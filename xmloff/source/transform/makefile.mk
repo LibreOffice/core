@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 12:27:16 $
+#   last change: $Author: rt $ $Date: 2005-01-11 14:29:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,72 +57,78 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ=..$/..
+PRJ := ..$/..
+PRJNAME := xmloff
+TARGET := xof
 
-PRJNAME=xmloff
-TARGET=transform
-AUTOSEG=true
+AUTOSEG := true
+ENABLE_EXCEPTIONS := TRUE
 
-ENABLE_EXCEPTIONS=TRUE
+.INCLUDE: settings.mk
 
-# --- Settings -----------------------------------------------------
+CDEFS += -DCONV_STAR_FONTS
 
-.INCLUDE :  svpre.mk
-.INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-CDEFS+=-DCONV_STAR_FONTS
+SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1OBJS = \
+    $(SLO)$/ChartOASISTContext.obj \
+    $(SLO)$/ChartOOoTContext.obj \
+    $(SLO)$/ChartPlotAreaOASISTContext.obj \
+    $(SLO)$/ChartPlotAreaOOoTContext.obj \
+    $(SLO)$/ControlOASISTContext.obj \
+    $(SLO)$/ControlOOoTContext.obj \
+    $(SLO)$/CreateElemTContext.obj \
+    $(SLO)$/DeepTContext.obj \
+    $(SLO)$/DlgOASISTContext.obj \
+    $(SLO)$/DocumentTContext.obj \
+    $(SLO)$/EventMap.obj \
+    $(SLO)$/EventOASISTContext.obj \
+    $(SLO)$/EventOOoTContext.obj \
+    $(SLO)$/FlatTContext.obj \
+    $(SLO)$/FormPropOASISTContext.obj \
+    $(SLO)$/FormPropOOoTContext.obj \
+    $(SLO)$/FrameOASISTContext.obj \
+    $(SLO)$/FrameOOoTContext.obj \
+    $(SLO)$/IgnoreTContext.obj \
+    $(SLO)$/MergeElemTContext.obj \
+    $(SLO)$/MetaTContext.obj \
+    $(SLO)$/MutableAttrList.obj \
+    $(SLO)$/NotesTContext.obj \
+    $(SLO)$/OOo2Oasis.obj \
+    $(SLO)$/Oasis2OOo.obj \
+    $(SLO)$/PersAttrListTContext.obj \
+    $(SLO)$/PersMixedContentTContext.obj \
+    $(SLO)$/ProcAddAttrTContext.obj \
+    $(SLO)$/ProcAttrTContext.obj \
+    $(SLO)$/PropertyActionsOASIS.obj \
+    $(SLO)$/PropertyActionsOOo.obj \
+    $(SLO)$/RenameElemTContext.obj \
+    $(SLO)$/StyleOASISTContext.obj \
+    $(SLO)$/StyleOOoTContext.obj \
+    $(SLO)$/TransformerActions.obj \
+    $(SLO)$/TransformerBase.obj \
+    $(SLO)$/TransformerContext.obj \
+    $(SLO)$/TransformerTokenMap.obj \
+    $(SLO)$/XMLFilterRegistration.obj
+SHL1STDLIBS = \
+    $(COMPHELPERLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(ONELIB) \
+    $(RTLLIB) \
+    $(SALHELPERLIB) \
+    $(SALLIB) \
+    $(TOOLSLIB)
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+    SHL1STDLIBS += -lxo$(OFFICEUPD)$(DLLPOSTFIX)
+.ELSE
+    SHL1STDLIBS += $(LIBPRE) ixo.lib
+.ENDIF
+SHL1VERSIONMAP = xof.map
+SHL1IMPLIB = i$(SHL1TARGET)
+DEF1NAME = $(SHL1TARGET)
 
-# --- Files --------------------------------------------------------
+SLOFILES = $(SHL1OBJS)
 
-SLOFILES =	\
-        $(SLO)$/ChartOOoTContext.obj	\
-        $(SLO)$/ChartOASISTContext.obj	\
-        $(SLO)$/ChartPlotAreaOOoTContext.obj \
-        $(SLO)$/ChartPlotAreaOASISTContext.obj \
-        $(SLO)$/ControlOASISTContext.obj	\
-        $(SLO)$/ControlOOoTContext.obj	\
-        $(SLO)$/CreateElemTContext.obj	\
-        $(SLO)$/DeepTContext.obj	\
-        $(SLO)$/DocumentTContext.obj	\
-        $(SLO)$/EventMap.obj	\
-        $(SLO)$/EventOASISTContext.obj	\
-        $(SLO)$/DlgOASISTContext.obj	\
-        $(SLO)$/EventOOoTContext.obj	\
-        $(SLO)$/FlatTContext.obj	\
-        $(SLO)$/FormPropOASISTContext.obj	\
-        $(SLO)$/FormPropOOoTContext.obj	\
-        $(SLO)$/FrameOASISTContext.obj	\
-        $(SLO)$/FrameOOoTContext.obj	\
-        $(SLO)$/IgnoreTContext.obj	\
-        $(SLO)$/MergeElemTContext.obj	\
-        $(SLO)$/MetaTContext.obj	\
-        $(SLO)$/MutableAttrList.obj		\
-        $(SLO)$/NotesTContext.obj	\
-        $(SLO)$/Oasis2OOo.obj		\
-        $(SLO)$/OOo2Oasis.obj		\
-        $(SLO)$/PersAttrListTContext.obj	\
-        $(SLO)$/PersMixedContentTContext.obj	\
-        $(SLO)$/ProcAddAttrTContext.obj	\
-        $(SLO)$/ProcAttrTContext.obj	\
-        $(SLO)$/PropertyActionsOOo.obj	\
-        $(SLO)$/PropertyActionsOASIS.obj	\
-        $(SLO)$/RenameElemTContext.obj	\
-        $(SLO)$/StyleOASISTContext.obj	\
-        $(SLO)$/StyleOOoTContext.obj	\
-        $(SLO)$/TransformerActions.obj		\
-        $(SLO)$/TransformerBase.obj		\
-        $(SLO)$/TransformerContext.obj	\
-        $(SLO)$/TransformerTokenMap.obj	\
-        $(SLO)$/XMLFilterRegistration.obj
-
-
-CPPUMAKERFLAGS=
-
-UNOTYPES=\
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
+.INCLUDE: target.mk
