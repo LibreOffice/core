@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ Menu RID_SVXMNU_ROWS
             Text[ chinese_traditional ] = "§R°£¦ζ";
             Text[ dutch ] = "Rijen wissen";
             Text[ chinese_simplified ] = "ΙΎ³ύΠΠ";
-            Text[ greek ] = "Διαγραφή στηλών";
+            Text[ greek ] = "Διαγραφή γραμμών";
             Text[ korean ] = "Ηΰ »θΑ¦";
             Text[ arabic ] = "ΝΠέ Υέζέ";
             Text[ turkish ] = "Satύrlarύ sil";
@@ -185,7 +185,7 @@ Menu RID_SVXMNU_COLS
                         Text [ swedish ] = "Textfδlt" ;
                         Text [ danish ] = "Tekstfelt" ;
                         Text [ italian ] = "Campo di testo" ;
-                        Text [ spanish ] = "Cuadro de texto" ;
+                        Text [ spanish ] = "Campo de texto" ;
                         Text [ french ] = "Zone de texte" ;
                         Text [ dutch ] = "Tekstveld" ;
                         Text[ chinese_simplified ] = "ΞΔ±ΎΏς";
