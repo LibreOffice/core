@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.21 $
- *  last change: $Author: vg $ $Date: 2003-04-15 16:06:05 $
+ *  $Revision: 1.22 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ ServerFontLayout::ServerFontLayout( ServerFont& rFont )
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     ServerFontLayoutEngine* pLE = NULL;
-    if( ~rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED )
+    if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED) )
         pLE = mrServerFont.GetLayoutEngine();
     if( !pLE )
         pLE = &aSimpleLayoutEngine;
@@ -115,13 +115,7 @@ bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 
 void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
-    SalLayout::AdjustLayout( rArgs );
-
-    // general justification
-    if( rArgs.mpDXArray )
-        ApplyDXArray( rArgs );
-    else if( rArgs.mnLayoutWidth )
-        Justify( rArgs.mnLayoutWidth );
+    GenericSalLayout::AdjustLayout( rArgs );
 
     // asian kerning
     if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
@@ -129,7 +123,7 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         ApplyAsianKerning( rArgs.mpStr, rArgs.mnLength );
 
     // kashida justification
-    if( rArgs.mnFlags & SAL_LAYOUT_KASHIDA_JUSTIFICATON )
+    if( (rArgs.mnFlags & SAL_LAYOUT_KASHIDA_JUSTIFICATON) && rArgs.mpDXArray )
     {
         int nKashidaIndex = mrServerFont.GetGlyphIndex( 0x0640 );
         if( nKashidaIndex != 0 )
@@ -150,38 +144,42 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
     Point aNewPos( 0, 0 );
     int nOldGlyphId = -1;
     int nGlyphWidth = 0;
-    for( int nGlyphCount = 0;; ++nGlyphCount )
+    GlyphItem aPrevItem;
+    bool bRightToLeft;
+    for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
-        int nCharPos;
-        bool bRightToLeft;
-        if( !rArgs.GetNextPos( &nCharPos, &bRightToLeft ) )
-            break;
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
         if( bRightToLeft )
             cChar = GetMirroredChar( cChar );
         int nGlyphIndex = rFont.GetGlyphIndex( cChar );
         // when glyph fallback is needed update LayoutArgs
         if( !nGlyphIndex )
-            if( !rArgs.NeedFallback( nCharPos, bRightToLeft ) )
-                continue;
+            rArgs.NeedFallback( nCharPos, bRightToLeft );
 
-        // apply pair kerning if requested
+        // apply pair kerning to prev glyph if requested
         if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
         {
-            int nKern = rFont.GetGlyphKernValue( nOldGlyphId, nGlyphIndex );
-            nGlyphWidth += nKern;
-            nOldGlyphId = nGlyphIndex;
+            int nKernValue = rFont.GetGlyphKernValue( nOldGlyphId, nGlyphIndex );
+            nGlyphWidth += nKernValue;
+            aPrevItem.mnNewWidth = nGlyphWidth;
         }
 
-        // update position of this glyph using all previous info
+        // finish previous glyph
+        if( nOldGlyphId >= 0 )
+            rLayout.AppendGlyph( aPrevItem );
         aNewPos.X() += nGlyphWidth;
 
+        // prepare GlyphItem for appending it in next round
+        nOldGlyphId = nGlyphIndex;
         const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
         nGlyphWidth = rGM.GetCharWidth();
         int nGlyphFlags = bRightToLeft ? GlyphItem::IS_RTL_GLYPH : 0;
-        GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
-        rLayout.AppendGlyph( aGI );
+        aPrevItem = GlyphItem( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
     }
+
+    // append last glyph item if any
+    if( nOldGlyphId >= 0 )
+        rLayout.AppendGlyph( aPrevItem );
 
     return true;
 }
@@ -486,6 +484,8 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
     le_int32* pCharIndices = (le_int32*)((char*)pIcuGlyphs + nGlyphCapacity * sizeof(LEGlyphID) );
     IcuPosition* pGlyphPositions = (IcuPosition*)((char*)pCharIndices + nGlyphCapacity * sizeof(le_int32) );
 
+    FreetypeServerFont& rFont = reinterpret_cast<FreetypeServerFont&>(rLayout.GetServerFont());
+
     UErrorCode rcI18n = U_ZERO_ERROR;
     LEErrorCode rcIcu = LE_NO_ERROR;
     Point aNewPos( 0, 0 );
@@ -503,7 +503,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
 
         // get layout engine matching to this script
         // no engine change necessary if script is latin
-        if( !mpIcuLE || ((eScriptCode != meScriptCode) &&  (eScriptCode > USCRIPT_INHERITED)) )
+        if( !mpIcuLE || ((eScriptCode != meScriptCode) && (eScriptCode > USCRIPT_INHERITED)) )
         {
             // TODO: cache multiple layout engines when multiple scripts are used
             delete mpIcuLE;
@@ -522,6 +522,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             break;
 
         // run ICU layout engine
+        // TODO: get enough context, remove extra glyps below
         int nRunGlyphCount = mpIcuLE->layoutChars( pIcuChars, nMinRunPos,
             nEndRunPos - nMinRunPos, rArgs.mnLength, bRightToLeft,
             aNewPos.X(), aNewPos.Y(), rcIcu );
@@ -539,15 +540,17 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
         // layout bidi/script runs and export them to a ServerFontLayout
         // convert results to GlyphItems
         const IcuPosition* pPos = pGlyphPositions;
-        FreetypeServerFont& rFont = reinterpret_cast<FreetypeServerFont&>(rLayout.GetServerFont());
         for( int i = 0; i < nRunGlyphCount; ++i, ++pPos )
         {
             int nCharPos = pCharIndices[i] + nMinRunPos;
             int nGlyphIndex = pIcuGlyphs[i];
             // when glyph fallback is needed update LayoutArgs
             if( !nGlyphIndex )
-                if( !rArgs.NeedFallback( nCharPos, bRightToLeft ) )
+            {
+                rArgs.NeedFallback( nCharPos, bRightToLeft );
+                if( SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags )
                     continue;
+            }
 
             // apply vertical flags, etc.
             sal_Unicode aChar = rArgs.mpStr[ nCharPos ];
