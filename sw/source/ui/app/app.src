@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 14:36:26 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 11:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3378,6 +3378,15 @@ QueryBox MSG_INS_MERGE_FIELDS
     Message[ korean ] = "Do you want to use names and addresses from a database?";
     Message[ turkish ] = "Do you want to use names and addresses from a database?";
     Message[ thai ] = "Do you want to use names and addresses from a database?";
+    Message[ greek ] = "Do you want to use names and addresses from a database?";
+    Message[ dutch ] = "Do you want to use names and addresses from a database?";
+    Message[ french ] = "Do you want to use names and addresses from a database?";
+    Message[ finnish ] = "Do you want to use names and addresses from a database?";
+    Message[ danish ] = "Do you want to use names and addresses from a database?";
+    Message[ chinese_simplified ] = "Do you want to use names and addresses from a database?";
+    Message[ chinese_traditional ] = "Do you want to use names and addresses from a database?";
+    Message[ arabic ] = "Do you want to use names and addresses from a database?";
+    Message[ catalan ] = "Do you want to use names and addresses from a database?";
 };
 QueryBox MSG_PRINT_AS_MERGE
 {
@@ -3397,6 +3406,15 @@ QueryBox MSG_PRINT_AS_MERGE
     Message[ korean ] = "Your document contains address database fields. Do you want to print a form letter?";
     Message[ turkish ] = "Your document contains address database fields. Do you want to print a form letter?";
     Message[ thai ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ greek ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ dutch ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ french ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ finnish ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ danish ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ chinese_simplified ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ chinese_traditional ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ arabic ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ catalan ] = "Your document contains address database fields. Do you want to print a form letter?";
 };
 WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
 {
@@ -3404,7 +3422,7 @@ WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
     Buttons = WB_OK ;
     DefButton = WB_DEF_YES ;
     Message = "Die Datenquelle \"%1\" konnte nicht gefunden werden.\nÜberprüfen Sie die Einstellungen in \'Extras - Datenquellen...\'";
-    Message[english_us] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[english_us] = "The data source \"%1\" was not found.\nCheck the settings in 'Tools - Data Sources...'";
     Message[ portuguese ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
     Message[ russian ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
     Message[ spanish ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
@@ -3416,6 +3434,15 @@ WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
     Message[ korean ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
     Message[ turkish ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
     Message[ thai ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ greek ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ dutch ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ french ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ finnish ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ danish ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ chinese_simplified ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ chinese_traditional ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ arabic ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ catalan ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
 };
 QueryBox MSG_DATA_SOURCES_UNAVAILABLE
 {
@@ -3423,7 +3450,7 @@ QueryBox MSG_DATA_SOURCES_UNAVAILABLE
     Buttons = WB_OK_CANCEL;
     DefButton = WB_DEF_YES ;
     Message = "Es steht keine Datenquelle zur Verfügung. Möchten Sie die Verbindung zu einer Datenquelle herstellen?";
-    Message[english_us] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[english_us] = "There is no data source available. Do you want to establish a data source connnection?";
     Message[ portuguese ] = "There is no data source available.\nDo you want to establish a data source connnection?";
     Message[ russian ] = "There is no data source available.\nDo you want to establish a data source connnection?";
     Message[ spanish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
@@ -3435,5 +3462,14 @@ QueryBox MSG_DATA_SOURCES_UNAVAILABLE
     Message[ korean ] = "There is no data source available.\nDo you want to establish a data source connnection?";
     Message[ turkish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
     Message[ thai ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ greek ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ dutch ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ french ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ finnish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ danish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ chinese_simplified ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ chinese_traditional ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ arabic ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ catalan ] = "There is no data source available.\nDo you want to establish a data source connnection?";
 };
 
