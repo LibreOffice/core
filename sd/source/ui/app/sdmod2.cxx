@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-12 08:40:47 $
+ *  last change: $Author: pw $ $Date: 2000-10-25 15:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,6 +782,10 @@ SfxTabPage*  SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
                 ( (SdTpOptionsMisc*) pRet )->aCbxStartWithActualPage.Hide();
                 ( (SdTpOptionsMisc*) pRet )->aGrpStartWithActualPage.Hide();
+            }
+            else
+            {
+                ( (SdTpOptionsMisc*) pRet )->aCbxCrookNoContortion.Hide();
             }
         break;
     }
