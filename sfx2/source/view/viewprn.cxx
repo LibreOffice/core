@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:37:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,9 @@
 #endif
 #include <svtools/useroptions.hxx>
 #include <svtools/printwarningoptions.hxx>
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "viewsh.hxx"
 #include "viewimp.hxx"
@@ -364,7 +366,8 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 {
-    USHORT                  nCopies=1, nPaperBin = 0, nDialogRet = RET_CANCEL;
+    USHORT                  nCopies=1;
+    USHORT                  nDialogRet = RET_CANCEL;
     BOOL                    bCollate=FALSE;
     SfxPrinter*             pPrinter = 0;
     PrintDialog*            pPrintDlg = 0;
