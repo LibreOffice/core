@@ -1,6 +1,6 @@
 fl	filter	:	svtools unotools goodies xmloff svx javaunohelper jvmaccess NULL
-fl	filter									usr1	-	all	fl_mkout			NULL
-fl	filter\prj								get		-	all	fl_prj				NULL
+fl	filter									usr1	-	all	fl_mkout	NULL
+fl	filter\prj								get		-	all	fl_prj	NULL
 fl	filter\source\jars						nmake	-	all	fl_javafilter_binaries	NULL
 fl	filter\source\xmlfilteradaptor			nmake	-	all	fl_xmlfilteradaptor	NULL
 fl	filter\source\xmlfilterdetect			nmake	-	all	fl_xmlfilterdetect	NULL
@@ -20,5 +20,4 @@ fl  filter\source\config\tools\merge        nmake   -   all fl_fcfg_merge fl_fcf
 fl  filter\source\config\fragments\types    nmake   -   all fl_fcfg_fragments_types  NULL
 fl  filter\source\config\fragments\filters  nmake   -   all fl_fcfg_fragments_filters  NULL
 fl  filter\source\config\fragments          nmake   -   all fl_fcfg_fragments fl_fcfg_merge  NULL
-fl  filter\util                             nmake   -   all fl_util fl_flash fl_xsltdialog fl_pdf fl_config fl_fcfg_utils fl_fcfg_merge fl_fcfg_fragments fl_fcfg_fragments_types fl_fcfg_fragments_filters NULL
 
