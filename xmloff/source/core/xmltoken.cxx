@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 13:01:59 $
+ *  last change: $Author: sj $ $Date: 2004-04-23 09:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2170,8 +2170,11 @@ namespace xmloff { namespace token {
         TOKEN( "date-time-update" ),            // XML_DATE_TIME_UPDATE
         TOKEN( "date-time-text" ),              // XML_DATE_TIME_TEXT
 
+
+        TOKEN( "selected-page" ),                   // XML_SELECTED_PAGE
+
         // DVO, OD 01.10.2003 #i18732#
-        TOKEN( "flow-with-text" ),   // XML_FLOW_WITH_TEXT
+        TOKEN( "flow-with-text" ),                  // XML_FLOW_WITH_TEXT
 
         TOKEN( "custom-shape" ),                    // XML_CUSTOM_SHAPE
         TOKEN( "engine" ),                          // XML_ENGINE
@@ -2281,8 +2284,6 @@ namespace xmloff { namespace token {
         TOKEN( "segments" ),                        // XML_SEGMENTS
         TOKEN( "word-wrap" ),                       // XML_WORD_WRAP
         TOKEN( "auto-grow-size" ),                  // XML_AUTO_GROW_SIZE
-        TOKEN( "selected-page" ),                   // XML_SELECTED_PAGE
-
 
         { 0, NULL, NULL }                       // XML_TOKEN_END
     };
