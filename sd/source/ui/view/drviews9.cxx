@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-14 12:28:46 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,13 +460,12 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                     Color         aColor ((BYTE) pRed->GetValue (),
                                           (BYTE) pGreen->GetValue (),
                                           (BYTE) pBlue->GetValue ());
+                    long i;
 
                     pAttr->ClearItem (XATTR_FILLGRADIENT);
                     pAttr->ClearItem (XATTR_FILLSTYLE);
 
-                    for (long i = 0;
-                              i < nCounts;
-                              i ++)
+                    for ( i = 0; i < nCounts; i ++)
                     {
                         XGradientEntry *pEntry = pGradientList->Get (i);
 
@@ -521,13 +520,12 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                     Color      aColor ((BYTE) pRed->GetValue (),
                                        (BYTE) pGreen->GetValue (),
                                        (BYTE) pBlue->GetValue ());
+                    long i;
 
                     pAttr->ClearItem (XATTR_FILLHATCH);
                     pAttr->ClearItem (XATTR_FILLSTYLE);
 
-                    for (long i = 0;
-                              i < nCounts;
-                              i ++)
+                    for ( i = 0; i < nCounts; i ++)
                     {
                         XHatchEntry *pEntry = pHatchList->Get (i);
 
@@ -585,14 +583,16 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                         XDashList  *pDashList = pDoc->GetDashList ();
                         long       nCounts    = pDashList->Count ();
                         XDashEntry *pEntry    = new XDashEntry (aNewDash, pName->GetValue ());
+                        long i;
 
-                        for (long i = 0;
-                                  i < nCounts;
-                                  i ++)
-                            if (pDashList->Get (i)->GetName () == pName->GetValue ()) break;
+                        for ( i = 0; i < nCounts; i++ )
+                            if (pDashList->Get (i)->GetName () == pName->GetValue ())
+                                break;
 
-                        if (i < nCounts) pDashList->Replace (pEntry, i);
-                        else pDashList->Insert (pEntry);
+                        if (i < nCounts)
+                            pDashList->Replace (pEntry, i);
+                        else
+                            pDashList->Insert (pEntry);
 
                         pAttr->Put (XLineDashItem (pName->GetValue (), aNewDash), XATTR_LINEDASH);
                         pAttr->Put (XLineStyleItem (XLINE_DASH), XATTR_LINESTYLE);
@@ -634,10 +634,9 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
 
                         XGradientList  *pGradientList = pDoc->GetGradientList ();
                         long           nCounts        = pGradientList->Count ();
+                        long i;
 
-                        for (long i = 0;
-                                  i < nCounts;
-                                  i ++)
+                        for ( i = 0; i < nCounts; i++ )
                         {
                             XGradientEntry *pEntry = pGradientList->Get (i);
 
@@ -701,10 +700,9 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
 
                         XHatchList *pHatchList = pDoc->GetHatchList ();
                         long       nCounts     = pHatchList->Count ();
+                        long i;
 
-                        for (long i = 0;
-                                  i < nCounts;
-                                  i ++)
+                        for ( i = 0; i < nCounts; i++ )
                         {
                             XHatchEntry *pEntry = pHatchList->Get (i);
 
