@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:28 $
+ *  last change: $Author: vg $ $Date: 2002-11-25 17:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1826,8 +1826,9 @@ sal_uInt32 SvXMLNumFmtExport::ForceSystemLanguage( sal_uInt32 nKey )
         }
         else
         {
+            String aFormatString( pFormat->GetFormatstring() );
             pFormatter->PutandConvertEntry(
-                            String( pFormat->GetFormatstring() ),
+                            aFormatString,
                             nErrorPos, nType, nNewKey,
                             pFormat->GetLanguage(), LANGUAGE_SYSTEM );
 
