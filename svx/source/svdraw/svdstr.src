@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:37:11 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -16452,38 +16452,9 @@ String SIP_SA_XMLATTRIBUTES
     Text[ slovak ] = "UÅ¾Ã­vateÄ¾om definovanÃ© atribÃºty";
 };
 
-String SIP_SA_RESERVE15
+String SIP_SA_TEXT_USEFIXEDCELLHEIGHT
 {
-    Text = "SvDraw Reserve 15";
-    Text [ ENGLISH ] = "SvDraw Reserve 15" ;
-    Text[ english_us ] = "SvDraw reserved for 15";
-    Text[ portuguese ] = "SvDraw Reserva 15";
-    Text[ russian ] = "Çàğåçåğâèğîâàííûé SvDraw 15";
-    Text[ dutch ] = "SvDraw reserve 15";
-    Text[ french ] = "Réservé pour SvDraw 15";
-    Text[ spanish ] = "SvDraw reserva 15";
-    Text[ italian ] = "Riservato per SvDraw 15";
-    Text[ danish ] = "SvDraw reserve 15";
-    Text[ swedish ] = "SvDraw reserverad för 15";
-    Text[ polish ] = "Zarezerwowane dla SvDraw 15";
-    Text[ portuguese_brazilian ] = "SvDraw Reservado em 15";
-    Text[ japanese ] = "SvDrawã®äºˆå‚™ 15";
-    Text[ chinese_simplified ] = "SvDraw Reserve 15";
-    Text[ chinese_traditional ] = "SvDraw é ç•™ 15";
-    Text[ arabic ] = "SvDraw ãÍÌæÒ áÜ 15";
-    Text[ dutch ] = "SvDraw reserve 15";
-    Text[ chinese_simplified ] = "SvDraw Reserve 15";
-    Text[ greek ] = "SvDraw åíáëëáêô. 15";
-    Text[ korean ] = "SvDraw ì˜ˆë¹„ 15";
-    Text[ turkish ] = "SvDraw - Yedek 15";
-    Text[ catalan ] = "SvDraw reservat per a 15";
-    Text[ finnish ] = "SvDraw varattu 15:lle";
-    Text[ thai ] = "à¸ªà¸‡à¸§à¸™ SvDraw à¹„à¸§à¹‰à¸ªà¸³à¸«à¸£à¸±à¸š  15";
-    Text[ czech ] = "SvDraw vyhrazen pro 15";
-    Text[ hebrew ] = "â€®SvDraw ×©××•×¨ ×œ 15â€¬";
-    Text[ hindi ] = "SvDraw 15 à¤•à¥‡à¤²à¤¿à¤ à¤°à¤•à¥à¤·à¤¿à¤¤";
-    Text[ slovak ] = "SvDraw vyhradenÃ½ pre 15";
-};
+    Text = "Schriftartunabhängigen Zeilenabstand verwenden";   Text [ ENGLISH ] = "Use font-independent line spacing";    Text [ english_us ] = "Use font-independent line spacing";  };
 
 String SIP_SA_RESERVE16
 {
