@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-26 13:22:17 $
+ *  last change: $Author: hr $ $Date: 2000-10-26 16:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include <sfx2/objsh.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vector>
+#include <algorithm>
 
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
