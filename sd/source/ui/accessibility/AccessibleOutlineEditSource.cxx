@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 17:26:56 $
+ *  last change: $Author: thb $ $Date: 2002-06-13 18:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ namespace accessibility
         mrView( rView ),
         mrWindow( rViewWindow ),
         mpOutliner( &rOutliner ),
+        mpOutlinerView( &rOutlView ),
         mTextForwarder( rOutliner ),
         mViewForwarder( rOutlView )
     {
@@ -100,18 +101,32 @@ namespace accessibility
 
     SvxTextForwarder* AccessibleOutlineEditSource::GetTextForwarder()
     {
-        return &mTextForwarder;
+        // TODO: maybe suboptimal
+        if( IsValid() )
+            return &mTextForwarder;
+        else
+            return NULL;
     }
 
     SvxViewForwarder* AccessibleOutlineEditSource::GetViewForwarder()
     {
-        return this;
+        // TODO: maybe suboptimal
+        if( IsValid() )
+            return this;
+        else
+            return NULL;
     }
 
     SvxEditViewForwarder* AccessibleOutlineEditSource::GetEditViewForwarder( sal_Bool )
     {
-        // ignore parameter, we're always in edit mode here
-        return &mViewForwarder;
+        // TODO: maybe suboptimal
+        if( IsValid() )
+        {
+            // ignore parameter, we're always in edit mode here
+            return &mViewForwarder;
+        }
+        else
+            return NULL;
     }
 
     void AccessibleOutlineEditSource::UpdateData()
@@ -127,7 +142,19 @@ namespace accessibility
 
     BOOL AccessibleOutlineEditSource::IsValid() const
     {
-        return TRUE;
+        if( mpOutliner && mpOutlinerView )
+        {
+            // Our view still on outliner?
+            ULONG nCurrView, nViews;
+
+            for( nCurrView=0, nViews=mpOutliner->GetViewCount(); nCurrView<nViews; ++nCurrView )
+            {
+                if( mpOutliner->GetView(nCurrView) == mpOutlinerView )
+                    return sal_True;
+            }
+        }
+
+        return sal_False;
     }
 
     Rectangle AccessibleOutlineEditSource::GetVisArea() const
@@ -186,6 +213,7 @@ namespace accessibility
                     if( mpOutliner )
                         mpOutliner->SetNotifyHdl( Link() );
                     mpOutliner = NULL;
+                    mpOutlinerView = NULL;
                     Broadcast( TextHint( SFX_HINT_DYING ) );
                     break;
             }

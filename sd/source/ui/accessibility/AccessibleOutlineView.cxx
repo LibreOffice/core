@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 17:26:56 $
+ *  last change: $Author: thb $ $Date: 2002-06-13 18:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,9 @@ AccessibleOutlineView::AccessibleOutlineView (
     SdOutlineViewShell* pViewShell,
     const uno::Reference<frame::XController>& rxController,
     const uno::Reference<XAccessible>& rxParent)
-    : AccessibleDocumentViewBase (pSdWindow, pViewShell, rxController, rxParent)
+    : AccessibleDocumentViewBase (pSdWindow, pViewShell, rxController, rxParent),
+      maTextHelper( this,
+                    ::std::auto_ptr< SvxEditSource >( NULL ) )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -162,13 +164,8 @@ AccessibleOutlineView::AccessibleOutlineView (
 
             if( pOutlineView && pOutliner )
             {
-                mpTextHelper =
-                    ::std::auto_ptr< AccessibleTextHelper >( new AccessibleTextHelper(
-                                                                 this,
-                                                                 ::std::auto_ptr< SvxEditSource >( new AccessibleOutlineEditSource(
-                                                                                                       *pOutliner, *pView, *pOutlineView, *pSdWindow ) ) ) );
-                // TODO: notice removal and regain of focus
-                mpTextHelper->SetFocus();
+                maTextHelper.SetEditSource( ::std::auto_ptr< SvxEditSource >( new AccessibleOutlineEditSource(
+                                                                                  *pOutliner, *pView, *pOutlineView, *pSdWindow ) ) );
             }
         }
     }
@@ -203,8 +200,7 @@ sal_Int32 SAL_CALL
     throw (uno::RuntimeException)
 {
     // forward
-    if( mpTextHelper.get() )
-        return mpTextHelper->GetChildCount();
+    return maTextHelper.GetChildCount();
 
     return 0;
 }
@@ -214,46 +210,22 @@ uno::Reference<XAccessible> SAL_CALL
     AccessibleOutlineView::getAccessibleChild (long nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // forward
-    if( mpTextHelper.get() )
-    {
-        // Forward request to children manager.
-        return mpTextHelper->GetChild(nIndex);
-    }
-    else
-        throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString::createFromAscii ("no accessible child with index ") + nIndex,
-            static_cast<uno::XWeak*>(this));
+    // Forward request to children manager.
+    return maTextHelper.GetChild(nIndex);
 }
 
 //=====  XAccessibleEventBroadcaster  ========================================
 
 void SAL_CALL AccessibleOutlineView::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
 {
-    // forward
-    if( mpTextHelper.get() )
-    {
-        // delegate listener handling to children manager.
-        mpTextHelper->AddEventListener(xListener);
-    }
-    else
-        throw uno::RuntimeException (
-            ::rtl::OUString::createFromAscii ("No texthelper"),
-            static_cast<uno::XWeak*>(this));
+    // delegate listener handling to children manager.
+    maTextHelper.AddEventListener(xListener);
 }
 
 void SAL_CALL AccessibleOutlineView::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
 {
     // forward
-    if( mpTextHelper.get() )
-    {
-        // delegate listener handling to children manager.
-        mpTextHelper->RemoveEventListener(xListener);
-    }
-    else
-        throw uno::RuntimeException (
-            ::rtl::OUString::createFromAscii ("No texthelper"),
-            static_cast<uno::XWeak*>(this));
+    maTextHelper.RemoveEventListener(xListener);
 }
 
 //=====  XServiceInfo  ========================================================
@@ -273,7 +245,7 @@ void SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     // dispose children
-    mpTextHelper.reset();
+    maTextHelper.SetEditSource( ::std::auto_ptr< SvxEditSource >(NULL) );
 
     AccessibleDocumentViewBase::disposing (rEventObject);
 }
@@ -282,18 +254,30 @@ void SAL_CALL
 
 void AccessibleOutlineView::FireEvent(const AccessibleEventObject& aEvent )
 {
-    // forward
-    if( mpTextHelper.get() )
-    {
-        // delegate listener handling to children manager.
-        mpTextHelper->FireEvent(aEvent);
-    }
+    // delegate listener handling to children manager.
+    maTextHelper.FireEvent(aEvent);
+}
+
+void AccessibleOutlineView::Activated (void)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    // delegate listener handling to children manager.
+    maTextHelper.SetFocus(sal_True);
+}
+
+void AccessibleOutlineView::Deactivated (void)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    // delegate listener handling to children manager.
+    maTextHelper.SetFocus(sal_False);
 }
 
 void SAL_CALL AccessibleOutlineView::disposing (void)
 {
     // dispose children
-    mpTextHelper.reset();
+    maTextHelper.SetEditSource( ::std::auto_ptr< SvxEditSource >(NULL) );
 
     AccessibleDocumentViewBase::disposing ();
 }
@@ -356,9 +340,10 @@ void SAL_CALL
 
 void AccessibleOutlineView::UpdateChildren()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     // Update visible children
-    if( mpTextHelper.get() )
-        mpTextHelper->UpdateChildren();
+    maTextHelper.UpdateChildren();
 }
 
 } // end of namespace accessibility

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 17:27:40 $
+ *  last change: $Author: thb $ $Date: 2002-06-13 18:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
 #include "AccessibleDocumentViewBase.hxx"
+#endif
+
+#ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
+#include <svx/AccessibleTextHelper.hxx>
 #endif
 
 
@@ -154,7 +158,13 @@ public:
 protected:
 
     // overridden, as we hold the listeners ourselves
-    void FireEvent (const ::drafts::com::sun::star::accessibility::AccessibleEventObject& aEvent);
+    virtual void FireEvent (const ::drafts::com::sun::star::accessibility::AccessibleEventObject& aEvent);
+
+    // overridden to detect focus changes
+    virtual void Activated (void);
+
+    // overridden to detect focus changes
+    virtual void Deactivated (void);
 
     // declared, but not defined
     AccessibleOutlineView( const AccessibleOutlineView& );
@@ -179,8 +189,7 @@ private:
     /// Invalidate text helper, updates visible children
     void UpdateChildren();
 
-    /// @dyn
-    ::std::auto_ptr< AccessibleTextHelper > mpTextHelper;
+    AccessibleTextHelper maTextHelper;
 
 };
 

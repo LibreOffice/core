@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 17:27:40 $
+ *  last change: $Author: thb $ $Date: 2002-06-13 18:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,11 +136,16 @@ namespace accessibility
 
     private:
 
+        // declared, but not defined
+        AccessibleOutlineEditSource( const AccessibleOutlineEditSource& );
+        AccessibleOutlineEditSource& operator=( const AccessibleOutlineEditSource& );
+
         DECL_LINK( NotifyHdl, EENotify* );
 
         SdrView&                        mrView;
         const Window&                   mrWindow;
         SdrOutliner*                    mpOutliner;
+        OutlinerView*                   mpOutlinerView;
 
         SvxOutlinerForwarder            mTextForwarder;
         SvxDrawOutlinerViewForwarder    mViewForwarder;
