@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMailMergeBroadcaster.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:32:35 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ module com { module sun { module star { module text {
     @see    com::sun::star::text::MailMergeEvent
     @see    com::sun::star::text::MailMerge
 
-    @since #107627#
+    @since OOo 1.1.2
 */
 published interface XMailMergeBroadcaster : com::sun::star::uno::XInterface
 {
