@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syslocale.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 09:37:27 $
+ *  last change: $Author: er $ $Date: 2001-07-05 14:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ class SvtSysLocale_Impl : public SvtListener
 
         SvtSysLocaleOptions     aSysLocaleOptions;
         LocaleDataWrapper*      pLocaleData;
+        CharClass*              pCharClass;
 
 public:
                                 SvtSysLocale_Impl();
@@ -123,6 +124,8 @@ SvtSysLocale_Impl::SvtSysLocale_Impl()
     const lang::Locale& rLocale = Application::GetSettings().GetLocale();
     pLocaleData = new LocaleDataWrapper(
         ::comphelper::getProcessServiceFactory(), rLocale );
+    pCharClass = new CharClass(
+        ::comphelper::getProcessServiceFactory(), rLocale );
     aSysLocaleOptions.AddListener( *this );
 }
 
@@ -130,6 +133,7 @@ SvtSysLocale_Impl::SvtSysLocale_Impl()
 SvtSysLocale_Impl::~SvtSysLocale_Impl()
 {
     aSysLocaleOptions.RemoveListener( *this );
+    delete pCharClass;
     delete pLocaleData;
 }
 
@@ -142,6 +146,7 @@ void SvtSysLocale_Impl::Notify( SvtBroadcaster& rBC, const SfxHint& rHint )
         MutexGuard aGuard( SvtSysLocale::GetMutex() );
         const lang::Locale& rLocale = Application::GetSettings().GetLocale();
         pLocaleData->setLocale( rLocale );
+        pCharClass->setLocale( rLocale );
     }
 }
 
@@ -188,4 +193,22 @@ Mutex& SvtSysLocale::GetMutex()
 const LocaleDataWrapper& SvtSysLocale::GetLocaleData() const
 {
     return *(pImpl->pLocaleData);
+}
+
+
+const LocaleDataWrapper* SvtSysLocale::GetLocaleDataPtr() const
+{
+    return pImpl->pLocaleData;
+}
+
+
+const CharClass& SvtSysLocale::GetCharClass() const
+{
+    return *(pImpl->pCharClass);
+}
+
+
+const CharClass* SvtSysLocale::GetCharClassPtr() const
+{
+    return pImpl->pCharClass;
 }
