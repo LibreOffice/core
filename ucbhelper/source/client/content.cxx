@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 12:54:53 $
+ *  last change: $Author: rt $ $Date: 2000-12-04 09:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,7 @@ Content::Content( const Reference< XContentIdentifier >& rId,
 //=========================================================================
 Content::Content( const Reference< XContent >& rContent,
                   const Reference< XCommandEnvironment >& rEnv )
+    throw ( ContentCreationException, RuntimeException )
 {
     ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
     if ( !pBroker )
