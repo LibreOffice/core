@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:09:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ SvXMLImportContext *SwXMLBodyContentContext_Impl::CreateChildContext(
 void SwXMLBodyContentContext_Impl::EndElement()
 {
     /* #108146# Code moved to SwXMLOmport::endDocument */
-    GetImport().GetTextImport()->SetOutlineStyles();
+    GetImport().GetTextImport()->SetOutlineStyles( sal_False );
 }
 
 SvXMLImportContext *SwXMLImport::CreateBodyContentContext(
