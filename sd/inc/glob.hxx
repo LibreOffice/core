@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:14:20 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SD_GLOB_HXX
-#define _SD_GLOB_HXX
+#ifndef SD_GLOB_HXX
+#define SD_GLOB_HXX
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
@@ -88,6 +88,7 @@
 #define SD_IF_SDDRAWGRAFOBJECTBAR       SFX_INTERFACE_SD_START + 13
 #define SD_IF_SDPRESVIEWSHELL           SFX_INTERFACE_SD_START + 14
 #define SD_IF_SDPREVIEWVIEWSHELL        SFX_INTERFACE_SD_START + 15
+#define SD_IF_SDVIEWSHELLBASE           SFX_INTERFACE_SD_START + 16
 
 // Inventor-Id fuer StarDraw UserData
 const UINT32 SdUDInventor=UINT32('S')*0x00000001+
