@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
+ *  last change: $Author: sab $ $Date: 2002-06-11 07:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,9 +335,9 @@ sal_Int32 SAL_CALL
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-//  return (maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
-//          (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
-    return 1;
+    return (maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
+            (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
+//  return 1;
 }
 
 uno::Reference< XAccessible > SAL_CALL
