@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctabl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:55:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 
 #include "xtable.hxx"
 #include "unoshcol.hxx"
+#include "recoveryui.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -315,6 +316,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             writeInfo( pKey, SvxShapeCollection::getImplementationName_Static(), SvxShapeCollection::getSupportedServiceNames_Static() );
             writeInfo( pKey, SvxUnoColorTable::getImplementationName_Static(), SvxUnoColorTable::getSupportedServiceNames_Static() );
             writeInfo( pKey, EnhancedCustomShapeEngine_getImplementationName(), EnhancedCustomShapeEngine_getSupportedServiceNames() );
+            writeInfo( pKey, svx::RecoveryUI::st_getImplementationName(), svx::RecoveryUI::st_getSupportedServiceNames() );
 #ifndef SVX_LIGHT
             writeInfo( pKey, svx::GraphicExporter_getImplementationName(), svx::GraphicExporter_getSupportedServiceNames() );
 #endif
@@ -356,6 +358,13 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SvxShapeCollection::getImplementationName_Static(),
                 SvxShapeCollection_createInstance,
                 SvxShapeCollection::getSupportedServiceNames_Static() );
+        }
+        else if( svx::RecoveryUI::st_getImplementationName().equalsAscii( pImplName ) )
+        {
+            xFactory = ::cppu::createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::RecoveryUI::st_getImplementationName(),
+                svx::RecoveryUI::st_createInstance,
+                svx::RecoveryUI::st_getSupportedServiceNames() );
         }
 #ifndef SVX_LIGHT
         else if( svx::GraphicExporter_getImplementationName().equalsAscii( pImplName ) )
