@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:33:35 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ String RID_SVXSTR_BACKGROUND
     Text[ dutch ] = "Achtergrond";
     Text[ french ] = "Arrière-plan";
     Text[ spanish ] = "Fondo";
-    Text[ italian ] = "Background";
+    Text[ italian ] = "Colore di sfondo";
     Text[ danish ] = "Baggrund";
     Text[ swedish ] = "Bakgrund";
     Text[ polish ] = "T³o";
@@ -455,6 +455,7 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE_H
 };
 
 // ********************************************************************** EOF
+
 
 
 
