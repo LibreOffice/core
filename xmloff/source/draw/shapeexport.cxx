@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-01 12:32:47 $
+ *  last change: $Author: cl $ $Date: 2001-06-01 13:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     xSdPropHdlFactory = new XMLSdPropHdlFactory( rExport.GetModel() );
 
     // construct PropertySetMapper
-    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xSdPropHdlFactory);
-    xPropertySetMapper = new XMLShapeExportPropertyMapper( xMapper, (XMLTextListAutoStylePool*)&rExport.GetTextParagraphExport()->GetListAutoStylePool(), rExp );
+    xPropertySetMapper = CreateShapePropMapper( rExport );
     if( pExtMapper )
     {
         UniReference < SvXMLExportPropertyMapper > xExtMapper( pExtMapper );
@@ -154,12 +153,6 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
 /*
     // chain text attributes
     xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
-*/
-
-/*
-    // chain form attributes
-    const UniReference< SvXMLExportPropertyMapper> xFormMapper( rExp.GetFormExport()->getStylePropertyMapper().getBodyPtr() );
-    xPropertySetMapper->ChainExportMapper(xFormMapper);
 */
 
     rExport.GetAutoStylePool()->AddFamily(
@@ -807,7 +800,6 @@ SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
                                           (XMLTextListAutoStylePool*)&rExport.GetTextParagraphExport()->GetListAutoStylePool(),
                                           rExport );
     // chain text attributes
-    pResult->ChainExportMapper( XMLTextParagraphExport::CreateParaExtPropMapper( rExport ));
     return pResult;
 }
 
