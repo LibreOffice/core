@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:49:43 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 namespace desktop
 {
@@ -88,6 +90,7 @@ using namespace svt;
 using namespace com::sun::star::system;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
 
 static void _setBold(FixedText& ft)
 {
@@ -120,6 +123,11 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid)
             aText.SearchAndReplaceAll( UniString::CreateFromAscii("%OLD_VERSION"), Migration::getOldVersionName());
             m_ftBody.SetText( aText );
         }
+        if (checkEval()) {
+            String aText(DesktopResId(STR_WELCOME_EVAL));
+            aText.SearchAndReplaceAll( UniString::CreateFromAscii("%EVALDAYS"), UniString::CreateFromAscii("90"));
+            m_ftBody.SetText( aText );
+        }
         break;
     case OEM_NORMAL:
         m_ftBody.SetText(String(WizardResId(STR_WELCOME_OEM)));
@@ -136,6 +144,19 @@ WelcomePage::OEMType WelcomePage::checkOEM()
     return OEM_NONE;
 }
 
+bool WelcomePage::checkEval()
+{
+    bool bResult = false;
+    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    Reference< XMaterialHolder > xHolder(xFactory->createInstance(
+        OUString::createFromAscii("com.sun.star.tab.tabreg")), UNO_QUERY);
+    if (xHolder.is()) {
+        Any aData = xHolder->getMaterial();
+        Sequence < NamedValue > aSeq;
+        if (aData >>= aSeq) bResult = true;
+    }
+    return bResult;
+}
 
 void WelcomePage::ActivatePage()
 {
