@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 12:27:31 $
+#   last change: $Author: obo $ $Date: 2004-11-16 13:09:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,8 @@ LIB1FILES=	\
     $(SLB)$/text.lib \
     $(SLB)$/draw.lib \
     $(SLB)$/chart.lib \
-    $(SLB)$/forms.lib
+    $(SLB)$/forms.lib \
+    $(SLB)$/xforms.lib
 
 LIB5TARGET= $(SLB)$/$(TARGET_FILTER).lib
 LIB5FILES= \
