@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-29 14:40:26 $
+ *  last change: $Author: sab $ $Date: 2001-04-03 06:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ XML_CONSTASCII_ACTION( sXML_add_in, "add-in" );
 XML_CONSTASCII_ACTION( sXML_add_in_name, "add-in-name" );
 XML_CONSTASCII_ACTION( sXML_address, "address" );
 XML_CONSTASCII_ACTION( sXML_adjustment, "adjustment" );
+XML_CONSTASCII_ACTION( sXML_algorithm, "algorithm" );
 XML_CONSTASCII_ACTION( sXML_align, "align" );
 XML_CONSTASCII_ACTION( sXML_all, "all" );
 XML_CONSTASCII_ACTION( sXML_allow_empty_cell, "allow-empty-cell" );
