@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-29 14:42:31 $
+ *  last change: $Author: aw $ $Date: 2001-06-19 13:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1791,6 +1791,24 @@ void SdrPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
             }
             else
                 aHead.SkipRecord(); // skip end mark
+        }
+    }
+
+    // #88340#
+    if(!aMasters.GetCount() && !IsMasterPage())
+    {
+        DBG_ERROR("Page without MasterPageDescriptor loaded (!)");
+        if(pModel && pModel->GetMasterPageCount() > 2)
+        {
+            // This is not allowed. Create a dummy entry
+            // to compensate this error.
+            SdrMasterPageDescriptor aDscr(1/*PageMaster*/);
+            aMasters.Insert(aDscr);
+        }
+        else
+        {
+            SdrMasterPageDescriptor aDscr(0);
+            aMasters.Insert(aDscr);
         }
     }
 }
