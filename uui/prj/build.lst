@@ -1,5 +1,5 @@
-uu	uui	:	svtools NULL
+uu	uui : sal cppu cppuhelper tools svtools vcl NULL
 uu	uui										usr1	-	all	uu_mkout NULL
-uu	uui\unotypes							nmake	-	all	uu_unotypes NULL
-uu	uui\source								nmake	-	all	uu_source uu_unotypes NULL
-uu	uui\util								nmake	-	all	uu_util uu_source NULL
+uu	uui\unotypes	nmake	-	all	uu_unotypes NULL
+uu	uui\source	nmake	-	all	uu_source uu_unotypes NULL
+uu	uui\util	nmake	-	all	uu_util uu_source NULL
