@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2004-03-01 11:38:50 $
+#   last change: $Author: rt $ $Date: 2004-09-08 16:52:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,10 +68,8 @@ LINKFLAGSDEFS = # do not fail with missing symbols
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  pyversion.mk
 #-------------------------------------------------------------------
 
-CFLAGS+=-I$(SOLARINCDIR)$/python
 .IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
 # no -Bdirect for SunWS CC
 DIRECT = $(LINKFLAGSDEFS)
@@ -80,20 +78,31 @@ DIRECT = $(LINKFLAGSDEFS)
 .IF "$(GUI)" == "UNX"
 # python expects modules without the lib prefix 
 PYUNO_MODULE=$(DLLDEST)$/pyuno$(DLLPOST)
-# python executable brings in the needed python core symbols,
-# so this library cannot be checked
-SHL1NOCHECK=yes
 PYUNORC=pyunorc
-.IF "$(OS)"=="SOLARIS" || "$(OS)"=="MACOSX"
-PYTHONLIB=-lpython
-.ENDIF
 .ELSE
-# on windows, the python executable also uses the shared library,
-# so we link pyuno directly to it
-PYTHONLIB=python$(PYMAJOR)$(PYMINOR).lib
+.INCLUDE :  pyversion.mk
 PYUNORC=pyuno.ini
 .ENDIF
 
+.IF "$(SYSTEM_PYTHON)" == "YES"
+PYTHONLIB=$(PYTHON_LIBS)
+CFLAGS+=$(PYTHON_CFLAGS)
+.ELSE # "$(SYSTEM_PYTHON)" == "YES"
+.INCLUDE :  pyversion.mk
+.IF "$(GUI)" == "UNX"
+# python executable brings in the needed python core symbols,
+# so this library cannot be checked
+SHL1NOCHECK=yes
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="MACOSX"
+PYTHONLIB=-lpython
+.ENDIF # "$(OS)"=="SOLARIS" || "$(OS)"=="MACOSX"
+.ELSE # "$(GUI)" == "UNX"
+# on windows, the python executable also uses the shared library,
+# so we link pyuno directly to it
+PYTHONLIB=python$(PYMAJOR)$(PYMINOR).lib
+.ENDIF # "$(GUI)" == "UNX"
+CFLAGS+=-I$(SOLARINCDIR)$/python
+.ENDIF # "$(SYSTEM_PYTHON)" == "YES"
 
 SHL1TARGET=$(TARGET)
 SLOFILES= \
