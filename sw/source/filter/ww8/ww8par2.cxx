@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:35:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ WW8TabBandDesc::~WW8TabBandDesc()
 class WW8TabDesc
 {
     std::vector<String> aNumRuleNames;
-    wwRedlineStack *mpOldRedlineStack;
+    sw::util::RedlineStack *mpOldRedlineStack;
 
     SwWW8ImplReader* pIo;
 
@@ -2436,7 +2436,7 @@ void WW8TabDesc::CreateSwTable()
     }
 
     mpOldRedlineStack = pIo->mpRedlineStack;
-    pIo->mpRedlineStack = new wwRedlineStack(pIo->rDoc);
+    pIo->mpRedlineStack = new sw::util::RedlineStack(pIo->rDoc);
 }
 
 void WW8TabDesc::UseSwTable()
