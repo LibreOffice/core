@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2000-10-04 15:37:04 $
+#   last change: $Author: pl $ $Date: 2000-10-20 11:29:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,16 +78,13 @@ TARGET=helper
 SLOFILES=\
     $(SLO)$/evntpost.obj		\
     $(SLO)$/sunowrap.obj		\
-    $(SLO)$/threadex.obj
+    $(SLO)$/threadex.obj		\
+    $(SLO)$/atom.obj
 
 .IF "$(GUI)" == "UNX"
 SLOFILES+=\
     $(SLO)$/ppdparser.obj	\
     $(SLO)$/strhelper.obj
-.ENDIF
-
-.IF "$(remote)" != ""
-SLOFILES+=$(SLO)$/atom.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------
