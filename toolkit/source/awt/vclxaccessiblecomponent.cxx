@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:48:30 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,13 +451,13 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VCLEVENT_WINDOW_ICONIFIED:
+        case VCLEVENT_WINDOW_MINIMIZE:
         {
             aNewValue <<= accessibility::AccessibleStateType::ICONIFIED;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_RESTORED:
+        case VCLEVENT_WINDOW_NORMALIZE:
         {
             aOldValue <<= accessibility::AccessibleStateType::ICONIFIED;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
