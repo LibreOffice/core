@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-18 11:53:11 $
+ *  last change: $Author: ka $ $Date: 2001-10-18 13:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,21 @@ void TransferableHelper::AddFormat( SotFormatStringId nFormat )
 
 void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 {
-    if( !HasFormat( rFlavor ) )
+    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool                        bAdd = sal_True;
+
+    while( aIter != aEnd )
+    {
+        if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
+        {
+            aIter = aEnd;
+            bAdd = sal_False;
+        }
+        else
+            aIter++;
+    }
+
+    if( bAdd )
     {
         DataFlavorEx aFlavorEx;
 
@@ -1934,23 +1948,37 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
             Reference< XMimeContentType > xRequestType1( xMimeFact->createMimeContentType( rInternalFlavor.MimeType ) );
             Reference< XMimeContentType > xRequestType2( xMimeFact->createMimeContentType( rRequestFlavor.MimeType ) );
 
-            if( xRequestType1.is() && xRequestType2.is() &&
-                xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( xRequestType2->getFullMediaType() ) )
+            if( xRequestType1.is() && xRequestType2.is() )
             {
-                if( xRequestType2->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/plain" ) ) )
+                if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( xRequestType2->getFullMediaType() ) )
                 {
-                    // special handling for text/plain media types
-                    const ::rtl::OUString aCharsetString( ::rtl::OUString::createFromAscii( "charset" ) );
-
-                    if( !xRequestType2->hasParameter( aCharsetString ) ||
-                        xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "utf-16" ) ) ||
-                        xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "unicode" ) ) )
+                    if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/plain" ) ) )
                     {
-                        bRet = sal_True;
+                        // special handling for text/plain media types
+                        const ::rtl::OUString aCharsetString( ::rtl::OUString::createFromAscii( "charset" ) );
+
+                        if( !xRequestType2->hasParameter( aCharsetString ) ||
+                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "utf-16" ) ) ||
+                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "unicode" ) ) )
+                        {
+                            bRet = sal_True;
+                        }
                     }
+                    else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-openoffice" ) ) )
+                    {
+                        // special handling for application/x-openoffice media types
+                        const ::rtl::OUString aFormatString( ::rtl::OUString::createFromAscii( "windows_formatname" ) );
+
+                        if( xRequestType1->hasParameter( aFormatString ) &&
+                            xRequestType2->hasParameter( aFormatString ) &&
+                            xRequestType1->getParameterValue( aFormatString ).equalsIgnoreAsciiCase( xRequestType2->getParameterValue( aFormatString ) ) )
+                        {
+                            bRet = sal_True;
+                        }
+                    }
+                    else
+                        bRet = sal_True;
                 }
-                else
-                    bRet = sal_True;
             }
         }
     }
