@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: jp $ $Date: 2001-04-25 19:32:27 $
+#   last change: $Author: sb $ $Date: 2001-10-08 14:05:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,6 +135,8 @@ IDLFILES=\
        XSearchDescriptor.idl\
     XSimpleErrorHandler.idl\
     XSortable.idl\
+    XStringAbbreviation.idl\
+    XStringWidth.idl\
     XStringMapping.idl\
     XStringEscape.idl\
     XTextSearch.idl\
