@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:18:51 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ String RID_SVXSTR_ICONCHOICEDLG_RESETBUT
     Text[ french ] = "Pr�c�dent";
     Text[ spanish ] = "~Regresar";
     Text[ italian ] = "Indietro";
-    Text[ danish ] = "Tilbage";
+    Text[ danish ] = "~Tilbage";
     Text[ swedish ] = "~Tillbaka";
     Text[ polish ] = "~Wstecz";
     Text[ portuguese_brazilian ] = "~Voltar";
@@ -90,7 +90,10 @@ String RID_SVXSTR_ICONCHOICEDLG_RESETBUT
     Text[ hebrew ] = "‮קודם‬";
     Text[ hindi ] = "~पीछे";
     Text[ slovak ] = "~Späť";
+    Text[ hungarian ] = "~Vissza";
+    Text[ slovenian ] = "N~azaj";
 };
+
 
 
 
