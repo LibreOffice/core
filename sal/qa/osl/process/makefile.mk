@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-07 15:11:09 $
+#   last change: $Author: hr $ $Date: 2003-09-29 14:40:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:testjob by codegen.pl 
+
+CFLAGS+=/Ob1
+
 SHL1OBJS=  \
     $(SLO)$/osl_Thread.obj
 
@@ -92,13 +95,43 @@ SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
+
 # DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP = export.map
 
 # END ------------------------------------------------------------------
 
+SHL2OBJS=$(SLO)$/osl_process.obj
+SHL2TARGET=osl_process
+SHL2STDLIBS=$(SALLIB) 
+
+.IF "$(GUI)" == "WNT"
+SHL2STDLIBS+=$(SOLARLIBDIR)$/cppunit.lib
+.ENDIF
+.IF "$(GUI)" == "UNX"
+SHL2STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
+.ENDIF
+
+SHL2IMPLIB=i$(SHL2TARGET)
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=$(SHL2TARGET)
+DEF2EXPORTFILE=export.exp
+
+OBJFILES=$(OBJ)$/osl_process_child.obj 
+APP1TARGET=osl_process_child
+APP1OBJS=$(OBJFILES)
+
+.IF "$(GUI)" == "UNX"
+APP1STDLIBS=$(LB)$/libsal.so
+.ENDIF
+.IF "$(GUI)" == "WNT"
+APP1STDLIBS=kernel32.lib $(LB)$/isal.lib
+.ENDIF
+
+
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
+
 SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
