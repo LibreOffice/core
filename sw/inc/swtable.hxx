@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
+ *  last change: $Author: mtg $ $Date: 2001-10-18 15:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ public:
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
     void GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
-                     FASTBOOL bHidden = FALSE ) const;
+                     FASTBOOL bHidden = FALSE, BOOL bCurRowOnly = FALSE ) const;
     void SetTabCols( const SwTabCols &rNew, SwTabCols &rOld,
                      const SwTableBox *pStart, BOOL bCurRowOnly );
 
