@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-20 07:11:22 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,8 +513,6 @@ void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
         return;
 
     pDLMedium = new SfxMedium( rURL, SFX_STREAM_READONLY, FALSE );
-    pDLMedium->SetTransferPriority( SFX_TFPRIO_DOC );
-
     if( pSh )
     {
         // Medium registrieren, damit abgebrochen werden kann
@@ -522,9 +520,9 @@ void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
 
         // Target-Frame uebertragen, damit auch javascript:-URLs
         // "geladen" werden koennen.
-        const SfxMedium *pShMedium = pSh->GetMedium();
-        if( pShMedium )
-            pDLMedium->SetLoadTargetFrame( pShMedium->GetLoadTargetFrame() );
+        //const SfxMedium *pShMedium = pSh->GetMedium();
+        //if( pShMedium )
+        //  pDLMedium->SetLoadTargetFrame( pShMedium->GetLoadTargetFrame() );
     }
 
     // Download anstossen (Achtung: Kann auch synchron sein).
