@@ -97,5 +97,15 @@ public abstract class SxcPluginFactory
         doc.read(is);
         return doc;
     }
+
+     public Document createOfficeDocument(String name, InputStream is,boolean isZip)
+        throws IOException {
+
+        // read zipped XML stream
+        //
+        SxcDocument doc = new SxcDocument(name);
+        doc.read(is,isZip);
+        return doc;
+    }
 }
 
