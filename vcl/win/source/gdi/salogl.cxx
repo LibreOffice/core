@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-02 15:18:28 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 
 #define _SV_SALOGL_CXX
 
-#ifndef _SV_SALOGL_HXX
-#include <salogl.hxx>
+#ifndef _SV_SALOGL_H
+#include <salogl.h>
 #endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
 
 #ifdef WIN
@@ -110,9 +110,9 @@ if( !pImplOpenWGLFnc##FncName ) bRet = FALSE;
 
 // Members
 static HINSTANCE    hImplOGLLib;
-HGLRC               SalOpenGL::mhOGLContext = 0;
-HDC                 SalOpenGL::mhOGLLastDC = 0;
-ULONG               SalOpenGL::mnOGLState = OGL_STATE_UNLOADED;
+HGLRC               WinSalOpenGL::mhOGLContext = 0;
+HDC                 WinSalOpenGL::mhOGLLastDC = 0;
+ULONG               WinSalOpenGL::mnOGLState = OGL_STATE_UNLOADED;
 
 INIT_OGLFNC_WGL( CreateContext );
 INIT_OGLFNC_WGL( DeleteContext );
@@ -132,26 +132,26 @@ LRESULT CALLBACK OpenGLWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 
 // - SalOpenGL -
 // -------------
 
-SalOpenGL::SalOpenGL( SalGraphics* pGraphics )
+WinSalOpenGL::WinSalOpenGL( SalGraphics* pGraphics )
 {
     // Set mhOGLLastDC only the first time a
     // SalOpenGL object is created; we need
     // this DC in SalOpenGL::Create();
     if ( OGL_STATE_UNLOADED == mnOGLState )
-        mhOGLLastDC = pGraphics->maGraphicsData.mhDC;
+        mhOGLLastDC = static_cast<WinSalGraphics*>(pGraphics)->mhDC;
 }
 
 // ------------------------------------------------------------------------
 
-SalOpenGL::~SalOpenGL()
+WinSalOpenGL::~WinSalOpenGL()
 {
 }
 
 // ------------------------------------------------------------------------
 
-BOOL SalOpenGL::Create()
+bool WinSalOpenGL::IsValid()
 {
-    BOOL bRet = FALSE;
+    bool bRet = false;
 
     if ( OGL_STATE_UNLOADED == mnOGLState )
     {
@@ -218,21 +218,21 @@ BOOL SalOpenGL::Create()
             mnOGLState = OGL_STATE_INVALID;
     }
     else if( OGL_STATE_VALID == mnOGLState )
-        bRet = TRUE;
+        bRet = true;
 
     return bRet;
 }
 
 // ------------------------------------------------------------------------
 
-void SalOpenGL::Release()
+void WinSalOpenGL::Release()
 {
     ImplFreeLib();
 }
 
 // ------------------------------------------------------------------------
 
-void* SalOpenGL::GetOGLFnc( const char* pFncName )
+void* WinSalOpenGL::GetOGLFnc( const char* pFncName )
 {
     if ( hImplOGLLib )
         return (void*)GetProcAddress( hImplOGLLib, pFncName );
@@ -244,9 +244,11 @@ void* SalOpenGL::GetOGLFnc( const char* pFncName )
 
 typedef BOOL (WINAPI *MyFuncType)(HDC, HGLRC);
 
-void SalOpenGL::OGLEntry( SalGraphics* pGraphics )
+void WinSalOpenGL::OGLEntry( SalGraphics* pSGraphics )
 {
-    if ( pGraphics->maGraphicsData.mhDC != mhOGLLastDC )
+    WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
+
+    if ( pGraphics->mhDC != mhOGLLastDC )
     {
         PIXELFORMATDESCRIPTOR pfd =
         {
@@ -254,7 +256,7 @@ void SalOpenGL::OGLEntry( SalGraphics* pGraphics )
             1,
             PFD_DRAW_TO_WINDOW | PFD_SUPPORT_GDI | PFD_SUPPORT_OPENGL,
             PFD_TYPE_RGBA,
-            GetDeviceCaps( pGraphics->maGraphicsData.mhDC, BITSPIXEL ),
+            GetDeviceCaps( pGraphics->mhDC, BITSPIXEL ),
             0, 0, 0, 0, 0, 0,
             0,
             0,
@@ -268,14 +270,14 @@ void SalOpenGL::OGLEntry( SalGraphics* pGraphics )
             0, 0, 0
         };
 
-        const int nIndex = ChoosePixelFormat( pGraphics->maGraphicsData.mhDC, &pfd );
-        if ( nIndex && SetPixelFormat( pGraphics->maGraphicsData.mhDC, nIndex, &pfd ) )
+        const int nIndex = ChoosePixelFormat( pGraphics->mhDC, &pfd );
+        if ( nIndex && SetPixelFormat( pGraphics->mhDC, nIndex, &pfd ) )
         {
             WNDCLASS    aWc;
             HWND        hDummyWnd;
 
             pImplOpenWGLFncDeleteContext( mhOGLContext );
-            mhOGLLastDC = pGraphics->maGraphicsData.mhDC;
+            mhOGLLastDC = pGraphics->mhDC;
             mhOGLContext = pImplOpenWGLFncCreateContext( mhOGLLastDC );
 
             SaveDC( mhOGLLastDC );
@@ -298,20 +300,32 @@ void SalOpenGL::OGLEntry( SalGraphics* pGraphics )
 
 // ------------------------------------------------------------------------
 
-void SalOpenGL::OGLExit( SalGraphics* pGraphics )
+void WinSalOpenGL::OGLExit( SalGraphics* pGraphics )
 {
 }
 
 // ------------------------------------------------------------------------
 
-BOOL SalOpenGL::ImplInitLib()
+void WinSalOpenGL::StartScene( SalGraphics* pGraphics )
+{
+}
+
+// ------------------------------------------------------------------------
+
+void WinSalOpenGL::StopScene()
+{
+}
+
+// ------------------------------------------------------------------------
+
+BOOL WinSalOpenGL::ImplInitLib()
 {
     return ((hImplOGLLib = LoadLibrary( OGL_LIBNAME )) != NULL);
 }
 
 // ------------------------------------------------------------------------
 
-void SalOpenGL::ImplFreeLib()
+void WinSalOpenGL::ImplFreeLib()
 {
     if ( hImplOGLLib )
     {
@@ -323,7 +337,7 @@ void SalOpenGL::ImplFreeLib()
 
 // ------------------------------------------------------------------------
 
-BOOL SalOpenGL::ImplInit()
+BOOL WinSalOpenGL::ImplInit()
 {
     BOOL bRet = TRUE;
 
