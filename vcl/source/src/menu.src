@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:38:41 $
+ *  last change: $Author: rt $ $Date: 2001-07-03 21:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ chinese_simplified ] = "³·ÏûÃüÁî(~U)";
             Text[ chinese_traditional ] = "´_­ì(~U)";
             Text[ greek ] = "Áíáß~ñåóç";
-            Text[ korean ] = "½ÇÇàÃë¼Ò(~U)";
+            Text[ korean ] = "½ÇÇàÃë¼Ò";
             Text[ arabic ] = "ÊÑÇÌÚ";
             Text[ turkish ] = "Geri al";
             Text[ language_user1 ] = " ";
@@ -143,7 +143,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ chinese_simplified ] = "¼ô³ı(~T)";
             Text[ chinese_traditional ] = "°Å¤U(~T)";
             Text[ greek ] = "~ÁğïêïğŞ";
-            Text[ korean ] = "Àß¶ó³»±â(~T)";
+            Text[ korean ] = "Àß¶ó³»±â";
             Text[ arabic ] = "ŞÕ";
             Text[ turkish ] = "~Kes";
             Text[ language_user1 ] = " ";
@@ -171,7 +171,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
             Text[ chinese_traditional ] = "½Æ»s(~C)";
             Text[ greek ] = "Áíôé~ãñáöŞ";
-            Text[ korean ] = "º¹»ç(~C)";
+            Text[ korean ] = "º¹»ç";
             Text[ arabic ] = "äÓÎ";
             Text[ turkish ] = "K~opyala";
             Text[ language_user1 ] = " ";
@@ -199,7 +199,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ chinese_simplified ] = "²åÈë(~P)";
             Text[ chinese_traditional ] = "´¡¤J(~P)";
             Text[ greek ] = "~Åğéêüëëçóç";
-            Text[ korean ] = "ºÙ¿©³Ö±â(~P)";
+            Text[ korean ] = "ºÙ¿©³Ö±â";
             Text[ arabic ] = "áÕŞ";
             Text[ turkish ] = "~Yapıştır";
             Text[ language_user1 ] = " ";
@@ -227,7 +227,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ chinese_simplified ] = "É¾³ı(~D)";
             Text[ chinese_traditional ] = "§R°£(~D)";
             Text[ greek ] = "Äéáãñá~öŞ";
-            Text[ korean ] = "»èÁ¦(~D)";
+            Text[ korean ] = "»èÁ¦";
             Text[ arabic ] = "ÍĞİ";
             Text[ turkish ] = "~Sil";
             Text[ language_user1 ] = " ";
@@ -256,7 +256,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ chinese_simplified ] = "È«²¿Ñ¡ÖĞ(~A)";
             Text[ chinese_traditional ] = "¥ş³¡¿ï¨ú(~A)";
             Text[ greek ] = "ÅğéëïãŞ üë~ùí";
-            Text[ korean ] = "¸ğµÎ¡¡¼±ÅÃ(~A)";
+            Text[ korean ] = "¸ğµÎ ¼±ÅÃ";
             Text[ arabic ] = "ÊÍÏíÏ Çáßá";
             Text[ turkish ] = "Tümünü seç";
             Text[ language_user1 ] = " ";
@@ -284,7 +284,7 @@ Menu SV_RESID_MENU_EDIT
             TEXT[ chinese_simplified ] = "²åÈëÌØÊâ×Ö·û(~S)...";
             TEXT[ chinese_traditional ] = "´¡¤J¯S®í¦r¤¸(~S)...";
             TEXT[ greek ] = "Åé~óáãùãŞ åéäéêïı ÷áñáêôŞñá...";
-            TEXT[ korean ] = "Æ¯¼ö¹®ÀÚ¡¡»ğÀÔ(~S)...";
+            TEXT[ korean ] = "Æ¯¼ö¹®ÀÚ »ğÀÔ...";
             TEXT[ arabic ] = "ÅÏÑÇÌ ÑãæÒ ÎÇÕÉ";
             TEXT[ turkish ] = "Özel karakter ekle...";
             TEXT[ language_user1 ] = " ";
@@ -293,5 +293,6 @@ Menu SV_RESID_MENU_EDIT
         };
     };
 };
+
 
 
