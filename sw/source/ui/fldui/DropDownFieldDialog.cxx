@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropDownFieldDialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:52:00 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,14 @@ void sw::DropDownFieldDialog::Apply()
         if(pDropField->GetPar1() != sSelect)
         {
             rSh.StartAllAction();
-            pDropField->SetPar1(sSelect);
-            rSh.SwEditShell::UpdateFlds(*pDropField);
+
+            SwDropDownField * pCopy = (SwDropDownField *) pDropField->Copy();
+
+            pCopy->SetPar1(sSelect);
+            rSh.SwEditShell::UpdateFlds(*pCopy);
+
+            delete pCopy;
+
             rSh.SetUndoNoResetModified();
             rSh.EndAllAction();
         }
