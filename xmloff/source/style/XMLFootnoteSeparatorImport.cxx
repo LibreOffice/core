@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteSeparatorImport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
+ *  last change: $Author: dvo $ $Date: 2001-03-01 14:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,27 +228,27 @@ void XMLFootnoteSeparatorImport::StartElement(
     // OK, now we have all values and can fill the XMLPropertyState vector
     Any aAny;
 
-    aAny <<= nLineWeight;
-    XMLPropertyState aLineWeight( nPropIndex-5, aAny );
-    rProperties.push_back(aLineWeight);
+    aAny <<= eLineAdjust;
+    XMLPropertyState aLineAdjust( nPropIndex-5, aAny);
+    rProperties.push_back(aLineAdjust);
 
     aAny <<= nLineColor;
     XMLPropertyState aLineColor( nPropIndex-4, aAny );
     rProperties.push_back(aLineColor);
 
-    aAny <<= nLineRelWidth;
-    XMLPropertyState aLineRelWidth( nPropIndex-3, aAny);
-    rProperties.push_back(aLineRelWidth);
+    aAny <<= nLineDistance;
+    XMLPropertyState aLineDistance( nPropIndex-3, aAny );
+    rProperties.push_back(aLineDistance);
 
-    aAny <<= eLineAdjust;
-    XMLPropertyState aLineAdjust( nPropIndex-2, aAny);
-    rProperties.push_back(aLineAdjust);
+    aAny <<= nLineRelWidth;
+    XMLPropertyState aLineRelWidth( nPropIndex-2, aAny);
+    rProperties.push_back(aLineRelWidth);
 
     aAny <<= nLineTextDistance;
     XMLPropertyState aLineTextDistance( nPropIndex-1, aAny);
     rProperties.push_back(aLineTextDistance);
 
-    aAny <<= nLineDistance;
-    XMLPropertyState aLineDistance( nPropIndex, aAny );
-    rProperties.push_back(aLineDistance);
+    aAny <<= nLineWeight;
+    XMLPropertyState aLineWeight( nPropIndex, aAny );
+    rProperties.push_back(aLineWeight);
 }

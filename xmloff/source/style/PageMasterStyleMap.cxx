@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
+ *  last change: $Author: dvo $ $Date: 2001-03-01 14:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,12 +128,12 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
 
 // footnote
     { "FootnoteHeight",         XML_NAMESPACE_STYLE,    sXML_footnote_max_height, XML_TYPE_MEASURE, CTF_PM_FTN_HEIGTH },
-    { "FootnoteLineWeight",     XML_NAMESPACE_STYLE,    sXML__empty,    XML_TYPE_MEASURE16|MID_FLAG_SPECIAL_ITEM,   CTF_PM_FTN_LINE_WEIGTH },
-    { "FootnoteLineColor",      XML_NAMESPACE_STYLE,    sXML__empty,    XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM,       CTF_PM_FTN_LINE_COLOR },
-    { "FootnoteLineRelativeWidth", XML_NAMESPACE_STYLE, sXML__empty,    XML_TYPE_PERCENT8|MID_FLAG_SPECIAL_ITEM,    CTF_PM_FTN_LINE_WIDTH },
     { "FootnoteLineAdjust",     XML_NAMESPACE_STYLE,    sXML__empty,    XML_TYPE_TEXT_HORIZONTAL_ADJUST|MID_FLAG_SPECIAL_ITEM,  CTF_PM_FTN_LINE_ADJUST },
-    { "FootnoteLineTextDistance", XML_NAMESPACE_STYLE,  sXML__empty,    XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM,     CTF_PM_FTN_LINE_DISTANCE },
-    { "FootnoteLineDistance",   XML_NAMESPACE_STYLE,    sXML_footnote_sep,  XML_TYPE_MEASURE|MID_FLAG_ELEMENT_ITEM,     CTF_PM_FTN_DISTANCE },
+    { "FootnoteLineColor",      XML_NAMESPACE_STYLE,    sXML__empty,    XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM,       CTF_PM_FTN_LINE_COLOR },
+    { "FootnoteLineDistance",   XML_NAMESPACE_STYLE,    sXML__empty,    XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM,CTF_PM_FTN_DISTANCE },
+    { "FootnoteLineRelativeWidth", XML_NAMESPACE_STYLE, sXML__empty,    XML_TYPE_PERCENT8|MID_FLAG_SPECIAL_ITEM,    CTF_PM_FTN_LINE_WIDTH },
+    { "FootnoteLineTextDistance", XML_NAMESPACE_STYLE,  sXML__empty,    XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM, CTF_PM_FTN_LINE_DISTANCE },
+    { "FootnoteLineWeight",     XML_NAMESPACE_STYLE,    sXML_footnote_sep,  XML_TYPE_MEASURE16|MID_FLAG_ELEMENT_ITEM,   CTF_PM_FTN_LINE_WEIGTH },
 
 // header
     { "HeaderHeight",               XML_NAMESPACE_SVG,      sXML_height,                    XML_TYPE_MEASURE,       CTF_PM_HEADERHEIGHT },

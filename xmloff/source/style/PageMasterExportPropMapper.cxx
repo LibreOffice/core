@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
+ *  last change: $Author: dvo $ $Date: 2001-03-01 14:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ void XMLPageMasterExportPropMapper::handleElementItem(
         case CTF_PM_TEXTCOLUMNS:
             pThis->aTextColumnsExport.exportXML( rProperty.maValue );
             break;
-        case CTF_PM_FTN_DISTANCE:
+        case CTF_PM_FTN_LINE_WEIGTH:
             pThis->aFootnoteSeparatorExport.exportXML( pProperties, nIdx,
                                                        getPropertySetMapper());
             break;

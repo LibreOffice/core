@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteSeparatorExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-28 18:09:57 $
+ *  last change: $Author: dvo $ $Date: 2001-03-01 14:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,20 +129,20 @@ void XMLFootnoteSeparatorExport::exportXML(
     if (nIdx >= 6)
     {
         // get the values from the properties
-        sal_Int16 nLineWeight = 0;
-        sal_Int32 nLineColor = 0;
-        sal_Int8 nLineRelWidth = 0;
         // enum text::HorizontalAdjust
         sal_Int16 eLineAdjust = text::HorizontalAdjust_LEFT;
-        sal_Int32 nLineTextDistance = 0;
+        sal_Int32 nLineColor = 0;
         sal_Int32 nLineDistance = 0;
+        sal_Int8 nLineRelWidth = 0;
+        sal_Int32 nLineTextDistance = 0;
+        sal_Int16 nLineWeight = 0;
 
-        (*pProperties)[nIdx-5].maValue >>= nLineWeight;
+        (*pProperties)[nIdx-5].maValue >>= eLineAdjust;
         (*pProperties)[nIdx-4].maValue >>= nLineColor;
-        (*pProperties)[nIdx-3].maValue >>= nLineRelWidth;
-        (*pProperties)[nIdx-2].maValue >>= eLineAdjust;
+        (*pProperties)[nIdx-3].maValue >>= nLineDistance;
+        (*pProperties)[nIdx-2].maValue >>= nLineRelWidth;
         (*pProperties)[nIdx-1].maValue >>= nLineTextDistance;
-        (*pProperties)[nIdx  ].maValue >>= nLineDistance;
+        (*pProperties)[nIdx  ].maValue >>= nLineWeight;
 
         OUStringBuffer sBuf;
 

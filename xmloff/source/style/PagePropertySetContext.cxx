@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PagePropertySetContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
+ *  last change: $Author: dvo $ $Date: 2001-03-01 14:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
                                               rLocalName, xAttrList, rProp,
                                               rProperties );
         break;
-    case CTF_PM_FTN_DISTANCE:
+    case CTF_PM_FTN_LINE_WEIGTH:
         pContext = new XMLFootnoteSeparatorImport(
             GetImport(), nPrefix, rLocalName, rProperties, rProp.mnIndex);
         break;
