@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 09:28:08 $
+ *  last change: $Author: af $ $Date: 2002-06-27 12:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,13 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( 
             AccessibleShape* pAcc = ShapeTypeHandler::Instance().CreateAccessibleObject(
                 AccessibleShapeInfo (xShape,mxParent), maTreeInfo);
             xAccessibleShape = pAcc;
-            pAcc->acquire();
+            if (pAcc != NULL)
+            {
+                pAcc->acquire();
+                // Now that we acquired the new accessible shape we can
+                // safely call its Init() method.
+                pAcc->Init ();
+            }
             mxShapes[pObj] = pAcc;
 
             // Create event and inform listeners of the object creation.

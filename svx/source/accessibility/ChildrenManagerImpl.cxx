@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: af $ $Date: 2002-06-13 16:57:27 $
+ *  last change: $Author: af $ $Date: 2002-06-27 12:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,6 @@ uno::Reference<XAccessible>
     if ( ! rChildDescriptor.mxAccessibleShape.is())
     {
         ::osl::MutexGuard aGuard (maMutex);
-        //        ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
         // Make sure that the requested accessible object has not been
         // created while locking the global mutex.
         if ( ! rChildDescriptor.mxAccessibleShape.is())
@@ -184,10 +183,13 @@ uno::Reference<XAccessible>
                         mxParent,
                         this),
                     maShapeTreeInfo);
-            //            rChildDescriptor.mpAccessibleShape = pShape;
             rChildDescriptor.mxAccessibleShape = uno::Reference<XAccessible> (
                 static_cast<uno::XWeak*>(pShape),
                 uno::UNO_QUERY);
+            // Now that there is a reference to the new accessible shape we
+            // can safely call its Init() method.
+            if (pShape != NULL)
+                pShape->Init();
         }
     }
 
