@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-11 12:25:30 $
+ *  last change: $Author: cp $ $Date: 2001-05-18 13:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,14 @@ public:
     virtual sal_uInt32  GetDepth ()     const = 0;
 };
 
+typedef enum {
+    InvalidType = 0,
+    TrueColorImage,
+    MonochromeImage,
+    PaletteImage,
+    GrayScaleImage
+} ImageType;
+
 /*
  * printer raster operations
  */
@@ -246,9 +254,12 @@ private:
     sal_Bool    mbCompressBmp;
 
     void    DrawPS1GrayImage      (const PrinterBmp& rBitmap, const Rectangle& rArea);
+    void    writePS2ImageHeader   (const Rectangle& rArea, psp::ImageType nType);
+    void    writePS2Colorspace    (const PrinterBmp& rBitmap, psp::ImageType nType);
     void    DrawPS2GrayImage      (const PrinterBmp& rBitmap, const Rectangle& rArea);
     void    DrawPS2PaletteImage   (const PrinterBmp& rBitmap, const Rectangle& rArea);
     void    DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const Rectangle& rArea);
+    void    DrawPS2MonoImage      (const PrinterBmp& rBitmap, const Rectangle& rArea);
 
     /* clip region */
 
