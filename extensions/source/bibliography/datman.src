@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-05 06:40:14 $
+ *  last change: $Author: os $ $Date: 2002-07-05 14:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,7 +511,8 @@ ModalDialog RID_DLG_DBCHANGE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 291 , 131 ) ;
     Moveable = TRUE ;
-
+    Text = "Datenquelle austauschen" ;
+    Text[ english_us ] = "Choose Data Source";
     OKButton BT_OK
     {
         Pos = MAP_APPFONT ( 238 , 3 ) ;

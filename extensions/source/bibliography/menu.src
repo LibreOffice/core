@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 08:55:59 $
+ *  last change: $Author: os $ $Date: 2002-07-05 14:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,33 +194,11 @@ Menu RID_MAIN_MENU
             MenuItem
             {
                 HelpId = HID_BIB_CHANGESOURCE;
-                Text = "~Datenquelle..." ;
-                Text[ English ] = "~Data source..." ;
                 Command = ".uno:Bib/sdbsource" ;
                 Identifier = RID_MAIN_ME_DBSOURCE;
                 Checkable=TRUE;
-                Text[ english_us ] = "~Data Source...";
-                        Text[ portuguese ] = "~Fonte de dados...";
-                        Text[ russian ] = "~»ÒıÓ‰Ì˚Â ‰‡ÌÌ˚Â...";
-                        Text[ greek ] = "–ÒÔ›ÎÂıÛÁ ~‰Â‰ÔÏ›Ì˘Ì...";
-                        Text[ dutch ] = "~Gegevensbron...";
-                        Text[ french ] = "~Source de donnÈes...";
-                        Text[ spanish ] = "~Fuente de datos...";
-                        Text[ italian ] = "Sorgente ~dati...";
-                        Text[ danish ] = "Datakilde...";
-                        Text[ swedish ] = "~Datak‰lla...";
-                        Text[ polish ] = "èrÛd≥o danych...";
-                        Text[ portuguese_brazilian ] = "~Data source...";
-                        Text[ japanese ] = "„Éá„Éº„Çø„ÇΩ„Éº„Çπ(~D)...";
-                        Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ ÏÜåÏä§(~D)...";
-                        Text[ chinese_simplified ] = "Êï∞ÊçÆÊ∫ê(~D)...";
-                        Text[ chinese_traditional ] = "Ë≥áÊñôÊ∫ê(~D)...";
-                        Text[ arabic ] = "„’œ— «·»Ì«‰« ...";
-                        Text[ turkish ] = "~Veri kayna˝...";
-                        Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Font de les ~dades...";
-                        Text[ finnish ] = "~Tietol‰hde";
-                        Text[ thai ] = "‡πÅ‡∏´‡∏•‡πà‡∏á~‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•...";
+                Text = "~Datenquelle austauschen..." ;
+                Text[ english_us ] = "~Choose Data Source...";
                };
             MenuItem
             {
@@ -230,7 +208,27 @@ Menu RID_MAIN_MENU
                 Checkable=TRUE;
                 Text = "~Datensatz lˆschen" ;
                 Text[ english_us ] = "Delete ~Record";
-            };
+                Text[ portuguese ] = "Delete ~Record";
+                        Text[ russian ] = "Delete ~Record";
+                        Text[ greek ] = "Delete ~Record";
+                        Text[ dutch ] = "Delete ~Record";
+                        Text[ french ] = "Supprimer l'en~registrement";
+                        Text[ spanish ] = "Eliminar ~registro";
+                        Text[ finnish ] = "Delete ~Record";
+                        Text[ italian ] = "Elimina record di dati";
+                        Text[ danish ] = "Delete ~Record";
+                        Text[ swedish ] = "Radera data~post";
+                        Text[ polish ] = "Delete ~Record";
+                        Text[ portuguese_brazilian ] = "Delete ~Record";
+                        Text[ japanese ] = "„É¨„Ç≥„Éº„Éâ„ÅÆÂâäÈô§";
+                        Text[ korean ] = "Î†àÏΩîÎìú ÏÇ≠Ï†ú";
+                        Text[ chinese_simplified ] = "Âà†Èô§Êï∞ÊçÆÊù°ÁõÆ";
+                        Text[ chinese_traditional ] = "Âà™Èô§Ë≥áÊñôÊ¢ùÁõÆ(~R)";
+                        Text[ turkish ] = "Delete ~Record";
+                        Text[ arabic ] = "Delete ~Record";
+                        Text[ catalan ] = "Delete ~Record";
+                        Text[ thai ] = "Delete ~Record";
+                    };
             };
         };
         Text[ russian ] = "~œ‡‚Í‡";
@@ -301,10 +299,53 @@ Menu RID_MAIN_MENU
                         Checkable=TRUE;
                         Text = "~Datensatz" ;
                         Text[ English ] = "~Record" ;
+                        Text[ english_us ] = "~Record";
+                        Text[ portuguese ] = "~Record";
+                        Text[ russian ] = "~Record";
+                        Text[ greek ] = "~Record";
+                        Text[ dutch ] = "~Record";
+                        Text[ french ] = "En~registrement";
+                        Text[ spanish ] = "~Registro";
+                        Text[ finnish ] = "~Record";
+                        Text[ italian ] = "Record di dati";
+                        Text[ danish ] = "~Record";
+                        Text[ swedish ] = "D~atapost";
+                        Text[ polish ] = "~Record";
+                        Text[ portuguese_brazilian ] = "~Record";
+                        Text[ japanese ] = "„É¨„Ç≥„Éº„Éâ";
+                        Text[ korean ] = "~Î†àÏΩîÎìú";
+                        Text[ chinese_simplified ] = "Êï∞ÊçÆÊù°ÁõÆ(~R)";
+                        Text[ chinese_traditional ] = "Ë≥áÊñôÊ¢ùÁõÆ(~R)";
+                        Text[ turkish ] = "~Record";
+                        Text[ arabic ] = "~Record";
+                        Text[ catalan ] = "~Record";
+                        Text[ thai ] = "~Record";
                     };
 
                 };
             };
+            Text[ language_user1 ] = "May 2002 EM: \"has nothing to do with the clipboard\" (OS)";
+            Text[ english_us ] = "~Insert";
+            Text[ portuguese ] = "~Insert";
+            Text[ russian ] = "~Insert";
+            Text[ greek ] = "~Insert";
+            Text[ dutch ] = "~Insert";
+            Text[ french ] = "~Insertion";
+            Text[ spanish ] = "~Insertar";
+            Text[ finnish ] = "~Insert";
+            Text[ italian ] = "~Inserisci";
+            Text[ danish ] = "~Insert";
+            Text[ swedish ] = "~Infoga";
+            Text[ polish ] = "~Insert";
+            Text[ portuguese_brazilian ] = "~Insert";
+            Text[ japanese ] = "ÊåøÂÖ•(~I)";
+            Text[ korean ] = "ÏÇΩÏûÖ(~I)";
+            Text[ chinese_simplified ] = "ÊèíÂÖ•(~I)";
+            Text[ chinese_traditional ] = "ÊèíÂÖ•(~I)";
+            Text[ turkish ] = "~Insert";
+            Text[ arabic ] = "~Insert";
+            Text[ catalan ] = "~Insert";
+            Text[ thai ] = "~Insert";
         };
     MenuItem
     {
@@ -356,6 +397,11 @@ Menu RID_MAIN_MENU
                         Text[ finnish ] = "~Suodatin";
                         Text[ thai ] = "~‡∏ï‡∏±‡∏ß‡∏Å‡∏£‡∏≠‡∏á...";
                     };
+             MenuItem
+            {
+            Separator = TRUE ;
+            };
+            ITEM_DATASOURCE_ADMINISTRATION
              MenuItem
             {
             Separator = TRUE ;
