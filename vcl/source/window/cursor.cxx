@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cursor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-27 08:25:19 $
+ *  last change: $Author: ssa $ $Date: 2001-11-26 17:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <window.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
 #endif
 #ifndef _SV_POLY_HXX
 #include <poly.hxx>
@@ -194,7 +197,8 @@ void Cursor::ImplShow( BOOL bDrawDirect )
             // Gibt es ein aktives Fenster und ist der Cursor in dieses Fenster
             // selektiert, dann zeige den Cursor an
             pWindow = Application::GetFocusWindow();
-            if ( !pWindow || (pWindow->mpCursor != this) || pWindow->mbInPaint )
+            if ( !pWindow || (pWindow->mpCursor != this) || pWindow->mbInPaint
+                || !pWindow->mpFrameData->mbHasFocus )
                 pWindow = NULL;
         }
 
