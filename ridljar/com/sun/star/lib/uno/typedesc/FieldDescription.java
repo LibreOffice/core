@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescription.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-26 11:43:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,34 +61,50 @@
 
 package com.sun.star.lib.uno.typedesc;
 
-
+import com.sun.star.uno.IFieldDescription;
+import com.sun.star.uno.ITypeDescription;
 import java.lang.reflect.Field;
 
+final class FieldDescription implements IFieldDescription {
+    public FieldDescription(
+        String name, int index, ITypeDescription typeDescription, Field field)
+    {
+        this.name = name;
+        this.index = index;
+        this.typeDescription = typeDescription;
+        this.field = field;
+    }
 
-import com.sun.star.uno.IMethodDescription;
-import com.sun.star.uno.ITypeDescription;
-import com.sun.star.uno.IFieldDescription;
+    public String getName() {
+        return name;
+    }
 
-import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
+    public boolean isUnsigned() {
+        return MemberDescriptionHelper.isUnsigned(typeDescription);
+    }
 
-public class FieldDescription extends MemberTypeInfo implements IFieldDescription {
-    ITypeDescription _iTypeDescription;
-    Field _field;
+    public boolean isAny() {
+        return MemberDescriptionHelper.isAny(typeDescription);
+    }
 
-    FieldDescription(String memberName, int memberIndex, int flags, Field field) {
-        super(memberName, memberIndex, flags);
+    public boolean isInterface() {
+        return MemberDescriptionHelper.isInterface(typeDescription);
+    }
 
-        _field = field;
+    public int getIndex() {
+        return index;
     }
 
     public ITypeDescription getTypeDescription() {
-        if(_iTypeDescription == null)
-            _iTypeDescription = TypeDescription.getTypeDescription(this, getField().getType());
-
-        return _iTypeDescription;
+        return typeDescription;
     }
 
-      public Field getField() {
-        return _field;
+    public Field getField() {
+        return field;
     }
+
+    private final String name;
+    private final int index;
+    private final ITypeDescription typeDescription;
+    private final Field field;
 }
