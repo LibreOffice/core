@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:54:11 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 11:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,17 @@ public final class java_environment implements IEnvironment {
 //      }
     }
 
+    /**
+     * Revokes all registered proxy interfaces.
+     *
+     * <p>This method should be part of <code>IEnvironment</code>.  It is called
+     * from <code>com.sun.star.lib.uno.bridges.java_remote.<!--
+     * -->java_remote_bridge.dispose</code>.</p>
+     */
+    public void revokeAllProxies() {
+        proxies.clear();
+    }
+
     // TODO  What's this???  java.lang.Object#equals requires reflexivity...
     //
     // Maybe this was hacked in so that different bridges use different
@@ -232,6 +243,13 @@ public final class java_environment implements IEnvironment {
             synchronized (map) {
                 Level1Entry l1 = getLevel1Entry(oid);
                 return l1 == null ? null : l1.find(type);
+            }
+        }
+
+        public void clear() {
+            synchronized (map) {
+                map.clear();
+                cleanUp();
             }
         }
 
