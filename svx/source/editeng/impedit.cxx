@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-22 18:16:33 $
+ *  last change: $Author: mt $ $Date: 2001-11-23 12:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1886,6 +1886,13 @@ void ImpEditView::RemoveDragAndDropListeners()
         GetWindow()->GetDragGestureRecognizer()->removeDragGestureListener( xDGL );
         uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( xDGL, uno::UNO_QUERY );
         GetWindow()->GetDropTarget()->removeDropTargetListener( xDTL );
+
+        if ( mxDnDListener.is() )
+        {
+            uno::Reference< lang::XEventListener> xEL( mxDnDListener, uno::UNO_QUERY );
+            xEL->disposing( lang::EventObject() );  // #95154# Empty Source means it's the Client
+            mxDnDListener.clear();
+        }
 
         bActiveDragAndDropListener = FALSE;
     }
