@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 15:02:43 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,14 +553,15 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         rtlRandomPool hPool = rtl_random_createPool();
         if ( hPool == 0 )
             throw BootstrapException( OUSTR( "cannot create random pool!" ) );
-        sal_uInt8 bytes[ 32 ];
+        sal_uInt8 bytes[ 16 ];
         if ( rtl_random_getBytes( hPool, bytes, ARLEN( bytes ) )
             != rtl_Random_E_None )
             throw BootstrapException( OUSTR( "random pool error!" ) );
         rtl_random_destroyPool( hPool );
         ::rtl::OUStringBuffer buf;
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "uno" ) );
         for ( sal_uInt32 i = 0; i < ARLEN( bytes ); ++i )
-            buf.append( static_cast< sal_Int32 >( bytes[ i ] ), 0x10 );
+            buf.append( static_cast< sal_Int32 >( bytes[ i ] ) );
         OUString sPipeName( buf.makeStringAndClear() );
 
         // accept string
