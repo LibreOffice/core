@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:27:07 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,14 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         rSet.DisableItem( SID_OBJECT_ALIGN_UP );
         rSet.DisableItem( SID_OBJECT_ALIGN_MIDDLE );
         rSet.DisableItem( SID_OBJECT_ALIGN_DOWN );
+
+        // pseudo slots for Format menu
+        rSet.DisableItem( SID_ALIGN_ANY_LEFT );
+        rSet.DisableItem( SID_ALIGN_ANY_HCENTER );
+        rSet.DisableItem( SID_ALIGN_ANY_RIGHT );
+        rSet.DisableItem( SID_ALIGN_ANY_TOP );
+        rSet.DisableItem( SID_ALIGN_ANY_VCENTER );
+        rSet.DisableItem( SID_ALIGN_ANY_BOTTOM );
     }
 
     if ( !nMarkCount || pView->HasMarkedControl() )
