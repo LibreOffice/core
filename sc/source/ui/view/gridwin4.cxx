@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:28:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,12 +128,18 @@ void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
 void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
                         const String& rTitle, const Color& rColor, BOOL bTextBelow,
                         double nPPTX, double nPPTY, const Fraction& rZoomY,
-                        ScDocument* pDoc, ScViewData* pButtonViewData )
+                        ScDocument* pDoc, ScViewData* pButtonViewData, BOOL bLayoutRTL )
 {
     //  pButtonViewData wird nur benutzt, um die Button-Groesse zu setzen,
     //  darf ansonsten NULL sein!
 
     Rectangle aInner = rInnerPixel;
+    if ( bLayoutRTL )
+    {
+        aInner.Left() = rInnerPixel.Right();
+        aInner.Right() = rInnerPixel.Left();
+    }
+
     Rectangle aVisible( Point(0,0), pDev->GetOutputSizePixel() );
     lcl_LimitRect( aInner, aVisible );
 
@@ -180,9 +186,12 @@ void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
                         / rZoomY.GetDenominator();
     long nBHeight = nVer + aTextSize.Height() + 1;
     Size aButSize( nBWidth, nBHeight );
-    aComboButton.Draw( Point(aOuter.Right()-nBWidth+1, nButtonY), aButSize, false );
+    long nButtonPos = bLayoutRTL ? aOuter.Left() : aOuter.Right()-nBWidth+1;
+    aComboButton.Draw( Point(nButtonPos, nButtonY), aButSize, FALSE );
     if (pButtonViewData)
         pButtonViewData->SetScenButSize( aButSize );
+
+    long nTextStart = bLayoutRTL ? aInner.Right() - aTextSize.Width() + 1 : aInner.Left();
 
     BOOL bWasClip = FALSE;
     Region aOldClip;
@@ -194,11 +203,13 @@ void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
             bWasClip = TRUE;
             aOldClip = pDev->GetActiveClipRegion();
         }
-        pDev->SetClipRegion( Rectangle( aInner.Left(), nButtonY + nVer/2,
-                        aOuter.Right() - nBWidth, nButtonY + nVer/2 + aTextSize.Height() ) );
+        long nClipStartX = bLayoutRTL ? aOuter.Left() + nBWidth : aInner.Left();
+        long nClipEndX = bLayoutRTL ? aInner.Right() : aOuter.Right() - nBWidth;
+        pDev->SetClipRegion( Rectangle( nClipStartX, nButtonY + nVer/2,
+                                nClipEndX, nButtonY + nVer/2 + aTextSize.Height() ) );
     }
 
-    pDev->DrawText( Point( aInner.Left(), nButtonY + nVer/2 ), rTitle );
+    pDev->DrawText( Point( nTextStart, nButtonY + nVer/2 ), rTitle );
 
     if ( bClip )
     {
@@ -239,6 +250,9 @@ void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, ScSplitP
         ScRangeListRef xRanges = new ScRangeList;
         aMarks.FillRangeListWithMarks( xRanges, FALSE );
 
+        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        long nLayoutSign = bLayoutRTL ? -1 : 1;
+
         USHORT nRangeCount = (USHORT)xRanges->Count();
         for (i=0; i<nRangeCount; i++)
         {
@@ -255,10 +269,10 @@ void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, ScSplitP
                                     aRange.aStart.Col(), aRange.aStart.Row(), eWhich, TRUE );
                 Point aEndPos = pViewData->GetScrPos(
                                     aRange.aEnd.Col()+1, aRange.aEnd.Row()+1, eWhich, TRUE );
-                //  auf dem Gitter:
-                aStartPos.X() -= 1;
+                //  on the grid:
+                aStartPos.X() -= nLayoutSign;
                 aStartPos.Y() -= 1;
-                aEndPos.X() -= 1;
+                aEndPos.X() -= nLayoutSign;
                 aEndPos.Y() -= 1;
 
                 BOOL bTextBelow = ( aRange.aStart.Row() == 0 );
@@ -282,7 +296,7 @@ void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, ScSplitP
                 lcl_DrawOneFrame( pDev, Rectangle( aStartPos, aEndPos ),
                                     aCurrent, aColor, bTextBelow,
                                     pViewData->GetPPTX(), pViewData->GetPPTY(), pViewData->GetZoomY(),
-                                    pDoc, pViewData );
+                                    pDoc, pViewData, bLayoutRTL );
             }
         }
     }
@@ -375,14 +389,23 @@ void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
     double nPPTX = pViewData->GetPPTX();
     double nPPTY = pViewData->GetPPTY();
 
+    Rectangle aMirroredPixel = aPixRect;
+    if ( pDoc->IsLayoutRTL( nTab ) )
+    {
+        //  mirror and swap
+        long nWidth = GetSizePixel().Width();
+        aMirroredPixel.Left()  = nWidth - 1 - aPixRect.Right();
+        aMirroredPixel.Right() = nWidth - 1 - aPixRect.Left();
+    }
+
     long nScrX = ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
-    while ( nScrX <= aPixRect.Left() && nX1 < MAXCOL )
+    while ( nScrX <= aMirroredPixel.Left() && nX1 < MAXCOL )
     {
         ++nX1;
         nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
     }
     USHORT nX2 = nX1;
-    while ( nScrX <= aPixRect.Right() && nX2 < MAXCOL )
+    while ( nScrX <= aMirroredPixel.Right() && nX2 < MAXCOL )
     {
         ++nX2;
         nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX2, nTab ), nPPTX );
@@ -462,8 +485,18 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
     pDoc->ExtendHidden( nX1, nY1, nX2, nY2, nTab );
 
     Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
-    USHORT nScrX = (USHORT) aScrPos.X();
-    USHORT nScrY = (USHORT) aScrPos.Y();
+    long nMirrorWidth = GetSizePixel().Width();
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    if ( bLayoutRTL )
+    {
+        long nEndPixel = pViewData->GetScrPos( nX2+1, nPosY, eWhich ).X();
+        nMirrorWidth = aScrPos.X() - nEndPixel;
+        aScrPos.X() = nEndPixel + 1;
+    }
+
+    long nScrX = aScrPos.X();
+    long nScrY = aScrPos.Y();
 
     USHORT nCurX = pViewData->GetCurX();
     USHORT nCurY = pViewData->GetCurY();
@@ -507,6 +540,8 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
     ScOutputData aOutputData( this, OUTTYPE_WINDOW, pRowInfo, nArrCount, pDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );
+
+    aOutputData.SetMirrorWidth( nMirrorWidth );         // needed for RTL
 
     if ( bTextWysiwyg )
     {
@@ -716,15 +751,15 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
                             //! gleich beim Zeichnen leer lassen !!!
     if ( bEditMode && (pViewData->GetRefTabNo() == pViewData->GetTabNo()) )
     {
-        USHORT nCol1 = pViewData->GetEditViewCol();
-        USHORT nRow1 = pViewData->GetEditViewRow();
+        USHORT nCol1 = pViewData->GetEditStartCol();
+        USHORT nRow1 = pViewData->GetEditStartRow();
         USHORT nCol2 = pViewData->GetEditEndCol();
         USHORT nRow2 = pViewData->GetEditEndRow();
         SetLineColor();
         SetFillColor( pEditView->GetBackgroundColor() );
         Point aStart = pViewData->GetScrPos( nCol1, nRow1, eWhich );
         Point aEnd = pViewData->GetScrPos( nCol2+1, nRow2+1, eWhich );
-        aEnd.X() -= 2;      // Gitter nicht ueberschreiben
+        aEnd.X() -= 2 * nLayoutSign;        // don't overwrite grid
         aEnd.Y() -= 2;
         DrawRect( Rectangle( aStart,aEnd ) );
 
@@ -811,7 +846,10 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
         if ( nX2==MAXCOL )
         {
             Rectangle aDrawRect( aPixRect );
-            aDrawRect.Left() = nScrX + aOutputData.GetScrW();
+            if ( bLayoutRTL )
+                aDrawRect.Right() = nScrX - 1;
+            else
+                aDrawRect.Left() = nScrX + aOutputData.GetScrW();
             if (aDrawRect.Right() >= aDrawRect.Left())
                 DrawRect( aDrawRect );
         }
@@ -820,7 +858,13 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
             Rectangle aDrawRect( aPixRect );
             aDrawRect.Top() = nScrY + aOutputData.GetScrH();
             if ( nX2==MAXCOL )
-                aDrawRect.Right() = nScrX + aOutputData.GetScrW() - 1;      // Ecke nicht doppelt
+            {
+                // no double painting of the corner
+                if ( bLayoutRTL )
+                    aDrawRect.Left() = nScrX;
+                else
+                    aDrawRect.Right() = nScrX + aOutputData.GetScrW() - 1;
+            }
             if (aDrawRect.Bottom() >= aDrawRect.Top())
                 DrawRect( aDrawRect );
         }
@@ -1093,10 +1137,13 @@ void ScGridWindow::DrawRefMark( USHORT nRefStartX, USHORT nRefStartY,
     BOOL bHide = ( nCurX+1 >= nRefStartX && nCurX <= nRefEndX+1 &&
                    nCurY+1 >= nRefStartY && nCurY <= nRefEndY+1 );
 
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
     Point aStartPos = pViewData->GetScrPos( nRefStartX, nRefStartY, eWhich, TRUE );
     Point aEndPos = pViewData->GetScrPos( nRefEndX+1, nRefEndY+1, eWhich, TRUE );
-    aEndPos.X() -= 2;
-    aEndPos.Y() -= 2;   // nicht ueber das Gitter
+    aEndPos.X() -= 2 * nLayoutSign;
+    aEndPos.Y() -= 2;   // don't paint over the grid
 
     //  begrenzen um Ueberlaeufe mit Paint-Fehlern zu vermeiden
     long nMinY = -10;
@@ -1117,8 +1164,8 @@ void ScGridWindow::DrawRefMark( USHORT nRefStartX, USHORT nRefStartY,
     {
         SetLineColor();
         SetFillColor( rColor );
-        DrawRect( Rectangle( aEndPos.X()-3, aEndPos.Y()-3,
-                                aEndPos.X()+1, aEndPos.Y()+1 ) );
+        DrawRect( Rectangle( aEndPos.X()-3*nLayoutSign, aEndPos.Y()-3,
+                                aEndPos.X()+nLayoutSign, aEndPos.Y()+1 ) );
     }
 
     if (bHide)
@@ -1135,6 +1182,8 @@ void ScGridWindow::DrawButtons( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     ScDocument*     pDoc = pViewData->GetDocument();
     ScDBData*       pDBData = NULL;
     ScQueryParam*   pQueryParam = NULL;
+
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
     Point aOldPos  = aComboButton.GetPosPixel();    // Zustand fuer MouseDown/Up
     Size  aOldSize = aComboButton.GetSizePixel();   // merken
@@ -1227,6 +1276,12 @@ void ScGridWindow::DrawButtons( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
                     long nPosX = aScrPos.X();
                     long nPosY = aScrPos.Y();
+                    if ( bLayoutRTL )
+                    {
+                        // overwrite the right, not left (visually) grid as long as the
+                        // left/right colors of the button borders aren't mirrored.
+                        nPosX -= nSizeX - 2;
+                    }
 
                     SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
                     DrawLine( Point(nPosX,nPosY), Point(nPosX,nPosY+nSizeY-1) );
@@ -1259,6 +1314,8 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     USHORT nTab = pViewData->GetTabNo();
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     ScDDComboBoxButton aButton( this );             // for optimal size
     Size aBtnSize = aButton.GetSizePixel();
@@ -1285,9 +1342,12 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
 
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
     if (!bNextCell)
-        aPos.X() += nCellSizeX - aBtnSize.Width();      // right edge of cell if next cell not available
+        aPos.X() += (nCellSizeX - aBtnSize.Width()) * nLayoutSign;  // right edge of cell if next cell not available
     aPos.Y() += nCellSizeY - aBtnSize.Height();
     // X remains at the left edge
+
+    if ( bLayoutRTL )
+        aPos.X() -= aBtnSize.Width()-1;     // align right edge of button with cell border
 
     return Rectangle( aPos, aBtnSize );
 }
@@ -1346,7 +1406,12 @@ void ScGridWindow::DrawComboButton( const Point&    rCellPos,
         aComboButton.SetSizePixel( aBtnSize );
     }
 
-    aScrPos.X() += nCellSizeX - aBtnSize.Width();
+    BOOL bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+
+    if ( bLayoutRTL )
+        aScrPos.X() -= nCellSizeX - 1;
+    else
+        aScrPos.X() += nCellSizeX - aBtnSize.Width();
     aScrPos.Y() += nCellSizeY - aBtnSize.Height();
 
     aComboButton.SetPosPixel( aScrPos );
@@ -1369,6 +1434,9 @@ void ScGridWindow::InvertSimple( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     ScMarkData& rMark = pViewData->GetMarkData();
     ScDocument* pDoc = pViewData->GetDocument();
     USHORT nTab = pViewData->GetTabNo();
+
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     USHORT nTestX2 = nX2;
     USHORT nTestY2 = nY2;
@@ -1403,7 +1471,7 @@ void ScGridWindow::InvertSimple( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     ScInvertMerger aInvert( this );
 
     Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
-    USHORT nScrY = (USHORT) aScrPos.Y();
+    long nScrY = aScrPos.Y();
     BOOL bWasHidden = FALSE;
     for (USHORT nY=nY1; nY<=nY2; nY++)
     {
@@ -1444,14 +1512,14 @@ void ScGridWindow::InvertSimple( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                     nLoopEndX = nX1;
             }
 
-            USHORT nEndY = nScrY + (USHORT) ScViewData::ToPixel( nHeightTwips, nPPTY ) - 1;
-            USHORT nScrX = (USHORT) aScrPos.X();
+            long nEndY = nScrY + ScViewData::ToPixel( nHeightTwips, nPPTY ) - 1;
+            long nScrX = aScrPos.X();
             for (USHORT nX=nX1; nX<=nLoopEndX; nX++)
             {
-                USHORT nWidth = (USHORT) ScViewData::ToPixel( pDoc->GetColWidth( nX,nTab ), nPPTX );
+                long nWidth = ScViewData::ToPixel( pDoc->GetColWidth( nX,nTab ), nPPTX );
                 if ( nWidth > 0 )
                 {
-                    USHORT nEndX = nScrX + nWidth - 1;
+                    long nEndX = nScrX + ( nWidth - 1 ) * nLayoutSign;
                     if (bTestMerge)
                     {
                         USHORT nThisY = nY;
@@ -1491,12 +1559,13 @@ void ScGridWindow::InvertSimple( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                                     Point aEndPos = pViewData->GetScrPos(
                                             nThisX + pMerge->GetColMerge(),
                                             nThisY + pMerge->GetRowMerge(), eWhich );
-                                    if ( aEndPos.X() > nScrX && aEndPos.Y() > nScrY )
+                                    if ( aEndPos.X() * nLayoutSign > nScrX * nLayoutSign && aEndPos.Y() > nScrY )
                                     {
-                                        aInvert.AddRect( Rectangle( nScrX,nScrY,aEndPos.X()-1,aEndPos.Y()-1 ) );
+                                        aInvert.AddRect( Rectangle( nScrX,nScrY,
+                                                    aEndPos.X()-nLayoutSign,aEndPos.Y()-1 ) );
                                     }
                                 }
-                                else if ( nEndX >= nScrX && nEndY >= nScrY )
+                                else if ( nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
                                 {
                                     aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
                                 }
@@ -1506,13 +1575,13 @@ void ScGridWindow::InvertSimple( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                     else        // !bTestMerge
                     {
                         if ( rMark.IsCellMarked( nX, nY, TRUE ) == bRepeat &&
-                                                nEndX >= nScrX && nEndY >= nScrY )
+                                                nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
                         {
                             aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
                         }
                     }
 
-                    nScrX = nEndX + 1;
+                    nScrX = nEndX + nLayoutSign;
                 }
             }
             nScrY = nEndY + 1;
@@ -1564,9 +1633,12 @@ void ScGridWindow::DrawDragRect( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     double nPPTY = pViewData->GetPPTY();
     USHORT i;
 
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
     if (bMarkDrop)
     {
-        aScrPos.X() -= 1;           // nur die Position markieren
+        aScrPos.X() -= nLayoutSign;         // only mark the position
         nSizeXPix   += 2;
     }
     else
@@ -1576,7 +1648,7 @@ void ScGridWindow::DrawDragRect( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                 nSizeXPix += ScViewData::ToPixel( pDoc->GetColWidth( i, nTab ), nPPTX );
         else
         {
-            aScrPos.X() -= 1;
+            aScrPos.X() -= nLayoutSign;
             nSizeXPix   += 2;
         }
     }
@@ -1590,9 +1662,16 @@ void ScGridWindow::DrawDragRect( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
         nSizeYPix   += 2;
     }
 
-    aScrPos.X() -= 2;
+    aScrPos.X() -= 2 * nLayoutSign;
     aScrPos.Y() -= 2;
-    Rectangle aRect( aScrPos, Size( nSizeXPix + 3, nSizeYPix + 3 ) );
+//  Rectangle aRect( aScrPos, Size( nSizeXPix + 3, nSizeYPix + 3 ) );
+    Rectangle aRect( aScrPos.X(), aScrPos.Y(),
+                     aScrPos.X() + ( nSizeXPix + 2 ) * nLayoutSign, aScrPos.Y() + nSizeYPix + 2 );
+    if ( bLayoutRTL )
+    {
+        aRect.Left() = aRect.Right();   // end position is left
+        aRect.Right() = aScrPos.X();
+    }
 
     Invert(Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ));
     Invert(Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ));
@@ -1642,15 +1721,26 @@ void ScGridWindow::DrawCursor()
         MapMode aOld = GetMapMode(); SetMapMode(MAP_PIXEL);
 
         Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, TRUE );
+        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
-        //  rechts/unten ausserhalb des Bildschirms ?
-
-        Size aOutSize = GetOutputSizePixel();
-        if ( aScrPos.X() <= aOutSize.Width() + 2 && aScrPos.Y() <= aOutSize.Height() + 2 )
+        //  completely right of/below the screen?
+        //  (test with logical start position in aScrPos)
+        BOOL bMaybeVisible;
+        if ( bLayoutRTL )
+            bMaybeVisible = ( aScrPos.X() >= -2 && aScrPos.Y() >= -2 );
+        else
+        {
+            Size aOutSize = GetOutputSizePixel();
+            bMaybeVisible = ( aScrPos.X() <= aOutSize.Width() + 2 && aScrPos.Y() <= aOutSize.Height() + 2 );
+        }
+        if ( bMaybeVisible )
         {
             long nSizeXPix;
             long nSizeYPix;
             pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
+
+            if ( bLayoutRTL )
+                aScrPos.X() -= nSizeXPix - 2;       // move instead of mirroring
 
             BOOL bFix = ( pViewData->GetHSplitMode() == SC_SPLIT_FIX ||
                             pViewData->GetVSplitMode() == SC_SPLIT_FIX );
@@ -1688,15 +1778,20 @@ void ScGridWindow::DrawAutoFillMark()
     {
         USHORT nX = aAutoMarkPos.Col();
         USHORT nY = aAutoMarkPos.Row();
+        USHORT nTab = pViewData->GetTabNo();
+        ScDocument* pDoc = pViewData->GetDocument();
+        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
         Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, TRUE );
         long nSizeXPix;
         long nSizeYPix;
         pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-        aFillPos.X() += nSizeXPix;
-        aFillPos.Y() += nSizeYPix;
+        if ( bLayoutRTL )
+            aFillPos.X() -= nSizeXPix + 3;
+        else
+            aFillPos.X() += nSizeXPix - 2;
 
-        aFillPos.X() -= 2;
+        aFillPos.Y() += nSizeYPix;
         aFillPos.Y() -= 2;
         Rectangle aFillRect( aFillPos, Size(6,6) );
         //  Anfasser von Zeichenobjekten sind 7*7
