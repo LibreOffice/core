@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-04-03 07:16:44 $
+ *  last change: $Author: os $ $Date: 2001-05-23 08:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,6 +1030,8 @@ class SwXParagraphEnumeration : public SwSimpleEnumerationBaseClass,
     SwUnoCrsr*          GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
     CursorType          eCursorType;
     ULONG               nEndIndex;
+    sal_Int32           nFirstParaStart;
+    sal_Int32           nLastParaEnd;
 public:
     SwXParagraphEnumeration(SwXText* pParent, SwPosition& rPos, CursorType eType);
     SwXParagraphEnumeration(SwXText* pParent, SwUnoCrsr* pCrsr, CursorType eType);
@@ -1071,10 +1073,13 @@ class SwXParagraph : public cppu::WeakImplHelper9
     rtl::OUString               m_sText;
     BOOL                        m_bIsDescriptor;
 
+    sal_Int32                   nSelectionStartPos;
+    sal_Int32                   nSelectionEndPos;
+
     SwUnoCrsr*              GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
 public:
     SwXParagraph();
-    SwXParagraph(SwXText* pParent, SwUnoCrsr* pCrsr);
+    SwXParagraph(SwXText* pParent, SwUnoCrsr* pCrsr, sal_Int32 nSelStart = -1, sal_Int32 nSelEnd = - 1);
     virtual ~SwXParagraph();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -1203,13 +1208,16 @@ class SwXTextPortionEnumeration : public cppu::WeakImplHelper3
     BOOL                bAtEnd;
     BOOL                bFirstPortion;
 
+    const sal_Int32     nStartPos;
+    const sal_Int32     nEndPos;
 
     SwUnoCrsr*          GetCrsr() const { return (SwUnoCrsr*)GetRegisteredIn(); }
     SwXTextPortionEnumeration();
     void                CreatePortions();
 public:
     SwXTextPortionEnumeration(SwPaM& rParaCrsr,
-            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent);
+            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent,
+            sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwXTextPortionEnumeration();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
