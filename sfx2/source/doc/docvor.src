@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:29:52 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,7 +740,7 @@ ModalDialog DLG_ORGANIZE
         Text[ russian ] = "Êîìàíäû";
         Text[ polish ] = "Pole~cenia";
         Text[ japanese ] = "ºÏİÄŞ";
-        Text[ chinese_traditional ] = "©R¥O";
+        Text[ chinese_traditional ] = "«ü¥O";
         Text[ arabic ] = "ÃæÇãÑ";
         Text[ greek ] = "Å~íôïëİò";
         Text[ korean ] = "¸í·É";
