@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-17 14:05:20 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ TabPage TP_DOCINFODESC
         Text[ arabic ] = "«·⁄‰Ê«‰";
         Text[ turkish ] = "~Ba˛l˝k";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~TÌtulo";
+        Text[ catalan ] = "~TÌtol";
         Text[ thai ] = "~‡∏ä‡∏∑‡πà‡∏≠";
     };
     Edit ED_TITLE
@@ -273,7 +273,7 @@ TabPage TP_DOCINFODOC
         Text[ chinese_simplified ] = "Á±ªÂûãÔºö";
         Text[ russian ] = "“ËÔ:";
         Text[ polish ] = "Typ:";
-        Text[ japanese ] = "„Çø„Ç§„Éó:";
+        Text[ japanese ] = "Á®ÆÈ°û:";
         Text[ chinese_traditional ] = "È°ûÂûãÔºö";
         Text[ greek ] = "‘˝ÔÚ:";
         Text[ korean ] = "ÌòïÏãù:";
@@ -343,7 +343,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "«·„Êﬁ⁄:";
         Text[ turkish ] = "Yer:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "UbicaciÛn:";
+        Text[ catalan ] = "UbicaciÛ :";
         Text[ finnish ] = "Sijainti:";
         Text[ thai ] = "‡∏ó‡∏µ‡πà‡∏ï‡∏±‡πâ‡∏á:";
     };
@@ -409,7 +409,7 @@ TabPage TP_DOCINFODOC
         Text[ chinese_simplified ] = "Âª∫Á´ãÊó•ÊúüÔºö";
         Text[ russian ] = "—ÓÁ‰‡Ì:";
         Text[ polish ] = "Utworzony:";
-        Text[ japanese ] = "‰ΩúÊàêÊó•:";
+        Text[ japanese ] = "‰ΩúÊàêÊó•ÊôÇ:";
         Text[ chinese_traditional ] = "Âª∫Á´ãÊó•ÊúüÔºö";
         Text[ greek ] = "ƒÁÏÈÔıÒ„ﬁËÁÍÂ ÙÁ:";
         Text[ korean ] = "ÏûëÏÑ±Ïùº:";
@@ -445,7 +445,7 @@ TabPage TP_DOCINFODOC
         Text[ chinese_simplified ] = "Â∑≤ÁªèÁºñËæëÔºö";
         Text[ russian ] = "ŒÚÂ‰‡ÍÚËÓ‚‡Ì:";
         Text[ polish ] = "Opracowano:";
-        Text[ japanese ] = "Á∑®ÈõÜÊó•:";
+        Text[ japanese ] = "Á∑®ÈõÜÊôÇÈñì:";
         Text[ chinese_traditional ] = "Â∑≤Á∂ìÁ∑®ËºØÔºö";
         Text[ greek ] = "≈ÂÓÂÒ„‹ÛÙÁÍÂ:";
         Text[ korean ] = "Ìé∏Ïßë:";
@@ -478,7 +478,7 @@ TabPage TP_DOCINFODOC
         Text[ chinese_simplified ] = "Êõ¥ÊîπÁöÑÊó•ÊúüÔºö";
         Text[ russian ] = "»ÁÏÂÌÂÌ:";
         Text[ polish ] = "Zmodyfikowany:";
-        Text[ japanese ] = "Â§âÊõ¥Êó•:";
+        Text[ japanese ] = "Â§âÊõ¥Êó•ÊôÇ:";
         Text[ chinese_traditional ] = "ËÆäÊõ¥ÁöÑÊó•ÊúüÔºö";
         Text[ greek ] = "‘ÒÔÔÔÈﬁËÁÍÂ ÙÁ:";
         Text[ korean ] = "Î≥ÄÍ≤ΩÏùºÏûê:";
@@ -587,7 +587,7 @@ TabPage TP_DOCINFODOC
         Text[ chinese_traditional ] = "Âà™Èô§(~D)";
         Text[ arabic ] = "Õ–›";
         Text[ turkish ] = "~Sil";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
         Text[ thai ] = "~‡∏•‡∏ö";
     };
@@ -684,7 +684,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "€Ì— „⁄—Ê›";
         Text[ turkish ] = "bilinmiyor";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "desconocido";
+        Text[ catalan ] = "Desconegut";
         Text[ finnish ] = "tuntematon";
         Text[ thai ] = "‡πÑ‡∏°‡πà‡∏£‡∏π‡πâ‡∏à‡∏±‡∏Å";
     };
@@ -796,6 +796,23 @@ TabPage TP_DOCINFORELOAD
         Text = "Keine automatische Aktualisierung" ;
         Text [ english ] = "Do not refresh automatically" ;
         Text [ english_us ] = "Do not refresh automatically" ;
+        Text[ portuguese ] = "Do not refresh automatically";
+        Text[ russian ] = "Do not refresh automatically";
+        Text[ greek ] = "Do not refresh automatically";
+        Text[ dutch ] = "Do not refresh automatically";
+        Text[ french ] = "Do not refresh automatically";
+        Text[ spanish ] = "Do not refresh automatically";
+        Text[ finnish ] = "Do not refresh automatically";
+        Text[ italian ] = "Do not refresh automatically";
+        Text[ danish ] = "Do not refresh automatically";
+        Text[ swedish ] = "Do not refresh automatically";
+        Text[ polish ] = "Do not refresh automatically";
+        Text[ japanese ] = "Do not refresh automatically";
+        Text[ korean ] = "Do not refresh automatically";
+        Text[ chinese_simplified ] = "Do not refresh automatically";
+        Text[ chinese_traditional ] = "Do not refresh automatically";
+        Text[ turkish ] = "Do not refresh automatically";
+        Text[ arabic ] = "Do not refresh automatically";
     };
 
     RadioButton RB_RELOADUPDATE
@@ -806,6 +823,23 @@ TabPage TP_DOCINFORELOAD
         Text = "Dieses Dokument aktualisieren" ;
         Text [ english ] = "Refresh this document" ;
         Text [ english_us ] = "Refresh this document" ;
+        Text[ portuguese ] = "Refresh this document";
+        Text[ russian ] = "Refresh this document";
+        Text[ greek ] = "Refresh this document";
+        Text[ dutch ] = "Refresh this document";
+        Text[ french ] = "Refresh this document";
+        Text[ spanish ] = "Refresh this document";
+        Text[ finnish ] = "Refresh this document";
+        Text[ italian ] = "Refresh this document";
+        Text[ danish ] = "Refresh this document";
+        Text[ swedish ] = "Refresh this document";
+        Text[ polish ] = "Refresh this document";
+        Text[ japanese ] = "Refresh this document";
+        Text[ korean ] = "Refresh this document";
+        Text[ chinese_simplified ] = "Refresh this document";
+        Text[ chinese_traditional ] = "Refresh this document";
+        Text[ turkish ] = "Refresh this document";
+        Text[ arabic ] = "Refresh this document";
     };
     FixedText FT_EVERY
     {
@@ -814,6 +848,25 @@ TabPage TP_DOCINFORELOAD
         Text = "alle" ;
         Text [ english ] = "every" ;
         Text [ english_us ] = "every" ;
+        Text[ portuguese ] = "every";
+        Text[ russian ] = "every";
+        Text[ greek ] = "every";
+        Text[ dutch ] = "every";
+        Text[ french ] = "every";
+        Text[ spanish ] = "every";
+        Text[ finnish ] = "every";
+        Text[ italian ] = "every";
+        Text[ danish ] = "every";
+        Text[ swedish ] = "every";
+        Text[ polish ] = "every";
+        Text[ japanese ] = "every";
+        Text[ korean ] = "every";
+        Text[ chinese_simplified ] = "every";
+        Text[ chinese_traditional ] = "every";
+        Text[ turkish ] = "every";
+        Text[ arabic ] = "every";
+        Text[ catalan ] = "Tot";
+        Text[ thai ] = "‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î";
     };
     NumericField ED_RELOAD
     {
@@ -835,6 +888,25 @@ TabPage TP_DOCINFORELOAD
         Text = "Sekunden" ;
         Text [ english ] = "seconds" ;
         Text [ english_us ] = "seconds" ;
+        Text[ portuguese ] = "seconds";
+        Text[ russian ] = "seconds";
+        Text[ greek ] = "seconds";
+        Text[ dutch ] = "seconds";
+        Text[ french ] = "seconds";
+        Text[ spanish ] = "seconds";
+        Text[ finnish ] = "seconds";
+        Text[ italian ] = "seconds";
+        Text[ danish ] = "seconds";
+        Text[ swedish ] = "seconds";
+        Text[ polish ] = "seconds";
+        Text[ japanese ] = "seconds";
+        Text[ korean ] = "seconds";
+        Text[ chinese_simplified ] = "seconds";
+        Text[ chinese_traditional ] = "seconds";
+        Text[ turkish ] = "seconds";
+        Text[ arabic ] = "seconds";
+        Text[ catalan ] = "segons";
+        Text[ thai ] = "‡∏ä‡∏ä:‡∏ô‡∏ô:‡∏ß‡∏ß";
     };
 
     RadioButton RB_FORWARDUPDATE
@@ -845,6 +917,23 @@ TabPage TP_DOCINFORELOAD
         Text = "Von diesem Dokument weiterleiten" ;
         Text [ english ] = "Redirect from this document" ;
         Text [ english_us ] = "Redirect from this document" ;
+        Text[ portuguese ] = "Redirect from this document";
+        Text[ russian ] = "Redirect from this document";
+        Text[ greek ] = "Redirect from this document";
+        Text[ dutch ] = "Redirect from this document";
+        Text[ french ] = "Redirect from this document";
+        Text[ spanish ] = "Redirect from this document";
+        Text[ finnish ] = "Redirect from this document";
+        Text[ italian ] = "Redirect from this document";
+        Text[ danish ] = "Redirect from this document";
+        Text[ swedish ] = "Redirect from this document";
+        Text[ polish ] = "Redirect from this document";
+        Text[ japanese ] = "Redirect from this document";
+        Text[ korean ] = "Redirect from this document";
+        Text[ chinese_simplified ] = "Redirect from this document";
+        Text[ chinese_traditional ] = "Redirect from this document";
+        Text[ turkish ] = "Redirect from this document";
+        Text[ arabic ] = "Redirect from this document";
     };
     FixedText FT_AFTER
     {
@@ -853,6 +942,23 @@ TabPage TP_DOCINFORELOAD
         Text = "nach" ;
         Text [ english ] = "after" ;
         Text [ english_us ] = "after" ;
+        Text[ portuguese ] = "after";
+        Text[ russian ] = "after";
+        Text[ greek ] = "after";
+        Text[ dutch ] = "after";
+        Text[ french ] = "after";
+        Text[ spanish ] = "after";
+        Text[ finnish ] = "after";
+        Text[ italian ] = "after";
+        Text[ danish ] = "after";
+        Text[ swedish ] = "after";
+        Text[ polish ] = "after";
+        Text[ japanese ] = "after";
+        Text[ korean ] = "after";
+        Text[ chinese_simplified ] = "after";
+        Text[ chinese_traditional ] = "after";
+        Text[ turkish ] = "after";
+        Text[ arabic ] = "after";
     };
     NumericField ED_FORWARD
     {
@@ -874,6 +980,25 @@ TabPage TP_DOCINFORELOAD
         Text = "Sekunden" ;
         Text [ english ] = "seconds" ;
         Text [ english_us ] = "seconds" ;
+        Text[ portuguese ] = "seconds";
+        Text[ russian ] = "seconds";
+        Text[ greek ] = "seconds";
+        Text[ dutch ] = "seconds";
+        Text[ french ] = "seconds";
+        Text[ spanish ] = "seconds";
+        Text[ finnish ] = "seconds";
+        Text[ italian ] = "seconds";
+        Text[ danish ] = "seconds";
+        Text[ swedish ] = "seconds";
+        Text[ polish ] = "seconds";
+        Text[ japanese ] = "seconds";
+        Text[ korean ] = "seconds";
+        Text[ chinese_simplified ] = "seconds";
+        Text[ chinese_traditional ] = "seconds";
+        Text[ turkish ] = "seconds";
+        Text[ arabic ] = "seconds";
+        Text[ catalan ] = "segons";
+        Text[ thai ] = "‡∏ä‡∏ä:‡∏ô‡∏ô:‡∏ß‡∏ß";
     };
     FixedText FT_URL
     {
@@ -882,6 +1007,24 @@ TabPage TP_DOCINFORELOAD
         Text = "an URL" ;
         Text [ english ] = "to URL" ;
         Text [ english_us ] = "to URL" ;
+        Text[ portuguese ] = "~URL";
+        Text[ russian ] = "~URL";
+        Text[ greek ] = "~URL";
+        Text[ dutch ] = "~URL";
+        Text[ french ] = "URL";
+        Text[ spanish ] = "~URL";
+        Text[ finnish ] = "~URL-osoite";
+        Text[ italian ] = "URL";
+        Text[ danish ] = "URL";
+        Text[ swedish ] = "~URL";
+        Text[ polish ] = "URL";
+        Text[ portuguese_brazilian ] = "~URL";
+        Text[ japanese ] = "~URL";
+        Text[ korean ] = "~URL";
+        Text[ chinese_simplified ] = "~URL";
+        Text[ chinese_traditional ] = "~URL";
+        Text[ turkish ] = "~URL";
+        Text[ arabic ] = "URL~";
     };
     Edit ED_URL
     {
@@ -902,6 +1045,23 @@ TabPage TP_DOCINFORELOAD
         Text = "an Frame" ;
         Text [ english ] = "to frame" ;
         Text [ english_us ] = "to frame" ;
+        Text[ portuguese ] = "to frame";
+        Text[ russian ] = "to frame";
+        Text[ greek ] = "to frame";
+        Text[ dutch ] = "to frame";
+        Text[ french ] = "to frame";
+        Text[ spanish ] = "to frame";
+        Text[ finnish ] = "to frame";
+        Text[ italian ] = "to frame";
+        Text[ danish ] = "to frame";
+        Text[ swedish ] = "to frame";
+        Text[ polish ] = "to frame";
+        Text[ japanese ] = "to frame";
+        Text[ korean ] = "to frame";
+        Text[ chinese_simplified ] = "to frame";
+        Text[ chinese_traditional ] = "to frame";
+        Text[ turkish ] = "to frame";
+        Text[ arabic ] = "to frame";
     };
     ComboBox CB_FRAME
     {
@@ -914,6 +1074,23 @@ TabPage TP_DOCINFORELOAD
         Text = "Wenn Sie die Option \"%PLACEHOLDER%\" w‰hlen, m¸ssen Sie eine URL angeben." ;
         Text [ english ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL." ;
         Text [ english_us ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL." ;
+        Text[ portuguese ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ russian ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ greek ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ dutch ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ french ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ spanish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ finnish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ italian ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ danish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ swedish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ polish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ japanese ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ korean ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ chinese_simplified ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ chinese_traditional ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ turkish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ arabic ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
     };
 
 };
@@ -977,7 +1154,7 @@ TabDialog SID_DOCINFO
                 Text[ arabic ] = "⁄«„";
                 Text[ turkish ] = "Genel";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "General";
+                Text[ catalan ] = "Continguts";
                 Text[ finnish ] = "Yleist‰";
                 Text[ thai ] = "‡∏ó‡∏±‡πà‡∏ß‡πÑ‡∏õ";
             };
@@ -1005,7 +1182,7 @@ TabDialog SID_DOCINFO
                 Text[ arabic ] = "«·Ê’›";
                 Text[ turkish ] = "Tan˝m";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "DescripciÛn";
+                Text[ catalan ] = "DescripciÛ";
                 Text[ finnish ] = "Kuvaus";
                 Text[ thai ] = "‡∏Ñ‡∏≥‡∏≠‡∏ò‡∏¥‡∏ö‡∏≤‡∏¢";
             };
