@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:28:39 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ inline void _defaultConstructArray(
         for (i=0; i < nTotalElements; i++)
         {
             uno_Sequence** ppElement = (uno_Sequence **)pMem + i;
-            *ppElement = _getEmptySequence();
+            *ppElement = createEmptySequence();
         }
         break;
     }
@@ -288,7 +288,7 @@ inline void _defaultConstructData(
         }
         break;
     case typelib_TypeClass_SEQUENCE:
-        *(uno_Sequence **)pMem = _getEmptySequence();
+        *(uno_Sequence **)pMem = createEmptySequence();
         break;
     case typelib_TypeClass_INTERFACE:
         *(void **)pMem = 0; // either cpp or c-uno interface
