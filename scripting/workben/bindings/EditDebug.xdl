@@ -12,22 +12,22 @@
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.LangLocComboListener" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:menulist dlg:id="ScriptList" dlg:tab-index="3" dlg:left="64" dlg:top="50" dlg:width="110" dlg:height="44"/>
-  <dlg:button dlg:id="OK" dlg:tab-index="4" dlg:left="58" dlg:top="131" dlg:width="36" dlg:height="14" dlg:value="OK">
+  <dlg:button dlg:id="OK" dlg:tab-index="5" dlg:left="58" dlg:top="131" dlg:width="36" dlg:height="14" dlg:value="OK">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.DoEdit" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="Cancel" dlg:tab-index="5" dlg:left="97" dlg:top="131" dlg:width="36" dlg:height="14" dlg:value="Cancel">
+  <dlg:button dlg:id="Cancel" dlg:tab-index="6" dlg:left="97" dlg:top="131" dlg:width="36" dlg:height="14" dlg:value="Cancel">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.MenuCancelButton" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="Help" dlg:tab-index="6" dlg:left="138" dlg:top="131" dlg:width="36" dlg:height="14" dlg:value="Help">
+  <dlg:button dlg:id="Help" dlg:tab-index="7" dlg:left="138" dlg:top="131" dlg:width="36" dlg:height="14" dlg:value="Help">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.MenuHelpButton" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="7" dlg:left="42" dlg:top="6" dlg:width="131" dlg:height="7"/>
-  <dlg:text dlg:id="Label1" dlg:tab-index="8" dlg:left="5" dlg:top="6" dlg:width="36" dlg:height="9" dlg:value="Select script"/>
-  <dlg:text dlg:id="Label7" dlg:tab-index="9" dlg:left="12" dlg:top="18" dlg:width="29" dlg:height="11" dlg:value="Location"/>
-  <dlg:text dlg:id="Label8" dlg:tab-index="10" dlg:left="12" dlg:top="31" dlg:width="35" dlg:height="9" dlg:value="Language"/>
-  <dlg:text dlg:id="Label9" dlg:tab-index="11" dlg:left="12" dlg:top="53" dlg:width="24" dlg:height="14" dlg:value="Script"/>
-  <dlg:fixedline dlg:id="FixedLine2" dlg:tab-index="12" dlg:left="7" dlg:top="120" dlg:width="167" dlg:height="7"/>
-  <dlg:button dlg:id="CommandButton1" dlg:tab-index="13" dlg:left="136" dlg:top="101" dlg:width="36" dlg:height="14" dlg:value="Browse...">
+  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="8" dlg:left="42" dlg:top="6" dlg:width="131" dlg:height="7"/>
+  <dlg:text dlg:id="Label1" dlg:tab-index="9" dlg:left="5" dlg:top="6" dlg:width="36" dlg:height="9" dlg:value="Select script"/>
+  <dlg:text dlg:id="Label7" dlg:tab-index="10" dlg:left="12" dlg:top="18" dlg:width="29" dlg:height="11" dlg:value="Location"/>
+  <dlg:text dlg:id="Label8" dlg:tab-index="11" dlg:left="12" dlg:top="31" dlg:width="35" dlg:height="9" dlg:value="Language"/>
+  <dlg:text dlg:id="Label9" dlg:tab-index="12" dlg:left="12" dlg:top="53" dlg:width="24" dlg:height="14" dlg:value="Script"/>
+  <dlg:fixedline dlg:id="FixedLine2" dlg:tab-index="13" dlg:left="7" dlg:top="120" dlg:width="167" dlg:height="7"/>
+  <dlg:button dlg:id="Browse" dlg:tab-index="4" dlg:left="136" dlg:top="101" dlg:width="36" dlg:height="14" dlg:value="Browse...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.DoBrowseAndEdit" script:language="StarBasic"/>
   </dlg:button>
  </dlg:bulletinboard>
