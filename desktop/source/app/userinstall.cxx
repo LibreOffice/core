@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:26:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/beans/XHierarchicalPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -143,20 +144,69 @@ namespace desktop {
 
     static UserInstall::UserInstallError create_user_install(OUString&);
 
-#ifdef UNX
-    static const char *szReadme = "/README";
-#else
-    static const char *szReadme = "/readme.txt";
-#endif
+    static bool is_user_install()
+    {
+        try
+        {
+            OUString sConfigSrvc(
+                 RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.ConfigurationProvider" ) );
+            OUString sAccessSrvc(
+                 RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.ConfigurationAccess" ) );
+
+            // get configuration provider
+            Reference< XMultiServiceFactory > theMSF
+                = comphelper::getProcessServiceFactory();
+            Reference< XMultiServiceFactory > theConfigProvider
+                = Reference< XMultiServiceFactory >(
+                    theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
+
+            // localize the provider to user selection
+            Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
+            LanguageType aUserLanguageType = LanguageSelection::getLanguageType();
+            OUString aUserLanguage = ConvertLanguageToIsoString(aUserLanguageType);
+            Locale aLocale = LanguageSelection::IsoStringToLocale(aUserLanguage);
+            localizable->setLocale(aLocale);
+
+            Sequence< Any > theArgs(1);
+            NamedValue v;
+            v.Name = OUString::createFromAscii("NodePath");
+            v.Value = makeAny(OUString::createFromAscii("org.openoffice.Setup"));
+            theArgs[0] <<= v;
+            Reference< XHierarchicalNameAccess> hnacc(
+                theConfigProvider->createInstanceWithArguments(
+                    sAccessSrvc, theArgs), UNO_QUERY_THROW);
+
+            try
+            {
+                sal_Bool bValue = sal_False;
+                hnacc->getByHierarchicalName(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "Office/ooSetupInstCompleted" ) ) ) >>= bValue;
+
+                return bValue ? true : false;
+            }
+            catch ( NoSuchElementException const & )
+            {
+                // just return false in this case.
+            }
+        }
+        catch (Exception const & e)
+        {
+            OString msg(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
+            OSL_ENSURE(sal_False, msg.getStr());
+        }
+
+        return false;
+    }
 
     UserInstall::UserInstallError UserInstall::finalize( Desktop& rDesktop )
     {
         OUString aUserInstallPath;
         Bootstrap::PathStatus aLocateResult =
             Bootstrap::locateUserInstallation(aUserInstallPath);
-        OUString aReadme = aUserInstallPath + (OUString::createFromAscii(szReadme));
-        File aReadmeFile(aReadme);
-        UserInstallError aError = E_None;
+
         switch (aLocateResult) {
 
             case Bootstrap::DATA_INVALID:
@@ -164,20 +214,31 @@ namespace desktop {
             case Bootstrap::DATA_UNKNOWN:
                 // cannot find a valid path or path is missing
                 return E_Unknown;
-                break;
+
             case Bootstrap::PATH_EXISTS:
+            {
                 // path exists, check if an installation lives there
-                if (aReadmeFile.open(0) == FileBase::E_None) {
-                    return E_None;
+                if ( is_user_install() )
+                {
+                    // User installation already there, just check license.
+                    if (License::check())
+                        return E_None;
+                    else
+                        return E_License;
                 }
+                // Note: fall-thru intended.
+            }
             case Bootstrap::PATH_VALID:
-                // found a path but need to create user install
                 {
                     Reference< XMultiServiceFactory > xMultiServiceFactory( ::comphelper::getProcessServiceFactory() );
                     rDesktop.RegisterServices( xMultiServiceFactory );
                 }
 
-                return create_user_install(aUserInstallPath);
+                if (License::check())
+                    return  create_user_install(aUserInstallPath);
+                else
+                    return E_License;
+
             default:
                 return E_Unknown;
         }
@@ -231,23 +292,11 @@ namespace desktop {
         }
         return err;
     }
-#ifdef UNX
+
     static const char *pszCopyList[] = {
         "/user",
-        "/README",
-        "/README.html",
-        "/THIRDPARTYLICENSEREADME.html",
         NULL
     };
-#else
-    static const char *pszCopyList[] = {
-        "/user",
-        "/readme.txt",
-        "/readme.html",
-        "/THIRDPARTYLICENSEREADME.html",
-        NULL
-    };
-#endif
 
     static UserInstall::UserInstallError create_user_install(OUString& aUserPath)
     {
@@ -292,13 +341,6 @@ namespace desktop {
             Sequence< Any > theArgs(1);
             NamedValue v;
             v.Name = OUString::createFromAscii("NodePath");
-            v.Value = makeAny(OUString::createFromAscii("org.openoffice.Setup"));
-            theArgs[0] <<= v;
-            Reference< XHierarchicalPropertySet> hpset(
-                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-            hpset->setHierarchicalPropertyValue(OUString::createFromAscii("L10N/ooLocale"), makeAny(aUserLanguage));
-            Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
-
             v.Value <<= OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
             theArgs[0] <<= v;
             Reference< XPropertySet > pset = Reference< XPropertySet >(
@@ -314,10 +356,18 @@ namespace desktop {
             }
             Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
 
-        } catch (Exception& e)
+            v.Value = makeAny(OUString::createFromAscii("org.openoffice.Setup"));
+            theArgs[0] <<= v;
+            Reference< XHierarchicalPropertySet> hpset(
+                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
+            hpset->setHierarchicalPropertyValue(OUString::createFromAscii("L10N/ooLocale"), makeAny(aUserLanguage));
+            hpset->setHierarchicalPropertyValue(OUString::createFromAscii("Office/ooSetupInstCompleted"), makeAny(sal_True));
+            Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
+
+        } catch (Exception const & e)
         {
-            const sal_Char *msg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr();
-            OSL_ENSURE(sal_False, msg);
+            OString msg(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
+            OSL_ENSURE(sal_False, msg.getStr());
             return UserInstall::E_Configuration;
         }
 
