@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-21 13:18:30 $
+ *  last change: $Author: pl $ $Date: 2002-01-17 14:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,9 +835,49 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
 
     // do a reschedule
     time_t nBegin = time( NULL );
+    XEvent aEvent;
     do
     {
-        dispatchEvent( 1500 );
+        {
+            ClearableMutexGuard aGuard(m_aMutex);
+            bool bHandle = false;
+
+            if( XCheckTypedEvent( m_pDisplay,
+                                  PropertyNotify,
+                                  &aEvent
+                                  ) )
+                bHandle = true;
+            else
+            if( XCheckTypedEvent( m_pDisplay,
+                                  SelectionClear,
+                                  &aEvent
+                                  ) )
+                bHandle = true;
+            else
+            if( XCheckTypedEvent( m_pDisplay,
+                                  SelectionRequest,
+                                  &aEvent
+                                  ) )
+                bHandle = true;
+            else
+            if( XCheckTypedEvent( m_pDisplay,
+                                  SelectionNotify,
+                                  &aEvent
+                                  ) )
+                bHandle = true;
+            else
+            {
+                TimeValue aTVal;
+                aTVal.Seconds = 0;
+                aTVal.Nanosec = 200000000;
+                osl_waitThread( &aTVal );
+            }
+            if( bHandle )
+            {
+                aGuard.clear();
+                handleXEvent( aEvent );
+            }
+        }
         osl_yieldThread();
     } while( ! it->second->m_aDataArrived.check() && time(NULL)-nBegin < 3 );
 
@@ -2849,12 +2889,6 @@ void SelectionManager::handleXEvent( XEvent& rEvent )
 
 void SelectionManager::dispatchEvent( int millisec )
 {
-#ifdef DEBUG
-//     int* pTest = *(int**)&m_aMutex;
-//     if( pTest[8] != 0 )
-//         abort();
-#endif
-
     pollfd aPollFD;
     XEvent event;
 
