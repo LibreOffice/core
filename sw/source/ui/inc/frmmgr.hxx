@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:49:33 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 class   SwWrtShell;
 struct  SvxSwFrameValidation;
 struct  SwPosition;
-
 
 class   SwFmt;
 class   SwFmtCol;
