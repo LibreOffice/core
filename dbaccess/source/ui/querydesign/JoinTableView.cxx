@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-26 07:52:10 $
+ *  last change: $Author: oj $ $Date: 2002-03-26 08:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1672,7 +1672,8 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAdd
         m_pView->getController()->getTableConnectionData()->push_back(_pConnection->GetData());
     }
     m_vTableConnection.push_back(_pConnection);
-    _pConnection->Invalidate(),
+    _pConnection->RecalcLines();
+    _pConnection->Invalidate();
     childCountChanged(m_vTableConnection.size() - 1);
 }
 // -----------------------------------------------------------------------------
