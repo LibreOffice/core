@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:48:35 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ static const sal_Char* errorCodeToMessage(ErrorCode eCode)
         return "a rest parameter may not be used on an interface method";
     case EIDL_READONLY_ATTRIBUTE_SET_EXCEPTIONS:
         return "a readonly attribute may not have a setter raises clause";
+    case EIDL_UNSIGNED_TYPE_ARGUMENT:
+        return "an unsigned integer type cannot be used as a type argument";
     case EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS:
         return
             "the number of given type arguments does not match the expected"
