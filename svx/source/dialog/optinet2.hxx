@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:48:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,11 +281,17 @@ public:
 private:
     FixedLine           maSecOptionsFL;
     FixedInfo           maSecOptionsFI;
+    ReadOnlyImage       maSaveOrSendDocsFI;
     CheckBox            maSaveOrSendDocsCB;
+    ReadOnlyImage       maSignDocsFI;
     CheckBox            maSignDocsCB;
+    ReadOnlyImage       maPrintDocsFI;
     CheckBox            maPrintDocsCB;
+    ReadOnlyImage       maCreatePdfFI;
     CheckBox            maCreatePdfCB;
+    ReadOnlyImage       maRemovePersInfoFI;
     CheckBox            maRemovePersInfoCB;
+    ReadOnlyImage       maRecommPasswdFI;
     CheckBox            maRecommPasswdCB;
 
     FixedLine           maMacroSecFL;
