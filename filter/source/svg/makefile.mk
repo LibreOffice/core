@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 15:25:12 $
+#   last change: $Author: kz $ $Date: 2004-03-25 14:59:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,11 +120,13 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(SALLIB)
+    $(SALLIB) 
+
 .IF "$(SOLAR_JAVA)"!=""
 SHL1STDLIBS+=\
-    $(SJLIB)
+    $(JVMACCESSLIB)
 .ENDIF
+
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
