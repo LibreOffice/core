@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:08:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     //Fuert Spezialbehandlung fuer _Get[Next|Prev]Leaf() durch.
     SwLayoutFrm *GetLeaf( MakePageType eMakePage, BOOL bFwd );
 
-    SwTable *pTable;
+    SwTable* pTable;
 
     BOOL bComplete          :1; //Eintrage als Repaint ohne das CompletePaint
                                 //der Basisklasse gesetzt werden muss. Damit
@@ -208,6 +208,13 @@ public:
     SwRowFrm* GetFirstNonHeadlineRow() const;
 
     bool IsLayoutSplitAllowed() const;
+
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    bool IsCollapsingBorders() const;
+
+    // used for collapsing border lines:
+    USHORT GetBottomLineSize() const;
+    // <-- collapsing
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrm)
 };
