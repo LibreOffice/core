@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-05 09:29:37 $
+ *  last change: $Author: sab $ $Date: 2001-03-06 05:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,24 +480,6 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                         uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
                         if (xShapesIndex.is())
                         {
-                            if( xDrawPage.is() )
-                            {
-                                uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
-                                if( xFormsSupplier.is() )
-                                {
-                                    uno::Reference< container::XNameContainer > xForms( xFormsSupplier->getForms() );
-                                    if( xForms.is() && xForms->hasElements() )
-                                    {
-                                        GetFormExport()->examineForms(xDrawPage);
-                                        if (!pSharedData)
-                                            CreateSharedData(nTableCount);
-                                        ScMyDrawPage aDrawPage;
-                                        aDrawPage.bHasForms = sal_True;
-                                        aDrawPage.xDrawPage = xDrawPage;
-                                        pSharedData->AddDrawPage(aDrawPage, nTable);
-                                    }
-                                }
-                            }
                             sal_Int32 nShapes = xShapesIndex->getCount();
                             for (sal_Int32 nShape = 0; nShape < nShapes; nShape++)
                             {
@@ -513,47 +495,8 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                                         sal_Int16 nLayerID;
                                         if( aPropAny >>= nLayerID )
                                         {
-                                            if( nLayerID == SC_LAYER_INTERN )
-                                                CollectInternalShape( xShape );
-                                            else
-                                            {
-                                                SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
-                                                if (pShapeImp)
-                                                {
-                                                    SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-                                                    if (pSdrObj)
-                                                    {
-                                                        GetShapeExport()->collectShapeAutoStyles(xShape);
-                                                        bShapeStyles = sal_True;
-                                                        nShapesCount++;
-                                                        if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
-                                                        {
-                                                            if (pDoc)
-                                                            {
-                                                                awt::Point aPoint = xShape->getPosition();
-                                                                awt::Size aSize = xShape->getSize();
-                                                                Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
-                                                                ScRange aRange = pDoc->GetRange(static_cast<USHORT>(nTable), aRectangle);
-                                                                ScMyShape aMyShape;
-                                                                aMyShape.aAddress = aRange.aStart;
-                                                                aMyShape.aEndAddress = aRange.aEnd;
-                                                                aMyShape.nIndex = nShape;
-                                                                if (!pSharedData)
-                                                                    CreateSharedData(nTableCount);
-                                                                pSharedData->AddNewShape(aMyShape);
-                                                                pSharedData->SetLastColumn(nTable, aRange.aStart.Col());
-                                                                pSharedData->SetLastRow(nTable, aRange.aStart.Row());
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            if (!pSharedData)
-                                                                CreateSharedData(nTableCount);
-                                                            pSharedData->AddTableShape(nTable, nShape);
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                            if( nLayerID != SC_LAYER_INTERN )
+                                                nShapesCount++;
                                         }
                                     }
                                 }
@@ -570,6 +513,88 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
     pSharedData->nProgressReference = 2 * pSharedData->nProgressObjects;
     pSharedData->nProgressValue = pSharedData->nProgressReference / 10;
     pSharedData->nProgressReference += pSharedData->nProgressValue;
+}
+
+void ScXMLExport::CollectShapesAutoStyles(uno::Reference<sheet::XSpreadsheet>& xTable, const sal_Int32 nTable)
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
+    if (xDrawPageSupplier.is())
+    {
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+        uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
+        if (xShapesIndex.is())
+        {
+            if( xDrawPage.is() )
+            {
+                uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
+                if( xFormsSupplier.is() )
+                {
+                    uno::Reference< container::XNameContainer > xForms( xFormsSupplier->getForms() );
+                    if( xForms.is() && xForms->hasElements() )
+                    {
+                        GetFormExport()->examineForms(xDrawPage);
+                        ScMyDrawPage aDrawPage;
+                        aDrawPage.bHasForms = sal_True;
+                        aDrawPage.xDrawPage = xDrawPage;
+                        pSharedData->AddDrawPage(aDrawPage, nTable);
+                    }
+                }
+            }
+            sal_Int32 nShapes = xShapesIndex->getCount();
+            for (sal_Int32 nShape = 0; nShape < nShapes; nShape++)
+            {
+                uno::Any aShape = xShapesIndex->getByIndex(nShape);
+                uno::Reference<drawing::XShape> xShape;
+                if (aShape >>= xShape)
+                {
+                    uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+                    if( xShapeProp.is() )
+                    {
+                        uno::Any aPropAny = xShapeProp->getPropertyValue(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
+                        sal_Int16 nLayerID;
+                        if( aPropAny >>= nLayerID )
+                        {
+                            if( nLayerID == SC_LAYER_INTERN )
+                                CollectInternalShape( xShape );
+                            else
+                            {
+                                SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
+                                if (pShapeImp)
+                                {
+                                    SdrObject *pSdrObj = pShapeImp->GetSdrObject();
+                                    if (pSdrObj)
+                                    {
+                                        GetShapeExport()->collectShapeAutoStyles(xShape);
+                                        bShapeStyles = sal_True;
+                                        if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
+                                        {
+                                            if (pDoc)
+                                            {
+                                                awt::Point aPoint = xShape->getPosition();
+                                                awt::Size aSize = xShape->getSize();
+                                                Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
+                                                ScRange aRange = pDoc->GetRange(static_cast<USHORT>(nTable), aRectangle);
+                                                ScMyShape aMyShape;
+                                                aMyShape.aAddress = aRange.aStart;
+                                                aMyShape.aEndAddress = aRange.aEnd;
+                                                aMyShape.nIndex = nShape;
+                                                pSharedData->AddNewShape(aMyShape);
+                                                pSharedData->SetLastColumn(nTable, aRange.aStart.Col());
+                                                pSharedData->SetLastRow(nTable, aRange.aStart.Row());
+                                            }
+                                        }
+                                        else
+                                            pSharedData->AddTableShape(nTable, nShape);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 void ScXMLExport::_ExportMeta()
@@ -1438,6 +1463,7 @@ void ScXMLExport::_ExportAutoStyles()
                     uno::Reference<sheet::XSpreadsheet> xTable;
                     if (aTable>>=xTable)
                     {
+                        CollectShapesAutoStyles(xTable, nTable);
                         uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
                         if (xTableProperties.is())
                         {
