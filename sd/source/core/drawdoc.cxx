@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:17:35 $
+ *  last change: $Author: dl $ $Date: 2000-11-27 09:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     if (eLanguage == LANGUAGE_DONTKNOW)
         eLanguage = LANGUAGE_ENGLISH_US;
     SetLanguage( eLanguage );
+    SetLanguageCJK( eLanguage );
+    SetLanguageCTL( eLanguage );
 
     mpInternational = new International(eLanguage);
     String aLanguage, aCountry, aEmpty;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-22 13:12:20 $
+ *  last change: $Author: dl $ $Date: 2000-11-27 09:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,9 @@
 void SdModule::Execute(SfxRequest& rReq)
 {
     const SfxItemSet* pSet = rReq.GetArgs();
+    ULONG nSlotId = rReq.GetSlot();
 
-    switch (rReq.GetSlot())
+    switch ( nSlotId )
     {
         case SID_NEWDOC:
         {
@@ -223,10 +224,14 @@ void SdModule::Execute(SfxRequest& rReq)
         break;
 
         case SID_ATTR_LANGUAGE:
+        case SID_ATTR_CHAR_CJK_LANGUAGE:
+        case SID_ATTR_CHAR_CTL_LANGUAGE:
         {
             const SfxPoolItem* pItem;
-            if( pSet && SFX_ITEM_SET == pSet->GetItemState(
-                        SID_ATTR_LANGUAGE, FALSE, &pItem ) )
+            if( pSet &&
+                SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_LANGUAGE, FALSE, &pItem ) ||
+                SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR_CJK_LANGUAGE, FALSE, &pItem ) ||
+                SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR_CTL_LANGUAGE, FALSE, &pItem ) )
             {
                 // am Dokument sichern:
                 SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
@@ -234,7 +239,13 @@ void SdModule::Execute(SfxRequest& rReq)
                 {
                     LanguageType eLanguage = ( (SvxLanguageItem*)pItem )->GetValue();
                     SdDrawDocument* pDoc = pDocSh->GetDoc();
-                    pDoc->SetLanguage( eLanguage );
+
+                    if( nSlotId == SID_ATTR_CHAR_CJK_LANGUAGE )
+                        pDoc->SetLanguageCJK( eLanguage );
+                    else if( nSlotId == SID_ATTR_CHAR_CTL_LANGUAGE )
+                        pDoc->SetLanguageCTL( eLanguage );
+                    else
+                        pDoc->SetLanguage( eLanguage );
 
                     if( pDoc->GetOnlineSpell() )
                     {

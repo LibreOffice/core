@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: dl $ $Date: 2000-11-27 09:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,17 +1047,6 @@ ULONG SdDrawDocument::GetLinkCount()
 
 /*************************************************************************
 |*
-|* Language zurueckgeben
-|*
-\************************************************************************/
-
-LanguageType SdDrawDocument::GetLanguage() const
-{
-    return eLanguage;
-}
-
-/*************************************************************************
-|*
 |* Language setzen
 |*
 \************************************************************************/
@@ -1069,6 +1058,38 @@ void SdDrawDocument::SetLanguage( LanguageType eNewLang )
         eLanguage = eNewLang;
         GetDrawOutliner().SetDefaultLanguage( eLanguage );
         pHitTestOutliner->SetDefaultLanguage( eLanguage );
+        SetChanged( TRUE );
+    }
+}
+
+
+/*************************************************************************
+|*
+|* CJK Language setzen
+|*
+\************************************************************************/
+
+void SdDrawDocument::SetLanguageCJK( LanguageType eNewLang )
+{
+    if( eLanguageCJK != eNewLang )
+    {
+        eLanguageCJK = eNewLang;
+        SetChanged( TRUE );
+    }
+}
+
+
+/*************************************************************************
+|*
+|* CTL Language setzen
+|*
+\************************************************************************/
+
+void SdDrawDocument::SetLanguageCTL( LanguageType eNewLang )
+{
+    if( eLanguageCTL != eNewLang )
+    {
+        eLanguageCTL = eNewLang;
         SetChanged( TRUE );
     }
 }

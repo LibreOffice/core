@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:11:00 $
+ *  last change: $Author: dl $ $Date: 2000-11-27 09:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,8 @@ private:
     BOOL              bCustomShow;
     ULONG             nPresFirstPage;
     LanguageType      eLanguage;
+    LanguageType      eLanguageCJK;
+    LanguageType      eLanguageCTL;
     SvxNumType        ePageNumType;
     Link              aOldNotifyUndoActionHdl;
 #ifndef SVX_LIGHT
@@ -243,8 +245,12 @@ public:
 
     SdDrawDocShell* GetDocSh() { return(pDocSh) ; }
 
-    LanguageType    GetLanguage() const;
+    LanguageType    GetLanguage() const { return eLanguage; }
     void            SetLanguage( LanguageType eNewLang );
+    LanguageType    GetLanguageCJK() const { return eLanguageCJK; }
+    void            SetLanguageCJK( LanguageType eNewLang );
+    LanguageType    GetLanguageCTL() const { return eLanguageCTL; }
+    void            SetLanguageCTL( LanguageType eNewLang );
 
     SvxNumType      GetPageNumType() const { return ePageNumType; }
     void            SetPageNumType(SvxNumType eType) { ePageNumType = eType; }

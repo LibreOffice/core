@@ -54,6 +54,20 @@ interface StarImpress : Module
         StateMethod = GetState ;
     ]
 
+    SID_ATTR_CHAR_CJK_LANGUAGE // ole() api()
+    [
+
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_CHAR_CTL_LANGUAGE // ole() api()
+    [
+
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
     SID_OUTLINE_TO_IMPRESS // ole() api()
     [
         ExecMethod = Execute ;
