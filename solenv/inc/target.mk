@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-05 19:59:42 $
+#   last change: $Author: hjs $ $Date: 2001-02-06 11:17:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2403,7 +2403,9 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 
 .IF "$(MAKEFILERC)"==""
 .IF "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
+.IF "$(DEPFILES)" != ""
 .INCLUDE : $(DEPFILES)
+.ENDIF			# "$(DEPFILES)" != ""
 .INCLUDE : $(MISC)$/$(TARGET).dpc
 .IF "$(GROUP)"=="WRITER"
 .IF "$(debug)"!=""
