@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:32:45 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 #include "sfxtypes.hxx"
 #include "sfxdir.hxx"
 #include "doctempl.hxx"
-#include "dataurl.hxx"
+//#include "dataurl.hxx"
 #include "arrdecl.hxx"
 #include "docfac.hxx"
 #include "docfile.hxx"
@@ -130,7 +130,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pLabelResMgr( 0 ),
         pAppDispatch(NULL),
         pTemplates( 0 ),
-        pVerbs(0),
         pFilterIni( 0 ),
         pPool(0),
         pEventConfig(0),
