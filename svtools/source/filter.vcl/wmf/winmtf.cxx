@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-29 14:09:51 $
+ *  last change: $Author: sj $ $Date: 2002-06-03 15:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,9 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
         break;
     }
     aFont.SetCharSet( eCharSet );
-    aFont.SetName( UniString( (char*)rFont.lfFaceName, eCharSet ) );
-
+    CharSet eFontNameEncoding = eCharSet == RTL_TEXTENCODING_SYMBOL ?
+        RTL_TEXTENCODING_MS_1252 : eCharSet;
+    aFont.SetName( UniString( (char*)rFont.lfFaceName, eFontNameEncoding ) );
     FontFamily eFamily;
     switch ( rFont.lfPitchAndFamily & 0xf0 )
     {
