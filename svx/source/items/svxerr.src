@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:13:12 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,47 +216,31 @@ Resource RID_SVXERRCODE
         Text [ de ] = "Der im Dokument enthaltene originale VBA Basic Code wird nicht gespeichert." ;
         Text [ en-US ] = "The original VBA Basic Code contained in the document will not be saved.";
     };
+
+    String ERRCODE_SVX_WRONGPASS & ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Das Kennwort ist ungültig. Das Dokument kann nicht geöffnet werden.";
+        Text [ en-US ] = "The password is incorrect. The document cannot be opened.";
+    };
+
+    String ERRCODE_SVX_READ_FILTER_CRYPT & ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Die Verschlüsselungsmethode des aktuellen Dokumentes wird nicht unterstützt. Nur die Microsoft Office 97/2000 kompatible Kennwortverschlüsselung wird unterstützt.";
+        Text[ en-US ] = "The encryption method of this document is not supported. Only the Microsoft Office 97/2000 compatible password encryption is supported.";
+    };
+
+    String ERRCODE_SVX_READ_FILTER_PPOINT & ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Das Laden von kennwortgeschützten PowerPoint Dokumenten wird nicht unterstützt.";
+        Text [ en-US ] = "The loading of password-encrypted PowerPoint documents is not supported.";
+    };
+
+    String ERRCODE_SVX_EXPORT_FILTER_CRYPT & ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Der Kennwortschutz wird beim Speichern von Dokumementen im Microsoft Office Format nicht unterstützt.\nMöchten Sie Dokument ohne Kennwortschtz speichern";
+        Text[ en-US ] = "Password protection is not supported when documents are saved in Microsoft Office format.\nDo you want to save the document without password protection";
+    Text[ x-comment ] = "This error is used with an InteractionRequest Handler using a Query classification. This adds a question mark to the end of the string. So no need for one here. Note also the new line between sentences.";
+    };
 };
  // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
