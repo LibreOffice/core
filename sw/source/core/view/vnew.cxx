@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:47:59 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     pOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
                             : (OutputDevice*)rDocument.GetPrt(TRUE)),
+    mpTmpRef( 0 ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
     pSfxViewShell( 0 ),
@@ -271,6 +272,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     pOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
                             : (OutputDevice*)rShell.GetDoc()->GetPrt(TRUE)),
+    mpTmpRef( 0 ),
     pOpt( 0 ),
     pAccOptions( new SwAccessibilityOptions ),
     nStartAction( 0 ),
@@ -382,6 +384,7 @@ ViewShell::~ViewShell()
     if ( pDoc )
         GetLayout()->DeRegisterShell( this );
 
+    delete mpTmpRef;
     delete pAccOptions;
 }
 
