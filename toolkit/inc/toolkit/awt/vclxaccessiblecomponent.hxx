@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 15:41:59 $
+ *  last change: $Author: tbe $ $Date: 2002-05-17 15:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,11 +155,6 @@ public:
     // ::drafts::com::sun::star::accessibility::XAccessibleComponent
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -199,7 +194,6 @@ private:
     Reference< XAccessibleStateSet > getAccessibleStateSet() => overload FillAccessibleStateSet( ... )
 
 // ::drafts::com::sun::star::accessibility::XAccessibleComponent
-    sal_Bool isFocusTraversable()
     Any getAccessibleKeyBinding()
 
 ---------------------------------------------------------- */

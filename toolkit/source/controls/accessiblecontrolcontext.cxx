@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontrolcontext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 14:31:31 $
+ *  last change: $Author: tbe $ $Date: 2002-05-17 15:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,39 +351,6 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL OAccessibleControlContext::isShowing(  ) throw (RuntimeException)
-    {
-        // TODO
-        return sal_True;
-    }
-
-    //--------------------------------------------------------------------
-    sal_Bool SAL_CALL OAccessibleControlContext::isVisible(  ) throw (RuntimeException)
-    {
-        // TODO
-        return sal_True;
-    }
-
-    //--------------------------------------------------------------------
-    sal_Bool SAL_CALL OAccessibleControlContext::isFocusTraversable(  ) throw (RuntimeException)
-    {
-        // UNO controls in design mode are not focussable
-        return sal_False;
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL OAccessibleControlContext::addFocusListener( const Reference< awt::XFocusListener >& xListener ) throw (RuntimeException)
-    {
-        OSL_ENSURE( sal_False, "OAccessibleControlContext::addFocusListener: !isFocusTraversable, but addFocusListener!" );
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL OAccessibleControlContext::removeFocusListener( const Reference< awt::XFocusListener >& xListener ) throw (RuntimeException)
-    {
-        OSL_ENSURE( sal_False, "OAccessibleControlContext::removeFocusListener: !isFocusTraversable, but removeFocusListener!" );
-    }
-
-    //--------------------------------------------------------------------
     void SAL_CALL OAccessibleControlContext::grabFocus(  ) throw (RuntimeException)
     {
         OSL_ENSURE( sal_False, "OAccessibleControlContext::grabFocus: !isFocusTraversable, but grabFocus!" );
@@ -403,6 +370,9 @@ namespace toolkit
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/04/26 14:31:31  fs
+ *  initial checkin - fallback AccessibleContext for uno controls
+ *
  *
  *  Revision 1.0 17.04.2002 12:50:51  fs
  ************************************************************************/

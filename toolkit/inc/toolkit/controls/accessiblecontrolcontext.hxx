@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontrolcontext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 14:30:04 $
+ *  last change: $Author: tbe $ $Date: 2002-05-17 15:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,11 +150,6 @@ namespace toolkit
 
         // XAccessibleComponent
         virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -180,6 +175,9 @@ namespace toolkit
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/04/26 14:30:04  fs
+ *  initial checkin - fallback AccessibleContext for uno controls
+ *
  *
  *  Revision 1.0 17.04.2002 12:34:01  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 15:44:41 $
+ *  last change: $Author: tbe $ $Date: 2002-05-17 15:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,54 +576,12 @@ awt::Point VCLXAccessibleComponent::getLocationOnScreen(  ) throw (uno::RuntimeE
     return aPos;
 }
 
-sal_Bool VCLXAccessibleComponent::isShowing() throw (uno::RuntimeException)
-{
-    OContextEntryGuard( this );
-
-    sal_Bool bShowing = sal_False;
-    if ( GetWindow() && GetWindow()->IsVisible() )
-        bShowing = GetWindow()->IsReallyVisible();  // I hope IsReallyVisible is doing everything I need?
-
-    return bShowing;
-}
-
-sal_Bool VCLXAccessibleComponent::isVisible() throw (uno::RuntimeException)
-{
-    OContextEntryGuard( this );
-
-    sal_Bool bVisible = sal_False;
-    if ( GetWindow() )
-        bVisible = GetWindow()->IsVisible();
-
-    return bVisible;
-}
-
-sal_Bool VCLXAccessibleComponent::isFocusTraversable() throw (uno::RuntimeException)
-{
-    return FALSE;
-}
-
-void VCLXAccessibleComponent::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
-{
-    OContextEntryGuard( this );
-
-    if ( mxWindow.is() )
-        mxWindow->addFocusListener( xListener );
-}
-
-void VCLXAccessibleComponent::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
-{
-    OContextEntryGuard( this );
-
-    if ( mxWindow.is() )
-        mxWindow->removeFocusListener( xListener );
-}
-
 void VCLXAccessibleComponent::grabFocus(  ) throw (uno::RuntimeException)
 {
     OContextEntryGuard( this );
 
-    if ( mxWindow.is() && isFocusTraversable() )
+    uno::Reference< accessibility::XAccessibleStateSet > xStates = getAccessibleStateSet();
+    if ( mxWindow.is() && xStates.is() && xStates->contains( accessibility::AccessibleStateType::FOCUSABLE ) )
         mxWindow->setFocus();
 }
 
