@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-10 14:12:23 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DATABASENAME, "DatabaseName");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CONTROLUSER, "ControlUser");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CONTROLPASSWORD, "ControlPassword");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CACHESIZE, "CacheSize");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CREATEVIEW, "CreateView");
 
 
 //============================================================
