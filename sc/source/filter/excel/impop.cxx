@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:18:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,8 +195,8 @@ ScExtDocOptions &ImportTyp::GetExtOpt( void )
 
 
 
-ImportExcel::ImportExcel( SvStream& rSvStrm, XclBiff eBiff, ScDocument* pDoc, const String& rDocUrl ):
-    XclImpRootData( eBiff, *pDoc, rDocUrl, RTL_TEXTENCODING_MS_1252 ),
+ImportExcel::ImportExcel( SfxMedium& rMedium, SvStream& rSvStrm, XclBiff eBiff, ScDocument* pDoc ):
+    XclImpRootData( eBiff, rMedium, *pDoc, RTL_TEXTENCODING_MS_1252 ),
     ImportTyp( pDoc, RTL_TEXTENCODING_MS_1252 ),
     XclImpRoot( static_cast< XclImpRootData& >( *this ) ),
     maStrm( rSvStrm, *this ),
@@ -507,14 +507,9 @@ void ImportExcel::Row25( void )
 void ImportExcel::Bof2( void )
 {
     sal_uInt16 nSubType;
-#if SC_XCL_USEDECR
-    maStrm.UseDecryption( false );
-#endif
+    maStrm.DisableDecryption();
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
-#if SC_XCL_USEDECR
-    maStrm.UseDecryption( true );
-#endif
 
     pExcRoot->eHauptDateiTyp = Biff2;
     if( nSubType == 0x0010 )        // Worksheet?
@@ -552,9 +547,9 @@ BOOL ImportExcel::Password( void )
 
 void ImportExcel::Externsheet( void )
 {
-    String aEncodedUrl, aUrl, aTabName;
+    String aUrl, aTabName;
     bool bSameWorkBook;
-    aIn.AppendByteString( aEncodedUrl, false );
+    String aEncodedUrl( aIn.ReadByteString( false ) );
     XclImpUrlHelper::DecodeUrl( aUrl, aTabName, bSameWorkBook, *pExcRoot->pIR, aEncodedUrl );
     ScfTools::ConvertToScSheetName( aTabName );
     pExcRoot->pExtSheetBuff->Add( aUrl, aTabName, bSameWorkBook );
@@ -760,41 +755,6 @@ void ImportExcel::DocProtect( void )
         uno::Sequence<sal_Int8> aEmptyPass;
         GetDoc().SetDocProtection( TRUE, aEmptyPass );
     }
-}
-
-
-BOOL ImportExcel::Filepass( void )
-{
-#if SC_XCL_USEDECR
-    if( pExcRoot->eHauptDateiTyp <= Biff5 )
-    {
-        aIn.UseDecryption( false );
-        sal_uInt16 nKey, nHash;
-        aIn >> nKey >> nHash;
-
-        bool bValid = (maPassword.Len() > 0);
-        if( !bValid )
-        {
-            if( (nKey == 0xB359) && (nHash == 0x9A0A) )
-            {
-                // Workbook protection -> password is encoded in PASSWORD record
-                maPassword.AssignAscii( "VelvetSweatshop" );
-                bValid = true;
-            }
-        }
-
-        if( bValid )
-        {
-            XclImpBiff5Decrypter* pDecrypter = new XclImpBiff5Decrypter( maPassword, nKey, nHash );
-            bValid = pDecrypter->IsValid();     // validates password
-            aIn.EnableDecryption( pDecrypter );
-        }
-        return !bValid;
-    }
-    else
-#endif
-        // POST: return = TRUE, wenn Password <> 0
-        return aIn.ReaduInt32() != 0;
 }
 
 
@@ -1295,14 +1255,9 @@ void ImportExcel::Row34( void )
 void ImportExcel::Bof3( void )
 {
     sal_uInt16 nSubType;
-#if SC_XCL_USEDECR
-    maStrm.UseDecryption( false );
-#endif
+    maStrm.DisableDecryption();
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
-#if SC_XCL_USEDECR
-    maStrm.UseDecryption( true );
-#endif
 
     DBG_ASSERT( nSubType != 0x0100, "*ImportExcel::Bof3(): Biff3 als Workbook?!" );
     pExcRoot->eHauptDateiTyp = Biff3;
@@ -1503,14 +1458,9 @@ void ImportExcel::Window2_5( void )
 void ImportExcel::Bof4( void )
 {
     sal_uInt16 nSubType;
-#if SC_XCL_USEDECR
-    maStrm.UseDecryption( false );
-#endif
+    maStrm.DisableDecryption();
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
-#if SC_XCL_USEDECR
-    maStrm.UseDecryption( true );
-#endif
 
     pExcRoot->eHauptDateiTyp = Biff4;
     if( nSubType == 0x0010 )        // Sheet?
@@ -1536,13 +1486,8 @@ void ImportExcel::Bof5( void )
     BiffTyp     eHaupt = Biff5;
     BiffTyp     eDatei;
 
-#if SC_XCL_USEDECR
-    maStrm.UseDecryption( false );
-#endif
+    maStrm.DisableDecryption();
     maStrm >> nVers >> nSubType;
-#if SC_XCL_USEDECR
-    maStrm.UseDecryption( true );
-#endif
 
     switch( nSubType )
     {
