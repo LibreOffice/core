@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonFilePickerElementIds.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 01:46:11 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,14 +101,14 @@ published constants CommonFilePickerElementIds
     //---------------------------------------------------------------------
     /** The label of the filter listbox of a FilePicker dialog.
 
-        @since #107627#
+        @since OOo 1.1.2
     */
     const short LISTBOX_FILTER_LABEL = 6;
 
     //---------------------------------------------------------------------
     /** The label of the file name listbox of a FilePicker dialog.
 
-        @since #107627#
+        @since OOo 1.1.2
     */
     const short EDIT_FILEURL_LABEL = 7;
 };
