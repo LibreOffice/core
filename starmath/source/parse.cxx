@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:22:29 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1881,6 +1881,10 @@ void SmParser::Font()
 
     NodeStack.Push(new SmFontNode(aToken));
 }
+
+
+// gets number used as arguments in Math formulas (e.g. 'size' command)
+// Format: no negative numbers, must start with a digit, no exponent notation, ...
 BOOL lcl_IsNumber(const UniString& rText)
 {
     BOOL bPoint = FALSE;
@@ -1936,11 +1940,32 @@ void SmParser::FontSize()
     }
 
     // get number argument
-    double    fTmp;
-    Fraction  aValue;
-    if(lcl_IsNumber(CurToken.aText) &&
-        sscanf(ByteString(CurToken.aText, RTL_TEXTENCODING_ASCII_US).GetBuffer(), "%lf", &fTmp) == 1)
-        aValue = fTmp;
+    Fraction  aValue( 1L );
+    if (lcl_IsNumber( CurToken.aText ))
+    {
+        double    fTmp;
+        if ((fTmp = CurToken.aText.ToDouble()) != 0.0)
+        {
+            aValue = fTmp;
+
+            //!! keep the numerator and denominator from being to large
+            //!! otherwise ongoing multiplications may result in overflows
+            //!! (for example in SmNode::SetFontSize the font size calculated
+            //!! may become 0 because of this!!! Happens e.g. for ftmp = 2.9 with Linux
+            //!! or ftmp = 1.11111111111111111... (11/9) on every platform.)
+            if (aValue.GetDenominator() > 1000)
+            {
+                long nNum   = aValue.GetNumerator();
+                long nDenom = aValue.GetDenominator();
+                while (nDenom > 1000)
+                {
+                    nNum    /= 10;
+                    nDenom  /= 10;
+                }
+                aValue = Fraction( nNum, nDenom );
+            }
+        }
+    }
 
     NextToken();
 
