@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-23 13:57:08 $
+ *  last change: $Author: mt $ $Date: 2001-11-06 12:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@ TextView::TextView( TextEngine* pEng, Window* pWindow )
     mbHighlightSelection = FALSE;
     mbAutoIndent = FALSE;
     mbCursorEnabled = TRUE;
+    mbClickedInSelection = FALSE;
 //  mbInSelection = FALSE;
 
     mnTravelXPos = TRAVEL_X_DONTKNOW;
@@ -810,6 +811,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
 
 void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
 {
+    mbClickedInSelection = FALSE;
     mnTravelXPos = TRAVEL_X_DONTKNOW;
     mpSelEngine->SelMouseButtonUp( rMouseEvent );
     if ( rMouseEvent.IsMiddle() && !IsReadOnly() &&
@@ -829,6 +831,7 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
     mpTextEngine->CheckIdleFormatter(); // Falls schnelles Tippen und MouseButtonDown
     mnTravelXPos = TRAVEL_X_DONTKNOW;
+    mbClickedInSelection = IsSelectionAtPoint( rMouseEvent.GetPosPixel() );
 
     mpTextEngine->SetActiveView( this );
 
@@ -1793,9 +1796,11 @@ BOOL TextView::ImplCheckTextLen( const String& rNewText )
 
 void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    if ( maSelection.HasRange() )
+    if ( mbClickedInSelection )
     {
         vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+        DBG_ASSERT( maSelection.HasRange(), "TextView::dragGestureRecognized: mbClickedInSelection, but no selection?" );
 
         delete mpDDInfo;
         mpDDInfo = new TextDDInfo;
