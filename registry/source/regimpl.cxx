@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-30 12:00:48 $
+ *  last change: $Author: jbu $ $Date: 2002-10-23 15:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,6 +678,91 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
 //*********************************************************************
 //  openKey
 //
+static OUString makePath( const OUString & resolvedPath, const OUString &path )
+{
+    OUStringBuffer buf(resolvedPath);
+    if( ! resolvedPath.getLength() ||
+        '/' != resolvedPath[resolvedPath.getLength()-1])
+    {
+        buf.appendAscii( "/" );
+    }
+
+    if( path[0] == '/' )
+    {
+        buf.append( path.getStr()+1 );
+    }
+    else
+    {
+        buf.append( path );
+    }
+    return buf.makeStringAndClear();
+}
+
+RegError ORegistry::openKeyWithoutLink(
+    RegKeyHandle hKey, const OUString& keyName,
+    RegKeyHandle* phOpenKey)
+{
+    ORegKey*        pKey;
+    ORegKey* pRet;
+    storeAccessMode accessMode = KEY_MODE_OPEN;
+
+    *phOpenKey = NULL;
+
+    if ( !keyName.getLength() )
+    {
+        return REG_INVALID_KEYNAME;
+    }
+
+    if ( isReadOnly() )
+    {
+        accessMode = KEY_MODE_OPENREAD;
+    }
+
+    REG_GUARD(m_mutex);
+
+    if (hKey)
+        pKey = (ORegKey*)hKey;
+    else
+        pKey = m_openKeyTable[ROOT];
+
+    OUString    sFullKeyName  = makePath( pKey->getName(), keyName );
+    OUString    sFullPath;
+    OUString    sRelativKey;
+
+    sal_Int32 lastIndex = sFullKeyName.lastIndexOf('/');
+    sRelativKey = sFullKeyName.copy(lastIndex + 1);
+    sFullPath = sFullKeyName.copy(0, lastIndex + 1);
+
+    KeyMap::iterator ii = m_openKeyTable.find( sFullKeyName );
+    if( ii == m_openKeyTable.end() )
+    {
+        OStoreDirectory rStoreDir;
+        storeError      _err = rStoreDir.create(pKey->getStoreFile(), sFullPath, sRelativKey, accessMode);
+
+        if (_err == store_E_NotExists)
+            return REG_KEY_NOT_EXISTS;
+        else
+            if (_err == store_E_WrongFormat)
+                return REG_INVALID_KEY;
+
+        if( _err != store_E_None )
+            return REG_KEY_NOT_EXISTS;
+
+        pRet = new ORegKey(sFullKeyName, rStoreDir, this);
+        *phOpenKey = pRet;
+        m_openKeyTable[sFullKeyName] = pRet;
+    }
+    else
+    {
+        // try to open it directly
+        pRet = ii->second;
+        OSL_ASSERT( pRet );
+        *phOpenKey = pRet;
+    }
+    pRet->acquire();
+    return REG_NO_ERROR;
+}
+
 RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
                             RegKeyHandle* phOpenKey, RESOLVE eResolve)
 {
@@ -711,6 +796,13 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
     {
         case RESOLVE_FULL:
             {
+                // try the optimistic approach (links aren't recognized)
+                RegKeyHandle handle = 0;
+                if( REG_NO_ERROR == openKeyWithoutLink( hKey, keyName,&handle ) )
+                {
+                    *phOpenKey = handle;
+                    return REG_NO_ERROR;
+                }
                 sFullKeyName = resolveLinks(pKey, keyName);
 
                 if ( !sFullKeyName.getLength() )
@@ -2042,15 +2134,13 @@ RegError ORegistry::deleteLink(RegKeyHandle hKey, const OUString& linkName)
 //*********************************************************************
 //  resolveLinks()
 //
+
 OUString ORegistry::resolveLinks(ORegKey* pKey, const OUString& path, sal_Bool firstLinkOnly)
 {
     OUString    resolvedPath(pKey->getName());
     sal_Int32   nIndex = 0;
     OUString    token;
     ORegKey*    pLink = NULL;
-
-//     if (resolvedPath.getLength() > 1)
-//         resolvedPath += ROOT;
 
     if ( path.getStr()[0] == '/' )
         nIndex++;
@@ -2118,6 +2208,7 @@ ORegKey* ORegistry::resolveLink(ORegKey* pKey, OUString& resolvedPath, const OUS
     } else
     {
         resolvedPath += name;
+
         return NULL;
     }
 }

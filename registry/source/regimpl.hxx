@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:42 $
+ *  last change: $Author: jbu $ $Date: 2002-10-23 15:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,10 @@ protected:
     RegError    dumpKey(const OUString& sPath,
                         const OUString& sName,
                         sal_Int16 nSpace) const;
+
+    RegError    openKeyWithoutLink(RegKeyHandle hKey,
+                                   const OUString& keyName,
+                                   RegKeyHandle* phOpenKey);
 
     OUString resolveLinks(ORegKey* pKey, const OUString& path, sal_Bool firstLinkOnly=sal_False);
     ORegKey* resolveLink(ORegKey* pKey, OUString& resolvedPath, const OUString& name);

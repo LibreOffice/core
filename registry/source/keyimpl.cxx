@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keyimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-07-23 15:43:28 $
+ *  last change: $Author: jbu $ $Date: 2002-10-23 15:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,24 +1205,30 @@ sal_uInt32 ORegKey::countSubKeys()
 //
 sal_Bool ORegKey::checkLink()
 {
-    RegValueType    valueType = RG_VALUETYPE_NOT_DEFINED;
-    sal_uInt32      valueSize = 0;
 
-    OUString linkTarget( OUString( RTL_CONSTASCII_USTRINGPARAM("LINK_TARGET") ));
-    if (!((ORegKey*)this)->getValueInfo( linkTarget, &valueType, &valueSize))
+    OUString aPath (m_name); aPath += m_pRegistry->ROOT;
+    OUString aName (RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX "LINK_TARGET"));
+
+    if (m_storeFile.attrib (aPath, aName, 0, 0) == store_E_None)
     {
-        sal_Unicode* value = (sal_Unicode*)rtl_allocateMemory(valueSize);
-        if (!((ORegKey*)this)->getValue( linkTarget, value))
+        OUString     valueName (RTL_CONSTASCII_USTRINGPARAM("LINK_TARGET"));
+        RegValueType valueType = RG_VALUETYPE_NOT_DEFINED;
+        sal_uInt32   valueSize = 0;
+
+        ORegKey* pThis = const_cast<ORegKey*>(this);
+        if (pThis->getValueInfo (valueName, &valueType, &valueSize) == REG_NO_ERROR)
         {
-             m_link = OUString(value);
-            m_isLink = sal_True;
+            sal_Unicode* value = (sal_Unicode*)rtl_allocateMemory(valueSize);
+            if (pThis->getValue (valueName, value) == REG_NO_ERROR)
+            {
+                m_link = OUString (value);
+                m_isLink = sal_True;
+            }
+
+            rtl_freeMemory (value);
+            return sal_True;
         }
-
-        rtl_freeMemory(value);
-
-        return sal_True;
     }
-
     return sal_False;
 }
 
