@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:51:25 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,13 +422,13 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
-        Text[ polish ] = "Ramka";
+        Text[ polish ] = "Frame";
         Text[ portuguese_brazilian ] = "F~rame";
         Text[ japanese ] = "ÌÚ°Ñ(~R)";
         Text[ korean ] = "ÇÁ·¹ÀÓ(~R)";
         Text[ chinese_simplified ] = "¿ò¶ÔÏó(~R)";
         Text[ chinese_traditional ] = "®Ø(~R)";
-        Text[ arabic ] = "~Frame";
+        Text[ arabic ] = "ÅØÇÑ";
         Text[ turkish ] = "F~rame";
     };
     ComboBox CB_FRAME
@@ -593,7 +593,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text [ dutch ] = "Aan~wijzing" ;
         Text [ french ] = "~Texte" ;
         Text[ spanish ] = "Texto";
-        Text[ italian ] = "Nota";
+        Text[ italian ] = "Testo";
         Text[ danish ] = "Tekst";
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
@@ -897,13 +897,13 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
-        Text[ polish ] = "Ramka";
+        Text[ polish ] = "Frame";
         Text[ portuguese_brazilian ] = "F~rame";
         Text[ japanese ] = "ÌÚ°Ñ(~R)";
         Text[ korean ] = "ÇÁ·¹ÀÓ(~R)";
         Text[ chinese_simplified ] = "¿ò¶ÔÏó(~R)";
         Text[ chinese_traditional ] = "®Ø(~R)";
-        Text[ arabic ] = "~Frame";
+        Text[ arabic ] = "ÅØÇÑ";
         Text[ turkish ] = "F~rame";
     };
     ComboBox CB_FRAME
@@ -1068,7 +1068,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text [ dutch ] = "Te~kst" ;
         Text [ french ] = "~Texte" ;
         Text[ spanish ] = "Texto";
-        Text[ italian ] = "Nota";
+        Text[ italian ] = "Testo";
         Text[ danish ] = "Tekst";
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
@@ -1447,13 +1447,13 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
-        Text[ polish ] = "Ramka";
+        Text[ polish ] = "Frame";
         Text[ portuguese_brazilian ] = "F~rame";
         Text[ japanese ] = "ÌÚ°Ñ(~R)";
         Text[ korean ] = "ÇÁ·¹ÀÓ(~R)";
         Text[ chinese_simplified ] = "¿ò¶ÔÏó(~R)";
         Text[ chinese_traditional ] = "®Ø(~R)";
-        Text[ arabic ] = "~Frame";
+        Text[ arabic ] = "ÅØÇÑ";
         Text[ turkish ] = "F~rame";
     };
     ComboBox CB_FRAME
@@ -1618,7 +1618,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text [ dutch ] = "Te~kst" ;
         Text [ french ] = "~Texte" ;
         Text[ spanish ] = "Texto";
-        Text[ italian ] = "Nota";
+        Text[ italian ] = "Testo";
         Text[ danish ] = "Tekst";
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
@@ -1948,13 +1948,13 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
-        Text[ polish ] = "Ramka";
+        Text[ polish ] = "Frame";
         Text[ portuguese_brazilian ] = "F~rame";
         Text[ japanese ] = "ÌÚ°Ñ(~R)";
         Text[ korean ] = "ÇÁ·¹ÀÓ(~R)";
         Text[ chinese_simplified ] = "¿ò¶ÔÏó(~R)";
         Text[ chinese_traditional ] = "®Ø(~R)";
-        Text[ arabic ] = "~Frame";
+        Text[ arabic ] = "ÅØÇÑ";
         Text[ turkish ] = "F~rame";
     };
     ComboBox CB_FRAME
@@ -2119,7 +2119,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text [ dutch ] = "Te~kst" ;
         Text [ french ] = "~Texte" ;
         Text[ spanish ] = "Texto";
-        Text[ italian ] = "Nota";
+        Text[ italian ] = "Testo";
         Text[ danish ] = "Tekst";
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
