@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-20 11:24:33 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 11:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,14 @@
 
 #ifdef __cplusplus
 extern "C" {
-            $(SLB)$/communi.lib     \
 #endif
 #include <osl/types.h>
 #include <osl/macros.hxx>
 #include <rtl/types.h>
 #include <rtl/macros.hxx>
+
+
+
 
 /********************************************************************************/
 /* Data types
@@ -243,6 +245,8 @@ typedef struct _sal_Sequence
 #define SAL_THROW_EXTERN_C()
 #endif
 
+
+
 #ifdef __cplusplus
 enum __sal_NoAcquire
 {
@@ -251,6 +255,37 @@ enum __sal_NoAcquire
     SAL_NO_ACQUIRE
 };
 #endif /* __cplusplus */
+
+
+    /* Ende alte Typen */
+/* The #ifndef _TIMEVALUE is to prevent clashes with osl/time.h which also contains
+    TimeValue. osl/types.h will be removed soon.
+*/
+
+#ifndef _TIMEVALUE
+#define _TIMEVALUE
+
+#ifdef SAL_W32
+#   pragma pack(push, 8)
+#elif defined(SAL_OS2)
+#   pragma pack(1)
+#endif
+
+/* Time since Jan-01-1970 */
+
+typedef struct {
+    sal_uInt32 Seconds;
+    sal_uInt32 Nanosec;
+} TimeValue;
+
+#ifdef SAL_W32
+#   pragma pack(pop)
+#elif defined(SAL_OS2)
+#   pragma pack()
+#endif
+//
+#endif
+
 
 #ifdef __cplusplus
 }
