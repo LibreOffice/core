@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:00 $
+#   last change: $Author: nf $ $Date: 2000-12-11 14:00:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,6 +122,11 @@ APP6OBJS= $(OBJ)$/urlconv.obj
 APP6STDLIBS=\
     $(TOOLSLIB)	\
     $(SALLIB)
+
+APP7TARGET= replace
+APP7OBJS= $(OBJ)$/replace.obj
+APP7STDLIBS=$(STATIC_LIBS)
+APP7DEPN=   $(LB)$/atools.lib 
 
 # --- Targets ------------------------------------------------------
 
