@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-17 14:46:05 $
+ *  last change: $Author: fme $ $Date: 2001-12-18 13:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,7 +808,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
             nMode |= SETBASE_ULSPACE;
             if( !rInf.IsTest() )
 #ifdef VERTICAL_LAYOUT
-                Point aTmpBase( aBase );
+                aTmpBase = aBase;
                 if ( GetInfo().GetTxtFrm()->IsVertical() )
                     GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
 
@@ -1666,13 +1666,13 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
                 rULSpace.GetLower(), rULSpace.GetUpper(),
                 pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
 
-            pTextRanger[ 0 ]->SetUpper( rLRSpace.GetLeft() );
-            pTextRanger[ 0 ]->SetLower( rLRSpace.GetRight() );
+            pTextRanger[ 0 ]->SetUpper( (USHORT)rLRSpace.GetLeft() );
+            pTextRanger[ 0 ]->SetLower( (USHORT)rLRSpace.GetRight() );
         }
         else
         {
             pTextRanger[ 0 ] = new TextRanger( aXPoly, pXPoly, 20,
-                rLRSpace.GetLeft(), rLRSpace.GetRight(),
+                (USHORT)rLRSpace.GetLeft(), (USHORT)rLRSpace.GetRight(),
                 pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
 
             pTextRanger[ 0 ]->SetUpper( rULSpace.GetUpper() );
