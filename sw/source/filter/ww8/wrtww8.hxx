@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:09:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,8 +183,6 @@ class WW8OleMaps;
 class SvStorageRef;
 struct WW8_PdAttrDesc;
 class SvxBrushItem;
-
-#define WWFL_ULSPACE_LIKE_SWG   0x00000001
 
 #define GRF_MAGIC_1 0x12    // 3 magic Bytes fuer PicLocFc-Attribute
 #define GRF_MAGIC_2 0x34
@@ -433,7 +431,6 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     SwMSConvertControls* pOCXExp;
     WW8OleMaps* pOleMap;
 
-    ULONG nIniFlags;            // Flags aus der writer.ini
     USHORT nCharFmtStart;
     USHORT nFmtCollStart;
     USHORT nStyleBeforeFly;     // Style-Nummer des Nodes,
@@ -628,7 +625,6 @@ public:
     void OutSprmBytes( BYTE* pBytes, USHORT nSiz )
                                 { pO->Insert( pBytes, nSiz, pO->Count() ); }
 
-    ULONG GetIniFlags() const               { return nIniFlags; }
     inline bool IsUnicode() const           { return pPiece->IsUnicode(); }
 
     const SfxItemSet* GetCurItemSet() const         { return pISet; }
