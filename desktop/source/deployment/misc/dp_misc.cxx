@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:52:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,9 @@ const OUString OfficePipeId::operator () ()
             OUString(), status.getFileURL(), userPath )
         != ::osl::FileBase::E_None)
     {
-        return OUString();
+        throw RuntimeException(
+            OUSTR("No valid file URL in " SAL_CONFIGFILE("bootstrap") ": ") +
+            userPath, Reference<XInterface>() );
     }
 
     rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
