@@ -294,7 +294,7 @@ public abstract class OfficeDocument
      */
     public Iterator getEmbeddedObjects() {
 
-        if (embeddedObjects == null) {
+        if (embeddedObjects == null && manifestDoc != null) {
             embeddedObjects = new HashMap();
 
             // Need to read the manifest file and construct a list of objects
@@ -582,6 +582,21 @@ public abstract class OfficeDocument
         Element domEntry;
         Element manifestRoot = manifestDoc.getDocumentElement();
 
+        // The EmbeddedObjects come first.
+        Iterator embObjs = getEmbeddedObjects();
+        while (embObjs.hasNext()) {
+            EmbeddedObject obj = (EmbeddedObject)embObjs.next();
+            obj.writeManifestData(manifestDoc);
+
+            obj.write(zip);
+        }
+
+        // Add in the entry for the Pictures directory.  Always present.
+        domEntry = manifestDoc.createElement(TAG_MANIFEST_FILE);
+        domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "Pictures/");
+        domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, "");
+        manifestRoot.appendChild(domEntry);
+
     // Write content to the Zip file and then write any of the optional
         // data, if it exists.
     zip.setContentXMLBytes(docToBytes(contentDoc));
@@ -684,7 +699,6 @@ public abstract class OfficeDocument
         try {
             // First of all try for JAXP 1.0
             if (domImpl.equals("com.sun.xml.tree.XmlDocument")) {
-                System.out.println("Using JAXP");
                 Class jaxpDoc = Class.forName("com.sun.xml.tree.XmlDocument");
 
                 // The method is in the XMLDocument class itself, not a helper
@@ -695,7 +709,6 @@ public abstract class OfficeDocument
             }
          else if (domImpl.equals("org.apache.crimson.tree.XmlDocument"))
         {
-         System.out.println("Using Crimson");
          Class crimsonDoc = Class.forName("org.apache.crimson.tree.XmlDocument");
          // The method is in the XMLDocument class itself, not a helper
                 meth = crimsonDoc.getMethod("write",
@@ -705,7 +718,6 @@ public abstract class OfficeDocument
         }
             else if (domImpl.equals("org.apache.xerces.dom.DocumentImpl")
             || domImpl.equals("org.apache.xerces.dom.DeferredDocumentImpl")) {
-                System.out.println("Using Xerces");
                 // Try for Xerces
                 Class xercesSer =
                         Class.forName("org.apache.xml.serialize.XMLSerializer");
