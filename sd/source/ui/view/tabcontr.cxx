@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:22:35 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #include "TabControl.hxx"
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _SVDLAYER_HXX
 #include <svx/svdlayer.hxx>
