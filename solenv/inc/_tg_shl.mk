@@ -225,9 +225,9 @@ $(SHL1TARGETN) : \
 .IF "$(SHL1ADD_VERINFO)"!=""
      @-+echo \#include \"$(SHL1ADD_VERINFO)\" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ELSE			# "$(SHL1ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL1ADD_VERINFO)"!=""
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
@@ -625,9 +625,9 @@ $(SHL2TARGETN) : \
 .IF "$(SHL2ADD_VERINFO)"!=""
      @-+echo \#include \"$(SHL2ADD_VERINFO)\" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ELSE			# "$(SHL2ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL2ADD_VERINFO)"!=""
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
@@ -1025,9 +1025,9 @@ $(SHL3TARGETN) : \
 .IF "$(SHL3ADD_VERINFO)"!=""
      @-+echo \#include \"$(SHL3ADD_VERINFO)\" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ELSE			# "$(SHL3ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL3ADD_VERINFO)"!=""
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
@@ -1425,9 +1425,9 @@ $(SHL4TARGETN) : \
 .IF "$(SHL4ADD_VERINFO)"!=""
      @-+echo \#include \"$(SHL4ADD_VERINFO)\" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ELSE			# "$(SHL4ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL4ADD_VERINFO)"!=""
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
@@ -1825,9 +1825,9 @@ $(SHL5TARGETN) : \
 .IF "$(SHL5ADD_VERINFO)"!=""
      @-+echo \#include \"$(SHL5ADD_VERINFO)\" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ELSE			# "$(SHL5ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL5ADD_VERINFO)"!=""
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
@@ -2225,9 +2225,9 @@ $(SHL6TARGETN) : \
 .IF "$(SHL6ADD_VERINFO)"!=""
      @-+echo \#include \"$(SHL6ADD_VERINFO)\" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ELSE			# "$(SHL6ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL6ADD_VERINFO)"!=""
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
@@ -2625,9 +2625,9 @@ $(SHL7TARGETN) : \
 .IF "$(SHL7ADD_VERINFO)"!=""
      @-+echo \#include \"$(SHL7ADD_VERINFO)\" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ELSE			# "$(SHL7ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL7ADD_VERINFO)"!=""
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
@@ -3025,9 +3025,9 @@ $(SHL8TARGETN) : \
 .IF "$(SHL8ADD_VERINFO)"!=""
      @-+echo \#include \"$(SHL8ADD_VERINFO)\" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ELSE			# "$(SHL8ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL8ADD_VERINFO)"!=""
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
@@ -3425,9 +3425,9 @@ $(SHL9TARGETN) : \
 .IF "$(SHL9ADD_VERINFO)"!=""
      @-+echo \#include \"$(SHL9ADD_VERINFO)\" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ELSE			# "$(SHL9ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL9ADD_VERINFO)"!=""
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
@@ -3825,9 +3825,9 @@ $(SHL10TARGETN) : \
 .IF "$(SHL10ADD_VERINFO)"!=""
      @-+echo \#include \"$(SHL10ADD_VERINFO)\" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ELSE			# "$(SHL10ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL10ADD_VERINFO)"!=""
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
