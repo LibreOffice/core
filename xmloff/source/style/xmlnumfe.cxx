@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2002-06-26 16:51:10 $
+ *  last change: $Author: er $ $Date: 2002-08-05 18:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,6 +1067,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         nFmtType = NUMBERFORMAT_LOGICAL;
     else if ( eBuiltIn == NF_TEXT )
         nFmtType = NUMBERFORMAT_TEXT;
+
+    // #101606# An empty subformat is a valid number-style resulting in an
+    // empty display string for the condition of the subformat.
+    if ( nFmtType == NUMBERFORMAT_UNDEFINED && rFormat.GetNumForType( nPart,
+                0, sal_False ) == 0 )
+        nFmtType = 0;
 
     XMLTokenEnum eType = XML_TOKEN_INVALID;
     switch ( nFmtType )
