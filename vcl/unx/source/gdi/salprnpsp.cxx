@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:10:20 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,20 +236,25 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 
     // copy input slot
-    const PPDKey* pKey;
-    const PPDValue* pValue;
+    const PPDKey* pKey = NULL;
+    const PPDValue* pValue = NULL;
     ::std::list< const PPDValue* > aValues;
     ::std::list< const PPDValue* >::iterator it;
 
+    pJobSetup->mnPaperBin = 0xffff;
     pKey                        = rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
-    pValue                      = rData.m_aContext.getValue( pKey );
-    rData.m_aContext.getUnconstrainedValues( pKey, aValues );
-    pJobSetup->mnPaperBin       = 0;
-    for( it = aValues.begin(); it != aValues.end(); ++it, pJobSetup->mnPaperBin++ )
-        if( *it == pValue )
-            break;
-    if( it == aValues.end() )
-        pJobSetup->mnPaperBin = 0xffff;
+    if( pKey )
+        pValue                  = rData.m_aContext.getValue( pKey );
+    if( pKey && pValue )
+    {
+        for( pJobSetup->mnPaperBin = 0;
+             pValue != pKey->getValue( pJobSetup->mnPaperBin ) &&
+                 pJobSetup->mnPaperBin < pKey->countValues();
+             pJobSetup->mnPaperBin++ )
+            ;
+        if( pJobSetup->mnPaperBin >= pKey->countValues() || pValue == pKey->getDefaultValue() )
+            pJobSetup->mnPaperBin = 0xffff;
+    }
 
 
     // copy the whole context
@@ -603,7 +608,10 @@ BOOL SalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 
     PrinterInfo aInfo( rManager.getPrinterInfo( pJobSetup->maPrinterName ) );
     if ( pJobSetup->mpDriverData )
+    {
+        SetData( ~0, pJobSetup );
         JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aInfo );
+    }
 
     if( pSetupFunction( aInfo ) )
     {
@@ -618,9 +626,9 @@ BOOL SalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 
         // copy everything to job setup
         copyJobDataToJobSetup( pJobSetup, aInfo );
+        return TRUE;
     }
-
-    return TRUE;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -694,16 +702,10 @@ BOOL SalInfoPrinter::SetData(
                 if( nPaperBin == 0xffff )
                     pValue = pKey->getDefaultValue();
                 else
-                {
-                    ::std::list< const PPDValue* > aSlots;
-                    aData.m_aContext.getUnconstrainedValues( pKey, aSlots );
-                    ::std::list< const PPDValue* >::iterator it;
-                    for( it = aSlots.begin(); it != aSlots.end() && nPaperBin; ++it, --nPaperBin )
-                        ;
-                    if( it == aSlots.end() )
-                        return FALSE;
-                    pValue = *it;
-                }
+                    pValue = pKey->getValue( pJobSetup->mnPaperBin );
+
+                // may fail due to constraints;
+                // real paper bin is copied back to jobsetup in that case
                 aData.m_aContext.setValue( pKey, pValue );
             }
             // if printer has no InputSlot key simply ignore this setting
@@ -776,11 +778,8 @@ ULONG SalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
 
-    ::std::list< const PPDValue* > aValues;
     const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
-    aData.m_aContext.getUnconstrainedValues( pKey, aValues );
-
-    return aValues.size();
+    return pKey ? pKey->countValues() : 0;
 }
 
 // -----------------------------------------------------------------------
@@ -793,22 +792,14 @@ String SalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, ULONG nPa
     String aRet;
     if( aData.m_pParser )
     {
-        ::std::list< const PPDValue* > aValues;
         const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
-        aData.m_aContext.getUnconstrainedValues( pKey, aValues );
-        if( nPaperBin == 0xffff )
+        if( nPaperBin == 0xffff || ! pKey )
             aRet = aData.m_pParser->getDefaultInputSlot();
         else
         {
-            ::std::list< const PPDValue* >::iterator it;
-            for( it = aValues.begin(); it != aValues.end(); ++it )
-            {
-                if( ! nPaperBin-- )
-                {
-                    aRet = String( (*it)->m_aOption );
-                    break;
-                }
-            }
+            const PPDValue* pValue = pKey->getValue( nPaperBin );
+            if( pValue )
+                aRet = pValue->m_aOptionTranslation.Len() ? pValue->m_aOptionTranslation : pValue->m_aOption;
         }
     }
 
