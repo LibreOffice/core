@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-14 16:48:22 $
+ *  last change: $Author: cmc $ $Date: 2001-03-23 09:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2684,15 +2684,39 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
     MSO_BlipFlags eFlags = (MSO_BlipFlags)GetPropertyValue( DFF_Prop_pibFlags, mso_blipflagDefault );
     ULONG nBlipId = GetPropertyValue( DFF_Prop_pib, 0 );
     BOOL bGrfRead = FALSE,
-        // Grafik verlinkt
-        bLinkGrf = 0 != ( eFlags & mso_blipflagLinkToFile );
+    // Grafik verlinkt
+    bLinkGrf = 0 != ( eFlags & mso_blipflagLinkToFile );
 
     if( SeekToContent( DFF_Prop_pibName, rSt ) )
         MSDFFReadZString( rSt, aFilename, GetPropertyValue( DFF_Prop_pibName ), TRUE );
 
     //   UND, ODER folgendes:
     if( !( eFlags & mso_blipflagDoNotSave ) ) // Grafik embedded
-        bGrfRead = GetBLIP( nBlipId, aGraf );
+        if (!(bGrfRead = GetBLIP(nBlipId, aGraf)))
+        {
+            /*
+            Still no luck, lets look at the end of this record for a FBSE pool,
+            this fallback is a specific case for how word does it sometimes
+            */
+            rObjData.rSpHd.SeekToEndOfRecord( rSt );
+            DffRecordHeader aHd;
+            rSt >> aHd;
+            if( DFF_msofbtBSE == aHd.nRecType )
+            {
+                const ULONG nSkipBLIPLen = 20;
+                const ULONG nSkipShapePos = 4;
+                const ULONG nSkipBLIP = 4;
+                const ULONG nSkip =
+                    nSkipBLIPLen + 4 + nSkipShapePos + 4 + nSkipBLIP;
+
+                if (nSkip <= aHd.nRecLen)
+                {
+                    rSt.SeekRel(nSkip);
+                    if (0 == rSt.GetError())
+                        bGrfRead = GetBLIPDirect( rSt, aGraf );
+                }
+            }
+        }
 
     if ( bGrfRead )
     {   // the writer is doing it's own cropping, so this part affects only impress and calc
@@ -2783,8 +2807,12 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
 
         if ( nContrast || nBrightness || ( nGamma != 0x10000 ) || ( eDrawMode != GRAPHICDRAWMODE_STANDARD ) )
         {
-            // currently the luminance and contrast items are available in impress only
-            if ( ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_PPT )
+
+            // Was: currently the luminance and contrast items are available
+            // in impress only
+            // Now: available in writer as well, so logically only do
+            // hackery for excel import
+            if ( !(GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL)
                     && ( ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 ) )
             {
                 if ( nBrightness )
