@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 1999 SUN MICROSYSTEMS, INC. -->
+
+<!ENTITY % module-description-optional "project-build-dependency|runtime-module-dependency">
+<!ENTITY % component-description-optional "reference-docu|service-dependency|type">
+<!ELEMENT module-description (module-name, component-description+,(%module-description-optional;)* )>
+<!ELEMENT component-description (author,name,description,loader-name,language,status, supported-service+, (%component-description-optional;)* )>
+
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT reference-docu EMPTY >
+<!ATTLIST reference-docu 
+	xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink/Namespace"
+	xlink:type      (simple)        #FIXED "simple" 
+	xlink:href      CDATA           #REQUIRED
+  	xlink:role      NMTOKEN         #IMPLIED
+  	xlink:title   	CDATA           #IMPLIED >
+
+<!ELEMENT module-name (#PCDATA)>
+<!ELEMENT loader-name (#PCDATA)>
+<!ELEMENT supported-service (#PCDATA)>
+<!ELEMENT service-dependency (#PCDATA)>
+<!ELEMENT project-build-dependency (#PCDATA)>
+<!ELEMENT runtime-module-dependency (#PCDATA)>
+<!ELEMENT language (#PCDATA)>
+<!ELEMENT status EMPTY >
+<!ATTLIST status value (under_construction | alpha | beta | final) #REQUIRED>
+<!ELEMENT type (#PCDATA)>
+
