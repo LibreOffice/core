@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-17 16:01:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ void SAL_CALL DropTarget::disposing()
 
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void SAL_CALL DropTarget::release()
 {
     if( m_refCount == 1)
