@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-03-01 08:26:45 $
+ *  last change: $Author: os $ $Date: 2002-03-19 16:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,20 +308,21 @@ void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew);
 class SwXTextRange;
 class SwXTextCursor;
 class SwXText : public ::com::sun::star::text::XText,
-                ::com::sun::star::lang::XTypeProvider,
-                ::com::sun::star::text::XTextRangeCompare,
-                ::com::sun::star::text::XRelativeTextContentInsert,
-                ::com::sun::star::text::XRelativeTextContentRemove,
-                ::com::sun::star::lang::XUnoTunnel
+                public ::com::sun::star::lang::XTypeProvider,
+                public ::com::sun::star::text::XTextRangeCompare,
+                public ::com::sun::star::text::XRelativeTextContentInsert,
+                public ::com::sun::star::text::XRelativeTextContentRemove,
+                public ::com::sun::star::beans::XPropertySet,
+                public ::com::sun::star::lang::XUnoTunnel
 {
-    SwDoc*              pDoc;
-    BOOL                bObjectValid;
-    CursorType          eCrsrType;
+    SwDoc*                      pDoc;
+    BOOL                        bObjectValid;
+    CursorType                  eCrsrType;
+    const SfxItemPropertyMap*   _pMap;
 protected:
     virtual const SwStartNode *GetStartNode() const;
 public:
-                SwXText(SwDoc* pDc, CursorType eType) :
-                        pDoc(pDc),bObjectValid(0 != pDc), eCrsrType(eType){}
+                SwXText(SwDoc* pDc, CursorType eType);
     virtual     ~SwXText();
 
     const SwDoc*            GetDoc()const {return pDoc;}
@@ -362,6 +363,15 @@ public:
     virtual void SAL_CALL removeTextContentBefore(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent>& xSuccessor) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeTextContentAfter(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent>& xPredecessor) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
+
+    //XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     //XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
