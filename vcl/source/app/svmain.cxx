@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-02-28 13:17:58 $
+ *  last change: $Author: pluby $ $Date: 2001-03-09 00:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <tools/postwin.h>
 #endif
 
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
 #include <svunx.h>
 #endif
 
