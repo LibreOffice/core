@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-12 07:34:04 $
+ *  last change: $Author: hdu $ $Date: 2002-09-20 10:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,8 @@ bool SalLayout::IsSpacingGlyph( long nGlyph ) const
 
 GenericSalLayout::GenericSalLayout( const ImplLayoutArgs& rArgs )
 :   SalLayout( rArgs ),
-    mnGlyphCapacity(0), mnGlyphCount(0), mpGlyphItems( NULL )
+    mnGlyphCapacity(0), mnGlyphCount(0), mpGlyphItems( NULL ),
+    mnKashidaIndex(0), mnKashidaWidth(0)
 {}
 
 // -----------------------------------------------------------------------
@@ -327,6 +328,14 @@ void GenericSalLayout::SetGlyphItems( GlyphItem* pGlyphItems, int nGlyphCount )
 {
     mpGlyphItems = pGlyphItems;
     mnGlyphCount = nGlyphCount;
+}
+
+// -----------------------------------------------------------------------
+
+void GenericSalLayout::EnableKashidaJustification( long nKashidaIndex, int nKashidaWidth )
+{
+    mnKashidaIndex = nKashidaIndex;
+    mnKashidaWidth = nKashidaWidth;
 }
 
 // -----------------------------------------------------------------------
@@ -515,7 +524,7 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
     GlyphItem* pG = mpGlyphItems;
     for( i = 0; i < mnGlyphCount; ++i, ++pG )
     {
-        int n = pG->mnCharPos;
+        n = pG->mnCharPos;
         if( n < mnEndCharPos )
         {
             if( (n -= mnMinCharPos) >= 0 )
@@ -553,20 +562,22 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
     for( i = 0; i < mnGlyphCount; ++i, ++pG )
     {
         if( pG->IsClusterStart() )
-        {
-            long nNewDelta = nNewPos;
-            nNewDelta += nBasePointX - pG->maLinearPos.X();
-            nDelta = nNewDelta;
-        }
+            nDelta = nBasePointX + (nNewPos - pG->maLinearPos.X());
 
-        nNewPos += pNewClusterWidths[ i ];
         pG->maLinearPos.X() += nDelta;
+        nNewPos += pNewClusterWidths[ i ];
     }
 
-    // adjust new glyph widths to results calculated above
+    // adjust glyph widths to results above and align them in this space
     pG = mpGlyphItems;
     for( i = 1; i < mnGlyphCount; ++i, ++pG )
-        pG[0].mnNewWidth = pG[1].maLinearPos.X() - pG[0].maLinearPos.X();
+    {
+        pG->mnNewWidth = pG[1].maLinearPos.X() - pG[0].maLinearPos.X();
+
+        // right align in new space for RTL glyphs
+        if( pG->IsRTLGlyph() )
+            pG[0].maLinearPos.X() += pG->mnNewWidth - pG->mnOrigWidth;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -641,7 +652,7 @@ void GenericSalLayout::GetCaretPositions( long* pCaretXArray ) const
         if( (n >= mnMinCharPos) && (n < mnEndCharPos) )
         {
             int nCurrIdx = 2 * (n - mnMinCharPos);
-            if( !(pG->mnFlags & GlyphItem::IS_RTL_GLYPH) )
+            if( !pG->IsRTLGlyph() )
             {
                 // normal positions for LTR case
                 pCaretXArray[ nCurrIdx ]   = nXPos;
@@ -760,98 +771,6 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
     rPos = GetDrawPosition( aRelativePos );
 
     return nCount;
-}
-
-// -----------------------------------------------------------------------
-
-GenericSalLayout* GenericSalLayout::ExtractLayout( int nXorFlags, int nAndFlags )
-{
-    int nNewSize = 0;
-    int nUsableSize = 0;
-
-    int i;
-    const GlyphItem* pSrc = mpGlyphItems;
-    for( i = mnGlyphCount; --i >= 0; ++pSrc )
-    {
-        if( ((pSrc->mnFlags ^ nXorFlags) & nAndFlags) != 0 )
-            continue;
-        ++nUsableSize;
-        if( (pSrc->mnCharPos >= mnMinCharPos)
-        &&  (pSrc->mnCharPos < mnEndCharPos) )
-            ++nNewSize;
-    }
-
-    GenericSalLayout* pDstLayout = NULL;
-
-    if( !nNewSize )
-        return NULL;
-
-//###    if( nUsableSize == mnGlyphCount )
-    {
-        pDstLayout = this;
-        Reference();
-    }
-/*###
-    else
-    {
-        pDstLayout = new GenericSalLayout( nNewSize );
-        bool bWantFallback = false;
-        if( nNewSize > 0 )
-        {
-            GlyphItem* pDst = pDstLayout->mpGlyphItems;
-            pSrc = mpGlyphItems;
-            bool bFirst = true;
-            for( i = mnSize; --i >= 0; ++pSrc )
-            {
-                if( (pSrc->mnCharPos >= mnMinCharPos)
-                &&  (pSrc->mnCharPos < mnEndCharPos)
-                &&  !((pSrc->mnFlags ^ nXorFlags) & nAndFlags) )
-                {
-                    *(pDst++) = *pSrc;
-                    if( !pSrc->mnGlyphIndex )
-                        bWantFallback = true;
-                }
-            }
-        }
-
-        pDstLayout->maAdvance       = maAdvance;
-        pDstLayout->maBasePoint     = maBasePoint;
-        pDstLayout->mnMinCharPos= mnMinCharPos;
-        pDstLayout->mnEndCharPos  = mnEndCharPos;
-        pDstLayout->mnOrientation   = mnOrientation;
-        pDstLayout->mbWantFallback  = bWantFallback;
-    }
-
-    pDstLayout->SetDrawPosition( maDrawPosition );
-###*/
-
-    return pDstLayout;
-}
-
-// -----------------------------------------------------------------------
-
-void GenericSalLayout::MergeLayout( int nFlags, const GenericSalLayout& rSalLayout )
-{
-    GlyphItem* pG = mpGlyphItems;
-    for( int i = mnGlyphCount; --i >= 0; ++pG )
-    {
-        // use only when we need glyph fallback
-        if( pG->mnGlyphIndex != 0 )
-            continue;
-        int nCharPos = pG->mnCharPos;
-        const GlyphItem* pSrc = rSalLayout.mpGlyphItems;
-        for( int j = rSalLayout.mnGlyphCount; --j >= 0; ++pSrc )
-        {
-            if( !pSrc->mnGlyphIndex )
-                continue;
-            if( nCharPos != pSrc->mnCharPos )
-                continue;
-            pG->mnGlyphIndex = pSrc->mnGlyphIndex;
-            pG->mnFlags      = nFlags;
-            //### TODO: adjust position of following glyphs
-            break;
-        }
-    }
 }
 
 // =======================================================================
