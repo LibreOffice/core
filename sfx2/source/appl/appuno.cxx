@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-02 08:57:28 $
+ *  last change: $Author: dv $ $Date: 2001-04-18 15:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1006,13 +1006,6 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.ui.FileOpen") );
 
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxFilePicker::impl_getStaticImplementationNameSave();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.ui.FileSave") );
 #if 0
     if (pRegistryKey)
     {
@@ -1067,10 +1060,6 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         if ( SfxFilePicker::impl_getStaticImplementationNameOpen().equals( UNOOUSTRING::createFromAscii( pImplementationName ) ) )
         {
             xFactory = SfxFilePicker::impl_createFactoryOpen( xServiceManager );
-        }
-        if ( SfxFilePicker::impl_getStaticImplementationNameSave().equals( UNOOUSTRING::createFromAscii( pImplementationName ) ) )
-        {
-            xFactory = SfxFilePicker::impl_createFactorySave( xServiceManager );
         }
 
         // Factory is valid - service was found.
