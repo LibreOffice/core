@@ -2,6 +2,7 @@ so  soltools :   stlport NULL
 so	soltools								usr1	-	all	so_usr1 NULL
 so	soltools\inc							get	-	all	so_inc NULL
 so	soltools\ldump							nmake	-	n	so_ldump NULL
+so	soltools\winunistd						nmake	-	n	so_wunistd NULL
 so	soltools\mkdepend						nmake	-	all	so_mkdep NULL
 so	soltools\checkdll						nmake	-	u	so_chkdl NULL
 so	soltools\cpp							nmake	-	all	so_cpp__ NULL

@@ -6,3 +6,4 @@
 ..\%__SRC%\bin\checkdll %_DEST%\bin%_EXT%\checkdll
 ..\%__SRC%\bin\cpp.exe %_DEST%\bin%_EXT%\cpplcc.exe
 ..\%__SRC%\bin\cpp %_DEST%\bin%_EXT%\cpp.lcc
+..\%__SRC%\inc\unistd.h %_DEST%\inc%_EXT%\unistd.h
