@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orienthelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:26:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <sfx2/itemconnect.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class NumericField;
 class CheckBox;
 
@@ -98,7 +102,7 @@ struct OrientationHelper_Impl;
     direct modifications of the "Stacked text" check box. Otherwise the update
     mechanism of registered controls will not work.
  */
-class OrientationHelper : public Window
+class SVX_DLLPUBLIC OrientationHelper : public Window
 {
 public:
     explicit            OrientationHelper(
@@ -140,7 +144,7 @@ private:
 // ============================================================================
 
 /** Wrapper for usage of the stacked attribute of an OrientationHelper in item connections. */
-class OrientStackedWrapper : public sfx::SingleControlWrapper< OrientationHelper, bool >
+class SVX_DLLPUBLIC OrientStackedWrapper : public sfx::SingleControlWrapper< OrientationHelper, bool >
 {
 public:
     explicit            OrientStackedWrapper( OrientationHelper& rOrientHlp );
