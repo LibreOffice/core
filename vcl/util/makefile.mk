@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-04 14:46:09 $
+#   last change: $Author: obo $ $Date: 2004-02-20 09:04:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -257,9 +257,7 @@ SHL1STDLIBS += -framework Cocoa
 .ENDIF
 
 
-.IF "$(OS)"=="MACOSX"
-SHL1STDLIBS += -lXinerama
-.ENDIF
+SHL1STDLIBS += -lX11
 
 .ENDIF          # "$(GUI)"=="UNX"
 
@@ -272,11 +270,11 @@ LIB2FILES= \
             $(SLB)$/salwin.lib  \
             $(SLB)$/salgdi.lib  \
             $(SLB)$/salapp.lib
-SHL2TARGET=pure_x_$(UPD)$(DLLPOSTFIX)
+SHL2TARGET=vclplug_gen$(UPD)$(DLLPOSTFIX)
 SHL2IMPLIB=ipure_x
 SHL2LIBS=  $(LIB2TARGET)
 
-# libs for pure_x plugin
+# libs for generic plugin
 SHL2STDLIBS=\
             $(VCLLIB)\
             -lpsp$(VERSION)$(DLLPOSTFIX)\
@@ -315,6 +313,40 @@ SHL2STDLIBS += -lXext -lSM -lICE -lX11
 .ENDIF          # "$(OS)"=="SOLARIS"
 
 .ENDIF          # "$(GUIBASE)"=="unx"
+
+# dummy plugin
+LIB3TARGET=$(SLB)$/idummy_plug_
+LIB3FILES= \
+            $(SLB)$/dapp.lib
+SHL3TARGET=vclplug_dummy$(UPD)$(DLLPOSTFIX)
+SHL3IMPLIB=idummy_plug_
+SHL3LIBS=  $(LIB3TARGET)
+
+# libs for dummy plugin
+SHL3STDLIBS=\
+            $(VCLLIB)\
+            $(SOTLIB)           \
+            $(UNOTOOLSLIB)      \
+            $(TOOLSLIB)         \
+            $(COMPHELPERLIB)	\
+            $(UCBHELPERLIB)     \
+            $(CPPUHELPERLIB)    \
+            $(CPPULIB)          \
+            $(VOSLIB)           \
+            $(SALLIB)
+
+# gtk plugin
+LIB4TARGET=$(SLB)$/igtk_plug_
+LIB4FILES=\
+            $(SLB)$/gtkapp.lib\
+            $(SLB)$/gtkwin.lib
+SHL4TARGET=vclplug_gtk$(UPD)$(DLLPOSTFIX)
+SHL4IMPLIB=igtk_plug_
+SHL4LIBS=$(LIB4TARGET)
+# libs for gtk plugin
+SHL4STDLIBS=`pkg-config --libs gtk+-2.0 gthread-2.0`
+SHL4STDLIBS+=-l$(SHL2TARGET)
+SHL4STDLIBS+=$(SHL3STDLIBS) -lX11 -ldl
 
 .ENDIF # UNX
 
