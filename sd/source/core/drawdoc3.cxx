@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2001-12-17 14:54:13 $
+ *  last change: $Author: ka $ $Date: 2002-02-04 14:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 {
     BOOL bOK = TRUE;
     BOOL bContinue = TRUE;
-    BOOL bScaleObjects = TRUE;
+    BOOL bScaleObjects = FALSE;
     USHORT nReplacedStandardPages = 0;
 
     SdDrawDocument* pBookmarkDoc = NULL;
