@@ -79,12 +79,8 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ViewMenu" menu:label="" >
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:Zoom" menu:helpid="10000" menu:label="" />
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
-            <menu:menuitem menu:id=".uno:ShowRuler" menu:helpid="27040" menu:label="" />
-            <menu:menuitem menu:id=".uno:StatusBarVisible" menu:helpid="5920" menu:label="" />
-            <menu:menuitem menu:id=".uno:ShowImeStatusWindow" menu:helpid="6680" menu:label="" />
+            <menu:menuitem menu:id=".uno:PageMode" menu:helpid="27049" menu:label="" />
+            <menu:menuitem menu:id=".uno:LayerMode" menu:helpid="27050" menu:label="" />
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:DisplayQualityMenu" menu:label="" >
                 <menu:menupopup>
@@ -94,19 +90,11 @@
                     <menu:menuitem menu:id=".uno:OutputQualityContrast" menu:helpid="27400" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:PreviewWindow" menu:helpid="27327" menu:label="" />
-            <menu:menu menu:id=".uno:PreviewDisplayQualityMenu" menu:label="" >
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:PreviewQualityColor" menu:helpid="27369" menu:label="" />
-                    <menu:menuitem menu:id=".uno:PreviewQualityGrayscale" menu:helpid="27370" menu:label="" />
-                    <menu:menuitem menu:id=".uno:PreviewQualityBlackWhite" menu:helpid="27371" menu:label="" />
-                    <menu:menuitem menu:id=".uno:PreviewQualityContrast" menu:helpid="27401" menu:label="" />
-                </menu:menupopup>
-            </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:PageMode" menu:helpid="27049" menu:label="" />
-            <menu:menuitem menu:id=".uno:LayerMode" menu:helpid="27050" menu:label="" />
-            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
+            <menu:menuitem menu:id=".uno:StatusBarVisible" menu:helpid="5920" menu:label="" />
+            <menu:menuitem menu:id=".uno:ShowImeStatusWindow" menu:helpid="6680" menu:label="" />
+            <menu:menuitem menu:id=".uno:ShowRuler" menu:helpid="27040" menu:label="" />
             <menu:menu menu:id=".uno:GridMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:GridVisible" menu:helpid="27322" menu:label="" />
@@ -114,7 +102,6 @@
                     <menu:menuitem menu:id=".uno:GridFront" menu:helpid="27323" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
             <menu:menu menu:id=".uno:SnapLinesMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:HelplinesVisible" menu:helpid="27324" menu:label="" />
@@ -123,7 +110,10 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:PreviewWindow" menu:helpid="27327" menu:label="" />
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen" menu:helpid="5627" menu:label="" />
+            <menu:menuitem menu:id=".uno:Zoom" menu:helpid="10000" menu:label="" />
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:InsertMenu" menu:label="" >
