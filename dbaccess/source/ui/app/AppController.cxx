@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:43:10 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,16 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
             return sal_False;
 
         Reference<XModifiable> xModi(m_xModel,UNO_QUERY);
-        if ( m_bCurrentlyModified || (xModi.is() && xModi->isModified()) )
+        Reference<XStorable> xStor(getModel(),UNO_QUERY);
+
+        if  (   xStor.is()
+            &&  !xStor->isReadonly()
+            &&  (   m_bCurrentlyModified
+                ||  (   xModi.is()
+                    &&  xModi->isModified()
+                    )
+                )
+            )
         {
             switch (ExecuteQuerySaveDocument(getView(),getStrippedDatabaseName()))
             {
@@ -1222,6 +1231,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 break;
             case SID_SELECTALL:
                 getContainer()->selectAll();
+                InvalidateAll();
                 break;
             case SID_DB_APP_DSRELDESIGN:
                 {
@@ -1230,13 +1240,18 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     if ( xConnection.is() )
                     {
                         ORelationDesignAccess aHelper(getORB());
-                        Reference< XComponent > xComponent(aHelper.create(Reference<XDataSource>(m_xDataSource,UNO_QUERY), Reference<XConnection>()),UNO_QUERY);
+                        Reference< XComponent > xComponent(aHelper.create(Reference<XDataSource>(m_xDataSource,UNO_QUERY), getActiveConnection()),UNO_QUERY);
                         addDocumentListener(xComponent,NULL);
                     }
                 }
                 break;
             case SID_DB_APP_DSUSERADMIN:
-                openDialog(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.UserAdministrationDialog")));
+                {
+                    Reference<XConnection> xConnection;
+                    ensureConnection(xConnection);
+                    if ( xConnection.is() )
+                        openDialog(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.UserAdministrationDialog")));
+                }
                 break;
             case SID_DB_APP_TABLEFILTER:
                 openTableFilterDialog();
@@ -1258,7 +1273,12 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 askToReconnect();
                 break;
             case ID_DIRECT_SQL:
-                openDirectSQLDialog();
+                {
+                    Reference<XConnection> xConnection;
+                    ensureConnection(xConnection);
+                    if ( xConnection.is() )
+                        openDirectSQLDialog();
+                }
                 break;
             case SID_DB_APP_VIEW_TABLES:
                 getContainer()->changeContainer(E_TABLE);
@@ -1347,6 +1367,7 @@ void OApplicationController::describeSupportedFeatures()
                                                                                         CommandGroup::INSERT );
 
     implDescribeSupportedFeature( ".uno:DBDelete",           SID_DB_APP_DELETE,         CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Delete",             SID_DB_APP_DELETE,         CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBRename",           SID_DB_APP_RENAME,         CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBEdit",             SID_DB_APP_EDIT,           CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBOpen",             SID_DB_APP_OPEN,           CommandGroup::EDIT );
@@ -2000,7 +2021,6 @@ void OApplicationController::renameEntry()
 // -----------------------------------------------------------------------------
 void OApplicationController::onEntryDeSelect(SvTreeListBox* _pTree)
 {
-    getContainer()->showPreview(NULL);
     InvalidateAll();
 }
 // -----------------------------------------------------------------------------
@@ -2032,6 +2052,18 @@ void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
                         }
                         break;
                     case E_QUERY:
+                        {
+                            ::rtl::OUString sName = pView->getQualifiedName( _pEntry,NULL);
+                            if ( pView->isPreviewEnabled() )
+                            {
+                                Reference<XConnection> xConnection;
+                                ensureConnection(xConnection);
+                                if ( xConnection.is() )
+                                    pView->showPreview(getDatabaseName(),xConnection,sName,sal_False);
+                            }
+                            return;
+                        }
+                        break;
                     case E_TABLE:
                         {
                             Reference<XConnection> xConnection;
