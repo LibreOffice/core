@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-20 13:02:39 $
+ *  last change: $Author: cl $ $Date: 2002-03-27 14:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ enum WID_PAGE
     WID_PAGE_HEIGHT, WID_PAGE_EFFECT, WID_PAGE_CHANGE, WID_PAGE_SPEED, WID_PAGE_NUMBER,
     WID_PAGE_ORIENT, WID_PAGE_LAYOUT, WID_PAGE_DURATION, WID_PAGE_LDNAME, WID_PAGE_LDBITMAP,
     WID_PAGE_BACK, WID_PAGE_PREVIEW, WID_PAGE_VISIBLE, WID_PAGE_SOUNDFILE, WID_PAGE_BACKFULL,
-    WID_PAGE_BACKVIS, WID_PAGE_BACKOBJVIS, WID_PAGE_USERATTRIBS, WID_PAGE_BOOKMARK
+    WID_PAGE_BACKVIS, WID_PAGE_BACKOBJVIS, WID_PAGE_USERATTRIBS, WID_PAGE_BOOKMARK, WID_PAGE_ISDARK
 };
 
 #ifndef SEQTYPE
@@ -218,6 +218,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
         { MAP_CHAR_LEN(sUNO_Prop_IsBackgroundObjectsVisible),   WID_PAGE_BACKOBJVIS,    &::getBooleanCppuType(),                        0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
         { MAP_CHAR_LEN(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  &::getCppuType((const OUString*)0),             0,  0},
+        { MAP_CHAR_LEN("IsBackgroundDark" ),            WID_PAGE_ISDARK,    &::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
         {0,0,0,0,0}
     };
 
@@ -237,6 +238,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
         { MAP_CHAR_LEN(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  &::getCppuType((const OUString*)0),             0,  0},
+        { MAP_CHAR_LEN("IsBackgroundDark" ),            WID_PAGE_ISDARK,    &::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
         {0,0,0,0,0}
     };
 
@@ -264,6 +266,7 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap( PageKind ePageKind )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN("BackgroundFullSize"),           WID_PAGE_BACKFULL,  &::getBooleanCppuType(),                        0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
+        { MAP_CHAR_LEN("IsBackgroundDark" ),            WID_PAGE_ISDARK,    &::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
         {0,0,0,0,0}
     };
 
@@ -278,6 +281,7 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap( PageKind ePageKind )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    &::getCppuType((const sal_Int16*)0),            0,  0},
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
+        { MAP_CHAR_LEN("IsBackgroundDark" ),            WID_PAGE_ISDARK,    &::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
         {0,0,0,0,0}
     };
 
@@ -624,10 +628,10 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             break;
         }
 
-
         case WID_PAGE_LDBITMAP:
         case WID_PAGE_LDNAME:
         case WID_PAGE_NUMBER:
+        case WID_PAGE_ISDARK:
             throw beans::PropertyVetoException();
 
         default:
@@ -814,6 +818,12 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
         aAny <<= getBookmarkURL();
         break;
     }
+    case WID_PAGE_ISDARK:
+    {
+        aAny <<= (sal_Bool)GetPage()->GetBackgroundColor().IsDark();
+        break;
+    }
+
     default:
         throw beans::UnknownPropertyException();
         break;
@@ -2041,6 +2051,7 @@ SdMasterPage::SdMasterPage( SdXImpressDocument* mpModel, SdPage* pPage ) throw()
 
                     if( pMasterObj->GetOrdNum() != 0 )
                         pMasterObj->SetOrdNum( 0 );
+
                     break;
                 }
             }
