@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsceni.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:14:26 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,15 +106,15 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
     bProtected( sal_False )
 {
     rImport.LockSolarMutex();
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableScenarioAttrTokenMap();
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
+    const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetTableScenarioAttrTokenMap());
+    for( sal_Int16 i = 0; i < nAttrCount; ++i )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         OUString aLocalName;
-        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
+        USHORT nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName ));
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -184,7 +184,7 @@ SvXMLImportContext *ScXMLTableScenarioContext::CreateChildContext(
 void ScXMLTableScenarioContext::EndElement()
 {
     SCTAB   nCurrTable( GetScImport().GetTables().GetCurrentSheet() );
-    ScDocument* pDoc = GetScImport().GetDocument();
+    ScDocument* pDoc(GetScImport().GetDocument());
     if (pDoc)
     {
         pDoc->SetScenario( nCurrTable, TRUE );
@@ -200,9 +200,9 @@ void ScXMLTableScenarioContext::EndElement()
         if( bProtected )
             nFlags |= SC_SCENARIO_PROTECT;
         pDoc->SetScenarioData( nCurrTable, String( sComment ), aBorderColor, nFlags );
-        for( sal_Int32 i = 0; i < static_cast<sal_Int32>(aScenarioRanges.Count()); i++ )
+        for( sal_Int32 i = 0; i < static_cast<sal_Int32>(aScenarioRanges.Count()); ++i )
         {
-            ScRange* pRange = aScenarioRanges.GetObject( i );
+            ScRange* pRange(aScenarioRanges.GetObject( i ));
             if( pRange )
                 pDoc->ApplyFlagsTab( pRange->aStart.Col(), pRange->aStart.Row(),
                     pRange->aEnd.Col(), pRange->aEnd.Row(), nCurrTable, SC_MF_SCENARIO );
