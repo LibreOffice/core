@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:38:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@
 #ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
-#include <com/sun/star/awt/FontUnderline.hpp>
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_HXX_
@@ -433,7 +433,6 @@ OBoundControl::OBoundControl( const Reference< XMultiServiceFactory >& _rxFactor
             const ::rtl::OUString& _rAggregateService, const sal_Bool _bSetDelegator )
     :OControl( _rxFactory, _rAggregateService, _bSetDelegator )
     ,m_bLocked(sal_False)
-    ,m_bLastKnownValidity( sal_True )
     ,m_aOriginalFont( EmptyFontDescriptor() )
     ,m_nOriginalTextLineColor( 0 )
 {
@@ -509,67 +508,7 @@ void OBoundControl::_setLock(sal_Bool _bLock)
 //--------------------------------------------------------------------
 sal_Bool SAL_CALL OBoundControl::setModel( const Reference< XControlModel >& _rxModel ) throw (RuntimeException)
 {
-    implStartStopModelValidityListening( false );
-    sal_Bool bReturn = OControl::setModel( _rxModel );
-    implStartStopModelValidityListening( true );
-
-    implCheckValidity();
-
-    return bReturn;
-}
-
-//--------------------------------------------------------------------
-void SAL_CALL OBoundControl::componentValidityChanged( const EventObject& Source ) throw (RuntimeException)
-{
-    implCheckValidity();
-}
-
-//--------------------------------------------------------------------
-bool OBoundControl::implPropertyChanged( const ::rtl::OUString& _rPropertyName, const Any& _rValue )
-{
-    // if the changed property is one of the properties which we use to indicate "invalidity" at the peer,
-    // we need to
-    // a) remember the value as "original value" (to restore when we're valid, again)
-    // b) ensure that our marking is forwarded to the peer, again (this is done by the caller, who
-    //    may collect multiple changes)
-    bool bIsInvalidityIndicatorProperty = false;
-    if ( _rPropertyName == PROPERTY_HELPTEXT )
-    {
-        if ( !m_bLastKnownValidity && ( bIsInvalidityIndicatorProperty = true ) )
-            _rValue >>= m_sOriginalHelpText;
-    }
-    else if ( _rPropertyName == PROPERTY_FONT )
-    {
-        if ( !m_bLastKnownValidity && ( bIsInvalidityIndicatorProperty = true ) )
-            _rValue >>= m_aOriginalFont;
-    }
-    else if ( _rPropertyName == PROPERTY_TEXTLINECOLOR )
-    {
-        if ( !m_bLastKnownValidity && ( bIsInvalidityIndicatorProperty = true ) )
-            _rValue >>= m_nOriginalTextLineColor;
-    }
-    return bIsInvalidityIndicatorProperty;
-}
-
-//--------------------------------------------------------------------
-void SAL_CALL OBoundControl::propertiesChange( const Sequence< PropertyChangeEvent >& aEvent ) throw (RuntimeException)
-{
-    // delegate to the aggregate
-    Reference< XPropertiesChangeListener > xAggregateListener;
-    if ( m_xAggregate.is() )
-        m_xAggregate->queryAggregation( ::getCppuType( &xAggregateListener ) ) >>= xAggregateListener;
-    if ( xAggregateListener.is() )
-        xAggregateListener->propertiesChange( aEvent );
-
-    // see if one of the changed properties is used by us to indicate invalidity
-    bool bValidityIndicatorPropertyChanged = false;
-    const PropertyChangeEvent* pEvent = aEvent.getConstArray();
-    const PropertyChangeEvent* pEventEnd = aEvent.getConstArray() + aEvent.getLength();
-    for ( ; pEvent != pEventEnd; ++pEvent )
-        bValidityIndicatorPropertyChanged |= implPropertyChanged( pEvent->PropertyName, pEvent->NewValue );
-
-    if ( bValidityIndicatorPropertyChanged )
-        implMarkInvalid( m_sLastKnownInvalidityExplanation );
+    return OControl::setModel( _rxModel );
 }
 
 //--------------------------------------------------------------------
@@ -582,114 +521,7 @@ void SAL_CALL OBoundControl::disposing(const EventObject& Source) throw (Runtime
 //--------------------------------------------------------------------
 void OBoundControl::disposing()
 {
-    implStartStopModelValidityListening( false );
-
     OControl::disposing();
-}
-
-//--------------------------------------------------------------------
-void OBoundControl::implCheckValidity() SAL_THROW(())
-{
-    try
-    {
-        // the validatable and the validator
-        Reference< XValidatableFormComponent > xValidatable( getModel(), UNO_QUERY );
-        Reference< XValidator > xValidator = xValidatable.is() ? xValidatable->getValidator() : Reference< XValidator >();
-
-        sal_Bool        bIsCurrentlyValid = xValidatable.is() ? xValidatable->isValid() : sal_True;
-        ::rtl::OUString sCurrentExplanation;
-        if ( !bIsCurrentlyValid && xValidator.is() )
-            sCurrentExplanation = xValidator->explainInvalid( xValidatable->getCurrentValue() );
-
-        if ( ( bIsCurrentlyValid == m_bLastKnownValidity ) && ( sCurrentExplanation == m_sLastKnownInvalidityExplanation ) )
-            // nothing to do
-            return;
-
-        if ( bIsCurrentlyValid )
-            implMarkValid( );
-        else
-            implMarkInvalid( sCurrentExplanation );
-
-        m_bLastKnownValidity = bIsCurrentlyValid;
-        m_sLastKnownInvalidityExplanation = sCurrentExplanation;
-    }
-    catch( const Exception& )
-    {
-        OSL_ENSURE( sal_False, "OBoundControl::implCheckValidity: caught an exception!" );
-    }
-}
-
-//--------------------------------------------------------------------
-void OBoundControl::implMarkValid() SAL_THROW(( Exception ))
-{
-    Reference< XVclWindowPeer > xPeer( getPeer(), UNO_QUERY );
-    if ( !xPeer.is() )
-        return;
-
-    // reset the help text
-    xPeer->setProperty( PROPERTY_HELPTEXT, makeAny( m_sOriginalHelpText ) );
-    m_sOriginalHelpText = ::rtl::OUString();
-
-    // reset the font
-    xPeer->setProperty( PROPERTY_FONT, makeAny( m_aOriginalFont ) );
-    m_aOriginalFont = EmptyFontDescriptor();
-
-    // reset the text line color
-    xPeer->setProperty( PROPERTY_TEXTLINECOLOR, makeAny( m_nOriginalTextLineColor ) );
-    m_nOriginalTextLineColor = 0;
-}
-
-//--------------------------------------------------------------------
-void OBoundControl::implMarkInvalid( const ::rtl::OUString& _rExplanation ) SAL_THROW(( Exception ))
-{
-    Reference< XVclWindowPeer > xPeer( getPeer(), UNO_QUERY );
-    if ( !xPeer.is() )
-        return;
-
-    if ( m_bLastKnownValidity )
-    {
-        // the last we know about validity is that our text/value was valid. So
-        // before doing anythiung, save the properties which we are going to modify
-        xPeer->getProperty( PROPERTY_HELPTEXT      ) >>= m_sOriginalHelpText;
-        xPeer->getProperty( PROPERTY_FONT          ) >>= m_aOriginalFont;
-        xPeer->getProperty( PROPERTY_TEXTLINECOLOR ) >>= m_nOriginalTextLineColor;
-    }
-
-    // set the invalidity explanation as help text
-    xPeer->setProperty( PROPERTY_HELPTEXT, makeAny( _rExplanation ) );
-
-    // modify the font
-    FontDescriptor aFont = EmptyFontDescriptor();
-    xPeer->getProperty( PROPERTY_FONT ) >>= aFont;
-    aFont.Underline = FontUnderline::WAVE;
-    xPeer->setProperty( PROPERTY_FONT, makeAny( aFont ) );
-
-    // modify the text line color (which is used for underlining)
-    xPeer->setProperty( PROPERTY_TEXTLINECOLOR, makeAny( (sal_Int32)0x00FF0000 ) );
-}
-
-//--------------------------------------------------------------------
-void OBoundControl::implStartStopModelValidityListening( bool _bStart )
-{
-    Reference< XValidatableFormComponent > xValidatable( getModel(), UNO_QUERY );
-    if ( xValidatable.is() )
-        if ( _bStart )
-            xValidatable->addFormComponentValidityListener( this );
-        else
-            xValidatable->removeFormComponentValidityListener( this );
-
-    Reference< XMultiPropertySet > xModelMultiProps( getModel(), UNO_QUERY );
-    if ( xModelMultiProps.is() )
-    {
-        Sequence< ::rtl::OUString > aNames( 3 );
-        aNames[ 0 ] = PROPERTY_HELPTEXT;
-        aNames[ 1 ] = PROPERTY_FONT;
-        aNames[ 2 ] = PROPERTY_TEXTLINECOLOR;
-        if ( _bStart )
-            xModelMultiProps->addPropertiesChangeListener( aNames, this );
-        else
-            xModelMultiProps->removePropertiesChangeListener( this );
-    }
 }
 
 //==================================================================
@@ -1384,8 +1216,9 @@ OBoundControlModel::OBoundControlModel(
     ,m_bLoadListening( sal_False )
     ,m_nValuePropertyAggregateHandle( -1 )
     ,m_pAggPropMultiplexer( NULL )
-    ,m_bSettingAggregateState( sal_False )
+    ,m_eControlValueChangeInstigator( eOther )
     ,m_bIsCurrentValueValid( sal_True )
+    ,m_bTransferingValue( sal_False )
 {
     DBG_CTOR(frm_OBoundControlModel, NULL);
 
@@ -1410,9 +1243,10 @@ OBoundControlModel::OBoundControlModel(
     ,m_bLoadListening( sal_False )
     ,m_nValuePropertyAggregateHandle( _pOriginal->m_nValuePropertyAggregateHandle )
     ,m_pAggPropMultiplexer( NULL )
-    ,m_bSettingAggregateState( sal_False )
+    ,m_eControlValueChangeInstigator( eOther )
     ,m_xValidator( _pOriginal->m_xValidator )
     ,m_bIsCurrentValueValid( _pOriginal->m_bIsCurrentValueValid )
+    ,m_bTransferingValue( sal_False )
 {
     DBG_CTOR(frm_OBoundControlModel, NULL);
 
@@ -1624,20 +1458,19 @@ void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) th
     if ( _rEvt.PropertyName == m_sValuePropertyName )
     {   // our control value changed
 
-        if ( !m_bSettingAggregateState )
-        {   // not caused by ourself
-            if ( hasExternalValueBinding() )
-            {   // the control value changed, while we have an external value binding
-                // -> forward the value to it
+        if ( hasExternalValueBinding() )
+        {   // the control value changed, while we have an external value binding
+            // -> forward the value to it
+            if ( m_eControlValueChangeInstigator != eExternalBinding )
                 transferControlValueToExternal( );
-            }
-            else if ( !m_bCommitable && m_xColumnUpdate.is() )
-            {   // the control value changed, while we have are  bound to a database column,
-                // but not committable (which means changes in the control have to be reflected to
-                // the underlying database column immediately)
-                // -> forward the value to the database column
+        }
+        else if ( !m_bCommitable && m_xColumnUpdate.is() )
+        {   // the control value changed, while we are  bound to a database column,
+            // but not committable (which means changes in the control have to be reflected to
+            // the underlying database column immediately)
+            // -> forward the value to the database column
+            if ( m_eControlValueChangeInstigator !=  eDbColumnBinding )
                 commitControlValueToDbColumn( false );
-            }
         }
 
         // validate the new value
@@ -2323,14 +2156,14 @@ void SAL_CALL OBoundControlModel::reloaded( const EventObject& _rEvent ) throw(R
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::setControlValue( const Any& _rValue )
+void OBoundControlModel::setControlValue( const Any& _rValue, ValueChangeInstigator _eInstigator )
 {
     OSL_PRECOND( m_xAggregateFastSet.is() && m_xAggregateSet.is(),
         "OBoundControlModel::setControlValue: invalid aggregate !" );
     OSL_PRECOND( m_sValuePropertyName.getLength() || ( m_nValuePropertyAggregateHandle != -1 ),
         "OBoundControlModel::setControlValue: please override if you have own value property handling!" );
 
-    m_bSettingAggregateState = sal_True;
+    m_eControlValueChangeInstigator = _eInstigator;
     {
         // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
         // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
@@ -2346,7 +2179,7 @@ void OBoundControlModel::setControlValue( const Any& _rValue )
             m_xAggregateSet->setPropertyValue( m_sValuePropertyName, _rValue );
         }
     }
-    m_bSettingAggregateState = sal_False;
+    m_eControlValueChangeInstigator = eOther;
 }
 
 //------------------------------------------------------------------------------
@@ -2420,7 +2253,7 @@ Any OBoundControlModel::getDefaultForReset() const
 //-----------------------------------------------------------------------------
 void OBoundControlModel::resetNoBroadcast()
 {
-    setControlValue( getDefaultForReset() );
+    setControlValue( getDefaultForReset(), eOther );
 }
 
 //-----------------------------------------------------------------------------
@@ -2604,25 +2437,34 @@ void OBoundControlModel::connectExternalValueBinding( const Reference< XValueBin
 
     // if the binding is also a validator, use it, too. This is a constraint of the
     // com.sun.star.form.binding.ValidatableBindableFormComponent service
-    try
+    if ( m_bSupportsValidation )
     {
-        Reference< XValidator > xAsValidator( _rxBinding, UNO_QUERY );
-        if ( xAsValidator.is() )
-            setValidator( xAsValidator );
-    }
-    catch( const Exception& )
-    {
-        OSL_ENSURE( sal_False, "OBoundControlModel::connectExternalValueBinding: caught an exception while establishing the binding as validator!" );
+        try
+        {
+            Reference< XValidator > xAsValidator( _rxBinding, UNO_QUERY );
+            if ( xAsValidator.is() )
+                setValidator( xAsValidator );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OBoundControlModel::connectExternalValueBinding: caught an exception while establishing the binding as validator!" );
+        }
     }
 }
 
 //--------------------------------------------------------------------
 void OBoundControlModel::disconnectExternalValueBinding( )
 {
-    // not listening at the binding anymore
-    Reference< XModifyBroadcaster > xModifiable( m_xExternalBinding, UNO_QUERY );
-    if ( xModifiable.is() )
-        xModifiable->removeModifyListener( this );
+    try
+    {
+        // not listening at the binding anymore
+        Reference< XModifyBroadcaster > xModifiable( m_xExternalBinding, UNO_QUERY );
+        if ( xModifiable.is() )
+            xModifiable->removeModifyListener( this );
+    }
+    catch( const RuntimeException& )
+    {
+    }
 
     // if the binding also acts as our validator, disconnect the validator, too
     if ( ( m_xExternalBinding == m_xValidator ) && m_xValidator.is() )
@@ -2686,7 +2528,7 @@ void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent ) throw (
     ::osl::MutexGuard aGuard( m_aMutex );
 
     OSL_PRECOND( hasExternalValueBinding(), "OBoundControlModel::modified: Where did this come from?" );
-    if ( hasExternalValueBinding() && ( m_xExternalBinding == _rEvent.Source ) )
+    if ( !m_bTransferingValue && hasExternalValueBinding() && ( m_xExternalBinding == _rEvent.Source ) )
     {
         transferExternalValueToControl( );
     }
@@ -2695,7 +2537,7 @@ void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent ) throw (
 //--------------------------------------------------------------------
 void OBoundControlModel::transferDbValueToControl( )
 {
-    setControlValue( translateDbColumnToControlValue() );
+    setControlValue( translateDbColumnToControlValue(), eDbColumnBinding );
 }
 
 //------------------------------------------------------------------------------
@@ -2703,7 +2545,7 @@ void OBoundControlModel::transferExternalValueToControl( )
 {
     try
     {
-        setControlValue( translateExternalValueToControlValue( ) );
+        setControlValue( translateExternalValueToControlValue( ), eExternalBinding );
     }
     catch( const Exception& )
     {
@@ -2719,6 +2561,7 @@ void OBoundControlModel::transferControlValueToExternal( )
 
     if ( m_xExternalBinding.is() )
     {
+        m_bTransferingValue = sal_True;
         try
         {
             m_xExternalBinding->setValue( translateControlValueToExternalValue( ) );
@@ -2731,6 +2574,20 @@ void OBoundControlModel::transferControlValueToExternal( )
         {
             OSL_ENSURE( sal_False, "OBoundControlModel::transferControlValueToExternal: could not commit the value (no support)!" );
         }
+        catch( const DisposedException& )
+        {
+            OSL_ENSURE( sal_False, "OBoundControlModel::transferControlValueToExternal: could not commit the value: the binding is already disposed!!" );
+        }
+        catch( const Exception& e )
+        {
+#if OSL_DEBUG_LEVEL > 0
+            ::rtl::OString sMessage( "OBoundControlModel::transferControlValueToExternal: could not commit the value: unexpected exception type!\n" );
+            sMessage += "message:\n";
+            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
+            OSL_ENSURE( sal_False, sMessage.getStr() );
+#endif
+        }
+        m_bTransferingValue = sal_False;
     }
 }
 
@@ -2746,9 +2603,19 @@ Any OBoundControlModel::translateExternalValueToControlValue( )
         Reference< XPropertySetInfo > xPropInfo( m_xAggregateSet->getPropertySetInfo( ) );
         if ( xPropInfo.is() )
         {
-            Type aValuePropType = xPropInfo->getPropertyByName( m_sValuePropertyName ).Type;
-            if ( m_xExternalBinding.is() && m_xExternalBinding->supportsType( aValuePropType ) )
-                return m_xExternalBinding->getValue( aValuePropType );
+            Property aValuePropertyDescriptor = xPropInfo->getPropertyByName( m_sValuePropertyName );
+            // if the external binding does support this type, ask for it
+            if ( m_xExternalBinding.is() && m_xExternalBinding->supportsType( aValuePropertyDescriptor.Type ) )
+            {
+                Any aExternalValue = m_xExternalBinding->getValue( aValuePropertyDescriptor.Type );
+                // if the external value is VOID, and our value property is not allowed to be VOID,
+                // then default-construct a value
+                if ( !aExternalValue.hasValue() && ( ( aValuePropertyDescriptor.Attributes & PropertyAttribute::MAYBEVOID ) == 0 ) )
+                    aExternalValue.setValue( NULL, aValuePropertyDescriptor.Type );
+
+                // outta here
+                return aExternalValue;
+            }
         }
     }
 
@@ -2842,6 +2709,10 @@ void SAL_CALL OBoundControlModel::setValidator( const Reference< XValidator >& _
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::setValidator: How did you reach this method?" );
         // the interface for this method should not have been exposed if we do not
         // support validation
+
+    // early out if the validator does not change
+    if( _rxValidator == m_xValidator )
+        return;
 
     if ( m_xValidator.is() && ( m_xValidator == m_xExternalBinding ) )
         throw VetoException(
