@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-24 20:36:22 $
+ *  last change: $Author: kz $ $Date: 2001-10-25 20:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Area delle celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui a base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -230,7 +230,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -288,7 +288,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Area delle celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -385,7 +385,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Area delle celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui a base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -444,7 +444,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -502,7 +502,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Area delle celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -599,7 +599,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Area delle celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui uma base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -658,7 +658,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -716,7 +716,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Area delle celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -813,7 +813,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Area delle celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui a base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -872,7 +872,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -930,7 +930,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Area delle celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -1027,7 +1027,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Area delle celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui a base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -1086,7 +1086,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -1144,7 +1144,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Area delle celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -1241,7 +1241,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Area delle celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui a base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -1300,7 +1300,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -1358,7 +1358,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Area delle celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -1455,7 +1455,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Area delle celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui a base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -1514,7 +1514,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -1572,7 +1572,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Area delle celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -1669,7 +1669,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Area delle celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui a base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -1728,7 +1728,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -1786,7 +1786,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Intervallo di celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -1883,7 +1883,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Intervallo di celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui a base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -1942,7 +1942,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -2000,7 +2000,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Intervallo di celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -2097,7 +2097,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Intervallo di celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui a base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -2156,7 +2156,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -2214,7 +2214,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Intervallo di celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -2311,7 +2311,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Intervallo di celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui a base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -2370,7 +2370,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -2428,7 +2428,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Intervallo di celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -2525,7 +2525,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zellbereich mit den Daten" ;
             Text [ english ] = "is the range of cells that make up the database." ;
             Text [ norwegian ] = "Der Zellbereich mit den Daten" ;
-            Text [ italian ] = "È l'area delle celle con i dati." ;
+            Text [ italian ] = "Intervallo di celle con i dati." ;
             Text [ portuguese_brazilian ] = "Der Zellbereich mit den Daten" ;
             Text [ portuguese ] = "é o intervalo de células que constitui a base de dados." ;
             Text [ finnish ] = "Tiedot sisältävä solualue." ;
@@ -2584,7 +2584,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
             Text [ english ] = "indicates which field is used in the function." ;
             Text [ norwegian ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
-            Text [ italian ] = "È il campo database (colonna) utilizzato per i criteri di ricerca." ;
+            Text [ italian ] = "Campo database (colonna) utilizzato per i criteri di ricerca." ;
             Text [ portuguese_brazilian ] = "Legt das Datenbankfeld (Spalte) f? die Suchkriterien fest." ;
             Text [ portuguese ] = "indica o campo da base de dados (coluna) usado para os critérios de procura." ;
             Text [ finnish ] = "Osoittaa, mikä tietokannan kenttä (sarake) sisältää hakuehdot." ;
@@ -2642,7 +2642,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ english ] = "is the range of cells that contains the database criteria." ;
             Text [ norwegian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
-            Text [ italian ] = "È l'area delle celle con i criteri di ricerca specificati." ;
+            Text [ italian ] = "Intervallo di celle con i criteri di ricerca specificati." ;
             Text [ portuguese_brazilian ] = "Gibt den Zellbereich mit den Suchkriterien an." ;
             Text [ portuguese ] = "é o intervalo de células que contém os critérios de procura da base de dados." ;
             Text [ finnish ] = "Määrittää hakuehdot sisältävän solualueen." ;
@@ -2745,7 +2745,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ portuguese_brazilian ] = "Eine ganze Zahl zwischen 1600 und 3000, 0 und 19 (-> 2000 bis 2019) oder 20 und 99 (-> 1920 - 1999)." ;
             Text [ swedish ] = "Ett heltal mellan 1583 och 9956, eller 0 och 99 (19xx eller 20xx enligt inställt alternativ). " ;
             Text [ danish ] = "Et heltal mellem 1583 og 9956 eller 0 og 99 (19xx eller 20xx alt efter indstillet alternativ)." ;
-            Text [ italian ] = "È un numero intero compreso tra 1583 e 9956, oppure tra 0 e 99 (19xx oppure 20xx a seconda dell'opzione impostata)." ;
+            Text [ italian ] = "Numero intero compreso tra 1583 e 9956, oppure tra 0 e 99 (19xx oppure 20xx a seconda dell'opzione impostata)." ;
             Text [ spanish ] = "Es un número entero entre 1583 y 9956, o 0 y 99 (19xx o 20xx dependiendo de la opción definida)." ;
             Text [ french ] = "Un nombre entier compris entre 1583 et 9956 ou entre 0 et 99 (19xx ou 20xx selon l'option définie)." ;
             Text [ dutch ] = "Een geheel getal tussen 1583 en 9956, of tussen 0 en 19 (19xx of 20xx overeenkomstig ingestelde optie)." ;
@@ -2799,7 +2799,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Eine ganze Zahl zwischen 1 und 12 für den Monat." ;
             Text [ english ] = "is a number between 1 and 12 representing the month of the year." ;
             Text [ norwegian ] = "Eine ganze Zahl zwischen 1 und 12 für den Monat." ;
-            Text [ italian ] = "È un numero intero compreso tra 1 e 12 che rappresenta il mese dell'anno." ;
+            Text [ italian ] = "Numero intero compreso tra 1 e 12 che rappresenta il mese dell'anno." ;
             Text [ portuguese_brazilian ] = "Eine ganze Zahl zwischen 1 und 12 f? den Monat." ;
             Text [ portuguese ] = "é um número inteiro entre 1 e 12, representando um mês." ;
             Text [ finnish ] = "Kuukautta kuvaava kokonaisluku 1 - 12." ;
@@ -2858,7 +2858,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Eine ganze Zahl zwischen 1 und 31 für den Tag." ;
             Text [ english ] = "is a number between 1 and 31 representing the day of the month." ;
             Text [ norwegian ] = "Eine ganze Zahl zwischen 1 und 31 für den Tag." ;
-            Text [ italian ] = "È un numero compreso tra 1 e 31 che rappresenta il giorno del mese." ;
+            Text [ italian ] = "Numero compreso tra 1 e 31 che rappresenta il giorno del mese." ;
             Text [ portuguese_brazilian ] = "Eine ganze Zahl zwischen 1 und 31 f? den Tag." ;
             Text [ portuguese ] = "é um número inteiro entre 1 e 31, representando um dia no mês." ;
             Text [ finnish ] = "Päivää kuvaava kokonaisluku 1 - 31." ;
@@ -2892,7 +2892,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bestimmt aus einem Text in einem möglichen Datumseingabeformat eine interne Zahl." ;
             Text [ english ] = "Returns the serial number of the date represented by date_text." ;
             Text [ norwegian ] = "Bestimmt aus einem Text in einem möglichen Datumseingabeformat eine interne Zahl." ;
-            Text [ italian ] = "Restituisce il numero seriale della data rappresentata da data." ;
+            Text [ italian ] = "Restituisce il numero seriale della data rappresentata da un testo." ;
             Text [ portuguese_brazilian ] = "Bestimmt aus einem Text in einem m?lichen Datumseingabeformat eine interne Zahl." ;
             Text [ portuguese ] = "Devolve o número de série da data representada por texto_data." ;
             Text [ finnish ] = "Palauttaa mahdollisen päivämäärämuodon sisäisen arvon." ;
@@ -31854,7 +31854,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "N" ;
             Text [ english ] = "size" ;
             Text [ norwegian ] = "N" ;
-            Text [ italian ] = "dimens" ;
+            Text [ italian ] = "Dimensioni " ;
             Text [ portuguese_brazilian ] = "N" ;
             Text [ portuguese ] = "Tamanho" ;
             Text [ finnish ] = "koko" ;
@@ -31884,7 +31884,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Größe der Grundgesamtheit." ;
             Text [ english ] = "is the sample size." ;
             Text [ norwegian ] = "Die Größe der Grundgesamtheit." ;
-            Text [ italian ] = "è la dimensione del campione." ;
+            Text [ italian ] = "Dimensioni del campione." ;
             Text [ portuguese_brazilian ] = "Die Gr?e der Grundgesamtheit." ;
             Text [ portuguese ] = "é o tamanho do exemplo." ;
             Text [ finnish ] = "Populaation koko." ;
@@ -31918,7 +31918,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "(Gauss-Test) Berechnet die zweiseitige Prüfstatistik zur Normalverteilung." ;
             Text [ english ] = "Returns the two-tailed P-value of a z-test." ;
             Text [ norwegian ] = "(Gauss-Test) Berechnet die zweiseitige Prüfstatistik zur Normalverteilung." ;
-            Text [ italian ] = "(Test di Gauss), restituisce il livello di significatività a due code per un test z." ;
+            Text [ italian ] = "(Test di Gauss) Restituisce la statistica inferenziale bilaterale per la distribuzione normale." ;
             Text [ portuguese_brazilian ] = "(Gauss-Test) Berechnet die zweiseitige Pr?statistik zur Normalverteilung." ;
             Text [ portuguese ] = "Devolve o valor P bilateral do teste Z" ;
             Text [ finnish ] = "Palauttaa z-testin kaksihäntäisen P-arvon." ;
@@ -31953,7 +31953,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten" ;
             Text [ english ] = "array" ;
             Text [ norwegian ] = "Daten" ;
-            Text [ italian ] = "matrice" ;
+            Text [ italian ] = "Dati" ;
             Text [ portuguese_brazilian ] = "Daten" ;
             Text [ portuguese ] = "Matriz" ;
             Text [ finnish ] = "tiedot" ;
@@ -31982,7 +31982,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Daten." ;
             Text [ english ] = "is the array or range of data against which to test x." ;
             Text [ norwegian ] = "Die Matrix der Daten." ;
-            Text [ italian ] = "è la matrice o l'intervallo di dati con cui esaminare x." ;
+            Text [ italian ] = "Matrice dei dati." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Daten." ;
             Text [ portuguese ] = "é a matriz ou intervalo de dados em que x será testado." ;
             Text [ finnish ] = "Tietomatriisi." ;
@@ -32011,7 +32011,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "X" ;
             Text [ english ] = "x" ;
             Text [ norwegian ] = "X" ;
-            Text [ italian ] = "x" ;
+            Text [ italian ] = "X" ;
             Text [ portuguese_brazilian ] = "X" ;
             Text [ portuguese ] = "X" ;
             Text [ finnish ] = "Luku" ;
@@ -32040,7 +32040,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wert, der getestet werden soll." ;
             Text [ english ] = "is the value to test." ;
             Text [ norwegian ] = "Der Wert, der getestet werden soll." ;
-            Text [ italian ] = "è il valore da esaminare." ;
+            Text [ italian ] = "Il valore da esaminare." ;
             Text [ portuguese_brazilian ] = "Der Wert, der getestet werden soll." ;
             Text [ portuguese ] = "é o valor a ser testado." ;
             Text [ finnish ] = "Testattava arvo." ;
@@ -32069,7 +32069,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "STD" ;
             Text [ english ] = "sigma" ;
             Text [ norwegian ] = "STD" ;
-            Text [ italian ] = "sigma" ;
+            Text [ italian ] = "Sigma" ;
             Text [ portuguese_brazilian ] = "STD" ;
             Text [ portuguese ] = "Sigma" ;
             Text [ finnish ] = "sigma" ;
@@ -32098,7 +32098,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Standardabweichung der Grundgesamtheit." ;
             Text [ english ] = "is the population (known) standard deviation." ;
             Text [ norwegian ] = "Die Standardabweichung der Grundgesamtheit." ;
-            Text [ italian ] = "è la deviazione standard della popolazione (nota)." ;
+            Text [ italian ] = "Deviazione standard del campione." ;
             Text [ portuguese_brazilian ] = "Die Standardabweichung der Grundgesamtheit." ;
             Text [ portuguese ] = "é o desvio padrão da população (conhecido)." ;
             Text [ finnish ] = "Populaation vakiopoikkeama." ;
@@ -32167,7 +32167,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_B" ;
             Text [ english ] = "actual_range" ;
             Text [ norwegian ] = "Daten B" ;
-            Text [ italian ] = "dati_B" ;
+            Text [ italian ] = "Dati B" ;
             Text [ portuguese_brazilian ] = "Daten B" ;
             Text [ portuguese ] = "Dados_B" ;
             Text [ finnish ] = "Tiedot_B" ;
@@ -32196,7 +32196,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der beobachteten Daten." ;
             Text [ english ] = "is the range of data that contains observations to test against expected values." ;
             Text [ norwegian ] = "Die Matrix der beobachteten Daten." ;
-            Text [ italian ] = "è l'intervallo di dati contenente le osservazioni da confrontare con i valori attesi." ;
+            Text [ italian ] = "La matrice dei dati ossarvati." ;
             Text [ portuguese_brazilian ] = "Die Matrix der beobachteten Daten." ;
             Text [ portuguese ] = "é o intervalo de dados que contém observações para serem comparadas com os valores esperados." ;
             Text [ finnish ] = "Tutkittu tietomatriisi." ;
@@ -32225,7 +32225,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_E" ;
             Text [ english ] = "expected_range" ;
             Text [ norwegian ] = "Daten E" ;
-            Text [ italian ] = "dati_E" ;
+            Text [ italian ] = "Dati E" ;
             Text [ portuguese_brazilian ] = "Daten E" ;
             Text [ portuguese ] = "Dados_E" ;
             Text [ finnish ] = "tiedot_E" ;
@@ -32254,7 +32254,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der erwarteten Daten." ;
             Text [ english ] = "is the range of data that contains the ratio of the product of row totals and column totals to the grand total." ;
             Text [ norwegian ] = "Die Matrix der erwarteten Daten." ;
-            Text [ italian ] = "è l'intervallo di dati contenente la proporzione del prodotto dei totali di riga e di colonna per il totale complessivo." ;
+            Text [ italian ] = "La matrice dei valori attesi." ;
             Text [ portuguese_brazilian ] = "Die Matrix der erwarteten Daten." ;
             Text [ portuguese ] = "É a matriz dos dados necessários." ;
             Text [ finnish ] = "Oletettu tietomatriisi." ;
@@ -32322,7 +32322,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_1" ;
             Text [ english ] = "array 1" ;
             Text [ norwegian ] = "Daten 1" ;
-            Text [ italian ] = "Dati_1" ;
+            Text [ italian ] = "Dati 1" ;
             Text [ portuguese_brazilian ] = "Daten 1" ;
             Text [ portuguese ] = "Dados_1" ;
             Text [ finnish ] = "tiedot_1" ;
@@ -32351,7 +32351,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix des ersten Datensatzes." ;
             Text [ english ] = "is the first array or range of data." ;
             Text [ norwegian ] = "Die Matrix des ersten Datensatzes." ;
-            Text [ italian ] = "è la prima matrice o il primo intervallo di dati." ;
+            Text [ italian ] = "La matrice del primo record di dati." ;
             Text [ portuguese_brazilian ] = "Die Matrix des ersten Datensatzes." ;
             Text [ portuguese ] = "é a primeira matriz ou intervalo de dados." ;
             Text [ finnish ] = "Ensimmäinen tietuematriisi." ;
@@ -32380,7 +32380,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_2" ;
             Text [ english ] = "array 2" ;
             Text [ norwegian ] = "Daten 2" ;
-            Text [ italian ] = "Dati_2" ;
+            Text [ italian ] = "Dati 2" ;
             Text [ portuguese_brazilian ] = "Daten 2" ;
             Text [ portuguese ] = "Dados_2" ;
             Text [ finnish ] = "tiedot_2" ;
@@ -32409,7 +32409,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix des zweiten Datensatzes." ;
             Text [ english ] = "is the second array or range of data." ;
             Text [ norwegian ] = "Die Matrix des zweiten Datensatzes." ;
-            Text [ italian ] = "è la seconda matrice o il secondo intervallo di dati." ;
+            Text [ italian ] = "La matrice del secondo record di dati." ;
             Text [ portuguese_brazilian ] = "Die Matrix des zweiten Datensatzes." ;
             Text [ portuguese ] = "é a segunda matriz ou intervalo de dados." ;
             Text [ finnish ] = "Toinen tietuematriisi." ;
@@ -32477,7 +32477,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_1" ;
             Text [ english ] = "array 1" ;
             Text [ norwegian ] = "Daten 1" ;
-            Text [ italian ] = "Dati_1" ;
+            Text [ italian ] = "Dati 1" ;
             Text [ portuguese_brazilian ] = "Daten 1" ;
             Text [ portuguese ] = "Dados_1" ;
             Text [ finnish ] = "tiedot_1" ;
@@ -32506,7 +32506,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix des ersten Datensatzes." ;
             Text [ english ] = "is the first data set." ;
             Text [ norwegian ] = "Die Matrix des ersten Datensatzes." ;
-            Text [ italian ] = "è il primo insieme di dati." ;
+            Text [ italian ] = "La matrice del primo record di dati." ;
             Text [ portuguese_brazilian ] = "Die Matrix des ersten Datensatzes." ;
             Text [ portuguese ] = "é o primeiro conjunto de dados." ;
             Text [ finnish ] = "Ensimmäinen tietuematriisi." ;
@@ -32535,7 +32535,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_2" ;
             Text [ english ] = "array 2" ;
             Text [ norwegian ] = "Daten 2" ;
-            Text [ italian ] = "Dati_2" ;
+            Text [ italian ] = "Dati 2" ;
             Text [ portuguese_brazilian ] = "Daten 2" ;
             Text [ portuguese ] = "Dados_2" ;
             Text [ finnish ] = "tiedot_2" ;
@@ -32564,7 +32564,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix des zweiten Datensatzes." ;
             Text [ english ] = "is the second data set." ;
             Text [ norwegian ] = "Die Matrix des zweiten Datensatzes." ;
-            Text [ italian ] = "è il secondo insieme di dati." ;
+            Text [ italian ] = "La matrice del secondo record di dati." ;
             Text [ portuguese_brazilian ] = "Die Matrix des zweiten Datensatzes." ;
             Text [ portuguese ] = "é o segundo conjunto de dados." ;
             Text [ finnish ] = "Toinen tietuematriisi." ;
@@ -32593,7 +32593,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Modus" ;
             Text [ english ] = "tails" ;
             Text [ norwegian ] = "Modus" ;
-            Text [ italian ] = "modo" ;
+            Text [ italian ] = "Modo" ;
             Text [ portuguese_brazilian ] = "Modus" ;
             Text [ portuguese ] = "Modo" ;
             Text [ finnish ] = "tila" ;
@@ -32622,7 +32622,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Modus = 1 berechnet den einseitigen Test, Modus = 2 den zweiseitigen." ;
             Text [ english ] = "specifies the number of distribution tails." ;
             Text [ norwegian ] = "Modus = 1 berechnet den einseitigen Test, Modus = 2 den zweiseitigen." ;
-            Text [ italian ] = "specifica il numero di code di distribuzione." ;
+            Text [ italian ] = "Modo = 1 calcola il test univoco, Modo = 2 calcola il test biunivoco." ;
             Text [ portuguese_brazilian ] = "Modus = 1 berechnet den einseitigen Test, Modus = 2 den zweiseitigen." ;
             Text [ portuguese ] = "determina o modo de distribuição a devolver: 1 = unilateral; 2 = bilateral." ;
             Text [ finnish ] = "Tila määrittää palautettavien jakaumahäntien määrän. 1 = yksihäntäinen ja 2 = kaksihäntäinen jakauma" ;
@@ -32651,7 +32651,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Typ" ;
             Text [ english ] = "type" ;
             Text [ norwegian ] = "Typ" ;
-            Text [ italian ] = "tipo" ;
+            Text [ italian ] = "Tipo" ;
             Text [ portuguese_brazilian ] = "Typ" ;
             Text [ portuguese ] = "Tipo" ;
             Text [ finnish ] = "Tyyppi" ;
@@ -32680,7 +32680,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Typ des T-Tests." ;
             Text [ english ] = "is the kind of t-test to perform." ;
             Text [ norwegian ] = "Der Typ des T-Tests." ;
-            Text [ italian ] = "è il tipo di test t da eseguire." ;
+            Text [ italian ] = "Tipo di test t da eseguire." ;
             Text [ portuguese_brazilian ] = "Der Typ des T-Tests." ;
             Text [ portuguese ] = "é o tipo de teste T a ser executado." ;
             Text [ finnish ] = "T-testin laji." ;
@@ -32748,7 +32748,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "Dati_y" ;
+            Text [ italian ] = "Dati Y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "tiedot_Y" ;
@@ -32777,7 +32777,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Y-Daten." ;
             Text [ english ] = "is an array or range of data points." ;
             Text [ norwegian ] = "Die Matrix der Y-Daten." ;
-            Text [ italian ] = "è una matrice o un intervallo di valori (Y)." ;
+            Text [ italian ] = "La matrice dei dati Y." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Y-Daten." ;
             Text [ portuguese ] = "é a matriz dos dados y." ;
             Text [ finnish ] = "Tietomatriisi Y." ;
@@ -32806,7 +32806,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "Dati_x" ;
+            Text [ italian ] = "Dati X" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "tiedot_X" ;
@@ -32835,7 +32835,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten." ;
             Text [ english ] = "is an array or range of data points." ;
             Text [ norwegian ] = "Die Matrix der X-Daten." ;
-            Text [ italian ] = "è una matrice o un intervallo di valori (X)." ;
+            Text [ italian ] = "La matrice dei dati X." ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten." ;
             Text [ portuguese ] = "é a matriz dos dados x." ;
             Text [ finnish ] = "Tietomatriisi X." ;
@@ -32903,7 +32903,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "Dati_y" ;
+            Text [ italian ] = "Dati Y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "tiedot_Y" ;
@@ -32932,7 +32932,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Y-Daten." ;
             Text [ english ] = "is the dependent set of observations or data." ;
             Text [ norwegian ] = "Die Matrix der Y-Daten." ;
-            Text [ italian ] = "è l'insieme dipendente di osservazioni o di dati." ;
+            Text [ italian ] = "La matrice dei dati Y." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Y-Daten." ;
             Text [ portuguese ] = "é o conjunto dependente de observações ou dados." ;
             Text [ finnish ] = "Tietomatriisi Y." ;
@@ -32961,7 +32961,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "Dati_x" ;
+            Text [ italian ] = "Dati X" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "tiedot_X" ;
@@ -32990,7 +32990,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten." ;
             Text [ english ] = "is the independent set of observations or data." ;
             Text [ norwegian ] = "Die Matrix der X-Daten." ;
-            Text [ italian ] = "è l'insieme indipendente di osservazioni o di dati." ;
+            Text [ italian ] = "La matrice dei dati X." ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten." ;
             Text [ portuguese ] = "é o conjunto independente de observações ou dados." ;
             Text [ finnish ] = "Tietomatriisi X." ;
@@ -33058,7 +33058,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "Dati_y" ;
+            Text [ italian ] = "Dati Y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "tiedot_Y" ;
@@ -33087,7 +33087,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Y-Daten." ;
             Text [ english ] = "is an array or cell range of numeric dependent data points." ;
             Text [ norwegian ] = "Die Matrix der Y-Daten." ;
-            Text [ italian ] = "è una matrice dei dati Y." ;
+            Text [ italian ] = "La matrice dei dati Y." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Y-Daten." ;
             Text [ portuguese ] = "é uma matriz ou intervalo de célula de dados numéricos dependentes." ;
             Text [ finnish ] = "Tietomatriisi Y." ;
@@ -33116,7 +33116,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "Dati_x" ;
+            Text [ italian ] = "Dati X" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "tiedot_X" ;
@@ -33145,7 +33145,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten." ;
             Text [ english ] = "is the set of independent data points." ;
             Text [ norwegian ] = "Die Matrix der X-Daten." ;
-            Text [ italian ] = "è una matrice dei dati X." ;
+            Text [ italian ] = "La matrice dei dati X." ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten." ;
             Text [ portuguese ] = "é o conjunto de dados independentes." ;
             Text [ finnish ] = "Tietomatriisi X." ;
@@ -33213,7 +33213,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "Dati_y" ;
+            Text [ italian ] = "Dati Y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "tiedot_Y" ;
@@ -33242,7 +33242,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Y-Daten." ;
             Text [ english ] = "is an array or range of dependent data points." ;
             Text [ norwegian ] = "Die Matrix der Y-Daten." ;
-            Text [ italian ] = "è una matrice o un intervallo di dati dipendenti." ;
+            Text [ italian ] = "La matrice dei dati Y." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Y-Daten." ;
             Text [ portuguese ] = "é uma matriz ou intervalo de dados dependentes." ;
             Text [ finnish ] = "Tietomatriisi Y." ;
@@ -33271,7 +33271,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "Dati_x" ;
+            Text [ italian ] = "Dati X" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "tiedot_X" ;
@@ -33300,7 +33300,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten." ;
             Text [ english ] = "is an array or range of independent data points." ;
             Text [ norwegian ] = "Die Matrix der X-Daten." ;
-            Text [ italian ] = "è una matrice o un intervallo di dati indipendenti." ;
+            Text [ italian ] = "La matrice dei dati X." ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten." ;
             Text [ portuguese ] = "é uma matriz ou intervalo de dados independentes.." ;
             Text [ finnish ] = "Tietomatriisi X." ;
@@ -33368,7 +33368,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_1" ;
             Text [ english ] = "array 1" ;
             Text [ norwegian ] = "Daten 1" ;
-            Text [ italian ] = "Dati_1" ;
+            Text [ italian ] = "Dati 1" ;
             Text [ portuguese_brazilian ] = "Daten 1" ;
             Text [ portuguese ] = "Dados_1" ;
             Text [ finnish ] = "Tiedot_1" ;
@@ -33426,7 +33426,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_2" ;
             Text [ english ] = "array 2" ;
             Text [ norwegian ] = "Daten 2" ;
-            Text [ italian ] = "Dati_2" ;
+            Text [ italian ] = "Dati 2" ;
             Text [ portuguese_brazilian ] = "Daten 2" ;
             Text [ portuguese ] = "Dados_2" ;
             Text [ finnish ] = "Tiedot_2" ;
@@ -41562,6 +41562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
