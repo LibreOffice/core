@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-25 21:19:02 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,7 +617,7 @@ TabPage TP_LAB_LAB
         Text [ portuguese ] = "Tipo" ;
         Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Type" ;
-        Text [ french ] = "~Type" ;
+        Text [ french ] = "Type" ;
         Text [ swedish ] = "~Typ" ;
         Text [ dutch ] = "~Type" ;
         Text [ spanish ] = "~Tipo" ;
@@ -1516,7 +1516,7 @@ TabPage TP_BUSINESS_DATA
         Text[ dutch ] = "~Positie";
         Text[ french ] = "~Fonction";
         Text[ spanish ] = "~Posición";
-        Text[ italian ] = "~Posizione";
+        Text[ italian ] = "Posizione";
         Text[ danish ] = "Stilling";
         Text[ swedish ] = "~Befattning";
         Text[ polish ] = "Pozycja";
