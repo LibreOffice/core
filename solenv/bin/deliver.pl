@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: vg $ $Date: 2004-05-10 07:55:38 $
+#   last change: $Author: vg $ $Date: 2004-05-13 11:05:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.59 $ ';
+$id_str = ' $Revision: 1.60 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -666,10 +666,11 @@ sub glob_and_copy
     }
 }
 
-sub unstripped {
+sub is_unstripped {
     my $file_name = shift;
 
     if (-f $file_name && (( `file $file_name` ) =~ /not stripped/o)) {
+        return '1' if ($file_name =~ /\.bin$/o);
         return '1' if ($file_name =~ /\.so\.*/o);
         return '1' if (basename($file_name) !~ /\./o);
     };
@@ -735,7 +736,7 @@ sub copy_if_newer
     # to minimize the possibility for race conditions
     local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
     my $rc = '';
-    if (($gui eq 'unx') && (defined $ENV{PROEXT}) && (unstripped($from))) {
+    if (($gui eq 'unx') && (defined $ENV{PROEXT}) && (is_unstripped($from))) {
         $rc = strip_target($from, $temp_file);
     } else {
         $rc = copy($from, $temp_file);
