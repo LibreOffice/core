@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:03 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 #include "hintids.hxx"
 #include "charatr.hxx"
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -96,20 +95,12 @@
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_SDB_XDATABASEACCESS_HPP_
-//#include <com/sun/star/sdb/XDatabaseAccess.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-
-#else
-
-
-#endif //REPLACE_OFADBMGR
 
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -199,7 +190,6 @@
 
 #include "fldui.hrc"
 
-#ifdef REPLACE_OFADBMGR
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -209,8 +199,6 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-
-#endif
 
 /*--------------------------------------------------------------------
     Beschreibung: Gruppen der Felder
@@ -1192,15 +1180,10 @@ BOOL SwFldMgr::InsertFld(USHORT         nType,
 
             if( !(nSubType & SUB_OWN_FMT) ) // Datenbankformat ermitteln
             {
-#ifdef REPLACE_OFADBMGR
                 String sSourceName(sDBName.GetToken(0, DB_DELIM));
                 String sTableName(sDBName.GetToken(1, DB_DELIM));
                 nFormat = pSh->GetNewDBMgr()->GetColumnFmt( sSourceName, sTableName, sPar1,
                                         pSh->GetNumberFormatter(), GetCurrLanguage() );
-#else
-                nFormat = pSh->GetNewDBMgr()->GetColumnFmt( sDBName, sPar1,
-                                        pSh->GetNumberFormatter() );
-#endif
             }
             pFld->ChangeFormat( nFormat );
 
@@ -1231,11 +1214,7 @@ BOOL SwFldMgr::InsertFld(USHORT         nType,
                 nPos = 0;
             sPar1 = rPar1.Copy(nPos);
 
-#ifdef REPLACE_OFADBMGR
             if (sDBName.Len() && pSh->GetDBName() != sDBName)
-#else
-            if (sDBName.Len() && pSh->GetDBName().ToUpperAscii() != sDBName.ToUpperAscii())
-#endif
                 pSh->ChgDBName(sDBName);
 
             switch(nType)
@@ -1655,7 +1634,6 @@ String SwFldMgr::GetDataBaseFieldValue(const String &rDBName, const String &rFie
      Anm: Im Fehlerfall wird TRUE returnt.
  --------------------------------------------------------------------*/
 
-#ifdef REPLACE_OFADBMGR
 BOOL SwFldMgr::IsDBNumeric(const String& rDBName, const String& rTblQryName,
                                     BOOL bIsTable, const String& rFldName)
 {
@@ -1756,70 +1734,10 @@ BOOL SwFldMgr::IsDBNumeric(const String& rDBName, const String& rTblQryName,
     return bNumeric;
 }
 
-#else
-BOOL SwFldMgr::IsDBNumeric(const String& rDBName, USHORT nCol)
-{
-    SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
-    String sDBName;
-    if (!rDBName.Len())
-        sDBName = pSh->GetDBDesc();
-    else
-        sDBName = rDBName;
-
-    SwNewDBMgr* pDBMgr = pSh->GetNewDBMgr();
-    BOOL bRet = TRUE;
-    if(nCol > 0 && pDBMgr->OpenDB(DBMGR_STD, sDBName, FALSE))
-    {
-        short nType = pDBMgr->GetColumnFormatType(DBMGR_STD, nCol);
-
-        switch (nType)
-        {
-            case dbCurrency:
-            case dbCounter:
-            case dbNumeric:
-            case dbDateTime:
-            case dbDate:
-            case dbTime:
-            case dbBool:
-            case dbDecimal:
-            case dbBigInt:
-                bRet = TRUE;
-                break;
-
-            default:
-                bRet = FALSE;
-                break;
-        }
-    }
-    return bRet;
-}
-
-BOOL SwFldMgr::IsDBNumeric(const String& rDBName, const String& rFldName)
-{
-    SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
-    SwNewDBMgr* pDBMgr = pSh->GetNewDBMgr();
-
-    String sDBName;
-    if (!rDBName.Len())
-        sDBName = pSh->GetDBDesc();
-    else
-        sDBName = rDBName;
-
-    if( pDBMgr->OpenDB(DBMGR_STD, sDBName, FALSE))
-    {
-        int nCol = pDBMgr->GetColumnPos(DBMGR_STD, rFldName);
-        if (nCol > 0)
-            return IsDBNumeric(rDBName, nCol);
-    }
-    return TRUE;
-}
-#endif
 
 /*--------------------------------------------------------------------
     Beschreibung: ExpressionFields explizit evaluieren
  --------------------------------------------------------------------*/
-
-
 void SwFldMgr::EvalExpFlds(SwWrtShell* pSh)
 {
     if (pSh == NULL)
@@ -1832,8 +1750,6 @@ void SwFldMgr::EvalExpFlds(SwWrtShell* pSh)
         pSh->EndAllAction();
     }
 }
-
-
 USHORT SwFldMgr::GetCurrLanguage() const
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
@@ -1848,7 +1764,6 @@ USHORT SwFldMgr::GetCurrLanguage() const
 
     return (USHORT)eCurLanguage;
 }
-
 
 void SwFieldType::_GetFldName()
 {
@@ -2076,7 +1991,6 @@ ULONG SwFldMgr::GetDefaultFormat(USHORT nTypeId, BOOL bIsText, SvNumberFormatter
 
     return pFormatter->GetStandardFormat(nDefFormat, GetCurrLanguage());
 }
-#ifdef REPLACE_OFADBMGR
 /* -----------------------------23.06.00 17:32--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2094,360 +2008,5 @@ Reference<XNameAccess> SwFldMgr::GetDBContext()
     }
     return xDBContext;
 }
-#endif
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:36  hr
-      initial import
-
-      Revision 1.285  2000/09/18 16:05:29  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.284  2000/09/07 15:59:23  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.283  2000/09/04 11:43:16  tbe
-      basicide, isetbrw, si, vcdlged moved from svx to basctl
-
-      Revision 1.282  2000/08/15 19:53:15  jp
-      Bug #76817#: DDE-Field - use the correct format Id's
-
-      Revision 1.281  2000/07/18 12:50:08  os
-      replace ofadbmgr
-
-      Revision 1.280  2000/06/30 08:52:52  os
-      #76541# string assertions removed
-
-      Revision 1.279  2000/06/26 13:36:00  os
-      new DataBase API
-
-      Revision 1.278  2000/05/26 07:21:29  os
-      old SW Basic API Slots removed
-
-      Revision 1.277  2000/04/18 15:17:32  os
-      UNICODE
-
-      Revision 1.276  2000/02/11 14:46:35  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.275  1999/10/21 10:50:48  os
-      SwAuthorityFieldType has SwDoc* member
-
-      Revision 1.274  1999/10/11 09:00:11  os
-      AuthorityField(Type):Import/Export interfaces
-
-      Revision 1.273  1999/09/20 09:46:33  os
-      second param at SwAuthorityField
-
-      Revision 1.272  1999/09/15 14:04:02  os
-      AuthorityField(-Type), RES_AUTHORITY
-
-      Revision 1.271  1999/01/12 20:16:08  JP
-      Bug #60431#: Datenbank Numberformate ggfs. ins Doc uebertragen
-
-
-      Rev 1.270   12 Jan 1999 21:16:08   JP
-   Bug #60431#: Datenbank Numberformate ggfs. ins Doc uebertragen
-
-      Rev 1.269   27 Nov 1998 14:52:16   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.268   17 Nov 1998 10:50:38   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.267   04 Nov 1998 12:11:08   OM
-   #58851# Fixe Dateinamenfelder bearbeiten
-
-      Rev 1.266   16 Oct 1998 12:55:46   OM
-   #57970# Zahlenformat Seitenvorlage fuer Statistikfeld
-
-      Rev 1.265   15 Oct 1998 16:02:50   OM
-   #57965# Variablennamen fuer Eingabefeld verwenden
-
-      Rev 1.264   15 Sep 1998 16:01:58   OM
-   #55149# In Dialogen Zahlenformat der Applikation verwenden
-
-      Rev 1.263   10 Aug 1998 16:40:00   JP
-   Bug #54796#: neue NumerierungsTypen (WW97 kompatibel)
-
-      Rev 1.262   24 Jul 1998 13:57:04   OM
-   #53246# Makros vorselektieren
-
-      Rev 1.261   07 Jul 1998 17:04:58   OM
-   #52283# Ueber alle DB-Feldbefehle navigieren
-
-      Rev 1.260   18 Jun 1998 11:16:42   OM
-   Kapitelebenen fuer Nummernkreise
-
-      Rev 1.259   20 May 1998 13:24:24   OM
-   Offset fuer DateTimeFields
-
-      Rev 1.258   15 Apr 1998 16:39:34   OM
-   #47244 SubType nich veraendern
-
-      Rev 1.257   26 Mar 1998 17:00:22   OM
-   Feldbefehl: Seitenanzahl im Html-Mode
-
-      Rev 1.256   26 Mar 1998 16:43:06   OM
-   Feldbefehl: Seitenanzahl im Html-Mode
-
-      Rev 1.255   06 Mar 1998 15:31:20   OM
-   Neue numerische Datenbankformate
-
-      Rev 1.254   13 Feb 1998 14:14:50   JP
-   UpdateFld: TYP_INETFLD gibt es nicht mehr!
-
-      Rev 1.253   27 Jan 1998 22:43:52   JP
-   GetNumDepend durch GetDepends ersetzt
-
-      Rev 1.252   13 Jan 1998 15:01:48   OM
-   Formula-Field wieder unterstuetzt
-
-      Rev 1.251   12 Jan 1998 17:10:20   OM
-   Formelfelder wieder erlauben
-
-      Rev 1.250   12 Jan 1998 12:42:58   OM
-   Nummernkreise nicht doppelt anlegen
-
-      Rev 1.249   06 Jan 1998 18:12:56   OM
-   Felbefehl-Dlg
-
-      Rev 1.248   19 Dec 1997 18:24:26   OM
-   Feldbefehl-bearbeiten Dlg
-
-      Rev 1.247   17 Dec 1997 15:23:36   OM
-   #46218# Korrekte Sprache besorgen
-
-      Rev 1.246   16 Dec 1997 17:01:42   OM
-   Feldbefehle bearbeiten
-
-      Rev 1.245   11 Dec 1997 16:58:02   OM
-   Feldumstellung
-
-      Rev 1.244   05 Dec 1997 13:16:38   OM
-   #45750# DDE-Field Delimiter fuer Basic wandeln
-
-      Rev 1.243   28 Nov 1997 19:50:38   MA
-   includes
-
-      Rev 1.242   27 Nov 1997 13:17:18   OM
-   Variablen-TP
-
-      Rev 1.241   25 Nov 1997 12:38:44   OM
-   Funktionen-TP
-
-      Rev 1.240   21 Nov 1997 17:19:44   OM
-   Feldbefehl-Umstellung: DocInfo
-
-      Rev 1.239   18 Nov 1997 14:33:14   OM
-   Sba-Umstellung 372
-
-      Rev 1.238   18 Nov 1997 10:33:12   OM
-   Neuer Feldbefehldialog
-
-      Rev 1.237   14 Nov 1997 11:42:36   OM
-   Aufgeraeumt
-
-      Rev 1.236   30 Oct 1997 14:30:52   OM
-   Feldbefehl-Umstellung
-
-      Rev 1.235   15 Oct 1997 11:57:24   OM
-   Feldumstellung
-
-      Rev 1.234   13 Oct 1997 11:43:16   OM
-   Feldumstellung
-
-      Rev 1.233   09 Oct 1997 16:13:44   OM
-   Feldumstellung
-
-      Rev 1.232   07 Oct 1997 10:51:26   OM
-   Feldumstellung
-
-      Rev 1.231   06 Oct 1997 15:40:44   OM
-   Feldumstellung
-
-      Rev 1.230   02 Oct 1997 15:21:44   OM
-   Feldumstellung
-
-      Rev 1.229   24 Sep 1997 15:18:56   OM
-   Feldumstellung
-
-      Rev 1.228   18 Sep 1997 14:34:02   OM
-   Feldumstellung
-
-      Rev 1.227   02 Sep 1997 09:55:56   OM
-   SDB-Headeranpassung
-
-      Rev 1.226   01 Sep 1997 13:12:40   OS
-   DLL-Umstellung
-
-      Rev 1.225   25 Aug 1997 11:54:20   OS
-   368-Changes SBA
-
-      Rev 1.224   15 Aug 1997 12:11:24   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.223   09 Aug 1997 13:17:38   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.222   05 Aug 1997 12:38:24   MH
-   chg: header
-
-      Rev 1.221   09 Jul 1997 17:33:24   HJS
-   includes
-
-      Rev 1.220   29 May 1997 16:16:00   OM
-   URL in ScriptDialog eingeben
-
-      Rev 1.219   29 Apr 1997 16:10:22   OM
-   Unsichtbare Benutzerfelder
-
-      Rev 1.218   28 Apr 1997 16:31:04   JP
-   SetFldValue: immer einen FldTypen anlegen.
-
-      Rev 1.217   08 Apr 1997 10:32:42   MA
-   includes
-
-      Rev 1.216   04 Apr 1997 10:32:28   OM
-   Datenbanken nach Gebrauch wieder schliessen
-
-      Rev 1.215   14 Mar 1997 14:07:22   OM
-   #37666# GPF beim Bearbeiten alter 3.x DB-Feldbefehlen behoben
-
-      Rev 1.214   11 Mar 1997 13:15:12   OM
-   Datenbank beim Feldeinfuegen am Dok setzen
-
-      Rev 1.213   26 Feb 1997 02:22:20   OM
-   #37068# Feldbefhel-Dlg GPF gefixt
-
-      Rev 1.212   25 Feb 1997 20:04:10   OM
-   GPF in Feldbefehlen behoben
-
-      Rev 1.211   24 Feb 1997 20:29:30   OM
-   Offset-Fehler behoben
-
-      Rev 1.210   23 Feb 1997 21:14:42   OM
-   Aufgeraeumt
-
-      Rev 1.209   23 Feb 1997 15:05:54   OS
-   SetFieldValue liefert BOOL
-
-      Rev 1.208   22 Feb 1997 21:22:58   OM
-   Aufgeraeumt
-
-      Rev 1.207   22 Feb 1997 16:43:14   OM
-   Basic-Umstellung: OpenColumn
-
-      Rev 1.206   17 Feb 1997 10:39:18   OM
-   Neue Feldbefehle im Webmode
-
-      Rev 1.205   16 Feb 1997 10:48:20   OM
-   DBMGR an Ofa verschoben
-
-      Rev 1.204   13 Feb 1997 17:37:42   OM
-   Neu: javaedit
-
-      Rev 1.203   11 Feb 1997 16:52:04   OM
-   Eingabefeld ueber Basic ohne Dialog einfuegen
-
-      Rev 1.202   09 Feb 1997 16:34:06   OM
-   Variable setzen: html_on/off
-
-      Rev 1.201   07 Feb 1997 17:19:50   OM
-   Web-Mode fuer Feldbefehle-Dlg
-
-      Rev 1.200   07 Feb 1997 11:34:14   OM
-   Web-Mode fuer FeldbefehlDlg
-
-      Rev 1.199   05 Feb 1997 09:35:56   OM
-   Verschiebung in den Bereichen behoben
-
-      Rev 1.198   03 Feb 1997 17:08:58   OM
-   InsertURL aus Feldbefehl-Dlg entfernt
-
-      Rev 1.197   29 Jan 1997 13:14:18   MA
-   unbenutzes entfernt
-
-      Rev 1.196   17 Dec 1996 15:37:46   OM
-   Macrofelder editieren
-
-      Rev 1.195   11 Dec 1996 10:21:04   MA
-   Warnings
-
-      Rev 1.194   26 Nov 1996 20:39:32   JP
-   RefFelder werden jetzt mit&nach den ExpFeldern aktualisiert
-
-      Rev 1.193   13 Nov 1996 15:00:58   JP
-   neuer FeldTyp fuer Scripts (z.B. JavaScript)
-
-      Rev 1.192   11 Nov 1996 09:55:52   MA
-   ResMgr
-
-      Rev 1.191   08 Nov 1996 14:55:58   JP
-   ueberfluessiges Include entfernt
-
-      Rev 1.190   07 Nov 1996 15:46:56   JP
-   Bug #33084#: Referenzen nach einfuegen updaten
-
-      Rev 1.189   05 Nov 1996 22:45:06   JP
-   UpdateCurFld..() entfernt - ueberflussig; UpdateFld: GetRefFld sonderbehandelt
-
-      Rev 1.188   05 Nov 1996 15:32:42   JP
-   Umstellungen fuer neue Referenz-Seite
-
-      Rev 1.187   01 Nov 1996 03:55:46   MH
-   add: includes
-
-      Rev 1.186   24 Oct 1996 13:36:20   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.185   25 Sep 1996 14:11:48   OM
-   Neue Datenbanktrenner
-
-      Rev 1.184   19 Sep 1996 14:32:30   OM
-   Datenbank Basicanbindung
-
-      Rev 1.183   02 Sep 1996 18:43:00   JP
-   INetFeld entfernt
-
-      Rev 1.182   30 Aug 1996 12:45:42   OS
-   UpdateGlosPath kann Blockliste aktualisieren
-
-      Rev 1.181   28 Aug 1996 12:11:14   OS
-   includes
-
-      Rev 1.180   21 Aug 1996 13:08:52   OS
-   Manager gfs. mit wrtshell konstruieren
-
-      Rev 1.179   20 Aug 1996 17:22:18   JP
-   Bug #30489#: Mehrfachselektion bei SetRef-Feldern abklemmen
-
-      Rev 1.178   16 Aug 1996 11:27:56   OM
-   Dokinfo aufgegliedert
-
-      Rev 1.177   15 Aug 1996 09:56:44   AMA
-   Fix: Macros am INetFmt setzen.
-
-      Rev 1.176   12 Aug 1996 10:50:04   AMA
-   Chg: SwFmtINetFmt jetzt mit TargetFrame im CTor.
-
-      Rev 1.175   08 Aug 1996 15:33:34   AMA
-   New: Benutze InsertURL (als Textattribut) an der EditShell
-
-      Rev 1.174   05 Aug 1996 15:18:24   OM
-   Datenbankumstellung
-
-      Rev 1.173   25 Jul 1996 16:41:54   OM
-   Umstellung auf Tabellen
-
-      Rev 1.172   23 Jul 1996 14:29:40   JP
-   PageNext/-Prev: mit Offset; InsertField: nach Left auch wieder ein Right rufen
-
-      Rev 1.171   10 Jul 1996 17:47:56   OM
-   LocalizeDBName in Expfld verschoben
-
-
-*************************************************************************/
 

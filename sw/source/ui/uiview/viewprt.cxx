@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:38:28 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,11 +374,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
     if( pMgr->GetMergeType() == DBMGR_MERGE_MAILMERGE )
     {
         ::MakeOptions( pDlg, aOpts, 0, bWeb, GetPrinter() );
-#ifdef REPLACE_OFADBMGR
         bStartJob = pMgr->MergePrint( *this, aOpts, *pProgress );
-#else
-        bStartJob = pMgr->MergePrint( *this, aOpts, *pProgress );
-#endif
     }
     else
     {
@@ -626,145 +622,4 @@ void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
     }
 
 }
-
-/*--------------------------------------------------------------------
-
-$Log: not supported by cvs2svn $
-Revision 1.1.1.1  2000/09/18 17:14:49  hr
-initial import
-
-Revision 1.143  2000/09/18 16:06:14  willem.vandorp
-OpenOffice header added.
-
-Revision 1.142  2000/09/07 15:59:33  os
-change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-Revision 1.141  2000/09/07 08:24:35  os
-FaxName now in SwPrintOptions
-
-Revision 1.140  2000/08/10 07:36:58  os
-#77466# CreateFromInt32
-
-Revision 1.139  2000/07/18 12:50:09  os
-replace ofadbmgr
-
-Revision 1.138  2000/07/10 07:02:56  os
-replace ofadbmgr
-
-Revision 1.137  2000/07/07 15:25:44  os
-replace ofadbmgr
-
-Revision 1.136  2000/05/26 07:21:35  os
-old SW Basic API Slots removed
-
-Revision 1.135  2000/03/03 15:17:04  os
-StarView remainders removed
-
-Revision 1.134  2000/02/11 14:59:27  hr
-#70473# changes for unicode ( patched by automated patchtool )
-
-Revision 1.133  2000/02/01 14:11:31  os
-#72527# print selection query box
-
-Revision 1.132  1999/12/14 14:32:05  jp
-Bug #69595#: print can create single Jobs
-
-Revision 1.131  1999/11/11 15:09:57  hr
-#65293#: STLPORT 3.2.1
-
-Revision 1.130  1999/09/10 08:35:03  os
-restore ViewOption after printing
-
-Revision 1.129  1999/09/09 07:13:27  os
-Query changed: printing documents with field commands
-
-Revision 1.128  1999/08/11 14:12:24  JP
-Bug #68171#: DoPrint - donst change selektionflag if not execute the Sel.Dlg
-
-
-      Rev 1.127   11 Aug 1999 16:12:24   JP
-   Bug #68171#: DoPrint - donst change selektionflag if not execute the Sel.Dlg
-
-      Rev 1.126   09 Jul 1999 13:54:30   JP
-   Bug #67535#: DoPrint - PrintSelection Dialog before any action started
-
-      Rev 1.125   01 Mar 1999 16:22:16   MA
-   #62490# Altlast entfernt (Drucken und Briefumschlaege/Etiketten und Datenbank)
-
-      Rev 1.124   04 Feb 1999 11:22:16   ER
-   #61415# OfaMiscCfg nach SFX verschoben
-
-      Rev 1.123   13 Jan 1999 11:53:12   JP
-   Bug #60794#: Fehlererkennung beim Tabellenrechnen
-
-      Rev 1.122   29 Oct 1998 11:52:44   OM
-   #58593# Selektion nur anbieten, wenn auch vorhanden
-
-      Rev 1.121   19 Oct 1998 11:34:48   OM
-   #58017# Falschen Hilfetext entfernt
-
-      Rev 1.120   29 Sep 1998 16:58:30   OM
-   #57214# Fokus von Controls nicht als Selektion interpretieren
-
-      Rev 1.119   08 Sep 1998 09:59:24   MI
-   #55602# DocInfo vor Ausdruck setzen und ggf. hinterher resetten (ErrorCode bei Abort)
-
-      Rev 1.118   31 Aug 1998 17:48:56   OM
-   #55613# Selektion drucken
-
-      Rev 1.117   25 Aug 1998 08:25:28   OS
-   SfxPrintProgress ermittelt den aktuellen Drucker der ViewShell -> fuer Fax spaeter erzeugen #55210#
-
-      Rev 1.116   13 Jul 1998 14:42:30   TJ
-   include
-
-      Rev 1.115   13 Jul 1998 08:48:42   OS
-   Dialog-Parent richtig setzen #51814#
-
-      Rev 1.114   07 Jul 1998 14:25:54   AMA
-   Chg: DoPrint uebernimmt das Drucken
-
-      Rev 1.113   03 Jul 1998 15:04:32   AMA
-   Chg: DoPrint uebernimmt das Drucken
-
-      Rev 1.112   24 Jun 1998 16:17:42   OM
-   #51575# Printoptionen auch in Seitenvorschau beachten
-
-      Rev 1.111   21 Nov 1997 15:00:26   MA
-   includes
-
-      Rev 1.110   02 Oct 1997 16:29:14   TJ
-   include
-
-      Rev 1.109   30 Sep 1997 16:57:50   TJ
-   include
-
-      Rev 1.108   03 Sep 1997 15:55:34   OS
-   DLL-Umbau
-
-      Rev 1.107   02 Sep 1997 09:56:28   OM
-   SDB-Headeranpassung
-
-      Rev 1.106   08 Aug 1997 17:26:22   OM
-   Headerfile-Umstellung
-
-      Rev 1.105   21 Jul 1997 17:16:20   AMA
-   Fix #38434#: Das FontListen-Update wird jetzt von SetPrt angestossen
-
-      Rev 1.104   11 Jul 1997 14:47:00   OM
-   #41525# Nur durch SQL-Statement eingeschraenkte Datensaetze verwenden
-
-      Rev 1.103   08 Jul 1997 14:06:12   OS
-   ConfigItems von der App ans Module
-
-      Rev 1.102   13 Jun 1997 12:11:30   MA
-   #40665# sid_broiwse ist an der DocShell
-
-      Rev 1.101   11 Jun 1997 09:18:22   OS
-   FN_CONFIG_DLG ->SID_SW_EDITOPTIONS fuer Fax #40584#
-
-      Rev 1.100   09 Jun 1997 14:27:58   MA
-   chg: Browse-Flag nur noch am Doc
-
-*/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:06 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
 #endif
-#ifdef REPLACE_OFADBMGR
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
@@ -132,10 +131,6 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#else
-
-#endif  //REPLACE_OFADBMGR
-
 #include "dbmgr.hxx"
 
 
@@ -149,7 +144,6 @@
 #include "textsh.hxx"
 #include "dbinsdlg.hxx"
 
-#ifdef REPLACE_OFADBMGR
 using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -161,13 +155,11 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-#endif
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 #define DB_DD_DELIM 0x0b
 
 #ifdef DEBUG
 // the addressbook doesn't support the new api yet (593)
-#ifdef REPLACE_OFADBMGR
 void lcl_ReplaceDataSource(String& sDBName, String& sTblName, String& sStatmnt)
 {
     Reference<XNameAccess> xDBContext;
@@ -219,7 +211,6 @@ void lcl_ReplaceDataSource(String& sDBName, String& sTblName, String& sStatmnt)
         }
     }
 }
-#endif // REPLACE_OFADBMGR
 #endif // DEBUG
 
 inline void AddSelList( List& rLst, long nRow )
@@ -250,27 +241,12 @@ void lcl_QRY_UPDATE( const SfxItemSet *pArgs, SwNewDBMgr *pNewDBMgr,
 
 #ifdef DEBUG
 // the addressbook doesn't support the new api yet (593)
-#ifdef REPLACE_OFADBMGR
         lcl_ReplaceDataSource(sDBName, sTableName, sStatement);
-#endif
 #endif // DEBUG
 
-#ifdef REPLACE_OFADBMGR
-#else
-        if(sTableName.Len())
-        {
-            sDBName += DB_DELIM;
-            sDBName += rTableNameItem.GetValue();
-        }
-#endif
         pNewDBMgr->SetMergeType( DBMGR_MERGE );
-#ifdef REPLACE_OFADBMGR
         pNewDBMgr->Merge(DBMGR_MERGE, &rSh,
                         sStatement, pSelectionList, sDBName, sTableName);
-#else
-        pNewDBMgr->Merge(DBMGR_MERGE, &rSh,
-                        sStatement, pSelectionList, sDBName);
-#endif
     }
 }
 
@@ -301,7 +277,6 @@ void SwBaseShell::ExecDB(SfxRequest &rReq)
                 const SbaSelectionItem &rSelectionItem = (const SbaSelectionItem&) pArgs->Get(SID_ATTR_SBA_SELECTION);
                 xSelectionList = rSelectionItem.GetSelectionList();
             }
-#ifdef REPLACE_OFADBMGR
 #ifdef DEBUG
             {
                 sDBName = C2S("Nordwind");
@@ -309,30 +284,13 @@ void SwBaseShell::ExecDB(SfxRequest &rReq)
                 sStatement = C2S("select * from Artikel");
             }
 #endif //DEBUG
-#endif //REPLACE_OFADBMGR
-#ifdef REPLACE_OFADBMGR
-#else
-            else
-                break;
-#endif
             if ( !xSelectionList.Is() )
                 xSelectionList = new SbaSelectionList;
-
-#ifdef REPLACE_OFADBMGR
-#else
-            if (sTableName.Len())
-            {
-                sDBName += DB_DELIM;
-                sDBName += sTableName;
-            }
-#endif
 
             SwMailMergeDlg* pDlg = new SwMailMergeDlg(
                     NULL, GetShellPtr(),
                     sDBName,
-#ifdef REPLACE_OFADBMGR
                     sTableName,
-#endif
                     sStatement, xSelectionList );
 
             if (pDlg->Execute() == RET_OK)
@@ -341,17 +299,11 @@ void SwBaseShell::ExecDB(SfxRequest &rReq)
 
                 OFF_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, GetView().GetViewFrame()->GetObjectShell()));
 
-#ifdef REPLACE_OFADBMGR
                 pNewDBMgr->Merge(pNewDBMgr->GetMergeType(),
                                     GetShellPtr(), sStatement,
                                     xSelectionList,
                                     sDBName,
                                     sTableName);
-#else
-                pNewDBMgr->Merge(pNewDBMgr->GetMergeType(),
-                                    GetShellPtr(), sStatement,
-                                    xSelectionList, sDBName);
-#endif
                 delete(pDlg);
             }
         }
@@ -376,9 +328,7 @@ void SwBaseShell::ExecDB(SfxRequest &rReq)
 
 #ifdef DEBUG
 // the addressbook doesn't support the new api yet (593)
-#ifdef REPLACE_OFADBMGR
         lcl_ReplaceDataSource(sDBName, sTblName, sStatmnt);
-#endif
 #endif // DEBUG
 
                 String* pDataStr = new String( sDBName );
@@ -428,12 +378,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
             {
                 String sSbaData = ((const SfxStringItem&)pArgs->Get(nSlot)).GetValue();
                 String sDBName = sSbaData.GetToken(0, DB_DD_DELIM);
-#ifdef REPLACE_OFADBMGR
                 String sTableName(sSbaData.GetToken(1, DB_DD_DELIM));
-#else
-                sDBName += DB_DELIM;
-                sDBName += sSbaData.GetToken(1, DB_DD_DELIM);
-#endif
                 BOOL bTable = sSbaData.GetToken(2, DB_DD_DELIM) == C2S("1");
                 String sStatement = sSbaData.GetToken(3, DB_DD_DELIM);
 
@@ -447,15 +392,9 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                                 sSbaData.GetToken( i, DB_DD_DELIM).ToInt32() );
 
                 pNewDBMgr->SetMergeType( DBMGR_MERGE );
-#ifdef REPLACE_OFADBMGR
                 pNewDBMgr->Merge(DBMGR_MERGE,
                                     GetShellPtr(), sStatement,
                                     pSelectionList, sDBName, sTableName);
-#else
-                pNewDBMgr->Merge(DBMGR_MERGE,
-                                    GetShellPtr(), sStatement,
-                                    pSelectionList, sDBName);
-#endif
             }
             break;
 
@@ -491,7 +430,6 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String*, pString )
     if( pString )
     {
 
-#ifdef REPLACE_OFADBMGR
         USHORT nTokenPos = 0;
         String sSourceName( pString->GetToken( 0, DB_DD_DELIM, nTokenPos ));
         String sTblQryName( pString->GetToken( 0, DB_DD_DELIM, nTokenPos ));
@@ -524,256 +462,13 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String*, pString )
                                 pString->GetToken( 0, DB_DD_DELIM, nTokenPos ).ToInt32() );
                 pDlg->DataToDoc( &aSelectionList , xSource, xConnection);
             }
-//          else
-//              rSh.ChgDBName( sOldDBName );
             delete pDlg;
         }
-//      else
-//          rSh.ChgDBName( sOldDBName );
-#else
-        USHORT nTokenPos = 0;
-        String sDBName( pString->GetToken( 0, DB_DD_DELIM, nTokenPos ));
-        ( sDBName += DB_DELIM ) +=
-                pString->GetToken( 0, DB_DD_DELIM, nTokenPos );
-        String sStatmnt( pString->GetToken( 1, DB_DD_DELIM, nTokenPos ));
-
-        SbaSelectionList aSelectionList;
-        while( nTokenPos < pString->Len() )
-            AddSelList( aSelectionList,
-                        pString->GetToken( 0, DB_DD_DELIM, nTokenPos ).ToInt32() );
-
-        SwWrtShell& rSh = pThis->GetShell();
-        SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
-        String sOldDBName( rSh.GetDBName() );
-        ( sDBName += ';' ) += sStatmnt;
-        rSh.ChgDBName( sDBName );
-
-        if( pNewDBMgr->OpenDB( DBMGR_STD, rSh.GetDBDesc() ) )
-        {
-            pNewDBMgr->ChangeStatement( DBMGR_STD, sStatmnt );
-
-            SwInsertDBColAutoPilot *pDlg = new SwInsertDBColAutoPilot(
-                                                        pThis->GetView() );
-            if( pDlg->HasValidDB() && RET_OK == pDlg->Execute() )
-            {
-                // dann jetzt ueber den DBManager die Selektierten
-                // Daten ins Dokument einfuegen.
-                pDlg->DataToDoc( &aSelectionList );
-            }
-            else
-                rSh.ChgDBName( sOldDBName );
-            delete pDlg;
-            pNewDBMgr->CloseAll();
-        }
-        else
-            rSh.ChgDBName( sOldDBName );
-#endif
     }
 
     delete pString;
     return 0;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:47  hr
-    initial import
-
-    Revision 1.115  2000/09/18 16:06:06  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.114  2000/07/18 12:50:09  os
-    replace ofadbmgr
-
-    Revision 1.113  2000/07/07 15:25:43  os
-    replace ofadbmgr
-
-    Revision 1.112  2000/07/06 07:59:11  os
-    replace ofadbmgr
-
-    Revision 1.111  2000/07/05 08:22:09  os
-    Replace ofadbmgr
-
-    Revision 1.110  2000/06/07 13:18:20  os
-    using UCB
-
-    Revision 1.109  2000/05/26 07:21:33  os
-    old SW Basic API Slots removed
-
-    Revision 1.108  2000/05/23 19:29:09  jp
-    Bugfixes for Unicode
-
-    Revision 1.107  2000/05/10 11:53:02  os
-    Basic API removed
-
-    Revision 1.106  2000/04/18 14:58:24  os
-    UNICODE
-
-    Revision 1.105  2000/02/11 14:58:04  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.104  2000/01/06 07:32:58  os
-    #71436# mail merge dialog: execute via status method disposed
-
-    Revision 1.103  1999/11/11 15:00:55  hr
-    #65293#: STLPORT 3.2.1
-
-    Revision 1.102  1999/09/29 07:00:54  mh
-    chg: header
-
-    Revision 1.101  1999/03/01 15:22:38  MA
-    #62490# Altlast entfernt (Drucken und Briefumschlaege/Etiketten und Datenbank)
-
-
-      Rev 1.100   01 Mar 1999 16:22:38   MA
-   #62490# Altlast entfernt (Drucken und Briefumschlaege/Etiketten und Datenbank)
-
-      Rev 1.99   26 Feb 1999 16:08:42   MA
-   #62490# Rest vom Drucken Etiketten entfernt
-
-      Rev 1.98   12 Oct 1998 10:16:12   OM
-   #57790# Dialog nicht mehr AppModal
-
-      Rev 1.97   28 May 1998 17:09:54   JP
-   Auch beim Droppen von Datensaetzen als Text den neuen DBInsertDialog starten
-
-      Rev 1.96   20 May 1998 21:32:32   JP
-   InsertDBCols als Text: rufe den neuen Autopiloten
-
-      Rev 1.95   09 Dec 1997 12:31:08   OM
-   #45200# Serienbrief: Speichern-Monitor
-
-      Rev 1.94   02 Dec 1997 19:38:24   MA
-   #45900#, SelectionList muss fuer Dialog existieren
-
-      Rev 1.93   24 Nov 1997 09:46:52   MA
-   includes
-
-      Rev 1.92   18 Nov 1997 14:45:22   OM
-   Sba-Umstellung 372
-
-      Rev 1.91   03 Nov 1997 13:55:42   MA
-   precomp entfernt
-
-      Rev 1.90   08 Sep 1997 11:12:38   OM
-   #43152# SingleJob-Parameter fuer DataUpdatePrint
-
-      Rev 1.89   02 Sep 1997 14:58:36   OM
-   Neue Parameter fuer DataUpdatePrint
-
-      Rev 1.88   02 Sep 1997 09:58:00   OM
-   SDB-Headeranpassung
-
-      Rev 1.87   01 Sep 1997 13:23:56   OS
-   DLL-Umstellung
-
-      Rev 1.86   06 Aug 1997 14:37:02   TRI
-   VCL: includes
-
-      Rev 1.85   11 Jul 1997 14:46:36   OM
-   #41525# Nur durch SQL-Statement eingeschraenkte Datensaetze verwenden
-
-      Rev 1.84   09 Jun 1997 17:23:16   OM
-   Serienbriefe als Dateien speichern
-
-      Rev 1.83   29 Apr 1997 16:19:48   OM
-   Druckdialog bei Aufruf aus Basic unterdruecken
-
-      Rev 1.82   07 Apr 1997 17:45:56   MH
-   chg: header
-
-      Rev 1.81   09 Mar 1997 15:51:36   OM
-   Basic abgesichert
-
-      Rev 1.80   24 Feb 1997 16:54:02   OS
-   Item mit Tabellenname auswerten
-
-      Rev 1.79   13 Feb 1997 22:59:16   MA
-   Datenbankfunktionalitaet wieder hergestellt
-
-      Rev 1.78   12 Feb 1997 16:57:48   OM
-   Datenbankslots ueber Baseshell rufen
-
-      Rev 1.77   12 Feb 1997 10:40:46   OM
-   Endlosschleife behoben
-
-      Rev 1.76   12 Feb 1997 09:22:44   OM
-   DD-Trenner korrigiert
-
-      Rev 1.75   09 Feb 1997 15:09:34   OM
-   Anderer Trenner bei DB Drag u. Drop
-
-      Rev 1.74   07 Feb 1997 17:20:36   OM
-   Datenbankumstellung Drag u. Drop
-
-      Rev 1.73   16 Dec 1996 10:59:02   OM
-   Drucken aus DB-Browser angefangen
-
-      Rev 1.72   11 Dec 1996 10:50:56   MA
-   Warnings
-
-      Rev 1.71   01 Dec 1996 19:30:28   sdo
-   GCC-Parser
-
-      Rev 1.70   12 Nov 1996 16:50:58   MA
-   richtige Versionen gemerged
-
-      Rev 1.68   08 Nov 1996 17:40:14   OM
-   DB-Mode fuer Serienbriefe und Etiketten zum Teil wiederbelebt
-
-      Rev 1.67   24 Oct 1996 13:36:40   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.66   25 Sep 1996 14:12:10   OM
-   Neue Datenbanktrenner
-
-      Rev 1.65   19 Sep 1996 14:32:52   OM
-   Datenbank Basicanbindung
-
-      Rev 1.64   18 Sep 1996 10:44:58   OM
-   Serienbriefe wieder angebunden
-
-      Rev 1.63   13 Sep 1996 15:47:16   OM
-   Serienbrief
-
-      Rev 1.62   06 Sep 1996 12:31:42   OM
-   Statusmethode fuer DB-Slot
-
-      Rev 1.61   28 Aug 1996 15:54:58   OS
-   includes
-
-      Rev 1.60   23 Aug 1996 15:51:56   OM
-   Datenbank: Drag&Drop
-
-      Rev 1.59   23 Aug 1996 14:48:00   OM
-   Datenbank: Drag&Drop
-
-      Rev 1.58   21 Aug 1996 14:51:52   OM
-   Datenbank Drag&Drop
-
-      Rev 1.57   07 Aug 1996 16:24:24   OM
-   Datenbankumstellung
-
-      Rev 1.56   19 Jul 1996 16:10:14   OM
-   SBA-Umstellung
-
-      Rev 1.55   17 Jul 1996 13:47:40   OM
-   Datenbankumstellung 327
-
-      Rev 1.54   02 Jul 1996 16:36:20   OM
-   #28615# Makroausfuehrung auch bei Serienbriefdruck
-
-      Rev 1.53   04 Jun 1996 14:11:22   OM
-   Serienbrief Mailing
-
-      Rev 1.52   06 May 1996 17:39:34   OM
-   Mehrere Datenbanken pro Dokument
-
-      Rev 1.51   30 Apr 1996 09:24:34   OM
-   Mehrere Datenbanken pro Dok
-
-------------------------------------------------------------------------*/
 
 
 

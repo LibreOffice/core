@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:33:58 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@
 #endif
 
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
@@ -139,7 +138,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
 
-#endif
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
@@ -149,9 +147,7 @@ using namespace com::sun::star::uno;
 
 SwMailMergeDlg::SwMailMergeDlg(Window *pParent, SwWrtShell *pShell,
             const String& rName,
-#ifdef REPLACE_OFADBMGR
-        const String& rTblName,
-#endif
+            const String& rTblName,
             const String& rStat,
             SbaSelectionListRef& pSelList):
 
@@ -199,9 +195,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window *pParent, SwWrtShell *pShell,
 
     pSh             (pShell),
     rDBName         (rName),
-#ifdef REPLACE_OFADBMGR
     rTableName      (rTblName),
-#endif
     rStatement      (rStat),
     rSelectionList  (pSelList),
     nMergeType      (DBMGR_MERGE_MAILING)
@@ -211,10 +205,6 @@ SwMailMergeDlg::SwMailMergeDlg(Window *pParent, SwWrtShell *pShell,
 
     DBG_ASSERT(pSh, "Shell fehlt"  );
 
-#ifdef REPLACE_OFADBMGR
-#else
-    pSbaObject = pSh->GetNewDBMgr()->GetSbaObject();
-#endif
     pModOpt = SW_MOD()->GetModuleConfig();
 
     aSingleJobsCB.Check(pModOpt->IsSinglePrintJob());
@@ -224,10 +214,6 @@ SwMailMergeDlg::SwMailMergeDlg(Window *pParent, SwWrtShell *pShell,
     aFormatHtmlCB.Check((nMailingMode & TXTFORMAT_HTML) != 0);
     aFormatRtfCB.Check((nMailingMode & TXTFORMAT_RTF) != 0);
 
-#ifdef REPLACE_OFADBMGR
-#else
-    DBG_ASSERT(pSbaObject, "SbaObject nicht gefunden!");
-#endif
     aAllRB.Check(TRUE);
 
     // Handler installieren
@@ -257,11 +243,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window *pParent, SwWrtShell *pShell,
     aFromNF.SetModifyHdl(aLk);
     aToNF.SetModifyHdl(aLk);
 
-#ifdef REPLACE_OFADBMGR
     pSh->GetNewDBMgr()->GetColumnNames(&aAddressFldLB, rDBName, rTableName);
-#else
-    pSh->GetNewDBMgr()->GetColumnNames(&aAddressFldLB, rDBName);
-#endif
     for(USHORT nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); nEntry++)
         aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
     aAddressFldLB.SelectEntry(C2S("EMAIL"));
@@ -555,155 +537,5 @@ IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, pBtn )
 
     return 0;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:35  hr
-    initial import
-
-    Revision 1.75  2000/09/18 16:05:27  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.74  2000/07/18 12:50:08  os
-    replace ofadbmgr
-
-    Revision 1.73  2000/06/07 13:26:46  os
-    using UCB
-
-    Revision 1.72  2000/04/19 12:56:34  os
-    include sfx2/filedlg.hxx removed
-
-    Revision 1.71  2000/04/18 15:31:35  os
-    UNICODE
-
-    Revision 1.70  2000/03/03 15:17:00  os
-    StarView remainders removed
-
-    Revision 1.69  2000/02/11 14:45:27  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.68  2000/01/24 12:48:37  os
-    #72153# call SfxFileDialog::DisableSaveLastDirectory
-
-    Revision 1.67  1998/09/02 12:11:56  OM
-    #45378# HelpIDs fuer Dateidialoge
-
-
-      Rev 1.66   02 Sep 1998 14:11:56   OM
-   #45378# HelpIDs fuer Dateidialoge
-
-      Rev 1.65   23 Jul 1998 13:26:52   OM
-   #52257# Mail Attachments
-
-      Rev 1.64   17 Jul 1998 17:19:52   TJ
-   include
-
-      Rev 1.63   09 Jul 1998 09:52:32   JP
-   EmptyStr benutzen
-
-      Rev 1.62   09 Dec 1997 12:31:28   OM
-   #45200# Serienbrief: Speichern-Monitor
-
-      Rev 1.61   02 Dec 1997 19:39:12   MA
-   #45900#, SelectionList muss fuer Dialog existieren
-
-      Rev 1.60   24 Nov 1997 11:52:12   MA
-   includes
-
-      Rev 1.59   03 Nov 1997 13:17:14   MA
-   precomp entfernt
-
-      Rev 1.58   30 Sep 1997 14:22:06   MH
-   chg: header
-
-      Rev 1.57   02 Sep 1997 09:58:22   OM
-   SDB-Headeranpassung
-
-      Rev 1.56   26 Aug 1997 15:34:46   TRI
-   VCL Includes
-
-      Rev 1.55   05 Aug 1997 12:31:44   MH
-   chg: header
-
-      Rev 1.54   08 Jul 1997 14:12:44   OS
-   ConfigItems von der App ans Module
-
-      Rev 1.53   09 Jun 1997 17:22:32   OM
-   Serienbriefe als Dateien speichern
-
-      Rev 1.52   04 Jun 1997 11:43:02   OM
-   Korrektes Mailformat RTF
-
-      Rev 1.51   20 Mar 1997 12:44:42   OM
-   Mailing: Format RTF
-
-      Rev 1.50   11 Mar 1997 11:27:18   OM
-   Serienbrief-eMail in waehlbaren Formaten versenden
-
-      Rev 1.49   14 Feb 1997 11:36:24   OM
-   #36178# GPF im Serienbriefdruck behoben
-
-      Rev 1.48   29 Jan 1997 18:13:04   MA
-   unbenutzes entfernt
-
-      Rev 1.47   06 Dec 1996 14:39:36   OM
-   OpenDB-Fehlercode korrigiert
-
-      Rev 1.46   05 Dec 1996 13:36:58   OM
-   Serienbrief reanimiert
-
-      Rev 1.45   11 Nov 1996 09:44:18   MA
-   ResMgr
-
-      Rev 1.44   07 Oct 1996 09:33:18   MA
-   Umstellung Enable/Disable
-
-      Rev 1.43   18 Sep 1996 10:38:54   OM
-   Serienbriefe wieder angebunden
-
-      Rev 1.42   13 Sep 1996 15:46:48   OM
-   Serienbrief
-
-      Rev 1.41   22 Aug 1996 12:30:32   OM
-   Serienbrief Dlg umgestellt
-
-      Rev 1.40   06 Aug 1996 16:45:38   OM
-   Datenbankumstellung
-
-      Rev 1.39   26 Jul 1996 20:36:38   MA
-   includes
-
-      Rev 1.38   25 Jul 1996 16:39:52   OM
-   DB-Auswahldialog eingebaut
-
-      Rev 1.37   23 Jul 1996 13:26:32   OM
-   Datenbank und Tabelle auswaehlen
-
-      Rev 1.36   22 Jul 1996 11:03:00   OM
-   Datenbankauswahldialog
-
-      Rev 1.35   19 Jul 1996 16:10:02   OM
-   SBA-Umstellung
-
-      Rev 1.34   17 Jul 1996 13:47:06   OM
-   Datenbankumstellung 327
-
-      Rev 1.33   05 Jul 1996 15:57:50   OM
-   #28464# Serienbrief mit markierten Datensaetzen
-
-      Rev 1.32   28 Jun 1996 10:21:50   OM
-   Neue Segs
-
-      Rev 1.31   28 Jun 1996 10:20:54   OM
-   #29103# Radiobutton bei Eingabe selektieren
-
-      Rev 1.30   04 Jun 1996 14:10:28   OM
-   Neue Segs
-
-      Rev 1.29   04 Jun 1996 14:09:40   OM
-   Serienbrief Mailing
-
-------------------------------------------------------------------------*/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,8 @@ class SwFldDBPage : public SwFldPage
     GroupBox            aFormatGB;
 
     String              sOldDBName;
-#ifdef REPLACE_OFADBMGR
     String              sOldTableName;
     String              sOldColumnName;
-#endif
     ULONG               nOldFormat;
     USHORT              nOldSubType;
     Link                aOldNumSelectHdl;

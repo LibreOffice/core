@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,14 +90,12 @@
 #ifndef _SWNUMFMTLB_HXX //autogen
 #include <numfmtlb.hxx>
 #endif
-#ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
 namespace com{namespace sun{namespace star{namespace sdbcx{
     class XColumnsSupplier;
 }}}}
-#endif
 
 class SwTableAutoFmt;
 class SwView;
@@ -126,14 +124,12 @@ struct SwInsDBColumn
     int operator<( const SwInsDBColumn& rCmp ) const;
 };
 
-#ifdef REPLACE_OFADBMGR
 struct SwInsDBData
 {
     String sDataBaseName;
     String sDataTableName;
     String sStatement;
 };
-#endif
 typedef SwInsDBColumn* SwInsDBColumnPtr;
 SV_DECL_PTRARR_SORT_DEL( SwInsDBColumns, SwInsDBColumnPtr, 32, 32 )
 
@@ -181,11 +177,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog
     HelpButton      aBtHelp;
 
     SwInsDBColumns  aDBColumns;
-#ifdef REPLACE_OFADBMGR
     const SwInsDBData   aDBData;
-#else
-
-#endif //REPLACE_OFADBMGR
 
     Link            aOldNumFmtLnk;
     String          sNoTmpl;
@@ -217,29 +209,17 @@ class SwInsertDBColAutoPilot : public SfxModalDialog
     void SetTabSet();
 
 public:
-#ifdef REPLACE_OFADBMGR
     SwInsertDBColAutoPilot( SwView& rView,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
         com::sun::star::uno::Reference<com::sun::star::sdbcx::XColumnsSupplier>,
         const SwInsDBData& rData  );
-#else
-    SwInsertDBColAutoPilot( SwView& rView );
-#endif //REPLACE_OFADBMGR
 
     virtual ~SwInsertDBColAutoPilot();
 
-#ifdef REPLACE_OFADBMGR
     void DataToDoc( const SbaSelectionList*,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection);
-#else
-    BOOL HasValidDB() const { return 0 != aDBColumns.Count(); }
-    void DataToDoc( const SbaSelectionList* );
-#endif //REPLACE_OFADBMGR
 
 };
-
-
-
 
 #endif

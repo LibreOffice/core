@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,12 @@
 
 #include "swtypes.hxx"
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
 namespace com{namespace sun{namespace star{namespace container{
     class XNameAccess;
 }}}}
-#else
-#endif
 
 class SwWrtShell;
 class SwField;
@@ -142,11 +139,9 @@ private:
 
     USHORT          GetCurrLanguage() const;
 
-#ifdef REPLACE_OFADBMGR
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xDBContext;
 
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> GetDBContext();
-#endif
 
 public:
     SwFldMgr(SwWrtShell* pSh = 0);
@@ -199,13 +194,8 @@ public:
 
     // Erfragen von Werten aus Datenbankfeldern (BASIC )
     String          GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh);
-#ifdef REPLACE_OFADBMGR
     BOOL            IsDBNumeric(const String& rDBName, const String& rTblQryName,
                                         BOOL bIsTable, const String& rFldName);
-#else
-    BOOL            IsDBNumeric(const String& rDBName, USHORT nColumn);
-    BOOL            IsDBNumeric(const String& rDBName, const String& rFldName);
-#endif
 
     // RefMark mit Namen organisieren
     BOOL            CanInsertRefMark( const String& rStr );

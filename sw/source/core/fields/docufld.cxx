@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:44:15 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1416,7 +1416,6 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
                 if (pMgr->IsInMerge())
                 {
                     String sDBName;
-#ifdef REPLACE_OFADBMGR
                     sDBName = GetDBName( sTmpName, pDoc );
                     if(sDBName.Len())
                     {
@@ -1431,20 +1430,6 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
                             bValid = sal_True;
                         }
                     }
-#else
-                    if ((sDBName = GetDBName( sTmpName, pDoc )).Len() &&
-                            pMgr->OpenDB( DBMGR_STD, sDBName, sal_False ))
-                    {
-                        String sColumnName( GetColumnName( sTmpName ));
-
-                        if (sColumnName.Len())
-                        {
-                            pMgr->GetColumnCnt(DBMGR_STD, sColumnName,
-                                            pMgr->GetCurRecordId(DBMGR_STD), aContent);
-                            bValid = sal_True;
-                        }
-                    }
-#endif
                 }
                 else
                     bValid = sal_True;

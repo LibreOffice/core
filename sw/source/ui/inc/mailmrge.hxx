@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,15 +137,10 @@ class SwMailMergeDlg : public SvxStandardDialog
     HelpButton      aHelpBTN;
 
     SwWrtShell*     pSh;
-#ifdef REPLACE_OFADBMGR
-#else
     SbaObject*      pSbaObject;
-#endif
     SwModuleOptions* pModOpt;
     const String&   rDBName;
-#ifdef REPLACE_OFADBMGR
     const String&   rTableName;
-#endif
     const String&   rStatement;
     SbaSelectionListRef& rSelectionList;
 
@@ -165,9 +160,7 @@ public:
 
      SwMailMergeDlg(Window* pParent, SwWrtShell* pSh,
          const String& rName,
-#ifdef REPLACE_OFADBMGR
         const String& rTblName,
-#endif
                         const String& rStat, SbaSelectionListRef& pSelList);
     ~SwMailMergeDlg();
 

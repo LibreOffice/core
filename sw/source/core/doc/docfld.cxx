@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1132,17 +1132,12 @@ void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
             {
                 SwDBNumSetField* pDBFld = (SwDBNumSetField*)pFld;
 
-#ifdef REPLACE_OFADBMGR
                 String sDBName(pDBFld->GetDBName(&rDoc));
                 String sSourceName(sDBName.GetToken(0, DB_DELIM));
                 String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
 
                 if( pDBFld->IsCondValid() &&
                     pMgr->OpenDataSource( sSourceName, sTableName ))
-#else
-                if( pMgr->OpenDB( DBMGR_STD, pDBFld->GetDBName(&rDoc)) &&
-                                                    pDBFld->IsCondValid() )
-#endif
                     rCalc.VarChange( lcl_GetDBVarName( rDoc, *pDBFld),
                                     pDBFld->GetFormat() );
             }
@@ -1150,16 +1145,11 @@ void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
         case RES_DBNEXTSETFLD:
             {
                 SwDBNextSetField* pDBFld = (SwDBNextSetField*)pFld;
-#ifdef REPLACE_OFADBMGR
                 String sDBName(pDBFld->GetDBName(&rDoc));
                 String sSourceName(sDBName.GetToken(0, DB_DELIM));
                 String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
                 if( !pDBFld->IsCondValid() ||
                     !pMgr->OpenDataSource( sSourceName, sTableName ))
-#else
-                if( !pMgr->OpenDB( DBMGR_STD, pDBFld->GetDBName(&rDoc)) ||
-                                                    !pDBFld->IsCondValid() )
-#endif
                     break;
 
                 String sDBNumNm(lcl_GetDBVarName( rDoc, *pDBFld));
@@ -1180,11 +1170,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
     bNewFldLst = FALSE;
 
     SwNewDBMgr* pMgr = GetNewDBMgr();
-#ifdef REPLACE_OFADBMGR
     pMgr->CloseAll(FALSE);
-#else
-    pMgr->SetAllDirty(DBMGR_STD);
-#endif
 
     if( pUpdtFlds->GetSortLst()->Count() )
     {
@@ -1198,11 +1184,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
             lcl_CalcFld( *this, rCalc, **ppSortLst, pMgr );
     }
 
-#ifdef REPLACE_OFADBMGR
     pMgr->CloseAll(FALSE);
-#else
-    pMgr->SetAllDirty(DBMGR_STD, FALSE);
-#endif
 }
 
 void SwDoc::FldsToCalc( SwCalc& rCalc, ULONG nLastNd, USHORT nLastCnt )
@@ -1212,11 +1194,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, ULONG nLastNd, USHORT nLastCnt )
     bNewFldLst = FALSE;
 
     SwNewDBMgr* pMgr = GetNewDBMgr();
-#ifdef REPLACE_OFADBMGR
     pMgr->CloseAll(FALSE);
-#else
-    pMgr->SetAllDirty(DBMGR_STD);
-#endif
 
     const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
     for( USHORT n = pUpdtFlds->GetSortLst()->Count();
@@ -1225,11 +1203,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, ULONG nLastNd, USHORT nLastCnt )
         --n, ++ppSortLst )
         lcl_CalcFld( *this, rCalc, **ppSortLst, pMgr );
 
-#ifdef REPLACE_OFADBMGR
     pMgr->CloseAll(FALSE);
-#else
-    pMgr->SetAllDirty(DBMGR_STD, FALSE);
-#endif
 }
 
 void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
@@ -1374,11 +1348,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
 
     // aktuelle Datensatznummer schon vorher einstellen
     SwNewDBMgr* pMgr = GetNewDBMgr();
-#ifdef REPLACE_OFADBMGR
     pMgr->CloseAll(FALSE);
-#else
-    pMgr->SetAllDirty(DBMGR_STD);
-#endif
 /*
     if(pMgr && pMgr->OpenDB(DBMGR_STD, GetDBDesc(), FALSE))
     {
@@ -1445,17 +1415,12 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
             // Feld Evaluieren
             ((SwDBField*)pFld)->Evaluate();
 
-#ifdef REPLACE_OFADBMGR
                 String sDBName(((SwDBField*)pFld)->GetDBName());
                 String sSourceName(sDBName.GetToken(0, DB_DELIM));
                 String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
 
             if( pMgr->OpenDataSource( sSourceName, sTableName ))
                 aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(sSourceName, sTableName));
-#else
-            if(pMgr->OpenDB(DBMGR_STD, ((SwDBField*)pFld)->GetDBName()))
-                aCalc.VarChange( sDBNumNm, pMgr->GetCurSelectedRecordId(DBMGR_STD) );
-#endif
 
             const String& rName = pFld->GetTyp()->GetName();
 
@@ -1597,11 +1562,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
         }
     }
 
-#ifdef REPLACE_OFADBMGR
     pMgr->CloseAll(FALSE);
-#else
-    pMgr->SetAllDirty(DBMGR_STD, FALSE);
-#endif
     // HashTabelle wieder loeschen
     ::DeleteHashTable( pHashStrTbl, nStrFmtCnt );
 
@@ -1640,47 +1601,16 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
 
         String sDBName( rDBFld.GetDBName(this) );
 
-#ifdef REPLACE_OFADBMGR
         String sSourceName(sDBName.GetToken(0, DB_DELIM));
         String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
 
         if( pMgr->OpenDataSource( sSourceName, sTableName ))
             rCalc.VarChange( lcl_GetDBVarName( *this, rDBFld),
                         pMgr->GetSelectedRecordId(sSourceName, sTableName) );
-#else
-        if( pMgr->OpenDB( DBMGR_STD, sDBName ))
-            rCalc.VarChange( lcl_GetDBVarName( *this, rDBFld),
-                    pMgr->GetCurSelectedRecordId( DBMGR_STD ) );
-#endif
     }
     else
     {
-#ifdef REPLACE_OFADBMGR
         DBG_ERROR("TODO: what should happen with unnamed DBFields?")
-#else
-        // Alle Datenbanken bearbeiten
-        OfaDBParam* pParam = pMgr->GetFirstDBData(DBMGR_STD);
-//      why that? - the name must be empty
-//      String sOldFldName( rDBFld.GetRealDBName() );
-
-        while (pParam)
-        {
-            if (pParam->HasConnection())
-            {
-                rDBFld.SetDBName( pParam->GetSymDBName() );
-
-                if( RES_DBNEXTSETFLD == nFldType )
-                    ((SwDBNextSetField&)rDBFld).Evaluate(this);
-                else
-                    ((SwDBNumSetField&)rDBFld).Evaluate(this);
-
-                rCalc.VarChange( lcl_GetDBVarName( *this, rDBFld ),
-                        pMgr->GetCurSelectedRecordId( DBMGR_STD ) );
-            }
-            pParam = pMgr->GetNextDBData();
-        }
-        rDBFld.SetDBName(aEmptyStr);
-#endif
     }
 }
 
@@ -1743,11 +1673,7 @@ void SwDoc::InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld )
 
 String SwDoc::GetDBName()
 {
-#ifdef REPLACE_OFADBMGR
     return GetDBDesc();
-#else
-    return GetNewDBMgr()->ExtractDBName( GetDBDesc() );
-#endif
 }
 
 const String& SwDoc::GetDBDesc()
@@ -1851,7 +1777,6 @@ void SwDoc::GetAllDBNames( SvStringsDtor& rAllDBNames )
 {
     SwNewDBMgr* pMgr = GetNewDBMgr();
 
-#ifdef REPLACE_OFADBMGR
     const SwDSParamArr& rArr = pMgr->GetDSParamArray();
     for(USHORT i = 0; i < rArr.Count(); i++)
     {
@@ -1861,22 +1786,6 @@ void SwDoc::GetAllDBNames( SvStringsDtor& rAllDBNames )
         (*pStr) += pParam->sTableOrQuery;
         rAllDBNames.Insert( pStr, rAllDBNames.Count() );
     }
-#else
-    OfaDBParam* pParam = pMgr->GetFirstDBData(DBMGR_STD);
-
-    while( pParam )
-    {
-        if( pParam->GetSymDBName().Len() )
-        {
-            String* pStr = new String( pParam->GetSymDBName() );
-#ifndef UNX
-            GetAppCharClass().toUpper( *pStr );
-#endif
-            rAllDBNames.Insert( pStr, rAllDBNames.Count() );
-        }
-        pParam = pMgr->GetNextDBData();
-    }
-#endif
 }
 
 /*--------------------------------------------------------------------
@@ -1940,7 +1849,6 @@ void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
     const CharClass& rCC = GetAppCharClass();
     String sLowerDBName( DBNAME_LOWER( rDBName ));
 
-#ifdef REPLACE_OFADBMGR
     for (USHORT i = 0; i < rDBNameList.Count(); i++)
         if( sLowerDBName.Equals( DBNAME_LOWER(
                 rDBNameList.GetObject(i)->GetToken(0) )))
@@ -1949,17 +1857,6 @@ void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
     const SwDSParam* pParam = GetNewDBMgr()->CreateDSData(rDBName);
     String* pNew = new String( rDBName );
     rDBNameList.Insert( pNew, rDBNameList.Count() );
-#else
-    for (USHORT i = 0; i < rDBNameList.Count(); i++)
-        if( sLowerDBName.Equals( DBNAME_LOWER(
-                GetNewDBMgr()->ExtractDBName( *rDBNameList.GetObject(i) ) )))
-                return;
-    OfaDBParam& rParam = GetNewDBMgr()->GetDBData( DBMGR_STD, &rDBName );
-    String* pNew = new String( rParam.GetDBName() );
-    if( !pNew->Len() )
-        *pNew = rParam.GetSymDBName();
-    rDBNameList.Insert( pNew, rDBNameList.Count() );
-#endif
 }
 
 /*--------------------------------------------------------------------
@@ -2210,25 +2107,11 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
     String  sNewName( rNewName );
     sNewName.SearchAndReplace( DB_DELIM, '.');
     String sUpperNewNm( sNewName );
-#ifdef REPLACE_OFADBMGR
-#else
-#ifndef UNX
-    rCC.toUpper( sFormel );
-    rCC.toUpper( sUpperNewNm );
-#endif
-#endif
 
 
     for( USHORT i = 0; i < rUsedDBNames.Count(); ++i )
     {
         String  sDBName( *rUsedDBNames.GetObject( i ) );
-
-#ifdef REPLACE_OFADBMGR
-#else
-#ifndef UNX
-        rCC.toUpper( sDBName );
-#endif
-#endif
 
         sDBName.SearchAndReplace( DB_DELIM, '.');
         if( sDBName.Equals( sUpperNewNm ))
@@ -2243,12 +2126,6 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
                     rFormel.Erase( nPos, sDBName.Len() );
                     rFormel.Insert( sNewName, nPos );
                     sFormel = rFormel;
-#ifdef REPLACE_OFADBMGR
-#else
-#ifndef UNX
-                    rCC.toUpper( sFormel );
-#endif
-#endif
                 }
             }
         }
@@ -2620,7 +2497,6 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 
             case RES_DBNUMSETFLD:
             {
-#ifdef REPLACE_OFADBMGR
                 String sDBName(((SwDBNumSetField*)pFld)->GetDBName(&rDoc));
                 String sSourceName(sDBName.GetToken(0, DB_DELIM));
                 String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
@@ -2630,19 +2506,11 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                     GETFLD_ALL == eGetMode ||
                     ( GETFLD_CALC & eGetMode &&
                         ((SwDBNumSetField*)pFld)->IsCondValid()))
-#else
-                if( bIsDBMgr && rDoc.GetNewDBMgr()->OpenDB(DBMGR_STD,
-                                ((SwDBNumSetField*)pFld)->GetDBName(&rDoc)) &&
-                    GETFLD_ALL == eGetMode ||
-                    ( GETFLD_CALC & eGetMode &&
-                        ((SwDBNumSetField*)pFld)->IsCondValid() ))
-#endif
                     pFormel = &pFld->GetPar1();
             }
             break;
             case RES_DBNEXTSETFLD:
             {
-#ifdef REPLACE_OFADBMGR
                 String sDBName(((SwDBNextSetField*)pFld)->GetDBName(&rDoc));
                 String sSourceName(sDBName.GetToken(0, DB_DELIM));
                 String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
@@ -2652,13 +2520,6 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                     GETFLD_ALL == eGetMode ||
                     ( GETFLD_CALC & eGetMode &&
                         ((SwDBNextSetField*)pFld)->IsCondValid() ))
-#else
-                if( bIsDBMgr && rDoc.GetNewDBMgr()->OpenDB(DBMGR_STD,
-                                ((SwDBNextSetField*)pFld)->GetDBName(&rDoc)) &&
-                    GETFLD_ALL == eGetMode ||
-                    ( GETFLD_CALC & eGetMode &&
-                        ((SwDBNextSetField*)pFld)->IsCondValid() ))
-#endif
                     pFormel = &pFld->GetPar1();
             }
             break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:02 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@
 
 #include "envlop.hrc"
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -108,9 +107,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star;
 using namespace rtl;
 #define C2U(char) rtl::OUString::createFromAscii(char)
-#else
-
-#endif  //REPLACE_OFADBMGR
 
 // --------------------------------------------------------------------------
 
@@ -312,21 +308,11 @@ SwEnvPage::~SwEnvPage()
 
 IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
 {
-#ifdef REPLACE_OFADBMGR
-#else
-    sActDBName = SFX_APP()->LocalizeDBName(NATIONAL2INI, aDatabaseLB.GetSelectEntry());
-#endif
     SwWait aWait( *pSh->GetView().GetDocShell(), TRUE );
 
     if (pListBox == &aDatabaseLB)
         pSh->GetNewDBMgr()->GetTableNames(&aTableLB, sActDBName);
-#ifdef REPLACE_OFADBMGR
     pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName, aTableLB.GetSelectEntry());
-#else
-    sActDBName += DB_DELIM;
-    sActDBName += aTableLB.GetSelectEntry();
-    pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName);
-#endif
     return 0;
 }
 
@@ -376,7 +362,6 @@ void SwEnvPage::InitDatabaseBox()
     if (pSh->GetNewDBMgr())
     {
         aDatabaseLB.Clear();
-#ifdef REPLACE_OFADBMGR
         Sequence<OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
@@ -392,27 +377,6 @@ void SwEnvPage::InitDatabaseBox()
         }
         else
             aDBFieldLB.Clear();
-#else
-        SbaObject *pSbaObject = pSh->GetNewDBMgr()->GetSbaObject();
-        if(!pSbaObject)
-            return;
-        String sDBNames = pSbaObject->GetDatabaseNames();
-        sDBNames = SFX_APP()->LocalizeDBName(INI2NATIONAL, sDBNames);
-        USHORT nCount = sDBNames.GetTokenCount();
-
-        for (USHORT i = 0; i < nCount; i++)
-            aDatabaseLB.InsertEntry(sDBNames.GetToken(i));
-        String sDBName = SFX_APP()->LocalizeDBName( INI2NATIONAL,
-                                    sActDBName.GetToken( 0, DB_DELIM ));
-        aDatabaseLB.SelectEntry(sDBName);
-        if (pSh->GetNewDBMgr()->GetTableNames(&aTableLB, sDBName))
-        {
-            aTableLB.SelectEntry(sActDBName.GetToken(1, DB_DELIM));
-            pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName);
-        }
-        else
-            aDBFieldLB.Clear();
-#endif
 
     }
 }
@@ -483,141 +447,4 @@ void SwEnvPage::Reset(const SfxItemSet& rSet)
     aSenderBox.GetClickHdl().Call(&aSenderBox);
 }
 
-
-
-// ----------------------------------------------------------------------------
-
-/*
-$Log: not supported by cvs2svn $
-Revision 1.2  2000/09/26 13:06:56  os
-use of configuration service
-
-Revision 1.1.1.1  2000/09/18 17:14:35  hr
-initial import
-
-Revision 1.91  2000/09/18 16:05:25  willem.vandorp
-OpenOffice header added.
-
-Revision 1.90  2000/07/18 12:50:08  os
-replace ofadbmgr
-
-Revision 1.89  2000/03/03 15:17:00  os
-StarView remainders removed
-
-Revision 1.88  2000/02/11 14:45:12  hr
-#70473# changes for unicode ( patched by automated patchtool )
-
-Revision 1.87  1999/10/08 10:00:09  jp
-no cast from GetpApp to SfxApp
-
-Revision 1.86  1999/10/05 10:18:49  os
-#67889# some printer problems solved
-
-Revision 1.85  1999/09/28 13:21:24  os
-survive without database
-
-Revision 1.84  1999/09/24 13:53:09  os
-chg: ODbRow/ODbVariant - includes moved
-
-Revision 1.83  1999/08/26 17:36:02  JP
-no cast from GetpApp to SfxApp
-
-
-      Rev 1.82   26 Aug 1999 19:36:02   JP
-   no cast from GetpApp to SfxApp
-
-      Rev 1.81   13 Jul 1999 14:28:34   HR
-   #65293#: include <swwait.hxx> and <view.hxx>
-
-      Rev 1.80   08 Jul 1999 18:25:00   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.79   09 Jun 1999 19:34:42   JP
-   have to change: no cast from GetpApp to SfxApp/OffApp, SfxShell only subclass of SfxApp
-
-      Rev 1.78   01 Mar 1999 16:21:52   MA
-   #62490# Altlast entfernt (Drucken und Briefumschlaege/Etiketten und Datenbank)
-
-      Rev 1.77   09 Jul 1998 09:52:30   JP
-   EmptyStr benutzen
-
-      Rev 1.76   09 Apr 1998 14:23:46   OM
-   #47097# Undo von Vorlagenaenderungen ermoeglichen
-
-      Rev 1.75   24 Nov 1997 11:52:12   MA
-   includes
-
-      Rev 1.74   03 Nov 1997 13:17:16   MA
-   precomp entfernt
-
-      Rev 1.73   03 Sep 1997 13:59:12   OM
-   #36627# Sinnvolle Fehlermeldungen liefern
-
-      Rev 1.72   02 Sep 1997 09:58:24   OM
-   SDB-Headeranpassung
-
-      Rev 1.71   05 May 1997 11:16:30   OM
-   Hilfetext fuer OK loeschen
-
-      Rev 1.70   24 Apr 1997 11:06:30   OM
-   HelpID fuer Briefumschlag aendern
-
-      Rev 1.69   04 Apr 1997 14:04:52   OM
-   HelpIDs fuer DruckButton
-
-      Rev 1.68   05 Feb 1997 10:19:06   OM
-   FillItemSet in DeactivatePage rufen
-
-      Rev 1.67   04 Dec 1996 13:54:02   OM
-   Kein konstanter AdressDBName mehr
-
-      Rev 1.66   11 Nov 1996 09:44:16   MA
-   ResMgr
-
-      Rev 1.65   07 Oct 1996 09:33:18   MA
-   Umstellung Enable/Disable
-
-      Rev 1.64   25 Sep 1996 14:11:12   OM
-   Neue Datenbanktrenner
-
-      Rev 1.63   06 Aug 1996 16:46:38   OM
-   Neue Segs
-
-      Rev 1.62   06 Aug 1996 16:45:36   OM
-   Datenbankumstellung
-
-      Rev 1.61   26 Jul 1996 20:36:38   MA
-   includes
-
-      Rev 1.60   17 Jul 1996 13:47:04   OM
-   Datenbankumstellung 327
-
-      Rev 1.59   02 Jul 1996 18:47:06   MA
-   Wait-Umstellung 325
-
-      Rev 1.58   31 May 1996 16:01:20   OM
-   Datenbankumstellung
-
-      Rev 1.57   29 May 1996 12:29:28   OM
-   Umstellung auf 320
-
-      Rev 1.56   18 Apr 1996 16:32:16   OM
-   Datenbankumstellung: Basic-Entkopplung
-
-      Rev 1.55   15 Apr 1996 09:59:44   OM
-   #26838# DefWin fuer DatenbankDlg setzen
-
-      Rev 1.54   12 Apr 1996 14:07:50   OM
-   #26838# Richtiges Window-Parent disabled
-
-      Rev 1.53   11 Apr 1996 12:27:16   OM
-   #26838# Mehrfachoeffnung vom Datenbank-Dlg unterbunden
-
-      Rev 1.52   04 Apr 1996 12:09:00   OM
-   patches legalisiert
-
-      Rev 1.51   20 Mar 1996 15:36:34   OM
-   DB-Namensumstellung auf ODBC
-
-*/
 

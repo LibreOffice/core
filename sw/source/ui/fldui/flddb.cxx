@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,11 +154,7 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
 
     aTypeLB.SetUpdateMode(FALSE);
     USHORT nOldPos = aTypeLB.GetSelectEntryPos();
-#ifdef REPLACE_OFADBMGR
     sOldDBName = aDatabaseTLB.GetDBName(sOldTableName, sOldColumnName);
-#else
-    sOldDBName = aDatabaseTLB.GetDBName();
-#endif
 
     aTypeLB.Clear();
 
@@ -206,25 +202,17 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
 
         if (sOldDBName.Len())
         {
-#ifdef REPLACE_OFADBMGR
             aDatabaseTLB.Select(sOldDBName, sOldTableName, sOldColumnName);
-#else
-            aDatabaseTLB.Select(sOldDBName);
-#endif
         }
         else
         {
             SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
-#ifdef REPLACE_OFADBMGR
             String sTmp(pSh->GetDBName());
 
             aDatabaseTLB.Select(
-                sTmp.GetToken(0, DB_DELIM),
-                sTmp.GetToken(1, DB_DELIM),
-                sTmp.GetToken(2, DB_DELIM));
-#else
-            aDatabaseTLB.Select(pSh->GetDBName());
-#endif
+            sTmp.GetToken(0, DB_DELIM),
+            sTmp.GetToken(1, DB_DELIM),
+            sTmp.GetToken(2, DB_DELIM));
         }
     }
 
@@ -256,11 +244,7 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
     {
         aConditionED.SaveValue();
         aValueED.SaveValue();
-#ifdef REPLACE_OFADBMGR
         sOldDBName = aDatabaseTLB.GetDBName(sOldTableName, sOldColumnName);
-#else
-        sOldDBName = aDatabaseTLB.GetDBName();
-#endif
         nOldFormat = GetCurField()->GetFormat();
         nOldSubType = GetCurField()->GetSubType();
     }
@@ -272,38 +256,22 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
 
 BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
 {
-#ifdef REPLACE_OFADBMGR
     String sTableName, sColumnName;
     String sDBName = aDatabaseTLB.GetDBName(sTableName, sColumnName);
-#else
-    String sDBName = aDatabaseTLB.GetDBName();
-#endif
     SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
 
     if (!sDBName.Len())
     {
-#ifdef REPLACE_OFADBMGR
         String sTmp = pSh->GetDBName();
         sDBName = sTmp.GetToken(0, DB_DELIM);
         sTableName = sTmp.GetToken(1, DB_DELIM);
-#else
-        sDBName = pSh->GetDBName();
-#endif
     }
     else
     {
-#ifdef REPLACE_OFADBMGR
         String sNewDBName = sDBName;
         sNewDBName += DB_DELIM;
         sNewDBName += sTableName;
         pSh->ChgDBName(sNewDBName);
-#else
-        // keine Spaltennamen an ChgDBName uebergeben
-        String sNewDBName = sDBName.GetToken(0, DB_DELIM);
-        sNewDBName += DB_DELIM;
-        sNewDBName += sDBName.GetToken(1, DB_DELIM);
-        pSh->ChgDBName(sNewDBName);
-#endif
     }
 
     if (sDBName.Len())      // Ohne Datenbank kein neuer Feldbefehl
@@ -315,7 +283,6 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
         USHORT nSubType = 0;
 
         sDBName += DB_DELIM;
-#ifdef REPLACE_OFADBMGR
         sDBName += sTableName;
         sDBName += DB_DELIM;
         if(sColumnName.Len())
@@ -323,7 +290,6 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
             sDBName += sColumnName;
             sDBName += DB_DELIM;
         }
-#endif
         aName.Insert(sDBName, 0);
 
         switch (nTypeId)
@@ -342,14 +308,10 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
         }
 
 
-#ifdef REPLACE_OFADBMGR
         String sTempDBName, sTempTableName, sTempColumnName;
         sTempDBName = aDatabaseTLB.GetDBName(sTempTableName, sTempColumnName);
         BOOL bDBListBoxChanged = sOldDBName != sTempDBName ||
             sOldTableName != sTempTableName || sOldColumnName != sTempColumnName;
-#else
-        BOOL bDBListBoxChanged = sOldDBName != aDatabaseTLB.GetDBName();
-#endif
         if (!IsFldEdit() ||
             aConditionED.GetSavedValue() != aConditionED.GetText() ||
              aValueED.GetSavedValue() != aValueED.GetText() ||
@@ -410,7 +372,6 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 
         if (IsFldEdit())
         {
-#ifdef REPLACE_OFADBMGR
             String sDBName, sTableName, sColumnName;
             if (nTypeId == TYP_DBFLD)
             {
@@ -425,19 +386,6 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
             sDBName = sDBName.GetToken(0, DB_DELIM);
 
             aDatabaseTLB.Select(sDBName, sTableName, sColumnName);
-#else
-            String sDBName;
-            if (nTypeId == TYP_DBFLD)
-            {
-                sDBName = ((SwDBField*)GetCurField())->GetDBName();
-                sDBName += DB_DELIM;
-                sDBName += ((SwDBFieldType*)GetCurField()->GetTyp())->GetColumnName();
-            }
-            else
-                sDBName = ((SwDBNameInfField*)GetCurField())->GetDBName(pSh->GetDoc());
-
-            aDatabaseTLB.Select(sDBName);
-#endif
         }
 
         switch (nTypeId)
@@ -595,7 +543,6 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
 
             if (pEntry != 0)
             {
-#ifdef REPLACE_OFADBMGR
                 String sTableName;
                 String sColumnName;
                 BOOL bIsTable;
@@ -604,14 +551,6 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
                             sTableName,
                             bIsTable,
                             sColumnName);
-#else
-                String sName(aDatabaseTLB.GetDBName());
-                String sColumnName(sName.GetToken(2, DB_DELIM));
-                String sDBName(sName.GetToken(0, DB_DELIM));
-                sDBName += DB_DELIM;
-                sDBName += sName.GetToken(1, DB_DELIM);
-                bNumFormat = GetFldMgr().IsDBNumeric(sDBName, sColumnName);
-#endif
                 if (!IsFldEdit())
                     aDBFormatRB.Check();
             }
@@ -652,105 +591,4 @@ void    SwFldDBPage::FillUserData()
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.31  2000/09/18 16:05:28  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.30  2000/07/07 15:25:43  os
-    replace ofadbmgr
-
-    Revision 1.29  2000/06/30 08:52:52  os
-    #76541# string assertions removed
-
-    Revision 1.28  2000/06/26 13:35:59  os
-    new DataBase API
-
-    Revision 1.27  2000/05/23 18:36:33  jp
-    Bugfixes for Unicode
-
-    Revision 1.26  2000/04/18 15:17:31  os
-    UNICODE
-
-    Revision 1.25  1999/02/25 16:24:50  JP
-    Bug #62438#: UserData nur auswerten, wenn kein Refresh ist
-
-
-      Rev 1.24   25 Feb 1999 17:24:50   JP
-   Bug #62438#: UserData nur auswerten, wenn kein Refresh ist
-
-      Rev 1.23   21 Jan 1999 09:50:36   OS
-   #59900# Fussnoten im Dialog korrekt sortieren; keine prot. Member
-
-      Rev 1.22   12 Jan 1999 11:42:26   OS
-   #60579# ausgewaehlten Typ in den UserData speichern
-
-      Rev 1.21   11 Dec 1998 15:16:24   OM
-   #60051# Richtiges Format fuer Serienbrieffelder waehlen
-
-      Rev 1.20   17 Nov 1998 10:50:38   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.19   04 Nov 1998 13:27:56   OM
-   #58939# Bei Formataenderung RadioButton vorselektieren
-
-      Rev 1.18   10 Aug 1998 16:39:58   JP
-   Bug #54796#: neue NumerierungsTypen (WW97 kompatibel)
-
-      Rev 1.17   09 Jul 1998 09:52:58   JP
-   EmptyStr benutzen
-
-      Rev 1.16   10 Jun 1998 13:26:08   OM
-   Alten Typ nach Reset restaurieren
-
-      Rev 1.15   27 Mar 1998 15:23:54   OM
-   #48909# Insert-Btn korrekt enablen/disablen
-
-      Rev 1.14   06 Mar 1998 13:07:48   OM
-   Nur bei Aenderung Feld aktualisieren
-
-      Rev 1.13   04 Mar 1998 08:32:24   MH
-   chg: Syntax
-
-      Rev 1.12   16 Feb 1998 09:39:00   OM
-   Fuer Solaris nicht direkt von void* auf ushort casten
-
-      Rev 1.11   06 Jan 1998 18:12:54   OM
-   Felbefehl-Dlg
-
-      Rev 1.10   05 Jan 1998 17:44:34   OM
-   DB-Feldbefehl bearbeiten
-
-      Rev 1.9   12 Dec 1997 17:14:00   OM
-   Listbox bei numerischen Formaten enablen
-
-      Rev 1.8   11 Dec 1997 16:58:00   OM
-   Feldumstellung
-
-      Rev 1.7   20 Nov 1997 17:01:20   OM
-   Neuer Felddialog
-
-      Rev 1.6   19 Nov 1997 16:30:42   OM
-   Datenbank-TP Drag&Drop
-
-      Rev 1.5   18 Nov 1997 10:34:36   OM
-   Neuer Feldbefehldialog
-
-      Rev 1.4   17 Nov 1997 09:06:36   OM
-   Basisklasse fuer Feldbefehl-TPs
-
-      Rev 1.3   05 Nov 1997 17:02:46   OM
-   Spaltennamen anzeigen
-
-      Rev 1.2   05 Nov 1997 15:35:38   OM
-   Neuer Feldbefehldialog
-
-      Rev 1.1   30 Oct 1997 14:31:42   OM
-   Feldbefehl-Umstellung
-
-      Rev 1.0   28 Oct 1997 15:05:06   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
 

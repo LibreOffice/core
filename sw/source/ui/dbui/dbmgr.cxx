@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:01 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
 #endif
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
@@ -214,7 +220,6 @@
 #include <statstr.hrc>
 #endif
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
 #endif
@@ -254,9 +259,6 @@
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_SDB_XDATABASEACCESS_HPP_
-//#include <com/sun/star/sdb/XDatabaseAccess.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -281,26 +283,21 @@
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
 #endif
-#else
 
-#endif  //REPLACE_OFADBMGR
-
-#ifdef REPLACE_OFADBMGR
 using namespace rtl;
+using namespace ::com::sun::star;
+using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
+using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
-#define C2S(cChar) String::CreateFromAscii(cChar)
-#endif
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
+#define C2S(cChar) String::CreateFromAscii(cChar)
 #define C2U(char) rtl::OUString::createFromAscii(char)
 
 #define DB_SEP_SPACE    0
@@ -308,7 +305,6 @@ using namespace ::com::sun::star::ucb;
 #define DB_SEP_RETURN   2
 #define DB_SEP_NEWLINE  3
 
-#ifdef REPLACE_OFADBMGR
 SV_IMPL_PTRARR(SwDSParamArr, SwDSParamPtr);
 
 /* -----------------------------17.07.00 17:04--------------------------------
@@ -371,7 +367,6 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     rResult = SwNewDBMgr::GetDBField( xColumnProps, aFormatData, pNumber);
     return TRUE;
 };
-#endif
 /*--------------------------------------------------------------------
     Beschreibung: Daten importieren
  --------------------------------------------------------------------*/
@@ -379,28 +374,15 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
 BOOL SwNewDBMgr::Merge( USHORT nOpt, SwWrtShell* pSh,
                         const String& rStatement,
                         const SbaSelectionListRef xSelectionList,
-#ifdef REPLACE_OFADBMGR
                         const String& rDataSource,
                         const String& rTableOrQuery,
-#else
-                        const String& rDBName,
-#endif
                         const String *pPrinter)
 {
-#ifdef REPLACE_OFADBMGR
     ChgDBName(pSh, rDataSource, rTableOrQuery,rStatement);
-#else
-    ChgDBName(pSh, rDBName, rStatement);
-#endif
     // Falls noch nicht offen, spaetestens hier
 
-#ifdef REPLACE_OFADBMGR
     if(!OpenMergeSource(rDataSource, rTableOrQuery, rStatement, xSelectionList))
         return FALSE;
-#else
-    if(!OpenDB(FALSE, pSh->GetDBDesc()))
-        return FALSE;
-#endif
 
     if (IsInitDBFields())
     {
@@ -410,25 +392,12 @@ BOOL SwNewDBMgr::Merge( USHORT nOpt, SwWrtShell* pSh,
         pSh->ChangeDBFields( aDBNames, pSh->GetDBName());
         SetInitDBFields(FALSE);
     }
-#ifdef REPLACE_OFADBMGR
     const SbaSelectionList* pSelList = 0;
     if( xSelectionList.Is() && (long)xSelectionList->GetObject(0) != -1L )
     {
         if( xSelectionList->Count() )
             pSelList = &xSelectionList;
     }
-#else
-    OfaDBParam& rParam = GetDBData(FALSE);
-    ChangeStatement(FALSE, rStatement);
-    const SbaSelectionList* pSelList = 0;
-    rParam.pSelectionList->Clear();
-    if( xSelectionList.Is() && (long)xSelectionList->GetObject(0) != -1L )
-    {
-        *rParam.pSelectionList = *xSelectionList;
-        if( xSelectionList->Count() )
-            pSelList = &xSelectionList;
-    }
-#endif
 
     BOOL bRet = TRUE;
     switch(nOpt)
@@ -470,19 +439,11 @@ BOOL SwNewDBMgr::Merge( USHORT nOpt, SwWrtShell* pSh,
 
         default:        // Einfuegen der selektierten Eintraege
                         // (war: InsertRecord)
-#ifdef REPLACE_OFADBMGR
             ImportFromConnection(pSh );
-#else
-            ImportFromConnection(pSh, pSelList );
-#endif
             break;
     }
 
-#ifdef REPLACE_OFADBMGR
     EndMerge();
-#else
-    CloseAll();
-#endif
     return bRet;
 }
 /*--------------------------------------------------------------------
@@ -493,24 +454,6 @@ BOOL SwNewDBMgr::Merge( USHORT nOpt, SwWrtShell* pSh,
 BOOL SwNewDBMgr::Merge(SwWrtShell* pSh)
 {
     pSh->StartAllAction();
-#ifdef REPLACE_OFADBMGR
-#else
-    bInMerge = TRUE;
-
-    // 1. Satz positionieren, Evaluierung ueber die Felder
-    for (USHORT i = 0; i < aDBDataArr.Count(); i++)
-    {
-        OfaDBParam* pParam = aDBDataArr[i];
-
-        // Alle Im Dok enthaltenen Datenbanken oeffnen und Cursorpos initialisieren
-        if (OpenDB(FALSE, pParam->GetDBName()))
-        {
-            if (pParam->GetCursor())
-                Flush(FALSE);   // Cursor initialisieren
-            ToFirstSelectedRecord(FALSE);
-        }
-    }
-#endif
 
 /*  for (ULONG i = 0 ; i < GetDBData().pSelectionList->Count(); i++)
     {
@@ -520,11 +463,6 @@ BOOL SwNewDBMgr::Merge(SwWrtShell* pSh)
 
     pSh->ViewShell::UpdateFlds(TRUE);
     pSh->SetModified();
-
-#ifdef REPLACE_OFADBMGR
-#else
-    bInMerge = FALSE;
-#endif
 
     pSh->EndAllAction();
 
@@ -567,28 +505,10 @@ BOOL SwNewDBMgr::Merge(SwWrtShell* pSh)
  --------------------------------------------------------------------*/
 
 
-#ifdef REPLACE_OFADBMGR
 void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
-#else
-void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh,
-                                        const SbaSelectionList* pSelList )
-#endif
 {
-#ifdef REPLACE_OFADBMGR
     if(pMergeData && !pMergeData->bEndOfDB)
-#else
-    OfaDBParam& rParam = GetDBData(FALSE);
-    ASSERT(rParam.GetCursor(), "Cursor");
-
-    if( ToFirstSelectedRecord( FALSE ) && IsSuccessful( FALSE ) )
-#endif
     {
-#ifdef REPLACE_OFADBMGR
-#else
-        //  Spaltenkoepfe
-        SbaDBDataDefRef aDBDef = OpenColumnNames(FALSE);
-        if( aDBDef.Is() )
-#endif
         {
             pSh->StartAllAction();
             pSh->StartUndo(0);
@@ -600,47 +520,15 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh,
 
             SwWait *pWait = 0;
 
-#ifdef REPLACE_OFADBMGR
-#else
-            if( pSelList )
-            {
-                for( ULONG i = 0; i < pSelList->Count(); ++i )
-                {
-
-                    ULONG nIndex = (ULONG)pSelList->GetObject( i );
-
-                    ASSERT(nIndex >= rParam.CurrentPos(),
-                        "Zu lesender Datensatz < vorhergehender Datensatz!");
-
-                    // N„chsten zu lesenden Datensatz ansteuern
-                    GotoRecord( nIndex );
-                    ImportDBEntry(&aDBDef, pSh);
-
-                    if( i == 10 )
-                        pWait = new SwWait( *pSh->GetView().GetDocShell(), TRUE );
-                }
-            }
-            else
-#endif
             {
                 ULONG i = 0;
                 do {
 
-#ifdef REPLACE_OFADBMGR
                     ImportDBEntry(pSh);
-#else
-                    ImportDBEntry(&aDBDef, pSh);
-                    rParam.GetCursor()->Next();
-                    rParam.CurrentPos()++;
-#endif
                     if( 10 == ++i )
                         pWait = new SwWait( *pSh->GetView().GetDocShell(), TRUE);
 
-#ifdef REPLACE_OFADBMGR
                 } while(ToNextMergeRecord());
-#else
-                } while( !rParam.GetCursor()->IsOffRange() );
-#endif
             }
 
             pSh->DoGroupUndo(bGroupUndo);
@@ -649,10 +537,6 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh,
             delete pWait;
         }
     }
-#ifdef REPLACE_OFADBMGR
-#else
-    CloseAll();
-#endif
 }
 
 
@@ -704,31 +588,16 @@ inline String lcl_GetDBInsertMode( String sDBName )
 }
 
 
-#ifdef REPLACE_OFADBMGR
 void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
-#else
-void SwNewDBMgr::ImportDBEntry(SbaDBDataDef* pDef, SwWrtShell* pSh)
-#endif
 {
-#ifdef REPLACE_OFADBMGR
     if(pMergeData && !pMergeData->bEndOfDB)
-#else
-    OfaDBParam& rParam = GetDBData(FALSE);
-    if( !rParam.GetCursor()->IsOffRange() )
-#endif
     {
-#ifdef REPLACE_OFADBMGR
           Reference< XColumnsSupplier > xColsSupp( pMergeData->xResultSet, UNO_QUERY );
           Reference <XNameAccess> xCols = xColsSupp->getColumns();
         String sSymDBName(pMergeData->sDataSource);
         sSymDBName += DB_DELIM;
         sSymDBName += pMergeData->sTableOrQuery;
         String sFormatStr( lcl_GetDBInsertMode( sSymDBName ));
-#else
-        const ODbRowRef&  xRow = rParam.GetCursor()->GetRow();
-        ULONG nCount = (UINT16)xRow->size();
-        String sFormatStr( lcl_GetDBInsertMode( rParam.GetSymDBName() ));
-#endif
         USHORT nFmtLen = sFormatStr.Len();
         if( nFmtLen )
         {
@@ -739,7 +608,6 @@ void SwNewDBMgr::ImportDBEntry(SbaDBDataDef* pDef, SwWrtShell* pSh)
             String sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
             while( sColumn.Len() )
             {
-#ifdef REPLACE_OFADBMGR
                 if(!xCols->hasByName(sColumn))
                     return;
                 Any aCol = xCols->getByName(sColumn);
@@ -748,12 +616,6 @@ void SwNewDBMgr::ImportDBEntry(SbaDBDataDef* pDef, SwWrtShell* pSh)
                 {
                     SwDBFormatData aDBFormat;
                     String sInsert = GetDBField( xColumnProp,   aDBFormat);
-#else
-                int nColumn = GetColumnPos(DBMGR_STD, sColumn);
-                if(nColumn > 0)
-                {
-                    String sInsert = ImportDBField(nColumn, pDef, xRow);
-#endif
                     if( DB_SEP_SPACE == nSeparator )
                             sInsert += cSpace;
                     else if( DB_SEP_TAB == nSeparator)
@@ -779,7 +641,6 @@ void SwNewDBMgr::ImportDBEntry(SbaDBDataDef* pDef, SwWrtShell* pSh)
         else
         {
             String sStr;
-#ifdef REPLACE_OFADBMGR
             Sequence<OUString> aColNames = xCols->getElementNames();
             const OUString* pColNames = aColNames.getConstArray();
             long nLength = aColNames.getLength();
@@ -792,14 +653,6 @@ void SwNewDBMgr::ImportDBEntry(SbaDBDataDef* pDef, SwWrtShell* pSh)
                 if (i < nLength - 1)
                     sStr += '\t';
             }
-#else
-            for (ULONG i = 1; i < nCount; i++)  // 0 = Bookmark
-            {
-                sStr += ImportDBField(i, pDef, xRow);
-                if (i < nCount - 1)
-                    sStr += '\t';
-            }
-#endif
             pSh->SwEditShell::Insert(sStr);
             pSh->SwFEShell::SplitNode();    // Zeilenvorschub
         }
@@ -812,23 +665,15 @@ void SwNewDBMgr::ImportDBEntry(SbaDBDataDef* pDef, SwWrtShell* pSh)
 
 
 void SwNewDBMgr::ChgDBName(SwWrtShell* pSh,
-#ifdef REPLACE_OFADBMGR
                         const String& rDataSource,
                         const String& rTableOrQuery,
-#else
-                        const String& rDBName,
-#endif
                         const String& rStatement)
 {
     if (pSh)
     {
-#ifdef REPLACE_OFADBMGR
         String sNewDBName(rDataSource);
         sNewDBName += DB_DELIM;
         sNewDBName += rTableOrQuery;
-#else
-        String sNewDBName(ExtractDBName(rDBName));
-#endif
         sNewDBName += ';';
         sNewDBName += rStatement;
         pSh->ChgDBName(sNewDBName);
@@ -838,16 +683,11 @@ void SwNewDBMgr::ChgDBName(SwWrtShell* pSh,
 /*--------------------------------------------------------------------
     Beschreibung: Listbox mit Tabellenliste fuellen
  --------------------------------------------------------------------*/
-#ifdef REPLACE_OFADBMGR
 BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
-#else
-BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, String sDBName)
-#endif
 {
     BOOL bRet = FALSE;
     String sOldTableName(pListBox->GetSelectEntry());
     pListBox->Clear();
-#ifdef REPLACE_OFADBMGR
     Reference< XDataSource> xSource;
     Reference< XConnection> xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
     if(xConnection.is())
@@ -874,57 +714,17 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, String sDBName)
             pListBox->SelectEntry(sOldTableName);
         bRet = TRUE;
     }
-#else
-
-    sDBName = OFF_APP()->LocalizeDBName(NATIONAL2INI, sDBName);
-    if (sDBName.Len())
-    {
-        SbaDatabaseRef pConnection = pSbaObject->GetDatabase(sDBName, TRUE);
-
-        if (pConnection)
-        {
-            String sTableName;
-
-            USHORT nCount = pConnection->GetObjectCount(dbTable);
-
-            for (USHORT i = 0; i < nCount; i++)
-            {
-                sTableName = pConnection->GetObjectName(dbTable, i);
-                pListBox->InsertEntry(sTableName);
-            }
-
-            nCount = pConnection->GetObjectCount(dbQuery);
-
-            for (i = 0; i < nCount; i++)
-            {
-                sTableName = pConnection->GetObjectName(dbQuery, i);
-                pListBox->InsertEntry(sTableName);
-            }
-
-            if (sOldTableName.Len())
-                pListBox->SelectEntry(sOldTableName);
-            if (!pListBox->GetSelectEntryCount())
-                pListBox->SelectEntryPos(0);
-            bRet = TRUE;
-        }
-    }
-#endif
     return bRet;
 }
 
 /*--------------------------------------------------------------------
     Beschreibung: Listbox mit Spaltennamen einer Datenbank fuellen
  --------------------------------------------------------------------*/
-#ifdef REPLACE_OFADBMGR
 BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
             const String& rDBName, const String& rTableName, BOOL bAppend)
-#else
-BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox, String sDBName, BOOL bAppend)
-#endif
 {
     if (!bAppend)
         pListBox->Clear();
-#ifdef REPLACE_OFADBMGR
     Reference< XDataSource> xSource;
     Reference< XConnection> xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
     Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
@@ -938,25 +738,6 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox, String sDBName, BOOL bAppend)
             pListBox->InsertEntry(pColNames[nCol]);
         }
     }
-#else
-    if (!sDBName.Len() || (!IsDBOpen(DBMGR_STD, sDBName) && !OpenDB(DBMGR_STD, sDBName, TRUE)))
-        return(FALSE);
-
-    SbaDBDataDefRef aDBDef = OpenColumnNames(DBMGR_STD);
-
-    if (aDBDef.Is())
-    {
-        const SbaColumnList& rCols = aDBDef->GetOriginalColumns();
-
-        for (USHORT i = 1; i <= rCols.Count(); i++)
-        {
-            const SbaNameItem* pNameItem = (const SbaNameItem*)&rCols.GetObject(i-1)->Get(SBA_DEF_FLTNAME);
-            pListBox->InsertEntry(pNameItem->GetValue());
-        }
-
-        pListBox->SelectEntryPos(0);
-    }
-#endif
     return(TRUE);
 }
 
@@ -965,12 +746,8 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox, String sDBName, BOOL bAppend)
  --------------------------------------------------------------------*/
 
 SwNewDBMgr::SwNewDBMgr() :
-#ifdef REPLACE_OFADBMGR
             pMergeData(0),
             bInMerge(FALSE),
-#else
-            OfaDBMgr(),
-#endif
             nMergeType(DBMGR_INSERT),
             bInitDBFields(FALSE)
 {
@@ -979,11 +756,9 @@ SwNewDBMgr::SwNewDBMgr() :
 /* -----------------------------18.07.00 08:56--------------------------------
 
  ---------------------------------------------------------------------------*/
-#ifdef REPLACE_OFADBMGR
 SwNewDBMgr::~SwNewDBMgr()
 {
 }
-#endif
 /*--------------------------------------------------------------------
     Beschreibung:   Serienbrief drucken
  --------------------------------------------------------------------*/
@@ -995,44 +770,9 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     SwWrtShell* pSh = &rView.GetWrtShell();
     //check if the doc is synchronized and contains at least one linked section
     BOOL bSynchronizedDoc = pSh->IsLabelDoc() && pSh->GetSectionFmtCount() > 1;
-#ifdef REPLACE_OFADBMGR
     //merge source is already open
     rOpt.nMergeCnt = pMergeData && pMergeData->xSelectionList.Is() ?
                                     pMergeData->xSelectionList->Count() : 0;
-#else
-    OfaDBParam& rParam = GetDBData(FALSE);
-
-    // 1. Satz positionieren, Evaluierung ueber die Felder
-    for (USHORT i = 0; i < aDBDataArr.Count(); i++)
-    {
-        OfaDBParam* pParam = aDBDataArr[i];
-
-        // Alle Im Dok enthaltenen Datenbanken oeffnen und Cursorpos initialisieren
-        if (OpenDB(FALSE, pParam->GetDBName()))
-        {
-            if (pParam->GetCursor())
-                Flush(FALSE);   // Cursor initialisieren
-            ToFirstSelectedRecord(FALSE);
-        }
-    }
-
-    OpenDB(FALSE, rParam.GetDBName());
-    if (!ToFirstSelectedRecord(FALSE))
-        return(FALSE);
-    ODbRowRef xRow = GetCurSelectedRecord(FALSE);
-    // keine Arme keine Kekse
-    if(!xRow.is())
-        return FALSE;
-
-    bInMerge = TRUE;
-
-    rOpt.nMergeCnt = GetDBData(FALSE).pSelectionList.Is()
-                            ? GetDBData(FALSE).pSelectionList->Count()
-                            : 0;
-    rOpt.nMergeAct = 0;
-
-    Flush(FALSE);   // Cursor initialisieren
-#endif
 
 //  if (IsPrintFromBasicDB())
 //      rOpt.bSinglePrtJobs = IsSingleJobs();
@@ -1052,13 +792,6 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
          bRet = FALSE;
 
     do {
-#ifdef REPLACE_OFADBMGR
-
-#else
-        xRow = GetCurSelectedRecord(FALSE); // Naechste Selektion holen
-        ULONG nOldRec = GetCurRecordId(FALSE);  // Alte Position merken
-        if(xRow.Is())
-#endif
         {
             pSh->ViewShell::UpdateFlds();
             ++rOpt.nMergeAct;
@@ -1085,16 +818,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
                 rJNm.Erase();
             }
         }
-#ifdef REPLACE_OFADBMGR
     } while( bSynchronizedDoc ? ExistsNextRecord() : ToNextMergeRecord());
-#else
-        // Kontext fuer ToNextSelectedRecord auf richtige Datenbank stellen:
-        GetDBData(FALSE, &rParam.GetDBName());
-        // Endlosschleifen durch "Erster Datensatz" verhindern:
-        if (GetCurRecordId(FALSE) < nOldRec)
-            ToSelectedRecord(FALSE, nOldRec);   // Alte Position restaurieren
-    } while( xRow.is() && GotoNextSelectedRecord( bSynchronizedDoc) );
-#endif
 
     if( rOpt.bSinglePrtJobs )
     {
@@ -1121,10 +845,6 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
         pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, pDocSh);
     }
 
-#ifdef REPLACE_OFADBMGR
-#else
-    CloseAll();
-#endif
     return bRet;
 }
 
@@ -1137,63 +857,15 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
 {
     //check if the doc is synchronized and contains at least one linked section
     BOOL bSynchronizedDoc = pSh->IsLabelDoc() && pSh->GetSectionFmtCount() > 1;
-#ifdef REPLACE_OFADBMGR
-#else
-
-    OfaDBParam& rParam = GetDBData(FALSE);
-
-    // 1. Satz positionieren, Evaluierung ueber die Felder
-    for (USHORT i = 0; i < aDBDataArr.Count(); i++)
-    {
-        OfaDBParam* pParam = aDBDataArr[i];
-
-        // Alle Im Dok enthaltenen Datenbanken oeffnen und Cursorpos initialisieren
-        if (OpenDB(FALSE, pParam->GetDBName()))
-        {
-            if (pParam->GetCursor())
-                Flush(FALSE);   // Cursor initialisieren
-            ToFirstSelectedRecord(FALSE);
-        }
-    }
-
-    OpenDB(FALSE, rParam.GetDBName());
-    if (!ToFirstSelectedRecord(FALSE))
-        return(FALSE);
-
-    ODbRowRef xRow = GetCurSelectedRecord(FALSE);
-#endif
     BOOL bLoop = TRUE;
 
-#ifdef REPLACE_OFADBMGR
-#else
-    // keine Arme keine Kekse
-    if(!xRow.is())
-        return FALSE;
-    SbaDBDataDefRef aDBDef = OpenColumnNames(FALSE);
-    if (aDBDef.Is())
-#endif
     {
-#ifdef REPLACE_OFADBMGR
         Reference< XColumnsSupplier > xColsSupp( pMergeData->xResultSet, UNO_QUERY );
         Reference <XNameAccess> xCols = xColsSupp->getColumns();
         if(!xCols->hasByName(sEMailAddrFld))
             return FALSE;
         Any aCol = xCols->getByName(sEMailAddrFld);
         Reference< XPropertySet > xColumnProp = *(Reference< XPropertySet >*)aCol.getValue();;
-#else
-        const SbaColumnList& rCols = aDBDef->GetOriginalColumns();
-        USHORT nColPos = 0;
-        for (nColPos = 0; nColPos < rCols.Count(); nColPos++)
-        {
-            const SbaNameItem* pNameItem = (const SbaNameItem*)&rCols.GetObject(nColPos)->Get(SBA_DEF_FLTNAME);
-            if (pNameItem->GetValue() == sEMailAddrFld)
-                break;
-        }
-
-        if (nColPos >= rCols.Count())
-            return FALSE;
-        nColPos++;
-#endif
 
         bInMerge = TRUE;
         SfxDispatcher* pSfxDispatcher = pSh->GetView().GetViewFrame()->GetDispatcher();
@@ -1207,10 +879,6 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
         SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
         BYTE nMailFmts = pModOpt->GetMailingFormats() | TXTFORMAT_ASCII;    // Immer Ascii
         SfxByteItem aTextFormats(SID_MAIL_TXTFORMAT, nMailFmts);
-#ifdef REPLACE_OFADBMGR
-#else
-        Flush(FALSE);   // Cursor initialisieren
-#endif
 
         pSfxDispatcher->Execute( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
         if( !pSh->IsModified() )
@@ -1313,13 +981,6 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
 
                 do
                 {
-#ifdef REPLACE_OFADBMGR
-#else
-                    // Naechste Selektion holen
-                    xRow = GetCurSelectedRecord(FALSE);
-                    ULONG nOldRec = GetCurRecordId(FALSE);  // Alte Position merken
-                    if( xRow.is() && xRow->size() > 0)
-#endif
                     {
 
                         if(UIUNDO_DELETE_INVISIBLECNTNT == rSh.GetUndoIds())
@@ -1330,12 +991,8 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
                         rSh.RemoveInvisibleContent();
 
                         SfxFrameItem aFrame( SID_DOCFRAME, pVItem->GetFrame() );
-#ifdef REPLACE_OFADBMGR
                         SwDBFormatData aDBFormat;
                         sAddress = GetDBField( xColumnProp, aDBFormat);
-#else
-                        sAddress = ImportDBField(nColPos, &aDBDef, xRow);
-#endif
                         if (!sAddress.Len())
                             sAddress = '_';
 
@@ -1369,17 +1026,7 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
                             break; // das Verschicken wurde unterbrochen
 
                     }
-#ifdef REPLACE_OFADBMGR
                 } while( !bCancel && bSynchronizedDoc ? ExistsNextRecord() : ToNextMergeRecord());
-#else
-                    // Kontext fuer ToNextSelectedRecord auf richtige Datenbank stellen:
-                    GetDBData(FALSE, &rParam.GetDBName());
-
-                    // Endlosschleifen durch "Erster Datensatz" verhindern:
-                    if (GetCurRecordId(FALSE) < nOldRec)
-                        ToSelectedRecord(FALSE, nOldRec);   // Alte Position restaurieren
-                } while(!bCancel && xRow.is() && GotoNextSelectedRecord( bSynchronizedDoc));
-#endif
                 pDoc->SetNewDBMgr( pOldDBMgr );
                 pView->GetDocShell()->OwnerLock( FALSE );
 
@@ -1407,42 +1054,9 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
         bInMerge = FALSE;
         nMergeType = DBMGR_INSERT;
     }
-
-#ifdef REPLACE_OFADBMGR
-#else
-    CloseAll();
-#endif
     return bLoop;
 }
 
-/* -----------------------------17.04.00 11:18--------------------------------
-
- ---------------------------------------------------------------------------*/
-#ifdef REPLACE_OFADBMGR
-#else
-BOOL SwNewDBMgr::GotoNextSelectedRecord( BOOL bSyncronized )
-{
-    BOOL bRet = FALSE;
-    if(!bSyncronized)
-        bRet = ToNextSelectedRecord( FALSE );
-    else
-    {
-        OfaDBParam& rParam = GetDBData(FALSE);
-        if (rParam.GetCursor())
-        {
-            if (rParam.pSelectionList.Is() && rParam.pSelectionList->Count())
-            {
-                bRet = (rParam.CurrentSelPos() < rParam.pSelectionList->Count());
-            }
-            else
-            {
-                bRet = !rParam.GetCursor()->IsOffRange();
-            }
-        }
-    }
-    return(bRet);
-}
-#endif
 /*--------------------------------------------------------------------
     Beschreibung:   Serienbriefe als einzelne Dokumente speichern
  --------------------------------------------------------------------*/
@@ -1451,79 +1065,25 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
 {
     //check if the doc is synchronized and contains at least one linked section
     BOOL bSynchronizedDoc = pSh->IsLabelDoc() && pSh->GetSectionFmtCount() > 1;
-#ifdef REPLACE_OFADBMGR
-#else
-    OfaDBParam& rParam = GetDBData(FALSE);
-
-    // 1. Satz positionieren, Evaluierung ueber die Felder
-    for (USHORT i = 0; i < aDBDataArr.Count(); i++)
-    {
-        OfaDBParam* pParam = aDBDataArr[i];
-
-        // Alle im Dok enthaltenen Datenbanken oeffnen und Cursorpos initialisieren
-        if (OpenDB(FALSE, pParam->GetDBName()))
-        {
-            if (pParam->GetCursor())
-                Flush(FALSE);   // Cursor initialisieren
-            ToFirstSelectedRecord(FALSE);
-        }
-    }
-
-    OpenDB(FALSE, rParam.GetDBName());
-    if (!ToFirstSelectedRecord(FALSE))
-        return(FALSE);
-
-    ODbRowRef xRow = GetCurSelectedRecord(FALSE);
-
-    // keine Arme keine Kekse
-    if(!xRow.is())
-        return FALSE;
-#endif
     BOOL bLoop = TRUE;
 
-#ifdef REPLACE_OFADBMGR
     Reference< XPropertySet > xColumnProp;
-#else
-    SbaDBDataDefRef aDBDef = OpenColumnNames(FALSE);
-    if (aDBDef.Is())
-#endif
     {
         USHORT nColPos = 0;
         BOOL bColumnName = sEMailAddrFld.Len() > 0;
 
         if (bColumnName)
         {
-#ifdef REPLACE_OFADBMGR
             Reference< XColumnsSupplier > xColsSupp( pMergeData->xResultSet, UNO_QUERY );
             Reference <XNameAccess> xCols = xColsSupp->getColumns();
             if(!xCols->hasByName(sEMailAddrFld))
                 return FALSE;
             Any aCol = xCols->getByName(sEMailAddrFld);
             xColumnProp = *(Reference< XPropertySet >*)aCol.getValue();;
-#else
-            const SbaColumnList& rCols = aDBDef->GetOriginalColumns();
-
-            for (nColPos = 0; nColPos < rCols.Count(); nColPos++)
-            {
-                const SbaNameItem* pNameItem = (const SbaNameItem*)&rCols.GetObject(nColPos)->Get(SBA_DEF_FLTNAME);
-                if (pNameItem->GetValue() == sEMailAddrFld)
-                    break;
-            }
-
-            if (nColPos >= rCols.Count())
-                return FALSE;
-
-            nColPos++;
-#endif
         }
 
         bInMerge = TRUE;
         SfxDispatcher* pSfxDispatcher = pSh->GetView().GetViewFrame()->GetDispatcher();
-
-#ifdef REPLACE_OFADBMGR
-#else
-        Flush(FALSE);   // Cursor initialisieren
-#endif
 
         pSfxDispatcher->Execute( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
         if( !pSh->IsModified() )
@@ -1558,26 +1118,13 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
             String sExt( INetURLObject( sOldName ).GetExtension() );
 
             do {
-#ifdef REPLACE_OFADBMGR
-#else
-                // Naechste Selektion holen
-                xRow = GetCurSelectedRecord(FALSE);
-                ULONG nOldRec = GetCurRecordId(FALSE);  // Alte Position merken
-
-                if( xRow.is() && xRow->size() > 0 )
-#endif
                 {
                     String sPath(sSubject);
 
                     if( bColumnName )
                     {
-#ifdef REPLACE_OFADBMGR
                         SwDBFormatData aDBFormat;
                         sAddress = GetDBField( xColumnProp, aDBFormat);
-#else
-
-                        sAddress = ImportDBField(nColPos, &aDBDef, xRow);
-#endif
                         if (!sAddress.Len())
                             sAddress = '_';
                         sPath += sAddress;
@@ -1641,19 +1188,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
                         xDocSh->DoClose();
                     }
                 }
-#ifdef REPLACE_OFADBMGR
             } while( !bCancel && bSynchronizedDoc ? ExistsNextRecord() : ToNextMergeRecord());
-#else
-                // Kontext fuer ToNextSelectedRecord auf
-                // richtige Datenbank stellen:
-                GetDBData(FALSE, &rParam.GetDBName());
-
-                // Endlosschleifen durch "Erster Datensatz" verhindern:
-                if( !bCancel && GetCurRecordId(FALSE) < nOldRec )
-                    ToSelectedRecord(FALSE, nOldRec);   // Alte Position restaurieren
-            }  while( !bCancel && xRow.is() &&
-                        GotoNextSelectedRecord( bSynchronizedDoc) );
-#endif
             // Alle Dispatcher freigeben
             pViewFrm = SfxViewFrame::GetFirst(pDocSh);
             while (pViewFrm)
@@ -1669,10 +1204,6 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
         nMergeType = DBMGR_INSERT;
     }
 
-#ifdef REPLACE_OFADBMGR
-#else
-    CloseAll();
-#endif
     return bLoop;
 }
 
@@ -1694,20 +1225,14 @@ IMPL_LINK_INLINE_END( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
                     den uebergebenen Formatter uebertragen
   --------------------------------------------------------------------*/
 
-#ifdef REPLACE_OFADBMGR
 ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
                                 const String& rTableName,
                                 const String& rColNm,
                                 SvNumberFormatter* pNFmtr,
                                 long nLanguage )
-#else
-ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName, const String& rColNm,
-                                SvNumberFormatter* pNFmtr )
-#endif
 {
     //JP 12.01.99: ggfs. das NumberFormat im Doc setzen
     ULONG nRet = 0;
-#ifdef REPLACE_OFADBMGR
     if(pNFmtr)
     {
         SvNumberFormatsSupplierObj* pNumFmt = new SvNumberFormatsSupplierObj( pNFmtr );
@@ -1779,24 +1304,11 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName, const String& rColNm,
         else
             nRet = pNFmtr->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM );
     }
-#else
-    if( pNFmtr )
-    {
-        int nCol;
-        if( OpenDB( DBMGR_STD, rDBName, FALSE ) &&
-            0 != ( nCol = GetColumnPos( DBMGR_STD, rColNm )))
-            nRet = GetRealColumnFmt( rColNm, GetColumnFormat( DBMGR_STD, nCol ),
-                                    *pNFmtr );
-        else
-            nRet = pNFmtr->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM );
-    }
-#endif
     return nRet;
 }
 /* -----------------------------17.07.00 09:47--------------------------------
 
  ---------------------------------------------------------------------------*/
-#ifdef REPLACE_OFADBMGR
 sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
                           const String& rTableName,
                           const String& rColNm )
@@ -1818,51 +1330,7 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
     }
     return nRet;
 }
-#else
-#endif
 
-#ifdef REPLACE_OFADBMGR
-#else
-ULONG SwNewDBMgr::GetRealColumnFmt( const String& rColNm, ULONG nFmt,
-                                    SvNumberFormatter& rNFmtr )
-{
-    SvNumberFormatter* pDBNumFmtr;
-    const SvNumberformat* pNFmt;
-    SbaDBDataDefRef aDBDef = OpenColumnNames( DBMGR_STD );
-    if( aDBDef.Is() && 0 != ( pDBNumFmtr = aDBDef->GetFormatter() ) &&
-        0 != (pNFmt = pDBNumFmtr->GetEntry( nFmt ) ) )
-    {
-        nFmt = rNFmtr.GetEntryKey( pNFmt->GetFormatstring(), pNFmt->GetLanguage() );
-        if( NUMBERFORMAT_ENTRY_NOT_FOUND == nFmt )
-        {
-            xub_StrLen nCheckPos;
-            short nType;
-            XubString aTmp( pNFmt->GetFormatstring() );
-            rNFmtr.PutEntry( aTmp, nCheckPos, nType, nFmt, pNFmt->GetLanguage() );
-        }
-    }
-    else
-        nFmt = rNFmtr.GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM );
-
-    return nFmt;
-}
-BOOL SwNewDBMgr::IsDBCaseSensitive( const String& rName ) const
-{
-    BOOL bRet = FALSE;
-    String sDBName = OFF_APP()->LocalizeDBName( NATIONAL2INI, rName );
-    if( sDBName.Len() )
-    {
-        SbaDatabaseRef xConnection = pSbaObject->GetDatabase(sDBName, TRUE);
-        if( xConnection.Is() )
-            // JP 18.11.99: looked from
-            //      \offmgr\source\sba\core\db\dbtabobj.cxx
-            bRet = SDB_IC_OBJECT == xConnection->GetIdentifierCase();
-    }
-    return bRet;
-}
-#endif
-
-#ifdef REPLACE_OFADBMGR
 /* -----------------------------03.07.00 17:12--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2301,8 +1769,39 @@ sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
 BOOL    SwNewDBMgr::ShowInBeamer(const String& rDBName, const String& rTableName,
                                             BYTE nType, const String& rStatement)
 {
-    DBG_ERROR("no beamer interface available!")
-    return FALSE;
+    SwView* pView = SW_MOD()->GetView();
+    SfxViewFrame* pFrame = pView->GetViewFrame();
+    Reference<XFrame> xFrame = pFrame->GetFrame()->GetFrameInterface();
+//  Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+//  Reference<XInterface> xInstance;
+//  if( xMgr.is() )
+//  {
+//      xInstance = xMgr->createInstance( C2U( "com.sun.star.frame.Desktop" ));
+//  }
+    Reference<XDispatchProvider> xDP(xFrame, UNO_QUERY);
+     util::URL aURL;
+    aURL.Complete = C2U(".component:DB/DataSourceBrowser");
+    Reference<XDispatch> xD = xDP->queryDispatch(aURL,
+                C2U("_beamer"),
+                 0xff);
+    xD->dispatch(aURL,
+                 Sequence<PropertyValue>());
+//  Reference<XComponentLoader> xLoader(xInstance, UNO_QUERY);
+//  DBG_ASSERT(xLoader.is(), "no loader available?")
+//  if(!xLoader.is())
+//      return FALSE;
+
+//  Reference<XComponent> xRet;
+//  try
+//  {
+//      xRet = xLoader->loadComponentFromURL(
+//                  C2U(".component:DB/DataSourceBrowser"),
+//              C2U("_beamer"),
+//              0xff,
+//              Sequence<PropertyValue>() );
+//  }
+//  catch(Exception&){DBG_ERROR("Exception: loadComponentFromURL()")}
+    return TRUE;
 }
 /* -----------------------------17.07.00 14:50--------------------------------
 
@@ -2528,77 +2027,3 @@ Sequence<OUString> SwNewDBMgr::GetExistingDatabaseNames()
     }
     return Sequence<OUString>();
 }
-#endif  //REPLACE_OFADBMGR
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/10/06 13:32:56  jp
-    should changes: don't use IniManager
-
-    Revision 1.1.1.1  2000/09/18 17:14:33  hr
-    initial import
-
-    Revision 1.372  2000/09/18 16:05:18  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.371  2000/08/08 10:10:39  os
-    ucb transfer command used
-
-    Revision 1.370  2000/07/18 12:50:07  os
-    replace ofadbmgr
-
-    Revision 1.369  2000/07/07 15:25:43  os
-    replace ofadbmgr
-
-    Revision 1.368  2000/07/06 07:59:10  os
-    replace ofadbmgr
-
-    Revision 1.367  2000/07/05 08:23:06  os
-    Replace ofadbmgr
-
-    Revision 1.366  2000/06/26 13:18:45  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.365  2000/06/13 09:57:36  os
-    using UCB
-
-    Revision 1.364  2000/06/08 09:46:48  os
-    ContentBroker not in SwModule
-
-    Revision 1.363  2000/06/07 13:26:07  os
-    using UCB
-
-    Revision 1.362  2000/05/23 18:11:05  jp
-    Bugfixes for Unicode
-
-    Revision 1.361  2000/04/17 10:01:56  os
-    #74698# detect synchronized documents with an additional DBNextSet - field
-
-    Revision 1.360  2000/04/11 08:03:52  os
-    UNICODE
-
-    Revision 1.359  2000/02/11 14:44:23  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.358  2000/01/06 18:20:27  jp
-    Bug #71413#: MergeMailFiles: HandleErrors, created filenames starts with 1
-
-    Revision 1.357  2000/01/06 07:31:29  os
-    #71436# mail merge dialog: execute via status method disposed
-
-    Revision 1.356  1999/12/22 15:57:02  jp
-    Bug #71238#: MergePrint - behind the first call erase the JobName
-
-    Revision 1.355  1999/12/14 14:35:04  jp
-    Bug #69595#: print can create single Jobs
-
-    Revision 1.354  1999/11/23 11:20:55  os
-    comment
-
-    Revision 1.353  1999/11/18 21:02:54  jp
-    for Bug #68744#: new: IsCaseSensitive
-
-
-
-------------------------------------------------------------------------*/
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include <tools/string.hxx>
 #endif
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _SBAITEMS_HXX
 #include "offmgr/sbaitems.hxx"
 #endif
@@ -74,16 +73,8 @@
 #include <com/sun/star/util/Date.hpp>
 #endif
 
-#else
-
-#ifndef _OFF_OFADBMGR_HXX //autogen
-#include <offmgr/ofadbmgr.hxx>
-#endif
-#endif
-
 #include "swtypes.hxx"  // fuer aEmptyStr
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -118,7 +109,6 @@ struct SwDBFormatData
     com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter> xFormatter;
     com::sun::star::lang::Locale aLocale;
 };
-#endif //REPLACE_OFADBMGR
 
 class SwView;
 class SwWrtShell;
@@ -144,7 +134,6 @@ enum DBMgrOptions
 /*--------------------------------------------------------------------
      Beschreibung: (neue) Logische Datenbanken verwalten
  --------------------------------------------------------------------*/
-#ifdef REPLACE_OFADBMGR
 #define SW_DB_SELECT_UNKNOWN    0
 #define SW_DB_SELECT_TABLE      1
 #define SW_DB_SELECT_QUERY      2
@@ -182,13 +171,8 @@ struct SwDSParam
 typedef SwDSParam* SwDSParamPtr;
 SV_DECL_PTRARR_DEL(SwDSParamArr, SwDSParamPtr, 0, 5)
 
-#endif  //REPLACE_OFADBMGR
 
-#ifdef REPLACE_OFADBMGR
 class SwNewDBMgr
-#else
-class SwNewDBMgr : public OfaDBMgr
-#endif
 {
     SbaSelectionListRef pMergeList;     // Liste der fÅr Serienbrief selektierten EintrÑge
     String              sEMailAddrFld;  // Mailing: Spaltenname der E-Mail Adresse
@@ -199,7 +183,6 @@ class SwNewDBMgr : public OfaDBMgr
     BOOL                bSingleJobs : 1;    // Einzelne Druckjobs bei Aufruf aus Basic
     BOOL                bCancel : 1;        // Serienbrief-Save abgebrochen
 
-#ifdef REPLACE_OFADBMGR
     BOOL                bInMerge    : 1;    //merge process active
     SwDSParamArr        aDataSourceParams;
 
@@ -210,26 +193,15 @@ class SwNewDBMgr : public OfaDBMgr
                             const String& rStatement,
                             const SbaSelectionListRef xSelectionList);
     SwDSParam*          FindDSData(const String& rDBName, BOOL bCreate);
-#endif
 
 
     DECL_LINK( PrtCancelHdl, Button * );
 
     // Datensaetze als Text ins Dokument einfuegen
-#ifdef REPLACE_OFADBMGR
     void ImportFromConnection( SwWrtShell* pSh);
-#else
-    void ImportFromConnection( SwWrtShell* pSh,
-                                const SbaSelectionList* pSelList = 0 );
-#endif
 
     // Einzelnen Datensatz als Text ins Dokument einfuegen
-#ifdef REPLACE_OFADBMGR
     void ImportDBEntry(SwWrtShell* pSh);
-#else
-    void ImportDBEntry(SbaDBDataDef* pDef, SwWrtShell* pSh);
-    BOOL    GotoNextSelectedRecord( BOOL bSyncronized );
-#endif
 
     // Mischen von Datensaetzen in Felder, dann per email versenden
     BOOL            MergeMailing(SwWrtShell* pSh);
@@ -237,17 +209,11 @@ class SwNewDBMgr : public OfaDBMgr
     BOOL            MergeMailFiles(SwWrtShell* pSh);
 public:
     SwNewDBMgr();
-#ifdef REPLACE_OFADBMGR
     ~SwNewDBMgr();
-#endif
     // Am Dokument Datenbank- Tabellenname und SQL-Select-Statement setzen
     void            ChgDBName( SwWrtShell* pSh,
-#ifdef REPLACE_OFADBMGR
                         const String& rDataSource,
                         const String& rTableOrQuery,
-#else
-                        const String& rDBName,
-#endif
                                 const String& rStatement );
 
     // Art des aktellen Mergens. Siehe DBMgrOptions-enum
@@ -257,12 +223,8 @@ public:
     // Mischen von Datensaetzen in Felder
     BOOL            Merge(USHORT nOpt, SwWrtShell* pSh, const String& rStatement,
                         const SbaSelectionListRef pSelectionList,
-#ifdef REPLACE_OFADBMGR
                         const String& rDataSource,
                         const String& rTableOrQuery,
-#else
-                        const String& rDBName,
-#endif
                         const String *pPrinter = NULL);
     BOOL            Merge(SwWrtShell* pSh);
     // Mischen von Datensaetzen in Felder, dann drucken
@@ -285,7 +247,6 @@ public:
     inline void     SetAttachment(const String& sAtt) { sAttached = sAtt; }
 
 
-#ifdef REPLACE_OFADBMGR
     // Listbox mit allen Tabellennamen einer Datenbank fuellen
     BOOL            GetTableNames(ListBox* pListBox, const String& rDBName );
     // Listbox mit allen Spaltennamen einer Datenbanktabelle fuellen
@@ -300,26 +261,6 @@ public:
                           const String& rTableName,
                           const String& rColNm );
 
-#else
-    // Listbox mit allen Tabellennamen einer Datenbank fuellen
-    BOOL            GetTableNames(ListBox* pListBox, String sDBName);
-    // Listbox mit allen Spaltennamen einer Datenbanktabelle fuellen
-    BOOL            GetColumnNames(ListBox* pListBox, String sDBName, BOOL bAppend = FALSE);
-    // DB-Cursor auf einen bestimmten Datensatz stellen
-    // (Ist im OfaDBMgr protected, daher hier nochmals als public fuer dbinsdlg.cxx)
-    inline void GotoRecord( ULONG nIndex )
-    {   OfaDBMgr::GotoRecord( FALSE, nIndex ); }
-
-    ULONG GetColumnFmt( const String& rDBName, const String& rColNm,
-                                SvNumberFormatter* pNFmtr );
-    // Numberformat der Spalte ermitteln und ggfs. in den uebergebenen
-    // Formatter uebertragen
-    ULONG GetRealColumnFmt( const String& rColNm, ULONG nFmt,
-                            SvNumberFormatter& rNFmtr );
-    BOOL IsDBCaseSensitive( const String& rName ) const;
-#endif
-
-#ifdef REPLACE_OFADBMGR
     inline BOOL     IsInMerge() const   { return bInMerge; }
     void            EndMerge();
 
@@ -372,10 +313,6 @@ public:
                                     BYTE    eTableOrQuery = SW_DB_SELECT_UNKNOWN);
 
     static ::com::sun::star::uno::Sequence<rtl::OUString> GetExistingDatabaseNames();
-
-#else
-
-#endif  //REPLACE_OFADBMGR
 
 };
 

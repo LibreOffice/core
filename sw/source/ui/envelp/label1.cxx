@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:02 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,6 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -167,18 +166,15 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
+using namespace ::com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::uno;
-
-#define C2U(char) rtl::OUString::createFromAscii(char)
-#else
-
-#endif  //REPLACE_OFADBMGR
-
-using namespace ::com::sun::star;
 using namespace ::comphelper;
 using namespace ::rtl;
+
+#define C2U(char) rtl::OUString::createFromAscii(char)
+
 
 // dont use RTL_CONSTASCII_STRINGPARAM for UNO_NAME ...
 // #define CL2S(cChar) UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
@@ -754,13 +750,7 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
 
     if (pListBox == &aDatabaseLB)
         GetNewDBMgr()->GetTableNames(&aTableLB, sActDBName);
-#ifdef REPLACE_OFADBMGR
     GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName, aTableLB.GetSelectEntry());
-#else
-    sActDBName += DB_DELIM;
-    sActDBName += aTableLB.GetSelectEntry();
-    GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName);
-#endif
     return 0;
 }
 
@@ -899,7 +889,6 @@ void SwLabPage::InitDatabaseBox()
     if(GetNewDBMgr())
     {
         aDatabaseLB.Clear();
-#ifdef REPLACE_OFADBMGR
         Sequence<OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
@@ -914,58 +903,21 @@ void SwLabPage::InitDatabaseBox()
         }
         else
             aDBFieldLB.Clear();
-#else
-        SbaObject *pSbaObject = GetNewDBMgr()->GetSbaObject();
-        if(!pSbaObject)
-            return;
-        String sDBNames = pSbaObject->GetDatabaseNames();
-        sActDBName = aItem.sDBName;
-        if ( !sActDBName.Len() )
-            sActDBName = GetNewDBMgr()->GetAddressDBName();
-
-        sDBNames = SFX_APP()->LocalizeDBName(INI2NATIONAL, sDBNames);
-
-        sal_uInt16 nCount = sDBNames.GetTokenCount();
-
-        for (sal_uInt16 i = 0; i < nCount; i++)
-            aDatabaseLB.InsertEntry(sDBNames.GetToken(i));
-
-        String sDBName = SFX_APP()->LocalizeDBName( INI2NATIONAL,
-                                        sActDBName.GetToken( 0, DB_DELIM ));
-        aDatabaseLB.SelectEntry(sDBName);
-        if (GetNewDBMgr()->GetTableNames(&aTableLB, sDBName))
-        {
-            aTableLB.SelectEntry(sActDBName.GetToken(1, DB_DELIM));
-            GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName);
-        }
-        else
-            aDBFieldLB.Clear();
-#endif
     }
 }
 
 // --------------------------------------------------------------------------
-
-
-
 SfxTabPage* SwLabPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwLabPage(pParent, rSet);
 }
 
 // --------------------------------------------------------------------------
-
-
-
 void SwLabPage::ActivatePage(const SfxItemSet& rSet)
 {
     Reset( rSet );
 }
-
 // --------------------------------------------------------------------------
-
-
-
 int SwLabPage::DeactivatePage(SfxItemSet* pSet)
 {
     if (pSet)

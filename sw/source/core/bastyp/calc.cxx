@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:05:18 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,17 +897,11 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
 
         // Name(p)=Adress.PLZ oder Adress.DATENSATZNUMMER
         // DBSETNUMBERFLD = DatenSATZ-nummernfeld (NICHT "setze Datensatznummer!!!")
-#ifdef REPLACE_OFADBMGR
         String sDBName(GetDBName( sTmpName ));
         String sSourceName(sDBName.GetToken(0, DB_DELIM));
         String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
         if( pMgr && sSourceName.Len() && sTableName.Len() &&
             pMgr->OpenDataSource(sSourceName, sTableName))
-#else
-        String sDBName;
-        if( pMgr && ( sDBName = GetDBName( sTmpName )).Len() &&
-            pMgr->OpenDB( DBMGR_STD, sDBName, FALSE ))
-#endif
         {
             String sColumnName( GetColumnName( sTmpName ));
             ASSERT (sColumnName.Len(), "DB-Spaltenname fehlt!");
@@ -918,19 +912,11 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
             // Hier nochmal initialisieren, da das nicht mehr in docfld
             // fuer Felder != RES_DBFLD geschieht. Z.B. wenn ein Expressionfield
             // vor einem DB_Field in einem Dok vorkommt.
-#ifdef REPLACE_OFADBMGR
             VarChange( sDBNum, pMgr->GetSelectedRecordId(sSourceName, sTableName));
-#else
-            VarChange( sDBNum, pMgr->GetCurSelectedRecordId(DBMGR_STD));
-#endif
 
             if( sDBNum.EqualsIgnoreCaseAscii(sColumnName) )
             {
-#ifdef REPLACE_OFADBMGR
                 aErrExpr.nValue.PutLong(long(pMgr->GetSelectedRecordId(sSourceName, sTableName)));
-#else
-                aErrExpr.nValue.PutLong(long(pMgr->GetCurSelectedRecordId(DBMGR_STD)));
-#endif
                 return &aErrExpr;
             }
 
@@ -941,17 +927,12 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
             String sResult;
             double nNumber = DBL_MAX;
 
-#ifdef REPLACE_OFADBMGR
             const SfxPoolItem& rItem = rDoc.GetDefault(RES_CHRATR_LANGUAGE);
             LanguageType eLang = ((SvxLanguageItem&)rDoc.GetDefault(
                                         RES_CHRATR_LANGUAGE )).GetLanguage();
             if(LANGUAGE_SYSTEM == eLang)
                 eLang = ::GetSystemLanguage();
             if(pMgr->GetColumnCnt(sSourceName, sTableName, sColumnName, nTmpRec, (long)eLang, sResult, &nNumber))
-#else
-            if (pMgr->GetColumnCnt(DBMGR_STD, sColumnName,
-                        pMgr->AbsToRel(DBMGR_STD, nTmpRec), sResult, &nNumber))
-#endif
             {
                 if (nNumber != DBL_MAX)
                     aErrExpr.nValue.PutDouble( nNumber );
@@ -976,7 +957,6 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
                             SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) ))
     {
         SwNewDBMgr *pMgr = rDoc.GetNewDBMgr();
-#ifdef REPLACE_OFADBMGR
         String sDBName(GetDBName( sTmpName ));
         String sSourceName(sDBName.GetToken(0, DB_DELIM));
         String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
@@ -984,13 +964,6 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
             pMgr->OpenDataSource(sSourceName, sTableName) &&
             !pMgr->IsInMerge())
             pNewExp->nValue.PutULong( pMgr->GetSelectedRecordId(sSourceName, sTableName));
-#else
-
-        if( pMgr && (sTmpName = GetDBName( sTmpName )).Len() &&
-            pMgr->OpenDB( DBMGR_STD, sTmpName, FALSE ) &&
-            !pMgr->IsInMerge() )
-            pNewExp->nValue.PutULong( pMgr->GetCurSelectedRecordId(DBMGR_STD) );
-#endif
     }
 
     return pNewExp;

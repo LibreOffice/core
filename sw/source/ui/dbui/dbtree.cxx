@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:01 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include <sot/formats.hxx>
 #endif
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -100,25 +99,6 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#else
-
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _SBAOBJ_HXX //autogen
-#include <offmgr/sbaobj.hxx>
-#endif
-#ifndef _SBA_SBADB_HXX //autogen
-#include <offmgr/sbadb.hxx>
-#endif
-#ifndef _SBAITEMS_HRC
-#include <offmgr/sbaitems.hrc>
-#endif
-#ifndef _SBAITEMS_HXX
-#include <offmgr/sbaitems.hxx>
-#endif
-
-#endif  //REPLACE_OFADBMGR
 
 #ifndef _DRAG_HXX //autogen
 #include <vcl/drag.hxx>
@@ -133,7 +113,6 @@
 #include "dbui.hrc"
 #include "dbtree.hxx"
 
-#ifdef REPLACE_OFADBMGR
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -142,7 +121,6 @@ using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
-#endif
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 // STATIC DATA -----------------------------------------------------------
@@ -167,7 +145,6 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId, const String& r
     bShowColumns    (bShowCol),
     bInitialized    (FALSE)
 {
-#ifdef REPLACE_OFADBMGR
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( xMgr.is() )
     {
@@ -175,7 +152,6 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId, const String& r
         xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
     }
     DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available")
-#endif
 
     SetHelpId(HID_DB_SELECTION_TLB);
 
@@ -199,10 +175,8 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId, const String& r
 
 void SwDBTreeList::InitTreeList()
 {
-#ifdef REPLACE_OFADBMGR
     if(!xDBContext.is())
         return;
-#endif
     SetSelectionMode(SINGLE_SELECTION);
     SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     // Font nicht setzen, damit der Font des Controls uebernommen wird!
@@ -214,7 +188,6 @@ void SwDBTreeList::InitTreeList()
 
     GetModel()->SetCompareHdl(LINK(this, SwDBTreeList, DBCompare));
 
-#ifdef REPLACE_OFADBMGR
     Sequence<OUString> aDBNames = xDBContext->getElementNames();
     const OUString* pDBNames = aDBNames.getConstArray();
     long nCount = aDBNames.getLength();
@@ -229,19 +202,6 @@ void SwDBTreeList::InitTreeList()
     String sColumnName(sDefDBName.GetToken(2, DB_DELIM));
     Select(sDBName, sTableName, sColumnName);
 
-#else
-    OfficeApplication* pOffApp = OFF_APP();
-    SbaObject* pSbaObject = pOffApp->GetSbaObject();
-    String sDBNames = pSbaObject->GetDatabaseNames();
-    USHORT nCount = sDBNames.GetTokenCount();
-
-    for (USHORT i = 0; i < nCount; i++)
-    {
-        String sDBName(sDBNames.GetToken(i));
-        InsertEntry(sDBName, aDBBMP, aDBBMP, NULL, TRUE);
-    }
-    Select(sDefDBName);
-#endif
 
     bInitialized = TRUE;
 }
@@ -255,12 +215,8 @@ void SwDBTreeList::ShowColumns(BOOL bShowCol)
     if (bShowCol != bShowColumns)
     {
         bShowColumns = bShowCol;
-#ifdef REPLACE_OFADBMGR
         String sTableName, sColumnName;
         String  sDBName(GetDBName(sTableName, sColumnName));
-#else
-        String sDBName(GetDBName());
-#endif
 
         SetUpdateMode(FALSE);
 
@@ -280,11 +236,7 @@ void SwDBTreeList::ShowColumns(BOOL bShowCol)
 
         if (sDBName.Len())
         {
-#ifdef REPLACE_OFADBMGR
             Select(sDBName, sTableName, sColumnName);   // force RequestingChilds
-#else
-            Select(sDBName);    // RequestingChilds erzwingen
-#endif
         }
         SetUpdateMode(TRUE);
     }
@@ -298,7 +250,6 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
 {
     if (!pParent->HasChilds())
     {
-#ifdef REPLACE_OFADBMGR
 
         if (GetParent(pParent)) // column names
         {
@@ -419,61 +370,6 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                 }
             }
         }
-#else
-        SbaObject* pSbaObject = OFF_APP()->GetSbaObject();
-        if (GetParent(pParent)) // Spaltennamen
-        {
-            SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
-            SwNewDBMgr *pMgr = pSh->GetNewDBMgr();
-
-            String sDBName = GetEntryText(GetParent(pParent));
-            sDBName += DB_DELIM;
-            sDBName += GetEntryText(pParent);
-
-            if (!sDBName.Len() || (!pMgr->IsDBOpen(DBMGR_STD, sDBName) && !pMgr->OpenDB(DBMGR_STD, sDBName, TRUE)))
-                return;
-
-            SbaDBDataDefRef aDBDef = pMgr->OpenColumnNames(DBMGR_STD);
-
-            if (aDBDef.Is())
-            {
-                const SbaColumnList& rCols = aDBDef->GetOriginalColumns();
-
-                for (USHORT i = 1; i <= rCols.Count(); i++)
-                {
-                    const SbaNameItem* pNameItem = (const SbaNameItem*)&rCols.GetObject(i-1)->Get(SBA_DEF_FLTNAME);
-                    InsertEntry(pNameItem->GetValue(), pParent);
-                }
-            }
-            pMgr->CloseAll(DBMGR_STD);
-        }
-        else    // Tabellennamen
-        {
-            String sDBName = GetEntryText(pParent);
-
-            SbaDatabaseRef pConnection = pSbaObject->GetDatabase(sDBName, TRUE);
-            if (pConnection.Is())
-            {
-                String sTableName;
-
-                USHORT nCount = pConnection->GetObjectCount(dbTable);
-
-                for (USHORT i = 0; i < nCount; i++)
-                {
-                    sTableName = pConnection->GetObjectName(dbTable, i);
-                    InsertEntry(sTableName, aTableBMP, aTableBMP, pParent, bShowColumns);
-                }
-
-                nCount = pConnection->GetObjectCount(dbQuery);
-
-                for (i = 0; i < nCount; i++)
-                {
-                    sTableName = pConnection->GetObjectName(dbQuery, i);
-                    InsertEntry(sTableName, aQueryBMP, aQueryBMP, pParent, bShowColumns);
-                }
-            }
-        }
-#endif
     }
 }
 
@@ -495,47 +391,24 @@ IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
  Beschreibung:
 ------------------------------------------------------------------------*/
 
-#ifdef REPLACE_OFADBMGR
 String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, BOOL* pbIsTable)
-#else
-String SwDBTreeList::GetDBName() const
-#endif
 {
     String sDBName;
-#ifdef REPLACE_OFADBMGR
-#else
-    String sColumnName;
-#endif
     SvLBoxEntry* pEntry = FirstSelected();
 
     if (pEntry && GetParent(pEntry))
     {
         if (GetParent(GetParent(pEntry)))
         {
-#ifdef REPLACE_OFADBMGR
             rColumnName = GetEntryText(pEntry);
-#else
-            sColumnName = GetEntryText(pEntry);
-#endif
             pEntry = GetParent(pEntry); // Spaltenname war selektiert
         }
         sDBName = GetEntryText(GetParent(pEntry));
-#ifdef REPLACE_OFADBMGR
         if(pbIsTable)
         {
             *pbIsTable = pEntry->GetUserData() != 0;
         }
         rTableName = GetEntryText(pEntry);
-#else
-        sDBName += DB_DELIM;
-        sDBName += GetEntryText(pEntry);
-
-        if (sColumnName.Len())
-        {
-            sDBName += DB_DELIM;
-            sDBName += sColumnName;
-        }
-#endif
     }
     return sDBName;
 }
@@ -545,18 +418,8 @@ String SwDBTreeList::GetDBName() const
 ------------------------------------------------------------------------*/
 
 
-#ifdef REPLACE_OFADBMGR
 void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const String& rColumnName)
-#else
-void  SwDBTreeList::Select(const String& rDataBaseName)
-#endif
 {
-#ifdef REPLACE_OFADBMGR
-#else
-    String rDBName(rDataBaseName.GetToken(0, DB_DELIM));
-    String rTableName(rDataBaseName.GetToken(1, DB_DELIM));
-    String rColumnName(rDataBaseName.GetToken(2, DB_DELIM));
-#endif
     SvLBoxEntry* pParent;
     SvLBoxEntry* pChild;
     USHORT nParent = 0;
@@ -634,7 +497,6 @@ void  SwDBTreeList::Command( const CommandEvent& rCEvt )
 void SwDBTreeList::StartExecuteDrag()
 {
     DragServer::Clear();
-#ifdef REPLACE_OFADBMGR
     String sTableName, sColumnName;
     String  sDBName(GetDBName(sTableName, sColumnName));
     if(sDBName.Len())
@@ -663,30 +525,6 @@ void SwDBTreeList::StartExecuteDrag()
         }
         DragServer::CopyString(sDBName);
     }
-#else
-    String sDBName(GetDBName());
-    if(sDBName.Len())
-    {
-        if (sDBName.GetTokenCount(DB_DELIM) > 2)    // Spaltenname ist enthalten
-        {
-            String aCopyData = sDBName.GetToken(0, DB_DELIM);
-            aCopyData   += char(11);
-            aCopyData   += sDBName.GetToken(1, DB_DELIM);
-            aCopyData   += char(11);
-            aCopyData   += String(String::CreateFromAscii("0"));
-            aCopyData   += char(11);
-            aCopyData   += sDBName.GetToken(2, DB_DELIM);
-
-            // Datenbankfeld draggen
-            DragServer::CopyData(aCopyData.GetBuffer(), aCopyData.Len() + 1,
-                                    SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE);
-        }
-
-        USHORT nPos;
-        while ((nPos = sDBName.SearchAndReplace(DB_DELIM, '.')) != STRING_NOTFOUND);
-        DragServer::CopyString(sDBName);
-    }
-#endif
 }
 
 /*------------------------------------------------------------------------
@@ -697,140 +535,4 @@ BOOL  SwDBTreeList::QueryDrop( DropEvent& rEvt)
 {
     return FALSE;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:34  hr
-    initial import
-
-    Revision 1.41  2000/09/18 16:05:19  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.40  2000/06/26 13:31:03  os
-    new DataBase API
-
-    Revision 1.39  2000/04/11 08:03:52  os
-    UNICODE
-
-    Revision 1.38  2000/02/11 14:44:29  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.37  1999/11/09 16:54:18  os
-    #69090# default in ::Command
-
-    Revision 1.36  1999/01/20 16:00:04  AWO
-    #59398#FormatIds
-
-
-      Rev 1.35   20 Jan 1999 17:00:04   AWO
-   #59398#FormatIds
-
-      Rev 1.34   21 Aug 1998 12:59:04   OM
-   #55373# D&D von DB-Feldern
-
-      Rev 1.33   07 Mar 1998 13:30:14   OM
-   Alles bei Column-Umschaltung einklappen
-
-      Rev 1.32   27 Feb 1998 18:26:26   OM
-   Aufgeraeumt
-
-      Rev 1.31   03 Feb 1998 12:21:12   OM
-   #46621# HelpIDs fuer Feldbefehl-Dlg
-
-      Rev 1.30   06 Jan 1998 18:12:02   OM
-   Felbefehl-Dlg
-
-      Rev 1.29   05 Jan 1998 17:44:54   OM
-   DB-Feldbefehl bearbeiten
-
-      Rev 1.28   15 Dec 1997 11:32:08   OM
-   GetObjectName gefixt
-
-      Rev 1.27   12 Dec 1997 10:37:44   OM
-   GetObjectName angepasst
-
-      Rev 1.26   12 Dec 1997 10:11:02   OM
-   Spaltennamen nicht sortieren
-
-      Rev 1.25   11 Dec 1997 17:01:10   OM
-   Feldumstellung
-
-      Rev 1.24   19 Nov 1997 16:33:06   OM
-   Datenbank-TP Drag&Drop
-
-      Rev 1.23   18 Nov 1997 14:34:02   OM
-   Sba-Umstellung 372
-
-      Rev 1.22   18 Nov 1997 10:35:42   OM
-   Neuer Feldbefehldialog
-
-      Rev 1.21   17 Nov 1997 14:36:32   OM
-   Column-Darstellung an/abschaltbar
-
-      Rev 1.20   10 Nov 1997 10:48:56   TJ
-   GetTableName und GetQueryName durch GetObjectName ersetzt
-
-      Rev 1.19   06 Nov 1997 17:01:50   OM
-   #45188# Schriftgroesse in TreeListBox anders initialisieren
-
-      Rev 1.18   06 Nov 1997 13:01:26   OM
-   Geaenderte Datenbankauswahl
-
-      Rev 1.17   05 Nov 1997 17:02:12   OM
-   Spaltennamen anzeigen
-
-      Rev 1.16   14 Oct 1997 14:10:34   OM
-   Feldumstellung
-
-      Rev 1.15   02 Sep 1997 09:57:10   OM
-   SDB-Headeranpassung
-
-      Rev 1.14   01 Sep 1997 13:16:04   OS
-   DLL-Umstellung
-
-      Rev 1.13   25 Aug 1997 11:53:54   OS
-   368-Changes SBA
-
-      Rev 1.12   06 Aug 1997 11:36:00   TRI
-   GetpApp statt pApp
-
-      Rev 1.11   14 Mar 1997 14:09:26   OM
-   Sortierte DB-Listboxen
-
-      Rev 1.10   11 Nov 1996 09:25:38   MA
-   ResMgr
-
-      Rev 1.9   14 Oct 1996 16:06:44   OM
-   Datenbankumstellung 341c
-
-      Rev 1.8   25 Sep 1996 14:10:44   OM
-   Neue Datenbanktrenner
-
-      Rev 1.7   03 Sep 1996 12:01:58   OM
-   #30967# Fehlendes SEXPORT
-
-      Rev 1.6   28 Aug 1996 09:18:04   OS
-   includes
-
-      Rev 1.5   14 Aug 1996 11:39:36   OM
-   RequestingChilds nur bei leerem Parent
-
-      Rev 1.4   08 Aug 1996 16:15:54   OM
-   Neue Segs
-
-      Rev 1.3   08 Aug 1996 16:15:14   OM
-   Tabellen nur on demand anfordern
-
-      Rev 1.2   05 Aug 1996 15:48:38   OM
-   Neue Segs
-
-      Rev 1.1   05 Aug 1996 15:47:52   OM
-   Datenbankumstellung
-
-      Rev 1.0   25 Jul 1996 16:35:50   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,14 +98,11 @@
 #include "expfld.hxx"
 #include "txtatr.hxx"
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
 
 using namespace ::com::sun::star::sdbc;
-#endif
-
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
@@ -433,17 +430,10 @@ void SwDBField::Evaluate()
     double nValue = DBL_MAX;
     String sTmpName(GetDBName());
 
-#ifdef REPLACE_OFADBMGR
     String sDataSource(sTmpName.GetToken(0, DB_DELIM));
     String sDataTableOrQuery(sTmpName.GetToken(1, DB_DELIM));
     if(!pMgr || !pMgr->IsDataSourceOpen(sDataSource, sDataTableOrQuery))
         return ;
-#else
-    if(!pMgr || !pMgr->IsDBOpen(DBMGR_STD, sTmpName) || !pMgr->IsInMerge())
-    {
-        return;
-    }
-#endif
 
     ULONG nFmt;
 
@@ -451,32 +441,17 @@ void SwDBField::Evaluate()
     String aColNm( ((SwDBFieldType*)GetTyp())->GetColumnName() );
 
     SvNumberFormatter* pDocFormatter = GetDoc()->GetNumberFormatter();
-#ifdef REPLACE_OFADBMGR
     pMgr->GetMergeColumnCnt(aColNm, GetLanguage(), aContent, &nValue, &nFmt);
     if( !( nSubType & SUB_OWN_FMT ) )
         SetFormat( nFmt = pMgr->GetColumnFmt( sDataSource, sDataTableOrQuery,
                                         aContent, pDocFormatter, GetLanguage() ));
-#else
-    pMgr->GetColumnCnt( DBMGR_STD, aColNm,
-                            pMgr->GetCurRecordId( DBMGR_STD ), aContent,
-                            &nValue, &nFmt );
-    if( !( nSubType & SUB_OWN_FMT ) )
-        SetFormat( nFmt = pMgr->GetRealColumnFmt( aColNm, nFmt,
-                                        *pDocFormatter ) );
-#endif
 
     if( DBL_MAX != nValue )
     {
-#ifdef REPLACE_OFADBMGR
         sal_Int32 nColumnType = pMgr->GetColumnType(sDataSource, sDataTableOrQuery, aContent);
         if( DataType::DATE == nColumnType  || DataType::TIME == nColumnType  ||
                  DataType::TIMESTAMP )
 
-#else
-        int nColumnPos = pMgr->GetColumnPos(FALSE, aColNm);
-        String  sColumnType = pMgr->GetColumnType(FALSE, nColumnPos, FALSE);
-        if(sColumnType.EqualsAscii("DATE/TIME") || sColumnType.EqualsAscii("DATE"))
-#endif
         {
             Date aStandard(1,1,1900);
             if (*pDocFormatter->GetNullDate() != aStandard)
@@ -721,7 +696,6 @@ SwField* SwDBNextSetField::Copy() const
 
 void SwDBNextSetField::Evaluate(SwDoc* pDoc)
 {
-#ifdef REPLACE_OFADBMGR
     SwNewDBMgr* pMgr = pDoc->GetNewDBMgr();
     String sTmpName(GetDBName());
     String sDataSource(sTmpName.GetToken(0, DB_DELIM));
@@ -730,14 +704,6 @@ void SwDBNextSetField::Evaluate(SwDoc* pDoc)
             !pMgr || !pMgr->IsDataSourceOpen(sDataSource, sDataTableOrQuery))
         return ;
     pMgr->ToNextMergeRecord();
-#else
-    if( bCondValid && pDoc->GetNewDBMgr() &&
-                        pDoc->GetNewDBMgr()->IsDBOpen(DBMGR_STD, GetDBName()) )
-    {
-        // Bedingung OK -> naechste selektierter Record ist der aktuelle
-        pDoc->GetNewDBMgr()->ToNextSelectedRecord(DBMGR_STD);
-    }
-#endif
 }
 
 /*--------------------------------------------------------------------
@@ -846,7 +812,6 @@ SwField* SwDBNumSetField::Copy() const
 void SwDBNumSetField::Evaluate(SwDoc* pDoc)
 {
     SwNewDBMgr* pMgr = pDoc->GetNewDBMgr();
-#ifdef REPLACE_OFADBMGR
     String sTmpName(GetDBName());
     String sDataSource(sTmpName.GetToken(0, DB_DELIM));
     String sDataTableOrQuery(sTmpName.GetToken(1, DB_DELIM));
@@ -855,13 +820,6 @@ void SwDBNumSetField::Evaluate(SwDoc* pDoc)
     {   // Bedingug OK -> aktuellen Set einstellen
         pMgr->ToRecordId(Max((USHORT)aPar2.ToInt32(), USHORT(1))-1);
     }
-#else
-    if( bCondValid && pMgr && pMgr->IsDBOpen(DBMGR_STD, GetDBName())
-                                                && pMgr->IsInMerge() )
-    {   // Bedingug OK -> aktuellen Set einstellen
-        pMgr->ToSelectedRecord(DBMGR_STD, Max((USHORT)aPar2.ToInt32(), USHORT(1))-1);
-    }
-#endif
 }
 
 /*--------------------------------------------------------------------
@@ -1041,7 +999,6 @@ void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
     if (!pMgr->IsInMerge())
         return;
 
-#ifdef REPLACE_OFADBMGR
     String sTmpName(GetDBName());
     String sDataSource(sTmpName.GetToken(0, DB_DELIM));
     String sDataTableOrQuery(sTmpName.GetToken(1, DB_DELIM));
@@ -1051,14 +1008,6 @@ void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
         return ;
     }
     nNumber = pMgr->GetSelectedRecordId() + 1;
-#else
-    if(!(pMgr && pMgr->IsDBOpen(DBMGR_STD, GetDBName())))
-    {
-        nNumber = 0;
-        return;
-    }
-    nNumber = pMgr->GetCurSelectedRecordId(DBMGR_STD) + 1;
-#endif
 }
 
 

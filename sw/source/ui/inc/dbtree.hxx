@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,12 @@
 #include <svtools/svtreebx.hxx>
 #endif
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
 namespace com{namespace sun{namespace star{namespace container{
     class XNameAccess;
 }}}}
-#endif
 
 #include "swtypes.hxx"
 
@@ -88,9 +86,7 @@ class SwDBTreeList : public SvTreeListBox
     BOOL            bInitialized;
     BOOL            bShowColumns;
 
-#ifdef REPLACE_OFADBMGR
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xDBContext;
-#endif
     DECL_LINK( DBCompare, SvSortData* );
 
     void            InitTreeList();
@@ -105,13 +101,8 @@ public:
      SwDBTreeList(Window* pParent, const ResId& rResId, const String& rDefDBName = aEmptyStr, const BOOL bShowCol = FALSE );
     ~SwDBTreeList();
 
-#ifdef REPLACE_OFADBMGR
     String  GetDBName(String& rTableName, String& rColumnName, BOOL* pbIsTable = 0);
     void    Select(const String& rDBName, const String& rTableName, const String& rColumnName);
-#else
-    String  GetDBName() const;
-    void    Select(const String& rDBName);      // Format: Datenbank.Tabelle
-#endif
 
     void    Show();
     void    ShowColumns(BOOL bShowCol);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:01 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -130,10 +129,6 @@
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
 #endif
-
-#else
-
-#endif  //REPLACE_OFADBMGR
 
 #include <sdb/tools.hxx>
 #ifndef _SDB_SDBCURS_HXX //autogen
@@ -276,7 +271,6 @@
 #endif
 
 
-#ifdef REPLACE_OFADBMGR
 using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -287,11 +281,10 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
-#define C2U(cChar) OUString::createFromAscii(cChar)
-#endif
 
 const char cDBFldStart  = '<';
 const char cDBFldEnd    = '>';
+#define C2U(cChar) OUString::createFromAscii(cChar)
 #define C2S(cChar) String::CreateFromAscii(cChar)
 
 // Hilfsstruktur fuers einfuegen von Datenbankspalten als Felder oder Text
@@ -411,14 +404,10 @@ int SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-#ifdef REPLACE_OFADBMGR
 SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         Reference<XDataSource> xDataSource,
         Reference<sdbcx::XColumnsSupplier> xColSupp,
         const SwInsDBData& rData )
-#else
-SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView )
-#endif //REPLACE_OFADBMGR
     : SfxModalDialog( rView.GetWindow(), SW_RES( DLG_AP_INSERT_DB_SEL )),
     aFtInsertData( this, SW_RES( FT_INSERT_DATA )),
     aRbAsTable( this, SW_RES( RB_AS_TABLE )),
@@ -457,9 +446,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView )
     aPbTblAutofmt( this, SW_RES( PB_TBL_AUTOFMT )),
 
     sNoTmpl( SW_RES( STR_NOTEMPL )),
-#ifdef REPLACE_OFADBMGR
     aDBData(rData),
-#endif //REPLACE_OFADBMGR
     pView( &rView ),
     pTAutoFmt( 0 ),
     pTblSet( 0 ),
@@ -471,7 +458,6 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView )
 
     nGBFmtLen = aGbDbFormat.GetText().Len();
 
-#ifdef REPLACE_OFADBMGR
     if(xColSupp.is())
     {
         SwWrtShell& rSh = pView->GetWrtShell();
@@ -576,58 +562,6 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView )
             }
         }
     }
-#else
-    // die ListBoxen mit den Spaltenkoepfen fuellen:
-    {
-        USHORT n;
-        SwNewDBMgr* pDBMgr = pView->GetWrtShell().GetNewDBMgr();
-        const String& rDBName = pView->GetWrtShell().GetDBDesc();
-
-        if( pDBMgr->IsDBOpen( DBMGR_STD, rDBName) ||
-            pDBMgr->OpenDB( DBMGR_STD, rDBName, TRUE ) )
-        {
-            SbaDBDataDefRef xDBDef = pDBMgr->OpenColumnNames( DBMGR_STD );
-            if( xDBDef.Is() )
-            {
-                const SbaColumnList& rCols = xDBDef->GetOriginalColumns();
-                for( n = 0; n < rCols.Count(); ++n )
-                {
-                    const SbaColumn* pCol = rCols.GetObject( n );
-                    const SbaNameItem& rNmItm = (SbaNameItem&)pCol->Get(
-                                                            SBA_DEF_FLTNAME );
-                    const SbaDataFieldTypeItem& rType = (SbaDataFieldTypeItem&)
-                                                pCol->Get( SBA_DEF_FLTTYPE );
-
-                    SwInsDBColumn* pNew = new SwInsDBColumn(
-                                                    rNmItm.GetValue(), n );
-
-                    switch( rType.GetValue() )
-                    {
-                    case dbCurrency:
-                    case dbCounter:
-                    case dbNumeric:
-                    case dbDateTime:
-                    case dbDate:
-                    case dbTime:
-                    case dbBool:
-                    case dbDecimal:
-                    case dbBigInt:
-                        pNew->bHasFmt = TRUE;
-                        pNew->nDBNumFmt = ((SfxUInt32Item&)pCol->Get(
-                                                SBA_DEF_FMTVALUE)).GetValue();
-                        break;
-                    }
-
-                    if( !aDBColumns.Insert( pNew ))
-                    {
-                        ASSERT( !this, "Spaltenname mehrfach vergeben?" );
-                        delete pNew;
-                    }
-                }
-            }
-        }
-    }
-#endif //REPLACE_OFADBMGR
 
     // Absatzvorlagen-ListBox fuellen
     {
@@ -1224,16 +1158,11 @@ FASTBOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
                 if( bInsField )
                 {
                     SwWrtShell& rSh = pView->GetWrtShell();
-#ifdef REPLACE_OFADBMGR
                     String sDBContent(aDBData.sDataBaseName);
                     sDBContent += DB_DELIM;
                     sDBContent += aDBData.sDataTableName;
                     SwDBFieldType aFldType( rSh.GetDoc(), aSrch.sColumn,
                                             sDBContent );
-#else
-                    SwDBFieldType aFldType( rSh.GetDoc(), aSrch.sColumn,
-                                            rSh.GetDBName() );
-#endif
                     pNew = new _DB_Column( rFndCol, *new SwDBField(
                             (SwDBFieldType*)rSh.InsertFldType( aFldType ),
                                                             nFormat ) );
@@ -1257,17 +1186,12 @@ FASTBOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-#ifdef REPLACE_OFADBMGR
 void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList,
     Reference< XDataSource> xSource,
     Reference< XConnection> xConnection )
-#else
-void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
-#endif
 {
     SwWrtShell& rSh = pView->GetWrtShell();
 
-#ifdef REPLACE_OFADBMGR
        Reference< sdbc::XResultSet > xResultSet;
     Reference< sdbc::XRow > xRow;
     Reference< sdbc::XStatement > xStatement;
@@ -1294,30 +1218,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
     }
     if(!xResultSet.is() || !xRow.is())
         return;
-#else
-
-    SwNewDBMgr* pDBMgr = rSh.GetNewDBMgr();
-    if( ( aRbAsTable.IsChecked() ? !aLbTableCol.GetEntryCount()
-                                 : !aEdDbText.GetText().Len() ) ||
-        !pDBMgr->ToFirstSelectedRecord( DBMGR_STD ) ||
-        !pDBMgr->IsSuccessful( DBMGR_STD ) )
-        return ;
-
-    OfaDBParam& rParam = pDBMgr->GetDBData( DBMGR_STD );
-
-    rParam.pSelectionList->Clear();
-    if( pSelList && -1L != (long)pSelList->GetObject( 0 ) )
-    {
-        *rParam.pSelectionList = *pSelList;
-        if( !pSelList->Count() )
-            pSelList = 0;
-    }
-    else
-        pSelList = 0;
-
-    SbaDBDataDefRef xColDef = pDBMgr->OpenColumnNames( DBMGR_STD );
-
-#endif
     rSh.StartAllAction();
     rSh.StartUndo( 0 );
     BOOL bGroupUndo = rSh.DoesGroupUndo();
@@ -1390,7 +1290,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
 
         for( ULONG i = 0 ; ; ++i )
         {
-#ifdef REPLACE_OFADBMGR
             BOOL bBreak = FALSE;
             try
             {
@@ -1422,12 +1321,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
             }
             if(bBreak)
                 break;
-#else
-            if( pSelList )
-                // naechsten zu lesenden Datensatz ansteuern
-                pDBMgr->GotoRecord( (ULONG)pSelList->GetObject( i ));
-            const ODbRowRef&  xRow = rParam.GetCursor()->GetRow();
-#endif
             for( n = 0; n < nCols; ++n )
             {
                 // beim aller erstenmal KEIN GoNextCell, weil wir schon
@@ -1437,7 +1330,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
                     rSh.GoNextCell();
 
                 const SwInsDBColumn* pEntry = aColFlds[ n ];
-#ifdef REPLACE_OFADBMGR
                 Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
                 Reference <XNameAccess> xCols = xColsSupp->getColumns();
                 Any aCol = xCols->getByName(pEntry->sColumn);
@@ -1445,9 +1337,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
                 if(aCol.hasValue())
                     xColumnProps = *(Reference< XPropertySet >*)aCol.getValue();
                 Reference< XColumn > xColumn(xColumnProps, UNO_QUERY);
-#else
-                const ODbVariantRef& xVar = (*xRow)[pEntry->nCol+1];
-#endif
                 try
                 {
                     if( pEntry->bHasFmt )
@@ -1456,21 +1345,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
                                         pEntry->bIsDBFmt ? pEntry->nDBNumFmt
                                                          : pEntry->nUsrNumFmt );
                         aTblSet.Put(aNumFmt);
-#ifdef REPLACE_OFADBMGR
                         if( xColumn.is() )
-#else
-                        if( !xVar->isNull() )
-#endif
                         {
-#ifdef REPLACE_OFADBMGR
                             double fVal = xColumn->getDouble();
                             if( xColumn->wasNull() )
                                 aTblSet.ClearItem( RES_BOXATR_VALUE );
                             else
                             {
-#else
-                            double fVal = xVar->toDouble();
-#endif
                                 if(rNumFmtr.GetType(aNumFmt.GetValue()) & NUMBERFORMAT_DATE)
                                 {
                                     ::Date aStandard(1,1,1900);
@@ -1478,50 +1359,30 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
                                         fVal += (aStandard - *rNumFmtr.GetNullDate());
                                 }
                                 aTblSet.Put( SwTblBoxValue( fVal ));
-#ifdef REPLACE_OFADBMGR
                             }
-#endif
                         }
                         else
                             aTblSet.ClearItem( RES_BOXATR_VALUE );
                         rSh.SetTblBoxFormulaAttrs( aTblSet );
                     }
-#ifdef REPLACE_OFADBMGR
                     else
                     {
                         OUString sVal =  xColumn->getString();
                         if(!xColumn->wasNull())
                             rSh.SwEditShell::Insert( sVal );
                     }
-#else
-                    else if( !xVar->isNull() )
-                        rSh.SwEditShell::Insert( xVar->toString() );
-#endif
                 }
-#ifdef REPLACE_OFADBMGR
                 catch(Exception aExcept)
                 {
                     DBG_ERROR(ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer())
                 }
-#else
-                catch(...)
-                {
-                }
-#endif
             }
 
             if( !pSelList )
             {
-#ifdef REPLACE_OFADBMGR
                 BOOL bNext = xResultSet->next();
                 if(!bNext)
                     break;
-#else
-                rParam.GetCursor()->Next();
-                rParam.CurrentPos()++;
-                if( rParam.GetCursor()->IsOffRange() )
-                    break;
-#endif
             }
             else if( i+1 >= pSelList->Count() )
                 break;
@@ -1577,7 +1438,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
 
             // fuers Einfuegen als Felder -> nach jedem Datensatz ein
             // "NextField" einfuegen
-#ifdef REPLACE_OFADBMGR
             SwDBFormatData aDBFormatData;
             Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             if( xMgr.is() )
@@ -1636,17 +1496,11 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
                                         GetFldType( 0, RES_DBNEXTSETFLD ),
                                         C2S("1"), aEmptyStr, sDBContent );
 
-#else
-            SwDBNextSetField aNxtDBFld( (SwDBNextSetFieldType*)rSh.
-                                        GetFldType( 0, RES_DBNEXTSETFLD ),
-                                        C2S("1"), aEmptyStr, rSh.GetDBName() );
-#endif
 
             BOOL bSetCrsr = TRUE;
             USHORT n, nCols = aColArr.Count();
             for( ULONG i = 0 ; ; ++i )
             {
-#ifdef REPLACE_OFADBMGR
                 BOOL bBreak = FALSE;
                 try
                 {
@@ -1674,16 +1528,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
                 catch(...){ bBreak = TRUE; }
                 if(bBreak)
                     break;
-#else
-                if( pSelList )
-                {
-                    ULONG nIndex = (ULONG)pSelList->GetObject( i );
-                    // naechsten zu lesenden Datensatz ansteuern
-                    pDBMgr->GotoRecord( nIndex );
-                }
-
-                const ODbRowRef&  xRow = rParam.GetCursor()->GetRow();
-#endif
                 for( n = 0; n < nCols; ++n )
                 {
                     _DB_Column* pDBCol = aColArr[ n ];
@@ -1707,7 +1551,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
                             SwDBField* pFld = (SwDBField*)pDBCol->DB_ColumnData.
                                                 pField->Copy();
                             double nValue = DBL_MAX;
-#ifdef REPLACE_OFADBMGR
                             Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
                             Reference <XNameAccess> xCols = xColsSupp->getColumns();
                             Any aCol = xCols->getByName(pDBCol->pColInfo->sColumn);
@@ -1718,11 +1561,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
                                                 xColumnProps,
                                                 aDBFormatData,
                                                 &nValue ) );
-#else
-                            pFld->SetExpansion( pDBMgr->ImportDBField(
-                                                pDBCol->pColInfo->nCol+1,
-                                                &xColDef, xRow, &nValue ) );
-#endif
                             if( DBL_MAX != nValue )
                                 pFld->ChgValue( nValue, TRUE );
                             pFld->SetInitialized();
@@ -1735,7 +1573,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
                     case _DB_Column::DB_COL_TEXT:
                         {
                             double nValue = DBL_MAX;
-#ifdef REPLACE_OFADBMGR
                             Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
                             Reference <XNameAccess> xCols = xColsSupp->getColumns();
                             Any aCol = xCols->getByName(pDBCol->pColInfo->sColumn);
@@ -1746,11 +1583,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
                                                 xColumnProps,
                                                 aDBFormatData,
                                                 &nValue );
-#else
-                            sIns = pDBMgr->ImportDBField(
-                                            pDBCol->pColInfo->nCol+1,
-                                            &xColDef, xRow, &nValue );
-#endif
                             if( pDBCol->DB_ColumnData.nFormat &&
                                 DBL_MAX != nValue )
                             {
@@ -1785,17 +1617,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList )
 
                 if( !pSelList )
                 {
-#ifdef REPLACE_OFADBMGR
                     BOOL bNext = xResultSet->next();
                     if(!bNext)
                         break;
-#else
-                    rParam.GetCursor()->Next();
-                    rParam.CurrentPos()++;
-
-                    if( rParam.GetCursor()->IsOffRange() )
-                        break;
-#endif
                 }
                 else if( i+1 >= pSelList->Count() )
                     break;
@@ -2335,138 +2159,4 @@ void _DB_ColumnConfig::SetData( _DB_ColumnConfigData* pData )
     }
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/10/06 13:32:56  jp
-    should changes: don't use IniManager
-
-    Revision 1.1.1.1  2000/09/18 17:14:33  hr
-    initial import
-
-    Revision 1.40  2000/09/18 16:05:18  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.39  2000/07/27 21:15:40  jp
-    opt: get template names direct from the doc and don't load it from the resource
-
-    Revision 1.38  2000/07/10 07:02:55  os
-    replace ofadbmgr
-
-    Revision 1.37  2000/07/06 07:59:10  os
-    replace ofadbmgr
-
-    Revision 1.36  2000/07/05 08:21:49  os
-    Replace ofadbmgr
-
-    Revision 1.35  2000/05/26 07:21:28  os
-    old SW Basic API Slots removed
-
-    Revision 1.34  2000/05/23 18:11:01  jp
-    Bugfixes for Unicode
-
-    Revision 1.33  2000/04/20 12:54:38  os
-    GetName() returns String&
-
-    Revision 1.32  2000/04/11 08:03:52  os
-    UNICODE
-
-    Revision 1.31  2000/03/30 13:25:58  os
-    UNO III
-
-    Revision 1.30  2000/02/11 14:44:18  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.29  1999/09/24 13:50:13  os
-    chg: ODbRow/ODbVariant
-
-    Revision 1.28  1999/08/10 08:31:24  JP
-    Bug #67040#: data to text - set double to defined value
-
-
-      Rev 1.27   10 Aug 1999 10:31:24   JP
-   Bug #67040#: data to text - set double to defined value
-
-      Rev 1.26   08 Jul 1999 16:07:52   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.25   08 Jul 1999 09:13:50   MA
-   limit wait cursor to document window
-
-      Rev 1.24   18 Jun 1999 14:03:36   JP
-   Bug #67040#: DataToDoc - clear ValueItem in TableSet
-
-      Rev 1.23   16 Jun 1999 22:05:08   JP
-   Bug #66996##66995#: DataToDoc - set userformat flag at field, use userformat for text
-
-      Rev 1.22   09 Jun 1999 16:25:46   JP
-   Bug #66735#: TblFmtHdl: no 0 pointer access
-
-      Rev 1.21   11 May 1999 21:48:20   JP
-   Task #66127#: Methoden rund ums Lineal verbessert und Schnittstellen veraendert/erweitert
-
-      Rev 1.20   29 Apr 1999 09:59:04   JP
-   Bug #65544#: Spalten ggfs. auch vom Bereich besorgen
-
-      Rev 1.19   22 Feb 1999 11:50:02   JP
-   fuer Bug #61545#: Code optimiert
-
-      Rev 1.18   17 Feb 1999 08:39:24   OS
-   #58158# Einfuegen TabPage auch in HTML-Docs
-
-      Rev 1.17   30 Nov 1998 17:31:02   OM
-   #59770# Tabellenoptionen: Ueberschrift nur auf erster Seite
-
-      Rev 1.16   27 Nov 1998 14:49:56   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.15   11 Nov 1998 16:49:36   OM
-   #58158# Einfuegeoptionen fuer Tabellen
-
-      Rev 1.14   10 Nov 1998 19:18:34   JP
-   Task #58158#: InsertTable/TextToTable - Flags fuer HdlRepeat/LayoutSplit mitgeben
-
-      Rev 1.13   08 Sep 1998 16:51:16   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.12   15 Jul 1998 09:52:26   JP
-   Bug #52951#: TabellenEigenschaftenButton nur enablen wenn Spalten ausgewaehlt sind
-
-      Rev 1.11   21 Jun 1998 14:23:30   JP
-   Feld in FormatGroupBox anzeigen, Format richtig zuweisen
-
-      Rev 1.10   19 Jun 1998 16:19:24   TJ
-   include
-
-      Rev 1.9   17 Jun 1998 13:50:56   JP
-   Bug #50989#: DataToDoc - Absatztvorlagen mit anderem Follow beachten; GPF bei Eigenschaften ohne Eintraege
-
-      Rev 1.8   15 Jun 1998 12:27:18   OM
-   #51009# Numberformatter-Listbox ViewPtr reinreichen
-
-      Rev 1.7   09 Jun 1998 13:05:34   JP
-   Bug #50993# ReadIniToUI - bei disabled'ten InTable wird jetzt auch InFelder gecheckt
-
-      Rev 1.6   09 Jun 1998 12:18:16   JP
-   Bug #50989# DataToDoc - Vorlagen setzen ist nicht so einfach moeglich
-
-      Rev 1.5   02 Jun 1998 10:39:20   JP
-   TabellenAutoFormat aus der Konf. erzeugen
-
-      Rev 1.4   29 May 1998 19:08:58   JP
-   Tabellen Eigenschaften koennen jetzt eingestellt werden
-
-      Rev 1.3   28 May 1998 17:05:58   JP
-   Handling zum einstellen der Nummernformate geaendert
-
-      Rev 1.2   27 May 1998 19:48:42   JP
-   kleinere Verbesserungen
-
-      Rev 1.1   25 May 1998 09:49:32   JP
-   Tabelle formatieren erstmal abgeklemmt, bis der Dialog auch ohne Tabelle benutzbar ist
-
-      Rev 1.0   20 May 1998 21:35:22   JP
-   Autopilot fuers Datenbankspalten einfuegen als Text/Felder/Tabelle
-
-------------------------------------------------------------------------*/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:03:03 $
+ *  last change: $Author: os $ $Date: 2000-10-27 11:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,13 +619,11 @@ void SwModule::ExecDB(SfxRequest &rReq)
             {
                 SwWrtShell &rSh = GetView()->GetWrtShell();
                 sDBName = rSh.GetDBName();
-#ifdef REPLACE_OFADBMGR
 #ifdef DEBUG
                 sDBName = String::CreateFromAscii("Address Book File");
                 sDBName += DB_DELIM;
                 sDBName += String::CreateFromAscii("address");
 #endif //DEBUG
-#endif //REPLACE_OFADBMGR
 
                 rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
                                     // das Mischen von DB-Feldern notwendig.
@@ -695,29 +693,8 @@ void SwModule::ShowDBObj(SwWrtShell& rSh, const String& rDBName, sal_Bool bShowE
 {
     String sDBName(rDBName.GetToken(0, DB_DELIM));
 
-#ifdef REPLACE_OFADBMGR
-        String sTable(rDBName.GetToken(1, DB_DELIM));
-        rSh.GetNewDBMgr()->ShowInBeamer( sDBName, sTable, SW_DB_SELECT_UNKNOWN, aEmptyStr );
-#else
-    if (sDBName.Len())
-    {
-        OfaDBMgr *pDBMgr = OFF_APP()->GetOfaDBMgr();
-        SbaDatabaseRef pConnection = pDBMgr->GetSbaObject()->
-                                GetDatabase(sDBName, bShowError);
-        if ( pConnection )
-        {
-            String sTable(rDBName.GetToken(1, DB_DELIM));
-            DBObject eType;
-            if( !pConnection->HasObject( eType = dbTable, sTable ) &&
-                !pConnection->HasObject( eType = dbQuery , sTable ))
-                eType = dbTable;
-
-            //wenn keine Connection gefunden wurde, dann braucht man auch
-            //den Beamer nicht
-            pDBMgr->ShowInBeamer( sDBName, sTable, eType, aEmptyStr );
-        }
-    }
-#endif
+    String sTable(rDBName.GetToken(1, DB_DELIM));
+    rSh.GetNewDBMgr()->ShowInBeamer( sDBName, sTable, SW_DB_SELECT_UNKNOWN, aEmptyStr );
 }
 
 /*--------------------------------------------------------------------
