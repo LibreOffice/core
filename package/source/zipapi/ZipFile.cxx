@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-30 09:48:59 $
+ *  last change: $Author: mtg $ $Date: 2001-08-02 13:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,7 +529,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getRawStream( ZipEntry& rEntry,
                createFileStream(rEntry, rData, sal_False, nUncompressedSize, nEnd) :
                createMemoryStream(rEntry, rData, sal_False, nUncompressedSize, nEnd);
 */
-    return createMemoryStream(rEntry, rData, sal_False, nUncompressedSize, nEnd);
+    return createMemoryStream(rEntry, rData, sal_True, nUncompressedSize, nEnd);
 }
 
 sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
