@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 09:57:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1383,7 +1383,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                 ScBaseCell* pCell = NULL;
                 if (bDoCell)
                 {
-                    if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 )
+                    if ( nCellY == nY && nCellX == nX && nCellX >= nX1 && nCellX <= nX2 )
                         pCell = pThisRowInfo->pCellInfo[nCellX+1].pCell;
                     else
                         GetVisibleCell( nCellX, nCellY, nTab, pCell );      // get from document
@@ -2069,7 +2069,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                     const SfxItemSet* pCondSet;
                     if (bDoCell)
                     {
-                        if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 )
+                        if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 &&
+                             (pDoc->GetColFlags(nCellX,nTab) & CR_HIDDEN) == 0 )
                         {
                             CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nCellX+1];
                             pPattern = rCellInfo.pPatternAttr;
