@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:29:51 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ class SwTxtAttr;
 class SwpHints;
 class SfxPoolItem;
 class SfxItemSet;
-class SwPosition;
+struct SwPosition;
 class SwPaM;
 class SwNodeNum;
 class SwNodes;
