@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsExport.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-09-21 14:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,6 @@ XMLTextColumnsExport::XMLTextColumnsExport( SvXMLExport& rExp ) :
 
 void XMLTextColumnsExport::exportXML( const Any& rAny )
 {
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, sXML_columns,
-                              sal_True, sal_True );
     Reference < XTextColumns > xColumns;
     rAny >>= xColumns;
 
@@ -115,13 +113,19 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     sal_Int32 nCount = aColumns.getLength();
 
     OUStringBuffer sValue;
+    GetExport().GetMM100UnitConverter().convertNumber( sValue, nCount );
+    GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_column_count,
+                              sValue.makeStringAndClear() );
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, sXML_columns,
+                              sal_True, sal_True );
+
     while( nCount-- )
     {
         // style:rel-width
         GetExport().GetMM100UnitConverter().convertNumber( sValue,
                                                        pColumns->Width );
         sValue.append( (sal_Unicode)'*' );
-        GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_rel_width,
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_rel_width,
                                   sValue.makeStringAndClear() );
 
         // fo:margin-left
@@ -137,7 +141,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                     sValue.makeStringAndClear() );
 
         // style:column
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, sXML_column,
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, sXML_column,
                                   sal_True, sal_True );
         pColumns++;
     }
