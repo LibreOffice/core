@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 09:45:36 $
+ *  last change: $Author: oj $ $Date: 2002-05-07 07:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2233,7 +2233,6 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
     }
 
     m_pSelectionBox = new OSelectionBrowseBox(this);
-    //  ::dbaui::notifySystemWindow(this,m_pSelectionBox,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 
     setNoneVisbleRow(static_cast<OQueryController*>(getController())->getVisibleRows());
     m_pSelectionBox->Show();
@@ -2245,8 +2244,8 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
 // -----------------------------------------------------------------------------
 OQueryDesignView::~OQueryDesignView()
 {
-    //  ::dbaui::notifySystemWindow(this,m_pSelectionBox,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-    delete m_pSelectionBox;
+    ::std::auto_ptr<Window> aTemp(m_pSelectionBox);
+    m_pSelectionBox = NULL;
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OQueryDesignView, SplitHdl, void*, p )
