@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:58:29 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text [ english ] = "While loading this control an error occured. Thus it was replaced with a placeholder.";
     Text [ english_us ] = "While loading this control an error occured. Therefore, it was replaced with a placeholder.";
     Text[ portuguese ] = "Ao carregar este controlo ocorreu um erro. Por esta razγo foi substituνdo por um marcador de posiηγo.";
-    Text[ russian ] = "Οπθ ηΰγπσηκε ύςξγξ ύλεμενςΰ σοπΰβλενθÿ (control) οπξθηξψλΰ ξψθακΰ. Οξύςξμσ ξν αϋλ ηΰμενεν μεςκξι-ηΰοξλνθςελεμ.";
+    Text[ russian ] = "Οπθ ηΰγπσηκε ύςξγξ ύλεμενςΰ σοπΰβλενθÿ (control) οπξθηξψλΰ ξψθακΰ. Οξύςξμσ ξν αϋλ ηΰμενεν μερςξηΰοξλνθςελεμ.";
     Text[ greek ] = "Προέκυψε σφάλμα κατά τη φόρτωση αυτού του στοιχείου ελέγχου. Για αυτόν τον λόγο αντικαταστάθηκε με ένα σύμβολο κράτησης θέσης.";
     Text[ dutch ] = "Fout bjj het laden van control. Werd vervangen door plaatsvervanger.";
     Text[ french ] = "Erreur lors du chargement de ce contrτle ; c'est pouquoi il a ιtι remplacι par un substituant.";
@@ -149,9 +149,9 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ italian ] = "Durante il caricamento del control si θ verificato un errore. Pertanto θ stato sostituito con una variabile.";
     Text[ danish ] = "Der opstod en fejl under indlζsningen af dette kontrolelement. Det blev derfor erstattet med en pladsholder.";
     Text[ swedish ] = "Nδr denna control laddades uppstod ett fel. Dδrfφr ersattes den av en platshεllare.";
-    Text[ polish ] = "WystΉpi³ b³Ήd podczas ³adowania pola kontrolnego (control). Zamieniono je dlatego na znak-wype³niacz.";
+    Text[ polish ] = "WystΉpi³ b³Ήd podczas ³adowania pola kontrolnego (control). Zamieniono je dlatego na symbol wieloznaczny.";
     Text[ portuguese_brazilian ] = "While loading this control an error occured. Thus it was replaced with a placeholder.";
-    Text[ japanese ] = "‚±‚ΜΊέΔΫ°Ω‚Μ“Η‚έ‚ρ‚Ε‚Ά‚ι‚Ι΄Χ°‚ª”­¶‚µ‚ά‚µ‚½B‚»‚κ‚ª΄φ‚Εά²ΩΔή¶°Δή‚Ι’u·‚³‚κ‚ά‚µ‚½B";
+    Text[ japanese ] = "‚±‚ΜΊέΔΫ°Ω‚Μ“Η‚έ‚έ’†‚Ι΄Χ°‚ª”­¶‚µ‚ά‚µ‚½B‚»‚κ‚ª΄φ‚Εά²ΩΔή¶°Δή‚Ι’u·‚³‚κ‚ά‚µ‚½B";
     Text[ korean ] = "ΐΜ ΔΑΖ®·Ρΐ» ·ΞµεΗÒ ¶§ Ώΐ·ω°΅ Ήί»ύΗΨΌ­ °³ΓΌ Ζ²·Ξ ΄λΓΌµΗΎϊ½ΐ΄Ο΄Ω.";
     Text[ chinese_simplified ] = "ΤΪΧ°ΤΨΥβΈφΧΦ¶ΞΚ±³φΟΦΑΛÒ»Έφ΄νΞσ£¬Òς΄ΛΣΓΝ¨Εδ·ϋ΄ϊΜζΧΦ¶Ξ΅£";
     Text[ chinese_traditional ] = "¦bΈΛΈό³o­Σ±±¨ξ¶µ®Ιµo¥Ν¤@­ΣΏω»~΅C¦ύ¤wΈg¥Ξ¤@­Σ³q°t²Ε΄ΐ¥N¥¦΅C";
@@ -203,7 +203,7 @@ String RID_STR_CONNECTERROR
     Text[ chinese_simplified ] = "Α¬½ΣΚ§°ά";
     Text[ russian ] = "Οξδκλώχενθε οξβπεζδενξ";
     Text[ polish ] = "Po³Ήczenie nie dosz³o do skutku";
-    Text[ japanese ] = "Ϊ‘±‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½";
+    Text[ japanese ] = "Ϊ‘±‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
     Text[ chinese_traditional ] = "³s½u¥Ά±Ρ";
     Text[ greek ] = "Η σύνδεση απέτυχε";
     Text[ korean ] = "Ώ¬°αΏ΅ ½ΗΖΠΗίΐ½";
