@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcreator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-08 12:49:41 $
+ *  last change: $Author: mav $ $Date: 2003-12-08 14:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,69 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::impl_static
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new UNOEmbeddedObjectCreator( xServiceManager ) );
+}
+
+//-------------------------------------------------------------------------
+uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitNew(
+                                            const uno::Sequence< sal_Int8 >& aClassID,
+                                            const ::rtl::OUString& aClassName,
+                                            const uno::Reference< embed::XStorage >& xStorage,
+                                            const ::rtl::OUString& sEntName,
+                                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+    throw ( lang::IllegalArgumentException,
+            io::IOException,
+            uno::Exception,
+            uno::RuntimeException)
+{
+    uno::Reference< uno::XInterface > xResult;
+
+    if ( !xStorage.is() )
+        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
+                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            3 );
+
+    if ( !sEntName.getLength() )
+        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
+                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            4 );
+
+    ::rtl::OUString aDocServiceName = GetDocumentServiceNameFromClassID( aClassID );
+
+    if ( aDocServiceName.getLength() )
+    {
+        uno::Reference< embed::XEmbedObjectFactory > xOOoEmbFact(
+                            m_xFactory->createInstance(
+                                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OOoEmbeddedObjectFactory" ) ),
+                            uno::UNO_QUERY );
+        if ( !xOOoEmbFact.is() )
+            throw uno::RuntimeException(); // TODO:
+
+        xResult = xOOoEmbFact->createInstanceUserInit( GetClassIDFromServName( aDocServiceName ),
+                                                        GetClassNameFromServName( aDocServiceName ),
+                                                        xStorage,
+                                                        sEntName,
+                                                        embed::EntryInitModes::ENTRY_TRUNCATE_INIT,
+                                                        uno::Sequence< beans::PropertyValue >(),
+                                                        lObjArgs );
+    }
+    else
+    {
+        // can be an OLE object
+        // TODO: but in future it can be a different type of an object
+        //       the information about implementation and factory to create it
+        //       will be retrieved from configuration
+
+        uno::Reference< embed::XEmbedObjectCreator > xOleEmbCreator(
+                            m_xFactory->createInstance(
+                                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OleEmbeddedObjectFactory" ) ),
+                            uno::UNO_QUERY );
+        if ( !xOleEmbCreator.is() )
+            throw uno::RuntimeException(); // TODO:
+
+        xResult = xOleEmbCreator->createInstanceInitNew( aClassID, aClassName, xStorage, sEntName, lObjArgs );
+    }
+
+    return xResult;
 }
 
 //-------------------------------------------------------------------------
