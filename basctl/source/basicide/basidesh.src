@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-02 21:24:00 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 21:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ String RID_STR_FILTER_ALLFILES
     TEXT[ greek ] = "<Όλα>";
     TEXT[ korean ] = "<λª¨λ‘>";
     TEXT[ turkish ] = "<Tόmό>";
-    TEXT[ catalan ] = "<Todos>";
+    TEXT[ catalan ] = "<Tot>";
 };
 String RID_STR_NOMODULE
 {
@@ -117,7 +117,7 @@ String RID_STR_NOMODULE
     Text[ greek ] = "< Καμία λειτουργική μονάδα >";
     Text[ korean ] = "< λª¨λ“ μ—†μ >";
     Text[ turkish ] = "< Modόl yok >";
-    Text[ catalan ] = "< ningϊn mσdulo >";
+    Text[ catalan ] = "< Cap mςdul >";
     Text[ finnish ] = "< Ei moduulia >";
 };
 String RID_STR_WRONGPASSWORD
@@ -147,7 +147,7 @@ String RID_STR_WRONGPASSWORD
     Text[ greek ] = "Εσφαλμένος κωδικός πρόσβασης.";
     Text[ korean ] = "ν¨μ¤μ›λ“κ°€ ν‹€λ¦½λ‹λ‹¤.";
     Text[ turkish ] = "Yanlύώ ώifre";
-    Text[ catalan ] = "Contraseρa errσnea.";
+    Text[ catalan ] = "Contrasenya incorrecta.";
 };
 String RID_STR_OPEN
 {
@@ -175,7 +175,7 @@ String RID_STR_OPEN
     Text[ greek ] = "Φόρτωση";
     Text[ korean ] = "λ΅λ“";
     Text[ turkish ] = "Yόkle";
-    Text[ catalan ] = "Cargar";
+    Text[ catalan ] = "Carrega";
 };
 String RID_STR_SAVE
 {
@@ -203,7 +203,7 @@ String RID_STR_SAVE
     Text[ greek ] = "Αποθήκευση";
     Text[ korean ] = "μ €μ¥";
     Text[ turkish ] = "Kaydet";
-    Text[ catalan ] = "Guardar";
+    Text[ catalan ] = "Desa";
 };
 String RID_STR_SOURCETOBIG
 {
@@ -230,7 +230,7 @@ String RID_STR_SOURCETOBIG
     Text[ greek ] = "Δεν είναι δυνατόν να γίνει η μεταγλώττιση και η αποθήκευση του κειμένου προέλευσης επειδή είναι υπερβολικά μεγάλο.\nΔιαγράψτε μερικά σχόλια ή μετακινήστε ορισμένες μεθόδους σε κάποια άλλη λειτουργική μονάδα.";
     Text[ korean ] = "μ†μ¤ν…μ¤νΈκ°€ λ„λ¬΄ μ»¤μ„ μ €μ¥ λλ” μ»΄νμΌμ΄ λ¶κ°€λ¥ν•©λ‹λ‹¤.\nμΌλ¶€ μ£Όμ„μ„ μ‚­μ ν•κ±°λ‚, λª‡λª‡ λ©”μ†λ“λ¥Ό λ‹¤λ¥Έ λª¨λ“λ΅ μ®κΈ°μ‹­μ‹μ¤.";
     Text[ turkish ] = "Kaynak metin uzunluπu nedeniyle kaydedilemiyor ve derlenemiyor.\nBazύ aηύklamalarύ silin ya da bazύ yφntemleri baώka bir modόle aktarύn.";
-    Text[ catalan ] = "El texto fuente es demasiado grande por lo que no se puede guardar o compilar.\nElimine algunos comentarios o transfiera algunos mιtodos a otro mσdulo.";
+    Text[ catalan ] = "El text font ιs massa gran i no es pot compilar ni desar.\n Suprimiu alguns dels comentaris o transferiu alguns mθtodes a un altre mςdul.";
     Text[ finnish ] = "Lδhdeteksti on liian pitkδ eikδ sitδ voida koota tai tallentaa.\nPoista huomautuksia tai siirrδ joitakin menetelmiδ toiseen moduuliin.";
 };
 String RID_STR_ERROROPENSTORAGE
@@ -258,7 +258,7 @@ String RID_STR_ERROROPENSTORAGE
     Text[ greek ] = "Σφάλμα κατά το άνοιγμα του αρχείου";
     Text[ korean ] = "νμΌ μ—΄κΈ°μ‹μ— μ¤λ¥";
     Text[ turkish ] = "Dosyayύ aηma sύrasύnda hata";
-    Text[ catalan ] = "Error al abrir el archivo";
+    Text[ catalan ] = "S'ha produοt un error en obrir el fitxer";
     Text[ finnish ] = "Tiedoston avaamisessa on ilmennyt virhe";
 };
 String RID_STR_ERROROPENLIB
@@ -285,7 +285,7 @@ String RID_STR_ERROROPENLIB
     Text[ greek ] = "Σφάλμα κατά τη φόρτωση της βιβλιοθήκης";
     Text[ korean ] = "λΌμ΄λΈλ¬λ¦¬ λ΅λ“μ— μ¤λ¥";
     Text[ turkish ] = "Kitaplύπύ yόkleme sύrasύnda hata";
-    Text[ catalan ] = "Error al cargar la biblioteca";
+    Text[ catalan ] = "S'ha produοt un error en carregar la biblioteca";
     Text[ finnish ] = "Kirjaston lataamisessa on ilmennyt virhe";
 };
 String RID_STR_NOLIBINSTORAGE
@@ -313,7 +313,7 @@ String RID_STR_NOLIBINSTORAGE
     Text[ greek ] = "Το αρχείο δεν περιέχει βιβλιοθήκες του BASIC";
     Text[ korean ] = "νμΌμ—λ” μ–΄λ–¤ BASIC λΌμ΄λΈλ¬λ¦¬λ„ ν¬ν•¨λμ–΄ μμ§€ μ•μµλ‹λ‹¤";
     Text[ turkish ] = "Dosya BASIC kitaplύklarύ iηermiyor";
-    Text[ catalan ] = "El archivo no contiene bibliotecas BASIC";
+    Text[ catalan ] = "El fitxer no contι cap biblioteca del BASIC";
     Text[ finnish ] = "Tiedostossa ei ole BASIC-kirjastoja";
 };
 String RID_STR_BADSBXNAME
@@ -343,7 +343,7 @@ String RID_STR_BADSBXNAME
     Text[ greek ] = "Μη αποδεκτό όνομα";
     Text[ korean ] = "μ ν¨ν•μ§€ μ•μ€ μ΄λ¦„";
     Text[ turkish ] = "Geηersiz ad";
-    Text[ catalan ] = "Nombre no vαlido";
+    Text[ catalan ] = "El nom no ιs vΰlid";
 };
 String RID_STR_LIBNAMETOLONG
 {
@@ -367,7 +367,7 @@ String RID_STR_LIBNAMETOLONG
     Text[ chinese_traditional ] = "η¨‹εΌεΊ«εη¨±ζ€ι•·δΈεΎ—θ¶…ι30ε€‹ε­—ε…ƒγ€‚";
     Text[ arabic ] = "νΜΘ ΓαΗ νÒνΟ ΗΣγ ΗαγίΚΘΙ Ϊδ 30 ΝΡέΗπ.";
     Text[ turkish ] = "Kitaplύk adύ en fazla 30 karakter uzunluπunda olmalύ.";
-    Text[ catalan ] = "El nombre de la biblioteca no debe contener mαs de 30 caracteres.";
+    Text[ catalan ] = "Un nom de biblioteca pot tenir fins a 30 carΰcters.";
     Text[ finnish ] = "Kirjaston nimessδ voi olla 30 merkkiδ.";
 };
 String RID_STR_ERRORCHOOSEMACRO
@@ -393,7 +393,7 @@ String RID_STR_ERRORCHOOSEMACRO
     Text[ chinese_traditional ] = "η„΅ζ³•ε­ε–ε…¶δ»–ζ–‡δ»¶η„ε·¨ι›†γ€‚";
     Text[ turkish ] = "Macros from other documents are not accessible.";
     Text[ arabic ] = "Macros from other documents are not accessible.";
-    Text[ catalan ] = "Macros from other documents are not accessible.";
+    Text[ catalan ] = "Les macros d'altres documents no sσn accessibles.";
 };
 String RID_STR_SBXNAMEALLREADYUSED
 {
@@ -421,7 +421,7 @@ String RID_STR_SBXNAMEALLREADYUSED
     Text[ greek ] = "Το όνομα αυτό υπάρχει ήδη";
     Text[ korean ] = "μ΄λ¦„μ΄ μ΄λ―Έ μμ";
     Text[ turkish ] = "Bu ad mevcut durumda";
-    Text[ catalan ] = "El nombre ya existe";
+    Text[ catalan ] = "El nom ja existeix";
 };
 String RID_STR_SBXNAMEALLREADYUSED2
 {
@@ -449,7 +449,7 @@ String RID_STR_SBXNAMEALLREADYUSED2
     Text[ greek ] = "Υπάρχει ήδη ένα αντικείμενο με αυτό το όνομα";
     Text[ korean ] = "κ°™μ€ μ΄λ¦„μ„ κ°€μ§„ κ°μ²΄κ°€ μ΄λ―Έ μμ";
     Text[ turkish ] = "Bu adύ taώύyan bir nesne mevcut";
-    Text[ catalan ] = "Ya existe un objeto con el mismo nombre";
+    Text[ catalan ] = "Ja hi ha un objecte amb el mateix nom";
 };
 String RID_STR_FILEEXISTS
 {
@@ -476,7 +476,7 @@ String RID_STR_FILEEXISTS
     Text[ greek ] = "Το αρχείο 'XX' υπάρχει ήδη";
     Text[ korean ] = "νμΌ'XX' μ€ (λ”) μ΄λ―Έ μ΅΄μ¬ν•©λ‹λ‹¤";
     Text[ turkish ] = "Dosya 'XX' mevcut durumda";
-    Text[ catalan ] = "El archivo 'XX' ya existe";
+    Text[ catalan ] = "El fitxer 'XX' ja existeix";
     Text[ finnish ] = "Tiedosto XX on jo olemassa.";
 };
 String RID_STR_COMPILEERROR
@@ -506,7 +506,7 @@ String RID_STR_COMPILEERROR
     Text[ greek ] = "Σφάλμα μεταγλώττισης: ";
     Text[ korean ] = "μ»΄νμΌ μ¤λ¥: ";
     Text[ turkish ] = "Derleme hatasύ ";
-    Text[ catalan ] = "Error de compilaciσn:  ";
+    Text[ catalan ] = "Error de compilaciσ: ";
 };
 String RID_STR_RUNTIMEERROR
 {
@@ -534,7 +534,7 @@ String RID_STR_RUNTIMEERROR
     Text[ greek ] = "Σφάλμα χρόνου εκτέλεσης: #";
     Text[ korean ] = "λ°νƒ€μ„ μ¤λ¥: #";
     Text[ turkish ] = "Yόrόtόm sόresi hatasύ: #";
-    Text[ catalan ] = "Error en tiempo de ejecuciσn: #";
+    Text[ catalan ] = "Error d'execuciσ: #";
 };
 String RID_STR_SEARCHNOTFOUND
 {
@@ -562,7 +562,7 @@ String RID_STR_SEARCHNOTFOUND
     Text[ greek ] = "Δεν βρέθηκε ο ζητούμενος όρος";
     Text[ korean ] = "κ²€μƒ‰μ©μ–΄λ¥Ό μ°Ύμ§€ λª»ν–μµλ‹λ‹¤";
     Text[ turkish ] = "Aranan terim bulunamadύ";
-    Text[ catalan ] = "No se encontrσ la expresiσn buscada";
+    Text[ catalan ] = "La clau de cerca no s'ha trobat";
 };
 String RID_STR_SEARCHFROMSTART
 {
@@ -589,7 +589,7 @@ String RID_STR_SEARCHFROMSTART
     Text[ greek ] = "Εκτελέστηκε η αναζήτηση έως τη τελευταία λειτουργική μονάδα. Θέλετε να συνεχιστεί η αναζήτηση από τη πρώτη λειτουργική μονάδα;";
     Text[ korean ] = "λ§μ§€λ§‰ λª¨λ“κΉμ§€ μ°Ύμ•μµλ‹λ‹¤. μ²μ λª¨λ“μ—μ„ μ°ΎκΈ°λ¥Ό κ³„μ†ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "Son modόle kadar arama tamamlandύ? Aramaya ilk modόlden devam etmek istiyor musunuz?";
-    Text[ catalan ] = "Se buscσ hasta el ϊltimo mσdulo. ΏDesea continuar la bϊsqueda en el primer mσdulo?";
+    Text[ catalan ] = "S'ha completat la cerca fins a l'ϊltim mςdul. Voleu continuar des del primer?";
     Text[ finnish ] = "Haku viimeisestδ moduulista on valmis. Jatketaanko ensimmδisestδ moduulista?";
 };
 String RID_STR_SEARCHREPLACES
@@ -618,7 +618,7 @@ String RID_STR_SEARCHREPLACES
     Text[ greek ] = "Ο ζητούμενος όρος αντικαταστάθηκε XX φορές";
     Text[ korean ] = "κ²€μƒ‰ μ©μ–΄λ¥Ό  XXλ² λ€μ²΄ν–μµλ‹λ‹¤";
     Text[ turkish ] = "Aranan terim XX kez deπiώtirildi";
-    Text[ catalan ] = "Expresiσn buscada reemplazada XX veces";
+    Text[ catalan ] = "La clau de cerca s'ha reemplaηat XX vegades";
 };
 String RID_STR_COULDNTREAD
 {
@@ -644,7 +644,7 @@ String RID_STR_COULDNTREAD
     Text[ greek ] = "Δεν ήταν δυνατόν να γίνει η ανάγνωση του αρχείου";
     Text[ korean ] = "νμΌμ„ μ½μ§€ λª»ν–μµλ‹λ‹¤";
     Text[ turkish ] = "Dosya okunamadύ";
-    Text[ catalan ] = "No se pudo leer el archivo";
+    Text[ catalan ] = "El fitxer no s'ha pogut llegir";
     Text[ finnish ] = "Tiedoston lukeminen ei onnistunut.";
 };
 String RID_STR_COULDNTWRITE
@@ -671,7 +671,7 @@ String RID_STR_COULDNTWRITE
     Text[ greek ] = "Δεν ήταν δυνατή η αποθήκευση του αρχείου";
     Text[ korean ] = "νμΌμ„ μ €μ¥ν•μ§€ λª»ν–μµλ‹λ‹¤";
     Text[ turkish ] = "Dosya kaydedilemedi";
-    Text[ catalan ] = "No se pudo guardar el archivo";
+    Text[ catalan ] = "El fitxer no s'ha pogut desar";
     Text[ finnish ] = "Tiedoston tallentaminen ei onnistunut";
 };
 String RID_STR_CANNOTCHANGENAMESTDLIB
@@ -699,7 +699,7 @@ String RID_STR_CANNOTCHANGENAMESTDLIB
     Text[ greek ] = "Δεν είναι δυνατόν να αλλάξει το όνομα της βασικής βιβλιοθήκης.";
     Text[ korean ] = "κΈ°λ³Έ λΌμ΄λΈλ¬λ¦¬μ μ΄λ¦„μ€ λ³€κ²½ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Standart kitaplύπύn adύ deπiώtirilemez.";
-    Text[ catalan ] = "No se puede modificar el nombre de la biblioteca estαndar";
+    Text[ catalan ] = "El nom de la biblioteca per defecte no es pot canviar.";
     Text[ finnish ] = "Oletuskirjaston nimeδ ei voi muuttaa.";
 };
 String RID_STR_CANNOTCHANGENAMEREFLIB
@@ -727,7 +727,7 @@ String RID_STR_CANNOTCHANGENAMEREFLIB
     Text[ greek ] = "Δεν είναι δυνατόν να αλλάξει το όνομα μιας βιβλιοθήκης η οποία είναι προορισμός κάποιας αναφοράς";
     Text[ korean ] = "μ°Έμ΅°λ λΌμ΄λΈλ¬λ¦¬μ μ΄λ¦„μ€ λ³€κ²½ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Referans alύnan bir kitaplύπύn adύ deπiώtirilemez.";
-    Text[ catalan ] = "No se puede modificar el nombre de una biblioteca referenciada";
+    Text[ catalan ] = "El nom de una biblioteca referenciada no es pot canviar.";
     Text[ finnish ] = "Viitekirjaston nimeδ ei voi muuttaa.";
 };
 String RID_STR_CANNOTUNLOADSTDLIB
@@ -754,7 +754,7 @@ String RID_STR_CANNOTUNLOADSTDLIB
     Text[ greek ] = "Δεν είναι δυνατόν να απενεργοποιηθεί η βασική βιβλιοθήκη";
     Text[ korean ] = "κΈ°λ³Έ λΌμ΄λΈλ¬λ¦¬λ” λΉ„ν™μ„±ν™”ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Standart kitaplύπύn etkinliπi kaldύrύlύmaz.";
-    Text[ catalan ] = "No se puede desactivar la biblioteca estαndar";
+    Text[ catalan ] = "La biblioteca per defecte no es pot desactivar";
     Text[ finnish ] = "Oletuskirjaston kδytφstδ poisto ei onnistu";
 };
 String RID_STR_GENERATESOURCE
@@ -781,7 +781,7 @@ String RID_STR_GENERATESOURCE
     Text[ greek ] = "Δημιουργία κειμένου προέλευσης";
     Text[ korean ] = "μ†μ¤ν…μ¤νΈ μƒμ„±";
     Text[ turkish ] = "Kaynak kod oluώturuluyor";
-    Text[ catalan ] = "Creando un texto fuente";
+    Text[ catalan ] = "S'estΰ generant la font";
     Text[ finnish ] = "Luodaan lδhde";
 };
 String RID_STR_FILENAME
@@ -808,7 +808,7 @@ String RID_STR_FILENAME
     Text[ greek ] = "Όνομα αρχείου: ";
     Text[ korean ] = "νμΌ μ΄λ¦„: ";
     Text[ turkish ] = "Dosya adύ: ";
-    Text[ catalan ] = "Nombre del archivo:  ";
+    Text[ catalan ] = "Nom del fitxer:";
     Text[ finnish ] = "Tiedoston nimi:";
 };
 String RID_STR_APPENDLIBS
@@ -836,7 +836,7 @@ String RID_STR_APPENDLIBS
     Text[ greek ] = "Προσθήκη βιβλιοθηκών";
     Text[ korean ] = "λΌμ΄λΈλ¬λ¦¬ μ¶”κ°€";
     Text[ turkish ] = "Kitaplύk ekle";
-    Text[ catalan ] = "Aρadir bibliotecas";
+    Text[ catalan ] = "Afegeix biblioteques";
     Text[ finnish ] = "Liitδ kirjastot";
 };
 String RID_STR_QUERYDELMACRO
@@ -864,7 +864,7 @@ String RID_STR_QUERYDELMACRO
     Text[ greek ] = "Θέλετε να διαγραφεί η μακροεντολή ΧΧ;";
     Text[ korean ] = "λ§¤ν¬λ΅XXμ„(λ¥ΌοΌ‰μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "XX makrosunu silmek istiyor musunuz?";
-    Text[ catalan ] = "ΏDesea eliminar la macro XX?";
+    Text[ catalan ] = "Voleu suprimir la macro XX?";
     Text[ finnish ] = "Haluatko poistaa makron XX?";
 };
 String RID_STR_QUERYDELDIALOG
@@ -892,7 +892,7 @@ String RID_STR_QUERYDELDIALOG
     Text[ greek ] = "Θέλετε να διαγραφεί ο διάλογος ΧΧ;";
     Text[ korean ] = "λ€ν™”μƒμXXμ„(λ¥ΌοΌ‰μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "XX diyaloπunu silmek istiyor musunuz?";
-    Text[ catalan ] = "ΏDesea eliminar el diαlogo XX?";
+    Text[ catalan ] = "Voleu suprimir el diΰleg XX?";
     Text[ finnish ] = "Haluatko poistaa valintaikkunan XX?";
 };
 String RID_STR_QUERYDELLIB
@@ -920,7 +920,7 @@ String RID_STR_QUERYDELLIB
     Text[ greek ] = "Θέλετε να διαγραφεί η βιβλιοθήκη ΧΧ;";
     Text[ korean ] = "λΌμ΄λΈλ¬λ¦¬XXμ„(λ¥Ό) μ‚­μ ν•μ‹κ² μµλ‹κΉ ?";
     Text[ turkish ] = "XX kitaplύπύnύ silmek istiyor musunuz?";
-    Text[ catalan ] = "ΏDesea eliminar la biblioteca XX?";
+    Text[ catalan ] = "Voleu suprimir la biblioteca XX?";
     Text[ finnish ] = "Haluatko poistaa kirjaston XX?";
 };
 String RID_STR_QUERYDELLIBREF
@@ -948,7 +948,7 @@ String RID_STR_QUERYDELLIBREF
     Text[ greek ] = "Θέλετε να διαγραφεί η αναφορά προς τη βιβλιοθήκη ΧΧ;";
     Text[ korean ] = "λΌμ΄λΈλ¬λ¦¬XXμ— μλ” μ°Έμ΅°λ¥Ό μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "XX kitaplύπύna iliώkin referansύ silmek istiyor musunuz?";
-    Text[ catalan ] = "ΏDesea eliminar la referencia a la biblioteca XX?";
+    Text[ catalan ] = "Voleu suprimir la referθncia a la biblioteca XX?";
     Text[ finnish ] = "Haluatko poistaa viittauksen kirjastoon XX?";
 };
 String RID_STR_QUERYDELMODULE
@@ -976,7 +976,7 @@ String RID_STR_QUERYDELMODULE
     Text[ greek ] = "Θέλετε να διαγραφεί η λειτουργική μονάδα XX;";
     Text[ korean ] = "λª¨λ“XXμ„(λ¥Ό) μ‚­μ ν•μ‹κ² μµλ‹κΉ ?";
     Text[ turkish ] = "XX modόlόnό silmek istiyor musunuz?";
-    Text[ catalan ] = "ΏDesea eliminar el mσdulo XX?";
+    Text[ catalan ] = "Voleu suprimir el mςdul XX?";
     Text[ finnish ] = "Haluatko poistaa moduulin XX?";
 };
 String RID_STR_OBJNOTFOUND
@@ -1003,7 +1003,7 @@ String RID_STR_OBJNOTFOUND
     Text[ greek ] = "Δεν βρέθηκε το αντικείμενο ή η μέθοδος";
     Text[ korean ] = "κ°μ²΄ λλ” λ©”μ†λ“λ¥Ό μ°Ύμ§€ λª»ν–μµλ‹λ‹¤";
     Text[ turkish ] = "Nesne ya da yφntem bulunamadύ";
-    Text[ catalan ] = "No se ha encontrado el objeto o mιtodo";
+    Text[ catalan ] = "No s'ha trobat l'objecte o el mθtode";
     Text[ finnish ] = "Objektia tai menetelmδδ ei lφytynyt";
 };
 String RID_STR_BASIC
@@ -1059,7 +1059,7 @@ String RID_STR_LINE
     Text[ korean ] = "ν–‰";
     Text[ turkish ] = "Sa.";
     Text[ language_user1 ] = "TSM: 11/9/00 This entry denotes Zeile - Zl";
-    Text[ catalan ] = "Li";
+    Text[ catalan ] = "Ln";
     Text[ finnish ] = "Rv";
 };
 String RID_STR_COLUMN
@@ -1114,7 +1114,7 @@ String RID_STR_DOC
     Text[ greek ] = "Έγγραφο";
     Text[ korean ] = "λ¬Έμ„";
     Text[ turkish ] = "Belge";
-    Text[ catalan ] = "Documento";
+    Text[ catalan ] = "Document";
     Text[ finnish ] = "Asiakirja";
 };
 Bitmap RID_BMP_BRKPNT0
@@ -1151,7 +1151,7 @@ String RID_BASICIDE_OBJECTBAR
     Text[ greek ] = "Γραμμή μακροεντολής";
     Text[ korean ] = "λ§¤ν¬λ΅ λª¨μ";
     Text[ turkish ] = "Makro ηubuπu";
-    Text[ catalan ] = "Barra de macro";
+    Text[ catalan ] = "Barra de macros";
 };
 String RID_STR_CANNOTCLOSE
 {
@@ -1180,7 +1180,7 @@ String RID_STR_CANNOTCLOSE
     Text[ greek ] = "Δεν είναι δυνατόν να κλείσετε το παράθυρο \nκατά τη διάρκεια εκτέλεσης του προγράμματος BASIC.";
     Text[ korean ] = "BASIC ν”„λ΅κ·Έλ¨μ΄ μ§„ν–‰λλ” λ™μ•μ€ \nμ°½μ„ λ‹«μ„ μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "BASIC programύ ηalύώύrken\npencere kapatύlamaz.";
-    Text[ catalan ] = "No se puede cerrar la ventana\nmientras se ejecuta el programa BASIC.";
+    Text[ catalan ] = "La finestra no es pot tancar mentre s'executa el BASIC.";
 };
 String RID_STR_REPLACESTDLIB
 {
@@ -1206,7 +1206,7 @@ String RID_STR_REPLACESTDLIB
     Text[ greek ] = "Δεν είναι δυνατόν να αντικατασταθεί η βασική βιβλιοθήκη.";
     Text[ korean ] = "κΈ°λ³Έ λΌμ΄λΈλ¬λ¦¬λ” λ€μ²΄ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Standart kitaplύk deπiώtirilemez.";
-    Text[ catalan ] = "No se puede substituir la biblioteca estαndar.";
+    Text[ catalan ] = "La biblioteca per defecte no es pot reemplaηar.";
     Text[ finnish ] = "Oletuskirjaston korvaaminen ei onnistu";
 };
 String RID_STR_REFNOTPOSSIBLE
@@ -1235,7 +1235,7 @@ String RID_STR_REFNOTPOSSIBLE
     Text[ greek ] = "Δεν είναι δυνατή η αναφορά στο 'XX' .";
     Text[ korean ] = "'XX'μ— λ€ν• μ°Έμ΅° λ¶κ°€λ¥";
     Text[ turkish ] = "'XX' referans alύnamaz.";
-    Text[ catalan ] = "No es posible la referencia a 'XX' .";
+    Text[ catalan ] = "La referθncia a 'XX' no ιs possible.";
     Text[ finnish ] = "Viite kohteeseen XX ei ole mahdollinen.";
 };
 String RID_STR_WATCHNAME
@@ -1264,7 +1264,7 @@ String RID_STR_WATCHNAME
     Text[ greek ] = "Παρατηρητής";
     Text[ korean ] = "κ°μ‹μ";
     Text[ turkish ] = "έzleyici";
-    Text[ catalan ] = "Observador";
+    Text[ catalan ] = "Mira";
 };
 String RID_STR_STACKNAME
 {
@@ -1292,7 +1292,7 @@ String RID_STR_STACKNAME
     Text[ greek ] = "Στοίβα εντολών";
     Text[ korean ] = "μ½ μ¤νƒ";
     Text[ turkish ] = "Komut yύπύnύ";
-    Text[ catalan ] = "Pila de comandos";
+    Text[ catalan ] = "Crida la pila";
 };
 String RID_STR_INITIDE
 {
@@ -1320,7 +1320,7 @@ String RID_STR_INITIDE
     Text[ greek ] = "Αρχικοποίηση BASIC";
     Text[ korean ] = "BASIC μ΄κΈ°ν™”";
     Text[ turkish ] = "BASIC baώlatύlύyor";
-    Text[ catalan ] = "Iniciar BASIC";
+    Text[ catalan ] = "Inicialitzaciσ del BASIC";
 };
 String RID_STR_STDMODULENAME
 {
@@ -1348,7 +1348,7 @@ String RID_STR_STDMODULENAME
     Text[ greek ] = "Λειτουργική μονάδα";
     Text[ korean ] = "λª¨λ“";
     Text[ turkish ] = "Modόl";
-    Text[ catalan ] = "Mσdulo";
+    Text[ catalan ] = "Mςdul";
 };
 String RID_STR_STDDIALOGNAME
 {
@@ -1376,7 +1376,7 @@ String RID_STR_STDDIALOGNAME
     Text[ greek ] = "Διάλογος";
     Text[ korean ] = "λ€ν™”μƒμ";
     Text[ turkish ] = "Diyalog";
-    Text[ catalan ] = "Diαlogo";
+    Text[ catalan ] = "Diΰleg";
 };
 String RID_STR_STDLIBNAME
 {
@@ -1430,7 +1430,7 @@ String RID_STR_NEWLIB
     Text[ greek ] = "Δημιουργία βιβλιοθήκης";
     Text[ korean ] = "μƒ λΌμ΄λΈλ¬λ¦¬";
     Text[ turkish ] = "Yeni kitaplύk";
-    Text[ catalan ] = "Nueva biblioteca";
+    Text[ catalan ] = "Biblioteca nova";
     Text[ finnish ] = "Uusi kirjasto";
 };
 String RID_STR_NEWMOD
@@ -1457,7 +1457,7 @@ String RID_STR_NEWMOD
     Text[ greek ] = "Νέα λειτουργική μονάδα";
     Text[ korean ] = "μƒ λª¨λ“";
     Text[ turkish ] = "Yeni modόl";
-    Text[ catalan ] = "Nuevo mσdulo";
+    Text[ catalan ] = "Mςdul nou";
     Text[ finnish ] = "Uusi moduuli";
 };
 String RID_STR_NEWDLG
@@ -1484,7 +1484,7 @@ String RID_STR_NEWDLG
     Text[ greek ] = "Δημιουργία διαλόγου";
     Text[ korean ] = "μƒ λ€ν™”μƒμ";
     Text[ turkish ] = "Yeni diyalog";
-    Text[ catalan ] = "Nuevo diαlogo";
+    Text[ catalan ] = "Diΰleg nou";
     Text[ finnish ] = "Uusi valintaikkuna";
 };
 String RID_STR_ALL
@@ -1513,7 +1513,7 @@ String RID_STR_ALL
     Text[ greek ] = "Όλα";
     Text[ korean ] = "λª¨λ‘";
     Text[ turkish ] = "Tόmό";
-    Text[ catalan ] = "Todos";
+    Text[ catalan ] = "Tot";
 };
 String RID_STR_PAGE
 {
@@ -1541,7 +1541,7 @@ String RID_STR_PAGE
     Text[ greek ] = "Σελίδα";
     Text[ korean ] = "νμ΄μ§€";
     Text[ turkish ] = "Sayfa";
-    Text[ catalan ] = "Pαgina";
+    Text[ catalan ] = "Pΰgina";
 };
 String RID_STR_MACRONAMEREQ
 {
@@ -1568,7 +1568,7 @@ String RID_STR_MACRONAMEREQ
     Text[ greek ] = "Πρέπει να εισάγετε ένα όνομα.";
     Text[ korean ] = "μ΄λ¦„μ„ μ…λ ¥ν•΄μ•Ό ν•©λ‹λ‹¤.";
     Text[ turkish ] = "Bir ad girilmesi gerekir.";
-    Text[ catalan ] = "Se debe introducir un nombre.";
+    Text[ catalan ] = "S'ha d'introduir un nom.";
     Text[ finnish ] = "Nimi on mδδritettδvδ.";
 };
 String RID_STR_WILLSTOPPRG
@@ -1596,7 +1596,7 @@ String RID_STR_WILLSTOPPRG
     Text[ greek ] = "Μετά από αυτή την αλλαγή θα πρέπει να εκκινήσετε το πρόγραμμα ξανά.\nΣυνέχεια;";
     Text[ korean ] = "μ΄ λ³€κ²½ ν›„,  μ‚¬μ©μμ ν”„λ΅κ·Έλ¨μ„ λ‹¤μ‹ μ‹μ‘ν•΄μ•Ό ν•©λ‹λ‹¤.\nκ³„μ†ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "Bu deπiώiklikten sonra programύ yeniden baώlatmanύz gerekir.\nDevam etmek istiyor musunuz?";
-    Text[ catalan ] = "Tendrα que volver a iniciar el programa despuιs de estas modificaciones.\nΏContinuar?";
+    Text[ catalan ] = "Haureu de reiniciar el programa desprιs d'aquesta ediciσ\nVoleu continuar?";
     Text[ finnish ] = "Ohjelma on kδynnistettδvδ uudelleen tδmδn muutoksen jδlkeen.\nJatketaanko?";
 };
 String RID_STR_SEARCHALLMODULES
@@ -1623,7 +1623,7 @@ String RID_STR_SEARCHALLMODULES
     Text[ greek ] = "Να αντικατασταθεί το κείμενο σε όλες τις τρέχουσες λειτουργικές μονάδες;";
     Text[ korean ] = "ν™μ„±ν™”λ λª¨λ“  λª¨λ“μ—μ„ ν…μ¤νΈλ¥Ό λ€μ²΄ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "Bu metin tόm etkin modόllerde deπiώtirilsin mi?";
-    Text[ catalan ] = "ΏDesea substituir el texto en todos los mσdulos activos?";
+    Text[ catalan ] = "Voleu reemplaηar el text de tots els mςduls actius?";
     Text[ finnish ] = "Haluatko korvata tekstin kaikissa aktiivissa moduuleissa?";
 };
 Edit RID_EDT_WATCHEDIT
@@ -1698,7 +1698,7 @@ String RID_STR_REMOVEWATCH
     Text[ greek ] = "Παρατηρητής: ";
     Text[ korean ] = "κ°μ‹μ: ";
     Text[ turkish ] = "έzleyici: ";
-    Text[ catalan ] = "Observador: ";
+    Text[ catalan ] = "Observador:";
 };
 String RID_STR_STACK
 {
@@ -1724,7 +1724,7 @@ String RID_STR_STACK
     Text[ greek ] = "Κλήσεις: ";
     Text[ korean ] = "νΈμ¶: ";
     Text[ turkish ] = "Ηaπrύlar: ";
-    Text[ catalan ] = "Llamadas: ";
+    Text[ catalan ] = "Crides: ";
     Text[ finnish ] = "Kutsut: ";
 };
 /*
@@ -1962,7 +1962,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Μεταγλώττιση";
             Text[ korean ] = "μ»΄νμΌ";
             Text[ turkish ] = "Derle";
-            Text[ catalan ] = "Compilar";
+            Text[ catalan ] = "Compila";
         };
         ToolBoxItem
         {
@@ -1992,7 +1992,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Εκτέλεση";
             Text[ korean ] = "μ‹¤ν–‰";
             Text[ turkish ] = "Yόrόt";
-            Text[ catalan ] = "Ejecutar";
+            Text[ catalan ] = "Executa";
         };
         ToolBoxItem
         {
@@ -2021,7 +2021,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Διακοπή";
             Text[ korean ] = "μ •μ§€";
             Text[ turkish ] = "Durdur";
-            Text[ catalan ] = "Detener";
+            Text[ catalan ] = "Atura";
         };
         ToolBoxItem
         {
@@ -2052,7 +2052,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Βήμα διαδικασίας";
             Text[ korean ] = "μ²λ¦¬ λ‹¨κ³„";
             Text[ turkish ] = "Yordam adύmύ";
-            Text[ catalan ] = "Paso a paso";
+            Text[ catalan ] = "Pas del procediment";
             Text[ finnish ] = "Toiminnon vaihe";
         };
         ToolBoxItem
@@ -2080,7 +2080,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Απλό βήμα";
             Text[ korean ] = "κ°κ°μ λ‹¨κ³„";
             Text[ turkish ] = "Tek adύm";
-            Text[ catalan ] = "Paso ϊnico";
+            Text[ catalan ] = "Pas simple";
             Text[ finnish ] = "Yksittδinen vaihe";
         };
         ToolBoxItem
@@ -2109,7 +2109,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Βήμα πίσω";
             Text[ korean ] = "λ’¤λ΅ κ±΄λ„λ›°κΈ°";
             Text[ turkish ] = "Geri adύm";
-            Text[ catalan ] = "Salto atrαs";
+            Text[ catalan ] = "Un pas enrere";
             Text[ finnish ] = "Edellinen vaihe";
         };
         ToolBoxItem
@@ -2139,7 +2139,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Σημείο στάσης";
             Text[ korean ] = "μ¤‘λ‹¨μ ";
             Text[ turkish ] = "Kesme noktasύ";
-            Text[ catalan ] = "Punto de ruptura";
+            Text[ catalan ] = "Punt de ruptura";
         };
         ToolBoxItem
         {
@@ -2166,7 +2166,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Εμφάνιση παρατηρητή";
             Text[ korean ] = "κ°μ‹μ λ³΄μ΄κΈ°";
             Text[ turkish ] = "έzleyici ekle";
-            Text[ catalan ] = "Mostrar observador";
+            Text[ catalan ] = "Afegeix l'observador";
             Text[ finnish ] = "Lisδδ kello";
         };
         ToolBoxItem
@@ -2200,7 +2200,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Κατάλογος αντικειμένων";
             Text[ korean ] = "κ°μ²΄ μΉ΄νƒλ΅κ·Έ";
             Text[ turkish ] = "Nesne kataloπu";
-            Text[ catalan ] = "Catαlogo de objetos";
+            Text[ catalan ] = "Catΰleg d'objectes";
         };
         ToolBoxItem
         {
@@ -2258,7 +2258,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Λειτουργικές μονάδες";
             Text[ korean ] = "λª¨λ“";
             Text[ turkish ] = "Modόller";
-            Text[ catalan ] = "Mσdulos";
+            Text[ catalan ] = "Mςduls";
         };
         ToolBoxItem
         {
@@ -2291,7 +2291,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Αναζήτηση παρένθεσης";
             Text[ korean ] = "κ΄„νΈ μ°ΎκΈ°";
             Text[ turkish ] = "Ayraηlarύ bul";
-            Text[ catalan ] = "Buscar parιntesis";
+            Text[ catalan ] = "Cerca els parθntesis";
         };
         ToolBoxItem
         {
@@ -2320,7 +2320,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Πεδία ελέγχου";
             Text[ korean ] = "μ»¨νΈλ΅¤";
             Text[ turkish ] = "Komut alanlarύ";
-            Text[ catalan ] = "Campos de control";
+            Text[ catalan ] = "Controls";
         };
         ToolBoxItem
         {
@@ -2352,7 +2352,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Εισαγωγή κειμένου προέλευσης";
             Text[ korean ] = "μ†μ¤ν…μ¤νΈ μ‚½μ…";
             Text[ turkish ] = "Kaynak metin ekle";
-            Text[ catalan ] = "Insertar texto fuente";
+            Text[ catalan ] = "Insereix un text font";
             Text[ finnish ] = "Lisδδ lδhdeteksti";
         };
         ToolBoxItem
@@ -2381,7 +2381,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_traditional ] = "ε¦ε­εε§‹ζª”...";
             Text[ arabic ] = "ΝέΩ δΥ ΗαγΥΟΡ ΘΗΣγ...";
             Text[ turkish ] = "Kaynak metni farklύ kaydet...";
-            Text[ catalan ] = "Guardar texto fuente como...";
+            Text[ catalan ] = "Desa la font com a...";
         };
     };
     Text[ chinese_simplified ] = "BASIC";
@@ -2444,7 +2444,7 @@ Menu RID_POPUP_BRKPROPS
             Text[ greek ] = "Ενεργά";
             Text[ korean ] = "ν™μ„±";
             Text[ turkish ] = "Etkin";
-            Text[ catalan ] = "Activo";
+            Text[ catalan ] = "Actiu";
         };
         MenuItem
         {
@@ -2479,7 +2479,7 @@ Menu RID_POPUP_BRKPROPS
             Text[ greek ] = "Ιδιότητες...";
             Text[ korean ] = "λ“±λ΅μ •λ³΄(~I)...";
             Text[ turkish ] = "Φzellikler...";
-            Text[ catalan ] = "Propiedades...";
+            Text[ catalan ] = "Propietats...";
         };
     };
     Text[ chinese_simplified ] = "ε±ζ€§";
@@ -2493,7 +2493,7 @@ Menu RID_POPUP_BRKPROPS
     Text[ greek ] = "Ιδιότητες";
     Text[ korean ] = "λ“±λ΅μ •λ³΄";
     Text[ turkish ] = "Φzellikler";
-    Text[ catalan ] = "Propiedades";
+    Text[ catalan ] = "Propietats";
 };
 Menu RID_POPUP_BRKDLG
 {
@@ -2541,7 +2541,7 @@ Menu RID_POPUP_BRKDLG
             Text[ greek ] = "Σημεία στάσης...";
             Text[ korean ] = "μ¤‘λ‹¨μ ...";
             Text[ turkish ] = "Kesme noktalarύ...";
-            Text[ catalan ] = "Puntos de ruptura...";
+            Text[ catalan ] = "Punts de ruptura...";
         };
     };
     Text[ chinese_simplified ] = "δΈ­ζ–­η‚Ή";
@@ -2555,7 +2555,7 @@ Menu RID_POPUP_BRKDLG
     Text[ greek ] = "Σημεία στάσης";
     Text[ korean ] = "μ¤‘λ‹¨μ ";
     Text[ turkish ] = "Kesme noktalarύ";
-    Text[ catalan ] = "Puntos de ruptura";
+    Text[ catalan ] = "Punts de ruptura";
 };
 Menu RID_POPUP_TABBAR
 {
@@ -2608,7 +2608,7 @@ Menu RID_POPUP_TABBAR
                         Text[ greek ] = "Λειτουργική μονάδα BASIC";
                         Text[ korean ] = "BASIC λª¨λ“";
                         Text[ turkish ] = "BASIC modόlό";
-                        Text[ catalan ] = "Mσdulo BASIC";
+                        Text[ catalan ] = "Mςdul del BASIC";
                         Text[ finnish ] = "BASIC-moduuli";
                     };
                     MenuItem
@@ -2637,7 +2637,7 @@ Menu RID_POPUP_TABBAR
                         Text[ greek ] = "Διάλογος BASIC";
                         Text[ korean ] = "BASIC λ€ν™”μƒμ";
                         Text[ turkish ] = "BASIC diyaloπu";
-                        Text[ catalan ] = "Diαlogo BASIC";
+                        Text[ catalan ] = "Diΰleg del BASIC";
                         Text[ finnish ] = "BASIC-valintaikkuna";
                     };
                 };
@@ -2654,7 +2654,7 @@ Menu RID_POPUP_TABBAR
             Text[ greek ] = "Εισαγωγή";
             Text[ korean ] = "μ‚½μ…";
             Text[ turkish ] = "Ekle";
-            Text[ catalan ] = "Insertar";
+            Text[ catalan ] = "Insereix";
         };
         MenuItem
         {
@@ -2686,7 +2686,7 @@ Menu RID_POPUP_TABBAR
             Text[ greek ] = "Διαγραφή";
             Text[ korean ] = "μ‚­μ ";
             Text[ turkish ] = "Sil";
-            Text[ catalan ] = "Eliminar";
+            Text[ catalan ] = "Suprimeix";
         };
         MenuItem
         {
@@ -2716,7 +2716,7 @@ Menu RID_POPUP_TABBAR
             Text[ greek ] = "Μετονομασία";
             Text[ korean ] = "μ΄λ¦„ λ³€κ²½";
             Text[ turkish ] = "Yeniden adlandύr";
-            Text[ catalan ] = "Cambiar nombre";
+            Text[ catalan ] = "Reanomena";
         };
         MenuItem
         {
@@ -2746,7 +2746,7 @@ Menu RID_POPUP_TABBAR
             Text[ greek ] = "Απόκρυψη";
             Text[ korean ] = "μ¨κΈ°κΈ°";
             Text[ turkish ] = "Gizle";
-            Text[ catalan ] = "Ocultar";
+            Text[ catalan ] = "Oculta";
         };
         MenuItem
         {
@@ -2780,7 +2780,7 @@ Menu RID_POPUP_TABBAR
             Text[ greek ] = "Λειτουργικές μονάδες...";
             Text[ korean ] = "λª¨λ“...";
             Text[ turkish ] = "Modόller...";
-            Text[ catalan ] = "Mσdulos...";
+            Text[ catalan ] = "Mςduls...";
         };
     };
 };
@@ -2823,6 +2823,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
