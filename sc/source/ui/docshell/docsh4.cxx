@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 13:29:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,7 @@
 #include <sfx2/request.hxx>
 #include <svtools/sfxecode.hxx>
 #include <sfx2/topfrm.hxx>
-#include <offmgr/ofaitem.hxx>
-#include <offmgr/sbaitems.hxx>
+#include <svx/ofaitem.hxx>
 #include <sot/formats.hxx>
 #include <svtools/printdlg.hxx>
 #include <svtools/whiter.hxx>
