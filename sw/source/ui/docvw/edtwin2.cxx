@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:40:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,9 +465,9 @@ aktuelle Zeichenvorlage anzeigen?
             const SvxFieldItem* pFieldItem;
             const SdrTextObj* pTextObj = NULL;
 
-            if (pSdrView->HasMarkedObj())
+            if (pSdrView->AreObjectsMarked())
             {
-                const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
 
                 if (rMarkList.GetMarkCount() == 1)
                     pObj = rMarkList.GetMark(0)->GetObj();
