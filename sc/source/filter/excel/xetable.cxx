@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:05:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ XclExpStringRec::XclExpStringRec( const XclExpRoot& rRoot, const String& rResult
     XclExpRecord( EXC_ID_STRING ),
     mxResult( XclExpStringHelper::CreateString( rRoot, rResult ) )
 {
-    DBG_ASSERT( (rRoot.GetBiff() <= xlBiff7) || (mxResult->Len() > 0),
+    DBG_ASSERT( (rRoot.GetBiff() <= EXC_BIFF5) || (mxResult->Len() > 0),
         "XclExpStringRec::XclExpStringRec - empty result not allowed in BIFF8+" );
     SetRecSize( mxResult->GetSize() );
 }
@@ -129,42 +129,46 @@ void XclExpStringRec::WriteBody( XclExpStream& rStrm )
 
 XclExpRangeFmlaBase::XclExpRangeFmlaBase(
         sal_uInt16 nRecId, sal_uInt32 nRecSize, const ScAddress& rScPos ) :
-    XclExpRecord( nRecId, nRecSize )
+    XclExpRecord( nRecId, nRecSize ),
+    maXclRange( ScAddress::UNINITIALIZED ),
+    maBaseXclPos( ScAddress::UNINITIALIZED )
 {
-    mnFirstXclCol = mnLastXclCol = mnBaseXclCol = static_cast< sal_uInt16 >( rScPos.Col() );
-    mnFirstXclRow = mnLastXclRow = mnBaseXclRow = static_cast< sal_uInt16 >( rScPos.Row() );
+    maBaseXclPos.Set( static_cast< sal_uInt16 >( rScPos.Col() ), static_cast< sal_uInt16 >( rScPos.Row() ) );
+    maXclRange.maFirst = maXclRange.maLast = maBaseXclPos;
 }
 
 XclExpRangeFmlaBase::XclExpRangeFmlaBase(
         sal_uInt16 nRecId, sal_uInt32 nRecSize, const ScRange& rScRange ) :
-    XclExpRecord( nRecId, nRecSize )
+    XclExpRecord( nRecId, nRecSize ),
+    maXclRange( ScAddress::UNINITIALIZED ),
+    maBaseXclPos( ScAddress::UNINITIALIZED )
 {
-    mnFirstXclCol = mnBaseXclCol = static_cast< sal_uInt16 >( rScRange.aStart.Col() );
-    mnFirstXclRow = mnBaseXclRow = static_cast< sal_uInt16 >( rScRange.aStart.Row() );
-    mnLastXclCol = static_cast< sal_uInt16 >( rScRange.aEnd.Col() );
-    mnLastXclRow = static_cast< sal_uInt16 >( rScRange.aEnd.Row() );
+    maXclRange.Set(
+        static_cast< sal_uInt16 >( rScRange.aStart.Col() ),
+        static_cast< sal_uInt16 >( rScRange.aStart.Row() ),
+        static_cast< sal_uInt16 >( rScRange.aEnd.Col() ),
+        static_cast< sal_uInt16 >( rScRange.aEnd.Row() ) );
+    maBaseXclPos = maXclRange.maFirst;
 }
 
 bool XclExpRangeFmlaBase::IsBasePos( sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const
 {
-    return (mnBaseXclCol == nXclCol) && (mnBaseXclRow == nXclRow);
+    return (maBaseXclPos.mnCol == nXclCol) && (maBaseXclPos.mnRow == nXclRow);
 }
 
 void XclExpRangeFmlaBase::Extend( const ScAddress& rScPos )
 {
     sal_uInt16 nXclCol = static_cast< sal_uInt16 >( rScPos.Col() );
     sal_uInt16 nXclRow = static_cast< sal_uInt16 >( rScPos.Row() );
-    mnFirstXclCol = ::std::min( mnFirstXclCol, nXclCol );
-    mnFirstXclRow = ::std::min( mnFirstXclRow, nXclRow );
-    mnLastXclCol = ::std::max( mnLastXclCol, nXclCol );
-    mnLastXclRow = ::std::max( mnLastXclRow, nXclRow );
+    maXclRange.maFirst.mnCol = ::std::min( maXclRange.maFirst.mnCol, nXclCol );
+    maXclRange.maFirst.mnRow = ::std::min( maXclRange.maFirst.mnRow, nXclRow );
+    maXclRange.maLast.mnCol  = ::std::max( maXclRange.maLast.mnCol,  nXclCol );
+    maXclRange.maLast.mnRow  = ::std::max( maXclRange.maLast.mnRow,  nXclRow );
 }
 
 void XclExpRangeFmlaBase::WriteRangeAddress( XclExpStream& rStrm ) const
 {
-    rStrm   << mnFirstXclRow << mnLastXclRow
-            << static_cast< sal_uInt8 >( mnFirstXclCol )
-            << static_cast< sal_uInt8 >( mnLastXclCol );
+    maXclRange.Write( rStrm, false );
 }
 
 // Array formulas =============================================================
@@ -177,7 +181,7 @@ XclExpArray::XclExpArray( XclExpTokenArrayRef xTokArr, const ScRange& rScRange )
 
 XclExpTokenArrayRef XclExpArray::CreateCellTokenArray( const XclExpRoot& rRoot ) const
 {
-    return rRoot.GetFormulaCompiler().CreateSpecialRefFormula( EXC_TOKID_EXP, mnBaseXclCol, mnBaseXclRow );
+    return rRoot.GetFormulaCompiler().CreateSpecialRefFormula( EXC_TOKID_EXP, maBaseXclPos );
 }
 
 bool XclExpArray::IsVolatile() const
@@ -247,7 +251,7 @@ void XclExpShrfmla::ExtendRange( const ScAddress& rScPos )
 
 XclExpTokenArrayRef XclExpShrfmla::CreateCellTokenArray( const XclExpRoot& rRoot ) const
 {
-    return rRoot.GetFormulaCompiler().CreateSpecialRefFormula( EXC_TOKID_EXP, mnBaseXclCol, mnBaseXclRow );
+    return rRoot.GetFormulaCompiler().CreateSpecialRefFormula( EXC_TOKID_EXP, maBaseXclPos );
 }
 
 bool XclExpShrfmla::IsVolatile() const
@@ -316,10 +320,10 @@ bool XclExpTableop::TryExtend( const ScAddress& rScPos, const XclMultipleOpRefs&
     bool bOk = IsAppendable( nXclCol, nXclRow );
     if( bOk )
     {
-        SCCOL nFirstScCol  = static_cast< SCCOL >( mnFirstXclCol );
-        SCROW nFirstScRow  = static_cast< SCROW >( mnFirstXclRow );
-        SCCOL nLastScCol   = static_cast< SCCOL >( mnLastXclCol );
-        SCROW nLastScRow   = static_cast< SCROW >( mnLastXclRow );
+        SCCOL nFirstScCol  = static_cast< SCCOL >( maXclRange.maFirst.mnCol );
+        SCROW nFirstScRow  = static_cast< SCROW >( maXclRange.maFirst.mnRow );
+        SCCOL nLastScCol   = static_cast< SCCOL >( maXclRange.maLast.mnCol );
+        SCROW nLastScRow   = static_cast< SCROW >( maXclRange.maLast.mnRow );
         SCCOL nColInpScCol = static_cast< SCCOL >( mnColInpXclCol );
         SCROW nColInpScRow = static_cast< SCROW >( mnColInpXclRow );
         SCCOL nRowInpScCol = static_cast< SCCOL >( mnRowInpXclCol );
@@ -377,11 +381,11 @@ bool XclExpTableop::TryExtend( const ScAddress& rScPos, const XclMultipleOpRefs&
 void XclExpTableop::Finalize()
 {
     // is the range complete? (last appended cell is in last column)
-    mbValid = mnLastXclCol == mnLastAppXclCol;
+    mbValid = maXclRange.maLast.mnCol == mnLastAppXclCol;
     // if last row is incomplete, try to shorten the used range
-    if( !mbValid && (mnFirstXclRow < mnLastXclRow) )
+    if( !mbValid && (maXclRange.maFirst.mnRow < maXclRange.maLast.mnRow) )
     {
-        --mnLastXclRow;
+        --maXclRange.maLast.mnRow;
         mbValid = true;
     }
 
@@ -389,18 +393,18 @@ void XclExpTableop::Finalize()
     if( mbValid ) switch( mnScMode )
     {
         case 0:
-            mbValid =   (mnColInpXclCol + 1 < mnFirstXclCol) || (mnColInpXclCol > mnLastXclCol) ||
-                        (mnColInpXclRow     < mnFirstXclRow) || (mnColInpXclRow > mnLastXclRow);
+            mbValid =   (mnColInpXclCol + 1 < maXclRange.maFirst.mnCol) || (mnColInpXclCol > maXclRange.maLast.mnCol) ||
+                        (mnColInpXclRow     < maXclRange.maFirst.mnRow) || (mnColInpXclRow > maXclRange.maLast.mnRow);
         break;
         case 1:
-            mbValid =   (mnColInpXclCol     < mnFirstXclCol) || (mnColInpXclCol > mnLastXclCol) ||
-                        (mnColInpXclRow + 1 < mnFirstXclRow) || (mnColInpXclRow > mnLastXclRow);
+            mbValid =   (mnColInpXclCol     < maXclRange.maFirst.mnCol) || (mnColInpXclCol > maXclRange.maLast.mnCol) ||
+                        (mnColInpXclRow + 1 < maXclRange.maFirst.mnRow) || (mnColInpXclRow > maXclRange.maLast.mnRow);
         break;
         case 2:
-            mbValid =   ((mnColInpXclCol + 1 < mnFirstXclCol) || (mnColInpXclCol > mnLastXclCol) ||
-                         (mnColInpXclRow + 1 < mnFirstXclRow) || (mnColInpXclRow > mnLastXclRow)) &&
-                        ((mnRowInpXclCol + 1 < mnFirstXclCol) || (mnRowInpXclCol > mnLastXclCol) ||
-                         (mnRowInpXclRow + 1 < mnFirstXclRow) || (mnRowInpXclRow > mnLastXclRow));
+            mbValid =   ((mnColInpXclCol + 1 < maXclRange.maFirst.mnCol) || (mnColInpXclCol > maXclRange.maLast.mnCol) ||
+                         (mnColInpXclRow + 1 < maXclRange.maFirst.mnRow) || (mnColInpXclRow > maXclRange.maLast.mnRow)) &&
+                        ((mnRowInpXclCol + 1 < maXclRange.maFirst.mnCol) || (mnRowInpXclCol > maXclRange.maLast.mnCol) ||
+                         (mnRowInpXclRow + 1 < maXclRange.maFirst.mnRow) || (mnRowInpXclRow > maXclRange.maLast.mnRow));
         break;
     }
 }
@@ -409,7 +413,7 @@ XclExpTokenArrayRef XclExpTableop::CreateCellTokenArray( const XclExpRoot& rRoot
 {
     XclExpFormulaCompiler& rFmlaComp = rRoot.GetFormulaCompiler();
     return mbValid ?
-        rFmlaComp.CreateSpecialRefFormula( EXC_TOKID_TBL, mnBaseXclCol, mnBaseXclRow ) :
+        rFmlaComp.CreateSpecialRefFormula( EXC_TOKID_TBL, maBaseXclPos ) :
         rFmlaComp.CreateErrorFormula( EXC_ERR_NA );
 }
 
@@ -426,9 +430,9 @@ void XclExpTableop::Save( XclExpStream& rStrm )
 
 bool XclExpTableop::IsAppendable( sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const
 {
-    return  ((nXclCol == mnLastAppXclCol + 1) && (nXclRow == mnFirstXclRow)) ||
-            ((nXclCol == mnLastAppXclCol + 1) && (nXclCol <= mnLastXclCol) && (nXclRow == mnLastXclRow)) ||
-            ((mnLastAppXclCol == mnLastXclCol) && (nXclCol == mnFirstXclCol) && (nXclRow == mnLastXclRow + 1));
+    return  ((nXclCol == mnLastAppXclCol + 1) && (nXclRow == maXclRange.maFirst.mnRow)) ||
+            ((nXclCol == mnLastAppXclCol + 1) && (nXclCol <= maXclRange.maLast.mnCol) && (nXclRow == maXclRange.maLast.mnRow)) ||
+            ((mnLastAppXclCol == maXclRange.maLast.mnCol) && (nXclCol == maXclRange.maFirst.mnCol) && (nXclRow == maXclRange.maLast.mnRow + 1));
 }
 
 void XclExpTableop::WriteBody( XclExpStream& rStrm )
@@ -543,10 +547,9 @@ XclExpTableopRef XclExpTableopBuffer::TryCreate( const ScAddress& rScPos, const 
 // ============================================================================
 
 XclExpCellBase::XclExpCellBase(
-        sal_uInt16 nRecId, sal_uInt32 nContSize, sal_uInt16 nXclCol, sal_uInt16 nXclRow ) :
+        sal_uInt16 nRecId, sal_uInt32 nContSize, const XclAddress& rXclPos ) :
     XclExpRecord( nRecId, nContSize + 4 ),
-    mnXclCol( nXclCol ),
-    mnXclRow( nXclRow )
+    maXclPos( rXclPos )
 {
 }
 
@@ -573,18 +576,17 @@ void XclExpCellBase::RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes )
 // Single cell records ========================================================
 
 XclExpSingleCellBase::XclExpSingleCellBase(
-        sal_uInt16 nRecId, sal_uInt32 nContSize,
-        sal_uInt16 nXclCol, sal_uInt16 nXclRow, sal_uInt32 nXFId ) :
-    XclExpCellBase( nRecId, 2, nXclCol, nXclRow ),
+        sal_uInt16 nRecId, sal_uInt32 nContSize, const XclAddress& rXclPos, sal_uInt32 nXFId ) :
+    XclExpCellBase( nRecId, 2, rXclPos ),
     maXFId( nXFId ),
     mnContSize( nContSize )
 {
 }
 
 XclExpSingleCellBase::XclExpSingleCellBase( const XclExpRoot& rRoot,
-        sal_uInt16 nRecId, sal_uInt32 nContSize, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+        sal_uInt16 nRecId, sal_uInt32 nContSize, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_Int16 nScript, sal_uInt32 nForcedXFId ) :
-    XclExpCellBase( nRecId, 2, nXclCol, nXclRow ),
+    XclExpCellBase( nRecId, 2, rXclPos ),
     maXFId( nForcedXFId ),
     mnContSize( nContSize )
 {
@@ -614,7 +616,7 @@ void XclExpSingleCellBase::ConvertXFIndexes( const XclExpRoot& rRoot )
 
 void XclExpSingleCellBase::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= xlBiff3 );
+    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF3 );
     AddRecSize( mnContSize );
     XclExpCellBase::Save( rStrm );
 }
@@ -630,10 +632,9 @@ void XclExpSingleCellBase::WriteBody( XclExpStream& rStrm )
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpNumberCell, 256, 256 )
 
 XclExpNumberCell::XclExpNumberCell(
-        const XclExpRoot& rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+        const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, double fValue ) :
-    XclExpSingleCellBase( rRoot, EXC_ID_NUMBER, 8, nXclCol, nXclRow,
-        pPattern, ApiScriptType::WEAK, nForcedXFId ),
+    XclExpSingleCellBase( rRoot, EXC_ID_NUMBER, 8, rXclPos, pPattern, ApiScriptType::WEAK, nForcedXFId ),
     mfValue( fValue )
 {
 }
@@ -648,10 +649,9 @@ void XclExpNumberCell::WriteContents( XclExpStream& rStrm )
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBooleanCell, 256, 256 )
 
 XclExpBooleanCell::XclExpBooleanCell(
-        const XclExpRoot rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+        const XclExpRoot rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, bool bValue ) :
-    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, nXclCol, nXclRow,
-        pPattern, ApiScriptType::WEAK, nForcedXFId ),
+    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::WEAK, nForcedXFId ),
     mbValue( bValue )
 {
 }
@@ -666,10 +666,9 @@ void XclExpBooleanCell::WriteContents( XclExpStream& rStrm )
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell, 256, 256 )
 
 XclExpErrorCell::XclExpErrorCell(
-        const XclExpRoot rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+        const XclExpRoot rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt8 nErrCode ) :
-    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, nXclCol, nXclRow,
-        pPattern, ApiScriptType::WEAK, nForcedXFId ),
+    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::WEAK, nForcedXFId ),
     mnErrCode( nErrCode )
 {
 }
@@ -684,22 +683,22 @@ void XclExpErrorCell::WriteContents( XclExpStream& rStrm )
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpLabelCell, 256, 256 )
 
 XclExpLabelCell::XclExpLabelCell(
-        const XclExpRoot& rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+        const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, const ScStringCell& rCell ) :
-    XclExpSingleCellBase( EXC_ID_LABEL, 0, nXclCol, nXclRow, nForcedXFId )
+    XclExpSingleCellBase( EXC_ID_LABEL, 0, rXclPos, nForcedXFId )
 {
-    sal_uInt16 nMaxLen = (rRoot.GetBiff() >= xlBiff8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
+    sal_uInt16 nMaxLen = (rRoot.GetBiff() == EXC_BIFF8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
     XclExpStringRef xText = XclExpStringHelper::CreateCellString( rRoot, rCell, pPattern, EXC_STR_DEFAULT, nMaxLen );
     Init( rRoot, pPattern, xText );
 }
 
 XclExpLabelCell::XclExpLabelCell(
-        const XclExpRoot& rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+        const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
         const ScEditCell& rCell, XclExpHyperlinkHelper& rLinkHelper ) :
-    XclExpSingleCellBase( EXC_ID_LABEL, 0, nXclCol, nXclRow, nForcedXFId )
+    XclExpSingleCellBase( EXC_ID_LABEL, 0, rXclPos, nForcedXFId )
 {
-    sal_uInt16 nMaxLen = (rRoot.GetBiff() >= xlBiff8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
+    sal_uInt16 nMaxLen = (rRoot.GetBiff() == EXC_BIFF8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
     XclExpStringRef xText = XclExpStringHelper::CreateCellString( rRoot, rCell, pPattern, rLinkHelper, EXC_STR_DEFAULT, nMaxLen );
     Init( rRoot, pPattern, xText );
 }
@@ -728,8 +727,7 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
     // initialize the record contents
     switch( rRoot.GetBiff() )
     {
-        case xlBiff5:
-        case xlBiff7:
+        case EXC_BIFF5:
             // BIFF5-BIFF7: create a LABEL or RSTRING record
             DBG_ASSERT( mxText->Len() <= EXC_LABEL_MAXLEN, "XclExpLabelCell::XclExpLabelCell - string too long" );
             SetContSize( mxText->GetSize() );
@@ -742,7 +740,7 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
                 SetContSize( GetContSize() + 1 + 2 * mxText->GetFormatsCount() );
             }
         break;
-        case xlBiff8:
+        case EXC_BIFF8:
             // BIFF8+: create a LABELSST record
             mnSstIndex = rRoot.GetSst().Insert( xText );
             SetRecId( EXC_ID_LABELSST );
@@ -756,8 +754,7 @@ void XclExpLabelCell::WriteContents( XclExpStream& rStrm )
 {
     switch( rStrm.GetRoot().GetBiff() )
     {
-        case xlBiff5:
-        case xlBiff7:
+        case EXC_BIFF5:
             rStrm << *mxText;
             if( mxText->IsRich() )
             {
@@ -765,7 +762,7 @@ void XclExpLabelCell::WriteContents( XclExpStream& rStrm )
                 mxText->WriteFormats( rStrm );
             }
         break;
-        case xlBiff8:
+        case EXC_BIFF8:
             rStrm << mnSstIndex;
         break;
         default:    DBG_ERROR_BIFF();
@@ -776,14 +773,14 @@ void XclExpLabelCell::WriteContents( XclExpStream& rStrm )
 
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpFormulaCell, 256, 256 )
 
-XclExpFormulaCell::XclExpFormulaCell( const XclExpRoot& rRoot,
-        sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+XclExpFormulaCell::XclExpFormulaCell(
+        const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
         const ScFormulaCell& rScFmlaCell,
         XclExpArrayBuffer& rArrayBfr,
         XclExpShrfmlaBuffer& rShrfmlaBfr,
         XclExpTableopBuffer& rTableopBfr ) :
-    XclExpSingleCellBase( EXC_ID_FORMULA, 0, nXclCol, nXclRow, nForcedXFId ),
+    XclExpSingleCellBase( EXC_ID_FORMULA, 0, rXclPos, nForcedXFId ),
     mrScFmlaCell( const_cast< ScFormulaCell& >( rScFmlaCell ) )
 {
     // *** Find result number format overwriting cell number format *** -------
@@ -820,7 +817,7 @@ XclExpFormulaCell::XclExpFormulaCell( const XclExpRoot& rRoot,
 
     // *** Convert the formula token array *** --------------------------------
 
-    ScAddress aScPos( static_cast< SCCOL >( nXclCol ), static_cast< SCROW >( nXclRow ), rRoot.GetCurrScTab() );
+    ScAddress aScPos( static_cast< SCCOL >( rXclPos.mnCol ), static_cast< SCROW >( rXclPos.mnRow ), rRoot.GetCurrScTab() );
     const ScTokenArray& rScTokArr = *mrScFmlaCell.GetCode();
 
     // first try to create multiple operations
@@ -841,7 +838,7 @@ XclExpFormulaCell::XclExpFormulaCell( const XclExpRoot& rRoot,
             rMatEnd.IncCol( static_cast< SCsCOL >( nMatWidth - 1 ) );
             rMatEnd.IncRow( static_cast< SCsROW >( nMatHeight - 1 ) );
             // reduce to valid range (range keeps valid, because start position IS valid)
-            rRoot.CheckCellRange( aMatScRange );
+            rRoot.GetAddressConverter().ValidateRange( aMatScRange, true );
             // create the ARRAY record
             mxAddRec = rArrayBfr.CreateArray( rScTokArr, aMatScRange );
         }
@@ -910,7 +907,7 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
         {
             String aResult;
             mrScFmlaCell.GetString( aResult );
-            if( aResult.Len() || (rStrm.GetRoot().GetBiff() <= xlBiff7) )
+            if( aResult.Len() || (rStrm.GetRoot().GetBiff() <= EXC_BIFF5) )
             {
                 rStrm << EXC_FORMULA_RES_STRING;
                 mxStringRec.reset( new XclExpStringRec( rStrm.GetRoot(), aResult ) );
@@ -944,9 +941,8 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
 // Multiple cell records ======================================================
 
 XclExpMultiCellBase::XclExpMultiCellBase(
-        sal_uInt16 nRecId, sal_uInt16 nMulRecId, sal_uInt32 nContSize,
-        sal_uInt16 nXclCol, sal_uInt16 nXclRow ) :
-    XclExpCellBase( nRecId, 0, nXclCol, nXclRow ),
+        sal_uInt16 nRecId, sal_uInt16 nMulRecId, sal_uInt32 nContSize, const XclAddress& rXclPos ) :
+    XclExpCellBase( nRecId, 0, rXclPos ),
     mnMulRecId( nMulRecId ),
     mnContSize( nContSize )
 {
@@ -975,7 +971,7 @@ void XclExpMultiCellBase::ConvertXFIndexes( const XclExpRoot& rRoot )
 
 void XclExpMultiCellBase::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= xlBiff3 );
+    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF3 );
 
     XclExpMultiXFIdDeq::const_iterator aEnd = maXFIds.end();
     XclExpMultiXFIdDeq::const_iterator aRangeBeg = maXFIds.begin();
@@ -1107,20 +1103,20 @@ void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes 
 
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBlankCell, 256, 256 )
 
-XclExpBlankCell::XclExpBlankCell( sal_uInt16 nXclCol, sal_uInt16 nXclRow, const XclExpMultiXFId& rXFId ) :
-    XclExpMultiCellBase( EXC_ID_BLANK, EXC_ID_MULBLANK, 0, nXclCol, nXclRow )
+XclExpBlankCell::XclExpBlankCell( const XclAddress& rXclPos, const XclExpMultiXFId& rXFId ) :
+    XclExpMultiCellBase( EXC_ID_BLANK, EXC_ID_MULBLANK, 0, rXclPos )
 {
     DBG_ASSERT( rXFId.mnCount > 0, "XclExpBlankCell::XclExpBlankCell - invalid count" );
     AppendXFId( rXFId );
 }
 
-XclExpBlankCell::XclExpBlankCell( const XclExpRoot& rRoot,
-        sal_uInt16 nXclCol, sal_uInt16 nLastXclCol, sal_uInt16 nXclRow,
+XclExpBlankCell::XclExpBlankCell(
+        const XclExpRoot& rRoot, const XclAddress& rXclPos, sal_uInt16 nLastXclCol,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId ) :
-    XclExpMultiCellBase( EXC_ID_BLANK, EXC_ID_MULBLANK, 0, nXclCol, nXclRow )
+    XclExpMultiCellBase( EXC_ID_BLANK, EXC_ID_MULBLANK, 0, rXclPos )
 {
-    DBG_ASSERT( nXclCol <= nLastXclCol, "XclExpBlankCell::XclExpBlankCell - invalid column range" );
-    AppendXFId( rRoot, pPattern, ApiScriptType::WEAK, nForcedXFId, nLastXclCol - nXclCol + 1 );
+    DBG_ASSERT( rXclPos.mnCol <= nLastXclCol, "XclExpBlankCell::XclExpBlankCell - invalid column range" );
+    AppendXFId( rRoot, pPattern, ApiScriptType::WEAK, nForcedXFId, nLastXclCol - rXclPos.mnCol + 1 );
 }
 
 bool XclExpBlankCell::TryMerge( const XclExpCellBase& rCell )
@@ -1150,9 +1146,9 @@ void XclExpBlankCell::WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol )
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpRkCell, 256, 256 )
 
 XclExpRkCell::XclExpRkCell(
-        const XclExpRoot& rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+        const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_Int32 nRkValue ) :
-    XclExpMultiCellBase( EXC_ID_RK, EXC_ID_MULRK, 4, nXclCol, nXclRow )
+    XclExpMultiCellBase( EXC_ID_RK, EXC_ID_MULRK, 4, rXclPos )
 {
     AppendXFId( rRoot, pPattern, ApiScriptType::WEAK, nForcedXFId );
     maRkValues.push_back( nRkValue );
@@ -1286,12 +1282,11 @@ XclExpDimensions::XclExpDimensions( const XclExpRoot& rRoot ) :
 {
     switch( rRoot.GetBiff() )
     {
-        case xlBiff2:   SetRecHeader( EXC_ID2_DIMENSIONS, 8 );  break;
-        case xlBiff3:
-        case xlBiff4:
-        case xlBiff5:
-        case xlBiff7:   SetRecHeader( EXC_ID_DIMENSIONS, 10 );  break;
-        case xlBiff8:   SetRecHeader( EXC_ID_DIMENSIONS, 14 );  break;
+        case EXC_BIFF2: SetRecHeader( EXC_ID2_DIMENSIONS, 8 );  break;
+        case EXC_BIFF3:
+        case EXC_BIFF4:
+        case EXC_BIFF5: SetRecHeader( EXC_ID_DIMENSIONS, 10 );  break;
+        case EXC_BIFF8: SetRecHeader( EXC_ID_DIMENSIONS, 14 );  break;
         default:        DBG_ERROR_BIFF();
     }
 }
@@ -1309,12 +1304,12 @@ void XclExpDimensions::SetDimensions(
 void XclExpDimensions::WriteBody( XclExpStream& rStrm )
 {
     XclBiff eBiff = rStrm.GetRoot().GetBiff();
-    if( eBiff >= xlBiff8 )
+    if( eBiff == EXC_BIFF8 )
         rStrm << mnFirstUsedXclRow << mnFirstFreeXclRow;
     else
         rStrm << static_cast< sal_uInt16 >( mnFirstUsedXclRow ) << static_cast< sal_uInt16 >( mnFirstFreeXclRow );
     rStrm << mnFirstUsedXclCol << mnFirstFreeXclCol;
-    if( eBiff >= xlBiff3 )
+    if( eBiff >= EXC_BIFF3 )
         rStrm << sal_uInt16( 0 );
 }
 
@@ -1468,7 +1463,7 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
     sal_uInt16 nMaxUsedWidth = 0;
     for( nPos = 0, nSize = maColInfos.Size(); nPos < nSize; ++nPos )
     {
-        const XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
+        XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
         sal_uInt16 nColCount = xRec->GetColCount();
 
         // add XF index to passed vector
@@ -1542,7 +1537,7 @@ void XclExpDefrowheight::SetDefaultData( const XclExpDefaultRowData& rDefData )
 
 void XclExpDefrowheight::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= xlBiff3 );
+    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF3 );
     rStrm << maDefData.mnFlags << maDefData.mnHeight;
 }
 
@@ -1647,7 +1642,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
             if( nFirstFreeXclCol < nNextUsedXclCol )
             {
                 aXFId.mnCount = nNextUsedXclCol - nFirstFreeXclCol;
-                XclExpCellRef xNewCell( new XclExpBlankCell( nFirstFreeXclCol, mnXclRow, aXFId ) );
+                XclExpCellRef xNewCell( new XclExpBlankCell( XclAddress( nFirstFreeXclCol, mnXclRow ), aXFId ) );
                 // insert the cell, InsertCell() may merge it with existing BLANK records
                 InsertCell( xNewCell, nPos );
                 // insert default XF indexes into aXFIndexes
@@ -2021,7 +2016,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     rDoc.GetTableArea( nScTab, nLastUsedScCol, nLastUsedScRow );
 
     ScRange aUsedRange( 0, 0, nScTab, nLastUsedScCol, nLastUsedScRow, nScTab );
-    CheckCellRange( aUsedRange );
+    GetAddressConverter().ValidateRange( aUsedRange, true );
     nLastUsedScCol = aUsedRange.aEnd.Col();
     nLastUsedScRow = aUsedRange.aEnd.Row();
 
@@ -2065,9 +2060,8 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         SCCOL nLastScCol = aIt.GetEndCol();
         ScAddress aScPos( nScCol, nScRow, nScTab );
 
-        sal_uInt16 nXclCol = static_cast< sal_uInt16 >( nScCol );
+        XclAddress aXclPos( static_cast< sal_uInt16 >( nScCol ), static_cast< sal_uInt16 >( nScRow ) );
         sal_uInt16 nLastXclCol = static_cast< sal_uInt16 >( nLastScCol );
-        sal_uInt16 nXclRow = static_cast< sal_uInt16 >( nScRow );
 
         const ScBaseCell* pScCell = aIt.GetCell();
         XclExpCellRef xCell;
@@ -2100,19 +2094,19 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                     ULONG nScNumFmt = GETITEMVALUE( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT, ULONG );
                     if( rFormatter.GetType( nScNumFmt ) == NUMBERFORMAT_LOGICAL )
                         xCell.reset( new XclExpBooleanCell(
-                            GetRoot(), nXclCol, nXclRow, pPattern, nMergeBaseXFId, fValue != 0.0 ) );
+                            GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue != 0.0 ) );
                 }
 
                 // try to create an RK value (compressed floating-point number)
                 sal_Int32 nRkValue;
                 if( !xCell && XclTools::GetRKFromDouble( nRkValue, fValue ) )
                     xCell.reset( new XclExpRkCell(
-                        GetRoot(), nXclCol, nXclRow, pPattern, nMergeBaseXFId, nRkValue ) );
+                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, nRkValue ) );
 
                 // else: simple floating-point number cell
                 if( !xCell )
                     xCell.reset( new XclExpNumberCell(
-                        GetRoot(), nXclCol, nXclRow, pPattern, nMergeBaseXFId, fValue ) );
+                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue ) );
             }
             break;
 
@@ -2120,7 +2114,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             {
                 const ScStringCell& rScStrCell = *static_cast< const ScStringCell* >( pScCell );
                 xCell.reset( new XclExpLabelCell(
-                    GetRoot(), nXclCol, nXclRow, pPattern, nMergeBaseXFId, rScStrCell ) );
+                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScStrCell ) );
             }
             break;
 
@@ -2129,7 +2123,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 const ScEditCell& rScEditCell = *static_cast< const ScEditCell* >( pScCell );
                 XclExpHyperlinkHelper aLinkHelper( GetRoot(), aScPos );
                 xCell.reset( new XclExpLabelCell(
-                    GetRoot(), nXclCol, nXclRow, pPattern, nMergeBaseXFId, rScEditCell, aLinkHelper ) );
+                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScEditCell, aLinkHelper ) );
 
                 // add a single created HLINK record to the record list
                 if( aLinkHelper.HasLinkRecord() )
@@ -2144,7 +2138,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             {
                 const ScFormulaCell& rScFmlaCell = *static_cast< const ScFormulaCell* >( pScCell );
                 xCell.reset( new XclExpFormulaCell(
-                    GetRoot(), nXclCol, nXclRow, pPattern, nMergeBaseXFId,
+                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId,
                     rScFmlaCell, maArrayBfr, maShrfmlaBfr, maTableopBfr ) );
             }
             break;
@@ -2156,7 +2150,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             case CELLTYPE_NOTE:
             {
                 xCell.reset( new XclExpBlankCell(
-                    GetRoot(), nXclCol, nLastXclCol, nXclRow, pPattern, nMergeBaseXFId ) );
+                    GetRoot(), aXclPos, nLastXclCol, pPattern, nMergeBaseXFId ) );
             }
             break;
         }
