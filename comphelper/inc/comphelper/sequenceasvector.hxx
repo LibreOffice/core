@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequenceasvector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 12:46:10 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,17 @@ template< class TElementType >
 class SequenceAsVector : public ::std::vector< TElementType >
 {
     //-------------------------------------------
+    // types
+
+    public:
+
+        //---------------------------------------
+        /** @short  When inheriting from a template using typename is generally required when using
+                    types from the base! */
+        typedef typename ::std::vector< TElementType >::const_iterator const_iterator;
+
+    //-------------------------------------------
+    // interface
     public:
 
         //---------------------------------------
@@ -270,3 +281,4 @@ class SequenceAsVector : public ::std::vector< TElementType >
 } // namespace comphelper
 
 #endif // _COMPHELPER_SEQUENCEASVECTOR_HXX_
+
