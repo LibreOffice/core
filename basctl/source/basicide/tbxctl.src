@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 11:53:38 $
+ *  last change: $Author: tbe $ $Date: 2001-05-16 09:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,8 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_PUSHBUTTON ;
             Identifier = SID_INSERT_PUSHBUTTON ;
             RadioCheck = TRUE ;
-            Text = "Button" ;
-            Text [ english_us ] = "Button" ;
+            Text = "CommandButton" ;
+            Text [ english_us ] = "CommandButton" ;
             Text [ italian ] = "Pulsante di comando" ;
             Text [ spanish ] = "Botón de comando" ;
             Text [ french ] = "Bouton de commande" ;
@@ -189,8 +189,8 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_FIXEDTEXT ;
             Identifier = SID_INSERT_FIXEDTEXT ;
             RadioCheck = TRUE ;
-            Text = "FixedText" ;
-            Text [ english_us ] = "FixedText" ;
+            Text = "Label" ;
+            Text [ english_us ] = "Label" ;
             Text [ italian ] = "Testo fisso" ;
             Text [ spanish ] = "Etiqueta" ;
             Text [ french ] = "Étiquette" ;
@@ -276,7 +276,7 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_GROUPBOX ;
             Identifier = SID_INSERT_GROUPBOX ;
             RadioCheck = TRUE ;
-            Text = "GroupBox" ;
+            Text = "FrameControl" ;
             Text [ dutch ] = "FrameControl" ;
             Text [ english_us ] = "GroupBox" ;
             Text [ italian ] = "FrameControl" ;
@@ -353,9 +353,9 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_RADIOBUTTON ;
             Identifier = SID_INSERT_RADIOBUTTON ;
             RadioCheck = TRUE ;
-            Text = "RadioButton" ;
+            Text = "OptionButton" ;
             Text [ dutch ] = "OptionButton" ;
-            Text [ english_us ] = "RadioButton" ;
+            Text [ english_us ] = "OptionButton" ;
             Text [ italian ] = "Pulsante di scelta" ;
             Text [ spanish ] = "Botón de opción" ;
             Text [ french ] = "Bouton radio" ;
@@ -382,9 +382,9 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_EDIT ;
             Identifier = SID_INSERT_EDIT ;
             RadioCheck = TRUE ;
-            Text = "Edit" ;
-            Text [ dutch ] = "Edit" ;
-            Text [ english_us ] = "Edit" ;
+            Text = "TextField" ;
+            Text [ dutch ] = "TextField" ;
+            Text [ english_us ] = "TextField" ;
             Text [ italian ] = "Casella di testo" ;
             Text [ spanish ] = "Cuadro de texto" ;
             Text [ french ] = "Zone de texte" ;
