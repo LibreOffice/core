@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-15 11:32:26 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 10:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ USHORT Application::GetCommandLineParamCount()
 XubString Application::GetCommandLineParam( USHORT nParam )
 {
     NAMESPACE_VOS( OStartupInfo )   aStartInfo;
-    NAMESPACE_RTL( OUString )       aParam;
+    ::rtl::OUString     aParam;
     aStartInfo.getCommandArg( nParam, aParam );
     return XubString( aParam );
 }

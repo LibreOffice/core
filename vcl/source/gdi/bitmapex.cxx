@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-16 17:35:51 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 10:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,7 @@ BOOL BitmapEx::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                     }
                     else
                     {
-                        Byte        cBlack = 0;
+                        sal_uInt8       cBlack = 0;
                         AlphaMask*  pAlpha = new AlphaMask( GetSizePixel(), &cBlack );
 
                         aMask = pAlpha->ImplGetBitmap();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-09 00:03:51 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 10:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     pSVData->mnMainThreadId = ::vos::OThread::getCurrentIdentifier();
 
     NAMESPACE_VOS( OStartupInfo )   aStartInfo;
-    NAMESPACE_RTL( OUString )       aExeFileName;
+    ::rtl::OUString     aExeFileName;
 
 #ifdef REMOTE_APPSERVER
     // create condition now to avoid race

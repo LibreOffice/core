@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 15:40:00 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 10:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,10 +220,10 @@ sal_Bool SAL_CALL SalYieldMutex::tryToAcquire()
     {
         mnCount++;
         mnThreadId = GetCurrentThreadId();
-        return True;
+        return sal_True;
     }
     else
-        return False;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
