@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: svesik $ $Date: 2002-08-29 13:21:51 $
+#   last change: $Author: hr $ $Date: 2002-10-21 13:57:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,16 +84,20 @@ OLE2DEF=
 .INCLUDE : unxsoli2.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "C52SOLARISS"
+.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS3"
 .INCLUDE : unxsols3.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "C52SOLARISI"
+.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISI3"
 .INCLUDE : unxsoli3.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "C54SOLARISS"
+.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
 .INCLUDE : unxsols4.mk
+.ENDIF
+
+.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISI4"
+.INCLUDE : unxsoli4.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCSOLARISS"
