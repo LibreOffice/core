@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:43:24 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,16 @@ SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
 
 BOOL SwTabCols::operator==( const SwTabCols& rCmp ) const
 {
+    USHORT i;
+
     if ( !(nLeftMin == rCmp.GetLeftMin() &&
            nLeft    == rCmp.GetLeft()    &&
            nRight   == rCmp.GetRight()   &&
            nRightMax== rCmp.GetRightMax()&&
            Count()== rCmp.Count()) )
         return FALSE;
-    for ( USHORT i = 0; i < Count(); ++i )
+
+    for ( i = 0; i < Count(); ++i )
         if ( operator[](i) != rCmp[i] )
             return FALSE;
 
