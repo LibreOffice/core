@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:15:23 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,4 +566,5 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ catalan ] = "Línea de separación";
     };
 };
+
 
