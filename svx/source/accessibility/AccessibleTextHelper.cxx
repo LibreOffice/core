@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-13 18:46:17 $
+ *  last change: $Author: thb $ $Date: 2002-06-14 12:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,60 +541,72 @@ namespace accessibility
 
     sal_Bool AccessibleTextHelper_Impl::IsActive() const throw (uno::RuntimeException)
     {
-        SvxEditSource& rEditSource = GetEditSource();
-        SvxEditViewForwarder* pViewForwarder = rEditSource.GetEditViewForwarder();
+        try
+        {
+            SvxEditSource& rEditSource = GetEditSource();
+            SvxEditViewForwarder* pViewForwarder = rEditSource.GetEditViewForwarder();
 
-        if( !pViewForwarder )
-            return sal_False;
+            if( !pViewForwarder )
+                return sal_False;
 
-        if( pViewForwarder->IsValid() )
-            return sal_True;
-        else
+            if( pViewForwarder->IsValid() )
+                return sal_True;
+            else
+                return sal_False;
+        }
+        catch( const uno::RuntimeException& )
+        {
             return sal_False;
+        }
     }
 
     void AccessibleTextHelper_Impl::UpdateSelection()
     {
-        ESelection aSelection;
-        if( GetEditViewForwarder().GetSelection( aSelection ) )
+        try
         {
-            if( !maLastSelection.IsEqual( aSelection ) )
+            ESelection aSelection;
+            if( GetEditViewForwarder().GetSelection( aSelection ) )
             {
-                DBG_ASSERT( !mbThisHasFocus && mbGroupHasFocus, "AccessibleTextHelper_Impl::UpdateSelection: editing, but no focus set" );
-
-                // notify all affected paragraphs (TODO: may be suboptimal,
-                // since some paragraphs might stay selected)
-                if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND )
+                if( !maLastSelection.IsEqual( aSelection ) )
                 {
-                    // Did the caret move from one paragraph to another?
-                    if( maLastSelection.nEndPara != aSelection.nEndPara )
+                    DBG_ASSERT( !mbThisHasFocus && mbGroupHasFocus, "AccessibleTextHelper_Impl::UpdateSelection: editing, but no focus set" );
+
+                    // notify all affected paragraphs (TODO: may be suboptimal,
+                    // since some paragraphs might stay selected)
+                    if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND )
                     {
-                        maParaManager.FireEvent( maLastSelection.nEndPara,
-                                                 maLastSelection.nEndPara+1,
-                                                 AccessibleEventId::ACCESSIBLE_CARET_EVENT,
-                                                 uno::makeAny(static_cast<sal_Int32>(-1)),
-                                                 uno::makeAny(static_cast<sal_Int32>(maLastSelection.nEndPos)) );
+                        // Did the caret move from one paragraph to another?
+                        if( maLastSelection.nEndPara != aSelection.nEndPara )
+                        {
+                            maParaManager.FireEvent( maLastSelection.nEndPara,
+                                                     maLastSelection.nEndPara+1,
+                                                     AccessibleEventId::ACCESSIBLE_CARET_EVENT,
+                                                     uno::makeAny(static_cast<sal_Int32>(-1)),
+                                                     uno::makeAny(static_cast<sal_Int32>(maLastSelection.nEndPos)) );
 
-                        ChangeChildFocus( aSelection.nEndPara );
+                            ChangeChildFocus( aSelection.nEndPara );
+                        }
                     }
+
+                    uno::Any aOldCursor;
+
+                    if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND )
+                        aOldCursor <<= static_cast<sal_Int32>(maLastSelection.nEndPos);
+                    else
+                        aOldCursor <<= static_cast<sal_Int32>(-1);
+
+                    maParaManager.FireEvent( aSelection.nEndPara,
+                                             aSelection.nEndPara+1,
+                                             AccessibleEventId::ACCESSIBLE_CARET_EVENT,
+                                             uno::makeAny(static_cast<sal_Int32>(aSelection.nEndPos)),
+                                             aOldCursor );
+
+                    maLastSelection = aSelection;
                 }
-
-                uno::Any aOldCursor;
-
-                if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND )
-                    aOldCursor <<= static_cast<sal_Int32>(maLastSelection.nEndPos);
-                else
-                    aOldCursor <<= static_cast<sal_Int32>(-1);
-
-                maParaManager.FireEvent( aSelection.nEndPara,
-                                         aSelection.nEndPara+1,
-                                         AccessibleEventId::ACCESSIBLE_CARET_EVENT,
-                                         uno::makeAny(static_cast<sal_Int32>(aSelection.nEndPos)),
-                                         aOldCursor );
-
-                maLastSelection = aSelection;
             }
         }
+        // no selection? no update actions
+        catch( const uno::RuntimeException& ) {}
     }
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
