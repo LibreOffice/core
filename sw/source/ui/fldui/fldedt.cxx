@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:34:42 $
+ *  last change: $Author: os $ $Date: 2000-11-13 12:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
                         SID_ATTR_ADDRESS, SID_ATTR_ADDRESS,
                         SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS,
                         0L );
-    SvxAddressItem aAddress( *SFX_APP()->GetIniManager() );
+    SvxAddressItem aAddress;
     aAddress.SetWhich(SID_ATTR_ADDRESS);
     aSet.Put( aAddress );
     USHORT nEditPos = UNKNOWN_EDIT;
@@ -431,79 +431,11 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
     if( pSfxItemSet && SFX_ITEM_SET == pSfxItemSet->GetItemState(
             SID_ATTR_ADDRESS, FALSE, &pItem ) )
     {
-        ((SvxAddressItem*)pItem)->Store( *SFX_APP()->GetIniManager() );
+        ((SvxAddressItem*)pItem)->Store();
         pSh->UpdateFlds( *pCurFld );
     }
 
     return 0;
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:36  hr
-    initial import
-
-    Revision 1.146  2000/09/18 16:05:28  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.145  2000/05/10 11:55:12  os
-    Basic API removed
-
-    Revision 1.144  2000/04/18 15:17:31  os
-    UNICODE
-
-    Revision 1.143  2000/02/11 14:46:27  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.142  1999/09/21 14:05:23  os
-    SwExtUserSubType: language
-
-    Revision 1.141  1999/01/20 13:16:52  JP
-    Task #58677#: Crsr in Readonly Bereichen zulassen
-
-
-      Rev 1.140   20 Jan 1999 14:16:52   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.139   15 Oct 1998 16:02:48   OM
-   #57965# Variablennamen fuer Eingabefeld verwenden
-
-      Rev 1.138   19 Aug 1998 17:22:12   JP
-   Bug #55247#: fuers MoveNext-/-PrevFldType einen eigenen Pam verwenden
-
-      Rev 1.137   15 Jun 1998 13:07:50   OM
-   #50908# Positionskorrektur der Imagebuttons
-
-      Rev 1.136   08 Apr 1998 09:48:52   OM
-   #47470 Neue HelpIDs beim bearbeiten von Felbefehlen
-
-      Rev 1.135   06 Mar 1998 14:53:52   OM
-   Nur bei Aenderung Feld aktualisieren
-
-      Rev 1.134   03 Mar 1998 15:26:56   OM
-   Feld beim traveln selektieren
-
-      Rev 1.133   25 Feb 1998 16:56:48   OM
-   Fixe Author- und ExtUser-Felder
-
-      Rev 1.132   06 Feb 1998 14:17:04   OM
-   #47145# Buttongroesse anpassen
-
-      Rev 1.131   09 Jan 1998 16:56:50   OM
-   Bei Dok-Wechsel updaten
-
-      Rev 1.130   08 Jan 1998 16:16:26   OM
-   Traveling
-
-      Rev 1.129   08 Jan 1998 13:36:20   OM
-   Feldbefehl-Traveling
-
-      Rev 1.128   08 Jan 1998 12:56:24   OM
-   Feldbefehl-Traveling
-
-      Rev 1.127   16 Dec 1997 17:01:40   OM
-   Feldbefehle bearbeiten
-
-------------------------------------------------------------------------*/
 
