@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: gt $ $Date: 2004-07-15 06:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,10 +246,16 @@
 #define STR_SERIALNUM                   2
 #define STR_SIGALGORITHM                3
 #define STR_ISSUER                      4
-#define STR_VALIDFROM                   5
-#define STR_VALIDTO                     6
-#define STR_SUBJECT                     7
-#define STR_PUBKEY                      8
+#define STR_ISSUER_ID                   5
+#define STR_VALIDFROM                   6
+#define STR_VALIDTO                     7
+#define STR_SUBJECT                     8
+#define STR_SUBJECT_ID                  9
+#define STR_SUBJECT_PUBKEY_ALGO         10
+#define STR_SUBJECT_PUBKEY_VAL          11
+#define STR_SIGNATURE_ALGO              12
+#define STR_THUMBPRINT_ALGO             13
+#define STR_THUMBPRINT                  14
 
 // --------- tab page Certificate viewer - Certification Path ---------
 

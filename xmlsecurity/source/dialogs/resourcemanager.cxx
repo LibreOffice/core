@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourcemanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-14 11:36:06 $
+ *  last change: $Author: gt $ $Date: 2004-07-15 06:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,10 @@ namespace XmlSec
             ByteString  aName( "xmlsec" );
             aName += ByteString::CreateFromInt32( SOLARUPD );
 //          pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILanguage() );
-            LanguageType    aLang( LANGUAGE_ENGLISH_US );
+//          LanguageType    aLang( LANGUAGE_ENGLISH_US );
 //          pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), aLang );
 // MT: Change to Locale
-            pResMgr = ResMgr::CreateResMgr( aName.GetBuffer());
+            pResMgr = ResMgr::CreateResMgr( aName.GetBuffer() );
         }
 
     return pResMgr;
@@ -90,8 +90,9 @@ namespace XmlSec
     {
         if( !pInternational )
         {
-            LanguageType    aLang( LANGUAGE_ENGLISH_US );
-            pInternational = new International( aLang );
+//          LanguageType    aLang( LANGUAGE_ENGLISH_US );
+//          pInternational = new International( aLang );
+            pInternational = new International( Application::GetSettings().GetInternational() );
         }
         return pInternational;
     }
@@ -106,6 +107,24 @@ namespace XmlSec
     String GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT )
     {
         return GetInternational()->GetDate( GetDateTime( _rDT ) );
+    }
+
+    String GetDateTimeString( const rtl::OUString& _rDate, const rtl::OUString& _rTime )
+    {
+        Date        aDate(
+                        USHORT( String( _rDate, 6, 2 ).ToInt32() ),
+                        USHORT( String( _rDate, 4, 2 ).ToInt32() ),
+                        USHORT( String( _rDate, 0, 4 ).ToInt32() ) );
+        Time        aTime(
+                        USHORT( String( _rTime, 0, 2 ).ToInt32() ),
+                        USHORT( String( _rTime, 4, 2 ).ToInt32() ),
+                        USHORT( String( _rTime, 6, 2 ).ToInt32() ),
+//                      USHORT( String( _rTime, 8, 2 ).ToInt32() ) );
+                        0 );
+        String      aStr( GetInternational()->GetDate( aDate ) );
+        aStr.AppendAscii( " " );
+        aStr += GetInternational()->GetTime( aTime );
+        return aStr;
     }
 
     String GetDateString( const ::com::sun::star::util::DateTime& _rDT )
@@ -199,6 +218,37 @@ namespace XmlSec
         }
 
         return s;
+    }
+
+    String GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, UINT16 _nLineBreak )
+    {
+        const sal_Int8*         pSerNumSeq = _rSeq.getConstArray();
+        int                     nCnt = _rSeq.getLength();
+        String                  aStr;
+        const char              pHexDigs[ 17 ] = "0123456789ABCEDF";
+        char                    pBuffer[ 3 ] = "  ";
+        UINT8                   nNum;
+        UINT16                  nBreakStart = _nLineBreak? _nLineBreak : 1;
+        UINT16                  nBreak = nBreakStart;
+        for( int i = 0 ; i < nCnt ; ++i )
+        {
+            nNum = UINT8( pSerNumSeq[ i ] );
+            pBuffer[ 0 ] = pHexDigs[ nNum & 0x0F ];
+            nNum >>= 4;
+            pBuffer[ 1 ] = pHexDigs[ nNum ];
+            aStr.AppendAscii( pBuffer );
+
+            --nBreak;
+            if( nBreak )
+                aStr.AppendAscii( _pSep );
+            else
+            {
+                nBreak = nBreakStart;
+                aStr.AppendAscii( "\n" );
+            }
+        }
+
+        return aStr;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-14 11:36:06 $
+ *  last change: $Author: gt $ $Date: 2004-07-15 06:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,12 +298,14 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
 
     // fill list box
     Reference< security::XCertificate > xCert = mpDlg->mxCert;
+    UINT16                  nLineBreak = 16;
+    const char*             pHexSep = " ";
     String                  aLBEntry;
     String                  aDetails;
     aLBEntry = aDetails = String::CreateFromInt32( xCert->getVersion() );
     InsertElement( String( ResId( STR_VERSION ) ), aLBEntry, aDetails );
-    Sequence< sal_Int8 >    aSerNumSeq = xCert->getSerialNumber();
-    const sal_Int8*         pSerNumSeq = aSerNumSeq.getConstArray();
+    Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
+/*  const sal_Int8*         pSerNumSeq = aSerNumSeq.getConstArray();
     int                     nCnt = aSerNumSeq.getLength();
     String                  aSerNumStr;
     const char              pHexDigs[ 17 ] = "0123456789ABCEDF";
@@ -319,18 +321,48 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
 //      aSerNumStr.AppendAscii( " " );
         aSerNumStr.AppendAscii( pBuffer );
     }
-    InsertElement( String( ResId( STR_SERIALNUM ) ), aSerNumStr, aSerNumStr, true );
+    InsertElement( String( ResId( STR_SERIALNUM ) ), aSerNumStr, aSerNumStr, true );*/
+    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
+    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
+    InsertElement( String( ResId( STR_SERIALNUM ) ), aLBEntry, aDetails );
 //  InsertElement( String( ResId( STR_SIGALGORITHM ) ), String::CreateFromAscii( "n/a" ), String() );
+
     aLBEntry = XmlSec::GetPureContent( xCert->getIssuerName(), ", " );
     aDetails = XmlSec::GetPureContent( xCert->getIssuerName(), "\n", true );
     InsertElement( String( ResId( STR_ISSUER ) ), aLBEntry, aDetails );
+    aSeq = xCert->getIssuerUniqueID();
+    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
+    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
+    InsertElement( String( ResId( STR_ISSUER_ID ) ), aLBEntry, aDetails );
+
     aLBEntry = aDetails = XmlSec::GetDateTimeString( xCert->getNotBefore() );
     InsertElement( String( ResId( STR_VALIDFROM ) ), aLBEntry, aDetails  );
     aLBEntry = aDetails = XmlSec::GetDateTimeString( xCert->getNotAfter() );
     InsertElement( String( ResId( STR_VALIDTO ) ), aLBEntry, aDetails );
+
     aLBEntry = XmlSec::GetPureContent( xCert->getSubjectName(), ", " );
     aDetails = XmlSec::GetPureContent( xCert->getSubjectName(), "\n", true );
     InsertElement( String( ResId( STR_SUBJECT ) ), aLBEntry, aDetails );
+    aSeq = xCert->getSubjectUniqueID();
+    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
+    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
+    InsertElement( String( ResId( STR_SUBJECT_ID ) ), aLBEntry, aDetails );
+    aLBEntry = aDetails = xCert->getSubjectPublicKeyAlgorithm();
+    InsertElement( String( ResId( STR_SUBJECT_PUBKEY_ALGO ) ), aLBEntry, aDetails );
+    aSeq = xCert->getSubjectPublicKeyValue();
+    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
+    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
+    InsertElement( String( ResId( STR_SUBJECT_PUBKEY_VAL ) ), aLBEntry, aDetails );
+
+    aLBEntry = aDetails = xCert->getSignatureAlgorithm();
+    InsertElement( String( ResId( STR_SIGNATURE_ALGO ) ), aLBEntry, aDetails );
+
+    aLBEntry = aDetails = xCert->getThumbprintAlgorithm();
+    InsertElement( String( ResId( STR_THUMBPRINT_ALGO ) ), aLBEntry, aDetails );
+    aSeq = xCert->getThumbprint();
+    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
+    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
+    InsertElement( String( ResId( STR_THUMBPRINT ) ), aLBEntry, aDetails );
 
     FreeResource();
 
@@ -377,15 +409,22 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     ,maCertStatusML         ( this, ResId( ML_CERTSTATUS ) )
 {
     // fill list box
-    Sequence< Reference< security::XCertificate > >
-                aCertPath = _pDlg->mxSecurityEnvironment->buildCertificatePath( _pDlg->mxCert );
-    const Reference< security::XCertificate >*
-                pCertPath = aCertPath.getConstArray();
+    maCertPathLB.SetNodeDefaultImages();
+    maCertPathLB.SetSublistOpenWithLeftRight();
 
-    String  aCN_Id( String::CreateFromAscii( "CN" ) );
-    int     nCnt = aCertPath.getLength();
+    Sequence< Reference< security::XCertificate > >
+                    aCertPath = _pDlg->mxSecurityEnvironment->buildCertificatePath( _pDlg->mxCert );
+    const Reference< security::XCertificate >*
+                    pCertPath = aCertPath.getConstArray();
+
+    String          aCN_Id( String::CreateFromAscii( "CN" ) );
+    String          aState;
+    int             nCnt = aCertPath.getLength();
+    SvLBoxEntry*    pParent = NULL;
     for( int i = 0 ; i < nCnt ; ++i )
-        InsertCert( i, XmlSec::GetContentPart( pCertPath[ i ]->getIssuerName(), aCN_Id ), String::CreateFromInt32( i ) );
+        pParent = InsertCert( pParent, XmlSec::GetContentPart( pCertPath[ i ]->getIssuerName(), aCN_Id ), aState );
+
+    InsertCert( pParent, XmlSec::GetContentPart( _pDlg->mxCert->getIssuerName(), aCN_Id ), aState );
 
     FreeResource();
 
@@ -428,8 +467,10 @@ void CertificateViewerCertPathTP::Clear( void )
     maCertPathLB.Clear();
 }
 
-void CertificateViewerCertPathTP::InsertCert( int _nLevel, const String& _rName, const String& _rStatus )
+SvLBoxEntry* CertificateViewerCertPathTP::InsertCert( SvLBoxEntry* _pParent, const String& _rName, const String& _rStatus )
 {
-    SvLBoxEntry*    pEntry = maCertPathLB.InsertEntry( _rName );
+    SvLBoxEntry*    pEntry = maCertPathLB.InsertEntry( _rName, _pParent );
     pEntry->SetUserData( ( void* ) new String( _rStatus ) );
+
+    return pEntry;
 }

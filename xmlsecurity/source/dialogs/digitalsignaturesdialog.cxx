@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-14 11:05:45 $
+ *  last change: $Author: gt $ $Date: 2004-07-15 06:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
         {
             aSubject = XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id );
             aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id );
-            aDateTimeStr = XmlSec::GetDateString( xCert->getNotAfter() );
+//          aDateTimeStr = XmlSec::GetDateString( xCert->getNotAfter() );
+            aDateTimeStr = XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime );
         }
         else
         {

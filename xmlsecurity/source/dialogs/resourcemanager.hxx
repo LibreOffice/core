@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourcemanager.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+ *  last change: $Author: gt $ $Date: 2004-07-15 06:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,9 @@
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 
 namespace XmlSec
 {
@@ -83,12 +85,15 @@ namespace XmlSec
     International*  GetInternational( void );
     DateTime        GetDateTime( const ::com::sun::star::util::DateTime& _rDT );
     String          GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT );
+    String          GetDateTimeString( const rtl::OUString& _rDate, const rtl::OUString& _rTime );
     String          GetDateString( const ::com::sun::star::util::DateTime& _rDT );
 
     String          GetPureContent( const String& _rRawString,
                                     const char* _pCommaReplacement = ", ",
                                     bool _bPreserveId = false );        // strips "CN=" and so from string
     String          GetContentPart( const String& _rRawString, const String& _rPartId );
+
+    String          GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", UINT16 _nLineBreak = 0xFFFF );
 }
 
 #define XMLSEC_RES(id)      ResId(id,XmlSec::GetResMgr())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-14 11:34:47 $
+ *  last change: $Author: gt $ $Date: 2004-07-15 06:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ private:
 
     DECL_LINK(          CertSelectHdl, void* );
     void                Clear( void );
-    void                InsertCert( int _nLevel, const String& _rName, const String& _rStatus );
+    SvLBoxEntry*        InsertCert( SvLBoxEntry* _pParent, const String& _rName, const String& _rStatus );
 public:
                         CertificateViewerCertPathTP( Window* pParent, CertificateViewer* _pDlg );
     virtual             ~CertificateViewerCertPathTP();

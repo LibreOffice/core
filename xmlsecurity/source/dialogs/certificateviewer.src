@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-14 11:36:06 $
+ *  last change: $Author: gt $ $Date: 2004-07-15 06:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,11 @@ TabPage RID_XMLSECTP_DETAILS
         Text = "Issuer";
         Text [ en-US ] = "Issuer";
     };
+    String STR_ISSUER_ID
+    {
+        Text = "Issuer";
+        Text [ en-US ] = "Issuer Unique ID";
+    };
     String STR_VALIDFROM
     {
         Text = "Valid From";
@@ -289,10 +294,35 @@ TabPage RID_XMLSECTP_DETAILS
         Text = "Subject";
         Text [ en-US ] = "Subject";
     };
-    String STR_PUBKEY
+    String STR_SUBJECT_ID
     {
-        Text = "Public Key";
-        Text [ en-US ] = "Public Key";
+        Text = "Subject Unique ID";
+        Text [ en-US ] = "Subject Unique ID";
+    };
+    String STR_SUBJECT_PUBKEY_ALGO
+    {
+        Text = "Subject Algorithm";
+        Text [ en-US ] = "Subject Algorithm";
+    };
+    String STR_SUBJECT_PUBKEY_VAL
+    {
+        Text = "Subject Public Key";
+        Text [ en-US ] = "Subject Public Key";
+    };
+    String STR_SIGNATURE_ALGO
+    {
+        Text = "Signature Algorithm";
+        Text [ en-US ] = "Signature Algorithm";
+    };
+    String STR_THUMBPRINT_ALGO
+    {
+        Text = "Thumbprint Algorithm";
+        Text [ en-US ] = "Thumbprint Algorithm";
+    };
+    String STR_THUMBPRINT
+    {
+        Text = "Thumbprint";
+        Text [ en-US ] = "Thumbprint";
     };
 };
 
