@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-10 15:16:35 $
+ *  last change: $Author: jp $ $Date: 2001-08-22 07:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,6 +479,11 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
  *                  SwSubFont::DoOnCapitals() const
  *************************************************************************/
 
+// JP 22.8.2001 - global optimization off - Bug 91245 / 91223
+#if defined( WNT ) && defined( MSC )
+#pragma optimize("g",off)
+#endif
+
 void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 {
     ASSERT( pLastFont, "SwFont::DoOnCapitals: No LastFont?!" );
@@ -690,5 +695,10 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     rDo.GetInf().SetText( rOldText );
     rDo.GetInf().SetKanaDiff( nKana );
 }
+
+// JP 22.8.2001 - global optimization off - Bug 91245 / 91223
+#if defined( WNT ) && defined( MSC )
+#pragma optimize("g",on)
+#endif
 
 
