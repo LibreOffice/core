@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:13 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/color.hxx>
 #include <svtools/pathoptions.hxx>
+#include <svtools/moduleoptions.hxx>
 #pragma hdrstop
 
 #include "helpid.hrc"
@@ -211,7 +212,7 @@ friend class SfxOrganizeListBox_Impl;
     SfxOrganizeMgr          aMgr;
 
     SvStringsDtor*          GetAllFactoryURLs_Impl() const;
-    sal_Bool                GetFactoryURL_Impl( String& rFactoryURL, String& rFileURL ) const;
+    sal_Bool                GetServiceName_Impl( String& rFactoryURL, String& rFileURL ) const;
     long                    Dispatch_Impl( USHORT nId, Menu* _pMenu );
     String                  GetPath_Impl( BOOL bOpen, const String& rFileName );
     void                    InitBitmaps( void );
@@ -1628,20 +1629,19 @@ BOOL SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry *pEntry)
         return FALSE;
 }
 
-SvStringsDtor* SfxOrganizeDlg_Impl::GetAllFactoryURLs_Impl() const
+SvStringsDtor* SfxOrganizeDlg_Impl::GetAllFactoryURLs_Impl( ) const
 {
+    SvtModuleOptions aModOpt;
+    ::com::sun::star::uno::Sequence < ::rtl::OUString >& aServiceNames = aModOpt.GetAllServiceNames() ;
     SvStringsDtor* pList = new SvStringsDtor;
-    String aFactoryURL( DEFINE_CONST_UNICODE("private:factory/") );
-    USHORT nCount = SfxObjectFactory::GetObjectFactoryCount_Impl();
-    for( USHORT i = 0; i < nCount; ++i )
+    sal_Int32 nCount = aServiceNames.getLength();
+    for( sal_Int32 i=0; i<nCount; ++i )
     {
-        const SfxObjectFactory& rObjFac = SfxObjectFactory::GetObjectFactory_Impl(i);
-        const String& rDefTemplateURL = rObjFac.GetStandardTemplate();
-        String aShortName = String::CreateFromAscii( rObjFac.GetShortName() );
-        if ( rDefTemplateURL.Len() > 0 && aShortName.Len() > 0 )
+        if ( SfxObjectFactory::GetStandardTemplate( aServiceNames[i] ).Len() > 0 )
         {
-            String* pURL = new String( aFactoryURL );
-            *pURL += aShortName;
+            SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
+            SvtModuleOptions::ClassifyFactoryByName( aServiceNames[i], eFac );
+            String* pURL = new String( aModOpt.GetFactoryEmptyDocumentURL( eFac ) );
             pList->Insert( pURL, pList->Count() );
         }
     }
@@ -1649,7 +1649,7 @@ SvStringsDtor* SfxOrganizeDlg_Impl::GetAllFactoryURLs_Impl() const
     return pList;
 }
 
-sal_Bool SfxOrganizeDlg_Impl::GetFactoryURL_Impl( String& rFactoryURL, String& rFileURL ) const
+sal_Bool SfxOrganizeDlg_Impl::GetServiceName_Impl( String& rName, String& rFileURL ) const
 {
     sal_Bool bRet = sal_False;
     const SfxDocumentTemplates* pTemplates = aMgr.GetTemplates();
@@ -1666,14 +1666,8 @@ sal_Bool SfxOrganizeDlg_Impl::GetFactoryURL_Impl( String& rFactoryURL, String& r
                 SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( aStorage->GetFormat() );
             if ( pFilter )
             {
-                const SfxFactoryFilterContainer* pFilterCont =
-                    (SfxFactoryFilterContainer*)pFilter->GetFilterContainer();
-                if ( pFilterCont )
-                {
-                    const SfxObjectFactory& rObjFac = pFilterCont->GetFactory();
-                    rFactoryURL = String::CreateFromAscii( rObjFac.GetShortName() );
-                    bRet = ( rFactoryURL.Len() > 0 );
-                }
+                rName = pFilter->GetServiceName();
+                bRet = TRUE;
             }
         }
     }
@@ -1892,9 +1886,9 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
 
         case ID_DEFAULT_TEMPLATE:
         {
-            String aFactoryURL, aFileURL;
-            if ( GetFactoryURL_Impl( aFactoryURL, aFileURL ) )
-                SfxObjectFactory::SetStandardTemplate( aFactoryURL, aFileURL );
+            String aServiceName, aFileURL;
+            if ( GetServiceName_Impl( aServiceName, aFileURL ) )
+                SfxObjectFactory::SetStandardTemplate( aServiceName, aFileURL );
             break;
         }
 
@@ -1907,8 +1901,8 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
         Menu* pSubMenu = _pMenu ? _pMenu : aEditBtn.GetPopupMenu()->GetPopupMenu( ID_RESET_DEFAULT_TEMPLATE );
         if ( pSubMenu )
         {
-            String aObjFacURL = pSubMenu->GetItemCommand( nId );
-            SfxObjectFactory::SetStandardTemplate( aObjFacURL, String() );
+            String aServiceName = SfxObjectShell::GetServiceNameFromFactory( pSubMenu->GetItemCommand( nId ) );
+            SfxObjectFactory::SetStandardTemplate( aServiceName, String() );
             bHandled = sal_True;
         }
     }
@@ -2029,7 +2023,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
     if ( bEnable && eVT == SfxOrganizeListBox_Impl::VIEW_TEMPLATES && nDepth == nDocLevel )
     {
         String aFactoryURL, aFileURL;
-        bEnable = GetFactoryURL_Impl( aFactoryURL, aFileURL );
+        bEnable = GetServiceName_Impl( aFactoryURL, aFileURL );
     }
     else if ( bEnable )
         bEnable = FALSE;
@@ -2054,6 +2048,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
     }
     else
         bEnable = sal_False;
+
     delete pList;
     pMenu->EnableItem( ID_RESET_DEFAULT_TEMPLATE, bEnable );
 
@@ -2181,7 +2176,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 */
 {
     void* pDummy = NULL;
-    sfx2::FileDialogHelper aFileDlg( WB_OPEN, *(SfxObjectFactory*)pDummy );
+    sfx2::FileDialogHelper aFileDlg( WB_OPEN, String() );
 
     // add config and basic filter
     static String sOpenBracket( DEFINE_CONST_UNICODE( " (" ) );
