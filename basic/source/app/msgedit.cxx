@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gh $ $Date: 2001-08-09 13:46:27 $
+ *  last change: $Author: gh $ $Date: 2002-03-28 14:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 #include "basic.hrc"
 #include "msgedit.hxx"
 #include "app.hxx"
+#include "apperror.hxx"
 #include "appbased.hxx"
 #include "basmsg.hrc"
 
@@ -111,7 +112,7 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 
 #define LOGTYPE( pEntry ) ((pEntry && pEntry->GetUserData())?((TTDebugData*)pEntry->GetUserData())->aLogType:LOG_ERROR)
 
-MsgEdit::MsgEdit( AppWin* pParent, BasicFrame *pBF, const WinBits& aBits )
+MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
 : aEditTree( pParent, pBF, aBits | WB_HASBUTTONS | WB_HASLINES | WB_HASBUTTONSATROOT )
 , pBasicFrame(pBF)
 , pCurrentRun(NULL)
@@ -120,7 +121,7 @@ MsgEdit::MsgEdit( AppWin* pParent, BasicFrame *pBF, const WinBits& aBits )
 , nVersion(0)
 , bFileLoading(FALSE)
 , bModified(FALSE)
-, pAppWin( pParent )
+, pAppError( pParent )
 {
     SetFont( aEditTree.GetDefaultFont( DEFAULTFONT_FIXED, aEditTree.GetSettings().GetLanguage(), 0, &aEditTree ) );
     aEditTree.SetNodeBitmaps( Bitmap( ResId (MBP_PLUS) ), Bitmap( ResId (MBP_MINUS) ) );
@@ -146,6 +147,21 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
 {
     if ( LogMsg->aDebugData.aFilename.Copy(0,2).CompareToAscii( "--" ) == COMPARE_EQUAL )
         LogMsg->aDebugData.aFilename.Erase(0,2);
+
+    if ( LogMsg->aDebugData.aFilename.GetChar(0) != '~' ) // do we want to convert
+    {
+        DirEntry aConvert( LogMsg->aDebugData.aFilename );
+        if ( pAppError->aBaseDir.Contains( aConvert ) )
+        {
+            aConvert.ToRel( pAppError->aBaseDir );
+            LogMsg->aDebugData.aFilename = CUniString("~");         // mark as converted
+            LogMsg->aDebugData.aFilename += aConvert.GetFull( FSYS_STYLE_VFAT );
+        }
+        else if ( !bFileLoading )
+        {
+            LogMsg->aDebugData.aFilename.Insert( CUniString("~-"), 0); // mark as unconvertable
+        }
+    }
     xub_StrLen nPos;
     LogMsg->aDebugData.aMsg.ConvertLineEnd();
     if ( (nPos = LogMsg->aDebugData.aMsg.Search( CUniString("\n").ConvertLineEnd() )) != STRING_NOTFOUND )
@@ -184,7 +200,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
 
         if ( !bFileLoading )
         {   // Kommt vom Testtool und muß gleich geschrieben werden.
-            BOOL bFileWasChanged = pAppWin->DiskFileChanged( SINCE_LAST_LOAD );
+            BOOL bFileWasChanged = pAppError->DiskFileChanged( SINCE_LAST_LOAD );
 
             DBG_ASSERT( aLogFileName == LogMsg->aLogFileName, "Logging to different logfile as before" );
             DirEntry aEntry( LogMsg->aLogFileName );
@@ -206,7 +222,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
                 aStrm.Close();
             }
             if ( !bFileWasChanged )
-                pAppWin->UpdateFileInfo( HAS_BEEN_LOADED );
+                pAppError->UpdateFileInfo( HAS_BEEN_LOADED );
         }
     }
 }
@@ -669,9 +685,10 @@ BOOL MsgEdit::Save( const String& aName )
 }
 
 
-TTTreeListBox::TTTreeListBox( Window* pParent, BasicFrame* pBF, WinBits nWinStyle )
+TTTreeListBox::TTTreeListBox( AppError* pParent, BasicFrame* pBF, WinBits nWinStyle )
 : SvTreeListBox( pParent, nWinStyle )
 , pBasicFrame(pBF)
+, pAppError( pParent )
 //, nDeselectParent(0)
 {}
 
@@ -681,13 +698,29 @@ BOOL TTTreeListBox::DoubleClickHdl()
     if ( pThisEntry && pThisEntry->GetUserData() && ((TTDebugData*)pThisEntry->GetUserData())->aFilename.Len() > 0 )
     {
         TTDebugData *aData = (TTDebugData*)pThisEntry->GetUserData();
-        if ( pBasicFrame->FindModuleWin( aData->aFilename ) )
+        String aFilename = aData->aFilename;
+        if ( aData->aFilename.GetChar(0) == '~' )
         {
-            AppEdit *pWin = pBasicFrame->FindModuleWin( aData->aFilename );
+            if ( aData->aFilename.GetChar(1) == '-' )
+            {
+                aFilename.Erase( 0,2 );
+            }
+            else
+            {
+                aFilename.Erase( 0,1 );
+                DirEntry aConvert( pAppError->aBaseDir );
+                aConvert += DirEntry( aFilename, FSYS_STYLE_VFAT );
+                aFilename = aConvert.GetFull();
+            }
+        }
+
+        if ( pBasicFrame->FindModuleWin( aFilename ) )
+        {
+            AppWin *pWin = pBasicFrame->FindModuleWin( aFilename );
             pWin->ToTop();
         }
         else
-            pBasicFrame->LoadFile( aData->aFilename );
+            pBasicFrame->LoadFile( aFilename );
 
         if ( pBasicFrame->pWork && pBasicFrame->pWork->ISA(AppEdit) )
             ((AppEdit*)pBasicFrame->pWork)->Highlight( aData->nLine, aData->nCol1, aData->nCol2 );

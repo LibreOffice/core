@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appwin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: gh $ $Date: 2002-03-28 14:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ public:
     virtual FileType GetFileType()=0;   // Liefert den Filetype
     virtual BOOL ReloadAllowed(){ return TRUE; } // Ermöglicht dem Dok temporär NEIN zu sagen
     virtual void Reload();              // Reload nach änderung auf Platte
+    virtual void LoadIniFile(){;}       // (re)load ini file after change
     void CheckReload();                 // Prüft und Fragt ob reloaded werden soll
     BOOL DiskFileChanged( USHORT nWhat );   // Prüft ob die Datei sich verändert hat
     void UpdateFileInfo( USHORT nWhat );    // Merkt sich den aktuellen Zustand der Datei

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apperror.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: gh $ $Date: 2002-03-28 14:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#ifndef _SV_CONFIG_HXX
+#include <vcl/config.hxx>
+#endif
+#ifndef _BASIC_TTRESHLP_HXX
+#include "ttstrhlp.hxx"
+#endif
 #include "basic.hrc"
 #include "apperror.hxx"
 
@@ -66,6 +72,7 @@ TYPEINIT1(AppError,AppWin);
 AppError::AppError( BasicFrame* pParent, String aFileName )
 : AppWin( pParent )
 {
+    LoadIniFile();
     SetText( aFileName );   // Muﬂ vor new MsgEdit stehen!!
     pDataEdit = new MsgEdit( this, pParent, WB_HSCROLL | WB_VSCROLL | WB_LEFT );
     DirEntry aEntry( aFileName );
@@ -113,3 +120,10 @@ FileType AppError::GetFileType()
     return FT_RESULT_FILE;
 }
 
+void AppError::LoadIniFile()
+{
+    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
+    aConf.SetGroup("Path");
+
+    aBaseDir = DirEntry( aConf.ReadKey("Basisverzeichnis") );
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apperror.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: gh $ $Date: 2002-03-28 14:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,5 +77,7 @@ public:
     FileType GetFileType();         // Liefert den Filetype
     MsgEdit* GetMsgTree()           { return ((MsgEdit*)pDataEdit); }
     virtual BOOL ReloadAllowed(){ return !StarBASIC::IsRunning(); }
+    virtual void LoadIniFile();     // (re)load ini file after change
+    DirEntry aBaseDir;
 };
 

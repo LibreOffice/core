@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: gh $ $Date: 2002-03-28 14:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include "dataedit.hxx"
 #include "testtool.hxx"
 class BasicFrame;
-class AppWin;
+class AppError;
 
 #define SelectChildren SelectChilds     // Sonst wird mir schlecht
 
@@ -87,8 +87,9 @@ protected:
 //  USHORT          nDeselectParent;
     BasicFrame      *pBasicFrame;
     void            InitEntry( SvLBoxEntry*, const String&, const Image&, const Image& );
+    AppError        *pAppError;
 public:
-    TTTreeListBox( Window* pParent, BasicFrame* pBF, WinBits nWinStyle=0 );
+    TTTreeListBox( AppError* pParent, BasicFrame* pBF, WinBits nWinStyle=0 );
     ~TTTreeListBox(){}
 
 //  virtual void    SelectHdl();
@@ -115,10 +116,10 @@ protected:
     String Impl_MakeSaveText( SvLBoxEntry *pEntry ) const;
     String Impl_MakeSaveText( TTDebugData aData ) const;
     USHORT nVersion;        // Speichert die Dateiversion
-    AppWin* pAppWin;
+    AppError* pAppError;
     String aLogFileName;    // Name der Logdatei
 public:
-    MsgEdit( AppWin*, BasicFrame *pBF, const WinBits& );
+    MsgEdit( AppError*, BasicFrame *pBF, const WinBits& );
     ~MsgEdit();
     void AddAnyMsg( TTLogMsg *LogMsg );
     void AddRun( String aMsg, TTDebugData aDebugData );

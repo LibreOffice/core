@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-26 15:15:40 $
+ *  last change: $Author: gh $ $Date: 2002-03-28 14:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,11 +705,6 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     pHelpMenu->SetActivateHdl( LINK( this, BasicFrame, InitMenu ) );
     pHelpMenu->SetDeactivateHdl( LINK( this, BasicFrame, DeInitMenu ) );
 
-
-    LoadLRU();
-
-    LoadIniFile();
-
 #ifndef UNX
     pPrn    = new BasicPrinter;
 #else
@@ -717,6 +712,9 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
 #endif
     pList   = new EditList;
     pStatus = new StatusLine( this );
+
+    LoadLRU();
+    LoadIniFile();
 
     UpdateTitle();
 //  SetIcon( aAppIcon );
@@ -759,6 +757,9 @@ void BasicFrame::LoadIniFile()
 
     if ( pBasic )
         pBasic->LoadIniFile();
+
+    for ( int i = 0 ; i < pList->Count() ; i++ )
+        pList->GetObject( i )->LoadIniFile();
 }
 
 BasicFrame::~BasicFrame()
