@@ -2,9 +2,9 @@
 #
 #   $RCSfile: language.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:48:30 $
+#   last change: $Author: rt $ $Date: 2004-02-10 14:32:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,8 +60,9 @@
 #
 #*************************************************************************
 
-
 package pre2par::language;
+
+use pre2par::existence;
 
 ##############################################################
 # Returning a specific language string from the block
@@ -154,7 +155,10 @@ sub get_all_replace_strings
         if ( ${$lngfile}[$i] =~ /^\s*\[\s*(.*?)\s*\]\s*$/ )
         {
             my $replacestring = $1;
-            push(@allstrings, $replacestring);
+            if (! pre2par::existence::exists_in_array($replacestring, \@allstrings))
+            {
+                push(@allstrings, $replacestring);
+            }
         }
     }
 
