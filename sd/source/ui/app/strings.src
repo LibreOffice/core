@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-24 20:58:23 $
+ *  last change: $Author: kz $ $Date: 2001-09-27 20:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5725,7 +5725,7 @@ String STR_WARN_DEL_UNDO_STACK
 {
     Text = "Diese Aktion lцscht die Liste der Arbeitsschritte, die rьckgдngig gemacht werden kцnnen. Bisher gemachte Дnderungen am Dokument bleiben erhalten, kцnnen jedoch nicht mehr rьckgдngig gemacht werden. Wollen Sie fortfahren und die neue Seitenvorlage zuweisen?" ;
     Text [ ENGLISH ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?" ;
-    Text[ english_us ] = "This action deletes the list of undoable actions. Changes made to the document up till now remain, but cannot be undone anymore. Do you want to continue and assign the new page layout?";
+    Text[ english_us ] = "This action deletes the list of undoable actions. Changes made to the document up till now remain, but cannot be undone anymore. Do you want to continue and assign the new design?";
     Text[ portuguese ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
     Text[ russian ] = "Данное действие удалит список шагов, которые можно отменить. Выполненные до сих пор изменения документа будут сохранены, но их болше нельзя будет отменить. Продолжить и назначить новый стиль страницы?";
     Text[ greek ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
@@ -5741,7 +5741,7 @@ String STR_WARN_DEL_UNDO_STACK
     Text[ japanese ] = "гЃ“гЃ®пЅ±пЅёпЅјпЅ®пѕќгЃ§е…ѓгЃ«ж€»гЃ™гЃ“гЃЁгЃЊгЃ§гЃЌг‚‹дЅњжҐ­йЃЋзЁ‹гЃ®пѕпЅЅпѕ„г‚’е‰Љй™¤гЃ—гЃѕгЃ™гЂ‚гЃ„гЃѕгЃѕгЃ§пѕ„пѕћпЅ·пЅ­пѕ’пѕќпѕ„гЃ§иЎЊгЃЈгЃџе¤‰ж›ґгЃЇгЃќгЃ®гЃѕгЃѕж®‹г‚ЉгЃѕгЃ™гЃЊгЂЃе…ѓгЃ«ж€»гЃ™гЃ“гЃЁгЃЇгЃ§гЃЌгЃѕгЃ›г‚“гЂ‚з¶љиЎЊгЃ—гЃ¦ж–°гЃ—гЃ„гЃ„пѕЌпѕџпЅ°пЅјпѕћпЅЅпѕЂпЅІпѕ™г‚’йЃ©з”ЁгЃ—гЃѕгЃ™гЃ‹гЂ‚";
     Text[ korean ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
     Text[ chinese_simplified ] = "иї™йЎ№ж“ЌдЅњдјље€ й™¤з”ЁжќҐж’¤ж¶€е‘Ѕд»¤зљ„е·ҐдЅњж­ҐйЄ¤е€—еЌ•гЂ‚и‡ід»Љдёєж­ўж‚ЁеЇ№ж–‡жЎЈж‰ЂеЃљзљ„ж›ґж”№дјљиў«дїќе­пјЊдЅ†жЇж‚Ёж— жі•е†Ќж’¤ж¶€иї™дє›ж›ґж”№гЂ‚и¦Ѓз»§з»­е№¶дЅїз”Ёж–°зљ„йЎµйќўж ·ејЏпјџ";
-    Text[ chinese_traditional ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
+    Text[ chinese_traditional ] = "йЂ™еЂ‹е‹•дЅњжњѓе€Єй™¤еѕ©еЋџжё…е–®зљ„й …з›®гЂ‚е·Із¶“и®Љж›ґзљ„е†…е®№е°‡жњѓиў«дїќз•™дёЌи®ЉпјЊдЅ†жЇдёЌеЏЇд»Ґе†Ќеѕ©еЋџж‰Ђжњ‰зљ„и®Љж›ґе†…е®№гЂ‚и¦Ѓз№јзєЊдё¦дё”дЅїз”ЁйЂ™еЂ‹ж–°зљ„й ЃйќўжЁЈејЏпјџ";
     Text[ turkish ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
     Text[ arabic ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
     Text[ catalan ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
@@ -13597,6 +13597,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Lдpikuultavuus";
 };
+
 
 
 
