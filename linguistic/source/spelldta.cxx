@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldta.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #endif
 
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
@@ -146,6 +147,92 @@ Reference< XSpellAlternatives > MergeProposals(
 }
 
 
+BOOL SeqHasEntry(
+        const Sequence< OUString > &rSeq,
+        const OUString &rTxt)
+{
+    BOOL bRes = FALSE;
+    INT32 nLen = rSeq.getLength();
+    const OUString *pEntry = rSeq.getConstArray();
+    for (INT32 i = 0;  i < nLen  &&  !bRes;  ++i)
+    {
+        if (rTxt == pEntry[i])
+            bRes = TRUE;
+    }
+    return bRes;
+}
+
+
+void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
+        Reference< XDictionaryList > &rxDicList,
+        INT16 nLanguage )
+{
+    static const OUString aEmpty;
+    BOOL bSthRemoved = FALSE;
+    INT32 nLen = rSeq.getLength();
+    OUString *pEntries = rSeq.getArray();
+    for (INT32 i = 0;  i < nLen;  ++i)
+    {
+        Reference< XDictionaryEntry > xNegEntry( SearchDicList( rxDicList,
+                    pEntries[i], nLanguage, FALSE, TRUE ) );
+        if (xNegEntry.is())
+        {
+            pEntries[i] = aEmpty;
+            bSthRemoved = TRUE;
+        }
+    }
+    if (bSthRemoved)
+    {
+        Sequence< OUString > aNew;
+        // merge sequence without duplicates and empty strings in new empty sequence
+        aNew = MergeProposalSeqs( aNew, rSeq, FALSE );
+        rSeq = aNew;
+    }
+}
+
+
+Sequence< OUString > MergeProposalSeqs(
+            Sequence< OUString > &rAlt1,
+            Sequence< OUString > &rAlt2,
+            BOOL bAllowDuplicates )
+{
+    Sequence< OUString > aMerged;
+
+    if (0 == rAlt1.getLength() && bAllowDuplicates)
+        aMerged = rAlt2;
+    else if (0 == rAlt2.getLength() && bAllowDuplicates)
+        aMerged = rAlt1;
+    else
+    {
+        INT32 nAltCount1 = rAlt1.getLength();
+        const OUString *pAlt1 = rAlt1.getConstArray();
+        INT32 nAltCount2 = rAlt2.getLength();
+        const OUString *pAlt2 = rAlt2.getConstArray();
+
+        INT32 nCountNew = Min( nAltCount1 + nAltCount2, (INT32) MAX_PROPOSALS );
+        aMerged.realloc( nCountNew );
+        OUString *pMerged = aMerged.getArray();
+
+        INT32 nIndex = 0;
+        INT32 i = 0;
+        for (int j = 0;  j < 2;  j++)
+        {
+            INT32           nCount  = j == 0 ? nAltCount1 : nAltCount2;
+            const OUString  *pAlt   = j == 0 ? pAlt1 : pAlt2;
+            for (i = 0;  i < nCount  &&  nIndex < MAX_PROPOSALS;  i++)
+            {
+                if (pAlt[i].getLength() &&
+                    (bAllowDuplicates || !SeqHasEntry(aMerged, pAlt[i] )))
+                    pMerged[ nIndex++ ] = pAlt[ i ];
+            }
+        }
+        //DBG_ASSERT(nIndex == nCountNew, "wrong number of proposals");
+        aMerged.realloc( nIndex );
+    }
+
+    return aMerged;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -168,6 +255,17 @@ SpellAlternatives::SpellAlternatives(
         aAlt.getArray()[ 0 ] = rRplcWord;
     else
         aAlt.realloc( 0 );
+}
+
+
+SpellAlternatives::SpellAlternatives(
+        const OUString &rWord, INT16 nLang, INT16 nFailureType,
+        const Sequence< OUString > &rAlternatives ) :
+    aWord       (rWord),
+    nLanguage   (nLang),
+    nType       (nFailureType),
+    aAlt        (rAlternatives)
+{
 }
 
 

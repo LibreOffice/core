@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-25 10:08:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    const Sequence< OUString > aDirCnt( utl::LocalFileHelper().
+    const Sequence< OUString > aDirCnt( utl::LocalFileHelper::
                                         GetFolderContents( rDicDir, FALSE ) );
     const OUString *pDirCnt = aDirCnt.getConstArray();
     INT32 nEntries = aDirCnt.getLength();
@@ -394,15 +394,15 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
     String aDCP( String::CreateFromAscii( "dcp" ) );
     for (INT32 i = 0;  i < nEntries;  ++i)
     {
-        String  aName( pDirCnt[i] );
+        String  aURL( pDirCnt[i] );
         USHORT  nLang = LANGUAGE_NONE;
         BOOL    bNeg  = FALSE;
 
-        if(!::IsVers2OrNewer( aName, nLang, bNeg, aBuf ))
+        if(!::IsVers2OrNewer( aURL, nLang, bNeg, aBuf ))
         {
             // Wenn kein
-            xub_StrLen nPos  = aName.Search('.');
-            String aExt(aName.Copy(nPos + 1));
+            xub_StrLen nPos  = aURL.Search('.');
+            String aExt(aURL.Copy(nPos + 1));
             aExt.ToLowerAscii();
 
             if(aExt == aDCN)       // negativ
@@ -417,7 +417,7 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
         // Wenn existent nicht aufnehmen
         //
         INT16 nSystemLanguage = ::GetSystemLanguage();
-        String aTmp1 = ToLower( aName, nSystemLanguage );
+        String aTmp1 = ToLower( aURL, nSystemLanguage );
         xub_StrLen nPos = aTmp1.SearchBackward( '/' );
         if (STRING_NOTFOUND != nPos)
             aTmp1 = aTmp1.Copy( nPos + 1 );
@@ -433,15 +433,15 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
         }
         if(j >= nCount)     // dictionary not yet in DicList
         {
-            String rDicURL( aName );
-            xub_StrLen nPos = aName.SearchBackward( '/' );
-            if (STRING_NOTFOUND != nPos)
-                aName = aName.Copy( nPos + 1 );
+            // get decoded dictionary file name
+            INetURLObject aURLObj( aURL );
+            String aDicName = aURLObj.getName( INetURLObject::LAST_SEGMENT,
+                        true, INetURLObject::DECODE_WITH_CHARSET,
+                        RTL_TEXTENCODING_UTF8 );
 
             DictionaryType eType = bNeg ? DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
             Reference< XDictionary > xDic =
-                    new DictionaryNeo( aName, nLang, eType,
-                                       rDicURL );
+                        new DictionaryNeo( aDicName, nLang, eType, aURL );
 
             addDictionary( xDic );
             nCount++;

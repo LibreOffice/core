@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-21 09:00:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,13 +443,18 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
         if (bCheckDics  &&
             GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
-            BOOL bIsWordOk = bRes;
-
             Reference< XDictionaryList > xDicList( GetDicList(), UNO_QUERY );
-            Reference< XDictionaryEntry > xEntry( SearchDicList( xDicList,
-                    aChkWord, nLanguage, !bIsWordOk, TRUE ) );
-            if (xEntry.is())
-                bRes = !bIsWordOk;
+            Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDicList,
+                    aChkWord, nLanguage, TRUE, TRUE ) );
+            if (xPosEntry.is())
+                bRes = TRUE;
+            else
+            {
+                Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDicList,
+                        aChkWord, nLanguage, FALSE, TRUE ) );
+                if (xNegEntry.is())
+                    bRes = FALSE;
+            }
         }
     }
 
@@ -693,44 +698,48 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
         if (bCheckDics  &&
             GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
-            BOOL bIsWordOk = !xRes.is();
-
             Reference< XDictionaryList > xDicList( GetDicList(), UNO_QUERY );
-            Reference< XDictionaryEntry > xEntry( SearchDicList( xDicList,
-                    aChkWord, nLanguage, !bIsWordOk, TRUE ) );
+            Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDicList,
+                    aChkWord, nLanguage, TRUE, TRUE ) );
 
-            OUString aRplcTxt;
-            BOOL     bAddAlternative = FALSE;
-
-            if (bIsWordOk && xEntry.is())   // negative entry found
+            if (xPosEntry.is())
+                xRes = NULL;    // positive dictionaries have precedence over negative ones
+            else
             {
-                aRplcTxt = xEntry->getReplacementText();
-                bAddAlternative = TRUE;
-            }
-            else if (!bIsWordOk)
-            {
-                if (xEntry.is())    // positive entry found
-                    xRes = NULL;
-                else
+                Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDicList,
+                        aChkWord, nLanguage, FALSE, TRUE ) );
+                if (xNegEntry.is())
                 {
-                    // search for negative entry to provide additional alternative
-                    xEntry = SearchDicList( xDicList,
-                                              aChkWord, nLanguage, FALSE, TRUE );
-                    if (xEntry.is())
+                    INT16 eFailureType = SpellFailure::IS_NEGATIVE_WORD;
+                    Sequence< OUString > aProposals;
+                    if (xRes.is())
                     {
-                        aRplcTxt = xEntry->getReplacementText();
-                        bAddAlternative = TRUE;
+                        eFailureType = xRes->getFailureType();
+                        aProposals = xRes->getAlternatives();
                     }
-                }
-            }
 
-            // (additional) alternative found?
-            if (bAddAlternative)
-            {
-                Reference< XSpellAlternatives > xAlt(
-                           new SpellAlternatives( aChkWord, nLanguage,
-                            SpellFailure::IS_NEGATIVE_WORD, aRplcTxt ) );
-                xRes = MergeProposals( xAlt, xRes );
+                    // replacement text to be added to suggestions, if not empty
+                    OUString aAddRplcTxt( xNegEntry->getReplacementText() );
+
+                    // replacement text must not be in negative dictionary itself
+                    if (aAddRplcTxt.getLength() &&
+                        !SearchDicList( xDicList, aAddRplcTxt, nLanguage, FALSE, TRUE ).is())
+                    {
+                        // add suggestion if not already part of proposals
+                        if (!SeqHasEntry( aProposals, aAddRplcTxt))
+                        {
+                            INT32 nLen = aProposals.getLength();
+                            aProposals.realloc( nLen + 1);
+                            aProposals.getArray()[ nLen ] = aAddRplcTxt;
+                        }
+                    }
+
+                    // remove entries listed in negative dictionaries
+                    SeqRemoveNegEntries( aProposals, xDicList, nLanguage );
+
+                    xRes = new SpellAlternatives( aChkWord, nLanguage,
+                                    eFailureType, aProposals );
+                }
             }
         }
     }
