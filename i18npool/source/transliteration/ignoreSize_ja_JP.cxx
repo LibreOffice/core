@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreSize_ja_JP.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:48 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #define TRANSLITERATION_largeToSmall_ja_JP
 #include <transliteration_OneToOne.hxx>
 
+using namespace drafts::com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace rtl;
@@ -87,10 +88,17 @@ Sequence< OUString > SAL_CALL
 ignoreSize_ja_JP::transliterateRange( const OUString& str1, const OUString& str2 )
   throw(RuntimeException)
 {
-  smallToLarge_ja_JP t1;
-  largeToSmall_ja_JP t2;
+    smallToLarge_ja_JP t1;
+    largeToSmall_ja_JP t2;
 
-  return transliteration_Ignore::transliterateRange(str1, str2, t1, t2);
+    return transliteration_Ignore::transliterateRange(str1, str2, t1, t2);
+}
+
+sal_Unicode SAL_CALL
+ignoreSize_ja_JP::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException)
+{
+    smallToLarge_ja_JP t1;
+    return t1.transliterateChar2Char(inChar);
 }
 
 } } } }

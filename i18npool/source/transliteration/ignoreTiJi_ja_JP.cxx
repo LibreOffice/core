@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreTiJi_ja_JP.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:48 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,97 +71,31 @@ using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OUString SAL_CALL
-ignoreTiJi_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException)
+
+static Mapping TiJi[] = {
+        // TU + I --> TI
+        { 0x30C4, 0x30A3, 0x30C1 },
+        // TE + I --> TI
+        { 0x30C6, 0x30A3, 0x30C1 },
+        // TU + I --> TI
+        { 0x3064, 0x3043, 0x3061 },
+        // TE + I --> TI
+        { 0x3066, 0x3043, 0x3061 },
+        // DE + I --> ZI
+        { 0x30C7, 0x30A3, 0x30B8 },
+        // DE + I --> ZI
+        { 0x3067, 0x3043, 0x3058 },
+
+        { 0, 0, 0 }
+};
+
+ignoreTiJi_ja_JP::ignoreTiJi_ja_JP()
 {
-  // Create a string buffer which can hold nCount + 1 characters.
-  // The reference count is 0 now.
-  rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
-  sal_Unicode * dst = newStr->buffer;
-  const sal_Unicode * src = inStr.getStr() + startPos;
-
-  // Allocate nCount length to offset argument.
-  offset.realloc( nCount );
-  sal_Int32 *p = offset.getArray();
-  sal_Int32 position = startPos;
-
-  //
-  sal_Unicode previousChar = *src ++;
-  sal_Unicode currentChar;
-
-  // Translation
-  while (-- nCount > 0) {
-    currentChar = *src ++;
-
-    // TU + I --> TI
-    // TE + I --> TI
-    if ( (previousChar == 0x30C4   ||  // KATAKANA LETTER TU
-      previousChar == 0x30C6 ) &&  // KATAKANA LETTER TE
-      currentChar  == 0x30A3 ) {   // KATAKANA LETTER SMALL I
-      position ++;
-      *p ++ = position;
-      position ++;
-      *dst ++ = 0x30C1;                // KATAKANA LETTER TI
-      previousChar = *src ++;
-      nCount --;
-      continue;
-    }
-
-    // TU + I --> TI
-    // TE + I --> TI
-    if ( (previousChar == 0x3064   ||  // HIRAGANA LETTER TU
-      previousChar == 0x3066 ) &&  // HIRAGANA LETTER TE
-      currentChar  == 0x3043 ) {   // HIRAGANA LETTER SMALL I
-      position ++;
-      *p ++ = position;
-      position ++;
-      *dst ++ = 0x3061;                // HIRAGANA LETTER TI
-      previousChar = *src ++;
-      nCount --;
-      continue;
-    }
-
-    // DE + I --> ZI
-    if (previousChar == 0x30C7 &&  // KATAKANA LETTER DE
-    currentChar  == 0x30A3 ) { // KATAKANA LETTER SMALL I
-      position ++;
-      *p ++ = position;
-      position ++;
-      *dst ++ = 0x30B8;            // KATAKANA LETTER ZI
-      previousChar = *src ++;
-      nCount --;
-      continue;
-    }
-
-    // DE + I --> ZI
-    if (previousChar == 0x3067 &&  // HIRAGANA LETTER DE
-    currentChar  == 0x3043 ) { // HIRAGANA LETTER SMALL I
-      position ++;
-      *p ++ = position;
-      position ++;
-      *dst ++ = 0x3058;            // HIRAGANA LETTER ZI
-      previousChar = *src ++;
-      nCount --;
-      continue;
-    }
-
-    *p ++ = position;
-    position ++;
-    *dst ++ = previousChar;
-    previousChar = currentChar;
-  }
-
-  if (nCount == 0) {
-    *p = position;
-    *dst ++ = previousChar;
-  }
-
-  *dst = (sal_Unicode) 0;
-
-  newStr->length = sal_Int32(dst - newStr->buffer);
-  offset.realloc(newStr->length);
-  return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+        func = (TransFunc) 0;
+        table = 0;
+        map = TiJi;
+        transliterationName = "ignoreTiJi_ja_JP";
+        implementationName = "com.sun.star.i18n.Transliteration.ignoreTiJi_ja_JP";
 }
 
 } } } }
