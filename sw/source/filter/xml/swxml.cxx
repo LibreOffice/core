@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 15:41:55 $
+ *  last change: $Author: mtg $ $Date: 2001-02-28 12:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
     xGraphicResolver = 0;
+    if( pObjectHelper )
+        SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
+    xObjectResolver = 0;
     rDoc.RemoveLink();
 
     return nRet;
