@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bc $ $Date: 2001-09-12 16:22:24 $
+ *  last change: $Author: tv $ $Date: 2001-11-16 14:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,19 @@ hidspecial HID { HelpID = HID_DLGIMPORT_0_CHKCALC; };
 hidspecial HID { HelpID = HID_DLGIMPORT_0_CHKIMPRESS; };
 #define HID_DLGIMPORT_0_CHKMATHGLOBAL  34599
 hidspecial HID { HelpID = HID_DLGIMPORT_0_CHKMATHGLOBAL; };
+
+
+#define HID_DLGCORRESPONDENCE_DIALOG     34630
+hidspecial HID { HelpID = HID_DLGCORRESPONDENCE_DIALOG; };
+#define HID_DLGCORRESPONDENCE_OPTIONBUTTON1     34631
+hidspecial HID { HelpID = HID_DLGCORRESPONDENCE_OPTIONBUTTON1; };
+#define HID_DLGCORRESPONDENCE_OPTIONBUTTON2     34632
+hidspecial HID { HelpID = HID_DLGCORRESPONDENCE_OPTIONBUTTON2; };
+#define HID_DLGCORRESPONDENCE_OKAY     34633
+hidspecial HID { HelpID = HID_DLGCORRESPONDENCE_OKAY; };
+#define HID_DLGCORRESPONDENCE_CANCEL     34634
+hidspecial HID { HelpID = HID_DLGCORRESPONDENCE_CANCEL; };
+
 
 #define HID_DLGCONVERT_DIALOG       34660
 hidspecial HID { HelpID = HID_DLGCONVERT_DIALOG; };
