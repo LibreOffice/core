@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,11 @@
 # define OUtoCStr( x ) ("dummy")
 #endif /* DEBUG */
 
+extern "C" void*  SAL_CALL OMozabConnection_CreateInstance(void* _pDriver)
+{
+    return (new connectivity::mozab::OConnection( reinterpret_cast<connectivity::mozab::MozabDriver*>(_pDriver) ));
+}
+
 
 using namespace connectivity::mozab;
 //  using namespace connectivity;
@@ -111,28 +116,28 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 // --------------------------------------------------------------------------------
 
+
+//------------------------------------------------------------------
+
 namespace connectivity {
     namespace mozab {
         // For the moment, we will connect the Mozilla address book to the Mozilla
         // top-level address book which will display whatever is in the preferences
         // file of Mozilla.
-        static sal_Char*    SDBC_SCHEME_MOZILLA         = "mozilla";
         static sal_Char*    MOZ_SCHEME_MOZILLA          = "moz-abdirectory://";
         static sal_Bool     USES_FACTORY_MOZILLA        = sal_False ;
         // This one is a base uri which will be completed with the connection data.
-        static sal_Char*    SDBC_SCHEME_LDAP            = "ldap";
         static sal_Char*    MOZ_SCHEME_LDAP             = "moz-abldapdirectory://";
         static sal_Bool     USES_FACTORY_LDAP           = sal_False ;
         // These two uris will be used to obtain directory factories to access all
         // address books of the given type.
-        static sal_Char*    SDBC_SCHEME_OUTLOOK_MAPI    = "outlook";
         static sal_Char*    MOZ_SCHEME_OUTLOOK_MAPI     = "moz-aboutlookdirectory://op/";
-        static sal_Bool     USES_FACTORY_OUTLOOK_MAPI      = sal_True ;
-        static sal_Char*    SDBC_SCHEME_OUTLOOK_EXPRESS = "outlookexp";
+        static sal_Bool     USES_FACTORY_OUTLOOK_MAPI   = sal_True ;
         static sal_Char*    MOZ_SCHEME_OUTLOOK_EXPRESS  = "moz-aboutlookdirectory://oe/";
         static sal_Bool     USES_FACTORY_OUTLOOK_EXPRESS= sal_True ;
     }
 }
+// -----------------------------------------------------------------------------
 
 
 OConnection::OConnection(MozabDriver*   _pDriver)
@@ -170,11 +175,9 @@ void SAL_CALL OConnection::release() throw(RuntimeException)
 //-----------------------------------------------------------------------------
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
-    osl_incrementInterlockedCount( &m_refCount );
-
     OSL_TRACE("IN OConnection::construct()\n" );
     //  open file
-
+    m_sURL = url;
     //
     // Skip 'sdbc:mozab: part of URL
     //
@@ -219,11 +222,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     //      "sdbc:address:outlookexp:"     -> aboutlookdirectory://oe/
     //
     m_IsLDAP = sal_False ;
-    if ( aAddrbookScheme.compareToAscii( SDBC_SCHEME_MOZILLA ) == 0 ) {
+    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_MOZILLA() ) == 0 ) {
         m_sMozillaURI = rtl::OUString::createFromAscii( MOZ_SCHEME_MOZILLA );
         m_UsesFactory = USES_FACTORY_MOZILLA ;
     }
-    else if ( aAddrbookScheme.compareToAscii( SDBC_SCHEME_LDAP ) == 0 ) {
+    else if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_LDAP() ) == 0 ) {
         rtl::OUString sHostName;
         rtl::OUString sBaseDN;
         sal_Int32     nPortNumber = -1;
@@ -277,15 +280,15 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             ::dbtools::throwGenericSQLException(
                         ::rtl::OUString::createFromAscii("No BaseDN provided"),NULL);
         }
-    // Addition of a fake query to enable the Mozilla LDAP directory to work correctly.
-    m_sMozillaURI += ::rtl::OUString::createFromAscii("?(or(DisplayName,=,DontDoThisAtHome))");
+        // Addition of a fake query to enable the Mozilla LDAP directory to work correctly.
+        m_sMozillaURI += ::rtl::OUString::createFromAscii("?(or(DisplayName,=,DontDoThisAtHome))");
 
     }
-    else if ( aAddrbookScheme.compareToAscii( SDBC_SCHEME_OUTLOOK_MAPI ) == 0 ) {
+    else if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_MAPI() ) == 0 ) {
         m_sMozillaURI       = ::rtl::OUString::createFromAscii( MOZ_SCHEME_OUTLOOK_MAPI );
         m_UsesFactory       = USES_FACTORY_OUTLOOK_MAPI ;
     }
-    else if ( aAddrbookScheme.compareToAscii( SDBC_SCHEME_OUTLOOK_EXPRESS ) == 0 ) {
+    else if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_EXPRESS() ) == 0 ) {
         m_sMozillaURI       = rtl::OUString::createFromAscii( MOZ_SCHEME_OUTLOOK_EXPRESS );
         m_UsesFactory       = USES_FACTORY_OUTLOOK_EXPRESS ;
         m_bOutlookExpress   = sal_True;
@@ -307,7 +310,6 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     _aDbHelper.getTableStrings( this, sal_True ); // Will throw an exception on failure
 
-    osl_decrementInterlockedCount( &m_refCount );
 }
 // XServiceInfo
 // --------------------------------------------------------------------------------
@@ -333,21 +335,15 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
 
     OSL_TRACE("OConnection::prepareStatement( %s )", OUtoCStr( _sSql ) );
     // the pre
-    if(m_aTypeInfo.empty())
-        buildTypeInfo();
-
     // create a statement
     // the statement can only be executed more than once
-    Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,m_aTypeInfo,_sSql);
+    Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,_sSql);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
     OSL_TRACE("OConnection::prepareCall( %s )", OUtoCStr( _sSql ) );
     // not implemented yet :-) a task to do
     return NULL;
@@ -364,15 +360,11 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
     // here you  have to set your commit mode please have a look at the jdbc documentation to get a clear explanation
 }
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
     // you have to distinguish which if you are in autocommit mode or not
     // at normal case true should be fine here
 
@@ -381,18 +373,11 @@ sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeExce
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
     // when you database does support transactions you should commit here
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-
     // same as commit but for the other case
 }
 // --------------------------------------------------------------------------------
@@ -423,65 +408,41 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
     // set you connection to readonly
 }
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
     // return if your connection to readonly
     return sal_False;
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
     // if your database doesn't work with catalogs you go to next method otherwise you kjnow what to do
 }
 // --------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-
     // return your current catalog
     return ::rtl::OUString();
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
     // set your isolation level
     // please have a look at @see com.sun.star.sdbc.TransactionIsolation
 }
 // --------------------------------------------------------------------------------
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-
     // please have a look at @see com.sun.star.sdbc.TransactionIsolation
     return TransactionIsolation::NONE;
 }
 // --------------------------------------------------------------------------------
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
     // if your driver has special database types you can return it here
-
     return NULL;
 }
 // --------------------------------------------------------------------------------
@@ -512,51 +473,6 @@ Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     // you should clear your collected warnings here
-}
-//--------------------------------------------------------------------
-void OConnection::buildTypeInfo() throw( SQLException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    Reference< XResultSet> xRs = getMetaData ()->getTypeInfo ();
-    Reference< XRow> xRow(xRs,UNO_QUERY);
-    // Information for a single SQL type
-
-    // Loop on the result set until we reach end of file
-
-    while (xRs->next ())
-    {
-        OTypeInfo aInfo;
-        aInfo.aTypeName         = xRow->getString   (1);
-        aInfo.nType             = xRow->getShort    (2);
-        aInfo.nPrecision        = xRow->getInt      (3);
-        aInfo.aLiteralPrefix    = xRow->getString   (4);
-        aInfo.aLiteralSuffix    = xRow->getString   (5);
-        aInfo.aCreateParams     = xRow->getString   (6);
-        aInfo.bNullable         = xRow->getBoolean  (7) == ColumnValue::NULLABLE;
-        aInfo.bCaseSensitive    = xRow->getBoolean  (8);
-        aInfo.nSearchType       = xRow->getShort    (9);
-        aInfo.bUnsigned         = xRow->getBoolean  (10);
-        aInfo.bCurrency         = xRow->getBoolean  (11);
-        aInfo.bAutoIncrement    = xRow->getBoolean  (12);
-        aInfo.aLocalTypeName    = xRow->getString   (13);
-        aInfo.nMinimumScale     = xRow->getShort    (14);
-        aInfo.nMaximumScale     = xRow->getShort    (15);
-        aInfo.nNumPrecRadix     = (sal_Int16)xRow->getInt(18);
-
-
-
-        // Now that we have the type info, save it
-        // in the Hashtable if we don't already have an
-        // entry for this SQL type.
-
-        m_aTypeInfo.push_back(aInfo);
-    }
-
-    // Close the result set/statement.
-
-    Reference< XCloseable> xClose(xRs,UNO_QUERY);
-    xClose->close();
 }
 //------------------------------------------------------------------------------
 void OConnection::disposing()

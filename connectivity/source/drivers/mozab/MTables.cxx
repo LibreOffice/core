@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MTables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:48:41 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
     aTypes[0] = ::rtl::OUString::createFromAscii("%");
     //  aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
     //  aTypes[1] = ::rtl::OUString::createFromAscii("SYSTEMTABLE");
+    ::rtl::OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 
@@ -138,7 +139,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
         if(xResult->next()) // there can be only one table with this name
         {
             OTable* pRet = new OTable(  this, static_cast<OCatalog&>(m_rParent).getConnection(),
-                                        aName,xRow->getString(4),xRow->getString(5),aSchema);
+                                        aName,xRow->getString(4),xRow->getString(5),sEmpty);
             xRet = pRet;
         }
     }

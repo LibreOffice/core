@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MPreparedStatement.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,8 @@ using namespace com::sun::star::util;
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.mozab.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql)
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql)
     :OStatement_BASE2(_pConnection)
-    ,m_aTypeInfo(_TypeInfo)
     ,m_bPrepared(sal_False)
     ,m_sSqlStatement(sql)
     ,m_nNumParams(0)

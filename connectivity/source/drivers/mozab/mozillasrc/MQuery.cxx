@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:55 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 12:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,16 +110,7 @@ MQuery::MQuery()
 {
     OSL_TRACE( "IN MQuery::MQuery()\n" );
 
-    // Set default values. (For now just as a reminder).
-    m_bQuerySubDirs   = sal_True;       // LDAP Queryies require this to be set!
-    m_nMaxNrOfReturns = -1; // Unlimited number of returns.
-
-    m_aQueryDirectory = new MQueryDirectory();
-    // MQueryHelper is reference counted, so we need to add to the
-    // count here to prevent accidental deletion else where...
-    //
-    m_aQueryHelper = new MQueryHelper();
-    NS_IF_ADDREF( m_aQueryHelper);
+   construct();
 
     OSL_TRACE( "\tOUT MQuery::MQuery()\n" );
 }
@@ -128,7 +119,7 @@ MQuery::MQuery(const ::std::map< ::rtl::OUString, ::rtl::OUString>  & ca)
 {
     OSL_TRACE( "IN MQuery::MQuery( ca )\n" );
 
-    MQuery::MQuery();
+    construct();
 
     m_aColumnAliasMap = ca;
 
@@ -153,6 +144,20 @@ MQuery::~MQuery()
 
     OSL_TRACE("\tOUT MQuery::~MQuery()\n");
 }
+// -----------------------------------------------------------------------------
+void MQuery::construct()
+{
+     // Set default values. (For now just as a reminder).
+    m_bQuerySubDirs   = sal_True;       // LDAP Queryies require this to be set!
+    m_nMaxNrOfReturns = -1; // Unlimited number of returns.
+
+    m_aQueryDirectory = new MQueryDirectory();
+    // MQueryHelper is reference counted, so we need to add to the
+    // count here to prevent accidental deletion else where...
+    //
+    m_aQueryHelper = new MQueryHelper();
+    NS_IF_ADDREF( m_aQueryHelper);
+}
 // -------------------------------------------------------------------------
 void MQuery::setAttributes(::std::vector< ::rtl::OUString> &attrs)
 {
@@ -160,10 +165,12 @@ void MQuery::setAttributes(::std::vector< ::rtl::OUString> &attrs)
     ::osl::MutexGuard aGuard( m_aMutex );
 
     m_aAttributes.clear();
+    m_aAttributes.reserve(attrs.size());
     ::std::vector< ::rtl::OUString>::iterator aIterAttr = attrs.begin();
-        ::std::map< ::rtl::OUString, ::rtl::OUString>::iterator aIterMap;
-    for(aIterAttr; aIterAttr != attrs.end();++aIterAttr) {
-            aIterMap = m_aColumnAliasMap.find(*aIterAttr);
+    ::std::map< ::rtl::OUString, ::rtl::OUString>::iterator aIterMap;
+    for(aIterAttr; aIterAttr != attrs.end();++aIterAttr)
+    {
+        aIterMap = m_aColumnAliasMap.find(*aIterAttr);
         if (aIterMap == m_aColumnAliasMap.end()) {
             // Not found.
             m_aAttributes.push_back(*aIterAttr);
@@ -173,8 +180,6 @@ void MQuery::setAttributes(::std::vector< ::rtl::OUString> &attrs)
     }
 
     OSL_TRACE("\tOUT MQuery::setAttributes()\n");
-
-    return;
 }
 // -------------------------------------------------------------------------
 const ::std::vector< ::rtl::OUString> &MQuery::getAttributes() const
@@ -216,7 +221,9 @@ void MQuery::setMatchItems(::std::vector< ::rtl::OUString> &mi)
     ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap;
 
     m_aMatchItems.clear();
-    for(aIter; aIter != mi.end();++aIter) {
+    m_aMatchItems.reserve(mi.size());
+    for(aIter; aIter != mi.end();++aIter)
+    {
         aIterMap = m_aColumnAliasMap.find(*aIter);
         if (aIterMap == m_aColumnAliasMap.end()) {
             // Not found.
@@ -244,12 +251,8 @@ void MQuery::setMatchValues(::std::vector< ::rtl::OUString>& mv)
 {
     OSL_TRACE("IN MQuery::setMatchValues()\n");
     ::osl::MutexGuard aGuard(m_aMutex);
-
-    ::std::vector< ::rtl::OUString>::iterator aIter = mv.begin();
     m_aMatchValues.clear();
-    for(aIter; aIter != mv.end();++aIter) {
-        m_aMatchValues.push_back(*aIter);
-    }
+    m_aMatchValues = mv;
     OSL_TRACE("\tOUT MQuery::setMatchValues()\n");
 
     return;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,20 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
+#ifndef _OSL_MODULE_H_
+#include <osl/module.h>
+#endif
 
 
+extern "C" void* SAL_CALL OMozabConnection_CreateInstance(void* _pDriver);
 namespace connectivity
 {
     namespace mozab
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL MozabDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
+
+        typedef void* (SAL_CALL * OMozabConnection_CreateInstanceFunction)(void* _pDriver );
+
 
         typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::sdbc::XDriver,
                                                     ::com::sun::star::lang::XServiceInfo > ODriver_BASE;
@@ -93,6 +100,10 @@ namespace connectivity
             connectivity::OWeakRefArray m_xConnections; //  vector containing a list
                                                         //  of all the Connection objects
                                                         //  for this Driver
+            oslModule                   s_hModule;
+            OMozabConnection_CreateInstanceFunction s_pCreationFunc;
+            void registerClient();
+            virtual ~MozabDriver();
         public:
 
             MozabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
@@ -118,6 +129,12 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         & getMSFactory(void) const { return m_xMSFactory; }
 
+            static sal_Bool acceptsURL_Stat( const ::rtl::OUString& url );
+            // static methods to return the names of the uri
+            static const sal_Char*    getSDBC_SCHEME_MOZILLA();
+            static const sal_Char*    getSDBC_SCHEME_LDAP();
+            static const sal_Char*    getSDBC_SCHEME_OUTLOOK_MAPI();
+            static const sal_Char*    getSDBC_SCHEME_OUTLOOK_EXPRESS();
         };
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,15 @@
  *
  *
  ************************************************************************/
+#ifndef CONNECTIVITY_SDRIVER_HXX
 #include "MDriver.hxx"
+#endif
+#ifndef CONNECTIVITY_SCONNECTION_HXX
 #include "MConnection.hxx"
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
+#endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -82,6 +89,13 @@ namespace connectivity
 MozabDriver::MozabDriver(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : ODriver_BASE(m_aMutex), m_xMSFactory( _rxFactory )
+    ,s_hModule(NULL)
+    ,s_pCreationFunc(NULL)
+{
+    registerClient();
+}
+// -----------------------------------------------------------------------------
+MozabDriver::~MozabDriver()
 {
 }
 // --------------------------------------------------------------------------------
@@ -97,8 +111,15 @@ void MozabDriver::disposing()
             xComp->dispose();
     }
     m_xConnections.clear();
+    connectivity::OWeakRefArray().swap(m_xConnections); // this really clears
 
     ODriver_BASE::disposing();
+    if(s_hModule)
+    {
+        s_pCreationFunc = NULL;
+        osl_unloadModule(s_hModule);
+        s_hModule = NULL;
+    }
 }
 
 // static ServiceInfo
@@ -147,10 +168,20 @@ Sequence< ::rtl::OUString > SAL_CALL MozabDriver::getSupportedServiceNames(  ) t
 Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     // create a new connection with the given properties and append it to our vector
-    OConnection* pCon = new OConnection(this);
-    Reference< XConnection > xCon = pCon;   // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
-    pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    Reference< XConnection > xCon;
+    if (s_pCreationFunc)
+    {
+        OConnection* pCon = reinterpret_cast<OConnection*>((*s_pCreationFunc)(this));
+        xCon = pCon;    // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
+        pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
+        m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    }
+    else
+    {
+        ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Could not load the library ");
+        sMsg += ::rtl::OUString::createFromAscii(SAL_MODULENAME( "mozabdrv2" ));
+        ::dbtools::throwGenericSQLException(sMsg,*this);
+    }
 
     return xCon;
 }
@@ -159,7 +190,7 @@ sal_Bool SAL_CALL MozabDriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
     // here we have to look if we support this url format
-    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:address:"),13));
+    return acceptsURL_Stat(url);
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
@@ -178,6 +209,92 @@ sal_Int32 SAL_CALL MozabDriver::getMinorVersion(  ) throw(RuntimeException)
     return 0; // depends on you
 }
 // --------------------------------------------------------------------------------
+sal_Bool MozabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
+{
+    // Skip 'sdbc:mozab: part of URL
+    //
+    sal_Int32 nLen = url.indexOf(':');
+    nLen = url.indexOf(':',nLen+1);
+    ::rtl::OUString aAddrbookURI(url.copy(nLen+1));
+    // Get Scheme
+    nLen = aAddrbookURI.indexOf(':');
+    ::rtl::OUString aAddrbookScheme;
+    if ( nLen == -1 )
+    {
+        // There isn't any subschema: - but could be just subschema
+        if ( aAddrbookURI.getLength() > 0 )
+            aAddrbookScheme= aAddrbookURI;
+        else if(url == ::rtl::OUString::createFromAscii("sdbc:address:") )
+            return sal_True; // special case here
+        else
+            return sal_False;
+    }
+    else
+        aAddrbookScheme = aAddrbookURI.copy(0, nLen);
+
+
+
+    return  ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_MOZILLA() ) == 0 )        ||
+            ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_LDAP() ) == 0 )
+#if defined(WNT) || defined(WIN)
+                                                                                ||
+            ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_MAPI() ) == 0 )   ||
+            ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_EXPRESS() ) == 0 )
+#endif
+            ;
+}
+// -----------------------------------------------------------------------------
+const sal_Char* MozabDriver::getSDBC_SCHEME_MOZILLA()
+{
+    static sal_Char*    SDBC_SCHEME_MOZILLA         = "mozilla";
+    return SDBC_SCHEME_MOZILLA;
+}
+// -----------------------------------------------------------------------------
+const sal_Char* MozabDriver::getSDBC_SCHEME_LDAP()
+{
+    static sal_Char*    SDBC_SCHEME_LDAP            = "ldap";
+    return SDBC_SCHEME_LDAP;
+}
+// -----------------------------------------------------------------------------
+const sal_Char* MozabDriver::getSDBC_SCHEME_OUTLOOK_MAPI()
+{
+    static sal_Char*    SDBC_SCHEME_OUTLOOK_MAPI    = "outlook";
+    return SDBC_SCHEME_OUTLOOK_MAPI;
+}
+// -----------------------------------------------------------------------------
+const sal_Char* MozabDriver::getSDBC_SCHEME_OUTLOOK_EXPRESS()
+{
+    static sal_Char*    SDBC_SCHEME_OUTLOOK_EXPRESS = "outlookexp";
+    return SDBC_SCHEME_OUTLOOK_EXPRESS;
+}
+// -----------------------------------------------------------------------------
+void MozabDriver::registerClient()
+{
+    if (!s_hModule)
+    {
+        OSL_ENSURE(NULL == s_pCreationFunc, "MozabDriver::registerClient: inconsistence: already have a factory function!");
+
+        const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SAL_MODULENAME( "mozabdrv2" ));
+
+        // load the dbtools library
+        s_hModule = osl_loadModule(sModuleName.pData, 0);
+        OSL_ENSURE(NULL != s_hModule, "MozabDriver::registerClient: could not load the dbtools library!");
+        if (NULL != s_hModule)
+        {
+            // get the symbol for the method creating the factory
+            const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("OMozabConnection_CreateInstance");
+            s_pCreationFunc = reinterpret_cast<OMozabConnection_CreateInstanceFunction>(osl_getSymbol(s_hModule, sFactoryCreationFunc.pData));
+
+            if (NULL == s_pCreationFunc)
+            {   // did not find the symbol
+                OSL_ENSURE(sal_False, "MozabDriver::registerClient: could not find the symbol for creating the factory!");
+                osl_unloadModule(s_hModule);
+                s_hModule = NULL;
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------
 
 
 

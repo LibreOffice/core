@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:55 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 12:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,7 @@ ODatabaseMetaDataResultSet::ORows& MDatabaseMetaDataHelper::getTables(
 
     // will not be detected (for now).
     ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
-    ::std::vector< ::rtl::OUString > tables = getTableStrings( _pCon );
+    ::std::vector< ::rtl::OUString >& tables = getTableStrings( _pCon );
 
     for ( sal_Int32 i = 0; i < tables.size(); i++ ) {
         ODatabaseMetaDataResultSet::ORow aRow(3);

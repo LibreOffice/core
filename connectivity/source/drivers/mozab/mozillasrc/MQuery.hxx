@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:55 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 12:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ namespace connectivity
             ::std::vector<eSqlOppr>         m_aSqlOppr;
             ::std::map< ::rtl::OUString,
                                     ::rtl::OUString>    m_aColumnAliasMap;
+            void construct();
         protected:
             ::osl::Mutex                    m_aMutex;
         public:

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+#   last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..$/..
 PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=mozab
+TARGET2=mozabdrv
 
 .IF "$(BUILD_SOSL)"!=""
 all: 
@@ -103,29 +104,9 @@ ENVCFLAGS+=/FR$(SLO)$/
 RC_SUBDIRS = mozillasrc
 
 # --- Files -------------------------------------
-MOZSLOFILES=\
-    $(SLO)$/MNSInit.obj			            \
-    $(SLO)$/MQueryHelper.obj			    \
-    $(SLO)$/MDatabaseMetaDataHelper.obj		\
-    $(SLO)$/MQuery.obj			            \
-    $(SLO)$/MTypeConverter.obj              \
-    $(SLO)$/MNameMapper.obj
-
 SLOFILES=\
-        $(SLO)$/MCatalog.obj					\
-        $(SLO)$/MColumns.obj					\
-        $(SLO)$/MTable.obj						\
-        $(SLO)$/MTables.obj						\
-        $(SLO)$/MColumnAlias.obj				\
-        $(SLO)$/MPreparedStatement.obj			\
-        $(SLO)$/MStatement.obj					\
-        $(SLO)$/MResultSetMetaData.obj			\
-        $(SLO)$/MResultSet.obj					\
-        $(SLO)$/MDatabaseMetaData.obj			\
         $(SLO)$/MDriver.obj						\
-        $(SLO)$/MServices.obj					\
-        $(SLO)$/MConnection.obj					\
-        $(MOZSLOFILES)
+        $(SLO)$/MServices.obj
 
         
 
@@ -141,11 +122,11 @@ SHL1STDLIBS=\
     $(OSLLIB)					\
     $(SALLIB)					\
     $(DBTOOLSLIB)				\
-    $(COMPHELPERLIB)			\
-    $(MOZ_LIB_XPCOM)
+    $(COMPHELPERLIB)
+
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(MOZAB_TARGET)
+SHL1IMPLIB=	i$(MOZAB_TARGET)$(MOZAB_MAJOR)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
@@ -153,7 +134,54 @@ DEF1NAME=	$(SHL1TARGET)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
             $(SLB)$/$(TARGET).lib
 DEFLIB1NAME=$(TARGET)
+DEF1EXPORTFILE=	exports.dxp
 
+
+# --- Files -------------------------------------
+MOZSLOFILES=\
+    $(SLO)$/MNSInit.obj			            \
+    $(SLO)$/MQueryHelper.obj			    \
+    $(SLO)$/MDatabaseMetaDataHelper.obj		\
+    $(SLO)$/MQuery.obj			            \
+    $(SLO)$/MTypeConverter.obj              \
+    $(SLO)$/MNameMapper.obj
+
+SLO2FILES=\
+        $(SLO)$/MCatalog.obj					\
+        $(SLO)$/MColumns.obj					\
+        $(SLO)$/MTable.obj						\
+        $(SLO)$/MTables.obj						\
+        $(SLO)$/MColumnAlias.obj				\
+        $(SLO)$/MPreparedStatement.obj			\
+        $(SLO)$/MStatement.obj					\
+        $(SLO)$/MResultSetMetaData.obj			\
+        $(SLO)$/MResultSet.obj					\
+        $(SLO)$/MDatabaseMetaData.obj			\
+        $(SLO)$/MConnection.obj					\
+        $(MOZSLOFILES)
+
+# --- MOZAB BASE Library -----------------------------------
+
+SHL2VERSIONMAP= $(TARGET2).map
+SHL2TARGET=	$(TARGET2)$(MOZAB_MAJOR)
+SHL2OBJS=$(SLO2FILES)
+SHL2STDLIBS=\
+    $(CPPULIB)					\
+    $(CPPUHELPERLIB)			\
+    $(VOSLIB)					\
+    $(OSLLIB)					\
+    $(SALLIB)					\
+    $(DBTOOLSLIB)				\
+    $(COMPHELPERLIB)			\
+    $(MOZ_LIB_XPCOM)
+
+SHL2STDLIBS+= i$(MOZAB_TARGET)$(MOZAB_MAJOR).lib
+
+
+SHL2DEPN=
+SHL2IMPLIB=	i$(TARGET2)
+SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=	$(SHL2TARGET)
 
 # --- Targets ----------------------------------
 
@@ -164,6 +192,15 @@ DEFLIB1NAME=$(TARGET)
 .IF "$(depend)"==""
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo CLEAR_THE_FILE	> $@
+    @echo _TI				>>$@
+    @echo _real				>>$@
+.ENDIF
+
+.IF "$(depend)"==""
+
+$(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo CLEAR_THE_FILE	> $@
     @echo _TI				>>$@

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,17 +118,9 @@ namespace connectivity
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
                         : ::connectivity::ODatabaseMetaDataBase(_pCon)
                         ,m_pConnection(_pCon)
-                        ,m_bUseCatalog(sal_True)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
-    if(!m_pConnection->isCatalogUsed())
-    {
-        osl_incrementInterlockedCount( &m_refCount );
-        m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
-        osl_decrementInterlockedCount( &m_refCount );
-    }
     m_pDbMetaDataHelper = new  MDatabaseMetaDataHelper();
-
 }
 // -------------------------------------------------------------------------
 ODatabaseMetaData::~ODatabaseMetaData()
@@ -148,10 +140,10 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     aRows.clear();
 
 
-    const ::std::vector< ::rtl::OUString > colNames = m_pConnection->getColumnAlias().getAlias();
+    const ::std::vector< ::rtl::OUString >& colNames = m_pConnection->getColumnAlias().getAlias();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::std::vector< ::rtl::OUString > tables = m_pDbMetaDataHelper->getTableStrings( m_pConnection );
+    ::std::vector< ::rtl::OUString >& tables = m_pDbMetaDataHelper->getTableStrings( m_pConnection );
 
     // ****************************************************
     // Some entries in a row never change, so set them now
@@ -215,10 +207,6 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aVal;
-    if(m_bUseCatalog)
-    { // do some special here for you database
-    }
-
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -354,9 +342,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aVal;
-    if(m_bUseCatalog)
-    {
-    }
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -381,9 +366,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
 sal_Bool SAL_CALL ODatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
 {
     sal_Bool bValue = sal_False;
-    if(m_bUseCatalog)
-    {
-    }
     return bValue;
 }
 // -------------------------------------------------------------------------

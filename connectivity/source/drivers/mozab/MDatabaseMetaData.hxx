@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ namespace connectivity
         class ODatabaseMetaData : public ODatabaseMetaDataBase
         {
             OConnection*                       m_pConnection;
-            sal_Bool                           m_bUseCatalog;
             MDatabaseMetaDataHelper*           m_pDbMetaDataHelper;
 
             ODatabaseMetaDataResultSet::ORows& SAL_CALL getColumnRows( const ::rtl::OUString& tableNamePattern, const ::rtl::OUString& columnNamePattern ) throw( ::com::sun::star::sdbc::SQLException );
