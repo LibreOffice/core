@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:37:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,9 @@ IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
     String aFilter;
     String aOptions;
     //  get filter name by looking at the file content (bWithContent = TRUE)
-    ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, TRUE );
+    // Break operation if any error occured inside.
+    if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, TRUE ))
+        return 0;
 
     LoadDocument( aEntered, aFilter, aOptions );
 
