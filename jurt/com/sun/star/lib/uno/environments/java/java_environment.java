@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:33:00 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@ import com.sun.star.uno.UnoRuntime;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * The java_environment is the environment where objects and
@@ -102,7 +104,7 @@ public final class java_environment implements IEnvironment, Disposable {
             oid[0] = UnoRuntime.generateOid(object);
         }
         return (isProxy(object) ? proxies : localObjects).register(
-            object, createKey(oid[0], type));
+            object, oid[0], type);
     }
 
     /**
@@ -114,9 +116,8 @@ public final class java_environment implements IEnvironment, Disposable {
      * @see com.sun.star.uno.IEnvironment#revokeInterface
      */
     public void revokeInterface(String oid, Type type) {
-        String key = createKey(oid, type);
-        if (!proxies.revoke(key)) {
-            localObjects.revoke(key);
+        if (!proxies.revoke(oid, type)) {
+            localObjects.revoke(oid, type);
         }
     }
 
@@ -129,10 +130,9 @@ public final class java_environment implements IEnvironment, Disposable {
      * @see com.sun.star.uno.IEnvironment#getRegisteredInterface
      */
     public Object getRegisteredInterface(String oid, Type type) {
-        String key = createKey(oid, type);
-        Object o = proxies.get(key);
+        Object o = proxies.get(oid, type);
         if (o == null) {
-            o = localObjects.get(key);
+            o = localObjects.get(oid, type);
         }
         return o;
     }
@@ -191,15 +191,18 @@ public final class java_environment implements IEnvironment, Disposable {
     }
 
     private static final class Registry {
-        public Object register(Object object, String key) {
+        public Object register(Object object, String oid, Type type) {
             synchronized (map) {
                 cleanUp();
-                Entry e = (Entry) map.get(key);
-                if (e != null) {
-                    Object o = e.get();
-                    if (o != null) {
-                        e.acquire();
-                        return o;
+                Level1Entry l1 = getLevel1Entry(oid);
+                if (l1 != null) {
+                    Level2Entry l2 = l1.get(type);
+                    if (l2 != null) {
+                        Object o = l2.get();
+                        if (o != null) {
+                            l2.acquire();
+                            return o;
+                        }
                     }
                 }
                 // TODO  If a holder references an unreachable object, but still
@@ -213,53 +216,136 @@ public final class java_environment implements IEnvironment, Disposable {
                 // currently a holder either references a strongly held object
                 // and uses register/revoke to control it, or references a
                 // weakly held proxy and never revokes it.)
-                map.put(key, new Entry(key, object, queue));
+                if (l1 == null) {
+                    l1 = new Level1Entry();
+                    map.put(oid, l1);
+                }
+                l1.add(new Level2Entry(oid, type, object, queue));
             }
             return object;
         }
 
-        public boolean revoke(String key) {
+        public boolean revoke(String oid, Type type) {
             synchronized (map) {
-                Entry e = (Entry) map.get(key);
-                if (e != null && e.release()) {
-                    map.remove(key);
+                Level1Entry l1 = getLevel1Entry(oid);
+                Level2Entry l2 = null;
+                if (l1 != null) {
+                    l2 = l1.get(type);
+                    if (l2 != null && l2.release()) {
+                        removeLevel2Entry(oid, l1, l2);
+                    }
                 }
                 cleanUp();
-                return e != null;
+                return l2 != null;
             }
         }
 
-        public Object get(String key) {
-            Entry e;
+        public Object get(String oid, Type type) {
             synchronized (map) {
-                e = (Entry) map.get(key);
+                Level1Entry l1 = getLevel1Entry(oid);
+                return l1 == null ? null : l1.find(type);
             }
-            return e == null ? null : e.get();
         }
 
         // must only be called while synchronized on map:
         private void cleanUp() {
             for (;;) {
-                Entry e = (Entry) queue.poll();
-                if (e == null) {
+                Level2Entry l2 = (Level2Entry) queue.poll();
+                if (l2 == null) {
                     break;
                 }
-                // It is possible that an Entry e1 for key k becomes weakly
-                // reachable, then another Entry e2 is registered for the same
-                // key k (a new Entry is created since now e1.get() == null),
-                // and only then e1 is enqueued.  To not erroneously remove the
-                // new e2 in that case, check whether the map still contains e1:
-                String key = e.getKey();
-                if (map.get(key) == e) {
-                    map.remove(key);
+                // It is possible that a Level2Entry e1 for the OID/type pair
+                // (o,t) becomes weakly reachable, then another Level2Entry e2
+                // is registered for the same pair (o,t) (a new Level2Entry is
+                // created since now e1.get() == null), and only then e1 is
+                // enqueued.  To not erroneously remove the new e2 in that case,
+                // check whether the map still contains e1:
+                String oid = l2.getOid();
+                Level1Entry l1 = getLevel1Entry(oid);
+                if (l1 != null && l1.get(l2.getType()) == l2) {
+                    removeLevel2Entry(oid, l1, l2);
                 }
             }
         }
 
-        private static final class Entry extends WeakReference {
-            public Entry(String key, Object object, ReferenceQueue queue) {
+        // must only be called while synchronized on map:
+        private Level1Entry getLevel1Entry(String oid) {
+            return (Level1Entry) map.get(oid);
+        }
+
+        // must only be called while synchronized on map:
+        private void removeLevel2Entry(String oid, Level1Entry l1,
+                                       Level2Entry l2) {
+            if (l1.remove(l2)) {
+                map.remove(oid);
+            }
+        }
+
+        private static final class Level1Entry {
+            // must only be called while synchronized on map:
+            public Level2Entry get(Type type) {
+                for (Iterator i = list.iterator(); i.hasNext();) {
+                    Level2Entry l2 = (Level2Entry) i.next();
+                    if (l2.getType().equals(type)) {
+                        return l2;
+                    }
+                }
+                return null;
+            }
+
+            // must only be called while synchronized on map:
+            public Object find(Type type) {
+                // First, look for an exactly matching entry; then, look for an
+                // arbitrary entry for a subtype of the request type:
+                for (Iterator i = list.iterator(); i.hasNext();) {
+                    Level2Entry l2 = (Level2Entry) i.next();
+                    if (l2.getType().equals(type)) {
+                        Object o = l2.get();
+                        if (o != null) {
+                            return o;
+                        }
+                    }
+                }
+                for (Iterator i = list.iterator(); i.hasNext();) {
+                    Level2Entry l2 = (Level2Entry) i.next();
+                    if (type.isSupertypeOf(l2.getType())) {
+                        Object o = l2.get();
+                        if (o != null) {
+                            return o;
+                        }
+                    }
+                }
+                return null;
+            }
+
+            // must only be called while synchronized on map:
+            public void add(Level2Entry l2) {
+                list.add(l2);
+            }
+
+            // must only be called while synchronized on map:
+            public boolean remove(Level2Entry l2) {
+                list.remove(l2);
+                return list.isEmpty();
+            }
+
+            private final LinkedList list = new LinkedList(); // of Level2Entry
+        }
+
+        private static final class Level2Entry extends WeakReference {
+            public Level2Entry(String oid, Type type, Object object,
+                               ReferenceQueue queue) {
                 super(object, queue);
-                this.key = key;
+                this.oid = oid;
+                this.type = type;
+            }
+
+            public String getOid() {
+                return oid;
+            }
+
+            public Type getType() {
+                return type;
             }
 
             // must only be called while synchronized on map:
@@ -272,20 +358,14 @@ public final class java_environment implements IEnvironment, Disposable {
                 return --count == 0;
             }
 
-            public String getKey() {
-                return key;
-            }
-
-            private final String key;
+            private final String oid;
+            private final Type type;
             private int count = 1;
         }
 
-        private final HashMap map = new HashMap(); // from key (String) to Entry
+        private final HashMap map = new HashMap();
+            // from OID (String) to Level1Entry
         private final ReferenceQueue queue = new ReferenceQueue();
-    }
-
-    private String createKey(String oid, Type type) {
-        return oid.concat(type.getTypeName());
     }
 
     private boolean isProxy(Object object) {
