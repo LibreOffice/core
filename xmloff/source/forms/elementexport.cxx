@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:30:45 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1492,6 +1492,14 @@ namespace xmloff
 
                 break;
 
+            default:
+                OSL_ENSURE(sal_False, "OControlExport::examineControl: unknown control type (class id)!");
+                // NO break!
+
+            case FormComponentType::NAVIGATIONBAR:
+                // TODO: should we have an own file format for this?
+                // NO break
+
             case FormComponentType::CONTROL:
                 m_eType = GENERIC_CONTROL;
                 // unknown control type
@@ -1501,10 +1509,6 @@ namespace xmloff
                     // In addition, the service name is absolutely necessary to create the control upon reading.
                 m_nIncludeEvents = EA_CONTROL_EVENTS;
                     // we always should be able to export events - this is not control type dependent
-                break;
-
-            default:
-                OSL_ENSURE(sal_False, "OControlExport::examineControl: unknown control type (class id)!");
                 break;
         }
 
