@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-17 07:41:41 $
+ *  last change: $Author: sb $ $Date: 2001-11-02 16:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ using namespace com::sun;
 
 
    ; RFC 1738, RFC 2396
-   http-url = "HTTP://" hostport ["/" segment *("/" segment) ["?" *pchar]]
+   http-url = "HTTP://" hostport ["/" segment *("/" segment) ["?" *uric]]
    segment = *(pchar / ";")
 
 
@@ -534,7 +534,7 @@ static sal_uInt32 const aMustEncodeMap[128]
 /* , */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW      +pZ+p1,
 /* - */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
 /* . */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* / */ pA+pB+pC+pH+pJ                  +pL+pM      +pP+pQ+pR   +pT+pU+pV   +pX,
+/* / */ pA+pB+pC            +pH   +pJ   +pL+pM      +pP+pQ+pR   +pT+pU+pV   +pX,
 /* 0 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
 /* 1 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
 /* 2 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
@@ -1339,15 +1339,13 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
     {
         aSynAbsURIRef += '?';
         UniString aSynQuery;
-        Part ePart
-            = m_eScheme == INET_PROT_HTTP ? PART_HTTP_QUERY : PART_URIC;
         for (++pPos; pPos < pEnd && *pPos != nFragmentDelimiter;)
         {
             EscapeType eEscapeType;
             sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, cEscapePrefix,
                                          eMechanism, eCharset, eEscapeType);
             appendUCS4(aSynQuery, nUTF32, eEscapeType, bOctets,
-                       ePart, cEscapePrefix, eCharset, true);
+                       PART_URIC, cEscapePrefix, eCharset, true);
         }
         m_aQuery.set(aSynAbsURIRef, aSynQuery, aSynAbsURIRef.Len());
     }
@@ -2919,9 +2917,7 @@ bool INetURLObject::setQuery(UniString const & rTheQuery, bool bOctets,
 {
     if (!getSchemeInfo().m_bQuery)
         return false;
-    UniString aNewQuery(encodeText(rTheQuery, bOctets,
-                                   m_eScheme == INET_PROT_HTTP ?
-                                       PART_HTTP_QUERY : PART_URIC,
+    UniString aNewQuery(encodeText(rTheQuery, bOctets, PART_URIC,
                                    getEscapePrefix(), eMechanism, eCharset,
                                    true));
     sal_Int32 nDelta;
