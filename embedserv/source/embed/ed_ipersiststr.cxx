@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:54:31 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,18 @@ STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv
     {
         AddRef();
         *ppv = (IOleObject*) this;
+        return S_OK;
+    }
+    else if (IsEqualIID(riid, IID_IOleWindow))
+    {
+        AddRef();
+        *ppv = (IOleWindow*) this;
+        return S_OK;
+    }
+    else if (IsEqualIID(riid, IID_IOleInPlaceObject))
+    {
+        AddRef();
+        *ppv = (IOleInPlaceObject*) this;
         return S_OK;
     }
     else if (IsEqualIID(riid, IID_IPersistFile))
