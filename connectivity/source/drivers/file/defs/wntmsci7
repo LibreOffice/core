@@ -2654,3 +2654,4 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?release@OStatement@file@connectivity@@WBKA@AAXXZ
 ?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx2435323891@@YAEABVString@@0@Z
 ?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx2943210900@@YAEABVString@@0@Z
+?isCaseSensitiveParentFolder@?%O:\SRX641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx2701922963@@YAEABVString@@0@Z
