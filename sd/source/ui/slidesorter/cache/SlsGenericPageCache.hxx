@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsGenericPageCache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:10:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #define SD_SLIDESORTER_GENERIC_PAGE_CACHE_HXX
 
 #include "SlsQueueProcessor.hxx"
-#include "SlsPreviewBitmapFactory.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
 
 
@@ -262,12 +261,12 @@ BitmapEx GenericPageCache<
     Size aBitmapSize (aPreview.GetSizePixel());
     if (aBitmapSize != rSize)
     {
-        OSL_ASSERT (rSize.Width() < 1000);
-        // The bitmap has the wrong size.
+        DBG_ASSERT (rSize.Width() < 1000,
+            "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width.  This may indicate an error.");
 
         // Scale the bitmap to the desired size when that is possible,
         // i.e. the bitmap is not empty.
-        if (aBitmapSize.Width() != 0 && aBitmapSize.Height())
+        if (aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
             // BMP_SCALE_NONE               0x00000000UL
             // BMP_SCALE_FAST               0x00000001UL
             // BMP_SCALE_INTERPOLATE        0x00000002UL
