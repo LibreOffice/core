@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2001-07-11 15:44:08 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:38:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,22 +69,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES= \
-    dbaexchange.cxx	\
-    showcols.cxx	\
-    gridcols.cxx	\
-    gridctrl.cxx	\
-    gridcell.cxx	\
-    fmgridcl.cxx 	\
-    fmgridif.cxx 	\
-    trace.cxx		
 
 SRS1NAME=fmcomp
 SRC1FILES= \
