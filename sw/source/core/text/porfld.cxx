@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-09-28 14:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
+#include <com/sun/star/text/ScriptType.hdl>
+#endif
+
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
@@ -112,6 +116,10 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+#include "breakit.hxx"
+#include "porrst.hxx"
+
+using namespace ::com::sun::star::text;
 
 /*************************************************************************
  *                      class SwFldPortion
@@ -227,6 +235,118 @@ SwFldSlot::~SwFldSlot()
     }
 }
 
+#ifdef DEBUG
+USHORT lcl_Script( const xub_Unicode aChar )
+{
+    USHORT nRet = ScriptType::WEAK;
+    if( 'A' <= aChar && aChar <= 'Z' )
+        nRet = ScriptType::LATIN;
+    else if( 'a' <= aChar && aChar <= 'z' )
+        nRet = ScriptType::ASIAN;
+    return nRet;
+}
+#endif
+
+BOOL SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
+{
+    BOOL bRet = FALSE;
+    const String& rTxt = rInf.GetTxt();
+    rFull += rInf.GetIdx();
+#ifdef DEBUG
+    static BOOL bTest = FALSE;
+#endif
+    if( rFull > rTxt.Len() )
+        rFull = rTxt.Len();
+    if( rFull && pBreakIt->xBreak.is() )
+    {
+        BYTE nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
+        xub_StrLen nChg = rInf.GetIdx();
+#ifdef DEBUG
+        if( bTest )
+        {
+            while( ++nChg < rFull )
+            {
+                USHORT nScript = lcl_Script( rTxt.GetChar( nChg ) );
+                BYTE nScr = nActual;
+                switch ( nScript ) {
+                    case ScriptType::LATIN : nScr = SW_LATIN; break;
+                    case ScriptType::ASIAN : nScr = SW_CJK; break;
+                    case ScriptType::COMPLEX : nScr = SW_CTL; break;
+                }
+                if( nActual != nScr )
+                    break;
+            }
+        }
+        else
+#endif
+        {
+            USHORT nScript = ScriptType::LATIN;
+            if( nActual )
+                nScript = nActual==SW_CJK ? ScriptType::ASIAN : ScriptType::COMPLEX;
+            nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+        }
+        if( rFull > nChg )
+        {
+            bRet = TRUE;
+            rFull = nChg;
+        }
+    }
+    rFull -= rInf.GetIdx();
+    return bRet;
+}
+
+void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
+{
+    String aTxt;
+    if( GetExpTxt( rInf, aTxt ) && aTxt.Len() && pBreakIt->xBreak.is() )
+    {
+        BYTE nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
+        USHORT nScript;
+#ifdef DEBUG
+        static BOOL bTest = FALSE;
+        if( bTest )
+        {
+            nScript = lcl_Script( aTxt.GetChar(0) );
+            xub_StrLen nChg = 0;
+            USHORT nCnt = 0;
+            if( ScriptType::WEAK == nScript )
+            {
+                while( ++nChg < aTxt.Len() &&
+                        ScriptType::WEAK == lcl_Script( aTxt.GetChar( nChg ) ) )
+                    ;
+                if( nChg < aTxt.Len() )
+                    nScript = lcl_Script( aTxt.GetChar( nChg ) );
+            }
+        }
+        else
+#endif
+        {
+            nScript = pBreakIt->xBreak->getScriptType( aTxt, 0 );
+            xub_StrLen nChg = 0;
+            USHORT nCnt = 0;
+            if( ScriptType::WEAK == nScript )
+            {
+                nChg = pBreakIt->xBreak->endOfScript( aTxt, 0, nScript );
+                if( nChg < aTxt.Len() )
+                    nScript = pBreakIt->xBreak->getScriptType( aTxt, nChg );
+            }
+        }
+        BYTE nTmp;
+        switch ( nScript ) {
+            case ScriptType::LATIN : nTmp = SW_LATIN; break;
+            case ScriptType::ASIAN : nTmp = SW_CJK; break;
+            case ScriptType::COMPLEX : nTmp = SW_CTL; break;
+            default: nTmp = nActual;
+        }
+        if( nTmp != nActual )
+        {
+            if( !pFnt )
+                pFnt = new SwFont( *rInf.GetFont() );
+            pFnt->SetActual( nTmp );
+        }
+    }
+}
+
 sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
 {
     // Scope wegen aDiffTxt::DTOR!
@@ -250,7 +370,11 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             if( nFullLen && CH_BREAK == aExpand.GetChar( nFullLen - 1 ) )
                 --nFullLen;
         }
+        BOOL bScriptChg = ScriptChange( rInf, nFullLen );
         rInf.SetLen( nFullLen );
+        if( pFnt )
+            pFnt->GoMagic( rInf.GetVsh(), pFnt->GetActual() );
+
         SwFontSave aSave( rInf, pFnt );
 
         // 8674: Laenge muss 0 sein, bei bFull nach Format ist die Laenge
@@ -315,7 +439,6 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 if( !pFld->GetFont() )
                 {
                     SwFont *pNewFnt = new SwFont( *rInf.GetFont() );
-                    pNewFnt->GoMagic( rInf.GetVsh(), pNewFnt->GetActual() );
                     pFld->SetFont( pNewFnt );
                 }
                 pFld->SetFollow( sal_True );
@@ -327,6 +450,8 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 nNextOffset += nNextOfst;
                 pFld->SetNextOffset( nNextOffset );
                 rInf.SetRest( pFld );
+                if( bScriptChg )
+                    new SwKernPortion( *this, 284 );
             }
         }
         // 7634 mit ASSERT: bad ascent
@@ -415,6 +540,7 @@ void SwHiddenPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( Width() )
     {
+        SwFontSave aSave( rInf, pFnt );
         rInf.DrawViewOpt( *this, POR_HIDDEN );
         SwExpandPortion::Paint( rInf );
     }
