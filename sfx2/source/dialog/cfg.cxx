@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:40:04 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ using namespace ::drafts::com::sun::star::script;
 #include <svtools/svstdarr.hxx>
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
-
+/*
 struct SfxStatBarInfo_Impl
 {
     USHORT          nId;
@@ -180,8 +180,8 @@ struct SfxStatBarInfo_Impl
         aHelpText(aString)
     {}
 };
-
-DECL_PTRARRAY(SfxStbInfoArr_Impl, SfxStatBarInfo_Impl*, 20, 4);
+*/
+//DECL_PTRARRAY(SfxStbInfoArr_Impl, SfxStatBarInfo_Impl*, 20, 4);
 SV_IMPL_PTRARR(SfxGroupInfoArr_Impl, SfxGroupInfoPtr);
 
 SfxMenuConfigEntry::SfxMenuConfigEntry( USHORT nInitId, const String& rInitStr,
@@ -1554,9 +1554,9 @@ void SfxConfigDialog::ActivateTabPage( USHORT nSlotId )
         case SID_TOOLBOXOPTIONS:
             SetCurPageId( TP_CONFIG_OBJECTBAR );
             break;
-        case SID_CONFIGSTATUSBAR:
-            SetCurPageId( TP_CONFIG_STATBAR );
-            break;
+//      case SID_CONFIGSTATUSBAR:
+//            SetCurPageId( TP_CONFIG_STATBAR );
+//            break;
         case SID_CONFIGMENU:
             SetCurPageId( TP_CONFIG_MENU );
             break;
@@ -1578,12 +1578,12 @@ SfxTabPage *CreateAccelConfigPage( Window *pParent, const SfxItemSet& rSet )
 {
     return new SfxAcceleratorConfigPage( pParent, rSet );
 }
-
+/*
 SfxTabPage *CreateStatusBarConfigPage( Window *pParent, const SfxItemSet& rSet )
 {
     return new SfxStatusBarConfigPage( pParent, rSet );
 }
-
+*/
 SfxTabPage *CreateObjectBarConfigPage( Window *pParent, const SfxItemSet& rSet )
 {
     return new SfxObjectBarConfigPage( pParent, rSet );
@@ -1604,7 +1604,7 @@ SfxConfigDialog::SfxConfigDialog( Window * pParent, const SfxItemSet* pSet, SfxV
 
     AddTabPage( TP_CONFIG_MENU, CreateMenuConfigPage, NULL );
     AddTabPage( TP_CONFIG_ACCEL, CreateAccelConfigPage, NULL );
-    AddTabPage( TP_CONFIG_STATBAR, CreateStatusBarConfigPage, NULL );
+//  AddTabPage( TP_CONFIG_STATBAR, CreateStatusBarConfigPage, NULL );
     AddTabPage( TP_CONFIG_OBJECTBAR, CreateObjectBarConfigPage, NULL );
     AddTabPage( TP_CONFIG_EVENT, CreateEventConfigPage, NULL );
 }
@@ -1623,7 +1623,7 @@ short SfxConfigDialog::Ok()
 }
 
 // SfxStatusBarConfigPage::Ctor() **********************************************
-
+/*
 SfxStatusBarConfigPage::SfxStatusBarConfigPage( Window *pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, SfxResId( TP_CONFIG_STATBAR ), rSet ),
@@ -1987,11 +1987,10 @@ void SfxStatusBarConfigListBox::CheckButtonHdl()
 }
 
 void SfxStatusBarConfigListBox::MouseMove( const MouseEvent& rMEvt )
-/*  Beschreibung
-    Virtuelle Methode, die gerufen wird, wenn der Mauszeiger "uber der TreeListBox bewegt wurde.
-    Wenn die Position des Mauszeigers "uber dem aktuell selektierten Entry liegt, wird ein Timer
-    aufgesetzt, um ggf. einen Hilfetext einzublenden.
-*/
+//  Beschreibung
+//  Virtuelle Methode, die gerufen wird, wenn der Mauszeiger "uber der TreeListBox bewegt wurde.
+//  Wenn die Position des Mauszeigers "uber dem aktuell selektierten Entry liegt, wird ein Timer
+//  aufgesetzt, um ggf. einen Hilfetext einzublenden.
 {
     Point aMousePos = rMEvt.GetPosPixel();
     SvLBoxEntry *pEntry = GetCurEntry();
@@ -2007,11 +2006,10 @@ void SfxStatusBarConfigListBox::MouseMove( const MouseEvent& rMEvt )
 }
 
 IMPL_LINK( SfxStatusBarConfigListBox, TimerHdl, Timer*, pTimer)
-/*  Beschreibung
-    Timer-Handler f"ur die Einblendung eines Hilfetextes. Wenn nach Ablauf des Timers
-    der Mauszeiger immer noch auf dem aktuell selektierten Eintrag steht, wird der
-    Helptext des Entries als Balloon-Help eingeblendet.
-*/
+//  Beschreibung
+//  Timer-Handler f"ur die Einblendung eines Hilfetextes. Wenn nach Ablauf des Timers
+//  der Mauszeiger immer noch auf dem aktuell selektierten Eintrag steht, wird der
+//  Helptext des Entries als Balloon-Help eingeblendet.
 {
     if ( pTimer )
         pTimer->Stop();
@@ -2065,7 +2063,7 @@ void SfxStatusBarConfigPage::Reset( const SfxItemSet& )
         Init();
     }
 }
-
+*/
 String SfxConfigDialog::FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle )
 {
     BOOL bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
