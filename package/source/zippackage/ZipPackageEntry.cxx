@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 05:19:35 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 14:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 
 using namespace com::sun::star;
 ZipPackageEntry::ZipPackageEntry (void)
-: bSetParent(sal_False)
 {
 }
 
@@ -133,7 +132,7 @@ void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< uno::XInterface 
     uno::Any aAny;
     uno::Reference < lang::XUnoTunnel > xTunnel  = this;
     aAny <<= xTunnel;
-    xNewParent->insertByName(getName(), aAny);
-    bSetParent = sal_True;
+    if (!xNewParent->hasByName(getName()))
+        xNewParent->insertByName(getName(), aAny);
     xParent = Parent;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:18 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 14:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,15 +134,11 @@ void SAL_CALL ZipPackageFolder::insertByName( const ::rtl::OUString& aName, cons
         uno::Reference < lang::XUnoTunnel > xRef;
         aElement >>= xRef;
         uno::Reference < container::XNamed > xNamed (xRef, uno::UNO_QUERY);
-        /*
         uno::Reference < container::XChild > xChild (xRef, uno::UNO_QUERY);
         uno::Reference < uno::XInterface > xInterface (*this);
-        */
         xNamed->setName (sName);
-        /*
-        xChild->setParent (xInterface);
-        */
         aContents[sName] = xRef;
+        xChild->setParent (xInterface);
     }
 }
 void SAL_CALL ZipPackageFolder::removeByName( const ::rtl::OUString& Name )
