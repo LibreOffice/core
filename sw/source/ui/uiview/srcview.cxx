@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-08 19:56:30 $
+ *  last change: $Author: os $ $Date: 2001-05-15 10:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,22 @@
 #ifndef _UIPARAM_HXX
 #include <uiparam.hxx>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
+#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
 #endif
@@ -139,9 +154,6 @@
 
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
-#ifndef _IODLG_HXX //autogen
-#include <sfx2/iodlg.hxx>
 #endif
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
@@ -247,8 +259,12 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
+using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::lang;
+using namespace ::rtl;
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
+#define C2U(cChar) OUString::createFromAscii(cChar)
 
 #define SWSRCVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|           \
                       SFX_VIEW_OBJECTSIZE_EMBEDDED|     \
@@ -547,16 +563,28 @@ void SwSrcView::Execute(SfxRequest& rReq)
         {
             SvtPathOptions aPathOpt;
             Window* pParent = &GetViewFrame()->GetWindow();
-            SfxFileDialog* pFileDlg = new SfxFileDialog(pParent, WB_SAVEAS|WB_3DLOOK);
-            pFileDlg->DisableSaveLastDirectory();
-            pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
-            String sHtml(C2S("HTML"));
-            pFileDlg->AddFilter( sHtml, C2S("*.html;*.htm") );
-            pFileDlg->SetCurFilter( sHtml );
-            pFileDlg->SetPath( aPathOpt.GetWorkPath() );
-            if( RET_OK == pFileDlg->Execute())
+            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+            Reference < XFilePicker > xFP;
+            if( xMgr.is() )
             {
-                SfxMedium aMedium( pFileDlg->GetPath(),
+                Sequence <Any> aProps(1);
+                aProps.getArray()[0] <<= C2U("FileSave");
+                xFP = Reference< XFilePicker >(
+                        xMgr->createInstanceWithArguments(
+                            C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                        UNO_QUERY );
+            }
+            DBG_ERROR("how to set help ids at com.sun.star.ui.FilePicker")
+        //    pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
+            Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+
+            String sHtml(C2S("HTML"));
+            xFltMgr->appendFilter( sHtml, C2S("*.html;*.htm") );
+            xFltMgr->setCurrentFilter( sHtml ) ;
+            xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
+            if( RET_OK == xFP->execute())
+            {
+                SfxMedium aMedium( xFP->getPath().getConstArray()[0],
                                     STREAM_WRITE | STREAM_SHARE_DENYNONE,
                                     FALSE );
 #ifdef USED
@@ -576,7 +604,6 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 aEditWin.Write( *aMedium.GetOutStream() );
                 aMedium.Commit();
             }
-            delete pFileDlg;
         }
         break;
         case SID_SAVEDOC:
