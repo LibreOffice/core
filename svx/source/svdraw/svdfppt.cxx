@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-06 15:52:05 $
+ *  last change: $Author: sj $ $Date: 2001-06-08 16:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1884,9 +1884,8 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                                             nSvxMSDffOLEConvFlags, *xObjStor, *xDestStorage ));
                                 if( xIPObj.Is() )
                                 {
-                                    pRet = new SdrOle2Obj( xIPObj, String(), rBoundRect,
-                                                            /*TRUE*/ FALSE );
-                                    // we have the Object, don't create another
+                                    String aNm( pOe->pShell->InsertObject( xIPObj, String() )->GetObjName() );
+                                    pRet = new SdrOle2Obj( xIPObj, aNm, rBoundRect, FALSE );
                                 }
                             }
                             if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
