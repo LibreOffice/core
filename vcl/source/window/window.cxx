@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-23 08:44:21 $
+ *  last change: $Author: hr $ $Date: 2002-10-23 16:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4835,7 +4835,10 @@ void Window::ImplNotifyKeyMouseEventListeners( NotifyEvent& rNEvt )
             if ( rNEvt.GetWindow() == this )
                 ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, (void*)rNEvt.GetMouseEvent() );
             else
-                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
+            {
+                MouseEvent aMouseEvent = ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this );
+                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, &aMouseEvent );
+            }
         }
     }
     else if( rNEvt.GetType() == EVENT_MOUSEBUTTONUP )
@@ -4845,7 +4848,10 @@ void Window::ImplNotifyKeyMouseEventListeners( NotifyEvent& rNEvt )
             if ( rNEvt.GetWindow() == this )
                 ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, (void*)rNEvt.GetMouseEvent() );
             else
-                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
+            {
+                MouseEvent aMouseEvent = ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this );
+                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, &aMouseEvent );
+            }
         }
     }
     else if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
@@ -4855,7 +4861,10 @@ void Window::ImplNotifyKeyMouseEventListeners( NotifyEvent& rNEvt )
             if ( rNEvt.GetWindow() == this )
                 ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, (void*)rNEvt.GetMouseEvent() );
             else
-                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
+            {
+                MouseEvent aMouseEvent = ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this );
+                ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, &aMouseEvent );
+            }
         }
     }
     else if( rNEvt.GetType() == EVENT_KEYINPUT )
