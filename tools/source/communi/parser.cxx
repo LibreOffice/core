@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:48 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,7 @@ ByteString &InformationParser::GetErrorText()
   //    sErrorText = pActStream->GetFileName();
     sErrorText = ByteString( sStreamName, gsl_getSystemTextEncoding());
     sErrorText += ByteString( " (" );
-    sErrorText += ByteString( nErrorLine );
+    sErrorText += ByteString::CreateFromInt64(nErrorLine);
     sErrorText += ByteString( "): " );
 
     switch ( nErrorCode ) {
