@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,11 @@ public:
     virtual SdrObject*   GetMaxToTopObj(SdrObject* pObj) const;
     virtual SdrObject*   GetMaxToBtmObj(SdrObject* pObj) const;
     virtual void         MarkListHasChanged();
+
+    // #i7672#
+    // Overload to resue edit background color in active text edit view (OutlinerView)
+    virtual void ModelHasChanged();
+
     virtual void         ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
                                             ULONG nNewPos );
     virtual BOOL TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
