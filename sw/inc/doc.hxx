@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-18 09:22:12 $
+ *  last change: $Author: jp $ $Date: 2002-02-22 11:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,10 @@ enum SwMoveFlags
 #define SW_HYPH_OK          1
 #define SW_HYPH_ABORTED     2
 #define SW_HYPH_CONTINUE    3
+
+// forward declartion
+void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
+
 
 class SwDoc
 {
@@ -1663,7 +1667,7 @@ public:
     // fuer AutoFormat: mit Undo/Redlining - Behandlung
     void SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
                                 const SfxItemSet* pSet = 0 );
-    void SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxPoolItem& );
+    void SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& );
 
     // !!!NUR fuer die SW-Textblocks!! beachtet kein LAYOUT!!!
     void ClearDoc();        // loescht den gesamten Inhalt.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:51:57 $
+ *  last change: $Author: jp $ $Date: 2002-02-22 11:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2204,7 +2204,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, USHORT nPoolId,
     }
 }
 
-void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxPoolItem& rItem )
+void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
 {
     SwTxtNode* pTNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
 
@@ -2219,7 +2219,7 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxPoolItem& rItem )
 
         // interressant sind nur die Items, die vom Set NICHT wieder
         // in den Node gesetzt werden. Also muss man die Differenz nehmen
-        SwRedlineExtraData_Format aExtraData( rItem.Which() );
+        SwRedlineExtraData_Format aExtraData( rSet );
 
 /*
         if( pSet && pTNd->GetpSwAttrSet() )
@@ -2242,7 +2242,7 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxPoolItem& rItem )
         SetRedlineMode_intern( eOld | REDLINE_IGNORE );
     }
 
-    Insert( rPam, rItem, SETATTR_DONTEXPAND );
+    Insert( rPam, rSet, SETATTR_DONTEXPAND );
     SetRedlineMode_intern( eOld );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-24 17:21:04 $
+ *  last change: $Author: jp $ $Date: 2002-02-22 11:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ long lcl_GetRightMargin( SwDoc& rDoc )
     return nWidth - nLeft - nRight;
 }
 
-void lcl_SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
+void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
 {
     rSet.Put( rItem );
     USHORT nWhCJK = 0, nWhCTL = 0;
@@ -336,16 +336,16 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                         SfxItemSet& rSet,
                         USHORT nOutLvlBits, BYTE nLevel, BOOL bItalic )
 {
-    ::lcl_SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD ) );
+    SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD ) );
     SvxFontHeightItem aHItem;
     if( pDoc->IsHTMLMode() )
         aHItem.SetHeight( aHeadlineSizes[ MAXLEVEL + nLevel ] );
     else
         aHItem.SetHeight( PT_14, aHeadlineSizes[ nLevel ] );
-    ::lcl_SetAllScriptItem( rSet, aHItem );
+    SetAllScriptItem( rSet, aHItem );
 
     if( bItalic && !pDoc->IsHTMLMode() )
-        ::lcl_SetAllScriptItem( rSet, SvxPostureItem( ITALIC_NORMAL ) );
+        SetAllScriptItem( rSet, SvxPostureItem( ITALIC_NORMAL ) );
 
     if( pDoc->IsHTMLMode() )
     {
@@ -387,8 +387,8 @@ void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, USHORT nFact,
     rSet.Put( aLR );
     if( bHeader )
     {
-        ::lcl_SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD ) );
-        ::lcl_SetAllScriptItem( rSet, SvxFontHeightItem( PT_16 ) );
+        SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD ) );
+        SetAllScriptItem( rSet, SvxFontHeightItem( PT_16 ) );
     }
     if( bTab )
     {
@@ -600,7 +600,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
                                                 RES_POOLCOLL_TEXT ));
 
             aSet.Put( aUL );
-            ::lcl_SetAllScriptItem( aSet, aFntSize );
+            SetAllScriptItem( aSet, aFntSize );
         }
         break;
 
@@ -674,9 +674,9 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCOLL_TABLE_HDLN:
         {
-            ::lcl_SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ) );
+            SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ) );
             if( !IsHTMLMode() )
-                ::lcl_SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
+                SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
             aSet.Put( aLN );
@@ -689,7 +689,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
             SvxLRSpaceItem aLR;
             aLR.SetTxtFirstLineOfst( -(short)GetMetricVal( CM_05 ));
             aLR.SetTxtLeft( GetMetricVal( CM_05 ));
-            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( PT_10 ) );
+            SetAllScriptItem( aSet, SvxFontHeightItem( PT_10 ) );
             aSet.Put( aLR );
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
             aSet.Put( aLN );
@@ -700,8 +700,8 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
         {
             SvxULSpaceItem aUL; aUL.SetUpper( PT_6 ); aUL.SetLower( PT_6 );
             aSet.Put( aUL );
-            ::lcl_SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
-            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( PT_10 ) );
+            SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
+            SetAllScriptItem( aSet, SvxFontHeightItem( PT_10 ) );
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
             aSet.Put( aLN );
         }
@@ -726,7 +726,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
     case RES_POOLCOLL_SENDADRESS:           // AbsenderAdresse
         {
             if( IsHTMLMode() )
-                ::lcl_SetAllScriptItem( aSet, SvxPostureItem(ITALIC_NORMAL) );
+                SetAllScriptItem( aSet, SvxPostureItem(ITALIC_NORMAL) );
             else
             {
                 SvxULSpaceItem aUL; aUL.SetLower( PT_3 );
@@ -1049,8 +1049,8 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCOLL_DOC_TITEL:            // Doc. Titel
         {
-            ::lcl_SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ) );
-            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( PT_18 ) );
+            SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ) );
+            SetAllScriptItem( aSet, SvxFontHeightItem( PT_18 ) );
 
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
 
@@ -1062,8 +1062,8 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCOLL_DOC_SUBTITEL:         // Doc. UnterTitel
         {
-            ::lcl_SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ));
-            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( PT_14 ));
+            SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ));
+            SetAllScriptItem( aSet, SvxFontHeightItem( PT_14 ));
 
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ));
 
@@ -1093,7 +1093,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
             ::lcl_SetDfltFont( DEFAULTFONT_FIXED, aSet );
 
 // WORKAROUND: PRE auf 10pt setzten
-            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem(PT_10) );
+            SetAllScriptItem( aSet, SvxFontHeightItem(PT_10) );
 // WORKAROUND: PRE auf 10pt setzten
 
             // der untere Absatz-Abstand wird explizit gesetzt (macht
@@ -1116,7 +1116,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
             aBox.SetLine( &aNew, BOX_LINE_BOTTOM );
 
             aSet.Put( aBox );
-            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem(120) );
+            SetAllScriptItem( aSet, SvxFontHeightItem(120) );
 
             SvxULSpaceItem aUL;
             if( !pDesc )
@@ -1345,10 +1345,10 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
     case RES_POOLCHR_BUL_LEVEL:             // Aufzaehlungszeichen
         {
             const Font& rBulletFont = SwNumRule::GetDefBulletFont();
-            ::lcl_SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamily(),
+            SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamily(),
                         rBulletFont.GetName(), rBulletFont.GetStyleName(),
                         rBulletFont.GetPitch(), rBulletFont.GetCharSet() ));
-            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( PT_9 ));
+            SetAllScriptItem( aSet, SvxFontHeightItem( PT_9 ));
         }
         break;
 
@@ -1379,7 +1379,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
         {
             long nH = ((SvxFontHeightItem*)GetDfltAttr(
                                 RES_CHRATR_CJK_FONTSIZE ))->GetHeight() / 2;
-            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( nH ));
+            SetAllScriptItem( aSet, SvxFontHeightItem( nH ));
         }
         break;
 
@@ -1387,14 +1387,14 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
     case RES_POOLCHR_HTML_CITIATION:
     case RES_POOLCHR_HTML_VARIABLE:
         {
-            ::lcl_SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
+            SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
         }
         break;
 
     case RES_POOLCHR_IDX_MAIN_ENTRY:
     case RES_POOLCHR_HTML_STRONG:
         {
-            ::lcl_SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ));
+            SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ));
         }
         break;
 

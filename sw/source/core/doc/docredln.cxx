@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 13:42:16 $
+ *  last change: $Author: jp $ $Date: 2002-02-22 11:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
+#endif
+#ifndef _SFX_ITEMITER_HXX //autogen
+#include <svtools/itemiter.hxx>
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
@@ -2517,15 +2520,33 @@ void SwRedlineExtraData_FmtColl::SetItemSet( const SfxItemSet& rSet )
 }
 
 
-SwRedlineExtraData_Format::SwRedlineExtraData_Format( USHORT nW )
-    : nWhich( nW )
+SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
+{
+    SfxItemIter aIter( rSet );
+    const SfxPoolItem* pItem = aIter.FirstItem();
+    while( TRUE )
+    {
+        aWhichIds.Insert( pItem->Which(), aWhichIds.Count() );
+        if( aIter.IsAtEnd() )
+            break;
+        pItem = aIter.NextItem();
+    }
+}
+
+SwRedlineExtraData_Format::SwRedlineExtraData_Format(
+        const SwRedlineExtraData_Format& rCpy )
+    : aWhichIds( (BYTE)rCpy.aWhichIds.Count() )
+{
+    aWhichIds.Insert( &rCpy.aWhichIds, 0 );
+}
+
+SwRedlineExtraData_Format::~SwRedlineExtraData_Format()
 {
 }
 
-
 SwRedlineExtraData* SwRedlineExtraData_Format::CreateNew() const
 {
-    return new SwRedlineExtraData_Format( nWhich );
+    return new SwRedlineExtraData_Format( *this );
 }
 
 void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
@@ -2536,14 +2557,26 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
     pDoc->SetRedlineMode_intern( eOld & ~(REDLINE_ON | REDLINE_IGNORE) );
 
     // eigentlich muesste hier das Attribut zurueck gesetzt werden!!!
-    pDoc->Insert( rPam, *GetDfltAttr( nWhich ), SETATTR_DONTEXPAND );
+    for( USHORT n = 0, nEnd = aWhichIds.Count(); n < nEnd; ++n )
+        pDoc->Insert( rPam, *GetDfltAttr( aWhichIds[ n ] ), SETATTR_DONTEXPAND );
 
     pDoc->SetRedlineMode_intern( eOld );
 }
 
 int SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) const
 {
-    return nWhich == ((SwRedlineExtraData_Format&)rCmp).nWhich;
+    int nRet = 1;
+    USHORT n = 0, nEnd = aWhichIds.Count();
+    if( nEnd != ((SwRedlineExtraData_Format&)rCmp).aWhichIds.Count() )
+        nRet = 0;
+    else
+        for( ; n < nEnd; ++n )
+            if( ((SwRedlineExtraData_Format&)rCmp).aWhichIds[n] != aWhichIds[n])
+            {
+                nRet = 0;
+                break;
+            }
+    return nRet;
 }
 
 /*  */

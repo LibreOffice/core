@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redline.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-27 13:29:06 $
+ *  last change: $Author: jp $ $Date: 2002-02-22 11:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,14 @@
 #include <tools/string.hxx>
 #endif
 
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
+
 #ifndef _PAM_HXX
-#include "pam.hxx"
+#include <pam.hxx>
 #endif
 #ifndef _REDLENUM_HXX
-#include "redlenum.hxx"         // enums
+#include <redlenum.hxx>
 #endif
 
 class SfxItemSet;
@@ -112,9 +115,13 @@ public:
 
 class SwRedlineExtraData_Format : public SwRedlineExtraData
 {
-    USHORT nWhich;
+    SvUShorts aWhichIds;
+
+    SwRedlineExtraData_Format( const SwRedlineExtraData_Format& rCpy );
+
 public:
-    SwRedlineExtraData_Format( USHORT nWhich );
+    SwRedlineExtraData_Format( const SfxItemSet& rSet );
+    virtual ~SwRedlineExtraData_Format();
     virtual SwRedlineExtraData* CreateNew() const;
     virtual void Reject( SwPaM& rPam ) const;
     virtual int operator == ( const SwRedlineExtraData& ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:10:20 $
+ *  last change: $Author: jp $ $Date: 2002-02-22 12:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,11 +295,16 @@ BOOL SwAutoCorrDoc::SetAttr( xub_StrLen nStt, xub_StrLen nEnd, USHORT nSlotId,
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
     SwPaM aPam( rNd, nStt, rNd, nEnd );
 
-    USHORT nWhich = rEditSh.GetDoc()->GetAttrPool().GetWhich( nSlotId, FALSE );
+    SfxItemPool& rPool = rEditSh.GetDoc()->GetAttrPool();
+    USHORT nWhich = rPool.GetWhich( nSlotId, FALSE );
     if( nWhich )
     {
         rItem.SetWhich( nWhich );
-        rEditSh.GetDoc()->SetFmtItemByAutoFmt( aPam, rItem );
+
+        SfxItemSet aSet( rPool, aCharFmtSetRange );
+        SetAllScriptItem( aSet, rItem );
+
+        rEditSh.GetDoc()->SetFmtItemByAutoFmt( aPam, aSet );
 
         if( !nUndoId )
             nUndoId = USHRT_MAX;
@@ -314,8 +319,10 @@ BOOL SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String&
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
     SwPaM aPam( rNd, nStt, rNd, nEnd );
 
-    rEditSh.GetDoc()->SetFmtItemByAutoFmt( aPam,
-                                            SwFmtINetFmt( rURL, aEmptyStr ));
+    SfxItemSet aSet( rEditSh.GetDoc()->GetAttrPool(),
+                        RES_TXTATR_INETFMT, RES_TXTATR_INETFMT );
+    aSet.Put( SwFmtINetFmt( rURL, aEmptyStr ));
+    rEditSh.GetDoc()->SetFmtItemByAutoFmt( aPam, aSet );
     if( !nUndoId )
         nUndoId = USHRT_MAX;
     return TRUE;
@@ -371,7 +378,7 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
 
     LanguageType eLang = GetLanguage(nEndPos, FALSE);
     if(LANGUAGE_SYSTEM == eLang)
-        eLang = GetAppLanguage();
+        eLang = (LanguageType)GetAppLanguage();
 
     //JP 22.04.99: Bug 63883 - Sonderbehandlung fuer Punkte.
     BOOL bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().Len() &&
@@ -503,7 +510,7 @@ LanguageType SwAutoCorrDoc::GetLanguage( xub_StrLen nPos, BOOL bPrevPara ) const
     if( pNd )
         eRet = pNd->GetLang( nPos, 0 );
     if(LANGUAGE_SYSTEM == eRet)
-        eRet = GetAppLanguage();
+        eRet = (LanguageType)GetAppLanguage();
     return eRet;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-08 17:33:22 $
+ *  last change: $Author: jp $ $Date: 2002-02-22 12:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1761,22 +1761,26 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                 sChgStr.Insert( aFlags.cBullet, 0 );
             pDoc->Insert( aDelPam, sChgStr );
 
+            SfxItemSet aSet( pDoc->GetAttrPool(), aTxtNodeSetRange );
             if( bChgBullet )
             {
                 aDelPam.GetPoint()->nContent = 0;
                 aDelPam.SetMark();
                 aDelPam.GetMark()->nContent = 1;
-                SvxFontItem aFnt( aFlags.aBulletFont.GetFamily(),
+                SetAllScriptItem( aSet,
+                     SvxFontItem( aFlags.aBulletFont.GetFamily(),
                                   aFlags.aBulletFont.GetName(),
                                   aFlags.aBulletFont.GetStyleName(),
                                   aFlags.aBulletFont.GetPitch(),
-                                  aFlags.aBulletFont.GetCharSet() );
-                pDoc->SetFmtItemByAutoFmt( aDelPam, aFnt );
+                                  aFlags.aBulletFont.GetCharSet() ) );
+                pDoc->SetFmtItemByAutoFmt( aDelPam, aSet );
                 aDelPam.DeleteMark();
                 nAutoCorrPos = 2;
+                aSet.ClearItem();
             }
             SvxTabStopItem aTStops;     aTStops.Insert( SvxTabStop( 0 ));
-            pDoc->SetFmtItemByAutoFmt( aDelPam, aTStops );
+            aSet.Put( aTStops );
+            pDoc->SetFmtItemByAutoFmt( aDelPam, aSet );
         }
     }
 
