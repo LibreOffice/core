@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: cl $ $Date: 2001-09-28 14:29:19 $
+ *  last change: $Author: cl $ $Date: 2001-10-26 09:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,7 +715,6 @@ void SdXMLShapeContext::SetLayer()
         catch( uno::Exception e )
         {
         }
-        DBG_ERROR( "could not attach shape to layer!" );
     }
 }
 
