@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseFrameProperties.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:03 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
 #endif
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
+
 
 //=============================================================================
 
@@ -107,7 +111,7 @@ service BaseFrameProperties
     //-------------------------------------------------------------------------
     /** contains the color of the background of the object.
      */
-    [property] long BackColor;
+    [property] com::sun::star::util::Color BackColor;
     //-------------------------------------------------------------------------
     /** contains the URL for the background graphic.
      */
