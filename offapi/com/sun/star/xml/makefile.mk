@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jsc $ $Date: 2002-05-21 09:01:40 $
+#   last change: $Author: bm $ $Date: 2002-10-15 11:39:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ IDLFILES=\
     XMLImportFilter.idl \
     XMLExportFilter.idl \
     XExportFilter.idl \
-    XImportFilter.idl
+    XImportFilter.idl \
+    UserDefinedAttributeContainer.idl
 
 # ------------------------------------------------------------------
 
