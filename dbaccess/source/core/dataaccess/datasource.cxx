@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 15:20:23 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 09:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
+#endif
+#ifndef _COMPHELPER_GUARDING_HXX_
+#include <comphelper/guarding.hxx>
 #endif
 
 using namespace ::com::sun::star::sdbc;
@@ -797,6 +800,8 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         // handle the request
         try
         {
+            MutexRelease aRelease(m_aMutex);
+                // release the mutex when calling the handler, it may need to lock the SolarMutex
             _rxHandler->handle(xRequest);
         }
         catch(Exception&)
