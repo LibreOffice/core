@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2001-08-02 10:35:37 $
+ *  last change: $Author: pb $ $Date: 2001-08-08 08:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "msgpool.hxx"
 #include "app.hxx"
 #include "ucbhelp.hxx"
+#include "sfxtypes.hxx"
 
 #include "app.hrc"
 #include "newhelp.hrc"
@@ -168,16 +169,17 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define TBI_BOOKMARKS       1006
 #define TBI_SOURCEVIEW      1007
 
-#define CONFIGNAME_HELPWIN      String(DEFINE_CONST_UNICODE("OfficeHelp"))
-#define CONFIGNAME_INDEXWIN     String(DEFINE_CONST_UNICODE("OfficeHelpIndex"))
-#define CONFIGNAME_SEARCHPAGE   String(DEFINE_CONST_UNICODE("OfficeHelpSearch"))
-#define IMAGE_URL               String(DEFINE_CONST_UNICODE("private:factory/"))
-#define PROPERTY_KEYWORDLIST    ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordList"))
-#define PROPERTY_KEYWORDREF     ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordRef"))
-#define PROPERTY_ANCHORREF      ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordAnchorForRef"))
-#define PROPERTY_TITLE          ::rtl::OUString(DEFINE_CONST_UNICODE("Title"))
-#define HELP_URL                ::rtl::OUString(DEFINE_CONST_UNICODE("vnd.sun.star.help://"))
-#define HELP_SEARCH_TAG         ::rtl::OUString(DEFINE_CONST_UNICODE("/?Query="))
+#define CONFIGNAME_HELPWIN      DEFINE_CONST_UNICODE("OfficeHelp")
+#define CONFIGNAME_INDEXWIN     DEFINE_CONST_UNICODE("OfficeHelpIndex")
+#define CONFIGNAME_SEARCHPAGE   DEFINE_CONST_UNICODE("OfficeHelpSearch")
+#define IMAGE_URL               DEFINE_CONST_UNICODE("private:factory/")
+
+#define PROPERTY_KEYWORDLIST    DEFINE_CONST_OUSTRING("KeywordList")
+#define PROPERTY_KEYWORDREF     DEFINE_CONST_OUSTRING("KeywordRef")
+#define PROPERTY_ANCHORREF      DEFINE_CONST_OUSTRING("KeywordAnchorForRef")
+#define PROPERTY_TITLE          DEFINE_CONST_OUSTRING("Title")
+#define HELP_URL                DEFINE_CONST_OUSTRING("vnd.sun.star.help://")
+#define HELP_SEARCH_TAG         DEFINE_CONST_OUSTRING("/?Query=")
 
 #define PARSE_URL( aURL ) \
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( \
@@ -186,6 +188,20 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 
 #define GET_SLOT_NAME( nId ) \
     SFX_SLOTPOOL().GetSlotName_Impl( nId )
+
+// struct IndexEntry_Impl ------------------------------------------------
+
+struct IndexEntry_Impl
+{
+    sal_Bool        m_bSubEntry;
+    String          m_aURL;
+
+    IndexEntry_Impl( const String& rURL, sal_Bool bSubEntry ) :
+        m_bSubEntry( bSubEntry ), m_aURL( rURL ) {}
+};
+
+#define NEW_ENTRY( url, bool ) \
+    (void*)(ULONG)( new IndexEntry_Impl( url, bool ) )
 
 // class OpenStatusListener_Impl -----------------------------------------
 
@@ -388,6 +404,36 @@ void ContentTabPage_Impl::Resize()
     aContentBox.SetPosSizePixel( Point( 4, 4 ), aSize );
 }
 
+// class IndexBox_Impl ---------------------------------------------------
+
+IndexBox_Impl::IndexBox_Impl( Window* pParent, const ResId& rResId ) :
+
+    ComboBox( pParent, rResId )
+
+{
+    EnableAutocomplete( TRUE );
+    EnableUserDraw( TRUE );
+}
+
+// -----------------------------------------------------------------------
+
+void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
+{
+    IndexEntry_Impl* pEntry = (IndexEntry_Impl*)(ULONG)GetEntryData( rUDEvt.GetItemId() );
+    if ( pEntry && pEntry->m_bSubEntry )
+    {
+        // indent sub entries
+        Point aPos( rUDEvt.GetRect().TopLeft() );
+        aPos.X() += 8;
+        aPos.Y() += ( rUDEvt.GetRect().GetHeight() - rUDEvt.GetDevice()->GetTextHeight() ) / 2;
+        String aEntry( GetEntry( rUDEvt.GetItemId() ) );
+        aEntry.Erase( aEntry.Search( '[' ) - 1 );
+        rUDEvt.GetDevice()->DrawText( aPos, aEntry );
+    }
+    else
+        DrawEntry( rUDEvt, FALSE, TRUE, TRUE );
+}
+
 // class IndexTabPage_Impl -----------------------------------------------
 
 IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
@@ -402,8 +448,6 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
 
 {
     FreeResource();
-
-    aIndexCB.EnableAutocomplete( TRUE );
 
     aOpenBtn.SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
     aFactoryTimer.SetTimeoutHdl( LINK( this, IndexTabPage_Impl, FactoryHdl ) );
@@ -452,7 +496,7 @@ void IndexTabPage_Impl::InitializeIndex()
                 DBG_ASSERT( aKeywordRefList.getLength() == nCount, "keywordlist and reflist with different length" );
                 DBG_ASSERT( aAnchorRefList.getLength() == nCount, "keywordlist and anchorlist with different length" );
                 USHORT nPos;
-                String aIndex, aSubIndex;
+                String aIndex, aSubIndex, aEmpty;
 
                 for ( i = 0; i < nCount; ++i )
                 {
@@ -468,51 +512,57 @@ void IndexTabPage_Impl::InitializeIndex()
                     {
                         for ( j = 0; j < nRefCount; ++j )
                         {
-                            nPos = aIndexCB.InsertEntry( aKeywordPair );
-                            String* pData = new String( pRef[j] );
+                            String aKeyword( TRIM( aKeywordPair ) );
+                            while ( aIndexCB.GetEntryPos( aKeyword ) != LISTBOX_ENTRY_NOTFOUND )
+                                aKeyword += ' ';
+                            nPos = aIndexCB.InsertEntry( aKeyword );
+                            String aData( pRef[j] );
                             String aAnchor = String( pAnchor[j] );
                             if ( aAnchor.Len() > 0 )
                             {
-                                *pData += '#';
-                                *pData += aAnchor;
+                                aData += '#';
+                                aData += aAnchor;
                             }
-                            aIndexCB.SetEntryData( nPos, (void*)(ULONG)pData );
+                            aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData, sal_False ) );
                         }
+
+                        aIndex.Erase();
                     }
                     else if ( 2 == nTokenCount )
                     {
                         xub_StrLen nIdx = 0;
-                        String aToken = aKeywordPair.GetToken( 0, ';', nIdx );
+                        String aToken = TRIM( aKeywordPair.GetToken( 0, ';', nIdx ) );
                         if ( aIndex != aToken )
                         {
                             aIndex = aToken;
-                            aIndexCB.InsertEntry( aIndex );
+                            while ( aIndexCB.GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
+                                aToken += ' ';
+                            aIndexCB.InsertEntry( aToken );
                         }
-                        String aSubIndex( DEFINE_CONST_UNICODE("  ") );
-                        aSubIndex += aKeywordPair.GetToken( 0, ';', nIdx );
+                        String aSubIndex( TRIM( aKeywordPair.GetToken( 0, ';', nIdx ) ) );
                         for ( j = 0; j < nRefCount; ++j )
                         {
                             if ( aIndexCB.GetEntryPos( aSubIndex ) != LISTBOX_ENTRY_NOTFOUND )
                             {
                                 sal_Unicode cChar = aSubIndex.GetChar( aSubIndex.Len() - 1 );
-                                if (  ')' == cChar || ' ' == cChar )
+                                if (  ']' == cChar || ' ' == cChar )
                                     aSubIndex += ' ';
                                 else
                                 {
-                                    aSubIndex += String( DEFINE_CONST_UNICODE(" (") );
+                                    aSubIndex += DEFINE_CONST_UNICODE(" [");
                                     aSubIndex += aIndex;
-                                    aSubIndex += ')';
+                                    aSubIndex += ']';
                                 }
                             }
                             nPos = aIndexCB.InsertEntry( aSubIndex );
-                            String* pData = new String( pRef[j] );
+                            String aData( pRef[j] );
                             String aAnchor = String( pAnchor[j] );
                             if ( aAnchor.Len() > 0 )
                             {
-                                *pData += '#';
-                                *pData += aAnchor;
+                                aData += '#';
+                                aData += aAnchor;
                             }
-                            aIndexCB.SetEntryData( nPos, (void*)(ULONG)pData );
+                            aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData, sal_True ) );
                         }
                     }
                     else
@@ -549,7 +599,7 @@ void IndexTabPage_Impl::ClearIndex()
 {
     USHORT nCount = aIndexCB.GetEntryCount();
     for ( USHORT i = 0; i < nCount; ++i )
-        delete (String*)(ULONG)aIndexCB.GetEntryData(i);
+        delete (IndexEntry_Impl*)(ULONG)aIndexCB.GetEntryData(i);
     aIndexCB.Clear();
     aIndexCB.Update();
 }
@@ -637,9 +687,9 @@ void IndexTabPage_Impl::SetFactory( const String& rFactory )
 String IndexTabPage_Impl::GetSelectEntry() const
 {
     String aRet;
-    String* pData = (String*)(ULONG)aIndexCB.GetEntryData( aIndexCB.GetEntryPos( aIndexCB.GetText() ) );
-    if ( pData )
-        aRet = String( *pData );
+    IndexEntry_Impl* pEntry = (IndexEntry_Impl*)(ULONG)aIndexCB.GetEntryData( aIndexCB.GetEntryPos( aIndexCB.GetText() ) );
+    if ( pEntry )
+        aRet = pEntry->m_aURL;
     return aRet;
 }
 
@@ -764,7 +814,6 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
 {
     EnterWait();
     ClearSearchResults();
-
     String aSearchText = aSearchED.GetText();
     RememberSearchText( aSearchText );
     String aSearchURL = HELP_URL;
@@ -774,7 +823,6 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
     AppendConfigToken_Impl( aSearchURL, sal_False );
     if ( aScopeCB.IsChecked() )
         aSearchURL += DEFINE_CONST_UNICODE("&Scope=Heading");
-
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aSearchURL );
     const ::rtl::OUString* pFacs  = aFactories.getConstArray();
     UINT32 i, nCount = aFactories.getLength();
@@ -789,8 +837,14 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
         USHORT nPos = aResultsLB.InsertEntry( aTitle );
         aResultsLB.SetEntryData( nPos, (void*)(ULONG)pURL );
     }
-
     LeaveWait();
+
+    if ( !nCount )
+    {
+        InfoBox aBox( this, SfxResId( RID_INFO_NOSEARCHRESULTS ) );
+        aBox.SetText( String( SfxResId( STR_HELP_WINDOW_TITLE ) ) );
+        aBox.Execute();
+    }
     return 0;
 }
 
@@ -861,6 +915,14 @@ String SearchTabPage_Impl::GetSelectEntry() const
     if ( pData )
         aRet = String( *pData );
     return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+void SearchTabPage_Impl::ClearPage()
+{
+    ClearSearchResults();
+    aSearchED.SetText( String() );
 }
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -1357,6 +1419,14 @@ void SfxHelpIndexWindow_Impl::AddBookmarks( const String& rTitle, const String& 
     pFPage->AddBookmarks( rTitle, rURL );
 }
 
+// -----------------------------------------------------------------------
+
+void SfxHelpIndexWindow_Impl::ClearSearchPage()
+{
+    if ( pSPage )
+        pSPage->ClearPage();
+}
+
 // class SfxHelpTextWindow_Impl ------------------------------------------
 
 SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
@@ -1647,7 +1717,7 @@ void SfxHelpWindow_Impl::ShowStartPage()
     if ( xDisp.is() )
     {
         Sequence < PropertyValue > aArgs( 1 );
-        aArgs[0].Name = String( DEFINE_CONST_UNICODE("ReadOnly") );
+        aArgs[0].Name = DEFINE_CONST_UNICODE("ReadOnly");
         BOOL bReadOnly = TRUE;
         aArgs[0].Value <<= bReadOnly;
         if ( !IsWait() )
@@ -1715,12 +1785,13 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin )
 {
     String aNewTitle = aTitle;
-    aNewTitle += String( DEFINE_CONST_UNICODE(" - ") );
+    aNewTitle += DEFINE_CONST_UNICODE(" - ");
     aNewTitle += pIndexWin->GetActiveFactoryTitle();
     GetParent()->SetText( aNewTitle );
 
     if ( pWin )
         ShowStartPage();
+    pIndexWin->ClearSearchPage();
 
     return 0;
 }
@@ -1875,7 +1946,8 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
         case TBI_BOOKMARKS :
         {
             String aURL = pHelpInterceptor->GetCurrentURL();
-            if(aURL.Len())
+            if ( aURL.Len() > 0 )
+            {
                 try
                 {
                     Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -1897,10 +1969,11 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
                         }
                     }
                 }
-                catch(Exception& rEx)
+                catch( Exception& )
                 {
-                    DBG_ERROR("exception caught")
+                    DBG_ERRORFILE( "exception caught" )
                 }
+            }
             break;
         }
     }

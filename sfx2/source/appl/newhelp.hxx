@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-14 12:39:25 $
+ *  last change: $Author: pb $ $Date: 2001-08-08 08:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,11 +164,19 @@ public:
 
 // class IndexTabPage_Impl -----------------------------------------------
 
+class IndexBox_Impl : public ComboBox
+{
+public:
+    IndexBox_Impl( Window* pParent, const ResId& rResId );
+
+    virtual void        UserDraw( const UserDrawEvent& rUDEvt );
+};
+
 class IndexTabPage_Impl : public TabPage
 {
 private:
     FixedText           aExpressionFT;
-    ComboBox            aIndexCB;
+    IndexBox_Impl       aIndexCB;
     PushButton          aOpenBtn;
     Timer               aFactoryTimer;
 
@@ -240,6 +248,7 @@ public:
     void                SetDoubleClickHdl( const Link& rLink );
     void                SetFactory( const String& rFactory ) { aFactory = rFactory; }
     String              GetSelectEntry() const;
+    void                ClearPage();
 };
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -318,6 +327,7 @@ public:
     void                AddBookmarks( const String& rTitle, const String& rURL );
     String              GetActiveFactoryTitle() const { return aActiveLB.GetSelectEntry(); }
     void                UpdateTabControl() { aTabCtrl.Invalidate(); }
+    void                ClearSearchPage();
 };
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
