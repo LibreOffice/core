@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:30:45 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,22 @@ namespace configmgr
 {
 // ---------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------
+    static void convertToBool(const uno::Any& aValue, sal_Bool& bValue)
+    {
+        rtl::OUString aStrValue;
+        if (aValue >>= aStrValue)
+        {
+            if (aStrValue.equalsIgnoreAsciiCaseAscii("true"))
+            {
+                bValue = sal_True;
+            }
+            else if (aStrValue.equalsIgnoreAsciiCaseAscii("false"))
+            {
+                bValue = sal_False;
+            }
+        }
+    }
+    // ----------------------------------------------------------------------------------
     const sal_Char k_BootstrapContextImplName[]         = "com.sun.star.comp.configuration.bootstrap.BootstrapContext" ;
     const sal_Char k_BootstrapContextServiceName[]      = "com.sun.star.configuration.bootstrap.BootstrapContext" ;
 
@@ -520,7 +536,10 @@ uno::Any BootstrapContext::makeDefaultBackend()
     inline
     sal_Bool ContextReader::getBoolSetting(OUString const & _aSetting, sal_Bool bValue = false) const
     {
-        getSetting(_aSetting) >>= bValue;
+        uno::Any aValue = getSetting(_aSetting);
+        if (!(aValue >>= bValue))
+            convertToBool(aValue, bValue);
+
         return bValue;
     }
 
@@ -861,6 +880,27 @@ uno::Any BootstrapContext::makeBootstrapException()
     return impl_makeBootstrapException(rc,sMessage,sURL,*this);
 }
 // ---------------------------------------------------------------------------
+rtl::OUString SAL_CALL
+    BootstrapContext::getImplementationName(void)
+        throw (uno::RuntimeException)
+{
+    return ServiceInfoHelper(&k_BootstrapContextServiceInfo).getImplementationName() ;
+}
+//------------------------------------------------------------------------------
+
+sal_Bool SAL_CALL
+    BootstrapContext::supportsService(const rtl::OUString& aServiceName)
+        throw (uno::RuntimeException)
+{
+    return  ServiceInfoHelper(&k_BootstrapContextServiceInfo).supportsService(aServiceName) ;
+}
+//------------------------------------------------------------------------------
+uno::Sequence<rtl::OUString> SAL_CALL
+    BootstrapContext::getSupportedServiceNames(void)
+        throw (uno::RuntimeException)
+{
+    return ServiceInfoHelper(&k_BootstrapContextServiceInfo).getSupportedServiceNames() ;
+}
 // ---------------------------------------------------------------------------------------
 } // namespace configmgr
 
