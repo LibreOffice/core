@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,7 @@ namespace xmloff
         if (!implCheckPage(_rxDrawPage, xCollectionIndex))
             return;
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         sal_Bool bPageIsKnown =
 #endif
             implMoveIterators(_rxDrawPage, sal_False);
@@ -475,7 +475,7 @@ namespace xmloff
             return;
 
         // move the iterator which specify the currently handled page
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         sal_Bool bPageIsKnown =
 #endif
             implMoveIterators(_rxDrawPage, sal_True);
@@ -797,7 +797,7 @@ namespace xmloff
     {
         Reference< XPropertySet > xProps( _rxControl, UNO_QUERY );
         OSL_ENSURE( xProps.is(), "OFormLayerXMLExport_Impl::excludeFromExport: invalid control model!" );
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         ::std::pair< PropertySetBag::iterator, bool > aPos =
 #endif
         m_aIgnoreList.insert( xProps );
