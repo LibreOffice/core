@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-13 08:32:30 $
+ *  last change: $Author: tl $ $Date: 2001-09-14 08:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,13 +344,8 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
     sal_Int32 nProgressRange(nSteps);
     if (xStatusIndicator.is())
     {
-#if 0
-        OUString sLoading(RTL_CONSTASCII_USTRINGPARAM("Loading ..."));
-        xStatusIndicator->start(sLoading, nProgressRange);
-#else
         xStatusIndicator->start(String(SmResId(STR_STATSTR_READING)),
             nProgressRange);
-#endif
     }
 
     nSteps=0;
@@ -548,6 +543,46 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
 OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLSettingsExporter" ) );
+}
+
+// XServiceInfo
+// override empty method from parent class
+rtl::OUString SAL_CALL SmXMLExport::getImplementationName()
+    throw(uno::RuntimeException)
+{
+    switch( getExportFlags() )
+    {
+        default:
+        case EXPORT_ALL:
+            return SmXMLExport_getImplementationName();
+            break;
+        case EXPORT_META:
+            return SmXMLExportMeta_getImplementationName();
+            break;
+        case EXPORT_SETTINGS:
+            return SmXMLExportSettings_getImplementationName();
+            break;
+    }
+}
+
+// XServiceInfo
+// override empty method from parent class
+rtl::OUString SAL_CALL SmXMLImport::getImplementationName()
+    throw(uno::RuntimeException)
+{
+    switch( getImportFlags() )
+    {
+        default:
+        case IMPORT_ALL:
+            return SmXMLImport_getImplementationName();
+            break;
+        case IMPORT_META:
+            return SmXMLImportMeta_getImplementationName();
+            break;
+        case IMPORT_SETTINGS:
+            return SmXMLImportSettings_getImplementationName();
+            break;
+    }
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLExportSettings_getSupportedServiceNames()
@@ -808,9 +843,8 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
         sal_Int32 nProgressRange(nSteps);
         if (xStatusIndicator.is())
         {
-    //        xStatusIndicator->start(SW_RESSTR( STR_STATSTR_SWGWRITE),
-            OUString sSaving(RTL_CONSTASCII_USTRINGPARAM("Saving ..."));
-            xStatusIndicator->start(sSaving, nProgressRange);
+            xStatusIndicator->start(String(SmResId(STR_STATSTR_WRITING)),
+                nProgressRange);
         }
     }
 

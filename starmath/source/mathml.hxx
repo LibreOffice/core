@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-13 08:30:01 $
+ *  last change: $Author: tl $ $Date: 2001-09-14 08:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,11 @@ public:
         pOperatorAttrTokenMap(0),pColorTokenMap(0),pAnnotationAttrTokenMap(0),
         bSuccess(sal_False)
         {}
+
+    // XServiceInfo (override parent method)
+    ::rtl::OUString SAL_CALL getImplementationName()
+        throw( ::com::sun::star::uno::RuntimeException );
+
     void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException,
         ::com::sun::star::uno::RuntimeException );
@@ -412,6 +417,10 @@ public:
         com::sun::star::xml::sax::XDocumentHandler> &rHandler) :
         SvXMLExport(rFileName,rHandler), pTree(pIn), bSuccess(sal_False) {}
     virtual ~SmXMLExport() {};
+
+    // XServiceInfo (override parent method)
+    ::rtl::OUString SAL_CALL getImplementationName()
+        throw( ::com::sun::star::uno::RuntimeException );
 
     void _ExportAutoStyles() {}
     void _ExportMasterStyles() {}
