@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXHeadFootText.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-01-05 20:10:07 $
+ *  last change:$Date: 2004-09-08 15:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
