@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.3 $
+ #  $Revision: 1.4 $
  #
- #  last change: $Author: fs $ $Date: 2000-10-24 13:03:00 $
+ #  last change: $Author: fs $ $Date: 2000-10-25 13:01:00 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -89,9 +89,6 @@ SLOFILES=	\
         $(SLO)$/dsselect.obj	\
         $(SLO)$/dbadmin.obj	\
         $(SLO)$/adminpages.obj	\
-        $(SLO)$/genericunodialog.obj	\
-        $(SLO)$/unoadmin.obj	\
-        $(SLO)$/unosqlmessage.obj	\
         $(SLO)$/sqlmessage.obj	\
         $(SLO)$/dbfindex.obj
 
@@ -103,6 +100,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.3  2000/10/24 13:03:00  fs
+ #	some new file - added functionality for browsing system data sources
+ #	
  #	Revision 1.2  2000/10/09 12:39:29  fs
  #	some (a lot of) new imlpementations - still under development
  #	
