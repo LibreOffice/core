@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: af $ $Date: 2001-02-07 09:20:56 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,7 +904,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
     Text[ russian ] = "Íàéòè";
     Text[ polish ] = "Szukaj";
     Text[ japanese ] = "ŒŸõ";
-    Text[ chinese_traditional ] = "´M§ä";
+    Text[ chinese_traditional ] = "·j´M";
     Text[ arabic ] = "ÈÍË";
     Text[ dutch ] = "Zoeken";
     Text[ chinese_simplified ] = "ËÑÑ°";
@@ -1310,7 +1310,7 @@ String RID_SVXSTR_GALLERY_DELETEOBJ
     Text[ dutch ] = "Wilt u dit object\nwerkelijk wissen?";
     Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸ö¶ÔÏóÂğ£¿";
     Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá\näéáãñáöåß áõôü ôï áíôéêåßìåíï;";
-    Text[ korean ] = "ÀÌ °³Ã¼¸¦\n Á´¸» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "ÀÌ °³Ã¼¸¦\n Á¤¸» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Bu nesneyi gerçekten\nsilmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
 };
@@ -1441,7 +1441,7 @@ String RID_SVXSTR_GALLERY_FILTER
     Text[ russian ] = "Ãğàôè÷åñêèé ôèëüòğ";
     Text[ polish ] = "Filtr graficzny";
     Text[ japanese ] = "¸Ş×Ì¨¯¸Ì¨ÙÀ";
-    Text[ chinese_traditional ] = "¹Ï¤ù¹LÂo";
+    Text[ chinese_traditional ] = "¹Ï§Î¹LÂo";
     Text[ arabic ] = "İáÊÑ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Grafische filter";
     Text[ chinese_simplified ] = "Í¼ĞÎ¹ıÂË";
