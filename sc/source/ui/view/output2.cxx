@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:28:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 09:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <math.h>
 
 #ifndef _SVSTDARR_USHORTS
@@ -619,8 +620,31 @@ double ScOutputData::GetStretch()
 //==================================================================
 
 //
-//  Strings ausgeben
+//  output strings
 //
+
+void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScBaseCell* pCell )
+{
+    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+
+    String aCellText;
+    String aURL;
+    if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+    {
+        ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+        if ( pFCell->IsHyperLinkCell() )
+            pFCell->GetURLResult( aURL, aCellText );
+    }
+
+    if ( aURL.Len() && pPDFData )
+    {
+        vcl::PDFExtOutDevBookmarkEntry aBookmark;
+        aBookmark.nLinkId = pPDFData->CreateLink( rRect );
+        aBookmark.aBookmark = aURL;
+        std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFData->GetBookmarks();
+        rBookmarks.push_back( aBookmark );
+    }
+}
 
 void ScOutputData::SetSyntaxColor( Font* pFont, ScBaseCell* pCell )
 {
@@ -1216,6 +1240,8 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                 pDev->GetMapMode().GetMapUnit() == pRefDevice->GetMapMode().GetMapUnit(),
                 "DrawStrings: unterschiedliche MapUnits ?!?!" );
 
+    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+
     BOOL bWasIdleDisabled = pDoc->IsIdleDisabled();
     pDoc->DisableIdle( TRUE );
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
@@ -1647,6 +1673,8 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                 pDev->SetClipRegion( Region( aClipRect ) );
                         }
 
+                        Point aURLStart( nJustPosX, nJustPosY );    // copy before modifying for orientation
+
                         switch (aVars.GetOrient())
                         {
                             case SVX_ORIENTATION_STANDARD:
@@ -1708,6 +1736,15 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                 pDev->Pop();
                             else
                                 pDev->SetClipRegion();
+                        }
+
+                        // PDF: whole-cell hyperlink from formula?
+                        BOOL bHasURL = pPDFData && pCell && pCell->GetCellType() == CELLTYPE_FORMULA &&
+                                        static_cast<ScFormulaCell*>(pCell)->IsHyperLinkCell();
+                        if ( bHasURL )
+                        {
+                            Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
+                            lcl_DoHyperlinkResult( pDev, aURLRect, pCell );
                         }
                     }
                 }
@@ -1929,6 +1966,8 @@ void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlig
 
 void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 {
+    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
     UINT32 nMinHeight = aMinSize.Height() / 200;                // 1/2 Pixel
 
@@ -2767,6 +2806,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     }
                                 }
 
+                                Point aURLStart = aLogicStart;      // copy before modifying for orientation
+
                                 short nOriVal = 0;
                                 if (eOrient==SVX_ORIENTATION_TOPBOTTOM)
                                 {
@@ -2829,6 +2870,30 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                         pDev->Pop();
                                     else
                                         pDev->SetClipRegion();
+                                }
+
+                                // PDF: whole-cell hyperlink from formula?
+                                BOOL bHasURL = pPDFData && pCell && pCell->GetCellType() == CELLTYPE_FORMULA &&
+                                                static_cast<ScFormulaCell*>(pCell)->IsHyperLinkCell();
+                                if ( bHasURL )
+                                {
+                                    long nURLWidth = (long) pEngine->CalcTextWidth();
+                                    long nURLHeight = pEngine->GetTextHeight();
+                                    if ( bBreak )
+                                    {
+                                        Size aPaper = pEngine->GetPaperSize();
+                                        if ( bAsianVertical )
+                                            nURLHeight = aPaper.Height();
+                                        else
+                                            nURLWidth = aPaper.Width();
+                                    }
+                                    if ( eOrient == SVX_ORIENTATION_TOPBOTTOM || eOrient == SVX_ORIENTATION_BOTTOMTOP )
+                                        std::swap( nURLWidth, nURLHeight );
+                                    else if ( bAsianVertical )
+                                        aURLStart.X() -= nURLWidth;
+
+                                    Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
+                                    lcl_DoHyperlinkResult( pDev, aURLRect, pCell );
                                 }
                             }
                         }
