@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:29:12 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,9 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 
 void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
 {
+    if ( GetSelectionMode() == EE_SELMODE_HIDDEN )
+        return;
+
     // Vor dem Zeichnen der Selektion muss sichergestellt werden,
     // das der Fensterinhalt komplett gueltig ist!
     // Muss hier stehen, damit auf jeden Fall weg wenn lerr, nicht spaeter
