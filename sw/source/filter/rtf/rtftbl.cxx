@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:04:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,23 @@ void rtfSections::PrependedInlineNode(const SwPosition &rPos,
         maSegments.back().maStart = SwNodeIndex(rNode);
 }
 
+bool SwRTFParser::IsBorderToken(int nToken)
+{
+    /*
+        i30222 i28983
+        Our ability to sense border tokens is broken rtftoken.h is
+        organised in a way that ignores some border tokens. ReadBorderAttr
+        still doesn't support the more exotic borders but at least this
+        won't cause the parser to prematuerely exit the table
+    */
+    bool bResult = false;
+
+    bResult =   (nToken >= RTF_BRDRDASHD && nToken <= RTF_BRDRTHTNMG) ||
+                (nToken >=  RTF_BRDRTNTHSG && nToken <= RTF_BRDRWAVY);
+
+    return bResult;
+}
+
 void SwRTFParser::ReadTable( int nToken )
 {
     nInsTblRow = USHRT_MAX;
@@ -388,7 +405,7 @@ void SwRTFParser::ReadTable( int nToken )
                 /*#106415# The Cell Borders are now balanced on import to
                 improve the layout of tables.
                 */
-
+/*
                 if ( aBoxFmts.Count()>1)
                 {
 
@@ -450,7 +467,7 @@ void SwRTFParser::ReadTable( int nToken )
                     }
 
                 }
-
+*/
 
                 pFmt->SetAttr(aBox);
 
@@ -519,13 +536,17 @@ void SwRTFParser::ReadTable( int nToken )
                 ReadBackgroundAttr( nToken,
                         (SfxItemSet&)pBoxFmt->GetAttrSet(), TRUE );
             }
-            else if( ( nToken & ~(0xff | RTF_TABLEDEF) ) == RTF_BRDRDEF )
+            else if( ( nToken & ~(0xff | RTF_TABLEDEF) ) == RTF_BRDRDEF ||
+                      IsBorderToken(nToken))
             {
                 if( aMergeBoxes[ nBoxCnt ] )
                     break;
 
                 SfxItemSet& rSet = (SfxItemSet&)pBoxFmt->GetAttrSet();
-                ReadBorderAttr( nToken, rSet, TRUE );
+                if(!IsBorderToken( nToken ))
+                    ReadBorderAttr( nToken, rSet, TRUE );
+                else
+                    NextToken( nToken );
 #if 0
                 SetRowBorder(aRow);
 #endif
