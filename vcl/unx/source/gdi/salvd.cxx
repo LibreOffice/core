@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:40:18 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,10 +111,10 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice )
     int nDeviceDepth = pDevice->GetDepth();
 
     if( nDeviceDepth == nVisualDepth )
-        xColormap_ = &pDisplay->GetColormap();
+        m_pColormap = &pDisplay->GetColormap();
     else
     if( nDeviceDepth == 1 )
-        xColormap_ = new SalColormap();
+        m_pDeleteColormap = m_pColormap = new SalColormap();
 
     hDrawable_   = pDevice->GetDrawable();
     m_pVDev      = pDevice;
