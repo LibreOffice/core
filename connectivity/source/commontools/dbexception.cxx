@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 17:02:19 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ SQLExceptionInfo::SQLExceptionInfo(const ::com::sun::star::sdb::SQLErrorEvent& _
     staruno::Type aReasonType = _rError.Reason.getValueType();
 
     sal_Bool bValid = isAssignableFrom(aSQLExceptionType, aReasonType);
-    OSL_ENSHURE(bValid, "SQLExceptionInfo::SQLExceptionInfo : invalid argument (does not contain an SQLException) !");
+    OSL_ENSURE(bValid, "SQLExceptionInfo::SQLExceptionInfo : invalid argument (does not contain an SQLException) !");
     if (bValid)
         m_aContent = _rError.Reason;
 
@@ -214,21 +214,21 @@ sal_Bool SQLExceptionInfo::isKindOf(TYPE _eType) const
 //------------------------------------------------------------------------------
 SQLExceptionInfo::operator const ::com::sun::star::sdbc::SQLException*() const
 {
-    OSL_ENSHURE(isKindOf(SQL_EXCEPTION), "SQLExceptionInfo::operator SQLException* : invalid call !");
+    OSL_ENSURE(isKindOf(SQL_EXCEPTION), "SQLExceptionInfo::operator SQLException* : invalid call !");
     return reinterpret_cast<const ::com::sun::star::sdbc::SQLException*>(m_aContent.getValue());
 }
 
 //------------------------------------------------------------------------------
 SQLExceptionInfo::operator const ::com::sun::star::sdbc::SQLWarning*() const
 {
-    OSL_ENSHURE(isKindOf(SQL_WARNING), "SQLExceptionInfo::operator SQLException* : invalid call !");
+    OSL_ENSURE(isKindOf(SQL_WARNING), "SQLExceptionInfo::operator SQLException* : invalid call !");
     return reinterpret_cast<const ::com::sun::star::sdbc::SQLWarning*>(m_aContent.getValue());
 }
 
 //------------------------------------------------------------------------------
 SQLExceptionInfo::operator const ::com::sun::star::sdb::SQLContext*() const
 {
-    OSL_ENSHURE(isKindOf(SQL_CONTEXT), "SQLExceptionInfo::operator SQLException* : invalid call !");
+    OSL_ENSURE(isKindOf(SQL_CONTEXT), "SQLExceptionInfo::operator SQLException* : invalid call !");
     return reinterpret_cast<const ::com::sun::star::sdb::SQLContext*>(m_aContent.getValue());
 }
 
@@ -303,14 +303,14 @@ void SQLExceptionIteratorHelper::next(SQLExceptionInfo& _rOutInfo)
             _rOutInfo = *static_cast<const SQLContext*>(pNext);
             break;
         default:
-            OSL_ENSHURE(sal_False, "SQLExceptionIteratorHelper::next: invalid type!");
+            OSL_ENSURE(sal_False, "SQLExceptionIteratorHelper::next: invalid type!");
     }
 }
 
 //------------------------------------------------------------------------------
 const ::com::sun::star::sdbc::SQLException* SQLExceptionIteratorHelper::next()
 {
-    OSL_ENSHURE(hasMoreElements(), "SQLExceptionIteratorHelper::next : invalid call (please use hasMoreElements) !");
+    OSL_ENSURE(hasMoreElements(), "SQLExceptionIteratorHelper::next : invalid call (please use hasMoreElements) !");
 
     const ::com::sun::star::sdbc::SQLException* pReturn = m_pCurrent;
     if (m_pCurrent)
@@ -334,7 +334,7 @@ const ::com::sun::star::sdbc::SQLException* SQLExceptionIteratorHelper::next()
             if (!isAssignableFrom(aSqlExceptionCompare, aNextElementType))
             {
                 // the next chain element isn't an SQLException
-                OSL_ENSHURE(sal_False, "SQLExceptionIteratorHelper::next : the exception chain is invalid !");
+                OSL_ENSURE(sal_False, "SQLExceptionIteratorHelper::next : the exception chain is invalid !");
                 pSearch = NULL;
                 break;
             }
@@ -391,6 +391,9 @@ FunctionSequenceException::FunctionSequenceException(const Reference< XInterface
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/01 17:02:19  fs
+ *  operator= for SQLExceptionInfo, new ctor for SQLExceptionIteratorHelper, new next method
+ *
  *  Revision 1.3  2000/11/08 18:54:44  fs
  *  corrected the initial setting of the SQLExceptionInfo
  *

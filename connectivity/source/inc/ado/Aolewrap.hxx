@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolewrap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:25 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ namespace connectivity
 
             inline WrapT GetItem(sal_Int32 index) const
             {
-                OSL_ENSHURE(index >= 0 && index<GetItemCount(),"Wrong index for field!");
+                OSL_ENSURE(index >= 0 && index<GetItemCount(),"Wrong index for field!");
                 T* pT;
                 if (FAILED(pInterface->get_Item(OLEVariant(index), &pT))) return WrapT(NULL);
                 return WrapT(pT);

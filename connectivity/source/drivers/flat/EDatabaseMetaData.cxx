@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-15 13:07:15 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
                     aRow[4] = *pBegin;
 
                     ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
-                    OSL_ENSHURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
+                    OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
                     aRow[5] = getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
                     aRow[6] = getString(xColumn->getPropertyValue(PROPERTY_TYPENAME));
                     aRow[7] = getINT32(xColumn->getPropertyValue(PROPERTY_PRECISION));

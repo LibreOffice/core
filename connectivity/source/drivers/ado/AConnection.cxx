@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 10:27:12 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLE
             eIso = adXactSerializable;
             break;
         default:
-            OSL_ENSHURE(0,"OConnection::setTransactionIsolation invalid level");
+            OSL_ENSURE(0,"OConnection::setTransactionIsolation invalid level");
             return;
     }
     m_pAdoConnection->put_IsolationLevel(eIso);
@@ -443,7 +443,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, 
             nRet = TransactionIsolation::SERIALIZABLE;
             break;
         default:
-            OSL_ENSHURE(0,"OConnection::setTransactionIsolation invalid level");
+            OSL_ENSURE(0,"OConnection::setTransactionIsolation invalid level");
     }
     ADOS::ThrowException(*m_pAdoConnection,*this);
     return nRet;

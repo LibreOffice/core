@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 12:38:32 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ void ODatabaseMetaData::fillLiterals() throw(SQLException, RuntimeException)
 
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    OSL_ENSHURE(pRecordset,"getMaxSize no resultset!");
+    OSL_ENSURE(pRecordset,"getMaxSize no resultset!");
     WpADORecordset aRecordset(pRecordset);
 
     aRecordset.MoveFirst();
@@ -169,7 +169,7 @@ sal_Int32 ODatabaseMetaData::getInt32Property(const ::rtl::OUString& _aProperty)
 {
     WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(m_pADOConnection->get_Properties());
     ADOS::ThrowException(*m_pADOConnection,*this);
-    OSL_ENSHURE(aProps.IsValid(),"There are no properties at the connection");
+    OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
     ADO_PROP(_aProperty);
     sal_Int32 nValue(0);
     if(!aVar.isNull() && !aVar.isEmpty())
@@ -182,7 +182,7 @@ sal_Bool ODatabaseMetaData::getBoolProperty(const ::rtl::OUString& _aProperty) t
 {
     WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(m_pADOConnection->get_Properties());
     ADOS::ThrowException(*m_pADOConnection,*this);
-    OSL_ENSHURE(aProps.IsValid(),"There are no properties at the connection");
+    OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
     ADO_PROP(_aProperty);
     return (!aVar.isNull() && !aVar.isEmpty() ? aVar.getBool() : sal_False);
 }
@@ -191,7 +191,7 @@ sal_Bool ODatabaseMetaData::getBoolProperty(const ::rtl::OUString& _aProperty) t
 {
     WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(m_pADOConnection->get_Properties());
     ADOS::ThrowException(*m_pADOConnection,*this);
-    OSL_ENSHURE(aProps.IsValid(),"There are no properties at the connection");
+    OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
 
     ADO_PROP(_aProperty);
     ::rtl::OUString aValue;
@@ -1523,7 +1523,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
 {
 //  ADOProperties* pProps = m_pADOConnection->get_Properties();
-//  OSL_ENSHURE(pProps,"There are no properties at the connection");
+//  OSL_ENSURE(pProps,"There are no properties at the connection");
 //  if(!pProps)
 //      return sal_False;
 //  pProps->AddRef();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:45:56 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
     sal_Int32 nKey;
     sal_Int16 nKeyType;
 
-    OSL_ENSHURE(_xColumn.is() && _xFormatter.is(), "DBTypeConversion::getValue: invalid arg !");
+    OSL_ENSURE(_xColumn.is() && _xFormatter.is(), "DBTypeConversion::getValue: invalid arg !");
     if (!_xColumn.is() || !_xFormatter.is())
         return ::rtl::OUString();
 
@@ -641,7 +641,7 @@ DateTime DBTypeConversion::toDateTime(double dVal, const Date& _rNullDate)
 //------------------------------------------------------------------------------
 Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xSupplier)
 {
-    OSL_ENSHURE(xSupplier.is(), "getNULLDate : the formatter doesn't implement a supplier !");
+    OSL_ENSURE(xSupplier.is(), "getNULLDate : the formatter doesn't implement a supplier !");
     if (xSupplier.is())
     {
         try
@@ -753,7 +753,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
                 {
                     Date aDate;
                     sal_Bool bRet = _rVal >>= aDate;
-                    OSL_ENSHURE(bRet,"DBTypeConversion::toSQLString: _rVal is not date!");
+                    OSL_ENSURE(bRet,"DBTypeConversion::toSQLString: _rVal is not date!");
                     if (bQuote) aRet += ::rtl::OUString::createFromAscii("{D '");
                     aRet += DBTypeConversion::toDateString(aDate);;
                     if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
@@ -762,7 +762,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
                 {
                     Time aTime;
                     sal_Bool bRet = _rVal >>= aTime;
-                    OSL_ENSHURE(bRet,"DBTypeConversion::toSQLString: _rVal is not time!");
+                    OSL_ENSURE(bRet,"DBTypeConversion::toSQLString: _rVal is not time!");
                     if (bQuote) aRet += ::rtl::OUString::createFromAscii("{T '");
                     aRet += DBTypeConversion::toTimeString(aTime);
                     if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
@@ -773,7 +773,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
         }
         catch ( ... )
         {
-            OSL_ENSHURE(0,"TypeConversion Error");
+            OSL_ENSURE(0,"TypeConversion Error");
         }
     }
     else
@@ -791,6 +791,9 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/03/15 08:45:56  fs
+ *  cppuhelper/extract -> comphelper/extract
+ *
  *  Revision 1.10  2001/01/03 09:02:13  oj
  *  check month >0 and < 13
  *

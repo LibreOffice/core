@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:42 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ namespace connectivity
             if (m_aColMapping.size())
             {
                 // Validate column number
-                OSL_ENSHURE(column>0,"OResultSet::mapColumn column <= 0");
+                OSL_ENSURE(column>0,"OResultSet::mapColumn column <= 0");
                 map = m_aColMapping[column];
             }
 

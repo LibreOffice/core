@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:11:26 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  ORes
                         ,m_bEOF(sal_False)
 {
     osl_incrementInterlockedCount( &m_refCount );
-    OSL_ENSHURE(_pRecordSet,"No RecordSet !");
+    OSL_ENSURE(_pRecordSet,"No RecordSet !");
     if(!_pRecordSet)
         throw SQLException();
     m_pRecordSet->AddRef();
@@ -170,7 +170,7 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
                         ,m_bEOF(sal_False)
 {
     osl_incrementInterlockedCount( &m_refCount );
-    OSL_ENSHURE(_pRecordSet,"No RecordSet !");
+    OSL_ENSURE(_pRecordSet,"No RecordSet !");
     if(!_pRecordSet)
         throw SQLException();
     m_pRecordSet->AddRef();
@@ -648,7 +648,7 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    OSL_ENSHURE(!m_nRowPos,"OResultSet::isBeforeFirst: Error in setting m_nRowPos!");
+    OSL_ENSURE(!m_nRowPos,"OResultSet::isBeforeFirst: Error in setting m_nRowPos!");
     sal_Int16 bIsAtBOF;
     m_pRecordSet->get_BOF(&bIsAtBOF);
     return bIsAtBOF;
@@ -945,7 +945,7 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
 void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
 
-    OSL_ENSHURE(0,"OResultSet::updateNumericObject: NYI");
+    OSL_ENSURE(0,"OResultSet::updateNumericObject: NYI");
 }
 //------------------------------------------------------------------------------
 // XRowLocate
@@ -973,7 +973,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const Any& bookmark ) throw(SQLExc
 
     sal_Int32 nPos;
     bookmark >>= nPos;
-    OSL_ENSHURE(nPos >= 0 && nPos < m_aBookmarks.size(),"Invalid Index for vector");
+    OSL_ENSURE(nPos >= 0 && nPos < m_aBookmarks.size(),"Invalid Index for vector");
     if(nPos < 0 || nPos >= m_aBookmarks.size())
         throw SQLException();
 
@@ -989,7 +989,7 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const Any& bookmark, sal_I
     sal_Int32 nPos;
     bookmark >>= nPos;
     nPos += rows;
-    OSL_ENSHURE(nPos >= 0 && nPos < m_aBookmarks.size(),"Invalid Index for vector");
+    OSL_ENSURE(nPos >= 0 && nPos < m_aBookmarks.size(),"Invalid Index for vector");
     if(nPos < 0 || nPos >= m_aBookmarks.size())
         throw SQLException();
     return SUCCEEDED(m_pRecordSet->Move(rows,m_aBookmarks[nPos]));
@@ -1008,7 +1008,7 @@ sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& first, const Any& se
     if(nPos1 == nPos2)  // they should be equal
         return sal_True;
 
-    OSL_ENSHURE((nPos1 >= 0 && nPos1 < m_aBookmarks.size()) || (nPos1 >= 0 && nPos2 < m_aBookmarks.size()),"Invalid Index for vector");
+    OSL_ENSURE((nPos1 >= 0 && nPos1 < m_aBookmarks.size()) || (nPos1 >= 0 && nPos2 < m_aBookmarks.size()),"Invalid Index for vector");
 
     CompareEnum eNum;
     m_pRecordSet->CompareBookmarks(m_aBookmarks[nPos1],m_aBookmarks[nPos2],&eNum);
@@ -1025,7 +1025,7 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, Runtim
     m_pRecordSet->get_Properties(&pProps);
     WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(pProps);
     ADOS::ThrowException(*((OConnection*)m_pStmt->getConnection().get())->getConnection(),*this);
-    OSL_ENSHURE(aProps.IsValid(),"There are no properties at the connection");
+    OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
 
     WpADOProperty aProp(aProps.GetItem(::rtl::OUString::createFromAscii("Bookmarks Ordered")));
     OLEVariant aVar;
@@ -1090,7 +1090,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& ro
         sal_Int32 i=0;
         do
         {
-            OSL_ENSHURE(i<aSeq.getLength(),"Index greater than length of sequence");
+            OSL_ENSURE(i<aSeq.getLength(),"Index greater than length of sequence");
             m_pRecordSet->get_Status(&pSeq[i]);
             if(pSeq[i++] == adRecDeleted)
                 --m_nRowPos;

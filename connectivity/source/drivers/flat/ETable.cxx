@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:53:33 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,7 +902,7 @@ sal_Bool OFlatTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,s
                 char cThousandDelimiter = pConnection->getThousandDelimiter();
                 ByteString aStrConverted;
 
-                OSL_ENSHURE(cDecimalDelimiter && nType != DataType::INTEGER ||
+                OSL_ENSURE(cDecimalDelimiter && nType != DataType::INTEGER ||
                            !cDecimalDelimiter && nType == DataType::INTEGER,
                            "FalscherTyp");
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BStatement.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:24:15 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ Reference< XResultSet > OAdabasStatement::getResultSet (sal_Bool checkCount) thr
 
     if (numCols > 0)
     {
-        OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+        OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
         pRs = new OAdabasResultSet(m_aStatementHandle,this);
 
         // Save a copy of our last result set

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:47:25 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ OIndexIterator* ODbaseIndex::createIterator(OBoolOperator* pOp,
 //------------------------------------------------------------------
 BOOL ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
 {
-    OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
     // Sucht ein bestimmten Wert im Index
     // Wenn der Index Unique ist, interssiert der Key nicht, sonst ja
     try
@@ -259,7 +259,7 @@ BOOL ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValu
 BOOL ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
-    OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
     // Sucht ein bestimmten Wert im Index
     // Wenn der Index Unique ist, interssiert der Key nicht, sonst ja
     ONDXKey aKey;
@@ -270,7 +270,7 @@ BOOL ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 BOOL ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
-    OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
     ONDXKey aKey;
 
     // Existiert der Wert bereits
@@ -295,7 +295,7 @@ BOOL ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
                          const ORowSetValue& rNewValue)
 {
     openIndexFile();
-    OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
     ONDXKey aKey;
     if (!ConvertToKey(&aKey, nRec, rNewValue) || (isUnique() && getRoot()->Find(aKey)))
         return FALSE;
@@ -307,7 +307,7 @@ BOOL ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
 BOOL ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
-    OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
     // Existiert der Wert bereits
     // Find immer verwenden um das aktuelle Blatt zu bestimmen
     ONDXKey aKey;
@@ -328,7 +328,7 @@ BOOL ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 //------------------------------------------------------------------
 void ODbaseIndex::Collect(ONDXPage* pPage)
 {
-    OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
     if (pPage)
         m_aCollector.push_back(pPage);
 }
@@ -370,7 +370,7 @@ void ODbaseIndex::Release(BOOL bSave)
 //------------------------------------------------------------------
 ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, BOOL bLoad)
 {
-    OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
 
     ONDXPage* pPage;
     if (m_aCollector.size())
@@ -413,7 +413,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
     //  aText.Convert(m_pTable->getConnection()->getTextEncoding(), rIndex.m_pTable->getConnection()->GetCharacterSet());
     strcpy(rIndex.m_aHeader.db_name,aText.GetBuffer());
     sal_Int32 nWrites = rStream.Write(&rIndex.m_aHeader,512);
-    OSL_ENSHURE(nWrites == 512,"Write not successful: Wrong header size for dbase index!");
+    OSL_ENSURE(nWrites == 512,"Write not successful: Wrong header size for dbase index!");
     return rStream;
 }
 // -------------------------------------------------------------------------
