@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:35 $
+ *  last change: $Author: oj $ $Date: 2002-11-12 09:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -270,7 +267,8 @@ using namespace ::com::sun::star::ui::dialogs;
 void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
                         const Reference< XPropertySet >& _rxTable,
                         ::rtl::OUString& _rComposedName,
-                        sal_Bool _bQuote)
+                        sal_Bool _bQuote,
+                        EComposeRule _eRule)
 {
     OSL_ENSURE(_rxTable.is(),"Table can not be null!");
     if(_rxTable.is())
@@ -283,7 +281,7 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
             _rxTable->getPropertyValue(PROPERTY_SCHEMANAME) >>= aSchema;
             _rxTable->getPropertyValue(PROPERTY_NAME)       >>= aTable;
 
-            ::dbtools::composeTableName(_rxMetaData,aCatalog,aSchema,aTable,_rComposedName,_bQuote,::dbtools::eInDataManipulation);
+            ::dbtools::composeTableName(_rxMetaData,aCatalog,aSchema,aTable,_rComposedName,_bQuote,_eRule);
         }
     }
 }

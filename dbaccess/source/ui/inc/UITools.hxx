@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-26 10:49:03 $
+ *  last change: $Author: oj $ $Date: 2002-11-12 09:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #ifndef _SV_TASKPANELIST_HXX
 #include <vcl/taskpanelist.hxx>
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
+
 
 // we only need forward decl here
 namespace com { namespace sun { namespace star {
@@ -125,7 +129,8 @@ namespace dbaui
     void composeTableName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxTable,
                             ::rtl::OUString& _rComposedName,
-                            sal_Bool _bQuote);
+                            sal_Bool _bQuote,
+                            ::dbtools::EComposeRule _eRule = ::dbtools::eInDataManipulation);
 
     /** creates a new connection and appends the eventlistener
         @param  _rsDataSourceName       name of the datasource
