@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semnode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:41 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ SemanticNode::SetTokenResult( E_TokenDone       i_eDone,
                               E_EnvStackAction  i_eWhat2DoWithEnvStack,
                               UnoIDL_PE *       i_pParseEnv2Push )
 {
+    csv_assert(pTokenResult != 0);
+
     pTokenResult->eDone         = i_eDone;
     pTokenResult->eStackAction  = i_eWhat2DoWithEnvStack;
     pTokenResult->pEnv2Push     = i_pParseEnv2Push;
@@ -111,61 +113,3 @@ SemanticNode::SetTokenResult( E_TokenDone       i_eDone,
 
 }   // namespace uidl
 }   // namespace csi
-
-
-
-
-#if 0
-void
-UnoIDL_PE::ProcessToken( const Token & i_rToken )
-{
-/*
-    CleanUp();
-
-    LetCurTokenTrigger();
-
-    if ( Done() )
-        return true;
-
-    for ( SubEnvIterator iter = Triggered_SubEnvs.begin();
-          iter != Triggered_SubEnvs.end();
-          ++iter )
-    {
-        (*iter).Enter();
-
-        if ( (*iter).ProcessNextToken() )
-        {
-            (*iter).Leave();
-            return true;
-        }
-    }
-*/
-}
-
-void
-Trying_PE::ProcessToken( const Token & i_rToken )
-{
-/*
-    CleanUp();
-
-    LetCurTokenTrigger();
-
-    if ( Done() )
-        return true;
-
-    for ( SubEnvIterator iter = Triggered_SubEnvs.begin();
-          iter != Triggered_SubEnvs.end();
-          ++iter )
-    {
-        (*iter).Enter();
-
-        if ( (*iter).ProcessNextToken() )
-        {
-            (*iter).Leave();
-            return true;
-        }
-    }
-*/
-}
-#endif // 0
-
