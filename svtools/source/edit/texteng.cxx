@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-08 10:41:47 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 14:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,15 +84,15 @@
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
-#include <com/sun/star/text/XBreakIterator.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_CHARACTERITERATORMODE_HPP_
-#include <com/sun/star/text/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
-#include <com/sun/star/text/WordType.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 #endif
 
 #include <vcl/svapp.hxx>
@@ -1564,10 +1564,10 @@ void TextEngine::ImpBreakLine( ULONG nPara, TextLine* pLine, TextPortion* pPorti
     if ( nMaxBreakPos == STRING_LEN )   // GetTextBreak() ist anderer Auffassung als GetTextSize()
         nMaxBreakPos = pNode->GetText().Len() - 1;
 
-    uno::Reference < text::XBreakIterator > xBI = GetBreakIterator();
-    text::LineBreakHyphenationOptions aHyphOptions( NULL, 1 );
-    text::LineBreakUserOptions aUserOptions;
-    text::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, GetLocale(), pLine->GetStart(), aHyphOptions, aUserOptions );
+    uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
+    i18n::LineBreakHyphenationOptions aHyphOptions( NULL, 1 );
+    i18n::LineBreakUserOptions aUserOptions;
+    i18n::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, GetLocale(), pLine->GetStart(), aHyphOptions, aUserOptions );
     USHORT nBreakPos = aLBR.breakIndex;
     if ( nBreakPos <= pLine->GetStart() )
         nBreakPos = nMaxBreakPos;
@@ -2343,8 +2343,8 @@ String TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord )
     {
         TextSelection aSel( rCursorPos );
         TextNode* pNode = mpDoc->GetNodes().GetObject(  rCursorPos.GetPara() );
-        uno::Reference < text::XBreakIterator > xBI = GetBreakIterator();
-        text::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rCursorPos.GetIndex(), GetLocale(), text::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+        uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
+        i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rCursorPos.GetIndex(), GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
         aSel.GetStart().GetIndex() = aBoundary.startPos;
         aSel.GetEnd().GetIndex() = aBoundary.endPos;
         aWord = pNode->GetText().Copy( aSel.GetStart().GetIndex(), aSel.GetEnd().GetIndex() - aSel.GetStart().GetIndex() );
@@ -2711,9 +2711,9 @@ USHORT TextEngine::GetLeftMargin() const
     return mpDoc->GetLeftMargin();
 }
 
-uno::Reference< text::XBreakIterator > TextEngine::GetBreakIterator()
+uno::Reference< i18n::XBreakIterator > TextEngine::GetBreakIterator()
 {
-    static uno::Reference < text::XBreakIterator > mxBreakIterator;
+    static uno::Reference < i18n::XBreakIterator > mxBreakIterator;
     if ( !mxBreakIterator.is() )
         mxBreakIterator = vcl::unohelper::CreateBreakIterator();
     return mxBreakIterator;
