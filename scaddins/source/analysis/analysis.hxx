@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-07 06:56:53 $
+ *  last change: $Author: vg $ $Date: 2001-05-08 14:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,10 +150,10 @@ public:
 //  virtual double SAL_CALL     getGcd( constREFXPS&, const SEQ( CSS::uno::Any )& aCoeffList ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getLcm( constREFXPS&, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE_IAE;
 
-    virtual double SAL_CALL     getBesseli( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE;
-    virtual double SAL_CALL     getBesselj( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE;
-    virtual double SAL_CALL     getBesselk( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE;
-    virtual double SAL_CALL     getBessely( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE;
+    virtual double SAL_CALL     getBesseli( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getBesselj( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getBesselk( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getBessely( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
 
     virtual STRING SAL_CALL     getBin2oct( constREFXPS&, const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getBin2dec( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE;
