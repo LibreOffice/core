@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-29 14:06:55 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ String STR_LAYER_CONTROLS
     Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
     Text[ polish ] = "Pola kontrolne";
     Text[ japanese ] = "ºİÄÛ°Ù";
-    Text[ chinese_traditional ] = "±±¥ó";
+    Text[ chinese_traditional ] = "±±¥ó¶µ";
     Text[ arabic ] = "ÚäÇÕÑ ÊÍßã";
     Text[ dutch ] = "Controles";
     Text[ chinese_simplified ] = "¿Ø¼ş";
@@ -193,14 +193,14 @@ String STR_LAYER_MEASURELINES
     Text [ french ] = "Lignes de cote" ;
     Text [ portuguese_brazilian ] = "Ma?linien" ;
     Text [ portuguese ] = "Linhas de dimensão" ;
-    Text[ chinese_simplified ] = "¶¨³ß¶ÈÏß";
+    Text[ chinese_simplified ] = "³ß´çÏß";
     Text[ russian ] = "Ëèíèè ğàçìåğà";
     Text[ polish ] = "Linie wymiaru";
     Text[ japanese ] = "¡–@ü";
     Text[ chinese_traditional ] = "¤Ø¤o½u";
     Text[ arabic ] = "ÎØæØ ŞíÇÓ";
     Text[ dutch ] = "Meetlatten";
-    Text[ chinese_simplified ] = "¶¨³ß¶ÈÏß";
+    Text[ chinese_simplified ] = "³ß´çÏß";
     Text[ greek ] = "Ãñáììİò äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö ¼±";
     Text[ turkish ] = "Ölçme çizgileri";
@@ -346,7 +346,7 @@ String STR_PRESOBJ_MPTITLE
     Text[ dutch ] = "Klik om de opmaak van de titeltekst te bewerken";
     Text[ chinese_simplified ] = "ÇëÄú°´»÷Êó±ê£¬±à¼­±êÌâÎÄµÄ¸ñÊ½¡£";
     Text[ greek ] = "ÊÜíôå êëéê åäş ãéá ôçí åğåîåñãáóßá ôçò ìïñöŞò ôïõ êåéìİíïõ ôïõ ôßôëïõ";
-    Text[ korean ] = "Á¦¸ñ ÅØ½ºÆ®ÀÇ ¼­½ÄÀ» ÆíÁıÇÏ±â À§ÇØ Å¬¸¯ÇÏ½Ê½Ã¿À";
+    Text[ korean ] = "Á¦¸ñ ÅØ½ºÆ®ÀÇ ¼­½ÄÀ» ÆíÁıÇÏ·Á¸é Å¬¸¯ÇÏ½Ê½Ã¿À";
     Text[ turkish ] = "Ana başlık metnini düzenlemek için tıklayın";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muokkaa otsikon tekstimuotoa napsauttamalla";
@@ -374,7 +374,7 @@ String STR_PRESOBJ_MPOUTLINE
     Text[ dutch ] = "Klik om het formaat van de overzichtstekst te bewerken";
     Text[ chinese_simplified ] = "ÇëÄú°´»÷Êó±ê£¬±à¼­´ó¸ÙÕıÎÄ¸ñÊ½¡£";
     Text[ greek ] = "ÊÜíôå êëéê åäş ãéá ôçí åğåîåñãáóßá ôçò ìïñöŞò ôùí êåéìİíùí äéÜñèñùóçò";
-    Text[ korean ] = "´Ù´Ü°è ÅØ½ºÆ®ÀÇ ¼­½ÄÀ»¡¡ÆíÁıÇÏ±âÀ§ÇØ Å¬¸¯ÇÏ½Ê½Ã¿À";
+    Text[ korean ] = "´Ù´Ü°è ÅØ½ºÆ®ÀÇ ¼­½ÄÀ» ÆíÁıÇÏ·Á¸é Å¬¸¯ÇÏ½Ê½Ã¿À";
     Text[ turkish ] = "Anahat metninin formatlarını düzenlemek için tıklayın";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muokkaa jäsennyksen tekstimuotoa napsauttamalla";
@@ -404,7 +404,7 @@ String STR_PRESOBJ_MPOUTLLAYER2
     Text[ dutch ] = "Tweede overzichtsniveau";
     Text[ chinese_simplified ] = "µÚ¶ş¸ö´ó¸Ù¼¶";
     Text[ greek ] = "Äåıôåñï åğßğåäï äéÜñèñùóçò";
-    Text[ korean ] = "2¹øÂ°¡¡´Ù´Ü°è¡¡´Ü°è";
+    Text[ korean ] = "2¹øÂ° ´Ù´Ü°è";
     Text[ turkish ] = "İkinci anahat düzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Segundo nivel del esquema";
@@ -433,7 +433,7 @@ String STR_PRESOBJ_MPOUTLLAYER3
     Text[ dutch ] = "Derde overzichtsniveau";
     Text[ chinese_simplified ] = "µÚÈı¸ö´ó¸Ù¼¶";
     Text[ greek ] = "Ôñßôï åğßğåäï äéÜñèñùóçò";
-    Text[ korean ] = "3¹øÂ°  ´Ù´Ü°è¡¡´Ü°è";
+    Text[ korean ] = "3¹øÂ° ´Ù´Ü°è";
     Text[ turkish ] = "Üçüncü anahat düzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tercer nivel del esquema";
@@ -462,7 +462,7 @@ String STR_PRESOBJ_MPOUTLLAYER4
     Text[ dutch ] = "Vierde overzichtsniveau";
     Text[ chinese_simplified ] = "µÚËÄ¸ö´ó¸Ù¼¶";
     Text[ greek ] = "Ôİôáñôï åğßğåäï äéÜñèñùóçò";
-    Text[ korean ] = "4¹øÂ°  ´Ù´Ü°è¡¡´Ü°è";
+    Text[ korean ] = "4¹øÂ° ´Ù´Ü°è";
     Text[ turkish ] = "Dördüncü anahat düzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cuarto nivel del esquema";
@@ -492,7 +492,7 @@ String STR_PRESOBJ_MPOUTLLAYER5
     Text[ dutch ] = "Vijfde overzichtsniveau";
     Text[ chinese_simplified ] = "µÚÎå¸ö´ó¸Ù¼¶";
     Text[ greek ] = "Ğİìğôï åğßğåäï äéÜñèñùóçò";
-    Text[ korean ] = "5¹øÂ°  ´Ù´Ü°è¡¡´Ü°è";
+    Text[ korean ] = "5¹øÂ° ´Ù´Ü°è";
     Text[ turkish ] = "Beşinci anahat düzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Quinto nivel del esquema";
@@ -521,7 +521,7 @@ String STR_PRESOBJ_MPOUTLLAYER6
     Text[ dutch ] = "Zesde overzichtsniveau";
     Text[ chinese_simplified ] = "µÚÁù¸ö´ó¸Ù¼¶";
     Text[ greek ] = "¸êôï åğßğåäï äéÜñèñùóçò";
-    Text[ korean ] = "6¹øÂ°  ´Ù´Ü°è¡¡´Ü°è";
+    Text[ korean ] = "6¹øÂ° ´Ù´Ü°è";
     Text[ turkish ] = "Altıncı anahat düzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sexto nivel del esquema";
@@ -550,7 +550,7 @@ String STR_PRESOBJ_MPOUTLLAYER7
     Text[ dutch ] = "Zevende overzichtsniveau";
     Text[ chinese_simplified ] = "µÚÆß¸ö´ó¸Ù¼¶";
     Text[ greek ] = "¸âäïìï åğßğåäï äéÜñèñùóçò";
-    Text[ korean ] = "7¹øÂ°  ´Ù´Ü°è¡¡´Ü°è";
+    Text[ korean ] = "7¹øÂ° ´Ù´Ü°è";
     Text[ turkish ] = "Yedinci anahat düzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Séptimo nivel del esquema";
@@ -579,7 +579,7 @@ String STR_PRESOBJ_MPOUTLLAYER8
     Text[ dutch ] = "Achtste overzichtsniveau";
     Text[ chinese_simplified ] = "µÚ°Ë¸ö´ó¸Ù¼¶";
     Text[ greek ] = "¼ãäïï åğßğåäï äéÜñèñùóçò";
-    Text[ korean ] = "8¹øÂ°  ´Ù´Ü°è¡¡´Ü°è";
+    Text[ korean ] = "8¹øÂ° ´Ù´Ü°è";
     Text[ turkish ] = "Sekizinci anahat düzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Octavo nivel del esquema";
@@ -608,7 +608,7 @@ String STR_PRESOBJ_MPOUTLLAYER9
     Text[ dutch ] = "Negende overzichtsniveau";
     Text[ chinese_simplified ] = "µÚ¾Å¸ö´ó¸Ù¼¶";
     Text[ greek ] = "¸íáôï åğßğåäï äéÜñèñùóçò";
-    Text[ korean ] = "9¹øÂ°  ´Ù´Ü°è¡¡´Ü°è";
+    Text[ korean ] = "9¹øÂ° ´Ù´Ü°è";
     Text[ turkish ] = "Dokuzuncu anahat düzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Noveno nivel del esquema";
@@ -716,7 +716,7 @@ String STR_PRESOBJ_OUTLINE
     Text[ russian ] = "Äîáàâèòü ñòğóêòóğó ùåë÷êîì ìûøè";
     Text[ polish ] = "Dodaj konspekt przez klikniêcie";
     Text[ japanese ] = "¸Ø¯¸‚µ‚Ä±³Ä×²İ‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "«öÀ»·Æ¹«¥ªÁä·s¼W¤jºõ";
+    Text[ chinese_traditional ] = "«ö·Æ¹«¥ªÁä¨Ó·s¼W¤jºõ";
     Text[ arabic ] = "ÇäŞÑ åäÇ áÅÏÑÇÌ ÊŞÓíã";
     Text[ dutch ] = "Klik om overzicht toe te voegen";
     Text[ chinese_simplified ] = "µ¥»÷Êó±ê¼üĞÂÔö´ó¸Ù";
@@ -745,7 +745,7 @@ String STR_PRESOBJ_TEXT
     Text[ russian ] = "Äîáàâèòü òåêñò ùåë÷êîì";
     Text[ polish ] = "Dodaj tekst przez klikniêcie";
     Text[ japanese ] = "¸Ø¯¸‚µ‚ÄÃ·½Ä‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "«öÀ»·Æ¹«¥ªÁä¡A¿é¤J¤å¦r";
+    Text[ chinese_traditional ] = "«ö·Æ¹«¥ªÁä¡A¿é¤J¤å¦r";
     Text[ arabic ] = "ÇäŞÑ áÅÏÑÇÌ äÕ";
     Text[ dutch ] = "Klik om tekst toe te voegen";
     Text[ chinese_simplified ] = "µ¥»÷Êó±ê¼üÌí¼ÓÎÄ×Ö";
@@ -774,7 +774,7 @@ String STR_PRESOBJ_NOTESTEXT
     Text[ russian ] = "Äîáàâèòü ïğèìå÷àíèÿ ùåë÷êîì ìûøè";
     Text[ polish ] = "Dodaj notatkê przez klikniêcie";
     Text[ japanese ] = "¸Ø¯¸‚µ‚ÄÉ°Ä‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "«ö¤@¤U·Æ¹«¥ªÁä¥[¤J³Æµù";
+    Text[ chinese_traditional ] = "«ö¤@¤U·Æ¹«¥ªÁä·s¼W³Æµù";
     Text[ arabic ] = "ÇäŞÑ áÅÏÑÇÌ ãáÇÍÙÇÊ";
     Text[ dutch ] = "Klik om aantekeningen toe te voegen";
     Text[ chinese_simplified ] = "µ¥»÷Êó±ê¼üÌí¼Ó±¸×¢";
@@ -919,7 +919,7 @@ String STR_PRESOBJ_TABLE
     Text[ russian ] = "Äîáàâèòü òàáëèöó äâîéíûì ùåë÷êîì";
     Text[ polish ] = "Dodaj arkusz kalkulacyjny przez dwukrotne klikniêcie";
     Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚Ä•\\‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "ÂùÀ»·Æ¹««öÁä¥[¤J¤@­Ó¤u§@ªí";
+    Text[ chinese_traditional ] = "ÂùÀ»·Æ¹««öÁä·s¼W¤@­Ó¤u§@ªí";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ÌÏæá";
     Text[ dutch ] = "Dubbelklik om werkblad toe te voegen";
     Text[ chinese_simplified ] = "ÇëÄúË«»÷Êó±êĞÂÔö¹¤×÷±í";
@@ -1022,6 +1022,25 @@ String STR_PRESVIEWSHELL
     Text = "Präsentationsmodus" ;
     Text [ ENGLISH ] = "Presentation mode" ;
     Text [ english_us ] = "Presentation mode" ;
+    Text[ portuguese ] = "Modo de apresentação";
+    Text[ russian ] = "Presentation mode";
+    Text[ greek ] = "Presentation mode";
+    Text[ dutch ] = "Presentatiemodus";
+    Text[ french ] = "Presentation mode";
+    Text[ spanish ] = "Presentation mode";
+    Text[ finnish ] = "Presentation mode";
+    Text[ italian ] = "Presentation mode";
+    Text[ danish ] = "Presentation mode";
+    Text[ swedish ] = "Presentationsläge";
+    Text[ polish ] = "Tryb prezentacji";
+    Text[ portuguese_brazilian ] = "Presentation mode";
+    Text[ japanese ] = "½×²ÄŞ¼®°Ó°ÄŞ";
+    Text[ korean ] = "Presentation mode";
+    Text[ chinese_simplified ] = "ÑİÊ¾ÎÄ¸åÄ£Ê½";
+    Text[ chinese_traditional ] = "Â²³ø¼Ò¦¡";
+    Text[ turkish ] = "Presentation mode";
+    Text[ arabic ] = "Presentation mode";
+    Text[ catalan ] = "Presentation mode";
 };
 String STR_TEXTOBJECTBARSHELL
 {
@@ -1354,14 +1373,14 @@ String STR_NOT_ENOUGH_MEMORY
     Text [ danish ] = "Ikke tilstrækkelig hukommelse!\nHandlingen bliver afbrudt." ;
     Text [ portuguese_brazilian ] = "Nicht genug Speicher!\nDie Aktion wird abgebrochen." ;
     Text [ portuguese ] = "Memória insuficiente!\nA acção será cancelada." ;
-    Text[ chinese_simplified ] = "ÄÚ´æ²»×ã£¡\nÖĞ¶ÏÖ´ĞĞÃüÁî¡£";
+    Text[ chinese_simplified ] = "ÄÚ´æ²»×ã£¡\nÖĞ¶ÏÖ´ĞĞ²Ù×÷¡£";
     Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè!\nÎïåğàöèÿ áóäåò ïğåğâàíà.";
     Text[ polish ] = "Za ma³o pamiêci!\nAkcja zostanie anulowana.";
     Text[ japanese ] = "\\•ª‚ÈÒÓØ‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñB\n±¸¼®İ‚ğ’†~‚µ‚Ü‚·B";
     Text[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬¡I\n¤¤Â_°õ¦æ«ü¥O¡C";
     Text[ arabic ] = "áÇ ÊæÌÏ ĞÇßÑÉ ßÇİíÉ!\nÓæİ íÊã ŞØÚ ÇáÅÌÑÇÁ.";
     Text[ dutch ] = "Niet genoeg geheugen!\nDe activiteit wordt gestopt.";
-    Text[ chinese_simplified ] = "ÄÚ´æ²»×ã£¡\nÖĞ¶ÏÖ´ĞĞÃüÁî¡£";
+    Text[ chinese_simplified ] = "ÄÚ´æ²»×ã£¡\nÖĞ¶ÏÖ´ĞĞ²Ù×÷¡£";
     Text[ greek ] = "Äåí õğÜñ÷åé áñêåôŞ ìíŞìç!\nÇ åíİñãåéá èá äéáêïğåß.";
     Text[ korean ] = "ÀúÀå°ø°£ÀÌ ÃæºĞÄ¡ ¾Ê½À´Ï´Ù!\n½ÇÇàÀÌ Áß´ÜµÉ °ÍÀÔ´Ï´Ù.";
     Text[ turkish ] = "Disk alanı yeterli değil!\nİşlem iptal edilecek.";
@@ -2114,6 +2133,7 @@ String STR_POOLSHEET_ARROW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Arrow";
 };
+
 
 
 
