@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
 #include <xmloff/XMLFontStylesContext.hxx>
 #endif
+#ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
+#include <xmloff/DocumentSettingsContext.hxx>
+#endif
 
 #include "xmlimprt.hxx"
 #include "document.hxx"
@@ -100,8 +103,11 @@
 #ifndef _SC_XMLCHANGETRACKINGIMPORTHELPER_HXX
 #include "XMLChangeTrackingImportHelper.hxx"
 #endif
-#ifndef _SC_XMLVIEWSETTINGSCONTEXT_HXX
-#include "XMLViewSettingsContext.hxx"
+#ifndef SC_CHGVISET_HXX
+#include "chgviset.hxx"
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
@@ -133,6 +139,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _EMBOBJ_HXX
+#include <so3/embobj.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -216,6 +225,24 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
     return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS);
 }
 
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Settings_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLSettingsImporter" ) );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw()
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport_Settings" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
+                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_SETTINGS);
+}
+
 //----------------------------------------------------------------------------
 
 static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
@@ -227,6 +254,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_meta,              XML_TOK_DOC_META                },
     { XML_NAMESPACE_OFFICE, sXML_script,            XML_TOK_DOC_SCRIPTS             },
     { XML_NAMESPACE_OFFICE, sXML_body,              XML_TOK_DOC_BODY                },
+    { XML_NAMESPACE_OFFICE, sXML_settings,          XML_TOK_DOC_SETTINGS            },
     XML_TOKEN_MAP_END
 };
 
@@ -809,9 +837,6 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
     const SvXMLTokenMap& rTokenMap = GetScImport().GetDocElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
-    case XML_TOK_DOC_VIEW_SETTINGS:
-        pContext = GetScImport().CreateViewSettingsContext(nPrefix, rLocalName, xAttrList);
-        break;
     case XML_TOK_DOC_FONTDECLS:
         if (GetScImport().getImportFlags() & IMPORT_FONTDECLS)
             pContext = GetScImport().CreateFontDeclsContext(nPrefix, rLocalName, xAttrList);
@@ -841,6 +866,10 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
     case XML_TOK_DOC_BODY:
         if (GetScImport().getImportFlags() & IMPORT_CONTENT)
             pContext = GetScImport().CreateBodyContext( rLocalName, xAttrList );
+        break;
+    case XML_TOK_DOC_SETTINGS:
+        if (GetScImport().getImportFlags() & IMPORT_SETTINGS)
+            pContext = new XMLDocumentSettingsContext(GetScImport(), nPrefix, rLocalName, xAttrList );
         break;
     }
 
@@ -1529,14 +1558,6 @@ void SAL_CALL ScXMLImport::setTargetDocument( const uno::Reference<lang::XCompon
 
 // ---------------------------------------------------------------------
 
-SvXMLImportContext *ScXMLImport::CreateViewSettingsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
-                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
-{
-    SvXMLImportContext *pContext= new ScXMLViewSettingsContext( *this, nPrefix,
-                                        rLocalName, xAttrList);
-    return pContext;
-}
-
 SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
                                      const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
@@ -1658,3 +1679,135 @@ void ScXMLImport::InsertStyles()
 {
     GetStyles()->CopyStylesToDoc(sal_True);
 }
+
+void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rChangeProps)
+{
+    sal_Int32 nCount(rChangeProps.getLength());
+    if (nCount)
+    {
+        sal_Int32 nTemp32(0);
+        sal_Int16 nTemp16(0);
+        ScChangeViewSettings* pViewSettings = new ScChangeViewSettings();
+        for (sal_Int32 i = 0; i < nCount; i++)
+        {
+            rtl::OUString sName(rChangeProps[i].Name);
+            if (sName.compareToAscii(sXML_show_changes) == 0)
+                pViewSettings->SetShowChanges(::cppu::any2bool(rChangeProps[i].Value));
+            else if (sName.compareToAscii(sXML_show_accepted_changes) == 0)
+                pViewSettings->SetShowAccepted(::cppu::any2bool(rChangeProps[i].Value));
+            else if (sName.compareToAscii(sXML_show_rejected_changes) == 0)
+                pViewSettings->SetShowRejected(::cppu::any2bool(rChangeProps[i].Value));
+            else if (sName.compareToAscii(sXML_show_changes_by_datetime) == 0)
+                pViewSettings->SetHasDate(::cppu::any2bool(rChangeProps[i].Value));
+            else if (sName.compareToAscii(sXML_show_changes_by_datetime_mode) == 0)
+            {
+                if (rChangeProps[i].Value >>= nTemp16)
+                    pViewSettings->SetTheDateMode(ScChgsDateMode(nTemp16));
+            }
+            else if (sName.compareToAscii(sXML_show_changes_by_datetime_first_datetime) == 0)
+            {
+                util::DateTime aDateTime;
+                if (rChangeProps[i].Value >>= aDateTime)
+                {
+                    DateTime aCoreDateTime;
+                    ScXMLConverter::ConvertAPIToCoreDateTime(aDateTime, aCoreDateTime);
+                    pViewSettings->SetTheFirstDateTime(aCoreDateTime);
+                }
+            }
+            else if (sName.compareToAscii(sXML_show_changes_by_datetime_second_datetime) == 0)
+            {
+                util::DateTime aDateTime;
+                if (rChangeProps[i].Value >>= aDateTime)
+                {
+                    DateTime aCoreDateTime;
+                    ScXMLConverter::ConvertAPIToCoreDateTime(aDateTime, aCoreDateTime);
+                    pViewSettings->SetTheLastDateTime(aCoreDateTime);
+                }
+            }
+            else if (sName.compareToAscii(sXML_show_changes_by_author) == 0)
+                pViewSettings->SetHasAuthor(::cppu::any2bool(rChangeProps[i].Value));
+            else if (sName.compareToAscii(sXML_show_changes_by_author_name) == 0)
+            {
+                rtl::OUString sOUName;
+                if (rChangeProps[i].Value >>= sOUName)
+                {
+                    String sName(sOUName);
+                    pViewSettings->SetTheAuthorToShow(sName);
+                }
+            }
+            else if (sName.compareToAscii(sXML_show_changes_by_comment) == 0)
+                pViewSettings->SetHasComment(::cppu::any2bool(rChangeProps[i].Value));
+            else if (sName.compareToAscii(sXML_show_changes_by_comment_text) == 0)
+            {
+                rtl::OUString sOUComment;
+                if (rChangeProps[i].Value >>= sOUComment)
+                {
+                    String sComment(sOUComment);
+                    pViewSettings->SetTheComment(sComment);
+                }
+            }
+            else if (sName.compareToAscii(sXML_show_changes_by_ranges) == 0)
+                pViewSettings->SetHasRange(::cppu::any2bool(rChangeProps[i].Value));
+            else if (sName.compareToAscii(sXML_show_changes_by_ranges_list) == 0)
+            {
+                rtl::OUString sRanges;
+                if ((rChangeProps[i].Value >>= sRanges) && sRanges.getLength())
+                {
+                    ScRangeList aRangeList;
+                    ScXMLConverter::GetRangeListFromString(aRangeList, sRanges, GetDocument());
+                    pViewSettings->SetTheRangeList(aRangeList);
+                }
+            }
+        }
+        pDoc->SetChangeViewSettings(*pViewSettings);
+    }
+}
+
+void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aViewProps)
+{
+    sal_Int32 nCount(aViewProps.getLength());
+    sal_Int32 nHeight(0);
+    sal_Int32 nLeft(0);
+    sal_Int32 nTop(0);
+    sal_Int32 nWidth(0);
+    for (sal_Int32 i = 0; i < nCount; i++)
+    {
+        rtl::OUString sName(aViewProps[i].Name);
+        if (sName.compareToAscii(sXML_visible_area_height) == 0)
+            aViewProps[i].Value >>= nHeight;
+        else if (sName.compareToAscii(sXML_visible_area_left) == 0)
+            aViewProps[i].Value >>= nLeft;
+        else if (sName.compareToAscii(sXML_visible_area_top) == 0)
+            aViewProps[i].Value >>= nTop;
+        else if (sName.compareToAscii(sXML_visible_area_width) == 0)
+            aViewProps[i].Value >>= nWidth;
+        else if (sName.compareToAscii(sXML_tracked_changes_view_settings) == 0)
+        {
+            uno::Sequence<beans::PropertyValue> aChangeProps;
+            if(aViewProps[i].Value >>= aChangeProps)
+                SetChangeTrackingViewSettings(aChangeProps);
+        }
+    }
+    if (nHeight && nWidth)
+    {
+        ScModelObj* pDocObj = ScModelObj::getImplementation( GetModel() );
+        if (pDocObj)
+        {
+            SvEmbeddedObject* pEmbeddedObj = pDocObj->GetEmbeddedObject();
+            if (pEmbeddedObj)
+            {
+                Rectangle aRect;
+                aRect.setX( nLeft );
+                aRect.setY( nTop );
+                aRect.setWidth( nWidth );
+                aRect.setHeight( nHeight );
+                pEmbeddedObj->SetVisArea(aRect);
+            }
+        }
+    }
+}
+
+void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyValue>& aConfigProps)
+{
+}
+

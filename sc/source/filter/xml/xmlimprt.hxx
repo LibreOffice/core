@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,6 @@ using namespace rtl;
 
 enum ScXMLDocTokens
 {
-    XML_TOK_DOC_VIEW_SETTINGS,
     XML_TOK_DOC_FONTDECLS,
     XML_TOK_DOC_STYLES,
     XML_TOK_DOC_AUTOSTYLES,
@@ -121,6 +120,7 @@ enum ScXMLDocTokens
     XML_TOK_DOC_META,
     XML_TOK_DOC_SCRIPTS,
     XML_TOK_DOC_BODY,
+    XML_TOK_DOC_SETTINGS,
     XML_TOK_OFFICE_END=XML_TOK_UNKNOWN
 };
 
@@ -772,8 +772,6 @@ public:
     // namespace office
     SvXMLImportContext *CreateMetaContext(
                                     const ::rtl::OUString& rLocalName );
-    SvXMLImportContext *CreateViewSettingsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
-                                     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateFontDeclsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateScriptContext(
@@ -898,6 +896,10 @@ public:
     ScXMLChangeTrackingImportHelper* GetChangeTrackingImportHelper();
     void AddViewContext(SvXMLImportContext* pContext) { aViewContextList.push_back(pContext); }
     void InsertStyles();
+
+    void SetChangeTrackingViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rChangeProps);
+    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
+    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
 };
 
 #endif

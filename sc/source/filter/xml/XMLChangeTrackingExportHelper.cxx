@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-01 13:58:59 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,12 +951,11 @@ void ScChangeTrackingExportHelper::CollectAndWriteChanges()
 {
     if (pChangeTrack)
     {
-        sal_uInt32 nCount (pChangeTrack->GetActionMax());
-        if (nCount)
+        SvXMLElementExport aCangeListElem(rExport, XML_NAMESPACE_TABLE, sXML_tracked_changes, sal_True, sal_True);
         {
-            SvXMLElementExport aCangeListElem(rExport, XML_NAMESPACE_TABLE, sXML_tracked_changes, sal_True, sal_True);
+            ScChangeAction* pAction = pChangeTrack->GetFirst();
+            if (pAction)
             {
-                ScChangeAction* pAction = pChangeTrack->GetFirst();
                 WorkWithChangeAction(pAction);
                 ScChangeAction* pLastAction = pChangeTrack->GetLast();
                 while (pAction != pLastAction)

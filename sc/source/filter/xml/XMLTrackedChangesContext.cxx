@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     pChangeTrackingImportHelper = pTempChangeTrackingImportHelper;
+    pChangeTrackingImportHelper->SetChangeTrack(sal_True);
     // here are no attributes
 }
 

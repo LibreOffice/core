@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-09 18:26:23 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
 #endif
 
 class ScArea;
@@ -278,6 +281,9 @@ public:
 // IMPORT: Core Date Time
     static void         ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* pUnitConverter);
 
+    static void         ConvertCoreToAPIDateTime(const DateTime& aDateTime, com::sun::star::util::DateTime& rDateTime);
+
+    static void         ConvertAPIToCoreDateTime(const com::sun::star::util::DateTime& aDateTime, DateTime& rDateTime);
 };
 
 

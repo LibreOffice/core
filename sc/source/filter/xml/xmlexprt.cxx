@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 15:09:26 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,12 @@
 #ifndef SC_XMLEXPORTSHAREDDATA_HXX
 #include "XMLExportSharedData.hxx"
 #endif
+#ifndef SC_CHGVISET_HXX
+#include "chgviset.hxx"
+#endif
+#ifndef SC_DOCUNO_HXX
+#include "docuno.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
@@ -177,6 +183,9 @@
 #endif
 #ifndef _SCH_MEMCHRT_HXX
 #include <sch/memchrt.hxx>
+#endif
+#ifndef _EMBOBJ_HXX
+#include <so3/embobj.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -262,7 +271,21 @@
 #define SC_STANDARDFORMAT "StandardFormat"
 #define SC_LAYERID "LayerID"
 
-#define SC_DEFAULT_TABLE_COUNT 3
+#define SC_DEFAULT_TABLE_COUNT                      3
+#define SC_VIEWCHANGES_COUNT                        13
+#define SC_SHOW_CHANGES                             0
+#define SC_SHOW_ACCEPTED_CHANGES                    1
+#define SC_SHOW_REJECTED_CHANGES                    2
+#define SC_SHOW_CHANGES_BY_DATETIME                 3
+#define SC_SHOW_CHANGES_BY_DATETIME_MODE            4
+#define SC_SHOW_CHANGES_BY_DATETIME_FIRST_DATETIME  5
+#define SC_SHOW_CHANGES_BY_DATETIME_SECOND_DATETIME 6
+#define SC_SHOW_CHANGES_BY_AUTHOR                   7
+#define SC_SHOW_CHANGES_BY_AUTHOR_NAME              8
+#define SC_SHOW_CHANGES_BY_COMMENT                  9
+#define SC_SHOW_CHANGES_BY_COMMENT_TEXT             10
+#define SC_SHOW_CHANGES_BY_RANGES                   11
+#define SC_SHOW_CHANGES_BY_RANGES_LIST              12
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -338,7 +361,25 @@ OUString SAL_CALL ScXMLExport_Content_getImplementationName() throw()
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Content_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLExport(EXPORT_SETTINGS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLExport(EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS);
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Settings_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLSettingsExporter" ) );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL ScXMLExport_Settings_getImplementationName() throw()
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLExport_Settings" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Settings_createInstance(
+                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new ScXMLExport(EXPORT_SETTINGS);
 }
 
 //----------------------------------------------------------------------------
@@ -2863,6 +2904,96 @@ SvXMLAutoStylePoolP* ScXMLExport::CreateAutoStylePool()
 XMLPageExport* ScXMLExport::CreatePageExport()
 {
     return new XMLTableMasterPageExport( *this );
+}
+
+void ScXMLExport::GetChangeTrackViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
+{
+    ScChangeViewSettings* pViewSettings = GetDocument()->GetChangeViewSettings();
+    if (pViewSettings)
+    {
+        sal_Int32 nChangePos(rProps.getLength());
+        rProps.realloc(nChangePos + 1);
+        beans::PropertyValue* pProps = rProps.getArray();
+        if (pProps)
+        {
+            uno::Sequence<beans::PropertyValue> aChangeProps(SC_VIEWCHANGES_COUNT);
+            beans::PropertyValue* pChangeProps = aChangeProps.getArray();
+            if (pChangeProps)
+            {
+                pChangeProps[SC_SHOW_CHANGES].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_changes));
+                pChangeProps[SC_SHOW_CHANGES].Value <<= pViewSettings->ShowChanges();
+                pChangeProps[SC_SHOW_ACCEPTED_CHANGES].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_accepted_changes));
+                pChangeProps[SC_SHOW_ACCEPTED_CHANGES].Value <<= pViewSettings->IsShowAccepted();
+                pChangeProps[SC_SHOW_REJECTED_CHANGES].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_rejected_changes));
+                pChangeProps[SC_SHOW_REJECTED_CHANGES].Value <<= pViewSettings->IsShowRejected();
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_changes_by_datetime));
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME].Value <<= pViewSettings->HasDate();
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_MODE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_changes_by_datetime_mode));
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_MODE].Value <<= static_cast<sal_Int16>(pViewSettings->GetTheDateMode());
+                util::DateTime aDateTime;
+                ScXMLConverter::ConvertCoreToAPIDateTime(pViewSettings->GetTheFirstDateTime(), aDateTime);
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_FIRST_DATETIME].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_changes_by_datetime_first_datetime));
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_FIRST_DATETIME].Value <<= aDateTime;
+                ScXMLConverter::ConvertCoreToAPIDateTime(pViewSettings->GetTheLastDateTime(), aDateTime);
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_SECOND_DATETIME].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_changes_by_datetime_second_datetime));
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_SECOND_DATETIME].Value <<= aDateTime;
+                pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_changes_by_author));
+                pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR].Value <<= pViewSettings->HasAuthor();
+                pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR_NAME].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_changes_by_author_name));
+                pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR_NAME].Value <<= rtl::OUString (pViewSettings->GetTheAuthorToShow());
+                pChangeProps[SC_SHOW_CHANGES_BY_COMMENT].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_changes_by_comment));
+                pChangeProps[SC_SHOW_CHANGES_BY_COMMENT].Value <<= pViewSettings->HasComment();
+                pChangeProps[SC_SHOW_CHANGES_BY_COMMENT_TEXT].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_changes_by_comment_text));
+                pChangeProps[SC_SHOW_CHANGES_BY_COMMENT_TEXT].Value <<= rtl::OUString (pViewSettings->GetTheComment());
+                pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_changes_by_ranges));
+                pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Value <<= pViewSettings->HasRange();
+                rtl::OUString sRangeList;
+                ScXMLConverter::GetStringFromRangeList(sRangeList, &(pViewSettings->GetTheRangeList()), GetDocument());
+                pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_show_changes_by_ranges_list));
+                pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Value <<= sRangeList;
+
+                pProps[nChangePos].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_tracked_changes_view_settings));
+                pProps[nChangePos].Value <<= aChangeProps;
+            }
+        }
+    }
+}
+
+void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
+{
+    rProps.realloc(4);
+    beans::PropertyValue* pProps = rProps.getArray();
+    if(pProps)
+    {
+        ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
+        if (pDocObj)
+        {
+            SvEmbeddedObject* pEmbeddedObj = pDocObj->GetEmbeddedObject();
+            if (pEmbeddedObj)
+            {
+                Rectangle aRect(pEmbeddedObj->GetVisArea());
+                sal_uInt16 i(0);
+                pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_top));
+                pProps[i++].Value <<= aRect.getY();
+                pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_left));
+                pProps[i++].Value <<= aRect.getX();
+                pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_width));
+                pProps[i++].Value <<= aRect.getWidth();
+                pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_height));
+                pProps[i++].Value <<= aRect.getHeight();
+            }
+        }
+    }
+    GetChangeTrackViewSettings(rProps);
+}
+
+void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& rProps)
+{
+/*  rProps.realloc(SC_CONFIGURATION_COUNT);
+    beans::PropertyValue* pProps = rProps.getArray();
+    if(pProps)
+    {
+    }*/
 }
 
 XMLShapeExport* ScXMLExport::CreateShapeExport()

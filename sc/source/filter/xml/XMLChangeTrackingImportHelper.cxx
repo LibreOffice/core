@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 13:47:03 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,8 @@ ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper()
     pCurrentAction(NULL),
     pDoc(NULL),
     pTrack(NULL),
-    pViewSettings(NULL)
+    pViewSettings(NULL),
+    bChangeTrack(sal_False)
 {
     nPrefixLength = sIDPrefix.getLength();
 }
@@ -832,7 +833,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
 void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
 {
     pDoc = pTempDoc;
-    if (pDoc && !aActions.empty())
+    if (pDoc)
     {
         pTrack = new ScChangeTrack(pDoc, aUsers);
 
@@ -916,7 +917,6 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         pDoc->SetChangeTrack(pTrack);
         if (!pViewSettings)
         {
-            DBG_ERROR("there are no change view settings");
             pViewSettings = new ScChangeViewSettings();
             pViewSettings->SetShowChanges(sal_True);
         }

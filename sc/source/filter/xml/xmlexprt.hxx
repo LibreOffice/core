@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-19 12:08:06 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,6 @@ class ScXMLExport : public SvXMLExport
     void            CollectShapesAutoStyles(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable, const sal_Int32 nTable);
     void            WriteTablesView(const com::sun::star::uno::Any& aTableView);
     void            WriteView(const com::sun::star::uno::Any& aView);
-    virtual void _ExportViewSettings();
     virtual void _ExportFontDecls();
     virtual void _ExportStyles( sal_Bool bUsed );
     virtual void _ExportAutoStyles();
@@ -241,6 +240,10 @@ public:
         com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
 
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
+
+    void GetChangeTrackViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
+    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
+    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
 
     void CreateSharedData(const sal_Int32 nTableCount);
     void SetSharedData(ScMySharedData* pTemp) { pSharedData = pTemp; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-09 18:26:23 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,13 +751,7 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
 void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUStringBuffer& sDate)
 {
     util::DateTime aAPIDateTime;
-    aAPIDateTime.Year = aDateTime.GetYear();
-    aAPIDateTime.Month = aDateTime.GetMonth();
-    aAPIDateTime.Day = aDateTime.GetDay();
-    aAPIDateTime.Hours = aDateTime.GetHour();
-    aAPIDateTime.Minutes = aDateTime.GetMin();
-    aAPIDateTime.Seconds = aDateTime.GetSec();
-    aAPIDateTime.HundredthSeconds = aDateTime.Get100Sec();
+    ConvertCoreToAPIDateTime(aDateTime, aAPIDateTime);
     SvXMLUnitConverter::convertDateTime(sDate, aAPIDateTime);
 }
 
@@ -765,8 +759,25 @@ void ScXMLConverter::ConvertStringToDateTime(const rtl::OUString& sDate, DateTim
 {
     com::sun::star::util::DateTime aAPIDateTime;
     pUnitConverter->convertDateTime(aAPIDateTime, sDate);
-    Date aDate(aAPIDateTime.Day, aAPIDateTime.Month, aAPIDateTime.Year);
-    Time aTime(aAPIDateTime.Hours, aAPIDateTime.Minutes, aAPIDateTime.Seconds, aAPIDateTime.HundredthSeconds);
-    DateTime aTempDateTime (aDate, aTime);
-    aDateTime = aTempDateTime;
+    ConvertAPIToCoreDateTime(aAPIDateTime, aDateTime);
 }
+
+void ScXMLConverter::ConvertCoreToAPIDateTime(const DateTime& aDateTime, util::DateTime& rDateTime)
+{
+    rDateTime.Year = aDateTime.GetYear();
+    rDateTime.Month = aDateTime.GetMonth();
+    rDateTime.Day = aDateTime.GetDay();
+    rDateTime.Hours = aDateTime.GetHour();
+    rDateTime.Minutes = aDateTime.GetMin();
+    rDateTime.Seconds = aDateTime.GetSec();
+    rDateTime.HundredthSeconds = aDateTime.Get100Sec();
+}
+
+void ScXMLConverter::ConvertAPIToCoreDateTime(const util::DateTime& aDateTime, DateTime& rDateTime)
+{
+    Date aDate(aDateTime.Day, aDateTime.Month, aDateTime.Year);
+    Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds);
+    DateTime aTempDateTime (aDate, aTime);
+    rDateTime = aTempDateTime;
+}
+

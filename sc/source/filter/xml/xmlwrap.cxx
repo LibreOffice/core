@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,11 @@ sal_Bool ScXMLImportWrapper::Import()
         if( pObjectHelper )
             SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
 
+        sal_Bool bSettingsRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsImporter")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
+            sEmpty, aDocArgs);
+
         // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
         return bDocRetval;
     }
@@ -412,6 +417,7 @@ sal_Bool ScXMLImportWrapper::Export()
         sal_Bool bMetaRet(sal_False);
         sal_Bool bStylesRet (sal_False);
         sal_Bool bDocRet(sal_False);
+        sal_Bool bSettingsRet(sal_False);
         ScMySharedData* pSharedData = NULL;
 
         // meta export
@@ -481,7 +487,20 @@ sal_Bool ScXMLImportWrapper::Export()
                 SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
         }
 
-        return bDocRet && bMetaRet;
+        // settings export
+
+        {
+            uno::Sequence<uno::Any> aSettingsArgs(2);
+            uno::Any* pSettingsArgs = aSettingsArgs.getArray();
+            pSettingsArgs[0] <<= xHandler;
+            pSettingsArgs[1] <<= xStatusIndicator;
+            bSettingsRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
+                rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
+                sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsExporter")),
+                sal_True, aSettingsArgs, pSharedData);
+        }
+
+        return bDocRet && bMetaRet && bStylesRet && bSettingsRet;
     }
 
     // later: give string descriptor as parameter for doc type
