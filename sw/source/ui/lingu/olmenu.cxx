@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:29:06 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,12 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+
+// -> #111827#
+#include <SwRewriter.hxx>
+#include <comcore.hrc>
+#include <undobj.hxx>
+// <- #111827#
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -321,10 +327,6 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Rectangle& rWordPos )
             sal_Bool bOldIns = pSh->IsInsMode();
             pSh->SetInsMode( sal_True );
 
-            pSh->StartUndo(UIUNDO_REPLACE);
-            pSh->StartAction();
-            pSh->DelLeft();
-
             const Sequence< OUString > aAlts( xSpellAlt->getAlternatives() );
             const OUString *pString = aAlts.getConstArray();
             DBG_ASSERT( 0 <= nAltIdx && nAltIdx <= xSpellAlt->getAlternativesCount(),
@@ -340,6 +342,25 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Rectangle& rWordPos )
             {
                 aTmp += '.';
             }
+
+            // #111827#
+            SwRewriter aRewriter;
+
+            aRewriter.AddRule(UNDO_ARG1, pSh->GetCrsrDescr());
+            aRewriter.AddRule(UNDO_ARG2, String(SW_RES(STR_YIELDS)));
+
+            {
+                String aTmpStr;
+
+                aTmpStr += String(SW_RES(STR_START_QUOTE));
+                aTmpStr += aTmp;
+                aTmpStr += String(SW_RES(STR_END_QUOTE));
+                aRewriter.AddRule(UNDO_ARG3, aTmpStr);
+            }
+
+            pSh->StartUndo(UIUNDO_REPLACE, &aRewriter);
+            pSh->StartAction();
+            pSh->DelLeft();
 
             pSh->Insert( aTmp );
             /* #102505# EndAction/EndUndo moved down since insertion
