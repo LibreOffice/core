@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.193 $
+ *  $Revision: 1.194 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:27:59 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         while( nIndex != STRING_NOTFOUND )
         {
             String aName( aConfigFont.GetToken( 0, ';', nIndex ) );
-            if ( aName.Len() && mpFrameData->mpFontList->FindFont (aName) )
+            if ( aName.Len() && mpFrameData->mpFontList->FindFontFamily( aName ) )
             {
                 aUserInterfaceFont = aConfigFont;
                 break;
@@ -375,7 +375,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         if ( ! aUserInterfaceFont.Len() )
         {
             String aFallbackFont (RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI" ));
-            if ( mpFrameData->mpFontList->FindFont( aFallbackFont ) )
+            if ( mpFrameData->mpFontList->FindFontFamily( aFallbackFont ) )
                 aUserInterfaceFont = aFallbackFont;
         }
     }
