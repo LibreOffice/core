@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-18 12:30:41 $
+ *  last change: $Author: nn $ $Date: 2002-10-30 09:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #include "scextopt.hxx"
 #include "miscuno.hxx"
 #include "unonames.hxx"
+#include "inputopt.hxx"
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -931,8 +932,18 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         if ( nSizeYPix <= 0 )
             nSizeYPix = aPixRect.GetHeight();   // editing outside below the window -> keep cell height
 
-        pNewEngine->SetPaperSize( pView->GetActiveWin()->PixelToLogic( Size( nSizeXPix, nSizeYPix ),
-                                        GetLogicMode() ) );
+        Size aPaperSize = pView->GetActiveWin()->PixelToLogic( Size( nSizeXPix, nSizeYPix ), GetLogicMode() );
+        if ( bBreak && !bAsianVertical && SC_MOD()->GetInputOptions().GetTextWysiwyg() )
+        {
+            //  #95593# if text is formatted for printer, use the exact same paper width
+            //  (and same line breaks) as for output.
+
+            Fraction aFract(1,1);
+            Rectangle aUtilRect = ScEditUtil( pDoc,nNewX,nNewY,nTabNo, Point(0,0), pWin,
+                                    HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, FALSE );
+            aPaperSize.Width() = aUtilRect.GetWidth();
+        }
+        pNewEngine->SetPaperSize( aPaperSize );
 
         // sichtbarer Ausschnitt
         Size aPaper = pNewEngine->GetPaperSize();
