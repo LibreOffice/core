@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:57:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,8 @@ enum ScXMLDataPilotFieldAttrTokens
 
 enum ScXMLDataPilotFieldElemTokens
 {
-    XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_LEVEL
+    XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_LEVEL,
+    XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_REFERENCE
 };
 
 enum ScXMLDataPilotLevelAttrTokens
@@ -587,7 +588,10 @@ enum ScXMLDataPilotLevelAttrTokens
 enum ScXMLDataPilotLevelElemTokens
 {
     XML_TOK_DATA_PILOT_LEVEL_ELEM_DATA_PILOT_SUBTOTALS,
-    XML_TOK_DATA_PILOT_LEVEL_ELEM_DATA_PILOT_MEMBERS
+    XML_TOK_DATA_PILOT_LEVEL_ELEM_DATA_PILOT_MEMBERS,
+    XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_DISPLAY_INFO,
+    XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_SORT_INFO,
+    XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_LAYOUT_INFO
 };
 
 enum ScXMLDataPilotSubTotalsElemTokens
