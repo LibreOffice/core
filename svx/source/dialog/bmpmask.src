@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nf $ $Date: 2002-06-13 13:36:53 $
+ *  last change: $Author: cl $ $Date: 2002-07-09 09:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,18 @@ DockingWindow RID_SVXDLG_BMPMASK
     Text[ catalan ] = "Pipeta";
     Text[ finnish ] = "V�rivalitsin";
     Text[ thai ] = "ตัวหยดสี";
+
+    Image IMG_PIPETTE
+    {
+        ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
+        MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    };
+
+    Image IMG_PIPETTE_H
+    {
+        ImageBitmap = Bitmap { File = "sc10350_h.bmp" ; };
+        MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    };
 };
 
 String RID_SVXDLG_BMPMASK_STR_TRANSP

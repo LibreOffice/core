@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _bmpmask.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-25 09:48:51 $
+ *  last change: $Author: cl $ $Date: 2002-07-09 09:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,9 +492,13 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
         aLbColorTrans       ( this, ResId ( LB_TRANS ) ),
         aFt1                ( this, ResId ( FT_1 ) ),
         aFt2                ( this, ResId ( FT_2 ) ),
-        aFt3                ( this, ResId ( FT_3 ) )
+        aFt3                ( this, ResId ( FT_3 ) ),
+        maImgPipette        ( ResId ( IMG_PIPETTE ) ),
+        maImgPipetteH       ( ResId ( IMG_PIPETTE_H ) )
 {
     FreeResource();
+
+    ApplyStyle();
 
     aTbxPipette.SetSizePixel( aTbxPipette.CalcWindowSizePixel() );
     aTbxPipette.SetSelectHdl( LINK( pData, MaskData, PipetteHdl ) );
@@ -1240,4 +1244,18 @@ BOOL SvxBmpMask::IsEyedropping() const
     return aTbxPipette.IsItemChecked( TBI_PIPETTE );
 }
 
+void SvxBmpMask::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    SfxDockingWindow::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            ApplyStyle();
+}
+
+void SvxBmpMask::ApplyStyle()
+{
+    bool bHighContrast = (bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0);
+
+    aTbxPipette.SetItemImage( TBI_PIPETTE, bHighContrast ? maImgPipetteH : maImgPipette );
+}
 

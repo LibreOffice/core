@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:06 $
+ *  last change: $Author: cl $ $Date: 2002-07-09 09:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,5 +89,7 @@
 #define FT_1 1
 #define FT_2 2
 #define FT_3 3
+#define IMG_PIPETTE     11
+#define IMG_PIPETTE_H   12
 
 
