@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-17 12:15:52 $
+ *  last change: $Author: oj $ $Date: 2001-09-24 11:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,16 +173,16 @@ OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUStrin
 }
 
 ::rtl::OUString SetQuotation(const ::rtl::OUString& rValue, const ::rtl::OUString& rQuot, const ::rtl::OUString& rQuotToReplace);
-sal_Int32 getToken(const ::rtl::OUString& _rValue,const ::rtl::OUString& _rToken,sal_uInt32 _nPos);
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const
 {
     // get the token out of a string
-    static ::rtl::OUString sDateSep = ::rtl::OUString::createFromAscii("-");
+    static sal_Unicode sDateSep = '-';
 
-    sal_uInt16 nYear    = (sal_uInt16)getToken(rString,sDateSep,0);
-    sal_uInt16 nMonth   = (sal_uInt16)getToken(rString,sDateSep,1);
-    sal_uInt16 nDay     = (sal_uInt16)getToken(rString,sDateSep,2);
+    sal_Int32 nIndex = 0;
+    sal_uInt16 nYear    = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
+    sal_uInt16 nMonth   = (sal_uInt16)rString.getToken(1,sDateSep,nIndex).toInt32();
+    sal_uInt16 nDay     = (sal_uInt16)rString.getToken(2,sDateSep,nIndex).toInt32();
 
     Date aDate(nDay,nMonth,nYear);
     Reference< XNumberFormatsSupplier > xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
@@ -196,15 +196,16 @@ sal_Int32 getToken(const ::rtl::OUString& _rValue,const ::rtl::OUString& _rToken
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::convertDateTimeString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const
 {
-    static ::rtl::OUString sDateSep = ::rtl::OUString::createFromAscii("-");
-    static ::rtl::OUString sTimeSep = ::rtl::OUString::createFromAscii(":");
+    static sal_Unicode sDateSep = '-';
+    static sal_Unicode sTimeSep = ':';
 
-    sal_uInt16 nYear    = (sal_uInt16)getToken(rString,sDateSep,0);
-    sal_uInt16 nMonth   = (sal_uInt16)getToken(rString,sDateSep,1);
-    sal_uInt16 nDay     = (sal_uInt16)getToken(rString,sDateSep,2);
-    sal_uInt16 nHour    = (sal_uInt16)getToken(rString,sTimeSep,0);
-    sal_uInt16 nMinute  = (sal_uInt16)getToken(rString,sTimeSep,1);
-    sal_uInt16 nSecond  = (sal_uInt16)getToken(rString,sTimeSep,2);
+    sal_Int32 nIndex = 0;
+    sal_uInt16 nYear    = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
+    sal_uInt16 nMonth   = (sal_uInt16)rString.getToken(1,sDateSep,nIndex).toInt32();
+    sal_uInt16 nDay     = (sal_uInt16)rString.getToken(2,sDateSep,nIndex).toInt32();
+    sal_uInt16 nHour    = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
+    sal_uInt16 nMinute  = (sal_uInt16)rString.getToken(1,sTimeSep,nIndex).toInt32();
+    sal_uInt16 nSecond  = (sal_uInt16)rString.getToken(2,sTimeSep,nIndex).toInt32();
 
     DateTime aDate(0,nSecond,nMinute,nHour,nDay,nMonth,nYear);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
@@ -218,11 +219,12 @@ sal_Int32 getToken(const ::rtl::OUString& _rValue,const ::rtl::OUString& _rToken
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::convertTimeString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const
 {
-    static ::rtl::OUString sTimeSep = ::rtl::OUString::createFromAscii(":");
+    static sal_Unicode sTimeSep = ':';
 
-    sal_uInt16 nHour    = (sal_uInt16)getToken(rString,sTimeSep,0);
-    sal_uInt16 nMinute  = (sal_uInt16)getToken(rString,sTimeSep,1);
-    sal_uInt16 nSecond  = (sal_uInt16)getToken(rString,sTimeSep,2);
+    sal_Int32 nIndex = 0;
+    sal_uInt16 nHour    = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
+    sal_uInt16 nMinute  = (sal_uInt16)rString.getToken(1,sTimeSep,nIndex).toInt32();
+    sal_uInt16 nSecond  = (sal_uInt16)rString.getToken(2,sTimeSep,nIndex).toInt32();
 
     Time aTime(0,nHour,nMinute,nSecond);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
