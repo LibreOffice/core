@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:38:41 $
+ *  last change: $Author: kz $ $Date: 2004-01-19 17:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1175,7 +1175,7 @@ void BasicFrame::AddToLRU(String const& aFile)
     PopupMenu *pPopup  = GetMenuBar()->GetPopupMenu(RID_APPFILE);
 
     aConfig.SetGroup("LRU");
-    USHORT nMaxLRU = aConfig.ReadKey("MaxLRU","4").ToInt32();
+    USHORT nMaxLRU = (USHORT)aConfig.ReadKey("MaxLRU","4").ToInt32();
     DirEntry aFileEntry( aFile );
     USHORT i,nLastMove = nMaxLRU;
 
@@ -1212,7 +1212,7 @@ void BasicFrame::LoadLRU()
     BOOL       bAddSep = TRUE;
 
     aConfig.SetGroup("LRU");
-    USHORT nMaxLRU = aConfig.ReadKey("MaxLRU","4").ToInt32();
+    USHORT nMaxLRU = (USHORT)aConfig.ReadKey("MaxLRU","4").ToInt32();
 
     if ( pPopup )
         bAddSep = pPopup->GetItemPos( IDM_FILE_LRU1 ) == MENU_ITEM_NOTFOUND;
@@ -1966,6 +1966,7 @@ String BasicFrame::GenRealString( const String &aResString )
     String aString;
     xub_StrLen nInsertPos;
     BOOL bFound;
+    bFound = FALSE;
 
     while ( (nStart = aResult.Search(StartKenn,nStartPos)) != STRING_NOTFOUND &&
             (nGleich = aResult.SearchAscii("=",nStart+StartKenn.Len())) != STRING_NOTFOUND &&
@@ -1973,9 +1974,17 @@ String BasicFrame::GenRealString( const String &aResString )
     {
         aType = aResult.Copy(nStart,nGleich-nStart);
         aValue = aResult.Copy(nGleich+1,nEnd-nGleich-1);
-        bFound = FALSE;
         if ( aType.CompareTo(ResKenn) == COMPARE_EQUAL )
         {
+            if ( bFound )
+            {
+                // insert results of previous resource
+                DBG_ASSERT( aString.SearchAscii( "($Arg" ) == STRING_NOTFOUND, "Argument missing in String");
+                aResult.Insert( aString, nInsertPos );
+                nStart += aString.Len();
+                nEnd += aString.Len();
+                aString.Erase();
+            }
 //          if ( Resource::GetResManager()->IsAvailable( ResId( aValue ) ) )
                 aString = String( ResId( (USHORT)(aValue.ToInt32()) ) );
 //          else
@@ -1986,6 +1995,7 @@ String BasicFrame::GenRealString( const String &aResString )
             nInsertPos = nStart;
             nStartPos = nStart;
             aResult.Erase( nStart, nEnd-nStart+1 );
+            bFound = TRUE;
         }
         else if ( aType.Search(BaseArgKenn) == 0 )      // Fängt mit BaseArgKenn an
         {
@@ -2001,8 +2011,11 @@ String BasicFrame::GenRealString( const String &aResString )
             nStartPos += StartKenn.Len();
         }
     }
-    DBG_ASSERT( aString.SearchAscii( "($Arg" ) == STRING_NOTFOUND, "Argument missing in String");
-    aResult.Insert( aString, nInsertPos );
+    if ( bFound )
+    {
+        DBG_ASSERT( aString.SearchAscii( "($Arg" ) == STRING_NOTFOUND, "Argument missing in String");
+        aResult.Insert( aString, nInsertPos );
+    }
     return aResult;
 }
 
