@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.18 $
+*  $Revision: 1.19 $
 *
-*  last change: $Author: hr $ $Date: 2004-07-23 14:08:49 $
+*  last change: $Author: rt $ $Date: 2004-10-22 14:04:56 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -72,8 +72,8 @@
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
-#include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/frame.hxx>
@@ -95,7 +95,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
+using namespace ::scripting_util;
 
 namespace scripting_protocolhandler
 {
@@ -481,12 +482,13 @@ throw ( RuntimeException )
                 xProps->getPropertyValue( dc ), UNO_QUERY_THROW );
 
             ::rtl::OUString tmspf = ::rtl::OUString::createFromAscii(
-                "/singletons/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory");
+                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory");
 
             Reference< provider::XScriptProviderFactory > xFac(
                 xCtx->getValueByName( tmspf ), UNO_QUERY_THROW );
 
-            Any aContext;
+            Any aContext =
+                makeAny( ::rtl::OUString::createFromAscii("share") );
 
             m_xScriptProvider = Reference< provider::XScriptProvider > (
                 xFac->createScriptProvider( aContext ), UNO_QUERY_THROW );
