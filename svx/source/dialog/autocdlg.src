@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autocdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:59:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,17 +74,8 @@ TabDialog RID_OFA_AUTOCORR_DLG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "AutoKorrektur" ;
-    Text [ ENGLISH ] = "Auto correct" ;
-    Text [ english_us ] = "AutoCorrect" ;
-    Text [ italian ] = "Correzione automatica" ;
-    Text [ spanish ] = "Corrección automática" ;
-    Text [ french ] = "AutoCorrection" ;
-    Text [ dutch ] = "AutoCorrectie" ;
-    Text [ swedish ] = "AutoKorrigering" ;
-    Text [ danish ] = "AutoKorrektur" ;
-    Text [ portuguese_brazilian ] = "AutoCorreção" ;
-    Text [ portuguese ] = "AutoCorrecção" ;
+    Text [ de ] = "AutoKorrektur" ;
+    Text [ en-US ] = "AutoCorrect" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -94,257 +85,55 @@ TabDialog RID_OFA_AUTOCORR_DLG
             PageItem
             {
                 Identifier = RID_OFAPAGE_AUTOCORR_REPLACE ;
-                Text = "Ersetzung" ;
-                Text [ ENGLISH ] = "Replace" ;
-                Text [ english_us ] = "Replace" ;
-                Text [ italian ] = "Sostituzione" ;
-                Text [ spanish ] = "Reemplazar" ;
-                Text [ french ] = "Remplacement" ;
-                Text [ dutch ] = "Vervanging" ;
-                Text [ swedish ] = "Ersättning" ;
-                Text [ danish ] = "Erstat" ;
-                Text [ portuguese_brazilian ] = "Substituir" ;
-                Text [ portuguese ] = "Substituir" ;
-                Text[ chinese_simplified ] = "æ›¿æ¢";
-                Text[ russian ] = "Çàìåíà";
-                Text[ polish ] = "Zamiana";
-                Text[ japanese ] = "ç½®æ›";
-                Text[ chinese_traditional ] = "æ›¿ä»£";
-                Text[ arabic ] = "ÇÓÊÈÏÇá";
-                Text[ dutch ] = "Vervanging";
-                Text[ chinese_simplified ] = "æ›¿æ¢";
-                Text[ greek ] = "ÁíôéêáôÜóôáóç";
-                Text[ korean ] = "ë°”ê¾¸ê¸°";
-                Text[ turkish ] = "Değiştir";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Reemplaça";
-                Text[ finnish ] = "Korvaa";
-                Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆ";
-                Text[ czech ] = "Nahradit";
-                Text[ hebrew ] = "â€®×”×—×œ×¤×”â€¬";
-                Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¨à¤¾";
-                Text[ slovak ] = "NahradiÅ¥";
-                Text[ hungarian ] = "Csere";
-                Text[ slovenian ] = "Zamenjaj";
+                Text [ de ] = "Ersetzung" ;
+                Text [ en-US ] = "Replace" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_OFAPAGE_AUTOCORR_EXCEPT ;
-                Text = "Ausnahmen" ;
-                Text [ ENGLISH ] = "Exceptions" ;
-                Text [ english_us ] = "Exceptions" ;
-                Text [ italian ] = "Eccezioni" ;
-                Text [ spanish ] = "Excepciones" ;
-                Text [ french ] = "Exceptions" ;
-                Text [ dutch ] = "Uitzonderingen" ;
-                Text [ swedish ] = "Undantag" ;
-                Text [ danish ] = "Undtagelser" ;
-                Text [ portuguese_brazilian ] = "Exceções" ;
-                Text [ portuguese ] = "Excepções" ;
-                Text[ chinese_simplified ] = "ä¾‹å¤–";
-                Text[ russian ] = "Èñêëş÷åíèÿ";
-                Text[ polish ] = "Wyj¹tki";
-                Text[ japanese ] = "ä¾‹å¤–";
-                Text[ chinese_traditional ] = "ä¾‹å¤–";
-                Text[ arabic ] = "ÇÓÊËäÇÁÇÊ";
-                Text[ dutch ] = "Uitzonderingen";
-                Text[ chinese_simplified ] = "ä¾‹å¤–";
-                Text[ greek ] = "Åîáéñİóåéò";
-                Text[ korean ] = "ì˜ˆì™¸";
-                Text[ turkish ] = "İstisnalar";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Excepcions";
-                Text[ finnish ] = "Poikkeukset";
-                Text[ thai ] = "à¸‚à¹‰à¸­à¸¢à¸à¹€à¸§à¹‰à¸™";
-                Text[ czech ] = "VÃ½jimky";
-                Text[ hebrew ] = "Ausnahmen";
-                Text[ hindi ] = "à¤†à¤•à¥à¤·à¥‡à¤ª à¤•à¤°à¤¨à¤¾";
-                Text[ slovak ] = "VÃ½nimky";
-                Text[ hungarian ] = "KivÃ©telek";
-                Text[ slovenian ] = "Izjeme";
+                Text [ de ] = "Ausnahmen" ;
+                Text [ en-US ] = "Exceptions" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_OFAPAGE_AUTOCORR_OPTIONS ;
-                Text = "Optionen" ;
-                Text [ ENGLISH ] = "Options" ;
-                Text [ english_us ] = "Options" ;
-                Text [ italian ] = "Opzioni" ;
-                Text [ spanish ] = "Opciones" ;
-                Text [ french ] = "Options" ;
-                Text [ dutch ] = "Opties" ;
-                Text [ swedish ] = "Alternativ" ;
-                Text [ danish ] = "Indstillinger" ;
-                Text [ portuguese_brazilian ] = "Opções" ;
-                Text [ portuguese ] = "Opções" ;
-                Text[ chinese_simplified ] = "é€‰é¡¹";
-                Text[ russian ] = "Ïàğàìåòğû";
-                Text[ polish ] = "Opcje";
-                Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-                Text[ chinese_traditional ] = "é¸é …";
-                Text[ arabic ] = "ÎíÇÑÇÊ";
-                Text[ dutch ] = "Opties";
-                Text[ chinese_simplified ] = "é€‰é¡¹";
-                Text[ greek ] = "Åğéëïãİò";
-                Text[ korean ] = "ì˜µì…˜";
-                Text[ turkish ] = "Seçenekler";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Opcions";
-                Text[ finnish ] = "Asetukset";
-                Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-                Text[ czech ] = "Volby";
-                Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
-                Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
-                Text[ slovak ] = "Nastavenia";
-                Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-                Text[ slovenian ] = "MoÅ¾nosti";
+                Text [ de ] = "Optionen" ;
+                Text [ en-US ] = "Options" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_OFAPAGE_AUTOFMT_APPLY ;
-                Text = "Optionen" ;
-                Text [ ENGLISH ] = "Options" ;
-                Text [ english_us ] = "Options" ;
-                Text [ italian ] = "Opzioni" ;
-                Text [ spanish ] = "Opciones" ;
-                Text [ french ] = "Options" ;
-                Text [ dutch ] = "Opties" ;
-                Text [ swedish ] = "Alternativ" ;
-                Text [ danish ] = "Indstillinger" ;
-                Text [ portuguese_brazilian ] = "Opções" ;
-                Text [ portuguese ] = "Opções" ;
-                Text[ chinese_simplified ] = "é€‰é¡¹";
-                Text[ russian ] = "Ïàğàìåòğû";
-                Text[ polish ] = "Opcje";
-                Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-                Text[ chinese_traditional ] = "é¸é …";
-                Text[ arabic ] = "ÎíÇÑÇÊ";
-                Text[ dutch ] = "Opties";
-                Text[ chinese_simplified ] = "é€‰é¡¹";
-                Text[ greek ] = "Åğéëïãİò";
-                Text[ korean ] = "ì˜µì…˜";
-                Text[ turkish ] = "Seçenekler";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Opcions";
-                Text[ finnish ] = "Asetukset";
-                Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-                Text[ czech ] = "Volby";
-                Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
-                Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
-                Text[ slovak ] = "Nastavenia";
-                Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-                Text[ slovenian ] = "MoÅ¾nosti";
+                Text [ de ] = "Optionen" ;
+                Text [ en-US ] = "Options" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_OFAPAGE_AUTOCORR_QUOTE ;
-                Text = "Typografische Anführungszeichen" ;
-                Text [ English ] = "Typographic Quotes" ;
-                Text [ english_us ] = "Custom Quotes" ;
-                Text [ portuguese_brazilian ] = "Aspas Personalizadas" ;
-                Text [ swedish ] = "Typografiska anföringstecken" ;
-                Text [ danish ] = "Typografiske anførselstegn" ;
-                Text [ italian ] = "Virgolette tipografiche" ;
-                Text [ spanish ] = "Comillas tipográficas" ;
-                Text [ french ] = "Guillemets typographiques" ;
-                Text [ dutch ] = "Typografische aanhalingstekens" ;
-                Text [ portuguese ] = "Aspas tipográficas" ;
-                Text[ chinese_simplified ] = "ä¸ªäººå¼•å·";
-                Text[ russian ] = "Òèïîãğàôñêèå êàâû÷êè";
-                Text[ polish ] = "Cudzys³owy drukarskie";
-                Text[ japanese ] = "å°åˆ·ç”¨ã‚¯ã‚©ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãƒãƒ¼ã‚¯";
-                Text[ chinese_traditional ] = "å€‹äººå¼•è™Ÿ";
-                Text[ arabic ] = "ÚáÇãÇÊ ÊäÕíÕ ØÈæÛÑÇİíøÉ";
-                Text[ dutch ] = "Typografische aanhalingstekens";
-                Text[ chinese_simplified ] = "ä¸ªäººå¼•å·";
-                Text[ greek ] = "ÔõğïãñáöéêÜ åéóáãùãéêÜ";
-                Text[ korean ] = "ì¸ì‡„ì²´ ì¸ìš©ë¶€í˜¸";
-                Text[ turkish ] = "Tipografik tırnak işaretleri";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Cometes personalitzades";
-                Text[ finnish ] = "Mukautetut lainausmerkit";
-                Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸­à¸±à¸à¸›à¸£à¸°à¸à¸²à¸¨à¹€à¸­à¸‡";
-                Text[ czech ] = "VlastnÃ­ uvozovky";
-                Text[ hebrew ] = "Typografische AnfÃ¼hrungszeichen";
-                Text[ hindi ] = "à¤•à¥à¤µà¥‹à¤Ÿà¥à¤¸ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¥‹";
-                Text[ slovak ] = "VlastnÃ© Ãºvodzovky";
-                Text[ hungarian ] = "EgyÃ©ni idÃ©zÅ‘jelek";
-                Text[ slovenian ] = "Narekovaji po meri";
+                Text [ de ] = "Typografische Anführungszeichen" ;
+                Text [ en-US ] = "Custom Quotes" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_OFAPAGE_AUTOCOMPLETE_OPTIONS ;
-                Text = "Wortergänzung" ;
-                Text [ English ] = "Word completion" ;
-                Text[ english_us ] = "Word Completion";
-                Text[ portuguese ] = "Completar palavras";
-                Text[ russian ] = "Äîïîëíåíèå ñëîâà";
-                Text[ greek ] = "ÓõìğëŞñùóç ëİîçò";
-                Text[ dutch ] = "Woordinvulling";
-                Text[ french ] = "Insertion automatique";
-                Text[ spanish ] = "Completar palabras";
-                Text[ italian ] = "Completamento parola";
-                Text[ danish ] = "Ordfuldførelse";
-                Text[ swedish ] = "Ordkomplettering";
-                Text[ polish ] = "Uzupe³nianie wyrazów";
-                Text[ portuguese_brazilian ] = "Completar palavras";
-                Text[ japanese ] = "ã‚ªãƒ¼ãƒˆã‚³ãƒ³ãƒ—ãƒªãƒ¼ãƒˆ";
-                Text[ korean ] = "ë¬¸ì ì™„ì„±";
-                Text[ chinese_simplified ] = "å­—è¯è¡¥å……å®Œæ•´";
-                Text[ chinese_traditional ] = "è‡ªå‹•å®Œæˆå­—è©";
-                Text[ arabic ] = "ÅßãÇá ÇáßáãÉ";
-                Text[ turkish ] = "Sözcük tamamlama";
-                Text[ catalan ] = "Compleció de paraules";
-                Text[ finnish ] = "Sanan täydennys";
-                Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œà¸‚à¸­à¸‡à¸„à¸³";
-                Text[ czech ] = "DokonÄovÃ¡nÃ­ slov";
-                Text[ hebrew ] = "WortergÃ¤nzung";
-                Text[ hindi ] = "à¤¶à¤¬à¥à¤¦ à¤•à¥€ à¤¸à¤®à¤¾à¤ªà¥à¤¤à¥€";
-                Text[ slovak ] = "DokonÄovanie slov";
-                Text[ hungarian ] = "SzÃ³kiegÃ©szÃ­tÃ©s";
-                Text[ slovenian ] = "Dopolnjevanje besed";
+                Text [ de ] = "Wortergänzung" ;
+                Text [ en-US ] = "Word Completion";
             };
         };
     };
-    Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
     FixedText FT_LANG
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 140 , 8 ) ;
 
-        Text = "Ersetzung und Ausnahmen für ~Sprache:" ;
-        Text [ English ] = "Replacements and exceptions for ~Language:" ;
+        Text [ de ] = "Ersetzung und Ausnahmen für ~Sprache:" ;
         Left = TRUE ;
-        Text[ italian ] = "Sostituzione ed eccezioni per lingua";
-        Text[ portuguese_brazilian ] = "Substituições e exceções para o idioma:";
-        Text[ portuguese ] = "S~ubstituição e excepções para:";
-        Text[ danish ] = "Erstatning og undtagelser for sprog:";
-        Text[ french ] = "Remplacements et exceptions pour ~la langue :";
-        Text[ swedish ] = "Ersättning och undantag för ~språk:";
-        Text[ dutch ] = "Vervanging en uitzonderingen voor ~taal";
-        Text[ spanish ] = "Sustituciones y e~xcepciones para el idioma:";
-        Text[ english_us ] = "Replacements and exceptions for language:";
-        Text[ chinese_simplified ] = "ä½¿ç”¨æ›¿æ¢å’Œä¾‹å¤–çš„è¯­è¨€";
-        Text[ russian ] = "Çàìåíû è èñêëş÷åíèÿ äëÿ ÿçûêà:";
-        Text[ polish ] = "Zamiany i wyj¹tki dla jêzyka:";
-        Text[ japanese ] = "ç½®æ›ã¨ä¾‹å¤–æ‰±ã„ã®è¨€èª:";
-        Text[ chinese_traditional ] = "ä½¿ç”¨æ›¿ä»£å’Œä¾‹å¤–çš„èªè¨€ï¼š";
-        Text[ arabic ] = "ÇáÇÓÊÈÏÇá æÇáÇÓÊËäÇÁÇÊ ááÛÉ:";
-        Text[ dutch ] = "Vervanging en uitzonderingen voor ~taal";
-        Text[ chinese_simplified ] = "ä½¿ç”¨æ›¿æ¢å’Œä¾‹å¤–çš„è¯­è¨€";
-        Text[ greek ] = "ÁíôéêáôÜ~óôáóç êáé åîáéñİóåéò ãéá ôç ãëşóóá:";
-        Text[ korean ] = "ë°”ê¾¸ê¸° ë° ì˜ˆì™¸ë¥¼ ì„¤ì •í•  ì–¸ì–´:";
-        Text[ turkish ] = "Dil için değişiklik ve istisnalar:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reemplaçaments i excepcions per a l'idioma:";
-        Text[ finnish ] = "Korvaukset ja poikkeukset kielelle:";
-        Text[ thai ] = "à¸à¸²à¸£à¹à¸—à¸™à¸—à¸µà¹ˆà¹à¸¥à¸°à¸‚à¹‰à¸­à¸¢à¸à¹€à¸§à¹‰à¸™à¸ªà¸³à¸«à¸£à¸±à¸šà¸ à¸²à¸©à¸²:";
-        Text[ czech ] = "NÃ¡hrady a vÃ½jimky pro jazyk:";
-        Text[ hebrew ] = "Ersetzung und Ausnahmen fÃ¼r ~Sprache:";
-        Text[ hindi ] = "à¤­à¤¾à¤·à¤¾ à¤•à¥‡à¤²à¤¿à¤ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¨à¤¾ à¤”à¤° à¤†à¤•à¥à¤·à¥‡à¤ª:";
-        Text[ slovak ] = "NÃ¡hrady a vÃ½nimky pre jazyk:";
-        Text[ hungarian ] = "SzinonimÃ¡k Ã©s kivÃ©telek a kÃ¶vetkezÅ‘ nyelvhez:";
-        Text[ slovenian ] = "Zamenjave in izjeme za jezik:";
+        Text [ en-US ] = "Replacements and exceptions for language:";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_LANG
     {
@@ -354,345 +143,63 @@ TabDialog RID_OFA_AUTOCORR_DLG
         TabStop = TRUE ;
         Border = TRUE ;
     };
-    Text[ russian ] = "Àâòîçàìåíà";
-    Text[ polish ] = "Autokorekta";
-    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆã‚³ãƒ¬ã‚¯ãƒˆ";
-    Text[ chinese_traditional ] = "è‡ªå‹•æ ¡æ­£";
-    Text[ arabic ] = "ÊÕÍíÍ ÊáŞÇÆí";
-    Text[ dutch ] = "AutoCorrectie";
-    Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
-    Text[ greek ] = "Áõôüìáôç Äéüñèùóç";
-    Text[ korean ] = "ìë™ ìˆ˜ì •";
-    Text[ turkish ] = "Otomatik düzeltme";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Correcció automàtica";
-    Text[ finnish ] = "Automaattinen korjaus";
-    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¹ƒà¸«à¹‰à¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    Text[ czech ] = "AutomatickÃ© opravy";
-    Text[ hebrew ] = "â€®×ª×™×§×•×Ÿ ××•×˜×•××˜×™â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤µà¤¯à¤‚ à¤ à¥€à¤• à¤•à¤°à¥‹";
-    Text[ slovak ] = "AutomatickÃ© opravy";
-    Text[ hungarian ] = "Automatikus javÃ­tÃ¡s";
-    Text[ slovenian ] = "Samopopravki";
+    Text [ x-comment ] = " ";
 };
 #define COMMON_CLB_ENTRIES \
     String ST_USE_REPLACE \
     { \
-        Text = "Ersetzungstabelle anwenden" ; \
-        Text [ English ] = "Apply replacement table" ; \
-        Text [ english_us ] = "Use replacement table" ; \
-        Text [ swedish ] = "Använd ersättningstabell" ; \
-        Text [ danish ] = "Anvend erstatningstabel" ; \
-        Text [ italian ] = "Applica tabella di sostituzione" ; \
-        Text [ spanish ] = "Utilizar la tabla de sustitución" ; \
-        Text [ french ] = "Utiliser la table de remplacement" ; \
-        Text [ dutch ] = "Vervangende tabel gebruiken" ; \
-        Text [ portuguese_brazilian ] = "Usar tabela de substituição" ; \
-        Text [ portuguese ] = "Aplicar tabela de substituição" ; \
-        Text[ chinese_simplified ] = "ä½¿ç”¨æ›¿æ¢è¡¨";\
-        Text[ russian ] = "Èñïîëüçîâàòü òàáëèöó çàìåí";\
-        Text[ polish ] = "U¿yj tabeli zamian";\
-        Text[ japanese ] = "ç½®æ›ãƒªã‚¹ãƒˆã‚’ä½¿ã†";\
-        Text[ chinese_traditional ] = "ä½¿ç”¨æ›¿ä»£æ¸…å–®";\
-        Text[ arabic ] = "ÇÓÊÎÏÇã ŞÇÆãÉ ÇáÇÓÊÈÏÇá";\
-        Text[ dutch ] = "Vervangende tabel gebruiken";\
-        Text[ chinese_simplified ] = "ä½¿ç”¨æ›¿æ¢è¡¨";\
-        Text[ greek ] = "ÅöáñìïãŞ ôïõ ğßíáêá áíôéêáôÜóôáóçò";\
-        Text[ korean ] = "ëŒ€ì²´ í…Œì´ë¸” ì‚¬ìš©";\
-        Text[ turkish ] = "Değiştirme tablosunu kullan";\
-        Text[ language_user1 ] = " ";\
-        Text[ catalan ] = "Utilitza la taula de reemplaçament";\
-        Text[ finnish ] = "Käytä korvaustaulukkoa";\
-        Text[ thai ] = "à¹ƒà¸Šà¹‰à¸•à¸²à¸£à¸²à¸‡à¹à¸—à¸™à¸—à¸µà¹ˆ";\
-        Text[ czech ] = "PouÅ¾Ã­t tabulku nÃ¡hrad";\
-        Text[ hebrew ] = "Ersetzungstabelle anwenden";\
-        Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¨à¤¾ à¤¸à¤¾à¤°à¤£à¥€ à¤•à¥‹ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¥‹";\
-        Text[ slovak ] = "PouÅ¾iÅ¥ tabuÄ¾ku nÃ¡hrad";\
-        Text[ hungarian ] = "CseretÃ¡blÃ¡zat hasznÃ¡lata";\
-        Text[ slovenian ] = "Uporabi tabelo zamenjav";\
+        Text [ de ] = "Ersetzungstabelle anwenden" ; \
+        Text [ en-US ] = "Use replacement table" ; \
+        Text [ x-comment ] = " ";\
     }; \
     String ST_CPTL_STT_WORD \
     { \
-        Text = "ZWei Großbuchstaben am WOrtanfang korrigieren" ; \
-        Text [ ENGLISH ] = "REplace two Capital Letters at the WOrd beginning" ; \
-        Text [ norwegian ] = "ERstatt to Store Bokstaver i begynnelsen av ORd" ; \
-        Text [ italian ] = "COrreggi la doppia MAiuscola ad inizio PArola" ; \
-        Text [ portuguese_brazilian ] = "Corrigir DUas INiciais MAiúsculas " ; \
-        Text [ portuguese ] = "COrrigir duas maiúsculas no ÍNício da palavra" ; \
-        Text [ finnish ] = "Korjaa KAksi ISoa KIrjainta sanojen alussa" ; \
-        Text [ danish ] = "REt andet bogstav i ORd til lille" ; \
-        Text [ french ] = "COrriger la 2e majuscule en DÉbut de mot" ; \
-        Text [ swedish ] = "KOrrigera två versaler i BÖrjan av ordet" ; \
-        Text [ dutch ] = "TWee hoofdletters aan WOordbegin corrigeren" ; \
-        Text [ spanish ] = "Corregir DOs MAyúsculas SEguidas" ; \
-        Text [ english_us ] = "Correct TWo INitial CApitals" ; \
-        Text[ chinese_simplified ] = "æ›´æ­£å­—é¦–çš„ä¸¤ä¸ªå¤§å†™å­—æ¯";\
-        Text[ russian ] = "Èñïğàâëÿòü ÄÂå ïğîïèñíûå áóêâû â ÍÀ÷àëå ñëîâà";\
-        Text[ polish ] = "Poprawiaj DWie POcz¹tkowe wielkie litery";\
-        Text[ japanese ] = "2æ–‡å­—ç›®ã‚’å°æ–‡å­—ã«ã™ã‚‹";\
-        Text[ chinese_traditional ] = "æ ¡æ­£å­—é¦–çš„å…©å€‹å¤§å¯«å­—æ¯";\
-        Text[ arabic ] = "ÊÕÍíÍ ÍÑİíä ÇÓÊåáÇáííä İí ÈÏÇíÉ ÇáßáãÉ";\
-        Text[ dutch ] = "TWee hoofdletters aan WOordbegin corrigeren";\
-        Text[ chinese_simplified ] = "æ›´æ­£å­—é¦–çš„ä¸¤ä¸ªå¤§å†™å­—æ¯";\
-        Text[ greek ] = "Äéüñèùóç ÄÕï êåöáëáßùí óôçí áñ÷Ş ôçò ËÅîçò";\
-        Text[ korean ] = "ë‹¨ì–´ì˜ ì²˜ìŒ ë‘ ë¬¸ìê°€ ëŒ€ë¬¸ìì¸ ê²½ìš° ê³ ì¹¨";\
-        Text[ turkish ] = "İLk İKi BÜyük HArfi düzelt";\
-        Text[ language_user1 ] = " ";\
-        Text[ catalan ] = "Corregeix les DUes MAjúscules INicials";\
-        Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆà¸ªà¸­à¸‡à¸•à¸±à¸§à¸•à¸´à¸”à¸à¸±à¸™";\
-        Text[ czech ] = "Opravit prvnÃ­ DVÄ› VElkÃ¡ pÃ­smena";\
-        Text[ hebrew ] = "ZWei GroÃŸbuchstaben am WOrtanfang korrigieren";\
-        Text[ hindi ] = "Correct TWo INitial CApitals";\
-        Text[ slovak ] = "OpraviÅ¥ prvÃ© DVe VEÄ¾kÃ© pÃ­smenÃ¡";\
-        Text[ hungarian ] = "KÃ‰t NAgy KEzdÅ‘betÅ± javÃ­tÃ¡sa";\
-        Text[ slovenian ] = "Popravi DVe VEliki ZAÄetnici";\
+        Text [ de ] = "ZWei Großbuchstaben am WOrtanfang korrigieren" ; \
+        Text [ en-US ] = "Correct TWo INitial CApitals" ; \
+        Text [ x-comment ] = " ";\
     }; \
     String ST_CPTL_STT_SENT \
     { \
-        Text = "Jeden Satz mit einem Großbuchstaben beginnen" ; \
-        Text [ ENGLISH ] = "Start each Sentence with a Capital Letter" ; \
-        Text [ norwegian ] = "Begynn hver Setning med Stor Bokstav" ; \
-        Text [ italian ] = "Inizia ogni frase con la lettera maiuscola" ; \
-        Text [ portuguese_brazilian ] = "Iniciar todas as frases com maiúsculas" ; \
-        Text [ portuguese ] = "Iniciar todas as frases com maiúsculas" ; \
-        Text [ finnish ] = "Muuta jokaisen lauseen ensimmäinen kirjain isoksi" ; \
-        Text [ danish ] = "Første bogstav i sætninger med stort" ; \
-        Text [ french ] = "Majuscule en début de phrase" ; \
-        Text [ swedish ] = "Börja varje mening med stor bokstav" ; \
-        Text [ dutch ] = "Elke zin met een hoofdletter beginnen" ; \
-        Text [ spanish ] = "Iniciar todas las frases con mayúsculas" ; \
-        Text [ english_us ] = "Capitalize first letter of every sentence" ; \
-        Text[ chinese_simplified ] = "è®¾å®šæ¯ä¸ªå¥å­ç”±å¤§å†™å­—æ¯èµ·å¤´";\
-        Text[ russian ] = "Íà÷èíàòü êàæäîå ïğåäëîæåíèå ñ ïğîïèñíîé áóêâû";\
-        Text[ polish ] = "Pocz¹tek ka¿dego zdania z wielkiej litery";\
-        Text[ japanese ] = "ã™ã¹ã¦ã®æ–‡ã‚’å¤§æ–‡å­—ã§å§‹ã‚ã‚‹";\
-        Text[ chinese_traditional ] = "è¨­å®šæ¯å€‹å¥é¦–ç”±å¤§å¯«å­—æ¯é–‹å§‹";\
-        Text[ arabic ] = "ÈÏÁ ßá ÌãáÉ ÈÍÑİ ÇÓÊåáÇáí";\
-        Text[ dutch ] = "Elke zin met een hoofdletter beginnen";\
-        Text[ chinese_simplified ] = "è®¾å®šæ¯ä¸ªå¥å­ç”±å¤§å†™å­—æ¯èµ·å¤´";\
-        Text[ greek ] = "Åêêßíçóç êÜèå ğñüôáóçò ìå êåöáëáßï ãñÜììá";\
-        Text[ korean ] = "ëª¨ë“  ë¬¸ì¥ì„ ëŒ€ë¬¸ìë¡œ ì‹œì‘";\
-        Text[ turkish ] = "Her cümleye büyük harfle başla";\
-        Text[ language_user1 ] = " ";\
-        Text[ catalan ] = "Posa en majúscula la primera lletra de cada frase";\
-        Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¹à¸£à¸à¸‚à¸­à¸‡à¸›à¸£à¸°à¹‚à¸¢à¸„à¹ƒà¸«à¹‰à¹€à¸›à¹‡à¸™à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ";\
-        Text[ czech ] = "KaÅ¾dÃ© prvnÃ­ pÃ­smeno vÄ›ty bude velkÃ©";\
-        Text[ hebrew ] = "Jeden Satz mit einem GroÃŸbuchstaben beginnen";\
-        Text[ hindi ] = "à¤¹à¤° à¤µà¤¾à¤•à¥à¤¯ à¤•à¤¾ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤¾ à¤…à¤•à¥à¤·à¤° à¤•à¥‹ à¤¬à¤¡à¤¼à¥‡ à¤…à¤•à¥à¤·à¤° à¤®à¥‡à¤‚ à¤¬à¤¦à¤²à¥‹";\
-        Text[ slovak ] = "KaÅ¾dÃ© prvÃ© pÃ­smeno vety veÄ¾kÃ½m";\
-        Text[ hungarian ] = "Mondat elsÅ‘ betÅ±je nagybetÅ±";\
-        Text[ slovenian ] = "Vsako poved zaÄni z veliko zaÄetnico";\
+        Text [ de ] = "Jeden Satz mit einem Großbuchstaben beginnen" ; \
+        Text [ en-US ] = "Capitalize first letter of every sentence" ; \
+        Text [ x-comment ] = " ";\
     }; \
     String ST_BOLD_UNDER \
     { \
-        Text = "Automatisch *fett* und _unterstrichen_" ; \
-        Text [ English ] = "Automatic *bold* and _underline_" ; \
-        Text [ dutch ] = "Automatisch *vet* en _onderstreept_" ; \
-        Text [ english_us ] = "Automatic *bold* and _underline_" ; \
-        Text [ italian ] = "*Grassetto* e _sottolineato_ automatici" ; \
-        Text [ spanish ] = "En *negrita* y _subrayado_ automáticamente." ; \
-        Text [ french ] = "*Gras* et_Soulignage _ automatiques" ; \
-        Text [ swedish ] = "Automatiskt *fet* och_understruken_" ; \
-        Text [ danish ] = "Automatisk *fed* og _understreget_" ; \
-        Text [ portuguese_brazilian ] = "*Negrito* e  _sublinhado_ automáticos" ; \
-        Text [ portuguese ] = "*Negrito* e  _Sublinhado_ automáticos" ; \
-        Text[ chinese_simplified ] = "è‡ªåŠ¨*åŠ ç²—*å’ŒåŠ _ä¸‹åˆ’çº¿_";\
-        Text[ russian ] = "Àâòîìàòè÷åñêè âûäåëÿòü *æèğíûì* è _ïîä÷åğêèâàíèåì_";\
-        Text[ polish ] = "Automatyczne *pogrubianie* i _podkreœlanie_";\
-        Text[ japanese ] = "è‡ªå‹•çš„ã« *å¤ªå­—* ã‚’å¤ªå­—ã« _ä¸‹ç·š_ ã‚’ä¸‹ç·šä»˜ãã«";\
-        Text[ chinese_traditional ] = "è‡ªå‹•*åŠ ç²—*å’ŒåŠ åº•ç·š";\
-        Text[ arabic ] = "*ÚÑíÖ* æ _ÎØ ÊÍÊí_ ÊáŞÇÆíÇğ";\
-        Text[ dutch ] = "Automatisch *vet* en _onderstreept_";\
-        Text[ chinese_simplified ] = "è‡ªåŠ¨*åŠ ç²—*å’ŒåŠ _ä¸‹åˆ’çº¿_";\
-        Text[ greek ] = "ÁõôïìÜôùò *İíôïíá* êáé _õğïãñÜììéóç_";\
-        Text[ korean ] = "ìë™ìœ¼ë¡œ *ê¸€ì*ëŠ” êµµê²Œ, _ê¸€ì_ëŠ” ë°‘ì¤„ë¡œ";\
-        Text[ turkish ] = "Otomatik olarak *kalın* ve _altı çizili_ yaz";\
-        Text[ language_user1 ] = " ";\
-        Text[ catalan ] = "*negreta* i _subratllat_ automàtic";\
-        Text[ finnish ] = "Automaattinen *lihavoitu* ja _alleviivaus_";\
-        Text[ thai ] = " *à¸•à¸±à¸§à¸«à¸™à¸²*  _à¸‚à¸µà¸”à¹€à¸ªà¹‰à¸™à¹ƒà¸•à¹‰_ à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";\
-        Text[ czech ] = "AutomatickÃ© *tuÄnÃ©* a _podtrÅ¾enÃ©_";\
-        Text[ hebrew ] = "Automatisch *fett* und _unterstrichen_";\
-        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ *à¤®à¥‹à¤Ÿà¤¾* à¤”à¤° _à¤°à¥‡à¤–à¤¾à¤‚à¤•à¤¿à¤¤_";\
-        Text[ slovak ] = "Automaticky *tuÄnÃ©* a _podÄiarknutÃ©_";\
-        Text[ hungarian ] = "Automatikus *fÃ©lkÃ¶vÃ©r* Ã©s _alÃ¡hÃºzott_";\
-        Text[ slovenian ] = "Samodejno *krepko* in _podÄrtano_";\
+        Text [ de ] = "Automatisch *fett* und _unterstrichen_" ; \
+        Text [ en-US ] = "Automatic *bold* and _underline_" ; \
+        Text [ x-comment ] = " ";\
     }; \
     String STR_NO_DBL_SPACES \
     { \
-        Text = "Doppelte Leerzeichen ignorieren" ; \
-        Text [ English ] = "Detect URL" ; \
-        Text [ english_us ] = "Ignore double spaces" ; \
-        Text [ italian ] = "Ignora doppi spazi" ; \
-        Text [ spanish ] = "Ignorar los espacios dobles" ; \
-        Text [ french ] = "Ignorer les espaces doubles" ; \
-        Text [ dutch ] = "Dubbele spaties negeren" ; \
-        Text [ swedish ] = "Ignorera dubbla blanksteg" ; \
-        Text [ danish ] = "Ignorer dobbelte mellemrum" ; \
-        Text [ portuguese_brazilian ] = "Ignorar espaços duplos" ; \
-        Text [ portuguese ] = "Ignorar espaços duplos" ; \
-        Text[ chinese_simplified ] = "å¿½ç•¥åŒç©ºå­—ç¬¦";\
-        Text[ russian ] = "Ïğîïóñêàòü äâîéíûå ïğîáåëû";\
-        Text[ polish ] = "Ignoruj podwójne spacje";\
-        Text[ japanese ] = "ãƒ€ãƒ–ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã‚’ç„¡è¦–ã™ã‚‹";\
-        Text[ chinese_traditional ] = "å¿½ç•¥é›™æ ¼ç©ºå­—å…ƒ";\
-        Text[ arabic ] = "ÊÌÇåá ÃÍÑİ ÇáãÓÇİÇÊ ÇáãÒÏæÌÉ";\
-        Text[ dutch ] = "Dubbele spaties negeren";\
-        Text[ chinese_simplified ] = "å¿½ç•¥åŒç©ºå­—ç¬¦";\
-        Text[ greek ] = "ĞáñÜâëåøç äéğëşí êåíşí";\
-        Text[ korean ] = "ì´ì¤‘ ê³µë°± ë¬´ì‹œ";\
-        Text[ turkish ] = "Çift boşlukları yok say";\
-        Text[ language_user1 ] = " ";\
-        Text[ catalan ] = "Ignora els espais dobles";\
-        Text[ finnish ] = "Ohita peräkkäiset välit";\
-        Text[ thai ] = "à¸¢à¸à¹€à¸¥à¸´à¸à¸Šà¹ˆà¸­à¸‡à¸§à¹ˆà¸²à¸‡à¸ªà¸­à¸‡à¸Šà¹ˆà¸­à¸‡";\
-        Text[ czech ] = "Ignorovat dvojitÃ© mezery";\
-        Text[ hebrew ] = "Doppelte Leerzeichen ignorieren";\
-        Text[ hindi ] = "à¤¦à¥à¤µà¤¿à¤—à¥à¤£à¤¿à¤¤ à¤…à¤‚à¤¤à¤°à¥‹à¤‚ à¤•à¥‹ à¤‰à¤ªà¥‡à¤•à¥à¤·à¤¾ à¤•à¤°à¥‹";\
-        Text[ slovak ] = "IgnorovaÅ¥ dvojitÃ© medzery";\
-        Text[ hungarian ] = "A dupla szÃ³kÃ¶zÃ¶k figyelmen kÃ­vÃ¼l hagyÃ¡sa";\
-        Text[ slovenian ] = "Prezri dvojne razmike";\
+        Text [ de ] = "Doppelte Leerzeichen ignorieren" ; \
+        Text [ en-US ] = "Ignore double spaces" ; \
+        Text [ x-comment ] = " ";\
     }; \
     String ST_DETECT_URL \
     { \
-        Text = "URL erkennen" ; \
-        Text [ English ] = "Detect URL" ; \
-        Text [ english_us ] = "URL Recognition" ; \
-        Text [ italian ] = "Riconosci URL" ; \
-        Text [ spanish ] = "Reconocer URL" ; \
-        Text [ french ] = "Détecter les URL" ; \
-        Text [ dutch ] = "URL herkennen" ; \
-        Text [ swedish ] = "Känn igen URL" ; \
-        Text [ danish ] = "URL-genkendelse" ; \
-        Text [ portuguese_brazilian ] = "Reconhecer URLs" ; \
-        Text [ portuguese ] = "Reconhecer URL" ; \
-        Text[ chinese_simplified ] = "è¯†åˆ« URL";\
-        Text[ russian ] = "Ğàñïîçíàâàòü URL";\
-        Text[ polish ] = "Rozpoznawanie adresów URL";\
-        Text[ japanese ] = "URLè­˜åˆ¥";\
-        Text[ chinese_traditional ] = "è­˜åˆ¥ URL";\
-        Text[ arabic ] = "ÇáÊÚÑğİ Úáì URL";\
-        Text[ dutch ] = "URL herkennen";\
-        Text[ chinese_simplified ] = "è¯†åˆ« URL";\
-        Text[ greek ] = "Áíáãíşñéóç URL";\
-        Text[ korean ] = "URL ì¸ì‹";\
-        Text[ turkish ] = "URL'yi tanı";\
-        Text[ language_user1 ] = " ";\
-        Text[ catalan ] = "Reconeixement d'URL";\
-        Text[ finnish ] = "URL-tunnistus";\
-        Text[ thai ] = "à¸ˆà¸”à¸ˆà¸³ URL ";\
-        Text[ czech ] = "RozpoznÃ¡nÃ­ URL";\
-        Text[ hebrew ] = "URL erkennen";\
-        Text[ hindi ] = "URL à¤ªà¤¹à¤¾à¤šà¤¾à¤¨";\
-        Text[ slovak ] = "rozpoznÃ¡vanie URL";\
-        Text[ hungarian ] = "URL-felismerÃ©s";\
-        Text[ slovenian ] = "Prepoznavanje URL-ja";\
+        Text [ de ] = "URL erkennen" ; \
+        Text [ en-US ] = "URL Recognition" ; \
+        Text [ x-comment ] = " ";\
     }; \
     String ST_ORDINAL \
     { \
-        Text = "1st ... durch 1^st ... ersetzen" ; \
-        Text [ English ] = "Replace 1st with 1^st" ; \
-        Text [ english_us ] = "Replace 1st... with 1^st..." ; \
-        Text [ italian ] = "Sostituisci 1st ... con 1°..." ; \
-        Text [ spanish ] = "Reemplazar 1st ... por 1^st ..." ; \
-        Text [ french ] = "Remplacer 1er ... par 1^er ..." ; \
-        Text [ dutch ] = "1e ... vervangen door 1^e ..." ; \
-        Text [ swedish ] = "Ersätt engelska ordningstal 1st... med 1^st..." ; \
-        Text [ danish ] = "Erstat 1st... med 1^st..." ; \
-        Text [ portuguese_brazilian ] = "Substituir 1o... por 1º" ; \
-        Text [ portuguese ] = "Substituir 1st... por 1^st..." ; \
-        Text[ chinese_simplified ] = "1st ... ç”± 1^st ... æ›¿æ¢";\
-        Text[ russian ] = "Çàìåíÿòü àíãëèéñêèå ïîğÿäêîâûå (1st) ... íà âåğõíèé èíäåêñ (1^st)...";\
-        Text[ polish ] = "Zamieñ liczby porz¹dkowe (1st) na indeksy górne (1^s)";\
-        Text[ japanese ] = "1st ...ã‚’ 1^st ...ã«ç½®æ›";\
-        Text[ chinese_traditional ] = "1st ... ç”± 1^st ... æ›¿ä»£";\
-        Text[ arabic ] = "ÇÓÊÈÏÇá 1st ... ÈÜ 1^st ...";\
-        Text[ dutch ] = "1e ... vervangen door 1^e ...";\
-        Text[ chinese_simplified ] = "1st ... ç”± 1^st ... æ›¿æ¢";\
-        Text[ greek ] = "ÁíôéêáôÜóôáóç 1st... ìå 1^st...";\
-        Text[ korean ] = "1st...ì„ï¼ˆë¥¼ï¼‰1^st...ë¡œ ë°”ê¾¸ê¸°";\
-        Text[ turkish ] = "\"1st\" yazıldığında \"1^st\" ile değiştir";\
-        Text[ language_user1 ] = " ";\
-        Text[ catalan ] = "Reemplaça 1r... amb 1^r...";\
-        Text[ finnish ] = "Korvaa 1st -> 1^st...";\
-        Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆ 1st... à¸”à¹‰à¸§à¸¢ 1^st...";\
-        Text[ czech ] = "Nahradit 1st... za 1^st...";\
-        Text[ hebrew ] = "1st ... durch 1^st ... ersetzen";\
-        Text[ hindi ] = "1st...  à¤•à¥‹ 1^st... à¤¸à¥‡ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹";\
-        Text[ slovak ] = "NahradiÅ¥ 1st... za 1^st...";\
-        Text[ hungarian ] = "A \"1st...\" cserÃ©je \"1^st...\"-re";\
-        Text[ slovenian ] = "Zamenjaj 1st... z 1^st...";\
+        Text [ de ] = "1st ... durch 1^st ... ersetzen" ; \
+        Text [ en-US ] = "Replace 1st... with 1^st..." ; \
+        Text [ x-comment ] = " ";\
     }; \
     String ST_FRACTION \
     { \
-        Text = "1/2 ... durch ½ ... ersetzen" ; \
-        Text [ English ] = "Replace 1/2 ... with ½ ..." ; \
-        Text [ english_us ] = "Replace 1/2 ... with ½ ..." ; \
-        Text [ swedish ] = "Ersätt 1/2 ... med  ½ ..." ; \
-        Text [ danish ] = "Erstat 1/2 ... med ½ ..." ; \
-        Text [ italian ] = "Sostituisci 1/2 ... con ½" ; \
-        Text [ spanish ] = "Reemplazar 1/2 ... por ½ ..." ; \
-        Text [ dutch ] = "1/2 ... vervangen door 1/2 ..." ; \
-        Text [ portuguese_brazilian ] = "Substituir 1/2 ... por ½? " ; \
-        Text [ french ] = "Remplacer 1/2 ... par ½ ..." ; \
-        Text [ portuguese ] = "Substituir 1/2 ... por ½ ..." ; \
-        Text[ chinese_simplified ] = "1/2 ... ç”± Â½ ... æ›¿æ¢";\
-        Text[ russian ] = "Çàìåíÿòü 1/2 ... íà äğîáè ...";\
-        Text[ polish ] = "Zamieñ 1/2... na ?...";\
-        Text[ japanese ] = "1/2 ...ã‚’ Â½...ã«ç½®æ›";\
-        Text[ chinese_traditional ] = "1/2 ... ç”± Â½ ... æ›¿ä»£";\
-        Text[ arabic ] = "ÇÓÊÈÏÇá 1/2 ... ÈÜ ½...";\
-        Text[ dutch ] = "1/2 ... vervangen door 1/2 ...";\
-        Text[ chinese_simplified ] = "1/2 ... ç”± Â½ ... æ›¿æ¢";\
-        Text[ greek ] = "ÁíôéêáôÜóôáóç 1/2 ... ìå 1/2 ...";\
-        Text[ korean ] = "1/2 ...ì„ Â½...ë¡œ ë°”ê¾¸ê¸°";\
-        Text[ turkish ] = "Kesiri (1/2) kesir karakteriyle (½) değiştir.";\
-        Text[ language_user1 ] = " ";\
-        Text[ catalan ] = "Reemplaça 1/2 ... per ½ ...";\
-        Text[ finnish ] = "Korvaa 1/2 -> ½...";\
-        Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆ 1/2 ... à¸”à¹‰à¸§à¸¢ à¸ ...";\
-        Text[ czech ] = "Nahradit 1/2 ... za Â½ ...";\
-        Text[ hebrew ] = "1/2 ... durch Â½ ... ersetzen";\
-        Text[ hindi ] = "1/2 ... à¤•à¥‹ Ã‚Â½ ... à¤¸à¥‡ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹";\
-        Text[ slovak ] = "nahradiÅ¥ 1/2 ... za Â½ ...";\
-        Text[ hungarian ] = "Az \"1/2\" cserÃ©je \"Â½\"-re";\
-        Text[ slovenian ] = "Zamenjaj 1/2 ... z Â½ ...";\
+        Text [ de ] = "1/2 ... durch ½ ... ersetzen" ; \
+        Text [ en-US ] = "Replace 1/2 ... with ½ ..." ; \
+        Text [ x-comment ] = " ";\
     }; \
     String ST_DASH \
     { \
-        Text = "Gedankenstriche ersetzen" ; \
-        Text [ English ] = "Replace dashes" ; \
-        Text [ english_us ] = "Replace dashes" ; \
-        Text [ swedish ] = "Ersätt tankstreck" ; \
-        Text [ danish ] = "Erstat tankestreger" ; \
-        Text [ italian ] = "Sostituisci trattini" ; \
-        Text [ spanish ] = "Reemplazar guiones" ; \
-        Text [ french ] = "Remplacer les tirets" ; \
-        Text [ dutch ] = "Streepjes vervangen" ; \
-        Text [ portuguese_brazilian ] = "Substituir hífens" ; \
-        Text [ portuguese ] = "Substituir hífens" ; \
-        Text[ chinese_simplified ] = "æ›¿æ¢ç ´æŠ˜å·";\
-        Text[ russian ] = "Çàìåíÿòü äåôèñû";\
-        Text[ polish ] = "Zamieñ myœlniki";\
-        Text[ japanese ] = "ãƒ€ãƒƒã‚·ãƒ¥ã«ç½®æ›";\
-        Text[ chinese_traditional ] = "æ›¿ä»£ç ´æŠ˜è™Ÿ";\
-        Text[ arabic ] = "ÇÓÊÈÏÇá ÇáÔõÑóØ";\
-        Text[ dutch ] = "Streepjes vervangen";\
-        Text[ chinese_simplified ] = "æ›¿æ¢ç ´æŠ˜å·";\
-        Text[ greek ] = "ÁíôéêáôÜóôáóç ğáõëşí";\
-        Text[ korean ] = "ëŒ€ì‹œ ë°”ê¾¸ê¸°";\
-        Text[ turkish ] = "Tireleri değiştir";\
-        Text[ language_user1 ] = " ";\
-        Text[ catalan ] = "Reemplaça els traços";\
-        Text[ finnish ] = "Korvaa viivat";\
-        Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆà¹€à¸ªà¹‰à¸™à¸›à¸£à¸°à¸¢à¸²à¸§";\
-        Text[ czech ] = "Nahradit pomlÄky";\
-        Text[ hebrew ] = "Gedankenstriche ersetzen";\
-        Text[ hindi ] = "à¤¡à¥‰à¤¶à¥‹à¤‚ à¤•à¥‹ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹";\
-        Text[ slovak ] = "NahradiÅ¥ pomlÄky";\
-        Text[ hungarian ] = "KÃ¶tÅ‘jelek cserÃ©je";\
-        Text[ slovenian ] = "Zamenjaj vezaje";\
-    }; \
+        Text [ de ] = "Gedankenstriche ersetzen" ; \
+        Text [ en-US ] = "Replace dashes" ; \
+        Text [ x-comment ] = " ";\
+    };
 
 /**************************************************************************/
 /*                                                                        */
@@ -706,29 +213,9 @@ TabPage RID_OFAPAGE_AUTOCORR_OPTIONS
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Einstellungen" ;
-    Text [ English ] = "Options" ;
-    Text [ dutch ] = "Instellingen" ;
-    Text [ english_us ] = "Settings" ;
-    Text [ italian ] = "Impostazioni" ;
-    Text [ spanish ] = "Configuración" ;
-    Text [ french ] = "Paramètres" ;
-    Text [ swedish ] = "Inställningar" ;
-    Text [ danish ] = "Indstillinger" ;
-    Text [ portuguese ] = "Definições" ;
-    Text [ portuguese_brazilian ] = "Definições" ;
-    Text[ chinese_simplified ] = "è®¾å®š";
-    Text[ russian ] = "Óñòàíîâêè";
-    Text[ polish ] = "Ustawienia";
-    Text[ japanese ] = "è¨­å®š";
-    Text[ chinese_traditional ] = "è¨­å®š";
-    Text[ arabic ] = "ÅÚÏÇÏÇÊ";
-    Text[ dutch ] = "Instellingen";
-    Text[ chinese_simplified ] = "è®¾å®š";
-    Text[ greek ] = "Ñõèìßóåéò";
-    Text[ korean ] = "ì„¤ì •";
-    Text[ turkish ] = "Ayarlar";
-    Text[ language_user1 ] = " ";
+    Text [ de ] = "Einstellungen" ;
+    Text [ en-US ] = "Settings" ;
+    Text [ x-comment ] = " ";
     Control CLB_SETTINGS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
@@ -737,15 +224,6 @@ TabPage RID_OFAPAGE_AUTOCORR_OPTIONS
         TabStop = TRUE ;
     };
     COMMON_CLB_ENTRIES
-    Text[ catalan ] = "Paràmetres";
-    Text[ finnish ] = "Asetukset";
-    Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸„à¹ˆà¸²";
-    Text[ czech ] = "NastavenÃ­";
-    Text[ hebrew ] = "â€®×”×’×“×¨×•×ªâ€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
-    Text[ slovak ] = "Nastavenia";
-    Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-    Text[ slovenian ] = "Nastavitve";
 };
 /**************************************************************************/
 /*                                                                        */
@@ -769,556 +247,102 @@ TabPage RID_OFAPAGE_AUTOFMT_APPLY
     {
         Pos = MAP_APPFONT ( 6 , 162 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Bearbeiten..." ;
-        Text [ English ] = "Edit..." ;
-        Text [ english_us ] = "~Edit..." ;
-        Text [ swedish ] = "R~edigera..." ;
-        Text [ danish ] = "~Rediger..." ;
-        Text [ italian ] = "~Modifica..." ;
-        Text [ spanish ] = "~Editar..." ;
-        Text [ french ] = "Éditer..." ;
-        Text [ dutch ] = "~Bewerken..." ;
-        Text [ portuguese_brazilian ] = "~Editar..." ;
-        Text [ portuguese ] = "~Editar..." ;
+        Text [ de ] = "~Bearbeiten..." ;
+        Text [ en-US ] = "~Edit..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)...";
-        Text[ russian ] = "Ïğàâêà...";
-        Text[ polish ] = "~Edytuj...";
-        Text[ japanese ] = "ç·¨é›†(~E)...";
-        Text[ chinese_traditional ] = "ç·¨è¼¯(~E)...";
-        Text[ arabic ] = "...ÊÍÑíÑ";
-        Text[ dutch ] = "~Bewerken...";
-        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)...";
-        Text[ greek ] = "~Åğåîåñãáóßá...";
-        Text[ korean ] = "í¸ì§‘(~E)...";
-        Text[ turkish ] = "~Düzenle...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Edita...";
-        Text[ finnish ] = "~Muokkaa...";
-        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚...";
-        Text[ czech ] = "Upravit...";
-        Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
-        Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨...";
-        Text[ slovak ] = "~UpraviÅ¥.";
-        Text[ hungarian ] = "~SzerkesztÃ©s...";
-        Text[ slovenian ] = "~Uredi...";
+        Text [ x-comment ] = " ";
     };
     String STR_HEADER1
     {
-        Text = "[N]" ;
-        Text [ English ] = "[F]" ;
-        Text [ english_us ] = "[M]" ;
-        Text [ portuguese_brazilian ] = "[S]" ;
-        Text [ swedish ] = "[E]" ;
-        Text [ danish ] = "[E]" ;
-        Text [ italian ] = "[M]" ;
-        Text [ spanish ] = "[R]" ;
-        Text [ french ] = "[R]" ;
-        Text [ dutch ] = "[N]" ;
-        Text [ portuguese ] = "[R]" ;
-        Text[ chinese_simplified ] = "[M]";
-        Text[ russian ] = "[È]";
-        Text[ polish ] = "[M]";
-        Text[ japanese ] = "[M]";
-        Text[ greek ] = "[Ô]";
-        Text[ korean ] = "[M]";
-        Text[ chinese_traditional ] = "[M]";
-        Text[ arabic ] = "[Ê]";
-        Text[ turkish ] = "[R]";
-        Text[ catalan ] = "[M]";
-        Text[ finnish ] = "[M]";
-        Text[ thai ] = "[M]";
-        Text[ czech ] = "[M]";
-        Text[ hebrew ] = "[N]";
-        Text[ hindi ] = "[M]";
-        Text[ slovak ] = "[M]";
-        Text[ hungarian ] = "[M]";
-        Text[ slovenian ] = "[M]";
+        Text [ de ] = "[N]" ;
+        Text [ en-US ] = "[M]" ;
     };
     String STR_HEADER2
     {
-        Text = "[E]" ;
-        Text [ English ] = "[E]" ;
-        Text [ english_us ] = "[T]" ;
-        Text [ portuguese_brazilian ] = "[D]" ;
-        Text [ swedish ] = "[I]" ;
-        Text [ danish ] = "[S]" ;
-        Text [ italian ] = "[D]" ;
-        Text [ spanish ] = "[E]" ;
-        Text [ french ] = "[S]" ;
-        Text [ dutch ] = "[I]" ;
-        Text [ portuguese ] = "[D]" ;
-        Text[ chinese_simplified ] = "[T]";
-        Text[ russian ] = "[Â]";
-        Text[ polish ] = "[W]";
-        Text[ japanese ] = "[T]";
-        Text[ greek ] = "[Å]";
-        Text[ korean ] = "[T]";
-        Text[ chinese_traditional ] = "[T]";
-        Text[ arabic ] = "[ß]";
-        Text[ turkish ] = "[G]";
-        Text[ catalan ] = "[T]";
-        Text[ finnish ] = "[T]";
-        Text[ thai ] = "[T]";
-        Text[ czech ] = "[T]";
-        Text[ hebrew ] = "[E]";
-        Text[ hindi ] = "[T]";
-        Text[ slovak ] = "[T]";
-        Text[ hungarian ] = "[T]";
-        Text[ slovenian ] = "[T]";
+        Text [ de ] = "[E]" ;
+        Text [ en-US ] = "[T]" ;
     };
     FixedText FT_HEADER1_EXPLANATION
     {
         Pos = MAP_APPFONT ( 80 , 159 ) ;
         Size = MAP_APPFONT ( 174 , 8 ) ;
-        Text = "[N]: AutoFormat während der Nachbearbeitung" ;
-        Text [ English ] = "[F]: AutoFormat while finishing" ;
-        Text [ portuguese ] = "[R]: AutoFormato durante a reedição" ;
-        Text [ english_us ] = "[M]: Replace while modifying existing text" ;
-        Text [ portuguese_brazilian ] = "[S]: Substituir ao modificar o texto existente" ;
-        Text [ swedish ] = "[E]: autoformat under redigering i efterhand" ;
-        Text [ danish ] = "[E]: AutoFormat under efterredigering" ;
-        Text [ italian ] = "[M]: Formattazione automatica durante la modifica" ;
-        Text [ spanish ] = "[R]: Formateado automático durante la reedición" ;
-        Text [ french ] = "[R] : AutoFormat lors de la relecture/modification" ;
-        Text [ dutch ] = "[N]: AutoOpmaak tijdens de bewerking" ;
-        Text[ chinese_simplified ] = "[M]: åœ¨ç¼–è¾‘ä¿®æ”¹æ—¶æ‰§è¡Œè‡ªåŠ¨æ ¼å¼";
-        Text[ russian ] = "[È]: Çàìåíÿòü ïğè èçìåíåíèè ñóùåñòâóşùåãî òåêñòà";
-        Text[ polish ] = "[M]: Zamieniaj podczas modyfikacji tekstu";
-        Text[ japanese ] = "[M]: å…¥åŠ›å¾Œã®ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ";
-        Text[ greek ] = "[Ô]: Áõôüìáôç ìïñöïğïßçóç êáôÜ ôçí ôñïğïğïßçóç ôïõ õğÜñ÷ïíôïò êåéìİíïõ";
-        Text[ korean ] = "[M]: ê¸°ì¡´ ë¬¸ì„œë¥¼ ìˆ˜ì •í•˜ëŠ” ë™ì•ˆ ë°”ê¾¸ê¸°";
-        Text[ chinese_traditional ] = "[M]: åœ¨ä¿®æ”¹æ™‚åŸ·è¡Œè‡ªå‹•æ ¼å¼åŠŸèƒ½";
-        Text[ arabic ] = "[Ê]: ÊäÓíŞ ÊáŞÇÆí ÃËäÇÁ ÊÚÏíá ÇáäÕ ÇáãæÌæÏ";
-        Text[ turkish ] = "[R]: Metni düzenlerken değiştir";
-        Text[ catalan ] = "[M]: Reemplaça en modificar el text existent";
-        Text[ finnish ] = "[M]: Korvaa muokattaessa nykyistä tekstiä";
-        Text[ thai ] = "[M]: à¹à¸—à¸™à¸—à¸µà¹ˆà¸‚à¸“à¸°à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸—à¸µà¹ˆà¸¡à¸µà¸­à¸¢à¸¹à¹ˆ";
-        Text[ czech ] = "[M]: Nahradit pÅ™i zmÄ›nÄ› existujÃ­cÃ­ho textu";
-        Text[ hebrew ] = "[N]: AutoFormat wÃ¤hrend der Nachbearbeitung";
-        Text[ hindi ] = "[M]: à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¥‹ à¤¸à¥à¤§à¤¾à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "[M]: NahradiÅ¥ pri ÃºpravÃ¡ch existujÃºceho textu";
-        Text[ hungarian ] = "[M]: Csere gÃ©pelÃ©s kÃ¶zben";
-        Text[ slovenian ] = "[M]: Zamenjaj med spreminjanjem obstojeÄega besedila";
+        Text [ de ] = "[N]: AutoFormat während der Nachbearbeitung" ;
+        Text [ en-US ] = "[M]: Replace while modifying existing text" ;
     };
     FixedText FT_HEADER2_EXPLANATION
     {
         Pos = MAP_APPFONT ( 80 , 171 ) ;
         Size = MAP_APPFONT ( 174 , 8 ) ;
-        Text = "[E]: AutoFormat/AutoKorrektur während der Eingabe" ;
-        Text [ English ] = "[E]: AutoFormat/AutoCorrect while typing" ;
-        Text [ english_us ] = "[T]: AutoFormat/AutoCorrect while typing" ;
-        Text [ portuguese_brazilian ] = "[D]: AutoFormatação/AutoCorreção durante a digitação" ;
-        Text [ swedish ] = "[I]: autoformat/autokorrigering under inmatningen" ;
-        Text [ danish ] = "[S]: AutoFormat/AutoKorrektur under skrivning" ;
-        Text [ italian ] = "[D]: Formattazione automatica/Correzione automatica durante la digitazione" ;
-        Text [ spanish ] = "[E]: Corrección y formateado automático mientras se escribe" ;
-        Text [ french ] = "[S] : AutoFormat/AutoCorrection pendant la saisie" ;
-        Text [ dutch ] = "[I]: AutoOpmaak/AutoCorrectie tijdens de invoer" ;
-        Text [ portuguese ] = "[D]: AutoFormato/AutoCorrecção durante a digitação" ;
-        Text[ chinese_simplified ] = "[T]: åœ¨è¾“å…¥çš„åŒæ—¶æ‰§è¡Œè‡ªåŠ¨æ ¼å¼/è‡ªåŠ¨æ›´æ­£";
-        Text[ russian ] = "[Â]: Àâòîôîğìàò/Àâòîçàìåíà ïğè íàáîğå";
-        Text[ polish ] = "[W]: Autoformatowanie/Autokorekta podczas pisania";
-        Text[ japanese ] = "[T]: å…¥åŠ›ä¸­ã®ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ/ã‚ªãƒ¼ãƒˆã‚³ãƒ¬ã‚¯ãƒˆ";
-        Text[ greek ] = "[Å]: Áõôüìáôç Ìïñöïğïßçóç/Áõôüìáôç Äéüñèùóç êáôÜ ôçí åéóáãùãŞ";
-        Text[ korean ] = "[T]: ì…ë ¥ ì‹œ ìë™ ì„œì‹/ìë™ ìˆ˜ì •";
-        Text[ chinese_traditional ] = "[T]: åœ¨è¼¸å…¥æ™‚åŸ·è¡Œè‡ªå‹•æ ¼å¼æˆ–è‡ªå‹•æ ¡æ­£åŠŸèƒ½";
-        Text[ arabic ] = "[ß]: ÊäÓíŞ ÊáŞÇÆí/ÊÕÍíÍ ÊáŞÇÆí ÃËäÇÁ ÇáßÊÇÈÉ";
-        Text[ turkish ] = "[G]: Yazarken  otomatik formatlama/düzeltme ";
-        Text[ catalan ] = "[T]: Format automàtic/Correcció automàtica en teclejar";
-        Text[ finnish ] = "[T]: Automaattinen muotoilu/korjaus kirjoitettaessa";
-        Text[ thai ] = "[T]: à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´/à¹à¸à¹‰à¹„à¸‚à¹ƒà¸«à¹‰à¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸‚à¸“à¸°à¸à¸´à¸¡à¸à¹Œ";
-        Text[ czech ] = "[T]: AutomatickÃ½ formÃ¡t a opravy bÄ›hem psanÃ­";
-        Text[ hebrew ] = "[E]: AutoFormat/AutoKorrektur wÃ¤hrend der Eingabe";
-        Text[ hindi ] = "[T]: à¤Ÿà¤‡à¤ªà¤¿à¤‚à¤— à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤°à¤šà¤¨à¤¾/à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤ à¥€à¤• à¤•à¤°à¥‹";
-        Text[ slovak ] = "[T]: AutomatickÃ½ formÃ¡t/AutomatickÃ© opravy";
-        Text[ hungarian ] = "[T]: Automatikus formÃ¡zÃ¡s / automatikus javÃ­tÃ¡s gÃ©pelÃ©s kÃ¶zben";
-        Text[ slovenian ] = "[T]: Samooblikovanje/Samopopravki med tipkanjem";
+        Text [ de ] = "[E]: AutoFormat/AutoKorrektur während der Eingabe" ;
+        Text [ en-US ] = "[T]: AutoFormat/AutoCorrect while typing" ;
     };
     COMMON_CLB_ENTRIES
     String ST_DEL_EMPTY_PARA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Leere Absätze entfernen : Leere Absõtze entfernen */
-        Text = "Leere Absätze entfernen" ;
-        Text [ English ] = "Remove empty paragraphs" ;
-        Text [ english_us ] = "Remove blank paragraphs" ;
-        Text [ swedish ] = "Ta bort tomma stycken" ;
-        Text [ danish ] = "Fjern tomme afsnit" ;
-        Text [ italian ] = "Elimina paragrafi vuoti" ;
-        Text [ spanish ] = "Borrar los espacios en blanco" ;
-        Text [ french ] = "Supprimer les paragraphes vides" ;
-        Text [ dutch ] = "Lege alinea's verwijderen" ;
-        Text [ portuguese_brazilian ] = "Remover parágrafos vazios" ;
-        Text [ portuguese ] = "Remover parágrafos vazios" ;
-        Text[ chinese_simplified ] = "åˆ é™¤ç©ºç™½çš„æ®µè½";
-        Text[ russian ] = "Óäàëÿòü ïóñòûå àáçàöû";
-        Text[ polish ] = "Usuñ puste akapity";
-        Text[ japanese ] = "ç©ºç™½ã®æ®µè½ã‚’å‰Šé™¤";
-        Text[ chinese_traditional ] = "åˆªé™¤ç©ºç™½çš„æ®µè½";
-        Text[ arabic ] = "ÅÒÇáÉ ÇáİŞÑÇÊ ÇáİÇÑÛÉ";
-        Text[ dutch ] = "Lege alinea's verwijderen";
-        Text[ chinese_simplified ] = "åˆ é™¤ç©ºç™½çš„æ®µè½";
-        Text[ greek ] = "ÄéáãñáöŞ êåíşí ğáñáãñÜöùí";
-        Text[ korean ] = "ë¹ˆ ë‹¨ë½ ì œê±°";
-        Text[ turkish ] = "Boş paragrafları kaldır";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Suprimeix els paràgrafs en blanc";
-        Text[ finnish ] = "Poista tyhjät kappaleet";
-        Text[ thai ] = "à¹€à¸­à¸²à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¸—à¸µà¹ˆà¸§à¹ˆà¸²à¸‡à¸­à¸­à¸";
-        Text[ czech ] = "Odstranit prÃ¡zdnÃ© odstavce";
-        Text[ hebrew ] = "Leere AbsÃ¤tze entfernen";
-        Text[ hindi ] = "à¤–à¤¾à¤²à¥€ à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦à¥‹à¤‚ à¤•à¥‹ à¤¹à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "OdstrÃ¡niÅ¥ prÃ¡zdne odstavce";
-        Text[ hungarian ] = "Ãœres bekezdÃ©sek eltÃ¡volÃ­tÃ¡sa";
-        Text[ slovenian ] = "Odstrani prazne odstavke";
+        Text [ de ] = "Leere Absätze entfernen" ;
+        Text [ en-US ] = "Remove blank paragraphs" ;
+        Text [ x-comment ] = " ";
     };
     String ST_TYPO
     {
-        Text = "\"Gerade\" Anführungszeichen durch %1typografische%2 ersetzen" ;
-        Text [ ENGLISH ] = "Replace \"Standard\" Quotes by %1typographical%2 Quotes" ;
-        Text [ norwegian ] = "Erstatt \"Standard\" +++Quotes med %1typografiske%2 +++Quotes" ;
-        Text [ italian ] = "Sostituisci le virgolette \"standard\" con quelle %1tipografiche%2" ;
-        Text [ portuguese_brazilian ] = "Substituir aspas 'padrão' por aspas %1 personalizadas %2" ;
-        Text [ portuguese ] = "Substituir aspas \"padrão\" por %1tipográficas%2." ;
-        Text [ finnish ] = "Korvaa \"tavalliset\" lainausmerkit %1mukautetuilla%2 lainausmerkeillä" ;
-        Text [ danish ] = "Erstat \"lige\" anførselstegn med %1typografiske%2" ;
-        Text [ french ] = "Remplacer les \"paires d'apostrophes\" par des guillemets %1typographiques%2" ;
-        Text [ swedish ] = "Ersätt \"raka\" citationstecken med %1typografiska%2" ;
-        Text [ dutch ] = "\"Rechte\" aanhalingstekens vervangen door %1typografische%2." ;
-        Text [ spanish ] = "Reemplazar comillas \"rectas\" con comillas %1tipográficas%2" ;
-        Text [ english_us ] = "Replace \"standard\" quotes with %1custom%2 quotes" ;
-        Text[ chinese_simplified ] = "\"ç›´å‹\" å¼•å·ç”±%1å­—å‹å¼•å·%2æ›¿æ¢";
-        Text[ russian ] = "Çàìåíÿòü \"ïğÿìûå\" êàâû÷êè %1òèïîãğàôñêèìè%2";
-        Text[ polish ] = "Zamieñ cudzys³owy \"proste\" na %1drukarskie%2";
-        Text[ japanese ] = "\"ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ç”¨\"ã‚¯ã‚©ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãƒãƒ¼ã‚¯ã‚’ %1 å°åˆ·ç”¨ %2 ã«ç½®æ›";
-        Text[ arabic ] = "ÇÓÊÈÏÇá ÚáÇãÇÊ ÊäÕíÕ \"ÚÇÏíÉ\" ÈÜ ÚáÇãÇÊ ÊäÕíÕ %1ØÈæÛÑÇİíøÉ%2";
-        Text[ chinese_traditional ] = "ç›´å‹å¼•è™Ÿç”±%1å­—å‹å¼•è™Ÿ%2æ›¿ä»£";
-        Text[ dutch ] = "\"Rechte\" aanhalingstekens vervangen door %1typografische%2.";
-        Text[ chinese_simplified ] = "\"ç›´å‹\" å¼•å·ç”±%1å­—å‹å¼•å·%2æ›¿æ¢";
-        Text[ greek ] = "ÁíôéêáôÜóôáóç \"ßóùí\" åéóáãùãéêşí ìå %1ôõğïãñáöéêÜ%2";
-        Text[ korean ] = "\"í‘œì¤€\" ì¸ìš©ë¶€í˜¸ë¥¼ %1ì¸ì‡„ì²´%2 ì¸ìš©ë¶€í˜¸ë¡œ ë°”ê¾¸ê¸°";
-        Text[ turkish ] = "\"Düz\" tırnak işaretlerini %1tipografik%2 tırnak işaretleriyle değiştir";
-        Text[ catalan ] = "Reemplaça les cometes \"rectes\" amb cometes %1tipogràfiques%2";
-        Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆ \"à¸¡à¸²à¸•à¸£à¸à¸²à¸™\" à¸­à¸±à¸à¸›à¸£à¸°à¸à¸²à¸¨ %1à¸à¸³à¸«à¸™à¸”à¸­à¸±à¸à¸›à¸£à¸°à¸à¸²à¸¨à¹€à¸­à¸‡%2 ";
-        Text[ czech ] = "Nahradit \"standardnÃ­\" uvozovky %1vlastnÃ­mi%2";
-        Text[ hebrew ] = "\"Gerade\" AnfÃ¼hrungszeichen durch %1typografische%2 ersetzen";
-        Text[ hindi ] = "\"à¤¸à¥à¤Ÿà¤¾à¤¨à¥à¤¡à¤°à¥à¤¡\" à¤•à¥à¤µà¥‹à¤Ÿà¥à¤¸ %1custom%2 à¤•à¥à¤µà¥‹à¤Ÿà¥à¤¸ à¤¸à¥‡ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "NahradiÅ¥ \"standard\" Ãºvodzovky za %1custom%2 Ãºvodzovky";
-        Text[ hungarian ] = "A \"standard\" idÃ©zÅ‘jelek cserÃ©je %1egyÃ©nire%2";
-        Text[ slovenian ] = "Zamenjaj \"standardne\" narekovaje z narekovaji %1po meri%2";
+        Text [ de ] = "\"Gerade\" Anführungszeichen durch %1typografische%2 ersetzen" ;
+        Text [ en-US ] = "Replace \"standard\" quotes with %1custom%2 quotes" ;
     };
     String ST_USER_STYLE
     {
-        Text = "Benutzervorlagen ersetzen" ;
-        Text [ English ] = "Replace user styles" ;
-        Text [ dutch ] = "Eigen opmaakprofielen vervangen" ;
-        Text [ english_us ] = "Replace Custom Styles" ;
-        Text [ swedish ] = "Ersätt användardefinierade formatmallar" ;
-        Text [ danish ] = "Erstat brugerdefinerede typografier" ;
-        Text [ italian ] = "Sostituisci modelli utente" ;
-        Text [ spanish ] = "Reemplazar los estilos del usuario" ;
-        Text [ french ] = "Remplacer les styles personnalisés" ;
-        Text [ portuguese ] = "Substituir estilos personalizados" ;
-        Text [ portuguese_brazilian ] = "Substituir Estilos Personalizados" ;
-        Text[ chinese_simplified ] = "æ›¿æ¢ä½¿ç”¨è€…æ ·å¼";
-        Text[ russian ] = "Çàìåíÿòü ñòèëè ïîëüçîâàòåëÿ";
-        Text[ polish ] = "Zamieñ style niestandardowe";
-        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ã‚¹ã‚¿ã‚¤ãƒ«ã‚’ç½®æ›";
-        Text[ chinese_traditional ] = "æ›¿ä»£è‡ªè¨‚æ¨£å¼";
-        Text[ arabic ] = "ÇÓÊÈÏÇá äãÇĞÌ ÇáãÓÊÎÏã";
-        Text[ dutch ] = "Eigen opmaakprofielen vervangen";
-        Text[ chinese_simplified ] = "æ›¿æ¢ä½¿ç”¨è€…æ ·å¼";
-        Text[ greek ] = "ÁíôéêáôÜóôáóç ôùí ğñïóáñìïóìİíùí ğñïôığùí";
-        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìŠ¤íƒ€ì¼ ë°”ê¾¸ê¸°";
-        Text[ turkish ] = "Kullanıcı şablonlarını değiştir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reemplaça els estils personalitzats";
-        Text[ finnish ] = "Korvaa mukautetut tyylit";
-        Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆà¹à¸šà¸šà¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
-        Text[ czech ] = "Nahradit vlastnÃ­ styly";
-        Text[ hebrew ] = "Benutzervorlagen ersetzen";
-        Text[ hindi ] = "à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤¶à¥ˆà¤²à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "NahradiÅ¥ vlastnÃ© Å¡tÃ½ly";
-        Text[ hungarian ] = "EgyÃ©ni stÃ­lusok lecserÃ©lÃ©se";
-        Text[ slovenian ] = "Zamenjaj sloge po meri";
+        Text [ de ] = "Benutzervorlagen ersetzen" ;
+        Text [ en-US ] = "Replace Custom Styles" ;
+        Text [ x-comment ] = " ";
     };
     String ST_BULLET
     {
-        Text = "Bulletzeichen ersetzen durch: " ;
-        Text [ ENGLISH ] = "Replace Bullets by: " ;
-        Text [ norwegian ] = "Erstatt Punkttegn med " ;
-        Text [ italian ] = "Sostituisci punti con: " ;
-        Text [ portuguese_brazilian ] = "Substituir marcas por: " ;
-        Text [ portuguese ] = "Substituir marcas por: " ;
-        Text [ finnish ] = "Korvaa luettelomerkit objektilla: " ;
-        Text [ danish ] = "Erstat punkttegn med: " ;
-        Text [ french ] = "Remplacer les puces par : " ;
-        Text [ swedish ] = "Ersätt punkttecken med: " ;
-        Text [ dutch ] = "Opsommingstekens vervangen door:" ;
-        Text [ spanish ] = "Reemplazar viñetas por:  " ;
-        Text [ english_us ] = "Replace bullets with: " ;
-        Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å·æ›¿æ¢æˆï¼š ";
-        Text[ russian ] = "Çàìåíÿòü ìàğêåğû íà:  ";
-        Text[ polish ] = "Zamieñ znaki wypunktowania na:  ";
-        Text[ japanese ] = "ç½®æ›å¾Œã®ç®‡æ¡æ›¸ãè¨˜å·: ";
-        Text[ chinese_traditional ] = "é …ç›®ç¬¦è™Ÿæ›´æ›¿æˆï¼š ";
-        Text[ arabic ] = "ÇÓÊÈÏÇá ÚáÇãÉ ÇáÊÚÏÇÏ ÈÜ: ";
-        Text[ dutch ] = "Opsommingstekens vervangen door:";
-        Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å·æ›¿æ¢æˆï¼š ";
-        Text[ greek ] = "ÁíôéêáôÜóôáóç êïõêêßäùí ìå: ";
-        Text[ korean ] = "ëŒ€ì²´ ê¸€ë¨¸ë¦¬ ê¸°í˜¸: ";
-        Text[ turkish ] = "Madde işaretlerini şunlarla değiştir: ";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reemplaça els pics amb: ";
-        Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆà¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¹à¸ªà¸”à¸‡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸¢à¹ˆà¸­à¸¢à¸”à¹‰à¸§à¸¢: ";
-        Text[ czech ] = "Nahradit odrÃ¡Å¾ky za: ";
-        Text[ hebrew ] = "Bulletzeichen ersetzen durch:";
-        Text[ hindi ] = "à¤¸à¥‡ à¤¬à¥à¤²à¥à¤²à¥‡à¤Ÿà¥à¤¸ à¤•à¥‹ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹: ";
-        Text[ slovak ] = "NahradiÅ¥ odrÃ¡Å¾ky za:";
-        Text[ hungarian ] = "A felsorolÃ¡sjelzÅ‘k cserÃ©je a kÃ¶vetkezÅ‘re:";
-        Text[ slovenian ] = "Zamenjaj vrstiÄne oznake z:";
+        Text [ de ] = "Bulletzeichen ersetzen durch: " ;
+        Text [ en-US ] = "Replace bullets with: " ;
+        Text [ x-comment ] = " ";
     };
     String ST_RIGHT_MARGIN
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zusammenfassen von einzeiligen Absätzen ab : Zusammenfassen von einzeiligen Absõtzen ab */
-        Text = "Zusammenfassen von einzeiligen Absätzen ab" ;
-        Text [ ENGLISH ] = "Combine single line paragraphs at" ;
+        Text [ de ] = "Zusammenfassen von einzeiligen Absätzen ab" ;
          //        Text [ norwegian_wrong ] = "+++Combine single line paragraphs at" ;
-        Text [ italian ] = "Mantieni assieme i paragrafi ad una riga a partire da" ;
-        Text [ portuguese_brazilian ] = "Combinar parágrafos de uma linha se o comprimento for maior que" ;
-        Text [ portuguese ] = "Combinar parágrafos de uma linha a partir de" ;
-        Text [ finnish ] = "Yhdistä yhden rivin pituiset kappaleet, jos pituus on suurempi kuin" ;
-        Text [ danish ] = "Kombiner enkeltlinjede afsnit fra" ;
-        Text [ french ] = "Fusionner les paragraphes à une seule ligne à partir de" ;
          //        Text [ swedish_wrong ] = ~Kombinera enradiga stycken B738vid " ;
-        Text [ dutch ] = "Eénregelige alinea's samenvoegen vanaf" ;
-        Text [ spanish ] = "Combina los párrafos de una línea a partir de" ;
-        Text [ english_us ] = "Combine single line paragraphs if length greater than" ;
-        Text [ swedish ] = "Kombinera enradiga stycken längre än" ;
-        Text[ chinese_simplified ] = "åˆå¹¶å•ä¸ªçš„æ®µè½çš„èµ·å§‹æ•°ç›®";
-        Text[ russian ] = "Îáúåäèíÿòü îäíîñòğî÷íûå àáçàöû ñ";
-        Text[ polish ] = "Po³¹cz akapity jednowierszowe d³u¿sze ni¿";
-        Text[ japanese ] = "é•·ã•ãŒæ¬¡ã®å€¤ã‚ˆã‚ŠçŸ­ã„1è¡Œæ®µè½ã‚’çµåˆã™ã‚‹";
-        Text[ chinese_traditional ] = "åˆä½µå–®å€‹çš„æ®µè½çš„èµ·å§‹æ•¸ç›®";
-        Text[ arabic ] = "ÏãÌ ÇáİŞÑÇÊ ÇáÃÍÇÏíÉ ÇáÃÓØÑ ÈÏÇíÉ ãä";
-        Text[ dutch ] = "Eénregelige alinea's samenvoegen vanaf";
-        Text[ chinese_simplified ] = "åˆå¹¶å•ä¸ªçš„æ®µè½çš„èµ·å§‹æ•°ç›®";
-        Text[ greek ] = "Óõíäõáóìüò ìïíüãñáììùí ğáñáãñÜöùí áğü";
-        Text[ korean ] = "í•œì¤„ ë‹¨ë½ì´ ë‹¤ìŒ ê°’ë³´ë‹¤ ê¸´ ê²½ìš° ë‹¨ë½ì„ ê²°í•©";
-        Text[ turkish ] = "Tek satırlık paragrafları birleştir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Combina els paràgrafs d'una sola línia si la seva longitud és superior a";
-        Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¸šà¸£à¸£à¸—à¸±à¸”à¹€à¸”à¸µà¹ˆà¸¢à¸§à¸«à¸²à¸à¸„à¸§à¸²à¸¡à¸¢à¸²à¸§à¹€à¸à¸´à¹ˆà¸¡à¸‚à¸¶à¹‰à¸™";
-        Text[ czech ] = "SlouÄit jednoÅ™Ã¡dkovÃ© odstavce pokud je dÃ©lka vÄ›tÅ¡Ã­ neÅ¾";
-        Text[ hebrew ] = "Zusammenfassen von einzeiligen AbsÃ¤tzen ab";
-        Text[ hindi ] = "à¤…à¤—à¤° à¤²à¤®à¥à¤¬à¤¾à¤ˆ à¤…à¤§à¤¿à¤• à¤¹à¥ˆ à¤¤à¥‹ à¤…à¤•à¥‡à¤²à¤¾ à¤µà¤¾à¤•à¥à¤¯ à¤•à¤¾ à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦à¥‹à¤‚ à¤•à¥‹ à¤®à¤¿à¤²à¤¾à¤“ ";
-        Text[ slovak ] = "ZlÃºÄiÅ¥ jednoriadkovÃ© odstavce ak je dÄºÅ¾ka vÃ¤ÄÅ¡ia ako";
-        Text[ hungarian ] = "Egysoros bekezdÃ©sek Ã¶sszevonÃ¡sa, ha a sor hossza nagyobb mint";
-        Text[ slovenian ] = "ZdruÅ¾i enovrstiÄne odstavke, Äe je dolÅ¾ina veÄja od";
+        Text [ en-US ] = "Combine single line paragraphs if length greater than" ;
+        Text [ x-comment ] = " ";
     };
     String STR_NUM
     {
-        Text = "Nummerierung anwenden - Symbol: " ;
-        Text [ English ] = "Apply Numbering - symbol:" ;
-        Text [ english_us ] = "Apply numbering - symbol: " ;
-        Text [ swedish ] = "Använd numrering - symbol: " ;
-        Text [ danish ] = "Anvend nummerering - ikon: " ;
-        Text [ italian ] = "Applica numerazione - Simbolo:  " ;
-        Text [ spanish ] = "Aplicar la numeración - símbolo: " ;
-        Text [ french ] = "Utiliser la numérotation - symbole : " ;
-        Text [ dutch ] = "Nummering toepassen - symbool:" ;
-        Text [ portuguese_brazilian ] = "Aplicar numeração - símbolo:" ;
-        Text [ portuguese ] = "Aplicar numeração - Símbolo: " ;
-        Text[ chinese_simplified ] = "ä½¿ç”¨ç¼–å· - å›¾æ ‡ï¼š ";
-        Text[ russian ] = "Ïğèìåíÿòü íóìåğàöèş - ñèìâîë: ";
-        Text[ polish ] = "Zastosuj numeracjê - symbol:";
-        Text[ japanese ] = "ç®‡æ¡æ›¸ãã®é©ç”¨ã€€ãƒãƒ¼ã‚¯: ";
-        Text[ chinese_traditional ] = "ä½¿ç”¨ç·¨è™Ÿ - åœ–ç¤ºï¼š ";
-        Text[ arabic ] = "ÇÓÊÎÏÇã ÇáÊÑŞíã Ü ÑãÒ: ";
-        Text[ dutch ] = "Nummering toepassen - symbool:";
-        Text[ chinese_simplified ] = "ä½¿ç”¨ç¼–å· - å›¾æ ‡ï¼š ";
-        Text[ greek ] = "ÅöáñìïãŞ áñßèìçóçò - Óıìâïëï: ";
-        Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ì ìš© - ê¸°í˜¸: ";
-        Text[ turkish ] = "Numaralama sembolü uygula:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Aplica la numeració - Símbol: ";
-        Text[ finnish ] = "Käytä numerointia - symboli: ";
-        Text[ thai ] = "à¹ƒà¸Šà¹‰à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚ - à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œ: ";
-        Text[ czech ] = "PouÅ¾Ã­t ÄÃ­slovÃ¡nÃ­ - symbol: ";
-        Text[ hebrew ] = "Nummerierung anwenden - Symbol:";
-        Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹ - à¤¸à¤‚à¤•à¥‡à¤¤: ";
-        Text[ slovak ] = "PouÅ¾iÅ¥ ÄÃ­slovanie - symbol: ";
-        Text[ hungarian ] = "Automatikus felsorolÃ¡s Ã©s szÃ¡mozÃ¡s";
-        Text[ slovenian ] = "Uporabi oÅ¡tevilÄevanje - simbol:";
+        Text [ de ] = "Nummerierung anwenden - Symbol: " ;
+        Text [ en-US ] = "Apply numbering - symbol: " ;
+        Text [ x-comment ] = " ";
     };
     String STR_BORDER
     {
-        Text = "Umrandung anwenden" ;
-        Text [ English ] = "Apply border" ;
-        Text [ dutch ] = "Omranding toepassen" ;
-        Text [ english_us ] = "Apply border" ;
-        Text [ swedish ] = "Använd linje" ;
-        Text [ danish ] = "Anvend kant" ;
-        Text [ italian ] = "Applica bordo" ;
-        Text [ spanish ] = "Aplicar un borde" ;
-        Text [ french ] = "Appliquer une bordure" ;
-        Text [ portuguese_brazilian ] = "Aplicar borda" ;
-        Text [ portuguese ] = "Aplicar contorno" ;
-        Text[ chinese_simplified ] = "ä½¿ç”¨è¾¹æ¡†";
-        Text[ russian ] = "Ïğèìåíÿòü îáğàìëåíèå";
-        Text[ polish ] = "Zastosuj obramowanie";
-        Text[ japanese ] = "å¤–æ ã‚’ä»˜ã‘ã‚‹";
-        Text[ chinese_traditional ] = "ä½¿ç”¨é‚Šæ¡†";
-        Text[ arabic ] = "ÇÓÊÎÏÇã ÍÏæÏ";
-        Text[ dutch ] = "Omranding toepassen";
-        Text[ chinese_simplified ] = "ä½¿ç”¨è¾¹æ¡†";
-        Text[ greek ] = "ÅöáñìïãŞ ğåñéãñÜììáôïò";
-        Text[ korean ] = "í…Œë‘ë¦¬ ì ìš©";
-        Text[ turkish ] = "Çerçeve uygula";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Aplica una vora";
-        Text[ finnish ] = "Käytä kehystä";
-        Text[ thai ] = "à¹ƒà¸Šà¹‰à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
-        Text[ czech ] = "PouÅ¾Ã­t ohraniÄenÃ­";
-        Text[ hebrew ] = "Umrandung anwenden";
-        Text[ hindi ] = "à¤•à¤¿à¤¨à¤¾à¤°à¥‡ à¤•à¥‹ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹ ";
-        Text[ slovak ] = "PouÅ¾iÅ¥ ohraniÄenie";
-        Text[ hungarian ] = "Automatikus szegÃ©ly lÃ©trehozÃ¡sa";
-        Text[ slovenian ] = "Uporabi robove";
+        Text [ de ] = "Umrandung anwenden" ;
+        Text [ en-US ] = "Apply border" ;
+        Text [ x-comment ] = " ";
     };
     String STR_TABLE
     {
-        Text = "Tabelle erzeugen" ;
-        Text [ English ] = "Create table" ;
-        Text [ english_us ] = "Create table" ;
-        Text [ swedish ] = "Skapa tabell" ;
-        Text [ danish ] = "Opret tabel" ;
-        Text [ italian ] = "Crea tabella" ;
-        Text [ spanish ] = "Crear una tabla" ;
-        Text [ french ] = "Créer une table" ;
-        Text [ dutch ] = "Tabel aanmaken" ;
-        Text [ portuguese_brazilian ] = "Criar tabela" ;
-        Text [ portuguese ] = "Criar tabela" ;
-        Text[ chinese_simplified ] = "åˆ¶ä½œè¡¨æ ¼";
-        Text[ russian ] = "Ñîçäàâàòü òàáëèöó";
-        Text[ polish ] = "Utwórz tabelê";
-        Text[ japanese ] = "è¡¨ã®ä½œæˆ";
-        Text[ chinese_traditional ] = "è£½ä½œè¡¨æ ¼";
-        Text[ arabic ] = "ÅäÔÇÁ ŞÇÆãÉ";
-        Text[ dutch ] = "Tabel aanmaken";
-        Text[ chinese_simplified ] = "åˆ¶ä½œè¡¨æ ¼";
-        Text[ greek ] = "Äçìéïõñãßá ğßíáêá";
-        Text[ korean ] = "í‘œ ë§Œë“¤ê¸°";
-        Text[ turkish ] = "Tablo oluştur";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Crea una taula";
-        Text[ finnish ] = "Luo taulukko";
-        Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸•à¸²à¸£à¸²à¸‡";
-        Text[ czech ] = "VytvoÅ™it tabulku";
-        Text[ hebrew ] = "Tabelle erzeugen";
-        Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-        Text[ slovak ] = "VytvoriÅ¥ tabuÄ¾ku";
-        Text[ hungarian ] = "TÃ¡blÃ¡zat lÃ©trehozÃ¡sa";
-        Text[ slovenian ] = "Ustvari tabelo";
+        Text [ de ] = "Tabelle erzeugen" ;
+        Text [ en-US ] = "Create table" ;
+        Text [ x-comment ] = " ";
     };
     String STR_REPLACE_TEMPLATES
     {
-        Text = "Vorlagen anwenden" ;
-        Text [ English ] = "Apply styles" ;
-        Text [ english_us ] = "Apply Styles" ;
-        Text [ portuguese_brazilian ] = "Aplicar Estilos" ;
-        Text [ swedish ] = "Använd mallar" ;
-        Text [ danish ] = "Anvend typografier" ;
-        Text [ italian ] = "Applica modelli" ;
-        Text [ spanish ] = "Aplicar estilos" ;
-        Text [ french ] = "Appliquer les styles" ;
-        Text [ dutch ] = "Opmaakprofielen toepassen" ;
-        Text [ portuguese ] = "Aplicar estilos" ;
-        Text[ chinese_simplified ] = "ä½¿ç”¨æ ·å¼";
-        Text[ russian ] = "Ïğèìåíÿòü ñòèëè";
-        Text[ polish ] = "Zastosuj style";
-        Text[ japanese ] = "æ®µè½ã‚¹ã‚¿ã‚¤ãƒ«ã®é©ç”¨";
-        Text[ chinese_traditional ] = "ä½¿ç”¨æ¨£å¼";
-        Text[ arabic ] = "ÇÓÊÎÏÇã äãÇĞÌ";
-        Text[ dutch ] = "Opmaakprofielen toepassen";
-        Text[ chinese_simplified ] = "ä½¿ç”¨æ ·å¼";
-        Text[ greek ] = "ÅöáñìïãŞ ğñïôığùí";
-        Text[ korean ] = "ìŠ¤íƒ€ì¼ ì ìš©";
-        Text[ turkish ] = "Biçemleri Uygula";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Aplica els estils";
-        Text[ finnish ] = "Käytä tyylejä";
-        Text[ thai ] = "à¹ƒà¸Šà¹‰à¸¥à¸±à¸à¸©à¸“à¸°";
-        Text[ czech ] = "PouÅ¾Ã­t styly";
-        Text[ hebrew ] = "Vorlagen anwenden";
-        Text[ hindi ] = "à¤¶à¥ˆà¤²à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
-        Text[ slovak ] = "PouÅ¾iÅ¥ Å¡tÃ½ly";
-        Text[ hungarian ] = "BekezdÃ©sstÃ­lusok automatikus alkalmazÃ¡sa";
-        Text[ slovenian ] = "Uporabi sloge";
+        Text [ de ] = "Vorlagen anwenden" ;
+        Text [ en-US ] = "Apply Styles" ;
+        Text [ x-comment ] = " ";
     };
     String STR_DEL_SPACES_AT_STT_END
     {
-        Text = "Lösche Leerzeichen und Tabulatoren am Absatzanfang und -ende" ;
-        Text [ English ] = "Delete Blanks and Tabs at paragraphbegin and -end" ;
-        Text[ english_us ] = "Delete spaces and tabs at beginning and end of paragraph";
-        Text[ portuguese ] = "Eliminar espaços em branco e tabulações no início e fim do parágrafo";
-        Text[ russian ] = "Óäàëÿòü ïğîáåëû è òàáóëÿöèè â íà÷àëå è êîíöå àáçàöà";
-        Text[ greek ] = "ÄéáãñáöŞ êåíşí êáé óôçëïèåôşí óôçí áñ÷Ş êáé óôï ôİëïò ôçò ğáñáãñÜöïõ";
-        Text[ dutch ] = "Spaties en tabs aan begin en einde van de alinea wissen.";
-        Text[ french ] = "Supprimer les espaces et tabulations en début et fin de paragraphe";
-        Text[ spanish ] = "Borrar espacios y tabuladores a comienzo y final de párrafo.";
-        Text[ italian ] = "Cancella spazi e tabulazioni all'inizio e alla fine del paragrafo";
-        Text[ danish ] = "Slet mellemrum og tabulatorer ved afsnitsstart og -afslutning";
-        Text[ swedish ] = "Radera mellanslag och tabbar i början och slutet av stycke";
-        Text[ polish ] = "Usuñ spacje i tabulatory na pocz¹tku i na koñcu akapitu";
-        Text[ portuguese_brazilian ] = "Excluir espaços em branco e tabulações no início e no fim do parágrafo";
-        Text[ japanese ] = "æ®µè½é ­ã¨æ®µè½æœ«ã®ã‚¹ãƒšãƒ¼ã‚¹ã¨ã‚¿ãƒ–ã®å‰Šé™¤";
-        Text[ korean ] = "ë‹¨ë½ ì‹œì‘ê³¼ ë‹¨ë½ ëì—ì„œ ê³µë°±ê³¼ íƒ­ ì‚­ì œ";
-        Text[ chinese_simplified ] = "åˆ é™¤æ®µè½èµ·å§‹ä½ç½®ä¸æ®µè½ç»“æŸä½ç½®çš„ç©ºç¼ºå­—ç¬¦å’Œåˆ¶è¡¨ç¬¦";
-        Text[ chinese_traditional ] = "ç§»é™¤æ®µè½èµ·å§‹åŠçµå°¾ä½ç½®çš„ç©ºæ ¼å­—å…ƒå’Œå®šä½éµ";
-        Text[ turkish ] = "Paragrah başındaki ve sonundaki boşlukları ve sekmeleri sil";
-        Text[ arabic ] = "ÍĞİ ÃÍÑİ ÇáãÓÇİÉ æÚáÇãÇÊ ÇáÌÏæáÉ ÚäÏ ÈÏÇíÉ ÇáİŞÑÉ æäåÇíÊåÇ.";
-        Text[ catalan ] = "Suprimeix els espais i els tabuladors a l'inici i al final del paràgraf";
-        Text[ finnish ] = "Poista välilyönnit ja sarkaimet kappaleiden alusta ja lopusta";
-        Text[ thai ] = "à¸¥à¸šà¸Šà¹ˆà¸­à¸‡à¸§à¹ˆà¸²à¸‡à¹à¸¥à¸°à¸£à¸°à¸¢à¸°à¸à¸±à¹‰à¸™à¸—à¸µà¹ˆà¸ˆà¸¸à¸”à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹à¸¥à¸°à¸ˆà¸¸à¸”à¸ªà¸¸à¸”à¸—à¹‰à¸²à¸¢à¸‚à¸­à¸‡à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
-        Text[ czech ] = "Smazat mezery a tabulÃ¡tory na zaÄÃ¡tku a konci odstavce";
-        Text[ hebrew ] = "LÃ¶sche Leerzeichen und Tabulatoren am Absatzanfang und -ende";
-        Text[ hindi ] = "à¤…à¤‚à¤¤à¤°à¥‹à¤‚ à¤•à¥‹ à¤”à¤° à¤Ÿà¥‰à¤¬à¥‹à¤‚ à¤•à¥‹ à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦à¥‹à¤‚ à¤•à¥‡ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤”à¤° à¤…à¤‚à¤¤ à¤¸à¥‡ à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "ZmazaÅ¥ medzery a tabulÃ¡tory na zaÄiatku a konci odstavca";
-        Text[ hungarian ] = "SzÃ³kÃ¶zÃ¶k Ã©s tabulÃ¡torok tÃ¶rlÃ©se a bekezdÃ©s elejÃ©rÅ‘l Ã©s vÃ©gÃ©rÅ‘l";
-        Text[ slovenian ] = "IzbriÅ¡i presledke in tabulatorje na zaÄetku in koncu odstavka";
+        Text [ de ] = "Lösche Leerzeichen und Tabulatoren am Absatzanfang und -ende" ;
+        Text [ en-US ] = "Delete spaces and tabs at beginning and end of paragraph";
     };
     String STR_DEL_SPACES_BETWEEN_LINES
     {
-        Text = "Lösche Leerzeichen und Tabulatoren zwischen Zeilenende und -anfang" ;
-        Text [ English ] = "Delete Blanks and Tabs between Lineend and -begin" ;
-        Text[ english_us ] = "Delete spaces and tabs at end and start of line";
-        Text[ portuguese ] = "Eliminar espaços em branco e tabulações entre início e fim da linha";
-        Text[ russian ] = "Óäàëÿòü ïğîáåëû è òàáóëÿöèè â êîíöå è íà÷àëå ñòğîêè";
-        Text[ greek ] = "ÄéáãñáöŞ êåíşí êáé óôçëïèåôşí ìåôáîı ôïõ ôİëïõò êáé ôçò áñ÷Şò ôçò ãñáììŞò";
-        Text[ dutch ] = "Spaties en tabs tussen begin en einde van de regel wissen.";
-        Text[ french ] = "Supprimer les espaces et tabulations entre fin et début de ligne";
-        Text[ spanish ] = "Borrar espacios y tabuladores entre el fin y el comienzo de línea.";
-        Text[ italian ] = "Cancella spazi e tabulazioni tra l'inizio e la fine della riga";
-        Text[ danish ] = "Slet mellemrum og tabulatorer mellem linjeafslutning og -start";
-        Text[ swedish ] = "Radera mellanslag och tabbar mellan slutet och början på rad";
-        Text[ polish ] = "Usuñ spacje i tabulatory na pocz¹tku i koñcu wiersza";
-        Text[ portuguese_brazilian ] = "Excluir espaços em branco e tabulações no início e no fim da linha";
-        Text[ japanese ] = "è¡Œæœ«è¡Œé ­é–“ã®ã‚¹ãƒšãƒ¼ã‚¹ã¨ã‚¿ãƒ–ã®å‰Šé™¤";
-        Text[ korean ] = "ì¤„ ëê³¼ ì¤„ ì‹œì‘ ì‚¬ì´ì—ì„œ ê³µë°±ê³¼ íƒ­ ì‚­ì œ";
-        Text[ chinese_simplified ] = "åˆ é™¤è¡Œå°¾ä¸è¡Œé¦–çš„ç©ºç¼ºå­—ç¬¦å’Œåˆ¶è¡¨ç¬¦";
-        Text[ chinese_traditional ] = "ç§»é™¤è¡Œå°¾åŠè¡Œé¦–ä¹‹é–“çš„ç©ºæ ¼å­—å…ƒå’Œå®šä½éµ";
-        Text[ turkish ] = "Satır başındaki ve sonundaki boşluklarıve seklemelri sil";
-        Text[ arabic ] = "ÍĞİ ÃÍÑİ ÇáãÓÇİÉ æÚáÇãÇÊ ÇáÌÏæáÉ Èíä ÈÏÇíÉ ÇáÓØÑ æäåÇíÊå.";
-        Text[ catalan ] = "Suprimeix els buits i els tabuladors al final i l'inici de línia";
-        Text[ finnish ] = "Poista välilyönnit ja sarkaimet rivien alusta ja lopusta";
-        Text[ thai ] = "à¸¥à¸šà¸Šà¹ˆà¸­à¸‡à¸§à¹ˆà¸²à¸‡à¹à¸¥à¸°à¸£à¸°à¸¢à¸°à¸à¸±à¹‰à¸™à¸—à¸µà¹ˆà¸ˆà¸¸à¸”à¸ªà¸¸à¸”à¸—à¹‰à¸²à¸¢à¹à¸¥à¸°à¸ˆà¸¸à¸”à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¸‚à¸­à¸‡à¸šà¸£à¸£à¸—à¸±à¸”";
-        Text[ czech ] = "Smazat mezery a tabulÃ¡tory na zaÄÃ¡tku a konci Å™Ã¡dku";
-        Text[ hebrew ] = "LÃ¶sche Leerzeichen und Tabulatoren zwischen Zeilenende und -anfang";
-        Text[ hindi ] = "à¤…à¤‚à¤¤à¤°à¥‹à¤‚ à¤•à¥‹ à¤”à¤° à¤Ÿà¥‰à¤¬à¥‹à¤‚ à¤•à¥‹ à¤µà¤¾à¤•à¥à¤¯ à¤•à¤¾ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤”à¤° à¤…à¤‚à¤¤ à¤¸à¥‡ à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "ZmazaÅ¥ prÃ¡zdne znaky a tabulÃ¡tory na zaÄiatku a konci riadku";
-        Text[ hungarian ] = "A szÃ³kÃ¶zÃ¶k Ã©s tabulÃ¡torok tÃ¶rlÃ©se a sor elejÃ©rÅ‘l Ã©s vÃ©gÃ©rÅ‘l";
-        Text[ slovenian ] = "IzbriÅ¡i presledek in tabulatorje na zaÄetku in koncu vrstice";
+        Text [ de ] = "Lösche Leerzeichen und Tabulatoren zwischen Zeilenende und -anfang" ;
+        Text [ en-US ] = "Delete spaces and tabs at end and start of line";
     };
 
     Bitmap CHKBUT_UNCHECKED
@@ -1352,45 +376,15 @@ ModalDialog RID_OFADLG_PRCNT_SET
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 155 , 43 ) ;
-    Text = "Zusammenfassen" ;
-    Text [ ENGLISH ] = "Combine" ;
+    Text [ de ] = "Zusammenfassen" ;
     Moveable = TRUE ;
     FixedLine FL_PRCNT
     {
         Pos = MAP_APPFONT ( 4 , 3 ) ;
         Size = MAP_APPFONT ( 87 , 8 ) ;
-        Text = "Mindestgröße" ;
-        Text [ ENGLISH ] = "Minimum level" ;
-        Text [ dutch ] = "Minimumgrootte" ;
-        Text [ english_us ] = "Minimum size" ;
-        Text [ swedish ] = "Minsta storlek" ;
-        Text [ danish ] = "Mindstestørrelse" ;
-        Text [ italian ] = "Dimensione minima" ;
-        Text [ spanish ] = "Tamaño mínimo" ;
-        Text [ french ] = "Taille min." ;
-        Text [ portuguese_brazilian ] = "Tamanho mínimo" ;
-        Text [ portuguese ] = "Tamanho mínimo" ;
-        Text[ chinese_simplified ] = "æœ€å°å€¼";
-        Text[ russian ] = "Ìèíèìàëüíûé ğàçìåğ";
-        Text[ polish ] = "Minimalna wielkoœæ";
-        Text[ japanese ] = "æœ€å°ã‚µã‚¤ã‚º";
-        Text[ chinese_traditional ] = "æœ€å°å€¼";
-        Text[ arabic ] = "ÇáÍÌã ÇáÃÏäì";
-        Text[ dutch ] = "Minimumgrootte";
-        Text[ chinese_simplified ] = "æœ€å°å€¼";
-        Text[ greek ] = "ÅëÜ÷éóôï ìİãåèïò";
-        Text[ korean ] = "ìµœì†Œ í¬ê¸°";
-        Text[ turkish ] = "Asgari boyut";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mida mínima";
-        Text[ finnish ] = "Vähimmäiskoko";
-        Text[ thai ] = "à¸‚à¸™à¸²à¸”à¹€à¸¥à¹‡à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
-        Text[ czech ] = "MinimÃ¡lnÃ­ velikost";
-        Text[ hebrew ] = "MindestgrÃ¶ÃŸe";
-        Text[ hindi ] = "à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤® à¤ªà¤°à¤¿à¤®à¤¾à¤£";
-        Text[ slovak ] = "MinimÃ¡lna veÄ¾kosÅ¥";
-        Text[ hungarian ] = "Legkisebb mÃ©ret";
-        Text[ slovenian ] = "NajmanjÅ¡a velikost";
+        Text [ de ] = "Mindestgröße" ;
+        Text [ en-US ] = "Minimum size" ;
+        Text [ x-comment ] = " ";
     };
     OKButton BT_OK
     {
@@ -1422,36 +416,8 @@ ModalDialog RID_OFADLG_PRCNT_SET
         Last = 100 ;
         SpinSize = 5 ;
     };
-    Text [ dutch ] = "Samenvatten" ;
-    Text [ english_us ] = "Combine" ;
-    Text [ swedish ] = "Kombinera" ;
-    Text [ danish ] = "Flet" ;
-    Text [ italian ] = "Riassumi" ;
-    Text [ spanish ] = "Combinar" ;
-    Text [ french ] = "Fusionner" ;
-    Text [ portuguese_brazilian ] = "Combinar" ;
-    Text [ portuguese ] = "Intercalar" ;
-    Text[ chinese_simplified ] = "åˆå¹¶";
-    Text[ russian ] = "Îáúåäèíèòü";
-    Text[ polish ] = "Po³¹cz";
-    Text[ japanese ] = "çµåˆ";
-    Text[ chinese_traditional ] = "åˆä½µ";
-    Text[ arabic ] = "Öã";
-    Text[ dutch ] = "Samenvatten";
-    Text[ chinese_simplified ] = "åˆå¹¶";
-    Text[ greek ] = "Óõíäõáóìüò";
-    Text[ korean ] = "ê²°í•©";
-    Text[ turkish ] = "Birleştir";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Combina";
-    Text[ finnish ] = "Yhdistä";
-    Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡";
-    Text[ czech ] = "SloÅ¾it";
-    Text[ hebrew ] = "Zusammenfassen";
-    Text[ hindi ] = "à¤®à¤¿à¤²à¤¾à¤“";
-    Text[ slovak ] = "ZloÅ¾iÅ¥";
-    Text[ hungarian ] = "Ã–sszevonÃ¡s";
-    Text[ slovenian ] = "Sestavi";
+    Text [ en-US ] = "Combine" ;
+    Text [ x-comment ] = " ";
 };
 
 /**************************************************************************/
@@ -1470,40 +436,10 @@ TabPage RID_OFAPAGE_AUTOCORR_REPLACE
     {
         Pos = MAP_APPFONT ( 7 , 3 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "~Kürzel" ;
-        Text [ English ] = "~ShortName" ;
-        Text [ norwegian ] = "~KortNavn" ;
-        Text [ italian ] = "Iniziali" ;
-        Text [ portuguese_brazilian ] = "S~ubstituir" ;
-        Text [ portuguese ] = "S~ubstituir" ;
-        Text [ finnish ] = "Korvaa" ;
-        Text [ danish ] = "~Erstat" ;
-        Text [ french ] = "Rempla~cer" ;
-        Text [ swedish ] = "~Ersätt" ;
-        Text [ dutch ] = "~Afkorting" ;
-        Text [ spanish ] = "~Abreviatura" ;
-        Text [ english_us ] = "Repla~ce" ;
+        Text [ de ] = "~Kürzel" ;
+        Text [ en-US ] = "Repla~ce" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ç¼©å†™(~C)";
-        Text[ russian ] = "Çàìåíèòü";
-        Text[ polish ] = "Z~amieñ";
-        Text[ japanese ] = "å…¥åŠ›æ–‡å­—åˆ—(~C)";
-        Text[ chinese_traditional ] = "ç¸®å¯«(~C)";
-        Text[ arabic ] = "ÇÎÊÕÇÑ";
-        Text[ dutch ] = "~Afkorting";
-        Text[ chinese_simplified ] = "ç¼©å†™(~C)";
-        Text[ greek ] = "Áñ÷é~êÜ";
-        Text[ korean ] = "ì…ë ¥ ë¬¸ìì—´(~C)";
-        Text[ turkish ] = "~Değiştirilen:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reemp~laça";
-        Text[ thai ] = "à¹à¸—~à¸™à¸—à¸µà¹ˆ";
-        Text[ czech ] = "Nahradit";
-        Text[ hebrew ] = "~KÃ¼rzel";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾~à¤ªà¤¨à¤¾";
-        Text[ slovak ] = "Nahra~diÅ¥";
-        Text[ hungarian ] = "~Csere";
-        Text[ slovenian ] = "~Zamenjaj";
+        Text [ x-comment ] = " ";
     };
     Edit ED_SHORT
     {
@@ -1516,40 +452,10 @@ TabPage RID_OFAPAGE_AUTOCORR_REPLACE
     {
         Pos = MAP_APPFONT ( 71 , 3 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text = "Ersetzen d~urch:" ;
-        Text [ English ] = "Replace ~By:" ;
-        Text [ norwegian ] = "Erstatt ~Med:" ;
-        Text [ italian ] = "con:" ;
-        Text [ portuguese_brazilian ] = "~Por:" ;
-        Text [ portuguese ] = "~Por:" ;
-        Text [ finnish ] = "~Millä:" ;
-        Text [ danish ] = "~med:" ;
-        Text [ french ] = "~Par :" ;
-        Text [ swedish ] = "~med:" ;
-        Text [ dutch ] = "Vervangen ~door:" ;
-        Text [ spanish ] = "~por:" ;
-        Text [ english_us ] = "~With:" ;
+        Text [ de ] = "Ersetzen d~urch:" ;
+        Text [ en-US ] = "~With:" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "æ›¿æ¢æˆ(~W)ï¼š";
-        Text[ russian ] = "Çàìåíèòü íà:";
-        Text[ polish ] = "Zam~ieñ na:";
-        Text[ japanese ] = "ç½®æ›æ–‡å­—åˆ—(~W):";
-        Text[ chinese_traditional ] = "æ›´æ›¿æˆ(~W)";
-        Text[ arabic ] = "ÇáßáãÉ ÇáÈÏíáÉ:";
-        Text[ dutch ] = "Vervangen ~door:";
-        Text[ chinese_simplified ] = "æ›¿æ¢æˆ(~W)ï¼š";
-        Text[ greek ] = "ÁíôéêáôÜóôáóç ìå:";
-        Text[ korean ] = "ëŒ€ì²´ ë‹¨ì–´(~W)";
-        Text[ turkish ] = "~Yerine konulan:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Amb:";
-        Text[ thai ] = "~à¸à¸±à¸š:";
-        Text[ czech ] = "Za:";
-        Text[ hebrew ] = "Ersetzen d~urch:";
-        Text[ hindi ] = "~à¤¸à¥‡:";
-        Text[ slovak ] = "~S:";
-        Text[ hungarian ] = "~HelyettesÃ­tÅ‘ szÃ¶veg:";
-        Text[ slovenian ] = "~Z:";
+        Text [ x-comment ] = " ";
     };
     Edit ED_REPLACE
     {
@@ -1563,115 +469,27 @@ TabPage RID_OFAPAGE_AUTOCORR_REPLACE
         Pos = MAP_APPFONT ( 140 , 3 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         TabStop = TRUE ;
-        Text = "Nur ~Text" ;
-        Text [ English ] = "~Text Only" ;
-        Text [ norwegian ] = "~Kun Tekst" ;
-        Text [ italian ] = "Solo ~testo" ;
-        Text [ portuguese_brazilian ] = "~Somente texto" ;
-        Text [ portuguese ] = "~Só texto" ;
-        Text [ finnish ] = "~Vain teksti" ;
-        Text [ danish ] = "~Kun tekst" ;
-        Text [ french ] = "~Uniquement du texte" ;
-        Text [ swedish ] = "Bara ~text" ;
-        Text [ dutch ] = "~Alleen tekst" ;
-        Text [ spanish ] = "~Sólo texto" ;
-        Text [ english_us ] = "~Text only" ;
-        Text[ chinese_simplified ] = "åªæ˜¯æ–‡å­—(~T)";
-        Text[ russian ] = "Òîëüêî òåêñò";
-        Text[ polish ] = "Tylko ~tekst";
-        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®ã¿(~T)";
-        Text[ chinese_traditional ] = "åªæ˜¯ç´”æ–‡å­—(~T)";
-        Text[ arabic ] = "ÇáäÕ İŞØ";
-        Text[ dutch ] = "~Alleen tekst";
-        Text[ chinese_simplified ] = "åªæ˜¯æ–‡å­—(~T)";
-        Text[ greek ] = "Ìüíï êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸ë§Œ(~T)";
-        Text[ turkish ] = "Y~alnızca metin";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Només ~text";
-        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
-        Text[ czech ] = "Pouze text";
-        Text[ hebrew ] = "Nur ~Text";
-        Text[ hindi ] = "à¤•à¥‡à¤µà¤² ~à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
-        Text[ slovak ] = "Iba ~text";
-        Text[ hungarian ] = "Csak s~zÃ¶veg";
-        Text[ slovenian ] = "Samo ~besedilo";
+        Text [ de ] = "Nur ~Text" ;
+        Text [ en-US ] = "~Text only" ;
+        Text [ x-comment ] = " ";
     };
     PushButton PB_NEW_REPLACE
     {
         Pos = MAP_APPFONT ( 198 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "~Neu" ;
-        Text [ English ] = "New" ;
-        Text [ english_us ] = "~New" ;
-        Text [ italian ] = "~Nuovo" ;
-        Text [ spanish ] = "~Nuevo" ;
-        Text [ french ] = "Ajouter" ;
-        Text [ dutch ] = "~Nieuw" ;
-        Text [ swedish ] = "~Nytt" ;
-        Text [ danish ] = "~Ny(t)" ;
-        Text [ portuguese_brazilian ] = "~Novo" ;
-        Text [ portuguese ] = "~Novo" ;
-        Text[ chinese_simplified ] = "æ–°å¢(~N)";
-        Text[ russian ] = "Äîáàâèòü";
-        Text[ polish ] = "~Nowy";
-        Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";
-        Text[ chinese_traditional ] = "æ–°å¢(~N)";
-        Text[ arabic ] = "ÌÏíÏ";
-        Text[ dutch ] = "~Nieuw";
-        Text[ chinese_simplified ] = "æ–°å¢(~N)";
-        Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
-        Text[ turkish ] = "Ye~ni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nou";
-        Text[ finnish ] = "Uus~i";
-        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ½";
-        Text[ hebrew ] = "â€®×—×“×©â€¬";
-        Text[ hindi ] = "~à¤¨à¤¯à¤¾";
-        Text[ slovak ] = "~NovÃ½";
-        Text[ hungarian ] = "Ãš~j";
-        Text[ slovenian ] = "~Nov";
+        Text [ de ] = "~Neu" ;
+        Text [ en-US ] = "~New" ;
+        Text [ x-comment ] = " ";
     };
     PushButton PB_DELETE_REPLACE
     {
         Pos = MAP_APPFONT ( 198 , 32 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "~Löschen" ;
-        Text [ English ] = "Delete" ;
-        Text [ english_us ] = "~Delete" ;
-        Text [ italian ] = "Elimina" ;
-        Text [ spanish ] = "~Borrar" ;
-        Text [ french ] = "Supprimer" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text [ swedish ] = "~Radera" ;
-        Text [ danish ] = "~Slet" ;
-        Text [ portuguese_brazilian ] = "E~xcluir" ;
-        Text [ portuguese ] = "E~liminar" ;
-        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-        Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "U~suñ";
-        Text[ japanese ] = "å‰Šé™¤(~D)";
-        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ dutch ] = "~Wissen";
-        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-        Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "ì‚­ì œ(~D)";
-        Text[ turkish ] = "S~il";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Suprimeix";
-        Text[ finnish ] = "~Poista";
-        Text[ thai ] = "~à¸¥à¸š";
-        Text[ czech ] = "Smazat";
-        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "~ZmazaÅ¥";
-        Text[ hungarian ] = "~TÃ¶rlÃ©s";
-        Text[ slovenian ] = "~IzbriÅ¡i";
+        Text [ de ] = "~Löschen" ;
+        Text [ en-US ] = "~Delete" ;
+        Text [ x-comment ] = " ";
     };
     Control TLB_REPLACE
     {
@@ -1683,39 +501,9 @@ TabPage RID_OFAPAGE_AUTOCORR_REPLACE
     };
     String STR_MODIFY
     {
-        Text = "~Ersetzen" ;
-        Text [ English ] = "~Replace" ;
-        Text [ norwegian ] = "~Erstatte" ;
-        Text [ italian ] = "Sostituisci" ;
-        Text [ portuguese_brazilian ] = "~Substituir" ;
-        Text [ portuguese ] = "~Substituir" ;
-        Text [ finnish ] = "~Korvaa" ;
-        Text [ danish ] = "~Erstat" ;
-        Text [ french ] = "Remplacer" ;
-        Text [ swedish ] = "~Ersätt" ;
-        Text [ dutch ] = "~Vervangen" ;
-        Text [ spanish ] = "~Reemplazar" ;
-        Text [ english_us ] = "~Replace" ;
-        Text[ chinese_simplified ] = "æ›¿æ¢(~R)";
-        Text[ russian ] = "Çàìåíèòü";
-        Text[ polish ] = "~Zamieñ";
-        Text[ japanese ] = "ç½®æ›(~R)";
-        Text[ chinese_traditional ] = "æ›¿ä»£(~R)";
-        Text[ arabic ] = "ÇÓÊÈÏÇá";
-        Text[ dutch ] = "~Vervangen";
-        Text[ chinese_simplified ] = "æ›¿æ¢(~R)";
-        Text[ greek ] = "ÁíôéêáôÜóôáóç";
-        Text[ korean ] = "ë°”ê¾¸ê¸°(~R)";
-        Text[ turkish ] = "Değişti~r";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Reemplaça";
-        Text[ thai ] = "à¹~à¸—à¸™à¸—à¸µà¹ˆ";
-        Text[ czech ] = "Nahradit";
-        Text[ hebrew ] = "â€®×”×—×œ×¤×”â€¬";
-        Text[ hindi ] = "~à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¨à¤¾";
-        Text[ slovak ] = "Nah~radiÅ¥";
-        Text[ hungarian ] = "Cs~ere";
-        Text[ slovenian ] = "~Zamenjaj";
+        Text [ de ] = "~Ersetzen" ;
+        Text [ en-US ] = "~Replace" ;
+        Text [ x-comment ] = " ";
     };
 };
 /**************************************************************************/
@@ -1734,38 +522,9 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     {
         Pos = MAP_APPFONT ( 4 , 3 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text = "Abkürzungen, nach denen kein Großbuchstabe folgt" ;
-        Text [ English ] = "Abbreviations" ;
-        Text [ english_us ] = "Abbreviations (no subsequent capital)" ;
-        Text [ italian ] = "Abbreviazioni dopo le quali non si continua con un carattere maiuscolo" ;
-        Text [ spanish ] = "Abreviaturas a las que no siguen mayúsculas" ;
-        Text [ french ] = "Abréviations à ne pas faire suivre par une majuscule" ;
-        Text [ dutch ] = "Afkortingen waarop geen hoofdletter volgt" ;
-        Text [ swedish ] = "Förkortningar efter vilka ingen stor bokstav följer" ;
-        Text [ danish ] = "Forkortelser, efter hvilke der ikke følger stort bogstav" ;
-        Text [ portuguese_brazilian ] = "Abreviações (sem maiúscula subseqüente)" ;
-        Text [ portuguese ] = "Abreviaturas sem maiúscula subsequente" ;
-        Text[ chinese_simplified ] = "ç¼©å†™å­—æ¯åä¸å¸¦å¤§å†™å­—æ¯";
-        Text[ russian ] = "Ñîêğàùåíèÿ, ïîñëå êîòîğûõ íå ñëåäóåò ïğîïèñíûõ áóêâ";
-        Text[ polish ] = "Skróty, po których nie wystêpuj¹ wielkie litery";
-        Text[ japanese ] = "ãƒ”ãƒªã‚ªãƒ‰ä»˜ãã®çœç•¥èª";
-        Text[ chinese_traditional ] = "ç¸®å¯«å­—æ¯å¾Œä¸é™„å¸¶å¤§å¯«å­—æ¯";
-        Text[ arabic ] = "ÇÎÊÕÇÑÇÊ áÇ ÊõÊÈÚ ÈÍÑİ ÇÓÊåáÇáí";
-        Text[ dutch ] = "Afkortingen waarop geen hoofdletter volgt";
-        Text[ chinese_simplified ] = "ç¼©å†™å­—æ¯åä¸å¸¦å¤§å†™å­—æ¯";
-        Text[ greek ] = "Óõíôïìåıóåéò, ìåôÜ ôéò ïğïßåò äåí áêïëïõèåß êåöáëáßï ãñÜììá.";
-        Text[ korean ] = "ëŒ€ë¬¸ìë¡œ ì—°ì†ë˜ì§€ ì•ŠëŠ” ì•½ì";
-        Text[ turkish ] = "Kısaltmalar (takip eden kapital değil)";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Abreviacions (sense majúscules subsegüents)";
-        Text[ finnish ] = "Lyhennykset (ei isoja kirjaimia ensimmäisen jälkeen)";
-        Text[ thai ] = "à¸„à¸³à¸¢à¹ˆà¸­ (à¹„à¸¡à¹ˆà¸¡à¸µà¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆà¸•à¹ˆà¸­à¸¡à¸²)";
-        Text[ czech ] = "Zkratky (ne pÅ™ed velkÃ½m pÃ­smenem)";
-        Text[ hebrew ] = "AbkÃ¼rzungen, nach denen kein GroÃŸbuchstabe folgt";
-        Text[ hindi ] = "à¤¸à¤‚à¤•à¥à¤·à¥‡à¤ª (à¤†à¤—à¤¾à¤®à¥€ à¤¬à¤¡à¤¼à¥‡ à¤…à¤•à¥à¤·à¤° à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ)";
-        Text[ slovak ] = "Skratky (nie pred veÄ¾kÃ½m pÃ­smenom)";
-        Text[ hungarian ] = "RÃ¶vidÃ­tÃ©sek (csak az elsÅ‘ betÅ± nagy)";
-        Text[ slovenian ] = "OkrajÅ¡ave (brez naknadnih velikih Ärk)";
+        Text [ de ] = "Abkürzungen, nach denen kein Großbuchstabe folgt" ;
+        Text [ en-US ] = "Abbreviations (no subsequent capital)" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_ABBREV
     {
@@ -1787,164 +546,39 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     {
         Pos = MAP_APPFONT ( 198 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Neu" ;
-        Text [ English ] = "New" ;
+        Text [ de ] = "~Neu" ;
         TabStop = TRUE ;
         Disable = TRUE ;
-        Text [ english_us ] = "~New" ;
-        Text [ italian ] = "~Nuovo" ;
-        Text [ spanish ] = "~Nuevo" ;
-        Text [ french ] = "Ajouter" ;
-        Text [ dutch ] = "~Nieuw" ;
-        Text [ swedish ] = "~Nytt" ;
-        Text [ danish ] = "~Ny(t)" ;
-        Text [ portuguese_brazilian ] = "~Novo" ;
-        Text [ portuguese ] = "~Novo" ;
-        Text[ chinese_simplified ] = "æ–°å¢(~N)";
-        Text[ russian ] = "Äîáàâèòü";
-        Text[ polish ] = "~Nowy";
-        Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";
-        Text[ chinese_traditional ] = "æ–°å¢(~N)";
-        Text[ arabic ] = "ÌÏíÏ";
-        Text[ dutch ] = "~Nieuw";
-        Text[ chinese_simplified ] = "æ–°å¢(~N)";
-        Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
-        Text[ turkish ] = "~Yeni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nou";
-        Text[ finnish ] = "~Uusi";
-        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ½";
-        Text[ hebrew ] = "â€®×—×“×©â€¬";
-        Text[ hindi ] = "~à¤¨à¤¯à¤¾";
-        Text[ slovak ] = "~NovÃ½";
-        Text[ hungarian ] = "Ãš~j";
-        Text[ slovenian ] = "~Novo";
+        Text [ en-US ] = "~New" ;
+        Text [ x-comment ] = " ";
     };
     PushButton PB_DELABBREV
     {
         Pos = MAP_APPFONT ( 198 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Löschen" ;
-        Text [ English ] = "Delete" ;
+        Text [ de ] = "~Löschen" ;
         TabStop = TRUE ;
         Disable = TRUE ;
-        Text [ english_us ] = "~Delete" ;
-        Text [ italian ] = "~Elimina" ;
-        Text [ spanish ] = "~Borrar" ;
-        Text [ french ] = "Supprimer" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text [ swedish ] = "~Radera" ;
-        Text [ danish ] = "~Slet" ;
-        Text [ portuguese_brazilian ] = "E~xcluir" ;
-        Text [ portuguese ] = "E~liminar" ;
-        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-        Text[ russian ] = "~Óäàëèòü";
-        Text[ polish ] = "~Usuñ";
-        Text[ japanese ] = "å‰Šé™¤(~D)";
-        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ dutch ] = "~Wissen";
-        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-        Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "ì‚­ì œ(~D)";
-        Text[ turkish ] = "~Sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Suprimeix";
-        Text[ finnish ] = "~Poista";
-        Text[ thai ] = "~à¸¥à¸š";
-        Text[ czech ] = "Smazat";
-        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "~ZmazaÅ¥";
-        Text[ hungarian ] = "~TÃ¶rlÃ©s";
-        Text[ slovenian ] = "~IzbriÅ¡i";
+        Text [ en-US ] = "~Delete" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_AUTOABBREV
     {
         Pos = MAP_APPFONT ( 137 , 78 ) ;
         Size = MAP_APPFONT ( 111 , 10 ) ;
-        Text= "~Automatisch aufnehmen";
-        Text[ italian ] = "Inserisci automaticamente";
-        Text[ portuguese_brazilian ] = "~AutoIncluir";
-        Text[ portuguese ] = "Aceitar ~automaticamente";
-        Text[ danish ] = "~Inkluder automatisk";
-        Text[ french ] = "Adopter automatiquement";
-        Text[ swedish ] = "Lägg till ~automatiskt";
-        Text[ dutch ] = "~Automatisch opnemen";
-        Text[ spanish ] = "~Aceptar automáticamente";
-        Text[ english_us ] = "~AutoInclude";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨åŠ å…¥(~A)";
-        Text [ English ] = "Automatic pick up" ;
-        Text [ english_us ] = "~AutoInclude" ;
-        Text [ italian ] = "Inserisci automaticamente" ;
-        Text [ spanish ] = "~Aceptar automáticamente" ;
-        Text [ french ] = "Adopter automatiquement" ;
-        Text [ dutch ] = "~Automatisch opnemen" ;
+        Text [ de ] = "~Automatisch aufnehmen";
+        Text [ en-US ] = "~AutoInclude";
+        Text [ en-US ] = "~AutoInclude" ;
         TabStop = TRUE ;
-        Text [ swedish ] = "Lägg till ~automatiskt" ;
-        Text [ danish ] = "~Inkluder automatisk" ;
-        Text [ portuguese_brazilian ] = "~AutoIncluir" ;
-        Text [ portuguese ] = "Aceitar ~automaticamente" ;
-        Text[ russian ] = "~Âêëş÷àòü àâòîìàòè÷åñêè";
-        Text[ polish ] = "~Autodo³¹czanie";
-        Text[ japanese ] = "è‡ªå‹•çš„ã«è¿½åŠ (~A)";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨åŠ å…¥(~A)";
-        Text[ chinese_traditional ] = "è‡ªå‹•åŠ å…¥(~A)";
-        Text[ arabic ] = "ÅÖÇİÉ ÊáŞÇÆíÉ";
-        Text[ dutch ] = "~Automatisch opnemen";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨åŠ å…¥(~A)";
-        Text[ greek ] = "~Áõôüìáôç ğñïóèŞêç";
-        Text[ korean ] = "ìë™ ì¶”ê°€(~A)";
-        Text[ language_user1 ] = " ";
-        Text[ turkish ] = "~Otomatik İçer";
-        Text[ catalan ] = "Inclusió ~automàtica";
-        Text[ finnish ] = "Au~tomaattinen sisällytys";
-        Text[ thai ] = "à¸£à¸§à¸¡~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "AutomatickÃ© zahrnutÃ­";
-        Text[ hebrew ] = "~Automatisch aufnehmen";
-        Text[ hindi ] = "~à¤¸à¥à¤µà¤¯à¤‚-à¤…à¤¨à¥à¤¤à¤°à¥à¤—à¤¤";
-        Text[ slovak ] = "~AutomatickÃ© zahrnutie";
-        Text[ hungarian ] = "A~utomatikus beillesztÃ©s";
-        Text[ slovenian ] = "S~amodejno vkljuÄi";
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_DOUBLECAPS
     {
         Pos = MAP_APPFONT ( 4 , 94 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text = "Wörter, die mit zwei Großbuchstaben beginnen" ;
-        Text [ English ] = "Words with 2 capital letters at start" ;
-        Text [ english_us ] = "Words with TWo INitial CApitals" ;
-        Text [ italian ] = "Parole che iniziano con due maiuscole" ;
-        Text [ spanish ] = "Palabras que comienzan con dos mayúsculas" ;
-        Text [ french ] = "Mots commençant par deux majuscules" ;
-        Text [ dutch ] = "Woorden die met twee hoofdletters beginnen" ;
-        Text [ swedish ] = "Ord som börjar med två stora bokstäver" ;
-        Text [ danish ] = "Ord, som begynder med to store bogstaver" ;
-        Text [ portuguese_brazilian ] = "Palavras que começam com DUas MAiúsculas" ;
-        Text [ portuguese ] = "Palavras que comecem com duas maiúsculas" ;
-        Text[ chinese_simplified ] = "ä»¥ä¸¤ä¸ªå¤§å†™å­—æ¯å¼€å§‹çš„å­—";
-        Text[ russian ] = "Ñëîâà, íà÷èíàşùèåñÿ äâóìÿ ïğîïèñíûìè áóêâàìè";
-        Text[ polish ] = "Wyrazy zaczynaj¹ce siê DWoma wielkimi literami";
-        Text[ japanese ] = "å¤§æ–‡å­—2ã¤ã§å§‹ã¾ã‚‹å˜èª";
-        Text[ chinese_traditional ] = "å…©å€‹å¤§å¯«å­—æ¯é–‹å§‹çš„å­—";
-        Text[ arabic ] = "ÇáßáãÇÊ ÇáÊí ÊÈÏÃ ÈÍÑİí ÇÓÊåáÇá";
-        Text[ dutch ] = "Woorden die met twee hoofdletters beginnen";
-        Text[ chinese_simplified ] = "ä»¥ä¸¤ä¸ªå¤§å†™å­—æ¯å¼€å§‹çš„å­—";
-        Text[ greek ] = "Ëİîåéò ğïõ áñ÷ßæïõí ìå äıï êåöáëáßá ãñÜììáôá";
-        Text[ korean ] = "ì²˜ìŒ ë‘ ë¬¸ìê°€ ëŒ€ë¬¸ìë¡œ ì‹œì‘í•˜ëŠ” ë‹¨ì–´";
-        Text[ turkish ] = "Çİft BÜyük HArfli kelimeler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Paraules amb DUes MAjúscules INicials";
-        Text[ finnish ] = "Sanat, joissa on KAksi ISoa ALkukirjainta";
-        Text[ thai ] = "à¸„à¸³à¸—à¸µà¹ˆà¸¡à¸µà¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆà¸—à¸µà¹ˆà¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸ªà¸­à¸‡à¸•à¸±à¸§à¹à¸£à¸";
-        Text[ czech ] = "Slova se DVÄ›ma POÄÃ¡teÄnÃ­mi VElkÃ½mi PÃsmeny";
-        Text[ hebrew ] = "WÃ¶rter, die mit zwei GroÃŸbuchstaben beginnen";
-        Text[ hindi ] = "à¤ªà¤¹à¤¿à¤²à¤¾ à¤¦à¥‹ à¤…à¤•à¥à¤·à¤° à¤¬à¤¡à¤¼à¥‡ à¤…à¤•à¥à¤·à¤°à¥‹à¤‚ à¤µà¤¾à¤²à¤¾ à¤¶à¤¬à¥à¤¦";
-        Text[ slovak ] = "SlovÃ¡ s DVoma zaÄiatoÄnÃ½mi veÄ¾kÃ½mi pÃ­smenami";
-        Text[ hungarian ] = "Szavak KÃ‰t KEzdÅ‘ NAgybetÅ±vel";
-        Text[ slovenian ] = "Besede z DVema VElikima ZAÄetnicama";
+        Text [ de ] = "Wörter, die mit zwei Großbuchstaben beginnen" ;
+        Text [ en-US ] = "Words with TWo INitial CApitals" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_DOUBLE_CAPS
     {
@@ -1967,123 +601,28 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
         Pos = MAP_APPFONT ( 198 , 105 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
-        Text = "N~eu" ;
-        Text [ English ] = "New" ;
-        Text [ english_us ] = "Ne~w" ;
-        Text [ italian ] = "Nuo~vo" ;
-        Text [ spanish ] = "Nue~vo" ;
-        Text [ french ] = "Nouv~eau" ;
-        Text [ dutch ] = "Ni~euw" ;
-        Text [ swedish ] = "N~ytt" ;
-        Text [ danish ] = "N~y(t)" ;
-        Text [ portuguese_brazilian ] = "~Novo" ;
-        Text [ portuguese ] = "~Novo" ;
-        Text[ chinese_simplified ] = "æ–°å¢(~W)";
-        Text[ russian ] = "Äîáàâèòü";
-        Text[ polish ] = "No~wy";
-        Text[ japanese ] = "æ–°è¦ä½œæˆ(~W)";
-        Text[ chinese_traditional ] = "æ–°å¢(~W)";
-        Text[ arabic ] = "ÌÏíÏ";
-        Text[ dutch ] = "Ni~euw";
-        Text[ chinese_simplified ] = "æ–°å¢(~W)";
-        Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~W)";
-        Text[ turkish ] = "Y~eni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "No~u";
-        Text[ finnish ] = "Uu~si";
-        Text[ thai ] = "à¹ƒà¸«~à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ½";
-        Text[ hebrew ] = "N~eu";
-        Text[ hindi ] = "à¤¨~à¤¯à¤¾";
-        Text[ slovak ] = "No~vÃ½";
-        Text[ hungarian ] = "Ãš~j";
-        Text[ slovenian ] = "No~vo";
+        Text [ de ] = "N~eu" ;
+        Text [ en-US ] = "Ne~w" ;
+        Text [ x-comment ] = " ";
     };
     PushButton PB_DELDOUBLECAPS
     {
         Pos = MAP_APPFONT ( 198 , 122 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
-        Text = "Lö~schen" ;
-        Text [ English ] = "Delete" ;
-        Text [ english_us ] = "Dele~te" ;
-        Text [ italian ] = "Eli~mina" ;
-        Text [ spanish ] = "~Borrar" ;
-        Text [ french ] = "Supprimer" ;
-        Text [ dutch ] = "W~issen" ;
-        Text [ swedish ] = "Ra~dera" ;
-        Text [ danish ] = "~Slet" ;
-        Text [ portuguese_brazilian ] = "E~xcluir" ;
-        Text [ portuguese ] = "E~liminar" ;
-        Text[ chinese_simplified ] = "åˆ é™¤(~T)";
-        Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "U~suñ";
-        Text[ japanese ] = "å‰Šé™¤(~T)";
-        Text[ chinese_traditional ] = "åˆªé™¤(~T)";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ dutch ] = "W~issen";
-        Text[ chinese_simplified ] = "åˆ é™¤(~T)";
-        Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "ì‚­ì œ(~T)";
-        Text[ turkish ] = "Si~l";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Suprime~ix";
-        Text[ finnish ] = "P~oista";
-        Text[ thai ] = "à¸¥~à¸š";
-        Text[ czech ] = "Smazat";
-        Text[ hebrew ] = "â€®×¦×—×™×§×”â€¬";
-        Text[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾~à¤“";
-        Text[ slovak ] = "Zma~zaÅ¥";
-        Text[ hungarian ] = "TÃ¶~rlÃ©s";
-        Text[ slovenian ] = "Izb~riÅ¡i";
+        Text [ de ] = "Lö~schen" ;
+        Text [ en-US ] = "Dele~te" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_AUTOCAPS
     {
         Pos = MAP_APPFONT ( 137 , 169 ) ;
         Size = MAP_APPFONT ( 111 , 10 ) ;
-        Text= "A~utomatisch aufnehmen";
-        Text[ italian ] = "Inserisci automaticamente";
-        Text[ portuguese_brazilian ] = "A~utoIncluir";
-        Text[ portuguese ] = "Aceitar a~utomaticamente";
-        Text[ danish ] = "~Inkluder automatisk";
-        Text[ french ] = "Adopter automatiquement";
-        Text[ swedish ] = "Lägg till a~utomatiskt";
-        Text[ dutch ] = "A~utomatisch opnemen";
-        Text[ spanish ] = "A~ceptar automáticamente";
-        Text[ english_us ] = "A~utoInclude";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨åŠ å…¥(~U)";
-        Text[ russian ] = "Âêëş~÷àòü àâòîìàòè÷åñêè";
-        Text[ polish ] = "Au~todo³¹czanie";
-        Text[ japanese ] = "è‡ªå‹•çš„ã«è¿½åŠ (~U)";
-        Text[ chinese_traditional ] = "è‡ªå‹•åŠ å…¥(~U)";
-        Text [ English ] = "A~utomatic pick up" ;
-        Text [ english_us ] = "A~utoInclude" ;
-        Text [ italian ] = "Inserisci automaticamente" ;
-        Text [ spanish ] = "A~ceptar automáticamente" ;
-        Text [ french ] = "Adopter automatiquement" ;
-        Text [ dutch ] = "A~utomatisch opnemen" ;
-        Text = "A~utomatisch aufnehmen" ;
-        Text [ swedish ] = "Lägg till a~utomatiskt" ;
-        Text [ danish ] = "~Inkluder automatisk" ;
-        Text [ portuguese_brazilian ] = "A~utoIncluir" ;
-        Text [ portuguese ] = "Aceitar a~utomaticamente" ;
-        Text[ arabic ] = "ÅÖÇİÉ ÊáŞÇÆíÉ";
-        Text[ dutch ] = "A~utomatisch opnemen";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨åŠ å…¥(~U)";
-        Text[ greek ] = "Á~õôüìáôç ğñïóèŞêç";
-        Text[ korean ] = "ìë™ ì¶”ê°€(~U)";
-        Text[ language_user1 ] = " ";
-        Text[ turkish ] = "O~tomatik İçer";
-        Text[ catalan ] = "Inclusió a~utomàtica";
-        Text[ finnish ] = "A~utomaattinen sisällytys";
-        Text[ thai ] = "à¸£à¸§à¸¡à¸­à¸±~à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "AutomatickÃ© zahrnutÃ­";
-        Text[ hebrew ] = "A~utomatisch aufnehmen";
-        Text[ hindi ] = "à¤¸à¥à¤µ~à¤¯à¤‚-à¤…à¤¨à¥à¤¤à¤°à¥à¤—à¤¤";
-        Text[ slovak ] = "A~utomatickÃ© zahrnutie";
-        Text[ hungarian ] = "Automatikus ~beillesztÃ©s";
-        Text[ slovenian ] = "Sa~modejno vkljuÄi";
+        Text [ de ] = "A~utomatisch aufnehmen";
+        Text [ en-US ] = "A~utoInclude";
+        Text [ en-US ] = "A~utoInclude" ;
+        Text [ de ] = "A~utomatisch aufnehmen" ;
+        Text [ x-comment ] = " ";
     };
 };
 /**************************************************************************/
@@ -2098,127 +637,31 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Text = "Typografische Anführungszeichen" ;
-    Text [ English ] = "Typographic Quotes" ;
-    Text [ portuguese ] = "Aspas tipográficas" ;
-    Text [ english_us ] = "Custom Quotes" ;
-    Text [ portuguese_brazilian ] = "Aspas Personalizadas" ;
-    Text [ swedish ] = "Typografiska anföringstecken" ;
-    Text [ danish ] = "Typografiske anførselstegn" ;
-    Text [ italian ] = "Virgolette tipografiche" ;
-    Text [ spanish ] = "Comillas tipográficas" ;
-    Text [ french ] = "Guillemets typographiques" ;
-    Text [ dutch ] = "Typografische aanhalingstekens" ;
+    Text [ de ] = "Typografische Anführungszeichen" ;
+    Text [ en-US ] = "Custom Quotes" ;
     FixedLine FL_SINGLE
     {
         Pos = MAP_APPFONT ( 4 , 3 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text = "Einfache Anführungszeichen" ;
-        Text [ English ] = "SingleQuotes" ;
-        Text [ english_us ] = "Single quotes" ;
-        Text [ portuguese_brazilian ] = "Aspas simples" ;
-        Text [ swedish ] = "Enkla anföringstecken" ;
-        Text [ danish ] = "Enkelte anførselstegn" ;
-        Text [ italian ] = "Virgolette singole" ;
-        Text [ spanish ] = "Comillas sencillas" ;
-        Text [ french ] = "Guillemets simples" ;
-        Text [ dutch ] = "Enkele aanhalingstekens" ;
-        Text [ portuguese ] = "Aspas simples" ;
-        Text[ chinese_simplified ] = "å•å¼•å·";
-        Text[ russian ] = "Îäèíàğíûå êàâû÷êè";
-        Text[ polish ] = "Apostrofy";
-        Text[ japanese ] = "ã‚·ãƒ³ã‚°ãƒ«ã‚¯ã‚©ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãƒãƒ¼ã‚¯";
-        Text[ chinese_traditional ] = "å–®å¼•è™Ÿ";
-        Text[ arabic ] = "ÚáÇãÇÊ ÊäÕíÕ İÑÏíÉ";
-        Text[ dutch ] = "Enkele aanhalingstekens";
-        Text[ chinese_simplified ] = "å•å¼•å·";
-        Text[ greek ] = "ÁğëÜ åéóáãùãéêÜ";
-        Text[ korean ] = "ì‘ì€ ë”°ì˜´í‘œ";
-        Text[ turkish ] = "Tek tırnak";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cometes simples";
-        Text[ finnish ] = "Yksinkertaiset lainausmerkit";
-        Text[ thai ] = "à¸­à¸±à¸à¸›à¸£à¸°à¸à¸²à¸¨à¹€à¸”à¸µà¹ˆà¸¢à¸§";
-        Text[ czech ] = "JednoduchÃ© uvozovky";
-        Text[ hebrew ] = "Einfache AnfÃ¼hrungszeichen";
-        Text[ hindi ] = "à¤…à¤•à¥‡à¤²à¤¾ à¤•à¥à¤µà¥‹à¤Ÿà¥à¤¸à¥";
-        Text[ slovak ] = "JednoduchÃ© Ãºvodzovky";
-        Text[ hungarian ] = "Szimpla idÃ©zÅ‘jelek";
-        Text[ slovenian ] = "Enojni narekovaji";
+        Text [ de ] = "Einfache Anführungszeichen" ;
+        Text [ en-US ] = "Single quotes" ;
+        Text [ x-comment ] = " ";
     };
     Checkbox CB_SGL_TYPO
     {
         Pos = MAP_APPFONT ( 7 , 14 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
-        Text = "~Ersetzen" ;
-        Text [ ENGLISH ] = "Rep~lace" ;
-        Text [ portuguese ] = "~Substituir" ;
-        Text [ english_us ] = "Repla~ce" ;
-        Text [ portuguese_brazilian ] = "~Substituir" ;
-        Text [ swedish ] = "~Ersätt" ;
-        Text [ danish ] = "~Erstat" ;
-        Text [ italian ] = "Sostituisci" ;
-        Text [ spanish ] = "Ree~mplazar" ;
-        Text [ french ] = "Remplacer" ;
-        Text [ dutch ] = "Verva~ngen" ;
-        Text[ chinese_simplified ] = "æ›¿æ¢(~C)";
-        Text[ russian ] = "Çàìåíèòü";
-        Text[ polish ] = "Zam~ieñ";
-        Text[ japanese ] = "ç½®æ›(~C)";
-        Text[ chinese_traditional ] = "æ›¿ä»£(~C)";
-        Text[ arabic ] = "ÇÓÊÈÏÇá";
-        Text[ dutch ] = "Verva~ngen";
-        Text[ chinese_simplified ] = "æ›¿æ¢(~C)";
-        Text[ greek ] = "ÁíôéêáôÜóôáóç";
-        Text[ korean ] = "ë°”ê¾¸ê¸°(~C)";
-        Text[ turkish ] = "Değiş~tir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reempla~ça";
-        Text[ finnish ] = "Kor~vaa";
-        Text[ thai ] = "à¹à¸—~à¸™à¸—à¸µà¹ˆ";
-        Text[ czech ] = "Nahradit";
-        Text[ hebrew ] = "~Ersetzen";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾~à¤ªà¤¨à¤¾";
-        Text[ slovak ] = "Nahra~diÅ¥";
-        Text[ hungarian ] = "~Csere";
-        Text[ slovenian ] = "Za~menjaj";
+        Text [ de ] = "~Ersetzen" ;
+        Text [ en-US ] = "Repla~ce" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_SGL_STARTQUOTE
     {
         Pos = MAP_APPFONT ( 7 , 30 ) ;
         Size = MAP_APPFONT ( 86 , 8 ) ;
-        Text = "Am W~ortanfang:" ;
-        Text [ English ] = "Start quote:" ;
-        Text [ english_us ] = "~Start quote:" ;
-        Text [ italian ] = "~All'inizio parola:" ;
-        Text [ spanish ] = "Al ~comienzo de la palabra:" ;
-        Text [ french ] = "En début de mot :" ;
-        Text [ dutch ] = "Aan woord~begin:" ;
-        Text [ swedish ] = "Vid ~ordets början:" ;
-        Text [ danish ] = "Start ~Citering:" ;
-        Text [ portuguese_brazilian ] = "A~spas iniciais:" ;
-        Text [ portuguese ] = "No ~início da palavra:" ;
-        Text[ chinese_simplified ] = "åœ¨å­—é¦–(~S)ï¼š";
-        Text[ russian ] = "Îòêğûâàşùèå êàâû÷êè:";
-        Text[ polish ] = "~Apostrof otwieraj¹cy:";
-        Text[ japanese ] = "å˜èªå·¦(~S):";
-        Text[ chinese_traditional ] = "åœ¨å­—é¦–(~S)ï¼š";
-        Text[ arabic ] = "İí ÈÏÇíÉ ÇáßáãÉ:";
-        Text[ dutch ] = "Aan woord~begin:";
-        Text[ chinese_simplified ] = "åœ¨å­—é¦–(~S)ï¼š";
-        Text[ greek ] = "Óôçí áñ÷Ş ôçò ëİîçò:";
-        Text[ korean ] = "ë‹¨ì–´ ì™¼ìª½(~S):";
-        Text[ turkish ] = "~Alıntıyı başlat:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cometes ~inicials:";
-        Text[ finnish ] = "Lainauksen ~aloitus:";
-        Text[ thai ] = "à¸­à¸±à¸à¸›à¸£à¸°à¸à¸²à¸¨à¹€à¸›à¸´~à¸”:";
-        Text[ czech ] = "LevÃ¡ uvozovka:";
-        Text[ hebrew ] = "Am W~ortanfang:";
-        Text[ hindi ] = "~à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤¾ à¤•à¥à¤µà¥‹à¤Ÿà¥:";
-        Text[ slovak ] = "Ä½~avÃ¡ Ãºvodzovka:";
-        Text[ hungarian ] = "~KezdÅ‘ idÃ©zÅ‘jel:";
-        Text[ slovenian ] = "~ZaÄetni narekovaj:";
+        Text [ de ] = "Am W~ortanfang:" ;
+        Text [ en-US ] = "~Start quote:" ;
+        Text [ x-comment ] = " ";
     };
     PushButton PB_SGL_STARTQUOTE
     {
@@ -2236,38 +679,9 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     {
         Pos = MAP_APPFONT ( 7 , 46 ) ;
         Size = MAP_APPFONT ( 86 , 8 ) ;
-        Text = "Am Worten~de:" ;
-        Text [ English ] = "End quote:" ;
-        Text [ dutch ] = "~Aan woordeinde:" ;
-        Text [ english_us ] = "~End quote:" ;
-        Text [ italian ] = "A ~fine parola:" ;
-        Text [ spanish ] = "Al ~final de la palabra:" ;
-        Text [ french ] = "En ~fin de mot :" ;
-        Text [ swedish ] = "Vid or~dets slut:" ;
-        Text [ danish ] = "Slut ~Citering:" ;
-        Text [ portuguese_brazilian ] = "Aspas ~finais:" ;
-        Text [ portuguese ] = "No ~fim da palavra:" ;
-        Text[ chinese_simplified ] = "åœ¨å­—å°¾(~E)ï¼š";
-        Text[ russian ] = "Çàêğûâàşùèå êàâû÷êè:";
-        Text[ polish ] = "Apostro~f zamykaj¹cy:";
-        Text[ japanese ] = "å˜èªå³(~E):";
-        Text[ chinese_traditional ] = "åœ¨å­—å°¾(~E)ï¼š";
-        Text[ arabic ] = "İí äåÇíÉ ÇáßáãÉ:";
-        Text[ dutch ] = "~Aan woordeinde:";
-        Text[ chinese_simplified ] = "åœ¨å­—å°¾(~E)ï¼š";
-        Text[ greek ] = "Óôï ôİëïò ôçò ëİîçò:";
-        Text[ korean ] = "ë‹¨ì–´ ì˜¤ë¥¸ìª½(~E):";
-        Text[ turkish ] = "~Bitim imi:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cometes ~finals:";
-        Text[ finnish ] = "Lainauksen lo~petus";
-        Text[ thai ] = "à¸­à¸±à¸à¸›à¸£à¸°à¸à¸²à¸¨~à¸›à¸´à¸”:";
-        Text[ czech ] = "PravÃ¡ uvozovka:";
-        Text[ hebrew ] = "Am Worten~de:";
-        Text[ hindi ] = "~à¤…à¤‚à¤¤à¤¿à¤® à¤•à¥à¤µà¥‹à¤Ÿà¥:";
-        Text[ slovak ] = "~PravÃ¡ Ãºvodzovka:";
-        Text[ hungarian ] = "~ZÃ¡rÃ³ idÃ©zÅ‘jel:";
-        Text[ slovenian ] = "~KonÄni narekovaj:";
+        Text [ de ] = "Am Worten~de:" ;
+        Text [ en-US ] = "~End quote:" ;
+        Text [ x-comment ] = " ";
     };
     PushButton PB_SGL_ENDQUOTE
     {
@@ -2285,151 +699,35 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     {
         Pos = MAP_APPFONT ( 198 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "S~tandard" ;
-        Text [ English ] = "S~tandard" ;
+        Text [ de ] = "S~tandard" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Default" ;
-        Text [ portuguese_brazilian ] = "P~adrão" ;
-        Text [ swedish ] = "S~tandard" ;
-        Text [ danish ] = "Standar~d" ;
-        Text [ italian ] = "S~tandard" ;
-        Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "Par défaut" ;
-        Text [ dutch ] = "S~tandaard" ;
-        Text [ portuguese ] = "~Padrão" ;
-        Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
-        Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "~Domyœlnie";
-        Text[ japanese ] = "æ¨™æº–(~D)";
-        Text[ chinese_traditional ] = "æ¨™æº–(~D)";
-        Text[ arabic ] = "ÇİÊÑÇÖí";
-        Text[ dutch ] = "S~tandaard";
-        Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
-        Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
-        Text[ turkish ] = "~Öntanımlı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Per ~defecte";
-        Text[ finnish ] = "~Oletus";
-        Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
-        Text[ czech ] = "VÃ½chozÃ­";
-        Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬";
-        Text[ hindi ] = "~à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
-        Text[ slovak ] = "VÃ½cho~dzie";
-        Text[ hungarian ] = "AlapÃ©r~telmezett";
-        Text[ slovenian ] = "~Privzeto";
+        Text [ en-US ] = "~Default" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_DOUBLE
     {
         Pos = MAP_APPFONT ( 4 , 83 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text = "Doppelte Anführungszeichen" ;
-        Text [ English ] = "Double quotes" ;
-        Text [ english_us ] = "Double quotes" ;
-        Text [ portuguese_brazilian ] = "Aspas duplas" ;
-        Text [ swedish ] = "Dubbla anföringstecken" ;
-        Text [ danish ] = "Dobbelte anførselstegn" ;
-        Text [ italian ] = "Virgolette doppie" ;
-        Text [ spanish ] = "Comillas dobles" ;
-        Text [ french ] = "Doubles guillemets" ;
-        Text [ dutch ] = "Dubbele aanhalingstekens" ;
-        Text [ portuguese ] = "Aspas duplas" ;
-        Text[ chinese_simplified ] = "åŒå¼•å·";
-        Text[ russian ] = "Äâîéíûå êàâû÷êè";
-        Text[ polish ] = "Cudzys³owy";
-        Text[ japanese ] = "ãƒ€ãƒ–ãƒ«ã‚¯ã‚©ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãƒãƒ¼ã‚¯";
-        Text[ chinese_traditional ] = "é›™å¼•è™Ÿ";
-        Text[ arabic ] = "ÚáÇãÇÊ ÊäÕíÕ ãÒÏæÌÉ";
-        Text[ dutch ] = "Dubbele aanhalingstekens";
-        Text[ chinese_simplified ] = "åŒå¼•å·";
-        Text[ greek ] = "ÄéğëÜ åéóáãùãéêÜ";
-        Text[ korean ] = "í° ë”°ì˜´í‘œ";
-        Text[ turkish ] = "Çift tırnak";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cometes dobles";
-        Text[ finnish ] = "Kaksinkertaiset lainausmerkit";
-        Text[ thai ] = "à¸­à¸±à¸à¸›à¸£à¸°à¸à¸²à¸¨à¸„à¸¹à¹ˆ";
-        Text[ czech ] = "DvojitÃ© uvozovky";
-        Text[ hebrew ] = "Doppelte AnfÃ¼hrungszeichen";
-        Text[ hindi ] = "à¤¦à¥à¤µà¤¿à¤—à¥à¤£à¤¿à¤¤ à¤•à¥à¤µà¥‹à¤Ÿà¥";
-        Text[ slovak ] = "DvojitÃ© Ãºvodzovky";
-        Text[ hungarian ] = "Dupla idÃ©zÅ‘jelek";
-        Text[ slovenian ] = "Dvojni narekovaji";
+        Text [ de ] = "Doppelte Anführungszeichen" ;
+        Text [ en-US ] = "Double quotes" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_TYPO
     {
         Pos = MAP_APPFONT ( 7 , 94 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
-        Text = "E~rsetzen" ;
-        Text [ ENGLISH ] = "Replace" ;
+        Text [ de ] = "E~rsetzen" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Repl~ace" ;
-        Text [ portuguese_brazilian ] = "S~ubstituir" ;
-        Text [ swedish ] = "E~rsätt" ;
-        Text [ danish ] = "E~rstat" ;
-        Text [ italian ] = "Sostit~uisci" ;
-        Text [ spanish ] = "Reemplazar" ;
-        Text [ french ] = "Remplacer" ;
-        Text [ dutch ] = "Ve~rvangen" ;
-        Text [ portuguese ] = "S~ubstituir" ;
-        Text[ chinese_simplified ] = "æ›¿æ¢(~A)";
-        Text[ russian ] = "Çàìåíèòü";
-        Text[ polish ] = "Z~amieñ";
-        Text[ japanese ] = "ç½®æ›(~A)";
-        Text[ chinese_traditional ] = "æ›¿ä»£(~A)";
-        Text[ arabic ] = "ÇÓÊÈÏÇá";
-        Text[ dutch ] = "Ve~rvangen";
-        Text[ chinese_simplified ] = "æ›¿æ¢(~A)";
-        Text[ greek ] = "ÁíôéêáôÜóôáóç";
-        Text[ korean ] = "ë°”ê¾¸ê¸°(~A)";
-        Text[ turkish ] = "Deği~ştir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reempl~aça";
-        Text[ finnish ] = "Kor~vaa";
-        Text[ thai ] = "à¹à¸—~à¸™à¸—à¸µà¹ˆ";
-        Text[ czech ] = "Nahradit";
-        Text[ hebrew ] = "E~rsetzen";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿~à¤¸à¥à¤¥à¤¾à¤ªà¤¨à¤¾";
-        Text[ slovak ] = "Nahr~adiÅ¥";
-        Text[ hungarian ] = "Cs~ere";
-        Text[ slovenian ] = "Zamenj~aj";
+        Text [ en-US ] = "Repl~ace" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_STARTQUOTE
     {
         Pos = MAP_APPFONT ( 7 , 110 ) ;
         Size = MAP_APPFONT ( 86 , 8 ) ;
-        Text = "A~m Wortanfang:" ;
-        Text [ English ] = "Start quote:" ;
-        Text [ english_us ] = "Start q~uote:" ;
-        Text [ italian ] = "All'inizio parola:" ;
-        Text [ spanish ] = "Al c~omienzo de la palabra:" ;
-        Text [ french ] = "En début de mot :" ;
-        Text [ dutch ] = "Aan ~woordbegin:" ;
-        Text [ swedish ] = "Vid ordets b~örjan:" ;
-        Text [ danish ] = "Start ~Citering:" ;
-        Text [ portuguese_brazilian ] = "As~pas iniciais:" ;
-        Text [ portuguese ] = "No ~início da palavra:" ;
-        Text[ chinese_simplified ] = "åœ¨å­—é¦–(~U)ï¼š";
-        Text[ russian ] = "Îòêğûâàşùèå êàâû÷êè:";
-        Text[ polish ] = "C~udzys³ów otwieraj¹cy:";
-        Text[ japanese ] = "å˜èªå·¦(~U):";
-        Text[ chinese_traditional ] = "åœ¨å­—é¦–(~U)ï¼š";
-        Text[ arabic ] = "İí ÈÏÇíÉ ÇáßáãÉ:";
-        Text[ dutch ] = "Aan ~woordbegin:";
-        Text[ chinese_simplified ] = "åœ¨å­—é¦–(~U)ï¼š";
-        Text[ greek ] = "Óôçí áñ÷Ş ôçò ëİîçò:";
-        Text[ korean ] = "ë‹¨ì–´ ì™¼ìª½(~U):";
-        Text[ turkish ] = "Başlangıç alıntı:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "C~ometes inicials:";
-        Text[ finnish ] = "Lainauksen a~loitus:";
-        Text[ thai ] = "à¸­à¸±~à¸à¸›à¸£à¸°à¸à¸²à¸¨à¹€à¸›à¸´à¸”:";
-        Text[ czech ] = "LevÃ¡ uvozovka:";
-        Text[ hebrew ] = "A~m Wortanfang:";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤¾ à¤•à¥à¤µà¥‹~à¤Ÿà¥:";
-        Text[ slovak ] = "Ä½avÃ¡ Ãºvodz~ovka:";
-        Text[ hungarian ] = "Kez~dÅ‘ idÃ©zÅ‘jel:";
-        Text[ slovenian ] = "Za~Äetni narekovaj:";
+        Text [ de ] = "A~m Wortanfang:" ;
+        Text [ en-US ] = "Start q~uote:" ;
+        Text [ x-comment ] = " ";
     };
     PushButton PB_STARTQUOTE
     {
@@ -2447,44 +745,15 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     {
         Pos = MAP_APPFONT ( 7 , 126 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
-        Text = "Am ~Wortende:" ;
-        Text [ English ] = "End quote:" ;
-        Text [ dutch ] = "Aan w~oordeinde:" ;
-        Text [ english_us ] = "E~nd quote:" ;
-        Text [ italian ] = "A fine parola:" ;
-        Text [ spanish ] = "Al fi~nal de la palabra:" ;
-        Text [ french ] = "En fi~n de mot :" ;
-        Text [ swedish ] = "Vid ordets ~slut:" ;
-        Text [ danish ] = "~Slut Citering:" ;
-        Text [ portuguese_brazilian ] = "Aspas f~inais:" ;
-        Text [ portuguese ] = "No ~fim da palavra:" ;
-        Text[ chinese_simplified ] = "åœ¨å­—å°¾(~N)ï¼š";
-        Text[ russian ] = "Çàêğûâàşùèå êàâû÷êè:";
-        Text[ polish ] = "Cudzys³ów zamy~kaj¹cy:";
-        Text[ japanese ] = "å˜èªå³(~N):";
-        Text[ chinese_traditional ] = "åœ¨å­—å°¾(~N)ï¼š";
-        Text[ arabic ] = "İí äåÇíÉ ÇáßáãÉ:";
-        Text[ dutch ] = "Aan w~oordeinde:";
-        Text[ chinese_simplified ] = "åœ¨å­—å°¾(~N)ï¼š";
-        Text[ greek ] = "Óôï ôİëïò ôçò ëİîç~ò:";
-        Text[ korean ] = "ë‹¨ì–´ ì˜¤ë¥¸ìª½(~N):";
-        Text[ turkish ] = "~Son çift tırnak:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cometes f~inals:";
-        Text[ finnish ] = "Lainauksen ~lopetus:";
-        Text[ thai ] = "à¸­à¸±à¸à¸›à¸£à¸°à¸à¸²à¸¨à¸›à¸´~à¸”:";
-        Text[ czech ] = "PravÃ¡ uvozovka:";
-        Text[ hebrew ] = "Am ~Wortende:";
-        Text[ hindi ] = "à¤…à¤‚~à¤¤à¤¿à¤® à¤•à¥à¤µà¥‹à¤Ÿà¥:";
-        Text[ slovak ] = "PravÃ¡ Ãºvo~dzovka:";
-        Text[ hungarian ] = "ZÃ¡rÃ³ ~idÃ©zÅ‘jel";
-        Text[ slovenian ] = "KonÄni ~narekovaj:";
+        Text [ de ] = "Am ~Wortende:" ;
+        Text [ en-US ] = "E~nd quote:" ;
+        Text [ x-comment ] = " ";
     };
     PushButton PB_ENDQUOTE
     {
         Pos = MAP_APPFONT ( 105 , 124 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
-        Text = "\"" ;
+        Text [ de ] = "\"" ;
         TabStop = TRUE ;
     };
     FixedText FT_DBECEX
@@ -2496,166 +765,30 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     {
         Pos = MAP_APPFONT ( 195 , 143 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Sta~ndard" ;
-        Text [ English ] = "Sta~ndard" ;
+        Text [ de ] = "Sta~ndard" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "De~fault" ;
-        Text [ portuguese_brazilian ] = "Pa~drão" ;
-        Text [ swedish ] = "Sta~ndard" ;
-        Text [ danish ] = "Standar~d" ;
-        Text [ italian ] = "~Standard" ;
-        Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "Par défaut" ;
-        Text [ dutch ] = "~Standaard" ;
-        Text [ portuguese ] = "~Padrão" ;
-        Text[ chinese_simplified ] = "æ ‡å‡†(~F)";
-        Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "D~omyœlnie";
-        Text[ japanese ] = "æ¨™æº–(~F)";
-        Text[ chinese_traditional ] = "æ¨™æº–(~F)";
-        Text[ arabic ] = "ÇİÊÑÇÖí";
-        Text[ dutch ] = "~Standaard";
-        Text[ chinese_simplified ] = "æ ‡å‡†(~F)";
-        Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "ê¸°ë³¸ê°’(~F)";
-        Text[ turkish ] = "Öntanımlı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Per de~fecte";
-        Text[ finnish ] = "~Oletus";
-        Text[ thai ] = "à¸„à¹ˆà¸²à¹€~à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
-        Text[ czech ] = "VÃ½chozÃ­";
-        Text[ hebrew ] = "Sta~ndard";
-        Text[ hindi ] = "à¤…~à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
-        Text[ slovak ] = "VÃ½chod~zie";
-        Text[ hungarian ] = "AlapÃ©~rtelmezett ";
-        Text[ slovenian ] = "P~rivzeto";
+        Text [ en-US ] = "De~fault" ;
+        Text [ x-comment ] = " ";
     };
     String STR_CHANGE_START
     {
-        Text = "Zeichen für Wortanfang" ;
-        Text [ English ] = "Character for start quote" ;
-        Text [ dutch ] = "Teken voor woordbegin" ;
-        Text [ english_us ] = "Start quote" ;
-        Text [ italian ] = "Carattere per inizio parola" ;
-        Text [ spanish ] = "Carácter a comienzo de palabra" ;
-        Text [ french ] = "Signe de début de mot" ;
-        Text [ swedish ] = "Tecken för början av ordet" ;
-        Text [ danish ] = "Start citering" ;
-        Text [ portuguese_brazilian ] = "Iniciar citação" ;
-        Text [ portuguese ] = "Carácter para início de palavra" ;
-        Text[ chinese_simplified ] = "å­—é¦–å­—ç¬¦";
-        Text[ russian ] = "Îòêğûâàşùèå êàâû÷êè";
-        Text[ polish ] = "Otwieraj¹cy znak cudzys³owu";
-        Text[ japanese ] = "å˜èªå·¦ã®è¨˜å·";
-        Text[ chinese_traditional ] = "å­—é¦–å­—å…ƒ";
-        Text[ arabic ] = "ÚáÇãÉ áÈÏÇíÉ ÇáßáãÉ";
-        Text[ dutch ] = "Teken voor woordbegin";
-        Text[ chinese_simplified ] = "å­—é¦–å­—ç¬¦";
-        Text[ greek ] = "×áñáêôŞñáò ãéá ôçí áñ÷Ş ôçò ëİîçò";
-        Text[ korean ] = "ë‹¨ì–´ì‹œì‘ì˜ ë”°ì˜´í‘œ";
-        Text[ turkish ] = "Başlangıç alıntısı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cometes inicials";
-        Text[ finnish ] = "Lainauksen aloitus";
-        Text[ thai ] = "à¸­à¸±à¸à¸›à¸£à¸°à¸à¸²à¸¨à¹€à¸›à¸´à¸”";
-        Text[ czech ] = "LevÃ¡ uvozovka";
-        Text[ hebrew ] = "Zeichen fÃ¼r Wortanfang";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤¾ à¤•à¥à¤µà¥‹à¤Ÿà¥";
-        Text[ slovak ] = "Ä½avÃ¡ Ãºvodzovka";
-        Text[ hungarian ] = "IdÃ©zet kezdete";
-        Text[ slovenian ] = "ZaÄetni narekovaj";
+        Text [ de ] = "Zeichen für Wortanfang" ;
+        Text [ en-US ] = "Start quote" ;
+        Text [ x-comment ] = " ";
     };
     String STR_CHANGE_END
     {
-        Text = "Zeichen für Wortende" ;
-        Text [ English ] = "Character for end quote" ;
-        Text [ dutch ] = "Teken voor woordeinde" ;
-        Text [ english_us ] = "End quote" ;
-        Text [ italian ] = "Carattere per fine parola" ;
-        Text [ spanish ] = "Carácter a fin de palabra" ;
-        Text [ french ] = "Signe de fin de mot" ;
-        Text [ swedish ] = "Tecken för slutet av ordet" ;
-        Text [ danish ] = "Slut Citering" ;
-        Text [ portuguese_brazilian ] = "Término da citação" ;
-        Text [ portuguese ] = "Carácter para fim de palavra" ;
-        Text[ chinese_simplified ] = "å­—å°¾å­—ç¬¦";
-        Text[ russian ] = "Çàêğûâàşùèå êàâû÷êè";
-        Text[ polish ] = "Cudzys³ów zamykaj¹cy";
-        Text[ japanese ] = "å˜èªå³ã®è¨˜å·";
-        Text[ chinese_traditional ] = "å­—å°¾å­—å…ƒ";
-        Text[ arabic ] = "ÚáÇãÉ áäåÇíÉ ÇáßáãÉ";
-        Text[ dutch ] = "Teken voor woordeinde";
-        Text[ chinese_simplified ] = "å­—å°¾å­—ç¬¦";
-        Text[ greek ] = "×áñáêôŞñáò ãéá ôï ôİëïò ôçò ëİîçò";
-        Text[ korean ] = "ë‹¨ì–´ ëì˜ ê¸°í˜¸";
-        Text[ turkish ] = "Bitiş alıntısı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cometes finals";
-        Text[ finnish ] = "Lainauksen lopetus";
-        Text[ thai ] = "à¸­à¸±à¸à¸›à¸£à¸°à¸à¸²à¸¨à¸›à¸´à¸”";
-        Text[ czech ] = "PravÃ¡ uvozovka";
-        Text[ hebrew ] = "Zeichen fÃ¼r Wortende";
-        Text[ hindi ] = "à¤…à¤‚à¤¤à¤¿à¤® à¤•à¥à¤µà¥‹à¤Ÿà¥";
-        Text[ slovak ] = "PravÃ¡ Ãºvodzovka";
-        Text[ hungarian ] = "IdÃ©zet vÃ©ge";
-        Text[ slovenian ] = "KonÄni narekovaj";
+        Text [ de ] = "Zeichen für Wortende" ;
+        Text [ en-US ] = "End quote" ;
+        Text [ x-comment ] = " ";
     };
     String ST_STANDARD
     {
-        Text = "Standard" ;
-        Text [ English ] = "Standard" ;
-        Text [ english_us ] = "Default" ;
-        Text [ portuguese_brazilian ] = "Padrão" ;
-        Text [ swedish ] = "Standard" ;
-        Text [ danish ] = "Standard" ;
-        Text [ italian ] = "Configurazione standard" ;
-        Text [ spanish ] = "Predeterminado" ;
-        Text [ french ] = "Par défaut" ;
-        Text [ dutch ] = "Standaard" ;
-        Text [ portuguese ] = "Padrão" ;
-        Text[ chinese_simplified ] = "æ ‡å‡†";
-        Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domyœlnie";
-        Text[ japanese ] = "æ¨™æº–";
-        Text[ chinese_traditional ] = "æ¨™æº–";
-        Text[ arabic ] = "ÇİÊÑÇÖí";
-        Text[ dutch ] = "Standaard";
-        Text[ chinese_simplified ] = "æ ‡å‡†";
-        Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "ê¸°ë³¸ê°’";
-        Text[ turkish ] = "Öntanımlı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Estàndard";
-        Text[ finnish ] = "Oletusarvo";
-        Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
-        Text[ czech ] = "VÃ½chozÃ­";
-        Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××’×“×œâ€¬";
-        Text[ hindi ] = "Default";
-        Text[ slovak ] = "VÃ½chodzie";
-        Text[ hungarian ] = "AlapÃ©rtelmezett";
-        Text[ slovenian ] = "Privzeto";
+        Text [ de ] = "Standard" ;
+        Text [ en-US ] = "Default" ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "å­—å½¢å¼•å·";
-    Text[ russian ] = "Òèïîãğàôñêèå êàâû÷êè";
-    Text[ polish ] = "Cudzys³owy drukarskie";
-    Text[ japanese ] = "å°åˆ·ç”¨ã‚¯ã‚©ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãƒãƒ¼ã‚¯";
-    Text[ chinese_traditional ] = "å­—å‹å¼•è™Ÿ";
-    Text[ arabic ] = "ÚáÇãÇÊ ÊäÕíÕ ØÈæÛÑÇİíøÉ";
-    Text[ dutch ] = "Typografische aanhalingstekens";
-    Text[ chinese_simplified ] = "å­—å½¢å¼•å·";
-    Text[ greek ] = "ÔõğïãñáöéêÜ åéóáãùãéêÜ";
-    Text[ korean ] = "ì¸ì‡„ì²´ ì¸ìš©ë¶€í˜¸";
-    Text[ turkish ] = "Özel Alıntılar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cometes personalitzades";
-    Text[ finnish ] = "Mukautetut lainausmerkit";
-    Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸­à¸±à¸à¸›à¸£à¸°à¸à¸²à¸¨à¹€à¸­à¸‡";
-    Text[ czech ] = "VlastnÃ­ uvozovky";
-    Text[ hebrew ] = "Typografische AnfÃ¼hrungszeichen";
-    Text[ hindi ] = "à¤•à¥à¤µà¥‹à¤Ÿà¥à¤¸ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¥‹";
-    Text[ slovak ] = "VlastnÃ© Ãºvodzovky";
-    Text[ hungarian ] = "EgyÃ©ni idÃ©zÅ‘jelek";
-    Text[ slovenian ] = "Narekovaji po meri";
+    Text [ x-comment ] = " ";
 };
 
 /**************************************************************************/
@@ -2670,209 +803,49 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Text = "Wortergänzung" ;
-    Text [ English ] = "Word completion" ;
+    Text [ de ] = "Wortergänzung" ;
     CheckBox CB_ACTIV
     {
         Pos = MAP_APPFONT( 4, 3 );
         Size = MAP_APPFONT( 116, 10 );
-        Text = "~Wortergänzung aktivieren";
-        Text[ english_us ] = "Enable word ~completion";
-        Text[ french ] = "Compléter les mots";
-        Text[ swedish ] = "Aktivera ~komplettering av ord";
-        Text[ korean ] = "ë¬¸ì ì™„ì„± í™œì„±í™”(~C)";
-        Text[ chinese_simplified ] = "å­—è¯è¡¥å……å®Œæ•´";
-        Text[ chinese_traditional ] = "ä½¿ç”¨è£œå……å®Œæˆå­—è©(~C)";
-        Text[ portuguese ] = "~Completar palavras";
-        Text[ russian ] = "Äîïîëíÿòü ñëîâà";
-        Text[ greek ] = "ÓõìğëŞñùóç ëİîåùí";
-        Text[ dutch ] = "~Woorden afmaken";
-        Text[ spanish ] = "~Completar palabras";
-        Text[ finnish ] = "~Sanojen täydennys";
-        Text[ italian ] = "Attiva completamento parole";
-        Text[ danish ] = "Aktiver ord~fuldførelse";
-        Text[ polish ] = "~Uzupe³nij wyrazy";
-        Text[ portuguese_brazilian ] = "~Completar palavras";
-        Text[ japanese ] = "å€™è£œã®è¡¨ç¤º(~C)";
-        Text[ turkish ] = "Kelime ~tamamlamayı etkinleştir";
-        Text[ arabic ] = "ÅßãÇá ÇáßáãÇÊ";
-        Text[ catalan ] = "~Completa les paraules";
-        Text[ thai ] = "à¸„à¸³à¸—à¸µà¹ˆ~à¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ";
-        Text[ czech ] = "CelÃ¡ slova";
-        Text[ hebrew ] = "~WortergÃ¤nzung aktivieren";
-        Text[ hindi ] = "à¤¶à¤¬à¥à¤¦ à¤•à¥‹ ~à¤¸à¤®à¤¾à¤ªà¥à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "~CelÃ© slovÃ¡";
-        Text[ hungarian ] = "~SzÃ³kiegÃ©szÃ­tÃ©s engedÃ©lyezÃ©se";
-        Text[ slovenian ] = "OmogoÄi ~dopolnjevanje besed";
+        Text [ de ] = "~Wortergänzung aktivieren";
+        Text [ en-US ] = "Enable word ~completion";
     };
     CheckBox CB_APPEND_SPACE
     {
         Pos = MAP_APPFONT( 10, 17 );
         Size = MAP_APPFONT( 110, 10 );
-        Text = "~Leerzeichen anhängen";
-        Text[ English ] = "Append blanc";
-        Text[ english_us ] = "~Append space";
-        Text[ portuguese ] = "~Anexar espaço";
-        Text[ russian ] = "Äîáàâèòü ïğîáåë";
-        Text[ greek ] = "ĞñïóèŞêç êåíïı";
-        Text[ dutch ] = "~Spatie toevoegen";
-        Text[ french ] = "Ajouter un espace";
-        Text[ spanish ] = "~Añadir un espacio";
-        Text[ italian ] = "Allega spazi";
-        Text[ danish ] = "~Vedhæft mellemrum";
-        Text[ swedish ] = "Ti~llfoga mellanslag";
-        Text[ polish ] = "Do³¹cz spacje";
-        Text[ portuguese_brazilian ] = "Anexar espaço";
-        Text[ japanese ] = "ã‚¹ãƒšãƒ¼ã‚¹ã‚’ã¤ã‘ã‚‹(~A)";
-        Text[ korean ] = "ê³µë°± ì²¨ë¶€(~A)";
-        Text[ chinese_simplified ] = "é™„åŠ ç©ºæ ¼(~A)";
-        Text[ chinese_traditional ] = "é™„åŠ ç©ºæ ¼(~A)";
-        Text[ arabic ] = "ÅáÍÇŞ ÍÑİ ãÓÇİÉ";
-        Text[ turkish ] = "~Boşluk ekle";
-        Text[ catalan ] = "~Afegeix un espai";
-        Text[ finnish ] = "~Liitä väli";
-        Text[ thai ] = "~à¸œà¸™à¸§à¸à¸Šà¹ˆà¸­à¸‡à¸§à¹ˆà¸²à¸‡";
-        Text[ czech ] = "PÅ™idat mezeru";
-        Text[ hebrew ] = "~Leerzeichen anhÃ¤ngen";
-        Text[ hindi ] = "~Append space";
-        Text[ slovak ] = "~PriloÅ¾iÅ¥ medzeru";
-        Text[ hungarian ] = "SzÃ³kÃ¶z ~hozzÃ¡fÅ±zÃ©se";
-        Text[ slovenian ] = "D~odaj presledek";
+        Text [ de ] = "~Leerzeichen anhängen";
+        Text [ en-US ] = "~Append space";
     };
     CheckBox CB_AS_TIP
     {
         Pos = MAP_APPFONT( 10, 31 );
         Size = MAP_APPFONT( 110, 10 );
-        Text = "~Als Tipphilfe anzeigen";
-        Text[ English ] = "Show as tip";
-        Text[ english_us ] = "~Show as tip";
-        Text[ portuguese ] = "~Mostrar como Ajuda-Sugestão";
-        Text[ russian ] = "Ïîêàçàòü êàê ïîäñêàçêó";
-        Text[ greek ] = "ÅìöÜíéóç ùò âïŞèåé~á óõìâïõëŞò";
-        Text[ dutch ] = "~Als Help-tip weergeven";
-        Text[ french ] = "Afficher sous forme d'info~bulle";
-        Text[ spanish ] = "Mostrar como Ayuda e~mergente";
-        Text[ italian ] = "Mostra come Suggerimento";
-        Text[ danish ] = "Vis som indt~astningshjælp";
-        Text[ swedish ] = "Vis~a som tipshjälp";
-        Text[ polish ] = "P~oka¿ jako wskazówkê";
-        Text[ portuguese_brazilian ] = "~Mostrar como dica";
-        Text[ japanese ] = "ãƒ’ãƒ³ãƒˆã¨ã—ã¦è¡¨ç¤º(~S)";
-        Text[ korean ] = "íŒ!ìœ¼ë¡œ í‘œì‹œ(~S)";
-        Text[ chinese_simplified ] = "å½“ä½œæç¤ºæ˜¾ç¤º(~S)";
-        Text[ chinese_traditional ] = "ç•¶ä½œæç¤ºé¡¯ç¤º(~S)";
-        Text[ arabic ] = "ÅÙåÇÑ ßÊáãíÍ";
-        Text[ turkish ] = "Ö~neri olarak görüntüle";
-        Text[ catalan ] = "~Mostra com a consell";
-        Text[ finnish ] = "~Näytä vihjeenä";
-        Text[ thai ] = "à¹~à¸ªà¸”à¸‡à¸„à¸³à¹à¸™à¸°à¸™à¸³";
-        Text[ czech ] = "Zobrazit jako tip";
-        Text[ hebrew ] = "~Als Tipphilfe anzeigen";
-        Text[ hindi ] = "à¤¸à¤¹à¤¾à¤¯à¤¤à¤¾ à¤¸à¥‚à¤šà¤¨à¤¾ à¤œà¥ˆà¤¸à¥‡ ~à¤¦à¤¿à¤–à¤¾à¤“";
-        Text[ slovak ] = "ZobraziÅ¥ ako ~tip";
-        Text[ hungarian ] = "~MegjelenÃ­tÃ©s tippkÃ©nt";
-        Text[ slovenian ] = "~PokaÅ¾i kot namig";
+        Text [ de ] = "~Als Tipphilfe anzeigen";
+        Text [ en-US ] = "~Show as tip";
     };
     CheckBox CB_COLLECT
     {
         Pos = MAP_APPFONT( 4, 45 );
         Size = MAP_APPFONT( 116, 10 );
-        Text = "Wörter ~sammeln";
-        Text[ english_us ] = "C~ollect words";
-        Text[ french ] = "Rassembler les mots";
-        Text[ swedish ] = "~Samla ord";
-        Text[ korean ] = "ì œì•ˆ ë‹¨ì–´ ìˆ˜ì§‘(~O)";
-        Text[ portuguese ] = "~Reunir sugestões";
-        Text[ russian ] = "Ñîáğàòü ïğåäëîæåíèÿ";
-        Text[ greek ] = "ÓõëëïãŞ ğñïôÜóåùí";
-        Text[ dutch ] = "~Voorstellen verzamelen";
-        Text[ spanish ] = "Reunir sugeren~cias";
-        Text[ finnish ] = "Ke~rää ehdotukset";
-        Text[ italian ] = "Raccogli proposte";
-        Text[ danish ] = "Saml ~forslag";
-        Text[ polish ] = "Z~bierz propozycje";
-        Text[ portuguese_brazilian ] = "~Reunir sugestões";
-        Text[ japanese ] = "å€™è£œã‚’é›†ã‚ã‚‹(~O)";
-        Text[ chinese_simplified ] = "æ”¶é›†å­—";
-        Text[ chinese_traditional ] = "æ”¶é›†å»ºè­°(~O)";
-        Text[ turkish ] = "~Kelimeleri topla";
-        Text[ arabic ] = "ÌãÚ ÇáÇŞÊÑÇÍÇÊ";
-        Text[ catalan ] = "R~ecull suggeriments";
-        Text[ thai ] = "à¸£~à¸§à¸šà¸£à¸§à¸¡à¸‚à¹‰à¸­à¹à¸™à¸°à¸™à¸³";
-        Text[ czech ] = "ShromaÅ¾Äovat nÃ¡vrhy";
-        Text[ hebrew ] = "WÃ¶rter ~sammeln";
-        Text[ hindi ] = "à¤¸à¥à¤à¤¾à¤µà¥‹à¤‚ à¤•à¥‹ à¤¸à¤‚~à¤—à¥à¤°à¤¹ à¤•à¤°à¥‹";
-        Text[ slovak ] = "Zhr~omaÅ¾ÄovaÅ¥ nÃ¡vrhy";
-        Text[ hungarian ] = "~SzÃ³gyÅ±jtÃ©s";
-        Text[ slovenian ] = "Z~beri besede";
+        Text [ de ] = "Wörter ~sammeln";
+        Text [ en-US ] = "C~ollect words";
     };
     CheckBox CB_KEEP_LIST
     {
         Pos = MAP_APPFONT( 10, 59 );
         Size = MAP_APPFONT( 110, 30 );
         WordBreak = TRUE;
-        Text = "~Beim Schließen eines Dokuments Liste für spätere Verwendung speichern";
-        Text[ english_us ] = "~When closing a document, save the list for later use in other documents.";
-        Text[ portuguese ] = "~When closing a document, save the list for later use in other documents";
-        Text[ russian ] = "~When closing a document, save the list for later use in other documents";
-        Text[ greek ] = "~When closing a document, save the list for later use in other documents";
-        Text[ dutch ] = "~Bij sluiten van een document, sla de lijst voor later gebruik op.";
-        Text[ french ] = "À la fermeture d'un document, enregistrer la liste pour utilisation ultérieure";
-        Text[ spanish ] = "~Al cerrar un documento, guarde la lista para utilizarla posteriormente en otros documentos. ";
-        Text[ finnish ] = "~When closing a document, save the list for later use in other documents";
-        Text[ italian ] = "Prima di chiudere un documento salva l'elenco per poterlo riutilizzare.";
-        Text[ danish ] = "~Gem listen til senere brug, når et dokument lukkes.";
-        Text[ swedish ] = "Spara listan för senare användning i andra ~dokument när dokumentet stängs";
-        Text[ polish ] = "~When closing a document, save the list for later use in other documents";
-        Text[ portuguese_brazilian ] = "Ao ~fechar um documento, salve a lista para usá-la com outros documentos";
-        Text[ japanese ] = "ãƒªã‚¹ãƒˆã¯ã€ã‚ã¨ã‹ã‚‰ã§ã‚‚ã»ã‹ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã§ä½¿ç”¨ã§ãã‚‹ã‚ˆã†ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’é–‰ã˜ã‚‹éš›ã«ä¿å­˜ã™ã‚‹(~W)ã€‚";
-        Text[ korean ] = "ë¬¸ì„œë¥¼ ë‹«ì„ ë•Œ ì°¨í›„ ì‚¬ìš©ì„ ìœ„í•´ ëª©ë¡ ì €ì¥(~W)";
-        Text[ chinese_simplified ] = "åœ¨å…³é—­æ–‡æ¡£æ—¶å­˜ç›˜åˆ—å•ä»¥å¤‡åç”¨(~W)";
-        Text[ chinese_traditional ] = "åœ¨é—œé–‰æ–‡ä»¶æ™‚å„²å­˜æ¸…å–®ä»¥å‚™å¾Œç”¨(~W)";
-        Text[ turkish ] = "Dökümanı ~kapatırken listeyi, başka dökümanlarda kullanılmak üzere kaydet.";
-        Text[ arabic ] = "~When closing a document, save the list for later use in other documents";
-        Text[ catalan ] = "~When closing a document, save the list for later use in other documents";
-        Text[ thai ] = "~When closing a document, save the list for later use in other documents";
-        Text[ czech ] = "PÅ™i uzavÅ™enÃ­ dokumentu uloÅ¾it seznam pro pozdÄ›jÅ¡Ã­ pouÅ¾itÃ­ v jinÃ½ch dokumentech";
-        Text[ hebrew ] = "~Beim SchlieÃŸen eines Dokuments Liste fÃ¼r spÃ¤tere Verwendung speichern";
-        Text[ hindi ] = "~When closing a document, save the list for later use in other documents.";
-        Text[ slovak ] = "~Pri zatvÃ¡ranÃ­ dokumentu, uloÅ¾te tento zoznam pre pouÅ¾itie v inÃ½ch dokumentoch.";
-        Text[ hungarian ] = "~Lista mentÃ©se a dokumentum bezÃ¡rÃ¡sakor, hogy kÃ©sÅ‘bb mÃ¡s dokumentumokban is felhasznÃ¡lhatÃ³ legyen.";
-        Text[ slovenian ] = "~Ob zaprtju dokumenta shrani seznam za kasnejÅ¡o uporabo v drugih dokumentih.";
+        Text [ de ] = "~Beim Schließen eines Dokuments Liste für spätere Verwendung speichern";
+        Text [ en-US ] = "~When closing a document, save the list for later use in other documents.";
     };
     FixedText FT_EXPAND_KEY
     {
         Pos = MAP_APPFONT( 4, 102 );
         Size = MAP_APPFONT( 116, 8 );
-        Text = "A~nnehmen mit";
-        Text[ English ] = "Accept with";
-        Text[ english_us ] = "Acc~ept with";
-        Text[ portuguese ] = "A~ceitar com";
-        Text[ russian ] = "Ïğèíÿòü ñ";
-        Text[ greek ] = "Áğïäï÷Ş ìå";
-        Text[ dutch ] = "A~ccepteren met";
-        Text[ french ] = "A~ccepter avec";
-        Text[ spanish ] = "Aceptar con";
-        Text[ italian ] = "Accetta con";
-        Text[ danish ] = "A~ccepter med";
-        Text[ swedish ] = "A~cceptera med";
-        Text[ polish ] = "Za~twierdzaj klawiszem";
-        Text[ portuguese_brazilian ] = "Ac~eitar com";
-        Text[ japanese ] = "å®Ÿè¡Œç”¨ã‚­ãƒ¼(~E)";
-        Text[ korean ] = "ì„ íƒìš© í‚¤(~E)";
-        Text[ chinese_simplified ] = "æ¥å—æ—¶æŒ‰å‡»(~E)";
-        Text[ chinese_traditional ] = "æ¡ç”¨å»ºè­°å°±æŒ‰ä¸€ä¸‹(~E)";
-        Text[ arabic ] = "ŞÈæá ãÚ";
-        Text[ turkish ] = "Şu ~tuşla kabul et:";
-        Text[ catalan ] = "Acc~epta amb";
-        Text[ finnish ] = "Hy~väksy";
-        Text[ thai ] = "à¸¢à¸­à¸¡~à¸£à¸±à¸š";
-        Text[ czech ] = "PÅ™ijmout s";
-        Text[ hebrew ] = "A~nnehmen mit";
-        Text[ hindi ] = "à¤•à¥‡ à¤¸à¤¹à¤¿à¤¤ à¤¸à¥à¤µà¥€~à¤•à¥ƒà¤¤";
-        Text[ slovak ] = "Akc~eptovaÅ¥ s";
-        Text[ hungarian ] = "El~fogadÃ¡s az alÃ¡bbi billentyÅ±vel";
-        Text[ slovenian ] = "Spr~ejmi z";
+        Text [ de ] = "A~nnehmen mit";
+        Text [ en-US ] = "Acc~ept with";
     };
     ListBox DCB_EXPAND_KEY
     {
@@ -2887,35 +860,8 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     {
         Pos = MAP_APPFONT( 4, 129 );
         Size = MAP_APPFONT( 116, 8 );
-        Text = "~Min. Wortlänge";
-        Text[ English ] = "Min. word len";
-        Text[ english_us ] = "Mi~n. word length";
-        Text[ portuguese ] = "C~ompr. mín. de palavra";
-        Text[ russian ] = "Ìèí. äëèíà ñëîâà";
-        Text[ greek ] = "ÅëÜ÷éóôï ìŞêïò ëİîçò";
-        Text[ dutch ] = "~Min. woordlengte";
-        Text[ french ] = "Longueur de mot min.";
-        Text[ spanish ] = "Tamaño mín. de palabra";
-        Text[ italian ] = "Lungh. min. parola";
-        Text[ danish ] = "~Min. ordlængde";
-        Text[ swedish ] = "~Min. ordlängd";
-        Text[ polish ] = "Mi~nimalna d³ugoœæ wyrazu";
-        Text[ portuguese_brazilian ] = "Tamanho mí~n. de palavra";
-        Text[ japanese ] = "æœ€ä½æ–‡å­—æ•°(~N)";
-        Text[ korean ] = "ìµœì†Œ ë‹¨ì–´ ê¸¸ì´(~N)";
-        Text[ chinese_simplified ] = "æœ€å°‘å­—ç¬¦æ•°ç›®(~N)";
-        Text[ chinese_traditional ] = "æœ€çŸ­å­—é•·(~N)";
-        Text[ arabic ] = "ÇáØæá ÇáÃÏäì ááßáãÉ";
-        Text[ turkish ] = "As~gari sözcük uzunluğu:";
-        Text[ catalan ] = "Longitud mí~nima de paraules";
-        Text[ finnish ] = "Sanojen ~vähimmäispituus";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸¢à¸²à¸§à¸„à¸³à¸—à¸µà¹ˆà¸™à¹‰à¸­~à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
-        Text[ czech ] = "Min. dÃ©lka slova";
-        Text[ hebrew ] = "~Min. WortlÃ¤nge";
-        Text[ hindi ] = "à¤¨à¥à¤¯à¥‚~à¤¨à¤¤à¤®à¥ à¤¶à¤¬à¥à¤¦ à¤•à¤¾ à¤µà¤¿à¤¸à¥à¤¤à¤¾à¤°";
-        Text[ slovak ] = "Mi~n. dÄºÅ¾ka slova";
-        Text[ hungarian ] = "Mi~nimÃ¡lis szÃ³hossz";
-        Text[ slovenian ] = "Naj~m. dolÅ¾ina besede";
+        Text [ de ] = "~Min. Wortlänge";
+        Text [ en-US ] = "Mi~n. word length";
     };
     NumericField NF_MIN_WORDLEN
     {
@@ -2937,35 +883,8 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     {
         Pos = MAP_APPFONT( 4, 156 );
         Size = MAP_APPFONT( 116, 8 );
-        Text = "Ma~x. Einträge";
-        Text[ English ] = "Max. entries";
-        Text[ english_us ] = "~Max. entries";
-        Text[ portuguese ] = "Má~x. de entradas";
-        Text[ russian ] = "Ìàêñ. çàïèñåé";
-        Text[ greek ] = "Ìİãéóôïò áñéèìüò åããñáöşí";
-        Text[ dutch ] = "~Max. items";
-        Text[ french ] = "Ma~ximum d'entrées";
-        Text[ spanish ] = "Entradas máx.";
-        Text[ italian ] = "Ma~x. voci";
-        Text[ danish ] = "Ma~ks. elementer";
-        Text[ swedish ] = "Ma~x poster";
-        Text[ polish ] = "M~aksymalna liczba wpisów";
-        Text[ portuguese_brazilian ] = "Máx. de en~tradas";
-        Text[ japanese ] = "æœ€é«˜é …ç›®æ•°(~M)";
-        Text[ korean ] = "ìµœëŒ€ í•­ëª©(~M)";
-        Text[ chinese_simplified ] = "æœ€å¤šæ¡ç›®æ•°(~M)";
-        Text[ chinese_traditional ] = "æœ€å¤šæ¢ç›®(~M)";
-        Text[ arabic ] = "ÇáÍÏ ÇáÃŞÕì ááÅÏÎÇáÇÊ";
-        Text[ turkish ] = "~Azami giriş sayısı";
-        Text[ catalan ] = "Nombre ~màxim d'entrades";
-        Text[ finnish ] = "Merkintöjen ~enimmäismäärä";
-        Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£~à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
-        Text[ czech ] = "Max. poÄet poloÅ¾ek";
-        Text[ hebrew ] = "Ma~x. EintrÃ¤ge";
-        Text[ hindi ] = "~à¤…à¤§à¤¿à¤•à¤¤à¤®à¥ à¤­à¤°à¤¤à¤¿à¤¯à¤¾à¤ ";
-        Text[ slovak ] = "~Max. poÄet poloÅ¾iek";
-        Text[ hungarian ] = "~Lista elemeinek maximÃ¡lis szÃ¡ma";
-        Text[ slovenian ] = "Naj~veÄ vnosov";
+        Text [ de ] = "Ma~x. Einträge";
+        Text [ en-US ] = "~Max. entries";
     };
     NumericField NF_MAX_ENTRIES
     {
@@ -2997,64 +916,11 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     {
         Pos = MAP_APPFONT( 127, 165 );
         Size = MAP_APPFONT( 121, 14 );
-        Text = "Eintrag lö~schen";
-        Text[ English ] = "Delete entry";
+        Text [ de ] = "Eintrag lö~schen";
         TabStop = TRUE ;
-        Text[ english_us ] = "~Delete Entry";
-        Text[ portuguese ] = "~Eliminar entrada";
-        Text[ russian ] = "Óäàëèòü çàïèñü";
-        Text[ greek ] = "ÄéáãñáöŞ êáôá÷şñé~óçò";
-        Text[ dutch ] = "~Item wissen";
-        Text[ french ] = "Su~pprimer l'entrée";
-        Text[ spanish ] = "~Borrar la entrada";
-        Text[ italian ] = "Cancella voce";
-        Text[ danish ] = "~Slet element";
-        Text[ swedish ] = "Radera ~post";
-        Text[ polish ] = "U~suñ pozycjê";
-        Text[ portuguese_brazilian ] = "E~xcluir entrada";
-        Text[ japanese ] = "é …ç›®ã®å‰Šé™¤(~D)";
-        Text[ korean ] = "í•­ëª© ì‚­ì œ(~D)";
-        Text[ chinese_simplified ] = "åˆ é™¤æ¡ç›®(~D)";
-        Text[ chinese_traditional ] = "åˆªé™¤æ¢ç›®(~D)";
-        Text[ arabic ] = "ÍĞİ ÅÏÎÇá";
-        Text[ turkish ] = "~Girişi sil";
-        Text[ catalan ] = "~Suprimeix l'entrada";
-        Text[ finnish ] = "Poista ~merkintä";
-        Text[ thai ] = "~à¸¥à¸šà¸£à¸²à¸¢à¸à¸²à¸£";
-        Text[ czech ] = "Odstranit poloÅ¾ku";
-        Text[ hebrew ] = "Eintrag lÃ¶~schen";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ ~à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "~ZmazaÅ¥ poloÅ¾ku";
-        Text[ hungarian ] = "~BejegyzÃ©s tÃ¶rlÃ©se";
-        Text[ slovenian ] = "~IzbriÅ¡i vnos";
+        Text [ en-US ] = "~Delete Entry";
     };
-    Text[ english_us ] = "Word Completion";
-    Text[ portuguese ] = "Completar palavras";
-    Text[ russian ] = "Äîïîëíåíèå ñëîâà";
-    Text[ greek ] = "ÓõìğëŞñùóç ëİîçò";
-    Text[ dutch ] = "Woordinvulling";
-    Text[ french ] = "Insertion automatique";
-    Text[ spanish ] = "Completar palabras";
-    Text[ italian ] = "Completamento parola";
-    Text[ danish ] = "Ordfuldførelse";
-    Text[ swedish ] = "Ordkomplettering";
-    Text[ polish ] = "Uzupe³nianie wyrazów";
-    Text[ portuguese_brazilian ] = "Completar palavras";
-    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆã‚³ãƒ³ãƒ—ãƒªãƒ¼ãƒˆ";
-    Text[ korean ] = "ë¬¸ì ì™„ì„±";
-    Text[ chinese_simplified ] = "å­—è¯è¡¥å……å®Œæ•´";
-    Text[ chinese_traditional ] = "è‡ªå‹•å®Œæˆå­—è©";
-    Text[ arabic ] = "ÅßãÇá ÇáßáãÉ";
-    Text[ turkish ] = "Kelime Tamamlama";
-    Text[ catalan ] = "Compleció de paraules";
-    Text[ finnish ] = "Sanan täydennys";
-    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œà¸‚à¸­à¸‡à¸„à¸³";
-    Text[ czech ] = "DokonÄovÃ¡nÃ­ slov";
-    Text[ hebrew ] = "WortergÃ¤nzung";
-    Text[ hindi ] = "Word Completion";
-    Text[ slovak ] = "DokonÄovanie slov";
-    Text[ hungarian ] = "SzÃ³kiegÃ©szÃ­tÃ©s";
-    Text[ slovenian ] = "Dopolnjevanje besed";
+    Text [ en-US ] = "Word Completion";
 };
 
 
