@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 07:10:30 $
+ *  last change: $Author: dvo $ $Date: 2001-06-22 16:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1805,6 +1805,8 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             pContext = rImport.GetShapeImport()->CreateGroupChildContext(
                     rImport, nPrefix, rLocalName, xAttrList, xShapes );
         }
+
+        rIgnoreLeadingSpace = sal_False;
     }
 
     return pContext;
