@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
+ *  last change: $Author: mib $ $Date: 2002-06-07 07:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,18 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
+#ifndef _SFXVIEWSH_HXX //autogen
+#include <sfx2/viewsh.hxx>
 #endif
 
 #ifndef _VOS_MUTEX_HXX_ //autogen
@@ -139,7 +148,8 @@ using ::com::sun::star::lang::IndexOutOfBoundsException;
 SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *pMap ) :
     SwAccessibleContext( pMap, AccessibleRole::DOCUMENT,
                            pMap->GetShell()->GetDoc()->GetRootFrm() ),
-    xParent( pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() )
+    xParent( pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
+    pChildWin( 0 )
 {
 }
 
@@ -158,6 +168,72 @@ void SwAccessibleDocumentBase::SetVisArea()
         SwAccessibleFrame::SetVisArea( GetMap()->GetVisArea() );
         ChildrenScrolled( GetFrm(), aOldVisArea );
     }
+}
+
+void SwAccessibleDocumentBase::AddChild( Window *pWin, sal_Bool bFireEvent )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    ASSERT( !pChildWin, "only one child window is supported" );
+    if( !pChildWin )
+    {
+        pChildWin = pWin;
+
+        if( bFireEvent )
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+            aEvent.NewValue <<= pChildWin->GetAccessible();
+            FireAccessibleEvent( aEvent );
+        }
+    }
+}
+
+void SwAccessibleDocumentBase::RemoveChild( Window *pWin )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    ASSERT( pWin == pChildWin, "invalid child window to remove" );
+    if( pWin == pChildWin )
+    {
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+        aEvent.OldValue <<= pChildWin->GetAccessible();
+        FireAccessibleEvent( aEvent );
+
+        pChildWin = 0;
+    }
+}
+
+sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount( void )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // CHECK_FOR_DEFUNC is called by parent
+
+    sal_Int32 nChildren = SwAccessibleContext::getAccessibleChildCount();
+    if( !IsDisposing() && pChildWin )
+        nChildren++;
+
+    return nChildren;
+}
+
+Reference< XAccessible> SAL_CALL
+    SwAccessibleDocumentBase::getAccessibleChild( long nIndex )
+        throw (::com::sun::star::uno::RuntimeException,
+                ::com::sun::star::lang::IndexOutOfBoundsException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if( pChildWin  )
+    {
+        CHECK_FOR_DEFUNC( XAccessibleContext )
+        if( nIndex == GetChildCount() )
+            return pChildWin->GetAccessible();
+    }
+
+    return SwAccessibleContext::getAccessibleChild( nIndex );
 }
 
 
@@ -253,7 +329,26 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
     return aSize;
 }
 
+Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt(
+                const awt::Point& aPoint )
+        throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
+    if( pChildWin  )
+    {
+        CHECK_FOR_DEFUNC( XAccessibleComponent )
+
+        Window *pWin = GetWindow();
+        CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+
+        Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
+        if( pChildWin->GetWindowExtentsRelative( pWin ).IsInside( aPixPoint ) )
+            return pChildWin->GetAccessible();
+    }
+
+    return SwAccessibleContext::getAccessibleAt( aPoint );
+}
 
 //
 // SwAccessibeDocument
@@ -274,12 +369,69 @@ SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap *pMap ) :
     aSelectionHelper( *this )
 {
     SetName( GetResource( STR_ACCESS_DOC_NAME ) );
+    Window *pWin = pMap->GetShell()->GetWin();
+    if( pWin )
+    {
+        pWin->AddChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
+        USHORT nCount =   pWin->GetChildCount();
+        for( sal_uInt16 i=0; i < nCount; i++ )
+        {
+            Window *pChildWin = pWin->GetChild( i );
+            if( pChildWin &&
+                AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
+                AddChild( pChildWin, sal_False );
+        }
+    }
 }
 
 SwAccessibleDocument::~SwAccessibleDocument()
 {
+    Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : 0;
+    if( pWin )
+        pWin->RemoveChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
 }
 
+void SwAccessibleDocument::Dispose( sal_Bool bRecursive )
+{
+    ASSERT( GetFrm() && GetMap(), "already disposed" );
+
+    Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : 0;
+    if( pWin )
+        pWin->RemoveChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
+    SwAccessibleContext::Dispose( bRecursive );
+}
+
+IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEvent )
+{
+    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    {
+        VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
+        DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
+        switch ( pVclEvent->GetId() )
+        {
+        case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
+            {
+                Window* pChildWin = static_cast < Window * >( pVclEvent->GetData() );
+                if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
+                {
+                    AddChild( pChildWin );
+                }
+            }
+            break;
+        case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
+            {
+                Window* pChildWin = static_cast < Window * >( pVclEvent->GetData() );
+                if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
+                {
+                    RemoveChild( pChildWin );
+                }
+            }
+            break;
+        }
+    }
+    return 0;
+}
 
 
 OUString SAL_CALL SwAccessibleDocument::getImplementationName()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-27 12:34:44 $
+ *  last change: $Author: mib $ $Date: 2002-06-07 07:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,8 @@ protected:
 
     void SetParent( SwAccessibleContext *pParent );
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> GetWeakParent() const;
+
+    sal_Bool IsDisposing() const { return bDisposing; }
 
     Window *GetWindow();
     SwAccessibleMap *GetMap() { return pMap; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
+ *  last change: $Author: mib $ $Date: 2002-06-07 07:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 class SwRootFrm;
 class SwFEShell;
 class SwFlyFrm;
+class VclSimpleEvent;
 
 /**
  * base class for SwAccessibleDocument (in this same header file) and
@@ -85,6 +86,8 @@ class SwAccessibleDocumentBase : public SwAccessibleContext
 {
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible> xParent;
+
+    Window *pChildWin;  // protected by solar mutext
 
 protected:
 
@@ -97,7 +100,20 @@ public:
 
     void SetVisArea();
 
+    virtual void AddChild( Window *pWin, sal_Bool bFireEvent = sal_True );
+    virtual void RemoveChild( Window *pWin );
+
     //=====  XAccessibleContext  ==============================================
+
+    /// Return the number of currently visible children.
+    virtual long SAL_CALL getAccessibleChildCount (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// Return the specified child or NULL if index is invalid.
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+        getAccessibleChild (long nIndex)
+        throw (::com::sun::star::uno::RuntimeException,
+                ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Return a reference to the parent.
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
@@ -114,6 +130,11 @@ public:
         getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleComponent  ==============================================
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt(
+                const ::com::sun::star::awt::Point& aPoint )
+        throw (::com::sun::star::uno::RuntimeException);
+
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds()
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -151,6 +172,7 @@ public:
     SwAccessibleDocument(
         SwAccessibleMap *pMap );
 
+    DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
 
     //=====  XServiceInfo  ====================================================
 
@@ -215,6 +237,11 @@ public:
         sal_Int32 nSelectedChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
+
+    //====== thread safe C++ interface ========================================
+
+    // The object is not visible an longer and should be destroyed
+    virtual void Dispose( sal_Bool bRecursive = sal_False );
 };
 
 #endif
