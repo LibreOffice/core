@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 13:36:43 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 13:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2252,13 +2252,13 @@ Bitmap RID_SVXBMP_GALLERY_SOUND_7
 Image RID_SVXIMG_GALLERY_VIEW_ICON
 {
     ImageBitmap = Bitmap { File = "galicon.bmp"; };
-    MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 };
 
 Image RID_SVXIMG_GALLERY_VIEW_LIST
 {
     ImageBitmap = Bitmap { File = "gallist.bmp"; };
-    MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 };
 
 
