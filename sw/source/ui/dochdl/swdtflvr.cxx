@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:53:11 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,11 @@
 #include <svx/svdpage.hxx>
 #endif
 
+// #109590#
+#ifndef _SWCRSR_HXX
+#include <swcrsr.hxx>
+#endif
+
 extern BOOL bFrmDrag;
 extern BOOL bDDINetAttr;
 extern BOOL bExecuteDrag;
@@ -560,7 +565,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
     // 1) we have data for this format
     // 2) we have either a clipboard document (pClpDocFac), or
     //    we have a SwWrtShell (so we can generate a new clipboard document)
-    if( !HasFormat( nFormat ) || ( pClpDocFac != NULL && pWrtShell != NULL ) )
+    if( !HasFormat( nFormat ) || ( pClpDocFac == NULL && pWrtShell == NULL ) )
         return sal_False;
 
     if( !pClpDocFac )
@@ -3410,7 +3415,10 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         if ( bRet && bMove && !bFrmSel )
         {
             if ( bTblSel )
-                rSrcSh.DeleteTblSel();
+            {
+                /* #109590# delete table contents not cells */
+                rSrcSh.Delete();
+            }
             else
             {
                 //SmartCut, eines der Blank mitnehmen.
@@ -3424,6 +3432,14 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         }
         rSrcSh.KillPams();
         rSrcSh.Pop( FALSE );
+
+        /* #109590# after dragging a table selection inside one shell
+            set cursor to the drop position. */
+        if (bTblSel && &rSh == &rSrcSh)
+        {
+            rSrcSh.SwCrsrShell::SetCrsr(rDragPt);
+            rSrcSh.GetSwCrsr()->SetMark();
+        }
     }
 
     if( bRet && !bTblSel && !bFrmSel )
