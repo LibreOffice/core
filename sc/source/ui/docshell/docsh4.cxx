@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:32:21 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1303,16 +1303,12 @@ BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         SCROW nEndRow = rRange.aEnd.Row();
         if ( pRepeatRow && nStartRow >= pRepeatRow->aStart.Row() )
         {
-            for (SCROW i=pRepeatRow->aStart.Row(); i<=pRepeatRow->aEnd.Row(); i++ )
-                nBlkTwipsY += aDocument.FastGetRowHeight( i, nTab );
+            nBlkTwipsY += aDocument.FastGetRowHeight( pRepeatRow->aStart.Row(),
+                    pRepeatRow->aEnd.Row(), nTab );
             if ( nStartRow <= pRepeatRow->aEnd.Row() )
                 nStartRow = pRepeatRow->aEnd.Row() + 1;
         }
-        // legacy compilers' own scope for i
-        {
-            for (SCROW i=nStartRow; i<=nEndRow; i++ )
-                nBlkTwipsY += aDocument.FastGetRowHeight( i, nTab );
-        }
+        nBlkTwipsY += aDocument.FastGetRowHeight( nStartRow, nEndRow, nTab );
 
         Size aPhysPage;
         long nHdr, nFtr;
