@@ -1,4 +1,4 @@
-/* RCS  $Id: runargv.c,v 1.3 2001-05-07 12:47:09 mh Exp $
+/* RCS  $Id: runargv.c,v 1.4 2001-05-29 22:43:32 pluby Exp $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -97,7 +97,13 @@ char    *cmd;
    }
 
    while( _proc_cnt == Max_proc )
-      if( Wait_for_child(FALSE, -1) == -1 )  Fatal( "Lost a child %d", errno );
+      if( Wait_for_child(FALSE, -1) == -1 )
+      {
+         Fatal( "Lost a child %d", errno );
+         /* If we make it here, something has gone wrong and we need to
+          * forcefully exit */
+         Epilog( ERROR_EXIT_VALUE );
+      }
 
    argv = Pack_argv( group, shell, cmd );
 
