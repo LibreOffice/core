@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,17 @@
 using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
+
+// writer documents
+extern uno::Sequence< OUString > SAL_CALL SwTextDocument_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwTextDocument_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr ) throw( uno::Exception );
+extern uno::Sequence< OUString > SAL_CALL SwWebDocument_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwWebDocument_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr ) throw( uno::Exception );
+extern uno::Sequence< OUString > SAL_CALL SwGlobalDocument_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwGlobalDocument_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SwGlobalDocument_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr ) throw( uno::Exception );
 
 // xml import
 extern uno::Sequence< OUString > SAL_CALL SwXMLImport_getSupportedServiceNames() throw();
@@ -169,6 +180,7 @@ sal_Bool SAL_CALL component_writeInfo(
             registry::XRegistryKey *pKey =
                 reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
 
+
             // xml filter
             lcl_uno_writeInfo( pKey, SwXMLImport_getImplementationName(),
                                SwXMLImport_getSupportedServiceNames() );
@@ -200,6 +212,14 @@ sal_Bool SAL_CALL component_writeInfo(
             //Filter options
             lcl_uno_writeInfo( pKey, SwXFilterOptions::getImplementationName_Static(),
                                SwXFilterOptions::getSupportedServiceNames_Static() );
+
+            // documents
+            lcl_uno_writeInfo( pKey, SwTextDocument_getImplementationName(),
+                               SwTextDocument_getSupportedServiceNames() );
+            lcl_uno_writeInfo( pKey, SwWebDocument_getImplementationName(),
+                               SwWebDocument_getSupportedServiceNames() );
+            lcl_uno_writeInfo( pKey,SwGlobalDocument_getImplementationName(),
+                               SwGlobalDocument_getSupportedServiceNames() );
 
         }
         catch (registry::InvalidRegistryException &)
@@ -334,6 +354,30 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName,
                 SwXFilterOptions::getImplementationName_Static(),
                 SwXFilterOptions_createInstance,
                 SwXFilterOptions::getSupportedServiceNames_Static() );
+        }
+        else if( SwTextDocument_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwTextDocument_getImplementationName(),
+                SwTextDocument_createInstance,
+                SwTextDocument_getSupportedServiceNames() );
+        }
+        else if( SwWebDocument_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwWebDocument_getImplementationName(),
+                SwWebDocument_createInstance,
+                SwWebDocument_getSupportedServiceNames() );
+        }
+        else if( SwGlobalDocument_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwGlobalDocument_getImplementationName(),
+                SwGlobalDocument_createInstance,
+                SwGlobalDocument_getSupportedServiceNames() );
         }
 
         if( xFactory.is())
