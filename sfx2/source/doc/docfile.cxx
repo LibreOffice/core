@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-25 10:38:41 $
+ *  last change: $Author: mav $ $Date: 2002-09-27 09:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,8 +1005,11 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
                 }
                 else
                 {
+                    if ( bUCBStorage && !UCBStorage::IsStorageFile( pInStream ) )
+                        return NULL;
+
                     // create a storage on the stream
-                    aStorage = new SvStorage( bUCBStorage, *pInStream );
+                    aStorage = new SvStorage( pInStream, sal_False );
                     if ( !aStorage->GetName().Len() )
                            aStorage->SetName( aStorageName );
                 }
