@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-11 13:45:22 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 17:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,10 +453,28 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
         }
 
         {
-        MutexGuard aGuard( rBHelper.rMutex );
-        // set the property to the new value
-        setFastPropertyValue_NoBroadcast( nHandle, aConvertedVal );
-        // release guard to fire events
+            MutexGuard aGuard( rBHelper.rMutex );
+            try
+            {
+                // set the property to the new value
+                setFastPropertyValue_NoBroadcast( nHandle, aConvertedVal );
+            }
+            catch (const ::com::sun::star::beans::UnknownPropertyException& )   { throw;    /* allowed to leave */ }
+            catch (const ::com::sun::star::beans::PropertyVetoException& )      { throw;    /* allowed to leave */ }
+            catch (const ::com::sun::star::lang::IllegalArgumentException& )    { throw;    /* allowed to leave */ }
+            catch (const ::com::sun::star::lang::WrappedTargetException& )      { throw;    /* allowed to leave */ }
+            catch (const ::com::sun::star::uno::RuntimeException& )             { throw;    /* allowed to leave */ }
+            catch (const ::com::sun::star::uno::Exception& e )
+            {
+                // not allowed to leave this meathod
+                ::com::sun::star::lang::WrappedTargetException aWrap;
+                aWrap.Context = static_cast< ::com::sun::star::beans::XPropertySet* >( this );
+                aWrap.TargetException <<= e;
+
+                throw ::com::sun::star::lang::WrappedTargetException( aWrap );
+            }
+
+            // release guard to fire events
         }
         // file a change event, if the value changed
         fire( &nHandle, &rValue, &aOldVal, 1, sal_False );
