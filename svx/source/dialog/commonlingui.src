@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonlingui.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:32:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ czech ] = "Původní";
         Text[ hebrew ] = "~Original";
         Text[ slovak ] = "Pôvod~né";
+        Text[ hindi ] = "~यथार्थ";
     };
     Control FT_AKTWORD
     {
@@ -141,6 +142,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ czech ] = "Slovo";
         Text[ hebrew ] = "‮מילה‬";
         Text[ slovak ] = "~Slovo";
+        Text[ hindi ] = "~शब्द";
     };
 
     Edit ED_NEWWORD
@@ -181,6 +183,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ czech ] = "Návrhy";
         Text[ hebrew ] = "~Vorschläge";
         Text[ slovak ] = "Náv~rhy";
+        Text[ hindi ] = "~सुझावें";
     };
 
     PushButton BTN_IGNORE
@@ -215,6 +218,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ czech ] = "Ignorovat";
         Text[ hebrew ] = "‮להתעלם‬";
         Text[ slovak ] = "~Ignorovať";
+        Text[ hindi ] = "~उपेक्षा";
     };
 
     PushButton BTN_IGNOREALL
@@ -249,6 +253,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ czech ] = "Ignorovat vše";
         Text[ hebrew ] = "Immer i~gnorieren";
         Text[ slovak ] = "Vždy i~gnorovať";
+        Text[ hindi ] = "सब उ~पेक्षा करो";
     };
 
     PushButton BTN_CHANGE
@@ -284,6 +289,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ czech ] = "Nahradit";
         Text[ hebrew ] = "‮החלפה‬";
         Text[ slovak ] = "Nah~radiť";
+        Text[ hindi ] = "प्रतिस्थाप~न";
     };
 
     PushButton BTN_CHANGEALL
@@ -315,9 +321,10 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reempla�a ~sempre";
         Text[ thai ] = "แท~นที่ทุกครั้ง";
-        Text[ czech ] = "Vždy nahrazovat";
+        Text[ czech ] = "Navradit vše";
         Text[ hebrew ] = "I~mmer ersetzen";
         Text[ slovak ] = "Vž~dy nahradiť";
+        Text[ hindi ] = "हमेशा प्रतिस्थापि~त करो";
     };
 
     FixedText FT_STATUS
@@ -372,8 +379,17 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ slovak ] = "~Zavrieť";
+        Text[ hindi ] = "~बन्द करो";
     };
 };
+
+
+
+
+
+
+
+
 
 
 
