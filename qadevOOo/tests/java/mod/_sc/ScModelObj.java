@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScModelObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:18 $
+ *  last change:$Date: 2003-02-04 13:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.sheet.SpreadsheetDocument</code>. <p>
@@ -149,8 +152,7 @@ public class ScModelObj extends TestCase {
     * </ul>
     * @see
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         // creation of the testobject here
         // first we write what we are intend to do to log file
@@ -202,7 +204,8 @@ public class ScModelObj extends TestCase {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
+            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                        new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
             log.println("Getting a cell from sheet") ;
             toSel = oSheet.getCellByPosition(2, 3) ;
@@ -211,6 +214,10 @@ public class ScModelObj extends TestCase {
             throw new StatusException(
                 "Error getting cell object from spreadsheet document", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log) ;
+            throw new StatusException(
+                "Error getting cell object from spreadsheet document", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log) ;
             throw new StatusException(
                 "Error getting cell object from spreadsheet document", e);
@@ -228,4 +235,3 @@ public class ScModelObj extends TestCase {
 
 
 }    // finish class ScModelObj
-

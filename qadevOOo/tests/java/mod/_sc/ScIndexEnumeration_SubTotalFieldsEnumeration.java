@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_SubTotalFieldsEnumeration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:21 $
+ *  last change:$Date: 2003-02-04 13:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 public class ScIndexEnumeration_SubTotalFieldsEnumeration extends TestCase {
     public XSpreadsheetDocument xSpreadsheetDoc;
 
@@ -124,11 +127,15 @@ public class ScIndexEnumeration_SubTotalFieldsEnumeration extends TestCase {
         XIndexAccess oIndexAccess = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         try {
-            oSheet = (XSpreadsheet)oIndexAccess.getByIndex(0);
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get a spreadsheet", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException( "Couldn't get a spreadsheet", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get a spreadsheet", e);
         }

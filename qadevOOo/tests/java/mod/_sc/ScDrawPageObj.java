@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScDrawPageObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:31 $
+ *  last change:$Date: 2003-02-04 13:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ import util.InstCreator;
 import util.SOfficeFactory;
 import util.ShapeDsc;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 public class ScDrawPageObj extends TestCase {
 
     XSpreadsheetDocument xDoc = null;
@@ -148,7 +151,8 @@ public class ScDrawPageObj extends TestCase {
             oDP = (XDrawPages) oDPS.getDrawPages();
             oDP.insertNewByIndex(1);
             oDP.insertNewByIndex(2);
-            oObj = (XDrawPage) oDP.getByIndex(0);
+            oObj = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oDP.getByIndex(0));
 
             SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
@@ -162,6 +166,10 @@ public class ScDrawPageObj extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Can't create enviroment", e) ;
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Couldn't create insance");
+            e.printStackTrace(log);
+            throw new StatusException("Can't create enviroment", e) ;
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             log.println("Couldn't create insance");
             e.printStackTrace(log);
             throw new StatusException("Can't create enviroment", e) ;
