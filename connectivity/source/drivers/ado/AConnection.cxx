@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:32:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
 
 using namespace dbtools;
 using namespace connectivity::ado;
@@ -180,6 +184,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
     ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
+    if ( aDSN.compareToAscii("access:",7) == 0 )
+        aDSN = aDSN.copy(7);
 
     sal_Int32 nTimeout = 20;
     sal_Bool bSilent = sal_True;
@@ -497,13 +503,17 @@ void OConnection::buildTypeInfo() throw( SQLException)
 
         if ( bOk )
         {
+            // HACK for access
+            static const ::rtl::OUString s_sVarChar(RTL_CONSTASCII_USTRINGPARAM("VarChar"));
             do
             {
                 sal_Int32 nPos = 1;
                 OExtendedTypeInfo* aInfo            = new OExtendedTypeInfo();
                 aInfo->aSimpleType.aTypeName        = ADOS::getField(pRecordset,nPos++).get_Value();
-                DataTypeEnum eType                  = static_cast<DataTypeEnum>((sal_Int32)ADOS::getField(pRecordset,nPos++).get_Value());
-                aInfo->aSimpleType.nType            = ADOS::MapADOType2Jdbc(eType);
+                aInfo->eType                        = (DataTypeEnum)(sal_Int32)ADOS::getField(pRecordset,nPos++).get_Value();
+                if ( aInfo->eType == adWChar && aInfo->aSimpleType.aTypeName == s_sVarChar )
+                    aInfo->eType = adVarWChar;
+                aInfo->aSimpleType.nType            = ADOS::MapADOType2Jdbc(static_cast<DataTypeEnum>(aInfo->eType));
                 aInfo->aSimpleType.nPrecision       = ADOS::getField(pRecordset,nPos++).get_Value();
                 aInfo->aSimpleType.aLiteralPrefix   = ADOS::getField(pRecordset,nPos++).get_Value();
                 aInfo->aSimpleType.aLiteralSuffix   = ADOS::getField(pRecordset,nPos++).get_Value();
@@ -522,7 +532,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
                 // in the Hashtable if we don't already have an
                 // entry for this SQL type.
 
-                m_aTypeInfo.insert(OTypeInfoMap::value_type(eType,aInfo));
+                m_aTypeInfo.insert(OTypeInfoMap::value_type(aInfo->eType,aInfo));
             }
             while ( SUCCEEDED(pRecordset->MoveNext()) );
         }
@@ -600,16 +610,19 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
         for(;aIter != aPair.second;++aIter)
         {
             // search the best matching type
+            OExtendedTypeInfo* pInfo = aIter->second;
     #ifdef DBG_UTIL
-            ::rtl::OUString sDBTypeName = aIter->second->aSimpleType.aTypeName;
-            sal_Int32       nDBTypePrecision = aIter->second->aSimpleType.nPrecision;
-            sal_Int32       nDBTypeScale = aIter->second->aSimpleType.nMaximumScale;
+            ::rtl::OUString sDBTypeName = pInfo->aSimpleType.aTypeName;
+            sal_Int32       nDBTypePrecision = pInfo->aSimpleType.nPrecision;
+            sal_Int32       nDBTypeScale = pInfo->aSimpleType.nMaximumScale;
+            sal_Int32       nAdoType = pInfo->eType;
     #endif
             if  (   (   !_sTypeName.getLength()
-                    ||  (aIter->second->aSimpleType.aTypeName.equalsIgnoreAsciiCase(_sTypeName))
+                    ||  (pInfo->aSimpleType.aTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     )
-                &&  (aIter->second->aSimpleType.nPrecision      >= _nPrecision)
-                &&  (aIter->second->aSimpleType.nMaximumScale   >= _nScale)
+                &&  (pInfo->aSimpleType.nPrecision      >= _nPrecision)
+                &&  (pInfo->aSimpleType.nMaximumScale   >= _nScale)
+
                 )
                 break;
         }
