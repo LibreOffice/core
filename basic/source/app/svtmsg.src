@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: gh $ $Date: 2001-07-20 05:50:37 $
+ *  last change: $Author: gh $ $Date: 2001-07-20 06:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1082,7 +1082,9 @@ String S_TEAROFF_FAILED
     Text[ catalan ] = "Ha fallado TearOff en ToolBox para ($Arg1)";
     Text[ finnish ] = "TearOff-irrottamistoiminto ei onnistunut työkaluvalikossa kohteessa ($Arg1)";
 };
-String S_NO_SELECTED_ENTRY_DEPRECATED // Has to stay in for old res files
+
+// Has to stay in for old res files
+String S_NO_SELECTED_ENTRY_DEPRECATED
 {
     Text = "Es ist kein Eintrag Selektiert in TreeListBox bei ($Arg1)";
     Text[ english_us ] = "An entry has not been selected in TreeListBox at ($Arg1)";
