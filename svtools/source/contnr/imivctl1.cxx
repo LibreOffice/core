@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:59:27 $
+ *  last change: $Author: pb $ $Date: 2001-11-06 14:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3119,7 +3119,11 @@ const Size& SvxIconChoiceCtrl_Impl::GetItemSize( SvxIconChoiceCtrlEntry* pEntry,
 
 Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* pEntry )
 {
-    Rectangle aFocusRect( CalcTextRect( pEntry ) );
+    Rectangle aBmpRect( CalcBmpRect( pEntry ) );
+    Rectangle aTextRect( CalcTextRect( pEntry ) );
+    Rectangle aBoundRect( GetEntryBoundRect( pEntry ) );
+    Rectangle aFocusRect( aBoundRect.Left(), aBmpRect.Top() - 2,
+                          aBoundRect.Right() - 4, aTextRect.Bottom() + 4 );
     // Das Fokusrechteck soll nicht den Text beruehren
     if( aFocusRect.Left() - 1 >= pEntry->aRect.Left() )
         aFocusRect.Left()--;
