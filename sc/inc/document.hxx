@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 20:15:44 $
+ *  last change: $Author: sab $ $Date: 2001-07-18 07:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1255,6 +1255,7 @@ public:
                         const ScMarkData* pMarkData = NULL );
 
     SvNumberFormatter*  GetFormatTable() const;
+    SvNumberFormatter*  GetEnglishFormatTable() const;
     ULONG           GetStandardIndexEnglishUS();
 
     void            Sort( USHORT nTab, const ScSortParam& rSortParam, BOOL bKeepQuery );

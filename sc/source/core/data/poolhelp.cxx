@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolhelp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-24 18:29:32 $
+ *  last change: $Author: sab $ $Date: 2001-07-18 07:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@ ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
     pFormTable->SetColorLink( &aColorLink );
     pFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
 
+    pEngFormTable = new SvNumberFormatter( pSourceDoc->GetServiceManager(), LANGUAGE_ENGLISH_US );
+    pEngFormTable->SetColorLink( &aColorLink );
+    pEngFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
+
     pEditPool = EditEngine::CreatePool();
     pEditPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
     pEditPool->FreezeIdRanges();
@@ -106,6 +110,7 @@ ScPoolHelper::~ScPoolHelper()
     delete pEnginePool;
     delete pEditPool;
     delete pFormTable;
+    delete pEngFormTable;
     delete pStylePool;
     delete pDocPool;
 }

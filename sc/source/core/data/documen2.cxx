@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-11 19:22:05 $
+ *  last change: $Author: sab $ $Date: 2001-07-18 07:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,6 +593,11 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 SvNumberFormatter* ScDocument::GetFormatTable() const
 {
     return xPoolHelper->GetFormTable();
+}
+
+SvNumberFormatter* ScDocument::GetEnglishFormatTable() const
+{
+    return xPoolHelper->GetEngFormTable();
 }
 
 ULONG ScDocument::GetStandardIndexEnglishUS()
