@@ -12676,3 +12676,16 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?release@?$WeakImplHelper5@VXAccessible@accessibility@star@sun@com@drafts@@VXAccessibleEventBroadcaster@23456@VXAccessibleContext@23456@VXAccessibleComponent@23456@VXUnoTunnel@lang@345@@cppu@@WCE@AAXXZ
 ?s_cd@?$WeakImplHelper5@VXAccessible@accessibility@star@sun@com@drafts@@VXAccessibleEventBroadcaster@23456@VXAccessibleContext@23456@VXAccessibleComponent@23456@VXUnoTunnel@lang@345@@cppu@@0Uclass_data5@2@A
 ??RFilterTitleMatch@?%O:\SRX643\src\svtools\source\filepicker\filepicker.cxx752012437@@QAE_NABUFilterEntry@@@Z
+?getRectangle@?%O:\SRC659\src\svtools\source\Accessibility\AccessibleBrowseBoxHeaderCell.cxx2155627987@svt@@YA?AVRectangle@@PAVBrowseBox@@JEE@Z
+?checkActionIndex_Impl@?%O:\SRC659\src\svtools\source\Accessibility\accessiblelistboxentry.cxx2334431861@@YAXJ@Z
+?isHiContrast@?%O:\SRC659\src\svtools\source\brwbox\editbrowsebox.cxx1511531958@svt@@YAEPAVWindow@@@Z
+??0SvxIconChoiceCtrlEntry@@QAE@ABVString@@ABVImage@@1G@Z
+?InsertEntry@SvtIconChoiceCtrl@@QAEPAVSvxIconChoiceCtrlEntry@@ABVString@@ABVImage@@1KPBVPoint@@G@Z
+??RFilterTitleMatch@?%O:\SRC659\src\svtools\source\filepicker\filepicker.cxx2871518503@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC659\src\svtools\source\filepicker\iodlg.cxx1171721887@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC659\src\svtools\source\filepicker\iodlg.cxx1171721887@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC659\src\svtools\source\filepicker\iodlg.cxx1171721887@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC659\src\svtools\source\filepicker\iodlg.cxx1171721887@@YAXPAVControl@@JJAAJ@Z
+?lcl_autoUpdateFileExtension@?%O:\SRC659\src\svtools\source\filepicker\iodlg.cxx1171721887@@YAXPAVSvtFileDialog@@@Z
+?lcl_getHomeDirectory@?%O:\SRC659\src\svtools\source\filepicker\iodlg.cxx1171721887@@YAEABVString@@AAV2@@Z
+?lcl_DecoratedFilter@?%O:\SRC659\src\svtools\source\filepicker\iodlgimp.cxx566218618@@YA?AVString@@ABV2@@Z
