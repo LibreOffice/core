@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-25 12:29:40 $
+ *  last change: $Author: thb $ $Date: 2002-11-18 13:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,6 +918,32 @@ PolyPolygon GDIMetaFile::ImplGetRotatedPolyPolygon( const PolyPolygon& rPolyPoly
 
 // ------------------------------------------------------------------------
 
+void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
+                                     const OutputDevice&  rMapDev,
+                                     const PolyPolygon&   rPolyPoly,
+                                     const Gradient&      rGrad     )
+{
+    // #105055# Generate comment, GradientEx and Gradient actions
+    // (within DrawGradient)
+    VirtualDevice aVDev( rMapDev, 0 );
+    aVDev.EnableOutput( FALSE );
+    GDIMetaFile aGradMtf;
+
+    aGradMtf.Record( &aVDev );
+    aVDev.DrawGradient( rPolyPoly, rGrad );
+    aGradMtf.Stop();
+
+    int i, nAct( aGradMtf.GetActionCount() );
+    for( i=0; i<nAct; ++i )
+    {
+        MetaAction* pMetaAct = aGradMtf.GetAction(i);
+        pMetaAct->Duplicate();
+        rMtf.AddAction( pMetaAct );
+    }
+}
+
+// ------------------------------------------------------------------------
+
 void GDIMetaFile::Rotate( long nAngle10 )
 {
     nAngle10 %= 3600L;
@@ -1138,8 +1164,10 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( META_GRADIENT_ACTION ):
                 {
                     MetaGradientAction* pAct = (MetaGradientAction*) pAction;
-                    aMtf.AddAction( new MetaGradientAction( ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor, aRotOffset, fSin, fCos ).GetBoundRect(),
-                                                                                   pAct->GetGradient() ) );
+
+                    ImplAddGradientEx( aMtf, aMapVDev,
+                                       ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                       pAct->GetGradient() );
                 }
                 break;
 
@@ -1149,7 +1177,55 @@ void GDIMetaFile::Rotate( long nAngle10 )
                     Gradient              aGradient(  );
 
                     aMtf.AddAction( new MetaGradientExAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                                                         pAct->GetGradient() ) );
+                                                              pAct->GetGradient() ) );
+                }
+                break;
+
+                // #105055# Handle gradientex comment block correctly
+                case( META_COMMENT_ACTION ):
+                {
+                    MetaCommentAction* pAct = (MetaCommentAction*) pAction;
+                    if( pAct->GetComment().Equals( "XGRAD_SEQ_BEGIN" ) )
+                    {
+                        int nBeginComments( 1 );
+                        pAction = (MetaAction*) Next();
+
+                        // skip everything, except gradientex action
+                        while( pAction )
+                        {
+                            const USHORT nType = pAction->GetType();
+
+                            if( META_GRADIENTEX_ACTION == nType )
+                            {
+                                // Add rotated gradientex
+                                MetaGradientExAction* pAct = (MetaGradientExAction*) pAction;
+                                ImplAddGradientEx( aMtf, aMapVDev,
+                                                   ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                                   pAct->GetGradient() );
+                            }
+                            else if( META_COMMENT_ACTION == nType)
+                            {
+                                MetaCommentAction* pAct = (MetaCommentAction*) pAction;
+                                if( pAct->GetComment().Equals( "XGRAD_SEQ_END" ) )
+                                {
+                                    // handle nested blocks
+                                    --nBeginComments;
+
+                                    // gradientex comment block: end reached, done.
+                                    if( !nBeginComments )
+                                        break;
+                                }
+                                else if( pAct->GetComment().Equals( "XGRAD_SEQ_BEGIN" ) )
+                                {
+                                    // handle nested blocks
+                                    ++nBeginComments;
+                                }
+
+                            }
+
+                            pAction = (MetaAction*) Next();
+                        }
+                    }
                 }
                 break;
 
