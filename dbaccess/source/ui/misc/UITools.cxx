@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 07:19:41 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 10:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,9 +1114,10 @@ sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
                 xProp->getPropertyValue(PROPERTY_INFO) >>= aSeq;
                 const PropertyValue* pBegin = aSeq.getConstArray();
                 const PropertyValue* pEnd     = pBegin + aSeq.getLength();
+                ::rtl::OUString sProp(PROPERTY_ENABLESQL92CHECK);
                 for(;pBegin != pEnd;++pBegin)
                 {
-                    if ( pBegin->Name == PROPERTY_ENABLESQL92CHECK )
+                    if ( pBegin->Name == sProp )
                         pBegin->Value >>= bCheckNames;
                 }
             }
