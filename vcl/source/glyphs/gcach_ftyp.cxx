@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.97 $
- *  last change: $Author: vg $ $Date: 2003-07-04 12:51:04 $
+ *  $Revision: 1.98 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,7 +1125,11 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     {
         if( pGlyphFT->format == ft_glyph_format_outline )
             ((FT_OutlineGlyphRec*)pGlyphFT)->outline.flags |= ft_outline_high_precision;
+#ifdef MACOSX
+        FT_Render_Mode nRenderMode = (FT_Render_Mode)((nFTVERSION<2103) ? 1 : ft_render_mode_mono); // #i15743#
+#else
         FT_Render_Mode nRenderMode = (FT_Render_Mode)((nFTVERSION<2103) ? 1 : FT_RENDER_MODE_MONO); // #i15743#
+#endif
         rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, NULL, TRUE );
         if( rc != FT_Err_Ok )
             return false;
