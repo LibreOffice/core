@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 15:09:47 $
+ *  last change: $Author: jp $ $Date: 2001-10-15 15:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,6 @@
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
 #endif
-#ifndef _SWDTFLVR_HXX
-#include <swdtflvr.hxx>
-#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -190,9 +187,6 @@ void SwView::Activate(BOOL bMDIActivate)
                                                                 GetChildWindow(nId);
         if (pAuthMrk)
             pAuthMrk->ReInitDlg(*pWrtShell);
-
-        if( pWrtShell->HasSelection() )
-            SwTransferable::CreateSelection( *pWrtShell );
     }
     else
         //Wenigstens das Notify rufen (vorsichtshalber wegen der SlotFilter
@@ -236,6 +230,9 @@ void SwView::MarginChanged()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/09/11 15:09:47  jp
+    Task #91678#: 'selection clipbord' implemented
+
     Revision 1.1.1.1  2000/09/18 17:14:49  hr
     initial import
 
