@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:28:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 10:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,6 +652,17 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                 // like SDRUSERCALL_REMOVED with the effect that a
                 // deleted object was inserted into the
                 // DeletedPresObjList which lead to a crash.
+
+                // this should be redundant, but for safety reasons
+                // check if someone deleted a SdrObject without
+                // removing it from the presentation object list first
+                if( aPresObjList.GetPos((void*) &rObj) != LIST_ENTRY_NOTFOUND )
+                {
+                    DBG_ERROR("presentation object deleted but still in presentation obj list!");
+
+                    aPresObjList.Remove((void*)&rObj);
+                }
+
                 break;
 
             case SDRUSERCALL_REMOVED:
