@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:55:23 $
+#   last change: $Author: rt $ $Date: 2004-05-03 09:08:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 SHL1OBJS=  \
     $(SLO)$/rtl_crc32.obj
 
-SHL1TARGET= crc32
+SHL1TARGET= rtl_crc32
 SHL1STDLIBS=\
    $(SALLIB) 
 .IF "$(GUI)" == "WNT"
@@ -98,7 +98,7 @@ SHL1VERSIONMAP= export.map
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS)
+# SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
