@@ -150,7 +150,12 @@ public class PocketWordDocument implements Document, PocketWordConstants {
         }
 
         // The preamble may become important for font declarations.
-        docData.read(preamble);
+        int readValue = docData.read(preamble);
+        // #i33702# check for an empty InputStream.
+        if(readValue == -1) {
+            System.err.println("Error:invalid input stream");
+            return;
+        }
 
         byte[] font = new byte[80];
         int numfonts = 0;
