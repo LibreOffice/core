@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ghiggins $ $Date: 2002-08-12 09:13:29 $
+#   last change: $Author: ghiggins $ $Date: 2002-08-12 10:59:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,8 +108,11 @@ CXXFILES = \
         multipat.cxx	\
         multifil.cxx	\
         optextbr.cxx    \
-        srchcfg.cxx		\
-        optsso.cxx
+        srchcfg.cxx
+
+.IF "$(BUILD_SOSL)" == ""
+    CXXFILES += optsso.cxx
+.ENDIF
 
 SRCFILES =  \
         optasian.src	\
@@ -124,8 +127,11 @@ SRCFILES =  \
         optgrid.src		\
         optinet2.src	\
         multipat.src    \
-        optextbr.src	\
-        optsso.src
+        optextbr.src
+
+.IF "$(BUILD_SOSL)" == ""
+    SRCFILES += optsso.src
+.ENDIF
 
 SLOFILES=	\
         $(SLO)$/asiancfg.obj	\
@@ -146,8 +152,11 @@ SLOFILES=	\
         $(SLO)$/multipat.obj    \
         $(SLO)$/multifil.obj    \
         $(SLO)$/optextbr.obj    \
-        $(SLO)$/srchcfg.obj		\
-        $(SLO)$/optsso.obj
+        $(SLO)$/srchcfg.obj
+
+.IF "$(BUILD_SOSL)" == ""
+    SLOFILES += $(SLO)$/optsso.obj
+.ENDIF
 
 SVXLIGHTOBJFILES= \
         $(OBJ)$/adritem.obj
@@ -164,8 +173,11 @@ EXCEPTIONSFILES= \
         $(SLO)$/optlingu.obj \
         $(SLO)$/optaccessibility.obj \
         $(SLO)$/optsave.obj \
-        $(SLO)$/optpath.obj	\
-        $(SLO)$/optsso.obj
+        $(SLO)$/optpath.obj
+
+.IF "$(BUILD_SOSL)" == ""
+    EXCEPTIONSFILES += $(SLO)$/optsso.obj
+.ENDIF
 
 # --- Targets -------------------------------------------------------
 
