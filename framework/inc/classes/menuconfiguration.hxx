@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuconfiguration.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 14:17:52 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
 // Please consider that there is a corresponding define also in sfxsids.hrc!! (SID_SFX_START)/(SID_ADDONS)
 #define FWK_SID_SFX_START 5000
 #define FWK_SID_ADDONS (FWK_SID_SFX_START+1678)
+#define FWK_SID_ADDONHELP (FWK_SID_SFX_START+1684)
 
 const USHORT START_ITEMID_PICKLIST      = 4500;
 const USHORT END_ITEMID_PICKLIST        = 4599;
@@ -108,6 +109,7 @@ const USHORT MAX_ITEMCOUNT_PICKLIST     =   99; // difference between START_... 
 const USHORT START_ITEMID_WINDOWLIST    = 4600;
 const USHORT END_ITEMID_WINDOWLIST      = 4699;
 const USHORT ITEMID_ADDONLIST           = FWK_SID_ADDONS;
+const USHORT ITEMID_ADDONHELP           = FWK_SID_ADDONHELP;
 
 namespace framework
 {
@@ -117,6 +119,9 @@ class MenuConfiguration
     public:
         struct Attributes
         {
+            Attributes( const ::rtl::OUString& aFrame, const ::rtl::OUString& aImageIdStr ) :
+                aTargetFrame( aFrame ), aImageId( aImageIdStr ) {}
+
             ::rtl::OUString aTargetFrame;
             ::rtl::OUString aImageId;
         };
@@ -135,10 +140,6 @@ class MenuConfiguration
                 const ::rtl::OUString& aURL )
             throw ( ::com::sun::star::lang::WrappedTargetException );
 
-        PopupMenu* CreateAddonMenu(
-                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame )
-            throw ( ::com::sun::star::lang::WrappedTargetException );
-
         ToolBox* CreateToolBoxFromConfiguration(
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream )
             throw ( ::com::sun::star::lang::WrappedTargetException );
@@ -150,6 +151,9 @@ class MenuConfiguration
         void StoreToolBox( ToolBox* pToolBox,
                       ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream )
             throw ( ::com::sun::star::lang::WrappedTargetException );
+
+        static BOOL IsPickListItemId( USHORT nId );
+        static BOOL IsWindowListItemId( USHORT nId );
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& m_rxServiceManager;
