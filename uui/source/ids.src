@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-21 20:22:57 $
+ *  last change: $Author: kz $ $Date: 2001-09-25 21:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ Resource RID_UUI_ERRHDL
         Text[ japanese ] = "$(ARG1) のﾃﾞｰﾀは読み取れませんでした。";
         Text[ korean ] = "$(ARG1)의 데이터를 읽을 수 없었습니다.";
         Text[ chinese_simplified ] = "无法读取 $(ARG1) 的数据。";
-        Text[ chinese_traditional ] = "無法存取資料 $(ARG1) 。";
+        Text[ chinese_traditional ] = "無法存取 $(ARG1) 資料。";
         Text[ turkish ] = "Data of $(ARG1) could not be read";
         Text[ arabic ] = "Data of $(ARG1) could not be read";
         Text[ catalan ] = "Data of $(ARG1) could not be read";
@@ -403,7 +403,7 @@ Resource RID_UUI_ERRHDL
         Text[ japanese ] = "$(ARG1) の準備ができていません。";
         Text[ korean ] = "장치(드라이브) $(ARG1)이(가) 준비되지 않았습니다.";
         Text[ chinese_simplified ] = "$(ARG1) 尚未准备就绪。";
-        Text[ chinese_traditional ] = "設備(磁碟)$(ARG1)尚未就緒。";
+        Text[ chinese_traditional ] = "$(ARG1) 尚未就緒。";
         Text[ turkish ] = "The Device (drive) $(ARG1) is not ready";
         Text[ arabic ] = "The Device (drive) $(ARG1) is not ready";
         Text[ catalan ] = "The Device (drive) $(ARG1) is not ready";
@@ -455,7 +455,7 @@ Resource RID_UUI_ERRHDL
         Text[ japanese ] = "$(ARG1) へｱｸｾｽする際の一般的な入力/出力のｴﾗｰ。";
         Text[ korean ] = "$(ARG1)의 액세스에서 일반 입/출력 오류";
         Text[ chinese_simplified ] = "在读取 $(ARG1) 时发生一般的输入/输出错误";
-        Text[ chinese_traditional ] = "讀取 $(ARG1) 時發生一個一般的輸入/輸出錯誤。";
+        Text[ chinese_traditional ] = "存取 $(ARG1) 時發生一個一般的輸入/輸出錯誤。";
         Text[ turkish ] = "General input/output error while accessing $(ARG1)";
         Text[ arabic ] = "General input/output error while accessing $(ARG1)";
         Text[ catalan ] = "General input/output error while accessing $(ARG1)";
@@ -475,7 +475,7 @@ Resource RID_UUI_ERRHDL
         Text[ finnish ] = "An invalid attempt was made to access $(ARG1)";
         Text[ italian ] = "� stato rilevato un tentativo di accedere a $(ARG1) in modo non autorizzato.";
         Text[ danish ] = "An invalid attempt was made to access $(ARG1)";
-        Text[ swedish ] = "Ett f�rs�k gjordes att f� �tkomst till $(ARG1) p� ett ogiltigt s�tt";
+        Text[ swedish ] = "Ogiltigt f�rs�k att f� �tkomst till $(ARG1)";
         Text[ polish ] = "Nieprawid�owa pr�ba dost�pu do $(ARG1)";
         Text[ portuguese_brazilian ] = "An invalid attempt was made to access $(ARG1)";
         Text[ japanese ] = "$(ARG1) への無効なｱｸｾｽが試みられました。";
@@ -1218,7 +1218,7 @@ Resource RID_UUI_ERRHDL
     {
         Text = "Die zu der Partnerschaft gespeicherten Daten sind defekt";
         Text[english] = "The data associated with the partnership are corrupted";
-        Text[ english_us ] = "The data associated with the partnership is corrupted";
+        Text[ english_us ] = "The data associated with the partnership is corrupted.";
         Text[ portuguese ] = "Os dados associados � parceria est�o danificados.";
         Text[ russian ] = "������, ����������� ��� �����������, ����������.";
         Text[ greek ] = "The data associated with the partnership are corrupted";
@@ -1244,7 +1244,7 @@ Resource RID_UUI_ERRHDL
     {
         Text = "Die zu der Partnerschaft $(ARG1) gespeicherten Daten sind defekt";
         Text[english] = "The data associated with the partnership $(ARG1) are corrupted";
-        Text[ english_us ] = "The data associated with the partnership $(ARG1) is corrupted";
+        Text[ english_us ] = "The data associated with the partnership $(ARG1) is corrupted.";
         Text[ portuguese ] = "Os dados associados � parceria $(ARG1) est�o danificados.";
         Text[ russian ] = "������, ����������� ��� ����������� $(ARG1), ����������";
         Text[ greek ] = "The data associated with the partnership $(ARG1) are corrupted";
@@ -1353,7 +1353,7 @@ Resource RID_UUI_ERRHDL
         Text[ chinese_traditional ] = "請放置磁片 $(ARG1) 。";
         Text[ danish ] = "Inds�t venligst datamediet $(ARG1)";
         Text[ dutch ] = "Plaats datamedium in station $(ARG1)";
-        Text[ english_us ] = "Please insert data storage medium $(ARG1)";
+        Text[ english_us ] = "Please insert disk $(ARG1)";
         Text[ french ] = "Ins�rez le m�dia $(ARG1).";
         Text[ greek ] = "�������� �������� ��� ����� $(ARG1)";
         Text[ italian ] = "Inserite il supporto dati $(ARG1)";
@@ -1390,11 +1390,12 @@ Resource RID_UUI_ERRHDL
         Text[ japanese ] = "ｵﾌﾞｼﾞｪｸﾄはﾌｫﾙﾀﾞ $(ARG2) に格納できません。";
         Text[ korean ] = "디렉토리 $(ARG2)에 개체을(를) 만들 수 없습니다.";
         Text[ chinese_simplified ] = "无法在目录 $(ARG2) 内新建对象。";
-        Text[ chinese_traditional ] = "無法在�錄 $(ARG2) 之下建立物件";
+        Text[ chinese_traditional ] = "無法在目錄 $(ARG2) 之下建立物件";
         Text[ turkish ] = "The object could not be created in directory $(ARG2)";
         Text[ arabic ] = "The object could not be created in directory $(ARG2)";
         Text[ catalan ] = "The object could not be created in directory $(ARG2)";
     };
 };
+
 
 
