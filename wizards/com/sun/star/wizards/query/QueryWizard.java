@@ -2,9 +2,9 @@
 *
 *  $RCSfile: QueryWizard.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:45:33 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:35:47 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -126,7 +126,9 @@ public class QueryWizard extends WizardDialog {
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
             if (xLocMSF != null) {
                 PropertyValue[] curproperties = new PropertyValue[1];
-                curproperties[0] = Properties.createProperty("DataSourceName", "TESTDB");
+                curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/New Database9.odb"); //baseLocation ); "DataSourceName", "db1");
+
+//              curproperties[0] = Properties.createProperty("DataSourceName", "TESTDB");
                 QueryWizard CurQueryWizard = new QueryWizard(xLocMSF);
                 CurQueryWizard.startQueryWizard(xLocMSF, curproperties);
             }
@@ -305,7 +307,7 @@ public class QueryWizard extends WizardDialog {
         switch (nOldStep) {
             case SOFIELDSELECTIONPAGE :
                 CurDBMetaData.setFieldNames(CurDBCommandFieldSelection.getSelectedFieldNames());
-                CurDBMetaData.setAllIncludedFieldNames();
+                CurDBMetaData.setAllIncludedFieldNames(true);
                 CurDBMetaData.setFieldColumns(false);
                 CurDBMetaData.setNumericFields();
                 searchForOutdatedFields();
@@ -376,7 +378,7 @@ public class QueryWizard extends WizardDialog {
         public void setID(String sIncSuffix) {
             ID = 1;
             if (sIncSuffix != null) {
-                if (sIncSuffix != "") {
+                if ((!sIncSuffix.equals("")) && (!sIncSuffix.equals("_"))) {
                     String sID = JavaTools.ArrayoutofString(sIncSuffix, "_")[1];
                     ID = Integer.parseInt(sID);
                     int a = 0;
@@ -403,7 +405,7 @@ public class QueryWizard extends WizardDialog {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
                 String CurFieldName = SelItems[0];
                 if (JavaTools.FieldInList(CurDBMetaData.NonAggregateFieldNames, CurFieldName) > -1) {
-                    SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, resmsgNonNumericAsGroupBy);
+                    showMessageBox( "ErrorBox", VclWindowPeerAttribute.OK, resmsgNonNumericAsGroupBy);
                     CurGroupFieldSelection.xSelFieldsListBox.addItems(SelItems, CurGroupFieldSelection.xSelFieldsListBox.getItemCount());
                     String FieldList[] = CurGroupFieldSelection.xFieldsListBox.getItems();
                     int index = JavaTools.FieldInList(FieldList, CurFieldName);
