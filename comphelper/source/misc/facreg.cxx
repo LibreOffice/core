@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-09 19:04:24 $
+ *  last change: $Author: kz $ $Date: 2001-03-20 11:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
         }
     }
-    return True;
+    return sal_True;
 }
 
 void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
