@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:55:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,12 @@ namespace connectivity
             virtual ~ODriverDelegator();
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
+
+            /** called when we connected to a newly created embedded database
+            */
+            void onConnectedNewDatabase(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+            );
         };
     }
 
