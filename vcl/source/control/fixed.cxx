@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-12-01 14:54:47 $
+ *  last change: $Author: th $ $Date: 2000-12-07 14:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 
 // =======================================================================
 
-#define FIXEDLINE_TEXT_BORDER    2
+#define FIXEDLINE_TEXT_BORDER    4
 
 #define FIXEDTEXT_VIEW_STYLE    (WB_3DLOOK |                        \
                                  WB_LEFT | WB_CENTER | WB_RIGHT |   \
