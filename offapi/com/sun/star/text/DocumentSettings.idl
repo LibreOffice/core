@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettings.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,15 @@ service DocumentSettings
         something like <code>SaveLinkedDocumentContent</code>.</p>
     */
     [optional, property] boolean SaveGlobalDocumentLinks;
+    // ------------------------------------------------------------
+    /** specifies if the document has been created as a label document.
+
+        <p>This property indicates that the document contains multiple text frames
+        and that the content of one frame is duplicated into the other frames
+        by internally linked text sections.</p>
+
+    */
+    [optional, property] boolean IsLabelDocument;
 };
 
 //=============================================================================
