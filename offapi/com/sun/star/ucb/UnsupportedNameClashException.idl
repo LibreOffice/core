@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnsupportedNameClashException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-29 09:30:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com { module sun { module star { module ucb {
     @author     Kai Sommerfeld
     @see        Content
 */
-exception UnsupportedNameClashException : com::sun::star::uno::Exception
+published exception UnsupportedNameClashException : com::sun::star::uno::Exception
 {
     //-------------------------------------------------------------------------
     /** contains the <type>NameClash</type> that is not supported.
