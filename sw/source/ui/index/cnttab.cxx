@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:26:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2164,14 +2164,14 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     bInLevelHdl(sal_False)
 {
     Image aSortUpHC(ResId(IMG_SORTUP_HC ));
-    aFirstSortUpRB.SetModeImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
-    aSecondSortUpRB.SetModeImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
-    aThirdSortUpRB.SetModeImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
+    aFirstSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
+    aSecondSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
+    aThirdSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
 
     Image aSortDownHC(ResId(IMG_SORTDOWN_HC ));
-    aFirstSortDownRB.SetModeImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
-    aSecondSortDownRB.SetModeImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
-    aThirdSortDownRB.SetModeImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
+    aFirstSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
+    aSecondSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
+    aThirdSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
     FreeResource();
 
     sLevelStr = aLevelFT.GetText();
