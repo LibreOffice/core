@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-17 12:43:22 $
+ *  last change: $Author: dv $ $Date: 2001-07-18 13:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ public:
     SvLBoxEntry*            NextSelected( SvLBoxEntry* pEntry ) const;
     void                    EnableAutoResize();
     void                    SetFocus();
+
+    void                    EnableContextMenu( sal_Bool bEnable );
 };
 
 // struct SvtContentEntry ------------------------------------------------
