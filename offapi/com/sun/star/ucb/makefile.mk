@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kso $ $Date: 2001-01-10 13:10:48 $
+#   last change: $Author: kso $ $Date: 2001-01-31 08:20:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,6 +120,7 @@ IDLFILES=\
     FolderList.idl\
     FolderListCommand.idl\
     FolderListEntry.idl\
+    GlobalTransferCommandArgument.idl\
     HandleCookiesRequest.idl\
     HierarchyContentProvider.idl\
     HierarchyFolderContent.idl\
@@ -178,6 +179,7 @@ IDLFILES=\
     SortingInfo.idl\
     Store.idl\
     SynchronizePolicy.idl\
+    TransferCommandOperation.idl\
     TransferInfo.idl\
     TransferResult.idl\
     UniversalContentBroker.idl\
