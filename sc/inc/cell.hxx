@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:30:24 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
-#ifndef SC_COMPILER_HXX
-#include "compiler.hxx"
+#ifndef SC_TOKENARRAY_HXX
+#include "tokenarray.hxx"
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -100,7 +100,6 @@
 class ScDocument;
 class EditTextObject;
 class ScMatrix;
-class ScCompiler;
 class SfxBroadcaster;
 class ScBroadcasterList;
 class ScCodeArray;
@@ -380,7 +379,7 @@ public:
     double          GetValue();
     double          GetValueAlways();   // ignore errors
     void            GetString( String& rString );
-    void            GetMatrix( ScMatrix** pMatrix );
+    const ScMatrix* GetMatrix();
     BOOL            GetMatrixOrigin( ScAddress& rPos ) const;
     void            GetResultDimensions( USHORT& rCols, USHORT& rRows );
     USHORT          GetMatrixEdge( ScAddress& rOrgPos );
