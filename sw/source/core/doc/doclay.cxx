@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:37:47 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1550,13 +1550,13 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
                                      SdrObject& rSdrObj )
 {
 
-    SwDrawContact *pContact = (SwDrawContact*)GetUserCall( &rSdrObj );
+    SwDrawContact* pContact = (SwDrawContact*)GetUserCall( &rSdrObj );
     ASSERT( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
             "Kein DrawFrmFmt" );
-    if( !pContact )
+    if ( !pContact )
         return 0;
 
-    SwDrawFrmFmt *pOldFmt = (SwDrawFrmFmt *)pContact->GetFmt();
+    SwDrawFrmFmt* pOldFmt = (SwDrawFrmFmt *)pContact->GetFmt();
     if( !pOldFmt )
         return 0;
 
@@ -1586,8 +1586,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
         pColl = GetTxtCollFromPool( RES_POOLCOLL_TEXT );
     }
 
-    SwTxtNode *pNew = 0;
-    SwFlyFrmFmt *pNewFmt = 0;
+    SwTxtNode* pNew = 0;
+    SwFlyFrmFmt* pNewFmt = 0;
 
     // Rahmen zerstoeren, neuen Rahmen einfuegen, entsprechenden
     // Node mit Feld in den neuen Rahmen, den alten Rahmen mit
@@ -1632,11 +1632,10 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     }
 
     // Position uebernehmen
-    Point aPoint( rSdrObj.GetRelativePos() );
-    SwFmtVertOrient aVert( aPoint.B(), VERT_NONE, FRAME );
-    SwFmtHoriOrient aHori( aPoint.A(), HORI_NONE, FRAME );
-    pNewSet->Put( aVert );
-    pNewSet->Put( aHori );
+    // OD 2004-04-15 #i26791# - use directly the positioning attributes of
+    // the drawing object.
+    pNewSet->Put( pOldFmt->GetHoriOrient() );
+    pNewSet->Put( pOldFmt->GetVertOrient() );
 
     pNewSet->Put( pOldFmt->GetAnchor() );
 
@@ -1653,12 +1652,12 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     pNewSet->Put( pOldFmt->GetLRSpace() );
     pNewSet->Put( pOldFmt->GetULSpace() );
 
-    SwStartNode* pSttNd = GetNodes().MakeTextSection(
-                SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                SwFlyStartNode, pColl );
+    SwStartNode* pSttNd =
+        GetNodes().MakeTextSection( SwNodeIndex( GetNodes().GetEndOfAutotext() ),
+                                    SwFlyStartNode, pColl );
 
     pNewFmt = MakeFlyFrmFmt( GetUniqueFrameName(),
-                        GetFrmFmtFromPool( RES_POOLFRM_FRAME ));
+                             GetFrmFmtFromPool( RES_POOLFRM_FRAME ) );
 
     // JP 28.10.99: Bug 69487 - set border and shadow to default if the
     //              template contains any.
@@ -1704,7 +1703,9 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     pNewSet->Put( SvxLRSpaceItem() );
     pNewSet->Put( SvxULSpaceItem() );
 
-    rSdrObj.SetRelativePos( Point(0,0) );
+    // OD 2004-04-15 #i26791# - set position of the drawing object, which is labeled.
+    pNewSet->Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ) );
+    pNewSet->Put( SwFmtHoriOrient( 0, HORI_CENTER, FRAME ) );
 
     //Der Alte ist absatzgebunden, und zwar am Absatz im neuen.
     SwFmtAnchor aAnch( FLY_AT_CNTNT );
@@ -1717,7 +1718,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     if( pUndo )
     {
         pUndo->SetFlys( *pOldFmt, *pNewSet, *pNewFmt );
-        pUndo->SetDrawObj( aPoint, nLayerId );
+        // OD 2004-04-15 #i26791# - position no longer needed
+        pUndo->SetDrawObj( nLayerId );
     }
     else
         pOldFmt->SetAttr( *pNewSet );
@@ -2051,14 +2053,14 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
     SwNode* pNd = &rIdx.GetNode();
     if( pNd->IsCntntNode() && pLayout )
     {
-        SwFrm *pFrm = pNd->GetCntntNode()->GetFrm();
+        const SwFrm *pFrm = pNd->GetCntntNode()->GetFrm();
         if( pFrm )
         {
-            SwFrm *pUp = pFrm->GetUpper();
+            const SwFrm *pUp = pFrm->GetUpper();
             while ( pUp && !pUp->IsHeaderFrm() && !pUp->IsFooterFrm() )
             {
                 if ( pUp->IsFlyFrm() )
-                    pUp = ((SwFlyFrm*)pUp)->GetAnchor();
+                    pUp = ((SwFlyFrm*)pUp)->GetAnchorFrm();
                 pUp = pUp->GetUpper();
             }
             if ( pUp )
