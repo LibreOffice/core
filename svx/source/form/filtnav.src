@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:21:00 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ Menu RID_FM_FILTER_MENU
             Text [ ENGLISH ] = "~IS NULL" ;
             Text[ portuguese ] = "~Vazio";
             Text[ russian ] = "~Οσρςξ";
-            Text[ greek ] = "Είνα~ι κενό";
+            Text[ greek ] = "Είνα~ι μηδενικός χαρακτήρας";
             Text[ dutch ] = "~Is leeg";
             Text[ french ] = "~Est vide";
             Text[ spanish ] = "~Vacνo";
@@ -171,7 +171,7 @@ Menu RID_FM_FILTER_MENU
             Text [ ENGLISH ] = "~IS NOT NULL" ;
             Text[ portuguese ] = "~Nγo vazio";
             Text[ russian ] = "~Νε οσρςξ";
-            Text[ greek ] = "Δεν είνα~ι κενό";
+            Text[ greek ] = "Δεν είνα~ι μηδενικός χαρακτήρας";
             Text[ dutch ] = "~Is niet leeg";
             Text[ french ] = "~N'est pas vide";
             Text[ spanish ] = "~No Vacνo";
@@ -196,6 +196,7 @@ Menu RID_FM_FILTER_MENU
         };
     };
 };
+
 
 
 
