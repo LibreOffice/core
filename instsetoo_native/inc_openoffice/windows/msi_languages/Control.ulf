@@ -1,0 +1,696 @@
+[OOO_CONTROL_3]
+en-US = "Cancel"
+
+[OOO_CONTROL_5]
+en-US = "&Look in:"
+
+[OOO_CONTROL_6]
+en-US = "Browse to the destination folder."
+
+[OOO_CONTROL_7]
+en-US = "{&MSSansBold8}Change Current Destination Folder"
+
+[OOO_CONTROL_9]
+en-US = "Create new folder|"
+
+[OOO_CONTROL_10]
+en-US = "OK"
+
+[OOO_CONTROL_12]
+en-US = "&Folder name:"
+
+[OOO_CONTROL_13]
+en-US = "Up one level|"
+
+[OOO_CONTROL_14]
+en-US = "< &Back"
+
+[OOO_CONTROL_17]
+en-US = "&Change..."
+
+[OOO_CONTROL_18]
+en-US = "Cancel"
+
+[OOO_CONTROL_19]
+en-US = "Specify a network location for the server image of the product."
+
+[OOO_CONTROL_20]
+en-US = "Enter the network location or click Change to browse to a location.  Click Install to create a server image of [ProductName] at the specified network location or click Cancel to exit the wizard."
+
+[OOO_CONTROL_21]
+en-US = "{&MSSansBold8}Network Location"
+
+[OOO_CONTROL_22]
+en-US = "&Install"
+
+[OOO_CONTROL_23]
+en-US = "&Network location:"
+
+[OOO_CONTROL_24]
+en-US = "< &Back"
+
+[OOO_CONTROL_25]
+en-US = "Cancel"
+
+[OOO_CONTROL_26]
+en-US = "&Next >"
+
+[OOO_CONTROL_27]
+en-US = "{&TahomaBold10}Welcome to the Installation Wizard for [ProductName]"
+
+[OOO_CONTROL_28]
+en-US = "The Installation Wizard will create a server image of [ProductName] at a specified network location. To continue, click Next."
+
+[OOO_CONTROL_29]
+en-US = "&No"
+
+[OOO_CONTROL_30]
+en-US = "Are you sure you want to cancel [ProductName] installation?"
+
+[OOO_CONTROL_31]
+en-US = "&Yes"
+
+[OOO_CONTROL_32]
+en-US = "< &Back"
+
+[OOO_CONTROL_35]
+en-US = "Cancel"
+
+[OOO_CONTROL_36]
+en-US = "{\Tahoma8}{80}"
+
+[OOO_CONTROL_37]
+en-US = "&Organization:"
+
+[OOO_CONTROL_38]
+en-US = "Please enter your information."
+
+[OOO_CONTROL_39]
+en-US = "Install this application for:"
+
+[OOO_CONTROL_40]
+en-US = "{&MSSansBold8}Customer Information"
+
+[OOO_CONTROL_41]
+en-US = "{\Tahoma8}{50}"
+
+[OOO_CONTROL_42]
+en-US = "&User Name:"
+
+[OOO_CONTROL_43]
+en-US = "&Next >"
+
+[OOO_CONTROL_45]
+en-US = "&Serial Number:"
+
+[OOO_CONTROL_46]
+en-US = "< &Back"
+
+[OOO_CONTROL_49]
+en-US = "Cancel"
+
+[OOO_CONTROL_50]
+en-US = "&Change..."
+
+[OOO_CONTROL_51]
+en-US = "&Space"
+
+[OOO_CONTROL_52]
+en-US = "Select the program features you want installed."
+
+[OOO_CONTROL_53]
+en-US = "Click on an icon in the list below to change how a feature is installed."
+
+[OOO_CONTROL_54]
+en-US = "{&MSSansBold8}Custom Setup"
+
+[OOO_CONTROL_55]
+en-US = "Feature Description:"
+
+[OOO_CONTROL_56]
+en-US = "&Help"
+
+[OOO_CONTROL_57]
+en-US = "Install to:"
+
+[OOO_CONTROL_58]
+en-US = "Multiline description of the currently selected item"
+
+[OOO_CONTROL_59]
+en-US = "<selected feature path>"
+
+[OOO_CONTROL_60]
+en-US = "&Next >"
+
+[OOO_CONTROL_61]
+en-US = "Feature size"
+
+[OOO_CONTROL_64]
+en-US = "Custom Setup allows you to selectively install program features."
+
+[OOO_CONTROL_65]
+en-US = "{&MSSansBold8}Custom Setup Tips"
+
+[OOO_CONTROL_66]
+en-US = "Will not be installed."
+
+[OOO_CONTROL_67]
+en-US = "Will be installed on first use. (Available only if the feature supports this option.)"
+
+[OOO_CONTROL_68]
+en-US = "This install state means the feature..."
+
+[OOO_CONTROL_69]
+en-US = "Will be completely installed to the local hard drive."
+
+[OOO_CONTROL_70]
+en-US = "The icon next to the feature name indicates the install state of the feature. Click the icon to drop down the install state menu for each feature."
+
+[OOO_CONTROL_71]
+en-US = "Will be installed to run from the network. (Available only if the feature supports this option.)"
+
+[OOO_CONTROL_72]
+en-US = "OK"
+
+[OOO_CONTROL_73]
+en-US = "Will have some subfeatures installed to the local hard drive. (Available only if the feature has subfeatures.)"
+
+[OOO_CONTROL_74]
+en-US = "< &Back"
+
+[OOO_CONTROL_77]
+en-US = "Cancel"
+
+[OOO_CONTROL_78]
+en-US = "&Change..."
+
+[OOO_CONTROL_79]
+en-US = "Click Next to install to this folder, or click Change to install to a different folder."
+
+[OOO_CONTROL_80]
+en-US = "{&MSSansBold8}Database Folder"
+
+[OOO_CONTROL_81]
+en-US = "[DATABASEDIR]"
+
+[OOO_CONTROL_82]
+en-US = "Install [ProductName] database to:"
+
+[OOO_CONTROL_83]
+en-US = "&Next >"
+
+[OOO_CONTROL_84]
+en-US = "< &Back"
+
+[OOO_CONTROL_87]
+en-US = "Cancel"
+
+[OOO_CONTROL_88]
+en-US = "&Change..."
+
+[OOO_CONTROL_89]
+en-US = "Click Next to install to this folder, or click Change to install to a different folder."
+
+[OOO_CONTROL_90]
+en-US = "{&MSSansBold8}Destination Folder"
+
+[OOO_CONTROL_91]
+en-US = "[INSTALLDIR]"
+
+[OOO_CONTROL_92]
+en-US = "Install [ProductName] to:"
+
+[OOO_CONTROL_93]
+en-US = "&Next >"
+
+[OOO_CONTROL_96]
+en-US = "The disk space required for the installation of the selected features."
+
+[OOO_CONTROL_97]
+en-US = "The highlighted volumes do not have enough disk space available for the currently selected features. You can remove files from the highlighted volumes, choose to install less features onto local drives, or select different destination drives."
+
+[OOO_CONTROL_98]
+en-US = "{&MSSansBold8}Disk Space Requirements"
+
+[OOO_CONTROL_100]
+en-US = "OK"
+
+[OOO_CONTROL_103]
+en-US = "Some files that need to be updated are currently in use."
+
+[OOO_CONTROL_104]
+en-US = "The following applications are using files that need to be updated by this setup. Close these applications and click Retry to continue."
+
+[OOO_CONTROL_105]
+en-US = "{&MSSansBold8}Files in Use"
+
+[OOO_CONTROL_106]
+en-US = "&Exit"
+
+[OOO_CONTROL_107]
+en-US = "&Ignore"
+
+[OOO_CONTROL_108]
+en-US = "&Retry"
+
+[OOO_CONTROL_111]
+en-US = "Cancel"
+
+[OOO_CONTROL_113]
+en-US = "&Look in:"
+
+[OOO_CONTROL_114]
+en-US = "Browse to the destination folder."
+
+[OOO_CONTROL_115]
+en-US = "{&MSSansBold8}Change Current Destination Folder"
+
+[OOO_CONTROL_117]
+en-US = "Create New Folder|"
+
+[OOO_CONTROL_118]
+en-US = "OK"
+
+[OOO_CONTROL_120]
+en-US = "&Folder name:"
+
+[OOO_CONTROL_121]
+en-US = "Up One Level|"
+
+[OOO_CONTROL_122]
+en-US = "< &Back"
+
+[OOO_CONTROL_123]
+en-US = "Cancel"
+
+[OOO_CONTROL_124]
+en-US = "WARNING: This program is protected by copyright law and international treaties."
+
+[OOO_CONTROL_125]
+en-US = "&Next >"
+
+[OOO_CONTROL_126]
+en-US = "{&TahomaBold10}Welcome to the Installation Wizard for [ProductName]"
+
+[OOO_CONTROL_127]
+en-US = "The Installation Wizard will install [ProductName] on your computer. To continue, click Next."
+
+[OOO_CONTROL_128]
+en-US = "< &Back"
+
+[OOO_CONTROL_131]
+en-US = "Cancel"
+
+[OOO_CONTROL_132]
+en-US = "Please read the following license agreement carefully."
+
+[OOO_CONTROL_133]
+en-US = "{&MSSansBold8}License Agreement"
+
+[OOO_CONTROL_134]
+en-US = "&Next >"
+
+[OOO_CONTROL_135]
+en-US = "< &Back"
+
+[OOO_CONTROL_138]
+en-US = "Cancel"
+
+[OOO_CONTROL_139]
+en-US = "Modify, repair, or remove the program."
+
+[OOO_CONTROL_140]
+en-US = "{&MSSansBold8}Program Maintenance"
+
+[OOO_CONTROL_141]
+en-US = "&Next >"
+
+[OOO_CONTROL_143]
+en-US = "Change which program features are installed. This option displays the Custom Selection dialog in which you can change the way features are installed."
+
+[OOO_CONTROL_144]
+en-US = "Repair installation errors in the program. This option fixes missing or corrupt files, shortcuts, and registry entries."
+
+[OOO_CONTROL_145]
+en-US = "Remove [ProductName] from your computer."
+
+[OOO_CONTROL_146]
+en-US = "< &Back"
+
+[OOO_CONTROL_147]
+en-US = "Cancel"
+
+[OOO_CONTROL_148]
+en-US = "&Next >"
+
+[OOO_CONTROL_149]
+en-US = "{&TahomaBold10}Welcome to the Installation Wizard for [ProductName]"
+
+[OOO_CONTROL_150]
+en-US = "The Installation Wizard will allow you to modify, repair, or remove [ProductName]. To continue, click Next."
+
+[OOO_CONTROL_153]
+en-US = "Disk space required for the installation exceeds available disk space."
+
+[OOO_CONTROL_154]
+en-US = "The highlighted volumes do not have enough disk space available for the currently selected features. You can remove files from the highlighted volumes, choose to install less features onto local drives, or select different destination drives."
+
+[OOO_CONTROL_155]
+en-US = "{&MSSansBold8}Out of Disk Space"
+
+[OOO_CONTROL_156]
+en-US = "{120}{70}{70}{70}{70}"
+
+[OOO_CONTROL_157]
+en-US = "OK"
+
+[OOO_CONTROL_158]
+en-US = "< &Back"
+
+[OOO_CONTROL_159]
+en-US = "Cancel"
+
+[OOO_CONTROL_160]
+en-US = "&Update >"
+
+[OOO_CONTROL_161]
+en-US = "{&TahomaBold10}Welcome to the Patch for [ProductName]"
+
+[OOO_CONTROL_162]
+en-US = "The Installation Wizard will install the Patch for [ProductName] on your computer.  To continue, click Update."
+
+[OOO_CONTROL_163]
+en-US = "< &Back"
+
+[OOO_CONTROL_166]
+en-US = "Cancel"
+
+[OOO_CONTROL_167]
+en-US = "The wizard is ready to begin installation."
+
+[OOO_CONTROL_168]
+en-US = "Click Install to begin the installation."
+
+[OOO_CONTROL_169]
+en-US = "If you want to review or change any of your installation settings, click Back. Click Cancel to exit the wizard."
+
+[OOO_CONTROL_170]
+en-US = "{&MSSansBold8}Ready to Modify the Program"
+
+[OOO_CONTROL_171]
+en-US = "{&MSSansBold8}Ready to Repair the Program"
+
+[OOO_CONTROL_172]
+en-US = "{&MSSansBold8}Ready to Install the Program"
+
+[OOO_CONTROL_173]
+en-US = "&Install"
+
+[OOO_CONTROL_174]
+en-US = "< &Back"
+
+[OOO_CONTROL_177]
+en-US = "Cancel"
+
+[OOO_CONTROL_178]
+en-US = "You have chosen to remove the program from your system."
+
+[OOO_CONTROL_179]
+en-US = "Click Remove to remove [ProductName] from your computer. After removal, this program will no longer be available for use."
+
+[OOO_CONTROL_180]
+en-US = "If you want to review or change any settings, click Back."
+
+[OOO_CONTROL_181]
+en-US = "{&MSSansBold8}Remove the Program"
+
+[OOO_CONTROL_182]
+en-US = "&Remove"
+
+[OOO_CONTROL_183]
+en-US = "< &Back"
+
+[OOO_CONTROL_184]
+en-US = "Cancel"
+
+[OOO_CONTROL_185]
+en-US = "&Finish"
+
+[OOO_CONTROL_186]
+en-US = "Your system has not been modified. To complete installation at another time, please run setup again."
+
+[OOO_CONTROL_187]
+en-US = "Click Finish to exit the wizard."
+
+[OOO_CONTROL_188]
+en-US = "You can either keep any existing installed elements on your system to continue this installation at a later time or you can restore your system to its original state prior to the installation."
+
+[OOO_CONTROL_189]
+en-US = "Click Restore or Continue Later to exit the wizard."
+
+[OOO_CONTROL_190]
+en-US = "{&TahomaBold10}Installation Wizard Completed"
+
+[OOO_CONTROL_191]
+en-US = "The wizard was interrupted before [ProductName] could be completely installed."
+
+[OOO_CONTROL_192]
+en-US = "< &Back"
+
+[OOO_CONTROL_193]
+en-US = "Cancel"
+
+[OOO_CONTROL_194]
+en-US = "&Yes, check for program updates (Recommended) after the setup completes."
+
+[OOO_CONTROL_195]
+en-US = "Launch the program"
+
+[OOO_CONTROL_196]
+en-US = "Show the readme file"
+
+[OOO_CONTROL_197]
+en-US = "&Finish"
+
+[OOO_CONTROL_198]
+en-US = "{&TahomaBold10}Installation Wizard Completed"
+
+[OOO_CONTROL_199]
+en-US = "The Installation Wizard has successfully installed [ProductName]. Click Finish to exit the wizard."
+
+[OOO_CONTROL_200]
+en-US = "The Installation Wizard has successfully uninstalled [ProductName]. Click Finish to exit the wizard."
+
+[OOO_CONTROL_201]
+en-US = "Setup has finished installing [ProductName]."
+
+[OOO_CONTROL_202]
+en-US = "Some program files might have been updated since you purchased your copy of [ProductName]."
+
+[OOO_CONTROL_203]
+en-US = "Your Internet connection can be used to make sure that you have the latest updates."
+
+[OOO_CONTROL_204]
+en-US = "&Abort"
+
+[OOO_CONTROL_205]
+en-US = "&Cancel"
+
+[OOO_CONTROL_206]
+en-US = "<error text goes here><error text goes here><error text goes here><error text goes here><error text goes here><error text goes here><error text goes here><error text goes here><error text goes here><error text goes here><error text goes here>"
+
+[OOO_CONTROL_207]
+en-US = "&Ignore"
+
+[OOO_CONTROL_208]
+en-US = "&No"
+
+[OOO_CONTROL_209]
+en-US = "&OK"
+
+[OOO_CONTROL_210]
+en-US = "&Retry"
+
+[OOO_CONTROL_211]
+en-US = "&Yes"
+
+[OOO_CONTROL_214]
+en-US = "< &Back"
+
+[OOO_CONTROL_215]
+en-US = "Cancel"
+
+[OOO_CONTROL_216]
+en-US = "&Next >"
+
+[OOO_CONTROL_217]
+en-US = "{&TahomaBold10}Welcome to the Installation Wizard for [ProductName]"
+
+[OOO_CONTROL_218]
+en-US = "[ProductName] Setup is preparing the Installation Wizard which will guide you through the program setup process.  Please wait."
+
+[OOO_CONTROL_219]
+en-US = "< &Back"
+
+[OOO_CONTROL_220]
+en-US = "Cancel"
+
+[OOO_CONTROL_221]
+en-US = "&Finish"
+
+[OOO_CONTROL_222]
+en-US = "Your system has not been modified. To install this program at a later time, please run the installation again."
+
+[OOO_CONTROL_223]
+en-US = "Click Finish to exit the wizard."
+
+[OOO_CONTROL_224]
+en-US = "You can either keep any existing installed elements on your system to continue this installation at a later time or you can restore your system to its original state prior to the installation."
+
+[OOO_CONTROL_225]
+en-US = "Click Restore or Continue Later to exit the wizard."
+
+[OOO_CONTROL_226]
+en-US = "{&TahomaBold10}Installation Wizard Completed"
+
+[OOO_CONTROL_227]
+en-US = "The wizard was interrupted before [ProductName] could be completely installed."
+
+[OOO_CONTROL_228]
+en-US = "Progress done"
+
+[OOO_CONTROL_230]
+en-US = "< &Back"
+
+[OOO_CONTROL_233]
+en-US = "Cancel"
+
+[OOO_CONTROL_234]
+en-US = "The program features you selected are being installed."
+
+[OOO_CONTROL_235]
+en-US = "The program features you selected are being uninstalled."
+
+[OOO_CONTROL_236]
+en-US = "Please wait while the Installation Wizard installs [ProductName]. This may take several minutes."
+
+[OOO_CONTROL_237]
+en-US = "Please wait while the Installation Wizard uninstalls [ProductName]. This may take several minutes."
+
+[OOO_CONTROL_238]
+en-US = "{&MSSansBold8}Installing [ProductName]"
+
+[OOO_CONTROL_239]
+en-US = "{&MSSansBold8}Uninstalling [ProductName]"
+
+[OOO_CONTROL_240]
+en-US = "(Hidden for now)Sec."
+
+[OOO_CONTROL_241]
+en-US = "Status:"
+
+[OOO_CONTROL_242]
+en-US = "&Next >"
+
+[OOO_CONTROL_243]
+en-US = "(Hidden for now)"
+
+[OOO_CONTROL_244]
+en-US = ")Hidden for now)Estimated time remaining:"
+
+[OOO_CONTROL_245]
+en-US = "< &Back"
+
+[OOO_CONTROL_246]
+en-US = "Cancel"
+
+[OOO_CONTROL_247]
+en-US = "&Next >"
+
+[OOO_CONTROL_248]
+en-US = "The Installation Wizard will complete the installation of [ProductName] on your computer. To continue, click Next."
+
+[OOO_CONTROL_249]
+en-US = "The Installation Wizard will complete the suspended installation of [ProductName] on your computer. To continue, click Next."
+
+[OOO_CONTROL_250]
+en-US = "{&TahomaBold10}Resuming the Installation Wizard for [ProductName]"
+
+[OOO_CONTROL_251]
+en-US = "< &Back"
+
+[OOO_CONTROL_254]
+en-US = "Cancel"
+
+[OOO_CONTROL_255]
+en-US = "All program features will be installed. (Requires the most disk space.)"
+
+[OOO_CONTROL_256]
+en-US = "Choose which program features you want installed and where they will be installed. Recommended for advanced users."
+
+[OOO_CONTROL_257]
+en-US = "Choose the setup type that best suits your needs."
+
+[OOO_CONTROL_258]
+en-US = "Please select a setup type."
+
+[OOO_CONTROL_259]
+en-US = "{&MSSansBold8}Setup Type"
+
+[OOO_CONTROL_260]
+en-US = "&Next >"
+
+[OOO_CONTROL_262]
+en-US = "< &Back"
+
+[OOO_CONTROL_265]
+en-US = "Cancel"
+
+[OOO_CONTROL_266]
+en-US = "&Next >"
+
+[OOO_CONTROL_267]
+en-US = "Please select the product language for [ProductName]."
+
+[OOO_CONTROL_268]
+en-US = "{&MSSansBold8}Language Selection"
+
+[OOO_CONTROL_269]
+en-US = "Repair or remove the program."
+
+[OOO_CONTROL_270]
+en-US = "&Microsoft Word Documents"
+
+[OOO_CONTROL_271]
+en-US = "Microsoft &Excel Spreadsheets"
+
+[OOO_CONTROL_272]
+en-US = "Microsoft Po&werPoint Presentations"
+
+[OOO_CONTROL_273]
+en-US = "&[ProductName] Writer/Web"
+
+[OOO_CONTROL_274]
+en-US = "Select the file types that are to be opened with [ProductName]."
+
+[OOO_CONTROL_275]
+en-US = "[ProductName] will automatically open the following file types:"
+
+[OOO_CONTROL_276]
+en-US = "File types"
+
+[OOO_CONTROL_277]
+en-US = "Default HTML editor"
+
+[OOO_CONTROL_278]
+en-US = "{&MSSansBold8}File Type"
+
+[OOO_CONTROL_LANG_1033]
+en-US = "English"
+
+[OOO_CONTROL_LANG_1031]
+en-US = "German"
+
+[OOO_CONTROL_LANG_1034]
+en-US = "Spanish"
+
