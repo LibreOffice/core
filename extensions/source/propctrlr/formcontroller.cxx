@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 08:59:02 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 14:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2005,6 +2005,8 @@ namespace pcr
                                         --pEnd;
                                 }
                             }
+                            else
+                                --pEnd;
 
                         if (PROPERTY_ID_LISTSOURCETYPE == nPropId)
                             if (FormComponentType::COMBOBOX == m_nClassId)
@@ -2501,6 +2503,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/02/05 08:59:02  fs
+ *  #83468# SetTables ... correctly retrieve the rowset for combo-/listboxes
+ *
  *  Revision 1.4  2001/01/18 14:45:10  rt
  *  #65293# semicolon removed
  *
