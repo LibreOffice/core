@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:49:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@
 #define SC_UNONAME_OHEIGHT          "OptimalHeight"
 #define SC_UNONAME_OWIDTH           "OptimalWidth"
 #define SC_UNONAME_PAGESTL          "PageStyle"
+#define SC_UNONAME_TABLAYOUT        "TableLayout"
 #define SC_UNONAME_AUTOPRINT        "AutomaticPrintArea"
 
 //  LinkTarget
@@ -189,6 +190,9 @@
 
 //  drawing objects
 #define SC_UNONAME_IMAGEMAP         "ImageMap"
+#define SC_UNONAME_ANCHOR           "Anchor"
+#define SC_UNONAME_HORIPOS          "HoriOrientPosition"
+#define SC_UNONAME_VERTPOS          "VertOrientPosition"
 
 //  other cell properties
 #define SC_UNONAME_CHCOLHDR         "ChartColumnAsLabel"
