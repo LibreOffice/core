@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:36:39 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 13:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,10 +482,11 @@ namespace xmloff
         DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_TARGETFRAME, ::rtl::OUString);
 
         ::rtl::OUString sTargetFrame = comphelper::getString(m_xProps->getPropertyValue(PROPERTY_TARGETFRAME));
-        if (sTargetFrame.getLength() && (0 != sTargetFrame.compareToAscii("_blank")))
+        if (0 != sTargetFrame.compareToAscii("_blank"))
         {   // an empty string and "_blank" have the same meaning and don't have to be written
             AddAttribute(getCommonControlAttributeNamespace(CCA_TARGET_FRAME), getCommonControlAttributeName(CCA_TARGET_FRAME), sTargetFrame);
         }
+
         exportedProperty(PROPERTY_TARGETFRAME);
     }
 
@@ -744,6 +745,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/03/16 14:36:39  sab
+ *  did the required change (move of extract.hxx form cppuhelper to comphelper)
+ *
  *  Revision 1.11  2001/02/26 10:28:04  aw
  *  Changed double import/export to use it's own conversion routines
  *  so iots more clear what type is used
