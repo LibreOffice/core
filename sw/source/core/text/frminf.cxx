@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frminf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:26:04 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,9 @@ xub_StrLen SwTxtMargin::GetTxtStart() const
     const XubString &rTxt = GetInfo().GetTxt();
     const xub_StrLen nPos = nStart;
     const xub_StrLen nEnd = nPos + pCurr->GetLen();
-    for( xub_StrLen i = nPos; i < nEnd; ++i )
+    xub_StrLen i;
+
+    for( i = nPos; i < nEnd; ++i )
     {
         const xub_Unicode aChar = rTxt.GetChar( i );
         if( CH_TAB != aChar && ' ' != aChar )
@@ -106,7 +108,8 @@ xub_StrLen SwTxtMargin::GetTxtEnd() const
     const XubString &rTxt = GetInfo().GetTxt();
     const xub_StrLen nPos = nStart;
     const xub_StrLen nEnd = nPos + pCurr->GetLen();
-    for( long i = nEnd - 1; i >= nPos; --i )
+    long i;
+    for( i = nEnd - 1; i >= nPos; --i )
     {
         xub_Unicode aChar = rTxt.GetChar( i );
         if( CH_TAB != aChar && CH_BREAK != aChar && ' ' != aChar )
