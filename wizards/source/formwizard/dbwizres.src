@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: bc $ $Date: 2002-05-24 17:30:14 $
+ *  last change: $Author: bc $ $Date: 2002-05-30 16:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@ String RID_DB_COMMON_START + 0
 };
 String RID_DB_COMMON_START + 1
 {
-    Text = "A~bbrechen";
-    Text [ english_us] = "~Cancel";
+    Text = "Abbrechen";
+    Text [ english_us] = "Cancel";
     Text[ portuguese ] = "Ca~ncelar";
     Text[ russian ] = "~ŒÚÏÂÌ‡";
     Text[ dutch ] = "~Annuleren";
@@ -1363,8 +1363,8 @@ String RID_DB_FORM_WIZARD_START + 5
 
 String RID_DB_FORM_WIZARD_START + 6
 {
-    Text = "Tabellen oder Abfragen";
-    Text [ english_us ] = "Tables or queries";
+    Text = "~Tabellen und Abfragen";
+    Text [ english_us ] = "~Tables and queries";
     Text[ portuguese ] = "Tabelas ou consultas";
     Text[ russian ] = "“‡·ÎËˆ˚ ËÎË Á‡ÔÓÒ˚";
     Text[ dutch ] = "Tabellen of query's";
@@ -1560,8 +1560,8 @@ String RID_DB_FORM_WIZARD_START + 12
 
 String RID_DB_FORM_WIZARD_START + 13
 {
-    Text = "Felder im ~Formular";
-    Text [ english_us ] = "Fields in form";
+    Text = "~Felder im Bericht";
+    Text [ english_us ] = "~Fields in report";
     Text[ portuguese ] = "Campos no ~formul·rio";
     Text[ russian ] = "œÓÎˇ ‚ ~ÙÓÏÛÎˇÂ";
     Text[ dutch ] = "Velden in ~formulier";
@@ -3675,8 +3675,8 @@ String RID_DB_QUERY_WIZARD_START + 32
 
 String RID_DB_REPORT_WIZARD_START + 0
 {
-    Text = "AutoPilot Berichte";
-    Text [ english_us ] = "AutoPilot Report";
+    Text = "AutoPilot Bericht";
+    Text [ english_us ] = "Report AutoPilot";
     Text[ portuguese ] = "AutoPiloto - RelatÛrios";
     Text[ russian ] = "¿‚ÚÓÔËÎÓÚ ÓÚ˜ÂÚÓ‚";
     Text[ dutch ] = "AutoPiloot Berichten";
@@ -3931,8 +3931,8 @@ String RID_DB_REPORT_WIZARD_START + 8
 
 String RID_DB_REPORT_WIZARD_START + 11
 {
-    Text = "Gliederung";
-    Text [ english_us ] = ": Structure";
+    Text = "Gruppierungen";
+    Text [ english_us ] = ": Grouping";
     Text[ portuguese ] = ": Esquema";
     Text[ russian ] = ": —ÚÛÍÚÛ‡";
     Text[ dutch ] = ": overzicht";
@@ -3960,7 +3960,7 @@ String RID_DB_REPORT_WIZARD_START + 11
 String RID_DB_REPORT_WIZARD_START + 12
 {
     Text = "Sortieroptionen";
-    Text [ english_us ] = ": Sort Options";
+    Text [ english_us ] = ": Sorting Options";
     Text[ portuguese ] = ": OpÁıes de ordem";
     Text[ russian ] = ": œ‡‡ÏÂÚ˚ ÒÓÚËÓ‚ÍË";
     Text[ dutch ] = ": sorteeropties";
@@ -3989,7 +3989,7 @@ String RID_DB_REPORT_WIZARD_START + 12
 String RID_DB_REPORT_WIZARD_START + 13
 {
     Text = "Auswahl des Layouts";
-    Text [ english_us ] = "Style Selection";
+    Text [ english_us ] = "Choose Layout";
     Text[ portuguese ] = ": SelecÁ„o de estilo";
     Text[ russian ] = ": ¬˚·Ó ÒÚËÎˇ";
     Text[ dutch ] = ": stijl selecteren";
@@ -4014,10 +4014,18 @@ String RID_DB_REPORT_WIZARD_START + 13
     Text[ thai ] = ": ‡πÄ‡∏•‡∏∑‡∏≠‡∏Å‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞";
 };
 
+
 String RID_DB_REPORT_WIZARD_START + 14
 {
-    Text = "Layout der Datenstruktur";
-    Text [ english_us ] = ": Styles";
+    Text = "Bericht speichern";
+    Text [ english_us ] = "Save Report";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 15
+{
+    Text = "Layout der Daten";
+    Text [ english_us ] = ": Layout of data";
     Text[ portuguese ] = ": Estilos";
     Text[ russian ] = ":—ÚËÎË ÙÓÏ‡Ú‡";
     Text[ dutch ] = ": opmaakprofielen";
@@ -4042,10 +4050,10 @@ String RID_DB_REPORT_WIZARD_START + 14
     Text[ thai ] = ": ‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞";
 };
 
-String RID_DB_REPORT_WIZARD_START + 15
+String RID_DB_REPORT_WIZARD_START + 16
 {
-    Text = "Layout der Seitenkˆpfe";
-    Text [ english_us ] = ": Create";
+    Text = "Layout der Kopf- und Fuﬂzeilen";
+    Text [ english_us ] = ": Layout of headers and footers";
     Text[ portuguese ] = ": Criar";
     Text[ russian ] = ": √ÓÚÓ‚Ó";
     Text[ dutch ] = ": voltooien";
@@ -4073,8 +4081,8 @@ String RID_DB_REPORT_WIZARD_START + 15
 
 String RID_DB_REPORT_WIZARD_START + 19
 {
-    Text = "Gliederung der Felder";
-    Text [ english_us ] = "Organize fields";
+    Text = "Felder";
+    Text [ english_us ] = "Fields";
     Text[ portuguese ] = "Estruturar ~campos";
     Text[ russian ] = "–‡Á‰ÂÎËÚ¸ ÔÓÎˇ";
     Text[ dutch ] = "Velden ~indelen";
@@ -4102,7 +4110,7 @@ String RID_DB_REPORT_WIZARD_START + 19
 String RID_DB_REPORT_WIZARD_START + 20
 {
     Text = "~Sortieren nach";
-    Text [ english_us ] = "~Sort by";
+    Text [ english_us ] = "S~ort by";
     Text[ portuguese ] = "~Ordenar";
     Text[ russian ] = "~—ÓÚËÓ‚Í‡";
     Text[ dutch ] = "~Sortering";
@@ -4131,7 +4139,7 @@ String RID_DB_REPORT_WIZARD_START + 20
 String RID_DB_REPORT_WIZARD_START + 21
 {
     Text = "~Anschlieﬂend nach";
-    Text [ english_us ] = "~Afterwards by";
+    Text [ english_us ] = "And ~then by";
     Text[ portuguese ] = "~Ordenar";
     Text[ russian ] = "~—ÓÚËÓ‚Í‡";
     Text[ dutch ] = "~Sortering";
@@ -4159,8 +4167,8 @@ String RID_DB_REPORT_WIZARD_START + 21
 
 String RID_DB_REPORT_WIZARD_START + 22
 {
-    Text = "~Dokumentausrichtung";
-    Text [ english_us ] = "~Alignment";
+    Text = "~Ausrichtung";
+    Text [ english_us ] = "~Orientation";
     Text[ portuguese ] = "~Alinhamento";
     Text[ russian ] = "~¬˚‡‚ÌË‚‡ÌËÂ";
     Text[ dutch ] = "~Uitlijning";
@@ -4187,7 +4195,7 @@ String RID_DB_REPORT_WIZARD_START + 22
 
 String RID_DB_REPORT_WIZARD_START + 23
 {
-    Text = "~Hochformat";
+    Text = "H~ochformat";
     Text [ english_us ] = "~Portrait";
     Text[ portuguese ] = "~Vertical";
     Text[ russian ] = "~ ÌËÊÌ˚È ÙÓÏ‡Ú";
@@ -4243,7 +4251,13 @@ String RID_DB_REPORT_WIZARD_START + 24
 
 String RID_DB_REPORT_WIZARD_START + 25
 {
-    Text = "Bericht als Textdokumentvorlage ~speichern";
+    Text = "Zweck des Reports";
+    Text [ english_us ] = "Purpose of the Reportdocument";
+};
+
+String RID_DB_REPORT_WIZARD_START + 26
+{
+    Text = "Report als Textdokumentvorlage ~speichern";
     Text [ english_us ] = "save Report as Textdocument template";
     Text[ portuguese ] = "~Estilo";
     Text[ russian ] = "~—ÚËÎ¸";
@@ -4270,66 +4284,68 @@ String RID_DB_REPORT_WIZARD_START + 25
 };
 
 
+String RID_DB_REPORT_WIZARD_START + 27
+{
+    Text = "Report als Snapshot speichern";
+    Text [ english_us ] = "save Report as Snapshot";
+    Text[ portuguese ] = "~Estilo";
+    Text[ russian ] = "~—ÚËÎ¸";
+    Text[ dutch ] = "~Stijl";
+    Text[ french ] = "Style";
+    Text[ spanish ] = "~Estilo";
+    Text[ italian ] = "~Stile";
+    Text[ danish ] = "T~ype";
+    Text[ swedish ] = "~Stil";
+    Text[ polish ] = "~Styl";
+    Text[ portuguese_brazilian ] = "~Stil";
+    Text[ japanese ] = "„Çπ„Çø„Ç§„É´(~S)";
+    Text[ chinese_simplified ] = "ÂºèÊ†∑(~S)";
+    Text[ chinese_traditional ] = "È¢®Ê†º(~S)";
+    Text[ arabic ] = "~«·‰„ÿ";
+    Text[ dutch ] = "~Stijl";
+    Text[ chinese_simplified ] = "ÂºèÊ†∑(~S)";
+    Text[ greek ] = "~”ÙıÎ";
+    Text[ korean ] = "Ïú†Ìòï(~S)";
+    Text[ turkish ] = "~BiÁim";
+    Text[ catalan ] = "~Style";
+    Text[ finnish ] = "~Tyyli";
+    Text[ thai ] = "~‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 28
+{
+    Text = "Welche Felder sollen in Ihrem Bericht erscheinen?";
+    Text [ english_us ] = "Which fields do want to have in your report?";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 29
+{
+    Text = "Mˆchten Sie Gruppierungen hinzuf¸gen?";
+    Text [ english_us ] = "Du you want to add grouping levels?";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 30
+{
+    Text = "Nach welchen Feldern wollen Sie die Daten sortieren?";
+    Text [ english_us ] = "According to which fields do you want to sort the data?";
+};
+
+
 String RID_DB_REPORT_WIZARD_START + 31
 {
-    Text = "Format~vorlagen";
-    Text [ english_us ] = "Styles";
-    Text[ portuguese ] = "~Estilos";
-    Text[ russian ] = "—ÚËÎË ÙÓÏ‡Ú‡";
-    Text[ dutch ] = "~Opmaakprofielen";
-    Text[ french ] = "St~yles";
-    Text[ spanish ] = "~Estilos";
-    Text[ italian ] = "~Modelli";
-    Text[ danish ] = "~Formattypografier";
-    Text[ swedish ] = "Format~mallar";
-    Text[ polish ] = "~Style formatu";
-    Text[ portuguese_brazilian ] = "Format~vorlagen";
-    Text[ japanese ] = "Êõ∏Âºè„Çπ„Çø„Ç§„É´";
-    Text[ chinese_simplified ] = "Ê†ºÂºèÊ†∑Âºè";
-    Text[ chinese_traditional ] = "Ê†ºÂºèÊ®£Âºè";
-    Text[ arabic ] = "~ﬁÊ«·» «· ‰”Ìﬁ";
-    Text[ dutch ] = "~Opmaakprofielen";
-    Text[ chinese_simplified ] = "Ê†ºÂºèÊ†∑Âºè";
-    Text[ greek ] = "~–Ò¸Ùı·";
-    Text[ korean ] = "ÏÑúÏãù ÌÖúÌîåÎ¶ø";
-    Text[ turkish ] = "Format ˛ablonlar˝";
-    Text[ catalan ] = "Styles";
-    Text[ finnish ] = "Tyylit";
-    Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞";
+    Text = "Wie soll Ihr Bericht aussehen?";
+    Text [ english_us ] = "How do you want your report to look?";
 };
+
+
 
 String RID_DB_REPORT_WIZARD_START + 32
 {
-    Text = "Name des Berichts";
-    Text [ english_us ] = "~Name of report";
-    Text[ portuguese ] = "~Nome do relatÛrio";
-    Text[ russian ] = "~Õ‡Á‚‡ÌËÂ ÓÚ˜ÂÚ‡";
-    Text[ dutch ] = "~Naam bericht";
-    Text[ french ] = "~Nom de l'Ètat";
-    Text[ spanish ] = "~Nombre del informe";
-    Text[ italian ] = "~Nome del rapporto";
-    Text[ danish ] = "~Rapportens navn";
-    Text[ swedish ] = "~Namn pÂ rapport";
-    Text[ polish ] = "~Nazwa raportu";
-    Text[ portuguese_brazilian ] = "~Name des Berichts";
-    Text[ japanese ] = "„É¨„Éù„Éº„ÉàÂêç(~N)";
-    Text[ chinese_simplified ] = "Êä•Ë°®ÂêçÁß∞(~N)";
-    Text[ chinese_traditional ] = "Â†±Ë°®ÂêçÁ®±(~N)";
-    Text[ arabic ] = "~«”„ «· ﬁ—Ì—";
-    Text[ dutch ] = "~Naam bericht";
-    Text[ chinese_simplified ] = "Êä•Ë°®ÂêçÁß∞(~N)";
-    Text[ greek ] = "º~ÌÔÏ· ·Ì·ˆÔÒ‹Ú";
-    Text[ korean ] = "Î¶¨Ìè¨Ìä∏ Î™ÖÏπ≠(~N)";
-    Text[ turkish ] = "~Raporun ad˝";
-    Text[ catalan ] = "~Name of Report";
-    Text[ finnish ] = "Raportin ~nimi";
-    Text[ thai ] = "~‡∏ä‡∏∑‡πà‡∏≠‡∏£‡∏≤‡∏¢‡∏á‡∏≤‡∏ô";
-};
-
-String RID_DB_REPORT_WIZARD_START + 33
-{
-    Text = "Nach dem ~Beenden...";
-    Text [ english_us ] = "After complet~ion...";
+    Text = "Welche Art von Bericht mˆchten Sie erstellen?";
+    Text [ english_us ] = "Which type of report do you want?";
     Text[ portuguese ] = "Depois de ~pronto...";
     Text[ russian ] = "œÓÒÎÂ ÓÍÓÌ˜‡ÌËˇ...";
     Text[ dutch ] = "Na het ~beÎindigen...";
@@ -4354,6 +4370,36 @@ String RID_DB_REPORT_WIZARD_START + 33
     Text[ finnish ] = "Valmistumisen ~j‰lkeen";
     Text[ thai ] = "‡∏´‡∏•‡∏±‡∏á‡∏à‡∏≤‡∏Å‡πÄ‡∏™‡∏£‡πá‡∏à‡∏™‡∏°~‡∏ö‡∏π‡∏£‡∏ì‡πå...";
 };
+
+
+String RID_DB_REPORT_WIZARD_START + 33
+{
+    Text = "~Name des Berichts";
+    Text [ english_us ] = "~Title of report";
+    Text[ portuguese ] = "~Nome do relatÛrio";
+    Text[ russian ] = "~Õ‡Á‚‡ÌËÂ ÓÚ˜ÂÚ‡";
+    Text[ dutch ] = "~Naam bericht";
+    Text[ french ] = "~Nom de l'Ètat";
+    Text[ spanish ] = "~Nombre del informe";
+    Text[ italian ] = "~Nome del rapporto";
+    Text[ danish ] = "~Rapportens navn";
+    Text[ swedish ] = "~Namn pÂ rapport";
+    Text[ polish ] = "~Nazwa raportu";
+    Text[ portuguese_brazilian ] = "~Name des Berichts";
+    Text[ japanese ] = "„É¨„Éù„Éº„ÉàÂêç(~N)";
+    Text[ chinese_simplified ] = "Êä•Ë°®ÂêçÁß∞(~N)";
+    Text[ chinese_traditional ] = "Â†±Ë°®ÂêçÁ®±(~N)";
+    Text[ arabic ] = "~«”„ «· ﬁ—Ì—";
+    Text[ dutch ] = "~Naam bericht";
+    Text[ chinese_simplified ] = "Êä•Ë°®ÂêçÁß∞(~N)";
+    Text[ greek ] = "º~ÌÔÏ· ·Ì·ˆÔÒ‹Ú";
+    Text[ korean ] = "Î¶¨Ìè¨Ìä∏ Î™ÖÏπ≠(~N)";
+    Text[ turkish ] = "~Raporun ad˝";
+    Text[ catalan ] = "~Name of Report";
+    Text[ finnish ] = "Raportin ~nimi";
+    Text[ thai ] = "~‡∏ä‡∏∑‡πà‡∏≠‡∏£‡∏≤‡∏¢‡∏á‡∏≤‡∏ô";
+};
+
 
 String RID_DB_REPORT_WIZARD_START + 34
 {
@@ -4413,8 +4459,8 @@ String RID_DB_REPORT_WIZARD_START + 35
 
 String RID_DB_REPORT_WIZARD_START + 36
 {
-    Text = "Aufsteigend";
-    Text [ english_us ] = "Ascending";
+    Text = "A~ufsteigend";
+    Text [ english_us ] = "~Ascending";
     Text[ portuguese ] = "A;Z";
     Text[ greek ] = "A;Ÿ";
     Text[ dutch ] = "A;Z";
@@ -4439,8 +4485,8 @@ String RID_DB_REPORT_WIZARD_START + 36
 
 String RID_DB_REPORT_WIZARD_START + 37
 {
-    Text = "Absteigend";
-    Text [ english_us ] = "Descending";
+    Text = "Abs~teigend";
+    Text [ english_us ] = "~Descending";
     Text[ portuguese ] = "Os nomes de relatÛrios sÛ podem ter um m·ximo de 32 caracteres.";
     Text[ greek ] = "‘Ô ÏﬁÍÔÚ Ù˘Ì ÔÌÔÏ‹Ù˘Ì Ù˘Ì ·Ì·ˆÔÒ˛Ì ‰ÂÌ Ò›ÂÈ Ì· ıÂÒ‚·ﬂÌÂÈ ÙÔıÚ 32 ˜·Ò·ÍÙﬁÒÂÚ.";
     Text[ dutch ] = "Namen van berichten mogen maximaal 32 tekens lang zijn.";
@@ -4462,6 +4508,102 @@ String RID_DB_REPORT_WIZARD_START + 37
     Text[ finnish ] = "Raporttien nimet eiv‰t saa olla yli 32 merkin pituisia.";
     Text[ thai ] = "‡∏ä‡∏∑‡πà‡∏≠‡∏£‡∏≤‡∏¢‡∏á‡∏≤‡∏ô‡∏ï‡πâ‡∏≠‡∏á‡∏¢‡∏≤‡∏ß‡πÑ‡∏°‡πà‡πÄ‡∏Å‡∏¥‡∏ô 32 ‡∏ï‡∏±‡∏ß‡∏≠‡∏±‡∏Å‡∏Ç‡∏£‡∏∞";
 };
+
+
+String RID_DB_REPORT_WIZARD_START + 40
+{
+    Text = "Dynamische Berichtsvorlage";
+    Text [ english_us ] = "Dynamic Report template";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 41
+{
+    Text = "Berichtsvorlage sofort verwenden";
+    Text [ english_us ] = "Use report template immediately";
+};
+
+String RID_DB_REPORT_WIZARD_START + 42
+{
+    Text = "Berichtsvorlage weiter bearbeiten";
+    Text [ english_us ] = "Modify report template";
+};
+
+String RID_DB_REPORT_WIZARD_START + 43
+{
+    Text = "Statischer Bericht";
+    Text [ english_us ] = "Static report";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 44
+{
+    Text = "Speichern unter";
+    Text [ english_us ] = "Save as";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 45
+{
+    Text = "~Verkn¸pfung zur Datenbank erstellen";
+    Text [ english_us ] = "~Create link to database";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 50
+{
+    Text = "Gruppierungen";
+    Text [ english_us ] = "Groupings";
+};
+
+String RID_DB_REPORT_WIZARD_START + 51
+{
+    Text = "Ans~chlieﬂend nach";
+    Text [ english_us ] = "And then b~y";
+};
+
+String RID_DB_REPORT_WIZARD_START + 52
+{
+    Text = "Ansch~lieﬂend nach";
+    Text [ english_us ] = "And ~then by";
+};
+
+String RID_DB_REPORT_WIZARD_START + 53
+{
+    Text = "Au~fsteigend";
+    Text [ english_us ] = "Asc~ending";
+};
+
+String RID_DB_REPORT_WIZARD_START + 54
+{
+    Text = "Aufstei~gend";
+    Text [ english_us ] = "Ascend~ing";
+};
+
+String RID_DB_REPORT_WIZARD_START + 55
+{
+    Text = "Aufst~eigend";
+    Text [ english_us ] = "Ascendin~g";
+};
+
+String RID_DB_REPORT_WIZARD_START + 56
+{
+    Text = "Abste~igend";
+    Text [ english_us ] = "De~scending";
+};
+
+String RID_DB_REPORT_WIZARD_START + 57
+{
+    Text = "Absteige~nd";
+    Text [ english_us ] = "Des~cending";
+};
+
+String RID_DB_REPORT_WIZARD_START + 58
+{
+    Text = "Absteigen~d";
+    Text [ english_us ] = "De~scending";
+};
+
 
 // ============================================================================
 
@@ -6046,12 +6188,4 @@ String RID_DB_COMBO_WIZARD_START + 22
     Text[ finnish ] = "Ei, haluan vain n‰ytt‰‰ arvon.";
     Text[ thai ] = "‡πÑ‡∏°‡πà‡πÉ‡∏ä‡πà  ‡∏â‡∏±‡∏ô‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£‡πÉ‡∏ä‡πâ‡∏Ñ‡πà‡∏≤‡πÄ‡∏û‡∏∑‡πà‡∏≠‡πÅ‡∏™‡∏î‡∏á‡∏ß‡∏±‡∏ï‡∏ñ‡∏∏‡∏õ‡∏£‡∏∞‡∏™‡∏á‡∏Ñ‡πå‡πÄ‡∏ó‡πà‡∏≤‡∏ô‡∏±‡πâ‡∏ô";
 };
-
-
-
-
-
-
-
-
 
