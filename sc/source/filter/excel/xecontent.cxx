@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:20:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 
 #ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
+#endif
+#ifndef SC_XEHELPER_HXX
+#include "xehelper.hxx"
 #endif
 #ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
@@ -361,7 +364,7 @@ XclExpMergedcells::XclExpMergedcells( const XclExpRoot& rRoot ) :
 
 void XclExpMergedcells::AppendRange( const ScRange& rRange, sal_uInt32 nBaseXFId )
 {
-    if( GetBiff() >= xlBiff8 )
+    if( GetBiff() == EXC_BIFF8 )
     {
         maMergedRanges.Append( rRange );
         maBaseXFIds.push_back( nBaseXFId );
@@ -381,22 +384,20 @@ sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
 
 void XclExpMergedcells::Save( XclExpStream& rStrm )
 {
-    if( GetBiff() >= xlBiff8 )
+    if( GetBiff() == EXC_BIFF8 )
     {
-        CheckCellRangeList( maMergedRanges );
-        if( maMergedRanges.Count() )
+        XclRangeList aXclRanges;
+        GetAddressConverter().ConvertRangeList( aXclRanges, maMergedRanges, true );
+        size_t nFirstRange = 0;
+        size_t nRemainingRanges = aXclRanges.size();
+        while( nRemainingRanges > 0 )
         {
-            ULONG nFirstRange = 0;
-            ULONG nRemainingRanges = maMergedRanges.Count();
-            while( nRemainingRanges > 0)
-            {
-                ULONG nRangeCount = ::std::min<ULONG>(nRemainingRanges, EXC_MERGEDCELLS_MAXCOUNT);
-                rStrm.StartRecord(EXC_ID_MERGEDCELLS, 2 + 8 * nRangeCount );
-                XclTools::WriteRangeList( rStrm, maMergedRanges, nFirstRange, nRangeCount);
-                rStrm.EndRecord();
-                nFirstRange += nRangeCount;
-                nRemainingRanges -= nRangeCount;
-            }
+            size_t nRangeCount = ::std::min< size_t >( nRemainingRanges, EXC_MERGEDCELLS_MAXCOUNT );
+            rStrm.StartRecord( EXC_ID_MERGEDCELLS, 2 + 8 * nRangeCount );
+            aXclRanges.WriteSubList( rStrm, nFirstRange, nRangeCount );
+            rStrm.EndRecord();
+            nFirstRange += nRangeCount;
+            nRemainingRanges -= nRangeCount;
         }
     }
 }
@@ -545,44 +546,42 @@ void XclExpHyperlink::WriteBody( XclExpStream& rStrm )
 // Label ranges ===============================================================
 
 XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
-    XclExpRecord( EXC_ID_LABELRANGES )
+    XclExpRoot( rRoot )
 {
-    SCTAB nScTab = rRoot.GetCurrScTab();
-
+    SCTAB nScTab = GetCurrScTab();
     // row label ranges
     FillRangeList( maRowRanges, rRoot.GetDoc().GetRowNameRangesRef(), nScTab );
     // row labels only over 1 column (restriction of Excel97/2000/XP)
-    for( ScRange* pRange = maRowRanges.First(); pRange; pRange = maRowRanges.Next() )
-        if( pRange->aStart.Col() != pRange->aEnd.Col() )
-            pRange->aEnd.SetCol( pRange->aStart.Col() );
-    rRoot.CheckCellRangeList( maRowRanges );
-
+    for( ScRange* pScRange = maRowRanges.First(); pScRange; pScRange = maRowRanges.Next() )
+        if( pScRange->aStart.Col() != pScRange->aEnd.Col() )
+            pScRange->aEnd.SetCol( pScRange->aStart.Col() );
     // col label ranges
     FillRangeList( maColRanges, rRoot.GetDoc().GetColNameRangesRef(), nScTab );
-    rRoot.CheckCellRangeList( maColRanges );
-
-    SetRecSize( 4 + 8 * (maRowRanges.Count() + maColRanges.Count()) );
 }
 
-void XclExpLabelranges::FillRangeList( ScRangeList& rRanges, ScRangePairListRef xLabelRangesRef, SCTAB nScTab )
+void XclExpLabelranges::FillRangeList( ScRangeList& rScRanges,
+        ScRangePairListRef xLabelRangesRef, SCTAB nScTab )
 {
     for( const ScRangePair* pRangePair = xLabelRangesRef->First(); pRangePair; pRangePair = xLabelRangesRef->Next() )
     {
-        const ScRange& rRange = pRangePair->GetRange( 0 );
-        if( rRange.aStart.Tab() == nScTab )
-            rRanges.Append( rRange );
+        const ScRange& rScRange = pRangePair->GetRange( 0 );
+        if( rScRange.aStart.Tab() == nScTab )
+            rScRanges.Append( rScRange );
     }
 }
 
 void XclExpLabelranges::Save( XclExpStream& rStrm )
 {
-    if( maRowRanges.Count() || maColRanges.Count() )
-        XclExpRecord::Save( rStrm );
-}
-
-void XclExpLabelranges::WriteBody( XclExpStream& rStrm )
-{
-    rStrm << maRowRanges << maColRanges;
+    XclExpAddressConverter& rAddrConv = GetAddressConverter();
+    XclRangeList aRowXclRanges, aColXclRanges;
+    rAddrConv.ConvertRangeList( aRowXclRanges, maRowRanges, false );
+    rAddrConv.ConvertRangeList( aColXclRanges, maColRanges, false );
+    if( !aRowXclRanges.empty() || !aColXclRanges.empty() )
+    {
+        rStrm.StartRecord( EXC_ID_LABELRANGES, 4 + 8 * (aRowXclRanges.size() + aColXclRanges.size()) );
+        rStrm << aRowXclRanges << aColXclRanges;
+        rStrm.EndRecord();
+    }
 }
 
 // Conditional formatting  ====================================================
@@ -655,7 +654,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
             Font aFont;
             ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW );
             maFontData.FillFromFont( aFont );
-            mnFontColorId = GetPalette().InsertColor( aFont.GetColor(), xlColorCellText );
+            mnFontColorId = GetPalette().InsertColor( aFont.GetColor(), EXC_COLOR_CELLTEXT );
         }
 
         // border
@@ -818,10 +817,10 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     XclExpRecord( EXC_ID_CONDFMT ),
     XclExpRoot( rRoot )
 {
-    GetDoc().FindConditionalFormat( rCondFormat.GetKey(), maRanges, GetCurrScTab() );
-    CheckCellRangeList( maRanges );
-
-    if( maRanges.Count() )
+    ScRangeList aScRanges;
+    GetDoc().FindConditionalFormat( rCondFormat.GetKey(), aScRanges, GetCurrScTab() );
+    GetAddressConverter().ConvertRangeList( maXclRanges, aScRanges, true );
+    if( !maXclRanges.empty() )
         for( USHORT nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
             if( const ScCondFormatEntry* pEntry = rCondFormat.GetEntry( nIndex ) )
                 maCFList.AppendNewRecord( new XclExpCF( GetRoot(), *pEntry ) );
@@ -833,7 +832,7 @@ XclExpCondfmt::~XclExpCondfmt()
 
 bool XclExpCondfmt::IsValid() const
 {
-    return !maCFList.Empty() && maRanges.Count();
+    return !maCFList.Empty() && !maXclRanges.empty();
 }
 
 void XclExpCondfmt::Save( XclExpStream& rStrm )
@@ -848,30 +847,12 @@ void XclExpCondfmt::Save( XclExpStream& rStrm )
 void XclExpCondfmt::WriteBody( XclExpStream& rStrm )
 {
     DBG_ASSERT( !maCFList.Empty(), "XclExpCondfmt::WriteBody - no CF records to write" );
-    DBG_ASSERT( maRanges.Count(), "XclExpCondfmt::WriteBody - no cell ranges found" );
-
-    // build the minimum range containing all conditionally formatted cells
-    ScAddress aMinPos( GetXclMaxPos() );
-    ScAddress aMaxPos( 0, 0, 0 );
-    for( const ScRange* pRange = maRanges.First(); pRange; pRange = maRanges.Next() )
-    {
-        if( pRange->aStart.Col() < aMinPos.Col() )
-            aMinPos.SetCol( pRange->aStart.Col() );
-        if( pRange->aStart.Row() < aMinPos.Row() )
-            aMinPos.SetRow( pRange->aStart.Row() );
-        if( pRange->aEnd.Col() > aMaxPos.Col() )
-            aMaxPos.SetCol( pRange->aEnd.Col() );
-        if( pRange->aEnd.Row() > aMaxPos.Row() )
-            aMaxPos.SetRow( pRange->aEnd.Row() );
-    }
+    DBG_ASSERT( !maXclRanges.empty(), "XclExpCondfmt::WriteBody - no cell ranges found" );
 
     rStrm   << static_cast< sal_uInt16 >( maCFList.Size() )
             << sal_uInt16( 1 )
-            << static_cast< sal_uInt16 >( aMinPos.Row() )
-            << static_cast< sal_uInt16 >( aMaxPos.Row() )
-            << static_cast< sal_uInt16 >( aMinPos.Col() )
-            << static_cast< sal_uInt16 >( aMaxPos.Col() )
-            << maRanges;
+            << maXclRanges.GetEnclosingRange()
+            << maXclRanges;
 }
 
 // ----------------------------------------------------------------------------
@@ -1072,13 +1053,13 @@ XclExpDV::~XclExpDV()
 
 void XclExpDV::InsertCellRange( const ScRange& rRange )
 {
-    maRanges.Join( rRange );
+    maScRanges.Join( rRange );
 }
 
-bool XclExpDV::CheckWriteRecord()
+bool XclExpDV::Finalize()
 {
-    CheckCellRangeList( maRanges );
-    return (mnScHandle != ULONG_MAX) && maRanges.Count();
+    GetAddressConverter().ConvertRangeList( maXclRanges, maScRanges, true );
+    return (mnScHandle != ULONG_MAX) && !maXclRanges.empty();
 }
 
 void XclExpDV::WriteBody( XclExpStream& rStrm )
@@ -1092,7 +1073,7 @@ void XclExpDV::WriteBody( XclExpStream& rStrm )
         lclWriteDvFormula( rStrm, mxTokArr1.get() );
     lclWriteDvFormula( rStrm, mxTokArr2.get() );
     // cell ranges
-    rStrm << maRanges;
+    rStrm << maXclRanges;
 }
 
 // ----------------------------------------------------------------------------
@@ -1109,7 +1090,7 @@ XclExpDval::~XclExpDval()
 
 void XclExpDval::InsertCellRange( const ScRange& rRange, ULONG nScHandle )
 {
-    if( GetBiff() >= xlBiff8 )
+    if( GetBiff() == EXC_BIFF8 )
     {
         XclExpDV& rDVRec = SearchOrCreateDv( nScHandle );
         rDVRec.InsertCellRange( rRange );
@@ -1124,7 +1105,7 @@ void XclExpDval::Save( XclExpStream& rStrm )
     {
         --nPos;     // backwards to keep nPos valid
         XclExpDVRef xDVRec = maDVList.GetRecord( nPos );
-        if( !xDVRec->CheckWriteRecord() )
+        if( !xDVRec->Finalize() )
             maDVList.RemoveRecord( nPos );
     }
 
@@ -1338,7 +1319,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
                     // find range or create a new range
                     ScRange aScDestRange;
                     ScUnoConversion::FillScRange( aScDestRange, aDestRange );
-                    if( const ScRangeData* pRangeData = rDoc.GetRangeName()->GetRangeAtBlock( aScDestRange ) )
+                    if( const ScRangeData* pRangeData = rRoot.GetNamedRanges().GetRangeAtBlock( aScDestRange ) )
                     {
                         aRangeName = pRangeData->GetName();
                     }
