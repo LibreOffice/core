@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-01-30 17:00:10 $
+ *  last change: $Author: ab $ $Date: 2001-05-10 15:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ using namespace rtl;
 #include<basmgr.hxx>
 #include<sbintern.hxx>
 #include<runtime.hxx>
+
+#include<math.h>
 
 TYPEINIT1(SbUnoMethod,SbxMethod)
 TYPEINIT1(SbUnoProperty,SbxProperty)
@@ -539,6 +541,61 @@ Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetCl
 Any sbxToUnoValue( SbxVariable* pVar )
 {
     Type aType = getUnoTypeForSbxValue( pVar );
+    TypeClass eType = aType.getTypeClass();
+
+    // #79615 Choose "smallest" represention for int values
+    // because up cast is allowed, downcast not
+    switch( eType )
+    {
+        case TypeClass_FLOAT:
+        case TypeClass_DOUBLE:
+        {
+            double d = pVar->GetDouble();
+            if( d == floor( d ) )
+            {
+                if( d >= -128 && d <= 127 )
+                    aType = ::getCppuType( (sal_Int8*)0 );
+                else if( d >= SbxMININT && d <= SbxMAXINT )
+                    aType = ::getCppuType( (sal_Int16*)0 );
+                else if( d >= -SbxMAXLNG && d <= SbxMAXLNG )
+                    aType = ::getCppuType( (sal_Int32*)0 );
+            }
+            break;
+        }
+        case TypeClass_SHORT:
+        {
+            sal_Int16 n = pVar->GetInteger();
+            if( n >= -128 && n <= 127 )
+                aType = ::getCppuType( (sal_Int8*)0 );
+            break;
+        }
+        case TypeClass_LONG:
+        {
+            sal_Int32 n = pVar->GetLong();
+            if( n >= -128 && n <= 127 )
+                aType = ::getCppuType( (sal_Int8*)0 );
+            else if( n >= SbxMININT && n <= SbxMAXINT )
+                aType = ::getCppuType( (sal_Int16*)0 );
+            break;
+        }
+        case TypeClass_UNSIGNED_SHORT:
+        {
+            sal_uInt16 n = pVar->GetUShort();
+            if( n <= 255 )
+                aType = ::getCppuType( (sal_uInt8*)0 );
+            break;
+        }
+        case TypeClass_UNSIGNED_LONG:
+        {
+            sal_uInt32 n = pVar->GetLong();
+            if( n <= 255 )
+                aType = ::getCppuType( (sal_uInt8*)0 );
+            else if( n <= SbxMAXUINT )
+                aType = ::getCppuType( (sal_uInt16*)0 );
+            break;
+        }
+    }
+
     return sbxToUnoValue( pVar, TypeToIdlClass( aType ) );
 }
 
