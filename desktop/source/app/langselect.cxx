@@ -2,8 +2,8 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.10 $
- *  last change: $Author: rt $ $Date: 2004-08-20 13:00:26 $
+ *  $Revision: 1.11 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 14:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
 
 #include "app.hxx"
 #include "langselect.hxx"
-#include "langselect.hrc"
 #include <stdio.h>
 
 #ifndef _RTL_STRING_HXX
@@ -83,6 +82,7 @@
 #endif
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -97,26 +97,13 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::util;
 
 namespace desktop {
 
-LanguageSelectionDialog::LanguageSelectionDialog(ResMgr *pResMgr) :
-    ModalDialog(NULL,ResId(DLG_LANGSELECT, pResMgr)),
-    m_aText(this, ResId(TXT_DLG_LANGSELECT, pResMgr)),
-    m_aListBox(this, ResId(LST_DLG_LANGSELECT, pResMgr)),
-    m_aButton(this, ResId(BTN_DLG_LANGSELECT_OK, pResMgr))
-{
-    FreeResource();
-}
-
-namespace { struct lLanguages : public rtl::Static<IsoList, lLanguages> {}; }
-
-// execute the language selection
-// display a dialog if more than one language is installed
-// XXX this is a temporary solution
-static sal_Bool bFoundLanguage = sal_False;
-//static LanguageType aFoundLanguageType = LANGUAGE_DONTKNOW;
-static OUString aFoundLanguage;
+sal_Bool LanguageSelection::bFoundLanguage = sal_False;
+OUString LanguageSelection::aFoundLanguage;
+const OUString LanguageSelection::usFallbackLanguage = OUString::createFromAscii("en-US");
 
 Locale LanguageSelection::IsoStringToLocale(const OUString& str)
 {
@@ -130,245 +117,193 @@ Locale LanguageSelection::IsoStringToLocale(const OUString& str)
 
 void LanguageSelection::prepareLanguage()
 {
-    // XXX make everything works without assertions in first run
-    // in multi-language installations, some things might fail in first run
-    if (getUserLanguage().getLength() > 0) return;
-    IsoList l = getInstalledIsoLanguages();
-    if (l.size() >= 1)
+    OUString aLocaleString = getLanguageString();
+    OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+    Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
+    try
     {
-        // throw any away existing default config
-        OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
+
         Reference< XLocalizable > theConfigProvider(
-            theMSF->createInstance( sConfigSrvc ),UNO_QUERY );
-        OSL_ENSURE(theConfigProvider.is(), "cannot localize config manager.");
-        if (theConfigProvider.is())
-        {
-            OUString aLocaleString = *l.begin();
-            Locale loc = LanguageSelection::IsoStringToLocale(aLocaleString);
-            theConfigProvider->setLocale(loc);
-        }
+            theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW );
+        Locale loc = LanguageSelection::IsoStringToLocale(aLocaleString);
+        theConfigProvider->setLocale(loc);
+        Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
+        xProp->setPropertyValue(OUString::createFromAscii("ooLocale"), makeAny(aLocaleString));
+        Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+    }
+    catch (Exception& e)
+    {
+        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+        OSL_ENSURE(sal_False, aMsg.getStr());
+
     }
 }
+
 
 OUString LanguageSelection::getLanguageString()
 {
-
+    // did we already find a language?
     if (bFoundLanguage)
         return aFoundLanguage;
-
-    // check whether there was aleady a language selected by the user
+    // check whether the user has selected a specific language
     OUString aUserLanguage = getUserLanguage();
     if (aUserLanguage.getLength() > 0 )
     {
+        if (isInstalledLanguage(aUserLanguage))
+        {
+            // all is well
+            bFoundLanguage = sal_True;
+            aFoundLanguage = aUserLanguage;
+            return aFoundLanguage;
+        }
+        else
+        {
+            // selected language is not/no longer installed
+            resetUserLanguage();
+        }
+    }
+    // try to use system default
+    aUserLanguage = getSystemLanguage();
+    if (isInstalledLanguage(aUserLanguage, sal_False))
+    {
+        // great, system default language is available
         bFoundLanguage = sal_True;
         aFoundLanguage = aUserLanguage;
-        // return aFoundLanguageType;
-        // we can not return yet, we need to check whether this instance supports
-        // the language that was previously chosen by the user...
-    }
-
-    // fill list
-    IsoList &rLanguages = lLanguages::get();
-    if (rLanguages.size() < 1)
-        rLanguages = getInstalledIsoLanguages();
-    // check whether found language is available
-    if (bFoundLanguage)
-    {
-        IsoList::const_iterator iLang = rLanguages.begin();
-        while (iLang != rLanguages.end())
-        {
-            if (iLang->equals(aFoundLanguage))
-                return aFoundLanguage;
-            else
-                iLang++;
-        }
-    }
-    if (rLanguages.size() > 1) {
-        // are there multiple languages installed?
-        // get resource
-        rtl::OString aMgrName = OString("langselect") + OString::valueOf((sal_Int32)SUPD, 10);
-        ::com::sun::star::lang::Locale aLocale;
-        ResMgr* pResMgr = ResMgr::SearchCreateResMgr( aMgrName, aLocale );
-        LanguageSelectionDialog lsd(pResMgr);
-        StrList languages(getLanguageStrings(rLanguages));
-        for (StrList::iterator str_iter = languages.begin(); str_iter != languages.end(); str_iter++)
-        {
-            lsd.m_aListBox.InsertEntry(*str_iter);
-        }
-
-        lsd.Execute();
-        short nSelected = lsd.m_aListBox.GetSelectEntryPos();
-        IsoList::const_iterator i = rLanguages.begin();
-        for (sal_Int32 n=0; n<nSelected; n++) i++;
-        bFoundLanguage = sal_True;
-        aFoundLanguage = *i;
         return aFoundLanguage;
-    } else {
-        // if there is only one language, use it
-        if (rLanguages.size() == 1) {
-            bFoundLanguage = sal_True;
-            aFoundLanguage = *(rLanguages.begin());
-            return aFoundLanguage;
-        } else {
-            // last resort
-            // don't save
-            return ConvertLanguageToIsoString((LanguageType) SvtPathOptions().SubstituteVariable(
-                String::CreateFromAscii("$(langid)")).ToInt32()) ;
-            /*
-            ::com::sun::star::lang::Locale aLocale;
-            OUString aLocString( aLocale.Language );
-            if ( aLocale.Country.getLength() != 0 )
-            {
-                aLocString += OUString::createFromAscii("-")
-                                + aLocale.Country;
-                if ( aLocale.Variant.getLength() != 0 )
-                {
-                    aLocString += OUString::createFromAscii("-")
-                                    + aLocale.Variant;
-                }
-            }
-            return aLocString;
-            */
-        }
     }
-}
-
-
-// Get the localized selection strings for the list of languages
-StrList LanguageSelection::getLanguageStrings(const IsoList& langLst)
-{
-    StrList aList;
-    rtl::OString aMgrName = OString("langselect") + OString::valueOf((sal_Int32)SUPD, 10);
-    for (IsoList::const_iterator lang_iter = langLst.begin(); lang_iter != langLst.end(); lang_iter++)
+    // fallback 1: en-US
+    OUString usFB = usFallbackLanguage;
+    if (isInstalledLanguage(usFB))
     {
-        rtl::OUString lang = static_cast<OUString>(*lang_iter);
-        ::com::sun::star::lang::Locale aLocale = LanguageSelection::IsoStringToLocale(lang);
-        ResMgr* pResMgr = ResMgr::SearchCreateResMgr( aMgrName, aLocale );
-        if (pResMgr != NULL) {
-            String aString(ResId(STR_LANGSELECT, pResMgr));
-            aList.push_back(aString);
-            delete pResMgr;
-        }
+        bFoundLanguage = sal_True;
+        aFoundLanguage = usFallbackLanguage;
+        return aFoundLanguage;
     }
-    return aList;
+    // falback didn't work use first installed language
+    aUserLanguage = getFirstInstalledLanguage();
+    bFoundLanguage = sal_True;
+    aFoundLanguage = aUserLanguage;
+    return aFoundLanguage;
 }
 
-// get a language choosen by the user
-OUString LanguageSelection::getUserLanguage()
+Reference< XNameAccess > LanguageSelection::getConfigAccess(const sal_Char* pPath, sal_Bool bUpdate)
 {
-    OUString aLanguage;
+    Reference< XNameAccess > xNameAccess;
     try{
-
         OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-        OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
-        OUString sConfigURL = OUString::createFromAscii("org.openoffice.Setup/L10N/");
-        OUString sLocales = OUString::createFromAscii("ooLocale");
+        OUString sAccessSrvc;
+        if (bUpdate)
+            sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
+        else
+            sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+
+        OUString sConfigURL = OUString::createFromAscii(pPath);
 
         // get configuration provider
         Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
         Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
-                theMSF->createInstance( sConfigSrvc ),UNO_QUERY );
-        // check provider
-        if (!theConfigProvider.is()) return aLanguage;
+                theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW );
 
         // access the provider
         Sequence< Any > theArgs(1);
         theArgs[ 0 ] <<= sConfigURL;
-        Reference< XNameAccess > theNameAccess = Reference< XNameAccess > (
+        xNameAccess = Reference< XNameAccess > (
                 theConfigProvider->createInstanceWithArguments(
-                sAccessSrvc, theArgs ), UNO_QUERY );
-        // check access
-        if (!theNameAccess.is()) return aLanguage;
-        // run query
-        Any aResult = theNameAccess->getByName( sLocales );
-        OUString aLangString;
-        if (aResult >>= aLangString)
-        {
-            aLanguage = aLangString;
-        }
-    } catch (com::sun::star::uno::Exception)
+                sAccessSrvc, theArgs ), UNO_QUERY_THROW );
+    } catch (com::sun::star::uno::Exception& e)
     {
-        // didn't work - return dontknow
-        return aLanguage;
+        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+        OSL_ENSURE(sal_False, aMsg.getStr());
     }
+    return xNameAccess;
+}
+
+Sequence< OUString > LanguageSelection::getInstalledLanguages()
+{
+    Sequence< OUString > seqLanguages;
+    Reference< XNameAccess > xAccess = getConfigAccess("org.openoffice.Setup/Office/InstalledLocales", sal_False);
+    if (!xAccess.is()) return seqLanguages;
+    seqLanguages = xAccess->getElementNames();
+    return seqLanguages;
+}
+
+sal_Bool LanguageSelection::isInstalledLanguage(OUString& usLocale, sal_Bool bExact)
+{
+    sal_Bool bInstalled = sal_False;
+    Sequence< OUString > seqLanguages = getInstalledLanguages();
+    for (sal_Int32 i=0; i<seqLanguages.getLength(); i++)
+    {
+        if (usLocale.equals(seqLanguages[i]))
+        {
+            bInstalled = sal_True;
+            break;
+        }
+    }
+
+    if (!bInstalled && !bExact)
+    {
+        // no exact match was found, well try to find a substitute
+        Locale aLocale = IsoStringToLocale(usLocale);
+        Locale aInstalledLocale;
+        for (sal_Int32 i=0; i<seqLanguages.getLength(); i++)
+        {
+            aInstalledLocale = IsoStringToLocale(seqLanguages[i]);
+            if (aLocale.Language.equals(aInstalledLocale.Language))
+            {
+                bInstalled = sal_True;
+                usLocale = seqLanguages[i];
+                break;
+            }
+        }
+    }
+    return bInstalled;
+}
+
+OUString LanguageSelection::getFirstInstalledLanguage()
+{
+    OUString aLanguage;
+    Sequence< OUString > seqLanguages = getInstalledLanguages();
+    if (seqLanguages.getLength() > 0)
+        aLanguage = seqLanguages[0];
     return aLanguage;
 }
 
-// get a list with the languages that are installed
-IsoList LanguageSelection::getInstalledIsoLanguages()
+OUString LanguageSelection::getUserLanguage()
 {
-    IsoList aList;
-    // read language list from org.openoffice.Setup/Office/ooSetupLocales
-    try{
-        OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-        OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
-        OUString sConfigURL = OUString::createFromAscii("org.openoffice.Setup/Office/InstalledLocales");
-
-        // get configuration provider
-        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
-                theMSF->createInstance( sConfigSrvc ),UNO_QUERY );
-        // check provider
-        if (!theConfigProvider.is()) return aList;
-
-        // access the provider
-        Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= sConfigURL;
-        Reference< XNameAccess > theNameAccess = Reference< XNameAccess > (
-                theConfigProvider->createInstanceWithArguments(
-                sAccessSrvc, theArgs ), UNO_QUERY );
-        //check access
-        if (!theNameAccess.is()) return aList;
-
-        Sequence< OUString > aLangSeq = theNameAccess->getElementNames();
-
-        for (int i=0; i<aLangSeq.getLength(); i++)
-               aList.push_back(aLangSeq[i]);
-    } catch (com::sun::star::uno::Exception)
+    OUString aUserLanguage;
+    Reference< XNameAccess > xAccess(getConfigAccess("org.openoffice.Office.Linguistic/General", sal_False));
+    if (xAccess.is())
     {
-        // didn't work - return empty list
+        xAccess->getByName(OUString::createFromAscii("UILocale")) >>= aUserLanguage;
     }
-    return aList;
+    return aUserLanguage;
 }
 
-/*
-// get a list with the languages that are installed
-LangList LanguageSelection::getInstalledLanguages()
+OUString LanguageSelection::getSystemLanguage()
 {
-    LangList aList;
-    // read language list from org.openoffice.Setup/Office/ooSetupLocales
-    try{
-        OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-        OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
-        OUString sConfigURL = OUString::createFromAscii("org.openoffice.Setup/Office/InstalledLocales");
-
-        // get configuration provider
-        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
-                theMSF->createInstance( sConfigSrvc ),UNO_QUERY );
-        // check provider
-        if (!theConfigProvider.is()) return aList;
-
-        // access the provider
-        Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= sConfigURL;
-        Reference< XNameAccess > theNameAccess = Reference< XNameAccess > (
-                theConfigProvider->createInstanceWithArguments(
-                sAccessSrvc, theArgs ), UNO_QUERY );
-        //check access
-        if (!theNameAccess.is()) return aList;
-
-        Sequence< OUString > aLangSeq = theNameAccess->getElementNames();
-
-        for (int i=0; i<aLangSeq.getLength(); i++)
-            aList.push_back(ConvertIsoStringToLanguage(aLangSeq[i]));
-
-    } catch (com::sun::star::uno::Exception&)
+    OUString aUserLanguage;
+    Reference< XNameAccess > xAccess(getConfigAccess("org.openoffice.System/L10N", sal_False));
+    if (xAccess.is())
     {
-        // didn't work - return empty list
+        xAccess->getByName(OUString::createFromAscii("UILocale")) >>= aUserLanguage;
     }
-    return aList;
+    return aUserLanguage;
 }
-*/
+
+
+void LanguageSelection::resetUserLanguage()
+{
+    try{
+       Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Office.Linguistic/General", sal_True), UNO_QUERY_THROW);
+        xProp->setPropertyValue(OUString::createFromAscii("UILocale"), makeAny(OUString::createFromAscii("")));
+        Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+    } catch (com::sun::star::uno::RuntimeException& e)
+    {
+        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+        OSL_ENSURE(sal_False, aMsg.getStr());
+    }
+
+}
+
+
 } // namespace desktop
