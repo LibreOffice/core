@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 14:56:08 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,8 +1236,8 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
         {
         case SW_PASTESDR_REPLACE:
             {
-                const SwFrmFmt* pFmt;
-                const SwFrm* pAnchor;
+                const SwFrmFmt* pFmt(0);
+                const SwFrm* pAnchor(0);
                 if( pOldObj->ISA(SwVirtFlyDrawObj) )
                 {
                     pFmt = FindFrmFmt( pOldObj );
@@ -1396,103 +1396,3 @@ BOOL SwFEShell::Paste( const Graphic &rGrf )
     }
     return bRet;
 }
-
-#ifdef USED
-BOOL SwFEShell::Paste( SotDataObject& rObj, const Point& rPt )
-{
-    SET_CURR_SHELL( this );
-    BOOL bRet = FALSE;
-
-    SvData aData( XFillExchangeData::RegisterClipboardFormatName() );
-    XFillExchangeData* pFillData = NULL;
-
-    if( rObj.GetData( &aData ) )
-    {
-        if (aData.GetData( (SvDataCopyStream**) &pFillData, XFillExchangeData::StaticType(), TRANSFER_MOVE))
-        {
-/*              BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-            AddUndo(new SdrUndoAttrObj(*pPickObj));
-            EndUndo();*/
-
-            XFillAttrSetItem* pSetItem = pFillData->GetXFillAttrSetItem();
-            SfxItemSet rSet = pSetItem->GetItemSet();
-
-            XFillStyle eFill= ((XFillStyleItem&) rSet.Get(XATTR_FILLSTYLE)).GetValue();
-
-            if (eFill == XFILL_SOLID)
-            {
-                const XFillColorItem& rColItem = (XFillColorItem&) rSet.Get(XATTR_FILLCOLOR);
-                Color aColor = rColItem.GetValue();
-                String aName = rColItem.GetName();
-
-                SdrView *pSdrView = Imp()->GetDrawView();
-
-                if(pSdrView)
-                {
-                    SdrObject* pPickObj = NULL;
-                    // Ist ein Objekt getroffen worden?
-                    SdrPageView* pPV = NULL;
-                    pSdrView->PickObj( rPt, pPickObj, pPV);
-
-                    if ( pPickObj )
-                    {
-/*                          SfxItemSet aSet(pDoc->GetPool());
-
-                        BOOL bClosed = pPickObj->IsClosedObj();
-                        SdWindow* pWin = pViewSh->GetActiveWindow();
-                        USHORT nHitLog = USHORT ( pWin->PixelToLogic(Size(HITPIX,0)).Width() );
-                        const long  n2HitLog = nHitLog * 2;
-                        Point aHitPosR( aPos );
-                        Point aHitPosL( aPos );
-                        Point aHitPosT( aPos );
-                        Point aHitPosB( aPos );
-
-                        aHitPosR.X() += n2HitLog;
-                        aHitPosL.X() -= n2HitLog;
-                        aHitPosT.Y() += n2HitLog;
-                        aHitPosB.Y() -= n2HitLog;
-
-                        const SetOfByte* pVisiLayer = &GetPageViewPvNum(0)->GetVisibleLayers();
-
-                        if (bClosed                                          &&
-                            pPickObj->IsHit( aHitPosR, nHitLog, pVisiLayer ) &&
-                            pPickObj->IsHit( aHitPosL, nHitLog, pVisiLayer ) &&
-                            pPickObj->IsHit( aHitPosT, nHitLog, pVisiLayer ) &&
-                            pPickObj->IsHit( aHitPosB, nHitLog, pVisiLayer ) )
-                        {
-                            // Flaechenfuellung
-                            aSet.Put(XFillColorItem(aName, aColor));
-                            aSet.Put(XFillStyleItem(XFILL_SOLID));
-                        }
-                        else
-                        {
-                            // Linienstil hinzufuegen
-                            aSet.Put(XLineColorItem(aName, aColor));
-                        }
-
-                        // Textfarbe hinzufuegen
-    //                    aSet.Put(SvxColorItem(aColor, ITEMID_COLOR));
-
-                        pPickObj->SetAttributes(aSet, FALSE);*/
-                        bRet = TRUE;
-                    }
-                }
-                if (!bRet)  // Kein DrawObjekt
-                {
-                    SvxBrushItem aBrushItem(aColor, SID_ATTR_BRUSH);
-                    SfxViewShell* pViewShell = GetSfxViewShell();
-                    DBG_ASSERT(pViewShell, "no SfxViewShell?")
-                    if(pViewShell)
-                        pViewShell->GetViewFrame()->GetDispatcher()->
-                            Execute(    SID_ATTR_BRUSH, SFX_CALLMODE_SLOT,
-                                                &aBrushItem, 0L);
-                    bRet = TRUE;
-                }
-            }
-        }
-    }
-
-    return bRet;
-}
-#endif
-
