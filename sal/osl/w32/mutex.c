@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-04-06 14:32:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ static CRITICAL_SECTION MutexLock;
 /*****************************************************************************/
 /* osl_createMutex */
 /*****************************************************************************/
-oslMutex SAL_CALL osl_createMutex()
+oslMutex SAL_CALL osl_createMutex(void)
 {
     oslMutexImpl *pMutexImpl;
 
@@ -188,7 +188,7 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
     OSL_ASSERT(Mutex);
 
     if (lpfTryEnterCriticalSection != NULL)
-        return lpfTryEnterCriticalSection(&pMutexImpl->m_Mutex);
+        return (sal_Bool)(lpfTryEnterCriticalSection(&pMutexImpl->m_Mutex) != FALSE);
     else
     {
         EnterCriticalSection(&MutexLock);
@@ -234,7 +234,7 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 /* initialized in dllentry.c */
 oslMutex g_Mutex;
 
-oslMutex * SAL_CALL osl_getGlobalMutex()
+oslMutex * SAL_CALL osl_getGlobalMutex(void)
 {
     return &g_Mutex;
 }
