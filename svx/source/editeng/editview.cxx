@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:21:26 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <eeng_pch.hxx>
 
 #pragma hdrstop
@@ -917,6 +916,18 @@ EESpellState EditView::StartThesaurus()
     return PIMPEE->StartThesaurus( this );
 #endif
 }
+
+
+void EditView::StartTextConversion( LanguageType nLang, BOOL bMultipleDoc )
+{
+#ifdef SVX_LIGHT
+#else
+    DBG_CHKTHIS( EditView, 0 );
+    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
+    PIMPEE->Convert( this, nLang, bMultipleDoc );
+#endif
+}
+
 
 sal_uInt16 EditView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
 {
