@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 09:37:53 $
+ *  last change: $Author: cl $ $Date: 2001-12-17 15:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@ protected:
 
     virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw();
+
+    rtl::OUString getBookmarkURL() const;
+    void setBookmarkURL( rtl::OUString& rURL );
 
     void SetLftBorder( sal_Int32 nValue );
     void SetRgtBorder( sal_Int32 nValue );

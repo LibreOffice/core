@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-14 15:03:40 $
+ *  last change: $Author: cl $ $Date: 2001-12-17 15:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ enum WID_PAGE
     WID_PAGE_HEIGHT, WID_PAGE_EFFECT, WID_PAGE_CHANGE, WID_PAGE_SPEED, WID_PAGE_NUMBER,
     WID_PAGE_ORIENT, WID_PAGE_LAYOUT, WID_PAGE_DURATION, WID_PAGE_LDNAME, WID_PAGE_LDBITMAP,
     WID_PAGE_BACK, WID_PAGE_PREVIEW, WID_PAGE_VISIBLE, WID_PAGE_SOUNDFILE, WID_PAGE_BACKFULL,
-    WID_PAGE_BACKVIS, WID_PAGE_BACKOBJVIS, WID_PAGE_USERATTRIBS
+    WID_PAGE_BACKVIS, WID_PAGE_BACKOBJVIS, WID_PAGE_USERATTRIBS, WID_PAGE_BOOKMARK
 };
 
 #ifndef SEQTYPE
@@ -216,9 +216,8 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
         { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDFILE),         WID_PAGE_SOUNDFILE, &::getCppuType((const OUString*)0),             0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_IsBackgroundVisible),  WID_PAGE_BACKVIS,   &::getBooleanCppuType(),                        0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_IsBackgroundObjectsVisible),   WID_PAGE_BACKOBJVIS,    &::getBooleanCppuType(),                        0, 0},
-#ifndef SVX_LIGHT
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
-#endif
+        { MAP_CHAR_LEN(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  &::getCppuType((const OUString*)0),             0,  0},
         {0,0,0,0,0}
     };
 
@@ -236,9 +235,8 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    &::getCppuType((const view::PaperOrientation*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-#ifndef SVX_LIGHT
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
-#endif
+        { MAP_CHAR_LEN(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  &::getCppuType((const OUString*)0),             0,  0},
         {0,0,0,0,0}
     };
 
@@ -265,9 +263,7 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap( PageKind ePageKind )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    &::getCppuType((const view::PaperOrientation*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN("BackgroundFullSize"),           WID_PAGE_BACKFULL,  &::getBooleanCppuType(),                        0, 0},
-#ifndef SVX_LIGHT
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
-#endif
         {0,0,0,0,0}
     };
 
@@ -281,9 +277,7 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap( PageKind ePageKind )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    &::getCppuType((const view::PaperOrientation*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    &::getCppuType((const sal_Int16*)0),            0,  0},
-#ifndef SVX_LIGHT
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
-#endif
         {0,0,0,0,0}
     };
 
@@ -614,12 +608,22 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
             break;
         }
-#ifndef SVX_LIGHT
         case WID_PAGE_USERATTRIBS:
+        {
             if( !GetPage()->setAlienAttributes( aValue ) )
                 throw lang::IllegalArgumentException();
             break;
-#endif
+        }
+        case WID_PAGE_BOOKMARK:
+        {
+            OUString aBookmarkURL;
+            if( ! ( aValue >>= aBookmarkURL ) )
+                throw lang::IllegalArgumentException();
+
+            setBookmarkURL( aBookmarkURL );
+            break;
+        }
+
 
         default:
             throw beans::UnknownPropertyException();
@@ -701,7 +705,6 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
         break;
     case WID_PAGE_PREVIEW :
         {
-#ifndef SVX_LIGHT
             SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
             if ( pDoc )
             {
@@ -734,7 +737,6 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
                     }
                 }
             }
-#endif
         }
         break;
 
@@ -797,11 +799,16 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
         }
         break;
     }
-#ifndef SVX_LIGHT
     case WID_PAGE_USERATTRIBS:
+    {
         GetPage()->getAlienAttributes( aAny );
         break;
-#endif
+    }
+    case WID_PAGE_BOOKMARK:
+    {
+        aAny <<= getBookmarkURL();
+        break;
+    }
     default:
         throw beans::UnknownPropertyException();
         break;
@@ -906,6 +913,8 @@ uno::Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *p
     return xShape;
 }
 
+//----------------------------------------------------------------------
+
 // XServiceInfo
 uno::Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
     throw(uno::RuntimeException)
@@ -917,6 +926,8 @@ uno::Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
     return aSeq;
 }
 
+//----------------------------------------------------------------------
+
 // XLinkTargetSupplier
 uno::Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
     throw(uno::RuntimeException)
@@ -924,14 +935,65 @@ uno::Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  
     return new SdPageLinkTargets( (SdGenericDrawPage*)this );
 }
 
+//----------------------------------------------------------------------
+
 void SdGenericDrawPage::setBackground( const uno::Any& rValue ) throw(lang::IllegalArgumentException)
 {
     DBG_ERROR( "Don't call me, I'm useless!" );
 }
 
+//----------------------------------------------------------------------
+
 void SdGenericDrawPage::getBackground( uno::Any& rValue ) throw()
 {
     DBG_ERROR( "Don't call me, I'm useless!" );
+}
+
+//----------------------------------------------------------------------
+
+OUString SdGenericDrawPage::getBookmarkURL() const
+{
+    OUStringBuffer aRet;
+    if( pPage )
+    {
+        OUString aFileName( static_cast<SdPage*>(pPage)->GetFileName() );
+        if( aFileName.getLength() )
+        {
+            const OUString aBookmarkName( SdDrawPage::getPageApiNameFromUiName( static_cast<SdPage*>(pPage)->GetBookmarkName() ) );
+            {
+                static ::rtl::OUString ;
+                static String ;
+
+                aRet.append( aFileName );
+                aRet.append( (sal_Unicode)'#' );
+                aRet.append( aBookmarkName );
+            }
+        }
+    }
+
+    return aRet.makeStringAndClear();
+}
+
+//----------------------------------------------------------------------
+void SdGenericDrawPage::setBookmarkURL( rtl::OUString& rURL )
+{
+    if( pPage )
+    {
+        sal_Int32 nIndex = rURL.lastIndexOf( (sal_Unicode)'#' );
+        if( nIndex != -1 )
+        {
+            const String aFileName( rURL.copy( 0, nIndex ) );
+            const String aBookmarkName( SdDrawPage::getUiNameFromPageApiName( rURL.copy( nIndex+1 )  ) );
+
+            if( aFileName.Len() && aBookmarkName.Len() )
+            {
+                static_cast<SdPage*>(pPage)->DisconnectLink();
+                static_cast<SdPage*>(pPage)->SetFileName( aFileName );
+                static_cast<SdPage*>(pPage)->SetBookmarkName( aBookmarkName );
+                static_cast<SdPage*>(pPage)->ConnectLink();
+            }
+        }
+    }
 }
 
 //----------------------------------------------------------------------
