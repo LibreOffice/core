@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2001-04-26 08:56:53 $
+#   last change: $Author: tra $ $Date: 2001-04-26 09:12:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..$/..$/..
 PRJNAME=sysui
 TARGET=utils
 LIBTARGET=NO
