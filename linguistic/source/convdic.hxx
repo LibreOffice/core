@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdic.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:30:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 07:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include <tools/string.hxx>
 #endif
 
-#include <stl/hash_map>
-#include <stl/set>
+#include <hash_map>
+#include <set>
 
 #ifndef _LINGUISTIC_MISC_HXX_
 #include "misc.hxx"
@@ -124,19 +124,8 @@ struct StrEQ
     }
 };
 
-namespace std
-{
-template <> struct hash< const rtl::OUString >
-{
-    inline size_t operator()( const rtl::OUString &rTxt ) const
-    {
-        return (size_t) rTxt.hashCode();
-    }
-};
-}
-
 typedef std::hash_multimap< const rtl::OUString, const rtl::OUString,
-                       std::hash< const rtl::OUString >, StrEQ > ConvMap;
+                       const rtl::OUStringHash, StrEQ > ConvMap;
 
 typedef std::set< rtl::OUString, StrLT > ConvMapKeySet;
 
