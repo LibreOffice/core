@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
+ *  last change: $Author: dbo $ $Date: 2001-10-23 13:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,7 +435,11 @@ void FormattedFieldElement::endElement()
         {
             Reference< util::XNumberFormats > xFormats(
                 _pImport->getNumberFormatsSupplier()->getNumberFormats() );
-            sal_Int32 nKey = xFormats->addNew( sFormat, locale );
+            sal_Int32 nKey = xFormats->queryKey( sFormat, locale, sal_True );
+            if (-1 == nKey)
+            {
+                nKey = xFormats->addNew( sFormat, locale );
+            }
             ctx.getControlModel()->setPropertyValue(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("FormatKey") ), makeAny( nKey ) );
         }
