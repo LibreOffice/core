@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:12 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         QuickHelpText [ portuguese ] = "Favoritos" ;
         QuickHelpText [ english_us ] = "Favorites" ;
-        QuickHelpText [ portuguese_brazilian ] = "Favoriten" ;
+        QuickHelpText [ portuguese_brazilian ] = "Favoritos" ;
         QuickHelpText [ swedish ] = "Favoriter" ;
         QuickHelpText [ danish ] = "Favoriter" ;
         QuickHelpText [ italian ] = "Preferiti" ;
@@ -132,6 +132,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Favoriten";
         QuickHelpText[ catalan ] = "Preferits";
         QuickHelpText[ finnish ] = "Suosikit";
+        QuickHelpText[ czech ] = "Oblíbené";
+        QuickHelpText[ hebrew ] = "Favoriten";
+        QuickHelpText[ thai ] = "Favorites";
+        QuickHelpText[ hindi ] = "प्रिय";
     };
     ImageButton BTN_GEO
     {
@@ -147,7 +151,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         QuickHelpText [ portuguese ] = "Geometria" ;
         QuickHelpText [ english_us ] = "Geometry" ;
-        QuickHelpText [ portuguese_brazilian ] = "Geometrie" ;
+        QuickHelpText [ portuguese_brazilian ] = "Geometria" ;
         QuickHelpText [ swedish ] = "Geometri" ;
         QuickHelpText [ danish ] = "Geometri" ;
         QuickHelpText [ italian ] = "Geometria" ;
@@ -167,6 +171,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Geometrie";
         QuickHelpText[ catalan ] = "Geometria";
         QuickHelpText[ finnish ] = "Geometria";
+        QuickHelpText[ czech ] = "Geometrie";
+        QuickHelpText[ hebrew ] = "Geometrie";
+        QuickHelpText[ thai ] = "Geometry";
+        QuickHelpText[ hindi ] = "रेखागणित";
     };
     ImageButton BTN_REPRESENTATION
     {
@@ -182,7 +190,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         QuickHelpText [ portuguese ] = "Apresenta��o" ;
         QuickHelpText [ english_us ] = "Shading" ;
-        QuickHelpText [ portuguese_brazilian ] = "Darstellung" ;
+        QuickHelpText [ portuguese_brazilian ] = "Sombreado" ;
         QuickHelpText [ swedish ] = "Visning" ;
         QuickHelpText [ danish ] = "Visning" ;
         QuickHelpText [ italian ] = "Rappresentazione" ;
@@ -202,6 +210,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Darstellung";
         QuickHelpText[ catalan ] = "Representaci�";
         QuickHelpText[ finnish ] = "Varjostus";
+        QuickHelpText[ czech ] = "Stínování";
+        QuickHelpText[ hebrew ] = "Darstellung";
+        QuickHelpText[ thai ] = "Shading";
+        QuickHelpText[ hindi ] = "छाया करना";
     };
     ImageButton BTN_LIGHT
     {
@@ -217,7 +229,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         QuickHelpText [ portuguese ] = "Ilumina��o" ;
         QuickHelpText [ english_us ] = "Illumination" ;
-        QuickHelpText [ portuguese_brazilian ] = "Beleuchtung" ;
+        QuickHelpText [ portuguese_brazilian ] = "Ilumina��o" ;
         QuickHelpText [ swedish ] = "Belysning" ;
         QuickHelpText [ danish ] = "Belysning" ;
         QuickHelpText [ italian ] = "Illuminazione" ;
@@ -237,6 +249,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Beleuchtung";
         QuickHelpText[ catalan ] = "Il.luminaci�";
         QuickHelpText[ finnish ] = "Valaistus";
+        QuickHelpText[ czech ] = "Osvětlení";
+        QuickHelpText[ hebrew ] = "Beleuchtung";
+        QuickHelpText[ thai ] = "Illumination";
+        QuickHelpText[ hindi ] = "चमक";
     };
     ImageButton BTN_TEXTURE
     {
@@ -252,7 +268,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Texturas" ;
         QuickHelpText [ english_us ] = "Textures" ;
-        QuickHelpText [ portuguese_brazilian ] = "Texturen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Texturas" ;
         QuickHelpText [ swedish ] = "Texturer" ;
         QuickHelpText [ danish ] = "Teksturer" ;
         QuickHelpText [ italian ] = "Motivi" ;
@@ -272,6 +288,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Texturen";
         QuickHelpText[ catalan ] = "Textures";
         QuickHelpText[ finnish ] = "Pintakuviot";
+        QuickHelpText[ czech ] = "Textury";
+        QuickHelpText[ hebrew ] = "Texturen";
+        QuickHelpText[ thai ] = "Textures";
+        QuickHelpText[ hindi ] = "बनावट";
     };
     ImageButton BTN_MATERIAL
     {
@@ -307,6 +327,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Material";
         QuickHelpText[ catalan ] = "Material";
         QuickHelpText[ finnish ] = "Materiaali";
+        QuickHelpText[ czech ] = "Materiál";
+        QuickHelpText[ hebrew ] = "Material";
+        QuickHelpText[ thai ] = "Material";
+        QuickHelpText[ hindi ] = "पदार्थ";
     };
 
     ImageButton BTN_UPDATE
@@ -323,7 +347,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         QuickHelpText [ portuguese ] = "Actualizar" ;
         QuickHelpText [ english_us ] = "Update" ;
-        QuickHelpText [ portuguese_brazilian ] = "Aktualisieren" ;
+        QuickHelpText [ portuguese_brazilian ] = "Atualizar" ;
         QuickHelpText [ swedish ] = "Uppdatera" ;
         QuickHelpText [ danish ] = "Opdater" ;
         QuickHelpText [ italian ] = "Aggiorna" ;
@@ -343,6 +367,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Aktualisieren";
         QuickHelpText[ catalan ] = "Actualtiza";
         QuickHelpText[ finnish ] = "P�ivit�";
+        QuickHelpText[ czech ] = "Aktualizovat";
+        QuickHelpText[ hebrew ] = "Aktualisieren";
+        QuickHelpText[ thai ] = "Update";
+        QuickHelpText[ hindi ] = "अपडेट् करो";
     };
     ImageButton BTN_ASSIGN
     {
@@ -358,7 +386,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         QuickHelpText [ portuguese ] = "Atribuir" ;
         QuickHelpText [ english_us ] = "Assign" ;
-        QuickHelpText [ portuguese_brazilian ] = "Zuweisen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Designar" ;
         QuickHelpText [ swedish ] = "Tilldela" ;
         QuickHelpText [ danish ] = "Tildel" ;
         QuickHelpText [ italian ] = "Assegna" ;
@@ -378,6 +406,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Zuweisen";
         QuickHelpText[ catalan ] = "Assigna";
         QuickHelpText[ finnish ] = "Liit�";
+        QuickHelpText[ czech ] = "Přiřadit";
+        QuickHelpText[ hebrew ] = "Zuweisen";
+        QuickHelpText[ thai ] = "Assign";
+        QuickHelpText[ hindi ] = "निर्दिष्ट करो";
     };
      // Unterer Teil
     ImageButton BTN_CHANGE_TO_3D
@@ -395,7 +427,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Converte em 3-D" ;
         QuickHelpText [ english_us ] = "Convert to 3D" ;
-        QuickHelpText [ portuguese_brazilian ] = "Umwandeln in 3D" ;
+        QuickHelpText [ portuguese_brazilian ] = "Converter para 3D" ;
         QuickHelpText [ swedish ] = "Omvandla till 3D" ;
         QuickHelpText [ danish ] = "Konverter til 3D" ;
         QuickHelpText [ italian ] = "Converti in 3D" ;
@@ -415,6 +447,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Umwandeln in 3D";
         QuickHelpText[ catalan ] = "Converteix a 3D";
         QuickHelpText[ finnish ] = "Muunna kolmiulotteiseksi";
+        QuickHelpText[ czech ] = "Převést na 3D";
+        QuickHelpText[ hebrew ] = "Umwandeln in 3D";
+        QuickHelpText[ thai ] = "Convert to 3D";
+        QuickHelpText[ hindi ] = "3D में बदलो";
     };
     ImageButton BTN_LATHE_OBJ
     {
@@ -431,7 +467,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Converte em objecto de rota��o" ;
         QuickHelpText [ english_us ] = "Convert to Lathe Object" ;
-        QuickHelpText [ portuguese_brazilian ] = "Umwandeln in Rotationsk?per" ;
+        QuickHelpText [ portuguese_brazilian ] = "Converter para objeto de rota��o" ;
         QuickHelpText [ swedish ] = "Omvandla till rotationsobjekt" ;
         QuickHelpText [ danish ] = "Konverter til rotationslegeme" ;
         QuickHelpText [ italian ] = "Converti in corpo di rotazione" ;
@@ -451,6 +487,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Umwandeln in Rotationsk�rper";
         QuickHelpText[ catalan ] = "Converteix en cos de rotaci�";
         QuickHelpText[ finnish ] = "Muunna sorviobjektiksi";
+        QuickHelpText[ czech ] = "Převést na kruhový objekt";
+        QuickHelpText[ hebrew ] = "Umwandeln in Rotationskörper";
+        QuickHelpText[ thai ] = "Convert to Lathe Object";
+        QuickHelpText[ hindi ] = "खाद वस्तु में बदलो";
     };
     ImageButton BTN_PERSPECTIVE
     {
@@ -467,7 +507,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Activa/Desactiva Perspectiva" ;
         QuickHelpText [ english_us ] = "Perspective On/Off" ;
-        QuickHelpText [ portuguese_brazilian ] = "Perspektive ein-/ausschalten" ;
+        QuickHelpText [ portuguese_brazilian ] = "Ativar/desativar perspectiva" ;
         QuickHelpText [ swedish ] = "Perspektiv p�/av" ;
         QuickHelpText [ danish ] = "Aktiver/deaktiver perspektiv" ;
         QuickHelpText [ italian ] = "Attiva/disattiva prospettiva" ;
@@ -487,6 +527,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Perspektive ein-/ausschalten";
         QuickHelpText[ catalan ] = "Activa/desactiva perspectiva";
         QuickHelpText[ finnish ] = "Perspektiivi on/off";
+        QuickHelpText[ czech ] = "Perspektiva zap/vyp";
+        QuickHelpText[ hebrew ] = "Perspektive ein-/ausschalten";
+        QuickHelpText[ thai ] = "Perspective On/Off";
+        QuickHelpText[ hindi ] = "दृश्य शुरु/बंद";
     };
     Control CTL_PREVIEW
     {
@@ -519,7 +563,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Favoriten" ;
         Text [ ENGLISH ] = "~Preview" ;
         Text [ english_us ] = "Favorites" ;
-        Text [ portuguese_brazilian ] = "Favoriten" ;
+        Text [ portuguese_brazilian ] = "Favoritos" ;
         Text [ swedish ] = "Favoriter" ;
         Text [ danish ] = "Foretrukne" ;
         Text [ italian ] = "Preferiti" ;
@@ -537,10 +581,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "收藏";
         Text[ greek ] = "�����������";
         Text[ korean ] = "즐겨찾기";
-        Text[ turkish ] = "S�k kullan�lanlar";
+        Text[ turkish ] = "Favoriler";
         Text[ catalan ] = "Predilectes";
         Text[ finnish ] = "Suosikit";
         Text[ thai ] = "ชื่นชอบ";
+        Text[ czech ] = "Oblíbené";
+        Text[ hebrew ] = "‮מועדפים‬";
+        Text[ hindi ] = "प्रिय";
     };
     ImageButton BTN_ONLY_3D
     {
@@ -556,7 +603,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Atribui apenas atributos 3-D" ;
         QuickHelpText [ english_us ] = "3D Attributes Only" ;
-        QuickHelpText [ portuguese_brazilian ] = "Nur 3D-Attribute zuweisen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Somente atributos 3D" ;
         QuickHelpText [ swedish ] = "Tilldela bara 3D-attribut" ;
         QuickHelpText [ danish ] = "Tildel kun 3D-attributter" ;
         QuickHelpText [ italian ] = "Assegna solo attributi 3D" ;
@@ -576,6 +623,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Nur 3D-Attribute zuweisen";
         QuickHelpText[ catalan ] = "Assigna nom�s atributs 3D";
         QuickHelpText[ finnish ] = "Vain kolmiulotteiset m��ritteet";
+        QuickHelpText[ czech ] = "Pouze 3D atributy";
+        QuickHelpText[ hebrew ] = "Nur 3D-Attribute zuweisen";
+        QuickHelpText[ thai ] = "3D Attributes Only";
+        QuickHelpText[ hindi ] = "केवल 3D ऐट्रिब्यूट्स";
     };
     ImageButton BTN_ALL_ATTRIBUTES
     {
@@ -591,7 +642,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Aplica todos os atributos" ;
         QuickHelpText [ english_us ] = "Assign All Attributes" ;
-        QuickHelpText [ portuguese_brazilian ] = "Alle Attribute zuweisen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Aplicar todos os atributos" ;
         QuickHelpText [ swedish ] = "Tilldela alla attribut" ;
         QuickHelpText [ danish ] = "Tildel alle attributter" ;
         QuickHelpText [ italian ] = "Assegna tutti gli attributi" ;
@@ -611,6 +662,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Alle Attribute zuweisen";
         QuickHelpText[ catalan ] = "Assigna tots els atributs";
         QuickHelpText[ finnish ] = "Liit� kaikki m��ritteet";
+        QuickHelpText[ czech ] = "Přiřadit všechny atributy";
+        QuickHelpText[ hebrew ] = "Alle Attribute zuweisen";
+        QuickHelpText[ thai ] = "Assign All Attributes";
+        QuickHelpText[ hindi ] = "सब ऐट्रिब्यूट्स लागू करो";
     };
      // Geometrie
     FixedText FT_HORIZONTAL
@@ -638,10 +693,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "水平";
         Text[ greek ] = "���������";
         Text[ korean ] = "수평";
-        Text[ turkish ] = "Yatay";
+        Text[ turkish ] = "~Yatay";
         Text[ catalan ] = "Horitzontal";
         Text[ finnish ] = "Vaakatasossa";
         Text[ thai ] = "แนวนอน";
+        Text[ czech ] = "Vodorovně";
+        Text[ hebrew ] = "‮אופקי‬";
+        Text[ hindi ] = "समतल";
     };
     NumericField NUM_HORIZONTAL
     {
@@ -663,7 +721,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Vertikal" ;
         Text [ ENGLISH ] = "~Vertical" ;
         Text [ english_us ] = "~Vertical" ;
-        Text [ portuguese_brazilian ] = "Vertikal" ;
+        Text [ portuguese_brazilian ] = "Vertical" ;
         Text [ swedish ] = "Vertikal" ;
         Text [ danish ] = "~Lodret" ;
         Text [ italian ] = "Verticale" ;
@@ -681,10 +739,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "垂直";
         Text[ greek ] = "����������";
         Text[ korean ] = "수직";
-        Text[ turkish ] = "Dikey";
+        Text[ turkish ] = "~Dikey";
         Text[ catalan ] = "Vertical";
         Text[ finnish ] = "Pystytasossa";
         Text[ thai ] = "แนวตั้ง";
+        Text[ czech ] = "Svisle";
+        Text[ hebrew ] = "‮אנכי‬";
+        Text[ hindi ] = "लम्ब";
     };
     NumericField NUM_VERTICAL
     {
@@ -706,7 +767,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Segmente" ;
         Text [ ENGLISH ] = "~Segments" ;
         Text [ english_us ] = "Segments" ;
-        Text [ portuguese_brazilian ] = "Segmente" ;
+        Text [ portuguese_brazilian ] = "Segmentos" ;
         Text [ swedish ] = "Segment" ;
         Text [ danish ] = "Segmenter" ;
         Text [ italian ] = "Segmenti" ;
@@ -724,10 +785,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "分段";
         Text[ greek ] = "�������";
         Text[ korean ] = "세그먼트";
-        Text[ turkish ] = "Par�alar";
+        Text[ turkish ] = "Kesimler";
         Text[ catalan ] = "Segments";
         Text[ finnish ] = "Tahkoja";
         Text[ thai ] = "ส่วน";
+        Text[ czech ] = "Části";
+        Text[ hebrew ] = "‮קטעים‬";
+        Text[ hindi ] = "खण्ड";
     };
     FixedText FT_PERCENT_DIAGONAL
     {
@@ -736,7 +800,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Kantenrundung" ;
         Text [ ENGLISH ] = "~Percent diagonal" ;
         Text [ english_us ] = "R~ounded edges" ;
-        Text [ portuguese_brazilian ] = "Kantenrundung" ;
+        Text [ portuguese_brazilian ] = "Arestas arredondadas" ;
         Text [ swedish ] = "Rundade kanter" ;
         Text [ danish ] = "~Kant-afrunding" ;
         Text [ italian ] = "Bordi arrotondati" ;
@@ -746,18 +810,21 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ portuguese ] = "Arredondar arestas" ;
         Text[ chinese_simplified ] = "边角变圆";
         Text[ russian ] = "����������� ����";
-        Text[ polish ] = "Zaokr. kraw�dzi";
+        Text[ polish ] = "Zaokr�glone kraw�dzie";
         Text[ japanese ] = "角を丸くする";
         Text[ chinese_traditional ] = "邊角變圓";
         Text[ arabic ] = "������� ������";
         Text[ dutch ] = "Randen afronden";
         Text[ chinese_simplified ] = "边角变圆";
         Text[ greek ] = "���������������� ����";
-        Text[ korean ] = "모서리 둥글림";
-        Text[ turkish ] = "Kenar e�imi";
+        Text[ korean ] = "둥근 모서리";
+        Text[ turkish ] = "~Yuvarlanm�� k��eler";
         Text[ catalan ] = "Vores arrodonides";
         Text[ finnish ] = "Py�ristetyt kulmat";
         Text[ thai ] = "ขอบมน";
+        Text[ czech ] = "Zaoblené rohy";
+        Text[ hebrew ] = "‮עיגול קצוות‬";
+        Text[ hindi ] = "गोल आकार का किनारें";
     };
     MetricField MTR_PERCENT_DIAGONAL
     {
@@ -781,7 +848,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ ENGLISH ] = "~Backscale" ;
         Text [ portuguese ] = "Escala de profundidade" ;
         Text [ english_us ] = "~Scaled depth" ;
-        Text [ portuguese_brazilian ] = "Tiefenskalierung" ;
+        Text [ portuguese_brazilian ] = "Profundidade escalonada" ;
         Text [ swedish ] = "Djupskalning" ;
         Text [ danish ] = "~Dybdeskalering" ;
         Text [ italian ] = "Scala profondit�" ;
@@ -798,10 +865,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "深度比例";
         Text[ greek ] = "������� ������";
         Text[ korean ] = "깊이 배율 조정";
-        Text[ turkish ] = "Derinlik �l�eklendirmesi";
+        Text[ turkish ] = "~�l�eklenmi� derinlik";
         Text[ catalan ] = "Profunditat redimensionada";
         Text[ finnish ] = "Skaalattu syvyys";
         Text[ thai ] = "สเกลความลึก";
+        Text[ czech ] = "Škálovaná hloubka";
+        Text[ hebrew ] = "‮עומק מותאם‬";
+        Text[ hindi ] = "स्केल किया हुआ गहराई";
     };
     MetricField MTR_BACKSCALE
     {
@@ -824,7 +894,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Endwinkel" ;
         Text [ ENGLISH ] = "~End angle" ;
         Text [ english_us ] = "~Rotation angle" ;
-        Text [ portuguese_brazilian ] = "Endwinkel" ;
+        Text [ portuguese_brazilian ] = "�ngulo de rota��o" ;
         Text [ swedish ] = "Slutvinkel" ;
         Text [ danish ] = "~Slutvinkel" ;
         Text [ italian ] = "Angolo finale" ;
@@ -834,7 +904,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ portuguese ] = "�ngulo de rota��o" ;
         Text[ chinese_simplified ] = "最终角度";
         Text[ russian ] = "���� ��������";
-        Text[ polish ] = "K�t ko�cowy";
+        Text[ polish ] = "K�t obrotu";
         Text[ japanese ] = "回転角度";
         Text[ chinese_traditional ] = "旋轉角度";
         Text[ arabic ] = "����� �������";
@@ -842,10 +912,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "最终角度";
         Text[ greek ] = "������ �����";
         Text[ korean ] = "회전각도";
-        Text[ turkish ] = "D�n�� a��s�";
+        Text[ turkish ] = "~D�n�� a��s�";
         Text[ catalan ] = "Angle de gir";
         Text[ finnish ] = "Kiertokulma";
         Text[ thai ] = "มุมหมุน";
+        Text[ czech ] = "Úhel rotace";
+        Text[ hebrew ] = "‮זווית סיבוב‬";
+        Text[ hindi ] = "घुमाव कोण";
     };
     MetricField MTR_END_ANGLE
     {
@@ -873,16 +946,19 @@ DockingWindow RID_SVXFLOAT_3D
         CustomUnitText[ italian ] = " gradi";
         CustomUnitText[ danish ] = "Grader";
         CustomUnitText[ swedish ] = " grader";
-        CustomUnitText[ polish ] = " stopni(e)";
-        CustomUnitText[ portuguese_brazilian ] = " degree";
+        CustomUnitText[ polish ] = " st.";
+        CustomUnitText[ portuguese_brazilian ] = " graus";
         CustomUnitText[ japanese ] = " 度";
         CustomUnitText[ korean ] = " 도";
         CustomUnitText[ chinese_simplified ] = " 度";
         CustomUnitText[ chinese_traditional ] = " 度";
-        CustomUnitText[ turkish ] = " degree";
+        CustomUnitText[ turkish ] = " derece(ler)";
         CustomUnitText[ arabic ] = " degree";
         CustomUnitText[ catalan ] = " grau(s)";
         CustomUnitText[ thai ] = " องศา";
+        CustomUnitText[ czech ] = " stupňů";
+        CustomUnitText[ hebrew ] = "‮מעלות‬";
+        CustomUnitText[ hindi ] = " डिग्रियाँ";
     };
     FixedText FT_DEPTH
     {
@@ -891,7 +967,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Tiefe" ;
         Text [ ENGLISH ] = "~Depth" ;
         Text [ english_us ] = "~Depth" ;
-        Text [ portuguese_brazilian ] = "Tiefe" ;
+        Text [ portuguese_brazilian ] = "Profundidade" ;
         Text [ swedish ] = "Djup" ;
         Text [ danish ] = "D~ybde" ;
         Text [ italian ] = "Profondit�" ;
@@ -909,10 +985,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "深度";
         Text[ greek ] = "�����";
         Text[ korean ] = "깊이";
-        Text[ turkish ] = "Derinlik";
+        Text[ turkish ] = "~Derinlik";
         Text[ catalan ] = "Profunditat";
         Text[ finnish ] = "Syvyys";
         Text[ thai ] = "ความลึก";
+        Text[ czech ] = "Hloubka";
+        Text[ hebrew ] = "‮עומק‬";
+        Text[ hindi ] = "गहराई";
     };
     MetricField MTR_DEPTH
     {
@@ -938,7 +1017,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "Geometrie" ;
         Text [ ENGLISH ] = "Geometry" ;
         Text [ english_us ] = "Geometry" ;
-        Text [ portuguese_brazilian ] = "Geometrie" ;
+        Text [ portuguese_brazilian ] = "Geometria" ;
         Text [ swedish ] = "Geometri" ;
         Text [ danish ] = "Geometri" ;
         Text [ italian ] = "Geometria" ;
@@ -960,6 +1039,9 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ catalan ] = "Geometria";
         Text[ finnish ] = "Geometria";
         Text[ thai ] = "เรขาคณิต";
+        Text[ czech ] = "Geometrie";
+        Text[ hebrew ] = "‮גאומטריה‬";
+        Text[ hindi ] = "रेखागणित";
     };
     ImageButton BTN_NORMALS_OBJ
     {
@@ -975,7 +1057,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Espec�fico do objecto" ;
         QuickHelpText [ english_us ] = "Object-Specific" ;
-        QuickHelpText [ portuguese_brazilian ] = "Objektspezifisch" ;
+        QuickHelpText [ portuguese_brazilian ] = "Espec�fico do objeto" ;
         QuickHelpText [ swedish ] = "Objektspecifik" ;
         QuickHelpText [ danish ] = "Objektspecifik" ;
         QuickHelpText [ italian ] = "Specifico per l'oggetto" ;
@@ -995,6 +1077,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Objektspezifisch";
         QuickHelpText[ catalan ] = "Espec�fic de l'objecte";
         QuickHelpText[ finnish ] = "Objektikohtainen";
+        QuickHelpText[ czech ] = "Specificky pro objekt";
+        QuickHelpText[ hebrew ] = "Objektspezifisch";
+        QuickHelpText[ thai ] = "Object-Specific";
+        QuickHelpText[ hindi ] = "वस्तु-विशिष्ट";
     };
     ImageButton BTN_NORMALS_FLAT
     {
@@ -1010,7 +1096,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Plano" ;
         QuickHelpText [ english_us ] = "Flat" ;
-        QuickHelpText [ portuguese_brazilian ] = "Flach" ;
+        QuickHelpText [ portuguese_brazilian ] = "Plano" ;
         QuickHelpText [ swedish ] = "Platt" ;
         QuickHelpText [ danish ] = "Flad" ;
         QuickHelpText [ italian ] = "Piano" ;
@@ -1030,6 +1116,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Flach";
         QuickHelpText[ catalan ] = "Pla";
         QuickHelpText[ finnish ] = "Litte�";
+        QuickHelpText[ czech ] = "Ploché";
+        QuickHelpText[ hebrew ] = "Flach";
+        QuickHelpText[ thai ] = "Flat";
+        QuickHelpText[ hindi ] = "समतल";
     };
     ImageButton BTN_NORMALS_SPHERE
     {
@@ -1045,7 +1135,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Esf�rico" ;
         QuickHelpText [ english_us ] = "Spherical" ;
-        QuickHelpText [ portuguese_brazilian ] = "Kugelf?mig" ;
+        QuickHelpText [ portuguese_brazilian ] = "Esf�rico" ;
         QuickHelpText [ swedish ] = "Sf�risk" ;
         QuickHelpText [ danish ] = "Kugleformet" ;
         QuickHelpText [ italian ] = "Sferico" ;
@@ -1065,6 +1155,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Kugelf�rmig";
         QuickHelpText[ catalan ] = "Esf�ric";
         QuickHelpText[ finnish ] = "Pallomainen";
+        QuickHelpText[ czech ] = "Sférické";
+        QuickHelpText[ hebrew ] = "Kugelförmig";
+        QuickHelpText[ thai ] = "Spherical";
+        QuickHelpText[ hindi ] = "वर्तुल";
     };
     ImageButton BTN_NORMALS_INVERT
     {
@@ -1080,7 +1174,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Inverter normais" ;
         QuickHelpText [ english_us ] = "Invert Normals" ;
-        QuickHelpText [ portuguese_brazilian ] = "Normalen umkehren" ;
+        QuickHelpText [ portuguese_brazilian ] = "Inverter verticais" ;
         QuickHelpText [ swedish ] = "Omv�nda normaler" ;
         QuickHelpText [ danish ] = "Inverter normaler" ;
         QuickHelpText [ italian ] = "Inverti i normali" ;
@@ -1100,6 +1194,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Normalen umkehren";
         QuickHelpText[ catalan ] = "Inverteix els normals";
         QuickHelpText[ finnish ] = "K��nn� normaalit";
+        QuickHelpText[ czech ] = "Převrátit normály";
+        QuickHelpText[ hebrew ] = "Normalen umkehren";
+        QuickHelpText[ thai ] = "Invert Normals";
+        QuickHelpText[ hindi ] = "नोर्मलों को उलटना";
     };
     ImageButton BTN_TWO_SIDED_LIGHTING
     {
@@ -1115,7 +1213,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Ilumina��o de ambos os lados" ;
         QuickHelpText [ english_us ] = "Double-Sided Illumination" ;
-        QuickHelpText [ portuguese_brazilian ] = "2-seitige Beleuchtung" ;
+        QuickHelpText [ portuguese_brazilian ] = "Ilumina��o de ambos os lados" ;
         QuickHelpText [ swedish ] = "2-sidig belysning" ;
         QuickHelpText [ danish ] = "2-sidet belysning" ;
         QuickHelpText [ italian ] = "Illuminazione su due lati" ;
@@ -1123,7 +1221,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Eclairage des deux c�t�s" ;
         QuickHelpText [ dutch ] = "Dubbelzijdige belichting" ;
     QuickHelpText[ russian ] = "������������ ���������";
-        QuickHelpText[ polish ] = "Dwustronne o�wietlenie";
+        QuickHelpText[ polish ] = "O�wietlenie obustronne";
         QuickHelpText[ japanese ] = "両面照明";
         QuickHelpText[ chinese_simplified ] = "两面照明";
         QuickHelpText[ chinese_traditional ] = "雙面照明";
@@ -1135,6 +1233,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "2-seitige Beleuchtung";
         QuickHelpText[ catalan ] = "Il.luminaci� en dues bandes";
         QuickHelpText[ finnish ] = "Kaksipuolinen valaistus";
+        QuickHelpText[ czech ] = "Dvoustranné osvětlení";
+        QuickHelpText[ hebrew ] = "2-seitige Beleuchtung";
+        QuickHelpText[ thai ] = "Double-Sided Illumination";
+        QuickHelpText[ hindi ] = "दोनों ओर चमक";
     };
     FixedLine FL_NORMALS
     {
@@ -1143,7 +1245,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "Normalen" ;
         Text [ ENGLISH ] = "Normals" ;
         Text [ english_us ] = "Normals" ;
-        Text [ portuguese_brazilian ] = "Normalen" ;
+        Text [ portuguese_brazilian ] = "Perpendiculares" ;
         Text [ swedish ] = "Normaler" ;
         Text [ danish ] = "Normaler" ;
         Text [ italian ] = "Normali" ;
@@ -1165,6 +1267,9 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ catalan ] = "Normals";
         Text[ finnish ] = "Normaalit";
         Text[ thai ] = "ปกติ";
+        Text[ czech ] = "Normály";
+        Text[ hebrew ] = "‮נורמלים‬";
+        Text[ hindi ] = "नोर्मल";
     };
     ImageButton BTN_DOUBLE_SIDED
     {
@@ -1180,7 +1285,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Ambos os lados" ;
         QuickHelpText [ english_us ] = "Double-Sided" ;
-        QuickHelpText [ portuguese_brazilian ] = "Doppelseitig" ;
+        QuickHelpText [ portuguese_brazilian ] = "Ambos os lados" ;
         QuickHelpText [ swedish ] = "Dubbelsidig" ;
         QuickHelpText [ danish ] = "Dobbeltsidet" ;
         QuickHelpText [ italian ] = "Su entrambi i lati" ;
@@ -1200,6 +1305,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Doppelseitig";
         QuickHelpText[ catalan ] = "P�gina doble";
         QuickHelpText[ finnish ] = "Kaksipuolinen";
+        QuickHelpText[ czech ] = "Oboustranné";
+        QuickHelpText[ hebrew ] = "Doppelseitig";
+        QuickHelpText[ thai ] = "Double-Sided";
+        QuickHelpText[ hindi ] = "दोनों ओर";
     };
      // Darstellung
     FixedText FT_SHADEMODE
@@ -1209,7 +1318,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Modus" ;
         Text [ ENGLISH ] = "~Mode" ;
         Text [ english_us ] = "~Mode" ;
-        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ portuguese_brazilian ] = "Modo" ;
         Text [ swedish ] = "L�ge" ;
         Text [ danish ] = "Modus" ;
         Text [ italian ] = "Modo" ;
@@ -1227,10 +1336,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "模式";
         Text[ greek ] = "���������";
         Text[ korean ] = "모드";
-        Text[ turkish ] = "Kip";
+        Text[ turkish ] = "~Kip";
         Text[ catalan ] = "Mode";
         Text[ finnish ] = "Tila";
         Text[ thai ] = "โหมด";
+        Text[ czech ] = "Režim";
+        Text[ hebrew ] = "‮מצב פעולה‬";
+        Text[ hindi ] = "प्रकार";
     };
     ListBox LB_SHADEMODE
     {
@@ -1259,7 +1371,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "Flat" ; > ;
+            < "Plano" ; > ;
             < "Phong" ; > ;
             < "Gouraud" ; > ;
         };
@@ -1367,7 +1479,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     StringList [ turkish ] =
     {
-            < "Flat" ; > ;
+            < "D�z" ; > ;
         < "Phong" ; > ;
         < "Gouraud" ; > ;
     };
@@ -1386,6 +1498,26 @@ DockingWindow RID_SVXFLOAT_3D
     StringList [ thai ] =
     {
          < "แบน" ; > ;
+        < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+    StringList [ czech ] =
+    {
+         < "Ploché" ; > ;
+        < "Phong" ; > ;
+        < "Gouraud" ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮שטוח‬" ; > ;
+        < "‮פונג‬" ; > ;
+        < "‮ג'וראד‬" ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "समतल" ; > ;
+        < "फोन्ग" ; > ;
+        < "गौरौड" ; > ;
     };
     };
     ImageButton BTN_SHADOW_3D
@@ -1403,7 +1535,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Activa/Desactiva sombras 3-D" ;
         QuickHelpText [ english_us ] = "3D Shadowing On/Off" ;
-        QuickHelpText [ portuguese_brazilian ] = "3D-Schatten ein/-ausschalten" ;
+        QuickHelpText [ portuguese_brazilian ] = "Ativar/desativar sombra 3D" ;
         QuickHelpText [ swedish ] = "3D-skugga p�/av" ;
         QuickHelpText [ danish ] = "Aktiver/deaktiver 3D-skygge" ;
         QuickHelpText [ italian ] = "Mostra/nascondi ombre 3D" ;
@@ -1423,6 +1555,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "3D-Schatten ein/-ausschalten";
         QuickHelpText[ catalan ] = "Activa/desactiva ombra 3D";
         QuickHelpText[ finnish ] = "Kolmiulotteinen varjostus on/off";
+        QuickHelpText[ czech ] = "3D stín zap/vyp";
+        QuickHelpText[ hebrew ] = "3D-Schatten ein/-ausschalten";
+        QuickHelpText[ thai ] = "3D Shadowing On/Off";
+        QuickHelpText[ hindi ] = "3D छाया शुरु/बंद";
     };
     FixedText FT_SLANT
     {
@@ -1434,7 +1570,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Papierneigung" ;
         Text [ ENGLISH ] = "~Paper slant" ;
         Text [ english_us ] = "S~urface angle" ;
-        Text [ portuguese_brazilian ] = "Neigung" ;
+        Text [ portuguese_brazilian ] = "�ngulo da superf�cie" ;
         Text [ swedish ] = "Papperslutning" ;
         Text [ danish ] = "~Papirh�ldning" ;
         Text [ italian ] = "Inclinazione carta" ;
@@ -1444,7 +1580,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ portuguese ] = "�ngulo do papel" ;
         Text[ chinese_simplified ] = "平面倾斜";
         Text[ russian ] = "������ �����������";
-        Text[ polish ] = "Pochyl. papieru";
+        Text[ polish ] = "Pochylenie powierzchni";
         Text[ japanese ] = "用紙の傾き";
         Text[ chinese_traditional ] = "平面傾斜";
         Text[ arabic ] = "��� �����";
@@ -1452,10 +1588,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "平面倾斜";
         Text[ greek ] = "����� �������";
         Text[ korean ] = "용지의 기울기";
-        Text[ turkish ] = "Y�zey a��s�";
+        Text[ turkish ] = "~Y�zey a��s�";
         Text[ catalan ] = "Angle superficie";
         Text[ finnish ] = "Pintakulma";
         Text[ thai ] = "มุมพื้นผิว";
+        Text[ czech ] = "Sklon povrchu";
+        Text[ hebrew ] = "‮זווית שטח‬";
+        Text[ hindi ] = "तल कोण";
     };
     MetricField MTR_SLANT
     {
@@ -1482,16 +1621,19 @@ DockingWindow RID_SVXFLOAT_3D
         CustomUnitText[ italian ] = " gradi";
         CustomUnitText[ danish ] = "Grader";
         CustomUnitText[ swedish ] = " grader";
-        CustomUnitText[ polish ] = " stopni(e)";
-        CustomUnitText[ portuguese_brazilian ] = " degree";
+        CustomUnitText[ polish ] = " st.";
+        CustomUnitText[ portuguese_brazilian ] = " graus";
         CustomUnitText[ japanese ] = " 度";
         CustomUnitText[ korean ] = " 도";
         CustomUnitText[ chinese_simplified ] = " 度";
         CustomUnitText[ chinese_traditional ] = " 度";
-        CustomUnitText[ turkish ] = " degree";
+        CustomUnitText[ turkish ] = " derece(ler)";
         CustomUnitText[ arabic ] = " degree";
         CustomUnitText[ catalan ] = " grau(s)";
         CustomUnitText[ thai ] = " องศา";
+        CustomUnitText[ czech ] = " stupňů";
+        CustomUnitText[ hebrew ] = "‮מעלות‬";
+        CustomUnitText[ hindi ] = " डिग्रियाँ";
     };
     FixedLine FL_SHADOW
     {
@@ -1500,7 +1642,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "Schatten" ;
         Text [ ENGLISH ] = "Shadow" ;
         Text [ english_us ] = "Shadow" ;
-        Text [ portuguese_brazilian ] = "Schatten" ;
+        Text [ portuguese_brazilian ] = "Sombra" ;
         Text [ swedish ] = "Skugga" ;
         Text [ danish ] = "Skygger" ;
         Text [ italian ] = "Ombre" ;
@@ -1522,6 +1664,9 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ catalan ] = "Ombra";
         Text[ finnish ] = "Varjo";
         Text[ thai ] = "แรเงา";
+        Text[ czech ] = "Stín";
+        Text[ hebrew ] = "‮צל‬";
+        Text[ hindi ] = "छाया";
     };
     FixedText FT_DISTANCE
     {
@@ -1530,7 +1675,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Entfernung" ;
         Text [ ENGLISH ] = "~Distance" ;
         Text [ english_us ] = "~Distance" ;
-        Text [ portuguese_brazilian ] = "Entfernung" ;
+        Text [ portuguese_brazilian ] = "Dist�ncia" ;
         Text [ swedish ] = "Avst�nd" ;
         Text [ danish ] = "~Afstand" ;
         Text [ italian ] = "Distanza" ;
@@ -1548,10 +1693,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "间隔";
         Text[ greek ] = "��������";
         Text[ korean ] = "거리";
-        Text[ turkish ] = "Uzakl�k";
+        Text[ turkish ] = "~Uzakl�k";
         Text[ catalan ] = "Dist�ncia";
         Text[ finnish ] = "Et�isyys";
         Text[ thai ] = "ระยะ";
+        Text[ czech ] = "Vzdálenost";
+        Text[ hebrew ] = "‮מרחק‬";
+        Text[ hindi ] = "दूरी";
     };
     MetricField MTR_DISTANCE
     {
@@ -1577,7 +1725,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Brennweite" ;
         Text [ ENGLISH ] = "~Focal length" ;
         Text [ english_us ] = "~Focal length" ;
-        Text [ portuguese_brazilian ] = "Brennweite" ;
+        Text [ portuguese_brazilian ] = "Dist�ncia focal" ;
         Text [ swedish ] = "Br�nnvidd" ;
         Text [ danish ] = "~Br�ndvidde" ;
         Text [ italian ] = "Ampiezza focale" ;
@@ -1595,10 +1743,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "焦距";
         Text[ greek ] = "������� ��������";
         Text[ korean ] = "초점 거리";
-        Text[ turkish ] = "Odak uzakl���";
+        Text[ turkish ] = "~Odak uzakl���";
         Text[ catalan ] = "Longitud focal";
         Text[ finnish ] = "Polttov�li";
         Text[ thai ] = "ความยาวจุดรวม";
+        Text[ czech ] = "Ohnisková vzdálenost";
+        Text[ hebrew ] = "‮מרחק מיקוד‬";
+        Text[ hindi ] = "ताल के मध्य से उसके केन्द्र तक की दूरी";
     };
     MetricField MTR_FOCAL_LENGTH
     {
@@ -1624,7 +1775,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "Kamera" ;
         Text [ ENGLISH ] = "Camera" ;
         Text [ english_us ] = "Camera" ;
-        Text [ portuguese_brazilian ] = "Kamera" ;
+        Text [ portuguese_brazilian ] = "Camera" ;
         Text [ swedish ] = "Kamera" ;
         Text [ danish ] = "Kamera" ;
         Text [ italian ] = "Punto di osservazione" ;
@@ -1646,6 +1797,9 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ catalan ] = "C�mara";
         Text[ finnish ] = "Kamera";
         Text[ thai ] = "กล้อง";
+        Text[ czech ] = "Kamera";
+        Text[ hebrew ] = "‮מצלמה‬";
+        Text[ hindi ] = "केमरा";
     };
     FixedLine FL_REPRESENTATION
     {
@@ -1654,7 +1808,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "Darstellung" ;
         Text [ ENGLISH ] = "Representation" ;
         Text [ english_us ] = "Shading" ;
-        Text [ portuguese_brazilian ] = "Darstellung" ;
+        Text [ portuguese_brazilian ] = "Sombreado" ;
         Text [ swedish ] = "Visning" ;
         Text [ danish ] = "Visning" ;
         Text [ italian ] = "Rappresentazione" ;
@@ -1664,7 +1818,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ portuguese ] = "Destacar" ;
         Text[ chinese_simplified ] = "显示";
         Text[ russian ] = "���������";
-        Text[ polish ] = "Wygl�d";
+        Text[ polish ] = "Cieniowanie";
         Text[ japanese ] = "表示";
         Text[ chinese_traditional ] = "顯示";
         Text[ arabic ] = "�����";
@@ -1672,10 +1826,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "显示";
         Text[ greek ] = "�������";
         Text[ korean ] = "표시";
-        Text[ turkish ] = "G�r�nt�";
+        Text[ turkish ] = "G�lgeleme";
         Text[ catalan ] = "Representaci�";
         Text[ finnish ] = "Varjostus";
         Text[ thai ] = "แสงเงา";
+        Text[ czech ] = "Stín";
+        Text[ hebrew ] = "‮הצללה‬";
+        Text[ hindi ] = "छाया करना";
     };
      // Beleuchtung
     ImageButton BTN_LIGHT_1
@@ -1692,7 +1849,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 1" ;
         QuickHelpText [ english_us ] = "Light Source 1" ;
-        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 1" ;
+        QuickHelpText [ portuguese_brazilian ] = "Fonte de luz 1" ;
         QuickHelpText [ swedish ] = "Ljusk�lla 1" ;
         QuickHelpText [ danish ] = "Lyskilde 1" ;
         QuickHelpText [ italian ] = "Sorgente luminosa 1" ;
@@ -1712,6 +1869,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Lichtquelle 1";
         QuickHelpText[ catalan ] = "Font de llum 1";
         QuickHelpText[ finnish ] = "Valonl�hde 1";
+        QuickHelpText[ czech ] = "Světelný zdroj 1";
+        QuickHelpText[ hebrew ] = "Lichtquelle 1";
+        QuickHelpText[ thai ] = "Light Source 1";
+        QuickHelpText[ hindi ] = "प्रकाश मूल 1";
     };
     ImageButton BTN_LIGHT_2
     {
@@ -1727,7 +1888,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 2" ;
         QuickHelpText [ english_us ] = "Light Source 2" ;
-        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 2" ;
+        QuickHelpText [ portuguese_brazilian ] = "Fonte de luz 2" ;
         QuickHelpText [ swedish ] = "Ljusk�lla 2" ;
         QuickHelpText [ danish ] = "Lyskilde 2" ;
         QuickHelpText [ italian ] = "Sorgente luminosa 2" ;
@@ -1747,6 +1908,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Lichtquelle 2";
         QuickHelpText[ catalan ] = "Font de llum 2";
         QuickHelpText[ finnish ] = "Valonl�hde 2";
+        QuickHelpText[ czech ] = "Světelný zdroj 2";
+        QuickHelpText[ hebrew ] = "Lichtquelle 2";
+        QuickHelpText[ thai ] = "Light Source 2";
+        QuickHelpText[ hindi ] = "प्रकाश मूल 2";
     };
     ImageButton BTN_LIGHT_3
     {
@@ -1762,7 +1927,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 3" ;
         QuickHelpText [ english_us ] = "Light Source 3" ;
-        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 3" ;
+        QuickHelpText [ portuguese_brazilian ] = "Fonte de luz 3" ;
         QuickHelpText [ swedish ] = "Ljusk�lla 3" ;
         QuickHelpText [ danish ] = "Lyskilde 3" ;
         QuickHelpText [ italian ] = "Sorgente luminosa 3" ;
@@ -1782,6 +1947,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Lichtquelle 3";
         QuickHelpText[ catalan ] = "Font de llum 3";
         QuickHelpText[ finnish ] = "Valonl�hde 3";
+        QuickHelpText[ czech ] = "Světelný zdroj 3";
+        QuickHelpText[ hebrew ] = "Lichtquelle 3";
+        QuickHelpText[ thai ] = "Light Source 3";
+        QuickHelpText[ hindi ] = "प्रकाश मूल 3";
     };
     ImageButton BTN_LIGHT_4
     {
@@ -1797,7 +1966,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 4" ;
         QuickHelpText [ english_us ] = "Light Source 4" ;
-        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 4" ;
+        QuickHelpText [ portuguese_brazilian ] = "Fonte de luz 4" ;
         QuickHelpText [ swedish ] = "Ljusk�lla 4" ;
         QuickHelpText [ danish ] = "Lyskilde 4" ;
         QuickHelpText [ italian ] = "Sorgente luminosa 4" ;
@@ -1817,6 +1986,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Lichtquelle 4";
         QuickHelpText[ catalan ] = "Font de llum 4";
         QuickHelpText[ finnish ] = "Valonl�hde 4";
+        QuickHelpText[ czech ] = "Světelný zdroj 4";
+        QuickHelpText[ hebrew ] = "Lichtquelle 4";
+        QuickHelpText[ thai ] = "Light Source 4";
+        QuickHelpText[ hindi ] = "प्रकाश मूल 4";
     };
     ImageButton BTN_LIGHT_5
     {
@@ -1832,7 +2005,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 5" ;
         QuickHelpText [ english_us ] = "Light Source 5" ;
-        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 5" ;
+        QuickHelpText [ portuguese_brazilian ] = "Fonte de luz 5" ;
         QuickHelpText [ swedish ] = "Ljusk�lla 5" ;
         QuickHelpText [ danish ] = "Lyskilde 5" ;
         QuickHelpText [ italian ] = "Sorgente luminosa 5" ;
@@ -1852,6 +2025,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Lichtquelle 5";
         QuickHelpText[ catalan ] = "Font de llum 5";
         QuickHelpText[ finnish ] = "Valonl�hde 5";
+        QuickHelpText[ czech ] = "Světelný zdroj 5";
+        QuickHelpText[ hebrew ] = "Lichtquelle 5";
+        QuickHelpText[ thai ] = "Light Source 5";
+        QuickHelpText[ hindi ] = "प्रकाश मूल 5";
     };
     ImageButton BTN_LIGHT_6
     {
@@ -1867,7 +2044,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 6" ;
         QuickHelpText [ english_us ] = "Light Source 6" ;
-        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 6" ;
+        QuickHelpText [ portuguese_brazilian ] = "Fonte de luz 6" ;
         QuickHelpText [ swedish ] = "Ljusk�lla 6" ;
         QuickHelpText [ danish ] = "Lyskilde 6" ;
         QuickHelpText [ italian ] = "Sorgente luminosa 6" ;
@@ -1887,6 +2064,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Lichtquelle 6";
         QuickHelpText[ catalan ] = "Font de llum 6";
         QuickHelpText[ finnish ] = "Valonl�hde 6";
+        QuickHelpText[ czech ] = "Světelný zdroj 6";
+        QuickHelpText[ hebrew ] = "Lichtquelle 6";
+        QuickHelpText[ thai ] = "Light Source 6";
+        QuickHelpText[ hindi ] = "प्रकाश मूल 6";
     };
     ImageButton BTN_LIGHT_7
     {
@@ -1902,7 +2083,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 7" ;
         QuickHelpText [ english_us ] = "Light Source 7" ;
-        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 7" ;
+        QuickHelpText [ portuguese_brazilian ] = "Fonte de luz 7" ;
         QuickHelpText [ swedish ] = "Ljusk�lla 7" ;
         QuickHelpText [ danish ] = "Lyskilde 7" ;
         QuickHelpText [ italian ] = "Sorgente luminosa 7" ;
@@ -1922,6 +2103,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Lichtquelle 7";
         QuickHelpText[ catalan ] = "Font de llum 7";
         QuickHelpText[ finnish ] = "Valonl�hde 7";
+        QuickHelpText[ czech ] = "Světelný zdroj 7";
+        QuickHelpText[ hebrew ] = "Lichtquelle 7";
+        QuickHelpText[ thai ] = "Light Source 7";
+        QuickHelpText[ hindi ] = "प्रकाश मूल 7";
     };
     ImageButton BTN_LIGHT_8
     {
@@ -1937,7 +2122,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 8" ;
         QuickHelpText [ english_us ] = "Light Source 8" ;
-        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 8" ;
+        QuickHelpText [ portuguese_brazilian ] = "Fonte de luz 8" ;
         QuickHelpText [ swedish ] = "Ljusk�lla 8" ;
         QuickHelpText [ danish ] = "Lyskilde 8" ;
         QuickHelpText [ italian ] = "Sorgente luminosa 8" ;
@@ -1957,6 +2142,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Lichtquelle 8";
         QuickHelpText[ catalan ] = "Font de llum 8";
         QuickHelpText[ finnish ] = "Valonl�hde 8";
+        QuickHelpText[ czech ] = "Světelný zdroj 8";
+        QuickHelpText[ hebrew ] = "Lichtquelle 8";
+        QuickHelpText[ thai ] = "Light Source 8";
+        QuickHelpText[ hindi ] = "प्रकाश मूल 8";
     };
     ListBox LB_LIGHT_1
     {
@@ -2036,7 +2225,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Caixa de di�logo das cores" ;
         QuickHelpText [ english_us ] = "Colors Dialog" ;
-        QuickHelpText [ portuguese_brazilian ] = "Farbe ?er Farbdialog w?hlen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Caixa de Di�logo de cores" ;
         QuickHelpText [ swedish ] = "V�lj f�rg via f�rgdialog" ;
         QuickHelpText [ danish ] = "V�lg farve via farvedialog" ;
         QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
@@ -2056,6 +2245,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Rengi, renk penceresinde se�";
         QuickHelpText[ catalan ] = "Quadre de di�leg de colors";
         QuickHelpText[ finnish ] = "V�rien valintaikkuna";
+        QuickHelpText[ czech ] = "Dialog barev";
+        QuickHelpText[ hebrew ] = "Farbe über Farbdialog wählen";
+        QuickHelpText[ thai ] = "Colors Dialog";
+        QuickHelpText[ hindi ] = "रंगों का डयलॉग";
     };
     FixedText FT_LIGHTSOURCE
     {
@@ -2065,7 +2258,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ ENGLISH ] = "Lichtquelle" ;
         Text [ portuguese ] = "Fonte de luz" ;
         Text [ english_us ] = "~Light source" ;
-        Text [ portuguese_brazilian ] = "Lichtquelle" ;
+        Text [ portuguese_brazilian ] = "Fonte de luz" ;
         Text [ swedish ] = "Ljusk�lla" ;
         Text [ danish ] = "~Lyskilde" ;
         Text [ italian ] = "Sorgente luminosa" ;
@@ -2082,10 +2275,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "光源";
         Text[ greek ] = "��������� �����";
         Text[ korean ] = "광원";
-        Text[ turkish ] = "I��k kayna��";
+        Text[ turkish ] = "~I��k kayna��";
         Text[ catalan ] = "Font de llum";
         Text[ finnish ] = "Valonl�hde";
         Text[ thai ] = "แหล่งแสงสว่าง";
+        Text[ czech ] = "Světelný zdroj";
+        Text[ hebrew ] = "‮מקור אור‬";
+        Text[ hindi ] = "प्रकाश मूल";
     };
     ListBox LB_AMBIENTLIGHT
     {
@@ -2109,7 +2305,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Caixa de di�logo das cores" ;
         QuickHelpText [ english_us ] = "Colors Dialog" ;
-        QuickHelpText [ portuguese_brazilian ] = "Farbe ?er Farbdialog w?hlen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Caixa de Di�logo de cores" ;
         QuickHelpText [ swedish ] = "V�lj f�rg via f�rgdialog" ;
         QuickHelpText [ danish ] = "V�lg farve via farvedialog" ;
         QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
@@ -2129,6 +2325,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Rengi, renk penceresinde se�";
         QuickHelpText[ catalan ] = "Quadre de di�leg de colors";
         QuickHelpText[ finnish ] = "V�rien valintaikkuna";
+        QuickHelpText[ czech ] = "Dialog barev";
+        QuickHelpText[ hebrew ] = "Farbe über Farbdialog wählen";
+        QuickHelpText[ thai ] = "Colors Dialog";
+        QuickHelpText[ hindi ] = "रंगों का डयलॉग";
     };
     FixedText FT_AMBIENTLIGHT
     {
@@ -2137,7 +2337,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Umgebungslicht" ;
         Text [ ENGLISH ] = "~Ambient light" ;
         Text [ english_us ] = "~Ambient light" ;
-        Text [ portuguese_brazilian ] = "Umgebungslicht" ;
+        Text [ portuguese_brazilian ] = "Luz ambiente" ;
         Text [ swedish ] = "Omgivningsljus" ;
         Text [ danish ] = "Omgivelseslys" ;
         Text [ italian ] = "Luce ambientale" ;
@@ -2155,10 +2355,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "周围光线";
         Text[ greek ] = "�������� �������������";
         Text[ korean ] = "주변광";
-        Text[ turkish ] = "Ortam �����";
+        Text[ turkish ] = "~�evre �����";
         Text[ catalan ] = "Llum ambiental";
         Text[ finnish ] = "Taustavalo";
         Text[ thai ] = "แสงสว่างที่ล้อมรอบ";
+        Text[ czech ] = "Ambientní osvětlení";
+        Text[ hebrew ] = "‮אור רקע‬";
+        Text[ hindi ] = "व्यापक प्रकाश";
     };
     FixedLine FL_LIGHT
     {
@@ -2167,7 +2370,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "Beleuchtung" ;
         Text [ ENGLISH ] = "Lighting" ;
         Text [ english_us ] = "Illumination" ;
-        Text [ portuguese_brazilian ] = "Beleuchtung" ;
+        Text [ portuguese_brazilian ] = "Ilumina��o" ;
         Text [ swedish ] = "Belysning" ;
         Text [ danish ] = "Belysning" ;
         Text [ italian ] = "Illuminazione" ;
@@ -2185,10 +2388,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "照明";
         Text[ greek ] = "��������";
         Text[ korean ] = "조명";
-        Text[ turkish ] = "I��kland�rma";
+        Text[ turkish ] = "Ayd�nlatma";
         Text[ catalan ] = "Il.luminaci�";
         Text[ finnish ] = "Valaistus";
         Text[ thai ] = "ส่องแสง";
+        Text[ czech ] = "Osvětlení";
+        Text[ hebrew ] = "‮תאורה‬";
+        Text[ hindi ] = "चमक";
     };
      // Texturen
     FixedText FT_TEX_KIND
@@ -2198,7 +2404,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Art" ;
         Text [ ENGLISH ] = "~Kind" ;
         Text [ english_us ] = "~Type" ;
-        Text [ portuguese_brazilian ] = "Art" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ swedish ] = "Typ" ;
         Text [ danish ] = "Type" ;
         Text [ italian ] = "Tipo" ;
@@ -2216,10 +2422,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "类型";
         Text[ greek ] = "�����";
         Text[ korean ] = "종류";
-        Text[ turkish ] = "T�r";
+        Text[ turkish ] = "~T�r";
         Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi";
         Text[ thai ] = "ชนิด";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "‮סוג‬";
+        Text[ hindi ] = "वर्ग";
     };
     ImageButton BTN_TEX_LUMINANCE
     {
@@ -2235,7 +2444,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Preto & Branco" ;
         QuickHelpText [ english_us ] = "Black & White" ;
-        QuickHelpText [ portuguese_brazilian ] = "Schwarzwei?" ;
+        QuickHelpText [ portuguese_brazilian ] = "Branco & Preto" ;
         QuickHelpText [ swedish ] = "Svartvit" ;
         QuickHelpText [ danish ] = "Sort-hvid" ;
         QuickHelpText [ italian ] = "Bianco e nero" ;
@@ -2255,6 +2464,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Schwarzwei�";
         QuickHelpText[ catalan ] = "Blanc i negre";
         QuickHelpText[ finnish ] = "Mustavalkoinen";
+        QuickHelpText[ czech ] = "Černobílé";
+        QuickHelpText[ hebrew ] = "Schwarzweiß";
+        QuickHelpText[ thai ] = "Black & White";
+        QuickHelpText[ hindi ] = "काला और सफेद";
     };
     ImageButton BTN_TEX_COLOR
     {
@@ -2270,7 +2483,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Cor" ;
         QuickHelpText [ english_us ] = "Color" ;
-        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ portuguese_brazilian ] = "Cor" ;
         QuickHelpText [ swedish ] = "F�rg" ;
         QuickHelpText [ danish ] = "Farve" ;
         QuickHelpText [ italian ] = "Colore" ;
@@ -2290,6 +2503,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Farbe";
         QuickHelpText[ catalan ] = "Color";
         QuickHelpText[ finnish ] = "V�ri";
+        QuickHelpText[ czech ] = "Barva";
+        QuickHelpText[ hebrew ] = "Farbe";
+        QuickHelpText[ thai ] = "Color";
+        QuickHelpText[ hindi ] = "रंग";
     };
     FixedText FT_TEX_MODE
     {
@@ -2298,7 +2515,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Modus" ;
         Text [ ENGLISH ] = "~Mode" ;
         Text [ english_us ] = "~Mode" ;
-        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ portuguese_brazilian ] = "Modo" ;
         Text [ swedish ] = "L�ge" ;
         Text [ danish ] = "~Modus" ;
         Text [ italian ] = "Modo" ;
@@ -2316,10 +2533,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "模式";
         Text[ greek ] = "���������";
         Text[ korean ] = "모드";
-        Text[ turkish ] = "Kip";
+        Text[ turkish ] = "~Kip";
         Text[ catalan ] = "Mode";
         Text[ finnish ] = "Tila";
         Text[ thai ] = "โหมด";
+        Text[ czech ] = "Režim";
+        Text[ hebrew ] = "‮מצב עבודה‬";
+        Text[ hindi ] = "प्रकार";
     };
     ImageButton BTN_TEX_REPLACE
     {
@@ -2335,7 +2555,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "S� textura" ;
         QuickHelpText [ english_us ] = "Only Texture" ;
-        QuickHelpText [ portuguese_brazilian ] = "Nur Textur" ;
+        QuickHelpText [ portuguese_brazilian ] = "Somente textura" ;
         QuickHelpText [ swedish ] = "Bara textur" ;
         QuickHelpText [ danish ] = "Kun tekstur" ;
         QuickHelpText [ italian ] = "Solo struttura" ;
@@ -2355,6 +2575,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Nur Textur";
         QuickHelpText[ catalan ] = "Nom�s textura";
         QuickHelpText[ finnish ] = "Vain pintakuvio";
+        QuickHelpText[ czech ] = "Pouze textura";
+        QuickHelpText[ hebrew ] = "Nur Textur";
+        QuickHelpText[ thai ] = "Only Texture";
+        QuickHelpText[ hindi ] = "केवल बनावट";
     };
     ImageButton BTN_TEX_MODULATE
     {
@@ -2370,7 +2594,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Textura e sombreado" ;
         QuickHelpText [ english_us ] = "Texture and Shading" ;
-        QuickHelpText [ portuguese_brazilian ] = "Textur und Schattierung" ;
+        QuickHelpText [ portuguese_brazilian ] = "Textura e Sombreado" ;
         QuickHelpText [ swedish ] = "Textur och skugga" ;
         QuickHelpText [ danish ] = "Tekstur og nuance" ;
         QuickHelpText [ italian ] = "Struttura e ombre" ;
@@ -2390,6 +2614,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Textur und Schattierung";
         QuickHelpText[ catalan ] = "Textura i ombres";
         QuickHelpText[ finnish ] = "Pintakuvio ja varjostus";
+        QuickHelpText[ czech ] = "Textura a stínování";
+        QuickHelpText[ hebrew ] = "Textur und Schattierung";
+        QuickHelpText[ thai ] = "Texture and Shading";
+        QuickHelpText[ hindi ] = "बनावट और छाया करना";
     };
     ImageButton BTN_TEX_BLEND
     {
@@ -2405,7 +2633,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Textura, sombras e cor" ;
         QuickHelpText [ english_us ] = "Texture, Shadow and Color" ;
-        QuickHelpText [ portuguese_brazilian ] = "Textur, Schattierung und Farbe" ;
+        QuickHelpText [ portuguese_brazilian ] = "Textura, Sombreado e Cor" ;
         QuickHelpText [ swedish ] = "Textur, skugga och f�rg" ;
         QuickHelpText [ danish ] = "Tekstur, nuance og farve" ;
         QuickHelpText [ italian ] = "Struttura, ombra e colore" ;
@@ -2425,6 +2653,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Textur, Schattierung und Farbe";
         QuickHelpText[ catalan ] = "Textura, ombra i color";
         QuickHelpText[ finnish ] = "Pintakuvio, varjostus ja v�ri";
+        QuickHelpText[ czech ] = "Textura , stínování a barva";
+        QuickHelpText[ hebrew ] = "Textur, Schattierung und Farbe";
+        QuickHelpText[ thai ] = "Texture, Shadow and Color";
+        QuickHelpText[ hindi ] = "बनावट, छाया और रंग";
     };
     FixedText FT_TEX_PROJECTION_X
     {
@@ -2433,7 +2665,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Projektion X" ;
         Text [ ENGLISH ] = "~Projection X" ;
         Text [ english_us ] = "~Projection X" ;
-        Text [ portuguese_brazilian ] = "Projektion X" ;
+        Text [ portuguese_brazilian ] = "Proje��o X" ;
         Text [ swedish ] = "Projektion X" ;
         Text [ danish ] = "Projektion X" ;
         Text [ italian ] = "Proiezione X" ;
@@ -2451,10 +2683,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "投影 X";
         Text[ greek ] = "������� X";
         Text[ korean ] = "투영상 X";
-        Text[ turkish ] = "�zd���m X";
+        Text[ turkish ] = "X �~zd���m�";
         Text[ catalan ] = "Projecci� X";
         Text[ finnish ] = "X-projektio";
         Text[ thai ] = "การฉาย X";
+        Text[ czech ] = "Projekce X";
+        Text[ hebrew ] = "‮היטל X‬";
+        Text[ hindi ] = "प्रक्षेप X";
     };
     ImageButton BTN_TEX_OBJECT_X
     {
@@ -2470,7 +2705,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Espec�fico do objecto" ;
         QuickHelpText [ english_us ] = "Object-Specific" ;
-        QuickHelpText [ portuguese_brazilian ] = "Objektspezifisch" ;
+        QuickHelpText [ portuguese_brazilian ] = "Espec�fico do objeto" ;
         QuickHelpText [ swedish ] = "Objektspecifik" ;
         QuickHelpText [ danish ] = "Objektspecifik" ;
         QuickHelpText [ italian ] = "Specifico per l'oggetto" ;
@@ -2490,6 +2725,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Objektspezifisch";
         QuickHelpText[ catalan ] = "Espec�fic de l'objecte";
         QuickHelpText[ finnish ] = "Objektikohtainen";
+        QuickHelpText[ czech ] = "Specificky pro objekt";
+        QuickHelpText[ hebrew ] = "Objektspezifisch";
+        QuickHelpText[ thai ] = "Object-Specific";
+        QuickHelpText[ hindi ] = "वस्तु-विशिष्ट";
     };
     ImageButton BTN_TEX_PARALLEL_X
     {
@@ -2505,7 +2744,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Paralelo" ;
         QuickHelpText [ english_us ] = "Parallel" ;
-        QuickHelpText [ portuguese_brazilian ] = "Parallel" ;
+        QuickHelpText [ portuguese_brazilian ] = "Paralelo" ;
         QuickHelpText [ swedish ] = "Parallell" ;
         QuickHelpText [ danish ] = "Parallel" ;
         QuickHelpText [ italian ] = "Parallelo" ;
@@ -2525,6 +2764,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Parallel";
         QuickHelpText[ catalan ] = "Paral.lel";
         QuickHelpText[ finnish ] = "Yhdensuuntainen";
+        QuickHelpText[ czech ] = "Rovnoběžně";
+        QuickHelpText[ hebrew ] = "Parallel";
+        QuickHelpText[ thai ] = "Parallel";
+        QuickHelpText[ hindi ] = "समानान्तर";
     };
     ImageButton BTN_TEX_CIRCLE_X
     {
@@ -2540,7 +2783,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Circular" ;
         QuickHelpText [ english_us ] = "Circular" ;
-        QuickHelpText [ portuguese_brazilian ] = "Kreisf?mig" ;
+        QuickHelpText [ portuguese_brazilian ] = "Circular" ;
         QuickHelpText [ swedish ] = "Cirkelformad" ;
         QuickHelpText [ danish ] = "Cirkelformet" ;
         QuickHelpText [ italian ] = "Circolare" ;
@@ -2560,6 +2803,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Kreisf�rmig";
         QuickHelpText[ catalan ] = "Circular";
         QuickHelpText[ finnish ] = "Ympyr�n muotoinen";
+        QuickHelpText[ czech ] = "Kruhově";
+        QuickHelpText[ hebrew ] = "Kreisförmig";
+        QuickHelpText[ thai ] = "Circular";
+        QuickHelpText[ hindi ] = "वर्तुलाकार";
     };
     FixedText FT_TEX_PROJECTION_Y
     {
@@ -2568,7 +2815,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Projektion Y" ;
         Text [ ENGLISH ] = "~Projection Y" ;
         Text [ english_us ] = "P~rojection Y" ;
-        Text [ portuguese_brazilian ] = "Projektion Y" ;
+        Text [ portuguese_brazilian ] = "Proje��o Y" ;
         Text [ swedish ] = "Projektion Y" ;
         Text [ danish ] = "Projektion Y" ;
         Text [ italian ] = "Proiezione Y" ;
@@ -2586,10 +2833,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "投影 Y";
         Text[ greek ] = "������� Y";
         Text[ korean ] = "투영상 Y";
-        Text[ turkish ] = "�zd���m Y";
+        Text[ turkish ] = "Y �~zd���m�";
         Text[ catalan ] = "Projecci� Y";
         Text[ finnish ] = "Y-projektio";
         Text[ thai ] = "การฉาย Y";
+        Text[ czech ] = "Projekce Y";
+        Text[ hebrew ] = "‮היטל Y‬";
+        Text[ hindi ] = "प्रक्षेप Y";
     };
     ImageButton BTN_TEX_OBJECT_Y
     {
@@ -2605,7 +2855,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Espec�fico do objecto" ;
         QuickHelpText [ english_us ] = "Object-Specific" ;
-        QuickHelpText [ portuguese_brazilian ] = "Objektspezifisch" ;
+        QuickHelpText [ portuguese_brazilian ] = "Espec�fico do objeto" ;
         QuickHelpText [ swedish ] = "Objektspecifik" ;
         QuickHelpText [ danish ] = "Objektspecifik" ;
         QuickHelpText [ italian ] = "Specifico per l'oggetto" ;
@@ -2625,6 +2875,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Objektspezifisch";
         QuickHelpText[ catalan ] = "Espec�fic de l'objecte";
         QuickHelpText[ finnish ] = "Objektikohtainen";
+        QuickHelpText[ czech ] = "Specifický pro objekt";
+        QuickHelpText[ hebrew ] = "Objektspezifisch";
+        QuickHelpText[ thai ] = "Object-Specific";
+        QuickHelpText[ hindi ] = "वस्तु-विशिष्ट";
     };
     ImageButton BTN_TEX_PARALLEL_Y
     {
@@ -2640,7 +2894,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Paralelo" ;
         QuickHelpText [ english_us ] = "Parallel" ;
-        QuickHelpText [ portuguese_brazilian ] = "Parallel" ;
+        QuickHelpText [ portuguese_brazilian ] = "Paralelo" ;
         QuickHelpText [ swedish ] = "Parallell" ;
         QuickHelpText [ danish ] = "Parallel" ;
         QuickHelpText [ italian ] = "Parallelo" ;
@@ -2660,6 +2914,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Parallel";
         QuickHelpText[ catalan ] = "Paral.lel";
         QuickHelpText[ finnish ] = "Yhdensuuntainen";
+        QuickHelpText[ czech ] = "Rovnoběžně";
+        QuickHelpText[ hebrew ] = "Parallel";
+        QuickHelpText[ thai ] = "Parallel";
+        QuickHelpText[ hindi ] = "समानान्तर";
     };
     ImageButton BTN_TEX_CIRCLE_Y
     {
@@ -2675,7 +2933,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Circular" ;
         QuickHelpText [ english_us ] = "Circular" ;
-        QuickHelpText [ portuguese_brazilian ] = "Kreisf?mig" ;
+        QuickHelpText [ portuguese_brazilian ] = "Circular" ;
         QuickHelpText [ swedish ] = "Cirkelformad" ;
         QuickHelpText [ danish ] = "Cirkelformet" ;
         QuickHelpText [ italian ] = "Circolare" ;
@@ -2695,6 +2953,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Kreisf�rmig";
         QuickHelpText[ catalan ] = "Circular";
         QuickHelpText[ finnish ] = "Ympyr�n muotoinen";
+        QuickHelpText[ czech ] = "Kruhově";
+        QuickHelpText[ hebrew ] = "Kreisförmig";
+        QuickHelpText[ thai ] = "Circular";
+        QuickHelpText[ hindi ] = "वर्तुलाकार";
     };
     FixedText FT_TEX_FILTER
     {
@@ -2703,7 +2965,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Filtern" ;
         Text [ ENGLISH ] = "~Filtering" ;
         Text [ english_us ] = "~Filtering" ;
-        Text [ portuguese_brazilian ] = "Filtern" ;
+        Text [ portuguese_brazilian ] = "Filtragem" ;
         Text [ swedish ] = "Filtrera" ;
         Text [ danish ] = "Filtrer" ;
         Text [ italian ] = "Filtra" ;
@@ -2721,10 +2983,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "过滤";
         Text[ greek ] = "�����������";
         Text[ korean ] = "필터링";
-        Text[ turkish ] = "Filtrele";
+        Text[ turkish ] = "~S�zge�leme";
         Text[ catalan ] = "Filtratge";
         Text[ finnish ] = "Suodatus";
         Text[ thai ] = "การกรอง";
+        Text[ czech ] = "Filtrování";
+        Text[ hebrew ] = "‮סינון‬";
+        Text[ hindi ] = "फिल्टर करना";
     };
     ImageButton BTN_TEX_FILTER
     {
@@ -2740,7 +3005,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Activa/Desactiva filtro" ;
         QuickHelpText [ english_us ] = "Filtering On/Off" ;
-        QuickHelpText [ portuguese_brazilian ] = "Filtern ein/aus" ;
+        QuickHelpText [ portuguese_brazilian ] = "Ativar/desativar Filtro" ;
         QuickHelpText [ swedish ] = "Filtrera p�/av" ;
         QuickHelpText [ danish ] = "Aktiver/deaktiver filtrering" ;
         QuickHelpText [ italian ] = "Filtro on/off" ;
@@ -2760,6 +3025,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Filtern ein/aus";
         QuickHelpText[ catalan ] = "Activa/desactiva filtraci�";
         QuickHelpText[ finnish ] = "Suodatus on/off";
+        QuickHelpText[ czech ] = "Filtrování zap/vyp";
+        QuickHelpText[ hebrew ] = "Filtern ein/aus";
+        QuickHelpText[ thai ] = "Filtering On/Off";
+        QuickHelpText[ hindi ] = "फिल्टर करना ऑन्/ऑफ़्";
     };
     FixedLine FL_TEXTURE
     {
@@ -2768,7 +3037,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "Texturen" ;
         Text [ ENGLISH ] = "Textures" ;
         Text [ english_us ] = "Textures" ;
-        Text [ portuguese_brazilian ] = "Texturen" ;
+        Text [ portuguese_brazilian ] = "Texturas" ;
         Text [ swedish ] = "Texturer" ;
         Text [ danish ] = "Teksturer" ;
         Text [ italian ] = "Motivi" ;
@@ -2786,10 +3055,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "纹理";
         Text[ greek ] = "���";
         Text[ korean ] = "질감";
-        Text[ turkish ] = "Y�zeyler";
+        Text[ turkish ] = "Doku";
         Text[ catalan ] = "Textures";
         Text[ finnish ] = "Pintakuviot";
         Text[ thai ] = "พื้นผิว";
+        Text[ czech ] = "Textury";
+        Text[ hebrew ] = "‮מרקם‬";
+        Text[ hindi ] = "बनावट";
     };
      // Material
     /*  Control CTL_MATERIAL
@@ -2810,7 +3082,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Favoriten" ;
         Text [ ENGLISH ] = "~Favorites" ;
         Text [ english_us ] = "~Favorites" ;
-        Text [ portuguese_brazilian ] = "Favoriten" ;
+        Text [ portuguese_brazilian ] = "Favoritos" ;
         Text [ swedish ] = "Favoriter" ;
         Text [ danish ] = "~Favoriter" ;
         Text [ italian ] = "Preferiti" ;
@@ -2828,10 +3100,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "收藏";
         Text[ greek ] = "�����������";
         Text[ korean ] = "즐겨찾기";
-        Text[ turkish ] = "S�k kullan�lanlar";
+        Text[ turkish ] = "~Favoriler";
         Text[ catalan ] = "Predilectes";
         Text[ finnish ] = "Suosikit";
         Text[ thai ] = "ชื่นชอบ";
+        Text[ czech ] = "Oblíbené";
+        Text[ hebrew ] = "‮מועדפים‬";
+        Text[ hindi ] = "प्रिय";
     };
     ListBox LB_MAT_FAVORITES
     {
@@ -2878,12 +3153,12 @@ DockingWindow RID_SVXFLOAT_3D
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "Benutzerdefiniert" ; > ;
-            < "Metall" ; > ;
-            < "Gold" ; > ;
-            < "Chrom" ; > ;
-            < "Plastik" ; > ;
-            < "Holz" ; > ;
+            < "Definido pelo usu�rio" ; > ;
+            < "Metal" ; > ;
+            < "Ouro" ; > ;
+            < "Cromado" ; > ;
+            < "Pl�stico" ; > ;
+            < "Madeira" ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -2959,16 +3234,16 @@ DockingWindow RID_SVXFLOAT_3D
     };
     StringList [ polish ] =
     {
-            < "Ustawienia indywidualne" ; > ;
+            < "U�ytkownika" ; > ;
         < "Metal" ; > ;
         < "Z�oto" ; > ;
         < "Chrom" ; > ;
-        < "Plastyk" ; > ;
+        < "Plastik" ; > ;
         < "Drewno" ; > ;
     };
     StringList [ japanese ] =
     {
-            < "ユーザー設定" ; > ;
+            < "ユーザー定義" ; > ;
         < "メタル" ; > ;
         < "ゴールド" ; > ;
         < "クロム" ; > ;
@@ -3074,6 +3349,33 @@ DockingWindow RID_SVXFLOAT_3D
         < "พลาสติก" ; > ;
         < "ไม้" ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Uživatelem definované" ; > ;
+        < "Kov" ; > ;
+        < "Zlato" ; > ;
+        < "Chróm" ; > ;
+        < "Plast" ; > ;
+        < "Dřevo" ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮מוגדר בידי המשתמש‬" ; > ;
+        < "‮מתכתי‬" ; > ;
+        < "‮זהב‬" ; > ;
+        < "‮כרום‬" ; > ;
+        < "‮פלסטיק‬" ; > ;
+        < "‮עץ‬" ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "उपभोक्ता से परिभाषित" ; > ;
+        < "लोहा" ; > ;
+        < "सोना" ; > ;
+        < "पीला रंग" ; > ;
+        < "प्लास्टिक" ; > ;
+        < "लकडी" ; > ;
+    };
     };
     FixedText FT_MAT_COLOR
     {
@@ -3082,7 +3384,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Objektfarbe" ;
         Text [ ENGLISH ] = "~Object color" ;
         Text [ english_us ] = "~Object color" ;
-        Text [ portuguese_brazilian ] = "Objektfarbe" ;
+        Text [ portuguese_brazilian ] = "Cor do objeto" ;
         Text [ swedish ] = "Objektf�rg" ;
         Text [ danish ] = "~Objektfarve" ;
         Text [ italian ] = "Colore oggetto" ;
@@ -3100,10 +3402,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "对象颜色";
         Text[ greek ] = "����� ������������";
         Text[ korean ] = "개체 색상";
-        Text[ turkish ] = "Nesne rengi";
+        Text[ turkish ] = "~Nesne rengi";
         Text[ catalan ] = "Color de l'objecte";
         Text[ finnish ] = "Objektin v�ri";
         Text[ thai ] = "สีวัตถุ";
+        Text[ czech ] = "Barva objektu";
+        Text[ hebrew ] = "‮צבע עצם‬";
+        Text[ hindi ] = "वस्तु का रंग";
     };
     ListBox LB_MAT_COLOR
     {
@@ -3127,7 +3432,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Caixa de di�logo das cores" ;
         QuickHelpText [ english_us ] = "Colors Dialog" ;
-        QuickHelpText [ portuguese_brazilian ] = "Farbe ?er Farbdialog w?hlen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Caixa de Di�logo de cores" ;
         QuickHelpText [ swedish ] = "V�lj f�rg via f�rgdialog" ;
         QuickHelpText [ danish ] = "V�lg farve via farvedialog" ;
         QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
@@ -3143,10 +3448,14 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ dutch ] = "Kleur via kleurendialoog kiezen";
         QuickHelpText[ chinese_simplified ] = "颜色对话栏";
         QuickHelpText[ greek ] = "������� �������� ���� �������� ��������";
-        QuickHelpText[ korean ] = "색상 대화상자를 통해 색상 선택";
+        QuickHelpText[ korean ] = "색상 대화 상자를 통해 색상 선택";
         QuickHelpText[ turkish ] = "Rengi, renk penceresinde se�";
         QuickHelpText[ catalan ] = "Quadre de di�leg de colors";
         QuickHelpText[ finnish ] = "V�rien valintaikkuna";
+        QuickHelpText[ czech ] = "Dialog barev";
+        QuickHelpText[ hebrew ] = "Farbe über Farbdialog wählen";
+        QuickHelpText[ thai ] = "Colors Dialog";
+        QuickHelpText[ hindi ] = "रंगों का डयलॉग";
     };
     FixedText FT_MAT_EMISSION
     {
@@ -3155,7 +3464,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Leuchtfarbe" ;
         Text [ ENGLISH ] = "~Emission" ;
         Text [ english_us ] = "~Illumination color" ;
-        Text [ portuguese_brazilian ] = "Leuchtfarbe" ;
+        Text [ portuguese_brazilian ] = "Cor da ilumina��o" ;
         Text [ swedish ] = "Lysf�rg" ;
         Text [ danish ] = "~Lysfarve" ;
         Text [ italian ] = "Illuminazione" ;
@@ -3173,10 +3482,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "照明色";
         Text[ greek ] = "����� ��������";
         Text[ korean ] = "조명색";
-        Text[ turkish ] = "I��k rengi";
+        Text[ turkish ] = "~Ayd�nlatma rengi";
         Text[ catalan ] = "Il.luminaci�";
         Text[ finnish ] = "Valaistuksen v�ri";
         Text[ thai ] = "สีที่สว่าง";
+        Text[ czech ] = "Barva pro osvětlení";
+        Text[ hebrew ] = "‮צבע התאורה‬";
+        Text[ hindi ] = "चमक का रंग";
     };
     ListBox LB_MAT_EMISSION
     {
@@ -3200,7 +3512,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Caixa de di�logo das cores" ;
         QuickHelpText [ english_us ] = "Colors Dialog" ;
-        QuickHelpText [ portuguese_brazilian ] = "Farbe ?er Farbdialog w?hlen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Caixa de Di�logo de cores" ;
         QuickHelpText [ swedish ] = "V�lj f�rg via f�rgdialog" ;
         QuickHelpText [ danish ] = "V�lg farve via farvedialog" ;
         QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
@@ -3220,6 +3532,10 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ turkish ] = "Rengi, renk penceresinde se�";
         QuickHelpText[ catalan ] = "Quadre de di�leg de colors";
         QuickHelpText[ finnish ] = "V�rien valintaikkuna";
+        QuickHelpText[ czech ] = "Dialog barev";
+        QuickHelpText[ hebrew ] = "Farbe über Farbdialog wählen";
+        QuickHelpText[ thai ] = "Colors Dialog";
+        QuickHelpText[ hindi ] = "रंगों का डयलॉग";
     };
     FixedText FT_MAT_SPECULAR
     {
@@ -3228,7 +3544,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Farbe" ;
         Text [ ENGLISH ] = "~Color" ;
         Text [ english_us ] = "~Color" ;
-        Text [ portuguese_brazilian ] = "Farbe" ;
+        Text [ portuguese_brazilian ] = "Cor" ;
         Text [ swedish ] = "F�rg" ;
         Text [ danish ] = "F~arve" ;
         Text [ italian ] = "Colore" ;
@@ -3246,10 +3562,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "颜色";
         Text[ greek ] = "�����";
         Text[ korean ] = "색상";
-        Text[ turkish ] = "Renk";
+        Text[ turkish ] = "~Renk";
         Text[ catalan ] = "Color";
         Text[ finnish ] = "V�ri";
         Text[ thai ] = "สี";
+        Text[ czech ] = "Barva";
+        Text[ hebrew ] = "‮צבע‬";
+        Text[ hindi ] = "रंग";
     };
     ListBox LB_MAT_SPECULAR
     {
@@ -3273,7 +3592,7 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Caixa de di�logo das cores" ;
         QuickHelpText [ english_us ] = "Colors Dialog" ;
-        QuickHelpText [ portuguese_brazilian ] = "Farbe ?er Farbdialog w?hlen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Caixa de Di�logo de cores" ;
         QuickHelpText [ swedish ] = "V�lj f�rg via f�rgdialog" ;
         QuickHelpText [ danish ] = "V�lg farve via farvedialog" ;
         QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
@@ -3289,10 +3608,14 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ dutch ] = "Kleur via kleurendialoog kiezen";
         QuickHelpText[ chinese_simplified ] = "借助颜色对话栏选择颜色";
         QuickHelpText[ greek ] = "������� �������� ���� ��� �������� ��������";
-        QuickHelpText[ korean ] = "색상 대화상자를 통해 색상 선택";
+        QuickHelpText[ korean ] = "색상 대화 상자를 통해 색상 선택";
         QuickHelpText[ turkish ] = "Rengi, renk penceresinde se�";
         QuickHelpText[ catalan ] = "Quadre de di�leg de colors";
         QuickHelpText[ finnish ] = "V�rien valintaikkuna";
+        QuickHelpText[ czech ] = "Dialog barev";
+        QuickHelpText[ hebrew ] = "Farbe über Farbdialog wählen";
+        QuickHelpText[ thai ] = "Colors Dialog";
+        QuickHelpText[ hindi ] = "रंगों का डयलॉग";
     };
     FixedText FT_MAT_SPECULAR_INTENSITY
     {
@@ -3301,7 +3624,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "~Intensit�t" ;
         Text [ ENGLISH ] = "~Intensity" ;
         Text [ english_us ] = "I~ntensity" ;
-        Text [ portuguese_brazilian ] = "Intensit?t" ;
+        Text [ portuguese_brazilian ] = "Intensidade" ;
         Text [ swedish ] = "Intensitet" ;
         Text [ danish ] = "~Intensitet" ;
         Text [ italian ] = "Intensit�" ;
@@ -3319,10 +3642,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "强度";
         Text[ greek ] = "������";
         Text[ korean ] = "강도";
-        Text[ turkish ] = "Yo�unluk";
+        Text[ turkish ] = "~Yo�unluk";
         Text[ catalan ] = "Intensitat";
         Text[ finnish ] = "Intensiteetti";
         Text[ thai ] = "ความเข้ม";
+        Text[ czech ] = "Intenzita";
+        Text[ hebrew ] = "‮עוצמת אור‬";
+        Text[ hindi ] = "तीव्रता";
     };
     MetricField MTR_MAT_SPECULAR_INTENSITY
     {
@@ -3347,7 +3673,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text = "Glanzpunkt" ;
         Text [ ENGLISH ] = "Specular" ;
         Text [ english_us ] = "Specular" ;
-        Text [ portuguese_brazilian ] = "Glanzpunkt" ;
+        Text [ portuguese_brazilian ] = "Especularidade" ;
         Text [ swedish ] = "Spegelglans" ;
         Text [ danish ] = "Spejlglans" ;
         Text [ italian ] = "Riflesso" ;
@@ -3365,10 +3691,13 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "发光点";
         Text[ greek ] = "������ ���������";
         Text[ korean ] = "반사";
-        Text[ turkish ] = "Parlama noktas�";
+        Text[ turkish ] = "Specular";
         Text[ catalan ] = "Punt de brillantor";
         Text[ finnish ] = "Heijastus";
         Text[ thai ] = "แสงวาว";
+        Text[ czech ] = "Specular";
+        Text[ hebrew ] = "‮הבלטה‬";
+        Text[ hindi ] = "दर्पण के गुणवाला";
     };
     /*
     ImageButton BTN_MAT_FAVORITES {
@@ -3421,12 +3750,15 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "材料";
         Text[ greek ] = "�����";
         Text[ korean ] = "재질";
-        Text[ turkish ] = "Malzeme";
+        Text[ turkish ] = "Materyal";
         Text[ catalan ] = "Material";
         Text[ finnish ] = "Materiaali";
         Text[ thai ] = "วัสดุ";
+        Text[ czech ] = "Materiál";
+        Text[ hebrew ] = "‮חומר‬";
+        Text[ hindi ] = "पदार्थ";
     };
-    Text [ portuguese_brazilian ] = "3D-Effekte" ;
+    Text [ portuguese_brazilian ] = "Efeitos 3D" ;
     Text [ swedish ] = "3D-effekter" ;
     Text [ danish ] = "3D-effekter" ;
     Text [ italian ] = "Effetti 3D" ;
@@ -3436,7 +3768,7 @@ DockingWindow RID_SVXFLOAT_3D
     Text [ portuguese ] = "Efeitos 3D" ;
     Text[ chinese_simplified ] = "3 维效果";
     Text[ russian ] = "���������� �������";
-    Text[ polish ] = "Efekty 3-W";
+    Text[ polish ] = "Efekty 3D";
     Text[ japanese ] = "3D 効果";
     Text[ chinese_traditional ] = "3D 效果";
     Text[ arabic ] = "������� ������ �������";
@@ -3613,6 +3945,9 @@ DockingWindow RID_SVXFLOAT_3D
         File = "colordlg_h.bmp";
     };
     Text[ thai ] = "ลักษณะ3มิติ";
+    Text[ czech ] = "3D efekty";
+    Text[ hebrew ] = "‮פעלולים תלת מימדיים‬";
+    Text[ hindi ] = "3D प्रभाव";
 };
 
 Image RID_SVXIMAGE_LIGHT_ON
@@ -3662,17 +3997,20 @@ String RID_SVXFLOAT3D_FAVORITE
     Text[ italian ] = "Preferito";
     Text[ danish ] = "Favorit";
     Text[ swedish ] = "Favorit";
-    Text[ polish ] = "Faworyt";
-    Text[ portuguese_brazilian ] = "Favorite";
+    Text[ polish ] = "Ulubione";
+    Text[ portuguese_brazilian ] = "Favorito";
     Text[ japanese ] = "お気に入り";
     Text[ korean ] = "즐겨찾기";
     Text[ chinese_simplified ] = "收藏";
     Text[ chinese_traditional ] = "我的最愛";
-    Text[ turkish ] = "Favorite";
+    Text[ turkish ] = "S�k kullan�lan";
     Text[ arabic ] = "������";
     Text[ catalan ] = "Predilecte";
     Text[ finnish ] = "Suosikki";
     Text[ thai ] = "ชื่นชอบ";
+    Text[ czech ] = "Oblíbený";
+    Text[ hebrew ] = "‮מועדף‬";
+    Text[ hindi ] = "प्रिय";
 };
 String RID_SVXFLOAT3D_FIX_X
 {
@@ -3698,7 +4036,10 @@ String RID_SVXFLOAT3D_FIX_X
     Text[ arabic ] = "X";
     Text[ catalan ] = "X";
     Text[ finnish ] = "X";
-    Text[ thai ] = "ตัวเลข";
+    Text[ thai ] = "X";
+    Text[ czech ] = "X";
+    Text[ hebrew ] = "X";
+    Text[ hindi ] = "X";
 };
 String RID_SVXFLOAT3D_FIX_Y
 {
@@ -3724,6 +4065,10 @@ String RID_SVXFLOAT3D_FIX_Y
     Text[ arabic ] = "Y";
     Text[ catalan ] = "Y";
     Text[ finnish ] = "Y";
+    Text[ czech ] = "Y";
+    Text[ hebrew ] = "Y";
+    Text[ thai ] = "Y";
+    Text[ hindi ] = "Y";
 };
 String RID_SVXFLOAT3D_FIX_Z
 {
@@ -3749,6 +4094,10 @@ String RID_SVXFLOAT3D_FIX_Z
     Text[ arabic ] = "Z";
     Text[ catalan ] = "Z";
     Text[ finnish ] = "Z";
+    Text[ czech ] = "Z";
+    Text[ hebrew ] = "Z";
+    Text[ thai ] = "Z";
+    Text[ hindi ] = "Z";
 };
 String RID_SVXFLOAT3D_FIX_R
 {
@@ -3765,7 +4114,7 @@ String RID_SVXFLOAT3D_FIX_R
     Text[ danish ] = "R:";
     Text[ swedish ] = "R:";
     Text[ polish ] = "R:";
-    Text[ portuguese_brazilian ] = "R:";
+    Text[ portuguese_brazilian ] = "Vermelho:";
     Text[ japanese ] = "R:";
     Text[ korean ] = "R:";
     Text[ chinese_simplified ] = "R:";
@@ -3774,6 +4123,10 @@ String RID_SVXFLOAT3D_FIX_R
     Text[ arabic ] = "R:";
     Text[ catalan ] = "R";
     Text[ finnish ] = "R:";
+    Text[ czech ] = "R:";
+    Text[ hebrew ] = "R:";
+    Text[ thai ] = "R:";
+    Text[ hindi ] = "R:";
 };
 String RID_SVXFLOAT3D_FIX_G
 {
@@ -3790,7 +4143,7 @@ String RID_SVXFLOAT3D_FIX_G
     Text[ danish ] = "G:";
     Text[ swedish ] = "G:";
     Text[ polish ] = "G:";
-    Text[ portuguese_brazilian ] = "G:";
+    Text[ portuguese_brazilian ] = "Verde:";
     Text[ japanese ] = "G:";
     Text[ korean ] = "G:";
     Text[ chinese_simplified ] = "G:";
@@ -3800,6 +4153,10 @@ String RID_SVXFLOAT3D_FIX_G
     Text[ catalan ] = "G";
     Text[ finnish ] = "G:";
     Text[ language_user1 ] = "BLG 27.07.00 : \"G\" vom RGB-Farbmodel";
+    Text[ czech ] = "G:";
+    Text[ hebrew ] = "G:";
+    Text[ thai ] = "G:";
+    Text[ hindi ] = "G:";
 };
 String RID_SVXFLOAT3D_FIX_B
 {
@@ -3816,7 +4173,7 @@ String RID_SVXFLOAT3D_FIX_B
     Text[ danish ] = "B:";
     Text[ swedish ] = "B:";
     Text[ polish ] = "B:";
-    Text[ portuguese_brazilian ] = "B:";
+    Text[ portuguese_brazilian ] = "Azul:";
     Text[ japanese ] = "B:";
     Text[ korean ] = "B:";
     Text[ chinese_simplified ] = "B:";
@@ -3826,7 +4183,24 @@ String RID_SVXFLOAT3D_FIX_B
     Text[ catalan ] = "B";
     Text[ finnish ] = "B:";
 
+    Text[ czech ] = "B:";
+    Text[ hebrew ] = "B:";
+    Text[ thai ] = "B:";
+    Text[ hindi ] = "B:";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
