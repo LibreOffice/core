@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-01 14:00:04 $
+ *  last change: $Author: cmc $ $Date: 2001-08-13 11:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,14 +308,27 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
 
     // try to get an XStatusIndicator from the Medium
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
-    SfxItemSet* pSet = rMedium.GetItemSet();
-    if (pSet)
+
+    uno::Reference <lang::XUnoTunnel> xTunnel;
+    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    SmModel *pModel = reinterpret_cast<SmModel *>
+        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+
+    if (pModel)
     {
-        const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
-            pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
-        if (pItem)
+        SmDocShell *pDocShell =
+            static_cast<SmDocShell*>(pModel->GetObjectShell());
+
+        if (pDocShell->GetMedium())
         {
-            pItem->GetValue() >>= xStatusIndicator;
+            SfxItemSet* pSet = pDocShell->GetMedium()->GetItemSet();
+            if (pSet)
+            {
+                const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
+                    pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+                if (pItem)
+                    pItem->GetValue() >>= xStatusIndicator;
+            }
         }
     }
 
