@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-19 19:07:34 $
+ *  last change: $Author: iha $ $Date: 2003-11-22 11:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,31 @@ void addGridsToCooSys(  const uno::Reference< XDiagram >& xDiagram
     }
 }
 
+void addSeriesToPlotter( const uno::Sequence< uno::Reference< XDataSeriesTreeNode > >& rSeriesList
+                        , VSeriesPlotter* pPlotter
+                        , StackMode eYStackMode )
+{
+    for( sal_Int32 nS = 0; nS < rSeriesList.getLength(); ++nS )
+    {
+        uno::Reference< XDataSeries > xDataSeries( rSeriesList[nS], uno::UNO_QUERY );
+        if(!xDataSeries.is())
+            continue;
+        VDataSeries* pTestSeries = new VDataSeries( xDataSeries );
+        //virtual void addSeries( VDataSeries* pSeries, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
+        sal_Int32 nXSlot2 = 0;
+        if(eYStackMode==StackMode_NONE)
+            nXSlot2=-1;
+        //@todo
+        pPlotter->addSeries( pTestSeries, nXSlot2 );
+    // pPlotter->addSeries( pTestSeries, nXSlot2, nYSlot );
+        /*
+        if(nN==nSeriesCount-1)
+            pPlotter->addSeries( pTestSeries, -1 );
+        else
+            pPlotter->addSeries( pTestSeries, 0 );
+        */
+    }
+}
 void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysList
             , const uno::Reference< uno::XComponentContext>& xCC
             , const uno::Reference< drawing::XShapes>& xPageShapes
@@ -366,56 +391,53 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
         uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aXSlots( xChartTypeGroup->getChildren() );
         for( sal_Int32 nX = 0; nX < aXSlots.getLength(); ++nX )
         {
-            uno::Reference< XDataSeriesTreeParent > xXSlot = uno::Reference< XDataSeriesTreeParent >::query( aXSlots[nX] );
+            uno::Reference< XDataSeriesTreeParent > xXSlot( aXSlots[nX], uno::UNO_QUERY );
             DBG_ASSERT( xXSlot.is(), "a node for the first dimension of a chart tree should always be a parent" );
             if(!xXSlot.is())
                 continue;
-            uno::Reference< XStackableScaleGroup > xStackGroup = uno::Reference< XStackableScaleGroup >::query( xXSlot );
-            if( xStackGroup.is() &&
-                xStackGroup->getStackMode()==StackMode_STACKED)
+            uno::Reference< XStackableScaleGroup > xStackGroup( xXSlot, uno::UNO_QUERY );
+            if( xStackGroup.is() && xStackGroup->getStackMode()==StackMode_STACKED)
                 nXSlot++;
-            uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aYSlots(
-                xXSlot->getChildren() );
+            uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aYSlots( xXSlot->getChildren() );
             for( sal_Int32 nY = 0; nY < aYSlots.getLength(); ++nY )
             {
-                uno::Reference< XDataSeriesTreeParent > xYSlot = uno::Reference< XDataSeriesTreeParent >::query( aYSlots[nY] );
+                uno::Reference< XDataSeriesTreeParent > xYSlot( aYSlots[nY], uno::UNO_QUERY );
                 DBG_ASSERT( xYSlot.is(), "a node for the second dimension of a chart tree should always be a parent" );
                 if(!xYSlot.is())
                     continue;
-
-                uno::Reference< XScaleGroup > xScaleGroup( xYSlot, uno::UNO_QUERY );
-
-                {
-                    double fCoordinateOrigin[3] = { 0.0, 0.0, 0.0 };
-                    getCoordinateOrigin( fCoordinateOrigin, xScaleGroup->getCoordinateSystem() );
-                    addCooSysToList(rVCooSysList,xScaleGroup->getCoordinateSystem(),fCoordinateOrigin);
-                }
-
                 xStackGroup.set( uno::Reference< XStackableScaleGroup >::query( xYSlot ));
                 StackMode aYStackMode = StackMode_NONE;
                 if(xStackGroup.is())
                     aYStackMode = xStackGroup->getStackMode();
                 if(aYStackMode==StackMode_STACKED)
                     nYSlot++;
-                uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aSeriesList( xYSlot->getChildren() );
-                for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
+                if( 2 == nDimension )
                 {
-                    uno::Reference< XDataSeries > xDataSeries( aSeriesList[nS], uno::UNO_QUERY );
-
-                    VDataSeries* pTestSeries = new VDataSeries( xDataSeries );
-                    //virtual void addSeries( VDataSeries* pSeries, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
-                    sal_Int32 nXSlot2 = 0;
-                    if(aYStackMode==StackMode_NONE)
-                        nXSlot2=-1;
-                    //@todo
-                    apPlotter->addSeries( pTestSeries, nXSlot2 );
-                   // apPlotter->addSeries( pTestSeries, nXSlot2, nYSlot );
-                    /*
-                    if(nN==nSeriesCount-1)
-                        apPlotter->addSeries( pTestSeries, -1 );
-                    else
-                        apPlotter->addSeries( pTestSeries, 0 );
-                    */
+                    uno::Reference< XScaleGroup > xScaleGroup( xYSlot, uno::UNO_QUERY );
+                    {
+                        double fCoordinateOrigin[3] = { 0.0, 0.0, 0.0 };
+                        getCoordinateOrigin( fCoordinateOrigin, xScaleGroup->getCoordinateSystem() );
+                        addCooSysToList(rVCooSysList,xScaleGroup->getCoordinateSystem(),fCoordinateOrigin);
+                    }
+                    addSeriesToPlotter( xYSlot->getChildren(), apPlotter.get(), aYStackMode );
+                 }
+                else
+                {
+                    uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aZSlots( xYSlot->getChildren() );
+                    for( sal_Int32 nZ = 0; nZ < aZSlots.getLength(); ++nZ )
+                    {
+                        uno::Reference< XDataSeriesTreeParent > xZSlot( aZSlots[nZ], uno::UNO_QUERY );
+                        DBG_ASSERT( xZSlot.is(), "a node for the second dimension of a chart tree should always be a parent" );
+                        if(!xZSlot.is())
+                            continue;
+                        uno::Reference< XScaleGroup > xScaleGroup( xZSlot, uno::UNO_QUERY );
+                        {
+                            double fCoordinateOrigin[3] = { 0.0, 0.0, 0.0 };
+                            getCoordinateOrigin( fCoordinateOrigin, xScaleGroup->getCoordinateSystem() );
+                            addCooSysToList(rVCooSysList,xScaleGroup->getCoordinateSystem(),fCoordinateOrigin);
+                        }
+                        addSeriesToPlotter( xZSlot->getChildren(), apPlotter.get(), aYStackMode );
+                    }
                 }
             }
         }
