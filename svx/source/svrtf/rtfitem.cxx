@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:22:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
         {
         case RTF_PARD:
             RTFPardPlain( TRUE, &pSet );
+            ResetPard();
             nStyleNo = 0;
             bPardTokenRead = TRUE;
             break;
