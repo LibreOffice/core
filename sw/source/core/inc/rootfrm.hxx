@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:16:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ public:
     inline  void SetVirtPageNum( const BOOL bOf ) const;
     BOOL    IsDummyPage( USHORT nPageNum ) const;
 
-    BOOL    IsPageAtPos( const Point &rPt ) const;
+    const SwPageFrm* GetPageAtPos( const Point &rPt ) const;
 
     //Der Crsr moechte die zu selektierenden Bereiche wissen.
     void CalcFrmRects( SwShellCrsr&, BOOL bIsTblSel );
