@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 14:28:30 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ void BmpApp::Main( )
     // Param3: output directory
     // Param4: Langugage dependent directory
 
-    ResMgr*     pAppResMgr = new ResMgr( String( RTL_CONSTASCII_USTRINGPARAM( "bmp.res" ) ), NULL, NULL );
+    ResMgr*     pAppResMgr = ResMgr::CreateResMgr( "bmp" );
     MenuBar*    pMB = new MenuBar();
     PopupMenu*  pPB = new PopupMenu();
     String      aLangDir;
