@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:14 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 19:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
 #endif
+#ifndef RTL_DIGEST_H_
+#include <rtl/digest.h>
+#endif
 
 class EncryptionData;
 class ThreadedBuffer;
@@ -97,12 +100,14 @@ protected:
     ::rtl::OUString     sComment;
     Deflater            aDeflater;
     rtlCipher           aCipher;
+    rtlDigest           aDigest;
     CRC32               aCRC;
     ByteChucker         aChucker;
     com::sun::star::packages::zip::ZipEntry             *pCurrentEntry;
     sal_Int16           nMethod, nLevel;
     sal_Bool            bFinished, bEncryptCurrentEntry, bSpanning;
     sal_Int16           nCurrentDiskNumber;
+    ::vos::ORef < EncryptionData >  xCurrentEncryptData;
 
 public:
     ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Bool bNewSpanning );
@@ -123,7 +128,7 @@ public:
     void SAL_CALL setLevel( sal_Int32 nNewLevel )
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL putNextEntry( ::com::sun::star::packages::zip::ZipEntry& rEntry,
-            const vos::ORef < EncryptionData > &rData,
+            vos::ORef < EncryptionData > &rData,
             sal_Bool bEncrypt = sal_False )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void SAL_CALL closeEntry(  )
