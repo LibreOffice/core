@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
+ *  last change: $Author: dr $ $Date: 2001-11-20 10:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3388,7 +3388,7 @@ ExcExterncount::ExcExterncount( RootData* pRD, const BOOL bTableNew ) :
 
 void ExcExterncount::SaveCont( XclExpStream& rStrm )
 {
-    UINT16  nNumTabs = pExcRoot->pDoc->GetTableCount();
+    UINT16  nNumTabs = pExcRoot->pTabBuffer->GetExcTabCount();
 
     if( nNumTabs && bTable )
         nNumTabs--;

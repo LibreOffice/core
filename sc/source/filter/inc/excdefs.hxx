@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-13 12:11:54 $
+ *  last change: $Author: dr $ $Date: 2001-11-20 10:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,10 @@
 #define EXC_TAB_INVALID             0xFFFF      // Deleted refs
 #define EXC_TAB_EXTERNAL            0xFFFE      // Addins, DDE, OLE
 #define EXC_TABBUF_INVALID          0xFFFF
-#define EXC_TABBUF_MASKTAB          0x0000FFFF
-#define EXC_TABBUF_MASKFLAGS        0xFFFF0000
-#define EXC_TABBUF_FLAGIGNORE       0x00010000
-#define EXC_TABBUF_FLAGEXT          0x00020000
+#define EXC_TABBUF_MASKTAB          0x0000FFFFUL
+#define EXC_TABBUF_MASKFLAGS        0xFFFF0000UL
+#define EXC_TABBUF_FLAGIGNORE       0x00010000UL
+#define EXC_TABBUF_FLAGEXT          0x00020000UL
 
 //___________________________________________________________________
 // Style info
