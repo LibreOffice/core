@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-10 13:28:04 $
+ *  last change: $Author: sj $ $Date: 2000-11-13 17:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,17 +217,16 @@ USHORT FillFilter( GraphicFilter& rFilter )
         if ( aFullConfigPath.Len() )
             aFullConfigPath += sal_Unicode(';');
 
-        aFullConfigPath += aToken.getFSysPath( INetURLObject::FSYS_DETECT );;
+        aFullConfigPath += aToken.GetMainURL();
     }
 
     rFilter.SetConfigPath( aFullConfigPath );
-
-    INetURLObject aFilterPath( aPathOpt.GetFilterPath(), INET_PROT_FILE );
-    rFilter.SetFilterPath( aFilterPath.getFSysPath( INetURLObject::FSYS_DETECT ) );
+    rFilter.SetFilterPath( aPathOpt.GetFilterPath() );
 
     INetURLObject aFltOptFile( aPathOpt.GetUserConfigPath(), INET_PROT_FILE );
     aFltOptFile.Append(
         UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( IMPGRF_GRAPHIC_OPTIONS_FILE ) ) );
+
     rFilter.SetOptionsConfigPath( aFltOptFile );
 
     return rFilter.GetImportFormatCount();
