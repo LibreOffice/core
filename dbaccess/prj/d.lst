@@ -1,4 +1,12 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
+mkdir: %_DEST%\xml%_EXT%\uiconfig
+mkdir: %_DEST%\xml%_EXT%\uiconfig\dbquery
+mkdir: %_DEST%\xml%_EXT%\uiconfig\dbrelation
+mkdir: %_DEST%\xml%_EXT%\uiconfig\dbtable
+mkdir: %_DEST%\xml%_EXT%\uiconfig\dbquery\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\dbrelation\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\dbtable\menubar
+
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
@@ -10,5 +18,9 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 *.xml %_DEST%\xml%_EXT%\*.xml
 
 touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid
+
+..\uiconfig\dbquery\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\dbquery\menubar\*.xml
+..\uiconfig\dbrelation\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\dbrelation\menubar\*.xml
+..\uiconfig\dbtable\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\dbtable\menubar\*.xml
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
