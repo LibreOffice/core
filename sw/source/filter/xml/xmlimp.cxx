@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-08 15:00:25 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,8 +591,9 @@ void SwXMLImport::startDocument( void )
 
             // Insert all content into the new node
             pPaM->Move( fnMoveBackward );
-            pDoc->SetTxtFmtColl( *pPaM,
-                             pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD) );
+            pDoc->SetTxtFmtColl
+                ( *pPaM, pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD,
+                                                        FALSE) );
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-03 12:01:29 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3440,7 +3440,7 @@ SwTxtFmtColl* WW8RStyle::SearchFmtColl( const String& rName )
                     // Collection noch nicht gefunden, vielleicht im Pool ?
         USHORT n = SwStyleNameMapper::GetPoolIdFromUIName( rName , GET_POOLID_TXTCOLL );
         if ( n != USHRT_MAX )       // gefunden oder Standard
-            pColl = pIo->rDoc.GetTxtCollFromPool( n );
+            pColl = pIo->rDoc.GetTxtCollFromPoolSimple( n, FALSE );
     }
     return pColl;
 }
@@ -3527,7 +3527,9 @@ SwTxtFmtColl* WW8RStyle::MakeOrGetFmtColl(bool * pbStyExist, WW8_STD* pStd,
         && aArr[pStd->sti]!=RES_NONE    // Default-Style bekannt
         && !( pIo->nIniFlags & WW8FL_NO_DEFSTYLES ) ) // nicht abgeschaltet
     {
-        if(SwTxtFmtColl* pCol = pIo->rDoc.GetTxtCollFromPool(aArr[pStd->sti]))
+        SwTxtFmtColl* pCol =
+            pIo->rDoc.GetTxtCollFromPoolSimple(aArr[pStd->sti], FALSE);
+        if(pCol)
         {
             *pbStyExist = true;
             return pCol;
@@ -3768,7 +3770,8 @@ void WW8RStyle::ScanStyles()        // untersucht Style-Abhaengigkeiten
 void WW8RStyle::Import()
 {
     pIo->pDfltTxtFmtColl  = pIo->rDoc.GetDfltTxtFmtColl();
-    pIo->pStandardFmtColl = pIo->rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+    pIo->pStandardFmtColl =
+        pIo->rDoc.GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE);
 
     if( pIo->nIniFlags & WW8FL_NO_STYLES )
         return;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-02 13:59:25 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,7 +1009,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 
     SwNodeIndex aNdIdx( rDoc.GetNodes().GetEndOfExtras() );
     aNdIdx = *rDoc.GetNodes().MakeTextSection( aNdIdx, SwNormalStartNode,
-        rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
+        rDoc.GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD, FALSE ));
 
     {
         SwPaM *pTempPaM = pPaM;
@@ -1309,7 +1309,7 @@ SwPageDesc* SwWW8ImplReader::CreatePageDesc(SwPageDesc* pFirstPageDesc,
     USHORT nPageDescCount = rDoc.GetPageDescCnt();
     nPos = rDoc.MakePageDesc(
         ViewShell::GetShellRes()->GetPageDescName(nPageDescCount,false,bFollow),
-        bFollow ? pFirstPageDesc : 0 );
+        bFollow ? pFirstPageDesc : 0, FALSE );
 
     pNewPD = &rDoc._GetPageDesc( nPos );
 
@@ -2667,7 +2667,8 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 {
                     SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
                     SwTxtFmtColl* pColl =
-                        rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD);
+                        rDoc.GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
+                                                       FALSE );
                     SwStartNode *pNode =
                         rDoc.GetNodes().MakeTextSection(aIdx,
                         SwNormalStartNode,pColl);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2002-07-05 13:35:26 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,8 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
         SwDoc* pDoc = lcl_GetDocViaTunnel(xOldCursor);
 
         // create text section for redline
-        SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+        SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPoolSimple
+            (RES_POOLCOLL_STANDARD, FALSE);
         SwStartNode* pRedlineNode = pDoc->GetNodes().MakeTextSection(
             pDoc->GetNodes().GetEndOfRedlines(),
             SwNormalStartNode,

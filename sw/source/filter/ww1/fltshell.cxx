@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-10 16:35:29 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1548,7 +1548,7 @@ void SwFltOutDoc::NextTableCell()
          GetDoc().IsIdxInTbl(pPaM->GetPoint()->nNode),
          pTableLine,
          (SwTableBoxFmt*)pTableBox->GetFrmFmt(),
-         GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD),
+         GetDoc().GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE),
          0,
          pTableBoxes->Count());
     SeekCell(usTableY, usTableX, TRUE);
@@ -1581,7 +1581,7 @@ void SwFltOutDoc::NextTableRow()
         usTableX = 0;
         SeekCell(++usTableY, usTableX, TRUE);
         GetDoc().SetTxtFmtColl(*pPaM,
-            GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD));
+            GetDoc().GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE));
     }
 }
 
@@ -1770,10 +1770,10 @@ BOOL SwFltOutDoc::SeekCell(short nRow, short nCol, BOOL bPam)
 //#pragma message(__FILE__ "(?) : Sw's const problem")
 #ifdef DEBUG
         const SwTxtFmtColl* p = GetDoc().GetDfltTxtFmtColl();
-        p = GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+        p = GetDoc().GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE);
 #endif
         GetDoc().SetTxtFmtColl(*pPaM,
-            GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD));
+            GetDoc().GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE));
     }
     return TRUE;
 }
@@ -2135,7 +2135,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
 
     nPos = GetDoc().MakePageDesc( ViewShell::GetShellRes()->GetPageDescName(
                                    GetDoc().GetPageDescCnt(), FALSE, bFollow ),
-                                pFirstPageDesc );
+                                pFirstPageDesc, FALSE );
 
     pNewPD =  &((SwPageDesc&)GetDoc().GetPageDesc(nPos));
     if (bFollow)
@@ -2154,7 +2154,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
 SwFltFormatCollection::SwFltFormatCollection(
     SwDoc& rDoc, RES_POOL_COLLFMT_TYPE nType) :
     SwFltOutBase(rDoc),
-    pColl(rDoc.GetTxtCollFromPool(nType)),
+    pColl(rDoc.GetTxtCollFromPoolSimple(nType, FALSE)),
     pFlyAttrs( 0 ),
     bHasFly( FALSE )
 {
@@ -2180,7 +2180,7 @@ SwTxtFmtColl* SwFltFormatCollection::Search(String aName, CharSet eSrc)
     {
         USHORT n = GetDoc().GetPoolId(aName, GET_POOLID_TXTCOLL);
         if(USHRT_MAX != n)
-            pColl = GetDoc().GetTxtCollFromPool(n);
+            pColl = GetDoc().GetTxtCollFromPoolSimple(n, FALSE);
     }
     return pColl;
 }

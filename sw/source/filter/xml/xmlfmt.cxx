@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:45:11 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,7 +753,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
         // first if it hasn't been used by now.
         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId )
-            pPageDesc = pDoc->GetPageDescFromPool( nPoolId );
+            pPageDesc = pDoc->GetPageDescFromPoolSimple( nPoolId, FALSE );
     }
 
     if( !pPageDesc )

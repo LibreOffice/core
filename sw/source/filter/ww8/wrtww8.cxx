@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-22 12:56:00 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2257,7 +2257,7 @@ ULONG SwWW8Writer::StoreDoc()
     // set AutoHyphenation flag if found in default para style
     const SfxPoolItem* pItem;
     SwTxtFmtColl* pStdTxtFmtColl =
-        pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+        pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE);
     if (pStdTxtFmtColl && SFX_ITEM_SET == pStdTxtFmtColl->GetItemState(
         RES_PARATR_HYPHENZONE, false, &pItem))
     {
