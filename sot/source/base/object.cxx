@@ -2,9 +2,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-02 15:23:37 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 13:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,8 @@ void SotObject::RemoveInterface( SotObject * pObjP )
 {
     DBG_ASSERT( pObjP, "null pointer" )
     DBG_ASSERT( pAggList, "no aggregation list" )
-    for( ULONG i = 0; i < pAggList->Count(); i++ )
+    ULONG i;
+    for( i = 0; i < pAggList->Count(); i++ )
     {
         SvAggregate & rAgg = pAggList->GetObject( i );
         if( !rAgg.bFactory && pObjP == rAgg.pObj )
