@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:31:51 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 11:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,30 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( const sal_U
     while( c2 );
 
     return 0;
+}
+
+sal_Int32 rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+    sal_Unicode const * first, sal_Int32 firstLen,
+    char const * second, sal_Int32 secondLen)
+{
+    sal_Int32 i;
+    sal_Int32 len = firstLen < secondLen ? firstLen : secondLen;
+    for (i = 0; i < len; ++i) {
+        sal_Int32 c1 = *first++;
+        sal_Int32 c2 = (unsigned char) *second++;
+        sal_Int32 d;
+        if (c1 >= 65 && c1 <= 90) {
+            c1 += 32;
+        }
+        if (c2 >= 65 && c2 <= 90) {
+            c2 += 32;
+        }
+        d = c1 - c2;
+        if (d != 0) {
+            return d;
+        }
+    }
+    return firstLen - secondLen;
 }
 
 /* ----------------------------------------------------------------------- */
