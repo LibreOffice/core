@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:48:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3983,6 +3983,41 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
 
                 }
                 break;
+                case RES_BOX :
+                {
+                    SfxItemSet aSet(pDoc->GetAttrPool(),
+                                    RES_BOX, RES_BOX,
+                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+                                    0);
+                    SvxBoxInfoItem aBoxInfo;
+                    aBoxInfo.SetValid(0xff, FALSE);
+                    BYTE nValid = 0;
+                    switch(pMap->nMemberId & ~CONVERT_TWIPS)
+                    {
+                        case  LEFT_BORDER :             nValid = VALID_LEFT; break;
+                        case  RIGHT_BORDER:             nValid = VALID_RIGHT; break;
+                        case  TOP_BORDER  :             nValid = VALID_TOP; break;
+                        case  BOTTOM_BORDER:            nValid = VALID_BOTTOM; break;
+                        case  LEFT_BORDER_DISTANCE :
+                        case  RIGHT_BORDER_DISTANCE:
+                        case  TOP_BORDER_DISTANCE  :
+                        case  BOTTOM_BORDER_DISTANCE:
+                            nValid = VALID_DISTANCE;
+                        break;
+                    }
+                    aBoxInfo.SetValid(nValid, TRUE);
+
+
+                    aSet.Put(aBoxInfo);
+                    pDoc->GetTabBorders(*pCrsr, aSet);
+
+                    aSet.Put(aBoxInfo);
+                    SvxBoxItem aBoxItem((const SvxBoxItem&)aSet.Get(RES_BOX));
+                    ((SfxPoolItem&)aBoxItem).PutValue(aValue, pMap->nMemberId);
+                    aSet.Put(aBoxItem);
+                    pDoc->SetTabBorders( *pTblCrsr, aSet );
+                }
+                break;
                 case RES_BOXATR_FORMAT:
                 {
                     SwUnoTableCrsr* pCrsr = *pTblCrsr;
@@ -4052,6 +4087,19 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                     if(pTblCrsr->GetDoc()->GetBoxBackground( *pTblCrsr, aBrush ))
                         aBrush.QueryValue(aRet, pMap->nMemberId);
 
+                }
+                break;
+                case RES_BOX :
+                {
+                    SwDoc* pDoc = pTblCrsr->GetDoc();
+                    SfxItemSet aSet(pDoc->GetAttrPool(),
+                                    RES_BOX, RES_BOX,
+                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+                                    0);
+                    aSet.Put(SvxBoxInfoItem());
+                    pDoc->GetTabBorders(*pTblCrsr, aSet);
+                    const SvxBoxItem& rBoxItem = ((const SvxBoxItem&)aSet.Get(RES_BOX));
+                    rBoxItem.QueryValue(aRet, pMap->nMemberId);
                 }
                 break;
                 case RES_BOXATR_FORMAT:
