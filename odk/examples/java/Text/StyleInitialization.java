@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleInitialization.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:14:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -39,64 +39,24 @@
  *************************************************************************/
 
 //***************************************************************************
-// comment: Step 1: connect to the office an get the MSF
+// comment: Step 1: get the Desktop object from the office
 //          Step 2: open an empty text document
 //          Step 3: enter a example text
 //          Step 4: use the paragraph collection
 //          Step 5: apply a different paragraph style on the paragraphs
 //***************************************************************************
 
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
-
-// access the implementations via names
-import com.sun.star.comp.servicemanager.ServiceManager;
-
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.connection.XConnector;
-import com.sun.star.connection.XConnection;
-
-import com.sun.star.uno.IBridge;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
-import com.sun.star.uno.XComponentContext;
-
-// access the implementations via names
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.text.ControlCharacter.*;
-
-import com.sun.star.text.XText;
-
 
 public class StyleInitialization {
 
     public static void main(String args[]) {
-        String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.NamingService";
-
-        // It is possible to use a different connection string, passed as argument
-        if ( args.length == 1 ) {
-            sConnectionString = args[0];
-        }
-
-        XMultiServiceFactory xMSF = null;
-        try {
-            xMSF = connect( sConnectionString );
-        }
-        catch( Exception e) {
-            e.printStackTrace(System.out);
-            System.exit( 0 );
-        }
-
-        if( xMSF != null )  System.out.println("Connecting to " + sConnectionString );
-
         // You need the desktop to create a document
+        // The getDesktop method does the UNO bootstrapping, gets the
+        // remote servie manager and the desktop object.
         com.sun.star.frame.XDesktop xDesktop = null;
-        xDesktop = getDesktop( xMSF );
+        xDesktop = getDesktop();
 
         try {
             // BEGIN: 'Style basics' Section from the Tutorial
@@ -116,9 +76,12 @@ public class StyleInitialization {
             // you travel only at the model, not at the view. The cursor that you can
             // see on the document doesn't change the position
             com.sun.star.text.XTextCursor xTextCursor = null;
-            xTextCursor = (com.sun.star.text.XTextCursor) xTextDocument.getText().createTextCursor();
+            xTextCursor = (com.sun.star.text.XTextCursor)
+                xTextDocument.getText().createTextCursor();
 
-            XPropertySet oCPS = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, xTextCursor );
+            com.sun.star.beans.XPropertySet oCPS = (com.sun.star.beans.XPropertySet)
+                UnoRuntime.queryInterface(
+                    com.sun.star.beans.XPropertySet.class, xTextCursor);
             try {
                 oCPS.setPropertyValue("CharFontName","Helvetica");
             }
@@ -134,7 +97,8 @@ public class StyleInitialization {
             catch (Exception ex) {
 
             }
-            xText.insertControlCharacter( xTextCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false );
+            xText.insertControlCharacter(xTextCursor,
+                      com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false);
 
             xText.insertString( xTextCursor, sMyText, false );
 
@@ -143,29 +107,35 @@ public class StyleInitialization {
 
             // the text range not the cursor contains the 'parastyle' property
             xTextRange = xText.getEnd();
-            xPropertySet = (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
-                com.sun.star.beans.XPropertySet.class, xTextRange );
+            xPropertySet = (com.sun.star.beans.XPropertySet)
+                UnoRuntime.queryInterface(
+                    com.sun.star.beans.XPropertySet.class, xTextRange );
 
-            // To run the sample with StarOffice 5.2 you'll have to change 'ParaStyleName' to 'ParaStyle' in the next line
-            System.out.println( "Current Parastyle : " + xPropertySet.getPropertyValue("ParaStyleName") );
+            // To run the sample with StarOffice 5.2 you'll have to change
+            // 'ParaStyleName' to 'ParaStyle' in the next line
+            System.out.println( "Current Parastyle : "
+                                + xPropertySet.getPropertyValue("ParaStyleName") );
 
             // END: 'Style basics' Section from the Tutorial
 
-            // There are two way to travel throught the paragraphs, with a paragraph cursor, or a enumeration.
+            // There are two way to travel throught the paragraphs, with a
+            // paragraph cursor, or a enumeration.
             // You find both ways in this example
 
             // The first way, with the paragraph cursor
             com.sun.star.text.XParagraphCursor xParagraphCursor = null;
-            xParagraphCursor = (com.sun.star.text.XParagraphCursor) UnoRuntime.queryInterface(
-                com.sun.star.text.XParagraphCursor.class, xTextRange );
+            xParagraphCursor = (com.sun.star.text.XParagraphCursor)
+                UnoRuntime.queryInterface(
+                    com.sun.star.text.XParagraphCursor.class, xTextRange );
 
             xParagraphCursor.gotoStart( false );
             xParagraphCursor.gotoEndOfParagraph( true );
 
             // The second way, with the paragraph enumeration
             com.sun.star.container.XEnumerationAccess xEnumerationAccess = null;
-            xEnumerationAccess = (com.sun.star.container.XEnumerationAccess) UnoRuntime.queryInterface(
-                com.sun.star.container.XEnumerationAccess.class, xText );
+            xEnumerationAccess = (com.sun.star.container.XEnumerationAccess)
+                UnoRuntime.queryInterface(
+                    com.sun.star.container.XEnumerationAccess.class, xText );
 
             // the enumeration contains all paragraph form the document
             com.sun.star.container.XEnumeration xParagraphEnumeration = null;
@@ -180,10 +150,13 @@ public class StyleInitialization {
             // check if a paragraph is available
             while ( xParagraphEnumeration.hasMoreElements() ) {
                 // get the next paragraph
-                xParagraph = (com.sun.star.text.XTextContent) UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextContent.class, xParagraphEnumeration.nextElement());
+                xParagraph = (com.sun.star.text.XTextContent)
+                    UnoRuntime.queryInterface(
+                        com.sun.star.text.XTextContent.class,
+                        xParagraphEnumeration.nextElement());
 
-                // you need the method getAnchor to a TextRange -> to manipulate the paragraph
+                // you need the method getAnchor to a TextRange -> to manipulate
+                // the paragraph
                 String sText = xParagraph.getAnchor().getString();
 
                 // create a cursor from this paragraph
@@ -194,16 +167,18 @@ public class StyleInitialization {
                 xParaCursor.gotoStart( false );
                 xParaCursor.gotoEnd( true );
 
-                // The enumeration from the paragraphs contain parts from the paragraph with a
-                // different attributes.
+                // The enumeration from the paragraphs contain parts from the
+                // paragraph with a different attributes.
                 xParaEnumerationAccess = (com.sun.star.container.XEnumerationAccess)
-                    UnoRuntime.queryInterface(com.sun.star.container.XEnumerationAccess.class, xParagraph);
+                    UnoRuntime.queryInterface(
+                        com.sun.star.container.XEnumerationAccess.class, xParagraph);
                 xPortionEnumeration = xParaEnumerationAccess.createEnumeration();
 
                 while ( xPortionEnumeration.hasMoreElements() ) {
                     // output of all parts from the paragraph with different attributes
                     xWord = (com.sun.star.text.XTextRange) UnoRuntime.queryInterface(
-                        com.sun.star.text.XTextRange.class, xPortionEnumeration.nextElement());
+                        com.sun.star.text.XTextRange.class,
+                        xPortionEnumeration.nextElement());
                     String sWordString = xWord.getString();
                     System.out.println( "Content of the paragraph : " + sWordString );
                 }
@@ -259,7 +234,7 @@ public class StyleInitialization {
             // END: 'Finding a suitable style' Section from the Tutorial
         }
         catch( Exception e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
 
 
@@ -269,102 +244,83 @@ public class StyleInitialization {
 
     }
 
-    public static XMultiServiceFactory connect( String connectStr )
-    throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException, Exception {
-        // Get component context
-        XComponentContext xcomponentcontext =
-        com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(
-        null );
-
-        // initial serviceManager
-        XMultiComponentFactory xLocalServiceManager =
-        xcomponentcontext.getServiceManager();
-
-        // create a connector, so that it can contact the office
-        Object  xUrlResolver  = xLocalServiceManager.createInstanceWithContext(
-        "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
-        XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(
-            XUnoUrlResolver.class, xUrlResolver );
-
-        Object rInitialObject = urlResolver.resolve( connectStr );
-
-        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(
-            XNamingService.class, rInitialObject );
-
-        XMultiServiceFactory xMSF = null;
-        if( rName != null ) {
-            System.err.println( "got the remote naming service !" );
-            Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager" );
-
-            xMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface( XMultiServiceFactory.class, rXsmgr );
-        }
-
-        return ( xMSF );
-    }
-
-
-    public static com.sun.star.frame.XDesktop getDesktop( XMultiServiceFactory xMSF ) {
-        XInterface xInterface = null;
+    public static com.sun.star.frame.XDesktop getDesktop() {
         com.sun.star.frame.XDesktop xDesktop = null;
+        com.sun.star.lang.XMultiComponentFactory xMCF = null;
 
-        if( xMSF != null ) {
-            try {
-                xInterface = (XInterface) xMSF.createInstance("com.sun.star.frame.Desktop");
+        try {
+            com.sun.star.uno.XComponentContext xContext = null;
+
+            // get the remote office component context
+            xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+
+            // get the remote office service manager
+            xMCF = xContext.getServiceManager();
+            if( xMCF != null ) {
+                System.out.println("Connected to a running office ...");
+
+                Object oDesktop = xMCF.createInstanceWithContext(
+                    "com.sun.star.frame.Desktop", xContext);
                 xDesktop = (com.sun.star.frame.XDesktop) UnoRuntime.queryInterface(
-                    com.sun.star.frame.XDesktop.class, xInterface);
+                    com.sun.star.frame.XDesktop.class, oDesktop);
             }
-            catch( Exception e) {
-                e.printStackTrace(System.out);
-            }
+            else
+                System.out.println( "Can't create a desktop. No connection, no remote office servicemanager available!" );
         }
-        else
-            System.out.println( "Can't create a desktop. null pointer !" );
+        catch( Exception e) {
+            e.printStackTrace(System.err);
+            System.exit(1);
+        }
+
 
         return xDesktop;
     }
 
-    public static com.sun.star.text.XTextDocument createTextdocument( com.sun.star.frame.XDesktop xDesktop ) {
+    public static com.sun.star.text.XTextDocument createTextdocument(
+        com.sun.star.frame.XDesktop xDesktop )
+    {
         com.sun.star.text.XTextDocument aTextDocument = null;
 
         try {
-            com.sun.star.lang.XComponent xComponent = null;
-            xComponent = CreateNewDocument( xDesktop, "swriter" );
-
-            aTextDocument = (com.sun.star.text.XTextDocument) UnoRuntime.queryInterface(
-                com.sun.star.text.XTextDocument.class, xComponent );
+            com.sun.star.lang.XComponent xComponent = CreateNewDocument(xDesktop,
+                                                                        "swriter");
+            aTextDocument = (com.sun.star.text.XTextDocument)
+                UnoRuntime.queryInterface(
+                    com.sun.star.text.XTextDocument.class, xComponent);
         }
         catch( Exception e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
 
         return aTextDocument;
     }
 
 
-    protected static com.sun.star.lang.XComponent CreateNewDocument( com.sun.star.frame.XDesktop xDesktop, String sDocumentType ) {
+    protected static com.sun.star.lang.XComponent CreateNewDocument(
+        com.sun.star.frame.XDesktop xDesktop,
+        String sDocumentType )
+    {
         String sURL = "private:factory/" + sDocumentType;
 
         com.sun.star.lang.XComponent xComponent = null;
-        PropertyValue xValues[] = new PropertyValue[1];
-
         com.sun.star.frame.XComponentLoader xComponentLoader = null;
-        XInterface xInterface = null;
-
-        PropertyValue[] xEmptyArgs = new PropertyValue[0];
-
-        xComponentLoader = (com.sun.star.frame.XComponentLoader) UnoRuntime.queryInterface(
-            com.sun.star.frame.XComponentLoader.class, xDesktop );
+        com.sun.star.beans.PropertyValue xValues[] =
+            new com.sun.star.beans.PropertyValue[1];
+        com.sun.star.beans.PropertyValue xEmptyArgs[] =
+            new com.sun.star.beans.PropertyValue[0];
 
         try {
-            xComponent  = xComponentLoader.loadComponentFromURL( sURL, "_blank", 0, xEmptyArgs);
+            xComponentLoader = (com.sun.star.frame.XComponentLoader)
+                UnoRuntime.queryInterface(
+                    com.sun.star.frame.XComponentLoader.class, xDesktop);
+
+            xComponent  = xComponentLoader.loadComponentFromURL(
+                sURL, "_blank", 0, xEmptyArgs);
         }
         catch( Exception e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
 
         return xComponent ;
     }
-
-
 }
