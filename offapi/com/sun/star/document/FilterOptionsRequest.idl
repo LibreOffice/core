@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterOptionsRequest.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:03:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com { module sun { module star { module document {
 
     @since #107627#
 */
-exception FilterOptionsRequest : ::com::sun::star::uno::Exception
+published exception FilterOptionsRequest : ::com::sun::star::uno::Exception
 {
     /** The model of the document that should be provided to filters
         that supports XExporter interface.
