@@ -2,9 +2,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-30 09:05:43 $
+#   last change: $Author: rt $ $Date: 2004-07-30 12:47:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -379,8 +379,8 @@ sub determine_ship_directory
 
     my $shipdrive = $ENV{'SHIPDRIVE'};
 
-    my $destdir = $shipdrive . $installer::globals::separator . "install" . $installer::globals::separator .
-                $installer::globals::compiler . $installer::globals::productextension . $installer::globals::separator .
+    my $destdir = $shipdrive . $installer::globals::separator . $installer::globals::compiler .
+                $installer::globals::productextension . $installer::globals::separator .
                 $installer::globals::product . $installer::globals::separator .
                 $installer::globals::build . "_" . $installer::globals::lastminor . "_" .
                 "native_inprogress-number_" . $$languagesref . "\." . $installer::globals::buildid;
