@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wallitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 12:45:26 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,7 @@ SfxPoolItem* SfxWallpaperItem::Clone( SfxItemPool* ) const
 BOOL SfxWallpaperItem::QueryValue( com::sun::star::uno::Any& rVal,
                                    BYTE nMemberId ) const
 {
+    DBG_ERROR("Not implemented!");
     return FALSE;
 }
 
@@ -296,6 +297,7 @@ BOOL SfxWallpaperItem::QueryValue( com::sun::star::uno::Any& rVal,
 BOOL SfxWallpaperItem::PutValue( const com::sun::star::uno::Any& rVal,
                                  BYTE nMemberId )
 {
+    DBG_ERROR("Not implemented!");
     return FALSE;
 }
 

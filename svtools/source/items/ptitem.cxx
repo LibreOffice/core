@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ptitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:25:57 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,15 @@ SvStream& SfxPointItem::Store(SvStream &rStream, USHORT nItemVersion) const
 BOOL SfxPointItem::QueryValue( com::sun::star::uno::Any& rVal,
                                BYTE nMemberId ) const
 {
-    rVal <<= com::sun::star::awt::Point( aVal.getX(), aVal.getY() );
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
+    {
+        case 0: rVal <<= com::sun::star::awt::Point( aVal.getX(), aVal.getY() ); break;
+        case MID_X: rVal <<= aVal.getX(); break;
+        case MID_Y: rVal <<= aVal.getY(); break;
+        default: DBG_ERROR("Wrong MemberId!"); return FALSE;
+    }
+
     return TRUE;
 }
 
@@ -189,14 +197,26 @@ BOOL SfxPointItem::QueryValue( com::sun::star::uno::Any& rVal,
 BOOL SfxPointItem::PutValue( const com::sun::star::uno::Any& rVal,
                              BYTE nMemberId )
 {
+    nMemberId &= ~CONVERT_TWIPS;
     BOOL bRet = FALSE;
     com::sun::star::awt::Point aValue;
-    if ( rVal >>= aValue )
+    sal_Int32 nVal;
+    if ( !nMemberId )
+        bRet = ( rVal >>= aValue );
+    else
+        bRet = ( rVal >>= nVal );
+
+    if ( bRet )
     {
-        aVal.setX( aValue.X );
-        aVal.setY( aValue.Y );
-        bRet = TRUE;
+        switch ( nMemberId )
+        {
+            case 0: aVal.setX( aValue.X ); aVal.setY( aValue.Y ); break;
+            case MID_X: aVal.SetX( nVal ); break;
+            case MID_Y: aVal.SetY( nVal ); break;
+            default: DBG_ERROR("Wrong MemberId!"); return FALSE;
+        }
     }
+
     return bRet;
 }
 

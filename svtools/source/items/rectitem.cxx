@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rectitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:25:57 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,10 +183,24 @@ SvStream& SfxRectangleItem::Store(SvStream &rStream, USHORT nItemVersion) const
 BOOL SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
                                    BYTE nMemberId) const
 {
-    rVal <<= com::sun::star::awt::Rectangle( aVal.getX(),
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
+    {
+        case 0:
+        {
+            rVal <<= com::sun::star::awt::Rectangle( aVal.getX(),
                                              aVal.getY(),
                                              aVal.getWidth(),
                                              aVal.getHeight() );
+            break;
+        }
+        case MID_LEFT:  rVal <<= aVal.getX(); break;
+        case MID_RIGHT: rVal <<= aVal.getY(); break;
+        case MID_WIDTH: rVal <<= aVal.getWidth(); break;
+        case MID_HEIGHT: rVal <<= aVal.getHeight(); break;
+        default: DBG_ERROR("Wrong MemberID!"); return FALSE;
+    }
+
     return TRUE;
 }
 
@@ -195,15 +209,32 @@ BOOL SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
                                  BYTE nMemberId  )
 {
     BOOL bRet = FALSE;
-    com::sun::star::awt::Rectangle aValue;
-    if ( rVal >>= aValue )
+    nMemberId &= ~CONVERT_TWIPS;
+    com::sun::star::awt::Rectangle aValue = aVal;
+    sal_Int32 nVal;
+    if ( !nMemberId )
+        bRet = (rVal >>= aValue);
+    else
+        bRet = (rVal >>= nVal);
+
+    if ( bRet )
     {
-        aVal.setX( aValue.X );
-        aVal.setY( aValue.Y );
-        aVal.setWidth( aValue.Width );
-        aVal.setHeight( aValue.Height );
-        bRet = TRUE;
+        switch ( nMemberId )
+        {
+            case 0:
+                aVal.setX( aValue.X );
+                aVal.setY( aValue.Y );
+                aVal.setWidth( aValue.Width );
+                aVal.setHeight( aValue.Height );
+                break;
+            case MID_LEFT:  aVal.setX( nVal ); break;
+            case MID_RIGHT: aVal.setY( nVal ); break;
+            case MID_WIDTH: aVal.setWidth( nVal ); break;
+            case MID_HEIGHT: aVal.setHeight( nVal ); break;
+            default: DBG_ERROR("Wrong MemberID!"); return FALSE;
+        }
     }
+
     return bRet;
 }
 

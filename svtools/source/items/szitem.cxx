@@ -2,9 +2,9 @@
  *
  *  $RCSfile: szitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:25:57 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,13 +180,30 @@ SvStream& SfxSizeItem::Store(SvStream &rStream, USHORT nItemVersion) const
 BOOL  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+
     Size aTmp(aVal);
-    if(CONVERT_TWIPS&nMemberId)
+    if( bConvert )
     {
         aTmp.Height() = ( aTmp.Height() * 127 + 36) / 72;
         aTmp.Width() = ( aTmp.Width() * 127 + 36) / 72;
     }
-    rVal <<= com::sun::star::awt::Size( aTmp.getWidth(), aTmp.getHeight() );
+
+    switch ( nMemberId )
+    {
+        case 0:
+        {
+            rVal <<= com::sun::star::awt::Size( aTmp.getWidth(), aTmp.getHeight() );
+            break;
+        }
+        case MID_WIDTH:
+            rVal <<= aTmp.getWidth(); break;
+        case MID_HEIGHT:
+            rVal <<= aTmp.getHeight(); break;
+        default: DBG_ERROR("Wrong MemberId!"); return FALSE;
+    }
+
     return TRUE;
 }
 
@@ -194,19 +211,41 @@ BOOL  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
 BOOL SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
                             BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+
     BOOL bRet = FALSE;
     com::sun::star::awt::Size aValue;
-    if ( rVal >>= aValue )
+    sal_Int32 nVal;
+    if ( !nMemberId )
+        bRet = ( rVal >>= aValue );
+    else
+    {
+        bRet = ( rVal >>= nVal );
+        if ( nMemberId == MID_WIDTH )
+        {
+            aValue.setWidth( nVal );
+            aValue.setHeight( aVal.Height() );
+        }
+        else
+        {
+            aValue.setHeight( nVal );
+            aValue.setWidth( aVal.Width() );
+        }
+    }
+
+    if ( bRet )
     {
         Size aTmp( aValue.Width, aValue.Height );
-        if(CONVERT_TWIPS&nMemberId)
+        if( bConvert )
         {
             aTmp.Height() = ( aTmp.Height() * 72 + 63) / 127;
             aTmp.Width() = ( aTmp.Width() * 72 + 63) / 127;
         }
+
         aVal = aTmp;
-        bRet = TRUE;
     }
+
     return bRet;
 }
 
