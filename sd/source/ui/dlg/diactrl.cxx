@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diactrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-13 16:05:47 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,20 @@ DiaEffectControl::~DiaEffectControl()
 {
 }
 
+
+
+
+void DiaEffectControl::GetFocus (void)
+{
+    Window::GetFocus();
+    // Grab the focus to the slide effects control so that it can be
+    // controlled with the keyboard.
+    aLbEffect.GrabFocus();
+}
+
+
+
+
 //------------------------------------------------------------------------
 
 IMPL_LINK( DiaEffectControl, SelectDiaEffectHdl, void *, p )
@@ -205,6 +219,20 @@ DiaSpeedControl::DiaSpeedControl( Window* pParent, SfxBindings& rBdx, WinBits nS
 DiaSpeedControl::~DiaSpeedControl()
 {
 }
+
+
+
+
+void DiaSpeedControl::GetFocus (void)
+{
+    Window::GetFocus();
+    // Grab the focus to the slide speed control so that it can be
+    // controlled with the keyboard.
+    aLbSpeed.GrabFocus();
+}
+
+
+
 
 //------------------------------------------------------------------------
 
@@ -282,6 +310,20 @@ DiaAutoControl::DiaAutoControl( Window* pParent, SfxBindings& rBdx, WinBits nSty
 DiaAutoControl::~DiaAutoControl()
 {
 }
+
+
+
+
+void DiaAutoControl::GetFocus (void)
+{
+    Window::GetFocus();
+    // Grab the focus to the slide auto transition control so that it can be
+    // controlled with the keyboard.
+    aLbAuto.GrabFocus();
+}
+
+
+
 
 //------------------------------------------------------------------------
 
