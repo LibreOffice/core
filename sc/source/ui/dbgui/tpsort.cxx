@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsort.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-18 09:11:05 $
+ *  last change: $Author: nn $ $Date: 2001-08-03 16:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -899,6 +899,13 @@ int __EXPORT ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSet )
 
         if ( STRING_NOTFOUND != nColonPos )
             thePosStr.Erase( nColonPos );
+
+        if ( pViewData )
+        {
+            //  visible table is default for input without table
+            //  must be changed to GetRefTabNo when sorting has RefInput!
+            thePos.SetTab( pViewData->GetTabNo() );
+        }
 
         USHORT nResult = thePos.Parse( thePosStr, pDoc );
 
