@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 20:50:51 $
+ *  last change: $Author: kz $ $Date: 2001-10-25 20:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1299,22 +1299,22 @@ String sReady
 {
     Text = "Fertig";
     Text[English] = "Ready";
-    Text[ English_us ] = "Finished!";
+    Text[ English_us ] = "Finished";
     Text[ portuguese ] = "Pronto!";
-    Text[ russian ] = "������!";
+    Text[ russian ] = "������";
     Text[ greek ] = "������������!";
-    Text[ dutch ] = "Klaar!";
-    Text[ french ] = "Termin� !";
-    Text[ spanish ] = "�Terminado!";
+    Text[ dutch ] = "Klaar";
+    Text[ french ] = "Terminer";
+    Text[ spanish ] = "Terminado";
     Text[ italian ] = "Fine";
     Text[ danish ] = "Ready!";
-    Text[ swedish ] = "F�rdig!";
+    Text[ swedish ] = "F�rdig";
     Text[ polish ] = "Gotowe!";
     Text[ portuguese_brazilian ] = "Ready!";
     Text[ japanese ] = "完了しました。";
     Text[ korean ] = "완성!";
-    Text[ chinese_simplified ] = "完成！";
-    Text[ chinese_traditional ] = "已經完成！";
+    Text[ chinese_simplified ] = "完成";
+    Text[ chinese_traditional ] = "完成";
     Text[ turkish ] = "Ready!";
     Text[ arabic ] = "��!";
     Text[ catalan ] = "Complete !";
@@ -1697,7 +1697,7 @@ String sLogfileHelpText
     Text[ japanese ] = "ﾜｰｷﾝｸﾞﾃﾞｨﾚｸﾄﾘにﾛｸﾞﾌｧｲﾙが格納されます。";
     Text[ korean ] = "작업 디렉토리 안에 로그파일이 만들어집니다";
     Text[ chinese_simplified ] = "在您的工作目录内新建一个日志文件。";
-    Text[ chinese_traditional ] = "在您的工作目錄内新增一個日誌檔案。";
+    Text[ chinese_traditional ] = "在您的工作目錄內新增一個日誌檔案。";
     Text[ turkish ] = "A Logfile will be created within your Working Directory";
     Text[ arabic ] = "A Logfile will be created within your Working Directory";
     Text[ catalan ] = "A Logfile will be created within your Working Directory";
@@ -2165,6 +2165,7 @@ String sSumMSDrawTemplates
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
     Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
 };
+
 
 
 
