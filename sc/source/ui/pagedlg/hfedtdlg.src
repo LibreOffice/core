@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:21:48 $
+ *  last change: $Author: rt $ $Date: 2002-08-05 20:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "텍스트 속성";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Textattribute";
-        QuickHelpText[ catalan ] = "Atributos de texto";
+        QuickHelpText[ catalan ] = "Atributs de text";
         QuickHelpText[ thai ] = "Text Attributes";
         ButtonImage = Image
         {
@@ -901,7 +901,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "파일 이름";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dateiname";
-        QuickHelpText[ catalan ] = "Nombre de archivo";
+        QuickHelpText[ catalan ] = "Nom de fitxer";
         QuickHelpText[ thai ] = "File Name";
         ButtonImage = Image
         {
@@ -1048,7 +1048,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "표 이름";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenname";
-        QuickHelpText[ catalan ] = "Nombre de la hoja";
+        QuickHelpText[ catalan ] = "Nom del full";
         QuickHelpText[ thai ] = "Sheet Name";
         ButtonImage = Image
         {
@@ -1092,7 +1092,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "페이지";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seite";
-        QuickHelpText[ catalan ] = "P�gina";
+        QuickHelpText[ catalan ] = "P�gina";
         QuickHelpText[ thai ] = "Page";
         ButtonImage = Image
         {
@@ -1136,7 +1136,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "페이지들";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seiten";
-        QuickHelpText[ catalan ] = "P�ginas";
+        QuickHelpText[ catalan ] = "P�gines";
         QuickHelpText[ thai ] = "Pages";
         ButtonImage = Image
         {
@@ -1180,7 +1180,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "날짜";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum";
-        QuickHelpText[ catalan ] = "Fecha";
+        QuickHelpText[ catalan ] = "Data";
         QuickHelpText[ thai ] = "Date";
         ButtonImage = Image
         {
