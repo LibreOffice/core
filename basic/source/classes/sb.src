@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-17 09:15:06 $
+ *  last change: $Author: kz $ $Date: 2001-06-01 12:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,7 +848,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Incorrect record length" ;
         Text[ chinese_simplified ] = "Êı¾İÌõÄ¿³¤¶È´íÎó";
         Text[ russian ] = "Íåïğàâèëüíàÿ äëèíà çàïèñè äàííûõ";
-        Text[ polish ] = "Niepoprawna d³ugo?æ rekordów";
+        Text[ polish ] = "Niepoprawna d³ugoœæ rekordów";
         Text[ japanese ] = "Úº°ÄŞ‚Ì’·‚³‚ª•s“KØ";
         Text[ chinese_traditional ] = "¿ù»~ªº¸ê®Æ±ø¥Øªø«×";
         Text[ arabic ] = "Øæá ÓÌáÇÊ ÇáÈíÇäÇÊ ÛíÑ ÕÍíÍ";
@@ -936,7 +936,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Incorrect record number" ;
         Text[ chinese_simplified ] = "Êı¾İÌõÄ¿ºÅÂë´íÎó";
         Text[ russian ] = "Íåïğàâèëüíûé íîìåğ ğåãèñòğàöèè äàííûõ";
-        Text[ polish ] = "Niepoprawna d³ugo?æ rekordów";
+        Text[ polish ] = "Niepoprawna d³ugoœæ rekordów";
         Text[ japanese ] = "Úº°ÄŞ”Ô†‚ª•s“KØ";
         Text[ chinese_traditional ] = "¸ê®Æ±ø¥Ø¸¹½X¿ù»~";
         Text[ arabic ] = "ÑŞã ÓÌáÇÊ ÇáÈíÇäÇÊ ÛíÑ ÕÍíÍ";
@@ -1141,7 +1141,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Path/File access error" ;
         Text[ chinese_simplified ] = "¶ÁÈ¡Â·¾¶/ÎÄ¼şÊ±·¢Éú´íÎó";
         Text[ russian ] = "Îøèáêà äîñòóïà ïóòè èëè ôàéëà";
-        Text[ polish ] = "B³¹d dostêpu do ?cie¿ki/pliku";
+        Text[ polish ] = "B³¹d dostêpu do œcie¿ki/pliku";
         Text[ japanese ] = "Êß½‚Ü‚½‚ÍÌ§²Ù‚Ö‚Ì±¸¾½´×°";
         Text[ chinese_traditional ] = "Åª¨ú¸ô®|/ÀÉ®×®Éµo¥Í¿ù»~";
         Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÏÎæá Åáì ÇáãÓÇÑ/Çáãáİ";
@@ -1170,7 +1170,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Path not found" ;
         Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Â·¾¶";
         Text[ russian ] = "Ïóòü íå íàéäåí";
-        Text[ polish ] = "?cie¿ka nie zosta³a znaleziona";
+        Text[ polish ] = "Œcie¿ka nie zosta³a znaleziona";
         Text[ japanese ] = "Êß½‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¨S¦³§ä¨ì¸ô®|";
         Text[ arabic ] = "áã íñÚËÑ Úáì ÇáãÓÇÑ";
@@ -1266,7 +1266,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Gebruik van nul niet toegestaan";
         Text[ chinese_simplified ] = "²»ÔÊĞíÊ¹ÓÃÓÃÁãÖµ";
         Text[ greek ] = "Äåí åğéôñİğåôáé ç ÷ñŞóç ôïõ ìçäåíüò";
-        Text[ korean ] = "0 »ç¿ë Çã¿ëµÇÁö ¾ÊÀ½.";
+        Text[ korean ] = "³Î »ç¿ë Çã¿ëµÇÁö ¾ÊÀ½.";
         Text[ turkish ] = "Sıfır kullanımı geçerli değil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se admite el uso del cero";
@@ -1317,7 +1317,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Awaiting response to DDE connection" ;
         Text[ chinese_simplified ] = "ÔÚ DDE Á¬½ÓÊ±µÈºò´ğ¸´";
         Text[ russian ] = "Îæèäàíèå îòâåòà âî âğåìÿ ïîäêëş÷åíèÿ DDE";
-        Text[ polish ] = "Czekanie na odpowied? w po³¹czeniu DDE";
+        Text[ polish ] = "Czekanie na odpowiedŸ w po³¹czeniu DDE";
         Text[ japanese ] = "DDEÚ‘±‚É‚¨‚¯‚é‰“š‘Ò‚¿";
         Text[ chinese_traditional ] = "¦b DDE ³sµ²®Éµ¥­Ôµª´_";
         Text[ arabic ] = "DDE İí ÇäÊÙÇÑ ÇáÑÏ İí ÇÊÕÇá";
@@ -1494,7 +1494,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Timeout while waiting for DDE response" ;
         Text[ chinese_simplified ] = "µÈºò DDE »ØÓ¦³¬¹ıÊ±ÏŞ";
         Text[ russian ] = "Ïğåâûøåíèå äîïóñòèìîãî âğåìåíè âî âğåìÿ îæèäàíèÿ îòâåòà DDE";
-        Text[ polish ] = "Przekroczenie limitu czasu podczas czekania na odpowied? DDE";
+        Text[ polish ] = "Przekroczenie limitu czasu podczas czekania na odpowiedŸ DDE";
         Text[ japanese ] = "DDE‚Ì‰“š‘Ò‚¿‚ÌŠÔ‚ÉŠÔ’´‰ß";
         Text[ chinese_traditional ] = "µ¥­Ô DDE ¦^À³¶W¹L®É­­";
         Text[ arabic ] = "DDE Êã ÊÎØí ÇáæŞÊ ÃËäÇÁ ÇäÊÙÇÑ ÇáÑÏ ãä";
@@ -1532,7 +1532,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Gebruiker drukte Escape tijdens uitvoering DDE";
         Text[ chinese_simplified ] = "ÔÚÖ´ĞĞ DDE ÔËËã¹ı³ÌÖĞÊ¹ÓÃÕß°´»÷ÁË ESCAPE ¼ü";
         Text[ greek ] = "Ï ÷ñŞóôçò ğÜôçóå ESCAPE êáôÜ ôç äéÜñêåéá ôçò ëåéôïõñãßáò DDE.";
-        Text[ korean ] = "DDE ÀÛµ¿ÇÏ´Âµ¿¾È »ç¿ëÀÚ°¡Escape¸¦ ´­·¶À½.";
+        Text[ korean ] = "DDE°¡ ÀÛµ¿ÇÏ´Âµ¿¾È »ç¿ëÀÚ°¡ Escape¸¦ ´­·¶À½.";
         Text[ turkish ] = "DDE işlemi sırasında ESCAPE tuşuna basıldı";
         Text[ catalan ] = "El usuario presionó la tecla ESC durante la operación DDE";
     };
@@ -1611,7 +1611,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Data are in wrong format" ;
         Text[ chinese_simplified ] = "Êı¾İ¸ñÊ½´íÎó";
         Text[ russian ] = "Äàííûå íàõîäÿòñÿ â íåïğàâèëüíîì ôîğìàòå";
-        Text[ polish ] = "Pliki s¹ ?le sformatowane";
+        Text[ polish ] = "Pliki s¹ Ÿle sformatowane";
         Text[ japanese ] = "ÃŞ°À‚Í‘®‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¸ê®Æ®æ¦¡¿ù»~";
         Text[ arabic ] = "ÊäÓíŞ ÇáÈíÇäÇÊ ÛíÑ ÕÍíÍ";
@@ -1758,7 +1758,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "DDE message has been lost" ;
         Text[ chinese_simplified ] = "DDE ĞÅÏ¢ÒÅÊ§";
         Text[ russian ] = "Ñîîáùåíèå DDE ïîòåğÿíî";
-        Text[ polish ] = "Wiadomo?æ DDE zaginê³a";
+        Text[ polish ] = "Wiadomoœæ DDE zaginê³a";
         Text[ japanese ] = "DDEÒ¯¾°¼Ş‚Í¸‚í‚ê‚Ü‚µ‚½";
         Text[ chinese_traditional ] = "DDE°T®§¿ò¥¢";
         Text[ arabic ] = "DDE Êã İŞÏÇä ÑÓÇáÉ";
@@ -1968,7 +1968,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Incorrect property value" ;
         Text[ chinese_simplified ] = "´íÎóµÄÊôĞÔÊıÖµ";
         Text[ russian ] = "Íåïğàâèëüíîå çíà÷åíèå ñâîéñòâà";
-        Text[ polish ] = "Niepoprawna warto?æ w³a?ciwo?ci";
+        Text[ polish ] = "Niepoprawna wartoœæ w³aœciwoœci";
         Text[ japanese ] = "ÌßÛÊßÃ¨’l‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¿ù»~ªºÄİ©Ê¼Æ­È";
         Text[ arabic ] = "ŞíãÉ ÛíÑ ÕÍíÍÉ ááÎÇÕíÉ";
@@ -1998,7 +1998,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "This property is read-only" ;
         Text[ chinese_simplified ] = "·À¸²Ğ´µÄÊôĞÔ";
         Text[ russian ] = "Ñâîéñòâî âîçìîæíî òîëüêî ïğî÷èòàòü";
-        Text[ polish ] = "W³a?ciwo?æ tylko do odczytu";
+        Text[ polish ] = "W³aœciwoœæ tylko do odczytu";
         Text[ japanese ] = "ÌßÛÊßÃ¨‚Í‘‚«‚İ•ÛŒì‚³‚ê‚Ä‚¢‚Ü‚·";
         Text[ chinese_traditional ] = "°ßÅªªºÄİ©Ê";
         Text[ arabic ] = "åĞå ÇáÎÇÕíÉ ãÍãíÉ ÖÏ ÇáßÊÇÈÉ";
@@ -2028,7 +2028,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "This property is write only" ;
         Text[ chinese_simplified ] = "·À¶ÁÈ¡µÄÊôĞÔ";
         Text[ russian ] = "Ñâîéñòâî âîçìîæíî òîëüêî çàïèñàòü";
-        Text[ polish ] = "W³a?ciwo?æ tylko do zapisu";
+        Text[ polish ] = "W³aœciwoœæ tylko do zapisu";
         Text[ japanese ] = "ÌßÛÊßÃ¨‚Í“Ç‚İæ‚è•ÛŒì‚³‚ê‚Ä‚¢‚Ü‚·";
         Text[ chinese_traditional ] = "¨¾Åª¨úªºÄİ©Ê";
         Text[ arabic ] = "åĞå ÇáÎÇÕíÉ ãÍãíÉ ÖÏ ÇáŞÑÇÁÉ";
@@ -2087,7 +2087,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Property or method not found" ;
         Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ÊôĞÔ»ò·½·¨";
         Text[ russian ] = "Ñâîéñòâî èëè ìåòîä íå íàéäåíû";
-        Text[ polish ] = "Nie znaleziono w³a?ciwo?ci lub metody";
+        Text[ polish ] = "Nie znaleziono w³aœciwoœci lub metody";
         Text[ japanese ] = "ÌßÛÊßÃ¨‚Ü‚½‚ÍÒ¿¯ÄŞ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¨S¦³§ä¨ìÄİ©Ê©Î¤èªk";
         Text[ arabic ] = "áã íÊã ÇáÚËæÑ Úáì ÇáÎÇÕíÉ Ãæ ÇáÃÓáæÈ";
@@ -2182,7 +2182,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "OLE-automatisering wordt niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "Õâ¸ö¶ÔÏó²»Ö§³ÖOLE×Ô¶¯»¯";
         Text[ greek ] = "Ç áõôïìáôïğïßçóç ôïõ OLE äåí õğïóôçñßæåôáé áğü áõôü ôï áíôéêåßìåíï";
-        Text[ korean ] = "OLE ÀÚµ¿È­´Â ÀÌ¡¡°³Ã¼¿¡ÀÇÇØ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
+        Text[ korean ] = "OLE ÀÚµ¿È­´Â ÀÌ °³Ã¼¿¡ ÀÇÇØ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "OLE otomasyonu bu nesne tarafından desteklenmiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Este objeto no apoya la automatización OLE";
@@ -2205,7 +2205,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "This property or method is not supported by the object" ;
         Text[ chinese_simplified ] = "¶ÔÏó²»Ö§³ÖÕâ¸öÊôĞÔ»ò·½·¨";
         Text[ russian ] = "Îáúåêò íå ïîääåğæèâàåò ıòî ñâîéñòâî èëè ìåòîä";
-        Text[ polish ] = "Obiekt nie obs³uguje tej w³a?ciwo?ci lub metody";
+        Text[ polish ] = "Obiekt nie obs³uguje tej w³aœciwoœci lub metody";
         Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Í‚±‚Ì‘®«A‚ ‚é‚¢‚Í•û–@‚ğx‰‡‚µ‚Ü‚¹‚ñB";
         Text[ chinese_traditional ] = "ª«¥ó¤£¤ä«ù³o­ÓÄİ©Ê©Î¤èªk";
         Text[ arabic ] = "áÇ íÏÚã ÇáßÇÆä åĞå ÇáÎÇÕíÉ Ãæ åĞÇ ÇáÃÓáæÈ";
@@ -2411,7 +2411,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Invalid number of arguments" ;
         Text[ chinese_simplified ] = "ÎŞĞ§µÄ×Ô±äÁ¿ÊıÄ¿";
         Text[ russian ] = "Íåïğàâèëüíîå ÷èñëî àğãóìåíòîâ";
-        Text[ polish ] = "Nieprawid³owa ilo?æ argumentów";
+        Text[ polish ] = "Nieprawid³owa iloœæ argumentów";
         Text[ japanese ] = "ˆø”‚Ì”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "µL®Äªº¦ÛÅÜ¶q¼Æ¥Ø";
         Text[ arabic ] = "ÚÏÏ ÇáæÓÇÆØ ÛíÑ ÕÇáÍ";
@@ -2558,7 +2558,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Object does not have this property" ;
         Text[ chinese_simplified ] = "¶ÔÏó²»¾ß±¸Õâ¸öÊôĞÔ";
         Text[ russian ] = "Ó îáúåêòà íåò ıòîãî ñâîéñòâà";
-        Text[ polish ] = "Obiekt nie ma tej w³a?ciwo?ci";
+        Text[ polish ] = "Obiekt nie ma tej w³aœciwoœci";
         Text[ japanese ] = "µÌŞ¼Şª¸Ä‚É‚±‚Ì‘®«‚Í‚ ‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "ª«¥ó¤£¨ã³Æ³o­ÓÄİ©Ê";
         Text[ arabic ] = "áíÓ ááßÇÆä åĞå ÇáÎÇÕíÉ";
@@ -2646,7 +2646,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Invalid number of arguments" ;
         Text[ chinese_simplified ] = "ÎŞĞ§µÄ×Ô±äÁ¿ÊıÄ¿";
         Text[ russian ] = "Íåïğàâèëüíîå êîëè÷åñòâî àğãóìåíòîâ";
-        Text[ polish ] = "Nieprawid³owa ilo?æ argumentów";
+        Text[ polish ] = "Nieprawid³owa iloœæ argumentów";
         Text[ japanese ] = "ˆø”‚Ì”‚É–â‘è‚ª‚ ‚è‚Ü‚·";
         Text[ chinese_traditional ] = "¦ÛÅÜ¶q¼Æ¥ØµL®Ä";
         Text[ arabic ] = "ÚÏÏ æÓÇÆØ ÛíÑ ÕÇáÍ";
@@ -2705,7 +2705,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Unable to set property" ;
         Text[ chinese_simplified ] = "ÎŞ·¨È·¶¨ÊôĞÔ";
         Text[ russian ] = "Ñâîéñòâî óñòàíîâèòü íåâîçìîæíî";
-        Text[ polish ] = "W³a?ciwo?æ nie mog³a zostaæ zdefiniowana";
+        Text[ polish ] = "W³aœciwoœæ nie mog³a zostaæ zdefiniowana";
         Text[ japanese ] = "‘®«‚Íw’è‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
         Text[ chinese_traditional ] = "µLªk½T©wÄİ©Ê";
         Text[ arabic ] = "ÊÚĞÑ ÊÚííä ÇáÎÇÕíÉ";
@@ -2734,7 +2734,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Unable to determine property" ;
         Text[ chinese_simplified ] = "ÎŞ·¨¶Á³öÊôĞÔ";
         Text[ russian ] = "Ñâîéñòâî îïğåäåëèòü íåâîçìîæíî";
-        Text[ polish ] = "W³a?ciwo?æ nie mog³a zostaæ zdefiniowana";
+        Text[ polish ] = "W³aœciwoœæ nie mog³a zostaæ zdefiniowana";
         Text[ japanese ] = "‘®«‚ÍŠm‚©‚ß‚é‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
         Text[ chinese_traditional ] = "µLªkÅª¥XÄİ©Ê";
         Text[ arabic ] = "ÊÚĞÑ ÊÍÏíÏ ÇáÎÇÕíÉ";
@@ -2909,7 +2909,7 @@ Resource RID_BASIC_START
         Text [ english_us ] = "Value cannot be applied" ;
         Text[ chinese_simplified ] = "ÎŞ·¨Ö¸¶¨ÊıÖµ";
         Text[ russian ] = "Ïğèìåíèòü çííà÷åíèå íåâîçìîæíî";
-        Text[ polish ] = "Nie mo¿na zastosowaæ warto?ci";
+        Text[ polish ] = "Nie mo¿na zastosowaæ wartoœci";
         Text[ japanese ] = "”’l‚ÍŠ„‚è“–‚Ä‚ç‚ê‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "µLªk«ü©w¼Æ­È";
         Text[ arabic ] = "áÇ íãßä ÊØÈíŞ ÇáŞíãÉ";
@@ -3602,22 +3602,22 @@ Resource RID_BASIC_START
         Text [ italian ] = "Non contenuto nello script  VB" ;
         Text [ portuguese_brazilian ] = "Not implemented in VBScript" ;
         Text [ portuguese ] = "Não contido no Script VB" ;
-        Text [ french ] = "Pas contenu dans le VBScript" ;
+        Text [ french ] = "Exception $(ARG1)" ;
         Text [ dutch ] = "Bevindt zich niet in VBScript" ;
-        Text [ spanish ] = "No está contenido en el script VB" ;
+        Text [ spanish ] = "Exception $(ARG1)" ;
         Text [ danish ] = "Ikke indeholdt i VB-script" ;
-        Text [ swedish ] = "Innefattas inte i VBScript" ;
+        Text [ swedish ] = "Det har uppstått ett undantag $(ARG1)" ;
         Text [ finnish ] = "Ei sisälly VB-komentosarjaan" ;
-        Text [ english_us ] = "Not contained in VB script" ;
-        Text[ chinese_simplified ] = "Ã»ÓĞ°üº¬ÔÚ VB script ÄÚ";
-        Text[ russian ] = "Â VBScript íå ñîäåğæèòñÿ";
-        Text[ polish ] = "Nie zawarte w VBScript";
-        Text[ japanese ] = "VBScript‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "¨S¦³¥]§t¦bVB script¤§¤º";
+        Text [ english_us ] = "An exception occurred $(ARG1)" ;
+        Text[ chinese_simplified ] = "·¢ÉúÒ»¸öÒì³£µÄ´íÎó $(ARG1)";
+        Text[ russian ] = "Ïğîèçîøëî èñêëş÷åíèå $(ARG1)";
+        Text[ polish ] = "Wyst¹pi³ wyj¹tek $(ARG1)";
+        Text[ japanese ] = "—áŠO‚ª”­¶‚µ‚Ü‚µ‚½ $(ARG1)";
+        Text[ chinese_traditional ] = "µo¥Í¤@­Ó²§±`ªº¿ù»~ $(ARG1)";
         Text[ arabic ] = "VB script áÇ íÔÊãá ÚáíåÇ";
         Text[ dutch ] = "Bevindt zich niet in VBScript";
-        Text[ chinese_simplified ] = "Ã»ÓĞ°üº¬ÔÚ VB script ÄÚ";
-        Text[ greek ] = "Äåí ğåñéİ÷åôáé óôï VB script";
+        Text[ chinese_simplified ] = "·¢ÉúÒ»¸öÒì³£µÄ´íÎó $(ARG1)";
+        Text[ greek ] = "ĞáñïõóéÜóôçêå ìéá åîáßñåóç $(ARG1)";
         Text[ korean ] = "VB ½ºÅ©¸³Æ®¿¡¡¡Æ÷ÇÔµÇ¾î ÀÖÁö¡¡¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "VBScript'te mevcut değil";
         Text[ language_user1 ] = " ";
