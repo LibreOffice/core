@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filid.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: obr $ $Date: 2001-05-25 09:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,11 @@ FileContentIdentifier::FileContentIdentifier(
         m_pMyShell->uncheckMountPoint( aUnqPath,aRedirectedPath );
         if( aRedirectedPath == rtl::OUString() && m_pMyShell->m_vecMountPoint.size() )
         {
+#ifdef TF_FILEURL
+            aRedirectedPath = rtl::OUString::createFromAscii( "file:///" );
+#else
             aRedirectedPath = rtl::OUString::createFromAscii( "//./" );
+#endif
         }
         m_pMyShell->getUrlFromUnq( aRedirectedPath,m_aContentId );
         m_aNormalizedId = aUnqPath;

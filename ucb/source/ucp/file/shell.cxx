@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-22 09:08:30 $
+ *  last change: $Author: obr $ $Date: 2001-05-25 09:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2951,7 +2951,11 @@ sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& 
         0 == Url.compareToAscii( "file://localhost/" ) ||
         0 == Url.compareToAscii( "file://127.0.0.1/" ) )
     {
+#ifdef TF_FILEURL
+        Unq = rtl::OUString::createFromAscii( "file:///" );
+#else
         Unq = rtl::OUString::createFromAscii( "//./" );
+#endif
         return false;
     }
 
@@ -3607,6 +3611,48 @@ oslFileError getResolvedURL(rtl_uString* ustrPath, rtl_uString** pustrResolvedUR
 //  makeAbsolute Path
 //----------------------------------------------------------------------------
 
+#ifdef TF_FILEURL
+
+static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::OUString& aAbsPath )
+{
+    sal_Int32   nIndex = 7;
+
+    std::vector< rtl::OUString >    aTokenStack;
+
+    // should no longer happen
+    OSL_ASSERT( 0 != aRelPath.compareTo( rtl::OUString::createFromAscii( "//./" ), 4 ) );
+
+    if ( 0 != aRelPath.compareTo( rtl::OUString::createFromAscii( "file://" ), 7 ) )
+        return sal_False;
+
+       aRelPath.getToken( 0, '/', nIndex );
+
+    while ( nIndex >= 0 )
+    {
+        rtl::OUString   aToken = aRelPath.getToken( 0, '/', nIndex );
+
+        if ( aToken.compareToAscii( ".." ) == 0 )
+            aTokenStack.pop_back();
+        else
+            aTokenStack.push_back( aToken );
+    }
+
+
+    std::vector< rtl::OUString >::iterator it;
+    aAbsPath = rtl::OUString::createFromAscii("file://");
+
+    for ( it = aTokenStack.begin(); it != aTokenStack.end(); it++ )
+    {
+        aAbsPath += rtl::OUString::createFromAscii( "/" );
+        aAbsPath += *it;
+    }
+
+    return sal_True;
+}
+
+#else
+
+
 static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::OUString& aAbsPath )
 {
     sal_Int32   nIndex = 0;
@@ -3616,13 +3662,13 @@ static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::O
     if ( 0 != aRelPath.compareTo( rtl::OUString::createFromAscii( "//./" ), 4 ) )
         return sal_False;
 
-    aRelPath.getToken( 0, '/', nIndex );
+       aRelPath.getToken( 0, '/', nIndex );
 
     while ( nIndex >= 0 )
     {
         rtl::OUString   aToken = aRelPath.getToken( 0, '/', nIndex );
 
-        if ( aToken.compareTo( rtl::OUString::createFromAscii( ".." ) ) == 0 )
+        if ( aToken.compareToAscii( ".." ) == 0 )
             aTokenStack.pop_back();
         else
             aTokenStack.push_back( aToken );
@@ -3641,6 +3687,7 @@ static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::O
     return sal_True;
 }
 
+#endif
 //----------------------------------------------------------------------------
 
 sal_Bool SAL_CALL shell::checkMountPoint( const rtl::OUString&  aUnqPath,
