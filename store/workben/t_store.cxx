@@ -2,9 +2,9 @@
  *
  *  $RCSfile: t_store.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 21:15:30 $
+ *  last change: $Author: mhu $ $Date: 2001-07-18 11:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _T_STORE_CXX "$Revision: 1.3 $"
+#define _T_STORE_CXX "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -75,9 +75,6 @@
 #include <osl/time.h>
 #endif
 
-#ifndef _RTL_CHAR_H_
-#include <rtl/char.h>
-#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -126,6 +123,14 @@ enum Options
     OPTION_CREAT   = 0x0400,
     OPTION_TRUNC   = 0x0800
 };
+
+inline sal_Char ascii_toLowerCase (sal_Char ch)
+{
+    if ((ch >= 0x41) && (ch <= 0x5A))
+        return (ch + 0x20);
+    else
+        return (ch);
+}
 
 /*========================================================================
  *
@@ -284,7 +289,7 @@ int SAL_CALL main (int argc, char **argv)
         const char *opt = argv[i];
         if (opt[0] == '-')
         {
-            switch (rtl_char_toLowerCase(opt[1]))
+            switch (ascii_toLowerCase(sal_Char(opt[1])))
             {
                 case 'f':
                     nOptions |= OPTION_FILE;
@@ -349,9 +354,30 @@ int SAL_CALL main (int argc, char **argv)
 
     if ((nOptions == 0) || (nOptions & OPTION_HELP))
     {
-        printf ("Options:\n");
-        printf ("-f\tfilename\n");
+        printf ("Usage:\tt_store "
+                "[[-c] [-t] [-r] [-w]] [[-i] [-d] [-h]] "
+                "[-f filename]\n");
+
+        printf ("\nOptions:\n");
+        printf ("-c\tcreate\n");
+        printf ("-t\ttruncate\n");
+        printf ("-r\tread\n");
+        printf ("-w\twrite\n");
+        printf ("-i\titerate\n");
+        printf ("-d\tdump\n");
         printf ("-h\thelp\n");
+        printf ("-f\tfilename\n");
+
+        printf ("\nExamples:");
+        printf ("\nt_store -c -w -f t_store.rdb\n");
+        printf ("\tCreate file 't_store.rdb',\n"
+                "\twrite fixed number (1000) of streams.\n");
+        printf ("\nt_store -c -i -d -f t_store.rdb\n");
+        printf ("\tOpen file 't_store.rdb', "
+                "create '/' directory,\n"
+                "\titerate directory tree, "
+                "dump directory info.\n");
+
         exit (0);
     }
 
@@ -612,4 +638,3 @@ int SAL_CALL main (int argc, char **argv)
 
     return 0;
 }
-
