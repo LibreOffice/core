@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 19:31:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include "com/sun/star/beans/XPropertySetInfo.hpp"
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
@@ -311,7 +314,18 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                 Any aAny;
                 aAny <<= sStyleName;
 
-                rPropSet->setPropertyValue( rPropertyName, aAny );
+                try
+                {
+                    rPropSet->setPropertyValue( rPropertyName, aAny );
+                }
+                catch ( ::com::sun::star::lang::IllegalArgumentException& e )
+                {
+                    Sequence<OUString> aSeq(1);
+                    aSeq[0] = sStyleName;
+                    GetImport().SetError(
+                        XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_ERROR,
+                        aSeq, e.Message, NULL );
+                }
             }
         }
     }
