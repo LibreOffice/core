@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat_service.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-31 16:21:28 $
+ *  last change:$Date: 2003-05-27 12:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ public class java_fat_service implements TestBase {
     public boolean executeTest(lib.TestParameters param) {
         DynamicClassLoader dcl = new DynamicClassLoader();
         log = (LogWriter)dcl.getInstance((String)param.get("LogWriter"));
+        debug = ((Boolean) param.get("DebugIsActive")).booleanValue();
+
         DescGetter dg = new APIDescGetter();
         String job = (String) param.get("TestJob");
         boolean retValue = true;
@@ -111,7 +113,7 @@ public class java_fat_service implements TestBase {
         //get Job-Descriptions
         log.println("Getting Descriptions for Job: "+job);
         DescEntry[] entries = dg.getDescriptionFor(job,
-                (String) param.get("DescriptionPath"),true);
+                (String) param.get("DescriptionPath"),debug);
 
         if (entries == null ) {
             log.println("Couldn't get Description for Job");
@@ -120,7 +122,7 @@ public class java_fat_service implements TestBase {
 
         String conStr = (String) param.get("ConnectionString");
 
-        XMultiServiceFactory msf = param.getMSF();
+        XMultiServiceFactory msf = (XMultiServiceFactory)param.getMSF();
 
         for (int l=0;l<entries.length;l++) {
 
@@ -266,7 +268,7 @@ public class java_fat_service implements TestBase {
     protected TestEnvironment getEnv(DescEntry entry, TestParameters param) {
             DynamicClassLoader dcl = new DynamicClassLoader();
             log = (LogWriter)dcl.getInstance((String)param.get("LogWriter"));
-            XMultiServiceFactory msf = param.getMSF();
+            XMultiServiceFactory msf = (XMultiServiceFactory)param.getMSF();
 
             TestCase tCase = null;
 
