@@ -71,7 +71,7 @@ TARGET=solaris
 
 # --- Files --------------------------------------------------------
 
-LAUNCHERLIST = writer calc draw impress math printeradmin
+LAUNCHERLIST = writer calc draw impress math base printeradmin
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 LAUNCHERDIR  = $(shell cd $(MISC)$/$(TARGET); pwd)
 
@@ -89,7 +89,18 @@ MIMELIST = \
     presentation \
     presentation-template \
     formula \
-    master-document
+    master-document \
+    oasis-text \
+    oasis-text-template \
+    oasis-spreadsheet \
+    oasis-spreadsheet-template \
+    oasis-drawing \
+    oasis-drawing-template \
+    oasis-presentation \
+    oasis-presentation-template \
+    oasis-formula \
+    oasis-master-document \
+        oasis-database
 
 GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys
   
@@ -99,6 +110,7 @@ PKGFLAGFILE = $(MISC)$/$(TARGET).flag
 PKGDEPN = \
     $(MISC)/$(TARGET)/usr/share/applications.flag \
     $(MISC)/$(TARGET)/usr/share/gnome/application-registry/$(UNIXFILENAME).applications \
+    $(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).mime \
     $(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).keys
         
 PKGDIR  = $(shell cd $(BIN); pwd)
@@ -149,11 +161,17 @@ $(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDE
     @$(PERL) ../share/translate.pl -p $(PRODUCTNAME) -d $(MISC)/$(TARGET) --ext "keys" --key "description"  $(ULFDIR)/documents.ulf
     @cat $(MISC)/$(TARGET)/{$(MIMELIST)}.keys > $@
 
+$(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).mime : ../mimetypes/openoffice.mime
+    @$(MKDIRHIER) $(@:d)
+    @echo Creating GNOME .mime file ..
+    @echo ---------------------------------
+    @cat $< | tr -d "\015" > $@
+
 $(MISC)/$(TARGET)/usr/share/gnome/application-registry/$(UNIXFILENAME).applications : ../productversion.mk ../mimetypes/openoffice.applications
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .applications file ..
     @echo ---------------------------------
-    @cat $< | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
+    @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
 
 # --- pkginfo & prototype -----------------------------------------
 
