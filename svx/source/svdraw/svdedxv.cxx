@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-31 09:48:47 $
+ *  last change: $Author: aw $ $Date: 2002-05-31 11:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1472,7 +1472,7 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             // *pSet nicht enhalten ist (ansonsten ist es eine Kopie).
             USHORT* pNewWhichTable=RemoveWhichRange(pSet->GetRanges(),EE_ITEMS_START,EE_ITEMS_END);
             SfxItemSet aSet(pMod->GetItemPool(),pNewWhichTable);
-            delete pNewWhichTable;
+            /*90353*/ delete[] pNewWhichTable;
             SfxWhichIter aIter(aSet);
             USHORT nWhich=aIter.FirstWhich();
             while (nWhich!=0) {
