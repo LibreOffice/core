@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexTestCase.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Date: 2003-10-06 12:37:52 $
+ *  last change: $Date: 2003-11-18 16:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,9 @@ import java.io.PrintWriter;
  */
 public abstract class ComplexTestCase implements ComplexTest {
     /** The test parameters **/
-    protected static TestParameters param = null;
+    static protected TestParameters param = null;
     /** Log writer **/
-    protected static LogWriter log = null;
+    static protected LogWriter log = null;
     /** Description entry **/
     protected DescEntry subEntry = null;
     /** State of the current test method **/
@@ -88,6 +88,10 @@ public abstract class ComplexTestCase implements ComplexTest {
      * Can be set with parameter 'ThreadTimeOut'
      **/
     protected int mThreadTimeOut = 0;
+    /** Continue a test even if it did fail **/
+    public static final boolean CONTINUE = true;
+    /** End a test if it did fail **/
+    public static final boolean BREAK = true;
 
     /**
      * Call test. It is expected, that an environment is
