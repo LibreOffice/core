@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.203 $
+ *  $Revision: 1.204 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:44:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1182,79 +1182,12 @@ static ULONG ImplAutoHelpID()
     ULONG nHID = 0;
 
     ResMgr *pResMgr = Resource::GetResManager();
-
-    DBG_ASSERT( pResMgr,          "MM hat gesagt, dass wir immer einen haben" );
-    DBG_ASSERT( pResMgr->nTopRes, "MM hat gesagt, dass der Stack nie leer ist" );
-    if( !pResMgr || pResMgr->nTopRes < 1 || pResMgr->nTopRes > 2 )
+    DBG_ASSERT( pResMgr, "No res mgr for auto help id" );
+    if( ! pResMgr )
         return 0;
 
-    const ImpRCStack *pRC = pResMgr->StackTop( pResMgr->nTopRes==1 ? 0 : 1 );
+    nHID = pResMgr->GetAutoHelpId();
 
-    DBG_ASSERT( pRC->pResource, "MM hat gesagt, dass der immer einen hat" );
-    ULONG nGID = pRC->pResource->GetId();
-
-    if( !nGID || nGID > 32767 )
-        return 0;
-
-    // GGGg gggg::gggg gggg::ggLL LLLl::llll llll
-    switch( pRC->pResource->GetRT() ) { // maximal 7
-        case RSC_DOCKINGWINDOW:
-            nHID += 0x20000000L;
-        case RSC_WORKWIN:
-            nHID += 0x20000000L;
-        case RSC_MODELESSDIALOG:
-            nHID += 0x20000000L;
-        case RSC_FLOATINGWINDOW:
-            nHID += 0x20000000L;
-        case RSC_MODALDIALOG:
-            nHID += 0x20000000L;
-        case RSC_TABPAGE:
-            nHID += 0x20000000L;
-
-            if( pResMgr->nTopRes == 2 ) {
-                pRC = pResMgr->StackTop();
-                ULONG nLID = pRC->pResource->GetId();
-
-                if( !nLID || nLID > 511 )
-                    return 0;
-
-                switch( pRC->pResource->GetRT() ) { // maximal 32
-                    case RSC_TABCONTROL:        nHID |= 0x0000; break;
-                    case RSC_RADIOBUTTON:       nHID |= 0x0200; break;
-                    case RSC_CHECKBOX:          nHID |= 0x0400; break;
-                    case RSC_TRISTATEBOX:       nHID |= 0x0600; break;
-                    case RSC_EDIT:              nHID |= 0x0800; break;
-                    case RSC_MULTILINEEDIT:     nHID |= 0x0A00; break;
-                    case RSC_MULTILISTBOX:      nHID |= 0x0C00; break;
-                    case RSC_LISTBOX:           nHID |= 0x0E00; break;
-                    case RSC_COMBOBOX:          nHID |= 0x1000; break;
-                    case RSC_PUSHBUTTON:        nHID |= 0x1200; break;
-                    case RSC_SPINFIELD:         nHID |= 0x1400; break;
-                    case RSC_PATTERNFIELD:      nHID |= 0x1600; break;
-                    case RSC_NUMERICFIELD:      nHID |= 0x1800; break;
-                    case RSC_METRICFIELD:       nHID |= 0x1A00; break;
-                    case RSC_CURRENCYFIELD:     nHID |= 0x1C00; break;
-                    case RSC_DATEFIELD:         nHID |= 0x1E00; break;
-                    case RSC_TIMEFIELD:         nHID |= 0x2000; break;
-                    case RSC_IMAGERADIOBUTTON:  nHID |= 0x2200; break;
-                    case RSC_NUMERICBOX:        nHID |= 0x2400; break;
-                    case RSC_METRICBOX:         nHID |= 0x2600; break;
-                    case RSC_CURRENCYBOX:       nHID |= 0x2800; break;
-                    case RSC_DATEBOX:           nHID |= 0x2A00; break;
-                    case RSC_TIMEBOX:           nHID |= 0x2C00; break;
-                    case RSC_IMAGEBUTTON:       nHID |= 0x2E00; break;
-                    case RSC_MENUBUTTON:        nHID |= 0x3000; break;
-                    case RSC_MOREBUTTON:        nHID |= 0x3200; break;
-                    default:
-                        return 0;
-                } // of switch
-                nHID |= nLID;
-            } // of if
-            break;
-        default:
-            return 0;
-    } // of switch
-    nHID |= nGID << 14;
     return nHID;
 }
 
@@ -1265,7 +1198,7 @@ WinBits Window::ImplInitRes( const ResId& rResId )
     GetRes( rResId );
 
     char* pRes = (char*)GetClassRes();
-    pRes += 4;
+    pRes += 8;
     ULONG nStyle = GetLongRes( (void*)pRes );
     ((ResId&)rResId).aWinBits = nStyle;
     return nStyle;
@@ -1277,16 +1210,16 @@ void Window::ImplLoadRes( const ResId& rResId )
 {
     // newer move this line after IncrementRes
     char* pRes = (char*)GetClassRes();
-    pRes += 8;
+    pRes += 12;
     ULONG nHelpId = (ULONG)GetLongRes( (void*)pRes );
     if ( !nHelpId )
         nHelpId = ImplAutoHelpID();
     SetHelpId( nHelpId );
 
-    USHORT nObjMask = (USHORT)ReadShortRes();
+    ULONG nObjMask = ReadLongRes();
 
     // ResourceStyle
-    USHORT nRSStyle = ReadShortRes();
+    ULONG nRSStyle = ReadLongRes();
     // WinBits
     ReadLongRes();
     // HelpId
@@ -1305,7 +1238,7 @@ void Window::ImplLoadRes( const ResId& rResId )
         bPos = TRUE;
 
         if ( nObjMask & WINDOW_XYMAPMODE )
-            ePosMap = (MapUnit)(USHORT)ReadShortRes();
+            ePosMap = (MapUnit)ReadLongRes();
         if ( nObjMask & WINDOW_X )
             aPos.X() = ImplLogicUnitToPixelX( ReadLongRes(), ePosMap );
         if ( nObjMask & WINDOW_Y )
@@ -1320,7 +1253,7 @@ void Window::ImplLoadRes( const ResId& rResId )
         bSize = TRUE;
 
         if ( nObjMask & WINDOW_WHMAPMODE )
-            eSizeMap = (MapUnit)(USHORT)ReadShortRes();
+            eSizeMap = (MapUnit)ReadLongRes();
         if ( nObjMask & WINDOW_WIDTH )
             aSize.Width() = ImplLogicUnitToPixelX( ReadLongRes(), eSizeMap );
         if ( nObjMask & WINDOW_HEIGHT )
