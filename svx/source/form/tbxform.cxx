@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:07:00 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,7 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
             case SID_FM_GROUPBOX:
             case SID_FM_LISTBOX:
             case SID_FM_COMBOBOX:
+            case SID_FM_NAVIGATIONBAR:
             case SID_FM_EDIT:
             case SID_FM_DBGRID:
             case SID_FM_IMAGEBUTTON:
@@ -501,7 +502,7 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 Window* SvxFmTbxCtlRecTotal::CreateItemWindow( Window* pParent )
 {
     pFixedText = new FixedText( pParent );
-    String aSample("123456", sizeof("123456"));
+    String aSample( "123456", sizeof( "123456" ) - 1 );
     Size aSize( pFixedText->GetTextWidth( aSample ), pFixedText->GetTextHeight( ) );
     aSize.Width() += 12;
     pFixedText->SetSizePixel( aSize );
@@ -528,52 +529,6 @@ void SvxFmTbxCtlRecTotal::StateChanged( USHORT nSID, SfxItemState eState, const 
 
     SfxToolBoxControl::StateChanged( nSID, eState,pState );
 }
-
-/*
-//========================================================================
-// SvxFmTbxCtlRecTotal
-//========================================================================
-SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlFilterText, SfxBoolItem );
-
-//-----------------------------------------------------------------------
-SvxFmTbxCtlFilterText::SvxFmTbxCtlFilterText( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings )
-    :SfxToolBoxControl( nId, rTbx, rBindings )
-    ,pFixedText( NULL )
-    ,aText(SVX_RES(RID_STR_FORM_FILTERED))
-{
-}
-
-//-----------------------------------------------------------------------
-SvxFmTbxCtlFilterText::~SvxFmTbxCtlFilterText()
-{
-}
-
-//-----------------------------------------------------------------------
-Window* SvxFmTbxCtlFilterText::CreateItemWindow( Window* pParent )
-{
-    pFixedText = new FixedText( pParent );
-    Size aSize = pFixedText->GetTextSize( aText );
-    aSize.Width() += 6;
-    pFixedText->SetSizePixel( aSize );
-
-    return pFixedText;
-}
-
-//-----------------------------------------------------------------------
-void SvxFmTbxCtlFilterText::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    //////////////////////////////////////////////////////////////////////
-    // Setzen des FixedTextes
-    if (GetId() != SID_FM_FORM_FILTERED)
-        return;
-
-    if (pState && ((SfxBoolItem*)pState)->GetValue())
-        pFixedText->SetText( aText );
-    else
-        pFixedText->SetText( "" );
-
-    SfxToolBoxControl::StateChanged( nSID, eState,pState );
-}     */
 
 //========================================================================
 // SvxFmTbxNextRec
@@ -603,12 +558,6 @@ SvxFmTbxPrevRec::SvxFmTbxPrevRec( USHORT nId, ToolBox& rTbx, SfxBindings& rBindi
     :SfxToolBoxControl( nId, rTbx, rBindings )
 {
     rTbx.SetItemBits(nId, rTbx.GetItemBits(nId) | TIB_REPEAT);
-
-    /*AllSettings   aSettings = rTbx.GetSettings();
-    MouseSettings aMouseSettings = aSettings.GetMouseSettings();
-    aMouseSettings.SetButtonRepeat(aMouseSettings.GetButtonRepeat() / 2);
-    aSettings.SetMouseSettings(aMouseSettings);
-    rTbx.SetSettings(aSettings, TRUE);*/
 }
 
 
