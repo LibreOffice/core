@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:08:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
  */
 
 %{
+#include <hash_map>
 #include <string.h>
 
 #ifndef _IDLC_IDLC_HXX_
@@ -194,6 +195,49 @@ void checkIdentifier(::rtl::OString* id)
         }
 }
 
+typedef std::hash_map< rtl::OString, AstDeclaration *, rtl::OStringHash >
+    NameMap;
+
+void checkNameClashes(AstInterface * pInterface, NameMap & map)
+{
+    DeclList const & super = pInterface->getInheritedInterfaces();
+    {for (DeclList::const_iterator i(super.begin()); i != super.end(); ++i) {
+        checkNameClashes(static_cast< AstInterface * >(*i), map);
+    }}
+    {for (DeclList::iterator i(pInterface->getIteratorBegin());
+          i != pInterface->getIteratorEnd(); ++i) {
+        std::pair< NameMap::iterator, bool > res(
+            map.insert(NameMap::value_type((*i)->getLocalName(), *i)));
+        if (!res.second
+            && res.first->second->getScopedName() != (*i)->getScopedName())
+        {
+            idlc()->error()->error2(EIDL_REDEF_SCOPE, *i, res.first->second);
+        }
+    }}
+}
+
+void checkNameClashes(AstInterface * pInterface)
+{
+    NameMap map;
+    checkNameClashes(pInterface, map);
+}
+
+void addInheritedInterface(AstInterface * ifc, rtl::OString const & name)
+{
+    AstDeclaration * decl = ifc->lookupByName(name);
+    if (decl != 0 && decl->getNodeType() == NT_interface) {
+        if (!static_cast< AstInterface * >(decl)->isDefined()) {
+            idlc()->error()->inheritanceError(
+                NT_interface, &ifc->getScopedName(), decl);
+        } else if (!ifc->addInheritedInterface(
+                       static_cast< AstInterface * >(decl))) {
+            idlc()->error()->error1(EIDL_DOUBLE_INHERITANCE, decl);
+        }
+    } else {
+        idlc()->error()->lookupError(
+            EIDL_INTERFACEMEMBER_LOOKUP, name, scopeAsDecl(ifc));
+    }
+}
 
 %}
 /*
@@ -207,7 +251,6 @@ void checkIdentifier(::rtl::OString* id)
 	FeDeclarator*			fdval;		/* declarator value */
 	FeDeclList*			dlval;		/* declarator list value */
 	FeInheritanceHeader*	ihval;		/* inheritance header value */
-	FeInterfaceHeader*	ifval;		/* interface header value */
 	::rtl::OString*		sval;		/* OString value */
 	sal_Char* 			strval;	/* sal_Char* value */
 	sal_Char				cval;		/* sal_Char value */
@@ -297,8 +340,8 @@ void checkIdentifier(::rtl::OString* id)
 %type <dclval>	array_declarator array_type
 
 %type <sval>	interface_decl 
-%type <sval>	scoped_name
-%type <slval>  	scoped_names at_least_one_scoped_name inheritance_spec opt_raises
+%type <sval>	scoped_name inheritance_spec
+%type <slval>  	scoped_names at_least_one_scoped_name opt_raises
 
 %type <etval>	const_type integer_type char_type boolean_type
 %type <etval>	floating_pt_type any_type signed_int string_type
@@ -313,8 +356,7 @@ void checkIdentifier(::rtl::OString* id)
 %type <fdval> 	declarator simple_declarator complex_declarator
 %type <dlval> 	declarators at_least_one_declarator
 
-%type <ihval>	exception_header structure_header
-%type <ifval> 	interfaceheader
+%type <ihval>	exception_header structure_header interfaceheader
 
 %type <ulval> 	flag_header opt_attrflags opt_attrflag operation_head
 %type <ulval>	direction service_interface_header service_service_header
@@ -487,7 +529,7 @@ forward_dcl :
 		 */
 		if ( pScope && $1 ) 
 		{
-			pForward = new AstInterface(*$1, NULL, sal_False, pScope);
+			pForward = new AstInterface(*$1, NULL, pScope);
 			
 			if ( pDecl = pScope->lookupByName(pForward->getScopedName()) ) 
 			{
@@ -526,7 +568,7 @@ interface_dcl :
 		 */
 		if ( pScope && $1 ) 
 		{
-			pInterface = new AstInterface(*$1->getName(), $1->getInherits(), sal_True, pScope);
+			pInterface = new AstInterface(*$1->getName(), $1->getInherits(), pScope);
 			if ( pInterface &&
 				(pDecl = pScope->lookupByName(pInterface->getScopedName())) ) 
 			{
@@ -554,17 +596,7 @@ interface_dcl :
 						 */
 						else 
 						{
-                         if ( $1->getInherits() )   
-                             pForward->setInheritedInterfaces(*$1->getInherits());
-							
-							pForward->setImported(pInterface->isImported());
-							pForward->setInMainfile(pInterface->isInMainfile());
-							pForward->setLineNumber(pInterface->getLineNumber());
-							pForward->setFileName(pInterface->getFileName());
-
-							pForward->setDocumentation(pInterface->getDocumentation());
-							pForward->setDefined(sal_True);
-
+                            pForward->forwardDefined(*pInterface);
 							delete pInterface;
 							pInterface = pForward;
 						}
@@ -590,6 +622,16 @@ interface_dcl :
 	}
 	exports
 	{
+        AstInterface * ifc = static_cast< AstInterface * >(
+            idlc()->scopes()->topNonNull());
+        if (ifc->nInheritedInterfaces() == 0
+            && ifc->getScopedName() != "com::sun::star::uno::XInterface")
+        {
+            addInheritedInterface(
+                ifc, rtl::OString("::com::sun::star::uno::XInterface"));
+        }
+        ifc->setDefined();
+        checkNameClashes(ifc);
 		idlc()->setParseState(PS_InterfaceBodySeen);
 	}
 	'}'
@@ -612,9 +654,8 @@ interfaceheader :
 	{
 		idlc()->setParseState(PS_InheritSpecSeen);
 
-		FeInterfaceHeader* ih = new FeInterfaceHeader(NT_interface,$1, $2);
+		$$ = new FeInheritanceHeader(NT_interface, $1, $2);
 		delete $2;
-		$$ = ih;
 	}
 	;   
 
@@ -623,9 +664,9 @@ inheritance_spec :
 	{
 		idlc()->setParseState(PS_InheritColonSeen);
 	}
-	at_least_one_scoped_name
+	scoped_name
 	{
-		$$ = $3;
+        $$ = $3;
 	}
 	| /* EMPTY */
 	{
@@ -676,6 +717,14 @@ export :
 		idlc()->setParseState(PS_OperationDeclSeen);
 	}
 	';'
+	{
+		idlc()->setParseState(PS_NoState);
+	}
+    | interface_inheritance_decl
+    {
+		idlc()->setParseState(PS_InterfaceInheritanceDeclSeen);
+    }
+    ';'
 	{
 		idlc()->setParseState(PS_NoState);
 	}
@@ -1023,7 +1072,26 @@ opt_raises :
 		$$ = NULL;
 	}
 	;
-			
+
+interface_inheritance_decl :
+	IDL_INTERFACE
+	{
+		idlc()->setParseState(PS_ServiceIFHeadSeen);
+	}
+    at_least_one_scoped_name
+    {
+        AstInterface * ifc = static_cast< AstInterface * >(
+            idlc()->scopes()->topNonNull());
+        if (ifc->usesSingleInheritance()) {
+            idlc()->error()->error0(EIDL_MIXED_INHERITANCE);
+        } else {
+            for (StringList::iterator i($3->begin()); i != $3->end(); ++i) {
+                addInheritedInterface(ifc, *i);
+            }
+        }
+        delete $3;
+    }
+
 constants_exports :
 	constants_export constants_exports
 	| /* EMPTY */
@@ -1344,15 +1412,9 @@ exception_dcl :
 
 		if ( pScope )
 		{
-			AstException* pBase = NULL;
-			if ( $1->nInherits() )
-				pBase = (AstException*)$1->getInherits()->front();
-			
+			AstException* pBase = static_cast< AstException* >(
+                $1->getInherits());
 			pExcept = new AstException(*$1->getName(), pBase, pScope);	
-
-			if ( $1->nInherits() > 1 )
-				idlc()->error()->error1(EIDL_MULTIBLE_INHERITANCE, pExcept);
-
 			pScope->addDeclaration(pExcept);
 		}
 		/*
@@ -2268,15 +2330,8 @@ struct_type :
 
 		if ( pScope )
 		{
-			AstStruct* pBase= NULL;
-			if ( $1->nInherits() )
-				pBase = (AstStruct*)$1->getInherits()->front();
-			
+			AstStruct* pBase= static_cast< AstStruct* >($1->getInherits());
 			pStruct = new AstStruct(*$1->getName(), pBase, pScope);	
-
-			if ( $1->nInherits() > 1 )
-				idlc()->error()->error1(EIDL_MULTIBLE_INHERITANCE, pStruct);
-
 			pScope->addDeclaration(pStruct);
 		}
 		/*

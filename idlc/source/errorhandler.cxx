@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:07:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ static sal_Char* errorCodeToMessage(ErrorCode eCode)
     case EIDL_ILLEGAL_RAISES:
         return "error in raises(..) clause, ";
     case EIDL_CANT_INHERIT:
-        return "cannot inherit from ";
+        return "cannot inherit ";
     case EIDL_LOOKUP_ERROR:
         return "error in lookup of symbol: ";
     case EIDL_INHERIT_FWD_ERROR:
@@ -133,8 +133,6 @@ static sal_Char* errorCodeToMessage(ErrorCode eCode)
         return "error in lookup of symbol, expected interface is not defined and no forward exists: ";
     case EIDL_SERVICEMEMBER_LOOKUP:
         return "error in lookup of symbol, expected service is not defined: ";
-    case EIDL_MULTIBLE_INHERITANCE:
-        return "multiple inheritance is not allowed, in inheritance tree: ";
     case EIDL_TYPE_IDENT_CONFLICT:
         return "type and parameter/member name are equal: ";
     case EIDL_ONEWAY_RAISE_CONFLICT:
@@ -151,6 +149,11 @@ static sal_Char* errorCodeToMessage(ErrorCode eCode)
         return "only the 'attribute'|'readonly' flag is accepted: ";
     case EIDL_OPTIONALEXPECTED:
         return "only the 'optional' flag is accepted: ";
+    case EIDL_MIXED_INHERITANCE:
+        return "interface inheritance declarations cannot appear in both an"
+            " interface's header and its body";
+    case EIDL_DOUBLE_INHERITANCE:
+        return "interface is inherited more than once: ";
     }
     return "unknown errror";
 }
@@ -197,6 +200,8 @@ static sal_Char* parseStateToMessage(ParseState state)
         return "Malformed property declaration";
     case PS_OperationDeclSeen:
         return "Malformed operation declaration";
+    case PS_InterfaceInheritanceDeclSeen:
+        return "Malformed interface inheritance declaration";
     case PS_ConstantsDeclSeen:
         return "Malformed constants declaration";
     case PS_ServiceSeen:
@@ -620,9 +625,30 @@ void ErrorHandler::noTypeError(AstDeclaration* pDecl)
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::inheritanceError(OString* name, AstDeclaration* pDecl)
+namespace {
+
+char const * nodeTypeName(NodeType nodeType) {
+    switch (nodeType) {
+    case NT_interface:
+        return "interface";
+
+    case NT_exception:
+        return "exception";
+
+    case NT_struct:
+        return "struct";
+
+    default:
+        return "";
+    }
+}
+
+}
+
+void ErrorHandler::inheritanceError(NodeType nodeType, const OString* name, AstDeclaration* pDecl)
 {
-    if ( (pDecl->getNodeType() == NT_interface) &&
+    if ( nodeType == NT_interface &&
+         (pDecl->getNodeType() == NT_interface) &&
          !((AstInterface*)pDecl)->isDefined() )
     {
         errorHeader(EIDL_INHERIT_FWD_ERROR);
@@ -631,8 +657,9 @@ void ErrorHandler::inheritanceError(OString* name, AstDeclaration* pDecl)
     } else
     {
         errorHeader(EIDL_CANT_INHERIT);
-        fprintf(stderr, "interface '%s' attempts to inherit from '%s'\n",
-                name->getStr(), pDecl->getScopedName().getStr());
+        fprintf(stderr, "%s '%s' from '%s'\n",
+                nodeTypeName(nodeType), name->getStr(),
+                pDecl->getScopedName().getStr());
     }
     idlc()->incErrorCount();
 }
