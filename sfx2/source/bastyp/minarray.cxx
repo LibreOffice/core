@@ -2,9 +2,9 @@
  *
  *  $RCSfile: minarray.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ SfxPtrArr::SfxPtrArr( const SfxPtrArr& rOrig )
 SfxPtrArr::~SfxPtrArr()
 {
     DBG_MEMTEST();
-    __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+    delete [] pData;
 }
 
 // -----------------------------------------------------------------------
@@ -111,7 +111,7 @@ SfxPtrArr& SfxPtrArr::operator=( const SfxPtrArr& rOrig )
 {
     DBG_MEMTEST();
 
-    __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+    delete [] pData;
 
     nUsed = rOrig.nUsed;
     nGrow = rOrig.nGrow;
@@ -142,7 +142,7 @@ void SfxPtrArr::Append( void* aElem )
         {
             DBG_ASSERT( nUsed <= nNewSize, "" );
             memmove( pNewData, pData, sizeof(void*)*nUsed );
-            __DELETE (DEL_ARRAY (nUsed)) pData;
+            delete [] pData;
         }
         nUnused = nNewSize-nUsed;
         pData = pNewData;
@@ -169,7 +169,7 @@ USHORT SfxPtrArr::Remove( USHORT nPos, USHORT nLen )
     // bleibt vielleicht keiner uebrig
     if ( (nUsed-nLen) == 0 )
     {
-        __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+        delete [] pData;
         pData = 0;
         nUsed = 0;
         nUnused = 0;
@@ -193,7 +193,7 @@ USHORT SfxPtrArr::Remove( USHORT nPos, USHORT nLen )
         if ( nNewUsed != nPos )
             memmove( pNewData+nPos, pData+nPos+nLen,
                      sizeof(void*)*(nNewUsed-nPos) );
-        __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+        delete [] pData;
         pData = pNewData;
         nUsed = nNewUsed;
         nUnused = nNewSize - nNewUsed;
@@ -283,7 +283,7 @@ void SfxPtrArr::Insert( USHORT nPos, void* rElem )
         {
             DBG_ASSERT( nUsed < nNewSize, "" );
             memmove( pNewData, pData, sizeof(void*)*nUsed );
-            __DELETE (DEL_ARRAY (nUsed)) pData;
+            delete [] pData;
         }
         nUnused = nNewSize-nUsed;
         pData = pNewData;
@@ -338,7 +338,7 @@ ByteArr::ByteArr( const ByteArr& rOrig )
 ByteArr::~ByteArr()
 {
     DBG_MEMTEST();
-    __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+    delete [] pData;
 }
 
 // -----------------------------------------------------------------------
@@ -347,7 +347,7 @@ ByteArr& ByteArr::operator=( const ByteArr& rOrig )
 {
     DBG_MEMTEST();
 
-    __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+    delete [] pData;
 
     nUsed = rOrig.nUsed;
     nGrow = rOrig.nGrow;
@@ -377,7 +377,7 @@ void ByteArr::Append( char aElem )
         {
             DBG_ASSERT( nUsed <= nNewSize, "" );
             memmove( pNewData, pData, sizeof(char)*nUsed );
-            __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+            delete [] pData;
         }
         nUnused = nNewSize-nUsed;
         pData = pNewData;
@@ -404,7 +404,7 @@ USHORT ByteArr::Remove( USHORT nPos, USHORT nLen )
     // bleibt vielleicht keiner uebrig
     if ( (nUsed-nLen) == 0 )
     {
-        __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+        delete [] pData;
         pData = 0;
         nUsed = 0;
         nUnused = 0;
@@ -428,7 +428,7 @@ USHORT ByteArr::Remove( USHORT nPos, USHORT nLen )
         if ( nNewUsed != nPos )
             memmove( pNewData+nPos, pData+nPos+nLen,
                      sizeof(char)*(nNewUsed-nPos) );
-        __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+        delete [] pData;
         pData = pNewData;
         nUsed = nNewUsed;
         nUnused = nNewSize - nNewUsed;
@@ -497,7 +497,7 @@ void ByteArr::Insert( USHORT nPos, char rElem )
         {
             DBG_ASSERT( nUsed < nNewSize, "" );
             memmove( pNewData, pData, sizeof(char)*nUsed );
-            __DELETE (DEL_ARRAY (nUsed)) pData;
+            delete [] pData;
         }
         nUnused = nNewSize-nUsed;
         pData = pNewData;
@@ -570,7 +570,7 @@ WordArr::WordArr( const WordArr& rOrig )
 WordArr::~WordArr()
 {
     DBG_MEMTEST();
-    __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+    delete [] pData;
 }
 
 // -----------------------------------------------------------------------
@@ -579,7 +579,7 @@ WordArr& WordArr::operator=( const WordArr& rOrig )
 {
     DBG_MEMTEST();
 
-    __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+    delete [] pData;
 
     nUsed = rOrig.nUsed;
     nGrow = rOrig.nGrow;
@@ -609,7 +609,7 @@ void WordArr::Append( short aElem )
         {
             DBG_ASSERT( nUsed <= nNewSize, " " );
             memmove( pNewData, pData, sizeof(short)*nUsed );
-            __DELETE (DEL_ARRAY (nUsed)) pData;
+            delete [] pData;
         }
         nUnused = nNewSize-nUsed;
         pData = pNewData;
@@ -636,7 +636,7 @@ USHORT WordArr::Remove( USHORT nPos, USHORT nLen )
     // bleibt vielleicht keiner uebrig
     if ( (nUsed-nLen) == 0 )
     {
-        __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+        delete [] pData;
         pData = 0;
         nUsed = 0;
         nUnused = 0;
@@ -660,7 +660,7 @@ USHORT WordArr::Remove( USHORT nPos, USHORT nLen )
         if ( nNewUsed != nPos )
             memmove( pNewData+nPos, pData+nPos+nLen,
                      sizeof(short)*(nNewUsed-nPos) );
-            __DELETE (DEL_ARRAY (nUsed+nUnused)) pData;
+            delete [] pData;
         pData = pNewData;
         nUsed = nNewUsed;
         nUnused = nNewSize - nNewUsed;
@@ -729,7 +729,7 @@ void WordArr::Insert( USHORT nPos, short rElem )
         {
             DBG_ASSERT( nUsed < nNewSize, "" );
             memmove( pNewData, pData, sizeof(short)*nUsed );
-            __DELETE (DEL_ARRAY (nUsed)) pData;
+            delete [] pData;
         }
         nUnused = nNewSize-nUsed;
         pData = pNewData;
