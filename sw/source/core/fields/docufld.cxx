@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:07:07 $
+ *  last change: $Author: jp $ $Date: 2000-10-09 10:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,6 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
@@ -463,10 +460,7 @@ String SwAuthorFieldType::Expand(sal_uInt32 nFmt) const
     String sRet;
     SvtUserOptions aOpt;
     if((nFmt & 0xff) == AF_NAME)
-    {
-        sRet = SFX_APP()->GetIniManager()->GetUserFullName();
-//      ((sRet = aOpt.GetFirstName() ) += ' ' ) += aOpt.GetLastName();
-    }
+        sRet = aOpt.GetFullName();
     else
         sRet = aOpt.GetID();
     return sRet;
