@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-30 07:42:08 $
+ *  last change: $Author: pb $ $Date: 2002-11-22 13:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2530,15 +2530,34 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
     // Blinking
     nWhich = GetWhich( SID_ATTR_FLASH );
+    eState = rSet.GetItemState( nWhich );
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    switch ( eState )
     {
-        const SvxBlinkItem& rItem = (SvxBlinkItem&)rSet.Get( nWhich );
-        m_aBlinkingBtn.Check( rItem.GetValue() );
+        case SFX_ITEM_UNKNOWN:
+            m_aBlinkingBtn.Hide();
+            break;
+
+        case SFX_ITEM_DISABLED:
+        case SFX_ITEM_READONLY:
+            m_aBlinkingBtn.Disable();
+            break;
+
+        case SFX_ITEM_DONTCARE:
+            m_aBlinkingBtn.SetState( STATE_DONTKNOW );
+            break;
+
+        case SFX_ITEM_DEFAULT:
+        case SFX_ITEM_SET:
+        {
+            const SvxBlinkItem& rItem = (SvxBlinkItem&)rSet.Get( nWhich );
+            m_aBlinkingBtn.SetState( (TriState)rItem.GetValue() );
+            m_aBlinkingBtn.EnableTriState( FALSE );
+            break;
+        }
     }
 
     SetPrevFontWidthScale( rSet );
-
     ResetColor_Impl( rSet );
 
     // preview update
@@ -2788,13 +2807,32 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
         CLEARTITEM;
 
+    bChanged = TRUE;
+
     // Blinking
-    if ( m_aBlinkingBtn.IsChecked() != m_aBlinkingBtn.GetSavedValue() )
+    nWhich = GetWhich( SID_ATTR_FLASH );
+    pOld = GetOldItem( rSet, SID_ATTR_FLASH );
+    eState = m_aBlinkingBtn.GetState();
+
+    if ( pOld )
     {
-        nWhich = GetWhich( SID_ATTR_FLASH );
-        rSet.Put( SvxBlinkItem( m_aBlinkingBtn.IsChecked(), nWhich ) );
+        const SvxBlinkItem& rItem = *( (const SvxBlinkItem*)pOld );
+        if ( rItem.GetValue() == StateToAttr( eState ) && m_aBlinkingBtn.GetSavedValue() == eState )
+            bChanged = FALSE;
+    }
+
+    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+         !StateToAttr( eState ) && ( (SvxBlinkItem*)pItem )->GetValue() )
+        bChanged = TRUE;
+
+    if ( bChanged && eState != STATE_DONTKNOW )
+    {
+        rSet.Put( SvxBlinkItem( StateToAttr( eState ), nWhich ) );
         bModified = TRUE;
     }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        CLEARTITEM;
+
 
     bModified |= FillItemSetColor_Impl( rSet );
 
