@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2001-07-03 09:02:15 $
+#   last change: $Author: tra $ $Date: 2001-08-30 10:22:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,22 @@ PACKAGE=com$/sun$/star$/ui$/dialogs
 IDLFILES=\
     ExecutableDialogException.idl\
     ExecutableDialogResults.idl\
-    XExecutableDialog.idl
+    XExecutableDialog.idl\
+    CommonFilePickerElementIds.idl\
+    ExtendedFilePickerElementIds.idl\
+    FilePicker.idl\
+    FilePickerEvent.idl\
+    FilePreviewImageFormats.idl\
+    FolderPicker.idl\
+    ListboxControlActions.idl\
+    TemplateDescription.idl\
+    XFilePicker.idl\
+    XFilePickerControlAccess.idl	\
+    XFilePickerListener.idl\
+    XFilePickerNotifier.idl\
+    XFilePreview.idl\
+    XFilterManager.idl\
+    XFolderPicker.idl
 
 # ------------------------------------------------------------------
 
