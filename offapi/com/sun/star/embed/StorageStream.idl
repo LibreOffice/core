@@ -1,0 +1,200 @@
+/*************************************************************************
+ *
+ *  $RCSfile: StorageStream.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:23:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_embed_StorageStream_idl__
+#define __com_sun_star_embed_StorageStream_idl__
+
+#ifndef __com_sun_star_embed_XEncryptionProtectedSource_idl__
+#include <com/sun/star/embed/XEncryptionProtectedSource.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_io_XStream_idl__
+#include <com/sun/star/io/XStream.idl>
+#endif
+
+#ifndef __com_sun_star_io_XSeekable_idl__
+#include <com/sun/star/io/XSeekable.idl>
+#endif
+
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//=============================================================================
+/**  The <type>StorageStream</type> is a service that represents
+a stream that can be provided by <type>XStorage</type>::openStreamElement() call.
+In case a stream is open with readwrite access only one instance
+of the stream can exist.
+ */
+service StorageStream
+{
+    //================================================================
+    /** Allows to get access to <type>XInputStream</type> and <type>XOutputStream</type>
+    implementations. In case the storage stream is open readonly the returned reference
+    to <type>XOutputStream</type> will be empty.
+    */
+    interface ::com::sun::star::io::XStream;
+
+    //================================================================
+    /** Allows to control object lifetime.
+    <p>
+        A storage stream is created by a storage and has a restrictions depending on the mode
+    the stream is open in. In case a stream is open with readwrite access only one instance
+    of the stream can exist. It means that the stream can not be reopened even for readonly
+    access until the readwrite instance is disposed.
+        From the other side it is possible to open multiple streams for readonly access. But because
+    of the rule mentioned above it will not be possible to open the stream for readwrite access
+    until all the readonly instances are disposed.
+    </p>
+    <p>
+        The stream must be disposed by <type>XComponent</type>::dispose() call or by explicit closing
+    of input and output ( if provided ) streams implementations with
+    <type>XInputStream</type>::closeInput() and <type>XOutputStream</type>::closeOutput() calls.
+    Until stream is not disposed the changes written to it will be ignored during commit of parent storage.
+        In case parent storage is disposed the stream is disposed automatically.
+    </p>
+    <p>
+        In case a stream is disposed any call to it's methods should result in <type>DisposedException</type>.
+    </p>
+     */
+    interface ::com::sun::star::lang::XComponent;
+
+    //================================================================
+    /** Allows to get access to stream properties.
+     */
+    interface ::com::sun::star::beans::XPropertySet;
+
+    //================================================================
+    /** This interface must be supported in case either seekable readonly
+    or readwrite access is requested.
+     */
+    [optional]
+    interface ::com::sun::star::io::XSeekable;
+
+    //================================================================
+    /** Allows to set encryption key to the stream.
+
+    <p>
+        This interface must be supported by a stream with readwrite access
+    to allow to set an encryption key that should be used next time the stream is stored.
+    </p>
+     */
+    [optional]
+    interface ::com::sun::star::embed::XEncryptionProtectedSource;
+
+    //================================================================
+    /** Allows to get and set media type of the stream.
+     */
+    [property] string MediaType;
+
+    //================================================================
+    /** Specifies if the stream should be compressed next time it is stored.
+     */
+    [property] boolean Compressed;
+
+    //================================================================
+    /** Allows to detect if the stream is encrypted.
+    <p>
+        The property value <TRUE/> means that the stream is encrypted.
+    <FALSE/> - otherwise.
+    </p>
+
+    <p>
+        In case stream is not encrypted and the property is set to <TRUE/> explicitly,
+    the key must be set before the property is changed, othewise changing will fail.
+    It can be own encryption key or a common storage encryption key. In case both are
+    set the own one is used.
+        Since setting of own key sets this property to <TRUE/> automatically, changing
+    of this property to <TRUE/> explicitly makes sence only to encrypt stream with common
+    storage encryption key. In this case the own key is set to the current common encryption
+    key value.
+    </p>
+
+    <p>
+        In case stream is encrypted one and the value is set to <FALSE/>
+    the stream will not be encrypted next time it is stored. The data about
+    previously set encryption key ( if any ) will be removed.
+    </p>
+     */
+    [property] boolean Encrypted;
+
+    //================================================================
+    /** Allows to detect size of the stream.
+     */
+    [property, readonly] long Size;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
