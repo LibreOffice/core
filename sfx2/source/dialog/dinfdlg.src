@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ TabPage TP_DOCINFODESC
         Text [ ENGLISH ] = "~Title" ;
         Text [ norwegian ] = "~Tittel" ;
         Text [ italian ] = "~Titolo" ;
-        Text [ portuguese_brazilian ] = "~T?tulo" ;
+        Text [ portuguese_brazilian ] = "~T�tulo" ;
         Text [ portuguese ] = "~T�tulo" ;
         Text [ finnish ] = "O~tsikko" ;
         Text [ danish ] = "Titel" ;
@@ -93,7 +93,7 @@ TabPage TP_DOCINFODESC
         Text [ english_us ] = "~Title" ;
         Text[ chinese_simplified ] = "标题(~T)";
         Text[ russian ] = "���������";
-        Text[ polish ] = "Tytu�";
+        Text[ polish ] = "~Tytu�";
         Text[ japanese ] = "タイトル(~T)";
         Text[ chinese_traditional ] = "標題(~T)";
         Text[ greek ] = "~������";
@@ -103,6 +103,9 @@ TabPage TP_DOCINFODESC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~T�tol";
         Text[ thai ] = "~ชื่อ";
+        Text[ czech ] = "Název";
+        Text[ hebrew ] = "‮כותרת‬";
+        Text[ hindi ] = "~शीर्षक";
     };
     Edit ED_TITLE
     {
@@ -132,7 +135,7 @@ TabPage TP_DOCINFODESC
         Text [ english_us ] = "~Subject" ;
         Text[ chinese_simplified ] = "主题(~S)";
         Text[ russian ] = "����";
-        Text[ polish ] = "Temat";
+        Text[ polish ] = "Tem~at";
         Text[ japanese ] = "テーマ(~S)";
         Text[ chinese_traditional ] = "主題(~S)";
         Text[ greek ] = "����";
@@ -142,6 +145,9 @@ TabPage TP_DOCINFODESC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Assumpte";
         Text[ thai ] = "~ชื่อเรื่อง";
+        Text[ czech ] = "Předmět";
+        Text[ hebrew ] = "‮נושא‬";
+        Text[ hindi ] = "~विषय";
     };
     Edit ED_THEMA
     {
@@ -171,7 +177,7 @@ TabPage TP_DOCINFODESC
         Text [ english_us ] = "~Keywords" ;
         Text[ chinese_simplified ] = "关键字(~K)";
         Text[ russian ] = "�������� �����";
-        Text[ polish ] = "S�owa kluczowe";
+        Text[ polish ] = "~S�owa kluczowe";
         Text[ japanese ] = "キーワード(~K)";
         Text[ chinese_traditional ] = "關鍵字(~K)";
         Text[ greek ] = "������-�������";
@@ -181,6 +187,9 @@ TabPage TP_DOCINFODESC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Paraules clau";
         Text[ thai ] = "~คำสำคัญ";
+        Text[ czech ] = "Klíčová slova";
+        Text[ hebrew ] = "‮מילות מפתח‬";
+        Text[ hindi ] = "~प्रधानशब्द";
     };
     Edit ED_KEYWORDS
     {
@@ -198,28 +207,31 @@ TabPage TP_DOCINFODESC
         Text = "~Kommentar" ;
         Text [ ENGLISH ] = "~Description" ;
         Text [ norwegian ] = "~Description" ;
-        Text [ italian ] = "~Descrizione" ;
-        Text [ portuguese_brazilian ] = "~Descri??o" ;
+        Text [ italian ] = "~Commenti" ;
+        Text [ portuguese_brazilian ] = "~Descri��o" ;
         Text [ portuguese ] = "~Descri��o" ;
         Text [ finnish ] = "~Huomautus" ;
         Text [ danish ] = "Beskrivelse" ;
-        Text [ french ] = "Description" ;
-        Text [ swedish ] = "~Beskrivning" ;
+        Text [ french ] = "Commentaires" ;
+        Text [ swedish ] = "~Kommentar" ;
         Text [ dutch ] = "~Beschrijving" ;
-        Text [ spanish ] = "~Descripci�n" ;
+        Text [ spanish ] = "~Comentario" ;
         Text [ english_us ] = "~Comments" ;
-        Text[ chinese_simplified ] = "说明(~C)";
+        Text[ chinese_simplified ] = "注解(~C)";
         Text[ russian ] = "��������";
-        Text[ polish ] = "Opis";
+        Text[ polish ] = "~Komentarz";
         Text[ japanese ] = "コメント(~C)";
-        Text[ chinese_traditional ] = "描述(~C)";
+        Text[ chinese_traditional ] = "註解(~C)";
         Text[ greek ] = "���������";
-        Text[ korean ] = "메모(~C)";
+        Text[ korean ] = "설명(~C)";
         Text[ arabic ] = "�����";
-        Text[ turkish ] = "~Tan�m";
+        Text[ turkish ] = "~A��klamalar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Comentari";
         Text[ thai ] = "~ข้อคิดเห็น";
+        Text[ czech ] = "Komentář";
+        Text[ hebrew ] = "‮הערה‬";
+        Text[ hindi ] = "~अपवाद";
     };
     MultiLineEdit ED_COMMENT
     {
@@ -268,7 +280,7 @@ TabPage TP_DOCINFODOC
         Text [ dutch ] = "Type:" ;
         Text [ swedish ] = "Typ:" ;
         Text [ danish ] = "Type:" ;
-        Text [ portuguese_brazilian ] = "Typ:" ;
+        Text [ portuguese_brazilian ] = "Tipo:" ;
         Text [ portuguese ] = "Tipo:" ;
         Text[ chinese_simplified ] = "类型：";
         Text[ russian ] = "���:";
@@ -283,6 +295,9 @@ TabPage TP_DOCINFODOC
         Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi:";
         Text[ thai ] = "ชนิด:";
+        Text[ czech ] = "Typ:";
+        Text[ hebrew ] = "‮סוג:‬";
+        Text[ hindi ] = "वर्ग:";
     };
     FixedText FT_FILE_SHOW_TYP
     {
@@ -296,7 +311,7 @@ TabPage TP_DOCINFODOC
         Text = "~Schreibgesch�tzt" ;
         Text [ ENGLISH ] = "~Readonly" ;
         Text [ english_us ] = "~Read-only" ;
-        Text [ portuguese_brazilian ] = "~Schreibgesch?zt" ;
+        Text [ portuguese_brazilian ] = "~Somente leitura" ;
         Text [ swedish ] = "~Skrivskyddat" ;
         Text [ danish ] = "Skrivebeskyttet" ;
         Text [ italian ] = "~Sola lettura" ;
@@ -306,7 +321,7 @@ TabPage TP_DOCINFODOC
         Text [ portuguese ] = "~S� leitura" ;
         Text[ chinese_simplified ] = "防改写(~R)";
         Text[ russian ] = "~������ ��� ������";
-        Text[ polish ] = "Tylko do odczytu";
+        Text[ polish ] = "Tylko ~do odczytu";
         Text[ japanese ] = "読み取り専用(~R)";
         Text[ chinese_traditional ] = "唯讀(~R)";
         Text[ greek ] = "���� ��� ��������";
@@ -317,6 +332,9 @@ TabPage TP_DOCINFODOC
         Text[ catalan ] = "~Nom�s lectura";
         Text[ finnish ] = "Vain ~luku";
         Text[ thai ] = "~อ่านอย่างเดียว";
+        Text[ czech ] = "Pouze ke čtení";
+        Text[ hebrew ] = "‮קריאה בלבד‬";
+        Text[ hindi ] = "~केवल-पढ़ने केलिए";
     };
     FixedText FT_FILE
     {
@@ -331,7 +349,7 @@ TabPage TP_DOCINFODOC
         Text [ dutch ] = "Plaats:" ;
         Text [ swedish ] = "Plats:" ;
         Text [ danish ] = "Placering:" ;
-        Text [ portuguese_brazilian ] = "Ort:" ;
+        Text [ portuguese_brazilian ] = "Local:" ;
         Text [ portuguese ] = "Local:" ;
         Text[ chinese_simplified ] = "位置：";
         Text[ russian ] = "�����:";
@@ -346,6 +364,9 @@ TabPage TP_DOCINFODOC
         Text[ catalan ] = "Ubicaci�:";
         Text[ finnish ] = "Sijainti:";
         Text[ thai ] = "ที่ตั้ง:";
+        Text[ czech ] = "Umístění:";
+        Text[ hebrew ] = "‮מיקום:‬";
+        Text[ hindi ] = "स्थान:";
     };
     FixedText FT_FILE_VAL
     {
@@ -365,7 +386,7 @@ TabPage TP_DOCINFODOC
         Text [ dutch ] = "Grootte:" ;
         Text [ swedish ] = "Storlek:" ;
         Text [ danish ] = "St�rrelse:" ;
-        Text [ portuguese_brazilian ] = "Gr?e:" ;
+        Text [ portuguese_brazilian ] = "Tamanho:" ;
         Text [ portuguese ] = "Tamanho:" ;
         Text[ chinese_simplified ] = "大小：";
         Text[ russian ] = "������:";
@@ -380,6 +401,9 @@ TabPage TP_DOCINFODOC
         Text[ catalan ] = "Mida:";
         Text[ finnish ] = "Koko:";
         Text[ thai ] = "ขนาด:";
+        Text[ czech ] = "Velikost:";
+        Text[ hebrew ] = "‮גודל:‬";
+        Text[ hindi ] = "परिमाण:";
     };
     FixedText FT_FILE_SHOW_SIZE
     {
@@ -404,7 +428,7 @@ TabPage TP_DOCINFODOC
         Text [ dutch ] = "Gemaakt op:" ;
         Text [ swedish ] = "Skapat:" ;
         Text [ danish ] = "Oprettet den:" ;
-        Text [ portuguese_brazilian ] = "Erstellt am:" ;
+        Text [ portuguese_brazilian ] = "Criado:" ;
         Text [ portuguese ] = "Criado em:" ;
         Text[ chinese_simplified ] = "建立日期：";
         Text[ russian ] = "������:";
@@ -419,6 +443,9 @@ TabPage TP_DOCINFODOC
         Text[ catalan ] = "Creat el:";
         Text[ finnish ] = "Luotu:";
         Text[ thai ] = "สร้าง:";
+        Text[ czech ] = "Vytvořený:";
+        Text[ hebrew ] = "‮זמן יצירה:‬";
+        Text[ hindi ] = "उत्पन्न किया:";
     };
     FixedText FT_CREATE_VAL
     {
@@ -438,7 +465,7 @@ TabPage TP_DOCINFODOC
         Text [ dutch ] = "Gewijzigd op:" ;
         Text [ swedish ] = "�ndrat:" ;
         Text [ danish ] = "�ndret den:" ;
-        Text [ portuguese_brazilian ] = "Ge?ndert am:" ;
+        Text [ portuguese_brazilian ] = "Modificado:" ;
         Text [ portuguese ] = "Alterado em:" ;
         Text[ chinese_simplified ] = "更改的日期：";
         Text[ russian ] = "�������:";
@@ -453,6 +480,9 @@ TabPage TP_DOCINFODOC
         Text[ catalan ] = "Modificat el:";
         Text[ finnish ] = "Muokattu:";
         Text[ thai ] = "ดัดแปลงแก้ไข:";
+        Text[ czech ] = "Změněný:";
+        Text[ hebrew ] = "‮זמן עידכון:‬";
+        Text[ hindi ] = "सुधार किया:";
     };
     FixedText FT_CHANGE_VAL
     {
@@ -472,7 +502,7 @@ TabPage TP_DOCINFODOC
         Text [ dutch ] = "Afgedrukt op:" ;
         Text [ swedish ] = "Senaste utskrift:" ;
         Text [ danish ] = "Udskrevet den:" ;
-        Text [ portuguese_brazilian ] = "Gedruckt am:" ;
+        Text [ portuguese_brazilian ] = "Impresso:" ;
         Text [ portuguese ] = "Impresso em:" ;
         Text[ chinese_simplified ] = "上次打印的日期：";
         Text[ russian ] = "���������:";
@@ -482,11 +512,14 @@ TabPage TP_DOCINFODOC
         Text[ greek ] = "���������� ��:";
         Text[ korean ] = "최근 인쇄일:";
         Text[ arabic ] = "����� �������:";
-        Text[ turkish ] = "Yazd�rma tarihi:";
+        Text[ turkish ] = "Son yazd�r�lma tarihi:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Impr�s el:";
         Text[ finnish ] = "Tulostettu:";
         Text[ thai ] = "พิมพ์:";
+        Text[ czech ] = "Vytištěno:";
+        Text[ hebrew ] = "‮הדפסה אחרונה: ‬";
+        Text[ hindi ] = "छपाई किया:";
     };
     FixedText FT_PRINT_VAL
     {
@@ -501,7 +534,7 @@ TabPage TP_DOCINFODOC
         Text [ ENGLISH ] = "Editing time:" ;
         Text [ norwegian ] = "Editing time:" ;
         Text [ italian ] = "Durata revisioni:" ;
-        Text [ portuguese_brazilian ] = "Edit time:" ;
+        Text [ portuguese_brazilian ] = "Editado:" ;
         Text [ portuguese ] = "Editado:" ;
         Text [ french ] = "Dur�e d'�dition :" ;
         Text [ dutch ] = "Bewerkt:" ;
@@ -512,16 +545,19 @@ TabPage TP_DOCINFODOC
         Text [ english_us ] = "Editing time:" ;
         Text[ chinese_simplified ] = "编辑时间：";
         Text[ russian ] = "��������������:";
-        Text[ polish ] = "Opracowano:";
+        Text[ polish ] = "Edycja:";
         Text[ japanese ] = "編集時間:";
         Text[ chinese_traditional ] = "編輯時間：";
         Text[ greek ] = "�������������:";
         Text[ korean ] = "편집 시간:";
         Text[ arabic ] = "����:";
-        Text[ turkish ] = "D�zenleme:";
+        Text[ turkish ] = "D�zenleme zaman�:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Editat el:";
         Text[ thai ] = "แก้ไข:";
+        Text[ czech ] = "Editováno:";
+        Text[ hebrew ] = "‮זמן עריכה:‬";
+        Text[ hindi ] = "संपादन किया:";
     };
     FixedText FT_TIMELOG_VAL
     {
@@ -535,7 +571,7 @@ TabPage TP_DOCINFODOC
         Text = "Dokumentnummer:" ;
         Text [ ENGLISH ] = "Document number:" ;
         Text [ english_us ] = "Document number:" ;
-        Text [ portuguese_brazilian ] = "N?mero do documento:" ;
+        Text [ portuguese_brazilian ] = "Vers�o:" ;
         Text [ swedish ] = "Dokumentnummer:" ;
         Text [ danish ] = "Version:" ;
         Text [ italian ] = "Numero revisioni:" ;
@@ -551,11 +587,14 @@ TabPage TP_DOCINFODOC
         Text[ greek ] = "������:";
         Text[ korean ] = "버전:";
         Text[ arabic ] = "�������:";
-        Text[ turkish ] = "S�r�m:";
+        Text[ turkish ] = "Belge numaras�:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Versi�:";
         Text[ finnish ] = "Versio:";
         Text[ thai ] = "เวอร์ชั่น:";
+        Text[ czech ] = "Verze:";
+        Text[ hebrew ] = "‮מספר מסמך: ‬";
+        Text[ hindi ] = "आवर्तन:";
     };
     FixedText FT_DOCNO_VAL
     {
@@ -580,7 +619,7 @@ TabPage TP_DOCINFODOC
         Text[ danish ] = "Slet";
         Text[ swedish ] = "~Radera";
         Text[ polish ] = "~Usu�";
-        Text[ portuguese_brazilian ] = "~Delete";
+        Text[ portuguese_brazilian ] = "Exc~luir";
         Text[ japanese ] = "削除(~D)";
         Text[ korean ] = "삭제(~D)";
         Text[ chinese_simplified ] = "删除(~D)";
@@ -590,6 +629,9 @@ TabPage TP_DOCINFODOC
         Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
         Text[ thai ] = "~ลบ";
+        Text[ czech ] = "Vyčistit";
+        Text[ hebrew ] = "‮מחיקה‬";
+        Text[ hindi ] = "~मिटाओ";
     };
     CheckBox CB_USE_USERDATA
     {
@@ -604,12 +646,12 @@ TabPage TP_DOCINFODOC
         Text [ spanish ] = "Utilizar los ~datos del usuario" ;
         Text [ swedish ] = "Anv�nd ~anv�ndardata" ;
         Text [ portuguese ] = "Usar dados do ~utilizador";
-        Text[ portuguese_brazilian ] = "~Benutzerdaten verwenden";
+        Text[ portuguese_brazilian ] = "Usar dados do ~usu�rio";
         Text[ danish ] = "Anvend brugerdata";
         Text[ english_us ] = "~Apply user data";
         Text[ chinese_simplified ] = "采用使用者数据(~A)";
         Text[ russian ] = "��������� ������ ������������";
-        Text[ polish ] = "Zast~osuj dane u�ytkownika";
+        Text[ polish ] = "~Zastosuj dane u�ytkownika";
         Text[ japanese ] = "ユーザー データを使用する(~A)";
         Text[ chinese_traditional ] = "採用使用者資料(~A)";
         Text[ greek ] = "����� ~���������� ���������";
@@ -620,6 +662,9 @@ TabPage TP_DOCINFODOC
         Text[ catalan ] = "~Aplica les dades de l'usuari";
         Text[ finnish ] = "K�yt� ~k�ytt�j�tietoja";
         Text[ thai ] = "ใ~ช้ข้อมูลผู้ใช้";
+        Text[ czech ] = "Použít informace o uživateli";
+        Text[ hebrew ] = "‮שמירה עם שם משתמש‬";
+        Text[ hindi ] = "उपभोक्ता ड़ॉटा ~लागू करो";
     };
     FixedLine FL_FILE_3
     {
@@ -655,6 +700,9 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "�ablon:";
         Text[ catalan ] = "Plantilla:";
         Text[ thai ] = "แม่แบบ:";
+        Text[ czech ] = "Šablona:";
+        Text[ hebrew ] = "‮תבנית: ‬";
+        Text[ hindi ] = "नमूना:";
     };
     FixedText FT_TEMPL_VAL
     {
@@ -666,7 +714,7 @@ TabPage TP_DOCINFODOC
         Text = "unbekannt" ;
         Text [ English ] = "unknown" ;
         Text [ english_us ] = "unknown" ;
-        Text [ portuguese_brazilian ] = "unbekannt" ;
+        Text [ portuguese_brazilian ] = "desconhecido" ;
         Text [ swedish ] = "ok�nd" ;
         Text [ danish ] = "ukendt" ;
         Text [ italian ] = "sconosciuto" ;
@@ -687,6 +735,9 @@ TabPage TP_DOCINFODOC
         Text[ catalan ] = "Desconegut";
         Text[ finnish ] = "tuntematon";
         Text[ thai ] = "ไม่รู้จัก";
+        Text[ czech ] = "neznámá";
+        Text[ hebrew ] = "‮לא מוכר‬";
+        Text[ hindi ] = "अज्ञात";
     };
 };
 
@@ -757,7 +808,7 @@ TabPage TP_DOCINFOUSER
         Text [ English ] = "~Info fields..." ;
         Text [ norwegian ] = "Informajonsfelter..." ;
         Text [ italian ] = "Campi info..." ;
-        Text [ portuguese_brazilian ] = "Camos de Info..." ;
+        Text [ portuguese_brazilian ] = "~Campos de informa��o..." ;
         Text [ portuguese ] = "~Campos de informa��o" ;
         Text [ finnish ] = "~Tietokent�t..." ;
         Text [ danish ] = "Infofelter..." ;
@@ -768,7 +819,7 @@ TabPage TP_DOCINFOUSER
         Text [ english_us ] = "~Info fields..." ;
         Text[ chinese_simplified ] = "信息字段(~I)...";
         Text[ russian ] = "���� ����������...";
-        Text[ polish ] = "Pola infor~macyjne...";
+        Text[ polish ] = "Pola ~informacyjne...";
         Text[ japanese ] = "情報フィールド(~I)...";
         Text[ chinese_traditional ] = "資訊欄位(~I)...";
         Text[ greek ] = "����� �����������...";
@@ -778,6 +829,9 @@ TabPage TP_DOCINFOUSER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ca~mps d'informaci�...";
         Text[ thai ] = "เขตข้อมูลของ~ข้อมูล...";
+        Text[ czech ] = "Vlastní položky...";
+        Text[ hebrew ] = "‮שדות מידע...‬";
+        Text[ hindi ] = "~सूचना क्षेत्र...";
     };
 };
 
@@ -811,8 +865,14 @@ TabPage TP_DOCINFORELOAD
         Text[ korean ] = "자동으로 새로 고침 하지 않음";
         Text[ chinese_simplified ] = "不自动更新";
         Text[ chinese_traditional ] = "不自動更新";
-        Text[ turkish ] = "Do not refresh automatically";
+        Text[ turkish ] = "Otomatik olarak tazeleme";
         Text[ arabic ] = "Do not refresh automatically";
+        Text[ czech ] = "Neobnovovat automaticky";
+        Text[ hebrew ] = "‮לא לעדכן אוטומטית‬";
+        Text[ catalan ] = "Do not refresh automatically";
+        Text[ portuguese_brazilian ] = "Do not refresh automatically";
+        Text[ thai ] = "Do not refresh automatically";
+        Text[ hindi ] = "Do not refresh automatically";
     };
 
     RadioButton RB_RELOADUPDATE
@@ -838,8 +898,14 @@ TabPage TP_DOCINFORELOAD
         Text[ korean ] = "이 문서를 새로 고침";
         Text[ chinese_simplified ] = "更新这个文档";
         Text[ chinese_traditional ] = "更新這個文件";
-        Text[ turkish ] = "Refresh this document";
+        Text[ turkish ] = "Bu belgeyi";
         Text[ arabic ] = "Refresh this document";
+        Text[ czech ] = "Obnovit tento dokument";
+        Text[ hebrew ] = "‮עידכון מסמך זה‬";
+        Text[ catalan ] = "Refresh this document";
+        Text[ portuguese_brazilian ] = "Refresh this document";
+        Text[ thai ] = "Refresh this document";
+        Text[ hindi ] = "Refresh this document";
     };
     FixedText FT_EVERY
     {
@@ -848,26 +914,29 @@ TabPage TP_DOCINFORELOAD
         Text = "alle" ;
         Text [ english ] = "every" ;
         Text [ english_us ] = "every" ;
-        Text[ portuguese ] = "every";
-        Text[ russian ] = "every";
-        Text[ greek ] = "every";
-        Text[ dutch ] = "every";
+        Text[ portuguese ] = "Tudo";
+        Text[ russian ] = "���";
+        Text[ greek ] = "���";
+        Text[ dutch ] = "Alle";
         Text[ french ] = "tout";
         Text[ spanish ] = "cada";
-        Text[ finnish ] = "every";
+        Text[ finnish ] = "Kaikki";
         Text[ italian ] = "ogni";
-        Text[ danish ] = "every";
+        Text[ danish ] = "Alle";
         Text[ swedish ] = "var";
-        Text[ polish ] = "every";
+        Text[ polish ] = "Wszystkie";
         Text[ japanese ] = "すべて";
         Text[ korean ] = "설정 시간";
         Text[ chinese_simplified ] = "每";
         Text[ chinese_traditional ] = "毎";
-        Text[ turkish ] = "every";
-        Text[ arabic ] = "every";
+        Text[ turkish ] = "her";
+        Text[ arabic ] = "����";
         Text[ catalan ] = "Tot";
         Text[ thai ] = "ทั้งหมด";
         Text[ portuguese_brazilian ] = "Todos";
+        Text[ czech ] = "každých";
+        Text[ hebrew ] = "‮כל‬";
+        Text[ hindi ] = "सब ";
     };
     NumericField ED_RELOAD
     {
@@ -889,26 +958,29 @@ TabPage TP_DOCINFORELOAD
         Text = "Sekunden" ;
         Text [ english ] = "seconds" ;
         Text [ english_us ] = "seconds" ;
-        Text[ portuguese ] = "seconds";
-        Text[ russian ] = "seconds";
-        Text[ greek ] = "seconds";
-        Text[ dutch ] = "seconds";
+        Text[ portuguese ] = "Segundos";
+        Text[ russian ] = "������(�)";
+        Text[ greek ] = "������������";
+        Text[ dutch ] = "Seconden";
         Text[ french ] = "secondes";
         Text[ spanish ] = "segundos";
-        Text[ finnish ] = "seconds";
+        Text[ finnish ] = "sekuntia";
         Text[ italian ] = "secondi";
-        Text[ danish ] = "seconds";
+        Text[ danish ] = "Sekunder";
         Text[ swedish ] = "sekund";
-        Text[ polish ] = "seconds";
+        Text[ polish ] = "Sekundy";
         Text[ japanese ] = "秒毎";
         Text[ korean ] = "초 마다";
         Text[ chinese_simplified ] = "秒";
         Text[ chinese_traditional ] = "秒";
-        Text[ turkish ] = "seconds";
-        Text[ arabic ] = "seconds";
+        Text[ turkish ] = "saniyede bir tazele";
+        Text[ arabic ] = "�����";
         Text[ catalan ] = "segons";
         Text[ thai ] = "ชช:นน:วว";
         Text[ portuguese_brazilian ] = "segundos";
+        Text[ czech ] = "sekund";
+        Text[ hebrew ] = "‮שניות‬";
+        Text[ hindi ] = "सेकन्ड";
     };
 
     RadioButton RB_FORWARDUPDATE
@@ -934,8 +1006,14 @@ TabPage TP_DOCINFORELOAD
         Text[ korean ] = "이 문서로부터 다시 전송";
         Text[ chinese_simplified ] = "从这个文档转送";
         Text[ chinese_traditional ] = "從這個文件轉送";
-        Text[ turkish ] = "Redirect from this document";
+        Text[ turkish ] = "Bu belgeden y�nlendir";
         Text[ arabic ] = "Redirect from this document";
+        Text[ czech ] = "Přesměrovat z tohoto dokumentu";
+        Text[ hebrew ] = "‮הפניה מקובץ זה‬";
+        Text[ catalan ] = "Redirect from this document";
+        Text[ portuguese_brazilian ] = "Redirect from this document";
+        Text[ thai ] = "Redirect from this document";
+        Text[ hindi ] = "Redirect from this document";
     };
     FixedText FT_AFTER
     {
@@ -959,8 +1037,14 @@ TabPage TP_DOCINFORELOAD
         Text[ korean ] = "설정 시간";
         Text[ chinese_simplified ] = "经过";
         Text[ chinese_traditional ] = "經過";
-        Text[ turkish ] = "after";
+        Text[ turkish ] = "sonra";
         Text[ arabic ] = "after";
+        Text[ czech ] = "po";
+        Text[ hebrew ] = "‮אחרי‬";
+        Text[ catalan ] = "after";
+        Text[ portuguese_brazilian ] = "after";
+        Text[ thai ] = "after";
+        Text[ hindi ] = "after";
     };
     NumericField ED_FORWARD
     {
@@ -982,26 +1066,29 @@ TabPage TP_DOCINFORELOAD
         Text = "Sekunden" ;
         Text [ english ] = "seconds" ;
         Text [ english_us ] = "seconds" ;
-        Text[ portuguese ] = "seconds";
-        Text[ russian ] = "seconds";
-        Text[ greek ] = "seconds";
-        Text[ dutch ] = "seconds";
+        Text[ portuguese ] = "Segundos";
+        Text[ russian ] = "������(�)";
+        Text[ greek ] = "������������";
+        Text[ dutch ] = "Seconden";
         Text[ french ] = "secondes";
         Text[ spanish ] = "segundos";
-        Text[ finnish ] = "seconds";
+        Text[ finnish ] = "sekuntia";
         Text[ italian ] = "secondi";
-        Text[ danish ] = "seconds";
+        Text[ danish ] = "Sekunder";
         Text[ swedish ] = "sekund";
-        Text[ polish ] = "seconds";
+        Text[ polish ] = "Sekundy";
         Text[ japanese ] = "秒毎";
         Text[ korean ] = "초 후";
         Text[ chinese_simplified ] = "秒";
         Text[ chinese_traditional ] = "秒";
-        Text[ turkish ] = "seconds";
-        Text[ arabic ] = "seconds";
+        Text[ turkish ] = "saniye";
+        Text[ arabic ] = "�����";
         Text[ catalan ] = "segons";
         Text[ thai ] = "ชช:นน:วว";
         Text[ portuguese_brazilian ] = "segundos";
+        Text[ czech ] = "sekundách";
+        Text[ hebrew ] = "‮שניות‬";
+        Text[ hindi ] = "सेकन्ड";
     };
     FixedText FT_URL
     {
@@ -1020,15 +1107,19 @@ TabPage TP_DOCINFORELOAD
         Text[ italian ] = "URL";
         Text[ danish ] = "URL";
         Text[ swedish ] = "till URL";
-        Text[ polish ] = "URL";
+        Text[ polish ] = "Adres ~URL";
         Text[ portuguese_brazilian ] = "~URL";
         Text[ japanese ] = "URL へ";
         Text[ korean ] = "전송 URL";
         Text[ chinese_simplified ] = "送至 URL";
         Text[ chinese_traditional ] = "送至 URL";
-        Text[ turkish ] = "~URL";
+        Text[ turkish ] = "URL adresine";
         Text[ arabic ] = "URL~";
         Text[ catalan ] = "~URL";
+        Text[ czech ] = "URL";
+        Text[ hebrew ] = "‮ל URL‬";
+        Text[ thai ] = "to URL";
+        Text[ hindi ] = "~URL";
     };
     Edit ED_URL
     {
@@ -1064,8 +1155,14 @@ TabPage TP_DOCINFORELOAD
         Text[ korean ] = "프레임 대상";
         Text[ chinese_simplified ] = "送至框对象";
         Text[ chinese_traditional ] = "送至訊框";
-        Text[ turkish ] = "to frame";
+        Text[ turkish ] = "�er�evete";
         Text[ arabic ] = "to frame";
+        Text[ czech ] = "do rámce";
+        Text[ hebrew ] = "‮למסגרת‬";
+        Text[ catalan ] = "to frame";
+        Text[ portuguese_brazilian ] = "to frame";
+        Text[ thai ] = "to frame";
+        Text[ hindi ] = "to frame";
     };
     ComboBox CB_FRAME
     {
@@ -1093,8 +1190,14 @@ TabPage TP_DOCINFORELOAD
         Text[ korean ] = "[%PLACEHOLDER%] 옵션을 선택할 경우 URL을 입력해야만 합니다.";
         Text[ chinese_simplified ] = "如果选择选项 \"%PLACEHOLDER%\"，您就必须输入一个 URL 地址。";
         Text[ chinese_traditional ] = "如果您選擇選項 \"%PLACEHOLDER%\" ，就必須輸入一個 URL 地址。";
-        Text[ turkish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ turkish ] = "E�er \"%PLACEHOLDER%\" se�ene�ini se�erseniz, URL adresi girmeniz gerekli. ";
         Text[ arabic ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ czech ] = "Pokud vyberete volbu \"%PLACEHOLDER%\", musíte zadat URL.";
+        Text[ hebrew ] = "‮בחירת האפשרות \"%PLACEHOLDER%\" מצריכה ציון URL.‬";
+        Text[ catalan ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ portuguese_brazilian ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ thai ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ hindi ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
     };
 
 };
@@ -1115,11 +1218,11 @@ TabDialog SID_DOCINFO
     Text [ dutch ] = "Eigenschappen van" ;
     Text [ swedish ] = "Egenskaper f�r " ;
     Text [ danish ] = "Egenskaber af " ;
-    Text [ portuguese_brazilian ] = "Eigenschaften von " ;
+    Text [ portuguese_brazilian ] = "Propriedades de" ;
     Text [ portuguese ] = "Propriedades de " ;
     Text[ chinese_simplified ] = "属性： ";
     Text[ russian ] = "�������� ";
-    Text[ polish ] = "W�a�ciwo�ci   ";
+    Text[ polish ] = "W�a�ciwo�ci ";
     Text[ japanese ] = "プロパティ ";
     Text[ chinese_traditional ] = "屬性： ";
     Text[ greek ] = "��������� ��� ";
@@ -1146,7 +1249,7 @@ TabDialog SID_DOCINFO
                 Text [ dutch ] = "Algemeen" ;
                 Text [ swedish ] = "Allm�nt" ;
                 Text [ danish ] = "Generelt" ;
-                Text [ portuguese_brazilian ] = "Allgemein" ;
+                Text [ portuguese_brazilian ] = "Geral" ;
                 Text [ portuguese ] = "Geral" ;
                 Text[ chinese_simplified ] = "常规";
                 Text[ russian ] = "�����";
@@ -1161,6 +1264,9 @@ TabDialog SID_DOCINFO
                 Text[ catalan ] = "General";
                 Text[ finnish ] = "Yleiset";
                 Text[ thai ] = "ทั่วไป";
+                Text[ czech ] = "Obecné";
+                Text[ hebrew ] = "‮כללי‬";
+                Text[ hindi ] = "सामान्य";
             };
             PageItem
             {
@@ -1174,7 +1280,7 @@ TabDialog SID_DOCINFO
                 Text [ dutch ] = "Beschrijving" ;
                 Text [ swedish ] = "Beskrivning" ;
                 Text [ danish ] = "Beskrivelse" ;
-                Text [ portuguese_brazilian ] = "Beschreibung" ;
+                Text [ portuguese_brazilian ] = "Descri��o" ;
                 Text [ portuguese ] = "Descri��o" ;
                 Text[ chinese_simplified ] = "说明";
                 Text[ russian ] = "��������";
@@ -1189,6 +1295,9 @@ TabDialog SID_DOCINFO
                 Text[ catalan ] = "Descripci�";
                 Text[ finnish ] = "Kuvaus";
                 Text[ thai ] = "คำอธิบาย";
+                Text[ czech ] = "Popis";
+                Text[ hebrew ] = "‮תאור‬";
+                Text[ hindi ] = "विवरण";
             };
             PageItem
             {
@@ -1197,7 +1306,7 @@ TabDialog SID_DOCINFO
                 Text [ English ] = "User" ;
                 Text [ norwegian ] = "User" ;
                 Text [ italian ] = "Utente" ;
-                Text [ portuguese_brazilian ] = "Usu?rio" ;
+                Text [ portuguese_brazilian ] = "Definido pelo usu�rio" ;
                 Text [ portuguese ] = "Utilizador" ;
                 Text [ finnish ] = "K�ytt�j�n m��ritt�m�" ;
                 Text [ danish ] = "Bruger" ;
@@ -1214,10 +1323,13 @@ TabDialog SID_DOCINFO
                 Text[ greek ] = "�������";
                 Text[ korean ] = "사용자 정의";
                 Text[ arabic ] = "��������";
-                Text[ turkish ] = "Kullan�c�";
+                Text[ turkish ] = "Kullan�c� tan�ml�";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Definit per l'usuari";
                 Text[ thai ] = "กำหนดผู้ใช้";
+                Text[ czech ] = "Uživatelsky definované";
+                Text[ hebrew ] = "‮מוגדר על ידי המשתמש‬";
+                Text[ hindi ] = "उपभोक्ता से परिभाषित";
             };
             PageItem
             {
@@ -1241,16 +1353,31 @@ TabDialog SID_DOCINFO
                 Text[ greek ] = "Internet";
                 Text[ korean ] = "인터넷";
                 Text[ arabic ] = "������";
-                Text[ turkish ] = "Internet";
+                Text[ turkish ] = "�nternet";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Internet";
                 Text[ finnish ] = "Internet";
                 Text[ thai ] = "อินเตอร์เน็ต";
+                Text[ czech ] = "Internet";
+                Text[ hebrew ] = "‮אינטרנט‬";
+                Text[ hindi ] = "इन्टरनेट्";
             };
         };
     };
     Text[ thai ] = "คุณสมบัติของ ";
+    Text[ czech ] = "Vlastnosti ";
+    Text[ hebrew ] = "‮תכונות של‬";
+    Text[ hindi ] = "का स्वभाव ";
 };
+
+
+
+
+
+
+
+
+
 
 
 
