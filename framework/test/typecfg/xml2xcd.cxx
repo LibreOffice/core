@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2xcd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-07-06 13:22:20 $
+ *  last change: $Author: as $ $Date: 2001-07-09 12:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,8 +181,6 @@ using namespace ::framework ;
 #define SCPFILE_STANDARD                "scp_standard.txt"
 #define SCPFILE_ADDITIONAL              "scp_additional.txt"
 
-#define CFG_PATH_SEPERATOR              DECLARE_ASCII("/")
-
 //_________________________________________________________________________________________________________________
 //  declarations
 //_________________________________________________________________________________________________________________
@@ -306,8 +304,6 @@ void XCDGenerator::Main()
     ServiceManager aManager;
     ::comphelper::setProcessServiceFactory( aManager.getGlobalUNOServiceManager() );
     ::utl::setProcessServiceFactory      ( aManager.getGlobalUNOServiceManager() );
-
-    ::rtl::OUString _s = impl_encodeSetName( DECLARE_ASCII("Q&A") );
 
     // Get optional commands from command line.
     impl_parseCommandLine( m_aData );
@@ -1032,9 +1028,8 @@ void XCDGenerator::impl_generateTypeSet()
             ::rtl::OUString sEncName;
             for( nItem=0; nItem<nCount; ++nItem )
             {
-                sName            = lNames[nItem]                      ;
-                //sEncName         = impl_encodeSpecialSigns( sName    );
-                lEncNames[nItem] = impl_encodeSetName     ( sName );
+                sName            = lNames[nItem]              ;
+                lEncNames[nItem] = impl_encodeSetName( sName );
             }
         }
 
@@ -1104,9 +1099,11 @@ void XCDGenerator::impl_generateTypeSet()
                     pSCPBuffer->append     ( lNames[nItem]      );
                     pSCPBuffer->appendAscii( "\"\t\""           );
                     pSCPBuffer->append     ( sPath              );
-                    pSCPBuffer->appendAscii( "Type[\""          );
+                    pSCPBuffer->appendAscii( "Type"             );
+                    pSCPBuffer->append     ( CFG_ENCODING_OPEN  );
                     pSCPBuffer->append     ( lNames[nItem]      );
-                    pSCPBuffer->appendAscii( "\"]\"\n"          );
+                    pSCPBuffer->append     ( CFG_ENCODING_CLOSE );
+                    pSCPBuffer->appendAscii( "\"\n"             );
 
                     sName       = lEncNames[nItem];
                     aItem.sName = sName;
@@ -1177,7 +1174,6 @@ void XCDGenerator::impl_generateFilterSet()
                 sNewName         = lNewNames[nItem]                   ;
                 sOldName         = impl_getOldFilterName  ( sNewName );
                 lOldNames[nItem] = sOldName                           ;
-                //sOldName         = impl_encodeSpecialSigns( sOldName );
                 lEncNames[nItem] = impl_encodeSetName     ( sOldName );
             }
         }
@@ -1254,9 +1250,11 @@ void XCDGenerator::impl_generateFilterSet()
                     pSCPBuffer->append     ( lNewNames[nItem]   );
                     pSCPBuffer->appendAscii( "\"\t\""           );
                     pSCPBuffer->append     ( sPath              );
-                    pSCPBuffer->appendAscii( "Filter[\""        );
+                    pSCPBuffer->appendAscii( "Filter"           );
+                    pSCPBuffer->append     ( CFG_ENCODING_OPEN  );
                     pSCPBuffer->append     ( lOldNames[nItem]   );
-                    pSCPBuffer->appendAscii( "\"]\"\n"          );
+                    pSCPBuffer->append     ( CFG_ENCODING_CLOSE );
+                    pSCPBuffer->appendAscii( "\"\n"             );
 
                     sName       = lEncNames[nItem];
                     aItem.sName = sName;
@@ -1315,9 +1313,8 @@ void XCDGenerator::impl_generateDetectorSet()
             ::rtl::OUString sEncName;
             for( nItem=0; nItem<nCount; ++nItem )
             {
-                sName            = lNames[nItem]                      ;
-                //sEncName         = impl_encodeSpecialSigns( sName    );
-                lEncNames[nItem] = impl_encodeSetName     ( sName );
+                sName            = lNames[nItem]              ;
+                lEncNames[nItem] = impl_encodeSetName( sName );
 
                 m_aData.sNew2OldSCPStandard.appendAscii ( "org.openoffice.Office."  );
                 m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
@@ -1326,9 +1323,11 @@ void XCDGenerator::impl_generateDetectorSet()
                 m_aData.sNew2OldSCPStandard.appendAscii ( "\torg.openoffice.Office.");
                 m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
                 m_aData.sNew2OldSCPStandard.append      ( CFG_PATH_SEPERATOR        );
-                m_aData.sNew2OldSCPStandard.appendAscii ( "DetectService[\""        );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "DetectService"           );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_ENCODING_OPEN         );
                 m_aData.sNew2OldSCPStandard.append      ( sName                     );
-                m_aData.sNew2OldSCPStandard.appendAscii ( "\"]\n"                   );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_ENCODING_CLOSE        );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "\n"                      );
             }
         }
 
@@ -1387,9 +1386,8 @@ void XCDGenerator::impl_generateLoaderSet()
             ::rtl::OUString sEncName;
             for( nItem=0; nItem<nCount; ++nItem )
             {
-                sName            = lNames[nItem]                      ;
-                //sEncName         = impl_encodeSpecialSigns( sName    );
-                lEncNames[nItem] = impl_encodeSetName     ( sName );
+                sName            = lNames[nItem]              ;
+                lEncNames[nItem] = impl_encodeSetName( sName );
 
                 m_aData.sNew2OldSCPStandard.appendAscii ( "org.openoffice.Office."  );
                 m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
@@ -1398,9 +1396,11 @@ void XCDGenerator::impl_generateLoaderSet()
                 m_aData.sNew2OldSCPStandard.appendAscii ( "\torg.openoffice.Office.");
                 m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
                 m_aData.sNew2OldSCPStandard.append      ( CFG_PATH_SEPERATOR        );
-                m_aData.sNew2OldSCPStandard.appendAscii ( "FrameLoader[\""          );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "FrameLoader"             );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_ENCODING_OPEN         );
                 m_aData.sNew2OldSCPStandard.append      ( sName                     );
-                m_aData.sNew2OldSCPStandard.appendAscii ( "\"]\n"                   );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_ENCODING_CLOSE        );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "\n"                      );
             }
         }
 
@@ -1484,9 +1484,8 @@ void XCDGenerator::impl_generateContentHandlerSet()
             ::rtl::OUString sEncName;
             for( nItem=0; nItem<nCount; ++nItem )
             {
-                sName            = lNames[nItem]                      ;
-                //sEncName         = impl_encodeSpecialSigns( sName    );
-                lEncNames[nItem] = impl_encodeSetName     ( sName );
+                sName            = lNames[nItem]              ;
+                lEncNames[nItem] = impl_encodeSetName( sName );
 
                 m_aData.sNew2OldSCPStandard.appendAscii ( "org.openoffice.Office."  );
                 m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
@@ -1495,9 +1494,11 @@ void XCDGenerator::impl_generateContentHandlerSet()
                 m_aData.sNew2OldSCPStandard.appendAscii ( "\torg.openoffice.Office.");
                 m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
                 m_aData.sNew2OldSCPStandard.append      ( CFG_PATH_SEPERATOR        );
-                m_aData.sNew2OldSCPStandard.appendAscii ( "ContentHandler[\""       );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "ContentHandler"          );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_ENCODING_OPEN         );
                 m_aData.sNew2OldSCPStandard.append      ( sName                     );
-                m_aData.sNew2OldSCPStandard.appendAscii ( "\"]\n"                   );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_ENCODING_CLOSE        );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "\n"                      );
             }
         }
 
@@ -1692,28 +1693,22 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
 
     for( i=0; i<nCount; ++i )
     {
-        sal_Unicode c = sSource.charAt(i);
-        switch( c )
+        sal_Unicode cSign = sSource.charAt(i);
+        switch( cSign )
         {
-            // replace "&" with "&amp;"
-            case '&':   {
-                            sDestination.appendAscii( "&amp;" );
-                        }
+            // code &, ", ', <, > ...
+            case '&' :  sDestination.appendAscii( "&amp;"   );
                         break;
-            // replace "<" with "&lt;"
-            case '<':   {
-                            sDestination.appendAscii( "&lt;"  );
-                        }
+            case '<' :  sDestination.appendAscii( "&lt;"    );
                         break;
-            // replace ">" with "&gt;"
-            case '>':   {
-                            sDestination.appendAscii( "&gt;"  );
-                        }
+            case '>' :  sDestination.appendAscii( "&gt;"    );
+                        break;
+            case '\'':  sDestination.appendAscii( "&rsquo;" );
+                        break;
+            case '\"':  sDestination.appendAscii( "&quot;"  );
                         break;
             // copy all other letters
-            default :   {
-                            sDestination.append( sSource.charAt(i) );
-                        }
+            default :   sDestination.append( cSign );
                         break;
         }
     }
@@ -2428,6 +2423,8 @@ sal_Bool XCDGenerator::impl_isUsAsciiAlphaDigit(sal_Unicode c, sal_Bool bDigitAl
 
 ::rtl::OUString XCDGenerator::impl_encodeSetName( const ::rtl::OUString& rSource )
 {
+    return impl_encodeSpecialSigns( rSource );
+/*
     rtl::OUStringBuffer aTarget;
 
     sal_Unicode const * pBegin = rSource.getStr();
@@ -2473,4 +2470,5 @@ sal_Bool XCDGenerator::impl_isUsAsciiAlphaDigit(sal_Unicode c, sal_Bool bDigitAl
         aTarget.append(pCopyEnd, pEnd - pCopyEnd);
         return aTarget.makeStringAndClear();
     }
+*/
 }
