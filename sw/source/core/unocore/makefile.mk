@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 15:32:52 $
+#   last change: $Author: vg $ $Date: 2003-04-17 14:41:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,10 +66,6 @@ PRJNAME=sw
 TARGET=unocore
 
 AUTOSEG=true
-
-PROJECTPCH=core_pch
-PDBTARGET=core_pch
-PROJECTPCHSOURCE=..$/core_1st$/core_pch
 
 # --- Settings -----------------------------------------------------
 #ENABLE_EXCEPTIONS=TRUE
