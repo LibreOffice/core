@@ -59,27 +59,30 @@ namespace backenduno = css::configuration::backend ;
 
 
 
-typedef uno::Reference<lang::XSingleComponentFactory>  BackendFactory;
-typedef uno::Reference<backenduno::XSingleLayerStratum> XSingleLayerStratum;
+typedef uno::Reference<lang::XSingleComponentFactory>   BackendFactory;
+typedef uno::Reference<backenduno::XSingleLayerStratum> PlatformBackend;
 
 
-/* Struct containing a reference to a service factory(XSingleComponentFactory)
+/* Class containing a reference to a service factory(XSingleComponentFactory)
    object and a platform backend (XSingleLayerStratum).
    The reference to the platform backend will be NULL until the platform backend
-   is initialised */
-struct BackendRefsStruct
+   is initialised
+ */
+class BackendRef
 {
-    BackendFactory mFactory;
-    XSingleLayerStratum mBackend;
+    BackendFactory  mFactory;
+    PlatformBackend mBackend;
+public:
+    explicit
+    BackendRef(const BackendFactory& aFactory)
+    :mFactory(aFactory)
+    ,mBackend()
+    {}
 
-    BackendRefsStruct(const BackendFactory& aFactory,
-                      const XSingleLayerStratum& aBackend)
-                     :mFactory(aFactory),mBackend(aBackend){}
-
-
+    PlatformBackend getBackend(uno::Reference<uno::XComponentContext> const & xContext);
+    void disposeBackend();
 };
 
-typedef struct BackendRefsStruct  BackendRefs;
 typedef cppu::WeakComponentImplHelper4< backenduno::XBackend,
                                         backenduno::XBackendChangesNotifier,
                                         lang::XInitialization,
@@ -90,108 +93,114 @@ typedef cppu::WeakComponentImplHelper4< backenduno::XBackend,
   Class implementing the Backend service for system integration backend access.
   It creates the required backends and coordinates access to them.
   */
-class SystemIntegrationManager : public BackendBase {
-    public :
-        /**
-          Service constructor from a service factory.
+class SystemIntegrationManager : public BackendBase
+{
+public:
+   /**
+     Service constructor from a service factory.
 
-          @param xContext   component context
-          */
-        explicit
-        SystemIntegrationManager(
-                const uno::Reference<uno::XComponentContext>& xContext) ;
-        /** Destructor  */
-        ~SystemIntegrationManager() ;
+     @param xContext   component context
+     */
+    explicit
+    SystemIntegrationManager( const uno::Reference<uno::XComponentContext>& xContext) ;
 
-        // XBackend
-        virtual uno::Sequence<uno::Reference<backenduno::XLayer> >
-            SAL_CALL listOwnLayers(const rtl::OUString& aComponent)
-                throw (backenduno::BackendAccessException,
-                        lang::IllegalArgumentException,
-                        uno::RuntimeException) ;
+    /** Destructor  */
+    ~SystemIntegrationManager() ;
 
-        virtual uno::Reference<backenduno::XUpdateHandler>
-            SAL_CALL getOwnUpdateHandler(const rtl::OUString& aComponent)
-            throw (backenduno::BackendAccessException,
-                    lang::IllegalArgumentException,
-                    lang::NoSupportException,
-                    uno::RuntimeException) ;
-        virtual uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
-            listLayers(const rtl::OUString& aComponent,
-                       const rtl::OUString& aEntity)
+    // XBackend
+    virtual uno::Sequence<uno::Reference<backenduno::XLayer> >
+        SAL_CALL listOwnLayers(const rtl::OUString& aComponent)
             throw (backenduno::BackendAccessException,
                     lang::IllegalArgumentException,
                     uno::RuntimeException) ;
-        virtual uno::Reference<backenduno::XUpdateHandler> SAL_CALL
-            getUpdateHandler(const rtl::OUString& aComponent,
-                             const rtl::OUString& aEntity)
-            throw (backenduno::BackendAccessException,
-                    lang::IllegalArgumentException,
-                    lang::NoSupportException,
-                    uno::RuntimeException) ;
 
-        // XInitialize
-        virtual void SAL_CALL initialize(
-            const uno::Sequence<uno::Any>& aParameters)
-            throw (uno::RuntimeException, uno::Exception,
-                   lang::IllegalArgumentException,
-                   backenduno::BackendSetupException) ;
+    virtual uno::Reference<backenduno::XUpdateHandler>
+        SAL_CALL getOwnUpdateHandler(const rtl::OUString& aComponent)
+        throw (backenduno::BackendAccessException,
+                lang::IllegalArgumentException,
+                lang::NoSupportException,
+                uno::RuntimeException) ;
 
-       // XServiceInfo
-        virtual rtl::OUString SAL_CALL getImplementationName()
-            throw (uno::RuntimeException) ;
-        virtual sal_Bool SAL_CALL supportsService(
-                                            const rtl::OUString& aServiceName)
-            throw (uno::RuntimeException) ;
-        virtual uno::Sequence<rtl::OUString> SAL_CALL
-            getSupportedServiceNames(void) throw (uno::RuntimeException) ;
+    virtual uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
+        listLayers(const rtl::OUString& aComponent,
+                   const rtl::OUString& aEntity)
+        throw (backenduno::BackendAccessException,
+                lang::IllegalArgumentException,
+                uno::RuntimeException) ;
 
-        // XBackendChangesNotifier
-        virtual void SAL_CALL addChangesListener( const uno::Reference<backenduno::XBackendChangesListener>& xListner,
-                                                  const rtl::OUString& aComponent)
-            throw (::com::sun::star::uno::RuntimeException);
+    virtual uno::Reference<backenduno::XUpdateHandler> SAL_CALL
+        getUpdateHandler(const rtl::OUString& aComponent,
+                         const rtl::OUString& aEntity)
+        throw (backenduno::BackendAccessException,
+                lang::IllegalArgumentException,
+                lang::NoSupportException,
+                uno::RuntimeException) ;
+
+    // XInitialize
+    virtual void SAL_CALL initialize(const uno::Sequence<uno::Any>& aParameters)
+        throw (uno::RuntimeException, uno::Exception,
+               lang::IllegalArgumentException,
+               backenduno::BackendSetupException) ;
+
+   // XServiceInfo
+    virtual rtl::OUString SAL_CALL getImplementationName()
+        throw (uno::RuntimeException) ;
+
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& aServiceName)
+        throw (uno::RuntimeException) ;
+
+    virtual uno::Sequence<rtl::OUString> SAL_CALL
+        getSupportedServiceNames(void) throw (uno::RuntimeException) ;
+
+    // XBackendChangesNotifier
+    virtual void SAL_CALL addChangesListener( const uno::Reference<backenduno::XBackendChangesListener>& xListner,
+                                              const rtl::OUString& aComponent)
+        throw (uno::RuntimeException);
 
 
-        virtual void SAL_CALL removeChangesListener( const uno::Reference<backenduno::XBackendChangesListener>& xListner,
-                                                     const rtl::OUString& aComponent)
-            throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeChangesListener( const uno::Reference<backenduno::XBackendChangesListener>& xListner,
+                                                 const rtl::OUString& aComponent)
+        throw (uno::RuntimeException);
 
-         /**
-          Provides the implementation name.
+     /**
+      Provides the implementation name.
 
-          @return   implementation name
-          */
-        static rtl::OUString SAL_CALL getSystemIntegrationManagerName(void) ;
-        /**
-          Provides the list of supported services.
+      @return   implementation name
+      */
+    static rtl::OUString SAL_CALL getSystemIntegrationManagerName(void) ;
+    /**
+      Provides the list of supported services.
 
-          @return   list of service names
-          */
-        static uno::Sequence<rtl::OUString> SAL_CALL getServiceNames(void) ;
-   protected:
-   // ComponentHelper
-        virtual void SAL_CALL disposing();
-   private :
-        typedef std::multimap<rtl::OUString, BackendRefs> BackendFactoryList;
-        /** build lookup up table
-        */
-        void buildPlatformBeLookupTable();
-        /** get list of supported components
-        */
-        uno::Sequence<rtl::OUString>
-            getSupportedComponents(const BackendFactory& xFactory);
-        /**
-            get supporting backends from lookup table
-        */
-        std::vector<XSingleLayerStratum>
-            getSupportingBackends(const rtl::OUString& aComponent);
-        /** Mutex for resource protection */
-        osl::Mutex mMutex ;
-        /** Component Context */
-        uno::Reference<uno::XComponentContext> mContext ;
+      @return   list of service names
+      */
+    static uno::Sequence<rtl::OUString> SAL_CALL getServiceNames(void) ;
+protected:
+// ComponentHelper
+    virtual void SAL_CALL disposing();
+private :
+    typedef std::multimap<rtl::OUString, BackendRef> BackendFactoryList;
+    typedef std::vector<PlatformBackend> PlatformBackendList;
 
-        BackendFactoryList mPlatformBackends;
+    /** build lookup up table
+    */
+    void buildLookupTable();
 
+    /** get list of supported components
+    */
+    uno::Sequence<rtl::OUString> getSupportedComponents(const BackendFactory& xFactory);
+
+    /**
+        get supporting backends from lookup table
+    */
+    PlatformBackendList getSupportingBackends(const rtl::OUString& aComponent);
+
+private :
+    /** Mutex for resource protection */
+    osl::Mutex mMutex ;
+    /** Component Context */
+    uno::Reference<uno::XComponentContext> mContext ;
+
+    BackendFactoryList mPlatformBackends;
 } ;
 
 } }  // configmgr.backend
