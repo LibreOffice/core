@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:43:21 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,18 +250,18 @@ ModalDialog DLG_INS_ROW_COL
         Text [ portuguese ] = "Linhas" ;
         Text [ finnish ] = " rivejä" ;
         Text [ danish ] = "rækker" ;
-        Text [ french ] = "~Lignes" ;
-        Text [ swedish ] = "rader" ;
-        Text [ dutch ] = "Rijen" ;
+        Text [ french ] = " Lignes" ;
+        Text [ swedish ] = " rader" ;
+        Text [ dutch ] = " rijen" ;
         Text [ spanish ] = "Filas" ;
         Text [ english_us ] = "Rows" ;
         Text[ chinese_simplified ] = "ĞĞ";
         Text[ russian ] = "Ñòğîêè";
-        Text[ polish ] = "Wiersze";
+        Text[ polish ] = " Wiersze";
         Text[ japanese ] = "s";
         Text[ chinese_traditional ] = "¦æ";
-        Text[ arabic ] = "Õİæİ";
-        Text[ greek ] = "Ãñáììİò";
+        Text[ arabic ] = " Õİæİ";
+        Text[ greek ] = " Ãñáììİò";
         Text[ korean ] = "Çà";
         Text[ turkish ] = "Satır";
         Text[ language_user1 ] = " ";
@@ -276,18 +276,18 @@ ModalDialog DLG_INS_ROW_COL
         Text [ portuguese ] = "Colunas" ;
         Text [ finnish ] = " sarakkeita" ;
         Text [ danish ] = "kolonner" ;
-        Text [ french ] = "Colonnes" ;
-        Text [ swedish ] = "kolumner" ;
-        Text [ dutch ] = "Kolommen" ;
+        Text [ french ] = "  Colonnes" ;
+        Text [ swedish ] = " kolumner" ;
+        Text [ dutch ] = " kolommen" ;
         Text [ spanish ] = "Columnas" ;
         Text [ english_us ] = "Columns" ;
         Text[ chinese_simplified ] = "À¸";
         Text[ russian ] = "Êîëîíêè";
-        Text[ polish ] = "Kolumny";
+        Text[ polish ] = " Kolumny";
         Text[ japanese ] = "—ñ";
         Text[ chinese_traditional ] = "Äæ";
-        Text[ arabic ] = "ÃÚãÏÉ";
-        Text[ greek ] = "ÓôŞëåò";
+        Text[ arabic ] = " ÃÚãÏÉ";
+        Text[ greek ] = " ÓôŞëåò";
         Text[ korean ] = "¿­";
         Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
