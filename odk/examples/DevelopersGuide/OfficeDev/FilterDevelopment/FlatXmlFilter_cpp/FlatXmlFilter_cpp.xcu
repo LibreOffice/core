@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice.TypeDetection" oor:name="Filter">
+    <node oor:name="Filters">
+            <node oor:name="devguide_FlatXMLFilter_Cpp_calc" oor:op="replace">
+                <prop oor:name="FileFormatVersion"><value>0</value></prop>
+                <prop oor:name="Type"><value>devguide_FlatXMLType_Cpp_calc</value></prop>
+                <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+                <prop oor:name="UIComponent"/>
+                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlCpp, ,com.sun.star.comp.Calc.XMLOasisImporter,com.sun.star.comp.Calc.XMLOasisExporter</value></prop>
+                <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
+                <prop oor:name="TemplateName"/>
+                <prop oor:name="UIName">
+                    <value xml:lang="de">DevGuide FlatXML Calc</value>
+                    <value xml:lang="en-US">DevGuide FlatXML Calc</value>
+                </prop>
+                <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+            </node>
+            <node oor:name="devguide_FlatXMLFilter_Cpp_draw" oor:op="replace">
+                <prop oor:name="FileFormatVersion"><value>0</value></prop>
+                <prop oor:name="Type"><value>devguide_FlatXMLType_Cpp_draw</value></prop>
+                <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+                <prop oor:name="UIComponent"/>
+                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlCpp, ,com.sun.star.comp.DrawingLayer.XMLOasisImporter,com.sun.star.comp.DrawingLayer.XMLOasisExporter</value></prop>
+                <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
+                <prop oor:name="TemplateName"/>
+                <prop oor:name="UIName">
+                    <value xml:lang="de">DevGuide FlatXML Draw</value>
+                    <value xml:lang="en-US">DevGuide FlatXML Draw</value>
+                </prop>
+                <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+            </node>
+            <node oor:name="devguide_FlatXMLFilter_Cpp_impress" oor:op="replace">
+                <prop oor:name="FileFormatVersion"><value>0</value></prop>
+                <prop oor:name="Type"><value>devguide_FlatXMLType_Cpp_impress</value></prop>
+                <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+                <prop oor:name="UIComponent"/>
+                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlCpp, ,com.sun.star.comp.Impress.XMLOasisImporter,com.sun.star.comp.Impress.XMLOasisExporter</value></prop>
+                <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
+                <prop oor:name="TemplateName"/>
+                <prop oor:name="UIName">
+                    <value xml:lang="de">DevGuide FlatXML Impress</value>
+                    <value xml:lang="en-US">DevGuide FlatXML Impress</value>
+                </prop>
+                <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+            </node>
+            <node oor:name="devguide_FlatXMLFilter_Cpp_writer" oor:op="replace">
+                <prop oor:name="FileFormatVersion"><value>0</value></prop>
+                <prop oor:name="Type"><value>devguide_FlatXMLType_Cpp_writer</value></prop>
+                <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+                <prop oor:name="UIComponent"/>
+                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlCpp, ,com.sun.star.comp.Writer.XMLOasisImporter,com.sun.star.comp.Writer.XMLOasisExporter</value></prop>
+                <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
+                <prop oor:name="TemplateName"/>
+                <prop oor:name="UIName">
+                    <value xml:lang="de">DevGuide FlatXML Writer</value>
+                    <value xml:lang="en-US">DevGuide FlatXML Writer</value>
+                </prop>
+                <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+            </node>
+    </node>
+</oor:component-data>
