@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 11:49:59 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 15:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1977,7 +1977,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 43 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
         Text = "~Groﬂ-/Kleinschreibung" ;
         Text [ ENGLISH ] = "~Case sensitive" ;
         Text [ norwegian ] = "~Case sensitive" ;
@@ -2008,8 +2008,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     CheckBox BTN_REGEXP
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 128 , 43 ) ;
-        Size = MAP_APPFONT ( 85 , 10 ) ;
+        Pos = MAP_APPFONT ( 142 , 43 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "~Regul‰rer Ausdruck" ;
         Text [ ENGLISH ] = "~Regular expression" ;
         Text [ norwegian ] = "~Regular expression" ;
@@ -2041,7 +2041,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 57 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
         Text = "Bereich enth‰lt ~Spaltenbeschriftungen" ;
         Text [ ENGLISH ] = "Area ~contains column headers" ;
         Text [ norwegian ] = "Area ~contains column headers" ;
@@ -2072,8 +2072,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     CheckBox BTN_UNIQUE
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 128 , 57 ) ;
-        Size = MAP_APPFONT ( 85 , 10 ) ;
+        Pos = MAP_APPFONT ( 142 , 57 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "Keine ~Duplikate" ;
         Text [ ENGLISH ] = "~Unique" ;
         Text [ norwegian ] = "~Unique" ;
@@ -2105,7 +2105,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 71 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
         Text = "Filterergebnis ~ausgeben nach" ;
         Text [ ENGLISH ] = "Write ~result to" ;
         Text [ norwegian ] = "Write ~result to" ;
@@ -2136,8 +2136,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     CheckBox BTN_DEST_PERS
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 128 , 71 ) ;
-        Size = MAP_APPFONT ( 85 , 10 ) ;
+        Pos = MAP_APPFONT ( 142 , 71 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "~Persistent" ;
         Text [ ENGLISH ] = "~Persistent" ;
         TabStop = TRUE ;
