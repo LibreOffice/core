@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:10:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,8 @@ __EXPORT ScDrawView::~ScDrawView()
 
 void ScDrawView::AddCustomHdl()
 {
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+
     const SdrMarkList &rMrkList = GetMarkList();
     UINT32 nCount = rMrkList.GetMarkCount();
     for(UINT32 nPos=0; nPos<nCount; nPos++ )
@@ -178,7 +180,15 @@ void ScDrawView::AddCustomHdl()
         {
             const INT32 nDelta = 1;
 
-            Point aPos = pObj->GetCurrentBoundRect().TopLeft();
+            Rectangle aBoundRect = pObj->GetCurrentBoundRect();
+            Point aPos;
+            if (bNegativePage)
+            {
+                aPos = aBoundRect.TopRight();
+                aPos.X() = -aPos.X();           // so the loop below is the same
+            }
+            else
+                aPos = aBoundRect.TopLeft();
             long nPosX = (long) (aPos.X() / HMM_PER_TWIPS) + nDelta;
             long nPosY = (long) (aPos.Y() / HMM_PER_TWIPS) + nDelta;
 
@@ -406,7 +416,18 @@ void ScDrawView::UpdateWorkArea()
 {
     SdrPage* pPage = GetModel()->GetPage(nTab);
     if (pPage)
-        SetWorkArea( Rectangle( Point(), pPage->GetSize() ) );
+    {
+        Point aPos;
+        Size aPageSize( pPage->GetSize() );
+        Rectangle aNewArea( aPos, aPageSize );
+        if ( aPageSize.Width() < 0 )
+        {
+            //  RTL: from max.negative (left) to zero (right)
+            aNewArea.Right() = 0;
+            aNewArea.Left() = aPageSize.Width() + 1;
+        }
+        SetWorkArea( aNewArea );
+    }
     else
         DBG_ERROR("Page nicht gefunden");
 }
