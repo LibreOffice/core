@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:23:48 $
+ *  last change: $Author: avy $ $Date: 2001-05-04 08:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,10 +702,13 @@ void ODefinitionContainer::checkValid(sal_Bool _bIntendWriteAccess) const throw 
         throw DisposedException();
 
     if (_bIntendWriteAccess && isReadOnly())
+    {
+        ::rtl::OUString sMessage = DBACORE_RESSTRING( RID_STR_NEED_CONFIG_WRITE_ACCESS);
         DisposedException(
-            DBACORE_RESSTRING(RID_STR_NEED_CONFIG_WRITE_ACCESS),
+            sMessage,
             Reference< XInterface >(const_cast<XServiceInfo*>(static_cast<const XServiceInfo*>(this)))
         );
+    }
 
     DBG_ASSERT( (m_aDocuments.size() == m_aDocumentObjectKeys.size()) &&
                 (m_aDocuments.size() == m_aDocumentMap.size()),
