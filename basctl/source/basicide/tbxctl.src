@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:26:34 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 22:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,21 +76,21 @@ FloatingWindow RID_TBXCONTROLS
     Text [ danish ] = "Kontrolelementer" ;
     Text [ italian ] = "Campi di controllo" ;
     Text [ spanish ] = "Campos de control" ;
-    Text [ french ] = "Eléments de contrôle" ;
-    Text [ dutch ] = "Controlevelden" ;
+    Text [ french ] = "Champs de contrôle" ;
+    Text [ dutch ] = "Besturingselementen" ;
     Text [ portuguese_brazilian ] = "Kontrollfelder" ;
     Text [ portuguese ] = "Campos de controlo" ;
     String RID_TOOLBOX
     {
         Text = "Kontrollfelder" ;
         Text [ ENGLISH ] = "Controls" ;
-        Text [ dutch ] = "Controlevelden" ;
+        Text [ dutch ] = "Besturingselementen" ;
         Text [ english_us ] = "Controls" ;
         Text [ swedish ] = "Kontrollfält" ;
         Text [ danish ] = "Kontrolelementer" ;
         Text [ italian ] = "Campi di controllo" ;
         Text [ spanish ] = "Campos de control" ;
-        Text [ french ] = "Eléments de contrôle" ;
+        Text [ french ] = "Champs de contrôle" ;
         Text [ portuguese ] = "Campos de controlo" ;
         Text [ portuguese_brazilian ] = "Kontrollfelder" ;
         Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶Î";
@@ -143,7 +143,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Przycisk komendy";
             Text[ japanese ] = "ºÏİÄŞÎŞÀİ";
             Text[ chinese_traditional ] = "©R¥O«ö¶s";
-            Text[ arabic ] = "ÒÑ ÖÛØ";
+            Text[ arabic ] = "ÒÑ ÃãÑ";
             Text[ greek ] = "Ğåäßï åğéëïãŞò åíôïëŞò";
             Text[ korean ] = "¸í·É ¹öÆ°";
             Text[ turkish ] = "Komut düğmesi";
@@ -171,7 +171,7 @@ ToolBox RID_TOOLBOX
             Text[ japanese ] = "Áª¯¸ÎŞ¯¸½";
             Text[ chinese_traditional ] = "®Ö¨ú¤è¶ô";
             Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
-            Text[ greek ] = "Ğåäßï åëİã÷ïõ";
+            Text[ greek ] = "Ğëáßóéï åëİã÷ïõ";
             Text[ korean ] = "Ã¼Å© ¹Ú½º";
             Text[ turkish ] = "Seçme kutusu";
             Text[ language_user1 ] = " ";
@@ -186,7 +186,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Testo fisso" ;
             Text [ spanish ] = "Etiqueta" ;
             Text [ french ] = "Étiquette" ;
-            Text [ dutch ] = "Label" ;
+            Text [ dutch ] = "Bijschrift" ;
             Text [ swedish ] = "Etikett" ;
             Text [ danish ] = "Etiket" ;
             Text [ portuguese ] = "Etiqueta" ;
@@ -355,11 +355,11 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Mostra gli elementi di controllo invisibili" ;
             Text [ spanish ] = "Mostrar elementos de control invisibles" ;
             Text [ french ] = "Afficher les éléments de contrôle invisibles" ;
-            Text [ dutch ] = "Onzichtbare controle-elementen weergeven" ;
+            Text [ dutch ] = "Verborgen besturingselementen weergeven" ;
             Text[ chinese_simplified ] = "ÏÔÊ¾ÒşÈëµÄ¿ØÖÆ";
             Text[ russian ] = "Ïîêàçàòü ñêğûòûå ıëåìåíòû óïğàâëåíèÿ";
             Text[ polish ] = "Poka¿ ukryte elementy kontrolne";
-            Text[ japanese ] = "”ñ•\\¦‚ÌºİÄÛ°Ù—v‘f‚ğ•\\¦";
+            Text[ japanese ] = "‰B‚µºİÄÛ°Ù‚Ì•\\¦";
             Text[ chinese_traditional ] = "Åã¥ÜÁô¤Jªº±±¨î¤¸¥ó";
             Text[ arabic ] = "ÅÙåÇÑ ÚäÇÕÑ ÇáÊÍßã ÇáãÎİíÉ";
             Text[ greek ] = "ÅìöÜíéóç ìç ïñáôşí óôïé÷åßùí åëİã÷ïõ";
@@ -581,7 +581,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "¼¤»îÊÔÑéÄ£Ê½";
             Text[ russian ] = "Àêòèâèğîâàòü ğåæèì òåñòà";
             Text[ polish ] = "Uaktywnij tryb sprawdzania";
-            Text[ japanese ] = "Ã½ÄÓ°ÄŞ‚ğ±¸Ã¨ÌŞ‚É‚·‚é";
+            Text[ japanese ] = "Ã½ÄÓ°ÄŞ‚ğ±¸Ã¨ÌŞ";
             Text[ chinese_traditional ] = "¿E¬¡¸ÕÅç¼Ò¦¡";
             Text[ arabic ] = "ÊäÔíØ æÖÚ ÇáÇÎÊÈÇÑ";
             Text[ greek ] = "Åíåñãïğïßçóç êáôÜóôáóçò äïêéìŞò";
@@ -607,7 +607,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ÏÔÊ¾±í¸ñ¶Ô»°¿ò";
             Text[ russian ] = "Ïîêàçàòü äèàëîã ôîğìû";
             Text[ polish ] = "Poka¿ dialog formularza";
-            Text[ japanese ] = "Ì«°Ñ‚ÌÀŞ²±Û¸Ş‚ğ•\\¦";
+            Text[ japanese ] = "Ì«°ÑÀŞ²±Û¸Ş‚Ì•\\¦";
             Text[ chinese_traditional ] = "Åã¥Üªí®æ¹ï¸Ü¤è¶ô";
             Text[ arabic ] = "ÅÙåÇÑ ãÑÈÚ ÍæÇÑ ÇáÇÓÊãÇÑÉ";
             Text[ greek ] = "ÅìöÜíéóç äéáëüãïõ öüñìáò";
