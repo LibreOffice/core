@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:22:11 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 22:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ Window RID_MAIL_WINDOW
         Text[ italian ] = "In~via";
         Text[ danish ] = "Send";
         Text[ swedish ] = "~Skicka";
-        Text[ polish ] = "Wy?lij";
+        Text[ polish ] = "Wyúlij";
         Text[ portuguese_brazilian ] = "Send";
         Text[ japanese ] = "ëóêM";
         Text[ korean ] = "º€Ω≈";
@@ -547,7 +547,7 @@ Window RID_MAIL_WINDOW
         {
             < "«ok y¸ksek" ; 1 ; > ;
             < "Y¸ksek" ; 2 ; > ;
-            < "Normal" ; 3 ; > ;
+            < ", standart" ; 3 ; > ;
             < "D¸˛¸k" ; 4 ; > ;
             < "«ok d¸˛¸k" ; 5 ; > ;
         };
@@ -589,4 +589,5 @@ Window RID_MAIL_WINDOW
 };
 
 // ------------------------------------------------------------------- EOF
+
 
