@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
+ *  last change: $Author: oj $ $Date: 2002-02-19 14:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,12 +119,16 @@ namespace dbaui
         // execute a feature
         virtual void            Execute(sal_uInt16 nId);
 
+        virtual ~OJoinController();
     public:
         OJoinController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
-        ~OJoinController();
-        // removes the connection from the vector and delete it
-        void removeConnectionData(::std::auto_ptr<OTableConnectionData> _pData);
+        /** erase the data in the data vector
+            @param  _pData
+                    the data whioch should be erased
+        */
+        void removeConnectionData(OTableConnectionData* _pData);
+
         ::std::vector< OTableWindowData*>*      getTableWindowData()        { return &m_vTableData; }
         ::std::vector< OTableConnectionData*>*  getTableConnectionData()    { return &m_vTableConnectionData;}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:30:38 $
+ *  last change: $Author: oj $ $Date: 2002-02-19 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,9 +415,9 @@ void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabW
         SaveTabWinPosSize(aIter->second, nOffsetX, nOffsetY);
 }
 // -----------------------------------------------------------------------------
-void OJoinController::removeConnectionData(::std::auto_ptr<OTableConnectionData> _pData)
+void OJoinController::removeConnectionData(OTableConnectionData* _pData)
 {
-    m_vTableConnectionData.erase( ::std::find(m_vTableConnectionData.begin(),m_vTableConnectionData.end(),_pData.get()));
+    m_vTableConnectionData.erase( ::std::find(m_vTableConnectionData.begin(),m_vTableConnectionData.end(),_pData));
 }
 // -----------------------------------------------------------------------------
 void OJoinController::AddSupportedFeatures()
