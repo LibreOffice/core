@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parhtml.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-22 10:48:35 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,9 @@ BOOL HTMLOption::GetEnum( USHORT &rEnum, const HTMLOptionEnum *pOptEnums ) const
 
 HTMLOption::HTMLOption( USHORT nTok, const String& rToken,
                         const String& rValue )
-    : nToken( nTok ), aToken(rToken), aValue(rValue)
+    : aValue(rValue)
+    , aToken(rToken)
+    , nToken( nTok )
 {
     DBG_ASSERT( nToken>=HTML_OPTION_START && nToken<HTML_OPTION_END,
         "HTMLOption: unbekanntes Token" );
@@ -672,7 +674,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 if( cBreak=='>' && (cChar=='\\' || cChar=='\'' ||
                                     cChar=='\"' || cChar==' ') )
                 {
-                    // ' und " mussen innerhalb von Tags mit einem \
+                    // ' und " mussen innerhalb von Tags mit einem
                     // gekennzeichnet werden, um sie von ' und " als Klammern
                     // um Optionen zu unterscheiden. Logischerweise muss
                     // deshalb auch ein \ gekeenzeichnet werden. Ausserdem
@@ -1212,8 +1214,9 @@ int __EXPORT HTMLParser::_GetNextToken()
                         if( '>'!=nNextCh )
                             aToken += (sal_Unicode)' ';
                         ULONG nCStreamPos = 0UL;
-                        ULONG nCLineNr, nCLinePos;
-                        sal_uInt32 nCStrLen;
+                        ULONG nCLineNr = 0;
+                        ULONG nCLinePos = 0;
+                        sal_uInt32 nCStrLen = 0;
 
                         BOOL bDone = FALSE;
                         // bis zum schliessenden --> lesen. wenn keins gefunden
@@ -1503,7 +1506,7 @@ const HTMLOptions *HTMLParser::GetOptions( USHORT *pNoConvertToken ) const
             USHORT nToken;
             String aValue;
             sal_uInt32 nStt = nPos;
-            register sal_Unicode c;
+            register sal_Unicode c = 0;
 
             // Eigentlich sind hier nur ganz bestimmte Zeichen erlaubt.
             // Netscape achtet aber nur auf "=" und Leerzeichen (siehe
