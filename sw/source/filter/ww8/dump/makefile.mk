@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+#   last change: $Author: hr $ $Date: 2004-03-09 11:14:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,11 @@ APP1STDLIBS+= sdstor.lib
 .ELSE
 APP1STDLIBS+= sot.lib
 .ENDIF
+.IF "$(COMEX)"=="10"
+APP1STDLIBS+= ole32.lib oleaut32.lib uuid.lib shell32.lib advapi32.lib libci.lib
+.ELSE
 APP1STDLIBS+= ole32.lib oleaut32.lib uuid.lib shell32.lib advapi32.lib libci.lib msvcirt.lib
+.ENDIF
 .ELSE
 .IF "$(GUI)" == "OS2"
 APP1STDLIBS=sdstor.lib so2.lib svtool.lib $(SVLIB) tools.lib svmem.lib svx.lib
