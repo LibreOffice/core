@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:25:58 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
     Text [ ENGLISH ] = "There are no link targets available in the document." ;
     Text [ english_us ] = "Targets do not exist in the document." ;
     Text[ portuguese ] = "Destinos inexistentes no documento.";
-    Text[ russian ] = "Β δξκσμενςε νε θμεεςρÿ φελθ.";
+    Text[ russian ] = "Β δξκσμενςε νε θμεεςρÿ φελει.";
     Text[ greek ] = "Δεν υπάρχουν σημεία προορισμού στο έγγραφο.";
     Text[ dutch ] = "Geen doelen voorhanden in document";
     Text[ french ] = "Aucune cible existante dans le document.";
@@ -184,7 +184,7 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
     Text[ italian ] = "Nel documento non esistono destinazioni.";
     Text[ danish ] = "Der findes ingen mεl i dokumentet.";
     Text[ swedish ] = "Det finns inga mεl i dokumentet.";
-    Text[ polish ] = "Brak wierszy w dokumencie.";
+    Text[ polish ] = "Brak celσw w dokumencie.";
     Text[ portuguese_brazilian ] = "There are no targets available in the document.";
     Text[ japanese ] = "Δή·­ÒέΔ‚Ιΐ°Ήή―Δ‚ª‚ ‚θ‚ά‚Ή‚ρB";
     Text[ korean ] = "Ή®Ό­ΐΗ ΄λ»σΐΜ Ύψ½ΐ΄Ο΄Ω.";
