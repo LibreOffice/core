@@ -1,0 +1,1109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: UI.xcu,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: dg $ $Date: 2002-05-06 18:57:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<oor:node xmlns:oor="http://openoffice.org/2001/registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="UI" oor:context="org.openoffice.Office" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../../component-update.xsd">
+  <node oor:name="FilterClassification">
+    <node oor:name="GlobalFilters">
+      <node oor:name="Classes">
+        <node oor:name="com.sun.star.text.TextDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Textdokumente</value>
+            <value xml:lang="en">Text Documents</value>
+            <value xml:lang="en-US">Text documents</value>
+            <value xml:lang="x-comment">Text documents</value>
+            <value xml:lang="pt">Text documents</value>
+            <value xml:lang="ru">Текстовые документы</value>
+            <value xml:lang="el">Text documents</value>
+            <value xml:lang="nl">Tekstdocumenten</value>
+            <value xml:lang="fr">Textes</value>
+            <value xml:lang="es">Documentos de texto</value>
+            <value xml:lang="fi">Text documents</value>
+            <value xml:lang="it">Documenti di testo</value>
+            <value xml:lang="da">Text documents</value>
+            <value xml:lang="sv">Textdokument</value>
+            <value xml:lang="pl">Dokumenty tekstowe</value>
+            <value xml:lang="pt-BR">Text documents</value>
+            <value xml:lang="ja">文書ドキュメント</value>
+            <value xml:lang="ko">텍스트 문서</value>
+            <value xml:lang="zh-CN">文本文档</value>
+            <value xml:lang="zh-TW">文字文件</value>
+            <value xml:lang="tr">Text documents</value>
+            <value xml:lang="ar">Text documents</value>
+            <value xml:lang="ca">Text documents</value>
+            <value xml:lang="th">Text documents</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">HTML (StarWriter);MS WinWord 2.x (W4W);MS WinWord 6.0;MS Word 95;MS Word 95 Vorlage;MS Word 97;MS Word 97 Vorlage;StarOffice XML (Writer);StarWriter 3.0;StarWriter 3.0 Vorlage/Template;StarWriter 4.0;StarWriter 4.0 Vorlage/Template;StarWriter 5.0;StarWriter 5.0 Vorlage/Template;writer_StarOffice_XML_Writer_Template;Text</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Tabellendokumente</value>
+            <value xml:lang="en">Spreadsheets</value>
+            <value xml:lang="en-US">Spreadsheets</value>
+            <value xml:lang="x-comment">Table documents</value>
+            <value xml:lang="pt">Table documents</value>
+            <value xml:lang="ru">Документы электронных таблиц</value>
+            <value xml:lang="el">Table documents</value>
+            <value xml:lang="nl">Werkbladdocumenten</value>
+            <value xml:lang="fr">Classeurs</value>
+            <value xml:lang="es">Hojas de cálculo</value>
+            <value xml:lang="fi">Table documents</value>
+            <value xml:lang="it">Fogli elettronici</value>
+            <value xml:lang="da">Table documents</value>
+            <value xml:lang="sv">Tabelldokument</value>
+            <value xml:lang="pl">Arkusze kalkulacyjne</value>
+            <value xml:lang="pt-BR">Table documents</value>
+            <value xml:lang="ja">表計算ドキュメント</value>
+            <value xml:lang="ko">스트레드시트 문서</value>
+            <value xml:lang="zh-CN">工作表文档</value>
+            <value xml:lang="zh-TW">工作表文件</value>
+            <value xml:lang="tr">Table documents</value>
+            <value xml:lang="ar">Table documents</value>
+            <value xml:lang="ca">Table documents</value>
+            <value xml:lang="th">Spreadsheets</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarCalc 1.0;StarCalc 3.0;StarCalc 4.0;StarCalc 5.0;StarCalc 3.0 Vorlage/Template;StarCalc 4.0 Vorlage/Template;StarCalc 5.0 Vorlage/Template;MS Excel 97;MS Excel 97 Vorlage/Template;MS Excel 95;MS Excel 5.0/95;MS Excel 4.0;MS Excel 95 Vorlage/Template;;MS Excel 4.0 Vorlage/Template;StarOffice XML (Calc);calc_StarOffice_XML_Calc_Template;Text - txt - csv (StarCalc)</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Präsentationen</value>
+            <value xml:lang="en">Presentations</value>
+            <value xml:lang="en-US">Presentations</value>
+            <value xml:lang="x-comment">Presentations</value>
+            <value xml:lang="pt">Presentations</value>
+            <value xml:lang="ru">Презентации</value>
+            <value xml:lang="el">Presentations</value>
+            <value xml:lang="nl">Presentaties</value>
+            <value xml:lang="fr">Présentations</value>
+            <value xml:lang="es">Presentaciones</value>
+            <value xml:lang="fi">Presentations</value>
+            <value xml:lang="it">Presentazioni</value>
+            <value xml:lang="da">Presentations</value>
+            <value xml:lang="sv">Presentationer</value>
+            <value xml:lang="pl">Prezentacje</value>
+            <value xml:lang="pt-BR">Presentations</value>
+            <value xml:lang="ja">プレゼンテーション</value>
+            <value xml:lang="ko">프리젠테이션</value>
+            <value xml:lang="zh-CN">演示文稿</value>
+            <value xml:lang="zh-TW">簡報</value>
+            <value xml:lang="tr">Presentations</value>
+            <value xml:lang="ar">Presentations</value>
+            <value xml:lang="ca">Presentations</value>
+            <value xml:lang="th">Presentations</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">impress_StarOffice_XML_Draw;impress_StarOffice_XML_Impress_Template;MS PowerPoint 97;MS PowerPoint 97 Vorlage;StarImpress 4.0;StarImpress 4.0 Vorlage;StarImpress 5.0;StarImpress 5.0 (packed);StarImpress 5.0 Vorlage;StarOffice XML (Impress)</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Zeichnungen</value>
+            <value xml:lang="en">Drawings</value>
+            <value xml:lang="en-US">Drawings</value>
+            <value xml:lang="x-comment">Drawings</value>
+            <value xml:lang="pt">Drawings</value>
+            <value xml:lang="ru">Рисунки</value>
+            <value xml:lang="el">Drawings</value>
+            <value xml:lang="nl">Tekeningen</value>
+            <value xml:lang="fr">Dessins</value>
+            <value xml:lang="es">Dibujos</value>
+            <value xml:lang="fi">Drawings</value>
+            <value xml:lang="it">Disegni</value>
+            <value xml:lang="da">Drawings</value>
+            <value xml:lang="sv">Teckningar</value>
+            <value xml:lang="pl">Rysunki</value>
+            <value xml:lang="pt-BR">Drawings</value>
+            <value xml:lang="ja">図形描画</value>
+            <value xml:lang="ko">그리기</value>
+            <value xml:lang="zh-CN">绘图</value>
+            <value xml:lang="zh-TW">繪圖</value>
+            <value xml:lang="tr">Drawings</value>
+            <value xml:lang="ar">Drawings</value>
+            <value xml:lang="ca">Drawings</value>
+            <value xml:lang="th">Drawings</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">draw_StarOffice_XML_Draw_Template;SGV - StarDraw 2.0;StarDraw 3.0;StarDraw 3.0 Vorlage;StarDraw 5.0;StarDraw 5.0 Vorlage;StarOffice XML (Draw)</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Webseiten</value>
+            <value xml:lang="en">Web Pages</value>
+            <value xml:lang="en-US">Web pages</value>
+            <value xml:lang="x-comment">web pages</value>
+            <value xml:lang="pt">web pages</value>
+            <value xml:lang="ru">Web-страницы</value>
+            <value xml:lang="el">web pages</value>
+            <value xml:lang="nl">Webpagina's</value>
+            <value xml:lang="fr">Pages Web</value>
+            <value xml:lang="es">Páginas web</value>
+            <value xml:lang="fi">web pages</value>
+            <value xml:lang="it">Pagine Web</value>
+            <value xml:lang="da">web pages</value>
+            <value xml:lang="sv">Webbsidor</value>
+            <value xml:lang="pl">Strony WWW</value>
+            <value xml:lang="pt-BR">web pages</value>
+            <value xml:lang="ja">Webページ</value>
+            <value xml:lang="ko">웹 페이지</value>
+            <value xml:lang="zh-CN">网页</value>
+            <value xml:lang="zh-TW">網頁</value>
+            <value xml:lang="tr">web pages</value>
+            <value xml:lang="ar">web pages</value>
+            <value xml:lang="ca">web pages</value>
+            <value xml:lang="th">Web pages</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">HTML;StarWriter/Web 4.0 Vorlage/Template;StarWriter/Web 5.0 Vorlage/Template;writer_web_StarOffice_XML_Writer_Web_Template</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Globaldokumente</value>
+            <value xml:lang="en">Master Documents</value>
+            <value xml:lang="en-US">Master documents</value>
+            <value xml:lang="x-comment">Master documents</value>
+            <value xml:lang="pt">Master documents</value>
+            <value xml:lang="ru">Главные документы</value>
+            <value xml:lang="el">Master documents</value>
+            <value xml:lang="nl">Masterdocumenten</value>
+            <value xml:lang="fr">Documents maître</value>
+            <value xml:lang="es">Documentos maestros</value>
+            <value xml:lang="fi">Master documents</value>
+            <value xml:lang="it">Documenti master</value>
+            <value xml:lang="da">Master documents</value>
+            <value xml:lang="sv">Samlingsdokument</value>
+            <value xml:lang="pl">Dokumenty główne</value>
+            <value xml:lang="pt-BR">Master documents</value>
+            <value xml:lang="ja">マスタードキュメント</value>
+            <value xml:lang="ko">마스터 문서</value>
+            <value xml:lang="zh-CN">主控文档</value>
+            <value xml:lang="zh-TW">主控文件</value>
+            <value xml:lang="tr">Master documents</value>
+            <value xml:lang="ar">Master documents</value>
+            <value xml:lang="ca">Master documents</value>
+            <value xml:lang="th">Master documents</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarWriter 4.0 (StarWriter/GlobalDocument)/GlobalDocument;StarWriter 5.0 (StarWriter/GlobalDocument)/GlobalDocument;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.formular.FormularProperties" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Formeln</value>
+            <value xml:lang="en">Formulas</value>
+            <value xml:lang="en-US">Formulas</value>
+            <value xml:lang="x-comment">Formulas</value>
+            <value xml:lang="pt">Formulas</value>
+            <value xml:lang="ru">Формулы</value>
+            <value xml:lang="el">Formulas</value>
+            <value xml:lang="nl">Formules</value>
+            <value xml:lang="fr">Formules</value>
+            <value xml:lang="es">Fórmulas</value>
+            <value xml:lang="fi">Formulas</value>
+            <value xml:lang="it">Formule</value>
+            <value xml:lang="da">Formulas</value>
+            <value xml:lang="sv">Formler</value>
+            <value xml:lang="pl">Formuły</value>
+            <value xml:lang="pt-BR">Formulas</value>
+            <value xml:lang="ja">数式</value>
+            <value xml:lang="ko">수식</value>
+            <value xml:lang="zh-CN">公式</value>
+            <value xml:lang="zh-TW">公式</value>
+            <value xml:lang="tr">Formulas</value>
+            <value xml:lang="ar">Formulas</value>
+            <value xml:lang="ca">Formulas</value>
+            <value xml:lang="th">Formulas</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">MathML XML (Math);MathType 3.x;StarMath 2.0;StarMath 3.0;StarMath 4.0;StarMath 5.0;StarOffice XML (Math)</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+    <node oor:name="LocalFilters">
+      <node oor:name="Classes">
+        <node oor:name="msword956" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="en">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="en-US">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="x-comment">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="pt">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="ru">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="el">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="nl">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="fr">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="es">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="fi">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="it">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="da">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="sv">Microsoft Word 6.0/95</value>
+            <value xml:lang="pl">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="pt-BR">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="ja">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="ko">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="zh-CN">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="zh-TW">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="tr">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="ar">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="ca">Microsoft Word 6.0 / 95</value>
+            <value xml:lang="th">Microsoft Word 6.0 / 95</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">MS Word 95;MS WinWord 6.0</value>
+          </prop>
+        </node>
+        <node oor:name="sw3to5" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="en">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="en-US">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="x-comment">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="pt">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="ru">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="el">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="nl">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="fr">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="es">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="fi">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="it">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="da">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="sv">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="pl">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="pt-BR">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="ja">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="ko">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="zh-CN">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="zh-TW">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="tr">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="ar">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="ca">StarWriter 3.0 - 5.0</value>
+            <value xml:lang="th">StarWriter 3.0 - 5.0</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarWriter 5.0;StarWriter 4.0;StarWriter 3.0</value>
+          </prop>
+        </node>
+        <node oor:name="sw3to5templ" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarWriter 3.0 - 5.0 Vorlagen</value>
+            <value xml:lang="en">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="en-US">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="x-comment">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="pt">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="ru">StarWriter 3.0 - 5.0 Шаблоны</value>
+            <value xml:lang="el">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="nl">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="fr">StarWriter 3.0 - 5.0 Modèles</value>
+            <value xml:lang="es">StarWriter 3.0 - 5.0 Plantillas</value>
+            <value xml:lang="fi">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="it">StarWriter 3.0 - 5.0 Modelli</value>
+            <value xml:lang="da">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="sv">StarWriter 3.0 - 5.0 mallar</value>
+            <value xml:lang="pl">StarWriter 3.0 - 5.0 Szablony</value>
+            <value xml:lang="pt-BR">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="ja">StarWriter 3.0 - 5.0 テンプレート</value>
+            <value xml:lang="ko">StarWriter 3.0 - 5.0 템플릿</value>
+            <value xml:lang="zh-CN">StarWriter 3.0 - 5.0 样式</value>
+            <value xml:lang="zh-TW">StarWriter 3.0 - 5.0 樣式</value>
+            <value xml:lang="tr">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="ar">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="ca">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="th">StarWriter 3.0 - 5.0 Templates</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarWriter 5.0 Vorlage/Template;StarWriter 4.0 Vorlage/Template;StarWriter 3.0 Vorlage/Template</value>
+          </prop>
+        </node>
+        <node oor:name="text" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Text</value>
+            <value xml:lang="en">Text</value>
+            <value xml:lang="en-US">Text</value>
+            <value xml:lang="x-comment">Text</value>
+            <value xml:lang="pt">Texto</value>
+            <value xml:lang="ru">Текст</value>
+            <value xml:lang="el">Κείμενο</value>
+            <value xml:lang="nl">Tekst</value>
+            <value xml:lang="fr">Texte</value>
+            <value xml:lang="es">Texto</value>
+            <value xml:lang="fi">Teksti</value>
+            <value xml:lang="it">Testo</value>
+            <value xml:lang="da">Tekst</value>
+            <value xml:lang="sv">Text</value>
+            <value xml:lang="pl">Tekst</value>
+            <value xml:lang="pt-BR">Text</value>
+            <value xml:lang="ja">テキスト</value>
+            <value xml:lang="ko">텍스트</value>
+            <value xml:lang="zh-CN">文字</value>
+            <value xml:lang="zh-TW">文字</value>
+            <value xml:lang="tr">Metin</value>
+            <value xml:lang="ar">النص</value>
+            <value xml:lang="ca">Text</value>
+            <value xml:lang="th">ข้อความ</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">Text;Text DOS;Text Mac;Text Unix</value>
+          </prop>
+        </node>
+        <node oor:name="excel456" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="en">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="x-comment">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="pt">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="ru">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="el">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="nl">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="fr">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="es">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="fi">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="it">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="da">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="sv">Microsoft Excel 4.x - 5.0/95</value>
+            <value xml:lang="pl">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="pt-BR">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="ja">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="ko">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="zh-CN">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="zh-TW">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="tr">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="ar">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="ca">Microsoft Excel 4.x - 5.0 / 95</value>
+            <value xml:lang="th">Microsoft Excel 4.x - 5.0 / 95</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">MS Excel 95;MS Excel 5.0/95;MS Excel 4.0</value>
+          </prop>
+        </node>
+        <node oor:name="excel456templ" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Microsoft Excel 4.x - 5.0 / 95 Vorlagen</value>
+            <value xml:lang="en">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+            <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+            <value xml:lang="x-comment">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+            <value xml:lang="pt">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+            <value xml:lang="ru">Microsoft Excel 4.x - 5.0 / 95 Шаблоны</value>
+            <value xml:lang="el">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+            <value xml:lang="nl">Microsoft Excel 4.x - 5.0 / 95 Sjablonen</value>
+            <value xml:lang="fr">Microsoft Excel 4.x - 5.0 / 95 Modèles</value>
+            <value xml:lang="es">Microsoft Excel 4.x - 5.0 / 95 Plantillas</value>
+            <value xml:lang="fi">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+            <value xml:lang="it">Microsoft Excel 4.x - 5.0 / 95 Modelli</value>
+            <value xml:lang="da">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+            <value xml:lang="sv">Microsoft Excel 4.x - 5.0/95 mallar</value>
+            <value xml:lang="pl">Microsoft Excel 4.x - 5.0 / 95 Szablony</value>
+            <value xml:lang="pt-BR">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+            <value xml:lang="ja">Microsoft Excel 4.x - 5.0 / 95 テンプレート</value>
+            <value xml:lang="ko">Microsoft Excel 4.x - 5.0 / 95 서식 파일</value>
+            <value xml:lang="zh-CN">Microsoft Excel 4.x - 5.0 / 95 模板</value>
+            <value xml:lang="zh-TW">Microsoft Excel 4.x - 5.0 / 95 範本</value>
+            <value xml:lang="tr">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+            <value xml:lang="ar">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+            <value xml:lang="ca">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+            <value xml:lang="th">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">MS Excel 95 Vorlage/Template;MS Excel 5.0/95 Vorlage/Template;MS Excel 4.0 Vorlage/Template</value>
+          </prop>
+        </node>
+        <node oor:name="sc345" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="en">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="en-US">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="x-comment">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="pt">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="ru">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="el">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="nl">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="fr">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="es">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="fi">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="it">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="da">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="sv">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="pl">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="pt-BR">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="ja">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="ko">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="zh-CN">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="zh-TW">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="tr">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="ar">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="ca">StarCalc 3.0 - 5.0</value>
+            <value xml:lang="th">StarCalc 3.0 - 5.0</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarCalc 3.0;StarCalc 4.0;StarCalc 5.0</value>
+          </prop>
+        </node>
+        <node oor:name="sc345templ" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarCalc 3.0 - 5.0 Vorlagen</value>
+            <value xml:lang="en">StarCalc 3.0 - 5.0 Templates</value>
+            <value xml:lang="en-US">StarCalc 3.0 - 5.0 Templates</value>
+            <value xml:lang="x-comment">StarCalc 3.0 - 5.0 Templates</value>
+            <value xml:lang="pt">StarCalc 3.0 - 5.0 Templates</value>
+            <value xml:lang="ru">StarCalc 3.0 - 5.0 Шаблоны</value>
+            <value xml:lang="el">StarCalc 3.0 - 5.0 Templates</value>
+            <value xml:lang="nl">StarCalc 3.0 - 5.0 Sjablonen</value>
+            <value xml:lang="fr">StarCalc 3.0 - 5.0 Modèles</value>
+            <value xml:lang="es">StarCalc 3.0 - 5.0 Plantillas</value>
+            <value xml:lang="fi">StarCalc 3.0 - 5.0 Templates</value>
+            <value xml:lang="it">StarCalc 3.0 - 5.0 Modelli</value>
+            <value xml:lang="da">StarCalc 3.0 - 5.0 Templates</value>
+            <value xml:lang="sv">StarCalc 3.0 - 5.0 mallar</value>
+            <value xml:lang="pl">StarCalc 3.0 - 5.0 Szablony</value>
+            <value xml:lang="pt-BR">StarCalc 3.0 - 5.0 Templates</value>
+            <value xml:lang="ja">StarCalc 3.0 - 5.0 テンプレート</value>
+            <value xml:lang="ko">StarCalc 3.0 - 5.0 템플릿</value>
+            <value xml:lang="zh-CN">StarCalc 3.0 - 5.0 样式</value>
+            <value xml:lang="zh-TW">StarCalc 3.0 - 5.0 樣式</value>
+            <value xml:lang="tr">StarCalc 3.0 - 5.0 Templates</value>
+            <value xml:lang="ar">StarCalc 3.0 - 5.0 Templates</value>
+            <value xml:lang="ca">StarCalc 3.0 - 5.0 Templates</value>
+            <value xml:lang="th">StarCalc 3.0 - 5.0 Templates</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarCalc 3.0 Vorlage/Template;StarCalc 4.0 Vorlage/Template;StarCalc 5.0 Vorlage/Template</value>
+          </prop>
+        </node>
+        <node oor:name="sd35_i" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="en">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="en-US">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="x-comment">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="pt">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="ru">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="el">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="nl">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="fr">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="es">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="fi">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="it">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="da">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="sv">StarDraw 3.0/5.0 (StarImpress)</value>
+            <value xml:lang="pl">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="pt-BR">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="ja">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="ko">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="zh-CN">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="zh-TW">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="tr">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="ar">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="ca">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="th">StarDraw 3.0 / 5.0 (StarImpress)</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarDraw 5.0 (StarImpress);StarDraw 3.0 (StarImpress)</value>
+          </prop>
+        </node>
+        <node oor:name="sd35_itempl" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarDraw 3.0 / 5.0 Vorlagen (StarImpress)</value>
+            <value xml:lang="en">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
+            <value xml:lang="en-US">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
+            <value xml:lang="x-comment">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
+            <value xml:lang="pt">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="ru">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="el">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="nl">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="fr">StarDraw 3.0 / 5.0 Modèles (StarImpress)</value>
+            <value xml:lang="es">StarDraw 3.0 / 5.0 Plantillas (StarImpress)</value>
+            <value xml:lang="fi">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="it">StarDraw 3.0 / 5.0 Modelli (StarImpress)</value>
+            <value xml:lang="da">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="sv">StarDraw 3.0/5.0 mallar (StarImpress)</value>
+            <value xml:lang="pl">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="pt-BR">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="ja">StarDraw 3.0 / 5.0 テンプレート (StarImpress)</value>
+            <value xml:lang="ko">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="zh-CN">StarDraw 3.0 / 5.0 样式 (StarImpress)</value>
+            <value xml:lang="zh-TW">StarDraw 3.0 / 5.0 樣式(StarImpress)</value>
+            <value xml:lang="tr">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="ar">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="ca">StarDraw 3.0 / 5.0 (StarImpress)</value>
+            <value xml:lang="th">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarDraw 5.0 Vorlage (StarImpress);StarDraw 3.0 Vorlage (StarImpress)</value>
+          </prop>
+        </node>
+        <node oor:name="si45" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="en">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="en-US">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="x-comment">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="pt">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="ru">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="el">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="nl">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="fr">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="es">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="fi">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="it">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="da">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="sv">StarImpress 4.0/5.0</value>
+            <value xml:lang="pl">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="pt-BR">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="ja">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="ko">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="zh-CN">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="zh-TW">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="tr">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="ar">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="ca">StarImpress 4.0 / 5.0</value>
+            <value xml:lang="th">StarImpress 4.0 / 5.0</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarImpress 4.0;StarImpress 5.0;StarImpress 5.0 (packed)</value>
+          </prop>
+        </node>
+        <node oor:name="si45templ" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarImpress 4.0 / 5.0 Vorlagen</value>
+            <value xml:lang="en">StarImpress 4.0 / 5.0 Templates</value>
+            <value xml:lang="en-US">StarImpress 4.0 / 5.0 Templates</value>
+            <value xml:lang="x-comment">StarImpress 4.0 / 5.0 Templates</value>
+            <value xml:lang="pt">StarImpress 4.0 / 5.0 Templates</value>
+            <value xml:lang="ru">StarImpress 4.0 / 5.0 Шаблоны</value>
+            <value xml:lang="el">StarImpress 4.0 / 5.0 Templates</value>
+            <value xml:lang="nl">StarImpress 4.0 / 5.0 Sjablonen</value>
+            <value xml:lang="fr">StarImpress 4.0 / 5.0 Modèles</value>
+            <value xml:lang="es">StarImpress 4.0 / 5.0 Plantillas</value>
+            <value xml:lang="fi">StarImpress 4.0 / 5.0 Templates</value>
+            <value xml:lang="it">StarImpress 4.0 / 5.0 Modelli</value>
+            <value xml:lang="da">StarImpress 4.0 / 5.0 Templates</value>
+            <value xml:lang="sv">StarImpress 4.0/5.0 mallar</value>
+            <value xml:lang="pl">StarImpress 4.0 / 5.0 Szablony</value>
+            <value xml:lang="pt-BR">StarImpress 4.0 / 5.0 Templates</value>
+            <value xml:lang="ja">StarImpress 4.0 / 5.0 テンプレート</value>
+            <value xml:lang="ko">StarImpress 4.0 / 5.0 템플릿</value>
+            <value xml:lang="zh-CN">StarImpress 4.0 / 5.0 样式</value>
+            <value xml:lang="zh-TW">StarImpress 4.0 / 5.0 樣式</value>
+            <value xml:lang="tr">StarImpress 4.0 / 5.0 Templates</value>
+            <value xml:lang="ar">StarImpress 4.0 / 5.0 Templates</value>
+            <value xml:lang="ca">StarImpress 4.0 / 5.0 Templates</value>
+            <value xml:lang="th">StarImpress 4.0 / 5.0 Templates</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarImpress 4.0 Vorlage;StarImpress 5.0 Vorlage</value>
+          </prop>
+        </node>
+        <node oor:name="sd35" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="en">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="en-US">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="x-comment">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="pt">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="ru">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="el">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="nl">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="fr">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="es">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="fi">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="it">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="da">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="sv">StarDraw 3.0/5.0</value>
+            <value xml:lang="pl">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="pt-BR">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="ja">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="ko">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="zh-CN">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="zh-TW">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="tr">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="ar">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="ca">StarDraw 3.0 / 5.0</value>
+            <value xml:lang="th">StarDraw 3.0 / 5.0</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarDraw 5.0;StarDraw 3.0</value>
+          </prop>
+        </node>
+        <node oor:name="sd35templ" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarDraw 3.0 / 5.0 Vorlagen</value>
+            <value xml:lang="en">StarDraw 3.0 / 5.0 Vorlagen</value>
+            <value xml:lang="en-US">StarDraw 3.0 / 5.0 Templates</value>
+            <value xml:lang="x-comment">StarDraw 3.0 / 5.0 Vorlagen</value>
+            <value xml:lang="pt">StarDraw 3.0 / 5.0 Vorlagen</value>
+            <value xml:lang="ru">StarDraw 3.0 / 5.0 Шаблоны</value>
+            <value xml:lang="el">StarDraw 3.0 / 5.0 Vorlagen</value>
+            <value xml:lang="nl">StarDraw 3.0 / 5.0 Sjablonen</value>
+            <value xml:lang="fr">StarDraw 3.0 / 5.0 Modèles</value>
+            <value xml:lang="es">StarDraw 3.0 / 5.0 Plantillas</value>
+            <value xml:lang="fi">StarDraw 3.0 / 5.0 Vorlagen</value>
+            <value xml:lang="it">StarDraw 3.0 / 5.0 Modelli</value>
+            <value xml:lang="da">StarDraw 3.0 / 5.0 Vorlagen</value>
+            <value xml:lang="sv">StarDraw 3.0/5.0 mallar</value>
+            <value xml:lang="pl">StarDraw 3.0 / 5.0 Szablony</value>
+            <value xml:lang="pt-BR">StarDraw 3.0 / 5.0 Vorlagen</value>
+            <value xml:lang="ja">StarDraw 3.0 / 5.0 テンプレート</value>
+            <value xml:lang="ko">StarDraw 3.0 / 5.0 템플릿</value>
+            <value xml:lang="zh-CN">StarDraw 3.0 / 5.0 样式</value>
+            <value xml:lang="zh-TW">StarDraw 3.0 / 5.0 樣式</value>
+            <value xml:lang="tr">StarDraw 3.0 / 5.0 Vorlagen</value>
+            <value xml:lang="ar">StarDraw 3.0 / 5.0 Vorlagen</value>
+            <value xml:lang="ca">StarDraw 3.0 / 5.0 Vorlagen</value>
+            <value xml:lang="th">StarDraw 3.0 / 5.0 Templates</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarDraw 5.0 Vorlage;StarDraw 3.0 Vorlage</value>
+          </prop>
+        </node>
+        <node oor:name="sww45templ" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarWriter/Web 4.0 / 5.0 Vorlagen</value>
+            <value xml:lang="en">StarWriter/Web 4.0 / 5.0 Templates</value>
+            <value xml:lang="en-US">StarWriter/Web 4.0 / 5.0 Templates</value>
+            <value xml:lang="x-comment">StarWriter/Web 4.0 / 5.0 Templates</value>
+            <value xml:lang="pt">StarWriter/Web 4.0 / 5.0 Templates</value>
+            <value xml:lang="ru">StarWriter/Web 4.0 / 5.0 Шаблоны</value>
+            <value xml:lang="el">StarWriter/Web 4.0 / 5.0 Templates</value>
+            <value xml:lang="nl">StarWriter/Web 4.0 / 5.0 Sjablonen</value>
+            <value xml:lang="fr">StarWriter/Web 4.0 / 5.0 Modèles</value>
+            <value xml:lang="es">StarWriter/Web 4.0 / 5.0 Plantillas</value>
+            <value xml:lang="fi">StarWriter/Web 4.0 / 5.0 Templates</value>
+            <value xml:lang="it">StarWriter/Web 4.0 / 5.0 Modelli</value>
+            <value xml:lang="da">StarWriter/Web 4.0 / 5.0 Templates</value>
+            <value xml:lang="sv">StarWriter/Web 4.0/5.0 mallar</value>
+            <value xml:lang="pl">StarWriter/Web 4.0 / 5.0 Szablony</value>
+            <value xml:lang="pt-BR">StarWriter/Web 4.0 / 5.0 Templates</value>
+            <value xml:lang="ja">StarWriter/Web 4.0 / 5.0 テンプレート</value>
+            <value xml:lang="ko">StarWriter/Web 4.0 / 5.0 템플릿</value>
+            <value xml:lang="zh-CN">StarWriter/Web 4.0 / 5.0 样式</value>
+            <value xml:lang="zh-TW">StarWriter/Web 4.0 / 5.0 樣式</value>
+            <value xml:lang="tr">StarWriter/Web 4.0 / 5.0 Templates</value>
+            <value xml:lang="ar">StarWriter/Web 4.0 / 5.0 Templates</value>
+            <value xml:lang="ca">StarWriter/Web 4.0 / 5.0 Templates</value>
+            <value xml:lang="th">StarWriter/Web 4.0 / 5.0 Templates</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarWriter/Web 5.0 Vorlage/Template;StarWriter/Web 4.0 Vorlage/Template</value>
+          </prop>
+        </node>
+        <node oor:name="sww345" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarWriter/Web 3.0 - 5.0</value>
+            <value xml:lang="en">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="en-US">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="x-comment">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="pt">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="ru">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="el">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="nl">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="fr">StarWriter/Web 3.0 - 5.0</value>
+            <value xml:lang="es">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="fi">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="it">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="da">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="sv">StarWriter/Web 3.0/5.0</value>
+            <value xml:lang="pl">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="pt-BR">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="ja">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="ko">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="zh-CN">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="zh-TW">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="tr">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="ar">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="ca">StarWriter/Web 3.0 / 5.0</value>
+            <value xml:lang="th">StarWriter/Web 3.0 / 5.0</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarWriter 5.0 (StarWriter/Web);StarWriter 4.0 (StarWriter/Web);StarWriter 3.0 (StarWriter/Web)</value>
+          </prop>
+        </node>
+        <node oor:name="swwtext" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">Text (StarWriter/Web)</value>
+            <value xml:lang="en">Text (StarWriter/Web)</value>
+            <value xml:lang="en-US">Text (StarWriter/Web)</value>
+            <value xml:lang="x-comment">Text (StarWriter/Web)</value>
+            <value xml:lang="pt">Text (StarWriter/Web)</value>
+            <value xml:lang="ru">Текст (StarWriter/Web)</value>
+            <value xml:lang="el">Text (StarWriter/Web)</value>
+            <value xml:lang="nl">Tekst (StarWriter/Web)</value>
+            <value xml:lang="fr">Texte (StarWriter/Web)</value>
+            <value xml:lang="es">Texto (StarWriter/Web)</value>
+            <value xml:lang="fi">Text (StarWriter/Web)</value>
+            <value xml:lang="it">Testo (StarWriter/Web)</value>
+            <value xml:lang="da">Text (StarWriter/Web)</value>
+            <value xml:lang="sv">Text (StarWriter/Web)</value>
+            <value xml:lang="pl">Tekst (StarWriter/Web)</value>
+            <value xml:lang="pt-BR">Text (StarWriter/Web)</value>
+            <value xml:lang="ja">テキスト (StarWriter/Web)</value>
+            <value xml:lang="ko">텍스트 (StarWriter/Web)</value>
+            <value xml:lang="zh-CN">文字(StarWriter/Web)</value>
+            <value xml:lang="zh-TW">文字(StarWriter/Web)</value>
+            <value xml:lang="tr">Text (StarWriter/Web)</value>
+            <value xml:lang="ar">Text (StarWriter/Web)</value>
+            <value xml:lang="ca">Text (StarWriter/Web)</value>
+            <value xml:lang="th">Text (StarWriter/Web)</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">Text (StarWriter/Web);Text DOS (StarWriter/Web);Text Mac (StarWriter/Web);Text Unix (StarWriter/Web)</value>
+          </prop>
+        </node>
+        <node oor:name="sw45glob" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarWriter 4.0 / 5.0 Globaldokumente</value>
+            <value xml:lang="en">StarWriter 4.0 / 5.0 Master Documents</value>
+            <value xml:lang="en-US">StarWriter 4.0 / 5.0 Master Documents</value>
+            <value xml:lang="x-comment">StarWriter 4.0 / 5.0 Master Documents</value>
+            <value xml:lang="pt">StarWriter4.0/ 5.0 Master Documents</value>
+            <value xml:lang="ru">StarWriter4.0/ 5.0 Главные документы</value>
+            <value xml:lang="el">StarWriter4.0/ 5.0 Master Documents</value>
+            <value xml:lang="nl">StarWriter4.0/ 5.0 Masterdocumenten</value>
+            <value xml:lang="fr">StarWriter 4.0 / 5.0 Documents maître</value>
+            <value xml:lang="es">StarWriter 4.0 / 5.0 Documentos maestros</value>
+            <value xml:lang="fi">StarWriter4.0/ 5.0 Master Documents</value>
+            <value xml:lang="it">StarWriter 4.0 / 5.0 Documenti master</value>
+            <value xml:lang="da">StarWriter4.0/ 5.0 Master Documents</value>
+            <value xml:lang="sv">StarWriter 4.0/5.0 samlingsdokument</value>
+            <value xml:lang="pl">StarWriter4.0/ 5.0 - Dokumenty główne</value>
+            <value xml:lang="pt-BR">StarWriter4.0/ 5.0 Master Documents</value>
+            <value xml:lang="ja">StarWriter 4.0 / 5.0 マスタードキュメント</value>
+            <value xml:lang="ko">StarWriter 4.0/ 5.0 마스터 문서</value>
+            <value xml:lang="zh-CN">StarWriter 4.0/ 5.0 主控文档</value>
+            <value xml:lang="zh-TW">StarWriter 4.0/ 5.0 主控文件</value>
+            <value xml:lang="tr">StarWriter4.0/ 5.0 Master Documents</value>
+            <value xml:lang="ar">StarWriter4.0/ 5.0 Master Documents</value>
+            <value xml:lang="ca">StarWriter4.0/ 5.0 Master Documents</value>
+            <value xml:lang="th">StarWriter 4.0 / 5.0 Master Documents</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarWriter 5.0/GlobalDocument;StarWriter 4.0/GlobalDocument</value>
+          </prop>
+        </node>
+        <node oor:name="sm2to5" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">StarMath 2.0 - 5.0</value>
+            <value xml:lang="en">StarMath 2.0 - 5.0</value>
+            <value xml:lang="en-US">StarMath 2.0 - 5.0</value>
+            <value xml:lang="x-comment">StarMath 2.0 - 5.0</value>
+            <value xml:lang="pt">StarMath 2.0 - 5.0</value>
+            <value xml:lang="ru">StarMath 2.0 - 5.0</value>
+            <value xml:lang="el">StarMath 2.0 - 5.0</value>
+            <value xml:lang="nl">StarMath 2.0 - 5.0</value>
+            <value xml:lang="fr">StarMath 2.0 - 5.0</value>
+            <value xml:lang="es">StarMath 2.0 - 5.0</value>
+            <value xml:lang="fi">StarMath 2.0 - 5.0</value>
+            <value xml:lang="it">StarMath 2.0 - 5.0</value>
+            <value xml:lang="da">StarMath 2.0 - 5.0</value>
+            <value xml:lang="sv">StarMath 2.0 - 5.0</value>
+            <value xml:lang="pl">StarMath 2.0 - 5.0</value>
+            <value xml:lang="pt-BR">StarMath 2.0 - 5.0</value>
+            <value xml:lang="ja">StarMath 2.0 - 5.0</value>
+            <value xml:lang="ko">StarMath 2.0 - 5.0</value>
+            <value xml:lang="zh-CN">StarMath 2.0 - 5.0</value>
+            <value xml:lang="zh-TW">StarMath 2.0 - 5.0</value>
+            <value xml:lang="tr">StarMath 2.0 - 5.0</value>
+            <value xml:lang="ar">StarMath 2.0 - 5.0</value>
+            <value xml:lang="ca">StarMath 2.0 - 5.0</value>
+            <value xml:lang="th">StarMath 2.0 - 5.0</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarMath 5.0;StarMath 4.0;StarMath 3.0;StarMath 2.0</value>
+          </prop>
+        </node>
+        <node oor:name="wpw67" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="de">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="en">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="en-US">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="x-comment">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="pt">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="ru">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="el">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="nl">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="fr">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="es">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="fi">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="it">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="da">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="sv">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="pl">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="pt-BR">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="ja">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="ko">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="zh-CN">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="zh-TW">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="tr">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="ar">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="ca">WordPerfect (Win) 6.0 - 7.0</value>
+            <value xml:lang="th">WordPerfect (Win) 6.0 - 7.0</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">WordPerfect (Win) 6.0 (W4W);WordPerfect (Win) 6.1 (W4W);WordPerfect (Win) 7.0 (W4W)</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+  </node>
+  <node oor:name="ColorScheme">
+    <node oor:name="ColorSchemes">
+      <node oor:name="Default" oor:op="replace">
+        <node oor:name="DocColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="DocBoundaries">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="AppBackground">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="ObjectBoundaries">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="TableBoundaries">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Links">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="LinksVisited">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Anchor">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Spell">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterTextGrid">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterFieldShadings">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterIdxShadings">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterDirectCursor">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterNotesIndicator">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterScriptIndicator">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterSectionBoundaries">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="HTMLSGML">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="HTMLComment">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="HTMLKeyword">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="HTMLUnknown">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcGrid">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcPageBreak">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcPageBreakManual">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcPageBreakAutomatic">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcDetective">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcDetectiveError">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcReference">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcNotesBackground">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="DrawGuides">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="DrawGrid">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="DrawDrawing">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="DrawFill">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+      </node>
+    </node>
+  </node>
+</oor:node>

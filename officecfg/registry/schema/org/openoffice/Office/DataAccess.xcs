@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: DataAccess.xcs,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: dg $ $Date: 2002-05-06 18:52:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="DataAccess" oor:package="org.openoffice.Office" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../../component-schema.xsd" xml:lang="en-US">
+  <import oor:component="org.openoffice.Office.Common"/>
+  <uses oor:component="org.openoffice.Office.Common"/>
+  <templates>
+    <group oor:name="DataSettings">
+      <prop oor:name="Filter" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">contains a filter condition for a data object like a database table or query. The conditions must be defined according to the rules of SQL.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ApplyFilter" oor:type="xs:boolean">
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">indicates whether the filter should be applied or not.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Order" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">contains a sort rule for a data object like a database table or query. The rule must be defined according to the rules of SQL.</desc>
+        </info>
+      </prop>
+      <prop oor:name="RowHeight" oor:type="xs:int">
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">specifies the height of a data row.</desc>
+        </info>
+      </prop>
+      <prop oor:name="TextColor" oor:type="xs:int">
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">specifies the text color (RGB) for displaying text.</desc>
+        </info>
+      </prop>
+      <prop oor:name="TextLineColor" oor:type="xs:int">
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">specifies the color (RGB) for text lines (i.e. underlining and outstriking)</desc>
+        </info>
+      </prop>
+      <prop oor:name="CharacterEmphasis" oor:type="xs:short">
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">specifies the character emphasis to use. This is a com.sun.star.awt.FontEmphasisMark value.</desc>
+        </info>
+      </prop>
+      <prop oor:name="CharacterRelief" oor:type="xs:short">
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">specifies the character relief to use. This is a com.sun.star.FontRelief value</desc>
+        </info>
+      </prop>
+      <info>
+        <desc xml:lang="en-US">contains informations for displaying, sorting and ordering of data.</desc>
+      </info>
+      <node-ref oor:name="Font" oor:node-type="Font" oor:component="org.openoffice.Office.Common">
+        <info>
+          <desc xml:lang="en-US">specifies the font attributes for data displaying.</desc>
+        </info>
+      </node-ref>
+    </group>
+    <group oor:name="Column">
+      <prop oor:name="FormatKey" oor:type="xs:int">
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">contains the index of the number format that is used for the column. If the number format to be used for this column is no standard number format (and thus can't be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the datatype of the column.</desc>
+        </info>
+      </prop>
+      <prop oor:name="FormatString" oor:type="xs:string">
+        <value xsi:nil="true"/>
+      </prop>
+      <prop oor:name="FormatLocale" oor:type="xs:string">
+        <value xsi:nil="true"/>
+      </prop>
+      <prop oor:name="Align" oor:type="xs:int">
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">specifies the alignment of a columns text. If the value is a default alignment should be used according to the datatype of the column.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc xml:lang="en-US">left</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc xml:lang="en-US">center</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc xml:lang="en-US">right</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="Width" oor:type="xs:int">
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
+        </info>
+      </prop>
+      <prop oor:name="Position" oor:type="xs:int">
+        <info>
+          <desc xml:lang="en-US">position of the column within a grid. If the value is NULL, the default position should be used./</desc>
+        </info>
+      </prop>
+      <prop oor:name="Hidden" oor:type="xs:boolean">
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">determines whether the column should be displayed or not.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Control" oor:type="xs:hexBinary">
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">contains informations about a control which is used for displaying and editing the columns data.</desc>
+        </info>
+      </prop>
+      <prop oor:name="HelpText" oor:type="xs:string">
+        <value xsi:nil="true"/>
+      </prop>
+      <prop oor:name="ControlDefault" oor:type="xs:string">
+        <value xsi:nil="true"/>
+      </prop>
+      <info>
+        <desc xml:lang="en-US">Contains informations for displaying the data of a column.</desc>
+      </info>
+    </group>
+    <group oor:name="Table">
+      <info>
+        <desc xml:lang="en-US">Contains informations for displaying the data of a table.</desc>
+      </info>
+      <node-ref oor:name="Settings" oor:node-type="DataSettings"/>
+      <set oor:name="Columns" oor:node-type="Column">
+        <info>
+          <desc xml:lang="en-US">contains a list of column layout informations.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="Query">
+      <prop oor:name="Command" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">specifies the SQL command.</desc>
+        </info>
+      </prop>
+      <prop oor:name="EscapeProcessing" oor:type="xs:boolean">
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">determines whether the escape processing should be applied or not on the command.</desc>
+        </info>
+      </prop>
+      <prop oor:name="UpdateTableName" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">is the name of the table which should be updated, this is usually used for queries which relate on more than one table.</desc>
+        </info>
+      </prop>
+      <prop oor:name="UpdateSchemaName" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">is the name of the update table catalog.</desc>
+        </info>
+      </prop>
+      <prop oor:name="UpdateCatalogName" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">is the name of the update table schema.</desc>
+        </info>
+      </prop>
+      <prop oor:name="LayoutInformation" oor:type="xs:hexBinary" oor:nillable="false">
+        <info>
+          <desc xml:lang="en-US">contains the information for the querydesign.</desc>
+        </info>
+      </prop>
+      <info>
+        <desc xml:lang="en-US">specifies a database query according the rules of SQL and contains informations for displaying the query result data.</desc>
+      </info>
+      <node-ref oor:name="Settings" oor:node-type="DataSettings"/>
+      <set oor:name="Columns" oor:node-type="Column">
+        <info>
+          <desc xml:lang="en-US">contains a list of column layout informations.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="DataSourceSetting">
+      <prop oor:name="Value" oor:type="oor:any">
+        <info>
+          <desc xml:lang="en-US">contains the value of the data source setting item</desc>
+        </info>
+      </prop>
+      <info>
+        <desc xml:lang="en-US">defines the value for database driver specific value.</desc>
+      </info>
+    </group>
+    <group oor:name="Bookmark">
+      <prop oor:name="DocumentLocation" oor:type="xs:string"/>
+    </group>
+    <group oor:name="DataSourceDescription">
+      <prop oor:name="URL" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">indicates a database url, which locates a database driver</desc>
+        </info>
+      </prop>
+      <prop oor:name="IsPasswordRequired" oor:type="xs:boolean">
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">indicates that a password is always necessary</desc>
+        </info>
+      </prop>
+      <prop oor:name="TableFilter" oor:type="oor:string-list">
+        <value oor:separator=";">%</value>
+        <info>
+          <desc xml:lang="en-US">defines a list of tables, on which the DataSource should have it's focus. If empty, all the tables of the are used.</desc>
+        </info>
+      </prop>
+      <prop oor:name="TableTypeFilter" oor:type="oor:string-list">
+        <info>
+          <desc xml:lang="en-US">defines a list of table types, on which the DataSource should have it's focus. If empty, all the tables types of the are used.</desc>
+        </info>
+      </prop>
+      <prop oor:name="NumberFormatSettings" oor:type="xs:hexBinary">
+        <info>
+          <desc xml:lang="en-US">Provides information about numberformats used for the columns of queries and tables.</desc>
+        </info>
+      </prop>
+      <prop oor:name="User" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">Specifies the user name for the authentification upon creating a connection to the data source.</desc>
+        </info>
+      </prop>
+      <prop oor:name="LoginTimeout" oor:type="xs:int">
+        <info>
+          <desc xml:lang="en-US">Specifies the default timeout to be used when establishing a connection for this data source.</desc>
+        </info>
+      </prop>
+      <prop oor:name="SuppressVersionColumns" oor:type="xs:boolean">
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">If set to true (the default), components displaying data obtained from this data source will suppress version columns.</desc>
+        </info>
+      </prop>
+      <prop oor:name="LayoutInformation" oor:type="xs:hexBinary" oor:nillable="false">
+        <info>
+          <desc xml:lang="en-US">contains the information for the relationdesign.</desc>
+        </info>
+      </prop>
+      <info>
+        <desc xml:lang="en-US">describes how to establish a database connection and how to filter and layout the database data</desc>
+      </info>
+      <set oor:name="DataSourceSettings" oor:node-type="DataSourceSetting">
+        <info>
+          <desc xml:lang="en-US">is a list of arbitrary string tag/value pairs as connection arguments; normally at least a "user" and "password" property should be included.</desc>
+        </info>
+      </set>
+      <set oor:name="Tables" oor:node-type="Table">
+        <info>
+          <desc xml:lang="en-US">contains filtering and layout settings for specific database tables.</desc>
+        </info>
+      </set>
+      <set oor:name="Queries" oor:node-type="Query">
+        <info>
+          <desc xml:lang="en-US">contains a list of database queries.</desc>
+        </info>
+      </set>
+      <set oor:name="Bookmarks" oor:node-type="Bookmark"/>
+    </group>
+    <group oor:name="DataSource">
+      <prop oor:name="DataSourceName" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">The name of the registered data source.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Command" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">The command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
+        </info>
+      </prop>
+      <prop oor:name="CommandType" oor:type="xs:short">
+        <info>
+          <desc xml:lang="en-US">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command</desc>
+        </info>
+      </prop>
+      <info>
+        <desc xml:lang="en-US">Specifies the data source to be used for the bibliography.</desc>
+      </info>
+      <set oor:name="Fields" oor:node-type="FieldAssignment"/>
+    </group>
+    <group oor:name="FieldAssignment">
+      <prop oor:name="ProgrammaticFieldName" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">Specifies the desired (logical) column name</desc>
+        </info>
+      </prop>
+      <prop oor:name="AssignedFieldName" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">Specifies the real column name used in the data source.</desc>
+        </info>
+      </prop>
+      <info>
+        <desc xml:lang="en-US">Mapping between the desired (logical) column titles and the real column titles of the data source.</desc>
+      </info>
+    </group>
+    <group oor:name="DriverPooling">
+      <prop oor:name="DriverName" oor:type="xs:string"/>
+      <prop oor:name="Enable" oor:type="xs:boolean"/>
+      <prop oor:name="Timeout" oor:type="xs:int"/>
+    </group>
+  </templates>
+  <component>
+    <info>
+      <desc xml:lang="en-US">describes how to access databases of different vendors and how to filter and layout result data of specific database tables.</desc>
+    </info>
+    <group oor:name="DriverManager">
+      <prop oor:name="DriverPrecedence" oor:type="oor:string-list">
+        <value oor:separator=";">com.sun.star.comp.sdbc.ODBCDriver;com.sun.star.comp.sdbc.JDBCDriver</value>
+      </prop>
+    </group>
+    <group oor:name="ConnectionPool">
+      <prop oor:name="EnablePooling" oor:type="xs:boolean">
+        <value>true</value>
+      </prop>
+      <set oor:name="DriverSettings" oor:node-type="DriverPooling"/>
+    </group>
+    <set oor:name="DataSources" oor:node-type="DataSourceDescription">
+      <info>
+        <desc xml:lang="en-US">contains a list of descriptions for datasources</desc>
+      </info>
+    </set>
+    <group oor:name="AddressBook">
+      <prop oor:name="DataSourceName" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">The name of the registered data source.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Command" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">The command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
+        </info>
+      </prop>
+      <prop oor:name="CommandType" oor:type="xs:short">
+        <info>
+          <desc xml:lang="en-US">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command</desc>
+        </info>
+      </prop>
+      <prop oor:name="AutoPilotCompleted" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+      <set oor:name="Fields" oor:node-type="FieldAssignment"/>
+    </group>
+    <group oor:name="Bibliography">
+      <prop oor:name="BeamerHeight" oor:type="xs:int"/>
+      <prop oor:name="ViewHeight" oor:type="xs:int"/>
+      <prop oor:name="QueryText" oor:type="xs:string"/>
+      <prop oor:name="QueryField" oor:type="xs:string"/>
+      <node-ref oor:name="CurrentDataSource" oor:node-type="DataSource">
+        <!-- OldPath: Bibliography/BibliographyCurrent-->
+        <!-- OldLocation: Soffice.ini-->
+        <!-- Responsible: OS-->
+        <info>
+          <desc xml:lang="en-US">Determines the current data source for the bibliography</desc>
+        </info>
+      </node-ref>
+      <set oor:name="DataSourceHistory" oor:node-type="DataSource">
+        <!--OldPath: Bibliography/Bibliography-->
+        <!--OldLocation: Soffice.ini-->
+        <!--Responsible: OS-->
+        <info>
+          <desc xml:lang="en-US">Specifies the data source that can be used as a bibliography.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="DriverSettings">
+      <group oor:name="com.sun.star.comp.sdbc.mozaddressbook.Driver">
+        <group oor:name="ColumnAliases">
+          <prop oor:name="FirstName" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="LastName" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="NickName" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="PrimaryEmail" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="SecondEmail" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="PreferMailFormat" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkPhone" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomePhone" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="FaxNumber" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="PagerNumber" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="CellularNumber" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeAddress" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeAddress2" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeCity" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeState" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeZipCode" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeCountry" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkAddress" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkAddress2" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkCity" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkState" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkZipCode" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkCountry" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="JobTitle" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Department" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Company" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WebPage1" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WebPage2" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="BirthYear" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="BirthMonth" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="BirthDay" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Custom1" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Custom2" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Custom3" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Custom4" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Notes" oor:type="xs:string" oor:localized="true"/>
+        </group>
+      </group>
+      <group oor:name="com.sun.star.comp.sdbc.MozabDriver">
+        <group oor:name="MozillaPreferences">
+          <prop oor:name="ProfileName" oor:type="xs:string"/>
+        </group>
+        <group oor:name="ColumnAliases">
+          <prop oor:name="FirstName" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="LastName" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="NickName" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="PrimaryEmail" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="SecondEmail" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="PreferMailFormat" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkPhone" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomePhone" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="FaxNumber" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="PagerNumber" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="CellularNumber" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeAddress" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeAddress2" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeCity" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeState" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeZipCode" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="HomeCountry" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkAddress" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkAddress2" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkCity" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkState" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkZipCode" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WorkCountry" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="JobTitle" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Department" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Company" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WebPage1" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="WebPage2" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="BirthYear" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="BirthMonth" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="BirthDay" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Custom1" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Custom2" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Custom3" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Custom4" oor:type="xs:string" oor:localized="true"/>
+          <prop oor:name="Notes" oor:type="xs:string" oor:localized="true"/>
+        </group>
+      </group>
+    </group>
+    <group oor:name="FormSearchOptions">
+      <prop oor:name="SearchType" oor:type="xs:string">
+        <value>text</value>
+        <constraints>
+          <enumeration oor:value="text"/>
+          <enumeration oor:value="null"/>
+          <enumeration oor:value="non-null"/>
+        </constraints>
+      </prop>
+      <prop oor:name="SearchPosition" oor:type="xs:string">
+        <value>anywhere-in-field</value>
+        <constraints>
+          <enumeration oor:value="anywhere-in-field"/>
+          <enumeration oor:value="beginning-of-field"/>
+          <enumeration oor:value="end-of-field"/>
+          <enumeration oor:value="complete-field"/>
+        </constraints>
+      </prop>
+      <prop oor:name="SearchHistory" oor:type="oor:string-list"/>
+      <prop oor:name="IsSearchAllFields" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsUseFormatter" oor:type="xs:boolean">
+        <value>true</value>
+      </prop>
+      <prop oor:name="IsBackwards" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsWildcardSearch" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsUseRegularExpression" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsSimilaritySearch" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsLevenshteinRelaxed" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+      <prop oor:name="LevenshteinOther" oor:type="xs:short">
+        <value>2</value>
+      </prop>
+      <prop oor:name="LevenshteinShorter" oor:type="xs:short">
+        <value>2</value>
+      </prop>
+      <prop oor:name="LevenshteinLonger" oor:type="xs:short">
+        <value>2</value>
+      </prop>
+      <prop oor:name="IsMatchCase" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsUseAsianOptions" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+      <group oor:name="Japanese">
+        <prop oor:name="IsMatchFullHalfWidthForms" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchHiraganaKatakana" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchContractions" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchMinusDashCho-on" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchRepeatCharMarks" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchVariantFormKanji" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchOldKanaForms" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_DiZi_DuZu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_BaVa_HaFa" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_TsiThiChi_DhiZi" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_HyuIyu_ByuVyu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_SeShe_ZeJe" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_IaIya" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_KiKu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsIgnorePunctuation" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsIgnoreWhitespace" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsIgnoreProlongedSoundMark" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsIgnoreMiddleDot" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </group>
+    </group>
+  </component>
+</oor:component-schema>

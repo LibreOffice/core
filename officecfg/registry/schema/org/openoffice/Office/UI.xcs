@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: UI.xcs,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: dg $ $Date: 2002-05-06 18:52:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="UI" oor:package="org.openoffice.Office" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../../component-schema.xsd" xml:lang="en-US">
+  <templates>
+    <group oor:name="FilterClass">
+      <prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true" oor:nillable="false">
+        <info>
+          <desc xml:lang="en-US">This is the (localized) name to use when presenting the class to the user.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Filters" oor:type="oor:string-list"/>
+      <info>
+        <desc xml:lang="en-US">An entry of this type describes a class of filters. Filter classes (e.g. "Text documents") are represented to the user on it's own - the user notices it as if it is a single filter itself.</desc>
+      </info>
+    </group>
+    <group oor:name="ColorScheme">
+      <!-- Responsible: OS -->
+      <!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
+      <group oor:name="DocColor">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="DocBoundaries">
+        <prop oor:name="IsVisible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="AppBackground">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="ObjectBoundaries">
+        <prop oor:name="IsVisible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="TableBoundaries">
+        <prop oor:name="IsVisible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="Links">
+        <prop oor:name="IsVisible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="LinksVisited">
+        <prop oor:name="IsVisible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="Anchor">
+        <prop oor:name="IsVisible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="Spell">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="WriterTextGrid">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="WriterFieldShadings">
+        <prop oor:name="IsVisible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="WriterIdxShadings">
+        <prop oor:name="IsVisible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="WriterDirectCursor">
+        <prop oor:name="IsVisible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="WriterNotesIndicator">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="WriterScriptIndicator">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="WriterSectionBoundaries">
+        <prop oor:name="IsVisible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="HTMLSGML">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="HTMLComment">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="HTMLKeyword">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="HTMLUnknown">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="CalcGrid">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="CalcPageBreak">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="CalcPageBreakManual">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="CalcPageBreakAutomatic">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="CalcDetective">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="CalcDetectiveError">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="CalcReference">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="CalcNotesBackground">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="DrawGuides">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="DrawGrid">
+        <prop oor:name="IsVisible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="DrawDrawing">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="DrawFill">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="FilterClassification">
+      <group oor:name="GlobalFilters">
+        <prop oor:name="Order" oor:type="oor:string-list">
+          <value oor:separator=";">com.sun.star.text.TextDocument;com.sun.star.sheet.SpreadsheetDocument;com.sun.star.presentation.PresentationDocument;com.sun.star.drawing.DrawingDocument;com.sun.star.text.WebDocument;com.sun.star.text.GlobalDocument;com.sun.star.formular.FormularProperties</value>
+          <info>
+            <desc xml:lang="en-US">This list specifies the order of the global filters within their group.</desc>
+          </info>
+        </prop>
+        <info>
+          <desc xml:lang="en-US">Global classes are presented to the user in a group of it's own. A typical example for a global class would be "text documents", while something like "StarWriter 4.0 / 5.0 documents" would not be a global class.</desc>
+        </info>
+        <set oor:name="Classes" oor:node-type="FilterClass">
+          <info>
+            <desc xml:lang="en-US">This is the list of global classes. The name of a class denotes to the document service name of the associated module.</desc>
+          </info>
+        </set>
+      </group>
+      <group oor:name="LocalFilters">
+        <set oor:name="Classes" oor:node-type="FilterClass"/>
+      </group>
+    </group>
+    <group oor:name="ColorScheme">
+      <prop oor:name="CurrentColorScheme" oor:type="xs:string">
+        <value>Default</value>
+        <info>
+          <desc xml:lang="en-US">Name of the columns that have been selected for inserting data into text or fields, plus inserted text and line breaks</desc>
+        </info>
+      </prop>
+      <set oor:name="ColorSchemes" oor:node-type="ColorScheme">
+        <!-- Responsible: OS -->
+        <!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
+      </set>
+    </group>
+  </component>
+</oor:component-schema>

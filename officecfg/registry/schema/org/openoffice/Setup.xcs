@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: Setup.xcs,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: dg $ $Date: 2002-05-06 18:52:03 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Setup" oor:package="org.openoffice" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../component-schema.xsd" xml:lang="en-US">
+  <import oor:component="org.openoffice.Types"/>
+  <templates>
+    <group oor:name="Factory">
+      <!-- Responsible: AS-->
+      <!--The default must be written by the setup.-->
+      <prop oor:name="ooSetupFactoryShortName" oor:type="xs:string">
+        <!-- UIHints: setup -->
+        <info>
+          <desc xml:lang="en-US">short name of factory</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupFactoryTemplateFile" oor:type="xs:string">
+        <!-- UIHints: setup -->
+        <info>
+          <desc xml:lang="en-US">Name of standard template file for modul factory</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupFactoryWindowAttributes" oor:type="xs:string">
+        <!-- UIHints: setup -->
+        <info>
+          <desc xml:lang="en-US">Window attributes of factory window</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:type="xs:string">
+        <!-- UIHints: setup -->
+        <info>
+          <desc xml:lang="en-US">URL for dispatch to open empty document within this factory</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupFactoryIcon" oor:type="xs:int">
+        <!-- UIHints: setup -->
+        <info>
+          <desc xml:lang="en-US">Id of icon for factory</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="Product">
+      <!-- Responsible: JH-->
+      <!--The default must be written by the setup.-->
+      <prop oor:name="ooName" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">Name of an object or group.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupVersion" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">The version number to appear at the user interface.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupExtension" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">The extension of the version number to appear at the user interface.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Office">
+      <!-- Responsible: PB-->
+      <!--The default must be written by the setup.-->
+      <prop oor:name="ooSetupInstallPath" oor:type="xs:string">
+        <!-- OldPath: Service User/[username] -->
+        <!-- OldLocation: userdb.ini -->
+        <!-- Responsible: TPF/BEI -->
+        <info>
+          <desc xml:lang="en-US">The user install path. Directory where the user data is copied to. Must be a valid directory.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupInstallURL" oor:type="xs:string">
+        <!-- OldPath: Service User/[username] -->
+        <!-- OldLocation: userdb.ini -->
+        <!-- Responsible: TPF/BEI -->
+        <info>
+          <desc xml:lang="en-US">The user install path in URL notation. Must match the UCB configuration.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupInstCompleted" oor:type="xs:boolean">
+        <!-- OldPath: Service User/[username] -->
+        <!-- OldLocation: userdb.ini -->
+        <!-- Responsible: TPF/BEI -->
+        <info>
+          <desc xml:lang="en-US">True, if user data is copied successfully</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupLocales" oor:type="oor:string-list">
+        <!-- OldLocation: setup.inf-->
+        <!-- Responsible: PB / IS-->
+        <!-- UIHints: setup -->
+        <!--The default list must be deleted, as soon as the setup writes the values (#79254).-->
+        <info>
+          <desc xml:lang="en-US">The application language offered by the setup, if a multilingual version is used.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="en-US">
+            <info>
+              <desc xml:lang="en-US">en_US</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="de-DE">
+            <info>
+              <desc xml:lang="en-US">de_DE</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="ooSetupShowIntro" oor:type="xs:boolean">
+        <!-- OldPath: Common/Show-Intro -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: MBA -->
+        <!-- UIHints: Tools - Options - General - View -->
+        <info>
+          <desc xml:lang="en-US">Setting for displaying the product Logo when starting the program.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupConnectionURL" oor:type="xs:string">
+        <!-- OldPath: Common-->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: CD-->
+        <info>
+          <desc xml:lang="en-US">Specifies the URL for an UNO connection. No default is given, the URL has to be entered manually by the user.</desc>
+        </info>
+      </prop>
+      <set oor:name="Factories" oor:node-type="Factory"/>
+    </group>
+    <group oor:name="L10N">
+      <!-- Responsible: PB-->
+      <!--The default must be written by the setup.-->
+      <prop oor:name="ooLocale" oor:type="xs:string">
+        <!-- OldPath: User/Language -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: PB -->
+        <!-- UIHints: Tools - Options - General - Other -->
+        <!--The initial default should be written by the setup.-->
+        <info>
+          <desc xml:lang="en-US">The Office language selected by the user.</desc>
+          <label xml:lang="en-US">Locale</label>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupSystemLocale" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">This item stores the systems locale setting and will initially be set the setup application</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooSetupCurrency" oor:type="xs:string">
+        <info>
+          <desc xml:lang="en-US">The default currency the user wants to work with. If empty, the default currency of the System_Locale is taken. Values are, for example, USD-en-US or EUR-de-DE</desc>
+        </info>
+      </prop>
+    </group>
+  </component>
+</oor:component-schema>

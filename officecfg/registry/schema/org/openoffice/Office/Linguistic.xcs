@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: Linguistic.xcs,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: dg $ $Date: 2002-05-06 18:52:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Linguistic" oor:package="org.openoffice.Office" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../../component-schema.xsd" xml:lang="en-US">
+  <component>
+    <group oor:name="General">
+      <prop oor:name="IsIgnoreControlCharacters" oor:type="xs:boolean">
+        <!-- OldLocation: NEW -->
+        <!-- Responsible: TL -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Ignores the control characters (ASCII characters &lt; 32), valid for spellchecking hyphenation and thesaurus</desc>
+        </info>
+      </prop>
+      <prop oor:name="DefaultLocale" oor:type="xs:string">
+        <!-- OldPath: DefaultLanguage -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>en-US</value>
+        <info>
+          <desc xml:lang="en-US">The default document language for the linguistic.</desc>
+          <label xml:lang="en-US">Default language</label>
+        </info>
+      </prop>
+      <prop oor:name="DefaultLocale_CJK" oor:type="xs:string">
+        <!-- OldPath: DefaultLanguage -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc xml:lang="en-US">The default document language for the CJK linguistic</desc>
+          <label xml:lang="en-US">Default language for CJK linguistics</label>
+        </info>
+      </prop>
+      <prop oor:name="DefaultLocale_CTL" oor:type="xs:string">
+        <!-- OldPath: DefaultLanguage -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc xml:lang="en-US">The default document language for the CTL linguistic</desc>
+          <label xml:lang="en-US">Default language for CTL linguistics</label>
+        </info>
+      </prop>
+      <prop oor:name="IsGermanPreReform" oor:type="xs:boolean">
+        <!-- OldPath: MiscOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">Determines, if the Old German spelling should be used (true) or not (false).</desc>
+          <label xml:lang="en-US">Old German spelling</label>
+        </info>
+      </prop>
+      <group oor:name="DictionaryList">
+        <prop oor:name="ActiveDictionaries" oor:type="oor:string-list">
+          <!-- OldPath: Active-Dictionaries -->
+          <!-- OldLocation: soffice.ini -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Tools - Options - General - Language -->
+          <value oor:separator=";">IgnoreAllList;soffice.dic;standard.dic;sun.dic</value>
+          <info>
+            <desc xml:lang="en-US">Specifies the defined custom dictionaries (soffice.dic, standard.dic, sun.dic) and the Ignore list. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck. This list contains all words that marked with Ignore when</desc>
+            <label xml:lang="en-US">Custom dictionaries</label>
+          </info>
+        </prop>
+        <prop oor:name="IsUseDictionaryList" oor:type="xs:boolean">
+          <!-- OldLocation: NEW -->
+          <!-- Responsible: TL -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Determines, if personal dictionaries (see Dictionary list) should be used for spell checking and hyphenation</desc>
+          </info>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="SpellChecking">
+      <prop oor:name="IsSpellUpperCase" oor:type="xs:boolean">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">To include uppercase words in the spellcheck process.</desc>
+          <label xml:lang="en-US">Spell uppercase words</label>
+        </info>
+      </prop>
+      <prop oor:name="IsSpellWithDigits" oor:type="xs:boolean">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">To check the spelling of words which contain numbers as well as letters.</desc>
+          <label xml:lang="en-US">Spell words with digits</label>
+        </info>
+      </prop>
+      <prop oor:name="IsSpellCapitalization" oor:type="xs:boolean">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">To check the correct use of capitalization.</desc>
+          <label xml:lang="en-US">Check capitalization</label>
+        </info>
+      </prop>
+      <prop oor:name="IsHideMarkings" oor:type="xs:boolean">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">Hide markings from automatic spelling check.</desc>
+          <label xml:lang="en-US">Hide markings</label>
+        </info>
+      </prop>
+      <prop oor:name="IsSpellAuto" oor:type="xs:boolean">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">Check spelling while typing.</desc>
+          <label xml:lang="en-US">Automatic spellchecking</label>
+        </info>
+      </prop>
+      <prop oor:name="IsSpellSpecial" oor:type="xs:boolean">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Allow spellchecking in headers, footers, frames, etc.</desc>
+          <label xml:lang="en-US">Check spelljng in special regions</label>
+        </info>
+      </prop>
+      <prop oor:name="IsSpellInAllLocales" oor:type="xs:boolean">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US"/>
+          <label xml:lang="en-US">Check spelling in all languages</label>
+        </info>
+      </prop>
+      <prop oor:name="IsReverseDirection" oor:type="xs:boolean">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">Spell backwards.</desc>
+          <label xml:lang="en-US">Reverse direction.</label>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Hyphenation">
+      <prop oor:name="MinLeading" oor:type="xs:short">
+        <!-- OldPath: HyphMinLeading -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>2</value>
+        <info>
+          <desc xml:lang="en-US">The specified number indicates the minimum number of characters (of the hyphenated word) required at the end of the line</desc>
+          <label xml:lang="en-US">Characters per syllable before hyphen</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="2"/>
+          <maxInclusive oor:value="9"/>
+        </constraints>
+      </prop>
+      <prop oor:name="MinTrailing" oor:type="xs:short">
+        <!-- OldPath: HyphMinTrailing -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>2</value>
+        <info>
+          <desc xml:lang="en-US">The specified number indicates the minimum number of characters (of the hyphenated word) required at the next line</desc>
+          <label xml:lang="en-US">Characters per syllable after hyphen</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="2"/>
+          <maxInclusive oor:value="9"/>
+        </constraints>
+      </prop>
+      <prop oor:name="MinWordLength" oor:type="xs:short">
+        <!-- OldPath: HyphMinWordLength -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <value>5</value>
+        <info>
+          <desc xml:lang="en-US">The minimal word length to allow a hyphenation.</desc>
+          <label xml:lang="en-US">Minimal word length</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="2"/>
+          <maxInclusive oor:value="9"/>
+        </constraints>
+      </prop>
+      <prop oor:name="IsHyphSpecial" oor:type="xs:boolean">
+        <!-- OldPath: MiscOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Allow hyphenation in headers, footers, frames, etc.</desc>
+          <label xml:lang="en-US">Hyphenate in special regions.</label>
+        </info>
+      </prop>
+      <prop oor:name="IsHyphAuto" oor:type="xs:boolean">
+        <!-- OldPath: MiscOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">Allow for automatic insertion of soft hyphens.</desc>
+          <label xml:lang="en-US">Automatic hyphention.</label>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="ServiceManager">
+      <group oor:name="SpellCheckerList" oor:extensible="true"/>
+      <group oor:name="ThesaurusList" oor:extensible="true"/>
+      <group oor:name="HyphenatorList" oor:extensible="true"/>
+    </group>
+  </component>
+</oor:component-schema>

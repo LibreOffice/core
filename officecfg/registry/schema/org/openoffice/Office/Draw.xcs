@@ -1,0 +1,1031 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: Draw.xcs,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: dg $ $Date: 2002-05-06 18:52:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Draw" oor:package="org.openoffice.Office" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../../component-schema.xsd" xml:lang="en-US">
+  <import oor:component="org.openoffice.Office.Common"/>
+  <component>
+    <group oor:name="Layout">
+      <group oor:name="Display">
+        <prop oor:name="Ruler" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Layout/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Show ruler at the left and at the top of the workingarea</desc>
+            <label xml:lang="en-US">Rulers visible</label>
+          </info>
+        </prop>
+        <prop oor:name="Helpline" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Layout/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Show helplines</desc>
+            <label xml:lang="en-US">Helplines visible</label>
+          </info>
+        </prop>
+        <prop oor:name="Guide" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Layout/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Show helplines when moving objects</desc>
+            <label xml:lang="en-US">Guides when moving</label>
+          </info>
+        </prop>
+        <prop oor:name="Bezier" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Layout/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Show all controlpoints in Bezier editor</desc>
+            <label xml:lang="en-US">All control points in Bezier editor</label>
+          </info>
+        </prop>
+        <prop oor:name="Contour" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Layout/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Show outline of each object when moving multiple objects</desc>
+            <label xml:lang="en-US">Contour of each individual object</label>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Other">
+        <prop oor:name="StatusbarFunction" oor:type="xs:int">
+          <!-- OldPath: Calc/Layout -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: NN -->
+          <!-- UIHints: (Status Bar) -->
+          <value>9</value>
+          <info>
+            <desc xml:lang="en-US">Specifies the standard formula displayed in the Status Bar</desc>
+            <label xml:lang="en-US">Statusbar Function</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc xml:lang="en-US">None</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc xml:lang="en-US">Average</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc xml:lang="en-US">Count Numbers</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc xml:lang="en-US">Count All</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="4">
+              <info>
+                <desc xml:lang="en-US">Max</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="5">
+              <info>
+                <desc xml:lang="en-US">Min</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="9">
+              <info>
+                <desc xml:lang="en-US">Sum</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+        <group oor:name="TabStop">
+          <!-- OldPath: Draw/Layout -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing - Layout - [Section] Tab stops -->
+          <!-- Notice: Default-Nonmetric Value: 1270 1/100 mm-->
+          <prop oor:name="Metric" oor:type="xs:int">
+            <value>1250</value>
+            <info>
+              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <label xml:lang="en-US"/>
+            </info>
+          </prop>
+          <prop oor:name="NonMetric" oor:type="xs:int">
+            <value>1270</value>
+            <info>
+              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <label xml:lang="en-US"/>
+            </info>
+          </prop>
+          <info>
+            <desc xml:lang="en-US">Specifies the tab stops distance</desc>
+            <label xml:lang="en-US">Tab stops</label>
+          </info>
+        </group>
+        <group oor:name="MeasureUnit">
+          <!-- OldPath: Draw/Layout -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing - Layout - [Section] Meas. units -->
+          <prop oor:name="Metric" oor:type="xs:int">
+            <value>2</value>
+            <constraints>
+              <enumeration oor:value="1">
+                <info>
+                  <desc xml:lang="en-US">Millimeter</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc xml:lang="en-US">Centimeter</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="6">
+                <info>
+                  <desc xml:lang="en-US">Point</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="7">
+                <info>
+                  <desc xml:lang="en-US">Pica</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="8">
+                <info>
+                  <desc xml:lang="en-US">Inch</desc>
+                </info>
+              </enumeration>
+            </constraints>
+          </prop>
+          <prop oor:name="NonMetric" oor:type="xs:int">
+            <value>8</value>
+            <constraints>
+              <enumeration oor:value="1">
+                <info>
+                  <desc xml:lang="en-US">Millimeter</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc xml:lang="en-US">Centimeter</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="6">
+                <info>
+                  <desc xml:lang="en-US">Point</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="7">
+                <info>
+                  <desc xml:lang="en-US">Pica</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="8">
+                <info>
+                  <desc xml:lang="en-US">Inch</desc>
+                </info>
+              </enumeration>
+            </constraints>
+          </prop>
+          <info>
+            <desc xml:lang="en-US">Specifies the measurement unit to be used</desc>
+            <label xml:lang="en-US">Measurement unit</label>
+          </info>
+        </group>
+      </group>
+    </group>
+    <group oor:name="Content">
+      <group oor:name="Display">
+        <prop oor:name="PicturePlaceholder" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Contents/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options  Drawing - Contents - [Section] Alternative display -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Show only outlines of graphic-objects</desc>
+            <label xml:lang="en-US">Picture placeholders</label>
+          </info>
+        </prop>
+        <prop oor:name="ContourMode" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Contents/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options  Drawing - Contents - [Section] Alternative display -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Show only outlines of draw-objects</desc>
+            <label xml:lang="en-US">Contour mode</label>
+          </info>
+        </prop>
+        <prop oor:name="TextPlaceholder" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Contents/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options  Drawing - Contents - [Section] Alternative display -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Don&amp;apos;t show the text of text-objects</desc>
+            <label xml:lang="en-US">Text placeholders</label>
+          </info>
+        </prop>
+        <prop oor:name="LineContour" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Contents/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options  Drawing - Contents - [Section] Alternative display -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Show only hairlines instead of the choosed linestyle</desc>
+            <label xml:lang="en-US">Line contour only</label>
+          </info>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Misc">
+      <prop oor:name="BackgroundCache" oor:type="xs:boolean">
+        <!-- OldPath: Draw/Other -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Store masterpages in the cache</desc>
+          <label xml:lang="en-US">Use background cache</label>
+        </info>
+      </prop>
+      <prop oor:name="CopyWhileMoving" oor:type="xs:boolean">
+        <!-- OldPath: Draw/Other -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">Make a copy of a object if it&amp;apos;s modified</desc>
+          <label xml:lang="en-US">Copy while moving</label>
+        </info>
+      </prop>
+      <prop oor:name="ObjectMoveable" oor:type="xs:boolean">
+        <!-- OldPath: Draw/Other -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Don&amp;apos;t allow to move an object if it&amp;apos;s in rotating-mode</desc>
+          <label xml:lang="en-US">Objects always moveable</label>
+        </info>
+      </prop>
+      <prop oor:name="NoDistort" oor:type="xs:boolean">
+        <!-- OldPath: Draw/Other -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">The point alignment of 2D drawing objects and Bezier curves remains constant even if the perspective of the graphics has been distorted.</desc>
+          <label xml:lang="en-US">Don&amp;apos;t distort objects in curve</label>
+        </info>
+      </prop>
+      <prop oor:name="DclickTextedit" oor:type="xs:boolean">
+        <!-- OldPath: Draw/Other -->
+        <!-- OldLocation: soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Option Bar -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">A double-click on a textobject change its mode to editmode</desc>
+          <label xml:lang="en-US">Double-Click Text to Edit</label>
+        </info>
+      </prop>
+      <prop oor:name="RotateClick" oor:type="xs:boolean">
+        <!-- OldPath: Draw/Other -->
+        <!-- OldLocation: soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Option Bar -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">A double click on an object change its mode to rotation-mode</desc>
+          <label xml:lang="en-US">Rotation Mode after clicking object</label>
+        </info>
+      </prop>
+      <prop oor:name="Preview" oor:type="xs:double">
+        <!-- OldPath: Draw/Other -->
+        <!-- OldLocation: soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Menu: view - preview mode -->
+        <value>0</value>
+        <info>
+          <desc xml:lang="en-US">Quality of colors in the preview</desc>
+          <label xml:lang="en-US">Preview-Mode</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc xml:lang="en-US">color</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="868">
+            <info>
+              <desc xml:lang="en-US">grayscale</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="5381">
+            <info>
+              <desc xml:lang="en-US">black/white</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="SimpleHandles" oor:type="xs:boolean">
+        <!-- OldPath: Draw/Other -->
+        <!-- OldLocation: soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Optionbar -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Switch between simple and 3D-handles</desc>
+          <label xml:lang="en-US">Simple Handles</label>
+        </info>
+      </prop>
+      <prop oor:name="BigHandles" oor:type="xs:boolean">
+        <!-- OldPath: Draw/Other -->
+        <!-- OldLocation: soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Optionbar -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">Switch between small and big handles</desc>
+          <label xml:lang="en-US">Big Handles</label>
+        </info>
+      </prop>
+      <prop oor:name="CreateWithAttributes" oor:type="xs:boolean">
+        <!-- OldPath: Draw/Other -->
+        <!-- OldLocation: soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Optionbar -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">Switch between create objects current attributes.</desc>
+          <label xml:lang="en-US">Create with attributes</label>
+        </info>
+      </prop>
+      <group oor:name="TextObject">
+        <prop oor:name="QuickEditing" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Other/Text_Objects -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Other  [Section] Text objects -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">A simple click on a text object changes the mode to editmode</desc>
+            <label xml:lang="en-US">Allow quick editing</label>
+          </info>
+        </prop>
+        <prop oor:name="Selectable" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Other/Text_Objects -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Other  [Section] Text objects -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">A textframe only can be selected by clicking on the text, not by clicking in the frame.</desc>
+            <label xml:lang="en-US">Only text area selectable</label>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CrossFading">
+        <prop oor:name="Steps" oor:type="xs:short">
+          <!-- OldPath: Draw/Cross_fading -->
+          <!-- OldLocation: drawing.cfg -->
+          <!-- Responsible: KA -->
+          <!-- UIHints: Select two objects =&amp;gt; Edit  Cross-fade -->
+          <value>16</value>
+          <info>
+            <desc xml:lang="en-US">Number of steps for cross fading adjustable via dialog</desc>
+            <label xml:lang="en-US">Steps</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="1"/>
+            <maxInclusive oor:value="256"/>
+          </constraints>
+        </prop>
+        <prop oor:name="Orientation" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Cross_fading -->
+          <!-- OldLocation: drawing.cfg -->
+          <!-- Responsible: KA -->
+          <!-- UIHints: Select two objects =&amp;gt; Edit  Cross-fade -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Decides, whether the two objects to be faded should have the same orientation</desc>
+            <label xml:lang="en-US">Orientation</label>
+          </info>
+        </prop>
+        <prop oor:name="Attributes" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Cross_fading -->
+          <!-- OldLocation: drawing.cfg -->
+          <!-- Responsible: KA -->
+          <!-- UIHints: Select two objects =&amp;gt; Edit  Cross-fade -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Decides, if attributes (colors) should be faded, too</desc>
+            <label xml:lang="en-US">Attributes</label>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DefaultObjectSize">
+        <!-- OldPath: -->
+        <!-- OldLocation: -->
+        <!-- Responsible: AW -->
+        <!-- UIHints: Default size for newly created objects when using CTRL-Return or CTRL-Klick -->
+        <prop oor:name="Width" oor:type="xs:int">
+          <value>8000</value>
+          <info>
+            <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+            <label xml:lang="en-US"/>
+          </info>
+        </prop>
+        <prop oor:name="Height" oor:type="xs:int">
+          <value>5000</value>
+          <info>
+            <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+            <label xml:lang="en-US"/>
+          </info>
+        </prop>
+        <info>
+          <desc xml:lang="en-US">Defines the default size of newly created objects using CTRL-Return or CTRL-Klick at a object creating Button</desc>
+          <label xml:lang="en-US">Default Object Size</label>
+        </info>
+      </group>
+    </group>
+    <group oor:name="Snap">
+      <group oor:name="Object">
+        <prop oor:name="Grid" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Snap/Objects -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Directs to the next grid point when moving an object</desc>
+            <label xml:lang="en-US">Grid lines</label>
+          </info>
+        </prop>
+        <prop oor:name="SnapLine" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Snap/Objects -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">The outline of an object is justified to the next snap line</desc>
+            <label xml:lang="en-US">Snap lines</label>
+          </info>
+        </prop>
+        <prop oor:name="PageMargin" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Snap/Objects -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">The outline of an object is justified to the next page margin</desc>
+            <label xml:lang="en-US">Page margins</label>
+          </info>
+        </prop>
+        <prop oor:name="ObjectFrame" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Snap/Objects -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">The outline of an object is justified to the next graphic object</desc>
+            <label xml:lang="en-US">Object frame</label>
+          </info>
+        </prop>
+        <prop oor:name="ObjectPoint" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Snap/Objects -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">The outline of an object is justified to the next graphic object&amp;apos;s points.</desc>
+            <label xml:lang="en-US">Object points</label>
+          </info>
+        </prop>
+        <prop oor:name="Range" oor:type="xs:int">
+          <!-- OldPath: Draw/Snap/Objects -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <value>5</value>
+          <info>
+            <desc xml:lang="en-US">The area where to snap  [UNIT=Pixel]</desc>
+            <label xml:lang="en-US">Snap range</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="1"/>
+            <maxInclusive oor:value="50"/>
+          </constraints>
+        </prop>
+      </group>
+      <group oor:name="Position">
+        <prop oor:name="CreatingMoving" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Snap/Position -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Creates only symmetric objects, e.g. squares instead of rectangles or circles instead of ellipses.</desc>
+            <label xml:lang="en-US">When creating or moving objects</label>
+          </info>
+        </prop>
+        <prop oor:name="ExtendEdges" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Snap/Position -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Creating an object and pressing the shift-key would result in symmetric objects, e.g. squares instead of rectangles or circles instead of ellipses.</desc>
+            <label xml:lang="en-US">Extend edges</label>
+          </info>
+        </prop>
+        <prop oor:name="Rotating" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Snap/Position -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Switch on/off Rotating value</desc>
+            <label xml:lang="en-US">When rotating</label>
+          </info>
+        </prop>
+        <prop oor:name="RotatingValue" oor:type="xs:int">
+          <!-- OldPath: Draw/Snap/Position -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
+          <value>1500</value>
+          <info>
+            <desc xml:lang="en-US">The max angle an object can be rotated  [UNIT=Degree/100]</desc>
+            <label xml:lang="en-US">When rotating</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="18000"/>
+          </constraints>
+        </prop>
+        <prop oor:name="PointReduction" oor:type="xs:int">
+          <!-- OldPath: Draw/Snap/Position -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
+          <value>1500</value>
+          <info>
+            <desc xml:lang="en-US">Angle for pointreduction  [UNIT=Degree/100]</desc>
+            <label xml:lang="en-US">Point reduction</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="100"/>
+            <maxInclusive oor:value="9000"/>
+          </constraints>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Zoom">
+      <prop oor:name="ScaleX" oor:type="xs:int">
+        <!-- OldPath: Draw/Zoom -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Tools - Options - Drawing  Zoom - [Section] Scale -->
+        <value>1</value>
+        <info>
+          <desc xml:lang="en-US">Determines the first component of the zooming scale. Scale_X and Scale_Y are building the scale as follows: Scale_X:Scale_Y</desc>
+          <label xml:lang="en-US">Scale</label>
+        </info>
+      </prop>
+      <prop oor:name="ScaleY" oor:type="xs:int">
+        <!-- OldPath: Draw/Zoom -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: PW -->
+        <!-- UIHints: Tools - Options - Drawing  Zoom - [Section] Scale -->
+        <value>1</value>
+        <info>
+          <desc xml:lang="en-US">Determines the second component of the zooming scale. Scale_X and Scale_Y are building the scale as follows: Scale_X:Scale_Y</desc>
+          <label xml:lang="en-US">Scale</label>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Grid">
+      <group oor:name="Option">
+        <prop oor:name="SnapToGrid" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Grid/Options -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Options -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Option to move frames and drawing elements only between the grid points</desc>
+            <label xml:lang="en-US">Snap to grid</label>
+          </info>
+        </prop>
+        <prop oor:name="VisibleGrid" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Grid/Options -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Options -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Shows the grid</desc>
+            <label xml:lang="en-US">Visible grid</label>
+          </info>
+        </prop>
+        <prop oor:name="Synchronize" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Grid/Options -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Options -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Synchronize the grid-resulution of x- and y-axis</desc>
+            <label xml:lang="en-US">Synchronize axes</label>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Resolution">
+        <group oor:name="XAxis">
+          <!-- OldPath: Draw/Grid/Resolution -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
+          <!-- Notice: Default-nonmetrical value: 1270 1/100 mm. -->
+          <prop oor:name="Metric" oor:type="xs:int">
+            <value>1000</value>
+            <info>
+              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <label xml:lang="en-US"/>
+            </info>
+          </prop>
+          <prop oor:name="NonMetric" oor:type="xs:int">
+            <value>1270</value>
+            <info>
+              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <label xml:lang="en-US"/>
+            </info>
+          </prop>
+          <info>
+            <desc xml:lang="en-US">Defines the distance between grid points on the X axis</desc>
+            <label xml:lang="en-US">X Axis Resolution</label>
+          </info>
+        </group>
+        <group oor:name="YAxis">
+          <!-- OldPath: Draw/Grid/Resolution -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
+          <!-- Notice: Default- nonmerical value: 1270 1/100 mm. -->
+          <prop oor:name="Metric" oor:type="xs:int">
+            <value>1000</value>
+            <info>
+              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <label xml:lang="en-US"/>
+            </info>
+          </prop>
+          <prop oor:name="NonMetric" oor:type="xs:int">
+            <value>1270</value>
+            <info>
+              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <label xml:lang="en-US"/>
+            </info>
+          </prop>
+          <info>
+            <desc xml:lang="en-US">Defines the distance between grid points on the Y axis</desc>
+            <label xml:lang="en-US">Y Axis Resolution</label>
+          </info>
+        </group>
+      </group>
+      <group oor:name="Subdivision">
+        <prop oor:name="XAxis" oor:type="xs:double">
+          <!-- OldPath: Draw/Grid/Subdivision -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
+          <!-- Notice: Default value for English Version only: 254 Points) -->
+          <value>1</value>
+          <info>
+            <desc xml:lang="en-US">Specifies the number of intervals between two grid points on the X axis</desc>
+            <label xml:lang="en-US">X Axis Subdivision</label>
+          </info>
+        </prop>
+        <prop oor:name="YAxis" oor:type="xs:double">
+          <!-- OldPath: Draw/Grid/Subdivision -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
+          <!-- Notice: Default value for English Version only: 254 Points) -->
+          <value>1</value>
+          <info>
+            <desc xml:lang="en-US">Specifies the number of intervals between two grid points on the Y axis</desc>
+            <label xml:lang="en-US">Y Axis Subdivision</label>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="SnapGrid">
+        <prop oor:name="Size" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Grid/Snap_Grid -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Snap grid -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Synchronize snap-grid and grid</desc>
+            <label xml:lang="en-US">Size to grid</label>
+          </info>
+        </prop>
+        <group oor:name="XAxis">
+          <!-- OldPath: Draw/Grid/Snap_Grid -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Snap grid -->
+          <!-- Notice: Default-nonmetrical value: 1270 1/100 mm. -->
+          <prop oor:name="Metric" oor:type="xs:int">
+            <value>1000</value>
+            <info>
+              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <label xml:lang="en-US"/>
+            </info>
+          </prop>
+          <prop oor:name="NonMetric" oor:type="xs:int">
+            <value>1270</value>
+            <info>
+              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <label xml:lang="en-US"/>
+            </info>
+          </prop>
+          <info>
+            <desc xml:lang="en-US">Defines the horizontal distance between the single grid points</desc>
+            <label xml:lang="en-US">X axis</label>
+          </info>
+        </group>
+        <group oor:name="YAxis">
+          <!-- OldPath: Draw/Grid/Snap_Grid -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Snap grid -->
+          <!-- Notice: Default-Default-nonmetrical value: 1270 1/100 mm. -->
+          <prop oor:name="Metric" oor:type="xs:int">
+            <value>1000</value>
+            <info>
+              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <label xml:lang="en-US"/>
+            </info>
+          </prop>
+          <prop oor:name="NonMetric" oor:type="xs:int">
+            <value>1270</value>
+            <info>
+              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <label xml:lang="en-US"/>
+            </info>
+          </prop>
+          <info>
+            <desc xml:lang="en-US">Defines the vertical distance between the single grid points</desc>
+            <label xml:lang="en-US">Y axis</label>
+          </info>
+        </group>
+      </group>
+    </group>
+    <group oor:name="Print">
+      <group oor:name="Content">
+        <prop oor:name="Drawing" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Print/Contents -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Contents -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Specifies, if graphical contents should be printed</desc>
+            <label xml:lang="en-US">Drawing</label>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Page">
+        <prop oor:name="PageSize" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Print/Page -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Trimm all elements to the page size</desc>
+            <label xml:lang="en-US">Fit to page</label>
+          </info>
+        </prop>
+        <prop oor:name="PageTile" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Print/Page -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Option to print tiled pages</desc>
+            <label xml:lang="en-US">Tile pages</label>
+          </info>
+        </prop>
+        <prop oor:name="Booklet" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Print/Page -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Print brochure</desc>
+            <label xml:lang="en-US">Brochure</label>
+          </info>
+        </prop>
+        <prop oor:name="BookletFront" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Print/Page -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Print frontside of the brochure</desc>
+            <label xml:lang="en-US">Front side</label>
+          </info>
+        </prop>
+        <prop oor:name="BookletBack" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Print/Page -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Print backside of the brochure</desc>
+            <label xml:lang="en-US">Back side</label>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Other">
+        <prop oor:name="PageName" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Print -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Print pagename</desc>
+            <label xml:lang="en-US">Page name</label>
+          </info>
+        </prop>
+        <prop oor:name="Date" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Print -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Print date</desc>
+            <label xml:lang="en-US">Date</label>
+          </info>
+        </prop>
+        <prop oor:name="Time" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Print -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Print time</desc>
+            <label xml:lang="en-US">Time</label>
+          </info>
+        </prop>
+        <prop oor:name="HiddenPage" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Print -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
+          <value>true</value>
+          <info>
+            <desc xml:lang="en-US">Print hidden pages</desc>
+            <label xml:lang="en-US">Hidden pages</label>
+          </info>
+        </prop>
+        <prop oor:name="Quality" oor:type="xs:int">
+          <!-- OldPath: Draw/Print -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Quality -->
+          <value>0</value>
+          <info>
+            <desc xml:lang="en-US">Quality of the printed colors.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc xml:lang="en-US">color</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc xml:lang="en-US">grayscale</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc xml:lang="en-US">black/white</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+        <prop oor:name="FromPrinterSetup" oor:type="xs:boolean">
+          <!-- OldPath: Draw/Print -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: PW -->
+          <!-- UIHints: Tools - Options - Drawing  Print  [Check box] From printer setup -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Use systemsettings of printer to choose paper tray</desc>
+            <label xml:lang="en-US">From printer setup</label>
+          </info>
+        </prop>
+      </group>
+    </group>
+  </component>
+</oor:component-schema>

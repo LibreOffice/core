@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: Inet.xcs,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: dg $ $Date: 2002-05-06 18:52:03 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Inet" oor:package="org.openoffice" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../component-schema.xsd" xml:lang="en-US">
+  <templates>
+    <group oor:name="SearchEngine">
+      <info>
+        <desc xml:lang="en-US">Specifies the search type, i.e. nexus or exact search.</desc>
+      </info>
+      <group oor:name="And">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <info>
+            <desc xml:lang="en-US">Specifies the search expression, i.e. URL and query command.</desc>
+          </info>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <info>
+            <desc xml:lang="en-US">Specifies the suffix.</desc>
+          </info>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <info>
+            <desc xml:lang="en-US">Specifies the separator</desc>
+          </info>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <info>
+            <desc xml:lang="en-US">Specifies if upper and lower case spelling should be considered.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc xml:lang="en-US">None</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc xml:lang="en-US">Upper</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc xml:lang="en-US">Lower</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+      </group>
+      <group oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <info>
+            <desc xml:lang="en-US">Specifies the search expression, i.e. URL and query command.</desc>
+          </info>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <info>
+            <desc xml:lang="en-US">Specifies the suffix.</desc>
+          </info>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <info>
+            <desc xml:lang="en-US">Specifies the separator</desc>
+          </info>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <info>
+            <desc xml:lang="en-US">Specifies if upper and lower case spelling should be considered.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc xml:lang="en-US">None</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc xml:lang="en-US">Upper</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc xml:lang="en-US">Lower</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+      </group>
+      <group oor:name="Exact">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <info>
+            <desc xml:lang="en-US">Specifies the search expression, i.e. URL and query command.</desc>
+          </info>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <info>
+            <desc xml:lang="en-US">Specifies the suffix.</desc>
+          </info>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <info>
+            <desc xml:lang="en-US">Specifies the separator</desc>
+          </info>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <info>
+            <desc xml:lang="en-US">Specifies if upper and lower case spelling should be considered.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc xml:lang="en-US">None</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc xml:lang="en-US">Upper</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc xml:lang="en-US">Lower</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+      </group>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="Settings">
+      <prop oor:name="ooInetDNSServer" oor:type="xs:string">
+        <!-- OldPath: Inet/DNS -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: SB/MHU -->
+        <!-- UIHints: Tools - Options - Internet - Protocol -->
+        <info>
+          <desc xml:lang="en-US">Specifies the IP address of the DNS server. If the string is empty, the DNS will be specified automatically.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooInetNoProxy" oor:type="xs:string">
+        <!-- OldPath: Inet/NoProxy -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: SB/MHU -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc xml:lang="en-US">Enumeration of the names of the servers that do not require any Proxy servers.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooInetProxyType" oor:type="xs:int">
+        <!-- OldPath: Inet/ProxyType -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: SB/MHU -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc xml:lang="en-US">Specifies the type of the Proxy selection.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc xml:lang="en-US">None</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc xml:lang="en-US">Automatic</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc xml:lang="en-US">Manual</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetFTPProxyName" oor:type="xs:string">
+        <!-- OldPath: Inet/FTPProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: SB/MHU -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc xml:lang="en-US">Name of the FTP Proxy server</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooInetFTPProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/FTPProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: SB/MHU -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc xml:lang="en-US">Port of the FTP Proxy server</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0"/>
+          <maxInclusive oor:value="65535"/>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetHTTPProxyName" oor:type="xs:string">
+        <!-- OldPath: Inet/HTTPProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: SB/MHU -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc xml:lang="en-US">Name of the HTTP Proxy server</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooInetHTTPProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/HTTPProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: SB/MHU -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc xml:lang="en-US">Port of the HTTP Proxy server</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0"/>
+          <maxInclusive oor:value="65535"/>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetSOCKSProxyName" oor:type="xs:string">
+        <!-- OldPath: Inet/SOCKSProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: SB/MHU -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc xml:lang="en-US">Name of the Socks Proxy server</desc>
+        </info>
+      </prop>
+      <prop oor:name="ooInetSOCKSProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/SOCKSProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- Responsible: SB/MHU -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc xml:lang="en-US">Port of the Socks Proxy server</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0"/>
+          <maxInclusive oor:value="65535"/>
+        </constraints>
+      </prop>
+    </group>
+    <set oor:name="SearchEngines" oor:node-type="SearchEngine">
+      <!--Responsible: OS / TV-->
+      <!--UI: Tools - Options - Internet - Search-->
+      <info>
+        <desc xml:lang="en-US">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
+      </info>
+    </set>
+  </component>
+</oor:component-schema>

@@ -1,0 +1,943 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: Math.xcs,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: dg $ $Date: 2002-05-06 18:52:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Math" oor:package="org.openoffice.Office" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../../component-schema.xsd" xml:lang="en-US">
+  <templates>
+    <group oor:name="FontFormat">
+      <prop oor:name="Name" oor:type="xs:string"/>
+      <prop oor:name="CharSet" oor:type="xs:short"/>
+      <prop oor:name="Family" oor:type="xs:short">
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc xml:lang="en-US">FAMILY_DONTKNOW</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc xml:lang="en-US">FAMILY_DECORATIVE</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc xml:lang="en-US">FAMILY_MODERN</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="3">
+            <info>
+              <desc xml:lang="en-US">FAMILY_ROMAN</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="4">
+            <info>
+              <desc xml:lang="en-US">FAMILY_SCRIPT</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="5">
+            <info>
+              <desc xml:lang="en-US">FAMILY_SWISS</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="6">
+            <info>
+              <desc xml:lang="en-US">FAMILY_SYSTEM</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="Pitch" oor:type="xs:short">
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc xml:lang="en-US">PITCH_DONTKNOW</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc xml:lang="en-US">PITCH_FIXED</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc xml:lang="en-US">PITCH_VARIABLE</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="Weight" oor:type="xs:short">
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc xml:lang="en-US">WEIGHT_DONTKNOW</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc xml:lang="en-US">WEIGHT_THIN</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc xml:lang="en-US">WEIGHT_ULTRALIGHT</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="3">
+            <info>
+              <desc xml:lang="en-US">WEIGHT_LIGHT</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="4">
+            <info>
+              <desc xml:lang="en-US">WEIGHT_SEMILIGHT</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="5">
+            <info>
+              <desc xml:lang="en-US">WEIGHT_NORMAL</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="6">
+            <info>
+              <desc xml:lang="en-US">WEIGHT_MEDIUM</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="7">
+            <info>
+              <desc xml:lang="en-US">WEIGHT_SEMIBOLD</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="8">
+            <info>
+              <desc xml:lang="en-US">WEIGHT_BOLD</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="9">
+            <info>
+              <desc xml:lang="en-US">WEIGHT_ULTRABOLD</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="10">
+            <info>
+              <desc xml:lang="en-US">WEIGHT_BLACK</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="Italic" oor:type="xs:short">
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc xml:lang="en-US">ITALIC_NONE</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc xml:lang="en-US">ITALIC_OBLIQUE</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc xml:lang="en-US">ITALIC_NORMAL</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="3">
+            <info>
+              <desc xml:lang="en-US">ITALIC_DONTKNOW</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+    </group>
+    <group oor:name="Symbol">
+      <prop oor:name="Char" oor:type="xs:int"/>
+      <prop oor:name="Set" oor:type="xs:string"/>
+      <prop oor:name="Predefined" oor:type="xs:boolean">
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US"/>
+        </info>
+      </prop>
+      <prop oor:name="FontFormatId" oor:type="xs:string"/>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="Print">
+      <prop oor:name="Title" oor:type="xs:boolean">
+        <!-- OldPath: Math/Print -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Printing option / print title (filename) of formula</desc>
+          <label xml:lang="en-US">Title row</label>
+        </info>
+      </prop>
+      <prop oor:name="FormulaText" oor:type="xs:boolean">
+        <!-- OldPath: Math/Print -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Printing option / print text of formula</desc>
+          <label xml:lang="en-US">Formula text</label>
+        </info>
+      </prop>
+      <prop oor:name="Frame" oor:type="xs:boolean">
+        <!-- OldPath: Math/Print -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Printing option / draw border around formula</desc>
+          <label xml:lang="en-US">Border</label>
+        </info>
+      </prop>
+      <prop oor:name="Size" oor:type="xs:short">
+        <!-- OldPath: Math/Print -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
+        <value>0</value>
+        <info>
+          <desc xml:lang="en-US">Printing option / size of a formula PRINT_SIZE_NORMAL = original size; PRINT_SIZE_SCALED = size will be adapted to paper size; PRINT_SIZE_ZOOMED = size will be defined by the zoom factor</desc>
+          <label xml:lang="en-US">Print Size</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc xml:lang="en-US">PRINT_SIZE_NORMAL</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc xml:lang="en-US">PRINT_SIZE_SCALED</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc xml:lang="en-US">PRINT_SIZE_ZOOMED</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="ZoomFactor" oor:type="xs:short">
+        <!-- OldPath: Math/Print -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
+        <value>100</value>
+        <info>
+          <desc xml:lang="en-US">Printing option / zoomfactor for printing of formulas. Only valid with PRINT_SIZE_ZOOMED.  [UNIT=%]</desc>
+          <label xml:lang="en-US">Zoom factor</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="10"/>
+          <maxInclusive oor:value="400"/>
+        </constraints>
+      </prop>
+    </group>
+    <group oor:name="Misc">
+      <prop oor:name="NoSymbolsWarning" oor:type="xs:boolean">
+        <!-- OldPath: Math/Misc -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: - -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">If TRUE a warning message will be shown when the symbol file used by the formulas is missing.</desc>
+          <label xml:lang="en-US">Missing symbols warning</label>
+        </info>
+      </prop>
+      <prop oor:name="IgnoreSpacesRight" oor:type="xs:boolean">
+        <!-- OldPath: Math/Misc -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Miscellaneous options -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Option for ignoring spaces at the end of a line</desc>
+          <label xml:lang="en-US">Ignore ~ and &amp;apos; at the end of the line</label>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="View">
+      <prop oor:name="ToolboxVisible" oor:type="xs:boolean">
+        <!-- OldPath: Math/View -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: View - Selection -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Toggles the visibility of the ToolBox (Selection Box)</desc>
+          <label xml:lang="en-US">Show Tool Box</label>
+        </info>
+      </prop>
+      <prop oor:name="AutoRedraw" oor:type="xs:boolean">
+        <!-- OldPath: Math/View -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: View - AutoRefresh Display -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">If TRUE the display of the formula will be automatically updated after some time when the text has changed.</desc>
+          <label xml:lang="en-US">Update display automatically</label>
+        </info>
+      </prop>
+      <prop oor:name="FormulaCursor" oor:type="xs:boolean">
+        <!-- OldPath: Math/View -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: The icon &quot;Formula Cursor&quot; in the Tool bar -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">Toggles the visibility of the FormulaCursor</desc>
+          <label xml:lang="en-US">Show Formula Cursor</label>
+        </info>
+      </prop>
+    </group>
+    <set oor:name="FontFormatList" oor:node-type="FontFormat"/>
+    <group oor:name="StandardFormat">
+      <prop oor:name="Textmode" oor:type="xs:boolean">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format - Text Mode -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">If TRUE some expressions will be displayed in a more compact form.</desc>
+          <label xml:lang="en-US">Textmode</label>
+        </info>
+      </prop>
+      <prop oor:name="ScaleNormalBracket" oor:type="xs:boolean">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format - Spacing - Category - Brackets - Scale all brackets -->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">If TRUE the usually non scaleable brackets will be scaled to fit the size of their arguments too.</desc>
+          <label xml:lang="en-US">Scale normal brackets</label>
+        </info>
+      </prop>
+      <prop oor:name="HorizontalAlignment" oor:type="xs:short">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format - Alignment - Horizontal -->
+        <value>1</value>
+        <info>
+          <desc xml:lang="en-US">The default horizontal alignment for the formula.</desc>
+          <label xml:lang="en-US">Horizontal alignment</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc xml:lang="en-US">AlignLeft</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc xml:lang="en-US">AlignCenter</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc xml:lang="en-US">AlignRight</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="BaseSize" oor:type="xs:short">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format- Font Size - Base size -->
+        <value>12</value>
+        <info>
+          <desc xml:lang="en-US">The base size to which all relative sizes refer to.  [UNIT=Pts]</desc>
+          <label xml:lang="en-US">Base size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="4"/>
+          <maxInclusive oor:value="127"/>
+        </constraints>
+      </prop>
+      <prop oor:name="TextSize" oor:type="xs:short">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format- Font Size - Text -->
+        <value>100</value>
+        <info>
+          <desc xml:lang="en-US">The size for text (relative to the base size).  [UNIT=%]</desc>
+          <label xml:lang="en-US">Text size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5"/>
+          <maxInclusive oor:value="200"/>
+        </constraints>
+      </prop>
+      <prop oor:name="IndexSize" oor:type="xs:short">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format- Font Size - Indices -->
+        <value>60</value>
+        <info>
+          <desc xml:lang="en-US">The size for indices (relative to the base size).  [UNIT=%]</desc>
+          <label xml:lang="en-US">Index size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5"/>
+          <maxInclusive oor:value="200"/>
+        </constraints>
+      </prop>
+      <prop oor:name="FunctionSize" oor:type="xs:short">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format- Font Size - Functions -->
+        <value>100</value>
+        <info>
+          <desc xml:lang="en-US">The size for functions (relative to the base size).  [UNIT=%]</desc>
+          <label xml:lang="en-US">Function size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5"/>
+          <maxInclusive oor:value="200"/>
+        </constraints>
+      </prop>
+      <prop oor:name="OperatorSize" oor:type="xs:short">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format- Font Size - Operators -->
+        <value>100</value>
+        <info>
+          <desc xml:lang="en-US">The size for operators (relative to the base size).  [UNIT=%]</desc>
+          <label xml:lang="en-US">Operator size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5"/>
+          <maxInclusive oor:value="200"/>
+        </constraints>
+      </prop>
+      <prop oor:name="LimitsSize" oor:type="xs:short">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format- Font Size - Limits -->
+        <value>60</value>
+        <info>
+          <desc xml:lang="en-US">The size for limits (relative to the base size).  [UNIT=%]</desc>
+          <label xml:lang="en-US">Limits size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5"/>
+          <maxInclusive oor:value="200"/>
+        </constraints>
+      </prop>
+      <prop oor:name="VariableFont" oor:type="xs:string">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format - Fonts - Variables -->
+        <value/>
+        <info>
+          <desc xml:lang="en-US">Name of the font to be used for variables.</desc>
+          <label xml:lang="en-US">Variable Font name</label>
+        </info>
+      </prop>
+      <prop oor:name="FunctionFont" oor:type="xs:string">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format - Fonts - Functions -->
+        <value/>
+        <info>
+          <desc xml:lang="en-US">Name of the font to be used for functions.</desc>
+          <label xml:lang="en-US">Function Font name</label>
+        </info>
+      </prop>
+      <prop oor:name="NumberFont" oor:type="xs:string">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format - Fonts - Numbers -->
+        <value/>
+        <info>
+          <desc xml:lang="en-US">Name of the font to be used for numbers.</desc>
+          <label xml:lang="en-US">Number Font name</label>
+        </info>
+      </prop>
+      <prop oor:name="TextFont" oor:type="xs:string">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format - Fonts - Text -->
+        <value/>
+        <info>
+          <desc xml:lang="en-US">Name of the font to be used for text.</desc>
+          <label xml:lang="en-US">Text Font name</label>
+        </info>
+      </prop>
+      <prop oor:name="SansFont" oor:type="xs:string">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format - Fonts - Sans -->
+        <value/>
+        <info>
+          <desc xml:lang="en-US">Name of the font to be used that is defined as sans.</desc>
+          <label xml:lang="en-US">Sans Font name</label>
+        </info>
+      </prop>
+      <prop oor:name="SerifFont" oor:type="xs:string">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format - Fonts - Serif -->
+        <value/>
+        <info>
+          <desc xml:lang="en-US">Name of the font to be used that is defined as serif.</desc>
+          <label xml:lang="en-US">Serif Font name</label>
+        </info>
+      </prop>
+      <prop oor:name="FixedFont" oor:type="xs:string">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- Responsible: TL -->
+        <!-- UIHints: Format - Fonts - Fixed -->
+        <value/>
+        <info>
+          <desc xml:lang="en-US">Name of the font to be used that is defined as fixed.</desc>
+          <label xml:lang="en-US">Fixed Font name</label>
+        </info>
+      </prop>
+      <group oor:name="Distance">
+        <prop oor:name="Horizontal" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Spacing - Spacing -->
+          <value>10</value>
+          <info>
+            <desc xml:lang="en-US">The horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Horizontal distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="200"/>
+          </constraints>
+        </prop>
+        <prop oor:name="Vertical" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Spacing - Line Spacing -->
+          <value>5</value>
+          <info>
+            <desc xml:lang="en-US">The vertical distance of different lines.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Vertical distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="200"/>
+          </constraints>
+        </prop>
+        <prop oor:name="Root" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Spacing - Root Spacing -->
+          <value>0</value>
+          <info>
+            <desc xml:lang="en-US">The vertical distance of the root symbols horizontal bar to the argument.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Distance to root symbol</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="SubScript" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Indexes - Subscript -->
+          <value>20</value>
+          <info>
+            <desc xml:lang="en-US">The vertical distance of the subscript to the base.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Subscript distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="SuperScript" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Indexes - Superscript -->
+          <value>20</value>
+          <info>
+            <desc xml:lang="en-US">The vertical distance of the superscript to the base.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Superscript distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="LowerLimit" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Limits - Lower Limit -->
+          <value>0</value>
+          <info>
+            <desc xml:lang="en-US">The vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Lower limit distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="UpperLimit" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Limits - Upper Limit -->
+          <value>0</value>
+          <info>
+            <desc xml:lang="en-US">The vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Upper limit distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="OperatorSize" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Operators - Excess size -->
+          <value>50</value>
+          <info>
+            <desc xml:lang="en-US">The oversize of a large operator relativ to the base size.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Oversize of large operator</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="OperatorSpace" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Operators - Spacing -->
+          <value>20</value>
+          <info>
+            <desc xml:lang="en-US">The distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Distance to large operator</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="Numerator" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Fractions - Numerator -->
+          <value>0</value>
+          <info>
+            <desc xml:lang="en-US">The vertical distance of the numerator to the fraction seperator.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Numerator distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="Denominator" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Fractions - Denominator -->
+          <value>0</value>
+          <info>
+            <desc xml:lang="en-US">The vertical distance of the denominator to the fraction seperator.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Denominator distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="Fraction" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Fraction Bars - Excess length -->
+          <value>10</value>
+          <info>
+            <desc xml:lang="en-US">The overlength of the fraction seperator relative to its arguments.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Fraction overlength</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="StrokeWidth" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Fraction Bars - Weight -->
+          <value>5</value>
+          <info>
+            <desc xml:lang="en-US">The strokewidth of the fraction seperator.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Fraction strokewidth</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="1"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="BracketSize" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Brackets - Excess size (left/right) -->
+          <value>5</value>
+          <info>
+            <desc xml:lang="en-US">The oversize of the scalable brackets relative to the argument.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Bracket oversize</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="BracketSpace" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Brackets - Spacing -->
+          <value>5</value>
+          <info>
+            <desc xml:lang="en-US">  [UNIT=%]</desc>
+            <label xml:lang="en-US">Bracket distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="NormalBracketSize" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Brackets - Excess size -->
+          <value>0</value>
+          <info>
+            <desc xml:lang="en-US">The oversize of the normal brackets relative to the argument. Only valid if Scale_Normal_Brackets=TRUE.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Normal bracket oversize</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="MatrixRow" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Matrixes - Line Spacing -->
+          <value>3</value>
+          <info>
+            <desc xml:lang="en-US">The distance between the rows of a matrix.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Matrix row distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="300"/>
+          </constraints>
+        </prop>
+        <prop oor:name="MatrixColumn" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Matrixes - Column Spacing -->
+          <value>30</value>
+          <info>
+            <desc xml:lang="en-US">The distance between the columns of a matrix.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Matrix column distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="300"/>
+          </constraints>
+        </prop>
+        <prop oor:name="OrnamentSize" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Symbols - Primary height -->
+          <value>0</value>
+          <info>
+            <desc xml:lang="en-US">The distance between the attribute and its base.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Distance to attribute</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="OrnamentSpace" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Symbols - Minimum distance -->
+          <value>0</value>
+          <info>
+            <desc xml:lang="en-US">The distance between different attributes of the same base.  [UNIT=%]</desc>
+            <label xml:lang="en-US">Distance between attributes</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="100"/>
+          </constraints>
+        </prop>
+        <prop oor:name="LeftSpace" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Borders - Left -->
+          <value>100</value>
+          <info>
+            <desc xml:lang="en-US">Size of extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
+            <label xml:lang="en-US">Left margin</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="10000"/>
+          </constraints>
+        </prop>
+        <prop oor:name="RightSpace" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Borders - Right -->
+          <value>100</value>
+          <info>
+            <desc xml:lang="en-US">Size of extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
+            <label xml:lang="en-US">Right margin</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="10000"/>
+          </constraints>
+        </prop>
+        <prop oor:name="TopSpace" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Borders - Top -->
+          <value>0</value>
+          <info>
+            <desc xml:lang="en-US">Size of extra space to the top of the formula.  [UNIT=1/100 mm]</desc>
+            <label xml:lang="en-US">Top margin</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="10000"/>
+          </constraints>
+        </prop>
+        <prop oor:name="BottomSpace" oor:type="xs:short">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- Responsible: TL -->
+          <!-- UIHints: Format - Spacing - Category - Borders - Bottom -->
+          <value>0</value>
+          <info>
+            <desc xml:lang="en-US">Size of extra space to the bottom of the formula.  [UNIT=1/100 mm]</desc>
+            <label xml:lang="en-US">Bottom margin</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0"/>
+            <maxInclusive oor:value="10000"/>
+          </constraints>
+        </prop>
+      </group>
+    </group>
+    <set oor:name="SymbolList" oor:node-type="Symbol"/>
+  </component>
+</oor:component-schema>
