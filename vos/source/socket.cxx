@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 10:01:10 $
+ *  last change: $Author: jbu $ $Date: 2001-03-14 16:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,10 +413,7 @@ OIpxSocketAddr::OIpxSocketAddr(const rtl::OUString& NetNumber,
                                const rtl::OUString& NodeNumber,
                                sal_uInt32 SocketNumber)
 {
-    m_SockAddr= osl_createIpxSocketAddr(NetNumber.pData,
-                                        NodeNumber.pData,
-                                        SocketNumber);
-
+    // jbu : functionality removed from vos
 }
 
 /*****************************************************************************/
@@ -494,7 +491,8 @@ OIpxSocketAddr& OIpxSocketAddr::operator=(const OSocketAddr& Addr)
 /*****************************************************************************/
 OSocketAddr::TResult OIpxSocketAddr::getNetNumber(TIpxNetNumber& NetNumber) const
 {
-    return (TResult)osl_getIpxNetNumber(m_SockAddr, NetNumber);
+    // jbu : functionality removed from vos
+    return (TResult)0;
 }
 
 /*****************************************************************************/
@@ -502,7 +500,8 @@ OSocketAddr::TResult OIpxSocketAddr::getNetNumber(TIpxNetNumber& NetNumber) cons
 /*****************************************************************************/
 OSocketAddr::TResult OIpxSocketAddr::getNodeNumber(TIpxNodeNumber& NodeNumber) const
 {
-    return (TResult)osl_getIpxNodeNumber(m_SockAddr, NodeNumber);
+    // jbu : functionality removed from vos
+    return (TResult)0;
 }
 
 /*****************************************************************************/
@@ -510,7 +509,8 @@ OSocketAddr::TResult OIpxSocketAddr::getNodeNumber(TIpxNodeNumber& NodeNumber) c
 /*****************************************************************************/
 sal_uInt32 OIpxSocketAddr::getSocketNumber() const
 {
-    return osl_getIpxSocketNumber(m_SockAddr);
+//      return osl_getIpxSocketNumber(m_SockAddr);
+    return (TResult)0;
 }
 
 
@@ -520,30 +520,7 @@ sal_uInt32 OIpxSocketAddr::getSocketNumber() const
 //void OIpxSocketAddr::getAddressString(sal_Char* Buffer, sal_uInt32 Len) const
 void OIpxSocketAddr::getAddressString( rtl::OUString& Buffer ) const
 {
-    TIpxNetNumber  NetNumber;
-    TIpxNodeNumber NodeNumber;
-
-    sal_Char charBuffer[32] = "";
-
-    sal_Int32 i= 0, j= 0;
-
-    osl_getIpxNetNumber(m_SockAddr, NetNumber);
-    osl_getIpxNodeNumber(m_SockAddr, NodeNumber);
-
-    sprintf(charBuffer,
-            "%02X%02X%02X%02X.%02X%02X%02X%02X%02X%02X:%04X",
-            NetNumber[0],
-            NetNumber[1],
-            NetNumber[2],
-            NetNumber[3],
-            NodeNumber[0],
-            NodeNumber[1],
-            NodeNumber[2],
-            NodeNumber[3],
-            NodeNumber[4],
-            NodeNumber[5],
-            osl_getIpxSocketNumber(m_SockAddr));
-    Buffer = rtl::OUString::createFromAscii( charBuffer );
+    // jbu : functionality removed from vos
 }
 
 
