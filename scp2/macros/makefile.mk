@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 19:19:42 $
+#   last change: $Author: hjs $ $Date: 2005-01-20 12:44:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,10 +75,17 @@ TARGET=macros
 completelangiso_var:=$(completelangiso)
 .EXPORT : completelangiso_var
 
-ALLTAR : $(INCCOM)$/langmacros.inc
+CUSTOM_IMAGE_SETS:=$(CUSTOM_IMAGE_SETS)
+.EXPORT : CUSTOM_IMAGE_SETS
+
+ALLTAR : $(INCCOM)$/langmacros.inc $(INCCOM)$/images.inc
 
 .PHONY $(INCCOM)$/langmacros.inc:
-        @echo ------------------------------
-        @echo Making: $@  
+    @echo ------------------------------
+    @echo Making: $@  
     +-$(RENAME) $@ $@.tmp >& $(NULLDEV)
     +$(PERL) macro.pl -o $@.tmp && $(RENAME) $@.tmp $@
+
+.PHONY $(INCCOM)$/images.inc:
+    +$(PERL) images.pl -o $@.tmp && $(RENAME) $@.tmp $@
+
