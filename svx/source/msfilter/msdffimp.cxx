@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-11 15:28:22 $
+ *  last change: $Author: cmc $ $Date: 2002-05-09 12:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,35 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
 
 void DffPropSet::InitializePropSet() const
 {
-    memset( ( (DffPropSet*) this )->mpFlags, 0, 0x400 * sizeof( DffPropFlags ) );
+    /*
+    cmc:
+    " Boolean properties are grouped in bitfields by property set; note that
+    the Boolean properties in each property set are contiguous. They are saved
+    under the property ID of the last Boolean property in the set, and are
+    placed in the value field in reverse order starting with the last property
+    in the low bit. "
+
+    e.g.
+
+    fEditedWrap
+    fBehindDocument
+    fOnDblClickNotify
+    fIsButton
+    fOneD
+    fHidden
+    fPrint
+
+    are all part of a group and all are by default false except for fPrint,
+    which equates to a default bit sequence for the group of 0000001 -> 0x1
+
+    If at a later stage word sets fBehindDocument away from the default it
+    will be done by having a property named fPrint whose bitsequence will have
+    the fBehindDocument bit set. e.g. a DFF_Prop_fPrint with value 0x200020
+    has set bit 6 on so as to enable fBehindDocument (as well as disabling
+    everything else)
+    */
+
+    memset( ( (DffPropSet*) this )->mpFlags, 0, 0x400 * sizeof(DffPropFlags) );
     ( (DffPropSet*) this )->Clear();
 
     DffPropFlags nFlags = { 1, 0, 0, 1 };
@@ -3753,7 +3781,11 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             pObj->SetItemSet(aSet);
         }
 
-        pImpRec->bDrawHell      = (BOOL)GetPropertyValue( DFF_Prop_fPrint, 0 );
+        //Means that fBehindDocument is set
+        if (GetPropertyValue(DFF_Prop_fPrint) & 0x20)
+            pImpRec->bDrawHell = TRUE;
+        else
+            pImpRec->bDrawHell = FALSE;
         pTextImpRec->bDrawHell  = pImpRec->bDrawHell;
         pImpRec->nNextShapeId   = GetPropertyValue( DFF_Prop_hspNext, 0 );
         pTextImpRec->nNextShapeId=pImpRec->nNextShapeId;
