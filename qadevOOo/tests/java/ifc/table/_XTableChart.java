@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTableChart.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:58 $
+ *  last change:$Date: 2003-09-08 11:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.table;
 
-import com.sun.star.table.CellRangeAddress;
-import com.sun.star.table.XTableChart;
 import lib.MultiMethodTest;
 import util.ValueComparer;
+
+import com.sun.star.table.CellRangeAddress;
+import com.sun.star.table.XTableChart;
 
 /**
 * Testing <code>com.sun.star.table.XTableChart</code>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCellRange.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:58 $
+ *  last change:$Date: 2003-09-08 11:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.table;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.table.XCellRange</code>
@@ -172,6 +173,13 @@ public class _XCellRange extends MultiMethodTest {
 
 
     } // end getCellRangeByPosition()
+
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
+    }
 
 } // finish class _XCellRange
 
