@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:14:58 $
+ *  last change: $Author: as $ $Date: 2003-04-29 12:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,7 @@ SfxApplication::SfxApplication()
     pImp->pSimpleResManager = 0;
     pImp->nWarnLevel = 0;
     pImp->pAutoSaveTimer = 0;
-
+/*AS
 #if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
 #endif
@@ -540,12 +540,13 @@ SfxApplication::SfxApplication()
     aSettings.SetLanguage( eLanguage );
     Application::SetSettings( aSettings );
 
-    // Create instance of SvtSysLocale _after_ setting the locale at the application,
-    // so that it can initialize itself correctly.
-    pSysLocale = new SvtSysLocale;
 #if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
 #endif
+*/
+    // Create instance of SvtSysLocale _after_ setting the locale at the application,
+    // so that it can initialize itself correctly.
+    pSysLocale = new SvtSysLocale;
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:35:03 $
+ *  last change: $Author: as $ $Date: 2003-04-29 12:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
 #include <svtools/miscopt.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
+#include <svtools/syslocaleoptions.hxx>
 #endif
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
@@ -1311,6 +1314,16 @@ void Desktop::Main()
         pLanguageOptions = new SvtLanguageOptions(sal_True);
         SetSplashScreenProgress(45);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
+
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
+        String sLanguage = SvtPathOptions().SubstituteVariable(String::CreateFromAscii("$(langid)"));
+        LanguageType eUILanguage = (LanguageType) sLanguage.ToInt32();
+        LanguageType eLanguage = SvtSysLocaleOptions().GetLocaleLanguageType();
+        AllSettings aSettings( Application::GetSettings() );
+        aSettings.SetUILanguage( eUILanguage );
+        aSettings.SetLanguage( eLanguage );
+        Application::SetSettings( aSettings );
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
 
         if (pCmdLineArgs->IsEmpty())
         {
