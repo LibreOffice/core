@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-18 15:05:35 $
+#   last change: $Author: kz $ $Date: 2004-06-11 17:56:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,7 +147,6 @@ SCP1FILES +=                                  \
 SCP1FILES +=                           \
              registryitem_ooo.par      \
              folder_ooo.par            \
-             folderitem_ooo.par        \
              registryitem_writer.par   \
              folderitem_writer.par     \
              registryitem_calc.par     \
@@ -157,9 +156,7 @@ SCP1FILES +=                           \
              registryitem_impress.par  \
              folderitem_impress.par    \
              registryitem_math.par     \
-             module_quickstart.par     \
-             folderitem_quickstart.par \
-             procedure_quickstart.par  \
+             folderitem_math.par       \
              module_activex.par        \
              file_activex.par          \
              custom_activex.par
@@ -175,7 +172,9 @@ SCP1FILES += \
              directory_gnome.par    \
              file_gnome.par         \
              module_kde.par         \
-             file_kde.par
+             file_kde.par           \
+             module_mailcap.par     \
+             file_mailcap.par
 .ENDIF
 
 .IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == "" 
