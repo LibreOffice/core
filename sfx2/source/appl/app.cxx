@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:26:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,6 @@
 #include "docfac.hxx"
 #include "docfile.hxx"
 #include "docfilt.hxx"
-#include "cfgmgr.hxx"
 #include "fltfnc.hxx"
 #include "nfltdlg.hxx"
 #include "new.hxx"
@@ -198,9 +197,6 @@
 #include "dispatch.hxx"
 #include "viewsh.hxx"
 #include "genlink.hxx"
-#include "accmgr.hxx"
-#include "tbxmgr.hxx"
-#include "mnumgr.hxx"
 #include "topfrm.hxx"
 #include "newhdl.hxx"
 #include "appdata.hxx"
@@ -390,7 +386,6 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
 #include <framework/acceleratorinfo.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include "imagemgr.hxx"
-#include "accelinfo.hxx"
 
 ::osl::Mutex SfxApplication::gMutex;
 
@@ -404,8 +399,8 @@ SfxApplication* SfxApplication::GetOrCreate()
         SetApp( pNew );
 
         ::framework::SetImageProducer( GetImage );
-        ::framework::SetCommandURLFromKeyCode( GetCommandURLFromKeyCode );
-        ::framework::SetKeyCodeFromCommandURL( GetKeyCodeFromCommandURL );
+//        ::framework::SetCommandURLFromKeyCode( GetCommandURLFromKeyCode );
+//        ::framework::SetKeyCodeFromCommandURL( GetKeyCodeFromCommandURL );
         ::framework::SetToolBoxControllerCreator( SfxToolBoxControllerFactory );
         ::framework::SetStatusBarControllerCreator( SfxStatusBarControllerFactory );
 
@@ -492,10 +487,6 @@ SfxApplication::SfxApplication()
     pAppData_Impl->m_xImeStatusWindow->init();
     pApp->PreInit();
 
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SfxConfigManager" );
-    pCfgMgr = new SfxConfigManager;
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SfxConfigManager" );
-
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ initialize DDE" );
 
 #ifdef DDE_AVAILABLE
@@ -539,7 +530,6 @@ SfxApplication::~SfxApplication()
     if ( !bDowning )
         Deinitialize();
 
-    delete pCfgMgr;
     delete pImp;
     delete pAppData_Impl;
     pApp = 0;
@@ -573,38 +563,6 @@ SfxObjectShell* SfxApplication::GetActiveObjectShell() const
     if ( pViewFrame )
         return pViewFrame->GetObjectShell();
     return 0;
-}
-
-//--------------------------------------------------------------------
-
-long SfxAppFocusChanged_Impl( void* pObj, void* pArg )
-{
-/*
-    SfxApplication *pApp = SFX_APP();
-    if ( pApp && !pApp->IsDowning() )
-    {
-        Help* pHelp = Application::GetHelp();
-        Window* pFocusWindow = Application::GetFocusWindow();
-        if ( pHelp && pFocusWindow )
-        {
-            sal_uInt32 nId = pFocusWindow->GetHelpId();
-            while ( !nId && pFocusWindow )
-            {
-                pFocusWindow = pFocusWindow->GetParent();
-                nId = pFocusWindow ? pFocusWindow->GetHelpId() : 0;
-            }
-            ((SfxHelp_Impl*)pHelp)->SlotExecutedOrFocusChanged(
-                nId, sal_False, SvtHelpOptions().IsHelpAgentAutoStartMode() );
-        }
-    }
- */
-    return 0;
-}
-
-void SfxApplication::FocusChanged()
-{
-    static svtools::AsynchronLink *pFocusCallback = new svtools::AsynchronLink( Link( 0, SfxAppFocusChanged_Impl ) );
-    pFocusCallback->Call( this, sal_True );
 }
 
 //--------------------------------------------------------------------
@@ -788,19 +746,6 @@ SfxNewFileDialog*  SfxApplication::CreateNewDialog()
 }
 
 //--------------------------------------------------------------------
-/*
-const SfxFilter* SfxApplication::GetFilter
-(
-    const SfxObjectFactory &rFact,
-    const String &rFilterName
-    )   const
-{
-    DBG_ASSERT( rFilterName.Search( ':' ) == STRING_NOTFOUND,
-                "SfxApplication::GetFilter erwartet unqualifizierte Namen" );
-    return rFact.GetFilterContainer()->GetFilter4FilterName(rFilterName);
-}
-*/
-//--------------------------------------------------------------------
 
 short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool bAutoSave )
 {
@@ -883,16 +828,9 @@ SimpleResMgr* SfxApplication::GetSimpleResManager()
 
 void SfxApplication::SetProgress_Impl
 (
-    SfxProgress *pProgress  /*  zu startender <SfxProgress> oder 0, falls
-                                der Progress zurueckgesetzt werden soll */
+    SfxProgress *pProgress
+
 )
-
-/*  [Beschreibung]
-
-    Interne Methode zum setzen oder zuruecksetzen des Progress-Modes
-    fuer die gesamte Applikation.
-*/
-
 {
     DBG_ASSERT( ( !pAppData_Impl->pProgress && pProgress ) ||
                 ( pAppData_Impl->pProgress && !pProgress ),
@@ -981,38 +919,6 @@ String SfxApplication::LocalizeDBName
     char aDel
 ) const
 {
-/*    String  aActName;
-    String  aResult;
-    String  aNationalName = SfxResId(STR_ADDRESS_NAME);
-    String  aIniName( "Address" );
-    sal_uInt16  nCnt = rList.GetTokenCount( aDel );
-
-    for( sal_uInt16 i=0 ; i<nCnt ; i++ )
-    {
-        aActName = rList.GetToken( i, aDel );
-
-        if( eConvert == INI2NATIONAL )
-        {
-            if( aActName == aIniName )
-                aResult += aNationalName;
-            else
-                aResult += aActName;
-        }
-        else
-        {
-            if( aActName == aNationalName )
-                aResult += aIniName;
-            else
-                aResult += aActName;
-        }
-
-        aResult += aDel;
-    }
-
-    aResult.EraseTrailingChars( aDel );
-
-    return aResult;*/
-
     return rList;
 }
 
@@ -1069,20 +975,6 @@ void SfxApplication::GrabFocus( Window *pAlternate )
                         : pAlternate;
     pWin->GrabFocus();
     pAppData_Impl->pDefFocusWin = 0;
-}
-
-
-SfxStatusBarManager* SfxApplication::GetStatusBarManager() const
-{
-    // OBSOLETE: This will always return ZERO!
-    if ( !pViewFrame )
-        return NULL;
-
-    SfxViewFrame *pTop = pViewFrame;
-    while ( pTop->GetParentViewFrame_Impl() )
-        pTop = pTop->GetParentViewFrame_Impl();
-
-    return pTop->GetFrame()->GetWorkWindow_Impl()->GetStatusBarManager_Impl();
 }
 
 uno::Reference< task::XStatusIndicator > SfxApplication::GetStatusIndicator() const
