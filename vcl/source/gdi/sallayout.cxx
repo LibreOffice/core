@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:13:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,7 +1454,6 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     int nCharPos[ MAX_FALLBACK ];
     sal_Int32 nGlyphAdv[ MAX_FALLBACK ];
     int nValid[ MAX_FALLBACK ];
-    const ImplLayoutRuns& rLastLevelRuns = maFallbackRuns[ mnLevel-1 ];
 
     sal_Int32 nDummy;
     Point aPos;
@@ -1476,7 +1475,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             nStartNew[ nLevel ], &nGlyphAdv[ nLevel ], &nCharPos[ nLevel ] );
         if( (n > 0) && !nValid[ nLevel ] )
         {
-            // release unused fallbacks
+            // an empty fallback layout can be released
             mpLayouts[n]->Release();
         }
         else
@@ -1500,80 +1499,112 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     double fUnitMul = 1.0;
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
+    int nActiveCharPos = nCharPos[0];
     while( nValid[0] )
     {
         // find best fallback level
         for( n = 0; n < nLevel; ++n )
-            if( nValid[n] && !maFallbackRuns[n].PosIsInRun( nCharPos[0] ) )
+            if( nValid[n] && !maFallbackRuns[n].PosIsInRun( nActiveCharPos ) )
                 // fallback level n wins when it requested no further fallback
                 break;
+        int nFBLevel = n;
 
         if( n < nLevel )
         {
             // use base(n==0) or fallback(n>=1) level
-            long nNewPos = nXPos;
             fUnitMul = mnUnitsPerPixel;
             fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
-            nNewPos = static_cast<long>(nNewPos/fUnitMul + 0.5);
+            long nNewPos = static_cast<long>(nXPos/fUnitMul + 0.5);
             mpLayouts[n]->MoveGlyph( nStartOld[n], nNewPos );
         }
         else
         {
-            // if no fallback level has been found and the charpos in question
-            // has been resolved/unresolved then drop/keep the NotDef glyph
-            if( rLastLevelRuns.PosIsInRun( nCharPos[0] ) )
-                n = 0;  // keep NotDef in base level
-            else
-                n = -1; // drop NotDef in base level
+            n = 0;  // keep NotDef in base level
             fUnitMul = 1.0;
         }
 
-        if( n >= 0 )
+        if( n > 0 )
         {
-            // use glyph from best matching layout
-            int nCurrentGlyphAdv = nGlyphAdv[n];
-            nCurrentGlyphAdv = static_cast<long>(nCurrentGlyphAdv*fUnitMul + 0.5);
-            nXPos += nCurrentGlyphAdv;
-
-            // complete this glyph cluster, then advance to next
-            for( int nActivePos = nCharPos[0];; )
+            // drop the NotDef glyphs in the base layout run if a fallback run exists
+            while( maFallbackRuns[ n-1 ].PosIsInRun( nCharPos[0] ) )
             {
-                nStartOld[n] = nStartNew[n];
-                nValid[n] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
-                    nStartNew[n], &nGlyphAdv[n], &nCharPos[n] );
-                if( !nValid[n] || (nCharPos[n] != nActivePos) )
+                mpLayouts[0]->DropGlyph( nStartOld[0] );
+                nStartOld[0] = nStartNew[0];
+                nValid[0] = mpLayouts[0]->GetNextGlyphs( 1, &nDummy, aPos,
+                    nStartNew[0], &nGlyphAdv[0], &nCharPos[0] );
+                if( !nValid[0] )
+                   break;
+            }
+        }
+
+        // skip to end of layout run and calculate its advance width
+        int nRunAdvance = 0;
+        bool bKeepNotDef = (nFBLevel >= nLevel);
+        for(;;)
+        {
+            nRunAdvance += nGlyphAdv[n];
+
+            // proceed to next glyph
+            nStartOld[n] = nStartNew[n];
+            nValid[n] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
+                nStartNew[n], &nGlyphAdv[n], &nCharPos[n] );
+
+            // break after last glyph of active layout
+            if( !nValid[n] )
+            {
+                // performance optimization (when a fallback layout is no longer needed)
+                if( n >= nLevel-1 )
+                    --nLevel;
+                break;
+            }
+
+            // break at end of layout run
+            if( n > 0 )
+            {
+                // skip until end of fallback run
+                if( !maFallbackRuns[n-1].PosIsInRun( nCharPos[n] ) )
                     break;
-                int nCurrentGlyphAdv = nGlyphAdv[n];
-                nCurrentGlyphAdv = static_cast<long>(nCurrentGlyphAdv*fUnitMul + 0.5);
-                nXPos += nCurrentGlyphAdv;
             }
-
-            // performance optimization (fallback level is completed)
-            if( !nValid[n] && (n >= nLevel-1) )
-                --nLevel;
-        }
-
-        if( n != 0 ) // glyph fallback was successful
-        {
-            // drop NotDef glyph from base layout
-            mpLayouts[0]->DropGlyph( nStartOld[0] );
-            mpLayouts[0]->MoveGlyph( nStartNew[0], nXPos );
-
-            // get next glyph in base layout
-            nStartOld[0] = nStartNew[0];
-            nValid[0] = mpLayouts[0]->GetNextGlyphs( 1, &nDummy, aPos,
-                nStartNew[0], &nGlyphAdv[0], &nCharPos[0] );
-
-            // advance runs if necessary
-            if( n < 0 )
-                n = nLevel;
-            while( --n >= 0 )
+            else
             {
-                // if no more overlap with base level get next run
-                if( !maFallbackRuns[n].PosIsInRun( nCharPos[0] ) )
-                    maFallbackRuns[n].NextRun();
+                // break when a fallback is needed and available
+                bool bNeedFallback = maFallbackRuns[0].PosIsInRun( nCharPos[0] );
+                if( bNeedFallback )
+                    if( !maFallbackRuns[ nLevel-1 ].PosIsInRun( nCharPos[0] ) )
+                        break;
+                // break when change from resolved to unresolved base layout run
+                if( bKeepNotDef && !bNeedFallback )
+                    { maFallbackRuns[0].NextRun(); break; }
+                bKeepNotDef = bNeedFallback;
             }
         }
+
+        // adjust advance width from fallback font units to base units
+        if( n > 0 )
+            nRunAdvance = static_cast<long>(nRunAdvance*fUnitMul + 0.5);
+
+        // if a justification array is available => override the advance width
+        if( aMultiArgs.mpDXArray )
+        {
+            nRunAdvance = 0;
+            int nRelPos = nCharPos[0] - mnMinCharPos;
+            if( nRelPos > 0 )
+                nRunAdvance += aMultiArgs.mpDXArray[ nRelPos-1 ];
+            nRelPos = nActiveCharPos - mnMinCharPos;
+            if( nRelPos > 0 )
+                nRunAdvance -= aMultiArgs.mpDXArray[ nRelPos-1 ];
+            if( nRunAdvance < 0 )
+                nRunAdvance = -nRunAdvance;
+        }
+
+        // calculate new x position
+        nXPos += nRunAdvance;
+
+        // prepare for next fallback run
+        nActiveCharPos = nCharPos[0];
+        for( int i = nFBLevel; --i >= 0;)
+            if( !maFallbackRuns[i].PosIsInRun( nActiveCharPos ) )
+                maFallbackRuns[i].NextRun();
     }
 
     mpLayouts[0]->Simplify( true );
