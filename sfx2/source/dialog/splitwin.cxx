@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 11:44:48 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ friend class SfxSplitWindow;
                             aTimer.SetTimeoutHdl(
                                 LINK(pOwner, SfxSplitWindow, TimerHdl ) );
                             aTimer.SetTimeout( 200 );
-                            EnableDrop( TRUE );
+//                            EnableDrop( TRUE );
                             SetAlign( pOwner->GetAlign() );
                             Actualize();
                             ShowAutoHideButton( pOwner->IsAutoHideButtonVisible() );
@@ -146,7 +146,9 @@ friend class SfxSplitWindow;
                         }
 
     virtual void        MouseMove( const MouseEvent& );
+#ifndef TF_SVDATA
     virtual BOOL        QueryDrop( DropEvent& rEvt );
+#endif
     virtual void        AutoHide();
     virtual void        FadeIn();
     void                Actualize();
@@ -194,29 +196,23 @@ void SfxEmptySplitWin_Impl::FadeIn()
     }
 }
 
+#ifndef TF_SVDATA
 BOOL SfxEmptySplitWin_Impl::QueryDrop( DropEvent& rEvt )
 {
-#ifndef OS2
     bAutoHide = TRUE;
     FadeIn();
-#endif
-
     return FALSE;
 }
-
 
 BOOL SfxSplitWindow::QueryDrop( DropEvent& rEvt )
 {
     Point aMousePos( rEvt.GetPosPixel() );
     Rectangle aRect( GetFadeOutRect() );
     if ( aRect.IsInside( aMousePos ) && !bPinned )
-    {
         FadeOut();
-        return FALSE;
-    }
-    else
-        return SplitWindow::QueryDrop( rEvt );
+    return FALSE;
 }
+#endif
 
 //-------------------------------------------------------------------------
 

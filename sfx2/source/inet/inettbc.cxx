@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:30:19 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,7 +617,7 @@ SfxURLBox::SfxURLBox( Window* pParent, INetProtocol eSmart )
     pImp->pCompletions = NULL;
     SetHelpId( SID_OPENURL );
     EnableAutocomplete( FALSE );
-    EnableDrop();
+//  EnableDrop();
     if ( GetDesktopRectPixel().GetWidth() > 800 )
         SetSizePixel( Size( 300, 240 ) );
     else
@@ -643,7 +643,7 @@ SfxURLBox::SfxURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart
     pImp->pCompletions = NULL;
     SetHelpId( SID_OPENURL );
     EnableAutocomplete( FALSE );
-    EnableDrop();
+//  EnableDrop();
     // no automatic sizing if loaded from a resource (the size should be specified therein)
     SetText( String() );
 
@@ -691,19 +691,21 @@ void SfxURLBox::UpdatePicklistForSmartProtocol_Impl()
 }
 
 // **************************************************************************
-
+#ifndef TF_SVDATA
 BOOL SfxURLBox::QueryDrop( DropEvent &rEvt )
 {
-    return SFX_APP()->QueryDrop( rEvt );
+//    return SFX_APP()->QueryDrop( rEvt );
+    return FALSE;
 }
 
 // **************************************************************************
 
 BOOL SfxURLBox::Drop( const DropEvent &rEvt )
 {
-    return SFX_APP()->Drop( (DropEvent&) rEvt );
+//    return SFX_APP()->Drop( (DropEvent&) rEvt );
+    return FALSE;
 }
-
+#endif
 // **************************************************************************
 
 void SfxURLBox::OpenURL( const String& rName, BOOL bNew ) const

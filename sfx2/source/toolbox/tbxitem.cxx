@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-14 10:11:42 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,10 @@
  ************************************************************************/
 
 #include <string>           // prevent conflict with STL includes
+#ifndef TF_SVDATA
 #ifndef _SV_DRAG_HXX
 #include <vcl/drag.hxx>
+#endif
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -248,7 +250,7 @@ void SfxToolBoxControl::StateChanged
 }
 
 //------------------------------------------------------------------------
-
+#ifndef TF_SVDATA
 BOOL SfxToolBoxControl::Drop( DropEvent& rEvt )
 
 /*  [Beschreibung]
@@ -264,7 +266,8 @@ BOOL SfxToolBoxControl::Drop( DropEvent& rEvt )
 */
 
 {
-    return SFX_APP()->Drop_Impl( GetId(), rEvt );
+//    return SFX_APP()->Drop_Impl( GetId(), rEvt );
+    return FALSE;
 }
 
 //------------------------------------------------------------------------
@@ -284,8 +287,10 @@ BOOL SfxToolBoxControl::QueryDrop( DropEvent& rEvt )
 */
 
 {
-    return SFX_APP()->QueryDrop_Impl( GetId(), rEvt );
+//    return SFX_APP()->QueryDrop_Impl( GetId(), rEvt );
+    return FALSE;
 }
+#endif
 
 //--------------------------------------------------------------------
 
@@ -773,7 +778,7 @@ void SfxDragButton_Impl::Command ( const CommandEvent& rCEvt )
 {
     if( rCEvt.GetCommand() != COMMAND_STARTDRAG )
         return;
-
+ /*
     SfxViewFrame *pViewFrame = SfxViewFrame::Current();
     if ( pViewFrame )
     {
@@ -792,6 +797,7 @@ void SfxDragButton_Impl::Command ( const CommandEvent& rCEvt )
             ExecuteDrag( aMovePtr, aCopyPtr, aLinkPtr, DRAG_COPYABLE | DRAG_LINKABLE );
         }
     }
+  */
 }
 
 void SfxDragButton_Impl::MouseMove( const MouseEvent& rEvt )

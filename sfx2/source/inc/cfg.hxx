@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:05:59 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ public :
                                                 SvLBoxItem* pItem, const Point& rMousePos );
     virtual BOOL                EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
     virtual void                MouseMove( const MouseEvent& rMEvt );
-    virtual BOOL                QueryDrop( DropEvent& );
+//    virtual BOOL                QueryDrop( DropEvent& );
     virtual BOOL                NotifyMoving(SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, ULONG& );
     void                        Apply( SfxMenuManager* pMgr, SvLBoxEntry *pParent = NULL );
 };

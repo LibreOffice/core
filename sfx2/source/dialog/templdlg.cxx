@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-15 11:00:22 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,9 +563,8 @@ StyleTreeListBox_Impl::StyleTreeListBox_Impl(
     Konstruktor StyleTreeListBox_Impl
 
 */
-
 {
-    SetDragOptions(DROP_MOVE);
+//    SetDragOptions(DROP_MOVE);
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:26:55 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,6 @@
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
-#endif
-#if SUPD<613//MUSTINI
-    #ifndef _SFXINIMGR_HXX //autogen
-    #include <svtools/iniman.hxx>
-    #endif
-#endif
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
 #endif
 #include <so3/inetbnd.hxx>
 #include <vos/mutex.hxx>
@@ -1097,7 +1089,7 @@ void AutoReloadTimer_Impl::Timeout()
     if ( pFrame )
     {
         // momentan nicht m"oglich/sinnvoll?
-        if ( !pObjSh->CanReload_Impl() || pObjSh->IsAutoLoadLocked() || DragManager::GetDragManager() )
+        if ( !pObjSh->CanReload_Impl() || pObjSh->IsAutoLoadLocked() || Application::IsUICaptured() )
         {
             // erneuten Versuch erlauben
             Start();

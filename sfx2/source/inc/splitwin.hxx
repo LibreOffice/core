@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 11:54:08 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,9 @@ protected:
     virtual void        Split();
     virtual void        Command ( const CommandEvent& rCEvt );
     virtual void        MouseButtonDown ( const MouseEvent& );
+#ifndef TF_SVDATA
     virtual BOOL        QueryDrop( DropEvent& rEvt );
+#endif
 
 public:
                         SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,

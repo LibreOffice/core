@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-15 10:58:51 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,10 +115,18 @@ protected:
 public:
     DropListBox_Impl( Window* pParent, const ResId& rId, SfxCommonTemplateDialog_Impl* pD ) :
         SvTreeListBox( pParent, rId ), pDialog( pD ), pPreDropEntry( NULL )
+#ifndef TF_SVDATA
             { EnableDrop( TRUE ); }
+#else
+            {}
+#endif
     DropListBox_Impl( Window* pParent, WinBits nWinBits, SfxCommonTemplateDialog_Impl* pD ) :
         SvTreeListBox( pParent, nWinBits ), pDialog( pD ), pPreDropEntry( NULL )
+#ifndef TF_SVDATA
             { EnableDrop( TRUE ); }
+#else
+            {}
+#endif
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
