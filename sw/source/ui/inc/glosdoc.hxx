@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-15 13:12:01 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 12:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@ class SwGlossaries
 
     SwTextBlocks*   GetGlosDoc(const String &rName, BOOL bCreate = TRUE) const;
     SvStrings       *GetNameList();
+    // implementation in unoatxt.cxx
+    void RemoveFileFromList( const String& rGroup );
+    void InvalidateUNOOjects();
+
 public:
     SwGlossaries();
     ~SwGlossaries();
