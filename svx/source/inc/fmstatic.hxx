@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstatic.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-20 16:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ struct UStringDescription
     const sal_Char* pZeroTerminatedName;
 
     UStringDescription(sal_Char* _pName) { pZeroTerminatedName = _pName; }
+    operator const sal_Char*() const { return pZeroTerminatedName; }
     operator ::rtl::OUString() const { return ::rtl::OUString::createFromAscii(pZeroTerminatedName); }
     operator UniString() const { return UniString::CreateFromAscii(pZeroTerminatedName); }
 private:
