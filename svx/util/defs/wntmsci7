@@ -24044,3 +24044,17 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ??1?$vector@VPolyPolygon@@V?$allocator@VPolyPolygon@@@_STL@@@_STL@@QAE@XZ
 ?XOutGetTextOutlines@@YAEAAV?$vector@VPolyPolygon@@V?$allocator@VPolyPolygon@@@_STL@@@_STL@@ABVString@@AAVOutputDevice@@GGG@Z
 ?deallocate@?$allocator@VPolyPolygon@@@_STL@@QBEXPAVPolyPolygon@@I@Z
+?GetQuote@SvxAutoCorrect@@QBEGGEG@Z
+?EnableTransparency@SvxBackgroundTabPage@@QAEXEE@Z
+?calcFontInfo@?%O:\SRC664\src\svx\source\dialog\chardlg.cxx2716219879@@YA?AVFontInfo@@AAVSvxFont@@PAVSvxCharNamePage@@PBVFontNameBox@@PBVFontStyleBox@@PBVFontSizeBox@@PBVFontList@@GG@Z
+?enableRelativeMode@?%O:\SRC664\src\svx\source\dialog\chardlg.cxx2716219879@@YAXPAVSvxCharNamePage@@PAVFontSizeBox@@G@Z
+?setPrevFontEscapement@?%O:\SRC664\src\svx\source\dialog\chardlg.cxx2716219879@@YAXAAVSvxFont@@EEF@Z
+?calcFontHeightAnyAscent@?%O:\SRC664\src\svx\source\dialog\fntctrl.cxx2526527504@@YAXPAVOutputDevice@@AAVFont@@AAJ2@Z
+?initFont@?%O:\SRC664\src\svx\source\dialog\fntctrl.cxx2526527504@@YAXAAVFont@@@Z
+?scaleFontWidth@?%O:\SRC664\src\svx\source\dialog\fntctrl.cxx2526527504@@YAXAAVFont@@ABVOutputDevice@@AAJ@Z
+?setFont@?%O:\SRC664\src\svx\source\dialog\fntctrl.cxx2526527504@@YAXABVSvxFont@@AAV2@@Z
+?setFontSize@?%O:\SRC664\src\svx\source\dialog\fntctrl.cxx2526527504@@YAXAAVFont@@@Z
+?RequestHelp@SvxScriptExecListBox@@MAEXABVHelpEvent@@@Z
+??0GallerySplitter@@QAE@PAVWindow@@ABVResId@@@Z
+??1GallerySplitter@@UAE@XZ
+?DataChanged@GallerySplitter@@MAEXABVDataChangedEvent@@@Z
