@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gh $ $Date: 2002-05-29 10:38:46 $
+ *  last change: $Author: mt $ $Date: 2002-07-19 13:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1089,6 +1089,14 @@ ULONG TextEngine::GetTextHeight() const
     return mnCurTextHeight;
 }
 
+ULONG TextEngine::GetTextHeight( ULONG nParagraph ) const
+{
+    DBG_ASSERT( GetUpdateMode(), "Sollte bei Update=FALSE nicht verwendet werden: GetTextHeight" );
+    DBG_ASSERT( IsFormatted() || IsFormatting(), "GetTextHeight: Nicht formatiert" );
+
+    return CalcParaHeight( nParagraph );
+}
+
 ULONG TextEngine::CalcTextWidth()
 {
     if ( !IsFormatted() && !IsFormatting() )
@@ -1192,7 +1200,7 @@ USHORT TextEngine::GetLineLen( ULONG nParagraph, USHORT nLine ) const
     return 0xFFFF;
 }
 
-ULONG TextEngine::CalcParaHeight( ULONG nParagraph )
+ULONG TextEngine::CalcParaHeight( ULONG nParagraph ) const
 {
     ULONG nHeight = 0;
 
