@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-20 14:38:18 $
+ *  last change: $Author: cmc $ $Date: 2002-09-23 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2609,6 +2609,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(USHORT nId,
     return !rResult.empty();
 }
 
+#if 0
 ULONG WW8PLCFx_Fc_FKP::WW8Fkp::GetParaHeight() const
 {
     if( ePLCF != PAP )
@@ -2640,6 +2641,7 @@ ULONG WW8PLCFx_Fc_FKP::WW8Fkp::GetParaHeight() const
         return (ULONG)nH;
     }
 }
+#endif
 
 //-----------------------------------------
 
@@ -2955,6 +2957,7 @@ bool WW8PLCFx_Fc_FKP::HasSprm(USHORT nId, std::vector<const BYTE *> &rResult)
     return !rResult.empty();
 }
 
+#if 0
 ULONG WW8PLCFx_Fc_FKP::GetParaHeight() const
 {
     if( !pFkp )
@@ -2964,6 +2967,7 @@ ULONG WW8PLCFx_Fc_FKP::GetParaHeight() const
     }
     return pFkp->GetParaHeight();
 }
+#endif
 
 //-----------------------------------------
 

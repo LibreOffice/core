@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 15:19:46 $
+ *  last change: $Author: cmc $ $Date: 2002-09-23 10:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,9 @@
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
+#endif
+#ifndef _SW_HF_EAT_SPACINGITEM_HXX
+#include <hfspacingitem.hxx>
 #endif
 
 #ifndef _FLTINI_HXX
@@ -780,9 +783,7 @@ void SwWW8ImplReader::SetPage1(SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
 struct WW8ULSpaceData
 {
     bool bHasHeader, bHasFooter;
-    short nSwHLo, nHdUL,
-          nSwFUp, nFtUL,
-          nSwUp,  nSwLo;
+    short nSwHLo, nHdUL, nSwFUp, nFtUL, nSwUp,  nSwLo;
     WW8ULSpaceData() : bHasHeader(false), bHasFooter(false) {}
 };
 
@@ -842,8 +843,10 @@ void SwWW8ImplReader::GetPageULData( const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
     {
         rData.nSwUp  = nWWHTop;             // Header -> umrechnen
         rData.nSwHLo = nWWUp - nWWHTop;
+#if 0
         if( rData.nSwHLo < MINLAY )
             rData.nSwHLo = MINLAY;
+#endif
     }
     else // kein Header -> Up einfach uebernehmen
         rData.nSwUp = nWWUp;
@@ -857,16 +860,10 @@ void SwWW8ImplReader::GetPageULData( const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
     {
         rData.nSwLo = nWWFBot;              // Footer -> Umrechnen
         rData.nSwFUp = nWWLo - nWWFBot;
-
-        if( nIniFtSiz )
-            rData.nSwFUp -= (short)nIniFtSiz;
-        else if( nFtTextHeight )
-            rData.nSwFUp -= (short)nFtTextHeight;
-        else
-            rData.nSwFUp -= 240;
-
-        if( rData.nSwFUp < 0 )
-            rData.nSwFUp = 0;
+#if 0
+        if (rData.nSwFUp < MINLAY)
+            rData.nSwFUp = MINLAY;
+#endif
     }
     else // kein Footer -> Lo einfach uebernehmen
         rData.nSwLo = nWWLo;
@@ -874,8 +871,7 @@ void SwWW8ImplReader::GetPageULData( const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
     nPgTop = rData.nSwUp;
 }
 
-
-void SwWW8ImplReader::SetPageULSpaceItems( SwFrmFmt &rFmt, WW8ULSpaceData& rData )
+void SwWW8ImplReader::SetPageULSpaceItems(SwFrmFmt &rFmt, WW8ULSpaceData& rData)
 {
     if( nIniFlags & WW8FL_NO_LRUL )         // deactivated ?
         return;
@@ -884,16 +880,28 @@ void SwWW8ImplReader::SetPageULSpaceItems( SwFrmFmt &rFmt, WW8ULSpaceData& rData
     {
         //Kopfzeilenhoehe minimal sezten
         if (SwFrmFmt* pHdFmt = (SwFrmFmt*)rFmt.GetHeader().GetHeaderFmt())
-            pHdFmt->SetAttr( SwFmtFrmSize( ATT_MIN_SIZE, 0, rData.nSwHLo ) );
+        {
+            pHdFmt->SetAttr( SwFmtFrmSize( ATT_MIN_SIZE, 0, MM50 ) );
+            SvxULSpaceItem aHdUL(pHdFmt->GetULSpace());
+            const SwFmtFrmSize &rSize = pHdFmt->GetFrmSize();
+            aHdUL.SetLower(rData.nSwHLo - rSize.GetHeight());
+            pHdFmt->SetAttr(aHdUL);
+            pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                RES_HEADER_FOOTER_EAT_SPACING, true));
+        }
     }
 
     if( rData.bHasFooter )              // ... und Footer-Upper setzen
     {
         if (SwFrmFmt* pFtFmt = (SwFrmFmt*)rFmt.GetFooter().GetFooterFmt())
         {
-            SvxULSpaceItem aFtUL( pFtFmt->GetULSpace() );
-            aFtUL.SetUpper(  rData.nSwFUp );
-            pFtFmt->SetAttr( aFtUL );
+            pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, MM50));
+            SvxULSpaceItem aFtUL(pFtFmt->GetULSpace());
+            const SwFmtFrmSize &rSize = pFtFmt->GetFrmSize();
+            aFtUL.SetUpper(rData.nSwFUp - rSize.GetHeight());
+            pFtFmt->SetAttr(aFtUL);
+            pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                RES_HEADER_FOOTER_EAT_SPACING, true));
         }
     }
 

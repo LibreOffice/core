@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-20 14:38:17 $
+ *  last change: $Author: cmc $ $Date: 2002-09-23 10:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1906,12 +1906,6 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     USHORT nOldColl = nAktColl;
     nAktColl = pPlcxMan->GetColl();
 
-    if( bIsHeader )             // Fuer Kopfzeilenabstaende
-        nHdTextHeight += pPlcxMan->GetPapPLCF()->GetParaHeight();
-    else
-    if( bIsFooter )             // Fuer Kopfzeilenabstaende
-        nFtTextHeight += pPlcxMan->GetPapPLCF()->GetParaHeight();
-
     if( nAktColl >= nColls || !pCollA[nAktColl].pFmt
         || !pCollA[nAktColl].bColl )
     {
@@ -2105,7 +2099,6 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
     nCharFmt    = -1;
     bSpec = false;
     bPgSecBreak = false;
-    nHdTextHeight = nFtTextHeight = 0;
 
     pPlcxMan = new WW8PLCFMan( pSBase, nType, nStartCp );
     long nCpOfs = pPlcxMan->GetCpOfs(); // Offset fuer Header/Footer, Footnote
@@ -2264,7 +2257,6 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     bVerticalEnviron = false;
     bWasParaEnd = false;
     nProgress = 0;
-    nHdTextHeight = nFtTextHeight = 0;
     nPgWidth = lA4Width;
     nPgLeft = nPgRight = nPgTop = MM_250;
     nCorrIhdt = 0;
@@ -2975,7 +2967,6 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
 
         nIniFlags = aVal[ 0 ];
         nIniFlags1= aVal[ 1 ];
-        nIniFtSiz = aVal[ 2 ];
         // schiebt Flys um x twips nach rechts o. links
         nIniFlyDx = aVal[ 3 ];
         nIniFlyDy = aVal[ 4 ];

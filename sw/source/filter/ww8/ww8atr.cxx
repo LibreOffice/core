@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:57 $
+ *  last change: $Author: cmc $ $Date: 2002-09-23 10:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,9 @@
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
+#endif
+#ifndef _SW_HF_EAT_SPACINGITEM_HXX
+#include <hfspacingitem.hxx>
 #endif
 
 #ifdef DEBUG
@@ -3171,20 +3174,38 @@ static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
 
 static USHORT lcl_CalcHdFtDist(const SwFrmFmt& rFmt, bool bLower)
 {
-    long nDist = 0;
-    SwRect aRect( rFmt.FindLayoutRect(false));
-    if( aRect.Height() )
-        nDist += aRect.Height();
+    /*
+    #98506#
+    If we have dynamic spacing, the normal case for reexporting word docs, as
+    this is word's only setting. Then we can add spacing to the set height of
+    the h/f and get the wanted total size for word. Otherwise we have to get
+    the real rendered height like we used to before this property became
+    available.
+    */
+    long nDist=0;
+    const SvxULSpaceItem& rUL = rFmt.GetULSpace();
+    const SwFmtFrmSize& rSz = rFmt.GetFrmSize();
+
+    const SwHeaderAndFooterEatSpacingItem &rSpacingCtrl =
+        (const SwHeaderAndFooterEatSpacingItem &)
+        rFmt.GetAttr(RES_HEADER_FOOTER_EAT_SPACING);
+    if (rSpacingCtrl.GetValue())
+        nDist += rSz.GetHeight();
     else
     {
-        const SwFmtFrmSize& rSz = rFmt.GetFrmSize();
-        if( ATT_VAR_SIZE != rSz.GetSizeType() )
-            nDist += rSz.GetHeight();
+        SwRect aRect(rFmt.FindLayoutRect(false));
+        if (aRect.Height())
+            nDist += aRect.Height();
         else
         {
-            nDist += 274;       // defaulten fuer 12pt Schrift
-            const SvxULSpaceItem& rUL = rFmt.GetULSpace();
-            nDist += ( bLower ? rUL.GetLower() : rUL.GetUpper() );
+            const SwFmtFrmSize& rSz = rFmt.GetFrmSize();
+            if (ATT_VAR_SIZE != rSz.GetSizeType())
+                nDist += rSz.GetHeight();
+            else
+            {
+                nDist += 274;       // defaulten fuer 12pt Schrift
+                nDist += (bLower ? rUL.GetLower() : rUL.GetUpper());
+            }
         }
     }
     return (USHORT)nDist;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 15:19:45 $
+ *  last change: $Author: cmc $ $Date: 2002-09-23 10:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,15 +737,11 @@ friend class WW8FormulaControl;
                                 // Ini-Flags:
     ULONG nIniFlags;            // Flags aus der writer.ini
     ULONG nIniFlags1;           // dito ( zusaetzliche Flags )
-    ULONG nIniFtSiz;            // dito fuer Default-Size Footer
     ULONG nFieldFlags;          // dito fuer Feldern
     ULONG nFieldTagAlways[3];   // dito fuers Taggen von Feldern
     ULONG nFieldTagBad[3];      // dito fuers Taggen von nicht importierbaren F.
 
     ULONG nLastFlyNode;         // Node number of last imported Fly
-
-    ULONG nHdTextHeight;        // Hoehe des eingelesenen Headers
-    ULONG nFtTextHeight;        // Hoehe des eingelesenen Footers
 
     ULONG nDrawObjOfs;
     WW8_CP nDrawCpO;            // Anfang der Txbx-SubDocs
