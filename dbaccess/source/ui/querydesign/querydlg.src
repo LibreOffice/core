@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-27 10:15:57 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 20:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ ModalDialog DLG_QRY_JOIN
             Text[ turkish ] = "�lgili tablolar";
             Text[ catalan ] = "tablas implicadas";
             Text[ finnish ] = "beteiligte Tabellen";
+            Text[ thai ] = "Tables involved";
         };
 
         ListBox LB_LEFT_TABLE
@@ -159,6 +160,7 @@ ModalDialog DLG_QRY_JOIN
             Text[ turkish ] = "�lgili alanlar";
             Text[ catalan ] = "campos implicados";
             Text[ finnish ] = "beteiligte Felder";
+            Text[ thai ] = "Fields involved";
         };
     };
 
@@ -191,6 +193,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "ตัวเลือก";
     };
 
     FixedText FT_LISTBOXTITLE
@@ -200,6 +203,27 @@ ModalDialog DLG_QRY_JOIN
 
         Text = "~Art" ;
         Text [ ENGLISH ] = "~Type" ;
+        Text[ english_us ] = "~Type";
+        Text[ portuguese ] = "~Type";
+        Text[ russian ] = "~Type";
+        Text[ greek ] = "~Type";
+        Text[ dutch ] = "~Type";
+        Text[ french ] = "~Type";
+        Text[ spanish ] = "~Type";
+        Text[ finnish ] = "~Type";
+        Text[ italian ] = "~Type";
+        Text[ danish ] = "~Type";
+        Text[ swedish ] = "~Type";
+        Text[ polish ] = "~Type";
+        Text[ portuguese_brazilian ] = "~Type";
+        Text[ japanese ] = "~Type";
+        Text[ korean ] = "~Type";
+        Text[ chinese_simplified ] = "~Type";
+        Text[ chinese_traditional ] = "~Type";
+        Text[ turkish ] = "~Type";
+        Text[ arabic ] = "~Type";
+        Text[ catalan ] = "~Type";
+        Text[ thai ] = "~Type";
     };
 
     ListBox LB_JOINTYPE
@@ -224,6 +248,160 @@ ModalDialog DLG_QRY_JOIN
         };
         DropDown        = TRUE;
         DDExtraWidth    = TRUE;
+    StringList [ language_user1 ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ english_us ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ portuguese ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ russian ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ greek ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ dutch ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ french ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ spanish ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ finnish ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ italian ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ danish ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ swedish ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ polish ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ japanese ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ korean ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ turkish ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ arabic ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ catalan ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollst�ndiger"  ; Default; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "Innerer" ; Default; > ;
+        < "Linker" ; Default; > ;
+        < "Rechter" ; Default; > ;
+        < "Vollständiger"  ; Default; > ;
+    };
     };
 
     FixedText ML_HELPTEXT
@@ -278,6 +456,7 @@ ModalDialog DLG_QRY_JOIN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propietats de la uni�";
     Text[ finnish ] = "Liitoksen ominaisuudet";
+    Text[ thai ] = "คุณสมบัติการเชื่อมต่อ";
 };
 
 String STR_QUERY_INNER_JOIN
@@ -307,6 +486,7 @@ String STR_QUERY_INNER_JOIN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inclou nom�s els registres per als quals el contingut dels camps afins de les dues taules �s id�ntic.";
     Text[ finnish ] = "Sis�lt�� vain tietueet, joissa toisiinsa liittyv�t kent�t ovat identtiset molemmissa taulukoissa.";
+    Text[ thai ] = "รวมระเบียนเท่านั้นสำหรับเนื้อหาของเขตข้อมูลที่สัมพันธ์กันของทั้งสองตารางที่เหมือนกัน";
 };
 
 String STR_QUERY_LEFTRIGHT_JOIN
@@ -336,6 +516,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cont� TOTS els registres de dades de '%1' i nom�s els registres de '%2' en els que els continguts dels camps vinculats a totes dues taules s�n iguals.";
     Text[ finnish ] = "Sis�lt�� KAIKKI taulukon '%1' tietueet, mutta vain sellaiset taulukon '%2' tietueet, joissa ensimm�iseen taulukkoon liittyvien kenttien arvot ovat identtiset.";
+    Text[ thai ] = "มีระเบียนทั้งหมดจากตาราง '%1' แต่บางระเบียนเท่านั้นจากตาราง '%2' ที่ค่าในเขตข้อมูลที่สัมพันธ์กันตรงกัน";
 };
 
 String STR_QUERY_FULL_JOIN
@@ -365,6 +546,7 @@ String STR_QUERY_FULL_JOIN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cont� TOTS els registres de dades '%1' i de '%2'";
     Text[ finnish ] = "Sis�lt�� KAIKKI tietueet kohteista '%1' ja '%2'.";
+    Text[ thai ] = "มีระเบียนทั้งหมดจาก '%1' และจาก '%2'";
 };
 
 
