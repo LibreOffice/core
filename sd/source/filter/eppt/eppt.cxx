@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-06 12:05:22 $
+ *  last change: $Author: sj $ $Date: 2000-11-07 15:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,9 @@
 #ifndef _SOT_STORINFO_HXX
 #include <sot/storinfo.hxx>
 #endif
-
+#ifndef _MSOLEEXP_HXX
+#include <svx/msoleexp.hxx>
+#endif
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
 #endif
@@ -160,7 +162,7 @@
 PPTWriter::PPTWriter( SvStorageRef& rSvStorage, SvStorageRef& xOleSource,
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
-            SvMemoryStream* pVBA, sal_uInt32 nFilterOptions ) :
+            SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
     mbStatus                ( FALSE ),
     mXModel                 ( rXModel ),
     mXStatusIndicator       ( rXStatInd ),
@@ -294,7 +296,8 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage, SvStorageRef& xOleSource,
 
 //  mp_EscherEx->Flush();           // interne _Escher Daten jetzt einfuegen, damit die PersistTable rausgeschrieben werden kann
 
-    ImplWriteOLE();
+
+    ImplWriteOLE( nCnvrtFlags );
 
     ImplWriteVBA( pVBA );
 
@@ -1788,9 +1791,12 @@ void PPTWriter::ImplWriteVBA( SvMemoryStream* pVBA )
 
 // ---------------------------------------------------------------------------------------------
 
-void PPTWriter::ImplWriteOLE()
+void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
 {
     PPTExOleObjEntry* pPtr;
+
+    SvxMSExportOLEObjects aOleExport( nCnvrtFlags );
+
     for ( pPtr = (PPTExOleObjEntry*)maExOleObj.First(); pPtr;
         pPtr = (PPTExOleObjEntry*)maExOleObj.Next() )
     {
@@ -1810,9 +1816,7 @@ void PPTWriter::ImplWriteOLE()
                     if( xInplaceObj.Is() )
                     {
                         SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), TRUE ) );
-                        xTempStorage->SetVersion( SOFFICE_FILEFORMAT_31 );
-                        xInplaceObj->DoSaveAs( &xTempStorage );
-                        xInplaceObj->DoSaveCompleted();
+                        aOleExport.ExportOLEObject( *xInplaceObj, *xTempStorage );
                         SvMemoryStream* pStrm = xTempStorage->CreateMemoryStream();
                         xInplaceObj.Clear();
                         if ( pStrm )
@@ -2377,12 +2381,12 @@ void PPTExStyleSheet::Write( SvStream& rSt, _EscherEx* pEx )
 extern "C" BOOL __LOADONCALLAPI ExportPPT( SvStorageRef& rSvStorage, SvStorageRef& xOleSource,
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
-                            SvMemoryStream* pVBA, sal_uInt32 nFlagOptions )
+                            SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags )
 {
     PPTWriter*  pPPTWriter;
     BOOL bStatus = FALSE;
 
-    pPPTWriter = new PPTWriter( rSvStorage, xOleSource, rXModel, rXStatInd, pVBA, nFlagOptions );
+    pPPTWriter = new PPTWriter( rSvStorage, xOleSource, rXModel, rXStatInd, pVBA, nCnvrtFlags );
     if ( pPPTWriter )
     {
         bStatus = ( pPPTWriter->IsValid() == TRUE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-03 18:00:59 $
+ *  last change: $Author: sj $ $Date: 2000-11-07 15:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,7 +816,6 @@ class TextObj
 };
 
 // ------------------------------------------------------------------------
-
 class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvider
 {
         sal_Bool                        mbStatus;
@@ -923,7 +922,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Bool            ImplCreateNotes( int nPageNum );
         void                ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXBackgroundPropSet );
         void                ImplWriteVBA( SvMemoryStream* pVBA );
-        void                ImplWriteOLE();
+        void                ImplWriteOLE( sal_uInt32 nCnvrtFlags );
         sal_Bool            ImplWriteAtomEnding();
 
         sal_Bool            ImplInitSOIface();
@@ -965,7 +964,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
                                 PPTWriter( SvStorageRef& rSvStorage, SvStorageRef& rSource,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rStatInd,
-                                                SvMemoryStream* pVBA, sal_uInt32 nFilterOptions );
+                                                SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );
 
                                 ~PPTWriter();
 
