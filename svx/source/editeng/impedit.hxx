@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-19 15:57:22 $
+ *  last change: $Author: mt $ $Date: 2001-01-30 16:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,7 +882,7 @@ inline void ImpEditEngine::IdleFormatAndUpdate( EditView* pCurView )
 
 inline void ImpEditEngine::TextModified()
 {
-//  hat z.Zt. keine Bedeutung mehr.
+    bFormatted = FALSE;
 }
 
 inline EditUndoManager& ImpEditEngine::GetUndoManager()

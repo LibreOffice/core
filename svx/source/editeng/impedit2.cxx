@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-07 12:38:16 $
+ *  last change: $Author: mt $ $Date: 2001-01-30 16:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -947,6 +947,7 @@ void ImpEditEngine::ParaAttribsChanged( ContentNode* pNode )
     DBG_ASSERT( pNode, "ParaAttribsChanged: Welcher?" );
 
     aEditDoc.SetModified( TRUE );
+    bFormatted = FALSE;
 
     ParaPortion* pPortion = FindParaPortion( pNode );
     DBG_ASSERT( pPortion, "ParaAttribsChanged: Portion?" );
@@ -1549,6 +1550,7 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, USHORT nChars, EditUndo
     }
 
     aEditDoc.RemoveChars( rPaM, nChars );
+    TextModified();
 }
 
 EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, USHORT nNewPos )
@@ -1734,6 +1736,8 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
             pPP->GetLines().Reset();
         }
     }
+
+    TextModified();
 
     return aPaM;
 }
@@ -2068,7 +2072,6 @@ EditPaM ImpEditEngine::ImpFastInsertText( EditPaM aPaM, const XubString& rStr )
             InsertUndo( new EditUndoInsertChars( this, CreateEPaM( aPaM ), rStr ) );
 
         aPaM = aEditDoc.InsertText( aPaM, rStr );
-
         TextModified();
     }
     else
@@ -2094,6 +2097,8 @@ EditPaM ImpEditEngine::ImpInsertFeature( EditSelection aCurSel, const SfxPoolIte
     ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
     DBG_ASSERT( pPortion, "Blinde Portion in InsertFeature" );
     pPortion->MarkInvalid( aPaM.GetIndex()-1, 1 );
+
+    TextModified();
 
     return aPaM;
 }
@@ -2164,7 +2169,7 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( const EditPaM& rPaM, BOOL bKeepEnding
         GetEditEnginePtr()->ParagraphInserted( nPos+1 );
 
     CursorMoved( rPaM.GetNode() );  // falls leeres Attribut entstanden.
-    TextModified(); // Wofuer ?
+    TextModified();
     return aPaM;
 }
 

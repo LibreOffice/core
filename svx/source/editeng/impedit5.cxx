@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-08 12:41:31 $
+ *  last change: $Author: mt $ $Date: 2001-01-30 16:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,6 +570,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE
         }
         else if ( bCharAttribFound )
         {
+            bFormatted = FALSE;
             if ( !pNode->Len() || ( nStartPos != nEndPos  ) )
             {
                 pPortion->MarkSelectionInvalid( nStartPos, nEndPos-nStartPos );
@@ -631,7 +632,10 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, BOOL bRemoveParaAttri
         }
 
         if ( bChanged && !bRemoveParaAttribs )
+        {
+            bFormatted = FALSE;
             pPortion->MarkSelectionInvalid( nStartPos, nEndPos-nStartPos );
+        }
     }
 }
 
@@ -788,6 +792,7 @@ void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
                 aEditDoc.InsertAttrib( pNode, nLastEnd, nEndPos, rItem );
         }
     }
+    bFormatted = FALSE;
     // Portion braucht hier nicht invalidiert werden, geschieht woanders.
 }
 
