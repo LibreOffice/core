@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeSettingsBeanInfo.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-24 12:53:43 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-06 17:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@ public class OfficeSettingsBeanInfo extends SimpleBeanInfo {
                                OfficeSettings.class,
                                "get" + OfficeSettings.WARN_BEFORE_DOC_DEPLOY,
                                "set" + OfficeSettings.WARN_BEFORE_DOC_DEPLOY),
+                new PropertyDescriptor(OfficeSettings.WARN_BEFORE_PARCEL_DELETE,
+                               OfficeSettings.class,
+                               "get" + OfficeSettings.WARN_BEFORE_PARCEL_DELETE,
+                               "set" + OfficeSettings.WARN_BEFORE_PARCEL_DELETE),
                 new PropertyDescriptor(OfficeSettings.WARN_AFTER_DIR_DEPLOY,
                                OfficeSettings.class,
                                "get" + OfficeSettings.WARN_AFTER_DIR_DEPLOY,

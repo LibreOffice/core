@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeSettings.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-20 11:56:16 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-06 17:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ public class OfficeSettings extends SystemOption {
 
     public static final String OFFICE_DIRECTORY = "OfficeDirectory";
     public static final String WARN_BEFORE_DOC_DEPLOY = "WarnBeforeDocDeploy";
+    public static final String WARN_BEFORE_PARCEL_DELETE = "WarnBeforeParcelDelete";
     public static final String WARN_AFTER_DIR_DEPLOY = "WarnAfterDirDeploy";
     public static final String WARN_BEFORE_MOUNT = "WarnBeforeMount";
 
@@ -90,6 +91,7 @@ public class OfficeSettings extends SystemOption {
         super.initialize();
 
         setWarnBeforeDocDeploy(true);
+        setWarnBeforeParcelDelete(true);
         setWarnAfterDirDeploy(true);
         setWarnBeforeMount(true);
 
@@ -137,6 +139,14 @@ public class OfficeSettings extends SystemOption {
 
     public void setWarnBeforeDocDeploy(boolean value) {
         putProperty(WARN_BEFORE_DOC_DEPLOY, new Boolean(value), true);
+    }
+
+    public boolean getWarnBeforeParcelDelete() {
+        return ((Boolean)getProperty(WARN_BEFORE_PARCEL_DELETE)).booleanValue();
+    }
+
+    public void setWarnBeforeParcelDelete(boolean value) {
+        putProperty(WARN_BEFORE_PARCEL_DELETE, new Boolean(value), true);
     }
 
     public boolean getWarnAfterDirDeploy() {

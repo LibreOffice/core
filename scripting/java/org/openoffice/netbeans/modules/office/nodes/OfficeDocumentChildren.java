@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocumentChildren.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-21 16:24:14 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-06 17:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@ import org.openide.actions.*;
 import org.openide.util.actions.SystemAction;
 import org.openide.util.HelpCtx;
 
+import org.openoffice.netbeans.modules.office.options.OfficeSettings;
+import org.openoffice.netbeans.modules.office.utils.NagDialog;
 import org.openoffice.netbeans.modules.office.actions.OfficeDocumentCookie;
 
 public class OfficeDocumentChildren extends Children.Keys
@@ -155,6 +157,23 @@ public class OfficeDocumentChildren extends Children.Keys
         }
 
         public void destroy() throws IOException {
+            OfficeSettings settings = OfficeSettings.getDefault();
+            String message = "If you already have this document open in " +
+                "Office, please close it before continuing. Click OK to " +
+                "delete this parcel.";
+
+            if (settings.getWarnBeforeParcelDelete() == true) {
+                NagDialog warning = NagDialog.createConfirmationDialog(
+                    message, "Show this message in future", true);
+
+                boolean result = warning.show();
+
+                if (warning.getState() == false)
+                    settings.setWarnBeforeParcelDelete(false);
+
+                if (result == false)
+                    return;
+            }
             super.destroy();
             document.removeParcel(name);
         }
