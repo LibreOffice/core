@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:39:12 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,14 +311,14 @@ ModalDialog DLG_FILTERCRIT
         Text [ dutch ] = "Veldnaam" ;
         Text [ spanish ] = "Nombre del campo" ;
         Text [ english_us ] = "Field name" ;
-        Text[ chinese_simplified ] = "×Ö¶ÎÃû³Æ";
+        Text[ chinese_simplified ] = "å­—æ®µåç§°";
         Text[ russian ] = "Èìÿ ïîëÿ";
         Text[ polish ] = "Nazwa pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞ–¼";
-        Text[ chinese_traditional ] = "Äæ¦ì¦WºÙ";
+        Text[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾å";
+        Text[ chinese_traditional ] = "æ¬„ä½åç¨±";
         Text[ arabic ] = "ÇÓã ÇáÍŞá";
         Text[ greek ] = "¼íïìá ğåäßïõ";
-        Text[ korean ] = "ÇÊµå ÀÌ¸§";
+        Text[ korean ] = "í•„ë“œ ì´ë¦„";
         Text[ turkish ] = "Alan adı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre del campo";
@@ -341,14 +341,14 @@ ModalDialog DLG_FILTERCRIT
         Text [ dutch ] = "Voorwaarde" ;
         Text [ spanish ] = "Condición" ;
         Text [ english_us ] = "Condition" ;
-        Text[ chinese_simplified ] = "Ìõ¼ş";
+        Text[ chinese_simplified ] = "æ¡ä»¶";
         Text[ russian ] = "Óñëîâèå";
         Text[ polish ] = "Warunek";
-        Text[ japanese ] = "ğŒ";
-        Text[ chinese_traditional ] = "±ø¥ó";
+        Text[ japanese ] = "æ¡ä»¶";
+        Text[ chinese_traditional ] = "æ¢ä»¶";
         Text[ arabic ] = "ÔÑØ";
         Text[ greek ] = "ÓõíèŞêç";
-        Text[ korean ] = "Á¶°Ç";
+        Text[ korean ] = "ì¡°ê±´";
         Text[ turkish ] = "Koşul";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condición";
@@ -371,14 +371,14 @@ ModalDialog DLG_FILTERCRIT
         Text [ dutch ] = "Waarde" ;
         Text [ spanish ] = "Valor" ;
         Text [ english_us ] = "Value" ;
-        Text[ chinese_simplified ] = "ÊıÖµ";
+        Text[ chinese_simplified ] = "æ•°å€¼";
         Text[ russian ] = "Çíà÷åíèå";
         Text[ polish ] = "Wartoœæ";
-        Text[ japanese ] = "’l";
-        Text[ chinese_traditional ] = "¼Æ­È";
+        Text[ japanese ] = "å€¤";
+        Text[ chinese_traditional ] = "æ•¸å€¼";
         Text[ arabic ] = "ÇáŞíãÉ";
         Text[ greek ] = "ÔéìŞ";
-        Text[ korean ] = "°ª";
+        Text[ korean ] = "ê°’";
         Text[ turkish ] = "Değer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor";
@@ -402,14 +402,14 @@ ModalDialog DLG_FILTERCRIT
         Text [ dutch ] = "Koppeling" ;
         Text [ spanish ] = "Vínculo" ;
         Text [ english_us ] = "Operator" ;
-        Text[ chinese_simplified ] = "Á´½Ó";
+        Text[ chinese_simplified ] = "é“¾æ¥";
         Text[ russian ] = "Îïåğàòîğ";
         Text[ polish ] = "£¹cze";
-        Text[ japanese ] = "‰‰Zq";
-        Text[ chinese_traditional ] = "±¶®|";
+        Text[ japanese ] = "æ¼”ç®—å­";
+        Text[ chinese_traditional ] = "æ·å¾‘";
         Text[ arabic ] = "ÇÑÊÈÇØ";
         Text[ greek ] = "Óıíäåóç";
-        Text[ korean ] = "¸µÅ©";
+        Text[ korean ] = "ë§í¬";
         Text[ turkish ] = "Bağlantı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Vínculo";
@@ -431,14 +431,14 @@ ModalDialog DLG_FILTERCRIT
         Text [ dutch ] = "Criteria" ;
         Text [ spanish ] = "Criterios" ;
         Text [ english_us ] = "Criteria" ;
-        Text[ chinese_simplified ] = "Ìõ¼ş";
+        Text[ chinese_simplified ] = "æ¡ä»¶";
         Text[ russian ] = "Êğèòåğèè";
         Text[ polish ] = "Kryteria";
-        Text[ japanese ] = "ğŒ";
-        Text[ chinese_traditional ] = "±ø¥ó";
+        Text[ japanese ] = "æ¡ä»¶";
+        Text[ chinese_traditional ] = "æ¢ä»¶";
         Text[ arabic ] = "ÇáãÚÇííÑ";
         Text[ greek ] = "ÊñéôŞñéá";
-        Text[ korean ] = "±âÁØ";
+        Text[ korean ] = "ê¸°ì¤€";
         Text[ turkish ] = "Ölçütler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Criterios";
@@ -475,14 +475,14 @@ ModalDialog DLG_FILTERCRIT
         Text [ french ] = "- aucun(e) -" ;
         Text [ portuguese ] = "- nenhum -" ;
         Text [ portuguese_brazilian ] = "- keiner -" ;
-        Text[ chinese_simplified ] = "- ÎŞ -";
+        Text[ chinese_simplified ] = "- æ—  -";
         Text[ russian ] = "- áåç -";
         Text[ polish ] = "- brak -";
-        Text[ japanese ] = "-‚È‚µ-";
-        Text[ chinese_traditional ] = "- µL -";
+        Text[ japanese ] = "-ãªã—-";
+        Text[ chinese_traditional ] = "- ç„¡ -";
         Text[ arabic ] = "- ÈÏæä -";
         Text[ greek ] = "- êáíİíá -";
-        Text[ korean ] = "- ¾øÀ½ -";
+        Text[ korean ] = "- ì—†ìŒ -";
         Text[ turkish ] = "- Yok -";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "- ninguno -";
@@ -503,12 +503,12 @@ ModalDialog DLG_FILTERCRIT
         Text[ swedish ] = "=;<>;<;<=;>;>=;lika med;inte lika med;noll;inte noll";
         Text[ polish ] = "=;<>;<;<=;>;>=;równy;nie równy;zero;nie zero";
         Text[ portuguese_brazilian ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
-        Text[ japanese ] = "=;<>;<;<=;>;>=;“¯‚¶;“¯‚¶‚Å‚È‚¢;‹ó;‹ó‚Å‚È‚¢";
-        Text[ chinese_simplified ] = "=;<>;<;<=;>;>=;µÈÓÚ;²»µÈÓÚ;¿ÕÈ±;²»¿ÕÈ±";
-        Text[ chinese_traditional ] = "=;<>;<;<=;>;>=;µ¥©ó;¤£µ¥©ó;ªÅ¯Ê;¤£ªÅ¯Ê";
+        Text[ japanese ] = "=;<>;<;<=;>;>=;åŒã˜;åŒã˜ã§ãªã„;ç©º;ç©ºã§ãªã„";
+        Text[ chinese_simplified ] = "=;<>;<;<=;>;>=;ç­‰äº;ä¸ç­‰äº;ç©ºç¼º;ä¸ç©ºç¼º";
+        Text[ chinese_traditional ] = "=;<>;<;<=;>;>=;ç­‰æ–¼;ä¸ç­‰æ–¼;ç©ºç¼º;ä¸ç©ºç¼º";
         Text[ arabic ] = "=;<>;<;<=;>;>=;ãËá;áíÓ ãËá;ÎÇáí;áíÓ ÎÇáíÇğ";
         Text[ greek ] = "=;<>;<;<=;>;>=;üğùò;ü÷é üğùò;êåíü;ü÷é êåíü";
-        Text[ korean ] = "=;<>;<;<=;>;>=;°°À½;°°Áö ¾ÊÀ½;ºñ¾î ÀÖ´Â;ºñ¾îÀÖÁö¾ÊÀ½";
+        Text[ korean ] = "=;<>;<;<=;>;>=;ê°™ìŒ;ê°™ì§€ ì•ŠìŒ;ë¹„ì–´ ìˆëŠ”;ë¹„ì–´ìˆì§€ì•ŠìŒ";
         Text[ turkish ] = "=;<>;<;<=;>;>=;gibi;gibi değil;boş;boş değil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "=;<>;<;<=;>;>=;como;no como;vacío;no vacío";
@@ -525,15 +525,16 @@ ModalDialog DLG_FILTERCRIT
     Text[ swedish ] = "Filter";
     Text[ polish ] = "Filtr";
     Text[ portuguese_brazilian ] = "Filter";
-    Text[ japanese ] = "Ì¨ÙÀ";
-    Text[ korean ] = "ÇÊÅÍ";
-    Text[ chinese_simplified ] = "É¸Ñ¡";
-    Text[ chinese_traditional ] = "¿z¿ï";
+    Text[ japanese ] = "ï¾Œï½¨ï¾™ï¾€";
+    Text[ korean ] = "í•„í„°";
+    Text[ chinese_simplified ] = "ç­›é€‰";
+    Text[ chinese_traditional ] = "ç¯©é¸";
     Text[ turkish ] = "Filtre";
     Text[ arabic ] = "İáÊÑ";
     Text[ catalan ] = "Filtro";
     Text[ finnish ] = "Suodatin";
 };
+
 
 
 
