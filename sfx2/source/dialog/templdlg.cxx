@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:15:06 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,14 +68,8 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _EMBOBJ_HXX //autogen
-#include <so3/embobj.hxx>
-#endif
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
-#endif
-#ifndef _IFACE_HXX //autogen
-#include <so3/iface.hxx>
 #endif
 #ifndef GCC
 #pragma hdrstop
@@ -330,7 +324,7 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
             if ( aHelper.GetTransferableObjectDescriptor( nId, aDesc ) )
             {
-                if ( pDocShell->GetFactory() == aDesc.maClassName )
+                if ( aDesc.maClassName == pDocShell->GetFactory().GetClassId() )
                 {
                     PostUserEvent( LINK( this, DropListBox_Impl, OnAsyncExecuteDrop ), 0 );
 
