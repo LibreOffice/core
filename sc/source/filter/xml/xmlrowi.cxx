@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-10 09:59:19 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 16:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TABLE_XCOLUMNROWRANGE_HPP_
 #include <com/sun/star/table/XColumnRowRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XPRINTAREAS_HPP_
+#include <com/sun/star/sheet/XPrintAreas.hpp>
 #endif
 
 #include <com/sun/star/table/CellAddress.hpp>
@@ -266,6 +269,90 @@ void ScXMLTableRowContext::EndElement()
                                     xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), aFilteredAny);
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
+                                      USHORT nPrfx,
+                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      const sal_Bool bTempHeader ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    nStartRow(0),
+    nEndRow(0),
+    bHeader(bTempHeader)
+{
+    // don't have any attributes
+    if (bHeader)
+    {
+        nStartRow = rImport.GetTables().GetCurrentRow();
+        nStartRow++;
+    }
+}
+
+ScXMLTableRowsContext::~ScXMLTableRowsContext()
+{
+}
+
+SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( USHORT nPrefix,
+                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+{
+    SvXMLImportContext *pContext = 0;
+
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetTableRowsElemTokenMap();
+    sal_Bool bHeader = sal_False;
+    switch( rTokenMap.Get( nPrefix, rLName ) )
+    {
+    case XML_TOK_TABLE_ROWS_ROW:
+            pContext = new ScXMLTableRowContext( GetScImport(), nPrefix,
+                                                      rLName, xAttrList//,
+                                                      //this
+                                                      );
+        break;
+    }
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+
+    return pContext;
+}
+
+void ScXMLTableRowsContext::EndElement()
+{
+    ScXMLImport& rXMLImport = GetScImport();
+    nEndRow = rXMLImport.GetTables().GetCurrentRow();
+    if (bHeader && nStartRow <= nEndRow)
+    {
+        sal_Int16 nSheet = rXMLImport.GetTables().GetCurrentSheet();
+        uno::Reference <sheet::XSpreadsheetDocument> xSheetsDocument (rXMLImport.GetModel(), uno::UNO_QUERY);
+        if(xSheetsDocument.is())
+        {
+            uno::Reference<sheet::XSpreadsheets> xSheets = xSheetsDocument->getSheets();
+            if (xSheets.is())
+            {
+                uno::Reference<container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY);
+                if (xIndex.is())
+                {
+                    uno::Any aSheet = xIndex->getByIndex(nSheet);
+                    uno::Reference<sheet::XSpreadsheet> xSheet;
+                    if(aSheet >>= xSheet)
+                    {
+                        uno::Reference <sheet::XPrintAreas> xPrintAreas (xSheet, uno::UNO_QUERY);
+                        if (xPrintAreas.is())
+                        {
+                            xPrintAreas->setPrintTitleRows(sal_True);
+                            table::CellRangeAddress aRowHeaderRange;
+                            aRowHeaderRange.StartRow = nStartRow;
+                            aRowHeaderRange.EndRow = nEndRow;
+                            xPrintAreas->setTitleRows(aRowHeaderRange);
                         }
                     }
                 }
