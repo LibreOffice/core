@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-26 10:54:04 $
+ *  last change: $Author: gt $ $Date: 2001-10-12 13:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,25 @@ int IconcDlgCmpUS_Impl( const void* p1, const void* p2 )
 {
     return *(USHORT*)p1 - *(USHORT*)p2;
 }
+
+// some stuff for easier changes for SvtViewOptions
+static const sal_Char*      pViewOptDataName = "dialog data";
+#define VIEWOPT_DATANAME    ::rtl::OUString::createFromAscii( pViewOptDataName )
+
+static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
+{
+    rOpt.SetUserItem( VIEWOPT_DATANAME, ::com::sun::star::uno::makeAny( ::rtl::OUString( rData ) ) );
+}
+
+static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
+{
+    ::com::sun::star::uno::Any aAny( rOpt.GetUserItem( VIEWOPT_DATANAME ) );
+    ::rtl::OUString aUserData;
+    aAny >>= aUserData;
+
+    return String( aUserData );
+}
+
 
 //#####################################################################
 //
@@ -371,7 +390,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
     // save configuration at INI-Manager
     // and remove pages
     SvtViewOptions aTabDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
-    aTabDlgOpt.SetPosition( GetPosPixel().X(), GetPosPixel().Y() );
+    aTabDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( GetWindowState().GetBuffer() ) );
     aTabDlgOpt.SetPageID( mnCurrentPageId );
 
     const ULONG nCount = maPageList.Count();
@@ -387,7 +406,8 @@ IconChoiceDialog ::~IconChoiceDialog ()
             if ( aPageData.Len() )
             {
                 SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pData->nId ) );
-                aTabPageOpt.SetUserData( aPageData );
+
+                SetViewOptUserItem( aTabPageOpt, aPageData );
             }
 
             if ( pData->bOnDemand )
@@ -472,7 +492,8 @@ void IconChoiceDialog::RemoveTabPage( USHORT nId )
             if ( aPageData.Len() )
             {
                 SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pData->nId ) );
-                aTabPageOpt.SetUserData( aPageData );
+
+                SetViewOptUserItem( aTabPageOpt, aPageData );
             }
         }
 
@@ -927,7 +948,7 @@ void IconChoiceDialog::ActivatePageImpl ()
                 pData->pPage = (pData->fnCreatePage)( this, *CreateInputItemSet( mnCurrentPageId ) );
 
             SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pData->nId ) );
-            pData->pPage->SetUserData( aTabPageOpt.GetUserData() );
+            pData->pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
             SetPosSizePages ( pData->nId );
             PageCreated( mnCurrentPageId, *(pData->pPage) );
 
@@ -1218,8 +1239,7 @@ void IconChoiceDialog::Start_Impl()
     if ( aTabDlgOpt.Exists() )
     {
         // ggf. Position aus Konfig
-        aTabDlgOpt.GetPosition( aPos.X(), aPos.Y() );
-        SetPosPixel( aPos );
+        SetWindowState( ByteString( aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
 
         // initiale TabPage aus Programm/Hilfe/Konfig
         nActPage = (USHORT)aTabDlgOpt.GetPageID();
