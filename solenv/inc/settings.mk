@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.152 $
+#   $Revision: 1.153 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-30 17:21:40 $
+#   last change: $Author: pjunck $ $Date: 2004-10-27 15:22:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -498,12 +498,6 @@ DBG_LEVEL*=0
 optimize!=true
 dbgutil!=true
 DBG_LEVEL*=1
-.ENDIF
-
-.IF "$(product)"==""
-.IF "$(RES_ENUS)"==""
-SRSDEFAULT=-SrsDefault
-.ENDIF
 .ENDIF
 
 .IF "$(debug)"!=""
