@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Configuration.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:39:26 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,28 @@
               </prop>
               <prop oor:name="URLTemplate">
                 <value>vnd.sun.star.pkg</value>
+              </prop>
+              <prop oor:name="Arguments">
+                <value/>
+              </prop>
+            </node>
+            <node oor:name="Provider9" oor:op="replace">
+              <prop oor:name="ServiceName">
+                <value>com.sun.star.ucb.ExpandContentProvider</value>
+              </prop>
+              <prop oor:name="URLTemplate">
+                <value>vnd.sun.star.expand</value>
+              </prop>
+              <prop oor:name="Arguments">
+                <value/>
+              </prop>
+            </node>
+            <node oor:name="Provider10" oor:op="replace">
+              <prop oor:name="ServiceName">
+                <value>com.sun.star.ucb.TransientDocumentsContentProvider</value>
+              </prop>
+              <prop oor:name="URLTemplate">
+                <value>vnd.sun.star.tdoc</value>
               </prop>
               <prop oor:name="Arguments">
                 <value/>
