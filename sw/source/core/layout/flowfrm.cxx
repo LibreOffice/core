@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:00:05 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,7 +1482,10 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         }
     }
 
-    nUpper += pAttrs->GetTopLine( &rThis );
+    // OD 2004-02-26 #i25029# - pass previous frame <pPre> to method <GetTopLine(..)>,
+    // if parameter <pPr> is set.
+    // Note: parameter <pPr> is set, if method is called from <SwTxtFrm::WouldFit(..)>
+    nUpper += pAttrs->GetTopLine( rThis, (pPr ? pPre : 0L) );
 
     if( rThis.IsInDocBody() && rThis.GetAttrSet()->GetParaGrid().GetValue() )
     {
