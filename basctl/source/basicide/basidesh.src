@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:38:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ String RID_STR_FILTER_ALLFILES
     TEXT [ ENGLISH ] = "<All>" ;
     TEXT [ norwegian ] = "<Alle>" ;
     TEXT [ italian ] = "<tutto>" ;
-    TEXT [ portuguese_brazilian ] = "<Tudo>" ;
+    TEXT [ portuguese_brazilian ] = "<Todos>" ;
     TEXT [ portuguese ] = "<Todos>" ;
     TEXT [ finnish ] = "<Kaikki>" ;
     TEXT [ danish ] = "<Alle>" ;
@@ -88,7 +88,7 @@ String RID_STR_FILTER_ALLFILES
     TEXT [ english_us ] = "<All>" ;
     TEXT[ chinese_simplified ] = "<å…¨éƒ¨>";
     TEXT[ russian ] = "<Âñå>";
-    TEXT[ polish ] = "<Wszystkie>";
+    TEXT[ polish ] = "<Wszystko>";
     TEXT[ japanese ] = "<ã™ã¹ã¦>";
     TEXT[ chinese_traditional ] = "<å…¨éƒ¨>";
     TEXT[ arabic ] = "<Çáßá>";
@@ -96,16 +96,19 @@ String RID_STR_FILTER_ALLFILES
     TEXT[ chinese_simplified ] = "<å…¨éƒ¨>";
     TEXT[ greek ] = "<¼ëá>";
     TEXT[ korean ] = "<ëª¨ë‘>";
-    TEXT[ turkish ] = "<Tümü>";
+    TEXT[ turkish ] = "<Hepsi>";
     TEXT[ catalan ] = "<Tot>";
     TEXT[ thai ] = "<à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”>";
+    TEXT[ czech ] = "<VÅ¡e>";
+    TEXT[ hebrew ] = "<Alle>";
+    TEXT[ hindi ] = "<à¤¸à¤¬>";
 };
 String RID_STR_NOMODULE
 {
     Text = "< Kein Modul >" ;
     Text [ English ] = "< No module >" ;
     Text [ english_us ] = "< No Module >" ;
-    Text [ portuguese_brazilian ] = "< Kein Modul >" ;
+    Text [ portuguese_brazilian ] = "< Nenhum Módulo >" ;
     Text [ swedish ] = "< Ingen Modul >" ;
     Text [ danish ] = "< Intet modul >" ;
     Text [ italian ] = "<nessun modulo >" ;
@@ -123,10 +126,13 @@ String RID_STR_NOMODULE
     Text[ chinese_simplified ] = "< æ— æ¨¡å— >";
     Text[ greek ] = "< Êáìßá ëåéôïõñãéêŞ ìïíÜäá >";
     Text[ korean ] = "< ëª¨ë“ˆ ì—†ìŒ >";
-    Text[ turkish ] = "< Modül yok >";
+    Text[ turkish ] = "<Modul Yok>";
     Text[ catalan ] = "< Cap mòdul >";
     Text[ finnish ] = "< Ei moduulia >";
     Text[ thai ] = "< à¹„à¸¡à¹ˆà¸¡à¸µà¹‚à¸¡à¸”à¸¹à¸¥ >";
+    Text[ czech ] = "<Å½Ã¡dnÃ½ modul>";
+    Text[ hebrew ] = "< Kein Modul >";
+    Text[ hindi ] = "< à¤•à¥‹à¤ˆ à¤®à¥‹à¤¡à¥à¤¯à¥‚à¤² à¤¨à¤¹à¥€à¤‚ >";
 };
 String RID_STR_WRONGPASSWORD
 {
@@ -135,7 +141,7 @@ String RID_STR_WRONGPASSWORD
     Text [ English ] = "Password doesn't match." ;
     Text [ norwegian ] = "Passord passer ikke." ;
     Text [ italian ] = "La password non corrisponde." ;
-    Text [ portuguese_brazilian ] = "A senha n?o combina." ;
+    Text [ portuguese_brazilian ] = "Senha incorreta." ;
     Text [ portuguese ] = "Senha incorrecta." ;
     Text [ finnish ] = "Väärä salasana." ;
     Text [ danish ] = "Forkert adgangskode." ;
@@ -154,9 +160,12 @@ String RID_STR_WRONGPASSWORD
     Text[ chinese_simplified ] = "å¯†ç æ— æ•ˆã€‚";
     Text[ greek ] = "Åóöáëìİíïò êùäéêüò ğñüóâáóçò.";
     Text[ korean ] = "ì•”í˜¸ê°€ ë§ì§€ ì•ŠìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Yanlış şifre";
+    Text[ turkish ] = "Hatalı Parola";
     Text[ catalan ] = "Contrasenya incorrecta.";
     Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+    Text[ czech ] = "NeplatnÃ© heslo.";
+    Text[ hebrew ] = "Fehlerhaftes Kennwort.";
+    Text[ hindi ] = "à¤—à¤²à¤¤ à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¥¤";
 };
 String RID_STR_OPEN
 {
@@ -186,6 +195,9 @@ String RID_STR_OPEN
     Text[ turkish ] = "Yükle";
     Text[ catalan ] = "Carrega";
     Text[ thai ] = "à¹‚à¸«à¸¥à¸”";
+    Text[ czech ] = "NaÄÃ­st";
+    Text[ hebrew ] = "â€®×˜×¢×™× ×”â€¬";
+    Text[ hindi ] = "à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹ ";
 };
 String RID_STR_SAVE
 {
@@ -193,7 +205,7 @@ String RID_STR_SAVE
     Text [ ENGLISH ] = "Save" ;
     Text [ norwegian ] = "Save" ;
     Text [ italian ] = "Salva" ;
-    Text [ portuguese_brazilian ] = "Gravar" ;
+    Text [ portuguese_brazilian ] = "Salvar" ;
     Text [ portuguese ] = "Guardar" ;
     Text [ finnish ] = "Tallenna" ;
     Text [ danish ] = "Gem" ;
@@ -215,6 +227,9 @@ String RID_STR_SAVE
     Text[ turkish ] = "Kaydet";
     Text[ catalan ] = "Desa";
     Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸";
+    Text[ czech ] = "UloÅ¾it";
+    Text[ hebrew ] = "â€®×©×¦×™×¨×”â€¬";
+    Text[ hindi ] = "à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
 };
 String RID_STR_SOURCETOBIG
 {
@@ -228,11 +243,11 @@ String RID_STR_SOURCETOBIG
     Text [ spanish ] = "El texto fuente es demasiado grande por lo que no se puede guardar o compilar.\nBorre algunos comentarios o transfiera algunos métodos a otro módulo." ;
     Text [ french ] = "Le texte source est trop long : enregistrement et compilation impossibles.\nSupprimez des commentaires ou transférez des méthodes dans un autre module." ;
     Text [ dutch ] = "De brontekst is te lang en kan niet worden opgeslagen of gecompileerd.\\Wis enkele opmerkingen of verplaats enkele methodes naar een andere module." ;
-    Text [ portuguese_brazilian ] = "Der Quelltext ist zu gro? und kann weder gespeichert noch compiliert werden.\nL?chen Sie einige Kommentare oder ?ertragen Sie einige Methoden in ein anderes Modul." ;
+    Text [ portuguese_brazilian ] = "O código fonte é muito grande e não pode ser compilado nem salvo.\nExclua alguns comentários ou transfira alguns métodos para outro módulo." ;
     Text [ portuguese ] = "O texto-fonte é demasiado longo e não pode ser guardado nem compilado.\nElimine alguns comentários ou transfira alguns métodos para outro módulo." ;
     Text[ chinese_simplified ] = "æºæ–‡æœ¬å¤ªå¤§ï¼Œæ— æ³•å­˜ç›˜å’Œç¼–è¯‘ã€‚\nè¯·åˆ é™¤ä¸€äº›æ³¨è§£æˆ–è€…å°†å‡ ä¸ªæ–¹æ³•è½¬ç§»åˆ°ä¸€ä¸ªå…¶ä»–çš„æ¨¡å—ä¹‹ä¸­ã€‚";
     Text[ russian ] = "Èñõîäíûé òåêñò ñëèøêîì áîëüøîé. Åãî íåâîçìîæíî íè ñîõğàíèòü, íè êîìïèëèğîâàòü.\nÓäàëèòå íåêîòîğûå êîììåíòàğèè èëè ïåğåíåñèòå ÷àñòü êîäà â äğóãîé ìîäóëü.";
-    Text[ polish ] = "Tekst Ÿród³owy jest za du¿y. Nie mo¿na go zapisaæ ani skompilowaæ.\nNale¿y usun¹æ kilka komentarzy lub przenieœæ kilka metod do innego modu³u.";
+    Text[ polish ] = "Tekst Ÿród³owy jest zbyt du¿y. Nie mo¿na go zapisaæ ani skompilowaæ.\nUsuñ czêœæ komentarzy lub przenieœ niektóre metody do innego modu³u.";
     Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ†ã‚­ã‚¹ãƒˆãŒé•·ã™ãã¦ã€ä¿å­˜ã‚‚ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚’è¡Œã†ã“ã¨ã‚‚ã§ãã¾ã›ã‚“ã€‚\nã‚³ãƒ¡ãƒ³ãƒˆã‚’ã„ãã¤ã‹å‰Šé™¤ã™ã‚‹ã‹ã€ãƒ¡ã‚½ãƒƒãƒ‰ã®ã„ãã¤ã‹ã‚’åˆ¥ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã«è»¢é€ã—ã¾ã™ã€‚";
     Text[ chinese_traditional ] = "åŸå§‹æª”å¤ªå¤§ï¹ç„¡æ³•å„²å­˜ç·¨è­¯ã€‚\nè«‹åˆªé™¤ä¸€äº›è¨»è§£æˆ–è€…å°‡å¹¾å€‹æ–¹æ³•è½‰ç§»åˆ°ä¸€å€‹å…¶ä»–çš„æ¨¡å¡Šä¹‹ä¸­ã€‚";
     Text[ arabic ] = "äÕ ÇáãÕÏÑ ßÈíÑ áÏÑÌÉ íÊÚĞÑ ãÚåÇ ÍİÙå¡ Ãæ ÊÑÌãÊå.\nŞã ÈÍĞİ ÈÚÖ ÇáÊÚáíŞÇÊ¡ Ãæ ÇäŞá ÈÚÖ ÇáÃÓÇáíÈ Åáì æÍÏÉ äãØíÉ ÃÎÑì.";
@@ -240,10 +255,13 @@ String RID_STR_SOURCETOBIG
     Text[ chinese_simplified ] = "æºæ–‡æœ¬å¤ªå¤§ï¼Œæ— æ³•å­˜ç›˜å’Œç¼–è¯‘ã€‚\nè¯·åˆ é™¤ä¸€äº›æ³¨è§£æˆ–è€…å°†å‡ ä¸ªæ–¹æ³•è½¬ç§»åˆ°ä¸€ä¸ªå…¶ä»–çš„æ¨¡å—ä¹‹ä¸­ã€‚";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé ç ìåôáãëşôôéóç êáé ç áğïèŞêåõóç ôïõ êåéìİíïõ ğñïİëåõóçò åğåéäŞ åßíáé õğåñâïëéêÜ ìåãÜëï.\nÄéáãñÜøôå ìåñéêÜ ó÷üëéá Ş ìåôáêéíŞóôå ïñéóìİíåò ìåèüäïõò óå êÜğïéá Üëëç ëåéôïõñãéêŞ ìïíÜäá.";
     Text[ korean ] = "ì›ë³¸ í…ìŠ¤íŠ¸ê°€ ë„ˆë¬´ ì»¤ì„œ ì €ì¥ ë˜ëŠ” ì»´íŒŒì¼ì´ ë¶ˆê°€ëŠ¥í•©ë‹ˆë‹¤.\nì¼ë¶€ ì„¤ëª…ì„ ì‚­ì œí•˜ê±°ë‚˜ ëª‡ëª‡ ë©”ì†Œë“œë¥¼ ë‹¤ë¥¸ ëª¨ë“ˆë¡œ ì˜®ê¸°ì‹­ì‹œì˜¤.";
-    Text[ turkish ] = "Kaynak metin uzunluğu nedeniyle kaydedilemiyor ve derlenemiyor.\nBazı açıklamaları silin ya da bazı yöntemleri başka bir modüle aktarın.";
+    Text[ turkish ] = "Kaynak kodu çok büyük ve derlenemedi yada saklanamadı. Bazı yorumları sil veya diğer yorumların içine transfer et.";
     Text[ catalan ] = "El text font és massa gran i no es pot compilar ni desar.\n Suprimiu alguns dels comentaris o transferiu alguns mètodes a un altre mòdul.";
     Text[ finnish ] = "Lähdeteksti on liian pitkä eikä sitä voida koota tai tallentaa.\nPoista huomautuksia tai siirrä joitakin menetelmiä toiseen moduuliin.";
     Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¹ƒà¸«à¸à¹ˆà¹€à¸à¸´à¸™à¹„à¸›à¹à¸¥à¸°à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸–à¸¹à¸à¸„à¸­à¸¡à¹„à¸à¸¥à¹Œà¹à¸¥à¸°à¸šà¸±à¸™à¸—à¸¶à¸à¹„à¸”à¹‰\nà¸¥à¸šà¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™à¸šà¸²à¸‡à¸ªà¹ˆà¸§à¸™à¸«à¸£à¸·à¸­à¸–à¹ˆà¸²à¸¢à¹‚à¸­à¸™à¸šà¸²à¸‡à¸§à¸´à¸˜à¸µà¸à¸²à¸£à¹„à¸›à¸ªà¸¹à¹ˆà¹‚à¸¡à¸”à¸¹à¸¥à¸­à¸·à¹ˆà¸™";
+    Text[ czech ] = "ZdrojovÃ½ text je pÅ™Ã­liÅ¡ velkÃ½ a nemÅ¯Å¾e bÃ½t zkompilovÃ¡n ani uloÅ¾en.\nSmaÅ¾te nÄ›kterÃ© z komentÃ¡Å™Å¯ nebo pÅ™eveÄte nÄ›kterÃ© metody do jinÃ©ho modulu.";
+    Text[ hebrew ] = "Der Quelltext ist zu groÃŸ und kann weder gespeichert noch compiliert werden.\nLÃ¶schen Sie einige Kommentare oder Ã¼bertragen Sie einige Methoden in ein anderes Modul.";
+    Text[ hindi ] = "à¤®à¥‚à¤² à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤¬à¤¹à¥à¤¤ à¤¬à¤¡à¤¼à¤¾ à¤¹à¥ˆ à¤”à¤° à¤‡à¤¸à¤²à¤¿à¤ à¤¨ à¤‰à¤¸à¥‡ à¤•à¤®à¥à¤ªà¥ˆà¤² à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¤¨ à¤¸à¤‚à¤šà¤¿à¤¤ à¥¤\n à¤‡à¤¸à¤²à¤¿à¤ à¤•à¥à¤› à¤Ÿà¥€à¤•à¤¾ à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤“ à¤…à¤¥à¤µà¤¾ à¤•à¥à¤› à¤®à¥‡à¤¥à¤¡ à¤•à¥‹ à¤¦à¥‚à¤¸à¤°à¥‡ à¤®à¥‹à¤¡à¥à¤¯à¥‚à¤² à¤®à¥‡à¤‚ à¤¸à¥à¤¥à¤¾à¤¨à¤¾à¤¨à¥à¤¤à¤° à¤•à¤°à¥‹ à¥¤";
 };
 String RID_STR_ERROROPENSTORAGE
 {
@@ -257,11 +275,11 @@ String RID_STR_ERROROPENSTORAGE
     Text [ dutch ] = "Fout bij openen van bestand." ;
     Text [ swedish ] = "Fel när filen öppnades" ;
     Text [ danish ] = "Fejl ved åbning af filen" ;
-    Text [ portuguese_brazilian ] = "Fehler beim ?ffnen der Datei" ;
+    Text [ portuguese_brazilian ] = "Erro ao abrir o arquivo" ;
     Text [ portuguese ] = "Erro ao abrir o ficheiro." ;
     Text[ chinese_simplified ] = "æ‰“å¼€æ–‡ä»¶æ—¶å‘ç”Ÿé”™è¯¯ã€‚";
     Text[ russian ] = "Îøèáêà îòêğûòèÿ ôàéëà";
-    Text[ polish ] = "B³¹d przy otwieraniu pliku.";
+    Text[ polish ] = "B³¹d otwierania pliku";
     Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãã¨ãã®ã‚¨ãƒ©ãƒ¼ã§ã™ã€‚";
     Text[ chinese_traditional ] = "é–‹å•Ÿæª”æ¡ˆæ™‚ç™¼ç”ŸéŒ¯èª¤ã€‚";
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ İÊÍ Çáãáİ";
@@ -269,27 +287,30 @@ String RID_STR_ERROROPENSTORAGE
     Text[ chinese_simplified ] = "æ‰“å¼€æ–‡ä»¶æ—¶å‘ç”Ÿé”™è¯¯ã€‚";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôï Üíïéãìá ôïõ áñ÷åßïõ";
     Text[ korean ] = "íŒŒì¼ ì—¬ëŠ” ì¤‘ ì˜¤ë¥˜";
-    Text[ turkish ] = "Dosyayı açma sırasında hata";
+    Text[ turkish ] = "Dosya açma hatası";
     Text[ catalan ] = "S'ha produït un error en obrir el fitxer";
     Text[ finnish ] = "Tiedoston avaamisessa on ilmennyt virhe.";
     Text[ thai ] = "à¹€à¸›à¸´à¸”à¹à¸Ÿà¹‰à¸¡à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
+    Text[ czech ] = "Chyba pÅ™i otevÃ­rÃ¡nÃ­ souboru";
+    Text[ hebrew ] = "Fehler beim Ã–ffnen der Datei";
+    Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤–à¥‹à¤²à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤—à¤²à¤¤à¥€ ";
 };
 String RID_STR_ERROROPENLIB
 {
     Text = "Fehler beim Laden der Bibliothek" ;
     Text [ English ] = "Fehler beim Laden der Bibliothek" ;
     Text [ english_us ] = "Error loading library" ;
-    Text [ portuguese_brazilian ] = "Fehler beim Laden der Bibliothek" ;
+    Text [ portuguese_brazilian ] = "Erro ao carregar a biblioteca" ;
     Text [ swedish ] = "Fel vid laddning av bibliotek" ;
     Text [ danish ] = "Fejl ved indlæsning af biblioteket" ;
-    Text [ italian ] = "Errore nel caricare la library" ;
+    Text [ italian ] = "Errore nel caricare la libreria" ;
     Text [ spanish ] = "Error al cargar la biblioteca" ;
     Text [ french ] = "Erreur lors du chargement de la bibliothèque" ;
     Text [ dutch ] = "Fout bij laden van bibliotheek" ;
     Text [ portuguese ] = "Erro ao carregar a biblioteca." ;
     Text[ chinese_simplified ] = "åœ¨è£…å…¥ç¨‹åºåº“æ—¶å‘ç”Ÿé”™è¯¯ã€‚";
     Text[ russian ] = "Îøèáêà çàãğóçêè áèáëèîòåêè";
-    Text[ polish ] = "B³¹d przy ³adowaniu biblioteki.";
+    Text[ polish ] = "B³¹d ³adowania biblioteki";
     Text[ japanese ] = "ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’èª­ã¿è¾¼ã‚€ã¨ãã®ã‚¨ãƒ©ãƒ¼ã§ã™ã€‚";
     Text[ chinese_traditional ] = "è¼‰å…¥ç¨‹å¼åº«æ™‚ç™¼ç”ŸéŒ¯èª¤ã€‚";
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÊÍãíá ÇáãßÊÈÉ";
@@ -297,10 +318,13 @@ String RID_STR_ERROROPENLIB
     Text[ chinese_simplified ] = "åœ¨è£…å…¥ç¨‹åºåº“æ—¶å‘ç”Ÿé”™è¯¯ã€‚";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôç öüñôùóç ôçò âéâëéïèŞêçò";
     Text[ korean ] = "ë¼ì´ë¸ŒëŸ¬ë¦¬ ë¡œë“œ ì¤‘ ì˜¤ë¥˜";
-    Text[ turkish ] = "Kitaplığı yükleme sırasında hata";
+    Text[ turkish ] = "Kütüphane yükleme hatası";
     Text[ catalan ] = "S'ha produït un error en carregar la biblioteca";
     Text[ finnish ] = "Kirjaston lataamisessa on ilmennyt virhe.";
     Text[ thai ] = "à¹‚à¸«à¸¥à¸”à¹„à¸¥à¸šà¸£à¸²à¸£à¸µà¸œà¸´à¸”à¸à¸¥à¸²à¸”";
+    Text[ czech ] = "Chyba pÅ™i naÄÃ­tÃ¡nÃ­ knihovny";
+    Text[ hebrew ] = "Fehler beim Laden der Bibliothek";
+    Text[ hindi ] = "à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤—à¤²à¤¤à¥€ ";
 };
 String RID_STR_NOLIBINSTORAGE
 {
@@ -308,13 +332,13 @@ String RID_STR_NOLIBINSTORAGE
     Text = "Die Datei enthält keine BASIC-Bibliotheken" ;
     Text [ English ] = "The document doesn't contain any BASIC libaries" ;
     Text [ english_us ] = "The file does not contain any BASIC libraries" ;
-    Text [ italian ] = "Il file non contiene library BASIC" ;
+    Text [ italian ] = "Il file non contiene librerie BASIC" ;
     Text [ spanish ] = "El archivo no contiene bibliotecas BASIC" ;
     Text [ french ] = "Le fichier ne contient aucune bibliothèque BASIC" ;
     Text [ dutch ] = "Het bestand bevat geen BASIC-bibliotheken" ;
     Text [ swedish ] = "Filen innehåller inga BASIC-bibliotek" ;
     Text [ danish ] = "Filen indeholder ikke nogen BASIC-biblioteker" ;
-    Text [ portuguese_brazilian ] = "Die Datei enth?lt keine Basic-Bibliotheken" ;
+    Text [ portuguese_brazilian ] = "O arquivo não contém bibliotecas BASIC." ;
     Text [ portuguese ] = "O ficheiro não contém bibliotecas BASIC." ;
     Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶æ²¡æœ‰ BASIC ç¨‹åºåº“ã€‚";
     Text[ russian ] = "İòîò ôàéë íå ñîäåğæèò áèáëèîòåê BASIC";
@@ -326,10 +350,13 @@ String RID_STR_NOLIBINSTORAGE
     Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶æ²¡æœ‰ BASIC ç¨‹åºåº“ã€‚";
     Text[ greek ] = "Ôï áñ÷åßï äåí ğåñéİ÷åé âéâëéïèŞêåò ôïõ BASIC";
     Text[ korean ] = "íŒŒì¼ì—ëŠ” ì–´ë–¤ BASIC ë¼ì´ë¸ŒëŸ¬ë¦¬ë„ í¬í•¨ë˜ì–´ ìˆì§€ ì•ŠìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Dosya BASIC kitaplıkları içermiyor";
+    Text[ turkish ] = "Dosya BASIC kütüphanesi içermiyor";
     Text[ catalan ] = "El fitxer no conté cap biblioteca del BASIC";
     Text[ finnish ] = "Tiedostossa ei ole BASIC-kirjastoja.";
     Text[ thai ] = "à¹à¸Ÿà¹‰à¸¡à¹„à¸¡à¹ˆà¸¡à¸µà¹„à¸¥à¸šà¸£à¸²à¸£à¸µ BASIC à¹ƒà¸” à¹†à¹€à¸¥à¸¢";
+    Text[ czech ] = "Soubor neobsahuje Å¾Ã¡dnÃ© knihovny BASIC";
+    Text[ hebrew ] = "Die Datei enthÃ¤lt keine BASIC-Bibliotheken";
+    Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤®à¥‡à¤‚ BASIC à¤²à¥ˆà¤¬à¥à¤°à¤°à¤¿à¤¯à¤¾à¤ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ ";
 };
 String RID_STR_BADSBXNAME
 {
@@ -338,7 +365,7 @@ String RID_STR_BADSBXNAME
     Text [ English ] = "Invalid Name" ;
     Text [ norwegian ] = "Invalid Name" ;
     Text [ italian ] = "Nome non valido" ;
-    Text [ portuguese_brazilian ] = "Invalid Name" ;
+    Text [ portuguese_brazilian ] = "Nome Inválido" ;
     Text [ portuguese ] = "Nome incorrecto" ;
     Text [ french ] = "Nom incorrect" ;
     Text [ dutch ] = "Ongeldige aanduiding" ;
@@ -357,9 +384,12 @@ String RID_STR_BADSBXNAME
     Text[ chinese_simplified ] = "æ— æ•ˆçš„åç§°";
     Text[ greek ] = "Ìç áğïäåêôü üíïìá";
     Text[ korean ] = "ì˜ëª»ëœ ì´ë¦„";
-    Text[ turkish ] = "Geçersiz ad";
+    Text[ turkish ] = "Geçersiz İsim";
     Text[ catalan ] = "El nom no és vàlid";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+    Text[ czech ] = "NeplatnÃ½ nÃ¡zev";
+    Text[ hebrew ] = "UngÃ¼ltiger Bezeichner";
+    Text[ hindi ] = "à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¨à¤¾à¤®";
 };
 String RID_STR_LIBNAMETOLONG
 {
@@ -375,17 +405,20 @@ String RID_STR_LIBNAMETOLONG
     Text[ italian ] = "Il nome della librery può avere una lunghezza massima di 30 caratteri.";
     Text[ danish ] = "Navnet på et bibliotek må højst være på 30 tegn.";
     Text[ swedish ] = "Namnet på ett bibliotek får maximalt innehålla 30 tecken.";
-    Text[ polish ] = "Nazwa biblioteki mo¿e siê sk³adaæ z maksymalnie 30 znaków.";
-    Text[ portuguese_brazilian ] = "The name of a library can only be 30 characters long.";
+    Text[ polish ] = "Nazwa biblioteki mo¿e siê sk³adaæ maksymalnie z 30 znaków.";
+    Text[ portuguese_brazilian ] = "Um nome de biblioteca deve ter no máximo 30 caracteres.";
     Text[ japanese ] = "ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåã®æ–‡å­—æ•°ã¯æœ€é«˜30æ–‡å­—ã¾ã§ã§ã™ã€‚";
     Text[ korean ] = "ë¼ì´ë¸ŒëŸ¬ë¦¬ ì´ë¦„ì˜ ê¸¸ì´ê°€ 30ìë¥¼ ì´ˆê³¼í•´ì„œëŠ” ì•ˆë©ë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "ç¨‹åºåº“åç§°æœ€å¤šåªå…è®¸ç”±30ä¸ªå­—ç¬¦ç»„æˆã€‚";
     Text[ chinese_traditional ] = "ç¨‹å¼åº«åç¨±æœ€é•·ä¸å¾—è¶…é30å€‹å­—å…ƒã€‚";
     Text[ arabic ] = "íÌÈ ÃáÇ íÒíÏ ÇÓã ÇáãßÊÈÉ Úä 30 ÍÑİÇğ.";
-    Text[ turkish ] = "Kitaplık adı en fazla 30 karakter uzunluğunda olmalı.";
+    Text[ turkish ] = "Bir kütüphane ismi 30 karakterden fazla olamaz.";
     Text[ catalan ] = "Un nom de biblioteca pot tenir fins a 30 caràcters.";
     Text[ finnish ] = "Kirjaston nimessä voi olla 30 merkkiä.";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹„à¸¥à¸šà¸£à¸²à¸£à¸µà¸ªà¸²à¸¡à¸²à¸£à¸–à¸¡à¸µà¸„à¸§à¸²à¸¡à¸¢à¸²à¸§à¹„à¸”à¹‰à¸–à¸¶à¸‡ 30 à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
+    Text[ czech ] = "NÃ¡zev knihovny mÅ¯Å¾e obsahovat maximÃ¡lnÄ› 30 znakÅ¯.";
+    Text[ hebrew ] = "Der Name einer Bibliothek darf maximal 30 Zeichen lang sein.";
+    Text[ hindi ] = "à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€ à¤•à¤¾ à¤¨à¤¾à¤® à¤®à¥‡à¤‚ 30 à¤¸à¥‡ à¤…à¤§à¤¿à¤• à¤…à¤•à¥à¤·à¤°à¥‡à¤‚ à¤¨à¤¹à¥€à¤‚ à¤¹à¥‹ à¤¸à¤•à¤¤à¤¾ à¤¹à¥ˆ à¥¤";
 };
 String RID_STR_ERRORCHOOSEMACRO
 {
@@ -402,16 +435,19 @@ String RID_STR_ERRORCHOOSEMACRO
     Text[ italian ] = "Impossibile accedere alle macro di altri documenti.";
     Text[ danish ] = "Makroer fra andre dokumenter er ikke tilgængelige.";
     Text[ swedish ] = "Makron från andra dokument är inte tillgängliga.";
-    Text[ polish ] = "Brak dostêpu do makr innych dokumentów.";
-    Text[ portuguese_brazilian ] = "Macros from other documents are not accessible.";
+    Text[ polish ] = "Makra z innych dokumentów nie s¹ dostêpne.";
+    Text[ portuguese_brazilian ] = "As macros de outros documentos não são acessíveis.";
     Text[ japanese ] = "ã»ã‹ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ãƒã‚¯ãƒ­ã¸ã¯ã‚¢ã‚¯ã‚»ã‚¹ã§ãã¾ã›ã‚“ã€‚";
     Text[ korean ] = "ë‹¤ë¥¸ ë¬¸ì„œì˜ ë§¤í¬ë¡œì—ëŠ” ì•¡ì„¸ìŠ¤í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "æ— æ³•è¯»å–å…¶å®ƒæ–‡æ¡£çš„å®ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•å­˜å–å…¶ä»–æ–‡ä»¶çš„å·¨é›†ã€‚";
-    Text[ turkish ] = "Macros from other documents are not accessible.";
+    Text[ turkish ] = "Dökümandan gelen Makrolar kabul edilemez.";
     Text[ arabic ] = "Macros from other documents are not accessible.";
     Text[ catalan ] = "Les macros d'altres documents no són accessibles.";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡à¸¡à¸²à¹‚à¸„à¸£à¸ˆà¸²à¸à¹€à¸­à¸à¸ªà¸²à¸£à¸­à¸·à¹ˆà¸™à¹„à¸”à¹‰";
+    Text[ czech ] = "Makra z jinÃ½ch dokumentÅ¯ jsou nedostupnÃ¡.";
+    Text[ hebrew ] = "Auf Makros anderer Dokumente kann nicht zugegriffen werden.";
+    Text[ hindi ] = "Macros from other documents are not accessible.";
 };
 String RID_STR_LIBISREADONLY
 {
@@ -425,19 +461,22 @@ String RID_STR_LIBISREADONLY
     Text[ french ] = "Cette bibliothèque est en lecture seule.";
     Text[ spanish ] = "Esta biblioteca es de sólo lectura.";
     Text[ finnish ] = "Tämä kirjasto on vain luku -muotoa.";
-    Text[ italian ] = "La library è di sola lettura";
+    Text[ italian ] = "La libreria è di sola lettura";
     Text[ danish ] = "Dette bibliotek er skrivebeskyttet.";
     Text[ swedish ] = "Det här biblioteket är skrivskyddat.";
-    Text[ polish ] = "This library is readonly.";
-    Text[ portuguese_brazilian ] = "This library is readonly.";
+    Text[ polish ] = "Ta biblioteka jest tylko do odczytu.";
+    Text[ portuguese_brazilian ] = "Esta biblioteca é de somente leitura.";
     Text[ japanese ] = "ã“ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯æ›¸ãè¾¼ã¿ä¿è­·ã•ã‚Œã¦ã„ã¾ã™ã€‚";
     Text[ korean ] = "ì´ ë¼ì´ë¸ŒëŸ¬ë¦¬ëŠ” ì½ê¸° ì „ìš©ì…ë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "è¿™ä¸ªç¨‹åºç±»æ˜¯é˜²æ”¹å†™çš„ã€‚";
     Text[ chinese_traditional ] = "ç¨‹å¼é¡æ˜¯å”¯è®€çš„ã€‚";
-    Text[ turkish ] = "This library is readonly.";
+    Text[ turkish ] = "Bu kitaplık salt okunur.";
     Text[ arabic ] = "This library is readonly.";
     Text[ catalan ] = "Aquesta llibreria és de només lectura.";
     Text[ thai ] = "à¹„à¸¥à¸šà¸£à¸²à¸£à¸µà¹ˆà¸™à¸µà¹‰à¹€à¸›à¹‡à¸™à¸Šà¸™à¸´à¸”à¸­à¹ˆà¸²à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
+    Text[ czech ] = "Tato knihovna je pouze pro ÄtenÃ­.";
+    Text[ hebrew ] = "Diese Bibliothek ist schreibgeschÃ¼tzt.";
+    Text[ hindi ] = "This library is read-only.";
 };
 String RID_STR_REPLACELIB
 {
@@ -454,16 +493,19 @@ String RID_STR_REPLACELIB
     Text[ italian ] = "Non è possibile sostituire \"XX\".";
     Text[ danish ] = "'XX' kan ikke erstattes.";
     Text[ swedish ] = "Det går inte att ersätta 'XX'.";
-    Text[ polish ] = "'XX' can't be replaced.";
-    Text[ portuguese_brazilian ] = "'XX' can't be replaced.";
+    Text[ polish ] = "Nie mo¿na zamieniæ 'XX'.";
+    Text[ portuguese_brazilian ] = "Não é possível substituir 'XX'.";
     Text[ japanese ] = "'XX' ã¯ç½®æ›ã§ãã¾ã›ã‚“ã€‚";
     Text[ korean ] = "'XX'ì„(ë¥¼) ë°”ê¿€ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "æ— æ³•æ›´æ›¿ 'XX'ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•ä»£æ›¿ XX ã€‚";
-    Text[ turkish ] = "'XX' can't be replaced.";
+    Text[ turkish ] = "'XX' yer değiştirilemez.";
     Text[ arabic ] = "'XX' can't be replaced.";
     Text[ catalan ] = "No es pot reemplaçar 'XX'.";
     Text[ thai ] = "'XX' cannot be replaced.";
+    Text[ czech ] = "Nelze nahradit 'XX'.";
+    Text[ hebrew ] = "'XX' kann nicht ersetzt werden.";
+    Text[ hindi ] = "'XX' cannot be replaced.";
 };
 String RID_STR_IMPORTNOTPOSSIBLE
 {
@@ -480,16 +522,19 @@ String RID_STR_IMPORTNOTPOSSIBLE
     Text[ italian ] = "Non è possibile importare 'XX'.";
     Text[ danish ] = "Tilføjelse af 'XX' ikke mulig.";
     Text[ swedish ] = "Det är inte möjligt att lägga till 'XX'.";
-    Text[ polish ] = "Import of 'XX' not possible.";
-    Text[ portuguese_brazilian ] = "Import of 'XX' not possible.";
+    Text[ polish ] = "Import 'XX' nie jest mo¿liwy.";
+    Text[ portuguese_brazilian ] = "Não é possível adicionar 'XX'.";
     Text[ japanese ] = "'XX' ã®è¿½åŠ ã¯ã§ãã¾ã›ã‚“ã€‚";
     Text[ korean ] = "'XX'ì„(ë¥¼) ì¶”ê°€í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "æ— æ³•å¢åŠ  'XX' ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•æ–°å¢ XX ã€‚";
-    Text[ turkish ] = "Import of 'XX' not possible.";
+    Text[ turkish ] = "'XX' eklenemez.";
     Text[ arabic ] = "Import of 'XX' not possible.";
     Text[ catalan ] = "No es pot importar 'XX'.";
     Text[ thai ] = "'XX' cannot be added.";
+    Text[ czech ] = "Nelze pÅ™idat 'XX'.";
+    Text[ hebrew ] = "HinzufÃ¼gen von 'XX' nicht mÃ¶glich.";
+    Text[ hindi ] = "'XX' cannot be added.";
 };
 String RID_STR_NOIMPORT
 {
@@ -506,16 +551,19 @@ String RID_STR_NOIMPORT
     Text[ italian ] = "'XX' non è stato importato.";
     Text[ danish ] = "'XX' blev ikke tilføjet.";
     Text[ swedish ] = "'XX' har inte lagts till.";
-    Text[ polish ] = "'XX' was not imported.";
-    Text[ portuguese_brazilian ] = "'XX' was not imported.";
+    Text[ polish ] = "Nie dodano 'XX'.";
+    Text[ portuguese_brazilian ] = "XX' não foi adicionado.";
     Text[ japanese ] = "'XX' ã¯ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚";
     Text[ korean ] = "'XX'ì„(ë¥¼) ì¶”ê°€í•˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "æ²¡æœ‰å¢åŠ  'XX' ã€‚";
     Text[ chinese_traditional ] = "æ²’æœ‰å¢åŠ  'XX' ã€‚";
-    Text[ turkish ] = "'XX' was not imported.";
+    Text[ turkish ] = "'XX' eklenemedi.";
     Text[ arabic ] = "'XX' was not imported.";
     Text[ catalan ] = "No s'ha importat 'XX'.";
     Text[ thai ] = "'XX' was not added.";
+    Text[ czech ] = "'XX' nebylo pÅ™idÃ¡no.";
+    Text[ hebrew ] = "'XX' wurde nicht hinzugefÃ¼gt.";
+    Text[ hindi ] = "'XX' was not added.";
 };
 String RID_STR_ENTERPASSWORD
 {
@@ -532,16 +580,19 @@ String RID_STR_ENTERPASSWORD
     Text[ italian ] = "Digita password per 'XX'";
     Text[ danish ] = "Indtast adgangskode for 'XX'";
     Text[ swedish ] = "Ange lösenord för 'XX'";
-    Text[ polish ] = "Enter password for 'XX'";
-    Text[ portuguese_brazilian ] = "Enter password for 'XX'";
+    Text[ polish ] = "WprowadŸ has³o do 'XX'";
+    Text[ portuguese_brazilian ] = "Digite a senha para 'XX'";
     Text[ japanese ] = "'XX' ã®ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¾ã™";
     Text[ korean ] = "'XX'ì˜ ì•”í˜¸ë¥¼ ì…ë ¥í•˜ì‹­ì‹œì˜¤.";
     Text[ chinese_simplified ] = "ä¸º 'XX' é”®å…¥å¯†ç ã€‚";
     Text[ chinese_traditional ] = "ç‚º 'XX' éµå…¥å¯†ç¢¼";
-    Text[ turkish ] = "Enter password for 'XX'";
+    Text[ turkish ] = "'XX' için şifre giriniz.";
     Text[ arabic ] = "Enter password for 'XX'";
     Text[ catalan ] = "Introduïu la contrasenya per 'XX'";
     Text[ thai ] = "Enter password for 'XX'";
+    Text[ czech ] = "Zadejte heslo pro 'XX'";
+    Text[ hebrew ] = "Kennwort eingeben fÃ¼r 'XX'";
+    Text[ hindi ] = "Enter password for 'XX'";
 };
 String RID_STR_SBXNAMEALLREADYUSED
 {
@@ -549,7 +600,7 @@ String RID_STR_SBXNAMEALLREADYUSED
     Text [ English ] = "Name allready used" ;
     Text [ norwegian ] = "Name allready used" ;
     Text [ italian ] = "Nome già in uso" ;
-    Text [ portuguese_brazilian ] = "Name allready used" ;
+    Text [ portuguese_brazilian ] = "O nome já existe" ;
     Text [ portuguese ] = "Nome já existe." ;
     Text [ french ] = "Ce nom existe déjà" ;
     Text [ dutch ] = "Naam bestaat reeds" ;
@@ -568,9 +619,12 @@ String RID_STR_SBXNAMEALLREADYUSED
     Text[ chinese_simplified ] = "åç§°å·²ç»å­˜åœ¨ã€‚";
     Text[ greek ] = "Ôï üíïìá áõôü õğÜñ÷åé Şäç";
     Text[ korean ] = "ì´ë¦„ì´ ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Bu ad mevcut durumda";
+    Text[ turkish ] = "Bu ad zaten mevcut ";
     Text[ catalan ] = "El nom ja existeix";
     Text[ thai ] = "à¸¡à¸µà¸Šà¸·à¹ˆà¸­à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§";
+    Text[ czech ] = "NÃ¡zev jiÅ¾ existuje";
+    Text[ hebrew ] = "Name bereits vergeben";
+    Text[ hindi ] = "à¤¨à¤¾à¤® à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¹à¥ˆ ";
 };
 String RID_STR_SBXNAMEALLREADYUSED2
 {
@@ -578,7 +632,7 @@ String RID_STR_SBXNAMEALLREADYUSED2
     Text [ English ] = "Object with same name allready exists" ;
     Text [ norwegian ] = "Object with same name allready exist" ;
     Text [ italian ] = "Esiste già un oggetto con lo stesso nome" ;
-    Text [ portuguese_brazilian ] = "Object with same name allready exist" ;
+    Text [ portuguese_brazilian ] = "Já existe um objeto com este nome" ;
     Text [ portuguese ] = "Já existe objecto com o mesmo nome." ;
     Text [ french ] = "Un objet du même nom existe déjà" ;
     Text [ dutch ] = "Er bestaat reeds een object met deze naam." ;
@@ -597,9 +651,12 @@ String RID_STR_SBXNAMEALLREADYUSED2
     Text[ chinese_simplified ] = "å¯¹è±¡å·²ç»å­˜åœ¨ã€‚";
     Text[ greek ] = "ÕğÜñ÷åé Şäç İíá áíôéêåßìåíï ìå áõôü ôï üíïìá";
     Text[ korean ] = "ê°™ì€ ì´ë¦„ì„ ê°€ì§„ ê°œì²´ê°€ ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Bu adı taşıyan bir nesne mevcut";
+    Text[ turkish ] = "Bu isimde bir nesne zaten var";
     Text[ catalan ] = "Ja hi ha un objecte amb el mateix nom";
     Text[ thai ] = "à¸¡à¸µà¸Šà¸·à¹ˆà¸­à¸§à¸±à¸•à¸–à¸¸à¹€à¸«à¸¡à¸·à¸­à¸™à¸à¸±à¸™à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§";
+    Text[ czech ] = "Objekt s takovÃ½m nÃ¡zvem jiÅ¾ existuje";
+    Text[ hebrew ] = "Objekt mit dem Namen existiert schon";
+    Text[ hindi ] = "à¤¸à¤®à¤¾à¤¨ à¤¨à¤¾à¤® à¤•à¤¾ à¤µà¤¸à¥à¤¤à¥ à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¹à¥ˆ ";
 };
 String RID_STR_FILEEXISTS
 {
@@ -607,7 +664,7 @@ String RID_STR_FILEEXISTS
     Text = "Die Datei 'XX' existiert schon" ;
     Text [ English ] = "The file 'XX' allready exists" ;
     Text [ english_us ] = "The 'XX' file already exists" ;
-    Text [ portuguese_brazilian ] = "Die Datei ''XX'' existiert schon" ;
+    Text [ portuguese_brazilian ] = "O arquivo 'XX' já existe." ;
     Text [ swedish ] = "Filen 'XX' existerar redan" ;
     Text [ danish ] = "Filen 'XX' findes allerede" ;
     Text [ italian ] = "Il file 'XX' esiste già" ;
@@ -625,10 +682,13 @@ String RID_STR_FILEEXISTS
     Text[ chinese_simplified ] = "æ–‡ä»¶ 'XX' å·²ç»å­˜åœ¨ã€‚";
     Text[ greek ] = "Ôï áñ÷åßï 'XX' õğÜñ÷åé Şäç";
     Text[ korean ] = "'XX' íŒŒì¼ì´ ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Dosya 'XX' mevcut durumda";
+    Text[ turkish ] = "'XX' dosyası mevcut ";
     Text[ catalan ] = "El fitxer 'XX' ja existeix";
     Text[ finnish ] = "Tiedosto XX on jo olemassa.";
     Text[ thai ] = "à¸¡à¸µà¹à¸Ÿà¹‰à¸¡'XX' à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§";
+    Text[ czech ] = "Soubor 'XX' jiÅ¾ existuje";
+    Text[ hebrew ] = "Die Datei 'XX' existiert schon";
+    Text[ hindi ] = "'XX' à¤«à¤¾à¤‡à¤² à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¹à¥ˆ";
 };
 String RID_STR_COMPILEERROR
 {
@@ -637,7 +697,7 @@ String RID_STR_COMPILEERROR
     Text [ ENGLISH ] = "Compile-Error: " ;
     Text [ norwegian ] = "Compile-Error: " ;
     Text [ italian ] = "Errore di compilazione: " ;
-    Text [ portuguese_brazilian ] = "Erro-Compila??o: " ;
+    Text [ portuguese_brazilian ] = "Erro de Compilação: " ;
     Text [ portuguese ] = "Erro de compilação:  " ;
     Text [ finnish ] = "Koontivirhe: " ;
     Text [ danish ] = "Kompileringsfejl: " ;
@@ -648,7 +708,7 @@ String RID_STR_COMPILEERROR
     Text [ english_us ] = "Compile Error: " ;
     Text[ chinese_simplified ] = "ç¼–è¯‘é”™è¯¯ï¼š ";
     Text[ russian ] = "Îøèáêà êîìïèëÿöèè: ";
-    Text[ polish ] = "B³¹d kompilacji: ";
+    Text[ polish ] = "B³¹d kompilacji:";
     Text[ japanese ] = "ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¨ãƒ©ãƒ¼: ";
     Text[ chinese_traditional ] = "ç·¨è­¯éŒ¯èª¤: ";
     Text[ arabic ] = ":ÎØÃ İí ÇáÊÑÌãÉ";
@@ -656,9 +716,12 @@ String RID_STR_COMPILEERROR
     Text[ chinese_simplified ] = "ç¼–è¯‘é”™è¯¯ï¼š ";
     Text[ greek ] = "ÓöÜëìá ìåôáãëşôôéóçò: ";
     Text[ korean ] = "ì»´íŒŒì¼ ì˜¤ë¥˜: ";
-    Text[ turkish ] = "Derleme hatası ";
+    Text[ turkish ] = "Derleme hatası: ";
     Text[ catalan ] = "Error de compilació: ";
     Text[ thai ] = "à¸„à¸­à¸¡à¹„à¸à¸¥à¹Œà¸œà¸´à¸”à¸à¸¥à¸²à¸”: ";
+    Text[ czech ] = "Chyba v kompilaci: ";
+    Text[ hebrew ] = "Ãœbersetzungs-Fehler:";
+    Text[ hindi ] = "à¤•à¤®à¥à¤ªà¥ˆà¤² à¤—à¤²à¤¤à¥€ :";
 };
 String RID_STR_RUNTIMEERROR
 {
@@ -666,7 +729,7 @@ String RID_STR_RUNTIMEERROR
     Text [ ENGLISH ] = "Runtime-Error: #" ;
     Text [ norwegian ] = "Runtime-Error: #" ;
     Text [ italian ] = "Errore di Runtime: #" ;
-    Text [ portuguese_brazilian ] = "Erro-Execu??o: #" ;
+    Text [ portuguese_brazilian ] = "Erro de Execução: #" ;
     Text [ portuguese ] = "Erro de execução: #" ;
     Text [ finnish ] = "Suoritusvirhe: #" ;
     Text [ danish ] = "Kørselsfejl: #" ;
@@ -677,7 +740,7 @@ String RID_STR_RUNTIMEERROR
     Text [ english_us ] = "Runtime Error: #" ;
     Text[ chinese_simplified ] = "è¿è¡Œæ—¶é—´é”™è¯¯: #";
     Text[ russian ] = "Îøèáêà âğåìåíè âûïîëíåíèÿ: #";
-    Text[ polish ] = "B³¹d czasu przebiegu (runtime): #";
+    Text[ polish ] = "B³¹d œrodowiska wykonawczego: #";
     Text[ japanese ] = "ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ãƒ»ã‚¨ãƒ©ãƒ¼: #";
     Text[ chinese_traditional ] = "é‹è½‰æ™‚é–“éŒ¯èª¤: #";
     Text[ arabic ] = "# :ÎØÃ İí æŞÊ ÇáÊÔÛíá";
@@ -685,9 +748,12 @@ String RID_STR_RUNTIMEERROR
     Text[ chinese_simplified ] = "è¿è¡Œæ—¶é—´é”™è¯¯: #";
     Text[ greek ] = "ÓöÜëìá ÷ñüíïõ åêôİëåóçò: #";
     Text[ korean ] = "ëŸ°íƒ€ì„ ì˜¤ë¥˜: #";
-    Text[ turkish ] = "Yürütüm süresi hatası: #";
+    Text[ turkish ] = "Çalışma Hatası: #";
     Text[ catalan ] = "Error d'execució: #";
     Text[ thai ] = "à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸œà¸´à¸”à¸à¸¥à¸²à¸”: #";
+    Text[ czech ] = "Chyba pÅ™i bÄ›hu: #";
+    Text[ hebrew ] = "Laufzeit-Fehler: #";
+    Text[ hindi ] = "à¤°à¤¨à¤Ÿà¤‡à¤® à¤—à¤²à¤¤à¥€: #";
 };
 String RID_STR_SEARCHNOTFOUND
 {
@@ -695,7 +761,7 @@ String RID_STR_SEARCHNOTFOUND
     Text [ ENGLISH ] = "Search pattern not found" ;
     Text [ norwegian ] = "Search pattern not found" ;
     Text [ italian ] = "Termine non trovato" ;
-    Text [ portuguese_brazilian ] = "Search pattern not found" ;
+    Text [ portuguese_brazilian ] = "A chave da pesquisa não foi encontrada" ;
     Text [ portuguese ] = "Impossível encontrar expressão procurada." ;
     Text [ finnish ] = "Etsittävää ei löytynyt." ;
     Text [ danish ] = "Søgeordet ikke fundet" ;
@@ -714,9 +780,12 @@ String RID_STR_SEARCHNOTFOUND
     Text[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°è¦æœå¯»æ¡ç›®";
     Text[ greek ] = "Äåí âñİèçêå ï æçôïıìåíïò üñïò";
     Text[ korean ] = "ê²€ìƒ‰ í‚¤ë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Aranan terim bulunamadı";
+    Text[ turkish ] = "Aranan anahtar kelime bulunamamıştır";
     Text[ catalan ] = "La clau de cerca no s'ha trobat";
     Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¸„à¸µà¸¢à¹Œà¹„à¸¡à¹ˆà¸à¸š";
+    Text[ czech ] = "HledanÃ© klÃ­ÄovÃ© slovo nenalezeno";
+    Text[ hebrew ] = "Suchbegriff nicht gefunden";
+    Text[ hindi ] = "à¤–à¥‹à¤œ à¤•à¥€ à¤¨à¤¹à¥€à¤‚ à¤®à¤¿à¤²à¤¾ ";
 };
 String RID_STR_SEARCHFROMSTART
 {
@@ -730,7 +799,7 @@ String RID_STR_SEARCHFROMSTART
     Text [ dutch ] = "Er is tot aan de laatste module gezocht. Wilt u het zoeken voortzetten vanaf de eerste module?" ;
     Text [ swedish ] = "Sökning genomförd till sista modulen. Ska sökningen fortsätta i första modulen?" ;
     Text [ danish ] = "Søgningen har nået sidste modul. Ønsker du at fortsætte søgningen ved første modul?" ;
-    Text [ portuguese_brazilian ] = "Es wurde bis zum letzten Modul gesucht. M?hten Sie die Suche beim ersten Modul fortsetzen?" ;
+    Text [ portuguese_brazilian ] = "A pesquisa até o último módulo completou. Deseja continuar pelo o primeiro módulo?" ;
     Text [ portuguese ] = "Terminada a procura até ao último módulo. Deseja continuar a procura a partir do primeiro?" ;
     Text[ chinese_simplified ] = "å·²ç»æœå¯»è‡³æœ€åä¸€ä¸ªæ¨¡å—ã€‚è¦ä»ç¬¬ä¸€ä¸ªæ¨¡å—å¼€å§‹æœå¯»ï¼Ÿ";
     Text[ russian ] = "Ïîèñê äî ïîñëåäíåãî ìîäóëÿ çàâåğøåí. Âû õîòèòå ïğîäîëæèòü ïîèñê ñ ïåğâîãî ìîäóëÿ?";
@@ -742,10 +811,13 @@ String RID_STR_SEARCHFROMSTART
     Text[ chinese_simplified ] = "å·²ç»æœå¯»è‡³æœ€åä¸€ä¸ªæ¨¡å—ã€‚è¦ä»ç¬¬ä¸€ä¸ªæ¨¡å—å¼€å§‹æœå¯»ï¼Ÿ";
     Text[ greek ] = "Åêôåëİóôçêå ç áíáæŞôçóç İùò ôç ôåëåõôáßá ëåéôïõñãéêŞ ìïíÜäá. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôç ğñşôç ëåéôïõñãéêŞ ìïíÜäá;";
     Text[ korean ] = "ë§ˆì§€ë§‰ ëª¨ë“ˆê¹Œì§€ ê²€ìƒ‰ì„ ì™„ë£Œí–ˆìŠµë‹ˆë‹¤. ì²˜ìŒ ëª¨ë“ˆì—ì„œ ê²€ìƒ‰ì„ ê³„ì†í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ turkish ] = "Son modüle kadar arama tamamlandı? Aramaya ilk modülden devam etmek istiyor musunuz?";
+    Text[ turkish ] = "Aranan son modül tamamlandı. İlk modüle devam et?";
     Text[ catalan ] = "S'ha completat la cerca fins a l'últim mòdul. Voleu continuar des del primer?";
     Text[ finnish ] = "Haku viimeisestä moduulista on valmis. Jatketaanko ensimmäisestä moduulista?";
     Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¹„à¸›à¸—à¸µà¹ˆà¹‚à¸¡à¸”à¸¹à¸¥à¸ªà¸¸à¸”à¸—à¹‰à¸²à¸¢à¹€à¸ªà¸£à¹‡à¸ˆà¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸—à¸³à¸•à¹ˆà¸­à¸—à¸µà¹ˆà¹‚à¸¡à¸”à¸¹à¸¥à¹à¸£à¸à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Text[ czech ] = "HledÃ¡nÃ­ dokonÄeno aÅ¾ k poslednÃ­mu modulu. PokraÄovat od prvnÃ­ho modulu?";
+    Text[ hebrew ] = "Es wurde bis zum letzten Modul gesucht. MÃ¶chten Sie die Suche beim ersten Modul fortsetzen?";
+    Text[ hindi ] = "à¤…à¤‚à¤¤à¤¿à¤® à¤®à¥‹à¤¡à¥à¤¯à¥‚à¤² à¤¤à¤• à¤–à¥‹à¤œ à¤¸à¤®à¤¾à¤ªà¥à¤¤ à¤¹à¥à¤† à¥¤ à¤ªà¤¹à¤¿à¤²à¤¾ à¤®à¥‹à¤¡à¥à¤¯à¥‚à¤² à¤¸à¥‡ à¤–à¥‹à¤œ à¤•à¥‹ à¤œà¤¾à¤°à¥€ à¤°à¤–à¤¨à¤¾ à¤¹à¥ˆ?";
 };
 String RID_STR_SEARCHREPLACES
 {
@@ -753,7 +825,7 @@ String RID_STR_SEARCHREPLACES
     Text [ ENGLISH ] = "Search pattern replaced XX times" ;
     Text [ norwegian ] = "Search pattern replaced XX times" ;
     Text [ italian ] = "Termine sostituito XX volte" ;
-    Text [ portuguese_brazilian ] = "Search pattern replaced XX times" ;
+    Text [ portuguese_brazilian ] = "A chave da pesquisa foi substituída XX vezes." ;
     Text [ portuguese ] = "Expressão procurada substituída XX vezes" ;
     Text [ finnish ] = "Etsittävä korvattu XX kertaa." ;
     Text [ danish ] = "Søgeord erstattet XX gange" ;
@@ -764,7 +836,7 @@ String RID_STR_SEARCHREPLACES
     Text [ english_us ] = "Search key replaced XX times" ;
     Text[ chinese_simplified ] = "æ›¿æ¢æœå¯»æ¡ç›® XX æ¬¡";
     Text[ russian ] = "Èñêîìîå ïîíÿòèå çàìåíåíî XX ğàç";
-    Text[ polish ] = "Szukane has³o zast¹piono XXrazy.";
+    Text[ polish ] = "Szukane has³o zast¹piono XX razy.";
     Text[ japanese ] = "XX å€‹ã®æ¤œç´¢ã‚­ãƒ¼ãŒç½®æ›ã•ã‚Œã¾ã—ãŸã€‚";
     Text[ chinese_traditional ] = "æœå°‹é …ç›® XX æ¬¡ä»£æ›¿";
     Text[ arabic ] = "Êã ÇÓÊÈÏÇá ÈíÇäÇÊ ÇáÈÍË ××× ãÑÉ";
@@ -772,9 +844,12 @@ String RID_STR_SEARCHREPLACES
     Text[ chinese_simplified ] = "æ›¿æ¢æœå¯»æ¡ç›® XX æ¬¡";
     Text[ greek ] = "Ï æçôïıìåíïò üñïò áíôéêáôáóôÜèçêå XX öïñİò";
     Text[ korean ] = "ê²€ìƒ‰ í‚¤ë¥¼ XXë²ˆ ë°”ê¿¨ìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Aranan terim XX kez değiştirildi";
+    Text[ turkish ] = "Aranan anahtar kelime XX defa değiştirildi.";
     Text[ catalan ] = "La clau de cerca s'ha reemplaçat XX vegades";
     Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¸„à¸µà¸¢à¹Œà¹à¸—à¸™à¸—à¸µà¹ˆ XX à¸„à¸£à¸±à¹‰à¸‡";
+    Text[ czech ] = "HledanÃ© klÃ­ÄovÃ© slovo bylo XX-krÃ¡t nahrazeno";
+    Text[ hebrew ] = "Suchbegriff XXmal ersetzt";
+    Text[ hindi ] = "à¤–à¥‹à¤œ à¤•à¥€ à¤•à¥‹ XX à¤¬à¤¾à¤° à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤¿à¤¯à¤¾";
 };
 String RID_STR_COULDNTREAD
 {
@@ -787,11 +862,11 @@ String RID_STR_COULDNTREAD
     Text [ french ] = "Impossible de lire le fichier !" ;
     Text [ swedish ] = "Det gick inte att läsa filen" ;
     Text [ danish ] = "Filen kunne ikke læses" ;
-    Text [ portuguese_brazilian ] = "Die Datei konnte nicht gelesen werden" ;
+    Text [ portuguese_brazilian ] = "Não foi possível ler o arquivo" ;
     Text [ portuguese ] = "Foi impossível ler o ficheiro." ;
     Text[ chinese_simplified ] = "æ— æ³•è¯»å–æ–‡ä»¶ã€‚";
     Text[ russian ] = "Íåâîçìîæíî ïğî÷åñòü ôàéë";
-    Text[ polish ] = "Odczytanie pliku nie jest mo¿liwe.";
+    Text[ polish ] = "Plik nie móg³ zostaæ odczytany.";
     Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿å–ã‚ŠãŒã§ãã¾ã›ã‚“ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•è®€å–é€™å€‹æª”æ¡ˆã€‚";
     Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ Çáãáİ";
@@ -803,6 +878,9 @@ String RID_STR_COULDNTREAD
     Text[ catalan ] = "El fitxer no s'ha pogut llegir";
     Text[ finnish ] = "Tiedoston lukeminen ei onnistunut.";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸­à¹ˆà¸²à¸™à¹à¸Ÿà¹‰à¸¡à¹„à¸”à¹‰";
+    Text[ czech ] = "Soubor nelze pÅ™eÄÃ­st";
+    Text[ hebrew ] = "Die Datei konnte nicht gelesen werden";
+    Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤¨à¤¹à¥€à¤‚ à¤ªà¤¢à¤¼ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ ";
 };
 String RID_STR_COULDNTWRITE
 {
@@ -815,11 +893,11 @@ String RID_STR_COULDNTWRITE
     Text [ dutch ] = "Het bestand kan niet worden opgeslagen." ;
     Text [ swedish ] = "Det gick inte att spara filen" ;
     Text [ danish ] = "Filen kunne ikke gemmes" ;
-    Text [ portuguese_brazilian ] = "Die Datei konnte nicht gespeichert werden" ;
+    Text [ portuguese_brazilian ] = "Não foi possível salvar o arquivo" ;
     Text [ portuguese ] = "Foi impossível guardar o ficheiro." ;
     Text[ chinese_simplified ] = "æ— æ³•å­˜ç›˜æ–‡ä»¶ã€‚";
     Text[ russian ] = "Íåâîçìîæíî ñîõğàíèòü ôàéë";
-    Text[ polish ] = "Zapisanie pliku nie jest mo¿liwe.";
+    Text[ polish ] = "Plik nie móg³ zostaæ zapisany.";
     Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã¯ä¿å­˜ã§ãã¾ã›ã‚“ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•å„²å­˜é€™å€‹æª”æ¡ˆã€‚";
     Text[ arabic ] = "ÊÚĞÑ ÍİÙ Çáãáİ";
@@ -827,10 +905,13 @@ String RID_STR_COULDNTWRITE
     Text[ chinese_simplified ] = "æ— æ³•å­˜ç›˜æ–‡ä»¶ã€‚";
     Text[ greek ] = "Äåí Şôáí äõíáôŞ ç áğïèŞêåõóç ôïõ áñ÷åßïõ";
     Text[ korean ] = "íŒŒì¼ì„ ì €ì¥í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Dosya kaydedilemedi";
+    Text[ turkish ] = "Dosya kaydedilemiyor";
     Text[ catalan ] = "El fitxer no s'ha pogut desar";
     Text[ finnish ] = "Tiedoston tallentaminen ei onnistunut.";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸šà¸±à¸™à¸—à¸¶à¸à¹à¸Ÿà¹‰à¸¡à¹„à¸”à¹‰";
+    Text[ czech ] = "Soubor nelze uloÅ¾it";
+    Text[ hebrew ] = "Die Datei konnte nicht gespeichert werden";
+    Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
 };
 String RID_STR_CANNOTCHANGENAMESTDLIB
 {
@@ -839,16 +920,16 @@ String RID_STR_CANNOTCHANGENAMESTDLIB
     Text [ ENGLISH ] = "Cannot change name from standard libary" ;
     Text [ dutch ] = "De naam van de standaardbibliotheek kan niet worden gewijzigd." ;
     Text [ english_us ] = "The name of the default library cannot be changed." ;
-    Text [ italian ] = "Il nome della library standard non può essere modificato" ;
+    Text [ italian ] = "Il nome della libreria standard non può essere modificato" ;
     Text [ spanish ] = "No se puede modificar el nombre de la biblioteca predeterminada" ;
     Text [ french ] = "Impossible de modifier le nom de la bibliothèque par défaut !" ;
     Text [ swedish ] = "Det går inte att ändra standardbibliotekets namn" ;
     Text [ danish ] = "Navnet på standardbiblioteket kan ikke ændres" ;
-    Text [ portuguese_brazilian ] = "Der Name der Standard-Bibliothek kann nicht ge?ndert werden" ;
+    Text [ portuguese_brazilian ] = "Não é possível mudar o nome da biblioteca padrão." ;
     Text [ portuguese ] = "O nome da biblioteca padrão não pode ser alterado." ;
     Text[ chinese_simplified ] = "æ— æ³•æ›´æ”¹æ ‡å‡†ç¨‹åºåº“çš„åç§°ã€‚";
     Text[ russian ] = "Íåâîçìîæíî èçìåíèòü èìÿ ñòàíäàğòíîé áèáëèîòåêè";
-    Text[ polish ] = "Zmiana nazwy biblioteki standardowej nie jest mo¿liwa.";
+    Text[ polish ] = "Zmiana nazwy biblioteki domyœlnej nie jest mo¿liwa.";
     Text[ japanese ] = "æ¨™æº–ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåã®å¤‰æ›´ã¯ã§ãã¾ã›ã‚“ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•è®Šæ›´é€™å€‹æ¨™æº–ç¨‹å¼åº«çš„åç¨±ã€‚";
     Text[ arabic ] = "áÇ íãßä ÊÛííÑ ÇÓã ÇáãßÊÈÉ ÇáÇİÊÑÇÖíÉ";
@@ -856,10 +937,13 @@ String RID_STR_CANNOTCHANGENAMESTDLIB
     Text[ chinese_simplified ] = "æ— æ³•æ›´æ”¹æ ‡å‡†ç¨‹åºåº“çš„åç§°ã€‚";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá áëëÜîåé ôï üíïìá ôçò âáóéêŞò âéâëéïèŞêçò.";
     Text[ korean ] = "ê¸°ë³¸ ë¼ì´ë¸ŒëŸ¬ë¦¬ì˜ ì´ë¦„ì€ ë³€ê²½í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Standart kitaplığın adı değiştirilemez.";
+    Text[ turkish ] = "Öntanımlı kitaplığın adı değiştirilemez.";
     Text[ catalan ] = "El nom de la biblioteca per defecte no es pot canviar.";
     Text[ finnish ] = "Oletuskirjaston nimeä ei voi muuttaa.";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹„à¸¥à¸šà¸£à¸²à¸£à¸µà¹„à¸”à¹‰";
+    Text[ czech ] = "NÃ¡zev vÃ½chozÃ­ knihovny nelze zmÄ›nit.";
+    Text[ hebrew ] = "Der Name der Standard-Bibliothek kann nicht geÃ¤ndert werden";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€ à¤•à¤¾ à¤¨à¤¾à¤® à¤¨à¤¹à¥€à¤‚ à¤¬à¤¦à¤² à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
 };
 String RID_STR_CANNOTCHANGENAMEREFLIB
 {
@@ -868,16 +952,16 @@ String RID_STR_CANNOTCHANGENAMEREFLIB
     Text [ ENGLISH ] = "Cannot change name from referenced libary" ;
     Text [ dutch ] = "De naam van een bibliotheek met een verwijzing kan niet worden gewijzigd." ;
     Text [ english_us ] = "The name of a referenced library cannot be changed." ;
-    Text [ italian ] = "Il nome di una library alla quale si fa riferimento non può essere cambiato" ;
+    Text [ italian ] = "Il nome di una libreria alla quale si fa riferimento non può essere cambiato" ;
     Text [ spanish ] = "No se puede modificar el nombre de una biblioteca referenciada" ;
     Text [ french ] = "Impossible de modifier le nom d'une bibliothèque référencée !" ;
     Text [ swedish ] = "Det går inte att ändra namnet på ett referensbibliotek" ;
     Text [ danish ] = "Navnet på et angivet standardbibliotek kan ikke ændres" ;
-    Text [ portuguese_brazilian ] = "Der Name einer referenzierten Bibliothek kann nicht ge?ndert werden" ;
+    Text [ portuguese_brazilian ] = "Não é possível mudar o nome de uma biblioteca referenciada." ;
     Text [ portuguese ] = "É impossível alterar o nome de uma biblioteca de referência." ;
     Text[ chinese_simplified ] = "æ— æ³•æ›´æ”¹å¼•ç”¨ç¨‹åºåº“çš„åç§°ã€‚";
     Text[ russian ] = "Íåâîçìîæíî èçìåíèòü èìÿ áèáëèîòåêè, íà êîòîğóş èìååòñÿ ññûëêà.";
-    Text[ polish ] = "Nazwy biblioteki, do której siê odwo³ano, nie mo¿na zmieniæ.";
+    Text[ polish ] = "Zmiana nazwy biblioteki, do której siê odwo³ano, nie jest mo¿liwa.";
     Text[ japanese ] = "å‚ç…§å…ˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªåã®å¤‰æ›´ã¯ã§ãã¾ã›ã‚“ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•è®Šæ›´åƒç…§ç¨‹å¼åº«çš„åç¨±ã€‚";
     Text[ arabic ] = ".áÇ íãßä ÊÛííÑ ÇÓã ãßÊÈÉ ãÑÌÚíÉ";
@@ -885,27 +969,30 @@ String RID_STR_CANNOTCHANGENAMEREFLIB
     Text[ chinese_simplified ] = "æ— æ³•æ›´æ”¹å¼•ç”¨ç¨‹åºåº“çš„åç§°ã€‚";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá áëëÜîåé ôï üíïìá ìéáò âéâëéïèŞêçò ç ïğïßá åßíáé ğñïïñéóìüò êÜğïéáò áíáöïñÜò";
     Text[ korean ] = "ì°¸ì¡°ëœ ë¼ì´ë¸ŒëŸ¬ë¦¬ì˜ ì´ë¦„ì€ ë³€ê²½í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Referans alınan bir kitaplığın adı değiştirilemez.";
+    Text[ turkish ] = "Verilen kütüphanenin ismi değiştirilemedi.";
     Text[ catalan ] = "El nom de una biblioteca referenciada no es pot canviar.";
     Text[ finnish ] = "Viitekirjaston nimeä ei voi muuttaa.";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­à¹„à¸¥à¸šà¸£à¸²à¸£à¸µà¸—à¸µà¹ˆà¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¹„à¸”à¹‰";
+    Text[ czech ] = "NÃ¡zev odkazovanÃ© knihovny nelze zmÄ›nit.";
+    Text[ hebrew ] = "Der Name einer referenzierten Bibliothek kann nicht geÃ¤ndert werden";
+    Text[ hindi ] = "à¤°à¥‡à¤«à¤°à¥‡à¤¨à¥à¤¸ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€ à¤•à¤¾ à¤¨à¤¾à¤® à¤¨à¤¹à¥€à¤‚ à¤¬à¤¦à¤² à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
 };
 String RID_STR_CANNOTUNLOADSTDLIB
 {
     Text = "Die Standard-Bibliothek kann nicht deaktiviert werden" ;
     Text [ ENGLISH ] = "The standard libary cannot be deactivated" ;
     Text [ english_us ] = "The default library cannot be deactivated" ;
-    Text [ italian ] = "La library standard non può essere disattivata" ;
+    Text [ italian ] = "La libreria standard non può essere disattivata" ;
     Text [ spanish ] = "No se puede desactivar la biblioteca predeterminada" ;
     Text [ french ] = "Impossible de désactiver la bibliothèque par défaut !" ;
     Text [ dutch ] = "De standaardbibliotheek kan niet worden gedeactiveerd." ;
     Text [ swedish ] = "Det går inte att deaktivera standardbiblioteket" ;
     Text [ danish ] = "Standardbiblioteket kan ikke deaktiveres" ;
-    Text [ portuguese_brazilian ] = "Die Standard-Bibliothek kann nicht deaktiviert werden" ;
+    Text [ portuguese_brazilian ] = "A biblioteca padrão não pode ser desativada." ;
     Text [ portuguese ] = "É impossível desactivar a biblioteca padrão." ;
     Text[ chinese_simplified ] = "æ— æ³•å…³é—­æ ‡å‡†ç¨‹åºåº“";
     Text[ russian ] = "Íåâîçìîæíî äåàêòèâèğîâàòü ñòàíäàğòíóş áèáëèîòåêó";
-    Text[ polish ] = "Standardowej biblioteki nie mo¿na by³o zdeaktywowaæ.";
+    Text[ polish ] = "Nie mo¿na dezaktywowaæ biblioteki domyœlnej.";
     Text[ japanese ] = "æ¨™æº–ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•é—œé–‰é€™å€‹æ¨™æº–ç¨‹å¼åº«";
     Text[ arabic ] = "áÇ íãßä ÅáÛÇÁ ÊäÔíØ ÇáãßÊÈÉ ÇáÇİÊÑÇÖíÉ";
@@ -913,10 +1000,13 @@ String RID_STR_CANNOTUNLOADSTDLIB
     Text[ chinese_simplified ] = "æ— æ³•å…³é—­æ ‡å‡†ç¨‹åºåº“";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá áğåíåñãïğïéçèåß ç âáóéêŞ âéâëéïèŞêç";
     Text[ korean ] = "ê¸°ë³¸ ë¼ì´ë¸ŒëŸ¬ë¦¬ë¥¼ ë¹„í™œì„±í™”í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Standart kitaplığın etkinliği kaldırılımaz.";
+    Text[ turkish ] = "Öntanımlı kitaplığın etkinliği kaldırılamaz.";
     Text[ catalan ] = "La biblioteca per defecte no es pot desactivar";
     Text[ finnish ] = "Oletuskirjaston käytöstä poisto ei onnistu.";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸à¸´à¸à¸–à¸­à¸™à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹„à¸¥à¸šà¸£à¸²à¸£à¸µà¹„à¸”à¹‰";
+    Text[ czech ] = "VÃ½chozÃ­ knihovnu nelze deaktivovat";
+    Text[ hebrew ] = "Die Standard-Bibliothek kann nicht deaktiviert werden";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€ à¤•à¥‹ à¤¨à¤¿à¤·à¥à¤•à¥à¤°à¤¿à¤¯ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ  ";
 };
 String RID_STR_GENERATESOURCE
 {
@@ -929,11 +1019,11 @@ String RID_STR_GENERATESOURCE
     Text [ dutch ] = "Brontekst maken" ;
     Text [ swedish ] = "Skapa källtext" ;
     Text [ danish ] = "Genererer kildetekst" ;
-    Text [ portuguese_brazilian ] = "Erzeuge Quelltext" ;
+    Text [ portuguese_brazilian ] = "Gerando código fonte" ;
     Text [ portuguese ] = "A criar texto-fonte" ;
     Text[ chinese_simplified ] = "ç”Ÿæˆæºæ–‡æœ¬";
     Text[ russian ] = "Ñîçäàòü èñõîäíûé òåêñò";
-    Text[ polish ] = "Utwórz tekst Ÿród³owy";
+    Text[ polish ] = "Generowanie tekstu Ÿród³owego";
     Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ";
     Text[ chinese_traditional ] = "å»ºç«‹åŸå§‹æª”";
     Text[ arabic ] = "ÅäÔÇÁ äÕ ãÕÏÑ";
@@ -941,10 +1031,13 @@ String RID_STR_GENERATESOURCE
     Text[ chinese_simplified ] = "ç”Ÿæˆæºæ–‡æœ¬";
     Text[ greek ] = "Äçìéïõñãßá êåéìİíïõ ğñïİëåõóçò";
     Text[ korean ] = "ì›ë³¸ í…ìŠ¤íŠ¸ ìƒì„±";
-    Text[ turkish ] = "Kaynak kod oluşturuluyor";
+    Text[ turkish ] = "Kaynak kodu oluştur";
     Text[ catalan ] = "S'està generant la font";
     Text[ finnish ] = "Luodaan lähde";
     Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸—à¸µà¹ˆà¸¡à¸²";
+    Text[ czech ] = "Generuji zdroj";
+    Text[ hebrew ] = "Erzeuge Quelltext";
+    Text[ hindi ] = "à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¤¨à¥‡ à¤•à¤¾ à¤®à¥‚à¤² ";
 };
 String RID_STR_FILENAME
 {
@@ -957,11 +1050,11 @@ String RID_STR_FILENAME
     Text [ french ] = "Nom de fichier : " ;
     Text [ swedish ] = "Filnamn:   " ;
     Text [ danish ] = "Filnavn: " ;
-    Text [ portuguese_brazilian ] = "Dateiname: " ;
+    Text [ portuguese_brazilian ] = "Nome do arquivo:" ;
     Text [ portuguese ] = "Nome do ficheiro:  " ;
     Text[ chinese_simplified ] = "æ–‡ä»¶åï¼š ";
     Text[ russian ] = "Èìÿ ôàéëà: ";
-    Text[ polish ] = "Nazwa pliku: ";
+    Text[ polish ] = "Nazwa pliku:";
     Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«å: ";
     Text[ chinese_traditional ] = "æª”æ¡ˆå: ";
     Text[ arabic ] = ":ÇÓã Çáãáİ";
@@ -969,10 +1062,13 @@ String RID_STR_FILENAME
     Text[ chinese_simplified ] = "æ–‡ä»¶åï¼š ";
     Text[ greek ] = "¼íïìá áñ÷åßïõ: ";
     Text[ korean ] = "íŒŒì¼ ì´ë¦„: ";
-    Text[ turkish ] = "Dosya adı: ";
+    Text[ turkish ] = "Dosya adı:";
     Text[ catalan ] = "Nom del fitxer:";
     Text[ finnish ] = "Tiedoston nimi:";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹à¸Ÿà¹‰à¸¡:";
+    Text[ czech ] = "NÃ¡zev souboru:";
+    Text[ hebrew ] = "â€®×©× ×§×•×‘×¥:â€¬";
+    Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤¨à¤¾à¤®:";
 };
 String RID_STR_APPENDLIBS
 {
@@ -980,17 +1076,17 @@ String RID_STR_APPENDLIBS
     Text = "Bibliotheken hinzufügen" ;
     Text [ ENGLISH ] = "Append libaries" ;
     Text [ english_us ] = "Append Libraries" ;
-    Text [ italian ] = "Aggiungi library" ;
+    Text [ italian ] = "Aggiungi libreria" ;
     Text [ spanish ] = "Añadir bibliotecas" ;
     Text [ french ] = "Ajouter des bibliothèques" ;
     Text [ dutch ] = "Bibliotheken toevoegen" ;
     Text [ swedish ] = "Lägg till bibliotek" ;
     Text [ danish ] = "Tilføj biblioteker" ;
-    Text [ portuguese_brazilian ] = "Bibliotheken hinzuf?en" ;
+    Text [ portuguese_brazilian ] = "Anexar Bibliotecas" ;
     Text [ portuguese ] = "Inserir bibliotecas" ;
     Text[ chinese_simplified ] = "æ–°å¢ç¨‹åºåº“";
     Text[ russian ] = "Äîáàâèòü áèáëèîòåêè";
-    Text[ polish ] = "Dodaj biblioteki";
+    Text[ polish ] = "Do³¹cz biblioteki";
     Text[ japanese ] = "ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®è¿½åŠ ";
     Text[ chinese_traditional ] = "æ–°å¢ç¨‹å¼åº«";
     Text[ arabic ] = "ÅáÍÇŞ ãßÊÈÇÊ";
@@ -998,10 +1094,13 @@ String RID_STR_APPENDLIBS
     Text[ chinese_simplified ] = "æ–°å¢ç¨‹åºåº“";
     Text[ greek ] = "ĞñïóèŞêç âéâëéïèçêşí";
     Text[ korean ] = "ë¼ì´ë¸ŒëŸ¬ë¦¬ ì¶”ê°€";
-    Text[ turkish ] = "Kitaplık ekle";
+    Text[ turkish ] = "Kitaplıkları ekle";
     Text[ catalan ] = "Afegeix biblioteques";
     Text[ finnish ] = "Liitä kirjastot";
     Text[ thai ] = "à¸œà¸™à¸§à¸à¹„à¸¥à¸šà¸£à¸²à¸£à¸µ";
+    Text[ czech ] = "PÅ™ipojit knihovny";
+    Text[ hebrew ] = "Bibliotheken hinzufÃ¼gen";
+    Text[ hindi ] = "à¤²à¥ˆà¤¬à¥à¤°à¤°à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¥‹";
 };
 String RID_STR_QUERYDELMACRO
 {
@@ -1015,11 +1114,11 @@ String RID_STR_QUERYDELMACRO
     Text [ dutch ] = "Wilt u de macro XX wissen?" ;
     Text [ swedish ] = "Vill du radera makrot XX ?" ;
     Text [ danish ] = "Vil du slette makroen XX?" ;
-    Text [ portuguese_brazilian ] = "M?hten Sie das Makro XX l?chen ?" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir a macro XX ?" ;
     Text [ portuguese ] = "Deseja eliminar a macro XX ?" ;
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤å® XX ï¼Ÿ";
     Text[ russian ] = "Óäàëèòü ìàêğîñ XX ?";
-    Text[ polish ] = "Czy usun¹æ makro XX?";
+    Text[ polish ] = "Czy chcesz usun¹æ makro XX?";
     Text[ japanese ] = "ãƒã‚¯ãƒ­ XX ã‚’å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
     Text[ chinese_traditional ] = "æ‚¨è¦åˆªé™¤é€™å€‹å·¨é›† XX ï¹–";
     Text[ arabic ] = "¿ XX åá ÊÑíÏ ÍĞİ ÇáãÇßÑæ";
@@ -1027,10 +1126,13 @@ String RID_STR_QUERYDELMACRO
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤å® XX ï¼Ÿ";
     Text[ greek ] = "Èİëåôå íá äéáãñáöåß ç ìáêñïåíôïëŞ ××;";
     Text[ korean ] = "ë§¤í¬ë¡œ XXì„(ë¥¼ï¼‰ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ turkish ] = "XX makrosunu silmek istiyor musunuz?";
+    Text[ turkish ] = "XX macrosunu silmek istermisiniz ?";
     Text[ catalan ] = "Voleu suprimir la macro XX?";
     Text[ finnish ] = "Haluatko poistaa makron XX?";
     Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¸¡à¸²à¹‚à¸„à¸£ XX à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ ?";
+    Text[ czech ] = "PÅ™ejete si smazat XX?";
+    Text[ hebrew ] = "MÃ¶chten Sie das Makro XX lÃ¶schen ?";
+    Text[ hindi ] = "à¤†à¤ª à¤®à¥‰à¤•à¥à¤°à¥‹ XX à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ ?";
 };
 String RID_STR_QUERYDELDIALOG
 {
@@ -1044,11 +1146,11 @@ String RID_STR_QUERYDELDIALOG
     Text [ french ] = "Voulez-vous supprimer la boîte de dialogue XX ?" ;
     Text [ swedish ] = "Vill du radera dialogrutan XX?" ;
     Text [ danish ] = "Vil du slette dialogen XX?" ;
-    Text [ portuguese_brazilian ] = "M?hten Sie den Dialog XX l?chen ?" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir o diálogo XX ?" ;
     Text [ portuguese ] = "Deseja eliminar o diálogo XX ?" ;
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤å¯¹è¯ XX ï¼Ÿ";
     Text[ russian ] = "Óäàëèòü äèàëîã XX ?";
-    Text[ polish ] = "Czy usun¹æ dialog XX?";
+    Text[ polish ] = "Czy chcesz usun¹æ okno dialogowe XX?";
     Text[ japanese ] = "ãƒ€ã‚¤ã‚¢ãƒ­ã‚° XX ã‚’å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
     Text[ chinese_traditional ] = "æ‚¨è¦åˆªé™¤å°è©± XX ï¹–";
     Text[ arabic ] = "¿ XX åá ÊÑíÏ ÍĞİ ãÑÈÚ ÇáÍæÇÑ";
@@ -1056,10 +1158,13 @@ String RID_STR_QUERYDELDIALOG
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤å¯¹è¯ XX ï¼Ÿ";
     Text[ greek ] = "Èİëåôå íá äéáãñáöåß ï äéÜëïãïò ××;";
     Text[ korean ] = "ëŒ€í™” ìƒì XXì„(ë¥¼ï¼‰ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ turkish ] = "XX diyaloğunu silmek istiyor musunuz?";
+    Text[ turkish ] = "XX diyaloğunu silmek istermisiniz ?";
     Text[ catalan ] = "Voleu suprimir el diàleg XX?";
     Text[ finnish ] = "Haluatko poistaa valintaikkunan XX?";
     Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸ XX à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Text[ czech ] = "PÅ™ejete si smazat dialog XX?";
+    Text[ hebrew ] = "MÃ¶chten Sie den Dialog XX lÃ¶schen ?";
+    Text[ hindi ] = "à¤†à¤ª à¤¡à¤¯à¤²à¥‰à¤— XX à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ  ?";
 };
 String RID_STR_QUERYDELLIB
 {
@@ -1067,17 +1172,17 @@ String RID_STR_QUERYDELLIB
     Text = "Möchten Sie die Bibliothek XX löschen ?" ;
     Text [ ENGLISH ] = "Do you want to delete the libary XX" ;
     Text [ english_us ] = "Do you want to delete the XX library?" ;
-    Text [ italian ] = "Volete eliminare la library XX ?" ;
+    Text [ italian ] = "Volete eliminare la libreria XX ?" ;
     Text [ spanish ] = "¿Desea borrar la biblioteca XX?" ;
     Text [ french ] = "Voulez-vous supprimer la bibliothèque XX ?" ;
     Text [ dutch ] = "Wilt u de bibliotheek XX wissen?" ;
     Text [ swedish ] = "Vill du radera biblioteket XX ?" ;
     Text [ danish ] = "Vil du slette biblioteket XX?" ;
-    Text [ portuguese_brazilian ] = "M?hten Sie die Bibliothek XX l?chen ?" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir a biblioteca XX ?" ;
     Text [ portuguese ] = "Deseja eliminar a biblioteca XX ?" ;
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤ç¨‹åºåº“ XX ï¼Ÿ";
     Text[ russian ] = "Óäàëèòü áèáëèîòåêó XX ?";
-    Text[ polish ] = "Czy usun¹æ bibliotekê XX?";
+    Text[ polish ] = "Czy chcesz usun¹æ bibliotekê XX?";
     Text[ japanese ] = "ãƒ©ã‚¤ãƒ–ãƒ©ãƒª XX ã‚’å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
     Text[ chinese_traditional ] = "æ‚¨è¦åˆªé™¤é€™å€‹ç¨‹å¼åº« XX ï¹–";
     Text[ arabic ] = "¿ XX åá ÊÑíÏ ÍĞİ ÇáãßÊÈÉ";
@@ -1085,10 +1190,13 @@ String RID_STR_QUERYDELLIB
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤ç¨‹åºåº“ XX ï¼Ÿ";
     Text[ greek ] = "Èİëåôå íá äéáãñáöåß ç âéâëéïèŞêç ××;";
     Text[ korean ] = "ë¼ì´ë¸ŒëŸ¬ë¦¬ XXì„(ë¥¼) ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ turkish ] = "XX kitaplığını silmek istiyor musunuz?";
+    Text[ turkish ] = "XX kütüphanesini silmek istiyor musunuz?";
     Text[ catalan ] = "Voleu suprimir la biblioteca XX?";
     Text[ finnish ] = "Haluatko poistaa kirjaston XX?";
     Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¹„à¸¥à¸šà¸£à¸²à¸£à¸µ XX à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Text[ czech ] = "PÅ™ejete si smazat knihovnu XX?";
+    Text[ hebrew ] = "MÃ¶chten Sie die Bibliothek XX lÃ¶schen ?";
+    Text[ hindi ] = "à¤†à¤ª à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€ XX à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ  ?";
 };
 String RID_STR_QUERYDELLIBREF
 {
@@ -1096,17 +1204,17 @@ String RID_STR_QUERYDELLIBREF
     Text = "Möchten Sie die Referenz auf die Bibliothek XX löschen ?" ;
     Text [ ENGLISH ] = "Do you want to delete the reference to the libary XX ?" ;
     Text [ english_us ] = "Do you want to delete the reference to the XX library?" ;
-    Text [ italian ] = "Volete cancellare il riferimento alla library XX ?" ;
+    Text [ italian ] = "Volete cancellare il riferimento alla libreria XX ?" ;
     Text [ spanish ] = "¿Desea borrar la referencia a la biblioteca XX?" ;
     Text [ french ] = "Voulez-vous supprimer la référence à la bibliothèque XX ?" ;
     Text [ dutch ] = "Wilt u de verwijzing naar de bibliotheek XX wissen?" ;
     Text [ swedish ] = "Vill du radera referensen till biblioteket XX ?" ;
     Text [ danish ] = "Vil du slette referencen til biblioteket XX?" ;
-    Text [ portuguese_brazilian ] = "M?hten Sie die Referenz auf die Bibliothek XX l?chen ?" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir a referência à biblioteca XX ?" ;
     Text [ portuguese ] = "Deseja eliminar a referência à biblioteca XX ?" ;
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤ç¨‹åºåº“ XX çš„å¼•ç”¨ï¼Ÿ";
     Text[ russian ] = "Óäàëèòü ññûëêó íà áèáëèîòåêó XX ?";
-    Text[ polish ] = "Czy usun¹æ odwo³anie do bibliotekiXX?";
+    Text[ polish ] = "Czy chcesz usun¹æ odwo³anie do biblioteki XX?";
     Text[ japanese ] = "ãƒ©ã‚¤ãƒ–ãƒ©ãƒª XX ã¸ã®å‚ç…§å…ˆã‚’å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
     Text[ chinese_traditional ] = "æ‚¨è¦åˆªé™¤ç¨‹å¼åº« XX çš„åƒç…§ï¹–";
     Text[ arabic ] = "¿ XX åá ÊÑíÏ ÍĞİ ÇáãÑÌÚ Åáì ÇáãßÊÈÉ";
@@ -1114,10 +1222,13 @@ String RID_STR_QUERYDELLIBREF
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤ç¨‹åºåº“ XX çš„å¼•ç”¨ï¼Ÿ";
     Text[ greek ] = "Èİëåôå íá äéáãñáöåß ç áíáöïñÜ ğñïò ôç âéâëéïèŞêç ××;";
     Text[ korean ] = "ë¼ì´ë¸ŒëŸ¬ë¦¬ XXë¡œì˜ ì°¸ì¡°ë¥¼ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ turkish ] = "XX kitaplığına ilişkin referansı silmek istiyor musunuz?";
+    Text[ turkish ] = "XX kütüphanesi referansını silmek istermisiniz?";
     Text[ catalan ] = "Voleu suprimir la referència a la biblioteca XX?";
     Text[ finnish ] = "Haluatko poistaa viittauksen kirjastoon XX?";
     Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¸à¸²à¸£à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¹„à¸›à¸¢à¸±à¸‡à¹„à¸¥à¸šà¸£à¸²à¸£à¸µ XX à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Text[ czech ] = "PÅ™ejete si smazat odkaz na knihovnu XX?";
+    Text[ hebrew ] = "MÃ¶chten Sie die Referenz auf die Bibliothek XX lÃ¶schen ?";
+    Text[ hindi ] = "à¤†à¤ª à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€ XX à¤•à¤¾ à¤°à¥‡à¤«à¤°à¥‡à¤¨à¥à¤¸ à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ ?";
 };
 String RID_STR_QUERYDELMODULE
 {
@@ -1131,11 +1242,11 @@ String RID_STR_QUERYDELMODULE
     Text [ dutch ] = "Wilt u de module XX wissen?" ;
     Text [ swedish ] = "Vill du radera modulen XX ?" ;
     Text [ danish ] = "Vil du slette modulet XX?" ;
-    Text [ portuguese_brazilian ] = "M?hten Sie das Modul XX l?chen ?" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir o módulo XX ?" ;
     Text [ portuguese ] = "Deseja eliminar o módulo XX ?" ;
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤æ¨¡å— XX ï¼Ÿ";
     Text[ russian ] = "Óäàëèòü ìîäóëü XX ?";
-    Text[ polish ] = "Czy usun¹æ modu³ XX?";
+    Text[ polish ] = "Czy chcesz usun¹æ modu³ XX?";
     Text[ japanese ] = "ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ« XX ã‚’å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
     Text[ chinese_traditional ] = "æ‚¨è¦åˆªé™¤é€™å€‹æ¨¡å¡Š XX ï¹–";
     Text[ arabic ] = "¿ XX åá ÊÑíÏ ÍĞİ ÇáæÍÏÉ ÇáäãØíÉ";
@@ -1143,10 +1254,13 @@ String RID_STR_QUERYDELMODULE
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤æ¨¡å— XX ï¼Ÿ";
     Text[ greek ] = "Èİëåôå íá äéáãñáöåß ç ëåéôïõñãéêŞ ìïíÜäá XX;";
     Text[ korean ] = "ëª¨ë“ˆ XXì„(ë¥¼) ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ turkish ] = "XX modülünü silmek istiyor musunuz?";
+    Text[ turkish ] = "XX modülünü silmek istediğinizden emin misiniz?";
     Text[ catalan ] = "Voleu suprimir el mòdul XX?";
     Text[ finnish ] = "Haluatko poistaa moduulin XX?";
     Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¹‚à¸¡à¸”à¸¹à¸¥ XX à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Text[ czech ] = "PÅ™ejete si smazat modul XX?";
+    Text[ hebrew ] = "MÃ¶chten Sie das Modul XX lÃ¶schen ?";
+    Text[ hindi ] = "à¤†à¤ª à¤®à¥‹à¤¡à¥à¤¯à¥‚à¤² XX à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ ?";
 };
 String RID_STR_OBJNOTFOUND
 {
@@ -1159,11 +1273,11 @@ String RID_STR_OBJNOTFOUND
     Text [ french ] = "Impossible de détecter l'objet ou méthode !" ;
     Text [ swedish ] = "Objekt eller metod hittades inte" ;
     Text [ danish ] = "Objektet eller metoden blev ikke fundet" ;
-    Text [ portuguese_brazilian ] = "Objekt oder Methode nicht gefunden" ;
+    Text [ portuguese_brazilian ] = "Objeto ou método não encontrado" ;
     Text [ portuguese ] = "Impossível encontrar objecto ou método." ;
     Text[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°å¯¹è±¡æˆ–æ–¹æ³•ã€‚";
     Text[ russian ] = "Îáúåêò èëè ìåòîä íå íàéäåí";
-    Text[ polish ] = "Obiektu lub metody nie znaleziono.";
+    Text[ polish ] = "Nie znaleziono obiektu lub metody.";
     Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¾ãŸã¯ãƒ¡ã‚½ãƒƒãƒ‰ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚";
     Text[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°ç‰©ä»¶æˆ–æ–¹æ³•ã€‚";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáßÇÆä Ãæ ÇáÃÓáæÈ";
@@ -1171,10 +1285,13 @@ String RID_STR_OBJNOTFOUND
     Text[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°å¯¹è±¡æˆ–æ–¹æ³•ã€‚";
     Text[ greek ] = "Äåí âñİèçêå ôï áíôéêåßìåíï Ş ç ìİèïäïò";
     Text[ korean ] = "ê°œì²´ ë˜ëŠ” ë©”ì†Œë“œë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Nesne ya da yöntem bulunamadı";
+    Text[ turkish ] = "Nesne yada metod bulunamadı";
     Text[ catalan ] = "No s'ha trobat l'objecte o el mètode";
     Text[ finnish ] = "Objektia tai menetelmää ei löytynyt.";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸à¸šà¸§à¸±à¸•à¸–à¸¸à¸«à¸£à¸·à¸­à¸§à¸´à¸˜à¸µà¸à¸²à¸£";
+    Text[ czech ] = "Objekt nebo metoda nenalezeny";
+    Text[ hebrew ] = "Objekt oder Methode nicht gefunden";
+    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤…à¤¥à¤µà¤¾ à¤®à¥‡à¤¥à¤¡ à¤¨à¤¹à¥€à¤‚ à¤®à¤¿à¤²à¤¾";
 };
 String RID_STR_BASIC
 {
@@ -1203,6 +1320,9 @@ String RID_STR_BASIC
     Text[ catalan ] = "BASIC";
     Text[ finnish ] = "BASIC";
     Text[ thai ] = "BASIC";
+    Text[ czech ] = "BASIC";
+    Text[ hebrew ] = "BASIC";
+    Text[ hindi ] = "BASIC";
 };
 String RID_STR_LINE
 {
@@ -1216,11 +1336,11 @@ String RID_STR_LINE
     Text [ dutch ] = "Rg" ;
     Text [ swedish ] = "Ln" ;
     Text [ danish ] = "Zl" ;
-    Text [ portuguese_brazilian ] = "Zl" ;
+    Text [ portuguese_brazilian ] = "Lin" ;
     Text [ portuguese ] = "Ln" ;
     Text[ chinese_simplified ] = "è¡Œ";
     Text[ russian ] = "Ñòğ";
-    Text[ polish ] = "Wie";
+    Text[ polish ] = "w.";
     Text[ japanese ] = "è¡Œ";
     Text[ chinese_traditional ] = "è¡Œ";
     Text[ arabic ] = "ÓØÑ";
@@ -1228,11 +1348,14 @@ String RID_STR_LINE
     Text[ chinese_simplified ] = "è¡Œ";
     Text[ greek ] = "Ãñ";
     Text[ korean ] = "í–‰";
-    Text[ turkish ] = "Sa.";
+    Text[ turkish ] = "Ln";
     Text[ language_user1 ] = "TSM:; TSM: 11/9/00 This entry denotes Zeile - Zl";
     Text[ catalan ] = "Ln";
     Text[ finnish ] = "Rv";
     Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”";
+    Text[ czech ] = "Å˜Ã¡dek";
+    Text[ hebrew ] = "Zl";
+    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾";
 };
 String RID_STR_COLUMN
 {
@@ -1246,11 +1369,11 @@ String RID_STR_COLUMN
     Text [ french ] = "Col" ;
     Text [ swedish ] = "Kol" ;
     Text [ danish ] = "Sp" ;
-    Text [ portuguese_brazilian ] = "Sp" ;
+    Text [ portuguese_brazilian ] = "Col" ;
     Text [ portuguese ] = "Col" ;
     Text[ chinese_simplified ] = "åˆ—";
     Text[ russian ] = "Ñòëá";
-    Text[ polish ] = "Kol";
+    Text[ polish ] = "kol.";
     Text[ japanese ] = "åˆ—";
     Text[ chinese_traditional ] = "æ¬„";
     Text[ arabic ] = "ÚãæÏ";
@@ -1258,10 +1381,13 @@ String RID_STR_COLUMN
     Text[ chinese_simplified ] = "åˆ—";
     Text[ greek ] = "Óô";
     Text[ korean ] = "ì—´";
-    Text[ turkish ] = "Sü.";
+    Text[ turkish ] = "Meteor";
     Text[ catalan ] = "Col";
     Text[ finnish ] = "Sar";
     Text[ thai ] = "à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+    Text[ czech ] = "Sloupec";
+    Text[ hebrew ] = "Sp";
+    Text[ hindi ] = "à¤¸à¥à¤¤à¤‚à¤­";
 };
 String RID_STR_DOC
 {
@@ -1274,7 +1400,7 @@ String RID_STR_DOC
     Text [ dutch ] = "Document" ;
     Text [ swedish ] = "Dokument" ;
     Text [ danish ] = "Dokument" ;
-    Text [ portuguese_brazilian ] = "Dokument" ;
+    Text [ portuguese_brazilian ] = "Documento" ;
     Text [ portuguese ] = "Documento" ;
     Text[ chinese_simplified ] = "æ–‡æ¡£";
     Text[ russian ] = "Äîêóìåíò";
@@ -1290,6 +1416,9 @@ String RID_STR_DOC
     Text[ catalan ] = "Document";
     Text[ finnish ] = "Asiakirja";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£";
+    Text[ czech ] = "Dokument";
+    Text[ hebrew ] = "Dokument";
+    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°";
 };
 String RID_BASICIDE_OBJECTBAR
 {
@@ -1297,7 +1426,7 @@ String RID_BASICIDE_OBJECTBAR
     Text [ ENGLISH ] = "Macro-Bar" ;
     Text [ norwegian ] = "Macro-Bar" ;
     Text [ italian ] = "Barra delle macro" ;
-    Text [ portuguese_brazilian ] = "Barra-Macro" ;
+    Text [ portuguese_brazilian ] = "Barra de Macros" ;
     Text [ portuguese ] = "Barra de macros" ;
     Text [ finnish ] = "Makrorivi" ;
     Text [ danish ] = "Makrolinje" ;
@@ -1308,7 +1437,7 @@ String RID_BASICIDE_OBJECTBAR
     Text [ english_us ] = "Macro Bar" ;
     Text[ chinese_simplified ] = "å®æ ";
     Text[ russian ] = "Ïàíåëü ìàêğîñîâ";
-    Text[ polish ] = "Pasek makro";
+    Text[ polish ] = "Pasek makra";
     Text[ japanese ] = "ãƒã‚¯ãƒ­ãƒãƒ¼";
     Text[ chinese_traditional ] = "å·¨é›†åˆ—";
     Text[ arabic ] = "ÔÑíØ ãÇßÑæ";
@@ -1316,9 +1445,12 @@ String RID_BASICIDE_OBJECTBAR
     Text[ chinese_simplified ] = "å®æ ";
     Text[ greek ] = "ÃñáììŞ ìáêñïåíôïëŞò";
     Text[ korean ] = "ë§¤í¬ë¡œ ëª¨ìŒ";
-    Text[ turkish ] = "Makro çubuğu";
+    Text[ turkish ] = "Macro Çubuğu";
     Text[ catalan ] = "Barra de macros";
     Text[ thai ] = "à¹à¸–à¸šà¸¡à¸²à¹‚à¸„à¸£";
+    Text[ czech ] = "Panel maker";
+    Text[ hebrew ] = "Makro-Leiste";
+    Text[ hindi ] = "à¤®à¥‰à¤•à¥à¤°à¥‹ à¤ªà¤Ÿà¥à¤Ÿà¥€";
 };
 String RID_STR_CANNOTCLOSE
 {
@@ -1327,7 +1459,7 @@ String RID_STR_CANNOTCLOSE
     Text [ ENGLISH ] = "The window can't be closed while BASIC is running" ;
     Text [ norwegian ] = "The window can't be closed while BASIC is running" ;
     Text [ italian ] = "La finestra non può essere chiusa mentre\n il programma BASIC è in esecuzione." ;
-    Text [ portuguese_brazilian ] = "A janela n?o pode ser fechada enquanto o BASIC estiver rodando" ;
+    Text [ portuguese_brazilian ] = "A janela não pode ser fechada enquanto o BASIC estiver executando." ;
     Text [ portuguese ] = "A janela não pode ser fechada enquanto o \nBASIC estiver a ser executado." ;
     Text [ finnish ] = "Ikkunaa ei voi sulkea, kun BASIC on käynnissä." ;
     Text [ danish ] = "Vinduet kan ikke lukkes,\nmens BASIC-programmet kører." ;
@@ -1338,7 +1470,7 @@ String RID_STR_CANNOTCLOSE
     Text [ english_us ] = "The window cannot be closed while BASIC is running." ;
     Text[ chinese_simplified ] = "åœ¨ BASIC ç¨‹åºè¿è¡Œæ—¶\næ— æ³•å…³é—­çª—å£ã€‚";
     Text[ russian ] = "Çàêğûòü îêíî íåâîçìîæíî,\nïîêà BASIC ïğîãğàììà âûïîëíÿåòñÿ.";
-    Text[ polish ] = "Okna nie mo¿na by³o zamkn¹æ,\nprzy uruchomionym programie BASIC.";
+    Text[ polish ] = "Nie mo¿na zamkn¹æ okna, gdy dzia³a BASIC.";
     Text[ japanese ] = "BASIC ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®å®Ÿè¡Œä¸­ã¯ã€ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‰ã˜ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚";
     Text[ chinese_traditional ] = "åœ¨ BASIC ç¨‹å¼é‹è¡Œæ™‚\nç„¡æ³•é—œé–‰è¦–çª—ã€‚";
     Text[ arabic ] = "áÇ íãßä ÅÛáÇŞ ÇáäÇİĞÉ¡\nÈíäãÇ ÈÑäÇãÌ BASIC ŞíÏ ÇáÊÔÛíá.";
@@ -1346,26 +1478,29 @@ String RID_STR_CANNOTCLOSE
     Text[ chinese_simplified ] = "åœ¨ BASIC ç¨‹åºè¿è¡Œæ—¶\næ— æ³•å…³é—­çª—å£ã€‚";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá êëåßóåôå ôï ğáñÜèõñï \nêáôÜ ôç äéÜñêåéá åêôİëåóçò ôïõ ğñïãñÜììáôïò BASIC.";
     Text[ korean ] = "BASIC í”„ë¡œê·¸ë¨ì´ ì§„í–‰ë˜ëŠ” ë™ì•ˆ\nì°½ì„ ë‹«ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "BASIC programı çalışırken\npencere kapatılamaz.";
+    Text[ turkish ] = "BASIC  çalışırken pencere kapatılamaz.";
     Text[ catalan ] = "La finestra no es pot tancar mentre s'executa el BASIC.";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸›à¸´à¸”à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡à¸‚à¸“à¸°à¸à¸³à¸¥à¸±à¸‡à¹ƒà¸Šà¹‰à¸‡à¸²à¸™ BASIC à¸­à¸¢à¸¹à¹ˆà¹„à¸”à¹‰";
+    Text[ czech ] = "Okno nelze zavÅ™Ã­t, dokud bÄ›Å¾Ã­ kÃ³d BASIC.";
+    Text[ hebrew ] = "Das Fenster kann nicht geschlossen werden,\nwÃ¤hrend das BASIC-Programm lÃ¤uft.";
+    Text[ hindi ] = "à¤œà¤¬ BASIC à¤•à¤¾à¤°à¥à¤¯ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤µà¤¿à¤¨à¥à¤¡à¥‹ à¤•à¥‹ à¤¬à¤¨à¥à¤¦ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
 };
 String RID_STR_REPLACESTDLIB
 {
     Text = "Die Standard-Bibliothek kann nicht ersetzt werden." ;
     Text [ ENGLISH ] = "The standard libary can't be replaced." ;
     Text [ english_us ] = "The default library cannot be replaced." ;
-    Text [ italian ] = "Non è possibile sostituire la library standard." ;
+    Text [ italian ] = "Non è possibile sostituire la libreria standard." ;
     Text [ spanish ] = "No se puede sustituir la biblioteca predeterminada." ;
     Text [ french ] = "Impossible de remplacer la bibliothèque par défaut !" ;
     Text [ dutch ] = "De standaardbibliotheek kan niet worden vervangen." ;
     Text [ swedish ] = "Det går inte att ersätta standardbiblioteket." ;
     Text [ danish ] = "Standardbiblioteket kan ikke erstattes." ;
-    Text [ portuguese_brazilian ] = "Die Standard-Bibliothek kann nicht ersetzt werden." ;
+    Text [ portuguese_brazilian ] = "Não é possível substituir a biblioteca padrão." ;
     Text [ portuguese ] = "É impossível substituir a biblioteca padrão." ;
     Text[ chinese_simplified ] = "æ— æ³•æ›¿æ¢æ ‡å‡†ç¨‹åºåº“ã€‚";
     Text[ russian ] = "Íåâîçìîæíî çàìåíèòü ñòàíäàğòíóş áèáëèîòåêó.";
-    Text[ polish ] = "Zamiana standardowej biblioteki nie by³a mo¿liwa.";
+    Text[ polish ] = "Nie mo¿na zamieniæ biblioteki domyœlnej.";
     Text[ japanese ] = "æ¨™æº–ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯ç½®æ›ã§ãã¾ã›ã‚“ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•ä»£æ›¿é€™å€‹æ¨™æº–ç¨‹å¼åº«ã€‚";
     Text[ arabic ] = ".áÇ íãßä ÇÓÊÈÏÇá ÇáãßÊÈÉ ÇáÇİÊÑÇÖíÉ";
@@ -1373,10 +1508,13 @@ String RID_STR_REPLACESTDLIB
     Text[ chinese_simplified ] = "æ— æ³•æ›¿æ¢æ ‡å‡†ç¨‹åºåº“ã€‚";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíôéêáôáóôáèåß ç âáóéêŞ âéâëéïèŞêç.";
     Text[ korean ] = "ê¸°ë³¸ ë¼ì´ë¸ŒëŸ¬ë¦¬ëŠ” ë°”ê¿€ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Standart kitaplık değiştirilemez.";
+    Text[ turkish ] = "Öntanımlı kitaplık değiştirilemez.";
     Text[ catalan ] = "La biblioteca per defecte no es pot reemplaçar.";
     Text[ finnish ] = "Oletuskirjaston korvaaminen ei onnistu.";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸—à¸™à¸—à¸µà¹ˆà¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹„à¸¥à¸šà¸£à¸²à¸£à¸µà¹„à¸”à¹‰";
+    Text[ czech ] = "VÃ½chozÃ­ knihovnu nelze nahradit.";
+    Text[ hebrew ] = "Die Standard-Bibliothek kann nicht ersetzt werden.";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€ à¤•à¥‹ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
 };
 String RID_STR_REFNOTPOSSIBLE
 {
@@ -1391,7 +1529,7 @@ String RID_STR_REFNOTPOSSIBLE
     Text [ french ] = "Référence à 'XX' impossible." ;
     Text [ swedish ] = "Referens till 'XX' inte möjlig." ;
     Text [ danish ] = "Reference til 'XX' ikke mulig." ;
-    Text [ portuguese_brazilian ] = "Referenz auf 'XX' nicht m?lich." ;
+    Text [ portuguese_brazilian ] = "Não é possível referenciar a 'XX'." ;
     Text [ portuguese ] = "A referência a 'XX' é impossível." ;
     Text[ chinese_simplified ] = "æ— æ³•å¼•ç”¨ 'XX' ã€‚";
     Text[ russian ] = "Íåâîçìîæíà ññûëêà íà 'XX'.";
@@ -1403,10 +1541,13 @@ String RID_STR_REFNOTPOSSIBLE
     Text[ chinese_simplified ] = "æ— æ³•å¼•ç”¨ 'XX' ã€‚";
     Text[ greek ] = "Äåí åßíáé äõíáôŞ ç áíáöïñÜ óôï 'XX' .";
     Text[ korean ] = "'XX'ë¡œì˜ ì°¸ì¡°ê°€ ë¶ˆê°€ëŠ¥í•©ë‹ˆë‹¤.";
-    Text[ turkish ] = "'XX' referans alınamaz.";
+    Text[ turkish ] = "'XX' e referans alınamaz.";
     Text[ catalan ] = "La referència a 'XX' no és possible.";
     Text[ finnish ] = "Viittaus kohteeseen XX ei ole mahdollinen.";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸­à¸²à¸ˆà¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¹„à¸›à¸¢à¸±à¸‡ 'XX' à¹„à¸”à¹‰";
+    Text[ czech ] = "Odkaz na 'XX' nenÃ­ k dispozici.";
+    Text[ hebrew ] = "Referenz auf 'XX' nicht mÃ¶glich.";
+    Text[ hindi ] = "'XX' à¤•à¥‡à¤²à¤¿à¤ à¤°à¥‡à¤«à¤°à¥‡à¤¨à¥à¤¸ à¤¸à¤‚à¤­à¤µ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤";
 };
 String RID_STR_WATCHNAME
 {
@@ -1414,7 +1555,7 @@ String RID_STR_WATCHNAME
     Text [ ENGLISH ] = "Watches" ;
     Text [ norwegian ] = "Watches" ;
     Text [ italian ] = "Controllo" ;
-    Text [ portuguese_brazilian ] = "Vis es" ;
+    Text [ portuguese_brazilian ] = "Observador" ;
     Text [ portuguese ] = "Observador" ;
     Text [ finnish ] = "Seuranta" ;
     Text [ danish ] = "Observatør" ;
@@ -1433,9 +1574,12 @@ String RID_STR_WATCHNAME
     Text[ chinese_simplified ] = "æŸ¥çœ‹";
     Text[ greek ] = "ĞáñáôçñçôŞò";
     Text[ korean ] = "ì¡°ì‚¬ì‹";
-    Text[ turkish ] = "İzleyici";
+    Text[ turkish ] = "İzle";
     Text[ catalan ] = "Mira";
     Text[ thai ] = "à¸”à¸¹";
+    Text[ czech ] = "KukÃ¡tko";
+    Text[ hebrew ] = "Beobachter";
+    Text[ hindi ] = "à¤¨à¤¿à¤°à¥€à¤•à¥à¤·à¤£";
 };
 String RID_STR_STACKNAME
 {
@@ -1443,7 +1587,7 @@ String RID_STR_STACKNAME
     Text [ ENGLISH ] = "Stack" ;
     Text [ norwegian ] = "Stack" ;
     Text [ italian ] = "Stack" ;
-    Text [ portuguese_brazilian ] = "Pilha" ;
+    Text [ portuguese_brazilian ] = "Pilha de Chamadas" ;
     Text [ portuguese ] = "Empilhar" ;
     Text [ finnish ] = "Kutsupino" ;
     Text [ danish ] = "Kommandostak" ;
@@ -1454,7 +1598,7 @@ String RID_STR_STACKNAME
     Text [ english_us ] = "Call Stack" ;
     Text[ chinese_simplified ] = "å‘¼å«å †å ";
     Text[ russian ] = "Ñòåê âûçîâîâ";
-    Text[ polish ] = "Stos komend";
+    Text[ polish ] = "Stos wywo³añ";
     Text[ japanese ] = "ã‚¹ã‚¿ãƒƒã‚¯ã®å‘¼ã³å‡ºã—";
     Text[ chinese_traditional ] = "å‘¼å«å †ç–Š";
     Text[ arabic ] = "ÇÓÊÏÚÇÁ ÇáãßøóÏÓ";
@@ -1462,9 +1606,12 @@ String RID_STR_STACKNAME
     Text[ chinese_simplified ] = "å‘¼å«å †å ";
     Text[ greek ] = "Óôïßâá åíôïëşí";
     Text[ korean ] = "ìŠ¤íƒ í˜¸ì¶œ";
-    Text[ turkish ] = "Komut yığını";
+    Text[ turkish ] = "Çağrı Yığını";
     Text[ catalan ] = "Crida la pila";
     Text[ thai ] = "à¸„à¸­à¸¥à¸¥à¹Œà¸ªà¹à¸•à¹‡à¸„";
+    Text[ czech ] = "ZÃ¡sobnÃ­k volÃ¡nÃ­";
+    Text[ hebrew ] = "Kommandostapel";
+    Text[ hindi ] = "à¤•à¥‰à¤² à¤¸à¥à¤Ÿà¥‰à¤• ";
 };
 String RID_STR_INITIDE
 {
@@ -1472,7 +1619,7 @@ String RID_STR_INITIDE
     Text [ ENGLISH ] = "Init BASIC" ;
     Text [ norwegian ] = "Init BASIC" ;
     Text [ italian ] = "Inizializza BASIC" ;
-    Text [ portuguese_brazilian ] = "Iniciar BASIC" ;
+    Text [ portuguese_brazilian ] = "Inicialização do BASIC" ;
     Text [ portuguese ] = "Iniciar BASIC" ;
     Text [ finnish ] = "BASIC-alustus" ;
     Text [ danish ] = "Initialisering af BASIC" ;
@@ -1483,7 +1630,7 @@ String RID_STR_INITIDE
     Text [ english_us ] = "BASIC Initialization" ;
     Text[ chinese_simplified ] = "åˆå§‹åŒ– BASIC";
     Text[ russian ] = "Èíèöèàëèçàöèÿ BASIC";
-    Text[ polish ] = "Inicjalizacja BASIC";
+    Text[ polish ] = "Inicjalizacja œrodowiska BASIC";
     Text[ japanese ] = "BASIC ã®åˆæœŸåŒ–";
     Text[ chinese_traditional ] = "åˆå§‹åŒ– BASIC";
     Text[ arabic ] = "BASIC ÊåíÆÉ";
@@ -1491,9 +1638,12 @@ String RID_STR_INITIDE
     Text[ chinese_simplified ] = "åˆå§‹åŒ– BASIC";
     Text[ greek ] = "Áñ÷éêïğïßçóç BASIC";
     Text[ korean ] = "BASIC ì´ˆê¸°í™”";
-    Text[ turkish ] = "BASIC başlatılıyor";
+    Text[ turkish ] = "BASIC Kurulum";
     Text[ catalan ] = "Inicialització del BASIC";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡ BASIC ";
+    Text[ czech ] = "BASIC - inicializace";
+    Text[ hebrew ] = "Initialisierung BASIC";
+    Text[ hindi ] = "BASIC à¤‡à¤¨à¤¿à¤¶à¤¿à¤¯à¤²à¥ˆà¤œà¤¼à¥‡à¤¶à¤¨à¥";
 };
 String RID_STR_STDMODULENAME
 {
@@ -1501,7 +1651,7 @@ String RID_STR_STDMODULENAME
     Text [ ENGLISH ] = "Module" ;
     Text [ norwegian ] = "Module" ;
     Text [ italian ] = "Modulo" ;
-    Text [ portuguese_brazilian ] = "M?ulo" ;
+    Text [ portuguese_brazilian ] = "Módulo" ;
     Text [ portuguese ] = "Módulo" ;
     Text [ finnish ] = "Moduuli" ;
     Text [ danish ] = "Modul" ;
@@ -1523,6 +1673,9 @@ String RID_STR_STDMODULENAME
     Text[ turkish ] = "Modül";
     Text[ catalan ] = "Mòdul";
     Text[ thai ] = "à¹‚à¸¡à¸”à¸¹à¸¥";
+    Text[ czech ] = "Modul";
+    Text[ hebrew ] = "Modul";
+    Text[ hindi ] = "à¤®à¥‹à¤¡à¥à¤¯à¥‚à¤²";
 };
 String RID_STR_STDDIALOGNAME
 {
@@ -1530,7 +1683,7 @@ String RID_STR_STDDIALOGNAME
     Text [ ENGLISH ] = "Dialog" ;
     Text [ norwegian ] = "Dialog" ;
     Text [ italian ] = "Dialogo" ;
-    Text [ portuguese_brazilian ] = "Di?logo" ;
+    Text [ portuguese_brazilian ] = "Diálogo" ;
     Text [ portuguese ] = "Diálogo" ;
     Text [ finnish ] = "Valintaikkuna" ;
     Text [ danish ] = "Dialog" ;
@@ -1541,7 +1694,7 @@ String RID_STR_STDDIALOGNAME
     Text [ english_us ] = "Dialog" ;
     Text[ chinese_simplified ] = "å¯¹è¯æ¡†";
     Text[ russian ] = "Äèàëîã";
-    Text[ polish ] = "Dialog";
+    Text[ polish ] = "Okno dialogowe";
     Text[ japanese ] = "ãƒ€ã‚¤ã‚¢ãƒ­ã‚°";
     Text[ chinese_traditional ] = "å°è©±æ–¹å¡Š";
     Text[ arabic ] = "ãÑÈÚ ÍæÇÑ";
@@ -1549,17 +1702,20 @@ String RID_STR_STDDIALOGNAME
     Text[ chinese_simplified ] = "å¯¹è¯æ¡†";
     Text[ greek ] = "ÄéÜëïãïò";
     Text[ korean ] = "ëŒ€í™” ìƒì";
-    Text[ turkish ] = "Diyalog";
+    Text[ turkish ] = "İletişim";
     Text[ catalan ] = "Diàleg";
     Text[ thai ] = "à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸";
+    Text[ czech ] = "Dialog";
+    Text[ hebrew ] = "Dialog";
+    Text[ hindi ] = "à¤¡à¤¯à¤²à¥‰à¤—";
 };
 String RID_STR_STDLIBNAME
 {
     Text = "Bibliothek" ;
     Text [ ENGLISH ] = "Libary" ;
     Text [ norwegian ] = "Libary" ;
-    Text [ italian ] = "Library" ;
-    Text [ portuguese_brazilian ] = "Library" ;
+    Text [ italian ] = "Libreria" ;
+    Text [ portuguese_brazilian ] = "Biblioteca" ;
     Text [ portuguese ] = "Biblioteca" ;
     Text [ french ] = "Bibliothèque" ;
     Text [ dutch ] = "Bibliotheek" ;
@@ -1578,9 +1734,12 @@ String RID_STR_STDLIBNAME
     Text[ chinese_simplified ] = "ç¨‹åºåº“";
     Text[ greek ] = "ÂéâëéïèŞêç";
     Text[ korean ] = "ë¼ì´ë¸ŒëŸ¬ë¦¬";
-    Text[ turkish ] = "Kitaplık";
+    Text[ turkish ] = "Kütüphane";
     Text[ catalan ] = "Biblioteca";
     Text[ thai ] = "à¹„à¸¥à¸šà¸£à¸²à¸£à¸µ";
+    Text[ czech ] = "Knihovna";
+    Text[ hebrew ] = "Bibliothek";
+    Text[ hindi ] = "à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€";
 };
 String RID_STR_NEWLIB
 {
@@ -1588,10 +1747,10 @@ String RID_STR_NEWLIB
     Text [ English ] = "New libary" ;
     Text [ portuguese ] = "Nova biblioteca" ;
     Text [ english_us ] = "New Library" ;
-    Text [ portuguese_brazilian ] = "Neue Bibliothek" ;
+    Text [ portuguese_brazilian ] = "Nova Biblioteca" ;
     Text [ swedish ] = "Nytt bibliotek" ;
     Text [ danish ] = "Nyt bibliotek" ;
-    Text [ italian ] = "Nuova library" ;
+    Text [ italian ] = "Nuova libreria" ;
     Text [ spanish ] = "Biblioteca nueva" ;
     Text [ french ] = "Nouvelle bibliothèque" ;
     Text [ dutch ] = "Nieuwe bibliotheek" ;
@@ -1605,17 +1764,20 @@ String RID_STR_NEWLIB
     Text[ chinese_simplified ] = "æ–°çš„ç¨‹åºåº“";
     Text[ greek ] = "Äçìéïõñãßá âéâëéïèŞêçò";
     Text[ korean ] = "ìƒˆ ë¼ì´ë¸ŒëŸ¬ë¦¬";
-    Text[ turkish ] = "Yeni kitaplık";
+    Text[ turkish ] = "Yeni Kütüphane";
     Text[ catalan ] = "Biblioteca nova";
     Text[ finnish ] = "Uusi kirjasto";
     Text[ thai ] = "à¹„à¸¥à¸šà¸£à¸²à¸£à¸µà¹ƒà¸«à¸¡à¹ˆ";
+    Text[ czech ] = "NovÃ¡ knihovna";
+    Text[ hebrew ] = "Neue Bibliothek";
+    Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€";
 };
 String RID_STR_NEWMOD
 {
     Text = "Neues Modul" ;
     Text [ English ] = "New module" ;
     Text [ english_us ] = "New Module" ;
-    Text [ portuguese_brazilian ] = "Neues Modul" ;
+    Text [ portuguese_brazilian ] = "Novo Módulo" ;
     Text [ swedish ] = "Ny modul" ;
     Text [ danish ] = "Nyt modul" ;
     Text [ italian ] = "Nuovo modulo" ;
@@ -1637,13 +1799,16 @@ String RID_STR_NEWMOD
     Text[ catalan ] = "Mòdul nou";
     Text[ finnish ] = "Uusi moduuli";
     Text[ thai ] = "à¹‚à¸¡à¸”à¸¹à¸¥à¹ƒà¸«à¸¡à¹ˆ";
+    Text[ czech ] = "NovÃ½ modul";
+    Text[ hebrew ] = "Neues Modul";
+    Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤®à¥‹à¤¡à¥à¤¯à¥‚à¤²";
 };
 String RID_STR_NEWDLG
 {
     Text = "Neuer Dialog" ;
     Text [ English ] = "New dialog" ;
     Text [ english_us ] = "New Dialog" ;
-    Text [ portuguese_brazilian ] = "Neuer Dialog" ;
+    Text [ portuguese_brazilian ] = "Novo Diálogo" ;
     Text [ swedish ] = "Ny dialog" ;
     Text [ danish ] = "Ny dialog" ;
     Text [ italian ] = "Nuovo dialogo" ;
@@ -1661,10 +1826,13 @@ String RID_STR_NEWDLG
     Text[ chinese_simplified ] = "æ–°çš„å¯¹è¯æ¡†";
     Text[ greek ] = "Äçìéïõñãßá äéáëüãïõ";
     Text[ korean ] = "ìƒˆ ëŒ€í™” ìƒì";
-    Text[ turkish ] = "Yeni diyalog";
+    Text[ turkish ] = "Yeni İletişim";
     Text[ catalan ] = "Diàleg nou";
     Text[ finnish ] = "Uusi valintaikkuna";
     Text[ thai ] = "à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸à¹ƒà¸«à¸¡à¹ˆ";
+    Text[ czech ] = "NovÃ½ dialog";
+    Text[ hebrew ] = "Neuer Dialog";
+    Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤¡à¤¯à¤²à¥‰à¤—";
 };
 String RID_STR_ALL
 {
@@ -1683,7 +1851,7 @@ String RID_STR_ALL
     Text [ english_us ] = "All" ;
     Text[ chinese_simplified ] = "å…¨éƒ¨";
     Text[ russian ] = "Âñå";
-    Text[ polish ] = "Wszystkie";
+    Text[ polish ] = "Wszystko";
     Text[ japanese ] = "ã™ã¹ã¦";
     Text[ chinese_traditional ] = "å…¨éƒ¨";
     Text[ arabic ] = "Çáßá";
@@ -1694,6 +1862,9 @@ String RID_STR_ALL
     Text[ turkish ] = "Tümü";
     Text[ catalan ] = "Tot";
     Text[ thai ] = "à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
+    Text[ czech ] = "VÅ¡e";
+    Text[ hebrew ] = "â€®×”×›×œâ€¬";
+    Text[ hindi ] = "à¤¸à¤¬";
 };
 String RID_STR_PAGE
 {
@@ -1701,7 +1872,7 @@ String RID_STR_PAGE
     Text [ ENGLISH ] = "Page" ;
     Text [ norwegian ] = "Page" ;
     Text [ italian ] = "Pagina" ;
-    Text [ portuguese_brazilian ] = "P?gina" ;
+    Text [ portuguese_brazilian ] = "Página" ;
     Text [ portuguese ] = "Página" ;
     Text [ english_us ] = "Page" ;
     Text [ finnish ] = "Sivu" ;
@@ -1723,6 +1894,9 @@ String RID_STR_PAGE
     Text[ turkish ] = "Sayfa";
     Text[ catalan ] = "Pàgina";
     Text[ thai ] = "à¸«à¸™à¹‰à¸²";
+    Text[ czech ] = "StrÃ¡nka";
+    Text[ hebrew ] = "â€®×“×£â€¬";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ ";
 };
 String RID_STR_MACRONAMEREQ
 {
@@ -1736,11 +1910,11 @@ String RID_STR_MACRONAMEREQ
     Text [ french ] = "Vous devez indiquer un nom." ;
     Text [ swedish ] = "Ett namn måste anges." ;
     Text [ danish ] = "Et navn skal angives." ;
-    Text [ portuguese_brazilian ] = "Es mu? ein Name angegeben werden." ;
+    Text [ portuguese_brazilian ] = "É necessário digitar um nome." ;
     Text [ portuguese ] = "É necessário especificar um nome." ;
     Text[ chinese_simplified ] = "å¿…é¡»ç»™å®šä¸€ä¸ªåç§°ã€‚";
     Text[ russian ] = "Íåîáõîäèìî ââåñòè èìÿ.";
-    Text[ polish ] = "Nale¿y podaæ nazwê.";
+    Text[ polish ] = "Nale¿y wprowadziæ nazwê.";
     Text[ japanese ] = "åå‰ã¯å¿…ãšå…¥åŠ›ã—ã¾ã™ã€‚";
     Text[ chinese_traditional ] = "å¿…é ˆè¼¸å…¥ä¸€å€‹åç¨±ã€‚";
     Text[ arabic ] = ".íÌÈ ÅÏÎÇá ÇÓã";
@@ -1748,10 +1922,13 @@ String RID_STR_MACRONAMEREQ
     Text[ chinese_simplified ] = "å¿…é¡»ç»™å®šä¸€ä¸ªåç§°ã€‚";
     Text[ greek ] = "Ğñİğåé íá åéóÜãåôå İíá üíïìá.";
     Text[ korean ] = "ì´ë¦„ì„ ì…ë ¥í•´ì•¼ í•©ë‹ˆë‹¤.";
-    Text[ turkish ] = "Bir ad girilmesi gerekir.";
+    Text[ turkish ] = "Bir isim vermek zorundasınız";
     Text[ catalan ] = "S'ha d'introduir un nom.";
     Text[ finnish ] = "Nimi on määritettävä.";
     Text[ thai ] = "à¸•à¹‰à¸­à¸‡à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­";
+    Text[ czech ] = "MusÃ­ bÃ½t zadÃ¡n nÃ¡zev.";
+    Text[ hebrew ] = "Es muss ein Name angegeben werden.";
+    Text[ hindi ] = "à¤¨à¤¾à¤® à¤•à¥‹ à¤­à¤°à¤¤à¥€ à¤•à¤°à¤¨à¤¾ à¤†à¤µà¤¶à¥à¤¯à¤• à¤¹à¥ˆ à¥¤";
 };
 String RID_STR_WILLSTOPPRG
 {
@@ -1765,7 +1942,7 @@ String RID_STR_WILLSTOPPRG
     Text [ french ] = "Vous devrez redémarrer le programme après cette modification.\nPoursuivre ?" ;
     Text [ swedish ] = "Du måste starta om ditt program efter den här ändringen.\nFortsätta ändå?" ;
     Text [ danish ] = "Programmet skal genstartes efter denne ændring.\nFortsæt?" ;
-    Text [ portuguese_brazilian ] = "Sie m?sen nach dieser ?nderung Ihr Programm neu starten.\nForfahren?" ;
+    Text [ portuguese_brazilian ] = "Será necessário reiniciar o programa depois desta edição.\nContinuar?" ;
     Text [ portuguese ] = "Terá que reiniciar o programa depois desta modificação.\nContinuar?" ;
     Text[ chinese_simplified ] = "æ›´æ”¹ä¹‹åæ‚¨å¿…é¡»é‡æ–°å¯åŠ¨è¿™ä¸ªç¨‹åºã€‚\næ‚¨è¦ç»§ç»­å—ï¼Ÿ";
     Text[ russian ] = "Ïîñëå ıòîãî èçìåíåíèÿ íóæíî áóäåò ïåğåçàïóñòèòü ïğîãğàììó.\nÏğîäîëæèòü?";
@@ -1777,10 +1954,13 @@ String RID_STR_WILLSTOPPRG
     Text[ chinese_simplified ] = "æ›´æ”¹ä¹‹åæ‚¨å¿…é¡»é‡æ–°å¯åŠ¨è¿™ä¸ªç¨‹åºã€‚\næ‚¨è¦ç»§ç»­å—ï¼Ÿ";
     Text[ greek ] = "ÌåôÜ áğü áõôŞ ôçí áëëáãŞ èá ğñİğåé íá åêêéíŞóåôå ôï ğñüãñáììá îáíÜ.\nÓõíİ÷åéá;";
     Text[ korean ] = "ì´ ë³€ê²½ í›„ì— ì‚¬ìš©ìì˜ í”„ë¡œê·¸ë¨ì„ ë‹¤ì‹œ ì‹œì‘í•´ì•¼ í•©ë‹ˆë‹¤.\nê³„ì†í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ turkish ] = "Bu değişiklikten sonra programı yeniden başlatmanız gerekir.\nDevam etmek istiyor musunuz?";
+    Text[ turkish ] = "Bu düzeltmeden sonra programı yeniden başlatmalısınız. Devam?";
     Text[ catalan ] = "Haureu de reiniciar el programa després d'aquesta edició\nVoleu continuar?";
     Text[ finnish ] = "Ohjelma on käynnistettävä uudelleen tämän muutoksen jälkeen.\nJatketaanko?";
     Text[ thai ] = "à¸„à¸¸à¸“à¸ˆà¸°à¸•à¹‰à¸­à¸‡à¹€à¸£à¸´à¹ˆà¸¡à¹‚à¸›à¸£à¹à¸à¸£à¸¡à¸­à¸µà¸à¸„à¸£à¸±à¹‰à¸‡à¸«à¸¥à¸±à¸‡à¸ˆà¸²à¸à¸à¸²à¸£à¹à¸à¹‰à¹„à¸‚à¸™à¸µà¹‰\nà¸—à¸³à¸•à¹ˆà¸­à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Text[ czech ] = "Po tÃ©to ÃºpravÄ› budete muset restartovat program.\nPokraÄovat?";
+    Text[ hebrew ] = "Sie mÃ¼ssen nach dieser Ã„nderung Ihr Programm neu starten.\nForfahren?";
+    Text[ hindi ] = "à¤‡à¤¸ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨ à¤•à¥‡ à¤ªà¤¶à¥à¤šà¤¾à¤¤ à¤ªà¥à¤°à¥‹à¤—à¥à¤°à¤¾à¤® à¤•à¥‹ à¤ªà¥à¤¨à¤ƒà¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤°à¤¨à¤¾ à¤†à¤µà¤¶à¥à¤¯à¤• à¤¹à¥ˆ à¥¤\nà¤œà¤¾à¤°à¥€ à¤°à¤–à¤¨à¤¾ à¤¹à¥ˆ ?";
 };
 String RID_STR_SEARCHALLMODULES
 {
@@ -1793,11 +1973,11 @@ String RID_STR_SEARCHALLMODULES
     Text [ dutch ] = "Wilt u de tekst in alle actieve modules vervangen?" ;
     Text [ swedish ] = "Skall texten ersättas i alla aktiva moduler?" ;
     Text [ danish ] = "Skal teksten erstattes i alle aktive moduler?" ;
-    Text [ portuguese_brazilian ] = "Soll der Text in allen aktiven Modulen ersetzt werden?" ;
+    Text [ portuguese_brazilian ] = "Deseja substituir o texto em todos os módulos ativos?" ;
     Text [ portuguese ] = "Substituir o texto em todos os módulos activos?" ;
     Text[ chinese_simplified ] = "è¦æ›¿æ¢ä½¿ç”¨ä¸­çš„æ¨¡å—çš„å…¨éƒ¨æ–‡å­—ï¼Ÿ";
     Text[ russian ] = "Çàìåíèòü òåêñò âî âñåõ àêòèâíûõ ìîäóëÿõ?";
-    Text[ polish ] = "Czy zast¹piæ ten tekst we wszystkich aktywnych modu³ach?";
+    Text[ polish ] = "Czy chcesz zamieniæ tekst we wszystkich aktywnych modu³ach?";
     Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã‚’ã™ã¹ã¦ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã§ç½®ãæ›ãˆã¾ã™ã‹ã€‚";
     Text[ chinese_traditional ] = "æ‚¨è¦ä»£æ›¿åœ¨æ‰€æœ‰å•Ÿå‹•æ¨¡å¡Šä¸­çš„æ–‡å­—ï¹–";
     Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÈÏÇá ÇáäÕ İí ßá ÇáæÍÏÇÊ ÇáäãØíÉ ÇáäÔØÉ¿";
@@ -1805,10 +1985,13 @@ String RID_STR_SEARCHALLMODULES
     Text[ chinese_simplified ] = "è¦æ›¿æ¢ä½¿ç”¨ä¸­çš„æ¨¡å—çš„å…¨éƒ¨æ–‡å­—ï¼Ÿ";
     Text[ greek ] = "Íá áíôéêáôáóôáèåß ôï êåßìåíï óå üëåò ôéò ôñİ÷ïõóåò ëåéôïõñãéêİò ìïíÜäåò;";
     Text[ korean ] = "í…ìŠ¤íŠ¸ë¥¼ í™œì„±í™”ëœ ëª¨ë“  ëª¨ë“ˆì—ì„œ ëŒ€ì²´í•˜ì‹œê² ìŠµë‹ˆê¹Œ? ";
-    Text[ turkish ] = "Bu metin tüm etkin modüllerde değiştirilsin mi?";
+    Text[ turkish ] = "Metni tüm aktif modüllerde değiştirmek istermisiniz?";
     Text[ catalan ] = "Voleu reemplaçar el text de tots els mòduls actius?";
     Text[ finnish ] = "Haluatko korvata tekstin kaikissa aktiivisissa moduuleissa?";
     Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹à¸—à¸™à¸—à¸µà¹ˆà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¹ƒà¸™à¹‚à¸¡à¸”à¸¹à¸¥à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Text[ czech ] = "PÅ™ejete si nahradit text ve vÅ¡ech aktivnÃ­ch modulech?";
+    Text[ hebrew ] = "Soll der Text in allen aktiven Modulen ersetzt werden?";
+    Text[ hindi ] = "à¤†à¤ª à¤¸à¤¬ à¤•à¥à¤°à¤¿à¤¯à¤¾à¤¶à¥€à¤² à¤®à¥‹à¤¡à¥à¤¯à¥‚à¤²à¥‹à¤‚ à¤®à¥‡à¤‚ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¥‹ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ ?";
 };
 Edit RID_EDT_WATCHEDIT
 {
@@ -1834,7 +2017,7 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     QuickHelpText [ french ] = "Supprimer le témoin" ;
     QuickHelpText [ dutch ] = "Bewaker verwijderen" ;
     QuickHelpText [ danish ] = "Fjern observatør" ;
-    QuickHelpText [ portuguese_brazilian ] = "Beobachter entfernen" ;
+    QuickHelpText [ portuguese_brazilian ] = "Remover Observador" ;
     QuickHelpText [ portuguese ] = "Elimina Observador" ;
     QuickHelpText [ swedish ] = "Ta bort bevakare" ;
     QuickHelpText[ russian ] = "Óáğàòü êîíòğîëüíîå çíà÷åíèå";
@@ -1851,6 +2034,9 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     QuickHelpText[ catalan ] = "Suprimeix l'observador";
     QuickHelpText[ finnish ] = "Poista kello";
     QuickHelpText[ thai ] = "Remove Watch";
+    QuickHelpText[ czech ] = "Odstranit kukÃ¡tko";
+    QuickHelpText[ hebrew ] = "Beobachter entfernen";
+    QuickHelpText[ hindi ] = "à¤¨à¤¿à¤°à¥€à¤•à¥à¤·à¤£ à¤¹à¤Ÿà¤¾à¤“";
 };
 Image RID_IMG_REMOVEWATCH_HC
 {
@@ -1869,7 +2055,7 @@ String RID_STR_REMOVEWATCH
     Text [ ENGLISH ] = "Watch: " ;
     Text [ norwegian ] = "Watch: " ;
     Text [ italian ] = "Controllo: " ;
-    Text [ portuguese_brazilian ] = "Vis o: " ;
+    Text [ portuguese_brazilian ] = "Observador:" ;
     Text [ portuguese ] = "Observador:  " ;
     Text [ finnish ] = "Seuranta:" ;
     Text [ danish ] = "Observatør: " ;
@@ -1888,9 +2074,12 @@ String RID_STR_REMOVEWATCH
     Text[ chinese_simplified ] = "æŸ¥çœ‹ï¼š ";
     Text[ greek ] = "ĞáñáôçñçôŞò: ";
     Text[ korean ] = "ì¡°ì‚¬ì‹: ";
-    Text[ turkish ] = "İzleyici: ";
+    Text[ turkish ] = "İzle:";
     Text[ catalan ] = "Observador:";
     Text[ thai ] = "à¸”à¸¹:";
+    Text[ czech ] = "KukÃ¡tko:";
+    Text[ hebrew ] = "Beobachter:";
+    Text[ hindi ] = "à¤¨à¤¿à¤°à¥€à¤•à¥à¤·à¤£:";
 };
 String RID_STR_STACK
 {
@@ -1903,7 +2092,7 @@ String RID_STR_STACK
     Text [ dutch ] = "Oproepen:" ;
     Text [ swedish ] = "Anrop: " ;
     Text [ danish ] = "Opkald: " ;
-    Text [ portuguese_brazilian ] = "Aufrufe: " ;
+    Text [ portuguese_brazilian ] = "Chamadas: " ;
     Text [ portuguese ] = "Chamadas:  " ;
     Text[ chinese_simplified ] = "å‘¼å«ï¼š ";
     Text[ russian ] = "Ñòåê âûçîâîâ: ";
@@ -1915,10 +2104,13 @@ String RID_STR_STACK
     Text[ chinese_simplified ] = "å‘¼å«ï¼š ";
     Text[ greek ] = "ÊëŞóåéò: ";
     Text[ korean ] = "í˜¸ì¶œ: ";
-    Text[ turkish ] = "Çağrılar: ";
+    Text[ turkish ] = "Çağrılar:";
     Text[ catalan ] = "Crides: ";
     Text[ finnish ] = "Kutsut: ";
     Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸: ";
+    Text[ czech ] = "VolÃ¡nÃ­: ";
+    Text[ hebrew ] = "Aufrufe:";
+    Text[ hindi ] = "à¤•à¥‰à¤²à¥à¤¸: ";
 };
 /*
 String RID_STR_INSERTMODE
@@ -2102,8 +2294,8 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text = "Bibliothek" ;
             Text [ ENGLISH ] = "Libary" ;
             Text [ norwegian ] = "Libary" ;
-            Text [ italian ] = "LIbrary" ;
-            Text [ portuguese_brazilian ] = "Library" ;
+            Text [ italian ] = "Libreria" ;
+            Text [ portuguese_brazilian ] = "Biblioteca" ;
             Text [ portuguese ] = "Biblioteca" ;
             Text [ finnish ] = "Kirjasto" ;
             Text [ danish ] = "Bibliotek" ;
@@ -2122,9 +2314,12 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "ç¨‹åºåº“";
             Text[ greek ] = "ÂéâëéïèŞêç";
             Text[ korean ] = "ë¼ì´ë¸ŒëŸ¬ë¦¬";
-            Text[ turkish ] = "Kitaplık";
+            Text[ turkish ] = "Kütüphaneler";
             Text[ catalan ] = "Biblioteca";
             Text[ thai ] = "à¹„à¸¥à¸šà¸£à¸²à¸£à¸µ";
+            Text[ czech ] = "Knihovna";
+            Text[ hebrew ] = "Bibliothek";
+            Text[ hindi ] = "à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€";
         };
         ToolBoxItem
         {
@@ -2160,6 +2355,9 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ turkish ] = "Derle";
             Text[ catalan ] = "Compila";
             Text[ thai ] = "à¸„à¸­à¸¡à¹„à¸à¸¥à¹Œ";
+            Text[ czech ] = "Kompilovat";
+            Text[ hebrew ] = "Ãœbersetzen";
+            Text[ hindi ] = "à¤•à¤®à¥à¤ªà¥ˆà¤²";
         };
         ToolBoxItem
         {
@@ -2180,7 +2378,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ english_us ] = "Run" ;
             Text[ chinese_simplified ] = "æ‰§è¡Œ";
             Text[ russian ] = "Âûïîëíèòü";
-            Text[ polish ] = "Wykonaj";
+            Text[ polish ] = "Uruchom";
             Text[ japanese ] = "å®Ÿè¡Œ";
             Text[ chinese_traditional ] = "åŸ·è¡Œ";
             Text[ arabic ] = "ÊÔÛíá";
@@ -2188,9 +2386,12 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "æ‰§è¡Œ";
             Text[ greek ] = "Åêôİëåóç";
             Text[ korean ] = "ì‹¤í–‰";
-            Text[ turkish ] = "Yürüt";
+            Text[ turkish ] = "Çalıştır";
             Text[ catalan ] = "Executa";
             Text[ thai ] = "à¹ƒà¸Šà¹‰à¸‡à¸²à¸™";
+            Text[ czech ] = "Spustit";
+            Text[ hebrew ] = "AusfÃ¼hren";
+            Text[ hindi ] = "à¤šà¤²à¤¾à¤¨à¤¾";
         };
         ToolBoxItem
         {
@@ -2218,9 +2419,12 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "åœæ­¢";
             Text[ greek ] = "ÄéáêïğŞ";
             Text[ korean ] = "ì •ì§€";
-            Text[ turkish ] = "Durdur";
+            Text[ turkish ] = "Dur";
             Text[ catalan ] = "Atura";
             Text[ thai ] = "à¸«à¸¢à¸¸à¸”";
+            Text[ czech ] = "Zastavit";
+            Text[ hebrew ] = "Anhalten";
+            Text[ hindi ] = "à¤°à¥‹à¤•à¥‹";
         };
         ToolBoxItem
         {
@@ -2239,7 +2443,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ swedish ] = "Procedursteg" ;
             Text [ danish ] = "Proceduretrin" ;
             Text [ portuguese ] = "Passo a passo" ;
-            Text [ portuguese_brazilian ] = "Prozedurschritt" ;
+            Text [ portuguese_brazilian ] = "Passo do Procedimento" ;
             Text[ chinese_simplified ] = "è¿‡ç¨‹å•æ­¥";
             Text[ russian ] = "Øàã ñ îáõîäîì";
             Text[ polish ] = "Krok w procedurze";
@@ -2250,10 +2454,13 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "è¿‡ç¨‹å•æ­¥";
             Text[ greek ] = "ÂŞìá äéáäéêáóßáò";
             Text[ korean ] = "ì²˜ë¦¬ ë‹¨ê³„";
-            Text[ turkish ] = "Yordam adımı";
+            Text[ turkish ] = "İşlem Adımı";
             Text[ catalan ] = "Pas del procediment";
             Text[ finnish ] = "Toiminnon vaihe";
             Text[ thai ] = "à¸‚à¸±à¹‰à¸™à¸•à¸­à¸™à¸à¸£à¸°à¸šà¸§à¸™à¸§à¸´à¸˜à¸µ";
+            Text[ czech ] = "Krok procedury";
+            Text[ hebrew ] = "Prozedurschritt";
+            Text[ hindi ] = "à¤•à¤¾à¤°à¥à¤¯à¤ªà¥à¤°à¤£à¤¾à¤²à¥€ à¤¸à¥à¤Ÿà¥‡à¤ª";
         };
         ToolBoxItem
         {
@@ -2268,7 +2475,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ swedish ] = "Enkelt steg" ;
             Text [ danish ] = "Enkelt trin" ;
             Text [ portuguese ] = "Passo único" ;
-            Text [ portuguese_brazilian ] = "Einzelschritt" ;
+            Text [ portuguese_brazilian ] = "Passo a Passo" ;
             Text[ chinese_simplified ] = "å•æ­¥";
             Text[ russian ] = "Øàã ñ çàõîäîì";
             Text[ polish ] = "Pojedynczy krok";
@@ -2279,10 +2486,13 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "å•æ­¥";
             Text[ greek ] = "Áğëü âŞìá";
             Text[ korean ] = "ê°œë³„ ë‹¨ê³„";
-            Text[ turkish ] = "Tek adım";
+            Text[ turkish ] = "Tekli Adım";
             Text[ catalan ] = "Pas simple";
             Text[ finnish ] = "Yksittäinen vaihe";
             Text[ thai ] = "à¸‚à¸±à¹‰à¸™à¸•à¸­à¸™à¹€à¸”à¸µà¸¢à¸§";
+            Text[ czech ] = "Jeden krok";
+            Text[ hebrew ] = "Einzelschritt";
+            Text[ hindi ] = "à¤…à¤•à¥‡à¤²à¤¾ à¤¸à¥à¤Ÿà¥‡à¤ª";
         };
         ToolBoxItem
         {
@@ -2298,7 +2508,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ swedish ] = "Hoppa tillbaka" ;
             Text [ danish ] = "Spring tilbage" ;
             Text [ portuguese ] = "Para trás" ;
-            Text [ portuguese_brazilian ] = "R?ksprung" ;
+            Text [ portuguese_brazilian ] = "Um Passo para Trás" ;
             Text[ chinese_simplified ] = "è¿”å›ä¸€æ­¥";
             Text[ russian ] = "Øàã ñ âûõîäîì";
             Text[ polish ] = "Krok wstecz";
@@ -2309,10 +2519,13 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "è¿”å›ä¸€æ­¥";
             Text[ greek ] = "ÂŞìá ğßóù";
             Text[ korean ] = "ë’¤ë¡œ ì´ë™";
-            Text[ turkish ] = "Geri adım";
+            Text[ turkish ] = "Geri Dönüş";
             Text[ catalan ] = "Un pas enrere";
             Text[ finnish ] = "Edellinen vaihe";
             Text[ thai ] = "à¸à¸¥à¸±à¸šà¹„à¸›à¸‚à¸±à¹‰à¸™à¸•à¸­à¸™à¸à¹ˆà¸­à¸™";
+            Text[ czech ] = "Krok zpÄ›t";
+            Text[ hebrew ] = "RÃ¼cksprung";
+            Text[ hindi ] = "à¤¸à¥à¤Ÿà¥‡à¤ª à¤ªà¥€à¤›à¥‡";
         };
         ToolBoxItem
         {
@@ -2321,7 +2534,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ ENGLISH ] = "Breakpoint" ;
             Text [ norwegian ] = "Breakpoint" ;
             Text [ italian ] = "Punto di interruzione" ;
-            Text [ portuguese_brazilian ] = "Ponto de interrup??o" ;
+            Text [ portuguese_brazilian ] = "Ponto de interrupção" ;
             Text [ portuguese ] = "Ponto de interrupção" ;
             Text [ finnish ] = "Keskeytyspiste" ;
             Text [ danish ] = "Pausepunkt" ;
@@ -2340,9 +2553,12 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "ä¸­æ–­ç‚¹";
             Text[ greek ] = "Óçìåßï óôÜóçò";
             Text[ korean ] = "ì¤‘ë‹¨ì ";
-            Text[ turkish ] = "Kesme noktası";
+            Text[ turkish ] = "Kırılma noktası";
             Text[ catalan ] = "Punt de ruptura";
             Text[ thai ] = "à¸ˆà¸¸à¸”à¹à¸šà¹ˆà¸‡";
+            Text[ czech ] = "Bod pÅ™eruÅ¡enÃ­";
+            Text[ hebrew ] = "Haltepunkt";
+            Text[ hindi ] = "à¤¬à¥à¤°à¥‡à¤•à¤ªà¥‹à¤‡à¤¨à¥à¤Ÿ";
         };
         ToolBoxItem
         {
@@ -2350,6 +2566,14 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text = "Haltepunkte verwalten" ;
             Text [ ENGLISH ] = "Manage Breakpoints" ;
             Text [ english_us ] = "Manage Breakpoints" ;
+            Text[ french ] = "Gérer les points d'arrêt";
+            Text[ spanish ] = "Gestionar los puntos de ruptura";
+            Text[ italian ] = "Gestisci punti di interruzione";
+            Text[ swedish ] = "Hantera brytpunkter";
+            Text[ japanese ] = "ãƒ–ãƒ¬ãƒ¼ã‚¯ãƒã‚¤ãƒ³ãƒˆã®ç®¡ç†";
+            Text[ korean ] = "ì¤‘ë‹¨ì  ê´€ë¦¬";
+            Text[ chinese_simplified ] = "ç®¡ç†ä¸­æ–­ç‚¹";
+            Text[ chinese_traditional ] = "ç®¡ç†ä¸­æ–·é»";
         };
         ToolBoxItem
         {
@@ -2364,10 +2588,10 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ swedish ] = "Visa bevakare" ;
             Text [ danish ] = "Vis observatør" ;
             Text [ portuguese ] = "Mostrar Observador" ;
-            Text [ portuguese_brazilian ] = "Beobachter anzeigen" ;
+            Text [ portuguese_brazilian ] = "Adicionar Observador" ;
             Text[ chinese_simplified ] = "æŸ¥çœ‹";
             Text[ russian ] = "Äîáàâèòü êîíòğîëüíîå çíà÷åíèå";
-            Text[ polish ] = "Poka¿ czujkê";
+            Text[ polish ] = "Dodaj czujkê";
             Text[ japanese ] = "ã‚ªãƒ–ã‚¶ãƒ¼ãƒã®è¡¨ç¤º";
             Text[ chinese_traditional ] = "é¡¯ç¤ºæª¢è¦–";
             Text[ arabic ] = "ÅÙåÇÑ ÇáãÑÇŞÈ";
@@ -2375,10 +2599,13 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "æŸ¥çœ‹";
             Text[ greek ] = "ÅìöÜíéóç ğáñáôçñçôŞ";
             Text[ korean ] = "ì¡°ì‚¬ì‹ ì¶”ê°€";
-            Text[ turkish ] = "İzleyici ekle";
+            Text[ turkish ] = "İzleme Ekle";
             Text[ catalan ] = "Afegeix l'observador";
             Text[ finnish ] = "Lisää seuranta";
             Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸à¸²à¸£à¸”à¸¹";
+            Text[ czech ] = "PÅ™idat kukÃ¡tko";
+            Text[ hebrew ] = "Beobachter anzeigen";
+            Text[ hindi ] = "à¤¨à¤¿à¤°à¥€à¤•à¥à¤·à¤£ à¤œà¥‹à¤¡à¤¼à¥‹";
         };
         ToolBoxItem
         {
@@ -2391,7 +2618,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ ENGLISH ] = "Objectcatalog" ;
             Text [ norwegian ] = "Objectcatalog" ;
             Text [ italian ] = "Catalogo oggetti" ;
-            Text [ portuguese_brazilian ] = "Cat?logo de objetos" ;
+            Text [ portuguese_brazilian ] = "Catálogo de Objetos" ;
             Text [ portuguese ] = "Catálogo de objectos" ;
             Text [ finnish ] = "Objektiluettelo" ;
             Text [ danish ] = "Objektkatalog" ;
@@ -2413,6 +2640,9 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ turkish ] = "Nesne kataloğu";
             Text[ catalan ] = "Catàleg d'objectes";
             Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹à¸ªà¸”à¸‡à¸£à¸²à¸¢à¸à¸²à¸£à¸§à¸±à¸•à¸–à¸¸";
+            Text[ czech ] = "Katalog objektÅ¯";
+            Text[ hebrew ] = "Objektkatalog";
+            Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤¸à¥‚à¤šà¥€à¤ªà¤¤à¥à¤°";
         };
         ToolBoxItem
         {
@@ -2443,6 +2673,9 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ turkish ] = "Makrolar";
             Text[ catalan ] = "Macros";
             Text[ thai ] = "à¸¡à¸²à¹‚à¸„à¸£";
+            Text[ czech ] = "Makra";
+            Text[ hebrew ] = "â€®×××§×¨×•â€¬";
+            Text[ hindi ] = "à¤®à¥‰à¤•à¥à¤°à¥‹à¤¸";
         };
         ToolBoxItem
         {
@@ -2451,7 +2684,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ ENGLISH ] = "Modules" ;
             Text [ norwegian ] = "Moduler" ;
             Text [ italian ] = "Moduli" ;
-            Text [ portuguese_brazilian ] = "M?ulos" ;
+            Text [ portuguese_brazilian ] = "Módulos" ;
             Text [ portuguese ] = "Módulos" ;
             Text [ finnish ] = "Moduulit" ;
             Text [ danish ] = "Moduler" ;
@@ -2473,6 +2706,9 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ turkish ] = "Modüller";
             Text[ catalan ] = "Mòduls";
             Text[ thai ] = "à¹‚à¸¡à¸”à¸¹à¸¥";
+            Text[ czech ] = "Moduly";
+            Text[ hebrew ] = "Module";
+            Text[ hindi ] = "à¤®à¥‹à¤¡à¥à¤¯à¥‚à¤²";
         };
         ToolBoxItem
         {
@@ -2485,7 +2721,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ ENGLISH ] = "Match Bracket" ;
             Text [ norwegian ] = "Match Bracket" ;
             Text [ italian ] = "Abbina parentesi" ;
-            Text [ portuguese_brazilian ] = "Match Bracket" ;
+            Text [ portuguese_brazilian ] = "Localizar Parênteses" ;
             Text [ portuguese ] = "Localizar parênteses" ;
             Text [ finnish ] = "Etsi sulkeet" ;
             Text [ danish ] = "Søg efter parenteser" ;
@@ -2496,7 +2732,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ english_us ] = "Find Parentheses" ;
             Text[ chinese_simplified ] = "æœå¯»æ‹¬å·";
             Text[ russian ] = "Íàéòè ñêîáêó";
-            Text[ polish ] = "Szukaj nawiasów";
+            Text[ polish ] = "ZnajdŸ nawiasy";
             Text[ japanese ] = "ã‹ã£ã“ã®æ¤œç´¢";
             Text[ chinese_traditional ] = "æœå°‹æ‹¬è™Ÿ";
             Text[ arabic ] = "ÇáÈÍË Úä ÃŞæÇÓ";
@@ -2504,9 +2740,12 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "æœå¯»æ‹¬å·";
             Text[ greek ] = "ÁíáæŞôçóç ğáñİíèåóçò";
             Text[ korean ] = "ê´„í˜¸ ì°¾ê¸°";
-            Text[ turkish ] = "Ayraçları bul";
+            Text[ turkish ] = "Parantezleri Bul";
             Text[ catalan ] = "Cerca els parèntesis";
             Text[ thai ] = "à¸«à¸²à¸§à¸‡à¹€à¸¥à¹‡à¸š";
+            Text[ czech ] = "NajÃ­t zÃ¡vorky";
+            Text[ hebrew ] = "Klammer suchen";
+            Text[ hindi ] = "à¤•à¥‹à¤·à¥à¤ à¤• à¤•à¥‹ à¤…à¤¨à¥à¤µà¥‡à¤·à¤£ à¤•à¤°à¥‹";
         };
         ToolBoxItem
         {
@@ -2526,7 +2765,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ english_us ] = "Controls" ;
             Text[ chinese_simplified ] = "æ§åˆ¶";
             Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
-            Text[ polish ] = "Pola kontrolne";
+            Text[ polish ] = "Formanty";
             Text[ japanese ] = "ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«";
             Text[ chinese_traditional ] = "æ§åˆ¶é …";
             Text[ arabic ] = "ÚäÇÕÑ ÊÍßã";
@@ -2534,9 +2773,12 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "æ§åˆ¶";
             Text[ greek ] = "Ğåäßá åëİã÷ïõ";
             Text[ korean ] = "ì»¨íŠ¸ë¡¤";
-            Text[ turkish ] = "Komut alanları";
+            Text[ turkish ] = "Kontroller";
             Text[ catalan ] = "Controls";
             Text[ thai ] = "à¸•à¸±à¸§à¸„à¸§à¸šà¸„à¸¸à¸¡";
+            Text[ czech ] = "OvlÃ¡dacÃ­ prvky";
+            Text[ hebrew ] = "â€®×›×¤×ª×•×¨×™ ×©×œ×™×˜×”â€¬";
+            Text[ hindi ] = "à¤¨à¤¿à¤¯à¤‚à¤¤à¥à¤°à¤£";
         };
         ToolBoxItem
         {
@@ -2556,7 +2798,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ swedish ] = "Infoga källtext" ;
             Text [ danish ] = "Indsæt kildetekst" ;
             Text [ portuguese ] = "Inserir texto fonte" ;
-            Text [ portuguese_brazilian ] = "Quelltext einf?en" ;
+            Text [ portuguese_brazilian ] = "Inserir Código Fonte" ;
             Text[ chinese_simplified ] = "æ’å…¥æºæ–‡æœ¬";
             Text[ russian ] = "Âñòàâèòü èñõîäíûé òåêñò";
             Text[ polish ] = "Wstaw tekst Ÿród³owy";
@@ -2567,10 +2809,13 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "æ’å…¥æºæ–‡æœ¬";
             Text[ greek ] = "ÅéóáãùãŞ êåéìİíïõ ğñïİëåõóçò";
             Text[ korean ] = "ì›ë³¸ í…ìŠ¤íŠ¸ ì‚½ì…";
-            Text[ turkish ] = "Kaynak metin ekle";
+            Text[ turkish ] = "Kaynak Metni Ekle";
             Text[ catalan ] = "Insereix un text font";
             Text[ finnish ] = "Lisää lähdeteksti";
             Text[ thai ] = "à¹à¸—à¸£à¸à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+            Text[ czech ] = "VloÅ¾it zdrojovÃ½ text";
+            Text[ hebrew ] = "Quelltext einfÃ¼gen";
+            Text[ hindi ] = "à¤®à¥‚à¤² à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤œà¥‹à¤¡à¤¼à¥‹";
         };
         ToolBoxItem
         {
@@ -2579,7 +2824,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ ENGLISH ] = "Save source as..." ;
             Text [ norwegian ] = "Save source as..." ;
             Text [ italian ] = "Salva origine con nome..." ;
-            Text [ portuguese_brazilian ] = "Gravar origem como..." ;
+            Text [ portuguese_brazilian ] = "Salvar Código Fonte como..." ;
             Text [ portuguese ] = "Guardar texto fonte como..." ;
             Text [ finnish ] = "Tallenna lähde nimellä..." ;
             Text [ danish ] = "Gem kildetekst under..." ;
@@ -2591,15 +2836,18 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "ÁğïèŞêåõóç êåéìİíïõ ğñïİëåõóçò ùò...";
             Text[ dutch ] = "Brontekst opslaan als...";
             Text[ russian ] = "Ñîõğàíèòü èñõîäíûé òåêñò êàê...";
-            Text[ polish ] = "Zapisz tekst Ÿród³owy jako...";
+            Text[ polish ] = "Zapisz kod Ÿród³owy jako...";
             Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ†ã‚­ã‚¹ãƒˆã«åå‰ã‚’ã¤ã‘ã¦ä¿å­˜...";
             Text[ korean ] = "ì›ë³¸ í…ìŠ¤íŠ¸ë¥¼ ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ì €ì¥...";
             Text[ chinese_simplified ] = "æºæ–‡æœ¬å¦å­˜ä¸º...";
             Text[ chinese_traditional ] = "å¦å­˜åŸå§‹æª”...";
             Text[ arabic ] = "ÍİÙ äÕ ÇáãÕÏÑ ÈÇÓã...";
-            Text[ turkish ] = "Kaynak metni farklı kaydet...";
+            Text[ turkish ] = "Kaynağı Farklı Kaydet...";
             Text[ catalan ] = "Desa la font com a...";
             Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹à¸«à¸¥à¹ˆà¸‡à¸—à¸µà¹ˆà¸¡à¸²à¹€à¸›à¹‡à¸™...";
+            Text[ czech ] = "UloÅ¾it zdroj jako...";
+            Text[ hebrew ] = "Quelltext speichern unter...";
+            Text[ hindi ] = "à¤®à¥‚à¤² à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹ à¤œà¥ˆà¤¸à¥‡...";
         };
     };
     Text[ chinese_simplified ] = "BASIC";
@@ -2612,9 +2860,12 @@ ToolBox RID_BASICIDE_OBJECTBAR
     Text[ chinese_simplified ] = "BASIC";
     Text[ greek ] = "BASIC";
     Text[ korean ] = "BASIC";
-    Text[ turkish ] = "BASIC";
+    Text[ turkish ] = "TEMEL";
     Text[ catalan ] = "BASIC";
     Text[ thai ] = "BASIC";
+    Text[ czech ] = "BASIC";
+    Text[ hebrew ] = "BASIC";
+    Text[ hindi ] = "BASIC";
 };
 
 Menu RID_POPUP_BRKPROPS
@@ -2665,6 +2916,9 @@ Menu RID_POPUP_BRKPROPS
             Text[ turkish ] = "Etkin";
             Text[ catalan ] = "Actiu";
             Text[ thai ] = "à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆ";
+            Text[ czech ] = "AktivnÃ­";
+            Text[ hebrew ] = "Aktiv";
+            Text[ hindi ] = "à¤•à¥à¤°à¤¿à¤¯à¤¾à¤¶à¥€à¤²";
         };
         MenuItem
         {
@@ -2701,6 +2955,9 @@ Menu RID_POPUP_BRKPROPS
             Text[ turkish ] = "Özellikler...";
             Text[ catalan ] = "Propietats...";
             Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´...";
+            Text[ czech ] = "Vlastnosti...";
+            Text[ hebrew ] = "â€®×××¤×™× ×™×â€¬";
+            Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚...";
         };
     };
     Text[ chinese_simplified ] = "å±æ€§";
@@ -2713,24 +2970,27 @@ Menu RID_POPUP_BRKPROPS
     Text[ chinese_simplified ] = "å±æ€§";
     Text[ greek ] = "Éäéüôçôåò";
     Text[ korean ] = "ë“±ë¡ ì •ë³´";
-    Text[ turkish ] = "Özellikler";
+    Text[ turkish ] = "Seçenekler";
     Text[ catalan ] = "Propietats";
     Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
+    Text[ czech ] = "Vlastnosti";
+    Text[ hebrew ] = "Eigenschaften";
+    Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚";
 };
 Menu RID_POPUP_BRKDLG
 {
     Text = "Haltepunkte verwalten" ;
     Text [ ENGLISH ] = "Manage Breakpoints" ;
     Text [ norwegian ] = "Breakpoints" ;
-    Text [ italian ] = "Punti di interruzione" ;
-    Text [ portuguese_brazilian ] = "Pontos de interrup??o" ;
+    Text [ italian ] = "Gestisci punti di interruzione" ;
+    Text [ portuguese_brazilian ] = "Pontos de interrupção" ;
     Text [ portuguese ] = "Pontos de interrupção" ;
     Text [ finnish ] = "Keskeytyspisteet" ;
     Text [ danish ] = "Pausepunkter" ;
-    Text [ french ] = "Points d'arrêt" ;
-    Text [ swedish ] = "Brytpunkter" ;
+    Text [ french ] = "Gérer les points d'arrêt" ;
+    Text [ swedish ] = "Hantera brytpunkter" ;
     Text [ dutch ] = "Onderbrekingspunten" ;
-    Text [ spanish ] = "Puntos de ruptura" ;
+    Text [ spanish ] = "Gestionar los puntos de ruptura" ;
     Text [ english_us ] = "Manage Breakpoints" ;
     ItemList =
     {
@@ -2741,45 +3001,51 @@ Menu RID_POPUP_BRKDLG
             Text = "Haltepunkte verwalten..." ;
             Text [ ENGLISH ] = "Manage Breakpoints..." ;
             Text [ norwegian ] = "Breakpoints..." ;
-            Text [ italian ] = "Punti di interruzione..." ;
-            Text [ portuguese_brazilian ] = "Pontos de interrup??o..." ;
+            Text [ italian ] = "Gestisci punti di interruzione..." ;
+            Text [ portuguese_brazilian ] = "Pontos de interrupção..." ;
             Text [ portuguese ] = "Pontos de interrupção..." ;
             Text [ finnish ] = "Keskeytyspisteet..." ;
             Text [ danish ] = "Pausepunkter..." ;
-            Text [ french ] = "Points d'arrêt..." ;
-            Text [ swedish ] = "Brytpunkter..." ;
+            Text [ french ] = "Gérer les points d'arrêt..." ;
+            Text [ swedish ] = "Hantera brytpunkter..." ;
             Text [ dutch ] = "Onderbrekingspunten..." ;
-            Text [ spanish ] = "Puntos de ruptura..." ;
+            Text [ spanish ] = "Gestionar los puntos de ruptura..." ;
             Text [ english_us ] = "Manage Breakpoints..." ;
             /* ### ACHTUNG: Neuer Text in Resource? Dialog für die Haltepunkte : Dialog f³r die Haltepunkte */
-            Text[ chinese_simplified ] = "ä¸­æ–­ç‚¹...";
+            Text[ chinese_simplified ] = "ç®¡ç†ä¸­æ–­ç‚¹...";
             Text[ russian ] = "Òî÷êè îñòàíîâà...";
             Text[ polish ] = "Punkty przerwania...";
-            Text[ japanese ] = "ãƒ–ãƒ¬ãƒ¼ã‚¯ãƒã‚¤ãƒ³ãƒˆ...";
-            Text[ chinese_traditional ] = "ä¸­æ–·é»...";
+            Text[ japanese ] = "ãƒ–ãƒ¬ãƒ¼ã‚¯ãƒã‚¤ãƒ³ãƒˆã®ç®¡ç†...";
+            Text[ chinese_traditional ] = "ç®¡ç†ä¸­æ–·é»...";
             Text[ arabic ] = "...äŞÇØ ÇáÅíŞÇİ";
             Text[ dutch ] = "Onderbrekingspunten...";
-            Text[ chinese_simplified ] = "ä¸­æ–­ç‚¹...";
+            Text[ chinese_simplified ] = "ç®¡ç†ä¸­æ–­ç‚¹...";
             Text[ greek ] = "Óçìåßá óôÜóçò...";
-            Text[ korean ] = "ì¤‘ë‹¨ì ...";
-            Text[ turkish ] = "Kesme noktaları...";
+            Text[ korean ] = "ì¤‘ë‹¨ì  ê´€ë¦¬...";
+            Text[ turkish ] = "Kesmenoktaları...";
             Text[ catalan ] = "Punts de ruptura...";
             Text[ thai ] = "à¸ˆà¸¸à¸”à¹à¸šà¹ˆà¸‡...";
+            Text[ czech ] = "Body pÅ™eruÅ¡enÃ­...";
+            Text[ hebrew ] = "Haltepunkte...";
+            Text[ hindi ] = "à¤–à¤£à¥à¤¡à¤¨ à¤¬à¤¿à¤¨à¥à¤¦à¥...";
         };
     };
-    Text[ chinese_simplified ] = "ä¸­æ–­ç‚¹";
+    Text[ chinese_simplified ] = "ç®¡ç†ä¸­æ–­ç‚¹";
     Text[ russian ] = "Òî÷êè îñòàíîâà";
     Text[ polish ] = "Punkty przerwania";
-    Text[ japanese ] = "ãƒ–ãƒ¬ãƒ¼ã‚¯ãƒã‚¤ãƒ³ãƒˆ";
-    Text[ chinese_traditional ] = "ä¸­æ–·é»";
+    Text[ japanese ] = "ãƒ–ãƒ¬ãƒ¼ã‚¯ãƒã‚¤ãƒ³ãƒˆã®ç®¡ç†";
+    Text[ chinese_traditional ] = "ç®¡ç†ä¸­æ–·é»";
     Text[ arabic ] = "äŞÇØ ÇáÅíŞÇİ";
     Text[ dutch ] = "Onderbrekingspunten";
-    Text[ chinese_simplified ] = "ä¸­æ–­ç‚¹";
+    Text[ chinese_simplified ] = "ç®¡ç†ä¸­æ–­ç‚¹";
     Text[ greek ] = "Óçìåßá óôÜóçò";
-    Text[ korean ] = "ì¤‘ë‹¨ì ";
-    Text[ turkish ] = "Kesme noktaları";
+    Text[ korean ] = "ì¤‘ë‹¨ì  ê´€ë¦¬";
+    Text[ turkish ] = "Kesmenoktaları";
     Text[ catalan ] = "Punts de ruptura";
     Text[ thai ] = "à¸ˆà¸¸à¸”à¹à¸šà¹ˆà¸‡";
+    Text[ czech ] = "Body pÅ™eruÅ¡enÃ­";
+    Text[ hebrew ] = "Haltepunkte";
+    Text[ hindi ] = "à¤–à¤£à¥à¤¡à¤¨ à¤¬à¤¿à¤¨à¥à¤¦à¥";
 };
 Menu RID_POPUP_TABBAR
 {
@@ -2832,10 +3098,13 @@ Menu RID_POPUP_TABBAR
                         Text[ chinese_simplified ] = "BASIC æ¨¡å—";
                         Text[ greek ] = "ËåéôïõñãéêŞ ìïíÜäá BASIC";
                         Text[ korean ] = "BASIC ëª¨ë“ˆ";
-                        Text[ turkish ] = "BASIC modülü";
+                        Text[ turkish ] = "BASIC Modulu";
                         Text[ catalan ] = "Mòdul del BASIC";
                         Text[ finnish ] = "BASIC-moduuli";
                         Text[ thai ] = "à¹‚à¸¡à¸”à¸¹à¸¥ BASIC ";
+                        Text[ czech ] = "Modul BASIC";
+                        Text[ hebrew ] = "BASIC-Modul";
+                        Text[ hindi ] = "BASIC Module";
                     };
                     MenuItem
                     {
@@ -2862,10 +3131,13 @@ Menu RID_POPUP_TABBAR
                         Text[ chinese_simplified ] = "BASIC å¯¹è¯æ¡†";
                         Text[ greek ] = "ÄéÜëïãïò BASIC";
                         Text[ korean ] = "BASIC ëŒ€í™” ìƒì";
-                        Text[ turkish ] = "BASIC diyaloğu";
+                        Text[ turkish ] = "BASIC Diyalog";
                         Text[ catalan ] = "Diàleg del BASIC";
                         Text[ finnish ] = "BASIC-valintaikkuna";
                         Text[ thai ] = "à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸ BASIC ";
+                        Text[ czech ] = "BASIC dialog";
+                        Text[ hebrew ] = "BASIC-Dialog";
+                        Text[ hindi ] = "BASIC Dialog";
                     };
                 };
             };
@@ -2883,6 +3155,9 @@ Menu RID_POPUP_TABBAR
             Text[ turkish ] = "Ekle";
             Text[ catalan ] = "Insereix";
             Text[ thai ] = "à¹à¸—à¸£à¸";
+            Text[ czech ] = "VloÅ¾it";
+            Text[ hebrew ] = "EinfÃ¼gen";
+            Text[ hindi ] = "à¤›à¤¿à¤ªà¤•à¤¾à¤“";
         };
         MenuItem
         {
@@ -2893,7 +3168,7 @@ Menu RID_POPUP_TABBAR
             Text [ ENGLISH ] = "Delete" ;
             Text [ norwegian ] = "Slett" ;
             Text [ italian ] = "Cancella" ;
-            Text [ portuguese_brazilian ] = "Apagar" ;
+            Text [ portuguese_brazilian ] = "Excluir" ;
             Text [ portuguese ] = "Eliminar" ;
             Text [ finnish ] = "Poista" ;
             Text [ danish ] = "Slet" ;
@@ -2916,6 +3191,9 @@ Menu RID_POPUP_TABBAR
             Text[ turkish ] = "Sil";
             Text[ catalan ] = "Suprimeix";
             Text[ thai ] = "à¸¥à¸š";
+            Text[ czech ] = "Smazat";
+            Text[ hebrew ] = "â€®××—×™×§×”â€¬";
+            Text[ hindi ] = "à¤¹à¤Ÿà¤¾à¤¨à¤¾";
         };
         MenuItem
         {
@@ -2947,6 +3225,9 @@ Menu RID_POPUP_TABBAR
             Text[ turkish ] = "Yeniden adlandır";
             Text[ catalan ] = "Reanomena";
             Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­";
+            Text[ czech ] = "PÅ™ejmenovat";
+            Text[ hebrew ] = "Umbenennen";
+            Text[ hindi ] = "à¤ªà¥à¤¨à¤ƒ à¤¨à¤¾à¤® à¤¦à¥‹";
         };
         MenuItem
         {
@@ -2978,6 +3259,9 @@ Menu RID_POPUP_TABBAR
             Text[ turkish ] = "Gizle";
             Text[ catalan ] = "Oculta";
             Text[ thai ] = "à¸‹à¹ˆà¸­à¸™";
+            Text[ czech ] = "SkrÃ½t";
+            Text[ hebrew ] = "Ausblenden";
+            Text[ hindi ] = "à¤›à¤¿à¤ªà¤¾à¤“";
         };
         MenuItem
         {
@@ -2991,7 +3275,7 @@ Menu RID_POPUP_TABBAR
             Text [ ENGLISH ] = "Modules..." ;
             Text [ norwegian ] = "Modules..." ;
             Text [ italian ] = "Moduli..." ;
-            Text [ portuguese_brazilian ] = "M?ulos..." ;
+            Text [ portuguese_brazilian ] = "Módulos..." ;
             Text [ portuguese ] = "Módulos..." ;
             Text [ finnish ] = "Moduulit..." ;
             Text [ danish ] = "Moduler..." ;
@@ -3013,6 +3297,9 @@ Menu RID_POPUP_TABBAR
             Text[ turkish ] = "Modüller...";
             Text[ catalan ] = "Mòduls...";
             Text[ thai ] = "à¹‚à¸¡à¸”à¸¹à¸¥...";
+            Text[ czech ] = "Moduly...";
+            Text[ hebrew ] = "Module...";
+            Text[ hindi ] = "à¤®à¥‹à¤¡à¥à¤¯à¥‚à¤²...";
         };
     };
 };
@@ -3028,9 +3315,9 @@ Menu RID_POPUP_DLGED
             Text = "Eigenschaften..." ;
             Text [ ENGLISH ] = "Properties..." ;
             Text[ english_us ] = "Properties...";
-            Text[ portuguese ] = "Properties...";
+            Text[ portuguese ] = "Propriedades...";
             Text[ russian ] = "Ñâîéñòâà...";
-            Text[ greek ] = "Properties...";
+            Text[ greek ] = "Éäéüôçôåò...";
             Text[ dutch ] = "Eigenschappen...";
             Text[ french ] = "Propriétés...";
             Text[ spanish ] = "Propiedades...";
@@ -3039,15 +3326,18 @@ Menu RID_POPUP_DLGED
             Text[ danish ] = "Egenskaber...";
             Text[ swedish ] = "Egenskaper...";
             Text[ polish ] = "W³aœciwoœci...";
-            Text[ portuguese_brazilian ] = "Properties...";
+            Text[ portuguese_brazilian ] = "Propriedades...";
             Text[ japanese ] = "ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£...";
             Text[ korean ] = "ë“±ë¡ ì •ë³´...";
             Text[ chinese_simplified ] = "å±æ€§...";
             Text[ chinese_traditional ] = "å±¬æ€§...";
-            Text[ turkish ] = "Properties...";
-            Text[ arabic ] = "Properties...";
+            Text[ turkish ] = "Özellikler...";
+            Text[ arabic ] = "...ÎÕÇÆÕ";
             Text[ catalan ] = "Propietats...";
             Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´...";
+            Text[ czech ] = "Vlastnosti...";
+            Text[ hebrew ] = "â€®×××¤×™× ×™×â€¬";
+            Text[ hindi ] = "Properties...";
         };
     };
 };
@@ -3135,15 +3425,18 @@ String RID_STR_QUERYREPLACEMACRO
     Text[ danish ] = "Do you want to overwrite the macro XX ?";
     Text[ swedish ] = "Vill du skriva över makrot XX ?";
     Text[ polish ] = "Do you want to overwrite the macro XX ?";
-    Text[ portuguese_brazilian ] = "Do you want to overwrite the macro XX ?";
+    Text[ portuguese_brazilian ] = "Do you want to overwrite the XX macro?";
     Text[ japanese ] = "ãƒã‚¯ãƒ­ XX ã«ä¸Šæ›¸ãã—ã¾ã™ã‹ã€‚";
     Text[ korean ] = "macro XX ì„(ë¥¼) ë®ì–´ì“°ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ chinese_simplified ] = "æ‚¨è¦æ”¹å†™å® XX ï¼Ÿ";
     Text[ chinese_traditional ] = "æ‚¨è¦è¦†å¯« XX å·¨é›† ?";
-    Text[ turkish ] = "Do you want to overwrite the macro XX ?";
+    Text[ turkish ] = "XX macrosunun üstüne yazmak istermisiniz ?";
     Text[ arabic ] = "Do you want to overwrite the macro XX ?";
-    Text[ catalan ] = "Do you want to overwrite the macro XX ?";
-    Text[ thai ] = "Do you want to overwrite the macro XX ?";
+    Text[ catalan ] = "Do you want to overwrite the XX macro?";
+    Text[ thai ] = "Do you want to overwrite the XX macro?";
+    Text[ czech ] = "Chcete nahradit makro XX?";
+    Text[ hebrew ] = "MÃ¶chten Sie das Makro XX Ã¼berschreiben ?";
+    Text[ hindi ] = "Do you want to overwrite the XX macro?";
 };
 
 #define MN_EDIT 20
@@ -3292,10 +3585,13 @@ Menu RID_BASICMENU
             Text[ greek ] = "~Åğåîåñãáóßá";
             Text[ korean ] = "í¸ì§‘(~E)";
             Text[ arabic ] = "~ÊÍÑíÑ";
-            Text[ turkish ] = "Dü~zenle";
+            Text[ turkish ] = "~Düzenle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Edita";
             Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
+            Text[ czech ] = "Upravit";
+            Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
+            Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
         };
         MenuItem
         {
@@ -3366,11 +3662,14 @@ Menu RID_BASICMENU
                                     Text[ greek ] = "ÃñáììŞ åñãáëåß~ùí";
                                     Text[ korean ] = "ì£¼ ë„êµ¬ ëª¨ìŒ(~T)";
                                     Text[ arabic ] = "ÔÑíØ ÇáÃÏæÇÊ";
-                                    Text[ turkish ] = "Ana araç çubuğu";
+                                    Text[ turkish ] = "Ana ~Araççubuğu";
                                     Text[ language_user1 ] = " ";
                                     Text[ catalan ] = "Barra d'~eines principal";
                                     Text[ finnish ] = "Pää~työkalurivi";
                                     Text[ thai ] = "à¹~à¸–à¸šà¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­à¸«à¸¥à¸±à¸";
+                                    Text[ czech ] = "HlavnÃ­ panel nÃ¡strojÅ¯";
+                                    Text[ hebrew ] = "Werk~zeugleiste";
+                                    Text[ hindi ] = "~à¤®à¥à¤–à¥à¤¯ à¤”à¤œà¤¼à¤¾à¤° à¤ªà¤Ÿà¥à¤Ÿà¥€";
                                 };
                                 MenuItem
                                 {
@@ -3403,11 +3702,14 @@ Menu RID_BASICMENU
                                     Text[ greek ] = "~Åğåîåñãáóßá...";
                                     Text[ korean ] = "ì‚¬ìš©ì ì •ì˜(~Z)...";
                                     Text[ arabic ] = "ÊÎÕíÕ...";
-                                    Text[ turkish ] = "Ö~zelleştir...";
+                                    Text[ turkish ] = "Özelleştir...";
                                     Text[ language_user1 ] = " ";
                                     Text[ catalan ] = "Personalit~za...";
                                     Text[ finnish ] = "Mukau~ta";
                                     Text[ thai ] = "à¸à¸³à¸«~à¸™à¸”à¹€à¸­à¸‡...";
+                                    Text[ czech ] = "PÅ™izpÅ¯sobit...";
+                                    Text[ hebrew ] = "~Bearbeiten...";
+                                    Text[ hindi ] = "~à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¥‹...";
                                 };
                             };
                         };
@@ -3419,11 +3721,14 @@ Menu RID_BASICMENU
                         Text[ greek ] = "Ãñáììİò ó~õìâüëùí";
                         Text[ korean ] = "ë„êµ¬ ëª¨ìŒ(~T)";
                         Text[ arabic ] = "ÃÔÑØÉ ÇáÑãæÒ";
-                        Text[ turkish ] = "Araç ç~ubukları";
+                        Text[ turkish ] = "~Araç çubuğu";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Barra d'~eines";
                         Text[ finnish ] = "~Työkalurivit";
                         Text[ thai ] = "à¹~à¸–à¸šà¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­";
+                        Text[ czech ] = "Panely nÃ¡strojÅ¯";
+                        Text[ hebrew ] = "â€®×¡×¨×’×œ×™ ×›×œ×™×â€¬";
+                        Text[ hindi ] = "~à¤”à¤œà¤¼à¤¾à¤° à¤ªà¤Ÿà¥à¤Ÿà¥€";
                     };
                     MenuItem
                     {
@@ -3454,6 +3759,9 @@ Menu RID_BASICMENU
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Visualitza";
             Text[ thai ] = "~à¸¡à¸¸à¸¡à¸¡à¸­à¸‡";
+            Text[ czech ] = "Zobrazit";
+            Text[ hebrew ] = "â€®×ª×¦×•×’×”â€¬";
+            Text[ hindi ] = "~Ã Â¤Â¦Ã Â¥Æ’Ã Â¤Â¶Ã Â¥ÂÃ Â¤Â¯";
         };
         MenuItem
         {
@@ -3500,6 +3808,9 @@ Menu RID_BASICMENU
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ei~nes";
             Text[ thai ] = "à¹€~à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­";
+            Text[ czech ] = "NÃ¡stroje";
+            Text[ hebrew ] = "â€®×›×œ×™×â€¬";
+            Text[ hindi ] = "~à¤”à¤œà¤¼à¤¾à¤°";
         };
         GLOBLMN_WINMN
         {
@@ -3676,10 +3987,13 @@ Menu RID_BASICPLUGINMENU
             Text[ greek ] = "Åğåîåñãáóßá";
             Text[ korean ] = "í¸ì§‘(~E)";
             Text[ arabic ] = "~ÊÍÑíÑ";
-            Text[ turkish ] = "Dü~zenle";
+            Text[ turkish ] = "~Düzenle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Edita";
             Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
+            Text[ czech ] = "Upravit";
+            Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
+            Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
         };
         MenuItem
         {
@@ -3750,11 +4064,14 @@ Menu RID_BASICPLUGINMENU
                                     Text[ greek ] = "ÃñáììŞ åñãáëåß~ùí";
                                     Text[ korean ] = "ì£¼ ë„êµ¬ ëª¨ìŒ(~T)";
                                     Text[ arabic ] = "ÔÑíØ ÇáÃÏæÇÊ";
-                                    Text[ turkish ] = "Ana araç çubuğu";
+                                    Text[ turkish ] = "Ana ~Araç Çubuğu";
                                     Text[ language_user1 ] = " ";
                                     Text[ catalan ] = "Barra d'~eines principal";
                                     Text[ finnish ] = "Pää~työkalurivi";
                                     Text[ thai ] = "à¹à¸–à¸šà¹€~à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­à¸«à¸¥à¸±à¸";
+                                    Text[ czech ] = "HlavnÃ­ panel nÃ¡strojÅ¯";
+                                    Text[ hebrew ] = "Werk~zeugleiste";
+                                    Text[ hindi ] = "~à¤®à¥à¤–à¥à¤¯ à¤”à¤œà¤¼à¤¾à¤° à¤ªà¤Ÿà¥à¤Ÿà¥€";
                                 };
                                 MenuItem
                                 {
@@ -3787,11 +4104,14 @@ Menu RID_BASICPLUGINMENU
                                     Text[ greek ] = "Åğåîåñãáóßá...";
                                     Text[ korean ] = "ì‚¬ìš©ì ì •ì˜(~Z)...";
                                     Text[ arabic ] = "ÊÎÕíÕ...";
-                                    Text[ turkish ] = "Ö~zelleştir...";
+                                    Text[ turkish ] = "Özell~eştir...";
                                     Text[ language_user1 ] = " ";
                                     Text[ catalan ] = "Personalit~za...";
                                     Text[ finnish ] = "Mukau~ta";
                                     Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¹€~à¸­à¸‡...";
+                                    Text[ czech ] = "PÅ™izpÅ¯sobit...";
+                                    Text[ hebrew ] = "~Bearbeiten...";
+                                    Text[ hindi ] = "~à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¥‹...";
                                 };
                             };
                         };
@@ -3803,11 +4123,14 @@ Menu RID_BASICPLUGINMENU
                         Text[ greek ] = "Ãñáììİò ó~õìâüëùí";
                         Text[ korean ] = "ë„êµ¬ ëª¨ìŒ(~T)";
                         Text[ arabic ] = "ÃÔÑØÉ ÇáÑãæÒ";
-                        Text[ turkish ] = "Araç ç~ubukları";
+                        Text[ turkish ] = "~Araç çubuğu";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Barra d'~eines";
                         Text[ finnish ] = "~Työkalurivit";
                         Text[ thai ] = "à¹à¸–à¸šà¹€~à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­";
+                        Text[ czech ] = "Panely nÃ¡strojÅ¯";
+                        Text[ hebrew ] = "â€®×¡×¨×’×œ×™ ×›×œ×™×â€¬";
+                        Text[ hindi ] = "~à¤”à¤œà¤¼à¤¾à¤° à¤ªà¤Ÿà¥à¤Ÿà¥€";
                     };
                     MenuItem
                     {
@@ -3838,6 +4161,9 @@ Menu RID_BASICPLUGINMENU
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Visualitza";
             Text[ thai ] = "~à¸¡à¸¸à¸¡à¸¡à¸­à¸‡";
+            Text[ czech ] = "Zobrazit";
+            Text[ hebrew ] = "â€®×ª×¦×•×’×”â€¬";
+            Text[ hindi ] = "~Ã Â¤Â¦Ã Â¥Æ’Ã Â¤Â¶Ã Â¥ÂÃ Â¤Â¯";
         };
         MenuItem
         {
@@ -3884,6 +4210,9 @@ Menu RID_BASICPLUGINMENU
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ei~nes";
             Text[ thai ] = "à¹€~à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­";
+            Text[ czech ] = "NÃ¡stroje";
+            Text[ hebrew ] = "â€®×›×œ×™×â€¬";
+            Text[ hindi ] = "~à¤”à¤œà¤¼à¤¾à¤°";
         };
         GLOBLMN_WINMN
         {
@@ -3906,6 +4235,24 @@ Menu RID_BASICPLUGINMENU
         ITEM_HELP_MENU
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
