@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:39:55 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1156,16 +1156,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         break;
 
         case SID_ADDRESS_DATA_SOURCE:
-        case SID_DATASOURCE_ADMINISTRATION:
-        case SID_SDB52_IMPORT_WIZARD:
         {
-            ::rtl::OUString sDialogServiceName;
-            if ( rReq.GetSlot() == SID_ADDRESS_DATA_SOURCE )
-                sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.AddressBookSourcePilot");
-            else if ( rReq.GetSlot() == SID_DATASOURCE_ADMINISTRATION )
-                sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatasourceAdministrationDialog");
-            else
-                sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseImportWizard");
+            ::rtl::OUString sDialogServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.AddressBookSourcePilot" ) );
             try
             {
                 Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
