@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:01:45 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1939,6 +1939,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
 
             if( !aKeyEvent.GetRepeat() && pACorr &&
+                    pACfg->IsAutoFmtByInput() &&
                 (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
                     ( '*' == aCh || '_' == aCh ) ) ||
                  ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
@@ -1950,6 +1951,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     rSh.UpdateAttr();
             }
             else if( !aKeyEvent.GetRepeat() && pACorr &&
+                    pACfg->IsAutoFmtByInput() &&
                 pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                         ChgFractionSymbol | ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |
@@ -1981,7 +1983,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
         case KS_CheckAutoCorrect:
         {
-            if( pACorr &&
+            if( pACorr && pACfg->IsAutoFmtByInput() &&
                 pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                         ChgFractionSymbol | ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |
