@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:41:47 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,9 +348,9 @@ void OGenericUnoController::disposing(const EventObject& Source) throw( RuntimeE
 //------------------------------------------------------------------------
 void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     if ( !isDataSourceReadOnly() )
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
         Reference<XModifiable> xModi(aEvent.Source,UNO_QUERY);
         if ( xModi.is() )
             m_bCurrentlyModified = m_bCurrentlyModified || xModi->isModified(); // can only be reset by save
