@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-09 13:28:58 $
+ *  last change: $Author: dbo $ $Date: 2001-05-09 16:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,11 @@ static Reference< XComponentContext > initializeSF(
     context_values[ 1 ].bLateInitService = true;
     context_values[ 1 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") );
     context_values[ 1 ].value = makeAny( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) );
-    sal_Int32 nEntries = 2;
+    // tdmgr: cache size
+    context_values[ 2 ].bLateInitService = false;
+    context_values[ 2 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.TypeDescriptionManager.CacheSize") );
+    context_values[ 2 ].value = makeAny( (sal_Int32)512 );
+    sal_Int32 nEntries = 3;
 
     if (xRegistry.is())
     {
@@ -267,10 +271,6 @@ static Reference< XComponentContext > initializeSF(
         context_values[ 2 ].bLateInitService = false;
         context_values[ 2 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider.Registries") );
         context_values[ 2 ].value = makeAny( Sequence< Reference< registry::XSimpleRegistry > >( &xRegistry, 1 ) );
-        // tdmgr: cache size
-        context_values[ 3 ].bLateInitService = false;
-        context_values[ 3 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.TypeDescriptionManager.CacheSize") );
-        context_values[ 3 ].value = makeAny( (sal_Int32)512 );
         nEntries = 4;
     }
 
