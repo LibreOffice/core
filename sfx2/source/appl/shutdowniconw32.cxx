@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:24:54 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,22 +114,26 @@ using namespace ::osl;
 
 #define ID_QUICKSTART               1
 #define IDM_EXIT                    2
-#define IDM_OPEN                    3
-#define IDM_WRITER                  4
-#define IDM_CALC                    5
-#define IDM_IMPRESS                 6
-#define IDM_DRAW                    7
-#define IDM_TEMPLATE                8
+#if defined(USE_APP_SHORTCUTS)
+#   define IDM_OPEN                    3
+#   define IDM_WRITER                  4
+#   define IDM_CALC                    5
+#   define IDM_IMPRESS                 6
+#   define IDM_DRAW                    7
+#   define IDM_TEMPLATE                8
+#endif
 #define IDM_INSTALL                 9
 #define IDM_UNINSTALL               10
 
 
+#if defined(USE_APP_SHORTCUTS)
 #define WRITER_URL      "private:factory/swriter"
 #define CALC_URL        "private:factory/scalc"
 #define IMPRESS_URL     "private:factory/simpress"
 #define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=10425"
 #define DRAW_URL        "private:factory/sdraw"
 #define MATH_URL        "private:factory/smath"
+#endif
 
 #define ICON_SO_DEFAULT                 1
 #define ICON_TEXT_DOCUMENT              2
@@ -227,8 +231,10 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, OUString& text, int&
             mi.cch = text.getLength();
         }
 
+#if defined(USE_APP_SHORTCUTS)
         if ( IDM_TEMPLATE == id )
             mi.fState |= MFS_DEFAULT;
+#endif
     }
 
     InsertMenuItemW( hMenu, pos++, TRUE, &mi );
@@ -249,6 +255,7 @@ static HMENU createSystrayMenu( )
     if( !pShutdownIcon )
         return NULL;
 
+#if defined(USE_APP_SHORTCUTS)
     if ( aModuleOptions.IsWriter() )
         addMenuItem( hMenu, IDM_WRITER, ICON_TEXT_DOCUMENT,
             pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( WRITER_URL ) ) ), pos, true );
@@ -266,6 +273,7 @@ static HMENU createSystrayMenu( )
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
     addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true );
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
+#endif
     addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false );
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
     addMenuItem( hMenu, IDM_EXIT,   0, pShutdownIcon->GetResString( STR_QUICKSTART_EXIT ), pos, false );
@@ -374,7 +382,9 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             switch( lParam )
             {
                 case WM_LBUTTONDBLCLK:
+#if defined(USE_APP_SHORTCUTS)
                     PostMessage( aExecuterWindow, WM_COMMAND, IDM_TEMPLATE, (LPARAM)hWnd );
+#endif
                     break;
 
                 case WM_RBUTTONDOWN:
@@ -387,15 +397,17 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     CheckMenuItem( popupMenu, IDM_INSTALL, MF_BYCOMMAND| (ShutdownIcon::GetAutostart() ? MF_CHECKED : MF_UNCHECKED) );
 
                     EnableMenuItem( popupMenu, IDM_EXIT, MF_BYCOMMAND | (bModalMode ? MF_GRAYED : MF_ENABLED) );
+#if defined(USE_APP_SHORTCUTS)
                     EnableMenuItem( popupMenu, IDM_OPEN, MF_BYCOMMAND | (bModalMode ? MF_GRAYED : MF_ENABLED) );
                     EnableMenuItem( popupMenu, IDM_TEMPLATE, MF_BYCOMMAND | (bModalMode ? MF_GRAYED : MF_ENABLED) );
-
+#endif
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
                                               pt.x, pt.y, hWnd, NULL );
                     // BUGFIX: See Q135788 (PRB: Menus for Notification Icons Don't Work Correctly)
                     PostMessage( hWnd, NULL, 0, 0 );
                     switch( m )
                     {
+#if defined(USE_APP_SHORTCUTS)
                         case IDM_OPEN:
                         case IDM_WRITER:
                         case IDM_CALC:
@@ -403,6 +415,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                         case IDM_DRAW:
                         case IDM_TEMPLATE:
                             break;
+#endif
                         case IDM_INSTALL:
                             CheckMenuItem( popupMenu, IDM_INSTALL, MF_BYCOMMAND| (ShutdownIcon::GetAutostart() ? MF_CHECKED : MF_UNCHECKED) );
                             break;
@@ -481,6 +494,7 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
         case WM_COMMAND:
             switch( LOWORD(wParam) )
             {
+#if defined(USE_APP_SHORTCUTS)
                 case IDM_OPEN:
                     if ( !bModalMode && checkOEM() )
                         ShutdownIcon::FileOpen();
@@ -505,6 +519,7 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     if ( !bModalMode && checkOEM())
                         ShutdownIcon::FromTemplate();
                 break;
+#endif
                 case IDM_INSTALL:
                     ShutdownIcon::SetAutostart( !ShutdownIcon::GetAutostart() );
                     break;
