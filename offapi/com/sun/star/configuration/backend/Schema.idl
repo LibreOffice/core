@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Schema.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 12:59:16 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ module com { module sun { module star { module configuration { module backend {
         Service providing access to individual
         configuration data for an entity.
 
-  @since #107960#
+  @since OOo 1.1.2
   */
 published service Schema
 {
