@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profileitem_ooo.scp,v $
 *
-*  $Revision: 1.9 $
+*  $Revision: 1.10 $
 *
-*  last change: $Author: obo $ $Date: 2004-07-05 13:18:08 $
+*  last change: $Author: hr $ $Date: 2004-08-03 14:59:01 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -271,7 +271,7 @@ ProfileItem gid_Profileitem_Configmgr_Cachewrite
     Value  = "2";
 End
 
- ProfileItem gid_Profileitem_Configmgr_Localcfg_Userdataurl
+ProfileItem gid_Profileitem_Configmgr_Localcfg_Userdataurl
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
@@ -280,7 +280,7 @@ End
     Value  = "$UserInstallation/user/registry";
 End
 
- ProfileItem gid_Profileitem_Configmgr_Localcfg_Cacheurl
+ProfileItem gid_Profileitem_Configmgr_Localcfg_Cacheurl
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
@@ -288,16 +288,7 @@ End
     Key  = "CFG_CacheUrl";
     Value  = "$UserInstallation/user/registry/cache";
 End
-
- ProfileItem gid_Profileitem_Configmgr_Offline_Cachedataurl
-    ProfileID = gid_Profile_Configmgr_Ini;
-    ModuleID = gid_Module_Root;
-    Section   = "Bootstrap";
-    Order = 13;
-    Key  = "CFG_OfflineDataUrl";
-    Value  = "$UserInstallation/user/registry/offline";
-End
-
+ 
 ProfileItem gid_Profileitem_Configmgr_Localcfg_Defaultlayerurl
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
@@ -388,6 +379,15 @@ ProfileItem gid_Profileitem_Configmgr_Strata
     Key  = "CFG_Strata";
     Value  = "${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalDataSvc}:$CFG_ModuleLayerUrl;${CFG_LocalResDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalDataSvc}:$CFG_UnoSharedPackages;?com.sun.star.comp.configuration.backend.SystemIntegration:;?com.sun.star.comp.configuration.backend.PolicyLayerBackend:;${CFG_LocalDataSvc}:$CFG_UnoUserPackages;${CFG_LocalDataSvc}:$CFG_UserLayerUrl;";
 End
+
+ProfileItem gid_Profileitem_Configmgr_Ldapmappingurl
+    ProfileID = gid_Profile_Configmgr_Ini ;
+    ModuleID = gid_Module_Root;
+    Section   = "Bootstrap";
+    Order = 21;
+    Key  = "CFG_LdapMappingUrl";
+    Value  = "$BaseInstallation/share/registry/ldap";
+End 
 
 //end configmgr
 
