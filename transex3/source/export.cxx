@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:30:15 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 16:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,7 @@ extern FILE *GetNextFile()
         }
 
         sTempFile = sFileName;
+        Export::RemoveUTF8ByteOrderMarkerFromFile( sFileName );
 
         // able to open file?
         FILE *pFile = fopen( sFileName.GetBuffer(), "r" );
