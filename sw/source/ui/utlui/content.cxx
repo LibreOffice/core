@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-08 16:31:20 $
+ *  last change: $Author: os $ $Date: 2001-06-26 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1091,10 +1091,12 @@ void  SwContentTree::Command( const CommandEvent& rCEvt )
                         bSubPop4 = sal_True;
                         aSubPop4.InsertItem(401, sRemoveIdx);
                         aSubPop4.InsertItem(402, sUpdateIdx);
-                        aSubPop4.InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
-                        aSubPop4.InsertItem(405, sReadonlyIdx);
 
                         const SwTOXBase* pBase = ((SwTOXBaseContent*)pEntry->GetUserData())->GetTOXBase();
+                        if(!pBase->IsTOXBaseInReadonly())
+                            aSubPop4.InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
+                        aSubPop4.InsertItem(405, sReadonlyIdx);
+
                         aSubPop4.CheckItem( 405, pActiveShell->IsTOXBaseReadonly(*pBase));
                         aSubPop4.InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
                     }
@@ -3114,6 +3116,9 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/05/08 16:31:20  jp
+    remove old clipboard headerfile
+
     Revision 1.6  2001/05/07 09:04:37  jp
     chg: Drag&Drop interface changed to TransferData & Helper classes
 
