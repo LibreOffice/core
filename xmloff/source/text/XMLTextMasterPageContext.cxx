@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterPageContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 10:42:25 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 08:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,16 +205,6 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
 
     if( bOverwrite || bNew )
     {
-        // TODO: Look for page master and insert its attributes here!
-        if ( sPageMasterName.getLength() )
-        {
-            XMLPropStyleContext* pStyle = GetImport().GetTextImport()->FindPageMaster( sPageMasterName );
-            if (pStyle)
-            {
-                pStyle->FillPropertySet(xPropSet);
-            }
-        }
-
         bInsertHeader = bInsertFooter = sal_True;
         bInsertHeaderLeft = bInsertFooterLeft = sal_True;
     }
@@ -295,6 +285,17 @@ void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
 {
     if( xStyle.is() && (IsNew() || bOverwrite) )
     {
+        Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
+        if ( sPageMasterName.getLength() )
+        {
+            XMLPropStyleContext* pStyle =
+                GetImport().GetTextImport()->FindPageMaster( sPageMasterName );
+            if (pStyle)
+            {
+                pStyle->FillPropertySet(xPropSet);
+            }
+        }
+
         Reference < XNameContainer > xPageStyles =
             GetImport().GetTextImport()->GetPageStyles();
         if( !xPageStyles.is() )
@@ -303,7 +304,6 @@ void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
         if( !sFollow.getLength() || !xPageStyles->hasByName( sFollow ) )
             sFollow = xStyle->getName();
 
-        Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
         Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
         if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-24 14:30:38 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 08:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #endif
 #ifndef _XMLOFF_XMLCLIPPROPERTYHANDLER_HXX
 #include "XMLClipPropertyHandler.hxx"
+#endif
+#ifndef _XMLOFF_XMLTEXTCOLUMNSPPROPERTYHANDLER_HXX
+#include "XMLTextColumnsPropertyHandler.hxx"
 #endif
 #ifndef _XMLOFF_TXTPRHDL_HXX
 #include "txtprhdl.hxx"
@@ -677,31 +680,12 @@ sal_Bool XMLAnchorTypePropHdl::convert( const OUString& rStrImpValue,
 
 // ---------------------------------------------------------------------------
 
-class XMLTextColumnsPropHdl_Impl : public XMLPropertyHandler
-{
-public:
-    virtual ~XMLTextColumnsPropHdl_Impl ();
 
-    virtual sal_Bool equals(
-            const ::com::sun::star::uno::Any& r1,
-            const ::com::sun::star::uno::Any& r2 ) const;
-
-    /// TabStops will be imported/exported as XML-Elements. So the Import/Export-work must be done at another place.
-    virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
-            ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
-            const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
-};
-
-XMLTextColumnsPropHdl_Impl::~XMLTextColumnsPropHdl_Impl ()
+XMLTextColumnsPropertyHandler::~XMLTextColumnsPropertyHandler ()
 {
 }
 
-sal_Bool XMLTextColumnsPropHdl_Impl::equals(
+sal_Bool XMLTextColumnsPropertyHandler::equals(
         const Any& r1,
         const Any& r2 ) const
 {
@@ -738,7 +722,7 @@ sal_Bool XMLTextColumnsPropHdl_Impl::equals(
     return sal_True;
 }
 
-sal_Bool XMLTextColumnsPropHdl_Impl::importXML(
+sal_Bool XMLTextColumnsPropertyHandler::importXML(
         const OUString& rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
@@ -747,7 +731,7 @@ sal_Bool XMLTextColumnsPropHdl_Impl::importXML(
     return sal_False;
 }
 
-sal_Bool XMLTextColumnsPropHdl_Impl::exportXML(
+sal_Bool XMLTextColumnsPropertyHandler::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
@@ -944,7 +928,7 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLAnchorTypePropHdl;
         break;
     case XML_TYPE_TEXT_COLUMNS:
-        pHdl = new XMLTextColumnsPropHdl_Impl;
+        pHdl = new XMLTextColumnsPropertyHandler;
         break;
     case XML_TYPE_TEXT_HORIZONTAL_POS:
         pHdl = new XMLConstantsPropertyHandler( pXML_HoriPos_Enum, 0 );
