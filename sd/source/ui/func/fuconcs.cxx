@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconcs.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:12:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,6 +409,10 @@ SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16 nID, con
 
     if( pObj )
     {
+        Rectangle aRect( rRectangle );
+        if ( doConstructOrthogonal() )
+            ImpForceQuadratic( aRect );
+        pObj->SetLogicRect( aRect );
         SetAttributes( pObj );
         SfxItemSet aAttr(pDoc->GetPool());
         SetStyleSheet(aAttr, pObj);
