@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-07 18:11:29 $
+#   last change: $Author: dg $ $Date: 2001-02-08 11:39:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ SHL1VERSIONMAP= $(TARGET).map
 .ENDIF
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
+    $(COMPHELPERLIB)			\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
