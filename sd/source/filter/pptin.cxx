@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-26 16:13:16 $
+ *  last change: $Author: sj $ $Date: 2002-09-05 15:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,14 +604,14 @@ sal_Bool ImplSdPPTImport::Import()
                                             }
                                             if ( bSucceeded )
                                             {
-                                                if ( nPageNumber >= aSlideNameList.Count() )
+                                                if ( nPageNumber < aSlideNameList.Count() )
+                                                    pHyperlink->aConvSubString = *(String*)aSlideNameList.GetObject( nPageNumber );
+                                                if ( !pHyperlink->aConvSubString.Len() )
                                                 {
                                                     pHyperlink->aConvSubString = String( SdResId( STR_PAGE ) );
                                                     pHyperlink->aConvSubString.Append( sal_Unicode( ' ' ) );
                                                     pHyperlink->aConvSubString.Append( pDoc->CreatePageNumValue( (sal_Int32)nPageNumber + 1 ) );
                                                 }
-                                                else
-                                                    pHyperlink->aConvSubString = *(String*)aSlideNameList.GetObject( nPageNumber );
                                             }
                                         }
                                         aHyperList.Insert( pHyperlink, LIST_APPEND );
