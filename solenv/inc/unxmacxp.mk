@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:39:25 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 08:58:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -174,17 +174,9 @@ LINKFLAGS=-Wl,-multiply_defined,suppress
 # Random link flags dealing with different cases of linking
 
 LINKFLAGSAPPGUI=-bind_at_load
-.IF "$(UNIXVERSIONNAMES)"!=""
-    LINKFLAGSSHLGUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f:b:b)'
-.ELSE
-    LINKFLAGSSHLGUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f)'
-.ENDIF
+LINKFLAGSSHLGUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f)'
 LINKFLAGSAPPCUI=-bind_at_load -Wl,-u,__objcInit
-.IF "$(UNIXVERSIONNAMES)"!=""
-    LINKFLAGSSHLCUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f:b:b)'
-.ELSE
-    LINKFLAGSSHLCUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f)'
-.ENDIF
+LINKFLAGSSHLCUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f)'
 LINKFLAGSTACK=
 LINKFLAGSPROF=
 
