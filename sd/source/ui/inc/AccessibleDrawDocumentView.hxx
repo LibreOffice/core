@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 17:51:21 $
+ *  last change: $Author: af $ $Date: 2002-04-22 08:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,20 @@
 namespace accessibility {
 
 
-/** @descr
-        This class implements the UAA for views of Draw and Impress
-        documents.
+/** This class makes draw documents in the general view modes
+    accessible.  It passes all shapes on the current draw page to a
+    children manager and additionally creates a new shape that
+    represents the actual draw page.
+
+    Please see the documentation of the base class for further
+    explanations of the individual methods.
 */
 class AccessibleDrawDocumentView
-    :   public AccessibleDocumentViewBase
+    : public AccessibleDocumentViewBase
 {
 public:
     //=====  internal  ========================================================
+
     AccessibleDrawDocumentView (SdWindow* pSdWindow,
         SdViewShell* pViewShell,
         const ::com::sun::star::uno::Reference<
@@ -89,9 +94,13 @@ public:
 
     virtual ~AccessibleDrawDocumentView (void);
 
-    void Init (void);
+    /** Complete the initialization begun in the constructor.
+    */
+    virtual void Init (void);
+
 
     //=====  IAccessibleViewForwarderListener  ================================
+
     virtual void ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder);
 
@@ -136,24 +145,23 @@ public:
 
 
 protected:
-    // The visible children of the document view.
+    /** This object manages the shapes of the represented draw page.  It is
+        responsible to determine the visible shapes and create on demand the
+        accessible objects representing them.
+    */
     ChildrenManager* mpChildrenManager;
 
-    /// Model of the document.
-    com::sun::star::uno::Reference < ::drafts::com::sun::star::accessibility::XAccessible>
-        mxPageShape;
-
-    /** Update the draw page shape.  If a draw page shape does not yet exist
-        it is created.
+    /** Create a shape the represents the page as seen on the screen.
     */
-    AccessiblePageShape* UpdateDrawPageShape (void);
+    AccessiblePageShape* CreateDrawPageShape (void);
 
-    /// Set this object's name if is different to the current name.
+    /// Create an accessible name that contains the current view mode.
     virtual ::rtl::OUString
         CreateAccessibleName ()
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Set this object's description if is different to the current description.
+    /// Create an accessible description that contains the current
+    /// view mode.
     virtual ::rtl::OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
