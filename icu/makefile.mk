@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2002-09-25 12:09:57 $
+#   last change: $Author: er $ $Date: 2002-10-31 15:45:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,9 +92,17 @@ CXX:=$(COMPATH)$/bin$/CC
 
 CONFIGURE_DIR=source
 
-CONFIGURE_ACTION=sh ./configure
+CONFIGURE_ACTION=sh -c 'CFLAGS=-O CXXFLAGS=-O ./configure --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
 
-CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
+#CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
+CONFIGURE_FLAGS=
+
+# Use of
+# CONFIGURE_ACTION=sh -c 'CFLAGS=-O CXXFLAGS=-O ./configure'
+# CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
+# doesn't work as it would result in
+# sh -c 'CFLAGS=-O CXXFLAGS=-O ./configure' --enable-layout ...
+# note the position of the single quotes.
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(GNUMAKE)
@@ -166,7 +174,9 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary
 # Since you never know what will be in a patch (for example, it may already
 # patch at configure level) or in the case of a binary patch, we remove the
 # entire package directory if a patch is newer.
-$(MISC)$/remove_build.flag : $(BINARY_PATCH_FILE_NAME) $(PATCH_FILE_NAME)
+# Changes in this makefile could also make a complete build necessary if 
+# configure is affected.
+$(MISC)$/remove_build.flag : $(BINARY_PATCH_FILE_NAME) $(PATCH_FILE_NAME) makefile.mk
     $(REMOVE_PACKAGE_COMMAND)
     +$(TOUCH) $(MISC)$/remove_build.flag
 
