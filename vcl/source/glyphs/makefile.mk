@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hdu $ $Date: 2001-02-15 16:04:17 $
+#   last change: $Author: hdu $ $Date: 2001-02-22 17:03:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,29 +68,17 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-
-#UNOPRE=$/uno
-
-.INCLUDE :  svpre.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
-
-.IF "$(remote)" != ""
+.IF "$(USE_BUILTIN_RASTERIZER)" != ""
 SLOFILES=\
-            $(SLO)$/glyphcache.obj		\
-            $(SLO)$/gcach_vdev.obj		\
-            $(SLO)$/gcach_ftyp.obj
+        $(SLO)$/glyphcache.obj		\
+        $(SLO)$/gcach_vdev.obj		\
+        $(SLO)$/gcach_ftyp.obj
 
-.ENDIF
-
-.IF "$(GUI)" == "UNX"
-SLOFILES=\
-            $(SLO)$/glyphcache.obj		\
-            $(SLO)$/gcach_vdev.obj		\
-            $(SLO)$/gcach_ftyp.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------
