@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-28 14:04:44 $
+#   last change: $Author: hjs $ $Date: 2004-06-30 10:47:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -329,7 +329,7 @@ LIB1OBJFILES= \
     $(SLO)$/svxdlg.obj \
     $(SLO)$/charmap.obj     \
     $(SLO)$/_bmpmask.obj    \
-    $(SLO)$/frmsel.obj   	\
+    $(SLO)$/frmsel.obj \
     $(SLO)$/opengrf.obj     \
     $(SLO)$/hyphen.obj      \
     $(SLO)$/rubydialog.obj  \
@@ -337,9 +337,9 @@ LIB1OBJFILES= \
     $(SLO)$/spldlg.obj      \
     $(SLO)$/splwrap.obj     \
     $(SLO)$/hangulhanja.obj \
-    $(SLO)$/_contdlg.obj	\
+    $(SLO)$/_contdlg.obj \
     $(SLO)$/connctrl.obj \
-    $(SLO)$/contwnd.obj	\
+    $(SLO)$/contwnd.obj \
     $(SLO)$/fontlb.obj   \
     $(SLO)$/graphctl.obj \
     $(SLO)$/hyperdlg.obj \
@@ -382,14 +382,14 @@ LIB1OBJFILES= \
     $(SLO)$/worient.obj    \
     $(SLO)$/txenctab.obj \
     $(SLO)$/txencbox.obj \
-    $(SLO)$/grfflt.obj	\
+    $(SLO)$/grfflt.obj \
     $(SLO)$/frmdirlbox.obj \
     $(SLO)$/commonlingui.obj \
-    $(SLO)$/dialmgr.obj	\
+    $(SLO)$/dialmgr.obj \
     $(SLO)$/svxgrahicitem.obj \
     $(SLO)$/swframeexample.obj \
-    $(SLO)$/swframeposstrings.obj
-    $(SLO)$/svxbmpnumvalueset.obj	\
+    $(SLO)$/swframeposstrings.obj \
+    $(SLO)$/svxbmpnumvalueset.obj \
     $(SLO)$/svxgrahicitem.obj
 
 LIB2TARGET= $(SLB)$/cui.lib
