@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-10 11:26:03 $
+ *  last change: $Author: mba $ $Date: 2001-10-11 12:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,16 +620,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 pSet->ClearItem( SID_INPUTSTREAM );
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *pSet, aArgs );
-            if ( !pMedium->GetName().Len() )
-            {
-                // opened as Template
-                aURL = ::rtl::OUString();
-                sal_Int32 nLength = aArgs.getLength();
-                aArgs.realloc( nLength + 1 );
-                aArgs[nLength].Name = DEFINE_CONST_UNICODE("Title");
-                aArgs[nLength].Value <<= aTitle;
-            }
-
             xModel->attachResource( aURL, aArgs );
         }
 
