@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:44:20 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,18 +126,9 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
 IMPL_LINK( SdDocPreviewWin, PaintProc, SdrPaintProcRec *, pRecord )
 {
     SdrObject* pObj = pRecord->pObj;
-    if( !pObj->IsEmptyPresObj() )
+    if( pObj->GetPage() && pObj->GetPage()->checkVisibility( pRecord, false ) )
     {
         pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
-    }
-    else
-    {
-        // sad but true, background shapes are also empty presentation objects
-        // so we need to check if this is one
-        if( pObj->GetPage()->IsMasterPage() && (pObj->GetPage() == pObj->GetObjList()) && (pObj->GetOrdNum() == 0) && pObj->ISA( SdrRectObj ) )
-        {
-            pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
-        }
     }
 
     return 0;
