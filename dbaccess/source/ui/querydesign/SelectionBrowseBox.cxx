@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:05:29 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,7 +723,10 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x"));
 
     ::connectivity::OSQLParser* pParser = pController->getParser();
-    OSQLParseNode* pParseNode = pParser->parseTree(sErrorMsg, sSql,sal_False);
+    // first try the international version
+    OSQLParseNode* pParseNode = pParser->parseTree(sErrorMsg, sSql,sal_True);
+    if ( !pParseNode ) // if that doesn't work try the english one
+        pParseNode = pParser->parseTree(sErrorMsg, sSql,sal_False);
 
     if ( pParseNode ) // we got a valid select column
     {
@@ -825,36 +828,35 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                             OSL_ENSURE(0,"Unsupported function inserted!");
 
                     }
-                    else // a calculation has been found ( can be calc and function )
+                    else if( SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp) ||
+                             SQL_ISRULEOR2(pColumnRef,fold,char_substring_fct)  ||
+                             SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
+                                // a calculation has been found ( can be calc and function )
                     {
                         // append the whole text as field name
                         // so we first clear the function field
                         clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
-                        sal_Bool bQuote = sal_False;
-                        if (    SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct)
-                            ||  SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp) )
+                        sal_Bool bQuote = sal_True;
+                        sal_Int32 nDataType = DataType::DOUBLE;
+                        OSQLParseNode* pFunctionName = pColumnRef->getChild(0);
+                        if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
                         {
-                            bQuote = sal_True;
-                            sal_Int32 nDataType = DataType::DOUBLE;
-                            OSQLParseNode* pFunctionName = pColumnRef->getChild(0);
-                            if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
+                            if ( SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
+                                pFunctionName = pFunctionName->getChild(0);
+
+                            if ( pFunctionName )
                             {
-                                if ( SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
-                                    pFunctionName = pFunctionName->getChild(0);
+                                ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
+                                if ( !sFunctionName.getLength() )
+                                    sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_MS_1252);
 
-                                if ( pFunctionName )
-                                {
-                                    ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
-                                    if ( !sFunctionName.getLength() )
-                                        sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
-
-                                    nDataType = OSQLParser::getFunctionReturnType(
-                                                        sFunctionName
-                                                        ,&pController->getParser()->getContext());
-                                    aSelEntry->SetDataType(nDataType);
-                                }
+                                nDataType = OSQLParser::getFunctionReturnType(
+                                                    sFunctionName
+                                                    ,&pController->getParser()->getContext());
+                                aSelEntry->SetDataType(nDataType);
                             }
                         }
+
 
                         // now parse the hole statement
                         sal_uInt32 nFunCount = pColumnRef->count();
@@ -874,6 +876,27 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                         aSelEntry->SetTabWindow(NULL);
 
                         aSelEntry->SetField(sParameters);
+                        notifyTableFieldChanged(sOldAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
+                    }
+                    else
+                    {
+                        clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
+
+                        ::rtl::OUString aColumns;
+                        pColumnRef->parseNodeToStr( aColumns,
+                                                    xMetaData,
+                                                    &pController->getParser()->getContext(),
+                                                    sal_True,
+                                                    sal_False);
+                        // get the type out of the funtion name
+                        sal_Int32 nDataType = DataType::DOUBLE;
+                        aSelEntry->SetDataType(nDataType);
+                        aSelEntry->SetField(aColumns);
+                        aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
+                        aSelEntry->SetTabWindow(NULL);
+                        aSelEntry->SetFieldAlias(sColumnAlias);
+                        aSelEntry->SetFunctionType(FKT_NUMERIC | FKT_OTHER);
+
                         notifyTableFieldChanged(sOldAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
                     }
                 }
