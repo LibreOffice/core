@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_property.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:46:04 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 14:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ namespace bridges_urp
             , bSupportsMultipleSynchronous( sal_False )
             , bClearCache( sal_False )
             , bNegotiate( sal_True )
-            , bForceSynchronous( sal_False )
+            , bForceSynchronous( sal_True )
             {}
 
         inline Properties & SAL_CALL operator = ( const Properties &props )
