@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 11:09:19 $
+ *  last change: $Author: tbe $ $Date: 2001-05-04 15:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,6 +1257,40 @@ void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::Conta
         }
     }
 }
+
+//----------------------------------------------------------------------------
+
+SdrObject* DlgEdObj::CheckHit( const Point& rPnt, USHORT nTol,const SetOfByte* pSet ) const
+{
+    ::rtl::OUString aServiceName = GetServiceName();
+
+    if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ))
+    {
+        Rectangle aROuter = aOutRect;
+        aROuter.Left()   -= nTol;
+        aROuter.Right()  += nTol;
+        aROuter.Top()    -= nTol;
+        aROuter.Bottom() += nTol;
+
+        Rectangle aRInner = aOutRect;
+        if( (aRInner.GetSize().Height() > (long)nTol*2) &&
+            (aRInner.GetSize().Width()  > (long)nTol*2)    )
+        {
+            aRInner.Left()   += nTol;
+            aRInner.Right()  -= nTol;
+            aRInner.Top()    += nTol;
+            aRInner.Bottom() -= nTol;
+        }
+
+        if( aROuter.IsInside( rPnt ) && !aRInner.IsInside( rPnt ) )
+            return (SdrObject*)this;
+        else
+            return 0;
+    }
+    else
+        return SdrObject::CheckHit( rPnt, nTol, pSet );
+}
+
 
 //----------------------------------------------------------------------------
 
