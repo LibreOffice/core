@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:15:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,7 @@ ModalDialog RID_DLG_MAPPING
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 391 , 195 ) ;
     Moveable = TRUE ;
-    Text = "Spaltenzuordnung für Tabelle %1";
-    Text [ENGLISH] = "Column assignment for table %1";
+    Text [ de ] = "Spaltenzuordnung für Tabelle %1";
 
     OKButton BT_OK
     {
@@ -89,36 +88,9 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 329 , 8 ) ;
-        Text = "Spaltennamen";
-        Text [ENGLISH] = "Column names";
-        Text[ english_us ] = "Column names";
-        Text[ portuguese ] = "Nomes de coluna";
-        Text[ russian ] = "Íàçâàíèÿ ñòîëáöîâ";
-        Text[ greek ] = "Ïíüìáôá óôçëşí";
-        Text[ dutch ] = "Kolomnamen";
-        Text[ french ] = "Noms des colonnes";
-        Text[ spanish ] = "Nombres de columna";
-        Text[ italian ] = "Nomi colonna";
-        Text[ danish ] = "Kolonnenavne";
-        Text[ swedish ] = "Kolumnnamn";
-        Text[ polish ] = "Nazwy kolumn";
-        Text[ portuguese_brazilian ] = "Nomes das colunas";
-        Text[ japanese ] = "åˆ—å";
-        Text[ korean ] = "ì—´ ì´ë¦„";
-        Text[ chinese_simplified ] = "åˆ—åç§°";
-        Text[ chinese_traditional ] = "æ¬„å";
-        Text[ arabic ] = "ÃÓãÇÁ ÇáÃÚãÏÉ";
-        Text[ turkish ] = "Sütun ismi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Noms de columna";
-        Text[ finnish ] = "Sarakkeiden nimet";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
-        Text[ czech ] = "NÃ¡zvy sloupcÅ¯";
-        Text[ hebrew ] = "Spaltennamen";
-        Text[ hindi ] = "à¤¸à¥à¤¤à¤‚à¤­ à¤•à¤¾ à¤¨à¤¾à¤®à¥";
-        Text[ slovak ] = "NÃ¡zvy stÄºpcov";
-        Text[ hungarian ] = "Oszlopnevek";
-        Text[ slovenian ] = "Imena stolpcev";
+        Text [ de ] = "Spaltennamen";
+        Text [ en-US ] = "Column names";
+        Text [ x-comment ] = " ";
     };
     FixedText   FT_IDENTIFIER
     {
@@ -463,65 +435,12 @@ ModalDialog RID_DLG_MAPPING
     };
     String ST_NONE
     {
-        Text = "<kein>";
-        Text [ENGLISH] = "<none>";
-        Text[ english_us ] = "<none>";
-        Text[ portuguese ] = "<nenhum>";
-        Text[ russian ] = "<íåò>";
-        Text[ greek ] = "<êáíİíá>";
-        Text[ dutch ] = "<geen>";
-        Text[ french ] = "<aucun>";
-        Text[ spanish ] = "<ninguno>";
-        Text[ italian ] = "<nessuno>";
-        Text[ danish ] = "<ingen>";
-        Text[ swedish ] = "<ingen>";
-        Text[ polish ] = "<brak>";
-        Text[ portuguese_brazilian ] = "<nenhum>";
-        Text[ japanese ] = "<ãªã—>";
-        Text[ korean ] = "<ì—†ìŒ>";
-        Text[ chinese_simplified ] = "<æ— >";
-        Text[ chinese_traditional ] = "<ç„¡>";
-        Text[ arabic ] = "<ÈÏæä>";
-        Text[ turkish ] = "<Yok>";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "<cap>";
-        Text[ finnish ] = "<ei mitään>";
-        Text[ thai ] = "<à¹„à¸¡à¹ˆà¸¡à¸µ>";
-        Text[ czech ] = "<nic>";
-        Text[ hebrew ] = "<kein>";
-        Text[ hindi ] = "<à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚>";
-        Text[ slovak ] = "<niÄ>";
-        Text[ hungarian ] = "<semmi>";
-        Text[ slovenian ] = "<brez>";
+        Text [ de ] = "<kein>";
+        Text [ en-US ] = "<none>";
+        Text [ x-comment ] = " ";
     };
-    Text[ english_us ] = "Column Layout for Table %1";
-    Text[ portuguese ] = "Atribuição de colunas para a tabela %1";
-    Text[ russian ] = "Ğàñïîëîæåíèå ñòîëáöîâ òàáëèöû %1";
-    Text[ greek ] = "Ğñïóäéïñéóìüò óôçëşí ãéá ğßíáêá %1";
-    Text[ dutch ] = "Kolomindeling voor tabel %1";
-    Text[ french ] = "Assignation de colonnes pour la table %1";
-    Text[ spanish ] = "Asignación de columnas para tabla %1";
-    Text[ finnish ] = "Taulukon %1 sarakeasettelu";
-    Text[ italian ] = "Assegnazione colonne per la tabella %1";
-    Text[ danish ] = "Kolonnelayout for tabel %1";
-    Text[ swedish ] = "Kolumntilldelning för tabell %1";
-    Text[ polish ] = "Uk³ad kolumn w tabeli %1";
-    Text[ portuguese_brazilian ] = "Layout das colunas para a tabela %1";
-    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ« %1 ã®åˆ—åˆ†é¡";
-    Text[ korean ] = "í…Œì´ë¸” %1 ì˜ ì—´ ë ˆì´ì•„ì›ƒ";
-    Text[ chinese_simplified ] = "ç¼–æ’ %1 è¡¨æ ¼çš„åˆ—";
-    Text[ chinese_traditional ] = "ç·¨æ’ %1 è¡¨æ ¼çš„æ¬„";
-    Text[ turkish ] = "%1 Tablosu için sütun düzeni";
-    Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ ááÌÏæá %1";
-    Text[ catalan ] = "Assignació de columnes per a la taula %1";
-    Text[ thai ] = "à¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸‚à¸­à¸‡à¸•à¸²à¸£à¸²à¸‡ %1";
-    Text[ language_user1 ] = "; EM (29 July 2002): this was just a German spelling error, no change in translation";
-    Text[ czech ] = "RozloÅ¾enÃ­ sloupcÅ¯ pro tabulku %1";
-    Text[ hebrew ] = "Spaltenzuordnung fÃ¼r Tabelle %1";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ %1 à¤•à¥‡à¤²à¤¿à¤ à¤¸à¥à¤¤à¤‚à¤­ à¤•à¥‡ à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸";
-    Text[ slovak ] = "RozloÅ¾enie stÄºpcov pre tabuÄ¾ku %1";
-    Text[ hungarian ] = "%1 tÃ¡bla oszlopainak elrendezÃ©se";
-    Text[ slovenian ] = "Postavitev stolpcev za tabelo %1";
+    Text [ en-US ] = "Column Layout for Table %1";
+    Text [ x-comment ] = "; EM (29 July 2002): this was just a German spelling error, no change in translation";
 };
 ModalDialog RID_DLG_DBCHANGE
 {
@@ -530,8 +449,8 @@ ModalDialog RID_DLG_DBCHANGE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 291 , 131 ) ;
     Moveable = TRUE ;
-    Text = "Datenquelle auswählen" ;
-    Text[ english_us ] = "Choose Data Source";
+    Text [ de ] = "Datenquelle auswählen" ;
+    Text [ en-US ] = "Choose Data Source";
     OKButton BT_OK
     {
         Pos = MAP_APPFONT ( 238 , 3 ) ;
@@ -554,35 +473,8 @@ ModalDialog RID_DLG_DBCHANGE
     };
     String ST_ENTRY
     {
-        Text = "Eintrag";
-        Text [ENGLISH] = "Entry";
-        Text[ english_us ] = "Entry";
-        Text[ portuguese ] = "Entrada";
-        Text[ russian ] = "Èñòî÷íèê äàííûõ";
-        Text[ greek ] = "Êáôá÷şñéóç";
-        Text[ dutch ] = "Item";
-        Text[ french ] = "Entrée";
-        Text[ spanish ] = "Entrada";
-        Text[ italian ] = "Voce";
-        Text[ danish ] = "Element";
-        Text[ swedish ] = "Post";
-        Text[ polish ] = "Wpis";
-        Text[ portuguese_brazilian ] = "Entrada";
-        Text[ japanese ] = "é …ç›®";
-        Text[ korean ] = "í•­ëª©";
-        Text[ chinese_simplified ] = "æ¡ç›®";
-        Text[ chinese_traditional ] = "æ¢ç›®";
-        Text[ arabic ] = "ÅÏÎÇá";
-        Text[ turkish ] = "Giriş";
-        Text[ catalan ] = "Entrada";
-        Text[ finnish ] = "Merkintä";
-        Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£";
-        Text[ czech ] = "PoloÅ¾ka";
-        Text[ hebrew ] = "â€®×©×•×¨×”â€¬";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿";
-        Text[ slovak ] = "PoloÅ¾ka";
-        Text[ hungarian ] = "BejegyzÃ©s";
-        Text[ slovenian ] = "Vnos";
+        Text [ de ] = "Eintrag";
+        Text [ en-US ] = "Entry";
     };
     Control LB_SELECTION
     {
@@ -598,32 +490,6 @@ ModalDialog RID_DLG_DBCHANGE
         Size = MAP_APPFONT ( 223 , 12 ) ;
         Border = TRUE;
     };
-    Text[ portuguese ] = "Seleccionar fonte de dados";
-    Text[ russian ] = "Âûáîğ èñõîäíûõ äàííûõ";
-    Text[ greek ] = "ÅğéëïãŞ ğñïİëåõóçò äåäïìİíùí";
-    Text[ dutch ] = "Kies gegevensbron";
-    Text[ french ] = "Sélection de la source de données";
-    Text[ spanish ] = "Seleccionar fuente de datos";
-    Text[ finnish ] = "Valitse tietolähde";
-    Text[ italian ] = "Seleziona sorgente dati";
-    Text[ danish ] = "Vælg datakilde";
-    Text[ swedish ] = "Välj datakälla";
-    Text[ polish ] = "Wybór Ÿród³a danych";
-    Text[ portuguese_brazilian ] = "Selecione a fonte de dados";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®é¸æŠ";
-    Text[ korean ] = "ë°ì´í„° ì›ë³¸ ì„ íƒ";
-    Text[ chinese_simplified ] = "é€‰æ‹©æ•°æ®æº";
-    Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æº";
-    Text[ turkish ] = "Veri Kaynağını Seçin";
-    Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ ÇáÈíÇäÇÊ";
-    Text[ catalan ] = "Seleccioneu la font de dades";
-    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "Vybrat zdroj dat...";
-    Text[ hebrew ] = "Datenquelle auswÃ¤hlen";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤šà¥à¤¨à¥‹";
-    Text[ slovak ] = "Vyberte zdroj dÃ¡t";
-    Text[ hungarian ] = "AdatforrÃ¡s vÃ¡lasztÃ¡sa";
-    Text[ slovenian ] = "Izberi vir podatkov";
 };
 
 
