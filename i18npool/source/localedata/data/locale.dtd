@@ -39,7 +39,7 @@
 <!ELEMENT DefaultName  (#PCDATA)>
 
 <!-- Locale is made of different sub categories -->
-<!ELEMENT Locale (LC_INFO, LC_CTYPE, LC_FORMAT, LC_COLLATION, LC_SEARCH, LC_CALENDAR, LC_CURRENCY,  LC_TRANSLITERATION, LC_MISC, LC_NumberingLevel, LC_OutLineNumberingLevel)>
+<!ELEMENT Locale (LC_INFO, LC_CTYPE, LC_FORMAT, LC_COLLATION, LC_SEARCH, LC_INDEX, LC_CALENDAR, LC_CURRENCY,  LC_TRANSLITERATION, LC_MISC, LC_NumberingLevel, LC_OutLineNumberingLevel)>
 <!ATTLIST Locale  version CDATA #REQUIRED>
 <!-- Valid number -->
 
@@ -245,6 +245,31 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ELEMENT LC_SEARCH (SearchOptions?)>
 <!ATTLIST LC_SEARCH %RefLocale;>
 <!ELEMENT SearchOptions (TransliterationModules+)>
+
+<!ELEMENT LC_INDEX (IndexKey*, UnicodeScript*, FollowPageWord*)>
+<!ATTLIST LC_INDEX %RefLocale;>
+<!--
+Index key for the algorithm and language, like >A-Z< for English => A, B, C,
+..., Y, Z. The initial data was setup according to the ICU collation chart at
+http://oss.software.ibm.com/icu/charts/collation/
+-->
+<!ELEMENT IndexKey (#PCDATA)>
+<!ATTLIST IndexKey  %UNOModule;>
+<!ATTLIST IndexKey  default CDATA #REQUIRED >
+<!ATTLIST IndexKey  phonetic CDATA #REQUIRED >
+<!--
+The Unicode script types are those of
+offapi/com/sun/star/i18n/UnicodeScript.idl, they define the code range for the
+language.
+-->
+<!ELEMENT UnicodeScript (#PCDATA)>
+<!--
+The FollowPageWord entries were originally hard-coded in
+../../indexentry/indexentrysupplier.cxx, most locales used the English ``p.''
+and ``pp.'', valid data should be provided by native speakers.
+-->
+<!ELEMENT FollowPageWord (#PCDATA)>
+
 
 <!ELEMENT LC_TRANSLITERATION (Transliteration*)>
 <!ATTLIST LC_TRANSLITERATION %RefLocale;>
