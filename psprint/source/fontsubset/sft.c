@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:18:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,18 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.20 2003-04-11 17:18:21 vg Exp $
+/* $Id: sft.c,v 1.21 2003-04-15 16:14:17 vg Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
  *
   */
 
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
+
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
@@ -672,7 +676,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         ptr += 4;
 
         if (listFind(glyphlist, (void *) (int) index)) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf(stderr, "Endless loop found in a compound glyph.\n");
             fprintf(stderr, "%d -> ", index);
             listToFirst(glyphlist);
@@ -693,7 +697,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 
         if ((np = GetTTGlyphOutline(ttf, index, &nextComponent, 0, glyphlist)) == 0) {
             /* XXX that probably indicates a corrupted font */
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf(stderr, "An empty compound!\n");
             /* assert(!"An empty compound"); */
 #endif
@@ -1386,7 +1390,7 @@ static void FindCmap(TrueTypeFont *ttf)
             case 4: ttf->mapper = getGlyph4; break;
             case 6: ttf->mapper = getGlyph6; break;
             default:
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 /*- if the cmap table is really broken */
                 printf("%s: %d is not a recognized cmap format.\n", ttf->fname, GetUInt16(ttf->cmap, 0, 1));
 #endif
@@ -2098,7 +2102,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     AddTable(ttcr, post); AddTable(ttcr, os2);
 
     if ((res = StreamToFile(ttcr, fname)) != SF_OK) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf(stderr, "StreamToFile: error code: %d.\n", res);
 #endif
     }
