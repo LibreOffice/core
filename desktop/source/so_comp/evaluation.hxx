@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evaluation.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-01 09:43:28 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* makefile.mk changed 20030409, LO */
 
 #ifndef _SOCOMP_EVALUATION_HXX_
 #define _SOCOMP_EVALUATION_HXX_
