@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2001-12-10 17:43:37 $
+ *  last change: $Author: sj $ $Date: 2002-01-31 16:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,7 +1036,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             case EMR_RESIZEPALETTE :            WinMtfAssertHandler( "ResizePalette" );             break;
             case EMR_EXTFLOODFILL :             WinMtfAssertHandler( "ExtFloodFill" );              break;
             case EMR_ANGLEARC :                 WinMtfAssertHandler( "AngleArc" );                  break;
-            case EMR_SETMAPPERFLAGS :           WinMtfAssertHandler( "SetMapperFlags" );            break;
             case EMR_SETCOLORADJUSTMENT :       WinMtfAssertHandler( "SetColorAdjustment" );        break;
             case EMR_POLYDRAW16 :               WinMtfAssertHandler( "PolyDraw16" );                break;
             case EMR_CREATEDIBPATTERNBRUSHPT :  WinMtfAssertHandler( "CreateDibPatternBrushPt" );   break;
@@ -1063,6 +1062,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             case EMR_GRADIENTFILL :             WinMtfAssertHandler( "GradientFill" );              break;
             case EMR_SETLINKEDUFIS :            WinMtfAssertHandler( "SetLinkedUFIS" );             break;
 
+            case EMR_SETMAPPERFLAGS :           WinMtfAssertHandler( "SetMapperFlags", 0 );         break;
             case EMR_SETICMMODE :               WinMtfAssertHandler( "SetICMMode", 0 );             break;
             case EMR_CREATEMONOBRUSH :          WinMtfAssertHandler( "CreateMonoBrush", 0 );        break;
             case EMR_EXTCREATEPEN :             WinMtfAssertHandler( "ExtCreatePen", 0 );           break;
