@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:22:31 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1488,181 +1488,6 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
 
     return 0;
 }
-/* -----------------------------21.06.01 09:33--------------------------------
-
- ---------------------------------------------------------------------------*/
-class OfaHelperProgramsCfg_Impl : public utl::ConfigItem
-{
-    friend class OfaHelperProgramsTabPage;
-    OUString sHttp;
-    OUString sHttps;
-    OUString sFtp;
-    OUString sFile;
-    OUString sMailto;
-
-    sal_Bool bROHttp;
-    sal_Bool bROHttps;
-    sal_Bool bROFtp;
-    sal_Bool bROFile;
-    sal_Bool bROMailto;
-
-    const Sequence<OUString> GetPropertyNames();
-public:
-    OfaHelperProgramsCfg_Impl();
-    virtual ~OfaHelperProgramsCfg_Impl();
-
-    virtual void    Commit();
-
-};
-/* -----------------------------21.06.01 09:41--------------------------------
-
- ---------------------------------------------------------------------------*/
-OfaHelperProgramsCfg_Impl::OfaHelperProgramsCfg_Impl() :
-        ConfigItem(C2U("Office.Common/ExternalApps")),
-        bROHttp(sal_True),
-        bROHttps(sal_True),
-        bROFtp(sal_True),
-        bROFile(sal_True),
-        bROMailto(sal_True)
-{
-    const Sequence< OUString > aNames = GetPropertyNames();
-    const Sequence< Any > aValues = GetProperties(aNames);
-    const Sequence< sal_Bool > aROStates = GetReadOnlyStates(aNames);
-
-    const Any* pValues = aValues.getConstArray();
-    const sal_Bool* pROStates = aROStates.getConstArray();
-
-    for(sal_Int32 nProp = 0; nProp < aNames.getLength(); nProp++)
-    {
-        switch(nProp)
-        {
-            case 0 :
-            {
-                pValues[nProp] >>= sHttp;
-                bROHttp = pROStates[nProp];
-            }
-            break;//http
-            case 1 :
-            {
-                pValues[nProp] >>= sHttps;
-                bROHttps = pROStates[nProp];
-            }
-            break;//https
-            case 2 :
-            {
-                pValues[nProp] >>= sFtp;
-                bROFtp = pROStates[nProp];
-            }
-            break;//ftp
-            case 3 :
-            {
-                pValues[nProp] >>= sFile;
-                bROFile = pROStates[nProp];
-            }
-            break;//file
-            case 4 :
-            {
-                pValues[nProp] >>= sMailto;
-                bROMailto = pROStates[nProp];
-            }
-            break;//mailto
-        }
-    }
-}
-/* -----------------------------21.06.01 09:39--------------------------------
-
- ---------------------------------------------------------------------------*/
-OfaHelperProgramsCfg_Impl::~OfaHelperProgramsCfg_Impl()
-{}
-/* -----------------------------21.06.01 09:38--------------------------------
-
- ---------------------------------------------------------------------------*/
-const Sequence<OUString> OfaHelperProgramsCfg_Impl::GetPropertyNames()
-{
-    Sequence<OUString> aRet(5);
-    OUString* pRet = aRet.getArray();
-    pRet[0] = C2U("http");
-    pRet[1] = C2U("https");
-    pRet[2] = C2U("ftp");
-    pRet[3] = C2U("file");
-    pRet[4] = C2U("mailto");
-    return aRet;
-}
-/* -----------------------------21.06.01 09:45--------------------------------
-
- ---------------------------------------------------------------------------*/
-void    OfaHelperProgramsCfg_Impl::Commit()
-{
-    const Sequence< OUString > aOrgNames = GetPropertyNames();
-    sal_Int32 nOrgCount = aOrgNames.getLength();
-
-    Sequence< OUString > aNames(nOrgCount);
-    Sequence< Any > aValues(nOrgCount);
-    sal_Int32 nRealCount = 0;
-
-    OUString* pNames = aNames.getArray();
-    Any* pValues = aValues.getArray();
-
-    for(int nProp = 0; nProp < aOrgNames.getLength(); nProp++)
-    {
-        switch(nProp)
-        {
-            case  0:
-            {
-                if (!bROHttp)
-                {
-                    pNames[nRealCount] = aOrgNames[nProp];
-                    pValues[nRealCount] <<= sHttp;
-                    ++nRealCount;
-                }
-            }
-            break;//http
-            case  1:
-            {
-                if (!bROHttps)
-                {
-                    pNames[nRealCount] = aOrgNames[nProp];
-                    pValues[nRealCount] <<= sHttps;
-                    ++nRealCount;
-                }
-            }
-            break;//https
-            case  2:
-            {
-                if (!bROFtp)
-                {
-                    pNames[nRealCount] = aOrgNames[nProp];
-                    pValues[nRealCount] <<= sFtp;
-                    ++nRealCount;
-                }
-            }
-            break;//ftp
-            case  3:
-            {
-                if (!bROFile)
-                {
-                    pNames[nRealCount] = aOrgNames[nProp];
-                    pValues[nRealCount] <<= sFile;
-                    ++nRealCount;
-                }
-            }
-            break;//file
-            case  4:
-            {
-                if (!bROMailto)
-                {
-                    pNames[nRealCount] = aOrgNames[nProp];
-                    pValues[nRealCount] <<= sMailto;
-                    ++nRealCount;
-                }
-            }
-            break;//mailto
-        }
-    }
-    aNames.realloc(nRealCount);
-    aValues.realloc(nRealCount);
-    PutProperties(aNames, aValues);
-}
 
 /* -----------------------------22.06.01 11:47--------------------------------
 
@@ -1811,7 +1636,6 @@ void OfaMailProfilesCfg_Impl::Commit()
  ---------------------------------------------------------------------------*/
 struct OfaHelperProgramsTabPage_Impl
 {
-    OfaHelperProgramsCfg_Impl aAppConfig;
     OfaMailProfilesCfg_Impl aMailConfig;
 };
 
@@ -1825,28 +1649,6 @@ OfaHelperProgramsTabPage::OfaHelperProgramsTabPage(Window* pParent, const SfxIte
     aProfilesLB(this,       ResId(LB_PROFILES       )),
     aMailerURLED(this,      ResId(ED_MAILERURL      )),
     aMailerURLPB(this,      ResId(PB_MAILERURL      )),
-    aLinkFL(this,           ResId(FL_LINK           )),
-    aHTTPFI(this,           ResId(FI_HTTP           )),
-    aHTTPFT(this,           ResId(FT_HTTP           )),
-    aHTTPED(this,           ResId(ED_HTTP           )),
-    aHTTPPB(this,           ResId(PB_HTTP           )),
-    aHTTPSFI(this,          ResId(FI_HTTPS          )),
-    aHTTPSFT(this,          ResId(FT_HTTPS          )),
-    aHTTPSED(this,          ResId(ED_HTTPS          )),
-    aHTTPSPB(this,          ResId(PB_HTTPS          )),
-    aFTPFI(this,            ResId(FI_FTP            )),
-    aFTPFT(this,            ResId(FT_FTP            )),
-    aFTPED(this,            ResId(ED_FTP            )),
-    aFTPPB(this,            ResId(PB_FTP            )),
-    aMailerFI(this,         ResId(FI_MAILER         )),
-    aMailerFT(this,         ResId(FT_MAILER         )),
-    aMailerED(this,         ResId(ED_MAILER         )),
-    aMailerPB(this,         ResId(PB_MAILER         )),
-    aDocManagerFL(this,     ResId(FL_DOCMANAGER     )),
-    aDocManagerFI(this,     ResId(FI_DOCMANAGER     )),
-    aDocManagerFT(this,     ResId(FT_DOCMANAGER     )),
-    aDocManagerED(this,     ResId(ED_DOCMANAGER     )),
-    aDocManagerPB(this,     ResId(PB_DOCMANAGER     )),
     m_sMozilla(             ResId(STR_MOZILLA_PROGRAM_NAME  )),
     m_sNetscape(            ResId(STR_NETSCAPE_PROGRAM_NAME )),
     m_sDefaultFilterName(   ResId(STR_DEFAULT_FILENAME      )),
@@ -1858,15 +1660,6 @@ OfaHelperProgramsTabPage::OfaHelperProgramsTabPage(Window* pParent, const SfxIte
 
     Link aLink(LINK(this, OfaHelperProgramsTabPage, FileDialogHdl_Impl));
     aMailerURLPB.SetClickHdl(aLink);
-    aHTTPPB.SetClickHdl(aLink);
-    aHTTPSPB.SetClickHdl(aLink);
-    aFTPPB.SetClickHdl(aLink);
-    aMailerPB.SetClickHdl(aLink);
-#ifdef HELPER_PAGE_COMPLETE
-    aDocManagerPB.SetClickHdl(aLink);
-#else
-    aDocManagerPB.Hide();
-#endif
 
     aProfilesLB.SetSelectHdl(LINK(this, OfaHelperProgramsTabPage, ProfileHdl_Impl));
 }
@@ -1906,39 +1699,6 @@ BOOL OfaHelperProgramsTabPage::FillItemSet( SfxItemSet& rSet )
     if ( bMailModified )
         pImpl->aMailConfig.Commit();
 
-
-    BOOL bAppModified = FALSE;
-    if(!pImpl->aAppConfig.bROHttp && aHTTPED.GetSavedValue() != aHTTPED.GetText())
-    {
-        pImpl->aAppConfig.sHttp = aHTTPED.GetText();
-        bAppModified = TRUE;
-    }
-    if(!pImpl->aAppConfig.bROHttps && aHTTPSED.GetSavedValue() != aHTTPSED.GetText())
-    {
-        pImpl->aAppConfig.sHttps = aHTTPSED.GetText();
-        bAppModified = TRUE;
-    }
-    if(!pImpl->aAppConfig.bROFtp && aFTPED.GetSavedValue() != aFTPED.GetText())
-    {
-        pImpl->aAppConfig.sFtp = aFTPED.GetText();
-        bAppModified = TRUE;
-    }
-    if(!pImpl->aAppConfig.bROMailto && aMailerED.GetSavedValue() != aMailerED.GetText())
-    {
-        pImpl->aAppConfig.sMailto = aMailerED.GetText();
-        bAppModified = TRUE;
-    }
-#ifdef HELPER_PAGE_COMPLETE
-    if(!pImpl->aAppConfig.bROFile && aDocManagerED.GetSavedValue() != aDocManagerED.GetText())
-    {
-        pImpl->aAppConfig.sFile = aDocManagerED.GetText();
-        bAppModified = TRUE;
-    }
-#endif
-    if(bAppModified)
-    {
-        pImpl->aAppConfig.Commit();
-    }
     return FALSE;
 }
 /* -----------------------------21.06.01 07:46--------------------------------
@@ -2000,76 +1760,7 @@ void OfaHelperProgramsTabPage::Reset( const SfxItemSet& rSet )
                              aMailerURLED.IsEnabled() ||
                              aMailerURLPB.IsEnabled());
 
-    aHTTPED.SetText(pImpl->aAppConfig.sHttp);
-    aHTTPSED.SetText(pImpl->aAppConfig.sHttps);
-    aFTPED.SetText(pImpl->aAppConfig.sFtp);
-    aMailerED.SetText(pImpl->aAppConfig.sMailto);
-#ifdef HELPER_PAGE_COMPLETE
-    aDocManagerED.SetText(pImpl->aAppConfig.sFile);
-#endif
-    aHTTPED.SaveValue();
-    aHTTPSED.SaveValue();
-    aFTPED.SaveValue();
-    aMailerED.SaveValue();
-#ifdef HELPER_PAGE_COMPLETE
-    aHTTPFI.Show(pImpl->aAppConfig.bROHttp);
-    aHTTPSFI.Show(pImpl->aAppConfig.bROHttps);
-    aFTPFI.Show(pImpl->aAppConfig.bROFtp);
-    aMailerFI.Show(pImpl->aAppConfig.bROMailto);
-    aDocManagerED.SaveValue();
-    aDocManagerFI.Show(pImpl->aAppConfig.bROFile);
-#endif
-
-    aHTTPED.Enable(!pImpl->aAppConfig.bROHttp);
-    aHTTPSED.Enable(!pImpl->aAppConfig.bROHttps);
-    aFTPED.Enable(!pImpl->aAppConfig.bROFtp);
-    aMailerED.Enable(!pImpl->aAppConfig.bROMailto);
-#ifdef HELPER_PAGE_COMPLETE
-    aDocManagerED.Enable(!pImpl->aAppConfig.bROFile);
-#else
-    aDocManagerED.Hide();
-#endif
-
-    aHTTPFT.Enable(aHTTPED.IsEnabled());
-    aHTTPSFT.Enable(aHTTPSED.IsEnabled());
-    aFTPFT.Enable(aFTPED.IsEnabled());
-    aMailerFT.Enable(aMailerED.IsEnabled());
-#ifdef HELPER_PAGE_COMPLETE
-    aDocManagerFT.Enable(aDocManagerED.IsEnabled());
-#else
-    aDocManagerFT.Hide();
-#endif
-
-    aHTTPPB.Enable(aHTTPED.IsEnabled());
-    aHTTPSPB.Enable(aHTTPSED.IsEnabled());
-    aFTPPB.Enable(aFTPED.IsEnabled());
-    aMailerPB.Enable(aMailerED.IsEnabled());
-#ifdef HELPER_PAGE_COMPLETE
-    aDocManagerPB.Enable(aDocManagerED.IsEnabled());
-#endif
-
-    aLinkFL.Enable(aHTTPED.IsEnabled() || aHTTPSED.IsEnabled() || aFTPED.IsEnabled() || aMailerED.IsEnabled());
-#ifdef HELPER_PAGE_COMPLETE
-    aDocManagerFL.Enable(aDocManagerED.IsEnabled());
-#else
-    aLinkFL.Hide();
-    aHTTPFT.Hide();
-    aHTTPED.Hide();
-    aHTTPPB.Hide();
-    aHTTPSFT.Hide();
-    aHTTPSED.Hide();
-    aHTTPSPB.Hide();
-    aFTPFT.Hide();
-    aFTPED.Hide();
-    aFTPPB.Hide();
-    aMailerFT.Hide();
-    aMailerED.Hide();
-    aMailerPB.Hide();
-
-    aDocManagerFL.Hide();
-#endif
-
-    // check if the controls are correctly enabled
+// check if the controls are correctly enabled
     ProfileHdl_Impl(&aProfilesLB);
 }
 /* -----------------------------21.06.01 07:46--------------------------------
@@ -2111,18 +1802,6 @@ IMPL_LINK(  OfaHelperProgramsTabPage, FileDialogHdl_Impl, PushButton*, pButton )
 #endif // HELPER_PAGE_COMPLETE
         pEdit = &aMailerURLED;
     }
-    else if ( &aHTTPPB == pButton && !pImpl->aAppConfig.bROHttp )
-        pEdit = &aHTTPED;
-    else if ( &aHTTPSPB == pButton && !pImpl->aAppConfig.bROHttps )
-        pEdit = &aHTTPSED;
-    else if ( &aFTPPB == pButton && !pImpl->aAppConfig.bROFtp )
-        pEdit = &aFTPED;
-    else if ( &aMailerPB == pButton && !pImpl->aAppConfig.bROMailto )
-        pEdit = &aMailerED;
-#ifdef HELPER_PAGE_COMPLETE
-    else if ( &aDocManagerPB == pButton && !pImpl->aAppConfig.bROFile )
-        pEdit = &aDocManagerED;
-#endif
 
     if ( pEdit != NULL )
     {
