@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:02 $
+ *  last change: $Author: dvo $ $Date: 2002-03-25 15:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
@@ -129,6 +133,7 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::beans::UnknownPropertyException;
 using ::com::sun::star::document::XRedlinesSupplier;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
@@ -640,9 +645,21 @@ void XMLRedlineExport::ExportStartOrEndRedline(
     const Reference<XPropertySet> & rPropSet,
     sal_Bool bStart)
 {
+    if( ! rPropSet.is() )
+        return;
+
     // get appropriate (start or end) property
-    Any aAny =
-        rPropSet->getPropertyValue(bStart ? sStartRedline : sEndRedline);
+    Any aAny;
+    try
+    {
+        aAny = rPropSet->getPropertyValue(bStart ? sStartRedline : sEndRedline);
+    }
+    catch( UnknownPropertyException e )
+    {
+        // If we don't have the property, there's nothing to do.
+        return;
+    }
+
     Sequence<PropertyValue> aValues;
     aAny >>= aValues;
     const PropertyValue* pValues = aValues.getConstArray();

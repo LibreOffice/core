@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-01 10:03:41 $
+ *  last change: $Author: dvo $ $Date: 2002-03-25 15:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1479,8 +1479,15 @@ void XMLTextParagraphExport::exportText(
             }
         }
     }
+
+    // #96530# Export redlines at start & end of XText before & after
+    // exporting the text content enumeration
+    if( !bAutoStyles && (pRedlineExport != NULL) )
+        pRedlineExport->ExportStartOrEndRedline( xPropertySet, sal_True );
     exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection,
                                   bProgress, bExportParagraph, 0, bExportLevels );
+    if( !bAutoStyles && (pRedlineExport != NULL) )
+        pRedlineExport->ExportStartOrEndRedline( xPropertySet, sal_False );
 }
 
 void XMLTextParagraphExport::exportText(
@@ -1495,8 +1502,23 @@ void XMLTextParagraphExport::exportText(
                                       // is added
     Reference < XEnumerationAccess > xEA( rText, UNO_QUERY );
     Reference < XEnumeration > xParaEnum = xEA->createEnumeration();
+
+    // #98165# don't continue without a paragraph enumeration
+    if( ! xParaEnum.is() )
+        return;
+
+    // #96530# Export redlines at start & end of XText before & after
+    // exporting the text content enumeration
+    Reference<XPropertySet> xPropertySet;
+    if( !bAutoStyles && (pRedlineExport != NULL) )
+    {
+        xPropertySet = Reference<XPropertySet>::query( rText );
+        pRedlineExport->ExportStartOrEndRedline( xPropertySet, sal_True );
+    }
     exportTextContentEnumeration( xParaEnum, bAutoStyles, rBaseSection,
                                   bProgress, bExportParagraph );
+    if( !bAutoStyles && (pRedlineExport != NULL) )
+        pRedlineExport->ExportStartOrEndRedline( xPropertySet, sal_False );
 }
 
 sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(

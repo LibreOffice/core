@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:02 $
+ *  last change: $Author: dvo $ $Date: 2002-03-25 15:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,9 @@ void XMLIndexTOCContext::EndElement()
         rHelper->GetCursor()->goRight(1, sal_True);
         rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
                                          sEmpty, sal_True);
+
+        // check for Redlines on our end node
+        GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(sal_False);
     }
 }
 

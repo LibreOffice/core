@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2002-03-25 15:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,9 @@ void XMLSectionImportContext::EndElement()
     rHelper->GetCursor()->goRight(1, sal_True);
     rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
                                      sEmpty, sal_True);
+
+    // check for redlines to our endnode
+    rHelper->RedlineAdjustStartNodeCursor(sal_False);
 }
 
 SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
