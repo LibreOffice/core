@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-09 09:28:35 $
+ *  last change: $Author: pl $ $Date: 2002-10-09 09:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ class SalFrameData
     BOOL            bAlwaysOnTop_;
     BOOL            bViewable_;
     BOOL            bMapped_;
+    BOOL            mbInShow;
     BOOL            bDefaultPosition_;  // client is centered initially
     int             nVisibility_;
 

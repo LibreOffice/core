@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-09 08:44:14 $
+ *  last change: $Author: pl $ $Date: 2002-10-09 09:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,6 +640,7 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     bMapped_                    = FALSE;
     bDefaultPosition_           = TRUE;
     nVisibility_                = VisibilityFullyObscured;
+    mbInShow                    = FALSE;
 
     nScreenSaversTimeout_       = 0;
 
@@ -930,6 +931,7 @@ void SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
     maFrameData.bViewable_ = bVisible;
     if( bVisible )
     {
+        maFrameData.mbInShow = TRUE;
         if( ! bWasIntroBitmap && maFrameData.IsOverrideRedirect() )
         {
             const Size& rScreenSize( maFrameData.pDisplay_->GetScreenSize() );
@@ -3313,7 +3315,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                     /*  #99570# another workaround for sawfish: if a transient window for the same parent is shown
                      *  sawfish does not set the focus to it. Applies only for click to focus mode.
                      */
-                    if( ! (nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
+                    if( ! (nStyle_ & SAL_FRAME_STYLE_FLOAT ) && mbInShow )
                     {
                         // #101775# don't set the focus into the IME status window
                         // since this will lead to a parent loose-focus, close status,
@@ -3342,6 +3344,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                     if( hPresentationWindow != None )
                         XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
                     RestackChildren();
+                    mbInShow = FALSE;
                 }
                 break;
 
