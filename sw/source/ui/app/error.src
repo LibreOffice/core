@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:31:07 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,7 +876,7 @@ Resource RID_SW_ERRHDL
         TEXT[ russian ] = "Îøèáêà ïğè çàãğóçêå êîíâåğòîğà";
         TEXT[ polish ] = "B³¹d podczas ³adowania konwertera";
         TEXT[ japanese ] = "ºİÊŞ°À“Ç‚İ‚İ’†‚Ì´×°";
-        TEXT[ chinese_traditional ] = "Âà´«®Éµo¥Í¿ù»~";
+        TEXT[ chinese_traditional ] = "¸ü¤JÂà´«¾¹®Éµo¥Í¿ù»~";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍãíá ÇáãÍæá";
         TEXT[ greek ] = "ÓöÜëìá êáôÜ ôç öüñôùóç ôïõ ìåôáôñïğİá";
         TEXT[ korean ] = "º¯È¯ ·Îµå ¿À·ù";
@@ -902,7 +902,7 @@ Resource RID_SW_ERRHDL
         TEXT[ russian ] = "Îøèáêà ïğè çàãğóçêå êîíâåğòîğà";
         TEXT[ polish ] = "B³¹d podczas ³adowania konwertera";
         TEXT[ japanese ] = "ºİÊŞ°À“Ç‚İ‚İ’†‚Ì´×°";
-        TEXT[ chinese_traditional ] = "Âà´«®Éµo¥Í¿ù»~";
+        TEXT[ chinese_traditional ] = "¸ü¤JÂà´«¾¹®Éµo¥Í¿ù»~";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍãíá ÇáãÍæá";
         TEXT[ greek ] = "ÓöÜëìá êáôÜ ôç öüñôùóç ôïõ ìåôáôñïğİá";
         TEXT[ korean ] = "º¯È¯ ·Îµå ¿À·ù";
@@ -1045,11 +1045,11 @@ Resource RID_SW_ERRHDL
         Text [ danish ] = "Det var ikke muligt at indlæse nogen tegninger" ;
         Text [ portuguese ] = "Foi impossível carregar desenhos" ;
         Text [ portuguese_brazilian ] = "Es konnten keine Zeichnungen geladen werden" ;
-        Text[ chinese_simplified ] = "ÎŞ·¨×°ÔØÍ¼Ïñ";
+        Text[ chinese_simplified ] = "ÎŞ·¨×°ÈëÍ¼Ïñ";
         Text[ russian ] = "Çàãğóçêà ğèñóíêîâ íåâîçìîæíà";
         Text[ polish ] = "¯adne rysunki nie mog³y zostaæ za³adowane";
         Text[ japanese ] = "}Œ`•`‰æ‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
-        Text[ chinese_traditional ] = "µLªk¸Ë¸ü¼v¹³";
+        Text[ chinese_traditional ] = "µLªk¸ü¤J¼v¹³";
         Text[ arabic ] = "ÊÚĞÑ ÊÍãíá ÃíÉ ÑÓæãÇÊ";
         Text[ greek ] = "Äåí Şôáí äõíáôŞ ç öüñôùóç ó÷åäßùí";
         Text[ korean ] = "±×¸®±â°¡ ÀĞÇôÁú ¼ö ¾ø½À´Ï´Ù.";
@@ -1148,7 +1148,7 @@ Resource RID_SW_ERRHDL
         Text [ danish ] = "Nogle OLE-objekter kunne kun overtages som grafik" ;
         Text [ portuguese ] = "Alguns dos objectos OLE puderam ser apenas carregados como imagens" ;
         Text [ portuguese_brazilian ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
-        Text[ chinese_simplified ] = "Ò»Ğ© OLE ¶ÔÏóÖ»ÄÜÒÔÍ¼Ïñ·½Ê½×°ÔØ";
+        Text[ chinese_simplified ] = "Ò»Ğ© OLE ¶ÔÏóÖ»ÄÜÒÔÍ¼Ïñ·½Ê½×°Èë";
         Text[ russian ] = "Çàãğóçêà íåêîòîğûõ îáúåêòîâ OLE âîçìîæíà òîëüêî â êà÷åñòâå ğèñóíêîâ";
         Text[ polish ] = "Niektóre obiekty OLE mog¹ zostaæ za³adowane tylko jako grafiki";
         Text[ japanese ] = "‚¢‚­‚Â‚©‚ÌOLEµÌŞ¼Şª¸Ä‚Í¸Ş×¯Ì¨¯¸½‚Æ‚µ‚Ä‚Ì‚İ“Ç‚İ‚Ş‚±‚Æ‚ª‚Å‚«‚Ü‚·";
@@ -1198,11 +1198,11 @@ Resource RID_SW_ERRHDL
         Text [ danish ] = "Det var ikke muligt at indlæse dokumentet helt" ;
         Text [ portuguese ] = "Foi impossível carregar o documento completamente" ;
         Text [ portuguese_brazilian ] = "Dokument konnte nicht vollständig geladen werden" ;
-        Text[ chinese_simplified ] = "ÎŞ·¨ÍêÈ«×°ÔØÎÄµµ";
+        Text[ chinese_simplified ] = "ÎŞ·¨ÍêÈ«×°ÈëÎÄµµ";
         Text[ russian ] = "Ïîëíîñòüş çàãğóçèòü äîêóìåíò íåâîçìîæíî";
         Text[ polish ] = "Dokument nie móg³ zostaæ ca³kowicie za³adowany";
         Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğŠ®‘S‚É“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
-        Text[ chinese_traditional ] = "µLªk§¹¥ş¸Ë¸ü¤å¥ó";
+        Text[ chinese_traditional ] = "µLªk§¹¥ş¸ü¤J¤å¥ó";
         Text[ arabic ] = "ÊÚĞÑ ÊÍãíá ÇáãÓÊäÏ ÈÔßá ÊÇã";
         Text[ greek ] = "Äåí Şôáí äõíáôŞ ç öüñôùóç ïëüêëçñïõ ôïõ åããñÜöïõ";
         Text[ korean ] = "¹®¼­°¡ ¿ÏÀüÈ÷ ·ÎµåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
