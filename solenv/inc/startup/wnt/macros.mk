@@ -48,6 +48,9 @@ V *:= 		# RCS suffix
    __.DIVSEP-sh-no  *:= \\
     DIRSEPSTR		:=	\
 #	/ 				*=  $(DIRSEPSTR)$(DIRSEPSTR)
+   PWD:=$(shell +echo %_cwd)
+.EXPORT : PWD
+   
 .ELSE
    SHELL	    !:= $(SHELL)
    COMMAND          *=  $(CMNDNAME) $(CMNDARGS)
