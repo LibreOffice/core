@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-07 11:55:58 $
+ *  last change: $Author: tl $ $Date: 2001-05-07 13:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ public:
     const String            GetFontFormatId( const SmFontFormat &rFntFmt ) const;
     const String            GetNewFontFormatId() const;
     USHORT                  GetCount() const    { return aEntries.Count(); }
+    const String            GetFontFormatId( USHORT nPos ) const;
 };
 
 

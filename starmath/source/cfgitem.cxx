@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-07 11:55:51 $
+ *  last change: $Author: tl $ $Date: 2001-05-07 13:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,15 @@ const String SmFontFormatList::GetNewFontFormatId() const
     return aRes;
 }
 
+const String SmFontFormatList::GetFontFormatId( USHORT nPos ) const
+{
+    String aRes;
+    if (nPos < aEntries.Count())
+        aRes = aEntries[nPos].aId;
+    return aRes;
+}
+
+
 /////////////////////////////////////////////////////////////////
 
 SmMathConfig::SmMathConfig()
@@ -587,27 +596,29 @@ void SmMathConfig::ReplaceSymbols( const SmSym *pNewSymbols[], USHORT nCount )
         aNodeNameDelim += rSymbol.GetExportName();
         aNodeNameDelim += aDelim;
 
+        const OUString *pName = pNames;
+
         // Char
         pVal->Name  = aNodeNameDelim;
-        pVal->Name += pNames[0];
+        pVal->Name += *pName++;
         pVal->Value <<= (INT32) rSymbol.GetCharacter();
         pVal++;
         // Set
         pVal->Name  = aNodeNameDelim;
-        pVal->Name += pNames[1];
+        pVal->Name += *pName++;
         pVal->Value <<= OUString( rSymbol.GetSetName() );
         pVal++;
         // Predefined
         pVal->Name  = aNodeNameDelim;
-        pVal->Name += pNames[2];
+        pVal->Name += *pName++;
         pVal->Value <<= (BOOL) rSymbol.IsPredefined();
         pVal++;
         // FontFormatId
-        SmFontFormat aFntFmt( pFormat->GetFont( i ) );
+        SmFontFormat aFntFmt( rSymbol.GetFace() );
         String aFntFmtId( GetFontFormatList().GetFontFormatId( aFntFmt ) );
         DBG_ASSERT( aFntFmtId.Len(), "FontFormatId not found" );
         pVal->Name  = aNodeNameDelim;
-        pVal->Name += pNames[3];
+        pVal->Name += *pName++;
         pVal->Value <<= OUString( aFntFmtId );
         pVal++;
     }
@@ -722,6 +733,65 @@ SmFontFormat SmMathConfig::ReadFontFormat( SmMathConfigItem &rCfg,
 
 void SmMathConfig::SaveFontFormatList()
 {
+    SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ) );
+
+    Sequence< OUString > aNames = lcl_GetFontPropertyNames();
+    const OUString *pNames = aNames.getConstArray();
+    INT32 nSymbolProps = aNames.getLength();
+
+    SmFontFormatList &rFntFmtList = GetFontFormatList();
+    USHORT nCount = rFntFmtList.GetCount();
+
+    Sequence< PropertyValue > aValues( nCount * nSymbolProps );
+    PropertyValue *pValues = aValues.getArray();
+
+    PropertyValue *pVal = pValues;
+    OUString aDelim( OUString::valueOf( (sal_Unicode) '/' ) );
+    for (USHORT i = 0;  i < nCount;  ++i)
+    {
+        String aFntFmtId( rFntFmtList.GetFontFormatId( i ) );
+        const SmFontFormat aFntFmt( *rFntFmtList.GetFontFormat( aFntFmtId ) );
+
+        OUString  aNodeNameDelim( A2OU( FONT_FORMAT_LIST ) );
+        aNodeNameDelim += aDelim;
+        aNodeNameDelim += aFntFmtId;
+        aNodeNameDelim += aDelim;
+
+        const OUString *pName = pNames;
+
+        // Name
+        pVal->Name  = aNodeNameDelim;
+        pVal->Name += *pName++;
+        pVal->Value <<= OUString( aFntFmt.aName );
+        pVal++;
+        // CharSet
+        pVal->Name  = aNodeNameDelim;
+        pVal->Name += *pName++;
+        pVal->Value <<= (INT16) aFntFmt.nCharSet;
+        pVal++;
+        // Family
+        pVal->Name  = aNodeNameDelim;
+        pVal->Name += *pName++;
+        pVal->Value <<= (INT16) aFntFmt.nFamily;
+        pVal++;
+        // Pitch
+        pVal->Name  = aNodeNameDelim;
+        pVal->Name += *pName++;
+        pVal->Value <<= (INT16) aFntFmt.nPitch;
+        pVal++;
+        // Weight
+        pVal->Name  = aNodeNameDelim;
+        pVal->Name += *pName++;
+        pVal->Value <<= (INT16) aFntFmt.nWeight;
+        pVal++;
+        // Italic
+        pVal->Name  = aNodeNameDelim;
+        pVal->Name += *pName++;
+        pVal->Value <<= (INT16) aFntFmt.nItalic;
+        pVal++;
+    }
+    DBG_ASSERT( pVal - pValues == nCount * nSymbolProps, "properties missing" );
+    aCfg.ReplaceSetProperties( A2OU( FONT_FORMAT_LIST ) , aValues );
 }
 
 
