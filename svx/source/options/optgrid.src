@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-07 14:47:04 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -880,6 +880,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ catalan ] = "grados";
     };
 };
+
 
 
 
