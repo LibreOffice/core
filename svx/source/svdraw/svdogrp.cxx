@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,14 +134,20 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ImpSdrObjGroupLink: public SvBaseLink {
+class ImpSdrObjGroupLink: public so3::SvBaseLink
+{
     SdrObject* pSdrObj;
 public:
-    ImpSdrObjGroupLink(SdrObject* pObj1): SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),pSdrObj(pObj1) {}
+    ImpSdrObjGroupLink( SdrObject* pObj1 )
+        : ::so3::SvBaseLink( so3::LINKUPDATE_ONCALL, FORMAT_FILE ),
+        pSdrObj( pObj1 )
+    {}
     virtual ~ImpSdrObjGroupLink();
     virtual void Closed();
-    virtual void DataChanged(SvData& rData);
-    FASTBOOL     Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    virtual void DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue );
+
+    FASTBOOL     Connect() { return 0 != GetRealObject(); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,19 +171,24 @@ void ImpSdrObjGroupLink::Closed()
 }
 
 
-void ImpSdrObjGroupLink::DataChanged(SvData& rData)
+void ImpSdrObjGroupLink::DataChanged( const String& ,
+                                      const ::com::sun::star::uno::Any& )
 {
     FASTBOOL bForceReload=FALSE;
-    SdrModel*       pModel      = pSdrObj  ==NULL ? NULL : pSdrObj->GetModel();
-    SvxLinkManager* pLinkManager= pModel==NULL ? NULL : pModel->GetLinkManager();
-    if (pLinkManager!=NULL) {
-        ImpSdrObjGroupLinkUserData* pData=((SdrObjGroup*)pSdrObj)->GetLinkUserData();
-        if (pData!=NULL) {
+    SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
+    SvxLinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
+    if( pLinkManager )
+    {
+        ImpSdrObjGroupLinkUserData* pData=
+                                ((SdrObjGroup*)pSdrObj)->GetLinkUserData();
+        if( pData )
+        {
             String aFile;
             String aName;
-            pLinkManager->GetDisplayNames(*this,NULL,&aFile,&aName,NULL);
+            pLinkManager->GetDisplayNames( this, 0, &aFile, &aName, 0 );
 
-            if(!pData->aFileName.Equals(aFile) || !pData->aObjName.Equals(aName))
+            if( !pData->aFileName.Equals( aFile ) ||
+                !pData->aObjName.Equals( aName ))
             {
                 pData->aFileName=aFile;
                 pData->aObjName=aName;
@@ -186,9 +197,8 @@ void ImpSdrObjGroupLink::DataChanged(SvData& rData)
             }
         }
     }
-    if (pSdrObj!=NULL) {
-        ((SdrObjGroup*)pSdrObj)->ReloadLinkedGroup(bForceReload);
-    }
+    if( pSdrObj )
+        ((SdrObjGroup*)pSdrObj)->ReloadLinkedGroup( bForceReload );
 }
 
 #endif // SVX_LIGHT
@@ -592,7 +602,7 @@ void SdrObjGroup::ImpLinkAbmeldung()
     SvxLinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
     if (pLinkManager!=NULL && pData!=NULL && pData->pLink!=NULL) { // Nicht 2x Abmelden
         // Bei Remove wird *pLink implizit deleted
-        pLinkManager->Remove(*pData->pLink);
+        pLinkManager->Remove( pData->pLink );
         pData->pLink=NULL;
     }
 #endif // SVX_LIGHT

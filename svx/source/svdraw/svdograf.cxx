@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 16:36:12 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@
 // - SdrGraphicLink -
 // ------------------
 
-class SdrGraphicLink : public SvBaseLink
+class SdrGraphicLink : public so3::SvBaseLink
 {
     SdrGrafObj*         pGrafObj;
 
@@ -124,19 +124,20 @@ public:
     virtual             ~SdrGraphicLink();
 
     virtual void        Closed();
-    virtual void        DataChanged(SvData& rData);
+    virtual void        DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue );
 
-    BOOL                Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    BOOL                Connect() { return 0 != GetRealObject(); }
     void                UpdateSynchron();
 };
 
 // -----------------------------------------------------------------------------
 
 SdrGraphicLink::SdrGraphicLink(SdrGrafObj* pObj):
-    SvBaseLink(LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB),
+    so3::SvBaseLink( LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
     pGrafObj(pObj)
 {
-    SetSynchron(FALSE);
+    SetSynchron( FALSE );
 }
 
 // -----------------------------------------------------------------------------
@@ -147,71 +148,32 @@ SdrGraphicLink::~SdrGraphicLink()
 
 // -----------------------------------------------------------------------------
 
-void SdrGraphicLink::DataChanged(SvData& rData)
+void SdrGraphicLink::DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue )
 {
-    SdrModel*       pModel      = pGrafObj==NULL ? NULL : pGrafObj->GetModel();
-    SvxLinkManager* pLinkManager= pModel  ==NULL ? NULL : pModel->GetLinkManager();
+    SdrModel*       pModel      = pGrafObj ? pGrafObj->GetModel() : 0;
+    SvxLinkManager* pLinkManager= pModel  ? pModel->GetLinkManager() : 0;
 
-    if (pLinkManager!=NULL)
+    if( pLinkManager && rValue.hasValue() )
     {
-        const ULONG nFormat = rData.GetFormat();
-        GraphicType eOldGraphicType = pGrafObj->GetGraphicType();  // kein Hereinswappen
-        BOOL bIsChanged = pModel->IsChanged();
-        pLinkManager->GetDisplayNames(*this,NULL,&pGrafObj->aFileName,NULL,&pGrafObj->aFilterName);
+        pLinkManager->GetDisplayNames( this, 0, &pGrafObj->aFileName,
+                                            0, &pGrafObj->aFilterName );
 
-        if (nFormat == SOT_FORMATSTR_ID_SVXB)
+        Graphic aGraphic;
+        if( SvxLinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))
         {
-            Graphic* pGraphic = NULL;
+            GraphicType eOldGraphicType = pGrafObj->GetGraphicType();  // kein Hereinswappen
+            BOOL bIsChanged = pModel->IsChanged();
 
-            if (rData.GetData((SvDataCopyStream**) &pGraphic, Graphic::StaticType(), TRANSFER_REFERENCE))
-            {
-                pGrafObj->SetGraphic( *pGraphic );
-
-                if (eOldGraphicType != GRAPHIC_NONE)
-                    pGrafObj->SetChanged();
-                else
-                    pModel->SetChanged(bIsChanged);
-            }
+            pGrafObj->SetGraphic( aGraphic );
+            if( GRAPHIC_NONE != eOldGraphicType )
+                pGrafObj->SetChanged();
+            else
+                pModel->SetChanged( bIsChanged );
         }
-        else if (rData.GetFormat() != SvxLinkManager::RegisterStatusInfoId())
-        {
-            switch( nFormat)
-            {
-                case FORMAT_GDIMETAFILE:
-                {
-                    GDIMetaFile* pMetaFile=NULL;
-                    if (rData.GetData(&pMetaFile,TRANSFER_REFERENCE))
-                    {
-                        pGrafObj->SetGraphic(*pMetaFile);
-
-                        if (eOldGraphicType != GRAPHIC_NONE)
-                            pGrafObj->SetChanged();
-                        else
-                            pModel->SetChanged(bIsChanged);
-                    }
-                }
-                break;
-
-                case FORMAT_BITMAP:
-                {
-                    Bitmap* pBmp=NULL;
-                    if (rData.GetData(&pBmp,TRANSFER_REFERENCE))
-                    {
-                        pGrafObj->SetGraphic(*pBmp);
-
-                        if (eOldGraphicType != GRAPHIC_NONE)
-                            pGrafObj->SetChanged();
-                        else
-                            pModel->SetChanged(bIsChanged);
-                    }
-                }
-                break;
-
-                default:
-                    pGrafObj->SendRepaintBroadcast();
-                break;
-            }
-        }
+        else if( SotExchange::GetFormatIdFromMimeType( rMimeType ) !=
+                    SvxLinkManager::RegisterStatusInfoId() )
+            pGrafObj->SendRepaintBroadcast();
     }
 }
 
@@ -232,10 +194,10 @@ void SdrGraphicLink::UpdateSynchron()
 {
     if( GetObj() )
     {
-        SvData aData( GetContentType() );
-        aData.SetAspect( ASPECT_DOCPRINT );
-        GetObj()->GetData( &aData );
-        DataChanged( aData );
+        String aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
+        ::com::sun::star::uno::Any aValue;
+        GetObj()->GetData( aValue, aMimeType, TRUE );
+        DataChanged( aMimeType, aValue );
     }
 }
 
@@ -545,7 +507,7 @@ void SdrGrafObj::ImpLinkAbmeldung()
     if( pLinkManager != NULL && pGraphicLink!=NULL)
     {
         // Bei Remove wird *pGraphicLink implizit deleted
-        pLinkManager->Remove( *pGraphicLink );
+        pLinkManager->Remove( pGraphicLink );
         pGraphicLink=NULL;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 09:43:37 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,50 +66,55 @@
 #endif
 
 
-#ifndef _SV_WRKWIN_HXX //autogen
+#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
-
-#ifndef _SV_MSGBOX_HXX //autogen
+#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _URLOBJ_HXX //autogen
+#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _STREAM_HXX //autogen
+#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
-#ifndef _FILTER_HXX //autogen
+#ifndef _SOT_FORMATS_HXX
+#include <sot/formats.hxx>
+#endif
+#ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
 #endif
-#ifndef _SOERR_HXX //autogen
+#ifndef _SOERR_HXX
 #include <so3/soerr.hxx>
 #endif
-#ifndef _LNKBASE_HXX //autogen
+#ifndef _LNKBASE_HXX
 #include <so3/lnkbase.hxx>
 #endif
-#ifndef _SFXAPP_HXX //autogen
+#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
-#ifndef _SFX_PROGRESS_HXX //autogen
+#ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
 #endif
-#ifndef _SFX_INTERNO_HXX //autogen
+#ifndef _SFX_INTERNO_HXX
 #include <sfx2/interno.hxx>
 #endif
-#ifndef _SFX_DOCFILT_HACK_HXX //autogen
+#ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
 #endif
+#include <sot/exchange.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include "fileobj.hxx"
 #include "linkmgr.hxx"
 #include "dialmgr.hxx"
 #include "dialogs.hrc"
-#include "xoutbmp.hxx"          // XOutBitmap
+#include "xoutbmp.hxx"
 #include "impgrf.hxx"
 
-// es gibt wohl ein paar Compiler-Fehler beim optimieren
-#pragma optimize( "", off )
+using namespace ::com::sun::star::uno;
+
 
 #define FILETYPE_TEXT       1
 #define FILETYPE_GRF        2
@@ -124,13 +129,6 @@ public:
     DECL_STATIC_LINK( SvxFileObjProgress_Impl, UpdatePercentHdl, GraphicFilter* );
 };
 
-
-class ImplGrfCastBaseLink : public SvBaseLink
-{
-public:
-    ImplGrfCastBaseLink() : SvBaseLink( 0, 0 ) {}
-    void SetObject( SvPseudoObject* pObj ) { SetObj( pObj ); }
-};
 
 struct Impl_DownLoadData
 {
@@ -157,7 +155,7 @@ SvFileObject::SvFileObject()
 {
     bLoadAgain = bMedUseCache = TRUE;
     bSynchron = bLoadError = bWaitForData = bDataReady = bNativFormat =
-    bClearMedium = bProgress = FALSE;
+    bClearMedium = bProgress = bStateChangeCalled = FALSE;
 }
 
 
@@ -173,24 +171,20 @@ SvFileObject::~SvFileObject()
 }
 
 
-const SvDataTypeList & SvFileObject::GetTypeList() const
+BOOL SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
+                                const String & rMimeType,
+                                BOOL bGetSynchron )
 {
-    return aTypeList;
-}
-
-
-BOOL SvFileObject::GetData( SvData * pSvData )
-{
-    aTypeList.Clear();
+    ULONG nFmt = SotExchange::GetFormatStringId( rMimeType );
     switch( nType )
     {
     case FILETYPE_TEXT:
-        if( FORMAT_FILE == pSvData->GetFormat() )
+        if( FORMAT_FILE == nFmt )
         {
             // das Medium muss in der Applikation geoffnet werden, um die
             // relativen Datei Links aufzuloesen!!!! Wird ueber den
             // LinkManager und damit von dessen Storage erledigt.
-            pSvData->SetData( sFileNm );
+            rData <<= rtl::OUString( sFileNm );
 
 /*
 ===========================================================================
@@ -222,7 +216,6 @@ JP 28.02.96: noch eine Baustelle:
                 pSvData->SetData( pData, nLen, TRANSFER_MOVE );
             }
 */
-            aTypeList.Append( *pSvData );
         }
         break;
 
@@ -230,25 +223,24 @@ JP 28.02.96: noch eine Baustelle:
         if( !bLoadError )
         {
             SfxMediumRef xTmpMed;
-            ULONG nFmt = pSvData->GetFormat(),
-                    nGrfFmtId = Graphic::RegisterClipboardFormatName();
 
             if( FORMAT_GDIMETAFILE == nFmt || FORMAT_BITMAP == nFmt ||
-                nGrfFmtId == nFmt )
+                SOT_FORMATSTR_ID_SVXB == nFmt )
             {
                 Graphic aGrf;
 
                 //JP 15.07.98: Bug 52959
                 //      falls das Nativformat doch erwuenscht ist, muss am
                 //      Ende das Flag zurueckgesetzt werden.
+// wird einzig und allein im sw/ndgrf.cxx benutzt, wenn der Link vom
+// GraphicNode entfernt wird.
                 BOOL bOldNativFormat = bNativFormat;
-                bNativFormat = 0 != (ASPECT_ICON & pSvData->GetAspect());
+//!!??              bNativFormat = 0 != (ASPECT_ICON & pSvData->GetAspect());
 
                 // falls gedruckt werden soll, warten wir bis die
                 // Daten vorhanden sind
-                if( ASPECT_DOCPRINT & pSvData->GetAspect() )
+                if( bGetSynchron )
                 {
-
                     // testhalber mal ein LoadFile rufen um das nach-
                     // laden ueberahaupt anzustossen
                     if( !xMed.Is() )
@@ -286,29 +278,36 @@ JP 28.02.96: noch eine Baustelle:
                     aGrf.SetDefaultType();
                 }
 
-                if( nGrfFmtId != nFmt )
+                if( SOT_FORMATSTR_ID_SVXB != nFmt )
                     nFmt = (bLoadError || GRAPHIC_BITMAP == aGrf.GetType())
                                 ? FORMAT_BITMAP
                                 : FORMAT_GDIMETAFILE;
 
-                GDIMetaFile aMeta;
-                Bitmap aBmp;
-                SvData aData( nFmt );
-                if( nGrfFmtId == nFmt )
-                    aData.SetData( &aGrf, TRANSFER_REFERENCE );
-                else if( FORMAT_BITMAP == nFmt )
+                SvMemoryStream aMemStm( 65535, 65535 );
+                switch ( nFmt )
                 {
-                    aBmp = aGrf.GetBitmap();
-                    aData.SetData( &aBmp, TRANSFER_REFERENCE );
-                }
-                else
-                {
-                    aMeta = aGrf.GetGDIMetaFile();
-                    aData.SetData( &aMeta, TRANSFER_REFERENCE );
-                }
+                case SOT_FORMATSTR_ID_SVXB:
+                    if( GRAPHIC_NONE != aGrf.GetType() )
+                    {
+                        aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
+                        aMemStm << aGrf;
+                    }
+                    break;
 
-                *pSvData = aData;
-                aTypeList.Append( *pSvData );
+                case  FORMAT_BITMAP:
+                    if( !aGrf.GetBitmap().IsEmpty())
+                        aMemStm << aGrf.GetBitmap();
+                    break;
+
+                default:
+                    if( aGrf.GetGDIMetaFile().GetActionCount() )
+                    {
+                        GDIMetaFile aMeta( aGrf.GetGDIMetaFile() );
+                        aMeta.Write( aMemStm );
+                    }
+                }
+                rData <<= Sequence< sal_Int8 >( (sal_Int8*) aMemStm.GetData(),
+                                        aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
                 bNativFormat = bOldNativFormat;
 
@@ -322,30 +321,28 @@ JP 28.02.96: noch eine Baustelle:
         }
         break;
     }
-    return 0 != aTypeList.Count();
+    return sal_True/*0 != aTypeList.Count()*/;
 }
 
 
 
 
-BOOL SvFileObject::Connect( SvBaseLink& rLink )
+BOOL SvFileObject::Connect( so3::SvBaseLink* pLink )
 {
-    if( !rLink.GetLinkManager() )
+    if( !pLink || !pLink->GetLinkManager() )
         return FALSE;
 
     // teste doch mal, ob nicht ein anderer Link mit der gleichen
     // Verbindung schon existiert
-    rLink.GetLinkManager()->GetDisplayNames( rLink, 0, &sFileNm, 0, &sFilter );
+    pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sFileNm, 0, &sFilter );
 
-    SvPseudoObject* pObj = this;
-    if( OBJECT_CLIENT_GRF == rLink.GetObjType() )
+    if( OBJECT_CLIENT_GRF == pLink->GetObjType() )
     {
-        if( !rLink.IsUseCache() )
+        if( !pLink->IsUseCache() )
             bMedUseCache = FALSE;
 
         // Reload-Erkennung ???
-        SvPersist* pPersist = rLink.GetLinkManager()->GetCacheContainer();
-        SvInPlaceObjectRef aRef( pPersist );
+        SvInPlaceObjectRef aRef( pLink->GetLinkManager()->GetPersist() );
         if( aRef.Is() )
         {
             SfxObjectShell* pShell = ((SfxInPlaceObject*)&aRef)->GetObjectShell();
@@ -360,11 +357,11 @@ BOOL SvFileObject::Connect( SvBaseLink& rLink )
         }
     }
 
-    switch( rLink.GetObjectType() )
+    switch( pLink->GetObjType() )
     {
     case OBJECT_CLIENT_GRF:
         nType = FILETYPE_GRF;
-        bSynchron = rLink.IsSynchron();
+        bSynchron = pLink->IsSynchron();
         break;
 
     case OBJECT_CLIENT_FILE:
@@ -378,12 +375,9 @@ BOOL SvFileObject::Connect( SvBaseLink& rLink )
     SetUpdateTimeout( 0 );
 
     // und jetzt bei diesem oder gefundenem Pseudo-Object anmelden
-    AddDataAdvise( &rLink, rLink.GetContentType(),
-                        (bProgress ? ADVISEMODE_ONLYONCE : 0 ));
-    // um ueber Status-Aenderungen informiert zu werden
-    AddDataAdvise( &rLink, SvxLinkManager::RegisterStatusInfoId(),
-                            ADVISEMODE_ONLYONCE );
-    AddConnectAdvise( &rLink, ADVISE_CLOSED );
+    AddDataAdvise( pLink,
+                    SotExchange::GetFormatMimeType( pLink->GetContentType()),
+                    (bProgress ? ADVISEMODE_ONLYONCE : 0 ));
     return TRUE;
 }
 
@@ -530,70 +524,80 @@ BOOL SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 }
 
 
-SvLinkName* SvFileObject::Edit( Window* pParent, const SvBaseLink& rLink )
+String SvFileObject::Edit( Window* pParent, so3::SvBaseLink* pLink )
 {
-    if( !rLink.GetLinkManager() )
-        return 0;
-
     String sFile, sRange, sTmpFilter;
-    rLink.GetLinkManager()->GetDisplayNames( rLink, 0, &sFile, &sRange,
+    if( !pLink || !pLink->GetLinkManager() )
+        return sFile;
+
+    pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sFile, &sRange,
                                                         &sTmpFilter );
 
-    SvLinkName* pNewNm = 0;
-    if( OBJECT_CLIENT_GRF == rLink.GetObjectType() )
+    switch( pLink->GetObjType() )
     {
-        nType = FILETYPE_GRF;       // falls noch nicht gesetzt
-
-        SvxImportGraphicDialog* pDlg = new SvxImportGraphicDialog( pParent,
-                String( ResId( RID_SVXSTR_EDITGRFLINK, DIALOG_MGR() ) ), FALSE );
-
-        pDlg->SetPath( sFile, FALSE );
-        pDlg->SetCurFilter( sTmpFilter );
-
-        if( RET_OK == pDlg->Execute() )
+    case OBJECT_CLIENT_GRF:
         {
-            sFile = pDlg->GetPath();
-            sFile += cTokenSeperator;
-            sFile += cTokenSeperator;
-            sFile += pDlg->GetCurFilter();
-            pNewNm = new SvLinkName( sFile );
+            nType = FILETYPE_GRF;       // falls noch nicht gesetzt
+
+            SvxImportGraphicDialog* pDlg = new SvxImportGraphicDialog( pParent,
+                    String( ResId( RID_SVXSTR_EDITGRFLINK, DIALOG_MGR() ) ), FALSE );
+
+            pDlg->SetPath( sFile, FALSE );
+            pDlg->SetCurFilter( sTmpFilter );
+
+            if( RET_OK == pDlg->Execute() )
+            {
+                sFile = pDlg->GetPath();
+                sFile += ::so3::cTokenSeperator;
+                sFile += ::so3::cTokenSeperator;
+                sFile += pDlg->GetCurFilter();
+            }
+            else
+                sFile.Erase();
+            delete pDlg;
         }
-        delete pDlg;
-    }
-    else if( OBJECT_CLIENT_FILE == rLink.GetObjectType() )
-    {
-        nType = FILETYPE_TEXT;      // falls noch nicht gesetzt
-        Window* pOld = Application::GetDefModalDialogParent();
-        Application::SetDefModalDialogParent( pParent );
-
-        const SfxObjectFactory* pFactory;
-        SvPersist* pPersist = rLink.GetLinkManager()->GetCacheContainer();
-        SvInPlaceObjectRef aRef( pPersist );
-        if( aRef.Is() )
+        break;
+    case OBJECT_CLIENT_FILE:
         {
-            SfxObjectShell* pShell = ((SfxInPlaceObject*)&aRef)->GetObjectShell();
-            pFactory = &pShell->GetFactory();
-        }
-        else
-            pFactory = &SFX_APP()->GetDefaultFactory();
-        SfxMediumRef xMed = SFX_APP()->InsertDocumentDialog( 0, *pFactory );
+            nType = FILETYPE_TEXT;      // falls noch nicht gesetzt
+            Window* pOld = Application::GetDefModalDialogParent();
+            Application::SetDefModalDialogParent( pParent );
 
-        if( xMed.Is() )
-        {
-            sFile = xMed->GetName();
-            sFile += cTokenSeperator;
+            const SfxObjectFactory* pFactory;
+            SvInPlaceObjectRef aRef( pLink->GetLinkManager()->GetPersist() );
+            if( aRef.Is() )
+            {
+                SfxObjectShell* pShell = ((SfxInPlaceObject*)&aRef)->GetObjectShell();
+                pFactory = &pShell->GetFactory();
+            }
+            else
+                pFactory = &SFX_APP()->GetDefaultFactory();
+            SfxMediumRef xMed = SFX_APP()->InsertDocumentDialog( 0, *pFactory );
+
+            if( xMed.Is() )
+            {
+                sFile = xMed->GetName();
+                sFile += ::so3::cTokenSeperator;
 // Bereich!         sFile += xMed->GetFilter()->GetName();
-            sFile += cTokenSeperator;
-            sFile += xMed->GetFilter()->GetFilterName();
-            pNewNm = new SvLinkName( sFile );
+                sFile += ::so3::cTokenSeperator;
+                sFile += xMed->GetFilter()->GetFilterName();
+            }
+            else
+                sFile.Erase();
+            Application::SetDefModalDialogParent( pOld );
         }
-        Application::SetDefModalDialogParent( pOld );
+        break;
+
+    default:
+        sFile.Erase();
     }
-    return pNewNm;
+
+    return sFile;
 }
 
 
-IMPL_STATIC_LINK( SvxFileObjProgress_Impl, UpdatePercentHdl, GraphicFilter *, pFilter )
+IMPL_STATIC_LINK( SvxFileObjProgress_Impl, UpdatePercentHdl,
+                GraphicFilter *, pFilter )
 {
     pThis->SetState( pFilter->GetPercent() );
     return 0;
@@ -612,23 +616,25 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
         pThis->bDataReady = TRUE;
         pThis->SendStateChg_Impl( STATE_LOAD_OK );
 
-            // und dann nochmal die Daten senden (muss das noch sein??)
-        SvData aSvData;
-        pThis->DataChanged( aSvData );
+            // und dann nochmal die Daten senden
+        pThis->NotifyDataChanged();
     }
 
     if( pThis->bDataReady )
     {
         pThis->bLoadAgain = TRUE;
-        pThis->xMed->SetDataAvailableLink( Link() );
-        pThis->xMed->SetDoneLink( Link() );
+        if( pThis->xMed.Is() )
+        {
+            pThis->xMed->SetDataAvailableLink( Link() );
+            pThis->xMed->SetDoneLink( Link() );
 
-        Application::PostUserEvent(
-                    STATIC_LINK( pThis, SvFileObject, DelMedium_Impl ),
-                    new SfxMediumRef( pThis->xMed ));
+            Application::PostUserEvent(
+                        STATIC_LINK( pThis, SvFileObject, DelMedium_Impl ),
+                        new SfxMediumRef( pThis->xMed ));
+            pThis->xMed.Clear();
+        }
         if( pThis->pDownLoadData )
             delete pThis->pDownLoadData, pThis->pDownLoadData = 0;
-        pThis->xMed.Clear();
     }
 
     return 0;
@@ -667,10 +673,9 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void*, EMPTYARG )
         }
     }
 
-    SvData aSvData;
-    pThis->DataChanged( aSvData );
+    pThis->NotifyDataChanged();
 
-    SvStream* pStrm = pThis->xMed->GetInStream();
+    SvStream* pStrm = pThis->xMed.Is() ? pThis->xMed->GetInStream() : 0;
     if( pStrm && pStrm->GetError() )
     {
         if( ERRCODE_IO_PENDING == pStrm->GetError() )
@@ -696,67 +701,42 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void*, EMPTYARG )
 }
 
 
-IMPL_STATIC_LINK( SvFileObject, OldCacheGrf_Impl, void*, EMPTYARG )
-{
-    ULONG nCnt = pThis->GetSelectorCount();
-    if( nCnt )
-    {
-        SvAdvSelectorList& rSelLst = pThis->GetSelectorList();
-        SvAdvDataSelector * pD;
-
-        while( nCnt-- )
-            if( 0 != ( pD = PTR_CAST( SvAdvDataSelector,
-                                            rSelLst.GetObject( nCnt ) )) )
-            {
-                SvBaseLinkRef xLnkRef( pD->GetSink() );
-                if( xLnkRef.Is() && OBJECT_CLIENT_GRF == xLnkRef->GetObjType() )
-                {
-                    SvPersist* pPersist = xLnkRef->GetLinkManager()->GetCacheContainer();
-                    SvInPlaceObjectRef xRef( pPersist );
-                    if ( xRef.Is() )
-                        SfxObjectShell* pShell = ((SfxInPlaceObject*)&xRef)->GetObjectShell();
-                }
-            }
-    }
-    return 0;
-}
-
-
-
-ULONG SvFileObject::GetUpToDateStatus()
 /*  [Beschreibung]
 
-    Die Methode stellt fest, ob aus einem Grafik-Object die Grafik gelesen
+    Die Methode stellt fest, ob aus einem DDE-Object die Daten gelesen
     werden kann.
     Zurueckgegeben wird:
         ERRCODE_NONE            wenn sie komplett gelesen wurde
         ERRCODE_SO_PENDING      wenn sie noch nicht komplett gelesen wurde
         ERRCODE_SO_FALSE        sonst
 */
+BOOL SvFileObject::IsPending() const
 {
-    ULONG nRet = ERRCODE_SO_FALSE;
-    if( FILETYPE_GRF == nType && !bLoadError )
-    {
-        if( pDownLoadData || bWaitForData )
-            nRet = ERRCODE_SO_PENDING;
-        else if( !bWaitForData )
-        {
-            if( bDataReady || ( bSynchron && LoadFile_Impl() && xMed.Is() ) )
-                nRet = ERRCODE_NONE;
-            else
-            {
-                INetURLObject aUrl( sFileNm );
-
-                if( aUrl.HasError() ||
-                    INET_PROT_NOT_VALID == aUrl.GetProtocol() ||
-                    INET_PROT_FILE == aUrl.GetProtocol() )
-                    nRet = ERRCODE_NONE;
-            }
-        }
-
-    }
-    return nRet;
+    return FILETYPE_GRF == nType && !bLoadError &&
+            ( pDownLoadData || bWaitForData );
 }
+BOOL SvFileObject::IsDataComplete() const
+{
+    BOOL bRet = FALSE;
+    if( FILETYPE_GRF != nType )
+        bRet = TRUE;
+    else if( !bLoadError && ( !bWaitForData && !pDownLoadData ))
+    {
+        SvFileObject* pThis = (SvFileObject*)this;
+        if( bDataReady ||
+            ( bSynchron && pThis->LoadFile_Impl() && xMed.Is() ) )
+            bRet = TRUE;
+        else
+        {
+            INetURLObject aUrl( sFileNm );
+            if( aUrl.HasError() ||
+                INET_PROT_NOT_VALID == aUrl.GetProtocol() )
+                bRet = TRUE;
+        }
+    }
+    return bRet;
+}
+
 
 
 void SvFileObject::CancelTransfers()
@@ -784,13 +764,13 @@ void SvFileObject::SetTransferPriority( USHORT nPrio )
 
 void SvFileObject::SendStateChg_Impl( USHORT nState )
 {
-    if( GetSelectorCount() )
+    if( !bStateChangeCalled && HasDataLinks() )
     {
-        ULONG nId = SvxLinkManager::RegisterStatusInfoId();
-        SvData aData( nId );
-        String sData( String::CreateFromInt32( nState ));
-        aData.SetData( sData );
-        DataChanged( aData );
+        Any aAny;
+        aAny <<= rtl::OUString::valueOf( (sal_Int32)nState );
+        DataChanged( SotExchange::GetFormatName(
+                        SvxLinkManager::RegisterStatusInfoId()), aAny );
+        bStateChangeCalled = TRUE;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
-#ifndef _PSEUDO_HXX //autogen
-#include <so3/pseudo.hxx>
+#ifndef _LINKSRC_HXX //autogen
+#include <so3/linksrc.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -74,7 +74,8 @@
 class Graphic;
 struct Impl_DownLoadData;
 
-class SvFileObject : public SvPseudoObject
+
+class SvFileObject : public so3::SvLinkSource
 {
     String sFileNm;
     String sFilter;
@@ -94,8 +95,7 @@ class SvFileObject : public SvPseudoObject
     BOOL bMedUseCache : 1;
     BOOL bNativFormat : 1;
     BOOL bClearMedium : 1;
-
-    SvDataTypeList aTypeList;
+    BOOL bStateChangeCalled : 1;
 
     BOOL GetGraphic_Impl( Graphic&, SvStream* pStream = 0 );
     BOOL LoadFile_Impl();
@@ -104,27 +104,27 @@ class SvFileObject : public SvPseudoObject
     DECL_STATIC_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef* );
     DECL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void* );
     DECL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void* );
-    DECL_STATIC_LINK( SvFileObject, OldCacheGrf_Impl, void* );
 protected:
     virtual ~SvFileObject();
 
 public:
     SvFileObject();
 
-    virtual const SvDataTypeList & GetTypeList() const;
-    virtual BOOL GetData( SvData * );
+    virtual BOOL GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+                            const String & rMimeType,
+                            BOOL bSynchron = FALSE );
 
-    virtual BOOL Connect( SvBaseLink& );
-    virtual SvLinkName* Edit( Window*, const SvBaseLink& );
+    virtual BOOL Connect( so3::SvBaseLink* );
+    virtual String Edit( Window*, so3::SvBaseLink* );
 
     // erfrage ob das man direkt auf die Daten zugreifen kann oder ob das
     // erst angestossen werden muss
-    virtual ULONG GetUpToDateStatus();
+    virtual BOOL IsPending() const;
+    virtual BOOL IsDataComplete() const;
 
     void CancelTransfers();
     void SetTransferPriority( USHORT nPrio );
 };
-
 
 
 #endif

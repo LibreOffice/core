@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxln.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:12:27 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,16 +112,20 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ImpSdrObjTextLink: public SvBaseLink
+class ImpSdrObjTextLink: public ::so3::SvBaseLink
 {
     SdrTextObj*                 pSdrObj;
 
 public:
-    ImpSdrObjTextLink(SdrTextObj* pObj1): SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),pSdrObj(pObj1) {}
+    ImpSdrObjTextLink( SdrTextObj* pObj1 )
+        : ::so3::SvBaseLink( LINKUPDATE_ONCALL, FORMAT_FILE ),
+            pSdrObj( pObj1 )
+    {}
     virtual ~ImpSdrObjTextLink();
 
     virtual void Closed();
-    virtual void DataChanged(SvData& rData);
+    virtual void DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue );
 
     BOOL Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
@@ -132,7 +136,8 @@ ImpSdrObjTextLink::~ImpSdrObjTextLink()
 
 void ImpSdrObjTextLink::Closed()
 {
-    if (pSdrObj!=NULL) {
+    if (pSdrObj )
+    {
         // pLink des Objekts auf NULL setzen, da die Link-Instanz ja gerade destruiert wird.
         ImpSdrObjTextLinkUserData* pData=pSdrObj->GetLinkUserData();
         if (pData!=NULL) pData->pLink=NULL;
@@ -141,19 +146,24 @@ void ImpSdrObjTextLink::Closed()
     SvBaseLink::Closed();
 }
 
-void ImpSdrObjTextLink::DataChanged(SvData& rData)
+
+void ImpSdrObjTextLink::DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue )
 {
     FASTBOOL bForceReload=FALSE;
-    SdrModel*       pModel      = pSdrObj  ==NULL ? NULL : pSdrObj->GetModel();
-    SvxLinkManager* pLinkManager= pModel==NULL ? NULL : pModel->GetLinkManager();
-    if (pLinkManager!=NULL) {
+    SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
+    SvxLinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
+    if( pLinkManager )
+    {
         ImpSdrObjTextLinkUserData* pData=pSdrObj->GetLinkUserData();
-        if (pData!=NULL) {
+        if( pData )
+        {
             String aFile;
             String aFilter;
-            pLinkManager->GetDisplayNames(*this,NULL,&aFile,NULL,&aFilter);
+            pLinkManager->GetDisplayNames( this, 0,&aFile, 0, &aFilter );
 
-            if(!pData->aFileName.Equals(aFile) || !pData->aFilterName.Equals(aFilter))
+            if( !pData->aFileName.Equals( aFile ) ||
+                !pData->aFilterName.Equals( aFilter ))
             {
                 pData->aFileName = aFile;
                 pData->aFilterName = aFilter;
@@ -162,9 +172,8 @@ void ImpSdrObjTextLink::DataChanged(SvData& rData)
             }
         }
     }
-    if (pSdrObj!=NULL) {
-        pSdrObj->ReloadLinkedText(bForceReload);
-    }
+    if (pSdrObj )
+        pSdrObj->ReloadLinkedText( bForceReload );
 }
 #endif // SVX_LIGHT
 
@@ -456,7 +465,7 @@ void SdrTextObj::ImpLinkAbmeldung()
     SvxLinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
     if (pLinkManager!=NULL && pData!=NULL && pData->pLink!=NULL) { // Nicht 2x Abmelden
         // Bei Remove wird *pLink implizit deleted
-        pLinkManager->Remove(*pData->pLink);
+        pLinkManager->Remove( pData->pLink );
         pData->pLink=NULL;
     }
 #endif // SVX_LIGHT

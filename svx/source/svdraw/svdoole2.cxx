@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,6 @@
 #endif
 
 #ifndef SVX_LIGHT
-#ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
-#endif
-
 #ifndef _IPCLIENT_HXX //autogen
 #include <so3/ipclient.hxx>
 #endif
@@ -100,6 +96,8 @@
 #include <so3/clsids.hxx>
 #endif
 #endif
+
+#include <sot/formats.hxx>
 
 #ifndef _IPENV_HXX //autogen
 #include <so3/ipenv.hxx>
@@ -156,82 +154,6 @@ SO2_DECL_REF(SvInPlaceObject)
 #endif
 #endif // SVX_LIGHT
 
-#ifndef SVX_LIGHT
-/*************************************************************************
-|*
-|* SdrOleLink zur Verbindung von SdrOle2Obj und LinkManager
-|*
-\************************************************************************/
-
-class SdrOleLink : public SvBaseLink
-{
-private:
-    SdrOle2Obj*                 pOle2Obj;
-
-public:
-    SdrOleLink(SdrOle2Obj* pObj, SvPseudoObject* pPseudoObj);
-    virtual ~SdrOleLink();
-
-    virtual void Closed();
-    virtual void DataChanged( SvData& ) {}
-    FASTBOOL     Connect() { return 0 != SvBaseLink::GetRealObject(); }
-    SvLinkName*  GetCacheName() const { return SvBaseLink::GetCacheName(); }
-};
-
-#ifndef SV_DECL_SDROLELINK_DEFINED
-#define SV_DECL_SDROLELINK_DEFINED
-SV_DECL_REF(SdrOleLink)
-#endif
-
-SV_IMPL_REF (SdrOleLink)
-
-#endif // SVX_LIGHT
-
-#ifndef SVX_LIGHT
-
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
-
-SdrOleLink::SdrOleLink(SdrOle2Obj* pObj, SvPseudoObject* pPseudoObj):
-    SvBaseLink(String(),OBJECT_CLIENT_OLE_CACHE,pPseudoObj),
-    pOle2Obj(pObj)
-{
-}
-
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
-SdrOleLink::~SdrOleLink()
-{
-}
-
-/*************************************************************************
-|*
-|* Link an oder abmelden
-|*
-\************************************************************************/
-
-void SdrOleLink::Closed()
-{
-    // Die Verbindung wird aufgehoben
-    SdrModel* pModel = pOle2Obj->GetModel();
-    SvxLinkManager* pLinkManager = pModel->GetLinkManager();
-
-    if (pLinkManager!=NULL)
-        pLinkManager->Remove(*this);
-    // Basisklasse erst zum Schluss rufen, weil Closed()
-    // die Instanz zerstoert! (Wer programmiert denn sowas?!?)
-    // JP 28.02.96: Der Witz ist, das man sich eine LinkReferenz und nicht
-    //              den direkten Pointer haelt!!!!!
-    SvBaseLink::Closed();
-}
-#endif // SVX_LIGHT
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -241,22 +163,18 @@ SdrOle2Obj::SdrOle2Obj(FASTBOOL bFrame_)
 {
     Init();
 
-    xOleLinkRef = NULL;
     ppObjRef=new SvInPlaceObjectRef;
     bFrame=bFrame_;
-    bTestIfLinked=TRUE;
 }
 
 SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, FASTBOOL bFrame_)
 {
     Init();
 #ifndef SVX_LIGHT
-    xOleLinkRef.Clear();
     ppObjRef=new SvInPlaceObjectRef(rNewObjRef);
 #endif // !SVX_LIGHT
 
     bFrame=bFrame_;
-    bTestIfLinked=TRUE;
 
     SvInPlaceObjectRef& rIPRef = *ppObjRef;
 
@@ -275,13 +193,11 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
     Init();
 
 #ifndef SVX_LIGHT
-    xOleLinkRef.Clear();
     ppObjRef=new SvInPlaceObjectRef(rNewObjRef);
 #endif
 
     aName=rNewObjName;
     bFrame=bFrame_;
-    bTestIfLinked=TRUE;
 
     SvInPlaceObjectRef& rIPRef = *ppObjRef;
 
@@ -300,13 +216,11 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
     Init();
 
 #ifndef SVX_LIGHT
-    xOleLinkRef.Clear();
     ppObjRef=new SvInPlaceObjectRef(rNewObjRef);
 #endif
 
     aName=rNewObjName;
     bFrame=bFrame_;
-    bTestIfLinked=TRUE;
 
     SvInPlaceObjectRef& rIPRef = *ppObjRef;
 
@@ -400,8 +314,6 @@ void SdrOle2Obj::ImpAnmeldung()
                 xIObj = pInfo = new SvEmbeddedInfoObject(*ppObjRef,aName);
             }
 
-            SetOleLink((SvEmbeddedInfoObject*) pInfo);
-
             if ( !pPers->HasObject(aName) )
             {
                 pPers->Move(pInfo, aName);
@@ -466,15 +378,6 @@ void SdrOle2Obj::ImpAbmeldung()
     {
         // Aus Cache entfernen
         GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
-
-        if (xOleLinkRef.Is())
-        {
-            xOleLinkRef->Closed();
-            // Closed() deleted die Instanz bereits! (Wer programmiert denn sowas?!?)
-            // JP 28.02.96: Der Witz ist, das man sich eine LinkReferenz
-            //              und nicht den direkten Pointer haelt!!!!!
-            xOleLinkRef.Clear();
-        }
 
         if ( ppObjRef->Is() )
         {
@@ -1010,35 +913,6 @@ void SdrOle2Obj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     }
 }
 
-void SdrOle2Obj::SetOleLink(SvEmbeddedInfoObject* pInfoObj)
-{
-#ifndef SVX_LIGHT
-    if (xOleLinkRef.Is())
-    {
-        // Erst Verbindung aufheben
-        xOleLinkRef->Closed();
-        // Closed() deleted die Instanz bereits! (Wer programmiert denn sowas?!?)
-        // JP 28.02.96: Der Witz ist, das man sich eine LinkReferenz
-        //              und nicht den direkten Pointer haelt!!!!!
-        xOleLinkRef.Clear();
-    }
-
-    if (pModel!=NULL && pInfoObj && ppObjRef->Is()) {
-        if (pInfoObj->IsLink()) {
-            // Verbindung herstellen
-            xOleLinkRef = new SdrOleLink(this,&(*ppObjRef));
-            SvxLinkManager* pLinkManager=pModel->GetLinkManager();
-
-            if (pLinkManager!=NULL) {
-                pLinkManager->InsertSoLink(*xOleLinkRef);
-            }
-        }
-    }
-
-    bTestIfLinked = FALSE;
-#endif // SVX_LIGHT
-}
-
 void SdrOle2Obj::NbcMove(const Size& rSize)
 {
     SdrRectObj::NbcMove(rSize);
@@ -1116,15 +990,6 @@ const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
                 // set the modified state of the model.
                 if(!bWasChanged && pModel && pModel->IsChanged())
                     pModel->SetChanged(FALSE);
-            }
-
-            if( bTestIfLinked )
-            {
-                // Ist das Objekt ev. gelinkt? (nur einmal pruefen)
-                SvInfoObjectRef xIObj;
-                SvEmbeddedInfoObject* pInfo;
-                xIObj=pInfo=new SvEmbeddedInfoObject( *ppObjRef, aName );
-                ( (SdrOle2Obj*) this )->SetOleLink( pInfo );
             }
 
             if ( (*ppObjRef)->GetMiscStatus() & SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE )

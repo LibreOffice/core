@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 09:41:21 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _SVXLINKMGR_HXX
 
 
-#ifndef _LINKMGR_HXX //autogen
+#ifndef _LINKMGR_HXX
 #include <so3/linkmgr.hxx>
 #endif
 
@@ -80,38 +80,38 @@ enum LinkState
     STATE_LOAD_ABORT
 };
 
-class SvxLinkManager : public SvLinkManager
+class SvxLinkManager : public so3::SvLinkManager
 {
-    SvxLinkManager( const SvLinkManager& );
-    SvxLinkManager& operator=( const SvLinkManager& );
+    SvxLinkManager( const SvxLinkManager& );
+    SvxLinkManager& operator=( const SvxLinkManager& );
 
 public:
     SvxLinkManager( SvPersist * pCacheCont );
 
     // den Link mit einem PseudoObject verbinden und in die Liste eintragen
-    BOOL InsertFileLink( SvBaseLink&,
+    BOOL InsertFileLink( so3::SvBaseLink&,
                         USHORT nFileType,
                         const String& rTxt,
                         const String* pFilterNm = 0,
                         const String* pRange = 0 );
 
             // falls am Link schon alles eingestellt ist !
-    BOOL InsertFileLink( SvBaseLink& );
+    BOOL InsertFileLink( so3::SvBaseLink& );
 
         // erfrage die Strings fuer den Dialog
-    virtual BOOL GetDisplayNames( const SvBaseLink&,
+    virtual BOOL GetDisplayNames( const so3::SvBaseLink*,
                                     String* pType,
                                     String* pFile = 0,
                                     String* pLink = 0,
                                     String* pFilter = 0 ) const;
 
-    virtual SvPseudoObjectRef CreateObj( SvBaseLink & );
+    virtual so3::SvLinkSourceRef CreateObj( so3::SvBaseLink * );
 
     // eine Uebertragung wird abgebrochen, also alle DownloadMedien canceln
     // (ist zur Zeit nur fuer die FileLinks interressant!)
     void CancelTransfers();
 
-    static void SetTransferPriority( SvBaseLink& rLink, USHORT nPrio );
+    static void SetTransferPriority( so3::SvBaseLink& rLink, USHORT nPrio );
 
     // um Status Informationen aus dem FileObject an den BaseLink zu
     // senden, gibt es eine eigene ClipBoardId. Das SvData-Object hat
@@ -119,12 +119,14 @@ public:
     // Wird zur Zeit fuer FileObject in Verbindung mit JavaScript benoetigt
     // - das braucht Informationen ueber Load/Abort/Error
     static ULONG  RegisterStatusInfoId();
+
+    // if the mimetype says graphic/bitmap/gdimetafile then get the
+    // graphic from the Any. Return says no errors
+    static BOOL GetGraphicFromAny( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue,
+                                Graphic& rGrf );
+
 };
-
-
-// siehe im Cache nach, ob diese Graphic schon existiert
-BOOL GetCacheGraphic( const String& rName, Graphic* pGrf, Size* pSize );
-
 
 
 #endif
