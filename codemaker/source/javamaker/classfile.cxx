@@ -1,0 +1,905 @@
+/*************************************************************************
+ *
+ *  $RCSfile: classfile.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:13:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "classfile.hxx"
+
+#include "codemaker/global.hxx"
+#include "codemaker/options.hxx"
+#include "codemaker/unotype.hxx"
+
+#include "osl/diagnose.h"
+#include "rtl/string.h"
+#include "rtl/string.hxx"
+#include "sal/types.h"
+
+#include <map>
+#include <utility>
+#include <vector>
+
+using codemaker::javamaker::ClassFile;
+
+namespace {
+
+void appendU1(std::vector< unsigned char > & stream, sal_uInt8 data) {
+    stream.push_back(static_cast< unsigned char >(data));
+}
+
+void appendU2(std::vector< unsigned char > & stream, sal_uInt16 data) {
+    stream.push_back(static_cast< unsigned char >(data >> 8));
+    stream.push_back(static_cast< unsigned char >(data & 0xFF));
+}
+
+void appendU4(std::vector< unsigned char > & stream, sal_uInt32 data) {
+    stream.push_back(static_cast< unsigned char >(data >> 24));
+    stream.push_back(static_cast< unsigned char >((data >> 16) & 0xFF));
+    stream.push_back(static_cast< unsigned char >((data >> 8) & 0xFF));
+    stream.push_back(static_cast< unsigned char >(data & 0xFF));
+}
+
+void appendU8(std::vector< unsigned char > & stream, sal_uInt64 data) {
+    stream.push_back(static_cast< unsigned char >(data >> 56));
+    stream.push_back(static_cast< unsigned char >((data >> 48) & 0xFF));
+    stream.push_back(static_cast< unsigned char >((data >> 40) & 0xFF));
+    stream.push_back(static_cast< unsigned char >((data >> 32) & 0xFF));
+    stream.push_back(static_cast< unsigned char >((data >> 24) & 0xFF));
+    stream.push_back(static_cast< unsigned char >((data >> 16) & 0xFF));
+    stream.push_back(static_cast< unsigned char >((data >> 8) & 0xFF));
+    stream.push_back(static_cast< unsigned char >(data & 0xFF));
+}
+
+void appendStream(
+    std::vector< unsigned char > & stream,
+    std::vector< unsigned char > const & data)
+{
+    stream.insert(stream.end(), data.begin(), data.end());
+}
+
+void write(FileStream & file, void const * buffer, sal_uInt64 size) {
+    if (!file.write(buffer, size)) {
+        throw CannotDumpException(
+            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Error writing file")));
+    }
+}
+
+void writeU1(FileStream & file, sal_uInt8 data) {
+    unsigned char buf[] = { static_cast< unsigned char >(data) };
+    write(file, &buf, sizeof buf);
+}
+
+void writeU2(FileStream & file, sal_uInt16 data) {
+    unsigned char buf[] = {
+        static_cast< unsigned char >(data >> 8),
+        static_cast< unsigned char >(data & 0xFF) };
+    write(file, buf, sizeof buf);
+}
+
+void writeU4(FileStream & file, sal_uInt32 data) {
+    unsigned char buf[] = {
+        static_cast< unsigned char >(data >> 24),
+        static_cast< unsigned char >((data >> 16) & 0xFF),
+        static_cast< unsigned char >((data >> 8) & 0xFF),
+        static_cast< unsigned char >(data & 0xFF) };
+    write(file, buf, sizeof buf);
+}
+
+void writeStream(FileStream & file, std::vector< unsigned char > const & stream)
+{
+    std::vector< unsigned char >::size_type n = stream.size();
+    OSL_ASSERT(n <= SAL_MAX_UINT64);
+    if (n != 0) {
+        write(file, &stream[0], static_cast< sal_uInt64 >(n));
+    }
+}
+
+}
+
+ClassFile::Code::~Code() {}
+
+void ClassFile::Code::instrAastore() {
+    // aastore:
+    appendU1(m_code, 0x53);
+}
+
+void ClassFile::Code::instrAconstNull() {
+    // aconst_null:
+    appendU1(m_code, 0x01);
+}
+
+void ClassFile::Code::instrAnewarray(rtl::OString const & type) {
+    // anewarray <indexbyte1> <indexbyte2>:
+    appendU1(m_code, 0xBD);
+    appendU2(m_code, m_classFile.addClassInfo(type));
+}
+
+void ClassFile::Code::instrAreturn() {
+    // areturn:
+    appendU1(m_code, 0xB0);
+}
+
+void ClassFile::Code::instrAthrow() {
+    // athrow:
+    appendU1(m_code, 0xBF);
+}
+
+void ClassFile::Code::instrCheckcast(rtl::OString const & type) {
+    // checkcast <indexbyte1> <indexbyte2>:
+    appendU1(m_code, 0xC0);
+    appendU2(m_code, m_classFile.addClassInfo(type));
+}
+
+void ClassFile::Code::instrDup() {
+    // dup:
+    appendU1(m_code, 0x59);
+}
+
+void ClassFile::Code::instrGetstatic(
+    rtl::OString const & type, rtl::OString const & name,
+    rtl::OString const & descriptor)
+{
+    // getstatic <indexbyte1> <indexbyte2>:
+    appendU1(m_code, 0xB2);
+    appendU2(m_code, m_classFile.addFieldrefInfo(type, name, descriptor));
+}
+
+ClassFile::Code::Branch ClassFile::Code::instrIfAcmpne() {
+    // if_acmpne <branchbyte1> <branchbyte2>:
+    Branch branch = m_code.size();
+    appendU1(m_code, 0xA6);
+    appendU2(m_code, 0);
+    return branch;
+}
+
+ClassFile::Code::Branch ClassFile::Code::instrIfeq() {
+    // ifeq <branchbyte1> <branchbyte2>:
+    Branch branch = m_code.size();
+    appendU1(m_code, 0x99);
+    appendU2(m_code, 0);
+    return branch;
+}
+
+ClassFile::Code::Branch ClassFile::Code::instrIfnull() {
+    // ifnull <branchbyte1> <branchbyte2>:
+    Branch branch = m_code.size();
+    appendU1(m_code, 0xC6);
+    appendU2(m_code, 0);
+    return branch;
+}
+
+void ClassFile::Code::instrInstanceof(rtl::OString const & type) {
+    // instanceof <indexbyte1> <indexbyte2>:
+    appendU1(m_code, 0xC1);
+    appendU2(m_code, m_classFile.addClassInfo(type));
+}
+
+void ClassFile::Code::instrInvokeinterface(
+    rtl::OString const & type, rtl::OString const & name,
+    rtl::OString const & descriptor, sal_uInt8 args)
+{
+    // invokeinterface <indexbyte1> <indexbyte2> <nargs> 0:
+    appendU1(m_code, 0xB9);
+    appendU2(
+        m_code, m_classFile.addInterfaceMethodrefInfo(type, name, descriptor));
+    appendU1(m_code, args);
+    appendU1(m_code, 0);
+}
+
+void ClassFile::Code::instrInvokespecial(
+    rtl::OString const & type, rtl::OString const & name,
+    rtl::OString const & descriptor)
+{
+    // invokespecial <indexbyte1> <indexbyte2>:
+    appendU1(m_code, 0xB7);
+    appendU2(m_code, m_classFile.addMethodrefInfo(type, name, descriptor));
+}
+
+void ClassFile::Code::instrInvokestatic(
+    rtl::OString const & type, rtl::OString const & name,
+    rtl::OString const & descriptor)
+{
+    // invokestatic <indexbyte1> <indexbyte2>:
+    appendU1(m_code, 0xB8);
+    appendU2(m_code, m_classFile.addMethodrefInfo(type, name, descriptor));
+}
+
+void ClassFile::Code::instrInvokevirtual(
+    rtl::OString const & type, rtl::OString const & name,
+    rtl::OString const & descriptor)
+{
+    // invokevirtual <indexbyte1> <indexbyte2>:
+    appendU1(m_code, 0xB6);
+    appendU2(m_code, m_classFile.addMethodrefInfo(type, name, descriptor));
+}
+
+void ClassFile::Code::instrLookupswitch(
+    Code const * defaultBlock,
+    std::list< std::pair< sal_Int32, Code * > > const & blocks)
+{
+    // lookupswitch <0--3 byte pad> <defaultbyte1> <defaultbyte2> <defaultbyte3>
+    // <defaultbyte4> <npairs1> <npairs2> <npairs3> <npairs4>
+    // <match--offset pairs...>:
+    std::list< std::pair< sal_Int32, Code * > >::size_type size = blocks.size();
+    if (size > SAL_MAX_INT32) {
+        throw CannotDumpException(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "Lookup-switch too large for Java class file format")));
+    }
+    Position pos1 = m_code.size();
+    appendU1(m_code, 0xAB);
+    int pad = (pos1 + 1) % 4;
+    {for (int i = 0; i < pad; ++i) {
+        appendU1(m_code, 0);
+    }}
+    Position pos2 = pos1 + 1 + pad + 8 + blocks.size() * 8; //FIXME: overflow
+    appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1)); //FIXME: overflow
+    pos2 += defaultBlock->m_code.size(); //FIXME: overflow
+    appendU4(m_code, static_cast< sal_uInt32 >(size));
+    {for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
+              blocks.begin());
+          i != blocks.end(); ++i)
+    {
+        appendU4(m_code, static_cast< sal_uInt32 >(i->first));
+        appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1));
+            //FIXME: overflow
+        pos2 += i->second->m_code.size(); //FIXME: overflow
+    }}
+    appendStream(m_code, defaultBlock->m_code);
+    {for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
+              blocks.begin());
+          i != blocks.end(); ++i)
+    {
+        appendStream(m_code, i->second->m_code);
+    }}
+}
+
+void ClassFile::Code::instrNew(rtl::OString const & type) {
+    // new <indexbyte1> <indexbyte2>:
+    appendU1(m_code, 0xBB);
+    appendU2(m_code, m_classFile.addClassInfo(type));
+}
+
+void ClassFile::Code::instrNewarray(codemaker::UnoType::Sort sort) {
+    OSL_ASSERT(
+        sort >= codemaker::UnoType::SORT_BOOLEAN
+        && sort <= codemaker::UnoType::SORT_CHAR);
+    // newarray <atype>:
+    appendU1(m_code, 0xBC);
+    static sal_uInt8 const atypes[codemaker::UnoType::SORT_CHAR] = {
+        0x04, 0x08, 0x09, 0x09, 0x0A, 0x0A, 0x0B, 0x0B, 0x06, 0x07, 0x05 };
+    appendU1(m_code, atypes[sort - 1]);
+}
+
+void ClassFile::Code::instrPop() {
+    // pop:
+    appendU1(m_code, 0x57);
+}
+
+void ClassFile::Code::instrPutfield(
+    rtl::OString const & type, rtl::OString const & name,
+    rtl::OString const & descriptor)
+{
+    // putfield <indexbyte1> <indexbyte2>:
+    appendU1(m_code, 0xB5);
+    appendU2(m_code, m_classFile.addFieldrefInfo(type, name, descriptor));
+}
+
+void ClassFile::Code::instrPutstatic(
+    rtl::OString const & type, rtl::OString const & name,
+    rtl::OString const & descriptor)
+{
+    // putstatic <indexbyte1> <indexbyte2>:
+    appendU1(m_code, 0xB3);
+    appendU2(m_code, m_classFile.addFieldrefInfo(type, name, descriptor));
+}
+
+void ClassFile::Code::instrReturn() {
+    // return:
+    appendU1(m_code, 0xB1);
+}
+
+void ClassFile::Code::instrSwap() {
+    // swap:
+    appendU1(m_code, 0x5F);
+}
+
+void ClassFile::Code::instrTableswitch(
+    Code const * defaultBlock, sal_Int32 low,
+    std::list< Code * > const & blocks)
+{
+    // tableswitch <0--3 byte pad> <defaultbyte1> <defaultbyte2> <defaultbyte3>
+    // <defaultbyte4> <lowbyte1> <lowbyte2> <lowbyte3> <lowbyte4> <highbyte1>
+    // <highbyte2> <highbyte3> <highbyte4> <jump offsets...>:
+    Position pos1 = m_code.size();
+    appendU1(m_code, 0xAA);
+    int pad = (pos1 + 1) % 4;
+    {for (int i = 0; i < pad; ++i) {
+        appendU1(m_code, 0);
+    }}
+    std::list< Code * >::size_type size = blocks.size();
+    Position pos2 = pos1 + 1 + pad + 12 + size * 4; //FIXME: overflow
+    sal_uInt32 defaultOffset = static_cast< sal_uInt32 >(pos2 - pos1);
+        //FIXME: overflow
+    appendU4(m_code, defaultOffset);
+    pos2 += defaultBlock->m_code.size(); //FIXME: overflow
+    appendU4(m_code, static_cast< sal_uInt32 >(low));
+    appendU4(m_code, static_cast< sal_uInt32 >(low + (size - 1)));
+    {for (std::list< Code * >::const_iterator i(blocks.begin());
+          i != blocks.end(); ++i)
+    {
+        if (*i == 0) {
+            appendU4(m_code, defaultOffset);
+        } else {
+            appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1));
+                //FIXME: overflow
+            pos2 += (*i)->m_code.size(); //FIXME: overflow
+        }
+    }}
+    appendStream(m_code, defaultBlock->m_code);
+    {for (std::list< Code * >::const_iterator i(blocks.begin());
+          i != blocks.end(); ++i)
+    {
+        if (*i != 0) {
+            appendStream(m_code, (*i)->m_code);
+        }
+    }}
+}
+
+void ClassFile::Code::loadIntegerConstant(sal_Int32 value) {
+    if (value >= -1 && value <= 5) {
+        // iconst_<i>:
+        appendU1(m_code, static_cast< sal_uInt8 >(0x02 + value + 1));
+    } else if (value >= -128 && value <= 127) {
+        // bipush <byte>:
+        appendU1(m_code, 0x10);
+        appendU1(m_code, static_cast< sal_uInt8 >(value));
+    } else if (value >= -32768 && value <= 32767) {
+        // sipush <byte1> <byte2>:
+        appendU1(m_code, 0x11);
+        appendU2(m_code, static_cast< sal_uInt16 >(value));
+    } else {
+        ldc(m_classFile.addIntegerInfo(value));
+    }
+}
+
+void ClassFile::Code::loadStringConstant(rtl::OString const & value) {
+    ldc(m_classFile.addStringInfo(value));
+}
+
+void ClassFile::Code::loadLocalInteger(sal_uInt16 index) {
+    accessLocal(index, 0x1A, 0x15); // iload_<n>, iload
+}
+
+void ClassFile::Code::loadLocalLong(sal_uInt16 index) {
+    accessLocal(index, 0x1E, 0x16); // load_<n>, load
+}
+
+void ClassFile::Code::loadLocalFloat(sal_uInt16 index) {
+    accessLocal(index, 0x22, 0x17); // load_<n>, load
+}
+
+void ClassFile::Code::loadLocalDouble(sal_uInt16 index) {
+    accessLocal(index, 0x26, 0x18); // load_<n>, load
+}
+
+void ClassFile::Code::loadLocalReference(sal_uInt16 index) {
+    accessLocal(index, 0x2A, 0x19); // aload_<n>, aload
+}
+
+void ClassFile::Code::storeLocalReference(sal_uInt16 index) {
+    accessLocal(index, 0x4B, 0x3A); // astore_<n>, astore
+}
+
+void ClassFile::Code::branchHere(Branch branch) {
+    std::vector< unsigned char >::size_type n = m_code.size();
+    OSL_ASSERT(n > branch && n - branch <= SAL_MAX_INT16);
+    n -= branch;
+    m_code[branch + 1] = static_cast< sal_uInt8 >(n >> 8);
+    m_code[branch + 2] = static_cast< sal_uInt8 >(n & 0xFF);
+}
+
+void ClassFile::Code::addException(
+    Position start, Position end, Position handler, rtl::OString const & type)
+{
+    OSL_ASSERT(start < end && end <= m_code.size() && handler <= m_code.size());
+    if (m_exceptionTableLength == SAL_MAX_UINT16) {
+        throw CannotDumpException(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "Too many exception handlers for Java class file format")));
+    }
+    ++m_exceptionTableLength;
+    appendU2(m_exceptionTable, static_cast< sal_uInt16 >(start));
+        //FIXME: overflow
+    appendU2(m_exceptionTable, static_cast< sal_uInt16 >(end));
+        //FIXME: overflow
+    appendU2(m_exceptionTable, static_cast< sal_uInt16 >(handler));
+        //FIXME: overflow
+    appendU2(m_exceptionTable, m_classFile.addClassInfo(type));
+}
+
+ClassFile::Code::Position ClassFile::Code::getPosition() const {
+    return m_code.size();
+}
+
+ClassFile::Code::Code(ClassFile & classFile):
+    m_classFile(classFile), m_exceptionTableLength(0)
+{}
+
+void ClassFile::Code::ldc(sal_uInt16 index) {
+    if (index <= 0xFF) {
+        // ldc <index>:
+        appendU1(m_code, 0x12);
+        appendU1(m_code, static_cast< sal_uInt8 >(index));
+    } else {
+        // ldc_w <indexbyte1> <indexbyte2>:
+        appendU1(m_code, 0x13);
+        appendU2(m_code, index);
+    }
+}
+
+void ClassFile::Code::accessLocal(
+    sal_uInt16 index, sal_uInt8 fastOp, sal_uInt8 normalOp)
+{
+    if (index <= 3) {
+        // ...load/store_<n>:
+        appendU1(m_code, static_cast< sal_uInt8 >(fastOp + index));
+    } else if (index <= 0xFF) {
+        // ...load/store <index>:
+        appendU1(m_code, normalOp);
+        appendU1(m_code, static_cast< sal_uInt8 >(index));
+    } else {
+        // wide ...load/store <indexbyte1> <indexbyte2>:
+        appendU1(m_code, 0xC4);
+        appendU1(m_code, normalOp);
+        appendU2(m_code, index);
+    }
+}
+
+ClassFile::ClassFile(
+    AccessFlags accessFlags, rtl::OString const & thisClass,
+    rtl::OString const & superClass, rtl::OString const & signature):
+    m_constantPoolCount(1), m_accessFlags(accessFlags), m_interfacesCount(0),
+    m_fieldsCount(0), m_methodsCount(0), m_attributesCount(0)
+{
+    m_thisClass = addClassInfo(thisClass);
+    m_superClass = addClassInfo(superClass);
+    if (signature.getLength() != 0) {
+        ++m_attributesCount;
+        appendU2(
+            m_attributes,
+            addUtf8Info(rtl::OString(RTL_CONSTASCII_STRINGPARAM("Signature"))));
+        appendU4(m_attributes, 2);
+        appendU2(m_attributes, addUtf8Info(signature));
+    }
+}
+
+ClassFile::~ClassFile() {}
+
+ClassFile::Code * ClassFile::newCode() {
+    return new Code(*this);
+}
+
+sal_uInt16 ClassFile::addIntegerInfo(sal_Int32 value) {
+    std::map< sal_Int32, sal_uInt16 >::iterator i(m_integerInfos.find(value));
+    if (i != m_integerInfos.end()) {
+        return i->second;
+    }
+    sal_uInt16 index = nextConstantPoolIndex(1);
+    appendU1(m_constantPool, 3);
+    appendU4(m_constantPool, static_cast< sal_uInt32 >(value));
+    bool ok = m_integerInfos.insert(
+        std::map< sal_Int32, sal_uInt16 >::value_type(value, index)).second;
+    OSL_ASSERT(ok);
+    return index;
+}
+
+sal_uInt16 ClassFile::addFloatInfo(float value) {
+    std::map< float, sal_uInt16 >::iterator i(m_floatInfos.find(value));
+    if (i != m_floatInfos.end()) {
+        return i->second;
+    }
+    sal_uInt16 index = nextConstantPoolIndex(1);
+    appendU1(m_constantPool, 4);
+    union { float floatBytes; sal_uInt32 uint32Bytes; } bytes;
+    bytes.floatBytes = value;
+    appendU4(m_constantPool, bytes.uint32Bytes);
+    bool ok = m_floatInfos.insert(
+        std::map< float, sal_uInt16 >::value_type(value, index)).second;
+    OSL_ASSERT(ok);
+    return index;
+}
+
+sal_uInt16 ClassFile::addLongInfo(sal_Int64 value) {
+    std::map< sal_Int64, sal_uInt16 >::iterator i(m_longInfos.find(value));
+    if (i != m_longInfos.end()) {
+        return i->second;
+    }
+    sal_uInt16 index = nextConstantPoolIndex(2);
+    appendU1(m_constantPool, 5);
+    appendU8(m_constantPool, static_cast< sal_uInt64 >(value));
+    bool ok = m_longInfos.insert(
+        std::map< sal_Int64, sal_uInt16 >::value_type(value, index)).second;
+    OSL_ASSERT(ok);
+    return index;
+}
+
+sal_uInt16 ClassFile::addDoubleInfo(double value) {
+    std::map< double, sal_uInt16 >::iterator i(m_doubleInfos.find(value));
+    if (i != m_doubleInfos.end()) {
+        return i->second;
+    }
+    sal_uInt16 index = nextConstantPoolIndex(2);
+    appendU1(m_constantPool, 6);
+    union { double doubleBytes; sal_uInt64 uint64Bytes; } bytes;
+    bytes.doubleBytes = value;
+    appendU8(m_constantPool, bytes.uint64Bytes);
+    bool ok = m_doubleInfos.insert(
+        std::map< double, sal_uInt16 >::value_type(value, index)).second;
+    OSL_ASSERT(ok);
+    return index;
+}
+
+void ClassFile::addInterface(rtl::OString const & interface) {
+    if (m_interfacesCount == SAL_MAX_UINT16) {
+        throw CannotDumpException(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "Too many interfaces for Java class file format")));
+    }
+    ++m_interfacesCount;
+    appendU2(m_interfaces, addClassInfo(interface));
+}
+
+void ClassFile::addField(
+    AccessFlags accessFlags, rtl::OString const & name,
+    rtl::OString const & descriptor, sal_uInt16 constantValueIndex,
+    rtl::OString const & signature)
+{
+    if (m_fieldsCount == SAL_MAX_UINT16) {
+        throw CannotDumpException(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "Too many fields for Java class file format")));
+    }
+    ++m_fieldsCount;
+    appendU2(m_fields, static_cast< sal_uInt16 >(accessFlags));
+    appendU2(m_fields, addUtf8Info(name));
+    appendU2(m_fields, addUtf8Info(descriptor));
+    appendU2(
+        m_fields,
+        ((constantValueIndex == 0 ? 0 : 1)
+         + (signature.getLength() == 0 ? 0 : 1)));
+    if (constantValueIndex != 0) {
+        appendU2(
+            m_fields,
+            addUtf8Info(
+                rtl::OString(RTL_CONSTASCII_STRINGPARAM("ConstantValue"))));
+        appendU4(m_fields, 2);
+        appendU2(m_fields, constantValueIndex);
+    }
+    appendSignatureAttribute(m_fields, signature);
+}
+
+void ClassFile::addMethod(
+    AccessFlags accessFlags, rtl::OString const & name,
+    rtl::OString const & descriptor, Code const * code,
+    std::vector< rtl::OString > const & exceptions,
+    rtl::OString const & signature)
+{
+    if (m_methodsCount == SAL_MAX_UINT16) {
+        throw CannotDumpException(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "Too many methods for Java class file format")));
+    }
+    ++m_methodsCount;
+    appendU2(m_methods, static_cast< sal_uInt16 >(accessFlags));
+    appendU2(m_methods, addUtf8Info(name));
+    appendU2(m_methods, addUtf8Info(descriptor));
+    std::vector< rtl::OString >::size_type excs = exceptions.size();
+    if (excs > SAL_MAX_UINT16) {
+        throw CannotDumpException(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "Too many exception specifications for Java class file"
+                    " format")));
+    }
+    appendU2(
+        m_methods,
+        ((code == 0 ? 0 : 1) + (exceptions.empty() ? 0 : 1)
+         + (signature.getLength() == 0 ? 0 : 1)));
+    if (code != 0) {
+        std::vector< unsigned char >::size_type codeSize = code->m_code.size();
+        std::vector< unsigned char >::size_type exceptionTableSize
+            = code->m_exceptionTable.size();
+        if (codeSize > SAL_MAX_UINT32 - (2 + 2 + 4 + 2 + 2)
+            || (exceptionTableSize
+                > (SAL_MAX_UINT32 - (2 + 2 + 4 + 2 + 2)
+                   - static_cast< sal_uInt32 >(codeSize))))
+        {
+            throw CannotDumpException(
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "Code block is too big for Java class file format")));
+        }
+        appendU2(
+            m_methods,
+            addUtf8Info(rtl::OString(RTL_CONSTASCII_STRINGPARAM("Code"))));
+        appendU4(
+            m_methods,
+            (2 + 2 + 4 + static_cast< sal_uInt32 >(codeSize) + 2
+             + static_cast< sal_uInt32 >(exceptionTableSize) + 2));
+        appendU2(m_methods, code->m_maxStack);
+        appendU2(m_methods, code->m_maxLocals);
+        appendU4(m_methods, static_cast< sal_uInt32 >(codeSize));
+        appendStream(m_methods, code->m_code);
+        appendU2(m_methods, code->m_exceptionTableLength);
+        appendStream(m_methods, code->m_exceptionTable);
+        appendU2(m_methods, 0);
+    }
+    if (!exceptions.empty()) {
+        appendU2(
+            m_methods,
+            addUtf8Info(
+                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Exceptions"))));
+        appendU4(
+            m_methods,
+            static_cast< sal_uInt32 >(2 + 2 * static_cast< sal_uInt32 >(excs)));
+        appendU2(m_methods, static_cast< sal_uInt16 >(excs));
+        for (std::vector< rtl::OString >::const_iterator i(exceptions.begin());
+             i != exceptions.end(); ++i)
+        {
+            appendU2(m_methods, addClassInfo(*i));
+        }
+    }
+    appendSignatureAttribute(m_methods, signature);
+}
+
+void ClassFile::write(FileStream & file) const {
+    writeU4(file, 0xCAFEBABE);
+    writeU2(file, 0);
+    writeU2(file, 46);
+    writeU2(file, m_constantPoolCount);
+    writeStream(file, m_constantPool);
+    writeU2(file, static_cast< sal_uInt16 >(m_accessFlags));
+    writeU2(file, m_thisClass);
+    writeU2(file, m_superClass);
+    writeU2(file, m_interfacesCount);
+    writeStream(file, m_interfaces);
+    writeU2(file, m_fieldsCount);
+    writeStream(file, m_fields);
+    writeU2(file, m_methodsCount);
+    writeStream(file, m_methods);
+    writeU2(file, m_attributesCount);
+    writeStream(file, m_attributes);
+}
+
+sal_uInt16 ClassFile::nextConstantPoolIndex(sal_uInt16 width) {
+    OSL_ASSERT(width == 1 || width == 2);
+    if (m_constantPoolCount > SAL_MAX_UINT16 - width) {
+        throw CannotDumpException(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "Too many constant pool items for Java class file"
+                    " format")));
+    }
+    sal_uInt16 index = m_constantPoolCount;
+    m_constantPoolCount += width;
+    return index;
+}
+
+sal_uInt16 ClassFile::addUtf8Info(rtl::OString const & value) {
+    std::map< rtl::OString, sal_uInt16 >::iterator i(m_utf8Infos.find(value));
+    if (i != m_utf8Infos.end()) {
+        return i->second;
+    }
+    if (value.getLength() > SAL_MAX_UINT16) {
+        throw CannotDumpException(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "UTF-8 string too long for Java class file format")));
+    }
+    sal_uInt16 index = nextConstantPoolIndex(1);
+    appendU1(m_constantPool, 1);
+    appendU2(m_constantPool, static_cast< sal_uInt16 >(value.getLength()));
+    for (sal_Int32 j = 0; j < value.getLength(); ++j) {
+        appendU1(m_constantPool, static_cast< sal_uInt8 >(value[j]));
+    }
+    bool ok = m_utf8Infos.insert(
+        std::map< rtl::OString, sal_uInt16 >::value_type(value, index)).second;
+    OSL_ASSERT(ok);
+    return index;
+}
+
+sal_uInt16 ClassFile::addClassInfo(rtl::OString const & type) {
+    sal_uInt16 nameIndex = addUtf8Info(type);
+    std::map< sal_uInt16, sal_uInt16 >::iterator i(
+        m_classInfos.find(nameIndex));
+    if (i != m_classInfos.end()) {
+        return i->second;
+    }
+    sal_uInt16 index = nextConstantPoolIndex(1);
+    appendU1(m_constantPool, 7);
+    appendU2(m_constantPool, nameIndex);
+    bool ok = m_classInfos.insert(
+        std::map< sal_uInt16, sal_uInt16 >::value_type(nameIndex, index)).
+        second;
+    OSL_ASSERT(ok);
+    return index;
+}
+
+sal_uInt16 ClassFile::addStringInfo(rtl::OString const & value) {
+    sal_uInt16 stringIndex = addUtf8Info(value);
+    std::map< sal_uInt16, sal_uInt16 >::iterator i(
+        m_stringInfos.find(stringIndex));
+    if (i != m_stringInfos.end()) {
+        return i->second;
+    }
+    sal_uInt16 index = nextConstantPoolIndex(1);
+    appendU1(m_constantPool, 8);
+    appendU2(m_constantPool, stringIndex);
+    bool ok = m_stringInfos.insert(
+        std::map< sal_uInt16, sal_uInt16 >::value_type(stringIndex, index)).
+        second;
+    OSL_ASSERT(ok);
+    return index;
+}
+
+sal_uInt16 ClassFile::addFieldrefInfo(
+    rtl::OString const & type, rtl::OString const & name,
+    rtl::OString const & descriptor)
+{
+    sal_uInt16 classIndex = addClassInfo(type);
+    sal_uInt16 nameAndTypeIndex = addNameAndTypeInfo(name, descriptor);
+    sal_uInt32 key = (static_cast< sal_uInt32 >(classIndex) << 16)
+        | nameAndTypeIndex;
+    std::map< sal_uInt32, sal_uInt16 >::iterator i(m_fieldrefInfos.find(key));
+    if (i != m_fieldrefInfos.end()) {
+        return i->second;
+    }
+    sal_uInt16 index = nextConstantPoolIndex(1);
+    appendU1(m_constantPool, 9);
+    appendU2(m_constantPool, classIndex);
+    appendU2(m_constantPool, nameAndTypeIndex);
+    bool ok = m_fieldrefInfos.insert(
+        std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second;
+    OSL_ASSERT(ok);
+    return index;
+}
+
+sal_uInt16 ClassFile::addMethodrefInfo(
+    rtl::OString const & type, rtl::OString const & name,
+    rtl::OString const & descriptor)
+{
+    sal_uInt16 classIndex = addClassInfo(type);
+    sal_uInt16 nameAndTypeIndex = addNameAndTypeInfo(name, descriptor);
+    sal_uInt32 key = (static_cast< sal_uInt32 >(classIndex) << 16)
+        | nameAndTypeIndex;
+    std::map< sal_uInt32, sal_uInt16 >::iterator i(m_methodrefInfos.find(key));
+    if (i != m_methodrefInfos.end()) {
+        return i->second;
+    }
+    sal_uInt16 index = nextConstantPoolIndex(1);
+    appendU1(m_constantPool, 10);
+    appendU2(m_constantPool, classIndex);
+    appendU2(m_constantPool, nameAndTypeIndex);
+    bool ok = m_methodrefInfos.insert(
+        std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second;
+    OSL_ASSERT(ok);
+    return index;
+}
+
+sal_uInt16 ClassFile::addInterfaceMethodrefInfo(
+    rtl::OString const & type, rtl::OString const & name,
+    rtl::OString const & descriptor)
+{
+    sal_uInt16 classIndex = addClassInfo(type);
+    sal_uInt16 nameAndTypeIndex = addNameAndTypeInfo(name, descriptor);
+    sal_uInt32 key = (static_cast< sal_uInt32 >(classIndex) << 16)
+        | nameAndTypeIndex;
+    std::map< sal_uInt32, sal_uInt16 >::iterator i(
+        m_interfaceMethodrefInfos.find(key));
+    if (i != m_interfaceMethodrefInfos.end()) {
+        return i->second;
+    }
+    sal_uInt16 index = nextConstantPoolIndex(1);
+    appendU1(m_constantPool, 11);
+    appendU2(m_constantPool, classIndex);
+    appendU2(m_constantPool, nameAndTypeIndex);
+    bool ok = m_interfaceMethodrefInfos.insert(
+        std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second;
+    OSL_ASSERT(ok);
+    return index;
+}
+
+sal_uInt16 ClassFile::addNameAndTypeInfo(
+    rtl::OString const & name, rtl::OString const & descriptor)
+{
+    sal_uInt16 nameIndex = addUtf8Info(name);
+    sal_uInt16 descriptorIndex = addUtf8Info(descriptor);
+    sal_uInt32 key = (static_cast< sal_uInt32 >(nameIndex) << 16)
+        | descriptorIndex;
+    std::map< sal_uInt32, sal_uInt16 >::iterator i(
+        m_nameAndTypeInfos.find(key));
+    if (i != m_nameAndTypeInfos.end()) {
+        return i->second;
+    }
+    sal_uInt16 index = nextConstantPoolIndex(1);
+    appendU1(m_constantPool, 12);
+    appendU2(m_constantPool, nameIndex);
+    appendU2(m_constantPool, descriptorIndex);
+    bool ok = m_nameAndTypeInfos.insert(
+        std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second;
+    OSL_ASSERT(ok);
+    return index;
+}
+
+void ClassFile::appendSignatureAttribute(
+    std::vector< unsigned char > & stream, rtl::OString const & signature)
+{
+    if (signature.getLength() != 0) {
+        appendU2(
+            stream,
+            addUtf8Info(rtl::OString(RTL_CONSTASCII_STRINGPARAM("Signature"))));
+        appendU4(stream, 2);
+        appendU2(stream, addUtf8Info(signature));
+    }
+}
