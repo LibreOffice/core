@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:56:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,12 @@ class SbiParser : public SbiTokenizer
     void CloseBlock();              // Block aufloesen
     BOOL Channel( BOOL=FALSE );     // Kanalnummer parsen
     void StmntBlock( SbiToken );    // Statement-Block abarbeiten
+    void DefType( BOOL bPrivate );  // Parse type declaration
+    void DefEnum( BOOL bPrivate );  // Parse enum declaration
 
 public:
     SbxArrayRef   rTypeArray;       // das Type-Array
+    SbxArrayRef   rEnumArray;       // Enum types
     SbiStringPool aGblStrings;      // der String-Pool
     SbiStringPool aLclStrings;      // der String-Pool
     SbiSymPool    aGlobals;         // globale Variable
@@ -166,6 +169,7 @@ public:
     void Static();                  // STATIC
     void Stop();                    // STOP/SYSTEM
     void Type();                    // TYPE...AS...END TYPE
+    void Enum();                    // TYPE...END ENUM
     void While();                   // WHILE/WEND
     void With();                    // WITH
     void Write();                   // WRITE
