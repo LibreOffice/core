@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaLoader.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:32:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ import java.net.MalformedURLException;
  * service. Therefor the <code>JavaLoader</code> activates external UNO components which are implemented in Java.
  * The loader is used by the <code>ServiceManger</code>.
  * <p>
- * @version     $Revision: 1.11 $ $ $Date: 2003-03-26 12:32:54 $
+ * @version     $Revision: 1.12 $ $ $Date: 2003-04-24 14:03:33 $
  * @author      Markus Herzog
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
@@ -335,6 +335,15 @@ public class JavaLoader implements XImplementationLoader,
         catch (java.lang.ClassNotFoundException e) {
             CannotActivateFactoryException cae = new CannotActivateFactoryException(
                     "Can not activate factory because " + e.toString() );
+            cae.fillInStackTrace();
+            throw cae;
+        }
+
+        if (null == clazz)
+        {
+            CannotActivateFactoryException cae =
+                new CannotActivateFactoryException(
+                    "Cannot determine activation class!" );
             cae.fillInStackTrace();
             throw cae;
         }
