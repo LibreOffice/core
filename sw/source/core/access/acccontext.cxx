@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:55:12 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,8 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                         case SCROLLED_OUT:
                             xAccImpl->ScrolledOut( rOldVisArea );
                             break;
+                        case NONE:
+                            break;
                         }
                     }
                     else
@@ -351,6 +353,8 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                                 DisposeShape( rLower.GetSdrObject(),
                                               xAccImpl.getBodyPtr() );
                             }
+                            break;
+                        case NONE:
                             break;
                         }
                     }
@@ -609,9 +613,9 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
     SwAccessibleFrame( pM->GetVisArea().SVRect(), pF,
                        pM->GetShell()->IsPreView() ),
     pMap( pM ),
+        nClientId(0),
     nRole( nR ),
-    bDisposing( sal_False ),
-    nClientId(0)
+    bDisposing( sal_False )
 {
     InitStates();
     DBG_MSG_CD( "constructed" )
@@ -625,9 +629,9 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
                        pM->GetShell()->IsPreView() ),
     sName( rName ),
     pMap( pM ),
+        nClientId(0),
     nRole( nR ),
-    bDisposing( sal_False ),
-    nClientId(0)
+    bDisposing( sal_False )
 {
     InitStates();
     DBG_MSG_CD( "constructed" )
