@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EncryptionData.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:52 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 13:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,11 @@
 class EncryptionData : public cppu::OWeakObject
 {
 public:
+    // On export aKey holds the derived key
+    // On import aKey holds the hash of the user enterred key
     com::sun::star::uno::Sequence < sal_Int8 > aKey;
-    com::sun::star::uno::Sequence < sal_Int8 > aSalt;
-    com::sun::star::uno::Sequence < sal_Int8 > aInitVector;
-    sal_Int64 nIterationCount;
+    com::sun::star::uno::Sequence < sal_uInt8 > aSalt, aInitVector;
+    sal_Int32 nIterationCount;
     EncryptionData(): nIterationCount ( 0 ){}
 };
 #endif
