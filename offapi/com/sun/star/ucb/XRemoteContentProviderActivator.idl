@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderActivator.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-02-09 12:42:02 $
+ *  last change: $Author: sb $ $Date: 2001-02-12 09:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@ interface XContentProviderManager;
     <type scope="com::sun::star::ucb">XRemoteContentProviderAcceptor</type>
     and allows for a lazy implementation of
     <method scope="com::sun::star::ucb::XRemoteContentProviderAcceptor">addRemoteContentProvider</method>.
+
+    @deprecated
+    The way this works might change, therefore this interface is marked as
+    deprectated.
  */
 [uik(F2686420-FDB7-11D4-A0370050-04526AAD),
     ident("XRemoteContentProviderActivator", 1.0)]
