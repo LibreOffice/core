@@ -10,18 +10,18 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\storage
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\scripturi
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\formula
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\accessibility
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\awt
+mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\configuration
+mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\configuration\backend
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\drawing
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sheet
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\table
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\text
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\i18n
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\chart
 mkdir: %COMMON_DEST%\idl%_EXT%\com
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\auth
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\accessibility
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\awt
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\chart
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration
@@ -82,6 +82,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 ..\%__SRC%\ucrdoc\types_doc.db %_DEST%\bin%_EXT%\types_doc.rdb
 
 ..\com\sun\star\auth\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\auth
+..\com\sun\star\accessibility\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\accessibility
 ..\com\sun\star\awt\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\awt
 ..\com\sun\star\chart\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\chart
 ..\com\sun\star\configuration\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration
@@ -138,13 +139,11 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 
 ..\drafts\com\sun\star\frame\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame
 ..\drafts\com\sun\star\formula\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\formula
-..\drafts\com\sun\star\accessibility\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\accessibility
-..\drafts\com\sun\star\awt\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\awt
+..\drafts\com\sun\star\configuration\backend\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\configuration\backend
 ..\drafts\com\sun\star\i18n\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\i18n
 ..\drafts\com\sun\star\drawing\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\drawing
 ..\drafts\com\sun\star\sheet\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sheet
 ..\drafts\com\sun\star\table\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\table
-..\drafts\com\sun\star\text\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\text
 ..\drafts\com\sun\star\script\framework\storage\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\storage
 ..\drafts\com\sun\star\script\framework\provider\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\provider
 ..\drafts\com\sun\star\script\framework\scripturi\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\provider
