@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-07 12:29:02 $
+ *  last change: $Author: thb $ $Date: 2002-11-21 13:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1893,13 +1893,18 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( FASTBOOL         bContourFrame,
 
 void SdrTextObj::SetupOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaintRect ) const
 {
+    ImpInitDrawOutliner( rOutl );
+    UpdateOutlinerFormatting( rOutl, rPaintRect );
+}
+
+void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaintRect ) const
+{
     Rectangle aTextRect;
     Rectangle aAnchorRect;
     Fraction aFitXKorreg(1,1);
 
     FASTBOOL bContourFrame=IsContourTextFrame();
 
-    ImpInitDrawOutliner( rOutl );
     ImpSetupDrawOutlinerForPaint( bContourFrame, rOutl, aTextRect, aAnchorRect, rPaintRect, aFitXKorreg );
 
     if( GetModel() )
