@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
+ *  last change: $Author: tbe $ $Date: 2001-07-03 16:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,17 +75,17 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
-#include <com/sun/star/ui/XFilterManager.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
-#include <com/sun/star/ui/FilePickerElementID.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIDs.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
-#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
 
 #ifndef _SFXDOCFILE_HXX //autogen
@@ -142,7 +142,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace utl;
 using namespace comphelper;
 
@@ -471,7 +471,7 @@ BOOL ModulWindow::LoadBasic()
         Sequence <Any> aProps(1);
         aProps.getArray()[0] <<= ::rtl::OUString::createFromAscii("FileOpen");
         xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.FilePicker" ) ), aProps ), UNO_QUERY );
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aProps ), UNO_QUERY );
     }
 
     if ( aCurPath.Len() )
@@ -486,7 +486,7 @@ BOOL ModulWindow::LoadBasic()
 
     if( xFP->execute() == RET_OK )
     {
-        Sequence< ::rtl::OUString > aPaths = xFP->getPath();
+        Sequence< ::rtl::OUString > aPaths = xFP->getFiles();
         aCurPath = aPaths[0];
         SfxMedium aMedium( aCurPath, STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE, TRUE );
         SvStream* pStream = aMedium.GetInStream();
@@ -527,11 +527,11 @@ BOOL ModulWindow::SaveBasicSource()
         Sequence <Any> aProps(1);
         aProps.getArray()[0] <<= ::rtl::OUString::createFromAscii("FileSave_AutoextPwdBox");
         xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.FilePicker" ) ), aProps ), UNO_QUERY );
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aProps ), UNO_QUERY );
     }
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
-    xFPControl->enableControl(FilePickerElementID::CBX_PASSWORD, sal_False);
+    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, sal_False);
 
     if ( aCurPath.Len() )
         xFP->setDisplayDirectory ( aCurPath );
@@ -545,7 +545,7 @@ BOOL ModulWindow::SaveBasicSource()
 
     if( xFP->execute() == RET_OK )
     {
-        Sequence< ::rtl::OUString > aPaths = xFP->getPath();
+        Sequence< ::rtl::OUString > aPaths = xFP->getFiles();
         aCurPath = aPaths[0];
         SfxMedium aMedium( aCurPath, STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC, TRUE, FALSE );
         SvStream* pStream = aMedium.GetOutStream();

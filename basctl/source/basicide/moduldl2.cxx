@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
+ *  last change: $Author: tbe $ $Date: 2001-07-03 16:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,11 @@
 #include <so3/svstor.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
-#include <com/sun/star/ui/XFilterManager.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
@@ -113,7 +113,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::ui::dialogs;
 
 
 LibPage::LibPage( Window * pParent ) :
@@ -491,7 +491,7 @@ void LibPage::InsertLib()
         Sequence <Any> aProps(1);
         aProps.getArray()[0] <<= ::rtl::OUString::createFromAscii("FileOpen");
         xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.FilePicker" ) ), aProps ), UNO_QUERY );
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aProps ), UNO_QUERY );
     }
 
     xFP->setTitle( String( IDEResId( RID_STR_APPENDLIBS ) ) );
@@ -519,7 +519,7 @@ void LibPage::InsertLib()
 
     if( xFP->execute() == RET_OK )
     {
-        Sequence< ::rtl::OUString > aPaths = xFP->getPath();
+        Sequence< ::rtl::OUString > aPaths = xFP->getFiles();
         aPath = aPaths[0];
         IDE_DLL()->GetExtraData()->SetAddLibPath( aPath );
         IDE_DLL()->GetExtraData()->SetAddLibFilter( xFltMgr->getCurrentFilter() );
