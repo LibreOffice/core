@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.20 2001-06-05 16:09:28 bm Exp $
+	$Id: chart.mod,v 1.21 2001-06-12 16:11:23 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -64,8 +64,6 @@
 <!ATTLIST chart:chart
 		  chart:class %chart-class; #REQUIRED
 		  chart:add-in-name %string; #IMPLIED
-		  table:cell-range-address %cell-range-address; #IMPLIED
-		  chart:table-number-list %string; #IMPLIED
 		  draw:name %string; #IMPLIED
 		  %draw-position;
 		  %draw-size;
@@ -134,6 +132,7 @@
 		  svg:height %length; #IMPLIED
 		  chart:style-name %styleName; #IMPLIED
 		  table:cell-range-address %cell-range-address; #IMPLIED
+		  chart:table-number-list %string; #IMPLIED
 		  chart:data-source-has-labels (none|row|column|both) "none" >
 
 <!-- 3d scene attributes on plot-area -->
@@ -151,7 +150,7 @@
 		  dr3d:lighting-mode %boolean; #IMPLIED >
 
 <!ATTLIST style:properties
-		  chart:reinterpret-data-in-rows %boolean; "false" >
+		  chart:series-source (columns|rows) "columns" >
 
 <!ELEMENT chart:wall EMPTY>
 <!ATTLIST chart:wall
@@ -209,7 +208,7 @@
 <!ELEMENT chart:series ( chart:domain*,
 						 chart:data-point* )>
 <!ATTLIST chart:series
-		  chart:values-cell-range-address %cell-range-address; #REQUIRED
+		  chart:values-cell-range-address %cell-range-address; #IMPLIED
 		  chart:label-cell-address %cell-address; #IMPLIED
 		  chart:class %chart-class; #IMPLIED
 		  chart:attached-axis %string; #IMPLIED
