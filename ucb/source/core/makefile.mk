@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kso $ $Date: 2001-02-06 10:54:45 $
+#   last change: $Author: sb $ $Date: 2001-02-06 11:07:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,8 @@ SLOFILES=\
     $(SLO)$/ucbstore.obj \
     $(SLO)$/ucbprops.obj \
     $(SLO)$/provprox.obj \
-    $(SLO)$/ucbcmds.obj
+    $(SLO)$/ucbcmds.obj \
+    $(SLO)$/coreremotecontentbroker.obj
 
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbserv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-06 10:55:37 $
+ *  last change: $Author: sb $ $Date: 2001-02-06 11:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,15 @@
 #ifndef _PROVPROX_HXX
 #include "provprox.hxx"
 #endif
+#ifndef INCLUDED_UCB_COREREMOTECONTENTBROKER_HXX
+#include "coreremotecontentbroker.hxx"
+#endif
 
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
+using ucb_core::RemoteContentBroker;
 
 //=========================================================================
 static sal_Bool writeInfo( void * pRegistryKey,
@@ -169,7 +173,16 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
     writeInfo( pRegistryKey,
        UcbContentProviderProxyFactory::getImplementationName_Static(),
-       UcbContentProviderProxyFactory::getSupportedServiceNames_Static() );
+       UcbContentProviderProxyFactory::getSupportedServiceNames_Static() ) &&
+
+    //////////////////////////////////////////////////////////////////////
+    // Remote Content Broker.
+    //////////////////////////////////////////////////////////////////////
+    // THIS CAN BE REMOVED ONCE THE WEBTOP SERVER HAS A UCB OF ITS OWN:
+
+    writeInfo( pRegistryKey,
+               RemoteContentBroker::getImplementationName_Static(),
+               RemoteContentBroker::getSupportedServiceNames_Static() );
 }
 
 //=========================================================================
@@ -221,6 +234,17 @@ extern "C" void * SAL_CALL component_getFactory(
     {
         xFactory
             = UcbContentProviderProxyFactory::createServiceFactory( xSMgr );
+    }
+
+    //////////////////////////////////////////////////////////////////////
+    // Remote Content Broker.
+    //////////////////////////////////////////////////////////////////////
+    // THIS CAN BE REMOVED ONCE THE WEBTOP SERVER HAS A UCB OF ITS OWN:
+
+    else if ( RemoteContentBroker::getImplementationName_Static().
+                compareToAscii( pImplName ) == 0 )
+    {
+        xFactory = RemoteContentBroker::createServiceFactory( xSMgr );
     }
 
     //////////////////////////////////////////////////////////////////////
