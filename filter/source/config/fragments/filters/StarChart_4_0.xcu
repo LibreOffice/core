@@ -1,4 +1,4 @@
-    <node oor:name="StarChart 4.0" oor:op="replace">
+    <node oor:name="StarChart 4.0" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>3580</value></prop>
         <prop oor:name="Type"><value>chart_StarChart_40</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.chart.ChartDocument</value></prop>
