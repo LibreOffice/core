@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 06:19:21 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ DockingWindow FLT_WIN_ANIMATION
     Text [ ENGLISH ] = "Animation" ;
     Text [ norwegian ] = "Animasjon" ;
     Text [ italian ] = "Animazione" ;
-    Text [ portuguese_brazilian ] = "Animação" ;
+    Text [ portuguese_brazilian ] = "Anima??o" ;
     Text [ portuguese ] = "Animação" ;
     Text [ finnish ] = "Animaatio" ;
     Text [ danish ] = "Animation" ;
@@ -121,7 +121,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ english_us ] = "First Image" ;
         QuickHelpText[ russian ] = "Ïåğâàÿ êàğòèíà";
         QuickHelpText[ polish ] = "Pierwszy obraz";
-        QuickHelpText[ japanese ] = "Å‰‚Ì‰æ‘œ";
+        QuickHelpText[ japanese ] = "Å‰‚Ì²Ò°¼Ş‰æ‘œ!";
         QuickHelpText[ chinese_simplified ] = "µÚÒ»¸öÍ¼Ïñ";
         QuickHelpText[ chinese_traditional ] = "²Ä¤@­Ó¼v¹³";
         QuickHelpText[ arabic ] = "ÇáÕæÑÉ ÇáÃæáì";
@@ -152,7 +152,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ english_us ] = "Backwards" ;
         QuickHelpText[ russian ] = "Íàçàä";
         QuickHelpText[ polish ] = "Wstecz";
-        QuickHelpText[ japanese ] = "Œã–ß‚è‚µ‚Ä";
+        QuickHelpText[ japanese ] = "Œã–ß‚è‚·‚é!";
         QuickHelpText[ chinese_simplified ] = "·µ»Ø";
         QuickHelpText[ chinese_traditional ] = "¤Ï¦V";
         QuickHelpText[ arabic ] = "Åáì ÇáÎáİ";
@@ -183,7 +183,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ finnish ] = "Seis!" ;
         QuickHelpText[ russian ] = "Ñòîï";
         QuickHelpText[ polish ] = "Zatrzymanie";
-        QuickHelpText[ japanese ] = "’†~";
+        QuickHelpText[ japanese ] = "’†~!";
         QuickHelpText[ chinese_simplified ] = "Í£Ö¹";
         QuickHelpText[ chinese_traditional ] = "¼È°±";
         QuickHelpText[ arabic ] = "ÅíŞÇİ";
@@ -213,7 +213,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ english_us ] = "Play" ;
         QuickHelpText[ russian ] = "Âîñïğîèçâåñòè";
         QuickHelpText[ polish ] = "Odtwórz";
-        QuickHelpText[ japanese ] = "Ä¶‚·‚é";
+        QuickHelpText[ japanese ] = "Ä¶‚·‚é!";
         QuickHelpText[ chinese_simplified ] = "·ÅÓ³";
         QuickHelpText[ chinese_traditional ] = "©ñ¬M";
         QuickHelpText[ arabic ] = "ÊÔÛíá";
@@ -243,7 +243,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ english_us ] = "Last Image" ;
         QuickHelpText[ russian ] = "Ïîñëåäíÿÿ êàğòèíà";
         QuickHelpText[ polish ] = "Ostatni obraz";
-        QuickHelpText[ japanese ] = "ÅŒã‚Ì‰æ‘œ";
+        QuickHelpText[ japanese ] = "ÅŒã‚Ì²Ò°¼Ş‰æ‘œ!";
         QuickHelpText[ chinese_simplified ] = "×îºóÒ»¸öÍ¼Ïñ";
         QuickHelpText[ chinese_traditional ] = "³Ì«á¤@­Ó¼v¹³";
         QuickHelpText[ arabic ] = "ÇáÕæÑÉ ÇáÃÎíÑÉ";
@@ -283,7 +283,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ french ] = "Numéro de l'image" ;
         QuickHelpText[ russian ] = "Íîìåğ êàğòèíû";
         QuickHelpText[ polish ] = "Numer obrazu";
-        QuickHelpText[ japanese ] = "‰æ‘œ”Ô†";
+        QuickHelpText[ japanese ] = "²Ò°¼Ş‰æ‘œ”Ô†!";
         QuickHelpText[ chinese_simplified ] = "Í¼ÏñºÅÂë";
         QuickHelpText[ chinese_traditional ] = "¼v¹³¸¹½X";
         QuickHelpText[ arabic ] = "ÑŞã ÇáÕæÑÉ";
@@ -325,8 +325,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ danish ] = "Visningstid" ;
         QuickHelpText [ swedish ] = "Visningstid" ;
         QuickHelpText[ russian ] = "Äëèòåëüíîñòü ïîêàçà";
-        QuickHelpText[ polish ] = "Czas wyœwietlania";
-        QuickHelpText[ japanese ] = "•\\¦ŠÔ";
+        QuickHelpText[ polish ] = "Czas wy?wietlania";
+        QuickHelpText[ japanese ] = "•\\¦ŠÔ!";
         QuickHelpText[ chinese_simplified ] = "ÏÔÊ¾³ÖĞøÊ±¼ä";
         QuickHelpText[ chinese_traditional ] = "Åã¥Ü«ùÄò®É¶¡";
         QuickHelpText[ arabic ] = "ÇáãÏÉ";
@@ -568,7 +568,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText = "Anzahl der Durchläufe" ;
         QuickHelpText [ ENGLISH ] = "Loop count" ;
         QuickHelpText [ english_us ] = "Loop Count" ;
-        QuickHelpText [ portuguese_brazilian ] = "Anzahl der Durchläufe" ;
+        QuickHelpText [ portuguese_brazilian ] = "Anzahl der Durchl?ufe" ;
         QuickHelpText [ swedish ] = "Antal omgångar" ;
         QuickHelpText [ danish ] = "Antal sløjfer" ;
         QuickHelpText [ italian ] = "Numero dei passaggi" ;
@@ -688,7 +688,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
         QuickHelpText[ russian ] = "Êîëè÷åñòâî ïğîãîíîâ";
         QuickHelpText[ polish ] = "Liczba przebiegów";
-        QuickHelpText[ japanese ] = "Ù°Ìß”";
+        QuickHelpText[ japanese ] = "Ù°Ìß”!";
         QuickHelpText[ chinese_simplified ] = "Á¬Ğø·ÅÓ³µÄÊıÄ¿";
         QuickHelpText[ chinese_traditional ] = "³sÄò©ñ¬Mªº¼Æ¥Ø";
         QuickHelpText[ arabic ] = "ÚÏÏ ÇáÍáŞÇÊ";
@@ -880,7 +880,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ swedish ] = "Överta objekt" ;
         QuickHelpText[ russian ] = "Ïğèíÿòü îáúåêò";
         QuickHelpText[ polish ] = "Zastosuj obiekt";
-        QuickHelpText[ japanese ] = "µÌŞ¼Şª¸Ä‚ğˆø‚«Œp‚®";
+        QuickHelpText[ japanese ] = "µÌŞ¼Şª¸Ä‚Ì“K—p!";
         QuickHelpText[ chinese_simplified ] = "Ê¹ÓÃ¶ÔÏó";
         QuickHelpText[ chinese_traditional ] = "¨Ï¥Îª«¥ó";
         QuickHelpText[ arabic ] = "ÊØÈíŞ ÇáßÇÆä";
@@ -918,7 +918,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ swedish ] = "Överta objekt ett och ett!" ;
         QuickHelpText[ russian ] = "Ïğèíÿòü îáúåêòû ïî îäíîìó";
         QuickHelpText[ polish ] = "Zastosuj obiekty pojedynczo";
-        QuickHelpText[ japanese ] = "µÌŞ¼Şª¸Ä‚ğŒÂX‚Éˆø‚«Œp‚®";
+        QuickHelpText[ japanese ] = "µÌŞ¼Şª¸Ä‚ğ‚P‚Â‚¸‚Â“K—p!";
         QuickHelpText[ chinese_simplified ] = "µ¥¶ÀÊ¹ÓÃ¶ÔÏó";
         QuickHelpText[ chinese_traditional ] = "³æ¿W¨Ï¥Îª«¥ó";
         QuickHelpText[ arabic ] = "ÊØÈíŞ ÇáßÇÆäÇÊ ßá Úáì ÍÏå";
@@ -956,7 +956,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ swedish ] = "Radera aktuell bild" ;
         QuickHelpText[ russian ] = "Óäàëèòü òåêóùóş êàğòèíó";
         QuickHelpText[ polish ] = "Usuñ aktualny obraz";
-        QuickHelpText[ japanese ] = "Œ»‰æ–Ê‚ğíœ";
+        QuickHelpText[ japanese ] = "Œ»‰æ–Ê‚ğíœ!";
         QuickHelpText[ chinese_simplified ] = "É¾³ıµ±Ç°µÄÍ¼Ïñ";
         QuickHelpText[ chinese_traditional ] = "§R°£·í«eªº¼v¹³";
         QuickHelpText[ arabic ] = "ÍĞİ ÇáÕæÑÉ ÇáÍÇáíÉ";
@@ -994,7 +994,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ swedish ] = "Radera alla bilder" ;
         QuickHelpText[ russian ] = "Óäàëèòü âñå êàğòèíû";
         QuickHelpText[ polish ] = "Usuñ wszystkie obrazy";
-        QuickHelpText[ japanese ] = "‚·‚×‚Ä‚Ì‰æ‘œ‚ğíœ";
+        QuickHelpText[ japanese ] = "‚·‚×‚Ä‚Ì²Ò°¼Ş‰æ‘œ‚ğíœ!";
         QuickHelpText[ chinese_simplified ] = "É¾³ıÈ«²¿µÄÍ¼Ïñ";
         QuickHelpText[ chinese_traditional ] = "§R°£©Ò¦³ªº¼v¹³";
         QuickHelpText[ arabic ] = "ÍĞİ ßá ÇáÕæÑ";
@@ -1013,7 +1013,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ ENGLISH ] = "Number" ;
         Text [ norwegian ] = "Number" ;
         Text [ italian ] = "Numero" ;
-        Text [ portuguese_brazilian ] = "Número" ;
+        Text [ portuguese_brazilian ] = "N?ero" ;
         Text [ portuguese ] = "Número" ;
         Text [ finnish ] = "Luku" ;
         Text [ danish ] = "Antal" ;
@@ -1024,7 +1024,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ english_us ] = "Number" ;
         Text[ chinese_simplified ] = "ÊıÄ¿";
         Text[ russian ] = "Êîëè÷åñòâî";
-        Text[ polish ] = "Iloœæ";
+        Text[ polish ] = "Ilo?æ";
         Text[ japanese ] = "”";
         Text[ chinese_traditional ] = "¼Æ¥Ø";
         Text[ arabic ] = "ÇáÚÏÏ";
@@ -1060,7 +1060,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ chinese_simplified ] = "Í¼Ïñ";
         Text[ russian ] = "Êàğòèíà";
         Text[ polish ] = "Obraz";
-        Text[ japanese ] = "²Ò°¼Ş";
+        Text[ japanese ] = "²Ò°¼Ş‰æ‘œ";
         Text[ chinese_traditional ] = "¼v¹³";
         Text[ arabic ] = "ÇáÕæÑÉ";
         Text[ greek ] = "Åéêüíá";
@@ -1088,7 +1088,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ chinese_simplified ] = "Ğ¡×é¶ÔÏó";
         Text[ russian ] = "Îáúåêò ãğóïïû";
         Text[ polish ] = "Obiekt grupowy";
-        Text[ japanese ] = "¸ŞÙ°Ìß‰»‚³‚ê‚½µÌŞ¼Şª¸Ä";
+        Text[ japanese ] = "¸ŞÙ°Ìß‰»µÌŞ¼Şª¸Ä";
         Text[ chinese_traditional ] = "¸s²Õª«¥ó";
         Text[ arabic ] = "ßÇÆä ãÌãæÚÉ";
         Text[ greek ] = "Áíôéêåßìåíï ïìÜäáò";
@@ -1389,7 +1389,7 @@ DockingWindow FLT_WIN_ANIMATION
         < "Z lewej" ; Default ; > ;
         < "Z lewej/Na dole" ; Default ; > ;
         < "W górze" ; Default ; > ;
-        < "Wyœrodkowany" ; Default ; > ;
+        < "Wy?rodkowany" ; Default ; > ;
         < "W dole" ; Default ; > ;
         < "Z prawej/W górze" ; Default ; > ;
         < "Z prawej" ; Default ; > ;
@@ -1529,7 +1529,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ ENGLISH ] = "Animation group" ;
         Text [ norwegian ] = "Animasjonsgruppe" ;
         Text [ italian ] = "Gruppo animazione" ;
-        Text [ portuguese_brazilian ] = "Grupo de animação" ;
+        Text [ portuguese_brazilian ] = "Grupo de anima??o" ;
         Text [ portuguese ] = "Grupo de animação" ;
         Text [ finnish ] = "Animaatioryhmä" ;
         Text [ danish ] = "Animationsgruppe" ;
