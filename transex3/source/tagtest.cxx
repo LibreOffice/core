@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:23:33 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,13 @@
 #define SET_FLAG( nFlags, nFlag )       ( nFlags |= nFlag )
 #define RESET_FLAG( nFlags, nFlag )     ( nFlags &= ~nFlag )    // ~ = Bitweises NOT
 
-ByteString SimpleParser::aLastUnknownToken;
+//ByteString SimpleParser::aLastUnknownToken;
 
 
 struct Tag
 {
     char* aName;
-    Token nTag;
+    TokenId nTag;
 };
 
 
@@ -150,12 +150,15 @@ static Tag __READONLY_DATA aKnownTags[] =
     { "<#ELSE>", TAG_ELSE },
     { "<#VERSIONEND>", TAG_VERSIONEND },
     { "<#ENDGRAPHIC>", TAG_ENDGRAPHIC },
+    { "<Common Tag>", TAG_COMMONSTART },
+    { "</Common Tag>", TAG_COMMONEND },
     { "", TAG_UNKNOWN_TAG },
 };
 
 
 SimpleParser::SimpleParser()
 : nPos( 0 )
+, aNextTag( TAG_NOMORETAGS )
 {
 }
 
@@ -164,24 +167,48 @@ void SimpleParser::Parse( ByteString PaSource )
     aSource = PaSource;
     nPos = 0;
     aLastToken = "";
+    aNextTag = TokenInfo( TAG_NOMORETAGS );
     aTokenList.Clear();
 };
 
-Token SimpleParser::GetNextToken()
+TokenInfo SimpleParser::GetNextToken()
 {
-    aLastToken = GetNextTokenString();
-    if ( aLastToken == "" )
-        return TAG_NOMORETAGS;
+    TokenInfo aResult;
+    if ( aNextTag.nId != TAG_NOMORETAGS )
+    {
+        aResult = aNextTag;
+        aNextTag = TokenInfo( TAG_NOMORETAGS );
+    }
+    else
+    {
+        aLastToken = GetNextTokenString();
+        if ( aLastToken == "" )
+            return TokenInfo( TAG_NOMORETAGS );
 
-    USHORT i = 0;
-    while ( aKnownTags[i].nTag != TAG_UNKNOWN_TAG &&
-        aLastToken != aKnownTags[i].aName )
-        i++;
+        USHORT i = 0;
+        while ( aKnownTags[i].nTag != TAG_UNKNOWN_TAG &&
+            aLastToken != aKnownTags[i].aName )
+            i++;
+        aResult = TokenInfo( aKnownTags[i].nTag );
 
-    if ( aKnownTags[i].nTag == TAG_UNKNOWN_TAG )
-        aLastUnknownToken = aLastToken;
-    aTokenList.Insert( aKnownTags[i].nTag, LIST_APPEND );
-    return aKnownTags[i].nTag;
+        // try to detect common open/close tags
+        if ( aResult.nId == TAG_UNKNOWN_TAG && aLastToken.Copy(0,2).Equals( "\\<" ) )
+        {
+            if ( aLastToken.GetChar(2) == '/' )
+                aResult = TokenInfo( TAG_COMMONEND, aLastToken );
+            else
+            {
+                aResult = TokenInfo( TAG_COMMONSTART, aLastToken );
+                if ( aLastToken.GetChar( aLastToken.Len() -3 ) == '/' )
+                    aNextTag = TokenInfo( TAG_COMMONEND, aLastToken );
+            }
+        }
+    }
+
+    if ( aResult.nId == TAG_UNKNOWN_TAG )
+        aResult = TokenInfo( TAG_UNKNOWN_TAG, aLastToken );
+    aTokenList.Insert( aResult, LIST_APPEND );
+    return aResult;
 }
 
 ByteString SimpleParser::GetTokenText()
@@ -193,32 +220,44 @@ ByteString SimpleParser::GetNextTokenString()
 {
     USHORT nStyle1StartPos = aSource.Search( "<#", nPos );
     USHORT nStyle2StartPos = aSource.Search( "$[", nPos );
-    if ( STRING_NOTFOUND == nStyle1StartPos && STRING_NOTFOUND == nStyle2StartPos )
+    USHORT nStyle3StartPos = aSource.Search( "\\<", nPos );
+
+    // check if the tag starts with a letter to avoid things like <> <= ... >
+    while ( STRING_NOTFOUND != nStyle3StartPos && !( aSource.Copy( nStyle3StartPos+2, 1 ).IsAlphaAscii() || aSource.GetChar( nStyle3StartPos+2 ) == '/' ) )
+        nStyle3StartPos = aSource.Search( "\\<", nStyle3StartPos+1 );
+
+    if ( STRING_NOTFOUND == nStyle1StartPos && STRING_NOTFOUND == nStyle2StartPos && STRING_NOTFOUND == nStyle3StartPos )
         return "";  // no more tokens
 
-    if ( nStyle1StartPos < nStyle2StartPos )
+    if ( nStyle1StartPos < nStyle2StartPos && nStyle1StartPos <= nStyle3StartPos )  // <= to make sure aor spechial tags are recognized before all others
     {   // test for <# ... > style tokens
         USHORT nEndPos = aSource.Search( ">", nStyle1StartPos );
         nPos = nEndPos;
         return aSource.Copy( nStyle1StartPos, nEndPos-nStyle1StartPos +1 ).ToUpperAscii();
     }
-    else
+    else if ( nStyle2StartPos < nStyle1StartPos && nStyle2StartPos < nStyle3StartPos )
     {   // test for $[ ... ] style tokens
         USHORT nEndPos = aSource.Search( "]", nStyle2StartPos);
         nPos = nEndPos;
         return aSource.Copy( nStyle2StartPos, nEndPos-nStyle2StartPos +1 );
     }
+    else
+    {   // test for < ... > style tokens
+        USHORT nEndPos = aSource.Search( "\\>", nStyle3StartPos);
+        nPos = nEndPos;
+        return aSource.Copy( nStyle3StartPos, nEndPos-nStyle3StartPos +2 );
+    }
 }
 
-ByteString SimpleParser::GetLexem( Token aToken )
+ByteString SimpleParser::GetLexem( TokenInfo const &aToken )
 {
-    if ( aToken == TAG_UNKNOWN_TAG )
-        return aLastUnknownToken;
+    if ( aToken.aName.Len() )
+        return aToken.aName;
     else
     {
         USHORT i = 0;
         while ( aKnownTags[i].nTag != TAG_UNKNOWN_TAG &&
-            aKnownTags[i].nTag != aToken )
+            aKnownTags[i].nTag != aToken.nId )
             i++;
 
         return ByteString( aKnownTags[i].aName );
@@ -241,7 +280,7 @@ void TokenParser::Parse( const ByteString &aCode )
     aParser.Parse( aCode );
 
     //erstes Symbol holen
-    nTag = aParser.GetNextToken();
+    aTag = aParser.GetNextToken();
 
     nPfCaseOptions = 0;
     nAppCaseOptions = 0;
@@ -256,9 +295,9 @@ void TokenParser::Parse( const ByteString &aCode )
     //Es wurde nicht die ganze Kette abgearbeitet, bisher ist aber
     //kein Fehler aufgetreten
     //=> es wurde ein einleitendes Tag vergessen
-    if ( nTag != TAG_NOMORETAGS )
+    if ( aTag.nId != TAG_NOMORETAGS )
     {
-        switch ( nTag )
+        switch ( aTag.nId )
         {
             case TAG_END:
                 {
@@ -298,14 +337,14 @@ void TokenParser::Parse( const ByteString &aCode )
             case TAG_UNKNOWN_TAG:
                 {
                     ByteString sTmp( "unknown Tag: " );
-                    sTmp += aParser.GetLexem( nTag );
+                    sTmp += aParser.GetLexem( aTag );
                     ParseError( 6, sTmp );
                 }
                 break;
             default:
                 {
                     ByteString sTmp( "unexpected Tag: " );
-                    sTmp += aParser.GetLexem( nTag );
+                    sTmp += aParser.GetLexem( aTag );
                     ParseError( 6, sTmp );
                 }
         }
@@ -314,7 +353,7 @@ void TokenParser::Parse( const ByteString &aCode )
 
 void TokenParser::Paragraph()
 {
-    switch ( nTag )
+    switch ( aTag.nId )
     {
         case TAG_GRAPHIC:
         case TAG_NEXTVERSION:
@@ -359,6 +398,7 @@ void TokenParser::Paragraph()
         case TAG_BOLDON:
         case TAG_ITALICON:
         case TAG_UNDERLINEON:
+        case TAG_COMMONSTART:
             {
                 TagPair();
                 Paragraph();
@@ -430,7 +470,7 @@ void TokenParser::PfCase()
 
     //Jetzt ist eine PfCase-Produktion aktiv:
     Paragraph();
-    switch ( nTag )
+    switch ( aTag.nId )
     {
         case TAG_ELSE:
         case TAG_END:
@@ -455,7 +495,7 @@ void TokenParser::PfCase()
 
 void TokenParser::PfCaseBegin()
 {
-    switch ( nTag )
+    switch ( aTag.nId )
     {
         case TAG_OS2:
         case TAG_WIN:
@@ -464,13 +504,13 @@ void TokenParser::PfCaseBegin()
             {
                 //Token darf noch nicht vorgekommen sein im
                 //aktuellen Plattform-Case:
-                if ( !HAS_FLAG( nPfCaseOptions, TAG_NOGROUP( nTag ) ) )
+                if ( !HAS_FLAG( nPfCaseOptions, TAG_NOGROUP( aTag.nId ) ) )
                 {
-                    SET_FLAG( nPfCaseOptions, TAG_NOGROUP( nTag ) );
-                    match( nTag, nTag );
+                    SET_FLAG( nPfCaseOptions, TAG_NOGROUP( aTag.nId ) );
+                    match( aTag, aTag );
                 }
                 else {
-                    ByteString sTmp( aParser.GetLexem( nTag ));
+                    ByteString sTmp( aParser.GetLexem( aTag ));
                     sTmp += " defined twice in the same platform-case.";
                     ParseError( 9, sTmp );
                 }
@@ -489,7 +529,7 @@ void TokenParser::AppCase()
 
     Paragraph();
 
-    switch ( nTag )
+    switch ( aTag.nId )
     {
         case TAG_ELSE:
         case TAG_END:
@@ -520,7 +560,7 @@ void TokenParser::AppCase()
 
 void TokenParser::AppCaseBegin()
 {
-    switch ( nTag )
+    switch ( aTag.nId )
     {
         case TAG_WRITER:
         case TAG_DRAW:
@@ -534,13 +574,13 @@ void TokenParser::AppCaseBegin()
             {
                 //Token darf noch nicht vorgekommen sein im
                 //aktuellen Plattform-Case:
-                if ( !HAS_FLAG( nAppCaseOptions, TAG_NOGROUP( nTag ) ) )
+                if ( !HAS_FLAG( nAppCaseOptions, TAG_NOGROUP( aTag.nId ) ) )
                 {
-                    SET_FLAG( nAppCaseOptions, TAG_NOGROUP( nTag ) );
-                    match( nTag, nTag );
+                    SET_FLAG( nAppCaseOptions, TAG_NOGROUP( aTag.nId ) );
+                    match( aTag, aTag );
                 }
                 else {
-                    ByteString sTmp( aParser.GetLexem( nTag ));
+                    ByteString sTmp( aParser.GetLexem( aTag ));
                     sTmp += " defined twice in the same application-case.";
                     ParseError( 13, sTmp );
                 }
@@ -553,18 +593,18 @@ void TokenParser::CaseEnd()
     //Produktion:
     //CaseEnd -> <#ELSE> Paragraph <#END> | <#END>
 
-    switch ( nTag )
+    switch ( aTag.nId )
     {
         case TAG_ELSE:
         {
-            match( nTag, TAG_ELSE );
+            match( aTag, TAG_ELSE );
             Paragraph();
-            match( nTag, TAG_END );
+            match( aTag, TAG_END );
         }
         break;
         case TAG_END:
         {
-            match( nTag, TAG_END );
+            match( aTag, TAG_END );
         }
         break;
         default:
@@ -575,11 +615,11 @@ void TokenParser::CaseEnd()
 void TokenParser::SimpleTag()
 {
 
-    switch ( nTag )
+    switch ( aTag.nId )
     {
         case TAG_HELPID:
             {
-                match( nTag, TAG_HELPID );
+                match( aTag, TAG_HELPID );
             }
             break;
         case TAG_OFFICEFULLNAME:
@@ -594,7 +634,7 @@ void TokenParser::SimpleTag()
 
         case TAG_REFINSERT:
             {
-                match( nTag, nTag );
+                match( aTag, aTag );
             }
             break;
         default:
@@ -604,27 +644,36 @@ void TokenParser::SimpleTag()
 
 void TokenParser::TagPair()
 {
-    switch ( nTag )
+    switch ( aTag.nId )
     {
         case TAG_BOLDON:
             {
-                match( nTag, TAG_BOLDON );
+                match( aTag, TAG_BOLDON );
                 Paragraph();
-                match( nTag, TAG_BOLDOFF );
+                match( aTag, TAG_BOLDOFF );
             }
             break;
         case TAG_ITALICON:
             {
-                match( nTag, TAG_ITALICON );
+                match( aTag, TAG_ITALICON );
                 Paragraph();
-                match( nTag, TAG_ITALICOFF );
+                match( aTag, TAG_ITALICOFF );
             }
             break;
         case TAG_UNDERLINEON:
             {
-                match( nTag, TAG_UNDERLINEON );
+                match( aTag, TAG_UNDERLINEON );
                 Paragraph();
-                match( nTag, TAG_UNDERLINEOFF );
+                match( aTag, TAG_UNDERLINEOFF );
+            }
+            break;
+        case TAG_COMMONSTART:
+            {
+                //remember tag so we can give the original tag in case of an error
+                TokenInfo aEndTag( TAG_COMMONEND, ByteString( "Close tag for " ).Append(aTag.aName) );
+                match( aTag, TAG_COMMONSTART );
+                Paragraph();
+                match( aTag, aEndTag );
             }
             break;
         default:
@@ -635,21 +684,21 @@ void TokenParser::TagPair()
 
 void TokenParser::TagRef()
 {
-    switch ( nTag )
+    switch ( aTag.nId )
     {
         case TAG_GRAPHIC:
         case TAG_NEXTVERSION:
             {
-                if ( !HAS_FLAG( nActiveRefTypes, TAG_NOGROUP( nTag ) ) )
+                if ( !HAS_FLAG( nActiveRefTypes, TAG_NOGROUP( aTag.nId ) ) )
                 {
-                    Token aThisToken = nTag;
+                    TokenId aThisToken = aTag.nId;
                     SET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
-                    match( nTag, nTag );
+                    match( aTag, aTag );
                     Paragraph();
                     if ( aThisToken == TAG_GRAPHIC )
-                        match( nTag, TAG_ENDGRAPHIC );
+                        match( aTag, TAG_ENDGRAPHIC );
                     else
-                        match( nTag, TAG_VERSIONEND );
+                        match( aTag, TAG_VERSIONEND );
                     // don't reset since alowed only once per paragraph
                     // RESET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
                 }
@@ -662,13 +711,13 @@ void TokenParser::TagRef()
         case TAG_AVIS:
         case TAG_AHID:
             {
-                if ( !HAS_FLAG( nActiveRefTypes, TAG_NOGROUP( nTag ) ) )
+                if ( !HAS_FLAG( nActiveRefTypes, TAG_NOGROUP( aTag.nId ) ) )
                 {
-                    Token aThisToken = nTag;
+                    TokenId aThisToken = aTag.nId;
                     SET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
-                    match( nTag, nTag );
+                    match( aTag, aTag );
                     Paragraph();
-                    match( nTag, TAG_AEND );
+                    match( aTag, TAG_AEND );
                     RESET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
                 }
                 else
@@ -688,15 +737,15 @@ void TokenParser::TagRef()
         case TAG_TITEL:
         case TAG_REFSTART:
             {
-                if ( !HAS_FLAG( nActiveRefTypes, TAG_NOGROUP( nTag ) ) )
+                if ( !HAS_FLAG( nActiveRefTypes, TAG_NOGROUP( aTag.nId ) ) )
                 {
-                    Token aThisToken = nTag;
-                    match( nTag, nTag );
+                    TokenId aThisToken = aTag.nId;
+                    match( aTag, aTag );
                     if ( aThisToken != TAG_NAME )
                     {   // TAG_NAME has no TAG_END
                         SET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
                         Paragraph();
-                        match( nTag, TAG_END );
+                        match( aTag, TAG_END );
                         RESET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
                     }
                 }
@@ -711,11 +760,16 @@ void TokenParser::TagRef()
     }
 }
 
-BOOL TokenParser::match( const Token &aCurrentToken, const Token &aExpectedToken )
+BOOL TokenParser::match( const TokenInfo &aCurrentToken, const TokenId &aExpectedToken )
 {
-    if ( aCurrentToken == aExpectedToken )
+    return match( aCurrentToken, TokenInfo( aExpectedToken ) );
+}
+
+BOOL TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &aExpectedToken )
+{
+    if ( aCurrentToken.nId == aExpectedToken.nId )
     {
-        nTag = aParser.GetNextToken();
+        aTag = aParser.GetNextToken();
         return TRUE;
     }
     else
@@ -735,10 +789,10 @@ void TokenParser::ParseError( USHORT nErrNr, const ByteString &aErrMsg )
     aErrorList.Insert( new ParserMessage( nErrNr, aErrMsg, aParser.GetScanningPosition()-nTokenLength, nTokenLength), LIST_APPEND );
 
     // Das Fehlerhafte Tag überspringen
-    nTag = aParser.GetNextToken();
+    aTag = aParser.GetNextToken();
 }
 
-void LingTest::CheckMandatoryTag( TokenList aReference, TokenList aTestee, ParserMessageList &rErrorList, Token aToken )
+void LingTest::CheckMandatoryTag( TokenList aReference, TokenList aTestee, ParserMessageList &rErrorList, TokenInfo aToken )
 {
     while ( (aReference.GetPos( aToken ) != LIST_ENTRY_NOTFOUND) && (aTestee.GetPos( aToken ) != LIST_ENTRY_NOTFOUND) )
     {
@@ -761,6 +815,53 @@ void LingTest::CheckMandatoryTag( TokenList aReference, TokenList aTestee, Parse
     }
 }
 
+ByteString GetTagName( ByteString const &aTag )
+{
+    ByteString aRet( aTag.Copy(2) );    // cut off  \<
+    aRet.EraseLeadingChars( ' ' );
+    USHORT nPos;
+    if ( ( nPos = aRet.Search(' ') )  != STRING_NOTFOUND )
+        return aRet.Copy( 0, nPos );
+    aRet.Erase( aRet.Len() -2 );
+    if ( aRet.GetChar( aRet.Len()-1 ) == '/' )
+        aRet.Erase( aRet.Len() -1 );
+    else if ( aRet.GetChar( 0 ) == '/' )
+        aRet.Erase( 0, 1 );
+    return aRet;
+}
+
+BOOL LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens )
+{
+    TokenId aTokenId = aToken.nId;
+    TokenId aTokenGroup = TAG_GROUP( aTokenId );
+    if ( TAG_GROUP_PROGSWITCH == aTokenGroup
+        || TAG_REFINSERT == aTokenId
+        || TAG_REFSTART == aTokenId
+        || TAG_NAME == aTokenId
+        || TAG_HREF == aTokenId
+        || TAG_AVIS == aTokenId
+        || TAG_AHID == aTokenId
+        || TAG_GRAPHIC == aTokenId
+        || TAG_NEXTVERSION == aTokenId
+        || ( TAG_GROUP_META == aTokenGroup && (aMetaTokens & aTokenId) == aTokenId ) )
+    {
+        if ( TAG_GROUP_META == aTokenGroup )
+            aMetaTokens |= aTokenId;
+        return TRUE;
+    }
+    else if (   TAG_COMMONSTART == aTokenId
+             || TAG_COMMONEND == aTokenId )
+    {
+        ByteString aTagName = GetTagName( aToken.aName );
+        return !(aTagName.EqualsIgnoreCaseAscii( "comment" )
+              || aTagName.EqualsIgnoreCaseAscii( "bookmark_value" )
+              || aTagName.EqualsIgnoreCaseAscii( "emph" )
+              || aTagName.EqualsIgnoreCaseAscii( "item" )
+              || aTagName.EqualsIgnoreCaseAscii( "br" ) );
+    }
+    return FALSE;
+}
+
 void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessageList &rErrorList )
 {
     ULONG i=0,j=0;
@@ -771,35 +872,22 @@ void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessage
         aCompareWarningList.Remove();
     }
 
-    // First check the mandatory Tags
-/*  Check below is much stricter allready
-    CheckMandatoryTag( aReference, aTestee, rErrorList, TAG_AVIS );
-    CheckMandatoryTag( aReference, aTestee, rErrorList, TAG_AHID );
-    CheckMandatoryTag( aReference, aTestee, rErrorList, TAG_HREF );
-    CheckMandatoryTag( aReference, aTestee, rErrorList, TAG_NAME );
-*/
+    /* in xml tags, do not require the following tags
+        comment
+        bookmark_value
+        emph
+        item
+        br
+    */
 
     // filter uninteresting Tags
-    Token aMetaTokens = 0;
+    TokenId aMetaTokens = 0;
     i=0;
     while ( i < aReference.Count() )
     {
-        Token aToken = aReference.GetObject( i );
-        Token aTokenGroup = TAG_GROUP( aToken );
-        if ( TAG_GROUP_PROGSWITCH == aTokenGroup
-            || TAG_REFINSERT == aToken
-            || TAG_REFSTART == aToken
-            || TAG_NAME == aToken
-            || TAG_HREF == aToken
-            || TAG_AVIS == aToken
-            || TAG_AHID == aToken
-            || TAG_GRAPHIC == aToken
-            || TAG_NEXTVERSION == aToken
-            || ( TAG_GROUP_META == aTokenGroup && (aMetaTokens & aToken) == aToken ) )
+        if ( IsTagMandatory( aReference.GetObject( i ), aMetaTokens ) )
         {
             i++;
-            if ( TAG_GROUP_META == aTokenGroup )
-                aMetaTokens |= aToken;
         }
         else
             aReference.Remove( i );
@@ -809,22 +897,9 @@ void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessage
     i=0;
     while ( i < aTestee.Count() )
     {
-        Token aToken = aTestee.GetObject( i );
-        Token aTokenGroup = TAG_GROUP( aToken );
-        if ( TAG_GROUP_PROGSWITCH == aTokenGroup
-            || TAG_REFINSERT == aToken
-            || TAG_REFSTART == aToken
-            || TAG_NAME == aToken
-            || TAG_HREF == aToken
-            || TAG_AVIS == aToken
-            || TAG_AHID == aToken
-            || TAG_GRAPHIC == aToken
-            || TAG_NEXTVERSION == aToken
-            || ( TAG_GROUP_META == aTokenGroup && (aMetaTokens & aToken) == aToken ) )
+        if ( IsTagMandatory( aTestee.GetObject( i ), aMetaTokens ) )
         {
             i++;
-            if ( TAG_GROUP_META == aTokenGroup )
-                aMetaTokens |= aToken;
         }
         else
             aTestee.Remove( i );
@@ -838,7 +913,7 @@ void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessage
         j = 0;
         while ( j < aTestee.Count() && !bTagFound )
         {
-            if ( aReference.GetObject( i ) == aTestee.GetObject( j ) )
+            if ( aReference.GetObject( i ).nId == aTestee.GetObject( j ).nId )
                 bTagFound = TRUE;
             else
                 j++;
@@ -867,7 +942,7 @@ void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessage
     while ( i < aTestee.Count() )
     {
         ByteString sTmp( "Extra Tag in Translation: " );
-        sTmp += SimpleParser::GetLexem( aTestee.GetObject( j ));
+        sTmp += SimpleParser::GetLexem( aTestee.GetObject( i ));
         pNewWarning =  new ParserMessage( 21, sTmp );
         aCompareWarningList.Insert( pNewWarning, LIST_APPEND );
         i++;
