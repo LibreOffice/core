@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-01 09:03:59 $
+ *  last change: $Author: oj $ $Date: 2002-10-11 07:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xRow;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
         ::rtl::OUString                                                                 m_sUpdateTableName;
+        ::rtl::OUString                                                                 m_aSelectComposedTableName;
 
         sal_Bool m_bRowCountFinal;
 
@@ -221,6 +222,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.14  2002/10/01 09:03:59  oj
+    #97524# remember column type for reuse
+
     Revision 1.13  2001/12/05 14:56:24  oj
     #95610# fetch autoincrement values after insert with max
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-08 12:46:28 $
+ *  last change: $Author: oj $ $Date: 2002-10-11 07:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
     xTableProp->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-    m_aComposedTableName = getComposedTableName(sCatalog,sSchema,sTable);
+    m_aSelectComposedTableName = getComposedTableName(sCatalog,sSchema,sTable);
 
     ::rtl::OUString sComposedName;
     sCatalog = sSchema = sTable = ::rtl::OUString();
@@ -611,7 +611,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
             ::rtl::OUString sStmt = ::rtl::OUString::createFromAscii("SELECT ");
             sStmt += sMaxStmt;
             sStmt += ::rtl::OUString::createFromAscii("FROM ");
-            sStmt += m_aComposedTableName;
+            sStmt += m_aSelectComposedTableName;
             try
             {
                 // now fetch the autoincrement values
@@ -1391,6 +1391,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.38  2002/10/08 12:46:28  oj
+    #i3289# correct table name quoting so that in every situation the correct schema, catalog is used
+
     Revision 1.37  2002/10/01 09:03:59  oj
     #97524# remember column type for reuse
 
