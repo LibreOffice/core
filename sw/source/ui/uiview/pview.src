@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-03 00:34:08 $
+ *  last change: $Author: kz $ $Date: 2002-05-21 09:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "Standaar~d";
         TEXT[ chinese_simplified ] = "ι»θ®¤(~D)";
         TEXT[ greek ] = "Προεπιλογή";
-        TEXT[ korean ] = "κΈ°λ³Έκ°’(~D)";
+        TEXT[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         TEXT[ turkish ] = "Standar~t";
         TEXT[ catalan ] = "~Predeterminado";
         TEXT[ finnish ] = "~Oletusarvo";
