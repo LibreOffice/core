@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:46:25 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1661,7 +1661,9 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
             "Falsche AutoFormat-Id" );
 
     SwPageDesc *pNewPgDsc;
-    for( USHORT n = 0; n < aPageDescs.Count(); ++n )
+    USHORT n;
+
+    for( n = 0; n < aPageDescs.Count(); ++n )
         if( nId == ( pNewPgDsc = aPageDescs[ n ] )->GetPoolFmtId() )
         {
             if( pDesc )
@@ -1830,7 +1832,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             "Falsche AutoFormat-Id" );
 
     SwNumRule* pNewRule;
-    for( USHORT n = 0; n < GetNumRuleTbl().Count(); ++n )
+    USHORT n;
+
+    for( n = 0; n < GetNumRuleTbl().Count(); ++n )
         if( nId == ( pNewRule = GetNumRuleTbl()[ n ] )->GetPoolFmtId() )
         {
             if( pDesc )
