@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tv $ $Date: 2001-04-23 10:12:04 $
+#   last change: $Author: tv $ $Date: 2001-11-09 14:05:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ RESLIB2SRSFILES= $(SRS)$/webwizar.srs
 RESLIB2NAME=	wwz
 
 ZIP1TARGET      = $(WEBWIZARD_ALL_TARGET)
-ZIP1LIST        = *.xdl *.xba
+ZIP1LIST        = *.xdl *.xba *.xlb
 
 # --- Targets ------------------------------------------------------
 

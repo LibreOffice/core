@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tv $ $Date: 2001-04-23 09:30:36 $
+#   last change: $Author: tv $ $Date: 2001-11-09 14:05:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ RESLIB2SRSFILES= $(SRS)$/dbwizres.srs
 RESLIB2NAME=	dbw
 
 ZIP1TARGET      = $(FORMWIZARD_ALL_TARGET)
-ZIP1LIST        = *.xdl *.xba
+ZIP1LIST        = *.xdl *.xba *.xlb
 
 # --- Targets ------------------------------------------------------
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tv $ $Date: 2001-04-23 10:09:25 $
+#   last change: $Author: tv $ $Date: 2001-11-09 14:05:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ TARGET=tools
 # --- Files --------------------------------------------------------
 
 ZIP1TARGET      = $(TOOLS_ALL_TARGET)
-ZIP1LIST        = *.xdl *.xba
+ZIP1LIST        = *.xdl *.xba *.xlb
 
 # --- Targets ------------------------------------------------------
 

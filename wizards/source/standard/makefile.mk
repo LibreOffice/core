@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: tv $ $Date: 2001-11-09 14:05:35 $
+#   last change: $Author: tv $ $Date: 2001-11-09 14:05:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,11 +59,10 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..
 
 PRJNAME=wizards
-TARGET=euro
+TARGET=standard
 
 # --- Settings -----------------------------------------------------
 
@@ -74,17 +73,10 @@ TARGET=euro
 
 # --- Files --------------------------------------------------------
 
-#
-# testresource.
-#
-SRS2NAME =              euro
-SRC2FILES=              euro.src
-RESLIB2SRSFILES= $(SRS)$/euro.srs
-RESLIB2NAME=    eur
-
-ZIP1TARGET      = $(EURO_ALL_TARGET)
+ZIP1TARGET      = $(STANDARD_ALL_TARGET)
 ZIP1LIST        = *.xdl *.xba *.xlb
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tv $ $Date: 2001-04-23 10:02:03 $
+#   last change: $Author: tv $ $Date: 2001-11-09 14:05:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ RESLIB2SRSFILES= $(SRS)$/schedule.srs
 RESLIB2NAME=	cal
 
 ZIP1TARGET      = $(SCHEDULE_ALL_TARGET)
-ZIP1LIST        = *.xdl *.xba
+ZIP1LIST        = *.xdl *.xba *.xlb
 
 # --- Targets ------------------------------------------------------
 

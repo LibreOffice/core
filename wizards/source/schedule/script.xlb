@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library:library PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "library.dtd">
+<library:library xmlns:library="http://openoffice.org/2000/library" library:name="Schedule" library:readonly="true" library:passwordprotected="false">
+ <library:element library:name="OwnEvents"/>
+ <library:element library:name="CalendarMain"/>
+ <library:element library:name="BankHoliday"/>
+ <library:element library:name="DlgControl"/>
+ <library:element library:name="Language"/>
+ <library:element library:name="CreateTable"/>
+ <library:element library:name="HolidayGerman"/>
+ <library:element library:name="HolidayUSA"/>
+ <library:element library:name="HolidayFrance"/>
+ <library:element library:name="HolidayItalia"/>
+ <library:element library:name="HolidaySpain"/>
+ <library:element library:name="HolidayPortugal"/>
+ <library:element library:name="HolidayNetherlands"/>
+ <library:element library:name="HolidaySweden"/>
+ <library:element library:name="HolidayDanmark"/>
+ <library:element library:name="HolidayRussia"/>
+ <library:element library:name="HolidayPoland"/>
+</library:library>
