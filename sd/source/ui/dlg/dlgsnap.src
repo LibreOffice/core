@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:40:24 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,19 +68,8 @@ ModalDialog DLG_SNAPLINE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 140 , 125 ) ;
-    Text = "Neues Fangobjekt" ;
-    Text [ ENGLISH ] = "New Snap Object" ;
-    Text [ norwegian ] = "+++New Snap Object" ;
-    Text [ italian ] = "Nuovo oggetto cattura" ;
-    Text [ portuguese_brazilian ] = "Novo Objeto de Encaixe" ;
-    Text [ portuguese ] = "Novo objecto de captura" ;
-    Text [ finnish ] = "Lis‰‰ kohdistuspiste tai -viiva" ;
-    Text [ danish ] = "Nyt fangobjekt" ;
-    Text [ french ] = "Nouvel objet de capture" ;
-    Text [ swedish ] = "Nytt f‰stobjekt" ;
-    Text [ dutch ] = "Nieuw vangobject" ;
-    Text [ spanish ] = "Nuevo objeto de captura" ;
-    Text [ english_us ] = "New Snap Object" ;
+    Text [ de ] = "Neues Fangobjekt" ;
+    Text [ en-US ] = "New Snap Object" ;
     Moveable = TRUE ;
     OKButton BTN_OK
     {
@@ -106,74 +95,18 @@ ModalDialog DLG_SNAPLINE
         Pos = MAP_APPFONT ( 88 , 63  ) ;
         Size = MAP_APPFONT ( 46 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen : ~L˜schen */
-        Text = "~Lˆschen" ;
-        Text [ ENGLISH ] = "~Delete" ;
-        Text [ norwegian ] = "~Slett" ;
-        Text [ italian ] = "~Elimina" ;
-        Text [ portuguese_brazilian ] = "E~xcluir" ;
-        Text [ portuguese ] = "E~liminar" ;
-        Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "~Slet" ;
-        Text [ french ] = "Supprimer" ;
-        Text [ swedish ] = "~Radera" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Borrar" ;
-        Text [ english_us ] = "~Delete" ;
+        Text [ de ] = "~Lˆschen" ;
+        Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Âà†Èô§(~D)";
-        Text[ russian ] = "~”‰‡ÎËÚ¸";
-        Text[ polish ] = "~UsuÒ";
-        Text[ japanese ] = "ÂâäÈô§(~D)";
-        Text[ chinese_traditional ] = "Âà™Èô§(~D)";
-        Text[ arabic ] = "Õ–›";
-        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
-        Text[ korean ] = "ÏÇ≠Ï†ú(~D)";
-        Text[ turkish ] = "Sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Suprimeix";
-        Text[ thai ] = "~‡∏•‡∏ö";
-        Text[ czech ] = "Smazat";
-        Text[ hebrew ] = "‚ÄÆ◊û◊ó◊ô◊ß◊î‚Ä¨";
-        Text[ hindi ] = "~‡§Æ‡§ø‡§ü‡§æ‡§ì";
-        Text[ slovak ] = "~Zmaza≈•";
-        Text[ hungarian ] = "~T√∂rl√©s";
-        Text[ slovenian ] = "~Izbri≈°i";
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "Position" ;
-        Text [ ENGLISH ] = "Position" ;
-        Text [ norwegian ] = "Posisjon" ;
-        Text [ italian ] = "Posizione" ;
-        Text [ portuguese_brazilian ] = "PosiÁ„o" ;
-        Text [ portuguese ] = "PosiÁ„o" ;
-        Text [ finnish ] = "Sijainti" ;
-        Text [ danish ] = "Placering" ;
-        Text [ french ] = "Position" ;
-        Text [ swedish ] = "Position" ;
-        Text [ dutch ] = "Positie" ;
-        Text [ spanish ] = "PosiciÛn" ;
-        Text [ english_us ] = "Position" ;
-        Text[ chinese_simplified ] = "‰ΩçÁΩÆ";
-        Text[ russian ] = "œÓÎÓÊÂÌËÂ";
-        Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "‰ΩçÁΩÆ";
-        Text[ chinese_traditional ] = "‰ΩçÁΩÆ";
-        Text[ arabic ] = "«·„Ê÷⁄";
-        Text[ greek ] = "»›ÛÁ";
-        Text[ korean ] = "ÏúÑÏπò";
-        Text[ turkish ] = "Konum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PosiciÛ";
-        Text[ thai ] = "‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
-        Text[ czech ] = "Um√≠stƒõn√≠";
-        Text[ hebrew ] = "‚ÄÆ◊û◊ô◊ß◊ï◊ù‚Ä¨";
-        Text[ hindi ] = "‡§∏‡•ç‡§•‡§æ‡§®";
-        Text[ slovak ] = "Umiestnenie";
-        Text[ hungarian ] = "Poz√≠ci√≥";
-        Text[ slovenian ] = "Polo≈æaj";
+        Text [ de ] = "Position" ;
+        Text [ en-US ] = "Position" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_X
     {
@@ -225,176 +158,53 @@ ModalDialog DLG_SNAPLINE
     {
         Pos = MAP_APPFONT ( 6 , 50  ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "Art" ;
-        Text [ ENGLISH ] = "Kind" ;
-        Text [ norwegian ] = "+++Kind" ;
-        Text [ italian ] = "Tipo" ;
-        Text [ portuguese_brazilian ] = "Tipo" ;
-        Text [ portuguese ] = "Tipo" ;
-        Text [ finnish ] = "Kohdistusobjektin tyyppi" ;
-        Text [ danish ] = "Type" ;
-        Text [ french ] = "Type" ;
-        Text [ swedish ] = "Typ" ;
-        Text [ dutch ] = "Type" ;
-        Text [ spanish ] = "Tipo" ;
-        Text [ english_us ] = "Type" ;
-        Text[ chinese_simplified ] = "Á±ªÂûã";
-        Text[ russian ] = "“ËÔ";
-        Text[ polish ] = "Typ";
-        Text[ japanese ] = "Á®ÆÈ°û";
-        Text[ chinese_traditional ] = "È°ûÂûã";
-        Text[ arabic ] = "«·‰Ê⁄";
-        Text[ greek ] = "‘˝ÔÚ";
-        Text[ korean ] = "Ïú†Ìòï";
-        Text[ turkish ] = "T¸r";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipus";
-        Text[ thai ] = "‡∏ä‡∏ô‡∏¥‡∏î";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "‚ÄÆ◊°◊ï◊í‚Ä¨";
-        Text[ hindi ] = "‡§µ‡§∞‡•ç‡§ó";
-        Text[ slovak ] = "Typ";
-        Text[ hungarian ] = "T√≠pus";
-        Text[ slovenian ] = "Vrsta";
+        Text [ de ] = "Art" ;
+        Text [ en-US ] = "Type" ;
+        Text [ x-comment ] = " ";
     };
     ImageRadioButton RB_POINT
     {
         Pos = MAP_APPFONT ( 12 , 61  ) ;
         Size = MAP_APPFONT ( 64 , 16 ) ;
-        Text = "~Punkt" ;
-        Text [ ENGLISH ] = "~Point" ;
-        Text [ norwegian ] = "~Punkt" ;
-        Text [ italian ] = "~Punto" ;
-        Text [ portuguese_brazilian ] = "~Ponto" ;
-        Text [ portuguese ] = "~Ponto" ;
-        Text [ finnish ] = "~Piste" ;
-        Text [ danish ] = "~Punkt" ;
-        Text [ french ] = "~Point" ;
-        Text [ swedish ] = "~Punkt" ;
-        Text [ dutch ] = "~Punt" ;
-        Text [ spanish ] = "~Punto" ;
-        Text [ english_us ] = "~Point" ;
+        Text [ de ] = "~Punkt" ;
+        Text [ en-US ] = "~Point" ;
         TabStop = TRUE ;
         RadioButtonImage = Image
         {
             MaskColor = IMAGE_MASK_STDCOLOR;
             ImageBitmap = Bitmap { File = "hlppoint.bmp" ; };
         };
-        Text[ chinese_simplified ] = "ÁÇπ(~P)";
-        Text[ russian ] = "~“Ó˜Í‡";
-        Text[ polish ] = "P~unkt";
-        Text[ japanese ] = "ÁÇπ(~P)";
-        Text[ chinese_traditional ] = "Èªû(~P)";
-        Text[ arabic ] = "‰ﬁÿ…";
-        Text[ greek ] = "”ÁÏÂﬂÔ";
-        Text[ korean ] = "Ï†ê(~P)";
-        Text[ turkish ] = "Nokta";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Punt";
-        Text[ thai ] = "~‡∏à‡∏∏‡∏î";
-        Text[ czech ] = "Bod";
-        Text[ hebrew ] = "~Punkt";
-        Text[ hindi ] = "~‡§¨‡§ø‡§®‡•ç‡§¶‡•Å";
-        Text[ slovak ] = "~Bod";
-        Text[ hungarian ] = "~Pont";
-        Text[ slovenian ] = "~Toƒçka";
+        Text [ x-comment ] = " ";
     };
     ImageRadioButton RB_VERTICAL
     {
         Pos = MAP_APPFONT ( 12 , 81  ) ;
         Size = MAP_APPFONT ( 64 , 16 ) ;
-        Text = "~Vertikal" ;
-        Text [ ENGLISH ] = "~Vertical" ;
-        Text [ norwegian ] = "~Vertikal" ;
-        Text [ italian ] = "Verticale" ;
-        Text [ portuguese_brazilian ] = "~Vertical" ;
-        Text [ portuguese ] = "~Vertical" ;
-        Text [ finnish ] = "Pystyviiva" ;
-        Text [ danish ] = "~Lodret" ;
-        Text [ french ] = "Vertical" ;
-        Text [ swedish ] = "~Vertikal" ;
-        Text [ dutch ] = "~Verticaal" ;
-        Text [ spanish ] = "~Vertical" ;
-        Text [ english_us ] = "~Vertical" ;
+        Text [ de ] = "~Vertikal" ;
+        Text [ en-US ] = "~Vertical" ;
         TabStop = TRUE ;
         RadioButtonImage = Image
         {
             MaskColor = IMAGE_MASK_STDCOLOR;
             ImageBitmap = Bitmap { File = "hlplvert.bmp" ; };
         };
-        Text[ chinese_simplified ] = "Á∫µÂêë(~V)";
-        Text[ russian ] = "~¬ÂÚËÍ‡Î¸ÌÓ";
-        Text[ polish ] = "~Pionowo";
-        Text[ japanese ] = "Á∏¶‰ΩçÁΩÆ(~V)";
-        Text[ chinese_traditional ] = "Á∏±Âêë(~V)";
-        Text[ arabic ] = "—√”Ì";
-        Text[ greek ] = " ·Ù·Í¸Òıˆ·";
-        Text[ korean ] = "ÏàòÏßÅ(~V)";
-        Text[ turkish ] = "Dikey";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Vertical";
-        Text[ thai ] = "‡πÅ‡∏ô‡∏ß~‡∏ï‡∏±‡πâ‡∏á";
-        Text[ czech ] = "Svisl√Ω";
-        Text[ hebrew ] = "~Vertikal";
-        Text[ hindi ] = "~‡§≤‡§Ç‡§¨‡§∞‡•Ç‡§™";
-        Text[ slovak ] = "Z~visl√Ω";
-        Text[ hungarian ] = "~F√ºgg≈ëleges";
-        Text[ slovenian ] = "~Navpiƒçno";
+        Text [ x-comment ] = " ";
     };
     ImageRadioButton RB_HORIZONTAL
     {
         Pos = MAP_APPFONT ( 12 , 101  ) ;
         Size = MAP_APPFONT ( 65 , 16 ) ;
-        Text = "~Horizontal" ;
-        Text [ ENGLISH ] = "~Horizontal" ;
-        Text [ norwegian ] = "~Horisontal" ;
-        Text [ italian ] = "~Orizzontale" ;
-        Text [ portuguese_brazilian ] = "~Horizontal" ;
-        Text [ portuguese ] = "~Horizontal" ;
-        Text [ finnish ] = "Vaa~kaviiva" ;
-        Text [ danish ] = "~Vandret" ;
-        Text [ french ] = "~Horizontal" ;
-        Text [ swedish ] = "H~orisontell" ;
-        Text [ dutch ] = "~Horizontaal" ;
-        Text [ spanish ] = "~Horizontal" ;
-        Text [ english_us ] = "Hori~zontal" ;
+        Text [ de ] = "~Horizontal" ;
+        Text [ en-US ] = "Hori~zontal" ;
         TabStop = TRUE ;
         RadioButtonImage = Image
         {
             MaskColor = IMAGE_MASK_STDCOLOR;
             ImageBitmap = Bitmap { File = "hlplhorz.bmp" ; };
         };
-        Text[ chinese_simplified ] = "Ê®™Âêë(~Z)";
-        Text[ russian ] = "√ÓËÁÓÌÚ‡Î¸ÌÓ";
-        Text[ polish ] = "Po~ziomo";
-        Text[ japanese ] = "Ê®™‰ΩçÁΩÆ(~Z)";
-        Text[ chinese_traditional ] = "Ê©´Âêë(~Z)";
-        Text[ arabic ] = "√›ﬁÌ";
-        Text[ greek ] = "œÒÈÊ¸ÌÙÈ·";
-        Text[ korean ] = "ÏàòÌèâ(~Z)";
-        Text[ turkish ] = "Yatay";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Horit~zontal";
-        Text[ thai ] = "‡πÅ‡∏ô‡∏ß~‡∏ô‡∏≠‡∏ô";
-        Text[ czech ] = "Vodorovn√Ω";
-        Text[ hebrew ] = "~Horizontal";
-        Text[ hindi ] = "~‡§∏‡§Æ‡§§‡§≤";
-        Text[ slovak ] = "~Vodorovn√Ω";
-        Text[ hungarian ] = "V√≠~zszintes";
-        Text[ slovenian ] = "Vodo~ravno";
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "Êñ∞Âª∫ÂùêÊ†á";
-    Text[ russian ] = "ÕÓ‚˚È Ó·˙ÂÍÚ ÔË‚ˇÁÍË";
-    Text[ polish ] = "Nowy obiekt przyciπgania";
-    Text[ japanese ] = "Êñ∞„Åó„ÅÑ„Çπ„Éä„ÉÉ„Éó„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà";
-    Text[ chinese_traditional ] = "Êñ∞Âª∫Â∫ßÊ®ô";
-    Text[ arabic ] = "ﬂ«∆‰ Õ»” ÃœÌœ";
-    Text[ greek ] = "Õ›Ô ·ÌÙÈÍÂﬂÏÂÌÔ ÒÔÛÍ¸ÎÎÁÛÁÚ";
-    Text[ korean ] = "ÏÉà ÎßûÏ∂§ Í∞úÏ≤¥";
-    Text[ turkish ] = "Yeni kavrama nesnesi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objecte de captura nou";
-    Text[ thai ] = "‡∏à‡∏±‡∏î‡∏ß‡∏±‡∏ï‡∏ñ‡∏∏‡∏ä‡∏¥‡∏î‡πÉ‡∏´‡∏°‡πà";
+    Text [ x-comment ] = " ";
 
     Image BMP_POINT_H
     {
@@ -413,12 +223,6 @@ ModalDialog DLG_SNAPLINE
         MaskColor = IMAGE_MASK_STDCOLOR_HC;
         ImageBitmap = Bitmap { File = "hlplhorz_h.bmp" ; };
     };
-    Text[ czech ] = "Nov√Ω z√°chytn√Ω objekt";
-    Text[ hebrew ] = "Neues Fangobjekt";
-    Text[ hindi ] = "‡§®‡§Ø‡§æ ‡§∏‡•ç‡§®‡•â‡§™ ‡§µ‡§∏‡•ç‡§§‡•Å";
-    Text[ slovak ] = "Nov√Ω sn√≠mok";
-    Text[ hungarian ] = "√öj illeszt≈ëobjektum";
-    Text[ slovenian ] = "Nov predmet za pripenjanje";
 };
 
 
