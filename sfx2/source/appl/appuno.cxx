@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-29 13:34:23 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1836,7 +1836,8 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
     {
         // direct API call on a specified object
         String aCall( '[' );
-        aCall += INetURLObject::decode(aMacro.Copy(6), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET);
+        aCall += String(INetURLObject::decode(aMacro.Copy(6), INET_HEX_ESCAPE,
+        INetURLObject::DECODE_WITH_CHARSET));
         aCall += ']';
         pAppMgr->GetLib(0)->Execute( aCall );
         nErr = SbxBase::GetError();
