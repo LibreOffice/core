@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohtabl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:34:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include "xdef.hxx"
 #include "xflhtit.hxx"
 #include "unomid.hxx"
+#include "unofill.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
