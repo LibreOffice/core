@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
+ *  last change: $Author: obo $ $Date: 2000-11-14 10:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,8 +312,8 @@ ElementTree SetElementFactory::instantiateTemplate(TemplateHolder const& aTempla
     OSL_ENSURE(m_aProvider.get().isValid(), "ERROR: Template Instance Factory has no template provider - cannot instantiate element");
     OSL_ENSURE(aTemplate.isValid(), "ERROR: Template is NULL - cannot instantiate element");
 
-    if (!m_aProvider.get().isValid()) return 0;
-    if (!aTemplate.isValid()) return 0;
+    if (!m_aProvider.get().isValid()) return (ElementTree) 0;
+    if (!aTemplate.isValid()) return (ElementTree) 0;
 
     ElementTree aRet( new ElementTreeImpl( aTemplate, m_aProvider.getBodyPtr() ) );
 
@@ -327,7 +327,7 @@ ElementTree SetElementFactory::instantiateOnDefault(std::auto_ptr<INode> aTree, 
     OSL_ENSURE(aTree.get(), "ERROR: Tree is NULL - cannot instantiate element");
     OSL_ENSURE(aDummyTemplate.isValid(), "ERROR: Template is NULL - cannot instantiate element");
 
-    if (!aTree.get()) return 0;
+    if (!aTree.get()) return (ElementTree) 0;
 
     ElementTreeImpl* pNewTree = new ElementTreeImpl( NodeType::getDeferredChangeFactory(),*aTree, ~0u, aDummyTemplate );
     pNewTree->takeNodeFrom(aTree);

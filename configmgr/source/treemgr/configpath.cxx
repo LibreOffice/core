@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 19:18:28 $
+ *  last change: $Author: obo $ $Date: 2000-11-14 10:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ PathRep PathRep::compose(PathRep const& aRelativePath) const
 {
     Components aResult( components() );
     aResult.insert(aResult.end(), aRelativePath.begin(), aRelativePath.end());
-    return aResult;
+    return (PathRep) aResult;
 }
 //-----------------------------------------------------------------------------
 
@@ -253,7 +253,7 @@ PathRep PathRep::parent() const
         throw InvalidName(OUString(RTL_CONSTASCII_USTRINGPARAM("<empty>")), " - is empty. Cannot construct parent path");
 
     aResult.pop_back();
-    return aResult;
+    return (PathRep) aResult;
 }
 //-----------------------------------------------------------------------------
 
