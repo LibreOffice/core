@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BResultSet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:12 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 #ifndef CONNECTIVITY_ADABAS_RESULTSET_HXX
 #include "adabas/BResultSet.hxx"
+#endif
+#ifndef CONNECTIVITY_ADABAS_RESULTSETMETADATA_HXX
+#include "adabas/BResultSetMetaData.hxx"
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -238,6 +241,18 @@ void SAL_CALL OAdabasResultSet::refreshRow(  ) throw(SQLException, RuntimeExcept
     OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -----------------------------------------------------------------------------
+Reference< XResultSetMetaData > SAL_CALL OAdabasResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
+
+    if(!m_xMetaData.is())
+        m_xMetaData = new OAdabasResultSetMetaData(m_pStatement->getOwnConnection(),m_aStatementHandle);
+    return m_xMetaData;
+}
+// -----------------------------------------------------------------------------
+
 
 
 

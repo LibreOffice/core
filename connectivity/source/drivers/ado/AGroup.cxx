@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroup.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,6 @@ OAdoGroup::OAdoGroup(OCatalog* _pParent,sal_Bool _bCase,    ADOGroup* _pGroup) :
     else
         m_aGroup.Create();
 
-    refreshUsers();
 }
 // -------------------------------------------------------------------------
 OAdoGroup::OAdoGroup(OCatalog* _pParent,sal_Bool _bCase, const ::rtl::OUString& _Name) : OGroup_ADO(_Name,_bCase),m_pCatalog(_pParent)
@@ -126,7 +125,6 @@ OAdoGroup::OAdoGroup(OCatalog* _pParent,sal_Bool _bCase, const ::rtl::OUString& 
     construct();
     m_aGroup.Create();
     m_aGroup.put_Name(_Name);
-    refreshUsers();
 }
 // -------------------------------------------------------------------------
 void OAdoGroup::refreshUsers()

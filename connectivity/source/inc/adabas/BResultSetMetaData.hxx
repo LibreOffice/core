@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: BStatement.cxx,v $
+ *  $RCSfile: BResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:49:44 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,34 +58,32 @@
  *
  *
  ************************************************************************/
-#ifndef CONNECTIVITY_ADABAS_STATEMENT_HXX
-#include "adabas/BStatement.hxx"
-#endif
-#ifndef CONNECTIVITY_ADABAS_RESULTSET_HXX
-#include "adabas/BResultSet.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
-#include <com/sun/star/lang/DisposedException.hpp>
+#ifndef CONNECTIVITY_ADABAS_RESULTSETMETADATA_HXX
+#define CONNECTIVITY_ADABAS_RESULTSETMETADATA_HXX
+
+#ifndef _CONNECTIVITY_ODBC_ORESULTSETMETADATA_HXX_
+#include "odbc/OResultSetMetaData.hxx"
 #endif
 
-
-using namespace connectivity::adabas;
-using namespace connectivity::odbc;
-//------------------------------------------------------------------------------
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
-using namespace com::sun::star::container;
-using namespace com::sun::star::io;
-using namespace com::sun::star::util;
-
-// -----------------------------------------------------------------------------
-OResultSet* OAdabasStatement::createResulSet()
+namespace connectivity
 {
-    return new OAdabasResultSet(m_aStatementHandle,this);
+    namespace adabas
+    {
+        //**************************************************************
+        //************ Class: ResultSetMetaData
+        //**************************************************************
+
+        typedef odbc::OResultSetMetaData OAdabasResultSetMetaData_BASE;
+        class OAdabasResultSetMetaData :    public  OAdabasResultSetMetaData_BASE
+        {
+        public:
+            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            OAdabasResultSetMetaData(odbc::OConnection* _pConnection, SQLHANDLE _pStmt );
+            OAdabasResultSetMetaData(odbc::OConnection* _pConnection, SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping);
+            virtual ~OAdabasResultSetMetaData();
+
+            virtual sal_Int32 SAL_CALL getColumnType( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        };
+    }
 }
-// -----------------------------------------------------------------------------
-
-
+#endif // CONNECTIVITY_ADABAS_RESULTSETMETADATA_HXX

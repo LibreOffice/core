@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexColumns.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-08 14:08:31 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _CONNECTIVITY_ADABAS_TABLE_HXX_
 #include "adabas/BTable.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADABAS_CATALOG_HXX_
+#include "adabas/BCatalog.hxx"
+#endif
 
 using namespace connectivity::adabas;
 using namespace connectivity::sdbcx;
@@ -108,10 +111,10 @@ Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
         }
     }
 
-         xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getColumns(Any(),
-        m_pIndex->getTable()->getSchema(),m_pIndex->getTable()->getTableName(),_rName);
+    xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getColumns(Any(),
+            m_pIndex->getTable()->getSchema(),m_pIndex->getTable()->getTableName(),_rName);
 
-        Reference< XNamed > xRet = NULL;
+    Reference< XNamed > xRet = NULL;
     if(xResult.is())
     {
                 Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -119,14 +122,19 @@ Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
         {
             if(xRow->getString(4) == _rName)
             {
+                sal_Int32 nType             = xRow->getInt(5);
+                ::rtl::OUString sTypeName   = xRow->getString(6);
+                sal_Int32 nPrec             = xRow->getInt(7);
+                OAdabasCatalog::correctColumnProperties(nPrec,nType,sTypeName);
+
                 OIndexColumn* pRet = new OIndexColumn(bAsc,
                                                     _rName,
-                                                    xRow->getString(6),
+                                                    sTypeName,
                                                     xRow->getString(13),
                                                     xRow->getInt(11),
-                                                    xRow->getInt(7),
+                                                    nPrec,
                                                     xRow->getInt(9),
-                                                    xRow->getInt(5),
+                                                    nType,
                                                     sal_False,sal_False,sal_False,sal_True);
                 xRet = pRet;
                 break;

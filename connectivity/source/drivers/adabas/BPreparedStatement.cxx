@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BPreparedStatement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:38:44 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,42 +82,9 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
 
-Reference< XResultSet > OAdabasPreparedStatement::getResultSet (sal_Bool checkCount) throw( SQLException)
+// -----------------------------------------------------------------------------
+OResultSet* OAdabasPreparedStatement::createResulSet()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
-
-    if (m_xResultSet.get().is())  // if resultset already retrieved,
-    {
-        // throw exception to avoid sequence error
-        throw SQLException(::rtl::OUString::createFromAscii("Invalid state for getResultSet"),*this,
-            ::rtl::OUString(),0,Any());
-    }
-
-    OAdabasResultSet* pRs = NULL;
-    sal_Int32 numCols = 1;
-
-    // If we already know we have result columns, checkCount
-    // is false.  This is an optimization to prevent unneeded
-    // calls to getColumnCount
-
-    if (checkCount)
-        numCols = getColumnCount ();
-
-    // Only return a result set if there are result columns
-
-    if (numCols > 0)
-    {
-        OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-        pRs = new OAdabasResultSet(m_aStatementHandle,this);
-
-        // Save a copy of our last result set
-        // Changed to save copy at getResultSet.
-        //m_xResultSet = rs;
-    }
-    else
-        clearMyResultSet ();
-
-    return pRs;
+    return new OAdabasResultSet(m_aStatementHandle,this);
 }
+// -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,6 @@ OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection,ADOIndex* _pIndex
     construct();
     m_aIndex = WpADOIndex(_pIndex);
     fillPropertyValues();
-
-    refreshColumns();
 }
 // -------------------------------------------------------------------------
 OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection)
@@ -113,8 +111,6 @@ OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection)
 {
     construct();
     m_aIndex.Create();
-
-    refreshColumns();
 }
 
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2001-05-16 14:43:49 $
+#   last change: $Author: oj $ $Date: 2001-08-02 10:49:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ SLOFILES=\
         $(SLO)$/BDatabaseMetaData.obj			\
         $(SLO)$/BPreparedStatement.obj          \
         $(SLO)$/BStatement.obj                  \
+        $(SLO)$/BResultSetMetaData.obj			\
         $(SLO)$/BResultSet.obj
         
 .IF "$(OS)"=="MACOSX"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKey.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,6 @@ OAdoKey::OAdoKey(sal_Bool _bCase,OConnection* _pConnection, ADOKey* _pKey)
     construct();
     m_aKey = WpADOKey(_pKey);
     fillPropertyValues();
-    refreshColumns();
 }
 // -------------------------------------------------------------------------
 OAdoKey::OAdoKey(sal_Bool _bCase,OConnection* _pConnection)
@@ -105,8 +104,6 @@ OAdoKey::OAdoKey(sal_Bool _bCase,OConnection* _pConnection)
 {
     construct();
     m_aKey.Create();
-
-    refreshColumns();
 }
 // -------------------------------------------------------------------------
 void OAdoKey::refreshColumns()
