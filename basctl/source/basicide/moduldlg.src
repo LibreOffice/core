@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:04:17 $
+ *  last change: $Author: kz $ $Date: 2001-06-21 21:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,12 +518,12 @@ TabPage RID_TP_LIBS
         Text [ finnish ] = "~Salasana" ;
         Text [ danish ] = "Adgangskode..." ;
         Text [ french ] = "Mot de ~passe..." ;
-        Text [ swedish ] = "~Lösenord..." ;
+        Text [ swedish ] = "Lös~enord..." ;
         Text [ dutch ] = "W~achtwoord..." ;
         Text [ spanish ] = "~Contraseña..." ;
         Text [ english_us ] = "~Password..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÃÜÂë(~P)";
+        Text[ chinese_simplified ] = "ÃÜÂë(~P)...";
         Text[ russian ] = "Ïàðîëü...";
         Text[ polish ] = "Has³o...";
         Text[ japanese ] = "Êß½Ü°ÄÞ(~P)...";
@@ -868,5 +868,6 @@ ModalDialog RID_DLG_NEWLIB
         Text[ finnish ] = "~Luo erillinen tiedosto";
     };
 };
+
 
 
