@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuigaldlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:21:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <avmedia/mediawindow.hxx>
 #include <svtools/pathoptions.hxx>
+#include <avmedia/mediawindow.hxx>
 #include "opengrf.hxx"
 #include "impgrf.hxx"
 #include "gallery1.hxx"
@@ -762,7 +764,6 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
 {
     pData = _pData;
 
-    aSound.SetNotifyHdl( LINK( this, TPGalleryThemeProperties, SoundEndHdl ) );
     aPreviewTimer.SetTimeoutHdl( LINK( this, TPGalleryThemeProperties, PreviewTimerHdl ) );
     aPreviewTimer.SetTimeout( 500 );
     aBtnSearch.SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickSearchHdl));
@@ -788,6 +789,8 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
 
 TPGalleryThemeProperties::~TPGalleryThemeProperties()
 {
+    xMediaPlayer.clear();
+
     for( String* pStr = aFoundList.First(); pStr; pStr = aFoundList.Next() )
         delete pStr;
 
@@ -830,10 +833,10 @@ void TPGalleryThemeProperties::FillFilterList()
     String              aName;
     FilterEntry*        pFilterEntry;
     FilterEntry*        pTestEntry;
+    sal_uInt16          i, nKeyCount;
     BOOL                bInList;
 
-    sal_uInt16 i;
-    sal_uInt16 nKeyCount;
+    // graphic filters
     for( i = 0, nKeyCount = pFilter->GetImportFormatCount(); i < nKeyCount; i++ )
     {
         aExt = pFilter->GetImportFormatShortName( i );
@@ -875,44 +878,33 @@ void TPGalleryThemeProperties::FillFilterList()
         }
     }
 
-    String aWildcard;
+    // media filters
+       static const ::rtl::OUString aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
+    ::avmedia::FilterNameVector     aFilters;
+    const ::rtl::OUString           aSeparator( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+    ::rtl::OUString                 aAllTypes;
 
-    pFilterEntry = new FilterEntry;
-    pFilterEntry->aFilterName = String(GAL_RESID(RID_SVXSTR_EXTFORMAT1_SYS));
-#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
-    aWildcard = String(RTL_CONSTASCII_USTRINGPARAM("*.")) + (OUString) String(GAL_RESID(RID_SVXSTR_EXTFORMAT1_SYS));
-#else
-    aWildcard = String(RTL_CONSTASCII_USTRINGPARAM("*.")) + String(GAL_RESID(RID_SVXSTR_EXTFORMAT1_SYS));
-#endif
-    nFirstExtFilterPos = aCbbFileType.InsertEntry( addExtension( String(GAL_RESID(RID_SVXSTR_EXTFORMAT1_UI)),
-                                                                 aWildcard ) );
-    aFilterEntryList.Insert(pFilterEntry, nFirstExtFilterPos);
+    ::avmedia::MediaWindow::getMediaFilters( aFilters );
 
-    pFilterEntry = new FilterEntry;
-    pFilterEntry->aFilterName = String(GAL_RESID(RID_SVXSTR_EXTFORMAT2_SYS));
-#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
-    aWildcard = String(RTL_CONSTASCII_USTRINGPARAM("*.")) + (OUString) String(GAL_RESID(RID_SVXSTR_EXTFORMAT2_SYS));
-#else
-    aWildcard = String(RTL_CONSTASCII_USTRINGPARAM("*.")) + String(GAL_RESID(RID_SVXSTR_EXTFORMAT2_SYS));
-#endif
-    aFilterEntryList.Insert(pFilterEntry, aCbbFileType.InsertEntry( addExtension( String(GAL_RESID(RID_SVXSTR_EXTFORMAT2_UI)),
-                                                                                  aWildcard ) ));
+    for( int i = 0; i < aFilters.size(); ++i )
+    {
+        for( sal_Int32 nIndex = 0; nIndex >= 0; )
+        {
+            ::rtl::OUString aFilterWildcard( aWildcard );
 
-    pFilterEntry = new FilterEntry;
-    pFilterEntry->aFilterName = String(GAL_RESID(RID_SVXSTR_EXTFORMAT3_SYS));
-#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
-    aWildcard = String(RTL_CONSTASCII_USTRINGPARAM("*.")) + (OUString) String(GAL_RESID(RID_SVXSTR_EXTFORMAT3_SYS));
-#else
-    aWildcard = String(RTL_CONSTASCII_USTRINGPARAM("*.")) + String(GAL_RESID(RID_SVXSTR_EXTFORMAT3_SYS));
-#endif
-    aFilterEntryList.Insert(pFilterEntry, aCbbFileType.InsertEntry( addExtension( String(GAL_RESID(RID_SVXSTR_EXTFORMAT3_UI)),
-                                                                                  aWildcard )) );
+            pFilterEntry = new FilterEntry;
+            pFilterEntry->aFilterName = aFilters[ i ].second.getToken( 0, ';', nIndex );
+            nFirstExtFilterPos = aCbbFileType.InsertEntry( addExtension( aFilters[ i ].first,
+                                                                         aFilterWildcard += pFilterEntry->aFilterName ) );
 
-    // 'Alle' als Filter-Auswahl
+            aFilterEntryList.Insert( pFilterEntry, nFirstExtFilterPos );
+        }
+    }
 
-    // compute the extension string for all known import filters
+    // 'All' filters
     String aExtensions;
 
+    // graphic filters
     for ( i = 0; i < nKeyCount; ++i )
     {
         int j = 0;
@@ -925,24 +917,24 @@ void TPGalleryThemeProperties::FillFilterList()
             if ( aExtensions.Search( sWildcard ) == STRING_NOTFOUND )
             {
                 if ( aExtensions.Len() )
-                    aExtensions += sal_Unicode(';');
+                    aExtensions += sal_Unicode( ';' );
+
                 aExtensions += sWildcard;
             }
         }
     }
 
-    if ( aExtensions.Len() )
-        aExtensions += sal_Unicode(';');
+    // media filters
+    for( int i = 0; i < aFilters.size(); ++i )
+    {
+        for( sal_Int32 nIndex = 0; nIndex >= 0; )
+        {
+            if ( aExtensions.Len() )
+                aExtensions += sal_Unicode( ';' );
 
-    aExtensions += String( RTL_CONSTASCII_USTRINGPARAM("*.") );
-    aExtensions += String(GAL_RESID(RID_SVXSTR_EXTFORMAT1_SYS));
-
-    aExtensions += String( RTL_CONSTASCII_USTRINGPARAM(";*.") );
-    aExtensions += String(GAL_RESID(RID_SVXSTR_EXTFORMAT2_SYS));
-
-    aExtensions += String( RTL_CONSTASCII_USTRINGPARAM(";*.") );
-    aExtensions += String(GAL_RESID(RID_SVXSTR_EXTFORMAT3_SYS));
-
+            ( aExtensions += String( aWildcard ) ) += String( aFilters[ i ].second.getToken( 0, ';', nIndex ) );
+        }
+     }
 
 #if defined(WIN) || defined(WNT)
     if ( aExtensions.Len() > 240 )
@@ -1087,7 +1079,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickPreviewHdl, void *, p )
 
         if( !aCbxPreview.IsChecked() )
         {
-            aSound.SetSoundName( String() );
+            xMediaPlayer.clear();
             aWndPreview.SetGraphic( Graphic() );
             aWndPreview.Invalidate();
         }
@@ -1108,14 +1100,19 @@ void TPGalleryThemeProperties::DoPreview()
     {
         Graphic         aGraphic;
         INetURLObject   aURL( *aFoundList.GetObject( aLbxFound.GetEntryPos( aString ) ) );
-        String          aFileExt( aURL.GetExtension().ToLowerAscii() );
-        BOOL            bNoSound1 = ( aFileExt != String( GAL_RESID( RID_SVXSTR_EXTFORMAT1_SYS ) ).ToLowerAscii() );
-        BOOL            bNoSound2 = ( aFileExt != String( GAL_RESID( RID_SVXSTR_EXTFORMAT2_SYS ) ).ToLowerAscii() );
-        BOOL            bNoSound3 = ( aFileExt != String( GAL_RESID( RID_SVXSTR_EXTFORMAT3_SYS ) ).ToLowerAscii() );
 
         bInputAllowed = FALSE;
 
-        if( bNoSound1 && bNoSound2 && bNoSound3 )
+        if( ::avmedia::MediaWindow::isMediaURL( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) )
+        {
+            aGraphic = BitmapEx( GAL_RESID( RID_SVXBMP_GALLERY_MEDIA ) );
+
+            xMediaPlayer = ::avmedia::MediaWindow::createPlayer( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+
+            if( xMediaPlayer.is() )
+                xMediaPlayer->start();
+        }
+        else
         {
             GraphicFilter*  pFilter = GetGrfFilter();
             GalleryProgress aProgress( pFilter );
@@ -1126,14 +1123,6 @@ void TPGalleryThemeProperties::DoPreview()
                 ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTSPATH );
                 GetParent()->EnterWait();
             }
-        }
-        else
-        {
-            Bitmap aBitmap( GAL_RESID( RID_SVXBMP_GALLERY_SOUND_0 ) );
-            BitmapEx aBmpEx( aBitmap, COL_LIGHTMAGENTA );
-            aGraphic = aBmpEx;
-            aSound.SetSoundName( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-            aSound.Play();
         }
 
         aWndPreview.SetGraphic( aGraphic );
@@ -1239,14 +1228,6 @@ IMPL_LINK( TPGalleryThemeProperties, PreviewTimerHdl, void *, p )
 {
     aPreviewTimer.Stop();
     DoPreview();
-    return 0L;
-}
-
-// ------------------------------------------------------------------------
-
-IMPL_LINK( TPGalleryThemeProperties, SoundEndHdl, Sound*, pSound )
-{
-    aSound.SetSoundName( String() );
     return 0L;
 }
 
