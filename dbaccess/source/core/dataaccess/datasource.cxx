@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 07:31:10 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 10:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ const Reference< XNumberFormatsSupplier > & ODatabaseSource::getNumberFormatsSup
     if (!m_xNumberFormatsSupplier.is())
     {
         // the arguments : the locale of the current user
-        UserInformation aUserInfo(m_xServiceFactory);
+        UserInformation aUserInfo;
         Sequence< Any > aArguments(1);
         aArguments.getArray()[0] <<= aUserInfo.getUserLanguage();
 
