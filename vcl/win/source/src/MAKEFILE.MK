@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 17:50:28 $
+#   last change: $Author: obo $ $Date: 2004-09-09 09:20:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,7 +150,13 @@ RCDEPN= 	nullptr.cur 		\
             asnswe.cur			\
             airbrush.cur		\
             vtext.cur			\
-            50.bmp				\
+                        tblsels.cur                     \
+                        tblsele.cur                     \
+                        tblselse.cur                     \
+                        tblselw.cur                     \
+                        tblselsw.cur                     \
+                        pntbrsh.cur                  \
+                        50.bmp                          \
             sd.ico
 
 RCFILES=	salsrc.rc
