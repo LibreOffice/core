@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 13:54:05 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,9 @@
 #ifndef _RTL_BOOTSTRAP_HXX_
 #include <rtl/bootstrap.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
@@ -522,35 +525,46 @@ sal_Bool InitConfiguration()
     return xProvider.is();
 }
 
-static String aBrandName;
-static String aVersion;
-static String aExtension;
-static String aXMLFileFormatVersion;
+namespace
+{
+    struct BrandName
+        : public rtl::Static< String, BrandName > {};
+    struct Version
+        : public rtl::Static< String, Version > {};
+    struct Extension
+        : public rtl::Static< String, Extension > {};
+    struct XMLFileFormatVersion
+        : public rtl::Static< String, XMLFileFormatVersion > {};
+}
 
 void ReplaceStringHookProc( UniString& rStr )
 {
     static int nAll = 0, nPro = 0;
 
-    if ( !aBrandName.Len() )
+    String &rBrandName = BrandName::get();
+    String &rVersion = Version::get();
+    String &rExtension = Extension::get();
+    String &rXMLFileFormatVersion = XMLFileFormatVersion::get();
+    if ( !rBrandName.Len() )
     {
         Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
         rtl::OUString aTmp;
         aRet >>= aTmp;
-        aBrandName = aTmp;
+        rBrandName = aTmp;
 
         aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTXMLFILEFORMATVERSION );
         aRet >>= aTmp;
-        aXMLFileFormatVersion = aTmp;
+        rXMLFileFormatVersion = aTmp;
 
         aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
         aRet >>= aTmp;
-        aVersion = aTmp;
+        rVersion = aTmp;
 
-        if ( !aExtension.Len() )
+        if ( !rExtension.Len() )
         {
             aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTEXTENSION );
             aRet >>= aTmp;
-            aExtension = aTmp;
+            rExtension = aTmp;
         }
     }
 
@@ -558,10 +572,10 @@ void ReplaceStringHookProc( UniString& rStr )
     if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
     {
         nPro++;
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", aBrandName );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", aVersion );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", aExtension );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATVERSION", aXMLFileFormatVersion );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", rBrandName );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATVERSION", rXMLFileFormatVersion );
     }
 }
 
@@ -1537,7 +1551,7 @@ void Desktop::Main()
     // Preload function depends on an initialized sfx application!
     SetSplashScreenProgress(70);
 
-    sal_Bool bUseSystemFileDialog;
+    sal_Bool bUseSystemFileDialog(sal_True);
     if ( pCmdLineArgs->IsHeadless() )
     {
         // Ensure that we use not the system file dialogs as
