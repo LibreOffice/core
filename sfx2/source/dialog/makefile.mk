@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-26 11:16:20 $
+#   last change: $Author: kz $ $Date: 2004-03-01 13:13:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,6 @@ SLOFILES =\
         $(SLO)$/macropg.obj			\
         $(SLO)$/mailchildwin.obj	\
         $(SLO)$/mailwindow.obj		\
-        $(SLO)$/menucfg.obj			\
         $(SLO)$/mgetempl.obj		\
         $(SLO)$/navigat.obj			\
         $(SLO)$/newstyle.obj		\
