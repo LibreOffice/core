@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:19:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,8 +219,9 @@ public:
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =0, FASTBOOL bInReadOnly = FALSE );
 
-    FASTBOOL IsInFrontOfLabel() const;
-    void SetInFrontOfLabel(FASTBOOL bIsInFrontOfLabel); // #i27615#
+
+    inline FASTBOOL IsInFrontOfLabel() const { return bIsInFrontOfLabel; }
+    inline void _SetInFrontOfLabel( FASTBOOL bNew ) { bIsInFrontOfLabel = bNew; }
 
     virtual void SetMark();
     void DeleteMark() { pMark = pPoint; }
