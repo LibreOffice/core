@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:55:52 $
+ *  last change: $Author: fs $ $Date: 2002-12-12 16:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,6 +549,8 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     DBG_ASSERT( _pOriginal, "OControlModel::OControlModel: invalid original!" );
 
     // copy members
+    m_aName = _pOriginal->m_aName;
+    m_aTag = _pOriginal->m_aTag;
     m_nTabIndex = _pOriginal->m_nTabIndex;
     m_nClassId = _pOriginal->m_nClassId;
 
