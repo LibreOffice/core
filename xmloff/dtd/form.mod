@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.14 2003-10-21 08:37:17 obo Exp $
+	$Id: form.mod,v 1.15 2003-12-11 12:06:36 kz Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -56,7 +56,7 @@
 <!ENTITY % controls	"form:text|form:textarea|form:fixed-text|form:file|
 					 form:password|form:formatted-text|form:button|form:image|
 					 form:checkbox|form:radio|form:listbox|form:combobox|form:frame|
-					 form:hidden|form:image-frame|form:grid|form:generic-control">
+					 form:hidden|form:image-frame|form:grid|form:value-range|form:generic-control">
 
 <!ENTITY % name "form:name CDATA #IMPLIED">
 <!ENTITY % service-name "form:service-name CDATA #IMPLIED">
@@ -192,13 +192,12 @@
                               %tab-index;
                               %tab-stop;
                               %title;
+                              %min-value;
+                              %max-value;
                               %value;
                               %convert-empty;
                               %data-field;
                               %linked-cell;>
-
-<!ATTLIST form:formatted-text form:max-value CDATA #IMPLIED>
-<!ATTLIST form:formatted-text form:min-value CDATA #IMPLIED>
 <!ATTLIST form:formatted-text form:validation %boolean; "false">
 
 <!ELEMENT form:fixed-text (form:properties?, office:events?)>
@@ -348,6 +347,27 @@
 
 <!ELEMENT form:generic-control (form:properties?, office:events?)>
 
+<!ELEMENT form:value-range (form:properties?, office:events?)>
+<!ATTLIST form:value-range %disabled;
+                           %printable;
+                           %tab-index;
+                           %tab-stop;
+                           %title;
+                           %min-value;
+                           %max-value;
+                           %current-value;
+                           %value;
+                           %step-size;
+                           %page-step-size;
+                           %delay-for-repeat;
+                           %orientation;>
+
+<!ENTITY % min-value "form:min-value %float; #IMPLIED">
+<!ENTITY % max-value "form:max-value %float; #IMPLIED">
+<!ENTITY % step-size "form:step-size %positiveInteger; '1'">
+<!ENTITY % page-step-size "form:page-step-size %positiveInteger; #IMPLIED">
+<!ENTITY % delay-for-repeat "form:delay-for-repeat %positiveInteger; #IMPLIED">
+<!ENTITY % orientation "form:orientation (horizontal|vertical) #IMPLIED">
 
 <!ELEMENT form:properties (form:property+)>
 <!ELEMENT form:property (form:property-value*)>
