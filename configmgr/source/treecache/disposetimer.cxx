@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-15 16:14:03 $
+ *  last change: $Author: jb $ $Date: 2000-12-18 13:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,11 @@ void OTreeDisposeScheduler::scheduleCleanup(vos::ORef< OOptions > const& _xOptio
 
     osl::MutexGuard aGuard( m_aMutex );
 
+    CFG_TRACE_INFO("Scheduling data cleanup for user '%s' with locale '%s'",
+                    OUSTRING2ASCII(_xOptions->getUser()), OUSTRING2ASCII(_xOptions->getLocale()));
+
+    CFG_TRACE_INFO_NI("- Cleanup will be started in about %d seconds", int(m_aCleanupDelay.getTimeValue().Seconds));
+
     TimeStamp aNewTime = implGetCleanupTime(TimeStamp::getCurrentTime(), m_aCleanupDelay);
     OSL_ASSERT(!aNewTime.isNever());
 
@@ -112,6 +117,9 @@ void OTreeDisposeScheduler::clearTasks(vos::ORef< OOptions > const& _xOptions)
 {
     osl::MutexGuard aOwnGuard( m_aMutex );
 
+    CFG_TRACE_INFO("Cancelling all data cleanup tasks for user '%s' with locale '%s'",
+                    OUSTRING2ASCII(_xOptions->getUser()), OUSTRING2ASCII(_xOptions->getLocale()));
+
     Agenda::iterator it = m_aAgenda.begin();
     while(it != m_aAgenda.end())
     {
@@ -119,6 +127,7 @@ void OTreeDisposeScheduler::clearTasks(vos::ORef< OOptions > const& _xOptions)
         if (equivalentOptions(_xOptions,cur->second))
         {
             m_aAgenda.erase(cur);
+            CFG_TRACE_INFO_NI("- One pending task canceled");
         }
     }
 }
@@ -127,6 +136,10 @@ void OTreeDisposeScheduler::clearTasks(vos::ORef< OOptions > const& _xOptions)
 void OTreeDisposeScheduler::stopAndClearTasks()
 {
     osl::MutexGuard aOwnGuard( m_aMutex );
+
+    CFG_TRACE_INFO("Cancelling all data cleanup tasks, Stopping Cleanup timer");
+    CFG_TRACE_INFO_NI("- %d cleanup tasks were pending", int(m_aAgenda.size()) );
+
     if (m_xTimer.isValid())
     {
         m_xTimer->stop(); // just to be sure
@@ -176,6 +189,8 @@ void OTreeDisposeScheduler::onTimerShot()
 {
     //m_aTimer.stop();
 
+    CFG_TRACE_INFO("Cleanup Timer invoked - executing dispose task");
+
     TimeStamp aActualTime = TimeStamp::getCurrentTime();
     TimeStamp aNextTime = implGetCleanupTime(aActualTime, getCleanupInterval());
 
@@ -218,11 +233,18 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
     vos::ORef< OOptions > xTask = this->getTask( _aActualTime, aNextTime );
     if (xTask.isValid())
     {
+        CFG_TRACE_INFO("Found cleanup task for user %s and locale %s",
+                        OUSTRING2ASCII(xTask->getUser()), OUSTRING2ASCII(xTask->getLocale()));
+
         if (TreeInfo* pInfo = m_rTreeManager.requestTreeInfo(xTask,false))
         {
+            CFG_TRACE_INFO_NI("- Found matching data container (TreeInfo) - collecting data");
+
             TreeInfo::DisposeList aDisposeList;
 
             TimeStamp aNextTaskTime = pInfo->runDisposer(aDisposeList, _aActualTime);
+
+            CFG_TRACE_INFO_NI("- Found %d module trees to dispose", int(aDisposeList.size()) );
 
             if (!aNextTaskTime.isNever())
             {
@@ -231,11 +253,15 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
                 // repost with new time
                 osl::MutexGuard aOwnGuard( m_aMutex );
 
+                CFG_TRACE_INFO_NI("- Rescheduling current option set" );
+
                 aNextTime = this->implAddTask(xTask,aNextTaskTime);
             }
 
             else if (pInfo->isEmpty())// may have been the last one - check that
             {
+                CFG_TRACE_INFO_NI("- Disposing last data for this options set => Removing TreeInfo" );
+
                 // get rid of it - see TreeManager::disposeOne
                 std::auto_ptr<TreeInfo> pDisposeInfo(pInfo);
 
@@ -250,6 +276,8 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
                 OSL_ENSURE(pInfo->m_aNotificationList.empty(),
                             "WARNING: Empty TreeInfo still has notifications registered - will be leaked");
             }
+            else
+                CFG_TRACE_INFO_NI("- Currently no more cleanup tasks for this options set" );
 
             // clear the guard and throw away the nodes
             aGuard.clear();
@@ -259,11 +287,19 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
                 uno::Sequence< OUString > aCloseList = TreeInfo::collectNodeIds(aDisposeList);
                 if (m_rTreeManager.m_pSession && aCloseList.getLength() > 0)
                 {
+                    CFG_TRACE_INFO_NI("- Closing %d NodeIds", int(aCloseList.getLength()) );
                     m_rTreeManager.closeNodes(aCloseList,xTask);
                 }
+                CFG_TRACE_INFO_NI("- Now disposing %d module trees", int(aDisposeList.size()) );
             }
+            else
+                CFG_TRACE_INFO_NI("- No modules trees to dispose");
         }
+        else
+            CFG_TRACE_INFO_NI("- No matching data container (TreeInfo) found - task is obsolete");
     }
+    else
+        CFG_TRACE_INFO("No eligible task found - may reschedule");
 
     return aNextTime;
 }
@@ -293,12 +329,15 @@ void OTreeDisposeScheduler::implStartBefore(TimeStamp const& _aTime)
 
             OSL_ASSERT( m_xTimer->isTicking() && getExpirationTime(*m_xTimer) <= _aTime );
         }
+        CFG_TRACE_INFO_NI("- Cleanup timer running - next execution in %d seconds", int (m_xTimer->getRemainingTime().Seconds) );
+        CFG_TRACE_INFO_NI("- %d cleanup tasks are pending", int(m_aAgenda.size()) );
     }
     else
     {
         if (!m_xTimer.isEmpty())
         {
             m_xTimer->stop();
+            CFG_TRACE_INFO_NI("- Stopped timer - no more open cleanup tasks");
         }
     }
 }
