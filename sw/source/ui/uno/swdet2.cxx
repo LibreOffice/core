@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdet2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:34:00 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,187 +117,76 @@ extern const char __FAR_DATA sHTML[];
 
 ULONG SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter )
 {
-    SfxFilterFlags nMust = SFX_FILTER_IMPORT;
-    SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED;
     ULONG nRet = ERRCODE_NONE;
-    const SfxFilter* pSavFilter = *ppFilter;
+    if( *ppFilter )
+    {
+        // verify the given filter
+        String aPrefFlt = (*ppFilter)->GetUserData();
 
-    do {
-            // dann ueberpruefe mal ob der richtige ausgewaehlt wurde
-        if( *ppFilter )
+        // detection for TextFilter needs an additional checking
+        BOOL bTxtFilter = aPrefFlt.EqualsAscii( FILTER_TEXT, 0, 4 );
+        BOOL bDetected = SwIoSystem::IsFileFilter( rMedium, aPrefFlt );
+        if (!bTxtFilter && bDetected )
+            return nRet;
+        else if (bTxtFilter)
         {
-            const String& rUData = (*ppFilter)->GetUserData();
-
-            BOOL bTxtFilter = rUData.EqualsAscii( FILTER_TEXT, 0, 4 );
-
-            if (SwIoSystem::IsFileFilter( rMedium, rUData ) && !bTxtFilter)
-                break;
-
-            //JP 08.06.98: Bugfix 50498
-            if (bTxtFilter)
-            {
-                //JP 09.11.98: der SWDOS - Filter hat dieselbe Extension und
-                // wird vom SFX vorgeschlagen. Das es auch eine Textdatei ist,
-                // muss die hier ausgefilter werden!
-                if (SwIoSystem::IsFileFilter( rMedium, C2S("SW6"), ppFilter))
-                    break;
-            }
+            // #50498#: SWDOS uses "txt" extension - so a file detected as "Text" could
+            // also be an SWDOS file
+            if (SwIoSystem::IsFileFilter( rMedium, C2S("SW6"), ppFilter))
+                return nRet;
         }
+        else if ( !bDetected )
+            // mba: don't guess filters, only verify it
+            return ERRCODE_ABORT;
+    }
 
-        if( SFX_FILTER_TEMPLATE & nMust )
+    // mba: without preselection there is no PrefFlt
+    String aPrefFlt;
+    const SfxFilter* pTmp = SwIoSystem::GetFileFilter( rMedium.GetPhysicalName(), aPrefFlt, &rMedium );
+    if( !pTmp )
+        return ERRCODE_ABORT;
+    /*
+    else if( *ppFilter && (*ppFilter)->GetUserData().EqualsAscii( "W4W", 0, 3 )
+                && pTmp->GetUserData().EqualsAscii( FILTER_TEXT, 0, 4 ) )
+    {
+        // Bug 95262 - if the user (or short  detect) select a
+        //              Word 4 Word filter, but the autodect of mastersoft
+        //              can't detect it, we normally return the ascii filter
+        //              But the user may have a change to use the W4W filter,
+        //              so the SFX must show now a dialog with the 2 filters
+        nRet = ERRCODE_SFX_CONSULTUSER;
+        *ppFilter = pTmp;
+    } */
+
+    // sollte der voreingestellte Filter ASCII sein und wir haben
+    // ASCII erkannt, dann ist das ein gultiger Filter, ansonsten ist das
+    // ein Fehler und wir wollen die Filterbox sehen
+    /*
+    else if( pTmp->GetUserData().EqualsAscii( FILTER_TEXT ) )
+    {
+        // Bug 28974: "Text" erkannt, aber "Text Dos" "Text ..." eingestellt
+        //  -> keine FilterBox, sondern den eingestellten Filter benutzen
+        if( *ppFilter && (*ppFilter)->GetUserData().EqualsAscii( FILTER_TEXT, 0, 4 ) )
+            ;
+        else
+//          if( !*ppFilter || COMPARE_EQUAL != pTmp->GetUserData().Compare((*ppFilter)->GetUserData(), 4 ))
         {
-            // nur einen Vorlagen Filter
-            BOOL bStorage = rMedium.IsStorage();
-            if( bStorage && *ppFilter )
-                break;
-            else if( bStorage &&
-                ( SwIoSystem::IsFileFilter( rMedium, C2S(FILTER_XMLV), ppFilter ) ||
-                  SwIoSystem::IsFileFilter( rMedium, C2S(FILTER_SW5V), ppFilter ) ||
-                  SwIoSystem::IsFileFilter( rMedium, C2S(FILTER_SW4V), ppFilter ) ||
-                  SwIoSystem::IsFileFilter( rMedium, C2S(FILTER_SW3V), ppFilter ) ||
-                  SwIoSystem::IsFileFilter( rMedium, C2S(FILTER_XMLVW), ppFilter ) ||
-                  SwIoSystem::IsFileFilter( rMedium, C2S(FILTER_SWW5V), ppFilter ) ||
-                  SwIoSystem::IsFileFilter( rMedium, C2S(FILTER_SWW4V), ppFilter ) ))
-                break;
-            else if( !bStorage &&
-                SwIoSystem::IsFileFilter( rMedium, C2S(FILTER_SWGV), ppFilter ) )
-                break;
-
-            nRet = ERRCODE_ABORT;
-            break;
-        }
-
-
-        String aPrefFlt;
-        if( *ppFilter )
-        {
-            aPrefFlt = (*ppFilter)->GetUserData();
-            if( SwIoSystem::IsFileFilter( rMedium, aPrefFlt ) )
-            {
-                nRet = ERRCODE_NONE;
-                break;
-            }
-
-            // beim Browsen soll keine Filterbox kommen, wenn das Dokument nicht
-            // in den ersten paar Bytes HTML-Tags hat (MA/ST/...). Solche Dok.
-            // erzeugen z.B. SearchEngines
-//JP 20.07.00: from now on we are not a browser
-//          else if( aPrefFlt == C2S(sHTML) )
-//          {
-//              nRet = ERRCODE_NONE;
-//              break;
-//          }
-        }
-
-        const SfxFilter* pTmp = SwIoSystem::GetFileFilter( rMedium.GetPhysicalName(),
-                                                            aPrefFlt, &rMedium );
-        if( !pTmp )
-            nRet = ERRCODE_ABORT;
-
-
-        else if( *ppFilter && (*ppFilter)->GetUserData().EqualsAscii( "W4W", 0, 3 )
-                    && pTmp->GetUserData().EqualsAscii( FILTER_TEXT, 0, 4 ) )
-        {
-            // Bug 95262 - if the user (or short  detect) select a
-            //              Word 4 Word filter, but the autodect of mastersoft
-            //              can't detect it, we normally return the ascii filter
-            //              But the user may have a change to use the W4W filter,
-            //              so the SFX must show now a dialog with the 2 filters
-            nRet = ERRCODE_SFX_CONSULTUSER;
+//              nRet = ERRCODE_ABORT;
             *ppFilter = pTmp;
         }
-        // sollte der voreingestellte Filter ASCII sein und wir haben
-        // ASCII erkannt, dann ist das ein gultiger Filter, ansonsten ist das
-        // ein Fehler und wir wollen die Filterbox sehen
-        else if( pTmp->GetUserData().EqualsAscii( FILTER_TEXT ))
-        {
-            // Bug 28974: "Text" erkannt, aber "Text Dos" "Text ..." eingestellt
-            //  -> keine FilterBox, sondern den eingestellten Filter benutzen
-            if( *ppFilter && (*ppFilter)->GetUserData().EqualsAscii( FILTER_TEXT, 0, 4 ))
-                ;
-            else
-//          if( !*ppFilter || COMPARE_EQUAL != pTmp->GetUserData().Compare(
-//              (*ppFilter)->GetUserData(), 4 ))
-            {
-//              nRet = ERRCODE_ABORT;
-                *ppFilter = pTmp;
-            }
-        }
-        else
-        {
-            //Bug 41417: JP 09.07.97: HTML auf die WebDocShell defaulten
-            SfxFilterContainer aFilterContainer( String::CreateFromAscii("swriter/web") );
-            if( pTmp->GetUserData() != C2S(sHTML) ||
-                String::CreateFromAscii( "com.sun.star.text.WebDocument" ) ==
-                String( pTmp->GetServiceName() ) ||
-                0 == ( (*ppFilter) = SwIoSystem::GetFilterOfFormat( C2S(sHTML),
-                     &aFilterContainer ) ) )
-                *ppFilter = pTmp;
-        }
-
-    } while( FALSE );
-
-    if( ERRCODE_NONE == nRet && (
-        nMust != ( (*ppFilter)->GetFilterFlags() & nMust ) ||
-        0 != ( (*ppFilter)->GetFilterFlags() & nDont )) )
+    } */
+    else
     {
-        nRet = ERRCODE_ABORT;
-        *ppFilter = pSavFilter;
-    }
-    return nRet;
-}
-
-//-------------------------------------------------------------------------
-
-ULONG SwFilterDetect::GlobDetectFilter( SfxMedium& rMedium, const SfxFilter **ppFilter )
-{
-    SfxFilterFlags nMust = SFX_FILTER_IMPORT;
-    SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED;
-    ULONG nRet = ERRCODE_ABORT;
-    const SfxFilter* pSavFilter = *ppFilter;
-    do {
-            // dann ueberpruefe mal ob der richtige ausgewaehlt wurde
-        if( rMedium.IsStorage() )
-        {
-            uno::Reference < embed::XStorage > aStg = rMedium.GetStorage();
-
-            if( *ppFilter &&
-                aStg.is() &&
-                SwIoSystem::IsValidStgFilter( aStg, **ppFilter ))
-            {
-                nRet = ERRCODE_NONE;
-                break;
-            }
-
-            if( SFX_FILTER_TEMPLATE & nMust )
-                break;
-
-            const SfxFilterMatcher aMatcher( String::CreateFromAscii("swriter/GlobalDocument") );
-            SfxFilterMatcherIter aIter( &aMatcher );
-            const SfxFilter* pFltr = aIter.First();
-            while ( pFltr )
-            {
-                if( (sal_Unicode)'C' == pFltr->GetUserData().GetChar(0) &&
-                    aStg.is() && SwIoSystem::IsValidStgFilter( aStg, *pFltr ) )
-                {
-                    *ppFilter = pFltr;
-                    nRet = ERRCODE_NONE;
-                    break;
-                }
-
-                pFltr = aIter.Next();
-            }
-        }
-
-    } while( FALSE );
-
-    if( ERRCODE_NONE == nRet && (
-        nMust != ( (*ppFilter)->GetFilterFlags() & nMust ) ||
-        0 != ( (*ppFilter)->GetFilterFlags() & nDont )) )
-    {
-        nRet = ERRCODE_ABORT;
-        *ppFilter = pSavFilter;
+        //Bug 41417: JP 09.07.97: HTML documents should be loaded by WebWriter
+        SfxFilterContainer aFilterContainer( String::CreateFromAscii("swriter/web") );
+        if( pTmp->GetUserData() != C2S(sHTML) ||
+            String::CreateFromAscii( "com.sun.star.text.WebDocument" ) ==
+            String( pTmp->GetServiceName() ) ||
+            0 == ( (*ppFilter) = SwIoSystem::GetFilterOfFormat( C2S(sHTML),
+                    &aFilterContainer ) ) )
+            *ppFilter = pTmp;
     }
 
     return nRet;
 }
+
