@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:58:17 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1892,3 +1892,52 @@ void SfxObjectShell::SetCreateMode_Impl( SfxObjectCreateMode nMode )
     eCreateMode = nMode;
 }
 
+BOOL SfxObjectShell::IsInPlaceActive()
+{
+    if ( eCreateMode != SFX_CREATE_MODE_EMBEDDED )
+        return FALSE;
+
+    if ( GetInPlaceObject() && GetInPlaceObject()->GetProtocol().IsInPlaceActive() )
+        return TRUE;
+
+    if ( SfxViewFrame::GetFirst( this, 0, FALSE ) )
+    {
+        SfxFrame* pFrame = SfxViewFrame::GetFirst( this, 0, FALSE )->GetFrame();
+        Window* pWindow = &pFrame->GetWindow();
+        while ( pWindow )
+        {
+            if ( pWindow->IsSystemWindow() && ( pWindow->GetStyle() & WB_CLOSEABLE ) )
+                return FALSE;
+            pWindow = pWindow->GetParent();
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+BOOL SfxObjectShell::IsUIActive()
+{
+    if ( eCreateMode != SFX_CREATE_MODE_EMBEDDED )
+        return FALSE;
+
+    if ( GetInPlaceObject() && GetInPlaceObject()->GetProtocol().IsUIActive() )
+        return TRUE;
+
+    if ( SfxViewFrame::GetFirst( this, 0, FALSE ) )
+    {
+        SfxFrame* pFrame = SfxViewFrame::GetFirst( this, 0, FALSE )->GetFrame();
+        Window* pWindow = &pFrame->GetWindow();
+        while ( pWindow )
+        {
+            if ( pWindow->IsSystemWindow() && ( pWindow->GetStyle() & WB_CLOSEABLE ) )
+                return FALSE;
+            pWindow = pWindow->GetParent();
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
