@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-19 15:38:54 $
+ *  last change: $Author: hdu $ $Date: 2001-02-27 18:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,18 +548,23 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
             // requesting a font provided by builtin rasterizer
             mpServerSideFont = GlyphCache::GetInstance().CacheFont( *pEntry );
 #ifdef USE_PSPRINT
-            if( m_pPrinterGfx != NULL && mpServerSideFont )
+            if( (m_pPrinterGfx != NULL) && (mpServerSideFont != NULL) )
             {
                 // we need to notify printergfx of the font change
-                if( const ::rtl::OString* pOString = mpServerSideFont->GetFontFileName() )
+                int nFontId = mpServerSideFont->GetFontId();
+                if( nFontId <= 0 )
                 {
-                    // we have a fontfile the printfontmanager should know about
-                    ::rtl::OUString aFontFileName =  OStringToOUString( *pOString, RTL_TEXTENCODING_UNICODE );
-                    int nFaceNum = mpServerSideFont->GetFontFaceNumber();
-                    psp::PrintFontManager& rPSPFontManager = psp::PrintFontManager::get();
-                    if( int nID = rPSPFontManager.addFontFile( aFontFileName, nFaceNum ) )
-                        m_pPrinterGfx->SetFont( nID, pEntry->mnHeight, pEntry->mnOrientation );
+                    if( const ::rtl::OString* pOString = mpServerSideFont->GetFontFileName() )
+                    {
+                        // we have a font file the printfontmanager should know about
+                        ::rtl::OUString aFontFileName = OStringToOUString( *pOString, RTL_TEXTENCODING_UNICODE );
+                        int nFaceNum = mpServerSideFont->GetFontFaceNumber();
+                        psp::PrintFontManager& rPSPFontManager = psp::PrintFontManager::get();
+                        nFontId = rPSPFontManager.addFontFile( aFontFileName, nFaceNum );
+                        mpServerSideFont->SetFontId( nFontId );
+                    }
                 }
+                m_pPrinterGfx->SetFont( nFontId, pEntry->mnHeight, pEntry->mnOrientation );
             }
 #endif // USE_PSPRINT
             return;
@@ -830,7 +835,7 @@ static void DrawServerAAFontString( ServerFont* pServerFont,
     }
 
     Visual* pVisual = DefaultVisual( pDisplay, 0 );
-    XRenderPictFormat*  pVisualFormat =  (*aX11GlyphPeer.pXRenderFindVisualFormat)( pDisplay, pVisual );
+    XRenderPictFormat* pVisualFormat = (*aX11GlyphPeer.pXRenderFindVisualFormat)( pDisplay, pVisual );
 
     static Pixmap aPixmap = NULL;
     static Picture aSrc = NULL;
@@ -866,8 +871,8 @@ static void DrawServerAAFontString( ServerFont* pServerFont,
 
     // draw the string
     GlyphSet aGlyphSet = aX11GlyphPeer.GetGlyphSet( *pServerFont );
-    (*aX11GlyphPeer.pXRenderCompositeString16)( pDisplay, PictOpOver, aSrc, aDst,
-        0, aGlyphSet, 0, 0, nX, nY, pGlyphString, nLength );
+    (*aX11GlyphPeer.pXRenderCompositeString16)( pDisplay, PictOpOver,
+        aSrc, aDst, 0, aGlyphSet, 0, 0, nX, nY, pGlyphString, nLength );
 
     // cleanup
     (*aX11GlyphPeer.pXRenderFreePicture)( pDisplay, aDst );
@@ -891,24 +896,31 @@ static void DrawServerFontString( ServerFont* pServerFont,
 
     XGCValues aGCVal;
     aGCVal.fill_style = FillStippled;
-    GC tmpGC = XCreateGC( pDisplay, nDrawable, GCFillStyle, &aGCVal );
-    XCopyGC( pDisplay, nGC, ~GCFillStyle, tmpGC);
+    aGCVal.line_width = 0;
+    GC tmpGC = XCreateGC( pDisplay, nDrawable, GCFillStyle|GCLineWidth, &aGCVal );
+    XCopyGC( pDisplay, nGC, (1<<GCLastBit)-(1+GCFillStyle+GCLineWidth), tmpGC );
 
     for( int i = 0; i < nLength; ++i )
     {
         const int nGlyphIndex = pServerFont->GetGlyphIndex( pStr[i] );
 
         Pixmap aStipple = aX11GlyphPeer.GetPixmap( *pServerFont, nGlyphIndex );
-
         const GlyphMetric& rGM  = pServerFont->GetGlyphMetric( nGlyphIndex );
-        const int nDestX        = aPos.X() + rGM.GetOffset().X();
-        const int nDestY        = aPos.Y() + rGM.GetOffset().Y();
-        const int nWidth        = rGM.GetSize().Width();
-        const int nHeight       = rGM.GetSize().Height();
 
-        XSetStipple( pDisplay, tmpGC, aStipple );
-        XSetTSOrigin( pDisplay, tmpGC, nDestX, nDestY );
-        XFillRectangle( pDisplay, nDrawable, tmpGC, nDestX, nDestY, nWidth, nHeight );
+        if( aStipple != None )
+        {
+            const int nDestX    = aPos.X() + rGM.GetOffset().X();
+            const int nDestY    = aPos.Y() + rGM.GetOffset().Y();
+
+            aGCVal.stipple      = aStipple;
+            aGCVal.ts_x_origin  = nDestX;
+            aGCVal.ts_y_origin  = nDestY;
+            XChangeGC( pDisplay, tmpGC, GCStipple|GCTileStipXOrigin|GCTileStipYOrigin, &aGCVal );
+
+            const int nWidth    = rGM.GetSize().Width();
+            const int nHeight   = rGM.GetSize().Height();
+            XFillRectangle( pDisplay, nDrawable, tmpGC, nDestX, nDestY, nWidth, nHeight );
+        }
 #if 1
         aPos += rGM.GetDelta();
 #else
@@ -1232,6 +1244,7 @@ SalGraphics::SetFont( ImplFontSelectData *pEntry )
     {
     #endif
 
+
     maGraphicsData.SetFont( pEntry );
     return _IsPrinter() ? SAL_SETFONT_USEDRAWTEXTARRAY : 0;
 
@@ -1369,6 +1382,27 @@ ToFontFamily (psp::family::type eFamily)
     return FAMILY_DONTKNOW;
 }
 
+static void SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& rData )
+{
+    rData.meFamily      = ToFontFamily (aInfo.m_eFamilyStyle);
+    rData.meWeight      = ToFontWeight (aInfo.m_eWeight);
+    rData.meItalic      = ToFontItalic (aInfo.m_eItalic);
+    rData.meWidthType   = ToFontWidth  (aInfo.m_eWidth);
+    rData.mePitch       = ToFontPitch  (aInfo.m_ePitch);
+    rData.meCharSet     = aInfo.m_aEncoding;
+    rData.maName        = aInfo.m_aFamilyName;
+    rData.meScript      = SCRIPT_DONTKNOW;
+    /*rData.maStyleName = XXX */
+
+    rData.mnWidth       = 0;
+    rData.mnHeight      = 0;
+    rData.mbOrientation = TRUE;
+    rData.mnQuality     = aInfo.m_eType == psp::fonttype::Builtin ? 1024 : 0;
+    rData.mnVerticalOrientation= 0;
+    rData.meType        = TYPE_SCALABLE;
+    rData.mbDevice      = aInfo.m_eType == psp::fonttype::Builtin;
+}
+
 #endif /* USE_PSPRINT */
 
 // ----------------------------------------------------------------------------
@@ -1376,7 +1410,7 @@ ToFontFamily (psp::family::type eFamily)
 void
 SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
-    #if defined(USE_PSPRINT)
+#if defined(USE_PSPRINT)
     if (maGraphicsData.m_pJobData != NULL)
     {
         ::std::list< psp::fontID > aList;
@@ -1391,61 +1425,55 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
             if (rMgr.getFontFastInfo (*it, aInfo))
             {
                 ImplFontData *pFontData = new ImplFontData;
+                SetImplFontData( aInfo, *pFontData );
                 pFontData->mpSysData = (void*)*it;
-
-                pFontData->meFamily             = ToFontFamily (aInfo.m_eFamilyStyle);
-                pFontData->meWeight             = ToFontWeight (aInfo.m_eWeight);
-                pFontData->meItalic                 = ToFontItalic (aInfo.m_eItalic);
-                    pFontData->meWidthType          = ToFontWidth  (aInfo.m_eWidth);
-                pFontData->mePitch                  = ToFontPitch  (aInfo.m_ePitch);
-                pFontData->meCharSet            = aInfo.m_aEncoding;
-                pFontData->maName           = aInfo.m_aFamilyName;
-                pFontData->meScript         = SCRIPT_DONTKNOW;
-                /* pFontData->maStyleName  = XXX */
-
-                pFontData->mnWidth          = 0;
-                pFontData->mnHeight         = 0;
-                pFontData->mbOrientation        = TRUE;
-                pFontData->mnQuality            = aInfo.m_eType == psp::fonttype::Builtin ? 1024 : 0;
-                pFontData->mnVerticalOrientation= 0;
-                pFontData->meType               = TYPE_SCALABLE;
-                pFontData->mbDevice             = aInfo.m_eType == psp::fonttype::Builtin;
-
-#ifdef DEBUG
-                if( pFontData->maName.EqualsIgnoreCaseAscii( "helvetica" ) )
-                {
-                    fprintf( stderr, "" );
-                }
-#endif
                 pList->Add( pFontData );
             }
         }
     }
     else
+#endif
     {
-    #endif
 
-    XlfdStorage* pFonts = _GetDisplay()->GetXlfdList();
+        XlfdStorage* pFonts = _GetDisplay()->GetXlfdList();
 
-    for ( int nIdx = 0; nIdx < pFonts->GetCount(); nIdx++ )
-    {
-        ImplFontData *pFontData = new ImplFontData;
-        pFonts->Get(nIdx)->ToImplFontData( pFontData );
-        pList->Add( pFontData );
-    }
+        for ( int nIdx = 0; nIdx < pFonts->GetCount(); nIdx++ )
+        {
+            ImplFontData *pFontData = new ImplFontData;
+            pFonts->Get(nIdx)->ToImplFontData( pFontData );
+            pList->Add( pFontData );
+        }
 
 #ifdef USE_BUILTIN_RASTERIZER
         aX11GlyphPeer.SetDisplay( maGraphicsData.GetXDisplay() );
-#endif // USE_BUILTIN_RASTERIZER
+        GlyphCache::EnsureInstance( aX11GlyphPeer, false );
+        GlyphCache& rGC = GlyphCache::GetInstance();
 
-    #if defined(USE_PSPRINT)
+        ::std::list< psp::fontID > aList;
+        ::std::list< psp::fontID >::iterator it;
+        const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+        rMgr.getFontList( aList );
+        for( it = aList.begin(); it != aList.end(); ++it )
+        {
+            psp::FastPrintFontInfo aInfo;
+            if( rMgr.getFontFastInfo( *it, aInfo ) )
+            {
+                ImplFontData aFontData;
+                SetImplFontData( aInfo, aFontData );
+                aFontData.mnQuality += 4096;    // prefer to X11 fonts
+                aFontData.mbDevice  = TRUE;
+                ::rtl::OUString aTmpName( rMgr.getFontFileSysPath( aInfo.m_nID ) );
+                String aFontFileName( aTmpName.getStr(), aTmpName.getLength() );
+                int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
+                if( nFaceNum < 0 )
+                    nFaceNum = 0;
+                rGC.AddFontFile( aFontFileName, nFaceNum, aInfo.m_nID, &aFontData );
+            }
+        }
+
+        rGC.FetchFontList( pList );
+#endif // USE_BUILTIN_RASTERIZER
     }
-    #endif
-
-#ifdef USE_BUILTIN_RASTERIZER
-    GlyphCache::EnsureInstance( aX11GlyphPeer );
-    GlyphCache::GetInstance().FetchFontList( pList );
-#endif // USE_BUILTIN_RASTERIZER
 }
 
 // ----------------------------------------------------------------------------
@@ -1563,6 +1591,7 @@ InitializeWidthArray( long *pWidthArray, sal_Size nItems, int nValue = 0  )
 // ---------------------------------------------------------------------------
 
 long
+
 SalGraphics::GetCharWidth( USHORT nChar1, USHORT nChar2, long  *pWidthAry )
 {
 #ifdef USE_BUILTIN_RASTERIZER
