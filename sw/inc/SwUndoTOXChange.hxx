@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwUndoTOXChange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:56:15 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _SW_UNDO_TOX_CHANGE_HXX
 #define _SW_UNDO_TOX_CHANGE_HXX
-
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
 #endif
@@ -72,6 +71,8 @@
 class SwUndoTOXChange : public SwUndo
 {
     SwTOXBase * pTOX, aOld, aNew;
+
+    void UpdateTOXBaseSection();
 
 public:
     SwUndoTOXChange(SwTOXBase * pTOX, const SwTOXBase & rNew);
