@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:28:18 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,7 +691,13 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
 
         pPict->SeekRel( 8 );
         nDataSize += 46;
-        aBitmap = Bitmap( Size( nWidth, nHeight ), ( nPixelSize > 8 ) ? 24 : nPixelSize );
+
+        sal_uInt16 nDstBitCount = nPixelSize;
+        if ( nDstBitCount > 8 )
+            nDstBitCount = 24;
+        else if ( nDstBitCount == 2 )
+            nDstBitCount = 4;
+        aBitmap = Bitmap( Size( nWidth, nHeight ), nDstBitCount );
 
         if ( ( pAcc = aBitmap.AcquireWriteAccess() ) == NULL )
             BITMAPERROR;
