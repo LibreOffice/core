@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleTableCellView.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pjunck $
+ *  last change: $Author: kz $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ import com.sun.star.uno.XInterface;
 * Test of accessible object for the table cell of a text document.<p>
 * Object implements the following interfaces :
 * <ul>
-*  <li> <code>drafts::com::sun::star::accessibility::XAccessible</code></li>
+*  <li> <code>::com::sun::star::accessibility::XAccessible</code></li>
 * </ul>
 * @see com.sun.star.accessibility.XAccessible
 */
