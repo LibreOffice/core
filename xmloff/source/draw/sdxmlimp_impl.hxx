@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:34:30 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 19:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ enum SdXMLMasterPageElemTokenMap
 enum SdXMLMasterPageAttrTokenMap
 {
     XML_TOK_MASTERPAGE_NAME,
+    XML_TOK_MASTERPAGE_DISPLAY_NAME,
     XML_TOK_MASTERPAGE_PAGE_MASTER_NAME,
     XML_TOK_MASTERPAGE_STYLE_NAME,
     XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME
