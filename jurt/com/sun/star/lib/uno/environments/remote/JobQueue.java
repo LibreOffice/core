@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 11:56:03 $
+ *  last change: $Author: kr $ $Date: 2001-05-17 12:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.13 $ $ $Date: 2001-05-04 11:56:03 $
+ * @version     $Revision: 1.14 $ $ $Date: 2001-05-17 12:55:05 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -94,7 +94,7 @@ public class JobQueue {
     /**
      * When set to true, enables various debugging output.
      */
-    public static final boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     /**
      * E.g. to get privleges for security managers, it is
@@ -102,75 +102,66 @@ public class JobQueue {
      */
     static public IInvokeHook __JobDispatcher_run_hook;
 
-    static protected int __instances;
-
     protected Job _head;                 // the head of the job list
     protected Job _tail;                 // the tail of the job list
-    protected Job _current;              // the current executing job
 
-    protected ThreadID  _threadId;       // the thread id of the queue
-    protected int       _add_count = 0;  // the stack deepness
+    protected ThreadId  _threadId;       // the thread id of the queue
+    protected int       _ref_count = 0;  // the stack deepness
     protected boolean   _createThread;   // create a worker thread, if needed
     protected boolean   _createThread_now;   // create a worker thread, if needed
     protected Thread    _worker_thread;  // the thread that does the jobs
 
-    protected Hashtable _disposeIds = new Hashtable();       // disposeIds for disposing
+    protected Object    _disposeId; // the active dispose id
+    protected Object    _doDispose = null;
+    protected Throwable _throwable;
 
     protected JobQueue  _async_jobQueue; // chaining job qeueus for asyncs
     protected JobQueue  _sync_jobQueue;  // chaining job qeueus for syncs
 
     protected boolean _active = false;
 
-    protected JavaThreadPool _javaThreadPool;
-
-    // statistics
-    protected int _async_threads_created;
-    protected int _sync_threads_created;
-    protected int _async_jobs_queued;
-    protected int _sync_jobs_queued;
-
-    class MutableInt {
-        int _value;
-    }
+    protected JavaThreadPoolFactory _javaThreadPoolFactory;
 
     /**
      * A thread for dispatching jobs
      */
     class JobDispatcher extends Thread implements IInvokable {
-        JobDispatcher() {
+        Object _disposeId;
+
+        JobDispatcher(Object disposeId) {
             if(DEBUG) System.err.println("JobQueue$JobDispatcher.<init>:" + _threadId);
 
-            if(_sync_jobQueue == null)
-                ++ _sync_threads_created;
-            else
-                ++ _sync_jobQueue._async_threads_created;
+            _disposeId = disposeId;
         }
 
-        ThreadID getThreadId() {
+        ThreadId getThreadId() {
             return _threadId;
         }
 
         public Object invoke(Object params[]) {
             try {
-                _javaThreadPool.enter(5000);
+                  enter(2000, _disposeId);
             }
-            catch(Throwable exception) {
-//              catch(java.lang.Exception exception) {
+            catch(Throwable throwable) {
                 if(_head != null || _active) { // there was a job in progress, so give a stack
-                    System.err.println(getClass().getName() + " - exception occurred:" + exception);
-                    exception.printStackTrace(System.err);
+                    System.err.println(getClass().getName() + " - exception occurred:" + throwable);
+                    throwable.printStackTrace(System.err);
                 }
+            }
+            finally {
+                release();
             }
 
             return null;
         }
 
         public void run() {
-            if(DEBUG) System.err.println("ThreadPool$JobDispatcher.run");
+            if(DEBUG) System.err.println("ThreadPool$JobDispatcher.run: " + Thread.currentThread());
 
             if(__JobDispatcher_run_hook != null) {
                 try {
                     __JobDispatcher_run_hook.invoke(this, null);
+
                 }
                 catch(Exception exception) { // should not fly
                     System.err.println(getClass().getName() + " - unexpected: method >doWork< threw an exception - " + exception);
@@ -179,9 +170,16 @@ public class JobQueue {
             else
                 invoke(null);
 
-            // dispose the jobQueue
-//              dispose();
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".run - exit:" + _threadId);
+
+//              try {
+//                  Object object = new Object();
+//                  synchronized(object) {
+//                      object.wait();
+//                  }
+//              }
+//              catch(InterruptedException interruptedException) {
+//              }
         }
     }
 
@@ -194,14 +192,22 @@ public class JobQueue {
      * @param sync_jobQueue    the sync queue this async queue belongs to
      * @see                    com.sun.star.lib.uno.environments.remote.ThreadID
      */
-    JobQueue(JavaThreadPool javaThreadPool, ThreadID threadId, JobQueue sync_jobQueue) {
-        ++ __instances;
+    JobQueue(JavaThreadPoolFactory javaThreadPoolFactory, ThreadId threadId) {
+        _javaThreadPoolFactory = javaThreadPoolFactory;
+          _threadId              = new ThreadId();
 
-        _javaThreadPool   = javaThreadPool;
-        _threadId         = threadId;
-        _sync_jobQueue    = sync_jobQueue;
+        _sync_jobQueue    = javaThreadPoolFactory.getJobQueue(threadId);
+        if(_sync_jobQueue == null) {
+            _sync_jobQueue = new JobQueue(javaThreadPoolFactory, threadId, true);
+            _sync_jobQueue.acquire();
+        }
+
+        _sync_jobQueue._async_jobQueue = this;
+
         _createThread     = true;
         _createThread_now = true;
+
+        acquire();
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + " - init:" +  _threadId);
     }
@@ -213,10 +219,8 @@ public class JobQueue {
      * @param createThread    if true, the queue creates a worker thread if needed
      * @see             com.sun.star.lib.uno.environments.remote.ThreadID
      */
-    JobQueue(JavaThreadPool javaThreadPool, ThreadID threadId, boolean createThread){
-        ++ __instances;
-
-        _javaThreadPool   = javaThreadPool;
+    JobQueue(JavaThreadPoolFactory javaThreadPoolFactory, ThreadId threadId, boolean createThread){
+        _javaThreadPoolFactory   = javaThreadPoolFactory;
         _threadId         = threadId;
         _createThread     = createThread;
         _createThread_now = createThread;
@@ -225,100 +229,34 @@ public class JobQueue {
     }
 
     /**
-     * Gives the currently dispatched job.
-     * <p>
-     * @return  the dispatched job
-     * @see     com.sun.star.lib.uno.environments.remote.Job
-     */
-    Job getCurrentJob() {
-        return _current;
-    }
-
-    /**
      * Gives the thread id of this queue
      * <p>
      * @return  the thread id
      * @see     com.sun.star.lib.uno.environments.remote.ThreadID
      */
-    ThreadID getThreadId() {
+    ThreadId getThreadId() {
         return _threadId;
     }
 
-    /**
-     * Gives the dispatcher thread
-     * <p>
-     * @return  the thread
-     */
-    Thread getThread() {
-        return _worker_thread;
-    }
-
-
     synchronized void acquire() {
-        if(_add_count <= 0)
-            _javaThreadPool.addJobQueue(_threadId, this);
+        if(_ref_count <= 0)
+            _javaThreadPoolFactory.addJobQueue(this);
 
-        ++ _add_count;
+        ++ _ref_count;
     }
 
     synchronized void release() {
-        -- _add_count;
+        -- _ref_count;
 
-        if(_add_count <= 0) {
-            _javaThreadPool.removeJobQueue(_threadId);
-            dispose();
-        }
-    }
+        if(_ref_count <= 0) {
+            _javaThreadPoolFactory.removeJobQueue(this);
 
-    /**
-     * Adds a dispose id.
-     * <p>
-     * @return the count of how often the id has already been added
-     * @param  disposeId    the dispose id
-     */
-    private synchronized MutableInt addDisposeId(Object disposeId) {
-        MutableInt disposeId_count = null;
 
-        if(disposeId != null) {
-            if(DEBUG) System.err.println("##### " + getClass().getName() +  " " + this +".addDisposeId:" + disposeId);
-
-            disposeId_count = (MutableInt)_disposeIds.get(disposeId);
-            if(disposeId_count == null) {
-                disposeId_count = new MutableInt();
-                _disposeIds.put(disposeId, disposeId_count);
+            if(_sync_jobQueue != null) {
+                _sync_jobQueue._async_jobQueue = null;
+                _sync_jobQueue.release();
             }
-
-            ++ disposeId_count._value;
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".addDisposeId value:" + disposeId_count._value);
-
         }
-
-        return disposeId_count;
-    }
-
-    /**
-     * Removes a dispose id.
-     * <p>
-     * @param  disposeId        the dispose id
-     * @param  disposeId_count
-     */
-    private synchronized void removeDisposeId(Object disposeId, MutableInt disposeId_count) {
-        if(disposeId != null) {
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".removeDisposeId:" + disposeId + " " + disposeId_count);
-
-            if(disposeId_count == null)
-                disposeId_count = (MutableInt)_disposeIds.get(disposeId);
-
-            if(disposeId_count != null) {
-            -- disposeId_count._value;
-            if(disposeId_count._value <= 0)
-                _disposeIds.remove(disposeId);
-            }
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".removeDisposeId value:" + disposeId_count._value);
-
-        }
-
     }
 
     /**
@@ -327,19 +265,28 @@ public class JobQueue {
      * @return a job or null if timed out
      * @param  waitTime        the maximum amount of time to wait for a job
      */
-    private Job removeJob(int waitTime) {
+    private Job removeJob(int waitTime) throws Throwable {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".removeJob:" + _head + " " + _threadId);
 
         Job job = null;
         synchronized (this) {
             // wait max. waitTime time for a job to enter the queue
             boolean waited = false;
-            while(_head == null && waitTime >= 0 && !waited) {
+            while(_head == null && (waitTime == 0 || !waited)) {
+                if(_doDispose == _disposeId) {
+                    _doDispose = null;
+                    throw _throwable;
+                }
+
+                // notify sync queues
+                notifyAll();
+
                 try {
+                    // wait for new job
                     wait(waitTime);
                 }
                 catch(InterruptedException interruptedException) {
-                    throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - caught:" + interruptedException);
+                      throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - unexpected:" + interruptedException);
                 }
 
                 // signal that we have already waited once
@@ -348,29 +295,34 @@ public class JobQueue {
 
 
             if(_head != null) {
-                _current = _head;
+                Job current = _head;
                 _head    = _head._next;
 
                 if(_head == null)
                     _tail = null;
 
-                job = _current;
+                job = current;
                 _active = true;
             }
         }
 
         // always wait for asynchron jobqueue to be finished !
-        if( job != null && _async_jobQueue != null )
-        {
+        if(job != null && _async_jobQueue != null) {
             synchronized(_async_jobQueue) {
                 // wait for async queue to be empty and last job to be done
                 while(_async_jobQueue._active || _async_jobQueue._head != null) {
                     if(DEBUG) System.err.println("waiting for async:" + _async_jobQueue._head + " " +  _async_jobQueue._worker_thread);
+
+                    if(_doDispose == _disposeId) {
+                        _doDispose = null;
+                        throw _throwable;
+                    }
+
                     try {
-                        _async_jobQueue.wait(10);
+                        _async_jobQueue.wait();
                     }
                     catch(InterruptedException interruptedException) {
-                        throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - caught:" + interruptedException);
+                        throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - unexpected:" + interruptedException);
                     }
                 }
             }
@@ -385,41 +337,8 @@ public class JobQueue {
      * @param  job        the job
      * @param  disposeId  a dispose id
      */
-    public void putJob(Job job, Object disposeId) {
-        if(job.getOperation() == null || job.isSynchron()) { // if job is a reply or is sync
-            // fill the sync queue (this)
-            _putJob(job, disposeId);
-
-            ++ _sync_jobs_queued;
-        }
-        else {
-            synchronized(this) {
-                // create the async JobQueue ?
-                if(_async_jobQueue == null) {
-                    _async_jobQueue = new JobQueue(_javaThreadPool, new ThreadID(_threadId), this);
-                }
-
-                // fill the async queue, async queue are intentionally not disposed
-                _async_jobQueue._putJob(job, null);
-
-                ++ _async_jobs_queued;
-            }
-        }
-    }
-
-    /**
-     * Puts a job into the queue.
-     * <p>
-     * @param  job        the job
-     * @param  disposeId  a dispose id
-     */
-    private synchronized void _putJob(Job job, Object disposeId) {
+    synchronized void putJob(Job job, Object disposeId) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".putJob todoes: " + " job:" + job);
-
-        // Hold the dispose id at the, to be able to remove the dispose id
-        // once the job has been executed.
-        job._disposeId = disposeId;
-        addDisposeId(disposeId);
 
         if(_tail != null)
             _tail._next = job;
@@ -431,11 +350,9 @@ public class JobQueue {
         if(_worker_thread == null && _createThread && _createThread_now) { // if there is no thread, which dispatches and if shall create one, create one
 
             acquire();
-            if(_sync_jobQueue != null)
-                _sync_jobQueue.acquire();
 
             _createThread_now = false;
-            new JobDispatcher().start();
+            new JobDispatcher(disposeId).start();
         }
 
         // always notify possible waiters
@@ -464,7 +381,8 @@ public class JobQueue {
 
         boolean quit = false;
 
-        MutableInt disposeId_count = addDisposeId(disposeId);
+        Object hold_disposeId = _disposeId;
+        _disposeId = disposeId;
 
         Object result = null;
 
@@ -473,6 +391,7 @@ public class JobQueue {
 
         while(!quit) {
             Job job = null;
+
             try {
                 job = removeJob(waitTime);
 
@@ -482,7 +401,6 @@ public class JobQueue {
                     }
                     finally {
                         _active = false;
-                        removeDisposeId(job._disposeId, null);
                     }
 
                     if(job.isFinal()) {
@@ -507,7 +425,7 @@ public class JobQueue {
 
                         _createThread_now = true;
 
-                        removeDisposeId(disposeId, disposeId_count);
+                        _disposeId = hold_disposeId;
 
                         if(_sync_jobQueue != null)
                             notifyAll(); // notify waiters (e.g. this is an asyncQueue and there is a sync waiting)
@@ -528,67 +446,16 @@ public class JobQueue {
      * <p>
      * @param disposeId    the dispose id
      */
-    synchronized void interrupt(Object disposeId) {
-        MutableInt disposeId_count = (MutableInt)_disposeIds.get(disposeId);
+    synchronized void dispose(Object disposeId, Throwable throwable) {
+        if(_sync_jobQueue == null) { // dispose only sync queues
+            _doDispose = disposeId;
+            _throwable = throwable;
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + " " + this + ".interrupt:" + disposeId + " " + disposeId_count);
+            // get thread out of wait and let it throw the throwable
+            if(DEBUG) System.err.println(getClass().getName() + ".dispose - notifying thread");
 
-        if(disposeId_count != null && _worker_thread != null) { //
-            _worker_thread.interrupt();
+            notifyAll();
         }
-    }
-
-    /**
-     * The finalizer decreases the instance count
-     */
-    public void finalize() {
-        -- __instances;
-    }
-
-    /**
-     * Prints statistics abourt the queue
-     */
-    void printStats() {
-        System.err.println("threads created all: " + (_sync_threads_created + _async_threads_created)
-                           + " asyncs: " + _async_threads_created
-                           + " syncs: " + _sync_threads_created);
-        System.err.println("jobs pub - all: " + (_async_jobs_queued + _sync_jobs_queued)
-                           + " asyncs: " + _async_jobs_queued
-                           + " syncs: " + _sync_jobs_queued);
-    }
-
-    public String toString() {
-        String string =  "jobQueue: " + _threadId.toString();
-
-        Enumeration elements = _disposeIds.keys();
-        while(elements.hasMoreElements()) {
-            string += " " + elements.nextElement();
-        }
-
-        return string;
-    }
-
-
-    void dispose() {
-          if(_sync_jobQueue != null) {
-            _sync_jobQueue.release();
-          }
-    }
-
-    /**
-     * Clears the queue
-     */
-    synchronized void clear() {
-        if(_head != null)
-            System.err.println("JobQueue.dispose - jobs left");
-
-        _head = _tail = _current = null;
-          _worker_thread = null;
-
-//          _threadId = null;
-//          _async_jobQueue = null;
-
-//          notify(); // wakes up all threads, which are waiting for jobs
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IThreadPool.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 11:56:03 $
+ *  last change: $Author: kr $ $Date: 2001-05-17 12:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,58 +65,58 @@ package com.sun.star.lib.uno.environments.remote;
  * This interface is an abstraction of the various
  * threadpool implementations.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2001-05-04 11:56:03 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-05-17 12:55:05 $
  * @author      Joerg Budischewski
- * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
+ * @author      Kay Ramme
+ * @see         com.sun.star.lib.uno.environments.remote.ThreadPoolFactory
+ * @see         com.sun.star.lib.uno.environments.remote.IThreadPoolFactory
  * @since       UDK1.0
  */
 public interface IThreadPool {
     /**
-     * Retrieves the global threadId for the current thread.
+     * Attaches this thread to the thread pool.
      * <p>
-     * @return the thread id
-     */
-    public ThreadID getThreadId();
-
-
-    /**
-     * Adds a jobQueue for the current thread to the threadpool.
-     * Requests are now put into this queue.
-     * <p>
-     * @param  disposeId    the dipose id with which the thread can be interrupted while staying in the queue
      * @see                 #enter
      */
-    public void addThread(Object disposeId);
+    public void attach();
 
     /**
-     * Removes the jobQueue for the current thread.
+     * Detaches this thread from the thread pool.
+     * @see                 #enter
      */
-    public void removeThread();
+    public void detach();
 
     /**
-     * Queues a job into the jobQueue of the thread belonging to the jobs threadId.
+     * Lets this thread enter the thread pool.
+     * This thread then executes all jobs put via
+     * <code>putJob</code> until a reply job arrives.
      * <p>
-     * @param job       the job
-     * @param disposeId the dispose id
-     */
-    public void putJob(Job job, Object disposeId);
-
-    /**
-     * Lets the current thread enter the ThreadPool.
-     * The thread then dispatches all jobs and leaves
-     * the ThreadPool when it gets a reply job.
-     * <p>
+     * @see                 #putJob
      */
     public Object enter() throws Throwable;
 
     /**
-     * Interrupts all threads which have associated the dispose id.
+     * Queues a job into the jobQueue of the thread belonging
+     * to the jobs threadId.
      * <p>
-     * @param disposeId    the dispose id
+     * @param job       the job
      */
-    public void dispose(Object disposeId);
+    public void putJob(Job job);
+
+    /**
+     * Disposes this thread pool, thus releasing
+     * all threads by throwing the given
+     * <code>Throwable</code>.
+     * <p>
+     * @param throwing   the Throwable
+     */
+    public void dispose(Throwable throwable);
 
 
-    public void stopDispose(Object disposeId);
+    /**
+     * Destroys the thread pool and tries
+     * to join all created threads immediatly.
+     */
+    public void destroy();
 }
 

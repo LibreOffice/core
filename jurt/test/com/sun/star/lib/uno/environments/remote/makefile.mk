@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2001-01-17 10:06:35 $
+#   last change: $Author: kr $ $Date: 2001-05-17 12:55:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,8 @@ JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/JobQueue_Test.class				\
     $(CLASSDIR)$/$(PACKAGE)$/MyMessage.class					\
     $(CLASSDIR)$/$(PACKAGE)$/MyReceiver.class					\
+    $(CLASSDIR)$/$(PACKAGE)$/IWorkAt.class					\
+    $(CLASSDIR)$/$(PACKAGE)$/WorkAt.class					\
     $(CLASSDIR)$/$(PACKAGE)$/ThreadPool_Test.class
 
 # --- Targets ------------------------------------------------------

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:48 $
+#   last change: $Author: kr $ $Date: 2001-05-17 12:55:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,22 +71,23 @@ TARGET  = com_sun_star_lib_uno_environments_remote
 
 # --- Files --------------------------------------------------------
 
-JAVACLASSFILES= 										\
-    $(CLASSDIR)$/$(PACKAGE)$/IMarshal.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/IMessage.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/IUnmarshal.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/IProtocol.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/Job.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/JobQueue.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/IReceiver.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/ThreadID.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/IThreadPool.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/JavaThreadPool.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/Protocol.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/ThreadPool.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/remote_environment.class	\
-    $(CLASSDIR)$/$(PACKAGE)$/INativeCallback.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/NativeThreadPoolWrapper.class
+JAVACLASSFILES= 											\
+    $(CLASSDIR)$/$(PACKAGE)$/IMarshal.class					\
+    $(CLASSDIR)$/$(PACKAGE)$/IMessage.class					\
+    $(CLASSDIR)$/$(PACKAGE)$/IUnmarshal.class				\
+    $(CLASSDIR)$/$(PACKAGE)$/IProtocol.class				\
+    $(CLASSDIR)$/$(PACKAGE)$/Job.class						\
+    $(CLASSDIR)$/$(PACKAGE)$/JobQueue.class					\
+    $(CLASSDIR)$/$(PACKAGE)$/IReceiver.class				\
+    $(CLASSDIR)$/$(PACKAGE)$/Protocol.class					\
+    $(CLASSDIR)$/$(PACKAGE)$/ThreadId.class					\
+    $(CLASSDIR)$/$(PACKAGE)$/IThreadPool.class				\
+    $(CLASSDIR)$/$(PACKAGE)$/IThreadPoolFactory.class		\
+    $(CLASSDIR)$/$(PACKAGE)$/ThreadPoolFactory.class		\
+    $(CLASSDIR)$/$(PACKAGE)$/JavaThreadPoolFactory.class	\
+    $(CLASSDIR)$/$(PACKAGE)$/JavaThreadPool.class			\
+    $(CLASSDIR)$/$(PACKAGE)$/NativeThreadPoolFactory.class	\
+    $(CLASSDIR)$/$(PACKAGE)$/remote_environment.class
 
 # --- Targets ------------------------------------------------------
 

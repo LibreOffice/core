@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadPool_Test.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 12:03:56 $
+ *  last change: $Author: kr $ $Date: 2001-05-17 12:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,332 +77,618 @@ import com.sun.star.uno.UnoRuntime;
 
 
 public class ThreadPool_Test {
-    static int __requestId = 0;
-    static int __running_thread_count;
+    /**
+     * When set to true, enables various debugging output.
+     */
+    private static final boolean DEBUG = false;
 
-    static interface IReadyListener {
-        void readyEvent();
+    static IThreadPool __iThreadPool = null;
+    static IReceiver __iReceiver = new MyReceiver();
+    static TypeDescription __workAt_td = TypeDescription.getTypeDescription(IWorkAt.class);
+    static Object __disposeId = new Object();
+
+
+    static class TestThread extends Thread {
+        ThreadId _threadId;
+        Object _disposeId = new Object();
+        String _message;
+        IThreadPool _iThreadPool;
+
+        TestThread() {
+            this(__iThreadPool);
+        }
+
+        TestThread(IThreadPool iThreadPool) {
+            _iThreadPool = iThreadPool;
+        }
+
+        public void run() {
+            _threadId = ThreadPoolFactory.getThreadId();
+
+
+            try {
+                synchronized(this) {
+                    // notify that we are running
+                    notify();
+
+                    _iThreadPool.attach();
+
+                    // wait until we should continue
+                    wait();
+                }
+
+                if(DEBUG) System.err.println("entering queue");
+
+                _iThreadPool.enter();
+            }
+            catch(Throwable throwable) {
+                if(DEBUG) throwable.printStackTrace();
+
+                _message = throwable.getMessage();
+            }
+
+            _iThreadPool.detach();
+
+            synchronized(this) {
+                if(DEBUG) System.err.println("dying");
+
+                // notify the listeners that we are dying
+                notifyAll();
+            }
+        }
+    }
+
+    static void putJob(IWorkAt iWorkAt, boolean synchron, ThreadId threadId, String operation) {
+        IMessage iMessage = new MyMessage(synchron, __workAt_td, "oid", threadId, null, operation, null);
+
+        __iThreadPool.putJob(new Job(iWorkAt, __iReceiver, iMessage));
     }
 
 
-    static class MyImpl implements MyInterface {
-        int _received_requestId;
-        int _send_requestId;
-        boolean _passed = true;
-        IReadyListener _iReadyListener;
-        boolean _block;
+    static boolean test_dispose(Vector vector, boolean silent) throws Throwable {
+        boolean passed = true;
 
-        MyImpl() {
+        if(!silent)
+            System.err.println("\t\ttest_dispose:");
+
+        IThreadPool iThreadPool = ThreadPoolFactory.createThreadPool();
+        TestThread testThread = new TestThread(iThreadPool);
+
+        ThreadId threadId = null;
+
+        // start the test thread
+        synchronized(testThread) {
+            testThread.start();
+
+            testThread.wait();
+
+            threadId = testThread._threadId;
+
+            // let the thread attach and enter the threadpool
+            testThread.notifyAll();
         }
 
-        public int getNext() {
-            return _send_requestId ++;
+        String message = "blabla";
+
+        // terminate the test thread
+        synchronized(testThread) {
+            if(DEBUG) System.err.println("waiting for TestThread to die");
+
+            // put reply job
+            iThreadPool.dispose(new RuntimeException(message));
+
+            testThread.wait();
         }
 
-        void addReadyListener(IReadyListener iReadyListener) {
-            _iReadyListener = iReadyListener;
+        testThread.join();
+
+
+        passed = testThread._message.equals(message);
+
+        if(!silent)
+            System.err.println("\t\tpassed? " + passed);
+
+        return passed;
+    }
+
+
+
+    static boolean test_thread_async(Vector vector, boolean silent) throws Throwable {
+        boolean passed = true;
+
+        if(!silent)
+            System.err.println("\t\ttest_thread_async:");
+
+        WorkAt workAt = new WorkAt();
+
+
+        ThreadId threadId = new ThreadId();
+
+        // queue asyncs
+        for(int i = 0; i < WorkAt.MESSAGES; ++ i) {
+            Thread.yield(); // force scheduling
+            putJob(workAt, false, threadId, "increment");
         }
 
-        public Object syncCall(Object param) throws Exception{
-            Object object =  doSomething(param);
+        synchronized(workAt) {
+            putJob(workAt, false, threadId, "notifyme");
 
-            // send a request to ourself
+            while(!workAt._notified)
+                workAt.wait();
+        }
 
-//              ThreadPool.addThread(null);
-//              Job job = new Job(new MyReceiver(null),      // receiver
-//                                JavaThreadPool.getThreadId(Thread.currentThread()),        // threadID
-//                                __requestId ++,     // requestId
-//                                this,          // object
-//                                null,   // operation,
-//                                new MyMessage(0),       // parameter
-//                                true,            // synchron ?
-//                                null,                // exception ?
-//                                MyInterface.class);  // interface
+        passed = workAt._counter == WorkAt.MESSAGES;
+
+        if(!silent)
+            System.err.println("\t\tpassed? " + passed);
+
+        return passed;
+    }
+
+    static boolean test_dynamic_thread_sync(Vector vector, boolean silent) throws Throwable {
+        boolean passed = true;
+
+        if(!silent)
+            System.err.println("\t\t test_dynamic_thread_sync:");
+
+        WorkAt workAt = new WorkAt();
 
 
-//              ThreadPool.putJob(job, null);
-//              System.err.println("entering ...");
-//              ThreadPool.enter();
-//              System.err.println("left");
-            if(_block) {
+        ThreadId threadId = new ThreadId();
+
+        // queue asyncs
+        for(int i = 0; i < WorkAt.MESSAGES; ++ i) {
+            Thread.yield(); // force scheduling
+            putJob(workAt, true, threadId, "increment");
+        }
+
+        synchronized(workAt) {
+            putJob(workAt, true, threadId, "notifyme");
+
+            while(!workAt._notified)
+                workAt.wait();
+        }
+
+        passed = workAt._counter == WorkAt.MESSAGES;
+
+        if(!silent)
+            System.err.println("\t\tpassed? " + passed);
+
+        return passed;
+    }
+
+    static boolean test_static_thread_sync(Vector vector, boolean silent) throws Throwable {
+        boolean passed = true;
+
+        if(!silent)
+            System.err.println("\t\t test_static_thread_sync:");
+
+        WorkAt workAt = new WorkAt();
+
+        TestThread testThread = new TestThread();
+
+        ThreadId threadId = null;
+
+        // start the test thread
+        synchronized(testThread) {
+            testThread.start();
+
+            testThread.wait();
+
+            threadId = testThread._threadId;
+
+            // let the thread attach and enter the threadpool
+            testThread.notifyAll();
+        }
+
+
+        // queue syncs
+        for(int i = 0; i < WorkAt.MESSAGES; ++ i) {
+            Thread.yield(); // force scheduling
+            putJob(workAt, true, threadId, "increment");
+        }
+
+
+        // terminate the test thread
+        synchronized(testThread) {
+            if(DEBUG) System.err.println("waiting for TestThread to die");
+
+            // put reply job
+            putJob(workAt, true, threadId, null);
+
+            testThread.wait();
+        }
+
+        testThread.join();
+
+
+        passed = workAt._counter == WorkAt.MESSAGES;
+
+        if(!silent)
+            System.err.println("\t\tpassed? " + passed);
+
+        return passed;
+    }
+
+    static boolean test_dynamic_thread_async_sync_order(Vector vector, boolean silent) throws Throwable {
+        boolean passed = true;
+
+        if(!silent)
+            System.err.println("\t\ttest_dynamic_thread_async_sync_order:");
+
+        WorkAt workAt = new WorkAt();
+
+
+        ThreadId threadId = new ThreadId();
+
+        // queue asyncs
+        for(int i = 0; i < WorkAt.MESSAGES; ++ i) {
+            Thread.yield(); // force scheduling
+            putJob(workAt, false, threadId, "asyncCall");
+        }
+
+        // queue syncs
+        for(int i = 0; i < WorkAt.MESSAGES; ++ i) {
+            Thread.yield(); // force scheduling
+            putJob(workAt, true, threadId, "syncCall");
+        }
+
+
+        synchronized(workAt) {
+            putJob(workAt, true, threadId, "notifyme");
+
+            while(!workAt._notified)
+                workAt.wait();
+        }
+
+        passed = workAt.passedAsyncTest(vector);
+
+        if(!silent)
+            System.err.println("\t\tpassed? " + passed);
+
+        return passed;
+    }
+
+
+
+    static boolean test_static_thread_async_sync_order(Vector vector, boolean silent) throws Throwable {
+        boolean passed = true;
+
+        if(!silent)
+            System.err.println("\t\ttest_static_thread_async_sync_order:");
+
+        WorkAt workAt = new WorkAt();
+
+        TestThread testThread = new TestThread();
+
+        // start the test thread
+        synchronized(testThread) {
+            testThread.start();
+
+            testThread.wait();
+        }
+
+        ThreadId threadId = testThread._threadId;
+
+        // queue asyncs
+        for(int i = 0; i < WorkAt.MESSAGES; ++ i) {
+            Thread.yield(); // force scheduling
+            putJob(workAt, false, threadId, "asyncCall");
+        }
+
+
+        // let the thread attach and enter the threadpool
+        synchronized(testThread) {
+            testThread.notifyAll();
+        }
+
+
+        // queue syncs
+        for(int i = 0; i < WorkAt.MESSAGES; ++ i) {
+            Thread.yield(); // force scheduling
+            putJob(workAt, true, threadId, "syncCall");
+        }
+
+
+        // terminate the test thread
+        synchronized(testThread) {
+            if(DEBUG) System.err.println("waiting for TestThread to die");
+
+            // put reply job
+            putJob(workAt, true, threadId, null);
+
+            testThread.wait();
+        }
+
+        testThread.join();
+
+        passed = workAt.passedAsyncTest(vector);
+
+        if(!silent)
+            System.err.println("\t\tpassed? " + passed);
+
+        return passed;
+    }
+
+    static boolean test_stress(Vector vector) throws Throwable {
+        boolean passed = true;
+
+        System.err.println("\t\ttest_stress:");
+
+        WorkAt workAt = new WorkAt();
+
+        for(int i = 0; i < WorkAt.MESSAGES; ++ i) {
+            Thread.yield(); // force scheduling
+            ThreadId threadID = new ThreadId();
+
+            putJob(workAt, true, threadID, "increment");
+            putJob(workAt, false, threadID, "increment");
+        }
+
+
+        synchronized(workAt) {
+            while(workAt._counter < (2 * WorkAt.MESSAGES))
+                workAt.wait();
+        }
+
+
+        class Stress1 extends Thread {
+            Vector _vector;
+            boolean _passed = true;
+
+            Stress1(Vector vector) {
+                _vector = vector;
+            }
+
+            public void run() {
                 try {
-                    synchronized(this) {
-                        System.err.println(this + " waiting for interrupt...");
-                        wait(); // wait for exception
+                    for(int i = 0; i < 50; ++ i) {
+                        boolean tmp_passed = test_thread_async(_vector, true);
+
+                        _passed = _passed && tmp_passed;
                     }
                 }
-                catch(InterruptedException interruptedException) {
-                    System.err.println(this + " succecessfully interrupted - rethrowing...");
-                    throw interruptedException;
+                catch(Throwable throwable) {
+                    System.err.println(throwable);
+                    throwable.printStackTrace();
                 }
             }
-
-            return object;
-
-        }
-
-        public Object asyncCall(Object param) throws Exception {
-            return doSomething(param);
-        }
-
-        Object doSomething(Object param) throws Exception {
-//              synchronized(this) {
-//                  long waitTime = (long)(Math.random() * 100);
-//                  if(waitTime > 0)
-//                      wait(waitTime); // simulate work
-//              }
-
-            _passed = _passed && (((Integer)param).intValue() == _received_requestId);
-
-            if(!_passed)
-                throw new NullPointerException("blblbl");
+        };
 
 
+        Stress1 stress1 = new Stress1(vector);
+        stress1.start();
 
+        class Stress2 extends Thread {
+            Vector _vector;
+            boolean _passed = true;
 
-            ++ _received_requestId;
-
-            if(_iReadyListener != null)
-                _iReadyListener.readyEvent();
-
-//              synchronized(this) {
-//                  long waitTime = (long)(Math.random() * 100);
-//                  if(waitTime > 0)
-//                      wait(waitTime); // simulate work
-//              }
-
-            return "blabla";
-        }
-
-        void finish() {
-            _passed = _passed && (_send_requestId == _received_requestId);
-        }
-
-        boolean pendingRequests() {
-            return _send_requestId != _received_requestId;
-        }
-    }
-
-
-
-    static void sendJobs(int jobs, MyReceiver myReceiver, ThreadID threadID, MyImpl myImpl, boolean synchron, boolean finish, Object disposeId) throws Exception {
-        // sending synchronous calls
-        System.err.println("sending " + jobs + " " + synchron + " calls...");
-
-        for(int i = 0; i < jobs; ++ i) {
-            MyMessage myMessage = new MyMessage(synchron,
-                                                TypeDescription.getTypeDescription(MyInterface.class),
-                                                UnoRuntime.generateOid(myImpl),
-                                                threadID,
-                                                myImpl,
-                                                finish ? null : (synchron ? "syncCall": "asyncCall"),
-                                                new Object[]{new Integer(myImpl.getNext())});
-
-            Job job = new Job(myImpl, myReceiver, myMessage);
-//              Job job = new Job(UnoRuntime.generateOid(myImpl),
-//                                myReceiver,      // receiver
-//                                threadID,        // threadID
-//                                __requestId ++,     // requestId
-//                                myImpl,          // object
-//                                finish ? null : (synchron ? "syncCall": "asyncCall"),   // operation,
-//                                myMessage,       // parameter
-//                                synchron,            // synchron ?
-//                                null,                // exception ?
-//                                MyInterface.class);  // interface
-
-            ThreadPool.putJob(job, disposeId);
-        }
-    }
-
-
-
-    static class Worker_with_Thread extends Thread {
-        MyImpl _myImpl         = new MyImpl();
-        MyReceiver _myReceiver = new MyReceiver(null);
-        boolean _started = false;
-
-        public void run() {
-            System.err.println("WorkerThread - started");
-            try {
-                ThreadPool.addThread(null);
-                _started = true;
-
-                ThreadPool.enter();
-
-//                  _myImpl.finish();
+            Stress2(Vector vector) {
+                _vector = vector;
             }
-            catch(Throwable exception) {
-                System.err.println("WorkerThread - exception:" + exception);
-                exception.printStackTrace();
-            }
-            System.err.println("WorkerThread - finished - passed:" + _myImpl._passed);
-        }
-    }
 
-    static class RemoteObject implements IReadyListener {
-        MyImpl _myImpl         = new MyImpl();
-        MyReceiver _myReceiver = new MyReceiver(null);
-        ThreadID _threadID = new ThreadID(UnoRuntime.generateOid(this).getBytes());
+            public void run() {
+                try {
+                    for(int i = 0; i < 50; ++ i) {
+                        boolean tmp_passed = test_dynamic_thread_sync(_vector, true);
 
-        boolean _finished = false;
-
-        {
-            _myImpl.addReadyListener(this);
-        }
-
-        public synchronized void readyEvent() {
-            _finished = true;
-            notifyAll();
-        }
-    }
-
-    static Vector __threads = new Vector();
-
-
-    static class SenderThread extends Thread {
-        boolean _quit = false;
-        Object  _disposeId;
-
-        SenderThread(Object disposeId) {
-            _disposeId = disposeId;
-        }
-
-        public void run() {
-            try {
-                while(!_quit && __threads.size() > 0) {
-                    Enumeration elements = __threads.elements();
-                    while(elements.hasMoreElements() && !_quit) {
-                        Object object = elements.nextElement();
-
-                        if(object instanceof Worker_with_Thread) {
-                            Worker_with_Thread thread = (Worker_with_Thread)object;
-
-                            if(thread._started && !thread._myImpl.pendingRequests()) {
-                                sendJobs((int)(Math.random() * 50 + 1), thread._myReceiver, JavaThreadPool.getThreadId(thread), thread._myImpl, false, false, _disposeId);
-                                sendJobs((int)(1), thread._myReceiver, JavaThreadPool.getThreadId(thread), thread._myImpl, true, false, _disposeId);
-
-                                if(Math.random() > 0.95) {
-                                    sendJobs(1, thread._myReceiver, JavaThreadPool.getThreadId(thread), thread._myImpl, true, true, _disposeId); // finish
-
-                                    __threads.removeElement(thread);
-                                }
-                            }
-                        }
-                        else {
-                            RemoteObject remoteObject = (RemoteObject)object;
-
-                            if(!remoteObject._myImpl.pendingRequests()) {
-                                sendJobs((int)(Math.random() * 50 + 1), remoteObject._myReceiver, remoteObject._threadID, remoteObject._myImpl, false, false, _disposeId);
-                                sendJobs((int)(Math.random() * 50 + 1), remoteObject._myReceiver, remoteObject._threadID, remoteObject._myImpl, true, false, _disposeId);
-
-                                if(Math.random() > 0.95) {
-                                    __threads.removeElement(remoteObject);
-                                }
-                            }
-                        }
+                        _passed = _passed && tmp_passed;
                     }
-                    synchronized(this) {
-                        notify();
+                }
+                catch(Throwable throwable) {
+                    System.err.println(throwable);
+                    throwable.printStackTrace();
+                }
+            }
+        };
+
+
+        Stress2 stress2 = new Stress2(vector);
+        stress2.start();
+
+
+
+        class Stress3 extends Thread {
+            Vector _vector;
+            boolean _passed = true;
+
+            Stress3(Vector vector) {
+                _vector = vector;
+            }
+
+            public void run() {
+                try {
+                    for(int i = 0; i < 50; ++ i) {
+                        boolean tmp_passed = test_static_thread_sync(_vector, true);
+
+                        _passed = _passed && tmp_passed;
                     }
-//                      Thread.sleep((int)(Math.random() * 100));
+                }
+                catch(Throwable throwable) {
+                    System.err.println(throwable);
+                    throwable.printStackTrace();
                 }
             }
-            catch(Exception exception) {
-                System.err.println("SenderThread - exception:" + exception);
-                exception.printStackTrace();
+        };
+
+
+        Stress3 stress3 = new Stress3(vector);
+          stress3.start();
+
+
+
+        class Stress4 extends Thread {
+            Vector _vector;
+            boolean _passed = true;
+
+            Stress4(Vector vector) {
+                _vector = vector;
             }
-        }
-    }
 
-    static public boolean test_with_thread() throws InterruptedException {
-        Object disposeId = new Integer(0);
+            public void run() {
+                try {
+                    for(int i = 0; i < 50; ++ i) {
+                        boolean tmp_passed = test_dynamic_thread_async_sync_order(_vector, true);
 
-        int blockers = 0;
-
-        SenderThread senderThread = new SenderThread(disposeId);
-//          senderThread.start();
-        boolean started = false;
-        Vector threads = new Vector();
-
-        do {
-            ++ __running_thread_count;
-            Object object = null;
-
-            if(Math.random() > 1.25) {
-                Thread thread = new Worker_with_Thread();
-                thread.start();
-
-                object = thread;
-            }
-            else {
-                object = new RemoteObject();
-
-                if(Math.random() > 0.70) {
-                    ((RemoteObject)object)._myImpl._block = true;
-                    ++ blockers;
+                        _passed = _passed && tmp_passed;
+                    }
+                }
+                catch(Throwable throwable) {
+                    System.err.println(throwable);
+                    throwable.printStackTrace();
                 }
             }
+        };
 
-            __threads.addElement(object);
-            threads.addElement(object);
 
-            if(!started) {
-                started = true;
-                senderThread.start();
+        Stress4 stress4 = new Stress4(vector);
+          stress4.start();
+
+
+        class Stress5 extends Thread {
+            Vector _vector;
+            boolean _passed = true;
+
+            Stress5(Vector vector) {
+                _vector = vector;
             }
 
-            Thread.sleep((int)(Math.random() * 1000));
-        }
-        while(Math.random() > 0.05);
+            public void run() {
+                try {
+                    for(int i = 0; i < 50; ++ i) {
+                        boolean tmp_passed = test_static_thread_async_sync_order(_vector, true);
 
-
-        System.err.println("waiting for SenderThread to die...");
-        senderThread._quit = true;
-        senderThread.join();
-
-        System.err.println("disposing ThreadPool for id " + disposeId + " with " + blockers + " blocked ...");
-        ThreadPool.dispose(disposeId);
-
-        boolean passed = true;
-
-        // wait for all threads
-        System.err.println("joining all threads ...");
-        Enumeration elements = threads.elements();
-        while(elements.hasMoreElements()) {
-            Object object = elements.nextElement();
-            if(object instanceof Worker_with_Thread) {
-                Worker_with_Thread thread = (Worker_with_Thread)object;
-                thread.join();
-
-                passed = passed && thread._myImpl._passed;
-            }
-            else {
-                RemoteObject remoteObject = (RemoteObject)object;
-                synchronized(remoteObject) {
-                    while(!remoteObject._finished && !remoteObject._myImpl._block && remoteObject._myImpl._send_requestId > 0)
-                        remoteObject.wait(100);
+                        _passed = _passed && tmp_passed;
+                    }
+                }
+                catch(Throwable throwable) {
+                    System.err.println(throwable);
+                    throwable.printStackTrace();
                 }
             }
-        }
+        };
 
-        System.err.println("test_with_thread - passed? " + passed);
+
+        Stress5 stress5 = new Stress5(vector);
+        stress5.start();
+
+
+        class Stress6 extends Thread {
+            Vector _vector;
+            boolean _passed = true;
+
+            Stress6(Vector vector) {
+                _vector = vector;
+            }
+
+            public void run() {
+                for(int i = 0; i < 500; ++ i) {
+//                          Thread.sleep(500);
+                    try {
+                        boolean tmp_passed = test_dispose(_vector, true);
+
+                        _passed = _passed && tmp_passed;
+                    }
+                    catch(Throwable throwable) {
+                        System.err.println(throwable);
+                        throwable.printStackTrace();
+
+                        _passed = false;
+                        _vector.addElement("Stress6 - exception:" + throwable);
+                    }
+                }
+            }
+        };
+
+
+        Stress6 stress6 = new Stress6(vector);
+          stress6.start();
+
+
+
+
+        stress1.join();
+        stress2.join();
+        stress3.join();
+        stress4.join();
+        stress5.join();
+
+        if(!stress1._passed)
+            vector.addElement("Stress1 not passed");
+
+        if(!stress2._passed)
+            vector.addElement("Stress2 not passed");
+
+        if(!stress3._passed)
+            vector.addElement("Stress3 not passed");
+
+        if(!stress4._passed)
+            vector.addElement("Stress4 not passed");
+
+        if(!stress5._passed)
+            vector.addElement("Stress5 not passed");
+
+        if(!stress6._passed)
+            vector.addElement("Stress6 not passed");
+
+        passed = passed && stress1._passed;
+        passed = passed && stress2._passed;
+        passed = passed && stress3._passed;
+        passed = passed && stress4._passed;
+        passed = passed && stress5._passed;
+        passed = passed && stress6._passed;
+
+        System.err.println("\t\tpassed? " + passed);
 
         return passed;
     }
 
-    static public boolean test(Vector notpassed) throws Exception {
+    static public boolean test(Vector vector) throws Throwable {
+        __iThreadPool = ThreadPoolFactory.createThreadPool();
+
+        System.err.println("\tThreadPool test:");
+
         boolean passed = true;
+        boolean tmp_passed = false;
 
-        passed = passed && test_with_thread();
-        if(!passed && notpassed != null)
-            notpassed.addElement("ThreadPool_Test - test_with_thread passed?" + passed);
+          tmp_passed = test_dispose(vector, false);
+        passed = passed && tmp_passed;
 
+          tmp_passed = test_thread_async(vector, false);
+        passed = passed && tmp_passed;
+
+          tmp_passed = test_dynamic_thread_sync(vector, false);
+        passed = passed && tmp_passed;
+
+          tmp_passed = test_static_thread_sync(vector, false);
+        passed = passed && tmp_passed;
+
+          tmp_passed = test_dynamic_thread_async_sync_order(vector, false);
+        passed = passed && tmp_passed;
+
+          tmp_passed = test_static_thread_async_sync_order(vector, false);
+        passed = passed && tmp_passed;
+
+          tmp_passed = test_stress(vector);
+        passed = passed && tmp_passed;
+
+        System.err.println("\tpassed? " + passed);
         return passed;
     }
 
-    static public void main(String args[]) throws Exception {
-        test(null);
+    static public void main(String args[]) throws Throwable {
+          Object object = com.sun.star.comp.helper.RegistryServiceFactory.create("/usr/local2/kr/udkapi.rdb");
+
+        Vector vector = new Vector();
+
+        test(vector);
+
+        for(int i = 0; i < vector.size(); ++ i)
+            System.err.println("---:" + vector.elementAt(i));
     }
 }
+
+
+
 
 
