@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-30 13:17:25 $
+ *  last change: $Author: dvo $ $Date: 2001-02-14 13:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@ const sal_Char sAPI_SwFrameStyleEventDescriptor[] =
 const sal_Char sAPI_SwDetachedEventDescriptor[] = "SwDetachedEventDescriptor";
 const sal_Char sAPI_SwHyperlinkEventDescriptor[] =
                                     "SwHyperlinkEventDescriptor";
+const sal_Char sAPI_SwAutoTextEventDescriptor[] =
+                                    "SwAutoTextEventDescriptor";
+
 
 //
 // tables of all known events handled by this class
@@ -378,7 +381,9 @@ void SwBaseEventDescriptor::replaceByName(
     rElement >>= aSequence;
 
     // perform replace (in subclass)
-    replaceByName(nMacroID, getMacroFromAny(rElement));
+    SvxMacro aMacro(aEmptyMacro);
+    getMacroFromAny(aMacro, rElement);
+    replaceByName(nMacroID, aMacro);
 }
 
 Any SwBaseEventDescriptor::getByName(
@@ -395,7 +400,11 @@ Any SwBaseEventDescriptor::getByName(
         throw new NoSuchElementException();
 
     // perform get (in subclass)
-    return getAnyFromMacro(getByName(nMacroID));
+    Any aAny;
+    SvxMacro aMacro(aEmptyMacro);
+    getByName(aMacro, nMacroID);
+    getAnyFromMacro(aAny, aMacro);
+    return aAny;
 }
 
 Sequence<OUString> SwBaseEventDescriptor::getElementNames()
@@ -437,7 +446,7 @@ sal_Bool SwBaseEventDescriptor::hasElements()
 {
     // check if the first element of aSupportedMacroItemIDs is already
     // the delimiter
-    return aSupportedMacroItemIDs[0] == 0;
+    return aSupportedMacroItemIDs[0] != 0;
 }
 
 sal_Bool SwBaseEventDescriptor::supportsService(const OUString& rServiceName)
@@ -505,9 +514,9 @@ USHORT SwBaseEventDescriptor::getMacroID(const OUString& rName) const
     return 0;
 }
 
-Any SwBaseEventDescriptor::getAnyFromMacro(const SvxMacro& rMacro)
+void SwBaseEventDescriptor::getAnyFromMacro(Any& rAny,
+                                       const SvxMacro& rMacro)
 {
-    Any aRetValue;
     sal_Bool bRetValueOK = sal_False;   // do we have a ret value?
 
     if (rMacro.HasMacro())
@@ -543,7 +552,7 @@ Any SwBaseEventDescriptor::getAnyFromMacro(const SvxMacro& rMacro)
                 aLibValue.Value = aTmp;
                 aSequence[2] = aLibValue;
 
-                aRetValue <<= aSequence;
+                rAny <<= aSequence;
                 bRetValueOK = sal_True;
                 break;
             }
@@ -569,15 +578,14 @@ Any SwBaseEventDescriptor::getAnyFromMacro(const SvxMacro& rMacro)
         aKindValue.Value = aTmp;
         aSequence[0] = aKindValue;
 
-        aRetValue <<= aSequence;
+        rAny <<= aSequence;
         bRetValueOK = sal_True;
     }
-
-    return aRetValue;
 }
 
 
-const SvxMacro SwBaseEventDescriptor::getMacroFromAny(
+void SwBaseEventDescriptor::getMacroFromAny(
+    SvxMacro& rMacro,
     const Any& rAny)
         throw ( IllegalArgumentException )
 {
@@ -636,10 +644,8 @@ const SvxMacro SwBaseEventDescriptor::getMacroFromAny(
     {
         if (bNone)
         {
-            // create empty macro
-            OUString sEmpty;
-            SvxMacro aMacro(sEmpty, sEmpty, STARBASIC);
-            return aMacro;
+            // return empty macro
+            rMacro = aEmptyMacro;
         }
         else
         {
@@ -647,7 +653,7 @@ const SvxMacro SwBaseEventDescriptor::getMacroFromAny(
             {
                 // create macro and return
                 SvxMacro aMacro(sMacroVal, sLibVal, eType);
-                return aMacro;
+                rMacro = aMacro;
             }
             else
             {
@@ -701,7 +707,8 @@ void SwEventDescriptor::replaceByName(
     setMacroItem(aItem);
 }
 
-const SvxMacro& SwEventDescriptor::getByName(
+void SwEventDescriptor::getByName(
+    SvxMacro& rMacro,
     const USHORT nEvent )
         throw(
             NoSuchElementException,
@@ -709,14 +716,7 @@ const SvxMacro& SwEventDescriptor::getByName(
             RuntimeException)
 {
     const SvxMacroItem& rItem = getMacroItem();
-    if (rItem.HasMacro(nEvent))
-    {
-        return rItem.GetMacro(nEvent);
-    }
-    else
-    {
-        return aEmptyMacro;
-    }
+    rMacro = rItem.HasMacro(nEvent) ? rItem.GetMacro(nEvent) : aEmptyMacro;
 }
 
 
@@ -793,7 +793,8 @@ void SwDetachedEventDescriptor::replaceByName(
 }
 
 
-const SvxMacro& SwDetachedEventDescriptor::getByName(
+void SwDetachedEventDescriptor::getByName(
+    SvxMacro& rMacro,
     const USHORT nEvent )
     throw(
         NoSuchElementException,
@@ -804,7 +805,7 @@ const SvxMacro& SwDetachedEventDescriptor::getByName(
     if (-1 == nIndex)
         throw new IllegalArgumentException();
 
-    return (NULL == aMacros[nIndex]) ? aEmptyMacro : (*aMacros[nIndex]);
+    rMacro = (NULL == aMacros[nIndex]) ? aEmptyMacro : (*aMacros[nIndex]);
 }
 
 const sal_Bool SwDetachedEventDescriptor::hasByName(
@@ -858,7 +859,11 @@ void SwHyperlinkEventDescriptor::copyMacrosIntoINetFmt(
     {
         USHORT nEvent = aSupportedMacroItemIDs[i];
         if (hasByName(nEvent))
-            aFmt.SetMacro(nEvent, getByName(nEvent));
+        {
+            SvxMacro aMacro(aEmptyMacro);
+            getByName(aMacro, nEvent);
+            aFmt.SetMacro(nEvent, aMacro);
+        }
     }
 }
 
@@ -996,3 +1001,4 @@ OUString SwFrameStyleEventDescriptor::getImplementationName()
 {
     return sSwFrameStyleEventDescriptor;
 }
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-03 09:43:54 $
+ *  last change: $Author: dvo $ $Date: 2001-02-14 13:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
+#ifndef _UNOEVENT_HXX
+#include "unoevent.hxx"
+#endif
+#ifndef _SWEVENT_HXX
+#include "swevent.hxx"
+#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -127,6 +133,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
+using ::com::sun::star::container::NoSuchElementException;
 
 #define PROPERTY_NONE   0
 
@@ -1170,4 +1177,125 @@ Sequence< OUString > SwXAutoTextEntry::getSupportedServiceNames(void) throw( Run
     pArray[0] = C2U("com.sun.star.text.AutoTextEntry");
     return aRet;
 }
+/* -----------------------------06.04.00 11:11--------------------------------
 
+ ---------------------------------------------------------------------------*/
+Reference< container::XNameReplace > SwXAutoTextEntry::getEvents()
+    throw( uno::RuntimeException )
+{
+    return new SwAutoTextEventDescriptor( *this );
+}
+/* -----------------------------30.01.01 18:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+const USHORT aAutotextEvents[] =
+{
+    SW_EVENT_START_INS_GLOSSARY,
+    SW_EVENT_END_INS_GLOSSARY,
+    0
+};
+/* -----------------------------30.01.01 18:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwAutoTextEventDescriptor::SwAutoTextEventDescriptor(
+    SwXAutoTextEntry& rAutoText ) :
+        SwBaseEventDescriptor(aAutotextEvents),
+        sSwAutoTextEventDescriptor(RTL_CONSTASCII_USTRINGPARAM(
+            "SwAutoTextEventDescriptor")),
+        rAutoTextEntry(rAutoText)
+{
+}
+/* -----------------------------30.01.01 18:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwAutoTextEventDescriptor::~SwAutoTextEventDescriptor()
+{
+}
+/* -----------------------------30.01.01 18:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SwAutoTextEventDescriptor::getImplementationName()
+    throw( uno::RuntimeException )
+{
+    return sSwAutoTextEventDescriptor;
+}
+/* -----------------------------30.01.01 18:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwAutoTextEventDescriptor::replaceByName(
+    const USHORT nEvent,
+    const SvxMacro& rMacro)
+            throw(
+                IllegalArgumentException,
+                NoSuchElementException,
+                WrappedTargetException,
+                RuntimeException)
+{
+    DBG_ASSERT( NULL != rAutoTextEntry.GetGlossaries(),
+                "Strangely enough, the AutoText vanished!" );
+    DBG_ASSERT( (nEvent == SW_EVENT_END_INS_GLOSSARY) ||
+                (nEvent == SW_EVENT_START_INS_GLOSSARY) ,
+                "Unknown event ID" );
+
+    const SwGlossaries* pGlossaries = rAutoTextEntry.GetGlossaries();
+    SwTextBlocks* pBlocks =
+        pGlossaries->GetGroupDoc( rAutoTextEntry.GetGroupName() );
+    DBG_ASSERT( NULL != pBlocks,
+                "can't get autotext group; SwAutoTextEntry has illegal name?");
+
+    if ( NULL != pBlocks )
+    {
+        USHORT nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
+        if( nIndex != USHRT_MAX )
+        {
+            SvxMacroTableDtor aMacroTable;
+            if( pBlocks->GetMacroTable( nIndex, aMacroTable ) )
+            {
+                SvxMacro* pNewMacro = new SvxMacro(rMacro);
+                aMacroTable.Replace( nEvent, pNewMacro );
+                pBlocks->SetMacroTable( nIndex, aMacroTable );
+            }
+        }
+    }
+    // else: ignore
+}
+/* -----------------------------30.01.01 18:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwAutoTextEventDescriptor::getByName(
+    SvxMacro& rMacro,
+    const USHORT nEvent )
+            throw(
+                NoSuchElementException,
+                WrappedTargetException,
+                RuntimeException)
+{
+    DBG_ASSERT( NULL != rAutoTextEntry.GetGlossaries(), "no AutoText" );
+    DBG_ASSERT( (nEvent == SW_EVENT_END_INS_GLOSSARY) ||
+                (nEvent == SW_EVENT_START_INS_GLOSSARY) ,
+                "Unknown event ID" );
+
+    const SwGlossaries* pGlossaries = rAutoTextEntry.GetGlossaries();
+    SwTextBlocks* pBlocks =
+        pGlossaries->GetGroupDoc( rAutoTextEntry.GetGroupName() );
+    DBG_ASSERT( NULL != pBlocks,
+                "can't get autotext group; SwAutoTextEntry has illegal name?");
+
+    // return empty macro, unless macro is found
+    rMacro = aEmptyMacro;
+
+    if ( NULL != pBlocks )
+    {
+        USHORT nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
+        if( nIndex != USHRT_MAX )
+        {
+            SvxMacroTableDtor aMacroTable;
+            if( pBlocks->GetMacroTable( nIndex, aMacroTable ) )
+            {
+                SvxMacro *pMacro = aMacroTable.Get( nEvent );
+                if( pMacro )
+                    rMacro = *pMacro;
+            }
+        }
+    }
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: dvo $ $Date: 2001-02-14 13:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
+#include <com/sun/star/document/XEventsSupplier.hpp>
+#endif
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
@@ -100,11 +103,15 @@
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #endif
-
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx> // helper for implementations
+#endif
 #ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx> // helper for implementations
 #endif
-
+#ifndef _UNOEVENT_HXX
+#include "unoevent.hxx"
+#endif
 
 class SwTextBlocks;
 class SwGlossaries;
@@ -149,6 +156,7 @@ public:
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+
 };
 
 /* -----------------26.05.98 15:55-------------------
@@ -223,12 +231,13 @@ public:
 /* -----------------17.06.98 12:03-------------------
  *
  * --------------------------------------------------*/
-class SwXAutoTextEntry : public cppu::WeakImplHelper4
+class SwXAutoTextEntry : public cppu::WeakImplHelper5
 <
     ::com::sun::star::text::XAutoTextEntry,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XUnoTunnel,
-    ::com::sun::star::text::XText
+    ::com::sun::star::text::XText,
+    ::com::sun::star::document::XEventsSupplier
 >
 {
     SwGlossaries*   pGlossaries;
@@ -267,11 +276,53 @@ public:
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
+    // XEventsSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw( ::com::sun::star::uno::RuntimeException );
+
     void    Invalidate() {pGlossaries = 0;}
+    const SwGlossaries* GetGlossaries() { return pGlossaries; }
     const String&   GetGroupName() {return sGroupName;}
     const String&   GetEntryName() {return sEntryName;}
 
 };
+
+
+/** Implement the XNameAccess for the AutoText events */
+class SwAutoTextEventDescriptor : public SwBaseEventDescriptor
+{
+    ::rtl::OUString sSwAutoTextEventDescriptor;
+
+    SwXAutoTextEntry& rAutoTextEntry;
+
+public:
+    SwAutoTextEventDescriptor(  SwXAutoTextEntry& rAutoText );
+
+    ~SwAutoTextEventDescriptor();
+
+    virtual rtl::OUString SAL_CALL getImplementationName(void)
+        throw( ::com::sun::star::uno::RuntimeException );
+
+protected:
+
+    virtual void replaceByName(
+        const USHORT nEvent,        /// item ID of event
+        const SvxMacro& rMacro)     /// event (will be copied)
+            throw(
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual void getByName(
+        SvxMacro& rMacro,           /// macro to be filled
+        const USHORT nEvent )       /// item ID of event
+            throw(
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+};
+
+
 #endif
 
 
