@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TABSTOP = TRUE ;
         TEXT[ chinese_simplified ] = "·ÖºÅ(~S)";
         TEXT[ russian ] = "Òî÷êà ñ çàïÿòîé";
-        TEXT[ polish ] = "?rednik";
+        TEXT[ polish ] = "Œrednik";
         TEXT[ japanese ] = "¾ĞºÛİ(~S)";
         TEXT[ chinese_traditional ] = "¤À¸¹(~S)";
         TEXT[ arabic ] = "ÇáİÇÕáÉ ÇáãäŞæØÉ";
@@ -230,7 +230,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text [ portuguese ] = "~Largura igual para todas as colunas" ;
         Text[ chinese_simplified ] = "ËùÓĞÁĞµÄ¿í¶ÈÏàÍ¬";
         Text[ russian ] = "Îäèíàêîâàÿ øèğèíà âñåõ êîëîíîê";
-        Text[ polish ] = "~Jednakowa szeroko?æ wszystk. kolumn";
+        Text[ polish ] = "~Jednakowa szerokoœæ wszystk. kolumn";
         Text[ japanese ] = "‚·‚×‚Ä‚Ì—ñ•‚ğ“¯‚¶‚É";
         Text[ chinese_traditional ] = "©Ò¦³Äæ¼e«×¬Û¦P";
         Text[ arabic ] = "äİÓ ÇáÚÑÖ áßá ÇáÃÚãÏÉ";
@@ -261,7 +261,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Group = TRUE ;
         TEXT[ chinese_simplified ] = "ÕıÎÄÄÚµÄ·Ö¸ô·û";
         TEXT[ russian ] = "Ğàçäåëèòåëü òåêñòà";
-        TEXT[ polish ] = "Separator w tek?cie";
+        TEXT[ polish ] = "Separator w tekœcie";
         TEXT[ japanese ] = "Ã·½Ä“à‚Ì‹æØ‚è‹L†";
         TEXT[ chinese_traditional ] = "¤º¤åªº¤À¹j²Å";
         TEXT[ arabic ] = "ÚáÇãÇÊ ÇáİÕá İí ÇáäÕ";
@@ -352,7 +352,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ chinese_traditional ] = "¤£¤À¶}ªí®æ";
         Text[ arabic ] = "ÚÏã İÕá ÇáÌÏæá";
         Text[ greek ] = "¼÷é äéáßñåóç ôïõ ğß~íáêá";
-        Text[ korean ] = "Ç¥ ºĞ¸®ÇÏÁö¡¡¾Ê±â.";
+        Text[ korean ] = "Å×ÀÌºí ºĞ¸®ÇÏÁö¡¡¾Ê±â.";
         Text[ turkish ] = "Tabloyu tek sayfaya  ~sığdır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No dividir tabla";
@@ -504,3 +504,4 @@ ModalDialog DLG_CONV_TEXT_TABLE
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Convertir tabla en texto";
 };
+
