@@ -79,6 +79,7 @@ Sub Main
 	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.bmp&quot;
 	DialogModel.ImagePreview.ImageURL = sBitmapPath
 	ToggleOptionButtons(DialogModel, bWithBackGraphic)
+	MainDialog.GetControl(&quot;lbTemplate&quot;).SetFocus = True
 	DialogModel.cbGoOn.DefaultButton = True
 	MainDialog.Execute
 
@@ -104,7 +105,7 @@ Dim CurInd as Integer
 &apos;On Local Error Goto ErrorOcurred
 &apos; Todo:Check if the pointer is really disabled, when set to Hourglass
 	ToggleDialogControls(False)
-	oBaseDocument.LockControllers
+&apos;	oBaseDocument.LockControllers
 	&apos; Get selected list entry and corresponding file name
 	CurInd = GetCurIndex(DialogModel.lbTemplate, Layout(), NumberofLayouts%, 2)
 	oCursor = oBaseDocument.Text.CreateTextCursor()
@@ -118,9 +119,9 @@ ErrorOcurred:
 	If Err &lt;&gt; 0 Then
 		MsgBox(WebWiz_gErrWhileReloading$, 16, WebWiz_gWizardName$)
 	End If
-	oBaseDocument.UnlockControllers
+&apos;	oBaseDocument.UnlockControllers
 	oViewCursor.GotoStart(False)
-	ToggleDialogControls(True)
+	ToggleDialogControls(True, &quot;lbTemplate&quot;)
 End Sub
 
 
@@ -146,7 +147,7 @@ Dim CurIndex as Integer
 	CheckControls(oBaseDocument.DrawPage)
 	oViewCursor.GotoStart(False)
 	oBaseDocument.UnlockControllers
-	ToggleDialogControls(True)
+	ToggleDialogControls(True, &quot;lbStyles&quot;)
 End Sub
 
 
@@ -396,7 +397,7 @@ Dim sBitmapPath as String
 End Sub
 
 
-Sub ToggleDialogControls(ByVal bDoEnable as Boolean)
+Sub ToggleDialogControls(ByVal bDoEnable as Boolean, Optional FocusControlName as String)
 	With DialogModel
 		.cbCancel.Enabled = bDoEnable
 		.cbGoOn.Enabled = bDoEnable
@@ -409,6 +410,7 @@ Sub ToggleDialogControls(ByVal bDoEnable as Boolean)
 		If bDoEnable Then
 			&apos; Enable Controls referring to Background graphic only when this Property is set
 			bDoEnable = bWithBackGraphic
+			MainDialog.GetControl(FocusControlName).SetFocus = True
 		End If
 		ToggleOptionButtons(DialogModel, bDoEnable)
 	End With
