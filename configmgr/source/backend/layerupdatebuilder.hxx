@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatebuilder.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef CONFIGMGR_BACKEND_LAYERUPDATEBUILDER_HXX
 #define CONFIGMGR_BACKEND_LAYERUPDATEBUILDER_HXX
 
+#ifndef CONFIGMGR_BACKEND_LAYERUPDATE_HXX
+#include "layerupdate.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
@@ -88,20 +92,16 @@ namespace configmgr
         namespace uno = ::com::sun::star::uno;
         namespace backenduno = drafts::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
-        class LayerUpdate;
         class NodeUpdate;
         class PropertyUpdate;
 
         class LayerUpdateBuilder
         {
-            LayerUpdate     * m_pUpdate;
+            LayerUpdate     m_aUpdate;
             NodeUpdate      * m_pCurrentNode;
             PropertyUpdate  * m_pCurrentProp;
         public:
             LayerUpdateBuilder();
-
-            explicit
-            LayerUpdateBuilder(LayerUpdate & _rUpdate);
 
         public:
             /// set the context information for the update
@@ -123,14 +123,17 @@ namespace configmgr
             bool resetProperty(OUString const & _aName);
 
             bool finish();
+            void clear();
 
             bool isEmpty()      const;
             bool isActive()     const;
             bool isComplete()   const;
 
             bool isPropertyActive()     const;
+
+            LayerUpdate const & result() const;
         private:
-            LayerUpdate & data() const;
+            LayerUpdate & data();
         };
 // -----------------------------------------------------------------------------
 

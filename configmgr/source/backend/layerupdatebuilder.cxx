@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatebuilder.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,26 +80,37 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 
 LayerUpdateBuilder::LayerUpdateBuilder()
-: m_pUpdate(NULL)
+: m_aUpdate()
 , m_pCurrentNode(NULL)
 , m_pCurrentProp(NULL)
 {
 }
 // -----------------------------------------------------------------------------
 
-LayerUpdateBuilder::LayerUpdateBuilder(LayerUpdate & _rUpdate)
-: m_pUpdate(&_rUpdate)
-, m_pCurrentNode(NULL)
-, m_pCurrentProp(NULL)
+void LayerUpdateBuilder::clear()
 {
+    m_pCurrentProp = NULL;
+    m_pCurrentNode = NULL;
+    m_aUpdate = LayerUpdate();
+
+    OSL_POSTCOND( this->isEmpty(), "LayerUpdateBuilder: Could not reset the stored update.");
+}
+// -----------------------------------------------------------------------------
+
+LayerUpdate const & LayerUpdateBuilder::result() const
+{
+    OSL_ENSURE(this->isComplete(),
+                "LayerUpdateBuilder: There is no result to retrieve"
+                " - building the data is still in progress.");
+
+    return m_aUpdate;
 }
 // -----------------------------------------------------------------------------
 
 inline
-LayerUpdate & LayerUpdateBuilder::data() const
+LayerUpdate & LayerUpdateBuilder::data()
 {
-    OSL_ASSERT(m_pUpdate); // make real check (RuntimeException) ?
-    return *m_pUpdate;
+    return m_aUpdate;
 }
 // -----------------------------------------------------------------------------
 
@@ -274,28 +285,28 @@ bool LayerUpdateBuilder::finish()
 
 bool LayerUpdateBuilder::isEmpty() const
 {
-    OSL_ENSURE(m_pUpdate || !m_pCurrentNode, "LayerUpdateBuilder: Invariant violation: got a current node without a layer");
-    return m_pUpdate == 0;
+    OSL_ENSURE( !m_pCurrentNode || m_aUpdate.isEmpty(), "LayerUpdateBuilder: Invariant violation: got a current node without a layer");
+    return m_aUpdate.isEmpty();
 }
 // -----------------------------------------------------------------------------
 
 bool LayerUpdateBuilder::isActive() const
 {
-    OSL_ENSURE(m_pUpdate || !m_pCurrentNode, "LayerUpdateBuilder: Invariant violation: got a current node without a layer");
+    OSL_ENSURE( !m_pCurrentNode || m_aUpdate.isEmpty(), "LayerUpdateBuilder: Invariant violation: got a current node without a layer");
     return m_pCurrentNode != 0;
 }
 // -----------------------------------------------------------------------------
 
 bool LayerUpdateBuilder::isComplete() const
 {
-    OSL_ENSURE(m_pUpdate || !m_pCurrentNode, "LayerUpdateBuilder: Invariant violation: got a current node without a layer");
-    return m_pUpdate != NULL && m_pCurrentNode == NULL;
+    OSL_ENSURE( !m_pCurrentNode || m_aUpdate.isEmpty(), "LayerUpdateBuilder: Invariant violation: got a current node without a layer");
+    return !m_aUpdate.isEmpty() && m_pCurrentNode == NULL;
 }
 // -----------------------------------------------------------------------------
 
 bool LayerUpdateBuilder::isPropertyActive() const
 {
-    OSL_ENSURE(m_pUpdate || !m_pCurrentNode, "LayerUpdateBuilder: Invariant violation: got a current node without a layer");
+    OSL_ENSURE( !m_pCurrentNode || m_aUpdate.isEmpty(), "LayerUpdateBuilder: Invariant violation: got a current node without a layer");
     OSL_ENSURE(m_pCurrentNode || !m_pCurrentProp, "LayerUpdateBuilder: Invariant violation: got a current property without a node");
     return m_pCurrentProp != 0;
 }

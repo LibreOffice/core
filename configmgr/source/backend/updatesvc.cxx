@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatesvc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:01 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,20 +136,15 @@ void SAL_CALL
         uno::Reference< backenduno::XUpdatableLayer > xUpdLayer;
         if (aArguments[i] >>= xUpdLayer)
         {
-            if (xUpdLayer.is())
-            {
-                m_xLayerWriter = xUpdLayer->getWriteHandler();
-                m_xLayerReader = xUpdLayer.get();
-            }
-            else
-            {
-                m_xLayerWriter.clear();
-                m_xLayerReader.clear();
-            }
+            m_xSourceLayer = xUpdLayer.get();
+            m_xLayerWriter.clear();
+
+            OSL_ASSERT( uno::Reference< backenduno::XUpdatableLayer >::query(m_xSourceLayer).is() || !xUpdLayer.is() );
+
             continue;
         }
 
-        if (aArguments[i] >>= m_xLayerReader)
+        if (aArguments[i] >>= m_xSourceLayer)
             continue;
 
         if (aArguments[i] >>= m_xLayerWriter)
@@ -161,6 +156,36 @@ void SAL_CALL
     }
 }
 
+// -----------------------------------------------------------------------------
+
+void UpdateService::writeUpdatedLayer(Layer const & _xLayer)
+{
+    OSL_ENSURE( _xLayer.is(), "UpdateService: Trying to write NULL XLayer");
+
+    if (!_xLayer.is())
+    {
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Update Merger - Internal error: trying to write a NULL Layer"));
+        throw uno::RuntimeException(sMessage,*this);
+    }
+
+    // use our layer writer, if we have one
+    if ( m_xLayerWriter.is() )
+    {
+        _xLayer->readData( m_xLayerWriter );
+        return;
+    }
+
+    // look for an updatable layer otherwise
+    uno::Reference< backenduno::XUpdatableLayer > xUpdLayer(m_xSourceLayer, uno::UNO_QUERY);
+    if (xUpdLayer.is())
+    {
+        xUpdLayer->replaceWith( _xLayer );
+        return;
+    }
+
+    OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Update Merger: Cannot write merge results - no recipient available."));
+    throw uno::RuntimeException(sMessage,*this);
+}
 // -----------------------------------------------------------------------------
 
 // XServiceInfo

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,6 @@ namespace configmgr
             void raisePropExistsException(sal_Char const * pMsg);
 
         private:
-            uno::Reference< backenduno::XLayerHandler > m_xMerger;
             LayerUpdateBuilder                          m_aBuilder;
         };
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-30 12:24:59 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,6 @@ uno::Reference< uno::XInterface > SAL_CALL instantiateUpdateMerger
 
 LayerUpdateHandler::LayerUpdateHandler(CreationArg _xServiceFactory)
 : UpdateService(_xServiceFactory)
-, m_xMerger()
 , m_aBuilder()
 {
 }
@@ -153,18 +152,6 @@ void SAL_CALL
     LayerUpdateHandler::startUpdate( const OUString& aContext )
         throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    LayerUpdateMerger * pNewMerger = new LayerUpdateMerger(this->getLayerWriter());
-
-    m_xMerger.set( pNewMerger );
-
-    m_aBuilder = pNewMerger->getLayerUpdateBuilder();
-
-    if ( m_aBuilder.isEmpty() )
-    {
-        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("LayerUpdateHandler: LayerUpdateMerger is broken - Cannot get a builder for update data.") );
-        throw uno::RuntimeException(sMsg,*this);
-    }
-
     if (!m_aBuilder.setContext(aContext))
         raiseMalformedDataException("LayerUpdateHandler: Cannot start update - update is already in progress");
 }
@@ -179,11 +166,11 @@ void SAL_CALL
     if (!m_aBuilder.finish())
         raiseMalformedDataException("LayerUpdateHandler: Cannot finish update - a node is still open.");
 
-    m_aBuilder = LayerUpdateBuilder();
+    uno::Reference< backenduno::XLayer > xMergedLayer( LayerUpdateMerger::getMergedLayer(this->getSourceLayer(), m_aBuilder.result()) );
 
-    this->getLayerReader()->readData( m_xMerger );
+    m_aBuilder.clear();
 
-    m_xMerger.clear();
+    this->writeUpdatedLayer(xMergedLayer);
 }
 // -----------------------------------------------------------------------------
 

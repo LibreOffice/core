@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatemerger.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,16 +93,17 @@ namespace configmgr
         typedef rtl::Reference<NodeUpdate>      NodeUpdateRef;
         typedef rtl::Reference<PropertyUpdate>  PropertyUpdateRef;
 
-        class LayerUpdateMerger : public BasicUpdateMerger
+        class LayerUpdateMerger : protected BasicUpdateMerger
         {
         public:
-            explicit
-            LayerUpdateMerger( ResultHandler const & _xResultHandler);
-
-            ~LayerUpdateMerger();
+            static LayerSource getMergedLayer(LayerSource const & _xSourceLayer, LayerUpdate const & _aLayerUpdate)
+            { return new LayerUpdateMerger(_xSourceLayer, _aLayerUpdate); }
 
         public:
-            LayerUpdateBuilder getLayerUpdateBuilder();
+            explicit
+            LayerUpdateMerger( LayerSource const & _xSourceLayer, LayerUpdate const & _aLayerUpdate);
+
+            ~LayerUpdateMerger();
 
 
         // XLayerHandler overrides

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,12 +110,14 @@ namespace configmgr
         public:
             typedef std::vector<OUString> ContextPath;
 
+            bool isEmpty() const { return ! m_xContextNode.is(); }
+
             NodeUpdateRef       getContextNode() const;
             ContextPath const & getContextPath() const;
 
-        private:
-            friend class LayerUpdateBuilder;
             void setContextNode(NodeUpdateRef const & _xContextNode);
+
+        private:
             void makeContextPath(OUString const & _aContextPath);
 
         private:

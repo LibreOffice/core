@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicupdatemerger.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,21 +78,47 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
 
-BasicUpdateMerger::BasicUpdateMerger( ResultHandler const & _xResultHandler )
-: m_xResultHandler(_xResultHandler)
+BasicUpdateMerger::BasicUpdateMerger( LayerSource const & _xSourceLayer )
+: m_xSourceLayer(_xSourceLayer)
+, m_xResultHandler()
 , m_nNesting(0)
 , m_bSkipping(false)
 {
-    if (!m_xResultHandler.is())
-    {
-        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("UpdateMerger: Error - NULL output handler unexpected") );
-        throw uno::RuntimeException(sMsg,NULL);
-    }
 }
 // -----------------------------------------------------------------------------
 
 BasicUpdateMerger::~BasicUpdateMerger()
 {
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL BasicUpdateMerger::readData( ResultHandler const & _xResultHandler )
+        throw (uno::RuntimeException)
+{
+    if (!_xResultHandler.is())
+    {
+        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("UpdateMerger: Error - NULL output handler unexpected") );
+        throw uno::RuntimeException(sMsg,NULL);
+    }
+    if (!m_xSourceLayer.is())
+    {
+        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("UpdateMerger: Error - NULL output handler unexpected") );
+        throw uno::RuntimeException(sMsg,NULL);
+    }
+
+    try
+    {
+        m_xResultHandler = _xResultHandler;
+
+        m_xSourceLayer->readData( this );
+    }
+    catch (uno::Exception & )
+    {
+        m_xResultHandler.clear();
+        throw;
+    }
+
+    m_xResultHandler.clear();
 }
 // -----------------------------------------------------------------------------
 

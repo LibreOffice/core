@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicupdatemerger.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,12 @@
 #ifndef CONFIGMGR_BACKEND_BASICUPDATEMERGER_HXX
 #define CONFIGMGR_BACKEND_BASICUPDATEMERGER_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 
 #include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
+#include <drafts/com/sun/star/configuration/backend/XLayer.hpp>
 
 #ifndef INCLUDED_VECTOR
 #include <vector>
@@ -90,17 +91,18 @@ namespace configmgr
         using backenduno::TemplateIdentifier;
 // -----------------------------------------------------------------------------
 
-        class BasicUpdateMerger : public cppu::WeakImplHelper1< backenduno::XLayerHandler >
+        class BasicUpdateMerger : public cppu::WeakImplHelper2< backenduno::XLayerHandler, backenduno::XLayer >
         {
         public:
             typedef uno::Reference< backenduno::XLayerHandler > ResultHandler;
+            typedef uno::Reference< backenduno::XLayer >        LayerSource;
 
             explicit
-            BasicUpdateMerger(ResultHandler  const & _xResultHandler);
+            BasicUpdateMerger(LayerSource const & _xSourceLayer);
             ~BasicUpdateMerger();
 
         // XLayerHandler
-        public:
+        protected:
             virtual void SAL_CALL
                 startLayer(  )
                     throw (MalformedDataException, uno::RuntimeException);
@@ -153,7 +155,14 @@ namespace configmgr
                 addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
                     throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
 
-        private:    // new override
+        // XLayer
+        protected:
+            virtual void SAL_CALL
+                readData( const uno::Reference< backenduno::XLayerHandler >& aHandler )
+                    throw (uno::RuntimeException);
+
+        // new overrideable
+        private:
             /// write the whole update to the output
             virtual void flushUpdate() = 0;
 
@@ -175,6 +184,7 @@ namespace configmgr
 
             void flushContext();
         private:
+            LayerSource     m_xSourceLayer;
             ResultHandler   m_xResultHandler;
             ContextPath     m_aSearchPath;
 

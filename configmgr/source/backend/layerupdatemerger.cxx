@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatemerger.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,9 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
 
-LayerUpdateMerger::LayerUpdateMerger( ResultHandler const & _xResultHandler)
-: BasicUpdateMerger(_xResultHandler)
-, m_aLayerUpdate()
+LayerUpdateMerger::LayerUpdateMerger(LayerSource const & _xSourceLayer, LayerUpdate const & _aLayerUpdate)
+: BasicUpdateMerger(_xSourceLayer)
+, m_aLayerUpdate(_aLayerUpdate)
 , m_xCurrentNode()
 {
 }
@@ -86,12 +86,6 @@ LayerUpdateMerger::LayerUpdateMerger( ResultHandler const & _xResultHandler)
 
 LayerUpdateMerger::~LayerUpdateMerger()
 {
-}
-// -----------------------------------------------------------------------------
-
-LayerUpdateBuilder LayerUpdateMerger::getLayerUpdateBuilder()
-{
-    return LayerUpdateBuilder(m_aLayerUpdate);
 }
 // -----------------------------------------------------------------------------
 

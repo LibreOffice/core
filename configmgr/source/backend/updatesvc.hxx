@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatesvc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:01 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,19 +132,21 @@ namespace configmgr
 
         protected:
             typedef uno::Reference< lang::XMultiServiceFactory >    ServiceFactory;
-            typedef uno::Reference< backenduno::XLayerHandler >     LayerWriter;
-            typedef uno::Reference< backenduno::XLayer >            LayerReader;
+            typedef uno::Reference< backenduno::XLayer >            Layer;
 
             ServiceFactory getServiceFactory() const
             { return m_xServiceFactory; }
-            LayerWriter getLayerWriter() const
-            { return m_xLayerWriter; }
-            LayerReader getLayerReader() const
-            { return m_xLayerReader; }
+
+            Layer getSourceLayer() const
+            { return m_xSourceLayer; }
+
+            void writeUpdatedLayer(Layer const & _xLayer);
         private:
-            ServiceFactory      m_xServiceFactory;
-            LayerWriter         m_xLayerWriter;
-            LayerReader         m_xLayerReader;
+            typedef uno::Reference< backenduno::XLayerHandler >     LayerWriter;
+
+            ServiceFactory  m_xServiceFactory;
+            Layer           m_xSourceLayer;
+            LayerWriter     m_xLayerWriter;
 
             static ServiceInfoHelper getServiceInfo();
         };
