@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 12:59:16 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,8 @@ static void WriteDop( SwWW8Writer& rWrt )
     rDop.cPgFtnEdn      = (INT16)rDStat.nPage;
     rDop.cParasFtnEdn   = rDStat.nPara;
     rDop.cLinesFtnEdn   = rDStat.nPara;
+
+    rDop.fDontUseHTMLAutoSpacing = !(rWrt.pDoc->IsParaSpaceMax());
 
     rDop.Write( *rWrt.pTableStrm, *rWrt.pFib );
 }
@@ -2157,6 +2159,13 @@ ULONG SwWW8Writer::StoreDoc()
 
     PrepareStorage();
 
+    USHORT nRedlineMode = pDoc->GetRedlineMode();
+    if (pDoc->GetRedlineTbl().Count())
+    {
+        pDoc->SetRedlineMode(nRedlineMode | REDLINE_SHOW_DELETE |
+            REDLINE_SHOW_INSERT);
+    }
+
     maFontHelper.InitFontTable(bWrtWW8, *pDoc);
 
     pFib = new WW8Fib( bWrtWW8 ? 8 : 6 );
@@ -2273,15 +2282,10 @@ ULONG SwWW8Writer::StoreDoc()
     pPiece = new WW8_WrPct( pFib->fcMin, bWrtWW8 );
     pDop = new WW8Dop;
 
-    USHORT nRedlineMode = pDoc->GetRedlineMode();
+
     pDop->fRevMarking = 0 != (REDLINE_ON & nRedlineMode);
     pDop->fRMView = 0 != ( REDLINE_SHOW_DELETE & nRedlineMode );
     pDop->fRMPrint = pDop->fRMView;
-    if (pDoc->GetRedlineTbl().Count())
-    {
-        pDoc->SetRedlineMode(nRedlineMode | REDLINE_SHOW_DELETE |
-            REDLINE_SHOW_INSERT);
-    }
 
     // Tabelle fuer die freifliegenden Rahmen erzeugen, aber nur wenn
     // das gesamte Dokument geschrieben wird
