@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 16:10:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-20 16:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,14 +230,14 @@ public:
 // FmXGridControl
 //==================================================================
 typedef ::cppu::ImplHelper10<   ::com::sun::star::form::XBoundComponent,
-                                ::com::sun::star::form::XGrid           ,
-                                ::com::sun::star::util::XModifyBroadcaster            ,
-                                ::com::sun::star::form::XGridFieldDataSupplier        ,
-                                ::com::sun::star::container::XIndexAccess             ,
-                                ::com::sun::star::container::XEnumerationAccess       ,
-                                ::com::sun::star::util::XModeSelector                 ,
-                                ::com::sun::star::container::XContainer               ,
-                                ::com::sun::star::frame::XDispatchProvider            ,
+                                ::com::sun::star::form::XGrid,
+                                ::com::sun::star::util::XModifyBroadcaster,
+                                ::com::sun::star::form::XGridFieldDataSupplier,
+                                ::com::sun::star::container::XIndexAccess,
+                                ::com::sun::star::container::XEnumerationAccess,
+                                ::com::sun::star::util::XModeSelector,
+                                ::com::sun::star::container::XContainer,
+                                ::com::sun::star::frame::XDispatchProvider,
                                 ::com::sun::star::frame::XDispatchProviderInterception > FmXGridControl_BASE;
 
 class FmXGridPeer;
