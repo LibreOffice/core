@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:25:40 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,17 +238,17 @@
 						<enumeration oor:value="0">
 							<info>
 								<desc xml:lang="en-US">None</desc>
-								<desc xml:lang="el">None</desc>
-								<desc xml:lang="nl">None</desc>
+								<desc xml:lang="el">Κανένα</desc>
+								<desc xml:lang="nl">Geen</desc>
 								<desc xml:lang="fr">Aucun(e)</desc>
-								<desc xml:lang="fi">None</desc>
-								<desc xml:lang="cs">None</desc>
-								<desc xml:lang="da">None</desc>
+								<desc xml:lang="fi">Ei mitään</desc>
+								<desc xml:lang="cs">Žádné</desc>
+								<desc xml:lang="da">Ingen</desc>
 								<desc xml:lang="zh-CN">无</desc>
 								<desc xml:lang="zh-TW">無充填</desc>
-								<desc xml:lang="ar">None</desc>
-								<desc xml:lang="he">None</desc>
-								<desc xml:lang="ca">None</desc>
+								<desc xml:lang="ar">بدون</desc>
+								<desc xml:lang="he">‮ללא‬</desc>
+								<desc xml:lang="ca">Cap</desc>
 								<desc xml:lang="pt">Nenhum</desc>
 								<desc xml:lang="ru">Без</desc>
 								<desc xml:lang="es">Ninguno</desc>
@@ -267,16 +267,16 @@
 							<info>
 								<desc xml:lang="en-US">Upper</desc>
 								<desc xml:lang="el">Upper</desc>
-								<desc xml:lang="nl">Upper</desc>
+								<desc xml:lang="nl">Groot</desc>
 								<desc xml:lang="fr">Majuscules</desc>
-								<desc xml:lang="fi">Upper</desc>
-								<desc xml:lang="cs">Upper</desc>
-								<desc xml:lang="da">Upper</desc>
+								<desc xml:lang="fi">Ylempi</desc>
+								<desc xml:lang="cs">velká</desc>
+								<desc xml:lang="da">Stor</desc>
 								<desc xml:lang="zh-CN">大写</desc>
 								<desc xml:lang="zh-TW">大寫</desc>
-								<desc xml:lang="ar">Upper</desc>
-								<desc xml:lang="he">Upper</desc>
-								<desc xml:lang="ca">Upper</desc>
+								<desc xml:lang="ar">كبير</desc>
+								<desc xml:lang="he">‮אותיות גדולות‬</desc>
+								<desc xml:lang="ca">Superior</desc>
 								<desc xml:lang="pt">Maiúsculas</desc>
 								<desc xml:lang="ru">Прописные</desc>
 								<desc xml:lang="es">Mayúsculas</desc>
@@ -295,16 +295,16 @@
 							<info>
 								<desc xml:lang="en-US">Lower</desc>
 								<desc xml:lang="el">Lower</desc>
-								<desc xml:lang="nl">Lower</desc>
+								<desc xml:lang="nl">Klein</desc>
 								<desc xml:lang="fr">Minuscules</desc>
-								<desc xml:lang="fi">Lower</desc>
-								<desc xml:lang="cs">Lower</desc>
-								<desc xml:lang="da">Lower</desc>
+								<desc xml:lang="fi">Alempi</desc>
+								<desc xml:lang="cs">malá</desc>
+								<desc xml:lang="da">Små</desc>
 								<desc xml:lang="zh-CN">小写</desc>
 								<desc xml:lang="zh-TW">小寫</desc>
-								<desc xml:lang="ar">Lower</desc>
-								<desc xml:lang="he">Lower</desc>
-								<desc xml:lang="ca">Lower</desc>
+								<desc xml:lang="ar">صغير</desc>
+								<desc xml:lang="he">‮אותיות קטנות‬</desc>
+								<desc xml:lang="ca">Inferior</desc>
 								<desc xml:lang="pt">Minúsculas</desc>
 								<desc xml:lang="ru">Строчные</desc>
 								<desc xml:lang="es">Minúsculas</desc>
@@ -464,17 +464,17 @@
 						<enumeration oor:value="0">
 							<info>
 								<desc xml:lang="en-US">None</desc>
-								<desc xml:lang="el">None</desc>
-								<desc xml:lang="nl">None</desc>
+								<desc xml:lang="el">Κανένα</desc>
+								<desc xml:lang="nl">Geen</desc>
 								<desc xml:lang="fr">Aucun(e)</desc>
-								<desc xml:lang="fi">None</desc>
-								<desc xml:lang="cs">None</desc>
-								<desc xml:lang="da">None</desc>
+								<desc xml:lang="fi">Ei mitään</desc>
+								<desc xml:lang="cs">Žádné</desc>
+								<desc xml:lang="da">Ingen</desc>
 								<desc xml:lang="zh-CN">无</desc>
 								<desc xml:lang="zh-TW">無充填</desc>
-								<desc xml:lang="ar">None</desc>
-								<desc xml:lang="he">None</desc>
-								<desc xml:lang="ca">None</desc>
+								<desc xml:lang="ar">بدون</desc>
+								<desc xml:lang="he">‮ללא‬</desc>
+								<desc xml:lang="ca">Cap</desc>
 								<desc xml:lang="pt">Nenhum</desc>
 								<desc xml:lang="ru">Без</desc>
 								<desc xml:lang="es">Ninguno</desc>
@@ -493,16 +493,16 @@
 							<info>
 								<desc xml:lang="en-US">Upper</desc>
 								<desc xml:lang="el">Upper</desc>
-								<desc xml:lang="nl">Upper</desc>
+								<desc xml:lang="nl">Groot</desc>
 								<desc xml:lang="fr">Majuscules</desc>
-								<desc xml:lang="fi">Upper</desc>
-								<desc xml:lang="cs">Upper</desc>
-								<desc xml:lang="da">Upper</desc>
+								<desc xml:lang="fi">Ylempi</desc>
+								<desc xml:lang="cs">velká</desc>
+								<desc xml:lang="da">Stor</desc>
 								<desc xml:lang="zh-CN">大写</desc>
 								<desc xml:lang="zh-TW">大寫</desc>
-								<desc xml:lang="ar">Upper</desc>
-								<desc xml:lang="he">Upper</desc>
-								<desc xml:lang="ca">Upper</desc>
+								<desc xml:lang="ar">كبير</desc>
+								<desc xml:lang="he">‮אותיות גדולות‬</desc>
+								<desc xml:lang="ca">Superior</desc>
 								<desc xml:lang="pt">Maiúsculas</desc>
 								<desc xml:lang="ru">Прописные</desc>
 								<desc xml:lang="es">Mayúsculas</desc>
@@ -521,16 +521,16 @@
 							<info>
 								<desc xml:lang="en-US">Lower</desc>
 								<desc xml:lang="el">Lower</desc>
-								<desc xml:lang="nl">Lower</desc>
+								<desc xml:lang="nl">Klein</desc>
 								<desc xml:lang="fr">Minuscules</desc>
-								<desc xml:lang="fi">Lower</desc>
-								<desc xml:lang="cs">Lower</desc>
-								<desc xml:lang="da">Lower</desc>
+								<desc xml:lang="fi">Alempi</desc>
+								<desc xml:lang="cs">malá</desc>
+								<desc xml:lang="da">Små</desc>
 								<desc xml:lang="zh-CN">小写</desc>
 								<desc xml:lang="zh-TW">小寫</desc>
-								<desc xml:lang="ar">Lower</desc>
-								<desc xml:lang="he">Lower</desc>
-								<desc xml:lang="ca">Lower</desc>
+								<desc xml:lang="ar">صغير</desc>
+								<desc xml:lang="he">‮אותיות קטנות‬</desc>
+								<desc xml:lang="ca">Inferior</desc>
 								<desc xml:lang="pt">Minúsculas</desc>
 								<desc xml:lang="ru">Строчные</desc>
 								<desc xml:lang="es">Minúsculas</desc>
@@ -690,17 +690,17 @@
 						<enumeration oor:value="0">
 							<info>
 								<desc xml:lang="en-US">None</desc>
-								<desc xml:lang="el">None</desc>
-								<desc xml:lang="nl">None</desc>
+								<desc xml:lang="el">Κανένα</desc>
+								<desc xml:lang="nl">Geen</desc>
 								<desc xml:lang="fr">Aucun(e)</desc>
-								<desc xml:lang="fi">None</desc>
-								<desc xml:lang="cs">None</desc>
-								<desc xml:lang="da">None</desc>
+								<desc xml:lang="fi">Ei mitään</desc>
+								<desc xml:lang="cs">Žádné</desc>
+								<desc xml:lang="da">Ingen</desc>
 								<desc xml:lang="zh-CN">无</desc>
 								<desc xml:lang="zh-TW">無充填</desc>
-								<desc xml:lang="ar">None</desc>
-								<desc xml:lang="he">None</desc>
-								<desc xml:lang="ca">None</desc>
+								<desc xml:lang="ar">بدون</desc>
+								<desc xml:lang="he">‮ללא‬</desc>
+								<desc xml:lang="ca">Cap</desc>
 								<desc xml:lang="pt">Nenhum</desc>
 								<desc xml:lang="ru">Без</desc>
 								<desc xml:lang="es">Ninguno</desc>
@@ -719,16 +719,16 @@
 							<info>
 								<desc xml:lang="en-US">Upper</desc>
 								<desc xml:lang="el">Upper</desc>
-								<desc xml:lang="nl">Upper</desc>
+								<desc xml:lang="nl">Groot</desc>
 								<desc xml:lang="fr">Majuscules</desc>
-								<desc xml:lang="fi">Upper</desc>
-								<desc xml:lang="cs">Upper</desc>
-								<desc xml:lang="da">Upper</desc>
+								<desc xml:lang="fi">Ylempi</desc>
+								<desc xml:lang="cs">velká</desc>
+								<desc xml:lang="da">Stor</desc>
 								<desc xml:lang="zh-CN">大写</desc>
 								<desc xml:lang="zh-TW">大寫</desc>
-								<desc xml:lang="ar">Upper</desc>
-								<desc xml:lang="he">Upper</desc>
-								<desc xml:lang="ca">Upper</desc>
+								<desc xml:lang="ar">كبير</desc>
+								<desc xml:lang="he">‮אותיות גדולות‬</desc>
+								<desc xml:lang="ca">Superior</desc>
 								<desc xml:lang="pt">Maiúsculas</desc>
 								<desc xml:lang="ru">Прописные</desc>
 								<desc xml:lang="es">Mayúsculas</desc>
@@ -747,16 +747,16 @@
 							<info>
 								<desc xml:lang="en-US">Lower</desc>
 								<desc xml:lang="el">Lower</desc>
-								<desc xml:lang="nl">Lower</desc>
+								<desc xml:lang="nl">Klein</desc>
 								<desc xml:lang="fr">Minuscules</desc>
-								<desc xml:lang="fi">Lower</desc>
-								<desc xml:lang="cs">Lower</desc>
-								<desc xml:lang="da">Lower</desc>
+								<desc xml:lang="fi">Alempi</desc>
+								<desc xml:lang="cs">malá</desc>
+								<desc xml:lang="da">Små</desc>
 								<desc xml:lang="zh-CN">小写</desc>
 								<desc xml:lang="zh-TW">小寫</desc>
-								<desc xml:lang="ar">Lower</desc>
-								<desc xml:lang="he">Lower</desc>
-								<desc xml:lang="ca">Lower</desc>
+								<desc xml:lang="ar">صغير</desc>
+								<desc xml:lang="he">‮אותיות קטנות‬</desc>
+								<desc xml:lang="ca">Inferior</desc>
 								<desc xml:lang="pt">Minúsculas</desc>
 								<desc xml:lang="ru">Строчные</desc>
 								<desc xml:lang="es">Minúsculas</desc>
@@ -1398,6 +1398,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
