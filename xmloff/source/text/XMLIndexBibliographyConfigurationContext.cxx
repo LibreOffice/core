@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyConfigurationContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:20 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,6 @@
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
@@ -238,8 +234,8 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
     sal_Bool bSort(sal_True);
 
     // process children here and use default context!
-    if ((nPrefix == XML_NAMESPACE_TEXT) &&
-        rLocalName.equalsAsciiL(sXML_sort_key, sizeof(sXML_sort_key)-1))
+    if ( ( nPrefix == XML_NAMESPACE_TEXT ) &&
+         IsXMLToken( rLocalName, XML_SORT_KEY ) )
     {
         sal_Int16 nLength = xAttrList->getLength();
         for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
@@ -251,12 +247,11 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
 
             if (nPrfx == XML_NAMESPACE_TEXT)
             {
-                if (sLocalName.equalsAsciiL(sXML_key, sizeof(sXML_key)-1))
+                if ( IsXMLToken( sLocalName, XML_KEY ) )
                 {
                     sKey = xAttrList->getValueByIndex(nAttr);
                 }
-                else if (sLocalName.equalsAsciiL(sXML_sort_ascending,
-                                                sizeof(sXML_sort_ascending)-1))
+                else if ( IsXMLToken( sLocalName, XML_SORT_ASCENDING ) )
                 {
                     sal_Bool bTmp;
                     if (SvXMLUnitConverter::convertBool(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 14:00:16 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLTEXTPROPERTYSETCONTEXT_HXX
 #include "XMLTextPropertySetContext.hxx"
@@ -103,6 +103,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
+using namespace ::xmloff::token;
 
 class XMLTextShapePropertySetContext_Impl : public XMLShapePropertySetContext
 {
@@ -186,10 +187,9 @@ void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rValue )
 {
     if( XML_NAMESPACE_STYLE == nPrefixKey &&
-        rLocalName.equalsAsciiL( sXML_auto_update,
-                                 sizeof(sXML_auto_update)-1 ) )
+        IsXMLToken( rLocalName, XML_AUTO_UPDATE ) )
     {
-          if( rValue.equalsAsciiL( sXML_true, sizeof(sXML_true)-1 ) )
+          if( IsXMLToken( rValue, XML_TRUE ) )
             bAutoUpdate = sal_True;
     }
     else
@@ -224,7 +224,7 @@ SvXMLImportContext *XMLTextShapeStyleContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.compareToAscii( sXML_properties ) == 0 )
+        IsXMLToken( rLocalName, XML_PROPERTIES ) )
     {
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
@@ -236,7 +236,7 @@ SvXMLImportContext *XMLTextShapeStyleContext::CreateChildContext(
         }
     }
     else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-              rLocalName.equalsAsciiL( sXML_events, sizeof(sXML_events)-1 ) )
+              IsXMLToken( rLocalName, XML_EVENTS ) )
     {
         // create and remember events import context
         // (for delayed processing of events)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexUserSourceContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -120,11 +120,15 @@
 #include <rtl/ustring.hxx>
 #endif
 
+
 using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_USER_INDEX_ENTRY_TEMPLATE;
+using ::xmloff::token::XML_OUTLINE_LEVEL;
 
 
 const sal_Char sAPI_CreateFromEmbeddedObjects[] = "CreateFromEmbeddedObjects";
@@ -270,13 +274,12 @@ SvXMLImportContext* XMLIndexUserSourceContext::CreateChildContext(
     const Reference<XAttributeList> & xAttrList )
 {
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         (rLocalName.equalsAsciiL(sXML_user_index_entry_template,
-                    sizeof(sXML_user_index_entry_template)-1)))
+         (IsXMLToken(rLocalName, XML_USER_INDEX_ENTRY_TEMPLATE)) )
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
                                            aLevelNameTOCMap,
-                                           sXML_outline_level,
+                                           XML_OUTLINE_LEVEL,
                                            aLevelStylePropNameTOCMap,
                                            aAllowedTokenTypesUser);
     }

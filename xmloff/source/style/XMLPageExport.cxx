@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPageExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-06 11:06:15 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
@@ -120,6 +120,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
+using namespace ::xmloff::token;
 
 
 //______________________________________________________________________________
@@ -193,18 +194,18 @@ sal_Bool XMLPageExport::exportStyle(
     else
     {
         OUString sName( rStyle->getName() );
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_name, sName );
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, sName );
 
         OUString sPMName;
         if( findPageMasterName( sName, sPMName ) )
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_page_master_name, sPMName );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_PAGE_MASTER_NAME, sPMName );
 
         aAny = xPropSet->getPropertyValue( sFollowStyle );
         OUString sNextName;
         aAny >>= sNextName;
         if( sName != sNextName && sNextName.getLength() )
         {
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_next_style_name,
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NEXT_STYLE_NAME,
                           sNextName );
         }
 //      OUString sPageMaster = GetExport().GetAutoStylePool()->Find(
@@ -212,11 +213,11 @@ sal_Bool XMLPageExport::exportStyle(
 //                                          xPropSet );
 //      if( sPageMaster.getLength() )
 //          GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-//                                    sXML_page_master_name,
+//                                    XML_PAGE_MASTER_NAME,
 //                                    sPageMaster );
 
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                  sXML_master_page, sal_True, sal_True );
+                                  XML_MASTER_PAGE, sal_True, sal_True );
 
         exportMasterPageContent( xPropSet, sal_False );
     }

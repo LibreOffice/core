@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lspachdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-21 06:54:15 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #include <lspachdl.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -93,6 +93,8 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_CASEMAP_NORMAL;
 
 // this is a copy of defines in svx/inc/escpitem.hxx
 #define DFLT_ESC_PROP    58
@@ -121,7 +123,7 @@ sal_Bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
             return sal_False;
         aLSp.Height = nTemp;
     }
-    else if( rStrImpValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_casemap_normal) ) )
+    else if( IsXMLToken( rStrImpValue, XML_CASEMAP_NORMAL) )
     {
         aLSp.Mode = style::LineSpacingMode::PROP;
         aLSp.Height = 100;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-29 15:38:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _XMLOFF_XMLASTPLP_HXX
 #include "xmlaustp.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
@@ -94,6 +94,7 @@
 using namespace ::std;
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 //#############################################################################
 //
@@ -106,8 +107,8 @@ using namespace ::com::sun::star;
 //
 
 SvXMLAutoStylePoolP_Impl::SvXMLAutoStylePoolP_Impl()
-:   msCDATA( OUString::createFromAscii( sXML_CDATA ) ),
-    msWS( OUString::createFromAscii( sXML_WS ) ),
+:   msCDATA( GetXMLToken(XML_CDATA) ),
+    msWS( GetXMLToken(XML_WS) ),
     maFamilyList( 5, 5 )
 {
     mpAttrList = new SvXMLAttributeList();
@@ -397,23 +398,23 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
             if( aExpStyles[i].mpProperties )
             {
-                OUString sName( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_name) ) );
+                OUString sName( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_NAME) ) );
                 mpAttrList->AddAttribute( sName, msCDATA, aExpStyles[i].mpProperties->GetName() );
 
                 if( pFamily->bAsFamily )
                 {
-                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_family) );
+                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_FAMILY) );
                     mpAttrList->AddAttribute( sName, msCDATA, aStrFamilyName );
                 }
 
                 if( aExpStyles[i].mpParent->getLength() )
                 {
-                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_parent_style_name) );
+                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_PARENT_STYLE_NAME) );
                     mpAttrList->AddAttribute( sName, msCDATA, *aExpStyles[i].mpParent );
                 }
 
                 if( pFamily->bAsFamily )
-                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_style) );
+                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_STYLE) );
                 else
                     sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, pFamily->maStrFamilyName );
 

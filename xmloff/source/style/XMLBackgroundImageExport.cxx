@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 15:08:23 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,10 @@
 #endif
 
 #include <xmlnmspe.hxx>
-#include <xmlkywd.hxx>
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmltoken.hxx>
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -80,6 +83,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
+using namespace ::xmloff::token;
 
 XMLBackgroundImageExport::XMLBackgroundImageExport( SvXMLExport& rExp ) :
     rExport( rExp )
@@ -107,11 +111,11 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
         OUString sTempURL( GetExport().AddEmbeddedGraphicObject( sURL ) );
         if( sTempURL.getLength() )
         {
-            GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sTempURL );
-            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
-                          sXML_simple );
-            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
-                          sXML_onLoad );
+            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sTempURL );
+            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE,
+                                      XML_SIMPLE );
+            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE,
+                                      XML_ONLOAD );
         }
 
         OUStringBuffer aOut;
@@ -120,17 +124,17 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
         case GraphicLocation_LEFT_TOP:
         case GraphicLocation_MIDDLE_TOP:
         case GraphicLocation_RIGHT_TOP:
-            aOut.appendAscii( sXML_top );
+            aOut.append( GetXMLToken(XML_TOP) );
             break;
         case GraphicLocation_LEFT_MIDDLE:
         case GraphicLocation_MIDDLE_MIDDLE:
         case GraphicLocation_RIGHT_MIDDLE:
-            aOut.appendAscii( sXML_center );
+            aOut.append( GetXMLToken(XML_CENTER) );
             break;
         case GraphicLocation_LEFT_BOTTOM:
         case GraphicLocation_MIDDLE_BOTTOM:
         case GraphicLocation_RIGHT_BOTTOM:
-            aOut.appendAscii( sXML_bottom );
+            aOut.append( GetXMLToken(XML_BOTTOM) );
             break;
         }
 
@@ -143,34 +147,34 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
             case GraphicLocation_LEFT_TOP:
             case GraphicLocation_LEFT_BOTTOM:
             case GraphicLocation_LEFT_MIDDLE:
-                aOut.appendAscii( sXML_left );
+                aOut.append( GetXMLToken(XML_LEFT) );
                 break;
             case GraphicLocation_MIDDLE_TOP:
             case GraphicLocation_MIDDLE_MIDDLE:
             case GraphicLocation_MIDDLE_BOTTOM:
-                aOut.appendAscii( sXML_center );
+                aOut.append( GetXMLToken(XML_CENTER) );
                 break;
             case GraphicLocation_RIGHT_MIDDLE:
             case GraphicLocation_RIGHT_TOP:
             case GraphicLocation_RIGHT_BOTTOM:
-                aOut.appendAscii( sXML_right );
+                aOut.append( GetXMLToken(XML_RIGHT) );
                 break;
             }
         }
         if( aOut.getLength() )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                  sXML_position, aOut.makeStringAndClear() );
+                                  XML_POSITION, aOut.makeStringAndClear() );
 
         if( GraphicLocation_AREA == ePos )
         {
-            aOut.appendAscii( sXML_background_stretch  );
+            aOut.append( GetXMLToken(XML_BACKGROUND_STRETCH) );
         }
         else if( GraphicLocation_NONE != ePos && GraphicLocation_TILED != ePos  )
         {
-            aOut.appendAscii( sXML_background_no_repeat );
+            aOut.append( GetXMLToken(XML_BACKGROUND_NO_REPEAT) );
         }
         if( aOut.getLength() )
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_repeat,
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REPEAT,
                           aOut.makeStringAndClear() );
 
         if( pFilter )
@@ -178,7 +182,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
             OUString sFilter;
             (*pFilter) >>= sFilter;
             if( sFilter.getLength() )
-                GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_filter_name,
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FILTER_NAME,
                                           sFilter );
         }
     }

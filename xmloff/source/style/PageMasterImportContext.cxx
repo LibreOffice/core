@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:50:21 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_PAGEMASTERPROPHDL_HXX_
 #include "PageMasterPropHdl.hxx"
@@ -91,13 +91,14 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 void PageStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const rtl::OUString& rLocalName,
                                         const rtl::OUString& rValue )
 {
     // TODO: use a map here
-    if( XML_NAMESPACE_STYLE == nPrefixKey && rLocalName.compareToAscii( sXML_page_usage ) == 0 )
+    if( XML_NAMESPACE_STYLE == nPrefixKey && IsXMLToken( rLocalName, XML_PAGE_USAGE ) )
     {
         sPageUsage = rValue;
     }
@@ -130,10 +131,10 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
     SvXMLImportContext *pContext = NULL;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        ((rLocalName.compareToAscii( sXML_header_style ) == 0) ||
-        (rLocalName.compareToAscii( sXML_footer_style ) == 0) ) )
+        ((IsXMLToken(rLocalName, XML_HEADER_STYLE )) ||
+         (IsXMLToken(rLocalName, XML_FOOTER_STYLE )) ) )
     {
-        sal_Bool bHeader = (rLocalName.compareToAscii(sXML_header_style) == 0);
+        sal_Bool bHeader = IsXMLToken(rLocalName, XML_HEADER_STYLE);
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
@@ -173,7 +174,7 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
         }
     }
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.compareToAscii( sXML_properties ) == 0 )
+        IsXMLToken(rLocalName, XML_PROPERTIES) )
     {
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );

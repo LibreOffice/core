@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-29 15:38:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #ifndef _XMLOFF_ATTRLIST_HXX
 #include "attrlist.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
-#endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
 #endif
@@ -105,6 +102,7 @@
 using namespace ::std;
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 
 void SvXMLAutoStylePoolP::exportStyleAttributes(
@@ -178,12 +176,11 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                     {
                         OUString sAttrName( rNamespaceMap.GetQNameByKey(
                             aPropMapper->GetEntryNameSpace( nIndex ), aPropMapper->GetEntryXMLName( nIndex ) ) );
-                        OUString sCDATA( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA ) );
                         OUString sValue;
                         const XMLPropertyHandler* pPropHdl = aPropMapper->GetPropertyHandler( nIndex );
                         if( pPropHdl && pPropHdl->exportXML( sValue, pProp->maValue, rUnitConverter ) &&
-                            (sValue.compareToAscii( sXML_all ) != 0) )
-                            rAttrList.AddAttribute( sAttrName, sCDATA, sValue );
+                            ( ! IsXMLToken( sValue, XML_ALL ) ) )
+                            rAttrList.AddAttribute( sAttrName, GetXMLToken(XML_CDATA), sValue );
                     }
                     break;
                 }
@@ -202,8 +199,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
 {
     if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
     {
-        OUString sType( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA ) );
-        OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
+        OUString sWS( GetXMLToken(XML_WS) );
 
         sal_Int32       nHeaderStartIndex(-1);
         sal_Int32       nHeaderEndIndex(-1);
@@ -259,7 +255,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
 
         uno::Reference< xml::sax::XAttributeList > xEmptyList;
 
-        OUString sNameHeader( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii( sXML_header_style ) ) );
+        OUString sNameHeader( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_HEADER_STYLE) ) );
 
         rHandler->ignorableWhitespace( sWS );
         rHandler->startElement( sNameHeader, xEmptyList );
@@ -267,7 +263,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
         rHandler->ignorableWhitespace( sWS );
         rHandler->endElement( sNameHeader );
 
-        OUString sNameFooter( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii( sXML_footer_style ) ) );
+        OUString sNameFooter( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_FOOTER_STYLE) ) );
 
         rHandler->ignorableWhitespace( sWS );
         rHandler->startElement( sNameFooter, xEmptyList );

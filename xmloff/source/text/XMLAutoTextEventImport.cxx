@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventImport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:53:43 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -113,6 +113,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::lang::XMultiServiceFactory;
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_AUTO_TEXT_EVENTS;
 
 const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
@@ -162,10 +164,8 @@ SvXMLImportContext* XMLAutoTextEventImport::CreateContext(
     const OUString& rLocalName,
     const Reference<XAttributeList > & xAttrList )
 {
-    if ( xEvents.is() &&
-         (XML_NAMESPACE_OFFICE == nPrefix) &&
-         rLocalName.equalsAsciiL(sXML_auto_text_events,
-                                 sizeof(sXML_auto_text_events)-1) )
+    if ( xEvents.is() && (XML_NAMESPACE_OFFICE == nPrefix) &&
+         IsXMLToken( rLocalName, XML_AUTO_TEXT_EVENTS) )
     {
         return new XMLAutoTextContainerEventImport(
             *this, nPrefix, rLocalName, xEvents);

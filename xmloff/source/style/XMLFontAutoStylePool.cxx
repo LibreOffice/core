@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFontAutoStylePool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-03 12:21:30 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
@@ -91,7 +91,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-
+using namespace ::xmloff::token;
 
 int XMLFontAutoStylePoolNameCmp_Impl( const OUString& r1,
                                       const OUString& r2 )
@@ -288,7 +288,7 @@ OUString XMLFontAutoStylePool::Add(
 void XMLFontAutoStylePool::exportXML()
 {
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE,
-                              sXML_font_decls,
+                              XML_FONT_DECLS,
                               sal_True, sal_True );
     Any aAny;
     OUString sTmp;
@@ -304,36 +304,36 @@ void XMLFontAutoStylePool::exportXML()
         const XMLFontAutoStylePoolEntry_Impl *pEntry = pPool->GetObject( i );
 
         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                  sXML_name, pEntry->GetName() );
+                                  XML_NAME, pEntry->GetName() );
 
         aAny <<= pEntry->GetFamilyName();
         if( aFamilyNameHdl.exportXML( sTmp, aAny, rUnitConv ) )
             GetExport().AddAttribute( XML_NAMESPACE_FO,
-                                      sXML_font_family, sTmp );
+                                      XML_FONT_FAMILY, sTmp );
 
         const OUString& rStyleName = pEntry->GetStyleName();
         if( rStyleName.getLength() )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                      sXML_font_style_name,
+                                      XML_FONT_STYLE_NAME,
                                       rStyleName );
 
         aAny <<= (sal_Int16)pEntry->GetFamily();
         if( aFamilyHdl.exportXML( sTmp, aAny, rUnitConv  ) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                      sXML_font_family_generic, sTmp );
+                                      XML_FONT_FAMILY_GENERIC, sTmp );
 
         aAny <<= (sal_Int16)pEntry->GetPitch();
         if( aPitchHdl.exportXML( sTmp, aAny, rUnitConv  ) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                      sXML_font_pitch, sTmp );
+                                      XML_FONT_PITCH, sTmp );
 
         aAny <<= (sal_Int16)pEntry->GetEncoding();
         if( aEncHdl.exportXML( sTmp, aAny, rUnitConv  ) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                      sXML_font_charset, sTmp );
+                                      XML_FONT_CHARSET, sTmp );
 
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                  sXML_font_decl,
+                                  XML_FONT_DECL,
                                   sal_True, sal_True );
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-28 09:02:20 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,11 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
+
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_NUMBER
 */
@@ -94,7 +99,7 @@ class XMLNumberNonePropHdl : public XMLPropertyHandler
     sal_Int8        nBytes;
 public:
     XMLNumberNonePropHdl( sal_Int8 nB = 4 );
-    XMLNumberNonePropHdl( const sal_Char* sZeroString, sal_Int8 nB = 4 );
+    XMLNumberNonePropHdl( enum ::xmloff::token::XMLTokenEnum eZeroString, sal_Int8 nB = 4 );
     virtual ~XMLNumberNonePropHdl();
 
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
@@ -211,7 +216,7 @@ class XMLColorTransparentPropHdl : public XMLPropertyHandler
     const ::rtl::OUString sTransparent;
 
 public:
-    XMLColorTransparentPropHdl( const sal_Char *pTransparent=0 );
+    XMLColorTransparentPropHdl( enum ::xmloff::token::XMLTokenEnum eTransparent = xmloff::token::XML_TOKEN_INVALID );
     virtual ~XMLColorTransparentPropHdl();
 
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
@@ -227,7 +232,7 @@ class XMLIsTransparentPropHdl : public XMLPropertyHandler
     sal_Bool bTransPropValue;
 
 public:
-    XMLIsTransparentPropHdl( const sal_Char *pTransparent=0,
+    XMLIsTransparentPropHdl( enum ::xmloff::token::XMLTokenEnum eTransparent = xmloff::token::XML_TOKEN_INVALID,
                              sal_Bool bTransPropValue = sal_True );
     virtual ~XMLIsTransparentPropHdl();
 

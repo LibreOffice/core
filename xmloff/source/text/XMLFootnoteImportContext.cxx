@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteImportContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLFOOTNOTEBODYIMPORTCONTEXT_HXX
@@ -169,7 +169,7 @@ void XMLFootnoteImportContext::StartElement(
     if( xFactory.is() )
     {
         // create endnote or footnote
-        sal_Bool bIsEndnote = (0 == GetLocalName().compareToAscii(sXML_endnote));
+        sal_Bool bIsEndnote = IsXMLToken( GetLocalName(), XML_ENDNOTE );
         Reference<XInterface> xIfc = xFactory->createInstance(
             bIsEndnote ?
             OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_service_endnote)) :
@@ -189,7 +189,7 @@ void XMLFootnoteImportContext::StartElement(
                                   &sLocalName );
 
             if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-                 (0 == sLocalName.compareToAscii(sXML_id)) )
+                 IsXMLToken( sLocalName, XML_ID )   )
             {
                 // get ID ...
                 Reference<XPropertySet> xPropertySet(xTextContent, UNO_QUERY);
@@ -259,7 +259,7 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
                                       &sLocalName );
 
                 if ( (nPrefix == XML_NAMESPACE_TEXT) &&
-                     (0 == sLocalName.compareToAscii(sXML_label)) )
+                     IsXMLToken( sLocalName, XML_LABEL ) )
                 {
                     xFootnote->setLabel(xAttrList->getValueByIndex(nAttr));
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-15 12:37:49 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #endif
 
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -104,6 +104,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 
 XMLTextColumnsExport::XMLTextColumnsExport( SvXMLExport& rExp ) :
@@ -129,7 +130,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
 
     OUStringBuffer sValue;
     GetExport().GetMM100UnitConverter().convertNumber( sValue, nCount );
-    GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_column_count,
+    GetExport().AddAttribute( XML_NAMESPACE_FO, XML_COLUMN_COUNT,
                               sValue.makeStringAndClear() );
 
     // handle 'automatic' columns
@@ -146,12 +147,12 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             GetExport().GetMM100UnitConverter().convertMeasure(
                 aBuffer, nDistance );
             GetExport().AddAttribute( XML_NAMESPACE_FO,
-                                      sXML_column_gap,
+                                      XML_COLUMN_GAP,
                                       aBuffer.makeStringAndClear() );
         }
     }
 
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, sXML_columns,
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_COLUMNS,
                               sal_True, sal_True );
 
     if( xPropSet.is() )
@@ -165,7 +166,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             aAny >>= nWidth;
             GetExport().GetMM100UnitConverter().convertMeasure( sValue,
                                                                 nWidth );
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_width,
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_WIDTH,
                                       sValue.makeStringAndClear() );
 
             // style:color
@@ -174,7 +175,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             aAny >>= nColor;
             GetExport().GetMM100UnitConverter().convertColor( sValue,
                                                               nColor );
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_color,
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_COLOR,
                                       sValue.makeStringAndClear() );
 
             // style:height
@@ -183,7 +184,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             aAny >>= nHeight;
             GetExport().GetMM100UnitConverter().convertPercent( sValue,
                                                                 nHeight );
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_height,
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_HEIGHT,
                                       sValue.makeStringAndClear() );
 
             // style:vertical-align
@@ -191,21 +192,21 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             VerticalAlignment eVertAlign;
             aAny >>= eVertAlign;
 
-            sal_Char *pStr = 0;
+            enum XMLTokenEnum eStr = XML_TOKEN_INVALID;
             switch( eVertAlign )
             {
-//          case VerticalAlignment_TOP: pStr = sXML_top;
-            case VerticalAlignment_MIDDLE: pStr = sXML_middle; break;
-            case VerticalAlignment_BOTTOM: pStr = sXML_bottom; break;
+//          case VerticalAlignment_TOP: eStr = XML_TOP;
+            case VerticalAlignment_MIDDLE: eStr = XML_MIDDLE; break;
+            case VerticalAlignment_BOTTOM: eStr = XML_BOTTOM; break;
             }
 
-            if( pStr )
-                GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE,
-                                               sXML_vertical_align, pStr );
+            if( eStr != XML_TOKEN_INVALID)
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                          XML_VERTICAL_ALIGN, eStr );
 
             // style:column-sep
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                      sXML_column_sep,
+                                      XML_COLUMN_SEP,
                                       sal_True, sal_True );
         }
     }
@@ -216,23 +217,23 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
         GetExport().GetMM100UnitConverter().convertNumber( sValue,
                                                        pColumns->Width );
         sValue.append( (sal_Unicode)'*' );
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_rel_width,
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                                   sValue.makeStringAndClear() );
 
         // fo:margin-left
         GetExport().GetMM100UnitConverter().convertMeasure( sValue,
                                                        pColumns->LeftMargin );
-        GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_margin_left,
+        GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MARGIN_LEFT,
                                        sValue.makeStringAndClear() );
 
         // fo:margin-right
         GetExport().GetMM100UnitConverter().convertMeasure( sValue,
                                                        pColumns->RightMargin );
-        GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_margin_right,
+        GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MARGIN_RIGHT,
                                     sValue.makeStringAndClear() );
 
         // style:column
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, sXML_column,
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_COLUMN,
                                   sal_True, sal_True );
         pColumns++;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -216,8 +216,7 @@ void XMLSectionImportContext::StartElement(
     ProcessAttributes(xAttrList);
 
     // process index headers:
-    sal_Bool bIsIndexHeader = GetLocalName().equalsAsciiL(
-        sXML_index_title, sizeof(sXML_index_title)-1);
+    sal_Bool bIsIndexHeader = IsXMLToken( GetLocalName(), XML_INDEX_TITLE );
     if (bIsIndexHeader)
     {
         bValid = sal_True;
@@ -273,9 +272,8 @@ void XMLSectionImportContext::StartElement(
                 }
 
                 // password (only for regular sections)
-                if (bSequenceOK &&
-                    GetLocalName().equalsAsciiL(sXML_section,
-                                                sizeof(sXML_section)-1))
+                if ( bSequenceOK &&
+                     IsXMLToken(GetLocalName(), XML_SECTION) )
                 {
                     Any aAny;
                     aAny <<= aSequence;
@@ -355,13 +353,12 @@ void XMLSectionImportContext::ProcessAttributes(
                 bCondOK = sal_True;
                 break;
             case XML_TOK_SECTION_DISPLAY:
-                if (sAttr.equalsAsciiL(sXML_true, sizeof(sXML_true)-1))
+                if (IsXMLToken(sAttr, XML_TRUE))
                 {
                     bIsVisible = sal_True;
                 }
-                else if ( sAttr.equalsAsciiL(sXML_none, sizeof(sXML_none)-1) ||
-                          sAttr.equalsAsciiL(sXML_condition,
-                                             sizeof(sXML_condition)-1) )
+                else if ( IsXMLToken(sAttr, XML_NONE) ||
+                          IsXMLToken(sAttr, XML_CONDITION) )
                 {
                     bIsVisible = sal_False;
                 }
@@ -414,17 +411,15 @@ SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
     SvXMLImportContext* pContext = NULL;
 
     // section-source (-dde) elements
-    if ((XML_NAMESPACE_TEXT == nPrefix) &&
-        rLocalName.equalsAsciiL(sXML_section_source,
-                                sizeof(sXML_section_source)-1))
+    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
+         IsXMLToken(rLocalName, XML_SECTION_SOURCE) )
     {
         pContext = new XMLSectionSourceImportContext(GetImport(),
                                                      nPrefix, rLocalName,
                                                      xSectionPropertySet);
     }
-    else if ((XML_NAMESPACE_OFFICE == nPrefix) &&
-             rLocalName.equalsAsciiL(sXML_dde_source,
-                                     sizeof(sXML_dde_source)-1))
+    else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
+              IsXMLToken(rLocalName, XML_DDE_SOURCE) )
     {
         pContext = new XMLSectionSourceDDEImportContext(GetImport(),
                                                         nPrefix, rLocalName,

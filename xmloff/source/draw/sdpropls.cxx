@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-27 14:10:29 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,8 +165,8 @@
 #include "ControlBorderHandler.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmltoken.hxx>
 #endif
 
 #ifndef _SDPROPLS_HXX
@@ -227,182 +227,182 @@ using namespace ::xmloff::token;
 const XMLPropertyMapEntry aXMLSDProperties[] =
 {
     // stroke attributes
-    { "LineStyle",                      XML_NAMESPACE_DRAW, sXML_stroke,                XML_SD_TYPE_STROKE, 0 },
-    { "LineDashName",                   XML_NAMESPACE_DRAW, sXML_stroke_dash,           XML_TYPE_STRING, CTF_DASHNAME },
-    { "LineWidth",                      XML_NAMESPACE_SVG,  sXML_stroke_width,          XML_TYPE_MEASURE, 0 },
-    { "LineColor",                      XML_NAMESPACE_SVG,  sXML_stroke_color,          XML_TYPE_COLOR, 0 },
-    { "LineStartName",                  XML_NAMESPACE_DRAW, sXML_marker_start,          XML_TYPE_STRING, CTF_LINESTARTNAME },
-    { "LineStartWidth",                 XML_NAMESPACE_DRAW, sXML_marker_start_width,    XML_TYPE_MEASURE, 0 },
-    { "LineStartCenter",                XML_NAMESPACE_DRAW, sXML_marker_start_center,   XML_TYPE_BOOL, 0 },
-    { "LineEndName",                    XML_NAMESPACE_DRAW, sXML_marker_end,            XML_TYPE_STRING, CTF_LINEENDNAME },
-    { "LineEndWidth",                   XML_NAMESPACE_DRAW, sXML_marker_end_width,      XML_TYPE_MEASURE, 0 },
-    { "LineEndCenter",                  XML_NAMESPACE_DRAW, sXML_marker_end_center,     XML_TYPE_BOOL, 0 },
-    { "LineTransparence",               XML_NAMESPACE_SVG,  sXML_stroke_opacity,        XML_SD_TYPE_OPACITY, 0 },
-    { "LineJoint",                      XML_NAMESPACE_SVG,  sXML_stroke_linejoin,       XML_SD_TYPE_LINEJOIN, 0 },
+    { "LineStyle",                      XML_NAMESPACE_DRAW, XML_STROKE,                 XML_SD_TYPE_STROKE, 0 },
+    { "LineDashName",                   XML_NAMESPACE_DRAW, XML_STROKE_DASH,            XML_TYPE_STRING, CTF_DASHNAME },
+    { "LineWidth",                      XML_NAMESPACE_SVG,  XML_STROKE_WIDTH,           XML_TYPE_MEASURE, 0 },
+    { "LineColor",                      XML_NAMESPACE_SVG,  XML_STROKE_COLOR,           XML_TYPE_COLOR, 0 },
+    { "LineStartName",                  XML_NAMESPACE_DRAW, XML_MARKER_START,           XML_TYPE_STRING, CTF_LINESTARTNAME },
+    { "LineStartWidth",                 XML_NAMESPACE_DRAW, XML_MARKER_START_WIDTH,     XML_TYPE_MEASURE, 0 },
+    { "LineStartCenter",                XML_NAMESPACE_DRAW, XML_MARKER_START_CENTER,    XML_TYPE_BOOL, 0 },
+    { "LineEndName",                    XML_NAMESPACE_DRAW, XML_MARKER_END,             XML_TYPE_STRING, CTF_LINEENDNAME },
+    { "LineEndWidth",                   XML_NAMESPACE_DRAW, XML_MARKER_END_WIDTH,       XML_TYPE_MEASURE, 0 },
+    { "LineEndCenter",                  XML_NAMESPACE_DRAW, XML_MARKER_END_CENTER,      XML_TYPE_BOOL, 0 },
+    { "LineTransparence",               XML_NAMESPACE_SVG,  XML_STROKE_OPACITY,         XML_SD_TYPE_OPACITY, 0 },
+    { "LineJoint",                      XML_NAMESPACE_SVG,  XML_STROKE_LINEJOIN,        XML_SD_TYPE_LINEJOIN, 0 },
 
     // fill attributes
-    { "FillStyle",                      XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
-    { "FillColor",                      XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
-    { "FillGradientName",               XML_NAMESPACE_DRAW, sXML_fill_gradient_name,    XML_TYPE_STRING, CTF_FILLGRADIENTNAME },
-    { "FillGradientStepCount",          XML_NAMESPACE_DRAW, sXML_gradient_step_count,   XML_TYPE_NUMBER, 0 },
-    { "FillHatchName",                  XML_NAMESPACE_DRAW, sXML_fill_hatch_name,       XML_TYPE_STRING, CTF_FILLHATCHNAME },
-    { "FillBackground",                 XML_NAMESPACE_DRAW, sXML_fill_hatch_solid,      XML_TYPE_BOOL, 0 },
-    { "FillBitmapName",                 XML_NAMESPACE_DRAW, sXML_fill_image_name,       XML_TYPE_STRING, CTF_FILLBITMAPNAME },
-    { "FillTransparence",               XML_NAMESPACE_DRAW, sXML_transparency,          XML_TYPE_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 },    // exists in SW, too
-    { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name,     XML_TYPE_STRING, CTF_FILLTRANSNAME },
+    { "FillStyle",                      XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, 0 },
+    { "FillColor",                      XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, 0 },
+    { "FillGradientName",               XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STRING, CTF_FILLGRADIENTNAME },
+    { "FillGradientStepCount",          XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER, 0 },
+    { "FillHatchName",                  XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STRING, CTF_FILLHATCHNAME },
+    { "FillBackground",                 XML_NAMESPACE_DRAW, XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL, 0 },
+    { "FillBitmapName",                 XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME,        XML_TYPE_STRING, CTF_FILLBITMAPNAME },
+    { "FillTransparence",               XML_NAMESPACE_DRAW, XML_TRANSPARENCY,           XML_TYPE_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 },    // exists in SW, too
+    { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, XML_TRANSPARENCY_NAME,      XML_TYPE_STRING, CTF_FILLTRANSNAME },
 
-    { "FillBitmapSizeX",                XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapSizeY",                XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapMode",                 XML_NAMESPACE_STYLE,sXML_repeat,                XML_SD_TYPE_BITMAP_MODE, 0 },
-    { "FillBitmapPositionOffsetX",      XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_x,XML_TYPE_PERCENT, 0 },
-    { "FillBitmapPositionOffsetY",      XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_y,XML_TYPE_PERCENT, 0 },
-    { "FillBitmapRectanglePoint",       XML_NAMESPACE_DRAW, sXML_fill_image_ref_point,  XML_SD_TYPE_BITMAP_REFPOINT, 0 },
-    { "FillBitmapOffsetX",              XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,    XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X },
-    { "FillBitmapOffsetY",              XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,    XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y },
+    { "FillBitmapSizeX",                XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapSizeY",                XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapMode",                 XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_BITMAP_MODE, 0 },
+    { "FillBitmapPositionOffsetX",      XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT, 0 },
+    { "FillBitmapPositionOffsetY",      XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT, 0 },
+    { "FillBitmapRectanglePoint",       XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT,   XML_SD_TYPE_BITMAP_REFPOINT, 0 },
+    { "FillBitmapOffsetX",              XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X },
+    { "FillBitmapOffsetY",              XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y },
 
     // text frame attributes
-    { "TextHorizontalAdjust",           XML_NAMESPACE_DRAW, sXML_textarea_horizontal_align, XML_SD_TYPE_TEXT_ALIGN, 0 },
-    { "TextVerticalAdjust",             XML_NAMESPACE_DRAW, sXML_textarea_vertical_align,   XML_SD_TYPE_VERTICAL_ALIGN, 0 },
-    { "TextAutoGrowHeight",             XML_NAMESPACE_DRAW, sXML_auto_grow_width,       XML_TYPE_BOOL, 0 },
-    { "TextAutoGrowWidth",              XML_NAMESPACE_DRAW, sXML_auto_grow_height,      XML_TYPE_BOOL, 0 },
-    { "TextFitToSize",                  XML_NAMESPACE_DRAW, sXML_fit_to_size,           XML_SD_TYPE_FITTOSIZE, 0 },
-    { "TextContourFrame",               XML_NAMESPACE_DRAW, sXML_fit_to_contour,        XML_TYPE_BOOL, 0 },
-    { "TextMaximumFrameHeight",         XML_NAMESPACE_FO,   sXML_max_height,            XML_TYPE_MEASURE, 0 },
-    { "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   sXML_max_width,             XML_TYPE_MEASURE, 0 },
-    { "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   sXML_min_height,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
-    { "TextMinimumFrameWidth",          XML_NAMESPACE_FO,   sXML_min_width,             XML_TYPE_MEASURE, 0 },
-    { "TextUpperDistance",              XML_NAMESPACE_FO,   sXML_padding_top,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
-    { "TextLowerDistance",              XML_NAMESPACE_FO,   sXML_padding_bottom,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
-    { "TextLeftDistance",               XML_NAMESPACE_FO,   sXML_padding_left,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
-    { "TextRightDistance",              XML_NAMESPACE_FO,   sXML_padding_right,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
-    { "TextWritingMode",                XML_NAMESPACE_DRAW, sXML_writing_mode,          XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE },
-    { "NumberingRules",                 XML_NAMESPACE_TEXT, sXML_list_style,            XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES },
-    { "NumberingRules",                 XML_NAMESPACE_TEXT, sXML_list_style_name,       XML_TYPE_STRING, CTF_NUMBERINGRULES_NAME },
+    { "TextHorizontalAdjust",           XML_NAMESPACE_DRAW, XML_TEXTAREA_HORIZONTAL_ALIGN,  XML_SD_TYPE_TEXT_ALIGN, 0 },
+    { "TextVerticalAdjust",             XML_NAMESPACE_DRAW, XML_TEXTAREA_VERTICAL_ALIGN,    XML_SD_TYPE_VERTICAL_ALIGN, 0 },
+    { "TextAutoGrowHeight",             XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH,        XML_TYPE_BOOL, 0 },
+    { "TextAutoGrowWidth",              XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT,       XML_TYPE_BOOL, 0 },
+    { "TextFitToSize",                  XML_NAMESPACE_DRAW, XML_FIT_TO_SIZE,            XML_SD_TYPE_FITTOSIZE, 0 },
+    { "TextContourFrame",               XML_NAMESPACE_DRAW, XML_FIT_TO_CONTOUR,         XML_TYPE_BOOL, 0 },
+    { "TextMaximumFrameHeight",         XML_NAMESPACE_FO,   XML_MAX_HEIGHT,             XML_TYPE_MEASURE, 0 },
+    { "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   XML_MAX_WIDTH,              XML_TYPE_MEASURE, 0 },
+    { "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   XML_MIN_HEIGHT,             XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
+    { "TextMinimumFrameWidth",          XML_NAMESPACE_FO,   XML_MIN_WIDTH,              XML_TYPE_MEASURE, 0 },
+    { "TextUpperDistance",              XML_NAMESPACE_FO,   XML_PADDING_TOP,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
+    { "TextLowerDistance",              XML_NAMESPACE_FO,   XML_PADDING_BOTTOM,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
+    { "TextLeftDistance",               XML_NAMESPACE_FO,   XML_PADDING_LEFT,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
+    { "TextRightDistance",              XML_NAMESPACE_FO,   XML_PADDING_RIGHT,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
+    { "TextWritingMode",                XML_NAMESPACE_DRAW, XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE },
+    { "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE,             XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES },
+    { "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_NUMBERINGRULES_NAME },
 
     // shadow attributes
-    { "Shadow",                         XML_NAMESPACE_DRAW, sXML_shadow,                XML_SD_TYPE_SHADOW, 0 },
-    { "ShadowXDistance",                XML_NAMESPACE_DRAW, sXML_shadow_offset_x,       XML_TYPE_MEASURE, 0 },
-    { "ShadowYDistance",                XML_NAMESPACE_DRAW, sXML_shadow_offset_y,       XML_TYPE_MEASURE, 0 },
-    { "ShadowColor",                    XML_NAMESPACE_DRAW, sXML_shadow_color,          XML_TYPE_COLOR, 0 },
-    { "ShadowTransparence",             XML_NAMESPACE_DRAW, sXML_shadow_transparency,   XML_TYPE_PERCENT, 0 },
+    { "Shadow",                         XML_NAMESPACE_DRAW, XML_SHADOW,                 XML_SD_TYPE_SHADOW, 0 },
+    { "ShadowXDistance",                XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_X,        XML_TYPE_MEASURE, 0 },
+    { "ShadowYDistance",                XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_Y,        XML_TYPE_MEASURE, 0 },
+    { "ShadowColor",                    XML_NAMESPACE_DRAW, XML_SHADOW_COLOR,           XML_TYPE_COLOR, 0 },
+    { "ShadowTransparence",             XML_NAMESPACE_DRAW, XML_SHADOW_TRANSPARENCY,    XML_TYPE_PERCENT, 0 },
 
     // graphic attributes
-    { "GraphicColorMode",               XML_NAMESPACE_DRAW, sXML_color_mode,            XML_TYPE_COLOR_MODE, 0 }, // exists in SW, too, with same property name
-    { "AdjustLuminance",                XML_NAMESPACE_DRAW, sXML_luminance,             XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
-    { "AdjustContrast",                 XML_NAMESPACE_DRAW, sXML_contrast,              XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
-    { "Gamma",                          XML_NAMESPACE_DRAW, sXML_gamma,                 XML_TYPE_DOUBLE, 0 }, // signed? exists in SW, too, with same property name
-    { "AdjustRed",                      XML_NAMESPACE_DRAW, sXML_red,                   XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
-    { "AdjustGreen",                    XML_NAMESPACE_DRAW, sXML_green,                 XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
-    { "AdjustBlue",                     XML_NAMESPACE_DRAW, sXML_blue,                  XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
-    { "GraphicCrop",                    XML_NAMESPACE_FO,   sXML_clip,                  XML_TYPE_TEXT_CLIP, 0 }, // exists in SW, too, with same property name
+    { "GraphicColorMode",               XML_NAMESPACE_DRAW, XML_COLOR_MODE,             XML_TYPE_COLOR_MODE, 0 }, // exists in SW, too, with same property name
+    { "AdjustLuminance",                XML_NAMESPACE_DRAW, XML_LUMINANCE,              XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
+    { "AdjustContrast",                 XML_NAMESPACE_DRAW, XML_CONTRAST,               XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
+    { "Gamma",                          XML_NAMESPACE_DRAW, XML_GAMMA,                  XML_TYPE_DOUBLE, 0 }, // signed? exists in SW, too, with same property name
+    { "AdjustRed",                      XML_NAMESPACE_DRAW, XML_RED,                    XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
+    { "AdjustGreen",                    XML_NAMESPACE_DRAW, XML_GREEN,                  XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
+    { "AdjustBlue",                     XML_NAMESPACE_DRAW, XML_BLUE,                   XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
+    { "GraphicCrop",                    XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, 0 }, // exists in SW, too, with same property name
 
     // animation text attributes
-    { "TextAnimationKind",              XML_NAMESPACE_STYLE,sXML_text_blinking,         XML_TYPE_TEXT_ANIMATION_BLINKING, CTF_TEXTANIMATION_BLINKING },
-    { "TextAnimationKind",              XML_NAMESPACE_TEXT, sXML_animation,             XML_TYPE_TEXT_ANIMATION, CTF_TEXTANIMATION_KIND },
-    { "TextAnimationDirection",         XML_NAMESPACE_TEXT, sXML_animation_direction,   XML_TYPE_TEXT_ANIMATION_DIRECTION, 0 },
-    { "TextAnimationStartInside",       XML_NAMESPACE_TEXT, sXML_animation_start_inside,XML_TYPE_BOOL, 0 },
-    { "TextAnimationStopInside",        XML_NAMESPACE_TEXT, sXML_animation_stop_inside, XML_TYPE_BOOL, 0 },
-    { "TextAnimationCount",             XML_NAMESPACE_TEXT, sXML_animation_repeat,      XML_TYPE_NUMBER16, 0 },
-    { "TextAnimationDelay",             XML_NAMESPACE_TEXT, sXML_animation_delay,       XML_TYPE_DURATION16_MS, 0 },
-    { "TextAnimationAmount",            XML_NAMESPACE_TEXT, sXML_animation_steps,       XML_TYPE_TEXT_ANIMATION_STEPS, 0 },
+    { "TextAnimationKind",              XML_NAMESPACE_STYLE,XML_TEXT_BLINKING,          XML_TYPE_TEXT_ANIMATION_BLINKING, CTF_TEXTANIMATION_BLINKING },
+    { "TextAnimationKind",              XML_NAMESPACE_TEXT, XML_ANIMATION,              XML_TYPE_TEXT_ANIMATION, CTF_TEXTANIMATION_KIND },
+    { "TextAnimationDirection",         XML_NAMESPACE_TEXT, XML_ANIMATION_DIRECTION,    XML_TYPE_TEXT_ANIMATION_DIRECTION, 0 },
+    { "TextAnimationStartInside",       XML_NAMESPACE_TEXT, XML_ANIMATION_START_INSIDE, XML_TYPE_BOOL, 0 },
+    { "TextAnimationStopInside",        XML_NAMESPACE_TEXT, XML_ANIMATION_STOP_INSIDE,  XML_TYPE_BOOL, 0 },
+    { "TextAnimationCount",             XML_NAMESPACE_TEXT, XML_ANIMATION_REPEAT,       XML_TYPE_NUMBER16, 0 },
+    { "TextAnimationDelay",             XML_NAMESPACE_TEXT, XML_ANIMATION_DELAY,        XML_TYPE_DURATION16_MS, 0 },
+    { "TextAnimationAmount",            XML_NAMESPACE_TEXT, XML_ANIMATION_STEPS,        XML_TYPE_TEXT_ANIMATION_STEPS, 0 },
 
     // connector attributes
-    { "EdgeNode1HorzDist",              XML_NAMESPACE_DRAW, sXML_start_line_spacing_horizontal, XML_TYPE_MEASURE, 0 },
-    { "EdgeNode1VertDist",              XML_NAMESPACE_DRAW, sXML_start_line_spacing_vertical,   XML_TYPE_MEASURE, 0 },
-    { "EdgeNode2HorzDist",              XML_NAMESPACE_DRAW, sXML_end_line_spacing_horizontal,   XML_TYPE_MEASURE, 0 },
-    { "EdgeNode2VertDist",              XML_NAMESPACE_DRAW, sXML_end_line_spacing_vertical,     XML_TYPE_MEASURE, 0 },
+    { "EdgeNode1HorzDist",              XML_NAMESPACE_DRAW, XML_START_LINE_SPACING_HORIZONTAL,  XML_TYPE_MEASURE, 0 },
+    { "EdgeNode1VertDist",              XML_NAMESPACE_DRAW, XML_START_LINE_SPACING_VERTICAL,    XML_TYPE_MEASURE, 0 },
+    { "EdgeNode2HorzDist",              XML_NAMESPACE_DRAW, XML_END_LINE_SPACING_HORIZONTAL,    XML_TYPE_MEASURE, 0 },
+    { "EdgeNode2VertDist",              XML_NAMESPACE_DRAW, XML_END_LINE_SPACING_VERTICAL,      XML_TYPE_MEASURE, 0 },
 
     // measure attributes
-    { "MeasureLineDistance",            XML_NAMESPACE_DRAW, sXML_line_distance,         XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLineOverhang",        XML_NAMESPACE_DRAW, sXML_guide_overhang,        XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLineDistance",        XML_NAMESPACE_DRAW, sXML_guide_distance,        XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLine1Length",         XML_NAMESPACE_DRAW, sXML_start_guide,           XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLine2Length",         XML_NAMESPACE_DRAW, sXML_end_guide,             XML_TYPE_MEASURE, 0 },
-    { "MeasureTextHorizontalPosition",  XML_NAMESPACE_DRAW, sXML_measure_align,         XML_SD_TYPE_MEASURE_HALIGN, 0 },
-    { "MeasureTextVerticalPosition",    XML_NAMESPACE_DRAW, sXML_measure_vertical_align,XML_SD_TYPE_MEASURE_VALIGN, 0 },
-    { "MeasureUnit",                    XML_NAMESPACE_DRAW, sXML_unit,                  XML_SD_TYPE_MEASURE_UNIT, 0 },
-    { "MeasureShowUnit",                XML_NAMESPACE_DRAW, sXML_show_unit,             XML_TYPE_BOOL, 0 },
-    { "MeasureBelowReferenceEdge",      XML_NAMESPACE_DRAW, sXML_placing,               XML_SD_TYPE_MEASURE_PLACING, 0 },
-    { "MeasureTextRotate90",            XML_NAMESPACE_DRAW, sXML_parallel,              XML_TYPE_BOOL, 0 },
+    { "MeasureLineDistance",            XML_NAMESPACE_DRAW, XML_LINE_DISTANCE,          XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLineOverhang",        XML_NAMESPACE_DRAW, XML_GUIDE_OVERHANG,         XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLineDistance",        XML_NAMESPACE_DRAW, XML_GUIDE_DISTANCE,         XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLine1Length",         XML_NAMESPACE_DRAW, XML_START_GUIDE,            XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLine2Length",         XML_NAMESPACE_DRAW, XML_END_GUIDE,              XML_TYPE_MEASURE, 0 },
+    { "MeasureTextHorizontalPosition",  XML_NAMESPACE_DRAW, XML_MEASURE_ALIGN,          XML_SD_TYPE_MEASURE_HALIGN, 0 },
+    { "MeasureTextVerticalPosition",    XML_NAMESPACE_DRAW, XML_MEASURE_VERTICAL_ALIGN, XML_SD_TYPE_MEASURE_VALIGN, 0 },
+    { "MeasureUnit",                    XML_NAMESPACE_DRAW, XML_UNIT,                   XML_SD_TYPE_MEASURE_UNIT, 0 },
+    { "MeasureShowUnit",                XML_NAMESPACE_DRAW, XML_SHOW_UNIT,              XML_TYPE_BOOL, 0 },
+    { "MeasureBelowReferenceEdge",      XML_NAMESPACE_DRAW, XML_PLACING,                XML_SD_TYPE_MEASURE_PLACING, 0 },
+    { "MeasureTextRotate90",            XML_NAMESPACE_DRAW, XML_PARALLEL,               XML_TYPE_BOOL, 0 },
 
     // 3D geometry attributes
-    { "D3DHorizontalSegments",          XML_NAMESPACE_DR3D, sXML_horizontal_segments,   XML_TYPE_NUMBER, 0 },
-    { "D3DVerticalSegments",            XML_NAMESPACE_DR3D, sXML_vertical_segments,     XML_TYPE_NUMBER, 0 },
-    { "D3DPercentDiagonal",             XML_NAMESPACE_DR3D, sXML_edge_rounding,         XML_TYPE_PERCENT, 0 },
-    { "D3DBackscale",                   XML_NAMESPACE_DR3D, sXML_back_scale,            XML_TYPE_PERCENT, 0 },
-    { "D3DEndAngle",                    XML_NAMESPACE_DR3D, sXML_end_angle,             XML_TYPE_NUMBER, 0 },
-    { "D3DDepth",                       XML_NAMESPACE_DR3D, sXML_depth,                 XML_TYPE_MEASURE, 0 },
-    { "D3DDoubleSided",                 XML_NAMESPACE_DR3D, sXML_backface_culling,      XML_SD_TYPE_BACKFACE_CULLING, 0 },
+    { "D3DHorizontalSegments",          XML_NAMESPACE_DR3D, XML_HORIZONTAL_SEGMENTS,    XML_TYPE_NUMBER, 0 },
+    { "D3DVerticalSegments",            XML_NAMESPACE_DR3D, XML_VERTICAL_SEGMENTS,      XML_TYPE_NUMBER, 0 },
+    { "D3DPercentDiagonal",             XML_NAMESPACE_DR3D, XML_EDGE_ROUNDING,          XML_TYPE_PERCENT, 0 },
+    { "D3DBackscale",                   XML_NAMESPACE_DR3D, XML_BACK_SCALE,             XML_TYPE_PERCENT, 0 },
+    { "D3DEndAngle",                    XML_NAMESPACE_DR3D, XML_END_ANGLE,              XML_TYPE_NUMBER, 0 },
+    { "D3DDepth",                       XML_NAMESPACE_DR3D, XML_DEPTH,                  XML_TYPE_MEASURE, 0 },
+    { "D3DDoubleSided",                 XML_NAMESPACE_DR3D, XML_BACKFACE_CULLING,       XML_SD_TYPE_BACKFACE_CULLING, 0 },
 
     // 3D lighting attributes
-    { "D3DNormalsKind",                 XML_NAMESPACE_DR3D, sXML_normals_kind,          XML_SD_TYPE_NORMALS_KIND, 0 },
-    { "D3DNormalsInvert",               XML_NAMESPACE_DR3D, sXML_normals_direction,     XML_SD_TYPE_NORMALS_DIRECTION, 0 },
+    { "D3DNormalsKind",                 XML_NAMESPACE_DR3D, XML_NORMALS_KIND,           XML_SD_TYPE_NORMALS_KIND, 0 },
+    { "D3DNormalsInvert",               XML_NAMESPACE_DR3D, XML_NORMALS_DIRECTION,      XML_SD_TYPE_NORMALS_DIRECTION, 0 },
 
     // 3D texture attributes
-    { "D3DTextureProjectionX",          XML_NAMESPACE_DR3D, sXML_tex_generation_mode_x, XML_SD_TYPE_TEX_GENERATION_MODE_X, 0 },
-    { "D3DTextureProjectionY",          XML_NAMESPACE_DR3D, sXML_tex_generation_mode_y, XML_SD_TYPE_TEX_GENERATION_MODE_Y, 0 },
-    { "D3DTextureKind",                 XML_NAMESPACE_DR3D, sXML_tex_kind,              XML_SD_TYPE_TEX_KIND, 0 },
-    { "D3DTextureMode",                 XML_NAMESPACE_DR3D, sXML_tex_mode,              XML_SD_TYPE_TEX_MODE, 0 },
-    { "D3DTextureFilter",               XML_NAMESPACE_DR3D, sXML_tex_filter,            XML_SD_TYPE_BACKFACE_CULLING, 0 },
+    { "D3DTextureProjectionX",          XML_NAMESPACE_DR3D, XML_TEX_GENERATION_MODE_X,  XML_SD_TYPE_TEX_GENERATION_MODE_X, 0 },
+    { "D3DTextureProjectionY",          XML_NAMESPACE_DR3D, XML_TEX_GENERATION_MODE_Y,  XML_SD_TYPE_TEX_GENERATION_MODE_Y, 0 },
+    { "D3DTextureKind",                 XML_NAMESPACE_DR3D, XML_TEX_KIND,               XML_SD_TYPE_TEX_KIND, 0 },
+    { "D3DTextureMode",                 XML_NAMESPACE_DR3D, XML_TEX_MODE,               XML_SD_TYPE_TEX_MODE, 0 },
+    { "D3DTextureFilter",               XML_NAMESPACE_DR3D, XML_TEX_FILTER,             XML_SD_TYPE_BACKFACE_CULLING, 0 },
 
     // 3D material attributes
-    { "D3DMaterialColor",               XML_NAMESPACE_DR3D, sXML_diffuse_color,         XML_TYPE_COLOR, 0 },
-    { "D3DMaterialEmission",            XML_NAMESPACE_DR3D, sXML_emissive_color,        XML_TYPE_COLOR, 0 },
-    { "D3DMaterialSpecular",            XML_NAMESPACE_DR3D, sXML_specular_color,        XML_TYPE_COLOR, 0 },
-    { "D3DMaterialSpecularIntensity",   XML_NAMESPACE_DR3D, sXML_shininess,             XML_TYPE_PERCENT, 0 },
+    { "D3DMaterialColor",               XML_NAMESPACE_DR3D, XML_DIFFUSE_COLOR,          XML_TYPE_COLOR, 0 },
+    { "D3DMaterialEmission",            XML_NAMESPACE_DR3D, XML_EMISSIVE_COLOR,         XML_TYPE_COLOR, 0 },
+    { "D3DMaterialSpecular",            XML_NAMESPACE_DR3D, XML_SPECULAR_COLOR,         XML_TYPE_COLOR, 0 },
+    { "D3DMaterialSpecularIntensity",   XML_NAMESPACE_DR3D, XML_SHININESS,              XML_TYPE_PERCENT, 0 },
 
     // 3D shadow attributes
-    { "D3DShadow3D",                    XML_NAMESPACE_DR3D, sXML_shadow,                XML_SD_TYPE_SHADOW, 0 },
+    { "D3DShadow3D",                    XML_NAMESPACE_DR3D, XML_SHADOW,                 XML_SD_TYPE_SHADOW, 0 },
 
     // #FontWork# attributes
-    { "FontWorkStyle",                  XML_NAMESPACE_DRAW, sXML_fontwork_style,                XML_SD_TYPE_FONTWORK_STYLE, CTF_FONTWORK_STYLE  },
-    { "FontWorkAdjust",                 XML_NAMESPACE_DRAW, sXML_fontwork_adjust,               XML_SD_TYPE_FONTWORK_ADJUST,CTF_FONTWORK_ADJUST },
-    { "FontWorkDistance",               XML_NAMESPACE_DRAW, sXML_fontwork_distance,             XML_TYPE_MEASURE,           CTF_FONTWORK_DISTANCE   },
-    { "FontWorkStart",                  XML_NAMESPACE_DRAW, sXML_fontwork_start,                XML_TYPE_MEASURE,           CTF_FONTWORK_START  },
-    { "FontWorkMirror",                 XML_NAMESPACE_DRAW, sXML_fontwork_mirror,               XML_TYPE_BOOL,              CTF_FONTWORK_MIRROR },
-    { "FontWorkOutline",                XML_NAMESPACE_DRAW, sXML_fontwork_outline,              XML_TYPE_BOOL,              CTF_FONTWORK_OUTLINE    },
-    { "FontWorkShadow",                 XML_NAMESPACE_DRAW, sXML_fontwork_shadow,               XML_SD_TYPE_FONTWORK_SHADOW,CTF_FONTWORK_SHADOW },
-    { "FontWorkShadowColor",            XML_NAMESPACE_DRAW, sXML_fontwork_shadow_color,         XML_TYPE_COLOR,             CTF_FONTWORK_SHADOWCOLOR    },
-    { "FontWorkShadowOffsetX",          XML_NAMESPACE_DRAW, sXML_fontwork_shadow_offset_x,      XML_TYPE_MEASURE,           CTF_FONTWORK_SHADOWOFFSETX  },
-    { "FontWorkShadowOffsetY",          XML_NAMESPACE_DRAW, sXML_fontwork_shadow_offset_y,      XML_TYPE_MEASURE,           CTF_FONTWORK_SHADOWOFFSETY  },
-    { "FontWorkForm",                   XML_NAMESPACE_DRAW, sXML_fontwork_form,                 XML_SD_TYPE_FONTWORK_FORM,  CTF_FONTWORK_FORM   },
-    { "FontWorkHideForm",               XML_NAMESPACE_DRAW, sXML_fontwork_hide_form,            XML_TYPE_BOOL,              CTF_FONTWORK_HIDEFORM   },
-    { "FontWorkShadowTransparence",     XML_NAMESPACE_DRAW, sXML_fontwork_shadow_transparence,  XML_TYPE_PERCENT,           CTF_FONTWORK_SHADOWTRANSPARENCE },
+    { "FontWorkStyle",                  XML_NAMESPACE_DRAW, XML_FONTWORK_STYLE,             XML_SD_TYPE_FONTWORK_STYLE, CTF_FONTWORK_STYLE  },
+    { "FontWorkAdjust",                 XML_NAMESPACE_DRAW, XML_FONTWORK_ADJUST,                XML_SD_TYPE_FONTWORK_ADJUST,CTF_FONTWORK_ADJUST },
+    { "FontWorkDistance",               XML_NAMESPACE_DRAW, XML_FONTWORK_DISTANCE,              XML_TYPE_MEASURE,           CTF_FONTWORK_DISTANCE   },
+    { "FontWorkStart",                  XML_NAMESPACE_DRAW, XML_FONTWORK_START,                 XML_TYPE_MEASURE,           CTF_FONTWORK_START  },
+    { "FontWorkMirror",                 XML_NAMESPACE_DRAW, XML_FONTWORK_MIRROR,                XML_TYPE_BOOL,              CTF_FONTWORK_MIRROR },
+    { "FontWorkOutline",                XML_NAMESPACE_DRAW, XML_FONTWORK_OUTLINE,               XML_TYPE_BOOL,              CTF_FONTWORK_OUTLINE    },
+    { "FontWorkShadow",                 XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW,                XML_SD_TYPE_FONTWORK_SHADOW,CTF_FONTWORK_SHADOW },
+    { "FontWorkShadowColor",            XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_COLOR,          XML_TYPE_COLOR,             CTF_FONTWORK_SHADOWCOLOR    },
+    { "FontWorkShadowOffsetX",          XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_OFFSET_X,       XML_TYPE_MEASURE,           CTF_FONTWORK_SHADOWOFFSETX  },
+    { "FontWorkShadowOffsetY",          XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_OFFSET_Y,       XML_TYPE_MEASURE,           CTF_FONTWORK_SHADOWOFFSETY  },
+    { "FontWorkForm",                   XML_NAMESPACE_DRAW, XML_FONTWORK_FORM,                  XML_SD_TYPE_FONTWORK_FORM,  CTF_FONTWORK_FORM   },
+    { "FontWorkHideForm",               XML_NAMESPACE_DRAW, XML_FONTWORK_HIDE_FORM,             XML_TYPE_BOOL,              CTF_FONTWORK_HIDEFORM   },
+    { "FontWorkShadowTransparence",     XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_TRANSPARENCE,   XML_TYPE_PERCENT,           CTF_FONTWORK_SHADOWTRANSPARENCE },
 
     // control attributes (border exists one mor time for the text additions of shapes)
-    { "ControlBackground",              XML_NAMESPACE_FO,   sXML_background_color,      XML_TYPE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "ControlBorder",                  XML_NAMESPACE_FO,   sXML_border,                XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "ControlDataStyle",               XML_NAMESPACE_STYLE,sXML_data_style_name,       XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT|MID_FLAG_SPECIAL_ITEM, CTF_SD_CONTROL_SHAPE_DATA_STYLE },
-    { "ControlTextEmphasis",            XML_NAMESPACE_STYLE,sXML_text_emphasize,        XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 },
+    { "ControlBackground",              XML_NAMESPACE_FO,   XML_BACKGROUND_COLOR,       XML_TYPE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "ControlBorder",                  XML_NAMESPACE_FO,   XML_BORDER,                 XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "ControlDataStyle",               XML_NAMESPACE_STYLE,XML_DATA_STYLE_NAME,        XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT|MID_FLAG_SPECIAL_ITEM, CTF_SD_CONTROL_SHAPE_DATA_STYLE },
+    { "ControlTextEmphasis",            XML_NAMESPACE_STYLE,XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 },
 
     // special entries for floating frames
-    { "FrameIsAutoScroll",          XML_NAMESPACE_DRAW, sXML_frame_display_scrollbar,   XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR },
-    { "FrameIsBorder",              XML_NAMESPACE_DRAW, sXML_frame_display_border,      XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_BORDER },
-    { "FrameMarginWidth",           XML_NAMESPACE_DRAW, sXML_frame_margin_horizontal,   XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_HORI },
-    { "FrameMarginHeight",          XML_NAMESPACE_DRAW, sXML_frame_margin_vertical,     XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_VERT },
-    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_left,         XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,    CTF_SD_OLE_VIS_AREA_LEFT },
-    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_top,          XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,     CTF_SD_OLE_VIS_AREA_TOP },
-    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_width,        XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,   CTF_SD_OLE_VIS_AREA_WIDTH },
-    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_height,       XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_SD_OLE_VIS_AREA_HEIGHT },
-    { "IsInternal",                 XML_NAMESPACE_DRAW, NULL,                           XML_TYPE_BUILDIN_CMP_ONLY,                          CTF_SD_OLE_ISINTERNAL },
+    { "FrameIsAutoScroll",          XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_SCROLLBAR,    XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR },
+    { "FrameIsBorder",              XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_BORDER,       XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_BORDER },
+    { "FrameMarginWidth",           XML_NAMESPACE_DRAW, XML_FRAME_MARGIN_HORIZONTAL,    XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_HORI },
+    { "FrameMarginHeight",          XML_NAMESPACE_DRAW, XML_FRAME_MARGIN_VERTICAL,      XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_VERT },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_LEFT,          XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,    CTF_SD_OLE_VIS_AREA_LEFT },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_TOP,           XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,     CTF_SD_OLE_VIS_AREA_TOP },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_WIDTH,         XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,   CTF_SD_OLE_VIS_AREA_WIDTH },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_HEIGHT,        XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_SD_OLE_VIS_AREA_HEIGHT },
+    { "IsInternal",                 XML_NAMESPACE_DRAW, XML__EMPTY,                     XML_TYPE_BUILDIN_CMP_ONLY,                          CTF_SD_OLE_ISINTERNAL },
 
     // caption properties
-    { "CaptionType",                XML_NAMESPACE_DRAW, sXML_caption_type,              XML_SD_TYPE_CAPTION_TYPE, 0 },
-    { "CaptionIsFixedAngle",        XML_NAMESPACE_DRAW, sXML_caption_angle_type,        XML_SD_TYPE_CAPTION_ANGLE_TYPE, 0 },
-    { "CaptionAngle",               XML_NAMESPACE_DRAW, sXML_caption_angle,             XML_TYPE_NUMBER, 0 },
-    { "CaptionGap",                 XML_NAMESPACE_DRAW, sXML_caption_gap,               XML_TYPE_MEASURE, 0 },
-    { "CaptionEscapeDirection",     XML_NAMESPACE_DRAW, sXML_caption_escape_direction,  XML_SD_TYPE_CAPTION_ESC_DIR, 0 },
-    { "CaptionIsEscapeRelative",    XML_NAMESPACE_DRAW, sXML_caption_escape,            XML_SD_TYPE_CAPTION_IS_ESC_REL|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ISESCREL },
-    { "CaptionEscapeRelative",      XML_NAMESPACE_DRAW, sXML_caption_escape,            XML_SD_TYPE_CAPTION_ESC_REL|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ESCREL },
-    { "CaptionEscapeAbsolute",      XML_NAMESPACE_DRAW, sXML_caption_escape,            XML_SD_TYPE_CAPTION_ESC_ABS|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ESCABS },
-    { "CaptionLineLength",          XML_NAMESPACE_DRAW, sXML_caption_line_length,       XML_TYPE_MEASURE, 0 },
-    { "CaptionIsFitLineLength",     XML_NAMESPACE_DRAW, sXML_caption_fit_line_length,   XML_TYPE_BOOL, 0 },
+    { "CaptionType",                XML_NAMESPACE_DRAW, XML_CAPTION_TYPE,               XML_SD_TYPE_CAPTION_TYPE, 0 },
+    { "CaptionIsFixedAngle",        XML_NAMESPACE_DRAW, XML_CAPTION_ANGLE_TYPE,         XML_SD_TYPE_CAPTION_ANGLE_TYPE, 0 },
+    { "CaptionAngle",               XML_NAMESPACE_DRAW, XML_CAPTION_ANGLE,              XML_TYPE_NUMBER, 0 },
+    { "CaptionGap",                 XML_NAMESPACE_DRAW, XML_CAPTION_GAP,                XML_TYPE_MEASURE, 0 },
+    { "CaptionEscapeDirection",     XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE_DIRECTION,   XML_SD_TYPE_CAPTION_ESC_DIR, 0 },
+    { "CaptionIsEscapeRelative",    XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE,             XML_SD_TYPE_CAPTION_IS_ESC_REL|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ISESCREL },
+    { "CaptionEscapeRelative",      XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE,             XML_SD_TYPE_CAPTION_ESC_REL|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ESCREL },
+    { "CaptionEscapeAbsolute",      XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE,             XML_SD_TYPE_CAPTION_ESC_ABS|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ESCABS },
+    { "CaptionLineLength",          XML_NAMESPACE_DRAW, XML_CAPTION_LINE_LENGTH,        XML_TYPE_MEASURE, 0 },
+    { "CaptionIsFitLineLength",     XML_NAMESPACE_DRAW, XML_CAPTION_FIT_LINE_LENGTH,    XML_TYPE_BOOL, 0 },
 
     // misc object properties
-    { "MoveProtect",                XML_NAMESPACE_DRAW, sXML_move_protect,              XML_TYPE_BOOL, CTF_SD_MOVE_PROTECT },
-    { "SizeProtect",                XML_NAMESPACE_DRAW, sXML_size_protect,              XML_TYPE_BOOL, CTF_SD_SIZE_PROTECT },
+    { "MoveProtect",                XML_NAMESPACE_DRAW, XML_MOVE_PROTECT,               XML_TYPE_BOOL, CTF_SD_MOVE_PROTECT },
+    { "SizeProtect",                XML_NAMESPACE_DRAW, XML_SIZE_PROTECT,               XML_TYPE_BOOL, CTF_SD_SIZE_PROTECT },
     { 0L }
 };
 
@@ -411,34 +411,34 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 
 const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 {
-    { "Change",                     XML_NAMESPACE_PRESENTATION, "transition-type",  XML_SD_TYPE_PRESPAGE_TYPE, CTF_PAGE_TRANS_TYPE },
-    { "Effect",                     XML_NAMESPACE_PRESENTATION, "transition-style", XML_SD_TYPE_PRESPAGE_STYLE, CTF_PAGE_TRANS_STYLE },
-    { "Speed",                      XML_NAMESPACE_PRESENTATION, "transition-speed", XML_SD_TYPE_PRESPAGE_SPEED, CTF_PAGE_TRANS_SPEED },
-    { "Duration",                   XML_NAMESPACE_PRESENTATION, "duration",         XML_SD_TYPE_PRESPAGE_DURATION, CTF_PAGE_TRANS_DURATION },
-    { "Visible",                    XML_NAMESPACE_PRESENTATION, "visibility",       XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_VISIBLE },
-    { "Sound",                      XML_NAMESPACE_PRESENTATION, "sound",            XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM, CTF_PAGE_SOUND_URL },
-    { "BackgroundFullSize",         XML_NAMESPACE_DRAW,         "background-size",  XML_SD_TYPE_PRESPAGE_BACKSIZE, CTF_PAGE_BACKSIZE },
+    { "Change",                     XML_NAMESPACE_PRESENTATION, XML_TRANSITION_TYPE,    XML_SD_TYPE_PRESPAGE_TYPE, CTF_PAGE_TRANS_TYPE },
+    { "Effect",                     XML_NAMESPACE_PRESENTATION, XML_TRANSITION_STYLE,   XML_SD_TYPE_PRESPAGE_STYLE, CTF_PAGE_TRANS_STYLE },
+    { "Speed",                      XML_NAMESPACE_PRESENTATION, XML_TRANSITION_SPEED,   XML_SD_TYPE_PRESPAGE_SPEED, CTF_PAGE_TRANS_SPEED },
+    { "Duration",                   XML_NAMESPACE_PRESENTATION, XML_DURATION,           XML_SD_TYPE_PRESPAGE_DURATION, CTF_PAGE_TRANS_DURATION },
+    { "Visible",                    XML_NAMESPACE_PRESENTATION, XML_VISIBILITY,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_VISIBLE },
+    { "Sound",                      XML_NAMESPACE_PRESENTATION, XML_SOUND,              XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM, CTF_PAGE_SOUND_URL },
+    { "BackgroundFullSize",         XML_NAMESPACE_DRAW,         XML_BACKGROUND_SIZE,    XML_SD_TYPE_PRESPAGE_BACKSIZE, CTF_PAGE_BACKSIZE },
 
-    { "IsBackgroundVisible",        XML_NAMESPACE_PRESENTATION, sXML_background_visible, XML_TYPE_BOOL, 0 },
-    { "IsBackgroundObjectsVisible", XML_NAMESPACE_PRESENTATION, sXML_background_objects_visible, XML_TYPE_BOOL, 0 },
+    { "IsBackgroundVisible",        XML_NAMESPACE_PRESENTATION, XML_BACKGROUND_VISIBLE, XML_TYPE_BOOL, 0 },
+    { "IsBackgroundObjectsVisible", XML_NAMESPACE_PRESENTATION, XML_BACKGROUND_OBJECTS_VISIBLE, XML_TYPE_BOOL, 0 },
 
-    { "FillStyle",                  XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
-    { "FillColor",                  XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
-    { "FillGradientName",           XML_NAMESPACE_DRAW, sXML_fill_gradient_name,    XML_TYPE_STRING, 0 },
-    { "FillGradientStepCount",      XML_NAMESPACE_DRAW, sXML_gradient_step_count,   XML_TYPE_NUMBER, 0 },
-    { "FillHatchName",              XML_NAMESPACE_DRAW, sXML_fill_hatch_name,       XML_TYPE_STRING, 0 },
-    { "FillBitmapName",             XML_NAMESPACE_DRAW, sXML_fill_image_name,       XML_TYPE_STRING, 0 },
-    { "FillTransparenceName",       XML_NAMESPACE_DRAW, sXML_transparency_name,     XML_TYPE_STRING, 0 },
-    { "FillBitmapSizeX",            XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapSizeY",            XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapMode",             XML_NAMESPACE_STYLE,sXML_repeat,                XML_SD_TYPE_BITMAP_MODE, 0 },
-    { "FillBitmapPositionOffsetX",  XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_x,XML_TYPE_PERCENT, 0 },
-    { "FillBitmapPositionOffsetY",  XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_y,XML_TYPE_PERCENT, 0 },
-    { "FillBitmapRectanglePoint",   XML_NAMESPACE_DRAW, sXML_fill_image_ref_point,  XML_SD_TYPE_BITMAP_REFPOINT, 0 },
-    { "FillBitmapOffsetX",          XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,    XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X },
-    { "FillBitmapOffsetY",          XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,    XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y },
+    { "FillStyle",                  XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, 0 },
+    { "FillColor",                  XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, 0 },
+    { "FillGradientName",           XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STRING, 0 },
+    { "FillGradientStepCount",      XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER, 0 },
+    { "FillHatchName",              XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STRING, 0 },
+    { "FillBitmapName",             XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME,        XML_TYPE_STRING, 0 },
+    { "FillTransparenceName",       XML_NAMESPACE_DRAW, XML_TRANSPARENCY_NAME,      XML_TYPE_STRING, 0 },
+    { "FillBitmapSizeX",            XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapSizeY",            XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapMode",             XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_BITMAP_MODE, 0 },
+    { "FillBitmapPositionOffsetX",  XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT, 0 },
+    { "FillBitmapPositionOffsetY",  XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT, 0 },
+    { "FillBitmapRectanglePoint",   XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT,   XML_SD_TYPE_BITMAP_REFPOINT, 0 },
+    { "FillBitmapOffsetX",          XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X },
+    { "FillBitmapOffsetY",          XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET, XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y },
 
     { 0L }
 };
@@ -818,9 +818,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_SHADOW :
             {
-                const OUString aTrueStr( OUString::createFromAscii(sXML_visible) );
-                const OUString aFalseStr( OUString::createFromAscii(sXML_hidden) );
-                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_VISIBLE), GetXMLToken(XML_HIDDEN) );
                 break;
             }
             case XML_SD_TYPE_PRESPAGE_STYLE :
@@ -840,9 +838,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_TEXT_CROSSEDOUT :
             {
-                const OUString aTrueStr( OUString::createFromAscii(sXML_crossedout_single) );
-                const OUString aFalseStr( OUString::createFromAscii(sXML_none) );
-                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_CROSSEDOUT_SINGLE), GetXMLToken(XML_NONE) );
                 break;
             }
             case XML_SD_TYPE_OPACITY :
@@ -857,16 +853,12 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_PRESPAGE_VISIBILITY :
             {
-                const OUString aTrueStr( OUString::createFromAscii(sXML_visible) );
-                const OUString aFalseStr( OUString::createFromAscii(sXML_hidden) );
-                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_VISIBLE), GetXMLToken(XML_HIDDEN) );
                 break;
             }
             case XML_SD_TYPE_PRESPAGE_BACKSIZE:
             {
-                const OUString aTrueStr( OUString::createFromAscii(sXML_full) );
-                const OUString aFalseStr( OUString::createFromAscii(sXML_border) );
-                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_FULL), GetXMLToken(XML_BORDER) );
                 break;
             }
 
@@ -878,9 +870,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 // #87922# DoubleSided -> BackfaceCulling
                 // This BOOL needs to be flipped, DoubleSided TRUE -> NO Backface culling
                 // and vice versa.
-                const OUString aTrueStr( OUString::createFromAscii(sXML_disabled) );
-                const OUString aFalseStr( OUString::createFromAscii(sXML_enabled) );
-                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_DISABLED), GetXMLToken(XML_ENABLED) );
                 break;
             }
 
@@ -891,9 +881,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_NORMALS_DIRECTION:
             {
-                const OUString aTrueStr( OUString::createFromAscii(sXML_normal) );
-                const OUString aFalseStr( OUString::createFromAscii(sXML_inverse) );
-                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_NORMAL), GetXMLToken(XML_INVERSE) );
                 break;
             }
             case XML_SD_TYPE_TEX_GENERATION_MODE_X:
@@ -984,9 +972,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             case XML_SD_TYPE_MEASURE_PLACING:
                 {
-                    const OUString aTrueStr( OUString::createFromAscii(sXML_below) );
-                    const OUString aFalseStr( OUString::createFromAscii(sXML_above) );
-                    pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                    pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_BELOW), GetXMLToken(XML_ABOVE) );
                 }
                 break;
             case XML_TYPE_TEXT_CLIP:
@@ -1016,9 +1002,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 
             case XML_SD_TYPE_CAPTION_ANGLE_TYPE:
             {
-                const OUString aTrueStr( OUString::createFromAscii(sXML_fixed) );
-                const OUString aFalseStr( OUString::createFromAscii(sXML_free) );
-                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_FIXED), GetXMLToken(XML_FREE) );
                 break;
             }
             case XML_SD_TYPE_CAPTION_IS_ESC_REL:
@@ -1063,9 +1047,9 @@ XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< 
         mpListAutoPool( pListAutoPool ),
         mrExport( rExport ),
         maNumRuleExp( rExport ),
-        msCDATA( rtl::OUString::createFromAscii( sXML_CDATA )),
-        msTrue( rtl::OUString::createFromAscii( sXML_true )),
-        msFalse( rtl::OUString::createFromAscii( sXML_false )),
+        msCDATA( GetXMLToken(XML_CDATA)),
+        msTrue( GetXMLToken(XML_TRUE)),
+        msFalse( GetXMLToken(XML_FALSE)),
         mbIsInAutoStyles( sal_False )
 {
 }
@@ -1167,7 +1151,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_FILLHATCHNAME:
             case CTF_FILLBITMAPNAME:
 // #85953# take out this case to allow writing empty
-// sXML_transparency_name entries. This is used to represent
+// XML_TRANSPARENCY_NAME entries. This is used to represent
 // disabled FillTransparencyItems.
 //          case CTF_FILLTRANSNAME:
                 {
@@ -1390,7 +1374,7 @@ XMLPagePropertySetMapper::~XMLPagePropertySetMapper()
 XMLPageExportPropertyMapper::XMLPageExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport ) :
         SvXMLExportPropertyMapper( rMapper ),
         mrExport( rExport ),
-        msCDATA( rtl::OUString::createFromAscii( sXML_CDATA ))
+        msCDATA( GetXMLToken(XML_CDATA))
 {
 }
 
@@ -1495,11 +1479,11 @@ void XMLPageExportPropertyMapper::handleElementItem(
                 OUString aSoundURL;
                 if( (rProperty.maValue >>= aSoundURL) && aSoundURL.getLength() != 0 )
                 {
-                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, mrExport.GetRelativeReference(aSoundURL) );
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_new );
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onRequest );
-                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_PRESENTATION, sXML_sound, sal_True, sal_True );
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference(aSoundURL) );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_NEW );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
+                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_PRESENTATION, XML_SOUND, sal_True, sal_True );
                 }
             }
             break;

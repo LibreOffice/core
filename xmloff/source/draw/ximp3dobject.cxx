@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dobject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-18 08:40:43 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,8 @@
 #include "ximpstyl.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONSHAPE3D_HPP_

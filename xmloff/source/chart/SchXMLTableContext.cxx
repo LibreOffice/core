@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-25 12:01:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
@@ -101,6 +101,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace ::xmloff::token;
 
 // ----------------------------------------
 // class SchXMLTableContext
@@ -190,7 +191,7 @@ SvXMLImportContext* SchXMLTableColumnsContext::CreateChildContext(
     SvXMLImportContext* pContext = 0;
 
     if( nPrefix == XML_NAMESPACE_TABLE &&
-        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_table_column )))
+        IsXMLToken( rLocalName, XML_TABLE_COLUMN ) )
     {
         pContext = new SchXMLTableColumnContext( mrImportHelper, GetImport(), rLocalName, mrTable );
     }
@@ -228,7 +229,7 @@ void SchXMLTableColumnContext::StartElement( const uno::Reference< xml::sax::XAt
         USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_TABLE &&
-            aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_number_columns_repeated )))
+            IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
         {
             aValue = xAttrList->getValueByIndex( i );
             break;   // we only need this attribute
@@ -281,7 +282,7 @@ SvXMLImportContext* SchXMLTableRowsContext::CreateChildContext(
     SvXMLImportContext* pContext = 0;
 
     if( nPrefix == XML_NAMESPACE_TABLE &&
-        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_table_row )))
+        IsXMLToken( rLocalName, XML_TABLE_ROW ) )
     {
         pContext = new SchXMLTableRowContext( mrImportHelper, GetImport(), rLocalName, mrTable );
     }
@@ -328,7 +329,7 @@ SvXMLImportContext* SchXMLTableRowContext::CreateChildContext(
 
     // <table:table-cell> element
     if( nPrefix == XML_NAMESPACE_TABLE &&
-        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_table_cell )))
+        IsXMLToken(rLocalName, XML_TABLE_CELL ) )
     {
         pContext = new SchXMLTableCellContext( mrImportHelper, GetImport(), rLocalName, mrTable );
     }
@@ -382,9 +383,9 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
         {
             case XML_TOK_CELL_VAL_TYPE:
                 aValue = xAttrList->getValueByIndex( i );
-                if( aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_float )))
+                if( IsXMLToken( aValue, XML_FLOAT ) )
                     eValueType = SCH_CELL_TYPE_FLOAT;
-                else if( aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_string )))
+                else if( IsXMLToken( aValue, XML_STRING ) )
                     eValueType = SCH_CELL_TYPE_STRING;
                 break;
 
@@ -425,7 +426,7 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
     // <text:p> element
     if( mbReadPara &&
         nPrefix == XML_NAMESPACE_TEXT &&
-        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_p )))
+        IsXMLToken( rLocalName, XML_P ) )
     {
         // we have to read a string here (not a float)
         pContext = new SchXMLParagraphContext( GetImport(), rLocalName, maCellContent );

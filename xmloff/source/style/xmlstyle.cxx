@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLITEM_HXX
@@ -227,30 +227,30 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     // TODO: use a map here
     if( XML_NAMESPACE_STYLE == nPrefixKey )
     {
-        if( rLocalName.compareToAscii( sXML_family ) == 0L )
+        if( IsXMLToken( rLocalName, XML_FAMILY ) )
         {
-            if( rValue.compareToAscii( sXML_paragraph ) == 0L )
+            if( IsXMLToken( rValue, XML_PARAGRAPH ) )
                 nFamily = (sal_uInt16)SFX_STYLE_FAMILY_PARA;
-            else if( rValue.compareToAscii( sXML_text ) == 0L )
+            else if( IsXMLToken( rValue, XML_TEXT ) )
                 nFamily = (sal_uInt16)SFX_STYLE_FAMILY_CHAR;
         }
-        else if( rLocalName.compareToAscii( sXML_name ) == 0L )
+        else if( IsXMLToken( rLocalName, XML_NAME ) )
         {
             aName = rValue;
         }
-        else if( rLocalName.compareToAscii( sXML_parent_style_name ) == 0L )
+        else if( IsXMLToken( rLocalName, XML_PARENT_STYLE_NAME ) )
         {
             aParent = rValue;
         }
-        else if( rLocalName.compareToAscii( sXML_next_style_name ) == 0L )
+        else if( IsXMLToken( rLocalName, XML_NEXT_STYLE_NAME ) )
         {
             aFollow = rValue;
         }
-        else if( rLocalName.compareToAscii( sXML_help_file_name ) == 0L )
+        else if( IsXMLToken( rLocalName, XML_HELP_FILE_NAME ) )
         {
             aHelpFile = rValue;
         }
-        else if( rLocalName.compareToAscii( sXML_help_id ) == 0L )
+        else if( IsXMLToken( rLocalName, XML_HELP_ID ) )
         {
             sal_Int32 nTmp = rValue.toInt32();
             nHelpId =
@@ -548,7 +548,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
                         GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                     &aLocalName );
                     if( XML_NAMESPACE_STYLE == nPrefix &&
-                        aLocalName.compareToAscii( sXML_family ) == 0L )
+                        IsXMLToken( aLocalName, XML_FAMILY ) )
                     {
                         const OUString& rValue = xAttrList->getValueByIndex( i );
                         nFamily = GetFamily( rValue );
@@ -689,33 +689,32 @@ sal_uInt16 SvXMLStylesContext::GetFamily(
         const ::rtl::OUString& rValue ) const
 {
     sal_uInt16 nFamily = 0U;
-    if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_paragraph )))
+    if( IsXMLToken( rValue, XML_PARAGRAPH ) )
     {
         nFamily = XML_STYLE_FAMILY_TEXT_PARAGRAPH;
     }
-    else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_text )))
+    else if( IsXMLToken( rValue, XML_TEXT ) )
     {
         nFamily = XML_STYLE_FAMILY_TEXT_TEXT;
     }
-    else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_data_style)))
+    else if( IsXMLToken( rValue, XML_DATA_STYLE ) )
     {
         nFamily = XML_STYLE_FAMILY_DATA_STYLE;
     }
-    else if ( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_section) ) )
+    else if ( IsXMLToken( rValue, XML_SECTION ) )
     {
         nFamily = XML_STYLE_FAMILY_TEXT_SECTION;
     }
-    else if( 0 == rValue.compareToAscii( RTL_CONSTASCII_STRINGPARAM( sXML_table )))
+    else if( IsXMLToken( rValue, XML_TABLE ) )
     {
-        if( RTL_CONSTASCII_LENGTH( sXML_table ) == rValue.getLength() )
-            nFamily = XML_STYLE_FAMILY_TABLE_TABLE;
-        else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_table_column )))
-            nFamily = XML_STYLE_FAMILY_TABLE_COLUMN;
-        else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_table_row )))
-            nFamily = XML_STYLE_FAMILY_TABLE_ROW;
-        else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_table_cell )))
-            nFamily = XML_STYLE_FAMILY_TABLE_CELL;
+        nFamily = XML_STYLE_FAMILY_TABLE_TABLE;
     }
+    else if( IsXMLToken( rValue, XML_TABLE_COLUMN ) )
+        nFamily = XML_STYLE_FAMILY_TABLE_COLUMN;
+    else if( IsXMLToken( rValue, XML_TABLE_ROW ) )
+        nFamily = XML_STYLE_FAMILY_TABLE_ROW;
+    else if( IsXMLToken( rValue, XML_TABLE_CELL ) )
+        nFamily = XML_STYLE_FAMILY_TABLE_CELL;
     else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)))
     {
         nFamily = XML_STYLE_FAMILY_SD_GRAPHICS_ID;
@@ -736,7 +735,7 @@ sal_uInt16 SvXMLStylesContext::GetFamily(
     {
         nFamily = XML_STYLE_FAMILY_SCH_CHART_ID;
     }
-    else if ( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_ruby) ) )
+    else if ( IsXMLToken( rValue, XML_RUBY ) )
     {
         nFamily = XML_STYLE_FAMILY_TEXT_RUBY;
     }
@@ -916,7 +915,7 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         if( XML_NAMESPACE_NONE == nPrefix &&
-            aLocalName.compareToAscii( sXML_id ) == 0L )
+            IsXMLToken( aLocalName, XML_ID ) )
         {
             pImpl->SetId( xAttrList->getValueByIndex( i ) );
         }
@@ -937,7 +936,7 @@ SvXMLImportContext *SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_OFFICE == nPrefix &&
-        rLocalName.compareToAscii( sXML_use_styles ) == 0L )
+        IsXMLToken( rLocalName, XML_USE_STYLES ) )
     {
         OUString sHRef;
         pContext = new SvXMLUseStylesContext( GetImport(), nPrefix, rLocalName,
@@ -1061,7 +1060,7 @@ SvXMLUseStylesContext::SvXMLUseStylesContext(
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         if( XML_NAMESPACE_XLINK == nPrefix &&
-            aLocalName.compareToAscii( sXML_href ) == 0L )
+            IsXMLToken( aLocalName, XML_HREF ) )
         {
             rHRef = xAttrList->getValueByIndex( i );
             // TODO: Hack!

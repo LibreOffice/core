@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrope.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include <com/sun/star/style/DropCapFormat.hpp>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
@@ -92,6 +92,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 OUString XMLTextDropCapExport::GetQNameByKey( sal_uInt16 nKey,
                                                const OUString& rLocalName ) const
@@ -116,19 +117,17 @@ void XMLTextDropCapExport::CheckAttrList()
 #endif
 
 void XMLTextDropCapExport::AddAttribute( sal_uInt16 nPrefixKey,
-                                       const sal_Char *pName,
-                                       const OUString& rValue )
+                                         enum XMLTokenEnum eName,
+                                         const OUString& rValue )
 {
-    OUString sName( OUString::createFromAscii( pName ) );
-
-    pAttrList->AddAttribute( GetQNameByKey( nPrefixKey, sName ),
+    pAttrList->AddAttribute( GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
                              sCDATA, rValue );
 }
 
 XMLTextDropCapExport::XMLTextDropCapExport(
         const Reference< xml::sax::XDocumentHandler > & rHandler,
         const SvXMLUnitConverter& rUnitConverter ) :
-    sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
+    sCDATA( GetXMLToken( XML_CDATA ) ),
     pNamespaceMap( 0 ),
     rUnitConv( rUnitConverter ),
     pAttrList( new SvXMLAttributeList )
@@ -158,13 +157,13 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
     {
         // style:lines
         rUnitConv.convertNumber( sBuffer, (sal_Int32)aFormat.Lines );
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_lines,
+        AddAttribute( XML_NAMESPACE_STYLE, XML_LINES,
                       sBuffer.makeStringAndClear() );
 
         // style:length
         if( bWholeWord )
         {
-            sValue = OUString::createFromAscii(sXML_word);
+            sValue = GetXMLToken(XML_WORD);
         }
         else if( aFormat.Count > 1 )
         {
@@ -172,24 +171,24 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
             sValue = sBuffer.makeStringAndClear();
         }
         if( sValue.getLength() )
-            AddAttribute( XML_NAMESPACE_STYLE, sXML_length, sValue );
+            AddAttribute( XML_NAMESPACE_STYLE, XML_LENGTH, sValue );
 
         // style:distance
         if( aFormat.Distance > 0 )
         {
             rUnitConv.convertMeasure( sBuffer, aFormat.Distance );
-            AddAttribute( XML_NAMESPACE_STYLE, sXML_distance,
+            AddAttribute( XML_NAMESPACE_STYLE, XML_DISTANCE,
                           sBuffer.makeStringAndClear() );
         }
 
         // style:style-name
         if( rStyleName.getLength() )
-            AddAttribute( XML_NAMESPACE_STYLE, sXML_style_name,
+            AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE_NAME,
                           rStyleName );
     }
 
     OUString sElem = GetQNameByKey( XML_NAMESPACE_STYLE,
-                                    OUString::createFromAscii(sXML_drop_cap) );
+                                    GetXMLToken(XML_DROP_CAP) );
     xHandler->startElement( sElem, xAttrList );
     ClearAttrList();
     xHandler->endElement( sElem );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-27 16:31:05 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,14 @@
 #include "contextid.hxx"
 #endif
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
+#ifndef _STRING_HXX //autogen
+#include <tools/string.hxx>
+#endif
+
 #include "xmlnmspe.hxx"
 
 using namespace ::rtl;
@@ -452,7 +459,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         {
             const OUString aName( xNamed->getName() );
             if( aName.getLength() )
-                rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_name, aName );
+                rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, aName );
         }
     }
 
@@ -462,9 +469,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     if( aShapeInfo.msStyleName.getLength() != 0 )
     {
         if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == aShapeInfo.mnFamily)
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, aShapeInfo.msStyleName);
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, aShapeInfo.msStyleName);
         else
-            rExport.AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_style_name, aShapeInfo.msStyleName);
+            rExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STYLE_NAME, aShapeInfo.msStyleName);
     }
 
     // ------------------
@@ -472,7 +479,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // ------------------
     if( aShapeInfo.msTextStyleName.getLength() != 0 )
     {
-        rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_text_style_name, aShapeInfo.msTextStyleName);
+        rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_TEXT_STYLE_NAME, aShapeInfo.msTextStyleName);
     }
 
     // --------------------------
@@ -483,7 +490,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         if( nShapeId != -1 )
         {
             const OUString sId( OUString::valueOf( nShapeId ) );
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_id, sId );
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, sId );
         }
     }
 
@@ -501,7 +508,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                 uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
                 OUString aLayerName;
                 xProps->getPropertyValue( OUString::createFromAscii( "LayerName" ) ) >>= aLayerName;
-                rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_layer, aLayerName );
+                rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_LAYER, aLayerName );
 
             }
             catch( uno::Exception e )
@@ -979,27 +986,27 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
             // export only user defined glue points
 
             const OUString sId( OUString::valueOf( nIdentifier ) );
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_id, sId );
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, sId );
 
             rExport.GetMM100UnitConverter().convertMeasure(msBuffer, aGluePoint.Position.X);
-            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_x, msBuffer.makeStringAndClear());
+            rExport.AddAttribute(XML_NAMESPACE_SVG, XML_X, msBuffer.makeStringAndClear());
 
             rExport.GetMM100UnitConverter().convertMeasure(msBuffer, aGluePoint.Position.Y);
-            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_y, msBuffer.makeStringAndClear());
+            rExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y, msBuffer.makeStringAndClear());
 
             if( !aGluePoint.IsRelative )
             {
                 SvXMLUnitConverter::convertEnum( msBuffer, aGluePoint.PositionAlignment, aXML_GlueAlignment_EnumMap );
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_align, msBuffer.makeStringAndClear() );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ALIGN, msBuffer.makeStringAndClear() );
             }
 
             if( aGluePoint.Escape != drawing::EscapeDirection_SMART )
             {
                 SvXMLUnitConverter::convertEnum( msBuffer, aGluePoint.Escape, aXML_GlueEscapeDirection_EnumMap );
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_escape_direction, msBuffer.makeStringAndClear() );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ESCAPE_DIRECTION, msBuffer.makeStringAndClear() );
             }
 
-            SvXMLElementExport aEventsElemt(rExport, XML_NAMESPACE_DRAW, sXML_glue_point, sal_True, sal_True);
+            SvXMLElementExport aEventsElemt(rExport, XML_NAMESPACE_DRAW, XML_GLUE_POINT, sal_True, sal_True);
         }
     }
 }

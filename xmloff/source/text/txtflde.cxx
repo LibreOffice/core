@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-27 07:52:52 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #include "xmlnumfe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLEMENT_HXX
@@ -1025,9 +1025,9 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         {
             // export <text:span> element
             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                      sXML_style_name, sStyle );
+                                      XML_STYLE_NAME, sStyle );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                      sXML_span, sal_False, sal_False);
+                                      XML_SPAN, sal_False, sal_False);
             ExportFieldHelper( rTextField, xPropSet, xRangePropSet, nToken );
         }
         else
@@ -1060,36 +1060,36 @@ void XMLTextFieldExport::ExportFieldHelper(
     switch (nToken) {
     case FIELD_ID_AUTHOR:
         // author field: fixed, field (sub-)type
-        ProcessBoolean(sXML_fixed,
+        ProcessBoolean(XML_FIXED,
                        GetBoolProperty(sPropertyIsFixed, rPropSet), sal_True);
         ExportElement(MapAuthorFieldName(rPropSet), sPresentation);
         break;
 
     case FIELD_ID_SENDER:
         // sender field: fixed, field (sub-)type
-        ProcessBoolean(sXML_fixed,
+        ProcessBoolean(XML_FIXED,
                        GetBoolProperty(sPropertyIsFixed, rPropSet), sal_True);
         ExportElement(MapSenderFieldName(rPropSet), sPresentation);
         break;
 
     case FIELD_ID_PLACEHOLDER:
         // placeholder field: type, name, description
-        ProcessString(sXML_placeholder_type,
+        ProcessString(XML_PLACEHOLDER_TYPE,
                       MapPlaceholderType(
                         GetInt16Property(sPropertyPlaceholderType, rPropSet)));
-        ProcessString(sXML_description,
+        ProcessString(XML_DESCRIPTION,
                       GetStringProperty(sPropertyHint,rPropSet), sal_True);
-        ExportElement(sXML_placeholder, sPresentation);
+        ExportElement(XML_PLACEHOLDER, sPresentation);
         break;
 
     case FIELD_ID_VARIABLE_SET:
     {
         // variable set field: name, visible, format&value
-        ProcessString(sXML_name,
+        ProcessString(XML_NAME,
                       GetStringProperty(sPropertyVariableName, rPropSet));
         ProcessDisplay(GetBoolProperty(sPropertyIsVisible, rPropSet),
                        sal_False);
-        ProcessString(sXML_formula,
+        ProcessString(XML_FORMULA,
                       GetStringProperty(sPropertyContent, rPropSet),
                       sPresentation);
         ProcessValueAndType(IsStringField(nToken, rPropSet),
@@ -1098,13 +1098,13 @@ void XMLTextFieldExport::ExportFieldHelper(
                             sPresentation,
                             GetDoubleProperty(sPropertyValue, rPropSet),
                             sal_True, sal_True, sal_True);
-        ExportElement(sXML_variable_set, sPresentation);
+        ExportElement(XML_VARIABLE_SET, sPresentation);
         break;
     }
     case FIELD_ID_VARIABLE_GET:
     {
         // variable get field: name, format&value
-        ProcessString(sXML_name,
+        ProcessString(XML_NAME,
                       GetStringProperty(sPropertyContent, rPropSet));
         sal_Bool bCmd = GetBoolProperty(sPropertyIsShowFormula, rPropSet);
         ProcessDisplay(sal_True, bCmd);
@@ -1113,18 +1113,18 @@ void XMLTextFieldExport::ExportFieldHelper(
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
                             sEmpty, sEmpty, 0.0, // values not used
                             sal_False, !bCmd, !bCmd);
-        ExportElement(sXML_variable_get, sPresentation);
+        ExportElement(XML_VARIABLE_GET, sPresentation);
         break;
     }
     case FIELD_ID_VARIABLE_INPUT:
         // variable input field: name, description, format&value
-        ProcessString(sXML_name,
+        ProcessString(XML_NAME,
                       GetStringProperty(sPropertyVariableName, rPropSet));
-        ProcessString(sXML_description,
+        ProcessString(XML_DESCRIPTION,
                       GetStringProperty(sPropertyHint , rPropSet));
         ProcessDisplay(GetBoolProperty(sPropertyIsVisible, rPropSet),
                        sal_False);
-        ProcessString(sXML_formula,
+        ProcessString(XML_FORMULA,
                       GetStringProperty(sPropertyContent, rPropSet),
                       sPresentation);
         ProcessValueAndType(IsStringField(nToken, rPropSet),
@@ -1133,7 +1133,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                             sPresentation,
                             GetDoubleProperty(sPropertyValue, rPropSet),
                             sal_True, sal_True, sal_True);
-        ExportElement(sXML_variable_input, sPresentation);
+        ExportElement(XML_VARIABLE_INPUT, sPresentation);
         break;
 
     case FIELD_ID_USER_GET:
@@ -1148,23 +1148,23 @@ void XMLTextFieldExport::ExportFieldHelper(
                             sal_False, sal_False, !bCmd);
 
         // name from FieldMaster
-        ProcessString(sXML_name,
+        ProcessString(XML_NAME,
                       GetStringProperty(sPropertyName,
                                         GetMasterPropertySet(rTextField)));
-        ExportElement(sXML_user_field_get, sPresentation);
+        ExportElement(XML_USER_FIELD_GET, sPresentation);
         break;
     }
 
     case FIELD_ID_USER_INPUT:
         // user input field: name (from FieldMaster), description
-//      ProcessString(sXML_name,
+//      ProcessString(XML_NAME,
 //                    GetStringProperty(sPropertyName,
 //                                      GetMasterPropertySet(rTextField)));
-        ProcessString(sXML_name,
+        ProcessString(XML_NAME,
                       GetStringProperty(sPropertyContent, rPropSet));
-        ProcessString(sXML_description,
+        ProcessString(XML_DESCRIPTION,
                       GetStringProperty(sPropertyHint, rPropSet));
-        ExportElement(sXML_user_field_input, sPresentation);
+        ExportElement(XML_USER_FIELD_INPUT, sPresentation);
         break;
 
     case FIELD_ID_SEQUENCE:
@@ -1172,17 +1172,17 @@ void XMLTextFieldExport::ExportFieldHelper(
         // sequence field: name, formula, seq-format
         OUString sName = GetStringProperty(sPropertyVariableName, rPropSet);
         // TODO: use reference name only if actually beeing referenced.
-        ProcessString(sXML_ref_name,
+        ProcessString(XML_REF_NAME,
                       MakeSequenceRefName(
                           GetInt16Property(sPropertySequenceValue, rPropSet),
                           sName));
-        ProcessString(sXML_name, sName);
-        ProcessString(sXML_formula,
+        ProcessString(XML_NAME, sName);
+        ProcessString(XML_FORMULA,
                       GetStringProperty(sPropertyContent, rPropSet),
                       sPresentation);
         ProcessNumberingType(GetInt16Property(sPropertyNumberingType,
                                               rPropSet));
-        ExportElement(sXML_sequence, sPresentation);
+        ExportElement(XML_SEQUENCE, sPresentation);
         break;
     }
 
@@ -1190,7 +1190,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         // formula field: formula, format&value
         sal_Bool bCmd = GetBoolProperty(sPropertyIsShowFormula, rPropSet);
-        ProcessString(sXML_formula,
+        ProcessString(XML_FORMULA,
                       GetStringProperty(sPropertyContent, rPropSet),
                       sPresentation);
         ProcessDisplay(sal_True, bCmd);
@@ -1200,15 +1200,15 @@ void XMLTextFieldExport::ExportFieldHelper(
                             sPresentation,
                             GetDoubleProperty(sPropertyValue, rPropSet),
                             !bCmd, !bCmd, !bCmd);
-        ExportElement(sXML_expression, sPresentation);
+        ExportElement(XML_EXPRESSION, sPresentation);
         break;
     }
 
     case FIELD_ID_TEXT_INPUT:
         // text input field: description and string-value
-        ProcessString(sXML_description,
+        ProcessString(XML_DESCRIPTION,
                       GetStringProperty(sPropertyHint, rPropSet));
-        ExportElement(sXML_text_input, sPresentation);
+        ExportElement(XML_TEXT_INPUT, sPresentation);
         break;
 
     case FIELD_ID_TIME:
@@ -1223,7 +1223,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTimeValue))
         {
             // no value -> current time
-            ProcessDateTime(sXML_time_value,
+            ProcessDateTime(XML_TIME_VALUE,
                             GetDateTimeProperty(sPropertyDateTimeValue,
                                                 rPropSet),
                             sal_False );
@@ -1231,24 +1231,24 @@ void XMLTextFieldExport::ExportFieldHelper(
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTime))
         {
             // no value -> current time
-            ProcessDateTime(sXML_time_value,
+            ProcessDateTime(XML_TIME_VALUE,
                             GetDateTimeProperty(sPropertyDateTime,rPropSet),
                             sal_False );
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
         {
-            ProcessBoolean(sXML_fixed,
+            ProcessBoolean(XML_FIXED,
                            GetBoolProperty(sPropertyIsFixed, rPropSet),
                            sal_False);
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyAdjust))
         {
             // adjust value given as integer in minutes
-            ProcessDateTime(sXML_time_adjust,
+            ProcessDateTime(XML_TIME_ADJUST,
                             GetIntProperty(sPropertyAdjust, rPropSet),
                             sal_False, sal_True, sal_True);
         }
-        ExportElement(sXML_time, sPresentation);
+        ExportElement(XML_TIME, sPresentation);
         break;
 
     case FIELD_ID_DATE:
@@ -1263,7 +1263,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTimeValue))
         {
             // no value -> current date
-            ProcessDateTime(sXML_date_value,
+            ProcessDateTime(XML_DATE_VALUE,
                             GetDateTimeProperty(sPropertyDateTimeValue,
                                                 rPropSet),
                             sal_True);
@@ -1271,24 +1271,24 @@ void XMLTextFieldExport::ExportFieldHelper(
         // TODO: remove double-handling after SRC614
         else if (xPropSetInfo->hasPropertyByName(sPropertyDateTime))
         {
-            ProcessDateTime(sXML_date_value,
+            ProcessDateTime(XML_DATE_VALUE,
                             GetDateTimeProperty(sPropertyDateTime,rPropSet),
                             sal_True );
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
         {
-            ProcessBoolean(sXML_fixed,
+            ProcessBoolean(XML_FIXED,
                            GetBoolProperty(sPropertyIsFixed, rPropSet),
                            sal_False);
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyAdjust))
         {
             // adjust value given as number of days
-            ProcessDateTime(sXML_date_adjust,
+            ProcessDateTime(XML_DATE_ADJUST,
                             GetIntProperty(sPropertyAdjust, rPropSet),
                             sal_True, sal_True, sal_True);
         }
-        ExportElement(sXML_date, sPresentation);
+        ExportElement(XML_DATE, sPresentation);
         break;
 
     case FIELD_ID_PAGENUMBER:
@@ -1305,80 +1305,80 @@ void XMLTextFieldExport::ExportFieldHelper(
             if (xPropSetInfo->hasPropertyByName(sPropertySubType))
             {
                 // property SubType used in MapPageNumebrName
-                ProcessString(sXML_select_page,
+                ProcessString(XML_SELECT_PAGE,
                               MapPageNumberName(rPropSet, nAdjust));
             }
-            ProcessInteger(sXML_page_adjust, nAdjust, 0);
+            ProcessInteger(XML_PAGE_ADJUST, nAdjust, 0);
         }
-        ExportElement(sXML_page_number, sPresentation);
+        ExportElement(XML_PAGE_NUMBER, sPresentation);
         break;
 
     case FIELD_ID_PAGESTRING:
     {
-        ProcessString(sXML_string_value,
+        ProcessString(XML_STRING_VALUE,
                       GetStringProperty(sPropertyUserText, rPropSet),
                       sPresentation);
         sal_Int32 nDummy = 0; // MapPageNumberName need int
-        ProcessString(sXML_select_page, MapPageNumberName(rPropSet, nDummy));
-        ExportElement(sXML_page_continuation_string, sPresentation);
+        ProcessString(XML_SELECT_PAGE, MapPageNumberName(rPropSet, nDummy));
+        ExportElement(XML_PAGE_CONTINUATION_STRING, sPresentation);
         break;
     }
 
     case FIELD_ID_DATABASE_NAME:
-        ProcessString(sXML_database_name,
+        ProcessString(XML_DATABASE_NAME,
                       GetStringProperty(sPropertyDataBaseName, rPropSet));
-        ProcessString(sXML_table_name,
+        ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
-        ExportElement(sXML_database_name, sPresentation);
+        ExportElement(XML_DATABASE_NAME, sPresentation);
         break;
 
     case FIELD_ID_DATABASE_NUMBER:
-        ProcessString(sXML_database_name,
+        ProcessString(XML_DATABASE_NAME,
                       GetStringProperty(sPropertyDataBaseName, rPropSet));
-        ProcessString(sXML_table_name,
+        ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
         ProcessNumberingType(
             GetInt16Property(sPropertyNumberingType,rPropSet));
-        ProcessInteger(sXML_value,
+        ProcessInteger(XML_VALUE,
                        GetIntProperty(sPropertySetNumber, rPropSet));
-        ExportElement(sXML_database_row_number, sPresentation);
+        ExportElement(XML_DATABASE_ROW_NUMBER, sPresentation);
         break;
 
     case FIELD_ID_DATABASE_NEXT:
-        ProcessString(sXML_database_name,
+        ProcessString(XML_DATABASE_NAME,
                       GetStringProperty(sPropertyDataBaseName, rPropSet));
-        ProcessString(sXML_table_name,
+        ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
-        ProcessString(sXML_condition,
+        ProcessString(XML_CONDITION,
                       GetStringProperty(sPropertyCondition, rPropSet));
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for database next field");
-        ExportElement(sXML_database_next);
+        ExportElement(XML_DATABASE_NEXT);
         break;
 
     case FIELD_ID_DATABASE_SELECT:
-        ProcessString(sXML_database_name,
+        ProcessString(XML_DATABASE_NAME,
                       GetStringProperty(sPropertyDataBaseName, rPropSet));
-        ProcessString(sXML_table_name,
+        ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
-        ProcessString(sXML_condition,
+        ProcessString(XML_CONDITION,
                       GetStringProperty(sPropertyCondition, rPropSet));
-        ProcessInteger(sXML_row_number,
+        ProcessInteger(XML_ROW_NUMBER,
                        GetIntProperty(sPropertySetNumber, rPropSet));
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for database select field");
-        ExportElement(sXML_database_select);
+        ExportElement(XML_DATABASE_SELECT);
         break;
 
     case FIELD_ID_DATABASE_DISPLAY:
     {
         // get database, table and column name from field master
         Reference<XPropertySet> & xMaster = GetMasterPropertySet(rTextField);
-        ProcessString(sXML_database_name,
+        ProcessString(XML_DATABASE_NAME,
                       GetStringProperty(sPropertyDataBaseName, xMaster));
-        ProcessString(sXML_table_name,
+        ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, xMaster));
-        ProcessString(sXML_column_name,
+        ProcessString(XML_COLUMN_NAME,
                       GetStringProperty(sPropertyDataColumnName, xMaster));
         // export number format if available (happens only for numbers!)
         if (!GetBoolProperty(sPropertyIsDataBaseFormat, rPropSet))
@@ -1388,12 +1388,12 @@ void XMLTextFieldExport::ExportFieldHelper(
                                 sEmpty, sEmpty, 0.0, // not used
                                 sal_False, sal_False, sal_True);
         }
-        ExportElement(sXML_database_display, sPresentation);
+        ExportElement(XML_DATABASE_DISPLAY, sPresentation);
         break;
     }
 
     case FIELD_ID_DOCINFO_REVISION:
-        ProcessBoolean(sXML_fixed,
+        ProcessBoolean(XML_FIXED,
                        GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
         ExportElement(MapDocInfoFieldName(nToken), sPresentation);
         break;
@@ -1410,7 +1410,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                             sEmpty, sEmpty, 0.0,
                             sal_False, sal_False, sal_True);
         // todo: export date/time value, but values not available -> core bug
-        ProcessBoolean(sXML_fixed,
+        ProcessBoolean(XML_FIXED,
                        GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
         ExportElement(MapDocInfoFieldName(nToken), sPresentation);
         break;
@@ -1424,7 +1424,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_DOCINFO_SAVE_AUTHOR:
         if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
         {
-            ProcessBoolean(sXML_fixed,
+            ProcessBoolean(XML_FIXED,
                            GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
         }
         ExportElement(MapDocInfoFieldName(nToken), sPresentation);
@@ -1439,12 +1439,12 @@ void XMLTextFieldExport::ExportFieldHelper(
             GetExport().GetModel(), UNO_QUERY);
         Reference<XDocumentInfo> xDocInfo =xDocInfoSupplier->getDocumentInfo();
         Any aAny;
-        ProcessString(sXML_name,
+        ProcessString(XML_NAME,
                       xDocInfo->getUserFieldName(nToken -
                                             FIELD_ID_DOCINFO_INFORMATION0));
-        ProcessBoolean(sXML_fixed,
+        ProcessBoolean(XML_FIXED,
                        GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
-        ExportElement(sXML_user_defined, sPresentation);
+        ExportElement(XML_USER_DEFINED, sPresentation);
         break;
     }
 
@@ -1466,106 +1466,106 @@ void XMLTextFieldExport::ExportFieldHelper(
         break;
 
     case FIELD_ID_CONDITIONAL_TEXT:
-        ProcessString(sXML_condition,
+        ProcessString(XML_CONDITION,
                       GetStringProperty(sPropertyCondition, rPropSet));
-        ProcessString(sXML_string_value_if_true,
+        ProcessString(XML_STRING_VALUE_IF_TRUE,
                       GetStringProperty(sPropertyTrueContent, rPropSet));
-        ProcessString(sXML_string_value_if_false,
+        ProcessString(XML_STRING_VALUE_IF_FALSE,
                       GetStringProperty(sPropertyFalseContent, rPropSet));
-        ProcessBoolean(sXML_current_value,
+        ProcessBoolean(XML_CURRENT_VALUE,
                        GetBoolProperty(sPropertyIsConditionTrue, rPropSet),
                        sal_False);
-        ExportElement(sXML_conditional_text, sPresentation);
+        ExportElement(XML_CONDITIONAL_TEXT, sPresentation);
         break;
 
     case FIELD_ID_HIDDEN_TEXT:
-        ProcessString(sXML_condition,
+        ProcessString(XML_CONDITION,
                       GetStringProperty(sPropertyCondition, rPropSet));
-        ProcessString(sXML_string_value,
+        ProcessString(XML_STRING_VALUE,
                       GetStringProperty(sPropertyContent, rPropSet));
-        ProcessBoolean(sXML_is_hidden,
+        ProcessBoolean(XML_IS_HIDDEN,
                        GetBoolProperty(sPropertyIsHidden, rPropSet),
                        sal_False);
-        ExportElement(sXML_hidden_text, sPresentation);
+        ExportElement(XML_HIDDEN_TEXT, sPresentation);
         break;
 
     case FIELD_ID_HIDDEN_PARAGRAPH:
-        ProcessString(sXML_condition,
+        ProcessString(XML_CONDITION,
                       GetStringProperty(sPropertyCondition, rPropSet));
-        ProcessBoolean(sXML_is_hidden,
+        ProcessBoolean(XML_IS_HIDDEN,
                        GetBoolProperty(sPropertyIsHidden, rPropSet),
                        sal_False);
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for hidden paragraph field");
-        ExportElement(sXML_hidden_paragraph);
+        ExportElement(XML_HIDDEN_PARAGRAPH);
         break;
 
     case FIELD_ID_TEMPLATE_NAME:
-        ProcessString(sXML_display,
+        ProcessString(XML_DISPLAY,
                       MapTemplateDisplayFormat(
                           GetInt16Property(sPropertyFileFormat, rPropSet)));
-        ExportElement(sXML_template_name, sPresentation);
+        ExportElement(XML_TEMPLATE_NAME, sPresentation);
         break;
 
     case FIELD_ID_CHAPTER:
-        ProcessString(sXML_display,
+        ProcessString(XML_DISPLAY,
                       MapChapterDisplayFormat(
                           GetInt16Property(sPropertyChapterFormat, rPropSet)));
         // API numbers 0..9, we number 1..10
-        ProcessInteger(sXML_outline_level,
+        ProcessInteger(XML_OUTLINE_LEVEL,
                        GetInt8Property(sPropertyLevel, rPropSet) + 1);
-        ExportElement(sXML_chapter, sPresentation);
+        ExportElement(XML_CHAPTER, sPresentation);
         break;
 
     case FIELD_ID_FILE_NAME:
         // all properties are optional
         if (xPropSetInfo->hasPropertyByName(sPropertyFileFormat))
         {
-            ProcessString(sXML_display,
+            ProcessString(XML_DISPLAY,
                           MapFilenameDisplayFormat(
                              GetInt16Property(sPropertyFileFormat, rPropSet)));
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
         {
-            ProcessBoolean(sXML_fixed,
+            ProcessBoolean(XML_FIXED,
                            GetBoolProperty(sPropertyIsFixed, rPropSet),
                            sal_False);
         }
-        ExportElement(sXML_file_name, sPresentation);
+        ExportElement(XML_FILE_NAME, sPresentation);
         break;
 
     case FIELD_ID_REFPAGE_SET:
-        ProcessBoolean(sXML_active,
+        ProcessBoolean(XML_ACTIVE,
                        GetBoolProperty(sPropertyOn, rPropSet), sal_True);
-        ProcessInteger(sXML_page_adjust,
+        ProcessInteger(XML_PAGE_ADJUST,
                        GetInt16Property(sPropertyOffset, rPropSet), 0);
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation page variable field");
-        ExportElement(sXML_page_variable_set);
+        ExportElement(XML_PAGE_VARIABLE_SET);
         break;
 
     case FIELD_ID_REFPAGE_GET:
         ProcessNumberingType(
             GetInt16Property(sPropertyNumberingType, rPropSet));
-        ExportElement(sXML_page_variable_get, sPresentation);
+        ExportElement(XML_PAGE_VARIABLE_GET, sPresentation);
         break;
 
     case FIELD_ID_MACRO:
-        ProcessString(sXML_name, GetStringProperty(sPropertyMacro, rPropSet));
-        ProcessString(sXML_description,
+        ProcessString(XML_NAME, GetStringProperty(sPropertyMacro, rPropSet));
+        ProcessString(XML_DESCRIPTION,
                       GetStringProperty(sPropertyHint, rPropSet),
                       sPresentation);
-        ExportElement(sXML_execute_macro, sPresentation);
+        ExportElement(XML_EXECUTE_MACRO, sPresentation);
         break;
 
     case FIELD_ID_REF_SEQUENCE:
         // reference to sequence: format, name, find value (and element)
         // was: if (nSeqNumber != -1) ...
-        ProcessString(sXML_reference_format,
+        ProcessString(XML_REFERENCE_FORMAT,
                       MapReferenceType(GetInt16Property(
                           sPropertyReferenceFieldPart, rPropSet)),
-                      sXML_template);
-        ProcessString(sXML_ref_name,
+                      XML_TEMPLATE);
+        ProcessString(XML_REF_NAME,
                       MakeSequenceRefName(
                           GetInt16Property(sPropertySequenceNumber, rPropSet),
                           GetStringProperty(sPropertySourceName, rPropSet) ) );
@@ -1578,11 +1578,11 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_REF_REFERENCE:
     case FIELD_ID_REF_BOOKMARK:
         // reference to bookmarks, references: format, name (and element)
-        ProcessString(sXML_reference_format,
+        ProcessString(XML_REFERENCE_FORMAT,
                       MapReferenceType(GetInt16Property(
                           sPropertyReferenceFieldPart, rPropSet)),
-                      sXML_template);
-        ProcessString(sXML_ref_name,
+                      XML_TEMPLATE);
+        ProcessString(XML_REF_NAME,
                       GetStringProperty(sPropertySourceName, rPropSet));
         ExportElement(
             MapReferenceSource(GetInt16Property(
@@ -1593,11 +1593,11 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_REF_FOOTNOTE:
     case FIELD_ID_REF_ENDNOTE:
         // reference to end-/footnote: format, generate name, (and element)
-        ProcessString(sXML_reference_format,
+        ProcessString(XML_REFERENCE_FORMAT,
                       MapReferenceType(GetInt16Property(
                           sPropertyReferenceFieldPart, rPropSet)),
-                      sXML_template);
-        ProcessString(sXML_ref_name,
+                      XML_TEMPLATE);
+        ProcessString(XML_REF_NAME,
                       MakeFootnoteRefName(GetInt16Property(
                           sPropertySequenceNumber, rPropSet)));
         ExportElement(
@@ -1608,28 +1608,28 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_DDE:
         // name from field master
-         ProcessString(sXML_connection_name,
+         ProcessString(XML_CONNECTION_NAME,
 
                        GetStringProperty(sPropertyName,
                                          GetMasterPropertySet(rTextField)));
-        ExportElement(sXML_dde_connection, sPresentation);
+        ExportElement(XML_DDE_CONNECTION, sPresentation);
         break;
 
     case FIELD_ID_SHEET_NAME:
         // name of spreadsheet (Calc only)
-        ExportElement(sXML_sheet_name, sPresentation);
+        ExportElement(XML_SHEET_NAME, sPresentation);
         break;
 
     case FIELD_ID_URL:
     {
         // this field is a special case because it gets mapped onto a
         // hyperlink, rather than one of the regular text field.
-        ProcessString(sXML_href, GetExport().GetRelativeReference(GetStringProperty(sPropertyURL, rPropSet)),
+        ProcessString(XML_HREF, GetExport().GetRelativeReference(GetStringProperty(sPropertyURL, rPropSet)),
                       sal_True, XML_NAMESPACE_XLINK);
-        ProcessString(sXML_target_frame_name,
+        ProcessString(XML_TARGET_FRAME_NAME,
                       GetStringProperty(sPropertyTargetFrame,rPropSet),
                       sal_True, XML_NAMESPACE_OFFICE);
-        SvXMLElementExport aUrlField(rExport, XML_NAMESPACE_TEXT, sXML_a,
+        SvXMLElementExport aUrlField(rExport, XML_NAMESPACE_TEXT, XML_A,
                                      sal_False, sal_False);
         GetExport().GetDocHandler()->characters(sPresentation);
         break;
@@ -1638,26 +1638,26 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_BIBLIOGRAPHY:
     {
         ProcessBibliographyData(rPropSet);
-        ExportElement(sXML_bibliography_mark, sPresentation);
+        ExportElement(XML_BIBLIOGRAPHY_MARK, sPresentation);
         break;
     }
 
     case FIELD_ID_SCRIPT:
-        ProcessString(sXML_language,
+        ProcessString(XML_LANGUAGE,
                       GetStringProperty(sPropertyScriptType, rPropSet),
                       sal_True, XML_NAMESPACE_SCRIPT);
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for script field");
         if (GetBoolProperty(sPropertyURLContent, rPropSet))
         {
-            ProcessString(sXML_href,
+            ProcessString(XML_HREF,
                           GetExport().GetRelativeReference(GetStringProperty(sPropertyContent, rPropSet)),
                           sal_False, XML_NAMESPACE_XLINK);
-            ExportElement(sXML_script);
+            ExportElement(XML_SCRIPT);
         }
         else
         {
-            ExportElement(sXML_script,
+            ExportElement(XML_SCRIPT,
                           GetStringProperty(sPropertyContent, rPropSet));
         }
         break;
@@ -1665,12 +1665,12 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_ANNOTATION:
     {
         // author
-        ProcessString(sXML_author,
+        ProcessString(XML_AUTHOR,
                       GetStringProperty(sPropertyAuthor, rPropSet),
                       sal_True, XML_NAMESPACE_OFFICE);
 
         // date time
-        ProcessDate(sXML_create_date,
+        ProcessDate(XML_CREATE_DATE,
                     GetDateProperty(sPropertyDate, rPropSet),
                     XML_NAMESPACE_OFFICE);
 
@@ -1680,7 +1680,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
         // annotation element + content
         SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_OFFICE,
-                                 sXML_annotation, sal_False, sal_True);
+                                 XML_ANNOTATION, sal_False, sal_True);
         ProcessParagraphSequence(GetStringProperty(sPropertyContent,rPropSet));
         break;
     }
@@ -1689,18 +1689,18 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         // get style name for current style + combine letters and export a span
         const XMLPropertyState *aStates[] = { pCombinedCharactersPropertyState, 0 };
-        ProcessString(sXML_style_name,
+        ProcessString(XML_STYLE_NAME,
                       GetExport().GetTextParagraphExport()->Find(
                           XML_STYLE_FAMILY_TEXT_TEXT, rRangePropSet,
                           sEmpty, aStates) );
-        ExportElement(sXML_span, sPresentation);
+        ExportElement(XML_SPAN, sPresentation);
         break;
     }
 
     case FIELD_ID_MEASURE:
     {
-        ProcessString(sXML_kind, MapMeasureKind(GetInt16Property(sPropertyMeasureKind, rPropSet)));
-        ExportElement( sXML_measure, sPresentation );
+        ProcessString(XML_KIND, MapMeasureKind(GetInt16Property(sPropertyMeasureKind, rPropSet)));
+        ExportElement( XML_MEASURE, sPresentation );
         break;
     }
 
@@ -1840,7 +1840,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     {
         SvXMLElementExport aElem( GetExport(),
                                   XML_NAMESPACE_TEXT,
-                                  sXML_variable_decls,
+                                  XML_VARIABLE_DECLS,
                                   sal_True, sal_True );
 
         for (vector<OUString>::iterator aVarIter = aVarName.begin();
@@ -1888,8 +1888,8 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                     sal_False, sal_True, sal_False);
             }
 
-            ProcessString(sXML_name, sVarName);
-            ExportElement(sXML_variable_decl, sal_True);
+            ProcessString(XML_NAME, sVarName);
+            ExportElement(XML_VARIABLE_DECL, sal_True);
         }
     }
     // else: no declarations element
@@ -1899,7 +1899,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     {
         SvXMLElementExport aElem( GetExport(),
                                   XML_NAMESPACE_TEXT,
-                                  sXML_sequence_decls,
+                                  XML_SEQUENCE_DECLS,
                                   sal_True, sal_True );
 
         for (vector<OUString>::iterator aSeqIter = aSeqName.begin();
@@ -1923,15 +1923,15 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 sPropertyChapterNumberingLevel, xPropSet);
             DBG_ASSERT(nLevel >= 0, "illegal outline level");
             DBG_ASSERT(nLevel < 127, "possible illegal outline level");
-            ProcessInteger(sXML_display_outline_level, nLevel);
+            ProcessInteger(XML_DISPLAY_OUTLINE_LEVEL, nLevel);
 
             // separation character
             if (nLevel > 0) {
-                ProcessString(sXML_separation_character, GetStringProperty(
+                ProcessString(XML_SEPARATION_CHARACTER, GetStringProperty(
                     sPropertyNumberingSeparator, xPropSet));
             }
-            ProcessString(sXML_name, sVarName);
-            ExportElement(sXML_sequence_decl, sal_True);
+            ProcessString(XML_NAME, sVarName);
+            ExportElement(XML_SEQUENCE_DECL, sal_True);
         }
     }
     // else: no declarations element
@@ -1941,7 +1941,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     {
         SvXMLElementExport aElem( GetExport(),
                                   XML_NAMESPACE_TEXT,
-                                  sXML_user_field_decls,
+                                  XML_USER_FIELD_DECLS,
                                   sal_True, sal_True );
 
         for (vector<OUString>::iterator aUserIter = aUserName.begin();
@@ -1974,12 +1974,12 @@ void XMLTextFieldExport::ExportFieldDeclarations(
             else
             {
                 // string: write regardless of default
-                ProcessString(sXML_value_type, sXML_string);
-                ProcessString(sXML_string_value,
+                ProcessString(XML_VALUE_TYPE, XML_STRING);
+                ProcessString(XML_STRING_VALUE,
                               GetStringProperty(sPropertyContent, xPropSet));
             }
-            ProcessString(sXML_name, sVarName);
-            ExportElement(sXML_user_field_decl, sal_True);
+            ProcessString(XML_NAME, sVarName);
+            ExportElement(XML_USER_FIELD_DECL, sal_True);
         }
     }
     // else: no declarations element
@@ -1989,7 +1989,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     {
         SvXMLElementExport aElem( GetExport(),
                                   XML_NAMESPACE_TEXT,
-                                  sXML_dde_connection_decls,
+                                  XML_DDE_CONNECTION_DECLS,
                                   sal_True, sal_True );
 
         for (vector<OUString>::iterator aDdeIter = aDdeName.begin();
@@ -2008,20 +2008,20 @@ void XMLTextFieldExport::ExportFieldDeclarations(
             if (GetDependentFieldPropertySet(xPropSet, xDummy))
             {
 
-                ProcessString(sXML_name,
+                ProcessString(XML_NAME,
                               GetStringProperty(sPropertyName, xPropSet));
 
                 // export elements; can't use ProcessString because
                 // elements are in office namespace
-                ProcessString(sXML_dde_application,
+                ProcessString(XML_DDE_APPLICATION,
                               GetStringProperty(sPropertyDDECommandType,
                                                 xPropSet),
                               sal_False, XML_NAMESPACE_OFFICE);
-                ProcessString(sXML_dde_topic,
+                ProcessString(XML_DDE_TOPIC,
                               GetStringProperty(sPropertyDDECommandFile,
                                                 xPropSet),
                               sal_False, XML_NAMESPACE_OFFICE);
-                ProcessString(sXML_dde_item,
+                ProcessString(XML_DDE_ITEM,
                               GetStringProperty(sPropertyDDECommandElement,
                                                 xPropSet),
                               sal_False, XML_NAMESPACE_OFFICE);
@@ -2029,12 +2029,12 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                     sPropertyIsAutomaticUpdate, xPropSet);
                 if (bIsAutomaticUpdate)
                 {
-                    GetExport().AddAttributeASCII(XML_NAMESPACE_OFFICE,
-                                                  sXML_automatic_update,
-                                                  sXML_true);
+                    GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
+                                             XML_AUTOMATIC_UPDATE,
+                                             XML_TRUE);
                 }
 
-                ExportElement(sXML_dde_connection_decl, sal_True);
+                ExportElement(XML_DDE_CONNECTION_DECL, sal_True);
             }
             // else: no dependent field -> no export of field declaration
         }
@@ -2053,36 +2053,32 @@ void XMLTextFieldExport::SetExportOnlyUsedFieldDeclarations(
         pUsedMasters = new map<Reference<XText>, set<OUString> > ;
 }
 
-void XMLTextFieldExport::ExportElement(const sal_Char* pElementName,
+void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
                                        sal_Bool bAddSpace)
 {
-    // can't call ExportElement(sal_Char*, const OUString&) with empty
+    // can't call ExportElement(eElementName, const OUString&) with empty
     // string because xmlprinter only uses empty tags if no content
     // (not even empty content) was written.
 
-    DBG_ASSERT(NULL != pElementName, "invalid element name!");
-    if (NULL != pElementName)
+    DBG_ASSERT(XML_TOKEN_INVALID != eElementName, "invalid element name!");
+    if (XML_TOKEN_INVALID != eElementName)
     {
         // Element
-        SvXMLElementExport aElem( GetExport(),
-                                  XML_NAMESPACE_TEXT,
-                                  pElementName,
-                                  bAddSpace, bAddSpace );
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                                  eElementName, bAddSpace, bAddSpace );
     } // else: ignore
 }
 
-void XMLTextFieldExport::ExportElement(const sal_Char* pElementName,
+void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
                                        const OUString& sContent,
                                        sal_Bool bAddSpace)
 {
-    DBG_ASSERT(NULL != pElementName, "invalid element name!");
-    if (NULL != pElementName)
+    DBG_ASSERT(eElementName != XML_TOKEN_INVALID, "invalid element name!");
+    if (eElementName != XML_TOKEN_INVALID)
     {
         // Element
-        SvXMLElementExport aElem( GetExport(),
-                                  XML_NAMESPACE_TEXT,
-                                  pElementName,
-                                  bAddSpace, bAddSpace );
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                                  eElementName, bAddSpace, bAddSpace );
         // export content
         GetExport().GetDocHandler()->characters(sContent);
     } else {
@@ -2144,7 +2140,7 @@ void XMLTextFieldExport::ProcessValueAndType(
                 if( sDataStyleName.getLength() > 0 )
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                              sXML_data_style_name,
+                                              XML_DATA_STYLE_NAME,
                                               sDataStyleName );
                 } // else: ignore (no valid number format)
             }  // else: ignore (no number format)
@@ -2159,43 +2155,39 @@ void XMLTextFieldExport::ProcessDisplay(sal_Bool bIsVisible,
                                         sal_Bool bIsCommand,
                                         sal_Bool bValueDefault)
 {
-    sal_Char* pValue;
+    enum XMLTokenEnum eValue;
 
     if (bIsVisible)
     {
-        pValue = bIsCommand ? sXML_formula : sXML_value;
+        eValue = bIsCommand ? XML_FORMULA : XML_VALUE;
     }
     else
     {
-        pValue = sXML_none;
+        eValue = XML_NONE;
     }
 
     // omit attribute if default
-    if (!bValueDefault || (pValue != sXML_value))
+    if (!bValueDefault || (eValue != XML_VALUE))
     {
-        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                      sXML_display,
-                                      pValue);
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_DISPLAY, eValue);
     }
 }
 
 
 
 /// export boolean property
-void XMLTextFieldExport::ProcessBoolean(const sal_Char* pXmlName,
+void XMLTextFieldExport::ProcessBoolean(enum XMLTokenEnum eName,
                                         sal_Bool bBool, sal_Bool bDefault)
 {
-    DBG_ASSERT(NULL!=pXmlName, "invalid element name");
-    if (NULL == pXmlName) {
+    DBG_ASSERT( eName != XML_TOKEN_INVALID, "invalid element token");
+    if ( XML_TOKEN_INVALID == eName )
         return;
-    }
 
     // write attribute (if different than default)
     // negate to force 0/1 values (and make sal_Bool comparable)
     if ((!bBool) != (!bDefault)) {
-        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                      pXmlName,
-                                      (bBool ? sXML_true : sXML_false) );
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, eName,
+                                 (bBool ? XML_TRUE : XML_FALSE) );
     }
 }
 
@@ -2203,72 +2195,65 @@ void XMLTextFieldExport::ProcessBoolean(const sal_Char* pXmlName,
 
 
 /// export string attribute
-void XMLTextFieldExport::ProcessString(const sal_Char* pXmlName,
+void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
                                        const OUString& sValue,
                                        sal_Bool bOmitEmpty,
                                        sal_uInt16 nPrefix)
 {
-    DBG_ASSERT(NULL!=pXmlName, "invalid element name");
-    if (NULL == pXmlName) {
+    DBG_ASSERT( eName != XML_TOKEN_INVALID, "invalid element token");
+    if ( XML_TOKEN_INVALID == eName )
         return;
-    }
 
     // check for empty string, if applicable
-    if (bOmitEmpty && (sValue.getLength()==0)) {
+    if ( bOmitEmpty && (sValue.getLength()==0) )
         return;
-    }
 
     // write attribute
-    GetExport().AddAttribute(nPrefix, pXmlName, sValue);
+    GetExport().AddAttribute(nPrefix, eName, sValue);
 }
 
 /// export a string attribute
-void XMLTextFieldExport::ProcessString(const sal_Char* pXmlName,
+void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
                                        const ::rtl::OUString& sValue,
                                        const ::rtl::OUString& sDefault,
                                        sal_uInt16 nPrefix)
 {
     if (sValue != sDefault)
     {
-        ProcessString(pXmlName, sValue, sal_False, nPrefix);
+        ProcessString(eName, sValue, sal_False, nPrefix);
     }
 }
 
 
 /// export string attribute
 void XMLTextFieldExport::ProcessString(
-    const sal_Char* pXmlName,
-    const sal_Char* pValue,
+    enum XMLTokenEnum eName,
+    enum XMLTokenEnum eValue,
     sal_Bool bOmitEmpty,
     sal_uInt16 nPrefix)
 {
-    DBG_ASSERT(NULL != pXmlName, "invalid element name");
-    DBG_ASSERT(NULL != pValue, "invalid value name");
-    if ((NULL == pXmlName) || (NULL == pValue)) {
+    DBG_ASSERT( eName != XML_TOKEN_INVALID, "invalid element token" );
+    DBG_ASSERT( bOmitEmpty || (eValue != XML_TOKEN_INVALID),
+                "invalid value token" );
+    if ( XML_TOKEN_INVALID == eName )
         return;
-    }
 
     // check for empty string, if applicable
-    if (bOmitEmpty && (0 == pValue[0])) {
+    if (bOmitEmpty && (eValue == XML_TOKEN_INVALID))
         return;
-    }
 
-    GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT, pXmlName, pValue);
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT, eName, eValue);
 }
 
 /// export a string attribute
 void XMLTextFieldExport::ProcessString(
-    const sal_Char* pXmlName,
-    const sal_Char* pValue,
-    const sal_Char* pDefault,
+    enum XMLTokenEnum eName,
+    enum XMLTokenEnum eValue,
+    enum XMLTokenEnum eDefault,
     sal_uInt16 nPrefix)
 {
-    // save comparisons if pointers are equals.  This will happen
-    // frequently, as almost every code in here uses sXML_* constants.
-    if ((pValue != pDefault) && (0 != strcmp(pValue, pDefault)))
-    {
-        ProcessString(pXmlName, pValue, sal_False, nPrefix);
-    }
+    if ( eValue != eDefault )
+        ProcessString( eName, eValue, sal_False, nPrefix);
 }
 
 
@@ -2283,33 +2268,29 @@ void XMLTextFieldExport::ProcessParagraphSequence(
     while (aEnumerator.getNextToken(aSubString))
     {
         SvXMLElementExport aParagraph(
-            GetExport(), XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+            GetExport(), XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
         GetExport().GetDocHandler()->characters(aSubString);
     }
 }
 
 // export an integer attribute
-void XMLTextFieldExport::ProcessInteger(const sal_Char* pXmlName,
+void XMLTextFieldExport::ProcessInteger(enum XMLTokenEnum eName,
                                         sal_Int32 nNum)
 {
-    DBG_ASSERT(NULL != pXmlName, "invalid element name");
-
-    if (NULL == pXmlName) {
+    DBG_ASSERT( eName != XML_TOKEN_INVALID, "invalid element token");
+    if ( XML_TOKEN_INVALID == eName )
         return;
-    }
 
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, pXmlName,
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT, eName,
                              OUString::valueOf(nNum));
 }
 
 /// export an integer attribute, omit if default
-void XMLTextFieldExport::ProcessInteger(const sal_Char* pXmlName,
+void XMLTextFieldExport::ProcessInteger(enum XMLTokenEnum eName,
                                         sal_Int32 nNum, sal_Int32 nDefault)
 {
     if (nNum != nDefault)
-    {
-        ProcessInteger(pXmlName, nNum);
-    }
+        ProcessInteger(eName, nNum);
 }
 
 
@@ -2324,8 +2305,7 @@ void XMLTextFieldExport::ProcessNumberingType(sal_Int16 nNumberingType)
         // number type: num format
         GetExport().GetMM100UnitConverter().convertNumFormat( sTmp,
                                                               nNumberingType );
-        GetExport().AddAttribute(XML_NAMESPACE_STYLE,
-                                      sXML_num_format,
+        GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
                                       sTmp.makeStringAndClear() );
         // and letter sync, if applicable
         GetExport().GetMM100UnitConverter().convertNumLetterSync( sTmp,
@@ -2333,9 +2313,8 @@ void XMLTextFieldExport::ProcessNumberingType(sal_Int16 nNumberingType)
 
         if (sTmp.getLength())
         {
-            GetExport().AddAttribute(XML_NAMESPACE_STYLE,
-                                          sXML_num_letter_sync,
-                                      sTmp.makeStringAndClear() );
+            GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_LETTER_SYNC,
+                                     sTmp.makeStringAndClear() );
         }
     }
     // else: like page descriptor => ignore
@@ -2343,7 +2322,7 @@ void XMLTextFieldExport::ProcessNumberingType(sal_Int16 nNumberingType)
 
 
 /// export a date, time, or duration
-void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
+void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
                                          double dValue,
                                          sal_Bool bIsDate,
                                          sal_Bool bIsDuration,
@@ -2372,11 +2351,11 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
     }
 
     // output attribute
-    ProcessString(sXMLName, aBuffer.makeStringAndClear(), sal_True, nPrefix);
+    ProcessString(eName, aBuffer.makeStringAndClear(), sal_True, nPrefix);
 }
 
 /// export a date or time
-void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
+void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
                                          const DateTime& rTime,
                                          sal_Bool bIsDate,
                                          sal_uInt16 nPrefix)
@@ -2398,12 +2377,12 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
     rExport.GetMM100UnitConverter().convertDateTime(aBuffer, aDateTime);
 
     // output attribute
-    ProcessString(sXMLName, aBuffer.makeStringAndClear(), sal_True, nPrefix);
+    ProcessString(eName, aBuffer.makeStringAndClear(), sal_True, nPrefix);
 }
 
 /// export date according to ISO 8601
 void XMLTextFieldExport::ProcessDate(
-    const sal_Char* sXMLName,
+    enum XMLTokenEnum eName,
     const ::com::sun::star::util::Date& rDate,
     sal_uInt16 nPrefix)
 {
@@ -2412,12 +2391,12 @@ void XMLTextFieldExport::ProcessDate(
     aDateTime.Day = rDate.Day;
     aDateTime.Month = rDate.Month;
     aDateTime.Year = rDate.Year;
-    ProcessDateTime(sXMLName, aDateTime, sal_True, nPrefix);
+    ProcessDateTime(eName, aDateTime, sal_True, nPrefix);
 }
 
 
 /// export a date, time, or duration
-void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
+void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
                                          sal_Int32 nMinutes,
                                          sal_Bool bIsDate,
                                          sal_Bool bIsDuration,
@@ -2427,7 +2406,7 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
     // handle bOmitDurationIfZero here, because we can precisely compare ints
     if (!(bIsDuration && bOmitDurationIfZero && (nMinutes==0)))
     {
-        ProcessDateTime(sXMLName, (double)nMinutes / (double)(24*60),
+        ProcessDateTime(eName, (double)nMinutes / (double)(24*60),
                         bIsDate, bIsDuration, bOmitDurationIfZero, nPrefix);
     }
 }
@@ -2485,7 +2464,7 @@ void XMLTextFieldExport::ProcessBibliographyData(
                                                 aBibliographyDataTypeMap))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                     sXML_bibiliographic_type,
+                                     XML_BIBILIOGRAPHIC_TYPE,
                                      sBuf.makeStringAndClear());
             }
             // else: ignore this argument
@@ -2570,54 +2549,55 @@ sal_Bool XMLTextFieldExport::GetDependentFieldPropertySet(
 
 
 /// map placeholder type
-const sal_Char* XMLTextFieldExport::MapPlaceholderType(sal_uInt16 nType)
+enum XMLTokenEnum XMLTextFieldExport::MapPlaceholderType(sal_uInt16 nType)
 {
-    sal_Char* pTypeString = sXML_text;
+    enum XMLTokenEnum eType = XML_TEXT;
 
-    switch (nType) {
-    case PlaceholderType::TEXT:
-        pTypeString = sXML_text;
-        break;
+    switch (nType)
+    {
+        case PlaceholderType::TEXT:
+            eType = XML_TEXT;
+            break;
 
-    case PlaceholderType::TABLE:
-        pTypeString = sXML_table;
-        break;
+        case PlaceholderType::TABLE:
+            eType = XML_TABLE;
+            break;
 
-    case PlaceholderType::TEXTFRAME:
-        pTypeString = sXML_text_box;
-        break;
+        case PlaceholderType::TEXTFRAME:
+            eType = XML_TEXT_BOX;
+            break;
 
-    case PlaceholderType::GRAPHIC:
-        pTypeString = sXML_image;
-        break;
+        case PlaceholderType::GRAPHIC:
+            eType = XML_IMAGE;
+            break;
 
-    case PlaceholderType::OBJECT:
-        pTypeString = sXML_object;
-        break;
+        case PlaceholderType::OBJECT:
+            eType = XML_OBJECT;
+            break;
 
-    default:
-        // unkown placeholder: sXML_text
-        DBG_ERROR("unkown placeholder type");
+        default:
+            // unkown placeholder: XML_TEXT
+            DBG_ERROR("unkown placeholder type");
     }
 
-    return pTypeString;
+    return eType;
 }
 
 
 /// element name for author fields
-const sal_Char* XMLTextFieldExport::MapAuthorFieldName(
+enum XMLTokenEnum XMLTextFieldExport::MapAuthorFieldName(
     const Reference<XPropertySet> & xPropSet)
 {
     // Initalen oder voller Name?
     return GetBoolProperty(sPropertyFullName, xPropSet)
-        ? sXML_author_name : sXML_author_initials;
+        ? XML_AUTHOR_NAME : XML_AUTHOR_INITIALS;
 }
 
-const sal_Char* XMLTextFieldExport::MapPageNumberName(
+enum XMLTokenEnum XMLTextFieldExport::MapPageNumberName(
     const Reference<XPropertySet> & xPropSet,
     sal_Int32& nOffset)
 {
-    sal_Char* pName = NULL;
+    enum XMLTokenEnum eName = XML_TOKEN_INVALID;
     PageNumberType ePage;
     Any aAny = xPropSet->getPropertyValue(sPropertySubType);
     ePage = *(PageNumberType*)aAny.getValue();
@@ -2625,512 +2605,512 @@ const sal_Char* XMLTextFieldExport::MapPageNumberName(
     switch (ePage)
     {
         case PageNumberType_PREV:
-            pName = sXML_previous;
+            eName = XML_PREVIOUS;
             nOffset += 1;
             break;
         case PageNumberType_CURRENT:
-            pName = sXML_current;
+            eName = XML_CURRENT;
             break;
         case PageNumberType_NEXT:
-            pName = sXML_next;
+            eName = XML_NEXT;
             nOffset -= 1;
             break;
         default:
             DBG_ERROR("unknown page number type");
-            pName = NULL;
+            eName = XML_TOKEN_INVALID;
             break;
     }
 
-    return pName;
+    return eName;
 }
 
 /// map TemplateDisplayFormat to XML
-const sal_Char* XMLTextFieldExport::MapTemplateDisplayFormat(sal_Int16 nFormat)
+enum XMLTokenEnum XMLTextFieldExport::MapTemplateDisplayFormat(sal_Int16 nFormat)
 {
-    sal_Char* pName = NULL;
+    enum XMLTokenEnum eName = XML_TOKEN_INVALID;
 
     switch (nFormat)
     {
         case TemplateDisplayFormat::FULL:
-            pName = sXML_full;
+            eName = XML_FULL;
             break;
         case TemplateDisplayFormat::PATH:
-            pName = sXML_path;
+            eName = XML_PATH;
             break;
         case TemplateDisplayFormat::NAME:
-            pName = sXML_name;
+            eName = XML_NAME;
             break;
         case TemplateDisplayFormat::NAME_AND_EXT:
-            pName = sXML_name_and_extension;
+            eName = XML_NAME_AND_EXTENSION;
             break;
         case TemplateDisplayFormat::AREA:
-            pName = sXML_area;
+            eName = XML_AREA;
             break;
         case TemplateDisplayFormat::TITLE:
-            pName = sXML_title;
+            eName = XML_TITLE;
             break;
         default:
             DBG_ERROR("unknown template display format");
-            pName = NULL;
+            eName = XML_TOKEN_INVALID;
             break;
     }
 
-    return pName;
+    return eName;
 }
 
 /// map count/statistics field token to XML name
-const sal_Char* XMLTextFieldExport::MapCountFieldName(sal_Int16 nToken)
+enum XMLTokenEnum XMLTextFieldExport::MapCountFieldName(sal_Int16 nToken)
 {
-    const sal_Char* pElementName = NULL;
+    enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
 
     switch (nToken)
     {
         case FIELD_ID_COUNT_PAGES:
-            pElementName = sXML_page_count;
+            eElement = XML_PAGE_COUNT;
             break;
         case FIELD_ID_COUNT_PARAGRAPHS:
-            pElementName = sXML_paragraph_count;
+            eElement = XML_PARAGRAPH_COUNT;
             break;
         case FIELD_ID_COUNT_WORDS:
-            pElementName = sXML_word_count;
+            eElement = XML_WORD_COUNT;
             break;
         case FIELD_ID_COUNT_CHARACTERS:
-            pElementName = sXML_character_count;
+            eElement = XML_CHARACTER_COUNT;
             break;
         case FIELD_ID_COUNT_TABLES:
-            pElementName = sXML_table_count;
+            eElement = XML_TABLE_COUNT;
             break;
         case FIELD_ID_COUNT_GRAPHICS:
-            pElementName = sXML_image_count;
+            eElement = XML_IMAGE_COUNT;
             break;
         case FIELD_ID_COUNT_OBJECTS:
-            pElementName = sXML_object_count;
+            eElement = XML_OBJECT_COUNT;
             break;
         default:
             DBG_ERROR("no count field token");
-            pElementName = NULL;
+            eElement = XML_TOKEN_INVALID;
             break;
     }
 
-    return pElementName;
+    return eElement;
 }
 
 /// map ChapterDisplayFormat to XML string
-const sal_Char* XMLTextFieldExport::MapChapterDisplayFormat(sal_Int16 nFormat)
+enum XMLTokenEnum XMLTextFieldExport::MapChapterDisplayFormat(sal_Int16 nFormat)
 {
-    const sal_Char* pName = NULL;
+    enum XMLTokenEnum eName = XML_TOKEN_INVALID;
 
     switch (nFormat)
     {
         case ChapterFormat::NAME:
-            pName = sXML_name;
+            eName = XML_NAME;
             break;
         case ChapterFormat::NUMBER:
-            pName = sXML_number;
+            eName = XML_NUMBER;
             break;
         case ChapterFormat::NAME_NUMBER:
-            pName = sXML_number_and_name;
+            eName = XML_NUMBER_AND_NAME;
             break;
         case ChapterFormat::NO_PREFIX_SUFFIX:
-            pName = sXML_plain_number_and_name;
+            eName = XML_PLAIN_NUMBER_AND_NAME;
             break;
         case ChapterFormat::DIGIT:
-            pName = sXML_plain_number;
+            eName = XML_PLAIN_NUMBER;
             break;
         default:
             DBG_ERROR("unkown chapter display format");
-            pName = NULL;
+            eName = XML_TOKEN_INVALID;
             break;
     }
 
-    return pName;
+    return eName;
 }
 
 
 /// map FilenameDisplayFormat to XML attribute names
-const sal_Char* XMLTextFieldExport::MapFilenameDisplayFormat(sal_Int16 nFormat)
+enum XMLTokenEnum XMLTextFieldExport::MapFilenameDisplayFormat(sal_Int16 nFormat)
 {
-    sal_Char* pName = NULL;
+    enum XMLTokenEnum eName = XML_TOKEN_INVALID;
 
     switch (nFormat)
     {
         case FilenameDisplayFormat::FULL:
-            pName = sXML_full;
+            eName = XML_FULL;
             break;
         case FilenameDisplayFormat::PATH:
-            pName = sXML_path;
+            eName = XML_PATH;
             break;
         case FilenameDisplayFormat::NAME:
-            pName = sXML_name;
+            eName = XML_NAME;
             break;
         case FilenameDisplayFormat::NAME_AND_EXT:
-            pName = sXML_name_and_extension;
+            eName = XML_NAME_AND_EXTENSION;
             break;
         default:
             DBG_ERROR("unknown filename display format");
     }
 
-    return pName;
+    return eName;
 }
 
 
 /// map ReferenceFieldPart to XML string
-const sal_Char* XMLTextFieldExport::MapReferenceType(sal_Int16 nType)
+enum XMLTokenEnum XMLTextFieldExport::MapReferenceType(sal_Int16 nType)
 {
-    sal_Char* pElementName = NULL;
+    enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
 
     switch (nType)
     {
         case ReferenceFieldPart::PAGE:
-            pElementName = sXML_page;
+            eElement = XML_PAGE;
             break;
         case ReferenceFieldPart::CHAPTER:
-            pElementName = sXML_chapter;
+            eElement = XML_CHAPTER;
             break;
         case ReferenceFieldPart::TEXT:
-            pElementName = sXML_text;
+            eElement = XML_TEXT;
             break;
         case ReferenceFieldPart::UP_DOWN:
-            pElementName = sXML_direction;
+            eElement = XML_DIRECTION;
             break;
         case ReferenceFieldPart::CATEGORY_AND_NUMBER:
-            pElementName = sXML_category_and_value;
+            eElement = XML_CATEGORY_AND_VALUE;
             break;
         case ReferenceFieldPart::ONLY_CAPTION:
-            pElementName = sXML_caption;
+            eElement = XML_CAPTION;
             break;
         case ReferenceFieldPart::ONLY_SEQUENCE_NUMBER:
-            pElementName = sXML_value;
+            eElement = XML_VALUE;
             break;
         case ReferenceFieldPart::PAGE_DESC:
             // small hack: this value never gets written, because
-            // sXML_template is default
-            pElementName = sXML_template;
+            // XML_TEMPLATE is default
+            eElement = XML_TEMPLATE;
             break;
         default:
             DBG_ERROR("unknown reference type");
-            pElementName = sXML_template;
+            eElement = XML_TEMPLATE;
             break;
     }
 
-    return pElementName;
+    return eElement;
 }
 
 /// map ReferenceFieldPart to XML string
-const sal_Char* XMLTextFieldExport::MapReferenceSource(sal_Int16 nType)
+enum XMLTokenEnum XMLTextFieldExport::MapReferenceSource(sal_Int16 nType)
 {
-    sal_Char* pElementName = NULL;
+    enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
 
     switch (nType)
     {
         case ReferenceFieldSource::REFERENCE_MARK:
-            pElementName = sXML_reference_ref;
+            eElement = XML_REFERENCE_REF;
             break;
         case ReferenceFieldSource::SEQUENCE_FIELD:
-            pElementName = sXML_sequence_ref;
+            eElement = XML_SEQUENCE_REF;
             break;
         case ReferenceFieldSource::BOOKMARK:
-            pElementName = sXML_bookmark_ref;
+            eElement = XML_BOOKMARK_REF;
             break;
         case ReferenceFieldSource::FOOTNOTE:
-            pElementName = sXML_footnote_ref;
+            eElement = XML_FOOTNOTE_REF;
             break;
         case ReferenceFieldSource::ENDNOTE:
-            pElementName = sXML_endnote_ref;
+            eElement = XML_ENDNOTE_REF;
             break;
         default:
             DBG_ERROR("unkown reference source");
             break;
     }
 
-    return pElementName;
+    return eElement;
 }
 
 
 /// element name for sender fields
-const sal_Char* XMLTextFieldExport::MapSenderFieldName(
+enum XMLTokenEnum XMLTextFieldExport::MapSenderFieldName(
     const Reference<XPropertySet> & xPropSet)
 {
-    sal_Char* pElementName = NULL;
+    enum XMLTokenEnum eName = XML_TOKEN_INVALID;
 
     // sub-field type
     switch (GetInt16Property(sPropertyFieldSubType, xPropSet))
     {
         case UserDataPart::COMPANY :
-            pElementName = sXML_sender_company;
+            eName = XML_SENDER_COMPANY;
             break;
         case UserDataPart::FIRSTNAME :
-            pElementName = sXML_sender_firstname;
+            eName = XML_SENDER_FIRSTNAME;
             break;
         case UserDataPart::NAME :
-            pElementName = sXML_sender_lastname;
+            eName = XML_SENDER_LASTNAME;
             break;
         case UserDataPart::SHORTCUT :
-            pElementName = sXML_sender_initials;
+            eName = XML_SENDER_INITIALS;
             break;
         case UserDataPart::STREET :
-            pElementName = sXML_sender_street;
+            eName = XML_SENDER_STREET;
             break;
         case UserDataPart::COUNTRY :
-            pElementName = sXML_sender_country;
+            eName = XML_SENDER_COUNTRY;
             break;
         case UserDataPart::ZIP :
-            pElementName = sXML_sender_postal_code;
+            eName = XML_SENDER_POSTAL_CODE;
             break;
         case UserDataPart::CITY :
-            pElementName = sXML_sender_city;
+            eName = XML_SENDER_CITY;
             break;
         case UserDataPart::TITLE :
-            pElementName = sXML_sender_title;
+            eName = XML_SENDER_TITLE;
             break;
         case UserDataPart::POSITION :
-            pElementName = sXML_sender_position;
+            eName = XML_SENDER_POSITION;
             break;
         case UserDataPart::PHONE_PRIVATE :
-            pElementName = sXML_sender_phone_private;
+            eName = XML_SENDER_PHONE_PRIVATE;
             break;
         case UserDataPart::PHONE_COMPANY :
-            pElementName = sXML_sender_phone_work;
+            eName = XML_SENDER_PHONE_WORK;
             break;
         case UserDataPart::FAX :
-            pElementName = sXML_sender_fax;
+            eName = XML_SENDER_FAX;
             break;
         case UserDataPart::EMAIL :
-            pElementName = sXML_sender_email;
+            eName = XML_SENDER_EMAIL;
             break;
         case UserDataPart::STATE :
-            pElementName = sXML_sender_state_or_province;
+            eName = XML_SENDER_STATE_OR_PROVINCE;
             break;
         default:
             DBG_WARNING("unknown sender type");
-            pElementName = NULL;
+            eName = XML_TOKEN_INVALID;
             break;
     }
 
-    return pElementName;
+    return eName;
 }
 
-const sal_Char* XMLTextFieldExport::MapDocInfoFieldName(
+enum XMLTokenEnum XMLTextFieldExport::MapDocInfoFieldName(
     enum FieldIdEnum nToken)
 {
-    sal_Char* pElementName = NULL;
+    enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
 
     switch (nToken)
     {
         case FIELD_ID_DOCINFO_CREATION_AUTHOR:
-            pElementName = sXML_initial_creator;
+            eElement = XML_INITIAL_CREATOR;
             break;
         case FIELD_ID_DOCINFO_CREATION_DATE:
-            pElementName = sXML_creation_date;
+            eElement = XML_CREATION_DATE;
             break;
         case FIELD_ID_DOCINFO_CREATION_TIME:
-            pElementName = sXML_creation_time;
+            eElement = XML_CREATION_TIME;
             break;
         case FIELD_ID_DOCINFO_DESCRIPTION:
-            pElementName = sXML_description;
+            eElement = XML_DESCRIPTION;
             break;
         case FIELD_ID_DOCINFO_INFORMATION0:
-            pElementName = sXML_user_info_0;
+            eElement = XML_USER_INFO_0;
             break;
         case FIELD_ID_DOCINFO_INFORMATION1:
-            pElementName = sXML_user_info_1;
+            eElement = XML_USER_INFO_1;
             break;
         case FIELD_ID_DOCINFO_INFORMATION2:
-            pElementName = sXML_user_info_2;
+            eElement = XML_USER_INFO_2;
             break;
         case FIELD_ID_DOCINFO_INFORMATION3:
-            pElementName = sXML_user_info_3;
+            eElement = XML_USER_INFO_3;
             break;
         case FIELD_ID_DOCINFO_PRINT_TIME:
-            pElementName = sXML_print_time;
+            eElement = XML_PRINT_TIME;
             break;
         case FIELD_ID_DOCINFO_PRINT_DATE:
-            pElementName = sXML_print_date;
+            eElement = XML_PRINT_DATE;
             break;
         case FIELD_ID_DOCINFO_PRINT_AUTHOR:
-            pElementName = sXML_printed_by;
+            eElement = XML_PRINTED_BY;
             break;
         case FIELD_ID_DOCINFO_TITLE:
-            pElementName = sXML_title;
+            eElement = XML_TITLE;
             break;
         case FIELD_ID_DOCINFO_SUBJECT:
-            pElementName = sXML_subject;
+            eElement = XML_SUBJECT;
             break;
         case FIELD_ID_DOCINFO_KEYWORDS:
-            pElementName = sXML_keywords;
+            eElement = XML_KEYWORDS;
             break;
         case FIELD_ID_DOCINFO_REVISION:
-            pElementName = sXML_editing_cycles;
+            eElement = XML_EDITING_CYCLES;
             break;
         case FIELD_ID_DOCINFO_EDIT_DURATION:
-            pElementName = sXML_editing_duration;
+            eElement = XML_EDITING_DURATION;
             break;
         case FIELD_ID_DOCINFO_SAVE_TIME:
-            pElementName = sXML_modification_time;
+            eElement = XML_MODIFICATION_TIME;
             break;
         case FIELD_ID_DOCINFO_SAVE_DATE:
-            pElementName = sXML_modification_date;
+            eElement = XML_MODIFICATION_DATE;
             break;
         case FIELD_ID_DOCINFO_SAVE_AUTHOR:
-            pElementName = sXML_creator;
+            eElement = XML_CREATOR;
             break;
         default:
             DBG_WARNING("unknown docinfo field type!");
-            pElementName = NULL;
+            eElement = XML_TOKEN_INVALID;
             break;
     }
 
-    return pElementName;
+    return eElement;
 }
 
-const sal_Char* XMLTextFieldExport::MapBibliographyFieldName(OUString sName)
+enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(OUString sName)
 {
-    sal_Char* pName = NULL;
+    enum XMLTokenEnum eName = XML_TOKEN_INVALID;
 
     if (sName.equalsAsciiL("Identifier", sizeof("Identifier")-1))
     {
-        pName = sXML_identifier;
+        eName = XML_IDENTIFIER;
     }
     else if (sName.equalsAsciiL("BibiliographicType",
                                 sizeof("BibiliographicType")-1))
     {
-        pName = sXML_bibiliographic_type;
+        eName = XML_BIBILIOGRAPHIC_TYPE;
     }
     else if (sName.equalsAsciiL("Address", sizeof("Address")-1))
     {
-        pName = sXML_address;
+        eName = XML_ADDRESS;
     }
     else if (sName.equalsAsciiL("Annote", sizeof("Annote")-1))
     {
-        pName = sXML_annote;
+        eName = XML_ANNOTE;
     }
     else if (sName.equalsAsciiL("Author", sizeof("Author")-1))
     {
-        pName = sXML_author;
+        eName = XML_AUTHOR;
     }
     else if (sName.equalsAsciiL("Booktitle", sizeof("Booktitle")-1))
     {
-        pName = sXML_booktitle;
+        eName = XML_BOOKTITLE;
     }
     else if (sName.equalsAsciiL("Chapter", sizeof("Chapter")-1))
     {
-        pName = sXML_chapter;
+        eName = XML_CHAPTER;
     }
     else if (sName.equalsAsciiL("Edition", sizeof("Edition")-1))
     {
-        pName = sXML_edition;
+        eName = XML_EDITION;
     }
     else if (sName.equalsAsciiL("Editor", sizeof("Editor")-1))
     {
-        pName = sXML_editor;
+        eName = XML_EDITOR;
     }
     else if (sName.equalsAsciiL("Howpublished", sizeof("Howpublished")-1))
     {
-        pName = sXML_howpublished;
+        eName = XML_HOWPUBLISHED;
     }
     else if (sName.equalsAsciiL("Institution", sizeof("Institution")-1))
     {
-        pName = sXML_institution;
+        eName = XML_INSTITUTION;
     }
     else if (sName.equalsAsciiL("Journal", sizeof("Journal")-1))
     {
-        pName = sXML_journal;
+        eName = XML_JOURNAL;
     }
     else if (sName.equalsAsciiL("Month", sizeof("Month")-1))
     {
-        pName = sXML_month;
+        eName = XML_MONTH;
     }
     else if (sName.equalsAsciiL("Note", sizeof("Note")-1))
     {
-        pName = sXML_note;
+        eName = XML_NOTE;
     }
     else if (sName.equalsAsciiL("Number", sizeof("Number")-1))
     {
-        pName = sXML_number;
+        eName = XML_NUMBER;
     }
     else if (sName.equalsAsciiL("Organizations", sizeof("Organizations")-1))
     {
-        pName = sXML_organizations;
+        eName = XML_ORGANIZATIONS;
     }
     else if (sName.equalsAsciiL("Pages", sizeof("Pages")-1))
     {
-        pName = sXML_pages;
+        eName = XML_PAGES;
     }
     else if (sName.equalsAsciiL("Publisher", sizeof("Publisher")-1))
     {
-        pName = sXML_publisher;
+        eName = XML_PUBLISHER;
     }
     else if (sName.equalsAsciiL("School", sizeof("School")-1))
     {
-        pName = sXML_school;
+        eName = XML_SCHOOL;
     }
     else if (sName.equalsAsciiL("Series", sizeof("Series")-1))
     {
-        pName = sXML_series;
+        eName = XML_SERIES;
     }
     else if (sName.equalsAsciiL("Title", sizeof("Title")-1))
     {
-        pName = sXML_title;
+        eName = XML_TITLE;
     }
     else if (sName.equalsAsciiL("Report_Type", sizeof("Report_Type")-1))
     {
-        pName = sXML_report_type;
+        eName = XML_REPORT_TYPE;
     }
     else if (sName.equalsAsciiL("Volume", sizeof("Volume")-1))
     {
-        pName = sXML_volume;
+        eName = XML_VOLUME;
     }
     else if (sName.equalsAsciiL("Year", sizeof("Year")-1))
     {
-        pName = sXML_year;
+        eName = XML_YEAR;
     }
     else if (sName.equalsAsciiL("URL", sizeof("URL")-1))
     {
-        pName = sXML_url;
+        eName = XML_URL;
     }
     else if (sName.equalsAsciiL("Custom1", sizeof("Custom1")-1))
     {
-        pName = sXML_custom1;
+        eName = XML_CUSTOM1;
     }
     else if (sName.equalsAsciiL("Custom2", sizeof("Custom2")-1))
     {
-        pName = sXML_custom2;
+        eName = XML_CUSTOM2;
     }
     else if (sName.equalsAsciiL("Custom3", sizeof("Custom3")-1))
     {
-        pName = sXML_custom3;
+        eName = XML_CUSTOM3;
     }
     else if (sName.equalsAsciiL("Custom4", sizeof("Custom4")-1))
     {
-        pName = sXML_custom4;
+        eName = XML_CUSTOM4;
     }
     else if (sName.equalsAsciiL("Custom5", sizeof("Custom5")-1))
     {
-        pName = sXML_custom5;
+        eName = XML_CUSTOM5;
     }
     else if (sName.equalsAsciiL("ISBN", sizeof("ISBN")-1))
     {
-        pName = sXML_isbn;
+        eName = XML_ISBN;
     }
     else
     {
         DBG_ERROR("Unknown bibliography info data");
-        pName = NULL;
+        eName = XML_TOKEN_INVALID;
     }
 
-    return pName;
+    return eName;
 }
 
-const sal_Char* XMLTextFieldExport::MapMeasureKind(sal_Int16 nKind)
+enum XMLTokenEnum XMLTextFieldExport::MapMeasureKind(sal_Int16 nKind)
 {
     switch( nKind )
     {
     case 0:
-        return sXML_value;
+        return XML_VALUE;
     case 1:
-        return sXML_unit;
+        return XML_UNIT;
     }
-    return sXML_gap;
+    return XML_GAP;
 }
 
 OUString XMLTextFieldExport::MakeFootnoteRefName(

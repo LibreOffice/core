@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,13 +87,14 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNUME_HXX
 #include "xmlnume.hxx"
 #endif
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -103,6 +104,7 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::text::XLineNumberingProperties;
+
 
 XMLLineNumberingExport::XMLLineNumberingExport(SvXMLExport& rExp) :
     rExport(rExp),
@@ -151,40 +153,39 @@ void XMLLineNumberingExport::Export()
             aAny >>= sTmp;
             if (sTmp.getLength() > 0)
             {
-                rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_style_name,sTmp);
+                rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, sTmp);
             }
 
             // enable
             aAny = xLineNumbering->getPropertyValue(sIsOn);
             if (! *(sal_Bool*)aAny.getValue())
             {
-                rExport.AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                          sXML_number_lines, sXML_false);
+                rExport.AddAttribute(XML_NAMESPACE_TEXT,
+                                     XML_NUMBER_LINES, XML_FALSE);
             }
 
             // count empty lines
             aAny = xLineNumbering->getPropertyValue(sCountEmptyLines);
             if (! *(sal_Bool*)aAny.getValue())
             {
-                rExport.AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                          sXML_count_empty_lines, sXML_false);
+                rExport.AddAttribute(XML_NAMESPACE_TEXT,
+                                     XML_COUNT_EMPTY_LINES, XML_FALSE);
             }
 
             // count in frames
             aAny = xLineNumbering->getPropertyValue(sCountLinesInFrames);
             if (*(sal_Bool*)aAny.getValue())
             {
-                rExport.AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                          sXML_count_in_floating_frames,
-                                          sXML_true);
+                rExport.AddAttribute(XML_NAMESPACE_TEXT,
+                                     XML_COUNT_IN_FLOATING_FRAMES, XML_TRUE);
             }
 
             // restart numbering
             aAny = xLineNumbering->getPropertyValue(sRestartAtEachPage);
             if (*(sal_Bool*)aAny.getValue())
             {
-                rExport.AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                          sXML_restart_on_page, sXML_true);
+                rExport.AddAttribute(XML_NAMESPACE_TEXT,
+                                     XML_RESTART_ON_PAGE, XML_TRUE);
             }
 
             // Distance
@@ -195,7 +196,7 @@ void XMLLineNumberingExport::Export()
             {
                 OUStringBuffer sBuf;
                 rExport.GetMM100UnitConverter().convertMeasure(sBuf, nLength);
-                rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_offset,
+                rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_OFFSET,
                                      sBuf.makeStringAndClear());
             }
 
@@ -205,13 +206,13 @@ void XMLLineNumberingExport::Export()
             sal_Int16 nFormat;
             aAny >>= nFormat;
             rExport.GetMM100UnitConverter().convertNumFormat( sNumPosBuf, nFormat );
-            rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_num_format,
+            rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
                                  sNumPosBuf.makeStringAndClear());
             rExport.GetMM100UnitConverter().convertNumLetterSync( sNumPosBuf, nFormat );
             if( sNumPosBuf.getLength() )
             {
                 rExport.AddAttribute(XML_NAMESPACE_STYLE,
-                                     sXML_num_letter_sync,
+                                     XML_NUM_LETTER_SYNC,
                                      sNumPosBuf.makeStringAndClear() );
             }
 
@@ -222,7 +223,7 @@ void XMLLineNumberingExport::Export()
             if (SvXMLUnitConverter::convertEnum(sNumPosBuf, nPosition,
                                                 aLineNumberPositionMap))
             {
-                rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_number_position,
+                rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_NUMBER_POSITION,
                                      sNumPosBuf.makeStringAndClear());
             }
 
@@ -233,11 +234,11 @@ void XMLLineNumberingExport::Export()
             OUStringBuffer sBuf;
             SvXMLUnitConverter::convertNumber(sBuf,
                                               (sal_Int32)nLineInterval);
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_increment,
+            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_INCREMENT,
                                  sBuf.makeStringAndClear());
 
             SvXMLElementExport aConfigElem(rExport, XML_NAMESPACE_TEXT,
-                                           sXML_linenumbering_configuration,
+                                           XML_LINENUMBERING_CONFIGURATION,
                                            sal_True, sal_True);
 
             // line separator
@@ -254,11 +255,11 @@ void XMLLineNumberingExport::Export()
                 OUStringBuffer sBuf;
                 SvXMLUnitConverter::convertNumber(sBuf,
                                                   (sal_Int32)nLineDistance);
-                rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_increment,
+                rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_INCREMENT,
                                      sBuf.makeStringAndClear());
 
                 SvXMLElementExport aSeparatorElem(rExport, XML_NAMESPACE_TEXT,
-                                                  sXML_linenumbering_separator,
+                                                  XML_LINENUMBERING_SEPARATOR,
                                                   sal_True, sal_False);
                 rExport.GetDocHandler()->characters(sSeparator);
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLGraphicsDefaultStyle.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 23:07:53 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX
@@ -102,6 +102,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_PROPERTIES;
+
 // ---------------------------------------------------------------------
 
 TYPEINIT1( XMLGraphicsDefaultStyle, XMLPropStyleContext );
@@ -119,7 +122,7 @@ SvXMLImportContext *XMLGraphicsDefaultStyle::CreateChildContext( sal_uInt16 nPre
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_STYLE == nPrefix && rLocalName.compareToAscii( sXML_properties ) == 0 )
+    if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_PROPERTIES ) )
     {
         UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )

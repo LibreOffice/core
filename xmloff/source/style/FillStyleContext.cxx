@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillStyleContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 16:34:16 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,6 @@
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
 #endif
 
 using namespace ::com::sun::star;

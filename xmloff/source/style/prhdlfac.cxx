@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,6 @@
 
 #ifndef _XMLOFF_XMLTYPES_HXX
 #include "xmltypes.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
@@ -315,11 +311,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 pPropHdl = new XMLCrossedOutPropHdl ;
                 break;
             case XML_TYPE_TEXT_BOOLCROSSEDOUT:
-                {
-                    ::rtl::OUString aStrTrueString( RTL_CONSTASCII_USTRINGPARAM( sXML_crossedout_single ) );
-                    ::rtl::OUString aStrFalseString( RTL_CONSTASCII_USTRINGPARAM( sXML_crossedout_none ) );
-                    pPropHdl = new XMLNamedBoolPropertyHdl( aStrTrueString, aStrFalseString );
-                }
+                pPropHdl = new XMLNamedBoolPropertyHdl(
+                    GetXMLToken(XML_CROSSEDOUT_SINGLE),
+                    GetXMLToken(XML_CROSSEDOUT_NONE)    );
                 break;
             case XML_TYPE_TEXT_ESCAPEMENT:
                 pPropHdl = new XMLEscapementPropHdl;
@@ -358,10 +352,10 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 pPropHdl = new XMLUnderlinePropHdl;
                 break;
             case XML_TYPE_TEXT_UNDERLINE_COLOR:
-                pPropHdl = new XMLColorTransparentPropHdl( sXML_font_color );
+                pPropHdl = new XMLColorTransparentPropHdl( XML_FONT_COLOR );
                 break;
             case XML_TYPE_TEXT_UNDERLINE_HASCOLOR:
-                pPropHdl = new XMLIsTransparentPropHdl( sXML_font_color,
+                pPropHdl = new XMLIsTransparentPropHdl( XML_FONT_COLOR,
                                                          sal_False );
                 break;
             case XML_TYPE_TEXT_WEIGHT:

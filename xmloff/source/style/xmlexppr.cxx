@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-07 09:43:41 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@
 
 #include "xmlexppr.hxx"
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_ATTRLIST_HXX
@@ -127,6 +127,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::xmloff::token;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -881,13 +882,11 @@ void SvXMLExportPropertyMapper::exportXML(
     {
         if( (nFlags & XML_EXPORT_FLAG_IGN_WS) != 0 )
         {
-            OUString sWS( OUString::createFromAscii(sXML_WS) );
-            rHandler->ignorableWhitespace( sWS );
+            rHandler->ignorableWhitespace( GetXMLToken(XML_WS) );
         }
 
-        OUString sLName( OUString::createFromAscii(sXML_properties) );
         OUString sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE,
-                                                      sLName );
+                                                 GetXMLToken(XML_PROPERTIES) );
         rHandler->startElement( sName, xAttrList );
 
         exportElementItems( rHandler, rUnitConverter, rNamespaceMap,
@@ -989,7 +988,7 @@ void SvXMLExportPropertyMapper::_exportXML(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    OUString sCDATA( OUString::createFromAscii( sXML_CDATA ) );
+    OUString sCDATA( GetXMLToken(XML_CDATA) );
 
     if ( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) &
                 MID_FLAG_SPECIAL_ITEM_EXPORT ) != 0 )
@@ -1033,7 +1032,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                         }
                         pNewNamespaceMap->Add( sPrefix, sNamespace );
 
-                        sName.appendAscii( sXML_xmlns );
+                        sName.append( GetXMLToken(XML_XMLNS) );
                         sName.append( sal_Unicode(':') );
                         sName.append( sPrefix );
                         rAttrList.AddAttribute( sName.makeStringAndClear(), sCDATA,
@@ -1088,7 +1087,7 @@ void SvXMLExportPropertyMapper::exportElementItems(
     const sal_uInt16 nCount = rIndexArray.Count();
 
     sal_Bool bItemsExported = sal_False;
-    OUString sWS( OUString::createFromAscii(sXML_WS) );
+    OUString sWS( GetXMLToken(XML_WS) );
     for( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
     {
         const sal_uInt16 nElement = rIndexArray.GetObject( nIndex );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventImportHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-23 13:20:04 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,6 @@
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
 #endif
 
 

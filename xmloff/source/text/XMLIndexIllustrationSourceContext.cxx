@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexIllustrationSourceContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -113,7 +113,9 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
-
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE;
+using ::xmloff::token::XML_TOKEN_INVALID;
 
 TYPEINIT1(XMLIndexIllustrationSourceContext, XMLIndexTableSourceContext);
 
@@ -136,14 +138,13 @@ SvXMLImportContext* XMLIndexIllustrationSourceContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         (rLocalName.equalsAsciiL(sXML_illustration_index_entry_template,
-                    sizeof(sXML_illustration_index_entry_template)-1)))
+    if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
+         ( IsXMLToken( rLocalName, XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE ) ) )
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
                                            aLevelNameTableMap,
-                                           NULL, // no outline-level attr
+                                           XML_TOKEN_INVALID, // no outline-level attr
                                            aLevelStylePropNameTableMap,
                                            aAllowedTokenTypesTable);
     }

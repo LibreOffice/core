@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImageMapContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-27 08:20:39 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
@@ -344,14 +344,14 @@ SvXMLImportContext* XMLImageMapObjectContext::CreateChildContext(
     const Reference<XAttributeList> & xAttrList )
 {
     if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-         (rLocalName.equalsAsciiL(sXML_events, sizeof(sXML_events)-1)) )
+         IsXMLToken(rLocalName, XML_EVENTS) )
     {
         Reference<XEventsSupplier> xEvents( xMapEntry, UNO_QUERY );
         return new XMLEventsImportContext(
             GetImport(), nPrefix, rLocalName, xEvents);
     }
     else if ( (XML_NAMESPACE_SVG == nPrefix) &&
-              (rLocalName.equalsAsciiL(sXML_desc, sizeof(sXML_desc)-1)) )
+              IsXMLToken(rLocalName, XML_DESC) )
     {
         return new XMLStringBufferImportContext(
             GetImport(), nPrefix, rLocalName, sDescriptionBuffer);
@@ -377,8 +377,7 @@ void XMLImageMapObjectContext::ProcessAttribute(
             break;
 
         case XML_TOK_IMAP_NOHREF:
-            bIsActive = ! rValue.equalsAsciiL(sXML_nohref,
-                                              sizeof(sXML_nohref)-1);
+            bIsActive = ! IsXMLToken(rValue, XML_NOHREF);
             break;
 
         case XML_TOK_IMAP_NAME:
@@ -763,20 +762,17 @@ SvXMLImportContext *XMLImageMapContext::CreateChildContext(
 
     if ( XML_NAMESPACE_DRAW == nPrefix )
     {
-        if ( rLocalName.equalsAsciiL(sXML_area_rectangle,
-                                    sizeof(sXML_area_rectangle)-1) )
+        if ( IsXMLToken(rLocalName, XML_AREA_RECTANGLE) )
         {
             pContext = new XMLImageMapRectangleContext(
                 GetImport(), nPrefix, rLocalName, xImageMap);
         }
-        else if ( rLocalName.equalsAsciiL(sXML_area_polygon,
-                                          sizeof(sXML_area_polygon)-1) )
+        else if ( IsXMLToken(rLocalName, XML_AREA_POLYGON) )
         {
             pContext = new XMLImageMapPolygonContext(
                 GetImport(), nPrefix, rLocalName, xImageMap);
         }
-        else if ( rLocalName.equalsAsciiL(sXML_area_circle,
-                                          sizeof(sXML_area_circle)-1) )
+        else if ( IsXMLToken(rLocalName, XML_AREA_CIRCLE) )
         {
             pContext = new XMLImageMapCircleContext(
                 GetImport(), nPrefix, rLocalName, xImageMap);

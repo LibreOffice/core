@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 
 #pragma hdrstop
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLSTYLE_HXX
 #include "xmlstyle.hxx"
@@ -97,6 +99,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -136,11 +139,11 @@ SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext* pContext = 0L;
 
-    if( nPrefix == XML_NAMESPACE_PRESENTATION && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_animations ) ) )
+    if( nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_ANIMATIONS ) )
     {
         pContext = new XMLAnimationsContext( GetImport(), nPrefix, rLocalName, xAttrList );
     }
-    else if( nPrefix == XML_NAMESPACE_OFFICE && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_forms ) ) )
+    else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_FORMS ) )
     {
         if( GetImport().IsFormsSupported() )
             pContext = GetImport().GetFormImport()->createOfficeFormsContext( GetImport(), nPrefix, rLocalName );

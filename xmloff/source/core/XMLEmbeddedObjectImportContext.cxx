@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-09 12:15:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
@@ -92,28 +92,28 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 
 struct XMLServiceMapEntry_Impl
 {
-    const sal_Char *sClass;
-    sal_Int32      sClassLen;
+    enum XMLTokenEnum eClass;
     const sal_Char *sFilterService;
     sal_Int32      nFilterServiceLen;
 };
 
 #define SERVICE_MAP_ENTRY( cls, app ) \
-    { sXML_##cls, sizeof(sXML_##cls)-1, \
+    { XML_##cls, \
       XML_IMPORT_FILTER_##app, sizeof(XML_IMPORT_FILTER_##app)-1 }
 
 const XMLServiceMapEntry_Impl aServiceMap[] =
 {
-    SERVICE_MAP_ENTRY( text, WRITER ),
-    SERVICE_MAP_ENTRY( online_text, WRITER ),
-    SERVICE_MAP_ENTRY( spreadsheet, CALC ),
-    SERVICE_MAP_ENTRY( drawing, DRAW ),
-    SERVICE_MAP_ENTRY( presentation, IMPRESS ),
-    SERVICE_MAP_ENTRY( chart, CHART ),
-    { 0, 0, 0, 0 }
+    SERVICE_MAP_ENTRY( TEXT, WRITER ),
+    SERVICE_MAP_ENTRY( ONLINE_TEXT, WRITER ),
+    SERVICE_MAP_ENTRY( SPREADSHEET, CALC ),
+    SERVICE_MAP_ENTRY( DRAWING, DRAW ),
+    SERVICE_MAP_ENTRY( PRESENTATION, IMPRESS ),
+    SERVICE_MAP_ENTRY( CHART, CHART ),
+    { XML_TOKEN_INVALID, 0, 0 }
 };
 
 class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
@@ -218,12 +218,12 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     if( nPrfx == XML_NAMESPACE_MATH &&
-        rLName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_math ) ) )
+        IsXMLToken( rLName, XML_MATH ) )
     {
         sFilterService = OUString( RTL_CONSTASCII_USTRINGPARAM(XML_IMPORT_FILTER_MATH) );
     }
     else if( nPrfx == XML_NAMESPACE_OFFICE &&
-        rLName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_document ) ) )
+        IsXMLToken( rLName, XML_DOCUMENT ) )
     {
         OUString sClass;
 
@@ -234,7 +234,7 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
             OUString aLocalName;
             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
             if( nPrefix == XML_NAMESPACE_OFFICE &&
-                aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_class ) ) )
+                IsXMLToken( aLocalName, XML_CLASS ) )
             {
                 sClass = xAttrList->getValueByIndex( i );
                 break;
@@ -244,9 +244,9 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
         if( sClass.getLength() )
         {
             const XMLServiceMapEntry_Impl *pEntry = aServiceMap;
-            while( pEntry->sClass )
+            while( pEntry->eClass != XML_TOKEN_INVALID )
             {
-                if( sClass.equalsAsciiL( pEntry->sClass, pEntry->sClassLen ) )
+                if( IsXMLToken( sClass, pEntry->eClass ) )
                 {
                     sFilterService = OUString( pEntry->sFilterService,
                                                pEntry->nFilterServiceLen,

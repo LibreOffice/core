@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opaquhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 
 // --
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -83,6 +83,8 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -98,7 +100,7 @@ sal_Bool XMLOpaquePropHdl::importXML( const OUString& rStrImpValue, Any& rValue,
 {
     sal_Bool bRet = sal_True;
 
-    sal_Bool bValue = rStrImpValue.compareToAscii( sXML_opaque_foreground );
+    sal_Bool bValue = IsXMLToken( rStrImpValue, XML_OPAQUE_FOREGROUND );
     rValue <<= sal_Bool(bValue);
     bRet = sal_True;
 
@@ -113,9 +115,9 @@ sal_Bool XMLOpaquePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
     if (rValue >>= bValue)
     {
         if( bValue )
-            rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_opaque_foreground ) );
+            rStrExpValue = GetXMLToken( XML_OPAQUE_FOREGROUND );
         else
-            rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_opaque_background ) );
+            rStrExpValue = GetXMLToken( XML_OPAQUE_BACKGROUND );
 
         bRet = sal_True;
     }

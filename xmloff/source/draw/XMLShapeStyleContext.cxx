@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:07:00 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 
 #include <tools/debug.hxx>
 
-#include "xmlkywd.hxx"
-
 #ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
 #include "XMLShapeStyleContext.hxx"
 #endif
@@ -95,6 +93,8 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_PROPERTIES;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -135,7 +135,7 @@ SvXMLImportContext *XMLShapeStyleContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.compareToAscii( sXML_properties ) == 0 )
+        IsXMLToken( rLocalName, XML_PROPERTIES ) )
     {
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );

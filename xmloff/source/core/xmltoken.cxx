@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-28 13:16:41 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
+#endif
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
@@ -2013,6 +2017,36 @@ namespace xmloff { namespace token {
         TOKEN( "binary-data" ),                // XML_BINARY_DATA
         TOKEN( "notify-on-update-of-table" ),  // XML_NOTIFY_ON_UPDATE_OF_TABLE
 
+        TOKEN( "0" ),                          // XML_0
+        TOKEN( "play" ),                       // XML_PLAY
+        TOKEN( "handout-master" ),             // XML_HANDOUT_MASTER
+        TOKEN( "text-style-name" ),            // XML_TEXT_STYLE_NAME
+        TOKEN( "escape-direction" ),           // XML_ESCAPE_DIRECTION
+        TOKEN( "glue-point" ),                 // XML_GLUE_POINT
+        TOKEN( "primary-x" ),                  // XML_PRIMARY_X
+        TOKEN( "secondary-x" ),                // XML_SECONDARY_X
+        TOKEN( "primary-y" ),                  // XML_PRIMARY_Y
+        TOKEN( "secondary-y" ),                // XML_SECONDARY_Y
+        TOKEN( "primary-z" ),                  // XML_PRIMARY_Z
+
+        TOKEN( "caption-type" ),               // XML_CAPTION_TYPE
+        TOKEN( "caption-angle-type" ),         // XML_CAPTION_ANGLE_TYPE
+        TOKEN( "caption-angle" ),              // XML_CAPTION_ANGLE
+        TOKEN( "caption-gap" ),                // XML_CAPTION_GAP
+        TOKEN( "caption-escape-direction" ),   // XML_CAPTION_ESCAPE_DIRECTION
+        TOKEN( "caption-escape" ),             // XML_CAPTION_ESCAPE
+        TOKEN( "caption-line-length" ),        // XML_CAPTION_LINE_LENGTH
+        TOKEN( "caption-fit-line-length" ),    // XML_CAPTION_FIT_LINE_LENGTH
+        TOKEN( "free" ),                       // XML_FREE
+        TOKEN( "transition-type" ),            // XML_TRANSITION_TYPE,
+        TOKEN( "transition-style" ),           // XML_TRANSITION_STYLE
+        TOKEN( "transition-speed" ),           // XML_TRANSITION_SPEED
+        TOKEN( "duration" ),                   // XML_DURATION,
+        TOKEN( "background-size" ),            // XML_BACKGROUND_SIZE,
+        TOKEN( "background-objects-visible" ), // XML_BACKGROUND_OBJECTS_VISIBLE
+        TOKEN( "background-visible" ),         // XML_BACKGROUND_VISIBLE
+
+
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
 
@@ -2021,6 +2055,9 @@ namespace xmloff { namespace token {
     // get OUString representation of token
     const OUString& GetXMLToken( enum XMLTokenEnum eToken )
     {
+        DBG_ASSERT( eToken > XML_TOKEN_INVALID, "token value too low!" );
+        DBG_ASSERT( eToken < XML_TOKEN_END, "token value too high!" );
+
         XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
         if (!pToken->pOUString)
             pToken->pOUString = new OUString( pToken->pChar, pToken->nLength,
@@ -2033,6 +2070,9 @@ namespace xmloff { namespace token {
         const OUString& rString,
         enum XMLTokenEnum eToken )
     {
+        DBG_ASSERT( eToken > XML_TOKEN_INVALID, "token value too low!" );
+        DBG_ASSERT( eToken < XML_TOKEN_END, "token value too high!" );
+
         const XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
         return rString.equalsAsciiL( pToken->pChar, pToken->nLength );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListItemContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-25 06:57:28 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_TXTPARAI_HXX
 #include "txtparai.hxx"
@@ -93,6 +93,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
 
 TYPEINIT1( XMLTextListItemContext, SvXMLImportContext );
 
@@ -117,7 +118,7 @@ XMLTextListItemContext::XMLTextListItemContext(
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         if( !bIsHeader && XML_NAMESPACE_TEXT == nPrefix &&
-            aLocalName.compareToAscii( sXML_start_value ) == 0 )
+            IsXMLToken( aLocalName, XML_START_VALUE ) )
         {
             sal_Int32 nTmp = rValue.toInt32();
             if( nTmp >= 0 && nTmp <= SHRT_MAX )

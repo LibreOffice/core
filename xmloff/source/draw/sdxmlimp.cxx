@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:27 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,6 @@
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
@@ -565,7 +561,8 @@ SdXMLImport::SdXMLImport( sal_Bool bIsDraw, sal_uInt16 nImportFlags )
 {
     // add namespaces
     GetNamespaceMap().AddAtIndex(
-        XML_NAMESPACE_PRESENTATION, sXML_np_presentation, sXML_n_presentation, XML_NAMESPACE_PRESENTATION);
+        XML_NAMESPACE_PRESENTATION, GetXMLToken(XML_NP_PRESENTATION),
+        GetXMLToken(XML_N_PRESENTATION), XML_NAMESPACE_PRESENTATION);
 }
 
 // XImporter
@@ -774,11 +771,11 @@ SvXMLImportContext *SdXMLImport::CreateContext(USHORT nPrefix,
     SvXMLImportContext* pContext = 0;
 
     if(XML_NAMESPACE_OFFICE == nPrefix &&
-        ( 0 == rLocalName.compareToAscii(sXML_document) ||
-          0 == rLocalName.compareToAscii(sXML_document_meta) ||
-          0 == rLocalName.compareToAscii(sXML_document_styles) ||
-          0 == rLocalName.compareToAscii(sXML_document_content) ||
-          0 == rLocalName.compareToAscii(sXML_document_settings) ))
+        ( IsXMLToken( rLocalName, XML_DOCUMENT ) ||
+          IsXMLToken( rLocalName, XML_DOCUMENT_META ) ||
+          IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) ||
+          IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ||
+          IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS )   ))
     {
          pContext = new SdXMLDocContext_Impl(*this, nPrefix, rLocalName, xAttrList);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-10 12:35:52 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #endif
 
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
@@ -119,6 +119,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
+using namespace ::xmloff::token;
 
 void XMLTextParagraphExport::exportStyleAttributes(
         const ::com::sun::star::uno::Reference<
@@ -133,34 +134,33 @@ void XMLTextParagraphExport::exportStyleAttributes(
         aAny = xPropSet->getPropertyValue( sCategory );
         sal_Int16 nCategory;
         aAny >>= nCategory;
-        const sal_Char *pValue = 0;
+        enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
         if( -1 != nCategory )
         {
             switch( nCategory )
             {
             case ParagraphStyleCategory::TEXT:
-                pValue = sXML_text;
+                eValue = XML_TEXT;
                 break;
             case ParagraphStyleCategory::CHAPTER:
-                pValue = sXML_chapter;
+                eValue = XML_CHAPTER;
                 break;
             case ParagraphStyleCategory::LIST:
-                pValue = sXML_list;
+                eValue = XML_LIST;
                 break;
             case ParagraphStyleCategory::INDEX:
-                pValue = sXML_index;
+                eValue = XML_INDEX;
                 break;
             case ParagraphStyleCategory::EXTRA:
-                pValue = sXML_extra;
+                eValue = XML_EXTRA;
                 break;
             case ParagraphStyleCategory::HTML:
-                pValue = sXML_html;
+                eValue = XML_HTML;
                 break;
             }
         }
-        if( pValue )
-            GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_class,
-                                                pValue );
+        if( eValue != XML_TOKEN_INVALID )
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_CLASS, eValue);
     }
     if( xPropSetInfo->hasPropertyByName( sPageDescName ) )
     {
@@ -172,7 +172,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
             OUString sName;
             aAny >>= sName;
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                      sXML_master_page_name,
+                                      XML_MASTER_PAGE_NAME,
                                       sName );
         }
     }
@@ -204,16 +204,16 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
         {
             Reference < XPropertySet > xPropSet (xInt, UNO_QUERY);
             if (xPropSet.is())
-                exportDefaultStyle( xPropSet, sXML_paragraph, GetParaPropMapper());
+                exportDefaultStyle( xPropSet, GetXMLToken(XML_PARAGRAPH), GetParaPropMapper());
         }
     }
-    exportStyleFamily( "ParagraphStyles", sXML_paragraph, GetParaPropMapper(),
+    exportStyleFamily( "ParagraphStyles", GetXMLToken(XML_PARAGRAPH), GetParaPropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_PARAGRAPH, 0);
-    exportStyleFamily( "CharacterStyles", sXML_text, GetTextPropMapper(),
+    exportStyleFamily( "CharacterStyles", GetXMLToken(XML_TEXT), GetTextPropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_TEXT );
     // get shape export to make sure the the frame family is added correctly.
     GetExport().GetShapeExport();
-    exportStyleFamily( "FrameStyles", XML_STYLE_FAMILY_SD_GRAPHICS_NAME, GetFramePropMapper(),
+    exportStyleFamily( "FrameStyles", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), GetFramePropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_FRAME, 0);
     exportNumStyles( bUsed );
     if( !IsBlockMode() )

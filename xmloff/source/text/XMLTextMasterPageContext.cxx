@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterPageContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 22:19:14 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_TEXTMASTERPAGECONTEXT_HXX_
 #include "XMLTextMasterPageContext.hxx"
@@ -101,6 +101,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 //using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 Reference < XStyle > XMLTextMasterPageContext::Create()
 {
@@ -148,17 +149,15 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
         if( XML_NAMESPACE_STYLE == nPrefix )
         {
-            if( aLocalName.equalsAsciiL( sXML_name, sizeof( sXML_name )-1 ) )
+            if( IsXMLToken( aLocalName, XML_NAME ) )
             {
                 sName = xAttrList->getValueByIndex( i );
             }
-            else if( aLocalName.equalsAsciiL( sXML_next_style_name,
-                        sizeof( sXML_next_style_name )-1 ) )
+            else if( IsXMLToken( aLocalName, XML_NEXT_STYLE_NAME ) )
             {
                 sFollow = xAttrList->getValueByIndex( i );
             }
-            else if( aLocalName.equalsAsciiL( sXML_page_master_name,
-                        sizeof( sXML_page_master_name )-1 ) )
+            else if( IsXMLToken( aLocalName, XML_PAGE_MASTER_NAME ) )
             {
                 sPageMasterName = xAttrList->getValueByIndex( i );
             }

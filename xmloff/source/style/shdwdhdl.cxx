@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shdwdhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,13 @@
 
 // --
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmltoken.hxx>
 #endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -94,7 +95,7 @@ sal_Bool XMLShadowedPropHdl::importXML( const OUString& rStrImpValue, Any& rValu
 {
     sal_Bool bRet = sal_False;
 
-    sal_Bool bValue = rStrImpValue.compareToAscii( sXML_none ) != 0;
+    sal_Bool bValue = IsXMLToken( rStrImpValue, XML_NONE );
     rValue <<= sal_Bool(bValue);
     bRet = sal_True;
 
@@ -114,7 +115,7 @@ sal_Bool XMLShadowedPropHdl::exportXML( OUString& rStrExpValue, const Any& rValu
         }
         else
         {
-            rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) );
+            rStrExpValue = GetXMLToken( XML_NONE );
         }
 
         bRet = sal_True;

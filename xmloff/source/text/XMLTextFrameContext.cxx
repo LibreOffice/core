@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-28 13:21:55 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::document;
+using namespace ::xmloff::token;
 using ::com::sun::star::document::XEventsSupplier;
 
 class XMLTextFrameDescContext_Impl : public SvXMLImportContext
@@ -233,12 +234,12 @@ XMLTextFrameParam_Impl::XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16
 
         OUString aLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-        if ( XML_NAMESPACE_DRAW == nPrefix && aLocalName.equalsAsciiL( sXML_value, sizeof(sXML_value) -1 ) )
+        if ( XML_NAMESPACE_DRAW == nPrefix && IsXMLToken(aLocalName, XML_VALUE) )
         {
             sValue = rValue;
             bFoundValue=sal_True;
         }
-        else if ( XML_NAMESPACE_OFFICE == nPrefix && aLocalName.equalsAsciiL( sXML_name, sizeof( sXML_name) -1 ) )
+        else if ( XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken(aLocalName, XML_NAME) )
             sName = rValue;
     }
     if (sName.getLength() && bFoundValue )
@@ -321,7 +322,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
                                                                     rValue);
             break;
         case XML_TOK_TEXT_CONTOUR_AUTO:
-            bAuto = rValue.equalsAsciiL( sXML_true, sizeof(sXML_true)-1 );
+            bAuto = IsXMLToken(rValue, XML_TRUE);
             break;
         }
     }
@@ -752,7 +753,7 @@ XMLTextFrameContext::XMLTextFrameContext(
             }
             break;
         case XML_TOK_TEXT_FRAME_REL_WIDTH:
-            if( rValue.equalsAsciiL( sXML_scale, sizeof(sXML_scale)-1 ) )
+            if( IsXMLToken(rValue, XML_SCALE) )
             {
                 bSyncWidth = sal_True;
             }
@@ -780,12 +781,11 @@ XMLTextFrameContext::XMLTextFrameContext(
             }
             break;
         case XML_TOK_TEXT_FRAME_REL_HEIGHT:
-            if( rValue.equalsAsciiL( sXML_scale, sizeof(sXML_scale)-1 ) )
+            if( IsXMLToken( rValue, XML_SCALE ) )
             {
                 bSyncHeight = sal_True;
             }
-            else if( rValue.equalsAsciiL( sXML_scale_min,
-                                          sizeof(sXML_scale_min)-1 ) )
+            else if( IsXMLToken( rValue, XML_SCALE_MIN ) )
             {
                 bSyncHeight = sal_True;
                 bMinHeight = sal_True;
@@ -854,10 +854,7 @@ XMLTextFrameContext::XMLTextFrameContext(
             sArchive = rValue;
             break;
         case XML_TOK_TEXT_FRAME_MAY_SCRIPT:
-            if ( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( sXML_true ) ) )
-                bMayScript = sal_True;
-            else
-                bMayScript = sal_False;
+            bMayScript = IsXMLToken( rValue, XML_TRUE );
             break;
         case XML_TOK_TEXT_FRAME_MIME_TYPE:
             sMimeType = rValue;
@@ -925,7 +922,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_SVG == nPrefix &&
-        rLocalName.equalsAsciiL( sXML_desc, sizeof(sXML_desc)-1 ) )
+        IsXMLToken( rLocalName, XML_DESC ) )
     {
         pContext = new XMLTextFrameDescContext_Impl( GetImport(),
                                               nPrefix, rLocalName,
@@ -934,7 +931,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     else if( XML_NAMESPACE_DRAW == nPrefix )
     {
         if ( (nType == XML_TEXT_FRAME_APPLET || nType == XML_TEXT_FRAME_PLUGIN) &&
-              rLocalName.equalsAsciiL (  sXML_param, sizeof (sXML_param) -1 ) )
+              IsXMLToken( rLocalName, XML_PARAM ) )
         {
             pContext = new XMLTextFrameParam_Impl( GetImport(),
                                               nPrefix, rLocalName,
@@ -942,18 +939,15 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         }
         else if( xPropSet.is() )
         {
-            if( rLocalName.equalsAsciiL( sXML_contour_polygon,
-                                         sizeof(sXML_contour_polygon)-1 ) )
+            if( IsXMLToken( rLocalName, XML_CONTOUR_POLYGON ) )
                 pContext = new XMLTextFrameContourContext_Impl( GetImport(),
                                               nPrefix, rLocalName,
                                                xAttrList, xPropSet, sal_False );
-            else if( rLocalName.equalsAsciiL( sXML_contour_path,
-                                         sizeof(sXML_contour_path)-1 ) )
+            else if( IsXMLToken( rLocalName, XML_CONTOUR_PATH ) )
                 pContext = new XMLTextFrameContourContext_Impl( GetImport(),
                                               nPrefix, rLocalName,
                                                xAttrList, xPropSet, sal_True );
-            else if ( rLocalName.equalsAsciiL( sXML_image_map,
-                                               sizeof(sXML_image_map)-1) &&
+            else if ( IsXMLToken( rLocalName, XML_IMAGE_MAP ) &&
                       ( nType == XML_TEXT_FRAME_TEXTBOX ||
                         nType == XML_TEXT_FRAME_GRAPHIC ||
                         nType == XML_TEXT_FRAME_OBJECT_OLE ) )
@@ -963,7 +957,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     }
     else if( (XML_NAMESPACE_OFFICE == nPrefix) )
     {
-        if( rLocalName.equalsAsciiL(sXML_events, sizeof(sXML_events)-1) )
+        if( IsXMLToken( rLocalName, XML_EVENTS ) )
         {
             // do we still have the frame object?
             if (xPropSet.is())
@@ -1005,10 +999,10 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     }
     if( !pContext &&
             ( XML_TEXT_FRAME_OBJECT == nType &&
-             (XML_NAMESPACE_OFFICE == nPrefix &&
-             rLocalName.equalsAsciiL(sXML_document, sizeof(sXML_document)-1)) ||
-             (XML_NAMESPACE_MATH == nPrefix &&
-             rLocalName.equalsAsciiL(sXML_math, sizeof(sXML_math)-1)) ) )
+              (XML_NAMESPACE_OFFICE == nPrefix &&
+               IsXMLToken( rLocalName, XML_DOCUMENT )) ||
+              (XML_NAMESPACE_MATH == nPrefix &&
+               IsXMLToken(rLocalName, XML_MATH) ) ) )
     {
         if( !xPropSet.is() )
         {

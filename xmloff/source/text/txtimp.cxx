@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-28 13:19:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,8 @@
 #include <com/sun/star/container/XNamed.hpp>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -1507,7 +1507,7 @@ sal_Bool XMLTextImportHelper::HasDrawNameAttribute(
         sal_uInt16 nPrefix =
             rNamespaceMap.GetKeyByAttrName( rAttrName, &aLocalName );
         if( XML_NAMESPACE_DRAW == nPrefix &&
-            aLocalName.equalsAsciiL( sXML_name, sizeof( sXML_name ) - 1 ) )
+            IsXMLToken( aLocalName, XML_NAME ) )
         {
             return xAttrList->getValueByIndex(i).getLength() != 0;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csmaphdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include <csmaphdl.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -151,12 +151,12 @@ sal_Bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, uno::Any
 {
     sal_Bool bRet = sal_False;
 
-    if( 0 == rStrImpValue.compareToAscii( sXML_casemap_small_caps ) )
+    if( IsXMLToken( rStrImpValue, XML_CASEMAP_SMALL_CAPS ) )
     {
         rValue <<= (sal_Int16)style::CaseMap::SMALLCAPS;
         bRet = sal_True;
     }
-    else if( 0 == rStrImpValue.compareToAscii( sXML_casemap_normal ) )
+    else if( IsXMLToken( rStrImpValue, XML_CASEMAP_NORMAL ) )
     {
         rValue <<= (sal_Int16)style::CaseMap::NONE;
         bRet = sal_True;
@@ -175,10 +175,10 @@ sal_Bool XMLCaseMapVariantHdl::exportXML( OUString& rStrExpValue, const uno::Any
         switch( nValue )
         {
         case style::CaseMap::NONE:
-            aOut.appendAscii( sXML_casemap_normal );
+            aOut.append( GetXMLToken(XML_CASEMAP_NORMAL) );
             break;
         case style::CaseMap::SMALLCAPS:
-            aOut.appendAscii( sXML_casemap_small_caps );
+            aOut.append( GetXMLToken(XML_CASEMAP_SMALL_CAPS) );
             break;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:53:43 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ protected:
 
     /// export the events off all autotexts
     virtual sal_uInt32 exportDoc(
-        const sal_Char *pClass = NULL );
+        enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID );
 
     /// does the document have any events ?
     sal_Bool hasEvents();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weighhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include <weighhdl.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -101,6 +101,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
 
 struct FontWeightMapper
 {
@@ -139,12 +140,12 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
     sal_Bool bRet = sal_False;
     sal_uInt16 nWeight = 0;
 
-    if( rStrImpValue.compareToAscii( sXML_weight_normal ) == 0 )
+    if( IsXMLToken( rStrImpValue, XML_WEIGHT_NORMAL ) )
     {
         nWeight = 400;
         bRet = sal_True;
     }
-    else if( rStrImpValue.compareToAscii( sXML_weight_bold ) == 0 )
+    else if( IsXMLToken( rStrImpValue, XML_WEIGHT_BOLD ) )
     {
         nWeight = 700;
         bRet = sal_True;
@@ -217,9 +218,9 @@ sal_Bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rVa
         OUStringBuffer aOut;
 
         if( 400 == nWeight )
-            aOut.appendAscii( sXML_weight_normal );
+            aOut.append( GetXMLToken(XML_WEIGHT_NORMAL) );
         else if( 700 == nWeight )
-            aOut.appendAscii( sXML_weight_bold );
+            aOut.append( GetXMLToken(XML_WEIGHT_BOLD) );
         else
             rUnitConverter.convertNumber( aOut, (sal_Int32)nWeight );
 

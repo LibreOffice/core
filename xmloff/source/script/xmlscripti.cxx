@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlscripti.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-27 07:32:06 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 
 #include "xmlscripti.hxx"
 #include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
+#include "xmltoken.hxx"
 #include "xmlimp.hxx"
 #include "nmspmap.hxx"
 #include "XMLEventsImportContext.hxx"
@@ -83,6 +83,7 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::script;
 using namespace com::sun::star::document;
 using namespace com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 
 
 //-------------------------------------------------------------------------
@@ -165,9 +166,9 @@ XMLScriptElementContext::XMLScriptElementContext( SvXMLImport& rImport, sal_uInt
 
     sal_Bool bEmbedded = sal_False;
     sal_Bool bLinked = sal_False;
-    if( msLName.equalsAsciiL( sXML_library_embedded, sizeof(sXML_library_embedded)-1 ) )
+    if( IsXMLToken( msLName, XML_LIBRARY_EMBEDDED ) )
         bEmbedded = sal_True;
-    else if( msLName.equalsAsciiL( sXML_library_linked, sizeof(sXML_library_linked)-1 ) )
+    else if( IsXMLToken( msLName, XML_LIBRARY_LINKED ) )
         bLinked = sal_True;
 
     if( bEmbedded || bLinked )
@@ -182,22 +183,21 @@ XMLScriptElementContext::XMLScriptElementContext( SvXMLImport& rImport, sal_uInt
                                                                 &sAttrName );
 
             if( (XML_NAMESPACE_SCRIPT == nAttrPrefix) &&
-                sAttrName.equalsAsciiL( sXML_name, sizeof(sXML_name)-1 ) )
+                IsXMLToken( sAttrName, XML_NAME ) )
             {
                 msLibName = xAttrList->getValueByIndex( i );
             }
             else if( (XML_NAMESPACE_SCRIPT == nAttrPrefix) &&
-                     sAttrName.equalsAsciiL( sXML_password,
-                                             sizeof(sXML_password)-1 ) )
+                     IsXMLToken( sAttrName, XML_PASSWORD ) )
             {
                 sPassword = xAttrList->getValueByIndex( i );
             }
             else if( (XML_NAMESPACE_XLINK == nAttrPrefix) && bLinked &&
-                     sAttrName.equalsAsciiL( sXML_href, sizeof(sXML_href)-1 ) )
+                     IsXMLToken( sAttrName, XML_HREF ) )
             {
                 sLinkTargetURL = GetImport().GetAbsoluteReference(xAttrList->getValueByIndex( i ));
             }
-            //else if( msLName.equalsAsciiL( sXML_external_source_url, sizeof(sXML_external_source_url)-1 ) )
+            //else if( IsXMLToken(msLName, XML_EXTERNAL_SOURCE_URL) )
             //{
                 //sLinkTargetURL = xAttrList->getValueByIndex( i );
             //}
@@ -222,14 +222,14 @@ SvXMLImportContext* XMLScriptElementContext::CreateChildContext( sal_uInt16 nPre
 
     if ( XML_NAMESPACE_SCRIPT == nPrefix)
     {
-        if( msLName.equalsAsciiL( sXML_library_embedded, sizeof(sXML_library_embedded)-1 ) )
+        if( IsXMLToken( msLName, XML_LIBRARY_EMBEDDED ) )
         {
-            if( rLName.equalsAsciiL( sXML_module, sizeof(sXML_module)-1 ) )
+            if( IsXMLToken( rLName, XML_MODULE ) )
             {
                 pContext = new XMLScriptModuleContext( GetImport(), nPrefix,
                     rLName, msLibName, xAttrList, *this, mxBasicAccess );
             }
-            //else if( rLName.equalsAsciiL( sXML_dialog, sizeof(sXML_dilaog)-1 ) )
+            //else if( IsXMLToken( rLName, XML_DIALOG ) )
             //{
                 //pContext = new XMLScriptDialogContext( GetImport(),
                     //nPrefix, rLName, xAttrList, *this, mxBasicAccess );
@@ -279,13 +279,12 @@ XMLScriptModuleContext::XMLScriptModuleContext( SvXMLImport& rImport, sal_uInt16
                                                             &sAttrName );
 
         if( (XML_NAMESPACE_SCRIPT == nAttrPrefix) &&
-            sAttrName.equalsAsciiL( sXML_name, sizeof(sXML_name)-1 ) )
+            IsXMLToken( sAttrName, XML_NAME ) )
         {
             msModuleName = xAttrList->getValueByIndex( i );
         }
         else if( (XML_NAMESPACE_SCRIPT == nAttrPrefix) &&
-                 sAttrName.equalsAsciiL( sXML_language,
-                                         sizeof(sXML_language)-1 ) )
+                 IsXMLToken( sAttrName, XML_LANGUAGE ) )
         {
             msLanguage = xAttrList->getValueByIndex( i );
         }
@@ -343,10 +342,8 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext( sal_uInt16 nPrefix,
 
     if (XML_NAMESPACE_SCRIPT == nPrefix)
     {
-        if( rLName.equalsAsciiL( sXML_library_embedded,
-                                 sizeof(sXML_library_embedded)-1 ) ||
-            rLName.equalsAsciiL( sXML_library_linked,
-                                 sizeof(sXML_library_linked)-1 )    )
+        if( IsXMLToken( rLName, XML_LIBRARY_EMBEDDED ) ||
+            IsXMLToken( rLName, XML_LIBRARY_LINKED )         )
         {
             pContext = new XMLScriptElementContext(
                 GetImport(), nPrefix, rLName, xAttrList, *this, mxBasicAccess);
@@ -354,7 +351,7 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext( sal_uInt16 nPrefix,
     }
     else if (XML_NAMESPACE_OFFICE == nPrefix)
     {
-        if ( rLName.equalsAsciiL(sXML_events, sizeof(sXML_events)-1) )
+        if ( IsXMLToken( rLName, XML_EVENTS ) )
         {
             Reference<XEventsSupplier> xSupplier(GetImport().GetModel(),
                                                  UNO_QUERY);

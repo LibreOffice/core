@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:47:28 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef _RTL_USTRING_
 #include <rtl/ustring>
+#endif
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 
@@ -164,7 +168,7 @@ protected:
     ::rtl::OUString         sAttrValue;
 
 public:
-                            XMLPMPropHdl_Print( const sal_Char* sValue );
+                            XMLPMPropHdl_Print( enum ::xmloff::token::XMLTokenEnum eValue );
     virtual                 ~XMLPMPropHdl_Print();
 
     virtual sal_Bool        importXML(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 15:08:23 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -298,8 +298,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                             bOK = sal_False;
                         }
                     }
-                    else if( aToken.equalsAsciiL( sXML_center,
-                                                  sizeof(sXML_center)-1 ) )
+                    else if( IsXMLToken( aToken, XML_CENTER ) )
                     {
                         if( bHori )
                             lcl_xmlbic_MergeVertPos( eNewPos,

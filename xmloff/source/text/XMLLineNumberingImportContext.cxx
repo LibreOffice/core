@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNUMI_HXX
@@ -127,8 +127,8 @@ XMLLineNumberingImportContext::XMLLineNumberingImportContext(
     const Reference<XAttributeList> & xAttrList) :
         SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_LINENUMBERINGCONFIG),
         sStyleName(),
-        sNumFormat(RTL_CONSTASCII_USTRINGPARAM(sXML_1)),
-        sNumLetterSync(RTL_CONSTASCII_USTRINGPARAM(sXML_false)),
+        sNumFormat(GetXMLToken(XML_1)),
+        sNumLetterSync(GetXMLToken(XML_FALSE)),
         sSeparator(),
         nOffset(-1),
         nNumberPosition(style::LineNumberPosition::LEFT),
@@ -364,8 +364,7 @@ SvXMLImportContext* XMLLineNumberingImportContext::CreateChildContext(
     const Reference<XAttributeList> & xAttrList )
 {
     if ( (nPrefix == XML_NAMESPACE_TEXT) &&
-         rLocalName.equalsAsciiL(sXML_linenumbering_separator,
-                                 sizeof(sXML_linenumbering_separator)-1) )
+         IsXMLToken(rLocalName, XML_LINENUMBERING_SEPARATOR) )
     {
         return new XMLLineNumberingSeparatorImportContext(GetImport(),
                                                           nPrefix, rLocalName,

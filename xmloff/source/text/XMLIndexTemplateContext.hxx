@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 10:41:54 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include "xmlictxt.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 #include <vector>
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -124,7 +128,7 @@ class XMLIndexTemplateContext : public SvXMLImportContext
     ::rtl::OUString sStyleName;
 
     const SvXMLEnumMapEntry* pOutlineLevelNameMap;
-    const sal_Char* pOutlineLevelAttrName;
+    enum ::xmloff::token::XMLTokenEnum eOutlineLevelAttrName;
     const sal_Char** pOutlineLevelStylePropMap;
     const sal_Bool* pAllowedTokenTypesMap;
 
@@ -172,7 +176,7 @@ public:
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName,
         const SvXMLEnumMapEntry* aLevelNameMap,
-        const sal_Char* pLevelAttrName,
+        enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
         const sal_Char** aLevelStylePropNameMap,
         const sal_Bool* aAllowedTokenTypes);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTabStopEntryContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:38 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -100,12 +100,16 @@
 #include <rtl/ustring.hxx>
 #endif
 
+
+using namespace ::xmloff::token;
+
 using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::xml::sax::XAttributeList;
+
 
 TYPEINIT1( XMLIndexTabStopEntryContext, SvXMLImportContext );
 
@@ -142,16 +146,14 @@ void XMLIndexTabStopEntryContext::StartElement(
         OUString sAttr = xAttrList->getValueByIndex(nAttr);
         if (XML_NAMESPACE_STYLE == nPrefix)
         {
-            if (sLocalName.equalsAsciiL(sXML_type, sizeof(sXML_type)-1))
+            if ( IsXMLToken( sLocalName, XML_TYPE ) )
             {
                 // if it's neither left nor right, value is
                 // ignored. Since left is default, we only need to
                 // check for right
-                bTabRightAligned = sAttr.equalsAsciiL(sXML_right,
-                                                      sizeof(sXML_right)-1);
+                bTabRightAligned = IsXMLToken( sAttr, XML_RIGHT );
             }
-            else if (sLocalName.equalsAsciiL(sXML_position,
-                                             sizeof(sXML_position)-1))
+            else if ( IsXMLToken( sLocalName, XML_POSITION ) )
             {
                 sal_Int32 nTmp;
                 if (GetImport().GetMM100UnitConverter().
@@ -161,8 +163,7 @@ void XMLIndexTabStopEntryContext::StartElement(
                     bTabPositionOK = sal_True;
                 }
             }
-            else if (sLocalName.equalsAsciiL(sXML_leader_char,
-                                             sizeof(sXML_leader_char)-1))
+            else if ( IsXMLToken( sLocalName, XML_LEADER_CHAR ) )
             {
                 sLeaderChar = sAttr;
                 // valid only, if we have a char!

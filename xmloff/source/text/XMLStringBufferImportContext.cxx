@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStringBufferImportContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-24 16:49:52 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,18 +63,22 @@
 #include "XMLStringBufferImportContext.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_P;
+
 
 TYPEINIT1(XMLStringBufferImportContext, SvXMLImportContext);
 
@@ -111,7 +115,7 @@ void XMLStringBufferImportContext::EndElement()
 {
     // add return for paragraph elements
     if ( (XML_NAMESPACE_TEXT == GetPrefix()) &&
-         (GetLocalName().equalsAsciiL(sXML_p, sizeof(sXML_p)-1)) )
+         (IsXMLToken(GetLocalName(), XML_P))    )
     {
         rTextBuffer.append(sal_Unicode(0x0a));
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographySourceContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -119,6 +119,9 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+
+
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
@@ -163,14 +166,13 @@ SvXMLImportContext* XMLIndexBibliographySourceContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         (rLocalName.equalsAsciiL(sXML_bibliography_entry_template,
-                    sizeof(sXML_bibliography_entry_template)-1)))
+    if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
+         ( IsXMLToken( rLocalName, XML_BIBLIOGRAPHY_ENTRY_TEMPLATE ) ) )
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
                                            aLevelNameBibliographyMap,
-                                           sXML_bibliography_type,
+                                           XML_BIBLIOGRAPHY_TYPE,
                                            aLevelStylePropNameBibliographyMap,
                                            aAllowedTokenTypesBibliography);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventsImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-30 13:09:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::com::sun::star::xml::sax::XAttributeList;
@@ -183,13 +184,11 @@ SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
 
         if (XML_NAMESPACE_SCRIPT == nPrefix)
         {
-            if (sLocalName.equalsAsciiL(sXML_event_name,
-                                        sizeof(sXML_event_name)-1))
+            if (IsXMLToken(sLocalName, XML_EVENT_NAME))
             {
                 sEventName = xAttrList->getValueByIndex(nAttr);
             }
-            else if (sLocalName.equalsAsciiL(sXML_language,
-                                             sizeof(sXML_language)-1))
+            else if (IsXMLToken(sLocalName, XML_LANGUAGE))
             {
                 sLanguage = xAttrList->getValueByIndex(nAttr);
             }

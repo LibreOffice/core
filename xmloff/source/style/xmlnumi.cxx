@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-29 12:34:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,10 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 #include "i18nmap.hxx"
 #include "xmluconv.hxx"
 #ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
@@ -331,12 +334,12 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
     bHasColor( sal_False ),
     aColor( 0 )
 {
-    if( rLName.compareToAscii( sXML_list_level_style_number ) == 0 ||
-        rLName.compareToAscii( sXML_outline_level_style ) == 0 )
+    if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_NUMBER ) ||
+        IsXMLToken( rLName, XML_OUTLINE_LEVEL_STYLE )        )
         bNum = sal_True;
-    else if( rLName.compareToAscii( sXML_list_level_style_bullet ) == 0 )
+    else if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_BULLET ) )
         bBullet = sal_True;
-    else if( rLName.compareToAscii( sXML_list_level_style_image ) == 0 )
+    else if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_IMAGE ) )
         bImage = sal_True;
 
     SvXMLTokenMap aTokenMap( aLevelAttrTokenMap );
@@ -420,7 +423,7 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
 {
     SvXMLImportContext *pContext;
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.compareToAscii( sXML_properties ) == 0 )
+        IsXMLToken( rLocalName, XML_PROPERTIES ) )
     {
         pContext = new SvxXMLListLevelStyleAttrContext_Impl( GetImport(),
                                                              nPrefix,
@@ -738,9 +741,9 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             if( rValue.getLength() )
             {
                 sal_Int16 eAdjust = HoriOrientation::LEFT;
-                if( rValue.compareToAscii( sXML_center ) == 0 )
+                if( IsXMLToken( rValue, XML_CENTER ) )
                     eAdjust = HoriOrientation::CENTER;
-                else if( rValue.compareToAscii( sXML_end ) == 0 )
+                else if( IsXMLToken( rValue, XML_END ) )
                     eAdjust = HoriOrientation::RIGHT;
                 rListLevel.SetAdjust( eAdjust );
             }
@@ -879,14 +882,14 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     sal_Int16 eVertOrient = VertOrientation::LINE_CENTER;
     if( sVerticalPos.getLength() )
     {
-        if( sVerticalPos.compareToAscii( sXML_top ) == 0 )
+        if( IsXMLToken( sVerticalPos, XML_TOP ) )
             eVertOrient = VertOrientation::LINE_TOP;
-        else if( sVerticalPos.compareToAscii( sXML_bottom ) == 0 )
+        else if( IsXMLToken( sVerticalPos, XML_BOTTOM ) )
             eVertOrient = VertOrientation::LINE_BOTTOM;
     }
     if( sVerticalRel.getLength() )
     {
-        if( sVerticalRel.compareToAscii( sXML_baseline ) == 0 )
+        if( IsXMLToken( sVerticalRel, XML_BASELINE ) )
         {
             // TOP and BOTTOM are exchanged for a baseline relation
             switch( eVertOrient  )
@@ -902,7 +905,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
                 break;
             }
         }
-        else if( sVerticalRel.compareToAscii( sXML_char ) == 0 )
+        else if( IsXMLToken( sVerticalRel, XML_CHAR ) )
         {
             switch( eVertOrient  )
             {
@@ -936,9 +939,9 @@ void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                            const OUString& rValue )
 {
     if( XML_NAMESPACE_TEXT == nPrefixKey &&
-        rLocalName.compareToAscii( sXML_consecutive_numbering ) == 0 )
+        IsXMLToken( rLocalName, XML_CONSECUTIVE_NUMBERING ) )
     {
-        bConsecutive = rValue.compareToAscii( sXML_true ) == 0;
+        bConsecutive = IsXMLToken( rValue, XML_TRUE );
     }
     else
     {
@@ -992,10 +995,10 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
 
     if( XML_NAMESPACE_TEXT == nPrefix &&
         ( bOutline
-              ? rLocalName.compareToAscii( sXML_outline_level_style ) == 0
-              : ( rLocalName.compareToAscii(sXML_list_level_style_number) == 0 ||
-                rLocalName.compareToAscii(sXML_list_level_style_bullet) == 0 ||
-                 rLocalName.compareToAscii(sXML_list_level_style_image) == 0) ) )
+              ? IsXMLToken( rLocalName, XML_OUTLINE_LEVEL_STYLE )
+              : ( IsXMLToken( rLocalName, XML_LIST_LEVEL_STYLE_NUMBER ) ||
+                IsXMLToken( rLocalName, XML_LIST_LEVEL_STYLE_BULLET ) ||
+                 IsXMLToken( rLocalName, XML_LIST_LEVEL_STYLE_IMAGE )    ) ) )
     {
         SvxXMLListLevelStyleContext_Impl *pLevelStyle =
             new SvxXMLListLevelStyleContext_Impl( GetImport(), nPrefix,
@@ -1247,7 +1250,7 @@ sal_Int16 SvxXMLListStyleContext::GetNumType( const OUString& rNumFmt,
         case sal_Unicode('i'):  eValue = NumberingType::ROMAN_LOWER;    break;
         case sal_Unicode('I'):  eValue = NumberingType::ROMAN_UPPER;    break;
         }
-        if( rLetterSync.compareToAscii( sXML_true ) == 0 )
+        if( IsXMLToken( rLetterSync, XML_TRUE ) )
         {
             switch(eValue )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,16 @@
 
 #include "xmlnumfi.hxx"
 #include "xmltkmap.hxx"
-#include "xmlkywd.hxx"
 #include "xmlnmspe.hxx"
 #include "xmlictxt.hxx"
 #include "xmlimp.hxx"
 #include "xmluconv.hxx"
 #include "nmspmap.hxx"
 #include "families.hxx"
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -504,9 +507,9 @@ SvXMLNumFmtMapContext::SvXMLNumFmtMapContext( SvXMLImport& rImport,
         sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         if ( nPrefix == XML_NAMESPACE_STYLE )
         {
-            if ( aLocalName.compareToAscii(sXML_condition) == 0 )
+            if ( IsXMLToken( aLocalName, XML_CONDITION) )
                 sCondition = sValue;
-            else if ( aLocalName.compareToAscii(sXML_apply_style_name) == 0 )
+            else if ( IsXMLToken( aLocalName, XML_APPLY_STYLE_NAME) )
                 sName = sValue;
         }
     }
@@ -554,7 +557,7 @@ SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
         OUString sValue = xAttrList->getValueByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        if ( nPrefix == XML_NAMESPACE_FO && aLocalName.compareToAscii(sXML_color) == 0 )
+        if ( nPrefix == XML_NAMESPACE_FO && IsXMLToken( aLocalName, XML_COLOR ) )
             bColSet = SvXMLUnitConverter::convertColor( aColor, sValue );
     }
 }
@@ -1035,7 +1038,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     pStyles( &rStyles ),
     nKey(nTempKey)
 {
-    SetAttribute(XML_NAMESPACE_STYLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_name)), rLName);
+    SetAttribute(XML_NAMESPACE_STYLE, GetXMLToken(XML_NAME), rLName);
 }
 
 SvXMLNumFormatContext::~SvXMLNumFormatContext()

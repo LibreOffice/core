@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexMarkExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -99,6 +99,8 @@
 #include "xmluconv.hxx"
 #endif
 
+
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -125,15 +127,15 @@ XMLIndexMarkExport::XMLIndexMarkExport(
 {
 }
 
-const sal_Char* lcl_pTocMarkNames[] =
-    { sXML_toc_mark, sXML_toc_mark_start, sXML_toc_mark_end };
-const sal_Char* lcl_pUserIndexMarkName[] =
-    { sXML_user_index_mark,
-          sXML_user_index_mark_start, sXML_user_index_mark_end };
-const sal_Char* lcl_pAlphaIndexMarkName[] =
-    { sXML_alphabetical_index_mark,
-          sXML_alphabetical_index_mark_start,
-          sXML_alphabetical_index_mark_end };
+const enum XMLTokenEnum lcl_pTocMarkNames[] =
+    { XML_TOC_MARK, XML_TOC_MARK_START, XML_TOC_MARK_END };
+const enum XMLTokenEnum lcl_pUserIndexMarkName[] =
+    { XML_USER_INDEX_MARK,
+          XML_USER_INDEX_MARK_START, XML_USER_INDEX_MARK_END };
+const enum XMLTokenEnum lcl_pAlphaIndexMarkName[] =
+    { XML_ALPHABETICAL_INDEX_MARK,
+          XML_ALPHABETICAL_INDEX_MARK_START,
+          XML_ALPHABETICAL_INDEX_MARK_END };
 
 
 XMLIndexMarkExport::~XMLIndexMarkExport()
@@ -147,7 +149,7 @@ void XMLIndexMarkExport::ExportIndexMark(
     /// index marks have no styles!
     if (!bAutoStyles)
     {
-        const sal_Char** pElementNames = NULL;
+        const enum XMLTokenEnum * pElements = NULL;
         sal_Int8 nElementNo = -1;
 
         // get index mark
@@ -171,8 +173,7 @@ void XMLIndexMarkExport::ExportIndexMark(
             aAny >>= sTmp;
             DBG_ASSERT(sTmp.getLength() > 0,
                        "collapsed index mark without alternative text");
-            rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                 sXML_string_value, sTmp);
+            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STRING_VALUE, sTmp);
         }
         else
         {
@@ -183,8 +184,8 @@ void XMLIndexMarkExport::ExportIndexMark(
             // generate ID
             OUStringBuffer sBuf;
             GetID(sBuf, xIndexMarkPropSet);
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_id,
-                                     sBuf.makeStringAndClear());
+            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_ID,
+                                 sBuf.makeStringAndClear());
         }
 
         // distinguish between TOC, user, alphab. index marks by
@@ -196,7 +197,7 @@ void XMLIndexMarkExport::ExportIndexMark(
         if (xPropertySetInfo->hasPropertyByName(sUserIndexName))
         {
             // user index mark
-            pElementNames = lcl_pUserIndexMarkName;
+            pElements = lcl_pUserIndexMarkName;
             if (nElementNo != 2)
             {
                 ExportUserIndexMarkAttributes(xIndexMarkPropSet);
@@ -205,7 +206,7 @@ void XMLIndexMarkExport::ExportIndexMark(
         else if (xPropertySetInfo->hasPropertyByName(sPrimaryKey))
         {
             // alphabetical index mark
-            pElementNames = lcl_pAlphaIndexMarkName;
+            pElements = lcl_pAlphaIndexMarkName;
             if (nElementNo != 2)
             {
                 ExportAlphabeticalIndexMarkAttributes(xIndexMarkPropSet);
@@ -214,7 +215,7 @@ void XMLIndexMarkExport::ExportIndexMark(
         else
         {
             // table of content:
-            pElementNames = lcl_pTocMarkNames;
+            pElements = lcl_pTocMarkNames;
             if (nElementNo != 2)
             {
                 ExportTOCMarkAttributes(xIndexMarkPropSet);
@@ -222,15 +223,15 @@ void XMLIndexMarkExport::ExportIndexMark(
         }
 
         // export element
-        DBG_ASSERT(pElementNames != NULL, "illegal element array");
+        DBG_ASSERT(pElements != NULL, "illegal element array");
         DBG_ASSERT(nElementNo >= 0, "illegal name array index");
         DBG_ASSERT(nElementNo <= 2, "illegal name array index");
 
-        if ((pElementNames != NULL) && (nElementNo != -1))
+        if ((pElements != NULL) && (nElementNo != -1))
         {
             SvXMLElementExport aElem(rExport,
                                      XML_NAMESPACE_TEXT,
-                                     pElementNames[nElementNo],
+                                     pElements[nElementNo],
                                      sal_False, sal_False);
         }
     }
@@ -245,7 +246,7 @@ void XMLIndexMarkExport::ExportTOCMarkAttributes(
     aAny >>= nLevel;
     OUStringBuffer sBuf;
     SvXMLUnitConverter::convertNumber(sBuf, (sal_Int32)nLevel);
-    rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_outline_level,
+    rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
                              sBuf.makeStringAndClear());
 }
 
@@ -259,7 +260,7 @@ void XMLIndexMarkExport::ExportUserIndexMarkAttributes(
     aAny >>= sIndexName;
     if (sIndexName.getLength() > 0)
     {
-        rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_index_name,
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_INDEX_NAME,
                                  sIndexName);
     }
 
@@ -277,7 +278,7 @@ void XMLIndexMarkExport::ExportAlphabeticalIndexMarkAttributes(
     aAny >>= sPrimary;
     if (sPrimary.getLength() > 0)
     {
-        rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_key1, sPrimary);
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_KEY1, sPrimary);
     }
 
     OUString sSecondary;
@@ -285,7 +286,7 @@ void XMLIndexMarkExport::ExportAlphabeticalIndexMarkAttributes(
     aAny >>= sSecondary;
     if (sSecondary.getLength() > 0)
     {
-        rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_key2, sSecondary);
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_KEY2, sSecondary);
     }
 }
 

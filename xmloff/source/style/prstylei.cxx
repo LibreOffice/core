@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:24:41 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
 #include "xmlprcon.hxx"
@@ -106,13 +106,14 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::xmloff::token;
 
 
 void XMLPropStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rLocalName,
                                         const OUString& rValue )
 {
-    if( XML_NAMESPACE_STYLE == nPrefixKey && rLocalName.compareToAscii( sXML_family ) == 0 )
+    if( XML_NAMESPACE_STYLE == nPrefixKey && IsXMLToken( rLocalName, XML_FAMILY ) )
     {
         DBG_ASSERT( GetFamily() == ((SvXMLStylesContext *)&xStyles)->GetFamily( rValue ), "unexpected style family" );
     }
@@ -148,7 +149,7 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.compareToAscii( sXML_properties ) == 0 )
+        IsXMLToken( rLocalName, XML_PROPERTIES ) )
     {
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
             ((SvXMLStylesContext *)&xStyles)->GetImportPropertyMapper(

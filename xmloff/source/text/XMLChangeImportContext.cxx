@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:19:50 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,16 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::xml::sax::XAttributeList;
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_CHANGE_ID;
 
 TYPEINIT1( XMLChangeImportContext, SvXMLImportContext );
 
@@ -124,8 +126,7 @@ void XMLChangeImportContext::StartElement(
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
         if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             (sLocalName.equalsAsciiL(sXML_change_id,
-                                      sizeof(sXML_change_id)-1)) )
+             IsXMLToken( sLocalName, XML_CHANGE_ID ) )
         {
             // Id found! Now call RedlineImportHelper
 

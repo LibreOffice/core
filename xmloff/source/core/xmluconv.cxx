@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:06 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include <xmluconv.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmltoken.hxx>
 #endif
 
 #ifndef _TOOLS_SOLMATH_HXX
@@ -138,8 +138,8 @@ void SvXMLUnitConverter::initXMLStrings()
 {
     if( msXML_true.getLength() == 0 )
     {
-        msXML_true = OUString::createFromAscii( sXML_true );
-        msXML_false = OUString::createFromAscii( sXML_false );
+        msXML_true = GetXMLToken(XML_TRUE);
+        msXML_false = GetXMLToken(XML_FALSE);
     }
 }
 
@@ -489,16 +489,16 @@ void SvXMLUnitConverter::convertMeasure( OUStringBuffer& rBuffer,
 sal_Bool SvXMLUnitConverter::convertBool( sal_Bool& rBool,
                                       const OUString& rString )
 {
-    rBool = rString.compareToAscii( sXML_true ) == 0L;
+    rBool = IsXMLToken(rString, XML_TRUE);
 
-    return rBool || rString.compareToAscii( sXML_false ) == 0L;
+    return rBool || IsXMLToken(rString, XML_FALSE);
 }
 
 /** convert boolean to string */
 void SvXMLUnitConverter::convertBool( OUStringBuffer& rBuffer,
                                       sal_Bool bValue )
 {
-    rBuffer.appendAscii( bValue ? sXML_true : sXML_false );
+    rBuffer.append( GetXMLToken( bValue ? XML_TRUE : XML_FALSE ) );
 }
 
 /** convert string to percent */
@@ -1768,7 +1768,7 @@ sal_Bool SvXMLUnitConverter::convertNumFormat(
         case sal_Unicode('I'):  rType = NumberingType::ROMAN_UPPER; break;
         default:                bExt = sal_True; break;
         }
-        if( !bExt && rNumLetterSync.equalsAsciiL( sXML_true, sizeof(sXML_true)-1 ) )
+        if( !bExt && IsXMLToken( rNumLetterSync, XML_TRUE ) )
         {
             switch( rType )
             {
@@ -1804,32 +1804,32 @@ sal_Bool SvXMLUnitConverter::convertNumFormat(
 void SvXMLUnitConverter::convertNumFormat( OUStringBuffer& rBuffer,
                            sal_Int16 nType ) const
 {
-    const sal_Char *pFormat = 0;
+    enum XMLTokenEnum eFormat = XML_TOKEN_INVALID;
     sal_Bool bExt = sal_False;
     switch( nType )
     {
-    case NumberingType::CHARS_UPPER_LETTER: pFormat = sXML_A; break;
-    case NumberingType::CHARS_LOWER_LETTER: pFormat = sXML_a; break;
-    case NumberingType::ROMAN_UPPER:            pFormat = sXML_I; break;
-    case NumberingType::ROMAN_LOWER:            pFormat = sXML_i; break;
-    case NumberingType::ARABIC:             pFormat = sXML_1; break;
-    case NumberingType::CHARS_UPPER_LETTER_N:   pFormat = sXML_A; break;
-    case NumberingType::CHARS_LOWER_LETTER_N:   pFormat = sXML_a; break;
-    case NumberingType::NUMBER_NONE:            pFormat = sXML__empty; break;
+    case NumberingType::CHARS_UPPER_LETTER:     eFormat = XML_A_UPCASE; break;
+    case NumberingType::CHARS_LOWER_LETTER:     eFormat = XML_A; break;
+    case NumberingType::ROMAN_UPPER:            eFormat = XML_I_UPCASE; break;
+    case NumberingType::ROMAN_LOWER:            eFormat = XML_I; break;
+    case NumberingType::ARABIC:                 eFormat = XML_1; break;
+    case NumberingType::CHARS_UPPER_LETTER_N:   eFormat = XML_A_UPCASE; break;
+    case NumberingType::CHARS_LOWER_LETTER_N:   eFormat = XML_A; break;
+    case NumberingType::NUMBER_NONE:            eFormat = XML__EMPTY; break;
 
     case NumberingType::CHAR_SPECIAL:
     case NumberingType::PAGE_DESCRIPTOR:
     case NumberingType::BITMAP:
-        DBG_ASSERT( pFormat, "invalid number format" );
+        DBG_ASSERT( eFormat != XML_TOKEN_INVALID, "invalid number format" );
         break;
     default:
         bExt = sal_True;
         break;
     }
 
-    if( pFormat )
+    if( eFormat != XML_TOKEN_INVALID )
     {
-        rBuffer.appendAscii( pFormat );
+        rBuffer.append( GetXMLToken(eFormat) );
     }
     else
     {
@@ -1842,7 +1842,7 @@ void SvXMLUnitConverter::convertNumFormat( OUStringBuffer& rBuffer,
 void SvXMLUnitConverter::convertNumLetterSync( OUStringBuffer& rBuffer,
                                sal_Int16 nType ) const
 {
-    const sal_Char *pSync = 0;
+    enum XMLTokenEnum eSync = XML_TOKEN_INVALID;
     switch( nType )
     {
     case NumberingType::CHARS_UPPER_LETTER:
@@ -1852,22 +1852,22 @@ void SvXMLUnitConverter::convertNumLetterSync( OUStringBuffer& rBuffer,
     case NumberingType::ARABIC:
     case NumberingType::NUMBER_NONE:
         // default
-        // pSync = sXML_false;
+        // eSync = XML_FALSE;
         break;
 
     case NumberingType::CHARS_UPPER_LETTER_N:
     case NumberingType::CHARS_LOWER_LETTER_N:
-        pSync = sXML_true;
+        eSync = XML_TRUE;
         break;
 
     case NumberingType::CHAR_SPECIAL:
     case NumberingType::PAGE_DESCRIPTOR:
     case NumberingType::BITMAP:
-        DBG_ASSERT( pSync, "invalid number format" );
+        DBG_ASSERT( eSync != XML_TOKEN_INVALID, "invalid number format" );
         break;
     }
-    if( pSync )
-        rBuffer.appendAscii( pSync );
+    if( eSync != XML_TOKEN_INVALID )
+        rBuffer.append( GetXMLToken(eSync) );
 }
 
 void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>& rProps,

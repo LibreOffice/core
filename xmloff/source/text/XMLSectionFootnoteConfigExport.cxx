@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:21 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@
 #include "xmluconv.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNUME_HXX
@@ -117,6 +117,8 @@
 
 #include <vector>
 
+
+using namespace ::xmloff::token;
 
 using ::std::vector;
 using ::rtl::OUString;
@@ -217,7 +219,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
             // restart number is stored as 0.., but interpreted as 1..
             SvXMLUnitConverter::convertNumber(sBuf,
                                               (sal_Int32)(nNumRestartAt+1));
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_start_value,
+            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_START_VALUE,
                                  sBuf.makeStringAndClear());
         }
 
@@ -226,19 +228,19 @@ void XMLSectionFootnoteConfigExport::exportXML(
             // prefix and suffix
             if (sNumPrefix.getLength() > 0)
             {
-                    rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_num_prefix,
+                    rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_PREFIX,
                                          sNumPrefix);
             }
             if (sNumSuffix.getLength() > 0)
             {
-                rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_num_suffix,
+                rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_SUFFIX,
                                      sNumSuffix);
             }
 
             // number type: num format
             rExport.GetMM100UnitConverter().convertNumFormat( sBuf,
                                                               nNumberingType );
-            rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_num_format,
+            rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
                                  sBuf.makeStringAndClear());
 
             // and letter sync, if applicable
@@ -247,15 +249,15 @@ void XMLSectionFootnoteConfigExport::exportXML(
             if (sBuf.getLength())
             {
                 rExport.AddAttribute(XML_NAMESPACE_STYLE,
-                                     sXML_num_letter_sync,
+                                     XML_NUM_LETTER_SYNC,
                                      sBuf.makeStringAndClear());
             }
         }
 
         // and finally, the element
         SvXMLElementExport rElem(rExport, XML_NAMESPACE_TEXT,
-                                 (bEndnote ? sXML_endnotes_configuration :
-                                             sXML_footnotes_configuration ),
+                                 (bEndnote ? XML_ENDNOTES_CONFIGURATION :
+                                             XML_FOOTNOTES_CONFIGURATION ),
                                  sal_True, sal_True);
     }
 }

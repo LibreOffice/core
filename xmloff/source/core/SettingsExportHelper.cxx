@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-22 15:07:31 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
@@ -114,6 +114,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 XMLSettingsExportHelper::XMLSettingsExportHelper(SvXMLExport& rTempExport)
     : rExport(rTempExport)
@@ -230,23 +231,23 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
 void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-    rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_boolean);
-    SvXMLElementExport aBoolElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_BOOLEAN);
+    SvXMLElementExport aBoolElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
     rtl::OUString sValue;
     if (bValue)
-        sValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true));
+        sValue = GetXMLToken(XML_TRUE);
     else
-        sValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_false));
+        sValue = GetXMLToken(XML_FALSE);
     rExport.GetDocHandler()->characters(sValue);
 }
 
 void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-    rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_short);
-    SvXMLElementExport aShortElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_SHORT);
+    SvXMLElementExport aShortElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertNumber(sBuffer, sal_Int32(nValue));
     rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
@@ -255,9 +256,9 @@ void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUS
 void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-    rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_int);
-    SvXMLElementExport aIntElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_INT);
+    SvXMLElementExport aIntElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertNumber(sBuffer, nValue);
     rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
@@ -266,9 +267,9 @@ void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const rtl::OUStr
 void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-    rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_long);
-    SvXMLElementExport aIntElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_LONG);
+    SvXMLElementExport aIntElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
     rtl::OUString sValue(rtl::OUString::valueOf(nValue));
     rExport.GetDocHandler()->characters(sValue);
 }
@@ -276,9 +277,9 @@ void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const rtl::OUSt
 void XMLSettingsExportHelper::exportDouble(const double fValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-    rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_double);
-    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_DOUBLE);
+    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertDouble(sBuffer, fValue);
     rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
@@ -287,9 +288,9 @@ void XMLSettingsExportHelper::exportDouble(const double fValue, const rtl::OUStr
 void XMLSettingsExportHelper::exportString(const rtl::OUString& sValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-    rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_string);
-    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_STRING);
+    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
     if (sValue.getLength())
         rExport.GetDocHandler()->characters(sValue);
 }
@@ -297,11 +298,11 @@ void XMLSettingsExportHelper::exportString(const rtl::OUString& sValue, const rt
 void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-    rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_datetime);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_DATETIME);
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertDateTime(sBuffer, aValue);
-    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
+    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
     rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
 }
 
@@ -313,8 +314,8 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
     sal_Int32 nLength(aProps.getLength());
     if(nLength)
     {
-        rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-        SvXMLElementExport aSequenceElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item_set, sal_True, sal_True);
+        rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+        SvXMLElementExport aSequenceElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM_SET, sal_True, sal_True);
         for (sal_Int32 i = 0; i < nLength; i++)
             CallTypeFunction(aProps[i].Value, aProps[i].Name);
     }
@@ -386,9 +387,9 @@ void XMLSettingsExportHelper::exportbase64Binary(
 {
     DBG_ASSERT(rName.getLength(), "no name");
     sal_Int32 nLength(aProps.getLength());
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-    rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_base64Binary);
-    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_BASE64BINARY);
+    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
     if(nLength)
     {
         rtl::OUStringBuffer sBuffer;
@@ -408,8 +409,8 @@ void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
     if (nLength)
     {
         if (bNameAccess)
-            rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-        SvXMLElementExport aEntryElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item_map_entry, sal_True, sal_True);
+            rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+        SvXMLElementExport aEntryElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM_MAP_ENTRY, sal_True, sal_True);
         for (sal_Int32 i = 0; i < nLength; i++)
             CallTypeFunction(aProps[i].Value, aProps[i].Name);
     }
@@ -424,8 +425,8 @@ void XMLSettingsExportHelper::exportNameAccess(
                 "wrong NameAccess" );
     if(aNamed->hasElements())
     {
-        rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-        SvXMLElementExport aNamedElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item_map_named, sal_True, sal_True);
+        rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+        SvXMLElementExport aNamedElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM_MAP_NAMED, sal_True, sal_True);
         uno::Sequence< rtl::OUString > aNames(aNamed->getElementNames());
         for (sal_Int32 i = 0; i < aNames.getLength(); i++)
             exportMapEntry(aNamed->getByName(aNames[i]), aNames[i], sal_True);
@@ -442,8 +443,8 @@ void XMLSettingsExportHelper::exportIndexAccess(
     rtl::OUString sEmpty;// ( RTLCONSTASCII_USTRINGPARAM( "View" ) );
     if(aIndexed->hasElements())
     {
-        rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-        SvXMLElementExport aIndexedElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item_map_indexed, sal_True, sal_True);
+        rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+        SvXMLElementExport aIndexedElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM_MAP_INDEXED, sal_True, sal_True);
         sal_Int32 nCount = aIndexed->getCount();
         for (sal_Int32 i = 0; i < nCount; i++)
         {

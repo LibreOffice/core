@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-15 11:08:42 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _XMLOFF_XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _XMLERRORINDICATORPROPERTYHDL_HXX_
 #include "XMLErrorIndicatorPropertyHdl.hxx"
@@ -132,6 +135,7 @@
 #define SCH_XML_UNSETFLAG( status, flag )   (status) = ((status) | (flag)) - (flag)
 
 using namespace com::sun::star;
+using namespace ::xmloff::token;
 
 // the following class implementations are in this file:
 //
@@ -209,9 +213,9 @@ XMLChartPropertySetMapper::~XMLChartPropertySetMapper()
 XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
                                                             SvXMLExport& rExport) :
         SvXMLExportPropertyMapper( rMapper ),
-        msCDATA( rtl::OUString::createFromAscii( sXML_CDATA )),
-        msTrue( rtl::OUString::createFromAscii( sXML_true )),
-        msFalse( rtl::OUString::createFromAscii( sXML_false )),
+        msCDATA( GetXMLToken( XML_CDATA )),
+        msTrue( GetXMLToken( XML_TRUE )),
+        msFalse( GetXMLToken( XML_FALSE )),
         mrExport( rExport )
 {
     // chain draw properties
@@ -344,11 +348,11 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 {
                     rProperty.maValue >>= nValue;
                     if((( nValue & chart::ChartDataCaption::VALUE ) == chart::ChartDataCaption::VALUE ))
-                        sValueBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( sXML_value ));
+                        sValueBuffer.append( GetXMLToken( XML_VALUE ));
                     else if(( nValue & chart::ChartDataCaption::PERCENT ) == chart::ChartDataCaption::PERCENT )
-                        sValueBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( sXML_percentage ));
+                        sValueBuffer.append( GetXMLToken( XML_PERCENTAGE ));
                     else
-                        sValueBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( sXML_none ));
+                        sValueBuffer.append( GetXMLToken( XML_NONE ));
                 }
                 break;
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_TEXT:
@@ -471,11 +475,11 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                 {
                     // modify old value
                     rProperty.maValue >>= nValue;
-                    if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_none )))
+                    if( IsXMLToken( rValue, XML_NONE ))
                         SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::VALUE | chart::ChartDataCaption::PERCENT );
-                    else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_value )))
+                    else if( IsXMLToken( rValue, XML_VALUE ) )
                         SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::VALUE );
-                    else // must be sXML_percentage
+                    else // must be XML_PERCENTAGE
                         SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::PERCENT );
                     rProperty.maValue <<= nValue;
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeInfoContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-24 16:49:51 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
@@ -93,10 +93,11 @@
 
 
 
+using namespace ::xmloff::token;
+
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
-
 
 
 TYPEINIT1(XMLChangeInfoContext, SvXMLImportContext);
@@ -131,13 +132,11 @@ void XMLChangeInfoContext::StartElement(
         OUString sValue = xAttrList->getValueByIndex(nAttr);
         if (XML_NAMESPACE_OFFICE == nPrefix)
         {
-            if (sLocalName.equalsAsciiL(sXML_chg_author,
-                                        sizeof(sXML_chg_author)-1))
+            if ( IsXMLToken( sLocalName, XML_CHG_AUTHOR ) )
             {
                 sAuthor = sValue;
             }
-            else if (sLocalName.equalsAsciiL(sXML_chg_date_time,
-                                             sizeof(sXML_chg_date_time)-1))
+            else if ( IsXMLToken( sLocalName, XML_CHG_DATE_TIME ) )
             {
                 sDateTime = sValue;
             }
@@ -155,8 +154,8 @@ SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = NULL;
 
-    if ((XML_NAMESPACE_TEXT == nPrefix) &&
-        rLocalName.equalsAsciiL(sXML_p, sizeof(sXML_p)-1))
+    if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
+         IsXMLToken( rLocalName, XML_P )       )
     {
         pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
                                                    rLocalName, sCommentBuffer);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkerStyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-08 17:41:23 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #endif
 
 #ifndef _XMLOFF_ATTRLIST_HXX
-#include"attrlist.hxx"
+#include "attrlist.hxx"
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -76,23 +76,23 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include"xmluconv.hxx"
+#include "xmluconv.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
-#include"xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
-#include<rtl/ustrbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _RTL_USTRING_
-#include<rtl/ustring>
+#include <rtl/ustring>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONBEZIERCOORDS_HPP_
@@ -101,6 +101,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 XMLMarkerStyle::XMLMarkerStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & _rHandler,
                                         const SvXMLNamespaceMap& _rNamespaceMap, const SvXMLUnitConverter& _rUnitConverter )
@@ -115,10 +116,10 @@ XMLMarkerStyle::~XMLMarkerStyle()
 {
 }
 
-void XMLMarkerStyle::AddAttribute( sal_uInt16 nPrefix, const sal_Char *pName, const OUString& rStrValue )
+void XMLMarkerStyle::AddAttribute( sal_uInt16 nPrefix, enum XMLTokenEnum eName, const OUString& rStrValue )
 {
-    const OUString aStrName( OUString::createFromAscii( pName ) );
-    const OUString aStrCDATA( OUString::createFromAscii( sXML_CDATA ) );
+    const OUString aStrName( GetXMLToken( eName ) );
+    const OUString aStrCDATA( GetXMLToken( XML_CDATA ) );
 
     pAttrList->AddAttribute( mrNamespaceMap.GetQNameByKey( nPrefix, aStrName ), aStrCDATA, rStrValue );
 }
@@ -153,7 +154,7 @@ sal_Bool XMLMarkerStyle::ImpExportXML( const uno::Reference< xml::sax::XDocument
             /////////////////
             // Name
             OUString aStrName( rStrName );
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_name, aStrName );
+            AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aStrName );
 
             /////////////////
             // Viewbox (viewBox="0 0 1500 1000")
@@ -205,7 +206,7 @@ sal_Bool XMLMarkerStyle::ImpExportXML( const uno::Reference< xml::sax::XDocument
             sal_Int32 nDifY(nMaxY - nMinY);
 
             SdXMLImExViewBox aViewBox( 0, 0, nDifX, nDifY );
-            AddAttribute( XML_NAMESPACE_SVG, sXML_viewBox, aViewBox.GetExportString( rUnitConverter ) );
+            AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString( rUnitConverter ) );
 
             /////////////////
             // Pathdata
@@ -225,16 +226,16 @@ sal_Bool XMLMarkerStyle::ImpExportXML( const uno::Reference< xml::sax::XDocument
             }
 
             // write point array
-            AddAttribute(XML_NAMESPACE_SVG, sXML_d, aSvgDElement.GetExportString());
+            AddAttribute(XML_NAMESPACE_SVG, XML_D, aSvgDElement.GetExportString());
 
             /////////////////
             // Do Write
-            OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
+            OUString sWS( GetXMLToken( XML_WS ) );
 
-            OUString aStrTmp( RTL_CONSTASCII_USTRINGPARAM( sXML_marker ) );
+            OUString aStrTmp( GetXMLToken( XML_MARKER ) );
             rHandler->ignorableWhitespace( sWS );
             rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW, aStrTmp ), xAttrList );
-            rHandler->endElement( OUString::createFromAscii( sXML_marker ) );
+            rHandler->endElement( GetXMLToken( XML_MARKER ) );
             rHandler->ignorableWhitespace( sWS );
         }
     }
@@ -260,17 +261,17 @@ sal_Bool XMLMarkerStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
         mrNamespaceMap.GetKeyByAttrName( aStrFullAttrName, &aStrAttrName );
         OUString aStrValue = xAttrList->getValueByIndex( i );
 
-        if( aStrAttrName.compareToAscii( RTL_CONSTASCII_STRINGPARAM( sXML_name ) ) == 0 )
+        if( IsXMLToken( aStrAttrName, XML_NAME ) )
         {
             rStrName = aStrValue;
         }
-        else if( aStrAttrName.compareToAscii( RTL_CONSTASCII_STRINGPARAM( sXML_viewBox ) ) == 0 )
+        else if( IsXMLToken( aStrAttrName, XML_VIEWBOX ) )
         {
             pViewBox = new SdXMLImExViewBox( aStrValue, rUnitConverter );
             bHasViewBox = sal_True;
 
         }
-        else if( bHasViewBox && aStrAttrName.compareToAscii( RTL_CONSTASCII_STRINGPARAM( sXML_d ) ) == 0 )
+        else if( bHasViewBox && IsXMLToken( aStrAttrName, XML_D ) )
         {
             SdXMLImExSvgDElement aPoints(aStrValue, *pViewBox, awt::Point( 0, 0 ),
                 awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ),

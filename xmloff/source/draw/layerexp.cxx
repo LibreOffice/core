@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-14 11:35:10 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -103,7 +105,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
-
+using namespace ::xmloff::token;
 
 void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
 {
@@ -125,7 +127,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
     OUStringBuffer sTmp;
     OUString aName;
 
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, sXML_layer_set, sal_True, sal_True );
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_LAYER_SET, sal_True, sal_True );
 
     for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
     {
@@ -135,10 +137,10 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
         {
             if( xLayer->getPropertyValue( strName ) >>= aName )
             {
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_name, aName );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aName );
             }
 
-            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, sXML_layer, sal_True, sal_True );
+            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_LAYER, sal_True, sal_True );
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStarBasicContextFactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:45 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 
@@ -94,6 +94,9 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_LIBRARY;
+using ::xmloff::token::XML_MACRO_NAME;
 
 
 XMLStarBasicContextFactory::XMLStarBasicContextFactory() :
@@ -129,12 +132,11 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
 
         if (XML_NAMESPACE_SCRIPT == nPrefix)
         {
-            if (sLocalName.equalsAsciiL(sXML_library, sizeof(sXML_library)-1))
+            if (IsXMLToken(sLocalName, XML_LIBRARY))
             {
                 sLibraryVal = xAttrList->getValueByIndex(nAttr);
             }
-            else if (sLocalName.equalsAsciiL(sXML_macro_name,
-                                             sizeof(sXML_macro_name)-1))
+            else if (IsXMLToken(sLocalName, XML_MACRO_NAME))
             {
                 sMacroNameVal = xAttrList->getValueByIndex(nAttr);
             }

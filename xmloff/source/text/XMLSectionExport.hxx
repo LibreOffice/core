@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:20 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 class SvXMLExport;
@@ -395,7 +398,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         const ::rtl::OUString& sPropertyName,
-        const sal_Char* pAttributeName,
+        enum ::xmloff::token::XMLTokenEnum eAttributeName,
         sal_Bool bDefault,
         sal_Bool bInvert = sal_False);
 };

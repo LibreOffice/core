@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeforms.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 13:41:05 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -96,6 +96,7 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::xml;
+    using ::xmloff::token::XML_FORMS;
 
     //=========================================================================
     //= OFormsRootImport
@@ -170,7 +171,7 @@ namespace xmloff
     {
         addModelAttributes(_rExp);
 
-        m_pImplElement = new SvXMLElementExport(_rExp, XML_NAMESPACE_OFFICE, sXML_forms, sal_True, sal_True);
+        m_pImplElement = new SvXMLElementExport(_rExp, XML_NAMESPACE_OFFICE, XML_FORMS, sal_True, sal_True);
     }
 
     //---------------------------------------------------------------------
@@ -227,6 +228,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/20 13:41:05  fs
+ *  initial checkin - importing/exporting the office:forms element
+ *
  *
  *  Revision 1.0 20.03.01 13:12:35  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backhdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include <backhdl.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -91,14 +91,14 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry psXML_BrushHorizontalPos[] =
+SvXMLEnumMapEntry pXML_BrushHorizontalPos[] =
 {
     { XML_LEFT,             style::GraphicLocation_LEFT_MIDDLE   },
     { XML_RIGHT,            style::GraphicLocation_RIGHT_MIDDLE },
     { XML_TOKEN_INVALID,    0       }
 };
 
-SvXMLEnumMapEntry psXML_BrushVerticalPos[] =
+SvXMLEnumMapEntry pXML_BrushVerticalPos[] =
 {
     { XML_TOP,              style::GraphicLocation_MIDDLE_TOP   },
     { XML_BOTTOM,           style::GraphicLocation_MIDDLE_BOTTOM    },
@@ -157,7 +157,7 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
                 bRet = sal_False;
             }
         }
-        else if( aToken.compareToAscii( sXML_center ) )
+        else if( IsXMLToken( aToken, XML_CENTER ) )
         {
             if( bHori )
                 MergeXMLVertPos( ePos, style::GraphicLocation_MIDDLE_MIDDLE );
@@ -166,7 +166,7 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
             else
                 ePos = style::GraphicLocation_MIDDLE_MIDDLE;
         }
-        else if( rUnitConverter.convertEnum( nTmp, aToken, psXML_BrushHorizontalPos ) )
+        else if( rUnitConverter.convertEnum( nTmp, aToken, pXML_BrushHorizontalPos ) )
         {
             if( bVert )
                 MergeXMLHoriPos( ePos, (style::GraphicLocation)nTmp );
@@ -177,7 +177,7 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
 
             bHori = sal_True;
         }
-        else if( rUnitConverter.convertEnum( nTmp, aToken, psXML_BrushVerticalPos ) )
+        else if( rUnitConverter.convertEnum( nTmp, aToken, pXML_BrushVerticalPos ) )
         {
             if( bHori )
                 MergeXMLVertPos( ePos, (style::GraphicLocation)nTmp );
@@ -224,19 +224,19 @@ sal_Bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const
         case style::GraphicLocation_LEFT_TOP:
         case style::GraphicLocation_MIDDLE_TOP:
         case style::GraphicLocation_RIGHT_TOP:
-            aOut.appendAscii( sXML_top );
+            aOut.append( GetXMLToken(XML_TOP) );
             bRet = sal_True;
             break;
         case style::GraphicLocation_LEFT_MIDDLE:
         case style::GraphicLocation_MIDDLE_MIDDLE:
         case style::GraphicLocation_RIGHT_MIDDLE:
-            aOut.appendAscii( sXML_center );
+            aOut.append( GetXMLToken(XML_CENTER) );
             bRet = sal_True;
             break;
         case style::GraphicLocation_LEFT_BOTTOM:
         case style::GraphicLocation_MIDDLE_BOTTOM:
         case style::GraphicLocation_RIGHT_BOTTOM:
-            aOut.appendAscii( sXML_bottom );
+            aOut.append( GetXMLToken(XML_BOTTOM) );
             bRet = sal_True;
             break;
         }
@@ -250,17 +250,17 @@ sal_Bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const
             case style::GraphicLocation_LEFT_TOP:
             case style::GraphicLocation_LEFT_BOTTOM:
             case style::GraphicLocation_LEFT_MIDDLE:
-                aOut.appendAscii( sXML_left );
+                aOut.append( GetXMLToken(XML_LEFT) );
                 break;
             case style::GraphicLocation_MIDDLE_TOP:
             case style::GraphicLocation_MIDDLE_MIDDLE:
             case style::GraphicLocation_MIDDLE_BOTTOM:
-                aOut.appendAscii( sXML_center );
+                aOut.append( GetXMLToken(XML_CENTER) );
                 break;
             case style::GraphicLocation_RIGHT_MIDDLE:
             case style::GraphicLocation_RIGHT_TOP:
             case style::GraphicLocation_RIGHT_BOTTOM:
-                aOut.appendAscii( sXML_right );
+                aOut.append( GetXMLToken(XML_RIGHT) );
                 break;
             }
         }

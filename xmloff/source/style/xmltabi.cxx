@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 #include <com/sun/star/style/TabStop.hpp>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_I18NMAP_HXX
 #include "i18nmap.hxx"
@@ -180,23 +180,23 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
                 aTabStop.Position = nVal;
             break;
         case XML_TOK_TABSTOP_TYPE:
-            if( rValue.equalsAsciiL( sXML_left, sizeof( sXML_left )-1 ) )
+            if( IsXMLToken( rValue, XML_LEFT ) )
             {
                 aTabStop.Alignment = style::TabAlign_LEFT;
             }
-            else if( rValue.equalsAsciiL( sXML_right, sizeof( sXML_right )-1 ) )
+            else if( IsXMLToken( rValue, XML_RIGHT ) )
             {
                 aTabStop.Alignment = style::TabAlign_RIGHT;
             }
-            else if( rValue.equalsAsciiL( sXML_center, sizeof( sXML_center )-1 ) )
+            else if( IsXMLToken( rValue, XML_CENTER ) )
             {
                 aTabStop.Alignment = style::TabAlign_CENTER;
             }
-            else if( rValue.equalsAsciiL( sXML_char, sizeof( sXML_char )-1 ) )
+            else if( IsXMLToken( rValue, XML_CHAR ) )
             {
                 aTabStop.Alignment = style::TabAlign_DECIMAL;
             }
-            else if( rValue.equalsAsciiL( sXML_default, sizeof( sXML_default )-1 ) )
+            else if( IsXMLToken( rValue, XML_DEFAULT ) )
             {
                 aTabStop.Alignment = style::TabAlign_DEFAULT;
             }
@@ -270,7 +270,7 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_STYLE == nPrefix && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_tab_stop ) ) )
+    if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_TAB_STOP ) )
     {
         // create new tabstop import context
         SvxXMLTabStopContext_Impl *pTabStopContext =

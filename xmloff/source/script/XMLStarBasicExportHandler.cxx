@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStarBasicExportHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 11:51:27 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include "xmlexp.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -85,13 +85,14 @@
 
 
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::PropertyValue;
 
 
 XMLStarBasicExportHandler::XMLStarBasicExportHandler() :
-    sStarBasic(RTL_CONSTASCII_USTRINGPARAM(sXML_starbasic)),
+    sStarBasic(GetXMLToken(XML_STARBASIC)),
     sLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
     sMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName"))
 {
@@ -107,8 +108,8 @@ void XMLStarBasicExportHandler::Export(
     Sequence<PropertyValue> & rValues,
     sal_Bool bUseWhitespace)
 {
-    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, sXML_language, sStarBasic);
-    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, sXML_event_name, rEventName);
+    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE, sStarBasic);
+    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, rEventName);
 
     sal_Int32 nCount = rValues.getLength();
     for(sal_Int32 i = 0; i < nCount; i++)
@@ -117,17 +118,17 @@ void XMLStarBasicExportHandler::Export(
         {
             OUString sTmp;
             rValues[i].Value >>= sTmp;
-            rExport.AddAttribute(XML_NAMESPACE_SCRIPT, sXML_library, sTmp);
+            rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LIBRARY, sTmp);
         }
         else if (sMacroName.equals(rValues[i].Name))
         {
             OUString sTmp;
             rValues[i].Value >>= sTmp;
-            rExport.AddAttribute(XML_NAMESPACE_SCRIPT, sXML_macro_name, sTmp);
+            rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME, sTmp);
         }
         // else: disregard
     }
 
-    SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, sXML_event,
+    SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, XML_EVENT,
                                    bUseWhitespace, sal_False);
 }

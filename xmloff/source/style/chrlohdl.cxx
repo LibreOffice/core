@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrlohdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #include <chrlohdl.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -90,6 +90,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 // this is a copy of defines in svx/inc/escpitem.hxx
 #define DFLT_ESC_PROP    58
@@ -123,7 +124,7 @@ sal_Bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& 
 
     rValue >>= aLocale;
 
-    if( rStrImpValue.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_none ) ) != 0 )
+    if( IsXMLToken(rStrImpValue, XML_NONE) )
         aLocale.Language = rStrImpValue;
 
     rValue <<= aLocale;
@@ -139,7 +140,7 @@ sal_Bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& 
     rStrExpValue = aLocale.Language;
 
     if( !rStrExpValue.getLength() )
-        rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) );
+        rStrExpValue = GetXMLToken( XML_NONE );
 
     return sal_True;
 }
@@ -171,7 +172,7 @@ sal_Bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& r
 
     rValue >>= aLocale;
 
-    if( rStrImpValue.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_none ) ) != 0 )
+    if( IsXMLToken( rStrImpValue, XML_NONE ) )
         aLocale.Country = rStrImpValue;
 
     rValue <<= aLocale;
@@ -187,7 +188,7 @@ sal_Bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
     rStrExpValue = aLocale.Country;
 
     if( !rStrExpValue.getLength() )
-        rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) );
+        rStrExpValue = GetXMLToken( XML_NONE );
 
     return sal_True;
 }

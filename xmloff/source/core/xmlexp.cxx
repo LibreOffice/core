@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-25 12:39:27 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
@@ -137,10 +137,6 @@
 
 #ifndef _XMLOFF_SETTINGSEXPORTHELPER_HXX
 #include "SettingsExportHelper.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
@@ -241,66 +237,96 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
 
 void SvXMLExport::_InitCtor()
 {
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_OFFICE, sXML_np_office,
-                               sXML_n_office, XML_NAMESPACE_OFFICE );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_OFFICE,
+                               GetXMLToken(XML_NP_OFFICE),
+                               GetXMLToken(XML_N_OFFICE),
+                               XML_NAMESPACE_OFFICE );
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_FO, sXML_np_fo,
-                                   sXML_n_fo, XML_NAMESPACE_FO );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_FO, GetXMLToken(XML_NP_FO),
+                                   GetXMLToken(XML_N_FO), XML_NAMESPACE_FO );
     }
     if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_XLINK, sXML_np_xlink,
-                                   sXML_n_xlink, XML_NAMESPACE_XLINK );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_XLINK,
+                                   GetXMLToken(XML_NP_XLINK),
+                                   GetXMLToken(XML_N_XLINK),
+                                   XML_NAMESPACE_XLINK );
     }
     if( (getExportFlags() & EXPORT_SETTINGS) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_CONFIG, sXML_np_config,
-                                   sXML_n_config, XML_NAMESPACE_CONFIG );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_CONFIG,
+                                   GetXMLToken(XML_NP_CONFIG),
+                                   GetXMLToken(XML_N_CONFIG),
+                                   XML_NAMESPACE_CONFIG );
     }
 
     if( (getExportFlags() & EXPORT_META) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_DC, sXML_np_dc,
-                                   sXML_n_dc, XML_NAMESPACE_DC );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_META, sXML_np_meta,
-                                   sXML_n_meta, XML_NAMESPACE_META );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_DC, GetXMLToken(XML_NP_DC),
+                                   GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_META,
+                                   GetXMLToken(XML_NP_META),
+                                   GetXMLToken(XML_N_META),
+                                   XML_NAMESPACE_META );
     }
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_STYLE, sXML_np_style,
-                                   sXML_n_style, XML_NAMESPACE_STYLE );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_STYLE,
+                                   GetXMLToken(XML_NP_STYLE),
+                                   GetXMLToken(XML_N_STYLE),
+                                   XML_NAMESPACE_STYLE );
     }
 
     // namespaces for documents
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_TEXT, sXML_np_text,
-                                   sXML_n_text, XML_NAMESPACE_TEXT );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_DRAW, sXML_np_draw,
-                                   sXML_n_draw, XML_NAMESPACE_DRAW );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_DR3D, sXML_np_dr3d,
-                                   sXML_n_dr3d, XML_NAMESPACE_DR3D );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_SVG, sXML_np_svg,
-                                   sXML_n_svg, XML_NAMESPACE_SVG );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_CHART, sXML_np_chart,
-                                   sXML_n_chart, XML_NAMESPACE_CHART );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_TABLE, sXML_np_table,
-                                   sXML_n_table, XML_NAMESPACE_TABLE );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_NUMBER, sXML_np_number,
-                                   sXML_n_number, XML_NAMESPACE_NUMBER );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_TEXT,
+                                   GetXMLToken(XML_NP_TEXT),
+                                   GetXMLToken(XML_N_TEXT),
+                                   XML_NAMESPACE_TEXT );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_DRAW,
+                                   GetXMLToken(XML_NP_DRAW),
+                                   GetXMLToken(XML_N_DRAW),
+                                   XML_NAMESPACE_DRAW );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_DR3D,
+                                   GetXMLToken(XML_NP_DR3D),
+                                   GetXMLToken(XML_N_DR3D),
+                                   XML_NAMESPACE_DR3D );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_SVG,
+                                   GetXMLToken(XML_NP_SVG),
+                                   GetXMLToken(XML_N_SVG),
+                                   XML_NAMESPACE_SVG );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_CHART,
+                                   GetXMLToken(XML_NP_CHART),
+                                   GetXMLToken(XML_N_CHART),
+                                   XML_NAMESPACE_CHART );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_TABLE,
+                                   GetXMLToken(XML_NP_TABLE),
+                                   GetXMLToken(XML_N_TABLE),
+                                   XML_NAMESPACE_TABLE );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_NUMBER,
+                                   GetXMLToken(XML_NP_NUMBER),
+                                   GetXMLToken(XML_N_NUMBER),
+                                   XML_NAMESPACE_NUMBER );
     }
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_MATH, sXML_np_math,
-                                   sXML_n_math, XML_NAMESPACE_MATH );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_FORM, sXML_namespace_form,
-                                   sXML_url_form, XML_NAMESPACE_FORM );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_MATH,
+                                   GetXMLToken(XML_NP_MATH),
+                                   GetXMLToken(XML_N_MATH),
+                                   XML_NAMESPACE_MATH );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_FORM,
+                                   GetXMLToken(XML_NP_FORM),
+                                   GetXMLToken(XML_N_FORM),
+                                   XML_NAMESPACE_FORM );
     }
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_SCRIPT, sXML_namespace_script,
-                                   sXML_url_script, XML_NAMESPACE_SCRIPT );
+        pNamespaceMap->AddAtIndex( XML_NAMESPACE_SCRIPT,
+                                   GetXMLToken(XML_NP_SCRIPT),
+                                   GetXMLToken(XML_N_SCRIPT),
+                                   XML_NAMESPACE_SCRIPT );
     }
 
 
@@ -314,8 +340,8 @@ void SvXMLExport::_InitCtor()
 
 SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags ) :
     pImpl( 0 ), meClass( eClass ),
-    sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
-    sWS( OUString::createFromAscii( sXML_WS ) ),
+    sCDATA( GetXMLToken(XML_CDATA) ),
+    sWS( GetXMLToken(XML_WS) ),
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit ) ),
     pAttrList( new SvXMLAttributeList ),
@@ -335,8 +361,8 @@ SvXMLExport::SvXMLExport(
         const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
         MapUnit eDfltUnit   ) :
     pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
-    sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
-    sWS( OUString::createFromAscii( sXML_WS ) ),
+    sCDATA( GetXMLToken(XML_CDATA) ),
+    sWS( GetXMLToken(XML_WS) ),
     sOrigFileName( rFileName ),
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit ) ),
@@ -363,8 +389,8 @@ SvXMLExport::SvXMLExport(
         const Reference< XModel >& rModel,
         sal_Int16 eDfltUnit ) :
     pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
-    sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
-    sWS( OUString::createFromAscii( sXML_WS ) ),
+    sCDATA( GetXMLToken(XML_CDATA) ),
+    sWS( GetXMLToken(XML_WS) ),
     sOrigFileName( rFileName ),
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit) ) ),
@@ -394,8 +420,8 @@ SvXMLExport::SvXMLExport(
         const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
         sal_Int16 eDfltUnit ) :
     pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
-    sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
-    sWS( OUString::createFromAscii( sXML_WS ) ),
+    sCDATA( GetXMLToken(XML_CDATA) ),
+    sWS( GetXMLToken(XML_WS) ),
     sOrigFileName( rFileName ),
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit) ) ),
@@ -674,7 +700,7 @@ void SvXMLExport::ImplExportMeta()
 
     {
         // <office:meta>
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_meta,
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_META,
                                 sal_True, sal_True );
 
         _ExportMeta();
@@ -686,7 +712,7 @@ void SvXMLExport::ImplExportSettings()
     CheckAttrList();
 
     {
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_settings,
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SETTINGS,
                                 sal_True, sal_True );
         XMLSettingsExportHelper aSettingsExportHelper(*this);
         _ExportViewSettings(aSettingsExportHelper);
@@ -698,10 +724,10 @@ void SvXMLExport::ImplExportStyles( sal_Bool bUsed )
 {
     CheckAttrList();
 
-//  AddAttributeASCII( XML_NAMESPACE_NONE, sXML_id, sXML_styles_id );
+//  AddAttribute( XML_NAMESPACE_NONE, XML_ID, XML_STYLES_ID );
     {
         // <style:styles>
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_styles,
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_STYLES,
                                 sal_True, sal_True );
 
         _ExportStyles( sal_False );
@@ -710,23 +736,23 @@ void SvXMLExport::ImplExportStyles( sal_Bool bUsed )
 
 void SvXMLExport::ImplExportAutoStyles( sal_Bool bUsed )
 {
-//  AddAttributeASCII( XML_NAMESPACE_NONE, sXML_id, sXML_auto_styles_id );
+//  AddAttributeASCII( XML_NAMESPACE_NONE, XML_ID, XML_AUTO_STYLES_ID );
     {
         // <style:automatic-styles>
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
-                                  sXML_automatic_styles, sal_True, sal_True );
+                                  XML_AUTOMATIC_STYLES, sal_True, sal_True );
 
 #if 0
-        AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
-        AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_href, sXML_styles_href );
-        AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
-        AddAttribute( XML_NAMESPACE_XLINK, sXML_role,
+        AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+        AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, XML_STYLES_HREF );
+        AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+        AddAttribute( XML_NAMESPACE_XLINK, XML_ROLE,
                          pNamespaceMap->GetQNameByKey( XML_NAMESPACE_OFFICE,
-                                OUString::createFromAscii(sXML_stylesheet)) );
+                                               GetXMLToken(XML_STYLESHEET)) );
         {
             // <style:use-styles>
             SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
-                                      sXML_use_styles, sal_True, sal_True );
+                                      XML_USE_STYLES, sal_True, sal_True );
         }
 #endif
         _ExportAutoStyles();
@@ -737,23 +763,23 @@ void SvXMLExport::ImplExportMasterStyles( sal_Bool bUsed )
 {
     {
         // <style:master-styles>
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_master_styles,
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,
                                 sal_True, sal_True );
 
         _ExportMasterStyles();
     }
 
 #if 0
-    AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
-    AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_href, sXML_auto_styles_href );
-    AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
-    AddAttribute( XML_NAMESPACE_XLINK, sXML_role,
+    AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+    AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, XML_AUTO_STYLES_HREF );
+    AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+    AddAttribute( XML_NAMESPACE_XLINK, XML_ROLE,
                   pNamespaceMap->GetQNameByKey( XML_NAMESPACE_OFFICE,
-                                OUString::createFromAscii(sXML_stylesheet) ) );
+                                                GetXMLToken(XML_STYLESHEET) ) );
     {
         // <style:use-styles>
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
-                                  sXML_use_styles, sal_True, sal_True );
+                                  XML_USE_STYLES, sal_True, sal_True );
     }
 #endif
 }
@@ -767,7 +793,7 @@ void SvXMLExport::ImplExportContent()
     {
         // <office:body ...>
         SetBodyAttributes();
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_body,
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_BODY,
                                   sal_True, sal_True );
 
         _ExportContent();
@@ -807,53 +833,53 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
     // office:version = ...
     if( !bExtended )
-        AddAttributeASCII( XML_NAMESPACE_OFFICE, sXML_version, sXML_1_0 );
+        AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION,
+                      OUString::createFromAscii(sXML_1_0) );
 
     {
-        char* pRootService;
+        enum XMLTokenEnum eRootService = XML_TOKEN_INVALID;
         const sal_Int32 nExportMode = mnExportFlags & (EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_SETTINGS);
         if( EXPORT_META == nExportMode )
         {
             // export only meta
-            pRootService = sXML_document_meta;
+            eRootService = XML_DOCUMENT_META;
         }
         else if ( EXPORT_SETTINGS == nExportMode )
         {
             // export only settings
-            pRootService = sXML_document_settings;
+            eRootService = XML_DOCUMENT_SETTINGS;
         }
         else if( EXPORT_STYLES == nExportMode )
         {
             // export only styles
-            pRootService = sXML_document_styles;
+            eRootService = XML_DOCUMENT_STYLES;
         }
         else if( EXPORT_CONTENT == nExportMode )
         {
             // export only content
-            pRootService = sXML_document_content;
+            eRootService = XML_DOCUMENT_CONTENT;
         }
         else
         {
             // the god'ol one4all element
-            pRootService = sXML_document;
+            eRootService = XML_DOCUMENT;
         }
 
         if( (getExportFlags() & EXPORT_NODOCTYPE) == 0 &&
             xExtHandler.is() )
         {
             OUStringBuffer aDocType(
-                sizeof(sXML_xml_doctype_prefix) +
-                sizeof(sXML_xml_doctype_suffix) + 30 );
+                GetXMLToken(XML_XML_DOCTYPE_PREFIX).getLength() +
+                GetXMLToken(XML_XML_DOCTYPE_SUFFIX).getLength() + 30 );
 
-            aDocType.appendAscii( sXML_xml_doctype_prefix );
-            OUString sLName( OUString::createFromAscii(pRootService) );
+            aDocType.append( GetXMLToken(XML_XML_DOCTYPE_PREFIX) );
             aDocType.append( GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_OFFICE, sLName ) );
-            aDocType.appendAscii( sXML_xml_doctype_suffix );
+                           XML_NAMESPACE_OFFICE, GetXMLToken(eRootService) ) );
+            aDocType.append( GetXMLToken(XML_XML_DOCTYPE_SUFFIX) );
             xExtHandler->unknown( aDocType.makeStringAndClear() );
         }
 
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, pRootService, sal_True, sal_True );
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, eRootService, sal_True, sal_True );
 
         // meta information
         if( mnExportFlags & EXPORT_META )
@@ -920,7 +946,7 @@ void SvXMLExport::_ExportViewSettings(const XMLSettingsExportHelper& rSettingsEx
             aProps[nOldLength] = aProp;
         }
     }
-    OUString sViewSettings(RTL_CONSTASCII_USTRINGPARAM(sXML_view_settings));
+    OUString sViewSettings(GetXMLToken(XML_VIEW_SETTINGS));
     rSettingsExportHelper.exportSettings(aProps, sViewSettings);
 }
 
@@ -928,14 +954,14 @@ void SvXMLExport::_ExportConfigurationSettings(const XMLSettingsExportHelper& rS
 {
     uno::Sequence<beans::PropertyValue> aProps;
     GetConfigurationSettings(aProps);
-    OUString sConfigurationSettings(RTL_CONSTASCII_USTRINGPARAM(sXML_configuration_settings));
+    OUString sConfigurationSettings(GetXMLToken(XML_CONFIGURATION_SETTINGS));
     rSettingsExportHelper.exportSettings(aProps, sConfigurationSettings);
 }
 
 void SvXMLExport::_ExportScripts()
 {
     // <office:script>
-    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_script,
+    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPT,
                             sal_True, sal_True );
 
     XMLBasicExport aBasicExp( *this );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-29 11:18:45 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include "PageMasterPropHdl.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
@@ -99,6 +99,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::comphelper;
+using namespace ::xmloff::token;
 
 
 //______________________________________________________________________________
@@ -126,13 +127,13 @@ sal_Bool XMLPMPropHdl_PageStyleLayout::importXML(
 {
     sal_Bool bRet = sal_True;
 
-    if( rStrImpValue.compareToAscii( sXML_all ) == 0 )
+    if( IsXMLToken( rStrImpValue, XML_ALL ) )
         rValue <<= PageStyleLayout_ALL;
-    else if( rStrImpValue.compareToAscii( sXML_left ) == 0 )
+    else if( IsXMLToken( rStrImpValue, XML_LEFT ) )
         rValue <<= PageStyleLayout_LEFT;
-    else if( rStrImpValue.compareToAscii( sXML_right ) == 0 )
+    else if( IsXMLToken( rStrImpValue, XML_RIGHT ) )
         rValue <<= PageStyleLayout_RIGHT;
-    else if( rStrImpValue.compareToAscii( sXML_mirrored ) == 0 )
+    else if( IsXMLToken( rStrImpValue, XML_MIRRORED ) )
         rValue <<= PageStyleLayout_MIRRORED;
     else
         bRet = sal_False;
@@ -154,16 +155,16 @@ sal_Bool XMLPMPropHdl_PageStyleLayout::exportXML(
         switch( eLayout )
         {
             case PageStyleLayout_ALL:
-                rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_all ) );
+                rStrExpValue = GetXMLToken( XML_ALL );
             break;
             case PageStyleLayout_LEFT:
-                rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_left ) );
+                rStrExpValue = GetXMLToken( XML_LEFT );
             break;
             case PageStyleLayout_RIGHT:
-                rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_right ) );
+                rStrExpValue = GetXMLToken( XML_RIGHT );
             break;
             case PageStyleLayout_MIRRORED:
-                rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_mirrored ) );
+                rStrExpValue = GetXMLToken( XML_MIRRORED );
             break;
             default:
                 bRet = sal_False;
@@ -248,8 +249,7 @@ sal_Bool XMLPMPropHdl_NumLetterSync::importXML(
     sal_Int16 nNumType;
     sal_Int16 nSync = NumberingType::NUMBER_NONE;
     rUnitConverter.convertNumFormat( nSync, rStrImpValue,
-                OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_a ) ),
-                sal_True );
+                                     GetXMLToken( XML_A ), sal_True );
 
     if( !(rValue >>= nNumType) )
         nNumType = NumberingType::NUMBER_NONE;
@@ -304,7 +304,7 @@ sal_Bool XMLPMPropHdl_PaperTrayNumber::importXML(
 {
     sal_Bool bRet = sal_False;
 
-    if( rStrImpValue.compareToAscii( sXML_default ) == 0 )
+    if( IsXMLToken( rStrImpValue, XML_DEFAULT ) )
     {
         rValue <<= DEFAULT_PAPERTRAY;
         bRet = sal_True;
@@ -333,7 +333,7 @@ sal_Bool XMLPMPropHdl_PaperTrayNumber::exportXML(
     if( rValue >>= nPaperTray )
     {
         if( nPaperTray == DEFAULT_PAPERTRAY )
-            rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_default ) );
+            rStrExpValue = GetXMLToken( XML_DEFAULT );
         else
         {
             OUStringBuffer aBuffer;
@@ -349,8 +349,8 @@ sal_Bool XMLPMPropHdl_PaperTrayNumber::exportXML(
 //______________________________________________________________________________
 // property handler for style:print
 
-XMLPMPropHdl_Print::XMLPMPropHdl_Print( const sal_Char* sValue ) :
-    sAttrValue( OUString::createFromAscii( sValue ) )
+XMLPMPropHdl_Print::XMLPMPropHdl_Print( enum XMLTokenEnum eValue ) :
+    sAttrValue( GetXMLToken( eValue ) )
 {
 }
 
@@ -407,8 +407,8 @@ sal_Bool XMLPMPropHdl_CenterHorizontal::importXML(
     sal_Bool bRet = sal_False;
 
     if (rStrImpValue.getLength())
-        if ((rStrImpValue.compareToAscii(sXML_both) == 0) ||
-            (rStrImpValue.compareToAscii(sXML_horizontal) == 0))
+        if (IsXMLToken( rStrImpValue, XML_BOTH) ||
+            IsXMLToken( rStrImpValue, XML_HORIZONTAL))
         {
             rValue = ::cppu::bool2any(sal_True);
             bRet = sal_True;
@@ -429,9 +429,9 @@ sal_Bool XMLPMPropHdl_CenterHorizontal::exportXML(
     {
         bRet = sal_True;
         if (rStrExpValue.getLength())
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_both));
+            rStrExpValue = GetXMLToken(XML_BOTH);
         else
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_horizontal));
+            rStrExpValue = GetXMLToken(XML_HORIZONTAL);
     }
 
     return bRet;
@@ -449,8 +449,8 @@ sal_Bool XMLPMPropHdl_CenterVertical::importXML(
     sal_Bool bRet = sal_False;
 
     if (rStrImpValue.getLength())
-        if ((rStrImpValue.compareToAscii(sXML_both) == 0) ||
-            (rStrImpValue.compareToAscii(sXML_vertical) == 0))
+        if (IsXMLToken(rStrImpValue, XML_BOTH) ||
+            IsXMLToken(rStrImpValue, XML_VERTICAL) )
         {
             rValue = ::cppu::bool2any(sal_True);
             bRet = sal_True;
@@ -470,9 +470,9 @@ sal_Bool XMLPMPropHdl_CenterVertical::exportXML(
     {
         bRet = sal_True;
         if (rStrExpValue.getLength())
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_both));
+            rStrExpValue = GetXMLToken(XML_BOTH);
         else
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_vertical));
+            rStrExpValue = GetXMLToken(XML_VERTICAL);
     }
 
     return bRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,10 @@
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_PRSTYLEI_HXX_
@@ -390,8 +394,7 @@ void XMLIndexTOCContext::StartElement(
                                   &sLocalName );
             if ( XML_NAMESPACE_TEXT == nPrefix)
             {
-                if ( sLocalName.equalsAsciiL(sXML_style_name,
-                                            sizeof(sXML_style_name)-1) )
+                if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
                 {
                     XMLPropStyleContext* pStyle =
                         GetImport().GetTextImport()->FindSectionStyle(
@@ -401,8 +404,7 @@ void XMLIndexTOCContext::StartElement(
                         pStyle->FillPropertySet( xTOCPropertySet );
                     }
                 }
-                else if ( sLocalName.equalsAsciiL(sXML_protected,
-                                                  sizeof(sXML_protected)-1) )
+                else if ( IsXMLToken( sLocalName, XML_PROTECTED ) )
                 {
                     sal_Bool bTmp;
                     if ( SvXMLUnitConverter::convertBool(
@@ -453,8 +455,7 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
     {
         if (XML_NAMESPACE_TEXT == nPrefix)
         {
-            if (rLocalName.equalsAsciiL(sXML_index_body,
-                                        sizeof(sXML_index_body)-1))
+            if ( IsXMLToken( rLocalName, XML_INDEX_BODY ) )
             {
                 pContext = new XMLIndexBodyContext(GetImport(), nPrefix,
                                                    rLocalName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-27 13:56:27 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,9 @@
 #include <tools/color.hxx>
 #endif
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -539,7 +541,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
 
     if( aIter != aEnd )
     {
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, sXML_animations, sal_True, sal_True );
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, sal_True, sal_True );
 
         do
         {
@@ -547,26 +549,26 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
 
             DBG_ASSERT( rEffect.mnShapeId != -1, "shape id creation failed for animation effect?" );
 
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_shape_id, OUString::valueOf( rEffect.mnShapeId ) );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_SHAPE_ID, OUString::valueOf( rEffect.mnShapeId ) );
 
             if( rEffect.meKind == XMLE_DIM )
             {
                 // export a dim action;
 
                 SvXMLUnitConverter::convertColor( sTmp, rEffect.maDimColor );
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_color, sTmp.makeStringAndClear() );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, sTmp.makeStringAndClear() );
 
-                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, sXML_dim, sal_True, sal_True );
+                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_DIM, sal_True, sal_True );
             }
             else if( rEffect.meKind == XMLE_PLAY )
             {
                 if( rEffect.meSpeed != AnimationSpeed_MEDIUM )
                 {
                     SvXMLUnitConverter::convertEnum( sTmp, rEffect.meSpeed, aXML_AnimationSpeed_EnumMap );
-                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_speed, sTmp.makeStringAndClear() );
+                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_SPEED, sTmp.makeStringAndClear() );
                 }
 
-                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, sXML_play, sal_True, sal_True );
+                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_PLAY, sal_True, sal_True );
             }
             else
             {
@@ -574,59 +576,59 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                 if( rEffect.meEffect != EK_none )
                 {
                     SvXMLUnitConverter::convertEnum( sTmp, rEffect.meEffect, aXML_AnimationEffect_EnumMap );
-                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_effect, sTmp.makeStringAndClear() );
+                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_EFFECT, sTmp.makeStringAndClear() );
                 }
 
                 if( rEffect.meDirection != ED_none )
                 {
                     SvXMLUnitConverter::convertEnum( sTmp, rEffect.meDirection, aXML_AnimationDirection_EnumMap );
-                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_direction, sTmp.makeStringAndClear() );
+                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_DIRECTION, sTmp.makeStringAndClear() );
                 }
 
                 if( rEffect.mnStartScale != -1 )
                 {
                     SvXMLUnitConverter::convertPercent( sTmp, rEffect.mnStartScale );
-                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_start_scale, sTmp.makeStringAndClear() );
+                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_START_SCALE, sTmp.makeStringAndClear() );
                 }
 
                 if( rEffect.meSpeed != AnimationSpeed_MEDIUM )
                 {
                     SvXMLUnitConverter::convertEnum( sTmp, rEffect.meSpeed, aXML_AnimationSpeed_EnumMap );
-                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_speed, sTmp.makeStringAndClear() );
+                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_SPEED, sTmp.makeStringAndClear() );
                 }
 
                 if( rEffect.mnPathShapeId != -1 )
                 {
-                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_path_id, OUString::valueOf( rEffect.mnPathShapeId ) );
+                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PATH_ID, OUString::valueOf( rEffect.mnPathShapeId ) );
                 }
 
-                char *pLocalName;
+                enum XMLTokenEnum eLocalName;
                 if( rEffect.meKind == XMLE_SHOW )
                 {
                     if( rEffect.mbTextEffect )
-                        pLocalName = sXML_show_text;
+                        eLocalName = XML_SHOW_TEXT;
                     else
-                        pLocalName = sXML_show_shape;
+                        eLocalName = XML_SHOW_SHAPE;
                 }
                 else
                 {
                     if( rEffect.mbTextEffect )
-                        pLocalName = sXML_hide_text;
+                        eLocalName = XML_HIDE_TEXT;
                     else
-                        pLocalName = sXML_hide_shape;
+                        eLocalName = XML_HIDE_SHAPE;
                 }
 
-                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, pLocalName, sal_True, sal_True );
+                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, eLocalName, sal_True, sal_True );
                 if( rEffect.maSoundURL.getLength() != 0 )
                 {
-                    rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, rExport.GetRelativeReference(rEffect.maSoundURL) );
-                    rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
-                    rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_new );
-                    rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onRequest );
+                    rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, rExport.GetRelativeReference(rEffect.maSoundURL) );
+                    rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                    rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_NEW );
+                    rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
                     if( rEffect.mbPlayFull )
-                        rExport.AddAttributeASCII( XML_NAMESPACE_PRESENTATION, sXML_play_full, sXML_true );
+                        rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PLAY_FULL, XML_TRUE );
 
-                    SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, sXML_sound, sal_True, sal_True );
+                    SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_SOUND, sal_True, sal_True );
                 }
             }
 

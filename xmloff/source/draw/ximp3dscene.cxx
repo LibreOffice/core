@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-18 08:40:43 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #include "xexptran.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -91,6 +91,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 //////////////////////////////////////////////////////////////////////////////
 // dr3d:3dlight context
@@ -222,7 +223,7 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( USHORT nPrefix
 
     // look for local light context first
     if(nPrefix == XML_NAMESPACE_DR3D
-        && rLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_light))))
+        && IsXMLToken( rLocalName, XML_LIGHT ) )
     {
         // dr3d:light inside dr3d:scene context
         pContext = create3DLightContext( nPrefix, rLocalName, xAttrList );
@@ -293,14 +294,14 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
 {
     if( XML_NAMESPACE_DR3D == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
+        if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
             SdXMLImExTransform3D aTransform(rValue, mrImport.GetMM100UnitConverter());
             if(aTransform.NeedsAction())
                 mbSetTransform = aTransform.GetFullHomogenTransform(mxHomMat);
             return;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_vrp)) )
+        else if( IsXMLToken( rLocalName, XML_VRP ) )
         {
             Vector3D aNewVec;
             mrImport.GetMM100UnitConverter().convertVector3D(aNewVec, rValue);
@@ -312,7 +313,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             }
             return;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_vpn)) )
+        else if( IsXMLToken( rLocalName, XML_VPN ) )
         {
             Vector3D aNewVec;
             mrImport.GetMM100UnitConverter().convertVector3D(aNewVec, rValue);
@@ -324,7 +325,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             }
             return;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_vup)) )
+        else if( IsXMLToken( rLocalName, XML_VUP ) )
         {
             Vector3D aNewVec;
             mrImport.GetMM100UnitConverter().convertVector3D(aNewVec, rValue);
@@ -336,47 +337,47 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             }
             return;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_projection)) )
+        else if( IsXMLToken( rLocalName, XML_PROJECTION ) )
         {
-            if(rValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_parallel))))
+            if( IsXMLToken( rValue, XML_PARALLEL ) )
                 mxPrjMode = drawing::ProjectionMode_PARALLEL;
             else
                 mxPrjMode = drawing::ProjectionMode_PERSPECTIVE;
             return;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_distance)) )
+        else if( IsXMLToken( rLocalName, XML_DISTANCE ) )
         {
             mrImport.GetMM100UnitConverter().convertMeasure(mnDistance, rValue);
             return;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_focal_length)) )
+        else if( IsXMLToken( rLocalName, XML_FOCAL_LENGTH ) )
         {
             mrImport.GetMM100UnitConverter().convertMeasure(mnFocalLength, rValue);
             return;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_shadow_slant)) )
+        else if( IsXMLToken( rLocalName, XML_SHADOW_SLANT ) )
         {
             mrImport.GetMM100UnitConverter().convertNumber(mnShadowSlant, rValue);
             return;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_shade_mode)) )
+        else if( IsXMLToken( rLocalName, XML_SHADE_MODE ) )
         {
-            if(rValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_flat))))
+            if( IsXMLToken( rValue, XML_FLAT ) )
                 mxShadeMode = drawing::ShadeMode_FLAT;
-            else if(rValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_phong))))
+            else if( IsXMLToken( rValue, XML_PHONG ) )
                 mxShadeMode = drawing::ShadeMode_PHONG;
-            else if(rValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_gouraud))))
+            else if( IsXMLToken( rValue, XML_GOURAUD ) )
                 mxShadeMode = drawing::ShadeMode_SMOOTH;
             else
                 mxShadeMode = drawing::ShadeMode_DRAFT;
             return;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_ambient_color)) )
+        else if( IsXMLToken( rLocalName, XML_AMBIENT_COLOR ) )
         {
             mrImport.GetMM100UnitConverter().convertColor(maAmbientColor, rValue);
             return;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_lighting_mode)) )
+        else if( IsXMLToken( rLocalName, XML_LIGHTING_MODE ) )
         {
             mrImport.GetMM100UnitConverter().convertBool(mbLightingMode, rValue);
             return;

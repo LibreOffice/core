@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-21 11:29:50 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
@@ -161,12 +161,8 @@
 
 using namespace rtl;
 using namespace com::sun::star;
+using namespace ::xmloff::token;
 
-#define SCH_XML_AXIS_NAME_X     "primary-x"
-#define SCH_XML_AXIS_NAME_2X    "secondary-x"
-#define SCH_XML_AXIS_NAME_Y     "primary-y"
-#define SCH_XML_AXIS_NAME_2Y    "secondary-y"
-#define SCH_XML_AXIS_NAME_Z     "primary-z"
 
 // ========================================
 // class SchXMLExportHelper
@@ -383,45 +379,45 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
         // determine class
         if( sChartType.getLength())
         {
-            rtl::OUString sXMLChartType;
+            enum XMLTokenEnum eXMLChartType = XML_TOKEN_INVALID;
             rtl::OUString sAddInName;
 
             if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.LineDiagram" )))
-                sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_line ));
+                eXMLChartType = XML_LINE;
             else if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.AreaDiagram" )))
-                sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_area ));
+                eXMLChartType = XML_AREA;
             else if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.BarDiagram" )))
-                sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_bar ));
+                eXMLChartType = XML_BAR;
             else if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.PieDiagram" )))
-                sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_circle ));
+                eXMLChartType = XML_CIRCLE;
             else if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.DonutDiagram" )))
-                sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_ring ));
+                eXMLChartType = XML_RING;
             else if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.XYDiagram" )))
             {
-                sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_scatter ));
+                eXMLChartType = XML_SCATTER;
                 mnDomainAxes = 1;
             }
             else if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.NetDiagram" )))
-                sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_radar ));
+                eXMLChartType = XML_RADAR;
             else if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.StockDiagram" )))
-                sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_stock ));
+                eXMLChartType = XML_STOCK;
             else    // servie-name of add-in
             {
-                sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_add_in ));
+                eXMLChartType = XML_ADD_IN;
                 sAddInName = sChartType;
             }
 
-            if( sXMLChartType.getLength())
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_class, sXMLChartType );
+            if( eXMLChartType != XML_TOKEN_INVALID )
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, eXMLChartType );
 
             if( sAddInName.getLength())
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_add_in_name, sAddInName );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ADD_IN_NAME, sAddInName );
         }
         // write style name
         AddAutoStyleAttribute( aPropertyStates );
 
         //element
-        pElChart = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, sXML_chart, sal_True, sal_True );
+        pElChart = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_CHART, sal_True, sal_True );
     }
     else    // autostyles
     {
@@ -452,7 +448,7 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
             AddAutoStyleAttribute( aPropertyStates );
 
             // element
-            SvXMLElementExport aElTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
+            SvXMLElementExport aElTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
 
             // content (text:p)
             uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
@@ -496,7 +492,7 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
             AddAutoStyleAttribute( aPropertyStates );
 
             // element (has no subelements)
-            SvXMLElementExport aElSubTitle( mrExport, XML_NAMESPACE_CHART, sXML_subtitle, sal_True, sal_True );
+            SvXMLElementExport aElSubTitle( mrExport, XML_NAMESPACE_CHART, XML_SUBTITLE, sal_True, sal_True );
 
             // content (text:p)
             uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
@@ -549,22 +545,22 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
                 switch( aLegendPos )
                 {
                     case chart::ChartLegendPosition_LEFT:
-                        msString = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_left ));
+                        msString = GetXMLToken(XML_LEFT);
                         break;
                     case chart::ChartLegendPosition_RIGHT:
-                        msString = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_right ));
+                        msString = GetXMLToken(XML_RIGHT);
                         break;
                     case chart::ChartLegendPosition_TOP:
-                        msString = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_top ));
+                        msString = GetXMLToken(XML_TOP);
                         break;
                     case chart::ChartLegendPosition_BOTTOM:
-                        msString = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_bottom ));
+                        msString = GetXMLToken(XML_BOTTOM);
                         break;
                 }
 
                 // export anchor position
                 if( msString.getLength())
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_legend_position, msString );
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LEGEND_POSITION, msString );
 
                 // export absolute position
                 msString = rtl::OUString();
@@ -577,7 +573,7 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
             AddAutoStyleAttribute( aPropertyStates );
 
             // element
-            SvXMLElementExport aLegend( mrExport, XML_NAMESPACE_CHART, sXML_legend, sal_True, sal_True );
+            SvXMLElementExport aLegend( mrExport, XML_NAMESPACE_CHART, XML_LEGEND, sal_True, sal_True );
         }
         else    // autostyles
         {
@@ -630,8 +626,8 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
 {
     // table element
     // -------------
-    mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_name, msTableName );
-    SvXMLElementExport aTable( mrExport, XML_NAMESPACE_TABLE, sXML_table, sal_True, sal_True );
+    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, msTableName );
+    SvXMLElementExport aTable( mrExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True );
 
     if( rData.is())
     {
@@ -678,48 +674,48 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
             if( mbHasCategoryLabels )
             {
                 // row description are put in the first column
-                SvXMLElementExport aHeaderColumns( mrExport, XML_NAMESPACE_TABLE, sXML_table_header_columns, sal_True, sal_True );
-                SvXMLElementExport aHeaderColumn( mrExport, XML_NAMESPACE_TABLE, sXML_table_column, sal_True, sal_True );
+                SvXMLElementExport aHeaderColumns( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS, sal_True, sal_True );
+                SvXMLElementExport aHeaderColumn( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
             }
             // non-header columns
             if( mnSeriesCount )
             {
-                SvXMLElementExport aColumns( mrExport, XML_NAMESPACE_TABLE, sXML_table_columns, sal_True, sal_True );
-                mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_number_columns_repeated,
+                SvXMLElementExport aColumns( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS, sal_True, sal_True );
+                mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
                                        rtl::OUString::valueOf( (sal_Int64) mnSeriesCount ));
-                SvXMLElementExport aColumn( mrExport, XML_NAMESPACE_TABLE, sXML_table_column, sal_True, sal_True );
+                SvXMLElementExport aColumn( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
             }
 
             // rows
             if( mbHasSeriesLabels )
             {
-                SvXMLElementExport aHeaderRows( mrExport, XML_NAMESPACE_TABLE, sXML_table_header_rows, sal_True, sal_True );
-                SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, sXML_table_row, sal_True, sal_True );
+                SvXMLElementExport aHeaderRows( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS, sal_True, sal_True );
+                SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );
                 // write one empty cell (the cell A1 is never used)
                 {
-                    SvXMLElementExport aEmptyCell( mrExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True );
+                    SvXMLElementExport aEmptyCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
                 }
                 for( nSeries = 0; nSeries < nSeriesLablesLength; nSeries++ )
                 {
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_value_type, sXML_string );
-                    SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True );
+                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VALUE_TYPE, XML_STRING );
+                    SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
                     exportText( xSeriesLabels[ nSeries ] );
                 }
             }
 
             // export data
-            SvXMLElementExport aRows( mrExport, XML_NAMESPACE_TABLE, sXML_table_rows, sal_True, sal_True );
+            SvXMLElementExport aRows( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROWS, sal_True, sal_True );
             for( nDataPoint = 0; nDataPoint < nSeriesLength; nDataPoint++ )
             {
                 // <table:table-row>
-                SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, sXML_table_row, sal_True, sal_True );
+                SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );
                 pData = pSequence[ nDataPoint ].getConstArray();
 
                 if( mbHasCategoryLabels )
                 {
                     // cells containing row descriptions (in the first column)
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_value_type, sXML_string );
-                    SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True );
+                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VALUE_TYPE, XML_STRING );
+                    SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
                     if( nDataPoint < nCategoryLabelsLength )
                         exportText( xCategoryLabels[ nDataPoint ] );
                 }
@@ -738,9 +734,9 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                     msString = msStringBuffer.makeStringAndClear();
 
                         // <table:table-cell>
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_value_type, sXML_float );
-                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_value, msString );
-                    SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True );
+                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VALUE_TYPE, XML_FLOAT );
+                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VALUE, msString );
+                    SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
 
                     // <text:p>
                     exportText( msString );
@@ -789,7 +785,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
 
         if( msChartAddress.getLength())
         {
-            mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, msChartAddress );
+            mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, msChartAddress );
 
             uno::Reference< chart::XChartDocument > xDoc( mrExport.GetModel(), uno::UNO_QUERY );
             if( xDoc.is() )
@@ -832,7 +828,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         {
             // this attribute is for charts embedded in calc documents only.
             // With this you are able to store a file again in 5.0 binary format
-            mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_table_number_list, msTableNumberList );
+            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_TABLE_NUMBER_LIST, msTableNumberList );
         }
 
         // attributes
@@ -881,7 +877,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         }
 
         // element
-        pElPlotArea = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, sXML_plot_area, sal_True, sal_True );
+        pElPlotArea = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_PLOT_AREA, sal_True, sal_True );
 
         // light sources (inside plot area element)
         if( bIs3DChart &&
@@ -926,9 +922,9 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         if( msStringBuffer.getLength())
         {
             msString = msStringBuffer.makeStringAndClear();
-            mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, msString );
+            mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, msString );
         }
-        SvXMLElementExport aCategories( mrExport, XML_NAMESPACE_CHART, sXML_categories, sal_True, sal_True );
+        SvXMLElementExport aCategories( mrExport, XML_NAMESPACE_CHART, XML_CATEGORIES, sal_True, sal_True );
     }
 
     // series elements
@@ -977,7 +973,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 getCellAddress( nSeries + nDataPointOffset, nSeriesOffset + mnSeriesLength - 1 );
 
                 msString = msStringBuffer.makeStringAndClear();
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_values_cell_range_address, msString );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, msString );
 
                 // reference to label
                 if( mbHasSeriesLabels )
@@ -985,7 +981,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                     msStringBuffer.append( msTableName );
                     getCellAddress( nSeries + nDataPointOffset, 0 );
                     msString = msStringBuffer.makeStringAndClear();
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_label_cell_address, msString );
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS, msString );
                 }
             }
             else
@@ -996,10 +992,10 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 // deprecated
 //                  if( maSeriesAddresses.getLength() > nSeries )
 //                  {
-//                      mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_values_cell_range_address,
+//                      mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS,
 //                                             maSeriesAddresses[ nSeries ].DataRangeAddress );
 //                      if( maSeriesAddresses[ nSeries ].LabelAddress.getLength())
-//                          mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_label_cell_address,
+//                          mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS,
 //                                                 maSeriesAddresses[ nSeries ].LabelAddress );
 //                  }
             }
@@ -1007,9 +1003,9 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             if( bHasTwoYAxes )
             {
                 if( nAttachedAxis == chart::ChartAxisAssign::SECONDARY_Y )
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_attached_axis, SCH_XML_AXIS_NAME_2Y );
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_SECONDARY_Y );
                 else
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_attached_axis, SCH_XML_AXIS_NAME_Y );
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_PRIMARY_Y );
             }
 
             // write style name
@@ -1018,12 +1014,12 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             {
                 DBG_ASSERT( ! maAutoStyleNameQueue.empty(), "Autostyle queue empty!" );
                 aSeriesASName = maAutoStyleNameQueue.front();
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aSeriesASName );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aSeriesASName );
                 maAutoStyleNameQueue.pop();
             }
 
             // open series element until end of for loop
-            pSeries = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, sXML_series, sal_True, sal_True );
+            pSeries = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_SERIES, sal_True, sal_True );
         }
         else    // autostyles
         {
@@ -1065,9 +1061,9 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 msString = msStringBuffer.makeStringAndClear();
                 if( msString.getLength())
                 {
-                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, msString );
+                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, msString );
                 }
-                SvXMLElementExport aDomain( mrExport, XML_NAMESPACE_CHART, sXML_domain, sal_True, sal_True );
+                SvXMLElementExport aDomain( mrExport, XML_NAMESPACE_CHART, XML_DOMAIN, sal_True, sal_True );
             }
         }
 
@@ -1138,7 +1134,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                             //  Write reapeat counter (if data point run contains more than one point).
                             if( nRepeated > 1 )
                             {
-                                mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_repeated,
+                                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
                                                        rtl::OUString::valueOf( (sal_Int64)( nRepeated ) ));
                             }
 
@@ -1146,11 +1142,11 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                             if( aLastASName.getLength() &&
                                 ! aLastASName.equals( aSeriesASName ))
                             {
-                                mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aLastASName );
+                                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastASName );
                             }
 
                             //  Write the actual point data.
-                            SvXMLElementExport aPoint( mrExport, XML_NAMESPACE_CHART, sXML_data_point, sal_True, sal_True );
+                            SvXMLElementExport aPoint( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, sal_True, sal_True );
 
                             //  Reset repeat counter for the new style.
                             nRepeated = 1;
@@ -1175,7 +1171,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             {
                 if( nRepeated > 1 )
                 {
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_repeated,
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
                                            rtl::OUString::valueOf( (sal_Int64)( nRepeated ) ));
                 }
 
@@ -1183,10 +1179,10 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                     aLastASName.getLength() &&
                     ! aLastASName.equals( aSeriesASName ))
                 {
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aLastASName );
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastASName );
                 }
 
-                SvXMLElementExport aPoint( mrExport, XML_NAMESPACE_CHART, sXML_data_point, sal_True, sal_True );
+                SvXMLElementExport aPoint( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, sal_True, sal_True );
             }
         }
 
@@ -1218,7 +1214,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                     // add style name attribute
                     AddAutoStyleAttribute( aPropertyStates );
 
-                    SvXMLElementExport aWall( mrExport, XML_NAMESPACE_CHART, sXML_wall, sal_True, sal_True );
+                    SvXMLElementExport aWall( mrExport, XML_NAMESPACE_CHART, XML_WALL, sal_True, sal_True );
                 }
                 else    // autostyles
                 {
@@ -1379,17 +1375,18 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             }
             if( bExportContent )
             {
-                mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_class, (mnDomainAxes > 0)
-                                            ? sXML_domain        // scatter (or bubble) chart
-                                            : sXML_category );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, (mnDomainAxes > 0)
+                                       ? XML_DOMAIN      // scatter (or bubble) chart
+                                       : XML_CATEGORY );
 
-                mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_name, SCH_XML_AXIS_NAME_X );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_PRIMARY_X );
+
 
                 // write style name
                 AddAutoStyleAttribute( aPropertyStates );
 
                 // element
-                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, sXML_axis, sal_True, sal_True );
+                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
             }
             else    // autostyles
             {
@@ -1416,7 +1413,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                             addPosition( xShape );
 
                         AddAutoStyleAttribute( aPropertyStates );
-                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
+                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
 
                         // paragraph containing title
                         exportText( aText );
@@ -1437,8 +1434,8 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                 if( bExportContent )
                 {
                     AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_class, sXML_major );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, sXML_grid, sal_True, sal_True );
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MAJOR );
+                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
                 }
                 else
                 {
@@ -1453,8 +1450,8 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                 if( bExportContent )
                 {
                     AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_class, sXML_minor );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, sXML_grid, sal_True, sal_True );
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MINOR );
+                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
                 }
                 else
                 {
@@ -1491,13 +1488,13 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             }
             if( bExportContent )
             {
-                mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_class, (mnDomainAxes > 0)
-                                            ? sXML_domain        // scatter (or bubble) chart
-                                            : sXML_category );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, (mnDomainAxes > 0)
+                                       ? XML_DOMAIN      // scatter (or bubble) chart
+                                       : XML_CATEGORY );
 
-                mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_name, SCH_XML_AXIS_NAME_2X );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_SECONDARY_X );
                 AddAutoStyleAttribute( aPropertyStates );
-                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, sXML_axis, sal_True, sal_True );
+                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
             }
             else    // autostyles
             {
@@ -1537,10 +1534,10 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             }
             if( bExportContent )
             {
-                mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_class, sXML_value );
-                mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_name, SCH_XML_AXIS_NAME_Y );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_VALUE );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_PRIMARY_Y );
                 AddAutoStyleAttribute( aPropertyStates );
-                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, sXML_axis, sal_True, sal_True );
+                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
             }
             else
             {
@@ -1567,7 +1564,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                             addPosition( xShape );
 
                         AddAutoStyleAttribute( aPropertyStates );
-                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
+                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
 
                         // paragraph containing title
                         exportText( aText );
@@ -1589,8 +1586,8 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                 if( bExportContent )
                 {
                     AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_class, sXML_major );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, sXML_grid, sal_True, sal_True );
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MAJOR );
+                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
                 }
                 else
                 {
@@ -1607,8 +1604,8 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                 if( bExportContent )
                 {
                     AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_class, sXML_minor );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, sXML_grid, sal_True, sal_True );
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MINOR );
+                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
                 }
                 else
                 {
@@ -1643,10 +1640,10 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             }
             if( bExportContent )
             {
-                mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_class, sXML_value );
-                mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_name, SCH_XML_AXIS_NAME_2Y );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_VALUE );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_SECONDARY_Y );
                 AddAutoStyleAttribute( aPropertyStates );
-                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, sXML_axis, sal_True, sal_True );
+                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
             }
             else    // autostyles
             {
@@ -1684,10 +1681,11 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             }
             if( bExportContent )
             {
-                mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_class, sXML_series );
-                mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_name, SCH_XML_AXIS_NAME_Z );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_SERIES );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_PRIMARY_Z );
+
                 AddAutoStyleAttribute( aPropertyStates );
-                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, sXML_axis, sal_True, sal_True );
+                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
             }
             else
             {
@@ -1714,7 +1712,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                             addPosition( xShape );
 
                         AddAutoStyleAttribute( aPropertyStates );
-                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
+                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
 
                         // paragraph containing title
                         exportText( aText );
@@ -1736,8 +1734,8 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                 if( bExportContent )
                 {
                     AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_class, sXML_major );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, sXML_grid, sal_True, sal_True );
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MAJOR );
+                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
                 }
                 else
                 {
@@ -1754,8 +1752,8 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                 if( bExportContent )
                 {
                     AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttributeASCII( XML_NAMESPACE_CHART, sXML_class, sXML_minor );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, sXML_grid, sal_True, sal_True );
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MINOR );
+                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
                 }
                 else
                 {
@@ -1800,11 +1798,11 @@ void SchXMLExportHelper::addPosition( uno::Reference< drawing::XShape > xShape )
 
         mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, aPos.X );
         msString = msStringBuffer.makeStringAndClear();
-        mrExport.AddAttribute( XML_NAMESPACE_SVG, sXML_x, msString );
+        mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X, msString );
 
         mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, aPos.Y );
         msString = msStringBuffer.makeStringAndClear();
-        mrExport.AddAttribute( XML_NAMESPACE_SVG, sXML_y, msString );
+        mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y, msString );
     }
 }
 
@@ -1816,11 +1814,11 @@ void SchXMLExportHelper::addSize( uno::Reference< drawing::XShape > xShape )
 
         mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, aSize.Width );
         msString = msStringBuffer.makeStringAndClear();
-        mrExport.AddAttribute( XML_NAMESPACE_SVG, sXML_width,  msString );
+        mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,  msString );
 
         mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, aSize.Height );
         msString = msStringBuffer.makeStringAndClear();
-        mrExport.AddAttribute( XML_NAMESPACE_SVG, sXML_height, msString );
+        mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, msString );
     }
 }
 
@@ -1854,7 +1852,7 @@ void SchXMLExportHelper::AddAutoStyleAttribute( const std::vector< XMLPropertySt
     {
         DBG_ASSERT( ! maAutoStyleNameQueue.empty(), "Autostyle queue empty!" );
 
-        mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, maAutoStyleNameQueue.front());
+        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, maAutoStyleNameQueue.front());
         maAutoStyleNameQueue.pop();
     }
 }
@@ -1974,11 +1972,11 @@ void SchXMLExport::_ExportContent()
 
             GetMM100UnitConverter().convertMeasure( sStringBuffer, aSize.Width );
             sString = sStringBuffer.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_SVG, sXML_width,  sString );
+            AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,  sString );
 
             GetMM100UnitConverter().convertMeasure( sStringBuffer, aSize.Height );
             sString = sStringBuffer.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_SVG, sXML_height, sString );
+            AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, sString );
         }
 
         // determine if data comes from the outside

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escphdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 17:11:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #include <escphdl.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -86,6 +86,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 // this is a copy of defines in svx/inc/escpitem.hxx
 #define DFLT_ESC_PROP    58
@@ -113,11 +114,11 @@ sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     if( ! aTokens.getNextToken( aToken ) )
         return sal_False;
 
-    if( 0 == aToken.compareToAscii( sXML_escapement_sub ) )
+    if( IsXMLToken( aToken, XML_ESCAPEMENT_SUB ) )
     {
         nVal = DFLT_ESC_AUTO_SUB;
     }
-    else if( 0 == aToken.compareToAscii( sXML_escapement_super ) )
+    else if( IsXMLToken( aToken, XML_ESCAPEMENT_SUPER ) )
     {
         nVal = DFLT_ESC_AUTO_SUPER;
     }
@@ -144,11 +145,11 @@ sal_Bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     {
         if( nValue == DFLT_ESC_AUTO_SUPER )
         {
-            aOut.appendAscii( sXML_escapement_super );
+            aOut.append( GetXMLToken(XML_ESCAPEMENT_SUPER) );
         }
         else if( nValue == DFLT_ESC_AUTO_SUB )
         {
-            aOut.appendAscii( sXML_escapement_sub );
+            aOut.append( GetXMLToken(XML_ESCAPEMENT_SUB) );
         }
         else
         {
@@ -172,7 +173,7 @@ XMLEscapementHeightPropHdl::~XMLEscapementHeightPropHdl()
 
 sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    if( !rStrImpValue.compareToAscii( sXML_casemap_small_caps ) )
+    if( IsXMLToken( rStrImpValue, XML_CASEMAP_SMALL_CAPS ) )
         return sal_False;
 
     SvXMLTokenEnumerator aTokens( rStrImpValue );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 16:19:18 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #include "xmluconv.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 
@@ -100,6 +100,7 @@ using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::xml::sax::XAttributeList;
+using namespace ::xmloff::token;
 
 
 
@@ -133,8 +134,7 @@ void XMLTrackedChangesImportContext::StartElement(
 
         if ( XML_NAMESPACE_TEXT == nPrefix )
         {
-            if ( sLocalName.equalsAsciiL( sXML_track_changes,
-                                          sizeof(sXML_track_changes)-1 ) )
+            if ( IsXMLToken( sLocalName, XML_TRACK_CHANGES ) )
             {
                 sal_Bool bTmp;
                 if( SvXMLUnitConverter::convertBool(
@@ -143,9 +143,7 @@ void XMLTrackedChangesImportContext::StartElement(
                     bTrackChanges = bTmp;
                 }
             }
-            else if ( sLocalName.equalsAsciiL( sXML_protection_key,
-                                              sizeof(sXML_protection_key)-1 ) )
-            {
+            else if ( IsXMLToken( sLocalName, XML_PROTECTION_KEY ) )            {
                 Sequence<sal_Int8> aSequence;
                 SvXMLUnitConverter::decodeBase64(
                     aSequence, xAttrList->getValueByIndex(i));
@@ -171,8 +169,7 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
     SvXMLImportContext* pContext = NULL;
 
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         rLocalName.equalsAsciiL(sXML_changed_region,
-                                 sizeof(sXML_changed_region)-1) )
+         IsXMLToken( rLocalName, XML_CHANGED_REGION ) )
     {
         pContext = new XMLChangedRegionImportContext(GetImport(),
                                                      nPrefix, rLocalName);

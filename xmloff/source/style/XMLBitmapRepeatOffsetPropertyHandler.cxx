@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBitmapRepeatOffsetPropertyHandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-12 17:16:50 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
@@ -81,10 +83,15 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
+using ::xmloff::token::GetXMLToken;
+using ::xmloff::token::XML_VERTICAL;
+using ::xmloff::token::XML_HORIZONTAL;
+
+
 XMLBitmapRepeatOffsetPropertyHandler::XMLBitmapRepeatOffsetPropertyHandler( sal_Bool bX )
 :   mbX( bX ),
-    msVertical( RTL_CONSTASCII_USTRINGPARAM( sXML_vertical ) ),
-    msHorizontal( RTL_CONSTASCII_USTRINGPARAM( sXML_horizontal ) )
+    msVertical( GetXMLToken(XML_VERTICAL) ),
+    msHorizontal( GetXMLToken(XML_HORIZONTAL) )
 {
 }
 

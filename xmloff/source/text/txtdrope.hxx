@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrope.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "attrlist.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 class SvXMLNamespaceMap;
 class SvXMLUnitConverter;
 namespace com { namespace sun { namespace star { namespace uno {
@@ -104,7 +108,8 @@ protected:
     void CheckAttrList();
 #endif
     void ClearAttrList();
-    void AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
+    void AddAttribute( sal_uInt16 nPrefixKey,
+                       enum ::xmloff::token::XMLTokenEnum eName,
                        const ::rtl::OUString& rValue );
     ::rtl::OUString GetQNameByKey( sal_uInt16 nKey,
                                    const ::rtl::OUString& rLocalName ) const;

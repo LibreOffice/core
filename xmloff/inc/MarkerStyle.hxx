@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkerStyle.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 class SvXMLNamespaceMap;
 class SvXMLAttributeList;
 class SvXMLUnitConverter;
@@ -94,7 +98,7 @@ private:
                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                            ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName );
 
-    void AddAttribute( sal_uInt16 nPrefix, const sal_Char *pName, const ::rtl::OUString& rStrValue );
+    void AddAttribute( sal_uInt16 nPrefix, enum ::xmloff::token::XMLTokenEnum eName, const ::rtl::OUString& rStrValue );
 
 };
 

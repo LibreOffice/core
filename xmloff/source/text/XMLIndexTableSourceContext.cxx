@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTableSourceContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -123,6 +123,7 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+
 
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
@@ -242,14 +243,13 @@ SvXMLImportContext* XMLIndexTableSourceContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         (rLocalName.equalsAsciiL(sXML_table_index_entry_template,
-                    sizeof(sXML_table_index_entry_template)-1)))
+    if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
+         ( IsXMLToken( rLocalName, XML_TABLE_INDEX_ENTRY_TEMPLATE ) ) )
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
                                            aLevelNameTableMap,
-                                           NULL, // no outline-level attr
+                                           XML_TOKEN_INVALID, // no outline-level attr
                                            aLevelStylePropNameTableMap,
                                            aAllowedTokenTypesTable);
     }

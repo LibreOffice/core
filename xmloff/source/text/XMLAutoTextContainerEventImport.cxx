@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextContainerEventImport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:53:43 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
@@ -103,7 +103,8 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::container::XNameReplace;
-
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_EVENTS;
 
 
 TYPEINIT1(XMLAutoTextContainerEventImport, SvXMLImportContext);
@@ -128,9 +129,8 @@ SvXMLImportContext* XMLAutoTextContainerEventImport::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    if ((XML_NAMESPACE_OFFICE == nPrefix) &&
-        rLocalName.equalsAsciiL(sXML_events,
-                                sizeof(sXML_events)-1))
+    if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
+         IsXMLToken( rLocalName, XML_EVENTS)   )
     {
         return new XMLEventsImportContext(GetImport(), nPrefix, rLocalName,
                                           rEvents);

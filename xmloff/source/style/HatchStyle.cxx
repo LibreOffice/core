@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HatchStyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include"xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -148,10 +148,10 @@ XMLHatchStyle::~XMLHatchStyle()
 {
 }
 
-void XMLHatchStyle::AddAttribute( sal_uInt16 nPrefix, const sal_Char *pName, const ::rtl::OUString& rStrValue )
+void XMLHatchStyle::AddAttribute( sal_uInt16 nPrefix, enum ::xmloff::token::XMLTokenEnum eName, const ::rtl::OUString& rStrValue )
 {
-    const ::rtl::OUString aStrName( ::rtl::OUString::createFromAscii( pName ) );
-    const ::rtl::OUString aStrCDATA( ::rtl::OUString::createFromAscii( sXML_CDATA ) );
+    const ::rtl::OUString aStrName( GetXMLToken( eName ) );
+    const ::rtl::OUString aStrCDATA( GetXMLToken( XML_CDATA ) );
 
     pAttrList->AddAttribute( mrNamespaceMap.GetQNameByKey( nPrefix, aStrName ), aStrCDATA, rStrValue );
 }
@@ -185,35 +185,35 @@ sal_Bool XMLHatchStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::
             ::rtl::OUStringBuffer aOut;
 
             // Name
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_name, rStrName );
+            AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
 
             // Style
             if( !rUnitConverter.convertEnum( aOut, aHatch.Style, pXML_HatchStyle_Enum ) )
                 return sal_False;
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_style, aStrValue );
+            AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
             // Color
             rUnitConverter.convertColor( aOut, Color( aHatch.Color ) );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_color, aStrValue );
+            AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, aStrValue );
 
             // Distance
             rUnitConverter.convertMeasure( aOut, aHatch.Distance );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_hatch_distance, aStrValue );
+            AddAttribute( XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, aStrValue );
 
             // Angle
             rUnitConverter.convertNumber( aOut, sal_Int32( aHatch.Angle ) );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_rotation, aStrValue );
+            AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, aStrValue );
 
             // Do Write
-            OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
+            OUString sWS( GetXMLToken( XML_WS ) );
             rHandler->ignorableWhitespace( sWS );
-            rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW, ::rtl::OUString::createFromAscii(sXML_hatch) ),
+            rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_HATCH) ),
                                     xAttrList );
-            rHandler->endElement( ::rtl::OUString::createFromAscii( sXML_gradient ) );
+            rHandler->endElement( GetXMLToken( XML_GRADIENT ) );
             rHandler->ignorableWhitespace( sWS );
         }
     }

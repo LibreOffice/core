@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-20 12:01:47 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,8 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLANCHORTYPEPROPHDL_HXX
 #include "XMLAnchorTypePropHdl.hxx"
@@ -390,11 +390,9 @@ sal_Bool XMLOpaquePropHdl_Impl::importXML(
 {
     sal_Bool bRet = sal_True;
     sal_Bool bVal = sal_False;
-    if( rStrImpValue.equalsAsciiL(
-            CONSTASCII_USTRINGPARAM_CMP( sXML_foreground ) ) )
+    if( IsXMLToken( rStrImpValue, XML_FOREGROUND ) )
         bVal = sal_True;
-    else if( !rStrImpValue.equalsAsciiL(
-            CONSTASCII_USTRINGPARAM_CMP( sXML_background ) ) )
+    else if( !IsXMLToken( rStrImpValue, XML_BACKGROUND ) )
         bRet = sal_False;
 
     if( bRet )
@@ -409,9 +407,9 @@ sal_Bool XMLOpaquePropHdl_Impl::exportXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     if( *(sal_Bool *)rValue.getValue() )
-           rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_foreground) );
+           rStrExpValue = GetXMLToken( XML_FOREGROUND );
     else
-           rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_background) );
+           rStrExpValue = GetXMLToken( XML_BACKGROUND );
 
     return sal_True;
 }
@@ -444,11 +442,9 @@ sal_Bool XMLContourModePropHdl_Impl::importXML(
 {
     sal_Bool bRet = sal_True;
     sal_Bool bVal = sal_False;
-    if( rStrImpValue.equalsAsciiL(
-            CONSTASCII_USTRINGPARAM_CMP( sXML_outside ) ) )
+    if( IsXMLToken( rStrImpValue, XML_OUTSIDE ) )
         bVal = sal_True;
-    else if( !rStrImpValue.equalsAsciiL(
-            CONSTASCII_USTRINGPARAM_CMP( sXML_full ) ) )
+    else if( ! IsXMLToken( rStrImpValue, XML_FULL ) )
         bRet = sal_False;
 
     if( bRet )
@@ -463,9 +459,9 @@ sal_Bool XMLContourModePropHdl_Impl::exportXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     if( *(sal_Bool *)rValue.getValue() )
-           rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_outside) );
+           rStrExpValue = GetXMLToken( XML_OUTSIDE );
     else
-           rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_full) );
+           rStrExpValue = GetXMLToken( XML_FULL );
 
     return sal_True;
 }
@@ -499,7 +495,7 @@ sal_Bool XMLParagraphOnlyPropHdl_Impl::importXML(
     sal_Bool bRet = sal_True;
     sal_Bool bVal = sal_False;
 
-    if( !rStrImpValue.compareToAscii( sXML_no_limit ) == 0 )
+    if( ! IsXMLToken( rStrImpValue, XML_NO_LIMIT ) )
     {
         sal_Int32 nValue = 0;
         bRet = rUnitConverter.convertNumber( nValue, rStrImpValue );
@@ -518,9 +514,9 @@ sal_Bool XMLParagraphOnlyPropHdl_Impl::exportXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     if( *(sal_Bool *)rValue.getValue() )
-           rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM("1") );
+           rStrExpValue = GetXMLToken( XML_1 );
     else
-           rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_no_limit) );
+           rStrExpValue = GetXMLToken( XML_NO_LIMIT );
 
     return sal_True;
 }
@@ -599,8 +595,8 @@ class XMLFrameProtectPropHdl_Impl : public XMLPropertyHandler
 {
     const OUString sVal;
 public:
-    XMLFrameProtectPropHdl_Impl( const sal_Char *pVal ) :
-           sVal( OUString::createFromAscii(pVal) ) {}
+    XMLFrameProtectPropHdl_Impl( enum XMLTokenEnum eVal ) :
+           sVal( GetXMLToken(eVal) ) {}
     virtual ~XMLFrameProtectPropHdl_Impl ();
 
     virtual sal_Bool importXML(
@@ -620,7 +616,7 @@ sal_Bool XMLFrameProtectPropHdl_Impl::importXML(
 {
     sal_Bool bRet = sal_True;
     sal_Bool bVal = sal_False;
-    if( !rStrImpValue.equalsAsciiL( CONSTASCII_USTRINGPARAM_CMP( sXML_none ) ) )
+    if( ! IsXMLToken( rStrImpValue, XML_NONE ) )
     {
         bRet = sal_False;
         SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
@@ -650,7 +646,7 @@ sal_Bool XMLFrameProtectPropHdl_Impl::exportXML(
     if( *(sal_Bool *)rValue.getValue() )
     {
         if( !rStrExpValue.getLength() ||
-            rStrExpValue.equalsAsciiL(CONSTASCII_USTRINGPARAM_CMP(sXML_none)) )
+            IsXMLToken( rStrExpValue, XML_NONE ) )
         {
                rStrExpValue = sVal;
         }
@@ -666,7 +662,7 @@ sal_Bool XMLFrameProtectPropHdl_Impl::exportXML(
     }
     else if( !rStrExpValue.getLength() )
     {
-           rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_none) );
+           rStrExpValue = GetXMLToken( XML_NONE );
     }
 
     return sal_True;
@@ -856,8 +852,8 @@ class XMLGrfMirrorPropHdl_Impl : public XMLPropertyHandler
     sal_Bool bHori;
 
 public:
-    XMLGrfMirrorPropHdl_Impl( const sal_Char *pVal, sal_Bool bH ) :
-           sVal( OUString::createFromAscii(pVal) ),
+    XMLGrfMirrorPropHdl_Impl( enum XMLTokenEnum eVal, sal_Bool bH ) :
+           sVal( GetXMLToken( eVal ) ),
         bHori( bH ) {}
     virtual ~XMLGrfMirrorPropHdl_Impl ();
 
@@ -878,7 +874,7 @@ sal_Bool XMLGrfMirrorPropHdl_Impl::importXML(
 {
     sal_Bool bRet = sal_True;
     sal_Bool bVal = sal_False;
-    if( !rStrImpValue.equalsAsciiL( CONSTASCII_USTRINGPARAM_CMP( sXML_none ) ) )
+    if( ! IsXMLToken( rStrImpValue, XML_NONE ) )
     {
         bRet = sal_False;
         SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
@@ -887,8 +883,7 @@ sal_Bool XMLGrfMirrorPropHdl_Impl::importXML(
         {
             bRet = sal_True;
             if( aToken == sVal ||
-                 (bHori && aToken.equalsAsciiL(
-                          CONSTASCII_USTRINGPARAM_CMP( sXML_horizontal ) ) ) )
+                 (bHori && IsXMLToken( aToken, XML_HORIZONTAL ) ) )
             {
                 bVal = sal_True;
                 break;
@@ -910,15 +905,15 @@ sal_Bool XMLGrfMirrorPropHdl_Impl::exportXML(
     if( *(sal_Bool *)rValue.getValue() )
     {
         if( !rStrExpValue.getLength() ||
-            rStrExpValue.equalsAsciiL(CONSTASCII_USTRINGPARAM_CMP(sXML_none)) )
+            IsXMLToken( rStrExpValue, XML_NONE ) )
         {
                rStrExpValue = sVal;
         }
         else if( bHori &&
-                 ( rStrExpValue.equalsAsciiL( CONSTASCII_USTRINGPARAM_CMP(sXML_horizontal_on_left_pages)) ||
-                   rStrExpValue.equalsAsciiL( CONSTASCII_USTRINGPARAM_CMP(sXML_horizontal_on_right_pages)) ) )
+                 ( IsXMLToken( rStrExpValue, XML_HORIZONTAL_ON_LEFT_PAGES ) ||
+                   IsXMLToken( rStrExpValue, XML_HORIZONTAL_ON_RIGHT_PAGES ) ))
         {
-            rStrExpValue = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_horizontal) );
+            rStrExpValue = GetXMLToken( XML_HORIZONTAL );
         }
         else
         {
@@ -932,7 +927,7 @@ sal_Bool XMLGrfMirrorPropHdl_Impl::exportXML(
     }
     else if( !rStrExpValue.getLength() )
     {
-           rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_none) );
+           rStrExpValue = GetXMLToken( XML_NONE );
     }
 
     return sal_True;
@@ -983,14 +978,12 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::importXML(
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
     while( aTokenEnum.getNextToken( aToken ) )
     {
-        if( !bHasPos &&
-            aToken.equalsAsciiL( sXML_above, sizeof(sXML_above)-1 ) )
+        if( !bHasPos && IsXMLToken( aToken, XML_ABOVE ) )
         {
             bBelow = sal_False;
             bHasPos = sal_True;
         }
-        else if( !bHasPos &&
-                 aToken.equalsAsciiL( sXML_below, sizeof(sXML_below)-1 ) )
+        else if( !bHasPos && IsXMLToken( aToken, XML_BELOW ) )
         {
             bBelow = sal_True;
             bHasPos = sal_True;
@@ -1041,9 +1034,9 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::exportXML(
         {
             if( nType != 0 )
             {
-                const sal_Char *pPos = bBelow ? sXML_below : sXML_above;
+                enum XMLTokenEnum ePos = bBelow ? XML_BELOW : XML_ABOVE;
                 aOut.append( (sal_Unicode)' ' );
-                aOut.appendAscii( pPos );
+                aOut.append( GetXMLToken(ePos) );
             }
             rStrExpValue = aOut.makeStringAndClear();
         }
@@ -1164,8 +1157,8 @@ class XMLTextSyncWidthHeightPropHdl_Impl : public XMLPropertyHandler
     const OUString sValue;
 
 public:
-    XMLTextSyncWidthHeightPropHdl_Impl( const sal_Char *pValue ) :
-           sValue( OUString::createFromAscii(pValue) )  {}
+    XMLTextSyncWidthHeightPropHdl_Impl( enum XMLTokenEnum eValue ) :
+           sValue( GetXMLToken(eValue) )    {}
     virtual ~XMLTextSyncWidthHeightPropHdl_Impl();
 
     virtual sal_Bool importXML(
@@ -1305,13 +1298,13 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLOpaquePropHdl_Impl;
         break;
     case XML_TYPE_TEXT_PROTECT_CONTENT:
-        pHdl = new XMLFrameProtectPropHdl_Impl( sXML_content );
+        pHdl = new XMLFrameProtectPropHdl_Impl( XML_CONTENT );
         break;
     case XML_TYPE_TEXT_PROTECT_SIZE:
-        pHdl = new XMLFrameProtectPropHdl_Impl( sXML_size );
+        pHdl = new XMLFrameProtectPropHdl_Impl( XML_SIZE );
         break;
     case XML_TYPE_TEXT_PROTECT_POSITION:
-        pHdl = new XMLFrameProtectPropHdl_Impl( sXML_position );
+        pHdl = new XMLFrameProtectPropHdl_Impl( XML_POSITION );
         break;
     case XML_TYPE_TEXT_ANCHOR_TYPE:
         pHdl = new XMLAnchorTypePropHdl;
@@ -1350,13 +1343,13 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLConstantsPropertyHandler( pXML_VertRelAsChar_Enum, XML_TOKEN_INVALID );
         break;
     case XML_TYPE_TEXT_MIRROR_VERTICAL:
-        pHdl = new XMLGrfMirrorPropHdl_Impl( sXML_vertical, sal_False );
+        pHdl = new XMLGrfMirrorPropHdl_Impl( XML_VERTICAL, sal_False );
         break;
     case XML_TYPE_TEXT_MIRROR_HORIZONTAL_LEFT:
-        pHdl = new XMLGrfMirrorPropHdl_Impl( sXML_horizontal_on_left_pages, sal_True );
+        pHdl = new XMLGrfMirrorPropHdl_Impl( XML_HORIZONTAL_ON_LEFT_PAGES, sal_True );
         break;
     case XML_TYPE_TEXT_MIRROR_HORIZONTAL_RIGHT:
-        pHdl = new XMLGrfMirrorPropHdl_Impl( sXML_horizontal_on_right_pages, sal_True );
+        pHdl = new XMLGrfMirrorPropHdl_Impl( XML_HORIZONTAL_ON_RIGHT_PAGES, sal_True );
         break;
     case XML_TYPE_TEXT_CLIP:
         pHdl = new XMLClipPropertyHandler;
@@ -1365,41 +1358,36 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLTextEmphasizePropHdl_Impl;
         break;
     case XML_TYPE_TEXT_COMBINE:
-        pHdl = new XMLNamedBoolPropertyHdl(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_lines ) ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) ) );
+        pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_LINES ),
+                                            GetXMLToken( XML_NONE ) );
         break;
     case XML_TYPE_TEXT_COMBINE_CHARACTERS:
-        pHdl = new XMLNamedBoolPropertyHdl(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_letters ) ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) ) );
+        pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_LETTERS ),
+                                            GetXMLToken( XML_NONE ) );
         break;
     case XML_TYPE_TEXT_COMBINECHAR:
         pHdl = new XMLTextCombineCharPropHdl_Impl;
         break;
     case XML_TYPE_TEXT_AUTOSPACE:
-        pHdl = new XMLNamedBoolPropertyHdl(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_ideograph_alpha ) ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) ) );
+        pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_IDEOGRAPH_ALPHA ),
+                                            GetXMLToken( XML_NONE ) );
         break;
     case XML_TYPE_TEXT_PUNCTUATION_WRAP:
-        pHdl = new XMLNamedBoolPropertyHdl(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_hanging ) ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_simple ) ) );
+        pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_HANGING ),
+                                            GetXMLToken( XML_SIMPLE ) );
         break;
     case XML_TYPE_TEXT_LINE_BREAK:
-        pHdl = new XMLNamedBoolPropertyHdl(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_strict ) ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_normal ) ) );
+        pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_STRICT ),
+                                            GetXMLToken( XML_NORMAL ) );
         break;
     case XML_TYPE_TEXT_REL_WIDTH_HEIGHT:
         pHdl = new XMLTextRelWidthHeightPropHdl_Impl;
         break;
     case XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT:
-        pHdl = new XMLTextSyncWidthHeightPropHdl_Impl( sXML_scale );
+        pHdl = new XMLTextSyncWidthHeightPropHdl_Impl( XML_SCALE );
         break;
     case XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT_MIN:
-        pHdl = new XMLTextSyncWidthHeightPropHdl_Impl( sXML_scale_min );
+        pHdl = new XMLTextSyncWidthHeightPropHdl_Impl( XML_SCALE_MIN );
         break;
     case XML_TYPE_TEXT_RUBY_ADJUST:
         pHdl = new XMLConstantsPropertyHandler( pXML_RubyAdjust_Enum, XML_TOKEN_INVALID );
@@ -1411,9 +1399,8 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLTextRotationAnglePropHdl_Impl;
         break;
     case XML_TYPE_TEXT_ROTATION_SCALE:
-        pHdl = new XMLNamedBoolPropertyHdl(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_fixed ) ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_line_height ) ) );
+        pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_FIXED ),
+                                            GetXMLToken( XML_LINE_HEIGHT ) );
         break;
     case XML_TYPE_TEXT_VERTICAL_ALIGN:
         pHdl = new XMLConstantsPropertyHandler( pXML_VerticalAlign_Enum, XML_TOKEN_INVALID );

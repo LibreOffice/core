@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangedRegionImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-09 07:23:23 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -100,6 +100,7 @@
 #endif
 
 
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -134,9 +135,8 @@ void XMLChangedRegionImportContext::StartElement(
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
-        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             (sLocalName.equalsAsciiL(sXML_id,
-                                      sizeof(sXML_id)-1)) )
+        if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
+             ( IsXMLToken( sLocalName, XML_ID ) )  )
         {
             sID = xAttrList->getValueByIndex(nAttr);
         }
@@ -152,15 +152,14 @@ SvXMLImportContext* XMLChangedRegionImportContext::CreateChildContext(
 
     if (XML_NAMESPACE_TEXT == nPrefix)
     {
-        if (rLocalName.equalsAsciiL(sXML_insertion, sizeof(sXML_insertion)-1)||
-            rLocalName.equalsAsciiL(sXML_deletion, sizeof(sXML_deletion)-1) ||
-            rLocalName.equalsAsciiL(sXML_format_change,
-                                    sizeof(sXML_format_change)-1) )
+        if ( IsXMLToken( rLocalName, XML_INSERTION ) ||
+             IsXMLToken( rLocalName, XML_DELETION ) ||
+             IsXMLToken( rLocalName, XML_FORMAT_CHANGE ) )
         {
             // create XMLChangeElementImportContext for all kinds of changes
             pContext = new XMLChangeElementImportContext(
                GetImport(), nPrefix, rLocalName,
-               rLocalName.equalsAsciiL(sXML_deletion, sizeof(sXML_deletion)-1),
+               IsXMLToken( rLocalName, XML_DELETION ),
                *this);
         }
         // else: it may be a text element, see below

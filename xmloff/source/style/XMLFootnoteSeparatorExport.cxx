@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteSeparatorExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include "xmluconv.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
@@ -175,7 +175,7 @@ void XMLFootnoteSeparatorExport::exportXML(
     if (nLineWeight > 0)
     {
         rExport.GetMM100UnitConverter().convertMeasure(sBuf, nLineWeight);
-        rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_width,
+        rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_WIDTH,
                              sBuf.makeStringAndClear());
     }
 
@@ -183,7 +183,7 @@ void XMLFootnoteSeparatorExport::exportXML(
     if (nLineTextDistance > 0)
     {
         rExport.GetMM100UnitConverter().convertMeasure(sBuf,nLineTextDistance);
-        rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_distance_before_sep,
+        rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_DISTANCE_BEFORE_SEP,
                              sBuf.makeStringAndClear());
     }
 
@@ -191,7 +191,7 @@ void XMLFootnoteSeparatorExport::exportXML(
     if (nLineDistance > 0)
     {
         rExport.GetMM100UnitConverter().convertMeasure(sBuf, nLineDistance);
-        rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_distance_after_sep,
+        rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_DISTANCE_AFTER_SEP,
                              sBuf.makeStringAndClear());
     }
 
@@ -199,20 +199,20 @@ void XMLFootnoteSeparatorExport::exportXML(
     if (rExport.GetMM100UnitConverter().convertEnum(
         sBuf, eLineAdjust, aXML_HorizontalAdjust_Enum))
     {
-        rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_adjustment,
+        rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_ADJUSTMENT,
                              sBuf.makeStringAndClear());
     }
 
     // relative line width
     SvXMLUnitConverter::convertPercent(sBuf, nLineRelWidth);
-    rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_rel_width,
+    rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                          sBuf.makeStringAndClear());
 
     // color
     rExport.GetMM100UnitConverter().convertColor(sBuf, nLineColor);
-    rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_color,
+    rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_COLOR,
                          sBuf.makeStringAndClear());
 
     SvXMLElementExport aElem(rExport, XML_NAMESPACE_STYLE,
-                             sXML_footnote_sep, sal_True, sal_True);
+                             XML_FOOTNOTE_SEP, sal_True, sal_True);
 }

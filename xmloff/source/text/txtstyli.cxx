@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-25 17:22:38 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX
 #include "families.hxx"
@@ -158,21 +158,21 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     if( XML_NAMESPACE_STYLE == nPrefixKey )
     {
         // TODO: use a map here
-        if( rLocalName.compareToAscii( sXML_auto_update ) == 0 )
+        if( IsXMLToken( rLocalName, XML_AUTO_UPDATE ) )
         {
-            if( rValue.compareToAscii( sXML_true ) == 0 )
+            if( IsXMLToken( rValue, XML_TRUE ) )
                 bAutoUpdate = sal_True;
         }
-        else if( rLocalName.compareToAscii( sXML_list_style_name ) == 0 )
+        else if( IsXMLToken( rLocalName, XML_LIST_STYLE_NAME ) )
         {
             sListStyleName = rValue;
         }
-        else if( rLocalName.compareToAscii( sXML_master_page_name ) == 0 )
+        else if( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
         {
             sMasterPageName = rValue;
             bHasMasterPageName = sal_True;
         }
-        else if( rLocalName.compareToAscii( sXML_class ) == 0 )
+        else if( IsXMLToken( rLocalName, XML_CLASS ) )
         {
             sCategoryVal = rValue;
         }
@@ -220,7 +220,7 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.compareToAscii( sXML_properties ) == 0 )
+        IsXMLToken( rLocalName, XML_PROPERTIES ) )
     {
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
@@ -232,7 +232,7 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
                                                     sDropCapTextStyleName );
     }
     else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-              rLocalName.equalsAsciiL( sXML_events, sizeof(sXML_events)-1 ) )
+              IsXMLToken( rLocalName, XML_EVENTS ) )
     {
         // create and remember events import context
         // (for delayed processing of events)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 20:30:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include "xmlexp.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -104,12 +104,14 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::container::XNameAccess;
+using ::xmloff::token::GetXMLToken;
+using ::xmloff::token::XML_EVENTS;
 
 
 XMLEventExport::XMLEventExport(SvXMLExport& rExp,
                          const XMLEventNameTranslation* pTranslationTable) :
     rExport(rExp),
-    sEvents(RTL_CONSTASCII_USTRINGPARAM(sXML_events)),
+    sEvents(GetXMLToken(XML_EVENTS)),
     sScriptEvents(rExp.GetNamespaceMap().GetQNameByKey(
         XML_NAMESPACE_OFFICE, sEvents)),
     sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType"))

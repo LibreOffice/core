@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-23 12:38:52 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -122,6 +122,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace ::xmloff::token;
 
 
 //------------------------------------------------------------------
@@ -338,21 +339,21 @@ SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, USHORT nPrefix,
 
         if (nPrefix == XML_NAMESPACE_CONFIG)
         {
-            if (aLocalName.compareToAscii(sXML_name) == 0)
+            if (IsXMLToken(aLocalName, XML_NAME))
                 rProp.Name = sValue;
         }
     }
 
     if (nPrefix == XML_NAMESPACE_CONFIG)
     {
-        if (rLocalName.compareToAscii(sXML_config_item) == 0)
+        if (IsXMLToken(rLocalName, XML_CONFIG_ITEM))
             pContext = new XMLConfigItemContext(rImport, nPrefix, rLocalName, xAttrList, rProp.Value, pBaseContext);
-        else if((rLocalName.compareToAscii(sXML_config_item_set) == 0) ||
-                (rLocalName.compareToAscii(sXML_config_item_map_entry) == 0))
+        else if((IsXMLToken(rLocalName, XML_CONFIG_ITEM_SET)) ||
+                (IsXMLToken(rLocalName, XML_CONFIG_ITEM_MAP_ENTRY)) )
             pContext = new XMLConfigItemSetContext(rImport, nPrefix, rLocalName, xAttrList, rProp.Value, pBaseContext);
-        else if(rLocalName.compareToAscii(sXML_config_item_map_named) == 0)
+        else if(IsXMLToken(rLocalName, XML_CONFIG_ITEM_MAP_NAMED))
             pContext = new XMLConfigItemMapNamedContext(rImport, nPrefix, rLocalName, xAttrList, rProp.Value, pBaseContext);
-        else if(rLocalName.compareToAscii(sXML_config_item_map_indexed) == 0)
+        else if(IsXMLToken(rLocalName, XML_CONFIG_ITEM_MAP_INDEXED))
             pContext = new XMLConfigItemMapIndexedContext(rImport, nPrefix, rLocalName, xAttrList, rProp.Value, rProp.Name, pBaseContext);
     }
 
@@ -394,18 +395,18 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( USHORT nPref
 
         if (nPrefix == XML_NAMESPACE_CONFIG)
         {
-            if (aLocalName.compareToAscii(sXML_name) == 0)
+            if (IsXMLToken(aLocalName, XML_NAME))
                 sName = sValue;
         }
     }
 
     if (nPrefix == XML_NAMESPACE_CONFIG)
     {
-        if (rLocalName.compareToAscii(sXML_config_item_set) == 0)
+        if (IsXMLToken(rLocalName, XML_CONFIG_ITEM_SET))
         {
-            if (sName.compareToAscii(sXML_view_settings) == 0)
+            if (IsXMLToken(sName, XML_VIEW_SETTINGS))
                 pContext = new XMLConfigItemSetContext(GetImport(), nPrefix, rLocalName, xAttrList, aViewProps, NULL);
-            else if (sName.compareToAscii(sXML_configuration_settings) == 0)
+            else if (IsXMLToken(sName, XML_CONFIGURATION_SETTINGS))
                 pContext = new XMLConfigItemSetContext(GetImport(), nPrefix, rLocalName, xAttrList, aConfigProps, NULL);
         }
     }
@@ -519,7 +520,7 @@ XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport, USHORT nPrfx, c
 
         if (nPrefix == XML_NAMESPACE_CONFIG)
         {
-            if (aLocalName.compareToAscii(sXML_type) == 0)
+            if (IsXMLToken(aLocalName, XML_TYPE))
                 sType = sValue;
         }
     }
@@ -540,7 +541,7 @@ SvXMLImportContext *XMLConfigItemContext::CreateChildContext( USHORT nPrefix,
 
 void XMLConfigItemContext::Characters( const ::rtl::OUString& rChars )
 {
-    if (sType.compareToAscii(sXML_base64Binary) == 0)
+    if (IsXMLToken(sType, XML_BASE64BINARY))
     {
         rtl::OUString sTrimmedChars( rChars.trim() );
         if( sTrimmedChars.getLength() )
@@ -580,47 +581,47 @@ void XMLConfigItemContext::EndElement()
 {
     if (pBaseContext)
     {
-        if (sType.compareToAscii(sXML_boolean) == 0)
+        if (IsXMLToken(sType, XML_BOOLEAN))
         {
             sal_Bool bValue(sal_False);
-            if (sValue.compareToAscii(sXML_true) == 0)
+            if (IsXMLToken(sValue, XML_TRUE))
                 bValue = sal_True;
             rAny <<= bValue;
         }
-        else if (sType.compareToAscii(sXML_short) == 0)
+        else if (IsXMLToken(sType, XML_SHORT))
         {
             sal_Int32 nValue(0);
             SvXMLUnitConverter::convertNumber(nValue, sValue);
             rAny <<= static_cast<sal_Int16>(nValue);
         }
-        else if (sType.compareToAscii(sXML_int) == 0)
+        else if (IsXMLToken(sType, XML_INT))
         {
             sal_Int32 nValue(0);
             SvXMLUnitConverter::convertNumber(nValue, sValue);
             rAny <<= nValue;
         }
-        else if (sType.compareToAscii(sXML_long) == 0)
+        else if (IsXMLToken(sType, XML_LONG))
         {
             sal_Int64 nValue(sValue.toInt64());
             rAny <<= nValue;
         }
-        else if (sType.compareToAscii(sXML_double) == 0)
+        else if (IsXMLToken(sType, XML_DOUBLE))
         {
             double fValue(0.0);
             SvXMLUnitConverter::convertDouble(fValue, sValue);
             rAny <<= fValue;
         }
-        else if (sType.compareToAscii(sXML_string) == 0)
+        else if (IsXMLToken(sType, XML_STRING))
         {
             rAny <<= sValue;
         }
-        else if (sType.compareToAscii(sXML_datetime) == 0)
+        else if (IsXMLToken(sType, XML_DATETIME))
         {
             util::DateTime aDateTime;
             SvXMLUnitConverter::convertDateTime(aDateTime, sValue);
             rAny <<= aDateTime;
         }
-        else if (sType.compareToAscii(sXML_base64Binary) == 0)
+        else if (IsXMLToken(sType, XML_BASE64BINARY))
         {
             rAny <<= aDecoded;
         }

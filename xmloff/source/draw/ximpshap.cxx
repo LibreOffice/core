@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-27 14:56:38 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,8 @@
 #include"xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
@@ -185,6 +185,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 extern SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[];
 extern SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[];
@@ -241,15 +242,15 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext * pContext = NULL;
 
-    if( nPrefix == XML_NAMESPACE_OFFICE && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_events ) ) )
+    if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENTS ) )
     {
         pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
     }
-    else if( nPrefix == XML_NAMESPACE_DRAW && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_glue_point ) ) )
+    else if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_GLUE_POINT ) )
     {
         addGluePoint( xAttrList );
     }
-    else if( nPrefix == XML_NAMESPACE_DRAW && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_thumbnail ) ) )
+    else if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_THUMBNAIL ) )
     {
         // search attributes for xlink:href
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -261,7 +262,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
 
             if( nPrefix == XML_NAMESPACE_XLINK )
             {
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_href ) ) )
+                if( IsXMLToken( aLocalName, XML_HREF ) )
                 {
                     maThumbnailURL = GetImport().GetAbsoluteReference(xAttrList->getValueByIndex( i ));
                     break;
@@ -337,22 +338,22 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
 
         if( nPrefix == XML_NAMESPACE_SVG )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_x ) ) )
+            if( IsXMLToken( aLocalName, XML_X ) )
             {
                 GetImport().GetMM100UnitConverter().convertMeasure(aGluePoint.Position.X, sValue);
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_y ) ) )
+            else if( IsXMLToken( aLocalName, XML_Y ) )
             {
                 GetImport().GetMM100UnitConverter().convertMeasure(aGluePoint.Position.Y, sValue);
             }
         }
         else if( nPrefix == XML_NAMESPACE_DRAW )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_id ) ) )
+            if( IsXMLToken( aLocalName, XML_ID ) )
             {
                 nId = sValue.toInt32();
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_align ) ) )
+            else if( IsXMLToken( aLocalName, XML_ALIGN ) )
             {
                 USHORT eKind;
                 if( SvXMLUnitConverter::convertEnum( eKind, sValue, aXML_GlueAlignment_EnumMap ) )
@@ -361,7 +362,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
                     aGluePoint.IsRelative = sal_False;
                 }
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_escape_direction ) ) )
+            else if( IsXMLToken( aLocalName, XML_ESCAPE_DIRECTION ) )
             {
                 USHORT eKind;
                 if( SvXMLUnitConverter::convertEnum( eKind, sValue, aXML_GlueEscapeDirection_EnumMap ) )
@@ -697,50 +698,50 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_zindex)) )
+        if( IsXMLToken( rLocalName, XML_ZINDEX ) )
         {
             mnZOrder = rValue.toInt32();
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_id)) )
+        else if( IsXMLToken( rLocalName, XML_ID ) )
         {
             mnShapeId = rValue.toInt32();
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_name)) )
+        else if( IsXMLToken( rLocalName, XML_NAME ) )
         {
             maShapeName = rValue;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_style_name)) )
+        else if( IsXMLToken( rLocalName, XML_STYLE_NAME ) )
         {
             maDrawStyleName = rValue;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_text_style_name)) )
+        else if( IsXMLToken( rLocalName, XML_TEXT_STYLE_NAME ) )
         {
             maTextStyleName = rValue;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_layer)) )
+        else if( IsXMLToken( rLocalName, XML_LAYER ) )
         {
             maLayerName = rValue;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
+        else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
             mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
         }
     }
     else if( XML_NAMESPACE_PRESENTATION == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_user_transformed)) )
+        if( IsXMLToken( rLocalName, XML_USER_TRANSFORMED ) )
         {
-            mbIsUserTransformed = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
+            mbIsUserTransformed = IsXMLToken( rValue, XML_TRUE );
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_placeholder)) )
+        else if( IsXMLToken( rLocalName, XML_PLACEHOLDER ) )
         {
-            mbIsPlaceholder = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
+            mbIsPlaceholder = IsXMLToken( rValue, XML_TRUE );
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_class)) )
+        else if( IsXMLToken( rLocalName, XML_CLASS ) )
         {
             maPresentationClass = rValue;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_style_name)) )
+        else if( IsXMLToken( rLocalName, XML_STYLE_NAME ) )
         {
             maDrawStyleName = rValue;
             mnStyleFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
@@ -748,23 +749,23 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
     }
     else if( XML_NAMESPACE_SVG == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x)) )
+        if( IsXMLToken( rLocalName, XML_X ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maPosition.X, rValue);
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y)) )
+        else if( IsXMLToken( rLocalName, XML_Y ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maPosition.Y, rValue);
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_width)) )
+        else if( IsXMLToken( rLocalName, XML_WIDTH ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maSize.Width, rValue);
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_height)) )
+        else if( IsXMLToken( rLocalName, XML_HEIGHT ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maSize.Height, rValue);
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
+        else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
             // because of #85127# take svg:transform into account and hanle like
             // draw:transform for compatibility
@@ -802,7 +803,7 @@ void SdXMLRectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::O
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_corner_radius)) )
+        if( IsXMLToken( rLocalName, XML_CORNER_RADIUS ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(mnRadius, rValue);
             return;
@@ -874,22 +875,22 @@ void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::O
 {
     if( XML_NAMESPACE_SVG == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x1)) )
+        if( IsXMLToken( rLocalName, XML_X1 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(mnX1, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y1)) )
+        if( IsXMLToken( rLocalName, XML_Y1 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(mnY1, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x2)) )
+        if( IsXMLToken( rLocalName, XML_X2 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(mnX2, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y2)) )
+        if( IsXMLToken( rLocalName, XML_Y2 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(mnY2, rValue);
             return;
@@ -998,27 +999,27 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
 {
     if( XML_NAMESPACE_SVG == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_rx)) )
+        if( IsXMLToken( rLocalName, XML_RX ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(mnRX, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_ry)) )
+        if( IsXMLToken( rLocalName, XML_RY ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(mnRY, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_cx)) )
+        if( IsXMLToken( rLocalName, XML_CX ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(mnCX, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_cy)) )
+        if( IsXMLToken( rLocalName, XML_CY ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(mnCY, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_r)) )
+        if( IsXMLToken( rLocalName, XML_R ) )
         {
             // single radius, it's a circle and both radii are the same
             GetImport().GetMM100UnitConverter().convertMeasure(mnRX, rValue);
@@ -1028,7 +1029,7 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
     }
     else if( XML_NAMESPACE_DRAW == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_kind)) )
+        if( IsXMLToken( rLocalName, XML_KIND ) )
         {
             USHORT eKind;
             if( SvXMLUnitConverter::convertEnum( eKind, rValue, aXML_CircleKind_EnumMap ) )
@@ -1037,14 +1038,14 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
             }
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_start_angle)) )
+        if( IsXMLToken( rLocalName, XML_START_ANGLE ) )
         {
             double dStartAngle;
             if( SvXMLUnitConverter::convertDouble( dStartAngle, rValue ) )
                 mnStartAngle = (sal_Int32)(dStartAngle * 100.0);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_end_angle)) )
+        if( IsXMLToken( rLocalName, XML_END_ANGLE ) )
         {
             double dEndAngle;
             if( SvXMLUnitConverter::convertDouble( dEndAngle, rValue ) )
@@ -1115,7 +1116,7 @@ void SdXMLPolygonShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
 {
     if( XML_NAMESPACE_SVG == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_viewBox)) )
+        if( IsXMLToken( rLocalName, XML_VIEWBOX ) )
         {
             maViewBox = rValue;
             return;
@@ -1123,7 +1124,7 @@ void SdXMLPolygonShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
     }
     else if( XML_NAMESPACE_DRAW == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_points)) )
+        if( IsXMLToken( rLocalName, XML_POINTS ) )
         {
             maPoints = rValue;
             return;
@@ -1210,12 +1211,12 @@ void SdXMLPathShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::O
 {
     if( XML_NAMESPACE_SVG == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_viewBox)) )
+        if( IsXMLToken( rLocalName, XML_VIEWBOX ) )
         {
             maViewBox = rValue;
             return;
         }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_d)) )
+        else if( IsXMLToken( rLocalName, XML_D ) )
         {
             maD = rValue;
             return;
@@ -1339,22 +1340,22 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
     if(maPresentationClass.getLength())
     {
-        if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_subtitle))))
+        if( IsXMLToken( maPresentationClass, XML_PRESENTATION_SUBTITLE ))
         {
             // XmlShapeTypePresSubtitleShape
             pService = "com.sun.star.presentation.SubtitleShape";
         }
-        else if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_outline))))
+        else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OUTLINE ) )
         {
             // XmlShapeTypePresOutlinerShape
             pService = "com.sun.star.presentation.OutlinerShape";
         }
-        else if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_notes))))
+        else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_NOTES ) )
         {
             // XmlShapeTypePresNotesShape
             pService = "com.sun.star.presentation.NotesShape";
         }
-        else // if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_title))))
+        else //  IsXMLToken( maPresentationClass, XML_PRESENTATION_TITLE ) )
         {
             // XmlShapeTypePresTitleTextShape
             pService = "com.sun.star.presentation.TitleTextShape";
@@ -1437,7 +1438,7 @@ void SdXMLControlShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
 {
     if( XML_NAMESPACE_FORM == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_id)) )
+        if( IsXMLToken( rLocalName, XML_ID ) )
         {
             maFormId = rValue;
             return;
@@ -1520,27 +1521,27 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
     {
     case XML_NAMESPACE_DRAW:
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_start_shape)) )
+        if( IsXMLToken( rLocalName, XML_START_SHAPE ) )
         {
             mnStartShapeId = rValue.toInt32();
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_start_glue_point)) )
+        if( IsXMLToken( rLocalName, XML_START_GLUE_POINT ) )
         {
             mnStartGlueId = rValue.toInt32();
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_end_shape)) )
+        if( IsXMLToken( rLocalName, XML_END_SHAPE ) )
         {
             mnEndShapeId = rValue.toInt32();
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_end_glue_point)) )
+        if( IsXMLToken( rLocalName, XML_END_GLUE_POINT ) )
         {
             mnEndGlueId = rValue.toInt32();
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_line_skew)) )
+        if( IsXMLToken( rLocalName, XML_LINE_SKEW ) )
         {
             SvXMLTokenEnumerator aTokenEnum( rValue );
             OUString aToken;
@@ -1558,7 +1559,7 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
             }
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_type)) )
+        if( IsXMLToken( rLocalName, XML_TYPE ) )
         {
             SvXMLUnitConverter::convertEnum( mnType, rValue, aXML_ConnectionKind_EnumMap );
             return;
@@ -1566,22 +1567,22 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
     }
     case XML_NAMESPACE_SVG:
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x1)) )
+        if( IsXMLToken( rLocalName, XML_X1 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maStart.X, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y1)) )
+        if( IsXMLToken( rLocalName, XML_Y1 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maStart.Y, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x2)) )
+        if( IsXMLToken( rLocalName, XML_X2 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maEnd.X, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y2)) )
+        if( IsXMLToken( rLocalName, XML_Y2 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maEnd.Y, rValue);
             return;
@@ -1666,22 +1667,22 @@ void SdXMLMeasureShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
     {
     case XML_NAMESPACE_SVG:
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x1)) )
+        if( IsXMLToken( rLocalName, XML_X1 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maStart.X, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y1)) )
+        if( IsXMLToken( rLocalName, XML_Y1 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maStart.Y, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x2)) )
+        if( IsXMLToken( rLocalName, XML_X2 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maEnd.X, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y2)) )
+        if( IsXMLToken( rLocalName, XML_Y2 ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maEnd.Y, rValue);
             return;
@@ -1777,7 +1778,7 @@ void SdXMLPageShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::O
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_page_number)) )
+        if( IsXMLToken( rLocalName, XML_PAGE_NUMBER ) )
         {
             mnPageNumber = rValue.toInt32();
             return;
@@ -1795,7 +1796,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     // add, set style and properties from base shape
 
     // #86163# take into account which type of PageShape needs to
-    // be constructed. It's an pres shape if presentation:sXML_class == sXML_presentation_page.
+    // be constructed. It's an pres shape if presentation:XML_CLASS == XML_PRESENTATION_PAGE.
     sal_Bool bIsPresentation(maPresentationClass.getLength() != 0);
 
     uno::Reference< lang::XServiceInfo > xInfo( mxShapes, uno::UNO_QUERY );
@@ -1808,7 +1809,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     else
     {
         if(bIsPresentation
-            && !maPresentationClass.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_presentation_page)))
+            && !IsXMLToken( maPresentationClass, XML_PRESENTATION_PAGE ) )
         {
             bIsPresentation = FALSE;
         }
@@ -1907,17 +1908,17 @@ void SdXMLCaptionShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_caption_point_x)) )
+        if( IsXMLToken( rLocalName, XML_CAPTION_POINT_X ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maCaptionPoint.X, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_caption_point_y)) )
+        if( IsXMLToken( rLocalName, XML_CAPTION_POINT_Y ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maCaptionPoint.Y, rValue);
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_corner_radius)) )
+        if( IsXMLToken( rLocalName, XML_CORNER_RADIUS ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(mnRadius, rValue);
             return;
@@ -1949,7 +1950,7 @@ void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const
 {
     if( XML_NAMESPACE_XLINK == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
+        if( IsXMLToken( rLocalName, XML_HREF ) )
         {
             maURL = GetImport().GetAbsoluteReference(rValue);
             return;
@@ -1966,7 +1967,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
     // create graphic object shape
     char *pService;
 
-    if(maPresentationClass.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_graphic ) ) )
+    if( IsXMLToken( maPresentationClass, XML_GRAPHIC ) )
     {
         pService = "com.sun.star.presentation.GraphicObjectShape";
     }
@@ -2036,7 +2037,7 @@ SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
     SvXMLImportContext* pContext = NULL;
 
     if ( (XML_NAMESPACE_DRAW == nPrefix) &&
-         rLocalName.equalsAsciiL(sXML_image_map, sizeof(sXML_image_map)-1) )
+         IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
     {
         uno::Reference< beans::XPropertySet > xPropSet(mxShape,uno::UNO_QUERY);
         if (xPropSet.is())
@@ -2117,7 +2118,7 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
                 uno::Reference< frame::XModel > xChartModel;
                 if( aAny >>= xChartModel )
                 {
-                    mpChartContext = GetImport().GetChartImport()->CreateChartContext( GetImport(), XML_NAMESPACE_SVG, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_chart)), xChartModel, xAttrList );
+                    mpChartContext = GetImport().GetChartImport()->CreateChartContext( GetImport(), XML_NAMESPACE_SVG, GetXMLToken(XML_CHART), xChartModel, xAttrList );
                 }
             }
         }
@@ -2191,15 +2192,15 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
     sal_Bool bIsPresShape = maPresentationClass.getLength() != 0;
     if( bIsPresShape )
     {
-        if( maPresentationClass.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_presentation_chart)) )
+        if( IsXMLToken( maPresentationClass, XML_PRESENTATION_CHART ) )
         {
             pService = "com.sun.star.presentation.ChartShape";
         }
-        else if( maPresentationClass.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_presentation_table)) )
+        else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_TABLE ) )
         {
             pService = "com.sun.star.presentation.TableShape";
         }
-        else if( maPresentationClass.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_presentation_object)) )
+        else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OBJECT ) )
         {
             pService = "com.sun.star.presentation.OLE2Shape";
         }
@@ -2260,14 +2261,14 @@ void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
     switch( nPrefix )
     {
     case XML_NAMESPACE_DRAW:
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_class_id)) )
+        if( IsXMLToken( rLocalName, XML_CLASS_ID ) )
         {
             maCLSID = rValue;
             return;
         }
         break;
     case XML_NAMESPACE_XLINK:
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
+        if( IsXMLToken( rLocalName, XML_HREF ) )
         {
             maHref = GetImport().GetAbsoluteReference(rValue);
             return;
@@ -2316,24 +2317,24 @@ void SdXMLAppletShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
     switch( nPrefix )
     {
     case XML_NAMESPACE_DRAW:
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_applet_name)) )
+        if( IsXMLToken( rLocalName, XML_APPLET_NAME ) )
         {
             maAppletName = rValue;
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_code)) )
+        if( IsXMLToken( rLocalName, XML_CODE ) )
         {
             maAppletCode = rValue;
             return;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_may_script)) )
+        if( IsXMLToken( rLocalName, XML_MAY_SCRIPT ) )
         {
-            mbIsScript = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
+            mbIsScript = IsXMLToken( rValue, XML_TRUE );
             return;
         }
         break;
     case XML_NAMESPACE_XLINK:
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
+        if( IsXMLToken( rLocalName, XML_HREF ) )
         {
             maHref = GetImport().GetAbsoluteReference(rValue);
             return;
@@ -2390,7 +2391,7 @@ SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( USHORT nPrefix
 {
     SvXMLImportContext * pContext = NULL;
 
-    if( nPrefix == XML_NAMESPACE_DRAW && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_param ) ) )
+    if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_PARAM ) )
     {
         OUString aParamName, aParamValue;
         const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -2404,11 +2405,11 @@ SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( USHORT nPrefix
 
             if( nPrefix == XML_NAMESPACE_DRAW )
             {
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_name ) ) )
+                if( IsXMLToken( aLocalName, XML_NAME ) )
                 {
                     aParamName = aValue;
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_value ) ) )
+                else if( IsXMLToken( aLocalName, XML_VALUE ) )
                 {
                     aParamValue = aValue;
                 }
@@ -2468,14 +2469,14 @@ void SdXMLPluginShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
     switch( nPrefix )
     {
     case XML_NAMESPACE_DRAW:
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_mime_type)) )
+        if( IsXMLToken( rLocalName, XML_MIME_TYPE ) )
         {
             maMimeType = rValue;
             return;
         }
         break;
     case XML_NAMESPACE_XLINK:
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
+        if( IsXMLToken( rLocalName, XML_HREF ) )
         {
             maHref = GetImport().GetAbsoluteReference(rValue);
             return;
@@ -2519,7 +2520,7 @@ SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( USHORT nPrefix
 {
     SvXMLImportContext * pContext = NULL;
 
-    if( nPrefix == XML_NAMESPACE_DRAW && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_param ) ) )
+    if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_PARAM ) )
     {
         OUString aParamName, aParamValue;
         const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -2533,11 +2534,11 @@ SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( USHORT nPrefix
 
             if( nPrefix == XML_NAMESPACE_DRAW )
             {
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_name ) ) )
+                if( IsXMLToken( aLocalName, XML_NAME ) )
                 {
                     aParamName = aValue;
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_value ) ) )
+                else if( IsXMLToken( aLocalName, XML_VALUE ) )
                 {
                     aParamValue = aValue;
                 }
@@ -2618,14 +2619,14 @@ void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::
     switch( nPrefix )
     {
     case XML_NAMESPACE_DRAW:
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_frame_name)) )
+        if( IsXMLToken( rLocalName, XML_FRAME_NAME ) )
         {
             maFrameName = rValue;
             return;
         }
         break;
     case XML_NAMESPACE_XLINK:
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
+        if( IsXMLToken( rLocalName, XML_HREF ) )
         {
             maHref = GetImport().GetAbsoluteReference(rValue);
             return;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLNumberStyles.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-11 09:19:17 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,15 +83,19 @@
 #include "nmspmap.hxx"
 #endif
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 #include "sdxmlexp_impl.hxx"
 #include "sdxmlimp_impl.hxx"
 
 using namespace rtl;
+using namespace ::xmloff::token;
 
 struct SdXMLDataStyleNumber
 {
-    const char* mpNumberStyle;
+    enum XMLTokenEnum meNumberStyle;
     sal_Bool    mbLong;
     sal_Bool    mbTextual;
     sal_Bool    mbDecimal02;
@@ -99,26 +103,26 @@ struct SdXMLDataStyleNumber
 }
     aSdXMLDataStyleNumbers[] =
 {
-    { sXML_day,         sal_False,      sal_False,      sal_False,      NULL },
-    { sXML_day,         sal_True,       sal_False,      sal_False,      NULL },
-    { sXML_month,       sal_True,       sal_False,      sal_False,      NULL },
-    { sXML_month,       sal_False,      sal_True,       sal_False,      NULL },
-    { sXML_month,       sal_True,       sal_True,       sal_False,      NULL },
-    { sXML_year,        sal_False,      sal_False,      sal_False,      NULL },
-    { sXML_year,        sal_True,       sal_False,      sal_False,      NULL },
-    { sXML_day_of_week, sal_False,      sal_False,      sal_False,      NULL },
-    { sXML_day_of_week, sal_True,       sal_False,      sal_False,      NULL },
-    { sXML_text,        sal_False,      sal_False,      sal_False,      "."  },
-    { sXML_text,        sal_False,      sal_False,      sal_False,      " "  },
-    { sXML_text,        sal_False,      sal_False,      sal_False,      ", " },
-    { sXML_text,        sal_False,      sal_False,      sal_False,      ". " },
-    { sXML_hours,       sal_False,      sal_False,      sal_False,      NULL },
-    { sXML_minutes,     sal_False,      sal_False,      sal_False,      NULL },
-    { sXML_text,        sal_False,      sal_False,      sal_False,      ":"  },
-    { sXML_am_pm,       sal_False,      sal_False,      sal_False,      NULL },
-    { sXML_seconds,     sal_False,      sal_False,      sal_False,      NULL },
-    { sXML_seconds,     sal_False,      sal_False,      sal_True,       NULL },
-    { NULL }
+    { XML_DAY,          sal_False,      sal_False,      sal_False,      NULL },
+    { XML_DAY,          sal_True,       sal_False,      sal_False,      NULL },
+    { XML_MONTH,        sal_True,       sal_False,      sal_False,      NULL },
+    { XML_MONTH,        sal_False,      sal_True,       sal_False,      NULL },
+    { XML_MONTH,        sal_True,       sal_True,       sal_False,      NULL },
+    { XML_YEAR,         sal_False,      sal_False,      sal_False,      NULL },
+    { XML_YEAR,         sal_True,       sal_False,      sal_False,      NULL },
+    { XML_DAY_OF_WEEK,  sal_False,      sal_False,      sal_False,      NULL },
+    { XML_DAY_OF_WEEK,  sal_True,       sal_False,      sal_False,      NULL },
+    { XML_TEXT,         sal_False,      sal_False,      sal_False,      "."  },
+    { XML_TEXT,         sal_False,      sal_False,      sal_False,      " "  },
+    { XML_TEXT,         sal_False,      sal_False,      sal_False,      ", " },
+    { XML_TEXT,         sal_False,      sal_False,      sal_False,      ". " },
+    { XML_HOURS,        sal_False,      sal_False,      sal_False,      NULL },
+    { XML_MINUTES,      sal_False,      sal_False,      sal_False,      NULL },
+    { XML_TEXT,         sal_False,      sal_False,      sal_False,      ":"  },
+    { XML_AM_PM,        sal_False,      sal_False,      sal_False,      NULL },
+    { XML_SECONDS,      sal_False,      sal_False,      sal_False,      NULL },
+    { XML_SECONDS,      sal_False,      sal_False,      sal_True,       NULL },
+    { XML_TOKEN_INVALID, NULL }
 };
 
 // date
@@ -376,19 +380,18 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
 
     // name
     sAttrValue = OUString::createFromAscii( pStyle->mpName );
-    rExport.AddAttribute( XML_NAMESPACE_STYLE, sXML_name, sAttrValue );
+    rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, sAttrValue );
 
     // family
     sAttrValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("data-style"));
-    rExport.AddAttribute( XML_NAMESPACE_STYLE, sXML_family, sAttrValue );
+    rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, sAttrValue );
 
     if( pStyle->mbAutomatic )
     {
-        sAttrValue = OUString::createFromAscii( sXML_true );
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, sXML_automatic_order, sAttrValue );
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_AUTOMATIC_ORDER, XML_TRUE );
     }
 
-    SvXMLElementExport aElement( rExport, XML_NAMESPACE_NUMBER, pStyle->mbDateStyle ? sXML_date_style : sXML_time_style, sal_True, sal_True );
+    SvXMLElementExport aElement( rExport, XML_NAMESPACE_NUMBER, pStyle->mbDateStyle ? XML_DATE_STYLE : XML_TIME_STYLE, sal_True, sal_True );
 
     const sal_uInt8* pElements = (const sal_uInt8*)&pStyle->mpFormat[0];
 
@@ -398,23 +401,20 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
 
         if( rElement.mbDecimal02 )
         {
-            sAttrValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2"));
-            rExport.AddAttribute( XML_NAMESPACE_NUMBER, sXML_decimal_places, sAttrValue );
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES, XML_2 );
         }
 
         if( rElement.mbLong )
         {
-            sAttrValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_long));
-            rExport.AddAttribute( XML_NAMESPACE_NUMBER, sXML_style, sAttrValue );
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_STYLE, XML_LONG );
         }
 
         if( rElement.mbTextual )
         {
-            sAttrValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true));
-            rExport.AddAttribute( XML_NAMESPACE_NUMBER, sXML_textual, sAttrValue );
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TEXTUAL, XML_TRUE );
         }
 
-        SvXMLElementExport aNumberStyle( rExport, XML_NAMESPACE_NUMBER, rElement.mpNumberStyle, sal_True, sal_False );
+        SvXMLElementExport aNumberStyle( rExport, XML_NAMESPACE_NUMBER, rElement.meNumberStyle, sal_True, sal_False );
         if( rElement.mpText )
         {
             sAttrValue = OUString::createFromAscii( rElement.mpText );
@@ -518,17 +518,17 @@ SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXM
 
         if( nPrefix == XML_NAMESPACE_NUMBER )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_decimal_places ) ) )
+            if( IsXMLToken( aLocalName, XML_DECIMAL_PLACES ) )
             {
-                mbDecimal02 =  sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("2") );
+                mbDecimal02 =  IsXMLToken( sValue, XML_2 );
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_style ) ) )
+            else if( IsXMLToken( aLocalName, XML_STYLE ) )
             {
-                mbLong = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_long ) );
+                mbLong = IsXMLToken( sValue, XML_LONG );
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_textual ) ) )
+            else if( IsXMLToken( aLocalName, XML_TEXTUAL ) )
             {
-                mbTextual = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
+                mbTextual = IsXMLToken( sValue, XML_TRUE );
             }
         }
     }
@@ -557,7 +557,7 @@ SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rIm
 :   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList),
     mbAutomatic( sal_False ), mnIndex(0), mrImport( rImport ), mnKey( -1 )
 {
-    mbTimeStyle = rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_time_style ) );
+    mbTimeStyle = IsXMLToken( rLocalName, XML_TIME_STYLE );
 
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -569,9 +569,9 @@ SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rIm
 
         if( nPrefix == XML_NAMESPACE_NUMBER )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_automatic_order ) ) )
+            if( IsXMLToken( aLocalName, XML_AUTOMATIC_ORDER ) )
             {
-                mbAutomatic = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
+                mbAutomatic = IsXMLToken( sValue, XML_TRUE );
             }
         }
     }
@@ -590,9 +590,9 @@ void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, sal_Bool bLong
     }
 
     const SdXMLDataStyleNumber* pStyleMember = aSdXMLDataStyleNumbers;
-    for( sal_uInt8 nIndex = 0; pStyleMember->mpNumberStyle; nIndex++, pStyleMember++ )
+    for( sal_uInt8 nIndex = 0; pStyleMember->meNumberStyle != XML_TOKEN_INVALID; nIndex++, pStyleMember++ )
     {
-        if( ((rNumberStyle.compareToAscii( pStyleMember->mpNumberStyle ) == 0) &&
+        if( (IsXMLToken(rNumberStyle, pStyleMember->meNumberStyle) &&
             (pStyleMember->mbLong == bLong) &&
             (pStyleMember->mbTextual == bTextual) &&
             (pStyleMember->mbDecimal02 == bDecimal02) &&

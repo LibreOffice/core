@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-09 14:37:03 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 
 #ifndef _RTL_USTRING
 #include <rtl/ustring>
+#endif
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #include <map>
@@ -238,22 +242,22 @@ public:
 
     // determine element or attribute names
     // (public, because they may be useful in related XML export classes)
-    static const sal_Char* MapPlaceholderType(sal_uInt16 nType);
-    static const sal_Char* MapTemplateDisplayFormat(sal_Int16 nType);
-    static const sal_Char* MapChapterDisplayFormat(sal_Int16 nType);
-    static const sal_Char* MapFilenameDisplayFormat(sal_Int16 nType);
-    static const sal_Char* MapDocInfoFieldName(enum FieldIdEnum nToken);
-    static const sal_Char* MapReferenceSource(sal_Int16 nType);
-    static const sal_Char* MapReferenceType(sal_Int16 nType);
-    static const sal_Char* MapCountFieldName(sal_Int16 nToken);
-    static const sal_Char* MapBibliographyFieldName(::rtl::OUString sName);
-    static const sal_Char* MapMeasureKind(sal_Int16 nKind);
-    const sal_Char* MapPageNumberName(const ::com::sun::star::uno::Reference<
+    static enum ::xmloff::token::XMLTokenEnum MapPlaceholderType(sal_uInt16 nType);
+    static enum ::xmloff::token::XMLTokenEnum MapTemplateDisplayFormat(sal_Int16 nType);
+    static enum ::xmloff::token::XMLTokenEnum MapChapterDisplayFormat(sal_Int16 nType);
+    static enum ::xmloff::token::XMLTokenEnum MapFilenameDisplayFormat(sal_Int16 nType);
+    static enum ::xmloff::token::XMLTokenEnum MapDocInfoFieldName(enum FieldIdEnum nToken);
+    static enum ::xmloff::token::XMLTokenEnum MapReferenceSource(sal_Int16 nType);
+    static enum ::xmloff::token::XMLTokenEnum MapReferenceType(sal_Int16 nType);
+    static enum ::xmloff::token::XMLTokenEnum MapCountFieldName(sal_Int16 nToken);
+    static enum ::xmloff::token::XMLTokenEnum MapBibliographyFieldName(::rtl::OUString sName);
+    static enum ::xmloff::token::XMLTokenEnum MapMeasureKind(sal_Int16 nKind);
+    enum ::xmloff::token::XMLTokenEnum MapPageNumberName(const ::com::sun::star::uno::Reference<
                       ::com::sun::star::beans::XPropertySet> & xPropSet,
                       sal_Int32& nOffset);  /// also adjust page offset
-    const sal_Char* MapAuthorFieldName(const ::com::sun::star::uno::Reference <
+    enum ::xmloff::token::XMLTokenEnum MapAuthorFieldName(const ::com::sun::star::uno::Reference <
                       ::com::sun::star::beans::XPropertySet > & xPropSet);
-    const sal_Char* MapSenderFieldName(const ::com::sun::star::uno::Reference <
+    enum ::xmloff::token::XMLTokenEnum MapSenderFieldName(const ::com::sun::star::uno::Reference <
                       ::com::sun::star::beans::XPropertySet > & xPropSet);
 
 protected:
@@ -271,12 +275,12 @@ protected:
         enum FieldIdEnum nToken);
 
     /// export an empty element
-    void ExportElement(const sal_Char* pElementName,    /// element name
+    void ExportElement(enum ::xmloff::token::XMLTokenEnum eElement, /// element token
                        sal_Bool bAddSpace = sal_False); /// add blanks around
                                                         /// element?
 
     /// export an element with string content
-    void ExportElement(const sal_Char* pElementName,    /// element name
+    void ExportElement(enum ::xmloff::token::XMLTokenEnum eElement, /// element token
                        const ::rtl::OUString& sContent, /// element content
                        sal_Bool bAddSpace = sal_False); /// add blanks around
                                                         /// element?
@@ -285,47 +289,47 @@ protected:
 
     /// export a boolean attribute
     void ProcessBoolean(
-        const sal_Char* pXmlName,   /// attribute name (namespace text)
+        enum ::xmloff::token::XMLTokenEnum eXmlName,    /// attribute token (namespace text)
         sal_Bool bBool,     /// attribute value
         sal_Bool bDefault); /// attribute default; omit, if attribute differs
 
     /// export an integer attribute
     void ProcessInteger(
-        const sal_Char* pXmlName,   /// attribute name (namespace text)
+        enum ::xmloff::token::XMLTokenEnum eXmlName,    /// attribute token (namespace text)
         sal_Int32 nNum);            /// attribute value
 
     /// export an integer attribute, omit if default
     void ProcessInteger(
-        const sal_Char* pXmlName,   /// attribute name (namespace text)
+        enum ::xmloff::token::XMLTokenEnum eXmlName,    /// attribute token (namespace text)
         sal_Int32 nNum,             /// attribute value
         sal_Int32 nDefault);        /// default value
 
     /// export a string attribute
     void ProcessString(
-        const sal_Char* pXmlName,       /// attribute name (namespace text)
+        enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         const ::rtl::OUString& sValue,  /// attribute value
         sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string attribute, omit if default
     void ProcessString(
-        const sal_Char* pXmlName,       /// attribute name (namespace text)
+        enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         const ::rtl::OUString& sValue,  /// attribute value
         const ::rtl::OUString& sDefault, /// default value; omit if equal
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string attribute
     void ProcessString(
-        const sal_Char* pXmlName,       /// attribute name (namespace text)
-        const sal_Char* pValue,         /// attribute value
+        enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
+        enum ::xmloff::token::XMLTokenEnum eValue,          /// attribute token
         sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string attribute, omit if default
     void ProcessString(
-        const sal_Char* pXmlName,       /// attribute name (namespace text)
-        const sal_Char* pValue,         /// attribute value
-        const sal_Char* pDefault,       /// attribute default
+        enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
+        enum ::xmloff::token::XMLTokenEnum eValue,          /// attribute value token
+        enum ::xmloff::token::XMLTokenEnum eDefault,        /// default value token
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string as a sequence of paragraphs
@@ -356,7 +360,7 @@ protected:
 
     /// export times, dates and durations according to ISO 8601
     void ProcessDateTime(
-        const sal_Char* sXMLName,   /// name of attribute
+        enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
         double dValue,              /// date/time value
         sal_Bool bIsDate,           /// export as date (rather than date/time)?
         sal_Bool bIsDuration = sal_False,           /// export as duration
@@ -365,7 +369,7 @@ protected:
 
     /// export a date, time, or duration
     void ProcessDateTime(
-        const sal_Char* sXMLName,   /// name of attribute
+        enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
         sal_Int32 nMinutes,             /// date/time value in minutes
         sal_Bool bIsDate,           /// export as date?
         sal_Bool bIsDuration,       /// export as duration?
@@ -374,14 +378,14 @@ protected:
 
     /// export times, dates and durations according to ISO 8601
     void ProcessDateTime(
-        const sal_Char* sXMLName,   /// name of attribute
+        enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
         const ::com::sun::star::util::DateTime& rTime,      /// date/time value
         sal_Bool bIsDate,           /// export as date (rather than date/time)?
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export date according to ISO 8601
     void ProcessDate(
-        const sal_Char* sXMLName,   /// name of attribute
+        enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
         const ::com::sun::star::util::Date& rTime,  /// date value
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigImport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:21 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #include "xmlimp.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -120,7 +120,10 @@
 
 #include <vector>
 
+
+using namespace ::xmloff::token;
 using namespace ::com::sun::star::style;
+
 using ::rtl::OUString;
 using ::std::vector;
 using ::com::sun::star::uno::Any;
@@ -173,8 +176,7 @@ void XMLSectionFootnoteConfigImport::StartElement(
 
         if (XML_NAMESPACE_TEXT == nPrefix)
         {
-            if (sLocalName.equalsAsciiL(sXML_start_value,
-                                        sizeof(sXML_start_value)-1))
+            if (IsXMLToken(sLocalName, XML_START_VALUE))
             {
                 sal_Int32 nTmp;
                 if (SvXMLUnitConverter::convertNumber(nTmp, sAttrValue))
@@ -186,26 +188,22 @@ void XMLSectionFootnoteConfigImport::StartElement(
         }
         else if (XML_NAMESPACE_STYLE == nPrefix)
         {
-            if (sLocalName.equalsAsciiL(sXML_num_prefix,
-                                        sizeof(sXML_num_prefix)-1))
+            if (IsXMLToken(sLocalName, XML_NUM_PREFIX))
             {
                 sNumPrefix = sAttrValue;
                 bNumOwn = sal_True;
             }
-            else if (sLocalName.equalsAsciiL(sXML_num_suffix,
-                                             sizeof(sXML_num_suffix)-1))
+            else if (IsXMLToken(sLocalName, XML_NUM_SUFFIX))
             {
                 sNumSuffix = sAttrValue;
                 bNumOwn = sal_True;
             }
-            else if (sLocalName.equalsAsciiL(sXML_num_format,
-                                             sizeof(sXML_num_format)-1))
+            else if (IsXMLToken(sLocalName, XML_NUM_FORMAT))
             {
                 sNumFormat = sAttrValue;
                 bNumOwn = sal_True;
             }
-            else if (sLocalName.equalsAsciiL(sXML_num_letter_sync,
-                                             sizeof(sXML_num_letter_sync)-1))
+            else if (IsXMLToken(sLocalName, XML_NUM_LETTER_SYNC))
             {
                 sNumLetterSync = sAttrValue;
                 bNumOwn = sal_True;
@@ -215,9 +213,7 @@ void XMLSectionFootnoteConfigImport::StartElement(
 
     // OK, now we have all values and can fill the XMLPropertyState vector
     Any aAny;
-    sal_Bool bEndnote = GetLocalName().equalsAsciiL(
-        sXML_endnotes_configuration,
-        sizeof(sXML_endnotes_configuration)-1 );
+    sal_Bool bEndnote = IsXMLToken(GetLocalName(), XML_ENDNOTES_CONFIGURATION);
 
     aAny.setValue( &bNumOwn, ::getBooleanCppuType() );
     sal_Int32 nIndex = rMapper->FindEntryIndex( bEndnote ?

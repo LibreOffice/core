@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdropi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 using namespace ::rtl;
@@ -139,7 +139,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
             break;
 
         case XML_TOK_DROP_LENGTH:
-            if( rValue.compareToAscii( sXML_word ) == 0 )
+            if( IsXMLToken( rValue, XML_WORD ) )
             {
                 bWholeWord = sal_True;
             }

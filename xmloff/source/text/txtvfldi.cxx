@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include "txtvfldi.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_TEXTIMP_HXX_
@@ -250,19 +250,19 @@ void XMLVarFieldImportContext::ProcessAttribute(
             bFormulaOK = sal_True;
             break;
         case XML_TOK_TEXTFIELD_DISPLAY:
-            if (0 == sAttrValue.compareToAscii(sXML_formula))
+            if (IsXMLToken(sAttrValue, XML_FORMULA))
             {
                 bDisplayFormula = sal_True;
                 bDisplayNone = sal_False;
                 bDisplayOK = sal_True;
             }
-            else if (0 == sAttrValue.compareToAscii(sXML_value))
+            else if (IsXMLToken(sAttrValue, XML_VALUE))
             {
                 bDisplayFormula = sal_False;
                 bDisplayNone = sal_False;
                 bDisplayOK = sal_True;
             }
-            else if (0 == sAttrValue.compareToAscii(sXML_none))
+            else if (IsXMLToken(sAttrValue, XML_NONE))
             {
                 bDisplayFormula = sal_False;
                 bDisplayNone = sal_True;
@@ -447,8 +447,8 @@ XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
                                     sal_True, sal_True, sal_True,
                                     sal_False, sal_False, sal_False,
                                     sal_False, sal_False, sal_False, sal_True),
-        sNumFormat(sal_Unicode('1')),
-        sNumFormatSync(RTL_CONSTASCII_USTRINGPARAM(sXML_false)),
+        sNumFormat(OUString::valueOf(sal_Unicode('1'))),
+        sNumFormatSync(GetXMLToken(XML_FALSE)),
         sRefName(),
         bRefNameOK(sal_False),
         sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
@@ -768,25 +768,28 @@ SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference<xml::sax::XAttributeList> & xAttrList )
 {
-    sal_Char* sElementName;
+    enum XMLTokenEnum eElementName;
     SvXMLImportContext* pImportContext = NULL;
 
-    if (XML_NAMESPACE_TEXT == nPrefix) {
-        switch (eVarDeclsContextType) {
-        case VarTypeSequence:
-            sElementName = sXML_sequence_decl;
-            break;
-        case VarTypeSimple:
-            sElementName = sXML_variable_decl;
-            break;
-        case VarTypeUserField:
-            sElementName = sXML_user_field_decl;
-            break;
-        default:
-            DBG_ERROR("unknown field type!");
+    if( XML_NAMESPACE_TEXT == nPrefix )
+    {
+        switch (eVarDeclsContextType)
+        {
+            case VarTypeSequence:
+                eElementName = XML_SEQUENCE_DECL;
+                break;
+            case VarTypeSimple:
+                eElementName = XML_VARIABLE_DECL;
+                break;
+            case VarTypeUserField:
+                eElementName = XML_USER_FIELD_DECL;
+                break;
+            default:
+                DBG_ERROR("unknown field type!");
         }
 
-        if (0 == rLocalName.compareToAscii(sElementName)) {
+        if( IsXMLToken( rLocalName, eElementName ) )
+        {
             pImportContext = new XMLVariableDeclImportContext(
                 GetImport(), rImportHelper, nPrefix, rLocalName, xAttrList,
                 eVarDeclsContextType);
@@ -829,9 +832,9 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
         sPropertyIsExpression(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_expression))
 {
     if ( (XML_NAMESPACE_TEXT == nPrfx) &&
-         ( (0 == rLocalName.compareToAscii(sXML_sequence_decl)) ||
-           (0 == rLocalName.compareToAscii(sXML_variable_decl)) ||
-           (0 == rLocalName.compareToAscii(sXML_user_field_decl))    )) {
+         ( ( IsXMLToken( rLocalName, XML_SEQUENCE_DECL )) ||
+           ( IsXMLToken( rLocalName, XML_VARIABLE_DECL)) ||
+           ( IsXMLToken( rLocalName, XML_USER_FIELD_DECL))    )) {
 
         // TODO: check validity (need name!)
 
@@ -892,7 +895,7 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
 
                 if (nNumLevel >= 0)
                 {
-                    OUString sStr(cSeparationChar);
+                    OUString sStr(&cSeparationChar, 1);
                     aAny <<= sStr;
                     xFieldMaster->setPropertyValue(
                         sPropertyNumberingSeparator, aAny);

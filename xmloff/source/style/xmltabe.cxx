@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLITMAP_HXX
 #include "xmlitmap.hxx"
@@ -99,7 +99,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry psXML_tabstop_style[] =
+SvXMLEnumMapEntry pXML_tabstop_style[] =
 {
     { XML_LEFT,     style::TabAlign_LEFT    },
     { XML_CENTER,   style::TabAlign_CENTER  },
@@ -118,15 +118,15 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
 
     // position attribute
     mrUnitConv.convertMeasure( sBuffer, pTabStop->Position );
-    AddAttribute( XML_NAMESPACE_STYLE, sXML_position,
+    AddAttribute( XML_NAMESPACE_STYLE, XML_POSITION,
                   sBuffer.makeStringAndClear() );
 
     // type attribute
     if( style::TabAlign_LEFT != pTabStop->Alignment )
     {
         mrUnitConv.convertEnum( sBuffer, pTabStop->Alignment,
-                                   psXML_tabstop_style );
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_type,
+                                   pXML_tabstop_style );
+        AddAttribute( XML_NAMESPACE_STYLE, XML_TYPE,
                       sBuffer.makeStringAndClear() );
     }
 
@@ -135,7 +135,7 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
         pTabStop->DecimalChar != 0 )
     {
         sBuffer.append( pTabStop->DecimalChar );
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_char,
+        AddAttribute( XML_NAMESPACE_STYLE, XML_CHAR,
                       sBuffer.makeStringAndClear() );
     }
 
@@ -143,11 +143,11 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
     if( ' ' != pTabStop->FillChar && 0 != pTabStop->FillChar )
     {
         sBuffer.append( pTabStop->FillChar );
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_leader_char,
+        AddAttribute( XML_NAMESPACE_STYLE, XML_LEADER_CHAR,
                       sBuffer.makeStringAndClear() );
     }
 
-    OUString sElem = GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_tab_stop) );
+    OUString sElem = GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_TAB_STOP) );
     mxHandler->ignorableWhitespace( msWS );
     mxHandler->startElement( sElem, mxAttrList );
     ClearAttrList();
@@ -179,10 +179,10 @@ void SvxXMLTabStopExport::CheckAttrList()
 }
 #endif
 
-void SvxXMLTabStopExport::AddAttribute( sal_uInt16 nPrefixKey, const char *pName,
+void SvxXMLTabStopExport::AddAttribute( sal_uInt16 nPrefixKey, enum XMLTokenEnum eName,
                                        const OUString& rValue )
 {
-    OUString sName( OUString::createFromAscii( pName ) );
+    OUString sName( GetXMLToken( eName ) );
 
     mpAttrList->AddAttribute( GetQNameByKey( nPrefixKey, sName ),
                              msCDATA, rValue );
@@ -190,8 +190,8 @@ void SvxXMLTabStopExport::AddAttribute( sal_uInt16 nPrefixKey, const char *pName
 
 SvxXMLTabStopExport::SvxXMLTabStopExport( const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
                                       const SvXMLUnitConverter& rUnitConverter )
-:   msCDATA( OUString::createFromAscii( sXML_CDATA ) ),
-    msWS( OUString::createFromAscii( sXML_WS ) ),
+:   msCDATA( GetXMLToken( XML_CDATA ) ),
+    msWS( GetXMLToken( XML_WS ) ),
     mpNamespaceMap( 0 ),
     mrUnitConv( rUnitConverter ),
     mpAttrList( new SvXMLAttributeList )
@@ -227,7 +227,7 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny,
         //  return;
 
         OUString sElem = GetQNameByKey( XML_NAMESPACE_STYLE,
-                                       OUString::createFromAscii(sXML_tab_stops) );
+                                        GetXMLToken(XML_TAB_STOPS) );
         mxHandler->ignorableWhitespace( msWS );
         mxHandler->startElement( sElem, mxAttrList );
         ClearAttrList();

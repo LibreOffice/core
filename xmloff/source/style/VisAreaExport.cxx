@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VisAreaExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 18:05:31 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -90,6 +90,9 @@
 #include <tools/gen.hxx>
 #endif
 
+using namespace ::xmloff::token;
+
+
 XMLVisAreaExport::XMLVisAreaExport(SvXMLExport& rExport, const sal_Char *pName,
                             const Rectangle& aRect, const MapUnit aMapUnit)
 {
@@ -98,13 +101,13 @@ XMLVisAreaExport::XMLVisAreaExport(SvXMLExport& rExport, const sal_Char *pName,
     // write VisArea Element and its Attributes
     rtl::OUStringBuffer sBuffer;
     rUnitConv.convertMeasure(sBuffer, aRect.getX(), aMapUnit);
-    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_x, sBuffer.makeStringAndClear());
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_X, sBuffer.makeStringAndClear());
     rUnitConv.convertMeasure(sBuffer, aRect.getY(), aMapUnit);
-    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_y, sBuffer.makeStringAndClear());
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_Y, sBuffer.makeStringAndClear());
     rUnitConv.convertMeasure(sBuffer, aRect.getWidth(), aMapUnit);
-    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_width, sBuffer.makeStringAndClear());
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_WIDTH, sBuffer.makeStringAndClear());
     rUnitConv.convertMeasure(sBuffer, aRect.getHeight(), aMapUnit);
-    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_height, sBuffer.makeStringAndClear());
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_HEIGHT, sBuffer.makeStringAndClear());
     SvXMLElementExport aVisAreaElem(rExport, XML_NAMESPACE_OFFICE, pName, sal_True, sal_True);
 }
 
@@ -118,13 +121,13 @@ XMLVisAreaExport::XMLVisAreaExport(SvXMLExport& rExport, const sal_Char *pName,
     // write VisArea Element and its Attributes
     rtl::OUStringBuffer sBuffer;
     rUnitConv.convertMeasure(sBuffer, aRect.X, aMapUnit);
-    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_x, sBuffer.makeStringAndClear());
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_X, sBuffer.makeStringAndClear());
     rUnitConv.convertMeasure(sBuffer, aRect.Y, aMapUnit);
-    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_y, sBuffer.makeStringAndClear());
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_Y, sBuffer.makeStringAndClear());
     rUnitConv.convertMeasure(sBuffer, aRect.Width, aMapUnit);
-    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_width, sBuffer.makeStringAndClear());
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_WIDTH, sBuffer.makeStringAndClear());
     rUnitConv.convertMeasure(sBuffer, aRect.Height, aMapUnit);
-    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_height, sBuffer.makeStringAndClear());
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_HEIGHT, sBuffer.makeStringAndClear());
     SvXMLElementExport aVisAreaElem(rExport, XML_NAMESPACE_OFFICE, pName, sal_True, sal_True);
 }
 

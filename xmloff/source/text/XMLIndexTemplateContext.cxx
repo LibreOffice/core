@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -164,7 +164,7 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const SvXMLEnumMapEntry* pLevelNameMap,
-    const sal_Char* pLevelAttrName,
+    enum XMLTokenEnum eLevelAttrName,
     const sal_Char** pLevelStylePropMap,
     const sal_Bool* pAllowedTokenTypes) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
@@ -173,7 +173,7 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
         nOutlineLevel(1),   // all indices have level 1 (0 is for header)
         bStyleNameOK(sal_False),
         bOutlineLevelOK(sal_False),
-        pOutlineLevelAttrName(pLevelAttrName),
+        eOutlineLevelAttrName(eLevelAttrName),
         pOutlineLevelNameMap(pLevelNameMap),
         pOutlineLevelStylePropMap(pLevelStylePropMap),
         pAllowedTokenTypesMap(pAllowedTokenTypes),
@@ -203,8 +203,8 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
             "BibliographyDataField")),
         sChapterFormat(RTL_CONSTASCII_USTRINGPARAM("ChapterFormat"))
 {
-    DBG_ASSERT( ((NULL != pLevelAttrName) &&  (NULL != pLevelNameMap))
-                || ((NULL == pLevelAttrName) &&  (NULL == pLevelNameMap)),
+    DBG_ASSERT( ((XML_TOKEN_INVALID != eLevelAttrName) &&  (NULL != pLevelNameMap))
+                || ((XML_TOKEN_INVALID == eLevelAttrName) &&  (NULL == pLevelNameMap)),
                 "need both, attribute name and value map, or neither" );
     DBG_ASSERT( NULL != pOutlineLevelStylePropMap, "need property name map" );
     DBG_ASSERT( NULL != pAllowedTokenTypes, "need allowed tokens map" );
@@ -242,17 +242,16 @@ void XMLIndexTemplateContext::StartElement(
                               &sLocalName );
         if (XML_NAMESPACE_TEXT == nPrefix)
         {
-            if (sLocalName.equalsAsciiL(sXML_style_name,
-                                        sizeof(sXML_style_name)-1))
+            if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
             {
                 // style name
                 sStyleName = xAttrList->getValueByIndex(nAttr);
                 bStyleNameOK = sal_True;
             }
-            else if (NULL != pOutlineLevelAttrName)
+            else if (eOutlineLevelAttrName != XML_TOKEN_INVALID)
             {
                 // we have an attr name! Then see if we have the attr, too.
-                if (0 == sLocalName.compareToAscii(pOutlineLevelAttrName))
+                if (IsXMLToken(sLocalName, eOutlineLevelAttrName))
                 {
                     // outline level
                     sal_uInt16 nTmp;

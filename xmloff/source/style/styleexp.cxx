@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-27 16:38:56 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLITMAP_HXX
 //#include "xmlitmap.hxx"
@@ -141,6 +141,8 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 //using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
+
 using ::com::sun::star::document::XEventsSupplier;
 
 XMLStyleExport::XMLStyleExport(
@@ -171,7 +173,7 @@ void XMLStyleExport::exportStyleContent( const Reference< XStyle >& rStyle )
 
 sal_Bool XMLStyleExport::exportStyle(
         const Reference< XStyle >& rStyle,
-          const sal_Char *pXMLFamily,
+          const OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
         const OUString* pPrefix )
 {
@@ -200,12 +202,11 @@ sal_Bool XMLStyleExport::exportStyle(
         sName = *pPrefix;
     sName += rStyle->getName();
 
-    GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_name, sName );
+    GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, sName );
 
     // style:family="..."
-    if( pXMLFamily )
-        GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_family,
-                                         pXMLFamily );
+    if( rXMLFamily.getLength() > 0 )
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, rXMLFamily);
 
     // style:parent-style-name="..."
     OUString sParentString(rStyle->getParentStyle());
@@ -221,7 +222,7 @@ sal_Bool XMLStyleExport::exportStyle(
         sParent = sPoolStyleName;
 
     if( sParent.getLength() )
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_parent_style_name,
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_PARENT_STYLE_NAME,
                                     sParent );
 
     // style:next-style-name="..." (paragraph styles only)
@@ -232,7 +233,7 @@ sal_Bool XMLStyleExport::exportStyle(
         aAny >>= sNextName;
         if( sName != sNextName )
         {
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_next_style_name,
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NEXT_STYLE_NAME,
                           sNextName );
         }
     }
@@ -242,8 +243,8 @@ sal_Bool XMLStyleExport::exportStyle(
     {
         aAny = xPropSet->getPropertyValue( sIsAutoUpdate );
         if( *(sal_Bool *)aAny.getValue() )
-            GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_auto_update,
-                               sXML_true );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_AUTO_UPDATE,
+                                      XML_TRUE );
     }
 
     // style:list-style-name="..." (SW paragarph styles only)
@@ -259,7 +260,7 @@ sal_Bool XMLStyleExport::exportStyle(
                 OUString sListName;
                 aAny >>= sListName;
                 if( sListName.getLength() )
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_list_style_name,
+                    GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_LIST_STYLE_NAME,
                                   sListName );
             }
         }
@@ -275,7 +276,7 @@ sal_Bool XMLStyleExport::exportStyle(
 
     {
         // <style:style>
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, sXML_style,
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_STYLE,
                                   sal_True, sal_True );
         // <style:properties>
         ::std::vector< XMLPropertyState > xPropStates =
@@ -295,7 +296,7 @@ sal_Bool XMLStyleExport::exportStyle(
 
 sal_Bool XMLStyleExport::exportDefaultStyle(
         const Reference< XPropertySet >& xPropSet,
-          const sal_Char *pXMLFamily,
+          const OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper )
 {
     Reference< XPropertySetInfo > xPropSetInfo =
@@ -308,12 +309,12 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
 
     {
         // style:family="..."
-        if( pXMLFamily )
-            GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_family,
-                                             pXMLFamily );
+        if( rXMLFamily.getLength() > 0 )
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY,
+                                      rXMLFamily );
         // <style:style>
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                  sXML_default_style,
+                                  XML_DEFAULT_STYLE,
                                   sal_True, sal_True );
         // <style:properties>
         //::std::vector< XMLPropertyState > xPropStates =
@@ -332,42 +333,42 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
 #if 0
 void XMLStyleExport::exportStyleFamily(
     const sal_Char *pFamily,
-    const sal_Char *pXMLFamily,
+    const OUString& rXMLFamily,
     const UniReference < XMLPropertySetMapper >& rPropMapper,
     sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
     const OUString sFamily(OUString::createFromAscii(pFamily ));
     UniReference < SvXMLExportPropertyMapper > xExpPropMapper =
         new SvXMLExportPropertyMapper( rPropMapper );
-    exportStyleFamily( sFamily, pXMLFamily, xExpPropMapper, bUsed, nFamily,
+    exportStyleFamily( sFamily, rXMLFamily, xExpPropMapper, bUsed, nFamily,
                        pPrefix);
 }
 
 void XMLStyleExport::exportStyleFamily(
-    const OUString& rFamily, const sal_Char *pXMLFamily,
+    const OUString& rFamily, const OUString& rXMLFamily,
     const UniReference < XMLPropertySetMapper >& rPropMapper,
     sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
     UniReference < SvXMLExportPropertyMapper > xExpPropMapper =
         new SvXMLExportPropertyMapper( rPropMapper );
-    exportStyleFamily( rFamily, pXMLFamily, xExpPropMapper, bUsed, nFamily,
+    exportStyleFamily( rFamily, rXMLFamily, xExpPropMapper, bUsed, nFamily,
                        pPrefix);
 }
 #endif
 
 void XMLStyleExport::exportStyleFamily(
     const sal_Char *pFamily,
-    const sal_Char *pXMLFamily,
+    const OUString& rXMLFamily,
     const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
     sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
     const OUString sFamily(OUString::createFromAscii(pFamily ));
-    exportStyleFamily( sFamily, pXMLFamily, rPropMapper, bUsed, nFamily,
+    exportStyleFamily( sFamily, rXMLFamily, rPropMapper, bUsed, nFamily,
                        pPrefix);
 }
 
 void XMLStyleExport::exportStyleFamily(
-    const OUString& rFamily, const sal_Char *pXMLFamily,
+    const OUString& rFamily, const OUString& rXMLFamily,
     const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
     sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
@@ -413,7 +414,7 @@ void XMLStyleExport::exportStyleFamily(
         {
             if( !bUsed || xStyle->isInUse() )
             {
-                BOOL bExported = exportStyle( xStyle, pXMLFamily, rPropMapper,
+                BOOL bExported = exportStyle( xStyle, rXMLFamily, rPropMapper,
                                               pPrefix );
                 if( bUsed && bFirstStyle && bExported  )
                 {
@@ -488,7 +489,7 @@ void XMLStyleExport::exportStyleFamily(
                     xStyleCont->getByName( sNextName ) >>= xStyle;
                     DBG_ASSERT( xStyle.is(), "Style not found for export!" );
 
-                    if( xStyle.is() && exportStyle( xStyle, pXMLFamily, rPropMapper, pPrefix ) )
+                    if( xStyle.is() && exportStyle( xStyle, rXMLFamily, rPropMapper, pPrefix ) )
                         pExportedStyles->Insert( new String( sTmp ) );
                 }
             }

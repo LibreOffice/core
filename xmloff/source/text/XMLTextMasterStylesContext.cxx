@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterStylesContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
@@ -87,6 +87,9 @@
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
+
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_MASTER_PAGE;
 
 // ------------------------------------------------------------------------
 
@@ -117,7 +120,7 @@ SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
     SvXMLStyleContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.equalsAsciiL( sXML_master_page, sizeof(sXML_master_page)-1 ) &&
+        IsXMLToken( rLocalName, XML_MASTER_PAGE ) &&
          InsertStyleFamily( XML_STYLE_FAMILY_MASTER_PAGE ) )
         pContext = new XMLTextMasterPageContext(
                         GetImport(), nPrefix, rLocalName,

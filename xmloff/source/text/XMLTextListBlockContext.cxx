@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListBlockContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 10:17:35 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLTEXTLISTITEMCONTEXT_HXX
@@ -105,6 +105,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
+using namespace ::xmloff::token;
 
 TYPEINIT1( XMLTextListBlockContext, SvXMLImportContext );
 
@@ -156,7 +157,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING:
-            bRestartNumbering = rValue.compareToAscii( sXML_true ) != 0;
+            bRestartNumbering = !IsXMLToken(rValue, XML_TRUE);
             break;
         case XML_TOK_TEXT_LIST_BLOCK_STYLE_NAME:
             sStyleName = rValue;

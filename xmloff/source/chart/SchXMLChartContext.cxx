@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-26 13:08:17 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #ifndef _XMLOFF_XMLEMENT_HXX
 #include "xmlement.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
@@ -756,14 +756,14 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
         if( nPrefix == XML_NAMESPACE_SVG )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_x )))
+            if( IsXMLToken( aLocalName, XML_X ) )
                 GetImport().GetMM100UnitConverter().convertMeasure( mrPosition.X, aValue );
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_y )))
+            else if( IsXMLToken( aLocalName, XML_Y ) )
                 GetImport().GetMM100UnitConverter().convertMeasure( mrPosition.Y, aValue );
         }
         else if( nPrefix == XML_NAMESPACE_CHART )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_style_name )))
+            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
                 msAutoStyleName = aValue;
         }
     }
@@ -794,7 +794,7 @@ SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
     SvXMLImportContext* pContext = 0;
 
     if( nPrefix == XML_NAMESPACE_TEXT &&
-        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_p )))
+        IsXMLToken( rLocalName, XML_P ) )
     {
         pContext = new SchXMLParagraphContext( GetImport(), rLocalName, mrTitle );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-28 09:02:20 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,13 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
 
 void lcl_xmloff_setAny( Any& rValue, sal_Int32 nValue, sal_Int8 nBytes )
 {
@@ -175,13 +178,13 @@ sal_Bool XMLNumberPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 //
 
 XMLNumberNonePropHdl::XMLNumberNonePropHdl( sal_Int8 nB ) :
-    sZeroStr( RTL_CONSTASCII_USTRINGPARAM( sXML_no_limit ) ),
+    sZeroStr( GetXMLToken(XML_NO_LIMIT) ),
     nBytes( nB )
 {
 }
 
-XMLNumberNonePropHdl::XMLNumberNonePropHdl( const sal_Char* sZeroString, sal_Int8 nB ) :
-    sZeroStr( OUString::createFromAscii( sZeroString ) ),
+XMLNumberNonePropHdl::XMLNumberNonePropHdl( enum XMLTokenEnum eZeroString, sal_Int8 nB ) :
+    sZeroStr( GetXMLToken( eZeroString ) ),
     nBytes( nB )
 {
 }
@@ -538,9 +541,9 @@ sal_Bool XMLDoublePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 //
 
 XMLColorTransparentPropHdl::XMLColorTransparentPropHdl(
-        const sal_Char *pTransparent ) :
-    sTransparent( OUString::createFromAscii( pTransparent ? pTransparent
-                                                          : sXML_transparent ) )
+    enum XMLTokenEnum eTransparent ) :
+    sTransparent( GetXMLToken(
+        eTransparent != XML_TOKEN_INVALID ? eTransparent : XML_TRANSPARENT ) )
 {
     // Nothing to do
 }
@@ -591,9 +594,9 @@ sal_Bool XMLColorTransparentPropHdl::exportXML( OUString& rStrExpValue, const An
 //
 
 XMLIsTransparentPropHdl::XMLIsTransparentPropHdl(
-    const sal_Char *pTransparent, sal_Bool bTransPropVal ) :
-    sTransparent( OUString::createFromAscii( pTransparent ? pTransparent
-                                                      : sXML_transparent ) ),
+    enum XMLTokenEnum eTransparent, sal_Bool bTransPropVal ) :
+    sTransparent( GetXMLToken(
+        eTransparent != XML_TOKEN_INVALID ? eTransparent : XML_TRANSPARENT ) ),
     bTransPropValue( bTransPropVal )
 {
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 12:35:28 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -200,7 +200,7 @@ namespace xmloff
             if (bSuccess = _rUnitConverter.convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE))
             {
                 aReturn.append( (sal_Unicode)' ' );
-                aReturn.appendAscii( (const sal_Char*)(bBelow ? sXML_below : sXML_above) );
+                aReturn.append( GetXMLToken(bBelow ? XML_BELOW : XML_ABOVE) );
 
                 _rStrExpValue = aReturn.makeStringAndClear();
             }
@@ -224,12 +224,12 @@ namespace xmloff
         {
             if (!bHasPos)
             {
-                if (sToken.equalsAsciiL( sXML_above, sizeof(sXML_above)-1))
+                if (IsXMLToken(sToken, XML_ABOVE))
                 {
                     bBelow = sal_False;
                     bHasPos = sal_True;
                 }
-                else if (sToken.equalsAsciiL(sXML_below, sizeof(sXML_below)-1))
+                else if (IsXMLToken(sToken, XML_BELOW))
                 {
                     bBelow = sal_True;
                     bHasPos = sal_True;
@@ -384,6 +384,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/06/15 12:35:28  dvo
+ *  #86004# changes sXML_* string to XML_* tokens continued
+ *
  *  Revision 1.7  2001/06/07 12:27:21  fs
  *  #86096# handler for FontEmphasis/FontRelief / substituted OEnumInt16Handler by XMLConstantsPropertyHandler
  *

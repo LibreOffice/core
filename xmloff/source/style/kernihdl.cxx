@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kernihdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-10 17:29:15 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 
 // --
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -83,6 +83,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -99,8 +100,7 @@ sal_Bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue
     sal_Bool bRet = sal_True;
     sal_Int32 nKerning = 0;
 
-    if( !rStrImpValue.equalsAsciiL( sXML_kerning_normal,
-                                    sizeof(sXML_kerning_normal)-1 ) )
+    if( ! IsXMLToken( rStrImpValue, XML_KERNING_NORMAL ) )
     {
         bRet = rUnitConverter.convertMeasure( nKerning, rStrImpValue );
     }
@@ -120,7 +120,7 @@ sal_Bool XMLKerningPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
         OUStringBuffer aOut;
 
         if( nValue == 0 )
-            aOut.appendAscii( sXML_kerning_normal );
+            aOut.append( GetXMLToken(XML_KERNING_NORMAL) );
         else
             rUnitConverter.convertMeasure( aOut, nValue );
 

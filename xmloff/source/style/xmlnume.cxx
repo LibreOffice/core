@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-29 12:34:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
@@ -148,6 +148,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
+using namespace ::xmloff::token;
 
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE[] = "SymbolTextDistance";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_PARENT_NUMBERING[] = "ParentNumbering";
@@ -328,25 +329,25 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
     // text:level
     OUStringBuffer sTmp;
     sTmp.append( nLevel+1L );
-    GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_level, sTmp.makeStringAndClear() );
+    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL, sTmp.makeStringAndClear() );
     if( sTextStyleName.getLength() > 0 )
-        GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_style_name, sTextStyleName );
+        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME, sTextStyleName );
     if( sPrefix.getLength() > 0 )
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_num_prefix, sPrefix );
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_PREFIX, sPrefix );
     if( sSuffix.getLength() > 0 )
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_num_suffix, sSuffix );
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_SUFFIX, sSuffix );
 
-    const sal_Char *pElem = sXML_list_level_style_number;
+    enum XMLTokenEnum eElem = XML_LIST_LEVEL_STYLE_NUMBER;
     if( NumberingType::CHAR_SPECIAL == eType )
     {
         // <text:list-level-style-bullet>
-        pElem = sXML_list_level_style_bullet;
+        eElem = XML_LIST_LEVEL_STYLE_BULLET;
 
         if( cBullet )
         {
             // text:bullet-char="..."
             sTmp.append( cBullet );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_bullet_char,
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_BULLET_CHAR,
                           sTmp.makeStringAndClear() );
         }
 
@@ -355,7 +356,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
     {
         // <text:list-level-style-image>
 
-        pElem = sXML_list_level_style_image;
+        eElem = XML_LIST_LEVEL_STYLE_IMAGE;
 
 
         if( sImageURL.getLength() )
@@ -366,11 +367,11 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             OUString sURL( GetExport().AddEmbeddedGraphicObject( sImageURL ) );
             if( sURL.getLength() )
             {
-                GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sURL );
+                GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
 
-                GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
-                GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
-                GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
+                GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
             }
         }
         else
@@ -383,35 +384,35 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
     {
         // <text:list-level-style-number> or <text:outline-level-style>
         if( bOutline )
-            pElem = sXML_outline_level_style;
+            eElem = XML_OUTLINE_LEVEL_STYLE;
         else
-            pElem = sXML_list_level_style_number;
+            eElem = XML_LIST_LEVEL_STYLE_NUMBER;
 
         GetExport().GetMM100UnitConverter().convertNumFormat( sTmp, eType );
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_num_format,
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
                                        sTmp.makeStringAndClear() );
         GetExport().GetMM100UnitConverter().convertNumLetterSync( sTmp, eType );
         if( sTmp.getLength() )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                      sXML_num_letter_sync,
+                                      XML_NUM_LETTER_SYNC,
                                            sTmp.makeStringAndClear() );
 
         if( nStartValue > 1 )
         {
             sTmp.append( (sal_Int32)nStartValue );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_start_value,
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
                           sTmp.makeStringAndClear() );
         }
         if( nDisplayLevels > 1 && NumberingType::NUMBER_NONE != eType )
         {
             sTmp.append( (sal_Int32)nDisplayLevels );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_display_levels,
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_DISPLAY_LEVELS,
                           sTmp.makeStringAndClear() );
         }
     }
 
     {
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, pElem,
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, eElem,
                                   sal_True, sal_True );
 
         nSpaceBefore += nMinLabelWidth;
@@ -420,31 +421,31 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         if( nSpaceBefore > 0 )
         {
             GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nSpaceBefore );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_space_before,
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_SPACE_BEFORE,
                           sBuffer.makeStringAndClear() );
         }
         if( nMinLabelWidth != 0 )
         {
             GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nMinLabelWidth );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_min_label_width,
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_WIDTH,
                           sBuffer.makeStringAndClear() );
         }
         if( nMinLabelDist > 0 )
         {
             GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nMinLabelDist );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_min_label_distance,
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_DISTANCE,
                           sBuffer.makeStringAndClear() );
         }
         if( HoriOrientation::LEFT != eAdjust )
         {
-            const char *pValue = 0;
+            enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
             switch( eAdjust )
             {
-            case HoriOrientation::RIGHT:    pValue = sXML_end;  break;
-            case HoriOrientation::CENTER:   pValue = sXML_center;   break;
+            case HoriOrientation::RIGHT:    eValue = XML_END;   break;
+            case HoriOrientation::CENTER:   eValue = XML_CENTER;    break;
             }
-            if( pValue )
-                GetExport().AddAttributeASCII( XML_NAMESPACE_FO, sXML_text_align, pValue );
+            if( eValue != XML_TOKEN_INVALID )
+                GetExport().AddAttribute( XML_NAMESPACE_FO, XML_TEXT_ALIGN, eValue );
         }
 
         if( NumberingType::CHAR_SPECIAL == eType )
@@ -460,7 +461,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                 if( sStyleName.getLength() )
                 {
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                  sXML_font_name,
+                                                  XML_FONT_NAME,
                                                   sStyleName );
                 }
                 else
@@ -474,93 +475,93 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                     aAny <<= sBulletFontName;
                     if( aFamilyNameHdl.exportXML( sTmp, aAny, rUnitConv ) )
                         GetExport().AddAttribute( XML_NAMESPACE_FO,
-                                                  sXML_font_family, sTmp );
+                                                  XML_FONT_FAMILY, sTmp );
 
                     if( sBulletFontStyleName.getLength() )
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                  sXML_font_style_name,
+                                                  XML_FONT_STYLE_NAME,
                                                   sBulletFontStyleName );
 
                     XMLFontFamilyPropHdl aFamilyHdl;
                     aAny <<= (sal_Int16)eBulletFontFamily;
                     if( aFamilyHdl.exportXML( sTmp, aAny, rUnitConv  ) )
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                  sXML_font_family_generic,
+                                                  XML_FONT_FAMILY_GENERIC,
                                                   sTmp );
 
                     XMLFontPitchPropHdl aPitchHdl;
                     aAny <<= (sal_Int16)eBulletFontPitch;
                     if( aPitchHdl.exportXML( sTmp, aAny, rUnitConv  ) )
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                  sXML_font_pitch, sTmp );
+                                                  XML_FONT_PITCH, sTmp );
 
                     XMLFontEncodingPropHdl aEncHdl;
                     aAny <<= (sal_Int16)eBulletFontEncoding;
                     if( aEncHdl.exportXML( sTmp, aAny, rUnitConv  ) )
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                  sXML_font_charset, sTmp );
+                                                  XML_FONT_CHARSET, sTmp );
                 }
             }
         }
         else if( NumberingType::BITMAP == eType )
         {
-            const char *pValue = 0;
+            enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
             switch( eImageVertOrient )
             {
             case VertOrientation::BOTTOM:   // yes, its OK: BOTTOM means that the baseline
                                     // hits the frame at its topmost position
             case VertOrientation::LINE_TOP:
             case VertOrientation::CHAR_TOP:
-                pValue = sXML_top;
+                eValue = XML_TOP;
                 break;
             case VertOrientation::CENTER:
             case VertOrientation::LINE_CENTER:
             case VertOrientation::CHAR_CENTER:
-                pValue = sXML_middle;
+                eValue = XML_MIDDLE;
                 break;
             case VertOrientation::TOP:      // yes, its OK: TOP means that the baseline
                                     // hits the frame at its bottommost position
             case VertOrientation::LINE_BOTTOM:
             case VertOrientation::CHAR_BOTTOM:
-                pValue = sXML_bottom;
+                eValue = XML_BOTTOM;
                 break;
             }
-            if( pValue )
-                GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_vertical_pos, pValue );
+            if( eValue != XML_TOKEN_INVALID )
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_VERTICAL_POS, eValue );
 
-            pValue = 0;
+            eValue = XML_TOKEN_INVALID;
             switch( eImageVertOrient )
             {
             case VertOrientation::TOP:
             case VertOrientation::CENTER:
             case VertOrientation::BOTTOM:
-                pValue = sXML_baseline;
+                eValue = XML_BASELINE;
                 break;
             case VertOrientation::LINE_TOP:
             case VertOrientation::LINE_CENTER:
             case VertOrientation::LINE_BOTTOM:
-                pValue = sXML_line;
+                eValue = XML_LINE;
                 break;
             case VertOrientation::CHAR_TOP:
             case VertOrientation::CHAR_CENTER:
             case VertOrientation::CHAR_BOTTOM:
-                pValue = sXML_char;
+                eValue = XML_CHAR;
                 break;
             }
-            if( pValue )
-                GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_vertical_rel, pValue );
+            if( eValue != XML_TOKEN_INVALID )
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_VERTICAL_REL, eValue );
 
             if( nImageWidth > 0 )
             {
                 GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nImageWidth );
-                GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_width,
+                GetExport().AddAttribute( XML_NAMESPACE_FO, XML_WIDTH,
                               sBuffer.makeStringAndClear() );
             }
 
             if( nImageHeight > 0 )
             {
                 GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nImageHeight );
-                GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_height,
+                GetExport().AddAttribute( XML_NAMESPACE_FO, XML_HEIGHT,
                               sBuffer.makeStringAndClear() );
             }
         }
@@ -572,7 +573,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             {
                 const Color aColor( nColor );
                 SvXMLUnitConverter::convertColor( sBuffer, aColor );
-                GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_color,
+                GetExport().AddAttribute( XML_NAMESPACE_FO, XML_COLOR,
                               sBuffer.makeStringAndClear() );
             }
 
@@ -580,7 +581,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             if( nBullRelSize )
             {
                 GetExport().GetMM100UnitConverter().convertPercent( sTmp, nBullRelSize );
-                GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_font_size,
+                GetExport().AddAttribute( XML_NAMESPACE_FO, XML_FONT_SIZE,
                               sTmp.makeStringAndClear() );
             }
         }
@@ -588,7 +589,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         if( GetExport().GetAttrList().getLength() > 0 )
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                      sXML_properties, sal_True, sal_True );
+                                      XML_PROPERTIES, sal_True, sal_True );
         }
         if( NumberingType::BITMAP == eType && sImageURL.getLength() )
         {
@@ -628,18 +629,18 @@ void SvxXMLNumRuleExport::Export( const OUString& rName,
 
     // style:name="..."
     if( rName.getLength() )
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_name, rName );
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, rName );
 
     // text:consecutive-numbering="..."
     if( bContNumbering )
-        GetExport().AddAttributeASCII( XML_NAMESPACE_TEXT, sXML_consecutive_numbering,
-                             sXML_true );
+        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_CONSECUTIVE_NUMBERING,
+                             XML_TRUE );
 
     // other application specific attributes
     AddListStyleAttributes();
 
     OUString sElem = GetExport().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TEXT,
-                                   OUString::createFromAscii(sXML_list_style) );
+                                   GetXMLToken(XML_LIST_STYLE) );
     GetExport().GetDocHandler()->ignorableWhitespace( sWS );
     GetExport().GetDocHandler()->startElement( sElem, GetExport().GetXAttrList() );
     GetExport().ClearAttrList();
@@ -657,7 +658,7 @@ void SvxXMLNumRuleExport::ExportOutline()
     GetExport().CheckAttrList();
 
     OUString sElem = GetExport().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TEXT,
-                                   OUString::createFromAscii(sXML_outline_style) );
+                                   GetXMLToken(XML_OUTLINE_STYLE) );
     GetExport().GetDocHandler()->ignorableWhitespace( sWS );
     GetExport().GetDocHandler()->startElement( sElem, GetExport().GetXAttrList() );
 
@@ -682,7 +683,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
 
     // style:name="..."
     if( rName.getLength() )
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_name, rName );
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, rName );
 
     // text:consecutive-numbering="..."
     sal_Bool bContNumbering = sal_False;
@@ -693,14 +694,14 @@ void SvxXMLNumRuleExport::exportNumberingRule(
         bContNumbering = *(sal_Bool *)aAny.getValue();
     }
     if( bContNumbering )
-        GetExport().AddAttributeASCII( XML_NAMESPACE_TEXT,
-                                       sXML_consecutive_numbering, sXML_true );
+        GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                  XML_CONSECUTIVE_NUMBERING, XML_TRUE );
 
     // other application specific attributes
     AddListStyleAttributes();
 
     {
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, sXML_list_style ,
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, XML_LIST_STYLE ,
                                   sal_True, sal_True );
         exportLevelStyles( rNumRule );
     }
@@ -747,7 +748,7 @@ void SvxXMLNumRuleExport::exportOutline()
         if( xNumRule.is() )
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                      sXML_outline_style, sal_True, sal_True );
+                                      XML_OUTLINE_STYLE, sal_True, sal_True );
             exportLevelStyles( xNumRule, sal_True );
         }
     }
@@ -799,59 +800,3 @@ void SvxXMLNumRuleExport::exportStyles( sal_Bool bUsed,
         }
     }
 }
-
-#if SUPD < 627
-const sal_Char *SvxXMLNumRuleExport::GetNumFormatValue( sal_Int16 eNumType )
-{
-    const sal_Char *pFormat = 0;
-    switch( eNumType )
-    {
-    case NumberingType::CHARS_UPPER_LETTER: pFormat = sXML_A; break;
-    case NumberingType::CHARS_LOWER_LETTER: pFormat = sXML_a; break;
-    case NumberingType::ROMAN_UPPER:            pFormat = sXML_I; break;
-    case NumberingType::ROMAN_LOWER:            pFormat = sXML_i; break;
-    case NumberingType::ARABIC:             pFormat = sXML_1; break;
-    case NumberingType::CHARS_UPPER_LETTER_N:   pFormat = sXML_A; break;
-    case NumberingType::CHARS_LOWER_LETTER_N:   pFormat = sXML_a; break;
-    case NumberingType::NUMBER_NONE:            pFormat = sXML__empty; break;
-
-    case NumberingType::CHAR_SPECIAL:
-    case NumberingType::PAGE_DESCRIPTOR:
-    case NumberingType::BITMAP:
-        DBG_ASSERT( pFormat, "invalid number format" );
-        break;
-    }
-
-    return pFormat;
-}
-
-const sal_Char *SvxXMLNumRuleExport::GetNumLetterSync( sal_Int16 eNumType )
-{
-    const sal_Char *pSync = 0;
-    switch( eNumType )
-    {
-    case NumberingType::CHARS_UPPER_LETTER:
-    case NumberingType::CHARS_LOWER_LETTER:
-    case NumberingType::ROMAN_UPPER:
-    case NumberingType::ROMAN_LOWER:
-    case NumberingType::ARABIC:
-    case NumberingType::NUMBER_NONE:
-        // default
-        // pSync = sXML_false;
-        break;
-
-    case NumberingType::CHARS_UPPER_LETTER_N:
-    case NumberingType::CHARS_LOWER_LETTER_N:
-        pSync = sXML_true;
-        break;
-
-    case NumberingType::CHAR_SPECIAL:
-    case NumberingType::PAGE_DESCRIPTOR:
-    case NumberingType::BITMAP:
-        DBG_ASSERT( pSync, "invalid number format" );
-        break;
-    }
-
-    return pSync;
-}
-#endif

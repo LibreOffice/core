@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaImportComponent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:20:06 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLMETAI_HXX
@@ -76,6 +76,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 class SvXMLMetaDocumentContext : public SvXMLImportContext
 {
@@ -111,7 +112,7 @@ SvXMLImportContext *SvXMLMetaDocumentContext::CreateChildContext( USHORT nPrefix
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
-         rLocalName.equalsAsciiL(sXML_meta, sizeof(sXML_meta)-1) )
+         IsXMLToken(rLocalName, XML_META) )
     {
         return new SfxXMLMetaContext(GetImport(), nPrefix, rLocalName, GetImport().GetModel());
     }
@@ -143,7 +144,7 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
     const uno::Reference<xml::sax::XAttributeList > & xAttrList )
 {
     if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
-         rLocalName.equalsAsciiL(sXML_document_meta, sizeof(sXML_meta)-1) )
+         IsXMLToken(rLocalName, XML_DOCUMENT_META) )
     {
         return new SvXMLMetaDocumentContext(*this, nPrefix, rLocalName, xAttrList);
     }

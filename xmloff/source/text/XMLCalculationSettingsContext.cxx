@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-30 15:00:43 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
-#endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
@@ -92,6 +89,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrefix,
@@ -112,7 +110,7 @@ XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImpo
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
-            if (aLocalName.compareToAscii(sXML_null_year) == 0)
+            if ( IsXMLToken( aLocalName, XML_NULL_YEAR ) )
             {
                 sal_Int32 nTemp;
                 GetImport().GetMM100UnitConverter().convertNumber(nTemp, sValue);

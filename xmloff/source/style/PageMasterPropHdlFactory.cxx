@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdlFactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:47:28 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _XMLOFF_XMLTYPES_HXX
 #include "xmltypes.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
 #include "xmlbahdl.hxx"
@@ -88,6 +88,7 @@
 
 
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 //______________________________________________________________________________
 
@@ -123,40 +124,39 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
             break;
             case XML_PM_TYPE_PRINTORIENTATION:
                 pHdl = new XMLNamedBoolPropertyHdl(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_landscape ) ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_portrait ) ) );
+                    GetXMLToken( XML_LANDSCAPE ),
+                    GetXMLToken( XML_PORTRAIT ) );
             break;
             case XML_PM_TYPE_PRINTANNOTATIONS:
-                pHdl = new XMLPMPropHdl_Print( sXML_annotations );
+                pHdl = new XMLPMPropHdl_Print( XML_ANNOTATIONS );
             break;
             case XML_PM_TYPE_PRINTCHARTS:
-                pHdl = new XMLPMPropHdl_Print( sXML_charts );
+                pHdl = new XMLPMPropHdl_Print( XML_CHARTS );
             break;
             case XML_PM_TYPE_PRINTDRAWING:
-                pHdl = new XMLPMPropHdl_Print( sXML_drawings );
+                pHdl = new XMLPMPropHdl_Print( XML_DRAWINGS );
             break;
             case XML_PM_TYPE_PRINTFORMULAS:
-                pHdl = new XMLPMPropHdl_Print( sXML_formulas );
+                pHdl = new XMLPMPropHdl_Print( XML_FORMULAS );
             break;
             case XML_PM_TYPE_PRINTGRID:
-                pHdl = new XMLPMPropHdl_Print( sXML_grid );
+                pHdl = new XMLPMPropHdl_Print( XML_GRID );
             break;
             case XML_PM_TYPE_PRINTHEADERS:
-                pHdl = new XMLPMPropHdl_Print( sXML_headers );
+                pHdl = new XMLPMPropHdl_Print( XML_HEADERS );
             break;
             case XML_PM_TYPE_PRINTOBJECTS:
-                pHdl = new XMLPMPropHdl_Print( sXML_objects );
+                pHdl = new XMLPMPropHdl_Print( XML_OBJECTS );
             break;
             case XML_PM_TYPE_PRINTZEROVALUES:
-                pHdl = new XMLPMPropHdl_Print( sXML_zero_values );
+                pHdl = new XMLPMPropHdl_Print( XML_ZERO_VALUES );
             break;
             case XML_PM_TYPE_PRINTPAGEORDER:
-                pHdl = new XMLNamedBoolPropertyHdl(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_ttb ) ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_ltr ) ) );
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_TTB ),
+                                                    GetXMLToken( XML_LTR ) );
             break;
             case XML_PM_TYPE_FIRSTPAGENUMBER:
-                pHdl = new XMLNumberNonePropHdl( sXML_continue, 2 );
+                pHdl = new XMLNumberNonePropHdl( XML_CONTINUE, 2 );
             break;
             case XML_PM_TYPE_CENTER_HORIZONTAL:
                 pHdl = new XMLPMPropHdl_CenterHorizontal();

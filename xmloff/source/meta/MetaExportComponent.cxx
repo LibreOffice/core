@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 15:08:14 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,12 +103,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLMETAE_HXX
@@ -132,7 +128,7 @@ XMLMetaExportComponent::~XMLMetaExportComponent()
 {
 }
 
-sal_uInt32 XMLMetaExportComponent::exportDoc( const sal_Char *pClass )
+sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum eClass )
 {
     GetDocHandler()->startDocument();
     {
@@ -146,11 +142,11 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( const sal_Char *pClass )
             GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_OFFICE ),
             sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OFFICE ) );
 
-        SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, sXML_document_meta,
+        SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,
                         sal_True, sal_True );
         {
 
-            SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_meta,
+            SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_META,
                             sal_True, sal_True );
             SfxXMLMetaExport aMeta( GetDocHandler(), GetModel() );
             aMeta.Export( GetNamespaceMap() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteSeparatorImport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include "xmlimp.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -187,7 +187,7 @@ void XMLFootnoteSeparatorImport::StartElement(
 
         if (XML_NAMESPACE_STYLE == nPrefix)
         {
-            if (sLocalName.equalsAsciiL(sXML_width, sizeof(sXML_width)-1))
+            if (IsXMLToken( sLocalName, XML_WIDTH ))
             {
                 if (GetImport().GetMM100UnitConverter().convertMeasure(
                     nTmp, sAttrValue))
@@ -195,35 +195,31 @@ void XMLFootnoteSeparatorImport::StartElement(
                     nLineWeight = (sal_Int16)nTmp;
                 }
             }
-            else if (sLocalName.equalsAsciiL(sXML_distance_before_sep,
-                                           sizeof(sXML_distance_before_sep)-1))
+            else if (IsXMLToken( sLocalName, XML_DISTANCE_BEFORE_SEP ))
             {
                 if (GetImport().GetMM100UnitConverter().convertMeasure(
                                                         nTmp, sAttrValue))
                     nLineTextDistance = nTmp;
             }
-            else if (sLocalName.equalsAsciiL(sXML_distance_after_sep,
-                                           sizeof(sXML_distance_after_sep)-1))
+            else if (IsXMLToken( sLocalName, XML_DISTANCE_AFTER_SEP ))
             {
                 if (GetImport().GetMM100UnitConverter().convertMeasure(
                                                         nTmp, sAttrValue))
                     nLineDistance = nTmp;
             }
-            else if (sLocalName.equalsAsciiL(sXML_adjustment,
-                                             sizeof(sXML_adjustment)-1))
+            else if (IsXMLToken( sLocalName, XML_ADJUSTMENT ))
             {
                 sal_uInt16 nTmpU;
                 if (SvXMLUnitConverter::convertEnum(
                             nTmpU, sAttrValue, aXML_HorizontalAdjust_Enum))
                     eLineAdjust = (sal_Int16)nTmpU;
             }
-            else if (sLocalName.equalsAsciiL(sXML_rel_width,
-                                             sizeof(sXML_rel_width)-1))
+            else if (IsXMLToken( sLocalName, XML_REL_WIDTH ))
             {
                 if (SvXMLUnitConverter::convertPercent(nTmp, sAttrValue))
                     nLineRelWidth = (sal_uInt8)nTmp;
             }
-            else if (sLocalName.equalsAsciiL(sXML_color, sizeof(sXML_color)-1))
+            else if (IsXMLToken( sLocalName, XML_COLOR ))
             {
                 Color aColor;
                 if (SvXMLUnitConverter::convertColor(aColor, sAttrValue))

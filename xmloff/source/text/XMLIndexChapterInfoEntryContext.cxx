@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexChapterInfoEntryContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -156,14 +156,12 @@ void XMLIndexChapterInfoEntryContext::StartElement(
                               &sLocalName );
         if (XML_NAMESPACE_TEXT == nPrefix)
         {
-            if (sLocalName.equalsAsciiL(sXML_style_name,
-                                    sizeof(sXML_style_name)-1))
+            if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
             {
                 sCharStyleName = xAttrList->getValueByIndex(nAttr);
                 bCharStyleNameOK = sal_True;
             }
-            else if (sLocalName.equalsAsciiL(sXML_display,
-                                    sizeof(sXML_display)-1))
+            else if ( IsXMLToken( sLocalName, XML_DISPLAY ) )
             {
                 sal_uInt16 nTmp;
                 if (SvXMLUnitConverter::convertEnum(

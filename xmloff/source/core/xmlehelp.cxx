@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlehelp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-21 12:37:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,12 @@
 #include "xmlehelp.hxx"
 #endif
 
-#ifndef _XMLOFF_XMKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
                                            OUStringBuffer& rOut,
@@ -97,7 +98,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
     long nMul = 1000;
     long nDiv = 1;
     long nFac = 100;
-    const sal_Char *pUnit = NULL;
+    enum XMLTokenEnum eUnit = XML_TOKEN_INVALID;
     switch( eValueUnit )
     {
     case MAP_TWIP:
@@ -112,7 +113,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
             nMul = 25400;   // 25.4 * 1000
             nDiv = 1440;    // 72 * 20;
             nFac = 100;
-            pUnit = sXML_unit_mm;
+            eUnit = XML_UNIT_MM;
             break;
 
         case MAP_CM:
@@ -120,7 +121,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
             nMul = 25400;   // 2.54 * 10000
             nDiv = 1440;    // 72 * 20;
             nFac = 1000;
-            pUnit = sXML_unit_cm;
+            eUnit = XML_UNIT_CM;
             break;
 
         case MAP_POINT:
@@ -128,7 +129,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
             nMul = 1000;
             nDiv = 20;
             nFac = 100;
-            pUnit = sXML_unit_pt;
+            eUnit = XML_UNIT_PT;
             break;
 
         case MAP_INCH:
@@ -139,7 +140,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
             nMul = 100000;
             nDiv = 1440;    // 72 * 20;
             nFac = 10000;
-            pUnit = sXML_unit_inch;
+            eUnit = XML_UNIT_INCH;
             break;
         }
         break;
@@ -151,7 +152,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
         nMul = 10;
         nDiv = 1;
         nFac = 1;
-        pUnit = sXML_unit_pt;
+        eUnit = XML_UNIT_PT;
         break;
 
     case MAP_100TH_MM:
@@ -166,7 +167,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
             nMul = 10;
             nDiv = 1;
             nFac = 100;
-            pUnit = sXML_unit_mm;
+            eUnit = XML_UNIT_MM;
             break;
 
         case MAP_CM:
@@ -174,7 +175,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
             nMul = 10;
             nDiv = 1;   // 72 * 20;
             nFac = 1000;
-            pUnit = sXML_unit_cm;
+            eUnit = XML_UNIT_CM;
             break;
 
         case MAP_POINT:
@@ -182,7 +183,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
             nMul = 72000;
             nDiv = 2540;
             nFac = 100;
-            pUnit = sXML_unit_pt;
+            eUnit = XML_UNIT_PT;
             break;
 
         case MAP_INCH:
@@ -193,7 +194,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
             nMul = 100000;
             nDiv = 2540;
             nFac = 10000;
-            pUnit = sXML_unit_inch;
+            eUnit = XML_UNIT_INCH;
             break;
         }
         break;
@@ -257,10 +258,10 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
         }
     }
 
-    if( pUnit )
-        rOut.appendAscii( pUnit );
+    if( eUnit != XML_TOKEN_INVALID )
+        rOut.append( GetXMLToken(eUnit) );
 #if 0
-    const sal_Char *pUnit;
+    enum XMLTokenEnum eUnit;
     long nFac = 1;
     switch( eOutUnit )
     {
@@ -272,7 +273,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
     case MAP_MM:
         // 0.01mm
         nFac *= 100L;
-        pUnit = sXML_unit_mm;
+        eUnit = XML_UNIT_MM;
         break;
 
     case MAP_CM:
@@ -283,7 +284,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
         // 0.01cm
         nFac *= 100L;
 #endif
-        pUnit = sXML_unit_cm;
+        eUnit = XML_UNIT_CM;
         break;
 
     case MAP_TWIP:
@@ -295,7 +296,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
         // 0.1pt
         nFac *= 10L;
 #endif
-        pUnit = sXML_unit_pt;
+        eUnit = XML_UNIT_PT;
         break;
 
     case MAP_1000TH_INCH:
@@ -314,7 +315,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
         // 0.01in
         nFac *= 100L;
 #endif
-        pUnit = sXML_unit_inch;
+        eUnit = XML_UNIT_INCH;
         break;
     }
 
@@ -332,7 +333,7 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
         }
     }
 
-    rOut.appendAscii( OUString::createFromAscii( pUnit ) );
+    rOut.append( GetXMLToken(eUnit) );
 #endif
 
 }
@@ -351,7 +352,7 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
 
     if(eCoreUnit != eDestUnit)
     {
-        const sal_Char *pUnit = NULL;
+        enum XMLTokenEnum eUnit = XML_TOKEN_INVALID;
 
         switch(eCoreUnit)
         {
@@ -368,21 +369,21 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                     {
                         // 0.01mm = 0.57twip (exactly)
                         fRetval = ((25400.0 / 1440.0) / 1000.0);
-                        pUnit = sXML_unit_mm;
+                        eUnit = XML_UNIT_MM;
                         break;
                     }
                     case MAP_CM:
                     {
                         // 0.001cm = 0.57twip (exactly)
                         fRetval = ((25400.0 / 1440.0) / 10000.0);
-                        pUnit = sXML_unit_cm;
+                        eUnit = XML_UNIT_CM;
                         break;
                     }
                     case MAP_POINT:
                     {
                         // 0.01pt = 0.2twip (exactly)
                         fRetval = ((1000.0 / 20.0) / 1000.0);
-                        pUnit = sXML_unit_pt;
+                        eUnit = XML_UNIT_PT;
                         break;
                     }
                     case MAP_INCH:
@@ -391,7 +392,7 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                         DBG_ASSERT(MAP_INCH == eDestUnit, "output unit not supported for twip values");
                         // 0.0001in = 0.144twip (exactly)
                         fRetval = ((100000.0 / 1440.0) / 100000.0);
-                        pUnit = sXML_unit_inch;
+                        eUnit = XML_UNIT_INCH;
                         break;
                     }
                 }
@@ -404,19 +405,19 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                     case MAP_MM:
                         // 1mm = 72 / 25.4 pt (exactly)
                         fRetval = ( 25.4 / 72.0 );
-                        pUnit = sXML_unit_mm;
+                        eUnit = XML_UNIT_MM;
                         break;
 
                     case MAP_CM:
                         // 1cm = 72 / 2.54 pt (exactly)
                         fRetval = ( 2.54 / 72.0 );
-                        pUnit = sXML_unit_cm;
+                        eUnit = XML_UNIT_CM;
                         break;
 
                     case MAP_TWIP:
                         // 1twip = 72 / 1440 pt (exactly)
                         fRetval = 20.0;     // 1440.0 / 72.0
-                        pUnit = sXML_unit_pc;
+                        eUnit = XML_UNIT_PC;
                         break;
 
                     case MAP_INCH:
@@ -424,7 +425,7 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                         DBG_ASSERT(MAP_INCH == eDestUnit, "output unit not supported for pt values");
                         // 1in = 72 pt (exactly)
                         fRetval = ( 1.0 / 72.0 );
-                        pUnit = sXML_unit_inch;
+                        eUnit = XML_UNIT_INCH;
                         break;
                 }
                 break;
@@ -442,21 +443,21 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                     {
                         // 0.01mm = 1 mm/100 (exactly)
                         fRetval = ((10.0 / 1.0) / 1000.0);
-                        pUnit = sXML_unit_mm;
+                        eUnit = XML_UNIT_MM;
                         break;
                     }
                     case MAP_CM:
                     {
                         // 0.001mm = 1 mm/100 (exactly)
                         fRetval = ((10.0 / 1.0) / 10000.0);
-                        pUnit = sXML_unit_cm;
+                        eUnit = XML_UNIT_CM;
                         break;
                     }
                     case MAP_POINT:
                     {
                         // 0.01pt = 0.35 mm/100 (exactly)
                         fRetval = ((72000.0 / 2540.0) / 1000.0);
-                        pUnit = sXML_unit_pt;
+                        eUnit = XML_UNIT_PT;
                         break;
                     }
                     case MAP_INCH:
@@ -465,7 +466,7 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                         DBG_ASSERT(MAP_INCH == eDestUnit, "output unit not supported for 1/100mm values");
                         // 0.0001in = 0.254 mm/100 (exactly)
                         fRetval = ((100000.0 / 2540.0) / 100000.0);
-                        pUnit = sXML_unit_inch;
+                        eUnit = XML_UNIT_INCH;
                         break;
                     }
                 }
@@ -473,8 +474,8 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
             }
         }
 
-        if(pUnit)
-            rUnit.appendAscii(pUnit);
+        if(eUnit != XML_TOKEN_INVALID)
+            rUnit.append(GetXMLToken(eUnit));
     }
 
     return fRetval;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include "sdxmlimp_impl.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -81,6 +81,9 @@
 
 using namespace com::sun::star;
 using namespace rtl;
+using ::xmloff::token::IsXMLToken;
+
+using ::xmloff::token::XML_EMBEDDED_VISIBLE_AREA;
 
 //------------------------------------------------------------------
 
@@ -102,7 +105,7 @@ SvXMLImportContext *SdXMLViewSettingsContext::CreateChildContext( USHORT nPrefix
 
     if (nPrefix == XML_NAMESPACE_OFFICE)
     {
-        if (rLocalName.compareToAscii(sXML_embedded_visible_area) == 0)
+        if ( IsXMLToken( rLocalName, XML_EMBEDDED_VISIBLE_AREA ) )
         {
             sal_Int16 nMeasureUnit = 0;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyEntryContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -185,14 +185,12 @@ void XMLIndexBibliographyEntryContext::StartElement(
                               &sLocalName );
         if (XML_NAMESPACE_TEXT == nPrefix)
         {
-            if (sLocalName.equalsAsciiL(sXML_style_name,
-                                    sizeof(sXML_style_name)-1))
+            if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
             {
                 sCharStyleName = xAttrList->getValueByIndex(nAttr);
                 bCharStyleNameOK = sal_True;
             }
-            else if (sLocalName.equalsAsciiL(sXML_bibliography_data_field,
-                                    sizeof(sXML_bibliography_data_field)-1))
+            else if ( IsXMLToken( sLocalName, XML_BIBLIOGRAPHY_DATA_FIELD ) )
             {
                 sal_uInt16 nTmp;
                 if (SvXMLUnitConverter::convertEnum(

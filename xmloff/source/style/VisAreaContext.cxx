@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VisAreaContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:20:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include "VisAreaContext.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -92,6 +92,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace ::xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -144,22 +145,22 @@ void XMLVisAreaContext::process( const uno::Reference< xml::sax::XAttributeList>
 
         if (nPrefix == XML_NAMESPACE_OFFICE)
         {
-            if (aLocalName.compareToAscii(sXML_x) == 0)
+            if (IsXMLToken( aLocalName, XML_X ))
             {
                 SvXMLUnitConverter::convertMeasure(nX, sValue, aMapUnit);
                 rRect.X = nX;
             }
-            else if (aLocalName.compareToAscii(sXML_y) == 0)
+            else if (IsXMLToken( aLocalName, XML_Y ))
             {
                 SvXMLUnitConverter::convertMeasure(nY, sValue, aMapUnit);
                 rRect.Y = nY;
             }
-            else if (aLocalName.compareToAscii(sXML_width) == 0)
+            else if (IsXMLToken( aLocalName, XML_WIDTH ))
             {
                 SvXMLUnitConverter::convertMeasure(nWidth, sValue, aMapUnit);
                 rRect.Width = nWidth;
             }
-            else if (aLocalName.compareToAscii(sXML_height) == 0)
+            else if (IsXMLToken( aLocalName, XML_HEIGHT ))
             {
                 SvXMLUnitConverter::convertMeasure(nHeight, sValue, aMapUnit);
                 rRect.Height = nHeight;

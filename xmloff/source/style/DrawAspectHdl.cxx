@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawAspectHdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-29 08:13:00 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include "xmluconv.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_DRAWASPECTHDL_HXX
@@ -131,27 +131,27 @@ sal_Bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
     if( rValue >>= nAspect )
     {
         if( (nAspect & 1) != 0 )
-            aOut.appendAscii( sXML_content );
+            aOut.append( GetXMLToken(XML_CONTENT) );
 
         if( (nAspect & 2) != 0 )
         {
             if( aOut.getLength() )
                 aOut.append( sal_Unicode(' ') );
-            aOut.appendAscii( sXML_thumbnail );
+            aOut.append( GetXMLToken(XML_THUMBNAIL) );
         }
 
         if( (nAspect & 4) != 0 )
         {
             if( aOut.getLength() )
                 aOut.append( sal_Unicode(' ') );
-            aOut.appendAscii( sXML_icon );
+            aOut.append( GetXMLToken(XML_ICON) );
         }
 
         if( (nAspect & 8) != 0 )
         {
             if( aOut.getLength() )
                 aOut.append( sal_Unicode(' ') );
-            aOut.appendAscii( sXML_print );
+            aOut.append( GetXMLToken(XML_PRINT) );
         }
 
         rStrExpValue = aOut.makeStringAndClear();

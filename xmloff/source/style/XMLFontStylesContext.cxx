@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFontStylesContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 #include "fonthdl.hxx"
@@ -98,6 +98,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 using namespace ::xmloff::token;
+
 
 #define XML_STYLE_FAMILY_FONT 1
 
@@ -269,7 +270,7 @@ SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
 {
     SvXMLStyleContext *pStyle;
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.equalsAsciiL( sXML_font_decl, sizeof(sXML_font_decl)-1 ) )
+        IsXMLToken( rLocalName, XML_FONT_DECL ) )
     {
         pStyle = new XMLFontStyleContext_Impl( GetImport(), nPrefix,
                                                rLocalName, xAttrList, *this );

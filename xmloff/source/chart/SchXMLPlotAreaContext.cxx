@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:05 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
@@ -969,7 +969,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
 
     if( nPrefix == XML_NAMESPACE_CHART )
     {
-        if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_title )))
+        if( IsXMLToken( rLocalName, XML_TITLE ) )
         {
             uno::Reference< drawing::XShape > xTitleShape = getTitleShape();
             pContext = new SchXMLTitleContext( mrImportHelper, rImport, rLocalName,
@@ -977,7 +977,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
                                                xTitleShape,
                                                maCurrentAxis.aPosition );
         }
-        else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_grid )))
+        else if( IsXMLToken( rLocalName, XML_GRID ) )
         {
             sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
             sal_Bool bIsMajor = sal_True;       // default value for class is "major"
@@ -991,12 +991,12 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
 
                 if( nPrefix == XML_NAMESPACE_CHART )
                 {
-                    if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_class )))
+                    if( IsXMLToken( aLocalName, XML_CLASS ) )
                     {
-                        if( xAttrList->getValueByIndex( i ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_minor )))
+                        if( IsXMLToken( xAttrList->getValueByIndex( i ), XML_MINOR ) )
                             bIsMajor = sal_False;
                     }
-                    else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_style_name )))
+                    else if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
                         sAutoStyleName = xAttrList->getValueByIndex( i );
                 }
             }
@@ -1179,9 +1179,9 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
 
         if( nPrefix == XML_NAMESPACE_CHART )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_style_name )))
+            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
                 sAutoStyleName = xAttrList->getValueByIndex( i );
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_repeated )))
+            else if( IsXMLToken( aLocalName, XML_REPEATED ) )
                 nRepeat = xAttrList->getValueByIndex( i ).toInt32();
         }
     }
@@ -1223,7 +1223,7 @@ void SchXMLCategoriesDomainContext::StartElement( const uno::Reference< xml::sax
         USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_TABLE &&
-            aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_cell_range_address )))
+            IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
         {
             mrAddress = xAttrList->getValueByIndex( i );
         }
@@ -1264,7 +1264,7 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
             USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
             if( nPrefix == XML_NAMESPACE_CHART &&
-                aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_style_name )))
+                IsXMLToken( aLocalName, XML_STYLE_NAME ) )
             {
                 sAutoStyleName = xAttrList->getValueByIndex( i );
             }

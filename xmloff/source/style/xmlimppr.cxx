@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-25 17:22:37 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include "unoatrcn.hxx"
 #include "xmlnmspe.hxx"
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 // STL includes
 #include <algorithm>
 #include <functional>
@@ -102,6 +106,7 @@ using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::rtl;
 using namespace ::std;
+using namespace ::xmloff::token;
 
 SvXMLImportPropertyMapper::SvXMLImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper ) :
@@ -258,9 +263,9 @@ void SvXMLImportPropertyMapper::importXML(
                         xAttrContainer = xNew;
 
                         // find map entry and create new property state
-                        nIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, sXML_xmlns );
+                        nIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
                         if( nIndex == -1 )
-                            nIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, sXML_xmlns );
+                            nIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
 
                         Any aAny;
                         aAny <<= xAttrContainer;
@@ -273,7 +278,7 @@ void SvXMLImportPropertyMapper::importXML(
                     if( xAttrContainer.is() )
                     {
                         AttributeData aData;
-                        aData.Type = OUString::createFromAscii( sXML_CDATA );
+                        aData.Type = GetXMLToken( XML_CDATA );
                         aData.Value = rValue;
 
                         OUStringBuffer sName;

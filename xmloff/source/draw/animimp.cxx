@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-27 13:58:03 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,9 @@
 #include <comphelper/extract.hxx>
 #endif
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -129,6 +131,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
+using namespace ::xmloff::token;
 
 AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirection, sal_Int16 nStartScale, sal_Bool bIn )
 {
@@ -433,7 +436,7 @@ TYPEINIT1( XMLAnimationsSoundContext, SvXMLImportContext );
 XMLAnimationsSoundContext::XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent )
 : SvXMLImportContext( rImport, nPrfx, rLocalName ), mpParent( pParent )
 {
-    if( mpParent && nPrfx == XML_NAMESPACE_PRESENTATION && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_sound ) ) )
+    if( mpParent && nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SOUND ) )
     {
         const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -446,15 +449,15 @@ XMLAnimationsSoundContext::XMLAnimationsSoundContext( SvXMLImport& rImport, sal_
             switch( nPrefix )
             {
             case XML_NAMESPACE_XLINK:
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_href ) ) )
+                if( IsXMLToken( aLocalName, XML_HREF ) )
                 {
                     mpParent->maSoundURL = rImport.GetAbsoluteReference(sValue);
                 }
                 break;
             case XML_NAMESPACE_PRESENTATION:
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_play_full ) ) )
+                if( IsXMLToken( aLocalName, XML_PLAY_FULL ) )
                 {
-                    mpParent->mbPlayFull = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
+                    mpParent->mbPlayFull = IsXMLToken( sValue, XML_TRUE );
                 }
             }
         }
@@ -475,29 +478,29 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
     meEffect( EK_none ), meDirection( ED_none ), mnStartScale( 100 ),
     meSpeed( AnimationSpeed_MEDIUM ), maDimColor(0), mbPlayFull( sal_False )
 {
-    if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_show_shape ) ) )
+    if( IsXMLToken( rLocalName, XML_SHOW_SHAPE ) )
     {
         meKind = XMLE_SHOW;
     }
-    else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_show_text ) ) )
+    else if( IsXMLToken( rLocalName, XML_SHOW_TEXT ) )
     {
         meKind = XMLE_SHOW;
         mbTextEffect = sal_True;
     }
-    else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_hide_shape ) ) )
+    else if( IsXMLToken( rLocalName, XML_HIDE_SHAPE ) )
     {
         meKind = XMLE_HIDE;
     }
-    else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_hide_text ) ) )
+    else if( IsXMLToken( rLocalName, XML_HIDE_TEXT ) )
     {
         meKind = XMLE_HIDE;
         mbTextEffect = sal_True;
     }
-    else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_dim ) ) )
+    else if( IsXMLToken( rLocalName, XML_DIM ) )
     {
         meKind = XMLE_DIM;
     }
-    else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_play ) ) )
+    else if( IsXMLToken( rLocalName, XML_PLAY ) )
     {
         meKind = XMLE_PLAY;
     }
@@ -519,42 +522,42 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
         switch( nPrefix )
         {
         case XML_NAMESPACE_DRAW:
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_shape_id ) ) )
+            if( IsXMLToken( aLocalName, XML_SHAPE_ID ) )
             {
                 SvXMLUnitConverter::convertNumber(mnShapeId, sValue);
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_color ) ) )
+            else if( IsXMLToken( aLocalName, XML_COLOR ) )
             {
                 SvXMLUnitConverter::convertColor(maDimColor, sValue);
             }
             break;
 
         case XML_NAMESPACE_PRESENTATION:
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_effect ) ) )
+            if( IsXMLToken( aLocalName, XML_EFFECT ) )
             {
                 USHORT eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationEffect_EnumMap ) )
                     meEffect = (XMLEffect)eEnum;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_direction ) ) )
+            else if( IsXMLToken(aLocalName, XML_DIRECTION ) )
             {
                 USHORT eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationDirection_EnumMap ) )
                     meDirection = (XMLEffectDirection)eEnum;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_start_scale ) ) )
+            else if( IsXMLToken( aLocalName, XML_START_SCALE ) )
             {
                 sal_Int32 nScale;
                 if( SvXMLUnitConverter::convertPercent( nScale, sValue ) )
                     mnStartScale = (sal_Int16)nScale;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_speed ) ) )
+            else if( IsXMLToken( aLocalName, XML_SPEED ) )
             {
                 USHORT eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationSpeed_EnumMap ) )
                     meSpeed = (AnimationSpeed)eEnum;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_path_id ) ) )
+            else if( IsXMLToken( aLocalName, XML_PATH_ID ) )
             {
                 SvXMLUnitConverter::convertNumber(mnPathShapeId, sValue);
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoMarkFileContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-27 07:33:58 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
@@ -102,6 +102,9 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::beans::XPropertySet;
+
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_HREF;
 
 
 TYPEINIT1( XMLAutoMarkFileContext, SvXMLImportContext );
@@ -135,7 +138,7 @@ void XMLAutoMarkFileContext::StartElement(
             GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
 
         if ( ( XML_NAMESPACE_XLINK == nPrefix ) &&
-             sLocalName.equalsAsciiL(sXML_href, sizeof(sXML_href)-1 ) )
+             IsXMLToken(sLocalName, XML_HREF) )
         {
             Any aAny;
             aAny <<= GetImport().GetAbsoluteReference( xAttrList->getValueByIndex(i) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 15:08:14 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ void XMLAutoTextEventExport::initialize(
 
 
 sal_uInt32 XMLAutoTextEventExport::exportDoc(
-    const sal_Char* pClass)
+    enum XMLTokenEnum eClass)
 {
     if (hasEvents())
     {

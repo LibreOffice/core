@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bordrhdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #include <bordrhdl.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -156,7 +156,7 @@ using namespace ::xmloff::token;
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
 #define SVX_XML_BORDER_WIDTH_THICK 2
 
-SvXMLEnumMapEntry psXML_BorderStyles[] =
+SvXMLEnumMapEntry pXML_BorderStyles[] =
 {
     { XML_NONE,                 SVX_XML_BORDER_STYLE_NONE   },
     { XML_HIDDEN,               SVX_XML_BORDER_STYLE_NONE   },
@@ -171,7 +171,7 @@ SvXMLEnumMapEntry psXML_BorderStyles[] =
     { XML_TOKEN_INVALID,        0 }
 };
 
-SvXMLEnumMapEntry psXML_NamedBorderWidths[] =
+SvXMLEnumMapEntry pXML_NamedBorderWidths[] =
 {
     { XML_THIN,             SVX_XML_BORDER_WIDTH_THIN   },
     { XML_MIDDLE,           SVX_XML_BORDER_WIDTH_MIDDLE },
@@ -385,13 +385,13 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     {
         if( !bHasWidth &&
             rUnitConverter.convertEnum( nNamedWidth, aToken,
-                                        psXML_NamedBorderWidths ) )
+                                        pXML_NamedBorderWidths ) )
         {
             bHasWidth = sal_True;
         }
         else if( !bHasStyle &&
                  rUnitConverter.convertEnum( nStyle, aToken,
-                                              psXML_BorderStyles ) )
+                                              pXML_BorderStyles ) )
         {
             bHasStyle = sal_True;
         }
@@ -483,13 +483,11 @@ sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
     if( nWidth == 0 )
         return sal_False;
 
-    char *pStyle = (0 == nDistance) ? sXML_solid : sXML_double;
-
     rUnitConverter.convertMeasure( aOut, nWidth );
 
     aOut.append( sal_Unicode( ' ' ) );
 
-    aOut.appendAscii( pStyle );
+    aOut.append( GetXMLToken((0 == nDistance) ? XML_SOLID : XML_DOUBLE) );
 
     aOut.append( sal_Unicode( ' ' ) );
 

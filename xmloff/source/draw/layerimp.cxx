@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-11 07:38:35 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,9 @@
 #include <comphelper/extract.hxx>
 #endif
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -111,6 +113,9 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_NAME;
+
 
 TYPEINIT1( SdXMLLayerSetContext, SvXMLImportContext );
 
@@ -145,7 +150,7 @@ SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( USHORT nPrefix, c
             {
                 const OUString sValue( xAttrList->getValueByIndex( i ) );
 
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_name ) ) )
+                if( IsXMLToken( aLocalName, XML_NAME ) )
                 {
                     aName = sValue;
                 }

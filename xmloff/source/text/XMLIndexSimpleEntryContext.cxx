@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSimpleEntryContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -106,7 +106,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
-
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_STYLE_NAME;
 
 const sal_Char sAPI_TokenType[] = "TokenType";
 const sal_Char sAPI_CharacterStyleName[] = "CharacterStyleName";
@@ -144,8 +145,7 @@ void XMLIndexSimpleEntryContext::StartElement(
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
         if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             (sLocalName.equalsAsciiL(sXML_style_name,
-                                      sizeof(sXML_style_name)-1)) )
+             IsXMLToken(sLocalName, XML_STYLE_NAME) )
         {
             sCharStyleName = xAttrList->getValueByIndex(nAttr);
             bCharStyleNameOK = sal_True;

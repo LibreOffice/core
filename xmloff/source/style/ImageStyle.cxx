@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageStyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include"xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
@@ -96,11 +96,11 @@
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
-#include<rtl/ustrbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _RTL_USTRING_
-#include<rtl/ustring>
+#include <rtl/ustring>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -171,13 +171,13 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
             OUStringBuffer aOut;
 
             // Name
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_name, rStrName );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
 
             // uri
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, sXML_href, rExport.AddEmbeddedGraphicObject( aURL ) );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, sXML_type, OUString::createFromAscii(sXML_simple) );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, sXML_show, OUString::createFromAscii(sXML_embed) );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, sXML_actuate, OUString::createFromAscii(sXML_onLoad) );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, rExport.AddEmbeddedGraphicObject( aURL ) );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
 /*
             // size
@@ -185,14 +185,14 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
 
             rUnitConverter.convertNumber( aOut, aSize.Width );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_SVG, sXML_width, aStrValue );
+            AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH, aStrValue );
 
             rUnitConverter.convertNumber( aOut, aSize.Height );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_SVG, sXML_height, aStrValue );
+            AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, aStrValue );
 */
             // Do Write
-            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, sXML_fill_image, sal_True, sal_True );
+            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, sal_True, sal_True );
         }
     }
 

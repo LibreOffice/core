@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 15:08:13 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,6 @@
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
@@ -556,7 +552,7 @@ SdXMLExport::SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags )
     mbIsDraw(bIsDraw),
     mbFamilyGraphicUsed(FALSE),
     mbFamilyPresentationUsed(FALSE),
-    msZIndex( RTL_CONSTASCII_USTRINGPARAM(sXML_zindex) ),
+    msZIndex( GetXMLToken(XML_ZINDEX) ),
     msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
     msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
     msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
@@ -697,7 +693,8 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
 
     // add namespaces
     _GetNamespaceMap().AddAtIndex(
-        XML_NAMESPACE_PRESENTATION, sXML_np_presentation, sXML_n_presentation, XML_NAMESPACE_PRESENTATION);
+        XML_NAMESPACE_PRESENTATION, GetXMLToken(XML_NP_PRESENTATION),
+        GetXMLToken(XML_N_PRESENTATION), XML_NAMESPACE_PRESENTATION);
 
     GetShapeExport()->enableLayerExport();
 }
@@ -856,10 +853,10 @@ void SdXMLExport::ImpWriteObjGraphicStyleInfos()
     if( !xDefaults.is() )
         return;
 
-    aStEx.exportDefaultStyle( xDefaults, XML_STYLE_FAMILY_SD_GRAPHICS_NAME, aMapperRef );
+    aStEx.exportDefaultStyle( xDefaults, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), aMapperRef );
 
     // write graphic family styles
-    aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, XML_STYLE_FAMILY_SD_GRAPHICS_NAME, aMapperRef, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+    aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), aMapperRef, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -975,10 +972,10 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
             if(pInfo)
             {
                 // prepare presentation-page layout attributes, style-name
-                AddAttribute(XML_NAMESPACE_STYLE, sXML_name, pInfo->GetLayoutName());
+                AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, pInfo->GetLayoutName());
 
                 // write draw-style attributes
-                SvXMLElementExport aDSE(*this, XML_NAMESPACE_STYLE, sXML_presentation_page_layout, sal_True, sal_True);
+                SvXMLElementExport aDSE(*this, XML_NAMESPACE_STYLE, XML_PRESENTATION_PAGE_LAYOUT, sal_True, sal_True);
 
                 // write presentation placeholders
                 switch(pInfo->GetLayoutType())
@@ -1322,27 +1319,27 @@ void SdXMLExport::ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectan
         case XmlPlaceholderVerticalOutline: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_outline")); break;
     }
 
-    AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_object, aStr);
+    AddAttribute(XML_NAMESPACE_PRESENTATION, XML_OBJECT, aStr);
 
     // svg:x,y,width,height
     GetMM100UnitConverter().convertMeasure(sStringBuffer, rRect.Left());
     aStr = sStringBuffer.makeStringAndClear();
-    AddAttribute(XML_NAMESPACE_SVG, sXML_x, aStr);
+    AddAttribute(XML_NAMESPACE_SVG, XML_X, aStr);
 
     GetMM100UnitConverter().convertMeasure(sStringBuffer, rRect.Top());
     aStr = sStringBuffer.makeStringAndClear();
-    AddAttribute(XML_NAMESPACE_SVG, sXML_y, aStr);
+    AddAttribute(XML_NAMESPACE_SVG, XML_Y, aStr);
 
     GetMM100UnitConverter().convertMeasure(sStringBuffer, rRect.GetWidth());
     aStr = sStringBuffer.makeStringAndClear();
-    AddAttribute(XML_NAMESPACE_SVG, sXML_width, aStr);
+    AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, aStr);
 
     GetMM100UnitConverter().convertMeasure(sStringBuffer, rRect.GetHeight());
     aStr = sStringBuffer.makeStringAndClear();
-    AddAttribute(XML_NAMESPACE_SVG, sXML_height, aStr);
+    AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
     // write presentation-placeholder
-    SvXMLElementExport aPPL(*this, XML_NAMESPACE_PRESENTATION, sXML_placeholder, sal_True, sal_True);
+    SvXMLElementExport aPPL(*this, XML_NAMESPACE_PRESENTATION, XML_PLACEHOLDER, sal_True, sal_True);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1405,43 +1402,43 @@ void SdXMLExport::ImpWritePageMasterInfos()
             OUStringBuffer sStringBuffer;
 
             sString = sNewName;
-            AddAttribute(XML_NAMESPACE_STYLE, sXML_name, sString);
+            AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, sString);
 
             // write page-master
-            SvXMLElementExport aPME(*this, XML_NAMESPACE_STYLE, sXML_page_master, sal_True, sal_True);
+            SvXMLElementExport aPME(*this, XML_NAMESPACE_STYLE, XML_PAGE_MASTER, sal_True, sal_True);
 
             // prepare style:properties inside page-master
             GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetBorderTop());
             sString = sStringBuffer.makeStringAndClear();
-            AddAttribute(XML_NAMESPACE_FO, sXML_margin_top, sString);
+            AddAttribute(XML_NAMESPACE_FO, XML_MARGIN_TOP, sString);
 
             GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetBorderBottom());
             sString = sStringBuffer.makeStringAndClear();
-            AddAttribute(XML_NAMESPACE_FO, sXML_margin_bottom, sString);
+            AddAttribute(XML_NAMESPACE_FO, XML_MARGIN_BOTTOM, sString);
 
             GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetBorderLeft());
             sString = sStringBuffer.makeStringAndClear();
-            AddAttribute(XML_NAMESPACE_FO, sXML_margin_left, sString);
+            AddAttribute(XML_NAMESPACE_FO, XML_MARGIN_LEFT, sString);
 
             GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetBorderRight());
             sString = sStringBuffer.makeStringAndClear();
-            AddAttribute(XML_NAMESPACE_FO, sXML_margin_right, sString);
+            AddAttribute(XML_NAMESPACE_FO, XML_MARGIN_RIGHT, sString);
 
             GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetWidth());
             sString = sStringBuffer.makeStringAndClear();
-            AddAttribute(XML_NAMESPACE_FO, sXML_page_width, sString);
+            AddAttribute(XML_NAMESPACE_FO, XML_PAGE_WIDTH, sString);
 
             GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetHeight());
             sString = sStringBuffer.makeStringAndClear();
-            AddAttribute(XML_NAMESPACE_FO, sXML_page_height, sString);
+            AddAttribute(XML_NAMESPACE_FO, XML_PAGE_HEIGHT, sString);
 
             if(pInfo->GetOrientation() == view::PaperOrientation_PORTRAIT)
-                AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_print_orientation, sXML_portrait);
+                AddAttribute(XML_NAMESPACE_STYLE, XML_PRINT_ORIENTATION, XML_PORTRAIT);
             else
-                AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_print_orientation, sXML_landscape);
+                AddAttribute(XML_NAMESPACE_STYLE, XML_PRINT_ORIENTATION, XML_LANDSCAPE);
 
             // write style:properties
-            SvXMLElementExport aPMF(*this, XML_NAMESPACE_STYLE, sXML_properties, sal_True, sal_True);
+            SvXMLElementExport aPMF(*this, XML_NAMESPACE_STYLE, XML_PROPERTIES, sal_True, sal_True);
         }
     }
 }
@@ -1624,7 +1621,8 @@ void SdXMLExport::ImpWritePresentationStyles()
                     OUString aPrefix = xNamed->getName();
                     aPrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
                     aStEx.exportStyleFamily(xNamed->getName(),
-                        XML_STYLE_FAMILY_SD_PRESENTATION_NAME, aMapperRef, FALSE,
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME)),
+                        aMapperRef, FALSE,
                         XML_STYLE_FAMILY_SD_PRESENTATION_ID, &aPrefix);
                 }
             }
@@ -1657,13 +1655,13 @@ void SdXMLExport::_ExportMeta()
     if(mnObjectCount)
     {
         GetMM100UnitConverter().convertNumber(sBuffer, mnObjectCount);
-        AddAttribute(XML_NAMESPACE_META, sXML_object_count, sBuffer.makeStringAndClear());
+        AddAttribute(XML_NAMESPACE_META, XML_OBJECT_COUNT, sBuffer.makeStringAndClear());
         bContentUsed = TRUE;
     }
 
     // when there is data, export it
     if(bContentUsed)
-        SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, sXML_document_statistic, sal_True, sal_True);
+        SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, sal_True, sal_True);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1683,14 +1681,14 @@ void SdXMLExport::_ExportContent()
             // prepare page attributes, name of page
             uno::Reference < container::XNamed > xNamed(xDrawPage, uno::UNO_QUERY);
             if(xNamed.is())
-                AddAttribute(XML_NAMESPACE_DRAW, sXML_name, xNamed->getName());
+                AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, xNamed->getName());
 
             // draw:style-name (presentation page attributes AND background attributes)
             if( maDrawPagesStyleNames[nPageInd].getLength() )
-                AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, maDrawPagesStyleNames[nPageInd]);
+                AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maDrawPagesStyleNames[nPageInd]);
 
             if( IsImpress() )
-                AddAttribute(XML_NAMESPACE_DRAW, sXML_id, OUString::valueOf( sal_Int32( nPageInd + 1 ) ) );
+                AddAttribute(XML_NAMESPACE_DRAW, XML_ID, OUString::valueOf( sal_Int32( nPageInd + 1 ) ) );
 
             // draw:master-page-name
             uno::Reference < drawing::XMasterPageTarget > xMasterPageInt(xDrawPage, uno::UNO_QUERY);
@@ -1702,7 +1700,7 @@ void SdXMLExport::_ExportContent()
                     uno::Reference < container::XNamed > xMasterNamed(xUsedMasterPage, uno::UNO_QUERY);
                     if(xMasterNamed.is())
                     {
-                        AddAttribute(XML_NAMESPACE_DRAW, sXML_master_page_name, xMasterNamed->getName());
+                        AddAttribute(XML_NAMESPACE_DRAW, XML_MASTER_PAGE_NAME, xMasterNamed->getName());
                     }
                 }
             }
@@ -1710,11 +1708,11 @@ void SdXMLExport::_ExportContent()
             // presentation:page-layout-name
             if( IsImpress() && maDrawPagesAutoLayoutNames[nPageInd+1].getLength())
             {
-                AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_presentation_page_layout_name, maDrawPagesAutoLayoutNames[nPageInd+1]);
+                AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME, maDrawPagesAutoLayoutNames[nPageInd+1]);
             }
 
             // write page
-            SvXMLElementExport aDPG(*this, XML_NAMESPACE_DRAW, sXML_page, sal_True, sal_True);
+            SvXMLElementExport aDPG(*this, XML_NAMESPACE_DRAW, XML_PAGE, sal_True, sal_True);
 
             // write optional office:forms
             exportFormsElement( xDrawPage );
@@ -1753,7 +1751,7 @@ void SdXMLExport::_ExportContent()
                         if(xShapes.is() && xShapes->getCount())
                         {
                             // write presentation notes
-                            SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, sXML_notes, sal_True, sal_True);
+                            SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, sal_True, sal_True);
 
                             // write optional office:forms
                             exportFormsElement( xNotesPage );
@@ -1797,7 +1795,7 @@ void SdXMLExport::exportPresentationSettings()
             xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) ) >>= aFirstPage;
             if( aFirstPage.getLength() )
             {
-                AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_start_page, aFirstPage );
+                AddAttribute(XML_NAMESPACE_PRESENTATION, XML_START_PAGE, aFirstPage );
                 bHasAttr = sal_True;
             }
             else
@@ -1806,7 +1804,7 @@ void SdXMLExport::exportPresentationSettings()
                 xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomShow" ) ) ) >>= aCustomShow;
                 if( aCustomShow.getLength() )
                 {
-                    AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_show, aCustomShow );
+                    AddAttribute(XML_NAMESPACE_PRESENTATION, XML_SHOW, aCustomShow );
                     bHasAttr = sal_True;
                 }
             }
@@ -1815,7 +1813,7 @@ void SdXMLExport::exportPresentationSettings()
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsEndless" ) ) ) >>= bTemp;
         if( bTemp )
         {
-            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_endless, sXML_true );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_ENDLESS, XML_TRUE );
             bHasAttr = sal_True;
 
             sal_Int32 nPause;
@@ -1825,69 +1823,69 @@ void SdXMLExport::exportPresentationSettings()
 
             OUStringBuffer aOut;
             SvXMLUnitConverter::convertTime( aOut, aTime );
-            AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_pause, aOut.makeStringAndClear() );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PAUSE, aOut.makeStringAndClear() );
         }
 
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowAnimations" ) ) ) >>= bTemp;
         if( !bTemp )
         {
-            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_animations, sXML_disabled );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, XML_DISABLED );
             bHasAttr = sal_True;
         }
 
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAlwaysOnTop" ) ) ) >>= bTemp;
         if( bTemp )
         {
-            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_stay_on_top, sXML_true );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STAY_ON_TOP, XML_TRUE );
             bHasAttr = sal_True;
         }
 
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) ) ) >>= bTemp;
         if( bTemp )
         {
-            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_force_manual, sXML_true );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_FORCE_MANUAL, XML_TRUE );
             bHasAttr = sal_True;
         }
 
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFullScreen" ) ) ) >>= bTemp;
         if( !bTemp )
         {
-            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_full_screen, sXML_false );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_FULL_SCREEN, XML_FALSE );
             bHasAttr = sal_True;
         }
 
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsMouseVisible" ) ) ) >>= bTemp;
         if( !bTemp )
         {
-            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_mouse_visible, sXML_false );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_VISIBLE, XML_FALSE );
             bHasAttr = sal_True;
         }
 
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "StartWithNavigator" ) ) ) >>= bTemp;
         if( bTemp )
         {
-            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_start_with_navigator, sXML_true );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_START_WITH_NAVIGATOR, XML_TRUE );
             bHasAttr = sal_True;
         }
 
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UsePen" ) ) ) >>= bTemp;
         if( bTemp )
         {
-            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_mouse_as_pen, sXML_true );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_AS_PEN, XML_TRUE );
             bHasAttr = sal_True;
         }
 
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsTransitionOnClick" ) ) ) >>= bTemp;
         if( !bTemp )
         {
-            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_transition_on_click, sXML_disabled );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_TRANSITION_ON_CLICK, XML_DISABLED );
             bHasAttr = sal_True;
         }
 
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowLogo" ) ) ) >>= bTemp;
         if( bTemp )
         {
-            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_show_logo, sXML_true );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_SHOW_LOGO, XML_TRUE );
             bHasAttr = sal_True;
         }
 
@@ -1910,7 +1908,7 @@ void SdXMLExport::exportPresentationSettings()
 
         if( bHasAttr || nShowCount != 0 )
         {
-            SvXMLElementExport aSettings(*this, XML_NAMESPACE_PRESENTATION, sXML_settings, sal_True, sal_True);
+            SvXMLElementExport aSettings(*this, XML_NAMESPACE_PRESENTATION, XML_SETTINGS, sal_True, sal_True);
 
             if( nShowCount == 0 )
                 return;
@@ -1922,7 +1920,7 @@ void SdXMLExport::exportPresentationSettings()
 
             for( sal_Int32 nIndex = 0; nIndex < nShowCount; nIndex++, pShowNames++ )
             {
-                AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_name, *pShowNames );
+                AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, *pShowNames );
 
                 xShows->getByName( *pShowNames ) >>= xShow;
                 DBG_ASSERT( xShow.is(), "invalid custom show!" );
@@ -1944,9 +1942,9 @@ void SdXMLExport::exportPresentationSettings()
                 }
 
                 if( sTmp.getLength() )
-                    AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_pages, sTmp.makeStringAndClear() );
+                    AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PAGES, sTmp.makeStringAndClear() );
 
-                SvXMLElementExport aShows(*this, XML_NAMESPACE_PRESENTATION, sXML_show, sal_True, sal_True);
+                SvXMLElementExport aShows(*this, XML_NAMESPACE_PRESENTATION, XML_SHOW, sal_True, sal_True);
             }
         }
     }
@@ -2191,11 +2189,11 @@ void SdXMLExport::_ExportMasterStyles()
                 // presentation:page-layout-name
                 if( IsImpress() && maDrawPagesAutoLayoutNames[0].getLength())
                 {
-                    AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_presentation_page_layout_name, maDrawPagesAutoLayoutNames[0]);
+                    AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME, maDrawPagesAutoLayoutNames[0]);
                 }
 
                 // write masterpage
-                SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, sXML_handout_master, sal_True, sal_True);
+                SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_HANDOUT_MASTER, sal_True, sal_True);
 
                 // write graphic objects on this master page (if any)
                 uno::Reference< drawing::XShapes > xShapes(xHandoutPage, uno::UNO_QUERY);
@@ -2219,22 +2217,22 @@ void SdXMLExport::_ExportMasterStyles()
             if(xNamed.is())
             {
                 sMasterPageName = xNamed->getName();
-                AddAttribute(XML_NAMESPACE_STYLE, sXML_name, sMasterPageName);
+                AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, sMasterPageName);
             }
 
             ImpXMLEXPPageMasterInfo* pInfo = mpPageMaterUsageList->GetObject(nMPageId);
             if(pInfo)
             {
                 OUString sString = pInfo->GetName();
-                AddAttribute(XML_NAMESPACE_STYLE, sXML_page_master_name, sString);
+                AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_MASTER_NAME, sString);
             }
 
             // draw:style-name (background attributes)
             if( maMasterPagesStyleNames[nMPageId].getLength() )
-                AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, maMasterPagesStyleNames[nMPageId]);
+                AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maMasterPagesStyleNames[nMPageId]);
 
             // write masterpage
-            SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, sXML_master_page, sal_True, sal_True);
+            SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_MASTER_PAGE, sal_True, sal_True);
 
             // write optional office:forms
             exportFormsElement( xMasterPage );
@@ -2257,7 +2255,7 @@ void SdXMLExport::_ExportMasterStyles()
                         if(xShapes.is() && xShapes->getCount())
                         {
                             // write presentation notes
-                            SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, sXML_notes, sal_True, sal_True);
+                            SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, sal_True, sal_True);
 
                             // write optional office:forms
                             exportFormsElement( xNotesPage );
@@ -2299,7 +2297,7 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     beans::PropertyValue* pProps = rProps.getArray();
     if(pProps)
     {
-//      SvXMLElementExport aViewSettingsElem(*this, XML_NAMESPACE_DRAW, sXML_view_settings, sal_True, sal_True);
+//      SvXMLElementExport aViewSettingsElem(*this, XML_NAMESPACE_DRAW, XML_VIEW_SETTINGS, sal_True, sal_True);
 
         uno::Reference< beans::XPropertySet > xPropSet( GetModel(), uno::UNO_QUERY );
         if( !xPropSet.is() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-21 17:03:04 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLTEXTCOLUMNSCONTEXT_HXX
 #include "XMLTextColumnsContext.hxx"
@@ -359,15 +359,13 @@ XMLTextColumnsContext::XMLTextColumnsContext(
         const OUString& rValue = xAttrList->getValueByIndex( i );
         if( XML_NAMESPACE_FO == nPrefix )
         {
-            if( aLocalName.equalsAsciiL( sXML_column_count,
-                                         sizeof(sXML_column_count)-1 ) &&
+            if( IsXMLToken( aLocalName, XML_COLUMN_COUNT ) &&
                 GetImport().GetMM100UnitConverter().
                                 convertNumber( nVal, rValue, 0, SHRT_MAX ) )
             {
                 nCount = (sal_Int16)nVal;
             }
-            else if( aLocalName.equalsAsciiL( sXML_column_gap,
-                                              sizeof(sXML_column_gap)-1 ) )
+            else if( IsXMLToken( aLocalName, XML_COLUMN_GAP ) )
             {
                 bAutomatic = GetImport().GetMM100UnitConverter().
                     convertMeasure( nAutomaticDistance, rValue );
@@ -405,7 +403,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.equalsAsciiL( sXML_column, sizeof(sXML_column)-1 ) )
+        IsXMLToken( rLocalName, XML_COLUMN ) )
     {
         XMLTextColumnContext_Impl *pColumn =
             new XMLTextColumnContext_Impl( GetImport(), nPrefix, rLocalName,
@@ -421,8 +419,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
         pContext = pColumn;
     }
     else if( XML_NAMESPACE_STYLE == nPrefix &&
-             rLocalName.equalsAsciiL( sXML_column_sep,
-                                       sizeof(sXML_column_sep)-1 ) )
+             IsXMLToken( rLocalName, XML_COLUMN_SEP ) )
     {
         pColumnSep =
             new XMLTextColumnSepContext_Impl( GetImport(), nPrefix, rLocalName,

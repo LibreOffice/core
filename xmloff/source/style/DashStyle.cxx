@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DashStyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:29 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,6 @@
 #include"xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
-#endif
-
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
 #endif
@@ -161,10 +157,10 @@ XMLDashStyle::~XMLDashStyle()
 {
 }
 
-void XMLDashStyle::AddAttribute( sal_uInt16 nPrefix, const sal_Char *pName, const OUString& rStrValue )
+void XMLDashStyle::AddAttribute( sal_uInt16 nPrefix, enum XMLTokenEnum eName, const OUString& rStrValue )
 {
-    const OUString aStrName( OUString::createFromAscii( pName ) );
-    const OUString aStrCDATA( OUString::createFromAscii( sXML_CDATA ) );
+    const OUString aStrName( GetXMLToken( eName ) );
+    const OUString aStrCDATA( GetXMLToken( XML_CDATA ) );
 
     mpAttrList->AddAttribute( mrNamespaceMap.GetQNameByKey( nPrefix, aStrName ), aStrCDATA, rStrValue );
 }
@@ -200,18 +196,18 @@ sal_Bool XMLDashStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::c
             OUStringBuffer aOut;
 
             // Name
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_name, rStrName );
+            AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
 
             // Style
             rUnitConverter.convertEnum( aOut, aLineDash.Style, pXML_DashStyle_Enum );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_style, aStrValue );
+            AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
 
             // dots
             if( aLineDash.Dots )
             {
-                AddAttribute( XML_NAMESPACE_DRAW, sXML_dots1, OUString::valueOf( (sal_Int32)aLineDash.Dots ) );
+                AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1, OUString::valueOf( (sal_Int32)aLineDash.Dots ) );
 
                 if( aLineDash.DotLen )
                 {
@@ -225,14 +221,14 @@ sal_Bool XMLDashStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::c
                         rUnitConverter.convertMeasure( aOut, aLineDash.DotLen );
                     }
                     aStrValue = aOut.makeStringAndClear();
-                    AddAttribute( XML_NAMESPACE_DRAW, sXML_dots1_length, aStrValue );
+                    AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1_LENGTH, aStrValue );
                 }
             }
 
             // dashes
             if( aLineDash.Dashes )
             {
-                AddAttribute( XML_NAMESPACE_DRAW, sXML_dots2, OUString::valueOf( (sal_Int32)aLineDash.Dashes ) );
+                AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2, OUString::valueOf( (sal_Int32)aLineDash.Dashes ) );
 
                 if( aLineDash.DashLen )
                 {
@@ -246,7 +242,7 @@ sal_Bool XMLDashStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::c
                         rUnitConverter.convertMeasure( aOut, aLineDash.DashLen );
                     }
                     aStrValue = aOut.makeStringAndClear();
-                    AddAttribute( XML_NAMESPACE_DRAW, sXML_dots2_length, aStrValue );
+                    AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2_LENGTH, aStrValue );
                 }
             }
 
@@ -260,14 +256,14 @@ sal_Bool XMLDashStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::c
                 rUnitConverter.convertMeasure( aOut, aLineDash.Distance );
             }
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_distance, aStrValue );
+            AddAttribute( XML_NAMESPACE_DRAW, XML_DISTANCE, aStrValue );
 
 
             // Do Write
-            OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
+            OUString sWS( GetXMLToken( XML_WS ) );
             rHandler->ignorableWhitespace( sWS );
             OUString sElem = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW,
-                                           OUString::createFromAscii(sXML_stroke_dash) );
+                                           GetXMLToken(XML_STROKE_DASH) );
 
             rHandler->startElement( sElem, xAttrList );
             rHandler->endElement( sElem );

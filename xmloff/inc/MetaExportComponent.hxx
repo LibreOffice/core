@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 17:45:52 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ public:
 protected:
     // export the events off all autotexts
     virtual sal_uInt32 exportDoc(
-        const sal_Char *pClass = NULL );
+        enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID );
 
     // methods without content:
     virtual void _ExportAutoStyles();

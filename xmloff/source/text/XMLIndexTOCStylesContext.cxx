@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCStylesContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:38 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -113,6 +113,9 @@
 #include <rtl/ustring.hxx>
 #endif
 
+
+using namespace ::xmloff::token;
+
 using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
@@ -120,6 +123,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::container::XIndexReplace;
 using ::com::sun::star::xml::sax::XAttributeList;
+
 
 const sal_Char sAPI_LevelParagraphStyles[] = "LevelParagraphStyles";
 
@@ -156,8 +160,7 @@ void XMLIndexTOCStylesContext::StartElement(
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
         if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             (sLocalName.equalsAsciiL(sXML_outline_level,
-                                      sizeof(sXML_outline_level)-1)) )
+             (IsXMLToken(sLocalName, XML_OUTLINE_LEVEL)) )
         {
             sal_Int32 nTmp;
             if (SvXMLUnitConverter::convertNumber(
@@ -203,8 +206,7 @@ SvXMLImportContext *XMLIndexTOCStylesContext::CreateChildContext(
 {
     // check for index-source-style
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         rLocalName.equalsAsciiL(sXML_index_source_style,
-                                 sizeof(sXML_index_source_style)-1) )
+         IsXMLToken( rLocalName, XML_INDEX_SOURCE_STYLE ) )
     {
         // find text:style-name attribute and record in aStyleNames
         sal_Int16 nCount = xAttrList->getLength();
@@ -215,8 +217,7 @@ SvXMLImportContext *XMLIndexTOCStylesContext::CreateChildContext(
                 GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                                   &sLocalName );
             if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-                 (sLocalName.equalsAsciiL(sXML_style_name,
-                                          sizeof(sXML_style_name)-1)) )
+                 IsXMLToken( sLocalName, XML_STYLE_NAME ) )
             {
                 aStyleNames.push_back(xAttrList->getValueByIndex(nAttr));
             }

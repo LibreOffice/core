@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlprmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-01 13:15:04 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,15 +91,21 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
+
 using namespace ::std;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using ::xmloff::token::GetXMLToken;
 
 XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     const XMLPropertyMapEntry& rMapEntry,
     const UniReference< XMLPropertyHandlerFactory >& rFactory ) :
-    sXMLAttributeName( OUString::createFromAscii(rMapEntry.msXMLName) ),
+    sXMLAttributeName( GetXMLToken(rMapEntry.meXMLName) ),
     sAPIPropertyName( OUString::createFromAscii(rMapEntry.msApiName) ),
     nXMLNameSpace( rMapEntry.mnNameSpace ),
     nType( rMapEntry.mnType ),
@@ -241,7 +247,7 @@ const sal_Int32 XMLPropertySetMapper::GetEntryIndex(
 sal_Int32 XMLPropertySetMapper::FindEntryIndex(
         const sal_Char* sApiName,
         sal_uInt16 nNameSpace,
-        const sal_Char* sXMLName ) const
+        const OUString& sXMLName ) const
 {
     sal_Int32 nIndex = 0;
     sal_Int32 nEntries = GetEntryCount();
@@ -250,7 +256,7 @@ sal_Int32 XMLPropertySetMapper::FindEntryIndex(
     {
         const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];
         if( rEntry.nXMLNameSpace == nNameSpace &&
-            0 == rEntry.sXMLAttributeName.compareToAscii( sXMLName ) &&
+            rEntry.sXMLAttributeName.equals( sXMLName ) &&
             0 == rEntry.sAPIPropertyName.compareToAscii( sApiName ) )
             return nIndex;
         else

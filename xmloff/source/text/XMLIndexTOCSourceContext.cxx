@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCSourceContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -122,6 +122,7 @@
 
 
 
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
@@ -134,6 +135,7 @@ const sal_Char sAPI_CreateFromOutline[] = "CreateFromOutline";
 const sal_Char sAPI_CreateFromMarks[] = "CreateFromMarks";
 const sal_Char sAPI_Level[] = "Level";
 const sal_Char sAPI_CreateFromLevelParagraphStyles[] = "CreateFromLevelParagraphStyles";
+
 
 TYPEINIT1( XMLIndexTOCSourceContext, XMLIndexSourceBaseContext );
 
@@ -169,7 +171,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
     switch (eParam)
     {
         case XML_TOK_INDEXSOURCE_OUTLINE_LEVEL:
-            if (rValue.equalsAsciiL(sXML_none, sizeof(sXML_none)-1))
+            if ( IsXMLToken( rValue, XML_NONE ) )
             {
                 bUseOutline = sal_False;
             }
@@ -240,13 +242,12 @@ SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
     const Reference<XAttributeList> & xAttrList )
 {
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         (rLocalName.equalsAsciiL(sXML_table_of_content_entry_template,
-                            sizeof(sXML_table_of_content_entry_template)-1)))
+         IsXMLToken(rLocalName, XML_TABLE_OF_CONTENT_ENTRY_TEMPLATE) )
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
                                            aLevelNameTOCMap,
-                                           sXML_outline_level,
+                                           XML_OUTLINE_LEVEL,
                                            aLevelStylePropNameTOCMap,
                                            aAllowedTokenTypesTOC);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-27 14:02:50 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@
 #include <comphelper/extract.hxx>
 #endif
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -197,7 +199,7 @@ TYPEINIT1( XMLEventSoundContext, SvXMLImportContext );
 XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent )
 : SvXMLImportContext( rImport, nPrfx, rLocalName ), mpParent( pParent )
 {
-    if( mpParent && nPrfx == XML_NAMESPACE_PRESENTATION && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_sound ) ) )
+    if( mpParent && nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SOUND ) )
     {
         const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -210,15 +212,15 @@ XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImport, sal_uInt16 nPr
             switch( nPrefix )
             {
             case XML_NAMESPACE_XLINK:
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_href ) ) )
+                if( IsXMLToken( aLocalName, XML_HREF ) )
                 {
                     mpParent->msSoundURL = rImport.GetAbsoluteReference(sValue);
                 }
                 break;
             case XML_NAMESPACE_PRESENTATION:
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_play_full ) ) )
+                if( IsXMLToken( aLocalName, XML_PLAY_FULL ) )
                 {
-                    mpParent->mbPlayFull = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
+                    mpParent->mbPlayFull = IsXMLToken( sValue, XML_TRUE );
                 }
             }
         }
@@ -241,11 +243,11 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, c
 {
     const OUString msXMLEventName( RTL_CONSTASCII_USTRINGPARAM( "on-click" ) );
 
-    if( nPrfx == XML_NAMESPACE_PRESENTATION && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_event ) ) )
+    if( nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_EVENT ) )
     {
         mbValid = sal_True;
     }
-    else if( nPrfx == XML_NAMESPACE_SCRIPT && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_event ) ) )
+    else if( nPrfx == XML_NAMESPACE_SCRIPT && IsXMLToken( rLocalName, XML_EVENT ) )
     {
         mbScript = sal_True;
         mbValid = sal_True;
@@ -267,64 +269,64 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, c
         switch( nPrefix )
         {
         case XML_NAMESPACE_PRESENTATION:
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_action ) ) )
+            if( IsXMLToken( aLocalName, XML_ACTION ) )
             {
                 USHORT eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_EventActions_EnumMap ) )
                     meClickAction = (ClickAction)eEnum;
             }
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_effect ) ) )
+            if( IsXMLToken( aLocalName, XML_EFFECT ) )
             {
                 USHORT eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationEffect_EnumMap ) )
                     meEffect = (XMLEffect)eEnum;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_direction ) ) )
+            else if( IsXMLToken( aLocalName, XML_DIRECTION ) )
             {
                 USHORT eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationDirection_EnumMap ) )
                     meDirection = (XMLEffectDirection)eEnum;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_start_scale ) ) )
+            else if( IsXMLToken( aLocalName, XML_START_SCALE ) )
             {
                 sal_Int32 nScale;
                 if( SvXMLUnitConverter::convertPercent( nScale, sValue ) )
                     mnStartScale = (sal_Int16)nScale;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_speed ) ) )
+            else if( IsXMLToken( aLocalName, XML_SPEED ) )
             {
                 USHORT eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationSpeed_EnumMap ) )
                     meSpeed = (AnimationSpeed)eEnum;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_verb ) ) )
+            else if( IsXMLToken( aLocalName, XML_VERB ) )
             {
                 SvXMLUnitConverter::convertNumber( mnVerb, sValue );
             }
             break;
 
         case XML_NAMESPACE_SCRIPT:
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_event_name ) ) )
+            if( IsXMLToken( aLocalName, XML_EVENT_NAME ) )
             {
                 msEventName = sValue;
                 mbValid = msEventName == msXMLEventName;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_language ) ) )
+            else if( IsXMLToken( aLocalName, XML_LANGUAGE ) )
             {
                 msLanguage = sValue;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_macro_name ) ) )
+            else if( IsXMLToken( aLocalName, XML_MACRO_NAME ) )
             {
                 msMacroName = sValue;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_library ) ) )
+            else if( IsXMLToken( aLocalName, XML_LIBRARY ) )
             {
                 msLibrary = sValue;
             }
             break;
 
         case XML_NAMESPACE_XLINK:
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_href ) ) )
+            if( IsXMLToken( aLocalName, XML_HREF ) )
             {
                 msBookmark = rImport.GetAbsoluteReference(sValue);
             }

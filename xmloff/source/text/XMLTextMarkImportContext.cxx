@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMarkImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include "xmluconv.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
@@ -290,7 +290,7 @@ sal_Bool XMLTextMarkImportContext::FindName(
                               &sLocalName );
 
         if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             (0 == sLocalName.compareToAscii(sXML_name)) )
+             IsXMLToken(sLocalName, XML_NAME)   )
         {
             sName = xAttrList->getValueByIndex(nAttr);
             bNameOK = sal_True;

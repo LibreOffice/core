@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX
@@ -365,7 +365,7 @@ void XMLFootnoteConfigurationImportContext::StartElement(
                 break;
             }
             case XML_TOK_FTNCONFIG_POSITION:
-                bPosition = (0 == sValue.compareToAscii(sXML_document));
+                bPosition = IsXMLToken( sValue, XML_DOCUMENT );
                 break;
             default:
                 ; // ignore
@@ -384,17 +384,15 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
     {
         if (XML_NAMESPACE_TEXT == nPrefix)
         {
-            if (rLocalName.equalsAsciiL(
-                    sXML_footnote_continuation_notice_forward,
-                    sizeof(sXML_footnote_continuation_notice_forward)-1))
+            if ( IsXMLToken( rLocalName,
+                             XML_FOOTNOTE_CONTINUATION_NOTICE_FORWARD ) )
             {
                 pContext = new XMLFootnoteConfigHelper(GetImport(),
                                                        nPrefix, rLocalName,
                                                        *this, sal_False);
             }
-            else if (rLocalName.equalsAsciiL(
-                    sXML_footnote_continuation_notice_backward,
-                    sizeof(sXML_footnote_continuation_notice_backward)-1))
+            else if ( IsXMLToken( rLocalName,
+                                  XML_FOOTNOTE_CONTINUATION_NOTICE_BACKWARD ) )
             {
                 pContext = new XMLFootnoteConfigHelper(GetImport(),
                                                        nPrefix, rLocalName,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-18 08:39:24 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,9 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #endif
 
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -120,6 +122,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
+using namespace ::xmloff::token;
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -180,18 +183,18 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
             switch( nPrefix )
             {
             case XML_NAMESPACE_PRESENTATION:
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_start_page ) ) )
+                if( IsXMLToken( aLocalName, XML_START_PAGE ) )
                 {
                     aAny <<= sValue;
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ), aAny );
                     bAll = sal_False;
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_show ) ) )
+                else if( IsXMLToken( aLocalName, XML_SHOW ) )
                 {
                     mpImpl->maCustomShowName = sValue;
                     bAll = sal_False;
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_pause ) ) )
+                else if( IsXMLToken( aLocalName, XML_PAUSE ) )
                 {
                     DateTime aTime;
                     if( !SvXMLUnitConverter::convertTime( aTime,  sValue ) )
@@ -201,54 +204,54 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
                     aAny <<= nMS;
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Pause" ) ), aAny );
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_animations ) ) )
+                else if( IsXMLToken( aLocalName, XML_ANIMATIONS ) )
                 {
-                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_enabled ) ) );
+                    aAny = bool2any( IsXMLToken( sValue, XML_ENABLED ) );
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowAnimations" ) ), aAny );
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_stay_on_top ) ) )
+                else if( IsXMLToken( aLocalName, XML_STAY_ON_TOP ) )
                 {
-                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAlwaysOnTop" ) ), aAny );
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_force_manual ) ) )
+                else if( IsXMLToken( aLocalName, XML_FORCE_MANUAL ) )
                 {
-                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) ), aAny );
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_endless ) ) )
+                else if( IsXMLToken( aLocalName, XML_ENDLESS ) )
                 {
-                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsEndless" ) ), aAny );
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_full_screen ) ) )
+                else if( IsXMLToken( aLocalName, XML_FULL_SCREEN ) )
                 {
-                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFullScreen" ) ), aAny );
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_mouse_visible ) ) )
+                else if( IsXMLToken( aLocalName, XML_MOUSE_VISIBLE ) )
                 {
-                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsMouseVisible" ) ), aAny );
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_start_with_navigator ) ) )
+                else if( IsXMLToken( aLocalName, XML_START_WITH_NAVIGATOR ) )
                 {
-                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "StartWithNavigator" ) ), aAny );
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_mouse_as_pen ) ) )
+                else if( IsXMLToken( aLocalName, XML_MOUSE_AS_PEN ) )
                 {
-                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UsePen" ) ), aAny );
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_transition_on_click ) ) )
+                else if( IsXMLToken( aLocalName, XML_TRANSITION_ON_CLICK ) )
                 {
-                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_enabled ) ) );
+                    aAny = bool2any( IsXMLToken( sValue, XML_ENABLED ) );
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsTransitionOnClick" ) ), aAny );
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_show_logo ) ) )
+                else if( IsXMLToken( aLocalName, XML_SHOW_LOGO ) )
                 {
-                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowLogo" ) ), aAny );
                 }
             }
@@ -272,7 +275,7 @@ SdXMLShowsContext::~SdXMLShowsContext()
 
 SvXMLImportContext * SdXMLShowsContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
 {
-    if( mpImpl && nPrefix == XML_NAMESPACE_PRESENTATION && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_show ) ) )
+    if( mpImpl && nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SHOW ) )
     {
         OUString aName;
         OUString aPages;
@@ -289,11 +292,11 @@ SvXMLImportContext * SdXMLShowsContext::CreateChildContext( USHORT nPrefix, cons
             switch( nPrefix )
             {
             case XML_NAMESPACE_PRESENTATION:
-                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_name ) ) )
+                if( IsXMLToken( aLocalName, XML_NAME ) )
                 {
                     aName = sValue;
                 }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_pages ) ) )
+                else if( IsXMLToken( rLocalName, XML_PAGES ) )
                 {
                     aPages = sValue;
                 }

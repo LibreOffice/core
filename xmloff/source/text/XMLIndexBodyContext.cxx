@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBodyContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-31 16:11:06 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,6 @@
 
 #ifndef _XMLOFF_TEXTIMP_HXX_
 #include "txtimp.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterPageExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:13:18 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
@@ -92,6 +92,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
+using namespace ::xmloff::token;
 
 XMLTextMasterPageExport::XMLTextMasterPageExport( SvXMLExport& rExp ) :
     XMLPageExport( rExp ),
@@ -182,20 +183,20 @@ void XMLTextMasterPageExport::exportMasterPageContent(
         if( xHeaderText.is() )
         {
             if( !bHeader )
-                GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE,
-                                             sXML_display, sXML_false );
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                          XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                        sXML_header, sal_True, sal_True );
+                                        XML_HEADER, sal_True, sal_True );
             exportHeaderFooterContent( xHeaderText, sal_False );
         }
 
         if( xHeaderTextLeft.is() && xHeaderTextLeft != xHeaderText )
         {
             if( !bHeaderLeft )
-                GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE,
-                                             sXML_display, sXML_false );
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                          XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                        sXML_header_left, sal_True, sal_True );
+                                        XML_HEADER_LEFT, sal_True, sal_True );
             exportHeaderFooterContent( xHeaderTextLeft, sal_False );
         }
 
@@ -212,20 +213,20 @@ void XMLTextMasterPageExport::exportMasterPageContent(
         if( xFooterText.is() )
         {
             if( !bFooter )
-                GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE,
-                                             sXML_display, sXML_false );
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                          XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                        sXML_footer, sal_True, sal_True );
+                                        XML_FOOTER, sal_True, sal_True );
             exportHeaderFooterContent( xFooterText, sal_False );
         }
 
         if( xFooterTextLeft.is() && xFooterTextLeft != xFooterText )
         {
             if( !bFooterLeft )
-                GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE,
-                                             sXML_display, sXML_false );
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                          XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                        sXML_footer_left, sal_True, sal_True );
+                                        XML_FOOTER_LEFT, sal_True, sal_True );
             exportHeaderFooterContent( xFooterTextLeft, sal_False );
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameHyperlinkContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-27 07:38:11 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
@@ -86,6 +86,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
+using namespace ::xmloff::token;
 
 TYPEINIT1( XMLTextFrameHyperlinkContext, SvXMLImportContext );
 
@@ -145,10 +146,10 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
 
     if( sShow.getLength() && !sTargetFrameName.getLength() )
     {
-        if( sShow.equalsAsciiL( sXML_new, sizeof(sXML_new)-1 ) )
+        if( IsXMLToken( sShow, XML_NEW ) )
             sTargetFrameName =
                     OUString( RTL_CONSTASCII_USTRINGPARAM("_blank" ) );
-        else if( sShow.equalsAsciiL( sXML_replace, sizeof(sXML_replace)-1 ) )
+        else if( IsXMLToken( sShow, XML_REPLACE ) )
             sTargetFrameName =
                     OUString( RTL_CONSTASCII_USTRINGPARAM("_self" ) );
     }
@@ -171,13 +172,13 @@ SvXMLImportContext *XMLTextFrameHyperlinkContext::CreateChildContext(
     XMLTextFrameContext *pTextFrameContext = 0;
 
     if( XML_NAMESPACE_DRAW == nPrefix &&
-        rLocalName.equalsAsciiL( sXML_text_box, sizeof(sXML_text_box)-1 ) )
+        IsXMLToken( rLocalName, XML_TEXT_BOX ) )
         pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
                                             rLocalName, xAttrList,
                                             eAnchorType,
                                             XML_TEXT_FRAME_TEXTBOX);
     else if( XML_NAMESPACE_DRAW == nPrefix &&
-        rLocalName.equalsAsciiL( sXML_image, sizeof(sXML_image)-1 ) )
+             IsXMLToken( rLocalName, XML_IMAGE ) )
         pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
                                             rLocalName, xAttrList,
                                             eAnchorType,

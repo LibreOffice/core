@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSourceBaseContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-20 14:16:28 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -278,7 +278,7 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
     switch (eParam)
     {
         case XML_TOK_INDEXSOURCE_INDEX_SCOPE:
-            if (rValue.equalsAsciiL(sXML_chapter, sizeof(sXML_chapter)-1))
+            if ( IsXMLToken( rValue, XML_CHAPTER ) )
             {
                 bChapterIndex = sal_True;
             }
@@ -320,16 +320,14 @@ SvXMLImportContext* XMLIndexSourceBaseContext::CreateChildContext(
 
     if (XML_NAMESPACE_TEXT == nPrefix)
     {
-        if (rLocalName.equalsAsciiL(sXML_index_title_template,
-                                    sizeof(sXML_index_title_template)-1))
+        if ( IsXMLToken( rLocalName, XML_INDEX_TITLE_TEMPLATE ) )
         {
             pContext = new XMLIndexTitleTemplateContext(GetImport(),
                                                         rIndexPropertySet,
                                                         nPrefix, rLocalName);
         }
-        else if (bUseLevelFormats &&
-                 rLocalName.equalsAsciiL(sXML_index_source_styles,
-                                         sizeof(sXML_index_source_styles)-1))
+        else if ( bUseLevelFormats &&
+                  IsXMLToken( rLocalName, XML_INDEX_SOURCE_STYLES ) )
         {
             pContext = new XMLIndexTOCStylesContext(GetImport(),
                                                     rIndexPropertySet,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:20:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,16 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_PAGEPROPERTYSETCONTEXT_HXX
 #include "PagePropertySetContext.hxx"
 #endif
 
 using namespace com::sun::star;
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_PROPERTIES;
 
 //------------------------------------------------------------------
 
@@ -113,8 +115,7 @@ SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLName.compareToAscii( sXML_properties ) == 0 )
+    if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLName, XML_PROPERTIES ) )
     {
         PageContextType aType = Header;
         if (!bHeader)

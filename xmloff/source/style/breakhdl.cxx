@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakhdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include <breakhdl.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -91,7 +91,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry psXML_BreakTypes[] =
+SvXMLEnumMapEntry pXML_BreakTypes[] =
 {
     { XML_AUTO,         0 },
     { XML_COLUMN,       1 },
@@ -117,7 +117,7 @@ sal_Bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno:
     style::BreakType eBreak = style::BreakType_NONE;
     sal_uInt16 nEnum;
 
-    if( ( bRet = rUnitConverter.convertEnum( nEnum, rStrImpValue, psXML_BreakTypes ) ) )
+    if( ( bRet = rUnitConverter.convertEnum( nEnum, rStrImpValue, pXML_BreakTypes ) ) )
     {
         if( nEnum != 0 )
             eBreak = ( nEnum == 1 ) ? style::BreakType_COLUMN_BEFORE : style::BreakType_PAGE_BEFORE;
@@ -158,7 +158,7 @@ sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno:
     }
 
     OUStringBuffer aOut;
-    sal_Bool bOk = rUnitConverter.convertEnum( aOut, nEnum, psXML_BreakTypes );
+    sal_Bool bOk = rUnitConverter.convertEnum( aOut, nEnum, pXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();
 
     return sal_True;
@@ -180,7 +180,7 @@ sal_Bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::
     style::BreakType eBreak = style::BreakType_NONE;
     sal_uInt16 nEnum;
 
-    if( ( bRet = rUnitConverter.convertEnum( nEnum, rStrImpValue, psXML_BreakTypes ) ) )
+    if( ( bRet = rUnitConverter.convertEnum( nEnum, rStrImpValue, pXML_BreakTypes ) ) )
     {
         if( nEnum != 0 )
             eBreak = ( nEnum == 1 ) ? style::BreakType_COLUMN_AFTER : style::BreakType_PAGE_AFTER;
@@ -221,7 +221,7 @@ sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::
     }
 
     OUStringBuffer aOut;
-    sal_Bool bOk = rUnitConverter.convertEnum( aOut, nEnum, psXML_BreakTypes );
+    sal_Bool bOk = rUnitConverter.convertEnum( aOut, nEnum, pXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();
 
     return sal_True;

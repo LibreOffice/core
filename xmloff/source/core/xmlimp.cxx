@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-25 11:44:38 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 #ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
 #include "XMLFontStylesContext.hxx"
 #endif
@@ -140,6 +143,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;
+using namespace ::xmloff::token;
 
 sal_Char __READONLY_DATA sXML_np__office[] = "_office";
 sal_Char __READONLY_DATA sXML_np__style[] = "_style";
@@ -181,56 +185,104 @@ SvXMLImportContext *SvXMLImport::CreateContext( USHORT nPrefix,
 
 void SvXMLImport::_InitCtor()
 {
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_OFFICE_IDX, sXML_np__office,
-                               sXML_n_office, XML_NAMESPACE_OFFICE );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_STYLE_IDX, sXML_np__style,
-                               sXML_n_style, XML_NAMESPACE_STYLE );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_TEXT_IDX, sXML_np__text,
-                               sXML_n_text, XML_NAMESPACE_TEXT );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_TABLE_IDX, sXML_np__table,
-                               sXML_n_table, XML_NAMESPACE_TABLE );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_DRAW_IDX, sXML_np__draw,
-                               sXML_n_draw, XML_NAMESPACE_DRAW );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_DR3D_IDX, sXML_np__dr3d,
-                               sXML_n_dr3d, XML_NAMESPACE_DR3D );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_FO_IDX, sXML_np__fo,
-                               sXML_n_fo, XML_NAMESPACE_FO );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_XLINK_IDX, sXML_np__xlink,
-                               sXML_n_xlink, XML_NAMESPACE_XLINK );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_DC_IDX, sXML_np__dc,
-                               sXML_n_dc, XML_NAMESPACE_DC );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_META_IDX, sXML_np__meta,
-                               sXML_n_meta, XML_NAMESPACE_META );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_NUMBER_IDX, sXML_np__number,
-                                sXML_n_number, XML_NAMESPACE_NUMBER );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_SVG_IDX, sXML_np__svg,
-                               sXML_n_svg, XML_NAMESPACE_SVG );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_CHART_IDX, sXML_np__chart,
-                               sXML_n_chart, XML_NAMESPACE_CHART );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_MATH_IDX, sXML_np__math,
-                               sXML_n_math, XML_NAMESPACE_MATH );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_FORM_IDX, sXML_namespace_form,
-                                  sXML_url_form, XML_NAMESPACE_FORM );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_SCRIPT_IDX, sXML_np__script,
-                               sXML_url_script, XML_NAMESPACE_SCRIPT );
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_CONFIG_IDX, sXML_np__config,
-                               sXML_n_config, XML_NAMESPACE_CONFIG );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_OFFICE_IDX,
+                               OUString::createFromAscii(sXML_np__office),
+                               GetXMLToken(XML_N_OFFICE),
+                               XML_NAMESPACE_OFFICE );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_STYLE_IDX,
+                               OUString::createFromAscii(sXML_np__style),
+                               GetXMLToken(XML_N_STYLE),
+                               XML_NAMESPACE_STYLE );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_TEXT_IDX,
+                               OUString::createFromAscii(sXML_np__text),
+                               GetXMLToken(XML_N_TEXT),
+                               XML_NAMESPACE_TEXT );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_TABLE_IDX,
+                               OUString::createFromAscii(sXML_np__table),
+                               GetXMLToken(XML_N_TABLE),
+                               XML_NAMESPACE_TABLE );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_DRAW_IDX,
+                               OUString::createFromAscii(sXML_np__draw),
+                               GetXMLToken(XML_N_DRAW),
+                               XML_NAMESPACE_DRAW );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_DR3D_IDX,
+                               OUString::createFromAscii(sXML_np__dr3d),
+                               GetXMLToken(XML_N_DR3D),
+                               XML_NAMESPACE_DR3D );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_FO_IDX,
+                               OUString::createFromAscii(sXML_np__fo),
+                               GetXMLToken(XML_N_FO),
+                               XML_NAMESPACE_FO );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_XLINK_IDX,
+                               OUString::createFromAscii(sXML_np__xlink),
+                               GetXMLToken(XML_N_XLINK),
+                               XML_NAMESPACE_XLINK );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_DC_IDX,
+                               OUString::createFromAscii(sXML_np__dc),
+                               GetXMLToken(XML_N_DC),
+                               XML_NAMESPACE_DC );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_META_IDX,
+                               OUString::createFromAscii(sXML_np__meta),
+                               GetXMLToken(XML_N_META),
+                               XML_NAMESPACE_META );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_NUMBER_IDX,
+                               OUString::createFromAscii(sXML_np__number),
+                               GetXMLToken(XML_N_NUMBER),
+                               XML_NAMESPACE_NUMBER );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_SVG_IDX,
+                               OUString::createFromAscii(sXML_np__svg),
+                               GetXMLToken(XML_N_SVG),
+                               XML_NAMESPACE_SVG );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_CHART_IDX,
+                               OUString::createFromAscii(sXML_np__chart),
+                               GetXMLToken(XML_N_CHART),
+                               XML_NAMESPACE_CHART );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_MATH_IDX,
+                               OUString::createFromAscii(sXML_np__math),
+                               GetXMLToken(XML_N_MATH),
+                               XML_NAMESPACE_MATH );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_FORM_IDX,
+                               OUString::createFromAscii(sXML_namespace_form),
+                                  GetXMLToken(XML_N_FORM),
+                               XML_NAMESPACE_FORM );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_SCRIPT_IDX,
+                               OUString::createFromAscii(sXML_np__script),
+                               GetXMLToken(XML_N_SCRIPT),
+                               XML_NAMESPACE_SCRIPT );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_CONFIG_IDX,
+                               OUString::createFromAscii(sXML_np__config),
+                               GetXMLToken(XML_N_CONFIG),
+                               XML_NAMESPACE_CONFIG );
 
     // namespaces used in the technical preview (SO 5.2)
-    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_FO_IDX, sXML_np__fo_old,
-                               sXML_n_fo_old, XML_NAMESPACE_FO );
-    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_XLINK_IDX, sXML_np__xlink_old,
-                               sXML_n_xlink_old, XML_NAMESPACE_XLINK );
-    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_OFFICE_IDX, sXML_np__office,
-                               sXML_n_office_old, XML_NAMESPACE_OFFICE );
-    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_STYLE_IDX, sXML_np__style_old,
-                               sXML_n_style_old, XML_NAMESPACE_STYLE );
-    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_TEXT_IDX, sXML_np__text_old,
-                               sXML_n_text_old, XML_NAMESPACE_TEXT );
-    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_TABLE_IDX, sXML_np__table_old,
-                               sXML_n_table_old, XML_NAMESPACE_TABLE );
-    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_META_IDX, sXML_np__meta_old,
-                               sXML_n_meta_old, XML_NAMESPACE_META );
+    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_FO_IDX,
+                               OUString::createFromAscii(sXML_np__fo_old),
+                               GetXMLToken(XML_N_FO_OLD),
+                               XML_NAMESPACE_FO );
+    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_XLINK_IDX,
+                               OUString::createFromAscii(sXML_np__xlink_old),
+                               GetXMLToken(XML_N_XLINK_OLD),
+                               XML_NAMESPACE_XLINK );
+    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_OFFICE_IDX,
+                               OUString::createFromAscii(sXML_np__office),
+                               GetXMLToken(XML_N_OFFICE_OLD),
+                               XML_NAMESPACE_OFFICE );
+    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_STYLE_IDX,
+                               OUString::createFromAscii(sXML_np__style_old),
+                               GetXMLToken(XML_N_STYLE_OLD),
+                               XML_NAMESPACE_STYLE );
+    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_TEXT_IDX,
+                               OUString::createFromAscii(sXML_np__text_old),
+                               GetXMLToken(XML_N_TEXT_OLD),
+                               XML_NAMESPACE_TEXT );
+    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_TABLE_IDX,
+                               OUString::createFromAscii(sXML_np__table_old),
+                               GetXMLToken(XML_N_TABLE_OLD),
+                               XML_NAMESPACE_TABLE );
+    pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_META_IDX,
+                               OUString::createFromAscii(sXML_np__meta_old),
+                               GetXMLToken(XML_N_META_OLD),
+                               XML_NAMESPACE_META );
     sPackageProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
 
     if (xNumberFormatsSupplier.is())
@@ -966,7 +1018,7 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
         // construct event helper and register StarBasic handler and standard
         // event tables
         pEventImportHelper = new XMLEventImportHelper();
-        OUString sStarBasic(RTL_CONSTASCII_USTRINGPARAM(sXML_starbasic));
+        OUString sStarBasic(GetXMLToken(XML_STARBASIC));
         pEventImportHelper->RegisterFactory(sStarBasic,
                                             new XMLStarBasicContextFactory());
         pEventImportHelper->AddTranslationTable(aStandardEventTable);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fonthdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include <fonthdl.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -85,6 +85,10 @@
 
 #ifndef _XMLOFF_XMLEMENT_HXX
 #include "xmlelement.hxx"
+#endif
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 
 using namespace ::rtl;
@@ -299,7 +303,7 @@ sal_Bool XMLFontEncodingPropHdl::importXML( const OUString& rStrImpValue, uno::A
 {
     sal_Bool bRet = sal_True;
 
-    if( rStrImpValue.equalsAsciiL( sXML_x_symbol, sizeof(sXML_x_symbol)-1 ) )
+    if( IsXMLToken( rStrImpValue, XML_X_SYMBOL ) )
         rValue <<= (sal_Int16) RTL_TEXTENCODING_SYMBOL;
 
     return bRet;
@@ -315,7 +319,7 @@ sal_Bool XMLFontEncodingPropHdl::exportXML( OUString& rStrExpValue, const uno::A
     {
         if( (rtl_TextEncoding)nSet == RTL_TEXTENCODING_SYMBOL )
         {
-            aOut.appendAscii( sXML_x_symbol );
+            aOut.append( GetXMLToken(XML_X_SYMBOL) );
             rStrExpValue = aOut.makeStringAndClear();
             bRet = sal_True;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-27 07:30:28 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,12 @@
 #include "xmlmetai.hxx"
 #include "xmltkmap.hxx"
 #include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
 #include "xmlimp.hxx"
 #include "nmspmap.hxx"
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
@@ -533,7 +536,7 @@ SfxXMLMetaElementContext::SfxXMLMetaElementContext( SvXMLImport& rImport, sal_uI
                 sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
                                                     sAttrName, &aLocalName );
                 if ( nPrefix == XML_NAMESPACE_OFFICE &&
-                     aLocalName.compareToAscii(sXML_target_frame_name) == 0 )
+                     IsXMLToken(aLocalName, XML_TARGET_FRAME_NAME) )
                 {
                     rtl::OUString sValue = xAttrList->getValueByIndex( i );
                     aPropAny <<= sValue;
@@ -556,7 +559,7 @@ SfxXMLMetaElementContext::SfxXMLMetaElementContext( SvXMLImport& rImport, sal_uI
             sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName );
             if ( nPrefix == XML_NAMESPACE_META &&
-                 aLocalName.compareToAscii(sXML_name) == 0 )
+                 IsXMLToken(aLocalName, XML_NAME) )
             {
                 sFieldName = xAttrList->getValueByIndex( i );
             }
@@ -579,7 +582,7 @@ SvXMLImportContext* SfxXMLMetaElementContext::CreateChildContext( sal_uInt16 nPr
 
     if ( nElementType == XML_TOK_META_KEYWORDS &&
          nPrefix == XML_NAMESPACE_META &&
-         rLName.compareToAscii(sXML_keyword) == 0 )
+         IsXMLToken(rLName, XML_KEYWORD) )
     {
         //  <office:keyword> inside of <office:keywords>
         pContext = new SfxXMLMetaElementContext( GetImport(), nPrefix, rLName,

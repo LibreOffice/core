@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-27 15:06:41 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -153,6 +153,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -213,7 +214,7 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
             OUString aLocalName;
             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(xAttrList->getNameByIndex(i), &aLocalName);
 
-            if( (nPrefix == XML_NAMESPACE_XLINK) && aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_href ) ) )
+            if( (nPrefix == XML_NAMESPACE_XLINK) && IsXMLToken( aLocalName, XML_HREF ) )
             {
                 uno::Any aAny;
                 aAny <<= GetImport().GetAbsoluteReference( xAttrList->getValueByIndex(i) );
@@ -280,7 +281,7 @@ SvXMLImportContext *SdXMLDrawingPageStyleContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.compareToAscii( sXML_properties ) == 0 )
+        IsXMLToken( rLocalName, XML_PROPERTIES ) )
     {
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
@@ -362,7 +363,7 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
             }
             case XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION:
             {
-                if(sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_portrait))))
+                if( IsXMLToken( sValue, XML_PORTRAIT ) )
                     meOrientation = view::PaperOrientation_PORTRAIT;
                 else
                     meOrientation = view::PaperOrientation_LANDSCAPE;
@@ -435,7 +436,7 @@ SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = 0;
 
-    if(nPrefix == XML_NAMESPACE_STYLE && rLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_properties))))
+    if(nPrefix == XML_NAMESPACE_STYLE && IsXMLToken( rLocalName, XML_PROPERTIES) )
     {
         pContext = new SdXMLPageMasterStyleContext(GetSdImport(), nPrefix, rLocalName, xAttrList);
 
@@ -478,7 +479,7 @@ SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
         OUString aLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
 
-        if(nPrefix == XML_NAMESPACE_STYLE && aLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_name))))
+        if(nPrefix == XML_NAMESPACE_STYLE && IsXMLToken( aLocalName, XML_NAME ) )
         {
             msName = xAttrList->getValueByIndex( i );
         }
@@ -496,7 +497,7 @@ SvXMLImportContext *SdXMLPresentationPageLayoutContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = 0;
 
-    if(nPrefix == XML_NAMESPACE_PRESENTATION && rLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_placeholder))))
+    if(nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_PLACEHOLDER ) )
     {
         // presentation:placeholder inside style:presentation-page-layout context
         pContext = new SdXMLPresentationPlaceholderContext(
@@ -785,7 +786,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLGenericPageContext( rImport, nPrfx, rLName, xAttrList, rShapes )
 {
-    const sal_Bool bHandoutMaster = rLName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_handout_master));
+    const sal_Bool bHandoutMaster = IsXMLToken( rLName, XML_HANDOUT_MASTER );
 
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -1512,7 +1513,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
     SvXMLImportContext* pContext = 0;
 
     if(nPrefix == XML_NAMESPACE_STYLE
-        && rLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_master_page))))
+       && IsXMLToken( rLocalName, XML_MASTER_PAGE ) )
     {
         // style:masterpage inside office:styles context
         uno::Reference< drawing::XDrawPage > xNewMasterPage;
@@ -1550,7 +1551,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
         }
     }
     else    if(nPrefix == XML_NAMESPACE_STYLE
-        && rLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_handout_master))))
+        && IsXMLToken( rLocalName, XML_HANDOUT_MASTER ) )
     {
         uno::Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetSdImport().GetModel(), uno::UNO_QUERY );
         if( xHandoutSupp.is() )
@@ -1564,7 +1565,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
         }
     }
     else if( nPrefix == XML_NAMESPACE_DRAW
-        && rLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_layer_set))))
+        && IsXMLToken( rLocalName, XML_LAYER_SET ) )
     {
         pContext = new SdXMLLayerSetContext( GetImport(), nPrefix, rLocalName, xAttrList );
     }

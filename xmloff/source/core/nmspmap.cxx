@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-13 14:16:16 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef _XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -80,6 +80,9 @@
 #endif
 
 using namespace rtl;
+using ::xmloff::token::GetXMLToken;
+using ::xmloff::token::XML_XMLNS;
+
 
 /* The basic idea of this class is that we have two two ways to search our
  * data...by prefix and by key. We use an STL hash_map for fast prefix
@@ -94,12 +97,12 @@ using namespace rtl;
  */
 
 SvXMLNamespaceMap::SvXMLNamespaceMap() :
-    sXMLNS( OUString::createFromAscii(sXML_xmlns) )
+    sXMLNS( GetXMLToken(XML_XMLNS) )
 {
 }
 
 SvXMLNamespaceMap::SvXMLNamespaceMap( const SvXMLNamespaceMap& rMap ) :
-    sXMLNS( OUString::createFromAscii(sXML_xmlns) )
+    sXMLNS( GetXMLToken(XML_XMLNS) )
 {
     aNameHash = rMap.aNameHash;
     aNameMap  = rMap.aNameMap;

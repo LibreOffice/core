@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shadwhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,13 @@
 #include "xmluconv.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmltoken.hxx>
 #endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -112,7 +113,7 @@ sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
 
     while( aTokenEnum.getNextToken( aToken ) )
     {
-        if( aToken.compareToAscii( sXML_none ) == 0 )
+        if( IsXMLToken( aToken, XML_NONE ) )
         {
             aShadow.Location = table::ShadowLocation_NONE;
             bRet = sal_True;
@@ -197,7 +198,7 @@ sal_Bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
                 break;
             case table::ShadowLocation_NONE:
             default:
-                rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) );
+                rStrExpValue = GetXMLToken(XML_NONE);
                 return sal_True;
         }
 

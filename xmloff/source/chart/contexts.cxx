@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contexts.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 17:48:54 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -97,6 +97,7 @@
 #include "SchXMLChartContext.hxx"
 
 using namespace com::sun::star;
+using namespace ::xmloff::token;
 
 // ==================================================
 
@@ -108,10 +109,10 @@ SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
         mrImportHelper( rImpHelper )
 {
     DBG_ASSERT( XML_NAMESPACE_OFFICE == nPrefix &&
-        ( 0 == rLName.compareToAscii(sXML_document) ||
-          0 == rLName.compareToAscii(sXML_document_meta) ||
-          0 == rLName.compareToAscii(sXML_document_styles) ||
-          0 == rLName.compareToAscii(sXML_document_content) ),
+        ( IsXMLToken( rLName, XML_DOCUMENT ) ||
+          IsXMLToken( rLName, XML_DOCUMENT_META) ||
+          IsXMLToken( rLName, XML_DOCUMENT_STYLES) ||
+          IsXMLToken( rLName, XML_DOCUMENT_CONTENT) ),
                 "SchXMLDocContext instanciated with no <office:document> element" );
 }
 
@@ -170,7 +171,7 @@ SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
         mrImportHelper( rImpHelper )
 {
     DBG_ASSERT( XML_NAMESPACE_OFFICE == nPrefix &&
-                rLName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_body )),
+                IsXMLToken( rLName, XML_BODY ),
                 "SchXMLBodyContext instanciated with no <office:body> element" );
 }
 
@@ -190,7 +191,7 @@ SvXMLImportContext* SchXMLBodyContext::CreateChildContext(
 
     // <chart:chart> element
     if( nPrefix == XML_NAMESPACE_CHART &&
-        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_chart )))
+        IsXMLToken( rLocalName, XML_CHART ) )
     {
         pContext = mrImportHelper.CreateChartContext( GetImport(),
                                                       nPrefix, rLocalName,

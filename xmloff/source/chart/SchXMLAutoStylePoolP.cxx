@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLAutoStylePoolP.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-14 17:11:24 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
+using ::xmloff::token::GetXMLToken;
+using ::xmloff::token::XML_CDATA;
 
 SchXMLAutoStylePoolP::SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport ) :
         mrSchXMLExport( rSchXMLExport )
@@ -89,7 +95,7 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
     const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-    const rtl::OUString sCDATA( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA ));
+    const rtl::OUString sCDATA( GetXMLToken( XML_CDATA ));
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties,
                                                 rPropExp, rUnitConverter, rNamespaceMap );
 

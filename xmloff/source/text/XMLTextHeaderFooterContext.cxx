@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-09 07:23:23 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
 #endif
 #ifndef _XMLOFF_TEXTHEADERFOOTERCONTEXT_HXX_
 #include "XMLTextHeaderFooterContext.hxx"

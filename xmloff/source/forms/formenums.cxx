@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@
 #endif
 #ifndef _SV_WINTYPES_HXX
 #include <vcl/wintypes.hxx>     // for check states
-#endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
@@ -326,6 +323,11 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/06/15 10:37:07  dvo
+ *  #86004# #88312#
+ *  - changed convertEnum and appropriate maps to use token constants (rahter than sal_Char*)
+ *  - user index marks in the process
+ *
  *  Revision 1.6  2001/06/07 12:25:52  fs
  *  #86096# enums for FontEmphasis and FontRelief
  *

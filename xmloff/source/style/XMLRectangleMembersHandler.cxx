@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRectangleMembersHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-03 09:22:40 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#include "xmlkywd.hxx"
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"

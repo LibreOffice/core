@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-14 17:14:51 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,8 @@
  ************************************************************************/
 #include "XMLChartStyleContext.hxx"
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLNUMFI_HXX
 #include "xmlnumfi.hxx"
@@ -71,6 +71,9 @@
 #endif
 
 using namespace com::sun::star;
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_DATA_STYLE_NAME;
+
 
 TYPEINIT1( XMLChartStyleContext, XMLPropStyleContext );
 
@@ -81,7 +84,7 @@ void XMLChartStyleContext::SetAttribute(
     const ::rtl::OUString& rLocalName,
     const ::rtl::OUString& rValue )
 {
-    if( rLocalName.compareToAscii( sXML_data_style_name ) == 0 )
+    if( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
     {
         msDataStyleName = rValue;
     }

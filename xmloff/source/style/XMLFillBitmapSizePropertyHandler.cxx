@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFillBitmapSizePropertyHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,6 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
-
-#include "xmlkywd.hxx"
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
