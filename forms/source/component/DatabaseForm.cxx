@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:36:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3061,7 +3061,7 @@ void SAL_CALL ODatabaseForm::disposing(const EventObject& Source) throw( Runtime
         Reference< XConnection > xConnSource( Source.Source, UNO_QUERY );
         if ( xConnSource.is() )
         {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             Reference< XConnection > xActiveConn;
             m_xAggregateSet->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xActiveConn;
             OSL_ENSURE( xActiveConn.get() == xConnSource.get(), "ODatabaseForm::disposing: where did this come from?" );
