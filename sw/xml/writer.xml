@@ -717,4 +717,199 @@
         <status value="final"/>
         <supported-service>com::sun::star::text::ViewSettings</supported-service>
     </component-description>
+
+
+
+  <!-- XML-based filter: Writer import components
+       (full, styles, content, meta, settings)
+    -->
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Writer.XMLImporter</name>
+    <description>
+      This component imports a single XML document stream into a
+      writer document. For
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Writer.XMLStylesImporter</name>
+    <description>
+      This component imports the styles.xml stream into a writer document.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Writer.XMLContentImporter</name>
+    <description>
+      This component imports the content.xml stream into a writer document.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Writer.XMLMetaImporter</name>
+    <description>
+      This component imports the meta.xml stream into a writer document.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Writer.XMLSettingsImporter</name>
+    <description>
+      This component imports the settings.xml stream into a writer document.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+
+  <!-- XML-based filter: Writer export components
+       (full, styles, content, meta, settings)
+    -->
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Writer.XMLExporter</name>
+    <description>
+      This component exports a writer document into a single XML
+      document stream.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service/>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Writer.XMLStylesExporter</name>
+    <description>
+      This component exports a the styles of a writer document.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service/>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Writer.XMLContentExporter</name>
+    <description>
+      This component exports a the content of a writer document.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service/>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Writer.XMLMetaExporter</name>
+    <description>
+      This component exports a the meta of a writer document.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service/>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Writer.XMLSettingsExporter</name>
+    <description>
+      This component exports a the settings of a writer document.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service/>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+
 </module-description>
