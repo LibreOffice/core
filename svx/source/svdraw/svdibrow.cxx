@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdibrow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:41:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1242,7 +1242,7 @@ void SdrItemBrowser::Undirty()
     SfxItemSet aSet(pView->GetModel()->GetItemPool());
     pView->GetAttributes(aSet);
 
-    if(pView->HasMarkedObj())
+    if(pView->AreObjectsMarked())
     {
         // SfxItemSet a2ndSet(pView->GetAttributes(TRUE));
         SfxItemSet a2ndSet(pView->GetModel()->GetItemPool());
