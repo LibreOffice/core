@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-09 15:01:02 $
+ *  last change: $Author: mba $ $Date: 2002-07-09 15:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,12 @@
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -273,6 +279,13 @@ FmPropBrw::FmPropBrw(const Reference< XMultiServiceFactory >&   _xORB,
         {
             m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
             m_xMeAsFrame->setName(::rtl::OUString::createFromAscii("form property browser"));
+            if ( pBindings->GetDispatcher() )
+            {
+                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
+                        xSupp ( pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+                if ( xSupp.is() )
+                    xSupp->getFrames()->append( m_xMeAsFrame );
+            }
         }
     }
     catch (Exception&)
