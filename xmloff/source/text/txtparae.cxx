@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:06:38 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -1709,6 +1713,14 @@ void XMLTextParagraphExport::exportParagraph(
                     aAny = rPropSetHelper.getValue( PARA_STYLE_NAME,
                                                     xPropSet );
                 aAny >>= sStyle;
+            }
+
+            Reference< XInterface > xRef( rTextContent, UNO_QUERY );
+            if( xRef.is() )
+            {
+                const OUString& rIdentifier = GetExport().getInterfaceToIdentifierMapper().getIdentifier( xRef );
+                if( rIdentifier.getLength() )
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_ID, rIdentifier );
             }
 
             OUString sAutoStyle( sStyle );
