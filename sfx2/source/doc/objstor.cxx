@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ab $ $Date: 2001-04-06 13:24:24 $
+ *  last change: $Author: dv $ $Date: 2001-04-06 13:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1382,7 +1382,8 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         {
             INetURLObject::SetBaseURL( aOldURL );
             SetError( pMediumTmp->GetError() );
-            String aTmp( pMediumTmp->GetPhysicalName() );
+            String aTmp;
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pMediumTmp->GetPhysicalName(), aTmp );
             delete pMediumTmp;
             SfxContentHelper::Kill( aTmp );
             DoSaveCompleted( (SvStorage*)0 );
