@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-27 12:49:02 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,25 @@ ImageList RID_DEFAULTIMAGELIST_LC
     IL_TOOL ;
 };
 
+ImageList RID_DEFAULTIMAGELIST_SCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch_qrtl.bmp";
+    };
+    IL_TOOL ;
+};
+
+ImageList RID_DEFAULTIMAGELIST_LCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lch_qrtl.bmp" ;
+    };
+    IL_TOOL ;
+};
+
+
 
  // Toolbox----------------------------------------------------------------------------
 
@@ -161,7 +180,7 @@ ToolBox RID_BRW_QRY_TOOLBOX
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 3 , 1 ) ;
-    Size = MAP_APPFONT ( 200 , 14 ) ;
+    //  Size = MAP_APPFONT ( 200 , 14 ) ;
     OutputSize = TRUE ;
     Align = BOXALIGN_TOP ;
     HideWhenDeactivate = TRUE ;
@@ -523,6 +542,30 @@ Image BOOKMARKFOLDER_TREE_ICON
 Image BOOKMARK_TREE_ICON
 {
     ImageBitmap = Bitmap { File = "bookmark_sx.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image QUERYFOLDER_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "sxh03201.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image QUERY_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "sxh03202.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image BOOKMARKFOLDER_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "bookmarkcontainer_sxh.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image BOOKMARK_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "bookmark_sxh.bmp"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
