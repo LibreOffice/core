@@ -1,7 +1,7 @@
 cr	crashrep	:	sal sysui gtk tools shell NULL
 cr	crashrep				usr1	-	all	cr_mkout NULL
 cr	crashrep\scripts		nmake	-	all	cr_suscript NULL
-cr	crashrep\source\all		get		-	all	cr_sresource NULL
-cr	crashrep\source\unx\res	nmake	-	u	cr_sures NULL
-cr	crashrep\source\unx		nmake	-	u	cr_sunx cr_sures.u NULL
+cr	crashrep\source\all		nmake	-	all	cr_sresource NULL
+cr	crashrep\source\unx\res	nmake	-	u	cr_sures cr_sresource NULL
+cr	crashrep\source\unx		nmake	-	u	cr_sunx cr_sures.u cr_sresource NULL
 cr	crashrep\source\win32	nmake	-	n	cr_swin32 NULL
