@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:24:12 $
+ *  last change: $Author: vg $ $Date: 2002-11-27 16:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SE" ;
         Text [ portuguese_brazilian ] = "IF" ;
         Text [ portuguese ] = "SE" ;
-        Text [ finnish ] = "IF" ;
+        Text [ finnish ] = "JOS" ;
         Text [ danish ] = "HVIS" ;
         Text [ french ] = "SI" ;
         Text [ swedish ] = "OM" ;
@@ -101,7 +101,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SCEGLI" ;
         Text [ portuguese_brazilian ] = "ESCOLHER" ;
         Text [ portuguese ] = "SELECCIONAR" ;
-        Text [ finnish ] = "CHOOSE" ;
+        Text [ finnish ] = "VALITSE_INDEKSI" ;
         Text [ danish ] = "V∆LG" ;
         Text [ french ] = "CHOISIR" ;
         Text [ swedish ] = "VƒLJ" ;
@@ -147,7 +147,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "E" ;
         Text [ portuguese_brazilian ] = "E" ;
         Text [ portuguese ] = "E" ;
-        Text [ finnish ] = "AND" ;
+        Text [ finnish ] = "JA" ;
         Text [ danish ] = "OG" ;
         Text [ french ] = "ET" ;
         Text [ swedish ] = "OCH" ;
@@ -177,7 +177,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "O" ;
         Text [ portuguese_brazilian ] = "OU" ;
         Text [ portuguese ] = "OU" ;
-        Text [ finnish ] = "OR" ;
+        Text [ finnish ] = "TAI" ;
         Text [ danish ] = "ELLER" ;
         Text [ french ] = "OU" ;
         Text [ swedish ] = "ELLER" ;
@@ -210,7 +210,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "NON" ;
         Text [ portuguese_brazilian ] = "N?O" ;
         Text [ portuguese ] = "N√O" ;
-        Text [ finnish ] = "NOT" ;
+        Text [ finnish ] = "EI" ;
         Text [ danish ] = "IKKE" ;
         Text [ french ] = "NON" ;
         Text [ swedish ] = "ICKE" ;
@@ -268,7 +268,7 @@ Resource RID_SC_FUNCTION_NAMES
          // ???
         Text [ portuguese_brazilian ] = "PI" ;
         Text [ portuguese ] = "PI" ;
-        Text [ finnish ] = "PI" ;
+        Text [ finnish ] = "Pii" ;
         Text [ danish ] = "PI" ;
         Text [ french ] = "PI" ;
         Text [ swedish ] = "PI" ;
@@ -298,7 +298,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CASUALE" ;
         Text [ portuguese_brazilian ] = "ALEA" ;
         Text [ portuguese ] = "ALEAT“RIO" ;
-        Text [ finnish ] = "RAND" ;
+        Text [ finnish ] = "SATUNNAISLUKU" ;
         Text [ danish ] = "SLUMP" ;
         Text [ french ] = "ALEA" ;
         Text [ swedish ] = "SLUMP" ;
@@ -328,7 +328,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VERO" ;
         Text [ portuguese_brazilian ] = "VERDADEIRO" ;
         Text [ portuguese ] = "VERDADEIRO" ;
-        Text [ finnish ] = "TRUE" ;
+        Text [ finnish ] = "TOSI" ;
         Text [ danish ] = "SAND" ;
         Text [ french ] = "VRAI" ;
         Text [ swedish ] = "SANT" ;
@@ -358,7 +358,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "FALSO" ;
         Text [ portuguese_brazilian ] = "FALSO" ;
         Text [ portuguese ] = "FALSO" ;
-        Text [ finnish ] = "FALSE" ;
+        Text [ finnish ] = "EPƒTOSI" ;
         Text [ danish ] = "FALSK" ;
         Text [ french ] = "FAUX" ;
         Text [ swedish ] = "FALSKT" ;
@@ -388,7 +388,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "OGGI" ;
         Text [ portuguese_brazilian ] = "HOJE" ;
         Text [ portuguese ] = "HOJE" ;
-        Text [ finnish ] = "TODAY" ;
+        Text [ finnish ] = "TƒMƒ_PƒIVƒ" ;
         Text [ danish ] = "IDAG" ;
         Text [ french ] = "AUJOURDHUI" ;
         Text [ swedish ] = "IDAG" ;
@@ -418,7 +418,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ADESSO" ;
         Text [ portuguese_brazilian ] = "AGORA" ;
         Text [ portuguese ] = "AGORA" ;
-        Text [ finnish ] = "NOW" ;
+        Text [ finnish ] = "NYT" ;
         Text [ danish ] = "NU" ;
         Text [ french ] = "MAINTENANT" ;
         Text [ swedish ] = "NU" ;
@@ -426,7 +426,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "AHORA" ;
         Text [ english_us ] = "NOW" ;
         Text[ chinese_simplified ] = "NOW";
-        Text[ russian ] = "“ƒ¿“¿";
+        Text[ russian ] = "—≈…◊¿—";
         Text[ polish ] = "TERAZ";
         Text[ japanese ] = "NOW";
         Text[ chinese_traditional ] = "NOW";
@@ -448,7 +448,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "NON.DISP" ;
         Text [ portuguese_brazilian ] = "NA" ;
         Text [ portuguese ] = "NA" ;
-        Text [ finnish ] = "NA" ;
+        Text [ finnish ] = "PUUTTUU" ;
         Text [ danish ] = "IKKE.TILG∆NGELIG" ;
         Text [ french ] = "NA" ;
         Text [ swedish ] = "SAKNAS" ;
@@ -456,7 +456,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "NOD" ;
         Text [ english_us ] = "NA" ;
         Text[ chinese_simplified ] = "NA";
-        Text[ russian ] = "Õƒ";
+        Text[ russian ] = "Õ/ƒ";
         Text[ polish ] = "NA";
         Text[ japanese ] = "NA";
         Text[ chinese_traditional ] = "NA";
@@ -478,7 +478,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ATTUALE" ;
         Text [ portuguese_brazilian ] = "CURRENT" ;
         Text [ portuguese ] = "ACTUAL" ;
-        Text [ finnish ] = "CURRENT" ;
+        Text [ finnish ] = "NYKYINEN" ;
         Text [ danish ] = "AKTUEL" ;
         Text [ french ] = "ACTUELLE" ;
         Text [ swedish ] = "AKTUELL" ;
@@ -508,7 +508,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "GRADI" ;
         Text [ portuguese_brazilian ] = "GRAUS" ;
         Text [ portuguese ] = "GRAUS" ;
-        Text [ finnish ] = "DEGREES" ;
+        Text [ finnish ] = "ASTEET" ;
         Text [ danish ] = "GRADER" ;
         Text [ french ] = "DEGRES" ;
         Text [ swedish ] = "GRADER" ;
@@ -538,7 +538,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RADIANTI" ;
         Text [ portuguese_brazilian ] = "RADIANOS" ;
         Text [ portuguese ] = "RADIANOS" ;
-        Text [ finnish ] = "RADIANS" ;
+        Text [ finnish ] = "RADIAANIT" ;
         Text [ danish ] = "RADIANER" ;
         Text [ french ] = "RADIANS" ;
         Text [ swedish ] = "RADIANER" ;
@@ -1088,7 +1088,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RADQ" ;
         Text [ portuguese_brazilian ] = "SQRT" ;
         Text [ portuguese ] = "RAÕZ.Q" ;
-        Text [ finnish ] = "SQRT" ;
+        Text [ finnish ] = "NELI÷JUURI" ;
         Text [ danish ] = "KVROD" ;
         Text [ french ] = "RACINE" ;
         Text [ swedish ] = "ROT" ;
@@ -1118,7 +1118,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "FATTORIALE" ;
         Text [ portuguese_brazilian ] = "FATORIAL" ;
         Text [ portuguese ] = "FACT" ;
-        Text [ finnish ] = "FACT" ;
+        Text [ finnish ] = "KERTOMA" ;
         Text [ danish ] = "FAKULTET" ;
         Text [ french ] = "FACT" ;
         Text [ swedish ] = "FAKULTET" ;
@@ -1148,7 +1148,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ANNO" ;
         Text [ portuguese_brazilian ] = "YEAR" ;
         Text [ portuguese ] = "ANO" ;
-        Text [ finnish ] = "YEAR" ;
+        Text [ finnish ] = "VUOSI" ;
         Text [ danish ] = "≈R" ;
         Text [ french ] = "ANNEE" ;
         Text [ swedish ] = "≈R" ;
@@ -1178,7 +1178,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MESE" ;
         Text [ portuguese_brazilian ] = "MONTH" ;
         Text [ portuguese ] = "M S" ;
-        Text [ finnish ] = "MONTH" ;
+        Text [ finnish ] = "KUUKAUSI" ;
         Text [ danish ] = "M≈NED" ;
         Text [ french ] = "MOIS" ;
         Text [ swedish ] = "M≈NAD" ;
@@ -1208,7 +1208,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "GIORNO" ;
         Text [ portuguese_brazilian ] = "DAY" ;
         Text [ portuguese ] = "DIA" ;
-        Text [ finnish ] = "DAY" ;
+        Text [ finnish ] = "PƒIVƒ" ;
         Text [ danish ] = "DAG" ;
         Text [ french ] = "JOUR" ;
         Text [ swedish ] = "DAG" ;
@@ -1238,7 +1238,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ORA" ;
         Text [ portuguese_brazilian ] = "HORA" ;
         Text [ portuguese ] = "HORA" ;
-        Text [ finnish ] = "HOUR" ;
+        Text [ finnish ] = "TUNNIT" ;
         Text [ danish ] = "TIME" ;
         Text [ french ] = "HEURE" ;
         Text [ swedish ] = "TIMME" ;
@@ -1268,7 +1268,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MINUTO" ;
         Text [ portuguese_brazilian ] = "MINUTO" ;
         Text [ portuguese ] = "MINUTO" ;
-        Text [ finnish ] = "MINUTE" ;
+        Text [ finnish ] = "MINUUTIT" ;
         Text [ danish ] = "MINUT" ;
         Text [ french ] = "MINUTE" ;
         Text [ swedish ] = "MINUT" ;
@@ -1298,7 +1298,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SECONDO" ;
         Text [ portuguese_brazilian ] = "SEGUNDO" ;
         Text [ portuguese ] = "SEGUNDO" ;
-        Text [ finnish ] = "SECOND" ;
+        Text [ finnish ] = "SEKUNNIT" ;
         Text [ danish ] = "SEKUND" ;
         Text [ french ] = "SECONDE" ;
         Text [ swedish ] = "SEKUND" ;
@@ -1328,7 +1328,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SEGNO" ;
         Text [ portuguese_brazilian ] = "SIGN" ;
         Text [ portuguese ] = "SINAL" ;
-        Text [ finnish ] = "SIGN" ;
+        Text [ finnish ] = "ETUMERKKI" ;
         Text [ danish ] = "FORTEGN" ;
         Text [ french ] = "SIGNE" ;
         Text [ swedish ] = "TECKEN" ;
@@ -1388,11 +1388,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INT" ;
         Text [ portuguese_brazilian ] = "INT" ;
         Text [ portuguese ] = "N⁄M.INT" ;
-        Text [ finnish ] = "INT" ;
+        Text [ finnish ] = "KOKONAISLUKU" ;
         Text [ danish ] = "HELTAL" ;
         Text [ french ] = "ENT" ;
         Text [ swedish ] = "HELTAL" ;
-        Text [ dutch ] = "INTEGERSNIJPUNT" ;
+        Text [ dutch ] = "INTEGER" ;
         Text [ spanish ] = "ENTERO" ;
         Text [ english_us ] = "INT" ;
         Text[ chinese_simplified ] = "INT";
@@ -1401,7 +1401,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ japanese ] = "INT";
         Text[ chinese_traditional ] = "INT";
         Text[ arabic ] = "INT";
-        Text[ dutch ] = "INTEGERSNIJPUNT";
+        Text[ dutch ] = "INTEGER";
         Text[ chinese_simplified ] = "INT";
         Text[ greek ] = "INT";
         Text[ korean ] = "INT";
@@ -1421,7 +1421,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "PHI";
         Text[ french ] = "PHI";
         Text[ spanish ] = "PHI";
-        Text[ finnish ] = "PHI";
+        Text[ finnish ] = "Fii";
         Text[ italian ] = "FI";
         Text[ danish ] = "PHI";
         Text[ swedish ] = "FI";
@@ -1470,7 +1470,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.VUOTO" ;
         Text [ portuguese_brazilian ] = "ISVAZIO" ;
         Text [ portuguese ] = "….C…L.VAZIA" ;
-        Text [ finnish ] = "ISBLANK" ;
+        Text [ finnish ] = "ONTYHJƒ" ;
         Text [ danish ] = "ER.TOM" ;
         Text [ french ] = "ESTVIDE" ;
         Text [ swedish ] = "ƒRTOM" ;
@@ -1500,7 +1500,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.TESTO" ;
         Text [ portuguese_brazilian ] = "ISTEXTO" ;
         Text [ portuguese ] = "….TEXTO" ;
-        Text [ finnish ] = "ISTEXT" ;
+        Text [ finnish ] = "ONTEKSTI" ;
         Text [ danish ] = "ER.TEKST" ;
         Text [ french ] = "ESTTEXTE" ;
         Text [ swedish ] = "ƒRTEXT" ;
@@ -1530,7 +1530,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.NON.TESTO" ;
         Text [ portuguese_brazilian ] = "ISNAOTEXTO" ;
         Text [ portuguese ] = "….N√O.TEXTO" ;
-        Text [ finnish ] = "ISNONTEXT" ;
+        Text [ finnish ] = "ONEI_TEKSTI" ;
         Text [ danish ] = "ER.IKKE.TEKST" ;
         Text [ french ] = "ESTNONTEXTE" ;
         Text [ swedish ] = "ƒREJTEXT" ;
@@ -1560,7 +1560,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.LOGICO" ;
         Text [ portuguese_brazilian ] = "ISLOGICO" ;
         Text [ portuguese ] = "….L”GICO" ;
-        Text [ finnish ] = "ISLOGICAL" ;
+        Text [ finnish ] = "ONTOTUUS" ;
         Text [ danish ] = "ER.LOGISK" ;
         Text [ french ] = "ESTLOGIQUE" ;
         Text [ swedish ] = "ƒRLOGISK" ;
@@ -1590,7 +1590,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TIPO" ;
         Text [ portuguese_brazilian ] = "TIPO" ;
         Text [ portuguese ] = "TIPO" ;
-        Text [ finnish ] = "TYPE" ;
+        Text [ finnish ] = "TYYPPI" ;
         Text [ danish ] = "V∆RDITYPE" ;
         Text [ french ] = "TYPE" ;
         Text [ swedish ] = "VƒRDETYP" ;
@@ -1635,7 +1635,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "CELL";
         Text[ arabic ] = "CELL";
         Text[ catalan ] = "CELL";
-        Text[ finnish ] = "CELL";
+        Text[ finnish ] = "SOLU";
         Text[ thai ] = "‡πÄ‡∏ã‡∏•‡∏•‡πå";
     };
     String SC_OPCODE_IS_REF
@@ -1646,7 +1646,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.RIF" ;
         Text [ portuguese_brazilian ] = "ISREF" ;
         Text [ portuguese ] = "….REF" ;
-        Text [ finnish ] = "ISREF" ;
+        Text [ finnish ] = "ONVIITT" ;
         Text [ danish ] = "ER.REFERENCE" ;
         Text [ french ] = "ESTREF" ;
         Text [ swedish ] = "ƒRREF" ;
@@ -1676,7 +1676,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.NUMERO" ;
         Text [ portuguese_brazilian ] = "ISNUMERO" ;
         Text [ portuguese ] = "….N⁄MERO" ;
-        Text [ finnish ] = "ISNUMBER" ;
+        Text [ finnish ] = "ONLUKU" ;
         Text [ danish ] = "ER.TAL" ;
         Text [ french ] = "ESTNUM" ;
         Text [ swedish ] = "ƒRTAL" ;
@@ -1706,7 +1706,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.FORMULA" ;
         Text [ portuguese_brazilian ] = "ISFORMULA" ;
         Text [ portuguese ] = "….F”RMULA" ;
-        Text [ finnish ] = "ISFORMULA" ;
+        Text [ finnish ] = "ONKAAVA" ;
         Text [ danish ] = "ER.FORMEL" ;
         Text [ french ] = "ESTFORMULE" ;
         Text [ swedish ] = "ƒRFORMEL" ;
@@ -1736,7 +1736,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.NON.DISP" ;
         Text [ portuguese_brazilian ] = "ISNA" ;
         Text [ portuguese ] = "….N√O.DISP" ;
-        Text [ finnish ] = "ISNA" ;
+        Text [ finnish ] = "ONPUUTTUU" ;
         Text [ danish ] = "ER.IKKE.TILG∆NGELIG" ;
         Text [ french ] = "ESTNA" ;
         Text [ swedish ] = "ƒRSAKNAD" ;
@@ -1766,7 +1766,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.ERR" ;
         Text [ portuguese_brazilian ] = "ISERR" ;
         Text [ portuguese ] = "….ERRO" ;
-        Text [ finnish ] = "ISERR" ;
+        Text [ finnish ] = "ONVIRH" ;
         Text [ danish ] = "ER.FJL" ;
         Text [ french ] = "ESTERR" ;
         Text [ swedish ] = "ƒRF" ;
@@ -1796,7 +1796,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.ERRORE" ;
         Text [ portuguese_brazilian ] = "ISERRO" ;
         Text [ portuguese ] = "….ERROS" ;
-        Text [ finnish ] = "ISERROR" ;
+        Text [ finnish ] = "ONVIRHE" ;
         Text [ danish ] = "ER.FEJL" ;
         Text [ french ] = "ESTERREUR" ;
         Text [ swedish ] = "ƒRFEL" ;
@@ -1826,7 +1826,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.PARI" ;
         Text [ portuguese_brazilian ] = "ISPAR" ;
         Text [ portuguese ] = "…PAR" ;
-        Text [ finnish ] = "ISEVEN" ;
+        Text [ finnish ] = "ONPARILLINEN" ;
         Text [ danish ] = "ER.LIGE" ;
         Text [ french ] = "EST.PAIR" ;
         Text [ swedish ] = "ƒRJƒMN" ;
@@ -1856,7 +1856,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.DISPARI" ;
         Text [ portuguese_brazilian ] = "ISIMPAR" ;
         Text [ portuguese ] = "…ÕMPAR" ;
-        Text [ finnish ] = "ISODD" ;
+        Text [ finnish ] = "ONPARITON" ;
         Text [ danish ] = "ER.ULIGE" ;
         Text [ french ] = "EST.IMPAIR" ;
         Text [ swedish ] = "ƒRUDDA" ;
@@ -1916,7 +1916,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DATA.VALORE" ;
         Text [ portuguese_brazilian ] = "DATA.VALOR" ;
         Text [ portuguese ] = "DATA.VALOR" ;
-        Text [ finnish ] = "DATEVALUE" ;
+        Text [ finnish ] = "PƒIVƒYSARVO" ;
         Text [ danish ] = "DATOV∆RDI" ;
         Text [ french ] = "DATEVAL" ;
         Text [ swedish ] = "DATUMVƒRDE" ;
@@ -1946,7 +1946,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ORARIO.VALORE" ;
         Text [ portuguese_brazilian ] = "VALOR.TEMPO" ;
         Text [ portuguese ] = "VALOR.TEMPO" ;
-        Text [ finnish ] = "TIMEVALUE" ;
+        Text [ finnish ] = "AIKA_ARVO" ;
         Text [ danish ] = "TIDSV∆RDI" ;
         Text [ french ] = "TEMPSVAL" ;
         Text [ swedish ] = "TIDVƒRDE" ;
@@ -1976,7 +1976,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CODICE" ;
         Text [ portuguese_brazilian ] = "CODIGO" ;
         Text [ portuguese ] = "C”DIGO" ;
-        Text [ finnish ] = "CODE" ;
+        Text [ finnish ] = "KOODI" ;
         Text [ danish ] = "KODE" ;
         Text [ french ] = "CODE" ;
         Text [ swedish ] = "KOD" ;
@@ -2006,7 +2006,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ANNULLA.SPAZI" ;
         Text [ portuguese_brazilian ] = "ARRUMAR" ;
         Text [ portuguese ] = "COMPACTAR" ;
-        Text [ finnish ] = "TRIM" ;
+        Text [ finnish ] = "POISTA_VƒLIT" ;
         Text [ danish ] = "TRIM" ;
         Text [ french ] = "SUPPRESPACE" ;
         Text [ swedish ] = "RENSA" ;
@@ -2036,7 +2036,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MAIUSC" ;
         Text [ portuguese_brazilian ] = "MAIUSCULA" ;
         Text [ portuguese ] = "MAI⁄SCULA" ;
-        Text [ finnish ] = "UPPER" ;
+        Text [ finnish ] = "ISOT" ;
         Text [ danish ] = "STORE.BOGSTAVER" ;
         Text [ french ] = "MAJUSCULE" ;
         Text [ swedish ] = "VERSALER" ;
@@ -2066,11 +2066,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MAIUSC.INIZ" ;
         Text [ portuguese_brazilian ] = "PRIMAIUSCULA" ;
         Text [ portuguese ] = "INICIAL.MAI⁄SCULA" ;
-        Text [ finnish ] = "PROPER" ;
+        Text [ finnish ] = "ERISNIMI" ;
         Text [ danish ] = "STORT.FORBOGSTAV" ;
         Text [ french ] = "NOMPROPRE" ;
         Text [ swedish ] = "INITIAL" ;
-        Text [ dutch ] = "BEGINLETTERS" ;
+        Text [ dutch ] = "BEGINLETTERS2" ;
         Text [ spanish ] = "NOMPROPIO" ;
         Text [ english_us ] = "PROPER" ;
         Text[ chinese_simplified ] = "PROPER";
@@ -2079,7 +2079,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ japanese ] = "PROPER";
         Text[ chinese_traditional ] = "PROPER";
         Text[ arabic ] = "PROPER";
-        Text[ dutch ] = "BEGINLETTERS";
+        Text[ dutch ] = "BEGINLETTERS2";
         Text[ chinese_simplified ] = "PROPER";
         Text[ greek ] = "PROPER";
         Text[ korean ] = "PROPER";
@@ -2096,7 +2096,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MINUSC" ;
         Text [ portuguese_brazilian ] = "MINUSCULA" ;
         Text [ portuguese ] = "MIN⁄SCULA" ;
-        Text [ finnish ] = "LOWER" ;
+        Text [ finnish ] = "PIENET" ;
         Text [ danish ] = "SM≈.BOGSTAVER" ;
         Text [ french ] = "MINUSCULE" ;
         Text [ swedish ] = "GEMENER" ;
@@ -2126,7 +2126,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "LUNGHEZZA" ;
         Text [ portuguese_brazilian ] = "NUM.CARACT" ;
         Text [ portuguese ] = "N⁄M.CARACT" ;
-        Text [ finnish ] = "LEN" ;
+        Text [ finnish ] = "PITUUS" ;
         Text [ danish ] = "L∆NGDE" ;
         Text [ french ] = "NBCAR" ;
         Text [ swedish ] = "LƒNGD" ;
@@ -2182,7 +2182,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VALORE" ;
         Text [ portuguese_brazilian ] = "VALOR" ;
         Text [ portuguese ] = "VALOR" ;
-        Text [ finnish ] = "VALUE" ;
+        Text [ finnish ] = "ARVO" ;
         Text [ danish ] = "V∆RDI" ;
         Text [ french ] = "CNUM" ;
         Text [ swedish ] = "TEXTNUM" ;
@@ -2212,7 +2212,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "LIBERA" ;
         Text [ portuguese_brazilian ] = "TIRAR" ;
         Text [ portuguese ] = "LIMPAR" ;
-        Text [ finnish ] = "CLEAN" ;
+        Text [ finnish ] = "SIIVOA" ;
         Text [ danish ] = "RENS" ;
         Text [ french ] = "EPURAGE" ;
         Text [ swedish ] = "STƒDA" ;
@@ -2242,7 +2242,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CODICE.CARATT" ;
         Text [ portuguese_brazilian ] = "CARACT" ;
         Text [ portuguese ] = "CARACT" ;
-        Text [ finnish ] = "CHAR" ;
+        Text [ finnish ] = "MERKKI" ;
         Text [ danish ] = "TEGN" ;
         Text [ french ] = "CAR" ;
         Text [ swedish ] = "TECKENKOD" ;
@@ -2298,7 +2298,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "PARI" ;
         Text [ portuguese_brazilian ] = "PAR" ;
         Text [ portuguese ] = "PAR" ;
-        Text [ finnish ] = "EVEN" ;
+        Text [ finnish ] = "PARILLINEN" ;
         Text [ danish ] = "LIGE" ;
         Text [ french ] = "PAIR" ;
         Text [ swedish ] = "JƒMN" ;
@@ -2328,7 +2328,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISPARI" ;
         Text [ portuguese_brazilian ] = "IMPAR" ;
         Text [ portuguese ] = "ÕMPAR" ;
-        Text [ finnish ] = "ODD" ;
+        Text [ finnish ] = "PARITON" ;
         Text [ danish ] = "ULIGE" ;
         Text [ french ] = "IMPAIR" ;
         Text [ swedish ] = "UDDA" ;
@@ -2358,7 +2358,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.NORM.ST" ;
         Text [ portuguese_brazilian ] = "NORMSDIST" ;
         Text [ portuguese ] = "DIST.NORM.P" ;
-        Text [ finnish ] = "NORMSDIST" ;
+        Text [ finnish ] = "NORM_JAKAUMA_NORMIT" ;
         Text [ danish ] = "STANDARDNORMFORDELING" ;
         Text [ french ] = "LOI.NORMALE.STANDARD" ;
         Text [ swedish ] = "NORMSF÷RD" ;
@@ -2414,7 +2414,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INV.FISHER" ;
         Text [ portuguese_brazilian ] = "FISHERINV" ;
         Text [ portuguese ] = "INV.FISHER" ;
-        Text [ finnish ] = "FISHERINV" ;
+        Text [ finnish ] = "FISHER_KƒƒNT" ;
         Text [ danish ] = "FISHERINV" ;
         Text [ french ] = "FISHER.INVERSE" ;
         Text [ swedish ] = "FISHERINV" ;
@@ -2444,7 +2444,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INV.NORM.ST" ;
         Text [ portuguese_brazilian ] = "NORMSINV" ;
         Text [ portuguese ] = "INV.NORM.P" ;
-        Text [ finnish ] = "NORMSINV" ;
+        Text [ finnish ] = "NORM_JAKAUMA_NORMIT_KƒƒNT" ;
         Text [ danish ] = "STANDARDNORMINV" ;
         Text [ french ] = "LOI.NORMALE.STANDARD.INVERSE" ;
         Text [ swedish ] = "NORMSINV" ;
@@ -2504,7 +2504,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ERRORE.TIPO" ;
         Text [ portuguese_brazilian ] = "ERRORTYPE" ;
         Text [ portuguese ] = "TIPO.ERRO" ;
-        Text [ finnish ] = "ERRORTYPE" ;
+        Text [ finnish ] = "VIRHEEN_LAJI" ;
         Text [ danish ] = "FEJLTYPE" ;
         Text [ french ] = "TYPE.ERREUR" ;
         Text [ swedish ] = "FELTYP" ;
@@ -2512,7 +2512,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "TIPO.DE.ERROR" ;
         Text [ english_us ] = "ERRORTYPE" ;
         Text[ chinese_simplified ] = "ERRORTYPE";
-        Text[ russian ] = "“»œ.Œÿ»¡ »";
+        Text[ russian ] = "“»œŒÿ»¡ »";
         Text[ polish ] = "TYP.B£ DU";
         Text[ japanese ] = "ERRORTYPE";
         Text[ chinese_traditional ] = "ERRORTYPE";
@@ -2551,7 +2551,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "FORMULA";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "FORMULA";
-        Text[ finnish ] = "FORMULA";
+        Text[ finnish ] = "KAAVA";
         Text[ thai ] = "‡∏™‡∏π‡∏ï‡∏£";
     };
     String SC_OPCODE_ARABIC
@@ -2577,7 +2577,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ARABIC";
         Text[ arabic ] = "ARABIC";
         Text[ catalan ] = "ARABIC";
-        Text[ finnish ] = "ARABIC";
+        Text[ finnish ] = "ARABIALAINEN";
         Text[ thai ] = "‡∏†‡∏≤‡∏©‡∏≤‡∏≠‡∏≤‡∏£‡∏ö‡∏¥‡∏Å";
     };
     String SC_OPCODE_ARC_TAN_2
@@ -2618,7 +2618,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ARROTONDA.ECCESSO" ;
         Text [ portuguese_brazilian ] = "TETO" ;
         Text [ portuguese ] = "LIMITE.SUPERIOR" ;
-        Text [ finnish ] = "CEILING" ;
+        Text [ finnish ] = "PY÷RISTƒ_KERR_YL÷S" ;
         Text [ danish ] = "AFRUND.LOFT" ;
         Text [ french ] = "PLAFOND" ;
         Text [ swedish ] = "RUNDA.UPP" ;
@@ -2648,7 +2648,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ARROTONDA.DIFETTO" ;
         Text [ portuguese_brazilian ] = "BASE" ;
         Text [ portuguese ] = "LIMITE.INFERIOR" ;
-        Text [ finnish ] = "FLOOR" ;
+        Text [ finnish ] = "PY÷RISTƒ_KERR_ALAS" ;
         Text [ danish ] = "AFRUND.GULV" ;
         Text [ french ] = "PLANCHER" ;
         Text [ swedish ] = "RUNDA.NER" ;
@@ -2678,7 +2678,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ARROTONDA" ;
         Text [ portuguese_brazilian ] = "ARREDONDAR" ;
         Text [ portuguese ] = "ARREDONDAR" ;
-        Text [ finnish ] = "ROUND" ;
+        Text [ finnish ] = "PY÷RISTƒ" ;
         Text [ danish ] = "AFRUND" ;
         Text [ french ] = "ARRONDI" ;
         Text [ swedish ] = "AVRUNDA" ;
@@ -2708,7 +2708,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ARROTONDA.PER.ECC" ;
         Text [ portuguese_brazilian ] = "ARREDONDARPARACIMA" ;
         Text [ portuguese ] = "ARRED.PARA.CIMA" ;
-        Text [ finnish ] = "ROUNDUP" ;
+        Text [ finnish ] = "PY÷RISTƒ_DES_YL÷S" ;
         Text [ danish ] = "RUND.OP" ;
         Text [ french ] = "ARRONDI.SUP" ;
         Text [ swedish ] = "AVRUNDA.UPP≈T" ;
@@ -2738,7 +2738,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ARROTONDA.PER.DIF" ;
         Text [ portuguese_brazilian ] = "ARREDONDARPARABAIXO" ;
         Text [ portuguese ] = "ARRED.PARA.BAIXO" ;
-        Text [ finnish ] = "ROUNDDOWN" ;
+        Text [ finnish ] = "PY÷RISTƒ_DES_ALAS" ;
         Text [ danish ] = "RUND.NED" ;
         Text [ french ] = "ARRONDI.INF" ;
         Text [ swedish ] = "AVRUNDA.NED≈T" ;
@@ -2768,7 +2768,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TRONCA" ;
         Text [ portuguese_brazilian ] = "TRUNCAR" ;
         Text [ portuguese ] = "TRUNCAR" ;
-        Text [ finnish ] = "TRUNC" ;
+        Text [ finnish ] = "KATKAISE" ;
         Text [ danish ] = "AFKORT" ;
         Text [ french ] = "TRONQUE" ;
         Text [ swedish ] = "AVKORTA" ;
@@ -2824,7 +2824,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "POTENZA" ;
         Text [ portuguese_brazilian ] = "POTENCIA" ;
         Text [ portuguese ] = "POT NCIA" ;
-        Text [ finnish ] = "POWER" ;
+        Text [ finnish ] = "POTENSSI" ;
         Text [ danish ] = "POTENS" ;
         Text [ french ] = "PUISSANCE" ;
         Text [ swedish ] = "UPPH÷JT.TILL" ;
@@ -2854,7 +2854,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MCD" ;
         Text [ portuguese_brazilian ] = "GCD" ;
         Text [ portuguese ] = "MDC" ;
-        Text [ finnish ] = "GCD" ;
+        Text [ finnish ] = "SUURIN_YHT_TEKIJƒ" ;
         Text [ danish ] = "STÿRSTE.F∆LLES.DIVISOR" ;
         Text [ french ] = "PGCD" ;
         Text [ swedish ] = "SGD" ;
@@ -2884,7 +2884,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MCM" ;
         Text [ portuguese_brazilian ] = "LCD" ;
         Text [ portuguese ] = "MMC" ;
-        Text [ finnish ] = "LCM" ;
+        Text [ finnish ] = "PIENIN_YHT_JAETTAVA" ;
         Text [ danish ] = "MINDSTE.F∆LLES.MULTIPLUM" ;
         Text [ french ] = "PPCM" ;
         Text [ swedish ] = "MGM" ;
@@ -2914,7 +2914,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RESTO" ;
         Text [ portuguese_brazilian ] = "MOD" ;
         Text [ portuguese ] = "RESTO" ;
-        Text [ finnish ] = "MOD" ;
+        Text [ finnish ] = "JAKOJ" ;
         Text [ danish ] = "REST" ;
         Text [ french ] = "MOD" ;
         Text [ swedish ] = "REST" ;
@@ -2944,7 +2944,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MATR.SOMMA.PRODOTTO" ;
         Text [ portuguese_brazilian ] = "SOMARPRODUT" ;
         Text [ portuguese ] = "SOMAR.PRODUTO" ;
-        Text [ finnish ] = "SUMPRODUCT" ;
+        Text [ finnish ] = "TULOJEN_SUMMA" ;
         Text [ danish ] = "SUMPRODUKT" ;
         Text [ french ] = "SOMMEPROD" ;
         Text [ swedish ] = "PRODUKTSUMMA" ;
@@ -2974,7 +2974,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SOMMA.Q" ;
         Text [ portuguese_brazilian ] = "SOMARSQ" ;
         Text [ portuguese ] = "SOMARQUAD" ;
-        Text [ finnish ] = "SUMSQ" ;
+        Text [ finnish ] = "NELI÷SUMMA" ;
         Text [ danish ] = "SUMKV" ;
         Text [ french ] = "SOMME.CARRES" ;
         Text [ swedish ] = "KVADRATSUMMA" ;
@@ -3004,7 +3004,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SOMMA.DIFF.Q" ;
         Text [ portuguese_brazilian ] = "SOMARX2MY2" ;
         Text [ portuguese ] = "SOMA.X2MY2" ;
-        Text [ finnish ] = "SUMX2MY2" ;
+        Text [ finnish ] = "NELI÷SUMMIEN_EROTUS" ;
         Text [ danish ] = "SUMX2MY2" ;
         Text [ french ] = "SOMME.X2MY2" ;
         Text [ swedish ] = "SUMMAX2MY2" ;
@@ -3034,7 +3034,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SOMMA.SOMMA.Q" ;
         Text [ portuguese_brazilian ] = "SOMARX2DY2" ;
         Text [ portuguese ] = "SOMA.X2PY2" ;
-        Text [ finnish ] = "SUMX2PY2" ;
+        Text [ finnish ] = "NELI÷SUMMIEN_SUMMA" ;
         Text [ danish ] = "SUMX2PY2" ;
         Text [ french ] = "SOMME.X2PY2" ;
         Text [ swedish ] = "SUMMAX2PY2" ;
@@ -3064,7 +3064,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SOMMA.Q.DIFF" ;
         Text [ portuguese_brazilian ] = "SOMARXMY2" ;
         Text [ portuguese ] = "SOMA.XMY2" ;
-        Text [ finnish ] = "SUMXMY2" ;
+        Text [ finnish ] = "EROTUSTEN_NELI÷SUMMA" ;
         Text [ danish ] = "SUMXMY2" ;
         Text [ french ] = "SOMME.XMY2" ;
         Text [ swedish ] = "SUMMAXMY2" ;
@@ -3094,7 +3094,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DATA" ;
         Text [ portuguese_brazilian ] = "DATA" ;
         Text [ portuguese ] = "DATA" ;
-        Text [ finnish ] = "DATE" ;
+        Text [ finnish ] = "PƒIVƒYS" ;
         Text [ danish ] = "DATO" ;
         Text [ french ] = "DATE" ;
         Text [ swedish ] = "DATUM" ;
@@ -3124,7 +3124,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ORARIO" ;
         Text [ portuguese_brazilian ] = "HORA" ;
         Text [ portuguese ] = "TEMPO" ;
-        Text [ finnish ] = "TIME" ;
+        Text [ finnish ] = "AIKA" ;
         Text [ danish ] = "TID" ;
         Text [ french ] = "TEMPS" ;
         Text [ swedish ] = "KLOCKSLAG" ;
@@ -3154,7 +3154,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "GIORNI" ;
         Text [ portuguese_brazilian ] = "DIA" ;
         Text [ portuguese ] = "DIAS" ;
-        Text [ finnish ] = "DAYS" ;
+        Text [ finnish ] = "PƒIVƒT" ;
         Text [ danish ] = "DAGE" ;
         Text [ french ] = "JOURS" ;
         Text [ swedish ] = "DAGAR" ;
@@ -3184,7 +3184,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "GIORNO360" ;
         Text [ portuguese_brazilian ] = "DIAS360" ;
         Text [ portuguese ] = "DIAS360" ;
-        Text [ finnish ] = "DAYS360" ;
+        Text [ finnish ] = "PƒIVƒT360" ;
         Text [ danish ] = "DAGE360" ;
         Text [ french ] = "JOURS360" ;
         Text [ swedish ] = "DAGAR360" ;
@@ -3274,7 +3274,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MAX" ;
         Text [ portuguese_brazilian ] = "MAX" ;
         Text [ portuguese ] = "M¡XIMO" ;
-        Text [ finnish ] = "MAX" ;
+        Text [ finnish ] = "MAKS" ;
         Text [ danish ] = "MAKS" ;
         Text [ french ] = "MAX" ;
         Text [ swedish ] = "MAX" ;
@@ -3304,7 +3304,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MAX.VALORI" ;
         Text [ portuguese_brazilian ] = "MAXA" ;
         Text [ portuguese ] = "M¡XIMOA" ;
-        Text [ finnish ] = "MAXA" ;
+        Text [ finnish ] = "MAKSA" ;
         Text [ danish ] = "MAKSV" ;
         Text [ french ] = "MAXA" ;
         Text [ swedish ] = "MAXA" ;
@@ -3334,7 +3334,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SOMMA" ;
         Text [ portuguese_brazilian ] = "SOMA" ;
         Text [ portuguese ] = "SOMA" ;
-        Text [ finnish ] = "SUM" ;
+        Text [ finnish ] = "SUMMA" ;
         Text [ danish ] = "SUM" ;
         Text [ french ] = "SOMME" ;
         Text [ swedish ] = "SUMMA" ;
@@ -3364,7 +3364,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "PRODOTTO" ;
         Text [ portuguese_brazilian ] = "PRODUTO" ;
         Text [ portuguese ] = "PRODUTO" ;
-        Text [ finnish ] = "PRODUCT" ;
+        Text [ finnish ] = "TULO" ;
         Text [ danish ] = "PRODUKT" ;
         Text [ french ] = "PRODUIT" ;
         Text [ swedish ] = "PRODUKT" ;
@@ -3394,7 +3394,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MEDIA" ;
         Text [ portuguese_brazilian ] = "M?DIA" ;
         Text [ portuguese ] = "M…DIA" ;
-        Text [ finnish ] = "AVERAGE" ;
+        Text [ finnish ] = "KESKIARVO" ;
         Text [ danish ] = "MIDDEL" ;
         Text [ french ] = "MOYENNE" ;
         Text [ swedish ] = "MEDEL" ;
@@ -3424,7 +3424,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MEDIA.VALORI" ;
         Text [ portuguese_brazilian ] = "M?DIAA" ;
         Text [ portuguese ] = "M…DIAA" ;
-        Text [ finnish ] = "AVERAGEA" ;
+        Text [ finnish ] = "KESKIARVOA" ;
         Text [ danish ] = "MIDDELV" ;
         Text [ french ] = "MOYENNEA" ;
         Text [ swedish ] = "MEDELA" ;
@@ -3454,7 +3454,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CONTA.NUMERI" ;
         Text [ portuguese_brazilian ] = "CONTA" ;
         Text [ portuguese ] = "CONTAR.N⁄MEROS" ;
-        Text [ finnish ] = "COUNT" ;
+        Text [ finnish ] = "LASKE" ;
         Text [ danish ] = "T∆L" ;
         Text [ french ] = "NB" ;
         Text [ swedish ] = "ANTAL" ;
@@ -3484,11 +3484,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CONTA.VALORI" ;
         Text [ portuguese_brazilian ] = "CONT.VALORES" ;
         Text [ portuguese ] = "CONTAR.VAL" ;
-        Text [ finnish ] = "COUNTA" ;
+        Text [ finnish ] = "LASKE_A" ;
         Text [ danish ] = "T∆LV" ;
         Text [ french ] = "NBVAL" ;
         Text [ swedish ] = "ANTALV" ;
-        Text [ dutch ] = "AANTALARG" ;
+        Text [ dutch ] = "AANTAL2" ;
         Text [ spanish ] = "CONTARA" ;
         Text [ english_us ] = "COUNTA" ;
         Text[ chinese_simplified ] = "COUNTA";
@@ -3497,7 +3497,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ japanese ] = "COUNTA";
         Text[ chinese_traditional ] = "COUNTA";
         Text[ arabic ] = "COUNTA";
-        Text[ dutch ] = "AANTALARG";
+        Text[ dutch ] = "AANTAL2";
         Text[ chinese_simplified ] = "COUNTA";
         Text[ greek ] = "COUNTA";
         Text[ korean ] = "COUNTA";
@@ -3514,7 +3514,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAN" ;
         Text [ portuguese_brazilian ] = "VPL" ;
         Text [ portuguese ] = "VPL" ;
-        Text [ finnish ] = "NPV" ;
+        Text [ finnish ] = "NNA" ;
         Text [ danish ] = "NUTIDSV∆RDI" ;
         Text [ french ] = "VAN" ;
         Text [ swedish ] = "NETNUVƒRDE" ;
@@ -3544,7 +3544,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TIR.COST" ;
         Text [ portuguese_brazilian ] = "TIR" ;
         Text [ portuguese ] = "TIR" ;
-        Text [ finnish ] = "IRR" ;
+        Text [ finnish ] = "SISƒINEN_KORKO" ;
         Text [ danish ] = "IA" ;
         Text [ french ] = "TRI" ;
         Text [ swedish ] = "IR" ;
@@ -3589,7 +3589,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "MIRR";
         Text[ arabic ] = "MIRR";
         Text[ catalan ] = "MIRR";
-        Text[ finnish ] = "MIRR";
+        Text[ finnish ] = "MSISƒINEN";
         Text[ thai ] = "MIRR";
     };
     String SC_OPCODE_ISPMT
@@ -3746,7 +3746,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DEV.ST" ;
         Text [ portuguese_brazilian ] = "DESVPAD" ;
         Text [ portuguese ] = "DESV.PAD" ;
-        Text [ finnish ] = "STDEV" ;
+        Text [ finnish ] = "KESKIHAJONTA" ;
         Text [ danish ] = "STDAFV" ;
         Text [ french ] = "ECARTYPE" ;
         Text [ swedish ] = "STDAV" ;
@@ -3776,7 +3776,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DEV.ST.VALORI" ;
         Text [ portuguese_brazilian ] = "DESVPADA" ;
         Text [ portuguese ] = "DESV.PADA" ;
-        Text [ finnish ] = "STDEVA" ;
+        Text [ finnish ] = "KESKIHAJONTAA" ;
         Text [ danish ] = "STDAFVV" ;
         Text [ french ] = "ECARTYPEA" ;
         Text [ swedish ] = "STDAVA" ;
@@ -3806,7 +3806,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DEV.ST.POP" ;
         Text [ portuguese_brazilian ] = "STDEVP" ;
         Text [ portuguese ] = "DESV.PAD.P" ;
-        Text [ finnish ] = "STDEVP" ;
+        Text [ finnish ] = "KESKIHAJONTAP" ;
         Text [ danish ] = "STDAFVP" ;
         Text [ french ] = "ECARTYPEP" ;
         Text [ swedish ] = "STDAVP" ;
@@ -3836,7 +3836,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DEV.ST.POP.VALORI" ;
         Text [ portuguese_brazilian ] = "STDEVPA" ;
         Text [ portuguese ] = "DESV.PAD.PA" ;
-        Text [ finnish ] = "STDEVPA" ;
+        Text [ finnish ] = "KESKIHAJONTAPA" ;
         Text [ danish ] = "STDAFVPV" ;
         Text [ french ] = "ECARTYPEPA" ;
         Text [ swedish ] = "STDAVPA" ;
@@ -3892,7 +3892,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.NORM" ;
         Text [ portuguese_brazilian ] = "NORMDIST" ;
         Text [ portuguese ] = "DIST.NORM" ;
-        Text [ finnish ] = "NORMDIST" ;
+        Text [ finnish ] = "NORM_JAKAUMA" ;
         Text [ danish ] = "NORMFORDELING" ;
         Text [ french ] = "LOI.NORMALE" ;
         Text [ swedish ] = "NORMF÷RD" ;
@@ -3922,7 +3922,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.EXP" ;
         Text [ portuguese_brazilian ] = "EXPONDIST" ;
         Text [ portuguese ] = "DIST.EXPON" ;
-        Text [ finnish ] = "EXPONDIST" ;
+        Text [ finnish ] = "EKSPONENTIAALIJAKAUMA" ;
         Text [ danish ] = "EKSPFORDELING" ;
         Text [ french ] = "LOI.EXPONENTIELLE" ;
         Text [ swedish ] = "EXPONF÷RD" ;
@@ -3952,7 +3952,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.BINOM" ;
         Text [ portuguese_brazilian ] = "BINOMDIST" ;
         Text [ portuguese ] = "DISTR.BINOM" ;
-        Text [ finnish ] = "BINOMDIST" ;
+        Text [ finnish ] = "BINOMIJAKAUMA" ;
         Text [ danish ] = "BINOMINALFORDELING" ;
         Text [ french ] = "LOI.BINOMIALE" ;
         Text [ swedish ] = "BINOMF÷RD" ;
@@ -4012,7 +4012,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "COMBINAZIONE" ;
         Text [ portuguese_brazilian ] = "COMBIN" ;
         Text [ portuguese ] = "COMBIN" ;
-        Text [ finnish ] = "COMBIN" ;
+        Text [ finnish ] = "KOMBINAATIO" ;
         Text [ danish ] = "KOMBIN" ;
         Text [ french ] = "COMBIN" ;
         Text [ swedish ] = "KOMBIN" ;
@@ -4042,7 +4042,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "COMBINA" ;
         Text [ portuguese_brazilian ] = "COMBINA" ;
         Text [ portuguese ] = "COMBIN2" ;
-        Text [ finnish ] = "COMBINA" ;
+        Text [ finnish ] = "KOMBINAATIOA" ;
         Text [ danish ] = "KOMBIN2" ;
         Text [ french ] = "COMBINA" ;
         Text [ swedish ] = "KOMBIN2" ;
@@ -4072,7 +4072,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "PERMUTAZIONE" ;
         Text [ portuguese_brazilian ] = "PERMUT" ;
         Text [ portuguese ] = "PERMUTA«√O" ;
-        Text [ finnish ] = "PERMUT" ;
+        Text [ finnish ] = "PERMUTAATIO" ;
         Text [ danish ] = "PERMUT" ;
         Text [ french ] = "PERMUTATION" ;
         Text [ swedish ] = "PERMUT" ;
@@ -4102,7 +4102,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "PERMUTAZIONA" ;
         Text [ portuguese_brazilian ] = "PERMUTA" ;
         Text [ portuguese ] = "COMBIN" ;
-        Text [ finnish ] = "PERMUTATIONA" ;
+        Text [ finnish ] = "PERMUTAATIOA" ;
         Text [ danish ] = "PERMUT2" ;
         Text [ french ] = "PERMUTATIONA" ;
         Text [ swedish ] = "PERMUT2" ;
@@ -4132,7 +4132,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VA" ;
         Text [ portuguese_brazilian ] = "PV" ;
         Text [ portuguese ] = "VA" ;
-        Text [ finnish ] = "PV" ;
+        Text [ finnish ] = "NA" ;
         Text [ danish ] = "NV" ;
         Text [ french ] = "VA" ;
         Text [ swedish ] = "NUVƒRDE" ;
@@ -4140,7 +4140,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "VA" ;
         Text [ english_us ] = "PV" ;
         Text[ chinese_simplified ] = "PV";
-        Text[ russian ] = "œ«";
+        Text[ russian ] = "“«";
         Text[ polish ] = "PV";
         Text[ japanese ] = "PV";
         Text[ chinese_traditional ] = "PV";
@@ -4162,7 +4162,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "AMMORT.ANNUO" ;
         Text [ portuguese_brazilian ] = "SDA" ;
         Text [ portuguese ] = "SYD" ;
-        Text [ finnish ] = "SYD" ;
+        Text [ finnish ] = "VUOSIPOISTO" ;
         Text [ danish ] = "≈RSAFSKRIVNING" ;
         Text [ french ] = "SYD" ;
         Text [ swedish ] = "≈RSAVSKR" ;
@@ -4282,7 +4282,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DURATA" ;
         Text [ portuguese_brazilian ] = "DURATION" ;
         Text [ portuguese ] = "DURA«√O" ;
-        Text [ finnish ] = "DURATION" ;
+        Text [ finnish ] = "KESTO" ;
         Text [ danish ] = "VARIGHED" ;
         Text [ french ] = "DUREE" ;
         Text [ swedish ] = "L÷PTID" ;
@@ -4312,7 +4312,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "AMMORT.COST" ;
         Text [ portuguese_brazilian ] = "DPD" ;
         Text [ portuguese ] = "AMORLINC" ;
-        Text [ finnish ] = "SLN" ;
+        Text [ finnish ] = "STP" ;
         Text [ danish ] = "LA" ;
         Text [ french ] = "AMORLIN" ;
         Text [ swedish ] = "LINAVSKR" ;
@@ -4342,7 +4342,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RATA" ;
         Text [ portuguese_brazilian ] = "PGTO" ;
         Text [ portuguese ] = "PGTO" ;
-        Text [ finnish ] = "PMT" ;
+        Text [ finnish ] = "MAKSU" ;
         Text [ danish ] = "YDELSE" ;
         Text [ french ] = "VPM" ;
         Text [ swedish ] = "BETALNING" ;
@@ -4372,7 +4372,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "COLONNE" ;
         Text [ portuguese_brazilian ] = "COLUNAS" ;
         Text [ portuguese ] = "COLUNAS" ;
-        Text [ finnish ] = "COLUMNS" ;
+        Text [ finnish ] = "SARAKKEET" ;
         Text [ danish ] = "KOLONNER" ;
         Text [ french ] = "COLONNES" ;
         Text [ swedish ] = "KOLUMNER" ;
@@ -4402,7 +4402,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RIGHE" ;
         Text [ portuguese_brazilian ] = "LINHAS" ;
         Text [ portuguese ] = "LINHAS" ;
-        Text [ finnish ] = "ROWS" ;
+        Text [ finnish ] = "RIVIT" ;
         Text [ danish ] = "R∆KKER" ;
         Text [ french ] = "LIGNES" ;
         Text [ swedish ] = "RADER" ;
@@ -4450,7 +4450,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "SHEETS";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "SHEETS";
-        Text[ finnish ] = "SHEETS";
+        Text[ finnish ] = "TAULUKOT";
         Text[ thai ] = "‡∏ï‡∏≤‡∏£‡∏≤‡∏á";
     };
     String SC_OPCODE_COLUMN
@@ -4461,7 +4461,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RIF.COLONNA" ;
         Text [ portuguese_brazilian ] = "COLUNA" ;
         Text [ portuguese ] = "COLUNA" ;
-        Text [ finnish ] = "COLUMN" ;
+        Text [ finnish ] = "SARAKE" ;
         Text [ danish ] = "KOLONNE" ;
         Text [ french ] = "COLONNE" ;
         Text [ swedish ] = "KOLUMN" ;
@@ -4491,7 +4491,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RIF.RIGA" ;
         Text [ portuguese_brazilian ] = "LINHA" ;
         Text [ portuguese ] = "LINHA" ;
-        Text [ finnish ] = "ROW" ;
+        Text [ finnish ] = "RIVI" ;
         Text [ danish ] = "R∆KKE" ;
         Text [ french ] = "LIGNE" ;
         Text [ swedish ] = "RAD" ;
@@ -4539,7 +4539,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "SHEET";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "SHEET";
-        Text[ finnish ] = "SHEET";
+        Text[ finnish ] = "TAULUKKO";
         Text[ thai ] = "‡∏Å‡∏£‡∏∞‡∏î‡∏≤‡∏©‡∏Ñ‡∏≥‡∏ô‡∏ß‡∏ì";
     };
     String SC_OPCODE_ZGZ
@@ -4568,7 +4568,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ZGZ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "RRI";
-        Text[ finnish ] = "RRI";
+        Text[ finnish ] = "TUOTTOPROSENTTI";
         Text[ thai ] = "RRI";
     };
     String SC_OPCODE_ZW
@@ -4579,7 +4579,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VAL.FUT" ;
         Text [ portuguese_brazilian ] = "VF" ;
         Text [ portuguese ] = "VF" ;
-        Text [ finnish ] = "FV" ;
+        Text [ finnish ] = "TULEVA_ARVO" ;
         Text [ danish ] = "FV" ;
         Text [ french ] = "VC" ;
         Text [ swedish ] = "SLUTVƒRDE" ;
@@ -4609,7 +4609,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "NUM.RATE" ;
         Text [ portuguese_brazilian ] = "NPER" ;
         Text [ portuguese ] = "NPER" ;
-        Text [ finnish ] = "NPER" ;
+        Text [ finnish ] = "NJAKSO" ;
         Text [ danish ] = "NPER" ;
         Text [ french ] = "NPM" ;
         Text [ swedish ] = "PERIODER" ;
@@ -4639,7 +4639,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TASSO" ;
         Text [ portuguese_brazilian ] = "TAXA" ;
         Text [ portuguese ] = "TAXA" ;
-        Text [ finnish ] = "RATE" ;
+        Text [ finnish ] = "KORKO" ;
         Text [ danish ] = "RENTE" ;
         Text [ french ] = "TAUX" ;
         Text [ swedish ] = "RƒNTA" ;
@@ -4729,7 +4729,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INT.CUMUL" ;
         Text [ portuguese_brazilian ] = "CUMPPMT" ;
         Text [ portuguese ] = "PGTOJURACUM" ;
-        Text [ finnish ] = "CUMIPMT" ;
+        Text [ finnish ] = "MAKSETTU_KORKO" ;
         Text [ danish ] = "AKKUM.RENTE" ;
         Text [ french ] = "CUMUL.INTER" ;
         Text [ swedish ] = "KUMRƒNTA" ;
@@ -4759,7 +4759,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CAP.CUM" ;
         Text [ portuguese_brazilian ] = "CUMIPMT" ;
         Text [ portuguese ] = "PGTOCAPACUM" ;
-        Text [ finnish ] = "CUMPRINC" ;
+        Text [ finnish ] = "MAKSETTU_LYHENNYS" ;
         Text [ danish ] = "AKKUM.HOVEDSTOL" ;
         Text [ french ] = "CUMUL.PRINCPER" ;
         Text [ swedish ] = "KUMPRIS" ;
@@ -4789,7 +4789,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "EFFETTIVO" ;
         Text [ portuguese_brazilian ] = "EFETIVO" ;
         Text [ portuguese ] = "EFECTIVA" ;
-        Text [ finnish ] = "EFFECTIVE" ;
+        Text [ finnish ] = "TODELLINEN" ;
         Text [ danish ] = "EFFEKTIV" ;
         Text [ french ] = "TAUX.EFFECTIF" ;
         Text [ swedish ] = "EFFRƒNTA" ;
@@ -4819,7 +4819,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "NOMINALE" ;
         Text [ portuguese_brazilian ] = "NOMINAL" ;
         Text [ portuguese ] = "NOMINAL" ;
-        Text [ finnish ] = "NOMINAL" ;
+        Text [ finnish ] = "KORKO_VUOSI" ;
         Text [ danish ] = "NOMINEL" ;
         Text [ french ] = "TAUX.NOMINAL" ;
         Text [ swedish ] = "NOMRƒNTA" ;
@@ -4849,7 +4849,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SUBTOTALE" ;
         Text [ portuguese_brazilian ] = "SUBTOTAL" ;
         Text [ portuguese ] = "SUBTOTAL" ;
-        Text [ finnish ] = "SUBTOTAL" ;
+        Text [ finnish ] = "VƒLISUMMA" ;
         Text [ danish ] = "SUBTOTAL" ;
         Text [ french ] = "SOUS.TOTAL" ;
         Text [ swedish ] = "DELSUMMA" ;
@@ -4879,7 +4879,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.SOMMA" ;
         Text [ portuguese_brazilian ] = "BDSOMA" ;
         Text [ portuguese ] = "BDSOMA" ;
-        Text [ finnish ] = "DSUM" ;
+        Text [ finnish ] = "TSUMMA" ;
         Text [ danish ] = "DSUM" ;
         Text [ french ] = "BDSOMME" ;
         Text [ swedish ] = "DSUMMA" ;
@@ -4909,7 +4909,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.CONTA.NUMERI" ;
         Text [ portuguese_brazilian ] = "BDCONTAR" ;
         Text [ portuguese ] = "BDCONTAR" ;
-        Text [ finnish ] = "DCOUNT" ;
+        Text [ finnish ] = "TLASKE" ;
         Text [ danish ] = "DT∆L" ;
         Text [ french ] = "BDNB" ;
         Text [ swedish ] = "DANTAL" ;
@@ -4939,7 +4939,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.CONTA.VALORI" ;
         Text [ portuguese_brazilian ] = "DCONTAGEMA" ;
         Text [ portuguese ] = "BDCONTAR.VAL" ;
-        Text [ finnish ] = "DCOUNTA" ;
+        Text [ finnish ] = "TLASKEA" ;
         Text [ danish ] = "DT∆LV" ;
         Text [ french ] = "BDNBVAL" ;
         Text [ swedish ] = "DANTALV" ;
@@ -4969,7 +4969,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.MEDIA" ;
         Text [ portuguese_brazilian ] = "BDM?DIA" ;
         Text [ portuguese ] = "BDM…DIA" ;
-        Text [ finnish ] = "DAVERAGE" ;
+        Text [ finnish ] = "TKESKIARVO" ;
         Text [ danish ] = "DMIDDEL" ;
         Text [ french ] = "BDMOYENNE" ;
         Text [ swedish ] = "DMEDEL" ;
@@ -4999,7 +4999,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.VALORI" ;
         Text [ portuguese_brazilian ] = "BDEXTRAIR" ;
         Text [ portuguese ] = "BDOBTER" ;
-        Text [ finnish ] = "DGET" ;
+        Text [ finnish ] = "TNOUDA" ;
         Text [ danish ] = "DHENT" ;
         Text [ french ] = "BDLIRE" ;
         Text [ swedish ] = "DHƒMTA" ;
@@ -5029,7 +5029,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.MAX" ;
         Text [ portuguese_brazilian ] = "BDMAX" ;
         Text [ portuguese ] = "BDM¡X" ;
-        Text [ finnish ] = "DMAX" ;
+        Text [ finnish ] = "TMAKS" ;
         Text [ danish ] = "DMAKS" ;
         Text [ french ] = "BDMAX" ;
         Text [ swedish ] = "DMAX" ;
@@ -5059,7 +5059,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.MIN" ;
         Text [ portuguese_brazilian ] = "BDMIN" ;
         Text [ portuguese ] = "BDMIN" ;
-        Text [ finnish ] = "DMIN" ;
+        Text [ finnish ] = "TMIN" ;
         Text [ danish ] = "DMIN" ;
         Text [ french ] = "BDMIN" ;
         Text [ swedish ] = "DMIN" ;
@@ -5089,7 +5089,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.PRODOTTO" ;
         Text [ portuguese_brazilian ] = "DMULTIPL" ;
         Text [ portuguese ] = "DMULTIPL" ;
-        Text [ finnish ] = "DPRODUCT" ;
+        Text [ finnish ] = "TTULO" ;
         Text [ danish ] = "DPRODUKT" ;
         Text [ french ] = "BDPRODUIT" ;
         Text [ swedish ] = "DPRODUKT" ;
@@ -5119,7 +5119,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.DEV.ST" ;
         Text [ portuguese_brazilian ] = "BDEST" ;
         Text [ portuguese ] = "BDDESVPAD" ;
-        Text [ finnish ] = "DSTDEV" ;
+        Text [ finnish ] = "TKESKIHAJONTA" ;
         Text [ danish ] = "DSTAFV" ;
         Text [ french ] = "BDECARTYPE" ;
         Text [ swedish ] = "DSTDAV" ;
@@ -5149,7 +5149,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.DEV.ST.POP" ;
         Text [ portuguese_brazilian ] = "BDDESVPA" ;
         Text [ portuguese ] = "BDDESVPADP" ;
-        Text [ finnish ] = "DSTDEVP" ;
+        Text [ finnish ] = "TKESKIHAJONTAP" ;
         Text [ danish ] = "DSTAFVP" ;
         Text [ french ] = "BDECARTYPEP" ;
         Text [ swedish ] = "DSTDAVP" ;
@@ -5179,7 +5179,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.VAR" ;
         Text [ portuguese_brazilian ] = "BDVAREST" ;
         Text [ portuguese ] = "BDVAR" ;
-        Text [ finnish ] = "DVAR" ;
+        Text [ finnish ] = "TVARIANSSI" ;
         Text [ danish ] = "DVARIANS" ;
         Text [ french ] = "BDVAR" ;
         Text [ swedish ] = "DVARIANS" ;
@@ -5209,7 +5209,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DB.VAR.POP" ;
         Text [ portuguese_brazilian ] = "BDVARP" ;
         Text [ portuguese ] = "BDVARP" ;
-        Text [ finnish ] = "DVARP" ;
+        Text [ finnish ] = "TVARIANSSIP" ;
         Text [ danish ] = "DVARIANSP" ;
         Text [ french ] = "BDVARP" ;
         Text [ swedish ] = "DVARIANSP" ;
@@ -5239,7 +5239,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INDIRETTO" ;
         Text [ portuguese_brazilian ] = "INDIRETO" ;
         Text [ portuguese ] = "INDIRECTO" ;
-        Text [ finnish ] = "INDIRECT" ;
+        Text [ finnish ] = "EPƒSUORA" ;
         Text [ danish ] = "INDIREKTE" ;
         Text [ french ] = "INDIRECT" ;
         Text [ swedish ] = "INDIREKT" ;
@@ -5269,7 +5269,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INDIRIZZO" ;
         Text [ portuguese_brazilian ] = "ENDERE?O" ;
         Text [ portuguese ] = "ENDERE«O" ;
-        Text [ finnish ] = "ADDRESS" ;
+        Text [ finnish ] = "OSOITE" ;
         Text [ danish ] = "ADRESSE" ;
         Text [ french ] = "ADRESSE" ;
         Text [ swedish ] = "ADRESS" ;
@@ -5299,7 +5299,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CONFRONTA" ;
         Text [ portuguese_brazilian ] = "CORRESP" ;
         Text [ portuguese ] = "CORRESP" ;
-        Text [ finnish ] = "MATCH" ;
+        Text [ finnish ] = "VASTINE" ;
         Text [ danish ] = "SAMMENLIGN" ;
         Text [ french ] = "EQUIV" ;
         Text [ swedish ] = "PASSA" ;
@@ -5329,7 +5329,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CONTA.VUOTE" ;
         Text [ portuguese_brazilian ] = "CONTAR.VAZIO" ;
         Text [ portuguese ] = "CONTAR.VAZIO" ;
-        Text [ finnish ] = "COUNTBLANK" ;
+        Text [ finnish ] = "LASKE_TYHJƒT" ;
         Text [ danish ] = "ANTAL.BLANKE" ;
         Text [ french ] = "NB.VIDE" ;
         Text [ swedish ] = "ANTAL.TOMMA" ;
@@ -5359,7 +5359,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CONTA.SE" ;
         Text [ portuguese_brazilian ] = "CONT.SE" ;
         Text [ portuguese ] = "CONTAR.SE" ;
-        Text [ finnish ] = "COUNTIF" ;
+        Text [ finnish ] = "LASKE_JOS" ;
         Text [ danish ] = "T∆LHVIS" ;
         Text [ french ] = "NB.SI" ;
         Text [ swedish ] = "ANTAL.OM" ;
@@ -5389,7 +5389,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SOMMA.SE" ;
         Text [ portuguese_brazilian ] = "SOMASE" ;
         Text [ portuguese ] = "SOMA.SE" ;
-        Text [ finnish ] = "SUMIF" ;
+        Text [ finnish ] = "SUMMA_JOS" ;
         Text [ danish ] = "SUM.HVIS" ;
         Text [ french ] = "SOMME.SI" ;
         Text [ swedish ] = "SUMMA.OM" ;
@@ -5419,7 +5419,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CERCA" ;
         Text [ portuguese_brazilian ] = "PROC" ;
         Text [ portuguese ] = "REFER NCIA" ;
-        Text [ finnish ] = "LOOKUP" ;
+        Text [ finnish ] = "HAKU" ;
         Text [ danish ] = "SL≈.OP" ;
         Text [ french ] = "RECHERCHE" ;
         Text [ swedish ] = "LETAUPP" ;
@@ -5449,7 +5449,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CERCA.VERT" ;
         Text [ portuguese_brazilian ] = "PROCV" ;
         Text [ portuguese ] = "PROCV" ;
-        Text [ finnish ] = "VLOOKUP" ;
+        Text [ finnish ] = "PHAKU" ;
         Text [ danish ] = "LOPSLAG" ;
         Text [ french ] = "RECHERCHEV" ;
         Text [ swedish ] = "LETARAD" ;
@@ -5479,7 +5479,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CERCA.ORIZZ" ;
         Text [ portuguese_brazilian ] = "PROCH" ;
         Text [ portuguese ] = "PROCH" ;
-        Text [ finnish ] = "HLOOKUP" ;
+        Text [ finnish ] = "VHAKU" ;
         Text [ danish ] = "VOPSLAG" ;
         Text [ french ] = "RECHERCHEH" ;
         Text [ swedish ] = "LETAKOLUMN" ;
@@ -5539,7 +5539,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SCARTO" ;
         Text [ portuguese_brazilian ] = "OFFSET" ;
         Text [ portuguese ] = "DESLOCAMENTO" ;
-        Text [ finnish ] = "OFFSET" ;
+        Text [ finnish ] = "SIIRTYMƒ" ;
         Text [ danish ] = "FORSKYDNING" ;
         Text [ french ] = "DECALER" ;
         Text [ swedish ] = "F÷RSKJUTA" ;
@@ -5570,7 +5570,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ portuguese_brazilian ] = "NDICE" ;
          // ?? erstes Zeichen = I ??
         Text [ portuguese ] = "ÕNDICE" ;
-        Text [ finnish ] = "INDEX" ;
+        Text [ finnish ] = "INDEKSI" ;
         Text [ danish ] = "INDEKS" ;
         Text [ french ] = "INDEX" ;
         Text [ swedish ] = "INDEX" ;
@@ -5600,7 +5600,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "AREE" ;
         Text [ portuguese_brazilian ] = "AREAS" ;
         Text [ portuguese ] = "¡REAS" ;
-        Text [ finnish ] = "AREAS" ;
+        Text [ finnish ] = "ALUEET" ;
         Text [ danish ] = "OMR≈DER" ;
         Text [ french ] = "ZONES" ;
         Text [ swedish ] = "OMR≈DEN" ;
@@ -5630,7 +5630,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "VALUTA" ;
         Text [ portuguese_brazilian ] = "D?LAR" ;
         Text [ portuguese ] = "MOEDA" ;
-        Text [ finnish ] = "DOLLAR" ;
+        Text [ finnish ] = "VALUUTTA" ;
         Text [ danish ] = "KR" ;
         Text [ french ] = "FRANC" ;
         Text [ swedish ] = "VALUTA" ;
@@ -5660,7 +5660,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RIMPIAZZA" ;
         Text [ portuguese_brazilian ] = "SUBSTITUIR" ;
         Text [ portuguese ] = "SUBSTITUIR" ;
-        Text [ finnish ] = "REPLACE" ;
+        Text [ finnish ] = "KORVAA" ;
         Text [ danish ] = "ERSTAT" ;
         Text [ french ] = "REMPLACER" ;
         Text [ swedish ] = "ERSƒTT" ;
@@ -5690,7 +5690,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "FISSO" ;
         Text [ portuguese_brazilian ] = "FIXO" ;
         Text [ portuguese ] = "FIXAR" ;
-        Text [ finnish ] = "FIXED" ;
+        Text [ finnish ] = "KIINTEƒ" ;
         Text [ danish ] = "FAST" ;
         Text [ french ] = "CTXT" ;
         Text [ swedish ] = "FASTTAL" ;
@@ -5720,7 +5720,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TROVA" ;
         Text [ portuguese_brazilian ] = "ENCONTRAR" ;
         Text [ portuguese ] = "LOCALIZAR" ;
-        Text [ finnish ] = "FIND" ;
+        Text [ finnish ] = "ETSI" ;
         Text [ danish ] = "FIND" ;
         Text [ french ] = "TROUVE" ;
         Text [ swedish ] = "HITTA" ;
@@ -5750,7 +5750,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "IDENTICO" ;
         Text [ portuguese_brazilian ] = "EXATO" ;
         Text [ portuguese ] = "ID NTICO" ;
-        Text [ finnish ] = "EXACT" ;
+        Text [ finnish ] = "VERTAA" ;
         Text [ danish ] = "EKSAKT" ;
         Text [ french ] = "EXACT" ;
         Text [ swedish ] = "EXAKT" ;
@@ -5780,7 +5780,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SINISTRA" ;
         Text [ portuguese_brazilian ] = "ESQUERDA" ;
         Text [ portuguese ] = "ESQUERDA" ;
-        Text [ finnish ] = "LEFT" ;
+        Text [ finnish ] = "VASEN" ;
         Text [ danish ] = "VENSTRE" ;
         Text [ french ] = "GAUCHE" ;
         Text [ swedish ] = "VƒNSTER" ;
@@ -5810,7 +5810,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DESTRA" ;
         Text [ portuguese_brazilian ] = "DIREITA" ;
         Text [ portuguese ] = "DIREITA" ;
-        Text [ finnish ] = "RIGHT" ;
+        Text [ finnish ] = "OIKEA" ;
         Text [ danish ] = "HÿJRE" ;
         Text [ french ] = "DROITE" ;
         Text [ swedish ] = "H÷GER" ;
@@ -5840,7 +5840,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RICERCA" ;
         Text [ portuguese_brazilian ] = "PROCURAR" ;
         Text [ portuguese ] = "PROCURAR" ;
-        Text [ finnish ] = "SEARCH" ;
+        Text [ finnish ] = "KƒY_LƒPI" ;
         Text [ danish ] = "SÿG" ;
         Text [ french ] = "CHERCHE" ;
         Text [ swedish ] = "S÷K" ;
@@ -5870,7 +5870,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "STRINGA.ESTRAI" ;
         Text [ portuguese_brazilian ] = "MEIO" ;
         Text [ portuguese ] = "M…DIA" ;
-        Text [ finnish ] = "MID" ;
+        Text [ finnish ] = "POIMI_TEKSTI" ;
         Text [ danish ] = "MIDT" ;
         Text [ french ] = "STXT" ;
         Text [ swedish ] = "EXTEXT" ;
@@ -5900,7 +5900,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TESTO" ;
         Text [ portuguese_brazilian ] = "TEXTO" ;
         Text [ portuguese ] = "TEXTO" ;
-        Text [ finnish ] = "TEXT" ;
+        Text [ finnish ] = "TEKSTI" ;
         Text [ danish ] = "TEKST" ;
         Text [ french ] = "TEXTE" ;
         Text [ swedish ] = "TEXT" ;
@@ -5930,7 +5930,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "SOSTITUISCI" ;
         Text [ portuguese_brazilian ] = "SUBSTITUIR" ;
         Text [ portuguese ] = "SUBSTITUIR" ;
-        Text [ finnish ] = "SUBSTITUTE" ;
+        Text [ finnish ] = "VAIHDA" ;
         Text [ danish ] = "UDSKIFT" ;
         Text [ french ] = "SUBSTITUE" ;
         Text [ swedish ] = "BYT.UT" ;
@@ -5960,7 +5960,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RIPETI" ;
         Text [ portuguese_brazilian ] = "REPET" ;
         Text [ portuguese ] = "REPETIR" ;
-        Text [ finnish ] = "REPT" ;
+        Text [ finnish ] = "TOISTA" ;
         Text [ danish ] = "GENTAG" ;
         Text [ french ] = "REPT" ;
         Text [ swedish ] = "REP" ;
@@ -5990,7 +5990,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CONCATENA" ;
         Text [ portuguese_brazilian ] = "CONCATENAR" ;
         Text [ portuguese ] = "CONCATENAR" ;
-        Text [ finnish ] = "CONCATENATE" ;
+        Text [ finnish ] = "KETJUTA" ;
         Text [ danish ] = "SAMMENK∆DNING" ;
         Text [ french ] = "CONCATENER" ;
         Text [ swedish ] = "SAMMANFOGA" ;
@@ -6080,7 +6080,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MATR.INVERSA" ;
         Text [ portuguese_brazilian ] = "MINVERSO" ;
         Text [ portuguese ] = "MATRIZ.INVERSA" ;
-        Text [ finnish ] = "MINVERSE" ;
+        Text [ finnish ] = "MKƒƒNTEINEN" ;
         Text [ danish ] = "MINVERT" ;
         Text [ french ] = "INVERSEMAT" ;
         Text [ swedish ] = "MINVERT" ;
@@ -6110,7 +6110,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MATR.PRODOTTO" ;
         Text [ portuguese_brazilian ] = "MMULT" ;
         Text [ portuguese ] = "MATRIZ.MULT" ;
-        Text [ finnish ] = "MMULT" ;
+        Text [ finnish ] = "MKERRO" ;
         Text [ danish ] = "MPRODUKT" ;
         Text [ french ] = "PRODUITMAT" ;
         Text [ swedish ] = "MMULT" ;
@@ -6140,7 +6140,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MATR.TRASPOSTA" ;
         Text [ portuguese_brazilian ] = "MTRANS" ;
         Text [ portuguese ] = "TRANSPOR" ;
-        Text [ finnish ] = "TRANSPOSE" ;
+        Text [ finnish ] = "TRANSPONOI" ;
         Text [ danish ] = "TRANSPONER" ;
         Text [ french ] = "TRANSPOSE" ;
         Text [ swedish ] = "MTRANS" ;
@@ -6170,7 +6170,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MUNIT" ;
         Text [ portuguese_brazilian ] = "MUNIT" ;
         Text [ portuguese ] = "MATRIZ.UNIT¡RIA" ;
-        Text [ finnish ] = "MUNIT" ;
+        Text [ finnish ] = "YKSIKK÷NELI÷" ;
         Text [ danish ] = "ENHEDSMATRIX" ;
         Text [ french ] = "MUNIT" ;
         Text [ swedish ] = "ENHETSMATRIS" ;
@@ -6200,7 +6200,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RICERCA VALORE DESTINAZIONE" ;
         Text [ portuguese_brazilian ] = "BUSCADEOBJETIVO" ;
         Text [ portuguese ] = "RESOLVER" ;
-        Text [ finnish ] = "GOALSEEK" ;
+        Text [ finnish ] = "TAVOITTEEN_HAKU" ;
         Text [ danish ] = "M≈LSÿGNING" ;
         Text [ french ] = "CHERCHEVALCIBLE" ;
         Text [ swedish ] = "M≈LS÷KNING" ;
@@ -6230,7 +6230,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.IPERGEOM" ;
         Text [ portuguese_brazilian ] = "HYPGEOMDIST" ;
         Text [ portuguese ] = "DIST.HIPERGEOM" ;
-        Text [ finnish ] = "HYPGEOMDIST" ;
+        Text [ finnish ] = "HYPERGEOM_JAKAUMA" ;
         Text [ danish ] = "HYPGEOFORDELING" ;
         Text [ french ] = "LOI.HYPERGEOMETRIQUE" ;
         Text [ swedish ] = "HYPGEOMF÷RD" ;
@@ -6260,7 +6260,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.LOGNORM" ;
         Text [ portuguese_brazilian ] = "LOGNORMDIST" ;
         Text [ portuguese ] = "DIST.NORMAL.LOG" ;
-        Text [ finnish ] = "LOGNORMDIST" ;
+        Text [ finnish ] = "LOGNORM_JAKAUMA" ;
         Text [ danish ] = "LOGNORMFORDELING" ;
         Text [ french ] = "LOI.LOGNORMALE" ;
         Text [ swedish ] = "LOGNORMF÷RD" ;
@@ -6290,7 +6290,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.T" ;
         Text [ portuguese_brazilian ] = "TDIST" ;
         Text [ portuguese ] = "DIST.T" ;
-        Text [ finnish ] = "TDIST" ;
+        Text [ finnish ] = "TJAKAUMA" ;
         Text [ danish ] = "TFORDELING" ;
         Text [ french ] = "LOI.STUDENT" ;
         Text [ swedish ] = "TF÷RD" ;
@@ -6320,7 +6320,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.F" ;
         Text [ portuguese_brazilian ] = "FDIST" ;
         Text [ portuguese ] = "DIST.F" ;
-        Text [ finnish ] = "FDIST" ;
+        Text [ finnish ] = "FJAKAUMA" ;
         Text [ danish ] = "FFORDELING" ;
         Text [ french ] = "LOI.F" ;
         Text [ swedish ] = "FF÷RD" ;
@@ -6350,7 +6350,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.CHI" ;
         Text [ portuguese_brazilian ] = "CHIDIST" ;
         Text [ portuguese ] = "DIST.CHI" ;
-        Text [ finnish ] = "CHIDIST" ;
+        Text [ finnish ] = "CHIJAKAUMA" ;
         Text [ danish ] = "CHIFORDELING" ;
         Text [ french ] = "LOI.KHIDEUX" ;
         Text [ swedish ] = "CHI2F÷RD" ;
@@ -6410,7 +6410,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.BINOM.NEG" ;
         Text [ portuguese_brazilian ] = "NEGBINOMDIST" ;
         Text [ portuguese ] = "DIST.BINOM.NEG" ;
-        Text [ finnish ] = "NEGBINOMDIST" ;
+        Text [ finnish ] = "BINOMIJAKAUMA_NEG" ;
         Text [ danish ] = "NEGBINOMFORDELING" ;
         Text [ french ] = "LOI.BINOMIALE.NEG" ;
         Text [ swedish ] = "NEGBINOMF÷RD" ;
@@ -6440,7 +6440,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CRIT.BINOM" ;
         Text [ portuguese_brazilian ] = "CRITBINOM" ;
         Text [ portuguese ] = "CRIT.BINOM" ;
-        Text [ finnish ] = "CRITBINOM" ;
+        Text [ finnish ] = "BINOMIJAKAUMA_KRIT" ;
         Text [ danish ] = "KRITBINOM" ;
         Text [ french ] = "CRITERE.LOI.BINOMIALE" ;
         Text [ swedish ] = "KRITBINOM" ;
@@ -6500,7 +6500,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MEDIA.ARMONICA" ;
         Text [ portuguese_brazilian ] = "HARMEAN" ;
         Text [ portuguese ] = "M…DIA.HARM”NICA" ;
-        Text [ finnish ] = "HARMEAN" ;
+        Text [ finnish ] = "KESKIARVO_HARM" ;
         Text [ danish ] = "HARMIDDELV∆RDI" ;
         Text [ french ] = "MOYENNE.HARMONIQUE" ;
         Text [ swedish ] = "HARMMEDEL" ;
@@ -6530,7 +6530,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MEDIA.GEOMETRICA" ;
         Text [ portuguese_brazilian ] = "GEOMEAN" ;
         Text [ portuguese ] = "M…DIA.GEOM…TRICA" ;
-        Text [ finnish ] = "GEOMEAN" ;
+        Text [ finnish ] = "KESKIARVO_GEOM" ;
         Text [ danish ] = "GEOMIDDELV∆RDI" ;
         Text [ french ] = "MOYENNE.GEOMETRIQUE" ;
         Text [ swedish ] = "GEOMEAN" ;
@@ -6560,7 +6560,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "NORMALIZZA" ;
         Text [ portuguese_brazilian ] = "STANDARDIZE" ;
         Text [ portuguese ] = "NORMALIZAR" ;
-        Text [ finnish ] = "STANDARDIZE" ;
+        Text [ finnish ] = "NORMITA" ;
         Text [ danish ] = "STANDARDISER" ;
         Text [ french ] = "CENTREE.REDUITE" ;
         Text [ swedish ] = "STANDARDISERA" ;
@@ -6590,7 +6590,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MEDIA.DEV" ;
         Text [ portuguese_brazilian ] = "AVEDEV" ;
         Text [ portuguese ] = "DESV.M…DIO" ;
-        Text [ finnish ] = "AVEDEV" ;
+        Text [ finnish ] = "KESKIPOIKKEAMA" ;
         Text [ danish ] = "MAD" ;
         Text [ french ] = "ECART.MOYEN" ;
         Text [ swedish ] = "MEDELAVV" ;
@@ -6620,7 +6620,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ASIMMETRIA" ;
         Text [ portuguese_brazilian ] = "SKEW" ;
         Text [ portuguese ] = "ASSIMETRIA" ;
-        Text [ finnish ] = "SKEW" ;
+        Text [ finnish ] = "JAKAUMAN_VINOUS" ;
         Text [ danish ] = "SK∆VHED" ;
         Text [ french ] = "COEFFICIENT.ASYMETRIE" ;
         Text [ swedish ] = "SNEDHET" ;
@@ -6650,7 +6650,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DEV.Q" ;
         Text [ portuguese_brazilian ] = "DEVSQ" ;
         Text [ portuguese ] = "DEVSQ" ;
-        Text [ finnish ] = "DEVSQ" ;
+        Text [ finnish ] = "OIKAISTU_NELI÷SUMMA" ;
         Text [ danish ] = "SAK" ;
         Text [ french ] = "SOMME.CARRES.ECARTS" ;
         Text [ swedish ] = "KVADAVV" ;
@@ -6680,7 +6680,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MEDIANA" ;
         Text [ portuguese_brazilian ] = "MEDIAN" ;
         Text [ portuguese ] = "MEDIANA" ;
-        Text [ finnish ] = "MEDIAN" ;
+        Text [ finnish ] = "MEDIAANI" ;
         Text [ danish ] = "MEDIAN" ;
         Text [ french ] = "MEDIANE" ;
         Text [ swedish ] = "MEDIAN" ;
@@ -6710,7 +6710,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MODA" ;
         Text [ portuguese_brazilian ] = "MODE" ;
         Text [ portuguese ] = "MODAL" ;
-        Text [ finnish ] = "MODE" ;
+        Text [ finnish ] = "MOODI" ;
         Text [ danish ] = "HYPPIGST" ;
         Text [ french ] = "MODE" ;
         Text [ swedish ] = "TYPVƒRDE" ;
@@ -6718,7 +6718,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "MODA" ;
         Text [ english_us ] = "MODE" ;
         Text[ chinese_simplified ] = "MODE";
-        Text[ russian ] = "ÃŒƒ¿";
+        Text[ russian ] = "–≈∆»Ã";
         Text[ polish ] = "WYST.NAJCZ åCIEJ";
         Text[ japanese ] = "MODE";
         Text[ chinese_traditional ] = "MODE";
@@ -6740,7 +6740,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TEST.Z" ;
         Text [ portuguese_brazilian ] = "ZTEST" ;
         Text [ portuguese ] = "TESTEZ" ;
-        Text [ finnish ] = "ZTEST" ;
+        Text [ finnish ] = "ZTESTI" ;
         Text [ danish ] = "ZTEST" ;
         Text [ french ] = "TEST.Z" ;
         Text [ swedish ] = "ZTEST" ;
@@ -6770,7 +6770,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TEST.T" ;
         Text [ portuguese_brazilian ] = "TTEST" ;
         Text [ portuguese ] = "TESTE.T" ;
-        Text [ finnish ] = "TTEST" ;
+        Text [ finnish ] = "TTESTI" ;
         Text [ danish ] = "TTEST" ;
         Text [ french ] = "TEST.STUDENT" ;
         Text [ swedish ] = "TTEST" ;
@@ -6800,7 +6800,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RANGO" ;
         Text [ portuguese_brazilian ] = "RANK" ;
         Text [ portuguese ] = "ORDEM" ;
-        Text [ finnish ] = "RANK" ;
+        Text [ finnish ] = "ARVON_MUKAAN" ;
         Text [ danish ] = "PLADS" ;
         Text [ french ] = "RANG" ;
         Text [ swedish ] = "RANG" ;
@@ -6830,7 +6830,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "PERCENTILE" ;
         Text [ portuguese_brazilian ] = "PERCENTILE" ;
         Text [ portuguese ] = "PERCENTIL" ;
-        Text [ finnish ] = "PERCENTILE" ;
+        Text [ finnish ] = "PROSENTTIPISTE" ;
         Text [ danish ] = "FRAKTIL" ;
         Text [ french ] = "CENTILE" ;
         Text [ swedish ] = "PERCENTIL" ;
@@ -6860,7 +6860,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "PERCENT.RANGO" ;
         Text [ portuguese_brazilian ] = "PERCENTRANK" ;
         Text [ portuguese ] = "ORDEM.PERCENTUAL" ;
-        Text [ finnish ] = "PERCENTRANK" ;
+        Text [ finnish ] = "PROSENTTIJƒRJESTYS" ;
         Text [ danish ] = "PROCENTPLADS" ;
         Text [ french ] = "RANG.POURCENTAGE" ;
         Text [ swedish ] = "PROCENTRANG" ;
@@ -6890,7 +6890,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "GRANDE" ;
         Text [ portuguese_brazilian ] = "LARGE" ;
         Text [ portuguese ] = "MAIOR" ;
-        Text [ finnish ] = "LARGE" ;
+        Text [ finnish ] = "SUURI" ;
         Text [ danish ] = "STÿRSTE" ;
         Text [ french ] = "GRANDE.VALEUR" ;
         Text [ swedish ] = "ST÷RSTA" ;
@@ -6920,7 +6920,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "PICCOLO" ;
         Text [ portuguese_brazilian ] = "SMALL" ;
         Text [ portuguese ] = "MENOR" ;
-        Text [ finnish ] = "SMALL" ;
+        Text [ finnish ] = "PIENI" ;
         Text [ danish ] = "MINDSTE" ;
         Text [ french ] = "PETITE.VALEUR" ;
         Text [ swedish ] = "MINSTA" ;
@@ -6950,7 +6950,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "FREQUENZA" ;
         Text [ portuguese_brazilian ] = "FREQUENCY" ;
         Text [ portuguese ] = "FREQU NCIA" ;
-        Text [ finnish ] = "FREQUENCY" ;
+        Text [ finnish ] = "TAAJUUS" ;
         Text [ danish ] = "FREKVENS" ;
         Text [ french ] = "FREQUENCE" ;
         Text [ swedish ] = "FREKVENS" ;
@@ -6980,7 +6980,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "QUARTILE" ;
         Text [ portuguese_brazilian ] = "QUARTILE" ;
         Text [ portuguese ] = "QUARTIL" ;
-        Text [ finnish ] = "QUARTILE" ;
+        Text [ finnish ] = "NELJƒNNES" ;
         Text [ danish ] = "KVARTILE" ;
         Text [ french ] = "QUARTILE" ;
         Text [ swedish ] = "KVARTIL" ;
@@ -7010,7 +7010,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INV.NORM" ;
         Text [ portuguese_brazilian ] = "NORMINV" ;
         Text [ portuguese ] = "INV.NORM" ;
-        Text [ finnish ] = "NORMINV" ;
+        Text [ finnish ] = "NORM_JAKAUMA_KƒƒNT" ;
         Text [ danish ] = "NORMINV" ;
         Text [ french ] = "LOI.NORMALE.INVERSE" ;
         Text [ swedish ] = "NORMINV" ;
@@ -7040,7 +7040,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CONFIDENZA" ;
         Text [ portuguese_brazilian ] = "CONFIDENCE" ;
         Text [ portuguese ] = "INT.CONFIAN«A" ;
-        Text [ finnish ] = "CONFIDENCE" ;
+        Text [ finnish ] = "LUOTTAMUSVƒLI" ;
         Text [ danish ] = "KONFIDENSINTERVAL" ;
         Text [ french ] = "INTERVALLE.CONFIANCE" ;
         Text [ swedish ] = "KONFIDENS" ;
@@ -7070,7 +7070,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TEST.F" ;
         Text [ portuguese_brazilian ] = "FTEST" ;
         Text [ portuguese ] = "TESTEF" ;
-        Text [ finnish ] = "FTEST" ;
+        Text [ finnish ] = "FTESTI" ;
         Text [ danish ] = "FTEST" ;
         Text [ french ] = "TEST.F" ;
         Text [ swedish ] = "FTEST" ;
@@ -7100,7 +7100,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MEDIA.TRONCATA" ;
         Text [ portuguese_brazilian ] = "TRIMMEAN" ;
         Text [ portuguese ] = "M…DIA.INTERNA" ;
-        Text [ finnish ] = "TRIMMEAN" ;
+        Text [ finnish ] = "KESKIARVO_TASATTU" ;
         Text [ danish ] = "TRIMMIDDELV∆RDI" ;
         Text [ french ] = "MOYENNE.REDUITE" ;
         Text [ swedish ] = "TRIMMEDEL" ;
@@ -7130,7 +7130,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "PROBABILIT¿" ;
         Text [ portuguese_brazilian ] = "PROB" ;
         Text [ portuguese ] = "PROB" ;
-        Text [ finnish ] = "PROB" ;
+        Text [ finnish ] = "TODENNƒK÷ISYYS" ;
         Text [ danish ] = "SANDSYNLIGHED" ;
         Text [ french ] = "PROBABILITE" ;
         Text [ swedish ] = "SANNOLIKHET" ;
@@ -7160,7 +7160,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CORRELAZIONE" ;
         Text [ portuguese_brazilian ] = "CORREL" ;
         Text [ portuguese ] = "CORREL" ;
-        Text [ finnish ] = "CORREL" ;
+        Text [ finnish ] = "KORRELAATIO" ;
         Text [ danish ] = "KORRELATION" ;
         Text [ french ] = "COEFFICIENT.CORRELATION" ;
         Text [ swedish ] = "KORREL" ;
@@ -7190,7 +7190,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "COVARIANZA" ;
         Text [ portuguese_brazilian ] = "COVAR" ;
         Text [ portuguese ] = "COVAR" ;
-        Text [ finnish ] = "COVAR" ;
+        Text [ finnish ] = "KOVARIANSSI" ;
         Text [ danish ] = "KOVARIANS" ;
         Text [ french ] = "COVARIANCE" ;
         Text [ swedish ] = "KOVAR" ;
@@ -7250,7 +7250,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "RQ" ;
         Text [ portuguese_brazilian ] = "RSQ" ;
         Text [ portuguese ] = "R.QUAD" ;
-        Text [ finnish ] = "RSQ" ;
+        Text [ finnish ] = "PEARSON_NELI÷" ;
         Text [ danish ] = "FORKLARINGSGRAD" ;
         Text [ french ] = "COEFFICIENT.DETERMINATION" ;
         Text [ swedish ] = "RKV" ;
@@ -7280,7 +7280,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "ERR.STD.YX" ;
         Text [ portuguese_brazilian ] = "STEYX" ;
         Text [ portuguese ] = "ERRO.TIPO.YX" ;
-        Text [ finnish ] = "STEYX" ;
+        Text [ finnish ] = "KESKIVIRHE" ;
         Text [ danish ] = "STFYX" ;
         Text [ french ] = "ERREUR.TYPE.XY" ;
         Text [ swedish ] = "STDFELYX" ;
@@ -7310,7 +7310,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "PENDENZA" ;
         Text [ portuguese_brazilian ] = "SLOPE" ;
         Text [ portuguese ] = "DECLIVE" ;
-        Text [ finnish ] = "SLOPE" ;
+        Text [ finnish ] = "KULMAKERROIN" ;
         Text [ danish ] = "STIGNING" ;
         Text [ french ] = "PENTE" ;
         Text [ swedish ] = "LUTNING" ;
@@ -7340,7 +7340,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INTERCETTA" ;
         Text [ portuguese_brazilian ] = "INTERCEPT" ;
         Text [ portuguese ] = "INTERCEP«√O" ;
-        Text [ finnish ] = "INTERCEPT" ;
+        Text [ finnish ] = "LEIKKAUSPISTE" ;
         Text [ danish ] = "SK∆RING" ;
         Text [ french ] = "ORDONNEE.ORIGINE" ;
         Text [ swedish ] = "SKƒRNINGSPUNKT" ;
@@ -7370,7 +7370,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TENDENZA" ;
         Text [ portuguese_brazilian ] = "TREND" ;
         Text [ portuguese ] = "TEND NCIA" ;
-        Text [ finnish ] = "TREND" ;
+        Text [ finnish ] = "SUUNTAUS" ;
         Text [ danish ] = "TENDENS" ;
         Text [ french ] = "TENDANCE" ;
         Text [ swedish ] = "TREND" ;
@@ -7400,7 +7400,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "CRESCITA" ;
         Text [ portuguese_brazilian ] = "GROWTH" ;
         Text [ portuguese ] = "CRESCIMENTO" ;
-        Text [ finnish ] = "GROWTH" ;
+        Text [ finnish ] = "KASVU" ;
         Text [ danish ] = "FORÿGELSE" ;
         Text [ french ] = "CROISSANCE" ;
         Text [ swedish ] = "EXPTREND" ;
@@ -7430,7 +7430,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "REGR.LIN" ;
         Text [ portuguese_brazilian ] = "LINEST" ;
         Text [ portuguese ] = "REGR.LINEAR" ;
-        Text [ finnish ] = "LINEST" ;
+        Text [ finnish ] = "LINREGR" ;
         Text [ danish ] = "LINREGR" ;
         Text [ french ] = "DROITEREG" ;
         Text [ swedish ] = "REGR" ;
@@ -7460,7 +7460,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "REGR.LOG" ;
         Text [ portuguese_brazilian ] = "LOGEST" ;
         Text [ portuguese ] = "LOGEST" ;
-        Text [ finnish ] = "LOGEST" ;
+        Text [ finnish ] = "LOGREGR" ;
         Text [ danish ] = "LOGREGR" ;
         Text [ french ] = "LOGREG" ;
         Text [ swedish ] = "EXPREGR" ;
@@ -7468,7 +7468,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "ESTIMACI”N.LOGARÕTMICA" ;
         Text [ english_us ] = "LOGEST" ;
         Text[ chinese_simplified ] = "LOGEST";
-        Text[ russian ] = "À√–‘œ–»¡À";
+        Text[ russian ] = "ÀŒ√œ–»¡À";
         Text[ polish ] = "REGEXPP";
         Text[ japanese ] = "LOGEST";
         Text[ chinese_traditional ] = "LOGEST";
@@ -7490,7 +7490,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "PREVISIONE" ;
         Text [ portuguese_brazilian ] = "FORECAST" ;
         Text [ portuguese ] = "REGRESS√O.LINEAR" ;
-        Text [ finnish ] = "FORECAST" ;
+        Text [ finnish ] = "ENNUSTE" ;
         Text [ danish ] = "PROGNOSE" ;
         Text [ french ] = "PREVISION" ;
         Text [ swedish ] = "PREDIKTION" ;
@@ -7520,7 +7520,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INV.CHI" ;
         Text [ portuguese_brazilian ] = "CHIINV" ;
         Text [ portuguese ] = "INV.CHI" ;
-        Text [ finnish ] = "CHIINV" ;
+        Text [ finnish ] = "CHIJAKAUMA_KƒƒNT" ;
         Text [ danish ] = "CHIINV" ;
         Text [ french ] = "KHIDEUX.INVERSE" ;
         Text [ swedish ] = "CHI2INV" ;
@@ -7528,7 +7528,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "PRUEBA.JI.INV" ;
         Text [ english_us ] = "CHIINV" ;
         Text[ chinese_simplified ] = "CHIINV";
-        Text[ russian ] = "’»2Œ¡–";
+        Text[ russian ] = "’»Œ¡–";
         Text[ polish ] = "ROZK£AD.CHI.ODW";
         Text[ japanese ] = "CHIINV";
         Text[ chinese_traditional ] = "CHIINV";
@@ -7550,7 +7550,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.GAMMA" ;
         Text [ portuguese_brazilian ] = "GAMMADIST" ;
         Text [ portuguese ] = "DIST.GAMMA" ;
-        Text [ finnish ] = "GAMMADIST" ;
+        Text [ finnish ] = "GAMMAJAKAUMA" ;
         Text [ danish ] = "GAMMAFORDELING" ;
         Text [ french ] = "LOI.GAMMA" ;
         Text [ swedish ] = "GAMMAF÷RD" ;
@@ -7580,7 +7580,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INV.GAMMA" ;
         Text [ portuguese_brazilian ] = "GAMMAINV" ;
         Text [ portuguese ] = "INV.GAMMA" ;
-        Text [ finnish ] = "GAMMAINV" ;
+        Text [ finnish ] = "GAMMAJAKAUMA_KƒƒNT" ;
         Text [ danish ] = "GAMMAINV" ;
         Text [ french ] = "LOI.GAMMA.INVERSE" ;
         Text [ swedish ] = "GAMMAINV" ;
@@ -7610,7 +7610,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INV.T" ;
         Text [ portuguese_brazilian ] = "TINV" ;
         Text [ portuguese ] = "INV.T" ;
-        Text [ finnish ] = "TINV" ;
+        Text [ finnish ] = "TJAKAUMA_KƒƒNT" ;
         Text [ danish ] = "TINV" ;
         Text [ french ] = "LOI.STUDENT.INVERSE" ;
         Text [ swedish ] = "TINV" ;
@@ -7640,7 +7640,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INV.F" ;
         Text [ portuguese_brazilian ] = "FINV" ;
         Text [ portuguese ] = "INV.F" ;
-        Text [ finnish ] = "FINV" ;
+        Text [ finnish ] = "FJAKAUMA_KƒƒNT" ;
         Text [ danish ] = "FINV" ;
         Text [ french ] = "INVERSE.LOI.F" ;
         Text [ swedish ] = "FINV" ;
@@ -7648,7 +7648,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "DISTR.F.INV" ;
         Text [ english_us ] = "FINV" ;
         Text[ chinese_simplified ] = "FINV";
-        Text[ russian ] = "F–¿—œŒ¡–";
+        Text[ russian ] = "FŒ¡–";
         Text[ polish ] = "ROZK£AD.F.ODW.";
         Text[ japanese ] = "FINV";
         Text[ chinese_traditional ] = "FINV";
@@ -7670,7 +7670,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TEST.CHI" ;
         Text [ portuguese_brazilian ] = "CHITEST" ;
         Text [ portuguese ] = "TESTE.CHI" ;
-        Text [ finnish ] = "CHITEST" ;
+        Text [ finnish ] = "CHITESTI" ;
         Text [ danish ] = "CHITEST" ;
         Text [ french ] = "TEST.KHIDEUX" ;
         Text [ swedish ] = "CHI2TEST" ;
@@ -7678,7 +7678,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "PRUEBA.JI" ;
         Text [ english_us ] = "CHITEST" ;
         Text[ chinese_simplified ] = "CHITEST";
-        Text[ russian ] = "’»2“≈—“";
+        Text[ russian ] = "’»“≈—“";
         Text[ polish ] = "TEST.CHI";
         Text[ japanese ] = "CHITEST";
         Text[ chinese_traditional ] = "CHITEST";
@@ -7700,7 +7700,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INV.LOGNORM" ;
         Text [ portuguese_brazilian ] = "LOGINV" ;
         Text [ portuguese ] = "INV.LOG" ;
-        Text [ finnish ] = "LOGINV" ;
+        Text [ finnish ] = "LOGNORM_JAKAUMA_KƒƒNT" ;
         Text [ danish ] = "LOGINV" ;
         Text [ french ] = "LOI.LOGNORMALE.INVERSE" ;
         Text [ swedish ] = "LOGINV" ;
@@ -7708,7 +7708,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "INV.LOG" ;
         Text [ english_us ] = "LOGINV" ;
         Text[ chinese_simplified ] = "LOGINV";
-        Text[ russian ] = "ÀŒ√ÕŒ–ÃŒ¡–";
+        Text[ russian ] = "ÀŒ√Œ¡–";
         Text[ polish ] = "ROZK£AD.LOG.ODW";
         Text[ japanese ] = "LOGINV";
         Text[ chinese_traditional ] = "LOGINV";
@@ -7730,7 +7730,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "OPERAZIONE.MULTIPLA" ;
         Text [ portuguese_brazilian ] = "TABLEOPERATION" ;
         Text [ portuguese ] = "OPERA«√O.M⁄LTIPLA" ;
-        Text [ finnish ] = "MULTIPLE.OPERATIONS" ;
+        Text [ finnish ] = "MULTIPLE_OPERATIONS" ;
         Text [ danish ] = "MULTIOPERATION" ;
         Text [ french ] = "OPERATION.MULTIPLE" ;
         Text [ swedish ] = "MULTIPEL.OPERATION" ;
@@ -7738,7 +7738,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "OPERACI”N.M⁄LTIPLE" ;
         Text [ english_us ] = "MULTIPLE.OPERATIONS" ;
         Text[ chinese_simplified ] = "MULTIPLE.OPERATIONS";
-        Text[ russian ] = "“¿¡ÀœŒƒ—“¿ÕŒ¬ »";
+        Text[ russian ] = "—Œ¬Ã≈Ÿ.Œœ≈–¿÷»»";
         Text[ polish ] = "OPERACJE.WIELOKROTNE";
         Text[ japanese ] = "MULTIPLE.OPERATIONS";
         Text[ chinese_traditional ] = "MULTIPLE.OPERATIONS";
@@ -7760,11 +7760,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "DISTRIB.BETA" ;
         Text [ portuguese_brazilian ] = "BETADIST" ;
         Text [ portuguese ] = "DIST.BETA" ;
-        Text [ finnish ] = "BETADIST" ;
+        Text [ finnish ] = "BEETAJAKAUMA" ;
         Text [ danish ] = "BETAFORDELING" ;
         Text [ french ] = "LOI.BETA" ;
         Text [ swedish ] = "BETAF÷RD" ;
-        Text [ dutch ] = "BETA.VERD" ;
+        Text [ dutch ] = "B»TA.VERD" ;
         Text [ spanish ] = "DISTR.BETA" ;
         Text [ english_us ] = "BETADIST" ;
         Text[ chinese_simplified ] = "BETADIST";
@@ -7773,7 +7773,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ japanese ] = "BETADIST";
         Text[ chinese_traditional ] = "BETADIST";
         Text[ arabic ] = "BETADIST";
-        Text[ dutch ] = "BETA.VERD";
+        Text[ dutch ] = "B»TA.VERD";
         Text[ chinese_simplified ] = "BETADIST";
         Text[ greek ] = "BETADIST";
         Text[ korean ] = "BETADIST";
@@ -7790,11 +7790,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "INV.BETA" ;
         Text [ portuguese_brazilian ] = "BETAINV" ;
         Text [ portuguese ] = "INV.BETA" ;
-        Text [ finnish ] = "BETAINV" ;
+        Text [ finnish ] = "BEETAJAKAUMA_KƒƒNT" ;
         Text [ danish ] = "BETAINV" ;
         Text [ french ] = "BETA.INVERSE" ;
         Text [ swedish ] = "BETAINV" ;
-        Text [ dutch ] = "BETA.INV" ;
+        Text [ dutch ] = "B»TA.INV" ;
         Text [ spanish ] = "DISTR.BETA.INV" ;
         Text [ english_us ] = "BETAINV" ;
         Text[ chinese_simplified ] = "BETAINV";
@@ -7803,7 +7803,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ japanese ] = "BETAINV";
         Text[ chinese_traditional ] = "BETAINV";
         Text[ arabic ] = "BETAINV";
-        Text[ dutch ] = "BETA.INV";
+        Text[ dutch ] = "B»TA.INV";
         Text[ chinese_simplified ] = "BETAINV";
         Text[ greek ] = "BETAINV";
         Text[ korean ] = "BETAINV";
@@ -7820,7 +7820,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "NUM.SETTIMANA" ;
         Text [ portuguese_brazilian ] = "WEEKOFYEAR" ;
         Text [ portuguese ] = "N⁄MSEMANA" ;
-        Text [ finnish ] = "WEEKNUM" ;
+        Text [ finnish ] = "VIIKKO_NRO" ;
         Text [ danish ] = "KALENDERUGE" ;
         Text [ french ] = "NO.SEMAINE" ;
         Text [ swedish ] = "VECKONR" ;
@@ -7868,7 +7868,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "EASTERSUNDAY";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "EASTERSUNDAY";
-        Text[ finnish ] = "EASTERSUNDAY";
+        Text[ finnish ] = "PƒƒS_SUNNUNTAI";
         Text[ thai ] = "EASTERSUNDAY";
     };
     String SC_OPCODE_GET_DAY_OF_WEEK
@@ -7879,7 +7879,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "GIORNO.SETTIMANA" ;
         Text [ portuguese_brazilian ] = "WEEKDAY" ;
         Text [ portuguese ] = "DIA.SEMANA" ;
-        Text [ finnish ] = "WEEKDAY" ;
+        Text [ finnish ] = "VIIKONPƒIVƒ" ;
         Text [ danish ] = "UGEDAG" ;
         Text [ french ] = "JOURSEM" ;
         Text [ swedish ] = "VECKODAG" ;
@@ -7887,7 +7887,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "DÕASEM" ;
         Text [ english_us ] = "WEEKDAY" ;
         Text[ chinese_simplified ] = "WEEKDAY";
-        Text[ russian ] = "ƒ≈Õ‹Õ≈ƒ";
+        Text[ russian ] = "Õ≈ƒƒ≈Õ‹";
         Text[ polish ] = "DZIE—.TYGODNIA";
         Text[ japanese ] = "WEEKDAY";
         Text[ chinese_traditional ] = "WEEKDAY";
@@ -7909,7 +7909,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "#NOME!" ;
         Text [ portuguese_brazilian ] = "#NOME!" ;
         Text [ portuguese ] = "#NOME!" ;
-        Text [ finnish ] = "#NAME!" ;
+        Text [ finnish ] = "#NIMI!" ;
         Text [ danish ] = "#NAVN!" ;
         Text [ french ] = "#NOM!" ;
         Text [ swedish ] = "#NAMN!" ;
@@ -7939,7 +7939,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MODELLO" ;
         Text [ portuguese_brazilian ] = "STYLE" ;
         Text [ portuguese ] = "ESTILO" ;
-        Text [ finnish ] = "STYLE" ;
+        Text [ finnish ] = "TYYLI" ;
         Text [ danish ] = "TYPOGRAFI" ;
         Text [ french ] = "STYLE" ;
         Text [ swedish ] = "FORMATMALL" ;
@@ -8013,7 +8013,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "BASE";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "BASE";
-        Text[ finnish ] = "BASE";
+        Text[ finnish ] = "KANTALUKU";
         Text[ thai ] = "‡∏ê‡∏≤‡∏ô";
     };
     String SC_OPCODE_DECIMAL
@@ -8042,7 +8042,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "DECIMAL";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "DECIMAL";
-        Text[ finnish ] = "DECIMAL";
+        Text[ finnish ] = "DESIMAALI";
         Text[ thai ] = "‡∏ó‡∏®‡∏ô‡∏¥‡∏¢‡∏°";
     };
     String SC_OPCODE_CONVERT
@@ -8071,7 +8071,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "CONVERT";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "CONVERT";
-        Text[ finnish ] = "CONVERT";
+        Text[ finnish ] = "MUUNNOS";
         Text[ thai ] = "CONVERT";
     };
     String SC_OPCODE_ROMAN
