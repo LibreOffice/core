@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: as $ $Date: 2002-05-31 13:43:15 $
+ *  last change: $Author: as $ $Date: 2002-07-05 08:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             //-------------------------------------------------------------------------------------------------------------
                                             // Initialize a the drop target listener.
                                             // We hold member as reference ... not as pointer too!
-                                            DropTargetListener* pDropListener = new DropTargetListener( this );
+                                            DropTargetListener* pDropListener = new DropTargetListener( m_xFactory, this );
                                             m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >( static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY );
 
                                             // Safe impossible cases
@@ -3193,90 +3193,6 @@ void Frame::implts_stopWindowListening()
                 {
                     xDropTarget->removeDropTargetListener( xDragDropListener );
                     xDropTarget->setActive( sal_False );
-                }
-            }
-        }
-    }
-}
-
-/*-****************************************************************************************************//**
-    @short      helper to save window parameters (depending from document factory) into the configuration
-    @descr      We hold position and size of windows for every modul of the office inside the configuration.
-                And here is the place to get the neccessary informations from the on container window
-                and safe it.
-
-    @threadsafe yes
-    @modified   06.05.2002 09:13, as96863
-*//*-*****************************************************************************************************/
-void Frame::implts_saveWindowAttributes()
-{
-    // get some copies of internal member in threadsafe block
-    css::uno::Reference< css::awt::XWindow >               xContainerWindow;
-    css::uno::Reference< css::frame::XController >         xController     ;
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory        ;
-    sal_Bool                                               bIsPlugin       ;
-    /* SAFE */{
-        ReadGuard aReadLock( m_aLock );
-        xContainerWindow = m_xContainerWindow;
-        xController      = m_xController     ;
-        xFactory         = m_xFactory        ;
-        bIsPlugin        = m_bIsPlugIn       ;
-    }/* SAFE */
-
-    // operation not defined for missing window and not for plugin mode!
-    if (
-         ( xContainerWindow.is() )    &&
-         ( !bIsPlugin            )
-       )
-    {
-        // save pos/size of task window in module options
-        // To do so - get argument "FilterName" from the model ( if the component has one ) first
-        ::rtl::OUString sFilterName;
-        if (xController.is())
-        {
-            css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
-            if (xModel.is())
-            {
-                css::uno::Sequence< css::beans::PropertyValue > lArgs( xModel->getArgs() );
-                ArgumentAnalyzer aAnalyzer( lArgs );
-                aAnalyzer.getArgument( E_FILTERNAME , sFilterName );
-            }
-        }
-
-        // If such filter name is well know try to
-        // get the properties of the components' filter
-        // Use singleton implementati0on of internal stl filter cache to get neccessary informations!
-        // It's a threadsafe implementation.
-        FilterCache aCacheRef;
-        if (
-            (sFilterName.getLength()            )   &&
-            (aCacheRef.existsFilter(sFilterName))
-           )
-        {
-            Filter aFilter = aCacheRef.getFilter(sFilterName);
-            // use property "DocumentServiceName" to detect the factory
-            // Note: Some filter doesn't have such property - e.g. graphic filter.
-            if (aFilter.sDocumentService.getLength()>0)
-            {
-                SvtModuleOptions::EFactory eFactory;
-                if (SvtModuleOptions::ClassifyFactoryByName(aFilter.sDocumentService,eFactory))
-                {
-                    // store window position for this factory
-                    ByteString sState;
-                    /* SOLAR SAFE */{
-
-                        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-                        Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-                        if (
-                            (pWindow!=NULL            )   &&
-                            (pWindow->IsSystemWindow())
-                           )
-                        {
-                            sState = ((SystemWindow*)pWindow)->GetWindowState();
-                        }
-                    }/* SOLAR SAFE */
-                    if (sState.Len()>0)
-                        SvtModuleOptions().SetFactoryWindowAttributes( eFactory, B2U_ENC(sState,RTL_TEXTENCODING_UTF8) );
                 }
             }
         }
