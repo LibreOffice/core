@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:41:02 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1390,53 +1390,52 @@ String RID_DESKTOP
     Text = "%PRODUCTNAME" ;
 };
 
+WarningBox RID_XMLSEC_WARNING_BROKENSIGNATURE
+{
+    HelpId = HID_XMLSEC_WARNING_BROKENSIGNATURE;
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Title [ de ] = "Ungültige Dokument Signatur" ;
+    Title [ en-US ] = "Invalid Document Signature" ;
+    Message [ de ] = "Der digital signierte Dokumentinhalt stimmt nicht mit der aktuellen Dokumentsignatur überein.\nDieses deutet auf eine Dokumentmanipulation oder einen Übertragungsfehler hin.\n\nWir empfehlen Ihnen, dem aktuellen Dokumentinhalt nicht zu trauen." ;
+    Message [ en-US ] = "The digitally signed document content does not match the current document signature.\nThis could be the result of document manipulation or of structural document damage due to data transmission.\n\nWe recommend that you do not trust the content of the current document." ;
+};
 
+WarningBox RID_WARNING_MACROSDISABLED
+{
+    HelpId = HID_WARNING_MACROSDISABLED;
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Message [ de ] = "Dieses Dokument enthält Makros.\nDas Ausführen dieses Makros wird gemäß der aktuellen Makro-Sicherheitseinstellungen  unterbunden. Deshalb könnten einige Funktionen nicht verfügbar sein." ;
+    Message [ en-US ] = "This document contains macros.\nExecution of this macros is disabled due to the current macro security setting. Therefore, some functionality may not be available." ;
+};
 
+QueryBox RID_XMLSEC_QUERY_LOSINGSIGNATURE
+{
+    HelpId = HID_XMLSEC_QUERY_LOSINGSIGNATURE;
+    Buttons = WB_YES_NO ;
+    Message [ de ] = "Speichern in diesem Format entfernt alle existierenden Signaturen.\nMöchten Sie mit dem Speichern fortfahren?\n" ;
+    Message [ en-US ] = "Saving will remove all existing signatures.\nDo you want to continue saving the document?\n" ;
+};
 
+QueryBox RID_XMLSEC_QUERY_SAVEBEFORESIGN
+{
+    HelpId = HID_XMLSEC_QUERY_SAVEBEFORESIGN;
+    Buttons = WB_YES_NO ;
+    Message [ de ] = "Dieses Dokument muss im Open Office Dokumentformat gespeichert werden, bevor es digital signiert werden kann.\nMöchten Sie im Open Office Dokumentformat speichern und mit dem Signieren fortfahren?\n" ;
+    Message [ en-US ] = "This document must be saved in Open Office file format before it can be digitally signed.\nDo you want to save in the Open Office file format and continue signing?\n" ;
+};
 
+InfoBox RID_XMLSEC_INFO_WRONGDOCFORMAT
+{
+    HelpId = HID_XMLSEC_INFO_WRONGDOCFORMAT;
+    Message [ de ] = "Dieses Dokument muss im Open Office Dokumentformat gespeichert werden, bevor es digital signiert werden kann." ;
+    Message [ en-US ] = "This document must be saved in Open Office file format before it can be digitally signed." ;
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String RID_XMLSEC_DOCUMENTSIGNED
+{
+    Text [ de ] = "(Signiert)" ;
+    Text [ en-US ] = "(Signed)" ;
+};
 
