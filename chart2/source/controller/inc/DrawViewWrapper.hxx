@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-28 16:24:35 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 16:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@ class DrawViewWrapper : public E3dView
 public:
     DrawViewWrapper(SdrModel* pModel, OutputDevice* pOut);
     virtual ~DrawViewWrapper();
+
+    //triggers the use of an updated first page
+    void    ReInit();
 
     //fill list of selection handles 'aHdl'
     virtual void SetMarkHandles();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-28 16:22:51 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 16:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,14 +132,18 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut)
             , m_pMarkHandleProvider(NULL)
             , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
 {
-    m_pWrappedDLPageView = this->ShowPagePgNum( 0, Point(0,0) );
-
+    ReInit();
     /*
     m_pWrappedDLPageView->GetPage()->SetBorder(0, 0, 0, 0);
     m_pWrappedDLPageView->GetPage()->SetSize(Size(1000,1000));
     this->SetBordVisible(false);
     this->SetPageBorderVisible(false);
     */
+}
+
+void DrawViewWrapper::ReInit()
+{
+    m_pWrappedDLPageView = this->ShowPagePgNum( 0, Point(0,0) );
 }
 
 DrawViewWrapper::~DrawViewWrapper()
