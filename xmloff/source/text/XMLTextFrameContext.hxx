@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-31 10:25:03 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ class XMLTextFrameContext : public SvXMLImportContext
     const ::rtl::OUString sGraphicRotation;
     const ::rtl::OUString sTextBoxServiceName;
     const ::rtl::OUString sGraphicServiceName;
+    const ::rtl::OUString sWidthType;
 
     ::rtl::OUString sName;
     ::rtl::OUString sStyleName;
@@ -176,6 +177,7 @@ class XMLTextFrameContext : public SvXMLImportContext
     ::com::sun::star::text::TextContentAnchorType   eAnchorType;
 
     sal_Bool    bMayScript : 1;
+    sal_Bool    bMinWidth : 1;
     sal_Bool    bMinHeight : 1;
     sal_Bool    bSyncWidth : 1;
     sal_Bool    bSyncHeight : 1;
