@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.sdi,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:22:32 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,11 +334,6 @@ interface TextDraw : TextDrawBase
         StateMethod = GetState ;
     ]
     SID_FONTWORK_SHAPE
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    SID_FONTWORK_SHAPE_TYPES
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
