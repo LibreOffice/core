@@ -8,18 +8,12 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\bin\noarch\*.rpm %_DEST%\bin%_EXT%\*.rpm
 ..\%__SRC%\bin\*.tar.gz %_DEST%\bin%_EXT%\*.tar.gz
 
-..\%__SRC%\bin\gnomeint %_DEST%\bin%_EXT%\gnomeint.bin
-..\%__SRC%\bin\gnomeint.sh %_DEST%\bin%_EXT%\gnomeint
 ..\%__SRC%\bin\viewdoc.sh %_DEST%\bin%_EXT%\viewdoc
-..\%__SRC%\bin\functions.sh %_DEST%\bin%_EXT%\functions
-..\%__SRC%\bin\update-mime-data.sh %_DEST%\bin%_EXT%\update-mime-data
-..\%__SRC%\bin\update-user-mime-data.sh %_DEST%\bin%_EXT%\update-user-mime-data
-..\%__SRC%\bin\update-user-menus.sh %_DEST%\bin%_EXT%\update-user-menus
-..\%__SRC%\bin\update-redhat-user-menus.sh %_DEST%\bin%_EXT%\update-redhat-user-menus
-..\%__SRC%\bin\update-suse-user-menus.sh %_DEST%\bin%_EXT%\update-suse-user-menus
+..\%__SRC%\bin\gnome-set-default-application %_DEST%\bin%_EXT%\gnome-set-default-application
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
 ..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\install_quickstart.exe
 ..\%__SRC%\bin\soquickstart.exe %_DEST%\bin%_EXT%\so\quickstart.exe
 ..\%__SRC%\bin\soquickstart.exe %_DEST%\bin%_EXT%\so\install_quickstart.exe
 
+..\%__SRC%\misc\desktopshare\*.desktop %_DEST%\pck%_EXT%\*.desktop
