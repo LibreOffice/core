@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:12:16 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
-
+#include <ndtxt.hxx> // #111827#
 
 // fuer den dummen ?MSC-? Compiler
 inline xub_StrLen GetSttOrEnd( BOOL bCondition, const SwCntntNode& rNd )
@@ -211,6 +211,11 @@ FASTBOOL SwPosition::operator!=(const SwPosition &rPos) const
     if( nNode != rPos.nNode )
         return TRUE;
     return ( nContent != rPos.nContent );
+}
+
+SwDoc * SwPosition::GetDoc() const
+{
+    return nNode.GetNode().GetDoc();
 }
 
 SwComparePosition ComparePosition(
@@ -1090,6 +1095,51 @@ FASTBOOL GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
     return TRUE;
 }
 
+// #111827#
+String SwPaM::GetTxt() const
+{
+    String aResult;
 
+    SwNodeIndex aNodeIndex = Start()->nNode;
 
+    /* The first node can be the end node. A first end node must be
+       handled, too. There fore do ... while and no incrementing of
+       aNodeIndex in the first pass.
+     */
+    bool bFirst = true;
+    do
+    {
+        if (! bFirst)
+        {
+            aNodeIndex++;
+        }
 
+        bFirst = false;
+
+        SwTxtNode * pTxtNode = aNodeIndex.GetNode().GetTxtNode();
+
+        if (pTxtNode != NULL)
+        {
+            const String & aTmpStr = pTxtNode->GetTxt();
+
+            if (aNodeIndex == Start()->nNode)
+            {
+                xub_StrLen nEnd;
+                if (End()->nNode == aNodeIndex)
+                    nEnd = End()->nContent.GetIndex();
+                else
+                    nEnd = aTmpStr.Len();
+
+                aResult += aTmpStr.Copy(Start()->nContent.GetIndex(),
+                                        nEnd - Start()->nContent.GetIndex()) ;
+            }
+            else if (aNodeIndex == End()->nNode)
+                aResult += aTmpStr.Copy(0, End()->nContent.GetIndex());
+            else
+                aResult += aTmpStr;
+        }
+    }
+    while (aNodeIndex != End()->nNode);
+
+    return aResult;
+}
