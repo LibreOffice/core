@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-09 15:40:57 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,8 @@
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
 #include "strarray.hxx"
-
+#include <sfx2/request.hxx> //add CHINA001
+#include "ofaitem.hxx" //add CHINA001
 
 static USHORT pRanges[] =
 {
@@ -880,5 +881,13 @@ void SvxMeasurePage::FillUnitLB()
         aLbUnit.SetEntryData( nPos, (void*)nUnit );
     }
 }
+void SvxMeasurePage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,sal_False);
 
+    if (pOfaPtrItem)
+        SetView( static_cast<SdrView *>(pOfaPtrItem->GetValue()));
+
+    Construct();
+}
 
