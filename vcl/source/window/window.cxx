@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: tbe $ $Date: 2002-12-05 11:24:21 $
+ *  last change: $Author: ssa $ $Date: 2002-12-05 16:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8253,6 +8253,8 @@ USHORT Window::GetAccessibleRole() const
                     nRole = accessibility::AccessibleRole::FRAME;
                 else if( IsScrollable() )
                     nRole = accessibility::AccessibleRole::SCROLLPANE;
+                else if( ((Window*)this)->ImplGetWindow()->IsMenuFloatingWindow() )
+                    nRole = accessibility::AccessibleRole::WINDOW;      // #106002#, contextmenues are windows (i.e. toplevel)
                 else
                     // #104051# WINDOW seems to be a bad default role, use LAYEREDPANE instead
                     // a WINDOW is interpreted as a top-level window, which is typically not the case
