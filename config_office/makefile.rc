@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-15 22:05:20 $
+#   last change: $Author: svesik $ $Date: 2001-03-16 13:33:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,6 +127,7 @@ RC_SUBDIRS =  \
 	ldapber \
 	lingu \
 	linguistic \
+	mkdepend \
 	offapi \
 	officecfg \
 	offmgr \
@@ -177,6 +178,7 @@ RC_SUBDIRS =  \
 	xml2cmp \
 	xmlhelp \
 	xmloff \
+	xmlscript \
 	xprinter
 
 # 
@@ -215,7 +217,7 @@ UnoControls : cppuhelper offuh tools
 XmlSearch : external
 automation : basic
 basctl : svx
-basic : goodies
+basic : xmlscript goodies
 bridges : cppuhelper jurt
 chaos : inet svtools unzip
 codemaker : udkapi
@@ -228,7 +230,7 @@ cpputools : cppuhelper
 dbaccess : connectivity offmgr
 desktop : sc sd sw
 drafts : offapi
-dtrans : offapi sal
+dtrans : offapi sal rdbmaker
 eventattacher : cppuhelper offapi
 extensions : rdbmaker svx
 fileaccess : tools
@@ -240,7 +242,7 @@ idl : tools
 inet : ldapber tools
 instsetoo : non_vcl chaos configmgr dbaccess desktop extensions extras forms framework i18n scaddins scp wizards readlicense xmlhelp
 io : rdbmaker
-javaunohelper : cppuhelper jurt
+javaunohelper : cppuhelper jurt bridges
 jurt : codemaker ridljar sandbox
 jut : javaunohelper
 lingu : linguistic
@@ -263,7 +265,7 @@ scp : scptools
 scptools : setup2
 sd : offmgr sc
 setup2 : automation basic transex3 unoil unzip
-sfx2 : idl setup2
+sfx2 : idl setup2 xmloff xmlscript
 sim2 : svx
 sj2 : sandbox svtools
 so3 : inet sj2
@@ -288,7 +290,8 @@ vcl : rsc sot ucbhelper unotools xprinter
 vos : sal
 wizards : offmgr
 xmlhelp : external jut XmlSearch
-xmloff : lingu
+xmloff : goodies
+xmlscript : offapi
 
 # 
 # central target makefile
