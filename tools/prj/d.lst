@@ -148,5 +148,8 @@ hedabu: ..\inc\config.hxx %_DEST%\inc%_EXT%\tools\config.hxx
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
 
+..\%__SRC%\bin\rscdep.exe %_DEST%\bin%_EXT%\rscdep.exe
+..\%__SRC%\bin\rscdep %_DEST%\bin%_EXT%\rscdep
+
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
