@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:17:53 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6414,12 +6414,16 @@ BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
         rBLIPStream.SeekRel( nSkip );
 
         SvStream* pGrStream = &rBLIPStream;
-        SvMemoryStream* pOut = 0;
+        SvMemoryStream* pOut = NULL;
         if( bZCodecCompression )
         {
             pOut = new SvMemoryStream( 0x8000, 0x4000 );
-            if ( ZCodecDecompressed( rBLIPStream, *pOut, TRUE ) )
-                pGrStream = pOut;
+            ZCodec aZCodec( 0x8000, 0x8000 );
+            aZCodec.BeginCompression();
+            aZCodec.Decompress( rBLIPStream, *pOut );
+            aZCodec.EndCompression();
+            pOut->Seek( STREAM_SEEK_TO_BEGIN );
+            pGrStream = pOut;
         }
 
 #define DBG_EXTRACTGRAPHICS
@@ -6520,46 +6524,6 @@ BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
 
     return ( GRFILTER_OK == nRes ); // Ergebniss melden
 }
-
-/*static*/
-
-#define ZCODEC_DEC_BUFSIZE 0x4000
-
-BOOL SvxMSDffManager::ZCodecDecompressed( SvStream& rIn, SvStream& rOut, BOOL bLookForEnd )
-{
-    long nOutStartPos = rOut.Tell();
-    long nBytesOut = 0;
-
-    ZCodec aZCodec;
-    aZCodec.BeginCompression();
-
-    if( bLookForEnd )
-    {
-        BYTE* pBuf = new BYTE[ ZCODEC_DEC_BUFSIZE ];
-        long  nBytesRead;
-        while( TRUE )
-        {
-            nBytesRead = aZCodec.Read( rIn, pBuf, ZCODEC_DEC_BUFSIZE );
-            if( nBytesRead > 0 )
-            {
-                rOut.Write( pBuf, nBytesRead );
-                nBytesOut += nBytesRead;
-            }
-            else
-                break;
-        }
-        if( nBytesRead < 0 ) nBytesOut = 0;     // Error: Ergebnisse ungueltig !!
-        delete[] pBuf;
-    }
-    else
-        nBytesOut = aZCodec.Decompress( rIn, rOut );
-
-    aZCodec.EndCompression();
-
-    rOut.Seek( nOutStartPos );
-    return (0 < nBytesOut);
-}
-
 
 /* static */
 BOOL SvxMSDffManager::ReadCommonRecordHeader(DffRecordHeader& rRec, SvStream& rIn)
