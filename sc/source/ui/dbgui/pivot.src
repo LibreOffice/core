@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:55:21 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ swedish ] = "Layout";
         Text[ polish ] = "Uk³ad";
         Text[ portuguese_brazilian ] = "Layout";
-        Text[ japanese ] = "????";
+        Text[ japanese ] = "Ú²±³Ä";
         Text[ korean ] = "·¹ÀÌ¾Æ¿ô";
         Text[ chinese_simplified ] = "°æÊ½";
         Text[ chinese_traditional ] = "ª©¦¡";
@@ -310,13 +310,13 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ portuguese ] = "Saída de" ;
         Text [ finnish ] = "Tulokset kohteeseen" ;
         Text [ danish ] = "Output fra" ;
-        Text [ french ] = "Plage de destination" ;
+        Text [ french ] = "Destination" ;
         Text [ swedish ] = "Utd~ata från" ;
         Text [ dutch ] = "Uitvoer van" ;
         Text [ spanish ] = "Resultado en" ;
         Text [ english_us ] = "Results to" ;
         Hide = TRUE ;
-        Text[ chinese_simplified ] = "½á¹ûÏÔÊ¾µ½";
+        Text[ chinese_simplified ] = "Êä³öÇøÓò´Ó";
         Text[ russian ] = "Íà÷àòü ñ";
         Text[ polish ] = "Obszar docelowy tabeli od";
         Text[ japanese ] = "Œ‹‰Ê“\\‚è•t‚¯æ";
