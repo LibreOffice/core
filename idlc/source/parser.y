@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:20:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,6 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 	::rtl::OString*		sval;		/* OString value */
     std::vector< rtl::OString > * svals;
 	sal_Char* 			strval;	/* sal_Char* value */
-	sal_Char				cval;		/* sal_Char value */
 	sal_Bool				bval;		/* sal_Boolean* value */
 	sal_Int64				ival;		/* sal_Int64 value */
 	sal_uInt32			ulval;		/* sal_uInt32 value */
@@ -413,9 +412,7 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 %token <strval> 	IDL_SCOPESEPARATOR
 
 %token <ival>		IDL_INTEGER_LITERAL
-%token <sval>		IDL_STRING_LITERAL
 %token <dval>		IDL_FLOATING_PT_LITERAL
-%token <cval>		IDL_CHARACTER_LITERAL
 
 /*
  * These are production names:
@@ -1532,7 +1529,7 @@ primary_expr :
 		 * but only when it is evaluated (such as when it is assigned
 		 * as a constant value)
 		 */
-		$$ = new AstExpression($1, sal_True);
+		$$ = new AstExpression($1);
 	}
 	| literal
 	| '(' const_expr ')'
@@ -1543,14 +1540,6 @@ primary_expr :
 
 literal : 
 	IDL_INTEGER_LITERAL
-	{
-		$$ = new AstExpression($1);
-	}
-	| IDL_STRING_LITERAL
-	{
-		$$ = new AstExpression($1);
-	}
-	| IDL_CHARACTER_LITERAL
 	{
 		$$ = new AstExpression($1);
 	}
