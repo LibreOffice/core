@@ -679,31 +679,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Rechenleiste</value>
                     <value xml:lang="en-US">~Formula Bar</value>
-                    <value xml:lang="ar">شريط الصيغة</value>
-                    <value xml:lang="no">For~mula Bar</value>
-                    <value xml:lang="ca">Barra de fór~mules</value>
-                    <value xml:lang="zh-TW">編輯列(~M)</value>
-                    <value xml:lang="cs">Panel vzorců</value>
-                    <value xml:lang="da">Form~ellinje</value>
-                    <value xml:lang="el">Γραμμή τύπ~ων</value>
-                    <value xml:lang="es">Barra de ~fórmulas</value>
-                    <value xml:lang="fi">Kaava~rivi</value>
-                    <value xml:lang="fr">Barre de ~calcul</value>
-                    <value xml:lang="he">R~echenleiste</value>
-                    <value xml:lang="it">~Barra di calcolo</value>
-                    <value xml:lang="ja">数式バー(~M)</value>
-                    <value xml:lang="ko">수식 표시줄(~M)</value>
-                    <value xml:lang="nl">~Rekenbalk</value>
-                    <value xml:lang="pl">Pasek for~muły</value>
-                    <value xml:lang="pt-BR">Barra de ~Fórmulas</value>
-                    <value xml:lang="ru">Панель формулы</value>
-                    <value xml:lang="sk">Pa~nel vzorcov</value>
-                    <value xml:lang="sv">For~mellist</value>
-                    <value xml:lang="th">แถบสู~ตร</value>
-                    <value xml:lang="tr">Formül çubuğu</value>
-                    <value xml:lang="hi">सू~त्र पट्टी</value>
-                    <value xml:lang="zh-CN">编辑栏(~M)</value>
-                    <value xml:lang="pt">~Barra de fórmulas</value>
                 </prop>
             </node>
             <node oor:name=".uno:ViewRowColumnHeaders" oor:op="replace">
