@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 09:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,6 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#ifndef _SVX_QRYPARAM_HXX
-#include "qryparam.hxx"
-#endif
-
 #ifndef _SVDPAGV_HXX //autogen
 #include <svdpagv.hxx>
 #endif
@@ -182,16 +178,15 @@
 #include "dialmgr.hxx"
 #endif
 
-#ifndef _SVX_QRYPARAM_HXX
-#include "qryparam.hxx"
-#endif
-
 #ifndef _SVT_SDBPARSE_HXX
 #include <svtools/sdbparse.hxx>
 #endif
 
 #ifndef _SVX_FMPROP_HXX
 #include "fmprop.hxx"
+#endif
+#ifndef _SVX_FMSERVS_HXX
+#include "fmservs.hxx"
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -230,10 +225,50 @@
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
+#ifndef _COMPHELPER_INTERACTION_HXX_
+#include <comphelper/interaction.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
+#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
+#include <com/sun/star/sdb/ParametersRequest.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::beans;
+using namespace ::comphelper;
+using namespace ::dbtools;
 
 extern sal_uInt16 AutoSlotMap[];
+
+//==================================================================
+// FmXAutoControl
+//==================================================================
+class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
+{
+    Sequence< PropertyValue >       m_aValues;
+
+public:
+    OParameterContinuation() { }
+
+    Sequence< PropertyValue >   getValues() const { return m_aValues; }
+
+// XInteractionSupplyParameters
+    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException);
+};
+
+//------------------------------------------------------------------
+void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException)
+{
+    m_aValues = _rValues;
+}
 
 //==================================================================
 // FmXAutoControl
@@ -2922,17 +2957,65 @@ sal_Bool SAL_CALL FmXFormController::approveParameter(const ::com::sun::star::fo
     }
     else
     {
-        // default handling, asking for parameters
-        Reference< ::com::sun::star::container::XIndexAccess >  xParams = aEvent.Parameters;
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        // default handling: instantiate an interaction handler and let it handle the parameter request
+        try
+        {
+            // two continuations allowed: OK and Cancel
+            OParameterContinuation* pParamValues = new OParameterContinuation;
+            OInteractionAbort* pAbort = new OInteractionAbort;
+            // the request
+            ParametersRequest aRequest;
+            aRequest.Parameters = aEvent.Parameters;
+            aRequest.Connection = getConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
+            OInteractionRequest* pParamRequest = new OInteractionRequest(makeAny(aRequest));
+            Reference< XInteractionRequest > xParamRequest(pParamRequest);
+            // some knittings
+            pParamRequest->addContinuation(pParamValues);
+            pParamRequest->addContinuation(pAbort);
 
-        Reference< ::com::sun::star::sdbc::XConnection >  xConn;
-        Reference< ::com::sun::star::sdbc::XRowSet >  xForm(aEvent.Source, UNO_QUERY);
-        if (xForm.is())
-            xConn = ::dbtools::getConnection(xForm);
-        FmEnterParamDlg aDlg(getDialogParentWindow(), xParams, xConn);
-        if (aDlg.Execute() != RET_OK)
-            return sal_False;
+            // create the handler, let it handle the request
+            Reference< XInteractionHandler > xHandler(getProcessServiceFactory()->createInstance(SRV_SDB_INTERACTION_HANDLER), UNO_QUERY);
+            if (xHandler.is())
+            {
+                ::vos::OGuard aGuard(Application::GetSolarMutex());
+                xHandler->handle(xParamRequest);
+            }
+
+            if (!pParamValues->wasSelected())
+                // canceled
+                return sal_False;
+
+            // transfer the values into the parameter supplier
+            Sequence< PropertyValue > aFinalValues = pParamValues->getValues();
+            if (aFinalValues.getLength() != aRequest.Parameters->getCount())
+            {
+                DBG_ERROR("FmXFormController::approveParameter: the InteractionHandler returned nonsense!");
+                return sal_False;
+            }
+            const PropertyValue* pFinalValues = aFinalValues.getConstArray();
+            for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
+            {
+                Reference< XPropertySet > xParam;
+                ::cppu::extractInterface(xParam, aRequest.Parameters->getByIndex(i));
+                if (xParam.is())
+                {
+#ifdef DBG_UTIL
+                    ::rtl::OUString sName;
+                    xParam->getPropertyValue(FM_PROP_NAME) >>= sName;
+                    DBG_ASSERT(sName.equals(pFinalValues->Name), "FmXFormController::approveParameter: suspicious value names!");
+#endif
+                    try { xParam->setPropertyValue(FM_PROP_VALUE, pFinalValues->Value); }
+                    catch(Exception&)
+                    {
+                        DBG_ERROR("FmXFormController::approveParameter: setting one of the properties failed!");
+                    }
+                }
+            }
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("FmXFormController::approveParameter: caught an Exception (tried to let the InteractionHandler handle it)!");
+        }
     }
     return sal_True;
 }
