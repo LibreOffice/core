@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorexecute.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:11:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,13 +220,31 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    m_lCommandQueue.push_back(sCommand);
-    m_aAsyncCallback.Post(0);
+    css::uno::Reference< css::frame::XDispatchProvider > xProvider = m_xDispatcher;
 
     aLock.clear();
     // <- SAFE ----------------------------------
 
-    return sal_True;
+    // convert command in URL structure
+    css::uno::Reference< css::util::XURLTransformer > xParser = impl_ts_getURLParser();
+    css::util::URL aURL;
+    aURL.Complete = sCommand;
+    xParser->parseStrict(aURL);
+
+    // ask for dispatch object
+    sal_Bool bRet = sal_False;
+    css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, ::rtl::OUString(), 0);
+    if ( bRet = xDispatch.is() )
+    {
+        // <- SAFE ----------------------------------
+        aLock.reset();
+        m_lCommandQueue.push_back(TCommandQueue::value_type(aURL,xDispatch));
+        m_aAsyncCallback.Post(0);
+        aLock.clear();
+        // <- SAFE ----------------------------------
+    }
+
+    return bRet;
 }
 
 //-----------------------------------------------
@@ -385,24 +403,22 @@ IMPL_LINK(AcceleratorExecute, impl_ts_asyncCallback, void*, pVoid)
     TCommandQueue::iterator pIt = m_lCommandQueue.begin();
     if (pIt == m_lCommandQueue.end())
         return 0;
-    ::rtl::OUString sCommand = *pIt;
-    m_lCommandQueue.erase(pIt);
+    css::util::URL aURL = pIt->first;
+    css::uno::Reference< css::frame::XDispatch > xDispatch = pIt->second;
 
-    css::uno::Reference< css::frame::XDispatchProvider > xProvider = m_xDispatcher;
+    m_lCommandQueue.erase(pIt);
 
     aLock.clear();
     // <- SAFE ----------------------------------
 
-    // convert command in URL structure
-    css::uno::Reference< css::util::XURLTransformer > xParser = impl_ts_getURLParser();
-    css::util::URL aURL;
-    aURL.Complete = sCommand;
-    xParser->parseStrict(aURL);
-
-    // ask for dispatch object
-    css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, ::rtl::OUString(), 0);
-    if (xDispatch.is())
+    try
+    {
         xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue >());
+    }
+    catch(const css::uno::RuntimeException& exRuntime)
+        { throw exRuntime; }
+    catch(const css::uno::Exception&)
+        { }
 
     return 0;
 }
