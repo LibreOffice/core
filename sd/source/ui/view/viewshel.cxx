@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-13 12:04:37 $
+ *  last change: $Author: aw $ $Date: 2002-01-16 11:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,14 @@
 #include "grviewsh.hxx"
 #include "prevchld.hxx"
 #include "preview.hxx"
+
+// #96090#
+#ifndef _SFXSLSTITM_HXX
+#include <svtools/slstitm.hxx>
+#endif
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
+#endif
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -1356,4 +1364,160 @@ void SdViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// #96090#
+
+SfxUndoManager* SdViewShell::ImpGetUndoManager() const
+{
+    return GetViewFrame()->GetDispatcher()->GetShell(0)->GetUndoManager();
+}
+
+void SdViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
+{
+    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    if(pUndoManager)
+    {
+        sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
+        if(nCount)
+        {
+            // prepare list
+            List aStringList;
+
+            for(sal_uInt16 a(0); a < nCount; a++)
+            {
+                // generate one String in list per undo step
+                String* pInsertString = new String(pUndoManager->GetUndoActionComment(a));
+                aStringList.Insert(pInsertString, LIST_APPEND);
+            }
+
+            // set item
+            rSet.Put(SfxStringListItem(SID_GETUNDOSTRINGS, &aStringList));
+
+            // delete Strings again
+            for(a = 0; a < nCount; a++)
+                delete (String*)aStringList.GetObject(a);
+        }
+        else
+        {
+            rSet.DisableItem(SID_GETUNDOSTRINGS);
+        }
+    }
+}
+
+void SdViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
+{
+    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    if(pUndoManager)
+    {
+        sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
+        if(nCount)
+        {
+            // prepare list
+            List aStringList;
+
+            for(sal_uInt16 a(0); a < nCount; a++)
+            {
+                // generate one String in list per undo step
+                String* pInsertString = new String(pUndoManager->GetRedoActionComment(a));
+                aStringList.Insert(pInsertString, LIST_APPEND);
+            }
+
+            // set item
+            rSet.Put(SfxStringListItem(SID_GETREDOSTRINGS, &aStringList));
+
+            // delete Strings again
+            for(a = 0; a < nCount; a++)
+                delete (String*)aStringList.GetObject(a);
+        }
+        else
+        {
+            rSet.DisableItem(SID_GETREDOSTRINGS);
+        }
+    }
+}
+
+void SdViewShell::ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq)
+{
+    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    sal_uInt16 nNumber(1);
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
+
+    if(pReqArgs)
+    {
+        SfxUInt16Item* pUIntItem = (SfxUInt16Item*)&pReqArgs->Get(SID_UNDO);
+        nNumber = pUIntItem->GetValue();
+    }
+
+    if(nNumber && pUndoManager)
+    {
+        if(bDrawViewShell)
+        {
+            List* pList = pDoc->GetDeletedPresObjList();
+            if( pList )
+                pList->Clear();
+        }
+
+        sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
+        if(nCount >= nNumber)
+        {
+            // #94637# when UndoStack is cleared by ModifyPageUndoAction
+            // the nCount may have changed, so test GetUndoActionCount()
+            while(nNumber-- && pUndoManager->GetUndoActionCount())
+            {
+                pUndoManager->Undo();
+            }
+        }
+
+        // #91081# refresh rulers, maybe UNDO was move of TAB marker in ruler
+        if(bHasRuler)
+        {
+            Invalidate(SID_ATTR_TABSTOP);
+        }
+    }
+
+    // This one is corresponding to the default handling
+    // of SID_UNDO in sfx2
+    GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+
+    rReq.Done();
+}
+
+void SdViewShell::ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq)
+{
+    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    sal_uInt16 nNumber(1);
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
+
+    if(pReqArgs)
+    {
+        SfxUInt16Item* pUIntItem = (SfxUInt16Item*)&pReqArgs->Get(SID_REDO);
+        nNumber = pUIntItem->GetValue();
+    }
+
+    if(nNumber && pUndoManager)
+    {
+        sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
+        if(nCount >= nNumber)
+        {
+            // #94637# when UndoStack is cleared by ModifyPageRedoAction
+            // the nCount may have changed, so test GetRedoActionCount()
+            while(nNumber-- && pUndoManager->GetRedoActionCount())
+            {
+                pUndoManager->Redo();
+            }
+        }
+
+        // #91081# refresh rulers, maybe REDO was move of TAB marker in ruler
+        if(bHasRuler)
+        {
+            Invalidate(SID_ATTR_TABSTOP);
+        }
+    }
+
+    // This one is corresponding to the default handling
+    // of SID_UNDO in sfx2
+    GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+
+    rReq.Done();
+}
 
