@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:18:05 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,6 +757,26 @@ void SwFEShell::GetTabCols( SwTabCols &rToFill ) const
 }
 
 /***********************************************************************
+ *  Class      :  SwFEShell
+ *  Methoden   :  SetRowSplit(), GetRowSplit()
+ *  Datum      :  FME 13.11.2003
+ ***********************************************************************/
+
+void SwFEShell::SetRowSplit( const SwFmtRowSplit& rNew )
+{
+    SET_CURR_SHELL( this );
+    StartAllAction();
+    GetDoc()->SetRowSplit( GetShellCursor( *this ), rNew );
+    EndAllActionAndCall();
+}
+
+void SwFEShell::GetRowSplit( SwFmtRowSplit*& rpSz ) const
+{
+    GetDoc()->GetRowSplit( GetShellCursor( *this ), rpSz );
+}
+
+
+/***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetRowHeight(), GetRowHeight()
 #*  Datum      :  MA 17. May. 93
@@ -1393,11 +1413,14 @@ USHORT SwFEShell::GetCurTabColNum() const
 const SwFrm *lcl_FindFrmInTab( const SwLayoutFrm *pLay, const Point &rPt, SwTwips nFuzzy )
 {
     const SwFrm *pFrm = pLay->Lower();
-    do
-    {   if ( pFrm->Frm().IsNear( rPt, nFuzzy ) )
+
+    while( pFrm && pLay->IsAnLower( pFrm ) )
+    {
+        if ( pFrm->Frm().IsNear( rPt, nFuzzy ) )
         {
-            if ( pFrm->IsCellFrm() && ( !((SwCellFrm*)pFrm)->Lower()->IsLayoutFrm() ||
-                ((SwCellFrm*)pFrm)->Lower()->IsSctFrm() ) )
+            if ( pFrm->IsCellFrm() && ((SwCellFrm*)pFrm)->Lower() &&
+                 ( !((SwCellFrm*)pFrm)->Lower()->IsLayoutFrm() ||
+                    ((SwCellFrm*)pFrm)->Lower()->IsSctFrm() ) )
                 return pFrm;
             if ( pFrm->IsLayoutFrm() )
             {
@@ -1408,7 +1431,7 @@ const SwFrm *lcl_FindFrmInTab( const SwLayoutFrm *pLay, const Point &rPt, SwTwip
             break;
         }
         pFrm = pFrm->FindNext();
-    } while ( pFrm && pLay->IsAnLower( pFrm ) );
+    };
 
     return 0;
 }
