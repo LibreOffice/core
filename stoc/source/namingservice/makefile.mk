@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-29 16:41:47 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:11:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,15 +62,15 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET=		namingservice
-USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
+TARGET = namingservice.uno
 ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
+NO_BSYMBOLIC = TRUE
+COMP1TYPELIST = namingservice
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(SALLIB)
 
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP = namingservice.map
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
