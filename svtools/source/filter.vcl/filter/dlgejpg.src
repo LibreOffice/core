@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 21:37:38 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ ModalDialog DLG_EXPORT_JPG
         Text [ italian ] = "1: min. qualità\n100: max. qualità" ;
         Text [ spanish ] = "1: mín. calidad\n100: máx. calidad" ;
         Text [ french ] = "1 : qualité min.\n100 : qualité max." ;
-        Text [ dutch ] = "0: min. kwaliteit\n100: max. kwaliteit" ;
+        Text [ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit" ;
         Text [ swedish ] = "1: min. kvalitet\n100: max. kvalitet" ;
         Text [ danish ] = "0: min. kvalitet\n100: maks. kvalitet" ;
         Text [ portuguese_brazilian ] = "0: min. Qualidade\n100: max. Qualidade" ;
@@ -146,7 +146,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ japanese ] = "1: Å’á\n100: Å‚";
         Text[ chinese_traditional ] = "1: ³Ì®t«~½è \n100: ³Ì¨Î«~½è";
         Text[ arabic ] = "0: ÇáÍÏ ÇáÃÏäì ááÌæÏÉ\n100: ÇáÍÏ ÇáÃŞÕì ááÌæÏÉ";
-        Text[ dutch ] = "0: min. kwaliteit\n100: max. kwaliteit";
+        Text[ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit";
         Text[ chinese_simplified ] = "1: ×î²îÖÊÁ¿ \n100: ×î¼ÑÖÊÁ¿";
         Text[ greek ] = "0: åëÜ÷éóôç ğïéüôçôá\n100: ìİãéóôç ğïéüôçôá";
         Text[ korean ] = "1: ÃÖ¼Ò ¼º´É\n100: ÃÖ´ë ¼º´É";
@@ -183,14 +183,14 @@ ModalDialog DLG_EXPORT_JPG
         Text [ french ] = "Résolution couleur" ;
         Text [ dutch ] = "Kleurdichtheid" ;
         Text [ portuguese ] = "Resolução de cores" ;
-        Text[ chinese_simplified ] = "²ÊÉ«·Ö±æÂÊ";
+        Text[ chinese_simplified ] = "ÑÕÉ«·Ö±æÂÊ";
         Text[ russian ] = "Öâåòîâîå ğàçğåøåíèå";
         Text[ polish ] = "Rozdzielczoœæ kolorów";
         Text[ japanese ] = "F‚Ì‰ğ‘œ“x";
-        Text[ chinese_traditional ] = "±m¦â¸ÑªR«×";
+        Text[ chinese_traditional ] = "?¦â¸ÑªR«×";
         Text[ arabic ] = "ÇÓÊÈÇäÉ Çááæä";
         Text[ dutch ] = "Kleurdichtheid";
-        Text[ chinese_simplified ] = "²ÊÉ«·Ö±æÂÊ";
+        Text[ chinese_simplified ] = "ÑÕÉ«·Ö±æÂÊ";
         Text[ greek ] = "ÁíÜëõóç ÷ñùìÜôùí";
         Text[ korean ] = "ÄÃ·¯ ÇØ»óµµ";
         Text[ turkish ] = "Renk çözünürlüğü";
@@ -277,6 +277,7 @@ ModalDialog DLG_EXPORT_JPG
     Text[ catalan ] = "Opciones JPEG";
     Text[ finnish ] = "JPEG-valinnat";
 };
+
 
 
 
