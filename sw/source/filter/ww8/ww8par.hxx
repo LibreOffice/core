@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:15:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,10 @@ public:
     WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_);
     //Min and Max possible List Levels in Word
     enum ListLevel {nMinLevel=1, nMaxLevel=9};
-    SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, BYTE nLevel) const;
+    //the rParaSprms returns back the original word paragraph indent
+    //sprms which were attached to the original numbering format
+    SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, BYTE nLevel,
+        std::vector<sal_uInt8> &rParaSprms) const;
     SwNumRule* CreateNextRule(bool bSimple);
     ~WW8ListManager();
 private:
@@ -257,8 +260,11 @@ private:
     USHORT       nUniqueList; // current number for creating unique list names
     BYTE* GrpprlHasSprm(USHORT nId, BYTE& rSprms, BYTE nLen);
     WW8LSTInfo* GetLSTByListId(    ULONG  nIdLst     ) const;
+    //the rParaSprms returns back the original word paragraph indent
+    //sprms which are attached to this numbering level
     bool ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet, USHORT nLevelStyle,
-        bool bSetStartNo, std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel);
+        bool bSetStartNo, std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
+        std::vector<sal_uInt8> &rParaSprms);
 
     // Zeichenattribute aus GrpprlChpx
     typedef SfxItemSet* WW8aISet[nMaxLevel];
