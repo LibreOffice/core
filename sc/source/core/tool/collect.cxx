@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-15 16:13:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ void StrCollection::Store( SvStream& rStream ) const
 // TypedStrCollection
 //------------------------------------------------------------------------
 
-TypedStrData::TypedStrData( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
+TypedStrData::TypedStrData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 BOOL bAllStrings )
 {
     if ( pDoc->HasValueData( nCol, nRow, nTab ) )
