@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-09 15:39:33 $
+ *  last change: $Author: dr $ $Date: 2002-07-19 07:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3900,7 +3900,7 @@ ExcSetup::ExcSetup( RootData* pExcRoot ) :
 
         long                nMaxDH = 50;
         long                nMinDH = -nMaxDH;
-        long                nMaxDW = 70;
+        long                nMaxDW = 80;
         long                nMinDW = -nMaxDW;
         long                nDH, nDW;
 
