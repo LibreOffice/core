@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:41:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,20 +345,40 @@ sal_Bool OTimeModel::commitControlValueToDbColumn( bool _bPostReset )
 }
 
 //------------------------------------------------------------------------------
-Any OTimeModel::translateControlValueToValidatableValue( ) const
+Any OTimeModel::translateControlValueToExternalValue( ) const
 {
-    Any aValidatableValue( getControlValue() );
-    if ( aValidatableValue.hasValue() )
+    Any aExternalValue( getControlValue() );
+    if ( aExternalValue.hasValue() )
     {
         sal_Int32 nTime = 0;
-        OSL_ENSURE( aValidatableValue >>= nTime, "OTimeModel::translateControlValueToValidatableValue: invalid time!" );
+        OSL_VERIFY( aExternalValue >>= nTime );
         if ( nTime == ::Time( 99, 99, 99 ).GetTime() )
             // "invalid time" in VCL is different from "invalid time" in UNO
-            aValidatableValue <<= util::Time( -1, -1, -1, -1 );
+            aExternalValue <<= util::Time( -1, -1, -1, -1 );
         else
-            aValidatableValue <<= DBTypeConversion::toTime( nTime );
+            aExternalValue <<= DBTypeConversion::toTime( nTime );
     }
-    return aValidatableValue;
+    return aExternalValue;
+}
+
+//------------------------------------------------------------------------------
+Any OTimeModel::translateExternalValueToControlValue( ) const
+{
+    OSL_PRECOND( hasExternalValueBinding(),
+        "OTimeModel::translateExternalValueToControlValue: precondition not met!" );
+
+    Any aControlValue;
+    if ( hasExternalValueBinding() )
+    {
+        Any aExternalValue = getExternalValueBinding()->getValue( ::getCppuType( static_cast< util::Time* >( NULL ) ) );
+        if ( aExternalValue.hasValue() )
+        {
+            util::Time aTime;
+            OSL_VERIFY( aExternalValue >>= aTime );
+            aControlValue <<= DBTypeConversion::toINT32( aTime );
+        }
+    }
+    return aControlValue;
 }
 
 //------------------------------------------------------------------------------
