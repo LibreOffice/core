@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-29 20:33:31 $
+ *  last change: $Author: sab $ $Date: 2000-11-30 09:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,8 +599,8 @@ XML_CONSTASCII_ACTION( sXML_font_style, "font-style" );
 XML_CONSTASCII_ACTION( sXML_font_style_asian, "font-style-asian" );
 XML_CONSTASCII_ACTION( sXML_font_style_complex, "font-style-complex" );
 XML_CONSTASCII_ACTION( sXML_font_style_name, "font-style-name" );
-XML_CONSTASCII_ACTION( sXML_font_style_name_asian, "font-style-name-asian-complex" );
-XML_CONSTASCII_ACTION( sXML_font_style_name_complex, "font-style-name" );
+XML_CONSTASCII_ACTION( sXML_font_style_name_asian, "font-style-name-asian" );
+XML_CONSTASCII_ACTION( sXML_font_style_name_complex, "font-style-name-complex" );
 XML_CONSTASCII_ACTION( sXML_font_variant, "font-variant" );
 XML_CONSTASCII_ACTION( sXML_font_weight, "font-weight" );
 XML_CONSTASCII_ACTION( sXML_font_weight_asian, "font-weight-asian" );
