@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:29:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1165,7 +1165,7 @@
 #define RID_SC_FUNCTION_DESCRIPTIONS2   (SC_RESOURCE_START+44)
 #define RID_POPUP_CONTROL       (SC_RESOURCE_START+45)
 #define RID_POPUP_PAGEBREAK     (SC_RESOURCE_START+46)
-#define RID_OBJECTBAR_DRAWFORM  (SC_RESOURCE_START+47)
+    // FREE
 #define RID_POPUP_DRAWFORM      (SC_RESOURCE_START+48)
 #define RID_OBJECTMENU_DRAWFORM (SC_RESOURCE_START+49)
 #define RID_SC_ADDIN_ROT13      (SC_RESOURCE_START+50)
