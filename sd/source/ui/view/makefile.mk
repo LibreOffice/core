@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: af $ $Date: 2002-12-02 13:19:03 $
+#   last change: $Author: hr $ $Date: 2003-04-04 16:15:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,7 +145,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/slidvish.obj	
 
 EXCEPTIONSNOOPTFILES=\
-        $(SLO)$/drviews5.obj	
+        $(SLO)$/drviews5.obj\
+        $(SLO)$/drviewsb.obj
 
 SLOFILES =	\
         $(SLO)$/sdview.obj	\
