@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:19:47 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,6 +679,15 @@ UINT32 DffPropSet::GetPropertyValue( UINT32 nId, UINT32 nDefault ) const
     nId &= 0x3ff;
     return ( mpFlags[ nId ].bSet ) ? mpContents[ nId ] : nDefault;
 };
+
+bool DffPropSet::GetPropertyBool( UINT32 nId, bool bDefault ) const
+{
+    UINT32 nBaseId = nId | 31;              // base ID to get the UINT32 property value
+    UINT32 nMask = 1 << (nBaseId - nId);    // bit mask of the boolean property
+
+    UINT32 nPropValue = GetPropertyValue( nBaseId, bDefault ? nMask : 0 );
+    return (nPropValue & nMask) != 0;
+}
 
 void DffPropSet::SetPropertyValue( UINT32 nId, UINT32 nValue ) const
 {
@@ -6103,6 +6112,7 @@ BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
             pGrStream = pOut;
         }
 
+//#define DBG_EXTRACTGRAPHICS
 #ifdef DBG_EXTRACTGRAPHICS
 
         static sal_Int32 nCount;
