@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cyrillem $ $Date: 2002-06-07 16:53:32 $
+#   last change: $Author: jb $ $Date: 2002-06-12 16:42:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,8 @@ SLOFILES=\
     $(SLO)$/updatedispatch.obj \
     $(SLO)$/singlebackendadapter.obj \
     $(SLO)$/backendaccess.obj \
+    $(SLO)$/backendwrap.obj	    \
+    $(SLO)$/backendfactory.obj \
 
 # --- Targets ---
 
