@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2000-11-28 13:03:40 $
+ *  last change: $Author: tl $ $Date: 2000-11-29 16:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,11 +887,11 @@ void SvxLinguData_Impl::Reconfigure(
 
         aConfigured = xLinguSrvcMgr->getConfiguredServices(C2U(cHyph), pAllLocales[nLocale]);
         if(lcl_AddRemove(aConfigured, pRemove, nRemove, pInsert, nInsert))
-            xLinguSrvcMgr->setConfiguredServices(C2U(cSpell), pAllLocales[nLocale], aConfigured);
+            xLinguSrvcMgr->setConfiguredServices(C2U(cHyph), pAllLocales[nLocale], aConfigured);
 
         aConfigured = xLinguSrvcMgr->getConfiguredServices(C2U(cThes), pAllLocales[nLocale]);
         if(lcl_AddRemove(aConfigured, pRemove, nRemove, pInsert, nInsert))
-            xLinguSrvcMgr->setConfiguredServices(C2U(cSpell), pAllLocales[nLocale], aConfigured);
+            xLinguSrvcMgr->setConfiguredServices(C2U(cThes), pAllLocales[nLocale], aConfigured);
     }
 }
 // SvxModulesData_Impl ---------------------------------------------------
