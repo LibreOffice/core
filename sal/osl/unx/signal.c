@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-21 10:07:50 $
+ *  last change: $Author: mfe $ $Date: 2001-03-02 09:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ static struct SignalAction
     void (*Handler)(int);
 } Signals[] =
 {
-    { SIGHUP,    ACT_IGNORE,   NULL },    /* hangup */
+    { SIGHUP,    ACT_IGNORE, NULL },    /* hangup */
     { SIGINT,    ACT_EXIT,   NULL },    /* interrupt (rubout) */
     { SIGQUIT,   ACT_ABORT,  NULL },    /* quit (ASCII FS) */
     { SIGILL,    ACT_ABORT,  NULL },    /* illegal instruction (not reset when caught) */
@@ -248,24 +248,6 @@ static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
     oslSignalHandlerImpl* pHandler = SignalList;
     oslSignalAction Action = osl_Signal_ActCallNextHdl;
 
-    /* PORTAL EA SOFFICE TERMINATION HACK BEGIN */
-    struct sigaction act;
-    struct sigaction oldact;
-    int nRet=0;
-
-    act.sa_flags   = 0;
-    sigemptyset(&(act.sa_mask));
-
-    act.sa_handler=SIG_DFL;
-    nRet = sigaction(SIGALRM,&act,&oldact);
-    if ( nRet < 0 )
-    {
-        OSL_TRACE("sigaction failed : '%s'\n",strerror(errno));
-    }
-
-    alarm(30);
-    /* PORTAL EA SOFFICE TERMINATION HACK END */
-
     while (pHandler != NULL)
     {
         if ((Action = pHandler->Handler(pHandler->pData, pInfo))
@@ -274,11 +256,6 @@ static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
 
         pHandler = pHandler->pNext;
     }
-
-    /* PORTAL EA SOFFICE TERMINATION HACK BEGIN */
-    alarm(0);
-    /* PORTAL EA SOFFICE TERMINATION HACK END */
-
 
     return Action;
 }
@@ -304,7 +281,8 @@ static void CallSystemHandler(int Signal)
             switch (Signals[i].Action)
             {
                 case ACT_EXIT:      /* terminate */
-                    exit(255);
+                    /* prevent dumping core on exit() */
+                    _exit(255);
                     break;
 
                 case ACT_ABORT:     /* terminate witch core dump */
@@ -387,7 +365,8 @@ static void SignalHandlerFunction(int Signal)
         break;
 
     case osl_Signal_ActKillApp:
-        exit(255);
+        /* prevent dumping core on exit() */
+        _exit(255);
         break;
     default:
         break;
