@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-25 11:24:33 $
+ *  last change: $Author: mt $ $Date: 2002-05-27 10:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1193,6 +1193,9 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_BACKGROUNDCOLOR:
                 aProp <<= (sal_Int32) GetWindow()->GetControlBackground().GetColor();
+            break;
+            case BASEPROPERTY_DISPLAYBACKGROUNDCOLOR:
+                aProp <<= (sal_Int32) GetWindow()->GetDisplayBackground().GetColor().GetColor();
             break;
             case BASEPROPERTY_FONTRELIEF:
                 aProp <<= (sal_Int16) GetWindow()->GetControlFont().GetRelief();

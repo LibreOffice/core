@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-17 08:43:07 $
+ *  last change: $Author: mt $ $Date: 2002-05-27 10:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ namespace rtl {
 #define BASEPROPERTY_IMAGEALIGN             86  // sal_Int16
 #define BASEPROPERTY_SCALEIMAGE             87  // sal_Bool
 #define BASEPROPERTY_PUSHBUTTONTYPE         88  // sal_Int16
+#define BASEPROPERTY_DISPLAYBACKGROUNDCOLOR 89  // sal_Int32
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
