@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-24 13:38:09 $
+ *  last change: $Author: cl $ $Date: 2001-10-04 11:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,12 @@
 #include <svx/e3dundo.hxx>
 #endif
 #include <svx/dbexch.hrc>
+#ifndef SVX_UNOMODEL_HXX
+#include <svx/unomodel.hxx>
+#endif
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
 
 #include "docshell.hxx"
 #include "fupoor.hxx"
@@ -580,82 +586,89 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
         {
             BOOL bChanged = FALSE;
 
-            xStm->SetVersion( SOFFICE_FILEFORMAT_50 );
             FmFormModel* pModel = new FmFormModel( SvtPathOptions().GetPalettePath(), NULL, pDocSh );
-            xStm->Seek( 0 );
+            pModel->GetItemPool().SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
+            pModel->GetItemPool().FreezeIdRanges();
+
             pModel->SetStreamingSdrModel( TRUE );
-            pModel->GetItemPool().Load( *xStm );
-            *xStm >> *pModel;
+
+            xStm->Seek( 0 );
+            com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
+            bReturn = SvxDrawingLayerImport( pModel, xInputStream );
+
             pModel->SetStreamingSdrModel( FALSE );
 
-            if( pModel->GetPage( 0 )->GetObjCount() == 1 )
+            if( bReturn )
             {
-                // only one object
-                SdrObject*      pObj = pModel->GetPage( 0 )->GetObj( 0 );
-                SdrObject*      pPickObj = NULL;
-                SdrPageView*    pPV = NULL;
-                BOOL            bPickObj = PickObj( rPos, pPickObj, pPV );
-
-                if( ( nAction & DND_ACTION_MOVE ) && pPickObj && pObj )
+                if( pModel->GetPage( 0 )->GetObjCount() == 1 )
                 {
-                    // replace object
-                    SdrObject*  pNewObj = pObj->Clone();
-                    Rectangle   aPickObjRect( pPickObj->GetBoundRect() );
-                    Size        aPickObjSize( aPickObjRect.GetSize() );
-                    Point       aVec( aPickObjRect.TopLeft() );
-                    Rectangle   aObjRect( pNewObj->GetBoundRect() );
-                    Size        aObjSize( aObjRect.GetSize() );
+                    // only one object
+                    SdrObject*      pObj = pModel->GetPage( 0 )->GetObj( 0 );
+                    SdrObject*      pPickObj = NULL;
+                    SdrPageView*    pPV = NULL;
+                    BOOL            bPickObj = PickObj( rPos, pPickObj, pPV );
 
-                    Fraction aScaleWidth( aPickObjSize.Width(), aObjSize.Width() );
-                    Fraction aScaleHeight( aPickObjSize.Height(), aObjSize.Height() );
-                    pNewObj->NbcResize( aObjRect.TopLeft(), aScaleWidth, aScaleHeight );
-
-                    aVec -= aObjRect.TopLeft();
-                    pNewObj->NbcMove( Size( aVec.X(), aVec.Y() ) );
-
-                    BegUndo( String( SdResId(STR_UNDO_DRAGDROP ) ) );
-                    pNewObj->NbcSetLayer( pPickObj->GetLayer() );
-                    SdrPage* pWorkPage = GetPageViewPvNum( 0 )->GetPage();
-                    pWorkPage->InsertObject( pNewObj );
-                    AddUndo( new SdrUndoNewObj( *pNewObj ) );
-                    AddUndo( new SdrUndoDelObj( *pPickObj ) );
-                    pWorkPage->RemoveObject( pPickObj->GetOrdNum() );
-                    EndUndo();
-                    bChanged = TRUE;
-                    nAction = DND_ACTION_COPY;
-                }
-                else if( ( nAction & DND_ACTION_LINK ) && pPickObj && pObj && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) )
-                {
-                    SfxItemSet aSet( pDoc->GetPool() );
-
-                    // set new attributes to object
-                    BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
-                    AddUndo( new SdrUndoAttrObj( *pPickObj ) );
-                    aSet.Put( pObj->GetItemSet() );
-
-                    // Eckenradius soll nicht uebernommen werden.
-                    // In der Gallery stehen Farbverlauefe (Rechtecke)
-                    // welche den Eckenradius == 0 haben. Dieser soll
-                    // nicht auf das Objekt uebertragen werden.
-                    aSet.ClearItem( SDRATTR_ECKENRADIUS );
-
-                    pPickObj->SetItemSetAndBroadcast( aSet );
-
-                    if( pPickObj->ISA( E3dObject ) && pObj->ISA( E3dObject ) )
+                    if( ( nAction & DND_ACTION_MOVE ) && pPickObj && pObj )
                     {
-                        // Zusaetzlich 3D Attribute handeln
-                        SfxItemSet aNewSet( pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
-                        SfxItemSet aOldSet( pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
+                        // replace object
+                        SdrObject*  pNewObj = pObj->Clone();
+                        Rectangle   aPickObjRect( pPickObj->GetBoundRect() );
+                        Size        aPickObjSize( aPickObjRect.GetSize() );
+                        Point       aVec( aPickObjRect.TopLeft() );
+                        Rectangle   aObjRect( pNewObj->GetBoundRect() );
+                        Size        aObjSize( aObjRect.GetSize() );
 
-                        aOldSet.Put(pPickObj->GetItemSet());
-                        aNewSet.Put( pObj->GetItemSet() );
+                        Fraction aScaleWidth( aPickObjSize.Width(), aObjSize.Width() );
+                        Fraction aScaleHeight( aPickObjSize.Height(), aObjSize.Height() );
+                        pNewObj->NbcResize( aObjRect.TopLeft(), aScaleWidth, aScaleHeight );
 
-                        AddUndo( new E3dAttributesUndoAction( *pDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, FALSE ) );
-                        pPickObj->SetItemSetAndBroadcast( aNewSet );
+                        aVec -= aObjRect.TopLeft();
+                        pNewObj->NbcMove( Size( aVec.X(), aVec.Y() ) );
+
+                        BegUndo( String( SdResId(STR_UNDO_DRAGDROP ) ) );
+                        pNewObj->NbcSetLayer( pPickObj->GetLayer() );
+                        SdrPage* pWorkPage = GetPageViewPvNum( 0 )->GetPage();
+                        pWorkPage->InsertObject( pNewObj );
+                        AddUndo( new SdrUndoNewObj( *pNewObj ) );
+                        AddUndo( new SdrUndoDelObj( *pPickObj ) );
+                        pWorkPage->RemoveObject( pPickObj->GetOrdNum() );
+                        EndUndo();
+                        bChanged = TRUE;
+                        nAction = DND_ACTION_COPY;
                     }
+                    else if( ( nAction & DND_ACTION_LINK ) && pPickObj && pObj && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) )
+                    {
+                        SfxItemSet aSet( pDoc->GetPool() );
 
-                    EndUndo();
-                    bChanged = TRUE;
+                        // set new attributes to object
+                        BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
+                        AddUndo( new SdrUndoAttrObj( *pPickObj ) );
+                        aSet.Put( pObj->GetItemSet() );
+
+                        // Eckenradius soll nicht uebernommen werden.
+                        // In der Gallery stehen Farbverlauefe (Rechtecke)
+                        // welche den Eckenradius == 0 haben. Dieser soll
+                        // nicht auf das Objekt uebertragen werden.
+                        aSet.ClearItem( SDRATTR_ECKENRADIUS );
+
+                        pPickObj->SetItemSetAndBroadcast( aSet );
+
+                        if( pPickObj->ISA( E3dObject ) && pObj->ISA( E3dObject ) )
+                        {
+                            // Zusaetzlich 3D Attribute handeln
+                            SfxItemSet aNewSet( pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
+                            SfxItemSet aOldSet( pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
+
+                            aOldSet.Put(pPickObj->GetItemSet());
+                            aNewSet.Put( pObj->GetItemSet() );
+
+                            AddUndo( new E3dAttributesUndoAction( *pDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, FALSE ) );
+                            pPickObj->SetItemSetAndBroadcast( aNewSet );
+                        }
+
+                        EndUndo();
+                        bChanged = TRUE;
+                    }
                 }
             }
 
