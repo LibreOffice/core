@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-03 13:22:49 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 19:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
                 aPropValue.Value >>= lUserData;
                 if ( lUserData.getLength() == TOKEN_COUNT_FOR_OWN_FILTER )
                 {
-                    aEntry.bHasDialog = lUserData[ TOKEN_INDEX_FOR_HASDIALOG ].equalsIgnoreCase( sTrue );
+                    aEntry.bHasDialog = lUserData[ TOKEN_INDEX_FOR_HASDIALOG ].equalsIgnoreAsciiCase( sTrue );
                     aEntry.CreateFilterName( lUserData[ TOKEN_INDEX_FOR_FILTER ] );
                 }
             }
@@ -408,7 +408,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumber( const String& rFormatName )
     CacheVector::iterator aIter( aImport.begin() );
     while ( aIter != aImport.end() )
     {
-        if ( aIter->sUIName.equalsIgnoreCase( rFormatName ) )
+        if ( aIter->sUIName.equalsIgnoreAsciiCase( rFormatName ) )
             break;
         aIter++;
     }
@@ -420,7 +420,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForMediaType( const String& r
     CacheVector::iterator aIter( aImport.begin() );
     while ( aIter != aImport.end() )
     {
-        if ( aIter->sMediaType.equalsIgnoreCase( rMediaType ) )
+        if ( aIter->sMediaType.equalsIgnoreAsciiCase( rMediaType ) )
             break;
         aIter++;
     }
@@ -432,7 +432,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const String& r
     CacheVector::iterator aIter( aImport.begin() );
     while ( aIter != aImport.end() )
     {
-        if ( aIter->sType.equalsIgnoreCase( rShortName ) )
+        if ( aIter->sType.equalsIgnoreAsciiCase( rShortName ) )
             break;
         aIter++;
     }
@@ -514,7 +514,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumber( const String& rFormatName )
     CacheVector::iterator aIter( aExport.begin() );
     while ( aIter != aExport.end() )
     {
-        if ( aIter->sUIName.equalsIgnoreCase( rFormatName ) )
+        if ( aIter->sUIName.equalsIgnoreAsciiCase( rFormatName ) )
             break;
         aIter++;
     }
@@ -526,7 +526,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const String& r
     CacheVector::iterator aIter( aExport.begin() );
     while ( aIter != aExport.end() )
     {
-        if ( aIter->sMediaType.equalsIgnoreCase( rMediaType ) )
+        if ( aIter->sMediaType.equalsIgnoreAsciiCase( rMediaType ) )
             break;
         aIter++;
     }
@@ -538,7 +538,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const String& r
     CacheVector::iterator aIter( aExport.begin() );
     while ( aIter != aExport.end() )
     {
-        if ( aIter->sType.equalsIgnoreCase( rShortName ) )
+        if ( aIter->sType.equalsIgnoreAsciiCase( rShortName ) )
             break;
         aIter++;
     }

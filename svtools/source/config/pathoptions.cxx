@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 13:21:46 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 19:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         // YES; Get the next variable for replace.
         OUString aReplacement;
         OUString aSubString = aWorkText.copy( nPosition, nLength );
-        aSubString = aSubString.toLowerCase();
+        aSubString = aSubString.toAsciiLowerCase();
         sal_Int32 nReplaceLength = 0;
 
         // -------------------------------------------------------------------------------------------------------------------
