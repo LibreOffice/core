@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-31 12:52:36 $
+ *  last change: $Author: thb $ $Date: 2002-11-04 09:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,9 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
                 break;
         }
 
+        SvtGraphicFill::Transform aTransform;
         SvtGraphicFill::HatchType eHatch;
+        // TODO: Set hatch background color. Do that via multi-texturing
         switch( aHatch.GetHatchStyle() )
         {
             case XHATCH_SINGLE:
@@ -422,6 +424,19 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
             default:
                 DBG_ERROR( "ImpGraphicFill::ImpGraphicFill invalid hatch type");
                 break;
+        }
+
+        if( SvtGraphicFill::fillHatch == eType )
+        {
+            // scale
+            aTransform.matrix[0] *= aHatch.GetDistance();
+            aTransform.matrix[4] *= aHatch.GetDistance();
+
+            // rotate
+            aTransform.matrix[0] *= cos( aHatch.GetAngle() );
+            aTransform.matrix[1] *= -sin( aHatch.GetAngle() );
+            aTransform.matrix[3] *= sin( aHatch.GetAngle() );
+            aTransform.matrix[4] *= cos( aHatch.GetAngle() );
         }
 
         SvtGraphicFill::GradientType eGrad;
@@ -450,19 +465,116 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
                 break;
         }
 
+        Graphic aFillGraphic;
+        bool bTile( ITEMVALUE( rFillItemSet, XATTR_FILLBMP_TILE, SfxBoolItem ) );
+        if( SvtGraphicFill::fillTexture == eType )
+        {
+            Rectangle       aPolyRect( aPolyPoly.GetBoundRect() );
+
+            // avoid reimplementation of tiling and offset calculation
+            // -- simply render our texture into a VDev
+            if( bTile )
+            {
+                OutputDevice* pOut = rXOut.GetOutDev();
+
+                if( pOut )
+                {
+                    // setup VDev
+                    VirtualDevice   aVDev;
+                    MapMode         aMap( pOut->GetMapMode().GetMapUnit() );
+
+                    aVDev.SetOutputSizePixel( pOut->LogicToPixel( aPolyRect, aMap ).GetSize() );
+                    aVDev.SetMapMode( aMap );
+
+                    // setup XOutDev
+                    ExtOutputDevice aXOut( &aVDev );
+                    aXOut.SetFillAttr( rFillItemSet );
+
+                    // render into VDev
+                    aXOut.DrawRect( aPolyRect );
+
+                    // TODO: extract first 2x2 tiles (to cope with the offset variations), instead of the whole content
+                    Size aBmpSize( aVDev.GetOutputSize() );
+                    aFillGraphic = Graphic( aVDev.GetBitmap( Point(), aBmpSize ) );
+                    aFillGraphic.SetPrefMapMode( MapMode(MAP_PIXEL) );
+                    aFillGraphic.SetPrefSize( aBmpSize );
+
+                    if( aBmpSize.Width() == 0 )
+                        aBmpSize.Width() = 1;
+                    if( aBmpSize.Height() == 0 )
+                        aBmpSize.Height() = 1;
+
+                    // setup transformation (scale up to object boundaries)
+                    aTransform.matrix[0] *= (double)aPolyRect.GetWidth() / aBmpSize.Width();
+                    aTransform.matrix[4] *= (double)aPolyRect.GetHeight() / aBmpSize.Height();
+                }
+            }
+            else
+            {
+                // setup fill graphic
+                Bitmap aBitmap( ITEMVALUE( rSet, XATTR_FILLBITMAP, XFillBitmapItem ).GetBitmap() );
+                aFillGraphic = Graphic( aBitmap );
+                aFillGraphic.SetPrefMapMode( MapMode(MAP_PIXEL) );
+                aFillGraphic.SetPrefSize( Size(1, 1) );
+
+                // calc final size
+                BOOL    bStretch = ITEMVALUE( rSet, XATTR_FILLBMP_STRETCH, SfxBoolItem );
+                BOOL    bLogSize = ITEMVALUE( rSet, XATTR_FILLBMP_SIZELOG, SfxBoolItem );
+                Size    aSize( labs( ITEMVALUE( rSet, XATTR_FILLBMP_SIZEX, SfxMetricItem ) ),
+                               labs( ITEMVALUE( rSet, XATTR_FILLBMP_SIZEY, SfxMetricItem ) ) );
+
+                Size    aBmpRenderSize;
+                Size    aBmpSize( aBitmap.GetSizePixel() );
+
+                if( aBmpSize.Width() == 0 )
+                    aBmpSize.Width() = 1;
+                if( aBmpSize.Height() == 0 )
+                    aBmpSize.Height() = 1;
+
+                if( bLogSize )
+                {
+                    aBmpRenderSize = aSize;
+                }
+                else
+                {
+                    aBmpRenderSize.Width() = static_cast<long>( (double)aSize.Width() * aPolyRect.GetWidth() / 100.0 + .5 );
+                    aBmpRenderSize.Height()= static_cast<long>( (double)aSize.Height() * aPolyRect.GetHeight() / 100.0 + .5 );
+                }
+
+                // setup transformation (fill graphic is always centered)
+                if( bStretch )
+                {
+                    // scale
+                    aTransform.matrix[0] *= (double)aPolyRect.GetWidth() / aBmpSize.Width();
+                    aTransform.matrix[4] *= (double)aPolyRect.GetHeight() / aBmpSize.Height();
+                }
+                else
+                {
+                    // scale
+                    aTransform.matrix[0] *= (double)aBmpRenderSize.Width() / aBmpSize.Width();
+                    aTransform.matrix[4] *= (double)aBmpRenderSize.Height() / aBmpSize.Height();
+
+                    // translate
+                    aTransform.matrix[2] += (aPolyRect.GetWidth() - aBmpRenderSize.Width()) / 2.0;
+                    aTransform.matrix[5] += (aPolyRect.GetHeight() - aBmpRenderSize.Height()) / 2.0;
+                }
+            }
+        }
+
         SvtGraphicFill aFill( XOutCreatePolyPolygonBezier( aPolyPoly, rXOut.GetOutDev() ),
                               ITEMVALUE( rFillItemSet, XATTR_FILLCOLOR, XFillColorItem ),
                               ITEMVALUE( rFillItemSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem ) / 100.0,
                               SvtGraphicFill::fillEvenOdd,
                               eType,
-                              SvtGraphicFill::Transform(), // TODO
-                              eType == SvtGraphicFill::fillTexture ? ITEMVALUE( rFillItemSet, XATTR_FILLBMP_TILE, SfxBoolItem ) : false,
+                              aTransform,
+                              SvtGraphicFill::fillTexture == eType ? bTile : false,
                               eHatch,
                               aHatch.GetColor(),
                               eGrad,
                               aGradient.GetStartColor(),
                               aGradient.GetEndColor(),
-                              ITEMVALUE( rFillItemSet, XATTR_FILLBITMAP, XFillBitmapItem ).GetBitmap() );
+                              0 == aGradient.GetSteps() ? SvtGraphicFill::gradientStepsInfinite : aGradient.GetSteps(), // 0 means adaptive/infinite step count
+                              aFillGraphic );
 
 #ifdef DBG_UTIL
         ::rtl::OString aStr( aFill.toString() );
