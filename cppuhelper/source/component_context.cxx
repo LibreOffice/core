@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:51:51 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1117,8 +1117,10 @@ Reference< XComponentContext > SAL_CALL createInitialCfgComponentContext(
         DisposingForwarder::listen( Reference< lang::XComponent >::query( xDelegate ), p );
         return xContext;
     }
-    catch (...)
+    catch (Exception & exc)
     {
+        OSL_ENSURE( 0, OUStringToOString(
+                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         return Reference< XComponentContext >();
     }
 }
@@ -1139,8 +1141,10 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
             DisposingForwarder::listen( Reference< lang::XComponent >::query( xDelegate ), p );
             return xContext;
         }
-        catch (...)
+        catch (Exception & exc)
         {
+            OSL_ENSURE( 0, OUStringToOString(
+                            exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             return Reference< XComponentContext >();
         }
     }
