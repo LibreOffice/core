@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-22 14:13:04 $
+ *  last change: $Author: tra $ $Date: 2001-08-24 07:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,19 +66,11 @@
 #include <sal/types.h>
 #endif
 
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
 #include <objidl.h>
-
-/*
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-
-#ifdef __cplusplus
-}
-#endif
-*/
 
 //--------------------------------------------------------
 // the Mta-Ole clipboard class is for internal use only!
@@ -138,6 +130,8 @@ private:
     static LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static unsigned int WINAPI oleThreadProc( LPVOID pParam );
 
+    static unsigned int WINAPI clipboardChangedNotifierThreadProc( LPVOID pParam );
+
     sal_Bool WaitForThreadReady( ) const;
 
 private:
@@ -149,6 +143,16 @@ private:
     HWND                        m_hwndNextClipViewer;
     LPFNC_CLIPVIEWER_CALLBACK_t m_pfncClipViewerCallback;
     sal_Bool                    m_bInRegisterClipViewer;
+
+    sal_Bool                    m_bRunClipboardNotifierThread;
+    HANDLE                      m_hClipboardChangedNotifierThread;
+    HANDLE                      m_hClipboardChangedNotifierEvents[2];
+    HANDLE&                     m_hClipboardChangedEvent;
+    HANDLE&                     m_hTerminateClipboardChangedNotifierEvent;
+    osl::Mutex                  m_ClipboardChangedEventCountMutex;
+    sal_Int32                   m_ClipboardChangedEventCount;
+
+    osl::Mutex                  m_pfncClipViewerCallbackMutex;
 
     static CMtaOleClipboard*    s_theMtaOleClipboardInst;
 
