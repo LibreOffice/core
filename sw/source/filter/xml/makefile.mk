@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
+#   last change: $Author: mib $ $Date: 2001-07-05 09:50:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,8 +103,7 @@ CXXFILES = \
         xmlitem.cxx	\
         xmlitmpr.cxx	\
         xmlimpit.cxx \
-        xmlexpit.cxx \
-        xmlastpl.cxx
+        xmlexpit.cxx 
 
 SLOFILES =  \
         $(SLO)$/swxml.obj \
@@ -130,8 +129,7 @@ SLOFILES =  \
         $(SLO)$/xmlitem.obj	\
         $(SLO)$/xmlitmpr.obj	\
         $(SLO)$/xmlimpit.obj \
-        $(SLO)$/xmlexpit.obj \
-        $(SLO)$/xmlastpl.obj
+        $(SLO)$/xmlexpit.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/swxml.obj \
