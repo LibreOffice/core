@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyDataSource.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-04 08:22:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com { module sun { module star { module ucb {
     service implementation. Important for those service specifications is also
     to specify which of the optional parts are supported by the implementation.
 */
-service HierarchyDataSource
+published service HierarchyDataSource
 {
     //-------------------------------------------------------------------------
     /** allows creating access objects for specific views such as subsets and
