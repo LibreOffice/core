@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLayoutManagerEventBroadcaster.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:23:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 18:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,12 @@
 //=============================================================================
 /** makes it possible to receive events from a layout manager.
 
-    @see ::drafts::com::sun::star::frame::LayoutManager
+    @see ::com::sun::star::frame::LayoutManager
+
+    @since OOo 2.0.0
  */
-published interface XLayoutManagerEventBroadcaster : com::sun::star::uno::XInterface
+
+interface XLayoutManagerEventBroadcaster : com::sun::star::uno::XInterface
 {
     /** adds a layout manager event listener to the object's listener list.
 
