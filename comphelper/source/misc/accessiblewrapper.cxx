@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblewrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-25 10:59:00 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ using namespace ::comphelper;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::reflection;
 
 //.............................................................................
 namespace comphelper
@@ -115,9 +114,11 @@ namespace comphelper
     {
         void operator()( const AccessibleMap::value_type& _rMapEntry ) const
         {
-            Reference< XComponent > xComp( _rMapEntry.second, UNO_QUERY );
-            if ( xComp.is() )
-                xComp->dispose();
+            Reference< XComponent > xContextComponent;
+            if ( _rMapEntry.second.is() )
+                xContextComponent = xContextComponent.query( _rMapEntry.second->getAccessibleContext() );
+            if ( xContextComponent.is() )
+                xContextComponent->dispose();
         }
     };
 
@@ -190,7 +191,11 @@ namespace comphelper
             // see if we do cache children
             if ( !m_bTransientChildren )
             {
+#if OSL_DEBUG_LEVEL > 0
+                ::std::pair< AccessibleMap::iterator, bool > aPos =
+#endif
                 m_aChildrenMap.insert( AccessibleMap::value_type( _rxKey, xValue ) );
+                OSL_ENSURE( aPos.second, "OWrappedAccessibleChildrenManager::getAccessibleWrapperFor: element was already inserted!" );
 
                 // listen for disposals of inner children - this may happen when the inner context
                 // is the owner for the inner children (it will dispose these children, and of course
@@ -209,7 +214,7 @@ namespace comphelper
     {
         // dispose our children
         ::std::for_each( m_aChildrenMap.begin(), m_aChildrenMap.end(), RemoveEventListener( this ) );
-        ::std::for_each( m_aChildrenMap.begin(), m_aChildrenMap.end(), DisposeMappedChild() );
+        ::std::for_each( m_aChildrenMap.begin(), m_aChildrenMap.end(), DisposeMappedChild( ) );
         // clear our children
         AccessibleMap aMap;
         m_aChildrenMap.swap( aMap );
@@ -297,79 +302,36 @@ namespace comphelper
         // this should come from one of the inner XAccessible's of our children
         Reference< XAccessible > xSource( _rSource.Source, UNO_QUERY );
         AccessibleMap::iterator aDisposedPos = m_aChildrenMap.find( xSource );
-        OSL_ENSURE( m_aChildrenMap.end() != aDisposedPos,
-            "OWrappedAccessibleChildrenManager::disposing: where did this come from?" );
+#if OSL_DEBUG_LEVEL > 0
+        if ( m_aChildrenMap.end() == aDisposedPos )
+        {
+               OSL_ENSURE( sal_False,
+                "OWrappedAccessibleChildrenManager::disposing: where did this come from?" );
+            // helper for dignostics
+            Reference< XAccessible > xOwningAccessible( m_aOwningAccessible );
+            Reference< XAccessibleContext > xContext;
+            try
+            {
+                if ( xOwningAccessible.is() )
+                    xContext = xOwningAccessible->getAccessibleContext();
+                if ( xContext.is() )
+                {
+                    ::rtl::OUString sName = xContext->getAccessibleName();
+                    ::rtl::OUString sDescription = xContext->getAccessibleDescription();
+                    sal_Int32 nPlaceYourBreakpointHere = 0;
+                }
+            }
+            catch( const Exception& e )
+            {
+                e;  // make compiler happy
+                // silent this, it's only diagnostics which failed
+            }
+        }
+#endif
         if ( m_aChildrenMap.end() != aDisposedPos )
         {
             m_aChildrenMap.erase( aDisposedPos );
         }
-    }
-
-    //=========================================================================
-    //= OProxyAggregation
-    //=========================================================================
-    //-------------------------------------------------------------------------
-    OProxyAggregation::OProxyAggregation( const Reference< XMultiServiceFactory >& _rxORB )
-        :m_xORB( _rxORB )
-    {
-    }
-
-    //-------------------------------------------------------------------------
-    void OProxyAggregation::aggregateProxyFor( const Reference< XInterface >& _rxComponent, oslInterlockedCount& _rRefCount,
-            ::cppu::OWeakObject& _rDelegator )
-    {
-        // first a factory for the proxy
-        Reference< XProxyFactory > xFactory(
-            m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ) ),
-            UNO_QUERY
-        );
-        OSL_ENSURE( xFactory.is(), "OProxyAggregation::aggregateProxyFor: could not create a proxy factory!" );
-
-        // then the proxy itself
-        if ( xFactory.is() )
-        {
-            m_xProxyAggregate = xFactory->createProxy( _rxComponent );
-
-            // aggregate the proxy
-            osl_incrementInterlockedCount( &_rRefCount );
-            if ( m_xProxyAggregate.is() )
-            {
-                // At this point in time, the proxy has a ref count of exactly one - in m_xControlContextProxy.
-                // Remember to _not_ reset this member unles the delegator of the proxy has been reset, too!
-                m_xProxyAggregate->setDelegator( _rDelegator );
-            }
-            osl_decrementInterlockedCount( &_rRefCount );
-        }
-    }
-
-    //-------------------------------------------------------------------------
-    Any SAL_CALL OProxyAggregation::queryAggregation( const Type& _rType ) throw (RuntimeException)
-    {
-        return m_xProxyAggregate.is() ? m_xProxyAggregate->queryAggregation( _rType ) : Any();
-    }
-
-    //-------------------------------------------------------------------------
-    Sequence< Type > SAL_CALL OProxyAggregation::getTypes(  ) throw (RuntimeException)
-    {
-        Sequence< Type > aTypes;
-        if ( m_xProxyAggregate.is() )
-        {
-            Reference< XTypeProvider > xTypes;
-            m_xProxyAggregate->queryAggregation( ::getCppuType( &xTypes ) ) >>= xTypes;
-            if ( xTypes.is() )
-                aTypes = xTypes->getTypes();
-        }
-        return aTypes;
-    }
-
-    //-------------------------------------------------------------------------
-    OProxyAggregation::~OProxyAggregation()
-    {
-        if ( m_xProxyAggregate.is() )
-            m_xProxyAggregate->setDelegator( NULL );
-        m_xProxyAggregate.clear();
-            // this should remove the _one_and_only_ "real" reference (means not delegated to
-            // ourself) to this proxy, and thus delete it
     }
 
     //=========================================================================
@@ -378,7 +340,9 @@ namespace comphelper
     //-------------------------------------------------------------------------
     OAccessibleWrapper::OAccessibleWrapper( const Reference< XMultiServiceFactory >& _rxORB,
             const Reference< XAccessible >& _rxInnerAccessible, const Reference< XAccessible >& _rxParentAccessible )
-        :OAccessibleWrapper_Base( _rxORB, _rxInnerAccessible )
+        :OAccessibleWrapper_Base( )
+        ,OComponentProxyAggregation( _rxORB, Reference< XComponent >( _rxInnerAccessible, UNO_QUERY ) )
+        ,m_xInnerAccessible( _rxInnerAccessible )
         ,m_xParentAccessible( _rxParentAccessible )
     {
     }
@@ -386,8 +350,16 @@ namespace comphelper
     //--------------------------------------------------------------------
     OAccessibleWrapper::~OAccessibleWrapper( )
     {
-        implEnsureDisposeInDtor();
+        if ( !m_rBHelper.bDisposed )
+        {
+            acquire();  // to prevent duplicate dtor calls
+            dispose();
+        }
     }
+
+    //--------------------------------------------------------------------
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleWrapper, OComponentProxyAggregation, OAccessibleWrapper_Base )
+    IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleWrapper, OComponentProxyAggregation, OAccessibleWrapper_Base )
 
     //--------------------------------------------------------------------
     Reference< XAccessibleContext > OAccessibleWrapper::getContextNoCreate( ) const
@@ -409,7 +381,7 @@ namespace comphelper
         if ( !xContext.is() )
         {
             // create a new context
-            Reference< XAccessibleContext > xInnerContext = m_xInner->getAccessibleContext( );
+            Reference< XAccessibleContext > xInnerContext = m_xInnerAccessible->getAccessibleContext( );
             if ( xInnerContext.is() )
             {
                 xContext = createAccessibleContext( xInnerContext );
@@ -425,72 +397,189 @@ namespace comphelper
     //= OAccessibleWrapper (implementation)
     //=========================================================================
     //-------------------------------------------------------------------------
-    OAccessibleContextWrapper::OAccessibleContextWrapper(
+    OAccessibleContextWrapperHelper::OAccessibleContextWrapperHelper(
                 const Reference< XMultiServiceFactory >& _rxORB,
+                ::cppu::OBroadcastHelper& _rBHelper,
                 const Reference< XAccessibleContext >& _rxInnerAccessibleContext,
                 const Reference< XAccessible >& _rxOwningAccessible,
                 const Reference< XAccessible >& _rxParentAccessible )
-        :OAccessibleContextWrapper_Base( _rxORB, _rxInnerAccessibleContext )
+        :OComponentProxyAggregationHelper( _rxORB, _rBHelper )
+        ,m_xInnerContext( _rxInnerAccessibleContext )
         ,m_xOwningAccessible( _rxOwningAccessible )
         ,m_xParentAccessible( _rxParentAccessible )
-        ,m_nNotifierClient( 0 )
         ,m_pChildMapper( NULL )
     {
-        // add as event listener add the inner context, because we want to multiplex the AccessibleEvents
-        osl_incrementInterlockedCount( &m_refCount );
-        {
-            Reference< XAccessibleEventBroadcaster > xBroadcaster( m_xInner, UNO_QUERY );
-            if ( xBroadcaster.is() )
-                xBroadcaster->addEventListener( this );
-        }
-        osl_decrementInterlockedCount( &m_refCount );
-
+        // initialize the mapper for our children
         m_pChildMapper = new OWrappedAccessibleChildrenManager( getORB() );
         m_pChildMapper->acquire();
 
         // determine if we're allowed to cache children
-        Reference< XAccessibleStateSet > xStates( m_xInner->getAccessibleStateSet( ) );
-        OSL_ENSURE( xStates.is(), "OAccessibleContextWrapper::OAccessibleContextWrapper: no inner state set!" );
-        m_pChildMapper->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANTS ) );
+        Reference< XAccessibleStateSet > xStates( m_xInnerContext->getAccessibleStateSet( ) );
+        OSL_ENSURE( xStates.is(), "OAccessibleContextWrapperHelper::OAccessibleContextWrapperHelper: no inner state set!" );
+        m_pChildMapper->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANTS) );
 
         m_pChildMapper->setOwningAccessible( m_xOwningAccessible );
     }
 
     //--------------------------------------------------------------------
-    OAccessibleContextWrapper::~OAccessibleContextWrapper( )
+    void OAccessibleContextWrapperHelper::aggregateProxy( oslInterlockedCount& _rRefCount, ::cppu::OWeakObject& _rDelegator )
     {
-        m_pChildMapper->release();
-        m_pChildMapper = NULL;
+        Reference< XComponent > xInnerComponent( m_xInnerContext, UNO_QUERY );
+        OSL_ENSURE( xInnerComponent.is(), "OComponentProxyAggregation::aggregateProxy: accessible is no XComponent!" );
+        if ( xInnerComponent.is() )
+            OComponentProxyAggregationHelper::aggregateProxyFor( xInnerComponent, _rRefCount, _rDelegator );
 
-        implEnsureDisposeInDtor();
+        // add as event listener to the inner context, because we want to multiplex the AccessibleEvents
+        osl_incrementInterlockedCount( &_rRefCount );
+        {
+            Reference< XAccessibleEventBroadcaster > xBroadcaster( m_xInner, UNO_QUERY );
+            if ( xBroadcaster.is() )
+                xBroadcaster->addEventListener( this );
+        }
+        osl_decrementInterlockedCount( &_rRefCount );
     }
 
     //--------------------------------------------------------------------
-    //  IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleContextWrapper, OAccessibleContextWrapper_Base, OAccessibleContextWrapper_MBase )
-    IMPLEMENT_FORWARD_REFCOUNT( OAccessibleContextWrapper, OAccessibleContextWrapper_Base )
-    ::com::sun::star::uno::Any SAL_CALL OAccessibleContextWrapper::queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException)
+    OAccessibleContextWrapperHelper::~OAccessibleContextWrapperHelper( )
     {
-        ::com::sun::star::uno::Any aReturn = OAccessibleContextWrapper_MBase::queryInterface( _rType );
+        OSL_ENSURE( m_rBHelper.bDisposed, "OAccessibleContextWrapperHelper::~OAccessibleContextWrapperHelper: you should ensure (in your dtor) that the object is disposed!" );
+
+        m_pChildMapper->release();
+        m_pChildMapper = NULL;
+    }
+
+    //--------------------------------------------------------------------
+    Any SAL_CALL OAccessibleContextWrapperHelper::queryInterface( const Type& _rType ) throw (RuntimeException)
+    {
+        Any aReturn = OComponentProxyAggregationHelper::queryInterface( _rType );
         if ( !aReturn.hasValue() )
-            aReturn = OAccessibleContextWrapper_Base::queryInterface( _rType );
+            aReturn = OAccessibleContextWrapperHelper_Base::queryInterface( _rType );
         return aReturn;
     }
 
     //--------------------------------------------------------------------
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleContextWrapper, OAccessibleContextWrapper_Base, OAccessibleContextWrapper_MBase )
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleContextWrapperHelper, OComponentProxyAggregationHelper, OAccessibleContextWrapperHelper_Base )
+
+    //--------------------------------------------------------------------
+    sal_Int32 SAL_CALL OAccessibleContextWrapperHelper::getAccessibleChildCount(  ) throw (RuntimeException)
+    {
+        return m_xInnerContext->getAccessibleChildCount();
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XAccessible > SAL_CALL OAccessibleContextWrapperHelper::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
+    {
+        // get the child of the wrapped component
+        Reference< XAccessible > xInnerChild = m_xInnerContext->getAccessibleChild( i );
+        return m_pChildMapper->getAccessibleWrapperFor( xInnerChild );
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XAccessibleRelationSet > SAL_CALL OAccessibleContextWrapperHelper::getAccessibleRelationSet(  ) throw (RuntimeException)
+    {
+        return m_xInnerContext->getAccessibleRelationSet();
+            // TODO: if this relation set would contain relations to siblings, we would normally need
+            // to wrap them, too ....
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OAccessibleContextWrapperHelper::notifyEvent( const AccessibleEventObject& _rEvent ) throw (RuntimeException)
+    {
+#if OSL_DEBUG_LEVEL > 0
+        if ( AccessibleEventId::STATE_CHANGED == _rEvent.EventId )
+        {
+            sal_Bool bChildTransienceChanged = sal_False;
+            sal_Int16 nChangeState;
+            if ( _rEvent.OldValue >>= nChangeState )
+                bChildTransienceChanged = bChildTransienceChanged || AccessibleStateType::MANAGES_DESCENDANTS == nChangeState;
+            if ( _rEvent.NewValue >>= nChangeState )
+                bChildTransienceChanged = bChildTransienceChanged || AccessibleStateType::MANAGES_DESCENDANTS == nChangeState;
+            OSL_ENSURE( !bChildTransienceChanged, "OAccessibleContextWrapperHelper::notifyEvent: MANAGES_DESCENDANTS is not expected to change during runtime!" );
+                // if this asserts, then we would need to update our m_bTransientChildren flag here,
+                // as well as (potentially) our child cache
+        }
+#endif
+        AccessibleEventObject aTranslatedEvent( _rEvent );
+
+        {
+            ::osl::MutexGuard aGuard( m_rBHelper.rMutex );
+
+            // translate the event
+            queryInterface( ::getCppuType( static_cast< Reference< XInterface >* >( NULL ) ) ) >>= aTranslatedEvent.Source;
+            m_pChildMapper->translateAccessibleEvent( _rEvent, aTranslatedEvent );
+
+            // see if any of these notifications affect our child manager
+            m_pChildMapper->handleChildNotification( _rEvent );
+
+            if ( aTranslatedEvent.NewValue == m_xInner )
+                aTranslatedEvent.NewValue = makeAny(aTranslatedEvent.Source);
+            if ( aTranslatedEvent.OldValue == m_xInner )
+                aTranslatedEvent.OldValue = makeAny(aTranslatedEvent.Source);
+        }
+
+        notifyTranslatedEvent( aTranslatedEvent );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OAccessibleContextWrapperHelper::dispose() throw( RuntimeException )
+    {
+        ::osl::MutexGuard aGuard( m_rBHelper.rMutex );
+
+        // stop multiplexing events
+        Reference< XAccessibleEventBroadcaster > xBroadcaster( m_xInner, UNO_QUERY );
+        OSL_ENSURE( xBroadcaster.is(), "OAccessibleContextWrapperHelper::disposing(): inner context is no broadcaster!" );
+        if ( xBroadcaster.is() )
+            xBroadcaster->removeEventListener( this );
+
+        // dispose the child cache/map
+        m_pChildMapper->dispose();
+
+        // let the base class dispose the inner component
+        OComponentProxyAggregationHelper::dispose();
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OAccessibleContextWrapperHelper::disposing( const EventObject& _rEvent )  throw (RuntimeException)
+    {
+        // simply disambiguate this
+        OComponentProxyAggregationHelper::disposing( _rEvent );
+    }
+
+    //====================================================================
+    //= OAccessibleContextWrapper
+    //====================================================================
+    //--------------------------------------------------------------------
+    IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleContextWrapper, OAccessibleContextWrapper_CBase, OAccessibleContextWrapperHelper )
+
+    //--------------------------------------------------------------------
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleContextWrapper, OAccessibleContextWrapper_CBase, OAccessibleContextWrapperHelper )
+
+    //--------------------------------------------------------------------
+    OAccessibleContextWrapper::OAccessibleContextWrapper( const Reference< XMultiServiceFactory >& _rxORB,
+            const Reference< XAccessibleContext >& _rxInnerAccessibleContext, const Reference< XAccessible >& _rxOwningAccessible,
+            const Reference< XAccessible >& _rxParentAccessible )
+        :OAccessibleContextWrapper_CBase( m_aMutex )
+        ,OAccessibleContextWrapperHelper( _rxORB, rBHelper, _rxInnerAccessibleContext, _rxOwningAccessible, _rxParentAccessible )
+        ,m_nNotifierClient( 0 )
+    {
+        aggregateProxy( m_refCount, *this );
+    }
+
+    //--------------------------------------------------------------------
+    OAccessibleContextWrapper::~OAccessibleContextWrapper()
+    {
+    }
 
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL OAccessibleContextWrapper::getAccessibleChildCount(  ) throw (RuntimeException)
     {
-        return m_xInner->getAccessibleChildCount();
+        return OAccessibleContextWrapperHelper::getAccessibleChildCount();
     }
 
     //--------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL OAccessibleContextWrapper::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        // get the child of the wrapped component
-        Reference< XAccessible > xInnerChild = m_xInner->getAccessibleChild( i );
-        return m_pChildMapper->getAccessibleWrapperFor( xInnerChild );
+        return OAccessibleContextWrapperHelper::getAccessibleChild( i );
     }
 
     //--------------------------------------------------------------------
@@ -502,45 +591,50 @@ namespace comphelper
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL OAccessibleContextWrapper::getAccessibleIndexInParent(  ) throw (RuntimeException)
     {
-        return m_xInner->getAccessibleIndexInParent();
+        return m_xInnerContext->getAccessibleIndexInParent();
     }
 
     //--------------------------------------------------------------------
     sal_Int16 SAL_CALL OAccessibleContextWrapper::getAccessibleRole(  ) throw (RuntimeException)
     {
-        return m_xInner->getAccessibleRole();
+        return m_xInnerContext->getAccessibleRole();
     }
 
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OAccessibleContextWrapper::getAccessibleDescription(  ) throw (RuntimeException)
     {
-        return m_xInner->getAccessibleDescription();
+        return m_xInnerContext->getAccessibleDescription();
     }
 
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OAccessibleContextWrapper::getAccessibleName(  ) throw (RuntimeException)
     {
-        return m_xInner->getAccessibleName();
+        return m_xInnerContext->getAccessibleName();
     }
 
     //--------------------------------------------------------------------
     Reference< XAccessibleRelationSet > SAL_CALL OAccessibleContextWrapper::getAccessibleRelationSet(  ) throw (RuntimeException)
     {
-        return m_xInner->getAccessibleRelationSet();
-            // TODO: if this relation set would contain relations to siblings, we would normally need
-            // to wrap them, too ....
+        return OAccessibleContextWrapperHelper::getAccessibleRelationSet();
     }
 
     //--------------------------------------------------------------------
     Reference< XAccessibleStateSet > SAL_CALL OAccessibleContextWrapper::getAccessibleStateSet(  ) throw (RuntimeException)
     {
-        return m_xInner->getAccessibleStateSet();
+        return m_xInnerContext->getAccessibleStateSet();
     }
 
     //--------------------------------------------------------------------
     Locale SAL_CALL OAccessibleContextWrapper::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
     {
-        return m_xInner->getLocale();
+        return m_xInnerContext->getLocale();
+    }
+
+    //--------------------------------------------------------------------
+    void OAccessibleContextWrapper::notifyTranslatedEvent( const AccessibleEventObject& _rEvent ) throw (RuntimeException)
+    {
+        if ( m_nNotifierClient )
+            AccessibleEventNotifier::addEvent( m_nNotifierClient, _rEvent );
     }
 
     //--------------------------------------------------------------------
@@ -568,52 +662,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OAccessibleContextWrapper::notifyEvent( const AccessibleEventObject& _rEvent ) throw (RuntimeException)
-    {
-#if OSL_DEBUG_LEVEL > 0
-        if ( AccessibleEventId::STATE_CHANGED == _rEvent.EventId )
-        {
-            sal_Bool bChildTransienceChanged = sal_False;
-            sal_Int16 nChangeState;
-            if ( _rEvent.OldValue >>= nChangeState )
-                bChildTransienceChanged = bChildTransienceChanged || AccessibleStateType::MANAGES_DESCENDANTS == nChangeState;
-            if ( _rEvent.NewValue >>= nChangeState )
-                bChildTransienceChanged = bChildTransienceChanged || AccessibleStateType::MANAGES_DESCENDANTS == nChangeState;
-            OSL_ENSURE( !bChildTransienceChanged, "OAccessibleContextWrapper::notifyEvent: MANAGES_DESCENDANTS is not expected to change during runtime!" );
-                // if this asserts, then we would need to update our m_bTransientChildren flag here,
-                // as well as (potentially) our child cache
-        }
-#endif
-        AccessibleEventNotifier::TClientId  nClientId( 0 );
-        AccessibleEventObject               aTranslatedEvent( _rEvent );
-
-        {
-            ::osl::MutexGuard aGuard( m_aMutex );
-
-            // see if any of these notifications affect our child manager
-            m_pChildMapper->handleChildNotification( _rEvent );
-
-            // see if we need to multiplex this event
-            if ( !m_nNotifierClient )
-                // no client id => no listeners => no need to multiplex
-                return;
-
-            aTranslatedEvent.Source = *this;
-            m_pChildMapper->translateAccessibleEvent( _rEvent, aTranslatedEvent );
-            if ( aTranslatedEvent.NewValue == m_xInner )
-                aTranslatedEvent.NewValue = makeAny(aTranslatedEvent.Source);
-            if ( aTranslatedEvent.OldValue == m_xInner )
-                aTranslatedEvent.OldValue = makeAny(aTranslatedEvent.Source);
-
-            // to prevent races:
-            nClientId = m_nNotifierClient;
-        }
-
-        AccessibleEventNotifier::addEvent( nClientId, aTranslatedEvent );
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL OAccessibleContextWrapper::disposing() throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OAccessibleContextWrapper::disposing()  throw (RuntimeException)
     {
         AccessibleEventNotifier::TClientId nClientId( 0 );
 
@@ -627,30 +676,22 @@ namespace comphelper
                 nClientId = m_nNotifierClient;
                 m_nNotifierClient = 0;
             }
-
-            // dispose the child cache/map
-            m_pChildMapper->dispose();
-
-            // let the base class dispose the inner object
-            // before we do this, remove ourself as listener
-            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventBroadcaster > xBroadcaster( m_xInner, ::com::sun::star::uno::UNO_QUERY );
-            OSL_ENSURE( xBroadcaster.is(), "OAccessibleContextWrapper::disposing(): inner context is no broadcaster!" );
-            if ( xBroadcaster.is() )
-                xBroadcaster->removeEventListener( this );
-
-            OAccessibleContextWrapper_Base::disposing();
         }
         // --- </mutex lock> -----------------------------------------
 
+        // let the base class do
+        OAccessibleContextWrapperHelper::dispose();
+
+        // notify the disposal
         if ( nClientId )
             AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, *this );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OAccessibleContextWrapper::disposing( const EventObject& _rEvent )  throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OAccessibleContextWrapper::dispose() throw( RuntimeException )
     {
-        // simply disambiguate this
-        OAccessibleContextWrapper_Base::disposing( _rEvent );
+        // simply disambiguate
+        OComponentProxyAggregation_CBase::dispose();
     }
 
 //.............................................................................
