@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Linguistic.xcs,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 12:54:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@
 					<desc>Checks spelling automatically.</desc>
 					<label>Automatic spellchecking</label>
 				</info>
-				<value>false</value>
+				<value>true</value>
 			</prop>
 			<prop oor:name="IsSpellSpecial" oor:type="xs:boolean">
 				<!-- OldPath: MiscOptions / SpellOptions -->
