@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.45 2003-12-16 12:28:37 vg Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.46 2004-03-15 12:48:59 obo Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: vg $ $Date: 2003-12-16 12:28:37 $ $Revision: 1.45 $
+//	$Author: obo $ $Date: 2004-03-15 12:48:59 $ $Revision: 1.46 $
 //
 // Description:
 //
@@ -82,7 +82,7 @@ static ::rtl::OUString aEmptyString;
 
 static connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
 							     const connectivity::SQLNodeType eNodeType,
-								 const sal_uInt16 nNodeID = 0)
+								 const sal_uInt32 nNodeID = 0)
 {
 
 	return new connectivity::OSQLInternalNode(pNewValue, eNodeType, nNodeID);
@@ -90,7 +90,7 @@ static connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
 
 static connectivity::OSQLInternalNode* newNode(const ::rtl::OString& _NewValue,
 							    const connectivity::SQLNodeType eNodeType,
-								const sal_uInt16 nNodeID = 0)
+								const sal_uInt32 nNodeID = 0)
 {
 
 	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
@@ -98,7 +98,7 @@ static connectivity::OSQLInternalNode* newNode(const ::rtl::OString& _NewValue,
 
 static connectivity::OSQLInternalNode* newNode(const ::rtl::OUString& _NewValue,
 							    const connectivity::SQLNodeType eNodeType,
-								const sal_uInt16 nNodeID = 0)
+								const sal_uInt32 nNodeID = 0)
 {
 
 	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
@@ -186,7 +186,7 @@ using namespace connectivity;
 
 /* numeric functions */
 %token <pParseNode> SQL_TOKEN_ABS SQL_TOKEN_ACOS SQL_TOKEN_ASIN SQL_TOKEN_ATAN SQL_TOKEN_ATAN2 SQL_TOKEN_CEILING 
-%token <pParseNode> SQL_TOKEN_COS SQL_TOKEN_COT SQL_TOKEN_DEGREES SQL_TOKEN_EXP SQL_TOKEN_DIV SQL_TOKEN_FLOOR SQL_TOKEN_LOGF    
+%token <pParseNode> SQL_TOKEN_COS SQL_TOKEN_COT SQL_TOKEN_DEGREES SQL_TOKEN_EXP SQL_TOKEN_DIV SQL_TOKEN_FLOOR SQL_TOKEN_LOGF SQL_TOKEN_LN   
 %token <pParseNode> SQL_TOKEN_LOG10 SQL_TOKEN_MOD SQL_TOKEN_PI SQL_TOKEN_POWER SQL_TOKEN_RADIANS SQL_TOKEN_RAND    
 %token <pParseNode> SQL_TOKEN_ROUND   SQL_TOKEN_SIGN    SQL_TOKEN_SIN     SQL_TOKEN_SQRT    SQL_TOKEN_TAN SQL_TOKEN_TRUNCATE
 
@@ -1900,7 +1900,8 @@ numeric_function_1Argument:
 	|	SQL_TOKEN_SQRT            
 	|	SQL_TOKEN_TAN             
 	|	SQL_TOKEN_EXP             
-	|	SQL_TOKEN_LOG10           
+	|	SQL_TOKEN_LOG10
+	|	SQL_TOKEN_LN
 	|	SQL_TOKEN_RADIANS         
 	;
 numeric_function_2Argument:
@@ -3251,7 +3252,7 @@ const double fMilliSecondsPerDay = 86400000.0;
 	{
 		sal_Char cEscape = 0;
 		if (pEscapeNode->count())
-			cEscape = pEscapeNode->getChild(1)->getTokenValue().toChar();
+			cEscape = static_cast<sal_Char>(pEscapeNode->getChild(1)->getTokenValue().toChar());
 
 		// Platzhalter austauschen
 		aMatchStr = pTokenNode->getTokenValue();
@@ -3260,7 +3261,7 @@ const double fMilliSecondsPerDay = 86400000.0;
 		const sal_Char* sReplace = bInternational ? "*?" : "%_";
 		for (sal_Int32 i = 0; i < nLen; i++)
 		{
-			sal_Char c = aMatchStr.getStr()[i];
+			sal_Char c = static_cast<sal_Char>(aMatchStr.getStr()[i]);
 			if (c == sSearch[0] || c == sSearch[1])
 			{
 				if (i > 0 && aMatchStr.getStr()[i-1] == cEscape)
@@ -3450,7 +3451,7 @@ sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
 {
 	// In yysvar nach dem angegebenen Namen suchen, den ::com::sun::star::sdbcx::Index zurueckliefern
 	// (oder 0, wenn nicht gefunden)
-	static sal_Int32 nLen = sizeof(yytname)/sizeof(yytname[0]);
+	static sal_uInt32 nLen = sizeof(yytname)/sizeof(yytname[0]);
 	for (sal_uInt32 i = YYTRANSLATE(SQL_TOKEN_INVALIDSYMBOL); i < (nLen-1); i++)
 	{
 		if (yytname && rValue == yytname[i])
@@ -3649,7 +3650,7 @@ sal_Int16 OSQLParser::buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,
 	return 1;
 }
 //-----------------------------------------------------------------------------
-sal_Int16 OSQLParser::buildNode_Date(const double& fValue, sal_Int16 nType, OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare)
+sal_Int16 OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType, OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare)
 {
 	OSQLParseNode* pColumnRef = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 	pColumnRef->append(new OSQLInternalNode(m_sFieldName,SQL_NODE_NAME));
