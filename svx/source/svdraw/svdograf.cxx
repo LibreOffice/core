@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-01 12:40:13 $
+ *  last change: $Author: ka $ $Date: 2001-08-09 08:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,23 +584,25 @@ UINT16 SdrGrafObj::GetObjIdentifier() const
 // Liefert FALSE, wenn die Pres-Bitmap zu gross ist
 FASTBOOL SdrGrafObj::ImpPaintEmptyPres( OutputDevice* pOutDev ) const
 {
-    Size        aSizePix( pOutDev->LogicToPixel( pGraphic->GetPrefSize(), pGraphic->GetPrefMapMode() ) );
-    Size        aSize( pOutDev->PixelToLogic( aSizePix ) );
-    Point       aPos( aRect.Center() );
-    FASTBOOL    bRet;
+    const MapMode   aDstMapMode( pOutDev->GetMapMode().GetMapUnit() );
+    Point           aPos( aRect.Center() );
+    Size            aSize;
+    FASTBOOL        bRet;
 
-    aPos.X() -= aSize.Width() >> 1;
-    aPos.Y() -= aSize.Height() >> 1;
+    if( pGraphic->GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+        aSize = pOutDev->PixelToLogic( pGraphic->GetPrefSize(), aDstMapMode );
+    else
+        aSize = pOutDev->LogicToLogic( pGraphic->GetPrefSize(), pGraphic->GetPrefMapMode(), aDstMapMode );
 
-    if( aPos.X() > aRect.Left() && aPos.Y() > aRect.Top())
+    aPos.X() -= ( aSize.Width() >> 1 );
+    aPos.Y() -= ( aSize.Height() >> 1 );
+
+    if( aPos.X() >= aRect.Left() && aPos.Y() >= aRect.Top() )
     {
         const Graphic& rGraphic = pGraphic->GetGraphic();
 
         if( pGraphic->GetType() == GRAPHIC_BITMAP )
-        {
-            const Size aSz( pOutDev->PixelToLogic( rGraphic.GetBitmap().GetSizePixel() ) );
-            pGraphic->Draw( pOutDev, aPos, aSz, NULL );
-        }
+            pGraphic->Draw( pOutDev, aPos, aSize, NULL );
         else
         {
             const ULONG nOldDrawMode = pOutDev->GetDrawMode();
@@ -613,11 +615,10 @@ FASTBOOL SdrGrafObj::ImpPaintEmptyPres( OutputDevice* pOutDev ) const
                 pOutDev->SetDrawMode( nNewDrawMode |= DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL  );
             }
 
-            rGraphic.Draw( pOutDev, aPos );
+            rGraphic.Draw( pOutDev, aPos, aSize );
             pOutDev->SetDrawMode( nOldDrawMode );
         }
 
-        pOutDev->SetFillColor();
         bRet = TRUE;
     }
     else
