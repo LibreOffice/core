@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callablestatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,9 @@ Sequence< ::rtl::OUString > OCallableStatement::getSupportedServiceNames(  ) thr
 void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+
 
     Reference< XOutParameters >(m_xAggregateAsSet, UNO_QUERY)->registerOutParameter( parameterIndex, sqlType, typeName );
 }
@@ -169,8 +170,7 @@ void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex
 void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     Reference< XOutParameters >(m_xAggregateAsSet, UNO_QUERY)->registerNumericOutParameter( parameterIndex, sqlType, scale );
 }
@@ -180,8 +180,7 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
 sal_Bool SAL_CALL OCallableStatement::wasNull(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->wasNull();
 }
@@ -190,8 +189,7 @@ sal_Bool SAL_CALL OCallableStatement::wasNull(  ) throw(SQLException, RuntimeExc
 ::rtl::OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getString( columnIndex );
 }
@@ -200,8 +198,7 @@ sal_Bool SAL_CALL OCallableStatement::wasNull(  ) throw(SQLException, RuntimeExc
 sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBoolean( columnIndex );
 }
@@ -210,8 +207,7 @@ sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex ) throw(
 sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getByte( columnIndex );
 }
@@ -220,9 +216,7 @@ sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex ) throw(SQL
 sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getShort( columnIndex );
 }
 
@@ -230,9 +224,7 @@ sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex ) throw(S
 sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getInt( columnIndex );
 }
 
@@ -240,9 +232,7 @@ sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex ) throw(SQL
 sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getLong( columnIndex );
 }
 
@@ -250,9 +240,7 @@ sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex ) throw(SQ
 float SAL_CALL OCallableStatement::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getFloat( columnIndex );
 }
 
@@ -260,9 +248,7 @@ float SAL_CALL OCallableStatement::getFloat( sal_Int32 columnIndex ) throw(SQLEx
 double SAL_CALL OCallableStatement::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getDouble( columnIndex );
 }
 
@@ -270,9 +256,7 @@ double SAL_CALL OCallableStatement::getDouble( sal_Int32 columnIndex ) throw(SQL
 Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBytes( columnIndex );
 }
 
@@ -280,9 +264,7 @@ Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnInde
 ::com::sun::star::util::Date SAL_CALL OCallableStatement::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getDate( columnIndex );
 }
 
@@ -290,9 +272,7 @@ Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnInde
 ::com::sun::star::util::Time SAL_CALL OCallableStatement::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getTime( columnIndex );
 }
 
@@ -300,8 +280,7 @@ Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnInde
 ::com::sun::star::util::DateTime SAL_CALL OCallableStatement::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getTimestamp( columnIndex );
 }
@@ -310,8 +289,7 @@ Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnInde
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBinaryStream( columnIndex );
 }
@@ -320,8 +298,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCallableStatement::get
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCallableStatement::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getCharacterStream( columnIndex );
 }
@@ -330,8 +307,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCallableStatement::get
 Any SAL_CALL OCallableStatement::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getObject( columnIndex, typeMap );
 }
@@ -340,9 +316,7 @@ Any SAL_CALL OCallableStatement::getObject( sal_Int32 columnIndex, const Referen
 Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getRef( columnIndex );
 }
 
@@ -350,9 +324,7 @@ Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 columnIndex ) t
 Reference< XBlob > SAL_CALL OCallableStatement::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBlob( columnIndex );
 }
 
@@ -360,9 +332,7 @@ Reference< XBlob > SAL_CALL OCallableStatement::getBlob( sal_Int32 columnIndex )
 Reference< XClob > SAL_CALL OCallableStatement::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getClob( columnIndex );
 }
 
@@ -370,9 +340,7 @@ Reference< XClob > SAL_CALL OCallableStatement::getClob( sal_Int32 columnIndex )
 Reference< XArray > SAL_CALL OCallableStatement::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getArray( columnIndex );
 }
 

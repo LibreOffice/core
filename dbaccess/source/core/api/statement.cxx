@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:13:59 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,8 +207,7 @@ void OStatementBase::close(void) throw( SQLException, RuntimeException )
 {
     {
         MutexGuard aGuard( m_aMutex );
-        if (OComponentHelper::rBHelper.bDisposed)
-            throw DisposedException();
+        ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     }
     dispose();
 }
@@ -311,8 +310,7 @@ void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
 Any OStatementBase::getWarnings(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     return Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY)->getWarnings();
 }
@@ -321,8 +319,7 @@ Any OStatementBase::getWarnings(void) throw( SQLException, RuntimeException )
 void OStatementBase::clearWarnings(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY)->clearWarnings();
 }
@@ -343,8 +340,7 @@ void OStatementBase::cancel(void) throw( RuntimeException )
 Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsMultipleResultSets())
@@ -357,8 +353,7 @@ Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLExcep
 sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsMultipleResultSets())
@@ -371,8 +366,7 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, Runtim
 sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsMultipleResultSets())
@@ -389,8 +383,7 @@ sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, Runtime
 void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsBatchUpdates())
@@ -403,8 +396,7 @@ void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsBatchUpdates())
@@ -417,8 +409,7 @@ void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeExceptio
 Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsBatchUpdates())
@@ -512,8 +503,7 @@ Sequence< ::rtl::OUString > OStatement::getSupportedServiceNames(  ) throw (Runt
 Reference< XResultSet > OStatement::executeQuery(const rtl::OUString& sql) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     disposeResultSet();
 
@@ -534,8 +524,7 @@ Reference< XResultSet > OStatement::executeQuery(const rtl::OUString& sql) throw
 sal_Int32 OStatement::executeUpdate(const rtl::OUString& sql) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     disposeResultSet();
 
@@ -546,8 +535,7 @@ sal_Int32 OStatement::executeUpdate(const rtl::OUString& sql) throw( SQLExceptio
 sal_Bool OStatement::execute(const rtl::OUString& sql) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     disposeResultSet();
     return Reference< XStatement >(m_xAggregateAsSet, UNO_QUERY)->execute(sql);

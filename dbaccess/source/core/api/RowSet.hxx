@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 11:11:15 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,12 @@ namespace dbaccess
         // inform the clones that we will delete some records
         void notifyClonesRowDelete(const ::com::sun::star::uno::Any& _rBookmark);
         void checkUpdateIterator();
+        ORowSetValue getInsertValue(sal_Int32 columnIndex);
+        void setParameter(sal_Int32 parameterIndex, const ORowSetValue& x);
+        // resizes the parameter vector if nescessary
+        void checkAndResizeParameters(sal_Int32 parameterIndex);
+        void updateValue(sal_Int32 columnIndex,const ORowSetValue& x);
+        void checkUpdateConditions(sal_Int32 columnIndex);
 
     protected:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
@@ -455,6 +461,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.22  2001/05/07 11:11:15  oj
+    #86483# set columns only null
+
     Revision 1.21  2001/04/12 09:32:26  fs
     #84852# make ActiveConnection a bound property
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datacolumn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:32:18 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,8 +181,7 @@ void ODataColumn::disposing()
 sal_Bool ODataColumn::wasNull(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->wasNull();
 }
@@ -191,8 +190,7 @@ sal_Bool ODataColumn::wasNull(void) throw( SQLException, RuntimeException )
 rtl::OUString ODataColumn::getString(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getString(m_nPos);
 }
@@ -201,8 +199,7 @@ rtl::OUString ODataColumn::getString(void) throw( SQLException, RuntimeException
 sal_Bool ODataColumn::getBoolean(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getBoolean(m_nPos);
 }
@@ -211,8 +208,7 @@ sal_Bool ODataColumn::getBoolean(void) throw( SQLException, RuntimeException )
 sal_Int8 ODataColumn::getByte(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getByte(m_nPos);
 }
@@ -221,8 +217,7 @@ sal_Int8 ODataColumn::getByte(void) throw( SQLException, RuntimeException )
 sal_Int16 ODataColumn::getShort(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getShort(m_nPos);
 }
@@ -231,8 +226,7 @@ sal_Int16 ODataColumn::getShort(void) throw( SQLException, RuntimeException )
 sal_Int32 ODataColumn::getInt(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getInt(m_nPos);
 }
@@ -241,8 +235,7 @@ sal_Int32 ODataColumn::getInt(void) throw( SQLException, RuntimeException )
 sal_Int64 ODataColumn::getLong(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getLong(m_nPos);
 }
@@ -251,8 +244,7 @@ sal_Int64 ODataColumn::getLong(void) throw( SQLException, RuntimeException )
 float ODataColumn::getFloat(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getFloat(m_nPos);
 }
@@ -260,8 +252,7 @@ float ODataColumn::getFloat(void) throw( SQLException, RuntimeException )
 double ODataColumn::getDouble(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getDouble(m_nPos);
 }
@@ -270,8 +261,7 @@ double ODataColumn::getDouble(void) throw( SQLException, RuntimeException )
 Sequence< sal_Int8 > ODataColumn::getBytes(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getBytes(m_nPos);
 }
@@ -279,8 +269,7 @@ Sequence< sal_Int8 > ODataColumn::getBytes(void) throw( SQLException, RuntimeExc
 com::sun::star::util::Date ODataColumn::getDate(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getDate(m_nPos);
 }
@@ -289,8 +278,7 @@ com::sun::star::util::Date ODataColumn::getDate(void) throw( SQLException, Runti
 com::sun::star::util::Time ODataColumn::getTime(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getTime(m_nPos);
 }
@@ -298,8 +286,7 @@ com::sun::star::util::Time ODataColumn::getTime(void) throw( SQLException, Runti
 com::sun::star::util::DateTime ODataColumn::getTimestamp(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getTimestamp(m_nPos);
 }
@@ -308,8 +295,7 @@ com::sun::star::util::DateTime ODataColumn::getTimestamp(void) throw( SQLExcepti
 Reference< ::com::sun::star::io::XInputStream >  ODataColumn::getBinaryStream(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getBinaryStream(m_nPos);
 }
@@ -318,8 +304,7 @@ Reference< ::com::sun::star::io::XInputStream >  ODataColumn::getBinaryStream(vo
 Reference< ::com::sun::star::io::XInputStream >  ODataColumn::getCharacterStream(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getCharacterStream(m_nPos);
 }
@@ -328,8 +313,7 @@ Reference< ::com::sun::star::io::XInputStream >  ODataColumn::getCharacterStream
 Any ODataColumn::getObject(const Reference< ::com::sun::star::container::XNameAccess > & typeMap) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getObject(m_nPos, typeMap);
 }
@@ -338,8 +322,7 @@ Any ODataColumn::getObject(const Reference< ::com::sun::star::container::XNameAc
 Reference< XRef >  ODataColumn::getRef(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getRef(m_nPos);
 }
@@ -348,8 +331,7 @@ Reference< XRef >  ODataColumn::getRef(void) throw( SQLException, RuntimeExcepti
 Reference< XBlob >  ODataColumn::getBlob(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getBlob(m_nPos);
 }
@@ -358,8 +340,7 @@ Reference< XBlob >  ODataColumn::getBlob(void) throw( SQLException, RuntimeExcep
 Reference< XClob >  ODataColumn::getClob(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getClob(m_nPos);
 }
@@ -368,8 +349,7 @@ Reference< XClob >  ODataColumn::getClob(void) throw( SQLException, RuntimeExcep
 Reference< XArray >  ODataColumn::getArray(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     return m_xRow->getArray(m_nPos);
 }
@@ -379,8 +359,7 @@ Reference< XArray >  ODataColumn::getArray(void) throw( SQLException, RuntimeExc
 void ODataColumn::updateNull(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateNull(m_nPos);
 }
@@ -389,8 +368,7 @@ void ODataColumn::updateNull(void) throw( SQLException, RuntimeException )
 void ODataColumn::updateBoolean(sal_Bool x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateBoolean(m_nPos, x);
 }
@@ -399,8 +377,7 @@ void ODataColumn::updateBoolean(sal_Bool x) throw( SQLException, RuntimeExceptio
 void ODataColumn::updateByte(sal_Int8 x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateByte(m_nPos, x);
 }
@@ -409,8 +386,7 @@ void ODataColumn::updateByte(sal_Int8 x) throw( SQLException, RuntimeException )
 void ODataColumn::updateShort(sal_Int16 x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateShort(m_nPos, x);
 }
@@ -419,8 +395,7 @@ void ODataColumn::updateShort(sal_Int16 x) throw( SQLException, RuntimeException
 void ODataColumn::updateInt(sal_Int32 x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateInt(m_nPos, x);
 }
@@ -429,8 +404,7 @@ void ODataColumn::updateInt(sal_Int32 x) throw( SQLException, RuntimeException )
 void ODataColumn::updateLong(sal_Int64 x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateLong(m_nPos, x);
 }
@@ -439,8 +413,7 @@ void ODataColumn::updateLong(sal_Int64 x) throw( SQLException, RuntimeException 
 void ODataColumn::updateFloat(float x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateFloat(m_nPos, x);
 }
@@ -449,8 +422,7 @@ void ODataColumn::updateFloat(float x) throw( SQLException, RuntimeException )
 void ODataColumn::updateDouble(double x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateDouble(m_nPos, x);
 }
@@ -459,8 +431,7 @@ void ODataColumn::updateDouble(double x) throw( SQLException, RuntimeException )
 void ODataColumn::updateString(const rtl::OUString& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateString(m_nPos, x);
 }
@@ -469,8 +440,7 @@ void ODataColumn::updateString(const rtl::OUString& x) throw( SQLException, Runt
 void ODataColumn::updateBytes(const Sequence< sal_Int8 >& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateBytes(m_nPos, x);
 }
@@ -479,8 +449,7 @@ void ODataColumn::updateBytes(const Sequence< sal_Int8 >& x) throw( SQLException
 void ODataColumn::updateDate(const com::sun::star::util::Date& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateDate(m_nPos, x);
 }
@@ -489,8 +458,7 @@ void ODataColumn::updateDate(const com::sun::star::util::Date& x) throw( SQLExce
 void ODataColumn::updateTime(const ::com::sun::star::util::Time& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateTime(m_nPos, x);
 }
@@ -499,8 +467,7 @@ void ODataColumn::updateTime(const ::com::sun::star::util::Time& x) throw( SQLEx
 void ODataColumn::updateTimestamp(const ::com::sun::star::util::DateTime& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateTimestamp(m_nPos, x);
 }
@@ -509,8 +476,7 @@ void ODataColumn::updateTimestamp(const ::com::sun::star::util::DateTime& x) thr
 void ODataColumn::updateCharacterStream(const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateCharacterStream(m_nPos, x, length);
 }
@@ -519,8 +485,7 @@ void ODataColumn::updateCharacterStream(const Reference< ::com::sun::star::io::X
 void ODataColumn::updateBinaryStream(const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateBinaryStream(m_nPos, x, length);
 }
@@ -529,8 +494,7 @@ void ODataColumn::updateBinaryStream(const Reference< ::com::sun::star::io::XInp
 void ODataColumn::updateNumericObject(const Any& x, sal_Int32 scale) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateNumericObject(m_nPos, x, scale);
 }
@@ -539,8 +503,7 @@ void ODataColumn::updateNumericObject(const Any& x, sal_Int32 scale) throw( SQLE
 void ODataColumn::updateObject(const Any& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
-    if (OColumnBase::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OColumnBase::rBHelper.bDisposed);
 
     m_xRowUpdate->updateObject(m_nPos, x);
 }

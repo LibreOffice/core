@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 13:08:06 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,169 +246,92 @@ void SAL_CALL ORowSetBase::disposing(void)
 // XRow
 sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
 
     return (m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
+}
+// -----------------------------------------------------------------------------
+ORowSetValue ORowSetBase::getValue(sal_Int32 columnIndex)
+{
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
+
+    ORowSetValue aRet;
+    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
+        aRet = (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
+    else
+    {
+        OSL_ENSURE(0,"ORowSetBase::getValue: we don't stand on a valid row!");
+    }
+
+    return aRet;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ORowSetBase::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-
-    return ::rtl::OUString();
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-    return sal_False;
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int8 SAL_CALL ORowSetBase::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-    return sal_Int8(0);
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int16 SAL_CALL ORowSetBase::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-    return sal_Int16(0);
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetBase::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-    return sal_Int32(0);
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int64 SAL_CALL ORowSetBase::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-    return sal_Int64();
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 float SAL_CALL ORowSetBase::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-    return float(0.0);
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 double SAL_CALL ORowSetBase::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-    return double(0.0);
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL ORowSetBase::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-    return Sequence< sal_Int8 >();
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::util::Date SAL_CALL ORowSetBase::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-    return ::com::sun::star::util::Date();
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::util::Time SAL_CALL ORowSetBase::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-    return ::com::sun::star::util::Time();
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::util::DateTime SAL_CALL ORowSetBase::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
-    return ::com::sun::star::util::DateTime();
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
 
     if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
         return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
@@ -417,65 +340,45 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
-    return Reference< ::com::sun::star::io::XInputStream >();
+    return getBinaryStream(columnIndex);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
 
     return Any();
 }
 // -------------------------------------------------------------------------
 Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
 
     return Reference< XRef >();
 }
 // -------------------------------------------------------------------------
 Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
 
     return Reference< XBlob >();
 }
 // -------------------------------------------------------------------------
 Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
 
     return Reference< XClob >();
 }
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
 
     return Reference< XArray >();
 }
@@ -483,12 +386,12 @@ Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 columnIndex ) thro
 // ::com::sun::star::sdbcx::XRowLocate
 Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_rMutex );
+
     if(!m_pCache || m_bBeforeFirst || m_bAfterLast)
         throwFunctionSequenceException(*m_pMySelf);
 
-    ::osl::MutexGuard aGuard( m_rMutex );
     OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
     return m_aBookmark;
 }
@@ -496,15 +399,13 @@ Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     OSL_ENSURE(bookmark.hasValue(),"ORowSetBase::moveToBookmark bookmark has no value!");
+    ::osl::MutexGuard aGuard( m_rMutex );
+
     if(!bookmark.hasValue() || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throwFunctionSequenceException(*m_pMySelf);
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
 
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
 
-    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
 
     sal_Bool bRet;
     if(bRet = notifyAllListenersCursorBeforeMove())
@@ -539,18 +440,12 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_rMutex );
 
-//  if(m_bBeforeFirst)
-//      m_pCache->beforeFirst();
-//  else if(m_aBookmark.hasValue())
-//      m_pCache->moveToBookmark(m_aBookmark);
+    checkPositioningAllowed();
+
 
     sal_Bool bRet;
     if(bRet = notifyAllListenersCursorBeforeMove())
@@ -590,31 +485,22 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetBase::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
     return m_pCache->compareBookmarks(first,second);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
     return m_pCache->hasOrderedBookmarks();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetBase::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
     return m_pCache->hashBookmark(bookmark);
 }
 // -------------------------------------------------------------------------
@@ -622,8 +508,7 @@ sal_Int32 SAL_CALL ORowSetBase::hashBookmark( const Any& bookmark ) throw(SQLExc
 // XResultSetMetaDataSupplier
 Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     if(m_pCache)
         return m_pCache->getMetaData();
@@ -634,8 +519,7 @@ Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  ) throw(SQLE
 // XColumnLocate
 sal_Int32 SAL_CALL ORowSetBase::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     // it is possible to save some time her when we remember the names - position relation in a map
@@ -646,9 +530,9 @@ sal_Int32 SAL_CALL ORowSetBase::findColumn( const ::rtl::OUString& columnName ) 
 // ::com::sun::star::sdbcx::XColumnsSupplier
 Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  ) throw(RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
+    ::osl::MutexGuard aGuard( m_aColumnsMutex );
     if(!m_pColumns)
     {
         if(!m_xEmptyCollection.is())
@@ -656,27 +540,14 @@ Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  ) throw(RuntimeExcep
         return m_xEmptyCollection;
     }
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
     return m_pColumns;
 }
 // -------------------------------------------------------------------------
 // XResultSet
 sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
     ::osl::MutexGuard aGuard( m_rMutex );
-
-
-
-//  if(m_bBeforeFirst)
-//      m_pCache->beforeFirst();
-//  else if(m_aBookmark.hasValue())
-//      m_pCache->moveToBookmark(m_aBookmark);
+    checkCache();
 
     sal_Bool bRet;
     if(bRet = notifyAllListenersCursorBeforeMove())
@@ -694,13 +565,7 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
         if(bRet)
         {
             m_bBeforeFirst  = sal_False;
-            m_aBookmark     = m_pCache->getBookmark();
-            m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            m_aCurrentRow.setBookmark(m_aBookmark);
-            OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
-            notifyAllListenersCursorMoved();
-            firePropertyChange(aOldValues);
-            m_aOldRow       = (*m_aCurrentRow);
+            setCurrentRow(sal_True,aOldValues);
         }
         else
         {
@@ -716,44 +581,31 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkPositioningAllowed();
 
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
-//  if(m_aBookmark.hasValue())
-//      m_pCache->moveToBookmark(m_aBookmark);
     return m_bBeforeFirst;
-    //  m_pCache->isBeforeFirst();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkPositioningAllowed();
 
     return m_bAfterLast;
-    //  return m_aCurrentRow == m_pCache->getEnd();
-
-//  if(m_aBookmark.hasValue())
-//      m_pCache->moveToBookmark(m_aBookmark);
-//  return m_pCache->isAfterLast();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkPositioningAllowed();
 
     if(m_bBeforeFirst || m_bAfterLast) // so we can't be on the first
         return sal_False;
 
-    ::osl::MutexGuard aGuard( m_rMutex );
     positionCache();
 
     return m_pCache->isFirst();
@@ -761,16 +613,13 @@ sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkPositioningAllowed();
 
     if(m_bBeforeFirst || m_bAfterLast) // so we can't be on the last
         return sal_False;
 
-    ::osl::MutexGuard aGuard( m_rMutex );
     positionCache();
 
     return m_pCache->isLast();
@@ -778,12 +627,10 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
-
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_rMutex );
+
+    checkPositioningAllowed();
 
     if(notifyAllListenersCursorBeforeMove())
     {
@@ -805,13 +652,11 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_rMutex );
+    checkPositioningAllowed();
+
     if(notifyAllListenersCursorBeforeMove())
     {
         // check if we are inserting a row
@@ -833,12 +678,9 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
-
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_rMutex );
+    checkPositioningAllowed();
 
     sal_Bool bRet;
     if(bRet = notifyAllListenersCursorBeforeMove())
@@ -862,16 +704,7 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 
         bRet = m_pCache->first();
         if(bRet)
-        {
-            m_aBookmark     = m_pCache->getBookmark();
-            m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            m_aCurrentRow.setBookmark(m_aBookmark);
-            OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
-            if(bMoved)
-                notifyAllListenersCursorMoved();
-            firePropertyChange(aOldValues);
-            m_aOldRow       = (*m_aCurrentRow);
-        }
+            setCurrentRow(bMoved,aOldValues);
         else
         {
             m_bAfterLast = m_bBeforeFirst = sal_True; // all true
@@ -885,12 +718,10 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
-
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_rMutex );
+    checkPositioningAllowed();
+
     sal_Bool bRet;
     if(bRet = notifyAllListenersCursorBeforeMove())
     {
@@ -914,14 +745,7 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
         bRet = m_pCache->last();
         if(bRet)
         {
-            m_aBookmark     = m_pCache->getBookmark();
-            m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            m_aCurrentRow.setBookmark(m_aBookmark);
-            OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
-            if(bMoved)
-                notifyAllListenersCursorMoved();
-            firePropertyChange(aOldValues);
-            m_aOldRow       = (*m_aCurrentRow);
+            setCurrentRow(bMoved,aOldValues);
         }
         else
         {
@@ -938,56 +762,46 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetBase::getRow(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_bAfterLast || m_bBeforeFirst) // we are on no valid row
-        return 0;
-
-    // check if we are inserting a row
-    if(!m_bClone && m_pCache->m_bInserted)
-        return 0;
-
-    if(!m_aBookmark.hasValue()) // check if we are standing on a deleted row
-        return m_nPosition;
-
     ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
 
-    if(m_pCache->m_bAfterLast || m_pCache->m_bBeforeFirst || m_pCache->compareBookmarks(m_aBookmark,m_pCache->getBookmark()) != CompareBookmark::EQUAL)
-        m_pCache->moveToBookmark(m_aBookmark);
-    return m_pCache->getRow();
+    sal_Int32  nPos = 0;
+    if(!(m_bAfterLast || m_bBeforeFirst)) // we are on no valid row
+    {
+
+        // check if we are inserting a row
+        if(!(!m_bClone && m_pCache->m_bInserted))
+        {
+            if(!m_aBookmark.hasValue()) // check if we are standing on a deleted row
+                nPos = m_nPosition;
+            else
+            {
+
+                if(m_pCache->m_bAfterLast || m_pCache->m_bBeforeFirst || m_pCache->compareBookmarks(m_aBookmark,m_pCache->getBookmark()) != CompareBookmark::EQUAL)
+                    m_pCache->moveToBookmark(m_aBookmark);
+                nPos = m_pCache->getRow();
+            }
+        }
+    }
+    return nPos;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if((m_bAfterLast && row > 1))
-        return sal_False;// we are already behind the last row
-
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_rMutex );
+    checkPositioningAllowed();
 
-    sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove())
+    sal_Bool bRet = !(m_bAfterLast && row > 1); // m_bAfterLast && row > 1 we are already behind the last row
+
+
+
+    if(bRet && (bRet = notifyAllListenersCursorBeforeMove()))
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
         checkInsert();
 
-    //  if(m_bBeforeFirst)
-    //      m_pCache->beforeFirst();
-    //  else if(m_aBookmark.hasValue())
-    //  {
-    //      m_pCache->moveToBookmark(m_aBookmark);
-    //      if(m_pCache->getRow() == row)
-    //          return sal_True;
-    //  }
         m_bAfterLast = m_bBeforeFirst = sal_False; // all false
         ORowSetMatrix::iterator aOldValues = NULL;
         if(!bWasNew && m_aOldRow.isValid())
@@ -996,13 +810,7 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
         bRet = m_pCache->absolute(row);
         if(bRet)
         {
-            m_aBookmark     = m_pCache->getBookmark();
-            m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            m_aCurrentRow.setBookmark(m_aBookmark);
-            OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
-            notifyAllListenersCursorMoved();
-            firePropertyChange(aOldValues);
-            m_aOldRow       = (*m_aCurrentRow);
+            setCurrentRow(sal_True,aOldValues);
         }
         else
         {
@@ -1018,32 +826,25 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
+
+    ::osl::MutexGuard aGuard( m_rMutex );
 
     if(!rows)
         return sal_True; // in this case do nothing
 
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
+    checkPositioningAllowed();
 
-    if((m_bAfterLast && rows > 1) || (m_bBeforeFirst && rows < 0))
-        return sal_False;// we are already behind the last row or before the first
+    sal_Bool bRet =!((m_bAfterLast && rows > 1) || (m_bBeforeFirst && rows < 0)); // we are already behind the last row or before the first
 
-    ::osl::MutexGuard aGuard( m_rMutex );
 
-    sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove())
+    if(bRet && (bRet = notifyAllListenersCursorBeforeMove()))
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
         checkInsert();
 
         m_bAfterLast = m_bBeforeFirst = sal_False; // all false
-    //  if(m_bBeforeFirst)
-    //      m_pCache->beforeFirst();
-    //  else if(m_aBookmark.hasValue())
-    //      m_pCache->moveToBookmark(m_aBookmark);
 
         ORowSetMatrix::iterator aOldValues = NULL;
         if(!bWasNew && m_aOldRow.isValid())
@@ -1052,15 +853,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
         bRet = m_pCache->relative(rows);
         if(bRet)
         {
-            m_aBookmark     = m_pCache->getBookmark();
-            m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            m_aCurrentRow.setBookmark(m_aBookmark);
-
-            OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
-            notifyAllListenersCursorMoved();
-            firePropertyChange(aOldValues);
-
-            m_aOldRow       = (*m_aCurrentRow);
+            setCurrentRow(sal_True,aOldValues);
         }
         else
         {
@@ -1077,19 +870,14 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_bBeforeFirst)
-        return sal_False;
-
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_rMutex );
 
-    sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove())
+    checkPositioningAllowed();
+
+    sal_Bool bRet = !m_bBeforeFirst;
+
+    if(bRet && (bRet = notifyAllListenersCursorBeforeMove()))
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
@@ -1109,13 +897,7 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
         bRet = m_pCache->previous();
         if(!(m_bBeforeFirst = m_pCache->isBeforeFirst()) && bRet)
         {
-            m_aBookmark     = m_pCache->getBookmark();
-            m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            m_aCurrentRow.setBookmark(m_aBookmark);
-            notifyAllListenersCursorMoved();
-            firePropertyChange(aOldValues);
-
-            m_aOldRow       = (*m_aCurrentRow);
+            setCurrentRow(sal_True,aOldValues);
         }
         else
         {
@@ -1127,6 +909,26 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
     }
     return bRet;
 }
+// -----------------------------------------------------------------------------
+void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& _rOldValues)
+{
+    m_aBookmark     = m_pCache->getBookmark();
+    m_aCurrentRow   = m_pCache->m_aMatrixIter;
+    m_aCurrentRow.setBookmark(m_aBookmark);
+
+    OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
+    if(_bMoved)
+        notifyAllListenersCursorMoved();
+    firePropertyChange(_rOldValues);
+
+    m_aOldRow       = (*m_aCurrentRow);
+}
+// -----------------------------------------------------------------------------
+void ORowSetBase::checkPositioningAllowed() throw( SQLException, RuntimeException )
+{
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
+        throwFunctionSequenceException(*m_pMySelf);
+}
 //------------------------------------------------------------------------------
 Reference< XInterface >  ORowSetBase::getStatement(void) throw( SQLException, RuntimeException )
 {
@@ -1135,61 +937,45 @@ Reference< XInterface >  ORowSetBase::getStatement(void) throw( SQLException, Ru
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
-        throwFunctionSequenceException(*m_pMySelf);
-
-    if(m_bBeforeFirst || m_bAfterLast)
-        return; // nothing to do here
-
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_rMutex );
-    positionCache();
-    m_pCache->refreshRow();
+    checkPositioningAllowed();
+
+    if(!(m_bBeforeFirst || m_bAfterLast))
+    {
+        positionCache();
+        m_pCache->refreshRow();
+    }
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
     ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
+
     return m_pCache->rowUpdated();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::rowInserted(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
     ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
+
     return m_pCache->rowInserted();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
-
-    if(!m_pCache)
-        throwFunctionSequenceException(*m_pMySelf);
-
     ::osl::MutexGuard aGuard( m_rMutex );
+    checkCache();
+
     return m_pCache->rowDeleted();
 }
 // -------------------------------------------------------------------------
 // XWarningsSupplier
 Any SAL_CALL ORowSetBase::getWarnings(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     if(!m_pCache)
         return Any();
@@ -1201,8 +987,7 @@ Any SAL_CALL ORowSetBase::getWarnings(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetBase::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
-    if (m_rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_rMutex );
     if(m_pCache)
@@ -1248,6 +1033,13 @@ void ORowSetBase::positionCache()
     }
     else
         OSL_ENSURE(0,"ORowSetBase::positionCache: no bookmark set!");
+}
+// -----------------------------------------------------------------------------
+void ORowSetBase::checkCache()
+{
+    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
+    if(!m_pCache)
+        throwFunctionSequenceException(*m_pMySelf);
 }
 // -----------------------------------------------------------------------------
 

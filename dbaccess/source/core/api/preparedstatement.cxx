@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preparedstatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,8 +219,7 @@ void OPreparedStatement::disposing()
 Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getColumns(void) throw( RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // do we have to populate the columns
     if (!m_pColumns->isInitialized())
@@ -251,9 +250,7 @@ Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getCol
 Reference< XResultSetMetaData > OPreparedStatement::getMetaData(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
-
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XResultSetMetaDataSupplier >(m_xAggregateAsSet, UNO_QUERY)->getMetaData();
 }
 
@@ -262,8 +259,7 @@ Reference< XResultSetMetaData > OPreparedStatement::getMetaData(void) throw( SQL
 Reference< XResultSet >  OPreparedStatement::executeQuery() throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     disposeResultSet();
 
@@ -283,8 +279,7 @@ Reference< XResultSet >  OPreparedStatement::executeQuery() throw( SQLException,
 sal_Int32 OPreparedStatement::executeUpdate() throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     disposeResultSet();
 
@@ -295,8 +290,7 @@ sal_Int32 OPreparedStatement::executeUpdate() throw( SQLException, RuntimeExcept
 sal_Bool OPreparedStatement::execute() throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     disposeResultSet();
     return Reference< XPreparedStatement >(m_xAggregateAsSet, UNO_QUERY)->execute();
@@ -313,8 +307,7 @@ Reference< XConnection > OPreparedStatement::getConnection(void) throw( SQLExcep
 void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setNull(parameterIndex, sqlType);
 }
@@ -323,8 +316,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
 void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setObjectNull(parameterIndex, sqlType, typeName);
 }
@@ -333,8 +325,7 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
 void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setBoolean(parameterIndex, x);
 }
@@ -343,8 +334,7 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
 void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setByte(parameterIndex, x);
 }
@@ -353,8 +343,7 @@ void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x 
 void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setShort(parameterIndex, x);
 }
@@ -363,8 +352,7 @@ void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 
 void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setInt(parameterIndex, x);
 }
@@ -373,8 +361,7 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
 void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setLong(parameterIndex, x);
 }
@@ -383,8 +370,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x
 void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setFloat(parameterIndex, x);
 }
@@ -393,8 +379,7 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
 void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setDouble(parameterIndex, x);
 }
@@ -403,8 +388,7 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setString(parameterIndex, x);
 }
@@ -413,8 +397,7 @@ void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::r
 void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setBytes(parameterIndex, x);
 }
@@ -423,8 +406,7 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
 void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const ::com::sun::star::util::Date& x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setDate(parameterIndex, x);
 }
@@ -433,8 +415,7 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const ::com
 void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setTime(parameterIndex, x);
 }
@@ -443,8 +424,7 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const ::com
 void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const ::com::sun::star::util::DateTime& x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setTimestamp(parameterIndex, x);
 }
@@ -453,8 +433,7 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
 void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setBinaryStream(parameterIndex, x, length);
 }
@@ -463,8 +442,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setCharacterStream(parameterIndex, x, length);
 }
@@ -473,8 +451,7 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
 void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setObject(parameterIndex, x);
 }
@@ -483,8 +460,7 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 targetSqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setObjectWithInfo(parameterIndex, x, targetSqlType, scale);
 }
@@ -493,8 +469,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Reference< XRef >& x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setRef(parameterIndex, x);
 }
@@ -503,8 +478,7 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
 void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Reference< XBlob >& x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setBlob(parameterIndex, x);
 }
@@ -513,8 +487,7 @@ void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Refer
 void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setClob(parameterIndex, x);
 }
@@ -523,8 +496,7 @@ void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Refer
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->setArray(parameterIndex, x);
 }
@@ -533,8 +505,7 @@ void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Refe
 void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     m_xAggregateAsParameters->clearParameters();
 }

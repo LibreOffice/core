@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 13:08:22 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,16 +384,15 @@ Sequence< ::rtl::OUString > OQueryComposer::getSupportedServiceNames(  ) throw (
 // XSQLQueryComposer
 ::rtl::OUString SAL_CALL OQueryComposer::getQuery(  ) throw(RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
+    ::osl::MutexGuard aGuard( m_aMutex );
     return m_aQuery;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(SQLException, RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -512,33 +511,28 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryComposer::getComposedQuery(  ) throw(RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     MutexGuard aGuard(m_aMutex);
 
+    ::rtl::OUString aResult;
     if (m_pSqlParseNode)
-    {
-        ::rtl::OUString aResult;
         m_pSqlParseNode->parseNodeToStr(aResult,m_xConnection->getMetaData());
-        return aResult;
-    }
     else
-        return getQuery();
+        aResult = getQuery();
+    return aResult;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryComposer::getFilter(  ) throw(RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
     return m_aFilter;
 }
 // -------------------------------------------------------------------------
 Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilter(  ) throw(RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     MutexGuard aGuard(m_aMutex);
 
@@ -608,16 +602,15 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilt
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryComposer::getOrder(  ) throw(RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
+    ::osl::MutexGuard aGuard( m_aMutex );
     return m_aOrder;
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column ) throw(SQLException, RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
         throw SQLException(::rtl::OUString::createFromAscii("Column doesn't support the property 'Value'!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
@@ -736,8 +729,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
 // -------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending ) throw(SQLException, RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
         throw SQLException(::rtl::OUString::createFromAscii("Column doesn't support the property 'Value'!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
@@ -795,8 +787,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
 // -------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::setFilter( const ::rtl::OUString& filter ) throw(SQLException, RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
     m_aFilter = filter;
@@ -812,8 +803,7 @@ void SAL_CALL OQueryComposer::setFilter( const ::rtl::OUString& filter ) throw(S
 // -------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::setOrder( const ::rtl::OUString& order ) throw(SQLException, RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -832,8 +822,7 @@ void SAL_CALL OQueryComposer::setOrder( const ::rtl::OUString& order ) throw(SQL
 // XTablesSupplier
 Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  ) throw(RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if(!m_pTables)
@@ -852,8 +841,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  ) throw(RuntimeExc
 // XColumnsSupplier
 Reference< XNameAccess > SAL_CALL OQueryComposer::getColumns(  ) throw(RuntimeException)
 {
-    if (OSubComponent::rBHelper.bDisposed)
-        throw DisposedException();
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
     return m_pColumns;
