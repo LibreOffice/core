@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:27:58 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,12 +354,14 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
     BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
 
+    /* af: (de)Select object before showing the context menu.
     // Fuer PopupMenu (vorher DrawViewShell)
     if ((rMEvt.GetButtons() == MOUSE_RIGHT) && rMEvt.GetClicks() == 1 &&
         pView->IsTextEdit())
     {
         return (TRUE);
     }
+        */
 
     pView->SetMarkHdlWhenTextEdit(TRUE);
     SdrViewEvent aVEvt;
@@ -395,7 +397,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
             pView->SetEditMode(SDREDITMODE_EDIT);
         }
 
-        if (rMEvt.IsLeft())
+        if (rMEvt.IsLeft() || rMEvt.IsRight())
         {
             pWindow->CaptureMouse();
             SdrObject* pObj;
