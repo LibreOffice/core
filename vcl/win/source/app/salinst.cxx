@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:35:42 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,6 +830,14 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 }
 
 // -----------------------------------------------------------------------
+// #108919#: ignore timer messages when called during time-out handler
+BOOL ImplVerifyTimerMessage( const MSG& rMsg )
+{
+    if( rMsg.message == WM_TIMER )
+        return !GetSalData()->mbInTimerProc;
+    else
+        return TRUE;    // arbitrary messages
+}
 
 BOOL SalInstance::AnyInput( USHORT nType )
 {
@@ -837,15 +845,19 @@ BOOL SalInstance::AnyInput( USHORT nType )
 
     if ( (nType & (INPUT_ANY)) == (INPUT_ANY) )
     {
-        // Any Input
-        if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
+        // #108919#: If called from the time-out handler, timer messages are ignored (see ImplVerifyTimerMessage)
+        // Thus we have to check for user input messages first to be able to detect them between the timer messages.
+        // Otherwise we might not detect user input and the system will become unresponsive.
+        if( AnyInput( INPUT_MOUSE ) || AnyInput( INPUT_KEYBOARD ) || AnyInput( INPUT_PAINT ) )
             return TRUE;
+        if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
+            return ImplVerifyTimerMessage( aMsg );
     }
     else
     {
         if ( nType & INPUT_MOUSE )
         {
-            // Test auf Mouseinput
+            // Test for mouse input
             if ( ImplPeekMessage( &aMsg, 0, WM_MOUSEFIRST, WM_MOUSELAST,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return TRUE;
@@ -853,7 +865,7 @@ BOOL SalInstance::AnyInput( USHORT nType )
 
         if ( nType & INPUT_KEYBOARD )
         {
-            // Test auf Keyinput
+            // Test for key input
             if ( ImplPeekMessage( &aMsg, 0, WM_KEYDOWN, WM_KEYDOWN,
                                   PM_NOREMOVE | PM_NOYIELD ) )
             {
@@ -868,7 +880,7 @@ BOOL SalInstance::AnyInput( USHORT nType )
 
         if ( nType & INPUT_PAINT )
         {
-            // Test auf Paintinput
+            // Test for paint input
             if ( ImplPeekMessage( &aMsg, 0, WM_PAINT, WM_PAINT,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return TRUE;
@@ -876,17 +888,20 @@ BOOL SalInstance::AnyInput( USHORT nType )
 
         if ( nType & INPUT_TIMER )
         {
-            // Test auf Timerinput
+            // Test for timer input
             if ( ImplPeekMessage( &aMsg, 0, WM_TIMER, WM_TIMER,
                                   PM_NOREMOVE | PM_NOYIELD ) )
-                return TRUE;
+                return ImplVerifyTimerMessage( aMsg );
+
         }
 
         if ( nType & INPUT_OTHER )
         {
-            // Test auf sonstigen Input
-            if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
-                return TRUE;
+            // Test for any input
+            // to have timer messages handled correctly, just check for INPUT_ANY, see above (#108919#)
+            return AnyInput( INPUT_ANY );
+            //if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
+            //    return ImplVerifyTimerMessage( aMsg );
         }
     }
 
