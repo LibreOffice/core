@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UriReferenceFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:36:30 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ interface XUriReferenceFactory;
    service does not support
    <type scope="com::sun::star::uri">XUriSchemeParser</type>.</p>
 
-   @since #i19971#
+   @since OOo2.0.0
  */
 service UriReferenceFactory: XUriReferenceFactory;
 
