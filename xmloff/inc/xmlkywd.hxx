@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-22 16:57:36 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,6 +563,7 @@ XML_CONSTASCII_ACTION( sXML_fn, "fn" );
 XML_CONSTASCII_ACTION( sXML_font_charset, "font-charset" );
 XML_CONSTASCII_ACTION( sXML_font_charset_asian, "font-charset-asian" );
 XML_CONSTASCII_ACTION( sXML_font_charset_complex, "font-charset-complex" );
+XML_CONSTASCII_ACTION( sXML_font_color, "font-color" );
 XML_CONSTASCII_ACTION( sXML_font_decl, "font-decl" );
 XML_CONSTASCII_ACTION( sXML_font_decls, "font-decls" );
 XML_CONSTASCII_ACTION( sXML_font_family, "font-family" );
@@ -1311,6 +1312,7 @@ XML_CONSTASCII_ACTION( sXML_text_shadow, "text-shadow" );
 XML_CONSTASCII_ACTION( sXML_text_style, "text-style" );
 XML_CONSTASCII_ACTION( sXML_text_transform, "text-transform" );
 XML_CONSTASCII_ACTION( sXML_text_underline, "text-underline" );
+XML_CONSTASCII_ACTION( sXML_text_underline_color, "text-underline-color" );
 XML_CONSTASCII_ACTION( sXML_textual, "textual" );
 XML_CONSTASCII_ACTION( sXML_thick, "thick" );
 XML_CONSTASCII_ACTION( sXML_thin, "thin" );
