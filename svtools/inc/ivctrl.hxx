@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 14:50:43 $
+ *  last change: $Author: pb $ $Date: 2002-06-21 06:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ class SvxIconChoiceCtrlEntry
     Image aImageHC;
 
     String aText;
+    String aQuickHelpText;
     void*  pUserData;
 
     friend class SvxIconChoiceCtrl_Impl;
@@ -175,6 +176,8 @@ public:
     Image                   GetImageHC () const { return aImageHC; }
     void                    SetText ( const String& rText ) { aText = rText; }
     String                  GetText () const { return aText; }
+    void                    SetQuickHelpText( const String& rText ) { aQuickHelpText = rText; }
+    String                  GetQuickHelpText() const { return aQuickHelpText; }
     void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
     void*                   GetUserData () { return pUserData; }
 
