@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:00:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -996,11 +996,11 @@ sal_Bool ORowSetCache::moveWindow()
                         }
                         else
                         {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                             ORowSetMatrix::iterator aOldPos = aCacheIter->second.aIterator;
 #endif
                             aCacheIter->second.aIterator += nOffSet;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                             ORowSetMatrix::iterator aCurrentPos = aCacheIter->second.aIterator;
 #endif
                             OSL_ENSURE(aCacheIter->second.aIterator >= m_pMatrix->begin()
@@ -1211,7 +1211,7 @@ sal_Bool ORowSetCache::last(  )
         OSL_ENSURE(m_bBeforeFirst,"ORowSetCache::last return false and BeforeFirst isn't true");
         m_aMatrixIter = m_pMatrix->end();
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if(bRet)
     {
         OSL_ENSURE((*m_aMatrixIter).isValid(),"ORowSetCache::last: Row not valid!");
