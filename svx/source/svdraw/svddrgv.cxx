@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-24 13:40:05 $
+ *  last change: $Author: aw $ $Date: 2002-10-02 12:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,9 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         pDragHdl=pHdl;
         eDragHdl= pHdl==NULL ? HDL_MOVE : pHdl->GetKind();
         bDragHdl=eDragHdl==HDL_REF1 || eDragHdl==HDL_REF2 || eDragHdl==HDL_MIRX;
-        BOOL bNotDraggable = (eDragHdl == HDL_ANCHOR);
+
+        // #103894# Expand test for HDL_ANCHOR_TR
+        BOOL bNotDraggable = (HDL_ANCHOR == eDragHdl || HDL_ANCHOR_TR == eDragHdl);
 
         if(bDragHdl)
         {
