@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 17:53:40 $
+ *  last change: $Author: gh $ $Date: 2004-01-22 15:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,8 +293,7 @@ static const char * const components[] =
     , "typeconverter.uno" SAL_DLLEXTENSION
     , SAL_MODULENAME( "fileacc" )
     , SAL_MODULENAME( "mcnttype" )          //Clipboard   Ask Oliver Braun
-    , SVLIBRARY( "i18n" )
-    , SVLIBRARY( "i18npool" )
+    , "i18npool.uno" SAL_DLLEXTENSION
         // Reading of files in specific encodings like UTF-8 using
         // createUnoService( "com.sun.star.io.TextInputStream" ) and such
     , "textinstream.uno" SAL_DLLEXTENSION
