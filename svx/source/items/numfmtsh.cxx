@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:31 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -980,7 +980,11 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
 
     if(pCurCurrencyEntry==NULL)
     {
-        bAdaptSelPos = sal_False;
+        // If no currency format was previously selected (we're not about to
+        // add another currency) and no NfCurrencyEntry was found that matches
+        // nCurFormatKey, try to select the initial currency format
+        // (nCurFormatKey).
+        bAdaptSelPos = (pTmpCurrencyEntry == NULL);
         pCurCurrencyEntry=(NfCurrencyEntry*)pTmpCurrencyEntry;
         bBankingSymbol=bTmpBanking;
         nCurCurrencyEntryPos=FindCurrencyFormat(pTmpCurrencyEntry,bTmpBanking);
