@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: bm $ $Date: 2001-12-17 10:22:10 $
+ *  last change: $Author: bm $ $Date: 2002-02-11 09:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,8 @@ void SchXMLExportHelper::exportAutoStyles()
 
         // export auto styles for additional shapes
         mrExport.GetShapeExport()->exportAutoStyles();
+        // and for text in additional shapes
+        mrExport.GetTextParagraphExport()->exportTextAutoStyles();
     }
 }
 
