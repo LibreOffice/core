@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-17 13:05:32 $
+ *  last change: $Author: dr $ $Date: 2001-01-25 18:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     ExcNameList*    pNameL      = rR.pNameList = new ExcNameList;
     ExcPalette2*    pPalette2   = rR.pPalette2 = new ExcPalette2( *rR.pColor );
     UsedFontList*   pFontRecs   = rR.pFontRecs = new UsedFontList( rR.eDateiTyp ) ;
-    UsedFormList*   pFormRecs   = new UsedFormList;
+    UsedFormList*   pFormRecs   = rR.pFormRecs = new UsedFormList;
 
     XclSstList*         pSstRecs            = NULL;
     XclExternsheetList* pExternsheetRecs    = NULL;     // change: ExternsheetList includes Supbooks

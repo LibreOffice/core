@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-11 09:38:20 $
+ *  last change: $Author: dr $ $Date: 2001-01-25 18:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ class XclExpUserBViewList;
 class ExcNameList;
 class ExcPalette2;
 class UsedFontList;
+class UsedFormList;
 class XclSstList;
 class XclSupbookList;
 class XclExternsheetList;
@@ -187,6 +188,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     ExcNameList*        pNameList;
     ExcPalette2*        pPalette2;
     UsedFontList*       pFontRecs;
+    UsedFormList*       pFormRecs;
     ExcExternDup*       pExtSheetCntAndRecs;
     UINT16              nColMax;
     UINT16              nRowMax;
