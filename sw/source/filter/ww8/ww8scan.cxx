@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-26 12:50:51 $
+ *  last change: $Author: cmc $ $Date: 2002-11-26 14:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5405,6 +5405,12 @@ WW8Fib::WW8Fib(BYTE nVer)
         // diese Flags muessen nicht gesetzt werden; koennen aber.
         //  wMagicCreated = wMagicRevised = 0x6a62;
         //  wMagicCreatedPrivate = wMagicRevisedPrivate = 0xb3b2;
+        //
+
+        wMagicCreated = 0x6143;
+        wMagicRevised = 0x6C6F;
+        wMagicCreatedPrivate = 0x6E61;
+        wMagicRevisedPrivate = 0x3136;
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-15 17:30:50 $
+ *  last change: $Author: cmc $ $Date: 2002-11-26 14:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -1631,9 +1634,9 @@ sal_Unicode Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
     sal_Char cChar)
 {
     const sal_uInt32 nFlags =
-        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
-        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
-        RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT |
+        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE |
+        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE |
+        RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE |
         RTL_TEXTTOUNICODE_FLAGS_FLUSH;
 
     sal_Unicode nConvChar;
@@ -1642,7 +1645,7 @@ sal_Unicode Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
     sal_Size nDestChars = rtl_convertTextToUnicode(hConverter, 0,
         &cChar, 1, &nConvChar, 1, nFlags, &nInfo, &nSrcBytes );
 
-    if (nInfo | RTL_TEXTTOUNICODE_INFO_UNDEFINED)
+    if (nInfo & RTL_TEXTTOUNICODE_INFO_UNDEFINED)
     {
         rtl_TextToUnicodeConverter hCP1252Converter =
             rtl_createTextToUnicodeConverter(RTL_TEXTENCODING_MS_1252);
@@ -1658,7 +1661,7 @@ sal_Unicode Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
     if (nDestChars == 1)
         return nConvChar;
     else
-        return 0;
+        return cChar;
 }
 
 // Returnwert: true for no Sonderzeichen
