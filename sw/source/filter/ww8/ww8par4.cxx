@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:01 $
+ *  last change: $Author: cmc $ $Date: 2002-10-21 09:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,23 +711,24 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
 
     ASSERT(nLen < 0 || (pSprmCIbstRMark || pSprmCDttmRMark),
         "The wheels have fallen off revision mark import");
-
+#if 0
     if (!pSprmCIbstRMark || !pSprmCDttmRMark)
         return;
+#endif
 
     if (nLen < 0)
         mpRedlineStack->close(*pPaM->GetPoint(), eType);
     else
     {
-        // start of new revision mark
-        USHORT nWWAutNo = SVBT16ToShort( pSprmCIbstRMark );
+        // start of new revision mark, if not there default to first entry
+        USHORT nWWAutNo = pSprmCIbstRMark ? SVBT16ToShort( pSprmCIbstRMark ) : 0;
         WW8AuthorInfo aEntry(nWWAutNo);
         USHORT nPos;
         if (pAuthorInfos && pAuthorInfos->Seek_Entry(&aEntry, &nPos))
         {
             if (const WW8AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
             {
-                UINT32 nWWDate = SVBT32ToLong(pSprmCDttmRMark);
+                UINT32 nWWDate = pSprmCDttmRMark ? SVBT32ToLong(pSprmCDttmRMark): 0;
                 ASSERT(nWWDate, "Date is 0, this will cause trouble!");
 
                 DateTime aStamp(WW8ScannerBase::WW8DTTM2DateTime(nWWDate));
