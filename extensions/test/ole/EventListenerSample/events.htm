@@ -42,7 +42,7 @@ function XEventListener_disposing( source)
 </script>
 
 <script language="VBScript">
-SUB MainVB()
+SUB MainVB( id)
 Set objServiceManager= CreateObject("com.sun.star.ServiceManager")
 
 Set objCoreReflection= objServiceManager.createInstance("com.sun.star.reflection.CoreReflection")
@@ -53,7 +53,13 @@ Set objDesktop= objServiceManager.createInstance("com.sun.star.frame.Desktop")
 Dim args()
 Set objDocument= objDesktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, args)
 
-Set eventListener= CreateObject("EventListener.EvtListener")
+Dim eventListener
+select case id
+  case 0
+    Set eventListener= CreateObject("EventListener.EvtListener")
+  case 1
+    Set eventListener= CreateObject("VBasicEventListener.VBEventListener")
+end select
 
 objDocument.addEventListener eventlistener
 END SUB
@@ -79,7 +85,13 @@ is written in C++ and housed in a dll. Then the event listener is added to the d
 The button runs VBScript code that creates the components EventListener.EvtListener and adds it
 to the document.
 </p>
-<button onclick='MainVB()'>VBScript</Button>
+<button onclick='MainVB(0)'>VBScript</Button>
+<p>
+Runs VBScript code that creates VBasicEventListener.VBEventListener ActiveX component which was
+written with VB
+</p>
+<button onclick='MainVB(1)'>VBScript</Button>
+
 </body>
 </html>
 
