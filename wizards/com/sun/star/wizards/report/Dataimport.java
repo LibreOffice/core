@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Dataimport.java,v $
 *
-*  $Revision: 1.33 $
+*  $Revision: 1.34 $
 *
-*  last change: $Author: kz $ $Date: 2005-03-18 16:20:06 $
+*  last change: $Author: vg $ $Date: 2005-03-23 09:53:01 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -145,9 +145,8 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             if (xMSF != null)
                 System.out.println("Connected to " + ConnectStr);
             Dataimport CurDataimport = new Dataimport(xMSF);
-            XTextDocument xTextDocument = null;
             TextDocument oTextDocument = new TextDocument(xMSF, true, true, null);
-            CurDataimport.createReport(xMSF, oTextDocument.xTextDocument, null);
+            CurDataimport.createReport(xMSF, oTextDocument.xTextDocument,null);
 
         } catch (Exception e) {
             e.printStackTrace(System.out);
@@ -231,7 +230,8 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         CurReportDocument.CurDBMetaData.dispose();
     }
 
-    public void createReport(final XMultiServiceFactory xMSF,XTextDocument _textDocument, PropertyValue[] properties) {
+
+    public void createReport(final XMultiServiceFactory xMSF,XTextDocument _textDocument,PropertyValue[] properties) {
         CurReportDocument = new ReportDocument(xMSF, _textDocument,false, oResource);
         CurProperties = properties;
         int iWidth = CurReportDocument.xFrame.getComponentWindow().getPosSize().Width;
