@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:47:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
 
 #pragma hdrstop
 
