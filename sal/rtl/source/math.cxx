@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-06 15:46:26 $
+ *  last change: $Author: sb $ $Date: 2002-11-07 10:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "rtl/math.h"
 
 #include "osl/diagnose.h"
+#include "rtl/alloc.h"
 #include "rtl/math.hxx"
 #include "rtl/strbuf.h"
 #include "rtl/string.h"
@@ -337,7 +338,11 @@ inline void doubleToString(StringT ** pResult,
         ( nDigits <= 0 ? std::max< sal_Int32 >( nDecPlaces, abs(nExp) )
           : nDigits + nDecPlaces ) + 10;
     if ( nBuf > nBufMax )
-        pBuf = new typename T::Char[nBuf];
+    {
+        pBuf = reinterpret_cast< typename T::Char * >(
+            rtl_allocateMemory(nBuf * sizeof (typename T::Char)));
+        OSL_ENSURE(pBuf != 0, "Out of memory");
+    }
     else
         pBuf = aBuf;
     typename T::Char * p = pBuf;
@@ -516,7 +521,7 @@ inline void doubleToString(StringT ** pResult,
                        p - pBuf);
 
     if ( pBuf != &aBuf[0] )
-        delete [] pBuf;
+        rtl_freeMemory(pBuf);
 }
 
 }
