@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:52:48 $
+ *  last change: $Author: fs $ $Date: 2000-10-26 18:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #define DLG_SQLMESSAGE                  1002
 #define DLG_SQLEXCEPTIONCHAIN           1003
 #define DLG_DATASOURCE_SELECTION        1004
+#define DLG_PARAMETERS                  1005
 
 //========================================================================
 // tab pages
@@ -174,6 +175,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/10/26 14:52:48  oj
+ *  new strings
+ *
  *  Revision 1.6  2000/10/25 13:01:27  fs
  *  STR_REMEMBERPASSWORD*
  *
