@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: vg $ $Date: 2001-10-02 12:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ namespace configmgr
     protected:
         INode(){}
 
-        bool markAsDefault(bool _bDefault = true) { m_aAttributes.bDefaulted = _bDefault;}
+        void markAsDefault(bool _bDefault = true) { m_aAttributes.bDefaulted = _bDefault;}
     public:
         explicit
         INode(node::Attributes);
