@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-15 13:03:04 $
+ *  last change: $Author: mtg $ $Date: 2001-05-17 16:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,11 @@
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
 #endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/ZipConstants.hpp>
+#endif
 
+using namespace com::sun::star::packages::ZipConstants;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star;
@@ -276,4 +280,10 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
     }
     else
         throw beans::UnknownPropertyException();
+}
+void ZipPackageStream::setSize (const sal_Int32 nNewSize)
+{
+    if (aEntry.nCompressedSize != nNewSize )
+        aEntry.nMethod = DEFLATED;
+    aEntry.nSize = nNewSize;
 }

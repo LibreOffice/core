@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-15 13:02:06 $
+ *  last change: $Author: mtg $ $Date: 2001-05-17 16:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,7 @@ public:
     { xEncryptionData->aSalt = rNewSalt;}
     inline void setIterationCount (const sal_Int32 nNewCount)
     { xEncryptionData->nIterationCount = nNewCount;}
-    inline void setSize (const sal_Int32 nNewSize)
-    { aEntry.nSize = nNewSize;}
+    void setSize (const sal_Int32 nNewSize);
 
     ZipPackageStream (ZipPackage & rNewPackage);
     virtual ~ZipPackageStream( void );
