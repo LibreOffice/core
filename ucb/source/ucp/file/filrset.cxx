@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2001-04-25 09:09:34 $
+ *  last change: $Author: abi $ $Date: 2001-05-14 07:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,16 +646,8 @@ sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
 
     if( row >= 0 )
     {
-        // By Darryl Gove :
-        // m_nRow = -1;
-        if( row >= m_aItems.size() )
-        {
-            m_nRow=row;
-            while( ( row-- >=0 ) && ( OneMore() ) )
-                ;
-        }
-        else
-            m_nRow=row;
+          m_nRow = -1;
+          while( row-- ) next();
     }
     else
     {
