@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 10:58:11 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:20:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,42 +111,31 @@ RESLIB1SRSFILES=\
 SHL1TARGET= sd$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= sd.map
 SHL1IMPLIB= sdi
-SHL1STDLIBS=        \
-    $(SCHLIB) \
-    $(BASICLIB) \
-    $(SFXLIB) \
-    $(SFXDEBUGLIB) \
-    $(SO2LIB) \
-    $(VCLLIB) \
-    $(SVMEMLIB) \
-    $(SVTOOLLIB) \
-    $(SVLLIB)	\
-    $(SVTLIB)	\
-    $(SVXLIB) \
-    $(SETLIB) \
-    $(GOODIESLIB) \
+
+# static libraries
+SHL1STDLIBS= $(SCHLIB) $(SCLIB) $(SMLIB)
+
+# dynamic libraries
+SHL1STDLIBS+= \
     $(OFALIB) \
-    $(SCLIB) \
+    $(SVXLIB) \
+    $(SFXLIB) \
+    $(BASICLIB) \
+    $(GOODIESLIB) \
+    $(SO2LIB) \
+    $(SVTOOLLIB) \
+    $(TKLIB) \
+    $(VCLLIB) \
+    $(SVLLIB) \
+    $(SOTLIB) \
+    $(UNOTOOLSLIB) \
     $(TOOLSLIB) \
     $(COMPHELPERLIB) \
-    $(ONELIB) \
-    $(PAPLIB) \
-    $(GOLIB) \
-    $(VOSLIB) \
-    $(SALLIB) \
-    $(TKLIB) \
-    $(SJLIB) \
-    $(STORELIB) \
-    $(CPPULIB) \
+    $(UCBHELPERLIB) \
     $(CPPUHELPERLIB) \
-    $(UNOTOOLSLIB) \
-    $(SOTLIB) \
-    $(COMPHELPERLIB)	\
-    $(UCBHELPERLIB)
-
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+= $(SMLIB)
-.ENDIF
+    $(CPPULIB) \
+    $(VOSLIB) \
+    $(SALLIB)
 
 .IF "$(GUI)" == "MAC"
 SHL1STDLIBS += \
