@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-06 16:11:06 $
+ *  last change: $Author: pl $ $Date: 2001-07-26 16:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,6 +883,15 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
                         || m_aLastJobData.m_aContext.getValue( pKey ) != pValue )
                    )
                 {
+                    if( GetPostscriptLevel( &rJob ) == 1 )
+                    {
+                        bool bHavePS2 =
+                            ( pValue->m_aValue.SearchAscii( "<<" ) != STRING_NOTFOUND )
+                            ||
+                            ( pValue->m_aValue.SearchAscii( ">>" ) != STRING_NOTFOUND );
+                        if( bHavePS2 )
+                            continue;
+                    }
                     bSuccess = writeFeature( pFile, pKey, pValue );
                 }
             }
