@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mba $ $Date: 2002-03-28 16:25:00 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:54:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,27 +127,10 @@ SVSDIDEPEND= \
         $(INC)$/globals.hrc \
         $(INC)$/cmdid.h
 
-SRCFILES= \
+SRS1NAME=$(TARGET)
+SRC1FILES= \
     swslots.src
 
 # --- Targets -------------------------------------------------------
 
-.IF "$(depend)" == ""
-
-TLBLIST+=\
-    $(BIN)$/$(SDINAME).tlb
-
-ALL: \
-    ALLTAR \
-    $(TLBLIST)
-
-.ENDIF
-
 .INCLUDE :  target.mk
-
-$(BIN)$/$(SDINAME).tlb:
-    @echo nix
-
-$(BIN)$/$(SDI2NAME).tlb:
-    @echo nix
-
