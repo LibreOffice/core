@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-22 17:21:54 $
+ *  last change: $Author: hdu $ $Date: 2002-05-08 12:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,13 +161,13 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
             nOldOrientation = mnOrientation;
             double fRad = mnOrientation * (M_PI / 1800.0);
             fCos = cos( fRad );
-            fSin = cos( fRad );
+            fSin = sin( fRad );
         }
 
         long nX0 = rRelative.X();
         long nY0 = rRelative.Y();
-        long nX = static_cast<long>( +fCos * nX0 - fSin * nY0 );
-        long nY = static_cast<long>( +fCos * nY0 + fSin * nX0 );
+        long nX = static_cast<long>( +fCos * nX0 + fSin * nY0 );
+        long nY = static_cast<long>( +fCos * nY0 - fSin * nX0 );
         aPos += Point( nX, nY );
     }
 
@@ -514,8 +514,7 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
 
 // -----------------------------------------------------------------------
 
-#if 0
-SalLayout* GenericSalLayout::ExtractLayout( int nXorFlags, int nAndFlags )
+GenericSalLayout* GenericSalLayout::ExtractLayout( int nXorFlags, int nAndFlags )
 {
     int nNewSize = 0;
     int nUsableSize = 0;
@@ -532,7 +531,7 @@ SalLayout* GenericSalLayout::ExtractLayout( int nXorFlags, int nAndFlags )
             ++nNewSize;
     }
 
-    SalLayout* pDstLayout = NULL;
+    GenericSalLayout* pDstLayout = NULL;
 
     if( !nNewSize )
         return NULL;
@@ -545,7 +544,7 @@ SalLayout* GenericSalLayout::ExtractLayout( int nXorFlags, int nAndFlags )
 /*###
     else
     {
-        pDstLayout = new SalLayout( nNewSize );
+        pDstLayout = new GenericSalLayout( nNewSize );
         bool bWantFallback = false;
         if( nNewSize > 0 )
         {
@@ -578,11 +577,9 @@ SalLayout* GenericSalLayout::ExtractLayout( int nXorFlags, int nAndFlags )
 
     return pDstLayout;
 }
-#endif
 
 // -----------------------------------------------------------------------
 
-#if 0
 void GenericSalLayout::MergeLayout( int nFlags, const GenericSalLayout& rSalLayout )
 {
     GlyphItem* pG = mpGlyphItems;
@@ -606,6 +603,5 @@ void GenericSalLayout::MergeLayout( int nFlags, const GenericSalLayout& rSalLayo
         }
     }
 }
-#endif
 
 // =======================================================================
