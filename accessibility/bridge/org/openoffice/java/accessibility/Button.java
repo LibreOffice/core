@@ -66,12 +66,9 @@ class Button extends AbstractButton implements javax.accessibility.Accessible {
         super(xAccessible, xAccessibleContext);
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleButton();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleButton();
     }
 
     protected class AccessibleButton extends AccessibleAbstractButton {
