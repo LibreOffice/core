@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:47:36 $
+ *  last change: $Author: nn $ $Date: 2001-04-10 18:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include "scmatrix.hxx"
 #include "patattr.hxx"
 #include "rechead.hxx"
+#include "rangeseq.hxx"
 #include "sc.hrc"
 #include "hints.hxx"
 
@@ -185,10 +186,8 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
     if ( FORMAT_STRING != SotExchange::GetFormatIdFromMimeType( rMimeType ))
         return;
 
-    ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-    rValue >>= aSeq;
-    String aLinkStr( (sal_Char*)aSeq.getConstArray(), aSeq.getLength(),
-                          DDE_TXT_ENCODING   );
+    String aLinkStr;
+    ScByteSequenceToString::GetString( aLinkStr, rValue, DDE_TXT_ENCODING );
     aLinkStr.ConvertLineEnd(LINEEND_LF);
 
     //  wenn String mit Zeilenende aufhoert, streichen:

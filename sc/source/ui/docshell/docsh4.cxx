@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-28 19:30:31 $
+ *  last change: $Author: nn $ $Date: 2001-04-10 18:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@
 #include "drwlayer.hxx"
 #include "docoptio.hxx"
 #include "undostyl.hxx"
+#include "rangeseq.hxx"
 
 //------------------------------------------------------------------
 
@@ -1884,12 +1885,8 @@ long __EXPORT ScDocShell::DdeSetData( const String& rItem,
     {
         if( rItem.EqualsIgnoreCaseAscii( "Format" ) )
         {
-            ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-            if( rValue >>= aSeq )
+            if ( ScByteSequenceToString::GetString( aDdeTextFmt, rValue, gsl_getSystemTextEncoding() ) )
             {
-                aDdeTextFmt = String( (const sal_Char*)aSeq.getConstArray(),
-                                        aSeq.getLength(),
-                                        gsl_getSystemTextEncoding() );
                 aDdeTextFmt.ToUpperAscii();
                 return 1;
             }
@@ -1901,11 +1898,9 @@ long __EXPORT ScDocShell::DdeSetData( const String& rItem,
         if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
             aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
-            ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-            if( rValue >>= aSeq )
+            String aData;
+            if ( ScByteSequenceToString::GetString( aData, rValue, gsl_getSystemTextEncoding() ) )
             {
-                String aData( (const sal_Char*)aSeq.getConstArray(),
-                              aSeq.getLength(), gsl_getSystemTextEncoding() );
                 return aObj.ImportString( aData, SOT_FORMATSTR_ID_SYLK ) ? 1 : 0;
             }
             return 0;
