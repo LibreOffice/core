@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _UnoControlScrollBarModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:40 $
+ *  last change:$Date: 2003-09-08 10:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 package ifc.awt;
 
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
 import util.utils;
 
 /**
