@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:25:20 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1646,6 +1646,9 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
             aViewData.SetRefTabNo( nTab );
         }
 
+        ScSplitPos eOldActive = aViewData.GetActivePart();      // before switching
+        BOOL bFocus = pGridWin[eOldActive]->HasFocus();
+
         aViewData.SetTabNo( nTab );
         //  UpdateShow noch vor SetCursor, damit UpdateAutoFillMark die richtigen
         //  Fenster findet (wird aus SetCursor gerufen)
@@ -1697,6 +1700,9 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         TabChanged();                                       // DrawView
         aViewData.GetViewShell()->WindowChanged();          // falls das aktive Fenster anders ist
         aViewData.GetViewShell()->DisconnectAllClients();   // wichtig fuer Floating Frames
+
+        if ( bFocus && aViewData.GetActivePart() != eOldActive && !bRefMode )
+            ActiveGrabFocus();      // grab focus to the pane that's active now
 
             //  Fixierungen
 
