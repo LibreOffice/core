@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-20 16:14:00 $
+ *  last change: $Author: fs $ $Date: 2001-05-02 10:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,7 +776,14 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface > & Element)
 
             Reference< ::com::sun::star::form::XForm >  xForm(xSet, UNO_QUERY);
             if (xForm.is())
+            {
                 xSet->removeVetoableChangeListener(FM_PROP_DATASOURCE, (::com::sun::star::beans::XVetoableChangeListener*)this);
+
+                // reset the ActiveConnection if the form is to be removed. This will (should) free the resources
+                // associated with this connection
+                // 86299 - 05/02/2001 - frank.schoenheit@germany.sun.com
+                xSet->setPropertyValue(FM_PROP_ACTIVE_CONNECTION, Any());
+            }
         }
     }
 
