@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dobject.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:25:00 $
+ *  last change: $Author: cl $ $Date: 2001-05-18 08:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,23 +98,25 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #endif
 
+#ifndef _XIMPSHAPE_HXX
+#include "ximpshap.hxx"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // common shape context
 
-class SdXML3DObjectContext : public SvXMLImportContext
+class SdXML3DObjectContext : public SdXMLShapeContext
 {
 protected:
     // the shape group this object should be created inside
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >  mxShapes;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >   mxShape;
 
-    rtl::OUString               maDrawStyleName;
     com::sun::star::drawing::HomogenMatrix mxHomMat;
     BOOL                        mbSetTransform;
 
+/*
     void SetStyle();
     void AddShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape);
-
+*/
 public:
     TYPEINFO();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-08 13:34:13 $
+ *  last change: $Author: cl $ $Date: 2001-05-18 08:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,7 +604,7 @@ SvXMLImportContext* XMLShapeImportHelper::Create3DSceneChildContext(
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
 {
-    SvXMLImportContext *pContext = 0L;
+    SdXMLShapeContext *pContext = 0L;
 
     if(rShapes.is())
     {
@@ -651,6 +651,18 @@ SvXMLImportContext* XMLShapeImportHelper::Create3DSceneChildContext(
                 break;
             }
         }
+    }
+
+    // now parse the attribute list and call the child context for each unknown attribute
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 a(0); a < nAttrCount; a++)
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex(a);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
+        const OUString aValue( xAttrList->getValueByIndex(a) );
+
+        pContext->processAttribute( nPrefix, aLocalName, aValue );
     }
 
     return pContext;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-28 11:19:11 $
+ *  last change: $Author: cl $ $Date: 2001-05-18 08:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,8 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     {
         mxChilds = uno::Reference< drawing::XShapes >::query( mxShape );
 
+        SetLayer();
+
         // set pos, size, shear and rotate
         SetTransformation();
     }
@@ -231,7 +233,7 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( USHORT nPrefix
     {
         pContext = GetImport().GetShapeImport()->Create3DSceneChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList, mxChilds);
-    }
+        }
 
     // call parent when no own context was created
     if(!pContext)
