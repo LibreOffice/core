@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MouseEvent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,46 +72,41 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::MouseEvent
-/** specifies an event from the mouse.@see InputEvent
+/** specifies an event from the mouse.
+
+    @see InputEvent
  */
 struct MouseEvent: com::sun::star::awt::InputEvent
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::MouseEvent::Buttons
     /** contains the pressed mouse buttons.
 
-
-
-        <p>Zero ore more constants from the <type scope="com::sun::star::awt">MouseButton</type> group.</p>
+        <p>Zero ore more constants from the
+        <type scope="com::sun::star::awt">MouseButton</type> group.</p>
      */
     short Buttons;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::MouseEvent::X
     /** contains the x coordinate location of the mouse.
      */
     long X;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::MouseEvent::Y
     /** contains the y coordinate location of the mouse.
      */
     long Y;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::MouseEvent::ClickCount
     /** contains the number of mouse clicks associated with event.
      */
     long ClickCount;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::MouseEvent::PopupTrigger
     /** specifies if this event is a popup-menu trigger event.
      */
     boolean PopupTrigger;

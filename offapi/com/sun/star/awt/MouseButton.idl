@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MouseButton.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,28 +68,24 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::MouseButton
 /** These values are used to specify which keys on the mouse are pressed.
  */
 constants MouseButton
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::MouseButton::LEFT
     /** specifies the left mouse button as being pressed.
      */
     const short LEFT = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::MouseButton::RIGHT
     /** specifies the right mouse button as being pressed.
      */
     const short RIGHT = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::MouseButton::MIDDLE
     /** specifies the middle mouse button as being pressed.
      */
     const short MIDDLE = 4;
