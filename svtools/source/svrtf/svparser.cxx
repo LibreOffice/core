@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:43 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,10 @@ sal_Unicode SvParser::GetNextChar()
             rInput >> c1;
             if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
             {
-                if( RTL_TEXTENCODING_DONTKNOW == eSrcEnc )
+                if (
+                     RTL_TEXTENCODING_DONTKNOW == eSrcEnc ||
+                     RTL_TEXTENCODING_SYMBOL == eSrcEnc
+                   )
                 {
                     // no convserion shall take place
                     c = (sal_Unicode)c1;
