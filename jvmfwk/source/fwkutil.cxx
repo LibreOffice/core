@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:55:05 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,7 +724,8 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
     {
         sal_Int8 curChar = *pData;
         //find the index of the first 4bits
-        char nibble;
+        //  TODO  What happens if text is not valid Hex characters?
+        char nibble = 0;
         for (int ii = 0; ii < 16; ii++)
         {
             if (curChar == decodingTable[ii])
