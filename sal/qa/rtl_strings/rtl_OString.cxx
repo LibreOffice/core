@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OString.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 14:57:08 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 10:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2781,10 +2781,12 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toChar(
         {"0", '0',new OString("0")},
         {"-", '-',new OString("-")},
         {"_", '_',new OString("_")},
-        {"•", '•',new OString("•")},
-        { "¶", '¶',new OString("¶")},
-        {"Ù", 'Ù',new OString("Ù")},
-        {"Ü", 'Ü',new OString("Ü")},
+
+//  TODO: may be UTF-8 values
+//        {"Å0Ñ6", 'Å0Ñ6',new OString("Å0Ñ6")},
+//        { "Å0Ñ7", 'Å0Ñ7',new OString("Å0Ñ7")},
+//        {"Å0ã0", 'Å0ã0',new OString("Å0ã0")},
+//        {"Å0Å6", 'Å0Å6',new OString("Å0Å6")},
         {"\n", '\n',new OString("\n")},
         {"\'", '\'',new OString("\'")},
         {"\"", '\"',new OString("\"")},
