@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 12:00:52 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@
 #define ITEMID_CHARROTATE       SID_ATTR_CHAR_ROTATED
 #define ITEMID_CHARSCALE_W      SID_ATTR_CHAR_SCALEWIDTH
 #define ITEMID_CHARRELIEF       SID_ATTR_CHAR_RELIEF
+#define ITEMID_CHARHIDDEN       SID_ATTR_CHAR_HIDDEN
 
 #include "xtable.hxx"       // XColorTable
 #include "chardlg.hxx"
@@ -164,6 +165,9 @@
 #include "emphitem.hxx"
 #include <charreliefitem.hxx>
 #include "twolinesitem.hxx"
+#ifndef _SVX_CHARHIDDENITEM_HXX
+#include <charhiddenitem.hxx>
+#endif
 
 #ifndef _SVX_CHARSCALEITEM_HXX
 #include <charscaleitem.hxx>
@@ -244,6 +248,8 @@ static USHORT pEffectsRanges[] =
     SID_ATTR_CHAR_EMPHASISMARK,
     SID_ATTR_CHAR_RELIEF,
     SID_ATTR_CHAR_RELIEF,
+    SID_ATTR_CHAR_HIDDEN,
+    SID_ATTR_CHAR_HIDDEN,
     0
 };
 
@@ -1846,6 +1852,7 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
     m_aOutlineBtn           ( this, ResId( CB_OUTLINE ) ),
     m_aShadowBtn            ( this, ResId( CB_SHADOW ) ),
     m_aBlinkingBtn          ( this, ResId( CB_BLINKING ) ),
+    m_aHiddenBtn            ( this, ResId( CB_CHARHIDDEN ) ),
 
     m_aTransparentColorName ( ResId( STR_CHARNAME_TRANSPARENT ) )
 
@@ -2565,6 +2572,34 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
             break;
         }
     }
+    // Hidden
+    nWhich = GetWhich( SID_ATTR_CHAR_HIDDEN );
+    eState = rSet.GetItemState( nWhich );
+
+    switch ( eState )
+    {
+        case SFX_ITEM_UNKNOWN:
+            m_aHiddenBtn.Hide();
+            break;
+
+        case SFX_ITEM_DISABLED:
+        case SFX_ITEM_READONLY:
+            m_aHiddenBtn.Disable();
+            break;
+
+        case SFX_ITEM_DONTCARE:
+            m_aHiddenBtn.SetState( STATE_DONTKNOW );
+            break;
+
+        case SFX_ITEM_DEFAULT:
+        case SFX_ITEM_SET:
+        {
+            const SvxCharHiddenItem& rItem = (SvxCharHiddenItem&)rSet.Get( nWhich );
+            m_aHiddenBtn.SetState( (TriState)rItem.GetValue() );
+            m_aHiddenBtn.EnableTriState( FALSE );
+            break;
+        }
+    }
 
     SetPrevFontWidthScale( rSet );
     ResetColor_Impl( rSet );
@@ -2584,6 +2619,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     m_aOutlineBtn.SaveValue();
     m_aShadowBtn.SaveValue();
     m_aBlinkingBtn.SaveValue();
+    m_aHiddenBtn.SaveValue();
     m_aFontColorLB.SaveValue();
 }
 
@@ -2845,6 +2881,30 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
         CLEARTITEM;
 
+    // Hidden
+    nWhich = GetWhich( SID_ATTR_CHAR_HIDDEN );
+    pOld = GetOldItem( rSet, SID_ATTR_CHAR_HIDDEN );
+    eState = m_aHiddenBtn.GetState();
+    bChanged = TRUE;
+
+    if ( pOld )
+    {
+        const SvxCharHiddenItem& rItem = *( (const SvxCharHiddenItem*)pOld );
+        if ( rItem.GetValue() == StateToAttr( eState ) && m_aHiddenBtn.GetSavedValue() == eState )
+            bChanged = FALSE;
+    }
+
+    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+         !StateToAttr( eState ) && ( (SvxCharHiddenItem*)pItem )->GetValue() )
+        bChanged = TRUE;
+
+    if ( bChanged && eState != STATE_DONTKNOW )
+    {
+        rSet.Put( SvxCharHiddenItem( StateToAttr( eState ), nWhich ) );
+        bModified = TRUE;
+    }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        CLEARTITEM;
 
     bModified |= FillItemSetColor_Impl( rSet );
 
