@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_AccessibleDropDownComboBox.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:33 $ 
+'*  last change:$Date: 2003-05-27 12:20:46 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -84,7 +84,7 @@ On Error Goto ErrHndl
     oDoc = utils.createDocument("swriter", cObjectName)
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot,7,"","AccessibleDropDownComboBox")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.COMBO_BOX,"","AccessibleDropDownComboBox")
     Out.Log("Implementation Name: "+oObj.getImplementationName())
 
 Exit Sub
@@ -93,7 +93,7 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    oDoc.dispose()
+    utils.closeObject(oDoc)
 End Sub
 
 Sub fireEvent()
