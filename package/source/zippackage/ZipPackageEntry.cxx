@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 14:09:05 $
+ *  last change: $Author: obo $ $Date: 2000-12-04 16:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< uno::XInterface 
     uno::Reference < container::XNameContainer > xNewParent (Parent, uno::UNO_QUERY);
 
     if ( !xNewParent.is())
-        throw (lang::NoSupportException());
+        throw lang::NoSupportException();
 
     if ( xOldParent.is() && xOldParent->hasByName(getName()))
         xOldParent->removeByName(getName());
