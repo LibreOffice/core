@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-21 15:00:54 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 09:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2117,8 +2117,9 @@ long ODatasourceSelector::Notify(NotifyEvent& _rNEvt)
                     // (the dialog), and this instance en- or disables our "new datasource" button
                     aMenu.EnableItem(MID_NEW_DATASOURCE, m_aNewDatasource.IsEnabled());
 
-                    DatasourceState eState = getEntryState(m_aDatasourceList.GetSelectEntryPos());
-                    aMenu.EnableItem(MID_DELETE_DATASOURCE, DELETED != eState);
+                    USHORT nSelectionPos = m_aDatasourceList.GetSelectEntryPos();
+                    DatasourceState eState = getEntryState(nSelectionPos);
+                    aMenu.EnableItem(MID_DELETE_DATASOURCE, (DELETED != eState && nSelectionPos != LISTBOX_ENTRY_NOTFOUND));
                     aMenu.EnableItem(MID_RESTORE_DATASOURCE, DELETED == eState);
 
                     switch (aMenu.Execute(_rNEvt.GetWindow(), aWhere))
@@ -2191,6 +2192,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2000/11/21 15:00:54  oj
+ *  #80549# wrong dsn for text
+ *
  *  Revision 1.18  2000/11/10 17:36:53  fs
  *  small bug fixes
  *
