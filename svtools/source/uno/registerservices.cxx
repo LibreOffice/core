@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-27 15:31:13 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@ DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
 DECLARE_CREATEINSTANCE( SvFilterOptionsDialog )
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, SvtFolderPicker )
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, SvtFilePicker )
+DECLARE_CREATEINSTANCE_NAMESPACE( svt, SvtOfficeFolderPicker )
+DECLARE_CREATEINSTANCE_NAMESPACE( svt, SvtOfficeFilePicker )
 
 IMPL_CREATEINSTANCE( ImageProducer );
 
@@ -274,6 +276,12 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
         xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.FolderPicker/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" ) );
 
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.OfficeFilePicker/UNO/SERVICES" ) );
+        xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFilePicker" ) );
+
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.OfficeFolderPicker/UNO/SERVICES" ) );
+        xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFolderPicker" ) );
+
         xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.SvFilterOptionsDialog/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilterOptionsDialog" ) );
 
@@ -333,6 +341,24 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
             xFactory = ::cppu::createSingleFactory( xServiceManager,
                                                     ::rtl::OUString::createFromAscii( sImplementationName ),
                                                     ::svt::SvtFolderPicker_CreateInstance,
+                                                    aServiceNames );
+        }
+        else if ( rtl_str_compare( sImplementationName, "com.sun.star.svtools.OfficeFilePicker") == 0 )
+        {
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+            aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFilePicker" );
+            xFactory = ::cppu::createSingleFactory( xServiceManager,
+                                                    ::rtl::OUString::createFromAscii( sImplementationName ),
+                                                    ::svt::SvtOfficeFilePicker_CreateInstance,
+                                                    aServiceNames );
+        }
+        else if ( rtl_str_compare( sImplementationName, "com.sun.star.svtools.OfficeFolderPicker") == 0 )
+        {
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+            aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFolderPicker" );
+            xFactory = ::cppu::createSingleFactory( xServiceManager,
+                                                    ::rtl::OUString::createFromAscii( sImplementationName ),
+                                                    ::svt::SvtOfficeFolderPicker_CreateInstance,
                                                     aServiceNames );
         }
         else if ( rtl_str_compare( sImplementationName, "com.sun.star.svtools.SvFilterOptionsDialog") == 0 )
