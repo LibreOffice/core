@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-12 10:34:55 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 11:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,9 @@
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
 #endif
+#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
+#include <com/sun/star/util/NumberFormat.hpp>
+#endif
 // .........................................................................
 namespace dbaui
 {
@@ -411,12 +414,15 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                     &&  (aIter->second->nMaximumScale   >= _nScale)
                     )
                 {
+// we can not assert here because we could be in d&d
+/*
                     OSL_ENSURE(sal_False,
                         (   ::rtl::OString("getTypeInfoFromType: assuming column type ")
                         +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
                         +=  ::rtl::OString("\" (expected type name ")
                         +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
                         +=  ::rtl::OString(" matches the type's local name).")).getStr());
+*/
                     break;
                 }
             }
@@ -458,8 +464,8 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             pTypeInfo = aFind->second;
     }
 
-
-    OSL_ENSURE(pTypeInfo, "getTypeInfoFromType: no type info found for this type!");
+// we can not assert here because we could be in d&d
+//  OSL_ENSURE(pTypeInfo, "getTypeInfoFromType: no type info found for this type!");
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------
@@ -685,7 +691,7 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
 // -----------------------------------------------------------------------------
 void setColumnUiProperties( const Reference< XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
 {
-    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
+    if(_pFieldDesc->GetFormatKey() != NumberFormat::UNDEFINED && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
         _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(_pFieldDesc->GetFormatKey()));
     if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
         _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(_pFieldDesc->GetHorJustify())));
