@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:24:56 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ czech ] = "Podrobnosti";
         Text[ hebrew ] = "Details";
         Text[ hindi ] = "विस्तारपूर्वक वर्णन";
+        Text[ slovak ] = "Podrobnosti";
     };
     FixedText FT_ERRORLIST
     {
@@ -178,6 +179,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ czech ] = "Seznam chyb:";
         Text[ hebrew ] = "~Fehlerliste:";
         Text[ hindi ] = "~गलती सूची:";
+        Text[ slovak ] = "Zoznam chybových h~lásení:";
     };
     Control CTL_ERRORLIST
     {
@@ -218,6 +220,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ czech ] = "Popis:";
         Text[ hebrew ] = "‮תאור:‬";
         Text[ hindi ] = "~विवरण:";
+        Text[ slovak ] = "~Popis:";
     };
     MultiLineEdit ME_DESCRIPTION
     {
@@ -264,6 +267,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ czech ] = "Chyba";
         Text[ hebrew ] = "Fehler";
         Text[ hindi ] = "गलती";
+        Text[ slovak ] = "Chyba";
     };
     String STR_EXCEPTION_WARNING
     {
@@ -293,6 +297,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ czech ] = "Upozornění";
         Text[ hebrew ] = "Warnung";
         Text[ hindi ] = "चेतावनी";
+        Text[ slovak ] = "Upozornenie";
     };
     String STR_EXCEPTION_INFO
     {
@@ -322,6 +327,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ czech ] = "Informace";
         Text[ hebrew ] = "Information";
         Text[ hindi ] = "सूचना";
+        Text[ slovak ] = "Informácia";
     };
     String STR_EXCEPTION_DETAILS
     {
@@ -351,6 +357,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ czech ] = "Podrobnosti";
         Text[ hebrew ] = "Details";
         Text[ hindi ] = "विस्तारपूर्वक वर्णन";
+        Text[ slovak ] = "Podrobnosti";
     };
     String STR_EXCEPTION_STATUS
     {
@@ -380,6 +387,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ czech ] = "Stav SQL";
         Text[ hebrew ] = "SQL-Status";
         Text[ hindi ] = "SQL वस्तुस्थिति";
+        Text[ slovak ] = "SQL status";
     };
     String STR_EXCEPTION_ERRORCODE
     {
@@ -409,6 +417,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ czech ] = "Kód chyby";
         Text[ hebrew ] = "Fehler-Code";
         Text[ hindi ] = "गलती कोड";
+        Text[ slovak ] = "Kód chyby";
     };
     Text[ portuguese ] = "%PRODUCTNAME Base";
     Text[ russian ] = "%PRODUCTNAME Base";
@@ -433,12 +442,21 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
     Text[ czech ] = "%PRODUCTNAME Base";
     Text[ hebrew ] = "%PRODUCTNAME Base";
     Text[ hindi ] = "%PRODUCTNAME आधार";
+    Text[ slovak ] = "%PRODUCTNAME Base";
 };
 
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.37.24.1  2003/06/12 10:57:56  gh
+ *  final Merge RC
+ *
+ *  Revision 1.37  2003/04/29 17:24:56  hr
+ *  INTEGRATION: CWS mergem8 (1.36.8); FILE MERGED
+ *  2003/04/29 08:34:02 gh 1.36.8.2: final merge for Beta2
+ *  2003/04/14 15:04:11 gh 1.36.8.1: merging all languages
+ *
  *  Revision 1.36.8.2  2003/04/29 08:34:02  gh
  *  final merge for Beta2
  *
@@ -573,6 +591,8 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
  *
  *  Revision 1.0 02.10.00 12:43:18  fs
  ************************************************************************/
+
+
 
 
 
