@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-09 09:13:21 $
+#   last change: $Author: kz $ $Date: 2005-01-21 13:28:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ ZIP1LIST        = biblio.odb
 
 ZIP2TARGET      = $(DATABASE_USER_BIBLIO_TARGET)
 
-ZIP2LIST        = biblio.dbf
+ZIP2LIST        = biblio.dbf biblio.dbt
 
 
 
