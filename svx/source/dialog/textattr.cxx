@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:52:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@
 
 static USHORT pRanges[] =
 {
-    SDRATTR_MISC_FIRST,
-    SDRATTR_TEXT_HORZADJUST,
+    SDRATTR_MISC_FIRST, SDRATTR_TEXT_HORZADJUST,
+    SDRATTR_TEXT_WORDWRAP, SDRATTR_TEXT_AUTOGROWSIZE,
     0
 };
 
