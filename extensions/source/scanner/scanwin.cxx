@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:40:31 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,7 +1042,7 @@ SEQ( sal_Int8 ) ScannerManager::getDIB()
             *pMemStm << (sal_uInt32) ( sizeof( BITMAPFILEHEADER ) + pBIH->biSize + ( nColEntries * sizeof( RGBQUAD ) ) );
 
             delete pMemStm;
-            HMEMCPY( pBuf + sizeof( BITMAPFILEHEADER ), pBIH, nDIBSize );
+            memcpy( pBuf + sizeof( BITMAPFILEHEADER ), pBIH, nDIBSize );
         }
 
         GlobalUnlock( hDIB );
