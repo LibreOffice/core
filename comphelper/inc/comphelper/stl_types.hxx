@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stl_types.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-13 15:35:32 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 12:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,20 +63,17 @@
 
 #if !defined(__SGI_STL_VECTOR_H) || !defined(__SGI_STL_MAP_H) || !defined(__SGI_STL_MULTIMAP_H)
 
-#include <math.h> // prevent conflict between exception and std::exception
 #include <vector>
 #include <map>
 #include <hash_map>
 #include <stack>
 #include <set>
+#include <math.h> // prevent conflict between exception and std::exception
 
 using namespace std;
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _RTL_CHAR_H_
-#include <rtl/char.h>
 #endif
 
 //... namespace comphelper ................................................
@@ -101,29 +98,11 @@ public:
     bool operator() (const ::rtl::OUString& x, const ::rtl::OUString& y) const
     {
         if (m_bCaseSensitive)
-            return x < y ? true : false;    // construct prevents a MSVC6 warning
-
-        // unfortunally the ::rtl::OUString does not have something like "compareIgnoreCase" ..
-        sal_Int32 nXLen = x.getLength();
-        sal_Int32 nYLen = y.getLength();
-        sal_Int32 nMinLen = nXLen < nYLen ? nXLen : nYLen;
-        const sal_Unicode* pX = x.getStr();
-        const sal_Unicode* pY = y.getStr();
-
-        sal_Unicode cX;
-        sal_Unicode cY;
-        for (sal_Int32 i=0; i<nMinLen; ++i, ++pX, ++pY)
-        {
-            cX = rtl_char_toUpperCase(*pX);
-            cY = rtl_char_toUpperCase(*pY);
-            if (cX < cY)
-                return sal_True;
-            if (cX > cY)
-                return sal_False;
-        }
-        // the first nMinLen characters are equal
-        return nXLen < nYLen;
+            return rtl_ustr_compare(x.getStr(), y.getStr()) < 0 ? true : false;
+        else
+            return rtl_ustr_compareIgnoreAsciiCase(x.getStr(), y.getStr()) < 0 ? true : false;
     }
+
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
 //------------------------------------------------------------------------
@@ -135,7 +114,7 @@ struct UStringEqual
 //------------------------------------------------------------------------
 struct UStringIEqual
 {
-    sal_Bool operator() (const ::rtl::OUString& lhs, const ::rtl::OUString& rhs) const { return lhs.equalsIgnoreCase( rhs );}
+    sal_Bool operator() (const ::rtl::OUString& lhs, const ::rtl::OUString& rhs) const { return lhs.equalsIgnoreAsciiCase( rhs );}
 };
 
 //------------------------------------------------------------------------
@@ -153,7 +132,7 @@ public:
     UStringMixEqual(sal_Bool bCaseSensitive = sal_True):m_bCaseSensitive(bCaseSensitive){}
     sal_Bool operator() (const ::rtl::OUString& lhs, const ::rtl::OUString& rhs) const
     {
-        return m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreCase( rhs );
+        return m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs );
     }
     sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
@@ -167,7 +146,7 @@ public:
     UStringMixHash(sal_Bool bCaseSensitive = sal_True):m_bCaseSensitive(bCaseSensitive){}
     size_t operator() (const ::rtl::OUString& rStr) const
     {
-        return m_bCaseSensitive ? rStr.hashCode() : rStr.toUpperCase().hashCode();
+        return m_bCaseSensitive ? rStr.hashCode() : rStr.toAsciiUpperCase().hashCode();
     }
     sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
