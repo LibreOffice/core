@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:41:30 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,29 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>          //SwDoc
 #endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>        //SwTxtNode
+#endif
+#ifndef _NDNOTXT_HXX
+#include <ndnotxt.hxx>      //SwNoTxtNode
+#endif
+#ifndef _FMTCNTNT_HXX
+#include <fmtcntnt.hxx>     //SwFmtCntnt
+#endif
+#ifndef _NDINDEX_HXX
+#include <ndindex.hxx>      //SwNodeIndex
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>      //SwNodeNum
+#endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>      //SwTable
 #endif
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>       //SwFrmFmt
+#endif
+#ifndef _SVX_TSPTITEM_HXX
+#include <svx/tstpitem.hxx> //SvxTabStopItem
 #endif
 #ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>   //SdrObject
@@ -236,6 +254,45 @@ namespace sw
             std::sort(rStyles.begin(), rStyles.end(), outlinecmp());
         }
 
+        const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode)
+        {
+            const SwNumRule *pRule = 0;
+            const SwNodeNum* pNum = 0;
+            if (
+                (pNum = rTxtNode.GetNum()) &&
+                (MAXLEVEL > pNum->GetLevel()) &&
+                (pRule = rTxtNode.GetNumRule())
+               )
+            {
+                return &(pRule->Get(pNum->GetLevel()));
+            }
+
+            ASSERT(rTxtNode.GetDoc(), "No document for node?, suspicious");
+            if (!rTxtNode.GetDoc())
+                return 0;
+
+            if (
+                  (pNum = rTxtNode.GetOutlineNum()) &&
+                  (MAXLEVEL > pNum->GetLevel()) &&
+                  (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
+                )
+            {
+                return &(pRule->Get(pNum->GetLevel()));
+            }
+
+            return 0;
+        }
+
+        SwNoTxtNode *GetNoTxtNodeFromSwFrmFmt(const SwFrmFmt &rFmt)
+        {
+            const SwNodeIndex *pIndex = rFmt.GetCntnt().GetCntntIdx();
+            ASSERT(pIndex, "No NodeIndex in SwFrmFmt ?, suspicious");
+            if (!pIndex)
+                return 0;
+            SwNodeIndex aIdx(*pIndex, 1);
+            return aIdx.GetNode().GetNoTxtNode();
+        }
+
         bool HasPageBreak(const SwNode &rNd)
         {
             const SvxFmtBreakItem *pBreak = 0;
@@ -253,6 +310,41 @@ namespace sw
             if (pBreak && pBreak->GetBreak() == SVX_BREAK_PAGE_BEFORE)
                 return true;
             return false;
+        }
+
+        bool AdjustTabs(SvxTabStopItem &rTStop, long nSrcLeft, long nDestLeft)
+        {
+            bool bChanged = false;
+            if (nDestLeft != nSrcLeft)
+            {
+                USHORT nCount = rTStop.Count();
+                for (USHORT nCnt = 0; nCnt < nCount; ++nCnt)
+                {
+                    SvxTabStop& rTab = const_cast<SvxTabStop&>(rTStop[nCnt]);
+                    if (SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment())
+                    {
+                        rTab.GetTabPos() += nSrcLeft;
+                        rTab.GetTabPos() -= nDestLeft;
+                        bChanged = true;
+                    }
+                }
+            }
+            return bChanged;
+        }
+
+        Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly)
+        {
+            PolyPolygon3D aPolyPoly(rPolyPoly);
+            aPolyPoly.Merge();
+            const PolyPolygon &rNewPolyPoly = aPolyPoly.GetPolyPolygon();
+            if (!rNewPolyPoly.Count())
+                return Polygon();
+            else
+            {
+                ASSERT(rNewPolyPoly.Count() == 1,
+                    "I (cmc) must not have understood PolyPoly3D Merge");
+                return rPolyPoly.GetObject(0);
+            }
         }
 
     }
