@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accnotextframe.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:06:52 $
+ *  last change: $Author: dvo $ $Date: 2002-04-18 11:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,4 +152,53 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
     }
 
     return sDesc;
+}
+
+
+
+//
+// XInterface
+//
+
+Any SAL_CALL SwAccessibleNoTextFrame::queryInterface(
+    const Type& aType )
+    throw (RuntimeException)
+{
+    if( aType ==
+        ::getCppuType( static_cast<Reference<XAccessibleImage>*>( NULL ) ) )
+    {
+        Reference<XAccessibleImage> xImage = this;
+        Any aAny;
+        aAny <<= xImage;
+        return aAny;
+    }
+    else
+        return SwAccessibleContext::queryInterface( aType );
+}
+
+
+//
+// XAccessibleImage
+//
+
+// implementation of the XAccessibleImage methods is a no-brainer, as
+// all releveant information is already accessible through other
+// methods. So we just delegate to those.
+
+OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageDescription()
+    throw ( RuntimeException )
+{
+    return getAccessibleDescription();
+}
+
+sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageHeight(  )
+    throw ( RuntimeException )
+{
+    return getSize().Height;
+}
+
+sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageWidth(  )
+    throw ( RuntimeException )
+{
+    return getSize().Width;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accnotextframe.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:07:08 $
+ *  last change: $Author: dvo $ $Date: 2002-04-18 11:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,15 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEIMAGE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleImage.hpp>
+#endif
+
 class SwFlyFrm;
 class SwNoTxtNode;
 
-class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase
+class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
+                                public ::drafts::com::sun::star::accessibility::XAccessibleImage
 {
 
 protected:
@@ -92,6 +97,36 @@ public:
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
+
+    //=====  XInterface  ======================================================
+
+    // XInterface methods need to be implemented to disambiguate
+    // between those inherited through SwAcessibleContext and
+    // XAccessibleImage.
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        const ::com::sun::star::uno::Type& aType )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire(  ) throw ()
+        { SwAccessibleContext::acquire(); };
+
+    virtual void SAL_CALL release(  ) throw ()
+        { SwAccessibleContext::release(); };
+
+    //=====  XAccessibleImage  ================================================
+
+    virtual ::rtl::OUString SAL_CALL
+        getAccessibleImageDescription(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Int32 SAL_CALL
+        getAccessibleImageHeight(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Int32 SAL_CALL
+        getAccessibleImageWidth(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
 };
 
 
