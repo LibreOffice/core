@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editwin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:27:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
