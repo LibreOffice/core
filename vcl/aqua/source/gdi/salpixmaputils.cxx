@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salpixmaputils.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:49 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-21 20:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,53 +488,71 @@ PixMapHandle CopyPixMap ( PixMapHandle  hPixMap )
     {
         if ( LockPixels( hPixMap ) )
         {
-            hPixMapCopy = NewPixMap();
+            OSStatus nOSStatus = noErr;
 
-            if ( ( hPixMapCopy != NULL ) && ( *hPixMapCopy != NULL ) )
+            CopyPixMap( hPixMap, hPixMapCopy );
+
+            nOSStatus = QDErr();
+
+            if (    (  nOSStatus   == noErr )
+                             && (  hPixMapCopy != NULL  )
+                             && ( *hPixMapCopy != NULL  )
+                          )
             {
-                const Rect   aPixMapBoundsRect = (**hPixMap).bounds;
-                const long   nPixMapBitDepth   = (**hPixMap).pixelSize;
-                const long   nPixMapWidth      = GetPixMapWidth( &aPixMapBoundsRect );
-                const long   nPixMapHeight     = GetPixMapHeight( &aPixMapBoundsRect );
-                const long   nPixMapRowOffset  = GetPixMapOffset( nPixMapBitDepth, nPixMapWidth );
-                const long   nPixMapImageSize  = GetPixMapImageSize( nPixMapHeight, nPixMapRowOffset );
-                char        *pPixMapDataCopy   = NewPtrClear( nPixMapImageSize );
+                hPixMapCopy = NewPixMap();
 
-                if ( pPixMapDataCopy != NULL )
+                if ( ( hPixMapCopy != NULL ) && ( *hPixMapCopy != NULL ) )
                 {
-                    GWorldFlags  nPixMapCopyFlags = noErr;
+                    const Rect   aPixMapBoundsRect = (**hPixMap).bounds;
+                    const long   nPixMapBitDepth   = (**hPixMap).pixelSize;
+                    const long   nPixMapWidth      = GetPixMapWidth( &aPixMapBoundsRect );
+                    const long   nPixMapHeight     = GetPixMapHeight( &aPixMapBoundsRect );
+                    const long   nPixMapRowOffset  = GetPixMapOffset( nPixMapBitDepth, nPixMapWidth );
+                    const long   nPixMapImageSize  = GetPixMapImageSize( nPixMapHeight, nPixMapRowOffset );
+                    char        *pPixMapDataCopy   = NewPtrClear( nPixMapImageSize );
 
-                    nPixMapCopyFlags = GetPixelsState( hPixMapCopy );
-
-                    if ( nPixMapCopyFlags == noErr )
+                    if ( pPixMapDataCopy != NULL )
                     {
-                        if ( LockPixels( hPixMapCopy ) )
+                        GWorldFlags  nPixMapCopyFlags = noErr;
+
+                        nPixMapCopyFlags = GetPixelsState( hPixMapCopy );
+
+                        if ( nPixMapCopyFlags == noErr )
                         {
-                            const char *pPixMapData = (**hPixMap).baseAddr;
+                            if ( LockPixels( hPixMapCopy ) )
+                            {
+                                const char *pPixMapData = (**hPixMap).baseAddr;
 
-                            // Copy the data from the original port
+                                // Copy the data from the original port
 
-                            BlockMoveData( pPixMapData, pPixMapDataCopy, nPixMapImageSize );
+                                BlockMoveData( pPixMapData, pPixMapDataCopy, nPixMapImageSize );
 
-                            (**hPixMapCopy).rowBytes    = (**hPixMap).rowBytes;     // Offset to next line
-                            (**hPixMapCopy).bounds      = (**hPixMap).bounds;       // Bounding bitmap rectangle
-                            (**hPixMapCopy).pmVersion   = (**hPixMap).pmVersion;    // PixMap version number
-                            (**hPixMapCopy).packType    = (**hPixMap).packType;     // Defines packing format
-                            (**hPixMapCopy).packSize    = (**hPixMap).packSize;     // Length of pixel data
-                            (**hPixMapCopy).hRes        = (**hPixMap).hRes;         // Horizontal resolution (ppi)
-                            (**hPixMapCopy).vRes        = (**hPixMap).vRes;         // Vertical resolution (ppi)
-                            (**hPixMapCopy).pixelType   = (**hPixMap).pixelType;    // Defines pixel type
-                            (**hPixMapCopy).pixelSize   = (**hPixMap).pixelSize;    // Number of bits in a pixel
-                            (**hPixMapCopy).cmpCount    = (**hPixMap).cmpCount;     // Number of components in a pixel
-                            (**hPixMapCopy).cmpSize     = (**hPixMap).cmpSize;      // Number of bits per component
-                            (**hPixMapCopy).pixelFormat = (**hPixMap).pixelFormat;  // Four character code representation
-                            (**hPixMapCopy).pmExt       = (**hPixMap).pmExt;        // Handle to PixMap extension
+                                (**hPixMapCopy).rowBytes    = (**hPixMap).rowBytes;     // Offset to next line
+                                (**hPixMapCopy).bounds      = (**hPixMap).bounds;       // Bounding bitmap rectangle
+                                (**hPixMapCopy).pmVersion   = (**hPixMap).pmVersion;    // PixMap version number
+                                (**hPixMapCopy).packType    = (**hPixMap).packType;     // Defines packing format
+                                (**hPixMapCopy).packSize    = (**hPixMap).packSize;     // Length of pixel data
+                                (**hPixMapCopy).hRes        = (**hPixMap).hRes;         // Horizontal resolution (ppi)
+                                (**hPixMapCopy).vRes        = (**hPixMap).vRes;         // Vertical resolution (ppi)
+                                (**hPixMapCopy).pixelType   = (**hPixMap).pixelType;    // Defines pixel type
+                                (**hPixMapCopy).pixelSize   = (**hPixMap).pixelSize;    // Number of bits in a pixel
+                                (**hPixMapCopy).cmpCount    = (**hPixMap).cmpCount;     // Number of components in a pixel
+                                (**hPixMapCopy).cmpSize     = (**hPixMap).cmpSize;      // Number of bits per component
+                                (**hPixMapCopy).pixelFormat = (**hPixMap).pixelFormat;  // Four character code representation
+                                (**hPixMapCopy).pmExt       = (**hPixMap).pmExt;        // Handle to PixMap extension
 
-                            // Copy the color table from the original port
+                                // Copy the color table from the original port
 
-                            (**hPixMapCopy).pmTable = CopyPixMapCTab( hPixMap );
+                                (**hPixMapCopy).pmTable = CopyPixMapCTab( hPixMap );
 
-                            SetPixelsState( hPixMapCopy, nPixMapCopyFlags );
+                                SetPixelsState( hPixMapCopy, nPixMapCopyFlags );
+                            } // if
+                            else
+                            {
+                                DisposePtr( pPixMapDataCopy );
+
+                                pPixMapDataCopy = NULL;
+                            } // else
                         } // if
                         else
                         {
@@ -545,17 +563,11 @@ PixMapHandle CopyPixMap ( PixMapHandle  hPixMap )
                     } // if
                     else
                     {
-                        DisposePtr( pPixMapDataCopy );
+                        DisposePixMap( hPixMapCopy );
 
-                        pPixMapDataCopy = NULL;
+                        hPixMapCopy = NULL;
                     } // else
                 } // if
-                else
-                {
-                    DisposePixMap( hPixMapCopy );
-
-                    hPixMapCopy = NULL;
-                } // else
             } // if
 
             SetPixelsState( hPixMap, nPixMapFlags );

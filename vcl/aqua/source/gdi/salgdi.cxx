@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.51 $
- *  last change: $Author: pluby $ $Date: 2001-02-21 01:18:26 $
+ *  $Revision: 1.52 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-21 20:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,17 @@ SalGraphics::~SalGraphics()
     // Release memory taken up by clip region, off-screen
     // graph world, and colour graph port
 
+    if (    (    ( maGraphicsData.mbGWorldPixelsCopy == TRUE )
+              || ( maGraphicsData.mbGWorldPixelsNew  == TRUE )
+            )
+         && ( maGraphicsData.mhGWorldPixMap != NULL )
+           )
+    {
+        DisposePixMap( maGraphicsData.mhGWorldPixMap );
+
+        maGraphicsData.mhGWorldPixMap = NULL;
+    } // if
+
     if ( maGraphicsData.mhClipRgn != NULL )
     {
         DisposeRgn( maGraphicsData.mhClipRgn );
@@ -162,7 +173,7 @@ SalGraphics::~SalGraphics()
 
     // Initialize the rest of the fields to zero
 
-    memset ( &maGraphicsData, 0, sizeof(SalGraphicsData) );
+    memset( &maGraphicsData, 0, sizeof(SalGraphicsData) );
 } // SalGraphics Class Destructor
 
 // =======================================================================
@@ -1201,8 +1212,6 @@ void SalGraphics::Invert( ULONG            nPoints,
                 } // if
             } // if
 
-            maGraphicsData.mnPenModePort = patCopy;
-
             EndGraphics( &maGraphicsData );
         } // if
     } // if
@@ -1259,8 +1268,11 @@ long SalGraphics::GetCharWidth( sal_Unicode  nChar1,
     // both of the two Unicode characters and all characters between them.
     // The width of nChar1 is put in element 0 of pWidthAry and the width
     // of nChar2 is put in element nChar2 - nChar1 of pWidthAry
+
     for ( i = 0 ; i < nCharCount ; i++ )
+    {
         pWidthAry[i] = 10;
+    } // for
 
     fprintf( stderr,
              "<<WARNING>> SalGraphics::GetCharWidth not yet implemented!\n"
@@ -1275,7 +1287,7 @@ void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
 {
     // Stub Code
 
-    pMetric->mnAscent = 10;
+    pMetric->mnAscent  = 10;
     pMetric->mnDescent = 10;
 
     fprintf( stderr,
@@ -1302,8 +1314,9 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
 {
     ImplFontData *pFontData = new ImplFontData;
 
-    pFontData->mnWidth = 10;
+    pFontData->mnWidth  = 10;
     pFontData->mnHeight = 10;
+
     pList->Add( pFontData );
 
     fprintf( stderr,

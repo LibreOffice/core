@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:47 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-21 20:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ struct SalGraphicsData
     // Graph port pixels, state and flags
 
     BOOL            mbGWorldPixelsLocked;   // GWorld pixels locked?
+    BOOL            mbGWorldPixelsCopy;     // GWorld pixels was a copy of the original?
+    BOOL            mbGWorldPixelsNew;      // GWorld pixels is brand new?
     GWorldFlags     mnGWorldFlags;          // GWorld pixels status flags
     PixMapHandle    mhGWorldPixMap;         // GWorld pixels
 
@@ -111,9 +113,15 @@ struct SalGraphicsData
     // Pen attributes and status
 
     BOOL            mbPenTransparent;       // Is pen transparent?
-    short           mnPenMode;              // Pen Mode
-    short           mnPenModePort;          // Port pen Mode
+    SInt32          mnPenMode;              // Pen Mode
     RGBColor        maPenColor;             // Pen Color
+
+    // Port's pen attributes
+
+    SInt32          mnPortPenMode;          // Port's pen mode
+    MacOSPoint      maPortPenSize;          // Port's pen size;
+    MacOSPoint      maPortPenLocation;      // Port's pen location
+    PixPatHandle    mhPortPenPattern;       // Port's pen pattern
 
     // Brush attributes and status
 

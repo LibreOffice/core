@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdiutils.cxx,v $
  *
- *  $Revision: 1.2 $
- *  last change: $Author: pluby $ $Date: 2001-02-20 05:52:44 $
+ *  $Revision: 1.3 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-21 20:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,9 +321,21 @@ BOOL BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
         if ( rSalGraphicsData->mpCGrafPort != NULL )
         {
-            // Get the port pen attributes
+            // Get the port's pen attributes
 
-            rSalGraphicsData->mnPenModePort
+            GetPortPenPixPat( rSalGraphicsData->mpCGrafPort,
+                                          rSalGraphicsData->mhPortPenPattern
+                                        );
+
+             GetPortPenSize(   rSalGraphicsData->mpCGrafPort,
+                                         &(rSalGraphicsData->maPortPenSize)
+                                       );
+
+            GetPortPenLocation(   rSalGraphicsData->mpCGrafPort,
+                                            &(rSalGraphicsData->maPortPenLocation)
+                                          );
+
+            rSalGraphicsData->mnPortPenMode
                 = GetPortPenMode( rSalGraphicsData->mpCGrafPort );
 
             // Set the port pen mode to its new value
@@ -443,10 +455,18 @@ BOOL EndGraphics ( SalGraphicsDataPtr rSalGraphicsData )
             rSalGraphicsData->mbGWorldPixelsLocked = FALSE;
         } // if
 
-        // Reset the port to its original attributes
+        // Reset the port's pen to its original attributes
+
+        SetPortPenPixPat( rSalGraphicsData->mpCGrafPort,
+                                  rSalGraphicsData->mhPortPenPattern
+                                );
+
+        SetPortPenSize( rSalGraphicsData->mpCGrafPort,
+                                rSalGraphicsData->maPortPenSize
+                              );
 
         SetPortPenMode( rSalGraphicsData->mpCGrafPort,
-                        rSalGraphicsData->mnPenModePort
+                        rSalGraphicsData->mnPortPenMode
                       );
 
         // Unlock focus on the current NSView
@@ -505,6 +525,8 @@ void InitFont ( SalGraphicsDataPtr rSalGraphicsData )
 void InitGWorld ( SalGraphicsDataPtr rSalGraphicsData )
 {
     rSalGraphicsData->mbGWorldPixelsLocked = FALSE;
+    rSalGraphicsData->mbGWorldPixelsCopy   = FALSE;
+    rSalGraphicsData->mbGWorldPixelsNew    = FALSE;
     rSalGraphicsData->mnGWorldFlags        = noErr;
     rSalGraphicsData->mhGWorldPixMap       = NULL;
 } // InitGWorld
@@ -513,10 +535,17 @@ void InitGWorld ( SalGraphicsDataPtr rSalGraphicsData )
 
 void InitPen ( SalGraphicsDataPtr rSalGraphicsData )
 {
+    long  nMacOSPointSize = sizeof(MacOSPoint);
+
     rSalGraphicsData->maPenColor       = GetBlackColor();
     rSalGraphicsData->mnPenMode        = patCopy;
-    rSalGraphicsData->mnPenModePort    = patCopy;
     rSalGraphicsData->mbPenTransparent = FALSE;
+
+    rSalGraphicsData->mnPortPenMode    = patCopy;
+    rSalGraphicsData->mhPortPenPattern = NULL;
+
+    memset(     &(rSalGraphicsData->maPortPenSize), 0, nMacOSPointSize );
+    memset( &(rSalGraphicsData->maPortPenLocation), 0, nMacOSPointSize );
 } // InitPen
 
 // -----------------------------------------------------------------------

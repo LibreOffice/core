@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pluby $ $Date: 2001-02-20 22:01:10 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-21 20:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ static BOOL InitVirtualDeviceGWorld ( SalVirDevDataPtr rSalVirDevData )
         if ( nOSStatus != noErr )
         {
             nFlags = noErr;
+
             nOSStatus = NewGWorld( &pGWorld,
                                     nPixelDepth,
                                    &aBoundsRect,
@@ -157,6 +158,8 @@ static BOOL InitVirtualDeviceGWorld ( SalVirDevDataPtr rSalVirDevData )
             // Initialize virtual port's GWorld attributes
 
             rSalVirDevData->mpGraphics->maGraphicsData.mbGWorldPixelsLocked = FALSE;
+            rSalVirDevData->mpGraphics->maGraphicsData.mbGWorldPixelsCopy   = FALSE;
+            rSalVirDevData->mpGraphics->maGraphicsData.mbGWorldPixelsNew    = FALSE;
             rSalVirDevData->mpGraphics->maGraphicsData.mnGWorldFlags        = noErr;
 
             // Initialize the virtual port's brush attributes
@@ -257,6 +260,15 @@ BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
     // If we have already created a graphics context, dispose of it,
     // by deleting exisiting clip regions, offscreen graphic worlds,
     // and its associated colour graph port
+
+    if (    (    ( maVirDevData.mpGraphics->maGraphicsData.mbGWorldPixelsCopy == TRUE )
+              || ( maVirDevData.mpGraphics->maGraphicsData.mbGWorldPixelsNew  == TRUE )
+            )
+         && ( maVirDevData.mpGraphics->maGraphicsData.mhGWorldPixMap != NULL )
+           )
+    {
+        DisposePixMap( maVirDevData.mpGraphics->maGraphicsData.mhGWorldPixMap );
+    } // if
 
     if ( maVirDevData.mpGraphics->maGraphicsData.mhClipRgn != NULL )
     {
