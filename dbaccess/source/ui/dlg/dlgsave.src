@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:00:38 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ ModalDialog DLG_SAVE_AS
         Text[ catalan ] = "Nom de l'~informe";
         Text[ finnish ] = "R~aportin nimi";
         Text[ thai ] = "ชื่อ~รายงาน";
-        Text[ czech ] = "Název zprávy";
+        Text[ czech ] = "Název sestavy";
         Text[ hebrew ] = "~Name des Berichts";
         Text[ hindi ] = "~रिपोर्ट नाम";
         Text[ slovak ] = "Názov sp~rávy";
@@ -499,6 +499,8 @@ ModalDialog DLG_SAVE_AS
     Text[ hindi ] = "संचित करो जैसे";
     Text[ slovak ] = "Uložiť ako";
 };
+
+
 
 
 
