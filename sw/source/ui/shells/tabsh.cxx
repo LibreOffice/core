@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-10-26 14:17:20 $
+ *  last change: $Author: os $ $Date: 2001-10-31 08:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,9 +338,11 @@ SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     SvxBrushItem aBrush( RES_BACKGROUND );
 //      rSh.GetBoxBackground(aBrush);
 //  rSet.Put( aBrush );
-            rSh.GetRowBackground(aBrush);
-    rSet.Put( aBrush, SID_ATTR_BRUSH_ROW );
-        rSh.GetTabBackground(aBrush);
+    if(rSh.GetRowBackground(aBrush))
+        rSet.Put( aBrush, SID_ATTR_BRUSH_ROW );
+    else
+        rSet.InvalidateItem(SID_ATTR_BRUSH_ROW);
+    rSh.GetTabBackground(aBrush);
     rSet.Put( aBrush, SID_ATTR_BRUSH_TABLE );
     FASTBOOL bTableSel = rSh.IsTableMode();
     if(!bTableSel)
