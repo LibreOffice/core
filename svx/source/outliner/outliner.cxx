@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:13:51 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1300,7 +1300,7 @@ void Outliner::InvalidateBullet( Paragraph* pPara, ULONG nPara )
     }
 }
 
-ULONG Outliner::Read( SvStream& rInput, USHORT eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
+ULONG Outliner::Read( SvStream& rInput, const String& rBaseURL, USHORT eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     DBG_CHKTHIS(Outliner,0);
 
@@ -1313,7 +1313,7 @@ ULONG Outliner::Read( SvStream& rInput, USHORT eFormat, SvKeyValueIterator* pHTT
     Clear();
 
     ImplBlockInsertionCallbacks( TRUE );
-    ULONG nRet = pEditEngine->Read( rInput, (EETextFormat)eFormat, pHTTPHeaderAttrs );
+    ULONG nRet = pEditEngine->Read( rInput, rBaseURL, (EETextFormat)eFormat, pHTTPHeaderAttrs );
 
     bFirstParaIsEmpty = FALSE;
 
