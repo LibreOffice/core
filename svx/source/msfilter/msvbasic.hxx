@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 15:19:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _MSVBASIC_HXX
@@ -105,7 +104,7 @@ public:
         : xStor(&rIn), pOffsets(0), nOffsets(0), bCommented(bCmmntd),
         aVBAStrings(0), nLines(0), sComment(String::CreateFromAscii(
             RTL_CONSTASCII_STRINGPARAM("Rem "))),
-        eCharSet(RTL_TEXTENCODING_MS_1252)
+        meCharSet(RTL_TEXTENCODING_MS_1252), mbMac(false)
         {}
     ~VBA_Impl()
     {
@@ -139,8 +138,9 @@ private:
     sal_uInt16 nOffsets;
     enum Limits {nWINDOWLEN = 4096};
     sal_uInt8 aHistory[nWINDOWLEN];
-    rtl_TextEncoding eCharSet;
+    rtl_TextEncoding meCharSet;
     bool bCommented;
+    bool mbMac;
     int nLines;
 
     //0 for failure, anything else for success
@@ -151,3 +151,5 @@ private:
 };
 
 #endif
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
