@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-11 12:14:05 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 08:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,25 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 
+namespace
+{
+    static void lcl_exportDataStyle( SvXMLExport& _rExport, const UniReference< XMLPropertySetMapper >& _rxMapper,
+        const XMLPropertyState& _rProperty )
+    {
+        DBG_ASSERT( _rxMapper.is(), "xmloff::lcl_exportDataStyle: invalid property mapper!" );
+        // obtain the data style name
+        ::rtl::OUString sDataStyleName;
+        _rProperty.maValue >>= sDataStyleName;
+        DBG_ASSERT( sDataStyleName.getLength(), "xmloff::lcl_exportDataStyle: invalid property value for the data style name!" );
+
+        // add the attribute
+        _rExport.AddAttribute(
+            _rxMapper->GetEntryNameSpace( _rProperty.mnIndex ),
+            _rxMapper->GetEntryXMLName( _rProperty.mnIndex ),
+            sDataStyleName );
+    }
+}
+
 void SvXMLAutoStylePoolP::exportStyleAttributes(
 #if SUPD < 650
         SvXMLAttributeList& rAttrList,
@@ -120,6 +139,24 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 #endif
         ) const
 {
+    if ( XML_STYLE_FAMILY_CONTROL_ID == nFamily )
+    {   // it's a control-related style
+        UniReference< XMLPropertySetMapper > aPropertyMapper = rPropExp.getPropertySetMapper();
+
+        for (   vector< XMLPropertyState >::const_iterator pProp = rProperties.begin();
+                pProp != rProperties.end();
+                ++pProp
+            )
+        {
+            if  (   ( pProp->mnIndex > -1 )
+                &&  ( CTF_FORMS_DATA_STYLE == aPropertyMapper->GetEntryContextId( pProp->mnIndex ) )
+                )
+            {   // it's the data-style for a grid column
+                lcl_exportDataStyle( GetExport(), aPropertyMapper, *pProp );
+            }
+        }
+    }
+
     if( (XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily) || (XML_STYLE_FAMILY_SD_PRESENTATION_ID == nFamily) )
     {   // it's a graphics style
         UniReference< XMLPropertySetMapper > aPropertyMapper = rPropExp.getPropertySetMapper();
@@ -147,16 +184,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                             break;
                         }
 
-                        // obtain the data style name
-                        ::rtl::OUString sControlDataStyleName;
-                        pProp->maValue >>= sControlDataStyleName;
-                        DBG_ASSERT(sControlDataStyleName.getLength(), "SvXMLAutoStylePoolP::exportStyleAttributes: invalid property value for the data style name!");
-
-                        // add the attribute
-                        GetExport().AddAttribute(
-                            aPropertyMapper->GetEntryNameSpace(pProp->mnIndex),
-                            aPropertyMapper->GetEntryXMLName(pProp->mnIndex),
-                            sControlDataStyleName );
+                        lcl_exportDataStyle( GetExport(), aPropertyMapper, *pProp );
 
                         // check if there is another property with the special context id we're handling here
                         bFoundControlShapeDataStyle = sal_True;
