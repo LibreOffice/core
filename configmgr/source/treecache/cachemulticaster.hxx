@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachemulticaster.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ namespace configmgr
     {
     public:
         CacheChangeMulticaster();
-        ~CacheChangeMulticaster();
+        virtual ~CacheChangeMulticaster();
 
     // ICachedDataNotifier implementation
     public:
