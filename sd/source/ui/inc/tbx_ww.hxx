@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-28 13:02:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,13 @@ public:
 
     void         StartSelection() { aTbx.GetToolBox().StartSelection(); }
     void         Update();
+
+private:
+    /** Adapt the toolbox to whether CTL is active or not.  If CTL is not
+        active then all toolbox items that describe CTL specific shapes are
+        deleted from it and its size is re-calculated.
+    */
+    void AdaptToCTL (void);
 };
 
 //------------------------------------------------------------------------
