@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-06 08:36:56 $
+ *  last change: $Author: mt $ $Date: 2001-06-15 07:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2433,6 +2433,20 @@ void UnoListBoxControl::dispose() throw(uno::RuntimeException)
     UnoControl::dispose();
 }
 
+void UnoListBoxControl::ImplUpdateSelectedItemsProperty()
+{
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XListBox > xListBox( mxPeer, uno::UNO_QUERY );
+        DBG_ASSERT( xListBox.is(), "XListBox?" );
+
+        uno::Sequence<sal_Int16> aSeq = xListBox->getSelectedItemsPos();
+        uno::Any aAny;
+        aAny <<= aSeq;
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ), aAny, sal_False );
+    }
+}
+
 void UnoListBoxControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
 {
     UnoControl::ImplSetPeerProperty( rPropName, rVal );
@@ -2645,6 +2659,7 @@ void UnoListBoxControl::selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(
         uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
         xListBox->selectItemPos( nPos, bSelect );
     }
+    ImplUpdateSelectedItemsProperty();
 }
 
 void UnoListBoxControl::selectItemsPos( const uno::Sequence<sal_Int16>& aPositions, sal_Bool bSelect ) throw(uno::RuntimeException)
@@ -2654,6 +2669,7 @@ void UnoListBoxControl::selectItemsPos( const uno::Sequence<sal_Int16>& aPositio
         uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
         xListBox->selectItemsPos( aPositions, bSelect );
     }
+    ImplUpdateSelectedItemsProperty();
 }
 
 void UnoListBoxControl::selectItem( const ::rtl::OUString& aItem, sal_Bool bSelect ) throw(uno::RuntimeException)
@@ -2663,6 +2679,7 @@ void UnoListBoxControl::selectItem( const ::rtl::OUString& aItem, sal_Bool bSele
         uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
         xListBox->selectItem( aItem, bSelect );
     }
+    ImplUpdateSelectedItemsProperty();
 }
 
 void UnoListBoxControl::makeVisible( sal_Int16 nEntry ) throw(uno::RuntimeException)
@@ -2700,15 +2717,7 @@ void UnoListBoxControl::setMultipleMode( sal_Bool bMulti ) throw(uno::RuntimeExc
 
 void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(uno::RuntimeException)
 {
-    // Neue uno::Sequence als beans::Property ins Model treten.
-    uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
-    DBG_ASSERT( xListBox.is(), "XListBox?" );
-
-    uno::Sequence<sal_Int16> aSeq = xListBox->getSelectedItemsPos();
-    uno::Any aAny;
-    aAny <<= aSeq;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ), aAny, sal_False );
-
+    ImplUpdateSelectedItemsProperty();
     if ( maItemListeners.getLength() )
         maItemListeners.itemStateChanged( rEvent );
 }
