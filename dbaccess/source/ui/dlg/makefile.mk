@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.25 $
+ #  $Revision: 1.26 $
  #
- #  last change: $Author: kz $ $Date: 2004-05-19 04:36:31 $
+ #  last change: $Author: hr $ $Date: 2004-08-02 15:49:43 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -74,59 +74,66 @@ TARGET=uidlg
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	\
+        ConnectionPage.src	\
         UserAdmin.src	\
         directsql.src	\
-        missingdocdlg.src	\
-        doclinkdialog.src	\
-        AdabasStat.src	\
-        AdabasPage.src	\
-        indexdialog.src	\
-        RelationDlg.src	\
-        adtabdlg.src	\
-        dlgsave.src		\
-        queryorder.src	\
-        queryfilter.src	\
-        paramdialog.src	\
-        dsselect.src	\
-        dbadmin.src		\
-        dbfindex.src	\
-        dlgsize.src		\
-        dlgattr.src		\
+        AdabasStat.src		\
+        AdabasPage.src		\
+        indexdialog.src		\
+        RelationDlg.src		\
+        adtabdlg.src		\
+        dlgsave.src			\
+        queryorder.src		\
+        queryfilter.src		\
+        paramdialog.src		\
+        dsselect.src		\
+        dbadmin2.src		\
+        dbadmin.src			\
+        dbfindex.src		\
+        dlgsize.src			\
+        CollectionView.src	\
+        dlgattr.src			\
+        AdvancedPageDlg.src \
+        AdabasStatDlg.src	\
+        UserAdminDlg.src	\
         sqlmessage.src
 
 # ... object files ............................
-EXCEPTIONSFILES=	\
-        $(SLO)$/datasourcemap.obj	\
-        $(SLO)$/UserAdmin.obj	\
-        $(SLO)$/directsql.obj	\
-        $(SLO)$/generalpage.obj	\
-        $(SLO)$/tablespage.obj	\
-        $(SLO)$/doclinkdialog.obj	\
-        $(SLO)$/AdabasStat.obj	\
-        $(SLO)$/AdabasPage.obj	\
+EXCEPTIONSFILES=						\
+        $(SLO)$/directsql.obj			\
+        $(SLO)$/dbwiz.obj				\
+        $(SLO)$/generalpage.obj			\
         $(SLO)$/indexfieldscontrol.obj	\
-        $(SLO)$/indexdialog.obj	\
-        $(SLO)$/RelationDlg.obj	\
-        $(SLO)$/adtabdlg.obj	\
-        $(SLO)$/dlgsave.obj		\
-        $(SLO)$/queryorder.obj	\
-        $(SLO)$/queryfilter.obj	\
-        $(SLO)$/paramdialog.obj	\
-        $(SLO)$/dbadmin.obj		\
-        $(SLO)$/commonpages.obj	\
-        $(SLO)$/detailpages.obj	\
-        $(SLO)$/sqlmessage.obj	\
-        $(SLO)$/finteraction.obj	\
+        $(SLO)$/indexdialog.obj			\
+        $(SLO)$/RelationDlg.obj			\
+        $(SLO)$/adtabdlg.obj			\
+        $(SLO)$/dlgsave.obj				\
+        $(SLO)$/queryorder.obj			\
+        $(SLO)$/queryfilter.obj			\
+        $(SLO)$/paramdialog.obj			\
+        $(SLO)$/dbadmin.obj				\
+        $(SLO)$/detailpages.obj			\
+        $(SLO)$/sqlmessage.obj			\
+        $(SLO)$/finteraction.obj		\
+        $(SLO)$/ConnectionPage.obj		\
+        $(SLO)$/AdvancedPageDlg.obj		\
+        $(SLO)$/AdabasStatDlg.obj		\
+        $(SLO)$/UserAdminDlg.obj		\
+        $(SLO)$/UserAdmin.obj			\
+        $(SLO)$/AdabasStat.obj			\
+        $(SLO)$/tablespage.obj			\
+        $(SLO)$/DbAdminImpl.obj			\
+        $(SLO)$/TablesSingleDlg.obj		\
+        $(SLO)$/CollectionView.obj		\
+        $(SLO)$/dsselect.obj			\
         $(SLO)$/dbfindex.obj
 
-SLOFILES=	\
-        $(EXCEPTIONSFILES) \
-        $(SLO)$/datasourceselector.obj	\
-        $(SLO)$/missingdocdlg.obj	\
-        $(SLO)$/dlgsize.obj		\
-        $(SLO)$/dlgattr.obj		\
-        $(SLO)$/odbcconfig.obj	\
-        $(SLO)$/dsselect.obj	\
+SLOFILES=								\
+        $(EXCEPTIONSFILES)				\
+        $(SLO)$/DriverSettings.obj		\
+        $(SLO)$/dlgsize.obj				\
+        $(SLO)$/dlgattr.obj				\
+        $(SLO)$/odbcconfig.obj			\
         $(SLO)$/adminpages.obj
 
 .IF "$(GUI)"=="WNT"
