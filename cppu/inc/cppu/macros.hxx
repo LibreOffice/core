@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:38:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,15 @@
 /** Namespace name for compiler/ platform, e.g. gcc3, msci */
 #define CPPU_CURRENT_NAMESPACE CPPU_ENV
 
-/** Patching the gcc 3 incomatible alignment change for linux.
-    This pragma macro is appended by the cppumaker tool to every first member of a struct, iff
-    the struct inherits from a base struct the first member is no double or [unsigned] long long.
+/** Patching the GCC 3 incomatible alignment change for Linux.
+
+    This macro is appended by cppumaker to every first member of a struct, if
+    the struct inherits from a base struct and the first member is neither
+    double nor sal_[u]Int64.  (The double/sal_[u]Int64 restriction is due to a
+    bug in GCC prior to version 3.3, which would cause __alignof__ of such a
+    struct to become 8 instead of 4 if CPPU_GCC3_ALIGN were added to its first
+    member.)
+
     @internal
 */
 #if defined(__GNUC__) && (__GNUC__ >= 3)
