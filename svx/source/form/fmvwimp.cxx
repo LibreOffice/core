@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-14 16:14:35 $
+ *  last change: $Author: fs $ $Date: 2002-05-14 12:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _SVDOGRP_HXX
 #include "svdogrp.hxx"
+#endif
+#ifndef _SVDITER_HXX
+#include "svditer.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
@@ -231,6 +234,15 @@ namespace svxform
             m_xComp->dispose();
     }
 }
+
+//------------------------------------------------------------------------------
+class FmXFormView::ObjectRemoveListener : public SfxListener
+{
+    FmXFormView* m_pParent;
+public:
+    ObjectRemoveListener( FmXFormView* pParent );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+};
 
 //========================================================================
 DBG_NAME(FmXPageViewWinRec);
@@ -487,6 +499,9 @@ FmXFormView::~FmXFormView()
         Application::RemoveUserEvent(m_nErrorMessageEvent);
     if (m_nAutoFocusEvent)
         Application::RemoveUserEvent(m_nAutoFocusEvent);
+
+    delete m_pWatchStoredList;
+    m_pWatchStoredList = NULL;
 }
 
 //      EventListener
@@ -1290,6 +1305,272 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
         {
             DBG_ERROR("FmXFormView::createControlLabelPair : could not marry the control and the label !");
         }
+    }
+}
+
+//------------------------------------------------------------------------------
+FmXFormView::ObjectRemoveListener::ObjectRemoveListener( FmXFormView* pParent )
+    :m_pParent( pParent )
+{
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::ObjectRemoveListener::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if (rHint.ISA(SdrHint) && (((SdrHint&)rHint).GetKind() == HINT_OBJREMOVED))
+        m_pParent->ObjectRemovedInAliveMode(((SdrHint&)rHint).GetObject());
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::ObjectRemovedInAliveMode( const SdrObject* pObject )
+{
+    // wenn das entfernte Objekt in meiner MarkList, die ich mir beim Umschalten in den Alive-Mode gemerkt habe, steht,
+    // muss ich es jetzt da rausnehmen, da ich sonst beim Zurueckschalten versuche, die Markierung wieder zu setzen
+    // (interesanterweise geht das nur bei gruppierten Objekten schief (beim Zugriff auf deren ObjList GPF), nicht bei einzelnen)
+
+    sal_uInt32 nCount = m_aMark.GetMarkCount();
+    for (sal_uInt32 i = 0; i < nCount; ++i)
+    {
+        SdrMark* pMark = m_aMark.GetMark(i);
+        SdrObject* pCurrent = pMark->GetObj();
+        if (pObject == pCurrent)
+        {
+            m_aMark.DeleteMark(i);
+            return;
+        }
+        // ich brauche nicht in GroupObjects absteigen : wenn dort unten ein Objekt geloescht wird, dann bleibt der
+        // Zeiger auf das GroupObject, den ich habe, trotzdem weiter gueltig bleibt ...
+    }
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::stopMarkListWatching()
+{
+    if ( m_pWatchStoredList )
+    {
+        m_pWatchStoredList->EndListeningAll();
+        delete m_pWatchStoredList;
+        m_pWatchStoredList = NULL;
+    }
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::startMarkListWatching()
+{
+    if ( !m_pWatchStoredList )
+    {
+        m_pWatchStoredList = new ObjectRemoveListener( this );
+        FmFormModel* pModel = GetFormShell() ? GetFormShell()->GetFormModel() : NULL;
+        DBG_ASSERT( pModel != NULL, "FmXFormView::startMarkListWatching: shell has no model!" );
+        m_pWatchStoredList->StartListening( *static_cast< SfxBroadcaster* >( pModel ) );
+    }
+    else
+        DBG_ERROR( "FmXFormView::startMarkListWatching: already listening!" );
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
+{
+    if ( m_pView )
+    {
+        m_aMark = m_pView->GetMarkList();
+        if ( _bSmartUnmark )
+        {
+            sal_uInt32 nCount = m_aMark.GetMarkCount( );
+            for ( sal_uInt32 i = 0; i < nCount; ++i )
+            {
+                SdrMark*   pMark = m_aMark.GetMark(i);
+                SdrObject* pObj  = pMark->GetObj();
+
+                if ( m_pView->IsObjMarked( pObj ) )
+                {
+                    if ( pObj->IsGroupObject() )
+                    {
+                        SdrObjListIter aIter( *pObj->GetSubList() );
+                        sal_Bool bMixed = sal_False;
+                        while ( aIter.IsMore() && !bMixed )
+                            bMixed = ( aIter.Next()->GetObjInventor() != FmFormInventor );
+
+                        if ( !bMixed )
+                        {
+                            // all objects in the group are form objects
+                            m_pView->MarkObj( pMark->GetObj(), pMark->GetPageView(), sal_True /* unmark! */ );
+                        }
+                    }
+                    else
+                    {
+                        if ( pObj->GetObjInventor() == FmFormInventor )
+                        {   // this is a form layer object
+                            m_pView->MarkObj( pMark->GetObj(), pMark->GetPageView(), sal_True /* unmark! */ );
+                        }
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        DBG_ERROR( "FmXFormView::saveMarkList: invalid view!" );
+        m_aMark = SdrMarkList();
+    }
+}
+
+//--------------------------------------------------------------------------
+static sal_Bool lcl_hasObject( SdrObjListIter& rIter, SdrObject* pObj )
+{
+    sal_Bool bFound = sal_False;
+    while (rIter.IsMore() && !bFound)
+        bFound = pObj == rIter.Next();
+
+    rIter.Reset();
+    return bFound;
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
+{
+    if ( !m_pView )
+        return;
+
+    _rRestoredMarkList.Clear();
+
+    const SdrMarkList& rCurrentList = m_pView->GetMarkList();
+    FmFormPage* pPage = GetFormShell() ? GetFormShell()->GetCurPage() : NULL;
+    if (pPage)
+    {
+        if (rCurrentList.GetMarkCount())
+        {   // there is a current mark ... hmm. Is it a subset of the mark we remembered in saveMarkList?
+            sal_Bool bMisMatch = sal_False;
+
+            // loop through all current marks
+            sal_uInt32 nCurrentCount = rCurrentList.GetMarkCount();
+            for ( sal_uInt32 i=0; i<nCurrentCount&& !bMisMatch; ++i )
+            {
+                const SdrObject* pCurrentMarked = rCurrentList.GetMark( i )->GetObj();
+
+                // loop through all saved marks, check for equality
+                sal_Bool bFound = sal_False;
+                sal_uInt32 nSavedCount = m_aMark.GetMarkCount();
+                for ( sal_uInt32 j=0; j<nSavedCount && !bFound; ++j )
+                {
+                    if ( m_aMark.GetMark( j )->GetObj() == pCurrentMarked )
+                        bFound = sal_True;
+                }
+
+                // did not find a current mark in the saved marks
+                if ( !bFound )
+                    bMisMatch = sal_True;
+            }
+
+            if ( bMisMatch )
+            {
+                m_aMark.Clear();
+                _rRestoredMarkList = rCurrentList;
+                return;
+            }
+        }
+        // wichtig ist das auf die Objecte der markliste nicht zugegriffen wird
+        // da diese bereits zerstoert sein koennen
+        SdrPageView* pCurPageView = m_pView->GetPageViewPvNum(0);
+        SdrObjListIter aPageIter( *pPage );
+        sal_Bool bFound = sal_True;
+
+        // gibt es noch alle Objecte
+        sal_uInt32 nCount = m_aMark.GetMarkCount();
+        for (sal_uInt32 i = 0; i < nCount && bFound; i++)
+        {
+            SdrMark*   pMark = m_aMark.GetMark(i);
+            SdrObject* pObj  = pMark->GetObj();
+            if (pObj->IsGroupObject())
+            {
+                SdrObjListIter aIter(*pObj->GetSubList());
+                while (aIter.IsMore() && bFound)
+                    bFound = lcl_hasObject(aPageIter, aIter.Next());
+            }
+            else
+                bFound = lcl_hasObject(aPageIter, pObj);
+
+            bFound = bFound && pCurPageView == pMark->GetPageView();
+        }
+
+        if (bFound)
+        {
+            // Das LastObject auswerten
+            if (nCount) // Objecte jetzt Markieren
+            {
+                for (sal_uInt32 i = 0; i < nCount; i++)
+                {
+                    SdrMark* pMark = m_aMark.GetMark(i);
+                    SdrObject* pObj = pMark->GetObj();
+                    if ( pObj->GetObjInventor() == FmFormInventor )
+                        if ( !m_pView->IsObjMarked( pObj ) )
+                            m_pView->MarkObj( pObj, pMark->GetPageView() );
+                }
+
+                _rRestoredMarkList = m_aMark;
+            }
+            // This one is from the times where the code was part of the FmXFormShell instead of the FmXFormView.
+            // I do not see the deeper sense - it's not fully clear what it does, and everything works as
+            // expected without it. Fine, so I omit it :).
+            // 02.05.2002 - fs@openoffice.org
+//          else
+//          {
+//              Reference< XIndexAccess> xCont(pPage->GetForms(), UNO_QUERY);
+//
+//              // Ist das aktuelle Object ein Element eines SelectionSuppliers?
+//              Reference< XChild> xChild(m_xCurControl,UNO_QUERY);
+//              Reference< ::com::sun::star::view::XSelectionSupplier> xSelectionSupplier;
+//              if (xChild.is())
+//                  xSelectionSupplier = Reference< ::com::sun::star::view::XSelectionSupplier>(xChild->getParent(), UNO_QUERY);
+//              if (xSelectionSupplier.is())
+//              {
+//                  // suchen der Zugehoreigen Form
+//                  Reference< XForm> xForm(GetForm(m_xCurControl));
+//                  Reference< XInterface> xIface(xForm, UNO_QUERY);
+//                  if (xForm.is() && searchElement(xCont, xIface))
+//                  {
+//                      setCurForm(xForm);
+//                      setCurControl(m_xCurControl);
+//
+//                      // jetzt noch die Selection vornehmen
+//                      xSelectionSupplier->select(makeAny(m_xCurControl));
+//                  }
+//              }
+//              else
+//              {
+//                  // Auswerten des letzen Objects
+//                  Reference< XForm> xForm(m_xCurForm, UNO_QUERY);
+//                  Reference< XInterface> xIface(xForm, UNO_QUERY);
+//                  if (xForm.is() && searchElement(xCont, xIface))
+//                  {
+//                      setCurForm(xForm);
+//                  }
+//                  else
+//                  {
+//                      if (pPage->GetImpl()->getCurForm().is())
+//                          xForm = pPage->GetImpl()->getCurForm();
+//                      else if (xCont.is() && xCont->getCount())
+//                          xForm = pPage->GetImpl()->getDefaultForm();
+//
+//                      if (xForm.is())
+//                          setCurForm(xForm);
+//                  }
+//              }
+//
+//              Reference< XInterface> xPreviousObject(getSelObject());
+//
+//              // wurde vorher Form angezeigt, dann wieder die Form anzeigen
+//              Reference< XForm> xOldForm(xPreviousObject, UNO_QUERY);
+//              if (xOldForm.is())
+//                  setSelObject(m_xCurForm);
+//              else
+//                  setSelObject(m_xCurControl);
+//
+//              if (IsPropBrwOpen() && m_xSelObject != xPreviousObject)
+//                  ShowProperties(m_xSelObject, sal_True);
+//          }
+        }
+        m_aMark.Clear();
     }
 }
 
