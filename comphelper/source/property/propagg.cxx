@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:45:42 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,7 +816,18 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const ::rtl::O
             m_xAggregateState->setPropertyToDefault(_rPropertyName);
     }
     else
-        setPropertyToDefaultByHandle(nHandle);
+    {
+        try
+        {
+            setPropertyToDefaultByHandle( nHandle );
+        }
+        catch( const UnknownPropertyException& ) { throw; }
+        catch( const RuntimeException& ) { throw; }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OPropertySetAggregationHelper::setPropertyToDefault: caught an exception which is not allowed to leave here!" );
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
