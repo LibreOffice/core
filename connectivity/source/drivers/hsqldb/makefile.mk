@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 12:10:29 $
+#   last change: $Author: kz $ $Date: 2005-01-21 16:40:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,8 @@ SLOFILES=\
         $(SLO)$/HStorageMap.obj					\
         $(SLO)$/HStorageAccess.obj				\
         $(SLO)$/HDriver.obj						\
+        $(SLO)$/HConnection.obj					\
+        $(SLO)$/HTerminateListener.obj			\
         $(SLO)$/StorageNativeOutputStream.obj	\
         $(SLO)$/StorageNativeInputStream.obj	\
         $(SLO)$/StorageFileAccess.obj			\
