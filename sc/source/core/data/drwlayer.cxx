@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:44:05 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,34 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
+#include <com/sun/star/embed/XVisualObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
+#include <com/sun/star/embed/XClassifiedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XCOMPONENTSUPPLIER_HPP_
+#include <com/sun/star/embed/XComponentSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#endif
+
+
 #ifdef PCH
 #include "core_pch.hxx"
 #endif
@@ -95,14 +123,16 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docinf.hxx>
 #include <sfx2/docfile.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/svstor.hxx>
+//REMOVE    #include <so3/ipobj.hxx>
+//REMOVE    #include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/itempool.hxx>
 #include <vcl/virdev.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
 #include <vcl/svapp.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 #include "drwlayer.hxx"
 #include "drawpage.hxx"
@@ -124,6 +154,8 @@
 #define SHRINK_DIST     25
 
 #define SHRINK_DIST_TWIPS   15
+
+using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
 //
@@ -158,7 +190,8 @@ static ScDrawObjFactory* pFac = NULL;
 static E3dObjFactory* pF3d = NULL;
 static USHORT nInst = 0;
 
-SvPersist* ScDrawLayer::pGlobalDrawPersist = NULL;
+SfxObjectShell* ScDrawLayer::pGlobalDrawPersist = NULL;
+//REMOVE    SvPersist* ScDrawLayer::pGlobalDrawPersist = NULL;
 
 BOOL bDrawIsInUndo = FALSE;         //! Member
 
@@ -871,7 +904,6 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
     long nEndY = 0;
     long nStartX = LONG_MAX;
     long nStartY = LONG_MAX;
-
 
     // Grenzen ausrechnen
 
@@ -1666,10 +1698,22 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
             if ( pNewObject->GetObjIdentifier() == OBJ_OLE2 )
             {
-                SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pNewObject)->GetObjRef();
-                if ( aIPObj.Is() && SotExchange::IsChart( *aIPObj->GetSvFactory() ) )
+                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pNewObject)->GetObjRef();
+                uno::Reference< embed::XClassifiedObject > xClassified( xIPObj, uno::UNO_QUERY );
+                SvGlobalName aObjectClassName;
+                if ( xClassified.is() )
                 {
-                    SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
+                    try {
+                        aObjectClassName = SvGlobalName( xClassified->getClassID() );
+                    } catch( uno::Exception& )
+                    {
+                        // TODO: handle error?
+                    }
+                }
+
+                if ( xIPObj.is() && SotExchange::IsChart( aObjectClassName ) )
+                {
+                    SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
                     if ( pChartData )
                     {
                         ScChartArray aArray( pDoc, *pChartData );   // parses range description
@@ -1727,7 +1771,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
                                 SchMemChart* pMemChart = aArray.CreateMemChart();
                                 ScChartArray::CopySettings( *pMemChart, *pChartData );
-                                SchDLL::Update( aIPObj, pMemChart );
+                                SchDLL::Update( xIPObj, pMemChart );
                                 delete pMemChart;
                             }
                             else
@@ -1744,7 +1788,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                                 SchChartRange aChartRange;
                                 pChartData->SetChartRange( aChartRange );
                                 pChartData->SetReadOnly( FALSE );
-                                SchDLL::Update( aIPObj, pChartData );
+                                SchDLL::Update( xIPObj, pChartData );
                             }
                         }
                     }
@@ -1962,29 +2006,71 @@ ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )             // static
 
 Graphic ScDrawLayer::GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj )    // static
 {
-    SvInPlaceObjectRef  aIPObjRef = pOle2Obj->GetObjRef();
-    Graphic             aGraphic;
+    uno::Reference< embed::XEmbeddedObject > xIPObj = pOle2Obj->GetObjRef();
+    Graphic aGraphic;
 
-    if ( aIPObjRef.Is() )
+    if ( xIPObj.is() )
     {
-        VirtualDevice   aVDev;
-        GDIMetaFile     aGDIMtf;
-        const MapMode   aMap100( MAP_100TH_MM );
-        const Size&     rSize = aIPObjRef->GetVisArea().GetSize();
+        try
+        {
+            svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+            uno::Reference< embed::XComponentSupplier > xCompSupplier( xIPObj, uno::UNO_QUERY );
+            DBG_ASSERT( xCompSupplier.is(), "The object must implement XComponentSupplier!" );
+            if ( xCompSupplier.is() )
+            {
+                uno::Reference< datatransfer::XTransferable > xTransfer( xCompSupplier, uno::UNO_QUERY );
+                DBG_ASSERT( xTransfer.is(), "The component does not implement XTransferable!" );
+                if ( xTransfer.is() )
+                {
+                    datatransfer::DataFlavor aDataFlavor(
+                        ::rtl::OUString::createFromAscii( "application/x-openoffice;windows_formatname=\"GDIMetaFile\"" ),
+                        ::rtl::OUString::createFromAscii( "GDIMetaFile" ),
+                        getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
 
-        aVDev.SetMapMode( aMap100 );
-        aGDIMtf.Record( &aVDev );
-
-        aIPObjRef->DoDraw( &aVDev, Point(), rSize, JobSetup() );
-
-        aGDIMtf.Stop();
-        aGDIMtf.WindStart();
-        aGDIMtf.SetPrefMapMode( aMap100 );
-        aGDIMtf.SetPrefSize( rSize );
-        aGraphic = Graphic( aGDIMtf );
+                    uno::Any aAny = xTransfer->getTransferData( aDataFlavor );
+                    uno::Sequence< sal_Int8 > aGDIData;
+                    if ( aAny >>= aGDIData )
+                    {
+                        SvMemoryStream aMemStm( aGDIData.getArray(), aGDIData.getLength(), STREAM_READ );
+                        aMemStm.ObjectOwnsMemory( sal_False );
+                        GDIMetaFile aGDIMtf;
+                        aGDIMtf.Read( aMemStm );
+                        aGraphic = Graphic( aGDIMtf );
+                    }
+                }
+            }
+        }
+        catch( uno::Exception& )
+        {
+            //TODO: handle error?
+        }
     }
 
     return aGraphic;
+
+//REMOVE        SvInPlaceObjectRef  aIPObjRef = pOle2Obj->GetObjRef();
+//REMOVE        Graphic             aGraphic;
+//REMOVE
+//REMOVE        if ( aIPObjRef.Is() )
+//REMOVE        {
+//REMOVE            VirtualDevice   aVDev;
+//REMOVE            GDIMetaFile     aGDIMtf;
+//REMOVE            const MapMode   aMap100( MAP_100TH_MM );
+//REMOVE            const Size&     rSize = aIPObjRef->GetVisArea().GetSize();
+//REMOVE
+//REMOVE            aVDev.SetMapMode( aMap100 );
+//REMOVE            aGDIMtf.Record( &aVDev );
+//REMOVE
+//REMOVE            aIPObjRef->DoDraw( &aVDev, Point(), rSize, JobSetup() );
+//REMOVE
+//REMOVE            aGDIMtf.Stop();
+//REMOVE            aGDIMtf.WindStart();
+//REMOVE            aGDIMtf.SetPrefMapMode( aMap100 );
+//REMOVE            aGDIMtf.SetPrefSize( rSize );
+//REMOVE            aGraphic = Graphic( aGDIMtf );
+//REMOVE        }
+//REMOVE
+//REMOVE        return aGraphic;
 }
 
 // static:
@@ -2036,12 +2122,22 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
         }
         else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
         {
-            SvInPlaceObjectRef aIPObjRef = ( (SdrOle2Obj*) pObj )->GetObjRef();
+            uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObj)->GetObjRef();
+            uno::Reference< embed::XVisualObject > xVisObj( xIPObj, uno::UNO_QUERY );
+            DBG_ASSERT( !xIPObj.is() || xVisObj.is(), "If there is an embedded object it must implement XVisualObject!" );
 
-            if ( aIPObjRef.Is() )
+            if ( xVisObj.is() )
             {
-                aGraphSize = aIPObjRef->GetVisArea().GetSize();
-                bObjSupported = TRUE;
+                try {
+                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+                    awt::Size aSize = xVisObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
+                    aGraphSize = Size( aSize.Width, aSize.Height );
+                    bObjSupported = TRUE;
+                }
+                catch( uno::Exception& )
+                {
+                    // TODO: error handling
+                }
             }
         }
 
@@ -2057,7 +2153,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
     return pIMapObj;
 }
 
-void ScDrawLayer::SetGlobalDrawPersist(SvPersist* pPersist)         // static
+void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)            // static
 {
     DBG_ASSERT(!pGlobalDrawPersist,"SetGlobalDrawPersist mehrfach");
     pGlobalDrawPersist = pPersist;
@@ -2076,10 +2172,12 @@ SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStream
     if ( !pDoc )
         return NULL;
 
-    SvStorage*  pStor = pDoc->GetDocumentShell() ? pDoc->GetDocumentShell()->GetMedium()->GetStorage() : NULL;
+    uno::Reference< embed::XStorage > xStorage = pDoc->GetDocumentShell() ?
+                                                        pDoc->GetDocumentShell()->GetMedium()->GetStorage() :
+                                                        NULL;
     SvStream*   pRet = NULL;
 
-    if( pStor )
+    if( xStorage.is() )
     {
         if( rStreamInfo.maUserData.Len() &&
             ( rStreamInfo.maUserData.GetToken( 0, ':' ) ==
@@ -2091,37 +2189,42 @@ SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStream
             if( aPicturePath.GetTokenCount( '/' ) == 2 )
             {
                 const String aPictureStreamName( aPicturePath.GetToken( 1, '/' ) );
+                const String aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
 
-                if( !xPictureStorage.Is() )
-                {
-                    const String aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
-
-                    if( pStor->IsContained( aPictureStorageName ) &&
-                        pStor->IsStorage( aPictureStorageName )  )
+                try {
+                    if ( xStorage->isStorageElement( aPictureStorageName ) )
                     {
-                        ( (ScDrawLayer*) this )->xPictureStorage = pStor->OpenUCBStorage( aPictureStorageName, STREAM_READ | STREAM_WRITE );
+                        uno::Reference< embed::XStorage > xPictureStorage =
+                                    xStorage->openStorageElement( aPictureStorageName, embed::ElementModes::READ );
+
+                        if( xPictureStorage.is() &&
+                            xPictureStorage->isStreamElement( aPictureStreamName ) )
+                        {
+                            uno::Reference< io::XStream > xStream =
+                                xPictureStorage->openStreamElement( aPictureStreamName, embed::ElementModes::READ );
+                            if ( xStream.is() )
+                                pRet = ::utl::UcbStreamHelper::CreateStream( xStream );
+                        }
                     }
                 }
-
-                if( xPictureStorage.Is() &&
-                    xPictureStorage->IsContained( aPictureStreamName ) &&
-                    xPictureStorage->IsStream( aPictureStreamName ) )
+                catch( uno::Exception& )
                 {
-                    pRet = xPictureStorage->OpenStream( aPictureStreamName );
+                    // TODO: error handling
                 }
             }
         }
-        else
-        {
-            pRet = pStor->OpenStream( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_SCSTREAM)),
-                                      STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
-
-            if( pRet )
-            {
-                pRet->SetVersion( pStor->GetVersion() );
-                pRet->SetKey( pStor->GetKey() );
-            }
-        }
+        // the following code seems to be related to binary format
+//REMOVE            else
+//REMOVE            {
+//REMOVE                pRet = pStor->OpenStream( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_SCSTREAM)),
+//REMOVE                                          STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
+//REMOVE
+//REMOVE                if( pRet )
+//REMOVE                {
+//REMOVE                    pRet->SetVersion( pStor->GetVersion() );
+//REMOVE                    pRet->SetKey( pStor->GetKey() );
+//REMOVE                }
+//REMOVE            }
 
         rStreamInfo.mbDeleteAfterUse = ( pRet != NULL );
     }
@@ -2129,10 +2232,10 @@ SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStream
     return pRet;
 }
 
-void ScDrawLayer::ReleasePictureStorage()
-{
-    xPictureStorage.Clear();
-}
+//REMOVE    void ScDrawLayer::ReleasePictureStorage()
+//REMOVE    {
+//REMOVE        xPictureStorage.Clear();
+//REMOVE    }
 
 SdrLayerID __EXPORT ScDrawLayer::GetControlExportLayerId( const SdrObject & ) const
 {
