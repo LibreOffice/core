@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-21 13:25:54 $
+ *  last change: $Author: sj $ $Date: 2002-03-25 16:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,6 +814,9 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
             case DFF_Prop_shadowColor :
                 rSet.Put( SdrShadowColorItem( String(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_shadowColor ) ) );
             break;
+            case DFF_Prop_shadowOpacity :
+                rSet.Put( SdrShadowTransparenceItem( (sal_uInt16)( nContent / 655 ) ) );
+            break;
             case DFF_Prop_shadowOffsetX :
             {
                 INT32 nVal = (INT32)nContent;
@@ -832,13 +835,9 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
             break;
             case DFF_Prop_fshadowObscured :
             {
-                if ( ( nContent & 0x02 ) == 0 )
-                    break;
-            }
-            case DFF_Prop_fShadow :
-            {
-                rSet.Put( SdrShadowItem( nContent != 0 ) );
-                if ( nContent )
+                sal_Bool bHasShadow = ( nContent & 2 ) != 0;
+                rSet.Put( SdrShadowItem( bHasShadow ) );
+                if ( bHasShadow )
                 {
                     if ( !IsProperty( DFF_Prop_shadowOffsetX ) )
                         rSet.Put( SdrShadowXDistItem( 35 ) );
