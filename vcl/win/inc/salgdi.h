@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:01:37 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,18 @@
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
+#ifndef _SV_OUTFONT_HXX
+#include <outfont.hxx>
+#endif
+#ifndef _SV_IMPFONT_HXX
+#include <impfont.hxx>
+#endif
 
 #include "boost/scoped_ptr.hpp"
+#include <hash_set>
 
-struct ImplFontSelectData;
+class ImplFontSelectData;
+class ImplWinFontEntry;
 
 // -----------
 // - Defines -
@@ -83,20 +91,56 @@ struct ImplFontSelectData;
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
 
-// win32 platform specifics, maybe move pmk file
+// win32 platform specific options. Move them to the PMK file?
 #define USE_UNISCRIBE
 #define GCP_KERN_HACK
+#define GNG_VERT_HACK
 
-// Instances of classes derived from SalLayout might collectively want to cache
-// font data; see the mxTextLayoutCache member of SalGraphicsData.  Since
-// different derived classes will typically cache different data, this abstract
-// class offers only the minimal interface needed from the outside:
-class ImplTextLayoutCache
+// win32 specific physically available font face
+class ImplWinFontData : public ImplFontData
 {
 public:
-    virtual inline ~ImplTextLayoutCache() {};
+                            ImplWinFontData( const ImplDevFontAttributes&,
+                                WIN_BYTE eWinCharSet, int nHeight = 0 );
+                            ~ImplWinFontData();
 
-    virtual void flush( int nMinLevel ) = 0;
+    virtual ImplFontData*   Clone() const;
+    virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+    void                    UpdateFromHDC( HDC );
+
+    bool                    HasChar( sal_Unicode c ) const { return mpUnicodeMap->HasChar(c); }
+    WIN_BYTE                GetCharSet() const          { return meWinCharSet; }
+    bool                    IsGlyphApiDisabled() const  { return mbDisableGlyphApi; }
+    bool                    SupportsKorean() const      { return mbHasKoreanRange; }
+    bool                    SupportsCJK() const         { return mbHasCJKSupport; }
+    ImplFontCharMap*        GetImplFontCharMap();
+
+private:
+    bool                    mbDisableGlyphApi;
+    bool                    mbHasKoreanRange;
+    bool                    mbHasCJKSupport;
+
+    ImplFontCharMap*        mpUnicodeMap;
+
+    // TODO: get rid of the members below needed to work with the Win9x non-unicode API
+    BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
+    BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
+    WIN_BYTE                meWinCharSet;
+
+private:
+    void                    ReadCmapTable( HDC );
+    void                    ReadOs2Table( HDC );
+
+#ifdef GNG_VERT_HACK
+    void                    ReadGsubTable( HDC ) const;
+
+    typedef std::hash_set<int> IntHashSet;
+    mutable IntHashSet      maGsubTable;
+    mutable bool            mbGsubRead;
+public:
+    bool                    HasGSUBstitutions( HDC ) const;
+    bool                    IsGSUBstituted( sal_Unicode ) const;
+#endif // GNG_VERT_HACK
 };
 
 // -------------------
@@ -108,7 +152,9 @@ class WinSalGraphics : public SalGraphics
 public:
     HDC                     mhDC;               // HDC
     HWND                    mhWnd;              // Window-Handle, when Window-Graphics
-    HFONT                   mhFonts[ MAX_FALLBACK ]; // Font + Fallbacks
+    HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
+    ImplWinFontData*        mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
+    ImplWinFontEntry*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
     HPEN                    mhPen;              // Pen
     HBRUSH                  mhBrush;            // Brush
     HRGN                    mhRegion;           // Region Handle
@@ -126,9 +172,9 @@ public:
     LOGFONTA*               mpLogFont;          // LOG-Font which is currently selected (only W9x)
     BYTE*                   mpFontCharSets;     // All Charsets for the current font
     BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
+    BOOL                    mbFontKernInit;     // FALSE: FontKerns must be queried
     KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
     ULONG                   mnFontKernPairCount;// Number of Kerning Pairs of the current Font
-    BOOL                    mbFontKernInit;     // FALSE: FontKerns must be queried
     int                     mnPenWidth;         // Linienbreite
     BOOL                    mbStockPen;         // is Pen a stockpen
     BOOL                    mbStockBrush;       // is Brush a stcokbrush
@@ -140,10 +186,6 @@ public:
     BOOL                    mbScreen;           // is Screen compatible
     BOOL                    mbXORMode;          // _every_ output with RasterOp XOR
 
-    // Used collectively by the (derived) SalLayout instances returned by
-    // SalGraphics::GetTextLayout, to cache data derived from mhDC's font;
-    // flushed whenever a new font is selected into mhDC:
-    boost::scoped_ptr< ImplTextLayoutCache > mxTextLayoutCache;
 public:
     WinSalGraphics();
     virtual ~WinSalGraphics();
@@ -247,16 +289,14 @@ public:
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
-    // get the repertoire of the current font; the code pairs returned
-    // contain unicode ranges. if pCodePairs is NULL return only the
-    // number of pairs which would be filled
-    virtual ULONG           GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
+    // get the repertoire of the current font
+    virtual ImplFontCharMap* GetImplFontCharMap() const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied
     // OutputDevice for all its device specific preferred font substitutions
     virtual void            GetDevFontSubstList( OutputDevice* );
-    virtual ImplFontData*   AddTempDevFont( const String& rFileURL, const String& rFontName );
+    virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
     // returns TRUE if creation of subset was successfull
@@ -317,10 +357,8 @@ void    ImplSalInitGraphics( WinSalGraphics* mpData );
 void    ImplSalDeInitGraphics( WinSalGraphics* mpData );
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( SalColor nSalColor );
-void    ImplGetLogFontFromFontSelect( HDC hDC,
-                                      const ImplFontSelectData* pFont,
-                                      LOGFONTW& rLogFont,
-                                      bool bTestVerticalAvail );
+void    ImplGetLogFontFromFontSelect( HDC hDC, const ImplFontSelectData*,
+            LOGFONTW&, bool bTestVerticalAvail );
 
 // -----------
 // - Defines -
@@ -338,9 +376,9 @@ inline bool ImplCmpKernData( const KERNINGPAIR& a, const KERNINGPAIR& b )
 {
     if( a.wFirst < b.wFirst )
         return true;
-    if( (a.wFirst == b.wFirst) && (a.wSecond < b.wSecond) )
-        return true;
-    return false;
+    if( a.wFirst > b.wFirst )
+        return false;
+    return (a.wSecond < b.wSecond);
 }
 
 #endif // _SV_SALGDI_H
