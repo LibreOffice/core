@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-08 10:17:18 $
+ *  last change: $Author: as $ $Date: 2001-03-29 10:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,9 @@ FileSource_Impl::~FileSource_Impl()
 void SAL_CALL  FileSource_Impl::addListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
 {
     if( m_xListener.is() )
+    {
         DBG_ERROR( "addSourceControllerListener called when already having a listener!" );
+    }
     m_xListener = aListener;
 }
 
@@ -1438,9 +1440,6 @@ void SfxMedium::GetMedium_Impl()
 {
     if ( !pInStream )
     {
-        if ( !SfxContentHelper::Exists( GetName() ) )
-            return;
-
         pImp->bDownloadDone = sal_False;
         pImp->bStreamReady = sal_False;
 
@@ -1460,6 +1459,9 @@ void SfxMedium::GetMedium_Impl()
         }
         else
         {
+            if ( !SfxContentHelper::Exists( GetName() ) )
+                return;
+
             SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
             BOOL bAllowReadOnlyMode = pItem ? pItem->GetValue() : TRUE;
             BOOL bIsWritable = ( nStorOpenMode & STREAM_WRITE );
