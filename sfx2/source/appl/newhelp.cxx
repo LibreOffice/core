@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:50:55 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 12:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include "panelist.hxx"
 #include "imgmgr.hxx"
 #include "srchdlg.hxx"
+#include "sfxhelp.hxx"
 
 #include "app.hrc"
 #include "newhelp.hrc"
@@ -682,6 +683,7 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* 
     aIndexCB        ( this, ResId( CB_INDEX ) ),
     aOpenBtn        ( this, ResId( PB_OPEN_INDEX ) ),
 
+    sSharedFactory  ( SHARED_FACTORY ),
     bIsActivated    ( sal_False )
 
 {
@@ -957,12 +959,19 @@ void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 
 void IndexTabPage_Impl::SetFactory( const String& rFactory )
 {
-    DBG_ASSERT( rFactory.Len() > 0, "empty factory" );
-    String sSharedFactory( SHARED_FACTORY );
+    String sNewFactory( rFactory );
+    DBG_ASSERT( sNewFactory.Len() > 0, "empty factory" );
+    bool bShared = ( sNewFactory == sSharedFactory );
 
-    if ( rFactory != sFactory && rFactory != sSharedFactory )
+    if ( sFactory.Len() == 0 && bShared )
     {
-        sFactory = rFactory;
+        sNewFactory = SfxHelp::GetDefaultHelpModule();
+        bShared = false;
+    }
+
+    if ( sNewFactory != sFactory && !bShared )
+    {
+        sFactory = sNewFactory;
         ClearIndex();
         if ( bIsActivated )
             aFactoryTimer.Start();
@@ -3046,6 +3055,9 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 
 IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin )
 {
+    if ( sTitle.Len() == 0 )
+        sTitle = GetParent()->GetText();
+
     String aNewTitle = sTitle;
     aNewTitle += DEFINE_CONST_UNICODE(" - ");
     aNewTitle += pIndexWin->GetActiveFactoryTitle();
