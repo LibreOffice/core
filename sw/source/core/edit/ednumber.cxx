@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:25:53 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ BOOL SwEditShell::IsOutlineCopyable( USHORT nIdx ) const
 }
 
 
-BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart, BOOL bOutline )
+BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart ) // #115901#
 {
     BOOL bRet = FALSE;
     SwPaM* pCrsr = GetCrsr();
@@ -529,7 +529,8 @@ BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart, BOOL bOutline )
         ( !bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()) )
     {
         StartAllAction();       // Klammern fuers Updaten !!
-        bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, bNumOn, bOutline );
+        // #115901#
+        bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, bNumOn );
         EndAllAction();
     }
     return bRet;
