@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegComp.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-02 10:37:45 $
+ *  last change: $Author: jl $ $Date: 2002-01-22 11:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,26 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.registry.XImplementationRegistration;
 
+/** A command-line tool. It registers an UNO component with a registry database.
+    During registration the component will be instantiated and be asked
+    to write the necessary information to the database.
+    Command line arguments:<br>
+    database register|unregister locationURL loader
+     <br>
+    For example:
+    <pre>
+    java com.sun.star.tools.RegComp applicat.rdb register
+    file:///e:/demos/InstanceInspector.jar com.sun.star.loader.Java2
+    </pre>
 
+    In order to examine the results of the registration use the regview.exe
+    tool. For example:
+    <pre>
+    regview nameOfDatatbase /SERVICES/serviceName
+    regview nameOfDataBase /IMPLEMENTATIONS/implementationName
+    </pre>
+    @see <a href="http://udk.openoffice.org/java/man/register_java_components.html">Registering Java Components</a>
+ */
 public class RegComp {
 
     static public void main(String args[]) throws Exception {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoApp.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-19 13:27:47 $
+ *  last change: $Author: jl $ $Date: 2002-01-22 11:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,9 +157,13 @@ class ConnectionListener implements XStreamListener
 }
 
 /**
- * <code>UnoApp</code> is the generic UNO application for java.
- * It removes the need for writing UNO applications in Java.
- * <p>
+ * A command line tool. <code>UnoApp</code> is the generic UNO application for java.
+ * It removes the need for writing UNO applications in Java. That is, it instantiates a service and runs it if it implements
+ * <code>com.sun.star.lang.XMain</code>. <br>
+ * In a remote scenario it is used to intantiate services and makes them accessible
+ * via a network.
+ * @see <a href="http://udk.openoffice.org/java/man/UnoApp.html">The Java Uno Application</a>
+ *
  */
 public class UnoApp extends Applet {
     static public final boolean DEBUG = false;
@@ -890,7 +894,9 @@ public class UnoApp extends Applet {
     }
 
 
-    /* overwrite the applet methods */
+    /** Calls the main method. The parameter of the applet are passed as arguments
+        to the main method.
+     */
     public void init() {
         System.err.println("##### " + getClass().getName() + ".init");
 

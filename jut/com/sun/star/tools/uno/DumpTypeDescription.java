@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DumpTypeDescription.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:54:01 $
+ *  last change: $Author: jl $ $Date: 2002-01-22 11:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,51 @@ import com.sun.star.uno.IMethodDescription;
 import com.sun.star.uno.ITypeDescription;
 import com.sun.star.uno.Type;
 
-
+/** A command-line tool. Prints information of com.sun.star.lib.uno.typedesc.TypeDescription objects to the
+    error stream.
+ */
 public class DumpTypeDescription {
+
+    /** Prints information about a TypeDescription object that has been constructed based
+        on the argument <i>typeName</i>. The output is written to the error stream.
+        The information consists of general as well as method and member information.
+        These are:<br>
+        <ul>
+        <li>type name</li>
+        <li>array type name</li>
+        <li>type of the super class</li>
+        <li>type class</li>
+        <li>component type</li>
+        <li>java.lang.Class object</li>
+        </ul>
+        Method information:
+        <ul>
+        <li>name</li>
+        <li>index</li>
+        <li>is one way</li>
+        <li>is unsigned</li>
+        <li>is Any</li>
+        <li>is interface</li>
+        <li>in signature</li>
+        <li>out signature</li>
+        <li>return signature</li>
+        <li>java.lang.reflect.Method object</li>
+        </ul>
+
+        Field information:
+        <ul>
+        <li>name</li>
+        <li>index</li>
+        <li>is one way</li>
+        <li>is unsigned</li>
+        <li>is Any</li>
+        <li>is interface</li>
+        <li>com.sun.star.lib.uno.typedesc.TypeDescription object</li>
+        </ul>
+
+        @param typeName name of a type for which an TypeDescription  object
+        is constructed whoose information are printed.
+     */
     static public void dumpTypeDescription(String typeName) throws Exception {
         ITypeDescription iTypeDescription = TypeDescription.getTypeDescription(typeName);
 
@@ -129,7 +172,19 @@ public class DumpTypeDescription {
 
             }
     }
+    /** Executes this tool.
+        The command line arguments consist of an identifier followed by a type name.
+        Identifiers can either be uno or java. Based on the type name, a
+        com.sun.star.lib.uno.typedesc.TypeDescription
+        object is constructed whose information are then printed out to the error stream.
+        <br>
+        usage: [uno &lt;type name&gt;]|[java &lt;class name&gt]* <br>
+        Examples: <br>
+        java com.sun.star.uno.tools.DumpTypeDescription uno com.sun.star.lang.XMultiServiceFactory
+        java com.sun.star.uno.tools.DumpTypeDescription java java.lang.Byte java java.lang.String
+        @param args command line arguments
 
+    */
     static public void main(String args[]) throws Exception {
         if(args.length == 0)
             System.err.println("usage: [uno <type name>]|[java <class name>]*");

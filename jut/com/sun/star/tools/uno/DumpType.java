@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DumpType.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:54:01 $
+ *  last change: $Author: jl $ $Date: 2002-01-22 11:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.registry.XImplementationRegistration;
 
 import com.sun.star.uno.Type;
-
+/** A command-line tool. Prints information about com.sun.star.uno.Type to error stream.
+ */
 public class DumpType {
     static private final String[] __typeClassToTypeName = new String[]{
         "void",
@@ -101,6 +102,11 @@ public class DumpType {
         "unknown"
     };
 
+    /** Prints information about argument type to the standard error stream.
+        The information consists of type name, type description, class name,
+        as well as the type class.
+        @param type the Type object whoose information are printed.
+     */
     static public void dumpType(Type type) throws Exception {
         System.err.println("uno type name:" + type.getTypeName());
         System.err.println("description:" + type.getTypeDescription());
@@ -109,6 +115,17 @@ public class DumpType {
         System.err.println("type class:" + __typeClassToTypeName[type.getTypeClass().getValue()]);
     }
 
+    /** Executes this tool.
+        The command line arguments consist of an identifier followed by a type name.
+        Identifiers can either be uno or java. Based on the type name, a com.sun.star.uno.Type
+        object is constructed whose information are then printed out to the error stream.
+        <br>
+        usage: [uno &lt;type name&gt;]|[java &lt;class name&gt]* <br>
+        Examples: <br>
+        java com.sun.star.uno.tools.DumpType uno com.sun.star.lang.XMultiServiceFactory
+        java com.sun.star.uno.tools.DumpType java java.lang.Byte java java.lang.String
+        @param args command line arguments
+    */
     static public void main(String args[]) throws Exception {
         if(args.length == 0)
             System.err.println("usage: [uno <type name>]|[java <class name>]*");
