@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-12 15:52:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
+#include <svtools/acceleratorexecute.hxx>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -303,6 +306,7 @@ MenuBarManager::MenuBarManager(
     , m_bDisposed( sal_False )
     , m_bModuleIdentified( sal_False )
     , m_bRetrieveImages( sal_False )
+    , m_bAcceleratorCfg( sal_False )
 {
     m_xPopupMenuControllerRegistration = Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration >(
         // #110897# ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.frame.PopupMenuControllerFactory" ))),
@@ -324,6 +328,7 @@ MenuBarManager::MenuBarManager(
     , m_bDisposed( sal_False )
     , m_bModuleIdentified( sal_False )
     , m_bRetrieveImages( sal_False )
+    , m_bAcceleratorCfg( sal_False )
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -410,6 +415,7 @@ MenuBarManager::MenuBarManager(
     , m_bDisposed( sal_False )
     , m_bModuleIdentified( sal_False )
     , m_bRetrieveImages( sal_False )
+    , m_bAcceleratorCfg( sal_False )
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -496,6 +502,7 @@ MenuBarManager::MenuBarManager(
     , m_bDisposed( sal_False )
     , m_bModuleIdentified( sal_False )
     , m_bRetrieveImages( sal_False )
+    , m_bAcceleratorCfg( sal_False )
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -1208,6 +1215,25 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
             }
         }
 
+        // Try to set accelerator keys
+        {
+            RetrieveShortcuts( m_aMenuItemHandlerVector );
+            std::vector< MenuItemHandler* >::iterator p;
+            for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+            {
+                MenuItemHandler* pMenuItemHandler = *p;
+
+                // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
+                if ( pMenuItemHandler->aMenuItemURL == aCmdHelpIndex )
+                {
+                    KeyCode aKeyCode( KEY_F1 );
+                    pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
+                }
+                else
+                    pMenu->SetAccelKey( pMenuItemHandler->nItemId, pMenuItemHandler->aKeyCode );
+            }
+        }
+
         URL aTargetURL;
 
         // #110897#
@@ -1298,14 +1324,6 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                                 // Force update of popup menu
                                 pMenuItemHandler->xPopupMenuController->updatePopupMenu();
                             }
-
-                            // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
-                            KeyCode aKeyCode;
-                            if ( aTargetURL.Complete == aCmdHelpIndex )
-                                aKeyCode = KeyCode( KEY_F1 );
-                            else
-                                aKeyCode = GetKeyCodeFromCommandURL( m_xFrame, aTargetURL.Complete );
-                            pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
 
                             if ( xMenuItemDispatch.is() )
                             {
@@ -1794,6 +1812,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                 }
 
                 MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
+                pItemHandler->aMenuItemURL = aItemCommand;
 
                 if ( m_xPopupMenuControllerRegistration.is() &&
                      m_xPopupMenuControllerRegistration->hasController( aItemCommand, rtl::OUString() ))
@@ -1818,6 +1837,103 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
     m_pVCLMenu->SetActivateHdl( LINK( this, MenuBarManager, Activate ));
     m_pVCLMenu->SetDeactivateHdl( LINK( this, MenuBarManager, Deactivate ));
     m_pVCLMenu->SetSelectHdl( LINK( this, MenuBarManager, Select ));
+}
+
+void MenuBarManager::impl_RetrieveShortcutsFromConfiguration(
+    const Reference< XAcceleratorConfiguration >& rAccelCfg,
+    const Sequence< rtl::OUString >& rCommands,
+    std::vector< MenuItemHandler* >& aMenuShortCuts )
+{
+    if ( rAccelCfg.is() )
+    {
+        try
+        {
+            com::sun::star::awt::KeyEvent aKeyEvent;
+            Sequence< Any > aSeqKeyCode = rAccelCfg->getPreferredKeyEventsForCommandList( rCommands );
+            for ( sal_Int32 i = 0; i < aSeqKeyCode.getLength(); i++ )
+            {
+                if ( aSeqKeyCode[i] >>= aKeyEvent )
+                    aMenuShortCuts[i]->aKeyCode = svt::AcceleratorExecute::st_AWTKey2VCLKey( aKeyEvent );
+            }
+        }
+        catch ( IllegalArgumentException& )
+        {
+        }
+    }
+}
+
+void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuShortCuts )
+{
+    if ( m_bModuleIdentified )
+    {
+        Reference< XAcceleratorConfiguration > xDocAccelCfg( m_xDocAcceleratorManager );
+        Reference< XAcceleratorConfiguration > xModuleAccelCfg( m_xModuleAcceleratorManager );
+        Reference< XAcceleratorConfiguration > xGlobalAccelCfg( m_xGlobalAcceleratorManager );
+
+        if ( !m_bAcceleratorCfg )
+        {
+            // Retrieve references on demand
+            m_bAcceleratorCfg = sal_True;
+            if ( !xDocAccelCfg.is() )
+            {
+                Reference< XController > xController = m_xFrame->getController();
+                Reference< XModel > xModel;
+                if ( xController.is() )
+                {
+                    xModel = xController->getModel();
+                    if ( xModel.is() )
+                    {
+                        Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
+                        if ( xSupplier.is() )
+                        {
+                            Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+                            if ( xDocUICfgMgr.is() )
+                            {
+                                xDocAccelCfg = Reference< XAcceleratorConfiguration >( xDocUICfgMgr->getShortCutManager(), UNO_QUERY );
+                                m_xDocAcceleratorManager = xDocAccelCfg;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ( !xModuleAccelCfg.is() )
+            {
+                Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier( getServiceFactory()->createInstance(
+                                                                                            SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ),
+                                                                                        UNO_QUERY );
+                Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
+                if ( xUICfgMgr.is() )
+                {
+                    xModuleAccelCfg = Reference< XAcceleratorConfiguration >( xUICfgMgr->getShortCutManager(), UNO_QUERY );
+                    m_xModuleAcceleratorManager = xModuleAccelCfg;
+                }
+            }
+
+            if ( !xGlobalAccelCfg.is() )
+            {
+                xGlobalAccelCfg = Reference< XAcceleratorConfiguration >( getServiceFactory()->createInstance(
+                                                                            SERVICENAME_GLOBALACCELERATORCONFIGURATION ),
+                                                                          UNO_QUERY );
+                m_xGlobalAcceleratorManager = xGlobalAccelCfg;
+            }
+        }
+
+        KeyCode aEmptyKeyCode;
+        Sequence< rtl::OUString > aSeq( aMenuShortCuts.size() );
+        for ( sal_uInt32 i = 0; i < aMenuShortCuts.size(); i++ )
+        {
+            aSeq[i] = aMenuShortCuts[i]->aMenuItemURL;
+            aMenuShortCuts[i]->aKeyCode = aEmptyKeyCode;
+        }
+
+        if ( m_xGlobalAcceleratorManager.is() )
+            impl_RetrieveShortcutsFromConfiguration( xGlobalAccelCfg, aSeq, aMenuShortCuts );
+        if ( m_xModuleAcceleratorManager.is() )
+            impl_RetrieveShortcutsFromConfiguration( xModuleAccelCfg, aSeq, aMenuShortCuts );
+        if ( m_xDocAcceleratorManager.is() )
+            impl_RetrieveShortcutsFromConfiguration( xGlobalAccelCfg, aSeq, aMenuShortCuts );
+    }
 }
 
 void MenuBarManager::RetrieveImageManagers()
