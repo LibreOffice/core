@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:08:05 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 21:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ TabPage TP_COLUMN
         Text[ french ] = "Colonnes";
         Text[ spanish ] = "~Columnas";
         Text[ finnish ] = "~Määrä";
-        Text[ italian ] = "~Num.";
+        Text[ italian ] = "~Colonne";
         Text[ danish ] = "Antal";
         Text[ swedish ] = "~Kolumner";
         Text[ polish ] = "Kolumny";
@@ -170,14 +170,14 @@ TabPage TP_COLUMN
         Text [ ENGLISH ] = "Columns" ;
         Text[ language_user1 ] = " ";
         Text[ english_us ] = "Columns";
-        Text[ portuguese ] = "Colunas";
+        Text[ portuguese ] = "Predefinições";
         Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
         Text[ greek ] = "ÐñïåðéëïãÞ";
         Text[ dutch ] = "Kolommen";
         Text[ french ] = "Définitions";
         Text[ spanish ] = "Columnas";
         Text[ finnish ] = "Sarakkeet";
-        Text[ italian ] = "Colonne";
+        Text[ italian ] = "Preimpostazioni";
         Text[ danish ] = "Kolonner";
         Text[ swedish ] = "Förinställningar";
         Text[ polish ] = "Ustawienia domyœlne";
@@ -205,7 +205,7 @@ TabPage TP_COLUMN
         Text[ french ] = "Colonne";
         Text[ spanish ] = "Columna";
         Text[ finnish ] = "Column";
-        Text[ italian ] = "Column";
+        Text[ italian ] = "Colonna";
         Text[ danish ] = "Column";
         Text[ swedish ] = "Kolumn";
         Text[ polish ] = "Kolumna";
@@ -459,7 +459,7 @@ TabPage TP_COLUMN
         Text[ french ] = "Largeur et écart";
         Text[ spanish ] = "Ancho y espacio";
         Text[ finnish ] = "Sarakkeen leveys";
-        Text[ italian ] = "Larghezza colonna";
+        Text[ italian ] = "Larghezza e distanza";
         Text[ danish ] = "Kolonnebredde";
         Text[ swedish ] = "Bredd och avstånd";
         Text[ polish ] = "Szerokoœæ i odstêp";
@@ -1174,5 +1174,6 @@ ModalDialog DLG_COLUMN
     Text[ catalan ] = "Columnas";
     Text[ finnish ] = "Sarakkeet";
 };
+
 
 
