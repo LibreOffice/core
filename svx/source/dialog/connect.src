@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2001-02-07 10:11:35 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage RID_SVXPAGE_CONNECTION
     Text [ spanish ] = "Conector" ;
     Text [ french ] = "Connecteur" ;
     Text [ dutch ] = "Verbinding" ;
-    Text [ portuguese ] = "Conectores" ;
+    Text [ portuguese ] = "Conector" ;
     GroupBox GRP_DISTANCE
     {
         Pos = MAP_APPFONT ( 6 , 90  ) ;
@@ -419,7 +419,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Début ~vertical" ;
         Text [ dutch ] = "Begin ~verticaal" ;
         Text [ portuguese ] = "Início ~vertical" ;
-        Text[ chinese_simplified ] = "ÆğÊ¼²¿·Ö´¹Ö±·½Ïò(~V)";
+        Text[ chinese_simplified ] = "ÆğÊ¼²¿·ÖÊÇ´¹Ö±·½Ïò(~V)";
         Text[ russian ] = "Íà÷àëî âåğòèêàëüíî";
         Text[ polish ] = "Pocz¹tek pionowo";
         Text[ japanese ] = "cü‚Ìn“_(~V)";
