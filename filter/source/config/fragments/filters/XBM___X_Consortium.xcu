@@ -1,4 +1,4 @@
-    <node oor:name="XBM - X-Consortium" oor:op="replace">
+    <node oor:name="XBM - X-Consortium" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>xbm_X_Consortium</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
