@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:06:57 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
@@ -2073,6 +2076,12 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
                 try {
                     awt::Size aSize = xIPObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
                     aGraphSize = Size( aSize.Width, aSize.Height );
+                    bObjSupported = TRUE;
+                }
+                catch( embed::NoVisualAreaSizeException& )
+                {
+                    DBG_ERROR( "Couldn't get visual area of the object!\n" );
+                    aGraphSize = Size( 5000, 5000 );
                     bObjSupported = TRUE;
                 }
                 catch( uno::Exception& )
