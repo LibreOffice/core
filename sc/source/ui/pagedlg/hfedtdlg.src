@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-16 22:54:55 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 12:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,13 @@
 
 #include "hfedtdlg.hrc"
 #define HFEDIT_DLGTITLE \
-/* ### ACHTUNG: Neuer Text in Resource? Kopf-/Fußzeilen : Kopf-/Fu˜zeilen */\
     Text = "Kopf-/Fußzeilen" ; \
     Text [ ENGLISH ] = "Header/Footer" ; \
     Text [ norwegian ] = "Header/Footer" ; \
     Text [ italian ] = "Intestazione/piè di pagina" ; \
     Text [ portuguese_brazilian ] = "Cabe?alho/Rodap?" ; \
     Text [ portuguese ] = "Cabeçalhos/Rodapés" ; \
-    Text [ finnish ] = "Yl?otsikot/alaselitteet" ; \
+    Text [ finnish ] = "Yläotsikot/alaselitteet" ; \
     Text [ danish ] = "Sidehoved/Sidefod" ; \
     Text [ french ] = "En-tête/Pied de page" ; \
     Text [ swedish ] = "Sidhuvud/sidfot" ; \
@@ -79,7 +78,7 @@
     Text[ chinese_simplified ] = "é¡µçœ‰/é¡µè„š";   \
     Text[ russian ] = "Âåğõíèé/Íèæíèé êîëîíòèòóëû"; \
     Text[ polish ] = "Nag³ówki-/Stopki";    \
-    Text[ japanese ] = "ï¾ï½¯ï¾€ï¾/ï¾Œï½¯ï¾€";    \
+    Text[ japanese ] = "ãƒ˜ãƒƒãƒ€/ãƒ•ãƒƒã‚¿";   \
     Text[ chinese_traditional ] = "é é¦–å’Œé å°¾";    \
     Text[ arabic ] = "ÑÄæÓ/ÊĞííáÇÊ ÇáÕİÍÇÊ";    \
     Text[ dutch ] = "Kop-/voettekst";   \
@@ -88,7 +87,8 @@
     Text[ korean ] = "ë¨¸ë¦¬ê¸€/ë°”ë‹¥ê¸€"; \
     Text[ turkish ] = "Üst/Altbilgi";   \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "Encabezam./Pie de página";
+    Text[ catalan ] = "Capçaleres/Peus";    \
+    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸©/à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸©";
 
 #define HEADER \
     Text = "Kopfzeile" ; \
@@ -97,7 +97,7 @@
     Text [ italian ] = "Riga d'intestazione" ; \
     Text [ portuguese_brazilian ] = "Cabe?alho" ; \
     Text [ portuguese ] = "Cabeçalho" ; \
-    Text [ finnish ] = "Yl?otsikko" ; \
+    Text [ finnish ] = "Yläotsikko" ; \
     Text [ danish ] = "Sidehoved" ; \
     Text [ french ] = "En-tête" ; \
     Text [ swedish ] = "Sidhuvud" ; \
@@ -107,7 +107,7 @@
     Text[ chinese_simplified ] = "é¡µçœ‰";  \
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë"; \
     Text[ polish ] = "Nag³ówek";    \
-    Text[ japanese ] = "ï¾ï½¯ï¾€ï¾";  \
+    Text[ japanese ] = "ãƒ˜ãƒƒãƒ€"; \
     Text[ chinese_traditional ] = "é é¦–"; \
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";  \
     Text[ dutch ] = "Koptekst"; \
@@ -116,10 +116,10 @@
     Text[ korean ] = "ë¨¸ë¦¬ê¸€";   \
     Text[ turkish ] = "Üstbilgi";   \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "Encabezamiento";
+    Text[ catalan ] = "Capçalera";  \
+    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸©";
 
 #define FOOTER \
-/* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */\
     Text = "Fußzeile" ; \
     Text [ ENGLISH ] = "Footer" ; \
     Text [ norwegian ] = "Footer" ; \
@@ -136,7 +136,7 @@
     Text[ chinese_simplified ] = "é¡µè„š";  \
     Text[ russian ] = "Íèæíèé êîëîíòèòóë";  \
     Text[ polish ] = "Stopka";  \
-    Text[ japanese ] = "ï¾Œï½¯ï¾€"; \
+    Text[ japanese ] = "ãƒ•ãƒƒã‚¿"; \
     Text[ chinese_traditional ] = "é å°¾"; \
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";    \
     Text[ dutch ] = "Voettekst";    \
@@ -145,7 +145,8 @@
     Text[ korean ] = "ë°”ë‹¥ê¸€";   \
     Text[ turkish ] = "Altbilgi";   \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "Pie de página";
+    Text[ catalan ] = "Peu de pàgina";  \
+    Text[ thai ] = "à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸©";
 
 #define HEADER_RIGHT \
     Text = "Kopfzeile (rechts)" ; \
@@ -154,7 +155,7 @@
     Text [ italian ] = "Riga d'intestazione (destra)" ; \
     Text [ portuguese_brazilian ] = "Cabe?alho (direito)" ; \
     Text [ portuguese ] = "Cabeçalho (direito)" ; \
-    Text [ finnish ] = "Yl?otsikko (oikea)" ; \
+    Text [ finnish ] = "Yläotsikko (oikea)" ; \
     Text [ danish ] = "Sidehoved (højre)" ; \
     Text [ french ] = "En-tête (droit)" ; \
     Text [ swedish ] = "Sidhuvud (höger)" ; \
@@ -164,7 +165,7 @@
     Text[ chinese_simplified ] = "é¡µçœ‰(å³)"; \
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë (ñïğàâà)";    \
     Text[ polish ] = "Wiersz nag³ówka (z prawej)";  \
-    Text[ japanese ] = "ï¾ï½¯ï¾€ï¾(å³)"; \
+    Text[ japanese ] = "ãƒ˜ãƒƒãƒ€(å³)";    \
     Text[ chinese_traditional ] = "é é¦–(å³)";    \
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ (íãíä)";   \
     Text[ dutch ] = "Koptekst (rechts)";    \
@@ -173,7 +174,8 @@
     Text[ korean ] = "ë¨¸ë¦¬ê¸€(ì˜¤ë¥¸ìª½)";    \
     Text[ turkish ] = "Altbilgi (sağ)"; \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "Encabezam. (der.)";
+    Text[ catalan ] = "Capçalera (dreta)";  \
+    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸© (à¸‚à¸§à¸²)";
 
 #define HEADER_LEFT \
     Text = "Kopfzeile (links)" ; \
@@ -182,7 +184,7 @@
     Text [ italian ] = "Riga d'intestazione (sinistra)" ; \
     Text [ portuguese_brazilian ] = "Cabe?alho (esquerdo)" ; \
     Text [ portuguese ] = "Cabeçalho (esquerdo)" ; \
-    Text [ finnish ] = "Yl?otsikko (vasen)" ; \
+    Text [ finnish ] = "Yläotsikko (vasen)" ; \
     Text [ danish ] = "Sidehoved (venstre)" ; \
     Text [ french ] = "En-tête (à gauche)" ; \
     Text [ swedish ] = "Sidhuvud (vänster)" ; \
@@ -192,7 +194,7 @@
     Text[ chinese_simplified ] = "é¡µçœ‰(å·¦)"; \
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë (ñëåâà)"; \
     Text[ polish ] = "Wiersz nag³ówka (z lewej)";   \
-    Text[ japanese ] = "ï¾ï½¯ï¾€ï¾(å·¦)"; \
+    Text[ japanese ] = "ãƒ˜ãƒƒãƒ€(å·¦)";    \
     Text[ chinese_traditional ] = "é é¦–(å·¦)";    \
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ (íÓÇÑ)";   \
     Text[ dutch ] = "Koptekst (links)"; \
@@ -201,10 +203,10 @@
     Text[ korean ] = "ë¨¸ë¦¬ê¸€(ì™¼ìª½)";   \
     Text[ turkish ] = "Üstbilgi (sol)"; \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "Encabezam. (izq.)";
+    Text[ catalan ] = "Capçalera (esquerra)";   \
+    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸© (à¸‹à¹‰à¸²à¸¢)";
 
 #define FOOTER_RIGHT \
-/* ### ACHTUNG: Neuer Text in Resource? Fußzeile (rechts) : Fu˜zeile (rechts) */\
     Text = "Fußzeile (rechts)" ; \
     Text [ ENGLISH ] = "Footer (right)" ; \
     Text [ norwegian ] = "Footer (right)" ; \
@@ -221,7 +223,7 @@
     Text[ chinese_simplified ] = "é¡µè„š(å³)"; \
     Text[ russian ] = "Íèæíèé êîëîíòèòóë (ñïğàâà)"; \
     Text[ polish ] = "Wiersz stopki (z prawej)";    \
-    Text[ japanese ] = "ï¾Œï½¯ï¾€(å³)";    \
+    Text[ japanese ] = "ãƒ•ãƒƒã‚¿(å³)";    \
     Text[ chinese_traditional ] = "é å°¾(å³)";    \
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ (íãíä)"; \
     Text[ dutch ] = "Voettekst (rechts)";   \
@@ -230,10 +232,10 @@
     Text[ korean ] = "ë°”ë‹¥ê¸€ (ì˜¤ë¥¸ìª½)";   \
     Text[ turkish ] = "Altbilgi (sağ)"; \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "Pie de página (derecha)";
+    Text[ catalan ] = "Peu de pàgina (dreta)";  \
+    Text[ thai ] = "à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸© (à¸‚à¸§à¸²)";
 
 #define FOOTER_LEFT \
-/* ### ACHTUNG: Neuer Text in Resource? Fußzeile (links) : Fu˜zeile (links) */\
     Text = "Fußzeile (links)" ; \
     Text [ ENGLISH ] = "Footer (left)" ; \
     Text [ norwegian ] = "Footer (left)" ; \
@@ -250,7 +252,7 @@
     Text[ chinese_simplified ] = "é¡µè„š(å·¦)"; \
     Text[ russian ] = "Íèæíèé êîëîíòèòóë (ñëåâà)";  \
     Text[ polish ] = "Wiersz stopki (z lewej)"; \
-    Text[ japanese ] = "ï¾Œï½¯ï¾€(å·¦)";    \
+    Text[ japanese ] = "ãƒ•ãƒƒã‚¿(å·¦)";    \
     Text[ chinese_traditional ] = "é å°¾(å·¦)";    \
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ (íÓÇÑ)"; \
     Text[ dutch ] = "Voettekst (links)";    \
@@ -259,7 +261,8 @@
     Text[ korean ] = "ë°”ë‹¥ê¸€ (ì™¼ìª½)";  \
     Text[ turkish ] = "Altbilgi (sol)"; \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "Pie de página (izquierda)";
+    Text[ catalan ] = "Peu de pàgina (esquerra)";   \
+    Text[ thai ] = "à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸© (à¸‹à¹‰à¸²à¸¢)";
 
  //------------------------------------------------------------------------
  // Bearbeiten vom Seitendialog aus aufgerufen
@@ -275,7 +278,7 @@ TabDialog RID_SCDLG_HFED_HEADER
     Text [ italian ] = "Intestazioni" ;
     Text [ portuguese_brazilian ] = "Cabe?alho" ;
     Text [ portuguese ] = "Cabeçalhos" ;
-    Text [ finnish ] = "Yl?otsikot" ;
+    Text [ finnish ] = "Yläotsikot" ;
     Text [ danish ] = "Sidehoveder" ;
     Text [ french ] = "En-têtes" ;
     Text [ swedish ] = "Sidhuvuden" ;
@@ -309,7 +312,7 @@ TabDialog RID_SCDLG_HFED_HEADER
     Text[ chinese_simplified ] = "é¡µçœ‰";
     Text[ russian ] = "Âåğõíèå êîëîíòèòóëû";
     Text[ polish ] = "Nag³ówki";
-    Text[ japanese ] = "ï¾ï½¯ï¾€ï¾";
+    Text[ japanese ] = "ãƒ˜ãƒƒãƒ€";
     Text[ chinese_traditional ] = "é é¦–";
     Text[ arabic ] = "ÑÄæÓ ÇáÕİÍÇÊ";
     Text[ dutch ] = "Kopteksten";
@@ -318,14 +321,14 @@ TabDialog RID_SCDLG_HFED_HEADER
     Text[ korean ] = "ë¨¸ë¦¬ê¸€";
     Text[ turkish ] = "Üstbilgi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Encabezamientos";
+    Text[ catalan ] = "Capçaleres";
+    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸©";
 };
 TabDialog RID_SCDLG_HFED_FOOTER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Fußzeilen : Fu˜zeilen */
     Text = "Fußzeilen" ;
     Text [ ENGLISH ] = "Footer" ;
     Text [ norwegian ] = "Footer" ;
@@ -366,7 +369,7 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Text[ chinese_simplified ] = "é¡µè„š";
     Text[ russian ] = "Íèæíèå êîëîíòèòóëû";
     Text[ polish ] = "Stopki";
-    Text[ japanese ] = "ï¾Œï½¯ï¾€";
+    Text[ japanese ] = "ãƒ•ãƒƒã‚¿";
     Text[ chinese_traditional ] = "é å°¾";
     Text[ arabic ] = "ÊĞííáÇÊ ÇáÕİÍÉ";
     Text[ dutch ] = "Voetteksten";
@@ -375,7 +378,8 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Text[ korean ] = "ë°”ë‹¥ê¸€";
     Text[ turkish ] = "Altbilgi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Pies de página";
+    Text[ catalan ] = "Peus de pàgina";
+    Text[ thai ] = "à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸©";
 };
  //------------------------------------------------------------------------
  // Bearbeiten/Kopf-Fusszeile:
@@ -728,7 +732,8 @@ TabPage RID_HFBASE
         Text[ korean ] = "ì™¼ìª½ ì˜ì—­(~L)";
         Text[ turkish ] = "~Sol bölüm";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Área ~izquierda";
+        Text[ catalan ] = "Àrea ~esquerra";
+        Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸”à¹‰à¸²à¸™~à¸‹à¹‰à¸²à¸¢";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_LEFT
@@ -749,7 +754,7 @@ TabPage RID_HFBASE
         Text [ italian ] = "Area ~centrale" ;
         Text [ portuguese_brazilian ] = "~?rea Central" ;
         Text [ portuguese ] = "~Área central" ;
-        Text [ finnish ] = "~Keskit? alue" ;
+        Text [ finnish ] = "~Keskitä alue" ;
         Text [ danish ] = "Midterområde" ;
         Text [ french ] = "Plage centrale" ;
         Text [ swedish ] = "~Mittområde" ;
@@ -768,7 +773,8 @@ TabPage RID_HFBASE
         Text[ korean ] = "ì¤‘ì‹¬ ì˜ì—­(~C)";
         Text[ turkish ] = "~Orta bölüm";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Área ~central";
+        Text[ catalan ] = "Àrea ~central";
+        Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ~à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_CENTER
@@ -791,8 +797,8 @@ TabPage RID_HFBASE
         Text [ portuguese ] = "~Área direita" ;
         Text [ finnish ] = "~Oikea alue" ;
         Text [ danish ] = "Højre område" ;
-        Text [ french ] = "Plage ~droite" ;
-        Text [ swedish ] = "~Höger område" ;
+        Text [ french ] = "Plage droite" ;
+        Text [ swedish ] = "Höge~r område" ;
         Text [ dutch ] = "~Rechter bereik" ;
         Text [ spanish ] = "Área ~derecha" ;
         Text [ english_us ] = "R~ight Area" ;
@@ -808,7 +814,8 @@ TabPage RID_HFBASE
         Text[ korean ] = "ì˜¤ë¥¸ìª½ ì˜ì—­(~I)";
         Text[ turkish ] = "~Sağ bölüm";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Área ~derecha";
+        Text[ catalan ] = "Àrea d~reta";
+        Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸”à¹‰à¸²à¸™~à¸‚à¸§à¸²";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_RIGHT
@@ -831,32 +838,37 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Attributi di testo" ;
         QuickHelpText [ portuguese_brazilian ] = "Atributos de Texto" ;
         QuickHelpText [ portuguese ] = "Atributos de texto" ;
-        QuickHelpText [ finnish ] = "Tekstim??ritteet!" ;
+        QuickHelpText [ finnish ] = "Tekstimääritteet" ;
         QuickHelpText [ danish ] = "Tekstattributter" ;
         QuickHelpText [ french ] = "Attributs de texte" ;
         QuickHelpText [ swedish ] = "Textattribut" ;
         QuickHelpText [ dutch ] = "Tekstattributen" ;
         QuickHelpText [ spanish ] = "Atributos de texto" ;
         QuickHelpText [ english_us ] = "Text Attributes" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "text.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-        /* ### ACHTUNG: Neuer Text in Resource? Ändern der Textattribute der aktuellen Selektion : ndern der Textattribute der aktuellen Selektion */
-    QuickHelpText[ russian ] = "Àòğèáóòû òåêñòà";
+        QuickHelpText[ russian ] = "Àòğèáóòû òåêñòà";
         QuickHelpText[ polish ] = "Atrybuty tekstu";
-        QuickHelpText[ japanese ] = "ï¾ƒï½·ï½½ï¾„ã®å±æ€§";
+        QuickHelpText[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®å±æ€§";
         QuickHelpText[ chinese_simplified ] = "æ­£æ–‡å±æ€§";
         QuickHelpText[ chinese_traditional ] = "æ–‡å­—å±¬æ€§";
         QuickHelpText[ arabic ] = "ÓãÇÊ ÇáäÕ";
         QuickHelpText[ dutch ] = "Tekstattributen";
         QuickHelpText[ chinese_simplified ] = "æ­£æ–‡å±æ€§";
         QuickHelpText[ greek ] = "Éäéüôçôåò êåéìİíïõ";
-        QuickHelpText[ korean ] = "í…ìŠ¤íŠ¸ã€€ì†ì„±";
+        QuickHelpText[ korean ] = "í…ìŠ¤íŠ¸ ì†ì„±";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Textattribute";
         QuickHelpText[ catalan ] = "Atributos de texto";
+        QuickHelpText[ thai ] = "Text Attributes";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "text.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+    };
+    Image IMG_TEXT_H
+    {
+        ImageBitmap = Bitmap { File = "text_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
     ImageButton BTN_FILE
     {
@@ -870,32 +882,37 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Nome del file" ;
         QuickHelpText [ portuguese_brazilian ] = "Nome do Arquivo" ;
         QuickHelpText [ portuguese ] = "Nome do ficheiro" ;
-        QuickHelpText [ finnish ] = "Tiedoston nimi!" ;
+        QuickHelpText [ finnish ] = "Tiedoston nimi" ;
         QuickHelpText [ danish ] = "Filnavn" ;
         QuickHelpText [ french ] = "Nom de fichier" ;
         QuickHelpText [ swedish ] = "Filnamn" ;
         QuickHelpText [ dutch ] = "Bestandsnaam" ;
         QuickHelpText [ spanish ] = "Nombre de archivo" ;
         QuickHelpText [ english_us ] = "File Name" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "file.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-        /* ### ACHTUNG: Neuer Text in Resource? Einfügen des Dateinames des aktuellen Dokumentes : Einf³gen des Dateinames des aktuellen Dokumentes */
         QuickHelpText[ russian ] = "Èìÿ ôàéëà";
         QuickHelpText[ polish ] = "Nazwa pliku";
-        QuickHelpText[ japanese ] = "ï¾Œï½§ï½²ï¾™å";
+        QuickHelpText[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«å";
         QuickHelpText[ chinese_simplified ] = "æ–‡ä»¶å";
         QuickHelpText[ chinese_traditional ] = "æª”æ¡ˆåç¨±";
         QuickHelpText[ arabic ] = "ÇÓã Çáãáİ";
         QuickHelpText[ dutch ] = "Bestandsnaam";
         QuickHelpText[ chinese_simplified ] = "æ–‡ä»¶å";
         QuickHelpText[ greek ] = "¼íïìá áñ÷åßïõ";
-        QuickHelpText[ korean ] = "íŒŒì¼ã€€ì´ë¦„";
+        QuickHelpText[ korean ] = "íŒŒì¼ ì´ë¦„";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dateiname";
         QuickHelpText[ catalan ] = "Nombre de archivo";
+        QuickHelpText[ thai ] = "File Name";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "file.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+    };
+    Image IMG_FILE_H
+    {
+        ImageBitmap = Bitmap { File = "file_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
 
     Menu RID_POPUP_FCOMMAND
@@ -913,14 +930,14 @@ TabPage RID_HFBASE
                 Text[ portuguese ] = "Título";
                 Text[ danish ] = "Titel";
                 Text[ french ] = "Titre";
-                Text[ swedish ] = "Titel";
+                Text[ swedish ] = "Rubrik";
                 Text[ dutch ] = "Titel";
                 Text[ spanish ] = "Título";
                 Text[ english_us ] = "Title";
     Text[ chinese_simplified ] = "æ ‡é¢˜";
                 Text[ russian ] = "Çàãîëîâîê";
                 Text[ polish ] = "Tytu³";
-                Text[ japanese ] = "ï¾€ï½²ï¾„ï¾™";
+                Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«";
                 Text[ chinese_traditional ] = "æ¨™é¡Œ";
                 Text[ arabic ] = "ÇáÚäæÇä";
                 Text[ dutch ] = "Titel";
@@ -929,8 +946,9 @@ TabPage RID_HFBASE
                 Text[ korean ] = "ì œëª©";
                 Text[ turkish ] = "Başlık";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Título";
+                Text[ catalan ] = "Títol";
                 Text[ finnish ] = "Otsikko";
+                Text[ thai ] = "à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡";
             };
             MenuItem
             {
@@ -951,7 +969,7 @@ TabPage RID_HFBASE
     Text[ chinese_simplified ] = "æ–‡ä»¶å";
                 Text[ russian ] = "Èìÿ ôàéëà";
                 Text[ polish ] = "Nazwa pliku";
-                Text[ japanese ] = "ï¾Œï½§ï½²ï¾™å";
+                Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«å";
                 Text[ chinese_traditional ] = "æª”æ¡ˆåç¨±";
                 Text[ arabic ] = "ÇÓã Çáãáİ";
                 Text[ dutch ] = "Bestandsnaam";
@@ -960,8 +978,9 @@ TabPage RID_HFBASE
                 Text[ korean ] = "íŒŒì¼ ì´ë¦„";
                 Text[ turkish ] = "Dosya adı";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Nombre del archivo";
+                Text[ catalan ] = "Nom del fitxer";
                 Text[ finnish ] = "Tiedoston nimi";
+                Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹à¸Ÿà¹‰à¸¡";
             };
             MenuItem
             {
@@ -975,24 +994,25 @@ TabPage RID_HFBASE
                 Text[ portuguese ] = "Atalho/Nome do ficheiro";
                 Text[ danish ] = "Sti/Filnavn";
                 Text[ french ] = "Chemin/Nom de fichier";
-                Text[ swedish ] = "Sökväg/Filnamn";
+                Text[ swedish ] = "Sökväg/filnamn";
                 Text[ dutch ] = "Pad/Bestandsnaam";
                 Text[ spanish ] = "Ruta/Nombre de archivo";
                 Text[ english_us ] = "Path/File Name";
     Text[ chinese_simplified ] = "è·¯å¾„/æ–‡ä»¶å";
                 Text[ russian ] = "Èìÿ ïóòè/ôàéëà";
                 Text[ polish ] = "Œcie¿ka/Nazwa pliku";
-                Text[ japanese ] = "ï¾Šï¾Ÿï½½/ï¾Œï½§ï½²ï¾™å";
+                Text[ japanese ] = "ãƒ‘ã‚¹/ãƒ•ã‚¡ã‚¤ãƒ«å";
                 Text[ chinese_traditional ] = "è·¯å¾‘/æª”æ¡ˆåç¨±";
                 Text[ arabic ] = "ÇáãÓÇÑ/ÇÓã Çáãáİ";
                 Text[ dutch ] = "Pad/Bestandsnaam";
                 Text[ chinese_simplified ] = "è·¯å¾„/æ–‡ä»¶å";
                 Text[ greek ] = "¼íïìá äéáäñïìŞò/ïíüìáôïò";
-                Text[ korean ] = "ê²½ë¡œ/íŒŒì¼ã€€ì´ë¦„";
+                Text[ korean ] = "ê²½ë¡œ/íŒŒì¼ ì´ë¦„";
                 Text[ turkish ] = "Yol/dosya adı";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Ruta/Nombre de archivo";
+                Text[ catalan ] = "Nom del camí/fitxer";
                 Text[ finnish ] = "Polun/tiedoston nimi";
+                Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡/à¹à¸Ÿà¹‰à¸¡";
             };
         };
     };
@@ -1009,20 +1029,14 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Nome tabella" ;
         QuickHelpText [ portuguese_brazilian ] = "Tabela Nome" ;
         QuickHelpText [ portuguese ] = "Nome da folha" ;
-        QuickHelpText [ finnish ] = "Lomakkeen nimi!" ;
+        QuickHelpText [ finnish ] = "Lomakkeen nimi" ;
         QuickHelpText [ danish ] = "Arknavn" ;
         QuickHelpText [ french ] = "Nom de feuille" ;
         QuickHelpText [ swedish ] = "Tabellnamn" ;
         QuickHelpText [ dutch ] = "Tabelnaam" ;
         QuickHelpText [ spanish ] = "Nombre de la hoja" ;
         QuickHelpText [ english_us ] = "Sheet Name" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "table.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-        /* ### ACHTUNG: Neuer Text in Resource? Einfügen des aktuellen Tabellennamens : Einf³gen des aktuellen Tabellennamens */
-    QuickHelpText[ russian ] = "Èìÿ ëèñòà";
+        QuickHelpText[ russian ] = "Èìÿ ëèñòà";
         QuickHelpText[ polish ] = "Nazwa tabeli";
         QuickHelpText[ japanese ] = "è¡¨å";
         QuickHelpText[ chinese_simplified ] = "è¡¨æ ¼åç§°";
@@ -1031,10 +1045,21 @@ TabPage RID_HFBASE
         QuickHelpText[ dutch ] = "Tabelnaam";
         QuickHelpText[ chinese_simplified ] = "è¡¨æ ¼åç§°";
         QuickHelpText[ greek ] = "¼íïìá ğßíáêá";
-        QuickHelpText[ korean ] = "í‘œã€€ì´ë¦„";
+        QuickHelpText[ korean ] = "í‘œ ì´ë¦„";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenname";
         QuickHelpText[ catalan ] = "Nombre de la hoja";
+        QuickHelpText[ thai ] = "Sheet Name";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "table.bmp" ; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+    Image IMG_TABLE_H
+    {
+        ImageBitmap = Bitmap { File = "table_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
     ImageButton BTN_PAGE
     {
@@ -1048,32 +1073,37 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Pagina" ;
         QuickHelpText [ portuguese_brazilian ] = "Página" ;
         QuickHelpText [ portuguese ] = "Página" ;
-        QuickHelpText [ finnish ] = "Sivu!" ;
+        QuickHelpText [ finnish ] = "Sivu" ;
         QuickHelpText [ danish ] = "Side" ;
         QuickHelpText [ french ] = "Page" ;
         QuickHelpText [ swedish ] = "Sida" ;
         QuickHelpText [ dutch ] = "Pagina" ;
         QuickHelpText [ spanish ] = "Página" ;
         QuickHelpText [ english_us ] = "Page" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "page.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-        /* ### ACHTUNG: Neuer Text in Resource? Einfügen der aktuellen Seitenzahl : Einf³gen der aktuellen Seitenzahl */
-    QuickHelpText[ russian ] = "Ñòğàíèöà";
+        QuickHelpText[ russian ] = "Ñòğàíèöà";
         QuickHelpText[ polish ] = "Strona";
-        QuickHelpText[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç•ªå·";
+        QuickHelpText[ japanese ] = "ãƒšãƒ¼ã‚¸ç•ªå·";
         QuickHelpText[ chinese_simplified ] = "é¡µé¢";
         QuickHelpText[ chinese_traditional ] = "é ";
         QuickHelpText[ arabic ] = "ÕİÍÉ";
         QuickHelpText[ dutch ] = "Pagina";
         QuickHelpText[ chinese_simplified ] = "é¡µé¢";
         QuickHelpText[ greek ] = "Óåëßäá";
-        QuickHelpText[ korean ] = "ìª½";
+        QuickHelpText[ korean ] = "í˜ì´ì§€";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seite";
         QuickHelpText[ catalan ] = "Página";
+        QuickHelpText[ thai ] = "Page";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "page.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+    };
+    Image IMG_PAGE_H
+    {
+        ImageBitmap = Bitmap { File = "page_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
     ImageButton BTN_PAGES
     {
@@ -1087,32 +1117,37 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Pagine" ;
         QuickHelpText [ portuguese_brazilian ] = "Páginas" ;
         QuickHelpText [ portuguese ] = "Páginas" ;
-        QuickHelpText [ finnish ] = "Sivut!" ;
+        QuickHelpText [ finnish ] = "Sivut" ;
         QuickHelpText [ danish ] = "Sider" ;
         QuickHelpText [ french ] = "Pages" ;
         QuickHelpText [ swedish ] = "Sidor" ;
         QuickHelpText [ dutch ] = "Pagina's" ;
         QuickHelpText [ spanish ] = "Páginas" ;
         QuickHelpText [ english_us ] = "Pages" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "pages.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-        /* ### ACHTUNG: Neuer Text in Resource? Einfügen der letzten Seitenzahl : Einf³gen der letzten Seitenzahl */
-    QuickHelpText[ russian ] = "Ñòğàíèöû";
+        QuickHelpText[ russian ] = "Ñòğàíèöû";
         QuickHelpText[ polish ] = "Strony";
-        QuickHelpText[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç·æ•°";
+        QuickHelpText[ japanese ] = "ãƒšãƒ¼ã‚¸ç·æ•°";
         QuickHelpText[ chinese_simplified ] = "é¡µæ•°";
         QuickHelpText[ chinese_traditional ] = "é ";
         QuickHelpText[ arabic ] = "ÕİÍÇÊ";
         QuickHelpText[ dutch ] = "Pagina's";
         QuickHelpText[ chinese_simplified ] = "é¡µæ•°";
         QuickHelpText[ greek ] = "Óåëßäåò";
-        QuickHelpText[ korean ] = "ìª½ë“¤";
+        QuickHelpText[ korean ] = "í˜ì´ì§€ë“¤";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seiten";
         QuickHelpText[ catalan ] = "Páginas";
+        QuickHelpText[ thai ] = "Pages";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "pages.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+    };
+    Image IMG_PAGES_H
+    {
+        ImageBitmap = Bitmap { File = "pages_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
     ImageButton BTN_DATE
     {
@@ -1126,20 +1161,14 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Data" ;
         QuickHelpText [ portuguese_brazilian ] = "Data" ;
         QuickHelpText [ portuguese ] = "Data" ;
-        QuickHelpText [ finnish ] = "P?iv?m??r?!" ;
+        QuickHelpText [ finnish ] = "Päivämäärä" ;
         QuickHelpText [ danish ] = "Dato" ;
         QuickHelpText [ french ] = "Date" ;
         QuickHelpText [ swedish ] = "Datum" ;
         QuickHelpText [ dutch ] = "Datum" ;
         QuickHelpText [ spanish ] = "Fecha" ;
         QuickHelpText [ english_us ] = "Date" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "date.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-        /* ### ACHTUNG: Neuer Text in Resource? Einfügen des aktuellen Datums : Einf³gen des aktuellen Datums */
-    QuickHelpText[ russian ] = "Äàòà";
+        QuickHelpText[ russian ] = "Äàòà";
         QuickHelpText[ polish ] = "Data";
         QuickHelpText[ japanese ] = "æ—¥ä»˜";
         QuickHelpText[ chinese_simplified ] = "æ—¥æœŸ";
@@ -1152,6 +1181,17 @@ TabPage RID_HFBASE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum";
         QuickHelpText[ catalan ] = "Fecha";
+        QuickHelpText[ thai ] = "Date";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "date.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+    };
+    Image IMG_DATE_H
+    {
+        ImageBitmap = Bitmap { File = "date_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
     ImageButton BTN_TIME
     {
@@ -1165,20 +1205,14 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Ora" ;
         QuickHelpText [ portuguese_brazilian ] = "Hora" ;
         QuickHelpText [ portuguese ] = "Hora" ;
-        QuickHelpText [ finnish ] = "Aika!" ;
+        QuickHelpText [ finnish ] = "Aika" ;
         QuickHelpText [ danish ] = "Klokkeslæt" ;
         QuickHelpText [ french ] = "Heure" ;
         QuickHelpText [ swedish ] = "Klockslag" ;
         QuickHelpText [ dutch ] = "Tijd" ;
         QuickHelpText [ spanish ] = "Hora" ;
         QuickHelpText [ english_us ] = "Time" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "time.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-        /* ### ACHTUNG: Neuer Text in Resource? Einfügen der aktuellen Uhrzeit : Einf³gen der aktuellen Uhrzeit */
-    QuickHelpText[ russian ] = "Âğåìÿ";
+        QuickHelpText[ russian ] = "Âğåìÿ";
         QuickHelpText[ polish ] = "Godzina";
         QuickHelpText[ japanese ] = "æ™‚åˆ»";
         QuickHelpText[ chinese_simplified ] = "æ—¶é—´";
@@ -1191,20 +1225,30 @@ TabPage RID_HFBASE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Uhrzeit";
         QuickHelpText[ catalan ] = "Hora";
+        QuickHelpText[ thai ] = "Time";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "time.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+    };
+    Image IMG_TIME_H
+    {
+        ImageBitmap = Bitmap { File = "time_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
     FixedText FT_INFO
     {
         Pos = MAP_APPFONT ( 12 , 155 ) ;
         Size = MAP_APPFONT ( 240 , 24 ) ;
         WordBreak = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? Benutzen Sie die Schaltflächen, um die Schriftart zu verändern oder Feldbefehle wie Datum, Uhrzeit, etc. einzufügen. : Benutzen Sie die Schaltflõchen, um die Schriftart zu verõndern oder Feldbefehle wie Datum, Uhrzeit, etc. einzuf³gen. */
         Text = "Benutzen Sie die Schaltflächen, um die Schriftart zu verändern oder Feldbefehle wie Datum, Uhrzeit, etc. einzufügen." ;
         Text [ ENGLISH ] = "Use image buttons to change the text font orto insert special commands like date, time etc." ;
         Text [ norwegian ] = "Use image buttons to change the text font orto insert special commands like date, time etc." ;
         Text [ italian ] = "Usare i pulsanti per modificare il tipo di carattere\no per inserire comandi speciali come data, ora, ecc." ;
         Text [ portuguese_brazilian ] = "Use os bot?s de imagem para mudar a fonte do texto ouinserir comandos especiais como data hora, etc." ;
         Text [ portuguese ] = "Use os botões para mudar o tipo de letra ou inserir campos como data, hora, etc." ;
-        Text [ finnish ] = "N?pp?imien avulla voit vaihtaa fonttia tai lis?t? kentt?komentoja, kuten p?iv?m??r?n tai kellonajan." ;
+        Text [ finnish ] = "Näppäimien avulla voit vaihtaa fonttia tai lisätä kenttäkomentoja, kuten päivämäärän tai kellonajan." ;
         Text [ danish ] = "Brug knapperne til at forandre skrifttypen eller til at indsætte felter som dato, klokkeslæt etc." ;
         Text [ french ] = "Utilisez les boutons pour modifier la police ou pour insérer des champs tels que la date, l'heure, etc." ;
         Text [ swedish ] = "Använd kommandoknapparna för att ändra teckensnitt eller infoga fältkommandon som datum, klockslag etc." ;
@@ -1214,7 +1258,7 @@ TabPage RID_HFBASE
         Text[ chinese_simplified ] = "è¯·ç‚¹å‡»æŒ‰é’®ï¼Œæ›´æ”¹å­—ä½“æˆ–æ’å…¥æ—¥æœŸï¼Œæ—¶é—´ç­‰åŒºåŸŸæŒ‡ä»¤ã€‚";
         Text[ russian ] = "Äëÿ èçìåíåíèÿ øğèôòà èëè äëÿ âñòàâêè òàêèõ êîìàíä ïîëÿ êàê äàòà, âğåìÿ è ò.ä. èñïîëüçóéòå êíîïêè.";
         Text[ polish ] = "U¿yj przycisków, aby zmieniæ czcionkê oraz wpisaæ datê i godzinê.";
-        Text[ japanese ] = "ï¾Œï½«ï¾ï¾„ã®å¤‰æ›´ã¾ãŸã¯æ—¥ä»˜ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã‚„æ™‚åˆ»ï¾Œï½¨ï½°ï¾™ï¾„ï¾ãªã©ã‚’æŒ¿å…¥ã™ã‚‹ã¨ãã¯ã€å¤‰æ›´ï¾ï¾ï¾€ï¾ã‚’ï½¸ï¾˜ï½¯ï½¸ã—ã¾ã™ã€‚";
+        Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã®å¤‰æ›´ã¾ãŸã¯æ—¥ä»˜ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚„æ™‚åˆ»ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãªã©ã‚’æŒ¿å…¥ã™ã‚‹ã¨ãã¯ã€å¤‰æ›´ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¾ã™ã€‚";
         Text[ chinese_traditional ] = "è«‹æŒ‰ä¸€ä¸‹é€™å€‹æŒ‰éˆ•ä¾†è®Šæ›´å­—å‹æˆ–æ’å…¥æ—¥æœŸã€æ™‚é–“ç­‰å€åŸŸæŒ‡ä»¤ã€‚";
         Text[ arabic ] = "ÇÓÊÎÏã ÇáãİÇÊíÍ áÊÛííÑ äæÚ ÇáÎØ Ãæ áÅÖÇİÉ ÃæÇãÑ ÍŞæá¡ ãËá ÇáÊÇÑíÎ¡ Ãæ ÇáæŞÊ ...ÅáÎ.";
         Text[ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen.";
@@ -1223,7 +1267,8 @@ TabPage RID_HFBASE
         Text[ korean ] = "ê¸€ê¼´ì„ ë³€ê²½í•˜ê±°ë‚˜ ë‚ ì§œ, ì‹œê°„ë“±ì˜ í•„ë“œ ëª…ë ¹ì–´ë¥¼ ì‚½ì…í•˜ê¸° ìœ„í•´ì„œëŠ” ë²„íŠ¼ì„ ì‚¬ìš©í•˜ì‹­ì‹œì˜¤.";
         Text[ turkish ] = "Yazıtipini değiştirmek ya da tarih, saat gibi alan komutları eklemek için düğmeleri kullanınız.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Utilice los botones para modificar la fuente o para insertar comandos como fecha, hora, etc.";
+        Text[ catalan ] = "Utilitzeu els botons per canviar el tipus de lletra o bé inserir ordres de camp com ara la data, l'hora, etc.";
+        Text[ thai ] = "à¹ƒà¸Šà¹‰à¸›à¸¸à¹ˆà¸¡à¹€à¸à¸·à¹ˆà¸­à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸«à¸£à¸·à¸­à¹à¸—à¸£à¸à¸„à¸³à¸ªà¸±à¹ˆà¸‡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥  à¹€à¸Šà¹ˆà¸™  à¸§à¸±à¸™à¸—à¸µà¹ˆ  à¹€à¸§à¸¥à¸²  à¸¯à¸¥à¸¯";
     };
     FixedLine FL_INFO
     {
@@ -1235,7 +1280,7 @@ TabPage RID_HFBASE
         Text [ italian ] = "Nota" ;
         Text [ portuguese_brazilian ] = "Dica" ;
         Text [ portuguese ] = "Observação" ;
-        Text [ finnish ] = "Huomautus" ;
+        Text [ finnish ] = "Huomautus:" ;
         Text [ danish ] = "Tip" ;
         Text [ french ] = "Remarque" ;
         Text [ swedish ] = "Tips" ;
@@ -1254,7 +1299,8 @@ TabPage RID_HFBASE
         Text[ korean ] = "ì£¼";
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Indicación";
+        Text[ catalan ] = "Nota";
+        Text[ thai ] = "à¸«à¸¡à¸²à¸¢à¹€à¸«à¸•à¸¸";
     };
 };
  // Kombinationen: Header/Footer links/rechts
@@ -1375,8 +1421,6 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
-
-
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 12:10:43 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 12:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,14 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     aBtnTime    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
     aBtnFile    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
     aBtnTable   .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+
+    aBtnText    .SetModeImage( Image( ScResId( IMG_TEXT_H  ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnFile    .SetModeImage( Image( ScResId( IMG_FILE_H  ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnTable   .SetModeImage( Image( ScResId( IMG_TABLE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnPage    .SetModeImage( Image( ScResId( IMG_PAGE_H  ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnLastPage.SetModeImage( Image( ScResId( IMG_PAGES_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnDate    .SetModeImage( Image( ScResId( IMG_DATE_H  ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnTime    .SetModeImage( Image( ScResId( IMG_TIME_H  ) ), BMP_COLOR_HIGHCONTRAST );
 
     aWndLeft.   SetFont( aPatAttr );
     aWndCenter. SetFont( aPatAttr );

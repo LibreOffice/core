@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-14 09:21:35 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 12:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,4 +84,13 @@
 #define FILE_COMMAND_FILENAME   12
 #define FILE_COMMAND_PATH       13
 
-#define FL_INFO 14
+#define FL_INFO                 14
+
+#define IMG_TEXT_H              21
+#define IMG_PAGE_H              22
+#define IMG_PAGES_H             23
+#define IMG_DATE_H              24
+#define IMG_TIME_H              25
+#define IMG_FILE_H              26
+#define IMG_TABLE_H             27
+
