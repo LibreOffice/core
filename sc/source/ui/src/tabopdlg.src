@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:33 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   tabopdlg.src  $
  //   $Author: hr $
- //     $Date: 2003-03-26 18:06:33 $
- // $Revision: 1.16 $
+ //     $Date: 2003-04-29 17:13:38 $
+ // $Revision: 1.17 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -82,7 +82,7 @@ ModelessDialog RID_SCDLG_TABOP
     Text [ ENGLISH ] = "Table" ;
     Text [ norwegian ] = "Table" ;
     Text [ italian ] = "Tabella" ;
-    Text [ portuguese_brazilian ] = "Tabela" ;
+    Text [ portuguese_brazilian ] = "Operações múltiplas" ;
     Text [ portuguese ] = "Operações múltiplas" ;
     Text [ finnish ] = "Useita toimintoja" ;
     Text [ danish ] = "Multioperationer" ;
@@ -101,7 +101,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ ENGLISH ] = "~formulas" ;
         Text [ norwegian ] = "~formler" ;
         Text [ italian ] = "~Formule" ;
-        Text [ portuguese_brazilian ] = "~formulas" ;
+        Text [ portuguese_brazilian ] = "~Fórmulas" ;
         Text [ portuguese ] = "~Fórmulas" ;
         Text [ finnish ] = "~Kaavat" ;
         Text [ danish ] = "~Formler" ;
@@ -112,16 +112,19 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ english_us ] = "~Formulas" ;
         Text[ chinese_simplified ] = "å…¬å¼(~F)";
         Text[ russian ] = "Ôîğìóëû";
-        Text[ polish ] = "Formu³y";
+        Text[ polish ] = "~Formu³y";
         Text[ japanese ] = "æ•°å¼(~F)";
         Text[ chinese_traditional ] = "å…¬å¼(~F)";
         Text[ arabic ] = "ÕíÛ";
         Text[ greek ] = "~Ôığïé";
         Text[ korean ] = "ìˆ˜ì‹(~F)";
-        Text[ turkish ] = "~Formül";
+        Text[ turkish ] = "~Formüller";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fórmules";
         Text[ thai ] = "~à¸ªà¸¹à¸•à¸£";
+        Text[ czech ] = "Vzorce";
+        Text[ hebrew ] = "~Formeln";
+        Text[ hindi ] = "~à¤¸à¥‚à¤¤à¥à¤°";
     };
     Edit ED_FORMULARANGE
     {
@@ -137,7 +140,7 @@ ModelessDialog RID_SCDLG_TABOP
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Encolher" ;
         QuickHelpText [ swedish ] = "Förminska" ;
         QuickHelpText [ danish ] = "Formindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -159,6 +162,9 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     FixedText FT_ROWCELL
     {
@@ -168,7 +174,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ ENGLISH ] = "~Row" ;
         Text [ norwegian ] = "~rad" ;
         Text [ italian ] = "Riga" ;
-        Text [ portuguese_brazilian ] = "filei~ra" ;
+        Text [ portuguese_brazilian ] = "Célula de entrada da ~linha" ;
         Text [ portuguese ] = "~Linha" ;
         Text [ finnish ] = "~Rivien syöttösolu" ;
         Text [ danish ] = "Række" ;
@@ -179,16 +185,19 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ english_us ] = "~Row input cell" ;
         Text[ chinese_simplified ] = "è¡Œ(~R)";
         Text[ russian ] = "Ñòğîêà ââîäà";
-        Text[ polish ] = "Wiersz";
+        Text[ polish ] = "A~dres w wierszu";
         Text[ japanese ] = "è¡Œ(~R)";
         Text[ chinese_traditional ] = "åˆ—(~R)";
         Text[ arabic ] = "ÇáÕİ";
         Text[ greek ] = "~ÃñáììŞ";
         Text[ korean ] = "í–‰(~R)";
-        Text[ turkish ] = "~Satır";
+        Text[ turkish ] = "Hücre içerisine s~atır ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cel.la d'entrada de la ~fila";
         Text[ thai ] = "à¹~à¸–à¸§à¸›à¹‰à¸­à¸™à¹€à¸‹à¸¥à¸¥à¹Œ";
+        Text[ czech ] = "VstupnÃ­ buÅˆka Å™Ã¡dku";
+        Text[ hebrew ] = "~Zeile";
+        Text[ hindi ] = "~à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤‡à¤¨à¤ªà¥à¤Ÿ à¤•à¥‹à¤·à¥à¤ ";
     };
     Edit ED_ROWCELL
     {
@@ -204,7 +213,7 @@ ModelessDialog RID_SCDLG_TABOP
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Encolher" ;
         QuickHelpText [ swedish ] = "Förminska" ;
         QuickHelpText [ danish ] = "Formindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -226,6 +235,9 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     FixedText FT_COLCELL
     {
@@ -235,7 +247,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ ENGLISH ] = "~Column" ;
         Text [ norwegian ] = "~kolonne" ;
         Text [ italian ] = "~Colonna" ;
-        Text [ portuguese_brazilian ] = "~coluna" ;
+        Text [ portuguese_brazilian ] = "Célula de entrada da ~coluna" ;
         Text [ portuguese ] = "~Coluna" ;
         Text [ finnish ] = "~Sarakkeiden syöttösolu" ;
         Text [ danish ] = "Kolonne" ;
@@ -246,16 +258,19 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ english_us ] = "~Column input cell" ;
         Text[ chinese_simplified ] = "åˆ—(~C)";
         Text[ russian ] = "Ñòîëáåö ââîäà";
-        Text[ polish ] = "Kolumna";
+        Text[ polish ] = "~Adres w kolumnie";
         Text[ japanese ] = "åˆ—(~C)";
         Text[ chinese_traditional ] = "æ¬„(~C)";
         Text[ arabic ] = "ÇáÚãæÏ";
         Text[ greek ] = "~ÓôŞëç";
         Text[ korean ] = "ì—´(~C)";
-        Text[ turkish ] = "~Sütun";
+        Text[ turkish ] = "Hücre içerisine s~ütun ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cel.la d'entrada de la columna";
         Text[ thai ] = "~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸›à¹‰à¸­à¸™à¹€à¸‹à¸¥à¸¥à¹Œ";
+        Text[ czech ] = "VstupnÃ­ buÅˆka sloupce";
+        Text[ hebrew ] = "~Spalte";
+        Text[ hindi ] = "~à¤¸à¥à¤¤à¤‚à¤­ à¤‡à¤¨à¤ªà¥à¤Ÿ à¤•à¥‹à¤·à¥à¤ ";
     };
     Edit ED_COLCELL
     {
@@ -271,7 +286,7 @@ ModelessDialog RID_SCDLG_TABOP
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Encolher" ;
         QuickHelpText [ swedish ] = "Förminska" ;
         QuickHelpText [ danish ] = "Formindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -293,6 +308,9 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     FixedLine FL_VARIABLES
     {
@@ -302,7 +320,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ ENGLISH ] = "Variables" ;
         Text [ norwegian ] = "Variabler" ;
         Text [ italian ] = "Predefiniti" ;
-        Text [ portuguese_brazilian ] = "Vari?veis" ;
+        Text [ portuguese_brazilian ] = "Configurações padrão" ;
         Text [ portuguese ] = "Predefinições" ;
         Text [ finnish ] = "Oletusasetukset" ;
         Text [ danish ] = "Forudindstillinger" ;
@@ -319,10 +337,13 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇİÊÑÇÖíÉ";
         Text[ greek ] = "ĞñïåğéëïãŞ";
         Text[ korean ] = "ê¸°ë³¸ ì„¤ì •";
-        Text[ turkish ] = "Varsayılan";
+        Text[ turkish ] = "Öntanımlı ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Variables";
         Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+        Text[ czech ] = "VÃ½chozÃ­ nastavenÃ­";
+        Text[ hebrew ] = "Vorgaben";
+        Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
     };
     OKButton BTN_OK
     {
@@ -346,7 +367,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ ENGLISH ] = "No formula specified!" ;
         Text [ norwegian ] = "Ingen formel er spesifisert!" ;
         Text [ italian ] = "Nessuna formula specificata!" ;
-        Text [ portuguese_brazilian ] = "No formula specified!" ;
+        Text [ portuguese_brazilian ] = "Nenhuma fórmula especificada." ;
         Text [ portuguese ] = "Fórmula não especificada!" ;
         Text [ finnish ] = "Kaavaa ei ole määritetty." ;
         Text [ danish ] = "Der er ikke specificeret nogen formel!" ;
@@ -357,7 +378,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ english_us ] = "No formula specified." ;
         Text[ chinese_simplified ] = "æ²¡æœ‰è¾“å…¥å…¬å¼ï¼";
         Text[ russian ] = "Íå óêàçàíà ôîğìóëà.";
-        Text[ polish ] = "Nie wpisano formu³y!";
+        Text[ polish ] = "Nie podano formu³y.";
         Text[ japanese ] = "æ•°å¼ãŒè¨˜å…¥ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "æ²’æœ‰æŒ‡å®šå…¬å¼ï¼";
         Text[ arabic ] = "áã íÊã ÊÍÏíÏ ÃíÉ ÇáÕíÛÉ!";
@@ -367,6 +388,9 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No s'ha indicat cap fórmula.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸£à¸°à¸šà¸¸à¸ªà¸¹à¸•à¸£";
+        Text[ czech ] = "Vzorec nebyl zadÃ¡n.";
+        Text[ hebrew ] = "Keine Formel eingetragen";
+        Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤¸à¥‚à¤¤à¥à¤° à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤¨à¤¹à¥€à¤‚ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ à¥¤";
     };
     String STR_NOCOLROW
     {
@@ -374,7 +398,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ ENGLISH ] = "Neither row nor column specified!" ;
         Text [ norwegian ] = "Hverken rad eller kolonne er spesifisert!" ;
         Text [ italian ] = "Non è stata specificata nessuna riga o colonna!" ;
-        Text [ portuguese_brazilian ] = "Neither row nor column specified!" ;
+        Text [ portuguese_brazilian ] = "Nenhuma linha ou coluna especificada." ;
         Text [ portuguese ] = "Linha e coluna indefinidas!" ;
         Text [ finnish ] = "Riviä tai saraketta ei ole määritetty." ;
         Text [ danish ] = "Der er hverken specificeret række eller kolonne!" ;
@@ -385,7 +409,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ english_us ] = "Neither row or column specified." ;
         Text[ chinese_simplified ] = "æ²¡æœ‰æŒ‡å®šè¡Œå’Œåˆ—ï¼";
         Text[ russian ] = "Íè ñòğîêè, íè ñòîëáöû íå óêàçàíû.";
-        Text[ polish ] = "Nie wpisano ani wiersza ani kolumny!";
+        Text[ polish ] = "Nie okreœlono ani wiersza, ani kolumny!";
         Text[ japanese ] = "è¡Œåˆ—ã¨ã‚‚ã«è¨˜å…¥ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "æ²’æœ‰æŒ‡å®šæ¬„å’Œåˆ—ï¼";
         Text[ arabic ] = "áã íÊã ÊÍÏíÏ ÇáÕİ æáÇ ÇáÚãæÏ!";
@@ -395,6 +419,9 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No s'ha indicat cap fila ni cap columna.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸£à¸°à¸šà¸¸à¸—à¸±à¹‰à¸‡à¹à¸–à¸§à¹à¸¥à¸°à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+        Text[ czech ] = "Nebyl uveden Å™Ã¡dek ani sloupec.";
+        Text[ hebrew ] = "Weder Zeile noch Spalte eingetragen";
+        Text[ hindi ] = "à¤¨ à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤•à¥‹ à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ à¤¨ à¤¸à¥à¤¤à¤‚à¤­ à¤•à¥‹ à¥¤";
     };
     String STR_WRONGFORMULA
     {
@@ -402,7 +429,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ ENGLISH ] = "Undefined name or range for formula!" ;
         Text [ norwegian ] = "Udefinert navn eller verdimengde for formel !" ;
         Text [ italian ] = "Nome o area non definiti!" ;
-        Text [ portuguese_brazilian ] = "Undefined name or range for formula!" ;
+        Text [ portuguese_brazilian ] = "Nome ou intervalo indefinido!" ;
         Text [ portuguese ] = "Nome ou área indefinidos!" ;
         Text [ finnish ] = "Määrittämätön nimi tai alue." ;
         Text [ danish ] = "Udefineret navn eller område!" ;
@@ -413,7 +440,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ english_us ] = "Undefined name or range." ;
         Text[ chinese_simplified ] = "æ²¡æœ‰å®šä¹‰åç§°æˆ–åŒºåŸŸï¼";
         Text[ russian ] = "Èìÿ èëè îáëàñòü íå îïğåäåëåíû.";
-        Text[ polish ] = "Nie zdefiniowana nazwa lub obszar!";
+        Text[ polish ] = "Niezdefiniowana nazwa lub zakres.";
         Text[ japanese ] = "åå‰ã¾ãŸã¯ç¯„å›²ãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "æ²’æœ‰å®šç¾©åç¨±æˆ–å€åŸŸï¼";
         Text[ arabic ] = "ÇÓã Ãæ äØÇŞ ÛíÑ ãõÚÑøİ!";
@@ -423,6 +450,9 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El nom o àrea no s'ha definit.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸à¸³à¸«à¸™à¸”à¸Šà¸·à¹ˆà¸­à¸«à¸£à¸·à¸­à¸Šà¹ˆà¸§à¸‡";
+        Text[ czech ] = "NedefinovanÃ½ nÃ¡zev nebo oblast!";
+        Text[ hebrew ] = "Undefinierter Name oder Bereich";
+        Text[ hindi ] = "Undefined name or range.";
     };
     String STR_WRONGROWCOL
     {
@@ -430,7 +460,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ ENGLISH ] = "Row: no formula cell!" ;
         Text [ norwegian ] = "Rad: ingen  formelcelle!" ;
         Text [ italian ] = "Nome non definito o riferimento a celle errato!" ;
-        Text [ portuguese_brazilian ] = "Row: no formula cell!" ;
+        Text [ portuguese_brazilian ] = "Nome indefinido ou referência de célula incorreta." ;
         Text [ portuguese ] = "Nome ou referência da célula indefinidos!" ;
         Text [ finnish ] = "Määrittämätön nimi tai virheellinen soluviite." ;
         Text [ danish ] = "Udefineret navn eller forkert cellereference!" ;
@@ -441,7 +471,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ english_us ] = "Undefined name or wrong cell reference." ;
         Text[ chinese_simplified ] = "æ²¡æœ‰å®šä¹‰åç§°æˆ–é”™è¯¯çš„å•å…ƒæ ¼å¼•ç”¨ï¼";
         Text[ russian ] = "Íå îïğåäåëåíî èìÿ èëè íåïğàâèëüíàÿ ññûëêà ÿ÷åéêè.";
-        Text[ polish ] = "Nie zdefiniowana nazwa lub z³y adres komórki!";
+        Text[ polish ] = "Niezdefiniowana nazwa lub niepoprawne odwo³anie do komórki.";
         Text[ japanese ] = "åå‰ãŒæŒ‡å®šã•ã‚Œã¦ã„ãªã„ã‹ã€ã¾ãŸã¯ã‚»ãƒ«å‚ç…§ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "æ²’æœ‰å®šç¾©åç¨±æˆ–éŒ¯èª¤çš„å„²å­˜æ ¼åƒç…§ï¼";
         Text[ arabic ] = "ÇÓã ÛíÑ ãõÚÑøİ Ãæ ãÑÌÚ ÎáíÉ ÎÇØÆ!";
@@ -451,6 +481,9 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El nom no s'ha definit o bé la referència a la cel.la és incorrecta.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸à¸³à¸«à¸™à¸”à¸Šà¸·à¹ˆà¸­à¸«à¸£à¸·à¸­à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¹€à¸‹à¸¥à¸¥à¹Œà¸œà¸´à¸”";
+        Text[ czech ] = "NedefinovanÃ© jmÃ©no nebo Å¡patnÃ½ odkaz na buÅˆku.";
+        Text[ hebrew ] = "Undefinierter Name oder falsche Zellreferenz";
+        Text[ hindi ] = "à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¾ à¤¨ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤¨à¤¾à¤®à¥ à¤…à¤¥à¤µà¤¾ à¤—à¤²à¤¤ à¤•à¥‹à¤·à¥à¤  à¤•à¤¾ à¤°à¥‡à¤«à¤°à¥‡à¤¨à¥à¤¸ à¥¤";
     };
     String STR_NOCOLFORMULA
     {
@@ -458,7 +491,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ ENGLISH ] = "Formulas form no column!" ;
         Text [ norwegian ] = "Formelblanketten har ingen kolonne!" ;
         Text [ italian ] = "Le formule non producono una colonna!" ;
-        Text [ portuguese_brazilian ] = "Formulas form no column!" ;
+        Text [ portuguese_brazilian ] = "As fórmulas não formam uma coluna." ;
         Text [ portuguese ] = "Fórmulas não formam coluna!" ;
         Text [ finnish ] = "Kaavat eivät muodosta saraketta." ;
         Text [ danish ] = "Formler danner ikke kolonne!" ;
@@ -469,7 +502,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ english_us ] = "Formulas don't form a column." ;
         Text[ chinese_simplified ] = "å…¬å¼å¹¶ä¸æ„æˆåˆ—ï¼";
         Text[ russian ] = "Ôîğìóëû íå îáğàçóşò ñòîëáåö.";
-        Text[ polish ] = "Formu³y nie tworz¹ kolumny!";
+        Text[ polish ] = "Formu³y nie tworz¹ kolumny.";
         Text[ japanese ] = "æ•°å¼ã¯åˆ—ã‚’å½¢æˆã—ã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "å…¬å¼ä¸¦ä¸æ§‹æˆæ¬„ï¼";
         Text[ arabic ] = "ÇáÕíÛ áÇ ÊõÔßá ÚãæÏÇğ!";
@@ -479,6 +512,9 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Les fórmules no formen una columna.";
         Text[ thai ] = "à¸ªà¸¹à¸•à¸£à¹„à¸¡à¹ˆà¸ˆà¸±à¸”à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+        Text[ czech ] = "Vzorce netvoÅ™Ã­ sloupec!";
+        Text[ hebrew ] = "Formeln bilden keine Spalte";
+        Text[ hindi ] = "à¤¸à¥‚à¤¤à¥à¤° à¤¸à¥à¤¤à¤‚à¤­ à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤¨à¤¹à¥€à¤‚ à¤•à¤°à¤¤à¤¾ à¤¹à¥ˆ à¥¤";
     };
     String STR_NOROWFORMULA
     {
@@ -486,18 +522,18 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ ENGLISH ] = "Formulas form no row!" ;
         Text [ norwegian ] = "Formelblanketten har ingen rad!" ;
         Text [ italian ] = "Le formule non producono una riga!" ;
-        Text [ portuguese_brazilian ] = "Formulas form no row!" ;
+        Text [ portuguese_brazilian ] = "As fórmulas não formam uma linha." ;
         Text [ portuguese ] = "Fórmulas não formam linha!" ;
         Text [ finnish ] = "Kaavat eivät muodosta riviä." ;
         Text [ danish ] = "Formler danner ikke række!" ;
         Text [ french ] = "Les formules ne forment pas de ligne !" ;
         Text [ swedish ] = "Formlerna bildar ingen rad!" ;
         Text [ dutch ] = "Formules vormen geen rij!" ;
-        Text [ spanish ] = "¡Fórmulas no forman una fila!" ;
+        Text [ spanish ] = "¡Las fórmulas no forman una fila!" ;
         Text [ english_us ] = "Formulas don't form a row." ;
         Text[ chinese_simplified ] = "å…¬å¼ä¸æ„æˆè¡Œï¼";
         Text[ russian ] = "Ôîğìóëû íå îáğàçóşò ñòğîêó.";
-        Text[ polish ] = "Formu³y nie tworz¹ wiersza!";
+        Text[ polish ] = "Formu³y nie tworz¹ wiersza.";
         Text[ japanese ] = "æ•°å¼ã¯è¡Œã‚’å½¢æˆã—ã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "å…¬å¼ä¸æ§‹æˆåˆ—ï¼";
         Text[ arabic ] = "ÇáÕíÛ áÇ ÊõÔßá ÕİÇğ!";
@@ -507,6 +543,9 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Les fórmules no formen una fila.";
         Text[ thai ] = "à¸ªà¸¹à¸•à¸£à¹„à¸¡à¹ˆà¸ˆà¸±à¸”à¹à¸–à¸§";
+        Text[ czech ] = "Vzorce netvoÅ™Ã­ Å™Ã¡dek!";
+        Text[ hebrew ] = "Formeln bilden keine Zeile";
+        Text[ hindi ] = "à¤¸à¥‚à¤¤à¥à¤° à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤¨à¤¹à¥€à¤‚ à¤•à¤°à¤¤à¤¾ à¤¹à¥ˆ à¥¤";
     };
     Text[ chinese_simplified ] = "å¤šé‡è®¡ç®—";
     Text[ russian ] = "Ñîâìåùåííûå îïåğàöèè";
@@ -520,7 +559,19 @@ ModelessDialog RID_SCDLG_TABOP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Operacions múltiples";
     Text[ thai ] = "à¸«à¸¥à¸²à¸¢à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£";
+    Text[ czech ] = "VÃ­cenÃ¡sobnÃ© operace";
+    Text[ hebrew ] = "Mehrfachoperationen";
+    Text[ hindi ] = "à¤¬à¤¹à¥à¤®à¥à¤–à¥€ à¤•à¤¾à¤°à¥à¤¯";
 };
+
+
+
+
+
+
+
+
+
 
 
 
