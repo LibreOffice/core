@@ -2,9 +2,9 @@
  *
  *  $RCSfile: version.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2002-03-07 17:24:11 $
+ *  last change: $Author: hjs $ $Date: 2002-04-15 12:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,40 +75,37 @@ char * strcpy(char*, const char* );
 #include <_version.h>
 
 
-typedef struct _VersionInfo
+struct VersionInfo
 {
-    char    aTime[20];
-    char    aDate[20];
-    char    aUpd[5];
-    char    aMinor;
-    char    aBuild[5];
-    char    aInpath[20];
-} VersionInfo;
+    const char  aTime[20];
+    const char  aDate[20];
+    const char  aUpd[5];
+    const char  aMinor;
+    const char  aBuild[5];
+    const char  aInpath[20];
+};
 
+static const struct VersionInfo g_aVersionInfo =
+{
+    __TIME__,
+    __DATE__,
+    _UPD,
+    _LAST_MINOR,
+    _BUILD,
+    _INPATH
+};
 
 #ifdef WNT
-__declspec(dllexport) VersionInfo *GetVersionInfo();
-#endif
-#ifdef OS2
-VersionInfo *GetVersionInfo();
+__declspec(dllexport) const struct VersionInfo* GetVersionInfo();
 #endif
 
 #ifdef WNT
-__declspec(dllexport) VersionInfo *GetVersionInfo()
-#endif
-#if defined( OS2 ) || defined( UNX )
-VersionInfo *GetVersionInfo()
+__declspec(dllexport) const struct VersionInfo* GetVersionInfo()
+#else
+const VersionInfo *GetVersionInfo()
 #endif
 {
-    VersionInfo *pInfo;
-    pInfo = (VersionInfo*)malloc(sizeof(VersionInfo));
-    (void) strcpy(pInfo->aUpd, _UPD);
-    (void) strcpy(pInfo->aDate, __DATE__);
-    (void) strcpy(pInfo->aTime, __TIME__);
-    pInfo->aMinor = _LAST_MINOR;
-    (void) strcpy(pInfo->aBuild, _BUILD );
-    (void) strcpy(pInfo->aInpath, _INPATH );
-    return pInfo;
+    return &g_aVersionInfo;
 }
 
 #if 0
