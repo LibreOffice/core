@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-03 17:34:42 $
+ *  last change: $Author: mba $ $Date: 2001-07-10 11:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #include "frmhtmlw.hxx"
 #include "app.hxx"
 #include "unoctitm.hxx"
+#include "helpid.hrc"
 
 //--------------------------------------------------------------------
 
@@ -663,6 +664,7 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl
 {
     aTimer.SetTimeout( 250 );
     aTimer.SetTimeoutHdl( LINK( this, SfxAppToolBoxControl_Impl, Timeout ) );
+    rBox.SetHelpId( nId, HID_TBXCONTROL_FILENEW );
 }
 
 void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
