@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:53:33 $
+ *  last change: $Author: kz $ $Date: 2001-07-04 00:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ chinese_traditional ] = "¤£¤δ«ω³o­ΣΉΟ§ΞΐΙ®Χª©¥»";
         TEXT[ arabic ] = "αδ νΚγ ΟΪγ ΕΥΟΗΡ γαέ ΗαΡΣζγΗΚ";
         TEXT[ greek ] = "Δεν υποστηρίζεται η έκδοση αυτού του γραφικού αρχείου.";
-        TEXT[ korean ] = "±Χ·΅ΗΘΖΔΐΟΐΗ ΉφΐόΐΊ ΑφΏψµΗΑφ ΎΚΐ½";
+        TEXT[ korean ] = "±Χ·΅ΗΘΖΔΐΟΐΗ ΉφΐόΐΜ ΑφΏψµΗΑφ ΎΚΐ½";
         TEXT[ turkish ] = "Grafik dosyasύnύn sόrόmό desteklenmiyor";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "No se apoya la versiσn del archivo grαfico";
@@ -514,5 +514,6 @@ Resource RID_SVXRES_IMPORTGRAPHIC
     };
 };
  // ********************************************************************** EOF
+
 
 
