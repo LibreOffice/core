@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:36:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,16 +347,36 @@ sal_Bool ODateModel::commitControlValueToDbColumn( bool _bPostReset )
 }
 
 //------------------------------------------------------------------------------
-Any ODateModel::translateControlValueToValidatableValue( ) const
+Any ODateModel::translateControlValueToExternalValue( ) const
 {
-    Any aValidatableValue( getControlValue() );
-    if ( aValidatableValue.hasValue() )
+    Any aExternalValue( getControlValue() );
+    if ( aExternalValue.hasValue() )
     {
         sal_Int32 nDate = 0;
-        OSL_ENSURE( aValidatableValue >>= nDate, "ODateModel::translateControlValueToValidatableValue: invalid date!" );
-        aValidatableValue <<= DBTypeConversion::toDate( nDate );
+        OSL_VERIFY( aExternalValue >>= nDate );
+        aExternalValue <<= DBTypeConversion::toDate( nDate );
     }
-    return aValidatableValue;
+    return aExternalValue;
+}
+
+//------------------------------------------------------------------------------
+Any ODateModel::translateExternalValueToControlValue( ) const
+{
+    OSL_PRECOND( hasExternalValueBinding(),
+        "ODateModel::translateExternalValueToControlValue: precondition not met!" );
+
+    Any aControlValue;
+    if ( hasExternalValueBinding() )
+    {
+        Any aExternalValue = getExternalValueBinding()->getValue( ::getCppuType( static_cast< util::Date* >( NULL ) ) );
+        if ( aExternalValue.hasValue() )
+        {
+            util::Date aDate;
+            OSL_VERIFY( aExternalValue >>= aDate );
+            aControlValue <<= DBTypeConversion::toINT32( aDate );
+        }
+    }
+    return aControlValue;
 }
 
 //------------------------------------------------------------------------------
