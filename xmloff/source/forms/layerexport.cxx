@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
+ *  last change: $Author: kz $ $Date: 2000-12-13 12:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ namespace xmloff
         if (!implCheckPage(_rxDrawPage, xCollectionIndex))
             return;
 
-#ifdef DEBUG
+#ifdef _DEBUG
         sal_Bool bPageIsKnown =
 #endif
             implMoveIterators(_rxDrawPage, sal_False);
@@ -330,7 +330,7 @@ namespace xmloff
             return;
 
         // move the iterator which specify the currently handled page
-#ifdef DEBUG
+#ifdef _DEBUG
         sal_Bool bPageIsKnown =
 #endif
             implMoveIterators(_rxDrawPage, sal_True);
@@ -431,6 +431,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/06 17:28:05  fs
+ *  changes for the formlayer import - still under construction
+ *
  *  Revision 1.4  2000/12/03 10:57:06  fs
  *  some changes to support more than one page to be examined/exported
  *
