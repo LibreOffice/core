@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:33:58 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ String WEBDIALOG + 1
     Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí áÕİÍÉ æíÈ";
     Text[ turkish ] = "OtoPilot Web sayfası";
     Text[ catalan ] = "AutoPilot Web Page";
-    Text[ finnish ] = "AutoPilot Web-Seite";
+    Text[ finnish ] = "Automaattinen Web-sivun ohjaus";
 };
 
 
@@ -141,7 +141,7 @@ String WEBDIALOG + 3
     Text[ arabic ] = "ÅäÔÇÁ";
     Text[ turkish ] = "~Oluştur";
     Text[ catalan ] = "C~reate";
-    Text[ finnish ] = "~Fertig stellen";
+    Text[ finnish ] = "~Luo";
 };
 
 
@@ -170,7 +170,7 @@ String WEBDIALOG + 4
     Text[ arabic ] = "Ãí ŞÇáÈ ÊÑÛÈ ÈÇÓÊÎÏÇãå¿";
     Text[ turkish ] = "Hangi şablon kullanılsın ?";
     Text[ catalan ] = "Which template should be used?";
-    Text[ finnish ] = "Welche Vorlage soll verwendet werden ?";
+    Text[ finnish ] = "Mitä mallipohjaa käytetään?";
 };
 
 String WEBDIALOG + 5
@@ -197,7 +197,7 @@ String WEBDIALOG + 5
     Text[ turkish ] = "Hangi biçim kullanılsın ?";
     Text[ language_user1 ] = "The German should read \"Stilart\" and has nothing to do with \"Vorlage\". ENG: don't use style here.(EM16.5.00)";
     Text[ catalan ] = "Which layout should be used?";
-    Text[ finnish ] = "Welcher Stil soll verwendet werden ?";
+    Text[ finnish ] = "Mitä asettelua käytetään?";
 };
 
 
@@ -335,7 +335,7 @@ String WEBDIALOG + 10
     Text[ turkish ] = "Şablon oluştur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Create template";
-    Text[ finnish ] = "Vorlage erzeugen";
+    Text[ finnish ] = "Luo tyyli";
 };
 
 
@@ -362,7 +362,7 @@ String WEBERROR + 1
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ŞÇáÈ áÅÚÏÇÏ ÇáÕİÍÉ.";
     Text[ turkish ] = "Sayfa yapısı için şablon bulunamadı.";
     Text[ catalan ] = "A template for the page setup could not be found.";
-    Text[ finnish ] = "Es wurde keine Vorlage für den Seitenaufbau gefunden.";
+    Text[ finnish ] = "Sivun mallipohjaa ei löytynyt.";
 };
 
 String WEBERROR + 2
@@ -389,7 +389,7 @@ String WEBERROR + 2
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì äãØ áäãØ ÇáÕİÍÉ.";
     Text[ turkish ] = "Sayfa biçimi için şablon bulunamadı.";
     Text[ catalan ] = "A Style for the Page Style could not be found.";
-    Text[ finnish ] = "Es wurde keine Vorlage für den Seitenstil gefunden.";
+    Text[ finnish ] = "Sivutyylin tyyliä ei löytynyt.";
 };
 
 String WEBERROR + 3
@@ -415,7 +415,7 @@ String WEBERROR + 3
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊŞííã ÇáŞæÇáÈ.";
     Text[ turkish ] = "Şablon değerlendirilirken bir hata oluştu.";
     Text[ catalan ] = "An error occurred while interpreting the templates.";
-    Text[ finnish ] = "Bei der Auswertung der Vorlagen ist ein Fehler aufgetreten.";
+    Text[ finnish ] = "Mallia tulkittaessa on ilmennyt virhe.";
 };
 
 String WEBERROR + 4
@@ -441,7 +441,7 @@ String WEBERROR + 4
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍÏíË ÇáŞÇáÈ.";
     Text[ turkish ] = "Şablon güncellenirken bir hata oluştu.";
     Text[ catalan ] = "An error occurred while refreshing the template.";
-    Text[ finnish ] = "Bei der Aktualisierung der Vorlage ist ein Fehler aufgetreten.";
+    Text[ finnish ] = "Mallia päivitettäessä on ilmennyt virhe.";
 };
 
 String WEBERROR + 5
@@ -468,7 +468,7 @@ String WEBERROR + 5
     Text[ turkish ] = "Format şablonları uygulanırken bir hata oluştu.";
     Text[ language_user1 ] = "- All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM p.s.Formatvorlagen sind Styles.";
     Text[ catalan ] = "An error occurred while applying the Styles.";
-    Text[ finnish ] = "Bei der Zuweisung der Formatvorlagen ist ein Fehler aufgetreten.";
+    Text[ finnish ] = "Tyylejä liitettäessä on ilmennyt virhe.";
 };
 
 String WEBERROR + 6
@@ -494,7 +494,7 @@ String WEBERROR + 6
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊŞííã ÇáãÓÊäÏÇÊ.";
     Text[ turkish ] = "Belgeler değerlendirilirken bir hata oluştu.";
     Text[ catalan ] = "An error occurred while interpreting the documents.";
-    Text[ finnish ] = "Bei der Auswertung der Dokumente ist ein Fehler aufgetreten.";
+    Text[ finnish ] = "Asiakirjaa tulkitessa on ilmennyt virhe.";
 };
 
 String WEBERROR + 7
@@ -520,7 +520,7 @@ String WEBERROR + 7
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊäİíĞ ÇáãÑÔÏ ÇáÂáí.";
     Text[ turkish ] = "OtoPilot çalıştırılırken bir hata oluştu.";
     Text[ catalan ] = "An error occurred while running the AutoPilot.";
-    Text[ finnish ] = "Bei der Ausführung des AutoPiloten ist ein Fehler aufgetreten.";
+    Text[ finnish ] = "Automaattisen ohjauksen suorituksessa on ilmennyt virhe.";
 };
 
 
