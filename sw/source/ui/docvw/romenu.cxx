@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:23:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,12 +362,19 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
 
 void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
 {
-    SwWrtShell &rSh = rView.GetWrtShell();
-    SfxDispatcher &rDis = *rView.GetViewFrame()->GetDispatcher();
     USHORT nId     = PopupMenu::Execute(
     pWin,
     rPixPos );
+    Execute(pWin, nId);
+}
 
+/*-- 17.03.2004 13:06:18---------------------------------------------------
+    execute the resulting ID only - necessary to support XContextMenuInterception
+  -----------------------------------------------------------------------*/
+void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
+{
+    SwWrtShell &rSh = rView.GetWrtShell();
+    SfxDispatcher &rDis = *rView.GetViewFrame()->GetDispatcher();
     if ( nId >= MN_READONLY_GRAPHICTOGALLERY )
     {
         String sTmp;
@@ -457,7 +464,8 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
             SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk( FALSE );
             break;
 
-        default: /* do nothing */;
+        default: //forward the id to the SfxBindings
+            nExecId = nId;
     }
     if( USHRT_MAX != nExecId )
         rDis.GetBindings()->Execute( nExecId );
