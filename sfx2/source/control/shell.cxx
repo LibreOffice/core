@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 09:13:04 $
+ *  last change: $Author: mba $ $Date: 2002-09-06 12:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1201,7 +1201,11 @@ const SfxPoolItem* SfxShell::ExecuteSlot
     if ( !pSlot )
         pSlot = pIF->GetSlot(nSlot);
     if ( !pSlot && SfxMacroConfig::IsMacroSlot( nSlot ) )
-        pSlot = SFX_APP()->GetMacroConfig()->GetMacroInfo(nSlot)->GetSlot();
+    {
+        SfxMacroInfo* pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo(nSlot);
+        if ( pInfo )
+            pSlot = pInfo->GetSlot();
+    }
 
     DBG_ASSERT( pSlot, "slot not supported" );
 
@@ -1272,7 +1276,11 @@ const SfxPoolItem* SfxShell::GetSlotState
     if ( !pSlot )
         pSlot = pIF->GetSlot(nSlotId);
     if ( !pSlot && SfxMacroConfig::IsMacroSlot( nSlotId ) )
-        pSlot = SFX_APP()->GetMacroConfig()->GetMacroInfo(nSlotId)->GetSlot();
+    {
+        SfxMacroInfo* pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo(nSlotId);
+        if ( pInfo )
+            pSlot = pInfo->GetSlot();
+    }
 
     if ( pSlot )
         // ggf. auf Which-Id mappen

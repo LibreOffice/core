@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-23 10:44:34 $
+ *  last change: $Author: mba $ $Date: 2002-09-06 12:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
     bWasHighContrast = IsHiContrastMode();
 
     USHORT nSVPos = 0;
-    for ( USHORT nPos = 0; nPos < nCount; ++nPos, ++nSVPos )
+    for ( USHORT nPos=0; nPos<nCount; ++nPos, ++nSVPos )
     {
         USHORT nId = pSVMenu->GetItemId(nSVPos);
         PopupMenu* pPopup = pSVMenu->GetPopupMenu(nId);
@@ -467,10 +467,20 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     String aCmd( pSVMenu->GetItemCommand( nId ) );
                     if ( aCmd.CompareToAscii("slot:", 5) == 0 )
                     {
-                        if ( SfxMacroConfig::IsMacroSlot( nId ) )
-                            SFX_APP()->GetMacroConfig()->RegisterSlotId( nId );
-                        pSVMenu->SetItemCommand( nId, String() );
-                        aCmd.Erase();
+                        SfxMacroConfig* pCfg = SFX_APP()->GetMacroConfig();
+                        if ( pCfg->IsMacroSlot( nId ) )
+                        {
+                            if ( pCfg->GetMacroInfo( nId ) )
+                            {
+                                pCfg->RegisterSlotId( nId );
+                                pSVMenu->SetItemCommand( nId, String() );
+                                aCmd.Erase();
+                            }
+                            else
+                            {
+                                pSVMenu->SetItemCommand( nId, String::CreateFromAscii("macro:///macro.not.founc") );
+                            }
+                        }
                     }
 /*
                     if ( aCmd.Len() )

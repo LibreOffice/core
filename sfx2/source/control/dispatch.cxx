@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 07:57:29 $
+ *  last change: $Author: mba $ $Date: 2002-09-06 12:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2491,12 +2491,16 @@ sal_Bool SfxDispatcher::_FindServer
     // Makro-Slot?
     if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
     {
-        const SfxSlot* pSlot = pSfxApp->GetMacroConfig()->GetMacroInfo(nSlot)->GetSlot();
-        if ( pSlot )
+        SfxMacroInfo* pInfo = pSfxApp->GetMacroConfig()->GetMacroInfo(nSlot);
+        if ( pInfo )
         {
-            rServer.SetShellLevel(nTotCount-1);
-            rServer.SetSlot( pSlot );
-            return sal_True;
+            const SfxSlot* pSlot = pInfo->GetSlot();
+            if ( pSlot )
+            {
+                rServer.SetShellLevel(nTotCount-1);
+                rServer.SetSlot( pSlot );
+                return sal_True;
+            }
         }
 
         return sal_False;

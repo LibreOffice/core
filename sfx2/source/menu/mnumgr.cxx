@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:16:25 $
+ *  last change: $Author: mba $ $Date: 2002-09-06 12:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,9 @@ BOOL SfxMenuManager::StoreMenu( SvStream& rStream, Menu* pMenu, SfxModule* pMod 
             if( pIterator->IsBinding( pMod ) )
             {
                 String aCmd( pIterator->GetCommand() );
-                if ( aCmd.CompareToAscii("macro:", 6) == 0 && !pMC->IsMacroSlot( nId ) )
+                BOOL bIsMacroSlot = SfxMacroConfig::IsMacroSlot(nId);
+
+                if ( aCmd.CompareToAscii("macro:", 6) == 0 && !bIsMacroSlot )
                 {
                     SfxMacroInfo aInfo( aCmd );
                     pMC->GetSlotId( &aInfo );
@@ -408,15 +410,32 @@ BOOL SfxMenuManager::StoreMenu( SvStream& rStream, Menu* pMenu, SfxModule* pMod 
                     aMacroSlots.Insert( nId, aMacroSlots.Count() );
                 }
 
-                rStream << 'I';
-                rStream << nId;
-                rStream.WriteByteString(aTitle, nEnc );
-                if ( SfxMacroConfig::IsMacroSlot(nId) )
-                    // MacroInfo speichern
-                    rStream << *(pMC->GetMacroInfo(nId));
-                if ( pIterator->GetPopupMenu() )
-                    // Unechtes Popup "uberspringen
-                    pIterator->RemovePopup();
+                if ( bIsMacroSlot )
+                {
+                    SfxMacroInfo* pInfo = pMC->GetMacroInfo(nId);
+                    if ( pInfo )
+                    {
+                        rStream << 'I';
+                        rStream << nId;
+                        rStream.WriteByteString(aTitle, nEnc );
+                        rStream << *(pInfo);
+                    }
+                    else
+                    {
+                        // trashed config entry, avoid disaster
+                        rStream << 'S';
+                    }
+                }
+                else
+                {
+                    rStream << 'I';
+                    rStream << nId;
+                    rStream.WriteByteString(aTitle, nEnc );
+
+                    if ( pIterator->GetPopupMenu() )
+                        // Unechtes Popup "uberspringen
+                        pIterator->RemovePopup();
+                }
             }
             else if ( pIterator->GetPopupMenu() )
             {
@@ -654,8 +673,12 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SfxMenuCfgItemArr& rCfg)
             pSuper->InsertItem( nId, rCfg[n]->aTitle );
             if ( SfxMacroConfig::IsMacroSlot( nId ) )
             {
-                SFX_APP()->GetMacroConfig()->RegisterSlotId( nId );
-                pSuper->SetItemCommand( nId, SFX_APP()->GetMacroConfig()->GetMacroInfo(nId)->GetURL() );
+                SfxMacroInfo* pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo(nId);
+                if ( pInfo )
+                {
+                    SFX_APP()->GetMacroConfig()->RegisterSlotId( nId );
+                    pSuper->SetItemCommand( nId, pInfo->GetURL() );
+                }
             }
             else if ( rCfg[n]->aCommand.Len() )
             {
