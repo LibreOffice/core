@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: lo $ $Date: 2002-09-30 16:01:32 $
+#   last change: $Author: obo $ $Date: 2002-10-10 13:10:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -226,6 +226,7 @@ APP4LINKRES=$(MISC)$/$(APP4TARGET).res
 
 SLOFILES =	\
     $(SLO)$/app.obj			\
+    $(SLO)$/lockfile.obj		\
     $(SLO)$/intro.obj		\
     $(SLO)$/officeipcthread.obj	\
     $(SLO)$/appinit.obj		\
