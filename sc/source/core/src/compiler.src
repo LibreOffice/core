@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-08 11:51:07 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1328,6 +1328,24 @@ Resource RID_SC_FUNCTION_NAMES
     {
         Text = "ZELLE" ;
         Text [ english ] = "CELL" ;
+        Text[ english_us ] = "CELL";
+        Text[ portuguese ] = "CELL";
+        Text[ russian ] = "CELL";
+        Text[ greek ] = "CELL";
+        Text[ dutch ] = "CELL";
+        Text[ french ] = "CELL";
+        Text[ spanish ] = "CELL";
+        Text[ italian ] = "CELL";
+        Text[ danish ] = "CELL";
+        Text[ swedish ] = "CELL";
+        Text[ polish ] = "CELL";
+        Text[ portuguese_brazilian ] = "CELL";
+        Text[ japanese ] = "CELL";
+        Text[ korean ] = "CELL";
+        Text[ chinese_simplified ] = "CELL";
+        Text[ chinese_traditional ] = "CELL";
+        Text[ turkish ] = "CELL";
+        Text[ arabic ] = "CELL";
     };
     String SC_OPCODE_IS_REF
     {
@@ -1819,7 +1837,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "VALUE" ;
         Text [ danish ] = "VÆRDI" ;
         Text [ french ] = "CNUM" ;
-        Text [ swedish ] = "TEXTNUM" ;
+        Text [ swedish ] = "VÄRDE" ;
         Text [ dutch ] = "WAARDE" ;
         Text [ spanish ] = "VALOR" ;
         Text [ english_us ] = "VALUE" ;
@@ -2120,6 +2138,24 @@ Resource RID_SC_FUNCTION_NAMES
     {
         Text = "ARABISCH" ;
         Text [ english ] = "ARABIC" ;
+        Text[ english_us ] = "ARABIC";
+        Text[ portuguese ] = "ARABIC";
+        Text[ russian ] = "ARABIC";
+        Text[ greek ] = "ARABIC";
+        Text[ dutch ] = "ARABIC";
+        Text[ french ] = "ARABIC";
+        Text[ spanish ] = "ARABIC";
+        Text[ italian ] = "ARABIC";
+        Text[ danish ] = "ARABIC";
+        Text[ swedish ] = "ARABIC";
+        Text[ polish ] = "ARABIC";
+        Text[ portuguese_brazilian ] = "ARABIC";
+        Text[ japanese ] = "ARABIC";
+        Text[ korean ] = "ARABIC";
+        Text[ chinese_simplified ] = "ARABIC";
+        Text[ chinese_traditional ] = "ARABIC";
+        Text[ turkish ] = "ARABIC";
+        Text[ arabic ] = "ARABIC";
     };
     String SC_OPCODE_ARC_TAN_2
     {
@@ -3023,6 +3059,24 @@ Resource RID_SC_FUNCTION_NAMES
     {
         Text = "QIKV" ;
         Text [ english ] = "MIRR" ;
+        Text[ english_us ] = "MIRR";
+        Text[ portuguese ] = "MIRR";
+        Text[ russian ] = "MIRR";
+        Text[ greek ] = "MIRR";
+        Text[ dutch ] = "MIRR";
+        Text[ french ] = "MIRR";
+        Text[ spanish ] = "MIRR";
+        Text[ italian ] = "MIRR";
+        Text[ danish ] = "MIRR";
+        Text[ swedish ] = "MIRR";
+        Text[ polish ] = "MIRR";
+        Text[ portuguese_brazilian ] = "MIRR";
+        Text[ japanese ] = "MIRR";
+        Text[ korean ] = "MIRR";
+        Text[ chinese_simplified ] = "MIRR";
+        Text[ chinese_traditional ] = "MIRR";
+        Text[ turkish ] = "MIRR";
+        Text[ arabic ] = "MIRR";
     };
     String SC_OPCODE_VAR
     {
@@ -7018,7 +7072,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ polish ] = "#NAZWA!";
         Text[ japanese ] = "#NAME!";
         Text[ chinese_traditional ] = "#NAME!";
-        Text[ arabic ] = "#ÇáÇÓã!";
+        Text[ arabic ] = "#NAME!";
         Text[ dutch ] = "#NAAM!";
         Text[ chinese_simplified ] = "#NAME!";
         Text[ greek ] = "#NAME!";
@@ -7137,6 +7191,24 @@ Resource RID_SC_FUNCTION_NAMES
     {
         Text = "RÖMISCH";
         Text [ english ] = "ROMAN" ;
+        Text[ english_us ] = "ROMAN";
+        Text[ portuguese ] = "ROMAN";
+        Text[ russian ] = "ROMAN";
+        Text[ greek ] = "ROMAN";
+        Text[ dutch ] = "ROMAN";
+        Text[ french ] = "ROMAN";
+        Text[ spanish ] = "ROMAN";
+        Text[ italian ] = "ROMAN";
+        Text[ danish ] = "ROMAN";
+        Text[ swedish ] = "ROMAN";
+        Text[ polish ] = "ROMAN";
+        Text[ portuguese_brazilian ] = "ROMAN";
+        Text[ japanese ] = "ROMAN";
+        Text[ korean ] = "ROMAN";
+        Text[ chinese_simplified ] = "ROMAN";
+        Text[ chinese_traditional ] = "ROMAN";
+        Text[ turkish ] = "ROMAN";
+        Text[ arabic ] = "ROMAN";
     };
 };
 Resource RID_SC_FUNCTION_NAMES_ENGLISH
