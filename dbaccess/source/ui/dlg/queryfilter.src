@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:03:11 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 06:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,9 +192,34 @@ ModalDialog DLG_FILTERCRIT
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 303 , 76 ) ;
-    Text = "Filter" ;
-    Text [ english ] = "Filter";
-    Text [ english_us ] = "Filter";
+    /* These strings are equal to the toolbox bubble helptext from MID_SBA_QRY_FILTERCRIT in toolbox.hrc */
+    Text ="Standardfilter" ;
+    Text [ ENGLISH ] ="Standardfilter" ;
+    Text[ english_us ] ="Default Filter";
+    Text[ portuguese ] ="Filtro padrão";
+    Text[ russian ] ="Ñòàíäàğòíûé ôèëüòğ";
+    Text[ dutch ] ="Standaardfilter";
+    Text[ french ] ="Filtre standard";
+    Text[ spanish ] ="Filtro predeterminado";
+    Text[ italian ] ="Filtro standard";
+    Text[ danish ] ="Standardfilter";
+    Text[ swedish ] ="Standardfilter";
+    Text[ polish ] ="Filtr standardowy";
+    Text[ portuguese_brazilian ] ="Filter";
+    Text[ japanese ] ="æ¨™æº–ãƒ•ã‚£ãƒ«ã‚¿";
+    Text[ chinese_simplified ] ="æ ‡å‡†ç­›é€‰";
+    Text[ chinese_traditional ] ="æ¨™æº–ç¯©é¸";
+    Text[ arabic ] ="İáÊÑ ŞíÇÓí";
+    Text[ dutch ] ="Standaardfilter";
+    Text[ chinese_simplified ] ="æ ‡å‡†ç­›é€‰";
+    Text[ greek ] ="Ößëôñï ğñïåğéëïãŞò";
+    Text[ korean ] ="ê¸°ë³¸ í•„í„°";
+    Text[ turkish ] ="Standart filtre";
+    Text[ language_user1 ] ="";
+    Text[ finnish ] ="Oletussuodatin";
+    Text[ catalan ] ="Default Filter";
+    Text[ thai ] ="à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
+
     Moveable = TRUE ;
     Closeable = TRUE ;
     HelpId = HID_DLG_FILTERCRIT ;
@@ -514,25 +539,6 @@ ModalDialog DLG_FILTERCRIT
         Text[ catalan ] = "=;<>;<;<=;>;>=;como;no como;vacío;no vacío";
         Text[ finnish ] = "=;<>;<;<=;>;>=;kuten;ei kuten;tyhjä;ei tyhjä";
     };
-    Text[ portuguese ] = "Filtro";
-    Text[ russian ] = "Ôèëüòğ";
-    Text[ greek ] = "Ößëôñá";
-    Text[ dutch ] = "Filter";
-    Text[ french ] = "Filtre";
-    Text[ spanish ] = "Filtro";
-    Text[ italian ] = "Filtro";
-    Text[ danish ] = "Filtre";
-    Text[ swedish ] = "Filter";
-    Text[ polish ] = "Filtr";
-    Text[ portuguese_brazilian ] = "Filter";
-    Text[ japanese ] = "ï¾Œï½¨ï¾™ï¾€";
-    Text[ korean ] = "í•„í„°";
-    Text[ chinese_simplified ] = "ç­›é€‰";
-    Text[ chinese_traditional ] = "ç¯©é¸";
-    Text[ turkish ] = "Filtre";
-    Text[ arabic ] = "İáÊÑ";
-    Text[ catalan ] = "Filtro";
-    Text[ finnish ] = "Suodatin";
 };
 
 
