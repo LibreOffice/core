@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.87 $
+*  $Revision: 1.88 $
 *
-*  last change: $Author: rt $ $Date: 2005-01-28 15:35:26 $
+*  last change: $Author: vg $ $Date: 2005-02-21 16:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2299,7 +2299,7 @@ namespace xmloff { namespace token {
         TOKEN( "glue-point-leaving-direction" ,     XML_GLUE_POINT_LEAVING_DIRECTIONS ),
         TOKEN( "text-path" ,                            XML_TEXT_PATH ),
         TOKEN( "text-path-mode" ,                       XML_TEXT_PATH_MODE ),
-        TOKEN( "text-path-scale-x" ,                    XML_TEXT_PATH_SCALE_X ),
+        TOKEN( "text-path-scale" ,                  XML_TEXT_PATH_SCALE ),
         TOKEN( "text-path-same-letter-heights" ,        XML_TEXT_PATH_SAME_LETTER_HEIGHTS ),
         TOKEN( "modifiers" ,                            XML_MODIFIERS ),
         TOKEN( "equation" ,                         XML_EQUATION ),
