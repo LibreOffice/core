@@ -60,10 +60,9 @@
 # export STAR_PROFILE_LOCKING_DISABLED
 #
 
-#
-# SAL_ENABLE_FILE_LOCKING=1
-# export SAL_ENABLE_FILE_LOCKING
-#
+# file locking now enabled by default
+SAL_ENABLE_FILE_LOCKING=1
+export SAL_ENABLE_FILE_LOCKING
 
 # set -x
 
@@ -205,6 +204,11 @@ for sd_arg in ${1+"$@"} ; do
         ;;
     esac
 done
+
+# read database entries for Adabas D
+if [ -f /etc/adabasrc ]; then
+  . /etc/adabasrc
+fi
 
 sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-common"
 "${sd_prog}"/pagein -L"${sd_prog}" ${sd_pagein_args}
