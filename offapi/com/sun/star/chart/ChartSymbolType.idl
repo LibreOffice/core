@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartSymbolType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: bm $ $Date: 2000-11-20 14:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,17 @@ constants ChartSymbolType
 
     //-------------------------------------------------------------------------
 
+    /** Take a Bitmap from a URL and use this as symbol.
+
+        The bitmap given by the URL set in the property <type>SymbolBitmapURL</type>
+        is copied so that the graphic is embedded.
+
+        @see service ChartDataPointProperties
+     */
+    const long BITMAPURL = -1;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: value com::sun::star::chart::ChartSymbolType::SYMBOL0
     /** The default symbol for row 0 is used.
      */
@@ -153,6 +164,9 @@ constants ChartSymbolType
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:02  hjs
     initial import
 
