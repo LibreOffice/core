@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:16:48 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ ModalDialog IDD_FIND_DIALOG {
     TEXT[ korean ] = "StarBasic: ÅØ½ºÆ®  Ã£±â";
     TEXT[ chinese_simplified ] = "StarBasic: Find Text";
     TEXT[ chinese_traditional ] = "Testtool: Find Text";
-    TEXT[ arabic ] = "StarBasic: Find Text";
+    TEXT[ arabic ] = "Testtool: Find Text";
     TEXT[ turkish ] = "StarBasic: Metni ara";
 };
 
@@ -495,7 +495,7 @@ ModalDialog IDD_REPLACE_DIALOG {
     TEXT[ korean ] = "StarBasic: ÅØ½ºÆ® ¹Ù²Ù±â";
     TEXT[ chinese_simplified ] = "Testtool: Replace Text";
     TEXT[ chinese_traditional ] = "Testtool¡GReplace Text";
-    TEXT[ arabic ] = "StarBasic: Replace Text";
+    TEXT[ arabic ] = "Testtool: Replace Text";
     TEXT[ turkish ] = "StarBasic: Metni deðiþtir";
 };
 
@@ -547,7 +547,7 @@ ErrorBox IDS_CANTLOAD {
     Title[ dutch ] = "Testtool-fout!";
     Title[ french ] = "Testtool : Erreur!";
     Title[ spanish ] = "Error de StarBasic";
-    Title[ italian ] = "StarBasic-Fehler!";
+    Title[ italian ] = "Testtool Error!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
     Title[ polish ] = "Testtool Error!";
@@ -556,7 +556,7 @@ ErrorBox IDS_CANTLOAD {
     Title[ korean ] = "StarBasic-¿À·ùr!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "StarBasic Error!";
-    Title[ arabic ] = "StarBasic Error!";
+    Title[ arabic ] = "Testtool Error!";
     MESSAGE[ turkish ] = "Kitaplýk yüklenemiyor!";
     Title[ turkish ] = "StarBasic-Fehler";
 };
@@ -596,7 +596,7 @@ ErrorBox IDS_CANTSAVE {
     Title[ korean ] = "StarBasic-¿À·ù!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
-    Title[ arabic ] = "StarBasic Error!";
+    Title[ arabic ] = "Testtool Error!";
     MESSAGE[ turkish ] = "Kitaplýk kaydedilemiyor!";
     Title[ turkish ] = "StarBasic-Fehler";
 };
@@ -636,7 +636,7 @@ ErrorBox IDS_NOMAINPGM {
     Title[ korean ] = "StarBasic-¿À·ùr!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
-    Title[ arabic ] = "StarBasic Error!";
+    Title[ arabic ] = "Testtool Error!";
     MESSAGE[ turkish ] = "Bu pencere ana program içermiyor!";
     Title[ turkish ] = "StarBasic-Fehler";
 };
@@ -676,7 +676,7 @@ ErrorBox IDS_READERROR {
     Title[ korean ] = "StarBasic-¿À·ù!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
-    Title[ arabic ] = "StarBasic Error!";
+    Title[ arabic ] = "Testtool Error!";
     MESSAGE[ turkish ] = "Dosya okunamýyor!";
     Title[ turkish ] = "StarBasic-Fehler";
 };
@@ -716,7 +716,7 @@ ErrorBox IDS_WRITEERROR {
     Title[ korean ] = "StarBasic-¿À·ùr!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
-    Title[ arabic ] = "StarBasic Error!";
+    Title[ arabic ] = "Testtool Error!";
     MESSAGE[ turkish ] = "Dosya kaydedilemiyor!";
     Title[ turkish ] = "StarBasic-Fehler";
 };
@@ -756,7 +756,7 @@ ErrorBox IDS_PATTERNNOTFOUND {
     Title[ korean ] = "StarBasic-¿À·ù!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
-    Title[ arabic ] = "StarBasic Error!";
+    Title[ arabic ] = "Testtool Error!";
     MESSAGE[ turkish ] = "Arama terimi bulunamadý!";
     Title[ turkish ] = "StarBasic-Fehler";
 };
@@ -796,7 +796,7 @@ ErrorBox IDS_INVALID_VALUE {
     Title[ korean ] = "StarBasic£­¿À·ù!";
     Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "Testtool Error!";
-    Title[ arabic ] = "StarBasic Error!";
+    Title[ arabic ] = "Testtool Error!";
     MESSAGE[ turkish ] = "Bu deðer geçersiz olduðu için belirlenemez.";
     Title[ turkish ] = "StarBasic-Fehler";
 };
@@ -838,7 +838,7 @@ QueryBox IDS_ASKSAVEERROR {
     Title[ korean ] = "StarBasic";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
-    Title[ arabic ] = "StarBasic!";
+    Title[ arabic ] = "Testtool!";
     MESSAGE[ turkish ] = "Dosya kaydý sýrasýnda bir hata ortaya çýktý! Ýþlem yine de yürütülsün mü?";
     Title[ turkish ] = "StarBasic";
 };
@@ -879,7 +879,7 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     Title[ korean ] = "StarBasic";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
-    Title[ arabic ] = "StarBasic!";
+    Title[ arabic ] = "Testtool!";
     MESSAGE[ turkish ] = "Dosya deðiþtirildi. Deðiþiklikler kaydedilsin mi?";
     Title[ turkish ] = "StarBasic";
 };
@@ -920,7 +920,7 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     Title[ korean ] = "StarBasic";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
-    Title[ arabic ] = "StarBasic!";
+    Title[ arabic ] = "Testtool!";
     MESSAGE[ turkish ] = "Dosya, veri kayýt ortamýnda\nve editörde deðiþtirildi. Kaydedilsin mi?";
     Title[ turkish ] = "StarBasic";
 };
@@ -961,7 +961,7 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     Title[ korean ] = "StarBasic";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
-    Title[ arabic ] = "StarBasic!";
+    Title[ arabic ] = "Testtool!";
     MESSAGE[ turkish ] = "Dosya, veri ortamýnda deðiþtirildi.\nKaydedilsin mi?";
     Title[ turkish ] = "StarBasic";
 };
@@ -1002,7 +1002,7 @@ QueryBox IDS_ASKRELOAD {
     Title[ korean ] = "StarBasic";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
-    Title[ arabic ] = "StarBasic!";
+    Title[ arabic ] = "Testtool!";
     MESSAGE[ turkish ] = "Dosya, veri ortamýnda deðiþtirildi. Yeniden yüklensin mi?";
     Title[ turkish ] = "StarBasic";
 };
@@ -1043,7 +1043,7 @@ QueryBox IDS_ASKDIRTYRELOAD {
     Title[ korean ] = "StarBasic";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
-    Title[ arabic ] = "StarBasic!";
+    Title[ arabic ] = "Testtool!";
     MESSAGE[ turkish ] = "Dosya, veri ortamýnda ve\neditörde deðiþtirildi deðiþtirildi. Yeniden yüklensin mi?";
     Title[ turkish ] = "StarBasic";
 };
@@ -1084,7 +1084,7 @@ QueryBox IDS_RUNNING {
     Title[ korean ] = "StarBasic";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
-    Title[ arabic ] = "StarBasic!";
+    Title[ arabic ] = "Testtool!";
     MESSAGE[ turkish ] = "BASIC programý hâlâ etkin. Yine de çýkmak istiyor musunuz?";
     Title[ turkish ] = "StarBasic";
 };
@@ -1125,7 +1125,7 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     Title[ korean ] = "StarBasic";
     Title[ chinese_simplified ] = "Testtool!";
     Title[ chinese_traditional ] = "Testtool!";
-    Title[ arabic ] = "StarBasic!";
+    Title[ arabic ] = "Testtool!";
     MESSAGE[ turkish ] = "Yabancý formatta kaydetmek bilgi kaybýna yol açar";
     Title[ turkish ] = "StarBasic";
 };
@@ -1325,7 +1325,7 @@ String IDS_APPNAME {
     TEXT[ korean ] = "%PRODUCTNAME Basic";
     TEXT[ chinese_simplified ] = "Testtool";
     TEXT[ chinese_traditional ] = "Testtool";
-    TEXT[ arabic ] = "StarBasic";
+    TEXT[ arabic ] = "Testtool";
     TEXT[ turkish ] = "%PRODUCTNAME Basic";
 };
 String IDS_APPNAME2 {
@@ -1467,7 +1467,7 @@ String IDS_LOADDLG {
     TEXT[ korean ] = "StarBasic: ÆÄÀÏ ÆÇµ¶";
     TEXT[ chinese_simplified ] = "Testtool: Load File";
     TEXT[ chinese_traditional ] = "Testtool¡GLoad File";
-    TEXT[ arabic ] = "StarBasic: Load File";
+    TEXT[ arabic ] = "Testtool: Load File";
     TEXT[ turkish ] = "StarBasic: Dosyayý yükle";
 };
 String IDS_SAVEDLG {
@@ -1488,7 +1488,7 @@ String IDS_SAVEDLG {
     TEXT[ korean ] = "StarBasic: ÆÄÀÏ ÀúÀå";
     TEXT[ chinese_simplified ] = "Testtool: Save File";
     TEXT[ chinese_traditional ] = "Testtool: Save File";
-    TEXT[ arabic ] = "StarBasic: Save File";
+    TEXT[ arabic ] = "Testtool: Save File";
     TEXT[ turkish ] = "StarBasic: Dosyayý kaydet";
 };
 String IDS_BASFILTER {
@@ -2926,7 +2926,7 @@ ModelessDialog IDD_PRINT_DIALOG {
     TEXT[ korean ] = "StarBasic: ÆÄÀÏ¡¡ÀÎ¼â";
     TEXT[ chinese_simplified ] = "Testtool: Print File";
     TEXT[ chinese_traditional ] = "Testtool: Print File";
-    TEXT[ arabic ] = "StarBasic: Print File";
+    TEXT[ arabic ] = "Testtool: Print File";
     TEXT[ turkish ] = "StarBasic: Dosyayý yazdýr";
 };
 
