@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:46:43 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,11 +230,36 @@ namespace sdr
 
                     if(!(aExpandRegion.IsEmpty() || aExpandRegion.IsNull()))
                     {
-                        // expand the ClipRegion
-                        pWin->ExpandPaintClipRegion(aExpandRegion);
+                        // #116639#
+                        //      aOriginalDrawArea.Union(aExpandRegion.GetBoundRect());
+                        // Because of a bug in Region which THB wants to take a look at,
+                        // the result of the previous command is WRONG when done in logical
+                        // coodinates, the Region gets a line to small (!). Thus, for
+                        // a workaround i have to do the union in pixel coordinates (!).
+                        const Region aExpandRegionPixel(pOut->LogicToPixel(aExpandRegion));
+                        Rectangle aExpandPixelRect(aExpandRegionPixel.GetBoundRect());
 
-                        // also expand the DrawArea, more needs to be redrawn now.
-                        aOriginalDrawArea.Union(aExpandRegion.GetBoundRect());
+                        // #116639#, #i29132#
+                        // Since e.g. with connectors like in #i29132# still rounding
+                        // errors happen when converting to pixels, i choose now to handle
+                        // this here in expanding the expand rectangle by one pixel, that
+                        // means: device dependent.
+                        // The maximum rounding error is potentially 1/2 pixel, so with
+                        // one pixel the rect is then potentially up to 1/2 pixel too big.
+                        // I see no other way until we have more precise conversions, though.
+                        // All involved logic coordinates are correct.
+                        aExpandPixelRect.Left() -= 1;
+                        aExpandPixelRect.Top() -= 1;
+                        aExpandPixelRect.Right() += 1;
+                        aExpandPixelRect.Bottom() += 1;
+
+                        // expand the window's ClipRegion
+                        pWin->ExpandPaintClipRegion(Region(pOut->PixelToLogic(aExpandPixelRect)));
+
+                        // adapt expansion to OriginalDrawArea
+                        Region aOrigDrawAreaPixel(pOut->LogicToPixel(aOriginalDrawArea));
+                        aOrigDrawAreaPixel.Union(aExpandPixelRect);
+                        aOriginalDrawArea = pOut->PixelToLogic(aOrigDrawAreaPixel);
                     }
 
                     // restore original DrawArea
@@ -298,40 +323,93 @@ namespace sdr
                 && rDisplayInfo.GetOutputDevice()
                 && maDrawHierarchy.Count())
             {
-                // First look if pre-rendering should be done. If Yes, use it. If no,
-                // do a normal ProcessDisplay() using DoProcessDiaply(). The second one
-                // is called in any case, maybe for pre-rendering or for direct output.
-                if(DoPreRender(rDisplayInfo))
+                // #i28641# test if ControlLayer is to be painted
+                SdrPage* pStartPage = GetSdrPage();
+                const SdrModel& rModel = *(pStartPage->GetModel());
+                const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
+                const sal_uInt32 nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
+                SetOfByte aProcessLayers = rDisplayInfo.GetProcessLayers();
+                sal_Bool bDrawControlLayer(aProcessLayers.IsSet((sal_uInt8)nControlLayerId));
+
+                // Clear ControlLayer
+                if(bDrawControlLayer)
                 {
-                    // Get OutputDevice
-                    OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-
-                    // update pre-rendered VirtualDevice
-                    PreRender(rDisplayInfo);
-
-                    // calculate the to-be-refreshed rectangle
-                    Rectangle aPaintRect(rDisplayInfo.GetRedrawArea().GetBoundRect());
-                    Rectangle aPaintRectPixel = pOut->LogicToPixel(aPaintRect);
-
-                    // paint using prepared, pre-rendered VirtualDevice
-                    sal_Bool bMapModeWasEnabledDest(pOut->IsMapModeEnabled());
-                    sal_Bool bMapModeWasEnabledSource(maPreRenderDevice.IsMapModeEnabled());
-                    pOut->EnableMapMode(sal_False);
-                    maPreRenderDevice.EnableMapMode(sal_False);
-
-                    Size aPaintSizePixel = aPaintRectPixel.GetSize();
-                    pOut->DrawOutDev(
-                        aPaintRectPixel.TopLeft(), aPaintSizePixel,
-                        aPaintRectPixel.TopLeft(), aPaintSizePixel,
-                        maPreRenderDevice);
-
-                    pOut->EnableMapMode(bMapModeWasEnabledDest);
-                    maPreRenderDevice.EnableMapMode(bMapModeWasEnabledSource);
+                    // clear for normal paint
+                    aProcessLayers.Clear((sal_uInt8)nControlLayerId);
                 }
-                else
+
+                // Is there still something to be painted besides control layer?
+                if(!aProcessLayers.IsEmpty())
                 {
+                    // standard paint
+                    rDisplayInfo.SetProcessLayers(aProcessLayers);
+
+                    // Look if pre-rendering should be done. If Yes, use it. If no,
+                    // do a normal ProcessDisplay() using DoProcessDiaply(). The second one
+                    // is called in any case, maybe for pre-rendering or for direct output.
+                    if(DoPreRender(rDisplayInfo))
+                    {
+                        // Get OutputDevice
+                        OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
+
+                        // update pre-rendered VirtualDevice
+                        PreRender(rDisplayInfo);
+
+                        // calculate the to-be-refreshed rectangle
+                        Rectangle aPaintRect(rDisplayInfo.GetRedrawArea().GetBoundRect());
+                        Rectangle aPaintRectPixel = pOut->LogicToPixel(aPaintRect);
+
+                        // paint using prepared, pre-rendered VirtualDevice
+                        sal_Bool bMapModeWasEnabledDest(pOut->IsMapModeEnabled());
+                        sal_Bool bMapModeWasEnabledSource(maPreRenderDevice.IsMapModeEnabled());
+                        pOut->EnableMapMode(sal_False);
+                        maPreRenderDevice.EnableMapMode(sal_False);
+
+                        Size aPaintSizePixel = aPaintRectPixel.GetSize();
+                        pOut->DrawOutDev(
+                            aPaintRectPixel.TopLeft(), aPaintSizePixel,
+                            aPaintRectPixel.TopLeft(), aPaintSizePixel,
+                            maPreRenderDevice);
+
+                        pOut->EnableMapMode(bMapModeWasEnabledDest);
+                        maPreRenderDevice.EnableMapMode(bMapModeWasEnabledSource);
+                    }
+                    else
+                    {
+                        // paint direct
+                        DoProcessDisplay(rDisplayInfo);
+                    }
+                }
+
+                // #i28641# Draw ControlLayer (force to unbuffered due to VCL limitations)
+                if(bDrawControlLayer)
+                {
+                    // paint ControlLayer
+                    aProcessLayers.ClearAll();
+                    aProcessLayers.Set((sal_uInt8)nControlLayerId);
+                    rDisplayInfo.SetProcessLayers(aProcessLayers);
+                    rDisplayInfo.SetControlLayerPainting(sal_True);
+
                     // paint direct
                     DoProcessDisplay(rDisplayInfo);
+
+                    rDisplayInfo.SetControlLayerPainting(sal_False);
+                }
+
+                // If a ObjectAnimator exists, execute it. This will only do anything
+                // if the ObjectAnimator's timer is not yet running and if there are
+                // events scheduled.
+                if(HasObjectAnimator())
+                {
+                    GetObjectAnimator().Execute();
+                }
+
+                // Test if paint was interrupted. If Yes, we need to invalidate the
+                // PageView where the paint region was defined
+                if(!rDisplayInfo.DoContinuePaint())
+                {
+                    Rectangle aRect = rDisplayInfo.GetRedrawArea().GetBoundRect();
+                    GetPageViewWindow().Invalidate(aRect);
                 }
             }
 
@@ -391,23 +469,17 @@ namespace sdr
                 && !rDisplayInfo.OutputToRecordingMetaFile());
         }
 
-        // Process the whole displaying
+        // Process the whole displaying. Only use given DsiplayInfo, do not access other
+        // OutputDevices then the given ones.
         void ObjectContactOfPageView::DoProcessDisplay(DisplayInfo& rDisplayInfo)
         {
-            // test if ControlLayer is to be painted
-            SdrPage* pStartPage = GetSdrPage();
-            const SdrModel& rModel = *(pStartPage->GetModel());
-            const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
-            const sal_uInt32 nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
-            SetOfByte aProcessLayers = rDisplayInfo.GetProcessLayers();
-            sal_Bool bDrawControlLayer(aProcessLayers.IsSet((sal_uInt8)nControlLayerId));
-            ViewObjectContact& rDrawPageVOContact = *(maDrawHierarchy.GetObject(0L));
-
             // visualize entered group when that feature is switched on and it's not
-            // a print output
-            sal_Bool bVisualizeEnteredGroup(DoVisualizeEnteredGroup() && !rDisplayInfo.OutputToPrinter());
+            // a print output. #i29129# No ghosted display for printing.
+            sal_Bool bVisualizeEnteredGroup(
+                DoVisualizeEnteredGroup()
+                && !rDisplayInfo.OutputToPrinter());
 
-            // Always save original DRawMode, it's used by the renderers
+            // Always save original DrawMode, it's used by the renderers
             // when they need to paint into a bitmap.
             rDisplayInfo.SaveOriginalDrawMode();
 
@@ -418,15 +490,8 @@ namespace sdr
                 rDisplayInfo.SetGhostedDrawMode();
             }
 
-            // Clear ControlLayer
-            if(bDrawControlLayer)
-            {
-                // clear for normal paint
-                aProcessLayers.Clear((sal_uInt8)nControlLayerId);
-            }
-
             // #114359# save old and set clip region
-            OutputDevice& rOutDev = GetPageViewWindow().GetOutputDevice();
+            OutputDevice& rOutDev = *rDisplayInfo.GetOutputDevice();
             sal_Bool bClipRegionPushed(sal_False);
             const Region& rRedrawArea(rDisplayInfo.GetRedrawArea());
 
@@ -437,27 +502,11 @@ namespace sdr
                 rOutDev.IntersectClipRegion(rRedrawArea);
             }
 
-            // Draw DrawPage without controls
-            if(!aProcessLayers.IsEmpty())
-            {
-                // standard paint
-                rDisplayInfo.SetProcessLayers(aProcessLayers);
-                rDrawPageVOContact.PaintObjectHierarchy(rDisplayInfo);
-            }
+            // standard paint
+            ViewObjectContact& rDrawPageVOContact = *(maDrawHierarchy.GetObject(0L));
+            rDrawPageVOContact.PaintObjectHierarchy(rDisplayInfo);
 
-            // Draw DrawPage, Controls only
-            if(bDrawControlLayer)
-            {
-                // paint ControlLayer
-                aProcessLayers.ClearAll();
-                aProcessLayers.Set((sal_uInt8)nControlLayerId);
-                rDisplayInfo.SetProcessLayers(aProcessLayers);
-                rDisplayInfo.SetControlLayerPainting(sal_True);
-                rDrawPageVOContact.PaintObjectHierarchy(rDisplayInfo);
-                rDisplayInfo.SetControlLayerPainting(sal_False);
-            }
-
-            // #114359# restore old ClipReghion
+            // #114359# restore old ClipRegion
             if(bClipRegionPushed)
             {
                 rOutDev.Pop();
@@ -467,22 +516,6 @@ namespace sdr
             if(bVisualizeEnteredGroup)
             {
                 rDisplayInfo.RestoreOriginalDrawMode();
-            }
-
-            // Test if paint was interrupted. If Yes, we need to invalidate the
-            // PageView where the paint region was defined
-            if(!rDisplayInfo.DoContinuePaint())
-            {
-                Rectangle aRect = rDisplayInfo.GetRedrawArea().GetBoundRect();
-                GetPageViewWindow().Invalidate(aRect);
-            }
-
-            // If a ObjectAnimator exists, execute it. This will only do anything
-            // if the ObjectAnimator's timer is not yet running and if there are
-            // events scheduled.
-            if(HasObjectAnimator())
-            {
-                GetObjectAnimator().Execute();
             }
         }
 
