@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:13:42 $
+#   last change: $Author: lla $ $Date: 2000-10-19 11:32:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ SLOFILES=\
     $(SLO)$/xmltreebuilder.obj \
     $(SLO)$/xmlformater.obj \
     $(SLO)$/localsession.obj \
+    $(SLO)$/setupsession.obj \
     $(SLO)$/mergeupdates.obj \
     $(SLO)$/dataexport.obj \
     $(SLO)$/dataimport.obj \
