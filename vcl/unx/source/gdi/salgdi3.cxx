@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:10:15 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,12 +1205,14 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
     mbVertical = ((rArgs.mnFlags & SAL_LAYOUT_VERTICAL) != 0);
 
     long nUnitsPerPixel = 1;
-    long nWidth = 0;
     int nOldGlyphId = -1;
-    for( int nGlyphCount = 0;; ++nGlyphCount )
+    long nGlyphWidth = 0;
+    int nCharPos = -1;
+    Point aNewPos( 0, 0 );
+    GlyphItem aPrevItem;
+    for(;;)
     {
         bool bRightToLeft;
-        int nCharPos;
         if( !rArgs.GetNextPos( &nCharPos, &bRightToLeft ) )
             break;
 
@@ -1223,29 +1225,35 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
             rArgs.NeedFallback( nCharPos, bRightToLeft );
 #endif
 
-        long nGlyphWidth;
-        nUnitsPerPixel = mrPrinterGfx.GetCharWidth( cChar, cChar, &nGlyphWidth );
-        Point aNewPos( nWidth, 0 );
-        nWidth += nGlyphWidth;
-
+        // apply pair kerning to prev glyph if requested
         if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
         {
             // TODO: get kerning value from printer
             int nKern = 0; //GetGlyphKernValue( nOldGlyphId, nGlyphIndex );
-            aNewPos += Point( nKern, 0 );
-            nOldGlyphId = nGlyphIndex;
+            nGlyphWidth += nKern;
+            aPrevItem.mnNewWidth = nGlyphWidth;
         }
-        // TODO: apply asian kerning if requested too
-        // but most probably no asian pairs in builtin fonts
+
+        // finish previous glyph
+        if( nOldGlyphId >= 0 )
+            AppendGlyph( aPrevItem );
+        nOldGlyphId = nGlyphIndex;
+        aNewPos.X() += nGlyphWidth;
+
+        // prepare GlyphItem for appending it in next round
+        nUnitsPerPixel = mrPrinterGfx.GetCharWidth( cChar, cChar, &nGlyphWidth );
         int nGlyphFlags = bRightToLeft ? GlyphItem::IS_RTL_GLYPH : 0;
         nGlyphIndex |= GF_ISCHAR;
-        GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
-        AppendGlyph( aGI );
+        aPrevItem = GlyphItem( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
     }
+
+    // append last glyph item if any
+    if( nOldGlyphId >= 0 )
+        AppendGlyph( aPrevItem );
 
     SetOrientation( mrPrinterGfx.GetFontAngle() );
     SetUnitsPerPixel( nUnitsPerPixel );
-    return (nWidth >= 0);
+    return (nOldGlyphId >= 0);
 }
 
 //--------------------------------------------------------------------------
