@@ -9,7 +9,8 @@
 #ifndef _RESOURCE_H
 #define _RESOURCE_H
 
-#define IDS_APP_TITLE   11
+#define IDS_APP_TITLE   10
+#define IDS_APP_PROD_TITLE  11
 #define IDS_OUTOFMEM    12
 #define IDS_NOMSI   13
 #define IDS_REQUIRES_NEWER_VERSION  14
@@ -26,7 +27,7 @@
 #define IDS_ALREADY_RUNNING 25
 #define IDS_UNKNOWN_ERROR   26
 #define IDS_INVALID_PROFILE 27
-#define IDS_STRING39    28
+#define IDS_CHOOSE_LANG 28
 #define IDS_UNKNOWN_LANG    29
 #define IDS_LANGUAGE_ENGLISH    30
 #define IDS_LANGUAGE_SPAIN  31
@@ -60,6 +61,7 @@
 
 #define IDD_LANGUAGE                    101
 #define IDC_COMBO1                      1001
+#define IDC_TEXT01                      1002
 
 #define IDI_INSTALLER                  99
 
