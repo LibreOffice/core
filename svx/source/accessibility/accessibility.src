@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-30 10:33:27 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ String RID_SVXSTR_A11Y_TEXT_COLOR
     Text[ turkish ] = "text color";
     Text[ arabic ] = "text color";
     Text[ catalan ] = "text color";
-    Text[ thai ] = "text color";
+    Text[ thai ] = "สีข้อความ";
 };
 String RID_SVXSTR_A11Y_BACKGROUND_COLOR
 {
@@ -136,8 +136,8 @@ String RID_SVXSTR_A11Y_BACKGROUND_COLOR
     Text[ chinese_traditional ] = "背景顔色";
     Text[ turkish ] = "background color";
     Text[ arabic ] = "background color";
-    Text[ catalan ] = "background color";
-    Text[ thai ] = "background color";
+    Text[ catalan ] = "Color de fons";
+    Text[ thai ] = "สีพื้นหลัง";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_NONE
 {
@@ -163,7 +163,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_NONE
     Text[ turkish ] = "none";
     Text[ arabic ] = "none";
     Text[ catalan ] = "none";
-    Text[ thai ] = "none";
+    Text[ thai ] = "ไม่มี";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_SOLID
 {
@@ -195,7 +195,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
 {
     Text = "Schraffiert" ;
     Text[ ENGLISH ] = "Hatching" ;
-    Text[ ENGLISH_US ] = "Hatching" ;
+    Text[ ENGLISH_US ] = "With hatching" ;
     Text[ portuguese ] = "hatch";
     Text[ russian ] = "hatch";
     Text[ greek ] = "hatch";
@@ -231,7 +231,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
     Text[ finnish ] = "gradient";
     Text[ italian ] = "Trasparenza";
     Text[ danish ] = "gradient";
-    Text[ swedish ] = "gradient";
+    Text[ swedish ] = "Gradient";
     Text[ polish ] = "gradient";
     Text[ portuguese_brazilian ] = "gradient";
     Text[ japanese ] = "透過性グラデーション";
@@ -253,12 +253,12 @@ String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
     Text[ russian ] = "bitmap";
     Text[ greek ] = "bitmap";
     Text[ dutch ] = "bitmap";
-    Text[ french ] = "bitmap";
-    Text[ spanish ] = "bitmap";
+    Text[ french ] = "Bitmap";
+    Text[ spanish ] = "Bitmap";
     Text[ finnish ] = "Bittikartta";
     Text[ italian ] = "Stile bitmap";
     Text[ danish ] = "bitmap";
-    Text[ swedish ] = "bitmap";
+    Text[ swedish ] = "Bitmap";
     Text[ polish ] = "Mapa bitowa";
     Text[ portuguese_brazilian ] = "bitmap";
     Text[ japanese ] = "ビットマップ";
@@ -301,12 +301,12 @@ String RID_SVXSTR_A11Y_STYLE
 {
     Text = "Stil" ;
     Text[ ENGLISH ] = "style" ;
-    Text[ ENGLISH_US ] = "style" ;
+    Text[ ENGLISH_US ] = "Style" ;
     Text[ portuguese ] = "style";
     Text[ russian ] = "style";
     Text[ greek ] = "style";
     Text[ dutch ] = "style";
-    Text[ french ] = "style";
+    Text[ french ] = "Style";
     Text[ spanish ] = "Estilo";
     Text[ finnish ] = "style";
     Text[ italian ] = "Stile";
@@ -346,8 +346,8 @@ String RID_SVXSTR_A11Y_AND
     Text[ chinese_traditional ] = "和";
     Text[ turkish ] = "and";
     Text[ arabic ] = "and";
-    Text[ catalan ] = "and";
-    Text[ thai ] = "and";
+    Text[ catalan ] = "AND";
+    Text[ thai ] = "และ";
 };
 
 
@@ -584,8 +584,8 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MM
     Text[ chinese_traditional ] = "中";
     Text[ turkish ] = "Center";
     Text[ arabic ] = "Center";
-    Text[ catalan ] = "Center";
-    Text[ thai ] = "Center";
+    Text[ catalan ] = "Mig";
+    Text[ thai ] = "กลาง";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_RM
@@ -742,7 +742,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A045
     Text[ turkish ] = "45 degrees";
     Text[ arabic ] = "45 degrees";
     Text[ catalan ] = "45 degrees";
-    Text[ thai ] = "45 degrees";
+    Text[ thai ] = "45 องศา";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A090
@@ -768,7 +768,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A090
     Text[ turkish ] = "90 degrees";
     Text[ arabic ] = "90 degrees";
     Text[ catalan ] = "90 degrees";
-    Text[ thai ] = "90 degrees";
+    Text[ thai ] = "90 องศา";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A135
