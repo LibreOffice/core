@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:24:34 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 11:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,7 +684,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
     nWidth -= nBndX;
 
     if ( ( nRowBytes & 0x8000 ) != 0 )
-    {
+    {   // it is a PixMap
         nRowBytes &= 0x3fff;
         *pPict >> nVersion >> nPackType >> nPackSize >> nHRes >> nVRes >> nPixelType >>
                     nPixelSize >> nCmpCount >> nCmpSize >> nPlaneBytes;
@@ -828,7 +828,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                     }
                     else
                     {
-                        nCount = ( 1 - ( ( (USHORT)nFlagCounterByte ) | 0xff00 ) ) & 0xffff;
+                        nCount = ( 1 - ( ( (USHORT)nFlagCounterByte ) | 0xff00 ) );
                         *pPict >> nDat;
                         for ( i = 0; i < nCount; i++ )
                         {
@@ -887,10 +887,10 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                     if ( (nFlagCounterByte & 0x80) == 0)
                     {
                         nCount=((USHORT)nFlagCounterByte)+1;
-                        if ( nCount + nx > nWidth)
-                            nCount = nWidth - nx;
-                        for (i=0; i<nCount; i++)
-                        {
+                        if ( nCount + nx > nWidth)              // SJ: the RLE decoding seems not to be correct here,
+                            nCount = nWidth - nx;               // I don't want to change this until I have a bugdoc for
+                        for (i=0; i<nCount; i++)                // this case. Have a look at 32bit, there I changed the
+                        {                                       // encoding, so that it is used a straight forward array
                             *pPict >> nD;
                             nRed = (BYTE)( nD >> 7 );
                             nGreen = (BYTE)( nD >> 2 );
@@ -900,7 +900,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                     }
                     else
                     {
-                        nCount=(1-(((USHORT)nFlagCounterByte)|0xff00))&0xffff;
+                        nCount=(1-(((USHORT)nFlagCounterByte)|0xff00));
                         if ( nCount + nx > nWidth )
                             nCount = nWidth - nx;
                         *pPict >> nD;
@@ -921,124 +921,94 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
     else if (nPixelSize==32)
     {
         BYTE                nByteCountAsByte, nFlagCounterByte;
-        USHORT              nByteCount, nCount, nDestBPL,nc;
+        USHORT              nByteCount, nCount;
         ULONG               nSrcBitsPos;
         BitmapColor         aBitmapColor;
         if ( ( pReadAcc = aBitmap.AcquireReadAccess() ) == NULL )
             BITMAPERROR;
         if ( nRowBytes != 4*nWidth )
             BITMAPERROR;
-        nDestBPL = ( ( 3 * nWidth ) + 0x0003 ) & 0xfffc;
 
-        for ( ny = 0; ny < nHeight; ny++ )
+        if ( nRowBytes < 8 || nPackType == 1 )
         {
-            nx = 0;
-            if ( nRowBytes < 8 || nPackType == 1 )
+            for ( ny = 0; ny < nHeight; ny++ )
             {
-                for ( i = 0; i < nWidth; i++ )
+                if ( nRowBytes < 8 || nPackType == 1 )
                 {
-                    *pPict >> nDummy >> nRed >> nGreen >> nBlue;
-                    pAcc->SetPixel( ny, nx++, BitmapColor( nRed, nGreen, nBlue) );
+                    for ( nx = 0; nx < nWidth; nx++ )
+                    {
+                        *pPict >> nDummy >> nRed >> nGreen >> nBlue;
+                        pAcc->SetPixel( ny, nx, BitmapColor( nRed, nGreen, nBlue) );
+                    }
+                    nDataSize += ( (ULONG)nWidth ) * 4;
                 }
-                nDataSize += ( (ULONG)nWidth ) * 4;
             }
-            else if ( nPackType == 2 )
+        }
+        else if ( nPackType == 2 )
+        {
+            for ( ny = 0; ny < nHeight; ny++ )
             {
-                for ( i = 0; i < nWidth; i++ )
+                for ( nx = 0; nx < nWidth; nx++ )
                 {
                     *pPict >> nRed >> nGreen >> nBlue;
-                    pAcc->SetPixel( ny, nx++, BitmapColor( nRed, nGreen, nBlue ) );
+                    pAcc->SetPixel( ny, nx, BitmapColor( nRed, nGreen, nBlue ) );
                 }
                 nDataSize += ( (ULONG)nWidth ) * 3;
             }
-            else
+        }
+        else
+        {
+            if ( ( nCmpCount == 3 ) || ( nCmpCount == 4 ) )
             {
-                nSrcBitsPos = pPict->Tell();
-                if ( nRowBytes > 250 )
+                sal_uInt8* pScanline = new sal_uInt8[ nWidth * nCmpCount ];
+                for ( ny = 0; ny < nHeight; ny++ )
                 {
-                    *pPict >> nByteCount;
-                    nByteCount += 2;
-                }
-                else
-                {
-                    *pPict >> nByteCountAsByte;
-                    nByteCount = (BYTE)nByteCountAsByte;
-                    nByteCount++;
-                }
-                for ( nc = 0; nc < 4; nc++ )
-                {
-                    nx = 0;
-                    while ( nx != nWidth )
+                    nSrcBitsPos = pPict->Tell();
+                    if ( nRowBytes > 250 )
+                    {
+                        *pPict >> nByteCount;
+                        nByteCount += 2;
+                    }
+                    else
+                    {
+                        *pPict >> nByteCountAsByte;
+                        nByteCount = (BYTE)nByteCountAsByte;
+                        nByteCount++;
+                    }
+                    i = 0;
+                    while( i < (sal_uInt32)( nWidth * nCmpCount ) )
                     {
                         *pPict >> nFlagCounterByte;
                         if ( ( nFlagCounterByte & 0x80 ) == 0)
                         {
                             nCount = ( (USHORT)nFlagCounterByte ) + 1;
-                            BOOL nSeekStream = 0;
-                            if ( ( nCount + nx ) > nWidth )
-                            {
-                                nSeekStream = nCount - nWidth + nx;
-                                nCount = nWidth - nx;
-                            }
-                            for ( i  = 0; i < nCount; i++ )
+                            if ( ( i + nCount ) > (sal_uInt32)( nWidth * nCmpCount ) )
+                                nCount = (sal_uInt16)( nWidth * nCmpCount - i );
+                            while( nCount-- )
                             {
                                 *pPict >> nDat;
-                                switch( nc )
-                                {
-                                    case 0 :
-                                        nx++;
-                                        break;
-                                    case 1 :
-                                        pAcc->SetPixel( ny, nx++, BitmapColor( nDat, 0, 0 ) );
-                                        break;
-                                    case 2 :
-                                        aBitmapColor = pReadAcc->GetPixel( ny, nx );
-                                        aBitmapColor.SetGreen( nDat );
-                                        pAcc->SetPixel( ny, nx++, aBitmapColor );
-                                        break;
-                                    case 3 :
-                                        aBitmapColor = pReadAcc->GetPixel( ny, nx );
-                                        aBitmapColor.SetBlue( nDat );
-                                        pAcc->SetPixel( ny, nx++, aBitmapColor );
-                                        break;
-                                }
+                                pScanline[ i++ ] = nDat;
                             }
-                            if ( nSeekStream )
-                                pPict->SeekRel( nSeekStream );
                         }
                         else
                         {
                             nCount = ( 1 - ( ( (USHORT)nFlagCounterByte ) | 0xff00 ) );
-                            if ( nCount + nx > nWidth )
-                                nCount = nWidth - nx;
+                            if ( ( i + nCount ) > (sal_uInt32)( nWidth * nCmpCount ) )
+                                nCount = (sal_uInt16)( nWidth * nCmpCount - i );
                             *pPict >> nDat;
-                            for ( i = 0; i < nCount; i++ )
-                            {
-                                switch( nc )
-                                {
-                                    case 0 :
-                                        nx++;
-                                        break;
-                                    case 1 :
-                                        pAcc->SetPixel( ny, nx++, BitmapColor( nDat, 0, 0 ) );
-                                        break;
-                                    case 2 :
-                                        aBitmapColor = pReadAcc->GetPixel( ny, nx );
-                                        aBitmapColor.SetGreen( nDat );
-                                        pAcc->SetPixel( ny, nx++, aBitmapColor );
-                                        break;
-                                    case 3 :
-                                        aBitmapColor = pReadAcc->GetPixel( ny, nx );
-                                        aBitmapColor.SetBlue( nDat );
-                                        pAcc->SetPixel( ny, nx++, aBitmapColor );
-                                        break;
-                                }
-                            }
+                            while( nCount-- )
+                                pScanline[ i++ ] = nDat;
                         }
                     }
+                    sal_uInt8* pTmp = pScanline;
+                    if ( nCmpCount == 4 )
+                        pTmp += nWidth;
+                    for ( nx = 0; nx < nWidth; pTmp++ )
+                        pAcc->SetPixel( ny, nx++, BitmapColor( *pTmp, pTmp[ nWidth ], pTmp[ 2 * nWidth ] ) );
+                    nDataSize += (ULONG)nByteCount;
+                    pPict->Seek( nSrcBitsPos + (ULONG)nByteCount );
                 }
-                nDataSize += (ULONG)nByteCount;
-                pPict->Seek( nSrcBitsPos + (ULONG)nByteCount );
+                delete[] pScanline;
             }
         }
     }
