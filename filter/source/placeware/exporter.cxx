@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exporter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-02 15:43:44 $
+ *  last change: $Author: cl $ $Date: 2002-10-02 15:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
         throw IOException();
 }
 
-#define PLACEWARE_DEBUG 1
+//#define PLACEWARE_DEBUG 1
 
 sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream, const rtl::OUString& rURL, Reference < XInterface > xHandler )
 {

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: cl $ $Date: 2002-09-25 10:24:38 $
+#   last change: $Author: cl $ $Date: 2002-10-02 15:43:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,8 @@ UNOTYPES=\
     com.sun.star.container.XIndexAccess
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/filter.obj								\
+SLOFILES=	$(SLO)$/zip.obj									\
+            $(SLO)$/filter.obj								\
             $(SLO)$/uno.obj									\
             $(SLO)$/exporter.obj							\
             $(SLO)$/Base64Codec.obj
