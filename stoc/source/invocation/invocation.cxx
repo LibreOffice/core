@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:34 $
+ *  last change: $Author: obo $ $Date: 2000-09-18 23:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,7 +713,8 @@ struct MemberItem
 };
 
 // qsort compare function for MemberItem
-int __cdecl compare(const void *elem1, const void *elem2 )
+//int __cdecl compare(const void *elem1, const void *elem2 )
+int SAL_CALL compare(const void *elem1, const void *elem2 )
 {
     MemberItem* pItem1 = *(MemberItem**)elem1;
     MemberItem* pItem2 = *(MemberItem**)elem2;
