@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-08 09:17:31 $
+ *  last change: $Author: mt $ $Date: 2000-11-08 09:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,8 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd )
 
                 if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
                     SetTextColor( Color( COL_RED ) );
+                else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
+                    SetTextColor( Color( COL_LIGHTGRAY ) );
             }
             DrawText( aPos, aText, nIndex, nTmpEnd - nIndex );
             nIndex = nTmpEnd;
