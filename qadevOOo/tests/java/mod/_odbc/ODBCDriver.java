@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODBCDriver.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:56:12 $
+ *  last change:$Date: 2003-09-08 11:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,17 @@
 
 package mod._odbc;
 
-import lib.TestCase;
-import com.sun.star.lang.XMultiServiceFactory;
-import lib.TestParameters;
 import java.io.PrintWriter;
-import lib.TestEnvironment;
-import lib.StatusException;
-import com.sun.star.uno.XInterface;
+
 import lib.Status;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
 
 /**
  * Here <code>com.sun.star.sdbc.Driver</code> service is tested.<p>
