@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-26 08:08:49 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,20 +110,12 @@ class SwFlyCntPortion : public SwLinePortion
     virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
 
 public:
-#ifdef VERTICAL_LAYOUT
     SwFlyCntPortion( const SwTxtFrm& rFrm, SwFlyInCntFrm *pFly,
                      const Point &rBase, long nAscent, long nDescent,
                      long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags );
     SwFlyCntPortion( const SwTxtFrm& rFrm, SwDrawContact *pDrawContact,
                      const Point &rBase, long nAscent, long nDescent,
                      long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags );
-#else
-    SwFlyCntPortion( SwFlyInCntFrm *pFly, const Point &rBase, long nAscent,
-        long nDescent, long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags );
-    SwFlyCntPortion( SwDrawContact *pDrawContact, const Point &rBase,
-        long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
-        sal_uInt8 nFlags );
-#endif
     inline const Point& GetRefPoint() const { return aRef; }
     inline SwFlyInCntFrm *GetFlyFrm() { return (SwFlyInCntFrm*)pContact; }
     inline const SwFlyInCntFrm *GetFlyFrm() const
@@ -136,14 +128,9 @@ public:
     inline const sal_uInt8 GetAlign() const { return nAlign; }
     inline void SetAlign( sal_uInt8 nNew ) { nAlign = nNew; }
     inline void SetMax( sal_Bool bNew ) { bMax = bNew; }
-#ifdef VERTICAL_LAYOUT
     void SetBase( const SwTxtFrm& rFrm, const Point &rBase,
                   long nLnAscent, long nLnDescent, long nFlyAscent,
                   long nFlyDescent, sal_uInt8 nFlags );
-#else
-    void SetBase( const Point &rBase, long nLnAscent, long nLnDescent,
-        long nFlyAscent, long nFlyDescent, sal_uInt8 nFlags );
-#endif
     const SwFrmFmt *GetFrmFmt() const;
     xub_StrLen GetFlyCrsrOfst( const KSHORT nOfst, const Point &rPoint,
                         SwPosition *pPos, const SwCrsrMoveState* pCMS ) const;
