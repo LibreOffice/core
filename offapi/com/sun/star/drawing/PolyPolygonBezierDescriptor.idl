@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PolyPolygonBezierDescriptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
     <p>A polypolygonbezier consists of multiple bezier polygons combined
     in one.</p>
  */
-service PolyPolygonBezierDescriptor
+published service PolyPolygonBezierDescriptor
 {
     //-------------------------------------------------------------------------
 
