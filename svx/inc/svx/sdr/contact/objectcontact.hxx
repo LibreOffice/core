@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontact.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:44:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ namespace sdr
     {
         class DisplayInfo;
         class ViewContact;
+        class ViewObjectContactRedirector;
     } // end of namespace contact
     namespace animation
     {
@@ -114,6 +115,11 @@ namespace sdr
             // the EventHandler for asynchronious loading of graphics
             sdr::event::TimerEventHandler*                  mpEventHandler;
 
+            // The redirector. If set it is used to pipe all supported calls
+            // to the redirector. When one is set at the ViewContact too, the one at
+            // the ViewContact will win.
+            ViewObjectContactRedirector*                    mpViewObjectContactRedirector;
+
             // bitfield
             // This flag describes if the DrawHierarchy used by this OC is
             // in a valid state. It needs to be set to sal_True when the DrawHierarchy is
@@ -149,7 +155,7 @@ namespace sdr
             void AddViewObjectContact(ViewObjectContact& rVOContact);
 
             // A ViewObjectContact was deleted and shall be forgotten.
-            void RemoveViewObjectContact(ViewObjectContact& rVOContact);
+            virtual void RemoveViewObjectContact(ViewObjectContact& rVOContact);
 
             // Test if ViewObjectContact is registered here
             sal_Bool ContainsViewObjectContact(ViewObjectContact& rVOContact);
@@ -224,6 +230,10 @@ namespace sdr
 
             // check if asynchronious graphis loading is allowed. Default is sal_False.
             virtual sal_Bool IsAsynchronGraphicsLoadingAllowed() const;
+
+            // access to ViewObjectContactRedirector
+            ViewObjectContactRedirector* GetViewObjectContactRedirector() const;
+            void SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew);
         };
     } // end of namespace contact
 } // end of namespace sdr
