@@ -375,7 +375,7 @@ sub setglobalvariables
         elsif ( $ENV{'TEMP'} )  { $installer::globals::temppath = $ENV{'TEMP'}; }
         $installer::globals::temppath =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . "instsetunpack";
-        $installer::globals::temppath = installer::systemactions::create_unique_directory($installer::globals::temppath);
+        $installer::globals::temppath = installer::systemactions::create_pid_directory($installer::globals::temppath);
         push(@installer::globals::removedirs, $installer::globals::temppath);
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::productextension;
         installer::systemactions::create_directory($installer::globals::temppath);
