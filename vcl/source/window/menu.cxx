@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: mt $ $Date: 2000-10-11 16:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2811,7 +2811,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
         {
             xub_Unicode nCharCode = rKEvent.GetCharCode();
             USHORT nPos;
-            MenuItemData* pData = pMenu->GetItemList()->SearchItem( nCharCode, nPos );
+            MenuItemData* pData = nCharCode ? pMenu->GetItemList()->SearchItem( nCharCode, nPos ) : NULL;
             if ( pData )
             {
                 if ( pData->pSubMenu )
