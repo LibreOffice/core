@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelSupport.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:34 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-12 12:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ public class ParcelSupport implements ParcelCookie
 {
     private FileObject fo;
     private ParcelZipper zipper = ParcelZipper.getParcelZipper();
+    private String language = null;
 
     public ParcelSupport(FileObject fo) {
         this.fo = fo;
@@ -98,6 +99,18 @@ public class ParcelSupport implements ParcelCookie
 
     public File getFile() {
         return FileUtil.toFile(fo);
+    }
+
+    public String getLanguage() {
+        if (language == null) {
+            try {
+                language = zipper.getParcelLanguage(getFile());
+            }
+            catch (IOException ioe) {
+                return null;
+            }
+        }
+        return language;
     }
 
     public void mount()

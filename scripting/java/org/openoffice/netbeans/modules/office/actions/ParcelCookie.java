@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelCookie.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:23 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-12 12:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@ import org.openide.nodes.Node;
 public interface ParcelCookie extends Node.Cookie
 {
     public File getFile();
+
+    public String getLanguage();
 
     public void mount();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelZipper.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:19 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-12 12:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,7 @@ public class ParcelZipper
         return result;
     }
 
-    private String getParcelLanguage(File file) throws IOException {
+    public String getParcelLanguage(File file) throws IOException {
         ZipFile zf = new ZipFile(file);
         ZipEntry ze = zf.getEntry(PARCEL_DESCRIPTOR_XML);
 
