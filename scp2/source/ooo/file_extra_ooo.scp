@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_extra_ooo.scp,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:46:39 $
+*  last change: $Author: hr $ $Date: 2004-11-09 16:51:18 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -196,38 +196,7 @@ File gid_File_Extra_Fontunxpsprint
     Dir = gid_Dir_Psprint;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, SETUPZIP, DONT_OVERWRITE);
-    Name (en-US) = "/letter/fontunxpsprint.zip";
-    Name (pt) = "fontunxpsprint.zip";
-    Name (ru) = "fontunxpsprint.zip";
-    Name (el) = "fontunxpsprint.zip";
-    Name (nl) = "fontunxpsprint.zip";
-    Name (fr) = "fontunxpsprint.zip";
-    Name (es) = "fontunxpsprint.zip";
-    Name (fi) = "fontunxpsprint.zip";
-    Name (hu) = "fontunxpsprint.zip";
-    Name (ca) = "fontunxpsprint.zip";
-    Name (50) = "fontunxpsprint.zip";
-    Name (it) = "fontunxpsprint.zip";
-    Name (cs) = "fontunxpsprint.zip";
-    Name (sk) = "fontunxpsprint.zip";
-    Name (en-GB) = "fontunxpsprint.zip";
-    Name (da) = "fontunxpsprint.zip";
-    Name (sv) = "fontunxpsprint.zip";
-    Name (no) = "fontunxpsprint.zip";
-    Name (pl) = "fontunxpsprint.zip";
-    Name (de) = "fontunxpsprint.zip";
-    Name (pt-BR) = "fontunxpsprint.zip";
-    Name (th) = "fontunxpsprint.zip";
-    Name (et) = "fontunxpsprint.zip";
-    Name (ja) = "fontunxpsprint.zip";
-    Name (ko) = "fontunxpsprint.zip";
-    Name (zh-CN) = "fontunxpsprint.zip";
-    Name (zh-TW) = "fontunxpsprint.zip";
-    Name (tr) = "fontunxpsprint.zip";
-    Name (hi-IN) = "fontunxpsprint.zip";
-    Name (ar) = "fontunxpsprint.zip";
-    Name (he) = "fontunxpsprint.zip";
-    Name (99) = "fontunxpsprint.zip";
+    Name = "fontunxpsprint.zip";
 End
 
 #endif
