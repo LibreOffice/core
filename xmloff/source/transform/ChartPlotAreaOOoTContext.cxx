@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartPlotAreaOOoTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:45:11 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,18 +127,18 @@ XMLTransformerContext * XMLChartPlotAreaOOoTContext::CreateChildContext(
             if( pPersContext != 0 )
             {
                 // iterate over attributes to find category axis
-                Reference< xml::sax::XAttributeList > xAttrList( pPersContext->GetAttrList());
-                sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+                Reference< xml::sax::XAttributeList > xNewAttrList( pPersContext->GetAttrList());
+                sal_Int16 nAttrCount = xNewAttrList.is() ? xNewAttrList->getLength() : 0;
                 for( sal_Int16 i=0; i < nAttrCount; i++ )
                 {
-                    const OUString & rAttrName = xAttrList->getNameByIndex( i );
+                    const OUString & rAttrName = xNewAttrList->getNameByIndex( i );
                     OUString aLocalName;
-                    sal_uInt16 nPrefix =
+                    sal_uInt16 nNewPrefix =
                         GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                              &aLocalName );
-                    if( nPrefix == XML_NAMESPACE_CHART &&
+                    if( nNewPrefix == XML_NAMESPACE_CHART &&
                         ::xmloff::token::IsXMLToken( aLocalName, ::xmloff::token::XML_CLASS ) &&
-                        ::xmloff::token::IsXMLToken( xAttrList->getValueByIndex( i ), ::xmloff::token::XML_CATEGORY ))
+                        ::xmloff::token::IsXMLToken( xNewAttrList->getValueByIndex( i ), ::xmloff::token::XML_CATEGORY ))
                     {
                         // category axis found
                         pPersContext->AddContent( pContext );
