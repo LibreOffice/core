@@ -1,0 +1,116 @@
+..\%__SRC%\lib\mail.lib %_DEST%\lib%_EXT%\mail.lib
+..\%__SRC%\lib\crypt.lib %_DEST%\lib%_EXT%\crypt.lib
+..\%__SRC%\lib\icrp.lib %_DEST%\lib%_EXT%\icrp.lib
+..\%__SRC%\lib\igo.lib %_DEST%\lib%_EXT%\go.lib
+..\%__SRC%\lib\igo.lib %_DEST%\lib%_EXT%\igo.lib
+..\%__SRC%\slb\go.lib %_DEST%\lib%_EXT%\xgo.lib
+..\%__SRC%\slb\gol.lib %_DEST%\lib%_EXT%\gol.lib
+..\%__SRC%\srs\mail.srs %_DEST%\res%_EXT%\mail.srs
+..\%__SRC%\srs\dialog.srs %_DEST%\res%_EXT%\godialog.srs
+..\%__SRC%\misc\goodies.hid %_DEST%\bin%_EXT%\goodies.hid
+..\%__SRC%\bin\ma?????.* %_DEST%\bin%_EXT%\ma?????.*
+..\%__SRC%\bin\tfu?????.dll %_DEST%\bin%_EXT%\tfu?????.dll
+..\%__SRC%\bin\tfu?????.sym %_DEST%\bin%_EXT%\tfu?????.sym
+..\%__SRC%\bin\crp?????.dll %_DEST%\bin%_EXT%\crp?????.dll
+..\%__SRC%\bin\crp?????.sym %_DEST%\bin%_EXT%\crp?????.sym
+..\%__SRC%\bin\solarvim.dll %_DEST%\bin%_EXT%\solarvim.dll
+..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
+..\%__SRC%\bin\ept%UPD%*.dll %_DEST%\bin%_EXT%\ept%UPD%*.dll
+..\%__SRC%\bin\ept%UPD%*.sym %_DEST%\bin%_EXT%\ept%UPD%*.sym
+..\%__SRC%\bin\eme%UPD%*.dll %_DEST%\bin%_EXT%\eme%UPD%*.dll
+..\%__SRC%\bin\eme%UPD%*.sym %_DEST%\bin%_EXT%\eme%UPD%*.sym
+..\%__SRC%\bin\egi%UPD%*.dll %_DEST%\bin%_EXT%\egi%UPD%*.dll
+..\%__SRC%\bin\egi%UPD%*.sym %_DEST%\bin%_EXT%\egi%UPD%*.sym
+..\%__SRC%\bin\epn%UPD%*.dll %_DEST%\bin%_EXT%\epn%UPD%*.dll
+..\%__SRC%\bin\epn%UPD%*.sym %_DEST%\bin%_EXT%\epn%UPD%*.sym
+..\%__SRC%\bin\eti%UPD%*.dll %_DEST%\bin%_EXT%\eti%UPD%*.dll
+..\%__SRC%\bin\eti%UPD%*.sym %_DEST%\bin%_EXT%\eti%UPD%*.sym
+..\%__SRC%\bin\ecg%UPD%*.dll %_DEST%\bin%_EXT%\ecg%UPD%*.dll
+..\%__SRC%\bin\ecg%UPD%*.sym %_DEST%\bin%_EXT%\ecg%UPD%*.sym
+..\%__SRC%\bin\era%UPD%*.dll %_DEST%\bin%_EXT%\era%UPD%*.dll
+..\%__SRC%\bin\era%UPD%*.sym %_DEST%\bin%_EXT%\era%UPD%*.sym
+..\%__SRC%\bin\eps%UPD%*.dll %_DEST%\bin%_EXT%\eps%UPD%*.dll
+..\%__SRC%\bin\eps%UPD%*.sym %_DEST%\bin%_EXT%\eps%UPD%*.sym
+..\%__SRC%\bin\exp%UPD%*.dll %_DEST%\bin%_EXT%\exp%UPD%*.dll
+..\%__SRC%\bin\exp%UPD%*.sym %_DEST%\bin%_EXT%\exp%UPD%*.sym
+..\%__SRC%\bin\epb%UPD%*.dll %_DEST%\bin%_EXT%\epb%UPD%*.dll
+..\%__SRC%\bin\epb%UPD%*.sym %_DEST%\bin%_EXT%\epb%UPD%*.sym
+..\%__SRC%\bin\epg%UPD%*.dll %_DEST%\bin%_EXT%\epg%UPD%*.dll
+..\%__SRC%\bin\epg%UPD%*.sym %_DEST%\bin%_EXT%\epg%UPD%*.sym
+..\%__SRC%\bin\epp%UPD%*.dll %_DEST%\bin%_EXT%\epp%UPD%*.dll
+..\%__SRC%\bin\epp%UPD%*.sym %_DEST%\bin%_EXT%\epp%UPD%*.sym
+..\%__SRC%\bin\ime%UPD%*.dll %_DEST%\bin%_EXT%\ime%UPD%*.dll
+..\%__SRC%\bin\ime%UPD%*.sym %_DEST%\bin%_EXT%\ime%UPD%*.sym
+..\%__SRC%\bin\ipt%UPD%*.dll %_DEST%\bin%_EXT%\ipt%UPD%*.dll
+..\%__SRC%\bin\ipt%UPD%*.sym %_DEST%\bin%_EXT%\ipt%UPD%*.sym
+..\%__SRC%\bin\icd%UPD%*.dll %_DEST%\bin%_EXT%\icd%UPD%*.dll
+..\%__SRC%\bin\icd%UPD%*.sym %_DEST%\bin%_EXT%\icd%UPD%*.sym
+..\%__SRC%\bin\ipx%UPD%*.dll %_DEST%\bin%_EXT%\ipx%UPD%*.dll
+..\%__SRC%\bin\ipx%UPD%*.sym %_DEST%\bin%_EXT%\ipx%UPD%*.sym
+..\%__SRC%\bin\icg%UPD%*.dll %_DEST%\bin%_EXT%\icg%UPD%*.dll
+..\%__SRC%\bin\icg%UPD%*.sym %_DEST%\bin%_EXT%\icg%UPD%*.sym
+..\%__SRC%\bin\ira%UPD%*.dll %_DEST%\bin%_EXT%\ira%UPD%*.dll
+..\%__SRC%\bin\ira%UPD%*.sym %_DEST%\bin%_EXT%\ira%UPD%*.sym
+..\%__SRC%\bin\itg%UPD%*.dll %_DEST%\bin%_EXT%\itg%UPD%*.dll
+..\%__SRC%\bin\itg%UPD%*.sym %_DEST%\bin%_EXT%\itg%UPD%*.sym
+..\%__SRC%\bin\ipd%UPD%*.dll %_DEST%\bin%_EXT%\ipd%UPD%*.dll
+..\%__SRC%\bin\ipd%UPD%*.sym %_DEST%\bin%_EXT%\ipd%UPD%*.sym
+..\%__SRC%\bin\ips%UPD%*.dll %_DEST%\bin%_EXT%\ips%UPD%*.dll
+..\%__SRC%\bin\ips%UPD%*.sym %_DEST%\bin%_EXT%\ips%UPD%*.sym
+..\%__SRC%\bin\ipb%UPD%*.dll %_DEST%\bin%_EXT%\ipb%UPD%*.dll
+..\%__SRC%\bin\ipb%UPD%*.sym %_DEST%\bin%_EXT%\ipb%UPD%*.sym
+..\%__SRC%\bin\iti%UPD%*.dll %_DEST%\bin%_EXT%\iti%UPD%*.dll
+..\%__SRC%\bin\iti%UPD%*.sym %_DEST%\bin%_EXT%\iti%UPD%*.sym
+..\%__SRC%\bin\igi%UPD%*.dll %_DEST%\bin%_EXT%\igi%UPD%*.dll
+..\%__SRC%\bin\igi%UPD%*.sym %_DEST%\bin%_EXT%\igi%UPD%*.sym
+..\%__SRC%\bin\idx%UPD%*.dll %_DEST%\bin%_EXT%\idx%UPD%*.dll
+..\%__SRC%\bin\idx%UPD%*.sym %_DEST%\bin%_EXT%\idx%UPD%*.sym
+..\%__SRC%\bin\ixb%UPD%*.dll %_DEST%\bin%_EXT%\ixb%UPD%*.dll
+..\%__SRC%\bin\ixb%UPD%*.sym %_DEST%\bin%_EXT%\ixb%UPD%*.sym
+..\%__SRC%\bin\jpg%UPD%*.dll %_DEST%\bin%_EXT%\jpg%UPD%*.dll
+..\%__SRC%\bin\jpg%UPD%*.sym %_DEST%\bin%_EXT%\jpg%UPD%*.sym
+..\%__SRC%\bin\go%UPD%*.dll %_DEST%\bin%_EXT%\go%UPD%*.dll
+..\%__SRC%\bin\go%UPD%*.sym %_DEST%\bin%_EXT%\go%UPD%*.sym
+..\%__SRC%\bin\gol%UPD%*.dll %_DEST%\bin%_EXT%\gol%UPD%*.dll
+..\%__SRC%\bin\gol%UPD%*.sym %_DEST%\bin%_EXT%\gol%UPD%*.sym
+
+..\%__SRC%\lib\lib*%UPD%*.* %_DEST%\lib%_EXT%\lib*%UPD%*.*
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
+
+mkdir: %_DEST%\inc%_EXT%\goodies
+hedabu: ..\inc\grfmgr.hxx %_DEST%\inc%_EXT%\goodies\grfmgr.hxx
+hedabu: ..\inc\mailenum.hxx %_DEST%\inc%_EXT%\goodies\mailenum.hxx
+hedabu: ..\inc\mailbook.hxx %_DEST%\inc%_EXT%\goodies\mailbook.hxx
+hedabu: ..\inc\mailbody.hxx %_DEST%\inc%_EXT%\goodies\mailbody.hxx
+hedabu: ..\inc\mailsrv.hxx %_DEST%\inc%_EXT%\goodies\mailsrv.hxx
+hedabu: ..\inc\mailread.hxx %_DEST%\inc%_EXT%\goodies\mailread.hxx
+hedabu: ..\inc\mailbrw.hxx %_DEST%\inc%_EXT%\goodies\mailbrw.hxx
+hedabu: ..\inc\mailfmgr.hxx %_DEST%\inc%_EXT%\goodies\mailfmgr.hxx
+hedabu: ..\inc\maillog.hxx %_DEST%\inc%_EXT%\goodies\maillog.hxx
+hedabu: ..\inc\vector3d.hxx %_DEST%\inc%_EXT%\goodies\vector3d.hxx
+hedabu: ..\inc\point3d.hxx %_DEST%\inc%_EXT%\goodies\point3d.hxx
+hedabu: ..\inc\hmatrix.hxx %_DEST%\inc%_EXT%\goodies\hmatrix.hxx
+hedabu: ..\inc\matrix3d.hxx %_DEST%\inc%_EXT%\goodies\matrix3d.hxx
+hedabu: ..\inc\point4d.hxx %_DEST%\inc%_EXT%\goodies\point4d.hxx
+hedabu: ..\inc\base3d.hxx %_DEST%\inc%_EXT%\goodies\base3d.hxx
+hedabu: ..\inc\b3dlight.hxx %_DEST%\inc%_EXT%\goodies\b3dlight.hxx
+hedabu: ..\inc\vector3d.hxx %_DEST%\inc%_EXT%\goodies\vector3d.hxx
+hedabu: ..\inc\matril3d.hxx %_DEST%\inc%_EXT%\goodies\matril3d.hxx
+hedabu: ..\inc\bucket.hxx %_DEST%\inc%_EXT%\goodies\bucket.hxx
+hedabu: ..\inc\point3d.hxx %_DEST%\inc%_EXT%\goodies\point3d.hxx
+hedabu: ..\inc\b3dentty.hxx %_DEST%\inc%_EXT%\goodies\b3dentty.hxx
+hedabu: ..\inc\b3dcolor.hxx %_DEST%\inc%_EXT%\goodies\b3dcolor.hxx
+hedabu: ..\inc\b3dcompo.hxx %_DEST%\inc%_EXT%\goodies\b3dcompo.hxx
+hedabu: ..\inc\b3dtex.hxx %_DEST%\inc%_EXT%\goodies\b3dtex.hxx
+hedabu: ..\inc\b3dgeom.hxx %_DEST%\inc%_EXT%\goodies\b3dgeom.hxx
+hedabu: ..\inc\b3dvolum.hxx %_DEST%\inc%_EXT%\goodies\b3dvolum.hxx
+hedabu: ..\inc\b3dtrans.hxx %_DEST%\inc%_EXT%\goodies\b3dtrans.hxx
+hedabu: ..\inc\b2dmbase.hxx %_DEST%\inc%_EXT%\goodies\b2dmbase.hxx
+hedabu: ..\inc\b2dmbmp.hxx %_DEST%\inc%_EXT%\goodies\b2dmbmp.hxx
+hedabu: ..\inc\b2dmline.hxx %_DEST%\inc%_EXT%\goodies\b2dmline.hxx
+hedabu: ..\inc\b2dmpnt.hxx %_DEST%\inc%_EXT%\goodies\b2dmpnt.hxx
+hedabu: ..\inc\b2dmtri.hxx %_DEST%\inc%_EXT%\goodies\b2dmtri.hxx
+hedabu: ..\inc\bxdintpo.hxx %_DEST%\inc%_EXT%\goodies\bxdintpo.hxx
+hedabu: ..\inc\agsdkdll.hxx %_DEST%\inc%_EXT%\goodies\agsdkdll.hxx
+

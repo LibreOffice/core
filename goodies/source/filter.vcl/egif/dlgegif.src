@@ -1,0 +1,230 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgegif.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:30:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dlgegif.hrc"
+ModalDialog DLG_EXPORT_GIF
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 169 , 70 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text = "GIF Optionen" ;
+    Text [ ENGLISH ] = "GIF options" ;
+    Text [ english_us ] = "GIF Options" ;
+    Text [ italian ] = "Opzioni GIF" ;
+    Text [ spanish ] = "Opciones GIF" ;
+    Text [ french ] = "Options GIF" ;
+    Text [ dutch ] = "GIF-opties" ;
+    Text [ swedish ] = "GIF alternativ" ;
+    Text [ danish ] = "GIF indstillinger" ;
+    Text [ portuguese_brazilian ] = "GIF Optionen" ;
+    Text [ portuguese ] = "Opções GIF" ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 113 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 113 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 113 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GRP_MODE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 100 , 29 ) ;
+        Text = "Modus" ;
+        Text [ ENGLISH ] = "Mode" ;
+        Text [ english_us ] = "Mode" ;
+        Text [ italian ] = "Modo" ;
+        Text [ spanish ] = "Modo" ;
+        Text [ french ] = "Mode" ;
+        Text [ dutch ] = "Modus" ;
+        Text [ swedish ] = "Läge" ;
+        Text [ danish ] = "Modus" ;
+        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ portuguese ] = "Modo" ;
+        Text[ chinese_simplified ] = "Ä£Ê½";
+        Text[ russian ] = "Ğåæèì";
+        Text[ polish ] = "Tryb";
+        Text[ japanese ] = "Ó°ÄŞ";
+        Text[ chinese_traditional ] = "¼Ò¦¡";
+        Text[ arabic ] = "æÖÚ";
+        Text[ dutch ] = "Modus";
+        Text[ chinese_simplified ] = "Ä£Ê½";
+        Text[ greek ] = "ÊáôÜóôáóç";
+        Text[ korean ] = "¸ğµå";
+        Text[ turkish ] = "Kip";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_INTERLACED
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Interlaced" ;
+        Text [ ENGLISH ] = "~Interlaced" ;
+        Text [ english_us ] = "~Interlaced" ;
+        Text [ portuguese_brazilian ] = "~Interlaced" ;
+        Text [ swedish ] = "~Interlaced" ;
+        Text [ danish ] = "~Interlaced" ;
+        Text [ italian ] = "Interlaced" ;
+        Text [ spanish ] = "~Entrelazado" ;
+        Text [ french ] = "~Entrelacé" ;
+        Text [ dutch ] = "~Interlaced" ;
+        Text [ portuguese ] = "~Interlaced" ;
+        Text[ chinese_simplified ] = "½»´í(~I)";
+        Text[ russian ] = "~Ñ ÷åğåäîâàíèåì";
+        Text[ polish ] = "Interlaced";
+        Text[ japanese ] = "²İÀ°Ú°½‚µ‚½(~I)";
+        Text[ chinese_traditional ] = "¥æ¿ù(~I)";
+        Text[ arabic ] = "ãÊÔÇÈß";
+        Text[ dutch ] = "~Interlaced";
+        Text[ chinese_simplified ] = "½»´í(~I)";
+        Text[ greek ] = "Ğåğëåãìİíç";
+        Text[ korean ] = "ÀÎÅÍ·¹ÀÌ½º(~I)";
+        Text[ turkish ] = "~Interlaced";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_DRAW
+    {
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 100 , 29 ) ;
+        Text = "Zeichenobjekte" ;
+        Text [ ENGLISH ] = "Drawing objects" ;
+        Text [ english_us ] = "Drawing objects" ;
+        Text [ portuguese_brazilian ] = "Zeichenobjekte" ;
+        Text [ swedish ] = "Ritobjekt" ;
+        Text [ danish ] = "Tegneobjekter" ;
+        Text [ italian ] = "Oggetti di disegno" ;
+        Text [ spanish ] = "Objetos de dibujo" ;
+        Text [ french ] = "Objets de dessin" ;
+        Text [ dutch ] = "Tekenobjecten" ;
+        Text [ portuguese ] = "Objectos de desenho" ;
+        Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
+        Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
+        Text[ polish ] = "Obiekty graficzne";
+        Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
+        Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
+    Text[ polish ] = "Obiekty graficzne";
+    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
+    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
+    Text[ chinese_traditional ] = "¦r«¬ª«¥ó";
+        Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
+        Text[ dutch ] = "Tekenobjecten";
+        Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
+        Text[ greek ] = "Áíôéêåßìåíá ó÷åäßáóçò";
+        Text[ korean ] = "±×¸®±â °³Ã¼";
+        Text[ turkish ] = "Çizimler";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_TRANSLUCENT
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 86 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Transparent speichern" ;
+        Text [ ENGLISH ] = "Save ~transparent" ;
+        Text [ english_us ] = "Save ~transparency" ;
+        Text [ portuguese_brazilian ] = "~Transparent speichern" ;
+        Text [ swedish ] = "Spara ~transparent" ;
+        Text [ danish ] = "Gem ~transparent" ;
+        Text [ italian ] = "Salva in modo trasparente" ;
+        Text [ spanish ] = "Guardar en modo ~transparente" ;
+        Text [ french ] = "Enregistrer en t~ransparence" ;
+        Text [ dutch ] = "~Transparant opslaan" ;
+        Text [ portuguese ] = "~Guardar em modo transparente" ;
+        Text[ chinese_simplified ] = "´æÅÌÍ¸Ã÷(~T)";
+        Text[ russian ] = "Ñîõğàíèòü â ïğîçğà÷íîì ğåæèìå";
+        Text[ polish ] = "Zapisz w trybie przezroczystym";
+        Text[ japanese ] = "“§‰ß«‚Ì‚Ü‚Ü•Û‘¶(~T)";
+        Text[ chinese_traditional ] = "Àx¦s³z©ú(~T)";
+        Text[ arabic ] = "ÍİÙ ÔİÇİ";
+        Text[ dutch ] = "~Transparant opslaan";
+        Text[ chinese_simplified ] = "´æÅÌÍ¸Ã÷(~T)";
+        Text[ greek ] = "Äéá~öáíİò áğïèŞêåõóç";
+        Text[ korean ] = "Åõ¸í ¸ğµå ÀúÀå(~T)";
+        Text[ turkish ] = "Saydam biçimde kaydet";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "GIF Ñ¡Ïî";
+    Text[ russian ] = "Ïàğàìåòğû GIF";
+    Text[ polish ] = "Opcje GIF";
+    Text[ japanese ] = "GIF µÌß¼®İ";
+    Text[ chinese_traditional ] = "GIF¿ï¶µ";
+    Text[ arabic ] = "GIF ÎíÇÑÇÊ";
+    Text[ dutch ] = "GIF-opties";
+    Text[ chinese_simplified ] = "GIF Ñ¡Ïî";
+    Text[ greek ] = "Åğéëïãİò GIF";
+    Text[ korean ] = "GIF ¿É¼Ç";
+    Text[ turkish ] = "GIF seçenekleri";
+    Text[ language_user1 ] = " ";
+};

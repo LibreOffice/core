@@ -1,0 +1,188 @@
+/*************************************************************************
+ *
+ *  $RCSfile: epsstr.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:30:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include "strings.hrc"
+
+// Key fuer den Dialog
+String KEY_PREVIEW
+{
+    Text = "EPS Vorschaubild";
+    Text[ ENGLISH ] = "EPS preview";
+    Text[ italian ] = "Anteprima immagine EPS";
+    Text[ portuguese_brazilian ] = "EPS Vorschaubild";
+    Text[ portuguese ] = "Imagem de previsualização EPS";
+    Text[ danish ] = "EPS eksempelbillede";
+    Text[ french ] = "Aperçu EPS";
+    Text[ swedish ] = "EPS förhandsvisningsbild";
+    Text[ dutch ] = "EPS Voorbeeld";
+    Text[ spanish ] = "Previsualización EPS";
+    Text[ english_us ] = "EPS preview image";
+    Text[ chinese_simplified ] = "EPS Ô¤ÊÓÍ¼";
+    Text[ russian ] = "Ïğîñìîòğ êàğòèíêè EPS";
+    Text[ polish ] = "Podgl¹d EPS";
+    Text[ japanese ] = "EPS ÌßÚËŞ­°²Ò°¼Ş";
+    Text[ greek ] = "Åéêüíá ğñïåğéóêüğçóçò EPS";
+    Text[ korean ] = "EPS ¹Ì¸® º¸±â ÀÌ¹ÌÁö";
+    Text[ chinese_traditional ] = "EPS ÀËµø¹Ï";
+    Text[ arabic ] = "ÕæÑÉ ÇáãÚÇíäÉ  EPS";
+    Text[ turkish ] = "EPS önizleme resmi";
+    Text[ language_user1 ] = " ";
+};
+String KEY_VERSION
+{
+    Text = "EPS Version";
+    Text[ ENGLISH ] = "EPS version";
+    Text[ italian ] = "Versione EPS";
+    Text[ portuguese_brazilian ] = "EPS Version";
+    Text[ portuguese ] = "Versão EPS";
+    Text[ danish ] = "EPS version";
+    Text[ french ] = "Version EPS";
+    Text[ swedish ] = "EPS version";
+    Text[ dutch ] = "EPS versie";
+    Text[ spanish ] = "Versión EPS";
+    Text[ english_us ] = "EPS version";
+    Text[ chinese_simplified ] = "EPS °æ±¾";
+    Text[ russian ] = "Âåğñèÿ EPS";
+    Text[ polish ] = "Wersja EPS";
+    Text[ japanese ] = "EPS ÊŞ°¼Ş®İ";
+    Text[ greek ] = "¸êäïóç EPS";
+    Text[ korean ] = "EPS ¹öÀü";
+    Text[ chinese_traditional ] = "EPS ª©¥»";
+    Text[ arabic ] = "EPS ÅÕÏÇÑ";
+    Text[ turkish ] = "EPS sürümü";
+    Text[ language_user1 ] = " ";
+};
+String KEY_COLOR
+{
+    Text = "EPS Farb-Format";
+    Text[ ENGLISH ] = "EPS color format";
+    Text[ italian ] = "Formato colore EPS";
+    Text[ portuguese_brazilian ] = "EPS Farb-Format";
+    Text[ portuguese ] = "Formato de cor EPS";
+    Text[ danish ] = "EPS farveformat";
+    Text[ french ] = "Format de couleur EPS";
+    Text[ swedish ] = "EPS färgformat";
+    Text[ dutch ] = "EPS kleuropmaak";
+    Text[ spanish ] = "Formato de color EPS";
+    Text[ english_us ] = "EPS color format";
+    Text[ chinese_simplified ] = "EPS ÑÕÉ«¸ñÊ½";
+    Text[ russian ] = "Ôîğìàò öâåòà EPS";
+    Text[ polish ] = "Format koloru EPS";
+    Text[ japanese ] = "EPS F‚Ì‘®";
+    Text[ greek ] = "ÌïñöŞ ÷ñşìáôïò EPS";
+    Text[ korean ] = "EPS »ö ¼­½Ä";
+    Text[ chinese_traditional ] = "EPS ÃC¦â®æ¦¡";
+    Text[ arabic ] = "EPS ÊäÓíŞ ÇáÃáæÇä";
+    Text[ turkish ] = "EPS renk formatı";
+    Text[ language_user1 ] = " ";
+};
+String KEY_COMPR
+{
+    Text = "EPS Kompressionart";
+    Text[ ENGLISH ] = "EPS compression type";
+    Text[ italian ] = "Tipo di compressione EPS";
+    Text[ portuguese_brazilian ] = "EPS Kompressionart";
+    Text[ portuguese ] = "Modo de compressão EPS";
+    Text[ danish ] = "EPS kompressionstype";
+    Text[ french ] = "Type de compression EPS";
+    Text[ swedish ] = "EPS kompressionssätt";
+    Text[ dutch ] = "EPS compressietype";
+    Text[ spanish ] = "Tipo de compresión EPS";
+    Text[ english_us ] = "EPS compression mode";
+    Text[ chinese_simplified ] = "EPS Ñ¹Ëõ·½Ê½";
+    Text[ russian ] = "Òèï óæàòèÿ EPS";
+    Text[ polish ] = "Tryb kompresji EPS";
+    Text[ japanese ] = "EPS ˆ³kÓ°ÄŞ";
+    Text[ greek ] = "Ôığïò óõìğßåóçò EPS";
+    Text[ korean ] = "EPS ¾ĞÃà ¸ğµå";
+    Text[ chinese_traditional ] = "EPS À£ÁY¤è¦¡";
+    Text[ arabic ] = "EPS ØÑíŞÉ ÇáÖÛØ";
+    Text[ turkish ] = "EPS sıkıştırma türü";
+    Text[ language_user1 ] = " ";
+};
+
+String KEY_VERSION_CHECK
+{
+    Text =  "Achtung: Es konnten nicht alle importierte EPS-Grafiken in Level1 abgespeichert werden,\n"
+            "da einige in einem höherem Level vorliegen !";
+    Text[ ENGLISH ] = "Attention: It was not possible to save all imported EPS graphics in level1,"
+            "because some of them already attend to a higher level !";
+    Text[ italian ] = "Attenzione: non è stato possibile salvare tutte le immagini EPS importate nel livello1\nin quanto ne esistono alcune in un livello superiore!";
+    Text[ portuguese_brazilian ] = "Achtung: Es konnten nicht alle importierte EPS-Grafiken in Level1 abgespeichert werden,\nda einige in einem höherem Level vorliegen !";
+    Text[ portuguese ] = "Atenção: foi impossível guardar todas as imagens EPS importadas no nível 1,\numa vez que algumas se encontram num nível superior!";
+    Text[ danish ] = "Advarsel: Det var ikke muligt at gemme alle importerede EPS-billeder på niveau1,\nfordi nogle foreligger på et højere niveau !";
+    Text[ french ] = "Attention : Les graphiques EPS importés n'ont pas tous pu être enregistrés au niveau1\ncar certains d'entre eux sont d'un niveau supérieur !";
+    Text[ swedish ] = "OBS: Alla importerade EPS-grafiker kunde inte sparas på Level1,\neftersom en del finns på en högre nivå !";
+    Text[ dutch ] = "Pas op: Niet alle geïmporteerde EPS-afbeeldingen konden onder Level1 worden opgeslagen,\ndaar enkele ervan op een hoger level liggen !";
+    Text[ spanish ] = "¡Atención: No han podido ser guardados en Level1 todos los gráficos EPS importados\nporque existen algunos en un nivel más alto!";
+    Text[ english_us ] = "Warning: Not all of the imported EPS graphics could be saved at level1\nas some are at a higher level!";
+    Text[ chinese_simplified ] = "×¢Òâ: ÎŞ·¨½«ËùÓĞµÄÊäÈëÍ¼ĞÎÒÔ¡°¼¶±ğ 1¡±´æÅÌ£¬\nÒòÎªÒ»Ğ©Í¼ĞÎÊÇ¸ßÓÚ¡°¼¶±ğ 1¡± £¡";
+    Text[ russian ] = "Âíèìàíèå! Ñîõğàíèòü âñå èìïîğòèğîâàííûå èçîáğàæåíèÿ EPS íà óğîâíå 1 íåâîçìîæíî,\nòàê êàê íåêîòîğûå èç íèõ íàõîäÿòñÿ íà áîëåå âûñîêîì óğîâíå !";
+    Text[ polish ] = "Uwaga: Nie wszystkie importowane grafiki EPS mog³y zostaæ zapisane na poziomie1, \nponiewa¿ niektóre znajduj¹ siê na wy¿szym poziomie!";
+    Text[ japanese ] = "’ˆÓ: ²İÎß°Ä‚³‚ê‚½ EPS ¸Ş×Ì¨¯¸‚Ì’†‚Ì‚¢‚­‚Â‚©‚Í\n‚‚¢ÚÍŞÙ‚É‚ ‚é‚Ì‚ÅÚÍŞÙ1‚É•Û‘¶‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ greek ] = "Ğñïóï÷Ş: Äåí Şôáí äõíáôüí íá ãßíåé áğïèŞêåõóç üëùí ôùí åéóçãìİíùí ãñáöéêşí EPS,\nåğåéäŞ ìåñéêÜ áğü áõôÜ õğÜñ÷ïõí óå ìïñöŞ õøçëüôåñïõ åğéğİäïõ!";
+    Text[ korean ] = "ÁÖÀÇ: »óÀ§ ·¹º§¿¡ ±×·¡ÇÈÀÌ ¸î °¡Áö ÀÖ±â ¶§¹®¿¡\n°¡Á®¿Â EPS ±×·¡ÇÈÀ» ·¹º§1¿¡ ¸ğµÎ ÀúÀåÇÏÁö´Â ¸øÇß½À´Ï´Ù.";
+    Text[ chinese_traditional ] = "ª`·N¡GµLªk±N©Ò¦³ªº¿é¤J¹Ï§Î¥H¡§level 1¡¨Àx¦s¡M\n¦]¬°¤@¨Ç¹Ï§Î¬O°ª©ó¡§level 1¡¨ ¡I";
+    Text[ arabic ] = "ÊÍĞíÑ: ÊÚĞÑ ÍİÙ ßá ÕæÑ EPS ÇáãÓÊæÑÏÉ İí ÇáãÓÊæì 1¡\náÊæÇÌÏ ÈÚÖ ãäåÇ İí ãÓÊæì ÃÚáì!";
+    Text[ turkish ] = "Dikkat: Bazı EPS grafikleri daha üst düzeyde olduğu için, içe aktarılan tüm grafikler düzey 1'e kaydedilemedi.";
+    Text[ language_user1 ] = " ";
+};

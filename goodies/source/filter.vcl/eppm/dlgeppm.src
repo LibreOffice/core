@@ -1,0 +1,198 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgeppm.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:30:13 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dlgeppm.hrc"
+ModalDialog DLG_EXPORT_EPPM
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 133 , 67 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text = "PPM Optionen" ;
+    Text [ ENGLISH ] = "PPM options" ;
+    Text [ english_us ] = "PPM Options" ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 73 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 73 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 73 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GRP_FORMAT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 60 , 54 ) ;
+        Text = "Datei Format" ;
+        Text [ ENGLISH ] = "file format" ;
+        Text[ italian ] = "Formato file";
+        Text[ portuguese_brazilian ] = "Datei Format";
+        Text[ portuguese ] = "Formato do ficheiro";
+        Text[ danish ] = "Filformat";
+        Text[ french ] = "Format de fichier";
+        Text[ swedish ] = "Filformat";
+        Text[ dutch ] = "Bestandsformaat";
+        Text[ spanish ] = "Formato de archivo";
+        Text[ english_us ] = "File format";
+        Text[ chinese_simplified ] = "ÎÄ¼þ¸ñÊ½";
+        Text[ russian ] = "Ôîðìàò ôàéëà";
+        Text[ polish ] = "Format pliku";
+        Text[ japanese ] = "Ì§²ÙŒ`Ž®";
+        Text[ chinese_traditional ] = "ÀÉ®×®æ¦¡";
+        Text[ arabic ] = "ÊäÓíÞ ÇáãáÝ";
+        Text[ dutch ] = "Bestandsformaat";
+        Text[ chinese_simplified ] = "ÎÄ¼þ¸ñÊ½";
+        Text[ greek ] = "ÌïñöÞ áñ÷åßïõ";
+        Text[ korean ] = "ÆÄÀÏ ¼­½Ä";
+        Text[ turkish ] = "Dosya formatý";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_RAW
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "~Binär" ;
+        Text [ ENGLISH ] = "~raw" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "~Binario";
+        Text[ portuguese_brazilian ] = "~Binär";
+        Text[ portuguese ] = "~Binário";
+        Text[ danish ] = "~Binær";
+        Text[ french ] = "~Binaire";
+        Text[ swedish ] = "~Binär";
+        Text[ dutch ] = "~Binair";
+        Text[ spanish ] = "~Binario";
+        Text[ english_us ] = "~Binary";
+        Text[ chinese_simplified ] = "¶þÔª(~B)";
+        Text[ russian ] = "Áèíàðíûé";
+        Text[ polish ] = "Binarny";
+        Text[ japanese ] = "ÊÞ²ÅØ(~B)";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "¤G¦ì¤¸(~B)";
+        Text[ arabic ] = "ËäÇÆí";
+        Text[ dutch ] = "~Binair";
+        Text[ chinese_simplified ] = "¶þÔª(~B)";
+        Text[ greek ] = "Äõáäéêü";
+        Text[ korean ] = "¹ÙÀÌ³Ê¸®(~B)";
+        Text[ turkish ] = "Ýkili";
+    };
+    RadioButton RB_ASCII
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "~Text" ;
+        Text [ ENGLISH ] = "~text" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "~Testo";
+        Text[ portuguese_brazilian ] = "~Text";
+        Text[ portuguese ] = "~Texto";
+        Text[ danish ] = "~Tekst";
+        Text[ french ] = "~Texte";
+        Text[ swedish ] = "~Text";
+        Text[ dutch ] = "~Tekst";
+        Text[ spanish ] = "~Texto";
+        Text[ english_us ] = "~Text";
+        Text[ chinese_simplified ] = "ÎÄ×Ö(~T)";
+        Text[ russian ] = "Òåêñò";
+        Text[ polish ] = "Tekst";
+        Text[ japanese ] = "Ã·½Ä(~T)";
+        Text[ chinese_traditional ] = "¤å¦r(~T)";
+        Text[ arabic ] = "ÇáäÕ";
+        Text[ dutch ] = "~Tekst";
+        Text[ chinese_simplified ] = "ÎÄ×Ö(~T)";
+        Text[ greek ] = "Êåßìåíï";
+        Text[ korean ] = "ÅØ½ºÆ®(~T)";
+        Text[ turkish ] = "Metin";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ italian ] = "Opzioni PPM";
+    Text[ portuguese_brazilian ] = "PPM Optionen";
+    Text[ portuguese ] = "Opções PPM";
+    Text[ danish ] = "PPM indstillinger";
+    Text[ french ] = "Options PPM";
+    Text[ swedish ] = "PPM alternativ";
+    Text[ dutch ] = "PPM-opties";
+    Text[ spanish ] = "Opciones PPM ";
+    Text[ chinese_simplified ] = "PPM Ñ¡Ïî";
+    Text[ russian ] = "Ïàðàìåòðû PPM";
+    Text[ polish ] = "Opcje PPM";
+    Text[ japanese ] = "PPM µÌß¼®Ý";
+    Text[ chinese_traditional ] = "PPM¿ï¶µ";
+    Text[ arabic ] = "PPM ÎíÇÑÇÊ";
+    Text[ dutch ] = "PPM-opties";
+    Text[ chinese_simplified ] = "PPM Ñ¡Ïî";
+    Text[ greek ] = "ÅðéëïãÝò PPM";
+    Text[ korean ] = "PPM ¿É¼Ç";
+    Text[ turkish ] = "PPM seçenekleri";
+    Text[ language_user1 ] = " ";
+};

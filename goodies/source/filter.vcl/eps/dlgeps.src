@@ -1,0 +1,459 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgeps.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:30:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dlgeps.hrc"
+ModalDialog DLG_EXPORT_EPS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 149 , 198 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text = "EPS Export Optionen" ;
+    Text [ ENGLISH ] = "EPS export options" ;
+    Text[ portuguese ] = "Opções exportação EPS";
+    Text[ russian ] = "Ïàğàìåòğû ıêñïîğòà EPS";
+    Text[ dutch ] = "EPS export opties";
+    Text[ french ] = "Options d'export EPS";
+    Text[ spanish ] = "Opciones Exportación EPS";
+    Text[ italian ] = "Opzioni d'esportazione EPS";
+    Text[ danish ] = "EPS eksportindstillinger";
+    Text[ swedish ] = "EPS exportalternativ";
+    Text[ polish ] = "Opcje eksportowe EPS";
+    Text[ english_us ] = "EPS Export Options";
+    Text[ portuguese_brazilian ] = "EPS Export Optionen";
+    Text[ japanese ] = "EPS ´¸½Îß°ÄµÌß¼®İ";
+    Text[ chinese_simplified ] = "EPS Êä³öÑ¡Ïî";
+    Text[ chinese_traditional ] = "EPS ¿é¥X¿ï¶µ";
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 93 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 93 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 93 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    GroupBox GRP_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 80 , 42 ) ;
+        Text = "Vorschau";
+        Text [ ENGLISH ] = "Preview";
+        Text[ italian ] = "Anteprima";
+        Text[ portuguese_brazilian ] = "Vorschau";
+        Text[ portuguese ] = "Previsualização";
+        Text[ danish ] = "Eksempel";
+        Text[ french ] = "Aperçu";
+        Text[ swedish ] = "Förhandsvisning";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ spanish ] = "Previsualización";
+        Text[ english_us ] = "Preview";
+        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ polish ] = "Podgl¹d";
+        Text[ japanese ] = "ÌßÚËŞ­°";
+        Text[ chinese_traditional ] = "ÀËµø";
+        Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ greek ] = "Ğñïåğéóêüğçóç";
+        Text[ korean ] = "¹Ì¸® º¸±â";
+        Text[ turkish ] = "Önizleme";
+    };
+    CheckBox CB_PREVIEW_TIFF
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 71 , 10 ) ;
+        Text = "~Vorschau Bild (Tiff)" ;
+        Text [ ENGLISH ] = "~Preview picture (Tiff)" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "~Anteprima immagine (Tiff)";
+        Text[ portuguese_brazilian ] = "~Vorschau Bild (Tiff)";
+        Text[ portuguese ] = "~Previzualizar imagem (Tiff)";
+        Text[ danish ] = "~Vis billede (Tiff)";
+        Text[ french ] = "~Aperçu (Tiff)";
+        Text[ swedish ] = "Förhandsvisning bild (Tiff)";
+        Text[ dutch ] = "~Voorbeeldvenster (TIFF)";
+        Text[ spanish ] = "~Previsualización (Tiff)";
+        Text[ english_us ] = "Image ~preview (TIFF)";
+        Text[ chinese_simplified ] = "Í¼ÏñÔ¤ÊÓ(~TIFF)";
+        Text[ russian ] = "Ïğîñìîòğ êàğòèíêè (TIFF)";
+        Text[ polish ] = "Podgl¹d rysunku (Tiff)";
+        Text[ japanese ] = "}‚ÌÌßÚËŞ­° (Tiff)(~P)";
+        Text[ arabic ] = "ãÚÇíäÉ ÇáÕæÑÉ(TIFF) ";
+        Text[ dutch ] = "~Voorbeeldvenster (TIFF)";
+        Text[ chinese_simplified ] = "Í¼ÏñÔ¤ÊÓ(~TIFF)";
+        Text[ greek ] = "Ğñïåğéóêüğçóç åéêüíáò (TIFF)";
+        Text[ korean ] = "±×¸² ¹Ì¸® º¸±â (TIFF)(~P)";
+        Text[ chinese_traditional ] = "¹Ï¤ù¹wÄı(TIFF)(~P)";
+        Text[ turkish ] = "Resim önizleme (TIFF)";
+    };
+    CheckBox CB_PREVIEW_EPSI
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 71, 10 ) ;
+        Text = "~Interchange (EPSI)" ;
+        Text [ ENGLISH ] = "~Interchange (EPSI)" ;
+        TabStop = TRUE ;
+        Text[ english_us ] = "~Interchange (EPSI)";
+        Text[ portuguese ] = "~Interchange (EPSI)";
+        Text[ russian ] = "~Interchange (EPSI)";
+        Text[ greek ] = "~Interchange (EPSI)";
+        Text[ dutch ] = "~Interchange (EPSI)";
+        Text[ french ] = "~Interchange (EPSI)";
+        Text[ spanish ] = "~Interchange (EPSI)";
+        Text[ italian ] = "~Interchange (EPSI)";
+        Text[ danish ] = "~Interchange (EPSI)";
+        Text[ swedish ] = "Interchange (EPSI)";
+        Text[ polish ] = "~Interchange (EPSI)";
+        Text[ portuguese_brazilian ] = "~Interchange (EPSI)";
+        Text[ japanese ] = "²İÀ°Áªİ¼Ş(EPSI)(~I)";
+        Text[ korean ] = "ÀÎÅÍÃ¼ÀÎÁö (EPSI)(~I)";
+        Text[ chinese_simplified ] = "»¥»»(EPS~I)";
+        Text[ chinese_traditional ] = "¤¬´«(EPS~I)";
+        Text[ arabic ] = "~Interchange (EPSI)";
+        Text[ turkish ] = "Interchange (EPSI)";
+    };
+
+    GroupBox GRP_VERSION
+    {
+        Pos = MAP_APPFONT ( 6 , 51 ) ;
+        Size = MAP_APPFONT ( 80 , 42 ) ;
+        Text = "Version";
+        Text [ ENGLISH ] = "Version";
+        Text[ italian ] = "Versione";
+        Text[ portuguese_brazilian ] = "Version";
+        Text[ portuguese ] = "Versão";
+        Text[ danish ] = "Version";
+        Text[ french ] = "Version";
+        Text[ swedish ] = "Version";
+        Text[ dutch ] = "Versie";
+        Text[ spanish ] = "Versión";
+        Text[ english_us ] = "Version";
+        Text[ chinese_simplified ] = "°æ±¾";
+        Text[ russian ] = "Âåğñèÿ";
+        Text[ polish ] = "Wersja";
+        Text[ japanese ] = "ÊŞ°¼Ş®İ";
+        Text[ chinese_traditional ] = "ª©¥»";
+        Text[ arabic ] = "ÅÕÏÇÑ";
+        Text[ dutch ] = "Versie";
+        Text[ chinese_simplified ] = "°æ±¾";
+        Text[ greek ] = "¸êäïóç";
+        Text[ korean ] = "¹öÀü";
+        Text[ turkish ] = "Sürüm";
+    };
+    RadioButton RB_LEVEL1
+    {
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 71 , 10 ) ;
+        Text = "Level ~1" ;
+        Text [ ENGLISH ] = "Level ~1" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "Livello ~1";
+        Text[ portuguese_brazilian ] = "Level ~1";
+        Text[ portuguese ] = "Nível ~1";
+        Text[ danish ] = "Niveau ~1";
+        Text[ french ] = "Niveau ~1";
+        Text[ swedish ] = "Nivå ~1";
+        Text[ dutch ] = "Level ~1";
+        Text[ spanish ] = "Nivel ~1";
+        Text[ english_us ] = "Level ~1";
+        Text[ chinese_simplified ] = "¼¶±ğ ~1";
+        Text[ russian ] = "Óğîâåíü 1";
+        Text[ polish ] = "Poziom 1";
+        Text[ japanese ] = "ÚÍŞÙ 1";
+        Text[ chinese_traditional ] = "¯Å§O ~1";
+        Text[ arabic ] = "ÇáãÓÊæì 1";
+        Text[ dutch ] = "Level ~1";
+        Text[ chinese_simplified ] = "¼¶±ğ ~1";
+        Text[ greek ] = "Åğßğåäï ~1";
+        Text[ korean ] = "·¹º§ ~1";
+        Text[ turkish ] = "Düzey ~1";
+    };
+    RadioButton RB_LEVEL2
+    {
+        Pos = MAP_APPFONT ( 12 , 78 ) ;
+        Size = MAP_APPFONT ( 71, 10 ) ;
+        Text = "Level ~2" ;
+        Text [ ENGLISH ] = "Level ~2" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "Livello ~2";
+        Text[ portuguese_brazilian ] = "Level ~2";
+        Text[ portuguese ] = "Nível ~2";
+        Text[ danish ] = "Niveau ~2";
+        Text[ french ] = "Niveau ~2";
+        Text[ swedish ] = "Nivå ~2";
+        Text[ dutch ] = "Level ~2";
+        Text[ spanish ] = "Nivel ~2";
+        Text[ english_us ] = "Level ~2";
+        Text[ chinese_simplified ] = "¼¶±ğ ~2";
+        Text[ russian ] = "Óğîâåíü 2";
+        Text[ polish ] = "Poziom 2";
+        Text[ japanese ] = "ÚÍŞÙ 2";
+        Text[ chinese_traditional ] = "¯Å§O ~2";
+        Text[ arabic ] = "ÇáãÓÊæì 2";
+        Text[ dutch ] = "Level ~2";
+        Text[ chinese_simplified ] = "¼¶±ğ ~2";
+        Text[ greek ] = "Åğßğåäï ~2";
+        Text[ korean ] = "·¹º§ ~2";
+        Text[ turkish ] = "Düzey ~2";
+    };
+
+    GroupBox GRP_COLOR
+    {
+        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Size = MAP_APPFONT ( 80 , 42 ) ;
+        Text = "Farb Format";
+        Text [ ENGLISH ] = "Color Type";
+        Text[ italian ] = "Formato colore";
+        Text[ portuguese_brazilian ] = "Farb Format";
+        Text[ portuguese ] = "Formato da cor";
+        Text[ danish ] = "Farveformat";
+        Text[ french ] = "Format de couleur";
+        Text[ swedish ] = "Färgformat";
+        Text[ dutch ] = "Kleuropmaak";
+        Text[ spanish ] = "Formato del color";
+        Text[ english_us ] = "Color format";
+        Text[ chinese_simplified ] = "ÑÕÉ«¸ñÊ½";
+        Text[ russian ] = "Ôîğìàò öâåòà";
+        Text[ polish ] = "Format koloru";
+        Text[ japanese ] = "F‚Ì‘®";
+        Text[ chinese_traditional ] = "ÃC¦â®æ¦¡";
+        Text[ arabic ] = "ÊäÓíŞ Çááæä";
+        Text[ dutch ] = "Kleuropmaak";
+        Text[ chinese_simplified ] = "ÑÕÉ«¸ñÊ½";
+        Text[ greek ] = "ÌïñöŞ ÷ñşìáôïò";
+        Text[ korean ] = "»ö ¼­½Ä";
+        Text[ turkish ] = "Renk formatı";
+    };
+    RadioButton RB_COLOR
+    {
+        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Size = MAP_APPFONT ( 71, 10 ) ;
+        Text = "~Farbe" ;
+        Text [ ENGLISH ] = "~Color" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "~Colore";
+        Text[ portuguese_brazilian ] = "~Farbe";
+        Text[ portuguese ] = "~Cor";
+        Text[ danish ] = "~Farve";
+        Text[ french ] = "~Couleur";
+        Text[ swedish ] = "~Färg";
+        Text[ dutch ] = "~Kleur";
+        Text[ spanish ] = "~Color";
+        Text[ english_us ] = "~Color";
+        Text[ chinese_simplified ] = "ÑÕÉ«(~C)";
+        Text[ russian ] = "Öâåò";
+        Text[ polish ] = "Kolor";
+        Text[ japanese ] = "F(~C)";
+        Text[ chinese_traditional ] = "ÃC¦â(~C)";
+        Text[ arabic ] = "Çááæä";
+        Text[ dutch ] = "~Kleur";
+        Text[ chinese_simplified ] = "ÑÕÉ«(~C)";
+        Text[ greek ] = "×ñşìá";
+        Text[ korean ] = "»ö(~C)";
+        Text[ turkish ] = "Renk";
+    };
+    RadioButton RB_GRAYSCALE
+    {
+        Pos = MAP_APPFONT ( 12 , 126 ) ;
+        Size = MAP_APPFONT ( 71, 10 ) ;
+        Text = "~Graustufen" ;
+        Text [ ENGLISH ] = "~Grayscale" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "Toni di grigio";
+        Text[ portuguese_brazilian ] = "~Graustufen";
+        Text[ portuguese ] = "~Tons de cinzento";
+        Text[ danish ] = "Gråtoner";
+        Text[ french ] = "~Niveaux de gris";
+        Text[ swedish ] = "~Gråskalor";
+        Text[ dutch ] = "~Grijswaarden";
+        Text[ spanish ] = "~Escala de grises";
+        Text[ english_us ] = "~Grayscale";
+        Text[ chinese_simplified ] = "»Ò¶È(~G)";
+        Text[ russian ] = "Îòòåíêè ñåğîãî";
+        Text[ polish ] = "Odcienie szaroœci";
+        Text[ japanese ] = "¸ŞÚ°½¹°Ù(~G)";
+        Text[ chinese_traditional ] = "¦Ç¯Å(~G)";
+        Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
+        Text[ dutch ] = "~Grijswaarden";
+        Text[ chinese_simplified ] = "»Ò¶È(~G)";
+        Text[ greek ] = "ÄéáâÜèìéóç ôïõ ãêñé";
+        Text[ korean ] = "È¸»öÁ¶(~G)";
+        Text[ turkish ] = "Gri tonları";
+    };
+
+    GroupBox GRP_COMPRESSION
+    {
+        Pos = MAP_APPFONT ( 6 , 147 ) ;
+        Size = MAP_APPFONT ( 80 , 42 ) ;
+        Text = "Kompression";
+        Text [ ENGLISH ] = "Compression";
+        Text[ italian ] = "Compressione";
+        Text[ portuguese_brazilian ] = "Kompression";
+        Text[ portuguese ] = "Compressão";
+        Text[ danish ] = "Kompression";
+        Text[ french ] = "Compression";
+        Text[ swedish ] = "Kompression";
+        Text[ dutch ] = "Compressie";
+        Text[ spanish ] = "Compresión";
+        Text[ english_us ] = "Compression";
+        Text[ chinese_simplified ] = "Ñ¹Ëõ";
+        Text[ russian ] = "Óæàòèå";
+        Text[ polish ] = "Kompresja";
+        Text[ japanese ] = "ˆ³k";
+        Text[ chinese_traditional ] = "À£ÁY";
+        Text[ arabic ] = "ÖÛØ";
+        Text[ dutch ] = "Compressie";
+        Text[ chinese_simplified ] = "Ñ¹Ëõ";
+        Text[ greek ] = "Óõìğßåóç";
+        Text[ korean ] = "¾ĞÃà";
+        Text[ turkish ] = "Sıkıştırma";
+    };
+    RadioButton RB_COMPRESSION_LZW
+    {
+        Pos = MAP_APPFONT ( 12 , 158 );
+        Size = MAP_APPFONT ( 71, 10 ) ;
+        Text = "LZW Kodierung" ;
+        Text [ ENGLISH ] = "LZW Compression" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "Codifica LZW";
+        Text[ portuguese_brazilian ] = "LZW Kodierung";
+        Text[ portuguese ] = "Codificação LZW";
+        Text[ danish ] = "LZW kodning";
+        Text[ french ] = "Encodage LZW";
+        Text[ swedish ] = "LZW-kodning";
+        Text[ dutch ] = "LZW-codering";
+        Text[ spanish ] = "Codificación LZW";
+        Text[ english_us ] = "LZW encoding";
+        Text[ chinese_simplified ] = "LZW ±àÂë";
+        Text[ russian ] = "Êîäèğîâêà LZW";
+        Text[ polish ] = "Kodowanie LZW";
+        Text[ japanese ] = "LZW•„†‰»";
+        Text[ chinese_traditional ] = "LZW ½s½X";
+        Text[ arabic ] = "LZW ÊÑãíÒ";
+        Text[ dutch ] = "LZW-codering";
+        Text[ chinese_simplified ] = "LZW ±àÂë";
+        Text[ greek ] = "Êùäéêïğïßçóç LZW";
+        Text[ korean ] = "LZW ÀÎÄÚµù";
+        Text[ turkish ] = "LZW kodlaması";
+    };
+    RadioButton RB_COMPRESSION_NONE
+    {
+        Pos = MAP_APPFONT ( 12 , 174 ) ;
+        Size = MAP_APPFONT ( 71, 10 ) ;
+        Text = "Keine" ;
+        Text [ ENGLISH ] = "None" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "Senza";
+        Text[ portuguese_brazilian ] = "Keine";
+        Text[ portuguese ] = "Sem";
+        Text[ danish ] = "Ingen";
+        Text[ french ] = "Aucun(e)";
+        Text[ swedish ] = "Inga";
+        Text[ dutch ] = "Geen";
+        Text[ spanish ] = "Ninguno";
+        Text[ english_us ] = "None";
+        Text[ chinese_simplified ] = "ÎŞ";
+        Text[ russian ] = "Áåç";
+        Text[ polish ] = "Brak";
+        Text[ japanese ] = "‚È‚µ";
+        Text[ chinese_traditional ] = "µL";
+        Text[ arabic ] = "ÈÏæä";
+        Text[ dutch ] = "Geen";
+        Text[ chinese_simplified ] = "ÎŞ";
+        Text[ greek ] = "Êáíİíá";
+        Text[ korean ] = "¾øÀ½";
+        Text[ turkish ] = "Yok";
+    };
+    Text[ italian ] = "Opzioni d'esportazione EPS";
+    Text[ portuguese_brazilian ] = "EPS Export Optionen";
+    Text[ portuguese ] = "Opções exportação EPS";
+    Text[ danish ] = "EPS eksportindstillinger";
+    Text[ french ] = "Options d'export EPS";
+    Text[ swedish ] = "EPS exportalternativ";
+    Text[ dutch ] = "EPS export opties";
+    Text[ spanish ] = "Opciones Exportación EPS";
+    Text[ english_us ] = "EPS Export Options";
+    Text[ chinese_simplified ] = "EPS Êä³öÑ¡Ïî";
+    Text[ russian ] = "Ïàğàìåòğû ıêñïîğòà EPS";
+    Text[ polish ] = "Opcje eksportowe EPS";
+    Text[ japanese ] = "EPS ´¸½Îß°ÄµÌß¼®İ";
+    Text[ chinese_traditional ] = "EPS ¿é¥X¿ï¶µ";
+    Text[ arabic ] = "EPS ÎíÇÑÇÊ ÊÕÏíÑ";
+    Text[ dutch ] = "EPS export opties";
+    Text[ chinese_simplified ] = "EPS Êä³öÑ¡Ïî";
+    Text[ greek ] = "Åğéëïãİò åîáãùãŞò EPS";
+    Text[ korean ] = "EPS ³»º¸³»±â ¿É¼Ç";
+    Text[ turkish ] = "EPS dışa aktarma seçenekleri";
+};
