@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgeimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:56 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,11 @@ namespace remotebridges_factory {
         if( m_pContext && m_pContext->getRemoteInstance )
         {
             // get the appropriate remote environment
-            OUString sRemote( RTL_CONSTASCII_USTRINGPARAM( UNO_LB_REMOTE ));
+            OUString sRemote( m_pContext->m_pProtocol );
+            if( sRemote.indexOf( ',' ) != -1 )
+            {
+                sRemote = sRemote.copy( 0, sRemote.indexOf( ',' ) );
+            }
             uno_Environment *pEnvRemote = 0;
             uno_getEnvironment( &pEnvRemote , sRemote.pData , m_pContext );
 
