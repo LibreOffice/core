@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-07 11:12:31 $
+ *  last change: $Author: hr $ $Date: 2000-12-10 17:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ Frame::Frame( const Reference< XMultiServiceFactory >& xFactory )
 
     // Initialize a new interception helper object to handle dispatches and interceptor mechanism PRIVATE!
     // These helper don't need any reference to use ...
-    OInterceptionHelper* pInterceptionHelper = new OInterceptionHelper( Reference< XDispatchProvider >( static_cast< OWeakObject* >( pDispatchHelper ), UNO_QUERY ) );
+    OInterceptionHelper* pInterceptionHelper = new OInterceptionHelper(  Reference< XFrame >( this ), Reference< XDispatchProvider >( static_cast< OWeakObject* >( pDispatchHelper ), UNO_QUERY ) );
     m_xDispatchHelper = Reference< XDispatchProvider >( static_cast< OWeakObject* >(pInterceptionHelper), UNO_QUERY );
 
     // Initialize a new frameshelper-object to handle indexaccess and elementaccess!
