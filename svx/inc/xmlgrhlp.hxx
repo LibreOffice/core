@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $
+ *  last change: $Author: ka $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ private:
     SotStorageStreamRef         ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
                                                       const ::rtl::OUString& rPictureStreamName,
                                                       BOOL bTruncate );
+    String                      ImplGetGraphicMimeType( const String& rFileName ) const;
     Graphic                     ImplReadGraphic( const ::rtl::OUString& rPictureStorageName,
                                                  const ::rtl::OUString& rPictureStreamName );
     sal_Bool                    ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $
+ *  last change: $Author: ka $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ SotStorageRef SvXMLGraphicHelper::ImplGetGraphicStorage( const ::rtl::OUString& 
     {
         if( mxGraphicStorage.Is() && GRAPHICHELPER_MODE_WRITE == meCreateMode )
             mxGraphicStorage->Commit();
+
         mxGraphicStorage = mpRootStorage->OpenUCBStorage( maCurStorageName = rStorageName, STREAM_READ | STREAM_WRITE );
     }
 
@@ -154,8 +155,8 @@ SotStorageRef SvXMLGraphicHelper::ImplGetGraphicStorage( const ::rtl::OUString& 
 // -----------------------------------------------------------------------------
 
 SotStorageStreamRef SvXMLGraphicHelper::ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
-                                                             const ::rtl::OUString& rPictureStreamName,
-                                                             BOOL bTruncate )
+                                                              const ::rtl::OUString& rPictureStreamName,
+                                                              BOOL bTruncate )
 {
     SotStorageStreamRef xStm;
     SotStorageRef       xStorage( ImplGetGraphicStorage( rPictureStorageName ) );
@@ -163,14 +164,15 @@ SotStorageStreamRef SvXMLGraphicHelper::ImplGetGraphicStream( const ::rtl::OUStr
     if( xStorage.Is() )
     {
         xStm = xStorage->OpenSotStream( rPictureStreamName,
-                                     STREAM_READ |
-                                     ( ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) ?
-                                       ( STREAM_WRITE | ( bTruncate ? STREAM_TRUNC : 0 ) ) : 0 ) );
-        if( GRAPHICHELPER_MODE_WRITE == meCreateMode && xStm.Is() )
+                                        STREAM_READ | ( ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) ?
+                                        ( STREAM_WRITE | ( bTruncate ? STREAM_TRUNC : 0 ) ) : 0 ) );
+
+        if( xStm.Is() && ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) )
         {
             OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
             sal_Bool bTrue = sal_True;
             uno::Any aAny;
+
             aAny.setValue( &bTrue, ::getBooleanCppuType() );
             xStm->SetProperty( aPropName, aAny );
 
@@ -178,6 +180,38 @@ SotStorageStreamRef SvXMLGraphicHelper::ImplGetGraphicStream( const ::rtl::OUStr
     }
 
     return xStm;
+}
+
+// -----------------------------------------------------------------------------
+
+String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) const
+{
+    struct XMLGraphicMimeTypeMapper
+    {
+        const char* pExt;
+        const char* pMimeType;
+    };
+
+    static XMLGraphicMimeTypeMapper aMapper[] =
+    {
+        { "gif", "image/gif" },
+        { "png", "image/png" },
+        { "jpg", "image/jpeg" },
+        { "tif", "image/tiff" }
+    };
+
+    String aMimeType;
+
+    if( ( rFileName.Len() >= 4 ) && ( rFileName.GetChar( rFileName.Len() - 4 ) == '.' ) )
+    {
+        const ByteString aExt( rFileName.Copy( rFileName.Len() - 3 ), RTL_TEXTENCODING_ASCII_US );
+
+        for( long i = 0, nCount = sizeof( aMapper ) / sizeof( aMapper[ 0 ] ); ( i < nCount ) && !aMimeType.Len(); i++ )
+            if( aExt == aMapper[ i ].pExt )
+                aMimeType = String( aMapper[ i ].pMimeType, RTL_TEXTENCODING_ASCII_US );
+    }
+
+    return aMimeType;
 }
 
 // -----------------------------------------------------------------------------
@@ -212,6 +246,20 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
         {
             Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
             const GfxLink   aGfxLink( aGraphic.GetLink() );
+            const OUString  aMimeType( ImplGetGraphicMimeType( rPictureStreamName ) );
+            uno::Any        aAny;
+
+            // set stream properties (MediaType/Compression)
+            if( aMimeType.getLength() )
+            {
+                aAny <<= aMimeType;
+                xStm->SetProperty( String( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ), aAny );
+            }
+            else
+            {
+                aAny <<= ( (sal_Bool) sal_True );
+                xStm->SetProperty( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
+            }
 
             if( aGfxLink.GetDataSize() )
                 xStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
@@ -219,8 +267,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
             {
                 if( aGraphic.GetType() == GRAPHIC_BITMAP )
                 {
-                    GraphicFilter* pFilter = GetGrfFilter();
-
+                    GraphicFilter*  pFilter = GetGrfFilter();
                     String          aFormat;
 
                     if( aGraphic.IsAnimated() )
