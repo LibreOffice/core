@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 15:04:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-24 16:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,120 +287,6 @@ void SwView::ExecLingu(SfxRequest &rReq)
             ASSERT(!this, falscher Dispatcher);
             return;
     }
-}
-
-/*--------------------------------------------------------------------
-     Beschreibung: SpellCheck starten
- --------------------------------------------------------------------*/
-
-
-void SwView::SpellDocument( const String* pStr, sal_Bool bAllRight )
-{
-    //
-    // see ConvertDocument also
-    //
-
-    // do not spell if interactive spelling is active elsewhere
-    if (GetWrtShell().HasSpellIter())
-    {
-        MessBox( 0, WB_OK, String( SW_RES( STR_SPELL_TITLE ) ),
-                String( SW_RES( STR_MULT_INTERACT_SPELL_WARN ) ) ).Execute();
-        return;
-    }
-
-    SfxErrorContext aContext( ERRCTX_SVX_LINGU_SPELLING, aEmptyStr, pEditWin,
-         RID_SVXERRCTX, DIALOG_MGR() );
-
-    Reference< XSpellChecker1 >  xSpell = ::GetSpellChecker();
-    if(!xSpell.is())
-    {   // keine Arme keine Kekse
-        ErrorHandler::HandleError( ERRCODE_SVX_LINGU_LINGUNOTEXISTS );
-        return;
-    }
-    SpellKontext(sal_True);
-
-    SwViewOption* pVOpt = (SwViewOption*)pWrtShell->GetViewOptions();
-    sal_Bool bOldIdle = pVOpt->IsIdle();
-    pVOpt->SetIdle( sal_False );
-
-    sal_Bool bOldIns = pWrtShell->IsInsMode();
-    pWrtShell->SetInsMode( sal_True );
-
-    // den eigentlichen Inhalt pruefen
-    _SpellDocument( pStr, bAllRight );
-
-    pWrtShell->SetInsMode( bOldIns );
-
-    SpellKontext(sal_False);
-
-    // Ignorieren und ersetzen nur fuer einen Durchgang
-    // im Zuge des OnlineSpellings wollen wir die IgnoreList beibehalten
-    if (SvxGetChangeAllList().is())
-        SvxGetChangeAllList()->clear();
-    SvxSaveDictionaries( SvxGetDictionaryList() );
-
-    pVOpt->SetIdle( bOldIdle );
-    //SW_MOD()->CheckSpellChanges( sal_False, );
-
-    // SpellCache loeschen, Speicher freigeben.
-    // wg. Absturz in W95 verzichten wir auf die Freigabe...
-//  pSpell->FlushAllLanguages();
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Interne SpellFunktion
- --------------------------------------------------------------------*/
-
-
-void SwView::_SpellDocument( const String* pStr, sal_Bool bAllRight )
-{
-    //
-    // see _ConvertDocument also
-    //
-
-    sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection() ||
-        pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
-
-    Reference< XSpellChecker1 >  xSpell = ::GetSpellChecker();
-    Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    sal_Bool bIsWrapReverse  = xProp.is() ?
-            *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
-    sal_Bool bIsSpellSpecial = xProp.is() ?
-            *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_SPECIAL) ).getValue() : sal_True;
-
-    sal_Bool    bStart = bSelection || ( bIsWrapReverse ?
-                        pWrtShell->IsEndOfDoc() : pWrtShell->IsStartOfDoc() );
-    sal_Bool    bOther = !bSelection && !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
-
-    if( bOther && !bIsSpellSpecial )
-    // kein Sonderbereich eingeschaltet
-    {
-        // Ich will auch in Sonderbereichen trennen
-        QueryBox aBox( &GetEditWin(), SW_RES( DLG_SPECIAL_FORCED ) );
-        if( aBox.Execute() == RET_YES  &&  xProp.is())
-        {
-            sal_Bool bTrue = sal_True;
-            Any aTmp(&bTrue, ::getBooleanCppuType());
-            xProp->setPropertyValue( C2U(UPN_IS_SPELL_SPECIAL), aTmp );
-        }
-        else
-            return; // Nein Es wird nicht gespellt
-    }
-    if( bAllRight )
-    {
-// nothing to be
-//      pSpell->SetAllRight( bAllRight );
-//      pSpell->NewDic( pStr ? *pStr : (const String&) aEmptyStr, LANGUAGE_NOLANGUAGE, sal_False );
-    }
-    {
-        Reference<XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
-        SvxDicListChgClamp aClamp( xDictionaryList );
-        SwSpellWrapper aWrap( this, xSpell, bStart, bAllRight,
-                              bOther, bSelection );
-        aWrap.SpellDocument();
-    }
-//  pSpell->SetAllRight( sal_False );
-
 }
 
 /*--------------------------------------------------------------------
