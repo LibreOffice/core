@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: th $ $Date: 2001-07-30 10:54:16 $
+ *  last change: $Author: ssa $ $Date: 2001-08-03 15:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3807,8 +3807,7 @@ void Window::ImplNewInputContext()
         pFocusWin->mpFontCache->Release( pFontEntry );
 #else
     const Font& rFont       = rInputContext.GetFont();
-    UniString strLanguage   = ConvertLanguageToIsoString( rFont.GetLanguage() );
-    pFocusWin->ImplGetFrame()->SetInputContext( rFont, strLanguage, rInputContext.GetOptions() );
+    pFocusWin->ImplGetFrame()->SetInputContext( rFont, rInputContext.GetOptions() );
 #endif
 }
 
@@ -6839,15 +6838,8 @@ Reference< XClipboard > Window::GetClipboard()
             try
             {
 #ifdef REMOTE_APPSERVER
-
-                // FIXME: unix clipboard not appropriatly initialized yet.
-                Reference< XMultiServiceFactory > xFactory( ImplGetSVData()->mxClientFactory );
-
-                if( xFactory.is() )
-                {
-                    mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
-                }
-
+                if ( mpFrame->IsValid() )
+                    mpFrame->GetFrameInterface()->GetClipboardAndSelection( mpFrameData->mxClipboard, mpFrameData->mxSelection );
 #else
                 Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
 
@@ -6901,8 +6893,8 @@ Reference< XClipboard > Window::GetSelection()
             try
             {
 #ifdef REMOTE_APPSERVER
-
-                // FIXME: primary selection not supported yet
+                if ( mpFrame->IsValid() )
+                    mpFrame->GetFrameInterface()->GetClipboardAndSelection( mpFrameData->mxClipboard, mpFrameData->mxSelection );
 #else
 
 #ifdef UNX      // FIXME: primary selection only supported on unix yet
