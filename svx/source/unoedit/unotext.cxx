@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 17:58:25 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 18:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1374,6 +1374,8 @@ void SAL_CALL SvxUnoText::insertControlCharacter( const uno::Reference< text::XT
 void SAL_CALL SvxUnoText::insertTextContent( const uno::Reference< text::XTextRange >& xRange, const uno::Reference< text::XTextContent >& xContent, sal_Bool bAbsorb )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     SvxUnoTextRangeBase* pRange = SvxUnoTextRange::getImplementation( xRange );
     SvxUnoTextField* pField = SvxUnoTextField::getImplementation( xContent );
 
