@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:59:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,16 +228,19 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     bEndActionByVirDev = FALSE;
     bPaintWorks = bEnableSmooth = TRUE;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
-    if ( bPreView )
-    {
-        // OD 12.12.2002 #103492# - init page preview layout
-        pImp->InitPagePreviewLayout();
-    }
 
     pDoc->AddLink();
     pOutput = pOut;
     Init( pNewOpt );    //verstellt ggf. das Outdev (InitPrt())
     pOut = pOutput;
+
+    // OD 28.03.2003 #108470# - initialize print preview layout after layout
+    // is created in <ViewShell::Init(..)> - called above.
+    if ( bPreView )
+    {
+        // OD 12.12.2002 #103492# - init page preview layout
+        pImp->InitPagePreviewLayout();
+    }
 
     SET_CURR_SHELL( this );
 
