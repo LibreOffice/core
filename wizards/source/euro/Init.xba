@@ -178,6 +178,7 @@ Sub InitializeResources()
  			.lblTarget.Label = STARGETDIR 
 			.optWholeDir.State = 1
 			.txtSource.Text = ConvertfromUrl(GetPathSettings(&quot;Work&quot;))
+			SubstDir = .txtSource.Text
 			.txtTarget.Text = .txtSource.Text
 			.hlnProgress.Label = GetResText(1600)
 			.lblConfig.Label = GetResText(1603)

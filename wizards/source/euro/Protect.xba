@@ -3,7 +3,7 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Protect" script:language="StarBasic">REM  *****  BASIC  *****
 Option Explicit
 
-Dim PWIndex as Integer
+Public PWIndex as Integer
 
 
 Function UnprotectSheetsWithPassWord(oSheets as Object, bDoUnProtect as Boolean)

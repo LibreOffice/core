@@ -26,7 +26,8 @@ Sub StartAutoPilot()
 Dim i As Integer
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
-		oDocInfo = CreateUnoService(&quot;com.sun.star.document.StandaloneDocumentInfo&quot;)
+		oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
+
 		oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 		DocDisposed = True
 		oLocale = GetStarOfficeLocale()
@@ -70,6 +71,7 @@ Dim FilesList()
 				DocDisposed = StoreDocument()
 			End If
 		Next DocIndex
+		DialogModel.cmdGoOn.Enabled = True
 		If GoOn Then
 			Msgbox (sMsgREADY,64, sMsgDLGTITLE)
 		End	If
@@ -150,33 +152,16 @@ Sub SwapExtent()
 		DialogModel.lblSource.Label = sSOURCEDIR     &apos;&quot;Quellverzeichnis:&quot;
 		If Not IsNull(SubstFile) Then
 			SubstFile = DialogModel.txtSource.Text
-&apos;			DialogModel.txtSource.Text = SubstDir
+			DialogModel.txtSource.Text = SubstDir
 		End If
 	Else
 		DialogModel.LblSource.Label = sSOURCEFILE   &apos;&quot;Quelldatei:&quot;
 		If Not IsNull(SubstDir) Then
 			SubstDir = DialogModel.txtSource.Text
-&apos;			DialogModel.txtSource.Text = SubstFile
+			DialogModel.txtSource.Text = SubstFile
 		End If
 	End If
 	ToggleGoOnButton()
-End Sub
-
-
-Sub SourceSearchDialog()
-	If DialogModel.optWholeDir.State = 1 Then
-		&apos;Konvertierung eines gesamten Verzeichnisses
-		Source = Application.FileDialog( &quot;P&quot;, sMsgSELDIR, DialogModel.txtSource.Text )  &apos; &quot;WÃ¤hlen Sie ein Verzeichnis&quot;
-	Else
-		Source = Application.FileDialog( &quot;O&quot;, sMsgSELFILE, DialogModel.txtSource.Text ) &apos; &quot;WÃ¤hlen Sie eine Datei&quot;
-	End If
-	DialogModel.txtSource.Text = AssignFileName(Source, DialogModel.LblSource.Label,True)
-End Sub
-
-
-Sub TargetDirectorySearchDialog()
-	TargetDir = Application.FileDialog( &quot;P&quot;, sMsgTARGETDIR, DialogModel.txtTarget.Text )
-	DialogModel.txtTarget.Text = AssignFileName(TargetDir, DialogModel.LblTarget.Label,False)
 End Sub
 
 
@@ -190,25 +175,27 @@ Sub	InitializeThirdStep()
 Dim TextBoxText as String
 	Source = AssignFileName(DialogModel.txtSource.Text, DialogModel.lblSource.Label, True)
 	TargetDir = AssignFileName(DialogModel.txtTarget.Text, DialogModel.lblTarget.Label, False)
-	bRecursive = DialogModel.chkRecursive.State = 1
-	bDoUnprotect = DialogModel.chkProtect.State = 1
-	DialogModel.lblRetrieval.FontWeight = com.sun.star.awt.FontWeight.BOLD
-	DialogModel.lblRetrieval.Label = sPrgsRETRIEVAL
-	DialogModel.lblCurProgress.Label = sPrgsCONVERTING
-	If DialogModel.optWholeDir.State = 1 Then
-		TextBoxText = sSOURCEDIR &amp; &quot; &quot; &amp; Source &amp; chr(13) &apos;&amp; &quot; &quot;
-		If DialogModel.chkRecursive.State = 1 Then
-			TextBoxText = TextBoxText &amp; DeleteStr(sInclusiveSubDir,&quot;~&quot;) &amp; chr(13)
+	If Source &lt;&gt; &quot;&quot; And TargetDir &lt;&gt; &quot;&quot; Then
+		bRecursive = DialogModel.chkRecursive.State = 1
+		bDoUnprotect = DialogModel.chkProtect.State = 1
+		DialogModel.lblRetrieval.FontWeight = com.sun.star.awt.FontWeight.BOLD
+		DialogModel.lblRetrieval.Label = sPrgsRETRIEVAL
+		DialogModel.lblCurProgress.Label = sPrgsCONVERTING
+		If DialogModel.optWholeDir.State = 1 Then
+			TextBoxText = sSOURCEDIR &amp; &quot; &quot; &amp; Source &amp; chr(13) &apos;&amp; &quot; &quot;
+			If DialogModel.chkRecursive.State = 1 Then
+				TextBoxText = TextBoxText &amp; DeleteStr(sInclusiveSubDir,&quot;~&quot;) &amp; chr(13)
+			End If
+		Else
+			TextBoxText = sSOURCEFILE &amp; &quot; &quot; &amp; Source &amp; chr(13) 
 		End If
-	Else
-		TextBoxText = sSOURCEFILE &amp; &quot; &quot; &amp; Source &amp; chr(13) 
-	End If
-	TextBoxText = TextBoxText &amp; sTARGETDIR &amp; &quot; &quot; &amp; TargetDir &amp; chr(13)
-	If DialogModel.chkProtect.State = 1 Then
-		TextBoxText = TextboxText &amp; sPrgsUNPROTECT
-	End If
-	DialogModel.txtConfig.Text = TextBoxText
- 	ToggleProgressStep()
+		TextBoxText = TextBoxText &amp; sTARGETDIR &amp; &quot; &quot; &amp; TargetDir &amp; chr(13)
+		If DialogModel.chkProtect.State = 1 Then
+			TextBoxText = TextboxText &amp; sPrgsUNPROTECT
+		End If
+		DialogModel.txtConfig.Text = TextBoxText
+	 	ToggleProgressStep()
+	 End If
 End Sub
 
 
@@ -264,6 +251,7 @@ Sub InitializeProgressPage()
 	DialogModel.lblCurProgress.FontWeight = com.sun.star.awt.FontWeight.BOLD
 	DialogConvert.GetControl(&quot;lblRetrieval&quot;).Visible = True
 	DialogConvert.GetControl(&quot;lblCurProgress&quot;).Visible = True
+	DialogModel.cmdGoOn.Enabled = False
 End Sub
 
 
@@ -278,9 +266,17 @@ Dim sNoDirMessage as String
 		If DialogModel.optSingleFile.State = 1 Then
 			If bCheckFileType Then
 				sLocMimeType = GetRealFileContent(oDocInfo, sPath)
-				If Instr(1, sLocMimeType, &quot;calc&quot;) = 0 Then
-					Msgbox(sMsgFileInvalid, 48, sMsgDLGTITLE)
-					bIsValid = False
+				If DialogModel.chkTextDocuments.State = 1 Then
+&apos;Todo: Neue Resource aufsetzen mit Hinweis, dass Writer oder Calc Dokument ausgewählt werden muss
+					If (Instr(1, sLocMimeType, &quot;writer&quot;) = 0) And (Instr(1, sLocMimeType, &quot;calc&quot;) = 0) Then
+						Msgbox(sMsgFileInvalid, 48, sMsgDLGTITLE)
+						bIsValid = False						
+					End If				
+				Else
+					If Instr(1, sLocMimeType, &quot;calc&quot;) = 0 Then
+						Msgbox(sMsgFileInvalid, 48, sMsgDLGTITLE)
+						bIsValid = False
+					End If
 				End If
 			End If
 		Else
