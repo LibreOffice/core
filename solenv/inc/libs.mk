@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2000-11-20 11:07:34 $
+#   last change: $Author: rt $ $Date: 2000-11-21 17:10:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -245,7 +245,7 @@ DBTOOLSLIB=-ldbtools$(DBTOOLS_MAJOR)
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
 LINGULIB=$(HM2LIBST)
-LNGLIB=-llng$(UPD)$(DLLPOSTFIX)
+LNGLIB=-llng.a
 EXPAT3RDLIB=-lexpat_xmlparse -lexpat_xmltok
 EXPATASCII3RDLIB=-lascii_expat_xmlparse -lexpat_xmltok
 ZLIB3RDLIB=-lzlib
@@ -435,7 +435,7 @@ DBTOOLSLIB=$(LIBPRE) idbtools.lib
 HM2LIBSH=$(LIBPRE) hmwrpdll.lib
 HM2LIBST=$(LIBPRE) hmwrap.lib
 LINGULIB=$(HM2LIBST)
-LNGLIB=$(LIBPRE) lng.lib
+LNGLIB=$(LIBPRE) ilng.lib
 EXPAT3RDLIB=$(LIBPRE) expat_xmltok.lib $(LIBPRE) expat_xmlparse.lib
 EXPATASCII3RDLIB=$(LIBPRE) expat_xmltok.lib $(LIBPRE) ascii_expat_xmlparse.lib
 ZLIB3RDLIB=$(LIBPRE) zlib.lib
