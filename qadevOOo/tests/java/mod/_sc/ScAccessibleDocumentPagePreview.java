@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleDocumentPagePreview.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: pjunck $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,13 +207,12 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
 
         XWindow xWindow = at.getCurrentContainerWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
-        //at.printAccessibleTree(log,xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         oObj = at.getAccessibleObjectForRole
             (xRoot, AccessibleRole.DOCUMENT, "");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-        //at.printAccessibleTree(log, xRoot);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
