@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-05 16:33:02 $
+#   last change: $Author: rt $ $Date: 2004-07-13 13:43:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,9 @@ SVSDI1DEPEND= \
     drviewsh.sdi \
     outlnvsh.sdi \
     slidvish.sdi \
+    SlideSorterController.sdi \
     ViewShellBase.sdi \
+    TaskPaneViewShell.sdi \
     sdslots.hrc \
     $(PRJ)$/inc$/app.hrc
 
@@ -109,6 +111,7 @@ SVSDI2DEPEND= \
     outlnvsh.sdi \
     slidvish.sdi \
     ViewShellBase.sdi \
+    TaskPaneViewShell.sdi \
     sdslots.hrc \
     $(PRJ)$/inc$/app.hrc
 
