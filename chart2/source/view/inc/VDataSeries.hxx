@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-15 08:56:47 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 15:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
+#endif
 
 
 //.............................................................................
@@ -126,6 +129,11 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xShape;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xLabelsShape;
+
+    //the following group shapes will be created as children of m_xShape on demand
+    //they can be used to assure that some parts of a series shape are always in front of others (e.g. symbols in front of lines)
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xShapeFrontChild;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xShapeBackChild;
 
     //this is only temporarily here for area chart:
     ::com::sun::star::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;

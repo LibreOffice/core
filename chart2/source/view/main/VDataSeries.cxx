@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 17:07:12 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 15:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ void PlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleData >
 VDataSeries::VDataSeries()
     : m_xShape(NULL)
     , m_xLabelsShape(NULL)
+    , m_xShapeFrontChild(NULL)
+    , m_xShapeBackChild(NULL)
     , m_xDataSeries(NULL)
     , m_aDataSequences()
     , m_nPointCount(0)
@@ -169,6 +171,8 @@ void initDoubleValues( uno::Sequence< double >& rDoubleValues,
 VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries )
     : m_xShape(NULL)
     , m_xLabelsShape(NULL)
+    , m_xShapeFrontChild(NULL)
+    , m_xShapeBackChild(NULL)
     , m_xDataSeries(xDataSeries)
     , m_aDataSequences()
     , m_nPointCount(0)
