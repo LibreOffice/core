@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.2 $ 
+#   $Revision: 1.3 $ 
 #
-#   last change: $Author: hr $ $Date: 2003-04-04 16:37:49 $ 
+#   last change: $Author: vg $ $Date: 2003-05-22 14:04:45 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -65,6 +65,7 @@ PRJNAME = filter
 TARGET  =XSLTValidate 
 # --- Settings ----------------------------------------------------- 
 .INCLUDE: settings.mk  
+CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
 #USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 #USE_EXTENDED_MANIFESTFILE=TRUE
 JARFILES 		= sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar 
@@ -83,5 +84,10 @@ JAVACLASSFILES=$(CLASSDIR)$/XSLTValidate.class
 #        + $(COPY) $(COPYRECURSE) META-INF $(OUT)$/class$/META-INF
 # --- Targets ------------------------------------------------------  
 .INCLUDE :  target.mk 
+$(JAVACLASSFILES) : $(CLASSDIR)
+  
+$(CLASSDIR) :
+    $(MKDIR) $(CLASSDIR)
+
 
 

@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.2 $ 
+#   $Revision: 1.3 $ 
 #
-#   last change: $Author: hr $ $Date: 2003-04-04 16:37:25 $ 
+#   last change: $Author: vg $ $Date: 2003-05-22 14:04:07 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -64,13 +64,17 @@ PRJNAME = filter
 #PACKAGE = com$/sun$/star$/documentconversion$/XSLTFilter
 TARGET  =XSLTFilter  
 # --- Settings ----------------------------------------------------- 
-.INCLUDE: settings.mk  
+.INCLUDE: settings.mk
+CLASSDIR!:=$(CLASSDIR)$/$(TARGET)  
 #USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 #USE_EXTENDED_MANIFESTFILE=TRUE
 JARFILES 		= sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar 
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 CUSTOMMANIFESTFILE = Manifest  
 #JARMANIFEST = Manifest
+
+#JARDIR=$(CLASSDIR)
+
 JARCOMPRESS		= TRUE  
 JARCLASSDIRS	= XSLTFilter*.class
 JARTARGET		= $(TARGET).jar
@@ -80,8 +84,12 @@ JARTARGET		= $(TARGET).jar
 JAVACLASSFILES=$(CLASSDIR)$/XSLTFilter.class  
 #---Manifest -------------------------------------------------------
 #$(OUT)$/class$/$(TARGET)$/META-INF: META-INF
-#        + $(COPY) $(COPYRECURSE) META-INF $(OUT)$/class$/META-INF
+#        + $(COPY) $(COPYRECURSE) META-INF $(OUT)$/class$/XSLTFilter$/META-INF
 # --- Targets ------------------------------------------------------  
 .INCLUDE :  target.mk 
+$(JAVACLASSFILES) : $(CLASSDIR)
+  
+$(CLASSDIR) :
+    $(MKDIR) $(CLASSDIR)
 
 
