@@ -1,0 +1,1 @@
+uno -ro uno_services.rdb -ro uno_types.rdb -s com.sun.star.test.bridge.CppTestObject -u "uno:socket,host=localhost,port=2002;urp;test"

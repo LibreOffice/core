@@ -14,6 +14,19 @@ LIBTARGET=NO
 .INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
+.IF "$(GUI)"=="WNT"
+MY_DLLPOSTFIX=.dll
+MY_DLLPREFIX=
+DESTDIR=$(BIN)
+BATCH_SUFFIX=.bat
+GIVE_EXEC_RIGHTS=@echo
+.ELSE
+MY_DLLPOSTFIX=.so
+MY_DLLPREFIX=lib
+DESTDIR=$(LIB)
+BATCH_INPROCESS=bridgetest_inprocess
+GIVE_EXEC_RIGHTS=chmod +x 
+.ENDIF
 
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
@@ -78,5 +91,40 @@ DEF2NAME=	$(SHL2TARGET)
 DEF2EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
+ALL : \
+        ALLTAR \
+        $(DESTDIR)$/uno_types.rdb \
+        $(DESTDIR)$/uno_services.rdb \
+        $(DESTDIR)$/bridgetest_inprocess$(BATCH_SUFFIX) \
+        $(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) \
+        $(DESTDIR)$/bridgetest_client$(BATCH_SUFFIX) \
+
 
 .INCLUDE :	target.mk
+
+$(DESTDIR)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
+    $(GNUCOPY) -p $? $@
+
+$(DESTDIR)$/bridgetest_inprocess$(BATCH_SUFFIX) : bridgetest_inprocess
+    $(GNUCOPY) -p $? $@
+    $(GIVE_EXEC_RIGHTS) $@
+
+$(DESTDIR)$/bridgetest_client$(BATCH_SUFFIX) : bridgetest_client
+    $(GNUCOPY) -p $? $@
+    $(GIVE_EXEC_RIGHTS) $@
+
+$(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) : bridgetest_server
+    $(GNUCOPY) -p $? $@
+    $(GIVE_EXEC_RIGHTS) $@
+
+# I can't make a dependency on shared libraries, because dependent targets
+# get the .setdir current directory. AAARGGGGGG !
+$(DESTDIR)$/uno_services.rdb .SETDIR=$(DESTDIR) : 
+    regcomp -register -r uno_services.rdb \
+        -c $(MY_DLLPREFIX)bridgetest$(MY_DLLPOSTFIX)	\
+        -c $(MY_DLLPREFIX)cppobj$(MY_DLLPOSTFIX)		\
+        -c $(MY_DLLPREFIX)connectr$(MY_DLLPOSTFIX)		\
+        -c $(MY_DLLPREFIX)acceptor$(MY_DLLPOSTFIX)		\
+        -c $(MY_DLLPREFIX)brdgfctr$(MY_DLLPOSTFIX)		\
+        -c $(MY_DLLPREFIX)remotebridge$(MY_DLLPOSTFIX)	\
+        -c $(MY_DLLPREFIX)uuresolver$(MY_DLLPOSTFIX)	

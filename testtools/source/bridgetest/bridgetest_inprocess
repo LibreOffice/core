@@ -1,0 +1,1 @@
+uno -ro uno_services.rdb -ro uno_types.rdb -s com.sun.star.test.bridge.BridgeTest -- com.sun.star.test.bridge.CppTestObject
