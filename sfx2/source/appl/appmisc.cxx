@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:22:39 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,11 +788,14 @@ long Select_Impl( void* pHdl, void* pVoid )
 
 SfxMenuBarManager* SfxApplication::GetMenuBarManager() const
 {
+/*
     SfxViewFrame *pFrame = SfxViewFrame::Current();
     if ( pFrame )
         return pFrame->GetViewShell()->GetMenuBar_Impl();
     else
         return 0;
+*/
+    return 0;
 }
 
 SfxCancelManager *SfxApplication::GetCancelManager() const
