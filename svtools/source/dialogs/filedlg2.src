@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:11:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-27 06:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ String STR_FILEDLG_OVERWRITE
     Text [ spanish ] = "El archivo ya existe.\n¿Desea sobrescribirlo?" ;
     Text [ french ] = "Ce fichier existe déjà. \nVoulez-vous le remplacer ?" ;
     Text [ dutch ] = "Het bestand bestaat reeds. \nOverschrijven?" ;
-    Text[ chinese_simplified ] = "ÎÄ¼ş´æÔÚ¡£ \nÄúÒª¸²Ğ´ÎÄ¼şÂğ£¿";
+    Text[ chinese_simplified ] = "ÎÄ¼şÒÑ¾­´æÔÚ¡£ \nÒª¸ÄĞ´ÎÄ¼ş£¿";
     Text[ russian ] = "İòî ôàéë óæå ñóùåñòâóåò. \nÏåğåïèñàòü åãî?";
     Text[ polish ] = "Plik ju¿ istnieje. \nSkasowaæ plik przez zapisanie?";
     Text[ japanese ] = "Ì§²Ù‚Í‚ ‚è‚Ü‚·B \nã‘‚«‚µ‚Ü‚·‚©H";
@@ -450,6 +450,7 @@ String STR_FILEDLG_ASKNEWDIR
     Text[ catalan ] = "¿Desea crear el directorio %s?";
     Text[ finnish ] = "Haluatko luoda hakemiston %s?";
 };
+
 
 
 
