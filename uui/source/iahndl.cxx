@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-24 14:27:50 $
+ *  last change: $Author: sb $ $Date: 2001-08-27 08:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,15 @@
 #ifndef _LIST_HXX
 #include "tools/list.hxx"
 #endif
+#ifndef _TOOLS_RC_HXX
+#include "tools/rc.hxx"
+#endif
+#ifndef _TOOLS_RCID_H
+#include "tools/rcid.h"
+#endif
+#ifndef _TOOLS_RESID_HXX
+#include "tools/resid.hxx"
+#endif
 #ifndef _SOLAR_H
 #include "tools/solar.h"
 #endif
@@ -285,16 +294,22 @@ public:
 
     inline ~ErrorResource() SAL_THROW(()) { FreeResource(); }
 
-    rtl::OUString getString(ErrCode nErrorCode) const SAL_THROW(());
+    bool getString(ErrCode nErrorCode, rtl::OUString * pString) const
+        SAL_THROW(());
 };
 
-rtl::OUString ErrorResource::getString(ErrCode nErrorCode) const SAL_THROW(())
+bool ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
+    const SAL_THROW(())
 {
-    rtl::OUString
-        aResult(ResId(static_cast< USHORT >(nErrorCode & ERRCODE_RES_MASK)).
-                    SetAutoRelease(false));
+    OSL_ENSURE(pString, "specification violation");
+    ResId aResId(static_cast< USHORT >(nErrorCode & ERRCODE_RES_MASK));
+    aResId.SetRT(RSC_STRING);
+    if (!IsAvailableRes(aResId))
+        return false;
+    aResId.SetAutoRelease(false);
+    *pString = UniString(aResId);
     Resource::GetResManager()->PopContext();
-    return aResult;
+    return true;
 }
 
 //TODO! should be part of rtl::OUString (and optimized when rOld is char *)
@@ -1627,9 +1642,9 @@ UUIInteractionHandler::handleErrorRequest(
 
     rtl::OUString aMessage;
     {
-        enum Source { SOURCE_OFA, SOURCE_CNT, SOURCE_UUI };
+        enum Source { SOURCE_DEFAULT, SOURCE_CNT, SOURCE_UUI };
         static char const * const aManager[3]
-            = { CREATEVERSIONRESMGR_NAME(ofa),
+            = { 0,
                 CREATEVERSIONRESMGR_NAME(cnt),
                 CREATEVERSIONRESMGR_NAME(uui) };
         static USHORT const aId[3]
@@ -1640,17 +1655,23 @@ UUIInteractionHandler::handleErrorRequest(
                 RID_UUI_ERRHDL };
         Source eSource = nErrorCode >= ERRCODE_AREA_TOOLS
                          && nErrorCode < ERRCODE_AREA_LIB1 ?
-                             SOURCE_OFA :
+                             SOURCE_DEFAULT :
                          nErrorCode >= ERRCODE_AREA_CHAOS
                          && nErrorCode < ERRCODE_AREA_CHAOS_END ?
                              SOURCE_CNT :
                              SOURCE_UUI;
 
         vos::OGuard aGuard(Application::GetSolarMutex());
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(aManager[eSource]));
-        aMessage = ErrorResource(ResId(aId[eSource], xManager.get())).
-                       getString(nErrorCode);
+        std::auto_ptr< ResMgr > xManager;
+        if (aManager[eSource])
+        {
+            xManager.reset(ResMgr::CreateResMgr(aManager[eSource]));
+            if (!xManager.get())
+                return;
+        }
+        if (!ErrorResource(ResId(aId[eSource], xManager.get())).
+                 getString(nErrorCode, &aMessage))
+            return;
     }
     for (sal_Int32 i = 0;;)
     {
