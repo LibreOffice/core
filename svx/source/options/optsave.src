@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: os $ $Date: 2001-10-26 11:03:07 $
+ *  last change: $Author: kz $ $Date: 2001-10-30 07:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,26 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 260 - 12 - 12 , 8 ) ;
         Text = "XML-Format auf Größe optimieren (ohne Pretty Printing)" ;
         Text [ english ] = "Size optimization for XML format (no pretty printing)" ;
-        Text [ english_us ] = "Size optimization for XML format (no pretty printing)" ;
+        Text [ english_us ] = "Size optimization for XML files (no pretty printing)" ;
+        Text[ portuguese ] = "Size optimization for XML files (no pretty printing)";
+        Text[ russian ] = "Size optimization for XML files (no pretty printing)";
+        Text[ greek ] = "Size optimization for XML files (no pretty printing)";
+        Text[ dutch ] = "Grootte van ~XML-bestanden optimaliseren (zonder Pretty Printing)";
+        Text[ french ] = "Optimisation de la taille pour les fichiers ~XML (sans pretty printing)";
+        Text[ spanish ] = "Optimación del tamaño para los archivos ~XML (sin pretty printing)";
+        Text[ finnish ] = "Size optimization for XML files (no pretty printing)";
+        Text[ italian ] = "Size optimization for XML files (no pretty printing)";
+        Text[ danish ] = "Size optimization for XML files (no pretty printing)";
+        Text[ swedish ] = "Storleksoptimering för ~XML-filer (utan pretty printing)";
+        Text[ polish ] = "Size optimization for XML files (no pretty printing)";
+        Text[ portuguese_brazilian ] = "Size optimization for XML files (no pretty printing)";
+        Text[ japanese ] = "Size optimization for XML files (no pretty printing)";
+        Text[ korean ] = "Size optimization for XML files (no pretty printing)";
+        Text[ chinese_simplified ] = "Size optimization for XML files (no pretty printing)";
+        Text[ chinese_traditional ] = "Size optimization for XML files (no pretty printing)";
+        Text[ turkish ] = "Size optimization for XML files (no pretty printing)";
+        Text[ arabic ] = "Size optimization for XML files (no pretty printing)";
+        Text[ catalan ] = "Size optimization for XML files (no pretty printing)";
     };
 
     FixedLine GB_RELATIVE
@@ -780,5 +799,6 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Size = MAP_APPFONT( 50, 14 );
     };
 };
+
 
 
