@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: af $ $Date: 2002-09-06 14:08:00 $
+ *  last change: $Author: af $ $Date: 2002-09-06 14:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,7 @@ uno::Reference<XAccessible > SAL_CALL
     uno::Reference<XAccessible> xChildAtPosition;
 
     sal_Int32 nChildCount = getAccessibleChildCount ();
-    for (sal_Int32 i=0; i<nChildCount; ++i)
+    for (sal_Int32 i=nChildCount-1; i>=0; --i)
     {
         Reference<XAccessible> xChild (getAccessibleChild (i));
         if (xChild.is())
@@ -449,19 +449,9 @@ awt::Point SAL_CALL
     AccessibleDocumentViewBase::getLocation (void)
     throw (uno::RuntimeException)
 {
-    awt::Point aLocation (getLocationOnScreen ());
-
-    // Subtract absolute parent position.
-    uno::Reference<XAccessibleComponent> xParentComponent (
-        getAccessibleParent(), uno::UNO_QUERY);
-    if (xParentComponent.is())
-    {
-        awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
-        aLocation.X -= aParentLocation.X;
-        aLocation.Y -= aParentLocation.Y;
-    }
-
-    return aLocation;
+    CheckDisposedState ();
+    awt::Rectangle aBoundingBox (getBounds());
+    return awt::Point (aBoundingBox.X, aBoundingBox.Y);
 }
 
 
