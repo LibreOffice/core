@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionTriggerContainer.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ module com {  module sun {  module star {  module ui {
         </ul>
     </p>
 */
-service ActionTriggerContainer
+published service ActionTriggerContainer
 {
     /** provides access to the entries of a menu. The element type
      is <type scope="com::sun::star::beans">XPropertySet</type>.
