@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bulitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
+ *  last change: $Author: hr $ $Date: 2001-07-11 12:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, USHORT nVersion ) const
 
 void SvxBulletItem::SetDefaultFont_Impl()
 {
-    aFont = System::GetStandardFont( STDFONT_ROMAN );
+    aFont = System::_GetStandardFont( _STDFONT_ROMAN );
     aFont.SetAlign( ALIGN_BOTTOM);
     aFont.SetTransparent( TRUE );
 }
