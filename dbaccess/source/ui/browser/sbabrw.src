@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:50:14 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,7 +1146,7 @@ String STR_QUERY_DELETE_QUERY
     Text[ swedish ] = "Ska sφkningen '$name$' raderas?";
     Text[ polish ] = "Czy chcesz usunΉζ kwerendκ '$name$'?";
     Text[ portuguese_brazilian ] = "Deseja excluir a consulta \"$name$\"?";
-    Text[ japanese ] = "γ‚―γ‚¨γƒªγƒΌ '%1' γ‚’ε‰ι™¤γ—γΎγ™γ‹γ€‚";
+    Text[ japanese ] = "γ‚―γ‚¨γƒªγƒΌ '$name$' γ‚’ε‰ι™¤γ—γΎγ™γ‹γ€‚";
     Text[ korean ] = "μΏΌλ¦¬ '$name$'μ„(λ¥Ό) μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
     Text[ chinese_simplified ] = "θ¦ε ι™¤θΏ™δΈªζ¥θ―Ά '$name$' ?";
     Text[ chinese_traditional ] = "θ¦εªι™¤ι€™ε€‹ζ¥θ©Ά<$name$>?";
@@ -1240,7 +1240,7 @@ QueryBox QUERY_CONNECTION_LOST
     Message[ danish ] = "Forbindelsen til databasen blev slettet! Skal den genoprettes?";
     Message[ swedish ] = "Fφrbindelsen till databasen har raderats! Ska den upprδttas igen?";
     Message[ polish ] = "Po³Ήczenie z bazΉ danych zosta³o przerwane. Czy po³Ήczyζ ponownie?";
-    Message[ portuguese_brazilian ] = "A conexγo para a base de dados foi perdida. Deseja reconectar?";
+    Message[ portuguese_brazilian ] = "A conexγo para o banco de dados foi perdida. Deseja reconectar?";
     Message[ japanese ] = "γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚ΉγΈγ®ζ¥η¶γ―ε‰ι™¤γ•γ‚γΎγ—γγ€‚ζ¥η¶γ—γªγγ—γΎγ™γ‹γ€‚";
     Message[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤μ™€μ μ—°κ²°μ΄ λμ–΄μ΅μµλ‹λ‹¤. λ‹¤μ‹ μ—°κ²°ν•μ‹κ² μµλ‹κΉ?";
     Message[ chinese_simplified ] = "ε’ζ•°ζ®εΊ“η„θΏζ¥ε·²η»δΈ­ζ–­γ€‚θ¦ι‡ζ–°θΏζ¥ζ•°ζ®εΊ“οΌ";
@@ -1302,7 +1302,7 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text[ danish ] = "Ved beregning af tabellerne er der modtaget advarsler fra databaseforbindelsen.";
     Text[ swedish ] = "Databasfφrbindelsen rapporterade varningar medan tabellerna bestδmdes.";
     Text[ polish ] = "W trakcie pobierania tabel, po³Ήczenie z bazΉ danych zg³osi³o ostrzeΏenia.";
-    Text[ portuguese_brazilian ] = "Enquanto recuperava as tabelas, a conexγo da base de dados registrou alguns avisos.";
+    Text[ portuguese_brazilian ] = "Enquanto recuperava as tabelas, a conexγo do banco de dados registrou alguns avisos.";
     Text[ japanese ] = "γƒ†γƒΌγƒ–γƒ«γ®θ»Άι€δΈ­γ«γ€γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγ®ζ¥η¶γ‹γ‚‰θ­¦ε‘γγ‚γ‚γΎγ—γγ€‚";
     Text[ korean ] = "ν…μ΄λΈ”μ„ κ²€μƒ‰ μ¤‘ λ°μ΄ν„° μ—°κ²°μ—μ„ κ²½κ³ λ¥Ό ν–μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "θ―»ε–θ΅¨ζ Όζ—¶ε‘ε‡ΊδΈ€δΈªζ•°ζ®εΊ“θΏζ¥η„θ­¦ε‘γ€‚";
@@ -1418,7 +1418,7 @@ String STR_DSBROWSER_TITLE
     Text [ english_us ] = "Data sources view" ;
     Text[ portuguese ] = "Ver fontes de dados";
         Text[ russian ] = "Βθδ θρςξχνθκΰ δΰννϋυ";
-        Text[ greek ] = "Data source browser";
+        Text[ greek ] = "Προβολή προελεύσεων δεδομένων";
         Text[ dutch ] = "Beeld gegevensbronnen";
         Text[ french ] = "Vue des sources de donnιes";
         Text[ spanish ] = "Vista de fuente de datos";
@@ -1449,7 +1449,7 @@ String STR_NO_TABLE_FORMAT_INSIDE
     Text [ english_us ] = "No table format could be found." ;
     Text[ portuguese ] = "Foi impossνvel encontrar um formato de tabela.";
         Text[ russian ] = "Νεβξημξζνξ νΰιςθ τξπμΰς ςΰαλθφϋ.";
-        Text[ greek ] = "No table format found.";
+        Text[ greek ] = "Δεν ήταν δυνατή η εύρεση μορφοποίησης πίνακα.";
         Text[ dutch ] = "Geen tabelindeling gevonden.";
         Text[ french ] = "Impossible de dιtecter un format de table.";
         Text[ spanish ] = "No se pudo encontrar ningϊn formato de hoja de cαlculo.";
@@ -1480,7 +1480,7 @@ String STR_COULDNOTCONNECT_DATASOURCE
     Text [ english_us ] = "The connection to the data source \"$name$\" could not be established.";
     Text[ portuguese ] = "Foi impossνvel estabelecer a ligaηγo ΰ fonte de dados \"$name$\".";
         Text[ russian ] = "Νεβξημξζνξ ρξεδθνθςόρÿ ρ θρςξχνθκξμ δΰννϋυ \"$name$\".";
-        Text[ greek ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ greek ] = "Δεν ήταν δυνατή η δημιουργία σύνδεσης με την προέλευση δεδομένων \"$name$\".";
         Text[ dutch ] = "De verbinding met de gegevensbron \"$name$\" kan niet tot stand worden gebracht.";
         Text[ french ] = "Impossible d'ιtablir une connexion ΰ la source de donnιes \"$name$\".";
         Text[ spanish ] = "No se pudo realizar la conexiσn a la fuente de datos \"$name$\".";
@@ -1522,7 +1522,7 @@ Menu RID_MENU_REFRESH_DATA
             Text [ english_us ] = "Rebuild";
             Text[ portuguese ] = "Reconstruir";
                 Text[ russian ] = "Οεπεχθςΰςό";
-                Text[ greek ] = "reconstruct";
+                Text[ greek ] = "Αναδόμηση";
                 Text[ dutch ] = "opnieuw opbouwen";
                 Text[ french ] = "Reconstituer";
                 Text[ spanish ] = "Reconstruir";
@@ -1547,6 +1547,7 @@ Menu RID_MENU_REFRESH_DATA
             };
     };
 };
+
 
 
 
