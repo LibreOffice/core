@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:12:15 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 #endif
 #ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
 #include "XMLBase64ImportContext.hxx"
+#endif
+#ifndef _XMLOFF_XMLREPLACEMENTIMAGECONTEXT_HXX
+#include "XMLReplacementImageContext.hxx"
 #endif
 #ifndef _XMLOFF_PRSTYLEI_HXX_
 #include "prstylei.hxx"
@@ -451,7 +454,6 @@ XMLTextFrameContourContext_Impl::~XMLTextFrameContourContext_Impl()
 {
 }
 
-
 // ------------------------------------------------------------------------
 
 class XMLTextFrameContext_Impl : public SvXMLImportContext
@@ -693,7 +695,7 @@ void XMLTextFrameContext_Impl::Create( sal_Bool bHRefOrBase64 )
     {
         pStyle = xTxtImport->FindAutoFrameStyle( sStyleName );
         if( pStyle )
-            sStyleName = pStyle->GetParent();
+            sStyleName = pStyle->GetParentName();
     }
 
     Any aAny;
@@ -1404,7 +1406,8 @@ XMLTextFrameContext::XMLTextFrameContext(
     m_xAttrList( new SvXMLAttributeList( xAttrList ) ),
     m_eDefaultAnchorType( eATyp ),
     m_pHyperlink( 0 ),
-    m_bHasName( sal_False )
+    m_bHasName( sal_False ),
+    m_bSupportsReplacement( sal_False )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1526,6 +1529,11 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                                         GetImport(), nPrefix, rLocalName, xAttrList, xShapes, m_xAttrList );
                     }
                 }
+                else if( XML_TEXT_FRAME_OBJECT == nFrameType ||
+                         XML_TEXT_FRAME_OBJECT_OLE == nFrameType )
+                {
+                    m_bSupportsReplacement = sal_True;
+                }
 
                 if( !pContext )
                 {
@@ -1539,6 +1547,19 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 
                 m_xImplContext = pContext;
             }
+        }
+    }
+    else if( m_bSupportsReplacement && !m_xReplImplContext &&
+             XML_NAMESPACE_DRAW == nPrefix &&
+             IsXMLToken( rLocalName, XML_IMAGE ) )
+    {
+        // read replacement image
+        Reference < XPropertySet > xPropSet;
+        if( CreateIfNotThere( xPropSet ) )
+        {
+            pContext = new XMLReplacementImageContext( GetImport(),
+                                nPrefix, rLocalName, xAttrList, xPropSet );
+            m_xReplImplContext = pContext;
         }
     }
     else if( m_xImplContext->ISA( XMLTextFrameContext_Impl ) )
