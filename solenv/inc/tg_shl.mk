@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-23 15:15:43 $
+#   last change: $Author: hjs $ $Date: 2001-10-25 16:17:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -220,7 +220,7 @@ $(USE_SHL$(TNR)VERSIONMAP) .PHONY:
 
 #and now for the plain non-generic way...
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
-USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)VERSIONMAP:f)
+USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET)$(SHL$(TNR)VERSIONMAP:e)
 .IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
