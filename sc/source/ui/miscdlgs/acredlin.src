@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 15:43:16 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,7 +604,7 @@ ModelessDialog RID_SCDLG_CHANGES
     Text [ portuguese_brazilian ] = "Änderungen akzeptieren" ;
     Text [ swedish ] = "Acceptera eller kasta bort ändringarna" ;
     Text [ danish ] = "Accepter eller forkast ændringerne" ;
-    Text [ italian ] = "Accetta o rigetta modifiche" ;
+    Text [ italian ] = "Accetta o rifiuta modifiche" ;
     Text [ spanish ] = "Aceptar o rechazar modificaciones" ;
     Text [ french ] = "Accepter ou rejeter les modifications" ;
     Text [ dutch ] = "Wijzigingen accepteren of verwerpen" ;
