@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:49:28 $
+ *  last change: $Author: vg $ $Date: 2002-02-18 13:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ long SAL_CALL
         for (sal_uInt32 i = 0; i < nObjCount; i++)
         {
             SdrObject* pObj = pDrawPage->GetObj(i);
-            if (pObj && (pObj->GetLayer != SC_LAYER_INTERN))
+            if (pObj && (pObj->GetLayer() != SC_LAYER_INTERN))
                 nShapes++;
         }
     }
