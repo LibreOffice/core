@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:23:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ class Gate : public  IGate
                 // and if we hold the access lock nobody else can use this object without a dadlock!
                 aLock.clear();
                 // Wait for opening gate ...
-                bSuccessful = ( m_aPassage.wait( pTimeOut ) == osl_cond_result_ok );
+                bSuccessful = ( m_aPassage.wait( pTimeOut ) == ::osl::Condition::result_ok );
             }
 
             return bSuccessful;
