@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 16:17:17 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 16:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,19 +308,15 @@ void SdXMLShapeContext::SetStyle()
             pStyle = GetImport().GetShapeImport()->GetStylesContext()->
             FindStyleChildContext(mnStyleFamily, maDrawStyleName);
 
-        if(pStyle && pStyle->ISA(XMLPropStyleContext) )
+        if(pStyle && pStyle->ISA(XMLShapeStyleContext) )
         {
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
             if(xPropSet.is() )
             {
-                XMLPropStyleContext* pPropStyle =
-                    PTR_CAST( XMLPropStyleContext, pStyle );
+                XMLPropStyleContext* pDocStyle =
+                    PTR_CAST( XMLShapeStyleContext, pStyle );
 
-                XMLShapeStyleContext* pDocStyle = 0;
-                if( pPropStyle->ISA(XMLShapeStyleContext) )
-                    pDocStyle = PTR_CAST( XMLShapeStyleContext, pPropStyle );
-
-                if( pDocStyle && pDocStyle->GetStyle().is() )
+                if( pDocStyle->GetStyle().is() )
                 {
                     // set style on object
                     uno::Any aAny;
@@ -331,7 +327,7 @@ void SdXMLShapeContext::SetStyle()
                 if(bAutoStyle)
                 {
                     // set PropertySet on object
-                    pPropStyle->FillPropertySet(xPropSet);
+                    pDocStyle->FillPropertySet(xPropSet);
                 }
             }
         }

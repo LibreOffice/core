@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 19:19:53 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 16:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,12 @@
 #ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
 #include "XMLShapeStyleContext.hxx"
 #endif
+#ifndef _XMLOFF_XMLSHAPEPROPERTYSETCONTEXT_HXX
+#include "XMLShapePropertySetContext.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
-#include "xmlprcon.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNUMI_HXX
@@ -87,90 +86,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-//////////////////////////////////////////////////////////////////////////////
-
-class XMLShapePropertySetContext : public SvXMLPropertySetContext
-{
-    SvXMLImportContextRef mxBulletStyle;
-    sal_Int32 mnBulletIndex;
-
-public:
-    XMLShapePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                const ::rtl::OUString& rLName,
-                 const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-                 ::std::vector< XMLPropertyState > &rProps,
-                 const UniReference < SvXMLImportPropertyMapper > &rMap );
-
-    virtual ~XMLShapePropertySetContext();
-
-    virtual void EndElement();
-
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                   const ::rtl::OUString& rLocalName,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-                                   ::std::vector< XMLPropertyState > &rProperties,
-                                   const XMLPropertyState& rProp);
-};
-XMLShapePropertySetContext::XMLShapePropertySetContext(
-                 SvXMLImport& rImport, sal_uInt16 nPrfx,
-                 const OUString& rLName,
-                 const Reference< xml::sax::XAttributeList > & xAttrList,
-                 ::std::vector< XMLPropertyState > &rProps,
-                 const UniReference < SvXMLImportPropertyMapper > &rMap ) :
-    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, rProps, rMap ),
-    mnBulletIndex(-1)
-{
-}
-
-XMLShapePropertySetContext::~XMLShapePropertySetContext()
-{
-}
-
-void XMLShapePropertySetContext::EndElement()
-{
-    Reference< container::XIndexReplace > xNumRule;
-    if( mxBulletStyle.Is() )
-    {
-        SvxXMLListStyleContext* pBulletStyle = (SvxXMLListStyleContext*)&mxBulletStyle;
-        xNumRule = pBulletStyle->CreateNumRule( GetImport().GetModel() );
-        pBulletStyle->FillUnoNumRule(xNumRule, NULL /* const SvI18NMap * ??? */ );
-    }
-
-    Any aAny;
-    aAny <<= xNumRule;
-
-    XMLPropertyState aPropState( mnBulletIndex, aAny );
-    rProperties.push_back( aPropState );
-
-    SvXMLPropertySetContext::EndElement();
-}
-
-SvXMLImportContext *XMLShapePropertySetContext::CreateChildContext(
-                   sal_uInt16 nPrefix,
-                   const OUString& rLocalName,
-                   const Reference< xml::sax::XAttributeList > & xAttrList,
-                   ::std::vector< XMLPropertyState > &rProperties,
-                   const XMLPropertyState& rProp )
-{
-    SvXMLImportContext *pContext = 0;
-
-    switch( xMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
-    {
-    case CTF_NUMBERINGRULES:
-        mnBulletIndex = rProp.mnIndex;
-        mxBulletStyle = pContext = new SvxXMLListStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
-        break;
-    }
-
-    if( !pContext )
-        pContext = SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName,
-                                                            xAttrList,
-                                                            rProperties, rProp );
-
-    return pContext;
-}
 
 //////////////////////////////////////////////////////////////////////////////
 
