@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:42:38 $
+ *  last change: $Author: hro $ $Date: 2001-07-30 16:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,9 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, OUString& text, int&
             mi.dwTypeData = (LPWSTR) text.getStr();
             mi.cch = text.getLength();
         }
+
+        if ( IDM_TEMPLATE == id )
+            mi.fState |= MFS_DEFAULT;
     }
 
     InsertMenuItemW( hMenu, pos++, TRUE, &mi );
