@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:27:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-22 15:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ namespace
     }
 }
 // -----------------------------------------------------------------------------
-void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,const Reference< XMultiServiceFactory >& _rxORB,String& _sDatabaseName,String& _rsHostname,sal_Int32& _nPortNumber)
+void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,String& _sDatabaseName,String& _rsHostname,sal_Int32& _nPortNumber) const
 {
     DATASOURCE_TYPE eType = getType(_rDsn);
     String sUrl = cutPrefix(_rDsn);

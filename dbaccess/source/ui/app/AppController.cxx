@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:25:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-22 14:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,11 +818,11 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     String sDatabaseName;
                     if ( eType != DST_EMBEDDED )
                     {
-                        String sUser,sHostName;
+                        String sUser,sHostName,ssTemp;
+                        ssTemp = sTemp;
                         sal_Int32 nPortNumber = -1;
 
-                        m_aTypeCollection.extractHostNamePort(sTemp
-                                                            ,getORB()
+                        m_aTypeCollection.extractHostNamePort(ssTemp
                                                             ,sDatabaseName
                                                             ,sHostName
                                                             ,nPortNumber);
@@ -857,10 +857,10 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(sTemp);
                     if ( eType != DST_EMBEDDED )
                     {
-                        String sUser,sHostName,sDatabaseName;
+                        String sUser,sHostName,sDatabaseName,ssTemp;
+                        ssTemp = sTemp;
                         sal_Int32 nPortNumber = -1;
-                        m_aTypeCollection.extractHostNamePort(sTemp
-                                                            ,getORB()
+                        m_aTypeCollection.extractHostNamePort(ssTemp
                                                             ,sDatabaseName
                                                             ,sHostName
                                                             ,nPortNumber);
@@ -1324,7 +1324,7 @@ void OApplicationController::describeSupportedFeatures()
                                                                                         CommandGroup::VIEW );
 
     implDescribeSupportedFeature( ".uno:DBDSImport",        SID_DB_APP_DSIMPORT);
-    implDescribeSupportedFeature( ".uno:DBDSExport",        SID_DB_APP_DSEXPORT)
+    implDescribeSupportedFeature( ".uno:DBDSExport",        SID_DB_APP_DSEXPORT);
 
     implDescribeSupportedFeature( ".uno:DBDBAdmin",         SID_DB_APP_DBADMIN);
 

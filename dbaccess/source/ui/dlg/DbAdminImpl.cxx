@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:29:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-22 15:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,7 +1058,7 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
     String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
     String sUrlPart;
 
-    pCollection->extractHostNamePort(pUrlItem->GetValue(),m_xORB,sUrlPart,sNewHostName,nPortNumber);
+    pCollection->extractHostNamePort(pUrlItem->GetValue(),sUrlPart,sNewHostName,nPortNumber);
 
     switch( eType )
     {
