@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2004-09-21 14:58:21 $
+#   last change: $Author: obo $ $Date: 2004-10-18 14:42:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,11 @@ PKGCONFIG_MODULES=gconf-2.0
 .IF "$(OS)" == "SOLARIS"
 LINKFLAGS+=-z nodefs
 .ENDIF          # "$(OS)" == "SOLARIS"
+
+# Disable lazy binding of symbols
+.IF "$(OS)" == "SOLARIS" ||  "$(OS)" == "LINUX"
+LINKFLAGS+=-z now
+.ENDIF  
 
 .IF "$(OS)" == "LINUX"
 # hack for faked SO environment
