@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDiagram.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 17:58:24 $
+ *  last change: $Author: iha $ $Date: 2003-11-25 17:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,9 +285,9 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
             //UNO_NAME_3D_SCENE_SHADE_MODE drawing::ShadeMode
             //UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING Bool
 
-            //test only - CID for selection handling
+            //CID for selection handling
             xProp->setPropertyValue( C2U( UNO_NAME_MISC_OBJ_NAME )
-                , uno::makeAny( C2U("testonly;3DScene=XXX_CID") ) );
+                , uno::makeAny( C2U("CID/Diagram=XXX_CID") ) );
         }
         catch( uno::Exception& e )
         {
@@ -302,7 +302,7 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
             uno::Reference<drawing::XShapes>( m_xOuterGroupShape, uno::UNO_QUERY );
 
 
-    xOuterGroup_Shapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, C2U("CID/Diagram=XXX_CID") );
+    xOuterGroup_Shapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, rtl::OUString() );
 
     //-------------------------------------------------------------------------
     //create additional group to manipulate the aspect ratio of the whole diagram:
@@ -348,27 +348,26 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
     if( m_xDiagram.is() )
         xWallProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getWall());
 
+    uno::Reference< drawing::XShapes > xWallGroup_Shapes( m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, C2U("CID/DiagramWall=XXX_CID") ) );
     //add left wall
     {
         uno::Reference< drawing::XShape > xShape =
-            m_pShapeFactory->createStripe(xOuterGroup_Shapes
+            m_pShapeFactory->createStripe(xWallGroup_Shapes
             , Stripe(
                   drawing::Position3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME)
                 , drawing::Direction3D(0,0,-FIXED_SIZE_FOR_3D_CHART_VOLUME)
                 , drawing::Direction3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) )
             , xWallProp, lcl_GetWallPropertyMap(), false );
-        ShapeFactory::setShapeName( xShape, C2U("CID/DiagramWall=XXX_CID") );
     }
     //add back wall
     {
         uno::Reference< drawing::XShape > xShape =
-            m_pShapeFactory->createStripe(xOuterGroup_Shapes
+            m_pShapeFactory->createStripe(xWallGroup_Shapes
             , Stripe(
                   drawing::Position3D(0,0,0)
                 , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0)
                 , drawing::Direction3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) )
             , xWallProp, lcl_GetWallPropertyMap(), false );
-        ShapeFactory::setShapeName( xShape, C2U("CID/DiagramWall=XXX_CID") );
     }
     //---------------------------
 
