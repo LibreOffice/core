@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:12:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,12 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ portuguese ] = "~Enter password";
         Text[ russian ] = "~Enter password";
         Text[ greek ] = "~Enter password";
-        Text[ dutch ] = "~Enter password";
+        Text[ dutch ] = "Wachtwoord invoeren";
         Text[ french ] = "Saisie du mot de passe";
         Text[ spanish ] = "~Introduzca la contrase�a";
         Text[ finnish ] = "~Enter password";
         Text[ italian ] = "Digitate password";
-        Text[ danish ] = "~Enter password";
+        Text[ danish ] = "~Indtast adgangskode";
         Text[ swedish ] = "D~efiniera l�senord";
         Text[ polish ] = "~Enter password";
         Text[ portuguese_brazilian ] = "Digite a s~enha";
@@ -109,6 +109,8 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ hebrew ] = "Kennwort ~festlegen";
         Text[ hindi ] = "~Enter password";
         Text[ slovak ] = "Zadajt~e heslo";
+        Text[ hungarian ] = "~Jelszó bevitele";
+        Text[ slovenian ] = "~Vnesite geslo";
     };
     Edit ED_PASSWORD_CRT
     {
@@ -148,6 +150,8 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ hebrew ] = "Kennwort ~bestätigen";
         Text[ hindi ] = "~कूटशब्द दृढ़ करो";
         Text[ slovak ] = "Potvrďte ~heslo";
+        Text[ hungarian ] = "Jelszó ~megerősítése";
+        Text[ slovenian ] = "~Potrdite geslo";
     };
     Edit ED_PASSWORD_REPEAT
     {
@@ -182,7 +186,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     Text[ spanish ] = "Contrase�a ";
     Text[ finnish ] = "Anna p��salasana";
     Text[ italian ] = "Password";
-    Text[ danish ] = "Definer hovedadgangskode";
+    Text[ danish ] = "Adgangskode";
     Text[ swedish ] = "L�senord";
     Text[ polish ] = "Wprowad� has�o g��wne";
     Text[ portuguese_brazilian ] = "Digite a senha principal.";
@@ -198,7 +202,10 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     Text[ hebrew ] = "‮נא להקליד את הסיסמה הראשית‬";
     Text[ hindi ] = "मास्टर कूटशब्द को प्रविष्ट करो";
     Text[ slovak ] = "Heslo";
+    Text[ hungarian ] = "Jelszó";
+    Text[ slovenian ] = "Geslo";
 };
+
 
 
 
