@@ -1,7 +1,6 @@
 package com.sun.star.wizards.fax;
 
 import java.util.Vector;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.NoValidPathException;
@@ -11,7 +10,6 @@ import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.container.NoSuchElementException;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.graphic.XGraphicProvider;
@@ -22,7 +20,6 @@ import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.*;
-import com.sun.star.text.XTextFrame;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.CloseVetoException;
@@ -96,7 +93,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
             setMaxStep(5);
 
             //instatiate The Document Frame for the Preview
-            myFaxDoc = new FaxDocument(xMSF);
+            myFaxDoc = new FaxDocument(xMSF, this);
 
             //create the dialog:
             drawNaviBar();
@@ -135,6 +132,9 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
             //TODO:
             setConfiguration();
 
+            //If the configuration does not define Greeting/Salutation/CommunicationType yet choose a default
+            setDefaultForGreetingAndSalutationAndCommunication();
+
             //disable funtionality that is not supported by the template:
             initializeElements();
 
@@ -169,6 +169,9 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
             }
             sPath = fileAccess.getURL(sPath);
             myFaxDoc.killEmptyUserFields();
+            myFaxDoc.keepLogoFrame = (chkUseLogo.getState() != 0);
+            myFaxDoc.keepTypeFrame = (chkUseCommunicationType.getState() != 0);
+            myFaxDoc.killEmptyFrames();
 
             //first, if the filename was not changed, thus
             //it is coming from a saved session, check if the
@@ -182,7 +185,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
                 }
 
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer_StarOffice_XML_Writer_Template", false, "Template could not be saved!");
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to" + sPath);
             if (bSaveSuccess) {
                 saveConfiguration();
                 xWindow.setVisible(false);
@@ -249,8 +252,8 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
         myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
         myPathSelection.insert(5, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + ( HID + 47 ), "HID:" + ( HID + 48 ));
         myPathSelection.sDefaultDirectory = sUserTemplatePath;
-        myPathSelection.sDefaultName = "myFaxTemplate.stw";
-        myPathSelection.sDefaultFilter = "writer_StarOffice_XML_Writer_Template";
+        myPathSelection.sDefaultName = "myFaxTemplate.ott";
+        myPathSelection.sDefaultFilter = "writer8_template";
         myPathSelection.addSelectionListener(new myPathSelectionListener());
     }
 
@@ -314,6 +317,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
         setControlProperty("chkUseLogo", "Enabled", new Boolean(myFaxDoc.hasElement("Company Logo")));
         setControlProperty("chkUseSubject", "Enabled", new Boolean(myFaxDoc.hasElement("Subject Line")));
         setControlProperty("chkUseDate", "Enabled", new Boolean(myFaxDoc.hasElement("Date")));
+        myFaxDoc.updateDateFields();
     }
 
     public void initializeSalutation() {
@@ -328,9 +332,22 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
         setControlProperty("lstCommunicationType", "StringItemList", resources.CommunicationLabels);
     }
 
-    public void loaddocument() {
-        xTextDocument = myFaxDoc.loadAsPreview(BusinessFiles[1][0], false);
+    private void setDefaultForGreetingAndSalutationAndCommunication() {
+        XTextComponent xTextComponent;
+        xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
+        if (xTextComponent.getText().equals("")) {
+            xTextComponent.setText(resources.SalutationLabels[0]);
+        }
+        xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
+        if (xTextComponent.getText().equals("")) {
+            xTextComponent.setText(resources.GreetingLabels[0]);
+        }
+        xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
+        if (xTextComponent.getText().equals("")) {
+            xTextComponent.setText(resources.CommunicationLabels[0]);
+        }
     }
+
 
     public void initConfiguration() {
         try {
@@ -407,10 +424,8 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
 
     public void lstBusinessStyleItemChanged() {
         xTextDocument = myFaxDoc.loadAsPreview(BusinessFiles[1][lstBusinessStyle.getSelectedItemPos()], false);
-        myFaxDoc.xTextDocument.lockControllers();
         initializeElements();
         setElements();
-        myFaxDoc.xTextDocument.unlockControllers();
     }
 
     public void optPrivateFaxItemChanged() {
@@ -522,11 +537,13 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
         //UI relevant:
         if (optSenderDefine.getState())  {optSenderDefineItemChanged();}
         if (optSenderPlaceholder.getState())  {optSenderPlaceholderItemChanged();}
+        chkUseLogoItemChanged();
         chkUseSubjectItemChanged();
         chkUseSalutationItemChanged();
         chkUseGreetingItemChanged();
         chkUseCommunicationItemChanged();
         chkUseDateItemChanged();
+        chkUseFooterItemChanged();
         txtTemplateNameTextChanged();
 
         //not UI relevant:
@@ -561,10 +578,10 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
 
             if (chkFooterNextPages.getState() != 0) {
                 myFaxDoc.switchFooter("First Page", false, (chkFooterPageNumbers.getState() != 0),txtFooter.getText());
-                myFaxDoc.switchFooter("Default", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
+                myFaxDoc.switchFooter("Standard", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
             } else {
                 myFaxDoc.switchFooter("First Page", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
-                myFaxDoc.switchFooter("Default", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
+                myFaxDoc.switchFooter("Standard", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
             }
 
             //enable/disable roadmap item for footer page
