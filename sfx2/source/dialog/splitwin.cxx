@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 11:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,8 @@
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
 #endif
-#if SUPD<613//MUSTINI
-    #ifndef _SFXINIMGR_HXX //autogen
-    #include <svtools/iniman.hxx>
-    #endif
+#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
+#include <svtools/viewoptions.hxx>
 #endif
 #pragma hdrstop
 
@@ -291,52 +289,43 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
     if ( bWithButtons )
     {
         // Konfiguration einlesen
-#if SUPD<613//MUSTINI
-    #ifndef ENABLE_DIALOGCFG//MUSTINI
-            SfxIniManager *pAppIniMgr = SFX_APP()->GetAppIniManager();
-            if ( pAppIniMgr )
+        String aWindowId = String::CreateFromAscii("SplitWindow");
+        aWindowId += String::CreateFromInt32( (sal_Int32) eTbxAlign );
+        SvtViewOptions aWinOpt( E_WINDOW, aWindowId );
+        String aWinData( aWinOpt.GetUserData() );
+        if ( aWinData.Len() && aWinData.GetChar( (USHORT) 0 ) == 'V' )
+        {
+            pEmptyWin->nState = (USHORT) aWinData.GetToken( 1, ',' ).ToInt32();
+            if ( pEmptyWin->nState & 2 )
+                pEmptyWin->bFadeIn = TRUE;
+            bPinned = !( pEmptyWin->nState & 1 );
+
+            USHORT i=2;
+            USHORT nCount = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
+            for ( USHORT n=0; n<nCount; n++ )
             {
-                String aWinData( pAppIniMgr->Get( SFX_KEY_SPLITWINDOW, (USHORT) eTbxAlign ) );
-                if ( aWinData.Len() && aWinData.GetChar( (USHORT) 0 ) == 'V' )
+                SfxDock_Impl *pDock = new SfxDock_Impl;
+                pDock->pWin = 0;
+                pDock->bNewLine = FALSE;
+                pDock->bHide = TRUE;
+                pDock->nType = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
+                if ( !pDock->nType )
                 {
-                    pEmptyWin->nState = aWinData.GetToken( 1, ',' ).ToInt32();
-                    if ( pEmptyWin->nState & 2 )
-                        pEmptyWin->bFadeIn = TRUE;
-                    bPinned = !( pEmptyWin->nState & 1 );
-
-                    USHORT i=2;
-                    USHORT nCount = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
-                    for ( USHORT n=0; n<nCount; n++ )
+                    // K"onnte NewLine bedeuten
+                    pDock->nType = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
+                    if ( !pDock->nType )
                     {
-                        SfxDock_Impl *pDock = new SfxDock_Impl;
-                        pDock->pWin = 0;
-                        pDock->bNewLine = FALSE;
-                        pDock->bHide = TRUE;
-                        pDock->nType = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
-                        if ( !pDock->nType )
-                        {
-                            // K"onnte NewLine bedeuten
-                            pDock->nType = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
-                            if ( !pDock->nType )
-                            {
-                                // Lesefehler
-                                delete pDock;
-                                break;
-                            }
-                            else
-                                pDock->bNewLine = TRUE;
-                        }
-
-                        pDockArr->Insert(pDock,n);
+                        // Lesefehler
+                        delete pDock;
+                        break;
                     }
+                    else
+                        pDock->bNewLine = TRUE;
                 }
+
+                pDockArr->Insert(pDock,n);
             }
-    #else
-        #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                DBG_ASSERT(sal_False, "SfxSplitWindow::SfxSplitWindow()\nThere exist no config item for splitwindow!\n");
-        #endif
-    #endif
-#endif
+        }
     }
     else
     {
@@ -383,10 +372,11 @@ SfxSplitWindow::~SfxSplitWindow()
             aWinData += ',';
             aWinData += String::CreateFromInt32( pDock->nType);
         }
-#if SUPD<613//MUSTINI
-        SfxIniManager *pIniMgr = SFX_INIMANAGER();
-        pIniMgr->Set( aWinData, SFX_KEY_SPLITWINDOW, GetAlign() );
-#endif
+
+        String aWindowId = String::CreateFromAscii("SplitWindow");
+        aWindowId += String::CreateFromInt32( (sal_Int32) GetAlign() );
+        SvtViewOptions aWinOpt( E_WINDOW, aWindowId );
+        aWinOpt.SetUserData( aWinData );
     }
 
     if ( pEmptyWin )
@@ -772,6 +762,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
             pEmptyWin->bFadeIn = FALSE;
             SetPinned_Impl( FALSE );
             pEmptyWin->Actualize();
+            DBG_TRACE( "SfxSplitWindow::InsertWindow_Impl - registering empty Splitwindow" );
             pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign, TRUE )->nVisible = CHILD_VISIBLE;
             pWorkWin->ArrangeChilds_Impl();
             if ( bFadeIn )
@@ -782,6 +773,16 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
             BOOL bFadeIn = ( pEmptyWin->nState & 2 ) != 0;
             pEmptyWin->bFadeIn = FALSE;
             pEmptyWin->Actualize();
+#ifdef DBG_UTIL
+            if ( !bPinned || !pEmptyWin->bFadeIn )
+            {
+                DBG_TRACE( "SfxSplitWindow::InsertWindow_Impl - registering empty Splitwindow" );
+            }
+            else
+            {
+                DBG_TRACE( "SfxSplitWindow::InsertWindow_Impl - registering real Splitwindow" );
+            }
+#endif
             pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign, TRUE )->nVisible = CHILD_VISIBLE;
             pWorkWin->ArrangeChilds_Impl();
             if ( bFadeIn )
@@ -816,9 +817,19 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, BOOL bHide )
         // veranla\st!
         Hide();
         pEmptyWin->aTimer.Stop();
-        long nRealState = pEmptyWin->nState;
+        USHORT nRealState = pEmptyWin->nState;
         FadeOut();
         pEmptyWin->Hide();
+#ifdef DBG_UTIL
+        if ( !bPinned || !pEmptyWin->bFadeIn )
+        {
+            DBG_TRACE( "SfxSplitWindow::RemoveWindow - releasing empty Splitwindow" );
+        }
+        else
+        {
+            DBG_TRACE( "SfxSplitWindow::RemoveWindow - releasing real Splitwindow" );
+        }
+#endif
         pWorkWin->ReleaseChild_Impl( *GetSplitWindow() );
         pEmptyWin->nState = nRealState;
         pWorkWin->ArrangeAutoHideWindows( this );
@@ -1147,9 +1158,11 @@ void SfxSplitWindow::SetPinned_Impl( BOOL bOn )
         if ( pEmptyWin->bFadeIn )
         {
             // Ersatzfenster anmelden
+            DBG_TRACE( "SfxSplitWindow::SetPinned_Impl - releasing real Splitwindow" );
             pWorkWin->ReleaseChild_Impl( *this );
             Hide();
             pEmptyWin->Actualize();
+            DBG_TRACE( "SfxSplitWindow::SetPinned_Impl - registering empty Splitwindow" );
             pWorkWin->RegisterChild_Impl( *pEmptyWin, eAlign, TRUE )->nVisible = CHILD_VISIBLE;
         }
 
@@ -1171,8 +1184,10 @@ void SfxSplitWindow::SetPinned_Impl( BOOL bOn )
         if ( pEmptyWin->bFadeIn )
         {
             // Ersatzfenster abmelden
+            DBG_TRACE( "SfxSplitWindow::SetPinned_Impl - releasing empty Splitwindow" );
             pWorkWin->ReleaseChild_Impl( *pEmptyWin );
             pEmptyWin->Hide();
+            DBG_TRACE( "SfxSplitWindow::SetPinned_Impl - registering real Splitwindow" );
             pWorkWin->RegisterChild_Impl( *this, eAlign, TRUE )->nVisible = CHILD_VISIBLE;
         }
     }
@@ -1203,8 +1218,10 @@ void SfxSplitWindow::SetFadeIn_Impl( BOOL bOn )
         }
         else
         {
+            DBG_TRACE( "SfxSplitWindow::SetFadeIn_Impl - releasing empty Splitwindow" );
             pWorkWin->ReleaseChild_Impl( *pEmptyWin );
             pEmptyWin->Hide();
+            DBG_TRACE( "SfxSplitWindow::SetFadeIn_Impl - registering real Splitwindow" );
             pWorkWin->RegisterChild_Impl( *this, eAlign, TRUE )->nVisible = CHILD_VISIBLE;
             pWorkWin->ArrangeChilds_Impl();
             pWorkWin->ShowChilds_Impl();
@@ -1217,9 +1234,11 @@ void SfxSplitWindow::SetFadeIn_Impl( BOOL bOn )
         if ( !IsFloatingMode() )
         {
             // Das Fenster "schwebt" nicht, soll aber ausgeblendet werden,
+            DBG_TRACE( "SfxSplitWindow::SetFadeIn_Impl - releasing real Splitwindow" );
             pWorkWin->ReleaseChild_Impl( *this );
             Hide();
             pEmptyWin->Actualize();
+            DBG_TRACE( "SfxSplitWindow::SetFadeIn_Impl - registering empty Splitwindow" );
             pWorkWin->RegisterChild_Impl( *pEmptyWin, eAlign, TRUE )->nVisible = CHILD_VISIBLE;
             pWorkWin->ArrangeChilds_Impl();
             pWorkWin->ShowChilds_Impl();
@@ -1231,12 +1250,6 @@ void SfxSplitWindow::SetFadeIn_Impl( BOOL bOn )
             pWorkWin->ArrangeAutoHideWindows( this );
         }
     }
-}
-
-void SfxSplitWindow::EndAutoShow_Impl()
-{
-    SfxWorkWindow *pWorkWin = SFX_APP()->GetWorkWindow_Impl(SfxViewFrame::Current());
-    pWorkWin->EndAutoShow_Impl();
 }
 
 void SfxSplitWindow::AutoHide()
@@ -1262,6 +1275,12 @@ void SfxSplitWindow::AutoHide()
 
 void SfxSplitWindow::FadeOut()
 {
+    if ( pEmptyWin->aTimer.IsActive() )
+    {
+        pEmptyWin->bAutoHide = FALSE;
+        pEmptyWin->aTimer.Stop();
+    }
+
     SetFadeIn_Impl( FALSE );
     Show_Impl();
 }
