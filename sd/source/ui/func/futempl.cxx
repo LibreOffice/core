@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 16:20:37 $
+ *  last change: $Author: cl $ $Date: 2001-10-26 12:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,17 @@
 #endif
 #ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
+#endif
+
+
+#ifndef _SVX_XLNDSIT_HXX
+#include <svx/xlndsit.hxx>
+#endif
+#ifndef _SVX_XLNSTIT_HXX
+#include <svx/xlnstit.hxx>
+#endif
+#ifndef _SVX_XLNEDIT_HXX
+#include <svx/xlnedit.hxx>
 #endif
 
 #include "stlsheet.hxx"
@@ -454,6 +465,78 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                                                         &(const SvxLRSpaceItem&) rAttr.Get( EE_PARA_LRSPACE ) );
 
                                 ( (SfxItemSet&) rAttr).Put( aNumBullet );
+                            }
+                        }
+
+                        // check for unique names of named items for xml
+                        if( rAttr.GetItemState( XATTR_FILLBITMAP ) == SFX_ITEM_SET )
+                        {
+                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLBITMAP );
+                            SfxPoolItem* pNewItem = ((XFillBitmapItem*)pOldItem)->checkForUniqueItem( pDoc );
+                            if( pOldItem != pNewItem )
+                            {
+                                rAttr.Put( *pNewItem );
+                                delete pNewItem;
+                            }
+                        }
+                        if( rAttr.GetItemState( XATTR_LINEDASH ) == SFX_ITEM_SET )
+                        {
+                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINEDASH );
+                            SfxPoolItem* pNewItem = ((XLineDashItem*)pOldItem)->checkForUniqueItem( pDoc );
+                            if( pOldItem != pNewItem )
+                            {
+                                rAttr.Put( *pNewItem );
+                                delete pNewItem;
+                            }
+                        }
+                        if( rAttr.GetItemState( XATTR_LINESTART ) == SFX_ITEM_SET )
+                        {
+                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINESTART );
+                            SfxPoolItem* pNewItem = ((XLineStartItem*)pOldItem)->checkForUniqueItem( pDoc );
+                            if( pOldItem != pNewItem )
+                            {
+                                rAttr.Put( *pNewItem );
+                                delete pNewItem;
+                            }
+                        }
+                        if( rAttr.GetItemState( XATTR_LINEEND ) == SFX_ITEM_SET )
+                        {
+                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINEEND );
+                            SfxPoolItem* pNewItem = ((XLineEndItem*)pOldItem)->checkForUniqueItem( pDoc );
+                            if( pOldItem != pNewItem )
+                            {
+                                rAttr.Put( *pNewItem );
+                                delete pNewItem;
+                            }
+                        }
+                        if( rAttr.GetItemState( XATTR_FILLGRADIENT ) == SFX_ITEM_SET )
+                        {
+                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLGRADIENT );
+                            SfxPoolItem* pNewItem = ((XFillGradientItem*)pOldItem)->checkForUniqueItem( pDoc );
+                            if( pOldItem != pNewItem )
+                            {
+                                rAttr.Put( *pNewItem );
+                                delete pNewItem;
+                            }
+                        }
+                        if( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET )
+                        {
+                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLFLOATTRANSPARENCE );
+                            SfxPoolItem* pNewItem = ((XFillFloatTransparenceItem*)pOldItem)->checkForUniqueItem( pDoc );
+                            if( pOldItem != pNewItem )
+                            {
+                                rAttr.Put( *pNewItem );
+                                delete pNewItem;
+                            }
+                        }
+                        if( rAttr.GetItemState( XATTR_FILLHATCH ) == SFX_ITEM_SET )
+                        {
+                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLHATCH );
+                            SfxPoolItem* pNewItem = ((XFillHatchItem*)pOldItem)->checkForUniqueItem( pDoc );
+                            if( pOldItem != pNewItem )
+                            {
+                                rAttr.Put( *pNewItem );
+                                delete pNewItem;
                             }
                         }
 
