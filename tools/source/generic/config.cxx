@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-13 18:05:48 $
+ *  last change: $Author: pl $ $Date: 2001-03-16 16:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,8 @@
 #include <config.hxx>
 #endif
 
-#ifndef _VOS_MACROS_HXX
-#include <vos/macros.hxx>
-#endif
-#ifndef _VOS_PROFILE_HXX
-#include <vos/profile.hxx>
+#ifndef _OSL_SECURITY_H_
+#include <osl/security.h>
 #endif
 
 #pragma hdrstop
@@ -224,14 +221,32 @@ static BOOL ImplSysWriteConfig( const XubString& rFileName,
 static String ImplMakeConfigName( const XubString* pFileName,
                                   const XubString* pPathName )
 {
-    ::rtl::OUString aName;
     ::rtl::OUString aFileName;
     ::rtl::OUString aPathName;
     if ( pFileName )
         aFileName = *pFileName;
+    else
+    {
+#ifdef UNX
+        aFileName = String::CreateFromAscii( ".sversionrc" );
+#else
+        aFileName = String::CreateFromAscii( "sversion.ini" );
+#endif
+    }
+
     if ( pPathName )
         aPathName = toUncPath( *pPathName );
-    ::vos::OProfile::getProfileName( aName, aFileName, aPathName );
+    else
+    {
+        oslSecurity aSec = osl_getCurrentSecurity();
+        osl_getConfigDir( aSec, &aPathName.pData );
+        osl_freeSecurityHandle( aSec );
+    }
+
+    ::rtl::OUString aName( aPathName );
+    aName += ::rtl::OUString::createFromAscii( "/" );
+    aName += aFileName;
+
     return aName;
 }
 
