@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleComponent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 10:56:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,15 +110,15 @@ interface XAccessible;
     are measured in pixel.  They differ in their respective origin:
     <ul><li>The screen coordinate system has its origin in the upper left
     corner of the current screen.  Used by the
-    <member>getLocationOnScreen()</member> function.</li>
+    <method>getLocationOnScreen</method> function.</li>
     <li>The origin of the parent coordinate system is the upper left corner
     of the parent's bounding box.  With no parent the screen coordinate
-    system is used instead.  Used by the <member>getLocation()</member>
+    system is used instead.  Used by the <method>getLocation</method>
     function.</li>
     <li>The object coordinate system is relative to the upper left corner of
     an object's bounding box.  It is relative to itself so to speak.  Used
-    by the <member>contains()</member> and
-    <member>getAccessibleAt()</member> functions.</li>
+    by the <method>containsPoint</method> and
+    <method>getAccessibleAtPoint</method> functions.</li>
     </ul></p>
 
     <p>Key bindings which are associated with an accessible component can be
@@ -127,8 +127,8 @@ interface XAccessible;
     This distinction becomes important when there are more than one action.
     To get access to the key bindings you have to get the
     <type>XAccessibleAction</type> interface of a component, provided that
-    it is supported, and use the <member
-    scope="XAccessibleAction">getAccessibleKeyBinding()</member>.</p>
+    it is supported, and use the <method
+    scope="XAccessibleAction">getAccessibleKeyBinding()</method>.</p>
 
     @see XAccessibleExtendedComponent
 
@@ -146,7 +146,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
         @param point
             Coordinates of the point to test.  The origin of the coordinate
             system is the upper left corner of the object's bounding box as
-            returned by the <member>getBounds()</method>.  The scale of the
+            returned by the <method>getBounds</method>.  The scale of the
             coordinate system is identical to that of the screen coordiante
             system.
 
@@ -167,7 +167,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             Coordinates of the test point for which to find the Accessible
             child.  The origin of the coordinate system is the upper left
             corner of the object's bounding box as returned by the
-            <member>getBounds()</method>.  The scale of the coordinate
+            <method>getBounds</method>.  The scale of the coordinate
             system is identical to that of the screen coordiante system.
 
         @return
@@ -184,9 +184,9 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
 
         <p>The returned bounding box has the form of a rectangle.  Its
         coordinates are relative to the object's parent coordinate system.
-        Note that the two methods <member>getLocation</member> and
-        <member>getSize</member> return the same information.  With method
-        <member>getLocationOnScreen</member> you can get the bound box
+        Note that the two methods <method>getLocation</methodmber> and
+        <method>getSize</method> return the same information.  With method
+        <method>getLocationOnScreen</method> you can get the bound box
         position in screen coordinates.</p>
 
         @return
@@ -216,7 +216,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
         bounding box in screen coordinates.
 
         <p>This method returns the same point as does the method
-        <member>getLocation</member>.  The difference is that the
+        <method>getLocation</method>.  The difference is that the
         coordinates are absolute screen coordinates of the screen to which
         the object is rendered instead of being relative to the object's
         parent.</p>
@@ -239,7 +239,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
     /** Grabs the focus to this object.
 
         <p>If this object can not accept the focus,
-        i.e. <member>isFocusTraversable</member> returns <FALSE/> for this
+        i.e. <method>isFocusTraversable</method> returns <FALSE/> for this
         object then nothing happens.  Otherwise the object will attempt to
         take the focus.  Nothing happens if that fails, otherwise the object
         has the focus.  This method is called <code>requestFocus</code> in
