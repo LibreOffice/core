@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-17 11:59:50 $
+ *  last change: $Author: jb $ $Date: 2002-05-17 13:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,14 @@ void SAL_CALL SchemaBuilder::endSchema(  )
     substituteInstances();
 }
 // -----------------------------------------------------------------------------
+
+void SAL_CALL SchemaBuilder::importComponent( const OUString& aName )
+    throw (MalformedDataException, container::NoSuchElementException, lang::IllegalArgumentException, uno::RuntimeException)
+{
+    OSL_ENSURE(false, "Cross-componnet references are not yet supported");
+}
+// -----------------------------------------------------------------------------
+
 
 void SAL_CALL SchemaBuilder::startComponent( const OUString& aName )
         throw (MalformedDataException, container::ElementExistException, lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergedcomponentdata.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:56:07 $
+ *  last change: $Author: jb $ $Date: 2002-05-17 13:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,12 @@ bool MergedComponentData::hasSchema()const
 bool MergedComponentData::hasTemplates() const
 {
     return m_pTemplatesTree.get() != NULL;
+}
+// -----------------------------------------------------------------------------
+
+OUString MergedComponentData::getTemplateAccessor (TemplateIdentifier const & _aTemplateName) const
+{
+    return _aTemplateName.Name;
 }
 // -----------------------------------------------------------------------------
 

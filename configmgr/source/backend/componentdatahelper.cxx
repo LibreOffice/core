@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:56:07 $
+ *  last change: $Author: jb $ $Date: 2002-05-17 13:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,22 @@ void DataBuilderContext::raiseMalformedDataException(sal_Char const * _pText) co
 {
     OUString sMessage = OUString::createFromAscii(_pText);
     throw MalformedDataException(sMessage, m_pContext);
+}
+// -----------------------------------------------------------------------------
+
+void DataBuilderContext::raiseIllegalAccessException(sal_Char const * _pText) const
+        CFG_UNO_THROW1( lang::IllegalAccessException )
+{
+    OUString sMessage = OUString::createFromAscii(_pText);
+    throw lang::IllegalAccessException(sMessage, m_pContext);
+}
+// -----------------------------------------------------------------------------
+
+void DataBuilderContext::raiseIllegalTypeException(sal_Char const * _pText) const
+        CFG_UNO_THROW1( beans::IllegalTypeException )
+{
+    OUString sMessage = OUString::createFromAscii(_pText);
+    throw beans::IllegalTypeException(sMessage, m_pContext);
 }
 // -----------------------------------------------------------------------------
 
@@ -248,6 +264,42 @@ TemplateIdentifier DataBuilderContext::completeComponent( const TemplateIdentifi
     return aComplete;
 }
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
+TemplateIdentifier DataBuilderContext::getCurrentItemType() const
+                CFG_THROW2( MalformedDataException, uno::RuntimeException )
+{
+    ISubtree const * pCurrentSet = getCurrentParent().asISubtree();
+    if (!pCurrentSet || !pCurrentSet->isSetNode())
+        raiseMalformedDataException("Component Builder Context: Cannot add/replace node - context is not a set");
+
+    TemplateIdentifier aCompleteType;
+
+    aCompleteType.Name      = pCurrentSet->getElementTemplateName();
+    aCompleteType.Component = pCurrentSet->getElementTemplateModule();
+
+    return aCompleteType;
+}
+// -----------------------------------------------------------------------------
+
+TemplateIdentifier DataBuilderContext::getValidItemType(TemplateIdentifier const & aItemType) const
+                CFG_THROW3( MalformedDataException, beans::IllegalTypeException, uno::RuntimeException )
+{
+    ISubtree const * pCurrentSet = getCurrentParent().asISubtree();
+    if (!pCurrentSet || !pCurrentSet->isSetNode())
+        raiseMalformedDataException("Component Builder Context: Cannot add/replace node - context is not a set");
+
+    TemplateIdentifier aCompleteType = completeComponent( aItemType );
+
+    // for now only a single item-type is supported
+    if (aCompleteType.Name != pCurrentSet->getElementTemplateName())
+        raiseIllegalTypeException("Component Builder Context: Cannot add/replace node - template is not permitted in containing set");
+
+    if (aCompleteType.Component != pCurrentSet->getElementTemplateModule())
+        raiseIllegalTypeException("Component Builder Context: Cannot add/replace node - template is not permitted in containing set (component mismatch)");
+
+    return aCompleteType;
+}
 // -----------------------------------------------------------------------------
 
 ISubtree  * DataBuilderContext::addNodeToCurrent(std::auto_ptr<ISubtree>  _aNode)
