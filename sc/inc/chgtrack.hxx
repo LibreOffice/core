@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 10:16:34 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 14:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,7 +900,8 @@ public:
                                                 const DateTime& aDateTime,
                                                 const String &sComment,
                                                 ScBaseCell* pOldCell,
-                                                ScDocument* pDoc); // to use for XML Import
+                                                ScDocument* pDoc,
+                                                const String& sResult); // to use for XML Import
                                 ScChangeActionContent(const ULONG nActionNumber,
                                                 ScBaseCell* pOldCell,
                                                 const ScBigRange& aBigRange,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 10:17:35 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 14:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,7 +1658,7 @@ ScChangeActionContent::ScChangeActionContent( SvStream& rStrm,
 
 ScChangeActionContent::ScChangeActionContent(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
                                                 const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String& sComment,
-                                                ScBaseCell* pTempOldCell, ScDocument* pDoc)
+                                                ScBaseCell* pTempOldCell, ScDocument* pDoc, const String& sResult)
         :
         ScChangeAction(SC_CAT_CONTENT, aBigRange, nActionNumber),
         pOldCell(pTempOldCell),
@@ -1666,7 +1666,8 @@ ScChangeActionContent::ScChangeActionContent(const ULONG nActionNumber, const Sc
         pNextContent(NULL),
         pPrevContent(NULL),
         pNextInSlot(NULL),
-        ppPrevInSlot(NULL)
+        ppPrevInSlot(NULL),
+        aOldValue(sResult)
 
 {
     if (pOldCell)
