@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2000-12-11 17:44:03 $
+ *  last change: $Author: tra $ $Date: 2001-01-24 14:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,58 @@ static void InitDCOM( )
 }
 
 //------------------------------------------------------------------------------
+// init winsock
+//------------------------------------------------------------------------------
+
+void InitializeWinSock( )
+{
+    WSADATA wsaData;
+    int     error;
+    SOCKET  soc;
+    WORD    wVersionRequested;
+
+    //=========== Hack ===============
+    // Sun WebTop Plugin fails to initialize
+    // Winsock library because the Browser
+    // which loads the plugin has already
+    // initialized the Winsock library
+    // see MS Knowledgebase ID: Q130942
+    // that's why we only initialize the
+    // winsock library if it has not already
+    // done
+    // we assume that the previous caller has
+    // initialize Winsock version >= 1.1
+    // else ???
+
+    soc = socket( AF_INET, SOCK_STREAM, 0 );
+    if ( WSANOTINITIALISED == WSAGetLastError( ) )
+    {
+        wVersionRequested = MAKEWORD(2, 2);
+
+        error = WSAStartup(wVersionRequested, &wsaData);
+        if ( 0 == error )
+        {
+            WORD wMajorVersionRequired = 1;
+            WORD wMinorVersionRequired = 1;
+
+            if ((LOBYTE(wsaData.wVersion) <  wMajorVersionRequired) ||
+                (LOBYTE(wsaData.wVersion) == wMajorVersionRequired) &&
+                ((HIBYTE(wsaData.wVersion) < wMinorVersionRequired)))
+            {
+                showMessage(ERR_WINSOCK_WRONG_VERSION);
+            }
+        }
+        else
+        {
+            showMessage(ERR_WINSOCK_INIT_FAILED);
+        }
+    }
+
+    if ( INVALID_SOCKET != soc )
+        closesocket( soc );
+}
+
+//------------------------------------------------------------------------------
 // DllMain
 //------------------------------------------------------------------------------
 
@@ -165,9 +217,6 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
         case DLL_PROCESS_ATTACH:
             {
                 OSVERSIONINFO aInfo;
-                WORD     wVersionRequested;
-                WSADATA  wsaData;
-                int      error;
 
 #ifdef _M_IX86
                 SYSTEM_INFO SystemInfo;
@@ -181,23 +230,7 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
                 // Suppress file error messages from system like "Floppy A: not inserted"
                 SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
 
-                wVersionRequested = MAKEWORD(2, 2);
-
-                error = WSAStartup(wVersionRequested, &wsaData);
-                if ( 0 == error )
-                {
-                    WORD wMajorVersionRequired = 1;
-                    WORD wMinorVersionRequired = 1;
-
-                    if ((LOBYTE(wsaData.wVersion) <  wMajorVersionRequired) ||
-                        (LOBYTE(wsaData.wVersion) == wMajorVersionRequired) &&
-                        ((HIBYTE(wsaData.wVersion) < wMinorVersionRequired)))
-                        showMessage(ERR_WINSOCK_WRONG_VERSION);
-                }
-                else
-                {
-                    showMessage(ERR_WINSOCK_INIT_FAILED);
-                }
+                InitializeWinSock( );
 
                 /* initialize Win9x unicode functions */
                 aInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
