@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:18:38 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 #include <list>
 
@@ -107,10 +110,17 @@ const char* cConfigBaseURL = "/org.openoffice.";
 //const char* cConfigBaseURL = "/com.sun.star.";
 const char* cAccessSrvc = "com.sun.star.configuration.ConfigurationUpdateAccess";
 
-static ::rtl::OUString aBrandName;
-static ::rtl::OUString aProductVersion;
-static ::rtl::OUString aProductExtension;
-static ::rtl::OUString aXMLFileFormatVersion;
+namespace
+{
+    struct BrandName
+        : public rtl::Static< ::rtl::OUString, BrandName > {};
+    struct ProductVersion
+        : public rtl::Static< ::rtl::OUString, ProductVersion > {};
+    struct ProductExtension
+        : public rtl::Static< ::rtl::OUString, ProductExtension > {};
+    struct XMLFileFormatVersion
+        : public rtl::Static< ::rtl::OUString, XMLFileFormatVersion > {};
+}
 
 //-----------------------------------------------------------------------------
 struct ConfigItemListEntry_Impl
@@ -439,27 +449,31 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     ConfigManager * pTheConfigManager = GetConfigManager();
 
     Any aRet;
-    if ( eProp == PRODUCTNAME && aBrandName.getLength() )
+    ::rtl::OUString &rBrandName = BrandName::get();
+    if ( eProp == PRODUCTNAME && rBrandName.getLength() )
     {
-        aRet <<= aBrandName;
+        aRet <<= rBrandName;
         return aRet;
     }
 
-    if ( eProp == PRODUCTVERSION && aProductVersion.getLength() )
+    rtl::OUString &rProductVersion = ProductVersion::get();
+    if ( eProp == PRODUCTVERSION && rProductVersion.getLength() )
     {
-        aRet <<= aProductVersion;
+        aRet <<= rProductVersion;
         return aRet;
     }
 
-    if ( eProp == PRODUCTEXTENSION && aProductExtension.getLength() )
+    rtl::OUString &rProductExtension = ProductExtension::get();
+    if ( eProp == PRODUCTEXTENSION && rProductExtension.getLength() )
     {
-        aRet <<= aProductExtension;
+        aRet <<= rProductExtension;
         return aRet;
     }
 
-    if ( eProp == PRODUCTXMLFILEFORMATVERSION && aXMLFileFormatVersion.getLength() )
+    rtl::OUString &rXMLFileFormatVersion = XMLFileFormatVersion::get();
+    if ( eProp == PRODUCTXMLFILEFORMATVERSION && rXMLFileFormatVersion.getLength() )
     {
-        aRet <<= aXMLFileFormatVersion;
+        aRet <<= rXMLFileFormatVersion;
         return aRet;
     }
 
@@ -520,16 +534,16 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     }
 
     if ( eProp == PRODUCTNAME )
-        aRet >>= aBrandName;
+        aRet >>= rBrandName;
 
     if ( eProp == PRODUCTXMLFILEFORMATVERSION )
-        aRet >>= aXMLFileFormatVersion;
+        aRet >>= rXMLFileFormatVersion;
 
     if ( eProp == PRODUCTVERSION )
-        aRet >>= aProductVersion;
+        aRet >>= rProductVersion;
 
     if ( eProp == PRODUCTEXTENSION )
-        aRet >>= aProductExtension;
+        aRet >>= rProductExtension;
 
     return aRet;
 }
