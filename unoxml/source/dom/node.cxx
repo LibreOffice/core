@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:25:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,25 +715,29 @@ namespace DOM
         else
         {
 
-        xmlNodePtr cur = m_aNodePtr->children;
-        //find old node in child list
-        while (cur != NULL)
-        {
-            if(cur == old)
+            // update .last
+            if (m_aNodePtr->last == old)
+                m_aNodePtr->last = old->prev;
+
+            xmlNodePtr cur = m_aNodePtr->children;
+            //find old node in child list
+            while (cur != NULL)
             {
-                // unlink node from list
-                if (cur->prev != NULL)
-                    cur->prev->next = cur->next;
-                if (cur->next != NULL)
-                    cur->next->prev = cur->prev;
-                if (cur->parent != NULL && cur->parent->children == cur)
-                    cur->parent->children = cur->next;
-                cur->prev = NULL;
-                cur->next = NULL;
-                cur->parent = NULL;
+                if(cur == old)
+                {
+                    // unlink node from list
+                    if (cur->prev != NULL)
+                        cur->prev->next = cur->next;
+                    if (cur->next != NULL)
+                        cur->next->prev = cur->prev;
+                    if (cur->parent != NULL && cur->parent->children == cur)
+                        cur->parent->children = cur->next;
+                    cur->prev = NULL;
+                    cur->next = NULL;
+                    cur->parent = NULL;
+                }
+                cur = cur->next;
             }
-            cur = cur->next;
-        }
         }
 
         /*DOMNodeRemoved
