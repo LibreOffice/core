@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:10:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,14 +363,16 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
     SmModel *pModel = reinterpret_cast<SmModel *>
         (xTunnel->getSomething(SmModel::getUnoTunnelId()));
 
-    if (pModel)
+    SmDocShell *pDocShell = pModel ?
+            static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
+    if (pDocShell)
     {
-        SmDocShell *pDocShell =
-            static_cast<SmDocShell*>(pModel->GetObjectShell());
-
-        if (pDocShell->GetMedium())
+//        if (pDocShell->GetMedium())
         {
-            SfxItemSet* pSet = pDocShell->GetMedium()->GetItemSet();
+            DBG_ASSERT( pDocShell->GetMedium() == &rMedium,
+                    "different SfxMedium found" );
+
+            SfxItemSet* pSet = rMedium.GetItemSet();
             if (pSet)
             {
                 const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
@@ -380,8 +382,7 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
             }
         }
 
-        if( pDocShell &&
-            SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
+        if( SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
             bEmbedded = sal_True;
     }
 
@@ -1082,40 +1083,34 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
     SmModel *pModel = reinterpret_cast<SmModel *>
         (xTunnel->getSomething(SmModel::getUnoTunnelId()));
 
-    if (pModel)
-    {
-        SmDocShell *pDocShell =
-            static_cast<SmDocShell*>(pModel->GetObjectShell());
-        if( pDocShell &&
-            SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
-            bEmbedded = sal_True;
-    }
+    SmDocShell *pDocShell = pModel ?
+            static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
+    if( pDocShell &&
+        SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
+        bEmbedded = sal_True;
 
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
     if (!bEmbedded)
     {
-        uno::Reference<frame::XController> xController(
-            xModel->getCurrentController());
-        if( xController.is())
+        if (pDocShell /*&& pDocShell->GetMedium()*/)
         {
-            uno::Reference<frame::XFrame> xFrame( xController->getFrame());
-            if( xFrame.is())
+            DBG_ASSERT( pDocShell->GetMedium() == &rMedium,
+                    "different SfxMedium found" );
+
+            SfxItemSet* pSet = rMedium.GetItemSet();
+            if (pSet)
             {
-                uno::Reference<task::XStatusIndicatorFactory> xFactory( xFrame,
-                    uno::UNO_QUERY );
-            if( xFactory.is())
-                xStatusIndicator = xFactory->createStatusIndicator();
+                const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
+                    pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+                if (pItem)
+                    pItem->GetValue() >>= xStatusIndicator;
             }
         }
 
         // set progress range and start status indicator
-        sal_Int32 nSteps=3;
-        if (bFlat)
-            nSteps = 1;
-
-        sal_Int32 nProgressRange(nSteps);
         if (xStatusIndicator.is())
         {
+            sal_Int32 nProgressRange = bFlat ? 1 : 3;
             xStatusIndicator->start(String(SmResId(STR_STATSTR_WRITING)),
                 nProgressRange);
         }
@@ -3877,7 +3872,7 @@ void SmXMLExport::ExportText(const SmNode *pNode, int nLevel)
             //Note that we change the fontstyle to italic for strings that
             //are italic and longer than a single character.
             if ((pTemp->GetText().Len() > 1) &&
-                (pTemp->GetFont().GetItalic() == ITALIC_NORMAL))
+                (pTemp->GetFont().GetItalic() > ITALIC_NONE))
                 AddAttribute(XML_NAMESPACE_MATH,sXML_fontstyle,
                 OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_italic)));
             else if ((pTemp->GetText().Len() == 1) &&
