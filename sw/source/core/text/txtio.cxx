@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtio.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 12:13:55 $
+ *  last change: $Author: ama $ $Date: 2000-12-06 15:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,7 @@ IMPL_OUTOP( SwDropPortion )
 IMPL_OUTOP( SwKernPortion )
 IMPL_OUTOP( SwArrowPortion )
 IMPL_OUTOP( SwMultiPortion )
+IMPL_OUTOP( SwCombinedPortion )
 
 const char *GetPortionName( const MSHORT nType )
 {
@@ -777,6 +778,15 @@ SvStream &SwArrowPortion::operator<<( SvStream &rOs ) const //$ ostream
 SvStream &SwMultiPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {MULTI:" );
+    rOs << pTxt;
+    SwLinePortion::operator<<( rOs );
+    rOs << pClose;
+    return rOs;
+}
+
+SvStream &SwCombinedPortion::operator<<( SvStream &rOs ) const //$ ostream
+{
+    CONSTCHAR( pTxt, " {COMBINED:" );
     rOs << pTxt;
     SwLinePortion::operator<<( rOs );
     rOs << pClose;

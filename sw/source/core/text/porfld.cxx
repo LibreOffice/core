@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 11:42:24 $
+ *  last change: $Author: ama $ $Date: 2000-12-06 15:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
+#endif
+#ifndef _METRIC_HXX //autogen
+#include <vcl/metric.hxx>
 #endif
 
 #ifndef _FRMSH_HXX
@@ -995,6 +998,270 @@ void SwTxtFrm::StopAnimation( OutputDevice *pOut )
             pLine = pLine->GetLen() ? 0 : pLine->GetNext();
         }
     }
+}
+
+/*************************************************************************
+ * SwCombinedPortion::SwCombinedPortion(..)
+ * initializes the script array and clears the width array
+ *************************************************************************/
+
+SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
+     : SwFldPortion( rTxt )
+{
+    SetLen(1);
+    SetWhichPor( POR_COMBINED );
+    if( aExpand.Len() > 6 )
+        aExpand.Erase( 6 );
+    // Initialization of the scripttype array,
+    // the arrays of width and position are filled by the format function
+    if( pBreakIt->xBreak.is() )
+    {
+        BYTE nScr = SW_SCRIPTS;
+        for( USHORT i = 0; i < rTxt.Len(); ++i )
+        {
+            USHORT nScript = pBreakIt->xBreak->getScriptType( rTxt, i );
+            switch ( nScript ) {
+                case i18n::ScriptType::LATIN : nScr = SW_LATIN; break;
+                case i18n::ScriptType::ASIAN : nScr = SW_CJK; break;
+                case i18n::ScriptType::COMPLEX : nScr = SW_CTL; break;
+            }
+            aScrType[i] = nScr;
+        }
+    }
+    else
+    {
+        for( USHORT i = 0; i < 6; aScrType[i++] = 0 )
+            ; // nothing
+    }
+    memset( &aWidth, 0, sizeof(aWidth) );
+}
+
+/*************************************************************************
+ * SwCombinedPortion::Paint(..)
+ *************************************************************************/
+
+void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
+{
+    ASSERT( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
+    if( Width() )
+    {
+        rInf.DrawBackBrush( *this );
+        rInf.DrawViewOpt( *this, POR_FLD );
+        USHORT nCount = aExpand.Len();
+        if( !nCount )
+            return;
+        ASSERT( nCount < 7, "Too much combined characters" );
+
+        // the first character of the second row
+        USHORT nTop = ( nCount + 1 ) / 2;
+
+        SwFont aTmpFont( *rInf.GetFont() );
+        aTmpFont.SetProportion( nProportion );  // a smaller font
+        SwFontSave aFontSave( rInf, &aTmpFont );
+
+        USHORT i = 0;
+        Point aOldPos = rInf.GetPos();
+        Point aOutPos( aOldPos.X(), aOldPos.Y() - nUpPos );// Y of the first row
+        while( i < nCount )
+        {
+            if( i == nTop ) // change the row
+                aOutPos.Y() = aOldPos.Y() + nLowPos;    // Y of the second row
+            aOutPos.X() = aOldPos.X() + aPos[i];        // X position
+            const BYTE nAct = aScrType[i];              // script type
+            aTmpFont.SetActual( nAct );
+            // if there're more than 4 characters to display, we choose fonts
+            // with 2/3 of the original font width.
+            if( aWidth[ nAct ] )
+            {
+                Size aTmpSz = aTmpFont.GetSize( nAct );
+                if( aTmpSz.Width() != aWidth[ nAct ] )
+                {
+                    aTmpSz.Width() = aWidth[ nAct ];
+                    aTmpFont.SetSize( aTmpSz, nAct );
+                }
+            }
+            ((SwTxtPaintInfo&)rInf).SetPos( aOutPos );
+            rInf.DrawText( aExpand, *this, i, 1 );
+            ++i;
+        }
+        // rInf is const, so we have to take back our manipulations
+        ((SwTxtPaintInfo&)rInf).SetPos( aOldPos );
+    }
+}
+
+/*************************************************************************
+ * SwCombinedPortion::Format(..)
+ *************************************************************************/
+
+sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
+{
+    USHORT nCount = aExpand.Len();
+    if( !nCount )
+    {
+        Width( 0 );
+        return sal_False;
+    }
+
+    ASSERT( nCount < 7, "Too much combined characters" );
+    // If there are leading "weak"-scripttyped characters in this portion,
+    // they get the actual scripttype.
+    USHORT i = 0;
+    while( i < nCount && SW_SCRIPTS == aScrType[i] )
+        aScrType[i++] = rInf.GetFont()->GetActual();
+    if( nCount > 4 )
+    {
+        // more than four? Ok, then we need the 2/3 font width
+        i = 0;
+        while( i < aExpand.Len() )
+        {
+            ASSERT( aScrType[i] < SW_SCRIPTS, "Combined: Script fault" );
+            if( !aWidth[ aScrType[i] ] )
+            {
+                rInf.GetOut()->SetFont( rInf.GetFont()->GetFnt( aScrType[i] ) );
+                aWidth[ aScrType[i] ] = 2*
+                            rInf.GetOut()->GetFontMetric().GetSize().Width()/3;
+            }
+            ++i;
+        }
+    }
+
+    USHORT nTop = ( nCount + 1 ) / 2; // the first character of the second line
+    ViewShell *pSh = rInf.GetTxtFrm()->GetShell();
+    SwFont aTmpFont( *rInf.GetFont() );
+    SwFontSave aFontSave( rInf, &aTmpFont );
+    nProportion = 55;
+    // In nMainAscent/Descent we store the ascent and descent
+    // of the original surrounding font
+    USHORT nMaxDescent, nMaxAscent, nMaxWidth;
+    USHORT nMainDescent = rInf.GetFont()->GetHeight( pSh, rInf.GetOut() );
+    const USHORT nMainAscent = rInf.GetFont()->GetAscent( pSh, rInf.GetOut() );
+    nMainDescent -= nMainAscent;
+    // we start with a 50% font, but if we notice that the combined portion
+    // becomes bigger than the surrounding font, we check 45% and maybe 40%.
+    do
+    {
+        nProportion -= 5;
+        aTmpFont.SetProportion( nProportion );
+        i = 0;
+        memset( &aPos, 0, sizeof(aPos) );
+        nMaxDescent = 0;
+        nMaxAscent = 0;
+        nMaxWidth = 0;
+        nUpPos = nLowPos = 0;
+
+        // Now we get the width of all characters.
+        // The ascent and the width of the first line are stored in the
+        // ascent member of the portion, the descent in nLowPos.
+        // The ascent, descent and width of the second line are stored in the
+        // local nMaxAscent, nMaxDescent and nMaxWidth variables.
+        while( i < nCount )
+        {
+            BYTE nScrp = aScrType[i];
+            aTmpFont.SetActual( nScrp );
+            if( aWidth[ nScrp ] )
+            {
+                Size aFontSize( aTmpFont.GetSize( nScrp ) );
+                aFontSize.Width() = aWidth[ nScrp ];
+                aTmpFont.SetSize( aFontSize, nScrp );
+            }
+            Size aSize = aTmpFont._GetTxtSize( pSh, rInf.GetOut(), aExpand, i, 1 );
+            USHORT nAsc = aTmpFont.GetAscent( pSh, rInf.GetOut() );
+            aPos[ i ] = aSize.Width();
+            if( i == nTop ) // enter the second line
+            {
+                nLowPos = nMaxDescent;
+                Height( nMaxDescent + nMaxAscent );
+                Width( nMaxWidth );
+                SetAscent( nMaxAscent );
+                nMaxAscent = 0;
+                nMaxDescent = 0;
+                nMaxWidth = 0;
+            }
+            nMaxWidth += aPos[ i++ ];
+            if( nAsc > nMaxAscent )
+                nMaxAscent = nAsc;
+            if( aSize.Height() - nAsc > nMaxDescent )
+                nMaxDescent = aSize.Height() - nAsc;
+        }
+        // for one or two characters we double the width of the portion
+        if( nCount < 3 )
+        {
+            nMaxWidth *= 2;
+            Width( 2*Width() );
+            if( nCount < 2 )
+            {
+                Height( nMaxAscent + nMaxDescent );
+                nLowPos = nMaxDescent;
+            }
+        }
+        Height( Height() + nMaxDescent + nMaxAscent );
+        nUpPos = nMaxAscent;
+        SetAscent( Height() - nMaxDescent - nLowPos );
+    } while( nProportion > 40 && ( GetAscent() > nMainAscent ||
+                                    Height() - GetAscent() > nMainDescent ) );
+    // if the combined portion is smaller than the surrounding text,
+    // the portion grows. This looks better, if there's a character background.
+    if( GetAscent() < nMainAscent )
+    {
+        Height( Height() + nMainAscent - GetAscent() );
+        SetAscent( nMainAscent );
+    }
+    if( Height() < nMainAscent + nMainDescent )
+        Height( nMainAscent + nMainDescent );
+
+    // We calculate the x positions of the characters in both lines..
+    USHORT nTopDiff = 0;
+    USHORT nBotDiff = 0;
+    if( nMaxWidth > Width() )
+    {
+        nTopDiff = ( nMaxWidth - Width() ) / 2;
+        Width( nMaxWidth );
+    }
+    else
+        nBotDiff = ( Width() - nMaxWidth ) / 2;
+    switch( nTop)
+    {
+        case 3: aPos[1] = aPos[0] + nTopDiff;  // no break
+        case 2: aPos[nTop-1] = Width() - aPos[nTop-1];
+    }
+    aPos[0] = 0;
+    switch( nCount )
+    {
+        case 5: aPos[4] = aPos[3] + nBotDiff;   // no break
+        case 3: aPos[nTop] = nBotDiff;          break;
+        case 6: aPos[4] = aPos[3] + nBotDiff;   // no break
+        case 4: aPos[nTop] = 0;                 // no break
+        case 2: aPos[nCount-1] = Width() - aPos[nCount-1];
+    }
+
+    // Does the combined portion fit the line?
+    const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
+    if( bFull )
+    {
+        if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFldGrp()
+            || !((SwFldPortion*)rInf.GetLast())->IsFollow() ) )
+            Width( rInf.Width() - rInf.X() );
+        else
+        {
+            Truncate();
+            Width( 0 );
+            SetLen( 0 );
+            if( rInf.GetLast() )
+                rInf.GetLast()->FormatEOL( rInf );
+        }
+    }
+    return bFull;
+}
+
+/*************************************************************************
+ * SwCombinedPortion::GetViewWidth(..)
+ *************************************************************************/
+
+KSHORT SwCombinedPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+{
+    if( !GetLen() ) // for the dummy part at the end of the line, where
+        return 0;   // the combined portion doesn't fit.
+    return SwFldPortion::GetViewWidth( rInf );
 }
 
 

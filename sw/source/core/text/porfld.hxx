@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 11:42:06 $
+ *  last change: $Author: ama $ $Date: 2000-12-06 15:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,10 +234,38 @@ public:
     OUTPUT_OPERATOR
 };
 
+/*************************************************************************
+ *                      class SwCombinedPortion
+ * Used in for asian layout specialities to display up to six characters
+ * in 2 rows and 2-3 columns.
+ * e.g.
+ *
+ *       A..  A..  A.B  A.B   A.B.C   A.B.C
+ *       ...  ..B  .C.  C.D   .D.E.   D.E.F
+ *************************************************************************/
+
+class SwCombinedPortion : public SwFldPortion
+{
+    USHORT aPos[6];     // up to six X positions
+    USHORT aWidth[3];   // one width for every scripttype
+    BYTE aScrType[6];   // scripttype of every character
+    USHORT nUpPos;      // the Y position of the upper baseline
+    USHORT nLowPos;     // the Y position of the lower baseline
+    BYTE nProportion;   // relative font height
+public:
+    SwCombinedPortion( const XubString &rExpand );
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
+    OUTPUT_OPERATOR
+};
+
+
 CLASSIO( SwHiddenPortion )
 CLASSIO( SwNumberPortion )
 CLASSIO( SwBulletPortion )
 CLASSIO( SwGrfNumPortion )
+CLASSIO( SwCombinedPortion )
 
 
 #endif

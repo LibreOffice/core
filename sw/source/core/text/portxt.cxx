@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:28:27 $
+ *  last change: $Author: ama $ $Date: 2000-12-06 15:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,7 +627,7 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
     xub_StrLen nPos = 0;
     if ( InExpGrp() )
     {
-        if( !IsBlankPortion() && !InNumberGrp() )
+        if( !IsBlankPortion() && !InNumberGrp() && !IsCombinedPortion() )
         {
             // Bei OnWin() wird anstatt eines Leerstrings gern mal ein Blank
             // zurueckgeliefert, das koennen wir hier aber gar nicht gebrauchen

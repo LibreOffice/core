@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 11:33:55 $
+ *  last change: $Author: ama $ $Date: 2000-12-06 15:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,14 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         }
         case RES_HIDDENTXTFLD:
         {
+#ifdef OWN_YOUR_OWN_RISK
+            if( bName )
+                pRet = new SwFldPortion(pFld->GetCntnt( TRUE ));
+            else
+                pRet = new SwCombinedPortion(pFld->GetCntnt( FALSE ));
+#else
             pRet = new SwHiddenPortion(pFld->GetCntnt( bName ));
+#endif
             break;
         }
         case RES_CHAPTERFLD:

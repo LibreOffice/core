@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:18:38 $
+ *  last change: $Author: ama $ $Date: 2000-12-06 15:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ class SwTxtFormatInfo;
 #define PORGRP_NOTRECY  0x0080
 // kleine Spezialgruppen
 #define PORGRP_FIXMARG  0x0040
-#define PORGRP_FLDGLU   0x0020
+//#define PORGRP_?  0x0020
 #define PORGRP_TABNOTLFT 0x0010
 #define PORGRP_TOXREF   0x0008
 
@@ -127,15 +127,16 @@ class SwTxtFormatInfo;
 #define POR_SOFTHYPH    0xd082
 #define POR_SOFTHYPHSTR 0xd083
 
-#define POR_FLD         0xe0a0
-#define POR_HIDDEN      0xe0a1
-#define POR_QUOVADIS    0xe0a2
-#define POR_ERGOSUM     0xe0a3
+#define POR_FLD         0xe080
+#define POR_HIDDEN      0xe081
+#define POR_QUOVADIS    0xe082
+#define POR_ERGOSUM     0xe083
+#define POR_COMBINED    0xe084
 
-#define POR_FTNNUM      0xe8a0
-#define POR_NUMBER      0xe8a1
-#define POR_BULLET      0xe8a2
-#define POR_GRFNUM      0xe8a3
+#define POR_FTNNUM      0xe880
+#define POR_NUMBER      0xe881
+#define POR_BULLET      0xe882
+#define POR_GRFNUM      0xe883
 
 #define POR_GLUE        0x0480
 
@@ -220,8 +221,6 @@ public:
     inline const sal_Bool InExpGrp( )   const { return nWhichPor & PORGRP_EXP ? sal_True : sal_False;  }
     inline const sal_Bool InTabnLftGrp( ) const
         { return nWhichPor & PORGRP_TABNOTLFT ? sal_True : sal_False;  }
-    inline const sal_Bool InFldGluGrp( )const
-        { return nWhichPor & PORGRP_FLDGLU ? sal_True : sal_False;  }
     inline const sal_Bool InFixMargGrp( )const
         { return nWhichPor & PORGRP_FIXMARG ? sal_True : sal_False;  }
     inline const sal_Bool InSpaceGrp( )const
@@ -246,6 +245,7 @@ public:
     inline const sal_Bool IsHolePortion( )  const{ return nWhichPor == POR_HOLE; }
     inline const sal_Bool IsSoftHyphPortion()const{ return nWhichPor==POR_SOFTHYPH;}
     inline const sal_Bool IsPostItsPortion()const{ return nWhichPor == POR_POSTITS;}
+    inline const sal_Bool IsCombinedPortion()const{ return nWhichPor==POR_COMBINED;}
     inline const sal_Bool IsTextPortion( ) const{ return nWhichPor == POR_TXT; }
     inline const sal_Bool IsURLPortion( ) const{ return nWhichPor == POR_URL; }
     inline const sal_Bool IsHangingPortion( ) const{ return nWhichPor == POR_HNG; }
