@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:54:04 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1148,3 +1148,24 @@ FormTokenType SwFormTokensHelper::GetTokenType(const String & sToken,
 }
 
 // <- #i21237#
+
+void SwForm::SetPattern(USHORT nLevel, const SwFormTokens& rTokens)
+{
+    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
+    aPattern[nLevel] = rTokens;
+}
+
+void SwForm::SetPattern(USHORT nLevel, const String & rStr)
+{
+    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
+
+    SwFormTokensHelper aHelper(rStr);
+    aPattern[nLevel] = aHelper.GetTokens();
+}
+
+const SwFormTokens& SwForm::GetPattern(USHORT nLevel) const
+{
+    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
+    return aPattern[nLevel];
+}
+
