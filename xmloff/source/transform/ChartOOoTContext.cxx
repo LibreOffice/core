@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartOOoTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:44:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ void XMLChartOOoTransformerContext::StartElement(
                                "unexpected class token" );
                 if( ::xmloff::token::IsXMLToken( rAttrValue, XML_ADD_IN ) )
                 {
-                    nClassName = -1;
+                    nClassName = i;
                 }
                 else
                 {
