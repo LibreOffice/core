@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EncryptionEntity.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ class EncryptionEntity extends SecurityEntity
              xXMLEncryption, xRemoteServiceManager, xRemoteContext);
 
         m_nEncryptionElementCollectorId = m_xSAXEventKeeper.addSecurityElementCollector(
-            ElementMarkPriority.PRI_AFTERMODIFY,
+            ElementMarkPriority.AFTERMODIFY,
             true);
 
         m_xSAXEventKeeper.setSecurityId(m_nEncryptionElementCollectorId, m_nSecurityId);
@@ -120,7 +120,7 @@ class EncryptionEntity extends SecurityEntity
                 args[0] = new Integer(m_nSecurityId).toString();
                 args[1] = m_xSAXEventKeeper;
                 args[2] = new Integer(m_nEncryptionElementCollectorId).toString();
-                args[3] = m_xXMLSecurityContext;
+                args[3] = m_xXMLSecurityContext.getSecurityEnvironment();
                 args[4] = m_xXMLEncryption;
                 xInitialization.initialize(args);
 
@@ -222,7 +222,7 @@ class EncryptionEntity extends SecurityEntity
 
         int referenceId = m_xSAXEventKeeper.addSecurityElementCollector(
             isExporting?
-            (ElementMarkPriority.PRI_AFTERMODIFY):(ElementMarkPriority.PRI_BEFOREMODIFY),
+            (ElementMarkPriority.AFTERMODIFY):(ElementMarkPriority.BEFOREMODIFY),
             true);
 
         m_xSAXEventKeeper.setSecurityId(referenceId, m_nSecurityId);

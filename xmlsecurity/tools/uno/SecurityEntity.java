@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityEntity.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ class SecurityEntity
         {
             int referenceId = m_xSAXEventKeeper.addSecurityElementCollector(
                 isExporting?
-                (ElementMarkPriority.PRI_BEFOREMODIFY):(ElementMarkPriority.PRI_AFTERMODIFY),
+                (ElementMarkPriority.BEFOREMODIFY):(ElementMarkPriority.AFTERMODIFY),
                 false );
 
             setKeyId(referenceId);
