@@ -2,9 +2,9 @@
  *
  *  $RCSfile: functional,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:33:52 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ namespace std
 	using __gnu_cxx::select2nd;
 	using __gnu_cxx::unary_compose;
 	using __gnu_cxx::compose1;
+	using __gnu_cxx::identity;
 }
 #else
 #error UNSUPPORTED COMPILER
