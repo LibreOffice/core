@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:07:03 $
+ *  last change: $Author: kz $ $Date: 2001-04-07 19:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ String STR_SVT_COLLATE_CHARSET
     /* default or normal sorting algorithm */
     Text = "Charset" ;
      Text [ ENGLISH ] = "Character Set" ;
-    Text[ english_us ] = "Character Set";
+    Text[ english_us ] = "Character set";
     Text[ portuguese ] = "Character Set";
     Text[ russian ] = "Νΰαξπ ηνΰκξβ";
     Text[ greek ] = "Σύνολο χαρακτήρων";
