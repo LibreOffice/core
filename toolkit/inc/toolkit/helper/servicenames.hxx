@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicenames.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: mt $ $Date: 2001-01-24 14:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ extern const sal_Char __FAR_DATA szServiceName_UnoControlContainer[], szServiceN
 extern const sal_Char __FAR_DATA szServiceName_UnoControlContainerModel[], szServiceName2_UnoControlContainerModel[];
 extern const sal_Char __FAR_DATA szServiceName_TabController[], szServiceName2_TabController[];
 extern const sal_Char __FAR_DATA szServiceName_TabControllerModel[], szServiceName2_TabControllerModel[];
+extern const sal_Char __FAR_DATA szServiceName_UnoControlDialog[], szServiceName2_UnoControlDialog[];
+extern const sal_Char __FAR_DATA szServiceName_UnoControlDialogModel[], szServiceName2_UnoControlDialogModel[];
 extern const sal_Char __FAR_DATA szServiceName_UnoControlEdit[], szServiceName2_UnoControlEdit[];
 extern const sal_Char __FAR_DATA szServiceName_UnoControlEditModel[], szServiceName2_UnoControlEditModel[];
 extern const sal_Char __FAR_DATA szServiceName_UnoControlFileControl[], szServiceName2_UnoControlFileControl[];
