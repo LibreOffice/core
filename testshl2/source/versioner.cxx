@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versioner.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-20 11:10:27 $
+ *  last change: $Author: lla $ $Date: 2003-01-28 10:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include "versionhelper.hxx"
 
 #include <rtl/ustring.hxx>
-
 #include <iostream>
 
 // ----------------------------------- Main -----------------------------------
@@ -92,7 +91,8 @@ int _cdecl main( int argc, char* argv[] )
 
     if (opt.getParams().empty())
     {
-        std::cerr << "error: At least a library should given." << std::endl;
+        // std::cerr << "error: At least a library should given." << std::endl;
+        fprintf(stderr, "error: At least a library should given.\n");
         opt.showUsage();
         exit(0);
     }

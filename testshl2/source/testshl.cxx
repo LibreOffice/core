@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-20 11:09:46 $
+ *  last change: $Author: lla $ $Date: 2003-01-28 10:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,14 +136,15 @@ std::auto_ptr<Outputter> initOutputter(GetOpt & _aOptions)
         Log* pLog = new Log( FileHelper::convertPath( sLogFile ) );
         if ( pLog->open() != osl::FileBase::E_None )
         {
-            cerr << "could not open LogFile: " << pLog->getName().getStr() << endl;
+            // cerr << "could not open LogFile: " << pLog->getName().getStr() << endl;
+            fprintf(stderr, "could not open LogFile: %s\n", pLog->getName().getStr());
             exit(1);
         }
         pOutputter = std::auto_ptr<Outputter>(new Outputter(pLog));
     }
     else
     {
-        pOutputter = std::auto_ptr<Outputter>(new Outputter(cout));
+        pOutputter = std::auto_ptr<Outputter>(new Outputter(std::cout));
     }
 
     return pOutputter;
@@ -188,7 +189,8 @@ int _cdecl main( int argc, char* argv[] )
         // no library is given, but if a jobonly list is given, we should generate UNKNOWN errors.
         if (! opt.hasOpt("-jobonly"))
         {
-            std::cerr << "error: At least a library or a job file should given." << std::endl;
+            // std::cerr << "error: At least a library or a job file should given." << std::endl;
+            fprintf(stderr, "error: At least a library or a job file should given.\n");
             opt.showUsage();
             exit(0);
         }
@@ -236,21 +238,14 @@ int _cdecl main( int argc, char* argv[] )
 // all functions + the given, no one twice
 // only the given functions
 
-// Signals info
-// We can only say which function has thrown a signal, and what signal was thrown,
-// but not really where the signal was thrown. You have to debug this function by hand.
-
 // Exception info
 // Due to the fact that exceptions will caught, on exceptions the ASSERTION text is given.
 // but we know also the real thrown exception
 
 // PARAMETER:
-// - BaselibTest.txt anders benennen.
-// - in eigenes Verzeichnis setzen.
-// - log file, nicht nur cout.
 // - emacs mode
 // - test runner in perl.
-// - Version/Buildno. im Datum
+// - Version/Buildno. in Date
 // - xml
 
 // Remove rtl_tres_state from SAL!
@@ -260,7 +255,7 @@ int _cdecl main( int argc, char* argv[] )
 
 // What is a good test?
 // init your data
-// ASSERT( check if a generated result is what you expect )
+// ASSERT( check if a generated result is, what you expect )
 //
 // that's all
 // really all, no
@@ -304,3 +299,8 @@ int _cdecl main( int argc, char* argv[] )
 // get info what works, what not.
 
 // By a human readable line by line info.
+
+// http://foldoc.doc.ic.ac.uk/foldoc/foldoc.cgi?automated+testing
+// http://foldoc.doc.ic.ac.uk/foldoc/foldoc.cgi?fault-based+testing
+// http://foldoc.doc.ic.ac.uk/foldoc/foldoc.cgi?confidence+test
+
