@@ -13152,3 +13152,7 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?lcl_autoUpdateFileExtension@?%O:\SRC662\src\svtools\source\filepicker\iodlg.cxx1670829708@@YAXPAVSvtFileDialog@@@Z
 ?lcl_getHomeDirectory@?%O:\SRC662\src\svtools\source\filepicker\iodlg.cxx1670829708@@YAEABVString@@AAV2@@Z
 ?lcl_DecoratedFilter@?%O:\SRC662\src\svtools\source\filepicker\iodlgimp.cxx2016226972@@YA?AVString@@ABV2@@Z
+?CompareHashPassword@SvPasswordHelper@@SA_NABV?$Sequence@C@uno@star@sun@com@@ABVString@@@Z
+?GetHashPassword@SvPasswordHelper@@CAXAAV?$Sequence@C@uno@star@sun@com@@PBDK@Z
+?GetHashPasswordBigEndian@SvPasswordHelper@@CAXAAV?$Sequence@C@uno@star@sun@com@@ABVString@@@Z
+?GetHashPasswordLittleEndian@SvPasswordHelper@@CAXAAV?$Sequence@C@uno@star@sun@com@@ABVString@@@Z
