@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:41:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ void OUserAdmin::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
             Reference< XDataDefinitionSupplier > xDriver(m_pAdminDialog->getDriver(),UNO_QUERY);
             if ( xDriver.is() )
             {
-                m_xConnection = m_pAdminDialog->createConnection();
+                m_xConnection = m_pAdminDialog->createConnection().first;
                 if ( m_xConnection.is() )
                 {
                     // now set the tables supplier at the table control
