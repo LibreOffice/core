@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 20:05:16 $
+ *  last change: $Author: sj $ $Date: 2001-05-15 13:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <svtools/fltcall.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/group.hxx>
+#include <vcl/fixed.hxx>
 
 /*************************************************************************
 |*
@@ -82,8 +82,8 @@ class DlgExportEGIF : public ModalDialog
 private:
     CheckBox            aCbxInterlaced;
     CheckBox            aCbxTranslucent;
-    GroupBox            aGrpMode;
-    GroupBox            aGrpDraw;
+    FixedLine           aGrpMode;
+    FixedLine           aGrpDraw;
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
