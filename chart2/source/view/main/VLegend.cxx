@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 19:41:42 $
+ *  last change: $Author: bm $ $Date: 2003-11-14 15:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,20 +227,20 @@ void lcl_getProperties(
             (aTextValueMap[ C2U("CharHeight") ] >>= fFontHeight) )
         {
             aTextValueMap[ C2U("CharHeight") ] = uno::makeAny(
-                static_cast< double >(
-                    ::chart::RelativeSizeHelper::calculate( aPropRefSize, rReferenceSize, fFontHeight )));
+                static_cast< float >(
+                    ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize )));
 
             if( aTextValueMap[ C2U("CharHeightAsian") ] >>= fFontHeight )
             {
                 aTextValueMap[ C2U("CharHeightAsian") ] = uno::makeAny(
-                    static_cast< double >(
-                        ::chart::RelativeSizeHelper::calculate( aPropRefSize, rReferenceSize, fFontHeight )));
+                    static_cast< float >(
+                        ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize )));
             }
             if( aTextValueMap[ C2U("CharHeightComplex") ] >>= fFontHeight )
             {
                 aTextValueMap[ C2U("CharHeightComplex") ] = uno::makeAny(
-                    static_cast< double >(
-                        ::chart::RelativeSizeHelper::calculate( aPropRefSize, rReferenceSize, fFontHeight )));
+                    static_cast< float >(
+                        ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize )));
             }
         }
 
