@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:58 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
