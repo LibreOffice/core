@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-19 08:27:13 $
+ *  last change: $Author: cmc $ $Date: 2001-02-19 08:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2686,27 +2686,16 @@ SvXMLImportContext *SmXMLImport::CreateActionContext(sal_uInt16 nPrefix,
 
 SmXMLImport::~SmXMLImport()
 {
-    if (pMathElemTokenMap)
-        delete pMathElemTokenMap;
-    if (pPresLayoutElemTokenMap)
-        delete pPresLayoutElemTokenMap;
-    if (pPresElemTokenMap)
-        delete pPresElemTokenMap;
-    if (pPresScriptEmptyElemTokenMap)
-        delete pPresScriptEmptyElemTokenMap;
-    if (pPresTableElemTokenMap)
-        delete pPresTableElemTokenMap;
-    if (pPresLayoutAttrTokenMap)
-        delete pPresLayoutAttrTokenMap;
-    if (pFencedAttrTokenMap)
-        delete pFencedAttrTokenMap;
-    if (pColorTokenMap)
-        delete pColorTokenMap;
-    if (pOperatorAttrTokenMap)
-        delete pOperatorAttrTokenMap;
-    if (pAnnotationAttrTokenMap)
-        delete pAnnotationAttrTokenMap;
-
+    delete pMathElemTokenMap;
+    delete pPresLayoutElemTokenMap;
+    delete pPresElemTokenMap;
+    delete pPresScriptEmptyElemTokenMap;
+    delete pPresTableElemTokenMap;
+    delete pPresLayoutAttrTokenMap;
+    delete pFencedAttrTokenMap;
+    delete pColorTokenMap;
+    delete pOperatorAttrTokenMap;
+    delete pAnnotationAttrTokenMap;
 }
 
 void SmXMLExport::_ExportContent()
@@ -2775,8 +2764,7 @@ void SmXMLExport::ExportExpression(const SmNode *pNode,int nLevel)
     }
 #endif
 
-    if (pRow)
-        delete pRow;
+    delete pRow;
 }
 
 void SmXMLExport::ExportBinaryVertical(const SmNode *pNode,int nLevel)
@@ -2813,12 +2801,10 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
                 pRow = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
                     sXML_mtr, sal_True, sal_True);
             ExportNodes(pTemp,nLevel+1);
-            if (pRow)
-                delete pRow;
+            delete pRow;
         }
 
-    if (pTable)
-        delete pTable;
+    delete pTable;
 }
 
 void SmXMLExport::ExportMath(const SmNode *pNode, int nLevel)
@@ -2908,8 +2894,7 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
             ExportNodes(pCSub, nLevel+1);
         if (pCSup)
             ExportNodes(pCSup, nLevel+1);
-        if (pThing2)
-            delete pThing2;
+        delete pThing2;
 
         pSub = pNode->GetSubNode(RSUB+1);
         pSup = pNode->GetSubNode(RSUP+1);
@@ -2995,15 +2980,13 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
             ExportNodes(pCSub, nLevel+1);
         if (pCSup)
             ExportNodes(pCSup, nLevel+1);
-        if (pThing2)
-            delete pThing2;
+        delete pThing2;
 
         if (pSub)
             ExportNodes(pSub, nLevel+1);
         if (pSup)
             ExportNodes(pSup, nLevel+1);
-        if (pThing)
-            delete pThing;
+        delete pThing;
     }
 }
 
@@ -3062,8 +3045,7 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
             RTL_CONSTASCII_USTRINGPARAM(sXML_false)));
         ExportMath(pRight,nLevel+1);
     }
-    if (pRow)
-        delete pRow;
+    delete pRow;
 }
 
 void SmXMLExport::ExportRoot(const SmNode *pNode, int nLevel)
@@ -3297,8 +3279,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
         ExportNodes(pNode->GetSubNode(0),nLevel+1);
 #endif
 
-    if (pElement)
-        delete pElement;
+    delete pElement;
 }
 
 
