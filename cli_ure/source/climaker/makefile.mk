@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-25 12:28:37 $
+#   last change: $Author: vg $ $Date: 2003-10-06 13:05:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,12 +105,12 @@ UNOTYPES = \
 
 CFLAGS += /clr:noAssembly
 
-CXXFILES = \
-    climaker_emit.cxx		\
-    climaker_app.cxx
+OBJFILES = \
+    $(OBJ)$/climaker_emit.obj	\
+    $(OBJ)$/climaker_app.obj
 
 APP1TARGET = $(TARGET)
-APP1OBJS = $(foreach,i,$(subst,.cxx,.obj $(CXXFILES)) $(OBJ)$/$i)
+APP1OBJS = $(OBJFILES)
 
 APP1STDLIBS = \
     $(CPPUHELPERLIB)		\
@@ -118,7 +118,12 @@ APP1STDLIBS = \
     $(SALLIB)			\
     mscoree.lib
 
+ALL : ALLTAR $(BIN)$/climaker.exe.config
+
 .ENDIF
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE :  target.mk
+
+$(BIN)$/climaker.exe.config : climaker.exe.config
+    $(GNUCOPY) -f $? $@
