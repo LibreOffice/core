@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-01 11:15:10 $
+ *  last change: $Author: dr $ $Date: 2002-10-07 07:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -984,27 +984,30 @@ FltError ImportExcel::Read( void )
         }
     }
 
-    pD->CalcAfterLoad();
+    if( eLastErr == eERR_OK )
+    {
+        pD->CalcAfterLoad();
 
-    ScStyleSheetPool*       pPool = pD->GetStyleSheetPool();
+        ScStyleSheetPool*       pPool = pD->GetStyleSheetPool();
 
-    UINT16                  nTabLast;// = pExcRoot->pTabNameBuff->GetLastIndex();
-    if( pExcRoot->eHauptDateiTyp == Biff3 || (pExcRoot->eHauptDateiTyp == Biff4 && !bBiff4Workbook) )
-        nTabLast = 1;
-    else
-        nTabLast = pExcRoot->pTabNameBuff->GetLastIndex();
+        UINT16                  nTabLast;// = pExcRoot->pTabNameBuff->GetLastIndex();
+        if( pExcRoot->eHauptDateiTyp <= Biff3 || (pExcRoot->eHauptDateiTyp == Biff4 && !bBiff4Workbook) )
+            nTabLast = 1;
+        else
+            nTabLast = pExcRoot->pTabNameBuff->GetLastIndex();
 
-    UINT16                  nTabCount;
-    for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
-        pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
+        UINT16                  nTabCount;
+        for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
+            pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
 
-    DELETEZ( pProgress );
+        DELETEZ( pProgress );
 
-    AdjustRowHeight();
-    PostDocLoad();
+        AdjustRowHeight();
+        PostDocLoad();
 
-    if( bTabTruncated )
-        eLastErr = eERR_RNGOVRFLW;
+        if( bTabTruncated )
+            eLastErr = eERR_RNGOVRFLW;
+    }
 
     return eLastErr;
 }
@@ -1475,9 +1478,10 @@ FltError ImportExcel8::Read( void )
         }
     }
 
-    pD->CalcAfterLoad();
-
+    if( eLastErr == eERR_OK )
     {
+        pD->CalcAfterLoad();
+
         ScStyleSheetPool*       pPool = pD->GetStyleSheetPool();
 
         UINT16                  nTabLast = pExcRoot->pTabNameBuff->GetLastIndex();
@@ -1485,19 +1489,19 @@ FltError ImportExcel8::Read( void )
         UINT16                  nTabCount;
         for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
             pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
+
+        DELETEZ( pProgress );
+
+        AdjustRowHeight();
+        PostDocLoad();
+
+        // import change tracking data
+        XclImpChangeTrack aImpChTr( pExcRoot );
+        aImpChTr.Apply();
+
+        if( bTabTruncated )
+            eLastErr = eERR_RNGOVRFLW;
     }
-
-    DELETEZ( pProgress );
-
-    AdjustRowHeight();
-    PostDocLoad();
-
-    // import change tracking data
-    XclImpChangeTrack aImpChTr( pExcRoot );
-    aImpChTr.Apply();
-
-    if( bTabTruncated )
-        eLastErr = eERR_RNGOVRFLW;
 
     return eLastErr;
 }

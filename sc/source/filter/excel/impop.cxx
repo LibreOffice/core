@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-01 11:21:08 $
+ *  last change: $Author: dr $ $Date: 2002-10-07 07:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,10 @@ ScExtDocOptions &ImportTyp::GetExtOpt( void )
 ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     ImportTyp( aStream, pDoc, RTL_TEXTENCODING_MS_1252 ),
     aColOutlineBuff( MAXCOL + 1 ),
-    aRowOutlineBuff( MAXROW + 1 )
+    aRowOutlineBuff( MAXROW + 1 ),
+    bFitToPage( sal_False ),
+    bHasHeader( sal_False ),
+    bHasFooter( sal_False )
 {
     pChart = pUsedChartFirst = pUsedChartLast = NULL;
 
