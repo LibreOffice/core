@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-11 17:25:19 $
+#   last change: $Author: as $ $Date: 2001-05-23 05:56:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -163,6 +163,7 @@ SHL2OBJS=		$(SLO)$/registertemp.obj			\
                 $(SLO)$/frameloaderfactory.obj		\
                 $(SLO)$/filterfactory.obj			\
                 $(SLO)$/typedetection.obj			\
+                $(SLO)$/filtercachedata.obj			\
                 $(SLO)$/filtercache.obj				\
                 $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/wildcard.obj				\
