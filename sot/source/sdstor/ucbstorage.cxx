@@ -945,6 +945,8 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
         String aTemp = String::CreateFromAscii("vnd.sun.star.pkg://");
         aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL );
         m_aURL = aTemp;
+        if ( nMode & STREAM_WRITE )
+            m_pStream = ::utl::UcbStreamHelper::CreateStream( aName, nMode );
     }
     else
     {
@@ -1350,6 +1352,7 @@ UCBStorage_Impl::~UCBStorage_Impl()
 
     m_aChildrenList.Clear();
     delete m_pContent;
+    delete m_pStream;
     delete m_pTempFile;
 }
 
