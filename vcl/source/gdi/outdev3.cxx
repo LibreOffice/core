@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:34:00 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4483,7 +4483,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     BOOL                bOldMap         = mbMap;
     GDIMetaFile*        pOldMetaFile    = mpMetaFile;
     mpMetaFile = NULL;
-    mbMap = FALSE;
+    EnableMapMode( FALSE );
 
     FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
     PolyPolygon         aPolyPoly;
@@ -4554,7 +4554,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 
     SetLineColor( aOldLineColor );
     SetFillColor( aOldFillColor );
-    mbMap = bOldMap;
+    EnableMapMode( bOldMap );
     mpMetaFile = pOldMetaFile;
 }
 
@@ -4622,11 +4622,11 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     mnOutOffX   = 0L;
     mnOutOffY   = 0L;
     mpMetaFile  = NULL;
-    mbMap       = FALSE;
+    EnableMapMode( FALSE );
 
     DrawMask( aPoint, aBmp, GetTextColor() );
 
-    mbMap       = bOldMap;
+    EnableMapMode( bOldMap );
     mnOutOffX   = nOldOffX;
     mnOutOffY   = nOldOffY;
     mpMetaFile  = pOldMetaFile;
@@ -4894,6 +4894,9 @@ void OutputDevice::SetAntialiasing( USHORT nMode )
         mnAntialiasing = nMode;
         mbInitFont = TRUE;
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetAntialiasing( nMode );
 }
 
 // -----------------------------------------------------------------------
@@ -4987,6 +4990,9 @@ void OutputDevice::SetFont( const Font& rNewFont )
         maFont      = aFont;
         mbNewFont   = TRUE;
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetFont( rNewFont );
 }
 
 // -----------------------------------------------------------------------
@@ -4999,6 +5005,9 @@ void OutputDevice::SetLayoutMode( ULONG nTextLayoutMode )
         mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );
 
     mnTextLayoutMode = nTextLayoutMode;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetLayoutMode( nTextLayoutMode );
 }
 
 // -----------------------------------------------------------------------
@@ -5016,6 +5025,9 @@ void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
         eTextLanguage = GetSystemLanguage();
 
     meTextLanguage = eTextLanguage;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetDigitLanguage( eTextLanguage );
 }
 
 // -----------------------------------------------------------------------
@@ -5059,6 +5071,9 @@ void OutputDevice::SetTextColor( const Color& rColor )
         maTextColor = aColor;
         mbInitTextColor = TRUE;
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetTextColor( COL_BLACK );
 }
 
 // -----------------------------------------------------------------------
@@ -5075,6 +5090,9 @@ void OutputDevice::SetTextFillColor()
         maFont.SetFillColor( Color( COL_TRANSPARENT ) );
     if ( !maFont.IsTransparent() )
         maFont.SetTransparent( TRUE );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetTextFillColor();
 }
 
 // -----------------------------------------------------------------------
@@ -5126,6 +5144,9 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
         maFont.SetFillColor( aColor );
     if ( maFont.IsTransparent() != bTransFill )
         maFont.SetTransparent( bTransFill );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetTextFillColor( COL_BLACK );
 }
 
 // -----------------------------------------------------------------------
@@ -5149,6 +5170,9 @@ void OutputDevice::SetTextLineColor()
         mpMetaFile->AddAction( new MetaTextLineColorAction( Color(), FALSE ) );
 
     maTextLineColor = Color( COL_TRANSPARENT );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetTextLineColor();
 }
 
 // -----------------------------------------------------------------------
@@ -5188,6 +5212,9 @@ void OutputDevice::SetTextLineColor( const Color& rColor )
         mpMetaFile->AddAction( new MetaTextLineColorAction( aColor, TRUE ) );
 
     maTextLineColor = aColor;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetTextLineColor( COL_BLACK );
 }
 
 // -----------------------------------------------------------------------
@@ -5206,6 +5233,9 @@ void OutputDevice::SetTextAlign( TextAlign eAlign )
         maFont.SetAlign( eAlign );
         mbNewFont = TRUE;
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetTextAlign( eAlign );
 }
 
 // -----------------------------------------------------------------------
@@ -5253,6 +5283,9 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
     nWidth = ImplLogicWidthToDevicePixel( nWidth );
     aPos += Point( mnTextOffX, mnTextOffY );
     ImplDrawTextLine( aPos.X(), aPos.X(), aPos.Y(), nWidth, eStrikeout, eUnderline, bUnderlineAbove );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawTextLine( rPos, nWidth, eStrikeout, eUnderline, bUnderlineAbove );
 }
 
 // ------------------------------------------------------------------------
@@ -5340,6 +5373,9 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
         pGraphics->DrawWaveLine( aPos1, aPos2, nStyle );
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nStyle );
 }
 
 // -----------------------------------------------------------------------
@@ -5431,6 +5467,9 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
         ImplDrawText( *pSalLayout );
         pSalLayout->Release();
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawText( rStartPt, rStr, nIndex, nLen, pVector, pDisplayText );
 }
 
 // -----------------------------------------------------------------------
@@ -5509,6 +5548,9 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
         ImplDrawText( *pSalLayout );
         pSalLayout->Release();
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen );
 }
 
 // -----------------------------------------------------------------------
@@ -5664,6 +5706,9 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
         ImplDrawText( *pSalLayout );
         pSalLayout->Release();
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawStretchText( rStartPt, nWidth, rStr, nIndex, nLen );
 }
 
 // -----------------------------------------------------------------------
@@ -6307,6 +6352,9 @@ void OutputDevice::DrawText( const Rectangle& rRect,
         if ( bRestoreFillColor )
             SetTextFillColor( aOldTextFillColor );
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawText( rRect, rOrigStr, nStyle, pVector, pDisplayText );
 }
 
 // -----------------------------------------------------------------------
@@ -6700,6 +6748,9 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawCtrlText( rPos, rStr, nIndex, nLen, nStyle, pVector, pDisplayText );
 }
 
 // -----------------------------------------------------------------------
@@ -6847,6 +6898,10 @@ BOOL OutputDevice::AddTempDevFont( const String& rFileURL, const String& rFontNa
     if( !pFontData )
         return FALSE;
     mpFontList->Add( pFontData );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->AddTempDevFont( rFileURL, rFontName );
+
     return TRUE;
 }
 
