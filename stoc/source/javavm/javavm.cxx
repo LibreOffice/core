@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-31 16:43:39 $
+ *  last change: $Author: pluby $ $Date: 2001-03-09 04:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,11 @@
 
 #ifdef UNIX
 #define INI_FILE "javarc"
+#ifdef MACOSX
+#define DEF_JAVALIB "JavaVM.framework"
+#else
 #define DEF_JAVALIB "libjvm.so"
+#endif
 
 #define TIMEZONE "MEZ"
 
