@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:13 $
+ *  last change: $Author: cmc $ $Date: 2002-07-02 15:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,9 +491,9 @@ void SwWW8Writer::Out_SfxBreakItems( const SfxItemSet& rSet, const SwNode& rNd )
         bBreakBefore = TRUE;
 
         const SfxPoolItem* pItem;
-        if( !bStyDef && !bOutKF && !bOutPageDescs && SFX_ITEM_SET ==
-            rSet.GetItemState( RES_PAGEDESC, FALSE, &pItem ) &&
-            ((SwFmtPageDesc*)pItem)->GetRegisteredIn() )
+        if( !bStyDef && !bOutKF && !bInWriteEscher && !bOutPageDescs &&
+            SFX_ITEM_SET == rSet.GetItemState( RES_PAGEDESC, FALSE, &pItem )
+            && ((SwFmtPageDesc*)pItem)->GetRegisteredIn() )
         {
             // Die PageDescs werden beim Auftreten von PageDesc-Attributen nur
             // in WW8Writer::pSepx mit der entsprechenden Position
