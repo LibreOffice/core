@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:56:13 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ ModalDialog DLG_QRY_JOIN
             Text[ danish ] = "involverede tabeller";
             Text[ swedish ] = "inkluderade tabeller";
             Text[ polish ] = "implikowane tabele";
-            Text[ portuguese_brazilian ] = "involved tables";
+            Text[ portuguese_brazilian ] = "tabelas consideradas";
             Text[ japanese ] = "ι–Άι€£γƒ†γƒΌγƒ–γƒ«";
             Text[ korean ] = "κ΄€λ ¨ ν…μ΄λΈ”";
             Text[ chinese_simplified ] = "ζ‰ε…³θ”η„θ΅¨ζ Ό";
@@ -155,7 +155,7 @@ ModalDialog DLG_QRY_JOIN
             Text[ danish ] = "involverede felter";
             Text[ swedish ] = "inkluderade fδlt";
             Text[ polish ] = "implikowane pola";
-            Text[ portuguese_brazilian ] = "involved fields";
+            Text[ portuguese_brazilian ] = "campos considerados";
             Text[ japanese ] = "ι–Άι€£γƒ•γ‚£γƒΌγƒ«γƒ‰";
             Text[ korean ] = "κ΄€λ ¨ ν•„λ“";
             Text[ chinese_simplified ] = "ζ‰ε…³θ”η„ε­—ζ®µ";
@@ -227,7 +227,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ danish ] = "Type";
         Text[ swedish ] = "~Typ";
         Text[ polish ] = "Typ";
-        Text[ portuguese_brazilian ] = "~Type";
+        Text[ portuguese_brazilian ] = "~Tipo";
         Text[ japanese ] = "η¨®ι΅(~T)";
         Text[ korean ] = "μ ν•(~T)";
         Text[ chinese_simplified ] = "η±»ε‹(~T)";
@@ -266,10 +266,10 @@ ModalDialog DLG_QRY_JOIN
         DDExtraWidth    = TRUE;
     StringList [ language_user1 ] =
     {
-         < "Innerer" ; Default; > ;
-        < "Linker" ; Default; > ;
-        < "Rechter" ; Default; > ;
-        < "Vollstδndiger"  ; Default; > ;
+         < "; Innerer" ; Default; > ;
+        < "; Linker" ; Default; > ;
+        < "; Rechter" ; Default; > ;
+        < "; Vollstδndiger"  ; Default; > ;
     };
     StringList [ english_us ] =
     {
@@ -357,10 +357,10 @@ ModalDialog DLG_QRY_JOIN
     };
     StringList [ portuguese_brazilian ] =
     {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Full (outer) join"  ; Default; > ;
+         < "Interno" ; Default; > ;
+        < "Esquerda" ; Default; > ;
+        < "Direita" ; Default; > ;
+        < "Completo"  ; Default; > ;
     };
     StringList [ japanese ] =
     {
@@ -561,7 +561,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ chinese_traditional ] = "ε«ζ‰<%1>δΈ­η„ζ‰€ζ‰θ³‡ζ–™ζΆη›®ε’<%2>δΈ­ε…©ε€‹θ΅¨ζ Όη„ι€£ηµζ¬„δ½η›Έεη„θ³‡ζ–™ζΆη›®γ€‚";
     Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ chinese_simplified ] = "ε«ζ‰'%1'δΈ­η„ζ‰€ζ‰ζ•°ζ®ζ΅η›®ε’'%2'δΈ­δΈ¤δΈªθ΅¨ζ ΌεΌ•η”¨ε­—ζ®µη›Έεη„ζ•°ζ®ζ΅η›®γ€‚";
-    Text[ greek ] = "Περιέχει ΟΛΕΣ τις εγγραφές του πίνακα '%1' και τις εγγραφές του πίνακα '%2' στις οποίες ταυτίζονται τα περιεχόμενα των συνδεδεμένων πεδίων των ";
+    Text[ greek ] = "Περιέχει ΌΛΕΣ τις εγγραφές από τον πίνακα '%1', αλλά μόνο τις εγγραφές από τον πίνακα '%2' όπου τα σχετικά πεδία συμφωνούν.";
     Text[ korean ] = "ν…μ΄λΈ” '%1'μ—λ” λª¨λ“  λ μ½”λ“κ°€ ν…μ΄λΈ” '%2'μ—λ” λ‘ ν…μ΄λΈ”μ κ΄€κ³„λ ν•„λ“ λ‚΄μ©μ΄ μΌμΉν•λ” λ μ½”λ“λ§μ΄ ν¬ν•¨λ©λ‹λ‹¤.";
     Text[ arabic ] = "νΝΚζν Ϊαμ ία ΣΜαΗΚ '%1'΅ ζΣΜαΗΚ '%2' ΗαΚν ΚΚΨΗΘή ένεΗ γΝΚζνΗΚ ΗαΝήζα ΗαγΡΚΘΨΙ έν ίαΗ ΗαΜΟζανδ έήΨ.";
     Text[ turkish ] = "Contains ALL records from table '%1' but only records from table '%2' where the values in the related fields are matching.";
@@ -608,6 +608,7 @@ String STR_QUERY_FULL_JOIN
     Text[ hindi ] = "'%1' ΰ¤”ΰ¤° '%2' ΰ¤•ΰ¥‡ ΰ¤Έΰ¤¬ ΰ¤…ΰ¤­ΰ¤Ώΰ¤²ΰ¥‡ΰ¤– ΰ¤Έΰ¤®ΰ¥ΰ¤®ΰ¤Ώΰ¤²ΰ¤Ώΰ¤¤ ΰ¤Ήΰ¥";
     Text[ slovak ] = "ZahΕ•Εa vΕ΅etky zΓ΅znamy z tabuΔΎky'%1' a '%2'.";
 };
+
 
 
 
