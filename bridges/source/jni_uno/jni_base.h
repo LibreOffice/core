@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_base.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:30:48 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,8 +301,7 @@ inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
     {
         throw BridgeRuntimeError(
             OUSTR("cannot get comprehensive type description for ") +
-            *reinterpret_cast< ::rtl::OUString const * >(
-                &td_ref->pTypeName ) );
+            ::rtl::OUString::unacquired( &td_ref->pTypeName ) );
     }
 }
 
