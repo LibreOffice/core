@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: bm $ $Date: 2001-04-02 09:39:43 $
+ *  last change: $Author: bm $ $Date: 2001-04-06 08:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -983,6 +983,9 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 {
                     mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_values_cell_range_address,
                                            maSeriesAddresses[ nSeries ].DataRangeAddress );
+                    if( maSeriesAddresses[ nSeries ].LabelAddress.getLength())
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_label_cell_address,
+                                               maSeriesAddresses[ nSeries ].LabelAddress );
                 }
 
                 // this is what should be done in the future:
