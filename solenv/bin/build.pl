@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: vg $ $Date: 2002-01-21 16:04:31 $
+#   last change: $Author: vg $ $Date: 2002-01-23 11:01:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.43 $ ';
+$id_str = ' $Revision: 1.44 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -134,6 +134,8 @@ if ($cmd_file) {
     select STDERR;
 };
 
+print $new_line;
+
 &BuildAll();
 @TotenEltern = keys %DeadParents;
 if ($#TotenEltern != -1) {
@@ -151,7 +153,10 @@ if (($ENV{GUI} ne 'UNX') && $cmd_file) {
     print "popd\n";
 };
 $ENV{mk_tmp} = '';
-close CMD_FILE if ($cmd_file);
+if ($cmd_file) {
+    close CMD_FILE;
+    print STDOUT "Script $cm generated\n";
+};
 exit(0);
 
 #########################
@@ -259,11 +264,7 @@ sub MakeDir {
     };
     &RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
     if (!$cmd_file && !$show) {
-        if (chdir ($BuildDir)) {
-            print "$BuildDir\n";
-        } else {
-            &print_error("\n$BuildDir not found!!\n");
-        };
+        &print_error("\n$BuildDir not found!!\n") if (!(chdir ($BuildDir)));
         cwd();
         $error = system ("$dmake");
         if ($error) {
