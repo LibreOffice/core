@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-12-05 13:08:54 $
+ *  last change: $Author: os $ $Date: 2001-01-19 11:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,13 +218,101 @@ BOOL SwModuleOptions::SetCapOption(BOOL bHTML, const InsCaptionOpt* pOpt)
 
 --------------------------------------------------*/
 SwModuleOptions::SwModuleOptions() :
-    aRevisionConfig(),
     aInsertConfig(FALSE),
     aWebInsertConfig(TRUE),
     aTableConfig(FALSE),
     aWebTableConfig(TRUE),
     bHideFieldTips(FALSE)
 {
+}
+/* -----------------------------19.01.01 12:26--------------------------------
+
+ ---------------------------------------------------------------------------*/
+String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, BOOL bFromUI)
+{
+    String sReturn;
+    if(bFromUI)
+    {
+        String sChar;
+
+        xub_StrLen i = 0;
+        sal_Unicode c;
+
+        while (i < rDelim.Len())
+        {
+            c = rDelim.GetChar(i++);
+
+            if (c == '\\')
+            {
+                c = rDelim.GetChar(i++);
+
+                switch (c)
+                {
+                    case 'n':   sReturn += '\n';    break;
+                    case 't':   sReturn += '\t';    break;
+                    case '\\':  sReturn += '\\';    break;
+
+                    case 'x':
+                    {
+                        sal_Unicode nVal, nChar;
+                        BOOL bValidData = TRUE;
+                        xub_StrLen n;
+                        for( n = 0, nChar = 0; n < 2 && i < rDelim.Len(); ++n, ++i )
+                        {
+                            if( ((nVal = rDelim.GetChar( i )) >= '0') && ( nVal <= '9') )
+                                nVal -= '0';
+                            else if( (nVal >= 'A') && (nVal <= 'F') )
+                                nVal -= 'A' - 10;
+                            else if( (nVal >= 'a') && (nVal <= 'f') )
+                                nVal -= 'a' - 10;
+                            else
+                            {
+                                DBG_ERROR( "ungueltiger Hex-Wert" );
+                                bValidData = FALSE;
+                                break;
+                            }
+
+                            (nChar <<= 4 ) += nVal;
+                        }
+                        if( bValidData )
+                            sReturn += nChar;
+                        break;
+                    }
+
+                    default:    // Unbekannt, daher nur Backslash einfuegen
+                        sReturn += '\\';
+                        i--;
+                        break;
+                }
+            }
+            else
+                sReturn += c;
+        }
+    }
+    else
+    {
+        for (xub_StrLen i = 0; i < rDelim.Len(); i++)
+        {
+            sal_Unicode c = rDelim.GetChar(i);
+
+            switch (c)
+            {
+                case '\n':  sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\n")); break;
+                case '\t':  sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\t")); break;
+                case '\\':  sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\\\"));    break;
+
+                default:
+                    if( c <= 0x1f || c >= 0x7f )
+                    {
+                        sReturn.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\\x" ))
+                            += String::CreateFromInt32( c, 16 );
+                    }
+                    else
+                        sReturn += c;
+            }
+        }
+    }
+    return sReturn;
 }
 /* -----------------------------10.10.00 16:22--------------------------------
 
@@ -247,7 +335,6 @@ const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
             "LinesChanged/Mark",                        // 6
             "LinesChanged/Color"                        // 7
         };
-        Sequence<OUString> aNames(nCount);
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
             pNames[i] = OUString::createFromAscii(aPropNames[i]);
@@ -358,10 +445,9 @@ void SwRevisionConfig::Load()
 const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
+    static Sequence<OUString> aWebNames;
     if(!aNames.getLength())
     {
-        const int nCount = bIsWeb ? 3: 67;
-        aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
             "Table/Header",                                 // 0
@@ -432,12 +518,19 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
             "Caption/StarOfficeObject/OLEMisc/Settings/Level",      //65
             "Caption/StarOfficeObject/OLEMisc/Settings/Position"    //66
         };
-        Sequence<OUString> aNames(nCount);
+        const int nCount = 67;
+        const int nWebCount = 3;
+        aNames.realloc(nCount);
+        aWebNames.realloc(nWebCount);
         OUString* pNames = aNames.getArray();
-        for(int i = 0; i < nCount; i++)
-            pNames[i] = OUString::createFromAscii(aPropNames[i]);
+        OUString* pWebNames = aWebNames.getArray();
+        int i;
+        for(i = 0; i < nCount; i++)
+            pNames[i] = C2U(aPropNames[i]);
+        for(i = 0; i < nWebCount; i++)
+            pWebNames[i] = C2U(aPropNames[i]);
     }
-    return aNames;
+    return bIsWeb ? aWebNames : aNames;
 }
 /*-- 10.10.00 16:22:22---------------------------------------------------
 
@@ -791,27 +884,22 @@ void SwInsertConfig::Load()
  ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SwTableConfig::GetPropertyNames()
 {
-    static Sequence<OUString> aNames;
-    if(!aNames.getLength())
+    const int nCount = 8;
+    static Sequence<OUString> aNames(nCount);
+    static const char* aPropNames[] =
     {
-        const int nCount = 8;
-        aNames.realloc(nCount);
-        static const char* aPropNames[] =
-        {
-            "Shift/Row",                    //  0
-            "Shift/Column",                 //  1
-            "Insert/Row",                   //  2
-            "Insert/Column",                //  3
-            "Change/Effect",                //  4
-            "Input/NumberRecognition",      //  5
-            "Input/NumberFormatRecognition",//  6
-            "Input/Alignment"               //  7
-        };
-        Sequence<OUString> aNames(nCount);
-        OUString* pNames = aNames.getArray();
-        for(int i = 0; i < nCount; i++)
-            pNames[i] = OUString::createFromAscii(aPropNames[i]);
-    }
+        "Shift/Row",                    //  0
+        "Shift/Column",                 //  1
+        "Insert/Row",                   //  2
+        "Insert/Column",                //  3
+        "Change/Effect",                //  4
+        "Input/NumberRecognition",      //  5
+        "Input/NumberFormatRecognition",//  6
+        "Input/Alignment"               //  7
+    };
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < nCount; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
     return aNames;
 }
 /*-- 10.10.00 16:22:22---------------------------------------------------
@@ -899,4 +987,136 @@ void SwTableConfig::Load()
         }
     }
 }
+/*-- 18.01.01 17:02:47---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+SwMiscConfig::SwMiscConfig() :
+    ConfigItem(C2U("Office.Writer")),
+    bDefaultFontsInCurrDocOnly(sal_False),
+    bShowIndexPreview(sal_False),
+    bGrfToGalleryAsLnk(sal_True),
+    bNumAlignSize(sal_True),
+    bSinglePrintJob(sal_False),
+    bIsNameFromColumn(sal_True),
+    nMailingFormats(0)
+{
+#if SUPD>615
+    EnableNotification(GetPropertyNames());
+#else
+    Sequence <OUString> aNames(GetPropertyNames());
+    EnableNotification(aNames);
+#endif
+    Load();
+}
+/*-- 18.01.01 17:02:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwMiscConfig::~SwMiscConfig()
+{
+}
+/*-- 18.01.01 17:02:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
+{
+    static Sequence<OUString> aNames;
+    if(!aNames.getLength())
+    {
+        const int nCount = 11;
+        aNames.realloc(nCount);
+        static const char* aPropNames[] =
+        {
+            "Statistics/WordNumber/Delimiter",          // 0
+            "DefaultFont/Document",                     // 1
+            "Index/ShowPreview",                        // 2
+            "Misc/GraphicToGalleryAsLink",              // 3
+            "Numbering/Graphic/KeepRatio",              // 4
+            "FormLetter/PrintOutput/SinglePrintJobs",   // 5
+            "FormLetter/MailingOutput/Format",          // 6
+            "FormLetter/FileOutput/FileName/FromDatabaseField",  // 7
+            "FormLetter/FileOutput/Path",               // 8
+            "FormLetter/FileOutput/FileName/FromManualSetting",   // 9
+            "FormLetter/FileOutput/FileName/Generation"//10
+        };
+        OUString* pNames = aNames.getArray();
+        for(int i = 0; i < nCount; i++)
+            pNames[i] = C2U(aPropNames[i]);
+    }
+    return aNames;
+}
+/*-- 18.01.01 17:02:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMiscConfig::Notify( const Sequence<OUString>& rPropertyNames)
+{
+    Load();
+}
+/*-- 18.01.01 17:02:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMiscConfig::Commit()
+{
+    const Sequence<OUString>& aNames = GetPropertyNames();
+    const OUString* pNames = aNames.getConstArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case 0 :
+                pValues[nProp] <<= OUString(
+                    SwModuleOptions::ConvertWordDelimiter(sWordDelimiter, sal_False));
+            break;
+            case 1 : pValues[nProp].setValue(&bDefaultFontsInCurrDocOnly, rType); break;
+            case 2 : pValues[nProp].setValue(&bShowIndexPreview, rType) ;        break;
+            case 3 : pValues[nProp].setValue(&bGrfToGalleryAsLnk, rType);        break;
+            case 4 : pValues[nProp].setValue(&bNumAlignSize, rType);            break;
+            case 5 : pValues[nProp].setValue(&bSinglePrintJob, rType);          break;
+            case 6 : pValues[nProp] <<= nMailingFormats;             break;
+            case 7 : pValues[nProp] <<= OUString(sNameFromColumn);  break;
+            case 8 : pValues[nProp] <<= OUString(sMailingPath);     break;
+            case 9 : pValues[nProp] <<= OUString(sMailName);        break;
+            case 10: pValues[nProp].setValue(&bIsNameFromColumn, rType);break;
+        }
+    }
+    PutProperties(aNames, aValues);
+}
+/*-- 18.01.01 17:02:48---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMiscConfig::Load()
+{
+    const Sequence<OUString>& aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        OUString sTmp;
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case 0 : pValues[nProp] >>= sTmp;
+                        sWordDelimiter = SwModuleOptions::ConvertWordDelimiter(sTmp, sal_True);
+                    break;
+                    case 1 : bDefaultFontsInCurrDocOnly = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 2 : bShowIndexPreview = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 3 : bGrfToGalleryAsLnk = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 4 : bNumAlignSize = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 5 : bSinglePrintJob = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 6 : pValues[nProp] >>= nMailingFormats;              ; break;
+                    case 7 : pValues[nProp] >>= sTmp; sNameFromColumn = sTmp; break;
+                    case 8 : pValues[nProp] >>= sTmp; sMailingPath = sTmp;  break;
+                    case 9 : pValues[nProp] >>= sTmp; sMailName = sTmp;     break;
+                    case 10: bIsNameFromColumn = *(sal_Bool*)pValues[nProp].getValue(); break;
+                }
+            }
+        }
+    }
+}
