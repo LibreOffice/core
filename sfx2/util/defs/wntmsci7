@@ -4621,3 +4621,4 @@ _TI2?AVElementExistException@container@star@sun@com@@
 ?SetPaperOrientationWarning@SfxMiscCfg@@QAEXE@Z
 ?SetPaperSizeWarning@SfxMiscCfg@@QAEXE@Z
 ?SetYear2000@SfxMiscCfg@@QAEXJ@Z
+?CreateTempFileNoCopy@SfxMedium@@QAEXXZ
