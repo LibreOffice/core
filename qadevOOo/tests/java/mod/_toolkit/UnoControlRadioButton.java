@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlRadioButton.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 13:09:59 $
+ *  last change:$Date: 2004-01-05 20:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,17 +60,6 @@
  ************************************************************************/
 package mod._toolkit;
 
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.FormTools;
-import util.SOfficeFactory;
-import util.WriterTools;
-import util.utils;
-
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
@@ -87,12 +76,25 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import com.sun.star.view.XControlAccess;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.FormTools;
+import util.SOfficeFactory;
+import util.WriterTools;
+import util.utils;
+
 
 public class UnoControlRadioButton extends TestCase {
     XTextDocument xTextDoc;
 
     protected void initialize(TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) Param.getMSF());
 
         try {
             log.println("creating a textdocument");
@@ -107,15 +109,7 @@ public class UnoControlRadioButton extends TestCase {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 
     protected TestEnvironment createTestEnvironment(TestParameters Param,
