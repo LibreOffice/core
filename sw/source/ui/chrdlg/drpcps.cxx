@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-23 10:36:23 $
+ *  last change: $Author: gt $ $Date: 2002-08-23 14:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,22 +117,56 @@ static USHORT __FAR_DATA aPageRg[] = {
 
 class SwDropCapsPict : public Control
 {
-    String aText;
-    BYTE   nLines;
-    USHORT nDistance;
+    String  maText;
+    Color   maBackColor;
+    Color   maTextLineColor;
+    BYTE    mnLines;
+    long    mnTotLineH;
+    long    mnLineH;
+    long    mnTextH;
+    USHORT  mnDistance;
+    USHORT  mnLeading;
 
     virtual void Paint(const Rectangle &rRect);
-
 public:
 
      SwDropCapsPict(Window *pParent, const ResId &rResId) : Control(pParent, rResId) {}
     ~SwDropCapsPict();
 
-    void SetText    (const String &rT) {aText     = rT; Invalidate();}
-    void SetLines   (      BYTE    nL) {nLines    = nL; Invalidate();}
-    void SetDistance(      USHORT  nD) {nDistance = nD; Invalidate();}
+    void UpdatePaintSettings( void );       // also invalidates control!
+
+    inline void SetText( const String& rT );
+    inline void SetLines( BYTE nL );
+    inline void SetDistance( USHORT nD );
+    inline void SetValues( const String& rText, BYTE nLines, USHORT nDistance );
 };
 
+inline void SwDropCapsPict::SetText( const String& rT )
+{
+    maText = rT;
+    UpdatePaintSettings();
+}
+
+inline void SwDropCapsPict::SetLines( BYTE nL )
+{
+    mnLines = nL;
+    UpdatePaintSettings();
+}
+
+inline void SwDropCapsPict::SetDistance( USHORT nD )
+{
+    mnDistance = nD;
+    UpdatePaintSettings();
+}
+
+inline void SwDropCapsPict::SetValues( const String& rText, BYTE nLines, USHORT nDistance )
+{
+    maText = rText;
+    mnLines = nLines;
+    mnDistance = nDistance;
+
+    UpdatePaintSettings();
+}
 
 /****************************************************************************
 Default-String aus Zeichenanzahl erzeugen (A, AB, ABC, ...)
@@ -157,45 +191,26 @@ Pict: Dtor
 }
 
 /****************************************************************************
-Pict: Paint-Overload
+Pict: Update Font
 ****************************************************************************/
 
 #define LINES  10
 #define BORDER  2
 
 
-void  SwDropCapsPict::Paint(const Rectangle &rRect)
+void SwDropCapsPict::UpdatePaintSettings( void )
 {
-    if (!IsVisible())
-        return;
+    maBackColor = GetSettings().GetStyleSettings().GetWindowColor();
+    maTextLineColor = Color( COL_LIGHTGRAY );
 
-    SetMapMode(MapMode(MAP_PIXEL));
-    SetLineColor();
+    // gray lines
+    mnTotLineH = (GetOutputSizePixel().Height() - 2 * BORDER) / LINES;
+    mnLineH = mnTotLineH - 2;
+    mnLeading = (USHORT) GetFontMetric().GetLeading();
 
-    // Weisser Hintergrund
-    // #101510# OJ SetFillColor(Color(COL_WHITE));
-    SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
-
-    DrawRect(Rectangle(Point(0, 0), GetOutputSizePixel()));
-    SetClipRegion(Region(Rectangle(
-        Point(BORDER, BORDER),
-        Size (GetOutputSizePixel().Width () - 2 * BORDER,
-              GetOutputSizePixel().Height() - 2 * BORDER))));
-
-    // Graue Linien
-    long nTotLineH = (GetOutputSizePixel().Height() - 2 * BORDER) / LINES,
-         nLineH    = nTotLineH - 2;
-
-    ASSERT(nLineH > 0, "So klein lassen wir uns nicht machen");
-    long nY0 = (GetOutputSizePixel().Height() - (LINES * nTotLineH)) / 2;
-    SetFillColor(Color(COL_LIGHTGRAY));
-    for (USHORT i = 0; i < LINES; i++)
-        DrawRect(Rectangle(Point(BORDER, nY0 + i * nTotLineH), Size(GetOutputSizePixel().Width() - 2 * BORDER, nLineH)));
-
-    // Text berechnen
     Font aFont;
     {
-        SwDropCapsPage *pPage = (SwDropCapsPage *) GetParent();
+        SwDropCapsPage* pPage = ( SwDropCapsPage* ) GetParent();
         if (!pPage->aTemplateBox.GetSelectEntryPos())
         {
             // Font an Absatzanfang erfragen
@@ -232,29 +247,58 @@ void  SwDropCapsPict::Paint(const Rectangle &rRect)
         }
     }
 
-    long nTextH = nLines * nTotLineH;
-    aFont.SetSize(Size(0, nTextH));
+    mnTextH = mnLines * mnTotLineH;
+    aFont.SetSize(Size(0, mnTextH));
     aFont.SetTransparent(TRUE);
     aFont.SetColor(GetSettings().GetStyleSettings().GetWindowTextColor());
     aFont.SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
     SetFont(aFont);
-    USHORT nLeading = (USHORT) GetFontMetric().GetLeading();
-    aFont.SetSize(Size(0, aFont.GetSize().Height() + nLeading));
+    aFont.SetSize(Size(0, aFont.GetSize().Height() + mnLeading));
     SetFont(aFont);
 
-    // Texthintergrund mit Abstand (240 twips ~ 1 Zeilenhoehe)
+    Invalidate();
+}
 
-    ULONG lDistance = nDistance;
-    USHORT nDistW = (USHORT) (ULONG) (((lDistance * 100) / 240) * nTotLineH) / 100;
-    SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
+/****************************************************************************
+Pict: Paint-Overload
+****************************************************************************/
+
+void  SwDropCapsPict::Paint(const Rectangle &rRect)
+{
+    if (!IsVisible())
+        return;
+
+    SetMapMode(MapMode(MAP_PIXEL));
+    SetLineColor();
+
+    SetFillColor( maBackColor );
+
+    Size aOutputSizePixel( GetOutputSizePixel() );
+
+    DrawRect(Rectangle(Point(0, 0), aOutputSizePixel ));
+    SetClipRegion(Region(Rectangle(
+        Point(BORDER, BORDER),
+        Size (aOutputSizePixel.Width () - 2 * BORDER,
+              aOutputSizePixel.Height() - 2 * BORDER))));
+
+    ASSERT(mnLineH > 0, "So klein lassen wir uns nicht machen");
+    long nY0 = (aOutputSizePixel.Height() - (LINES * mnTotLineH)) / 2;
+    SetFillColor( maTextLineColor );
+    for (USHORT i = 0; i < LINES; ++i)
+        DrawRect(Rectangle(Point(BORDER, nY0 + i * mnTotLineH), Size(aOutputSizePixel.Width() - 2 * BORDER, mnLineH)));
+
+    // Texthintergrund mit Abstand (240 twips ~ 1 Zeilenhoehe)
+    ULONG lDistance = mnDistance;
+    USHORT nDistW = (USHORT) (ULONG) (((lDistance * 100) / 240) * mnTotLineH) / 100;
+    SetFillColor( maBackColor );
     if(((SwDropCapsPage*)GetParent())->aDropCapsBox.IsChecked())
     {
         DrawRect(Rectangle(
         Point(BORDER, nY0),
-        Size (GetTextWidth(aText) + nDistW, nTextH)));
+        Size (GetTextWidth(maText) + nDistW, mnTextH)));
 
     // Text zeichnen
-        DrawText(Point(BORDER, nY0 - nLeading), aText);
+        DrawText(Point(BORDER, nY0 - mnLeading), maText);
     }
 
     SetClipRegion();
@@ -403,11 +447,6 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
         aDistanceField.SetValue(0);
     }
 
-    // Preview
-    pPict->SetText(aTextEdit.GetText());
-    pPict->SetLines((BYTE )aLinesField.GetValue());
-    pPict->SetDistance((USHORT)aDistanceField.Denormalize(aDistanceField.GetValue(FUNIT_TWIP)));
-
     ::FillCharStyleListBox(aTemplateBox, rSh.GetView().GetDocShell(), TRUE);
 
     aTemplateBox.InsertEntry(SW_RESSTR(SW_STR_NONE), 0);
@@ -427,6 +466,12 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
         aTextEdit.Enable();
         aTextText.Enable();
     }
+
+    // Preview
+    pPict->SetValues(   aTextEdit.GetText(),
+                        BYTE( aLinesField.GetValue() ),
+                        USHORT( aDistanceField.Denormalize( aDistanceField.GetValue( FUNIT_TWIP ) ) ) );
+
     ClickHdl(&aDropCapsBox);
     bModified = FALSE;
 }
@@ -549,7 +594,7 @@ Page: Select-Handler der Template-Box.
 
 IMPL_LINK_INLINE_START( SwDropCapsPage, SelectHdl, ListBox *, EMPTYARG )
 {
-    pPict->Invalidate();
+    pPict->UpdatePaintSettings();
     bModified = TRUE;
     return 0;
 }
@@ -612,6 +657,9 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 
 /*--------------------------------------------------
   $Log: not supported by cvs2svn $
+  Revision 1.4  2002/07/23 10:36:23  oj
+  #101510# change colors to HC
+
   Revision 1.3  2001/10/19 08:41:38  fme
   Fix #92507#: Script and attribute changes inside drop caps
 
