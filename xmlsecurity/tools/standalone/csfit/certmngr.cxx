@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certmngr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-23 08:46:47 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 
 #include "securityenvironment_nssimpl.hxx"
 
+#include <xmlsecurity/biginteger.hxx>
+
+
 #include "nspr.h"
 #include "prtypes.h"
 
@@ -95,8 +98,6 @@ using namespace ::com::sun::star::lang ;
 using namespace ::com::sun::star::security ;
 using namespace ::com::sun::star::xml::wrapper ;
 using namespace ::com::sun::star::xml::crypto ;
-
-extern OUString bigIntegerToNumericString( Sequence< sal_Int8 > serial ) ;
 
 int SAL_CALL main( int argc, char **argv )
 {

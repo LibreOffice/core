@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-26 06:15:42 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <svtools/docpasswdrequest.hxx>
+#include <xmlsecurity/biginteger.hxx>
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -115,8 +116,6 @@ using ::com::sun::star::security::XCertificate ;
 
 extern X509Certificate_NssImpl* NssCertToXCert( CERTCertificate* cert ) ;
 extern X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* ) ;
-extern Sequence< sal_Int8 > numericStringToBigInteger( OUString ) ;
-extern OUString bigIntegerToNumericString( Sequence< sal_Int8 > serial ) ;
 
 char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* arg )
 {

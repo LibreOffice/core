@@ -1,8 +1,3 @@
 component_getImplementationEnvironment
 component_writeInfo
 component_getFactory
-?numericStringToBigInteger@@YA?AV?$Sequence@C@uno@star@sun@com@@VOUString@rtl@@@Z
-?bigIntegerToNumericString@@YA?AVOUString@rtl@@V?$Sequence@C@uno@star@sun@com@@@Z
-?getUnoTunnelId@SecurityEnvironment_MSCryptImpl@@SAABV?$Sequence@C@uno@star@sun@com@@XZ
-?setNativeElement@XMLElementWrapper_XmlSecImpl@@QAEXQAU_xmlNode@@@Z
-?getUnoTunnelImplementationId@XMLElementWrapper_XmlSecImpl@@SA?AV?$Sequence@C@uno@star@sun@com@@XZ

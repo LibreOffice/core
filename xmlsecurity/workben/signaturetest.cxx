@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signaturetest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 07:16:12 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,9 @@
 #include <xmlsecurity/xmlsignaturehelper.hxx>
 #include <xmlsecurity/digitalsignaturesdialog.hxx>
 #include <xmlsecurity/certificatechooser.hxx>
+#include <xmlsecurity/biginteger.hxx>
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star;

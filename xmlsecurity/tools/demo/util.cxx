@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-16 05:18:39 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <cppuhelper/bootstrap.hxx>
+#include <xmlsecurity/biginteger.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;

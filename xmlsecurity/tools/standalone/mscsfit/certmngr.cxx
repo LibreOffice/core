@@ -10,6 +10,8 @@
 
 #include "securityenvironment_mscryptimpl.hxx"
 
+#include <xmlsecurity/biginteger.hxx>
+
 #include "xmlsec/strings.h"
 #include "xmlsec/xmltree.h"
 #include "xmlsec/mscrypto/app.h"
@@ -27,8 +29,6 @@ using namespace ::com::sun::star::lang ;
 using namespace ::com::sun::star::security ;
 using namespace ::com::sun::star::xml::wrapper ;
 using namespace ::com::sun::star::xml::crypto ;
-
-extern OUString bigIntegerToNumericString( Sequence< sal_Int8 > serial ) ;
 
 int SAL_CALL main( int argc, char **argv )
 {

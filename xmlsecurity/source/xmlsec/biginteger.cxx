@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biginteger.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-26 06:15:41 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <xmlsecurity/biginteger.hxx>
+
 #include <xmlsec/xmlsec.h>
 #include <xmlsec/bn.h>
 #include <com/sun/star/uno/Sequence.hxx>

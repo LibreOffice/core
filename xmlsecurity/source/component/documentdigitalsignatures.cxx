@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-23 09:58:20 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #include <xmlsecurity/certificateviewer.hxx>
 #include <xmlsecurity/macrosecurity.hxx>
 #include <xmlsecurity/baseencoding.hxx>
+#include <xmlsecurity/biginteger.hxx>
+
 #include <../dialogs/resourcemanager.hxx>
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_

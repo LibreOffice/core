@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signdemo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-16 05:18:39 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/streamhelper.hxx>
+
+#include <xmlsecurity/biginteger.hxx>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>

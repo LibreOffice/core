@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-26 06:15:42 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #include "xmlsec/crypto.h"
 #include <xmlsec/base64.h>
 
+#include <xmlsecurity/biginteger.hxx>
+
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
@@ -91,9 +93,6 @@ using ::rtl::OUString ;
 
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::security::XCertificate ;
-
-extern Sequence< sal_Int8 > numericStringToBigInteger( OUString ) ;
-extern OUString bigIntegerToNumericString( Sequence< sal_Int8 > serial ) ;
 
 extern X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert ) ;
 

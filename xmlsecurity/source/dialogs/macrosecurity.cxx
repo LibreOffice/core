@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 06:08:23 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include <xmlsecurity/macrosecurity.hxx>
 #include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
+#include <xmlsecurity/biginteger.hxx>
+
 
 #ifndef _COM_SUN_STAR_XML_CRYPTO_XSECURITYENVIRONMENT_HPP_
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
@@ -70,14 +72,6 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-
-// MM : added for password exception
-#include <vcl/msgbox.hxx>
-#include <com/sun/star/security/NoPasswordException.hpp>
-using namespace ::com::sun::star::security;
-
-// Only for bigIntegerToNumericString
-#include <xmlsecurity/xmlsignaturehelper.hxx>
 
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
@@ -102,6 +96,8 @@ using namespace ::com::sun::star::security;
 #endif
 #include <tools/urlobj.hxx>
 
+#include <vcl/msgbox.hxx>
+
 #include "dialogs.hrc"
 #include "resourcemanager.hxx"
 
@@ -110,7 +106,6 @@ using namespace ::com::sun::star::security;
 #pragma warning (disable : 4355)    // 4355: this used in initializer-list
 #endif
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 

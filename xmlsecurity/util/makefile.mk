@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-26 06:14:21 $
+#   last change: $Author: mt $ $Date: 2004-07-26 07:29:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -162,7 +162,9 @@ SHL4LIBS=\
                 $(SLB)$/dialogs.lib     \
                 $(SLB)$/component.lib   
 
-SHL4OBJS=$(SLO)$/baseencoding.obj
+SHL4OBJS=\
+                $(SLO)$/baseencoding.obj    \
+                $(SLO)$/biginteger.obj
 
 SHL4STDLIBS=\
                 $(CPPULIB)			\
@@ -183,7 +185,7 @@ SHL4STDLIBS=\
 
 #MT: Remove ixml2 and xs_comm (above) by cerating service for base encodings
 .IF "$(GUI)"=="WNT"
-SHL4STDLIBS+= "ixml2.lib" "xmlsec.lib" "xsec_xmlsec.lib"
+SHL4STDLIBS+= "ixml2.lib" "xmlsec.lib" 
 .ELSE
 SHL4STDLIBS+= "-lxml2" "-lxmlsec" "-lxsec_xmlsec"
 .ENDIF

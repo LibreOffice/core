@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mmi $ $Date: 2004-07-16 10:19:25 $
+#   last change: $Author: mt $ $Date: 2004-07-26 07:29:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,8 @@ SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec" "-lxmlsec-nss" "helper.lib" 
 .ENDIF
 
 SHARE_OBJS =	\
-    $(OBJ)$/util.obj
+    $(OBJ)$/util.obj \
+    $(SLO)$/biginteger.obj
 
 #
 # The 1st application

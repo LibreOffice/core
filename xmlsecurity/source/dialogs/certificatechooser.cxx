@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificatechooser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-22 15:37:37 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
+#include <xmlsecurity/biginteger.hxx>
 
 #ifndef _COM_SUN_STAR_XML_CRYPTO_XSECURITYENVIRONMENT_HPP_
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
@@ -70,24 +71,17 @@
 #include <comphelper/sequence.hxx>
 #endif
 
-// MM : added for password exception
-#include <vcl/msgbox.hxx>
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
-using namespace ::com::sun::star::security;
 
-// Only for bigIntegerToNumericString
-#include <xmlsecurity/xmlsignaturehelper.hxx>
-
-#include "dialogs.hrc"
-#include "resourcemanager.hxx"
+#include <dialogs.hrc>
+#include <resourcemanager.hxx>
 
 /* HACK: disable some warnings for MS-C */
 #ifdef _MSC_VER
 #pragma warning (disable : 4355)    // 4355: this used in initializer-list
 #endif
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 #define INVAL_SEL       0xFFFF
@@ -98,7 +92,7 @@ USHORT CertificateChooser::GetSelectedEntryPos( void ) const
 
     SvLBoxEntry* pSel = maCertLB.FirstSelected();
     if( pSel )
-        nSel = ( sal_Int32 ) pSel->GetUserData();
+        nSel = (USHORT) ( sal_Int32 ) pSel->GetUserData();
 
     return (USHORT) nSel;
 }
@@ -128,7 +122,7 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::
     {
         maCerts = mxSecurityEnvironment->getPersonalCertificates();
     }
-    catch (NoPasswordException&)
+    catch (security::NoPasswordException&)
     {
     }
 

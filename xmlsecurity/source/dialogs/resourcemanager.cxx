@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourcemanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 10:52:35 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ namespace XmlSec
         String sSec( _rTime, 6, 2 );
 
 
-        Date aDate( sDay.ToInt32(), sMonth.ToInt32(), sYear.ToInt32() );
+        Date aDate( (USHORT)sDay.ToInt32(), (USHORT) sMonth.ToInt32(), (USHORT)sYear.ToInt32() );
         Time aTime( sHour.ToInt32(), sMin.ToInt32(), sSec.ToInt32(), 0 );
         String aStr( GetInternational()->GetDate( aDate ) );
         aStr.AppendAscii( " " );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: warnings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-20 05:32:08 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,6 @@
 #include <com/sun/star/security/NoPasswordException.hpp>
 using namespace ::com::sun::star::security;
 
-// Only for bigIntegerToNumericString
-#include <xmlsecurity/xmlsignaturehelper.hxx>
 
 #include "dialogs.hrc"
 #include "resourcemanager.hxx"

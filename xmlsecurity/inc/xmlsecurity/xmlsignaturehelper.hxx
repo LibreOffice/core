@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 07:16:08 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #include <com/sun/star/xml/crypto/sax/XSecurityController.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
-
-extern rtl::OUString bigIntegerToNumericString( ::com::sun::star::uno::Sequence< sal_Int8 > serial );
-extern ::com::sun::star::uno::Sequence< sal_Int8 > numericStringToBigInteger (  rtl::OUString serialNumber );
 
 class XSecController;
 class Date;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-23 09:58:21 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 07:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,12 @@
 
 #include <xmlsecurity/certificateviewer.hxx>
 
-// Only for bigIntegerToNumericString
-#include <xmlsecurity/xmlsignaturehelper.hxx>
-
-
 #ifndef _COM_SUN_STAR_SECURITY_XCERTIFICATE_HPP_
 #include <com/sun/star/security/XCertificate.hpp>
 #endif
 
 #include <com/sun/star/security/CertificateCharacters.hpp>
+#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 
 
 #include <unotools/localedatawrapper.hxx>
