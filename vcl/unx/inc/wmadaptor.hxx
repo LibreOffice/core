@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:31:59 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ public:
         windowType_Normal,
         windowType_ModalDialogue,
         windowType_ModelessDialogue,
-        windowType_OverrideRedirect,
+        windowType_Utility,
         windowType_Splash
     };
 
