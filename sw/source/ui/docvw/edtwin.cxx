@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:42:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,7 +1322,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         (0 != (nLclSelectionType = rSh.GetSelectionType()) &&
         ((nLclSelectionType & SwWrtShell::SEL_FRM) ||
         ((nLclSelectionType & SwWrtShell::SEL_DRW|SwWrtShell::SEL_DRW_FORM) &&
-                rSh.GetDrawView()->GetMarkList().GetMarkCount() == 1))))
+                rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1))))
     {
         SdrHdlList& rHdlList = (SdrHdlList&)rSh.GetDrawView()->GetHdlList();
         SdrHdl* pAnchor = rHdlList.GetHdl(HDL_ANCHOR);
@@ -1529,7 +1529,7 @@ KEYINPUT_CHECKTABLE:
                         {
                             if(!pFlyFmt && KS_KeyToView != eFlyState &&
                                 (rSh.GetSelectionType() & (SwWrtShell::SEL_DRW|SwWrtShell::SEL_DRW_FORM))  &&
-                                    rSh.GetDrawView()->HasMarkedObj())
+                                    rSh.GetDrawView()->AreObjectsMarked())
                                 eKeyState = KS_Draw_Change;
                         }
 
@@ -1610,7 +1610,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if(KS_KeyToView != eFlyState)
                         {
                             if((nSelectionType & (SwWrtShell::SEL_DRW|SwWrtShell::SEL_DRW_FORM))  &&
-                                    rSh.GetDrawView()->HasMarkedObj())
+                                    rSh.GetDrawView()->AreObjectsMarked())
                                 eKeyState = KS_Draw_Change;
                             else if(nSelectionType & (SwWrtShell::SEL_FRM|SwWrtShell::SEL_OLE|SwWrtShell::SEL_GRF))
                                 eKeyState = KS_Fly_Change;
@@ -1657,7 +1657,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_GoIntoFly;
                         else if((nSelectionType & SwWrtShell::SEL_DRW) &&
                                 0 == (nSelectionType & SwWrtShell::SEL_DRW_TXT) &&
-                                rSh.GetDrawView()->GetMarkList().GetMarkCount() == 1)
+                                rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1)
                             eKeyState = KS_GoIntoDrawing;
                         else if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
                             aTmpQHD.bIsAutoText )
@@ -1857,7 +1857,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else if((rSh.GetSelectionType() &
                                     (SwWrtShell::SEL_DRW|SwWrtShell::SEL_DRW_FORM|
                                         SwWrtShell::SEL_FRM|SwWrtShell::SEL_OLE|SwWrtShell::SEL_GRF))  &&
-                                rSh.GetDrawView()->HasMarkedObj())
+                                rSh.GetDrawView()->AreObjectsMarked())
                             eKeyState = KS_EnterDrawHandleMode;
                         else
                         {
@@ -1877,7 +1877,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
                         else if((rSh.GetSelectionType() & (SwWrtShell::SEL_DRW|SwWrtShell::SEL_DRW_FORM|
                                         SwWrtShell::SEL_FRM|SwWrtShell::SEL_OLE|SwWrtShell::SEL_GRF)) &&
-                                rSh.GetDrawView()->HasMarkedObj())
+                                rSh.GetDrawView()->AreObjectsMarked())
                             eKeyState = KS_EnterDrawHandleMode;
                     break;
                     case KEY_F2 :
@@ -1983,7 +1983,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         const int nSelectionType = rSh.GetSelectionType();
                         if((nSelectionType & SwWrtShell::SEL_DRW) &&
                             0 == (nSelectionType & SwWrtShell::SEL_DRW_TXT) &&
-                            rSh.GetDrawView()->GetMarkList().GetMarkCount() == 1)
+                            rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1)
                                 eKeyState = KS_GoIntoDrawing;
                         else
                             eKeyState = KS_InsChar;
@@ -2008,7 +2008,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         break;
         case KS_GoIntoDrawing :
         {
-            SdrObject* pObj = rSh.GetDrawView()->GetMarkList().GetMark(0)->GetObj();
+            SdrObject* pObj = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetObj();
             if(pObj)
             {
                 EnterDrawTextMode(pObj->GetLogicRect().Center());
@@ -2904,7 +2904,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                             {
                                 rSh.SelectObj(aDocPos, SW_ADD_SELECT);
 
-                                const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                                 if (rMarkList.GetMark(0) == NULL)
                                 {
                                     rSh.LeaveSelFrmMode();
@@ -3252,7 +3252,7 @@ void SwEditWin::MouseMove(const MouseEvent& rMEvt)
                 if ( bIsInMove || IsMinMove( aStartPos, aPixPt ) )
                 {
                     // Event-Verarbeitung fuers Resizen
-                    if( pSdrView->HasMarkedObj() )
+                    if( pSdrView->AreObjectsMarked() )
                     {
                         const SwFrmFmt* pFlyFmt;
                         const SvxMacro* pMacro;
