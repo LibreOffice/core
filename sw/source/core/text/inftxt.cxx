@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:25:38 $
+ *  last change: $Author: ama $ $Date: 2000-11-30 11:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 #ifndef _SVX_FORBIDDENRULEITEM_HXX
 #include <svx/forbiddenruleitem.hxx>
@@ -868,7 +871,7 @@ sal_Bool SwTxtFormatInfo::IsHyphenate() const
     if (bInterHyph && xHyph.is())
         SvxSpellWrapper::CheckHyphLang( xHyph, eTmp );
 
-    if( !xHyph.is() || !xHyph->hasLocale( SvxCreateLocale(eTmp) ) )
+    if( !xHyph.is() || !xHyph->hasLocale( pBreakIt->GetLocale(eTmp) ) )
         return sal_False;
     return sal_True;
 }

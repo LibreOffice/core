@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:27:07 $
+ *  last change: $Author: ama $ $Date: 2000-11-30 11:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,7 @@ sal_Bool SwTxtPortion::IsHyphenate( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
                 //! subtract 1 since the UNO-interface is 0 based
             Reference< XHyphenatedWord >
                     xHW = xHyph->queryAlternativeSpelling( OUString(aTxt),
-                            SvxCreateLocale( rInf.GetFont()->GetLanguage() ),
+                            pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
                             nHyphenationPos,
                             Sequence< PropertyValue >() );
             if (xHW.is()  &&  xHW->isAlternativeSpelling())
