@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-10 08:58:43 $
+ *  last change: $Author: bm $ $Date: 2001-05-10 09:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1610,7 +1610,8 @@ XML_CONSTASCII_ACTION( sXML_suffix, "suffix" );
 XML_CONSTASCII_ACTION( sXML_sum, "sum" );
 XML_CONSTASCII_ACTION( sXML_swiss, "swiss" );
 XML_CONSTASCII_ACTION( sXML_symbol, "symbol" );
-XML_CONSTASCII_ACTION( sXML_symbol_size, "symbol-size" );
+XML_CONSTASCII_ACTION( sXML_symbol_height, "symbol-height" );
+XML_CONSTASCII_ACTION( sXML_symbol_width, "symbol-width" );
 XML_CONSTASCII_ACTION( sXML_system, "system" );
 XML_CONSTASCII_ACTION( sXML_tab_stop, "tab-stop" );
 XML_CONSTASCII_ACTION( sXML_tab_stops, "tab-stops" );
