@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:26 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ ENGLISH ] = "Refers to" ;
         Text [ norwegian ] = "Refers to" ;
         Text [ italian ] = "Area" ;
-        Text [ portuguese_brazilian ] = "Remente a" ;
+        Text [ portuguese_brazilian ] = "Intervalo" ;
         Text [ portuguese ] = "Área" ;
         Text [ finnish ] = "Alue" ;
         Text [ danish ] = "Område" ;
@@ -96,10 +96,13 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ arabic ] = "ÇáäØÇŞ";
         Text[ greek ] = "Ğåñéï÷Ş";
         Text[ korean ] = "ë²”ìœ„";
-        Text[ turkish ] = "Aralık";
+        Text[ turkish ] = "Kenarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea";
         Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡";
+        Text[ czech ] = "Oblast";
+        Text[ hebrew ] = "Bereich";
+        Text[ hindi ] = "à¤«à¥ˆà¤²à¤¾à¤µ";
     };
     ListBox LB_RANGE
     {
@@ -124,7 +127,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
         QuickHelpText [ swedish ] = "Förminska" ;
         QuickHelpText [ danish ] = "Formindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -145,6 +148,9 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     RadioButton BTN_COLHEAD
     {
@@ -155,7 +161,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ ENGLISH ] = "contains column headers" ;
         Text [ norwegian ] = "contains column headers" ;
         Text [ italian ] = "Contiene intestazioni colonne" ;
-        Text [ portuguese_brazilian ] = "inclui cabe?alhos da coluna" ;
+        Text [ portuguese_brazilian ] = "Contém cabeçalhos de ~coluna" ;
         Text [ portuguese ] = "Contém ~cabeçalhos das colunas" ;
         Text [ finnish ] = "Sisältää sarakeotsikot" ;
         Text [ danish ] = "indeholder kolonneoverskrifter" ;
@@ -166,16 +172,19 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ english_us ] = "Contains ~column labels" ;
         Text[ chinese_simplified ] = "åŒ…å«åˆ—æ ‡é¢˜(~C)";
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
-        Text[ polish ] = "zawiera nag³ówki kolumn";
+        Text[ polish ] = "Zawiera nag³ówki ~kolumn";
         Text[ japanese ] = "åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~C)";
         Text[ chinese_traditional ] = "åŒ…å«æ¬„æ¨™ç±¤(~C)";
         Text[ arabic ] = "íÊÖãä ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "ğåñéİ÷åé êåöáëßäåò óôçëşí";
         Text[ korean ] = "ì—´ ë ˆì´ë¸” í¬í•¨(~C)";
-        Text[ turkish ] = "Sütun başlıkları ~içeriyor";
+        Text[ turkish ] = "~Sütun etiketleri içerir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Conté capçaleres de ~columna";
         Text[ thai ] = "à¸¡à¸µà¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+        Text[ czech ] = "Obsahuje zÃ¡hlavÃ­ sloupcÅ¯";
+        Text[ hebrew ] = "enthÃ¤lt ~Spaltenbeschriftungen";
+        Text[ hindi ] = "~à¤¸à¥à¤¤à¤‚à¤­ à¤¶à¥€à¤°à¥à¤·à¤•à¥‹à¤‚ à¤•à¥‹ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ";
     };
     RadioButton BTN_ROWHEAD
     {
@@ -192,20 +201,23 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ spanish ] = "Contiene títulos de ~filas" ;
         Text [ french ] = "Contient des étiquettes de ligne" ;
         Text [ portuguese ] = "Contém ~cabeçalhos das linhas" ;
-        Text [ portuguese_brazilian ] = "enth?lt ~Zeilenk?fe" ;
+        Text [ portuguese_brazilian ] = "Contém cabeçalhos de ~linhas" ;
         Text[ chinese_simplified ] = "åŒ…å«è¡Œæ ‡é¢˜(~R)";
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòğîê";
-        Text[ polish ] = "zawiera nag³ówki wierszy";
+        Text[ polish ] = "Zawiera nag³ówki ~wierszy";
         Text[ japanese ] = "è¡Œã®é …ç›®æ¬„ã‚’å«ã‚€(~R)";
         Text[ chinese_traditional ] = "åŒ…å«åˆ—æ¨™ç±¤(~R)";
         Text[ arabic ] = "íÊÖãä ÑÄæÓ Õİæİ";
         Text[ greek ] = "ğåñéİ÷åé êåöáëßäåò ãñáììşí";
         Text[ korean ] = "í–‰ ë ˆì´ë¸” í¬í•¨(~R)";
-        Text[ turkish ] = "Satır başlıkları  i~çeriyor";
+        Text[ turkish ] = "Satı~r etiketleri içerir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Conté capçaleres de ~fila";
         Text[ finnish ] = "Sisältää riviotsikot";
         Text[ thai ] = "à¸¡à¸µà¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸©à¹~à¸–à¸§";
+        Text[ czech ] = "Obsahuje zÃ¡hlavÃ­ Å™Ã¡dkÅ¯";
+        Text[ hebrew ] = "enthÃ¤lt ~Zeilenbeschriftungen";
+        Text[ hindi ] = "~à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤¶à¥€à¤°à¥à¤·à¤•à¥‹à¤‚ à¤•à¥‹ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ";
     };
     FixedText FT_DATA_LABEL
     {
@@ -214,7 +226,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text = "für ~Datenbereich" ;
         Text [ ENGLISH ] = "~for data range" ;
         Text [ english_us ] = "For ~data range" ;
-        Text [ portuguese_brazilian ] = "f? Datenbereich" ;
+        Text [ portuguese_brazilian ] = "Para o interv~alo de dados" ;
         Text [ swedish ] = "för ~dataområde" ;
         Text [ danish ] = "for ~dataområde" ;
         Text [ italian ] = "Per l'area dati" ;
@@ -224,17 +236,20 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ portuguese ] = "para a área ~dos dados" ;
         Text[ chinese_simplified ] = "ç”¨äºæ•°æ®åŒºåŸŸ(~D)";
         Text[ russian ] = "Äëÿ äèàïàçîíà äàííûõ";
-        Text[ polish ] = "dla zakresu danych";
+        Text[ polish ] = "W ~zakresie danych";
         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç¯„å›²(~D)";
         Text[ chinese_traditional ] = "ç”¨æ–¼è³‡æ–™å€åŸŸ(~D)";
         Text[ arabic ] = "áäØÇŞ ÇáÈíÇäÇÊ";
         Text[ greek ] = "ãéá ğåñéï÷Ş ~äåäïìİíùí";
         Text[ korean ] = "ë°ì´í„° ë²”ìœ„(~D)";
-        Text[ turkish ] = "Veri aralığı";
+        Text[ turkish ] = "Veri aralığı için";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Per a l'àrea de dades";
         Text[ finnish ] = "~Tietoalueelle";
         Text[ thai ] = "à¸ªà¸³à¸«à¸£à¸±à¸šà¸Šà¹ˆà¸§à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+        Text[ czech ] = "Pro oblast dat";
+        Text[ hebrew ] = "fÃ¼r ~Datenbereich";
+        Text[ hindi ] = "~à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤«à¥ˆà¤²à¤¾à¤µ à¤•à¥‡à¤²à¤¿à¤";
     };
     Edit ED_DATA
     {
@@ -251,7 +266,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
         QuickHelpText [ swedish ] = "Förminska" ;
         QuickHelpText [ danish ] = "Formindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -272,6 +287,9 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     OKButton BTN_OK
     {
@@ -293,7 +311,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ ENGLISH ] = "~Add" ;
         Text [ norwegian ] = "Leg~g til" ;
         Text [ italian ] = "Aggiungi" ;
-        Text [ portuguese_brazilian ] = "~Acrescentar" ;
+        Text [ portuguese_brazilian ] = "~Adicionar" ;
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "T~ilføj" ;
@@ -306,7 +324,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         DefButton = TRUE ;
         Text[ chinese_simplified ] = "æ–°å¢(~A)";
         Text[ russian ] = "Äîáàâèòü";
-        Text[ polish ] = "D~odaj";
+        Text[ polish ] = "~Dodaj";
         Text[ japanese ] = "è¿½åŠ (~A)";
         Text[ chinese_traditional ] = "æ–°å¢(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
@@ -316,6 +334,9 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Afegeix";
         Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
+        Text[ czech ] = "PÅ™idat";
+        Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
+        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     PushButton BTN_REMOVE
     {
@@ -325,7 +346,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ ENGLISH ] = "~Remove" ;
         Text [ norwegian ] = "~Fjern" ;
         Text [ italian ] = "Elimina..." ;
-        Text [ portuguese_brazilian ] = "~Remover" ;
+        Text [ portuguese_brazilian ] = "~Excluir" ;
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
@@ -337,7 +358,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "Usuñ";
+        Text[ polish ] = "~Usuñ";
         Text[ japanese ] = "å‰Šé™¤(~D)";
         Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
@@ -347,6 +368,9 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Suprimeix";
         Text[ thai ] = "~à¸¥à¸š";
+        Text[ czech ] = "Smazat";
+        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
+        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
     };
     HelpButton BTN_HELP
     {
@@ -361,22 +385,46 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text [ spanish ] = "Definir el área de la etiqueta" ;
     Text [ french ] = "Définir la plage de l'étiquette" ;
     Text [ dutch ] = "Opschriftenbereik definiëren" ;
-    Text [ portuguese_brazilian ] = "Beschriftungsbereich festlegen" ;
+    Text [ portuguese_brazilian ] = "Definir Intervalo de Rótulo" ;
     Text [ portuguese ] = "Definir área do rótulo" ;
     Text[ chinese_simplified ] = "å®šä¹‰æ•°æ®æ ‡å¿—åŒºåŸŸ";
     Text[ russian ] = "Çàäàòü îáëàñòü ïîäïèñè";
-    Text[ polish ] = "Zdefiniuj zakres etykiet";
+    Text[ polish ] = "Definiuj zakres etykiet";
     Text[ japanese ] = "ãƒ©ãƒ™ãƒ«ç¯„å›²ã®æŒ‡å®š";
     Text[ chinese_traditional ] = "å®šç¾©æ¨™é¡Œå€åŸŸ";
     Text[ arabic ] = "ÊÚÑíİ äØÇŞ ÇáÚäæäÉ";
     Text[ greek ] = "Ïñéóìüò ğåñéï÷Şò åğéãñáöŞò";
     Text[ korean ] = "ë ˆì´ë¸” ë²”ìœ„ ì§€ì •";
-    Text[ turkish ] = "Başlık aralığını belirle";
+    Text[ turkish ] = "Etiket aralığını belirle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Defineix l'àrea de l'etiqueta";
     Text[ finnish ] = "Määritä selitealue";
     Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸Šà¹ˆà¸§à¸‡à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­";
+    Text[ czech ] = "Definovat oblast popiskÅ¯";
+    Text[ hebrew ] = "Beschriftungsbereich festlegen";
+    Text[ hindi ] = "à¤²à¥‡à¤¬à¤¿à¤² à¤«à¥ˆà¤²à¤¾à¤µ à¤•à¥‹ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¾ à¤¦à¥‹";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
