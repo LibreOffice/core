@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 20:59:50 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ TabPage TP_DROPCAPS
         Text[ chinese_traditional ] = "¦r¤¸¼Æ¥Ø(~C)";
         Text[ arabic ] = "ÚÏÏ ÇáÃÍÑİ";
         Text[ greek ] = "Áñéèìüò ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ ¼ö:(~C)";
+        Text[ korean ] = "¹®ÀÚ ¼ö(~C):";
         Text[ turkish ] = "Karakter sayısı";
         Text[ language_user1 ] = " ";
     };
@@ -248,7 +248,7 @@ TabPage TP_DROPCAPS
         Text[ chinese_simplified ] = "ĞĞ(~L)";
         Text[ russian ] = "Ñòğîêè";
         Text[ polish ] = "Wiersze";
-        Text[ japanese ] = "s(~Lj";
+        Text[ japanese ] = "s(~L)";
         Text[ chinese_traditional ] = "¦æ(~L)";
         Text[ arabic ] = "ÃÓØÑ";
         Text[ greek ] = "Ãñáììİò";
@@ -439,7 +439,7 @@ TabPage TP_DROPCAPS
         Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡(~Y)";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ À¯Çü";
+        Text[ korean ] = "¹®ÀÚ À¯Çü(~Y)";
         Text[ turkish ] = "Karakter ~biçimi";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     };
