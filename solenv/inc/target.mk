@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-12 17:16:45 $
+#   last change: $Author: hjs $ $Date: 2001-10-16 13:16:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -666,7 +666,7 @@ ziplangdirs:=$(shell +find . -type d ! -name CVS ! -name "." | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
 ziplangdirs:=$(subst,CVS, $(shell +-dir /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
-zipalllangext=$(foreach,i,$(alllangext) $(eq,{$(subst,$(longlang_$i), $(ziplangdirs))},{$(ziplangdirs)} $(null) $i ))
+zipalllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(ziplangdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
 
 .ENDIF			#
 
