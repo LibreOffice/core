@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: er $ $Date: 2000-10-14 20:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,7 @@ enum Sc_SymbolType
 
 class ImpSvNumberformatScan
 {
-public:                             // ---- oeffentlicher Teil
-    static void GetLogicalKeywords( LanguageType eLnge,
-        const xub_Unicode*& pTrue, const xub_Unicode*& pFalse );
+public:
 
     ImpSvNumberformatScan( SvNumberFormatter* pFormatter );
     ~ImpSvNumberformatScan();
@@ -126,24 +124,24 @@ public:                             // ---- oeffentlicher Teil
 
     void CopyInfo(ImpSvNumberformatInfo* pInfo,
                      USHORT nAnz);              // Kopiert die FormatInfo
-    USHORT GetAnzResStrings() { return nAnzResStrings; }
+    USHORT GetAnzResStrings() const             { return nAnzResStrings; }
 
-    const International& GetIntl()  { return *pFormatter->GetInternational(); }
-    const CharClass& GetChrCls()    { return *pFormatter->GetCharClass(); }
+    const International& GetIntl() const        { return *pFormatter->GetInternational(); }
+    const CharClass& GetChrCls() const          { return *pFormatter->GetCharClass(); }
 
-    XubString& GetQuartalString(){ return sKeyword[NF_KEY_QUARTER]; }
-    XubString& GetTrueString()   { return sKeyword[NF_KEY_TRUE]; }
-    XubString& GetFalseString()  { return sKeyword[NF_KEY_FALSE]; }
-    XubString& GetColorString()  { return sKeyword[NF_KEY_COLOR]; }
-    XubString& GetRedString()    { return sKeyword[NF_KEY_RED]; }
-    XubString& GetBooleanString(){ return sKeyword[NF_KEY_BOOLEAN]; }
-    XubString& GetErrorString()  { return sErrStr; }
-    XubString* GetKeyword()      { return sKeyword; }
+    const XubString& GetQuartalString() const   { return sKeyword[NF_KEY_QUARTER]; }
+    const XubString& GetTrueString() const      { return sKeyword[NF_KEY_TRUE]; }
+    const XubString& GetFalseString() const     { return sKeyword[NF_KEY_FALSE]; }
+    const XubString& GetColorString() const     { return sKeyword[NF_KEY_COLOR]; }
+    const XubString& GetRedString() const       { return sKeyword[NF_KEY_RED]; }
+    const XubString& GetBooleanString() const   { return sKeyword[NF_KEY_BOOLEAN]; }
+    const XubString& GetErrorString() const     { return sErrStr; }
+    const XubString* GetKeyword() const         { return sKeyword; }
 
-    Date* GetNullDate()       { return pNullDate; }
-    XubString& GetStandardName() { return sNameStandardFormat; }
-    short GetStandardPrec()   { return nStandardPrec; }
-    Color& GetRedColor()      { return StandardColor[4]; }
+    Date* GetNullDate() const                   { return pNullDate; }
+    const XubString& GetStandardName() const    { return sNameStandardFormat; }
+    short GetStandardPrec() const               { return nStandardPrec; }
+    const Color& GetRedColor() const            { return StandardColor[4]; }
     Color* GetColor(XubString& sStr);           // Setzt Hauptfarben oder
                                                 // definierte Farben
 

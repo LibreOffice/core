@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: er $ $Date: 2000-10-14 20:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,37 +490,13 @@ short ImpSvNumberInputScan::GetLogical( const XubString& rString )
         res = 0;
     else
     {
-        const xub_Unicode *pTrue, *pFalse;
-        LanguageType eLnge = pFormatter->GetInternational()->GetLanguage();
-        ImpSvNumberformatScan::GetLogicalKeywords( eLnge, pTrue, pFalse );
-#if 0
-// NoMoreUpperNeeded
-        XubString sBool( pTrue );
-        USHORT nLen = rString.Len();
-        if ( nLen == sBool.Len() && pFormatter->GetInternational()->CompareEqual(
-                rString, sBool, INTN_COMPARE_IGNORECASE ) )
-        {                                                   // zuerst True
-            res = 1;                                        // True -> 1
-        }
+        const ImpSvNumberformatScan* pFS = pFormatter->GetFormatScanner();
+        if ( rString == pFS->GetTrueString() )
+            res = 1;
+        else if ( rString == pFS->GetFalseString() )
+            res = -1;
         else
-        {
-            sBool = pFalse;
-            if ( nLen == sBool.Len() && pFormatter->GetInternational()->CompareEqual(
-                    rString, sBool, INTN_COMPARE_IGNORECASE ) )
-            {                                               // dann False
-                res = -1;                                   // False -> -1
-            }
-            else
-                res = 0;                                    // sonst -> 0
-        }
-#else
-    if ( rString == pTrue )
-        res = 1;
-    else if ( rString == pFalse )
-        res = -1;
-    else
-        res = 0;
-#endif
+            res = 0;
     }
 
     return res;

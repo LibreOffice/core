@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: er $ $Date: 2000-10-14 20:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,15 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
+#include <unotools/numberformatcodewrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_KNUMBERFORMATUSAGE_HPP_
+#include <com/sun/star/lang/KNumberFormatUsage.hpp>
+#endif
 
 #define _SVSTDARR_USHORTS
 #include "svstdarr.hxx"
@@ -99,6 +108,11 @@
 #include "zforfind.hxx"
 #include "zformat.hxx"
 #include "numhead.hxx"
+
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 
 
         // Konstanten fuer Typoffsets pro Land/Sprache (CL)
@@ -136,22 +150,56 @@ SV_IMPL_PTRARR( NfWSStringsDtor, XubString* );
 
 /***********************Funktionen SvNumberFormatter**************************/
 
-SvNumberFormatter::SvNumberFormatter(LanguageType eLnge)
+SvNumberFormatter::SvNumberFormatter(
+            Reference< XMultiServiceFactory > xSMgr,
+            LanguageType eLang )
+        :
+        xServiceManager( xSMgr )
 {
-//! if (eLnge == LANGUAGE_SYSTEM)               // Sprache Systemn uebersteuern
-//!     eLnge = System::GetLanguage();
-    if (eLnge == LANGUAGE_DONTKNOW)
-        eLnge = LANGUAGE_ENGLISH_US;
-    SysLnge = eLnge;
-    ActLnge = eLnge;
+    ImpConstruct( eLang );
+}
+
+
+SvNumberFormatter::SvNumberFormatter( LanguageType eLang )
+{
+    ImpConstruct( eLang );
+}
+
+
+SvNumberFormatter::~SvNumberFormatter()
+{
+    SvNumberformat* pEntry = aFTable.First();
+    while (pEntry)
+    {
+        delete pEntry;
+        pEntry = aFTable.Next();
+    }
+    delete pLocaleData;
+    delete pCharClass;
+    delete pIntl;
+    delete pStringScanner;
+    delete pFormatScanner;
+    ClearMergeTable();
+    delete pMergeTable;
+}
+
+
+void SvNumberFormatter::ImpConstruct( LanguageType eLang )
+{
+    if ( eLang == LANGUAGE_DONTKNOW )
+        eLang = LANGUAGE_ENGLISH_US;
+    SysLnge = eLang;
+    ActLnge = eLang;
     eEvalDateFormat = NF_EVALDATEFORMAT_INTL;
     nDefaultCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
-    if ( !International::IsFormatAvailable( eLnge ) )
-        eLnge = UNKNOWN_SUBSTITUTE;
-    pIntl = new International( eLnge );
+    if ( !International::IsFormatAvailable( eLang ) )
+        eLang = UNKNOWN_SUBSTITUTE;
+    pIntl = new International( eLang );
     String aLanguage, aCountry, aVariant;
-    ConvertLanguageToIsoNames( International::GetRealLanguage( eLnge ), aLanguage, aCountry );
-    pCharClass = new CharClass( ::com::sun::star::lang::Locale( aLanguage, aCountry, aVariant ) );
+    ConvertLanguageToIsoNames( International::GetRealLanguage( eLang ), aLanguage, aCountry );
+    aLocale = Locale( aLanguage, aCountry, aVariant );
+    pCharClass = new CharClass( xServiceManager, aLocale );
+    pLocaleData = new LocaleDataWrapper( xServiceManager, aLocale );
     pStringScanner = new ImpSvNumberInputScan( this );
     pFormatScanner = new ImpSvNumberformatScan( this );
     pFormatTable = NULL;
@@ -162,21 +210,6 @@ SvNumberFormatter::SvNumberFormatter(LanguageType eLnge)
     pColorLink = NULL;
 }
 
-SvNumberFormatter::~SvNumberFormatter()
-{
-    SvNumberformat* pEntry = aFTable.First();
-    while (pEntry)
-    {
-        delete pEntry;
-        pEntry = aFTable.Next();
-    }
-    delete pCharClass;
-    delete pIntl;
-    delete pStringScanner;
-    delete pFormatScanner;
-    ClearMergeTable();
-    delete pMergeTable;
-}
 
 Color* SvNumberFormatter::GetUserDefColor(USHORT nIndex)
 {
@@ -232,8 +265,6 @@ void SvNumberFormatter::ImpChangeSysCL(LanguageType eLnge)
 
 void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
 {
-//! if (eLnge == LANGUAGE_SYSTEM)               // Sprache Systemn uebersteuern
-//!     eLnge = System::GetLanguage();
     if (ActLnge != eLnge)
     {
         delete pIntl;
@@ -244,7 +275,9 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
 
         String aLanguage, aCountry, aVariant;
         ConvertLanguageToIsoNames( International::GetRealLanguage( eLnge ), aLanguage, aCountry );
-        pCharClass->setLocale( ::com::sun::star::lang::Locale( aLanguage, aCountry, aVariant ) );
+        aLocale = Locale( aLanguage, aCountry, aVariant );
+        pCharClass->setLocale( aLocale );
+        pLocaleData->setLocale( aLocale );
 
         pFormatScanner->ChangeIntl();
         pStringScanner->ChangeIntl();
@@ -1278,37 +1311,41 @@ ULONG SvNumberFormatter::TestNewString(const XubString& sFormatString,
     return nRes;
 }
 
-SvNumberformat* SvNumberFormatter::ImpInsertFormat(XubString& sStr,
-                                     BOOL bStandard,
-                                     ULONG nPos)
+SvNumberformat* SvNumberFormatter::ImpInsertFormat(
+            const ::com::sun::star::lang::NumberFormatCode& rCode,
+            ULONG nPos )
 {
+    XubString aTmp( rCode.Code );
     xub_StrLen nCheckPos = 0;
-    SvNumberformat* pFormat = new SvNumberformat(sStr,
+    SvNumberformat* pFormat = new SvNumberformat(aTmp,
                                                  pFormatScanner,
                                                  pStringScanner,
                                                  nCheckPos,
                                                  ActLnge);
-    if (!pFormat || nCheckPos > 0)
+    if ( !pFormat || nCheckPos > 0 )
     {
         DBG_ERROR
             ("SvNumberFormatter:: Unbekanntes oder falsches Zahlformat");
         delete pFormat;
         return NULL;;
     }
-    if (bStandard)
-        pFormat->SetStandard();
-    if (!aFTable.Insert(nPos, pFormat))
+    if ( !aFTable.Insert( nPos, pFormat ) )
     {
         delete pFormat;
         return NULL;
     }
+    if ( rCode.Default )
+        pFormat->SetStandard();
+    if ( rCode.DefaultName.getLength() )
+        pFormat->SetComment( rCode.DefaultName );
     return pFormat;
 }
 
-SvNumberformat* SvNumberFormatter::ImpInsertNewStandardFormat( XubString& sStr,
-        ULONG nPos, USHORT nVersion )
+void SvNumberFormatter::ImpInsertNewStandardFormat(
+            const ::com::sun::star::lang::NumberFormatCode& rCode,
+            ULONG nPos, USHORT nVersion )
 {
-    SvNumberformat* pNewFormat = ImpInsertFormat( sStr, FALSE, nPos );
+    SvNumberformat* pNewFormat = ImpInsertFormat( rCode, nPos );
     if (pNewFormat)
         pNewFormat->SetNewStandardDefined( nVersion );
         // damit es gespeichert, richtig angezeigt und von alten Versionen konvertiert wird
@@ -1316,11 +1353,10 @@ SvNumberformat* SvNumberFormatter::ImpInsertNewStandardFormat( XubString& sStr,
     else
     {
         ByteString aErr( "New standard format not inserted: " );
-        aErr += ByteString( sStr, RTL_TEXTENCODING_UTF8 );
+        aErr += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aErr.GetBuffer() );
     }
 #endif
-    return pNewFormat;
 }
 
 void SvNumberFormatter::GetFormatSpecialInfo(ULONG nFormat,
@@ -1385,15 +1421,33 @@ inline ULONG SetIndexTable( NfIndexTableOffset nTabOff, ULONG nIndOff )
     if ( !bIndexTableInitialized )
     {
         DBG_ASSERT( theIndexTable[nTabOff] == NUMBERFORMAT_ENTRY_NOT_FOUND,
-            "SetIndexTable: theIndexTable[nTabOff] bereits belegt" );
+            "SetIndexTable: theIndexTable[nTabOff] already occupied" );
         theIndexTable[nTabOff] = nIndOff;
     }
     return nIndOff;
 }
 
 
+// quasi static
+sal_Int32 lcl_SvNumberFormatter_GetFormatCodeIndex(
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::lang::NumberFormatCode >& rSeq,
+            const sal_Int16 nIndex )
+{
+    const sal_Int32 nLen = rSeq.getLength();
+    for ( sal_Int16 j=0; j<nLen; j++ )
+    {
+        if ( rSeq[j].Index == nIndex )
+            return j;
+    }
+    DBG_ERRORFILE( "lcl_SvNumberFormatter_GetFormatCodeIndex: not found" );
+    return 0;
+}
+
+
 void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 {
+    using namespace ::com::sun::star;
+
     if ( !bIndexTableInitialized )
     {
         for ( USHORT j=0; j<NF_INDEX_TABLE_ENTRIES; j++ )
@@ -1402,194 +1456,154 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
         }
     }
     BOOL bOldConvertMode = pFormatScanner->GetConvertMode();
-    if (bOldConvertMode)                        // fuer diese Funktion
-        pFormatScanner->SetConvertMode(FALSE);      // ausschalten
-    xub_StrLen nCheckPos = 0;                   // Eintrag fuer Standard, Text
-                                                // und logisch direkt erzeugen
+    if (bOldConvertMode)
+        pFormatScanner->SetConvertMode(FALSE);      // switch off for this function
+
+    NumberFormatCodeWrapper aNumberFormatCode( xServiceManager, pLocaleData->getLocale() );
+
+    xub_StrLen nCheckPos = 0;
     SvNumberformat* pNewFormat = NULL;
-    XubString aSystem( RTL_CONSTASCII_USTRINGPARAM( "System" ) );           // Kommentar
-    XubString aDefSystem( RTL_CONSTASCII_USTRINGPARAM( "def/System" ) );        // Kommentar
-    // Zaehler fuer zusaetzliche Standardformate, die nicht in die ersten 10
-    // einer Kategorie passen, insgesamt nochmal ca. 20
-    // Bei jedem ImpInsertNewStandardformat hochzaehlen, neue Formate
-    // hinten anhaengen, nicht einfuegen!
+    XubString aFormatCode;
+    sal_Int32 nIdx;
+    XubString aSystem( RTL_CONSTASCII_USTRINGPARAM( "System" ) );           // comment field
+    XubString aDefSystem( RTL_CONSTASCII_USTRINGPARAM( "def/System" ) );    // comment field
+
+    // Counter for additional builtin formats not fitting into the first 10
+    // of a category (TLOT:=The Legacy Of Templin), altogether about 20 formats.
+    // Has to be incremented on each ImpInsertNewStandardformat, new formats
+    // must be appended, not inserted!
     USHORT nNewExtended = ZF_STANDARD_NEWEXTENDED;
 
-    SvNumberformat* pStandard = new SvNumberformat(
-                                        pFormatScanner->GetStandardName(),
-                                        pFormatScanner, pStringScanner,
-                                        nCheckPos, ActLnge);
-    pStandard->SetType(NUMBERFORMAT_NUMBER);
-    pStandard->SetStandard();
+    // General
+    aFormatCode = pFormatScanner->GetStandardName();
+    pNewFormat = new SvNumberformat( aFormatCode,
+        pFormatScanner, pStringScanner, nCheckPos, ActLnge );
+    pNewFormat->SetType(NUMBERFORMAT_NUMBER);
+    pNewFormat->SetStandard();
     if ( !aFTable.Insert(
             CLOffset + SetIndexTable( NF_NUMBER_STANDARD, ZF_STANDARD ),
-            pStandard))
-        delete pStandard;
+            pNewFormat))
+        delete pNewFormat;
     else
-        pStandard->SetLastInsertKey(SV_MAX_ANZ_STANDARD_FORMATE);
-    SvNumberformat* pLogical = new SvNumberformat(
-                                        pFormatScanner->GetBooleanString(),
-                                        pFormatScanner, pStringScanner,
-                                        nCheckPos, ActLnge);
-    pLogical->SetType(NUMBERFORMAT_LOGICAL);
-    pLogical->SetStandard();
+        pNewFormat->SetLastInsertKey(SV_MAX_ANZ_STANDARD_FORMATE);
+
+    // Boolean
+    aFormatCode = pFormatScanner->GetBooleanString();
+    pNewFormat = new SvNumberformat( aFormatCode,
+        pFormatScanner, pStringScanner, nCheckPos, ActLnge );
+    pNewFormat->SetType(NUMBERFORMAT_LOGICAL);
+    pNewFormat->SetStandard();
     if ( !aFTable.Insert(
             CLOffset + SetIndexTable( NF_BOOLEAN, ZF_STANDARD_LOGICAL ),
-            pLogical))
-        delete pLogical;
+            pNewFormat))
+        delete pNewFormat;
 
-    XubString aWSString = '@';
-    SvNumberformat* pText = new SvNumberformat(aWSString,
-                                               pFormatScanner, pStringScanner,
-                                               nCheckPos, ActLnge);
-    pText->SetType(NUMBERFORMAT_TEXT);
-    pText->SetStandard();
+    // Text
+    aFormatCode = '@';
+    pNewFormat = new SvNumberformat( aFormatCode,
+        pFormatScanner, pStringScanner, nCheckPos, ActLnge );
+    pNewFormat->SetType(NUMBERFORMAT_TEXT);
+    pNewFormat->SetStandard();
     if ( !aFTable.Insert(
             CLOffset + SetIndexTable( NF_TEXT, ZF_STANDARD_TEXT ),
-            pText))
-        delete pText;
+            pNewFormat))
+        delete pNewFormat;
 
     xub_Unicode cDecSep = pIntl->GetNumDecimalSep();
     xub_Unicode cThousandSep = pIntl->GetNumThousandSep();
-                                                        // Zahl:
-    XubString s0 = '0';                                 // 0
-    ImpInsertFormat(s0,FALSE,
+
+
+
+    // Number
+    uno::Sequence< lang::NumberFormatCode > aFormatSeq
+        = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::FIXED_NUMBER );
+
+    // 0
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_NUMBER_INT );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_INT, ZF_STANDARD+1 ));
-    XubString s1( RTL_CONSTASCII_USTRINGPARAM( "000" ) );       // 0,00
-    s1.Insert(cDecSep,1);
-    ImpInsertFormat(s1,FALSE,
+
+    // 0.00
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_NUMBER_DEC2 );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_DEC2, ZF_STANDARD+2 ));
-    XubString s2( RTL_CONSTASCII_USTRINGPARAM( "###0" ) );      // #.##0
-    s2.Insert(cThousandSep,1);
-    ImpInsertFormat(s2,FALSE,
+
+    // #,##0
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_NUMBER_1000INT );
+    ImpInsertFormat( aFormatSeq[nIdx],
             CLOffset + SetIndexTable( NF_NUMBER_1000INT, ZF_STANDARD+3 ));
-    XubString s3( RTL_CONSTASCII_USTRINGPARAM( "###000" ) );        // #.##0,00
-    s3.Insert(cThousandSep,1);
-    s3.Insert(cDecSep,5);
-    ImpInsertFormat(s3,FALSE,
+
+    // #,##0.00
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_NUMBER_1000DEC2 );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_1000DEC2, ZF_STANDARD+4 ));
-    // ab Version 6
-    XubString sNumSystem;                               // #.##0,00 System
-    if ( pIntl->IsNumLeadingZero() )
-        sNumSystem = '0';
-    if ( pIntl->IsNumThousandSep() )
-    {
-        if ( pIntl->IsNumLeadingZero() )
-            sNumSystem.Insert( XubString::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM( "###" ) ), 0 );
-        else
-            sNumSystem.Insert( XubString::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM( "####" ) ), 0 );
-        sNumSystem.Insert( cThousandSep, 1 );
-    }
-    USHORT nNumDigits = pIntl->GetNumDigits();
-    if ( nNumDigits )
-    {
-        sNumSystem += cDecSep;
-        for ( USHORT j=0; j<nNumDigits; j++ )
-        {
-            sNumSystem += '0';
-        }
-    }
-    pNewFormat = ImpInsertNewStandardFormat( sNumSystem,
+
+    // #.##0,00 System country/language dependent   since number formatter version 6
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_NUMBER_SYSTEM );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_SYSTEM, ZF_STANDARD+5 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aSystem );
 
-                                                        // Prozent:
-    XubString s4( RTL_CONSTASCII_USTRINGPARAM( "0%" ) );            // 0%
-    ImpInsertFormat(s4,FALSE,
+
+    // Percent number
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::PERCENT_NUMBER );
+
+    // 0%
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_PERCENT_INT );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_PERCENT_INT, ZF_STANDARD_PERCENT ));
-    XubString s5( RTL_CONSTASCII_USTRINGPARAM( "000%" ) );      // 0,00%
-    s5.Insert(cDecSep,1);
-    ImpInsertFormat(s5,TRUE,
+
+    // 0.00%
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_PERCENT_DEC2 );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_PERCENT_DEC2, ZF_STANDARD_PERCENT+1 ));
 
-    // Waehrung: (keine Standardoption also kein TRUE bei ImpInsertFormat)
 
-    XubString aRed( '[' );
-    aRed += pFormatScanner->GetRedString();
-    aRed += ']';
 
-    XubString sCurrFlat1( RTL_CONSTASCII_USTRINGPARAM( "###0" ) );      // #.##0 DM
-    sCurrFlat1.Insert(cThousandSep,1);
-    XubString sCurrFlat2( sCurrFlat1 );                  // #.##0,00 DM
-    XubString sCurrFlat3( sCurrFlat1 );                  // #.##0,-- DM
-    // Anzahl Nachkommastellen in Waehrung
-    USHORT nCurrDigits = pIntl->GetCurrDigits();
-    if ( nCurrDigits )
-    {
-        sCurrFlat2 += cDecSep;
-        sCurrFlat3 += cDecSep;
-        sCurrFlat2.Expand( sCurrFlat2.Len() + nCurrDigits, '0' );
-        sCurrFlat3.Expand( sCurrFlat3.Len() + nCurrDigits, '-' );
-    }
+    // Currency (no default standard option => no TRUE at ImpInsertFormat)
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::CURRENCY );
 
-    XubString s6 = sCurrFlat1;                          // #.##0 DM
-    ImpGetPosCurrFormat(s6);
-    XubString s7 = sCurrFlat2;                          // #.##0,00 DM
-    ImpGetPosCurrFormat(s7);
-    XubString sDash = sCurrFlat3;                       // #.##0,-- DM
-    ImpGetPosCurrFormat(sDash);
-    XubString sNegStr1 = sCurrFlat1;                        // -#.##0 DM
-    ImpGetNegCurrFormat(sNegStr1);
-    XubString sNegStr2 = sCurrFlat2;                        // -#.##0,00 DM
-    ImpGetNegCurrFormat(sNegStr2);
-    XubString sNegStr3 = sCurrFlat3;                        // -#.##0,-- DM
-    ImpGetNegCurrFormat(sNegStr3);
-    s6 += ';';
-    XubString s8 = s6;
-    s6 += sNegStr1;
-    s8 += aRed;
-    s8 += sNegStr1;
-    s7 += ';';
-    XubString s9 = s7;
-    s7 += sNegStr2;
-    s9 += aRed;
-    s9 += sNegStr2;
-    sDash += ';';
-    XubString sDashed = sDash;
-    sDash += sNegStr3;
-    sDashed += aRed;
-    sDashed += sNegStr3;
-    ImpInsertFormat(s6,FALSE,
+    // #,##0
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT );
+    aFormatSeq[nIdx].Default = sal_False;
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000INT, ZF_STANDARD_CURRENCY ));
-    ImpInsertFormat(s7,FALSE,
+
+    // #,##0.00
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2 );
+    aFormatSeq[nIdx].Default = sal_False;
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2, ZF_STANDARD_CURRENCY+1 ));
-                                                        // Muss immer 1 hinter
-                                                        // Standard sein
-                                                        // fuer Funktion DM()!!
-    ImpInsertFormat(s8,FALSE,
+        //! MUST be ZF_STANDARD_CURRENCY+1 for Calc currency function, e.g. DM()
+
+    // #,##0 negative red
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT_RED );
+    aFormatSeq[nIdx].Default = sal_False;
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000INT_RED, ZF_STANDARD_CURRENCY+2 ));
-    ImpInsertFormat(s9,FALSE,
+
+    // #,##0.00 negative red
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_RED );
+    aFormatSeq[nIdx].Default = sal_False;
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_RED, ZF_STANDARD_CURRENCY+3 ));
 
-    // ab Version 3 dazu
-    XubString s28 = sCurrFlat2;                             // #.##0,00 DEM
-#if NF_BANKSYMBOL_FIX_POSITION
-    s28.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " CCC" ) );
-#else
-    XubString s28n( sCurrFlat2 ), aCCC( RTL_CONSTASCII_USTRINGPARAM( "CCC" ) );
-    USHORT nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat(
-        pIntl->GetCurrPositiveFormat(), pIntl->GetCurrPositiveFormat(), TRUE );
-    USHORT nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat(
-        pIntl->GetCurrNegativeFormat(), pIntl->GetCurrNegativeFormat(), TRUE );
-    NfCurrencyEntry::CompletePositiveFormatString( s28, aCCC, nPosiForm );
-    NfCurrencyEntry::CompleteNegativeFormatString( s28n, aCCC, nNegaForm );
-    s28 += ';';
-    s28 += s28n;
-#endif
-    pNewFormat = ImpInsertFormat(s28,FALSE,
+    // #,##0.00 USD   since number formatter version 3
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_CCC );
+    aFormatSeq[nIdx].Default = sal_False;
+    pNewFormat = ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_CCC, ZF_STANDARD_CURRENCY+4 ));
     if ( pNewFormat )
-        pNewFormat->SetUsed(TRUE);          // damit es gespeichert wird
+        pNewFormat->SetUsed(TRUE);      // must be saved for older versions
 
-    // ab Version 6 dazu: #.##0,-- DM
-    ImpInsertNewStandardFormat( sDashed,
+    // #.##0,--   since number formatter version 6
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_DASHED );
+    aFormatSeq[nIdx].Default = sal_False;
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_DASHED, ZF_STANDARD_CURRENCY+5 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
+//! TODO: where to build the CurrencyTable now?
 #if 0   // erDEBUG
     {   // ab SV_NUMBERFORMATTER_VERSION_NEW_CURR EURo und letztes Format testen
         NfWSStringsDtor aArr;
@@ -1617,716 +1631,236 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     }
 #endif
 
-                                            // Datum:
-    XubString s10;
-    ImpGetDateFormat(s10);                  // TT.MM.JJ   kurzes Systemdatum
-    pNewFormat = ImpInsertFormat(s10,TRUE,
+
+
+    // Date
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::DATE );
+
+    // DD.MM.YY   System
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_SHORT );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYSTEM_SHORT, ZF_STANDARD_DATE ));
-    if ( pNewFormat )
-        pNewFormat->SetComment( aSystem );
 
-    const XubString* pKeyword = pFormatScanner->GetKeyword();
-    xub_Unicode cDateSep = pIntl->GetDateSep();
-    xub_Unicode cTimeSep = pIntl->GetTimeSep();
-
-    XubString s11 = pKeyword[NF_KEY_NN];        // NN TT.MMM JJ
-    s11 += ' ';
-    s11 += pKeyword[NF_KEY_TT];
-    s11 += cDateSep;
-    s11 += pKeyword[NF_KEY_MMM];
-    s11 += ' ';
-    s11 += pKeyword[NF_KEY_JJ];
-    ImpInsertFormat(s11,FALSE,
-        CLOffset + SetIndexTable( NF_DATE_DEF_NNDDMMMYY, ZF_STANDARD_DATE+1 ));
-
-    XubString s12;                           // MM.JJ
-    XubString s13;                           // TT.MMM
-    XubString sFullDate;                        // TT.MM.JJJJ
-    XubString sDDMMYY;                       // TT.MM.JJ
-    switch(pIntl->GetDateFormat())
-    {
-        case DMY:
-        {
-            s12 = pKeyword[NF_KEY_MM];          // MM.JJ
-            s12 += cDateSep;
-            s12 += pKeyword[NF_KEY_JJ];
-            s13 = pKeyword[NF_KEY_TT];          // TT.MMM
-            s13 += cDateSep;
-            s13 += pKeyword[NF_KEY_MMM];
-            sFullDate = pKeyword[NF_KEY_TT];    // TT
-            sFullDate += cDateSep;
-            sFullDate += pKeyword[NF_KEY_MM];   // MM
-            sFullDate += cDateSep;
-            sDDMMYY = sFullDate;
-            sFullDate += pKeyword[NF_KEY_JJJJ]; // JJJJ
-            sDDMMYY += pKeyword[NF_KEY_JJ];     // JJ
-        }
-        break;
-        case YMD:
-        {
-            s12 = pKeyword[NF_KEY_JJ];          // JJ.MM
-            s12 += cDateSep;
-            s12 += pKeyword[NF_KEY_MM];
-            s13 = pKeyword[NF_KEY_MMM];         // MMM TT
-            s13 += ' ';
-            s13 += pKeyword[NF_KEY_TT];
-            sFullDate = pKeyword[NF_KEY_JJJJ];  // JJJJ
-            sDDMMYY = pKeyword[NF_KEY_JJ];      // JJ
-            XubString aTmp( cDateSep );
-            aTmp += pKeyword[NF_KEY_MM];        // MM
-            aTmp += cDateSep;
-            aTmp += pKeyword[NF_KEY_TT];        // TT
-            sFullDate += aTmp;
-            sDDMMYY += aTmp;
-
-        }
-        break;
-        case MDY:
-        default:
-        {
-            s12 = pKeyword[NF_KEY_MM];          // MM.JJ
-            s12 += cDateSep;
-            s12 += pKeyword[NF_KEY_JJ];
-            s13 = pKeyword[NF_KEY_MMM];         // MMM TT
-            s13 += ' ';
-            s13 += pKeyword[NF_KEY_TT];
-            sFullDate = pKeyword[NF_KEY_MM];    // MM
-            sFullDate += cDateSep;
-            sFullDate += pKeyword[NF_KEY_TT];   // TT
-            sFullDate += cDateSep;
-            sDDMMYY = sFullDate;
-            sFullDate += pKeyword[NF_KEY_JJJJ]; // JJJJ
-            sDDMMYY += pKeyword[NF_KEY_JJ];     // JJ
-        }
-        break;
-    }
-    pNewFormat = ImpInsertFormat(s12,FALSE,
+    // DD.MM.YY   def/System
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_MMYY );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_MMYY, ZF_STANDARD_DATE+2 ));
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDefSystem );
 
-    ImpInsertFormat(s13,FALSE,
+    // DD MMM
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMM );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DDMMM, ZF_STANDARD_DATE+3 ));
 
-    XubString s14 = pKeyword[NF_KEY_MMMM];      // MMMM
-    ImpInsertFormat(s14,FALSE,
+    // MMMM
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_MMMM );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_MMMM, ZF_STANDARD_DATE+4 ));
 
-    XubString s15 = pKeyword[NF_KEY_QQ];            // QQ JJ
-    s15 += ' ';
-    s15 += pKeyword[NF_KEY_JJ];
-    ImpInsertFormat(s15,FALSE,
+    // QQ YY
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_QQJJ );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_QQJJ, ZF_STANDARD_DATE+5 ));
 
-    // ab Version 2 dazu, war TT.MM.[JJ]JJ jetzt (v6) TT.MM.JJJJ
-    pNewFormat = ImpInsertFormat(sFullDate,FALSE,
+    // DD.MM.YYYY   since number formatter version 2, was DD.MM.[YY]YY
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYYYY );
+    pNewFormat = ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYYYY, ZF_STANDARD_DATE+6 ));
     if ( pNewFormat )
-    {
-        pNewFormat->SetUsed(TRUE);          // damit es gespeichert wird
-        pNewFormat->SetComment( aDefSystem );
-    }
+        pNewFormat->SetUsed(TRUE);      // must be saved for older versions
 
-    // ab Version 6 dazu
-    pNewFormat = ImpInsertNewStandardFormat( sDDMMYY,
+    // DD.MM.YY   def/System, since number formatter version 6
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYY );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYY, ZF_STANDARD_DATE+7 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDefSystem );
-    // lange Wochentage: statt "NNN, " steht "NNNN" Code wg. Kompatibilitaet
-    // langes Systemdatum wie eingestellt
-    XubString sLongDate;
-    ImpGetLongDateFormat( sLongDate );              // NNN, T. MMMM JJJJ   System
-    pNewFormat = ImpInsertNewStandardFormat( sLongDate,
+
+    // NNN, D. MMMM YYYY   System
+    // Long day of week: "NNNN" instead of "NNN," because of compatibility
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_LONG );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYSTEM_LONG, ZF_STANDARD_DATE+8 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aSystem );
-    // harte aber systemabhaengige lange Datumformate
-    sLongDate.Erase();
-    ImpGetLongDateFormat( sLongDate, -1, 1, 1, 1 ); // T. MMM JJ   def/System
-    pNewFormat = ImpInsertNewStandardFormat( sLongDate,
+
+    // Hard coded but system (regional settings) delimiters dependent long date formats
+    // since numberformatter version 6
+
+    // D. MMM YY   def/System
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYY );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYY, ZF_STANDARD_DATE+9 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDefSystem );
-    //! leider hat das Templin'sche Erbe nur 10 Standardformate pro Kategorie
-    //! vorgesehen, weitere wuerden ZF_STANDARD_TIME ueberschreiben :-((
-    sLongDate.Erase();
-    ImpGetLongDateFormat( sLongDate, -1, 1, 1, 2 ); // T. MMM JJJJ   def/System
-    pNewFormat = ImpInsertNewStandardFormat( sLongDate,
+
+    //! Unfortunally TLOT intended only 10 builtin formats per category, more
+    //! would overwrite the next category (ZF_STANDARD_TIME) :-((
+    //! Therefore they are inserted with nNewExtended++ (which is also limited)
+
+    // D. MMM YYYY   def/System
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYYYY );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDefSystem );
-    sLongDate.Erase();
-    ImpGetLongDateFormat( sLongDate, -1, 1, 2, 2 ); // T. MMMM JJJJ   def/System
-    pNewFormat = ImpInsertNewStandardFormat( sLongDate,
+
+    // D. MMMM YYYY   def/System
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMMYYYY );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDefSystem );
-    sLongDate.Erase();
-    ImpGetLongDateFormat( sLongDate, 1, 1, 1, 1 );  // NN, T. MMM JJ   def/System
-    pNewFormat = ImpInsertNewStandardFormat( sLongDate,
+
+    // NN, D. MMM YY   def/System
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMYY );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDefSystem );
-    sLongDate.Erase();
-    ImpGetLongDateFormat( sLongDate, 1, 1, 2, 2 );  // NN, T. MMMM JJJJ   def/System
-    pNewFormat = ImpInsertNewStandardFormat( sLongDate,
+
+    // NN, D. MMMM YYYY   def/System
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMMYYYY );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDefSystem );
-    sLongDate.Erase();
-    ImpGetLongDateFormat( sLongDate, 2, 1, 2, 2 );  // NNN, T. MMMM JJJJ   def/System
-    pNewFormat = ImpInsertNewStandardFormat( sLongDate,
+
+    // NNN, D. MMMM YYYY   def/System
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNNNDMMMMYYYY );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_NNNNDMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDefSystem );
 
-    XubString aDIN( RTL_CONSTASCII_USTRINGPARAM( "DIN 5008 (EN 28601)" ) );
-    XubString sDinTMMMJJJJ;                     // DIN: T. MMM. JJJJ
-    sDinTMMMJJJJ += pKeyword[NF_KEY_T];
-    sDinTMMMJJJJ += '.';
-    sDinTMMMJJJJ += ' ';
-    sDinTMMMJJJJ += pKeyword[NF_KEY_MMM];
-    sDinTMMMJJJJ += '.';
-    sDinTMMMJJJJ += ' ';
-    sDinTMMMJJJJ += pKeyword[NF_KEY_JJJJ];
-    pNewFormat = ImpInsertNewStandardFormat( sDinTMMMJJJJ,
+    // Hard coded DIN (Deutsche Industrie Norm) and EN (European Norm) date formats
+
+    // D. MMM. YYYY   DIN/EN
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMYYYY );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_DMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDIN );
 
-    XubString sDinTMMMMJJJJ;                        // DIN: T. MMMM JJJJ
-    sDinTMMMMJJJJ += pKeyword[NF_KEY_T];
-    sDinTMMMMJJJJ += '.';
-    sDinTMMMMJJJJ += ' ';
-    sDinTMMMMJJJJ += pKeyword[NF_KEY_MMMM];
-    sDinTMMMMJJJJ += ' ';
-    sDinTMMMMJJJJ += pKeyword[NF_KEY_JJJJ];
-    pNewFormat = ImpInsertNewStandardFormat( sDinTMMMMJJJJ,
+    // D. MMMM YYYY   DIN/EN
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMMYYYY );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_DMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDIN );
 
-    XubString sDinMMTT;                         // DIN: MM-TT
-    sDinMMTT += pKeyword[NF_KEY_MM];
-    sDinMMTT += '-';
-    sDinMMTT += pKeyword[NF_KEY_TT];
-    pNewFormat = ImpInsertNewStandardFormat( sDinMMTT,
+    // MM-DD   DIN/EN
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_MMDD );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_MMDD, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDIN );
 
-    XubString sDinJJMMTT = sDinMMTT;                // DIN: JJ-MM-TT
-    sDinJJMMTT.Insert( '-', 0 );
-    sDinJJMMTT.Insert( pKeyword[NF_KEY_JJ], 0 );
-    pNewFormat = ImpInsertNewStandardFormat( sDinJJMMTT,
+    // YY-MM-DD   DIN/EN
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYMMDD );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_YYMMDD, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDIN );
 
-    XubString sDinJJJJMMTT = sDinMMTT;          // DIN: JJJJ-MM-TT
-    sDinJJJJMMTT.Insert( '-', 0 );
-    sDinJJJJMMTT.Insert( pKeyword[NF_KEY_JJJJ], 0 );
-    pNewFormat = ImpInsertNewStandardFormat( sDinJJJJMMTT,
+    // YYYY-MM-DD   DIN/EN
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYYYMMDD );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_YYYYMMDD, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
-    if ( pNewFormat )
-        pNewFormat->SetComment( aDIN );
 
-                                            // Uhrzeit:
-    XubString s16 = pKeyword[NF_KEY_HH];        // HH:MM
-    s16 += cTimeSep;
-    s16 += pKeyword[NF_KEY_MMI];
-    ImpInsertFormat(s16,FALSE,
+
+
+    // Time
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::TIME );
+
+    // HH:MM
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMM );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMM, ZF_STANDARD_TIME ));
-    XubString sFullTime = s16;              // HH:MM:SS
-    sFullTime += cTimeSep;
-    sFullTime += pKeyword[NF_KEY_SS];
-    ImpInsertFormat(sFullTime,TRUE,
+
+    // HH:MM:SS
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMSS );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMMSS, ZF_STANDARD_TIME+1 ));
-    XubString s18 = s16;                        // HH:MM AM/PM
-    s18 += ' ';
-    s18 += pKeyword[NF_KEY_AMPM];
-    ImpInsertFormat(s18,FALSE,
+
+    // HH:MM AM/PM
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMAMPM );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMMAMPM, ZF_STANDARD_TIME+2 ));
-    XubString s19 = sFullTime;              // HH:MM:SS AM/PM
-    s19 += ' ';
-    s19 += pKeyword[NF_KEY_AMPM];
-    ImpInsertFormat(s19,FALSE,
+
+    // HH:MM:SS AM/PM
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMSSAMPM );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMMSSAMPM, ZF_STANDARD_TIME+3 ));
-    XubString s20 = sFullTime;              // [HH]:MM:SS
-    s20.Insert('[',0);
-    s20.Insert(']',3);
-    ImpInsertFormat(s20,FALSE,
+
+    // [HH]:MM:SS
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HH_MMSS );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HH_MMSS, ZF_STANDARD_TIME+4 ));
-    XubString s21 = pKeyword[NF_KEY_MMI];   // MM:SS,00
-    s21 += cTimeSep;
-    s21 += pKeyword[NF_KEY_SS];
-    s21 += cDecSep;
-    s21 += '0';
-    s21 += '0';
-    ImpInsertFormat(s21,FALSE,
+
+    // MM:SS,00
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_MMSS00 );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_MMSS00, ZF_STANDARD_TIME+5 ));
-    XubString s29 = s20;                        // [HH]:MM:SS,00
-    s29 += cDecSep;
-    s29 += '0';
-    s29 += '0';
-    ImpInsertNewStandardFormat( s29,
+
+    // [HH]:MM:SS,00
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HH_MMSS00 );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HH_MMSS00, ZF_STANDARD_TIME+6 ),
         SV_NUMBERFORMATTER_VERSION_NF_TIME_HH_MMSS00 );
 
-                                            // Datum u. Uhrzeit:
-    XubString s22 = s10;                    // TT.MM.JJ HH:MM
-    s22 += ' ';
-    s22 += s16;
-    ImpInsertFormat(s22,TRUE,
+
+
+    // DateTime
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::DATE_TIME );
+
+    // DD.MM.YY HH:MM   System
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYSTEM_SHORT_HHMM );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATETIME_SYSTEM_SHORT_HHMM, ZF_STANDARD_DATETIME ));
-    XubString sFullDateTime = sFullDate;        // TT.MM.JJJJ HH:MM:SS
-    sFullDateTime += ' ';
-    sFullDateTime += sFullTime;
-    ImpInsertNewStandardFormat( sFullDateTime,
+
+    // DD.MM.YYYY HH:MM:SS   System
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYS_DDMMYYYY_HHMMSS );
+    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, ZF_STANDARD_DATETIME+1 ),
         SV_NUMBERFORMATTER_VERSION_NF_DATETIME_SYS_DDMMYYYY_HHMMSS );
 
-                                                        // Wissenschaft:
-    XubString s23( RTL_CONSTASCII_USTRINGPARAM( "000E+000" ) );     // 0,00E+000
-    s23.Insert(cDecSep,1);
-    ImpInsertFormat(s23,TRUE,
+
+
+    // Scientific number
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::SCIENTIFIC_NUMBER );
+
+    // 0.00E+000
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E000 );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_SCIENTIFIC_000E000, ZF_STANDARD_SCIENTIFIC ));
-    XubString s24( RTL_CONSTASCII_USTRINGPARAM( "000E+00" ) );      // 0,00E+00
-    s24.Insert(cDecSep,1);
-    ImpInsertFormat(s24,FALSE,
+
+    // 0.00E+00
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E00 );
+    ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_SCIENTIFIC_000E00, ZF_STANDARD_SCIENTIFIC+1 ));
 
-                                                // Bruch: (keine Standardopt.)
+
+
+    // Fraction number (no default option)
+    lang::NumberFormatCode aSingleFormatCode;
+
+     // # ?/?
+    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?/?" ) );
     XubString s25( RTL_CONSTASCII_USTRINGPARAM( "# ?/?" ) );            // # ?/?
-    ImpInsertFormat(s25,FALSE,
+    ImpInsertFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_FRACTION_1, ZF_STANDARD_FRACTION ));
-    // "??/" wird vom Compiler als Trigraph fuer '\' interpretiert!
-    XubString s26( RTL_CONSTASCII_USTRINGPARAM( "# ?\?/?\?" ) );        // # ??/??
-    ImpInsertFormat(s26,FALSE,
+
+    // # ??/??
+    //! "??/" would be interpreted by the compiler as a trigraph for '\'
+    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?\?/?\?" ) );
+    ImpInsertFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_FRACTION_2, ZF_STANDARD_FRACTION+1 ));
 
-    XubString sWeekOfYear( pKeyword[NF_KEY_WW] );
-    pNewFormat = ImpInsertNewStandardFormat( sWeekOfYear,
+    // Week of year   must be appended here because of nNewExtended
+    const XubString* pKeyword = pFormatScanner->GetKeyword();
+    aSingleFormatCode.Code = pKeyword[NF_KEY_WW];
+    ImpInsertNewStandardFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_DATE_WW, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NF_DATE_WW );
 
+
+
     bIndexTableInitialized = TRUE;
-    if (bOldConvertMode)                        // jetzt wieder
-        pFormatScanner->SetConvertMode(TRUE);   // einschalten
+    if (bOldConvertMode)
+        pFormatScanner->SetConvertMode(TRUE);
     DBG_ASSERT( nNewExtended <= ZF_STANDARD_NEWEXTENDEDMAX,
-        "Ueberlauf der nNewExtended Standardformate" );
+        "ImpGenerateFormtas: overflow of nNewExtended standard formats" );
 }
 
-void SvNumberFormatter::ImpGetDateFormat(XubString& sDateStr)
-{
-    const XubString* pKeyword = pFormatScanner->GetKeyword();
-    xub_Unicode cDateSep = pIntl->GetDateSep();
-    switch (pIntl->GetDateFormat())
-    {
-        case MDY:
-        {
-            if (pIntl->IsDateMonthLeadingZero())
-                sDateStr += pKeyword[NF_KEY_MM];
-            else
-                sDateStr += pKeyword[NF_KEY_M];
-            sDateStr += cDateSep;
-            if (pIntl->IsDateDayLeadingZero())
-                sDateStr += pKeyword[NF_KEY_TT];
-            else
-                sDateStr += pKeyword[NF_KEY_T];
-            sDateStr += cDateSep;
-            if (pIntl->IsDateCentury())
-                sDateStr += pKeyword[NF_KEY_JJJJ];
-            else
-                sDateStr += pKeyword[NF_KEY_JJ];
-        }
-        break;
-        case DMY:
-        {
-            if (pIntl->IsDateDayLeadingZero())
-                sDateStr += pKeyword[NF_KEY_TT];
-            else
-                sDateStr += pKeyword[NF_KEY_T];
-            sDateStr += cDateSep;
-            if (pIntl->IsDateMonthLeadingZero())
-                sDateStr += pKeyword[NF_KEY_MM];
-            else
-                sDateStr += pKeyword[NF_KEY_M];
-            sDateStr += cDateSep;
-            if (pIntl->IsDateCentury())
-                sDateStr += pKeyword[NF_KEY_JJJJ];
-            else
-                sDateStr += pKeyword[NF_KEY_JJ];
-        }
-        break;
-        case YMD:
-        {
-            if (pIntl->IsDateCentury())
-                sDateStr += pKeyword[NF_KEY_JJJJ];
-            else
-                sDateStr += pKeyword[NF_KEY_JJ];
-            sDateStr += cDateSep;
-            if (pIntl->IsDateMonthLeadingZero())
-                sDateStr += pKeyword[NF_KEY_MM];
-            else
-                sDateStr += pKeyword[NF_KEY_M];
-            sDateStr += cDateSep;
-            if (pIntl->IsDateDayLeadingZero())
-                sDateStr += pKeyword[NF_KEY_TT];
-            else
-                sDateStr += pKeyword[NF_KEY_T];
-        }
-        break;
-        default:
-        break;
-    }
-}
-
-
-void lcl_ImplAddStringMaybeQuoted( String& rDes, const String& rSrc,
-            CharClass* pChrCls )
-{
-    BOOL bQuoted = FALSE;
-    const xub_StrLen nLen = rSrc.Len();
-    xub_StrLen nPos = 0;
-    while ( nPos < nLen )
-    {
-        if ( !bQuoted && pChrCls->isLetter( rSrc, nPos ) )
-        {
-            rDes += '"';
-            bQuoted = TRUE;
-        }
-        else if ( bQuoted && !pChrCls->isLetter( rSrc, nPos ) )
-        {
-            rDes += '"';
-            bQuoted = FALSE;
-        }
-        rDes += rSrc.GetChar( nPos++ );
-    }
-    if ( bQuoted )
-        rDes += '"';
-}
-
-
-void SvNumberFormatter::ImpGetLongDateFormat( XubString& sDateStr,
-                                short nShortLongDayOfWeek,
-                                short nShortLongDay,
-                                short nShortLongMonth,
-                                short nShortLongYear )
-{
-    const XubString* pKeyword = pFormatScanner->GetKeyword();
-    switch ( nShortLongDayOfWeek )
-    {
-        case -1 :
-        break;
-        case 0 :
-            switch ( pIntl->GetLongDateDayOfWeekFormat() )
-            {
-                case DAYOFWEEK_NONE :
-                break;
-                case DAYOFWEEK_SHORT :
-                    sDateStr += pKeyword[NF_KEY_NN];
-                    lcl_ImplAddStringMaybeQuoted( sDateStr,
-                        pIntl->GetLongDateDayOfWeekSep(), pCharClass );
-                break;
-                case DAYOFWEEK_LONG :
-                    sDateStr += pKeyword[NF_KEY_NNNN];
-                    // NNNN ist leider bereits mit Separator, so wird es in
-                    // aelteren Versionen, die noch kein NNN kennen, korrekt
-                    // dargestellt, nur der Formatstring sieht krank aus..
-                break;
-                default:
-                    DBG_ERRORFILE( "unknown LongDateDayOfWeekFormat" );
-            }
-        break;
-        case 1 :
-            sDateStr += pKeyword[NF_KEY_NN];
-            lcl_ImplAddStringMaybeQuoted( sDateStr,
-                pIntl->GetLongDateDayOfWeekSep(), pCharClass );
-        break;
-        case 2 :
-            sDateStr += pKeyword[NF_KEY_NNNN];
-        break;
-        default:
-            DBG_ERRORFILE( "unknown nShortLongDayOfWeek" );
-    }
-    switch (pIntl->GetLongDateFormat())
-    {
-        case MDY:
-        {
-            switch ( nShortLongMonth )
-            {
-                case -1 :
-                break;
-                case 0 :
-                    switch ( pIntl->GetLongDateMonthFormat() )
-                    {
-                        case MONTH_NORMAL :
-                            sDateStr += pKeyword[NF_KEY_M];
-                        break;
-                        case MONTH_ZERO :
-                            sDateStr += pKeyword[NF_KEY_MM];
-                        break;
-                        case MONTH_SHORT :
-                            sDateStr += pKeyword[NF_KEY_MMM];
-                        break;
-                        case MONTH_LONG :
-                            sDateStr += pKeyword[NF_KEY_MMMM];
-                        break;
-                        default:
-                            DBG_ERRORFILE( "unknown LongDateMonthFormat" );
-                    }
-                break;
-                case 1 :
-                    sDateStr += pKeyword[NF_KEY_MMM];
-                break;
-                case 2 :
-                    sDateStr += pKeyword[NF_KEY_MMMM];
-                break;
-                default:
-                    DBG_ERRORFILE( "unknown nShortLongMonth" );
-            }
-            if ( nShortLongMonth != -1 )
-                lcl_ImplAddStringMaybeQuoted( sDateStr,
-                    pIntl->GetLongDateMonthSep(), pCharClass );
-
-            switch ( nShortLongDay )
-            {
-                case -1 :
-                break;
-                case 0 :
-                    if ( pIntl->IsLongDateDayLeadingZero() )
-                        sDateStr += pKeyword[NF_KEY_TT];
-                    else
-                        sDateStr += pKeyword[NF_KEY_T];
-                break;
-                case 1 :
-                    sDateStr += pKeyword[NF_KEY_T];
-                break;
-                case 2 :
-                    sDateStr += pKeyword[NF_KEY_TT];
-                break;
-                default:
-                    DBG_ERRORFILE( "unknown nShortLongDay" );
-            }
-            if ( nShortLongDay != -1 )
-                lcl_ImplAddStringMaybeQuoted( sDateStr,
-                    pIntl->GetLongDateDaySep(), pCharClass );
-
-            switch ( nShortLongYear )
-            {
-                case -1 :
-                break;
-                case 0 :
-                    if ( pIntl->IsLongDateCentury() )
-                        sDateStr += pKeyword[NF_KEY_JJJJ];
-                    else
-                        sDateStr += pKeyword[NF_KEY_JJ];
-                break;
-                case 1 :
-                    sDateStr += pKeyword[NF_KEY_JJ];
-                break;
-                case 2 :
-                    sDateStr += pKeyword[NF_KEY_JJJJ];
-                break;
-                default:
-                    DBG_ERRORFILE( "unknown nShortLongYear" );
-            }
-            //if ( nShortLongYear != -1 )
-            //  lcl_ImplAddStringMaybeQuoted( sDateStr,
-            //      pIntl->GetLongDateYearSep(), pCharClass );
-
-        }
-        break;
-        case DMY:
-        {
-            switch ( nShortLongDay )
-            {
-                case -1 :
-                break;
-                case 0 :
-                    if ( pIntl->IsLongDateDayLeadingZero() )
-                        sDateStr += pKeyword[NF_KEY_TT];
-                    else
-                        sDateStr += pKeyword[NF_KEY_T];
-                break;
-                case 1 :
-                    sDateStr += pKeyword[NF_KEY_T];
-                break;
-                case 2 :
-                    sDateStr += pKeyword[NF_KEY_TT];
-                break;
-                default:
-                    DBG_ERRORFILE( "unknown nShortLongDay" );
-            }
-            if ( nShortLongDay != -1 )
-                lcl_ImplAddStringMaybeQuoted( sDateStr,
-                    pIntl->GetLongDateDaySep(), pCharClass );
-
-            switch ( nShortLongMonth )
-            {
-                case -1 :
-                break;
-                case 0 :
-                    switch ( pIntl->GetLongDateMonthFormat() )
-                    {
-                        case MONTH_NORMAL :
-                            sDateStr += pKeyword[NF_KEY_M];
-                        break;
-                        case MONTH_ZERO :
-                            sDateStr += pKeyword[NF_KEY_MM];
-                        break;
-                        case MONTH_SHORT :
-                            sDateStr += pKeyword[NF_KEY_MMM];
-                        break;
-                        case MONTH_LONG :
-                            sDateStr += pKeyword[NF_KEY_MMMM];
-                        break;
-                        default:
-                            DBG_ERRORFILE( "unknown LongDateMonthFormat" );
-                    }
-                break;
-                case 1 :
-                    sDateStr += pKeyword[NF_KEY_MMM];
-                break;
-                case 2 :
-                    sDateStr += pKeyword[NF_KEY_MMMM];
-                break;
-                default:
-                    DBG_ERRORFILE( "unknown nShortLongMonth" );
-            }
-            if ( nShortLongMonth != -1 )
-                lcl_ImplAddStringMaybeQuoted( sDateStr,
-                    pIntl->GetLongDateMonthSep(), pCharClass );
-
-            switch ( nShortLongYear )
-            {
-                case -1 :
-                break;
-                case 0 :
-                    if ( pIntl->IsLongDateCentury() )
-                        sDateStr += pKeyword[NF_KEY_JJJJ];
-                    else
-                        sDateStr += pKeyword[NF_KEY_JJ];
-                break;
-                case 1 :
-                    sDateStr += pKeyword[NF_KEY_JJ];
-                break;
-                case 2 :
-                    sDateStr += pKeyword[NF_KEY_JJJJ];
-                break;
-                default:
-                    DBG_ERRORFILE( "unknown nShortLongYear" );
-            }
-            //if ( nShortLongYear != -1 )
-            //  lcl_ImplAddStringMaybeQuoted( sDateStr,
-            //      pIntl->GetLongDateYearSep(), pCharClass );
-
-        }
-        break;
-        case YMD:
-        {
-            switch ( nShortLongYear )
-            {
-                case -1 :
-                break;
-                case 0 :
-                    if ( pIntl->IsLongDateCentury() )
-                        sDateStr += pKeyword[NF_KEY_JJJJ];
-                    else
-                        sDateStr += pKeyword[NF_KEY_JJ];
-                break;
-                case 1 :
-                    sDateStr += pKeyword[NF_KEY_JJ];
-                break;
-                case 2 :
-                    sDateStr += pKeyword[NF_KEY_JJJJ];
-                break;
-                default:
-                    DBG_ERRORFILE( "unknown nShortLongYear" );
-            }
-            if ( nShortLongYear != -1 )
-                lcl_ImplAddStringMaybeQuoted( sDateStr,
-                    pIntl->GetLongDateYearSep(), pCharClass );
-
-            switch ( nShortLongMonth )
-            {
-                case -1 :
-                break;
-                case 0 :
-                    switch ( pIntl->GetLongDateMonthFormat() )
-                    {
-                        case MONTH_NORMAL :
-                            sDateStr += pKeyword[NF_KEY_M];
-                        break;
-                        case MONTH_ZERO :
-                            sDateStr += pKeyword[NF_KEY_MM];
-                        break;
-                        case MONTH_SHORT :
-                            sDateStr += pKeyword[NF_KEY_MMM];
-                        break;
-                        case MONTH_LONG :
-                            sDateStr += pKeyword[NF_KEY_MMMM];
-                        break;
-                        default:
-                            DBG_ERRORFILE( "unknown LongDateMonthFormat" );
-                    }
-                break;
-                case 1 :
-                    sDateStr += pKeyword[NF_KEY_MMM];
-                break;
-                case 2 :
-                    sDateStr += pKeyword[NF_KEY_MMMM];
-                break;
-                default:
-                    DBG_ERRORFILE( "unknown nShortLongMonth" );
-            }
-            if ( nShortLongMonth != -1 )
-                lcl_ImplAddStringMaybeQuoted( sDateStr,
-                    pIntl->GetLongDateMonthSep(), pCharClass );
-
-            switch ( nShortLongDay )
-            {
-                case -1 :
-                break;
-                case 0 :
-                    if ( pIntl->IsLongDateDayLeadingZero() )
-                        sDateStr += pKeyword[NF_KEY_TT];
-                    else
-                        sDateStr += pKeyword[NF_KEY_T];
-                break;
-                case 1 :
-                    sDateStr += pKeyword[NF_KEY_T];
-                break;
-                case 2 :
-                    sDateStr += pKeyword[NF_KEY_TT];
-                break;
-                default:
-                    DBG_ERRORFILE( "unknown nShortLongDay" );
-            }
-            //if ( nShortLongDay != -1 )
-            //  lcl_ImplAddStringMaybeQuoted( sDateStr,
-            //      pIntl->GetLongDateDaySep(), pCharClass );
-
-        }
-        break;
-        default:
-            DBG_ERRORFILE( "unknown LongDateFormat" );
-    }
-}
 
 void SvNumberFormatter::ImpGetPosCurrFormat(XubString& sPosStr)
 {
@@ -2963,15 +2497,15 @@ void SvNumberFormatter::ImpInitCurrencyTable()
             nSystemCurrencyPosition = j;
     }
     DBG_ASSERT( theCurrencyTable.Count(),
-        "SvNumberFormatter::ImpInitCurrencyTable: kein NfCurrencyEntry ?!?" );
-    // erster Eintrag ist System
-    // landesunabhaengigen EURo an zweiter Stelle einfuegen
+        "SvNumberFormatter::ImpInitCurrencyTable: no NfCurrencyEntry ?!?" );
+    // first entry is System
+    // insert country independent EURo at second position
     pEntry = new NfCurrencyEntry;
     pEntry->SetEuro();
     theCurrencyTable.Insert( pEntry, nCurrencyTableEuroPosition );
     DBG_ASSERT( theCurrencyTable[0]->GetLanguage() == LANGUAGE_SYSTEM,
-        "SvNumberFormatter::ImpInitCurrencyTable: erster Eintrag nicht System" );
-    DBG_ASSERT( nSystemCurrencyPosition, "Regional Settings Language nicht in TH's Tabellen" );
+        "SvNumberFormatter::ImpInitCurrencyTable: first entry is not System" );
+    DBG_ASSERT( nSystemCurrencyPosition, "system language_country locale not in TH's International format tables" );
     if ( nSystemCurrencyPosition )
     {
         if ( nSystemCurrencyPosition >= nCurrencyTableEuroPosition )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: er $ $Date: 2000-10-14 20:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,12 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
+#include <unotools/numberformatcodewrapper.hxx>
+#endif
 
 #include "iniman.hxx"
 #include "zforlist.hxx"
@@ -123,7 +129,6 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     pNullDate = new Date(30,12,1899);
     nStandardPrec = 2;
 
-    sCurString = pFormatter->GetCharClass()->upper( pIntl->GetCurrSymbol() );
     sErrStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "###" ) );
     Reset();
 #endif
@@ -135,123 +140,20 @@ ImpSvNumberformatScan::~ImpSvNumberformatScan()
     Reset();
 }
 
-// static
-void ImpSvNumberformatScan::GetLogicalKeywords( LanguageType eLnge,
-        const xub_Unicode*& pTrue, const xub_Unicode*& pFalse )
-{
-    static const xub_Unicode pDanishTrue[]      = { 'S', 'A', 'N', 'D', 0 };
-    static const xub_Unicode pDanishFalse[]     = { 'F', 'A', 'L', 'S', 'K', 0 };
-    static const xub_Unicode pDutchTrue[]       = { 'W', 'A', 'A', 'R', 0 };
-    static const xub_Unicode pDutchFalse[]      = { 'O', 'N', 'W', 'A', 'A', 'R', 0 };
-    static const xub_Unicode pFrenchTrue[]      = { 'V', 'R', 'A', 'I', 0 };
-    static const xub_Unicode pFrenchFalse[]     = { 'F', 'A', 'U', 'X', 0 };
-    static const xub_Unicode pGermanTrue[]      = { 'W', 'A', 'H', 'R', 0 };
-    static const xub_Unicode pGermanFalse[]     = { 'F', 'A', 'L', 'S', 'C', 'H', 0 };
-    static const xub_Unicode pItalianTrue[]     = { 'V', 'E', 'R', 'O', 0 };
-    static const xub_Unicode pItalianFalse[]    = { 'F', 'A', 'L', 'S', 'O', 0 };
-    static const xub_Unicode pNorwegianTrue[]   = { 'R', 'I', 'K', 'T', 'I', 'G', 0 };
-    static const xub_Unicode pNorwegianFalse[]  = { 'G', 'A', 'L', 'T', 0 };
-    static const xub_Unicode pPortugueseTrue[]  = { 'V', 'E', 'R', 'D', 'A', 'D', 'E', 'I', 'R', 'O', 0 };
-    static const xub_Unicode pPortugueseFalse[] = { 'F', 'A', 'L', 'S', 'O', 0 };
-    static const xub_Unicode pSpanishTrue[]     = { 'V', 'E', 'R', 'D', 'A', 'D', 'E', 'R', 'O', 0 };
-    static const xub_Unicode pSpanishFalse[]    = { 'F', 'A', 'L', 'S', 'O', 0 };
-    static const xub_Unicode pSwedishTrue[]     = { 'S', 'A', 'N', 'T', 0 };
-    static const xub_Unicode pSwedishFalse[]    = { 'F', 'A', 'L', 'S', 'K', 'T', 0 };
-    static const xub_Unicode pEnglishTrue[]     = { 'T', 'R', 'U', 'E', 0 };
-    static const xub_Unicode pEnglishFalse[]    = { 'F', 'A', 'L', 'S', 'E', 0 };
-
-    if (eLnge == LANGUAGE_SYSTEM)
-        eLnge = System::GetLanguage();
-    switch (eLnge)
-    {
-        case LANGUAGE_DANISH:
-            pTrue = pDanishTrue;
-            pFalse = pDanishFalse;
-            break;
-
-        case LANGUAGE_DUTCH         :
-        case LANGUAGE_DUTCH_BELGIAN :
-            pTrue = pDutchTrue;
-            pFalse = pDutchFalse;
-            break;
-
-        case LANGUAGE_FRENCH:
-        case LANGUAGE_FRENCH_BELGIAN:
-        case LANGUAGE_FRENCH_CANADIAN:
-        case LANGUAGE_FRENCH_SWISS:
-        case LANGUAGE_FRENCH_LUXEMBOURG:
-        case LANGUAGE_FRENCH_MONACO:
-            pTrue  = pFrenchTrue;
-            pFalse = pFrenchFalse;
-            break;
-
-        case LANGUAGE_GERMAN:
-        case LANGUAGE_GERMAN_SWISS:
-        case LANGUAGE_GERMAN_AUSTRIAN:
-        case LANGUAGE_GERMAN_LUXEMBOURG:
-        case LANGUAGE_GERMAN_LIECHTENSTEIN:
-            pTrue  = pGermanTrue;
-            pFalse = pGermanFalse;
-            break;
-
-        case LANGUAGE_ITALIAN:
-        case LANGUAGE_ITALIAN_SWISS:
-            pTrue  = pItalianTrue;
-            pFalse = pItalianFalse;
-            break;
-
-        case LANGUAGE_NORWEGIAN:
-        case LANGUAGE_NORWEGIAN_BOKMAL:
-        case LANGUAGE_NORWEGIAN_NYNORSK:
-            pTrue  = pNorwegianTrue;
-            pFalse = pNorwegianFalse;
-            break;
-
-        case LANGUAGE_PORTUGUESE:
-        case LANGUAGE_PORTUGUESE_BRAZILIAN:
-            pTrue  = pPortugueseTrue;
-            pFalse = pPortugueseFalse;
-            break;
-
-        case LANGUAGE_SPANISH             :
-        case LANGUAGE_SPANISH_MEXICAN     :
-        case LANGUAGE_SPANISH_MODERN      :
-        case LANGUAGE_SPANISH_GUATEMALA   :
-        case LANGUAGE_SPANISH_COSTARICA   :
-        case LANGUAGE_SPANISH_PANAMA      :
-        case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC :
-        case LANGUAGE_SPANISH_VENEZUELA   :
-        case LANGUAGE_SPANISH_COLOMBIA    :
-        case LANGUAGE_SPANISH_PERU        :
-        case LANGUAGE_SPANISH_ARGENTINA   :
-        case LANGUAGE_SPANISH_ECUADOR     :
-        case LANGUAGE_SPANISH_CHILE       :
-        case LANGUAGE_SPANISH_URUGUAY     :
-        case LANGUAGE_SPANISH_PARAGUAY    :
-        case LANGUAGE_SPANISH_BOLIVIA     :
-        case LANGUAGE_SPANISH_EL_SALVADOR :
-        case LANGUAGE_SPANISH_HONDURAS    :
-        case LANGUAGE_SPANISH_NICARAGUA   :
-        case LANGUAGE_SPANISH_PUERTO_RICO :
-            pTrue  = pSpanishTrue;
-            pFalse = pSpanishFalse;
-            break;
-
-        case LANGUAGE_SWEDISH:
-            pTrue  = pSwedishTrue;
-            pFalse = pSwedishFalse;
-            break;
-
-        default:
-            pTrue  = pEnglishTrue;
-            pFalse = pEnglishFalse;
-            break;
-    }   // switch
-}
-
-
 void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
 {
+    using namespace ::com::sun::star;
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::lang;
+
+    const CharClass* pCharClass = pFormatter->GetCharClass();
+    const LocaleDataWrapper* pLocaleData = pFormatter->GetLocaleData();
+    NumberFormatCodeWrapper aNumberFormatCode( pFormatter->GetServiceManager(), pLocaleData->getLocale() );
+
+    NumberFormatCode aFormat = aNumberFormatCode.getFormatCode( NF_NUMBER_STANDARD );
+    sNameStandardFormat = aFormat.Code;
+    sKeyword[NF_KEY_GENERAL] = pCharClass->upper( sNameStandardFormat );
+
     if (eLnge == LANGUAGE_SYSTEM)
         eLnge = System::GetLanguage();
     switch (eLnge)
@@ -262,9 +164,7 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
         case LANGUAGE_GERMAN_LUXEMBOURG:
         case LANGUAGE_GERMAN_LIECHTENSTEIN:
         {
-            sNameStandardFormat.AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "Standard" ) ); //!! darf nur aus 'a'-'Z' bestehen !!
-            sKeyword[NF_KEY_GENERAL].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "STANDARD" ) );     // =sNameStandardFormat
-                                                    // in Grossbuchstaben
+            //! all capital letters
             sKeyword[NF_KEY_M].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "M" ) );            // Monat
             sKeyword[NF_KEY_MM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "MM" ) );           // Monat
             sKeyword[NF_KEY_MMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "MMM" ) );      // Monat Jan
@@ -296,67 +196,6 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
         break;
         default:
         {
-            // Standard
-            switch ( eLnge )
-            {
-                case LANGUAGE_ENGLISH           :
-                case LANGUAGE_ENGLISH_US        :
-                case LANGUAGE_ENGLISH_UK        :
-                case LANGUAGE_ENGLISH_AUS       :
-                case LANGUAGE_ENGLISH_CAN       :
-                case LANGUAGE_ENGLISH_NZ        :
-                case LANGUAGE_ENGLISH_EIRE      :
-                case LANGUAGE_ENGLISH_SAFRICA   :
-                case LANGUAGE_ENGLISH_JAMAICA   :
-                case LANGUAGE_ENGLISH_CARRIBEAN :
-                case LANGUAGE_ENGLISH_BELIZE    :
-                case LANGUAGE_ENGLISH_TRINIDAD  :
-                case LANGUAGE_ENGLISH_ZIMBABWE  :
-                case LANGUAGE_ENGLISH_PHILIPPINES:
-                    sNameStandardFormat.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "General" ) );
-                    sKeyword[NF_KEY_GENERAL].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GENERAL" ) );
-                break;
-                case LANGUAGE_PORTUGUESE           :
-                case LANGUAGE_SPANISH             :
-                case LANGUAGE_SPANISH_MEXICAN     :
-                case LANGUAGE_SPANISH_MODERN      :
-                case LANGUAGE_SPANISH_GUATEMALA   :
-                case LANGUAGE_SPANISH_COSTARICA   :
-                case LANGUAGE_SPANISH_PANAMA      :
-                case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC :
-                case LANGUAGE_SPANISH_VENEZUELA   :
-                case LANGUAGE_SPANISH_COLOMBIA    :
-                case LANGUAGE_SPANISH_PERU        :
-                case LANGUAGE_SPANISH_ARGENTINA   :
-                case LANGUAGE_SPANISH_ECUADOR     :
-                case LANGUAGE_SPANISH_CHILE       :
-                case LANGUAGE_SPANISH_URUGUAY     :
-                case LANGUAGE_SPANISH_PARAGUAY    :
-                case LANGUAGE_SPANISH_BOLIVIA     :
-                case LANGUAGE_SPANISH_EL_SALVADOR :
-                case LANGUAGE_SPANISH_HONDURAS    :
-                case LANGUAGE_SPANISH_NICARAGUA   :
-                case LANGUAGE_SPANISH_PUERTO_RICO :
-                    sNameStandardFormat.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Estandar" ) );
-                    sKeyword[NF_KEY_GENERAL].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "ESTANDAR" ) );
-                break;
-                case LANGUAGE_PORTUGUESE_BRAZILIAN :
-                    sNameStandardFormat.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Geral" ) );
-                    sKeyword[NF_KEY_GENERAL].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GERAL" ) );
-                break;
-                case LANGUAGE_FINNISH :
-                    sNameStandardFormat.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Yleinen" ) );
-                    sKeyword[NF_KEY_GENERAL].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "YLEINEN" ) );
-                break;
-                case LANGUAGE_DUTCH         :
-                case LANGUAGE_DUTCH_BELGIAN :
-                    sNameStandardFormat.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Standaard" ) );
-                    sKeyword[NF_KEY_GENERAL].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "STANDAARD" ) );
-                break;
-                default:
-                    sNameStandardFormat.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Standard" ) );
-                    sKeyword[NF_KEY_GENERAL].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "STANDARD" ) );
-            }
             // Tag
             switch ( eLnge )
             {
@@ -479,10 +318,6 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
             // Quartal
             sKeyword[NF_KEY_QUARTER].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Quarter" ) );
             // Logisch
-            const xub_Unicode *pTrue, *pFalse;
-            GetLogicalKeywords( eLnge, pTrue, pFalse );
-            sKeyword[NF_KEY_TRUE] = pTrue;
-            sKeyword[NF_KEY_FALSE] = pFalse;
             sKeyword[NF_KEY_BOOLEAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "BOOLEAN" ) );
             // Farbe
             sKeyword[NF_KEY_COLOR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "COLOR" ) );
@@ -499,6 +334,35 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
         }
         break;
     }
+
+    sal_Int32 nCnt, nElem;
+
+    // boolean keyords
+    Sequence< ::rtl::OUString > aWordSeq = pLocaleData->getReservedWord();
+    nCnt = aWordSeq.getLength();
+    DBG_ASSERT( reservedWords::TRUE_WORD < nCnt, "SetDependentKeywords: TRUE_WORD?" )
+    if ( reservedWords::TRUE_WORD < nCnt )
+        sKeyword[NF_KEY_TRUE] = aWordSeq[ reservedWords::TRUE_WORD ];
+    DBG_ASSERT( reservedWords::FALSE_WORD < nCnt, "SetDependentKeywords: FALSE_WORD?" )
+    if ( reservedWords::FALSE_WORD < nCnt )
+        sKeyword[NF_KEY_FALSE] = aWordSeq[ reservedWords::FALSE_WORD ];
+
+    // currency symbol
+    Sequence< Currency > aCurrSeq = pLocaleData->getAllCurrencies();
+    nCnt = aCurrSeq.getLength();
+    for ( nElem=0; nElem<nCnt; nElem++ )
+    {
+        if ( aCurrSeq[nElem].isDefault )
+            break;
+    }
+    if ( nElem >= nCnt )
+    {
+        DBG_ERRORFILE( "SetDependentKeywords: no default currency" );
+        nElem = 0;
+        DBG_ASSERT( nElem < nCnt, "SetDependentKeywords: no currency at all" );
+    }
+    if ( nElem < nCnt )
+        sCurString = pFormatter->GetCharClass()->upper( aCurrSeq[nElem].symbol );
 }
 
 
@@ -574,7 +438,6 @@ Color* ImpSvNumberformatScan::GetColor(XubString& sStr)
 void ImpSvNumberformatScan::ChangeIntl()
 {
     SetDependentKeywords(pFormatter->GetInternational()->GetLanguage());
-    sCurString = pFormatter->GetCharClass()->upper(pFormatter->GetInternational()->GetCurrSymbol());
 }
 
 USHORT ImpSvNumberformatScan::GetKeyWord(const XubString& sSymbol)

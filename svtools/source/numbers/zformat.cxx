@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: er $ $Date: 2000-10-14 20:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,7 +718,7 @@ short SvNumberformat::ImpNextSymbol(XubString& rString,
     xub_StrLen nLen = rString.Len();
     ScanState eState = SsStart;
     sSymbol.Erase();
-    XubString* pKeywords = rScan.GetKeyword();
+    const XubString* pKeywords = rScan.GetKeyword();
     while (nPos < nLen && eState != SsStop)
     {
         cToken = rString.GetChar(nPos);
@@ -985,7 +985,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
                     rScan.SetConvertMode( LANGUAGE_GERMAN, LANGUAGE_ENGLISH_US );
                 }
                 XubString aColorName = NumFor[i].GetColorName();
-                Color* pColor = rScan.GetColor( aColorName );
+                const Color* pColor = rScan.GetColor( aColorName );
                 if ( !pColor && aLoadedColorName == aColorName )
                     eHackConversion = NF_CONVERT_NONE;
                 rScan.GetNumberformatter()->ChangeIntl( LANGUAGE_SYSTEM );
@@ -2952,7 +2952,7 @@ void SvNumberformat::GetFormatSpecialInfo(BOOL& bThousand,
     const ImpSvNumberformatInfo& rInfo = NumFor[0].Info();
     bThousand = rInfo.bThousand;
     nPrecision = GetFormatPrecision();
-    Color* pColor = NumFor[1].GetColor();
+    const Color* pColor = NumFor[1].GetColor();
     if (fLimit1 == 0.0 && fLimit2 == 0.0 && pColor
                        && (*pColor == rScan.GetRedColor()))
         IsRed = TRUE;
@@ -3207,7 +3207,7 @@ XubString SvNumberformat::GetMappedFormatstring(
         const XubString& rColorName = NumFor[n].GetColorName();
         if ( rColorName.Len() )
         {
-            XubString* pKey = rScan.GetKeyword() + NF_KEY_FIRSTCOLOR;
+            const XubString* pKey = rScan.GetKeyword() + NF_KEY_FIRSTCOLOR;
             for ( int j=NF_KEY_FIRSTCOLOR; j<=NF_KEY_LASTCOLOR; j++, pKey++ )
             {
                 if ( *pKey == rColorName )
