@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:41:33 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,21 +272,23 @@ enum SwMoveFlags
 // COMPATIBILITY FLAGS START
 //
 
-#define DUMMY_PARASPACEMAX          0x04
-#define DUMMY_PARASPACEMAX_AT_PAGES 0x20
-#define DUMMY_TAB_COMPAT            0x40
-#define DUMMY_USE_VIRTUAL_DEVICE    0x80
+// n8Dummy1:
+#define DUMMY_LINK_UPDATE_MODE_1                    0x01  // used in sw3misc
+#define DUMMY_LINK_UPDATE_MODE_2                    0x02  // used in sw3misc
+#define DUMMY_PARASPACEMAX                          0x04
+#define DUMMY_FIELD_UPDATE_MODE_1                   0x08  // used in sw3misc
+#define DUMMY_FIELD_UPDATE_MODE_2                   0x10  // used in sw3misc
+#define DUMMY_PARASPACEMAX_AT_PAGES                 0x20
+#define DUMMY_TAB_COMPAT                            0x40
+#define DUMMY_USE_VIRTUAL_DEVICE                    0x80
 
-#define DUMMY_ADD_FLY_OFFSETS       0x01
-#define DUMMY_ADD_EXTERNAL_LEADING  0x02
-#define DUMMY_USE_HIRES_VIR_DEV     0x04
-// OD 06.01.2004 #i11859#
-#define DUMMY_USE_FORMER_LINESPACING 0x08
-// OD 2004-02-16 #106629# - flag for adding paragraph and table spacing at
-// bottom of table cells
-#define DUMMY_ADD_PARA_SPACING_TO_TABLE_CELLS 0x10
-// OD 2004-03-12 #i11860#
-#define DUMMY_USE_FORMER_OBJECT_POS 0x20
+// n8Dummy2:
+#define DUMMY_ADD_FLY_OFFSETS                       0x01
+#define DUMMY_ADD_EXTERNAL_LEADING                  0x02
+#define DUMMY_USE_HIRES_VIR_DEV                     0x04
+
+// Any new compatibility flag should be added
+// as a member to SwDoc!!!
 
 //
 // COMPATIBILITY FLAGS END
@@ -481,12 +483,24 @@ class SwDoc
     sal_Bool    bPurgeOLE : 1;          // TRUE: Purge OLE-Objects
     sal_Bool    bKernAsianPunctuation : 1;  // TRUE: kerning also for ASIAN punctuation
     sal_Bool    bReadlineChecked    : 1;  // TRUE: if the query was already shown
-    sal_Bool    bOldNumbering : 1;       // #111955# TRUE: use old numbering
+
 #ifndef PRODUCT
     sal_Bool    bXMLExport : 1;         // TRUE: during XML export
 #endif
 
-    // -------------------------------------------------------------------
+    //
+    // COMPATIBILITY FLAGS START
+    //
+
+    sal_Bool    bOldNumbering                   : 1;    // #111955# TRUE: use old numbering
+    sal_Bool    bOldLineSpacing                 : 1;    // OD 06.01.2004 #i11859#
+    sal_Bool    bAddParaSpacingToTableCells     : 1;    // OD 2004-02-16 #106629#
+    sal_Bool    bUseFormerObjectPos             : 1;    // OD 2004-03-12 #i11860#
+    sal_Bool    bUseFormerTextWrapping          : 1;    // FME #108724#
+
+    //
+    // COMPATIBILITY FLAGS END
+    //
 
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
     static sal_uInt16 nUndoActions;     // anzahl von Undo ::com::sun::star::chaos::Action
@@ -1983,53 +1997,51 @@ public:
     // paragraph and table spacing at bottom of table cells.
     sal_Bool IsAddParaSpacingToTableCells() const
     {
-        return n8Dummy2 & DUMMY_ADD_PARA_SPACING_TO_TABLE_CELLS;
+        return bAddParaSpacingToTableCells;
     }
     void SetAddParaSpacingToTableCells( const sal_Bool _bAddParaSpacingToTableCells )
     {
-        if ( _bAddParaSpacingToTableCells )
-        {
-            n8Dummy2 |= DUMMY_ADD_PARA_SPACING_TO_TABLE_CELLS;
-        }
-        else
-        {
-            n8Dummy2 &= ~DUMMY_ADD_PARA_SPACING_TO_TABLE_CELLS;
-        }
+        bAddParaSpacingToTableCells = _bAddParaSpacingToTableCells;
     }
 
     // OD 06.01.2004 #i11859#
     sal_Bool IsFormerLineSpacing() const
     {
-        return n8Dummy2 & DUMMY_USE_FORMER_LINESPACING;
+        return bOldLineSpacing;
     }
     void SetUseFormerLineSpacing( const sal_Bool _bUseFormerLineSpacing )
     {
-        if ( _bUseFormerLineSpacing )
-        {
-            n8Dummy2 |= DUMMY_USE_FORMER_LINESPACING;
-        }
-        else
-        {
-            n8Dummy2 &= ~DUMMY_USE_FORMER_LINESPACING;
-        }
+        bOldLineSpacing = _bUseFormerLineSpacing;
     }
 
     // OD 2004-03-12 #i11860
     sal_Bool IsFormerObjectPositioning() const
     {
-        return n8Dummy2 & DUMMY_USE_FORMER_OBJECT_POS;
+        return bUseFormerObjectPos;
     }
     void SetUseFormerObjectPositioning( const sal_Bool _bUseFormerObjPos )
     {
-        if ( _bUseFormerObjPos )
-        {
-            n8Dummy2 |= DUMMY_USE_FORMER_OBJECT_POS;
-        }
-        else
-        {
-            n8Dummy2 &= ~DUMMY_USE_FORMER_OBJECT_POS;
-        }
+        bUseFormerObjectPos = _bUseFormerObjPos;
     }
+
+    // -> #111955#
+    sal_Bool IsOldNumbering() const
+    {
+         return bOldNumbering;
+    }
+    void SetOldNumbering( sal_Bool _bOldNumbering );
+    // <- #111955#
+
+    // --> FME #108724#
+    sal_Bool IsFormerTextWrapping() const
+    {
+        return bUseFormerTextWrapping;
+    }
+    void SetUseFormerTextWrapping( sal_Bool _bUseFormerTextWrapping )
+    {
+        bUseFormerTextWrapping = _bUseFormerTextWrapping;
+    };
+    // <--
 
     //
     // DOCUMENT COMPATIBILITY FLAGS END
@@ -2073,11 +2085,6 @@ public:
         has to trigger a reformatting only if some of the text is hidden.
     */
     bool ContainsHiddenChars() const;
-
-    // -> #111955#
-    sal_Bool IsOldNumbering() const { return bOldNumbering; }
-    void SetOldNumbering(sal_Bool _bOldNumbering);
-    // <- #111955#
 
     // call back for API wrapper
     SwModify*   GetUnoCallBack() const;
