@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:31 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType )
     Reference<XIdlClass> xRetClass;
     typelib_TypeDescription * pTD = 0;
     rType.getDescription( &pTD );
+
     if( pTD )
     {
         OUString sOWName( pTD->pTypeName );
@@ -1082,7 +1083,22 @@ String Impl_GetSupportedInterfaces( const String& rClassName, SbUnoObject* pUnoO
             for( UINT32 j = 0 ; j < nIfaceCount ; j++ )
             {
                 const Type& rType = pTypeArray[j];
-                aRet += Impl_GetInterfaceInfo( x, TypeToIdlClass( rType ), 1 );
+
+                Reference<XIdlClass> xClass = TypeToIdlClass( rType );
+                if( xClass.is() )
+                {
+                    aRet += Impl_GetInterfaceInfo( x, xClass, 1 );
+                }
+                else
+                {
+                    typelib_TypeDescription * pTD = 0;
+                    rType.getDescription( &pTD );
+                    String TypeName( OUString( pTD->pTypeName ) );
+
+                    aRet.AppendAscii( "*** ERROR: No IdlClass for type \"" );
+                    aRet += TypeName;
+                    aRet.AppendAscii( "\"\n*** Please check type library\n" );
+                }
             }
         }
         else if( xClassProvider.is() )
