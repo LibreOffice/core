@@ -2,9 +2,9 @@
 *
 *  $RCSfile: UnoDialog.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 14:06:50 $
+*  last change: $Author: vg $ $Date: 2005-03-08 15:46:05 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,6 +60,7 @@
 package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.*;
+import com.sun.star.awt.XReschedule;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.XMultiPropertySet;
 
@@ -89,6 +90,7 @@ public class UnoDialog implements EventNames {
     public XNameAccess xDlgNameAccess;
     public XControl xControl;
     public XDialog xDialog;
+    public XReschedule xReschedule;
     public XWindow xWindow;
     public XComponent xComponent;
     public XInterface xDialogModel;
@@ -591,6 +593,17 @@ public class UnoDialog implements EventNames {
         return xDialog.execute();
     }
 
+
+    public void setVisible(UnoDialog parent) throws com.sun.star.uno.Exception{
+        calculateDialogPosition(parent.xWindow.getPosSize());
+        if (xWindowPeer == null)
+            createWindowPeer();
+        XVclWindowPeer xVclWindowPeer = (XVclWindowPeer) UnoRuntime.queryInterface(XVclWindowPeer.class, xWindowPeer);
+        xDialog = (XDialog) UnoRuntime.queryInterface(XDialog.class, xUnoDialog);
+        this.xWindow.setVisible(true);
+    }
+
+
     /**
      *
      * @param parent
@@ -659,6 +672,7 @@ public class UnoDialog implements EventNames {
         if (parentPeer == null)
             parentPeer = ((XToolkit) UnoRuntime.queryInterface(XToolkit.class, tk)).getDesktopWindow();
         XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface(XToolkit.class, tk);
+        xReschedule = (XReschedule) UnoRuntime.queryInterface(XReschedule.class, xToolkit);
         xControl.createPeer(xToolkit, parentPeer);
         xWindowPeer = xControl.getPeer();
         return xControl.getPeer();
