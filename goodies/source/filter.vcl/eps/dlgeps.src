@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-03 21:47:42 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "~Voorbeeldvenster (TIFF)";
         Text[ chinese_simplified ] = "ΝΌΟρΤ¤ΐΐ(TIFF)(~P)";
         Text[ greek ] = "Προεπισκόπηση εικόνας (TIFF)";
-        Text[ korean ] = "±ΧΈ² ΉΜΈ®ΊΈ±β (TIFF)";
+        Text[ korean ] = "±ΧΈ² ΉΜΈ®ΊΈ±β (TIFF)(~P)";
         Text[ chinese_traditional ] = "ΉΟ¤ωΉwΔύ(TIFF)(~P)";
         Text[ turkish ] = "Resim φnizleme (TIFF)";
         Text[ finnish ] = "Kuvan ~esikatselu (TIFF)";
@@ -364,7 +364,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "~Grijswaarden";
         Text[ chinese_simplified ] = "»Ò¶Θ(~G)";
         Text[ greek ] = "Διαβάθμιση του γκρι";
-        Text[ korean ] = "ΘΈ»φµµ";
+        Text[ korean ] = "ΘΈ»φµµ(~G)";
         Text[ turkish ] = "Gri tonlarύ";
         Text[ finnish ] = "~Harmaasδvy";
         Text[ catalan ] = "~Escala de grises";
@@ -636,6 +636,7 @@ ModalDialog DLG_EXPORT_EPS
     Text[ finnish ] = "EPS-vientiasetukset";
     Text[ catalan ] = "Opciones Exportaciσn EPS";
 };
+
 
 
 
