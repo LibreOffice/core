@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digest.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mhu $ $Date: 2001-05-06 15:15:50 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _RTL_DIGEST_C_ "$Revision: 1.6 $"
+#define _RTL_DIGEST_C_ "$Revision: 1.7 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -913,6 +913,38 @@ rtlDigestError SAL_CALL rtl_digest_getMD5 (
     ctx = &(pImpl->m_context);
 
     __rtl_digest_endMD5 (ctx);
+    RTL_DIGEST_LTOC (ctx->m_nA, p);
+    RTL_DIGEST_LTOC (ctx->m_nB, p);
+    RTL_DIGEST_LTOC (ctx->m_nC, p);
+    RTL_DIGEST_LTOC (ctx->m_nD, p);
+    __rtl_digest_initMD5 (ctx);
+
+    return rtl_Digest_E_None;
+}
+
+/*
+ * rtl_digest_rawMD5.
+ */
+rtlDigestError SAL_CALL rtl_digest_rawMD5 (
+    rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen)
+{
+    DigestMD5_Impl   *pImpl = (DigestMD5_Impl *)Digest;
+    sal_uInt8        *p     = pBuffer;
+
+    DigestContextMD5 *ctx;
+
+    if ((pImpl == NULL) || (pBuffer == NULL))
+        return rtl_Digest_E_Argument;
+
+    if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmMD5))
+        return rtl_Digest_E_Algorithm;
+
+    if (!(pImpl->m_digest.m_length <= nBufLen))
+        return rtl_Digest_E_BufferSize;
+
+    ctx = &(pImpl->m_context);
+
+    /* __rtl_digest_endMD5 (ctx); *//* not finalized */
     RTL_DIGEST_LTOC (ctx->m_nA, p);
     RTL_DIGEST_LTOC (ctx->m_nB, p);
     RTL_DIGEST_LTOC (ctx->m_nC, p);
