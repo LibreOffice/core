@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-28 12:43:13 $
+ *  last change: $Author: dv $ $Date: 2001-06-29 09:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 
 #include <sal/types.h>
 
+#include <list>
+
 #ifndef  _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -112,8 +114,6 @@
 #endif
 
 #include "filedlghelper.hxx"
-#include "filepicker.hxx"
-#include "folderpicker.hxx"
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -193,6 +193,19 @@ namespace sfx2 {
 String EncodeSpaces_Impl( const String& rSource );
 String DecodeSpaces_Impl( const String& rSource );
 
+// struct FilterEntry_Impl -----------------------------------------------
+
+struct FilterEntry_Impl
+{
+    OUString            maTitle;
+    OUString            maFilter;
+
+    FilterEntry_Impl( const OUString& rTitle, const OUString& rFilter ) :
+        maTitle( rTitle ), maFilter( rFilter ) {}
+};
+
+typedef std::list < FilterEntry_Impl > FilterList;
+
 // ------------------------------------------------------------------------
 class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
 {
@@ -204,6 +217,7 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     OUString                maPath;
     OUString                maCurFilter;
     Timer                   maPreViewTimer;
+    FilterList             *mpFilterList;
 
     ErrCode                 mnError;
     sal_Bool                mbHasPassword   : 1;
@@ -219,8 +233,8 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
 private:
     void                    addFilters( sal_uInt32 nFlags,
                                         const SfxObjectFactory& rFactory );
-    void                    addFilter( const String& rFilterName,
-                                       const String& rExtension );
+    void                    addFilter( const OUString& rFilterName,
+                                       const OUString& rExtension );
     void                    addGraphicFilter();
     void                    enablePasswordBox();
     void                    updateVersions();
@@ -228,6 +242,9 @@ private:
 
     void                    loadConfig();
     void                    saveConfig();
+
+    OUString                getDefaultExtension() const;
+    void                    setExtension( OUString& rFileName ) const;
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
 
@@ -550,6 +567,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
     mbInsert        = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
 
     mpMatcher = NULL;
+    mpFilterList = new FilterList;
 
     mxFileDlg = Reference < XFilePicker > ( xFactory->createInstance( aService ), UNO_QUERY );
 
@@ -642,6 +660,8 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
 {
     if ( mbDeleteMatcher )
         delete mpMatcher;
+
+    delete mpFilterList;
 
     maPreViewTimer.SetTimeoutHdl( Link() );
 }
@@ -740,7 +760,11 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
             if ( aPathSeq.getLength() == 1 )
             {
-                String* pURL = new String( aPathSeq[0] );
+                OUString aFileURL( aPathSeq[0] );
+
+                setExtension( aFileURL );
+
+                String* pURL = new String( aFileURL );
                 rpURLList->Insert( pURL, 0 );
             }
             else
@@ -948,6 +972,8 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
         try
         {
             xFltMgr->appendFilter( aUIName, pFilter->GetWildcard().GetWildCard() );
+            mpFilterList->insert( mpFilterList->end(),
+                                 FilterEntry_Impl( aUIName, pFilter->GetWildcard().GetWildCard() ) );
         }
         catch( IllegalArgumentException )
         {
@@ -957,8 +983,8 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::addFilter( const String& rFilterName,
-                                       const String& rExtension )
+void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
+                                       const OUString& rExtension )
 {
     Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
 
@@ -968,6 +994,8 @@ void FileDialogHelper_Impl::addFilter( const String& rFilterName,
     try
     {
         xFltMgr->appendFilter( rFilterName, rExtension );
+
+        mpFilterList->insert( mpFilterList->end(), FilterEntry_Impl( rFilterName, rExtension ) );
     }
     catch( IllegalArgumentException )
     {
@@ -1025,6 +1053,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         try
         {
             xFltMgr->appendFilter( aName, aWildcard );
+            mpFilterList->insert( mpFilterList->end(), FilterEntry_Impl( aName, aWildcard ) );
         }
         catch( IllegalArgumentException )
         {
@@ -1186,6 +1215,97 @@ void FileDialogHelper_Impl::loadConfig()
 }
 
 // ------------------------------------------------------------------------
+OUString FileDialogHelper_Impl::getDefaultExtension() const
+{
+    OUString aExtension;
+    OUString aFilter = getFilter();
+
+    if ( ! mpFilterList->empty() )
+    {
+        FilterList::iterator aListIter;
+        for ( aListIter = mpFilterList->begin();
+              aListIter != mpFilterList->end(); ++aListIter )
+        {
+            FilterEntry_Impl& rEntry = *aListIter;
+
+            if ( rEntry.maTitle == aFilter )
+            {
+                // the first two chars are always '*.', so we should ignore them
+                OUString aTmp = rEntry.maFilter.copy( 2 );
+
+                // if there are mor then one extension, we will use the first one
+                sal_Int32 nIndex = aTmp.indexOf( ';' );
+
+                if ( nIndex != -1 )
+                    aTmp = aTmp.copy( 0, nIndex );
+
+                aExtension = aTmp;
+                break;
+            }
+        }
+    }
+
+    return aExtension;
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::setExtension( OUString& rFileName ) const
+{
+    if ( ! mbHasAutoExt )
+        return;
+
+    Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+
+    if ( ! xCtrlAccess.is() )
+        return;
+
+    sal_Bool bSetExtension;
+
+    try
+    {
+        Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 );
+        aValue >>= bSetExtension;
+    }
+    catch( IllegalArgumentException ){}
+
+    if ( ! bSetExtension )
+        return;
+
+    INetURLObject aURL( rFileName );
+    OUString aFileExt = aURL.getExtension( INetURLObject::LAST_SEGMENT,
+                                           true, INetURLObject::NO_DECODE );
+    if ( aFileExt.getLength() )
+        return;
+
+    OUString aDefaultExt = getDefaultExtension();
+    if ( aDefaultExt.getLength() )
+    {
+        aURL.setExtension( aDefaultExt );
+        rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
+    }
+}
+
+#if 0
+            // beim Speichern
+                // und automatischer Dateinamenserweiterung...
+                if ( pThis->_pImp->_pCbAutoExtension &&
+                     pThis->_pImp->_pCbAutoExtension->IsChecked())
+                {
+                    // Dateiextension beim Filterwechsel anpassen
+                    String aNewFile = pThis->_pImp->_pEdFileName->GetText();
+                    String aExt = GetFsysExtension_Impl( aNewFile );
+
+                    // aber nur wenn bereits eine Endung vorhanden ist
+                    if ( aExt.Len() )
+                    {
+                        SetFsysExtension_Impl( aNewFile, pThis->_aDefExt );
+                        pThis->_pImp->_pEdFileName->SetText( aNewFile );
+                    }
+                }
+#endif
+
+
+// ------------------------------------------------------------------------
 // -----------          FileDialogHelper        ---------------------------
 // ------------------------------------------------------------------------
 
@@ -1282,15 +1402,20 @@ void FileDialogHelper::SetTitle( const String& rNewTitle )
 // ------------------------------------------------------------------------
 String FileDialogHelper::GetPath() const
 {
+    OUString aPath;
+
     if ( mpImp->mxFileDlg.is() )
     {
         Sequence < OUString > aPathSeq = mpImp->mxFileDlg->getFiles();
 
         if ( aPathSeq.getLength() == 1 )
-            return String( aPathSeq[0] );
+        {
+            aPath = aPathSeq[0];
+            mpImp->setExtension( aPath );
+        }
     }
 
-    return String();
+    return aPath;
 }
 
 // ------------------------------------------------------------------------
