@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swwrtshitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:22:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,25 +78,4 @@ int SwWrtShellItem::operator==( const SfxPoolItem& rItem) const
 SfxPoolItem* SwWrtShellItem::Clone( SfxItemPool *pPool ) const
 {
     return new SwWrtShellItem( *this );
-}
-
-TYPEINIT1(SvStrDtorItem,SfxPoolItem);
-SvStrDtorItem::SvStrDtorItem( USHORT nWhich, SvStringsDtor* pString )
-    : SfxPoolItem( nWhich ), pStr( pString )
-{
-
-}
-SvStrDtorItem::SvStrDtorItem( const SvStrDtorItem& rItem)
-    : SfxPoolItem( rItem.Which() )
-{
-}
-
-int SvStrDtorItem::operator==( const SfxPoolItem& rItem) const
-{
-    return ((SvStrDtorItem&)rItem).pStr == pStr;
-}
-
-SfxPoolItem* SvStrDtorItem::Clone( SfxItemPool *pPool ) const
-{
-    return new SvStrDtorItem( *this );
 }
