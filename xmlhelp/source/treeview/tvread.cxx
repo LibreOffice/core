@@ -716,7 +716,6 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
         rtl::OUString aFileUrl;
         while( aDirectory.getNextItem( aDirItem ) == osl::FileBase::E_None &&
                aDirItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
-               aFileStatus.isValid( FileStatusMask_FileSize ) &&
                aFileStatus.isValid( FileStatusMask_FileURL ) )
         {
             aFileUrl = aFileStatus.getFileURL();
@@ -733,6 +732,8 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
                 ( str[idx + 4] == 'e' || str[idx + 4] == 'E' ) )
             {
                 OSL_ENSURE( j < MAX_MODULE_COUNT,"too many modules installed" );
+                OSL_ENSURE( aFileStatus.isValid( FileStatusMask_FileSize ),
+                            "invalid file size" );
                 configData.filelen[j] = aFileStatus.getFileSize();
                 configData.fileurl[j++] = aFileUrl ;
             }
