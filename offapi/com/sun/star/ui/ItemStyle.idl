@@ -1,0 +1,180 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ItemStyle.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2005-03-01 18:23:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_ItemDescriptor_idl__
+#define __com_sun_star_ui_ItemDescriptor_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module ui {
+
+/**
+    specifies styles which influence the appearance and the behavior of an
+    user interface item.
+
+    <p>
+    These styles are only valid if the item describes a toolbar or statusbar item.
+    The style values can be combined with the OR operator. Styles which are not valid
+    for an item will be ignored by the implementation.<br/>
+    There are two styles where
+    only one value is valid:
+    Alignment:
+    <ul>
+        <li>ALIGN_LEFT</li>
+        <li>ALIGN_CENTER</li>
+        <li>ALIGN_RIGHT</li>
+    </ul>
+    Drawing:
+    <ul>
+        <li>DRAW_OUT3D</li>
+        <li>DRAW_IN3D</li>
+        <li>DRAW_FLAT</li>
+    </ul>
+    </p>
+
+    @since OOo 2.0.0
+*/
+constants ItemStyle
+{
+    //-------------------------------------------------------------------------
+    /** specifies how the output of the item is aligned in the bounding box of
+        the user interface element.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item with a left aligned output.</p>
+    */
+    const short ALIGN_LEFT   = 1;
+
+    /** specifies how the output of the item is aligned in the bounding box of
+        the user interface element.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item with a centered aligned output.</p>
+    */
+    const short ALIGN_CENTER = 2;
+
+    /** specifies how the output of the item is aligned in the bounding box of
+        the user interface element.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item with a right aligned output.</p>
+    */
+    const short ALIGN_RIGHT  = 3;
+
+    //-------------------------------------------------------------------------
+    /** specifies how the implementation should draw the item.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item with an embossed 3D effect.</p>
+    */
+    const short DRAW_OUT3D   = 4;
+
+    /** specifies how the implementation should draw the item.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item with an impressed 3D effect.</p>
+    */
+    const short DRAW_IN3D    = 8;
+
+    /** specifies how the implementation should draw the item.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item without an 3D effect.</p>
+    */
+    const short DRAW_FLAT    = 12;
+
+    //-------------------------------------------------------------------------
+    /** specifies whether or not a item is displayed using an external function.
+        <p>This style is only valid if the item describes a statusbar item.</p>
+    */
+    const short OWNER_DRAW    = 16;
+
+    //-------------------------------------------------------------------------
+    /** specifies whether or not the size of the item is set automatically by
+        the parent user interface element.
+        <p>This style is only valid if the item describes a toolbar or statusbar item.</p>
+    */
+    const short AUTO_SIZE     = 32;
+
+    //-------------------------------------------------------------------------
+    /**  determines whether the item unchecks neighbor entries which have also this style set.
+         <p>This style is only valid if the item describes a toolbar item.</p>
+    */
+    const short RADIO_CHECK   = 64;
+
+    //-------------------------------------------------------------------------
+    /** specifies if an icon is placed on left side of the text, like an entry in a taskbar.
+        <p>This style is only valid if the item describes a toolbar item and visible if
+        style of the toolbar is set to symboltext.</p>
+    */
+    const short ICON          = 128;
+
+    //-------------------------------------------------------------------------
+    /** specifies that the item supports a dropdown menu or toolbar for additional functions.
+        <p>This style is only valid if the item describes a toolbar item.</p>
+    */
+    const short DROP_DOWN     = 256;
+
+    //-------------------------------------------------------------------------
+    /** indicates that the item continues to execute the command while you click and hold
+        the mouse button.
+        <p>This style is only valid if the item describes a toolbar item.</p>
+    */
+    const short REPEAT        = 512;
+};
+
+}; }; }; };
+
+#endif
