@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-16 12:30:48 $
+ *  last change: $Author: os $ $Date: 2000-11-28 08:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,7 +855,10 @@ BOOL    SwAuthorityField::QueryValue( Any& rVal, const String& rProperty ) const
     {
         pValues[i].Name = C2U(aFieldNames[i]);
         const String& rField = pAuthEntry->GetAuthorField((ToxAuthorityField) i);
-        pValues[i].Value <<= OUString(rField);
+        if(i == AUTH_FIELD_AUTHORITY_TYPE)
+            pValues[i].Value <<= sal_Int16(rField.ToInt32());
+        else
+            pValues[i].Value <<= OUString(rField);
     }
     rVal <<= aRet;
     return FALSE;
