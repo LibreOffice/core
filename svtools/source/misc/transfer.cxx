@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-14 09:32:25 $
+ *  last change: $Author: ka $ $Date: 2001-09-05 08:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1300,27 +1300,44 @@ sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, String& r
 
 sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, String& rStr )
 {
-    const Any aAny( GetAny( rFlavor ) );
-    sal_Bool bRet = sal_False;
+    ::rtl::OUString aOUString;
+    sal_Bool        bRet = GetString( rFlavor, aOUString );
+
+    rStr = aOUString;
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, ::rtl::OUString& rStr )
+{
+    DataFlavor aFlavor;
+    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetString( aFlavor, rStr ) );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, ::rtl::OUString& rStr )
+{
+    const Any   aAny( GetAny( rFlavor ) );
+    sal_Bool    bRet = sal_False;
+
     if( aAny.hasValue() )
     {
-        ::rtl::OUString aOUString;
-        Sequence< sal_Int8 > aSeq;
+        ::rtl::OUString         aOUString;
+        Sequence< sal_Int8 >    aSeq;
+
         bRet = sal_True;
+
         if( aAny >>= aOUString )
             rStr = aOUString;
         else if( aAny >>= aSeq )
-        {
-            // depends on the dataflavour which kind of charset we use
-            // default to UTF8
-            // in other cases its better to use system charset
-            rtl_TextEncoding eCSet = gsl_getSystemTextEncoding();
-
-            rStr = String( (sal_Char*)aSeq.getArray(), eCSet );
-        }
+            rStr = ::rtl::OUString( (sal_Char*) aSeq.getArray(), aSeq.getLength(), gsl_getSystemTextEncoding() );
         else
             bRet = sal_False;
     }
+
     return bRet;
 }
 
