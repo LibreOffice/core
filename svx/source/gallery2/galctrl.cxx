@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-07 16:00:37 $
+ *  last change: $Author: ka $ $Date: 2002-04-03 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 // ------------------
 
 GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
-    Window( pParent, WB_BORDER ),
+    Window( pParent, WB_TABSTOP | WB_BORDER ),
     DropTargetHelper( this ),
     DragSourceHelper( this ),
     mpTheme( pTheme )
@@ -285,7 +285,7 @@ IMPL_LINK( GalleryPreview, SoundEndHdl, Sound*, pSound )
 // -------------------
 
 GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
-        ValueSet( pParent, WB_3DLOOK | WB_BORDER | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_VSCROLL | WB_FLATVALUESET ),
+        ValueSet( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_VSCROLL | WB_FLATVALUESET ),
         DropTargetHelper( this ),
         DragSourceHelper( this ),
         mpTheme ( pTheme )
@@ -432,7 +432,7 @@ void GalleryIconView::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 // -------------------
 
 GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
-    BrowseBox( pParent, WB_3DLOOK | WB_BORDER ),
+    BrowseBox( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER ),
     mpTheme( pTheme ),
     mnCurRow( 0 ),
     mbInit( FALSE )

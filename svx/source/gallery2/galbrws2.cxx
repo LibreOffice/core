@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-13 16:19:30 $
+ *  last change: $Author: ka $ $Date: 2002-04-03 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ void GalleryThemePopup::StateChanged( USHORT nSID, SfxItemState eState, const Sf
 // ------------------
 
 GalleryToolBox::GalleryToolBox( GalleryBrowser2* pParent ) :
-    ToolBox( pParent )
+    ToolBox( pParent, WB_TABSTOP )
 {
 }
 
@@ -531,7 +531,7 @@ BOOL GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
     const ULONG nItemId = ImplGetSelectedItemId( NULL );
     BOOL        bRet = static_cast< GalleryBrowser* >( GetParent() )->KeyInput( rKEvt, pWindow );
 
-    if( !bRet && nItemId && mpCurTheme )
+    if( !bRet && !maViewBox.HasFocus() && nItemId && mpCurTheme )
     {
         USHORT              nExecuteId = 0;
         const SgaObjKind    eObjKind = mpCurTheme->GetObjectKind( nItemId - 1 );
@@ -657,7 +657,6 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                 mpPreview->PreviewSound( INetURLObject() );
 
                 mpIconView->Show();
-                mpIconView->GrabFocus();
 
                 maViewBox.EnableItem( TBX_ID_ICON, TRUE );
                 maViewBox.EnableItem( TBX_ID_LIST, TRUE );
@@ -676,7 +675,6 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                 mpPreview->PreviewSound( INetURLObject() );
 
                 mpListView->Show();
-                mpListView->GrabFocus();
 
                 maViewBox.EnableItem( TBX_ID_ICON, TRUE );
                 maViewBox.EnableItem( TBX_ID_LIST, TRUE );
@@ -703,7 +701,6 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                     mpPreview->SetGraphic( aGraphic );
                      mpPreview->Show();
-                    mpPreview->GrabFocus();
 
                     if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SGA_OBJ_SOUND )
                         mpPreview->PreviewSound( mpCurTheme->GetObjectURL( nPos ) );

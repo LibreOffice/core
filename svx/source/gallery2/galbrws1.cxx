@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-07 15:41:38 $
+ *  last change: $Author: ka $ $Date: 2002-04-03 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ long GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
 GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery ) :
     Control     ( pParent, rResId ),
     maNewTheme  ( this, WB_3DLOOK | WB_BORDER ),
-    mpThemes    ( new GalleryThemeListBox( this, WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
+    mpThemes    ( new GalleryThemeListBox( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
     mpGallery   ( pGallery )
 {
     StartListening( *mpGallery );
@@ -504,31 +504,51 @@ BOOL GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
     {
         ::std::vector< USHORT > aExecVector( ImplGetExecuteVector() );
         USHORT                  nExecuteId = 0;
+        BOOL                    bMod1 = rKEvt.GetKeyCode().IsMod1();
 
         switch( rKEvt.GetKeyCode().GetCode() )
         {
-            case( KEY_I ):
             case( KEY_INSERT ):
-            {
                 ClickNewThemeHdl( NULL );
+            break;
+
+            case( KEY_I ):
+            {
+                if( bMod1 )
+                   ClickNewThemeHdl( NULL );
             }
             break;
 
             case( KEY_U ):
-                nExecuteId = MN_ACTUALIZE;
+            {
+                if( bMod1 )
+                    nExecuteId = MN_ACTUALIZE;
+            }
             break;
 
             case( KEY_DELETE ):
-            case( KEY_D ):
                 nExecuteId = MN_DELETE;
             break;
 
+            case( KEY_D ):
+            {
+                if( bMod1 )
+                    nExecuteId = MN_DELETE;
+            }
+            break;
+
             case( KEY_R ):
-                nExecuteId = MN_RENAME;
+            {
+                if( bMod1 )
+                    nExecuteId = MN_RENAME;
+            }
             break;
 
             case( KEY_RETURN ):
-                nExecuteId = rKEvt.GetKeyCode().IsMod1() ? MN_PROPERTIES : 0;
+            {
+                if( bMod1 )
+                    nExecuteId = MN_PROPERTIES;
+            }
             break;
         }
 

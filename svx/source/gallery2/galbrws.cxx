@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-07 15:41:38 $
+ *  last change: $Author: ka $ $Date: 2002-04-03 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,8 +170,8 @@ BOOL GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
             if( mpBrowser1->mpThemes->HasChildPathFocus( TRUE ) )
                 mpBrowser2->GetViewWindow()->GrabFocus();
             else if( mpBrowser2->GetViewWindow()->HasFocus() )
-//                mpBrowser2->maViewBox.GrabFocus();
-//            else if( mpBrowser2->maViewBox.HasFocus() )
+                mpBrowser2->maViewBox.GrabFocus();
+            else if( mpBrowser2->maViewBox.HasFocus() )
                 mpBrowser1->maNewTheme.GrabFocus();
             else
                 mpBrowser1->mpThemes->GrabFocus();
@@ -181,8 +181,8 @@ BOOL GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
             if( mpBrowser1->mpThemes->HasChildPathFocus( TRUE ) )
                 mpBrowser1->maNewTheme.GrabFocus();
             else if( mpBrowser1->maNewTheme.HasFocus() )
-//                mpBrowser2->maViewBox.GrabFocus();
-//            else if( mpBrowser2->maViewBox.HasFocus() )
+                mpBrowser2->maViewBox.GrabFocus();
+            else if( mpBrowser2->maViewBox.HasFocus() )
                 mpBrowser2->GetViewWindow()->GrabFocus();
             else
                 mpBrowser1->mpThemes->GrabFocus();
