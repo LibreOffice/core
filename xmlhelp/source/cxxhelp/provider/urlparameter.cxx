@@ -1,0 +1,461 @@
+#ifndef _DB_CXX_H_
+#include <berkeleydb/db_cxx.h>
+#endif
+#ifndef _URLPARAMETER_HXX_
+#include <provider/urlparameter.hxx>
+#endif
+#ifndef _DATABASES_HXX_
+#include <provider/databases.hxx>
+#endif
+
+
+namespace chelp {
+
+    inline bool ascii_isDigit( sal_Unicode ch )
+    {
+        return ((ch >= 0x0030) && (ch <= 0x0039));
+    }
+
+    inline bool ascii_isLetter( sal_Unicode ch )
+    {
+        return (( (ch >= 0x0041) && (ch <= 0x005A)) || ((ch >=
+                                                         0x0061) && (ch <= 0x007A)));
+    }
+
+    inline bool isLetterOrDigit( sal_Unicode ch )
+    {
+        return ascii_isLetter( ch ) || ascii_isDigit( ch );
+    }
+
+}
+
+using namespace chelp;
+
+
+URLParameter::URLParameter( const rtl::OUString& aURL ) throw( com::sun::star::ucb::IllegalIdentifierException )
+    : m_aURL( aURL )
+{
+    init( false );
+    parse();
+}
+
+
+URLParameter::URLParameter( const rtl::OUString&  aURL,
+                            const rtl::OUString& aDefaultLanguage ) throw( com::sun::star::ucb::IllegalIdentifierException )
+    : m_aURL( aURL ),
+      m_aDefaultLanguage( aDefaultLanguage )
+{
+    init( true );
+    parse();
+}
+
+
+rtl::OUString URLParameter::get_id()
+{
+    if( m_aId.compareToAscii("start") == 0 )
+    {   // module is set
+        StaticModuleInformation* inf =
+            Databases::getStaticInformationForModule( get_module(),
+                                                          get_language() );
+        if( inf )
+            m_aId = inf->get_id();
+
+        m_bStart = true;
+    }
+
+    return m_aId;
+}
+
+rtl::OUString URLParameter::get_tag()
+{
+    if( isFile() )
+        return get_the_tag();
+    else
+        return m_aTag;
+}
+
+
+rtl::OUString URLParameter::get_title()
+{
+    if( isFile() )
+        return get_the_title();
+    else if( m_aModule.compareToAscii("") != 0 )
+    {
+        StaticModuleInformation* inf =
+            Databases::getStaticInformationForModule( get_module(),
+                                                          get_language() );
+        if( inf )
+            m_aTitle = inf->get_title();
+    }
+    else   // This must be the root
+        m_aTitle = rtl::OUString::createFromAscii("root");
+
+    return m_aTitle;
+}
+
+
+rtl::OUString URLParameter::get_language()
+{
+    if( m_aLanguage.getLength() == 0 )
+        m_aLanguage = m_aDefaultLanguage;
+
+    return m_aLanguage;
+}
+
+
+rtl::OUString URLParameter::get_program()
+{
+    if( m_aProgram.compareToAscii( "" ) != 0 )
+    {
+        StaticModuleInformation* inf =
+            Databases::getStaticInformationForModule( get_module(),
+                                                          get_language() );
+        if( inf )
+            m_aProgram = inf->get_program();
+    }
+    return m_aProgram;
+}
+
+
+//      public InputStream getInputFromJarFile()
+//      {
+//          try
+//          {
+//              JarFile jarFile = Databases.getJarFileForLanguage( get_jar(),get_language() );   // For module and language
+//              String path = get_path();
+//              int idx;
+//              if( ( idx = path.indexOf( '#' ) ) != -1 )
+//                  path = path.substring(0,idx);
+
+//              JarEntry jarEntry = jarFile.getJarEntry( path );
+//              if( jarEntry != null )
+//                  return jarFile.getInputStream( jarEntry );
+//              else
+//              {
+//                  // System.out.println( "File not found in jar: " + get_jar() + " " + path );
+//                  return Databases.errorFile( get_language() );
+//              }
+//          }
+//          catch( Exception e )
+//          {
+//              return Databases.errorFile( get_language() );
+//          }
+//      }
+
+
+
+
+//      public InputStream getInputFromDisk()
+//      {
+//          try
+//          {
+//              String fileName = Databases.getInstallDirectory()
+//                  + Databases.lang(get_language())
+//                  + File.separator
+//                  + get_path();
+
+//              int idx;
+//              if( ( idx = fileName.indexOf( '#' ) ) != -1 )
+//                  fileName = fileName.substring(0,idx);
+
+//              File aFile = new File( fileName );
+//              if( aFile.exists() )
+//              {
+//                  return new FileInputStream( aFile );
+//              }
+//              else
+//              {
+//                  System.out.println( "File not found from disk: " + get_path() );
+//                  return Databases.errorFile( get_language() );
+//              }
+//          }
+//          catch( Exception e )
+//          {
+//              return Databases.errorFile( get_language() );
+//          }
+//      }
+
+
+//      public byte[] getByteArrayText()
+//      {
+//          try
+//          {
+//              Db db = Databases.getHelptextDbForLanguage( get_module(),get_language() );
+
+//              StringDbt key = new StringDbt( _id );
+//              StringDbt data = new StringDbt();
+
+//              int err = db.get(null,key,data,0);
+//              if( data != null )
+//                  try
+//                  {
+//                      return data.getString().getBytes( "UTF8" );
+//                  }
+//                  catch( UnsupportedEncodingException e )
+//                  {
+//                      return data.getString().getBytes();
+//                  }
+//              else
+//                  return new byte[0];
+//          }
+//          catch( DbException err )
+//          {
+//              System.out.println( "No database for language: HelpURLParameter._readBerkeley" );
+//              return new byte[0];
+//          }
+//      }
+
+
+void URLParameter::init( bool bDefaultLanguageIsInitialized )
+{
+    m_bBerkeleyRead = false;
+    m_bStart = false;
+
+//      m_aTag = rtl::OUString::createFromAscii( "" );
+//      m_aId = rtl::OUString::createFromAscii( "" );
+//      m_aPath = rtl::OUString::createFromAscii( "" );
+//      m_aModule = rtl::OUString::createFromAscii( "" );
+//      m_aTitle = rtl::OUString::createFromAscii( "" );
+//      m_aJar = rtl::OUString::createFromAscii( "" );
+//      m_aEid = rtl::OUString::createFromAscii( "" );
+//      m_aLanguage =  rtl::OUString::createFromAscii( "" );
+
+//      if( ! bDefaultLanguageIsInitialized )
+//          m_aDefaultLanguage = rtl::OUString::createFromAscii( "" );
+
+//      m_aPrefix = rtl::OUString::createFromAscii( "" );
+//      m_aDevice = rtl::OUString::createFromAscii( "" );
+//      m_aProgram = rtl::OUString::createFromAscii( "" );
+//      m_aSystem = rtl::OUString::createFromAscii( "" );
+//      m_aActive = rtl::OUString::createFromAscii( "" );
+
+//      m_aQuery = rtl::OUString::createFromAscii( "" );
+//      m_aScope = rtl::OUString::createFromAscii( "" );
+    m_nHitCount = 100;                // The default maximum hitcount
+}
+
+
+rtl::OUString URLParameter::get_the_tag()
+{
+    if( ! m_bBerkeleyRead )
+        readBerkeley();
+
+    m_bBerkeleyRead = true;
+
+    return m_aTag;
+}
+
+
+
+rtl::OUString URLParameter::get_the_path()
+{
+    if( ! m_bBerkeleyRead )
+        readBerkeley();
+    m_bBerkeleyRead = true;
+
+    return m_aPath;
+}
+
+
+
+rtl::OUString URLParameter::get_the_title()
+{
+    if( ! m_bBerkeleyRead )
+        readBerkeley();
+    m_bBerkeleyRead = true;
+
+    return m_aTitle;
+}
+
+
+rtl::OUString URLParameter::get_the_jar()
+{
+    if( ! m_bBerkeleyRead )
+        readBerkeley();
+    m_bBerkeleyRead = true;
+
+    return m_aJar;
+}
+
+
+void URLParameter::readBerkeley()
+{
+//      if( get_id().compareToAscii("") != 0 )
+//      {
+//          try
+//          {
+//              Db* db = Databases::getDatabaseForLanguage( get_module(),
+//                                                              get_language() );
+
+//              StringDbt key = new StringDbt( m_aId );
+//              StringDbt data = new StringDbt();
+
+//              int err = db.get(null,key,data,0);
+//              if( data != null )
+//              {
+//                  m_aTitle = data.getTitle();
+//                  m_aPath  = data.getFile();
+//                  m_aJar   = data.getDatabase();
+//                  m_aTag   = data.getHash();
+//              }
+
+//          }
+//          catch( const DbException& err )
+//          {
+//              printf( "URLParameter::readBerkeley() -> DbException" );
+//          }
+//      }
+}
+
+
+void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierException )
+{
+    m_aExpr = m_aURL;
+
+    sal_Int32 lstIdx = m_aExpr.lastIndexOf( sal_Unicode( '#' ) );
+    if( lstIdx != -1 )
+        m_aExpr = m_aExpr.copy( 0,lstIdx );
+
+    if( ! scheme() || ! name( module() ) || ! query() )
+        throw com::sun::star::ucb::IllegalIdentifierException();
+}
+
+
+
+bool URLParameter::scheme()
+{
+#define PREFIX_LENGTH 20
+    if( m_aExpr.compareToAscii( "vnd.sun.star.help://",PREFIX_LENGTH ) == 0 )
+    {
+        m_aExpr = m_aExpr.copy( PREFIX_LENGTH );
+#undef PREFIX_LENGTH
+        return true;
+    }
+#define PREFIX_LENGTH 19
+    else if( m_aExpr.compareToAscii( "vnd.sun.star.help:/",PREFIX_LENGTH ) == 0 )
+    {
+        m_aExpr = m_aExpr.copy( PREFIX_LENGTH );
+#undef PREFIX_LENGTH
+        return true;
+    }
+#define PREFIX_LENGTH 18
+    else if( m_aExpr.compareToAscii( "vnd.sun.star.help:",PREFIX_LENGTH ) == 0 )
+    {
+        m_aExpr = m_aExpr.copy( PREFIX_LENGTH );
+#undef PREFIX_LENGTH
+        return true;
+    }
+    else
+        return false;
+}
+
+
+
+bool URLParameter::module()
+{
+    sal_Int32 idx = 0,length = m_aExpr.getLength();
+
+    while( idx < length && isLetterOrDigit( (m_aExpr.getStr())[idx] ) )
+        ++idx;
+
+    if( idx != 0 )
+    {
+        m_aModule = m_aExpr.copy( 0,idx );
+        m_aExpr = m_aExpr.copy( idx );
+        return true;
+    }
+    else
+        return false;
+}
+
+
+
+bool URLParameter::name( bool modulePresent )
+{
+    // if modulepresent, a name may be present, but must not
+
+    sal_Int32 length = m_aExpr.getLength();
+
+
+    if( length != 0 && (m_aExpr.getStr())[0] == sal_Unicode( '/' ) )
+    {
+        sal_Int32 idx = 1;
+        while( idx < length && isLetterOrDigit( (m_aExpr.getStr())[idx] ) )
+            ++idx;
+
+        if( idx != 1 && ! modulePresent )
+            return false;
+        else
+        {
+            m_aId = m_aExpr.copy( 1,idx );
+            m_aExpr = m_aExpr.copy( idx );
+        }
+    }
+
+    return true;
+}
+
+
+bool URLParameter::query()
+{
+    rtl::OUString query;
+
+    if( ! m_aExpr.getLength() )
+        return true;
+    else if( (m_aExpr.getStr())[0] == sal_Unicode( '?' ) )
+        query = m_aExpr.copy( 1 ).trim();
+    else
+        return false;
+
+
+    bool ret = true;
+    sal_Int32 delimIdx,equalIdx;
+    rtl::OUString parameter,value;
+
+    while( query.getLength() != 0 )
+    {
+        delimIdx = query.indexOf( sal_Unicode( '&' ) );
+        equalIdx = query.indexOf( sal_Unicode( '=' ) );
+        parameter = query.copy( 0,equalIdx ).trim();
+        if( delimIdx == -1 )
+        {
+            value = query.copy( equalIdx + 1 ).trim();
+            query = rtl::OUString();
+        }
+        else
+        {
+            value = query.copy( equalIdx+1,delimIdx - equalIdx - 1 ).trim();
+            query = query.copy( delimIdx+1 ).trim();
+        }
+
+        if( parameter.compareToAscii( "Language" ) == 0 )
+            m_aLanguage = value;
+        else if( parameter.compareToAscii( "Device" ) == 0 )
+            m_aDevice = value;
+        else if( parameter.compareToAscii( "Program" ) == 0 )
+            m_aProgram = value;
+        else if( parameter.compareToAscii( "Eid" ) == 0 )
+            m_aEid = value;
+        else if( parameter.compareToAscii( "Query" ) == 0 )
+        {
+            if( ! m_aQuery.getLength() )
+                m_aQuery = value;
+            else
+                m_aQuery += ( rtl::OUString::createFromAscii( " " ) + value );
+        }
+        else if( parameter.compareToAscii( "Scope" ) == 0 )
+            m_aScope = value;
+        else if( parameter.compareToAscii( "System" ) == 0 )
+            m_aSystem = value;
+        else if( parameter.compareToAscii( "HelpPrefix" ) == 0 )
+            m_aPrefix = value;
+        else if( parameter.compareToAscii( "HitCount" ) == 0 )
+            m_nHitCount = value.toInt32();
+        else if( parameter.compareToAscii( "Active" ) == 0 )
+            m_aActive = value;
+        else
+            ret = false;
+    }
+
+    return ret;
+}
