@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:52:46 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String SAMPLES
     Text[ english_us ] = "In order to use the full functionality of this sample, create a document that is based on this template.";
     Text[ portuguese ] = "Para poder usufruir de toda a funcionalidade deste exemplo, ter� que criar um novo documento com base neste modelo.";
     Text[ greek ] = "��� �� ��������� �� ��������������� ���� ��� ����������� ����� ��� ������������� �� ������ �� ������������� ��� ��� ������� ��������� �� ���� �� �������.";
-    Text[ dutch ] = "Om alle mogelijkheden van dit voorbeeld te kunnen gebruiken, maakt u een nieuw document op basis van deze sjabloon.";
+    Text[ dutch ] = "Om alle mogelijkheden van dit voorbeeld te kunnen gebruiken, maakt u een nieuw document op basis van dit sjabloon.";
     Text[ french ] = "Afin de pouvoir profiter de l'enti�re fonctionnalit� de cet exemple, il vous faut cr�er un nouveau document bas� sur ce mod�le.";
     Text[ spanish ] = "Para aprovechar al m�ximo la funcionalidad de este ejemplo deber� crear un documento nuevo basado en esta plantilla.";
     Text[ swedish ] = "Ett nytt dokument m�ste skapas med den h�r mallen som grund f�r att alla funktioner i detta exempel skall vara tillg�ngliga.";
@@ -102,6 +102,8 @@ String SAMPLES
     Text[ hebrew ] = "‮כדי לנצל את מלא היכולת של דוגמה זו יש ליצור מסמך מבוסס על תבנית זו.‬";
     Text[ hindi ] = "इस नमूने का सम्पूर्ण कार्य का उपयोग करने केलिए, इस नमूने के आधार पर एक लेखपत्र को उत्पन्न कीजिए ।";
     Text[ slovak ] = "Ak chcete využiť plnú funkčnosť tohoto vzorku, vytvorte dokument založený na tejto šablóne.";
+    Text[ hungarian ] = "Ahhoz, hogy a minta összes funkcióját használhassa, hozzon létre egy erre a sablonra épülő dokumentumot.";
+    Text[ slovenian ] = "Da bi izkoristili vse prednosti vzorca, ustvarite dokument, ki temelji na tej predlogi.";
 };
 
 String SAMPLES + 1
@@ -117,7 +119,7 @@ String SAMPLES + 1
     Text[ swedish ] = "H�nvisning";
     Text[ russian ] = "���������";
     Text[ italian ] = "Nota";
-    Text[ danish ] = "Henvisning";
+    Text[ danish ] = "Bem�rkninger";
     Text[ polish ] = "Wskaz�wka";
     Text[ portuguese_brazilian ] = "Observa��es";
     Text[ japanese ] = "指示";
@@ -133,6 +135,8 @@ String SAMPLES + 1
     Text[ hebrew ] = "‮הערות‬";
     Text[ hindi ] = "विशेष कथन";
     Text[ slovak ] = "Poznámky";
+    Text[ hungarian ] = "Megjegyzések";
+    Text[ slovenian ] = "Pripombe";
 };
 
 // --------------------------------------------------------------------
@@ -148,7 +152,7 @@ String STYLES
     Text[ french ] = "S�lection de th�me";
     Text[ spanish ] = "Selecci�n de temas";
     Text[ italian ] = "Scelta argomento";
-    Text[ danish ] = "Emneudvalg";
+    Text[ danish ] = "Temaudvalg";
     Text[ swedish ] = "Temaurval";
     Text[ polish ] = "Wyb�r temat�w";
     Text[ portuguese_brazilian ] = "Sele��o de Tema";
@@ -166,6 +170,8 @@ String STYLES
     Text[ hebrew ] = "‮בחירת נושא רקע‬";
     Text[ hindi ] = "प्रकरण चुनाव";
     Text[ slovak ] = "Výber témy";
+    Text[ hungarian ] = "Témaválasztás";
+    Text[ slovenian ] = "Izbor teme";
 };
 
 String STYLES + 1
@@ -176,7 +182,7 @@ String STYLES + 1
     Text[ portuguese ] = "Erro ao guardar o documento activo no porta-documentos! � imposs�vel restaurar a seguinte ac��o.";
     Text[ russian ] = "������ ���������� � ������ ������! ���������� �������� ��������� ��������.";
     Text[ greek ] = "������ ���� ��� ��������� ���������� ��� ��������� ��������! ��� ����� ������ � �������� ��� ��������� ���������.";
-    Text[ dutch ] = "Fout bij opslaan van huidig document in cachegeheugen. De volgende activiteit kan niet ongedaan worden gemaakt.";
+    Text[ dutch ] = "Fout bij opslaan van huidig document in cachegeheugen. De volgende handeling kan niet ongedaan worden gemaakt.";
     Text[ french ] = "Une erreur est survenue lors de l'enregistrement du document actif dans le presse-papiers ! Impossible d'annuler l'action suivante.";
     Text[ spanish ] = "�Ha ocurrido un error al guardar el documento actual en el portapapeles! La acci�n siguiente no se puede deshacer.";
     Text[ italian ] = "Errore mentre si cercava di salvare il documento negli appunti. L'azione seguente non pu� essere annullata.";
@@ -197,6 +203,8 @@ String STYLES + 1
     Text[ hebrew ] = "‮שגיאה בעת שמירת המסמך ללוח הטיוטה! הפעולה הבאה בלתי הפיכה.‬";
     Text[ hindi ] = "लेखपत्र को क्लिपबोर्ड में संचित करने के समय गलती ! निम्नलिखित कार्य का अनावृत्ति नहीं हो सकता है ।";
     Text[ slovak ] = "Chyba pri ukladaní dokumentu do schránky! Nasledujúca akcia nemôže byť odvolaná.";
+    Text[ hungarian ] = "Hiba történt a dokumentum vágólapra helyezése közben. A következő művelet nem vonható vissza.";
+    Text[ slovenian ] = "Pri shranjevanju dokumenta v odložišče je prišlo do napake! Naslednjega dejanja ni mogoče razveljaviti.";
 };
 
 String STYLES + 2
@@ -229,6 +237,8 @@ String STYLES + 2
     Text[ hebrew ] = "‮ביטול‬";
     Text[ hindi ] = "~रद्द करो";
     Text[ slovak ] = "~Zrušiť";
+    Text[ hungarian ] = "~Mégsem";
+    Text[ slovenian ] = "Pre~kliči";
 };
 
 String STYLES + 3
@@ -261,6 +271,8 @@ String STYLES + 3
     Text[ hebrew ] = "‮אישור‬";
     Text[ hindi ] = "~ठीक";
     Text[ slovak ] = "~OK";
+    Text[ hungarian ] = "~OK";
+    Text[ slovenian ] = "~V redu";
 };
 
 // --------------------------------------------------------------------
@@ -293,6 +305,8 @@ String AgendaDlgName
     Text[ hebrew ] = "‮תבנית יומן‬";
     Text[ hindi ] = "मिनट का नमूना";
     Text[ slovak ] = "Šablóna protokolu";
+    Text[ hungarian ] = "Jegyzőkönyvsablon";
+    Text[ slovenian ] = "Predloga zapisnika";
 };
 
 String AgendaDlgNoCancel
@@ -324,6 +338,8 @@ String AgendaDlgNoCancel
     Text[ hebrew ] = "‮יש לאשר אפשרות.‬";
     Text[ hindi ] = "विकल्प को दृढ़ करना ज़रूरी है ।";
     Text[ slovak ] = "Voľba musí byť potvrdená";
+    Text[ hungarian ] = "Az egyik beállítást jóvá kell hagynia.";
+    Text[ slovenian ] = "Možnost morate potrditi.";
 };
 
 String AgendaDlgFrame
@@ -355,6 +371,8 @@ String AgendaDlgFrame
     Text[ hebrew ] = "‮סוג רישום‬";
     Text[ hindi ] = "मिनट का वर्ग";
     Text[ slovak ] = "Typ protokolu";
+    Text[ hungarian ] = "Jegyzőkönyv típusa";
+    Text[ slovenian ] = "Vrsta zapisnika";
 };
 
 String AgendaDlgButton1
@@ -386,6 +404,8 @@ String AgendaDlgButton1
     Text[ hebrew ] = "‮יומן תוצאות‬";
     Text[ hindi ] = "नतीजा मिनटों में";
     Text[ slovak ] = "Prijaté uznesenie";
+    Text[ hungarian ] = "Jegyzőkönyv az eredményekről";
+    Text[ slovenian ] = "Zapisnik o rezultatih";
 };
 
 String AgendaDlgButton2
@@ -401,7 +421,7 @@ String AgendaDlgButton2
     Text[ swedish ] = "Redog�rande protokoll";
     Text[ russian ] = "��������� ��������";
     Text[ greek ] = "���������� ��������";
-    Text[ danish ] = "Forhandlingsreferat";
+    Text[ danish ] = "Evalueringsreferat";
     Text[ polish ] = "Protok� oceny";
     Text[ portuguese_brazilian ] = "Atas de Avalia��o";
     Text[ japanese ] = "中間報告の議事録";
@@ -417,6 +437,8 @@ String AgendaDlgButton2
     Text[ hebrew ] = "‮יומן הערכה‬";
     Text[ hindi ] = "परीक्षा करने का मिनटें ";
     Text[ slovak ] = "Priebeh zasadania";
+    Text[ hungarian ] = "Kiértékelő jegyzőkönyv";
+    Text[ slovenian ] = "Zapisnik o ocenah";
 };
 
 // --------------------------------------------------------------------
@@ -433,7 +455,7 @@ String CorrespondenceNoTextmark
     Text[ swedish ] = "Bokm�rket 'Recipient' saknas.";
     Text[ russian ] = "����������� �������� '����������'.";
     Text[ greek ] = "������ �� ������ ��� �������� 'Recipient' (����������).";
-    Text[ danish ] = "Tekstmarkeringen 'Recipient' mangler.";
+    Text[ danish ] = "Bogm�rket 'Modtager' mangler.";
     Text[ polish ] = "Brak zak�adki Adresat.";
     Text[ portuguese_brazilian ] = "Falta o marcador 'Destinat�rio'";
     Text[ japanese ] = "テキストマーク 'Recipient' がありません。";
@@ -449,6 +471,8 @@ String CorrespondenceNoTextmark
     Text[ hebrew ] = "‮סמן הנמען חסר‬";
     Text[ hindi ] = "पृष्ठसंकेत 'प्रतिग्राहक' अनुपस्थित लुप्त है ।";
     Text[ slovak ] = "Chýba záložka 'Príjemca'.";
+    Text[ hungarian ] = "A 'Címzett' könyvjelző hiányzik.";
+    Text[ slovenian ] = "Manjka zaznamek 'Prejemnik'.";
 };
 
 String CorrespondenceNoTextmark+1
@@ -464,7 +488,7 @@ String CorrespondenceNoTextmark+1
     Text[ swedish ] = "Om�jligt att infoga f�lt f�r standardbrev.";
     Text[ russian ] = "���������� �������� ���� ������������ ������.";
     Text[ greek ] = "��� ����� ������� �� ����� �������� ��� ������ ��� ��������� ���������.";
-    Text[ danish ] = "Det er ikke muligt at inds�tte brevfeltningsfelter.";
+    Text[ danish ] = "Det er ikke muligt at inkludere formularbrevsfelter.";
     Text[ polish ] = "Nie mo�na do��czy� p�l listu seryjnego.";
     Text[ portuguese_brazilian ] = "N�o � poss�vel inserir campos para a mala direta.";
     Text[ japanese ] = "差し込み印刷のフィールドを挿入できません。";
@@ -480,6 +504,8 @@ String CorrespondenceNoTextmark+1
     Text[ hebrew ] = "‮אין אפשרות לכלול שדות ממכתבי תבנית‬";
     Text[ hindi ] = "फॉर्म पत्र का क्षेत्रों को सम्मिलित नहीं कर सकते है ।";
     Text[ slovak ] = "Formulárové polia nemôžu byť zahrnuté.";
+    Text[ hungarian ] = "A körlevélmezőket nem lehet befoglalni.";
+    Text[ slovenian ] = "Ni mogoče vključiti polj tipskih pisem.";
 };
 
 String CorrespondenceMsgError
@@ -495,7 +521,7 @@ String CorrespondenceMsgError
     Text[ swedish ] = "Det har uppst�tt ett fel!";
     Text[ russian ] = "������";
     Text[ greek ] = "������";
-    Text[ danish ] = "Fejl";
+    Text[ danish ] = "Der opstod en fejl";
     Text[ polish ] = "B��d";
     Text[ portuguese_brazilian ] = "Erro";
     Text[ japanese ] = "エラーが発生しました。";
@@ -511,6 +537,8 @@ String CorrespondenceMsgError
     Text[ hebrew ] = "‮ארעה שגיאה!‬";
     Text[ hindi ] = "गलती";
     Text[ slovak ] = "Chyba";
+    Text[ hungarian ] = "Hiba történt.";
+    Text[ slovenian ] = "Prišlo je do napake.";
 };
 
 String CorrespondenceDialog
@@ -542,6 +570,8 @@ String CorrespondenceDialog
     Text[ hebrew ] = "‮נמען‬";
     Text[ hindi ] = "लेनेवाला";
     Text[ slovak ] = "Príjemca";
+    Text[ hungarian ] = "Címzett";
+    Text[ slovenian ] = "Naslovnik";
 };
 
 String CorrespondenceDialog+1
@@ -574,6 +604,8 @@ String CorrespondenceDialog+1
     Text[ hebrew ] = "‮נמען אחד‬";
     Text[ hindi ] = "एक प्रतिग्राहक";
     Text[ slovak ] = "Jeden príjemca";
+    Text[ hungarian ] = "Egy címzett";
+    Text[ slovenian ] = "En prejemnik";
 };
 
 String CorrespondenceDialog+2
@@ -605,6 +637,8 @@ String CorrespondenceDialog+2
     Text[ hebrew ] = "‮נמענים אחדים (ממסד הנתונים)‬";
     Text[ hindi ] = "अनेक प्रतिग्राहक (पता लेखासंचय)";
     Text[ slovak ] = "Niekoľko príjemcov (databáza adries)";
+    Text[ hungarian ] = "Több címzett (címlista-adatbázis)";
+    Text[ slovenian ] = "Več prejemnikov (adresar)";
 };
 
 String CorrespondenceDialog+3
@@ -636,6 +670,8 @@ String CorrespondenceDialog+3
     Text[ hebrew ] = "‮שימוש בתבנית זו‬";
     Text[ hindi ] = "इस नमूने का उपयोग";
     Text[ slovak ] = "Použitie tejto šablóny";
+    Text[ hungarian ] = "Sablon használata";
+    Text[ slovenian ] = "Uporaba te predloge";
 };
 
 
@@ -669,6 +705,8 @@ String CorrespondenceFields
     Text[ hebrew ] = "‮לחיצה על סמן המקום כותבת על‬";
     Text[ hindi ] = "स्थानधारक क्लिक करो और ओवररइट् करो";
     Text[ slovak ] = "Klikni na vlastníka a prepíš";
+    Text[ hungarian ] = "Kattintson a helykitöltőre, és írja felül";
+    Text[ slovenian ] = "Klikni ogrado in prepiši";
 };
 
 String CorrespondenceFields+1
@@ -701,6 +739,8 @@ String CorrespondenceFields+1
     Text[ hebrew ] = "‮חברה‬";
     Text[ hindi ] = "संस्था";
     Text[ slovak ] = "Spoločnosť";
+    Text[ hungarian ] = "Cég";
+    Text[ slovenian ] = "Podjetje";
 };
 
 String CorrespondenceFields+2
@@ -733,6 +773,8 @@ String CorrespondenceFields+2
     Text[ hebrew ] = "‮מחלקה‬";
     Text[ hindi ] = "विभाग";
     Text[ slovak ] = "Oddelenie";
+    Text[ hungarian ] = "Részleg";
+    Text[ slovenian ] = "Oddelek";
 };
 
 String CorrespondenceFields+3
@@ -765,6 +807,8 @@ String CorrespondenceFields+3
     Text[ hebrew ] = "‮שם פרטי‬";
     Text[ hindi ] = "पहिला नाम";
     Text[ slovak ] = "Meno";
+    Text[ hungarian ] = "Utónév";
+    Text[ slovenian ] = "Ime";
 };
 
 String CorrespondenceFields+4
@@ -797,6 +841,8 @@ String CorrespondenceFields+4
     Text[ hebrew ] = "‮שם משפחה‬";
     Text[ hindi ] = "अंतिम नाम";
     Text[ slovak ] = "Priezvisko";
+    Text[ hungarian ] = "Vezetéknév";
+    Text[ slovenian ] = "Priimek";
 };
 
 String CorrespondenceFields+5
@@ -829,6 +875,8 @@ String CorrespondenceFields+5
     Text[ hebrew ] = "‮רחוב‬";
     Text[ hindi ] = "सड़क";
     Text[ slovak ] = "Ulica";
+    Text[ hungarian ] = "Utca";
+    Text[ slovenian ] = "Ulica";
 };
 
 String CorrespondenceFields+6
@@ -861,6 +909,8 @@ String CorrespondenceFields+6
     Text[ hebrew ] = "‮מדינה‬";
     Text[ hindi ] = "देश";
     Text[ slovak ] = "Krajina";
+    Text[ hungarian ] = "Ország";
+    Text[ slovenian ] = "Država";
 };
 
 
@@ -894,6 +944,8 @@ String CorrespondenceFields+7
     Text[ hebrew ] = "‮מיקוד‬";
     Text[ hindi ] = "ZIP/डाक कोड";
     Text[ slovak ] = "PSČ";
+    Text[ hungarian ] = "Irányítószám";
+    Text[ slovenian ] = "Poštna številka";
 };
 
 String CorrespondenceFields+8
@@ -926,6 +978,8 @@ String CorrespondenceFields+8
     Text[ hebrew ] = "‮עיר‬";
     Text[ hindi ] = "नगर";
     Text[ slovak ] = "Obec";
+    Text[ hungarian ] = "Település";
+    Text[ slovenian ] = "Kraj";
 };
 
 String CorrespondenceFields+9
@@ -958,6 +1012,8 @@ String CorrespondenceFields+9
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
     Text[ slovak ] = "Nadpis";
+    Text[ hungarian ] = "Cím";
+    Text[ slovenian ] = "Naslov";
 };
 
 
@@ -991,6 +1047,8 @@ String CorrespondenceFields+10
     Text[ hebrew ] = "‮מיקום‬";
     Text[ hindi ] = "स्थान";
     Text[ slovak ] = "Umiestnenie";
+    Text[ hungarian ] = "Beosztás";
+    Text[ slovenian ] = "Položaj";
 };
 
 
@@ -1024,6 +1082,8 @@ String CorrespondenceFields+11
     Text[ hebrew ] = "‮צורת פניה‬";
     Text[ hindi ] = "पते का फॉर्म";
     Text[ slovak ] = "Formulár z adries";
+    Text[ hungarian ] = "Cím formátuma";
+    Text[ slovenian ] = "Naziv";
 };
 
 
@@ -1057,6 +1117,8 @@ String CorrespondenceFields+12
     Text[ hebrew ] = "‮ראשי תיבות‬";
     Text[ hindi ] = "इनिश्यल";
     Text[ slovak ] = "Iniciály";
+    Text[ hungarian ] = "Monogram";
+    Text[ slovenian ] = "Začetnice";
 };
 
 
@@ -1090,6 +1152,8 @@ String CorrespondenceFields+13
     Text[ hebrew ] = "‮פתיח‬";
     Text[ hindi ] = "नमस्कार";
     Text[ slovak ] = "Oslovenie";
+    Text[ hungarian ] = "Megszólítás";
+    Text[ slovenian ] = "Uvodni pozdrav";
 };
 
 
@@ -1123,6 +1187,8 @@ String CorrespondenceFields+14
     Text[ hebrew ] = "‮טלפון בבית‬";
     Text[ hindi ] = "घर का दूरभाष";
     Text[ slovak ] = "Telefón domov";
+    Text[ hungarian ] = "Otthoni telefonszám";
+    Text[ slovenian ] = "Domači telefon";
 };
 
 
@@ -1156,6 +1222,8 @@ String CorrespondenceFields+15
     Text[ hebrew ] = "‮טלפון בעבודה‬";
     Text[ hindi ] = "काम का दूरभाष";
     Text[ slovak ] = "Telefón do zamestnania";
+    Text[ hungarian ] = "Munkahelyi telefonszám";
+    Text[ slovenian ] = "Službeni telefon";
 };
 
 
@@ -1189,6 +1257,8 @@ String CorrespondenceFields+16
     Text[ hebrew ] = "‮פקס‬";
     Text[ hindi ] = "फॉक्स";
     Text[ slovak ] = "Fax";
+    Text[ hungarian ] = "Fax";
+    Text[ slovenian ] = "Faks";
 };
 
 
@@ -1222,6 +1292,8 @@ String CorrespondenceFields+17
     Text[ hebrew ] = "‮דואר א'‬";
     Text[ hindi ] = "इ-मेइल";
     Text[ slovak ] = "Email";
+    Text[ hungarian ] = "E-mail";
+    Text[ slovenian ] = "E-pošta";
 };
 
 
@@ -1255,6 +1327,8 @@ String CorrespondenceFields+18
     Text[ thai ] = "URL";
     Text[ hindi ] = "URL";
     Text[ slovak ] = "URL";
+    Text[ hungarian ] = "URL";
+    Text[ slovenian ] = "URL";
 };
 
 
@@ -1272,7 +1346,7 @@ String CorrespondenceFields+19
     Text[ spanish ] = "Notas";
     Text[ finnish ] = "Huomautukset";
     Text[ italian ] = "Note";
-    Text[ danish ] = "Note";
+    Text[ danish ] = "Noter";
     Text[ swedish ] = "Anteckning";
     Text[ polish ] = "Notatki";
     Text[ portuguese_brazilian ] = "Anota��es";
@@ -1288,6 +1362,8 @@ String CorrespondenceFields+19
     Text[ hebrew ] = "‮הערות‬";
     Text[ hindi ] = "टिप्पणी";
     Text[ slovak ] = "Poznámky";
+    Text[ hungarian ] = "Jegyzetek";
+    Text[ slovenian ] = "Opombe";
 };
 
 
@@ -1321,6 +1397,8 @@ String CorrespondenceFields+20
     Text[ hebrew ] = "‮שדה נוסף 1‬";
     Text[ hindi ] = "वैकल्पिक क्षेत्र 1";
     Text[ slovak ] = "Vol. pole 1";
+    Text[ hungarian ] = "1. alt. mező";
+    Text[ slovenian ] = "Izb. polje 1";
 };
 
 
@@ -1354,6 +1432,8 @@ String CorrespondenceFields+21
     Text[ hebrew ] = "‮שדה נוסף 2‬";
     Text[ hindi ] = "वैकल्पिक क्षेत्र 2";
     Text[ slovak ] = "Vol. pole 2";
+    Text[ hungarian ] = "2. alt. mező";
+    Text[ slovenian ] = "Izb. polje 2";
 };
 
 
@@ -1387,6 +1467,8 @@ String CorrespondenceFields+22
     Text[ hebrew ] = "‮שדה נוסף 3‬";
     Text[ hindi ] = "वैकल्पिक क्षेत्र 3";
     Text[ slovak ] = "Vol. pole 3";
+    Text[ hungarian ] = "3. alt. mező";
+    Text[ slovenian ] = "Izb. polje 3";
 };
 
 
@@ -1420,6 +1502,8 @@ String CorrespondenceFields+23
     Text[ hebrew ] = "‮שדה נוסף 4‬";
     Text[ hindi ] = "वैकल्पिक क्षेत्र 4";
     Text[ slovak ] = "Vol. pole 4";
+    Text[ hungarian ] = "4. alt. mező";
+    Text[ slovenian ] = "Izb. polje 4";
 };
 
 
@@ -1453,6 +1537,8 @@ String CorrespondenceFields+24
     Text[ thai ] = "ID";
     Text[ hindi ] = "ID";
     Text[ slovak ] = "ID";
+    Text[ hungarian ] = "Azonosító";
+    Text[ slovenian ] = "ID";
 };
 
 
@@ -1486,6 +1572,8 @@ String CorrespondenceFields+25
     Text[ hebrew ] = "‮מחוז‬";
     Text[ hindi ] = "राज्य";
     Text[ slovak ] = "Štát";
+    Text[ hungarian ] = "Állam";
+    Text[ slovenian ] = "Zvezna država";
 };
 
 
@@ -1519,6 +1607,8 @@ String CorrespondenceFields+26
     Text[ hebrew ] = "‮טלפון במשרד‬";
     Text[ hindi ] = "दफ्तर दूरभाष";
     Text[ slovak ] = "Telefón do kancelárie";
+    Text[ hungarian ] = "Munkahelyi telefon";
+    Text[ slovenian ] = "Službeni telefon";
 };
 
 
@@ -1552,6 +1642,8 @@ String CorrespondenceFields+27
     Text[ hebrew ] = "‮איתורית‬";
     Text[ hindi ] = "पेजर";
     Text[ slovak ] = "Pager";
+    Text[ hungarian ] = "Személyhívó";
+    Text[ slovenian ] = "Pozivnik";
 };
 
 
@@ -1585,6 +1677,8 @@ String CorrespondenceFields+28
     Text[ hebrew ] = "‮טלפון נייד‬";
     Text[ hindi ] = "मोबैल दूरभाष";
     Text[ slovak ] = "Mobil";
+    Text[ hungarian ] = "Mobiltelefon";
+    Text[ slovenian ] = "Mobilni telefon";
 };
 
 
@@ -1618,6 +1712,8 @@ String CorrespondenceFields+29
     Text[ hebrew ] = "‮טלפון אחר‬";
     Text[ hindi ] = "अन्य दूरभाष";
     Text[ slovak ] = "Ostatné telefóny";
+    Text[ hungarian ] = "Egyéb telefonszám";
+    Text[ slovenian ] = "Drug telefon";
 };
 
 String CorrespondenceFields+30
@@ -1650,6 +1746,8 @@ String CorrespondenceFields+30
     Text[ hebrew ] = "‮URL של לוח שנה‬";
     Text[ hindi ] = "केलन्डर URL";
     Text[ slovak ] = "Kalendár URL";
+    Text[ hungarian ] = "Naptár URL";
+    Text[ slovenian ] = "URL koledarja";
 };
 
 String CorrespondenceFields+31
@@ -1682,6 +1780,8 @@ String CorrespondenceFields+31
     Text[ hebrew ] = "‮להזמין‬";
     Text[ hindi ] = "आमन्त्रण";
     Text[ slovak ] = "Pozvať";
+    Text[ hungarian ] = "Meghívás";
+    Text[ slovenian ] = "Povabi";
 };
 
 
@@ -1716,6 +1816,8 @@ String TextField
     Text[ hebrew ] = "‮שדה פרטי המשתמש לא מוגדר!‬";
     Text[ hindi ] = "उपभोक्ता का ड़ॉटा क्षेत्र परिभाषित नहीं है!";
     Text[ slovak ] = "Užívateľské dátové pole nie je definované!";
+    Text[ hungarian ] = "A felhasználói adatmező nincs definiálva!";
+    Text[ slovenian ] = "Uporabniško podatkovno polje ni določeno!";
 };
 
 String Newsletter
@@ -1748,6 +1850,8 @@ String Newsletter
     Text[ hebrew ] = "‮עיצוב פריסה כללית‬";
     Text[ hindi ] = "सामान्य अभिन्यास";
     Text[ slovak ] = "Všeobecné rozloženie";
+    Text[ hungarian ] = "Általános elrendezés";
+    Text[ slovenian ] = "Splošna postavitev";
 };
 
 
@@ -1781,6 +1885,8 @@ String Newsletter + 1
     Text[ hebrew ] = "‮עיצוב פריסה ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति अभिन्यास";
     Text[ slovak ] = "Východzie rozloženie";
+    Text[ hungarian ] = "Alapértelmezett kiosztás";
+    Text[ slovenian ] = "Privzeta postavitev";
 };
 
 String Newsletter + 2
@@ -1813,6 +1919,8 @@ String Newsletter + 2
     Text[ hebrew ] = "‮עיצוב פריסה לחוברת הנצחה‬";
     Text[ hindi ] = "कमेमरेटिव प्रकाशन अभिन्यास ";
     Text[ slovak ] = "Vzhľad spomienkovej publikácie";
+    Text[ hungarian ] = "Megemlékezőkiadvány-elrendezés";
+    Text[ slovenian ] = "Postavitev spominske izdaje";
 };
 
 String Newsletter + 3
@@ -1845,6 +1953,8 @@ String Newsletter + 3
     Text[ hebrew ] = "‮עיצוב פריסה לחוברת מסחרית‬";
     Text[ hindi ] = "ब्रोशर अभिन्यास";
     Text[ slovak ] = "Vzhľad brožúry";
+    Text[ hungarian ] = "Brosúraelrendezés";
+    Text[ slovenian ] = "Postavitev brošure";
 };
 
 String Newsletter + 10
@@ -1877,6 +1987,8 @@ String Newsletter + 10
     Text[ hebrew ] = "‮עיצוב‬";
     Text[ hindi ] = "रचना";
     Text[ slovak ] = "Formát";
+    Text[ hungarian ] = "Formátum";
+    Text[ slovenian ] = "Oblika";
 };
 
 String Newsletter + 11
@@ -1893,7 +2005,7 @@ String Newsletter + 11
     Text[ spanish ] = "Por un lado";
     Text[ finnish ] = "Yksipuolinen";
     Text[ italian ] = "Una pagina";
-    Text[ danish ] = "Etsidet";
+    Text[ danish ] = "Enkeltsidet";
     Text[ swedish ] = "Enkelsidig";
     Text[ polish ] = "Z jednej strony";
     Text[ portuguese_brazilian ] = "Frente somente";
@@ -1909,6 +2021,8 @@ String Newsletter + 11
     Text[ hebrew ] = "‮חד צדדי‬";
     Text[ hindi ] = "अकेला-भाग";
     Text[ slovak ] = "Jednoduché";
+    Text[ hungarian ] = "Egyoldalas";
+    Text[ slovenian ] = "Enostransko";
 };
 
 String Newsletter + 12
@@ -1941,7 +2055,19 @@ String Newsletter + 12
     Text[ hebrew ] = "‮דו צדדי‬";
     Text[ hindi ] = "द्विगुणित-भाग";
     Text[ slovak ] = "Dvojité riadkovanie";
+    Text[ hungarian ] = "Kétoldalas";
+    Text[ slovenian ] = "Dvostransko";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
