@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:27:45 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
 #endif
+#include <tools/urlobj.hxx>
 #pragma hdrstop
 
 #define _SVX_ITEMWIN_CXX
@@ -103,20 +104,26 @@
 
 #include "linectrl.hrc"
 
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+
 #define LOGICAL_EDIT_HEIGHT         12
 //========================================================================
 // SvxLineBox
 //========================================================================
 
-SvxLineBox::SvxLineBox( Window* pParent, SfxBindings& rBind, WinBits nBits ) :
-
+SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     LineLB( pParent, nBits ),
     aLogicalSize(40,140),
     nCurPos     ( 0 ),
-    rBindings   ( rBind ),
     bRelease    ( TRUE ),
     mpSh        ( NULL ),
-    meBmpMode   ( GetDisplayBackground().GetColor().IsDark() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL )
+    meBmpMode   ( GetDisplayBackground().GetColor().IsDark() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
+    mxFrame     ( rFrame )
 {
     SetSizePixel( LogicToPixel( aLogicalSize, MAP_APPFONT ));
     Show();
@@ -155,8 +162,8 @@ void SvxLineBox::Select()
     {
         XLineStyle eXLS;
         USHORT nPos = GetSelectEntryPos();
-        SfxDispatcher* pDisp = rBindings.GetDispatcher();
-        DBG_ASSERT( pDisp, "invalid Dispatcher" );
+//      SfxDispatcher* pDisp = rBindings.GetDispatcher();
+        //DBG_ASSERT( pDisp, "invalid Dispatcher" );
 
         switch ( nPos )
         {
@@ -182,14 +189,33 @@ void SvxLineBox::Select()
                         SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) ) );
                     XLineDashItem aLineDashItem( GetSelectEntry(),
                         aItem.GetDashList()->Get( nPos - 2 )->GetDash() );
-                    pDisp->Execute( SID_ATTR_LINE_DASH, SFX_CALLMODE_RECORD, &aLineDashItem, 0L );
+
+                    Any a;
+                    Sequence< PropertyValue > aArgs( 1 );
+                    aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineDash" ));
+                    aLineDashItem.QueryValue ( a );
+                    aArgs[0].Value = a;
+                    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
+                                                 OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )),
+                                                 aArgs );
+//                    pDisp->Execute( SID_ATTR_LINE_DASH, SFX_CALLMODE_RECORD, &aLineDashItem, 0L );
                 }
             }
             break;
         }
 
         XLineStyleItem aLineStyleItem( eXLS );
-        pDisp->Execute( SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aLineStyleItem, 0L );
+        Any a;
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "XLineStyle" ));
+        aLineStyleItem.QueryValue ( a );
+        aArgs[0].Value = a;
+        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
+                                     OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:XLineStyle" )),
+                                     aArgs );
+//      pDisp->Execute( SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aLineStyleItem, 0L );
+
+        nCurPos = GetSelectEntryPos();
         ReleaseFocus_Impl();
     }
 }
@@ -313,6 +339,9 @@ void SvxLineBox::FillControl()
     Image aSolidLine ( aBitmap );
     InsertEntry( SVX_RESSTR(RID_SVXSTR_SOLID), aSolidLine );
 
+    if ( !mpSh )
+        mpSh = SfxObjectShell::Current();
+
     if( mpSh )
     {
         const SvxDashListItem* pItem = (const SvxDashListItem*)( mpSh->GetItem( SID_DASH_LIST ) );
@@ -320,21 +349,23 @@ void SvxLineBox::FillControl()
             Fill( pItem->GetDashList() );
     }
 
-    rBindings.Invalidate( SID_ATTR_LINE_DASH );
+//  rBindings.Invalidate( SID_ATTR_LINE_DASH );
 }
 //========================================================================
 // SvxColorBox
 //========================================================================
 
-SvxColorBox::SvxColorBox( Window* pParent, USHORT nSID, SfxBindings& rBind, WinBits nBits ) :
-
+SvxColorBox::SvxColorBox(
+    Window* pParent,
+    const OUString& rCommand,
+    const Reference< XFrame >& rFrame,
+    WinBits nBits ) :
     ColorLB( pParent, nBits ),
     aLogicalSize(45,80),
     nCurPos     ( 0 ),
-    nId         ( nSID ),
-    rBindings   ( rBind ),
-    bRelease    ( TRUE )
-
+    bRelease    ( TRUE ),
+    mxFrame     ( rFrame ),
+    maCommand   ( rCommand )
 {
     SetSizePixel( LogicToPixel( aLogicalSize , MAP_APPFONT));
     Show();
@@ -361,7 +392,7 @@ IMPL_LINK( SvxColorBox, DelayHdl_Impl, Timer *, pTimer )
         const SvxColorTableItem* pItem = (const SvxColorTableItem*)( pSh->GetItem( SID_COLOR_TABLE ) );
         if ( pItem )
             Fill( pItem->GetColorTable() );
-        rBindings.Invalidate( nId );
+//      rBindings.Invalidate( nId );
     }
     return 0;
 }
@@ -391,7 +422,19 @@ void SvxColorBox::Select()
     if ( !IsTravelSelect() )
     {
         XLineColorItem aLineColorItem( GetSelectEntry(), GetSelectEntryColor() );
-        rBindings.GetDispatcher()->Execute( nId, SFX_CALLMODE_RECORD, &aLineColorItem, 0L );
+
+        INetURLObject aObj( maCommand );
+
+        Any a;
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = aObj.GetURLPath();
+        aLineColorItem.QueryValue( a );
+        aArgs[0].Value = a;
+        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
+                                     maCommand,
+                                     aArgs );
+//        rBindings.GetDispatcher()->Execute( nId, SFX_CALLMODE_RECORD, &aLineColorItem, 0L );
+
         nCurPos = GetSelectEntryPos();
         ReleaseFocus_Impl();
     }
@@ -487,12 +530,11 @@ void SvxColorBox::ReleaseFocus_Impl()
 // SvxMetricField
 //========================================================================
 
-SvxMetricField::SvxMetricField( Window* pParent, SfxBindings& rBind, WinBits nBits ) :
-
+SvxMetricField::SvxMetricField(
+    Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     MetricField( pParent, nBits ),
-    aCurTxt     ( String() ),
-    rBindings   ( rBind )
-
+    aCurTxt( String() ),
+    mxFrame( rFrame )
 {
     Size aSize = Size(GetTextWidth( String::CreateFromAscii("99,99mm") ),GetTextHeight());
     aSize.Width() += 20;
@@ -541,7 +583,16 @@ void SvxMetricField::Modify()
     MetricField::Modify();
     long nTmp = GetCoreValue( *this, ePoolUnit );
     XLineWidthItem aLineWidthItem( nTmp );
-    rBindings.GetDispatcher()->Execute( SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aLineWidthItem, 0L );
+
+    Any a;
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineWidth" ));
+    aLineWidthItem.QueryValue( a );
+    aArgs[0].Value = a;
+    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineWidth" )),
+                                 aArgs );
+//  rBindings.GetDispatcher()->Execute( SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aLineWidthItem, 0L );
 }
 
 // -----------------------------------------------------------------------
@@ -664,13 +715,10 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 //========================================================================
 
 SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
-
     FillTypeLB( pParent, nBits | WB_TABSTOP ),
-
     nCurPos ( 0 ),
     bSelect ( FALSE ),
     bRelease(TRUE)
-
 {
     SetSizePixel( LogicToPixel( Size(40, 40 ),MAP_APPFONT ));
     Fill();
