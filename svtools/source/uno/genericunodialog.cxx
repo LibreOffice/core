@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericunodialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 12:34:35 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 15:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ void SAL_CALL OGenericUnoDialog::endExecute(  ) throw(RuntimeException)
 
     {
         ::osl::MutexGuard aExecutionGuard(m_aExecutionMutex);
-        OSL_ENSHURE(m_pDialog, "OGenericUnoDialog::endExecute : executing which dialog ?");
+        OSL_ENSURE(m_pDialog, "OGenericUnoDialog::endExecute : executing which dialog ?");
             // m_bExecuting is true but we have no dialog ?
         if (!m_pDialog)
             throw RuntimeException();
@@ -369,6 +369,9 @@ void OGenericUnoDialog::destroyDialog()
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/24 12:34:35  fs
+ *  initial checkin - frame for dialogs usuable as UNO service
+ *
  *  Revision 1.4  2000/11/01 16:34:16  fs
  *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
  *
