@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:15:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,10 +247,10 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
     {
         case SC_SERVICE_SHEET:
             //  noch nicht eingefuegt - DocShell=Null
-            xRet = (sheet::XSpreadsheet*)new ScTableSheetObj(NULL,0);
+            xRet.set((sheet::XSpreadsheet*)new ScTableSheetObj(NULL,0));
             break;
         case SC_SERVICE_URLFIELD:
-            xRet = (text::XTextField*)new ScCellFieldObj( NULL, ScAddress(), ESelection() );
+            xRet.set((text::XTextField*)new ScCellFieldObj( NULL, ScAddress(), ESelection() ));
             break;
         case SC_SERVICE_PAGEFIELD:
         case SC_SERVICE_PAGESFIELD:
@@ -259,31 +259,31 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case SC_SERVICE_TITLEFIELD:
         case SC_SERVICE_FILEFIELD:
         case SC_SERVICE_SHEETFIELD:
-            xRet = (text::XTextField*)new ScHeaderFieldObj( NULL, 0, nType, ESelection() );
+            xRet.set((text::XTextField*)new ScHeaderFieldObj( NULL, 0, nType, ESelection() ));
             break;
         case SC_SERVICE_CELLSTYLE:
-            xRet = (style::XStyle*)new ScStyleObj( NULL, SFX_STYLE_FAMILY_PARA, String() );
+            xRet.set((style::XStyle*)new ScStyleObj( NULL, SFX_STYLE_FAMILY_PARA, String() ));
             break;
         case SC_SERVICE_PAGESTYLE:
-            xRet = (style::XStyle*)new ScStyleObj( NULL, SFX_STYLE_FAMILY_PAGE, String() );
+            xRet.set((style::XStyle*)new ScStyleObj( NULL, SFX_STYLE_FAMILY_PAGE, String() ));
             break;
         case SC_SERVICE_AUTOFORMAT:
-            xRet = (container::XIndexAccess*)new ScAutoFormatObj( SC_AFMTOBJ_INVALID );
+            xRet.set((container::XIndexAccess*)new ScAutoFormatObj( SC_AFMTOBJ_INVALID ));
             break;
         case SC_SERVICE_CELLRANGES:
             //  wird nicht eingefuegt, sondern gefuellt
             //  -> DocShell muss gesetzt sein, aber leere Ranges
             if (pDocShell)
-                xRet = (sheet::XSheetCellRanges*)new ScCellRangesObj( pDocShell, ScRangeList() );
+                xRet.set((sheet::XSheetCellRanges*)new ScCellRangesObj( pDocShell, ScRangeList() ));
             break;
 
         case SC_SERVICE_DOCDEFLTS:
             if (pDocShell)
-                xRet = (beans::XPropertySet*)new ScDocDefaultsObj( pDocShell );
+                xRet.set((beans::XPropertySet*)new ScDocDefaultsObj( pDocShell ));
             break;
         case SC_SERVICE_DRAWDEFLTS:
             if (pDocShell)
-                xRet = (beans::XPropertySet*)new ScDrawDefaultsObj( pDocShell );
+                xRet.set((beans::XPropertySet*)new ScDrawDefaultsObj( pDocShell ));
             break;
 
         //  Drawing layer tables are not in SvxUnoDrawMSFactory,
@@ -292,66 +292,66 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
 
         case SC_SERVICE_GRADTAB:
             if (pDocShell)
-                xRet = SvxUnoGradientTable_createInstance( pDocShell->MakeDrawLayer() );
+                xRet.set(SvxUnoGradientTable_createInstance( pDocShell->MakeDrawLayer() ));
             break;
         case SC_SERVICE_HATCHTAB:
             if (pDocShell)
-                xRet = SvxUnoHatchTable_createInstance( pDocShell->MakeDrawLayer() );
+                xRet.set(SvxUnoHatchTable_createInstance( pDocShell->MakeDrawLayer() ));
             break;
         case SC_SERVICE_BITMAPTAB:
             if (pDocShell)
-                xRet = SvxUnoBitmapTable_createInstance( pDocShell->MakeDrawLayer() );
+                xRet.set(SvxUnoBitmapTable_createInstance( pDocShell->MakeDrawLayer() ));
             break;
         case SC_SERVICE_TRGRADTAB:
             if (pDocShell)
-                xRet = SvxUnoTransGradientTable_createInstance( pDocShell->MakeDrawLayer() );
+                xRet.set(SvxUnoTransGradientTable_createInstance( pDocShell->MakeDrawLayer() ));
             break;
         case SC_SERVICE_MARKERTAB:
             if (pDocShell)
-                xRet = SvxUnoMarkerTable_createInstance( pDocShell->MakeDrawLayer() );
+                xRet.set(SvxUnoMarkerTable_createInstance( pDocShell->MakeDrawLayer() ));
             break;
         case SC_SERVICE_DASHTAB:
             if (pDocShell)
-                xRet = SvxUnoDashTable_createInstance( pDocShell->MakeDrawLayer() );
+                xRet.set(SvxUnoDashTable_createInstance( pDocShell->MakeDrawLayer() ));
             break;
         case SC_SERVICE_NUMRULES:
             if (pDocShell)
-                xRet = SvxCreateNumRule( pDocShell->MakeDrawLayer() );
+                xRet.set(SvxCreateNumRule( pDocShell->MakeDrawLayer() ));
             break;
         case SC_SERVICE_DOCSPRSETT:
         case SC_SERVICE_SHEETDOCSET:
         case SC_SERVICE_DOCCONF:
             if (pDocShell)
-                xRet = (beans::XPropertySet*)new ScDocumentConfiguration(pDocShell);
+                xRet.set((beans::XPropertySet*)new ScDocumentConfiguration(pDocShell));
             break;
 
         case SC_SERVICE_IMAP_RECT:
-            xRet = SvUnoImageMapRectangleObject_createInstance( ScShapeObj::GetSupportedMacroItems() );
+            xRet.set(SvUnoImageMapRectangleObject_createInstance( ScShapeObj::GetSupportedMacroItems() ));
             break;
         case SC_SERVICE_IMAP_CIRC:
-            xRet = SvUnoImageMapCircleObject_createInstance( ScShapeObj::GetSupportedMacroItems() );
+            xRet.set(SvUnoImageMapCircleObject_createInstance( ScShapeObj::GetSupportedMacroItems() ));
             break;
         case SC_SERVICE_IMAP_POLY:
-            xRet = SvUnoImageMapPolygonObject_createInstance( ScShapeObj::GetSupportedMacroItems() );
+            xRet.set(SvUnoImageMapPolygonObject_createInstance( ScShapeObj::GetSupportedMacroItems() ));
             break;
 
         // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
         case SC_SERVICE_EXPORT_GOR:
-            xRet = (::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE );
+            xRet.set((::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE ));
             break;
 
         case SC_SERVICE_IMPORT_GOR:
-            xRet = (::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ );
+            xRet.set((::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ ));
             break;
 
         case SC_SERVICE_EXPORT_EOR:
             if (pDocShell)
-                xRet = (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_WRITE );
+                xRet.set((::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_WRITE ));
             break;
 
         case SC_SERVICE_IMPORT_EOR:
             if (pDocShell)
-                xRet = (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ );
+                xRet.set((::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ ));
             break;
 
         case SC_SERVICE_VALBIND:
@@ -360,14 +360,14 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             {
                 sal_Bool bListPos = ( nType == SC_SERVICE_LISTCELLBIND );
                 uno::Reference<sheet::XSpreadsheetDocument> xDoc( pDocShell->GetBaseModel(), uno::UNO_QUERY );
-                xRet = *new calc::OCellValueBinding( xDoc, bListPos );
+                xRet.set(*new calc::OCellValueBinding( xDoc, bListPos ));
             }
             break;
         case SC_SERVICE_LISTSOURCE:
             if (pDocShell)
             {
                 uno::Reference<sheet::XSpreadsheetDocument> xDoc( pDocShell->GetBaseModel(), uno::UNO_QUERY );
-                xRet = *new calc::OCellListSource( xDoc );
+                xRet.set(*new calc::OCellListSource( xDoc ));
             }
             break;
         case SC_SERVICE_CELLADDRESS:
@@ -375,7 +375,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             if (pDocShell)
             {
                 sal_Bool bRange = ( nType == SC_SERVICE_RANGEADDRESS );
-                xRet = *new ScAddressConversionObj( pDocShell, bRange );
+                xRet.set(*new ScAddressConversionObj( pDocShell, bRange ));
             }
             break;
 
