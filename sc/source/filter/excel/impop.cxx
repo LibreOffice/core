@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 14:59:57 $
+ *  last change: $Author: gt $ $Date: 2000-10-30 12:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2375,7 +2375,9 @@ void ImportExcel::EndSheet( void )
     pFltTab->Apply( nTab );
 
     pExcRoot->pExtSheetBuff->Reset();
-    pExcRoot->pExtNameBuff->Reset();
+
+    if( pExcRoot->eHauptDateiTyp < Biff8 )
+        pExcRoot->pExtNameBuff->Reset();
 }
 
 
