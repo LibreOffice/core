@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 18:02:31 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ spanish ] = "Área" ;
         Text [ english_us ] = "Range" ;
         Text[ chinese_simplified ] = "åŒºåŸŸ";
-        Text[ russian ] = "Îáëàñòü";
+        Text[ russian ] = "Äèàïàçîí";
         Text[ polish ] = "Zakres";
         Text[ japanese ] = "ç¯„å›²";
         Text[ chinese_traditional ] = "å€åŸŸ";
@@ -157,7 +157,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ italian ] = "Contiene intestazioni colonne" ;
         Text [ portuguese_brazilian ] = "inclui cabe?alhos da coluna" ;
         Text [ portuguese ] = "Contém ~cabeçalhos das colunas" ;
-        Text [ finnish ] = "~Sisältää sarakkeen otsikot" ;
+        Text [ finnish ] = "Sisältää sarakeotsikot" ;
         Text [ danish ] = "indeholder kolonneoverskrifter" ;
         Text [ french ] = "En-têtes de ~colonnes inclus" ;
         Text [ swedish ] = "innehåller ~kolumnhuvuden" ;
@@ -204,7 +204,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ turkish ] = "Satır başlıkları  i~çeriyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Conté capçaleres de ~fila";
-        Text[ finnish ] = "~Sisältää rivien otsikot";
+        Text[ finnish ] = "Sisältää riviotsikot";
         Text[ thai ] = "à¸¡à¸µà¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸©à¹~à¸–à¸§";
     };
     FixedText FT_DATA_LABEL
@@ -296,7 +296,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ portuguese_brazilian ] = "~Acrescentar" ;
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lisää" ;
-        Text [ danish ] = "Tilføj" ;
+        Text [ danish ] = "T~ilføj" ;
         Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "~Lägg till" ;
         Text [ dutch ] = "Toe~voegen" ;
@@ -358,7 +358,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text [ swedish ] = "Definiera etikettområde" ;
     Text [ danish ] = "Definer etiketområde" ;
     Text [ italian ] = "Definisci area di dicitura" ;
-    Text [ spanish ] = "Definir área de etiqueta" ;
+    Text [ spanish ] = "Definir el área de la etiqueta" ;
     Text [ french ] = "Définir la plage de l'étiquette" ;
     Text [ dutch ] = "Opschriftenbereik definiëren" ;
     Text [ portuguese_brazilian ] = "Beschriftungsbereich festlegen" ;
@@ -374,7 +374,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ turkish ] = "Başlık aralığını belirle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Defineix l'àrea de l'etiqueta";
-    Text[ finnish ] = "Määritä nimiöalue";
+    Text[ finnish ] = "Määritä selitealue";
     Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸Šà¹ˆà¸§à¸‡à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­";
 };
 
