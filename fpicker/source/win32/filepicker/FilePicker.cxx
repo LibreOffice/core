@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-24 08:58:17 $
+ *  last change: $Author: tra $ $Date: 2001-10-04 11:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ sal_Int16 SAL_CALL CFilePicker::execute( ) throw(RuntimeException)
     OSL_ASSERT( 0 != m_pImpl.get( ) );
 
     // we should not block in this call else
-    // in the case of an event the client can'tgetPImplFromHandle( hWnd )
+    // in the case of an event the client can't
     // call another function an we run into a
     // deadlock !!!!!
     return m_pImpl->execute( );
@@ -474,6 +474,8 @@ void SAL_CALL CFilePicker::setValue( sal_Int16 aControlId, sal_Int16 aControlAct
     throw(RuntimeException)
 {
     OSL_ASSERT( 0 != m_pImpl.get( ) );
+
+    MutexGuard aGuard( m_aMutex );
     m_pImpl->setValue( aControlId, aControlAction, aValue );
 }
 
@@ -485,6 +487,8 @@ Any  SAL_CALL CFilePicker::getValue( sal_Int16 aControlId, sal_Int16 aControlAct
     throw(RuntimeException)
 {
     OSL_ASSERT( 0 != m_pImpl.get( ) );
+
+    MutexGuard aGuard( m_aMutex );
     return m_pImpl->getValue( aControlId, aControlAction );
 }
 
@@ -496,6 +500,8 @@ void SAL_CALL CFilePicker::enableControl( sal_Int16 aControlId, sal_Bool bEnable
     throw(RuntimeException)
 {
     OSL_ASSERT( 0 != m_pImpl.get( ) );
+
+    MutexGuard aGuard( m_aMutex );
     m_pImpl->enableControl( aControlId, bEnable );
 }
 
@@ -506,6 +512,8 @@ void SAL_CALL CFilePicker::enableControl( sal_Int16 aControlId, sal_Bool bEnable
 void SAL_CALL CFilePicker::setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel )
     throw (RuntimeException)
 {
+    OSL_ASSERT( 0 != m_pImpl.get( ) );
+
     MutexGuard aGuard( m_aMutex );
     m_pImpl->setLabel( aControlId, aLabel );
 }
@@ -517,6 +525,8 @@ void SAL_CALL CFilePicker::setLabel( sal_Int16 aControlId, const ::rtl::OUString
 OUString SAL_CALL CFilePicker::getLabel( sal_Int16 aControlId )
     throw (RuntimeException)
 {
+    OSL_ASSERT( 0 != m_pImpl.get( ) );
+
     MutexGuard aGuard( m_aMutex );
     return m_pImpl->getLabel( aControlId );
 }
@@ -527,6 +537,9 @@ OUString SAL_CALL CFilePicker::getLabel( sal_Int16 aControlId )
 
 Sequence< sal_Int16 > SAL_CALL CFilePicker::getSupportedImageFormats(  ) throw (RuntimeException)
 {
+    OSL_ASSERT( 0 != m_pImpl.get( ) );
+
+    MutexGuard aGuard( m_aMutex );
     return m_pImpl->getSupportedImageFormats( );
 }
 
@@ -536,6 +549,9 @@ Sequence< sal_Int16 > SAL_CALL CFilePicker::getSupportedImageFormats(  ) throw (
 
 sal_Int32 SAL_CALL CFilePicker::getTargetColorDepth(  ) throw (RuntimeException)
 {
+    OSL_ASSERT( 0 != m_pImpl.get( ) );
+
+    MutexGuard aGuard( m_aMutex );
     return m_pImpl->getTargetColorDepth( );
 }
 
@@ -545,6 +561,9 @@ sal_Int32 SAL_CALL CFilePicker::getTargetColorDepth(  ) throw (RuntimeException)
 
 sal_Int32 SAL_CALL CFilePicker::getAvailableWidth(  ) throw (RuntimeException)
 {
+    OSL_ASSERT( 0 != m_pImpl.get( ) );
+
+    MutexGuard aGuard( m_aMutex );
     return m_pImpl->getAvailableWidth( );
 }
 
@@ -554,6 +573,9 @@ sal_Int32 SAL_CALL CFilePicker::getAvailableWidth(  ) throw (RuntimeException)
 
 sal_Int32 SAL_CALL CFilePicker::getAvailableHeight(  ) throw (RuntimeException)
 {
+    OSL_ASSERT( 0 != m_pImpl.get( ) );
+
+    MutexGuard aGuard( m_aMutex );
     return m_pImpl->getAvailableHeight( );
 }
 
@@ -564,6 +586,9 @@ sal_Int32 SAL_CALL CFilePicker::getAvailableHeight(  ) throw (RuntimeException)
 void SAL_CALL CFilePicker::setImage( sal_Int16 aImageFormat, const Any& aImage )
     throw (IllegalArgumentException, RuntimeException)
 {
+    OSL_ASSERT( 0 != m_pImpl.get( ) );
+
+    MutexGuard aGuard( m_aMutex );
     m_pImpl->setImage( aImageFormat, aImage );
 }
 
@@ -573,6 +598,9 @@ void SAL_CALL CFilePicker::setImage( sal_Int16 aImageFormat, const Any& aImage )
 
 sal_Bool SAL_CALL CFilePicker::setShowState( sal_Bool bShowState ) throw (RuntimeException)
 {
+    OSL_ASSERT( 0 != m_pImpl.get( ) );
+
+    MutexGuard aGuard( m_aMutex );
     return m_pImpl->setShowState( bShowState );
 }
 
@@ -582,6 +610,9 @@ sal_Bool SAL_CALL CFilePicker::setShowState( sal_Bool bShowState ) throw (Runtim
 
 sal_Bool SAL_CALL CFilePicker::getShowState(  ) throw (RuntimeException)
 {
+    OSL_ASSERT( 0 != m_pImpl.get( ) );
+
+    MutexGuard aGuard( m_aMutex );
     return m_pImpl->getShowState( );
 }
 
