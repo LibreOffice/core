@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mvtabdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 10:50:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ __EXPORT ScMoveTableDlg::~ScMoveTableDlg()
 
 USHORT ScMoveTableDlg::GetSelectedDocument () const { return nDocument;  }
 
-USHORT ScMoveTableDlg::GetSelectedTable    () const { return nTable;     }
+SCTAB ScMoveTableDlg::GetSelectedTable    () const { return nTable;     }
 
 BOOL   ScMoveTableDlg::GetCopyTable        () const { return bCopyTable; }
 
@@ -185,7 +185,7 @@ IMPL_LINK( ScMoveTableDlg, OkHdl, void *, EMPTYARG )
     USHORT  nTabLast    = aLbTable.GetEntryCount()-1;
 
     nDocument   = (nDocSel != nDocLast) ? nDocSel : SC_DOC_NEW;
-    nTable      = (nTabSel != nTabLast) ? nTabSel : SC_TAB_APPEND;
+    nTable      = (nTabSel != nTabLast) ? static_cast<SCTAB>(nTabSel) : SC_TAB_APPEND;
     bCopyTable  = aBtnCopy.IsChecked();
     EndDialog( RET_OK );
 
@@ -200,7 +200,7 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
     {
         ScDocument* pDoc   = (ScDocument*)
                              aLbDoc.GetEntryData( aLbDoc.GetSelectEntryPos() );
-        USHORT      nLast  = 0;
+        SCTAB      nLast  = 0;
         String      aName;
 
         aLbTable.Clear();
@@ -208,10 +208,10 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
         if ( pDoc )
         {
             nLast = pDoc->GetTableCount()-1;
-            for ( USHORT i=0; i<=nLast; i++ )
+            for ( SCTAB i=0; i<=nLast; i++ )
             {
                 pDoc->GetName( i, aName );
-                aLbTable.InsertEntry( aName, i );
+                aLbTable.InsertEntry( aName, static_cast<sal_uInt16>(i) );
             }
         }
         aLbTable.InsertEntry( ScGlobal::GetRscString(STR_MOVE_TO_END) );
