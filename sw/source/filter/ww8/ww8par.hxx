@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,10 @@
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
-#ifndef __SGI_STLSTACK
+#ifndef __SGI_STL_STACK
 #include <stack>
 #endif
-#ifndef __SGI_STLDEQUE
+#ifndef __SGI_STL_DEQUE
 #include <deque>
 #endif
 #ifndef __SGI_STL_MAP
@@ -244,6 +244,8 @@ public:
     enum ListLevel {nMinLevel=1, nMaxLevel=9};
     SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, BYTE nLevel) const;
     SwNumRule* CreateNextRule(bool bSimple);
+    void MapStyleToOrigList(const SwNumRule &rNmRule, SwWW8StyInf& rStyleInf);
+    void StrengthReduceListStyles();
     ~WW8ListManager();
 private:
     wwSprmParser maSprmParser;
@@ -252,6 +254,8 @@ private:
     const WW8Fib&    rFib;
     SvStream&        rSt;
     std::vector<WW8LSTInfo* > maLSTInfos;
+    std::multimap<const SwNumRule *, SwWW8StyInf*> maStyleNumberingMap;
+    typedef std::map<const SwNumRule *, SwWW8StyInf*>::iterator myMapIter;
     WW8LFOInfos* pLFOInfos;// D. aus PLF LFO, sortiert genau wie im WW8 Stream
     USHORT       nUniqueList; // current number for creating unique list names
     BYTE* GrpprlHasSprm(USHORT nId, BYTE& rSprms, BYTE nLen);
@@ -1288,7 +1292,8 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_ParaAutoBefore(USHORT , const BYTE *pData, short nLen);
     void Read_ParaAutoAfter(USHORT , const BYTE *pData, short nLen);
     void Read_LineSpace(        USHORT, const BYTE*, short nLen );
-    void Read_Justify(          USHORT, const BYTE*, short nLen );
+    void Read_Justify(USHORT, const BYTE*, short nLen);
+    void Read_RTLJustify(USHORT, const BYTE*, short nLen);
     void Read_Hyphenation(      USHORT, const BYTE* pData, short nLen );
     void Read_WidowControl(     USHORT, const BYTE* pData, short nLen );
     void Read_AlignFont(        USHORT, const BYTE* pData, short nLen );
@@ -1419,7 +1424,13 @@ public:     // eigentlich private, geht aber leider nur public
 
     // Laden eines kompletten DocFiles
     ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
-    CharSet SwWW8ImplReader::GetCurrentCharSet();
+    CharSet GetCurrentCharSet();
+    void StrengthReduceListStyles()
+    {
+        ASSERT(pLstManager, "impossible");
+        if (pLstManager)
+            pLstManager->StrengthReduceListStyles();
+    }
 };
 
 #endif
