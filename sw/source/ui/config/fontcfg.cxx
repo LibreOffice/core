@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:17:42 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ inline LanguageType lcl_LanguageOfType(sal_Int16 nType, sal_Int16 eWestern, sal_
 {
     return LanguageType(
                 nType < FONT_STANDARD_CJK ? eWestern :
-                    nType >= FONT_STANDARD_CTL ? eCTL : eWestern);
+                    nType >= FONT_STANDARD_CTL ? eCTL : eCJK);
 }
 /* -----------------------------08.09.00 15:52--------------------------------
 
