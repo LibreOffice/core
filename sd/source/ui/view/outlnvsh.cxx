@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:23:08 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,6 +728,8 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                     KeyCode  aKCode(KEY_DELETE);
                     KeyEvent aKEvt( 0, aKCode );
                     pOutlView->PostKeyEvent(aKEvt);
+                    if (pFuActual!=NULL && pFuActual->ISA(FuOutlineText))
+                        static_cast<FuOutlineText*>(pFuActual)->UpdateForKeyPress (aKEvt);
                 }
             }
             rReq.Done();
@@ -1861,56 +1863,12 @@ void OutlineViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin
         Invalidate( SID_PREVIEW_STATE );
 }
 
-/*************************************************************************
-|*
-|* Liefert die erste selektierte Seite zurueck.
-|* Wenn nichts selektiert ist, wird die erste Seite zurueckgeliefert.
-|*
-\************************************************************************/
+
+
 
 SdPage* OutlineViewShell::GetActualPage()
 {
-    /* Code, der das gleiche Ergebnis liefert, gibt es schon in der
-       SdOutlinerView ! */
-    /*
-    Outliner* pOutl = pOlView->GetOutliner();
-    DBG_ASSERT(pOutl, "kein Outliner");
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( pWindow );
-    List* pList = pOutlinerView->CreateSelectionList();
-
-    Paragraph* pSelPara = (Paragraph*)pList->First();
-    USHORT nPara = 0;
-
-    Paragraph* pPara = pOutl->First();
-    BOOL bFound = pPara == pSelPara;
-    while( !bFound )
-    {
-        BOOL bHasChilds = pOutl->HasChilds(pPara);
-        if( bHasChilds )
-        {
-            pPara = pOutl->Next();
-            while( pPara && pPara->GetDepth() != 0 && !bFound )
-            {
-                bFound = pPara == pSelPara;
-                if( !bFound )
-                    pPara = pOutl->Next();
-            }
-        }
-        if( !bFound )
-        {
-            if( !bHasChilds )
-                pPara = pOutl->Next();
-            bFound = pPara == pSelPara;
-            nPara++;
-        }
-    }
-    delete pList;
-
-    SdPage* pPage = GetDoc()->GetSdPage( nPara, PK_STANDARD );
-    */
-    SdPage* pPage = pOlView->GetActualPage();
-
-    return( pPage );
+    return pOlView->GetActualPage();
 }
 
 
@@ -2011,11 +1969,8 @@ String OutlineViewShell::GetPageRangeString()
     return aStrPageRange;
 }
 
-/*************************************************************************
-|*
-|* Update Preview
-|*
-\************************************************************************/
+
+
 
 void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
 {
@@ -2031,6 +1986,7 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
     BOOL bTitleObject = pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0;
     if( !bTitleObject )
         pPara = pOlView->GetPrevTitle( pPara );
+
 
     // #96551# handle both updates when its an OutlineView
     BOOL bOutlineView(FALSE);
@@ -2067,6 +2023,8 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
     if (bNewPage)
         SetCurrentPage (pPage);
 }
+
+
 
 
 /*************************************************************************
