@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberedSortingInfo.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 14:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** contains information for sorting a <type>ContentResultSet</type>.
 
-<p> in contrast to the struct <type>SortingInfo<type> this struct is used to be
+<p> in contrast to the struct <type>SortingInfo</type> this struct is used to be
 on the safe side, that no one asks for sorting by a property which is not
 contained in the <type>ContentResultSet</type>.
 */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RemoteAccessContentProvider.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 14:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,14 +79,14 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** A <type>RemoteAccessContentProvider</type> is a
-    <type>ContentProvider>/type> that provides access to contents available at
+    <type>ContentProvider</type> that provides access to contents available at
     other (remote) UCBs.
 */
 service RemoteAccessContentProvider
 {
     //-------------------------------------------------------------------------
     /** A <type>RemoteAccessContentProvider</type> is a specialized
-        <type>ContentProvider>/type>.
+        <type>ContentProvider</type>.
      */
     service com::sun::star::ucb::ContentProvider;
 

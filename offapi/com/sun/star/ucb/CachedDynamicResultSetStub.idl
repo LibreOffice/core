@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedDynamicResultSetStub.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:51 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 14:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,11 @@ module com { module sun { module star { module ucb {
 service CachedDynamicResultSetStub
 {
     //-------------------------------------------------------------------------
-    /** In Combination with a <type>CachedDynamicResultSet<type> this provides
+    /** In Combination with a <type>CachedDynamicResultSet</type> this provides
         remote optimized read access to a static or dynamicly changing
         <type>ContentResultSet</type>.
 
-        <p>The <type>XResultSet</type>'s given to the listener in the first
+        <p>The <type>XResultSet</type>s given to the listener in the first
         notification in the <type>WelcomeDynamicResultSetStruct</type> are
         implementations of <type>CachedContentResultSetStub</type>.
 
@@ -98,12 +98,13 @@ service CachedDynamicResultSetStub
 
     //-------------------------------------------------------------------------
     /** provides the initialization of the <type>CachedDynamicResultSetStub</type>
-        with a source object. The <parameter>Source</parameter> in <method>
-        XSourceInitialization::setSource</method> has to be an interface
-        <type>XDynamicResultSet</type> and an implementation of service <type>
-        DynamicResultSet</type>
+        with a source object.
 
-        This interface is required.
+        <p>The <var>Source</var> in <method>XSourceInitialization::setSource</method>
+        has to be an interface <type>XDynamicResultSet</type> and an
+        implementation of service <type>DynamicResultSet</type>
+
+        <p>This interface is required. </p>
      */
     interface com::sun::star::ucb::XSourceInitialization;
 };

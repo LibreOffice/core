@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OLE2Shape.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 14:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,12 @@ module com { module sun { module star { module drawing {
 service OLE2Shape
 {
     /** The <type>XShapeDescriptor</type> tells you what kind of
-        <type>Shape<type> this instance is.
+        <type>Shape</type> this instance is.
     */
     interface com::sun::star::drawing::XShapeDescriptor;
 
     /** This gives you the size and position of this <type>Shape</type> and
-        lets you change it. You can use <method>getShapeType</method> to
+        lets you change it. You can use <member>getShapeType</member> to
         determine what kind of <type>Shape</type> this is.
     */
     interface com::sun::star::drawing::XShape;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDynamicResultSet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 14:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ listen to change-notifications and than swap from the old to a new
 <p><type>XDynamicResultSet</type> provides the possibility to get notifications
 about changes on a <type>ContentResultSet</type> and have an
 listener-controlled update from one Version to the next Version. Two
-<type>ContentResultSet<type>s were given to the listener in the first sended
+<type>ContentResultSet</type>s were given to the listener in the first sended
 notification as interface <type>XResultSet</type>s.
 
 <p>To get notifications the listener has to be of type
@@ -110,7 +110,7 @@ notification as interface <type>XResultSet</type>s.
 <p>After registration you will get notifications for events of type
 <type>ListEvent</type>.
 
-<p>The calling of <method>XDynamicResultSetListener::notify()</method> has
+<p>The calling of <member>XDynamicResultSetListener::notify</member> has
 to happen in an own thread, because it could take a longer time and any actions
 til the listener returns the call. So don't block the notify-causing action.
 
@@ -143,9 +143,8 @@ interface XDynamicResultSet: com::sun::star::lang::XComponent
         <type>ContentResultSet</type>. Its content will never change.
 
         <p>This method is not allowed to be called, if someone already has
-        registered as listener via method>XDynamicResultSet::
-        setListener(...)</method> or if someone has established a connection to
-        a <type>CashedDynamicresultSet</type> via <method>connectToCache</method>.
+        registered as listener via <member>XDynamicResultSet::setListener</member> or if someone has established a connection to
+        a <type>CashedDynamicresultSet</type> via <member>XDynamicResultSet::connectToCache</member>.
         Otherwise you get the Exception <type>ListenerAlreadySetException</type>.
     */
     com::sun::star::sdbc::XResultSet getStaticResultSet()
@@ -159,7 +158,7 @@ interface XDynamicResultSet: com::sun::star::lang::XComponent
 
         <p>This method is not allowed to be called, if someone already has
             fetched the <type>ContentResultSet</type> via
-            <method>XDynamicResultSet::getStaticResultSet()</method>.
+            <member>XDynamicResultSet::getStaticResultSet</member>.
             Otherwise you get the Exception
             <type>ListenerAlreadySetException</type>.
 
@@ -188,7 +187,7 @@ interface XDynamicResultSet: com::sun::star::lang::XComponent
 
         <p>This method is not allowed to be called, if someone already has
             fetched the <type>ContentResultSet</type> via
-            <method>XDynamicResultSet::getStaticResultSet()</method>.
+            <method>XDynamicResultSet::getStaticResultSet</method>.
             Otherwise you get the Exception
             <type>ListenerAlreadySetException</type>.
 
