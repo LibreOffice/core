@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-30 15:46:12 $
+ *  last change: $Author: hjs $ $Date: 2002-02-08 11:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_IllegalAccessibleComponentStateException_HPP_
 #include <drafts/com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
