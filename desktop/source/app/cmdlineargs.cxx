@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 10:29:23 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
     sal_Bool    bPrinterName    = sal_False;
     sal_Bool    bForceOpenEvent = sal_False;
     sal_Bool    bForceNewEvent  = sal_False;
+    sal_Bool    bDisplaySpec    = sal_False;
 
     m_bEmpty = (aCmdLineString.getLength()<1);
 
@@ -179,7 +180,10 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                         bForceOpenEvent = sal_False;
                         bPrintToEvent   = sal_False;
                         bPrintEvent     = sal_False;
-                    }
+                        bViewEvent      = sal_False;
+                        bStartEvent     = sal_False;
+                        bDisplaySpec    = sal_False;
+                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-o" ))
                     {
                         // force open documents regards if they are templates or not
@@ -188,7 +192,10 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                         bForceNewEvent  = sal_False;
                         bPrintToEvent   = sal_False;
                         bPrintEvent     = sal_False;
-                    }
+                        bViewEvent      = sal_False;
+                        bStartEvent     = sal_False;
+                        bDisplaySpec    = sal_False;
+                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-pt" ))
                     {
                         // Print to special printer
@@ -197,7 +204,10 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                         bPrintEvent     = sal_False;
                         bOpenEvent      = sal_False;
                         bForceNewEvent  = sal_False;
-                        bForceOpenEvent = sal_False;
+                        bViewEvent      = sal_False;
+                        bStartEvent     = sal_False;
+                        bDisplaySpec    = sal_False;
+                         bForceOpenEvent = sal_False;
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-p" ))
                     {
@@ -207,17 +217,22 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                         bOpenEvent      = sal_False;
                         bForceNewEvent  = sal_False;
                         bForceOpenEvent = sal_False;
-                    }
+                        bViewEvent      = sal_False;
+                        bStartEvent     = sal_False;
+                        bDisplaySpec    = sal_False;
+                 }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-view" ))
                     {
                         // open in viewmode
                         bOpenEvent      = sal_False;
-                        bViewEvent      = sal_True;
                         bPrintEvent     = sal_False;
                         bPrintToEvent   = sal_False;
                         bForceNewEvent  = sal_False;
                         bForceOpenEvent = sal_False;
-                    }
+                        bViewEvent      = sal_True;
+                        bStartEvent     = sal_False;
+                        bDisplaySpec    = sal_False;
+                 }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-show" ))
                     {
                             // open in viewmode
@@ -228,7 +243,21 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                             bPrintToEvent   = sal_False;
                             bForceNewEvent  = sal_False;
                             bForceOpenEvent = sal_False;
+                            bDisplaySpec    = sal_False;
                     }
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-display" ))
+                    {
+                            // open in viewmode
+                            bOpenEvent      = sal_False;
+                               bPrintEvent     = sal_False;
+                            bForceOpenEvent = sal_False;
+                            bPrintToEvent   = sal_False;
+                            bForceNewEvent  = sal_False;
+                            bViewEvent      = sal_False;
+                            bStartEvent     = sal_False;
+                            bDisplaySpec    = sal_True;
+                    }
+
                 }
                 else
                 {
@@ -255,6 +284,11 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                             AddStringListParam_Impl( CMD_STRINGPARAM_FORCENEWLIST, aArgStr );
                         else if ( bForceOpenEvent )
                             AddStringListParam_Impl( CMD_STRINGPARAM_FORCEOPENLIST, aArgStr );
+                        else if ( bDisplaySpec ){
+                            AddStringListParam_Impl( CMD_STRINGPARAM_DISPLAY, aArgStr );
+                            bDisplaySpec = sal_False; // only one display, not a lsit
+                            bOpenEvent = sal_True;    // set back to standard
+                        }
                     }
                 }
             }
@@ -704,6 +738,13 @@ sal_Bool CommandLineArgs::GetPrinterName( ::rtl::OUString& rPara ) const
     osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_PRINTERNAME ];
     return m_aStrSetParams[ CMD_STRINGPARAM_PRINTERNAME ];
+}
+
+sal_Bool CommandLineArgs::GetDisplay( ::rtl::OUString& rPara ) const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_DISPLAY ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_DISPLAY ];
 }
 
 sal_Bool CommandLineArgs::IsPrinting() const
