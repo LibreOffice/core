@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:24:30 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ String STR_CENTER_HORI
     TEXT [ english_us ] = "~Centered" ;
     TEXT[ chinese_simplified ] = "¾ÓÖĞ(~C)";
     TEXT[ russian ] = "Ïî öåíòğó";
-    TEXT[ polish ] = "Wy?rodkuj";
+    TEXT[ polish ] = "Wyœrodkuj";
     TEXT[ japanese ] = "’†‰›(~C)";
     TEXT[ chinese_traditional ] = "¸m¤¤(~C)";
     TEXT[ arabic ] = "ÊæÓíØ";
@@ -348,7 +348,7 @@ String STR_CENTER_VERT
     Text [ dutch ] = "~Midden" ;
     Text[ chinese_simplified ] = "ÖĞ(~E)";
     Text[ russian ] = "Ïî ñåğåäèíå";
-    Text[ polish ] = "Po?rodku";
+    Text[ polish ] = "Poœrodku";
     Text[ japanese ] = "’†‰›(~E)";
     Text[ chinese_traditional ] = "¸m¤¤(~E)";
     Text[ arabic ] = "ÇáæÓØ";
@@ -401,7 +401,7 @@ String STR_MIR_FROMLEFT
     Text [ dutch ] = "Van binnen" ;
     Text[ chinese_simplified ] = "´ÓÄÚ";
     Text[ russian ] = "Âíóòğè";
-    Text[ polish ] = "Od ?rodka";
+    Text[ polish ] = "Od œrodka";
     Text[ japanese ] = "“à‘¤‚©‚ç";
     Text[ chinese_traditional ] = "±q¤º";
     Text[ arabic ] = "ãä ÇáÏÇÎá";
@@ -512,7 +512,7 @@ String STR_FLY_REL_PG_LEFT
     Text [ dutch ] = "Kaderrand links" ;
     Text[ chinese_simplified ] = "×ó¿ò±ß";
     Text[ russian ] = "Ëåâûé êğàé ğàìêè";
-    Text[ polish ] = "Lewa krawêd? ramki";
+    Text[ polish ] = "Lewa krawêdŸ ramki";
     Text[ japanese ] = "¶—]”’";
     Text[ chinese_traditional ] = "¥ª®ØÃä";
     Text[ arabic ] = "åÇãÔ ÇáßÇÏÑ ÇáÃíÓÑ";
@@ -538,7 +538,7 @@ String STR_FLY_MIR_REL_PG_LEFT
     Text [ dutch ] = "Binnenste kaderrand" ;
     Text[ chinese_simplified ] = "¿ò±ßÄÚÔò";
     Text[ russian ] = "Âíóòğåííèé êğàé ğàìêè";
-    Text[ polish ] = "Wewnêtrzna krawêd? ramki";
+    Text[ polish ] = "Wewnêtrzna krawêdŸ ramki";
     Text[ japanese ] = "—]”’ “à‘¤";
     Text[ chinese_traditional ] = "®ØÃä¤º«h";
     Text[ arabic ] = "åÇãÔ ÇáßÇÏÑ ÇáÏÇÎáí";
@@ -564,7 +564,7 @@ String STR_FLY_REL_PG_RIGHT
     Text [ dutch ] = "Kaderrand rechts" ;
     Text[ chinese_simplified ] = "ÓÒ¿ò±ß";
     Text[ russian ] = "Ïğàâûé êğàé ğàìêè";
-    Text[ polish ] = "Prawa krawêd? ramki";
+    Text[ polish ] = "Prawa krawêdŸ ramki";
     Text[ japanese ] = "‰E—]”’";
     Text[ chinese_traditional ] = "¥k®ØÃä";
     Text[ arabic ] = "åÇãÔ ÇáßÇÏÑ ÇáÃíãä";
@@ -590,7 +590,7 @@ String STR_FLY_MIR_REL_PG_RIGHT
     Text [ dutch ] = "Buitenste kaderrand" ;
     Text[ chinese_simplified ] = "¿ò±ßÍâ²à";
     Text[ russian ] = "Íàğóæíûé êğàé ğàìêè";
-    Text[ polish ] = "Zewnêtrzna krawêd? ramki";
+    Text[ polish ] = "Zewnêtrzna krawêdŸ ramki";
     Text[ japanese ] = "—]”’ ŠO‘¤";
     Text[ chinese_traditional ] = "®ØÃä¥~°¼";
     Text[ arabic ] = "åÇãÔ ÇáßÇÏÑ ÇáÎÇÑÌí";
@@ -1116,7 +1116,7 @@ String STR_CENTER_BASE
     Text [ dutch ] = "Basis ge~centreerd" ;
     Text[ chinese_simplified ] = "»ùÏß¾ÓÖĞ(~C)";
     Text[ russian ] = "Îñíîâíàÿ ëèíèÿ ïî öåíòğó";
-    Text[ polish ] = "Linia podstawowa, wy?rodkowana";
+    Text[ polish ] = "Linia podstawowa, wyœrodkowana";
     Text[ japanese ] = "Šîü‚Ì’†‰›(~C)";
     Text[ chinese_traditional ] = "°ò½u¸m¤¤(~C)";
     Text[ arabic ] = "æÓØ ÇáÎØ ÇáÃÓÇÓí";
@@ -1194,7 +1194,7 @@ String STR_LINE_CENTER
     Text [ portuguese_brazilian ] = "Zeile zentriert" ;
     Text[ chinese_simplified ] = "ĞĞ¾ÓÖĞ";
     Text[ russian ] = "Ñòğîêà ïî öåíòğó";
-    Text[ polish ] = "Wiersz wy?rodkowany";
+    Text[ polish ] = "Wiersz wyœrodkowany";
     Text[ japanese ] = "s‚Ì’†‰›";
     Text[ chinese_traditional ] = "¦æ¸m¤¤";
     Text[ arabic ] = "æÓØ ÇáÓØÑ";
@@ -1272,7 +1272,7 @@ String STR_CHAR_CENTER
     Text [ portuguese_brazilian ] = "Zeichen zentriert" ;
     Text[ chinese_simplified ] = "×Ö·û¾ÓÖĞ";
     Text[ russian ] = "Çíàê ïî öåíòğó";
-    Text[ polish ] = "Znaki wy?rodkowane";
+    Text[ polish ] = "Znaki wyœrodkowane";
     Text[ japanese ] = "•¶š‚Ì’†‰›";
     Text[ chinese_traditional ] = "¦r¤¸¸m¤¤";
     Text[ arabic ] = "æÓØ ÇáÍÑİ";
@@ -1466,7 +1466,7 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
     MESSAGE [ english_us ] = "Column spacing exceeds the column width." ;
     MESSAGE[ chinese_simplified ] = "ÁĞ¼ä¸ôÌ«´ó£¬³¬¹ıÁĞÇøÓò¡£";
     MESSAGE[ russian ] = "Ğàññòîÿíèå ìåæäó êîëîíêàìè ñëèøêîì áîëüøîå äëÿ øèğèíû êîëîíîê.";
-    MESSAGE[ polish ] = "Odstêp miêdzy kolumnami jest za du¿y dla ich szeroko?ci.";
+    MESSAGE[ polish ] = "Odstêp miêdzy kolumnami jest za du¿y dla ich szerokoœci.";
     MESSAGE[ japanese ] = "—ñ‚ÌŠÔŠu‚ª—ñ•‚É‘Î‚µ‚ÄL‚·‚¬‚Ü‚·";
     MESSAGE[ chinese_traditional ] = "Äæ¶¡¹j¤Ó¤j¡A¶W¹LÄæ°Ï°ì¡C";
     MESSAGE[ arabic ] = "íİæŞ ÊÈÇÚÏ ÇáÃÚãÏÉ ÚÑÖåÇ.";
