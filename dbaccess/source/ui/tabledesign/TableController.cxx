@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-17 06:15:36 $
+ *  last change: $Author: oj $ $Date: 2001-04-17 07:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,7 +676,7 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
         if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
         {
             ::rtl::OUString sName = String(ModuleRes(STR_TABLEDESIGN_TITLE));
-            sName += ::rtl::OUString::createFromAscii(" ");
+            sName += ::rtl::OUString::createFromAscii(": ");
             sName += m_sDataSourceName;
             xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
         }
@@ -1329,6 +1329,7 @@ void OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc
                 pActFieldDescr->SetPrimaryKey( sal_True );
                 m_vRowList.insert(m_vRowList.begin(),pNewRow);
 
+                static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->Invalidate();
                 static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->DisplayData(0);
             }
         }
@@ -1499,7 +1500,7 @@ void OTableController::alterColumns()
         {
             if(aColumns.find(*pBegin) == aColumns.end()) // found a column to delete
             {
-                if(xKeyColumns.is() && xKeyColumns->hasByName(*pBegin)) // check if this column is a memeber of the primary key
+                if(xKeyColumns.is() && xKeyColumns->hasByName(*pBegin)) // check if this column is a member of the primary key
                 {
                     String aMsgT(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN));
                     aMsgT.SearchAndReplace(String::CreateFromAscii("\"$column$\""),*pBegin);
