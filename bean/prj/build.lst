@@ -1,0 +1,3 @@
+od	bean\com\sun\star\comp\beans	nmake	-	all	od_beanjava NULL
+od	bean\native\win32				nmake	-	n	od_beanwin32 NULL
+od	bean\native\unix				nmake	-	u	od_beanunix NULL
