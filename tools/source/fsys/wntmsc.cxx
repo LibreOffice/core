@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wntmsc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:07 $
+ *  last change: $Author: th $ $Date: 2001-07-25 10:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ USHORT DirReader_Impl::Read()
                 :   0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
                 :   FSYS_FLAG_NORMAL;
             DirEntry *pTemp = new DirEntry( ByteString(pDosEntry->d_name),
-                                             eFlag, FSYS_STYLE_NTFS );
+                                            eFlag, FSYS_STYLE_NTFS );
 #ifdef FEAT_FSYS_DOUBLESPEED
             pTemp->ImpSetStat( new FileStat( (void*) pDosDir, (void*) 0 ) );
 #endif
@@ -620,10 +620,6 @@ FileStat::FileStat( const void *pInfo,      // struct dirent
 |*    Letzte Aenderung  MI 28.08.92
 |*
 *************************************************************************/
-
-#ifdef ENABLEUNICODE
-// #define UNICODE
-#endif
 
 #include <prewin.h>
 #include <shlobj.h>
@@ -1081,7 +1077,7 @@ ErrCode FileStat::QueryDiskSpace( const String &rPath,
         return Sys2SolarError_Impl( GetLastError() );
 
     BigInt aBytesPerCluster( BigInt(nSectorsPerCluster) *
-                              BigInt(nBytesPerSector) );
+                             BigInt(nBytesPerSector) );
     rFreeBytes = aBytesPerCluster * BigInt(nFreeClusters);
     rTotalBytes = aBytesPerCluster * BigInt(nClusters);
     return 0;

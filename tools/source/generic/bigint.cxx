@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bigint.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:07 $
+ *  last change: $Author: th $ $Date: 2001-07-25 10:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,7 +737,7 @@ ByteString BigInt::GetByteString() const
     ByteString aString;
 
     if ( !bIsBig )
-        aString = nVal;
+        aString = ByteString::CreateFromInt32( nVal );
     else
     {
         BigInt aTmp( *this );
@@ -775,14 +775,12 @@ ByteString BigInt::GetByteString() const
 
 // -----------------------------------------------------------------------
 
-#ifdef ENABLEUNICODE
-
 UniString BigInt::GetString() const
 {
     UniString aString;
 
     if ( !bIsBig )
-        aString = nVal;
+        aString = UniString::CreateFromInt32( nVal );
     else
     {
         BigInt aTmp( *this );
@@ -817,8 +815,6 @@ UniString BigInt::GetString() const
 
     return aString;
 }
-
-#endif
 
 // -----------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strascii.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+ *  last change: $Author: th $ $Date: 2001-07-25 10:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,99 +675,3 @@ void UniString::SearchAndReplaceAllAscii( const sal_Char* pAsciiStr, const UniSt
         nSPos = SearchAscii( pAsciiStr, nSPos );
     }
 }
-
-// =======================================================================
-
-#ifndef ENABLEUNICODE
-
-ByteString ByteString::CreateFromAscii( const sal_Char* pAsciiStr )
-{
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "ByteString::CreateFromAscii() - pAsciiStr include characters > 127" );
-
-    return ByteString( pAsciiStr );
-}
-
-// -----------------------------------------------------------------------
-
-ByteString ByteString::CreateFromAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
-{
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, nLen ),
-                "ByteString::CreateFromAscii() - pAsciiStr include characters > 127" );
-
-    return ByteString( pAsciiStr, nLen );
-}
-
-// -----------------------------------------------------------------------
-
-ByteString& ByteString::AssignAscii( const sal_Char* pAsciiStr )
-{
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "ByteString::AssignAscii() - pAsciiStr include characters > 127" );
-
-    return Assign( pAsciiStr );
-}
-
-// -----------------------------------------------------------------------
-
-ByteString& ByteString::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
-{
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, nLen ),
-                "ByteString::AssignAscii() - pAsciiStr include characters > 127" );
-
-    return Assign( pAsciiStr, nLen );
-}
-
-// -----------------------------------------------------------------------
-
-ByteString& ByteString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
-{
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, nLen ),
-                "ByteString::AppendAscii() - pAsciiStr include characters > 127" );
-
-    return Append( pAsciiStr, nLen );
-}
-
-// -----------------------------------------------------------------------
-
-StringCompare ByteString::CompareToAscii( const sal_Char* pAsciiStr,
-                                          xub_StrLen nLen ) const
-{
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, nLen ),
-                "ByteString::CompareToAscii() - pAsciiStr include characters > 127" );
-
-    return CompareTo( pAsciiStr, nLen );
-}
-
-// -----------------------------------------------------------------------
-
-BOOL ByteString::EqualsAscii( const sal_Char* pAsciiStr ) const
-{
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "ByteString::EqualsAscii() - pAsciiStr include characters > 127" );
-
-    return Equals( pAsciiStr );
-}
-
-// -----------------------------------------------------------------------
-
-xub_StrLen ByteString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex ) const
-{
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "ByteString::SearchAscii() - pAsciiStr include characters > 127" );
-
-    return Search( pAsciiStr, nIndex );
-}
-
-// -----------------------------------------------------------------------
-
-xub_StrLen ByteString::SearchAndReplaceAscii( const sal_Char* pAsciiStr, const ByteString& rRepStr,
-                                              xub_StrLen nIndex )
-{
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "ByteString::SearchAscii() - pAsciiStr include characters > 127" );
-
-    return SearchAndReplace( pAsciiStr, rRepStr, nIndex );
-}
-
-#endif

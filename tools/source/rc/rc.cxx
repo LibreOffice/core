@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-12-05 19:20:37 $
+ *  last change: $Author: th $ $Date: 2001-07-25 10:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,41 +136,6 @@ ResMgr* Resource::GetResManager()
 
     return pSVInData->pAppResMgr;
 }
-
-// =======================================================================
-
-#ifndef ENABLEUNICODE
-
-String::String( const ResId& rResId )
-{
-    rResId.SetRT( RSC_STRING );
-    ResMgr* pResMgr = rResId.GetResMgr();
-    if ( !pResMgr )
-        pResMgr = Resource::GetResManager();
-
-    if ( pResMgr->GetResource( rResId ) )
-    {
-        // String laden
-        RSHEADER_TYPE * pResHdr = (RSHEADER_TYPE*)pResMgr->GetClass();
-        USHORT nLen = pResHdr->GetLocalOff() - sizeof( RSHEADER_TYPE );
-
-        USHORT nStringLen = strlen( (char*)(pResHdr+1) );
-        UniString aWString( (const char*)(pResHdr+1), RTL_TEXTENCODING_UTF8,
-                          RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |
-                          RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
-                          RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT );
-        ResHookProc pImplResHookProc = ResMgr::GetReadStringHook();
-        if ( pImplResHookProc )
-            pImplResHookProc( aWString );
-        InitStringRes( aWString );
-
-        USHORT nSize = sizeof( RSHEADER_TYPE ) + nStringLen + 1;
-        nSize += nSize % 2;
-        pResMgr->Increment( nSize );
-    }
-}
-
-#endif
 
 // =======================================================================
 
