@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:11:19 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,6 +585,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                         {
                             pCell->GetCode()->DelRPN();
                             pCell->SetErrCode( nError );
+                            if(pCell->GetCode()->IsHyperLink())
+                                pCell->GetCode()->SetHyperLink(FALSE);
                         }
                         pDoc->PutCell( aPos, pCell );
                         if ( !bAutoCalc )
