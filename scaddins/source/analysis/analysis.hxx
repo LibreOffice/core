@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-06 13:59:16 $
+ *  last change: $Author: gt $ $Date: 2001-04-27 08:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ public:
     virtual sal_Int32 SAL_CALL  getIseven( constREFXPS&, sal_Int32 nVal ) THROWDEF_RTE;
     virtual sal_Int32 SAL_CALL  getIsodd( constREFXPS&, sal_Int32 nVal ) THROWDEF_RTE;
 
-    virtual double SAL_CALL     getMultinomial( constREFXPS&, const SEQSEQ( sal_Int32 )& aValueList ) THROWDEF_RTE;
+    virtual double SAL_CALL     getMultinomial( constREFXPS&, const SEQSEQ( sal_Int32 )& aValueList ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getSeriessum( constREFXPS&, double fX, double fN, double fM, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE;
     virtual double SAL_CALL     getQuotient( constREFXPS&, double fNum, double fDenum ) THROWDEF_RTE;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-24 11:38:26 $
+ *  last change: $Author: gt $ $Date: 2001-04-27 08:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,7 +884,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getIsodd( constREFXPS&, sal_Int32 nVal ) THROW
 }
 
 
-double SAL_CALL AnalysisAddIn::getMultinomial( constREFXPS&, const SEQSEQ( sal_Int32 )& aV ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getMultinomial( constREFXPS&, const SEQSEQ( sal_Int32 )& aV ) THROWDEF_RTE_IAE
 {
     sal_Int32       n1, n2;
     sal_Int32       nE1 = aV.getLength();
@@ -903,7 +903,7 @@ double SAL_CALL AnalysisAddIn::getMultinomial( constREFXPS&, const SEQSEQ( sal_I
             sal_Int32       n = pList[ n2 ];
 
             if( n < 0 || n > 170 )
-                return -1.0;
+                THROW_IAE;
             else if( n > 0 )
             {
                 nZ += n;
@@ -915,7 +915,7 @@ double SAL_CALL AnalysisAddIn::getMultinomial( constREFXPS&, const SEQSEQ( sal_I
     if( nZ <= 170 )
         return Fak( nZ ) / fN;
     else
-        return -1.0;
+        THROW_IAE;
 }
 
 
