@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Controller.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:43:30 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,13 @@
 			</info>
 			<set oor:name="PopupMenu" oor:node-type="ControllerType">
 				<info>
-					<desc>Contains UNO component implementation names that implements popup menu controller awhich are bound to a command and module name.</desc>
+					<desc xml:lang="en-US">Contains UNO component implementation names that implement popup menu controller which are bound to a command and module name.</desc>
+					<desc xml:lang="zh-CN">Contains UNO component implementation names that implement popup menu controller which are bound to a command and module name.</desc>
+				</info>
+			</set>
+			<set oor:name="ToolBar" oor:node-type="ControllerType">
+				<info>
+					<desc xml:lang="en-US">Contains UNO component implementation names that implement toolbar controller which are bound to a command and module name.</desc>
 				</info>
 			</set>
 		</group>
