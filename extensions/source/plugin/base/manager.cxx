@@ -2,9 +2,9 @@
  *
  *  $RCSfile: manager.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: pl $ $Date: 2000-11-28 10:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,13 @@
 #endif
 
 #include <plugin/impl.hxx>
+
+#ifndef _OSL_MUTEX_HXX
 #include <osl/mutex.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
@@ -117,46 +123,14 @@ const Sequence< ::rtl::OUString >& PluginManager::getAdditionalSearchPaths()
 
     if( ! aPaths.getLength() )
     {
-        Reference< XInterface >  xInst = get().m_xSMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Settings" ) );
-        Reference< ::com::sun::star::container::XNameAccess >  xAccess( xInst, UNO_QUERY );
-        if( xAccess.is() )
+        SvtPathOptions aOptions;
+        String aPluginPath( aOptions.GetPluginPath() );
+        if( aPluginPath.Len() )
         {
-            Any aValue = xAccess->getByName( ::rtl::OUString::createFromAscii( "PathSettings" ) );
-            Reference< ::com::sun::star::beans::XPropertySet >  xProp;
-            if( aValue.hasValue() )
-                aValue >>= xProp;
-            if( xProp.is() )
-            {
-                aValue = xProp->getPropertyValue( ::rtl::OUString::createFromAscii( "Plugins" ) );
-                if( aValue.getValueType().getTypeClass() == TypeClass_STRING  )
-
-                {
-                    ::rtl::OUString sValue;
-                    aValue >>= sValue;
-                    sal_Int32 nTokens = sValue.getTokenCount();
-                    aPaths = Sequence< ::rtl::OUString >( nTokens );
-                    while( nTokens-- )
-                        aPaths.getArray()[nTokens] = sValue.getToken( nTokens );
-                }
-                else if( aValue.getValueType().equals( ::getCppuType( (Sequence< ::rtl::OUString >*)0 ) ) )
-
-                {
-                    Sequence< ::rtl::OUString > aArr;
-                    aValue >>= aArr;
-                    sal_Int32 nGlobalTokens = 0;
-                    int i = 0;
-                    for( i = 0; i < aArr.getLength(); i++ )
-                        nGlobalTokens += aArr.getConstArray()[i].getTokenCount();
-                    aPaths = Sequence< ::rtl::OUString >( nGlobalTokens );
-                    for( i = aArr.getLength()-1; i >= 0; i-- )
-                    {
-                        sal_Int32 nTokens = aArr.getConstArray()[i].getTokenCount();
-                        while( nTokens-- )
-                            aPaths.getArray()[--nGlobalTokens] =
-                                aArr.getConstArray()[i].getToken( nTokens );
-                    }
-                }
-            }
+            int nPaths = aPluginPath.GetTokenCount( ';' );
+            aPaths.realloc( nPaths );
+            for( int i = 0; i < nPaths; i++ )
+                aPaths.getArray()[i] = aPluginPath.GetToken( i, ';' );
         }
     }
 
