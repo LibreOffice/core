@@ -2,9 +2,9 @@
 *
 *  $RCSfile: shortcut_ooo.scp,v $
 *
-*  $Revision: 1.14 $
+*  $Revision: 1.15 $
 *
-*  last change: $Author: rt $ $Date: 2004-12-16 10:53:07 $
+*  last change: $Author: vg $ $Date: 2005-02-24 16:29:53 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -159,6 +159,32 @@ Shortcut gid_Shortcut_Lib_Cppuhelper_3
     Name = STRING(CONCAT4(libcppuhelper,UDK_MAJOR,COMID,UNXSUFFIX));
     Styles = (NETWORK,RELATIVE);
 End
+
+#endif
+
+#ifndef SYSTEM_CURL
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Curl_0
+    FileID = gid_File_Lib_Curl;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libcurl,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Curl_1
+    FileID = gid_File_Lib_Curl;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT4(libcurl,UNXSUFFIX,.,CURL_MAJOR));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
 
 #endif
 
