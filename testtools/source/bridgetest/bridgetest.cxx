@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: obo $ $Date: 2003-09-04 09:16:21 $
-#*    $Revision: 1.8 $
+#*    last change   $Author: vg $ $Date: 2003-10-06 12:58:44 $
+#*    $Revision: 1.9 $
 #*
 #*    $Logfile: $
 #*
@@ -13,10 +13,10 @@
 #include <osl/diagnose.h>
 #include <osl/time.h>
 #include "typelib/typedescription.hxx"
-#include <uno/dispatcher.h>
-#include <uno/mapping.hxx>
+#include <uno/dispatcher.hxx>
+#include "uno/mapping.hxx"
 #include <uno/data.h>
-#include <uno/environment.h>
+#include "uno/environment.hxx"
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -324,6 +324,40 @@ static sal_Bool performQueryForUnknownType( const Reference< XBridgeTest > & xLB
     return bRet;
 }
 
+class MyClass : public OWeakObject
+{
+public:
+    static sal_Int32 s_instances;
+
+    MyClass();
+    virtual ~MyClass();
+    virtual void SAL_CALL acquire() throw ();
+    virtual void SAL_CALL release() throw ();
+};
+
+sal_Int32 MyClass::s_instances = 0;
+
+//______________________________________________________________________________
+MyClass::MyClass()
+{
+    ++s_instances;
+}
+//______________________________________________________________________________
+MyClass::~MyClass()
+{
+    --s_instances;
+}
+//______________________________________________________________________________
+void MyClass::acquire() throw ()
+{
+    OWeakObject::acquire();
+}
+//______________________________________________________________________________
+void MyClass::release() throw ()
+{
+    OWeakObject::release();
+}
+
 //==================================================================================================
 static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
 {
@@ -334,7 +368,7 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
         // this data is never ever granted access to by calls other than equals(), assign()!
         TestData aData; // test against this data
 
-        Reference<XInterface > xI( *new OWeakObject() );
+        Reference<XInterface > xI( new MyClass );
 
         assign( (TestElement &)aData,
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
@@ -867,37 +901,61 @@ Sequence<T> cloneSequence(const Sequence<T>& val)
 }
 
 template< class T >
-static inline sal_Bool makeSurrogate( com::sun::star::uno::Reference< T > & rOut,
-                                      const com::sun::star::uno::Reference< T > & rOriginal )
+static inline bool makeSurrogate(
+    Reference< T > & rOut, Reference< T > const & rOriginal )
 {
     rOut.clear();
+    if (! rOriginal.is())
+        return false;
 
-    typelib_TypeDescription * pTD = 0;
-    const com::sun::star::uno::Type & rType = ::getCppuType( &rOriginal );
-    TYPELIB_DANGER_GET( &pTD, rType.getTypeLibType() );
-    check( pTD ? 1 : 0 , "### cannot get typedescription!" );
-    if (pTD)
+    Environment aCppEnv_official;
+    Environment aUnoEnv_ano;
+    Environment aCppEnv_ano;
+
+    OUString aCppEnvTypeName(
+        RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+    OUString aUnoEnvTypeName(
+        RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
+    // official:
+    uno_getEnvironment(
+        reinterpret_cast< uno_Environment ** >( &aCppEnv_official ),
+        aCppEnvTypeName.pData, 0 );
+    // anonymous:
+    uno_createEnvironment(
+        reinterpret_cast< uno_Environment ** >( &aCppEnv_ano ),
+        aCppEnvTypeName.pData, 0 );
+    uno_createEnvironment(
+        reinterpret_cast< uno_Environment ** >( &aUnoEnv_ano ),
+        aUnoEnvTypeName.pData, 0 );
+
+    UnoInterfaceReference unoI;
+    Mapping cpp2uno( aCppEnv_official.get(), aUnoEnv_ano.get() );
+    Mapping uno2cpp( aUnoEnv_ano.get(), aCppEnv_ano.get() );
+    if (!cpp2uno.is() || !uno2cpp.is())
     {
-        uno_Environment * pCppEnv1 = 0;
-        uno_Environment * pCppEnv2 = 0;
-
-        OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-        uno_getEnvironment( &pCppEnv1, aCppEnvTypeName.pData, 0 );
-        uno_createEnvironment( &pCppEnv2, aCppEnvTypeName.pData, 0 ); // anonymous
-
-        ::com::sun::star::uno::Mapping aMapping( pCppEnv1, pCppEnv2, OUString::createFromAscii("prot") );
-        T * p = (T *)aMapping.mapInterface( rOriginal.get(), (typelib_InterfaceTypeDescription *)pTD );
-        if (p)
-        {
-            rOut = p;
-            p->release();
-        }
-
-        (*pCppEnv2->release)( pCppEnv2 );
-        (*pCppEnv1->release)( pCppEnv1 );
-
-        TYPELIB_DANGER_RELEASE( pTD );
+        throw RuntimeException(
+            OUSTR("cannot get C++-UNO mappings!"),
+            Reference< XInterface >() );
     }
+    cpp2uno.mapInterface(
+        reinterpret_cast< void ** >( &unoI.m_pUnoI ),
+        rOriginal.get(), ::getCppuType( &rOriginal ) );
+    if (! unoI.is())
+    {
+        throw RuntimeException(
+            OUSTR("mapping C++ to binary UNO failed!"),
+            Reference< XInterface >() );
+    }
+    uno2cpp.mapInterface(
+        reinterpret_cast< void ** >( &rOut ),
+        unoI.get(), ::getCppuType( &rOriginal ) );
+    if (! rOut.is())
+    {
+        throw RuntimeException(
+            OUSTR("mapping binary UNO to C++ failed!"),
+            Reference< XInterface >() );
+    }
+
     return rOut.is();
 }
 
@@ -905,6 +963,7 @@ static inline sal_Bool makeSurrogate( com::sun::star::uno::Reference< T > & rOut
 sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
     throw (RuntimeException)
 {
+    bool bRet = false;
     try
     {
         if (! rArgs.getLength())
@@ -949,11 +1008,11 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         }
 
         Reference<XBridgeTest > xLBT;
-        sal_Bool bRet;
         bRet = check( makeSurrogate( xLBT, xTest ), "makeSurrogate" );
         bRet = check( performTest( xLBT ), "standard test" ) && bRet;
         bRet = check( raiseException( xLBT ) , "exception test" )&& bRet;
-        bRet = check( raiseOnewayException( xLBT ), "oneway exception test" ) && bRet;
+        bRet = check( raiseOnewayException( xLBT ),
+                      "oneway exception test" ) && bRet;
         bRet = performQueryForUnknownType( xLBT ) && bRet;
         if (! bRet)
         {
@@ -961,21 +1020,27 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
                 OUString( RTL_CONSTASCII_USTRINGPARAM("error: test failed!") ),
                 Reference< XInterface >() );
         }
-
-        if( bRet )
-        {
-            printf( "\n\n ### test succeeded!\n" );
-        }
-        else
-        {
-            printf( "\n> ### test failed!\n" );
-        }
     }
     catch (Exception & exc)
     {
         OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "exception occured: %s\n", cstr.getStr() );
         throw;
+    }
+
+    if (MyClass::s_instances != 0)
+    {
+        OSL_ENSURE( 0, "leaking object instance!" );
+        printf( "\n\n ### leaking object instance!\n" );
+    }
+
+    if( bRet )
+    {
+        printf( "\n\n ### test succeeded!\n" );
+    }
+    else
+    {
+        printf( "\n> ### test failed!\n" );
     }
 
     return 0;
