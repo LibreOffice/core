@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-21 12:39:01 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 12:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,28 +385,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                         ShutdownIcon::GetAutostart()  ) ) )
                         bRet = TRUE;
                     break;
-
-                case SID_INET_HOMEPAGE          :
-                case SID_INET_MEMCACHE          :
-                case SID_INET_DISKCACHE         :
-                case SID_INET_EXPIRATION        :
-                case SID_INET_CACHEJS           :
-                case SID_INET_CACHEEXPIRED      :
-                case SID_INET_CACHEABORTED      :
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                    DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nSome INET values not no longer supported!\n" );
-#endif
-                    break;
-
-                case SID_INET_REVEAL_MAILADDR :
-#if SUPD<615
-                    if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_INET_REVEAL_MAILADDR),
-                                aInetOptions.GetProtocolRevealMailAddress() ) ) )
-                        bRet = TRUE;
-#else
-                    bRet = FALSE;
-#endif
-                    break;
                 case SID_SAVEREL_INET :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_INET ),
                                aSaveOptions.IsSaveRelINet() ) ) )
@@ -417,48 +395,13 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                                aSaveOptions.IsSaveRelFSys() ) ) )
                         bRet = TRUE;
                     break;
-#ifndef TF_CFGDATA
-                case SID_INET_SMTPSERVER :
-                    if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_SMTPSERVER),
-                                aInetOptions.GetSmtpServerName() )))
-                        bRet = TRUE;
-                    break;
-#endif
-                case SID_INET_POPSERVER :
-                case SID_INET_NNTPSERVER :
-                case SID_INET_MAXNEWS :
-                case SID_INET_MAXHTTPCONS :
-                case SID_INET_MAXFTPCONS :
-                case SID_INET_SMTPGATEWAY :
-                case SID_INET_MAILUSERNAME :
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                    DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nSome INET values not longer supported!\n" );
-#endif
-                    break;
-                case SID_ATTR_ALLOWFOLDERWEBVIEW :
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                    DBG_ASSERT(sal_False,"SfxApplication::GetOptions()\nINI-Key \"Common\\AllowFolderWebView\" is obsolete ... SID_ATTR_ALLOWFOLDERWEBVIEW isn't supported any longer!\n");
-#endif
-                    break;
-                case SID_INET_MAILPASSWORD :
-                case SID_INET_MAILTEXTFORMAT :
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                    DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nConfig item for INET values not implemented yet!\n" );
-#endif
-                    break;
                 case SID_BASIC_ENABLED :
-                    if ( rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_BASIC_ENABLED ),
-                                aSecurityOptions.GetBasicMode())))
+                    if ( rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_BASIC_ENABLED ), aSecurityOptions.GetBasicMode())))
                         bRet = TRUE;
                     break;
                 case SID_INET_EXE_PLUGIN  :
-                case SID_INET_USERAGENT :
-                case SID_INET_NONCACHED_SERVER :
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                    DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nSome INET values no longer supported!\n" );
-#endif
-                    break;
-
+                    if ( rSet.Put( SfxBoolItem( SID_INET_EXE_PLUGIN, aSecurityOptions.IsExecutePlugins() ) ) )
+                        bRet = TRUE;
                 case SID_INET_DNS_SERVER :
                     if ( rSet.Put( SfxStringItem( rPool.GetWhich(SID_INET_DNS_SERVER),
                                      aInetOptions.GetDnsIpAddress() ) ) )
@@ -469,13 +412,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                                 !aInetOptions.GetDnsIpAddress().getLength() ) ) )
                         bRet = TRUE;
                     break;
-                case SID_INET_CHANNELS_ONOFF  :
-                case SID_INET_COOKIESHANDLE :
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                    DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nSome INET values no longer supported!\n" );
-#endif
-                    break;
-
                 case SID_SECURE_URL :
                 {
                     ::com::sun::star::uno::Sequence< ::rtl::OUString > seqURLs = aSecurityOptions.GetSecureURLs();
@@ -498,26 +434,10 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     aList.Clear();
                     break;
                 }
-                case SID_ICONGRID :
-                case SID_AUTO_ADJUSTICONS :
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                    DBG_ASSERT(sal_False, "SfxApplication::GetOptions()\nSoffice.ini key \"View\\IconGrid\" is obsolete! .. How I can support SID_ICONGRID & SID_AUTO_ADJUSTICONS any longer?\n");
-#endif
-                    break;
-
-                case SID_RESTORE_EXPAND_STATE :
-                {
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                    DBG_ASSERT(sal_False, "SfxApplication::GetOptions()\nSoffice.ini key \"View\\AutoOpen\" is obsolete! .. How I can support SID_RESTORE_EXPAND_STATE any longer?\n");
-#endif
-
-                    break;
-                }
                 case SID_ENABLE_METAFILEPRINT :
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
                     DBG_ASSERT(sal_False, "SfxApplication::GetOptions()\nSoffice.ini key \"Common\\MetafilePrint\" is obsolete! .. How I can support SID_ENABLE_METAFILEPRINT any longer?\n");
 #endif
-
                     break;
                 case SID_INET_PROXY_TYPE :
                     if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
@@ -560,7 +480,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nSome INET values no longer supported!\n" );
 #endif
                     break;
-
                 case SID_INET_NOPROXY :
                     if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_NOPROXY),
                                 aInetOptions.GetProxyNoProxy() )))
@@ -848,57 +767,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         ShutdownIcon::SetAutostart(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    if(
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_HOMEPAGE), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MEMCACHE), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_DISKCACHE), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_EXPIRATION), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_CACHEJS), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_CACHEEXPIRED), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_CACHEABORTED), TRUE, &pItem))
-    )
-    {
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-        DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nSome INET keys no longer supported!\n");
-#endif
-    }
-
-#if SUPD<615
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_REVEAL_MAILADDR), TRUE, &pItem))
-    {
-        DBG_ASSERT( pItem->ISA(SfxBoolItem), "BoolItem expected" );
-        aInetOptions.SetProtocolRevealMailAddress( ( (const SfxBoolItem*)pItem )->GetValue() == TRUE );
-        bResetSession = TRUE;
-    }
-#endif
-
-    // SMTP-Server
-#ifndef TF_CFGDATA
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_SMTPSERVER), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        aInetOptions.SetSmtpServerName(((const SfxStringItem *)pItem)->GetValue());
-        bResetSession = TRUE;
-    }
-#endif
-    if(
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_POPSERVER), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_NNTPSERVER), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MAXNEWS), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MAXHTTPCONS), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MAXFTPCONS), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_SMTPGATEWAY), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MAILUSERNAME), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MAILPASSWORD), TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_MAILTEXTFORMAT ), TRUE, &pItem ) )
-    )
-    {
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-        DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nSome INET keys no longer supported!\n");
-#endif
-    }
-
-
     // Proxy-Type
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), TRUE, &pItem))
     {
@@ -928,11 +796,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_EXE_PLUGIN, TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
-        BOOL bExe = ( (const SfxBoolItem *)pItem )->GetValue();
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-        DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nSome INET keys no longer supported!\n");
-#endif
-
+        aSecurityOptions.SetExecutePlugins( ( (const SfxBoolItem *)pItem )->GetValue() );
         bResetSession = TRUE;
     }
 
@@ -956,16 +820,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
             aInetOptions.SetDnsIpAddress( aDNS );
         }
         bResetSession = TRUE;
-    }
-
-    if(
-        ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NONCACHED_SERVER, TRUE, &pItem))   ||
-        ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_USERAGENT, TRUE, &pItem))
-    )
-    {
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-        DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nSome INET keys no longer supported!\n");
-#endif
     }
 
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), TRUE, &pItem ) )
@@ -1011,17 +865,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         bProxiesModified = TRUE;
     }
 
-    if(
-        ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_CHANNELS_ONOFF, TRUE, &pItem)) ||
-        ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_COOKIESHANDLE, TRUE, &pItem))
-    )
-    {
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-        DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nSome INET keys no longer supported!\n");
-#endif
-    }
-
-
     // Secure-Referers
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_SECURE_URL, TRUE, &pItem))
     {
@@ -1043,14 +886,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
         DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nsoffice.ini key \"MetafilPrint\" not supported any longer!\n");
-#endif
-    }
-
-    // Web-View
-    if( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_ALLOWFOLDERWEBVIEW), TRUE, &pItem))
-    {
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-        DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nsoffice.ini key \"AllowFolderWebView\" not supported any longer!\n");
 #endif
     }
 
