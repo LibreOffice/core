@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:42:06 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,6 +715,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_DEC_INDENT_OFFSET                (FN_FORMAT2 + 151)
 
 #define FN_TABLE_MERGE_TABLE                (FN_FORMAT2 + 152)
+#define FN_TABLE_ROW_SPLIT                  (FN_FORMAT2 + 153)
 
 /*--------------------------------------------------------------------
     Bereich: Extras
