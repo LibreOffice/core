@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-11 16:11:07 $
+#   last change: $Author: obo $ $Date: 2004-04-01 14:18:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,6 +150,7 @@ $(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
     $(GNUCOPY) $(UNOUCRRDB) $@
      +cd $(BIN) && \
          regcomp -register -r applicat.rdb \
-             -c $(DLLPRE)i18n$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
-             -c $(DLLPRE)i18npool$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+             -c $(DLLPRE)i18nsearch.uno$(DLLPOST) \
+             -c $(DLLPRE)i18npool.uno$(DLLPOST)
+
 

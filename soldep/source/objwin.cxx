@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objwin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-26 14:48:15 $
+ *  last change: $Author: obo $ $Date: 2004-04-01 14:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,10 @@
 
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
-#include <vcl/system.hxx>
+//src680 #include <vcl/system.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
-#include <vcl/gdiobj.hxx>
+//src680 #include <vcl/gdiobj.hxx>
 
 #include "objwin.hxx"
 #include "depwin.hxx"
@@ -73,7 +73,8 @@
 #include "prjdep.hxx"
 #include "connctr.hxx"
 
-static Brush* pDefaultBrush = NULL;
+//src680
+static Wallpaper* pDefaultWallpaper = NULL;
 static Color aDefaultColor = 0L;
 
 UINT32 aColorMap[] = {
@@ -116,13 +117,14 @@ ObjectWin::ObjectWin( Window* pParent, WinBits nWinStyle )
                 bVisible( FALSE ),
                 bMenuExecute( FALSE )
 {
-    SetBackgroundBrush( Brush( Color( COL_WHITE )));
+    SetBackground( Wallpaper( Color( COL_WHITE )));
 
     aTipTimer.SetTimeout( 500 );
     aTipTimer.SetTimeoutHdl(
         LINK( this, ObjectWin, TipHdl ));
 
-    SetFont( System::_GetStandardFont( _STDFONT_SWISS ));
+//src680    SetFont( System::_GetStandardFont( _STDFONT_SWISS ));
+    SetFont( Font( GetFont() ) );
     EnableClipSiblings();
     SetZOrder( NULL, WINDOW_ZORDER_FIRST );
     mpPopup = new PopupMenu();
@@ -135,11 +137,12 @@ ObjectWin::ObjectWin( Window* pParent, WinBits nWinStyle )
     mpPopup->SetDeactivateHdl( LINK( this, ObjectWin, PopupDeactivated ));
     mnPopupStaticItems = mpPopup->GetItemCount();
 
-    if ( ! pDefaultBrush )
+/*src680    if ( ! pDefaultBrush )
     {
         pDefaultBrush = new Brush( GetBackgroundBrush() );
         aDefaultColor = GetTextColor();
     }
+*/
     Hide();
 }
 
@@ -340,24 +343,29 @@ Connector* ObjectWin::GetConnector( ULONG nStartId, ULONG nEndId )
 void ObjectWin::SetMarkMode( ULONG nMarkMode )
 /*****************************************************************************/
 {
-    Brush aBrush;
+//src680    Brush aBrush;
+    Wallpaper aWallpaper;
 
     if ( nMarkMode == MARKMODE_DEFAULT )
     {
-        if ( pDefaultBrush )
+//src680
+        if ( pDefaultWallpaper )
         {
-            aBrush = GetBackgroundBrush();
-            aBrush.SetColor( pDefaultBrush->GetColor() );
-            SetBackgroundBrush( aBrush );
+            aWallpaper = GetBackground();
+            aWallpaper.SetColor( pDefaultWallpaper->GetColor() );
+            SetBackground( aWallpaper );
             SetTextColor( aDefaultColor );
         }
     }
     else
     {
         mnMarkMode |= nMarkMode;
-        aBrush = GetBackgroundBrush();
-        aBrush.SetColor( aColorMap[ mnMarkMode ] );
-        SetBackgroundBrush( aBrush );
+//src680
+        aWallpaper = GetBackground();
+//src680
+        aWallpaper.SetColor( aColorMap[ mnMarkMode ] );
+//src680
+        SetBackground( aWallpaper );
         SetTextColor( COL_WHITE );
     }
     Invalidate();
@@ -367,7 +375,8 @@ void ObjectWin::SetMarkMode( ULONG nMarkMode )
 void ObjectWin::UnsetMarkMode( ULONG nMarkMode )
 /*****************************************************************************/
 {
-    Brush aBrush;
+//src680
+    Wallpaper aWallpaper;
 
     ULONG nOldMode = mnMarkMode;
     mnMarkMode &= ( !nMarkMode );
@@ -375,19 +384,21 @@ void ObjectWin::UnsetMarkMode( ULONG nMarkMode )
     if ( nOldMode != mnMarkMode ) {
         if ( mnMarkMode == MARKMODE_DEFAULT )
         {
-            if ( pDefaultBrush )
+//src680
+            if ( pDefaultWallpaper )
             {
-                aBrush = GetBackgroundBrush();
-                aBrush.SetColor( pDefaultBrush->GetColor() );
-                SetBackgroundBrush( aBrush );
+                aWallpaper = GetBackground();
+                aWallpaper.SetColor( pDefaultWallpaper->GetColor() );
+                SetBackground( aWallpaper );
                 SetTextColor( aDefaultColor );
             }
         }
         else
         {
-            aBrush = GetBackgroundBrush();
-            aBrush.SetColor( aColorMap[ mnMarkMode ] );
-            SetBackgroundBrush( aBrush );
+//src680
+            aWallpaper = GetBackground();
+            aWallpaper.SetColor( aColorMap[ mnMarkMode ] );
+            SetBackground( aWallpaper );
             SetTextColor( COL_WHITE );
         }
         Invalidate();

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: depper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-26 14:48:13 $
+ *  last change: $Author: obo $ $Date: 2004-04-01 14:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@ Depper::Depper( Window* pBaseWindow ):
     mpGraphWin = new GraphWin( mpProcessWin );
     mpBaseWin = new DepWin( mpGraphWin->GetBufferWindow(), WB_NOBORDER | WB_SIZEABLE | WB_AUTOSIZE );
 
-    mpGraphWin->SetBackgroundBrush( Brush( Color( COL_WHITE )));
-    mpBaseWin->SetBackgroundBrush( Brush( Color( COL_WHITE )));
+    mpGraphWin->SetBackground( Wallpaper( Color( COL_WHITE )));
+    mpBaseWin->SetBackground( Wallpaper( Color( COL_WHITE )));
 
     mpBaseWin->mpDepperDontuseme = this;
 

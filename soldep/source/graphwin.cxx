@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphwin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-26 14:48:14 $
+ *  last change: $Author: obo $ $Date: 2004-04-01 14:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ GraphWin::GraphWin( Window * pParent )
     SetTotalSize( Size( 2000,2000 ));
 //  SetTotalSize( pParent->GetSizePixel());
 
-    aBufferWindow.SetBackgroundBrush( Color( COL_WHITE ));
+    aBufferWindow.SetBackground( Wallpaper( Color( COL_WHITE )) );
 
 //  aBufferWindow.SetPosSizePixel( PIXELS( 0, 0, 238, 80 ) );
     aBufferWindow.SetPosSizePixel( PIXELS( 0, 0, 2000, 2000 ) );
