@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-07 18:09:35 $
+ *  last change: $Author: tbe $ $Date: 2001-03-12 11:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,21 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTEVENTSSUPPLIER_HPP_
+#include <com/sun/star/script/XScriptEventsSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
+#endif
+
 #include "vcsbxdef.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::script;
 using namespace ::rtl;
 
 //----------------------------------------------------------------------------
@@ -173,7 +183,7 @@ DlgEdObj::~DlgEdObj()
 {
     DBG_DTOR(DlgEdObj, NULL);
 
-    EndPropertyListening();
+    EndListening();
 }
 
 //----------------------------------------------------------------------------
@@ -358,7 +368,7 @@ void DlgEdObj::SetPropsFromRect()
 
     if ( !ISA(DlgEdForm) )
     {
-        //EndPropertyListening(sal_False);
+        //EndListening(sal_False);
 
         // get control property set
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
@@ -414,11 +424,11 @@ void DlgEdObj::SetPropsFromRect()
             xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
         }
 
-        //StartPropertyListening();
+        //StartListening();
     }
     else if ( ISA(DlgEdForm) )
     {
-        //EndPropertyListening(sal_False);
+        //EndListening(sal_False);
 
         // get control property set
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSetForm(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
@@ -464,12 +474,12 @@ void DlgEdObj::SetPropsFromRect()
             xPSetForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
         }
 
-        //StartPropertyListening();
+        //StartListening();
     }
 
     /* old method
     //
-    EndPropertyListening(sal_False);
+    EndListening(sal_False);
 
     // get property set
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
@@ -513,7 +523,7 @@ void DlgEdObj::SetPropsFromRect()
         xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
     }
 
-    StartPropertyListening();
+    StartListening();
     */
 }
 
@@ -799,6 +809,101 @@ IMPL_LINK(DlgEdObj, OnCreate, void*, EMPTYTAG)
 
 //----------------------------------------------------------------------------
 
+void DlgEdObj::StartListening()
+{
+    DBG_ASSERT(!isListening(), "DlgEdObj::StartListening: already listening!");
+
+    if (!isListening())
+    {
+        bIsListening = sal_True;
+
+        // XPropertyChangeListener
+        Reference< XPropertySet > xControlModel( GetUnoControlModel() , UNO_QUERY );
+        if (!m_xPropertyChangeListener.is() && xControlModel.is())
+        {
+            // create listener
+            m_xPropertyChangeListener = static_cast< ::com::sun::star::beans::XPropertyChangeListener*>( new DlgEdPropListenerImpl( (DlgEdObj*)this ) );
+
+            // register listener to properties
+            Reference< XPropertySetInfo > xControlModelInfo( xControlModel->getPropertySetInfo() );
+            DBG_ASSERT(xControlModelInfo.is(), "DlgEdObj::StartListening: control model has no property info!");
+            Sequence< Property > aProps = xControlModelInfo->getProperties();
+            Property* pProps = aProps.getArray();
+            for ( sal_Int32 i = 0 ; i < aProps.getLength() ; i++ )
+            {
+                if ( pProps[i].Attributes & PropertyAttribute::BOUND )
+                {
+                    xControlModel->addPropertyChangeListener( pProps[i].Name , m_xPropertyChangeListener );
+                }
+            }
+        }
+
+        // XContainerListener
+        Reference< XScriptEventsSupplier > xEventsSupplier( GetUnoControlModel() , UNO_QUERY );
+        if( !m_xContainerListener.is() && xEventsSupplier.is() )
+        {
+            // create listener
+            m_xContainerListener = static_cast< ::com::sun::star::container::XContainerListener*>( new DlgEdEvtContListenerImpl( (DlgEdObj*)this ) );
+
+            // register listener to script event container
+            Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
+            DBG_ASSERT(xEventCont.is(), "DlgEdObj::StartListening: control model has no script event container!");
+            Reference< XContainer > xCont( xEventCont , UNO_QUERY );
+            if (xCont.is())
+                xCont->addContainerListener( m_xContainerListener );
+        }
+    }
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdObj::EndListening(sal_Bool bRemoveListener)
+{
+    DBG_ASSERT(isListening(), "DlgEdObj::EndListening: not listening currently!");
+
+    if (isListening())
+    {
+        bIsListening = sal_False;
+
+        if (bRemoveListener)
+        {
+            // XPropertyChangeListener
+            Reference< XPropertySet > xControlModel(GetUnoControlModel(), UNO_QUERY);
+            if ( m_xPropertyChangeListener.is() && xControlModel.is() )
+            {
+                // remove listener
+                Reference< XPropertySetInfo > xControlModelInfo( xControlModel->getPropertySetInfo() );
+                DBG_ASSERT(xControlModelInfo.is(), "DlgEdObj::EndListening: control model has no property info!");
+                Sequence< Property > aProps = xControlModelInfo->getProperties();
+                Property* pProps = aProps.getArray();
+                for ( sal_Int32 i = 0 ; i < aProps.getLength() ; i++ )
+                {
+                    if ( pProps[i].Attributes & PropertyAttribute::BOUND )
+                    {
+                        xControlModel->removePropertyChangeListener( pProps[i].Name , m_xPropertyChangeListener );
+                    }
+                }
+            }
+            m_xPropertyChangeListener.clear();
+
+            // XContainerListener
+            Reference< XScriptEventsSupplier > xEventsSupplier( GetUnoControlModel() , UNO_QUERY );
+            if( m_xContainerListener.is() && xEventsSupplier.is() )
+            {
+                // remove listener
+                Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
+                DBG_ASSERT(xEventCont.is(), "DlgEdObj::EndListening: control model has no script event container!");
+                Reference< XContainer > xCont( xEventCont , UNO_QUERY );
+                if (xCont.is())
+                    xCont->removeContainerListener( m_xContainerListener );
+            }
+            m_xContainerListener.clear();
+        }
+    }
+}
+
+//----------------------------------------------------------------------------
+
 void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
 {
     if (isListening())
@@ -836,67 +941,54 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::StartPropertyListening()
+void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
 {
-    DBG_ASSERT(!isListening(), "DlgEdObj::StartPropertyListening: already listening!");
-
-    if (!isListening())
+    if (isListening())
     {
-        Reference< XPropertySet > xControlModel(GetUnoControlModel(), UNO_QUERY);
-
-        if (!m_xListener.is() && xControlModel.is())
+        // dialog model changed
+        if ( ISA(DlgEdForm) )
         {
-            // create listener
-            m_xListener = static_cast< ::com::sun::star::beans::XPropertyChangeListener*>( new DlgEdListenerImpl( (DlgEdObj*)this ) );
-
-            // register listener to properties
-            Reference< XPropertySetInfo > xControlModelInfo( xControlModel->getPropertySetInfo() );
-            DBG_ASSERT(xControlModelInfo.is(), "DlgEdObj::StartPropertyListening: control model has no property info!");
-            Sequence< Property > aProps = xControlModelInfo->getProperties();
-            Property* pProps = aProps.getArray();
-            for ( sal_Int32 i = 0 ; i < aProps.getLength() ; i++ )
-            {
-                if ( pProps[i].Attributes & PropertyAttribute::BOUND )
-                {
-                    xControlModel->addPropertyChangeListener( pProps[i].Name , m_xListener );
-                }
-            }
+            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(TRUE);
         }
-
-        bIsListening = sal_True;
+        else
+        {
+            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
+        }
     }
 }
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::EndPropertyListening(sal_Bool bRemoveListener)
+void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
 {
-    DBG_ASSERT(isListening(), "DlgEdObj::EndPropertyListening: not listening currently!");
-
     if (isListening())
     {
-        bIsListening = sal_False;
-
-        if (bRemoveListener)
+        // dialog model changed
+        if ( ISA(DlgEdForm) )
         {
-            Reference< XPropertySet > xControlModel(GetUnoControlModel(), UNO_QUERY);
-            if (m_xListener.is() && xControlModel.is())
-            {
-                // remove listener
-                Reference< XPropertySetInfo > xControlModelInfo( xControlModel->getPropertySetInfo() );
-                DBG_ASSERT(xControlModelInfo.is(), "DlgEdObj::EndPropertyListening: control model has no property info!");
-                Sequence< Property > aProps = xControlModelInfo->getProperties();
-                Property* pProps = aProps.getArray();
-                for ( sal_Int32 i = 0 ; i < aProps.getLength() ; i++ )
-                {
-                    if ( pProps[i].Attributes & PropertyAttribute::BOUND )
-                    {
-                        xControlModel->removePropertyChangeListener( pProps[i].Name , m_xListener );
-                    }
-                }
-            }
+            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(TRUE);
+        }
+        else
+        {
+            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
+        }
+    }
+}
 
-            m_xListener.clear();
+//----------------------------------------------------------------------------
+
+void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
+{
+    if (isListening())
+    {
+        // dialog model changed
+        if ( ISA(DlgEdForm) )
+        {
+            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(TRUE);
+        }
+        else
+        {
+            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-07 18:07:59 $
+ *  last change: $Author: tbe $ $Date: 2001-03-12 11:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ void VCDlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoCon
     pDlgEdForm = new DlgEdForm();
     uno::Reference< awt::XControlModel > xDlgMod( m_xUnoControlDialogModel, uno::UNO_QUERY );
     pDlgEdForm->SetUnoControlModel(xDlgMod);
-    pDlgEdForm->StartPropertyListening();
+    pDlgEdForm->StartListening();
     pDlgEdForm->SetDlgEditor( this );
     pDlgEdForm->SetRectFromProps();
     pSdrModel->GetPage(0)->InsertObject( pDlgEdForm );
@@ -467,7 +467,7 @@ void VCDlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoCon
             DlgEdObj* pCtrlObj = new DlgEdObj();
             pCtrlObj->SetDlgEdForm(pDlgEdForm);
             pCtrlObj->SetUnoControlModel( xCtrlModel );
-            pCtrlObj->StartPropertyListening();
+            pCtrlObj->StartListening();
             pCtrlObj->SetRectFromProps();
             pCtrlObj->SetChanged();
             pSdrModel->GetPage(0)->InsertObject( pCtrlObj );

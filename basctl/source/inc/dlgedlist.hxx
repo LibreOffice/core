@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedlist.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:55:35 $
+ *  last change: $Author: tbe $ $Date: 2001-03-12 11:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,30 +70,59 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
+#include <com/sun/star/container/XContainerListener.hpp>
+#endif
+
 class DlgEdObj;
 
 //============================================================================
-// DlgEdListenerImpl
+// DlgEdPropListenerImpl
 //============================================================================
 
 typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener > PropertyChangeListenerHelper;
 
-class DlgEdListenerImpl: public PropertyChangeListenerHelper
+class DlgEdPropListenerImpl: public PropertyChangeListenerHelper
 {
 private:
     DlgEdObj*       pDlgEdObj;
 
 public:
-    DlgEdListenerImpl();
-    DlgEdListenerImpl(DlgEdObj* pObj);
-    virtual ~DlgEdListenerImpl();
+    DlgEdPropListenerImpl();
+    DlgEdPropListenerImpl(DlgEdObj* pObj);
+    virtual ~DlgEdPropListenerImpl();
 
     // XEventListener
-    virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
 
+};
+
+//============================================================================
+// DlgEdEvtContListenerImpl
+//============================================================================
+
+typedef ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener > ContainerListenerHelper;
+
+class DlgEdEvtContListenerImpl: public ContainerListenerHelper
+{
+private:
+    DlgEdObj*       pDlgEdObj;
+
+public:
+    DlgEdEvtContListenerImpl();
+    DlgEdEvtContListenerImpl(DlgEdObj* pObj);
+    virtual ~DlgEdEvtContListenerImpl();
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XContainerListener
+    virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 #endif // _BASCTL_DLGEDLIST_HXX

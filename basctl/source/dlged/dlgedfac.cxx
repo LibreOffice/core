@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-02 14:01:51 $
+ *  last change: $Author: tbe $ $Date: 2001-03-12 11:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ IMPL_LINK( VCDlgEditFactory, MakeObject, SdrObjFactory *, pObjFactory )
         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObjFactory->pNewObj);
         if (pDlgEdObj)
         {
-            pDlgEdObj->StartPropertyListening();
+            pDlgEdObj->StartListening();
         }
     }
 

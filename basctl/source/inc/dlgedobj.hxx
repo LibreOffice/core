@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-07 18:10:25 $
+ *  last change: $Author: tbe $ $Date: 2001-03-12 11:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
+#include <com/sun/star/container/XContainerListener.hpp>
+#endif
+
 class DlgEdForm;
 
 //============================================================================
@@ -84,13 +88,14 @@ class DlgEdObj: public SdrUnoObj
 {
     friend class VCDlgEditor;
     friend class VCDlgEditFactory;
-    friend class DlgEdListenerImpl;
+    friend class DlgEdPropListenerImpl;
 
 private:
     sal_Bool        bIsListening;
     sal_uInt32      nEvent;
     DlgEdForm*      pDlgEdForm;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener> m_xContainerListener;
 
 public:
     TYPEINFO();
@@ -140,13 +145,19 @@ protected:
     String  GetDefaultName();
 
 public:
-    virtual void SAL_CALL _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+    // PropertyChangeListener
+    virtual void SAL_CALL _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ContainerListener
+    virtual void SAL_CALL _elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL _elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
 private:
-    // start listening for property changes
-    void StartPropertyListening();
-    // end listening for property changes
-    void EndPropertyListening(sal_Bool bRemoveListener = sal_True);
+    // start listening
+    void StartListening();
+    // end listening
+    void EndListening(sal_Bool bRemoveListener = sal_True);
     sal_Bool    isListening() const { return bIsListening; }
 };
 
