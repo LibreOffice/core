@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formadapter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:32:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1657,7 +1657,8 @@ Any SAL_CALL SbaXFormAdapter::getByName(const ::rtl::OUString& aName) throw( ::c
 // -------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL SbaXFormAdapter::getElementNames() throw( RuntimeException )
 {
-    return Sequence< ::rtl::OUString >(m_aChildNames.begin(),m_aChildNames.size());
+    ::rtl::OUString *pChildNames = m_aChildNames.empty() ? 0 : &m_aChildNames[0];
+    return Sequence< ::rtl::OUString >(pChildNames, m_aChildNames.size());
 }
 
 // -------------------------------------------------------------------------
