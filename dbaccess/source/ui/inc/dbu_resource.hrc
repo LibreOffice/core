@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 15:33:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 #define TAB_WIZ_COPYTABLE               RID_PAGE_START + 12
 #define TAB_PAG_ADABAS_SETTINGS         RID_PAGE_START + 13
 #define PAGE_DOCUMENTLINKS              RID_PAGE_START + 14
+#define PAGE_ADDRESSBOOK                RID_PAGE_START + 15
 
 //========================================================================
 // error boxes
@@ -431,6 +432,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.45  2001/05/16 15:33:27  fs
+ *  #87065# +QUERY_VIEW_DESIGN_SAVEMODIFIED
+ *
  *  Revision 1.44  2001/05/14 11:59:28  oj
  *  #86744# some changes for entries and views
  *

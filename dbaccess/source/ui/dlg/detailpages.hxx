@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 08:07:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,28 @@ namespace dbaui
     };
 
     //========================================================================
+    //= OOdbcDetailsPage
+    //========================================================================
+    class OAddressBookDetailsPage : public OCommonBehaviourTabPage
+    {
+    public:
+        static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
+        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+
+        /// get the SfxPoolItem ids used by this tab page
+        static sal_Int32* getDetailIds();
+
+    private:
+        FixedLine           m_aSeparator1;
+        FixedText           m_aFixedText;
+        ListBox             m_aAddressBookList;
+
+        OAddressBookDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+    };
+
+    //========================================================================
     //= OTextDetailsPage
     //========================================================================
     class OTextDetailsPage : public OCommonBehaviourTabPage
@@ -284,6 +306,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/04/27 08:07:01  fs
+ *  #86370# +adjustUTF8
+ *
  *  Revision 1.3  2001/04/20 13:38:06  oj
  *  #85736# new checkbox for odbc
  *

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+#   last change: $Author: oj $ $Date: 2001-05-23 14:16:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJINC=$(PRJ)$/source
 PRJNAME=dbaccess
 TARGET=querydesign
 
-ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -102,6 +100,30 @@ SLOFILES =\
             $(SLO)$/TableConnectionData.obj		\
             $(SLO)$/ConnectionLine.obj			\
             $(SLO)$/ConnectionLineData.obj		\
+            $(SLO)$/QueryTextView.obj			\
+            $(SLO)$/querycontroller.obj			\
+            $(SLO)$/queryview.obj
+
+EXCEPTIONSFILES =\
+            $(SLO)$/JoinDesignView.obj			\
+            $(SLO)$/JoinController.obj			\
+            $(SLO)$/QueryDesignView.obj			\
+            $(SLO)$/TableFieldData.obj			\
+            $(SLO)$/SelectionBrowseBox.obj		\
+            $(SLO)$/querydlg.obj				\
+            $(SLO)$/QueryTabWinUndoAct.obj		\
+            $(SLO)$/QueryMoveTabWinUndoAct.obj	\
+            $(SLO)$/QueryTabConnUndoAction.obj	\
+            $(SLO)$/TableFieldDescription.obj	\
+            $(SLO)$/JoinTableView.obj			\
+            $(SLO)$/QueryViewSwitch.obj			\
+            $(SLO)$/QueryTableView.obj			\
+            $(SLO)$/TableWindowData.obj			\
+            $(SLO)$/QTableWindow.obj			\
+            $(SLO)$/TableWindow.obj				\
+            $(SLO)$/JoinExchange.obj			\
+            $(SLO)$/TableWindowListBox.obj		\
+            $(SLO)$/TableWindowTitle.obj		\
             $(SLO)$/QueryTextView.obj			\
             $(SLO)$/querycontroller.obj			\
             $(SLO)$/queryview.obj

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-29 16:02:05 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
         case DST_JDBC:
         case DST_ODBC:
         case DST_ADO:
+        case DST_ADDRESSBOOK:
             return sal_True;
             break;
         case DST_DBASE:
@@ -205,6 +206,8 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_TEXT;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:calc:", 0, nSeparator))
         return DST_CALC;
+    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:mozab:", 0, nSeparator))
+        return DST_ADDRESSBOOK;
 
     // find third :
     nSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
@@ -380,6 +383,9 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/01/29 16:02:05  nn
+ *  added DST_CALC
+ *
  *  Revision 1.5  2001/01/04 11:20:23  fs
  *  #81485# +DST_ADO
  *

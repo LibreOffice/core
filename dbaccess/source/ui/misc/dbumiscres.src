@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:28:52 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,13 @@ Resource RSC_DATASOURCE_TYPES
 {
     String STR_CONNTYPES
     {
-        Text = "sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:ado:;sdbc:flat:;sdbc:calc:" ;
+        Text = "sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:ado:;sdbc:flat:;sdbc:calc:;sdbc:mozab:" ;
     };
     String STR_CONNUINAMES
     {
-        Text = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument" ;
-        Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet" ;
-        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet" ;
+        Text = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch" ;
+        Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
+        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
         Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Folha de cбlculo";
         Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;“екст;ƒокумент электронной таблицы";
         Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO; еяменп;Єггсбцп рянбкб";
@@ -305,6 +305,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/05/16 15:28:52  kz
+ *  Merge SRC632: 16.05.01 - 17:28:14 (NoBranch)
+ *
  *  Revision 1.21  2001/05/12 06:34:09  kz
  *  Merge SRC631: 12.05.01 - 08:34:37 (NoBranch)
  *

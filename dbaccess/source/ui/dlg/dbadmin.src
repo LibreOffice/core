@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 05:13:53 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,11 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ turkish ] = "ODBC";
         Text [ language_user1 ] = " ";
         Text[ catalan ] = "ODBC";
+    };
+    String STR_PAGETITLE_ADDRESSBOOK
+    {
+        Text = "Adressbuch" ;
+        Text [ english ] = "addressbook" ;
     };
     String STR_PAGETITLE_ADABAS
     {
@@ -1453,7 +1458,120 @@ TabPage PAGE_ODBC
         Text[ catalan ] = "Use catalog on filebased databases";
     };
 };
+//.........................................................................
+TabPage PAGE_ADDRESSBOOK
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE;
+    HelpId = HID_DSADMIN_PAGE_ADDRESSBOOK;
 
+    FixedText FT_USERNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 7 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Benutzername" ;
+        Text [ english ] = "~Username" ;
+        Text [ NORWEGIAN ] = "~Username" ;
+        Text [ DANISH ] = "Brugernavn" ;
+        Text [ english_US ] = "~User name" ;
+        Text [ SPANISH ] = "N~ombre del usuario" ;
+        Text [ FINNISH ] = "~Käyttäjätunnus" ;
+        Text [ FRENCH ] = "Nom d'~utilisateur" ;
+        Text [ ITALIAN ] = "Nome ~utente" ;
+        Text [ DUTCH ] = "Naam ~gebruiker" ;
+        Text [ SWEDISH ] = "~Användarnamn" ;
+        Text [ PORTUGUESE ] = "Nome do ~utilizador" ;
+        Text [ portuguese_brazilian ] = "~Benutzername" ;
+        Text [ chinese_simplified ] = "Ê¹ÓÃÃû(~U)";
+        Text [ russian ] = "Èìÿ ïîëüçîâàòåëÿ";
+        Text [ polish ] = "Nazwa u¿ytkownika";
+        Text [ japanese ] = "Õ°»Þ°–¼(~U)";
+        Text [ chinese_traditional ] = "¨Ï¥ÎªÌ(~U)";
+        Text [ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
+        Text [ greek ] = "¼íïìá ÷ñÞóôç";
+        Text [ korean ] = "»ç¿ëÀÚ ÀÌ¸§(~U)";
+        Text [ turkish ] = "Kullanýcý adý";
+        Text [ language_user1 ] = " ";
+        Text[ catalan ] = "N~ombre del usuario";
+    };
+    Edit ET_USERNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 6 ) ;
+        Size = MAP_APPFONT ( 105 , 12 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_USER_ODBC;
+    };
+    CheckBox CB_PASSWORD_REQUIRED
+    {
+        Pos = MAP_APPFONT ( 90 , 21 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Text = "Passwort erforderlich";
+        Text [ english ] = "Password required";
+        Text [ english_us ] = "Password required";
+        HelpId = HID_DSADMIN_PWDREC_ODBC;
+        Text [ portuguese ] = "Necessário senha";
+        Text [ russian ] = "Òðåáóåòñÿ ïàðîëü";
+        Text [ greek ] = "Áðáéôåßôáé êùäéêüò ðñüóâáóçò";
+        Text [ dutch ] = "Wachtwoord verlangd";
+        Text [ french ] = "Mot de passe requis";
+        Text [ spanish ] = "Se necesita una contraseña";
+        Text [ italian ] = "Password necessaria";
+        Text [ danish ] = "Adgangskode påkrævet";
+        Text [ swedish ] = "Lösenord krävs";
+        Text [ polish ] = "Podaj has³o";
+        Text [ portuguese_brazilian ] = "Password required";
+        Text [ japanese ] = "Êß½Ü°ÄÞ‚ª•K—v";
+        Text [ korean ] = "ÆÐ½º¿öµå°¡ ÇÊ¿äÇÕ´Ï´Ù";
+        Text [ chinese_simplified ] = "±ØÐëÊäÈëÃÜÂë";
+        Text [ chinese_traditional ] = "¥²¶·¿é¤J±K½X";
+        Text [ turkish ] = "Password required";
+        Text [ arabic ] = "ãØáæÈ ßáãÉ ÓÑ";
+        Text[ finnish ] = "Salasana pakollinen";
+        Text[ catalan ] = "Se necesita una contraseña";
+    };
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 4 , 34 ) ;
+        Size = MAP_APPFONT ( 252 , 1 ) ;
+    };
+    FixedText FT_ADDRESSBOOK
+    {
+        Pos = MAP_APPFONT ( 6 , 40 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Adressbuch" ;
+        Text [ english ] = "~Address book" ;
+    };
+    ListBox LB_ADDRESSBOOK
+    {
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        HelpId = HID_DSADMIN_LB_ADDRESSBOOK;
+
+        Pos = MAP_APPFONT ( 91 , 39 ) ;
+        Size = MAP_APPFONT ( 105 , 60 ) ;
+
+        StringList =
+        {
+            "System Adressbuch" ;
+            "LDAP" ;
+#if defined(WNT) || defined(WIN32)
+            "Outlook" ;
+#endif
+        };
+        StringList [ english ] =
+        {
+            "System address book" ;
+            "LDAP" ;
+#if defined(WNT) || defined(WIN32)
+            "Outlook" ;
+#endif
+        };
+    };
+};
 //.........................................................................
 TabPage PAGE_TEXT
 {
@@ -2874,6 +2992,9 @@ QueryBox QUERY_NEED_TO_SAVE_FILTER
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.47  2001/05/18 05:13:53  kz
+ *  Merge SRC632: 18.05.01 - 07:13:45 (NoBranch)
+ *
  *  Revision 1.46  2001/05/14 13:22:58  fs
  *  no : at end of label texts
  *

@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.15 $
+ #  $Revision: 1.16 $
  #
- #  last change: $Author: fs $ $Date: 2001-04-26 11:40:21 $
+ #  last change: $Author: oj $ $Date: 2001-05-23 14:16:42 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -64,8 +64,6 @@ PRJINC=$(PRJ)$/source
 PRJNAME=dbaccess
 TARGET=uidlg
 
-ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
@@ -123,6 +121,25 @@ SLOFILES=	\
         $(SLO)$/sqlmessage.obj	\
         $(SLO)$/dbfindex.obj
 
+EXCEPTIONSFILES=	\
+        $(SLO)$/missingdocdlg.obj	\
+        $(SLO)$/doclinkdialog.obj	\
+        $(SLO)$/AdabasStat.obj	\
+        $(SLO)$/AdabasPage.obj	\
+        $(SLO)$/indexfieldscontrol.obj	\
+        $(SLO)$/indexdialog.obj	\
+        $(SLO)$/RelationDlg.obj	\
+        $(SLO)$/adtabdlg.obj	\
+        $(SLO)$/dlgsave.obj		\
+        $(SLO)$/queryorder.obj	\
+        $(SLO)$/queryfilter.obj	\
+        $(SLO)$/paramdialog.obj	\
+        $(SLO)$/dbadmin.obj		\
+        $(SLO)$/commonpages.obj	\
+        $(SLO)$/detailpages.obj	\
+        $(SLO)$/sqlmessage.obj	\
+        $(SLO)$/dbfindex.obj
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
@@ -131,6 +148,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.15  2001/04/26 11:40:21  fs
+ #	file is alive, again - added support for data source associated bookmarks
+ #	
  #	Revision 1.14  2001/03/27 08:05:56  oj
  #	impl new page for adabas
  #	

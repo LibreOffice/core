@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 15:07:06 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1253,6 +1253,10 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             AddTabPage(PAGE_ODBC, String(ResId(STR_PAGETITLE_ODBC)), OOdbcDetailsPage::Create, 0, sal_False, 1);
             m_aCurrentDetailPages.push(PAGE_ODBC);
             break;
+        case DST_ADDRESSBOOK:
+            AddTabPage(PAGE_ADDRESSBOOK, String(ResId(STR_PAGETITLE_ADDRESSBOOK)), OAddressBookDetailsPage::Create, 0, sal_False, 1);
+            m_aCurrentDetailPages.push(PAGE_ADDRESSBOOK);
+            break;
         case DST_ADABAS:
             AddTabPage(TAB_PAG_ADABAS_SETTINGS, String(ResId(STR_PAGETITLE_ADABAS_STATISTIC)), OAdabasAdminSettings::Create, 0, sal_False, 1);
             AddTabPage(PAGE_ADABAS, String(ResId(STR_PAGETITLE_ADABAS)), OAdabasDetailsPage::Create, 0, sal_False, 1);
@@ -1679,11 +1683,12 @@ const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
                 pRelevantItems = pAdabasItems;
             }
             break;
-        case DST_JDBC:  pRelevantItems = OJdbcDetailsPage::getDetailIds(); break;
-        case DST_ADO:   pRelevantItems = OAdoDetailsPage::getDetailIds(); break;
-        case DST_ODBC:  pRelevantItems = OOdbcDetailsPage::getDetailIds(); break;
-        case DST_DBASE: pRelevantItems = ODbaseDetailsPage::getDetailIds(); break;
-        case DST_TEXT:  pRelevantItems = OTextDetailsPage::getDetailIds(); break;
+        case DST_JDBC:          pRelevantItems = OJdbcDetailsPage::getDetailIds(); break;
+        case DST_ADO:           pRelevantItems = OAdoDetailsPage::getDetailIds(); break;
+        case DST_ODBC:          pRelevantItems = OOdbcDetailsPage::getDetailIds(); break;
+        case DST_ADDRESSBOOK:   pRelevantItems = OAddressBookDetailsPage::getDetailIds(); break;
+        case DST_DBASE:         pRelevantItems = ODbaseDetailsPage::getDetailIds(); break;
+        case DST_TEXT:          pRelevantItems = OTextDetailsPage::getDetailIds(); break;
         case DST_CALC:
             {
                 // spreadsheet currently has no options page
@@ -2576,6 +2581,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.50  2001/05/15 15:07:06  fs
+ *  #86991# save the current (modified) settings when inserting a new data source
+ *
  *  Revision 1.49  2001/05/15 11:25:35  fs
  *  #86996# use the connection pool instead of the driver manager
  *

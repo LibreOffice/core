@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 08:07:31 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,6 +745,103 @@ namespace dbaui
     }
 
     //========================================================================
+    //= OAddressBookDetailsPage
+    //========================================================================
+    OAddressBookDetailsPage::OAddressBookDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+        :OCommonBehaviourTabPage(pParent, PAGE_ADDRESSBOOK, _rCoreAttrs, CBTP_USE_UIDPWD)
+        ,m_aSeparator1      (this, ResId(FL_SEPARATOR1))
+        ,m_aFixedText       (this, ResId(FT_ADDRESSBOOK))
+        ,m_aAddressBookList (this, ResId(LB_ADDRESSBOOK))
+    {
+        FreeResource();
+    }
+
+    // -----------------------------------------------------------------------
+    SfxTabPage* OAddressBookDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return ( new OAddressBookDetailsPage( pParent, _rAttrSet ) );
+    }
+
+    // -----------------------------------------------------------------------
+    sal_Int32* OAddressBookDetailsPage::getDetailIds()
+    {
+        static sal_Int32* pRelevantIds = NULL;
+        if (!pRelevantIds)
+        {
+            static sal_Int32 nRelevantIds[] =
+            {
+                0
+            };
+            pRelevantIds = nRelevantIds;
+        }
+        return pRelevantIds;
+    }
+    // -----------------------------------------------------------------------
+    sal_Bool OAddressBookDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    {
+        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet) || m_aAddressBookList.GetSelectEntryPos() != m_aAddressBookList.GetSavedValue();
+        String sAddressBook;
+        switch(m_aAddressBookList.GetSelectEntryPos())
+        {
+            case 0:
+                sAddressBook.AssignAscii("DEFAULT");
+                break;
+            case 1:
+                sAddressBook.AssignAscii("LDAP");
+                break;
+            case 2:
+                sAddressBook.AssignAscii("OUTLOOK");
+                break;
+            default:
+                OSL_ENSURE(0,"Wrong Addressbook type!");
+        }
+
+        SFX_ITEMSET_GET(_rSet, pConnectUrl, SfxStringItem, DSID_CONNECTURL, sal_True);
+        SFX_ITEMSET_GET(_rSet, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+        ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
+        if (pTypeCollection && pConnectUrl && pConnectUrl->GetValue().Len())
+        {
+            String sType = pTypeCollection->getDatasourcePrefix(DST_ADDRESSBOOK);
+            sType += sAddressBook;
+            _rSet.Put(SfxStringItem(DSID_CONNECTURL, sType));
+        }
+        return bChangedSomething;
+    }
+    // -----------------------------------------------------------------------
+    void OAddressBookDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    {
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        sal_Bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        String sAddressBook;
+
+        SFX_ITEMSET_GET(_rSet, pConnectUrl, SfxStringItem, DSID_CONNECTURL, sal_True);
+        SFX_ITEMSET_GET(_rSet, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+        ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
+        if (pTypeCollection && pConnectUrl && pConnectUrl->GetValue().Len())
+            sAddressBook = pTypeCollection->cutPrefix(pConnectUrl->GetValue());
+
+
+        USHORT nPos = 0;
+        if(!sAddressBook.CompareToAscii("DEFAULT"))
+            nPos = 0;
+        else if(!sAddressBook.CompareToAscii("LDAP"))
+            nPos = 1;
+        else if(!sAddressBook.CompareToAscii("OUTLOOK"))
+            nPos = 2;
+
+        m_aAddressBookList.SelectEntryPos(nPos);
+        if (_bSaveValue)
+            m_aAddressBookList.SaveValue();
+
+        if (bReadonly)
+            m_aAddressBookList.Disable();
+    }
+
+    //========================================================================
     //= OTextDetailsPage
     //========================================================================
     //------------------------------------------------------------------------
@@ -1052,6 +1149,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/04/27 08:07:31  fs
+ *  #86370# disallow UTF-8 for dBase and text data sources
+ *
  *  Revision 1.3  2001/04/20 13:38:06  oj
  *  #85736# new checkbox for odbc
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:57:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,8 @@
 #define HID_DSADMIN_TABLE_TOOLBOX                   (HID_DBACCESS_START + 171)
 #define HID_DSADMIN_QUERY_TOOLBOX                   (HID_DBACCESS_START + 172)
 #define HID_DSADMIN_BOOKMARK_TOOLBOX                (HID_DBACCESS_START + 173)
+#define HID_DSADMIN_PAGE_ADDRESSBOOK                (HID_DBACCESS_START + 174)
+#define HID_DSADMIN_LB_ADDRESSBOOK                  (HID_DBACCESS_START + 175)
 
 // don't forget to update the file util/hidother.src
 #endif // _DBA_DBACCESS_HELPID_HRC_
@@ -270,6 +272,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2001/05/14 11:57:17  oj
+ *  #86744# new helpids for views
+ *
  *  Revision 1.29  2001/05/10 12:09:02  fs
  *  #86223# new help ids (not surprising ...)
  *
