@@ -59,17 +59,8 @@
 <xsl:key name='headchildren' match="text:p |table:table | text:span | text:ordered-list | office:annotation | text:unordered-list | text:footnote | text:a | text:list-item | draw:plugin | draw:text-box | text:footnote-body | text:section"
    use="generate-id((..|preceding-sibling::text:h[@text:level='1']|preceding-sibling::text:h[@text:level='2']|preceding-sibling::text:h[@text:level='3']|preceding-sibling::text:h[@text:level='4']|preceding-sibling::text:h[@text:level='5'])[last()])"/>
 
-<xsl:key name="children" match="text:h[@text:level='2']"
-   use="generate-id(preceding-sibling::text:h[@text:level='1'][1])"/>
-
-<xsl:key name="children" match="text:h[@text:level='3']"
-   use="generate-id(preceding-sibling::text:h[@text:level='2' or @text:level='1'][1])"/>
-
-<xsl:key name="children" match="text:h[@text:level='4']"
-   use="generate-id(preceding-sibling::text:h[@text:level='3' or @text:level='2' or @text:level='1'][1])"/>
-
-<xsl:key name="children" match="text:h[@text:level='5']"
-   use="generate-id(preceding-sibling::text:h[@text:level='4' or @text:level='3' or @text:level='2' or @text:level='1'][1])"/>
+<xsl:key name="children" match="text:h[@text:level &gt; '1' and @text:level &lt; '6']"
+  use="generate-id(preceding-sibling::text:h[@text:level &lt; current()/@text:level][1])"/>
 
 
 <xsl:template match="text:h[@text:level='1']">
