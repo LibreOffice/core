@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 13:23:48 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,25 +88,26 @@ namespace xmloff
     XMLPropertyMapEntry aControlStyleProperties[] =
     {
         { PROPERTY_BACKGROUNDCOLOR, XML_NAMESPACE_FO, sXML_background_color,    XML_TYPE_COLOR, 0 },
-        { PROPERTY_ALIGN,   XML_NAMESPACE_STYLE,    sXML_text_align,            XML_TYPE_TEXT_ALIGN, 0 },
-        { PROPERTY_BORDER,  XML_NAMESPACE_FO,       sXML_border,                XML_TYPE_CONTROL_BORDER, 0 },
-        { "FontCharWidth",  XML_NAMESPACE_STYLE,    sXML_font_char_width,       XML_TYPE_NUMBER16, 0 },
-        { "FontCharset",    XML_NAMESPACE_STYLE,    sXML_font_charset,          XML_TYPE_TEXT_FONTENCODING, 0 },
-        { "FontFamily",     XML_NAMESPACE_STYLE,    sXML_font_family_generic,   XML_TYPE_TEXT_FONTFAMILY, 0 },
-        { "FontHeight",     XML_NAMESPACE_FO,       sXML_font_size,             XML_TYPE_CHAR_HEIGHT, 0 },
-        { "FontKerning",    XML_NAMESPACE_STYLE,    sXML_letter_kerning,        XML_TYPE_BOOL, 0 },
-        { "FontName",       XML_NAMESPACE_STYLE,    sXML_font_name,             XML_TYPE_STRING, 0 },
-        { "FontOrientation",XML_NAMESPACE_STYLE,    sXML_rotation_angle,        XML_TYPE_ROTATION_ANGLE, 0 },
-        { "FontPitch",      XML_NAMESPACE_STYLE,    sXML_font_pitch,            XML_TYPE_TEXT_FONTPITCH, 0 },
-        { "FontSlant",      XML_NAMESPACE_FO,       sXML_font_style,            XML_TYPE_TEXT_POSTURE, 0 },
-        { "FontStrikeout",  XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_TYPE_TEXT_CROSSEDOUT, 0 },
-        { "FontStyleName",  XML_NAMESPACE_STYLE,    sXML_font_style_name,       XML_TYPE_STRING, 0 },
+        { PROPERTY_ALIGN,           XML_NAMESPACE_STYLE,    sXML_text_align,            XML_TYPE_TEXT_ALIGN, 0 },
+        { PROPERTY_BORDER,          XML_NAMESPACE_FO,       sXML_border,                XML_TYPE_CONTROL_BORDER, 0 },
+        { "FontCharWidth",          XML_NAMESPACE_STYLE,    sXML_font_char_width,       XML_TYPE_NUMBER16, 0 },
+        { "FontCharset",            XML_NAMESPACE_STYLE,    sXML_font_charset,          XML_TYPE_TEXT_FONTENCODING, 0 },
+        { "FontFamily",             XML_NAMESPACE_STYLE,    sXML_font_family_generic,   XML_TYPE_TEXT_FONTFAMILY, 0 },
+        { "FontHeight",             XML_NAMESPACE_FO,       sXML_font_size,             XML_TYPE_CHAR_HEIGHT, 0 },
+        { "FontKerning",            XML_NAMESPACE_STYLE,    sXML_letter_kerning,        XML_TYPE_BOOL, 0 },
+        { "FontName",               XML_NAMESPACE_STYLE,    sXML_font_name,             XML_TYPE_STRING, 0 },
+        { "FontOrientation",        XML_NAMESPACE_STYLE,    sXML_rotation_angle,        XML_TYPE_ROTATION_ANGLE, 0 },
+        { "FontPitch",              XML_NAMESPACE_STYLE,    sXML_font_pitch,            XML_TYPE_TEXT_FONTPITCH, 0 },
+        { "FontSlant",              XML_NAMESPACE_FO,       sXML_font_style,            XML_TYPE_TEXT_POSTURE, 0 },
+        { "FontStrikeout",          XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_TYPE_TEXT_CROSSEDOUT, 0 },
+        { "FontStyleName",          XML_NAMESPACE_STYLE,    sXML_font_style_name,       XML_TYPE_STRING, 0 },
         // "FontType" - ignored - UnoControls don't use a FontType
-        { "FontUnderline",  XML_NAMESPACE_STYLE,    sXML_text_underline,        XML_TYPE_TEXT_UNDERLINE, 0 },
-        { "FontWeight",     XML_NAMESPACE_FO,       sXML_font_weight,           XML_TYPE_TEXT_WEIGHT, 0 },
-        { "FontWidth",      XML_NAMESPACE_STYLE,    sXML_font_width,            XML_TYPE_FONT_WIDTH, 0 },
-        { "FontWordLineMode",XML_NAMESPACE_FO,      sXML_score_spaces,          XML_TYPE_NBOOL, 0 },
-        { "TextColor",      XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
+        { "FontUnderline",          XML_NAMESPACE_STYLE,    sXML_text_underline,        XML_TYPE_TEXT_UNDERLINE, 0 },
+        { "FontWeight",             XML_NAMESPACE_FO,       sXML_font_weight,           XML_TYPE_TEXT_WEIGHT, 0 },
+        { "FontWidth",              XML_NAMESPACE_STYLE,    sXML_font_width,            XML_TYPE_FONT_WIDTH, 0 },
+        { "FontWordLineMode",       XML_NAMESPACE_FO,       sXML_score_spaces,          XML_TYPE_NBOOL, 0 },
+        { "TextColor",              XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
+        { PROPERTY_FORMATKEY,       XML_NAMESPACE_STYLE,    sXML_data_style_name,       XML_TYPE_STRING, 0 },
         { 0, 0, 0, 0 }
     };
 
@@ -147,6 +148,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/04/19 13:23:48  fs
+ *  arggghhhh .... remove the (double) TextColor entry
+ *
  *  Revision 1.7  2001/04/19 13:21:29  fs
  *  #85097# add TextColor to the styles map, so it won't be exported as ordinary property
  *
