@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-31 13:15:45 $
+ *  last change: $Author: mt $ $Date: 2001-08-20 11:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,19 +240,6 @@ sal_Bool TETextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor
     ULONG nT = SotExchange::GetFormat( rFlavor );
     return ( nT == SOT_FORMAT_STRING );
 }
-
-static uno::Reference< datatransfer::clipboard::XClipboard > ImplGetClipboard()
-{
-    static uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
-    if ( !xClipboard.is() )
-    {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = vcl::unohelper::GetMultiServiceFactory();
-        if ( xMSF.is() )
-            xClipboard = uno::Reference< datatransfer::clipboard::XClipboard >( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
-    }
-    return xClipboard;
-}
-
 
 // -------------------------------------------------------------------------
 // (+) class TextView
@@ -696,6 +683,8 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                 if ( !rKeyEvent.GetKeyCode().IsMod2() )
                 {
                     aCurSel = ImpMoveCursor( rKeyEvent );
+                    if ( aCurSel.HasRange() )
+                        Copy( GetWindow()->GetSelection() );
                     bMoved = TRUE;
                     if ( nCode == KEY_END )
                         bEndKey = TRUE;
@@ -821,6 +810,15 @@ void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
 {
     mnTravelXPos = TRAVEL_X_DONTKNOW;
     mpSelEngine->SelMouseButtonUp( rMouseEvent );
+    if ( rMouseEvent.IsMiddle() && !IsReadOnly() &&
+         ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
+    {
+        Paste( GetWindow()->GetSelection() );
+    }
+    else if ( rMouseEvent.IsLeft() && GetSelection().HasRange() )
+    {
+        Copy( GetWindow()->GetSelection() );
+    }
 }
 
 void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
@@ -1086,10 +1084,9 @@ void TextView::Cut()
     mpTextEngine->UndoActionEnd( TEXTUNDO_CUT );
 }
 
-void TextView::Copy()
+void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
 {
-    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
-    if ( xClipboard.is() )
+    if ( rxClipboard.is() )
     {
         TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
 
@@ -1097,9 +1094,9 @@ void TextView::Copy()
             mpTextEngine->Write( pDataObj->GetHTMLStream(), &maSelection, TRUE );
 
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        xClipboard->setContents( pDataObj, NULL );
+        rxClipboard->setContents( pDataObj, NULL );
 
-        uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
+        uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
         if( xFlushableClipboard.is() )
             xFlushableClipboard->flushClipboard();
 
@@ -1107,13 +1104,17 @@ void TextView::Copy()
     }
 }
 
-void TextView::Paste()
+void TextView::Copy()
 {
-    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
-    if ( xClipboard.is() )
+    Copy( GetWindow()->GetClipboard() );
+}
+
+void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
+{
+    if ( rxClipboard.is() )
     {
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
+        uno::Reference< datatransfer::XTransferable > xDataObj = rxClipboard->getContents();
         Application::AcquireSolarMutex( nRef );
         if ( xDataObj.is() )
         {
@@ -1133,6 +1134,11 @@ void TextView::Paste()
             }
         }
     }
+}
+
+void TextView::Paste()
+{
+    Paste( GetWindow()->GetClipboard() );
 }
 
 String TextView::GetSelected()
