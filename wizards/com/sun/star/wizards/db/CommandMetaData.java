@@ -2,9 +2,9 @@
 *
 *  $RCSfile: CommandMetaData.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:40:17 $
+*  last change: $Author: hr $ $Date: 2004-08-02 17:19:19 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -279,19 +279,13 @@ public class CommandMetaData extends DBMetaData {
 
 
     public void switchtoDesignmode(String _commandname, int _commandtype) {
-        PropertyValue[] rDispatchArguments;
-        if (_commandtype == com.sun.star.sdb.CommandType.QUERY)
-            rDispatchArguments = new PropertyValue[7];
-        else
-            rDispatchArguments = new PropertyValue[5];
+        PropertyValue[] rDispatchArguments = new PropertyValue[5];
         rDispatchArguments[0] = Properties.createProperty("DataSourceName", this.DataSourceName);
         rDispatchArguments[1] = Properties.createProperty("QueryDesignView", Boolean.TRUE);
         rDispatchArguments[2] = Properties.createProperty("CreateView", Boolean.FALSE);
         rDispatchArguments[3] = Properties.createProperty("ActiveConnection", this.DBConnection);
         if (_commandtype == com.sun.star.sdb.CommandType.QUERY) {
             rDispatchArguments[4] = Properties.createProperty("CurrentQuery", _commandname);
-            rDispatchArguments[5] = Properties.createProperty("ShowTreeView", Boolean.FALSE);
-            rDispatchArguments[6] = Properties.createProperty("ShowTreeViewButton", Boolean.FALSE);
             showCommandView(".component:DB/QueryDesign", rDispatchArguments);
         } else {
             rDispatchArguments[4] = Properties.createProperty("CurrentTable", _commandname);
@@ -301,11 +295,14 @@ public class CommandMetaData extends DBMetaData {
     }
 
     public void switchtoDataViewmode(String _commandname, int _commandtype) {
-        PropertyValue[] rDispatchArguments = new PropertyValue[4];
+        PropertyValue[] rDispatchArguments = new PropertyValue[7];
         rDispatchArguments[0] = Properties.createProperty("DataSourceName", this.DataSourceName);
         rDispatchArguments[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
         rDispatchArguments[2] = Properties.createProperty("Command", _commandname);
         rDispatchArguments[3] = Properties.createProperty("CommandType", new Integer(_commandtype));
+        rDispatchArguments[4] = Properties.createProperty("ShowTreeView", Boolean.FALSE);
+        rDispatchArguments[5] = Properties.createProperty("ShowTreeViewButton", Boolean.FALSE);
+        rDispatchArguments[6] = Properties.createProperty("ShowMenu", Boolean.TRUE);
         showCommandView(".component:DB/DataSourceBrowser", rDispatchArguments);
     }
 
