@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawutil.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_DRAWUTIL_HXX
 #define SC_DRAWUTIL_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -73,8 +77,8 @@ class ScDocument;
 class ScDrawUtil
 {
 public:
-    static void CalcScale( ScDocument* pDoc, USHORT nTab,
-                        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
+    static void CalcScale( ScDocument* pDoc, SCTAB nTab,
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         OutputDevice* pDev, const Fraction& rZoomX, const Fraction& rZoomY,
                         double nPPTX, double nPPTY,
                         Fraction& rScaleX, Fraction& rScaleY );
