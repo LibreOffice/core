@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProvider.java,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: rt $ $Date: 2004-10-22 13:58:09 $
+*  last change: $Author: rt $ $Date: 2005-01-27 15:28:38 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -625,7 +625,16 @@ public abstract class ScriptProvider
         ParcelContainer c = ((UnoPkgContainer)m_container).getRegisteredUnoPkgContainer( Name );
         if ( c != null )
         {
-            String libName = Name.substring( Name.lastIndexOf( "/" ) + 1 );
+            String libName;
+            if (Name.endsWith("/"))
+            {
+                String tmp = Name.substring( 0, Name.lastIndexOf( "/" ) );
+                libName = tmp.substring( tmp.lastIndexOf( "/" ) + 1 );
+            }
+            else
+            {
+                libName = Name.substring( Name.lastIndexOf( "/" ) + 1 );
+            }
             LogUtils.DEBUG("Deregistering library " + libName );
             if ( c.removeParcel( libName ) )
             {
