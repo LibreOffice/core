@@ -157,34 +157,6 @@ Dim oRuntimeDialog as Object
 End Function
 
 
-Sub SwitchWizardDialogHeight(oDialog as Object, sReduceDialog as String, sHeightenDialog as String)
-Dim oDialogModel  as Object
-Dim iDlgHeight as Integer
-Dim iYPos as Integer
-	oDialogModel = oDialog.Model
-	If oDialogModel.Height &gt; 100 Then
-		iDlgHeight = 26
-		oDialog.GetControl(&quot;imgTheme&quot;).visible = false
-		oDialog.GetControl(&quot;cmdSwitchHeight&quot;).Model.Label = CHR(9663)
-		oDialog.GetControl(&quot;cmdSwitchHeight&quot;).Model.HelpText = sHeightenDialog
-	Else
-		iDlgHeight = 210
-		oDialog.GetControl(&quot;imgTheme&quot;).visible = true
-		oDialog.GetControl(&quot;cmdSwitchHeight&quot;).Model.Label = CHR(9653)
-		oDialog.GetControl(&quot;cmdSwitchHeight&quot;).Model.HelpText = sReduceDialog
-	End If
-	iYPos = iDlgHeight - 20
-	oDialogModel.cmdCancel.PositionY = iYPos
-	oDialogModel.cmdHelp.PositionY = iYPos
-&apos; Todo: Abfragen, ob in der Sequenze oDialogModel.GetControls()  auch ein cmdBack 
-&apos; vorhanden ist
-	oDialogModel.cmdBack.PositionY = iYPos
-	oDialogModel.cmdGoOn.PositionY = iYPos
-	oDialogModel.cmdSwitchHeight.PositionY = iYPos
-	oDialogModel.Height = iDlgHeight
-End Sub
-
-
 Sub GetFolderName(oRefModel as Object)
 Dim oFolderDialog
 Dim iAccept as Integer
@@ -200,7 +172,7 @@ Dim oUcb as object
 	End If
 	iAccept = oFolderDialog.Execute()
 	If iAccept = 1 Then
-		sPath = oFolderDialog.GetDisplayDirectory()
+		sPath = oFolderDialog.GetDirectory()
 		If oUcb.Exists(sPath) Then
 			oRefModel.Text = ConvertFromUrl(sPath)
 		End If

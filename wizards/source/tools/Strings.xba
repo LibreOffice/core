@@ -280,38 +280,38 @@ End Function
 
 
 &apos; Converts an &quot;ordinary&quot; path to a &quot;URL-Path&quot;
-Function ConverttoURL(ByVal BigString as String) as String
-Dim Separator as String
-	If sProductname = &quot;&quot; Then
-		sProductname = GetProductname()
-	End If
-	If BigString &lt;&gt; &quot;&quot; Then
-		If IsFatOffice() Then
-			Separator = GetPathSeparator()
-			&apos; Is the delivered Path already a URL
-			If Instr(1,UCase(BigString),&quot;FILE:///&quot;) = 0 Then
-				BigString = ReplaceString(BigString,&quot;/&quot;,Separator)
-				BigString = &quot;file:///&quot; &amp; BigString
-			End If
-		End If
-		ConvertToURL = BigString
-	Else
-		ConvertToUrl = &quot;&quot;
-	End If
-End Function
+&apos;Function ConverttoURL(ByVal BigString as String) as String
+&apos;Dim Separator as String
+&apos;	If sProductname = &quot;&quot; Then
+&apos;		sProductname = GetProductname()
+&apos;	End If
+&apos;	If BigString &lt;&gt; &quot;&quot; Then
+&apos;		If IsFatOffice() Then
+&apos;			Separator = GetPathSeparator()
+&apos;			&apos; Is the delivered Path already a URL
+&apos;			If Instr(1,UCase(BigString),&quot;FILE:///&quot;) = 0 Then
+&apos;				BigString = ReplaceString(BigString,&quot;/&quot;,Separator)
+&apos;				BigString = &quot;file:///&quot; &amp; BigString
+&apos;			End If
+&apos;		End If
+&apos;		ConvertToURL = BigString
+&apos;	Else
+&apos;		ConvertToUrl = &quot;&quot;
+&apos;	End If
+&apos;End Function
 
 
 &apos; Converts an &quot;URL-Path&quot; to an ordinary &quot;Path&quot;
-Function ConvertfromURL(ByVal BigString as String) as String
-Dim Separator as String
-	Separator = GetPathSeparator()
-	If Left(Ucase(BigString),8)= &quot;FILE:///&quot; Then
-		BigString = Mid(BigString, 9, Len(BigString)-8)
-		BigString = ReplaceString(BigString,Separator,&quot;/&quot;)
-		BigString = ReplaceString(BigString,&quot;:&quot;,&quot;|&quot;)
-		ConvertFromUrl = BigString
-	End If
-End Function
+&apos;Function ConvertfromURL(ByVal BigString as String) as String
+&apos;Dim Separator as String
+&apos;	Separator = GetPathSeparator()
+&apos;	If Left(Ucase(BigString),8)= &quot;FILE:///&quot; Then
+&apos;		BigString = Mid(BigString, 9, Len(BigString)-8)
+&apos;		BigString = ReplaceString(BigString,Separator,&quot;/&quot;)
+&apos;		BigString = ReplaceString(BigString,&quot;:&quot;,&quot;|&quot;)
+&apos;		ConvertFromUrl = BigString
+&apos;	End If
+&apos;End Function
 
 
 &apos; Retrieves the second value for a next to &apos;SearchString&apos; in
@@ -448,12 +448,15 @@ On Local Error Goto No2ndDim
 End Function
 
 
-Function GetValueoutofList(SearchValue, BigList(), iDim as Integer)
+Function GetValueoutofList(SearchValue, BigList(), iDim as Integer, Optional ValueIndex)
 Dim i as Integer
 Dim MaxIndex as Integer
 	MaxIndex = Ubound(BigList(),1)
 	For i = 0 To MaxIndex
 		If BigList(i,0) = SearchValue Then
+			If Not IsMissing(ValueIndex) Then
+				ValueIndex = i
+			End If
 			GetValueOutOfList() = BigList(i,iDim)
 		End If
 	Next i
