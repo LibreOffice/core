@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-07 15:10:08 $
+ *  last change: $Author: dvo $ $Date: 2001-11-07 17:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HPP_
@@ -1030,32 +1034,48 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
     // get Field ID
     enum FieldIdEnum nToken = GetFieldID(rTextField, xPropSet);
 
+    // special treatment for combined characters field, because it is
+    // exported as a style
+    const XMLPropertyState **pStates = NULL;
+    if ( nToken == FIELD_ID_COMBINED_CHARACTERS )
+    {
+        const XMLPropertyState* aStates[] =
+            { pCombinedCharactersPropertyState, 0 };
+        pStates = aStates;
+    }
+
+    // find out whether we need to set the style or hyperlink
+    sal_Bool bHasHyperlink;
+    OUString sStyle = GetExport().GetTextParagraphExport()->
+        FindTextStyleAndHyperlink( xRangePropSet, bHasHyperlink, pStates );
+    sal_Bool bHasStyle = (sStyle.getLength() > 0);
+
+    // export hyperlink (if we have one)
+    if( bHasHyperlink )
+    {
+        Reference<XPropertyState> xRangePropState( xRangePropSet, UNO_QUERY );
+        bHasHyperlink =
+            GetExport().GetTextParagraphExport()->addHyperlinkAttributes(
+                xRangePropSet, xRangePropState,
+                xRangePropSet->getPropertySetInfo() );
+    }
+    SvXMLElementExport aHyperlink( GetExport(), bHasHyperlink,
+                                   XML_NAMESPACE_TEXT, XML_A,
+                                   sal_False, sal_False );
+
     // export span with style (if necessary)
-    // except for combined characters field)
-    if (FIELD_ID_COMBINED_CHARACTERS != nToken)
+    // (except for combined characters field)
+    if( bHasStyle )
     {
-        sal_Bool bDummy;
-        OUString sStyle = GetExport().GetTextParagraphExport()->FindTextStyleAndHyperlink( xRangePropSet, bDummy );
-        if( sStyle.getLength() )
-        {
-            // export <text:span> element
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                      XML_STYLE_NAME, sStyle );
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                      XML_SPAN, sal_False, sal_False);
-            ExportFieldHelper( rTextField, xPropSet, xRangePropSet, nToken );
-        }
-        else
-        {
-            // no style -> no span
-            ExportFieldHelper( rTextField, xPropSet, xRangePropSet, nToken );
-        }
+        // export <text:span> element
+        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME, sStyle );
     }
-    else
-    {
-        // combined characters: span will be handled below
-        ExportFieldHelper( rTextField, xPropSet, xRangePropSet, nToken );
-    }
+    SvXMLElementExport aSpan( GetExport(), bHasStyle,
+                              XML_NAMESPACE_TEXT, XML_SPAN,
+                              sal_False, sal_False);
+
+    // finally, export the field itself
+    ExportFieldHelper( rTextField, xPropSet, xRangePropSet, nToken );
 }
 
 /// export the given field to XML. Called on second pass through document
@@ -1698,12 +1718,10 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_COMBINED_CHARACTERS:
     {
-        // get style name for current style + combine letters and export a span
-        const XMLPropertyState *aStates[] = { pCombinedCharactersPropertyState, 0 };
-        sal_Bool bDummy;
-        ProcessString(XML_STYLE_NAME,
-                      GetExport().GetTextParagraphExport()->FindTextStyleAndHyperlink( rRangePropSet, bDummy, aStates) );
-        ExportElement(XML_SPAN, sPresentation);
+        // The style with the combined characters attribute has
+        // already been handled in the ExportField method. So all that
+        // is left to do now is to exprot the characters.
+        GetExport().Characters(sPresentation);
         break;
     }
 
