@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-23 14:59:15 $
+ *  last change: $Author: sb $ $Date: 2001-12-03 12:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2082,11 +2082,10 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
 }
 
 //============================================================================
-INetURLObject::SubString INetURLObject::getAuthority() const
+xub_StrLen INetURLObject::getAuthorityBegin() const
 {
     DBG_ASSERT(getSchemeInfo().m_bAuthority,
                "INetURLObject::getAuthority(): Bad scheme");
-
     xub_StrLen nBegin;
     if (m_aUser.isPresent())
         nBegin = m_aUser.getBegin();
@@ -2098,7 +2097,13 @@ INetURLObject::SubString INetURLObject::getAuthority() const
     DBG_ASSERT(m_aAbsURIRef.GetChar(nBegin) == '/'
                && m_aAbsURIRef.GetChar(nBegin + 1) == '/',
                "INetURLObject::getAuthority(): Bad authority");
+    return nBegin;
+}
 
+//============================================================================
+INetURLObject::SubString INetURLObject::getAuthority() const
+{
+    xub_StrLen nBegin = getAuthorityBegin();
     xub_StrLen nEnd = m_aPort.isPresent() ? m_aPort.getEnd() :
                       m_aHost.isPresent() ? m_aHost.getEnd() :
                       m_aAuth.isPresent() ? m_aAuth.getEnd() :
@@ -3293,180 +3298,122 @@ INetURLObject::getAbbreviated(
     rtl::OUStringBuffer aBuffer;
     aBuffer.appendAscii(getSchemeInfo().m_pScheme);
     aBuffer.append(static_cast< sal_Unicode >(':'));
-    OSL_ENSURE(m_aHost.isPresent()
-               || !(m_aUser.isPresent()
-                    || m_aAuth.isPresent()
-                    || m_aPort.isPresent()),
-               "unexpected situation"); // misusing host as authority...
-    if (m_aHost.isPresent())
-    {
-        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
-        OSL_ENSURE(m_aUser.isPresent() || !m_aAuth.isPresent(),
-                   "unexpected situation");
-        if (m_aUser.isPresent())
-        {
-            aBuffer.
-                append(decode(m_aUser, cEscapePrefix, eMechanism, eCharset));
-            if (m_aAuth.isPresent())
-            {
-                if (getSchemeInfo().m_bAuth)
-                    aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM(";AUTH="));
-                else
-                    aBuffer.append(static_cast< sal_Unicode >(':'));
-                aBuffer.append(decode(m_aAuth,
-                                      cEscapePrefix,
-                                      eMechanism,
-                                      eCharset));
-            }
-            aBuffer.append(static_cast< sal_Unicode >('@'));
-        }
-        aBuffer.append(decode(m_aHost, cEscapePrefix, eMechanism, eCharset));
-        if (m_aPort.isPresent())
-        {
-            aBuffer.append(static_cast< sal_Unicode >(':'));
-            aBuffer.
-                append(decode(m_aPort, cEscapePrefix, eMechanism, eCharset));
-        }
-    }
+    bool bAuthority = getSchemeInfo().m_bAuthority;
+    sal_Unicode const * pCoreBegin
+        = m_aAbsURIRef.GetBuffer() + (bAuthority ? getAuthorityBegin() :
+                                                   m_aPath.getBegin());
+    sal_Unicode const * pCoreEnd
+        = m_aAbsURIRef.GetBuffer() + m_aPath.getBegin() + m_aPath.getLength();
     bool bSegment = false;
     if (getSchemeInfo().m_bHierarchical)
     {
-        OSL_ENSURE(!m_aPath.isEmpty()
-                   && m_aAbsURIRef.GetChar(m_aPath.getBegin()) == '/',
-                   "unexpected situation");
-        aBuffer.append(static_cast< sal_Unicode >('/'));
         rtl::OUString aRest;
         if (m_aQuery.isPresent())
             aRest = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?..."));
         else if (m_aFragment.isPresent())
             aRest = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#..."));
-        bool bEllipsis = false;
         rtl::OUStringBuffer aTrailer;
-        sal_Unicode const * pBegin = m_aAbsURIRef.GetBuffer()
-                                         + m_aPath.getBegin();
-        sal_Unicode const * pEnd = pBegin + m_aPath.getLength();
-        bool bPrefix = true;
-        bool bSuffix = true;
+        sal_Unicode const * pBegin = pCoreBegin;
+        sal_Unicode const * pEnd = pCoreEnd;
         sal_Unicode const * pPrefixBegin = pBegin;
         sal_Unicode const * pSuffixEnd = pEnd;
+        bool bPrefix = true;
+        bool bSuffix = true;
         do
         {
             if (bSuffix)
             {
                 sal_Unicode const * p = pSuffixEnd - 1;
+                if (pSuffixEnd == pCoreEnd && *p == '/')
+                    --p;
                 while (*p != '/')
                     --p;
-                rtl::OUString aSegment(decode(p == pBegin ? p + 1 : p,
-                                              pSuffixEnd,
-                                              cEscapePrefix,
-                                              eMechanism,
-                                              eCharset));
+                if (bAuthority && p == pCoreBegin + 1)
+                    --p;
+                rtl::OUString
+                    aSegment(decode(p + (p == pBegin && pBegin != pCoreBegin ?
+                                             1 : 0),
+                                    pSuffixEnd,
+                                    cEscapePrefix,
+                                    eMechanism,
+                                    eCharset));
                 pSuffixEnd = p;
-                rtl::OUStringBuffer aResult1(aBuffer);
-                if (bEllipsis)
-                    aResult1.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
-                aResult1.append(aSegment);
-                aResult1.append(aTrailer);
-                aResult1.append(aRest);
-                rtl::OUStringBuffer aResult2;
-                if (pBegin != pSuffixEnd)
-                    if (bEllipsis)
-                        aResult2 = aResult1;
-                    else
-                    {
-                        aResult2 = aBuffer;
-                        aResult2.
-                            appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
-                        aResult2.append(aSegment);
-                        aResult2.append(aTrailer);
-                        aResult2.append(aRest);
-                    }
+                rtl::OUStringBuffer aResult(aBuffer);
+                if (pSuffixEnd != pBegin)
+                    aResult.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
+                aResult.append(aSegment);
+                aResult.append(aTrailer);
+                aResult.append(aRest);
                 if (rStringWidth->
-                            queryStringWidth(aResult1.makeStringAndClear())
-                        <= nWidth
-                    && (pBegin == pSuffixEnd
-                        || rStringWidth->
-                                   queryStringWidth(aResult2.
-                                                        makeStringAndClear())
-                               <= nWidth))
+                            queryStringWidth(aResult.makeStringAndClear())
+                        <= nWidth)
                 {
                     aTrailer.insert(0, aSegment);
                     bSegment = true;
                     pEnd = pSuffixEnd;
                 }
                 else
-                {
-                    bEllipsis = true;
                     bSuffix = false;
-                }
-                if (pPrefixBegin == pSuffixEnd)
+                if (pPrefixBegin > pSuffixEnd)
+                    pPrefixBegin = pSuffixEnd;
+                if (pBegin == pEnd)
                     break;
             }
             if (bPrefix)
             {
-                sal_Unicode const * p = pPrefixBegin + 1;
+                sal_Unicode const * p
+                    = pPrefixBegin
+                          + (bAuthority && pPrefixBegin == pCoreBegin ? 2 :
+                                                                        1);
                 while (p != pSuffixEnd && *p != '/')
                     ++p;
-                rtl::OUString aSegment(decode(pPrefixBegin + 1,
-                                              p == pEnd ? p : p + 1,
-                                              cEscapePrefix,
-                                              eMechanism,
-                                              eCharset));
+                if (p == pCoreEnd - 1 && *p == '/')
+                    ++p;
+                rtl::OUString
+                    aSegment(decode(pPrefixBegin
+                                        + (pPrefixBegin == pCoreBegin ? 0 :
+                                                                        1),
+                                    p == pEnd ? p : p + 1,
+                                    cEscapePrefix,
+                                    eMechanism,
+                                    eCharset));
                 pPrefixBegin = p;
-                rtl::OUStringBuffer aResult1(aBuffer);
-                if (bEllipsis)
-                    aResult1.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
-                aResult1.append(aSegment);
-                aResult1.append(aTrailer);
-                aResult1.append(aRest);
-                rtl::OUStringBuffer aResult2;
+                rtl::OUStringBuffer aResult(aBuffer);
+                aResult.append(aSegment);
                 if (pPrefixBegin != pEnd)
-                    if (bEllipsis)
-                        aResult2 = aResult1;
-                    else
-                    {
-                        aResult2 = aBuffer;
-                        aResult2.
-                            appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
-                        aResult2.append(aSegment);
-                        aResult2.append(aTrailer);
-                        aResult2.append(aRest);
-                    }
+                    aResult.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
+                aResult.append(aTrailer);
+                aResult.append(aRest);
                 if (rStringWidth->
-                            queryStringWidth(aResult1.makeStringAndClear())
-                        <= nWidth
-                    && (pPrefixBegin == pEnd
-                        || rStringWidth->
-                                   queryStringWidth(aResult2.
-                                                        makeStringAndClear())
-                               <= nWidth))
+                            queryStringWidth(aResult.makeStringAndClear())
+                        <= nWidth)
                 {
                     aBuffer.append(aSegment);
                     bSegment = true;
                     pBegin = pPrefixBegin;
                 }
                 else
-                {
-                    bEllipsis = true;
                     bPrefix = false;
-                }
-                if (pPrefixBegin == pSuffixEnd)
+                if (pPrefixBegin > pSuffixEnd)
+                    pSuffixEnd = pPrefixBegin;
+                if (pBegin == pEnd)
                     break;
             }
         }
         while (bPrefix || bSuffix);
         if (bSegment)
         {
-            if (bEllipsis)
+            if (pPrefixBegin != pBegin || pSuffixEnd != pEnd)
                 aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
             aBuffer.append(aTrailer);
         }
-        else
-            aBuffer.setLength(aBuffer.getLength() - 1);
-                // remove the initial '/' of the path again
     }
     if (!bSegment)
-        aBuffer.append(decode(m_aPath, cEscapePrefix, eMechanism, eCharset));
+        aBuffer.append(decode(pCoreBegin,
+                              pCoreEnd,
+                              cEscapePrefix,
+                              eMechanism,
+                              eCharset));
     if (m_aQuery.isPresent())
     {
         aBuffer.append(static_cast< sal_Unicode >('?'));
