@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:23:42 $
+ *  last change: $Author: dr $ $Date: 2001-03-09 13:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,6 +605,7 @@ class ImportExcel8 : public ImportExcel
         void                    ChartAxis( void );              // 0x101D
         void                    ChartTick( void );              // 0x101E
         void                    ChartValuerange( void );        // 0x101F
+        void                    ChartCatserrange( void );       // 0x1020
         void                    ChartAxislineformat( void );    // 0x1021
         void                    ChartDefaulttext( void );       // 0x1024
         void                    ChartText( void );              // 0x1025
