@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-01 17:28:31 $
+ *  last change: $Author: nn $ $Date: 2000-12-06 09:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,9 @@ ScConditionEntry::~ScConditionEntry()
 {
     delete pFCell1;
     delete pFCell2;
+
+    delete pFormula1;
+    delete pFormula2;
 }
 
 ScConditionEntry::ScConditionEntry( SvStream& rStream, ScMultipleReadHeader& rHdr,
