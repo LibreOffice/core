@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:30:45 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,6 +416,7 @@ public:
     // get RTF default ItemSets. Must be used by pard/plain tokens or in
     // reset of Style-Items
     const SfxItemSet& GetRTFDefaults();
+    virtual bool UncompressableStackEntry(const SvxRTFItemStackType &rSet) const;
 };
 
 // der Stack fuer die Attribute:
