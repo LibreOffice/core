@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:47:20 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ String RID_SVXSTR_EDITGRFLINK
     Text[ chinese_simplified ] = "Á´½ÓÍ¼ĞÎ";
     Text[ russian ] = "Ñâÿçàòü ãğàôèêó";
     Text[ polish ] = "Po³¹cz grafikê";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸‚ğØİ¸‚·‚é";
+    Text[ japanese ] = "}‚ğØİ¸‚·‚é";
     Text[ chinese_traditional ] = "³sµ²¹Ï§Î";
     Text[ arabic ] = "ÑÈØ ÇáÑÓæãÇÊ";
     Text[ language_user1 ] = "LS 09.08.99 Wir wollen in der franz?ischen Version m?lichst Substantive als Dialog?erschriften haben. Hier wird die bestehende Verkn?fung ge?dert, d.h., es wird eine neue Grafik ausgew?lt";
@@ -162,7 +162,7 @@ String RID_SVXSTR_GRFLINKPROGRESS
     Text[ chinese_simplified ] = "ÊäÈëÍ¼ĞÎ...";
     Text[ russian ] = "Èìïîğò ãğàôèêè...";
     Text[ polish ] = "Importuj grafikê...";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸‚ğ²İÎß°Ä‚·‚é...";
+    Text[ japanese ] = "}‚Ì²İÎß°Ä...";
     Text[ chinese_traditional ] = "¶×¤J¹Ï§Î...";
     Text[ arabic ] = "ÇÓÊíÑÇÏ ÑÓæãÇÊ...";
     Text[ dutch ] = "Bezig met het importeren van afbeelding...";
