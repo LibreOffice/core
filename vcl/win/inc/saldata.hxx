@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:48:24 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,19 +74,6 @@
 #ifndef _SV_WINCOMP_HXX
 #include <wincomp.hxx>
 #endif
-
-// as long as we're using the old skd header files, define some of the new XP constants here
-
-#ifndef SPI_GETFLATMENU
-#define SPI_GETFLATMENU     0x1022
-#endif
-#ifndef COLOR_MENUBAR
-#define COLOR_MENUBAR       30
-#endif
-#ifndef COLOR_MENUHILIGHT
-#define COLOR_MENUHILIGHT   29
-#endif
-
 
 class AutoTimer;
 class WinSalInstance;
