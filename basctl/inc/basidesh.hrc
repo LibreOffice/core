@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 12:17:43 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 07:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,16 +78,16 @@
 
 #define RID_EDT_WATCHEDIT               ( RID_BASICIDE_START +  4 )
 #define RID_ICO_MDIWINDOW               ( RID_BASICIDE_START +  5 )
-#define RID_IMG_LOCKED_HC (RID_BASICIDE_START + 6)
+#define RID_IMG_LOCKED_HC               ( RID_BASICIDE_START +  6 )
 #define RID_IMGLST_OBJECTS              ( RID_BASICIDE_START +  7 )
 #define RID_IMGBTN_REMOVEWATCH          ( RID_BASICIDE_START +  8 )
 #define RID_IMGBTN_GOTOCALL             ( RID_BASICIDE_START +  9 )
 #define RID_POPUP_BRKDLG                ( RID_BASICIDE_START + 10 )
 #define RID_POPUP_BRKPROPS              ( RID_BASICIDE_START + 11 )
 #define RID_POPUP_TABBAR                ( RID_BASICIDE_START + 12 )
-#define RID_IMGLST_OBJECTS_HC (RID_BASICIDE_START + 13)
-#define RID_IMGLST_LAYOUT_HC (RID_BASICIDE_START + 14)
-#define RID_IMG_REMOVEWATCH_HC (RID_BASICIDE_START + 15)
+#define RID_IMGLST_OBJECTS_HC           ( RID_BASICIDE_START + 13 )
+#define RID_IMGLST_LAYOUT_HC            ( RID_BASICIDE_START + 14 )
+#define RID_IMG_REMOVEWATCH_HC          ( RID_BASICIDE_START + 15 )
 #define RID_TD_ORGANIZE                 ( RID_BASICIDE_START + 36 )
 #define RID_TP_MODULS                   ( RID_BASICIDE_START + 37 )
 #define RID_TP_LIBS                     ( RID_BASICIDE_START + 38 )
@@ -102,6 +102,7 @@
 #define RID_STR_STACKNAME               ( RID_BASICIDE_START + 16 )
 #define RID_STR_WATCHNAME               ( RID_BASICIDE_START + 17 )
 #define RID_STR_REMOVEWATCH             ( RID_BASICIDE_START + 18 )
+#define RID_STR_CANNOTRUNMACRO          ( RID_BASICIDE_START + 19 )
 #define RID_STR_OPEN                    ( RID_BASICIDE_START + 20 )
 #define RID_STR_SAVE                    ( RID_BASICIDE_START + 21 )
 #define RID_STR_RUNTIMEERROR            ( RID_BASICIDE_START + 22 )
