@@ -2,9 +2,9 @@
  *
  *  $RCSfile: job.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 12:56:09 $
+ *  last change: $Author: obo $ $Date: 2005-03-16 14:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
             impl_reactForJobResult(aResult);
         }
     }
-    #ifdef OSL_DEBUG_LEVEL > 0
+    #if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
     {
         ::rtl::OUStringBuffer sMsg(256);
