@@ -140,7 +140,6 @@ Dim oViewSettings as Object
 	oController = oDocument.GetCurrentController
 	oViewSettings = oDocument.CurrentController.ViewSettings
 	oViewSettings.ShowTableBoundaries = False
-	oViewSettings.ShowTextBoundaries = False
 	oViewSettings.ShowOnlineLayout = True
 &apos;	oViewSettings.ShowHoriRuler = True
 	oDrawPage = oDocument.DrawPage
