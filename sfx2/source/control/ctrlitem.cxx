@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:33:26 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,25 @@ void SfxControllerItem::Bind( USHORT nNewId, SfxBindings *pBindinx )
     if (pBindinx)
         pBindings = pBindinx;
     pBindings->Register(*this);
+}
+
+void SfxControllerItem::BindInternal_Impl( USHORT nNewId, SfxBindings *pBindinx )
+{
+    DBG_MEMTEST();
+    DBG_CHKTHIS(SfxControllerItem, 0);
+    DBG_ASSERT(pBindings || pBindinx, "Keine Bindings");
+
+    if ( IsBound() ) {
+        DBG_ASSERT(pBindings, "Keine Bindings");
+        pBindings->Release(*this);
+    }
+
+    nId = nNewId;
+    pNext = 0;
+
+    if (pBindinx)
+        pBindings = pBindinx;
+    pBindings->RegisterInternal_Impl(*this);
 }
 
 
