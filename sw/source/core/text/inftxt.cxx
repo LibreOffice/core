@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:11:10 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 10:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,9 +601,9 @@ SwRect lcl_CalcRect( const SwTxtPaintInfo *pInf, const SwLinePortion &rPor )
 {
     SwRect aRect( GetDrawPos( pInf->GetPos(), rPor ),
                   Size( rPor.Width(), rPor.Height() ) );
-    if( rPor.InTxtGrp() && pInf->GetSpaceAdd() )
+    if( rPor.InSpaceGrp() && pInf->GetSpaceAdd() )
         aRect.Width( aRect.Width() +
-            ((SwTxtPortion&)rPor).CalcSpacing( pInf->GetSpaceAdd(), *pInf ) );
+                     rPor.CalcSpacing( pInf->GetSpaceAdd(), *pInf ) );
 
     if( aRect.HasArea() )
     {

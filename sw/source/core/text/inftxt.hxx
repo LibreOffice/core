@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:10:37 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 10:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,7 @@ public:
 
     inline const MSHORT GetSpaceIdx() const { return nSpaceIdx; }
     inline void ResetSpaceIdx(){nSpaceIdx = 0; }
+    inline void SetSpaceIdx( MSHORT nNew ) { nSpaceIdx = nNew; }
     inline void IncSpaceIdx() { ++nSpaceIdx; }
     inline void SetSpaceAdd( SvShorts *pNew ){ pSpaceAdd = pNew; }
     inline SvShorts* GetpSpaceAdd() const { return pSpaceAdd; }
