@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: thb $ $Date: 2004-03-18 10:38:37 $
+#   last change: $Author: rt $ $Date: 2004-11-26 17:08:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,11 +76,14 @@ ENABLE_EXCEPTIONS=TRUE
 CDEFS+= -DVERBOSE
 .ENDIF
 
-SLOFILES =	$(SLO)$/canvastools.obj $(SLO)$/elapsedtime.obj 
+SLOFILES =	\
+    $(SLO)$/canvastools.obj \
+    $(SLO)$/linepolypolygonbase.obj \
+    $(SLO)$/elapsedtime.obj 
 
 SHL1TARGET= 	$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	i$(TARGET)
-SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB)
+SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB)
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 
