@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-08 08:06:19 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bKeepFormats(sal_False),
     bMoveCells(sal_False),
     bStripData(sal_False),
-    bOrientation(sal_False),
+    eOrientation(table::TableOrientation_ROWS),
     bContainsHeader(sal_True),
     bAutoFilter(sal_False),
     bFilterCopyOutputData(sal_False),
@@ -244,7 +244,8 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_ORIENTATION :
             {
-                bOrientation = IsXMLToken(sValue, XML_COLUMN);
+                if (IsXMLToken(sValue, XML_COLUMN))
+                    eOrientation = table::TableOrientation_COLUMNS;
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_CONTAINS_HEADER :
@@ -427,8 +428,24 @@ void ScXMLDatabaseRangeContext::EndElement()
                             pDBData->SetImportParam(aImportParam);
                             if (bContainsSort)
                             {
+                                sal_uInt32 nOldSize(aSortSequence.getLength());
+                                aSortSequence.realloc(nOldSize + 1);
+                                beans::PropertyValue aProperty;
+                                aProperty.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT));
+                                aProperty.Value <<= eOrientation;
+                                aSortSequence[nOldSize] = aProperty;
                                 ScSortParam aSortParam;
                                 ScSortDescriptor::FillSortParam(aSortParam, aSortSequence);
+
+                                //#98317#; until now the Fields are relative to the left top edge of the range, but the
+                                // core wants to have the absolute position (column/row)
+                                sal_uInt16 nFieldStart = aSortParam.bByRow ? aCellRangeAddress.StartColumn : aCellRangeAddress.StartRow;
+                                for (sal_uInt16 i = 0; i < MAXSORT; ++i)
+                                {
+                                    if (aSortParam.bDoSort[i])
+                                        aSortParam.nField[i] += nFieldStart;
+                                }
+
                                 pDBData->SetSortParam(aSortParam);
                             }
                             uno::Reference <sheet::XSheetFilterDescriptor> xSheetFilterDescriptor = xDatabaseRange->getFilterDescriptor();
@@ -438,6 +455,7 @@ void ScXMLDatabaseRangeContext::EndElement()
                                 if (xFilterPropertySet.is())
                                 {
                                     uno::Any aTemp;
+                                    sal_Bool bOrientation(table::TableOrientation_COLUMNS == eOrientation);
                                     aTemp = ::cppu::bool2any(bOrientation);
                                     xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)), aTemp);
                                     aTemp = ::cppu::bool2any(bContainsHeader);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-02 10:31:45 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TABLE_TABLEORIENTATION_HPP_
+#include <com/sun/star/table/TableOrientation.hpp>
+#endif
 
 class ScXMLImport;
 
@@ -125,6 +128,7 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     com::sun::star::table::CellAddress aFilterOutputPosition;
     com::sun::star::table::CellRangeAddress aFilterConditionSourceRangeAddress;
     com::sun::star::sheet::DataImportMode nSourceType;
+    com::sun::star::table::TableOrientation eOrientation;
     sal_Int32       nRefresh;
     sal_Int16       nSubTotalsUserListIndex;
     sal_Int16       nSubTotalRuleGroupFieldNumber;
@@ -135,7 +139,6 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     sal_Bool        bKeepFormats : 1;
     sal_Bool        bMoveCells : 1;
     sal_Bool        bStripData : 1;
-    sal_Bool        bOrientation : 1;
     sal_Bool        bContainsHeader : 1;
     sal_Bool        bAutoFilter : 1;
     sal_Bool        bSubTotalsBindFormatsToContent : 1;
