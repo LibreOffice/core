@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:17:45 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
-#define _SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
+#ifndef SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
+#define SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
 
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTEXT_BASE_HXX
 #include <svx/AccessibleContextBase.hxx>
@@ -101,8 +101,11 @@
 #include <tools/link.hxx>
 #endif
 
-class SdWindow;
-class SdViewShell;
+namespace sd {
+class ViewShell;
+class Window;
+}
+
 class VclSimpleEvent;
 
 namespace accessibility {
@@ -163,8 +166,8 @@ public:
         not necessarily correspond with the parent of the given window.
      */
     AccessibleDocumentViewBase (
-        SdWindow* pSdWindow,
-        SdViewShell* pViewShell,
+        ::sd::Window* pSdWindow,
+        ::sd::ViewShell* pViewShell,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XController>& rxController,
         const ::com::sun::star::uno::Reference<
@@ -333,7 +336,7 @@ private:
 
 protected:
     /// The core window that is made accessible.
-    SdWindow* mpWindow;
+    ::sd::Window* mpWindow;
 
     /// The API window that is made accessible.
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>
