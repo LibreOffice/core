@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2002-08-02 12:45:27 $
+ *  last change: $Author: tra $ $Date: 2002-08-05 08:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,34 +114,18 @@ class DragSource:
     DragSource(const DragSource&);
     DragSource &operator= ( const DragSource&);
 
-    //#############################
-    // - BAD HACK - BAD HACK - BAD HACK - BAD HACK
-    // to avoid overlapping Dnd operation
-    // (threads)
-
     // First starting a new drag and drop thread if
     // the last one has finished
-    void DelayedStartDrag(
+    void StartDragImpl(
         const DragGestureEvent& trigger,
         sal_Int8 sourceActions,
         sal_Int32 cursor,
         sal_Int32 image,
         const Reference<XTransferable >& trans,
-        const Reference<XDragSourceListener >& listener );
-
-    void CancelPendingDelayedStartDragOperations();
-
-    friend unsigned __stdcall DelayedStartDndThreadFunc(void* Param);
+        const Reference<XDragSourceListener >& listener);
 
 public:
-    void SignalDndComplete();
-
-    // m_hWaitEvents[0] - Cancle Dnd event
-    // m_hWaitEvents[1] - Dnd complete event
-    HANDLE  m_hWaitEvents[2];
-
-    // - BAD HACK - BAD HACK - BAD HACK - BAD HACK
-    //#############################
+    long m_RunningDndOperationCount;
 
 public:
     // only valid for one dnd operation
