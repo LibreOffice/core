@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.27 2001-01-31 16:16:18 cl Exp $
+	$Id: style.mod,v 1.28 2001-02-01 17:42:47 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -339,7 +339,7 @@
 <!ATTLIST style:column fo:margin-right %positiveLength; #IMPLIED>
 
 <!ELEMENT style:column-sep EMPTY>
-<!ATTLIST style:column-sep style:style (none|solid|dotted|dashed|dot-dashed) 
+<!ATTLIST style:column-sep style:style (none|solid|dotted|dashed|dot-dashed)
 																	"solid">
 <!ATTLIST style:column-sep style:width %length; #REQUIRED>
 <!ATTLIST style:column-sep style:height %percentage; "100%">
@@ -363,6 +363,7 @@
 <!ATTLIST style:properties style:first-page-number %positiveInteger; #IMPLIED>
 <!ATTLIST style:properties style:scale-to %percentage; #IMPLIED>
 <!ATTLIST style:properties style:scale-to-pages %positiveInteger; #IMPLIED>
+<!ATTLIST style:properties style:table-centering (horizontal | vertical | both | none) #IMPLIED>
 
 <!ELEMENT style:footnote-layout (style:properties?,style:footnote-sep?)>
 <!ATTLIST style:properties style:max-height %lengthOrNoLimit; #IMPLIED>
