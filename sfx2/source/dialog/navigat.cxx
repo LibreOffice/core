@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-15 15:18:34 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 
 // includes *******************************************************************
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "navigat.hxx"
 #include "sfx.hrc"
