@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:37:48 $
+#   last change: $Author: obo $ $Date: 2003-10-20 14:15:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,12 +69,6 @@ PRJNAME=svx
 TARGET=dialogs
 VERSION=$(UPD)
 
-.IF "$(debug)" != ""
-LINK=n:\bin\optlinks\optlinks
-.ELSE
-OPTLINKS=YES
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -83,19 +77,6 @@ OPTLINKS=YES
 CFLAGS+=-DDG_DLL
 
 # --- Files --------------------------------------------------------
-
-HXX2TARGET= drawdlgs
-HXX2EXT=    hxx
-HXX2EXCL=   -E:*include*
-HXX2DEPN=\
-        $(INC)$/dlgctrl.hxx \
-        $(INC)$/dlgname.hxx \
-        $(INC)$/tabarea.hxx \
-        $(INC)$/tabline.hxx \
-        $(INC)$/labdlg.hxx \
-        $(INC)$/transfrm.hxx
-
-.IF "$(header)" == ""
 
 IMGLST_SRS=$(SRS)$/dialogs.srs
 BMP_IN=$(PRJ)$/win/res
@@ -283,7 +264,6 @@ EXCEPTIONSNOOPTFILES=$(SLO)$/impgrf.obj
 EXCEPTIONSFILES+=$(SLO)$/impgrf.obj
 .ENDIF
 
-.ENDIF
 
 # --- Targets -------------------------------------------------------
 
