@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-05-31 10:13:13 $
+ *  last change: $Author: os $ $Date: 2001-06-01 07:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #endif
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
+#endif
+#ifndef _SVX_FMGLOB_HXX
+#include <svx/fmglob.hxx>
 #endif
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
@@ -1018,8 +1021,9 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
-                        pObj->SetLayer( *(sal_Bool*)aValue.getValue() ?
-                                    pDoc->GetHeavenId() : pDoc->GetHellId() );
+                        if(FmFormInventor != pObj->GetObjInventor())
+                            pObj->SetLayer( *(sal_Bool*)aValue.getValue() ?
+                                        pDoc->GetHeavenId() : pDoc->GetHellId() );
                     }
 
                 }
@@ -1216,8 +1220,13 @@ Sequence< PropertyState > SwXShape::getPropertyStates(
     {
         SvxShape* pSvxShape = GetSvxShape();
         sal_Bool bGroupMember = sal_False;
-        if(pSvxShape->GetSdrObject())
-            bGroupMember = pSvxShape->GetSdrObject()->GetUpGroup() != 0;
+        sal_Bool bFormControl = sal_False;
+        SdrObject* pObject = pSvxShape->GetSdrObject();
+        if(pObject)
+        {
+            bGroupMember = pObject->GetUpGroup() != 0;
+            bFormControl = pObject->GetObjInventor() == FmFormInventor;
+        }
         const OUString* pNames = aPropertyNames.getConstArray();
         PropertyState* pRet = aRet.getArray();
         Reference< XPropertyState >  xShapePrState;
@@ -1227,7 +1236,10 @@ Sequence< PropertyState > SwXShape::getPropertyStates(
                                         _pMap, pNames[nProperty]);
             if(pMap)
             {
-                if(RES_OPAQUE == pMap->nWID || FN_TEXT_RANGE == pMap->nWID)
+                if(RES_OPAQUE == pMap->nWID)
+                    pRet[nProperty] = bFormControl ?
+                        PropertyState_DEFAULT_VALUE : PropertyState_DIRECT_VALUE;
+                else if(FN_TEXT_RANGE == pMap->nWID)
                     pRet[nProperty] = PropertyState_DIRECT_VALUE;
                 else if(bGroupMember)
                     pRet[nProperty] = PropertyState_DEFAULT_VALUE;
