@@ -2,9 +2,9 @@
  *
  *  $RCSfile: blankdispatcher.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-12 13:15:31 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,15 +151,6 @@ class BlankDispatcher   :   // -interfaces  ... are supported by our BaseDispatc
         css::uno::Reference< css::frame::XFrame > implts_findAndLockRecycleTask( const css::util::URL&                                   aURL       ,
                                                                                  const css::uno::Sequence< css::beans::PropertyValue >&  lArguments ,
                                                                                  const css::uno::Reference< css::frame::XFrame >         xDesktop   );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //-------------------------------------------------------------------------------------------------------------
-    #ifdef ENABLE_ASSERTIONS
-    private:
-        static sal_Bool implcp_ctor( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory ,
-                                     const css::uno::Reference< css::frame::XFrame >&              xDesktop );
-    #endif
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables

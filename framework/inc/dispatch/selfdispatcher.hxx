@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selfdispatcher.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-07-20 08:09:07 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,14 +140,6 @@ class SelfDispatcher   :   // -interfaces  ... are supported by our BaseDispatch
                                                      const css::uno::Sequence< css::beans::PropertyValue >&     lDescriptor ,
                                                            sal_Bool                                             bState      ,
                                                      const css::uno::Any&                                       aAsyncInfo  );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private debug methods
-    //-------------------------------------------------------------------------------------------------------------
-    #ifdef ENABLE_ASSERTIONS
-    private:
-        static sal_Bool implcp_checkProtocol( const css::util::URL& aURL );
-    #endif
 
 };      //  class SelfDispatcher
 

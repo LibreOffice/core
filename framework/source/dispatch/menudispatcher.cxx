@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:52:54 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,14 @@ void MenuDispatcher::impl_sendStatusEvent( const   Reference< XFrame >&    xEven
         OInterfaceIteratorHelper aIterator(*pListenerForURL);
         while( aIterator.hasMoreElements() )
         {
-            ((XStatusListener*)aIterator.next())->statusChanged( aEvent );
+            try
+            {
+                ((XStatusListener*)aIterator.next())->statusChanged( aEvent );
+            }
+            catch( RuntimeException& )
+            {
+                aIterator.remove();
+            }
         }
     }
 }

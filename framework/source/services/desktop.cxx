@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:53:37 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2180,7 +2180,14 @@ void Desktop::impl_sendQueryTerminationEvent() throw( css::frame::TerminationVet
         // We don't look for that(!) ... caller of this method will catch these.
         while( aIterator.hasMoreElements() == sal_True )
         {
-            ((css::frame::XTerminateListener*)aIterator.next())->queryTermination( aEvent );
+            try
+            {
+                ((css::frame::XTerminateListener*)aIterator.next())->queryTermination( aEvent );
+            }
+            catch( css::uno::RuntimeException& )
+            {
+                aIterator.remove();
+            }
         }
     }
 }
@@ -2204,7 +2211,14 @@ void Desktop::impl_sendNotifyTerminationEvent()
         // Send message to all listener.
         while( aIterator.hasMoreElements() == sal_True )
         {
-            ((css::frame::XTerminateListener*)aIterator.next())->notifyTermination( aEvent );
+            try
+            {
+                ((css::frame::XTerminateListener*)aIterator.next())->notifyTermination( aEvent );
+            }
+            catch( css::uno::RuntimeException& )
+            {
+                aIterator.remove();
+            }
         }
     }
 }

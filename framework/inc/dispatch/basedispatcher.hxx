@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedispatcher.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 14:56:04 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,30 +471,6 @@ class BaseDispatcher    :   // interfaces
         void            implts_sendResultEvent      ( const css::uno::Reference< css::frame::XFrame >&        xEventSource    ,
                                                       const ::rtl::OUString&                                  sURL            ,
                                                             sal_Bool                                          bLoadState      );
-/*DRAFT void            implts_updateHistory        ( const SvtHistoryItem&                                   rItem           ,
-                                                            sal_Bool                                          bChange         );*/
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  - normaly they should be private ...
-    //    but to support access from our super classes we should make some of them it protected!
-    //-------------------------------------------------------------------------------------------------------------
-    #ifdef ENABLE_ASSERTIONS
-    protected:
-        static sal_Bool implcp_ctor                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory     ,
-                                                      const css::uno::Reference< css::frame::XFrame >&              xOwnerFrame  );
-        static sal_Bool implcp_dispatch             ( const css::util::URL&                                         aURL         ,
-                                                      const css::uno::Sequence< css::beans::PropertyValue >&        lArguments   );
-    private:
-        static sal_Bool implcp_addStatusListener    ( const css::uno::Reference< css::frame::XStatusListener >&     xListener    ,
-                                                      const css::util::URL&                                         aURL         );
-        static sal_Bool implcp_removeStatusListener ( const css::uno::Reference< css::frame::XStatusListener >&     xListener    ,
-                                                      const css::util::URL&                                         aURL         );
-        static sal_Bool implcp_statusChanged        ( const css::frame::FeatureStateEvent&                          aEvent       );
-        static sal_Bool implcp_loadFinished         ( const css::uno::Reference< css::frame::XFrameLoader >&        xLoader      );
-        static sal_Bool implcp_loadCancelled        ( const css::uno::Reference< css::frame::XFrameLoader >&        xLoader      );
-        static sal_Bool implcp_disposing            ( const css::lang::EventObject&                                 aEvent       );
-    #endif  // #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables
@@ -508,7 +484,6 @@ class BaseDispatcher    :   // interfaces
     private:
         LoaderThreads                                               m_aLoaderThreads      ;   /// list of bindings between handler/loader, tasks and loaded URLs
         ListenerHash                                                m_aListenerContainer  ;   /// hash table for listener at specified URLs
-        ListenerHash                                                m_aResultListenerContainer  ;   /// hash table for listener at specified URLs
 
 };      //  class BaseDispatcher
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:54:05 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1807,7 +1807,16 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
         while (pIterator.hasMoreElements())
-            ((css::util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnerShip );
+        {
+            try
+            {
+                ((css::util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnerShip );
+            }
+            catch( css::uno::RuntimeException& )
+            {
+                pIterator.remove();
+            }
+        }
     }
 
     // Ok - no listener disagreed with this close() request
@@ -1841,7 +1850,16 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
         while (pIterator.hasMoreElements())
-            ((css::util::XCloseListener*)pIterator.next())->notifyClosing( aSource );
+        {
+            try
+            {
+                ((css::util::XCloseListener*)pIterator.next())->notifyClosing( aSource );
+            }
+            catch( css::uno::RuntimeException& )
+            {
+                pIterator.remove();
+            }
+        }
     }
 
     // Attention: We must release our own registered transaction here. Otherwhise following dispose() call
@@ -2970,15 +2988,11 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
         {
             try
             {
-            ((css::frame::XFrameActionListener *)aIterator.next())->frameAction( aFrameActionEvent );
+                ((css::frame::XFrameActionListener*)aIterator.next())->frameAction( aFrameActionEvent );
             }
-            catch( css::uno::RuntimeException& exRuntime )
+            catch( css::uno::RuntimeException& )
             {
-                LOG_WARNING("Frame::implts_sendFrameActionEvent(Runtime)", U2B(exRuntime.Message).getStr())
-            }
-            catch( css::uno::Exception& exUNO )
-            {
-                LOG_WARNING("Frame::implts_sendFrameActionEvent(Exception)", U2B(exUNO.Message).getStr())
+                aIterator.remove();
             }
         }
     }

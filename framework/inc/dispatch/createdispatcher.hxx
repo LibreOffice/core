@@ -2,9 +2,9 @@
  *
  *  $RCSfile: createdispatcher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 11:54:45 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,16 +147,6 @@ class CreateDispatcher  :   // -interfaces  ... are supported by our BaseDispatc
                                                            sal_Bool                                               bState      ,
                                                      const css::uno::Any&                                         aAsyncInfo  = css::uno::Any() )
         { LOG_WARNING( "CreateDispatcher::reactForHandlingState()", "Who call this function! It's a non used pure virtual function overload ..." ) }
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //-------------------------------------------------------------------------------------------------------------
-    #ifdef ENABLE_ASSERTIONS
-    private:
-        static sal_Bool implcp_ctor( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory ,
-                                     const css::uno::Reference< css::frame::XFrame >&              xParent  ,
-                                     const ::rtl::OUString&                                        sName    );
-    #endif
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables
