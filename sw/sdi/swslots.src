@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:25:06 $
+ *  last change: $Author: kz $ $Date: 2002-01-23 21:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8232,7 +8232,7 @@ SfxSlotInfo FN_TABLE_VERT_BOTTOM
     SlotName[ spanish ] = "Abajo";
     SlotName[ italian ] = "In basso";
     SlotName[ danish ] = "Nederst";
-    SlotName[ swedish ] = "Underst";
+    SlotName[ swedish ] = "Nere";
     SlotName[ polish ] = "W dole";
     SlotName[ portuguese_brazilian ] = "CellVertBottom";
     SlotName[ japanese ] = "ä¸‹";
@@ -8288,7 +8288,7 @@ SfxSlotInfo FN_TABLE_VERT_NONE
     SlotName[ spanish ] = "Arriba";
     SlotName[ italian ] = "Sopra";
     SlotName[ danish ] = "Øverst";
-    SlotName[ swedish ] = "Överst";
+    SlotName[ swedish ] = "Uppe";
     SlotName[ polish ] = "W górze";
     SlotName[ portuguese_brazilian ] = "CellVertTop";
     SlotName[ japanese ] = "ä¸Š";
