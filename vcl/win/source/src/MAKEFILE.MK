@@ -3,8 +3,8 @@
 #*	  $Workfile:   makefile.  $
 #*
 #*	  Ersterstellung	TH 01.04.97
-#*	  Letzte Aenderung	$Author: hr $ $Date: 2000-09-18 17:05:49 $
-#*	  $Revision: 1.1.1.1 $
+#*	  Letzte Aenderung	$Author: th $ $Date: 2000-11-15 20:44:59 $
+#*	  $Revision: 1.2 $
 #*
 #*	  $Logfile:   T:/vcl/win/source/src/makefile.__v  $
 #*
@@ -96,6 +96,7 @@ RCDEPN= 	nullptr.cur 		\
             aswe.cur			\
             asnswe.cur			\
             airbrush.cur		\
+            vtext.cur			\
             50.bmp				\
             sd.ico
 
