@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:48:05 $
+ *  last change: $Author: kz $ $Date: 2000-12-11 23:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7322,7 +7322,7 @@ String RID_SVXITEMS_TWOLINES_OFF
 {
     Text = "Zweizeilig aus";
     Text [ English ] = "Two lines off" ;
-    Text[ english_us ] = "Two lines off";
+    Text[ english_us ] = "Double lined off";
     Text[ portuguese ] = "Two lines off";
     Text[ russian ] = "Two lines off";
     Text[ greek ] = "Äßãñáììá - ¼÷é";
@@ -7345,7 +7345,7 @@ String RID_SVXITEMS_TWOLINES
 {
     Text = "Zweizeilig";
     Text [ English ] = "Two lines" ;
-    Text[ english_us ] = "Two lines";
+    Text[ english_us ] = "Double lined";
     Text[ portuguese ] = "Two lines";
     Text[ russian ] = "Äâóñòğî÷íûé";
     Text[ greek ] = "Äßãñáììá";
@@ -7462,12 +7462,12 @@ String RID_SVXITEMS_FORBIDDEN_RULE_OFF
 {
     Text = "Verbotene Zeichen an Zeilenanfang und -ende berücksichtigen";
     Text [ English ] = "Apply list of forbidden characters at line end and line start" ;
-    Text[ english_us ] = "Apply list of forbidden characters at line end and line start";
+    Text[ english_us ] = "Apply list of forbidden characters to beginning and end of lines";
     Text[ portuguese ] = "Apply list of forbidden characters at line end and line start";
     Text[ russian ] = "Ó÷èòûâàòü íåäîïóñòèìûå çíàêè â íà÷àëå è êîíöå ñòğîêè";
     Text[ greek ] = "Apply list of forbidden characters at line end and line start";
     Text[ dutch ] = "Apply list of forbidden characters at line end and line start";
-    Text[ french ] = "Apply list of forbidden characters at line end and line start";
+    Text[ french ] = "Tenir compte des caractères interdits en début et en fin de ligne";
     Text[ spanish ] = "Apply list of forbidden characters at line end and line start";
     Text[ italian ] = "Apply list of forbidden characters at line end and line start";
     Text[ danish ] = "Apply list of forbidden characters at line end and line start";
@@ -7486,12 +7486,12 @@ String RID_SVXITEMS_FORBIDDEN_RULE_ON
 {
     Text = "Verbotene Zeichen an Zeilenanfang und -ende nicht berücksichtigen";
     Text [ English ] = "Don't Apply list of forbidden characters at line end and line start" ;
-    Text[ english_us ] = "Don't Apply list of forbidden characters at line end and line start";
+    Text[ english_us ] = "Don't apply list of forbidden characters to beginning and end of lines";
     Text[ portuguese ] = "Don't Apply list of forbidden characters at line end and line start";
     Text[ russian ] = "Ó÷èòûâàòü íåäîïóñòèìûå çíàêè â íà÷àëå è êîíöå ñòğîêè";
     Text[ greek ] = "Don't Apply list of forbidden characters at line end and line start";
     Text[ dutch ] = "Don't Apply list of forbidden characters at line end and line start";
-    Text[ french ] = "Don't Apply list of forbidden characters at line end and line start";
+    Text[ french ] = "Ignorer les caractères interdits en début et en fin de ligne";
     Text[ spanish ] = "Don't Apply list of forbidden characters at line end and line start";
     Text[ italian ] = "Don't Apply list of forbidden characters at line end and line start";
     Text[ danish ] = "Don't Apply list of forbidden characters at line end and line start";
