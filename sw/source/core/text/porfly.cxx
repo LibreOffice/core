@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:24:36 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include "frmfmt.hxx"   // SwFrmFmt
 #include "viewsh.hxx"
 
+#ifndef _OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
+#endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
@@ -321,6 +324,10 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
         // Baseline-Ausgabe !
         // 7922: Bei CompletePaint alles painten
         SwRect aRepaintRect( rInf.GetPaintRect() );
+
+        if ( rInf.GetTxtFrm()->IsRightToLeft() )
+            rInf.GetTxtFrm()->SwitchLTRtoRTL( aRepaintRect );
+
         if ( rInf.GetTxtFrm()->IsVertical() )
             rInf.GetTxtFrm()->SwitchHorizontalToVertical( aRepaintRect );
 
@@ -333,7 +340,15 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
             if( !GetFlyFrm()->IsCompletePaint() )
                 aRect._Intersection( aRepaintRect );
 
-            GetFlyFrm()->Paint( aRect );
+
+            // GetFlyFrm() may change the layout mode at the output device.
+            {
+                SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
+                GetFlyFrm()->Paint( aRect );
+            }
+            ((SwTxtPaintInfo&)rInf).GetRefDev()->SetLayoutMode(
+                    rInf.GetOut()->GetLayoutMode() );
+
             // Es hilft alles nichts, im zeichengebundenen Frame kann wer weiss
             // was am OutputDevice eingestellt sein, wir muessen unseren Font
             // wieder hineinselektieren. Dass wir im const stehen, soll uns
