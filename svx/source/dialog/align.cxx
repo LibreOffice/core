@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         case ALIGNDLG_VERALIGN_MID:     nTmp = SVX_VER_JUSTIFY_CENTER;      break;
         case ALIGNDLG_VERALIGN_BOTTOM:  nTmp = SVX_VER_JUSTIFY_BOTTOM;      break;
     }
-    bSelected = aLbHorAlign.GetSelectEntryCount() > 0;
+    bSelected = aLbVerAlign.GetSelectEntryCount() > 0;
     pOld = GetUniqueItem( rOldSet, SID_ATTR_ALIGN_VER_JUSTIFY );
 
     DBG_ASSERT( !bSelected || (USHRT_MAX != nTmp) || !aLbVerAlign.IsEnabled(), "no button checked" );
