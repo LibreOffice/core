@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:26:06 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 09:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,16 @@ ModalDialog DLG_BREAK
         Text[ korean ] = "Processing Metafile:";
         Text[ turkish ] = "Processing Metafile:";
         Text[ thai ] = "Processing Metafile:";
+        Text[ english_us ] = "Processing metafile:";
+        Text[ greek ] = "Processing Metafile:";
+        Text[ dutch ] = "Processing Metafile:";
+        Text[ french ] = "Processing Metafile:";
+        Text[ finnish ] = "Processing Metafile:";
+        Text[ danish ] = "Processing Metafile:";
+        Text[ chinese_simplified ] = "Processing Metafile:";
+        Text[ chinese_traditional ] = "Processing Metafile:";
+        Text[ arabic ] = "Processing Metafile:";
+        Text[ catalan ] = "Processing Metafile:";
     };
     FixedText FT_ACT_INFO
     {
@@ -106,6 +116,16 @@ ModalDialog DLG_BREAK
         Text[ korean ] = "Brokened down metaobjects:";
         Text[ turkish ] = "Brokened down metaobjects:";
         Text[ thai ] = "Brokened down metaobjects:";
+        Text[ english_us ] = "Broken down metaobjects:";
+        Text[ greek ] = "Brokened down metaobjects:";
+        Text[ dutch ] = "Brokened down metaobjects:";
+        Text[ french ] = "Brokened down metaobjects:";
+        Text[ finnish ] = "Brokened down metaobjects:";
+        Text[ danish ] = "Brokened down metaobjects:";
+        Text[ chinese_simplified ] = "Brokened down metaobjects:";
+        Text[ chinese_traditional ] = "Brokened down metaobjects:";
+        Text[ arabic ] = "Brokened down metaobjects:";
+        Text[ catalan ] = "Brokened down metaobjects:";
     };
     FixedText FT_INS_INFO
     {
@@ -125,6 +145,16 @@ ModalDialog DLG_BREAK
         Text[ korean ] = "Inserted drawing objects:";
         Text[ turkish ] = "Inserted drawing objects:";
         Text[ thai ] = "Inserted drawing objects:";
+        Text[ english_us ] = "Inserted drawing objects:";
+        Text[ greek ] = "Inserted drawing objects:";
+        Text[ dutch ] = "Inserted drawing objects:";
+        Text[ french ] = "Inserted drawing objects:";
+        Text[ finnish ] = "Inserted drawing objects:";
+        Text[ danish ] = "Inserted drawing objects:";
+        Text[ chinese_simplified ] = "Inserted drawing objects:";
+        Text[ chinese_traditional ] = "Inserted drawing objects:";
+        Text[ arabic ] = "Inserted drawing objects:";
+        Text[ catalan ] = "Inserted drawing objects:";
     };
     FixedText FI_OBJ_INFO
     {
@@ -159,4 +189,14 @@ ModalDialog DLG_BREAK
     Text[ korean ] = "Break";
     Text[ turkish ] = "Break";
     Text[ thai ] = "Break";
+    Text[ english_us ] = "Break";
+    Text[ greek ] = "Break";
+    Text[ dutch ] = "Break";
+    Text[ french ] = "Break";
+    Text[ finnish ] = "Break";
+    Text[ danish ] = "Break";
+    Text[ chinese_simplified ] = "Break";
+    Text[ chinese_traditional ] = "Break";
+    Text[ arabic ] = "Break";
+    Text[ catalan ] = "Break";
 };
