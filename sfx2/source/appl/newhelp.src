@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-17 20:09:30 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 06:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,56 +511,53 @@ TabPage TP_HELP_CONTENT
     };
 };
 
-#define MASKCOLOR_GREY \
-    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
-
 #define MASKCOLOR_MAGENTA \
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
 Image IMG_HELP_TOOLBOX_INDEX_ON
 {
     ImageBitmap = Bitmap { File = "indexon_small.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_INDEX_OFF
 {
     ImageBitmap = Bitmap { File = "indexoff_small.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_START
 {
     ImageBitmap = Bitmap { File = "sc06303.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_PREV
 {
     ImageBitmap = Bitmap { File = "sc06301.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_NEXT
 {
     ImageBitmap = Bitmap { File = "sc06300.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_PRINT
 {
     ImageBitmap = Bitmap { File = "sc05504.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_BOOKMARKS
 {
     ImageBitmap = Bitmap { File = "favourite.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_SEARCHDIALOG
 {
     ImageBitmap = Bitmap { File = "search_small.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_COPY
 {
     ImageBitmap = Bitmap { File = "sc05711.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_CONTENT_BOOK_OPEN
 {
@@ -1186,47 +1183,47 @@ Image IMG_HELP_TOOLBOX_HC_COPY
 Image IMG_HELP_TOOLBOX_L_INDEX_ON
 {
     ImageBitmap = Bitmap { File = "indexon_big.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_L_INDEX_OFF
 {
     ImageBitmap = Bitmap { File = "indexoff_big.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_L_START
 {
     ImageBitmap = Bitmap { File = "lc06303.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_L_PREV
 {
     ImageBitmap = Bitmap { File = "lc06301.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_L_NEXT
 {
     ImageBitmap = Bitmap { File = "lc06300.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_L_PRINT
 {
     ImageBitmap = Bitmap { File = "lc05504.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_L_BOOKMARKS
 {
     ImageBitmap = Bitmap { File = "favourite_big.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_L_SEARCHDIALOG
 {
     ImageBitmap = Bitmap { File = "search_large.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_L_COPY
 {
     ImageBitmap = Bitmap { File = "lc05711.bmp" ; };
-    MASKCOLOR_GREY
+    MASKCOLOR_MAGENTA
 };
 
 Image IMG_HELP_TOOLBOX_HCL_INDEX_ON
