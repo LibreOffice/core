@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mfe $ $Date: 2001-02-08 13:01:05 $
+#   last change: $Author: jbu $ $Date: 2001-03-12 16:05:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,7 @@ $(PRJPCH)=
 PRJNAME=sal
 TARGET=sal
 USE_LDUMP2=TRUE
-NO_DEFAULT_STL=TRUE
+# NO_DEFAULT_STL=TRUE
 
 .IF "$(GUI)"!="OS2"
 USE_DEFFILE=TRUE
