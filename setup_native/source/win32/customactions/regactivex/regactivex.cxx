@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2004-05-25 15:44:42 $
+ *  last change: $Author: mav $ $Date: 2004-05-25 16:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include <msiquery.h>
 #include <string.h>
 #include <malloc.h>
-#include <assert.h>
 
 #define CHART_COMPONENT 1
 #define DRAW_COMPONENT 2
@@ -199,7 +198,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
     }
     else
     {
-        assert( FALSE );
+        // assert( FALSE );
     }
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Calc_Bin", &current_state, &future_state ) )
@@ -215,7 +214,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
     }
     else
     {
-        assert( FALSE );
+        // assert( FALSE );
     }
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Draw_Bin", &current_state, &future_state ) )
@@ -231,7 +230,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
     }
     else
     {
-        assert( FALSE );
+        // assert( FALSE );
     }
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Impress_Bin", &current_state, &future_state ) )
@@ -247,7 +246,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
     }
     else
     {
-        assert( FALSE );
+        // assert( FALSE );
     }
 
     return TRUE;
@@ -308,7 +307,7 @@ extern "C" UINT InstallActiveXControl( MSIHANDLE hMSI )
     }
     else
     {
-        assert( FALSE );
+        // assert( FALSE );
     }
 
     return ERROR_SUCCESS;
