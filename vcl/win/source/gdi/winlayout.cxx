@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-25 10:11:03 $
+ *  last change: $Author: hdu $ $Date: 2002-05-02 13:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,11 @@
 #endif
 
 #ifndef _SV_SALGDI_HXX
-//#define _SV_SALGDI3_CXX
 #include <salgdi.hxx>
 #endif // _SV_SALGDI_HXX
+#ifndef _SV_SALDATA_HXX
+#include <saldata.hxx>
+#endif // _SV_SALDATA_HXX
 
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
@@ -176,8 +178,21 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         nGcpOption |= GCP_REORDER;
     else if( 0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) )
         ; //TODO
-    DWORD nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
-        mnGlyphCount, rArgs.mnLayoutWidth, &aGCP, nGcpOption );
+
+    DWORD nRC;
+    if ( aSalShlData.mbWNT )
+    {
+        nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
+                    mnGlyphCount, rArgs.mnLayoutWidth, &aGCP, nGcpOption );
+    }
+    else
+    {
+        UniString  aUStr( rArgs.mpStr + rArgs.mnFirstCharIndex, mnGlyphCount );
+        ByteString aBStr = ImplSalGetWinAnsiString( aUStr );
+        // note: because aGCP.lpOutString==NULL GCP_RESULTSA is compatible with GCP_RESULTSW
+        nRC = ::GetCharacterPlacementA( mhDC, aBStr.GetBuffer(), aBStr.Len(),
+                    rArgs.mnLayoutWidth, (GCP_RESULTSA*)&aGCP, nGcpOption );
+    }
 
     // cache essential layout properties
     if( rArgs.mnLayoutWidth )
@@ -430,7 +445,7 @@ static HRESULT ((WINAPI *pScriptFreeCache)( SCRIPT_CACHE* ));
 
 static bool InitUSP()
 {
-    aUspModule = LoadLibrary( "usp10" );
+    aUspModule = LoadLibraryA( "usp10" );
     if( !aUspModule )
         return !(bUspDisabled = true);
 
