@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourceconnector.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:17:59 $
+ *  last change: $Author: fs $ $Date: 2001-05-11 08:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
+#include <com/sun/star/sdb/SQLContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
+#include <com/sun/star/sdbc/SQLWarning.hpp>
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
@@ -225,6 +231,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/10 12:17:59  fs
+ *  initial checkin - helper class for creating a connection for a data source
+ *
  *
  *  Revision 1.0 10.05.01 09:44:48  fs
  ************************************************************************/
