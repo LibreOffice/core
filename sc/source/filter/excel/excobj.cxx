@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,11 +401,11 @@ void ImportExcel::ChartSelection( void )
                     nCol2 &= 0x3FFF;
                 }
 
-                const Xti*  pXti = pExcRoot->pXtiBuffer->Get( nIxti );
+                const XclImpXti* pXti = pExcRoot->pXtiBuffer->Get( nIxti );
 
                 if( pXti )
                 {
-                    const SupbookE* pSbE = pExcRoot->pSupbookBuffer->Get( pXti->nSupbook );
+                    const XclImpSupbook* pSbE = pExcRoot->pSupbookBuffer->Get( pXti->nSupbook );
 
                     if( pSbE /*&& pSbE->IsSameSheet()*/ )
                     {// in aktuellem Workbook
