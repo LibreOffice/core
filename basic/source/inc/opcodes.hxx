@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcodes.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2000-10-18 08:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ enum SbiOpcode {
     _ERROR,             // TOS = Fehlercode
     _LSET,              // Speichern Objekt TOS ==> TOS-1
     _RSET,              // Speichern Objekt TOS ==> TOS-1
+    _REDIMP_ERASE,      // Copies array to be later used by REDIM PRESERVE before erasing it
     SbOP0_END,
 
     // Alle Opcodes mit einem Operanden
