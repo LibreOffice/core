@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:56:51 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,7 +725,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::clearAccessibleSelection() throw( R
 
 //-----------------------------------------------------------------------------
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::selectAllAccessible() throw( RuntimeException )
+void SAL_CALL SvxGraphCtrlAccessibleContext::selectAllAccessibleChildren() throw( RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
