@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obr $ $Date: 2001-09-12 11:32:25 $
+ *  last change: $Author: hro $ $Date: 2001-09-24 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,10 +120,17 @@ oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
 
 /***************************************************************************/
 
+extern oslMutex g_CurrentDirectoryMutex;
+
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
     TCHAR   szBuffer[MAX_PATH];
-    DWORD   dwLen = GetCurrentDirectory( sizeof(szBuffer) / sizeof(TCHAR), szBuffer );
+    DWORD   dwLen;
+
+
+    osl_acquireMutex( g_CurrentDirectoryMutex );
+    dwLen = GetCurrentDirectory( sizeof(szBuffer) / sizeof(TCHAR), szBuffer );
+    osl_releaseMutex( g_CurrentDirectoryMutex );
 
     if ( dwLen )
     {

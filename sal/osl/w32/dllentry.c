@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-07 09:23:22 $
+ *  last change: $Author: hro $ $Date: 2001-09-24 13:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,13 @@
 //------------------------------------------------------------------------------
 
 extern HRESULT (WINAPI *_CoInitializeEx) (LPVOID pvReserved, DWORD dwCoInit);
-extern LPWSTR *lpArgvW;
+extern LPWSTR           *lpArgvW;
 
 extern DWORD            g_dwTLSTextEncodingIndex;
 extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
 extern CRITICAL_SECTION g_ThreadKeyListCS;
-extern oslMutex g_Mutex;
+extern oslMutex         g_Mutex;
+extern oslMutex         g_CurrentDirectoryMutex;
 
 //------------------------------------------------------------------------------
 // defines
@@ -191,6 +192,9 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
                 /* initialize global mutex */
                 g_Mutex = osl_createMutex();
 
+                /* initialize "current directory" mutex */
+                g_CurrentDirectoryMutex = osl_createMutex();
+
                 /* request winsock rev. 1.1 */
                 wVersionRequested = MAKEWORD(1, 1);
 
@@ -252,6 +256,9 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
             DeleteCriticalSection( &g_ThreadKeyListCS );
 
             osl_destroyMutex( g_Mutex );
+
+            osl_destroyMutex( g_CurrentDirectoryMutex );
+
             break;
 
         case DLL_THREAD_ATTACH:
