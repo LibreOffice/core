@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:07:43 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,7 +673,7 @@ ScalableBitmapXlfd::ToString( ByteString &rString,
 
     rString += "-*-";
     char pTmp[256];
-    sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
+    snprintf( pTmp, sizeof(pTmp), pMatricsString, nPixelSize, nPixelSize );
     rString += pTmp;
     rString += "-*-*-";
     rString += static_cast< char >(rInfo.mcSpacing);
@@ -697,7 +697,7 @@ BitmapXlfd::ToString( ByteString &rString,
 
     rString += "-*-";
     char pTmp[256];
-    sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
+    snprintf( pTmp, sizeof(pTmp), pMatricsString, nPixelSize, nPixelSize );
     rString += pTmp;
     rString += "-*-*-";
     rString += static_cast< char >(rInfo.mcSpacing);
@@ -838,7 +838,7 @@ ScalableXlfd::ToString( ByteString &rString,
 
     rString += "-*-";
     char pTmp[256];
-    sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
+    snprintf( pTmp, sizeof(pTmp), pMatricsString, nPixelSize, nPixelSize );
     rString += pTmp;
     rString += "-*-*-";
     rString += static_cast< char >(rInfo.mcSpacing);
@@ -1026,7 +1026,7 @@ VirtualXlfd::ToString( ByteString &rString, unsigned short nPixelSize,
 
     rString += "-*-";
     char pTmp[256];
-    sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
+    snprintf( pTmp, sizeof(pTmp), pMatricsString, nPixelSize, nPixelSize );
     rString += pTmp;
     rString += "-*-*-";
     rString += static_cast< char >(rInfo.mcSpacing);
