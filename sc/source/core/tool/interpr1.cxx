@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-08 11:52:13 $
+ *  last change: $Author: er $ $Date: 2001-03-14 16:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include <unotools/charclass.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
+#include <unotools/collatorwrapper.hxx>
 
 #include <stdlib.h>
 #include <string.h>
@@ -237,17 +238,11 @@ short ScInterpreter::CompareFunc( const ScCompare& rComp )
         nRes = 1;   // Zahl ist kleiner als String
     else
     {
-        StringCompare eComp;
         if (pDok->GetDocOptions().IsIgnoreCase())
-            eComp = ScGlobal::pScInternational->Compare( *rComp.pVal[ 0 ],
-                *rComp.pVal[ 1 ], INTN_COMPARE_IGNORECASE );
+            nRes = (short) ScGlobal::pCollator->compareString(
+                *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
         else
-            eComp = (*rComp.pVal[ 0 ]).CompareTo( *rComp.pVal[ 1 ] );
-        switch( eComp )
-        {
-            case COMPARE_LESS:      nRes = 1; break;
-            case COMPARE_GREATER:   nRes = -1; break;
-        }
+            nRes = (*rComp.pVal[ 0 ]).CompareTo( *rComp.pVal[ 1 ] );
     }
     return nRes;
 }
@@ -3481,23 +3476,22 @@ void ScInterpreter::ScLookup()
                 if (rEntry.bQueryByString)
                 {
                     BOOL bFound = FALSE;
-                    StringCompare eRes;
+                    sal_Int32 nRes;
                     String aParamStr = *rEntry.pStr;
                     for (USHORT i = 0; i < nMatCount; i++)
                     {
                         if (!pMat1->IsValue(i))
-                            eRes = ScGlobal::pScInternational->Compare(
-                                pMat1->GetString(i), aParamStr,
-                                INTN_COMPARE_IGNORECASE );
-                        else
-                            eRes = COMPARE_GREATER;
-                        if (eRes == COMPARE_EQUAL)
                         {
-                            bFound = TRUE;
-                            nDelta = i;
+                            nRes = ScGlobal::pCollator->compareString(
+                                pMat1->GetString(i), aParamStr );
+                            if (nRes == COMPARE_EQUAL)
+                            {
+                                bFound = TRUE;
+                                nDelta = i;
+                            }
+                            else if (nRes == COMPARE_LESS)
+                                i = nMatCount+1;
                         }
-                        else if (eRes == COMPARE_LESS)
-                            i = nMatCount+1;
                     }
                     if (i == nMatCount+2 && !bFound)
                     {
@@ -3692,33 +3686,31 @@ void ScInterpreter::ScLookup()
         if (bIsStr)
         {
             BOOL bFound = FALSE;
-            StringCompare eRes;
             for (USHORT i = 0; i < nMatCount; i++)
             {
+                sal_Int32 nRes;
                 if (bSpMatrix)
                 {
                     if (pMat1->IsString(i, 0))
-                        eRes = ScGlobal::pScInternational->Compare(
-                            pMat1->GetString(i,0), sStr,
-                            INTN_COMPARE_IGNORECASE );
+                        nRes = ScGlobal::pCollator->compareString(
+                            pMat1->GetString(i,0), sStr );
                     else
-                        eRes = COMPARE_GREATER;
+                        nRes = COMPARE_GREATER;
                 }
                 else
                 {
                     if (pMat1->IsString(0, i))
-                        eRes = ScGlobal::pScInternational->Compare(
-                            pMat1->GetString(0,i), sStr,
-                            INTN_COMPARE_IGNORECASE );
+                        nRes = ScGlobal::pCollator->compareString(
+                            pMat1->GetString(0,i), sStr );
                     else
-                        eRes = COMPARE_GREATER;
+                        nRes = COMPARE_GREATER;
                 }
-                if (eRes == COMPARE_EQUAL)
+                if (nRes == COMPARE_EQUAL)
                 {
                     bFound = TRUE;
                     nDelta = i;
                 }
-                else if (eRes == COMPARE_LESS)
+                else if (nRes == COMPARE_LESS)
                     i = nMatCount+1;
             }
             if (i == nMatCount+2 && !bFound)
@@ -3908,7 +3900,7 @@ void ScInterpreter::ScHLookup()
                 short nDelta = -1;
                 if (rEntry.bQueryByString)
                 {
-                    StringCompare eRes;
+                    sal_Int32 nRes;
                     String aParamStr = *rEntry.pStr;
                     USHORT i;
                     if ( bSorted )
@@ -3916,15 +3908,16 @@ void ScInterpreter::ScHLookup()
                         for (i = 0; i < nMatCount; i++)
                         {
                             if (pMat->IsString(i, 0))
-                                eRes = ScGlobal::pScInternational->Compare(
-                                    pMat->GetString(i,0), aParamStr,
-                                    INTN_COMPARE_IGNORECASE );
+                            {
+                                nRes = ScGlobal::pCollator->compareString(
+                                    pMat->GetString(i,0), aParamStr );
+                                if (nRes == COMPARE_LESS)
+                                    i = nMatCount+1;
+                                else
+                                    nDelta = i;
+                            }
                             else
-                                eRes = COMPARE_GREATER;
-                            if (eRes == COMPARE_GREATER || eRes == COMPARE_EQUAL)
                                 nDelta = i;
-                            else if (eRes == COMPARE_LESS)
-                                i = nMatCount+1;
                         }
                     }
                     else
@@ -3932,15 +3925,14 @@ void ScInterpreter::ScHLookup()
                         for (i = 0; i < nMatCount; i++)
                         {
                             if (pMat->IsString(i, 0))
-                                eRes = ScGlobal::pScInternational->Compare(
-                                    pMat->GetString(i,0), aParamStr,
-                                    INTN_COMPARE_IGNORECASE );
-                            else
-                                eRes = COMPARE_GREATER;
-                            if (eRes == COMPARE_EQUAL)
                             {
-                                nDelta = i;
-                                i = nMatCount + 1;
+                                nRes = ScGlobal::pCollator->compareString(
+                                    pMat->GetString(i,0), aParamStr );
+                                if (nRes == COMPARE_EQUAL)
+                                {
+                                    nDelta = i;
+                                    i = nMatCount + 1;
+                                }
                             }
                         }
                     }
@@ -4150,7 +4142,7 @@ void ScInterpreter::ScVLookup()
                 short nDelta = -1;
                 if (rEntry.bQueryByString)
                 {
-                    StringCompare eRes;
+                    sal_Int32 nRes;
                     String aParamStr = *rEntry.pStr;
                     USHORT i;
                     if ( bSorted )
@@ -4158,15 +4150,16 @@ void ScInterpreter::ScVLookup()
                         for (i = 0; i < nMatCount; i++)
                         {
                             if (pMat->IsString(0, i))
-                                eRes = ScGlobal::pScInternational->Compare(
-                                    pMat->GetString(0,i), aParamStr,
-                                    INTN_COMPARE_IGNORECASE );
+                            {
+                                nRes = ScGlobal::pCollator->compareString(
+                                    pMat->GetString(0,i), aParamStr );
+                                if (nRes == COMPARE_LESS)
+                                    i = nMatCount+1;
+                                else
+                                    nDelta = i;
+                            }
                             else
-                                eRes = COMPARE_GREATER;
-                            if (eRes == COMPARE_GREATER || eRes == COMPARE_EQUAL)
                                 nDelta = i;
-                            else if (eRes == COMPARE_LESS)
-                                i = nMatCount+1;
                         }
                     }
                     else
@@ -4174,15 +4167,14 @@ void ScInterpreter::ScVLookup()
                         for (i = 0; i < nMatCount; i++)
                         {
                             if (pMat->IsString(0, i))
-                                eRes = ScGlobal::pScInternational->Compare(
-                                    pMat->GetString(0,i), aParamStr,
-                                    INTN_COMPARE_IGNORECASE );
-                            else
-                                eRes = COMPARE_GREATER;
-                            if (eRes == COMPARE_EQUAL)
                             {
-                                nDelta = i;
-                                i = nMatCount + 1;
+                                nRes = ScGlobal::pCollator->compareString(
+                                    pMat->GetString(0,i), aParamStr );
+                                if (nRes == COMPARE_EQUAL)
+                                {
+                                    nDelta = i;
+                                    i = nMatCount + 1;
+                                }
                             }
                         }
                     }
@@ -4365,8 +4357,8 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam)
                 while (!bFound && (nField <= nDBCol2))
                 {
                     pDok->GetString(nField, nDBRow1, nDBTab1, aCellStr);
-                    bFound = ScGlobal::pScInternational->CompareEqual(
-                        aCellStr, aStr, INTN_COMPARE_IGNORECASE );
+                    bFound = (ScGlobal::pCollator->compareString(
+                        aCellStr, aStr ) == COMPARE_EQUAL);
                     if (!bFound)
                         nField++;
                 }

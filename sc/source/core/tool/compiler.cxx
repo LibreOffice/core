@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-05 14:53:14 $
+ *  last change: $Author: er $ $Date: 2001-03-14 16:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <tools/rc.hxx>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>
+#include <unotools/collatorwrapper.hxx>
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -1064,8 +1065,8 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                                 ((ScEditCell*)pCell)->GetString( aStr );
                             break;
                         }
-                        if ( ScGlobal::pScInternational->CompareEqual(
-                                aStr, aName, INTN_COMPARE_IGNORECASE ) )
+                        if ( ScGlobal::pCollator->compareString(
+                                aStr, aName ) == COMPARE_EQUAL )
                         {
                             aRef.InitFlags();
                             aRef.nCol = aIter.GetCol();
@@ -1119,8 +1120,8 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                         ((ScEditCell*)pCell)->GetString( aStr );
                     break;
                 }
-                if ( ScGlobal::pScInternational->CompareEqual(
-                        aStr, aName, INTN_COMPARE_IGNORECASE ) )
+                if ( ScGlobal::pCollator->compareString(
+                        aStr, aName ) == COMPARE_EQUAL )
                 {
                     USHORT nCol = aIter.GetCol();
                     USHORT nRow = aIter.GetRow();

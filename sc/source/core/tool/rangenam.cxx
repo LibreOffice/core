@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
+ *  last change: $Author: er $ $Date: 2001-03-14 16:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <tools/debug.hxx>
 #include <tools/intn.hxx>
 #include <string.h>
+#include <unotools/collatorwrapper.hxx>
 
 #include "rangenam.hxx"
 #include "global.hxx"
@@ -665,19 +666,9 @@ __cdecl
 #endif
 ScRangeData::QsortNameCompare( const void* p1, const void* p2 )
 {
-    switch ( ScGlobal::pScInternational->Compare(
+    return (int) ScGlobal::pCollator->compareString(
             (*(const ScRangeData**)p1)->aName,
-            (*(const ScRangeData**)p2)->aName, INTN_COMPARE_IGNORECASE ) )
-    {
-        case COMPARE_LESS:
-            return -1;
-        break;
-        case COMPARE_GREATER:
-            return 1;
-        break;
-        default:
-            return 0;
-    }
+            (*(const ScRangeData**)p2)->aName );
 }
 
 
@@ -711,8 +702,8 @@ BOOL ScRangeName::SearchName( const String& rName, USHORT& rIndex ) const
     {
         String aName;
         ((*this)[i])->GetName( aName );
-        if ( ScGlobal::pScInternational->CompareEqual(
-                aName, rName, INTN_COMPARE_IGNORECASE ) )
+        if ( ScGlobal::pCollator->compareString(
+                aName, rName ) == COMPARE_EQUAL )
         {
             rIndex = i;
             return TRUE;

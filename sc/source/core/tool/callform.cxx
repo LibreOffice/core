@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callform.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-03 11:24:24 $
+ *  last change: $Author: er $ $Date: 2001-03-14 16:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+#include <unotools/collatorwrapper.hxx>
 
 #include "callform.hxx"
 #include "global.hxx"
@@ -199,15 +200,8 @@ FuncData::FuncData(const FuncData& rData) :
 
 short FuncCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
 {
-    StringCompare eComp = ScGlobal::pScInternational->Compare(
-        ((FuncData*)pKey1)->aInternalName, ((FuncData*)pKey2)->aInternalName,
-        INTN_COMPARE_IGNORECASE );
-    if (eComp == COMPARE_EQUAL)
-        return 0;
-    else if (eComp == COMPARE_LESS)
-        return -1;
-    else
-        return 1;
+    return (short) ScGlobal::pCollator->compareString(
+        ((FuncData*)pKey1)->aInternalName, ((FuncData*)pKey2)->aInternalName );
 }
 
 //------------------------------------------------------------------------
@@ -259,15 +253,8 @@ static ModuleCollection aModuleCollection;
 
 short ModuleCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
 {
-    StringCompare eComp = ScGlobal::pScInternational->Compare(
-        ((ModuleData*)pKey1)->aName, ((ModuleData*)pKey2)->aName,
-        INTN_COMPARE_IGNORECASE );
-    if (eComp == COMPARE_EQUAL)
-        return 0;
-    else if (eComp == COMPARE_LESS)
-        return -1;
-    else
-        return 1;
+    return (short) ScGlobal::pCollator->compareString(
+        ((ModuleData*)pKey1)->aName, ((ModuleData*)pKey2)->aName );
 }
 
 //------------------------------------------------------------------------

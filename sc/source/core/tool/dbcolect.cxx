@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-13 09:53:03 $
+ *  last change: $Author: er $ $Date: 2001-03-14 16:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/intn.hxx>
+#include <unotools/collatorwrapper.hxx>
 
 #include "dbcolect.hxx"
 #include "global.hxx"
@@ -1010,14 +1011,7 @@ short ScDBCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
 {
     const String& rStr1 = ((ScDBData*)pKey1)->GetName();
     const String& rStr2 = ((ScDBData*)pKey2)->GetName();
-    StringCompare eComp = ScGlobal::pScInternational->Compare(
-                                rStr1, rStr2, INTN_COMPARE_IGNORECASE );
-    if (eComp == COMPARE_EQUAL)
-        return 0;
-    else if (eComp == COMPARE_LESS)
-        return -1;
-    else
-        return 1;
+    return (short) ScGlobal::pCollator->compareString( rStr1, rStr2 );
 }
 
 //  IsEqual - alles gleich

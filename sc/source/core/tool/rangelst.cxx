@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangelst.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:18 $
+ *  last change: $Author: er $ $Date: 2001-03-14 16:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <tools/debug.hxx>
 #include <tools/intn.hxx>
 #include <stdlib.h>             // qsort
+#include <unotools/collatorwrapper.hxx>
 
 #include "rangelst.hxx"
 #include "document.hxx"
@@ -679,17 +680,16 @@ ScRangePairList::QsortNameCompare( const void* p1, const void* p2 )
     const ScAddress& rPos1 = ps1->pPair->GetRange(0).aStart;
     const ScAddress& rPos2 = ps2->pPair->GetRange(0).aStart;
     String aStr1, aStr2;
-    StringCompare eComp;
+    sal_Int32 nComp;
     if ( rPos1.Tab() == rPos2.Tab() )
-        eComp = COMPARE_EQUAL;
+        nComp = COMPARE_EQUAL;
     else
     {
         ps1->pDoc->GetName( rPos1.Tab(), aStr1 );
         ps2->pDoc->GetName( rPos2.Tab(), aStr2 );
-        eComp = ScGlobal::pScInternational->Compare( aStr1, aStr2,
-            INTN_COMPARE_IGNORECASE );
+        nComp = ScGlobal::pCollator->compareString( aStr1, aStr2 );
     }
-    switch ( eComp )
+    switch ( nComp )
     {
         case COMPARE_LESS:
             return -1;
@@ -713,15 +713,14 @@ ScRangePairList::QsortNameCompare( const void* p1, const void* p2 )
                 const ScAddress& rPos1 = ps1->pPair->GetRange(0).aEnd;
                 const ScAddress& rPos2 = ps2->pPair->GetRange(0).aEnd;
                 if ( rPos1.Tab() == rPos2.Tab() )
-                    eComp = COMPARE_EQUAL;
+                    nComp = COMPARE_EQUAL;
                 else
                 {
                     ps1->pDoc->GetName( rPos1.Tab(), aStr1 );
                     ps2->pDoc->GetName( rPos2.Tab(), aStr2 );
-                    eComp = ScGlobal::pScInternational->Compare( aStr1, aStr2,
-                        INTN_COMPARE_IGNORECASE );
+                    nComp = ScGlobal::pCollator->compareString( aStr1, aStr2 );
                 }
-                switch ( eComp )
+                switch ( nComp )
                 {
                     case COMPARE_LESS:
                         return -1;

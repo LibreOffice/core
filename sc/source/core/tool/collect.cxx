@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: er $ $Date: 2001-03-14 16:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
+#include <unotools/collatorwrapper.hxx>
 
 #include "rechead.hxx"
 #include "collect.hxx"
@@ -463,16 +464,12 @@ short TypedStrCollection::Compare( DataObject* pKey1, DataObject* pKey2 ) const
             //---------------------
             // Strings vergleichen:
             //---------------------
-            StringCompare eComp = ScGlobal::pScInternational->Compare(
-                                    rData1.aStrValue, rData2.aStrValue,
-                                    bCaseSensitive ? 0 : INTN_COMPARE_IGNORECASE );
-
-            if ( eComp == COMPARE_EQUAL )
-                nResult = 0;
-            else if ( eComp == COMPARE_LESS )
-                nResult = -1;
+            if ( bCaseSensitive )
+                nResult = (short) ScGlobal::pCaseCollator->compareString(
+                    rData1.aStrValue, rData2.aStrValue );
             else
-                nResult = 1;
+                nResult = (short) ScGlobal::pCollator->compareString(
+                    rData1.aStrValue, rData2.aStrValue );
         }
     }
 
@@ -484,8 +481,6 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
 {
     //  Die Collection ist nach String-Vergleichen sortiert, darum muss hier
     //  alles durchsucht werden
-
-    International* pInt = ScGlobal::pScInternational;
 
     xub_StrLen nCmpLen = rStart.Len();
     BOOL bFound = FALSE;
@@ -503,7 +498,8 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
             if (pData->nStrType)
             {
                 String aCmp = pData->aStrValue.Copy(0,nCmpLen);
-                if ( pInt->CompareEqual( aCmp, rStart, INTN_COMPARE_IGNORECASE ) )
+                if ( ScGlobal::pCollator->compareString( aCmp, rStart )
+                        == COMPARE_EQUAL )
                 {
                     rResult = pData->aStrValue;
                     rPos = i;
@@ -525,7 +521,8 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
             if (pData->nStrType)
             {
                 String aCmp = pData->aStrValue.Copy(0,nCmpLen);
-                if ( pInt->CompareEqual( aCmp, rStart, INTN_COMPARE_IGNORECASE ) )
+                if ( ScGlobal::pCollator->compareString( aCmp, rStart )
+                        == COMPARE_EQUAL )
                 {
                     rResult = pData->aStrValue;
                     rPos = i;
@@ -543,12 +540,12 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
 
 BOOL TypedStrCollection::GetExactMatch( String& rString ) const
 {
-    International* pInt = ScGlobal::pScInternational;
     for (USHORT i=0; i<nCount; i++)
     {
         TypedStrData* pData = (TypedStrData*) pItems[i];
         if ( pData->nStrType &&
-             pInt->CompareEqual( pData->aStrValue, rString, INTN_COMPARE_IGNORECASE ) )
+             ScGlobal::pCollator->compareString( pData->aStrValue, rString )
+                 == COMPARE_EQUAL )
         {
             rString = pData->aStrValue;                         // String anpassen
             return TRUE;
