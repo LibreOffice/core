@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:52:24 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
@@ -1756,7 +1759,7 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     else if ( mbExport )
         ::sfx2::appendExportFilters( aIter, xFltMgr, sFirstFilter, *this );
     else
-        ::sfx2::appendFiltersForSave( aIter, xFltMgr, sFirstFilter, *this );
+        ::sfx2::appendFiltersForSave( aIter, xFltMgr, sFirstFilter, *this, rFactory );
 
     // set our initial selected filter (if we do not already have one)
     if ( maSelectFilter.getLength() )
