@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropTargetDropEvent.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:46 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 10:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,31 +93,35 @@ struct DropTargetDropEvent: com::sun::star::datatransfer::dnd::DropTargetEvent
     //-------------------------------------------------------------------------
     /** the DropTargetContext of the current drag operation.
      */
+
     XDropTargetDropContext Context;
 
     //-------------------------------------------------------------------------
     /** this value represents the action(s) selected by the user at the time of
         the drop.
 
-        <p>If more than one action is specified, the
-        <type>DropTargetListener</type> should raise a dialog to ask the user
-        which action (s)he to use.</p>
+        <p>If more than one action is specified, the <type>DropTargetListener</type>
+         should raise a dialog to ask the user which action (s)he to use.</p>
      */
+
     byte DropAction;
 
     //-------------------------------------------------------------------------
     /** the cursor's current location within the windows's coordinates.
      */
+
     com::sun::star::awt::Point Location;
 
     //-------------------------------------------------------------------------
     /** this value represents the action(s) supported by the source.
      */
+
     byte SourceActions;
 
     //-------------------------------------------------------------------------
     /** the transferable object associated with the drop.
      */
+
     com::sun::star::datatransfer::XTransferable Transferable;
 };
 

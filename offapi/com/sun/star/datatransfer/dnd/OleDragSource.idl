@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XDropTargetDropContext.idl,v $
+ *  $RCSfile: OleDragSource.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: obr $ $Date: 2001-02-09 10:55:21 $
  *
@@ -59,15 +59,23 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_datatransfer_dnd_XDropTargetDropContext_idl__
-#define __com_sun_star_datatransfer_dnd_XDropTargetDropContext_idl__
+#ifndef __com_sun_star_datatransfer_dnd_OleDragSource_idl__
+#define __com_sun_star_datatransfer_dnd_OleDragSource_idl__
 
-#ifndef __com_sun_star_datatransfer_dnd_InvalidDNDOperationException_idl__
-#include <com/sun/star/datatransfer/dnd/InvalidDNDOperationException.idl>
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
 #endif
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef __com_sun_star_lang_XServiceInfo_idl__
+#include <com/sun/star/lang/XServiceInfo.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XTypeProvider_idl__
+#include <com/sun/star/lang/XTypeProvider.idl>
 #endif
 
 //=============================================================================
@@ -75,68 +83,51 @@
 module com { module sun { module star { module datatransfer { module dnd {
 
 //=============================================================================
-/** This interface is implemented by any DropTargetContext object.
 
-    <p>A DropTargetContext is created whenever the logical cursor associated
-    with a Drag and Drop operation moves with the visible geometry of a
-    window associated with a DropTarget. </p>
+interface XDragSource;
 
-    <p>The DropTargetContext provides the mechanism for a potential receiver
-    of a drop operation to both provide the end user with the appropriate drag
-    under feedback, but also to effect the subsequent data transfer if
-    appropriate. </p>
+//=============================================================================
+/** This service connects the java like UNO drag and drop protocol to the protocol
+    used on window platforms. It realized the drag source.
 
+    @see XDragSource
 */
 
-[ uik(260EDFB0-EDFB-11d4-82C90050-04D765F1), ident("XDropTargetDropContext",  0.1) ]
-interface XDropTargetDropContext : com::sun::star::uno::XInterface
+service OleDragSource
 {
     //-------------------------------------------------------------------------
-    /** accept the Drop.
-
-        <p>This method should be called from the <type>XDropTargetListener</type>s
-        <member>XDropTargetListener::drop</member> method if the implementation
-        wishes to accept the drop operation with the specified action.</p>
-
-        @param dragOperation
-        the operation accepted by the target.
-
-        @throws InvalidDNDOperationException
-        if the drop target is not in drop state.
-
-        @see DNDConstants
-        @see DropTargetDragEvent
+    /** used to provide data to other applications via Ole DND protocol.
     */
-
-    void acceptDrop( [in] byte dragOperation )
-        raises (InvalidDNDOperationException);
+    interface XDragSource;
 
     //-------------------------------------------------------------------------
-    /** reject the Drag.
+    /** the service expects a byte sequence uniqly identifying the machine as
+        the first (and only) parameter. This idenifier should be checked to
+        ensure that the window ids used for creating DropTargets are valid for
+        the service, i.e. come from the same machine.
 
-        <p>Reject the drop as a result of examining either or the available
-        <type scope="com::sun::star::datatransfer">DataFlavor</type> types
-        received in the <member>XDropTargetListener::dragEnter</member>.
+        <p>TODO: specify how such a machine id should look like.</p>
 
-        @throws InvalidDNDOperationException
-        if the drop target is not in drop state.
+        The second parameter is a window handle of the native windows window.
+        Is is passed as an unsigned long.
+
     */
-
-    void rejectDrop()
-        raises (InvalidDNDOperationException);
+    interface com::sun::star::lang::XInitialization;
 
     //-------------------------------------------------------------------------
-    /** signals that the drop is completed and if it was successful or not.
-
-        @param success
-        <TRUE/> if drop completed successful, <FALSE/> otherwise.
-
-        @throws InvalidDNDOperationException
-        if the drop target is not in drop state.
+    /** for shutdown and listener support.
     */
+    interface com::sun::star::lang::XComponent;
 
-    void dropComplete( [in] boolean success )
-        raises (InvalidDNDOperationException);
+    //-------------------------------------------------------------------------
+    /** service should always support this interface.
+    */
+    interface com::sun::star::lang::XServiceInfo;
+
+    //-------------------------------------------------------------------------
+    /** service should always support this interface.
+    */
+    interface com::sun::star::lang::XTypeProvider;
 };
 
 //=============================================================================

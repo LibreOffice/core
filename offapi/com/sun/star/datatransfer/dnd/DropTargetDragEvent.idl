@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropTargetDragEvent.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:46 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 10:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,16 +90,19 @@ struct DropTargetDragEvent: com::sun::star::datatransfer::dnd::DropTargetEvent
     //-------------------------------------------------------------------------
     /** the DropTargetContext of the current drag operation.
      */
+
     XDropTargetDragContext Context;
 
     //-------------------------------------------------------------------------
     /** this value represents the currently selected drop action.
      */
+
     byte DropAction;
 
     //-------------------------------------------------------------------------
     /** the cursor's current location within the windows's coordinates.
      */
+
     com::sun::star::awt::Point Location;
 
     //-------------------------------------------------------------------------

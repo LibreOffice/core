@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragSourceListener.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:47 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 10:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ interface XDragSourceListener: com::sun::star::lang::XEventListener
         the DragSourceDropEvent
     */
 
-    void dragDropEnd( [in] DragSourceDropEvent dsde );
+    [oneway] void dragDropEnd( [in] DragSourceDropEvent dsde );
 
       //-------------------------------------------------------------------------
     /** called as the hotspot enters a platform dependent drop site.
@@ -106,7 +106,7 @@ interface XDragSourceListener: com::sun::star::lang::XEventListener
         the DragSourceDragEvent
     */
 
-    void dragEnter( [in] DragSourceDragEvent dsde );
+    [oneway] void dragEnter( [in] DragSourceDragEvent dsde );
 
       //-------------------------------------------------------------------------
     /** called as the hotspot exits a platform dependent drop site.
@@ -118,19 +118,16 @@ interface XDragSourceListener: com::sun::star::lang::XEventListener
         the DragSourceEvent
     */
 
-    void dragExit( [in] DragSourceEvent dse );
+    [oneway] void dragExit( [in] DragSourceEvent dse );
 
       //-------------------------------------------------------------------------
     /** called as the hotspot moves over a platform dependent drop site.
-
-        <p>NOTE: currently this notification can not be ensured by all
-        implementations. Do not rely on it ! </p>
 
         @param dsde
         the DragSourceEvent
     */
 
-    void dragOver( [in] DragSourceDragEvent dsde );
+    [oneway] void dragOver( [in] DragSourceDragEvent dsde );
 
       //-------------------------------------------------------------------------
     /** called when the user has modified the drop gesture.
@@ -139,7 +136,7 @@ interface XDragSourceListener: com::sun::star::lang::XEventListener
         the DragSourceEvent
     */
 
-    void dropActionChanged( [in] DragSourceDragEvent dsde );
+    [oneway] void dropActionChanged( [in] DragSourceDragEvent dsde );
 };
 
 //=============================================================================

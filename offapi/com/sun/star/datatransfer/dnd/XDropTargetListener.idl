@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDropTargetListener.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:47 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 10:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef __com_sun_star_datatransfer_dnd_XDropTargetListener_idl__
 #define __com_sun_star_datatransfer_dnd_XDropTargetListener_idl__
 
-#ifndef __com_sun_star_datatransfer_dnd_DropTargetDragEvent_idl__
-#include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.idl>
+#ifndef __com_sun_star_datatransfer_dnd_DropTargetDragEnterEvent_idl__
+#include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.idl>
 #endif
 
 #ifndef __com_sun_star_datatransfer_dnd_DropTargetDropEvent_idl__
@@ -107,7 +107,7 @@ interface XDropTargetListener: com::sun::star::lang::XEventListener
         the DropTargetDragEvent
     */
 
-    void dragEnter( [in] DropTargetDragEvent dtde );
+    [oneway] void dragEnter( [in] DropTargetDragEnterEvent dtdee );
 
       //-------------------------------------------------------------------------
     /** the drag operation has departed the DropTarget without dropping.
@@ -116,7 +116,7 @@ interface XDropTargetListener: com::sun::star::lang::XEventListener
         the DropTargetEvent
     */
 
-    void dragExit( [in] DropTargetEvent dte );
+    [oneway] void dragExit( [in] DropTargetEvent dte );
 
       //-------------------------------------------------------------------------
     /** called when a drag operation is ongoing on the DropTarget.
@@ -125,7 +125,7 @@ interface XDropTargetListener: com::sun::star::lang::XEventListener
         the DropTargetEvent
     */
 
-    void dragOver( [in] DropTargetDragEvent dtde );
+    [oneway] void dragOver( [in] DropTargetDragEvent dtde );
 
       //-------------------------------------------------------------------------
     /** called when the user has modified the drop gesture.
@@ -134,7 +134,7 @@ interface XDropTargetListener: com::sun::star::lang::XEventListener
         the DropTargetEvent
     */
 
-    void dropActionChanged( [in] DropTargetDragEvent dtde );
+    [oneway] void dropActionChanged( [in] DropTargetDragEvent dtde );
 };
 
 //=============================================================================
