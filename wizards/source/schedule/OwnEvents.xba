@@ -15,7 +15,7 @@ Dim FileName as String
 Dim FileChannel as Integer
 Dim i as Integer
 	If bCalOwnDataChanged Then
-		FileName = GetPathSettings(&quot;Config&quot;, False) &amp; &quot;/&quot; &amp; &quot;DATE.DAT&quot;
+		FileName = GetPathSettings(&quot;UserConfig&quot;, False) &amp; &quot;/&quot; &amp; &quot;DATE.DAT&quot;
 		SaveDataToFile(FileName, DlgCalModel.lstOwnData.StringItemList())
 	End If
 End Sub
@@ -24,7 +24,7 @@ End Sub
 Sub CalLoadOwnData()
 Dim FileName as String
 Dim LocList() as String
-	FileName = GetPathSettings(&quot;Config&quot;, False) &amp; &quot;/DATE.DAT&quot;
+	FileName = GetPathSettings(&quot;UserConfig&quot;, False) &amp; &quot;/DATE.DAT&quot;
 	If LoadDataFromFile(FileName, LocList()) Then
 		DlgCalModel.lstOwnData.StringItemList() = LocList()
 	End If
