@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2000-11-06 20:38:47 $
+ *  last change: $Author: th $ $Date: 2000-11-28 14:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,7 +561,17 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             else
             {
                 if ( nSVEvent == EVENT_MOUSEMOVE )
+                {
+                    // Call the hook also, if Window is disabled
+                    Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
+                    MouseEvent aMEvt( aChildPos, pWindow->mpFrameData->mnClickCount, nMode, nCode, nCode );
+                    NotifyEvent aNEvt( EVENT_MOUSEMOVE, pChild, &aMEvt );
+                    Application::CallEventHooks( aNEvt );
+
+                    // Set normal MousePointer for disabled windows
                     ImplSetMousePointer( pChild );
+                }
+
                 return 0;
             }
         }
