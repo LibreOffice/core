@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:40:14 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,7 +712,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "¸üĞÂ";
                 Text[ russian ] = "Îáíîâèòü";
                 Text[ polish ] = "Aktualizuj";
-                Text[ japanese ] = "XV‚·‚é";
+                Text[ japanese ] = "XV";
                 Text[ chinese_traditional ] = "§ó·s";
                 Text[ arabic ] = "ÊÍÏíË";
                 Text[ greek ] = "Åíçìİñùóç";
@@ -1035,7 +1035,7 @@ Window DLG_NAVIGATION_PI
         Text[ polish ] = "Aktywne okno";
         Text[ japanese ] = "±¸Ã¨ÌŞ‚È³¨İÄŞ³";
         Text[ language_user1 ] = "èë? Îòêğûòîå - - - èëè: Îòêğûòîå - èëè: Îòêğûòîå";
-        Text[ chinese_traditional ] = "·í«eªºµøµ¡";
+        Text[ chinese_traditional ] = "¨Ï¥Î¤¤ªºµøµ¡";
         Text[ arabic ] = "ÇáäÇİĞÉ ÇáäÔØÉ";
         Text[ greek ] = "Åíåñãü ğáñÜèõñï";
         Text[ korean ] = "È°¼º Ã¢";
@@ -1081,7 +1081,7 @@ Window DLG_NAVIGATION_PI
         Text[ russian ] = "àêòèâíûé";
         Text[ polish ] = "aktywny";
         Text[ japanese ] = "±¸Ã¨ÌŞ";
-        Text[ chinese_traditional ] = "¿E¬¡ªº";
+        Text[ chinese_traditional ] = "¨Ï¥Î¤¤ªº";
         Text[ arabic ] = "äÔØ";
         Text[ greek ] = "åíåñãü";
         Text[ korean ] = "È°¼º";
@@ -1104,7 +1104,7 @@ Window DLG_NAVIGATION_PI
         Text[ russian ] = "íåàêòèâíûé";
         Text[ polish ] = "nieaktywny";
         Text[ japanese ] = "”ñ±¸Ã¨ÌŞ";
-        Text[ chinese_traditional ] = "¥¢¬¡ªº";
+        Text[ chinese_traditional ] = "Ãö³¬ªº";
         Text[ arabic ] = "ÛíÑ äÔØ";
         Text[ greek ] = "ìç åíåñãü";
         Text[ korean ] = "ºñ È°¼º";
