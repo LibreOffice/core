@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:43:08 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,7 @@
  *
  ************************************************************************/
 
-#if defined _MSC_VER
-#include <malloc.h>
-#else
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 
 #include "rtl/ustrbuf.hxx"
 
