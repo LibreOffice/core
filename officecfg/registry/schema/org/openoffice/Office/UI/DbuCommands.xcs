@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DbuCommands.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:50:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="DbuCommands" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
     <info>
 		<author>CD</author>
-		<desc xml:lang="en-US">Contains general information and about actions based on office commands.</desc>
+		<desc>Contains general information and about actions based on office commands.</desc>
 	</info>
 	<import oor:component="org.openoffice.Office.UI.Commands"/>
 	<uses oor:component="org.openoffice.Office.UI.Commands"/>
