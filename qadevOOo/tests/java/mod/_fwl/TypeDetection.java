@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDetection.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-01-28 19:29:07 $
+ *  last change:$Date: 2004-12-10 17:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,11 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XStorable;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
+import util.SOfficeFactory;
 
 /**
  * Test for object which is represented by service
@@ -109,6 +113,16 @@ import com.sun.star.uno.AnyConverter;
  * @see ifc.util.XFlushable
  */
 public class TypeDetection extends TestCase {
+
+    /**
+    * Disposes text document.
+    */
+    protected void cleanup( TestParameters tParam, PrintWriter log ) {
+        log.println( "    disposing xTextDoc " );
+        //util.DesktopTools.closeDoc(xTextDoc);
+    }
+
+    XTextDocument xTextDoc = null;
 
     /**
     * Creating a Testenvironment for the interfaces to be tested.
@@ -167,8 +181,30 @@ public class TypeDetection extends TestCase {
         query.Value = "writer_Text";
         querySequenze[0] = query;
 
+
+        log.println("create text document with bookmarks");
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        String fileURL = null;
+        try {
+            xTextDoc = SOF.createTextDoc( null );
+            XInterface xBookMark = SOF.createBookmark( xTextDoc );
+            SOF.insertTextContent( xTextDoc, (XTextContent) xBookMark );
+
+            fileURL = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF() );
+            fileURL = fileURL + "/bookmarks.oot";
+
+            XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class, xTextDoc);
+            System.out.println(fileURL);
+            store.storeToURL(fileURL, new PropertyValue[0]);
+
+        } catch( com.sun.star.uno.Exception e ) {
+            e.printStackTrace( log );
+            throw new StatusException( "Couldn³t create Bookmark", e );
+        }
+
         tEnv.addObjRelation("XContainerQuery.createSubSetEnumerationByProperties",
             querySequenze);
+        tEnv.addObjRelation("XTypeDetection.bookmarkDoc", fileURL+"#bookmark");
 
         return tEnv;
     } // finish method getTestEnvironment
