@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:36:36 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Vervangen" ;
         Text [ spanish ] = "Reemplazar" ;
         Text [ english_us ] = "Replace" ;
-        Text[ chinese_simplified ] = "¸üÌæ";
+        Text[ chinese_simplified ] = "Ìæ»»";
         Text[ russian ] = "Çàìåíèòü";
         Text[ polish ] = "Zamieñ";
         Text[ japanese ] = "’uŠ·";
@@ -1410,7 +1410,7 @@ Resource RID_GLOBSTR
         Text[ chinese_simplified ] = "Ê¹ÓÃµ¥Ôª¸ñÑùÊ½";
         Text[ russian ] = "Ïğèìåíèòü ñòèëü ÿ÷åéêè";
         Text[ polish ] = "Zastosuj styl komórki";
-        Text[ japanese ] = "¾Ù‚Ì½À²Ù‚ğ“K—p";
+        Text[ japanese ] = "¾Ù½À²Ù‚ğ“K—p";
         Text[ chinese_traditional ] = "¨Ï¥ÎÀx¦s®æ¼Ë¦¡";
         Text[ arabic ] = "ÇÓÊÎÏÇã äãØ ÎáíÉ";
         Text[ greek ] = "ÅöáñìïãŞ óôõë êåëéşí";
@@ -3474,11 +3474,11 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "El área destino no está vacía. ¿Desea sobrescribirlo?" ;
         Text [ french ] = "La plage cible n'est pas vide. Voulez-vous remplacer son contenu ?" ;
         Text [ dutch ] = "Het doelbereik is niet leeg. Overschrijven?" ;
-        Text[ chinese_simplified ] = "Õâ¸öÄ¿±êÇøÓò²»ÊÇ¿Õ°×µÄ¡£Äú»¹ÊÇÒªÉ¾³ıËüÂğ£¿";
+        Text[ chinese_simplified ] = "Õâ¸öÄ¿±êÇøÓò²»ÊÇ¿Õ°×µÄ¡£»¹ÊÇÒªÉ¾³ıËü£¿";
         Text[ russian ] = "Êîíå÷íàÿ îáëàñòü íå ïóñòàÿ. Ïåğåçàïèñàòü åå?";
         Text[ polish ] = "Obszar docelowy nie jest pusty. Czy on ma zostaæ skasowany przez zapisanie?";
         Text[ japanese ] = "ˆÚ“®æ‚ª‹ó”’‚Å‚Í‚ ‚è‚Ü‚¹‚ñBã‘‚«‚µ‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚·‚©B";
-        Text[ chinese_traditional ] = "³o­Ó¥Ø¼Ğ°Ï°ì¤£¬OªÅ¥Õªº¡C±zÁÙ¬O­n§R°£¡H";
+        Text[ chinese_traditional ] = "³o­Ó¥Ø¼Ğ°Ï°ì¤£¬OªÅ¥Õªº¡CÁÙ¬O­n§R°£¡H";
         Text[ arabic ] = "ÇáäØÇŞ ÇáåÏİ ÛíÑ İÇÑÛ. åá ÊÑíÏ ÇáßÊÇÈÉ İæŞ ãÍÊæíÇÊå¿";
         Text[ greek ] = "Ç ğåñéï÷Ş ğñïïñéóìïı äåí åßíáé êåíŞ. Èİëåôå íá áíôéêáôáóôáèåß;";
         Text[ korean ] = "¸ñÇ¥ ¿µ¿ªÀÌ ºñ¾îÀÖÁö ¾Ê½À´Ï´Ù. ±âÁ¸ÀÇ ³»¿ë¿¡ µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
@@ -4234,7 +4234,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Reeksen invullen..." ;
         Text [ spanish ] = "Rellenar serie..." ;
         Text [ english_us ] = "Fill Row..." ;
-        Text[ chinese_simplified ] = "Ìî³äĞòÁĞ...";
+        Text[ chinese_simplified ] = "³äÌîÏµÁĞ...";
         Text[ russian ] = "Çàïîëíèòü ğÿäû...";
         Text[ polish ] = "Wype³nij serie...";
         Text[ japanese ] = "˜A‘±ÃŞ°À...";
@@ -5038,11 +5038,11 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "(leeg)" ;
         Text [ spanish ] = "(vacío)" ;
         Text [ english_us ] = "(empty)" ;
-        Text[ chinese_simplified ] = "(¿Õ°×)";
+        Text[ chinese_simplified ] = "(¿ÕÈ±)";
         Text[ russian ] = "(ïóñòîé)";
         Text[ polish ] = "(pusty)";
         Text[ japanese ] = "(‹ó”’)";
-        Text[ chinese_traditional ] = "(ªÅ¥Õ)";
+        Text[ chinese_traditional ] = "(ªÅ¯Ê)";
         Text[ arabic ] = "(İÇÑÛ)";
         Text[ greek ] = "(êåíü)";
         Text[ korean ] = "(°ø¹é)";
@@ -7835,7 +7835,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Søg og erstat" ;
         Text [ portuguese ] = "Localizar & Substituir" ;
         Text [ portuguese_brazilian ] = "Suchen & Ersetzen" ;
-        Text[ chinese_simplified ] = "ËÑÑ°ºÍ¸üÌæ";
+        Text[ chinese_simplified ] = "ËÑÑ°ºÍÌæ»»";
         Text[ russian ] = "Íàéòè è Çàìåíèòü";
         Text[ polish ] = "ZnajdŸ i zamieñ";
         Text[ japanese ] = "ŒŸõ‚Æ’uŠ·";
@@ -7913,7 +7913,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Skal de eksisterende definitioner erstattes af #?" ;
         Text [ portuguese ] = "Substituir definição existente de #?" ;
         Text [ portuguese_brazilian ] = "Vorhandene Definition von # ersetzen?" ;
-        Text[ chinese_simplified ] = "¸üÌæÏÖ´æµÄ¶¨Òå # £¿";
+        Text[ chinese_simplified ] = "Ìæ»»ÏÖ´æµÄ¶¨Òå # £¿";
         Text[ russian ] = "Çàìåíèòü èìåşùååñÿ îïğåäåëåíèå #?";
         Text[ polish ] = "Zamieniæ istniej¹ce definicje #?";
         Text[ japanese ] = "Šù‘¶‚Ì’è‹`‚ğ # ‚É’u‚«Š·‚¦‚Ü‚·‚©B";
@@ -8411,11 +8411,11 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Første sidetal" ;
         Text [ portuguese ] = "Número da primeira página" ;
         Text [ portuguese_brazilian ] = "Erste Seitenzahl" ;
-        Text[ chinese_simplified ] = "µÚÒ»Ò³Ò³Âë";
+        Text[ chinese_simplified ] = "µÚÒ»¸öÒ³Âë";
         Text[ russian ] = "Íîìåğ ïåğâîé ñòğàíèöû";
         Text[ polish ] = "Pierwszy numer strony";
         Text[ japanese ] = "Å‰‚ÌÍß°¼Ş”Ô†";
-        Text[ chinese_traditional ] = "²Ä¤@­¶­¶½X";
+        Text[ chinese_traditional ] = "²Ä¤@­Ó­¶½X";
         Text[ arabic ] = "Ãæá ÑŞã ÕİÍÉ";
         Text[ greek ] = "Ğñşôïò áñéèìüò óåëßäáò";
         Text[ korean ] = "Ã¹ ÆäÀÌÁö ¹øÈ£";
@@ -8647,11 +8647,11 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Oprettet" ;
         Text [ portuguese ] = "Criado" ;
         Text [ portuguese_brazilian ] = "Erstellt" ;
-        Text[ chinese_simplified ] = "ÖÆ×÷";
+        Text[ chinese_simplified ] = "ÒÑ¾­ÖÆ×÷";
         Text[ russian ] = "Ñîçäàí";
         Text[ polish ] = "Utworzony";
         Text[ japanese ] = "ì¬“ú";
-        Text[ chinese_traditional ] = "»s§@";
+        Text[ chinese_traditional ] = "¤w¸g»s§@";
         Text[ arabic ] = "Êã ÇáÅäÔÇÁ";
         Text[ greek ] = "ÄçìéïõñãŞèçêå";
         Text[ korean ] = "¸¸µé¾îÁ³À½";
@@ -9756,7 +9756,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "¿Desea reemplazar el contenido de #?" ;
         Text [ french ] = "Souhaitez-vous remplacer le contenu de # ?" ;
         Text [ dutch ] = "Wilt u de inhoud van # vervangen?" ;
-        Text[ chinese_simplified ] = "ÄúÒª¸üÌæ # µÄÄÚÈİ£¿";
+        Text[ chinese_simplified ] = "ÄúÒªÌæ»» # µÄÄÚÈİ£¿";
         Text[ russian ] = "Âû õîòèòå çàìåíèòü ñîäåğæèìîå #?";
         Text[ polish ] = "Chcesz zamieniæ zawartoœæ #?";
         Text[ japanese ] = "# ‚Ì“à—e‚ğ’uŠ·‚µ‚Ü‚·‚©B";
@@ -9782,11 +9782,11 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Ancho:" ;
         Text [ french ] = "Largeur :" ;
         Text [ dutch ] = "Breedte:" ;
-        Text[ chinese_simplified ] = "¿í:";
+        Text[ chinese_simplified ] = "¿í¶È:";
         Text[ russian ] = "Øèğèíà:";
         Text[ polish ] = "Szerokoœæ:";
         Text[ japanese ] = "•:";
-        Text[ chinese_traditional ] = "¼e¡G";
+        Text[ chinese_traditional ] = "¼e«×¡G";
         Text[ arabic ] = "ÇáÚÑÖ:";
         Text[ greek ] = "ĞëÜôïò:";
         Text[ korean ] = "³Êºñ:";
@@ -9809,11 +9809,11 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Altura:" ;
         Text [ french ] = "Hauteur :" ;
         Text [ dutch ] = "Hoogte:" ;
-        Text[ chinese_simplified ] = "¸ß£º";
+        Text[ chinese_simplified ] = "¸ß¶È£º";
         Text[ russian ] = "Âûñîòà:";
         Text[ polish ] = "Wys.:";
         Text[ japanese ] = "‚‚³:";
-        Text[ chinese_traditional ] = "°ª¡G";
+        Text[ chinese_traditional ] = "°ª«×¡G";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ:";
         Text[ greek ] = "¾øïò:";
         Text[ korean ] = "³ôÀÌ:";
@@ -9887,11 +9887,11 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "<vacío>" ;
         Text [ french ] = "<vide>" ;
         Text [ dutch ] = "<leeg>" ;
-        Text[ chinese_simplified ] = "<¿Õ°×>";
+        Text[ chinese_simplified ] = "<¿ÕÈ±>";
         Text[ russian ] = "<ïóñòîé>";
         Text[ polish ] = "<pusty>";
         Text[ japanese ] = "<‹ó”’>";
-        Text[ chinese_traditional ] = "<ªÅ¥Õ>";
+        Text[ chinese_traditional ] = "<ªÅ¯Ê>";
         Text[ arabic ] = "<İÇÑÛ>";
         Text[ greek ] = "<êåíü>";
         Text[ korean ] = "<ºí·©Å©>";
@@ -10037,7 +10037,7 @@ Resource RID_GLOBSTR
         Text [ portuguese ] = "Com esta acção será cancelado o registo das modificações.\nAs informações sobre modificações prévias desaparecerão.\n\nCancelar?\n\n" ;
         Text [ english_us ] = "This action will exit the change recording mode.\nAny information about changes will be lost.\n\nExit change recording mode?\n\n" ;
         Text [ portuguese_brazilian ] = "Mit dieser Aktion wird die Aufzeichnung von ?nderungen beendet.\nDie Information ?er ?nderungen geht hierdurch verloren.\n\nAufzeichnung beenden?\n\n" ;
-        Text [ swedish ] = "Den här åtgärden avslutar registreringen av ändringar.\nInformationen om ändringar går då förlorad.\n\nAvsluta inspelningen?" ;
+        Text [ swedish ] = "Den här åtgärden avslutar registreringen av ändringar.\nInformationen om ändringar går då förlorad.\n\nVill du avsluta registreringen?\n\n" ;
         Text [ danish ] = "Denne handling afslutter registreringen af ændringer.\nAlle informationer om ændringer vil herigennem gå tabt.\nVil du afslutte registreringen?" ;
         Text [ italian ] = "Con questa operazione si termina la registrazione delle modifiche.\nL'informazione relativa alle modifiche andrà persa.\n\nTerminare la registrazione?\n\n" ;
         Text [ spanish ] = "Esta acción finalizará la grabación de modificaciones.\nCualquier información sobre modificaciones se perderá.\n\n¿Desea finalizar la grabación?\n\n" ;
@@ -10169,6 +10169,7 @@ Resource RID_GLOBSTR
     };
 */
 };
+
 
 
 
