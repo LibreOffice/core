@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,15 @@
 #endif // CONFIGMGR_BACKEND_MERGEDCOMPONENTDATA_HXX
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
-#include <drafts/com/sun/star/configuration/backend/XLayer.hpp>
+#include <com/sun/star/configuration/backend/XLayer.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSCHEMA_HPP_
-#include <drafts/com/sun/star/configuration/backend/XSchema.hpp>
+#include <com/sun/star/configuration/backend/XSchema.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XSCHEMA_HPP_
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
-#include <drafts/com/sun/star/configuration/backend/XBackend.hpp>
+#include <com/sun/star/configuration/backend/XBackend.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
 
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
@@ -94,8 +94,7 @@ namespace configmgr { namespace backend {
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
 namespace lang = css::lang ;
-//namespace backenduno = css::configuration::backend ;
-namespace backenduno = drafts::com::sun::star::configuration::backend ;
+namespace backenduno = css::configuration::backend ;
 
 /**
   Implementation of IMergedDataProvider handling the access
@@ -139,15 +138,17 @@ class BackendAccess : public IMergedDataProvider {
         uno::Reference<backenduno::XBackend> mBackend ;
 
         /**
-          Retrieves the schema and layers associated to a NodeRequest.
+          Retrieves the schema of a component.
 
-          @param aRequest   node request
-          @param aSchema    reference to XSchema filled on return
-          @param aLayers    sequence of XLayers filled on return
           */
-        void getSchemaAndLayers(const NodeRequest& aRequest,
-                uno::Reference<backenduno::XSchema>& aSchema,
-                uno::Sequence<uno::Reference<backenduno::XLayer> >& aLayers) ;
+        uno::Reference< backenduno::XSchema > getSchema(const OUString& aComponent) ;
+
+        /**
+          Retrieves the layers for a request.
+
+          */
+        void getLayers(const OUString& aComponent,const RequestOptions& aOptions,
+                uno::Sequence< uno::Reference<backenduno::XLayer> >& aLayers) ;
 } ;
 
 } } // configmgr.backend
