@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-04 18:50:14 $
+ *  last change: $Author: rt $ $Date: 2001-12-08 22:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,14 +847,14 @@ ItemList [ language_user1 ] =
         < "Cinese tradizionale (Windows-950)"           ; RTL_TEXTENCODING_MS_950           ; > ;
         < "Giapponese (Shift-JIS)"                          ; RTL_TEXTENCODING_SHIFT_JIS        ; > ;
         < "Cinese semplificato (GB-2312)"               ; RTL_TEXTENCODING_GB_2312          ; > ;
-        < "Cinese semplificato (GB-18030)"               ; RTL_TEXTENCODING_GB_18030          ; > ;
+        < "Cinese tradizionale (GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
         < "Cinese tradizionale (GBT-12345)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "Cinese semplificato (GBK/GB-2312-80)"            ; RTL_TEXTENCODING_GBK              ; > ;
         < "Cinese tradizionale (BIG5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
         < "Giapponese (EUC-JP)"                             ; RTL_TEXTENCODING_EUC_JP           ; > ;
         < "Cinese semplificato (EUC-CN)"                    ; RTL_TEXTENCODING_EUC_CN           ; > ;
-        < "Cinese tradizionale (EUC-TW)"                    ; RTL_TEXTENCODING_EUC_TW           ; > ;
-        < "Giapponese (ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
+        < "Conese tradizionale (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
+        < "Giapponese(ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
         < "Cinese semplificato (ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
         < "Cirillico (KOI8-R)"                              ; RTL_TEXTENCODING_KOI8_R           ; > ;
         < "Unicode (UTF-7)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
@@ -1696,6 +1696,7 @@ ItemList [ language_user1 ] =
     };
     };
  // ********************************************************************** EOF
+
 
 
 
