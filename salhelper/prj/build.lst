@@ -1,0 +1,3 @@
+shp	salhelper	:	sal NULL
+shp	salhelper		 	usr1	-	all	shp_mkout NULL
+shp	salhelper\source 	nmake	-	all shp_source NULL

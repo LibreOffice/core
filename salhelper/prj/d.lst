@@ -1,0 +1,14 @@
+mkdir: %_DEST%\inc%_EXT%\salhelper
+
+..\inc\salhelper\dynload.hxx %_DEST%\inc%_EXT%\salhelper\dynload.hxx
+				
+
+..\%__SRC%\bin\salhelper*.dll %_DEST%\bin%_EXT%\salhelper*.dll
+..\%__SRC%\lib\*salhelper*.lib %_DEST%\lib%_EXT%\*
+
+..\%__SRC%\lib\libsalhelper*.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libsalhelper*.dylib %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libsalhelper*.a %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\salhelper*.lib %_DEST%\lib%_EXT%\*
+..\%__SRC%\misc\salhelper*.pdb %_DEST%\misc%_EXT%\*
+..\version.mk %_DEST%\inc%_EXT%\salhelper\version.mk
