@@ -7,10 +7,16 @@ TARGET=copying
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 #----------------------------------------------------------------
 
+TITLE="OpenOffice.org 1.0"
+PRODUCTNAME="OpenOffice.org"
+
 IDLDIRLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type d -print))}
 
 DIRLIST = \
+    $(DESTDIRDOCU) \
+    $(DESTDIRDOCUIMAGES) \
     $(DESTDIREXAMPLES)		 	\
+    $(DESTDIRCLASSES)		 	\
     $(DESTDIRCPPEXAMPLES)		 	\
     $(DESTDIRCPPEXAMPLES)$/officeclient 	\
     $(DESTDIRCPPEXAMPLES)$/DocumentLoader 	\
@@ -35,6 +41,7 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean	\
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean/SimpleBean	\
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean/OfficeWriterBean	\
+    $(DESTDIRJAVAEXAMPLES)$/PropertySet   \
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector   \
     $(DESTDIRBASICEXAMPLES)		 	\
     $(DESTDIRBASICEXAMPLES)$/drawing 	\
@@ -234,6 +241,12 @@ JAVA_OFFICEBEAN_HELPERBEANS= \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeIconMono16.jpg \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/BasicOfficeBean.java
 
+JAVA_PROPERTYSET= \
+    $(DESTDIRJAVAEXAMPLES)$/PropertySet$/PropTest.java \
+    $(DESTDIRJAVAEXAMPLES)$/PropertySet$/readme.txt \
+    $(DESTDIRJAVAEXAMPLES)$/PropertySet$/manifest \
+    $(DESTDIRJAVAEXAMPLES)$/PropertySet$/Makefile
+
 BASIC_EXAMPLES= \
     $(DESTDIRBASICEXAMPLES)$/drawing$/dirtree.txt			\
     $(DESTDIRBASICEXAMPLES)$/drawing$/importexportofasciifiles.sxd 	\
@@ -291,15 +304,34 @@ EXAMPLESLIST= \
     $(JAVA_OFFICEBEAN_SIMPLEBEAN)  \
     $(JAVA_OFFICEBEAN_OFFICEWRITERBEAN)  \
     $(JAVA_OFFICEBEAN_HELPERBEANS)  \
+    $(JAVA_PROPERTYSET)  \
     $(BASIC_EXAMPLES)              \
     $(OLE_EXAMPLES)                \
     $(OLE_EXAMPLES_DELPHI)                \
     $(OLE_EXAMPLES_DELPHI_INSERTTABLES)                \
-    $(DESTDIREXAMPLES)$/examples.html   \
     $(DESTDIRJAVAEXAMPLES)$/debugging_java.html
-    
+#	$(DESTDIREXAMPLES)$/examples.html   \
 
-    
+DOCUHTMLFILES= \
+    $(DESTDIR)$/index.html \
+    $(DESTDIRDOCU)$/tools.html \
+    $(DESTDIRDOCU)$/notsupported.html \
+    $(DESTDIRDOCU)$/install.html \
+    $(DESTDIREXAMPLES)$/examples.html
+
+DOCUFILES+= \
+    $(DOCUHTMLFILES) \
+    $(DESTDIRDOCUIMAGES)$/black_dot.gif \
+    $(DESTDIRDOCUIMAGES)$/logo.gif \
+    $(DESTDIRDOCUIMAGES)$/sdk_logo.gif \
+    $(DESTDIRDOCUIMAGES)$/shadow_r.gif \
+    $(DESTDIRDOCUIMAGES)$/shadow_l.gif \
+    $(DESTDIRDOCUIMAGES)$/elements.jpg
+
+INSTALLSCRIPT= \
+    $(DESTDIR)$/setsdkenv_unix \
+    $(DESTDIR)$/setsdkenv_windows.bat
+
 IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
 DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
 
@@ -307,27 +339,65 @@ all : 	\
     remove_dk \
     $(DIRLIST) \
     $(EXAMPLESLIST) \
+    $(DOCUFILES) \
+    $(INSTALLSCRIPT) \
     $(DESTIDLLIST)  \
     $(DESTDIRBIN)$/applicat.rdb  \
     $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
     $(DESTDIR)$/settings$/dk.mk \
-    $(DESTDIR)$/classes$/unoil.jar \
-    $(DESTDIR)$/classes$/officebean.jar \
-    $(DESTDIR)$/odk_overview.html \
-    convert_links
+    $(DESTDIRCLASSES)$/officebean.jar \
+    converttags
+#	$(DESTDIRCLASSES)$/unoil.jar \
+#	$(DESTDIR)$/odk_overview.html \
 
-.IF "$(BUILD_SOSL)"==""
-convert_links : 
+.IF "$(BUILD_SOSL)"!=""
+converttags : 
     +$(PERL) $(CONVERTSCRIPT) $(DESTDIREXAMPLES) odk_ examples
 .ELSE
-convert_links : 
-    +echo no converison necessary
+converttags : 
+    @echo no conversion necessary!!
 .ENDIF
+
+#.IF "$(BUILD_SOSL)"!=""
+#convert_links : 
+#    +$(PERL) $(CONVERTTAGSCRIPT) $(TITLE) $(PRODUCTNAME) $(DOCUHTMLFILES)
+#.ELSE
+#convert_links : 
+#    +echo no conversion necessary!!
+#.ENDIF
 
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
 
-$(DESTDIREXAMPLES)$/examples.html : $(PRJ)$/examples$/examples.html
+$(DESTDIR)$/index.html : $(PRJ)$/index.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/examples.html : $(PRJ)$/docs$/examples.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/tools.html : $(PRJ)$/docs$/tools.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/notsupported.html : $(PRJ)$/docs$/notsupported.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/install.html : $(PRJ)$/docs$/install.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs/images$/%
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $? $@
+
+$(DESTDIR)$/setsdkenv_unix : $(PRJ)$/setsdkenv_unix
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIR)$/setsdkenv_windows.bat : $(PRJ)$/setsdkenv_windows.bat
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
@@ -347,10 +417,10 @@ $(DESTDIROLEEXAMPLES)$/% : $(PRJ)$/examples$/OLE$/% $(DIRLIST) $(BIN)$/$(UDKNAME
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIR)$/classes$/unoil.jar : $(BINOUT)$/unoil.jar 
+$(DESTDIRCLASSES)$/unoil.jar : $(BINOUT)$/unoil.jar 
     $(GNUCOPY) -p $? $@
 
-$(DESTDIR)$/classes$/officebean.jar : $(OUT)$/class$/officebean.jar 
+$(DESTDIRCLASSES)$/officebean.jar : $(OUT)$/class$/officebean.jar 
     $(GNUCOPY) -p $? $@
 
 $(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb 
