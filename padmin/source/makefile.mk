@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 14:16:06 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:37:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,16 +109,11 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(VCLLIB)						\
     -lpsp$(UPD)$(DLLPOSTFIX)		\
-    $(COMPHELPERLIB)				\
     $(UNOTOOLSLIB)					\
-    $(CPPUHELPERLIB)				\
-    $(CPPULIB)						\
     $(TOOLSLIB)						\
-    $(UNOLIB)						\
-    $(SOTLIB)						\
-    $(VOSLIB)						\
+    $(COMPHELPERLIB)				\
+    $(CPPULIB)						\
     $(SALLIB)
-
 
 APP1TARGET=spadmin.bin
 APP1DEPN+=$(SHL1TARGETN)
@@ -128,10 +123,15 @@ APP1OBJS=\
     $(OBJ)/icon_resource_ooo.obj
 
 APP1STDLIBS=	\
-            -l$(SHL1TARGET)		\
-            $(SHL1STDLIBS)		\
-            $(UCBHELPERLIB)		\
-            -lXext -lX11
+    -l$(SHL1TARGET)		\
+    $(VCLLIB)			\
+    $(TOOLSLIB)			\
+    $(UCBHELPERLIB)		\
+    $(COMPHELPERLIB)	\
+    $(CPPUHELPERLIB)	\
+    $(CPPULIB)			\
+    $(SALLIB)			\
+    -lXext -lX11
 
 APP2TARGET=so$/spadmin.bin
 APP2DEPN+=$(SHL1TARGETN)
@@ -141,10 +141,15 @@ APP2OBJS=\
     $(OBJ)/icon_resource_sun.obj
 
 APP2STDLIBS=	\
-            -l$(SHL1TARGET)		\
-            $(SHL1STDLIBS)		\
-            $(UCBHELPERLIB)		\
-            -lXext -lX11
+    -l$(SHL1TARGET)		\
+    $(VCLLIB)			\
+    $(TOOLSLIB)			\
+    $(UCBHELPERLIB)		\
+    $(COMPHELPERLIB)	\
+    $(CPPUHELPERLIB)	\
+    $(CPPULIB)			\
+    $(SALLIB)			\
+    -lXext -lX11
 
 all: $(BIN)$/so ALLTAR
 
