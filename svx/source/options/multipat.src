@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 19:35:24 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,3 +329,4 @@ String RID_SVXSTR_FILE_GB
     Text[ finnish ] = "Tiedostot";
 };
  // ******************************************************************* EOF
+
