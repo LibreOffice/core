@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filestd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:06:32 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ static const __store_errcode_mapping_st __store_errcode_map[] =
     { EDEADLOCK, store_E_LockingViolation },
     { EBADF,     store_E_InvalidHandle    },
     { EINVAL,    store_E_InvalidParameter },
+    { ENOSPC,    store_E_OutOfSpace       },
 };
 
 /*
@@ -250,17 +251,23 @@ inline storeError __store_ftrunc (HSTORE h, sal_uInt32 n)
 /*
  * __store_fsync.
  */
-inline void __store_fsync (HSTORE h)
+inline storeError __store_fsync (HSTORE h)
 {
-    ::fflush (h);
+    if (::fflush (h) < 0)
+        return ERROR_FROM_NATIVE(errno);
+    else
+        return store_E_None;
 }
 
 /*
  * __store_fclose.
  */
-inline void __store_fclose (HSTORE h)
+inline storeError __store_fclose (HSTORE h)
 {
-    ::fclose (h);
+    if (::fclose (h) < 0)
+        return ERROR_FROM_NATIVE(errno);
+    else
+        return store_E_None;
 }
 
 #endif /* INCLUDED_STORE_FILESTD_HXX */

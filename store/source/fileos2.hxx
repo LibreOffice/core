@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileos2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:06:31 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,17 +264,25 @@ inline storeError __store_ftrunc (HSTORE h, sal_uInt32 n)
 /*
  * __store_fsync.
  */
-inline void __store_fsync (HSTORE h)
+inline storeError __store_fsync (HSTORE h)
 {
-    ::DosResetBuffer (h);
+    APIRET result = ::DosResetBuffer (h);
+    if (result)
+        return ERROR_FROM_NATIVE(result);
+    else
+        return store_E_None;
 }
 
 /*
  * __store_fclose.
  */
-inline void __store_fclose (HSTORE h)
+inline storeError __store_fclose (HSTORE h)
 {
-    ::DosClose (h);
+    APIRET result = ::DosClose (h);
+    if (result)
+        return ERROR_FROM_NATIVE(result);
+    else
+        return store_E_None;
 }
 
 #endif /* INCLUDED_STORE_FILEOS2_HXX */
