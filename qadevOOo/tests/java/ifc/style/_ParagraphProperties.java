@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _ParagraphProperties.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-11-18 16:24:59 $
+ *  last change:$Date: 2005-03-29 11:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,18 +459,18 @@ public class _ParagraphProperties extends MultiPropertyTest {
         }
 
         public String[] getElementNames() {
-            Enumeration enum = members.keys();
+            Enumeration oEnum = members.keys();
             int count = members.size();
             String[] res = new String[count];
             int i=0;
-            while(enum.hasMoreElements())
-                res[i] = (String)enum.nextElement();
+            while(oEnum.hasMoreElements())
+                res[i] = (String)oEnum.nextElement();
             return res;
         }
 
         public com.sun.star.uno.Type getElementType() {
-            Enumeration enum = members.keys();
-            String key = (String)enum.nextElement();
+            Enumeration oEnum = members.keys();
+            String key = (String)oEnum.nextElement();
             Object o = members.get(key);
             return new Type(o.getClass());
         }
