@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuarea.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:55:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,10 @@
 #include "Window.hxx"
 #endif
 #include "app.hrc"
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 namespace sd {
-
 TYPEINIT1( FuArea, FuPoor );
 
 /*************************************************************************
@@ -133,8 +134,15 @@ FuArea::FuArea (
         SfxItemSet* pNewAttr = new SfxItemSet( pDoc->GetPool() );
         pView->GetAttributes( *pNewAttr );
 
-        SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( NULL, pNewAttr, pDoc, pView );
-
+        //CHINA001 SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( NULL, pNewAttr, pDoc, pView );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+        AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
+                                                                        pNewAttr,
+                                                                        pDoc,
+                                                                        ResId(RID_SVXDLG_AREA),
+                                                                        pView);
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         if ( pDlg->Execute() == RET_OK )
         {
             pView->SetAttributes (*(pDlg->GetOutputItemSet ()));
