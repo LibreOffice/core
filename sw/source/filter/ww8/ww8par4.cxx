@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-21 09:21:59 $
+ *  last change: $Author: cmc $ $Date: 2002-11-04 12:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 
 static bool SwWw6ReadMacPICTStream(Graphic& rGraph, SvStorageRef& rSrc1)
 {
-        // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
+    // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
     SvStorageStreamRef xSrc4 = rSrc1->OpenStream( CREATE_CONST_ASC( "\3PICT" ));
     SvStorageStream* pStp = xSrc4;
     pStp->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -296,10 +296,8 @@ static bool SwWw6ReadMacPICTStream(Graphic& rGraph, SvStorageRef& rSrc1)
 
     pStp->Seek( STREAM_SEEK_TO_BEGIN );
 
-            // Mac-Pict steht im 03PICT-StorageStream
-            // allerdings ohne die ersten 512 Bytes, die
-            // bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
-
+    // Mac-Pict steht im 03PICT-StorageStream allerdings ohne die ersten 512
+    // Bytes, die bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
     return SwWW8ImplReader::GetPictGrafFromStream( rGraph, *pStp );
 }
 

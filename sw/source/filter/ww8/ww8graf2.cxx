@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-24 14:39:52 $
+ *  last change: $Author: cmc $ $Date: 2002-11-04 12:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _UNOTOOLS_TEMPFILE_HXX
-#include <unotools/tempfile.hxx>
-#endif
 #ifndef _SVX_IMPGRF_HXX //autogen
 #include <svx/impgrf.hxx>
 #endif
@@ -98,19 +95,19 @@
 #include <svx/msdffimp.hxx>
 #endif
 
-
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
-
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
 #endif
 
+#ifndef _FSYS_HXX
+#include <tools/fsys.hxx>
+#endif
 
 #ifndef _IPOBJ_HXX //autogen
 #include <so3/ipobj.hxx>
@@ -139,21 +136,6 @@
 #ifndef _FLTSHELL_HXX
 #include <fltshell.hxx>
 #endif
-#ifndef _WW8STRUC_HXX
-#include <ww8struc.hxx>
-#endif
-#ifndef _WW8SCAN_HXX
-#include <ww8scan.hxx>
-#endif
-#ifndef _WW8PAR_HXX
-#include <ww8par.hxx>           // class SwWWImplReader
-#endif
-#ifndef _WW8PAR2_HXX
-#include <ww8par2.hxx>          // struct WWFlyPara
-#endif
-#ifndef _WW8GRAF_HXX
-#include <ww8graf.hxx>
-#endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
@@ -166,8 +148,21 @@
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // Progress
 #endif
-#ifndef _FSYS_HXX
-#include <tools/fsys.hxx>
+
+#ifndef _WW8STRUC_HXX
+#include "ww8struc.hxx"
+#endif
+#ifndef _WW8SCAN_HXX
+#include "ww8scan.hxx"
+#endif
+#ifndef _WW8PAR_HXX
+#include "ww8par.hxx"           // class SwWWImplReader
+#endif
+#ifndef _WW8PAR2_HXX
+#include "ww8par2.hxx"          // struct WWFlyPara
+#endif
+#ifndef _WW8GRAF_HXX
+#include "ww8graf.hxx"
 #endif
 
 wwZOrderer::wwZOrderer(SdrPage* pDrawPg,
@@ -319,93 +314,11 @@ ULONG wwZOrderer::GetDrawingObjectPos(short nWwHeight)
 extern void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );
 #endif // defined __WW8_NEEDS_COPY
 
-
-//-----------------------------------------
-//              los gehts
-//-----------------------------------------
-
-
-struct METAFILEHEADER       // ist aligned, deshalb gehts fuer alle Platformen
+bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
 {
-    UINT32  key;
-    UINT16  hmf;
-    UINT16  left;
-    UINT16  top;
-    UINT16  right;
-    UINT16  bottom;
-    UINT16  inch;
-    UINT32  reserved;
-    UINT16  checksum;
-};
-
-
-#define METAFILEHEADER_SIZE 22
-
-
-static void WriteWmfPreHd( long nWidth, long nHeight, SvStream& rOStream )
-{
-    METAFILEHEADER aHeader;
-
-    aHeader.key = 0x9AC6CDD7L;
-    aHeader.hmf = 0;
-    aHeader.left = 0;
-    aHeader.top = 0;
-    aHeader.right =  (UINT16)( nWidth * 100 / 144 );
-    aHeader.bottom =  (UINT16)( nHeight * 100 / 144 );
-    aHeader.inch= 1000;
-    aHeader.reserved = 0;
-    aHeader.checksum = 0;
-    for( USHORT n=0; n < 10; n++ )
-        aHeader.checksum ^= *(((UINT16*)&aHeader)+n);
-
-#ifdef __BIGENDIAN
-    aHeader.key = SWAPLONG( aHeader.key );
-    aHeader.left = 0;
-    aHeader.top = 0;
-    aHeader.right = SWAPSHORT( aHeader.right );
-    aHeader.bottom = SWAPSHORT( aHeader.bottom );
-    aHeader.inch = SWAPSHORT( aHeader.inch );
-    aHeader.checksum = SWAPSHORT( aHeader.checksum );
-#endif // __BIGENDIAN
-
-    rOStream.Write( (char*)&aHeader, METAFILEHEADER_SIZE );
+    return 0 == ::GetGrfFilter()->ImportGraphic(rGraphic, aEmptyStr, rSrc,
+        GRFILTER_FORMAT_DONTKNOW);
 }
-
-
-#define WWBUFSIZ 4096           //  512 <= WWBUFSIZE <= UINT16_MAX !!!
-
-bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc,
-    ULONG nLen)
-{
-    String sExt(CREATE_CONST_ASC(".pct"));
-    utl::TempFile aTempFile( aEmptyStr, &sExt );
-    aTempFile.EnableKillingFile();
-
-    SvStream* pOut = aTempFile.GetStream(
-                                STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
-    BYTE* pBuf = new BYTE[ ULONG_MAX != nLen ? 4096 : 512 ];
-    memset( pBuf, 0, 512 );
-    pOut->Write( pBuf, 512 );       // Anfang Pict: 512 Byte Muell
-    if( ULONG_MAX != nLen )
-    {
-        UINT16 nToRead = 4096;
-        do {
-            if( nToRead > nLen )
-                nToRead = (UINT16)nLen;
-            rSrc.Read( pBuf, nToRead );
-            pOut->Write( pBuf, nToRead );
-            nLen -= nToRead;
-        } while( nLen );
-    }
-    else
-        *pOut << rSrc;
-
-    delete[] pBuf;
-
-    return 0 == ::GetGrfFilter()->ImportGraphic( rGraphic, aEmptyStr, *pOut,
-                                                GRFILTER_FORMAT_DONTKNOW );
-}
-
 
 bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
     const WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos, bool* pbInDoc)
@@ -450,21 +363,18 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
     }
 
     // MAC - Word als Creator
-    // im WMF steht nur "Benutzen sie Word 6.0c"
-    // Mac-Pict steht dahinter
-    // allerdings ohne die ersten 512 Bytes,
-    // bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
-
+    // im WMF steht nur "Benutzen sie Word 6.0c" Mac-Pict steht dahinter
+    // allerdings ohne die ersten 512 Bytes, bei einem MAC-PICT egal sind (
+    // werden nicht ausgewertet )
     bOk = false;
-    long nCopy = rPic.lcb - ( pSt->Tell() - nPosFc );
-    if( 0 < nCopy  )
+    long nData = rPic.lcb - ( pSt->Tell() - nPosFc );
+    if (nData > 0)
     {
         rpGraphic = new Graphic();
-        if( 0 == ( bOk = SwWW8ImplReader::GetPictGrafFromStream(
-                                                *rpGraphic, *pSt, nCopy )))
-            DELETEZ( rpGraphic );
+        if (!(bOk = SwWW8ImplReader::GetPictGrafFromStream(*rpGraphic, *pSt)))
+            DELETEZ(rpGraphic);
     }
-    return bOk;                 // Grafik drin
+    return bOk; // Grafik drin
 }
 
 struct WW8PicDesc

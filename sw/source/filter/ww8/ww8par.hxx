@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-30 15:17:40 $
+ *  last change: $Author: cmc $ $Date: 2002-11-04 12:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1305,8 +1305,7 @@ public:     // eigentlich private, geht aber leider nur public
     const USHORT StyleUsingLFO( USHORT nLFOIndex ) const ;
     const SwFmt* GetStyleWithOrgWWName( String& rName ) const ;
 
-    static bool GetPictGrafFromStream( Graphic& rGraphic, SvStream& rSrc,
-        ULONG nLen = ULONG_MAX );
+    static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);
     static bool ImportOleWMF( SvStorageRef xSrc1, GDIMetaFile &rWMF,
         long &rX, long &rY);
