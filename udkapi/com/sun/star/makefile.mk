@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mi $ $Date: 2002-11-04 09:38:48 $
+#   last change: $Author: vg $ $Date: 2003-07-11 11:22:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ PACKAGE=com$/sun$/star
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    modules.idl
+    udk-modules.idl
 
 # ------------------------------------------------------------------
 
