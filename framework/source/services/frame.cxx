@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:54:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
@@ -129,6 +130,10 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJobExecutor.hpp>
@@ -396,11 +401,7 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             //-------------------------------------------------------------------------------------------------------------
                                             // Create an initial layout manager
                                             // Create layout manager and connect it to the newly created frame
-                                            css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager( m_xFactory->createInstance(
-                                                                                                                                    rtl::OUString::createFromAscii(
-                                                                                                                                        "drafts.com.sun.star.frame.LayoutManager" )),
-                                                                                                                                 css::uno::UNO_QUERY );
-                                            m_xLayoutManager = xLayoutManager;
+                                            m_xLayoutManager = css::uno::Reference< dcss::frame::XLayoutManager >(m_xFactory->createInstance(SERVICENAME_LAYOUTMANAGER), css::uno::UNO_QUERY);
                                         }
                                     )
 
@@ -673,13 +674,10 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
 void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >& xWindow ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Check incoming parameter.
-    LOG_ASSERT2( implcp_initialize( xWindow ), "Frame::initialize()", "Invalid parameter detected!" )
-
-    // if window is initially visible, we will never get a windowShowing event
-    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-    if ( pWindow && pWindow->IsVisible() )
-        m_bIsHidden = sal_False;
+    if (!xWindow.is())
+        throw css::uno::RuntimeException(
+                    ::rtl::OUString::createFromAscii("Frame::initialize() called without a valid container window reference."),
+                    static_cast< css::frame::XFrame* >(this));
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
@@ -696,29 +694,50 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     LOG_ASSERT2( m_xContainerWindow.is()==sal_True, "Frame::initialize()", "Leak detected! This state should never occure ..." )
     m_xContainerWindow = xWindow;
 
-    // Now we can use our indicator factory helper to support XStatusIndicatorFactory interface.
-    // We have a valid parent window for it!
-    // Initialize helper.
-    if( m_xContainerWindow.is() == sal_True )
-    {
-        css::uno::Reference< css::frame::XFrame > xFrame( static_cast< ::cppu::OWeakObject* >( this ), css::uno::UNO_QUERY );
-        StatusIndicatorFactory* pIndicatorFactoryHelper = new StatusIndicatorFactory( m_xFactory, xFrame, sal_False );
-        m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >( static_cast< ::cppu::OWeakObject* >( pIndicatorFactoryHelper ), css::uno::UNO_QUERY );
-    }
+    // if window is initially visible, we will never get a windowShowing event
+    Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+    if (pWindow && pWindow->IsVisible())
+        m_bIsHidden = sal_False;
 
-    // Provide container window to our layout manager implementation
-    if ( m_xLayoutManager.is() )
-    {
-        m_xLayoutManager->attachFrame( this );
-        addFrameActionListener( css::uno::Reference< css::frame::XFrameActionListener >( m_xLayoutManager, css::uno::UNO_QUERY ));
-        css::uno::Reference< drafts::com::sun::star::ui::XDockingAreaAcceptor > xDockingAreaAcceptor( static_cast< ::cppu::OWeakObject *>( new DockingAreaDefaultAcceptor( this )), css::uno::UNO_QUERY );
-        m_xLayoutManager->setDockingAreaAcceptor( xDockingAreaAcceptor );
-    }
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR          = m_xFactory;
+    css::uno::Reference< dcss::frame::XLayoutManager >     xLayoutManager = m_xLayoutManager;
 
     // Release lock ... because we call some impl methods, which are threadsafe by himself.
     // If we hold this lock - we will produce our own deadlock!
     aWriteLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+
+    if (xLayoutManager.is())
+    {
+        // Provide container window to our layout manager implementation
+        xLayoutManager->attachFrame(this);
+        addFrameActionListener(css::uno::Reference< css::frame::XFrameActionListener >(xLayoutManager, css::uno::UNO_QUERY));
+        DockingAreaDefaultAcceptor* pAcceptor = new DockingAreaDefaultAcceptor(this);
+        css::uno::Reference< dcss::ui::XDockingAreaAcceptor > xDockingAreaAcceptor( static_cast< ::cppu::OWeakObject* >(pAcceptor), css::uno::UNO_QUERY );
+        xLayoutManager->setDockingAreaAcceptor(xDockingAreaAcceptor);
+
+        // create the status bar ... but dont show it here!
+        xLayoutManager->lock();
+        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
+        xLayoutManager->unlock();
+    }
+
+    // create progress helper
+    css::uno::Reference< css::frame::XFrame >                 xThis            (static_cast< css::frame::XFrame* >(this)                        , css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::task::XStatusIndicatorFactory > xIndicatorFactory(xSMGR->createInstance(IMPLEMENTATIONNAME_STATUSINDICATORFACTORY), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::lang::XInitialization >         xIndicatorInit   (xIndicatorFactory                                               , css::uno::UNO_QUERY_THROW);
+    css::uno::Sequence< css::uno::Any > lArgs(1);
+    css::beans::NamedValue aArg;
+    aArg.Name    = STATUSINDICATORFACTORY_PROPNAME_FRAME;
+    aArg.Value <<= xThis;
+    lArgs[0]   <<= aArg;
+    xIndicatorInit->initialize(lArgs);
+
+    // SAFE -> ----------------------------------
+    aWriteLock.lock();
+    m_xIndicatorFactoryHelper = xIndicatorFactory;
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
 
     // Start listening for events after setting it on helper class ...
     // So superflous messages are filtered to NULL :-)
@@ -1919,13 +1938,6 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
 
     impl_checkMenuCloser();
 
-    /*ATTENTION
-        It's neccessary to release our StatusIndicatorFactory-helper at first!
-        He share our container window as parent for any created status indicator objects ...
-        and if we dispose this container window before we release this helper ...
-        we will run into some trouble!
-     */
-    m_xIndicatorFactoryHelper = NULL;
     impl_disposeContainerWindow( m_xContainerWindow );
 
     /*ATTENTION
@@ -1948,6 +1960,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     m_xDropTargetListener       = NULL;
     m_xDispatchRecorderSupplier = NULL;
     m_xLayoutManager            = NULL;
+    m_xIndicatorFactoryHelper   = NULL;
 
     // It's important to set default values here!
     // If may be later somewhere change the disposed-behaviour of this implementation
@@ -2031,28 +2044,21 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusI
     ReadGuard aReadLock( m_aLock );
 
     // Make snapshot of neccessary member and define default return value.
-    css::uno::Reference< css::task::XStatusIndicator >           xIndicator                                        ;
-    css::uno::Reference< css::task::XStatusIndicatorSupplier >   xSupplier   ( m_xController, css::uno::UNO_QUERY );
-    css::uno::Reference< css::task::XStatusIndicatorFactory >    xFactory    = m_xIndicatorFactoryHelper           ;
+    css::uno::Reference< css::task::XStatusIndicator >        xExternal(m_xIndicatorInterception.get(), css::uno::UNO_QUERY);
+    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory = m_xIndicatorFactoryHelper;
 
     aReadLock.unlock();
     /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
-    // If controller can create this status indicator ... use it for return.
-    // Otherwise use our own indicator factory helper!
-    if( xSupplier.is() == sal_True )
-    {
-        xIndicator = xSupplier->getStatusIndicator();
-    }
 
-    if(
-        ( xIndicator.is() == sal_False ) &&
-        ( xFactory.is()   == sal_True  )
-      )
-    {
-        xIndicator = xFactory->createStatusIndicator();
-    }
+    // Was set from outside to intercept any progress activities!
+    if (xExternal.is())
+        return xExternal;
 
-    return xIndicator;
+    // Or use our own factory as fallback, to create such progress.
+    if (xFactory.is())
+        return xFactory->createStatusIndicator();
+
+    return css::uno::Reference< css::task::XStatusIndicator >();
 }
 
 /*-****************************************************************************************************//**
@@ -2620,6 +2626,14 @@ sal_Bool SAL_CALL Frame::convertFastPropertyValue(          css::uno::Any&      
                     css::uno::makeAny(m_xLayoutManager), aValue, aOldValue, aConvertedValue );
                 break;
 
+        case FRAME_PROPHANDLE_INDICATORINTERCEPTION:
+                {
+                    css::uno::Reference< css::task::XStatusIndicator > xProgress(m_xIndicatorInterception.get(), css::uno::UNO_QUERY);
+                    bReturn = PropHelper::willPropertyBeChanged(
+                        css::uno::makeAny(xProgress), aValue, aOldValue, aConvertedValue );
+                }
+                break;
+
         #ifdef ENABLE_WARNINGS
         default :   LOG_WARNING( "Frame::convertFastPropertyValue()", "Invalid handle detected!" )
                     break;
@@ -2672,6 +2686,14 @@ void SAL_CALL Frame::setFastPropertyValue_NoBroadcast(          sal_Int32       
                 aValue >>= m_xLayoutManager;
                 break;
 
+        case FRAME_PROPHANDLE_INDICATORINTERCEPTION :
+                {
+                    css::uno::Reference< css::task::XStatusIndicator > xProgress;
+                    aValue >>= xProgress;
+                    m_xIndicatorInterception = xProgress;
+                }
+                break;
+
         #ifdef ENABLE_WARNINGS
         default :
                 LOG_WARNING( "Frame::setFastPropertyValue_NoBroadcast()", "Invalid handle detected!" )
@@ -2718,6 +2740,13 @@ void SAL_CALL Frame::getFastPropertyValue(  css::uno::Any&  aValue  ,
 
         case FRAME_PROPHANDLE_LAYOUTMANAGER :
                 aValue <<= m_xLayoutManager;
+                break;
+
+        case FRAME_PROPHANDLE_INDICATORINTERCEPTION :
+                {
+                    css::uno::Reference< css::task::XStatusIndicator > xProgress(m_xIndicatorInterception.get(), css::uno::UNO_QUERY);
+                    aValue = css::uno::makeAny(xProgress);
+                }
                 break;
 
         #ifdef ENABLE_WARNINGS
@@ -2828,6 +2857,7 @@ const css::uno::Sequence< css::beans::Property > Frame::impl_getStaticPropertyDe
     static const css::beans::Property pPropertys[] =
     {
         css::beans::Property( FRAME_PROPNAME_DISPATCHRECORDERSUPPLIER, FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL)          , css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( FRAME_PROPNAME_INDICATORINTERCEPTION   , FRAME_PROPHANDLE_INDICATORINTERCEPTION   , ::getCppuType((const css::uno::Reference< css::task::XStatusIndicator >*)NULL)                    , css::beans::PropertyAttribute::TRANSIENT ),
         css::beans::Property( FRAME_PROPNAME_ISHIDDEN                , FRAME_PROPHANDLE_ISHIDDEN                , ::getBooleanCppuType()                                                                            , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( FRAME_PROPNAME_LAYOUTMANAGER           , FRAME_PROPHANDLE_LAYOUTMANAGER           , ::getCppuType((const css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >*)NULL)  , css::beans::PropertyAttribute::TRANSIENT ),
         css::beans::Property( FRAME_PROPNAME_TITLE                   , FRAME_PROPHANDLE_TITLE                   , ::getCppuType((const ::rtl::OUString*)NULL)                                                       , css::beans::PropertyAttribute::TRANSIENT ),
