@@ -68,8 +68,13 @@ import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.DocumentSerializer;
+
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocument;
+import org.openoffice.xmerge.converter.xml.ParaStyle;
+import org.openoffice.xmerge.converter.xml.TextStyle;
+import org.openoffice.xmerge.converter.xml.StyleCatalog;
+
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.util.XmlUtil;
@@ -115,6 +120,8 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
     /**  The number of times the current column is repeated. */
     private int colsRepeated = 1;
 
+    /**  The number of times the current column is repeated. */
+    private StyleCatalog styleCat = null;
     /**
      *  An array of column widths of the current worksheet.  Width is
      *  measured in number of characters.
@@ -164,6 +171,32 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
     public abstract ConvertData serialize() throws ConvertException,
         IOException;
 
+    /*
+     * Handles the loading of defined styles from the style.xml file as well
+     * as automatic styles from the content.xml file.
+     *
+     * Any change to a defined style, such as a short bold section, falls into
+     * the latter category.
+     */
+    protected void loadStyles(SxcDocument sxwDoc) {
+        org.w3c.dom.Document contentDom = sxwDoc.getContentDOM();
+        // org.w3c.dom.Document styleDom   = sxwDoc.getStyleDOM();
+
+        styleCat = new StyleCatalog(25);
+
+        NodeList nl = null;
+        String families[] = new String[] { SxcConstants.TABLE_CELL_STYLE_FAMILY };
+        Class classes[]   = new Class[] { TextStyle.class };
+
+        /*
+         * Process the content XML for any other style info.
+         * Should only be automatic types here.
+         */
+        nl = contentDom.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
+        if (nl.getLength() != 0) {
+            styleCat.add(nl.item(0), families, classes, null, false);
+        }
+    }
 
     /**
      *  This method traverses <i>office:body</i> <code>Element</code>.
@@ -496,6 +529,31 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         // Get the number of columns this cell is repeated
         Node colsRepeatedNode =
             cellAtt.getNamedItem(ATTRIBUTE_TABLE_NUM_COLUMNS_REPEATED);
+
+        // Get the style type
+        Node tableStyleNode =
+            cellAtt.getNamedItem(ATTRIBUTE_TABLE_STYLE_NAME);
+
+        String styleName = new String("");
+
+        if(tableStyleNode!=null) {
+            styleName = tableStyleNode.getNodeValue();
+        }
+
+        if(styleName.equalsIgnoreCase("Default") || styleName.length()==0) {
+
+            Debug.log(Debug.TRACE, "No defined Style Attribute was found");
+
+        } else {
+
+            TextStyle tstyle = (TextStyle)styleCat.lookup(styleName,
+                                SxcConstants.TABLE_CELL_STYLE_FAMILY, null,
+                                TextStyle.class);
+
+            fmt.setItalic(tstyle.getAttribute(TextStyle.ITALIC));
+            fmt.setBold(tstyle.getAttribute(TextStyle.BOLD));
+            fmt.setUnderline(tstyle.getAttribute(TextStyle.UNDERLINE));
+        }
 
         // There is a number of cols repeated attribute
         if (colsRepeatedNode != null) {
@@ -868,6 +926,21 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         }
 
         return decimals;
+    }
+
+    /*
+     * Utility method to retrieve a Node attribute.
+     */
+    private String getAttribute (Node node, String attribute) {
+        NamedNodeMap attrNodes = node.getAttributes();
+
+        if (attrNodes != null) {
+            Node attr = attrNodes.getNamedItem(attribute);
+            if (attr != null) {
+                return attr.getNodeValue();
+            }
+        }
+        return null;
     }
 
 }

@@ -69,6 +69,9 @@ import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocument;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
+import org.openoffice.xmerge.converter.xml.TextStyle;
+import org.openoffice.xmerge.converter.xml.Style;
+import org.openoffice.xmerge.converter.xml.StyleCatalog;
 import org.openoffice.xmerge.util.Debug;
 
 /**
@@ -84,6 +87,7 @@ import org.openoffice.xmerge.util.Debug;
  *
  *  @author      Paul Rank
  *  @author      Mark Murnane
+ *  @author      Martin Maher
  */
 public abstract class SxcDocumentDeserializer implements OfficeConstants,
     DocumentDeserializer {
@@ -100,7 +104,10 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     /**  An <code>ConvertData</code> object assigned to this object. */
     private ConvertData cd = null;
 
+    /** A style catalog for the workbook  */
+    private StyleCatalog styleCat = null;
 
+    private int textStyles = 1;
     /**
      *  Constructor.
      *
@@ -182,6 +189,9 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         // Create a document
         SxcDocument sxcDoc = new SxcDocument(workbookName);
         sxcDoc.initContentDOM();
+
+        // Default to an initial 5 entries in the catalog.
+        styleCat = new StyleCatalog(5);
 
         doc = sxcDoc.getContentDOM();
 
@@ -368,6 +378,8 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         // The number of columns in the spreadsheet
         int lastColumn = decoder.getNumberOfColumns();
 
+        //
+        Node autoStylesNode = null;
 
         // Loop over all cells in the spreadsheet
         while (decoder.goToNextCell()) {
@@ -444,12 +456,42 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
             // Get the type of the data in the cell
             String cellType = decoder.getCellDataType();
 
+            // Get the cell format
+            Format fmt = decoder.getCellFormat();
+
             // Create an element node for the cell
             cellElement = (Element) doc.createElement(TAG_TABLE_CELL);
 
             // TODO - style currently hardcoded - get real value
             // Set cell style-name attribute
-            cellElement.setAttribute(ATTRIBUTE_TABLE_STYLE_NAME, "Default");
+
+            Node bodyNode = doc.getElementsByTagName(TAG_OFFICE_BODY).item(0);
+
+            // Not every document has an automatic style tag
+            autoStylesNode = doc.getElementsByTagName(
+                                        TAG_OFFICE_AUTOMATIC_STYLES).item(0);
+
+            if (autoStylesNode == null) {
+                autoStylesNode = doc.createElement(TAG_OFFICE_AUTOMATIC_STYLES);
+                doc.insertBefore(autoStylesNode, bodyNode);
+               }
+
+            TextStyle tStyle = fmt.getTextStyle();
+            String styleName;
+            Style result[] = (Style[]) styleCat.getMatching(tStyle);
+            if(result.length==0) {
+
+                    tStyle.setName("ce" + textStyles++);
+                    styleName = tStyle.getName();
+                    Debug.log(Debug.TRACE,"No existing style found, adding " + styleName);
+                    styleCat.add(tStyle);
+            } else {
+                    TextStyle existingStyle = (TextStyle) result[0];
+                    styleName = existingStyle.getName();
+                    Debug.log(Debug.TRACE,"Existing style found : " + styleName);
+            }
+
+            cellElement.setAttribute(ATTRIBUTE_TABLE_STYLE_NAME, styleName);
 
             // Store the cell data into the appropriate attributes
             processCellData(cellElement, cellType, cellContents);
@@ -473,6 +515,16 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         if (col <= lastColumn && rowElement != null) {
             int numSkippedCells = lastColumn - col + 1;
             addEmptyCells(numSkippedCells, rowElement);
+        }
+
+        // Now write the style catalog to the document
+        if(autoStylesNode!=null) {
+            Debug.log(Debug.TRACE,"Well the autostyle node was found!!!");
+            NodeList nl = styleCat.writeNode(doc, "dummy").getChildNodes();
+            int nlLen = nl.getLength();     // nl.item reduces the length
+        for (int i = 0; i < nlLen; i++) {
+            autoStylesNode.appendChild(nl.item(0));
+        }
         }
 
         if (row != 0) {

@@ -57,6 +57,9 @@ package org.openoffice.xmerge.converter.xml.sxc;
 
 import java.awt.Color;
 
+import org.openoffice.xmerge.converter.xml.TextStyle;
+import org.openoffice.xmerge.util.Debug;
+
 /**
  *  This class specifies the format for a given spreadsheet cell.
  *
@@ -342,5 +345,32 @@ public class Format implements Cloneable {
          return new String("Value : " + getValue() + " Category : " + getCategory());
      }
 
+     /**
+      * Return a <code>TextStyle</code> for this cell Format
+      *
+      *  @return    the <code>TextStyle</code> representing this format
+      */
+    public TextStyle getTextStyle() {
+
+        // Setup text style information
+        int mask = TextStyle.BOLD | TextStyle.ITALIC | TextStyle.UNDERLINE
+                    | TextStyle.STRIKETHRU;
+
+        int modifiers = 0;
+
+        if(italic) {
+            modifiers |= TextStyle.ITALIC;
+        }
+        if(bold) {
+            modifiers |= TextStyle.BOLD;
+        }
+        if(underline) {
+            modifiers |= TextStyle.UNDERLINE;
+        }
+
+        return new TextStyle("Default", SxcConstants.TABLE_CELL_STYLE_FAMILY, SxcConstants.DEFAULT_STYLE,
+                                        mask, modifiers, 0, null, null);
+                                        // mask, modifiers, fontSize, fontName, null);
+     }
 }
 

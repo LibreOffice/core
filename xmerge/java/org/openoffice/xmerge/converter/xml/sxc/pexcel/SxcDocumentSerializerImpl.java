@@ -70,6 +70,7 @@ import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentSerializer;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
+import org.openoffice.xmerge.converter.xml.StyleCatalog;
 
 /**
  *  <p>Pocket Excel implementation of <code>SxcDocumentDeserializer</code>
@@ -111,6 +112,8 @@ public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
         // get dom document
         org.w3c.dom.Document domDoc = sxcDoc.getContentDOM();
 
+        // load the styles
+        loadStyles(sxcDoc);
         //  Traverse to the office:body element.
         //  There should only be one.
         NodeList list = domDoc.getElementsByTagName(TAG_OFFICE_BODY);
