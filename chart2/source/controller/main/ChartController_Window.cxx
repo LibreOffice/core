@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-22 18:23:40 $
+ *  last change: $Author: iha $ $Date: 2003-11-25 17:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,8 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         SelectionHelper::changeSelection( aMPos, m_aSelectedObjectCID
                                 , *pDrawViewWrapper
                                 , !rMEvt.IsRight() ); //do not change selection if right clicked on the selected object
+        if( !ObjectIdentifier::isRotateableObject( m_aSelectedObjectCID ) )
+                pDrawViewWrapper->SetDragMode(SDRDRAG_MOVE);
     }
     if( bClickedTwiceOnDragableObject
         || ObjectIdentifier::isDragableObject( m_aSelectedObjectCID ) )
@@ -539,8 +541,11 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 eDragMode=SDRDRAG_MOVE;
             pDrawViewWrapper->SetDragMode(eDragMode);
 
+            rtl::OUString aPreviousSelectedObjectCID(m_aSelectedObjectCID);
             m_aSelectedObjectCID = rtl::OUString();
             SelectionHelper::changeSelection( aMPos, m_aSelectedObjectCID, *pDrawViewWrapper, true );
+            if( !aPreviousSelectedObjectCID.equals(m_aSelectedObjectCID) )
+                pDrawViewWrapper->SetDragMode(SDRDRAG_MOVE);
         }
     }
     else if( isDoubleClick(rMEvt) )
