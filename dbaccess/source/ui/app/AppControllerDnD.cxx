@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:59:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 14:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -998,7 +998,7 @@ void OApplicationController::impl_initialize( const Sequence< Any >& aArguments 
         ::sfx2::FileDialogHelper aFileDlg( ::sfx2::FILESAVE_AUTOEXTENSION,static_cast<sal_uInt32>(nBits) ,getView());
         aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
-        const SfxFilter* pFilter = getStandardFilter();
+        const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {
             aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
@@ -1061,7 +1061,7 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
 // -----------------------------------------------------------------------------
 ::std::auto_ptr<OLinkedDocumentsAccess> OApplicationController::getDocumentsAccess(ElementType _eType)
 {
-    OSL_ENSURE(_eType == E_FORM || _eType == E_REPORT || _eType == E_QUERY,"Illegal type for call!");
+    OSL_ENSURE(_eType == E_FORM || _eType == E_REPORT || _eType == E_QUERY || _eType == E_TABLE,"Illegal type for call!");
     Reference< XNameAccess > xNameAccess;
     switch( _eType )
     {
@@ -1086,6 +1086,14 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
                 xNameAccess = xSupp->getQueryDefinitions();
             break;
         }
+        case E_TABLE:
+        {
+            Reference< XTablesSupplier > xSupp(m_xDataSource,UNO_QUERY);
+            if ( xSupp.is() )
+                xNameAccess = xSupp->getTables();
+            break;
+        }
+
     }
 
     Reference<XConnection> xConnection;
