@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-21 11:46:25 $
+ *  last change: $Author: os $ $Date: 2002-08-28 12:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #endif
 #ifndef _SVX_COLORCFG_HXX
 #include <svx/colorcfg.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
+#include <svtools/accessibilityoptions.hxx>
 #endif
 
 
@@ -497,6 +500,7 @@ SwViewOption::SwViewOption() :
         aSnapSize.Width() = aSnapSize.Height() = 567;   // 1 cm
     nDivisionX = nDivisionY = 1;
 
+    bSelectionInReadonly = SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();
 
 #ifndef PRODUCT
     // korrespondieren zu den Angaben in ui/config/cfgvw.src

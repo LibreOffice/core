@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 12:11:04 $
+ *  last change: $Author: os $ $Date: 2002-08-28 12:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,4 +188,8 @@ view::XSelectionSupplier* SwView::GetUNOObject()
 void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
 {
     pWrtShell->ApplyAccessiblityOptions(rAccessibilityOptions);
+    //to enable the right state of the selection cursor in readonly documents
+    if(GetDocShell()->IsReadOnly())
+        pWrtShell->ShowCrsr();
+
 }
