@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:20:01 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 10:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ static bool is_gnome_desktop( Display* pDisplay )
                         &aRoot, &aParent, &pChildren, &nChildren );
             if( pChildren && nChildren )
             {
-                for( unsigned int i = 0; i < nChildren && ! pRet; i++ )
+                for( unsigned int i = 0; i < nChildren && ! ret; i++ )
                 {
                     Atom nType = None;
                     int nFormat = 0;
