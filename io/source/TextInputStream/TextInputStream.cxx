@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextInputStream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:49 $
+ *  last change: $Author: ab $ $Date: 2001-07-10 14:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,11 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
                     {
                         nBufferReadPos--;
                     }
+                }
+                else
+                {
+                    // No second line end char
+                    nBufferReadPos--;
                 }
             }
             else if( c == cLineEndChar1 || c == cLineEndChar2 )
