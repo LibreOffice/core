@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2000-12-14 11:48:20 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1332,14 +1332,14 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_ROTATION),      RES_GRFATR_ROTATION,     &::getCppuType((sal_Int16*)0), 0,   0},
-                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_LUMINANCE),     RES_GRFATR_LUMINANCE,    &::getCppuType((sal_Int16*)0), 0,   0},
-                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_CONTRAST),      RES_GRFATR_CONTRAST,     &::getCppuType((sal_Int16*)0), 0,   0},
-                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_RED),           RES_GRFATR_CHANNELR,     &::getCppuType((sal_Int16*)0), 0,   0},
-                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_GREEN),         RES_GRFATR_CHANNELG,     &::getCppuType((sal_Int16*)0), 0,   0},
-                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_BLUE),          RES_GRFATR_CHANNELB,     &::getCppuType((sal_Int16*)0), 0,   0},
-                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_GAMMA),         RES_GRFATR_GAMMA,        &::getCppuType((double*)0),        0,   0},
+                    { SW_PROP_NAME(UNO_NAME_ADJUST_LUMINANCE),      RES_GRFATR_LUMINANCE,    &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_ADJUST_CONTRAST),       RES_GRFATR_CONTRAST,     &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_ADJUST_RED),            RES_GRFATR_CHANNELR,     &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_ADJUST_GREEN),          RES_GRFATR_CHANNELG,     &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_ADJUST_BLUE),           RES_GRFATR_CHANNELB,     &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GAMMA),         RES_GRFATR_GAMMA,        &::getCppuType((double*)0),        0,   0},
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_IS_INVERTED),       RES_GRFATR_INVERT,       &::getBooleanCppuType(),   0,   0},
-                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_TRANSPARENCY),  RES_GRFATR_TRANSPARENCY, &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_TRANSPARENCY),  RES_GRFATR_TRANSPARENCY, &::getCppuType((sal_Int16*)0), 0,   0},
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_COLOR_MODE),    RES_GRFATR_DRAWMODE,     &::getCppuType((drawing::ColorMode*)0),        0,   0},
                     {0,0,0,0}
                 };

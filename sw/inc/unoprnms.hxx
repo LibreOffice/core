@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2000-12-14 10:50:44 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,14 +625,14 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_FORBIDDEN_RULES;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_MAIN_ENTRY;
 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_ROTATION;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_LUMINANCE;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_CONTRAST;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_RED;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_GREEN;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_BLUE;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_GAMMA;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ADJUST_LUMINANCE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ADJUST_CONTRAST;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ADJUST_RED;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ADJUST_GREEN;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ADJUST_BLUE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GAMMA;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_IS_INVERTED;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_TRANSPARENCY;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_TRANSPARENCY;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_COLOR_MODE;
 
 #endif
