@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-24 16:15:10 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,8 @@
 #include <dcontact.hxx>
 #endif
 
+using namespace com::sun::star;
+
 TYPEINIT1(SwFEShell,SwEditShell)
 
 /***********************************************************************
@@ -205,7 +207,7 @@ Point SwFEShell::GetCntntPos( const Point& rPoint, BOOL bNext ) const
 
 
 const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
-                                        const SvEmbeddedObject *pObj ) const
+                                        const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
     const SwFrm *pFrm = Imp()->HasDrawView()
                 ? ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
@@ -242,7 +244,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                     break;
 
         case RECT_FLY_PRT_EMBEDDED: bFrm = FALSE; /* no break */
-        case RECT_FLY_EMBEDDED:     pFrm = pObj ? FindFlyFrm( pObj )
+        case RECT_FLY_EMBEDDED:     pFrm = xObj.is() ? FindFlyFrm( xObj )
                                                 : pFrm->IsFlyFrm()
                                                     ? pFrm
                                                     : pFrm->FindFlyFrm();
