@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:23:42 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,33 +106,33 @@ using namespace rtl;
 RscTypCont :: RscTypCont( RscError * pErrHdl,
                           RSCBYTEORDER_TYPE nOrder,
                           const ByteString & rSearchPath,
-                          USHORT nFlagsP )
+                          sal_uInt32 nFlagsP )
     :
-      nByteOrder( nOrder ),
       nSourceCharSet( RTL_TEXTENCODING_UTF8 ),
+      nByteOrder( nOrder ),
       aSearchPath( rSearchPath ),
-      nFlags( nFlagsP ),
-      aBool( pHS->Insert( "BOOL" ), RSC_NOTYPE ),
-      aShort( pHS->Insert( "short" ), RSC_NOTYPE ),
-      aUShort( pHS->Insert( "USHORT" ), RSC_NOTYPE ),
-      aLong( pHS->Insert( "long" ), RSC_NOTYPE ),
-      aEnumLong( pHS->Insert( "enum_long" ), RSC_NOTYPE ),
-      aIdUShort( pHS->Insert( "IDUSHORT" ), RSC_NOTYPE ),
-      aIdNoZeroUShort( pHS->Insert( "IDUSHORT" ), RSC_NOTYPE ),
-      aNoZeroShort( pHS->Insert( "NoZeroShort" ), RSC_NOTYPE ),
-      a1to12Short( pHS->Insert( "MonthShort" ), RSC_NOTYPE ),
-      a0to23Short( pHS->Insert( "HourShort" ), RSC_NOTYPE ),
-      a1to31Short( pHS->Insert( "DayShort" ), RSC_NOTYPE ),
-      a0to59Short( pHS->Insert( "MinuteShort" ), RSC_NOTYPE ),
-      a0to99Short( pHS->Insert( "_0to59Short" ), RSC_NOTYPE ),
-      a0to9999Short( pHS->Insert( "YearShort" ), RSC_NOTYPE ),
-      aIdLong( pHS->Insert( "IDLONG" ), RSC_NOTYPE, TRUE ),
-      aString( pHS->Insert( "Chars" ), RSC_NOTYPE ),
-      aWinBits( pHS->Insert( "WinBits" ), RSC_NOTYPE, FALSE ),
+      aBool( pHS->getID( "BOOL" ), RSC_NOTYPE ),
+      aShort( pHS->getID( "short" ), RSC_NOTYPE ),
+      aUShort( pHS->getID( "USHORT" ), RSC_NOTYPE ),
+      aLong( pHS->getID( "long" ), RSC_NOTYPE ),
+      aEnumLong( pHS->getID( "enum_long" ), RSC_NOTYPE ),
+      aIdUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE ),
+      aIdNoZeroUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE ),
+      aNoZeroShort( pHS->getID( "NoZeroShort" ), RSC_NOTYPE ),
+      a1to12Short( pHS->getID( "MonthShort" ), RSC_NOTYPE ),
+      a0to23Short( pHS->getID( "HourShort" ), RSC_NOTYPE ),
+      a1to31Short( pHS->getID( "DayShort" ), RSC_NOTYPE ),
+      a0to59Short( pHS->getID( "MinuteShort" ), RSC_NOTYPE ),
+      a0to99Short( pHS->getID( "_0to59Short" ), RSC_NOTYPE ),
+      a0to9999Short( pHS->getID( "YearShort" ), RSC_NOTYPE ),
+      aIdLong( pHS->getID( "IDLONG" ), RSC_NOTYPE ),
+      aString( pHS->getID( "Chars" ), RSC_NOTYPE ),
+      aWinBits( pHS->getID( "WinBits" ), RSC_NOTYPE ),
       aLangType(),
-      aLangString( pHS->Insert( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType ),
-      aLangShort( pHS->Insert( "Lang_short" ), RSC_NOTYPE, &aShort, &aLangType ),
-      nAcceleratorType( 0 )
+      aLangString( pHS->getID( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType ),
+      aLangShort( pHS->getID( "Lang_short" ), RSC_NOTYPE, &aShort, &aLangType ),
+      nAcceleratorType( 0 ),
+      nFlags( nFlagsP )
 {
     nUniqueId = 256;
     nPMId = RSC_VERSIONCONTROL +1; //mindestens einen groesser
@@ -153,7 +153,7 @@ ByteString RscTypCont::ChangeLanguage( const ByteString& rNewLang )
     aLangFallbacks.clear();
     do
     {
-        USHORT nFallback = GetLangId( aLang );
+        sal_uInt32 nFallback = GetLangId( aLang );
         aLangFallbacks.push_back( nFallback );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, " %s (0x%hx)", aLang.GetBuffer(), nFallback );
@@ -185,7 +185,7 @@ void DestroyNode( RscTop * pRscTop, ObjNode * pObjNode ){
 
         if( pObjNode->GetRscObj() ){
             pRscTop->Destroy( RSCINST( pRscTop, pObjNode->GetRscObj() ) );
-            RscMem::Free( pObjNode->GetRscObj() );
+            rtl_freeMemory( pObjNode->GetRscObj() );
         }
         delete pObjNode;
     };
@@ -225,7 +225,7 @@ RscTypCont :: ~RscTypCont(){
 
     // Alle Unterbaeume loeschen
     aVersion.pClass->Destroy( aVersion );
-    RscMem::Free( aVersion.pData );
+    rtl_freeMemory( aVersion.pData );
     DestroySubTrees( pRoot );
 
     // Alle Klassen noch gueltig, jeweilige Instanzen freigeben
@@ -270,13 +270,13 @@ void RscTypCont::ClearSysNames()
 }
 
 //=======================================================================
-RscTop * RscTypCont::SearchType( HASHID nId )
+RscTop * RscTypCont::SearchType( Atom nId )
 /*  [Beschreibung]
 
     Sucht eine Basistyp nId;
 */
 {
-    if( nId == HASH_NONAME )
+    if( nId == InvalidAtom )
         return NULL;
 
 #define ELSE_IF( a )                \
@@ -324,11 +324,11 @@ RscTop * RscTypCont::SearchType( HASHID nId )
 |*    Letzte Aenderung  MM 27.06.90
 |*
 *************************************************************************/
-RscTop * RscTypCont :: Search( HASHID nRT ){
+RscTop * RscTypCont :: Search( Atom nRT ){
     return( (RscTop *)pRoot->Search( nRT ) );
 }
 
-CLASS_DATA RscTypCont :: Search( HASHID nRT, const RscId & rId ){
+CLASS_DATA RscTypCont :: Search( Atom nRT, const RscId & rId ){
     ObjNode *pObjNode;
     RscTop  *pRscTop;
 
@@ -349,7 +349,7 @@ CLASS_DATA RscTypCont :: Search( HASHID nRT, const RscId & rId ){
 |*    Letzte Aenderung  MM 10.07.91
 |*
 *************************************************************************/
-void RscTypCont :: Delete( HASHID nRT, const RscId & rId ){
+void RscTypCont :: Delete( Atom nRT, const RscId & rId ){
     ObjNode *   pObjNode;
     RscTop  *   pRscTop;
 
@@ -365,7 +365,7 @@ void RscTypCont :: Delete( HASHID nRT, const RscId & rId ){
                 if( pObjNode->GetRscObj() ){
                     pRscTop->Destroy( RSCINST( pRscTop,
                                                pObjNode->GetRscObj() ) );
-                    RscMem::Free( pObjNode->GetRscObj() );
+                    rtl_freeMemory( pObjNode->GetRscObj() );
                 }
                 delete pObjNode;
             }
@@ -382,8 +382,8 @@ void RscTypCont :: Delete( HASHID nRT, const RscId & rId ){
 |*    Letzte Aenderung  MM 27.06.90
 |*
 *************************************************************************/
-USHORT RscTypCont :: PutSysName( USHORT nRscTyp, char * pFileName,
-                                 USHORT nConst, USHORT nId, BOOL bFirst )
+sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
+                                 sal_uInt32 nConst, sal_uInt32 nId, BOOL bFirst )
 {
     RscSysEntry *   pSysEntry;
     BOOL            bId1 = FALSE;
@@ -620,56 +620,37 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteHxx, ObjNode *, pObjNode )
 |*    Letzte Aenderung  MM 09.12.91
 |*
 *************************************************************************/
-ULONG WritePMRes( FILE * fOutput, USHORT nType, USHORT nId, UINT32 nLen )
-{
-    fputc( (char)0xFF, fOutput );
-    fwrite( (const char *)&nType, sizeof( nType ), 1, fOutput );
-    fputc( (char)0xFF, fOutput );
-    fwrite( (const char *)&nId, sizeof( nId ), 1, fOutput );
-    USHORT fsOption = 0x0030; // Aus Resourcefile ermittelt
-    fwrite( (const char *)&fsOption, sizeof( fsOption ), 1, fOutput );
-    // !!! Achtung: Groesse der Resource NICHT dazuaddieren
-    // !!! nLen += 12; // groesse des Headers
-    ULONG nFilePos = ftell( fOutput );
-    fwrite( (const char *)&nLen, sizeof( nLen ), 1, fOutput );
-    return nFilePos;
-}
-
 void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut ){
     // Definition der Struktur, aus denen die Resource aufgebaut ist
     /*
     struct RSHEADER_TYPE{
-        USHORT          nId;        // Identifier der Resource
-        USHORT          nRT;        // Resource Typ
-        USHORT          nGlobOff;   // Globaler Offset
-        USHORT          nLocalOff;  // Lokaler Offset
+        sal_uInt32          nId;        // Identifier der Resource
+        sal_uInt32          nRT;        // Resource Typ
+        sal_uInt32          nGlobOff;   // Globaler Offset
+        sal_uInt32          nLocalOff;  // Lokaler Offset
     } aHeader;
     */
 
-    USHORT nId = rMem.GetShort( 0 );
-    USHORT nRT = rMem.GetShort( 2 );
+    sal_uInt32 nId = rMem.GetLong( 0 );
+    sal_uInt32 nRT = rMem.GetLong( 4 );
 
     // Tabelle wird entsprechend gefuellt
-    pTypCont->PutTranslatorKey( ((INT32)nRT << 16) + nId );
+    pTypCont->PutTranslatorKey( (sal_uInt64(nRT) << 32) + sal_uInt64(nId) );
 
     if( nRT == RSC_VERSIONCONTROL )
     { // kommt immmer als letztes
-        INT32 nCount = pTypCont->aIdTranslator.Count();
+        INT32 nCount = pTypCont->aIdTranslator.size();
         // groesse der Tabelle
-        UINT32 nSize = (nCount * 2 + 1) * sizeof( INT32 );
+        UINT32 nSize = (nCount * (sizeof(sal_uInt64)+sizeof(INT32))) + sizeof(INT32);
 
         rMem.Put( nCount ); //Anzahl speichern
-        INT32   l = (INT32)pTypCont->aIdTranslator.First();
-        while( nCount )
+        for( std::map< sal_uInt64, ULONG >::const_iterator it =
+             pTypCont->aIdTranslator.begin(); it != pTypCont->aIdTranslator.end(); ++it )
         {
             // Schluessel schreiben
-            l = pTypCont->aIdTranslator.GetCurKey();
-            rMem.Put( l );
+            rMem.Put( it->first );
             // Objekt Id oder Position schreiben
-            l = (INT32)pTypCont->aIdTranslator.GetCurObject();
-            rMem.Put( l );
-            l = (INT32)pTypCont->aIdTranslator.Next();
-            nCount--;
+            rMem.Put( (INT32)it->second );
         }
         rMem.Put( nSize ); // Groesse hinten Speichern
     }
@@ -811,11 +792,10 @@ IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteRcCtor, RscTop *, pRef )
 
 ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 {
-    RscSysEntry * pSysEntry;
     ERRTYPE       aError;
     RscEnumerateRef aEnumRef( this, pRoot, rContext.fOutput );
 
-    aIdTranslator.Clear();
+    aIdTranslator.clear();
     nFilePos = 0;
     nPMId = RSCVERSION_ID +1; //mindestens einen groesser
 
@@ -1001,7 +981,7 @@ ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, ULONG nFileKey,
 *************************************************************************/
 void RscTypCont::WriteSyntax( FILE * fOutput )
 {
-    for( USHORT i = 0; i < aBaseLst.Count(); i++ )
+    for( sal_uInt32 i = 0; i < aBaseLst.Count(); i++ )
         aBaseLst.GetObject( i )->WriteSyntaxHeader( fOutput, this );
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
     aEnumRef.WriteSyntax();
@@ -1117,8 +1097,8 @@ BOOL RscTypCont :: MakeConsistent( RscInconsList * pList ){
     return( ::MakeConsistent( pRoot, pList ) );
 }
 
-USHORT RscTypCont::PutTranslatorKey( ULONG nKey )
+sal_uInt32 RscTypCont::PutTranslatorKey( sal_uInt64 nKey )
 {
-    aIdTranslator.Insert( nKey, (void*)nFilePos );
+    aIdTranslator[ nKey ] = nFilePos;
     return nPMId++;
 }
