@@ -1,25 +1,43 @@
-
-#include <osl/mutex.hxx>
+#include "osl/getglobalmutex.hxx"
+#include "rtl/instance.hxx"
 #include "ole2uno.hxx"
 
 using namespace osl;
 namespace ole_adapter
 {
 
-Mutex* getBridgeMutex()
+struct MutexInit
 {
-    static Mutex* pMutex= NULL;
-
-    if( ! pMutex)
+    Mutex * operator () ()
     {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pMutex)
-        {
-            static Mutex aMutex;
-            pMutex= &aMutex;
-        }
+        static Mutex aInstance;
+        return &aInstance;
     }
-    return pMutex;
+};
+
+
+Mutex * getBridgeMutex()
+{
+    return rtl_Instance< Mutex, MutexInit, ::osl::MutexGuard,
+        ::osl::GetGlobalMutex >::create(
+            MutexInit(), ::osl::GetGlobalMutex());
 }
+
+
+// Mutex* getBridgeMutex()
+// {
+//  static Mutex* pMutex= NULL;
+
+//  if( ! pMutex)
+//  {
+//      MutexGuard guard( Mutex::getGlobalMutex() );
+//      if( !pMutex)
+//      {
+//          static Mutex aMutex;
+//          pMutex= &aMutex;
+//      }
+//  }
+//  return pMutex;
+// }
 
 }
