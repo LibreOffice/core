@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmarkcontainer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:22:30 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 12:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,12 @@ public:
     virtual ~OBookmarkContainer();
 
 // ::com::sun::star::uno::XInterface
-    virtual void SAL_CALL acquire(  ) throw(::com::sun::star::uno::RuntimeException) { m_rParent.acquire(); }
-    virtual void SAL_CALL release(  ) throw(::com::sun::star::uno::RuntimeException) { m_rParent.release(); }
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & _rType ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL release(  ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);

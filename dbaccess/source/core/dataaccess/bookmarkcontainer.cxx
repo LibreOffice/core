@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmarkcontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:10:33 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 12:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,38 @@ void OBookmarkContainer::dispose()
     m_aConfigurationNode.clear();
 
     m_bInitialized = sal_False;
+}
+
+//--------------------------------------------------------------------------
+Sequence< Type > SAL_CALL OBookmarkContainer::getTypes() throw (RuntimeException)
+{
+    Sequence< Type > aTypes = OBookmarkContainer_Base::getTypes();
+    sal_Int32 nLen = aTypes.getLength();
+    aTypes.realloc(nLen + 1);
+    aTypes[nLen] = ::getCppuType( static_cast< const Reference< XFlushable >* >( NULL ) );
+
+    return aTypes;
+}
+
+//--------------------------------------------------------------------------
+Any SAL_CALL OBookmarkContainer::queryInterface( const Type & _rType ) throw (RuntimeException)
+{
+    Any aReturn = OBookmarkContainer_Base::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = OConfigurationFlushable::queryInterface(_rType);
+    return aReturn;
+}
+
+//--------------------------------------------------------------------------
+void SAL_CALL OBookmarkContainer::acquire(  ) throw(RuntimeException)
+{
+    m_rParent.acquire();
+}
+
+//--------------------------------------------------------------------------
+void SAL_CALL OBookmarkContainer::release(  ) throw(RuntimeException)
+{
+    m_rParent.release();
 }
 
 //--------------------------------------------------------------------------
