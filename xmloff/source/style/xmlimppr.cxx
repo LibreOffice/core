@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: sab $ $Date: 2000-09-25 14:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ void SvXMLImportPropertyMapper::importXML(
                         const sal_Int32 nSize = rProperties.size();
                         for( nReference = 0; nReference < nSize; nReference++ )
                         {
-                            if( (nIndex != nReference) && (maPropMapper->GetEntryAPIName( rProperties[nReference].mnIndex ) == aAPIName ))
+                            if( (nIndex != rProperties[nReference].mnIndex) && (maPropMapper->GetEntryAPIName( rProperties[nReference].mnIndex ) == aAPIName ))
                             {
                                 aNewProperty = rProperties[nReference];
                                 aNewProperty.mnIndex = nIndex;
