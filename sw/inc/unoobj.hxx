@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,9 +187,16 @@
 #ifndef _CPPUHELPER_IMPLBASE9_HXX_
 #include <cppuhelper/implbase9.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE12_HXX_
-#include <cppuhelper/implbase12.hxx>    // helper for implementations
+#ifndef _CPPUHELPER_IMPLBASE11_HXX_
+#include <cppuhelper/implbase11.hxx>    // helper for implementations
 #endif
+#ifndef _SW_TEXTCURSORHELPER_HXX
+#include "TextCursorHelper.hxx"
+#endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
+
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
@@ -380,7 +387,7 @@ public:
     //
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
     INT16   ComparePositions(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange>& xPos1, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange>& xPos2) throw (com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException);
-    BOOL    CheckForOwnMember(const SwXTextRange* pRange1, const SwXTextCursor* pCursor1)throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    BOOL    CheckForOwnMember(const SwXTextRange* pRange1, const OTextCursorHelper* pCursor1)throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     //
     void            Invalidate() {bObjectValid = sal_False;}
     BOOL            IsValid()const {return bObjectValid;}
@@ -400,22 +407,22 @@ enum SwGetPropertyStatesCaller
 #define CRSR_ATTR_MODE_TABLE        1   //attributes should be applied to a table selection
 #define CRSR_ATTR_MODE_DONTREPLACE  2   //attributes should be added, not replaced
 
-class SwXTextCursor : public cppu::WeakImplHelper12
-<
-    ::com::sun::star::text::XSentenceCursor,
-    ::com::sun::star::text::XWordCursor,
-    ::com::sun::star::text::XParagraphCursor,
-    ::com::sun::star::beans::XPropertySet,
-    ::com::sun::star::beans::XPropertyState,
-    ::com::sun::star::document::XDocumentInsertable,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::lang::XUnoTunnel,
-    ::com::sun::star::util::XSortable,
-    ::com::sun::star::container::XContentEnumerationAccess,
-    ::com::sun::star::container::XEnumerationAccess,
-    ::com::sun::star::beans::XMultiPropertyStates
->,
-    public SwClient
+typedef cppu::WeakImplHelper11<
+                                ::com::sun::star::text::XSentenceCursor,
+                                ::com::sun::star::text::XWordCursor,
+                                ::com::sun::star::text::XParagraphCursor,
+                                ::com::sun::star::beans::XPropertySet,
+                                ::com::sun::star::beans::XPropertyState,
+                                ::com::sun::star::document::XDocumentInsertable,
+                                ::com::sun::star::lang::XServiceInfo,
+                                ::com::sun::star::util::XSortable,
+                                ::com::sun::star::container::XContentEnumerationAccess,
+                                ::com::sun::star::container::XEnumerationAccess,
+                                ::com::sun::star::beans::XMultiPropertyStates
+                            > SwXTextCursor_Base;
+class SwXTextCursor : public SwXTextCursor_Base,
+    public SwClient,
+    public OTextCursorHelper
 {
     SwEventListenerContainer    aLstnrCntnr;
     SfxItemPropertySet          aPropSet;
@@ -426,15 +433,19 @@ class SwXTextCursor : public cppu::WeakImplHelper12
 
     void    DeleteAndInsert(const String& rText);
 
+protected:
+    virtual ~SwXTextCursor();
 public:
     SwXTextCursor(::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent, const SwPosition& rPos,
                     CursorType eSet, SwDoc* pDoc, const SwPosition* pMark = 0);
     SwXTextCursor(::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent, SwUnoCrsr* pSourceCrsr, CursorType eSet = CURSOR_ALL);
     //invalid Cursor!
     SwXTextCursor(SwXText* pParent = 0);
-    virtual ~SwXTextCursor();
+
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+
+    DECLARE_XINTERFACE();
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
@@ -535,9 +546,10 @@ public:
     //SwClient
     virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
-    const SwPaM*        GetPaM() const;
-    const SwDoc*        GetDoc()const;
-    SwDoc*              GetDoc();
+    virtual const SwPaM*        GetPaM() const;
+    virtual SwPaM*              GetPaM();
+    virtual const SwDoc*        GetDoc() const;
+    virtual SwDoc*              GetDoc();
     SwUnoCrsr*          GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
     const SwUnoCrsr*    GetCrsr()const{return (SwUnoCrsr*)GetRegisteredIn();}
 
@@ -623,10 +635,11 @@ class SwXBookmark : public SwRefBookmarkBaseClass,
     SwDoc*                      pDoc;
     String                      m_aName;
     BOOL                        bIsDescriptor;
-
+protected:
+    virtual ~SwXBookmark();
 public:
         SwXBookmark(SwBookmark* pBkm = 0, SwDoc* pDoc = 0);
-        virtual ~SwXBookmark();
+
     TYPEINFO();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -682,9 +695,11 @@ typedef cppu::WeakAggImplHelper2
 class SwXBodyText : public SwXBodyTextBaseClass,
                     public SwXText
 {
+protected:
+    virtual ~SwXBodyText();
 public:
     SwXBodyText(SwDoc* pDoc);
-    virtual ~SwXBodyText();
+
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw(){OWeakObject::acquire();}
@@ -751,7 +766,8 @@ class SwXTextRange : public cppu::WeakImplHelper7
     void    _CreateNewBookmark(SwPaM& rPam);
     //TODO: new exception type for protected content
     void    DeleteAndInsert(const String& rText) throw( ::com::sun::star::uno::RuntimeException );
-
+protected:
+    virtual ~SwXTextRange();
 public:
     SwXTextRange();
     SwXTextRange(SwPaM& rPam, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rxParent);
@@ -760,7 +776,7 @@ public:
     SwXTextRange(SwFrmFmt& rTblFmt, const SwStartNode& rStartNode, SwPaM& rPam);
     SwXTextRange(SwFrmFmt& rTblFmt);
 
-    virtual ~SwXTextRange();
+
     TYPEINFO();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -838,11 +854,13 @@ class SwXTextRanges : public SwXTextRangesBaseClass,
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >           xParentText;
     XTextRangeArr*      GetRangesArray();
     SwUnoCrsr*          GetCrsr() const { return (SwUnoCrsr*)GetRegisteredIn(); }
+protected:
+    virtual ~SwXTextRanges();
 public:
     SwXTextRanges();
     SwXTextRanges( SwUnoCrsr* pCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent);
     SwXTextRanges(SwPaM* pCrsr);
-    virtual ~SwXTextRanges();
+
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -891,9 +909,11 @@ class SwXTextSection : public cppu::WeakImplHelper7
     BOOL                            m_bIndexHeader;
     String                          m_sName;
     SwTextSectionProperties_Impl*   pProps;
+protected:
+    virtual ~SwXTextSection();
 public:
     SwXTextSection(SwSectionFmt* pFmt = 0, BOOL bIndexHeader = FALSE);
-    virtual ~SwXTextSection();
+
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -983,10 +1003,11 @@ class SwXFootnote : public SwXFootnoteBaseClass,
 protected:
     virtual const SwStartNode *GetStartNode() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
+    virtual ~SwXFootnote();
 public:
     SwXFootnote(BOOL bEndnote);
     SwXFootnote(SwDoc* pDoc, const SwFmtFtn& rFmt);
-    virtual ~SwXFootnote();
+
 
     TYPEINFO();
 
@@ -1064,10 +1085,12 @@ class SwXParagraphEnumeration : public SwSimpleEnumerationBaseClass,
     ULONG               nEndIndex;
     sal_Int32           nFirstParaStart;
     sal_Int32           nLastParaEnd;
+protected:
+    virtual ~SwXParagraphEnumeration();
 public:
     SwXParagraphEnumeration(SwXText* pParent, SwPosition& rPos, CursorType eType);
     SwXParagraphEnumeration(SwXText* pParent, SwUnoCrsr* pCrsr, CursorType eType);
-    virtual ~SwXParagraphEnumeration();
+
 
 
     //XEnumeration
@@ -1109,10 +1132,12 @@ class SwXParagraph : public cppu::WeakImplHelper9
     sal_Int32                   nSelectionEndPos;
 
     SwUnoCrsr*              GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
+protected:
+    virtual ~SwXParagraph();
 public:
     SwXParagraph();
     SwXParagraph(SwXText* pParent, SwUnoCrsr* pCrsr, sal_Int32 nSelStart = -1, sal_Int32 nSelEnd = - 1);
-    virtual ~SwXParagraph();
+
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -1246,11 +1271,13 @@ class SwXTextPortionEnumeration : public cppu::WeakImplHelper3
     SwUnoCrsr*          GetCrsr() const { return (SwUnoCrsr*)GetRegisteredIn(); }
     SwXTextPortionEnumeration();
     void                CreatePortions();
+protected:
+    virtual ~SwXTextPortionEnumeration();
 public:
     SwXTextPortionEnumeration(SwPaM& rParaCrsr,
             ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent,
             sal_Int32 nStart, sal_Int32 nEnd );
-    virtual ~SwXTextPortionEnumeration();
+
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
