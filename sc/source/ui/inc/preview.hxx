@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ protected:
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
 public:
             ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh );
