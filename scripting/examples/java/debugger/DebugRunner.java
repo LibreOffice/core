@@ -6,7 +6,7 @@ import java.net.URLDecoder;
 
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.script.framework.provider.PathUtils;
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import com.sun.star.script.framework.runtime.XScriptContext;
 
 public class DebugRunner {
 
