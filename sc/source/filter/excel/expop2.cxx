@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@ extern const sal_Char*  pVBASubStorageName;
 
 
 
-ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument* pDoc, const String& rBasePath, CharSet eDest, bool bRelUrl ):
-    XclExpRootData( xlBiff5, *pDoc, rBasePath, eDest, bRelUrl ),
+ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, XclBiff eBiff, ScDocument* pDoc, const String& rBasePath, CharSet eDest, bool bRelUrl ):
+    XclExpRootData( eBiff, *pDoc, rBasePath, eDest, bRelUrl ),
     ExportTyp( aStream, pDoc, eDest ),
     XclExpRoot( static_cast< XclExpRootData& >( *this ) )
     // Excel immer Windoofs, Quelle (SC) immer System
@@ -194,10 +194,9 @@ FltError ExportBiff5::Write()
 
 
 
-ExportBiff8::ExportBiff8( SvStorage& rRootStorage, SvStream& aStream, ScDocument* pDoc, const String& rBasePath, CharSet eZ, bool bRelUrl ) :
-    ExportBiff5( rRootStorage, aStream, pDoc, rBasePath, eZ, bRelUrl )
+ExportBiff8::ExportBiff8( SvStorage& rRootStorage, SvStream& aStream, XclBiff eBiff, ScDocument* pDoc, const String& rBasePath, CharSet eZ, bool bRelUrl ) :
+    ExportBiff5( rRootStorage, aStream, eBiff, pDoc, rBasePath, eZ, bRelUrl )
 {
-    SetBiff( xlBiff8 );
     pExcRoot->eHauptDateiTyp = Biff8;
     pExcRoot->eDateiTyp = Biff8;
     pExcRoot->nRowMax = XCL8_ROWMAX;
