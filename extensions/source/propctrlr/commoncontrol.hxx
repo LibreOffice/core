@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commoncontrol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:04:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,7 @@ namespace pcr
             ::rtl::OUString                 m_aName;
             Window*                         m_pMeAsWindow;
             IBrowserControlListener*        m_pListener;
-            void*                           m_pData;
             sal_uInt16                      m_nLine;
-            sal_Bool                        m_bDir      : 1;
-            sal_Bool                        m_bLocked   : 1;
             sal_Bool                        m_bModified : 1;
 
     public:
@@ -106,15 +103,8 @@ namespace pcr
             virtual void                    SetMyName(const ::rtl::OUString &rString)   { m_aName = rString; }
             virtual ::rtl::OUString         GetMyName()const                            { return m_aName; }
 
-            virtual void                    SetMyData(void* pData)                      { m_pData = pData; }
-            virtual void*                   GetMyData()                                 { return m_pData; }
-
-            virtual sal_Bool                GetDirection()                              { return m_bDir; }
-
             virtual void                    SetLine(sal_uInt16 nLine)                   { m_nLine = nLine; }
             virtual sal_uInt16              GetLine()                                   { return m_nLine; }
-
-            virtual void                    SetLocked(sal_Bool bLocked=sal_True);
 
             virtual Window*                 GetMe()                                     { return m_pMeAsWindow; }
 
@@ -122,15 +112,6 @@ namespace pcr
             virtual void                    SetCtrPos(const Point& aPoint)              { m_pMeAsWindow->SetPosPixel(aPoint); }
             virtual Point                   GetCtrPos() const                           { return m_pMeAsWindow->GetPosPixel(); }
             virtual Size                    GetCtrSize() const                          { return m_pMeAsWindow->GetSizePixel(); }
-            virtual void                    ShowCtr( sal_Bool bFlag )                   { m_pMeAsWindow->Show( bFlag ); }
-            virtual void                    EnableControl( sal_Bool _bDoEnable )        { m_pMeAsWindow->Enable( _bDoEnable ); }
-            virtual void                    HideCtr()                                   { m_pMeAsWindow->Hide(); }
-
-            virtual void                    SetCtrHelpId(sal_uInt32 nHelpId)                    { m_pMeAsWindow->SetHelpId(nHelpId); }
-            virtual void                    SetTabOrder(Window* pRefWindow, sal_uInt16 nFlags ) { m_pMeAsWindow->SetZOrder(pRefWindow,nFlags); }
-            virtual void                    SetCtrParent(Window* pParent)               { m_pMeAsWindow->SetParent(pParent); }
-            virtual void                    InvalidateCtr()                             { m_pMeAsWindow->Invalidate(); }
-            virtual void                    UpdateCtr()                                 { m_pMeAsWindow->Update(); }
 
     protected:
             /// may be used to implement the default handling in PreNotify; returns sal_True if handled
