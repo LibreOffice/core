@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-30 14:24:15 $
+ *  last change: $Author: pb $ $Date: 2001-12-07 12:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,8 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #endif
 
-#ifndef INCLUDED_SVTOOLS_DYNAMICMENUOPTIONS_HXX
-#include <svtools/dynamicmenuoptions.hxx>
+#ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
+#include <svtools/historyoptions.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 #include <svtools/menuoptions.hxx>
@@ -1201,25 +1201,20 @@ sal_Bool SearchTabPage_Impl::OpenKeyword( const String& rKeyword )
 
 // class BookmarksTabPage_Impl -------------------------------------------
 
-void GetMenuEntry_Impl
+void GetBookmarkEntry_Impl
 (
-    Sequence< PropertyValue >& aDynamicMenuEntry,
+    Sequence< PropertyValue >& aBookmarkEntry,
     ::rtl::OUString& rTitle,
-    ::rtl::OUString& rURL,
-    ::rtl::OUString& rFrame,
-    ::rtl::OUString& rImageId
+    ::rtl::OUString& rURL
 )
 {
-    for ( int i = 0; i < aDynamicMenuEntry.getLength(); i++ )
+    for ( int i = 0; i < aBookmarkEntry.getLength(); i++ )
     {
-        if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_URL )
-            aDynamicMenuEntry[i].Value >>= rURL;
-        else if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_TITLE )
-            aDynamicMenuEntry[i].Value >>= rTitle;
-        else if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER )
-            aDynamicMenuEntry[i].Value >>= rImageId;
-        else if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_TARGETNAME )
-            aDynamicMenuEntry[i].Value >>= rFrame;
+        PropertyValue aValue = aBookmarkEntry[i];
+        if ( aValue.Name == HISTORY_PROPERTYNAME_URL )
+            aValue.Value >>= rURL;
+        else if ( aValue.Name == HISTORY_PROPERTYNAME_TITLE )
+            aValue.Value >>= rTitle;
     }
 }
 
@@ -1237,16 +1232,15 @@ BookmarksBox_Impl::BookmarksBox_Impl( Window* pParent, const ResId& rResId ) :
 BookmarksBox_Impl::~BookmarksBox_Impl()
 {
     // save bookmarks to configuration
-    SvtDynamicMenuOptions aMenuOpt;
-    aMenuOpt.Clear( E_HELPBOOKMARKS );
-    rtl::OUString aEmpty;
+    SvtHistoryOptions aHistOpt;
+    aHistOpt.Clear( eHELPBOOKMARKS );
+    rtl::OUString sEmpty;
     USHORT nCount = GetEntryCount();
     for ( USHORT i = 0; i < nCount; ++i )
     {
         String aTitle = GetEntry(i);
         String* pURL = (String*)(ULONG)GetEntryData(i);
-        aMenuOpt.AppendItem( E_HELPBOOKMARKS, rtl::OUString( *pURL ), rtl::OUString( aTitle ), aEmpty, aEmpty );
-
+        aHistOpt.AppendItem( eHELPBOOKMARKS, rtl::OUString( *pURL ), sEmpty, rtl::OUString( aTitle ), sEmpty );
         delete pURL;
     }
 }
@@ -1356,18 +1350,16 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent ) :
     aBookmarksPB.SetClickHdl( LINK( this, BookmarksTabPage_Impl, OpenHdl ) );
 
     // load bookmarks from configuration
-    Sequence< Sequence< PropertyValue > > aDynamicMenuEntries;
-    aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_HELPBOOKMARKS );
+    Sequence< Sequence< PropertyValue > > aBookmarkSeq;
+    aBookmarkSeq = SvtHistoryOptions().GetList( eHELPBOOKMARKS );
 
     ::rtl::OUString aTitle;
     ::rtl::OUString aURL;
-    ::rtl::OUString aImageURL;
-    ::rtl::OUString aTargetFrame;
 
-    UINT32 i, nCount = aDynamicMenuEntries.getLength();
+    UINT32 i, nCount = aBookmarkSeq.getLength();
     for ( i = 0; i < nCount; ++i )
     {
-        GetMenuEntry_Impl( aDynamicMenuEntries[i], aTitle, aURL, aTargetFrame, aImageURL );
+        GetBookmarkEntry_Impl( aBookmarkSeq[i], aTitle, aURL );
         AddBookmarks( aTitle, aURL );
     }
 }
