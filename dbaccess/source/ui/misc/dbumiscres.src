@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 11:35:13 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 12:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,51 +188,25 @@ String STR_OBJECT_ALREADY_EXSISTS
     Text[ arabic ] = "Œÿ√ √À‰«¡ «·≈‰‘«¡!";
 };
 
+String STR_UNEXPECTED_ERROR
+{
+    Text = "Ein unerwarteter Fehler ist aufgetreten. Die operation kann nicht ausgef¸hrt werden.";
+    Text [ english ] = "An unexpected error occured. The operation could not be completed.";
+    Text [ english_us ] = "An unexpected error occured. The operation could not be completed.";
+};
+
+String STR_COULDNOTOPEN_LINKEDDOC
+{
+    Text = "Das Dokument\n\n$file$\n\nkonnte nicht geˆffnet werden.";
+    Text [ english ] = "Th document\n\n$file$\n\ncould not be opened.";
+    Text [ english_us ] = "Th document\n\n$file$\n\ncould not be opened.";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
- *  Revision 1.14  2001/03/14 09:16:28  fs
- *  wrong texts in the semicolon-separated lists (english_us)
- *
- *  Revision 1.13  2001/03/09 20:39:55  kz
- *  Merge SRC624: 09.03.01 - 21:40:01 (NoBranch)
- *
- *  Revision 1.12  2001/02/13 09:48:18  fs
- *  #83632# merge IBMPC, IBMPC(850), DOS
- *
- *  Revision 1.11  2001/01/30 09:46:40  fs
- *  add the 'spreadsheet' to english_us, too
- *
- *  Revision 1.10  2001/01/29 16:02:05  nn
- *  added DST_CALC
- *
- *  Revision 1.9  2001/01/11 09:20:21  oj
- *  #81232# new string
- *
- *  Revision 1.8  2001/01/04 11:21:03  fs
- *  #81485# added dsn type ADO
- *
- *  Revision 1.7  2000/12/14 11:22:34  nf
- *  Replacement of StarPortal: Sun Webtop
- *
- *  Revision 1.6  2000/12/14 10:52:01  fs
- *  #81961# added a comment for the translation department
- *
- *  Revision 1.5  2000/11/29 09:47:29  kz
- *  Merge SRC614: 29.11.00 - 10:46:51 (NoBranch)
- *
- *  Revision 1.4  2000/11/21 15:01:37  oj
- *  #80549# wrong dsn for text
- *
- *  Revision 1.3  2000/10/27 15:17:01  kz
- *  Merge SRC610: 27.10.00 - 17:16:44 (NoBranch)
- *
- *  Revision 1.2  2000/10/19 13:42:45  fs
- *  URL prefix for text files is sdbc:flat:file:, not sdbc:text:
- *
- *  Revision 1.1  2000/10/05 10:09:02  fs
- *  initial checkin
- *
+ *  Revision 1.15  2001/03/19 11:35:13  kz
+ *  Merge SRC625: 19.03.01 - 12:35:02 (NoBranch)
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
