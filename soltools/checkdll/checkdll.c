@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkdll.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-18 09:50:15 $
+ *  last change: $Author: svesik $ $Date: 2001-06-22 12:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
     if ( (phandle = dlopen(argv[1], RTLD_NOW)) != NULL ) {
         if  ( (pfun = (char *(*)(void))dlsym(phandle, psymbol)) != NULL ) {
             printf(": ok\n");
-#ifdef GCC
+#if !defined(IRIX) && defined(GCC)
             _exit(0);
 #else
             dlclose(phandle);
