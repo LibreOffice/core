@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.23 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-11 20:28:28 $
+ *  $Revision: 1.24 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-11 20:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,18 +147,20 @@ static void CheckRectBounds ( Rect        *rSrcRect,
 // =======================================================================
 
 // =======================================================================
-static unsigned short IndexTo32BitDeviceColor ( long  *rIndex ){ unsigned short  color32Bit = 0;    unsigned short  upper8Bits = 0;    unsigned short  lower8Bits = 0;            lower8Bits   = *rIndex & 0xFF;     upper8Bits   =  lower8Bits << 8;   color32Bit   =  upper8Bits | lower8Bits;  *rIndex     >>=  8;           return  color32Bit;} // IndexTo32BitDeviceColor
+static unsigned short IndexTo32BitDeviceColor ( long  *rIndexColor ){    unsigned short  nDirectColor = 0;  unsigned short  nUpperByte   = 0;  unsigned short  nLowerByte   = 0;
+
+    const unsigned short  kByteMask = 0xFF;    const unsigned short  kOneByte  = 8;           nLowerByte     = *rIndexColor & kByteMask;     nUpperByte     =  nLowerByte << kOneByte;  nDirectColor   =  nUpperByte  | nLowerByte;   *rIndexColor  >>=  kOneByte;          return  nDirectColor;} // IndexTo32BitDeviceColor
 
 // -----------------------------------------------------------------------
 
-static void Index2DirectColor ( long      *rIndex,                                RGBColor  *rRGBColor
-                              ){  rRGBColor->blue  = IndexTo32BitDeviceColor ( rIndex ); rRGBColor->green = IndexTo32BitDeviceColor ( rIndex ); rRGBColor->red   = IndexTo32BitDeviceColor ( rIndex );
+static void Index2DirectColor ( long      *rIndexColor,                                RGBColor  *rRGBColor
+                              ){  rRGBColor->blue  = IndexTo32BitDeviceColor ( rIndexColor );    rRGBColor->green = IndexTo32BitDeviceColor ( rIndexColor );    rRGBColor->red   = IndexTo32BitDeviceColor ( rIndexColor );
 } // Index2DirectColor     
 // -----------------------------------------------------------------------
 
-static void Index2EightBitColor ( long        *pIndex,                                  RGBColor    *rRGBColor,
+static void Index2EightBitColor ( long        *pIndexColor,                                  RGBColor    *rRGBColor,
                                   const GDPtr  pGDevice
-                                ){    CTabPtr    pRGBCTable     = NULL;  PixMapPtr  pGDevicePixMap = NULL;         pGDevicePixMap = *(*pGDevice).gdPMap;  pRGBCTable     = *(*pGDevicePixMap).pmTable;  if ( *pIndex <= pRGBCTable->ctSize )   {      RGBColor  aRGBColor;              aRGBColor        = pRGBCTable->ctTable[*pIndex].rgb;       rRGBColor->red   = aRGBColor.red;      rRGBColor->green = aRGBColor.green;        rRGBColor->blue  = aRGBColor.blue; } // if} // Index2EightBitColor
+                                ){    CTabPtr    pRGBCTable     = NULL;  PixMapPtr  pGDevicePixMap = NULL;         pGDevicePixMap = *(*pGDevice).gdPMap;  pRGBCTable     = *(*pGDevicePixMap).pmTable;  if ( *pIndexColor <= pRGBCTable->ctSize )  {      RGBColor  aRGBColor;              aRGBColor        = pRGBCTable->ctTable[*pIndexColor].rgb;      rRGBColor->red   = aRGBColor.red;      rRGBColor->green = aRGBColor.green;        rRGBColor->blue  = aRGBColor.blue; } // if} // Index2EightBitColor
 // -----------------------------------------------------------------------
 //
 // Here we will convert index SAL color to either 8-bit or 32-bit color.
