@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:34 $
+ *  last change: $Author: cp $ $Date: 2001-06-28 13:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,7 +599,7 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
                                 ( pBIH->cBitCount == 1 ? BMP_FORMAT_1BIT_MSB_PAL :
                                   pBIH->cBitCount == 4 ? BMP_FORMAT_4BIT_MSN_PAL :
                                   pBIH->cBitCount == 8 ? BMP_FORMAT_8BIT_PAL :
-                                  pBIH->cBitCount == 16 ? BMP_FORMAT_16BIT_TC_MASK :
+                                  pBIH->cBitCount == 16 ? BMP_FORMAT_16BIT_TC_LSB_MASK :
                                   pBIH->cBitCount == 24 ? BMP_FORMAT_24BIT_TC_BGR :
                                   pBIH->cBitCount == 32 ? BMP_FORMAT_32BIT_TC_MASK : 0UL );
 
