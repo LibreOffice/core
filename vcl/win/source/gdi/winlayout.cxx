@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-02 13:34:09 $
+ *  last change: $Author: hdu $ $Date: 2002-05-03 16:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,12 +229,12 @@ void SimpleWinLayout::Draw() const
 bool SimpleWinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
 {
     long nWidth = 0;
+    bool bRet = false;
     for( int i = 0; i < mnGlyphCount; ++i )
     {
         // get outline of individual glyph
         PolyPolygon aGlyphOutline;
-        if( !rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], aGlyphOutline ) )
-            return false;
+        bRet |= rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], aGlyphOutline );
 
         // insert outline at correct position
         aGlyphOutline.Move( nWidth, 0 );
@@ -243,7 +243,7 @@ bool SimpleWinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyP
             rPolyPoly.Insert( aGlyphOutline[j] );
     }
 
-    return true;
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
