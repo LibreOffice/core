@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-15 10:32:19 $
+#   last change: $Author: vg $ $Date: 2003-04-24 13:00:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.42 $ ';
+$id_str = ' $Revision: 1.43 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -157,8 +157,12 @@ exit(0);
 
 sub do_copy
 {
-    # we need to copy twice: once from the platform dependent output tree
-    # and once from the common output tree, in this order
+    # We need to copy four times:
+    # from the platform dependent output tree,
+    # from the so platform dependent tree,
+    # from the common output tree,
+    # and from the so common output tree
+    # in this order.
     my ($dependent, $common, $from, $to, $file_list);
     my $line = shift;
     my $touch = 0;
@@ -168,6 +172,14 @@ sub do_copy
     print "copy dependent: from: $from, to: $to\n" if $is_debug;
     glob_and_copy($from, $to, $touch);
 
+    my $line_so = mod_so($line);
+    if ( $line_so ) {
+        my $dependent = expand_macros($line_so);
+        ($from, $to) = split(' ', $dependent);
+        print "copy dependent: from: $from, to: $to\n" if $is_debug;
+        glob_and_copy($from, $to, $touch);
+    }
+
     $line =~ s/%__SRC%/%COMMON_OUTDIR%/ig;
     if ( $line =~ /%COMMON_OUTDIR%/ ) {
         $line =~ s/%_DEST%/%COMMON_DEST%/ig;
@@ -175,6 +187,14 @@ sub do_copy
         ($from, $to) = split(' ', $common);
         print "copy common: from: $from, to: $to\n" if $is_debug;
         glob_and_copy($from, $to, $touch);
+
+        my $line_so = mod_so($line);
+        if ( $line_so ) {
+            $common = expand_macros($line_so);
+            ($from, $to) = split(' ', $common);
+            print "copy common: from: $from, to: $to\n" if $is_debug;
+            glob_and_copy($from, $to, $touch);
+        }
     }
 }
 
@@ -548,6 +568,23 @@ sub expand_macros
     return $line;
 }
 
+sub mod_so
+{
+    my $line = shift;
+
+    if ( $line =~ s/(%__SRC%[\\|\/]bin)/$1\\so/i ) {
+        $line =~ s/(%_DEST%[\\|\/]bin%_EXT%)/$1\\so/i;
+        return $line;
+    }
+    elsif ( $line =~ s/(%COMMON_OUTDIR%[\\|\/]bin)/$1\\so/i ) {
+        $line =~ s/(%COMMON_DEST%[\\|\/]bin%_EXT%)/$1\\so/i;
+        return $line;
+    }
+    else {
+        return undef;
+    }
+}
+
 sub walk_action_data
 {
     # all actions have to be excuted relative to the prj directory
@@ -815,6 +852,8 @@ sub push_default_actions
         push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]); # might be necessary
         push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc%_EXT%/$module/build.lst"]);
     }
+    push(@action_data, ['mkdir', "%_DEST%/bin%_EXT%/so"]);
+    push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/so"]);
 
     # need to copy libstaticmxp.dylib for Mac OS X
     if ( $^O eq 'darwin' )
