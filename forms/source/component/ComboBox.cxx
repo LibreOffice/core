@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 14:31:10 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 14:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (Runtime
 OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_CONTROL_COMBOBOX)
                     // use the old control name for compytibility reasons
-    ,OErrorBroadcaster( rBHelper )
+    ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,m_eListSourceType(ListSourceType_TABLE)
     ,m_bEmptyIsNull(sal_True)
     ,m_aNullDate(DBTypeConversion::getStandardDate())
