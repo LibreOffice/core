@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleButton.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Date: 2004-11-02 12:12:58 $
+ *  last change: $Date: 2004-12-10 17:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,21 +142,16 @@ public class AccessibleButton extends lib.TestCase {
         XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        shortWait();
+        util.utils.shortWait(Param.getInt("ShortWait"));
 
         DiagThread psDiag = new DiagThread(xTextDoc, msf);
         psDiag.start();
 
-        try {
-            psDiag.join();
-        } catch (Exception e) {
-        }
-
-        shortWait();
+        util.utils.shortWait(Param.getInt("ShortWait"));
 
         AccessibilityTools at = new AccessibilityTools();
 
-        shortWait();
+        util.utils.shortWait(Param.getInt("ShortWait"));
 
         Object atw = tk.getActiveTopWindow();
 
@@ -234,17 +229,6 @@ public class AccessibleButton extends lib.TestCase {
         }
     }
 
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e);
-        }
-    }
 
     /**
      * Thread for opening modal dialog 'Print Settings'.
