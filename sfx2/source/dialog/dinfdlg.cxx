@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:29:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,6 +632,39 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
 
     aDeleteBtn.SetClickHdl( LINK( this, SfxDocumentPage, DeleteHdl ) );
     aSignatureBtn.SetClickHdl( LINK( this, SfxDocumentPage, SignatureHdl ) );
+    WinBits nStyle = aFileValFt.GetStyle();
+    nStyle |= WB_PATHELLIPSIS;
+    aFileValFt.SetStyle( nStyle );
+
+    // if the button text is too wide, then broaden it
+    const long nOffset = 12;
+    String sText = aSignatureBtn.GetText();
+    long nTxtW = aSignatureBtn.GetTextWidth( sText );
+    if ( sText.Search( '~' ) == STRING_NOTFOUND )
+        nTxtW += nOffset;
+    long nBtnW = aSignatureBtn.GetSizePixel().Width();
+    if ( nTxtW >= nBtnW )
+    {
+        long nDelta = Max( nTxtW - nBtnW, nOffset/3 );
+        Size aNewSize = aSignatureBtn.GetSizePixel();
+        aNewSize.Width() += nDelta;
+        aSignatureBtn.SetSizePixel( aNewSize );
+        aDeleteBtn.SetSizePixel( aNewSize );
+        // and give them a new position
+        Point aNewPos = aSignatureBtn.GetPosPixel();
+        aNewPos.X() -= nDelta;
+        aSignatureBtn.SetPosPixel( aNewPos );
+        aNewPos = aDeleteBtn.GetPosPixel();
+        aNewPos.X() -= nDelta;
+        aDeleteBtn.SetPosPixel( aNewPos );
+
+        aNewSize = aSignedValFt.GetSizePixel();
+        aNewSize.Width() -= nDelta;
+        aSignedValFt.SetSizePixel( aNewSize );
+        aNewSize = aUseUserDataCB.GetSizePixel();
+        aNewSize.Width() -= nDelta;
+        aUseUserDataCB.SetSizePixel( aNewSize );
+    }
 }
 
 //------------------------------------------------------------------------
@@ -870,6 +903,8 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         INetURLObject aPath( aURL );
         aPath.setFinalSlash();
         aPath.removeSegment();
+        // we know it's a folder -> don't need the final slash, but it's better for WB_PATHELLIPSIS
+        aPath.removeFinalSlash();
         String aText( aPath.PathToFileName() ); //! (pb) MaxLen?
         aFileValFt.SetText( aText );
     }
