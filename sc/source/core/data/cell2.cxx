@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2002-09-16 12:34:33 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,10 +1198,8 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
             t->CalcAbsIfRel( aOldPos );
             BOOL bMod;
             {   // own scope for SingleDoubleRefModifier dtor if SingleRef
-                SingleDoubleRefModifier& rMod = (t->GetType() == svSingleRef ?
-                    SingleDoubleRefModifier( t->GetSingleRef() ) :
-                    SingleDoubleRefModifier( t->GetDoubleRef() ));
-                ComplRefData& rRef = rMod.Ref();
+                SingleDoubleRefModifier aMod( *t );
+                ComplRefData& rRef = aMod.Ref();
                 bMod = (ScRefUpdate::UpdateTranspose( pDocument, rSource,
                     rDest, rRef ) != UR_NOTHING || bPosChanged);
             }
@@ -1227,10 +1225,8 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
                 t->CalcAbsIfRel( aOldPos );
                 BOOL bMod;
                 {   // own scope for SingleDoubleRefModifier dtor if SingleRef
-                    SingleDoubleRefModifier& rMod = (t->GetType() == svSingleRef ?
-                        SingleDoubleRefModifier( t->GetSingleRef() ) :
-                        SingleDoubleRefModifier( t->GetDoubleRef() ));
-                    ComplRefData& rRef = rMod.Ref();
+                    SingleDoubleRefModifier aMod( *t );
+                    ComplRefData& rRef = aMod.Ref();
                     bMod = (ScRefUpdate::UpdateTranspose( pDocument, rSource,
                         rDest, rRef ) != UR_NOTHING || bPosChanged);
                 }
@@ -1286,10 +1282,8 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGro
             t->CalcAbsIfRel( aPos );
             BOOL bMod;
             {   // own scope for SingleDoubleRefModifier dtor if SingleRef
-                SingleDoubleRefModifier& rMod = (t->GetType() == svSingleRef ?
-                    SingleDoubleRefModifier( t->GetSingleRef() ) :
-                    SingleDoubleRefModifier( t->GetDoubleRef() ));
-                ComplRefData& rRef = rMod.Ref();
+                SingleDoubleRefModifier aMod( *t );
+                ComplRefData& rRef = aMod.Ref();
                 bMod = (ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY,
                     rRef ) != UR_NOTHING);
             }
@@ -1315,10 +1309,8 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGro
                 t->CalcAbsIfRel( aPos );
                 BOOL bMod;
                 {   // own scope for SingleDoubleRefModifier dtor if SingleRef
-                    SingleDoubleRefModifier& rMod = (t->GetType() == svSingleRef ?
-                        SingleDoubleRefModifier( t->GetSingleRef() ) :
-                        SingleDoubleRefModifier( t->GetDoubleRef() ));
-                    ComplRefData& rRef = rMod.Ref();
+                    SingleDoubleRefModifier aMod( *t );
+                    ComplRefData& rRef = aMod.Ref();
                     bMod = (ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY,
                         rRef ) != UR_NOTHING);
                 }
