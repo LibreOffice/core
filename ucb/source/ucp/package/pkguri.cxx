@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 09:14:45 $
+ *  last change: $Author: kso $ $Date: 2001-05-17 14:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,10 +180,12 @@ inline bool isUSASCII(sal_uInt32 nChar)
     return nChar <= 0x7F;
 }
 
+/*
 inline bool isVisible(sal_uInt32 nChar)
 {
     return nChar >= '!' && nChar <= '~';
 }
+*/
 
 inline bool isDigit(sal_uInt32 nChar)
 {
@@ -244,6 +246,7 @@ enum DecodeMechanism
     DECODE_WITH_CHARSET
 };
 
+/*
 enum Part
 {
     PART_OBSOLETE_NORMAL = 0x001, // Obsolete, do not use!
@@ -270,6 +273,7 @@ enum Part
     max_part = 0x80000000
         // Do not use!  Only there to allow compatible changes in the future.
 };
+*/
 
 enum EscapeType
 {
@@ -286,6 +290,7 @@ inline void appendEscape(rtl::OUStringBuffer & rTheText,
     rTheText.append(sal_Unicode(getHexDigit(int(nOctet & 15))));
 }
 
+#if 0
 inline bool mustEncode(sal_uInt32 nUTF32, Part ePart)
 {
     enum
@@ -413,7 +418,9 @@ inline bool mustEncode(sal_uInt32 nUTF32, Part ePart)
     /*   */ 0 };
     return !isUSASCII(nUTF32) || !(aMap[nUTF32] & ePart);
 }
+#endif
 
+/*
 void appendUCS4Escape(rtl::OUStringBuffer & rTheText, sal_Char cEscapePrefix,
                       sal_uInt32 nUCS4)
 {
@@ -514,6 +521,7 @@ void appendUCS4(rtl::OUStringBuffer & rTheText, sal_uInt32 nUCS4,
     else
         rTheText.append(sal_Unicode(nUCS4));
 }
+*/
 
 sal_uInt32 getUTF32(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
                     bool bOctets, sal_Char cEscapePrefix,
@@ -640,6 +648,7 @@ sal_uInt32 getUTF32(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
     return nUTF32;
 }
 
+/*
 static rtl::OUString encodeText(sal_Unicode const * pBegin,
                                 sal_Unicode const * pEnd, bool bOctets,
                                 Part ePart, sal_Char cEscapePrefix,
@@ -658,6 +667,7 @@ static rtl::OUString encodeText(sal_Unicode const * pBegin,
     }
     return aResult.makeStringAndClear();
 }
+*/
 
 static rtl::OUString decode(sal_Unicode const * pBegin,
                             sal_Unicode const * pEnd, sal_Char cEscapePrefix,
