@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-09 10:51:35 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 14:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,6 +595,12 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     {
         if( pChar->code != -1 )
         {
+            if( nAdobeEncoding == 3 && m_aEncoding == RTL_TEXTENCODING_SYMBOL )
+            {
+                pUnicodes[i] = pChar->code + 0xf000;
+                continue;
+            }
+
             ByteString aTranslate;
             if( pChar->code & 0xff000000 )
                 aTranslate += (char)(pChar->code >> 24 );
