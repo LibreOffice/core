@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hro $ $Date: 2001-09-18 13:36:53 $
+ *  last change: $Author: hro $ $Date: 2001-09-18 14:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 nid.uID = ID_QUICKSTART;
                 Shell_NotifyIconA(NIM_DELETE, &nid);
 
-                SendMessage( hWnd, WM_COMMAND, IDM_EXIT, (LPARAM)hWnd );
+                PostMessage( aExecuterWindow, WM_COMMAND, IDM_EXIT, (LPARAM)hWnd );
             }
             else
                 return DefWindowProc(hWnd, uMsg, wParam, lParam);
