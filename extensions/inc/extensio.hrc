@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 07:47:12 $
+ *  last change: $Author: fs $ $Date: 2001-08-01 12:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 
 #define RID_DBI_START       ( RID_MORE_EXTENSIONS_START +  30 )
 #define RID_DBI_END         ( RID_MORE_EXTENSIONS_START +  59 )
+
+#define RID_ABP_START       ( RID_MORE_EXTENSIONS_START +  60 )
+#define RID_ABP_END         ( RID_MORE_EXTENSIONS_START +  89 )
 
 
 // -----------------------------------------------------------------------
@@ -144,5 +147,10 @@
 #define UID_DBIWIZARD_FORMS_SAVETO              (HID_EXTENSIONS_START + 61)
 
 #define UID_BIB_FRAME_WINDOW                    (HID_EXTENSIONS_START + 62)
+
+#define HID_ABSPILOT_PREVIOUS                   (HID_EXTENSIONS_START + 63)
+#define HID_ABSPILOT_NEXT                       (HID_EXTENSIONS_START + 64)
+#define HID_ABSPILOT_CANCEL                     (HID_EXTENSIONS_START + 65)
+#define HID_ABSPILOT_FINISH                     (HID_EXTENSIONS_START + 66)
 
 #endif
