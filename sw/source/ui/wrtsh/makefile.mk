@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 16:04:43 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:58:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,9 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=wrtsh
 
-AUTOSEG=true
-
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -76,17 +73,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        move.cxx \
-        select.cxx \
-        wrtsh1.cxx \
-        wrtsh2.cxx \
-        wrtsh3.cxx \
-        wrtsh4.cxx \
-        delete.cxx \
-        wrtundo.cxx
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         wrtsh.src
 
 SLOFILES =  \
