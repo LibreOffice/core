@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-08 16:53:22 $
+ *  last change: $Author: ka $ $Date: 2001-05-21 11:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,8 @@
 // - Defines -
 // -----------
 
-#define MAX_BAND_WIDTH 1000000
+#define MAX_TILE_WIDTH  1024
+#define MAX_TILE_HEIGHT 1024
 
 // -----------------
 // - ImplCheckRect -
@@ -513,9 +514,13 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
             // create new bitmap action first
             if( aSzPix.Width() && aSzPix.Height() )
             {
-                Point           aDstPtPix( aBoundPixel.TopLeft() );
-                Size            aDstSzPix( aSzPix.Width(), Max( MAX_BAND_WIDTH / aSzPix.Width(), 2L ) );
-                const long      nLastY = aDstPtPix.Y() + aSzPix.Height() - 1L;
+                const Rectangle aOutputRect( Point(), aOutSzPix );
+                const long      nStartX = aBoundPixel.Left();
+                const long      nStartY = aBoundPixel.Top();
+                const long      nLastX = nStartX + aSzPix.Width() - 1L;
+                const long      nLastY = nStartY + aSzPix.Height() - 1L;
+                Point           aDstPtPix( nStartX, nStartY );
+                Size            aDstSzPix;
                 VirtualDevice   aMapVDev;
 
                 rOutMtf.AddAction( new MetaPushAction( PUSH_MAPMODE ) );
@@ -528,65 +533,78 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
 
                 while( aDstPtPix.Y() <= nLastY )
                 {
+                    aDstPtPix.X() = nStartX;
+                    aDstSzPix = Size( MAX_TILE_WIDTH, MAX_TILE_HEIGHT );
+
                     if( ( aDstPtPix.Y() + aDstSzPix.Height() - 1L ) > nLastY )
                         aDstSzPix.Height() = nLastY - aDstPtPix.Y() + 1L;
 
-                    if( aPaintVDev.SetOutputSizePixel( aDstSzPix ) )
+                    while( aDstPtPix.X() <= nLastX )
                     {
-                        aPaintVDev.Push();
-                        aMapVDev.Push();
+                        if( ( aDstPtPix.X() + aDstSzPix.Width() - 1L ) > nLastX )
+                            aDstSzPix.Width() = nLastX - aDstPtPix.X() + 1L;
 
-                        aMapVDev.mnDPIX = aPaintVDev.mnDPIX = mnDPIX;
-                        aMapVDev.mnDPIY = aPaintVDev.mnDPIY = mnDPIY;
-
-                        for( i = 0, pO = pRects; i < nCount; i++, pO++ )
+                        if( !Rectangle( aDstPtPix, aDstSzPix ).Intersection( aOutputRect ).IsEmpty() &&
+                            aPaintVDev.SetOutputSizePixel( aDstSzPix ) )
                         {
-                            MetaAction*     pAction = pO->mpAct;
-                            const USHORT    nType = pAction->GetType();
+                            aPaintVDev.Push();
+                            aMapVDev.Push();
 
-                            if( META_MAPMODE_ACTION == nType )
+                            aMapVDev.mnDPIX = aPaintVDev.mnDPIX = mnDPIX;
+                            aMapVDev.mnDPIY = aPaintVDev.mnDPIY = mnDPIY;
+
+                            for( i = 0, pO = pRects; i < nCount; i++, pO++ )
                             {
-                                pAction->Execute( &aMapVDev );
+                                MetaAction*     pAction = pO->mpAct;
+                                const USHORT    nType = pAction->GetType();
 
-                                MapMode     aMtfMap( aMapVDev.GetMapMode() );
-                                const Point aNewOrg( aMapVDev.PixelToLogic( aDstPtPix ) );
+                                if( META_MAPMODE_ACTION == nType )
+                                {
+                                    pAction->Execute( &aMapVDev );
 
-                                aMtfMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
-                                aPaintVDev.SetMapMode( aMtfMap );
+                                    MapMode     aMtfMap( aMapVDev.GetMapMode() );
+                                    const Point aNewOrg( aMapVDev.PixelToLogic( aDstPtPix ) );
+
+                                    aMtfMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
+                                    aPaintVDev.SetMapMode( aMtfMap );
+                                }
+                                else if( ( META_PUSH_ACTION == nType ) || ( META_POP_ACTION ) == nType )
+                                {
+                                    pAction->Execute( &aMapVDev );
+                                    pAction->Execute( &aPaintVDev );
+                                }
+                                else
+                                    pAction->Execute( &aPaintVDev );
+
+                                if( !( i % 4 ) )
+                                    Application::Reschedule();
                             }
-                            else if( ( META_PUSH_ACTION == nType ) || ( META_POP_ACTION ) == nType )
+
+                            const BOOL bOldMap = mbMap;
+                            mbMap = aPaintVDev.mbMap = FALSE;
+
+                            Bitmap aBandBmp( aPaintVDev.GetBitmap( Point(), aDstSzPix ) );
+
+                            // scale down bitmap, if requested
+                            if( rPrinterOptions.IsReduceBitmaps() && rPrinterOptions.IsReducedBitmapIncludesTransparency() )
                             {
-                                pAction->Execute( &aMapVDev );
-                                pAction->Execute( &aPaintVDev );
+                                aBandBmp = GetPreparedBitmap( aDstPtPix, aDstSzPix,
+                                                              Point(), aBandBmp.GetSizePixel(),
+                                                              aBandBmp, nMaxBmpDPIX, nMaxBmpDPIY );
                             }
-                            else
-                                pAction->Execute( &aPaintVDev );
 
-                            if( !( i % 4 ) )
-                                Application::Reschedule();
+                            rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN" ) );
+                            rOutMtf.AddAction( new MetaBmpScaleAction( aDstPtPix, aDstSzPix, aBandBmp ) );
+                            rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_END" ) );
+
+                            aPaintVDev.mbMap = TRUE;
+                            mbMap = bOldMap;
+                            aMapVDev.Pop();
+                            aPaintVDev.Pop();
                         }
 
-                        const BOOL bOldMap = mbMap;
-                        mbMap = aPaintVDev.mbMap = FALSE;
-
-                        Bitmap aBandBmp( aPaintVDev.GetBitmap( Point(), aDstSzPix ) );
-
-                        // scale down bitmap, if requested
-                        if( rPrinterOptions.IsReduceBitmaps() && rPrinterOptions.IsReducedBitmapIncludesTransparency() )
-                        {
-                            aBandBmp = GetPreparedBitmap( aDstPtPix, aDstSzPix,
-                                                          Point(), aBandBmp.GetSizePixel(),
-                                                          aBandBmp, nMaxBmpDPIX, nMaxBmpDPIY );
-                        }
-
-                        rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN" ) );
-                        rOutMtf.AddAction( new MetaBmpScaleAction( aDstPtPix, aDstSzPix, aBandBmp ) );
-                        rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_END" ) );
-
-                        aPaintVDev.mbMap = TRUE;
-                        mbMap = bOldMap;
-                        aMapVDev.Pop();
-                        aPaintVDev.Pop();
+                        // overlapping bands to avoid missing lines (e.g. PostScript)
+                        aDstPtPix.X() += aDstSzPix.Width();
                     }
 
                     // overlapping bands to avoid missing lines (e.g. PostScript)
