@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-08 18:57:41 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 15:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1635,6 +1635,7 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
         if( pObj == NULL )
             return;
 
+/*
         const sal_Int32 nLeft = mpPage->GetLftBorder();
         const sal_Int32 nRight = mpPage->GetRgtBorder();
         const sal_Int32 nUpper = mpPage->GetUppBorder();
@@ -1646,7 +1647,7 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
         aSize.Height -= nUpper + nLower - 1;
         Rectangle aRect( aPos.X, aPos.Y, aSize.Width, aSize.Height );
         pObj->SetLogicRect( aRect );
-
+*/
         // is it our own implementation?
         SdUnoPageBackground* pBack = SdUnoPageBackground::getImplementation( xSet );
 
