@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:48:28 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 22:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #define PARAM_PACKAGE       TEXT( "/I " )
 #define PARAM_ADMIN         TEXT( "/A " )
 #define PARAM_TRANSFORM     TEXT( " TRANSFORMS=" )
+#define PARAM_REBOOT        TEXT( " REBOOT=Force" )
 
 #define MSI_DLL             TEXT( "msi.dll" )
 #define ADVAPI32_DLL        TEXT( "advapi32.dll" )
@@ -851,6 +852,9 @@ boolean SetupAppX::Install( long nLanguage )
 
     nParLen += lstrlen( pDataBasePath ) + 3;        // two quotes, one null
 
+    if ( NeedReboot() )
+        nParLen += lstrlen( PARAM_REBOOT );
+
     if ( pTransform )
     {
         nParLen += lstrlen( PARAM_TRANSFORM );
@@ -872,6 +876,9 @@ boolean SetupAppX::Install( long nLanguage )
     StringCchCat( pParams, nParLen, TEXT( "\"" ) );
     StringCchCat( pParams, nParLen, pDataBasePath );
     StringCchCat( pParams, nParLen, TEXT( "\"" ) );
+
+    if ( NeedReboot() )
+        StringCchCat( pParams, nParLen, PARAM_REBOOT );
 
     if ( pTransform )
     {
@@ -1059,6 +1066,8 @@ boolean SetupAppX::CheckVersion()
         else
             Log( TEXT( "ERROR: Could not find InstMsiA/InstMsiW!\r\n" ) );
 
+        if ( bRet && IsWin9x() && ( GetMinorVersion() <= 10 ) )
+            SetRebootNeeded( true );
 
         if ( pInstaller ) delete [] pInstaller;
     }
