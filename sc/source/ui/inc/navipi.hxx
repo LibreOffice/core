@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:29:58 $
+ *  last change: $Author: dr $ $Date: 2001-11-02 14:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,12 +93,14 @@
 #endif
 
 
+class ScTabViewShell;
 class ScViewData;
 class ScArea;
 class ScScenarioWindow;
 class ScNavigatorControllerItem;
 class ScNavigatorDialogWrapper;
 class ScNavigatorDlg;
+class ScNavigatorSettings;
 class ScRange;
 
 //========================================================================
@@ -294,10 +296,12 @@ private:
     String          aStrHidden;
     String          aStrActiveWin;
 
-    SfxChildWindowContext* pContextWin;
-    Size            aInitSize;
-    ScArea*         pMarkArea;
-    ScViewData*     pViewData;
+    SfxChildWindowContext*  pContextWin;
+    Size                    aInitSize;
+    ScArea*                 pMarkArea;
+    ScViewData*             pViewData;
+    ScNavigatorSettings*    pSettings;
+
     long            nBorderOffset;
     long            nListModeHeight;
     long            nInitListHeight;
@@ -326,7 +330,10 @@ private:
     void    SetCurrentObject( const String rName );
     void    SetCurrentDoc( const String& rDocName );
 
-    BOOL    GetViewData     ();
+    ScTabViewShell*         GetTabViewShell() const;
+    ScNavigatorSettings*    GetSettings();
+    BOOL                    GetViewData();
+
     void    UpdateColumn    ( const USHORT* pCol = NULL );
     void    UpdateRow       ( const USHORT* pRow = NULL );
     void    UpdateTable     ( const USHORT* pTab = NULL );

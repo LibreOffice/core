@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-15 17:56:54 $
+ *  last change: $Author: dr $ $Date: 2001-11-02 14:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,10 @@
 #include "prevwsh.hxx"
 #include "tpprint.hxx"
 #include "scextopt.hxx"
+
+#ifndef SC_NAVSETT_HXX
+#include "navsett.hxx"
+#endif
 
 void ActivateOlk( ScViewData* pViewData );
 void DeActivateOlk( ScViewData* pViewData );
@@ -1490,6 +1494,7 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     bChartDlgIsEdit(FALSE),     \
     pDialogDPObject(NULL),      \
     nCurRefDlgId(0),            \
+    pNavSettings(NULL),         \
     aTarget( this )
 
 
@@ -1753,6 +1758,7 @@ __EXPORT ScTabViewShell::~ScTabViewShell()
     DELETEZ(pInputHandler);
     DELETEZ(pPivotSource);
     DELETEZ(pDialogDPObject);
+    DELETEZ(pNavSettings);
 
     DELETEZ(pFormShell);
 }
@@ -1821,6 +1827,14 @@ const String& ScTabViewShell::GetEditChartName() const
 {
     return aEditChartName;
 }
+
+ScNavigatorSettings* ScTabViewShell::GetNavigatorSettings()
+{
+    if( !pNavSettings )
+        pNavSettings = new ScNavigatorSettings;
+    return pNavSettings;
+}
+
 
 //------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 18:48:06 $
+ *  last change: $Author: dr $ $Date: 2001-11-02 14:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #endif
 
 class ScNavigatorDlg;
+class ScNavigatorSettings;
 class ScDocument;
 class ScDocShell;
 class ScAreaLink;
@@ -155,7 +156,8 @@ public:
             ScContentTree( Window* pParent, const ResId& rResId );
             ~ScContentTree();
 
-    virtual void    KeyInput(const KeyEvent& rKEvt);
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt );
 
     void    InitWindowBits( BOOL bButtons );
 
@@ -172,6 +174,9 @@ public:
     void    SelectDoc(const String& rName);
 
     const String& GetHiddenTitle() const    { return aHiddenTitle; }
+
+    void    ApplySettings();
+    void    StoreSettings();
 
     static BOOL IsInDrag()  { return bIsInDrag; }
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:38:47 $
+ *  last change: $Author: dr $ $Date: 2001-11-02 14:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #include "navipi.hrc"
 #include "navipi.hxx"
 
+#ifndef SC_NAVSETT_HXX
+#include "navsett.hxx"
+#endif
 
 
 //  Timeout, um Notizen zu suchen
@@ -104,6 +107,13 @@
 
 //  Toleranz, wieviel ueber der eingeklappten Groesse noch klein ist
 #define SCNAV_MINTOL        5
+
+//  maximum values for UI
+#define SCNAV_MAXCOL        (MAXCOL+1)
+#define SCNAV_COLDIGITS     3           // 1...256
+#define SCNAV_COLLETTERS    2           // A...IV
+
+#define SCNAV_MAXROW        (MAXROW+1)
 
 //------------------------------------------------------------------------
 
@@ -130,7 +140,7 @@ ColumnEdit::ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId )
         nKeyGroup   ( KEYGROUP_ALPHA ),
         nCol        ( 0 )
 {
-    SetMaxTextLen( 3 ); // 1 bis 256 bzw. A bis IV
+    SetMaxTextLen( SCNAV_COLDIGITS );   // 1...255 or A...IV
 }
 
 //------------------------------------------------------------------------
@@ -184,17 +194,17 @@ void __EXPORT ColumnEdit::LoseFocus()
 
 void __EXPORT ColumnEdit::Up()
 {
-    nCol += 1;
+    nCol++;
 
 #ifdef OS2
-    if ( nCol > 256 )
+    if ( nCol > SCNAV_MAXCOL )
         nCol = 1;
 #endif
 
-    if ( nCol <= 256 )
+    if ( nCol <= SCNAV_MAXCOL )
         SetCol( nCol );
     else
-        nCol -= 1;
+        nCol--;
 }
 
 //------------------------------------------------------------------------
@@ -205,7 +215,7 @@ void __EXPORT ColumnEdit::Down()
         SetCol( nCol-1 );
 #ifdef OS2
     else
-        SetCol( 256 );
+        SetCol( SCNAV_MAXCOL );
 #endif
 }
 
@@ -213,7 +223,7 @@ void __EXPORT ColumnEdit::Down()
 
 void __EXPORT ColumnEdit::First()
 {
-    nCol=1;
+    nCol = 1;
     SetText( 'A' );
 }
 
@@ -221,8 +231,9 @@ void __EXPORT ColumnEdit::First()
 
 void __EXPORT ColumnEdit::Last()
 {
-    nCol=256;
-    SetText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("IV")) );
+    String aStr;
+    nCol = NumToAlpha( SCNAV_MAXCOL, aStr );
+    SetText( aStr );
 }
 
 
@@ -291,23 +302,20 @@ USHORT ColumnEdit::AlphaToNum( String& rStr )
         rStr.ToUpperAscii();
         aByteStr.ToUpperAscii();
 
-        if ( aByteStr.Len() == 1 )
+        if ( aByteStr.Len() <= SCNAV_COLLETTERS )
         {
-            nColumn = (( (aByteStr.GetChar(0)) ) - 'A' ) + 1;
+            for ( USHORT nIndex = 0; nIndex < aByteStr.Len(); ++nIndex )
+                (nColumn *= 26) += (aByteStr.GetChar( nIndex ) - 'A' + 1);
         }
-        else if ( rStr.Len() == 2 )
+
+        if ( (aByteStr.Len() > SCNAV_COLLETTERS) || (nColumn > SCNAV_MAXCOL) )
         {
-            nColumn =  (((rStr.GetChar(0) - 'A') + 1) * 26)
-                     + (rStr.GetChar(1) - 'A') + 1;
-            if ( nColumn > 256 )
-            {
-                nColumn = 256;
-                rStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "IV" ));
-            }
+            nColumn = SCNAV_MAXCOL;
+            NumToAlpha( nColumn, rStr );
         }
-        else
-            rStr.Erase();
     }
+    else
+        rStr.Erase();
 
     return nColumn;
 }
@@ -330,28 +338,13 @@ USHORT ColumnEdit::NumStrToAlpha( String& rStr )
 
 USHORT ColumnEdit::NumToAlpha( USHORT nColNo, String& rStr )
 {
-    if ( nColNo > 256 )
-    {
-        rStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "IV" ));
-        nColNo = 256;
-    }
-    else if ( nColNo == 0 )
-    {
-        rStr = 'A';
+    if ( nColNo > SCNAV_MAXCOL )
+        nColNo = SCNAV_MAXCOL;
+    else if ( nColNo < 1 )
         nColNo = 1;
-    }
-    else
-    {
-        nColNo--;
-        if ( nColNo < 26 )
-            rStr = (sal_Unicode) ( 'A' + nColNo );
-        else
-        {
-            rStr  = (sal_Unicode) ( 'A' + ( nColNo / 26 ) - 1 );
-            rStr += (sal_Unicode) ( 'A' + ( nColNo % 26 ) );
-        }
-        nColNo++;
-    }
+
+    ScAddress aAddr( nColNo - 1, 0, 0 );
+    aAddr.Format( rStr, SCA_VALID_COL, NULL );
 
     return nColNo;
 }
@@ -573,6 +566,24 @@ void CommandToolBox::UpdateButtons()
 }
 
 //==================================================================
+//  class ScNavigatorSettings
+//==================================================================
+
+ScNavigatorSettings::ScNavigatorSettings() :
+    pExpanded( new BOOL[ SC_CONTENT_COUNT ] ),
+    nSelected( 0 ),
+    nSubSelected( 0 )
+{
+    for( USHORT nI = 0; nI < SC_CONTENT_COUNT; ++nI )
+        pExpanded[ nI ] = FALSE;
+}
+
+ScNavigatorSettings::~ScNavigatorSettings()
+{
+    delete[] pExpanded;
+}
+
+//==================================================================
 //  class ScNavigatorDlgWrapper
 //==================================================================
 
@@ -682,6 +693,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         nListModeHeight( 0 ),
         nInitListHeight( 0 ),
         pViewData   ( NULL ),
+        pSettings   ( NULL ),
         pMarkArea   ( NULL ),
         nCurCol     ( 0 ),
         nCurRow     ( 0 ),
@@ -1139,9 +1151,28 @@ void ScNavigatorDlg::SetCurrentDoc( const String& rDocName )        // aktiviere
 
 //------------------------------------------------------------------------
 
+ScTabViewShell* ScNavigatorDlg::GetTabViewShell() const
+{
+    return PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+}
+
+//------------------------------------------------------------------------
+
+ScNavigatorSettings* ScNavigatorDlg::GetSettings()
+{
+    if( !pSettings )
+    {
+        ScTabViewShell* pViewSh = GetTabViewShell();
+        pSettings = pViewSh ? pViewSh->GetNavigatorSettings() : NULL;
+    }
+    return pSettings;
+}
+
+//------------------------------------------------------------------------
+
 BOOL ScNavigatorDlg::GetViewData()
 {
-    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pViewSh = GetTabViewShell();
     pViewData = pViewSh ? pViewSh->GetViewData() : NULL;
 
     return ( pViewData != NULL );
@@ -1402,7 +1433,7 @@ void ScNavigatorDlg::GetDocNames( const String* pManualSel )
 
 void ScNavigatorDlg::MarkDataArea()
 {
-    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pViewSh = GetTabViewShell();
 
     if ( pViewSh )
     {
@@ -1426,7 +1457,7 @@ void ScNavigatorDlg::MarkDataArea()
 
 void ScNavigatorDlg::UnmarkDataArea()
 {
-    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pViewSh = GetTabViewShell();
 
     if ( pViewSh )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-20 09:36:46 $
+ *  last change: $Author: dr $ $Date: 2001-11-02 14:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ class ScGraphicShell;
 class ScChartShell;
 class ScPageBreakShell;
 class ScDPObject;
+class ScNavigatorSettings;
 
 struct ScHeaderFieldData;
 
@@ -175,6 +176,8 @@ private:
     ScTabViewTarget         aTarget;
     ScArea*                 pPivotSource;
     ScDPObject*             pDialogDPObject;
+
+    ScNavigatorSettings*    pNavSettings;
 
     String                  aPendingUserData;           // used in first Activate
     BOOL                    bFirstActivate;
@@ -376,6 +379,8 @@ public:
 
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                          const SfxHint& rHint, const TypeId& rHintType );
+
+    ScNavigatorSettings*    GetNavigatorSettings();
 
     // Drucken:
     virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );

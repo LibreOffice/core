@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-05 14:17:32 $
+ *  last change: $Author: dr $ $Date: 2001-11-02 14:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@
 #include "navipi.hrc"
 #include "arealink.hxx"
 #include "navicfg.hxx"
+
+#ifndef SC_NAVSETT_HXX
+#include "navsett.hxx"
+#endif
 
 using namespace com::sun::star;
 
@@ -391,6 +395,12 @@ IMPL_LINK( ScContentTree, DoubleClickHdl, ScContentTree *, EMPTYARG )
     return 0;
 }
 
+void ScContentTree::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    SvTreeListBox::MouseButtonDown( rMEvt );
+    StoreSettings();
+}
+
 void ScContentTree::KeyInput( const KeyEvent& rKEvt )
 {
     BOOL bUsed = FALSE;
@@ -426,8 +436,9 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                 break;
         }
     }
+    StoreSettings();
 
-    if (!bUsed)
+    if( !bUsed )
         SvTreeListBox::KeyInput(rKEvt);
 }
 
@@ -626,7 +637,7 @@ ScDocument* ScContentTree::GetSourceDocument()
     return NULL;
 }
 
-void ScContentTree::Refresh(USHORT nType)
+void ScContentTree::Refresh( USHORT nType )
 {
     if ( bHiddenDoc && !pHiddenDocument )
         return;                                 // anderes Dokument angezeigt
@@ -642,23 +653,6 @@ void ScContentTree::Refresh(USHORT nType)
     if ( nType == SC_CONTENT_OLEOBJECT )
         if (!DrawNamesChanged(SC_CONTENT_OLEOBJECT, OBJ_OLE2))
             return;
-
-    //  Expand-Zustand merken
-    //! und Selektion
-
-    USHORT i;
-    BOOL bExpanded[SC_CONTENT_COUNT];
-    BOOL bSelected[SC_CONTENT_COUNT];
-    for (i=1; i<SC_CONTENT_COUNT; i++)
-    {
-        if (pRootNodes[i])
-        {
-            bExpanded[i] = IsExpanded( pRootNodes[i] );
-            bSelected[i] = IsSelected( pRootNodes[i] );
-        }
-        else
-            bExpanded[i] = bSelected[i] = FALSE;
-    }
 
     SetUpdateMode(FALSE);
 
@@ -679,20 +673,7 @@ void ScContentTree::Refresh(USHORT nType)
     if ( !nType || nType == SC_CONTENT_AREALINK )
         GetLinkNames();
 
-    for (i=1; i<SC_CONTENT_COUNT; i++)
-        if (pRootNodes[i])
-        {
-            if ( bExpanded[i] != IsExpanded(pRootNodes[i]) )
-            {
-                if ( bExpanded[i] )
-                    Expand(pRootNodes[i]);
-                else
-                    Collapse(pRootNodes[i]);
-            }
-            if ( bSelected[i] != IsSelected(pRootNodes[i]) )
-                Select( pRootNodes[i], bSelected[i] );
-        }
-
+    ApplySettings();
     SetUpdateMode(TRUE);
 }
 
@@ -1468,6 +1449,48 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
     else
         DBG_ERROR("SelectDoc: nicht gefunden");
 }
+
+void ScContentTree::ApplySettings()
+{
+    const ScNavigatorSettings* pSettings = pParentWindow->GetSettings();
+    if( pSettings )
+    {
+        for( USHORT nEntry = 1; nEntry < SC_CONTENT_COUNT; nEntry++ )
+        {
+            if( pRootNodes[ nEntry ] )
+            {
+                if( pSettings->IsExpanded( nEntry ) != IsExpanded( pRootNodes[ nEntry ] ) )
+                {
+                    if( pSettings->IsExpanded( nEntry ) )
+                        Expand( pRootNodes[ nEntry ] );
+                    else
+                        Collapse( pRootNodes[ nEntry ] );
+                }
+                Select( pRootNodes[ nEntry ], (pSettings->GetSelected() == nEntry) );
+            }
+        }
+    }
+}
+
+void ScContentTree::StoreSettings()
+{
+    ScNavigatorSettings* pSettings = pParentWindow->GetSettings();
+    if( pSettings )
+    {
+        for( USHORT nEntry = 1; nEntry < SC_CONTENT_COUNT; nEntry++ )
+        {
+            if( pRootNodes[ nEntry ] )
+            {
+                pSettings->SetExpanded( nEntry, IsExpanded( pRootNodes[ nEntry ] ) );
+                if( IsSelected( pRootNodes[ nEntry ] ) )
+                    pSettings->SetSelected( nEntry );
+            }
+            else
+                pSettings->SetExpanded( nEntry, FALSE );
+        }
+    }
+}
+
 
 //
 //------------------------------------------------------------------------
