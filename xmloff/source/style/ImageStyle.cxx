@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageStyle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 11:16:41 $
+ *  last change: $Author: ka $ $Date: 2000-12-06 20:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
                 break;
             case XML_TOK_IMAGE_URL:
                 {
-                    aStrURL = rStrValue;
+                    aStrURL = rImport.ResolveGraphicObjectURL( rStrValue, sal_False );
                     bHasHRef = sal_True;
                 }
                 break;

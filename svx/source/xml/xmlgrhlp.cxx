@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $
+ *  last change: $Author: ka $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
     String      aURLStr( rURLStr );
     sal_Bool    bRet = sal_False;
 
-    if( aURLStr.Len() && ( aURLStr.GetTokenCount( ':' ) == 2 ) )
+    if( aURLStr.Len() )
     {
         aURLStr = aURLStr.GetToken( aURLStr.GetTokenCount( ':' ) - 1, ':' );
         const sal_uInt32 nTokenCount = aURLStr.GetTokenCount( '/' );
@@ -118,6 +118,10 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
         else if( 2 == nTokenCount )
         {
             rPictureStorageName = aURLStr.GetToken( 0, '/' );
+
+            if( rPictureStorageName.getLength() && rPictureStorageName.getStr()[ 0 ] == '#' )
+                rPictureStorageName = rPictureStorageName.copy( 1 );
+
             rPictureStreamName = aURLStr.GetToken( 1, '/' );
             bRet = sal_True;
         }
@@ -180,11 +184,12 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStor
 
 // -----------------------------------------------------------------------------
 
-void SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
-                                           const ::rtl::OUString& rPictureStreamName )
+sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
+                                               const ::rtl::OUString& rPictureStreamName,
+                                               const ::rtl::OUString& rGraphicId )
 {
-    String aPictureStreamName(rPictureStreamName);
-    GraphicObject aGrfObject( ByteString( aPictureStreamName, RTL_TEXTENCODING_ASCII_US ) );
+    GraphicObject   aGrfObject( ByteString( String( rGraphicId ), RTL_TEXTENCODING_ASCII_US ) );
+    sal_Bool        bRet = sal_False;
 
     if( aGrfObject.GetType() != GRAPHIC_NONE )
     {
@@ -205,19 +210,25 @@ void SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureStorag
                     String          aFormat;
 
                     if( aGraphic.IsAnimated() )
-                        aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "GIF" ) );
+                        aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "gif" ) );
                     else
-                        aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "PNG" ) );
+                        aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "png" ) );
 
-                    pFilter->ExportGraphic( aGraphic, String(), *xStm,
-                                            pFilter->GetExportFormatNumberForShortName( aFormat ) );
+                    bRet = ( pFilter->ExportGraphic( aGraphic, String(), *xStm,
+                                                     pFilter->GetExportFormatNumberForShortName( aFormat ) ) == 0 );
                 }
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
+                {
                     ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *xStm );
+                    bRet = ( xStm->GetError() == 0 );
+                }
             }
+
             xStm->Commit();
         }
     }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------------
@@ -226,10 +237,24 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
 {
     ::rtl::OUString aPictureStorageName, aPictureStreamName;
 
-    if( ( maIdSet.find( rURLStr ) == maIdSet.end() ) &&
-        ImplGetStreamNames( rURLStr, aPictureStorageName, aPictureStreamName ) )
+    if( ( maURLSet.find( rURLStr ) != maURLSet.end() ) )
     {
-        const static ::rtl::OUString aBaseURL( RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICOBJECT_URL_BASE ) );
+        URLPairVector::iterator aIter( maGrfURLs.begin() ), aEnd( maGrfURLs.end() );
+
+        while( aIter != aEnd )
+        {
+            if( rURLStr == (*aIter).first )
+            {
+                maGrfURLs[ nInsertPos ].second = (*aIter).second;
+                aIter = aEnd;
+            }
+            else
+                aIter++;
+        }
+    }
+    else if( ImplGetStreamNames( rURLStr, aPictureStorageName, aPictureStreamName ) )
+    {
+        URLPair& rURLPair = maGrfURLs[ nInsertPos ];
 
         if( GRAPHICHELPER_MODE_READ == meCreateMode )
         {
@@ -237,16 +262,43 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
 
             if( aObj.GetType() != GRAPHIC_NONE )
             {
-                maGrfVector.push_back( aObj );
-                ( maVector[ nInsertPos ] = aBaseURL ) += String( aObj.GetUniqueID().GetBuffer(), RTL_TEXTENCODING_ASCII_US );
+                const static ::rtl::OUString aBaseURL( RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICOBJECT_URL_BASE ) );
+
+                maGrfObjs.push_back( aObj );
+                rURLPair.second = aBaseURL;
+                rURLPair.second += String( aObj.GetUniqueID().GetBuffer(), RTL_TEXTENCODING_ASCII_US );
             }
             else
-                maVector[ nInsertPos ] = String();
+                rURLPair.second = String();
         }
-        else if( mbDirect )
-            ImplWriteGraphic( aPictureStorageName, aPictureStreamName );
+        else
+        {
+            const String        aGraphicObjectId( aPictureStreamName );
+            const GraphicObject aGrfObject( ByteString( aGraphicObjectId, RTL_TEXTENCODING_ASCII_US ) );
 
-        maIdSet.insert( rURLStr );
+            if( aGrfObject.GetType() != GRAPHIC_NONE )
+            {
+                String aStreamName( aGraphicObjectId );
+
+                if( aGrfObject.GetType() == GRAPHIC_BITMAP )
+                {
+                    if( aGrfObject.IsAnimated() )
+                        aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".gif" ) );
+                    else
+                        aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) );
+                }
+                else if( aGrfObject.GetType() == GRAPHIC_GDIMETAFILE )
+                    aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) );
+
+                if( mbDirect && aStreamName.Len() )
+                    ImplWriteGraphic( aPictureStorageName, aStreamName, aGraphicObjectId );
+
+                rURLPair.second = String( RTL_CONSTASCII_USTRINGPARAM( "#Pictures/" ) );
+                rURLPair.second += aStreamName;
+            }
+        }
+
+        maURLSet.insert( rURLStr );
     }
 }
 
@@ -292,20 +344,36 @@ void SvXMLGraphicHelper::Flush()
 {
     if( ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) && !mbDirect )
     {
-        ::_STL::set< ::rtl::OUString >::iterator aIter( maIdSet.begin() ), aEnd( maIdSet.end() );
+        ::rtl::OUString     aPictureStorageName, aPictureStreamName;
+        URLSet::iterator    aSetIter( maURLSet.begin() ), aSetEnd( maURLSet.end() );
 
-        while( aIter != aEnd )
+        while( aSetIter != aSetEnd )
         {
-            ::rtl::OUString aPictureStorageName, aPictureStreamName;
+            URLPairVector::iterator aPairIter( maGrfURLs.begin() ), aPairEnd( maGrfURLs.end() );
 
-            if( ImplGetStreamNames( *aIter++, aPictureStorageName, aPictureStreamName ) )
-                ImplWriteGraphic( aPictureStorageName, aPictureStreamName );
+            while( aPairIter != aPairEnd )
+            {
+                if( *aSetIter == (*aPairIter).first )
+                {
+                    if( ImplGetStreamNames( (*aPairIter).second, aPictureStorageName, aPictureStreamName ) )
+                    {
+                        DBG_ASSERT( String( aPictureStreamName ).GetTokenCount( '.' ) == 2, "invalid URL" );
+                        ImplWriteGraphic( aPictureStorageName, aPictureStreamName, String( aPictureStreamName ).GetToken( 0, '.' ) );
+                    }
+
+                    aPairIter = aPairEnd;
+                }
+                else
+                    aPairIter++;
+            }
+
+            aSetIter++;
         }
     }
     if( GRAPHICHELPER_MODE_WRITE == meCreateMode )
     {
-        SvStorageRef xStorage = ImplGetGraphicStorage(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(XML_GRAPHICSTORAGE_NAME) ) );
+        SvStorageRef xStorage = ImplGetGraphicStorage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(XML_GRAPHICSTORAGE_NAME) ) );
+
         if( xStorage.Is() )
             xStorage->Commit();
     }
@@ -327,14 +395,14 @@ void SAL_CALL SvXMLGraphicHelper::insertByIndex( sal_Int32 nIndex, const ::com::
 
     if( aStr.getLength() )
     {
-        if( nIndex == (sal_Int32) maVector.size() )
-            maVector.push_back( aStr );
+        if( nIndex == (sal_Int32) maGrfURLs.size() )
+            maGrfURLs.push_back( ::_STL::make_pair( aStr, ::rtl::OUString() ) );
         else
         {
-             if( nIndex > (sal_Int32) maVector.size() )
-                maVector.resize( nIndex + 1 );
+             if( nIndex > (sal_Int32) maGrfURLs.size() )
+                maGrfURLs.resize( nIndex + 1 );
 
-            maVector[ nIndex ] = aStr;
+            maGrfURLs[ nIndex ] = ::_STL::make_pair( aStr, ::rtl::OUString() );
         }
 
         ImplInsertGraphicURL( aStr, nIndex );
@@ -351,7 +419,7 @@ void SAL_CALL SvXMLGraphicHelper::removeByIndex( sal_Int32 nIndex )
     ::osl::MutexGuard aGuard( maMutex );
 
     DBG_ASSERT( nIndex < getCount(), "invalid Index" );
-    maVector.erase( maVector.begin() + nIndex );
+    maGrfURLs.erase( maGrfURLs.begin() + nIndex );
 }
 
 // -----------------------------------------------------------------------------
@@ -370,7 +438,7 @@ void SAL_CALL SvXMLGraphicHelper::replaceByIndex( sal_Int32 nIndex, const ::com:
     if( aStr.getLength() )
     {
         DBG_ASSERT( nIndex < getCount(), "invalid Index" );
-        maVector[ nIndex ] = aStr;
+        maGrfURLs[ nIndex ] = ::_STL::make_pair( aStr, ::rtl::OUString() );
         ImplInsertGraphicURL( aStr, nIndex );
     }
 }
@@ -381,7 +449,7 @@ sal_Int32 SAL_CALL SvXMLGraphicHelper::getCount()
     throw(  ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
-    return maVector.size();
+    return maGrfURLs.size();
 }
 
 // -----------------------------------------------------------------------------
@@ -395,7 +463,7 @@ sal_Int32 SAL_CALL SvXMLGraphicHelper::getCount()
     ::com::sun::star::uno::Any  aAny;
 
     DBG_ASSERT( nIndex < getCount(), "invalid Index" );
-    aAny <<= maVector[ nIndex ];
+    aAny <<= maGrfURLs[ nIndex ].second;
 
     return aAny;
 }
@@ -415,5 +483,5 @@ sal_Bool SAL_CALL SvXMLGraphicHelper::hasElements()
     throw(  ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
-    return maVector.size() > 0;
+    return maGrfURLs.size() > 0;
 }
