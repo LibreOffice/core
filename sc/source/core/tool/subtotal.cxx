@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtotal.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:19 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,37 +60,14 @@
  ************************************************************************/
 // INCLUDE ---------------------------------------------------------------
 
-#ifdef RS6000
-
-#include <fptrap.h>
-#include <fpxcp.h>
-
-#elif defined ( MAC )
-
-#include <MAC_START.h>
-#include <fp.h>
-#include <MAC_END.h>
-
-#endif
-
 #ifdef PCH
 #include "core_pch.hxx"
 #endif
 
-
-#include <float.h>
-#include <math.h>
-#ifdef SOLARIS
-#include <ieeefp.h>
-#endif
-#include <signal.h>
+#pragma hdrstop
 
 #include "subtotal.hxx"
 #include "interpre.hxx"
-
-// STATIC DATA -----------------------------------------------------------
-
-jmp_buf SubTotal::aGlobalJumpBuf;
 
 // -----------------------------------------------------------------------
 
