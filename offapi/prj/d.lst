@@ -13,6 +13,7 @@ mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\drawing
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\sheet
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\table
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\text
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\i18n
 mkdir: %_DEST%\idl%_EXT%\com
 mkdir: %_DEST%\idl%_EXT%\com\sun
 mkdir: %_DEST%\idl%_EXT%\com\sun\star
