@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:51:59 $
+ *  last change: $Author: rt $ $Date: 2005-02-09 14:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1258,62 +1258,68 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
             // Rahmen selektiert
             if( CNT_GRF == GetCntType() )
             {
-                Graphic aGrf( GetGraphic() );
-                if( SOT_FORMAT_GDIMETAFILE == nFmt )
+                // --> OD 2005-02-09 #119353# - robust
+                const Graphic* pGrf( GetGraphic() );
+                if ( pGrf )
                 {
-                    if( GRAPHIC_BITMAP != aGrf.GetType() )
+                    Graphic aGrf( *pGrf );
+                    if( SOT_FORMAT_GDIMETAFILE == nFmt )
+                    {
+                        if( GRAPHIC_BITMAP != aGrf.GetType() )
+                        {
+                            rGrf = aGrf;
+                            bConvert = FALSE;
+                        }
+                        else if( GetWin() )
+                        {
+                            Size aSz;
+                            Point aPt;
+                            GetGrfSize( aSz );
+
+                            VirtualDevice aVirtDev;
+                            aVirtDev.EnableOutput( FALSE );
+
+                            MapMode aTmp( GetWin()->GetMapMode() );
+                            aTmp.SetOrigin( aPt );
+                            aVirtDev.SetMapMode( aTmp );
+
+                            GDIMetaFile aMtf;
+                            aMtf.Record( &aVirtDev );
+                            aGrf.Draw( &aVirtDev, aPt, aSz );
+                            aMtf.Stop();
+                            aMtf.SetPrefMapMode( aTmp );
+                            aMtf.SetPrefSize( aSz );
+                            rGrf = aMtf;
+                        }
+                    }
+                    else if( GRAPHIC_BITMAP == aGrf.GetType() )
                     {
                         rGrf = aGrf;
                         bConvert = FALSE;
-                    }
-                    else if( GetWin() )
-                    {
-                        Size aSz;
-                        Point aPt;
-                        GetGrfSize( aSz );
-
-                        VirtualDevice aVirtDev;
-                        aVirtDev.EnableOutput( FALSE );
-
-                        MapMode aTmp( GetWin()->GetMapMode() );
-                        aTmp.SetOrigin( aPt );
-                        aVirtDev.SetMapMode( aTmp );
-
-                        GDIMetaFile aMtf;
-                        aMtf.Record( &aVirtDev );
-                        aGrf.Draw( &aVirtDev, aPt, aSz );
-                        aMtf.Stop();
-                        aMtf.SetPrefMapMode( aTmp );
-                        aMtf.SetPrefSize( aSz );
-                        rGrf = aMtf;
-                    }
-                }
-                else if( GRAPHIC_BITMAP == aGrf.GetType() )
-                {
-                    rGrf = aGrf;
-                    bConvert = FALSE;
-                }
-                else
-                {
-                    //fix(23806): Nicht die Originalgroesse, sondern die
-                    //aktuelle. Anderfalls kann es passieren, dass z.B. bei
-                    //Vektorgrafiken mal eben zig MB angefordert werden.
-                    const Size aSz( FindFlyFrm()->Prt().SSize() );
-                    VirtualDevice aVirtDev( *GetWin() );
-
-                    MapMode aTmp( MAP_TWIP );
-                    aVirtDev.SetMapMode( aTmp );
-                    if( aVirtDev.SetOutputSize( aSz ) )
-                    {
-                        aGrf.Draw( &aVirtDev, Point(), aSz );
-                        rGrf = aVirtDev.GetBitmap( Point(), aSz );
                     }
                     else
                     {
-                        rGrf = aGrf;
-                        bConvert = FALSE;
+                        //fix(23806): Nicht die Originalgroesse, sondern die
+                        //aktuelle. Anderfalls kann es passieren, dass z.B. bei
+                        //Vektorgrafiken mal eben zig MB angefordert werden.
+                        const Size aSz( FindFlyFrm()->Prt().SSize() );
+                        VirtualDevice aVirtDev( *GetWin() );
+
+                        MapMode aTmp( MAP_TWIP );
+                        aVirtDev.SetMapMode( aTmp );
+                        if( aVirtDev.SetOutputSize( aSz ) )
+                        {
+                            aGrf.Draw( &aVirtDev, Point(), aSz );
+                            rGrf = aVirtDev.GetBitmap( Point(), aSz );
+                        }
+                        else
+                        {
+                            rGrf = aGrf;
+                            bConvert = FALSE;
+                        }
                     }
                 }
+                // <--
             }
         }
         else if( SOT_FORMAT_GDIMETAFILE == nFmt )
