@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 09:50:15 $
+#   last change: $Author: nf $ $Date: 2001-04-23 11:19:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,11 +78,6 @@ NO_DEFAULT_STL=TRUE
 
 APP1TARGET	= 	javadep
 APP1OBJS	=	$(OBJ)$/javadep.obj
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS	=	gnu_getopt.lib
-.ELSE # "$(GUI)"=="WNT"
-APP1STDLIBS	=	-lgnu_getopt 
-.ENDIF # "$(GUI)"=="WNT"
 DEPOBJFILES	=	$(APP1OBJS)
 # --- Targets ------------------------------------------------------
 
