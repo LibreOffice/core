@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:30:10 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     aObjectNameED(this, SW_RES(ED_OBJECT_NAME )),
     aSettingsFL  (this, SW_RES(FL_SETTINGS)),
     rView( rV ),
-    pMgr( new SwFldMgr() )
+    pMgr( new SwFldMgr(rView.GetWrtShellPtr()) )
 
 {
     SwWrtShell &rSh = rView.GetWrtShell();
