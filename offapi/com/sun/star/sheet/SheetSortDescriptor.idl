@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetSortDescriptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@ service SheetSortDescriptor
     /** <p>provides common sorting properties.</p>
         <p>The base service is com::sun:star::table::TableSortDescriptor,
         but it is not changed in this documentation because compatibility reasons.</p>
+
+        @deprecated
      */
     service com::sun::star::util::SortDescriptor;
 
