@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-21 09:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ void XMLSectionExport::ExportIndexStart(
     sal_Bool bAutoStyles)
 {
     // HACK: disable index export until all problems have been resolved:
-//  return;
+    return;
 
     // get PropertySet
     Reference<XPropertySet> xPropertySet(rIndex, UNO_QUERY);
@@ -369,7 +369,7 @@ void XMLSectionExport::ExportIndexEnd(
     sal_Bool bAutoStyles)
 {
     // HACK: disable index export until all problems have been resolved:
-//  return;
+    return;
 
     if (! bAutoStyles)
     {
