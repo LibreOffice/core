@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:27:10 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 11:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,9 +274,8 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             // verhinder Rekursion (SetAttr!!)
             pFSize != pOldFSize )
         {
-            //if( 100 == pOldFSize->GetProp() &&
-        //      SFX_MAPUNIT_RELATIVE == pOldFSize->GetPropUnit() )
-            if( pOldFSize->GetPropUnit() == SFX_MAPUNIT_ABSOLUTE )
+            if( 100 == pOldFSize->GetProp() &&
+                SFX_MAPUNIT_RELATIVE == pOldFSize->GetPropUnit() )
             {
                 // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
                 // denn es wird bei uns gesetzt!
