@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-21 20:19:43 $
+ *  last change: $Author: kz $ $Date: 2001-09-25 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,7 +1114,7 @@ String STR_DESCRIPTION_CALC_TEMPLATE
     Text[ japanese ] = "%productname% 6.0 表計算ﾄﾞｷｭﾒﾝﾄ ﾃﾝﾌﾟﾚｰﾄ";
     Text[ korean ] = "%PRODUCTNAME 6.0 Tabledocument Template";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 工作表文档样式";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 工作表文件樣式";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Tabledocument Template";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Tabledocument Template";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Tabledocument Template";
@@ -1138,7 +1138,7 @@ String STR_DESCRIPTION_DRAW_TEMPLATE
     Text[ japanese ] = "%PRODUCTNAME 6.0 図形描画ﾃﾝﾌﾟﾚｰﾄ";
     Text[ korean ] = "%PRODUCTNAME 6.0 Drawing Template";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 绘图样式";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 繪圖樣式";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Drawing Template";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Drawing Template";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Drawing Template";
@@ -1162,7 +1162,7 @@ String STR_DESCRIPTION_IMPRESS_TEMPLATE
     Text[ japanese ] = "%PRODUCTNAME 6.0 ﾌﾟﾚｾﾞﾝﾃｰｼｮﾝ ﾃﾝﾌﾟﾚｰﾄ";
     Text[ korean ] = "%PRODUCTNAME 6.0 Presentation Template";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 演示文稿样式";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 簡報樣式";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Presentation Template";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Presentation Template";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Presentation Template";
@@ -1186,11 +1186,12 @@ String STR_DESCRIPTION_WRITER_TEMPLATE
     Text[ japanese ] = "%productname% 6.0 文書ﾄﾞｷｭﾒﾝﾄ ﾃﾝﾌﾟﾚｰﾄ";
     Text[ korean ] = "%PRODUCTNAME 6.0 Textdocument Template";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 文本文档样式";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 文字文件樣式";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Textdocument Template";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Textdocument Template";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Textdocument Template";
 };
+
 
 
 
