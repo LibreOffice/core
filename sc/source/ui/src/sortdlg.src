@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-18 09:22:04 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 08:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,8 +549,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     ListBox LB_OUTAREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 23 , 59 ) ;
-        Size = MAP_APPFONT ( 90 , 90 ) ;
+        Pos = MAP_APPFONT ( 20 , 59 ) ;
+        Size = MAP_APPFONT ( 93 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -596,8 +596,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 23 , 86 ) ;
-        Size = MAP_APPFONT ( 228 , 90 ) ;
+        Pos = MAP_APPFONT ( 20 , 86 ) ;
+        Size = MAP_APPFONT ( 231 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
