@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astoperation.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:41:14 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ public:
     const DeclList& getExceptions()
         { return m_exceptions; }
     sal_uInt16 nExceptions()
-        { return m_exceptions.size(); }
+        { return (sal_uInt16)(m_exceptions.size()); }
 
     sal_Bool dumpBlob(typereg::Writer & rBlob, sal_uInt16 index);
 
