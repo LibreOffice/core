@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hjs $ $Date: 2000-11-16 13:26:10 $
+#   last change: $Author: nf $ $Date: 2000-11-20 08:42:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1794,6 +1794,10 @@ SDI5 ?= TNR!:=5
 XMLPROPERTIESN:=$(foreach,i,$(XMLPROPERTIES) $(MISC)$/$(TARGET)_$(i:s/.xrb/.done/))
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
+.IF "$(XMLXULRES)"!=""
+XMLXULRESN:=$(foreach,i,$(XMLXULRES) $(MISC)$/$(TARGET)_xxl_$(i:s/.xxl/.done/))
+.ENDIF			# "$(XMLXULRES)"!=""
+
 .IF "$(UNIXTEXT)"!=""
 .IF "$(GUI)"=="UNX"
 CONVERTUNIXTEXT:=$(UNIXTEXT)
@@ -1913,6 +1917,7 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(NOLIBSLOTARGET) \
         $(OTHERTARRGET) \
         $(XMLPROPERTIESN) \
+        $(XMLXULRESN)	\
         $(GENJAVAFILES) \
         $(JAVATARGET)	\
         $(JAVACLASSFILES) $(JAVA1CLASSFILES)	\
@@ -2188,6 +2193,11 @@ $(MISC)$/$(TARGET)_%.done : %.xrb
     @xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) -g -d $@
     @+$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
+
+.IF "$(XMLXULRES)"!=""
+$(MISC)$/$(TARGET)_xxl_%.done : %.xxl
+    @xmlex -i $(<:b).xxl -o $(OUT)$/xul$/locale -g:dtd -d $@
+.ENDIF			# "$(XMLXULRES)"!=""
 
 .INCLUDE : tg_sdi.mk
 
