@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-14 08:28:05 $
+#   last change: $Author: jsc $ $Date: 2001-03-30 13:51:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ IDLFILES=\
     ProxyFactory.idl\
     TypeDescriptionManager.idl\
     TypeDescriptionProvider.idl\
+    XArrayTypeDescription.idl\
     XCompoundTypeDescription.idl\
     XUnionTypeDescription.idl\
     XEnumTypeDescription.idl\
