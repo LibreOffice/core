@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInstanceProvider.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:26 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,15 @@
  module com {  module sun {  module star {  module bridge {
 
 
-// DocMerge: empty anyway
+/** @missing
+ */
 [ uik(F84614A0-D3F0-11d3-9EE80050-04D7755D), ident("XInstanceProvider",  0.1) ]
 interface XInstanceProvider: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::bridge::XInstanceProvider::getInstance
-    /** returns the object associated with the name.
+    /** @returns
+            the object associated with the name.
      */
     com::sun::star::uno::XInterface getInstance( [in] string sInstanceName )
             raises ( com::sun::star::container::NoSuchElementException );

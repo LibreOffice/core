@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XXMLExtractor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,15 +75,15 @@
 module com { module sun { module star { module io {
 
 //=============================================================================
-/** Offers the capability to extract the XML document stream from a StarOffice
-    document storage
+/** offers the capability to extract the XML document stream from a document
+    storage.
 */
 
 [ uik(9A4E4394-875A-4251-906FCA05-D3BEEB32), ident( "XXMLExtractor", 1.0 ) ]
 interface XXMLExtractor : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Extracts the XML stream from the StarOffice document storage
+    /** extracts the XML stream from the document storage.
 
         @returns
         the extracted XML stream.

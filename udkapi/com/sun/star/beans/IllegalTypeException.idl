@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IllegalTypeException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,9 @@
 /** This exception is thrown to indicate the use of a type which is
     not appropriate.
 
+    <p>This problem can occur, if you use <atom>any</atom>.  </p>
 
-
-    <p>This problem occurs if you use <atom>any</atom>.
-
-    </p>@see PropertyContainer
+    @see PropertyContainer
  */
 exception IllegalTypeException: com::sun::star::uno::Exception
 {
@@ -93,6 +91,9 @@ exception IllegalTypeException: com::sun::star::uno::Exception
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:20  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:55  hjs
     initial import
 

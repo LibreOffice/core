@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyChangeEvent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,22 +73,17 @@
 //=============================================================================
 
 // DocMerge from xml: struct com::sun::star::beans::PropertyChangeEvent
-/** gets delivered whenever a "bound" or "constrained"
-    property is changed.
-
-
+/** gets delivered whenever a "bound" or "constrained" property is changed.
 
     <p>A <type>PropertyChangeEvent</type> object is sent as an
     argument to the methods of <type>XPropertyChangeListener</type>
-    and <type>XVetoableChangeListener</type>.
+    and <type>XVetoableChangeListener</type>. </p>
 
-    </p>
     <p>Normally such events contain the name and the old and new
-    value of the changed property.
+    value of the changed property.  </p>
 
-    </p>
     <p>Void values may be provided for the old and the new values if their
-    true values are not known.</p>
+    true values are not known. </p>
  */
 struct PropertyChangeEvent: com::sun::star::lang::EventObject
 {
@@ -102,7 +97,7 @@ struct PropertyChangeEvent: com::sun::star::lang::EventObject
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::beans::PropertyChangeEvent::Further
-    /** contains <true></true> if further events in the same transaction occur.
+    /** contains <true/> if further events in the same transaction occur.
      */
     boolean Further;
 
@@ -110,8 +105,6 @@ struct PropertyChangeEvent: com::sun::star::lang::EventObject
 
     // DocMerge from xml: field com::sun::star::beans::PropertyChangeEvent::PropertyHandle
     /** contains the implementation handle for the property.
-
-
 
         <p>May be -1 if the implementation has no handle. You can use
         this handle to get values from the <type>XFastPropertySet</type>.</p>
@@ -141,6 +134,9 @@ struct PropertyChangeEvent: com::sun::star::lang::EventObject
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:20  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:55  hjs
     initial import
 

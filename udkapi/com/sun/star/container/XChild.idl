@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChild.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:31 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,6 @@
 // DocMerge from xml: interface com::sun::star::container::XChild
 /** provides access to the parent of the object.
 
-
-
     <p>This interface normally is only supported if the objects all have
     exactly one dedicated parent container.</p>
  */
@@ -97,13 +95,10 @@ interface XChild: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::container::XChild::setParent
-    /** sets the parent to this object. The object returns this
-        parent through the method
+    /** sets the parent to this object.
 
-
-
-
-        .
+        @throws com::sun::star::lang::NoSupportException
+            if the name of this object cannot be changed.
      */
     void setParent( [in] com::sun::star::uno::XInterface Parent )
             raises( com::sun::star::lang::NoSupportException );
@@ -117,6 +112,9 @@ interface XChild: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:31  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:04  hjs
     initial import
 

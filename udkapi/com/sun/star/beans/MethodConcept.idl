@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodConcept.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,9 @@ constants MethodConcept
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::beans::MethodConcept::DANGEROUS
-    /** specifies methods which can result in an unstable
-                state (i.e. deadlock, application crash, security hole ... ) when
-                called directly by the user.
+    /** specifies methods which can result in an unstable state
+        (i.e. deadlock, application crash, security hole ... ) when called
+        directly by the user.
      */
     const long DANGEROUS = 1;
 
@@ -97,10 +97,10 @@ constants MethodConcept
 
     // DocMerge from idl: value com::sun::star::beans::MethodConcept::PROPERTY
     /** specifies methods which are used to set and get the
-                value of properties/attributes.
+        value of properties/attributes.
 
-                <p>These methods have the signature <code>type get...()</code>,
-                <code>void set...()</code> or <code>boolean is...()</code>.
+        <p>These methods have the signature <code>type get...()</code>,
+        <code>void set...()</code> or <code>boolean is...()</code>. </p>
      */
     const long PROPERTY = 2;
 
@@ -109,8 +109,8 @@ constants MethodConcept
     // DocMerge from idl: value com::sun::star::beans::MethodConcept::LISTENER
     /** specifies methods of the <em>listener concept</em>.
 
-                <p>These methods have the signature <code>add...Listener()</code>
-                or <code>remove...Listener()</code>.
+        <p>These methods have the signature <code>add...Listener()</code>
+        or <code>remove...Listener()</code>. </p>
      */
     const long LISTENER = 4;
 
@@ -119,11 +119,12 @@ constants MethodConcept
     // DocMerge from idl: value com::sun::star::beans::MethodConcept::ENUMERATION
     /** specifies methods of the <em>enumeration concept</em>.
 
-                <p>These methods have the signature
-                <code>create...Enumeration</code> and return an interface that
-                was derived from <type>XEnumeration</type>.  Additionally, the method
-                <method scope="com::sun::star::container">XEnumerationAccess::getElementType()</method> belongs
-                to this concept.
+        <p>These methods have the signature  <code>create...Enumeration</code>
+        and return an interface that  was derived from
+        <type scope="com::sun::star::container">XEnumeration</type>.
+        Additionally, the method
+        <member scope="com::sun::star::container">XEnumerationAccess::getElementType</member>
+        belongs to this concept. </p>
      */
     const long ENUMERATION = 8;
 
@@ -132,12 +133,12 @@ constants MethodConcept
     // DocMerge from idl: value com::sun::star::beans::MethodConcept::NAMECONTAINER
     /** specifies methods of the <em>name container concept</em>.
 
-                <p>These methods have the signature <code>get...ByName()</code>,
-                <code>set...ByName()</code>, <code>replace...ByName()</code>,
-                <code>remove...ByName()</code>, <code>has...ByName()</code> or
-                <code>get...Names</code>.  In addition, the method
-                <method>XNameAccess::getElementType()</method> belongs to this
-                concept.
+        <p>These methods have the signature <code>get...ByName()</code>,
+        <code>set...ByName()</code>, <code>replace...ByName()</code>,
+        <code>remove...ByName()</code>, <code>has...ByName()</code> or
+        <code>get...Names</code>.  In addition, the method
+        <method>XNameAccess::getElementType()</method> belongs to this
+        concept. </p>
      */
     const long NAMECONTAINER = 16;
 
@@ -146,10 +147,11 @@ constants MethodConcept
     // DocMerge from idl: value com::sun::star::beans::MethodConcept::INDEXCONTAINER
     /** specifies methods of the <em>index container concept</em>.
 
-                <p>These methods have the signature <code>get...ByIndex()</code>,
-                <code>insert...ByIndex()</code>, <code>replace...ByIndex()</code> or
-                <code>remove...ByIndex()</code>.  The method
-                <method scope="com::sun::star::container">XIndexAccess::getCount()</method> also belongs to this concept.
+        <p>These methods have the signature <code>get...ByIndex()</code>,
+        <code>insert...ByIndex()</code>, <code>replace...ByIndex()</code> or
+        <code>remove...ByIndex()</code>.  The method
+        <method scope="com::sun::star::container">XIndexAccess::getCount()</method>
+        also belongs to this concept. </p>
      */
     const long INDEXCONTAINER = 32;
 
@@ -162,6 +164,9 @@ constants MethodConcept
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:20  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:55  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnector.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:30 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,7 @@
 #include <com/sun/star/connection/XConnection.idl>
 
 
- module com {  module sun {  module star {  module connection {
-
-
+module com {  module sun {  module star {  module connection {
 
 // DocMerge: empty anyway
 [ uik(4F73C140-D329-11d3-9EE70050-04D7755D), ident( "XConnector", 1.0 ) ]
@@ -77,7 +75,7 @@ interface XConnector: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::connection::XConnector::connect
-    /** creates a new connection. Tries to connect to an XAcceptor.
+    /** creates a new connection. Tries to connect to an <type>XAcceptor</member>.
      */
     XConnection connect( [in] string sConnectionDescription )
         raises( NoConnectException,ConnectionSetupException );

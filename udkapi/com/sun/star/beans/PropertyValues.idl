@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyValues.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module beans {
 //=============================================================================
 /** specifies a sequence of <type>PropertyValue</type> instances.
 
-    <p>Such sequences are especially useful for remote interfaces.
+    <p>Such sequences are especially useful for remote interfaces. </p>
 */
 typedef sequence<PropertyValue> PropertyValues;
 

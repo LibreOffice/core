@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExactName.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,17 +76,16 @@
 /** provides a method of changing names for converting
     an approximate name to an existing name.
 
-
-
     <p> One field of application is the conversion of case-insensitive
-    names to the existing names.
+    names to the existing names.  </p>
 
-    </p>
     <p>Example: A basic interpreter ignores the case of the names. So
     it must query the <type>XExactName</type> interface and then call
-    the method. </p>@see com::sun::star::beans::XPropertySet
-        @see com::sun::star::beans::XIntrospectionAccess
-        @see com::sun::star::container::XNameAccess
+    the method. </p>
+
+    @see com::sun::star::beans::XPropertySet
+    @see com::sun::star::beans::XIntrospectionAccess
+    @see com::sun::star::container::XNameAccess
  */
 [ uik(E227A3D5-33D6-11D1-AABE00A0-249D5590), ident( "XExactName", 1.0 ) ]
 interface XExactName: com::sun::star::uno::XInterface
@@ -95,10 +94,10 @@ interface XExactName: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::beans::XExactName::getExactName
     /** @returns
-                    the exact name for a given aprroximate name.
+            the exact name for a given aprroximate name.
 
-                <p>For example "getExactName" could be returned for "GETEXACTNAME"
-                when "GETEXACTNAME" was used by a case insesitive scripting language.
+        <p>For example "getExactName" could be returned for "GETEXACTNAME"
+        when "GETEXACTNAME" was used by a case insesitive scripting language. </p>
      */
     string getExactName( [in] string aApproximateName );
 
@@ -111,6 +110,9 @@ interface XExactName: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:20  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:24:53  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

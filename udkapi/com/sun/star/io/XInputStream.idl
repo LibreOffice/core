@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInputStream.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module io {
+module com {  module sun {  module star {  module io {
 
 //=============================================================================
 
@@ -91,15 +91,11 @@ interface XInputStream: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::io::XInputStream::readBytes
     /** reads the specified number of bytes in the given sequence.
 
-
-
         <p>The return value specifies the number of bytes which have been
         put into the sequence. A difference between <var>nBytesToRead</var>
         and the return value indicates that EOF has been reached. This means
         that the method blocks until the specified number of bytes are
-        available or the EOF is reached.
-
-        </p>
+        available or the EOF is reached.  </p>
      */
     long readBytes( [out] sequence<byte> aData,
              [in] long nBytesToRead )
@@ -113,12 +109,8 @@ interface XInputStream: com::sun::star::uno::XInterface
     /** reads the available number of bytes at maximum
         <var>nMaxBytesToRead</var>.
 
-
-
         <p>This method blocks the thread until at least one byte is
-        available.
-
-        </p>
+        available.  </p>
      */
     long readSomeBytes( [out] sequence<byte> aData,
              [in] long nMaxBytesToRead )
@@ -131,12 +123,8 @@ interface XInputStream: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::io::XInputStream::skipBytes
     /** skips the next <var>nBytesToSkip</var> bytes (must be positive).
 
-
-
         <p>It is up to the implementation whether this method is
-        blocking the thread or not.
-
-        </p>
+        blocking the thread or not.  </p>
      */
     void skipBytes( [in] long nBytesToSkip )
             raises( com::sun::star::io::NotConnectedException,
@@ -148,12 +136,8 @@ interface XInputStream: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::io::XInputStream::available
     /** states how many bytes can be read or skipped without blocking.
 
-
-
         <p>Note: This method offers no information on whether the EOF
-        has been reached.
-
-        </p>
+        has been reached.  </p>
      */
     long available()
             raises( com::sun::star::io::NotConnectedException,
@@ -165,15 +149,11 @@ interface XInputStream: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::io::XInputStream::closeInput
     /** closes the stream.
 
-
-
         <p>Users must close the stream explicitly when no further
         reading should be done. (There may exist ring references to
         chained objects that can only be released during this call.
         Thus not calling this method would result in a leak of memory or
-        external resources.)
-
-        </p>
+        external resources.) </p>
      */
     void closeInput()
             raises( com::sun::star::io::NotConnectedException,
@@ -188,6 +168,9 @@ interface XInputStream: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:36  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:24  hjs
     initial import
 

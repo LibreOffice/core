@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContainer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:31 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,18 +80,18 @@
 /** supports quick access to the information if a container currently
     contains elements.
 
-
-
     <p>The <type>XContainer</type> interface is provided for containers
     which need to broadcast changes within the container; that means that
     the actions of adding or removing elements are broadcast to the
-    listeners.
+    listeners.  </p>
 
-    </p>
     <p>This can be useful for UI to enable/disable some functions
-    without actually accessing the data.
+    without actually accessing the data.  </p>
 
-    </p>@see XContent, XIndexAccess, XNameAcces, XEnumerationAccess
+    @see XContent
+    @see XIndexAccess
+    @see XNameAcces
+    @see XEnumerationAccess
  */
 [ uik(E227A527-33D6-11D1-AABE00A0-249D5590), ident( "XContainer", 1.0 ) ]
 interface XContainer: com::sun::star::uno::XInterface
@@ -100,7 +100,9 @@ interface XContainer: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::container::XContainer::addContainerListener
     /** adds the specified listener to receive events when
-        elements are inserted or removed.@see XContainerListener
+        elements are inserted or removed.
+
+        @see XContainerListener
      */
     [oneway] void addContainerListener( [in] com::sun::star::container::XContainerListener xListener );
 
@@ -108,7 +110,9 @@ interface XContainer: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::container::XContainer::removeContainerListener
     /** removes the specified listener so it does not receive
-        any events from this container.@see XContainerListener
+        any events from this container.
+
+        @see XContainerListener
      */
     [oneway] void removeContainerListener( [in] com::sun::star::container::XContainerListener xListener );
 
@@ -121,6 +125,9 @@ interface XContainer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:31  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:04  hjs
     initial import
 

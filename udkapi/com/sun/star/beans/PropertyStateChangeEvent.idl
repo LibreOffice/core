@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyStateChangeEvent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,18 +79,14 @@
 // DocMerge from xml: struct com::sun::star::beans::PropertyStateChangeEvent
 /** gets delivered whenever the state of a "bound" property is changed.
 
-
-
     <p>It is sent as an argument to the method of
-    <type>XPropertyStateChangeListener</type>.
+    <type>XPropertyStateChangeListener</type>.  </p>
 
-    </p>
     <p>Normally these events are accompanied by the name and the old
-    and new values of the changed property.
+    and new values of the changed property.  </p>
 
-    </p>
     <p>Void values may be provided for the old and new values if their
-    true values are not known.</p>
+    true values are not known. </p>
  */
 struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
 {
@@ -98,8 +94,6 @@ struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
 
     // DocMerge from xml: field com::sun::star::beans::PropertyStateChangeEvent::PropertyName
     /** specifies the name of the property which changes its value.
-
-
 
         <p>This name identifies the property uniquely within an
         <type>XPropertySet</type>.</p>
@@ -110,8 +104,6 @@ struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
 
     // DocMerge from xml: field com::sun::star::beans::PropertyStateChangeEvent::PropertyHandle
     /** contains the implementation handle for the property.
-
-
 
         <p>It may be -1 if the implementation has no handle. You can use this
         handle to get values from the <type>XFastPropertySet</type>
@@ -142,6 +134,9 @@ struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:20  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:56  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,18 +93,14 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::beans::XPropertyAccess
-/** makes it possible to access all multiple property values
-    and to set them at once.
-
-
+/** makes it possible to access all property values and to set them at once.
 
     <p>In most cases this interface will be in addition to
     <type>XPropertySet</type>. It is especially useful for remote
     communication because it lessens the number of calls for getting
     property values; that is especially important because these calls
-    are necessarily synchronous.
+    are necessarily synchronous.  </p>
 
-    </p>
     <p>Another advantage of this method is that conflicts are avoided
     if property value restrictions depend on the value of other properties.</p>
  */
@@ -115,8 +111,7 @@ interface XPropertyAccess: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::beans::XPropertyAccess::getPropertyValues
     /** @returns
-                    a sequence of all property values within the object in a single
-                    call.
+            a sequence of all property values within the object in a single call.
      */
     [const] sequence<com::sun::star::beans::PropertyValue> getPropertyValues();
 
@@ -124,8 +119,6 @@ interface XPropertyAccess: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::beans::XPropertyAccess::setPropertyValues
     /** sets the values of given properties.
-
-
 
         <p>All properties which are not contained in the sequence
         <var>aProps</var> will be left unchanged.</p>
@@ -145,6 +138,9 @@ interface XPropertyAccess: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:20  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:56  hjs
     initial import
 

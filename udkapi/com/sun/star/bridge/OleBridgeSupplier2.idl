@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OleBridgeSupplier2.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:26 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,14 @@ module com { module sun { module star { module bridge {
 //=============================================================================
 /** maps UNO types to COM types and vice versa. <p>
 
-    The COM types are restricted to those types that can be represented
+    <p>The COM types are restricted to those types that can be represented
     by a <code>VARIANT</code> except for <code>VT_CY</code> and
     <code>VT_DATE</code>. An <code>IUnknown</code> interface
     can only be mapped, if it can be successfully queried for
-    <code>IDispatch</code>.
-    Other COM interfaces are not supported. On the other hand UNO objects
-    and structs are always mapped to COM objects exposing <code>IDispatch</code>.
+    <code>IDispatch</code>. </p>
+
+    <p>Other COM interfaces are not supported. On the other hand UNO objects
+    and structs are always mapped to COM objects exposing <code>IDispatch</code>. </p>
 
 
     <p>The service implements the <type>XBridgeSupplier2</type> interface
@@ -87,10 +88,11 @@ module com { module sun { module star { module bridge {
     <const>com::sun::star::bridge::ModelDependent::UNO</const> and
     <const>com::sun::star::bridge::ModelDependent::OLE</const>.
     The service does not specify any
-    requirements for registering OLE objects and class factories.
+    requirements for registering OLE objects and class factories. </p>
 
     @guarantees
     -thread safe
+
     @guarantees
     -one instance service
 */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextOutputStream.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module io {
+module com {  module sun {  module star {  module io {
 
 //=============================================================================
 
@@ -86,12 +86,17 @@ interface XTextOutputStream: com::sun::star::io::XOutputStream
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XTextOutputStream::writeString
-    /** Writes a string using the encoding defined by setEncoding.
-        Line breaks or delimiters that may be neccessary to support
-        XTextInputStream::readLine and XTextInputStream::readString
-        have to be added manually to the parameter string.@see setEncoding
-                @see XTextInputStream::readLine
-                @see XTextInputStream::readString
+    /** writes a string using the encoding defined by
+        <member>XTextOutputStream::setEncodingi</member>.
+
+        <p>Line breaks or delimiters that may be neccessary to support
+        <member>XTextInputStream::readLine</member> and
+        <member>XTextInputStream::readString</member>
+        have to be added manually to the parameter string.
+
+        @see setEncoding
+        @see XTextInputStream::readLine
+        @see XTextInputStream::readString
      */
     void writeString( [in] string aString )
             raises( com::sun::star::io::IOException );
@@ -99,7 +104,9 @@ interface XTextOutputStream: com::sun::star::io::XOutputStream
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XTextOutputStream::setEncoding
-    /** Sets encoding
+    /** sets character encoding.
+
+        @incomplete
      */
     void setEncoding( [in] string Encoding );
 };
@@ -111,6 +118,9 @@ interface XTextOutputStream: com::sun::star::io::XOutputStream
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:36  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:24  hjs
     initial import
 

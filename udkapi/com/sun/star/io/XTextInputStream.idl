@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextInputStream.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module io {
+module com {  module sun {  module star {  module io {
 
 //=============================================================================
 
@@ -87,8 +87,10 @@ interface XTextInputStream: com::sun::star::io::XInputStream
 
     // DocMerge from xml: method com::sun::star::io::XTextInputStream::readLine
     /** reads text until a line break (CR, LF, or CR/LF) or EOF is found
-        and returns it as string (without CR, LF). The read characters are
-        converted according to the encoding defined by setEncoding.
+        and returns it as string (without CR, LF).
+
+        <p>The read characters are converted according to the encoding defined
+        by <member>XTextInputStream::setEncoding</member>.
      */
     string readLine()
             raises( com::sun::star::io::IOException );
@@ -96,11 +98,14 @@ interface XTextInputStream: com::sun::star::io::XInputStream
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XTextInputStream::readString
-    /** Reads text until one of the given delimiter characters or EOF is found.
-        Important: CR/LF is not used as default delimiter! So if no delimiter
+    /** reads text until one of the given delimiter characters or EOF is found.
+
+        <p>Important: CR/LF is not used as default delimiter! So if no delimiter
         is defined or none of the delimiters is found, the stream will be read
         to EOF. The read characters are converted according to the encoding
-        defined by setEncoding.@see setEncoding
+        defined by <member>XTextInputStream::setEncoding</member>.
+
+        @see setEncoding
      */
     string readString( [in] sequence<char> Delimiters, [in] boolean bRemoveDelimiter )
             raises( com::sun::star::io::IOException );
@@ -108,8 +113,10 @@ interface XTextInputStream: com::sun::star::io::XInputStream
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XTextInputStream::isEOF
-    /** Return true, if the end of file is reached, so that no next
-        string can be read.@see setEncoding
+    /** @returns
+            <TRUE/>, if the end of file is reached, so that no next string can be read.
+
+        @see setEncoding
      */
     boolean isEOF()
             raises( com::sun::star::io::IOException );
@@ -118,7 +125,9 @@ interface XTextInputStream: com::sun::star::io::XInputStream
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XTextInputStream::setEncoding
-    /** Sets encoding
+    /** sets character encoding.
+
+        @incomplete
      */
     void setEncoding( [in] string Encoding );
 };
@@ -130,6 +139,9 @@ interface XTextInputStream: com::sun::star::io::XInputStream
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:36  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:24  hjs
     initial import
 

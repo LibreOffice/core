@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridge.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:26 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,18 +63,18 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
+module com {  module sun {  module star {  module bridge {
 
- module com {  module sun {  module star {  module bridge {
-
-// DocMerge: empty anyway
+/** @missing
+ */
 [ uik(8E6CB4B0-D3F0-11d3-9EE80050-04D7755D), ident( "XBridge", 1.0 ) ]
 interface XBridge: com::sun::star::uno::XInterface
 {
-
     // DocMerge from xml: method com::sun::star::bridge::XBridge::getInstance
     /** tries to get an interface from the remote that is known by this name.
-        In general, this method is called once to get the initial object from the remote,
-        but it is allowed to call the method multiple times.
+
+        <p>In general, this method is called once to get the initial object from the
+        remote, but it is allowed to call the method multiple times. </p>
      */
     XInterface getInstance( [in] string sInstanceName );
 
@@ -86,8 +86,7 @@ interface XBridge: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::bridge::XBridge::getDescription
-    /** a descriptive string : protocol: + XConnection.getDescription()
-        This description is unique.
+    /** a unique descriptive string: protocol + ":" + XConnection.getDescription()
      */
     string getDescription();
 };

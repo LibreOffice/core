@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentEnumerationAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:31 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,23 +79,15 @@
 // DocMerge from xml: interface com::sun::star::container::XContentEnumerationAccess
 /** allows access to the collections of all content types within the object.
 
+    @example
+        <p>This example prints the names of all tables: </p>
 
-
-
-
-
-
-
-
-    @example <p>This example prints the names of all tables:
-
-    </p>
     <listing>
-    xTextTableEnum = xTextDoc.createContentEnumeration(
-    "com::sun::star::text::TextTable" )
-    while xTextTableEnum.hasMoreElements() do
-    print xTextTableEnum.getNextElement().Name
-    wend
+        xTextTableEnum = xTextDoc.createContentEnumeration(
+        "com::sun::star::text::TextTable" )
+        while xTextTableEnum.hasMoreElements() do
+        print xTextTableEnum.getNextElement().Name
+        wend
     </listing>
  */
 [ uik(E227A3F5-33D6-11D1-AABE00A0-249D5590), ident( "XContentEnumerationAccess", 1.0 ) ]
@@ -105,8 +97,7 @@ interface XContentEnumerationAccess: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::container::XContentEnumerationAccess::createContentEnumeration
     /** @returns
-                    a new enumeration object for the contents of the specified
-                    service type.
+            a new enumeration object for the contents of the specified  service type.
      */
     com::sun::star::container::XEnumeration createContentEnumeration( [in] string aServiceName );
 
@@ -114,11 +105,11 @@ interface XContentEnumerationAccess: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::container::XContentEnumerationAccess::getAvailableServiceNames
     /** @returns
-                    all names of services of which instances exist in this object.
+                all names of services of which instances exist in this object.
 
-                <p><method>XContentEnumerationAccess::createContentEnumeration</method>
-                creates a non-empty enumeration for all the service names which are
-                listed here. For all others it creates no enumeration.
+        <p><method>XContentEnumerationAccess::createContentEnumeration</method>
+        creates a non-empty enumeration for all the service names which are
+        listed here. For all others it creates no enumeration. </p>
      */
     sequence<string> getAvailableServiceNames();
 
@@ -131,6 +122,9 @@ interface XContentEnumerationAccess: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:31  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:04  hjs
     initial import
 

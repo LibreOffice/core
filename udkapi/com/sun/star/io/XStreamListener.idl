@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStreamListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module io {
+module com {  module sun {  module star {  module io {
 
 //=============================================================================
 
@@ -91,8 +91,6 @@ interface XStreamListener: com::sun::star::lang::XEventListener
     /** gets called when data transfer terminates normally or when data
         transfer is terminated from outside.
 
-
-
         <p>The termination could be done using the method
         <member>XActiveDataControl::terminate()</member>.</p>
      */
@@ -110,8 +108,6 @@ interface XStreamListener: com::sun::star::lang::XEventListener
     // DocMerge from xml: method com::sun::star::io::XStreamListener::error
     /** gets called when an internal error in source or sink has occurred.
 
-
-
         <p>After the method is called, the close is called on the
         connected streams.</p>
      */
@@ -126,6 +122,9 @@ interface XStreamListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:36  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:24  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: corba.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:34 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ module com { module sun { module star { module corba
      typedef unsigned long ObjectSystemID;
     typedef sequence< byte > OpaqueData;
 
+    /// @missing
     struct OneThreadID
     {
         ObjectSystemID objSysID;
@@ -73,27 +74,32 @@ module com { module sun { module star { module corba
 
     typedef sequence<OneThreadID> ThreadIDs;
 
+    /// @missing
     struct LogicalThreadID // Service context
     {
         ThreadIDs IDs;
     };
 
+    /// @missing
     struct CorbaString8
     {
         string theString;
     };
 
+    /// @missing
     struct CorbaUnion
     {
         long dummy;
     };
 
+    /// @missing
     struct ObjectKey
     {
         CorbaString8 sOid;
         CorbaString8 sType;
     };
 
+    /// @missing
     enum TCKind
     {
         tk_null, tk_void,

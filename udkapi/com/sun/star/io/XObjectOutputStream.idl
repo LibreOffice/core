@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XObjectOutputStream.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module io {
+module com {  module sun {  module star {  module io {
 
 interface XPersistObject;
 
@@ -80,34 +80,23 @@ interface XPersistObject;
 // DocMerge from xml: interface com::sun::star::io::XObjectOutputStream
 /** makes it possible to store the data and structure of runtime objects.
 
-
-
     <p>In every case all participating objects have to be stored or
     loaded at the same time. To be able to load objects, for each object
     class in the stream, a factory is needed. These factories are
     <type scope="com::sun::star::lang">XMultiServiceFactory</type>, which are
-    registered at the global service manager.
+    registered at the global service manager.  </p>
 
-    </p>
+    @example
+        <p>Given: Object A refers to B, B to C and C to A and D. The order
+        of storing and loading these objects is irrelevant, but it must be
+        the same for each action: </p>
 
-
-
-
-
-    @example <p>Given: Object A refers to B, B to C and C to A and D. The order
-    of storing and loading these objects is irrelevant, but it must be
-    the same for each action:
-
-    </p>
-    <ul>
-    <li>storing: A,B,C,D; loading: A,B,C,D is correct
-    </li>
-    <li>storing: B,A,C,D; loading: B,A,C,D is correct
-    </li>
-    <li>storing: C,A,B,D; loading: A,B,C,D is wrong
-    </li>
-    <li>storing: A,B,C,D; loading: A,B,C is wrong</li>
-    </ul>
+        <ul>
+            <li>storing: A,B,C,D; loading: A,B,C,D is correct </li>
+            <li>storing: B,A,C,D; loading: B,A,C,D is correct </li>
+            <li>storing: C,A,B,D; loading: A,B,C,D is wrong </li>
+            <li>storing: A,B,C,D; loading: A,B,C is wrong</li>
+        </ul>
  */
 [ uik(DF881FF1-2401-11D3-9ECD0010-5A677293), ident( "XObjectOutputStream", 1.0 ) ]
 interface XObjectOutputStream: XDataOutputStream
@@ -129,6 +118,9 @@ interface XObjectOutputStream: XDataOutputStream
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:36  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:24  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XProtocolProperties.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:26 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,60 +66,67 @@
 module com { module sun { module star { module bridge {
 
 
-/******
- * INTERNAL INTERFACE, DO NOT USE IT ELSEWHERE
- * Bridge internal interface, that allows to change protocol settings of the remote
- * counter part. In general, this interface is implemented by the bridge itself. It must not
- * be called from outside the bridge.
- *****/
+/** Bridge internal interface, that allows to change protocol settings of the remote
+    counter part.
+
+    <p>In general, this interface is implemented by the bridge itself. It must not
+    be called from outside the bridge.</p>
+
+    <p>INTERNAL INTERFACE, DO NOT USE IT ELSEWHERE!</p>
+*/
 [ uik(A7EF98B1-8D82-11d4-9F1B0050-04D7755D), ident( "XProtocolProperties", 1.0 ) ]
 interface XProtocolProperties : com::sun::star::uno::XInterface
 {
-    /***
-     * Called to get a list of bridge internal properties. Which properties can be retrieved, is
-     * protocol dependend.
-     * The properties MUST NOT change between a requestChange and a commit change call.
-     ***/
+    /** called to get a list of bridge internal properties. Which properties can be retrieved,
+        is protocol dependend.
+
+        <p> The properties MUST NOT change between a requestChange and a commit change call.</p>
+     */
     sequence< ProtocolProperty > getProperties( );
 
-    /****
-     * Called to initiate a protocol change. This method should always be called in the scope
-     * of the local bridge setting object, because the remote counter part may do such a call
-     * at the same time (typically at startup time).
-     *
-     * @param nRandomNumber In case both processes call requestChange at the same time,
-     *                      the caller with the higher nRandomNumber is allowed to call
-     *                      commitChange.
-     * @returns 1, if the caller may ( and MUST !!!) call commitChange.
-     *          0, if the caller is not allowed to call commitChange. This can only happen,
-     *             if the other bridge has called requestChange at the same time and
-     *             nRandomNumber is smaller than the other bridge's nRandomNumber.
-     *             The remote counterpart is supposed to call commitChange within a small
-     *             time span. Please call requestChange() after the remote counterpart has
-     *             called commitChange().
-     *          -1 if the nRandomNumber is of the same value as the previously
-     *             sent requestChange (sent by the remote counterpart). This is a draw :o).
-     *             Generate a new random number and try again.
-     ****/
+    /** called to initiate a protocol change.
+
+        <p>This method should always be called in the scope of the local bridge setting object,
+        because the remote counter part may do such a call at the same time
+        (typically at startup time). </p>
+
+        @param nRandomNumber
+            In case both processes call requestChange at the same time,
+             the caller with the higher nRandomNumber is allowed to call
+             commitChange.
+
+        @returns
+            1, if the caller may ( and MUST !!!) call commitChange.
+            0, if the caller is not allowed to call commitChange. This can only happen,
+               if the other bridge has called requestChange at the same time and
+               nRandomNumber is smaller than the other bridge's nRandomNumber.
+               The remote counterpart is supposed to call commitChange within a small
+               time span. Please call requestChange() after the remote counterpart has
+               called commitChange().
+            -1 if the nRandomNumber is of the same value as the previously
+               sent requestChange (sent by the remote counterpart). This is a draw :o).
+               Generate a new random number and try again.
+     */
     long requestChange( [in] long nRandomNumber );
 
-    /****
-     * Called to commit a protocol change. It is only allowed to call commitChange, if
-     * requestChange has been called previously and the return value was true.
-     * The new properties are valid after the reply of commitChange has been received.
-     * Note, that this is difficult for the callee, because it must marshal the reply
-     * with the old settings.
-     * All properties not mentioned in the list are unchanged.
-     * Note that the bridge must be blocked for other threads,
-     * before commitChange is sent and unblocked
-     * after the reply has been received. This blocks the bridge.
-     *
-     * @raises InvalidProtocolChangeException
-     *                                  when the remote counterpart could not change
-     *                                  at least one of the properties. No property
-     *                                  has been changed. requestChange must be called
-     *                                  again to initiate a new change of the protocol.
-     ****/
+    /** called to commit a protocol change.
+
+        <p>It is only allowed to call commitChange, if requestChange
+        has been called previously and the return value was true.  The new properties are
+        valid after the reply of commitChange has been received.
+        Note, that this is difficult for the callee, because it must marshal the reply
+        with the old settings. </p>
+
+        <p>All properties not mentioned in the list are unchanged.
+        Note that the bridge must be blocked for other threads,
+        before commitChange is sent and unblocked
+        after the reply has been received. This blocks the bridge.</p>
+
+        @raises InvalidProtocolChangeException
+                when the remote counterpart could not change at least one of the properties.
+                No property has been changed. requestChange must be called
+                again to initiate a new change of the protocol.
+     */
     void commitChange( [in] sequence< ProtocolProperty > newValues )
         raises ( com::sun::star::bridge::InvalidProtocolChangeException );
 };

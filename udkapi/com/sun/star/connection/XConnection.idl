@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnection.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:30 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,15 +64,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
- module com {  module sun {  module star {  module connection {
+module com {  module sun {  module star {  module connection {
 
-
-
-
-// DocMerge from idl: interface com::sun::star::connection::XConnection
-/** *******
-     *
-     ********
+/** @missing
  */
 [ uik(61F60EB1-D327-11d3-9EE70050-04D7755D), ident( "XConnection", 1.0 ) ]
 interface XConnection: com::sun::star::uno::XInterface
@@ -80,6 +74,8 @@ interface XConnection: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::connection::XConnection::read
     /** blocking.
+
+        @incomplete
      */
     long read( [out] sequence < byte > aReadBytes , [in] long nBytesToRead )
             raises( com::sun::star::io::IOException );
@@ -87,12 +83,15 @@ interface XConnection: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::connection::XConnection::write
     /** blocking.
+
+        @incomplete
      */
     void write( [in] sequence < byte > aData )
         raises( com::sun::star::io::IOException );
 
 
-    // DocMerge: empty anyway
+    /** @missing
+     */
     void flush( )
             raises( com::sun::star::io::IOException );
 
@@ -105,10 +104,11 @@ interface XConnection: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::connection::XConnection::getDescription
-    /** A string describing the connection. This string must be unique and is therefore
-        different from the arguments to XConnection.accept and XConnector.connect. In
-        general, the string contains an additional handle value.
-        For example, "socket:localhost:2000:2324"
+    /** A unique string describing the connection.
+
+        <p>This string is different from the arguments to <member>XConnection::accept</member>
+        and <member>XConnector::connect</member>. In general, the string contains an additional
+        handle value.  For example, "socket:localhost:2000:2324". </p>
      */
     string getDescription();
 };

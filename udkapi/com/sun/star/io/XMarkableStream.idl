@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMarkableStream.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module io {
+module com {  module sun {  module star {  module io {
 
 //=============================================================================
 
@@ -89,8 +89,7 @@ interface XMarkableStream: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XMarkableStream::createMark
-    /** creates a mark of the current postion and returns an identifier
-        to it.
+    /** creates a mark of the current postion and returns an identifier to it.
      */
     long createMark()
             raises( com::sun::star::io::IOException );
@@ -98,16 +97,13 @@ interface XMarkableStream: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XMarkableStream::deleteMark
-    /** deletes the mark that you previously created with "createMark()".
-
-
+    /** deletes the mark that you previously created with
+        <member>XMarkableStream::createMark</member>.
 
         <p>It is an error to delete a mark if other marks after this
         exist.  In this case, for reasons of robustness, the
         implementation must delete this mark and all others after
-        this mark.
-
-        </p>
+        this mark.  </p>
      */
     void deleteMark( [in] long Mark )
             raises( com::sun::star::io::IOException,
@@ -134,18 +130,18 @@ interface XMarkableStream: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::io::XMarkableStream::offsetToMark
     /** @returns
-                the offset from the current stream position to the
-                mark ("current position" - "mark position").
+            the offset from the current stream position to the
+            mark ("current position" - "mark position").
 
-                @param nMark
-                identifies the mark which is used as a base
-                to calculate the offset of the current position.
+        @param nMark
+            identifies the mark which is used as a base
+            to calculate the offset of the current position.
 
-                @throws IllegalArgumentException
-                if the mark does not exist or is deleted.
+        @throws IllegalArgumentException
+            if the mark does not exist or is deleted.
 
-                @throws IOException
-                if an I/O error has occurred.
+        @throws IOException
+            if an I/O error has occurred.
      */
     [const] long offsetToMark( [in] long nMark )
             raises( com::sun::star::io::IOException,
@@ -160,6 +156,9 @@ interface XMarkableStream: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:36  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:24  hjs
     initial import
 

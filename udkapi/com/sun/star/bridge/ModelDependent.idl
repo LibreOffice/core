@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModelDependent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:26 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,11 @@
 // DocMerge from idl: constants com::sun::star::bridge::ModelDependent
 /** These constants are used to specify model-dependant representations.
 
-        <p>They are only used for creating bridges to other component models.
+    <p>They are only used for creating bridges to other component models.
 
-        @see com::sun::star::bridge::XBridgeSupplier
-        @deprecated
+    @see com::sun::star::bridge::XBridgeSupplier
+
+    @deprecated
  */
 constants ModelDependent
 {
@@ -111,6 +112,9 @@ constants ModelDependent
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:26  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:24:54  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

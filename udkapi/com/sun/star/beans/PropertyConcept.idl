@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyConcept.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,10 @@
 
 // DocMerge from idl: constants com::sun::star::beans::PropertyConcept
 /** These constants are used to specify concepts of the introspection
-        which apply to properties and to the methods which represent attributes.
+    which apply to properties and to the methods which represent attributes.
 
-        <p>This list is not necessarily complete; new constants may be added
-        (by the author).
+    <p>This list is not necessarily complete; new constants may be added
+    (by the author). </p>
  */
 constants PropertyConcept
 {
@@ -88,8 +88,8 @@ constants PropertyConcept
 
     // DocMerge from idl: value com::sun::star::beans::PropertyConcept::DANGEROUS
     /** specifies that the change or retrieval of this
-                property directly by the user can result in an unstable
-                state (deadlock, application crash, security hole ... ).
+        property directly by the user can result in an unstable
+        state (deadlock, application crash, security hole ... ).
      */
     const long DANGEROUS = 1;
 
@@ -97,27 +97,25 @@ constants PropertyConcept
 
     // DocMerge from idl: value com::sun::star::beans::PropertyConcept::PROPERTYSET
     /** specifies all properties which are reachable by
-                <type>XPropertySet</type>, <type>XFastPropertySet</type> or
-                <type>XMultiPropertySet</type>.
+        <type>XPropertySet</type>, <type>XFastPropertySet</type> or
+        <type>XMultiPropertySet</type>.
      */
     const long PROPERTYSET = 2;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::beans::PropertyConcept::ATTRIBUTES
-    /** specifies all properties which are actually attributes
-                of interfaces.
+    /** specifies all properties which are actually attributes of interfaces.
      */
     const long ATTRIBUTES = 4;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::beans::PropertyConcept::METHODS
-    /** specifies all properties which are represented by
-                getter or setter methods.
+    /** specifies all properties which are represented by getter or setter methods.
 
-                <p>These methods have the signature <code>type get...()</code>,
-                <code>void set...()</code> or <code>boolean is...()</code>.
+        <p>These methods have the signature <code>type get...()</code>,
+        <code>void set...()</code> or <code>boolean is...()</code>. </p>
      */
     const long METHODS = 8;
 
@@ -130,6 +128,9 @@ constants PropertyConcept
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:20  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:55  hjs
     initial import
 

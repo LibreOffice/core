@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIntroTest.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ interface XPropertiesChangeListener;
 //=============================================================================
 /** This is a test interface for introspection.
 
-    <p>IMPORTANT: FOR TEST ONLY!
+    <p>IMPORTANT: FOR TEST ONLY! </p>
 
     <p>The following interface is just for testing purposes. It will not
     stay in the product. It is only used as an exportable test class,
@@ -124,12 +124,12 @@ interface XIntroTest: com::sun::star::uno::XInterface
     [attribute] short               ChildrenCount;
 
     //-------------------------------------------------------------------------
-    /** contains a struct of type Property.
+    /** contains a struct of type <type>Property</type>.
      */
     [attribute] com::sun::star::beans::Property         FirstStruct;
 
     //-------------------------------------------------------------------------
-    /** contains a struct of type PropertyValue.
+    /** contains a struct of type <type>PropertyValue</type>.
      */
     [attribute] com::sun::star::beans::PropertyValue    SecondStruct;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataExporter.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,12 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module io {
+module com {  module sun {  module star {  module io {
 
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XDataExporter
 /** makes it possible to export data from a component into a data sink.
-
-
 
     <p>Exporter objects are registered for specific components and data types.
     </p>
@@ -98,7 +96,7 @@ interface XDataExporter: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataExporter::exportData
-    /** exports data for a Component into an output stream.
+    /** exports data for a component into an output stream.
      */
     [oneway] void exportData( [in] com::sun::star::io::XOutputStream aOutputStream,
              [in] com::sun::star::lang::XComponent Component,
@@ -120,6 +118,9 @@ interface XDataExporter: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:36  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:23  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ObjectInputStream.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,42 +87,33 @@
 // DocMerge from xml: service com::sun::star::io::ObjectInputStream
 /** is a stream which allows reading the data of persistent objects.
 
-
-
     <p>Implementations of this service must fulfill the specifications of the
     <type>DataInputStream</type> service. It must be chained to an
     <type>XMarkableStream</type>. Therefore, it provides the
     <type>XMarkableStream</type> interface, and delegates the calls to the
-    chained object.
+    chained object.  </p>
 
-    </p>
     <p>The written objects are held until this instance is destroyed.
     The references to the objects are read as four-byte integers.
     Data format reads:</p>
-    <br>
+
     <pre>
     short   InfoLength
-    long    ObjectReference     // 0 indicates no object
-    UTF ServiceName     // length of 0 indicates this is only a reference
-    long    ObjectLength        // 0 if it is a reference or no object, otherwise the len of the object data
-    Object  ObjectData      // the data of the object
-    ...             // skipping additional data
+    long    ObjectReference  // 0 indicates no object
+    UTF     ServiceName      // length of 0 indicates this is only a reference
+    long    ObjectLength     // 0 if it is a reference or no object, otherwise the len of the object data
+    Object  ObjectData       // the data of the object
+    ...                      // skipping additional data
     </pre>
 
-    Guarantees:
+    @guarantees
     <ul>
-    <li>-thread safe
-    </li>
-    <li>-allow buffer size is 2 ^ 31 -1
-    </li>
-    <li>-maximum object reference identifier must be the number of objects.
-    </li>
-    <li>-object reference identifier 0 indicates no object
-    </li>
-    <li>-skip addition data
-    </li>
-    <li>-set the stream position behind the object data
-    </li>
+        <li>-thread safe</li>
+        <li>-allow buffer size is 2 ^ 31 -1</li>
+        <li>-maximum object reference identifier must be the number of objects. </li>
+        <li>-object reference identifier 0 indicates no object</li>
+        <li>-skip addition data</li>
+        <li>-set the stream position behind the object data</li>
     </ul>
  */
 service ObjectInputStream
@@ -148,6 +139,9 @@ service ObjectInputStream
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:36  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:23  hjs
     initial import
 

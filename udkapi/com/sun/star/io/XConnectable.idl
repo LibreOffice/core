@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,16 +75,13 @@
 // DocMerge from xml: interface com::sun::star::io::XConnectable
 /** makes it possible to connect data sinks and sources.
 
-
-
     <p>The predecessor-member is the element in the connection that is
     nearer to the source of the data. The successor-member is the element
     that is further away from the source of the data. (Note that this
     classification does not depend on whether the class implements
     <type>XInputStream</type> or <type>XOutputStream</type>; it only
-    depends on the direction of data flow.)
+    depends on the direction of data flow.) </p>
 
-    </p>
     <p>This interface allows generic services to navigate between
     arbitrary elements of a connection.</p>
  */
@@ -102,7 +99,7 @@ interface XConnectable: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::io::XConnectable::getPredecessor
     /** @returns
-                    the predecessor of this object.
+            the predecessor of this object.
      */
     com::sun::star::io::XConnectable getPredecessor();
 
@@ -117,7 +114,7 @@ interface XConnectable: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::io::XConnectable::getSuccessor
     /** @returns
-                    the successor of this object.
+            the successor of this object.
      */
     com::sun::star::io::XConnectable getSuccessor();
 
@@ -130,6 +127,9 @@ interface XConnectable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:36  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:23  hjs
     initial import
 

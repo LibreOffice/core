@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NoConnectException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:30 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,13 @@
 #define _COM_SUN_STAR_CONNECTION_NOCONNECTEXCEPTION_IDL_
 #include <com/sun/star/uno/Exception.idl>
 
- module com {  module sun {  module star {  module connection {
+module com {  module sun {  module star {  module connection {
 
-// DocMerge: empty anyway
+/** @missing
+ */
 exception NoConnectException: com::sun::star::uno::Exception
 {
-        };
+};
 
 
 };};};};

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bridge.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:26 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,38 +79,36 @@ module com {  module sun {  module star {  module bridge {
 
 //=============================================================================
 
-/**
- *
- *  a meta service which allows the bridgefactory service
- *  to instantiate an interprocess bridge using a certain transfer protocol.
- *  <p>
- *  Components, that support a certain protocol, must have at least two
- *  service names :
- *  <ul>
- *  <li> com.sun.star.bridge.Bridge </li>
- *  <li> arbitrary-module-path.ProtocolnameBridge </li>
- *  </ul>
- * <p>
- * The protocol name should be written as common servicenames, first letter is a
- * capital letter, the rest in small letters postfixed by Bridge (e.g. :
- * com.sun.star.bridge.UrpBridge would be correct servicename for the urp protocol).
- * However, the protocol names are compared case insensitive.
- * If there exist two services supporting the same protocol, it is arbitrary
- * which one is chosen, so this should be omitted.
+/** This meta service allows the bridgefactory service to instantiate an
+    interprocess bridge using a certain transfer protocol.
+
+    <p> Components, that support a certain protocol, must have at least two
+    service names: </p>
+
+    <ul>
+        <li> com.sun.star.bridge.Bridge </li>
+        <li> arbitrary-module-path.ProtocolnameBridge </li>
+    </ul>
+
+    <p>The protocol name should be written as common servicenames, first letter is a
+    capital letter, the rest in small letters postfixed by Bridge (e.g.:
+    <code>com.sun.star.bridge.UrpBridge</code> would be correct servicename for the
+    "urp" protocol).  However, the protocol names are compared case insensitive.
+    If there exist two services supporting the same protocol, it is arbitrary
+    which one is chosen, so this should be omitted. </p>
  */
 service Bridge
 {
-    /**
-     * allows to initialize the bridge service with the necessary
-     * arguments. The sequence&lt;any&gt; must have 4 members.
-     *
-     * <ol>
-     * <li> String : The unique name of the bridge or an empty string</li>
-     * <li> String : The protocol, that shall be instantiated</li>
-     * <li> XConnection : The bidirectional connection, the bridge should work on</li>
-     * <li> XInstanceProvider : The instance provider, that shall be called to access the
-     *                          initial object.</li>
-     * </ol>
+    /** allows to initialize the bridge service with the necessary
+         arguments. The sequence&lt;any&gt; must have 4 members.
+
+         <ol>
+             <li> String: The unique name of the bridge or an empty string</li>
+             <li> String: The protocol, that shall be instantiated</li>
+             <li> XConnection: The bidirectional connection, the bridge should work on</li>
+             <li> XInstanceProvider:
+                The instance provider, that shall be called to access the initial object.</li>
+         </ol>
      */
     interface com::sun::star::lang::XInitialization;
 

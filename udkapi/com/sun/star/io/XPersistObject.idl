@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPersistObject.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module io {
+module com {  module sun {  module star {  module io {
 
 interface XObjectInputStream;
 interface XObjectOutputStream;
@@ -89,13 +89,12 @@ interface XPersistObject: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::io::XPersistObject::getServiceName
     /** @returns
-                    the service name that specifies the behavior and the
-                    persistent data format of this implementation.
+            the service name that specifies the behavior and the
+            persistent data format of this implementation.
 
-                <p>This name can be used to create such an object by a factory.
+        <p>This name can be used to create such an object by a factory. </p>
 
-
-                @see XServiceName::getServiceName
+        @see XServiceName::getServiceName
      */
     [const] string getServiceName();
 
@@ -124,6 +123,9 @@ interface XPersistObject: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:36  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:24  hjs
     initial import
 
