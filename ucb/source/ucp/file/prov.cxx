@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: as $ $Date: 2001-07-30 12:47:28 $
+ *  last change: $Author: dg $ $Date: 2001-09-27 09:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,16 +266,8 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
 
         Sequence< Any > aArguments( 1 );
 
-#ifdef TF_CFGDATA
         aArguments[0] <<=
             rtl::OUString::createFromAscii( "org.openoffice.Webtop.Security" );
-#elif SUPD > 604
-        aArguments[0] <<=
-            rtl::OUString::createFromAscii( "org.openoffice.Security" );
-#else
-        aArguments[0] <<=
-            rtl::OUString::createFromAscii( "com.sun.star.Security" );
-#endif
 
         Reference< container::XHierarchicalNameAccess > xHierAccess;
         if( sProvider.is() )
@@ -288,13 +280,8 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
         if( xHierAccess.is() )
             xSubNode = Reference< container::XNameAccess >( xHierAccess,UNO_QUERY );
 
-#ifdef TF_CFGDATA
         rtl::OUString d = rtl::OUString::createFromAscii( "oowSecDir" );
         rtl::OUString a = rtl::OUString::createFromAscii( "oowSecAlias" );
-#else
-        rtl::OUString d = rtl::OUString::createFromAscii( "Directory" );
-        rtl::OUString a = rtl::OUString::createFromAscii( "AliasName" );
-#endif
 
         rtl::OUString aRootDirectory;
         if( xSubNode.is() )
