@@ -19,12 +19,12 @@ objc=cc
 CFLAGS=-c $(INCLUDE)
 CFLAGSCC=-pipe
 
-OBJCFLAGS=
+OBJCFLAGS=-no-precomp
 
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-CFLAGSCXX=-pipe -fno-for-scope -fpermissive -fno-operator-names -no-precomp
+CFLAGSCXX=-pipe -fno-for-scope -fpermissive -fno-operator-names
 
 CFLAGSOBJGUIST=-fPIC
 CFLAGSOBJCUIST=-fPIC

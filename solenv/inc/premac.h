@@ -3,8 +3,8 @@
 #*    $Workfile:   svpm.h  $
 #*
 #*    Ersterstellung    DV 01.10.97
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-20 14:43:16 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: patrick.luby $ $Date: 2000-09-27 22:52:33 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/tools/os2/inc/svpm.h_v  $
 #*
@@ -14,11 +14,14 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/solenv/inc/premac.h,v 1.1.1.1 2000-09-20 14:43:16 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/solenv/inc/premac.h,v 1.2 2000-09-27 22:52:33 patrick.luby Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/20 14:43:16  hr
+      initial import
+
       Revision 1.2  2000/06/26 17:08:58  patrick.luby
       Updated files so that the %minor.mk dmake recipe will work for developers who
       must use rsync to get the solver directories.
@@ -54,3 +57,5 @@
 #define ShowWindow MacOSShowWindow
 #define StringPtr MacOSStringPtr
 #define DirInfo MacOSDirInfo
+#define BOOL MacOSBOOL
+#define ULONG MacOSULONG
