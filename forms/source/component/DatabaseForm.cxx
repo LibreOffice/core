@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 12:20:05 $
+ *  last change: $Author: oj $ $Date: 2001-09-28 06:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2174,6 +2174,9 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
         case PROPERTY_ID_ACTIVE_CONNECTION:
             try
             {
+                if ( m_bSharingConnection )
+                    stopSharingConnection( );
+
                 m_bForwardingConnection = sal_True;
                 m_xAggregateSet->setPropertyValue(PROPERTY_ACTIVE_CONNECTION, rValue);
                 m_bForwardingConnection = sal_False;
