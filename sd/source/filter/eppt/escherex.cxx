@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:10:24 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,8 +335,9 @@ void PptEscherEx::CloseContainer()
 
 // ---------------------------------------------------------------------------------------------
 
-void PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData )
+sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData )
 {
+    sal_uInt32 nShapeId = 0;
     /* SJ: #Issue 26747#
        not creating group objects with a depth higher than 16, because then
        PPT is having a big performance problem when starting a slide show
@@ -356,11 +357,12 @@ void PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData
                     << (INT32)aRect.Right()
                     << (INT32)aRect.Bottom();
 
+        nShapeId = GetShapeID();
         if ( !mnGroupLevel )
-            AddShape( ESCHER_ShpInst_Min, 5 );                              // Flags: Group | Patriarch
+            AddShape( ESCHER_ShpInst_Min, 5, nShapeId );                    // Flags: Group | Patriarch
         else
         {
-            AddShape( ESCHER_ShpInst_Min, 0x201 );                          // Flags: Group | HaveAnchor
+            AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );                // Flags: Group | HaveAnchor
             AddAtom( 8, ESCHER_ClientAnchor );
             PtReplaceOrInsert( ESCHER_Persist_Grouping_Logic | mnGroupLevel, mpOutStrm->Tell() );
             *mpOutStrm << (INT16)aRect.Top() << (INT16)aRect.Left() << (INT16)aRect.Right() << (INT16)aRect.Bottom();
@@ -379,6 +381,7 @@ void PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData
         CloseContainer();                                               // ESCHER_SpContainer
     }
     mnGroupLevel++;
+    return nShapeId;
 }
 
 // ---------------------------------------------------------------------------------------------
