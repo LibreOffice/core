@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstatic.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-20 16:12:10 $
+ *  last change: $Author: fs $ $Date: 2002-03-14 16:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,26 +65,49 @@
 #include <tools/string.hxx>
 #endif
 
-struct UStringDescription
+struct ConstAsciiString
 {
-    const sal_Char* pZeroTerminatedName;
+    const sal_Char* ascii;
+    sal_Int32       length;
 
-    UStringDescription(sal_Char* _pName) { pZeroTerminatedName = _pName; }
-    operator const sal_Char*() const { return pZeroTerminatedName; }
-    operator ::rtl::OUString() const { return ::rtl::OUString::createFromAscii(pZeroTerminatedName); }
-    operator UniString() const { return UniString::CreateFromAscii(pZeroTerminatedName); }
+    inline  operator const ::rtl::OUString () const;
+    inline  operator const sal_Char* () const { return ascii; }
+
+    inline ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength);
+    inline ~ConstAsciiString();
+
 private:
-    UStringDescription();
+    mutable ::rtl::OUString*    ustring;
 };
 
+//------------------------------------------------------------
+inline ConstAsciiString::ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength)
+    :ascii(_pAsciiZeroTerminated)
+    ,length(_nLength)
+    ,ustring(NULL)
+{
+}
+
+//------------------------------------------------------------
+inline ConstAsciiString::~ConstAsciiString()
+{
+    delete ustring;
+    ustring = NULL;
+}
+
+//------------------------------------------------------------
+inline ConstAsciiString::operator const ::rtl::OUString () const
+{
+    if (!ustring)
+        ustring = new ::rtl::OUString(ascii, length, RTL_TEXTENCODING_ASCII_US);
+    return *ustring;
+}
+
 #define DECLARE_CONSTASCII_USTRING(name)    \
-    extern UStringDescription name
+    extern ConstAsciiString name
 
 #define IMPLEMENT_CONSTASCII_USTRING(name, asciivalue)  \
-    UStringDescription name(asciivalue)
-
-//#define DECLARE_CONSTASCII_USTRING(name)                  extern ::rtl::OUString name;
-//#define IMPLEMENT_CONSTASCII_USTRING(name, asciivalue)    ::rtl::OUString name = ::rtl::OUString::createFromAscii(asciivalue)
+    ConstAsciiString name(asciivalue, sizeof(asciivalue) - 1)
 
 
 #endif _FM_STATIC_HXX_
