@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 10:45:56 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,9 +334,17 @@ void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(
 //============================================================
 //= OTableColumn
 //============================================================
+DBG_NAME(OTableColumn);
+OTableColumn::OTableColumn(const ::rtl::OUString& _rName)
+{
+    DBG_CTOR(OTableColumn,NULL);
+    m_sName = _rName;
+}
 // -------------------------------------------------------------------------
 OTableColumn::OTableColumn(const Reference<XPropertySet>& _xColumn)
 {
+    DBG_CTOR(OTableColumn,NULL);
+
     m_aTypeName = (::comphelper::getString(_xColumn->getPropertyValue(PROPERTY_TYPENAME)));
     if(_xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
         m_aDefaultValue = (::comphelper::getString(_xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE)));
@@ -349,7 +357,11 @@ OTableColumn::OTableColumn(const Reference<XPropertySet>& _xColumn)
     m_bCurrency = (::comphelper::getBOOL(_xColumn->getPropertyValue(PROPERTY_ISCURRENCY)));
     _xColumn->getPropertyValue(PROPERTY_NAME) >>= m_sName;
 }
-
+// -----------------------------------------------------------------------------
+OTableColumn::~OTableColumn()
+{
+    DBG_DTOR(OTableColumn,NULL);
+}
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OTableColumn::getImplementationId() throw (RuntimeException)
@@ -417,11 +429,13 @@ Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (Ru
 //============================================================
 //= OColumnWrapper
 //============================================================
+DBG_NAME(OColumnWrapper);
 //--------------------------------------------------------------------------
 OColumnWrapper::OColumnWrapper(const Reference< XPropertySet > & rCol)
                :m_xAggregate(rCol)
                ,m_nColTypeID(-1)
 {
+    DBG_CTOR(OColumnWrapper,NULL);
     // which type of aggregate property do we have
     if (m_nColTypeID == -1)
     {
@@ -437,6 +451,11 @@ OColumnWrapper::OColumnWrapper(const Reference< XPropertySet > & rCol)
 
         m_xAggregate->getPropertyValue(PROPERTY_NAME) >>= m_sName;
     }
+}
+// -----------------------------------------------------------------------------
+OColumnWrapper::~OColumnWrapper()
+{
+    DBG_DTOR(OColumnWrapper,NULL);
 }
 
 //------------------------------------------------------------------------------

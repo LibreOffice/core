@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 14:03:54 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,11 +548,11 @@ Sequence< ::rtl::OUString > OColumns::getSupportedServiceNames(  ) throw (Runtim
 void OColumns::append(const ::rtl::OUString& rName, OColumn* pCol)
 {
     MutexGuard aGuard(m_rMutex);
-    pCol->acquire();
+
     pCol->m_sName = rName;
     OSL_ENSURE(m_aNameMap.find(rName) == m_aNameMap.end(),"OColumns::append: Column already exists");
 
-    insertElement(rName,pCol);
+    insertElement(rName,pCol); // already acuires the column
 }
 
 //------------------------------------------------------------------

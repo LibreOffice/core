@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:45:27 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
 #endif
+#ifndef INCLUDED_FUNCTIONAL
+#define INCLUDED_FUNCTIONAL
+#include <functional>
+#endif // INCLUDED_FUNCTIONAL
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;
@@ -350,6 +354,14 @@ OColumn* OQuery_LINUX::createColumn(const ::rtl::OUString& _rName) const
         return NULL;
     return aIter->second;
 }
+/// unary_function Functor object for class ZZ returntype is void
+struct TRelease : ::std::unary_function< OQuery_LINUX::TNameColumnMap::value_type ,void>
+{
+    inline void operator()(const OQuery_LINUX::TNameColumnMap::value_type& _aType)
+    {
+        _aType.second->release();
+    }
+};
 
 // -----------------------------------------------------------------------------
 void OQuery_LINUX::readColumnSettings(const OConfigurationNode& _rConfigLocation)
@@ -375,6 +387,7 @@ void OQuery_LINUX::readColumnSettings(const OConfigurationNode& _rConfigLocation
                         Reference<XPropertySet> xSource;
                         xColumns->getByName(*pBegin) >>= xSource;
                         OTableColumn* pColumn = new OTableColumn(xSource);
+                        pColumn->acquire();
                         m_aColumnMap[*pBegin] = pColumn;
                     }
                 }
@@ -391,7 +404,10 @@ void OQuery_LINUX::readColumnSettings(const OConfigurationNode& _rConfigLocation
     {
     }
     OQueryDescriptor::readColumnSettings(_rConfigLocation);
-    m_aColumnMap = ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess>();
+
+    ::std::for_each(m_aColumnMap.begin(),m_aColumnMap.end(),TRelease());
+
+    TNameColumnMap().swap(m_aColumnMap);// clear the map and memory
     // check if columns were set from configuration when not we are ouOfDate
     if(!m_pColumns->getCount())
         m_bColumnsOutOfDate = sal_True;

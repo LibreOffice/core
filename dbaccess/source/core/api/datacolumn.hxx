@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datacolumn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >       m_xRow;
         ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRowUpdate > m_xRowUpdate;
 
+        virtual ~ODataColumn();
     public:
         ODataColumn  (const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
                       const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >& _xRow,

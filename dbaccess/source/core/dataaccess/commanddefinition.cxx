@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:48:33 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,6 @@ OCommandDefinition::OCommandDefinition(const Reference< XInterface >& _rxContain
             const OConfigurationTreeRoot& _rConfigRoot)
     :OPropertyContainer(m_aBHelper)
     ,OConfigurationFlushable(m_aMutex)
-    ,m_xContainer(_rxContainer)
 {
     DBG_CTOR(OCommandDefinition, NULL);
 
@@ -172,7 +171,6 @@ OCommandDefinition::OCommandDefinition(const Reference< XInterface >& _rxContain
     m_sElementName = _rElementName;
     m_aConfigurationNode = _rConfigRoot;
 
-    DBG_ASSERT(m_xContainer.is(), "OCommandDefinition::OCommandDefinition : invalid container !");
     DBG_ASSERT(m_sElementName.getLength() != 0, "OCommandDefinition::OCommandDefinition : invalid name !");
     DBG_ASSERT(m_aConfigurationNode.isValid(), "OCommandDefinition::OCommandDefinition : invalid configuration node !");
 
@@ -280,13 +278,10 @@ void OCommandDefinition::inserted(const Reference< XInterface >& _rxContainer,
 {
     MutexGuard aGuard(m_aMutex);
 
-    DBG_ASSERT(!m_xContainer.is(), "OCommandDefinition::inserted : invalid call : I'm already part of a container !");
-
     DBG_ASSERT(_rxContainer.is(), "OCommandDefinition::inserted : invalid container !");
     DBG_ASSERT(_rElementName.getLength() != 0, "OCommandDefinition::inserted : invalid name !");
     DBG_ASSERT(_rConfigRoot.isValid(), "OCommandDefinition::inserted : invalid configuration node !");
 
-    m_xContainer = _rxContainer;
     m_sElementName = _rElementName;
     m_aConfigurationNode = _rConfigRoot;
 
@@ -299,8 +294,6 @@ void OCommandDefinition::removed()
 {
     MutexGuard aGuard(m_aMutex);
 
-    DBG_ASSERT(m_xContainer.is(), "OCommandDefinition::removed: invalid call : I'm not part of a container !");
-    m_xContainer = NULL;
     m_sElementName = ::rtl::OUString();
     m_aConfigurationNode.clear();
 }

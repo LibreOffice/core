@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultcolumn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ using namespace ::comphelper;
 using namespace ::cppu;
 using namespace dbaccess;
 
+DBG_NAME(OResultColumn);
 //--------------------------------------------------------------------------
 OResultColumn::OResultColumn(
                          const Reference < XResultSetMetaData >& _xMetaData,
@@ -106,8 +107,13 @@ OResultColumn::OResultColumn(
                      :m_xMetaData(_xMetaData)
                      ,m_nPos(_nPos)
 {
+    DBG_CTOR(OResultColumn,NULL);
 }
-
+// -----------------------------------------------------------------------------
+OResultColumn::~OResultColumn()
+{
+    DBG_DTOR(OResultColumn,NULL);
+}
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OResultColumn::getImplementationId() throw (RuntimeException)

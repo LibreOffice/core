@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,16 @@ typedef ::cppu::ImplHelper2 <   ::com::sun::star::sdbcx::XDataDescriptorFactory,
 class OQuery;
 class OColumn;
 typedef ::comphelper::OPropertyArrayUsageHelper< OQuery >   OQuery_ArrayHelperBase;
+
+
 class OQuery_LINUX  :public OQueryDescriptor
                 ,public OQuery_Base
                 ,public OConfigurationFlushable
 {
+    friend struct TRelease;
 protected:
-    ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess> m_aColumnMap;
+    typedef ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess> TNameColumnMap;
+    TNameColumnMap      m_aColumnMap; // contains all columnnames to columns
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         m_xCommandDefinition;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >

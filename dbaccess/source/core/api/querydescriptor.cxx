@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -138,11 +141,12 @@ void OQueryDescriptor::registerProperties()
     registerProperty(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, 0,
                     &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
 }
-
+DBG_NAME(OQueryDescriptor);
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor()
     :ODataSettings(m_aBHelper)
 {
+    DBG_CTOR(OQueryDescriptor,NULL);
     registerProperties();
 }
 
@@ -150,6 +154,7 @@ OQueryDescriptor::OQueryDescriptor()
 OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XPropertySet >& _rxCommandDefinition)
     :ODataSettings(m_aBHelper)
 {
+    DBG_CTOR(OQueryDescriptor,NULL);
     registerProperties();
 
     OSL_ENSURE(_rxCommandDefinition.is(), "OQueryDescriptor::OQueryDescriptor : invalid source property set !");
@@ -174,6 +179,7 @@ OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XProp
 OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor& _rSource)
     :ODataSettings(_rSource, m_aBHelper)
 {
+    DBG_CTOR(OQueryDescriptor,NULL);
     registerProperties();
 
     m_sCommand = _rSource.m_sCommand;
@@ -195,7 +201,10 @@ OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor& _rSource)
 //--------------------------------------------------------------------------
 OQueryDescriptor::~OQueryDescriptor()
 {
+    osl_incrementInterlockedCount( &m_refCount ); // jsut to ensure that we won't be destroyed twice
+    dispose();
     delete m_pColumns;
+    DBG_DTOR(OQueryDescriptor,NULL);
 }
 
 //--------------------------------------------------------------------------
@@ -388,9 +397,16 @@ void OQueryDescriptor::readColumnSettings(const OConfigurationNode& _rConfigLoca
 //==========================================================================
 //= ODescriptorColumn
 //==========================================================================
+DBG_NAME(ODescriptorColumn);
 ODescriptorColumn::ODescriptorColumn(const ::rtl::OUString& _rName)
 {
+    DBG_CTOR(ODescriptorColumn,NULL);
     m_sName = _rName;
+}
+// -----------------------------------------------------------------------------
+ODescriptorColumn::~ODescriptorColumn()
+{
+    DBG_DTOR(ODescriptorColumn,NULL);
 }
 
 // com::sun::star::lang::XTypeProvider

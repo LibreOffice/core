@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 14:03:54 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace dbaccess;
 using namespace comphelper;
@@ -91,6 +94,7 @@ using namespace ::com::sun::star::util;
 using namespace cppu;
 using namespace osl;
 
+DBG_NAME(ORowSetDataColumn);
 // -------------------------------------------------------------------------
 ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& _xMetaData,
                                       const Reference < XRow >& _xRow,
@@ -104,11 +108,12 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
     ,m_aColumnValue(_rColumnValue)
     ,m_rEnd(_rEnd)
 {
-
+    DBG_CTOR(ORowSetDataColumn,NULL);
 }
 // -------------------------------------------------------------------------
 ORowSetDataColumn::~ORowSetDataColumn()
 {
+    DBG_DTOR(ORowSetDataColumn,NULL);
 }
 // -------------------------------------------------------------------------
 // comphelper::OPropertyArrayUsageHelper

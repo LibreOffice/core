@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datacolumn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-
+DBG_NAME(ODataColumn);
 //--------------------------------------------------------------------------
 ODataColumn::ODataColumn(
                          const Reference < XResultSetMetaData >& _xMetaData,
@@ -108,6 +108,12 @@ ODataColumn::ODataColumn(
                      ,m_xRow(_xRow)
                      ,m_xRowUpdate(_xRowUpdate)
 {
+    DBG_CTOR(ODataColumn,NULL);
+}
+// -----------------------------------------------------------------------------
+ODataColumn::~ODataColumn()
+{
+    DBG_DTOR(ODataColumn,NULL);
 }
 
 // com::sun::star::lang::XTypeProvider

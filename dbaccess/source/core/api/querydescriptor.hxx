@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ class ODescriptorColumn :public OColumn
                         ,public OColumnSettings
                         ,public ::comphelper::OPropertyArrayUsageHelper< ODescriptorColumn >
 {
+protected:
+    virtual ~ODescriptorColumn();
 public:
     ODescriptorColumn(const ::rtl::OUString& _rName);
 
