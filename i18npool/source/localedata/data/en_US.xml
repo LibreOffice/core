@@ -34,7 +34,7 @@
 <TimePM>pm</TimePM>
 <MeasurementSystem>US</MeasurementSystem>
 </LC_CTYPE>
-<LC_FORMAT>
+<LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$$-409]">
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
 <FormatCode>M/D/YY</FormatCode>
 <DefaultName></DefaultName>
@@ -180,19 +180,19 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>[$$-409]#,##0;-[$$-409]#,##0</FormatCode>
+<FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>[$$-409]#,##0.00;-[$$-409]#,##0.00</FormatCode>
+<FormatCode>[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>[$$-409]#,##0;[RED]-[$$-409]#,##0</FormatCode>
+<FormatCode>[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>[$$-409]#,##0.00;[RED]-[$$-409]#,##0.00</FormatCode>
+<FormatCode>[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
@@ -200,7 +200,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>[$$-409]#,##0.--;[RED]-[$$-409]#,##0.--</FormatCode>
+<FormatCode>[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
