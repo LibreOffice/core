@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:07:01 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2328,31 +2328,38 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
 
     // OD 2004-05-26 #i21478# - don't move backward, if flow frame wants to
     // keep with next frame and next frame is locked.
+    // --> OD 2004-12-08 #i38232# - If next frame is a table, do *not* check,
+    // if it's locked.
     if ( pNewUpper && !IsFollow() &&
          rThis.GetAttrSet()->GetKeep().GetValue() && rThis.GetIndNext() )
     {
         SwFrm* pIndNext = rThis.GetIndNext();
-        // get first content of section, while empty sections are skipped
-        while ( pIndNext && pIndNext->IsSctFrm() )
+        // --> OD 2004-12-08 #i38232#
+        if ( !pIndNext->IsTabFrm() )
         {
-            if( static_cast<SwSectionFrm*>(pIndNext)->GetSection() )
+            // get first content of section, while empty sections are skipped
+            while ( pIndNext && pIndNext->IsSctFrm() )
             {
-                SwFrm* pTmp = static_cast<SwSectionFrm*>(pIndNext)->ContainsAny();
-                if ( pTmp )
+                if( static_cast<SwSectionFrm*>(pIndNext)->GetSection() )
                 {
-                    pIndNext = pTmp;
-                    break;
+                    SwFrm* pTmp = static_cast<SwSectionFrm*>(pIndNext)->ContainsAny();
+                    if ( pTmp )
+                    {
+                        pIndNext = pTmp;
+                        break;
+                    }
                 }
+                pIndNext = pIndNext->GetIndNext();
             }
-            pIndNext = pIndNext->GetIndNext();
+            ASSERT( !pIndNext || pIndNext->ISA(SwTxtFrm),
+                    "<SwFlowFrm::MovedBwd(..)> - incorrect next found." );
+            if ( pIndNext && pIndNext->IsFlowFrm() &&
+                 SwFlowFrm::CastFlowFrm(pIndNext)->IsJoinLocked() )
+            {
+                pNewUpper = 0L;
+            }
         }
-        ASSERT( !pIndNext || pIndNext->ISA(SwTxtFrm) || pIndNext->ISA(SwTabFrm),
-                "<SwFlowFrm::MovedBwd(..)> - incorrect next found." );
-        if ( pIndNext && pIndNext->IsFlowFrm() &&
-             SwFlowFrm::CastFlowFrm(pIndNext)->IsJoinLocked() )
-        {
-            pNewUpper = 0L;
-        }
+        // <--
     }
 
     if ( pNewUpper )
