@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 12:42:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,31 +551,32 @@
 #define STR_SCATTR_PAGE_SCALE_AUTO      390
 
 #define STR_UNDO_TAB_RTL                        391
-#define STR_UNDO_HANGULHANJA        392
+#define STR_UNDO_HANGULHANJA            392
+#define STR_UNDO_CHINESE_TRANSLATION    393
 
-#define STR_NAME_INPUT_CELL         393
-#define STR_NAME_INPUT_RANGE        394
-#define STR_NAME_INPUT_DBRANGE      395
-#define STR_NAME_INPUT_ROW          396
-#define STR_NAME_INPUT_SHEET        397
-#define STR_NAME_INPUT_DEFINE       398
-#define STR_NAME_ERROR_SELECTION    399
-#define STR_NAME_ERROR_NAME         400
+#define STR_NAME_INPUT_CELL         394
+#define STR_NAME_INPUT_RANGE        395
+#define STR_NAME_INPUT_DBRANGE      396
+#define STR_NAME_INPUT_ROW          397
+#define STR_NAME_INPUT_SHEET        398
+#define STR_NAME_INPUT_DEFINE       399
+#define STR_NAME_ERROR_SELECTION    400
+#define STR_NAME_ERROR_NAME         401
 
-#define STR_CHANGED_MOVE_REJECTION_WARNING      401
-#define STR_CHANGED_DELETE_REJECTION_WARNING    402
+#define STR_CHANGED_MOVE_REJECTION_WARNING      402
+#define STR_CHANGED_DELETE_REJECTION_WARNING    403
 
-#define STR_HF_NONE_IN_BRACKETS     403
-#define STR_HF_OF                   404
-#define STR_HF_OF_QUESTION          405
-#define STR_HF_CREATED_BY           406
-#define STR_HF_CONFIDENTIAL         407
-#define STR_HF_CUSTOMIZED           408
-#define STR_HF_CUSTOM_FOOTER        409
-#define STR_ERR_DATAPILOT_INPUT     410
+#define STR_HF_NONE_IN_BRACKETS     404
+#define STR_HF_OF                   405
+#define STR_HF_OF_QUESTION          406
+#define STR_HF_CREATED_BY           407
+#define STR_HF_CONFIDENTIAL         408
+#define STR_HF_CUSTOMIZED           409
+#define STR_HF_CUSTOM_FOOTER        410
 
-#define STR_COUNT                   411
+#define STR_ERR_DATAPILOT_INPUT     411
 
+#define STR_COUNT                   412
 
 #endif
 
