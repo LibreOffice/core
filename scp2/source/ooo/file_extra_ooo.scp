@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_extra_ooo.scp,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2004-06-15 16:10:47 $
+*  last change: $Author: hjs $ $Date: 2004-06-25 16:24:06 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -182,37 +182,37 @@ File gid_File_Extra_Fontunxpsprint
     Dir = gid_Dir_Psprint;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, SETUPZIP, DONT_OVERWRITE);
-    Name (01) = "/letter/fontunxpsprint.zip";
-    Name (03) = "fontunxpsprint.zip";
-    Name (07) = "fontunxpsprint.zip";
-    Name (30) = "fontunxpsprint.zip";
-    Name (31) = "fontunxpsprint.zip";
-    Name (33) = "fontunxpsprint.zip";
-    Name (34) = "fontunxpsprint.zip";
-    Name (35) = "fontunxpsprint.zip";
-    Name (36) = "fontunxpsprint.zip";
-    Name (37) = "fontunxpsprint.zip";
+    Name (en-US) = "/letter/fontunxpsprint.zip";
+    Name (pt) = "fontunxpsprint.zip";
+    Name (ru) = "fontunxpsprint.zip";
+    Name (el) = "fontunxpsprint.zip";
+    Name (nl) = "fontunxpsprint.zip";
+    Name (fr) = "fontunxpsprint.zip";
+    Name (es) = "fontunxpsprint.zip";
+    Name (fi) = "fontunxpsprint.zip";
+    Name (hu) = "fontunxpsprint.zip";
+    Name (ca) = "fontunxpsprint.zip";
     Name (50) = "fontunxpsprint.zip";
-    Name (39) = "fontunxpsprint.zip";
-    Name (42) = "fontunxpsprint.zip";
-    Name (43) = "fontunxpsprint.zip";
-    Name (44) = "fontunxpsprint.zip";
-    Name (45) = "fontunxpsprint.zip";
-    Name (46) = "fontunxpsprint.zip";
-    Name (47) = "fontunxpsprint.zip";
-    Name (48) = "fontunxpsprint.zip";
-    Name (49) = "fontunxpsprint.zip";
-    Name (55) = "fontunxpsprint.zip";
-    Name (66) = "fontunxpsprint.zip";
-    Name (77) = "fontunxpsprint.zip";
-    Name (81) = "fontunxpsprint.zip";
-    Name (82) = "fontunxpsprint.zip";
-    Name (86) = "fontunxpsprint.zip";
-    Name (88) = "fontunxpsprint.zip";
-    Name (90) = "fontunxpsprint.zip";
-    Name (91) = "fontunxpsprint.zip";
-    Name (96) = "fontunxpsprint.zip";
-    Name (97) = "fontunxpsprint.zip";
+    Name (it) = "fontunxpsprint.zip";
+    Name (cs) = "fontunxpsprint.zip";
+    Name (sk) = "fontunxpsprint.zip";
+    Name (en-GB) = "fontunxpsprint.zip";
+    Name (da) = "fontunxpsprint.zip";
+    Name (sv) = "fontunxpsprint.zip";
+    Name (no) = "fontunxpsprint.zip";
+    Name (pl) = "fontunxpsprint.zip";
+    Name (de) = "fontunxpsprint.zip";
+    Name (pt-BR) = "fontunxpsprint.zip";
+    Name (th) = "fontunxpsprint.zip";
+    Name (et) = "fontunxpsprint.zip";
+    Name (ja) = "fontunxpsprint.zip";
+    Name (ko) = "fontunxpsprint.zip";
+    Name (zh-CN) = "fontunxpsprint.zip";
+    Name (zh-TW) = "fontunxpsprint.zip";
+    Name (tr) = "fontunxpsprint.zip";
+    Name (hi-IN) = "fontunxpsprint.zip";
+    Name (ar) = "fontunxpsprint.zip";
+    Name (he) = "fontunxpsprint.zip";
     Name (99) = "fontunxpsprint.zip";
 End
 
