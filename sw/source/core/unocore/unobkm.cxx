@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobkm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:41:36 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@
 #endif
 #ifndef _SWUNDO_HXX //autogen
 #include <swundo.hxx>
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -285,14 +291,19 @@ void SwXBookmark::setName(const OUString& rName) throw( uno::RuntimeException )
             aPam.SetMark();
             *aPam.GetMark() = *pBkm->GetOtherPos();
         }
-        pDoc->StartUndo(UNDO_INSERT);
+
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UNDO_ARG1, sOldName);
+        aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
+        aRewriter.AddRule(UNDO_ARG3, rName);
+        pDoc->StartUndo(UNDO_BOOKMARK_RENAME, &aRewriter);
 
         SwBookmark* pMark = pDoc->MakeBookmark(aPam, aCode,
                     sBkName, sShortName, BOOKMARK);
         pMark->Add(this);
         GetDoc()->DelBookmark( sOldName );
 
-        pDoc->EndUndo(UNDO_INSERT);
+        pDoc->EndUndo(UNDO_BOOKMARK_RENAME);
     }
     else if(bIsDescriptor)
         m_aName = sBkName;
