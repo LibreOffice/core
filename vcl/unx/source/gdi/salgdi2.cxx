@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:27:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 12:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
 #endif
-#ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#ifndef _SV_SALFRAME_H
+#include <salframe.h>
 #endif
 
 #ifndef _USE_PRINT_EXTENSION_
@@ -685,7 +685,7 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
                            pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                            pPosAry->mnDestX,    pPosAry->mnDestY );
 
-            if( _IsWindow() && ! _IsVirtualDevice() )
+            if( bWindow_ && ! bVirDev_ )
             {
                 static_cast<X11SalFrame*>(m_pFrame)->YieldGraphicsExpose();
             }

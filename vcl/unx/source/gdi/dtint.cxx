@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:26:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 12:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,14 +141,14 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator()
         OString aOver( pOverride );
 #if USE_CDE
         if( aOver.equalsIgnoreAsciiCase( "cde" ) )
-            return new CDEIntegrator( pFrame );
+            return new CDEIntegrator();
 #endif
         if( aOver.equalsIgnoreAsciiCase( "kde" ) )
-            return new KDEIntegrator( pFrame );
+            return new KDEIntegrator();
         if( aOver.equalsIgnoreAsciiCase( "gnome" ) )
-            return new GNOMEIntegrator( pFrame );
+            return new GNOMEIntegrator();
         if( aOver.equalsIgnoreAsciiCase( "none" ) )
-            return new DtIntegrator( pFrame );
+            return new DtIntegrator();
     }
 
     Atom nDtAtom = None;
