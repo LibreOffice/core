@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigImport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,11 +139,9 @@ XMLSectionFootnoteConfigImport::XMLSectionFootnoteConfigImport(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     vector<XMLPropertyState> & rProps,
-    const UniReference<XMLPropertySetMapper> & rMapperRef,
-    sal_Int32 nIndex) :
+    const UniReference<XMLPropertySetMapper> & rMapperRef) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         rProperties(rProps),
-        nPropIndex(nIndex),
         rMapper(rMapperRef)
 {
 }
@@ -158,6 +156,7 @@ void XMLSectionFootnoteConfigImport::StartElement(
     sal_Bool bEnd = sal_True;   // we're inside the element, so this is true
     sal_Bool bNumOwn = sal_False;
     sal_Bool bNumRestart = sal_False;
+    sal_Bool bEndnote = sal_False;
     sal_Int16 nNumRestartAt = 0;
     OUString sNumPrefix;
     OUString sNumSuffix;
@@ -181,9 +180,14 @@ void XMLSectionFootnoteConfigImport::StartElement(
                 sal_Int32 nTmp;
                 if (SvXMLUnitConverter::convertNumber(nTmp, sAttrValue))
                 {
-                    nNumRestartAt = nTmp - 1;
+                    nNumRestartAt = static_cast< sal_Int16 >( nTmp ) - 1;
                     bNumRestart = sal_True;
                 }
+            }
+            else if( IsXMLToken( sLocalName, XML_NOTE_CLASS ) )
+            {
+                if( IsXMLToken( sAttrValue, XML_ENDNOTE ) )
+                    bEndnote = sal_True;
             }
         }
         else if (XML_NAMESPACE_STYLE == nPrefix)
@@ -213,7 +217,6 @@ void XMLSectionFootnoteConfigImport::StartElement(
 
     // OK, now we have all values and can fill the XMLPropertyState vector
     Any aAny;
-    sal_Bool bEndnote = IsXMLToken(GetLocalName(), XML_ENDNOTES_CONFIGURATION);
 
     aAny.setValue( &bNumOwn, ::getBooleanCppuType() );
     sal_Int32 nIndex = rMapper->FindEntryIndex( bEndnote ?
@@ -259,7 +262,6 @@ void XMLSectionFootnoteConfigImport::StartElement(
     aAny.setValue( &bEnd, ::getBooleanCppuType() );
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_END : CTF_SECTION_FOOTNOTE_END );
-    DBG_ASSERT( nIndex == nPropIndex, "Wrong property mapper index received.");
     XMLPropertyState aEndState( nIndex, aAny );
     rProperties.push_back( aEndState );
 }
