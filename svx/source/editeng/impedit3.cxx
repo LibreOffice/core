@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-22 13:15:09 $
+ *  last change: $Author: mt $ $Date: 2001-06-27 09:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,11 +994,10 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 }
 
                 // And now check for Compression:
-                if ( GetAsianCompressionMode() )
+                if ( pPortion->GetLen() && GetAsianCompressionMode() )
                     bCompressedChars |= ImplCalcAsianCompression( pNode, pPortion, nTmpPos, (long*)pLine->GetCharPosArray().GetData() + (nTmpPos-pLine->GetStart()), 10000, FALSE );
 
-                nTmpWidth += pPortion->GetSize().Width();;
-
+                nTmpWidth += pPortion->GetSize().Width();
 
                 if( bScriptSpace && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, nTmpPos+pPortion->GetLen() ) ) )
                 {
@@ -1258,8 +1257,11 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         if ( bCompressedChars )
         {
             long nRemainingWidth = nMaxLineWidth - aTextSize.Width();
-            ImplExpandCompressedPortions( pLine, pParaPortion, nRemainingWidth );
-            aTextSize = pLine->CalcTextSize( *pParaPortion );
+            if ( nRemainingWidth > 0 )
+            {
+                ImplExpandCompressedPortions( pLine, pParaPortion, nRemainingWidth );
+                aTextSize = pLine->CalcTextSize( *pParaPortion );
+            }
         }
 
         if ( pLine->IsHangingPunctuation() )
