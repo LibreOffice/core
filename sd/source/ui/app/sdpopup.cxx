@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpopup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-19 15:04:53 $
+ *  last change: $Author: thb $ $Date: 2001-09-03 15:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,22 @@
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
 #endif
+#ifndef _SVX_ADRITEM_HXX
+#include <svx/adritem.hxx>
+#endif
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
 
 #include "strings.hrc"
 #include "sdpopup.hxx"
 #include "sdresid.hxx"
 #include "sdmod.hxx"
+#include "drawdoc.hxx"
+#include "docshell.hxx"
 
 /*************************************************************************
 |*
@@ -301,9 +312,22 @@ SvxFieldData* SdFieldPopup::GetField()
         if( pFileField->GetFormat() != eFormat ||
             pFileField->GetType() != eType )
         {
-            pNewField = new SvxExtFileField( *pFileField );
-            ( (SvxExtFileField*) pNewField )->SetType( eType );
-            ( (SvxExtFileField*) pNewField )->SetFormat( eFormat );
+            SdDrawDocShell* pDocSh = PTR_CAST( SdDrawDocShell,
+                                               SfxObjectShell::Current() );
+
+            if( pDocSh )
+            {
+                SvxExtFileField aFileField( *pFileField );
+
+                String aName;
+                if( pDocSh->HasName() )
+                    aName = pDocSh->GetMedium()->GetName();
+
+                // #91225# Get current filename, not the one stored in the old field
+                pNewField = new SvxExtFileField( aName );
+                ( (SvxExtFileField*) pNewField )->SetType( eType );
+                ( (SvxExtFileField*) pNewField )->SetFormat( eFormat );
+            }
         }
     }
     else if( pField->ISA( SvxAuthorField ) )
@@ -327,7 +351,8 @@ SvxFieldData* SdFieldPopup::GetField()
         if( pAuthorField->GetFormat() != eFormat ||
             pAuthorField->GetType() != eType )
         {
-            pNewField = new SvxAuthorField( *pAuthorField );
+            // #91225# Get current state of address, not the old one
+            pNewField = new SvxAuthorField( SvxAddressItem() );
             ( (SvxAuthorField*) pNewField )->SetType( eType );
             ( (SvxAuthorField*) pNewField )->SetFormat( eFormat );
         }
