@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:31:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include <plugins/gtk/gtkdata.hxx>
 #include <plugins/gtk/gtkinst.hxx>
 #include <plugins/gtk/gtkgdi.hxx>
-#include <pspgraphics.h>
 #include <keycodes.hxx>
 #include <wmadaptor.hxx>
 #include <salbmp.h>
@@ -81,10 +80,6 @@
 #endif
 
 int GtkSalFrame::m_nFloats = 0;
-
-static GtkWidget * g_gtk_frame_ScrollWidget = NULL;
-
-
 
 static USHORT GetModCode( guint state )
 {
@@ -234,7 +229,6 @@ void GtkSalFrame::InitCommon()
     m_pCurrentCursor    = NULL;
     m_nKeyModifiers     = 0;
     m_bSingleAltPress   = false;
-    m_bResizeable       = true;
     m_bFullscreen       = false;
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (m_nStyle & SAL_FRAME_STYLE_SIZEABLE) && ! m_pParent );
@@ -426,10 +420,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
 
     if( bDecoHandling )
     {
-        m_bResizeable = (nStyle & SAL_FRAME_STYLE_SIZEABLE) != 0;
-        if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
-            m_bResizeable = true;
-        gtk_window_set_resizable( m_pWindow, m_bResizeable ? TRUE : FALSE );
+        gtk_window_set_resizable( m_pWindow, (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? TRUE : FALSE );
         if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
             lcl_set_accept_focus( m_pWindow, FALSE, false );
     }
@@ -707,7 +698,7 @@ void GtkSalFrame::setMinMaxSize()
     {
         GdkGeometry aGeo;
         int aHints = 0;
-        if( m_bResizeable )
+        if( m_nStyle & SAL_FRAME_STYLE_SIZEABLE )
         {
             if( m_aMinSize.Width() && m_aMinSize.Height() )
             {
@@ -949,14 +940,14 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen )
     {
         if( bFullScreen )
         {
-            if( ! m_bResizeable )
+            if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
                 gtk_window_set_resizable( m_pWindow, TRUE );
             gtk_window_fullscreen( m_pWindow );
         }
         else
         {
             gtk_window_unfullscreen( m_pWindow );
-            if( ! m_bResizeable )
+            if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
                 gtk_window_set_resizable( m_pWindow, FALSE );
         }
     }
@@ -1215,239 +1206,23 @@ SalBitmap* GtkSalFrame::SnapShot()
     return NULL;
 }
 
-static inline Color getColor( const GdkColor& rCol )
-{
-    return Color( rCol.red >> 8, rCol.green >> 8, rCol.blue >> 8 );
-}
-
-#if OSL_DEBUG_LEVEL > 1
-
-void printColor( const char* name, const GdkColor& rCol )
-{
-    fprintf( stderr, "   %s = 0x%2x 0x%2x 0x%2x\n",
-             name,
-             rCol.red >> 8, rCol.green >> 8, rCol.blue >> 8 );
-}
-
-void printStyleColors( GtkStyle* pStyle )
-{
-    static const char* pStates[] = { "NORMAL", "ACTIVE", "PRELIGHT", "SELECTED", "INSENSITIVE" };
-
-    for( int i = 0; i < 5; i++ )
-    {
-        fprintf( stderr, "state %s colors:\n", pStates[i] );
-        printColor( "bg     ", pStyle->bg[i] );
-        printColor( "fg     ", pStyle->fg[i] );
-        printColor( "light  ", pStyle->light[i] );
-        printColor( "dark   ", pStyle->dark[i] );
-        printColor( "mid    ", pStyle->mid[i] );
-        printColor( "text   ", pStyle->text[i] );
-        printColor( "base   ", pStyle->base[i] );
-        printColor( "text_aa", pStyle->text_aa[i] );
-    }
-}
-#endif
-
 void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
 {
     if( ! m_pWindow )
         return;
 
-    StyleSettings aStyleSet = rSettings.GetStyleSettings();
-
-    gtk_widget_ensure_style( GTK_WIDGET(m_pWindow) );
-    GtkStyle* pStyle = gtk_widget_get_style( GTK_WIDGET(m_pWindow) );
-
-#if OSL_DEBUG_LEVEL > 2
-    printStyleColors( pStyle );
-#endif
-
-    // text colors
-    Color aTextColor = getColor( pStyle->text[GTK_STATE_NORMAL] );
-    aStyleSet.SetDialogTextColor( aTextColor );
-    aStyleSet.SetButtonTextColor( aTextColor );
-    aStyleSet.SetRadioCheckTextColor( aTextColor );
-    aStyleSet.SetGroupTextColor( aTextColor );
-    aStyleSet.SetLabelTextColor( aTextColor );
-    aStyleSet.SetInfoTextColor( aTextColor );
-    aStyleSet.SetWindowTextColor( aTextColor );
-    aStyleSet.SetFieldTextColor( aTextColor );
-
-    // background colors
-    Color aBackColor = getColor( pStyle->bg[GTK_STATE_NORMAL] );
-    Color aBackFieldColor = getColor( pStyle->base[ GTK_STATE_NORMAL ] );
-    aStyleSet.Set3DColors( aBackColor );
-    aStyleSet.SetFaceColor( aBackColor );
-    aStyleSet.SetDialogColor( aBackColor );
-    aStyleSet.SetWorkspaceColor( aBackColor );
-    aStyleSet.SetFieldColor( aBackFieldColor );
-    aStyleSet.SetWindowColor( aBackFieldColor );
-    // ancient wisdom tells us a mystic algorithm how to set checked color
-    if( aBackColor == COL_LIGHTGRAY )
-        aStyleSet.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
-    else
+    GtkSalGraphics* pGraphics = static_cast<GtkSalGraphics*>(m_aGraphics[0].pGraphics);
+    bool bFreeGraphics = false;
+    if( ! pGraphics )
     {
-        Color aColor2 = aStyleSet.GetLightColor();
-        Color aCheck( (BYTE)(((USHORT)aBackColor.GetRed()+(USHORT)aColor2.GetRed())/2),
-                      (BYTE)(((USHORT)aBackColor.GetGreen()+(USHORT)aColor2.GetGreen())/2),
-                      (BYTE)(((USHORT)aBackColor.GetBlue()+(USHORT)aColor2.GetBlue())/2)
-                      );
-        aStyleSet.SetCheckedColor( aCheck );
+        pGraphics = static_cast<GtkSalGraphics*>(GetGraphics());
+        bFreeGraphics = true;
     }
 
-    // highlighting colors
-    Color aHighlightColor = getColor( pStyle->base[GTK_STATE_SELECTED] );
-    Color aHighlightTextColor = getColor( pStyle->text[GTK_STATE_SELECTED] );
-    aStyleSet.SetHighlightColor( aHighlightColor );
-    aStyleSet.SetHighlightTextColor( aHighlightTextColor );
+    pGraphics->updateSettings( rSettings );
 
-    // menu colors
-    GtkWidget* pMenu  = gtk_menu_new();
-    GtkWidget* pMenuItem = gtk_menu_item_new_with_label( "b" );
-    gtk_menu_shell_append( GTK_MENU_SHELL( pMenu ), pMenuItem );
-    gtk_widget_ensure_style( pMenu );
-    gtk_widget_ensure_style( pMenuItem );
-    GtkStyle* pMenuStyle = gtk_widget_get_style( pMenu );
-    GtkStyle* pMenuItemStyle = gtk_rc_get_style( pMenuItem );
-    GtkStyle* pMenuTextStyle = gtk_rc_get_style( gtk_bin_get_child( GTK_BIN(pMenuItem) ) );
-
-    aBackColor = getColor( pMenuStyle->bg[GTK_STATE_NORMAL] );
-    aStyleSet.SetMenuColor( aBackColor );
-    aStyleSet.SetMenuBarColor( aBackColor );
-    aTextColor = getColor( pMenuTextStyle->text[GTK_STATE_NORMAL] );
-    aStyleSet.SetMenuTextColor( aTextColor );
-    aHighlightColor = getColor( pMenuItemStyle->bg[ GTK_STATE_SELECTED ] );
-    aStyleSet.SetMenuHighlightColor( aHighlightColor );
-    aHighlightTextColor = getColor( pMenuTextStyle->fg[ GTK_STATE_PRELIGHT ] );
-    aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
-
-    // clean up the menu
-    gtk_widget_destroy( pMenu );
-
-    // UI font
-    OString aFamily     = pango_font_description_get_family( pStyle->font_desc );
-    int nPixelHeight    = pango_font_description_get_size( pStyle->font_desc )/PANGO_SCALE;
-    PangoStyle  eStyle  = pango_font_description_get_style( pStyle->font_desc );
-    PangoWeight eWeight = pango_font_description_get_weight( pStyle->font_desc );
-    PangoStretch eStretch = pango_font_description_get_stretch( pStyle->font_desc );
-
-    psp::FastPrintFontInfo aInfo;
-    // set family name
-    aInfo.m_aFamilyName = OStringToOUString( aFamily, RTL_TEXTENCODING_UTF8 );
-    // set italic
-    switch( eStyle )
-    {
-        case PANGO_STYLE_NORMAL:    aInfo.m_eItalic = psp::italic::Upright;break;
-        case PANGO_STYLE_ITALIC:    aInfo.m_eItalic = psp::italic::Italic;break;
-        case PANGO_STYLE_OBLIQUE:   aInfo.m_eItalic = psp::italic::Oblique;break;
-    }
-    // set weight
-    if( eWeight <= PANGO_WEIGHT_ULTRALIGHT )
-        aInfo.m_eWeight = psp::weight::UltraLight;
-    else if( eWeight <= PANGO_WEIGHT_LIGHT )
-        aInfo.m_eWeight = psp::weight::Light;
-    else if( eWeight <= PANGO_WEIGHT_NORMAL )
-        aInfo.m_eWeight = psp::weight::Normal;
-    else if( eWeight <= PANGO_WEIGHT_BOLD )
-        aInfo.m_eWeight = psp::weight::Bold;
-    else
-        aInfo.m_eWeight = psp::weight::UltraBold;
-    // set width
-    switch( eStretch )
-    {
-        case PANGO_STRETCH_ULTRA_CONDENSED: aInfo.m_eWidth = psp::width::UltraCondensed;break;
-        case PANGO_STRETCH_EXTRA_CONDENSED: aInfo.m_eWidth = psp::width::ExtraCondensed;break;
-        case PANGO_STRETCH_CONDENSED:       aInfo.m_eWidth = psp::width::Condensed;break;
-        case PANGO_STRETCH_SEMI_CONDENSED:  aInfo.m_eWidth = psp::width::SemiCondensed;break;
-        case PANGO_STRETCH_NORMAL:          aInfo.m_eWidth = psp::width::Normal;break;
-        case PANGO_STRETCH_SEMI_EXPANDED:   aInfo.m_eWidth = psp::width::SemiExpanded;break;
-        case PANGO_STRETCH_EXPANDED:        aInfo.m_eWidth = psp::width::Expanded;break;
-        case PANGO_STRETCH_EXTRA_EXPANDED:  aInfo.m_eWidth = psp::width::ExtraExpanded;break;
-        case PANGO_STRETCH_ULTRA_EXPANDED:  aInfo.m_eWidth = psp::width::UltraExpanded;break;
-    }
-
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
-#endif
-
-    // match font to e.g. resolve "Sans"
-    psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILocale() );
-
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
-             aInfo.m_nID != 0 ? "succeeded" : "failed",
-             OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
-
-    sal_Int32 nDPIX, nDPIY;
-    sal_Int32 nDispDPIY = getDisplay()->GetResolution().B();
-    getDisplay()->GetScreenFontResolution( nDPIX, nDPIY );
-    int nHeight = nPixelHeight * nDispDPIY / nDPIY;
-    // allow for rounding in back conversion (at SetFont)
-    while( (nHeight * nDPIY / nDispDPIY) > nPixelHeight )
-        nHeight--;
-    while( (nHeight * nDPIY / nDispDPIY) < nPixelHeight )
-        nHeight++;
-
-    Font aFont( aInfo.m_aFamilyName, Size( 0, nHeight ) );
-    if( aInfo.m_eWeight != psp::weight::Unknown )
-        aFont.SetWeight( PspGraphics::ToFontWeight( aInfo.m_eWeight ) );
-    if( aInfo.m_eWidth != psp::width::Unknown )
-        aFont.SetWidthType( PspGraphics::ToFontWidth( aInfo.m_eWidth ) );
-    if( aInfo.m_eItalic != psp::italic::Unknown )
-        aFont.SetItalic( PspGraphics::ToFontItalic( aInfo.m_eItalic ) );
-    if( aInfo.m_ePitch != psp::pitch::Unknown )
-        aFont.SetPitch( PspGraphics::ToFontPitch( aInfo.m_ePitch ) );
-
-    aStyleSet.SetAppFont( aFont );
-    aStyleSet.SetHelpFont( aFont );
-    aStyleSet.SetTitleFont( aFont );
-    aStyleSet.SetFloatTitleFont( aFont );
-    aStyleSet.SetMenuFont( aFont );
-    aStyleSet.SetToolFont( aFont );
-    aStyleSet.SetLabelFont( aFont );
-    aStyleSet.SetInfoFont( aFont );
-    aStyleSet.SetRadioCheckFont( aFont );
-    aStyleSet.SetPushButtonFont( aFont );
-    aStyleSet.SetFieldFont( aFont );
-    aStyleSet.SetIconFont( aFont );
-    aStyleSet.SetGroupFont( aFont );
-
-    if ( !g_gtk_frame_ScrollWidget )
-    {
-        g_gtk_frame_ScrollWidget = gtk_hscrollbar_new( NULL );
-
-        GtkWidget *pCacheWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-        GtkWidget *pDumbContainer = gtk_fixed_new();
-        gtk_container_add( GTK_CONTAINER( pCacheWindow ), pDumbContainer );
-        gtk_widget_realize( pDumbContainer );
-        gtk_widget_realize( pCacheWindow );
-
-        gtk_container_add( GTK_CONTAINER( pDumbContainer ), g_gtk_frame_ScrollWidget );
-        gtk_widget_realize( g_gtk_frame_ScrollWidget );
-    }
-
-    if ( g_gtk_frame_ScrollWidget )
-    {
-        gint slider_width = 14;
-        gint trough_border = 1;
-        gint min_slider_length = 21;
-
-        // Grab some button style attributes
-        gtk_widget_style_get( g_gtk_frame_ScrollWidget,
-                              "slider-width", &slider_width,
-                              "trough-border", &trough_border,
-                              "min-slider-length", &min_slider_length,
-                              NULL );
-        gint magic = trough_border ? 1 : 0;
-        aStyleSet.SetScrollBarSize( slider_width + 2*trough_border );
-        aStyleSet.SetMinThumbSize( min_slider_length - magic );
-    }
-
-//  FIXME: need some way of fetching toolbar icon size.
-//  aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_SMALL );
-
-    rSettings.SetStyleSettings( aStyleSet );
+    if( bFreeGraphics )
+        ReleaseGraphics( pGraphics );
 }
 
 void GtkSalFrame::Beep( SoundType eType )
