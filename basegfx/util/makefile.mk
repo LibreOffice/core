@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: aw $ $Date: 2003-11-26 14:40:18 $
+#   last change: $Author: thb $ $Date: 2004-02-24 22:10:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ LIB1FILES=\
     $(SLB)$/polygon.lib	\
     $(SLB)$/range.lib	\
     $(SLB)$/tuple.lib	\
+    $(SLB)$/tools.lib	\
     $(SLB)$/vector.lib
 
 SHL1TARGET= basegfx$(UPD)$(DLLPOSTFIX)
