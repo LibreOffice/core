@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-27 08:46:06 $
+ *  last change: $Author: nn $ $Date: 2000-11-30 18:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <svx/align.hxx>
 #include <svx/border.hxx>
 #include <svx/backgrnd.hxx>
+#include <svx/paragrph.hxx>
 /*
 #include <sbx.hxx>
 #include <sfxdoc.hxx>
@@ -113,6 +114,7 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrame,
     AddTabPage( TP_FONT,        SvxCharNamePage::Create,        0 );
     AddTabPage( TP_FONTEFF,     SvxCharEffectsPage::Create,     0 );
     AddTabPage( TP_ALIGNMENT,   SvxAlignmentTabPage::Create,    0 );
+    AddTabPage( TP_ASIAN,       SvxAsianTabPage::Create,        0 );
     AddTabPage( TP_BORDER,      SvxBorderTabPage::Create,       0 );
     AddTabPage( TP_BACKGROUND,  SvxBackgroundTabPage::Create,   0 );
     AddTabPage( TP_PROTECTION,  ScTabPageProtection::Create,    0 );

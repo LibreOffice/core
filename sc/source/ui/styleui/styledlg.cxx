@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-27 08:51:30 $
+ *  last change: $Author: nn $ $Date: 2000-11-30 18:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svx/chardlg.hxx>
 #include <svx/numfmt.hxx>
 #include <svx/page.hxx>
+#include <svx/paragrph.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/style.hxx>
 
@@ -105,6 +106,7 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
                 AddTabPage( TP_FONT, &SvxCharNamePage::Create,          &SvxCharNamePage::GetRanges );
                 AddTabPage( TP_FONTEFF, &SvxCharEffectsPage::Create,            &SvxCharEffectsPage::GetRanges );
                 AddTabPage( TP_ALIGNMENT, &SvxAlignmentTabPage::Create, &SvxAlignmentTabPage::GetRanges );
+                AddTabPage( TP_ASIAN, &SvxAsianTabPage::Create,         &SvxAsianTabPage::GetRanges );
                 AddTabPage( TP_BORDER, &SvxBorderTabPage::Create,       &SvxBorderTabPage::GetRanges );
                 AddTabPage( TP_BACKGROUND, &SvxBackgroundTabPage::Create,   &SvxBackgroundTabPage::GetRanges );
                 AddTabPage( TP_PROTECTION, &ScTabPageProtection::Create,    &ScTabPageProtection::GetRanges );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:12:31 $
+ *  last change: $Author: nn $ $Date: 2000-11-30 18:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,6 @@ TabDialog RID_SCDLG_ATTR
                 Text[ turkish ] = "Yazýtipi";
                 Text[ language_user1 ] = " ";
             };
-
             PageItem
             {
                 Identifier = TP_FONTEFF ;
@@ -156,7 +155,6 @@ TabDialog RID_SCDLG_ATTR
                 Text = "Schrifteffekt" ;
                 Text [ ENGLISH ] = "Character Extension" ;
             };
-
             PageItem
             {
                 Identifier = TP_ALIGNMENT ;
@@ -184,6 +182,13 @@ TabDialog RID_SCDLG_ATTR
                 Text[ korean ] = "¸ÂÃã";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_ASIAN ;
+                PageResID = 263 ;
+                Text = "Asiatische Typographie" ;
+                Text [ ENGLISH ] = "Asian typography" ;
             };
             PageItem
             {
