@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:14:08 $
+ *  last change: $Author: os $ $Date: 2001-04-06 15:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1293,6 +1293,11 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
+    };
+    String MSG_MODIFY
+    {
+        Text = "Möchten Sie die aktuelle Änderung übernehmen?" ;
+        Text [ English ] = "Do you want to accept the current modification?" ;
     };
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
