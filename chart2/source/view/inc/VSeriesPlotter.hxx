@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-17 10:46:52 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 14:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,18 +212,18 @@ protected: //methods
                 ::com::sun::star::drawing::XShapes >& xTarget );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
-        getLabelsGroupShape( VDataSeries* pDataSeries
+        getLabelsGroupShape( VDataSeries& rDataSeries
             , const::com::sun::star:: uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
-        getErrorBarsGroupShape( VDataSeries* pDataSeries
+        getErrorBarsGroupShape( VDataSeries& rDataSeries
             , const::com::sun::star:: uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget );
 
     void createDataLabel( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >& xTarget
-                , const VDataSeries& rDataSeries
+                , VDataSeries& rDataSeries
                 , sal_Int32 nPointIndex
                 , double fValue
                 , double fSumValue

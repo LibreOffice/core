@@ -263,47 +263,47 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShapeBackChild(
     return xShapes;
 }
 
-uno::Reference< drawing::XShapes > VSeriesPlotter::getLabelsGroupShape( VDataSeries* pDataSeries
+uno::Reference< drawing::XShapes > VSeriesPlotter::getLabelsGroupShape( VDataSeries& rDataSeries
                                         , const uno::Reference< drawing::XShapes >& xTarget )
 {
-    if(pDataSeries->m_xLabelsShape.is())
-    {
-        return uno::Reference<drawing::XShapes>( pDataSeries->m_xLabelsShape, uno::UNO_QUERY );
-    }
+    if(rDataSeries.m_xLabelsShape.is())
+        return uno::Reference<drawing::XShapes>( rDataSeries.m_xLabelsShape, uno::UNO_QUERY );
+
     //create a group shape for this series and add to logic target:
     uno::Reference< drawing::XShapes > xShapes(
-        createGroupShape( xTarget,pDataSeries->getLabelsCID() ));
+        this->createGroupShape( xTarget,rDataSeries.getLabelsCID() ));
     uno::Reference<drawing::XShape> xShape =
                 uno::Reference<drawing::XShape>( xShapes, uno::UNO_QUERY );
-    pDataSeries->m_xLabelsShape.set(xShape);
+    rDataSeries.m_xLabelsShape.set(xShape);
     return xShapes;
 
 }
 
-uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VDataSeries* pDataSeries
+uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VDataSeries& rDataSeries
                                         , const uno::Reference< drawing::XShapes >& xTarget )
 {
-    if(pDataSeries->m_xErrorBarsShape.is())
-    {
-        return uno::Reference<drawing::XShapes>( pDataSeries->m_xErrorBarsShape, uno::UNO_QUERY );
-    }
+    if(rDataSeries.m_xErrorBarsShape.is())
+        return uno::Reference<drawing::XShapes>( rDataSeries.m_xErrorBarsShape, uno::UNO_QUERY );
+
     //create a group shape for this series and add to logic target:
     uno::Reference< drawing::XShapes > xShapes(
-        createGroupShape( xTarget,pDataSeries->getErrorBarsCID() ));
+        this->createGroupShape( xTarget,rDataSeries.getErrorBarsCID() ));
     uno::Reference<drawing::XShape> xShape =
                 uno::Reference<drawing::XShape>( xShapes, uno::UNO_QUERY );
-    pDataSeries->m_xErrorBarsShape.set(xShape);
+    rDataSeries.m_xErrorBarsShape.set(xShape);
     return xShapes;
 
 }
 
 void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& xTarget
-                    , const VDataSeries& rDataSeries
+                    , VDataSeries& rDataSeries
                     , sal_Int32 nPointIndex
                     , double fValue
                     , double fSumValue
                     , const awt::Point& rScreenPosition2D )
 {
+    uno::Reference< drawing::XShapes > xTarget_( this->getLabelsGroupShape(rDataSeries, xTarget) );
+
     //check wether the label needs to be created and how:
     DataPointLabel* pLabel = rDataSeries.getDataPointLabel( nPointIndex );
 
@@ -361,7 +361,7 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
 
     //create text shape
     uno::Reference< drawing::XShape > xTextShape = ShapeFactory(m_xShapeFactory).
-        createText( xTarget, aText.makeStringAndClear()
+        createText( xTarget_, aText.makeStringAndClear()
                     , *pPropNames, *pPropValues
                     , ShapeFactory::makeTransformation( rScreenPosition2D ) );
 }
@@ -621,7 +621,7 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
         xErrorBarProp.is())
     {
         uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
-            getErrorBarsGroupShape(&rVDataSeries, xTarget) );
+            this->getErrorBarsGroupShape(rVDataSeries, xTarget) );
 
         createErrorBar( xErrorBarsGroup_Shapes
             , rUnscaledLogicPosition, xErrorBarProp
