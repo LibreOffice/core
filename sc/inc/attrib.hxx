@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:03:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 //------------------------------------------------------------------------
 
                                         // Flags fuer durch Merge verdeckte Zellen
@@ -100,12 +104,12 @@ BOOL HasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther );
 
 class ScMergeAttr: public SfxPoolItem
 {
-    INT16       nColMerge;
-    INT16       nRowMerge;
+    SCsCOL      nColMerge;
+    SCsROW      nRowMerge;
 public:
                 TYPEINFO();
                 ScMergeAttr();
-                ScMergeAttr( INT16 nCol, INT16 nRow = 0);
+                ScMergeAttr( SCsCOL nCol, SCsROW nRow = 0);
                 ScMergeAttr( const ScMergeAttr& );
                 ~ScMergeAttr();
 
@@ -116,8 +120,8 @@ public:
     virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVer ) const;
     virtual SvStream&       Store( SvStream& rStream, USHORT nVer ) const;
 
-            INT16           GetColMerge() const {return nColMerge; }
-            INT16           GetRowMerge() const {return nRowMerge; }
+            SCsCOL          GetColMerge() const {return nColMerge; }
+            SCsROW          GetRowMerge() const {return nRowMerge; }
 
             BOOL            IsMerged() const { return nColMerge>1 || nRowMerge>1; }
 
@@ -300,7 +304,7 @@ public:
 
 public:
     USHORT  nCount;
-    USHORT* pTabArr;
+    SCTAB*  pTabArr;
 };
 
 inline ScTableListItem::ScTableListItem( const USHORT nWhich )
