@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilteredContainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:59:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,9 @@ namespace dbaccess
                         sCatalog    = xCurrentRow->getString(1);
                         sSchema     = xCurrentRow->getString(2);
                         sName       = xCurrentRow->getString(3);
+#if OSL_DEBUG_LEVEL > 0
+                        ::rtl::OUString sTableType = xCurrentRow->getString(4);
+#endif
                         // we're not interested in the "wasNull", as the getStrings would return an empty string in
                         // that case, which is sufficient here
 
@@ -307,7 +310,7 @@ namespace dbaccess
         }
         catch (SQLException&)
         {
-            OSL_ENSURE(0,"OFilteredContainer::construct : catched an SQL-Exception !");
+            OSL_ENSURE(0,"OFilteredContainer::construct: caught an SQL-Exception !");
             disposing();
             return;
         }
@@ -360,14 +363,12 @@ namespace dbaccess
 
         return bFilterMatch;
     }
-    // -------------------------------------------------------------------------
-    Reference< XNamed > OFilteredContainer::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-    {
-        Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-        OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-        return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
-    }
     // -----------------------------------------------------------------------------
+    ::rtl::OUString OFilteredContainer::getNameForObject(const ObjectType& _xObject)
+    {
+        OSL_ENSURE(_xObject.is(),"OTables::getNameForObject: Object is NULL!");
+        return ::dbtools::composeTableName(m_xMetaData,_xObject,sal_False,::dbtools::eInDataManipulation);
+    }
 // ..............................................................................
 } // namespace
 // ..............................................................................
