@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 07:56:56 $
+ *  last change: $Author: pb $ $Date: 2001-02-20 07:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,3 +539,10 @@ Resource RID_DLSTATUS2
         Text[ language_user1 ] = " ";
     };
 };
+
+String STR_HTML_GENERATOR
+{
+    Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION (%1)" ;
+    Text[ language_user1 ] = "pb: no translation";
+};
+

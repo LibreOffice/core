@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:39:51 $
+ *  last change: $Author: pb $ $Date: 2001-02-20 07:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,30 +64,31 @@
 
 //fuer das Mapping Fehlercode -> ResId
 
-#define RC_BASTYP               RID_SFX_BASTYP_START
-#define DLG_FILTER_SELECT           (RC_BASTYP)
-#define STR_FILTER_DOWNLOAD             (RC_BASTYP+3)
-#define STR_FILTER_CHOOSER              (RC_BASTYP+4)
-#define STR_FILTER_OTHERS               (RC_BASTYP+5)
-#define STR_FILTER_ZIPPED               (RC_BASTYP+6)
-#define STR_FILTER_CHANNELON_OFFLINE        (RC_BASTYP+7)
-#define STR_FILTER_EXTERNAL         (RC_BASTYP+8)
-#define STR_FILTER_NOT_INSTALLED        (RC_BASTYP+9)
-#define STR_FILTER_CONSULT_SERVICE      (RC_BASTYP+10)
-#define STR_FILTER_COMPONENT            (RC_BASTYP+11)
-#define STR_MEMEXCEPTION            (RC_BASTYP+28)
-#define MSG_MEM_WARN                (RC_BASTYP+29)
+#define RC_BASTYP                       RID_SFX_BASTYP_START
+#define DLG_FILTER_SELECT               (RC_BASTYP +  0)
+#define STR_FILTER_DOWNLOAD             (RC_BASTYP +  3)
+#define STR_FILTER_CHOOSER              (RC_BASTYP +  4)
+#define STR_FILTER_OTHERS               (RC_BASTYP +  5)
+#define STR_FILTER_ZIPPED               (RC_BASTYP +  6)
+#define STR_FILTER_CHANNELON_OFFLINE    (RC_BASTYP +  7)
+#define STR_FILTER_EXTERNAL             (RC_BASTYP +  8)
+#define STR_FILTER_NOT_INSTALLED        (RC_BASTYP +  9)
+#define STR_FILTER_CONSULT_SERVICE      (RC_BASTYP + 10)
+#define STR_FILTER_COMPONENT            (RC_BASTYP + 11)
+#define STR_MEMEXCEPTION                (RC_BASTYP + 28)
+#define MSG_MEM_WARN                    (RC_BASTYP + 29)
+#define STR_HTML_GENERATOR              (RC_BASTYP + 30)
 
-#define RID_JSPROMPT                    (RC_BASTYP+8)
+#define RID_JSPROMPT                    (RC_BASTYP +  8)
 #define RID_JSPROMPT_TEXT               1
 #define RID_JSPROMPT_CANCEL             2
 #define RID_JSPROMPT_OK                 3
 
-#define RID_FLT_INTERACTIVE             (RC_BASTYP+9)
-#define RID_FLT_INTERACTIVE_TEXT            1
-#define RID_FLT_INTERACTIVE_EDIT            2
-#define RID_FLT_INTERACTIVE_CANCEL          3
-#define RID_FLT_INTERACTIVE_OK              4
+#define RID_FLT_INTERACTIVE             (RC_BASTYP +  9)
+#define RID_FLT_INTERACTIVE_TEXT        1
+#define RID_FLT_INTERACTIVE_EDIT        2
+#define RID_FLT_INTERACTIVE_CANCEL      3
+#define RID_FLT_INTERACTIVE_OK          4
 
 //= ErrorTexte "downloadcontroller" =================================================================
 #define ERR_INET_NAME_RESOLVE           (RC_BASTYP + 12)
@@ -96,17 +97,17 @@
 #define ERR_INET_WRITE                  (RC_BASTYP + 15)
 #define ERR_INET_GENERAL                (RC_BASTYP + 16)
 #define ERR_WRONG_URL                   (RC_BASTYP + 17)
-#define ERR_ACTIVEDOWNLOADS         (RC_BASTYP + 18)
-#define ERR_QUEUEDDOWNLOADS                 (RC_BASTYP + 19)
-#define ERR_FILEISLOCAL             (RC_BASTYP + 20)
-#define ERR_FILENAMECHECK83         (RC_BASTYP + 21)
+#define ERR_ACTIVEDOWNLOADS             (RC_BASTYP + 18)
+#define ERR_QUEUEDDOWNLOADS             (RC_BASTYP + 19)
+#define ERR_FILEISLOCAL                 (RC_BASTYP + 20)
+#define ERR_FILENAMECHECK83             (RC_BASTYP + 21)
 #define ERR_INSUFFICIENTDISKSPACE       (RC_BASTYP + 22)
 
 //= Texte "downloadcontroller" =================================================================
 #define STR_DOWNLOAD_SOURCE             (RC_BASTYP + 23)
 #define STR_DOWNLOAD_DESTINATION        (RC_BASTYP + 24)
-#define STR_DOWNLOAD_STATE          (RC_BASTYP + 25)
+#define STR_DOWNLOAD_STATE              (RC_BASTYP + 25)
 #define STR_DOWNLOAD_REMAININGTIME      (RC_BASTYP + 26)
 #define STR_DOWNLOAD_STATEFORMAT        (RC_BASTYP + 27)
-#define RID_DLSTATUS2                    (RC_BASTYP+ 28)
+#define RID_DLSTATUS2                   (RC_BASTYP + 28)
 
