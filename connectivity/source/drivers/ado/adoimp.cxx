@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 14:06:30 $
+ *  last change: $Author: kz $ $Date: 2001-04-24 08:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ sal_Int32 ADOS::MapADOType2Jdbc(DataTypeEnum eType)
         case adDBTime:              nType = DataType::TIME;         break;
         case adDBTimeStamp:         nType = DataType::TIMESTAMP;    break;
         case adBoolean:             nType = DataType::BIT;          break;
-        case adArray:               nType = DataType::ARRAY;        break;
+//      case adArray:               nType = DataType::ARRAY;        break;
         case adBinary:
         case adGUID:                nType = DataType::BINARY;       break;
         case adBSTR:
