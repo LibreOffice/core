@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-23 17:45:21 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 08:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,8 @@ Sequence< ::rtl::OUString > SAL_CALL MozabDriver::getSupportedServiceNames(  ) t
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
+    if ( ! acceptsURL(url) )
+        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     // create a new connection with the given properties and append it to our vector
     registerClient();
     Reference< XConnection > xCon;
@@ -195,6 +197,8 @@ sal_Bool SAL_CALL MozabDriver::acceptsURL( const ::rtl::OUString& url )
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
+    if ( ! acceptsURL(url) )
+        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     // if you have somthing special to say return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
