@@ -11,8 +11,10 @@ mkdir: %_DEST%\inc%_EXT%\salhelper
 ..\%__SRC%\bin\salhelper*.dll %_DEST%\bin%_EXT%\salhelper*.dll
 ..\%__SRC%\lib\*salhelper*.lib %_DEST%\lib%_EXT%\*
 
-..\%__SRC%\lib\libsalhelper*.so %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\libsalhelper*.dylib %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libsalhelper*.so* %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libsalhelper*.dylib* %_DEST%\lib%_EXT%\*
+
 ..\%__SRC%\lib\libsalhelper*.a %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\salhelper*.lib %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\libsample*.so %_DEST%\lib%_EXT%\*
+
+linklib: libsalhelper*.so.*.*.*
