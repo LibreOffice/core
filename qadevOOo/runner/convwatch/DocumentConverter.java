@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentConverter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-12-10 16:56:26 $
+ *  last change: $Date: 2005-02-24 17:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,11 @@ public class DocumentConverter extends EnhancedComplexTestCase
             // Get the MultiServiceFactory.
             // XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
             GraphicalTestArguments aGTA = getGraphicalTestArguments();
+            if (aGTA == null)
+            {
+                assure("Must quit", false);
+            }
+
             initMember();
 
             File aInputPath = new File(m_sInputPath);
