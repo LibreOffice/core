@@ -10392,3 +10392,4 @@ lpfnDrawStateW
 ?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3045610629@@YAXAAVString@@ABV2@@Z
 ?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3045610629@@YAXPAVControl@@JJAAJ@Z
 ?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3045610629@@YAEABVString@@AAV2@@Z
+??4IMPL_THistoryItem@@QAEAAU0@ABU0@@Z
