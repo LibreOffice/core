@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:17:31 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,8 @@
     Text[ greek ] = "Êåöáëßäåò/ÕðïóÝëéäá";  \
     Text[ korean ] = "¸Ó¸®±Û/¹Ù´Ú±Û";   \
     Text[ turkish ] = "Üst/Altbilgi";   \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "Encabezam./Pie de página";
 
 #define HEADER \
     Text = "Kopfzeile" ; \
@@ -114,7 +115,8 @@
     Text[ greek ] = "Êåöáëßäá"; \
     Text[ korean ] = "¸Ó¸®±Û";  \
     Text[ turkish ] = "Üstbilgi";   \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "Encabezamiento";
 
 #define FOOTER \
 /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */\
@@ -142,7 +144,8 @@
     Text[ greek ] = "ÕðïóÝëéäï";    \
     Text[ korean ] = "¹Ù´Ú±Û";  \
     Text[ turkish ] = "Altbilgi";   \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "Pie de página";
 
 #define HEADER_RIGHT \
     Text = "Kopfzeile (rechts)" ; \
@@ -169,7 +172,8 @@
     Text[ greek ] = "Êåöáëßäá (äåîéÜ)"; \
     Text[ korean ] = "¸Ó¸®±Û(¿À¸¥ÂÊ)";  \
     Text[ turkish ] = "Altbilgi (sað)"; \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "Encabezam. (der.)";
 
 #define HEADER_LEFT \
     Text = "Kopfzeile (links)" ; \
@@ -196,7 +200,8 @@
     Text[ greek ] = "Êåöáëßäá (áñéóôåñÜ)";  \
     Text[ korean ] = "¸Ó¸®±Û(¿ÞÂÊ)";    \
     Text[ turkish ] = "Üstbilgi (sol)"; \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "Encabezam. (izq.)";
 
 #define FOOTER_RIGHT \
 /* ### ACHTUNG: Neuer Text in Resource? Fußzeile (rechts) : Fu˜zeile (rechts) */\
@@ -224,7 +229,8 @@
     Text[ greek ] = "ÕðïóÝëéäï (äåîéÜ)";    \
     Text[ korean ] = "¹Ù´Ú±Û (¿À¸¥ÂÊ)"; \
     Text[ turkish ] = "Altbilgi (sað)"; \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "Pie de página (derecha)";
 
 #define FOOTER_LEFT \
 /* ### ACHTUNG: Neuer Text in Resource? Fußzeile (links) : Fu˜zeile (links) */\
@@ -252,7 +258,8 @@
     Text[ greek ] = "ÕðïóÝëéäï (áñéóôåñÜ)"; \
     Text[ korean ] = "¹Ù´Ú±Û (¿ÞÂÊ)";   \
     Text[ turkish ] = "Altbilgi (sol)"; \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "Pie de página (izquierda)";
 
  //------------------------------------------------------------------------
  // Bearbeiten vom Seitendialog aus aufgerufen
@@ -311,6 +318,7 @@ TabDialog RID_SCDLG_HFED_HEADER
     Text[ korean ] = "¸Ó¸®±Û";
     Text[ turkish ] = "Üstbilgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Encabezamientos";
 };
 TabDialog RID_SCDLG_HFED_FOOTER
 {
@@ -367,6 +375,7 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Text[ korean ] = "¹Ù´Ú±Û";
     Text[ turkish ] = "Altbilgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Pies de página";
 };
  //------------------------------------------------------------------------
  // Bearbeiten/Kopf-Fusszeile:
@@ -719,6 +728,7 @@ TabPage RID_HFBASE
         Text[ korean ] = "¿ÞÂÊ ¿µ¿ª(~L)";
         Text[ turkish ] = "~Sol bölüm";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área ~izquierda";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_LEFT
@@ -758,6 +768,7 @@ TabPage RID_HFBASE
         Text[ korean ] = "Áß½É ¿µ¿ª(~C)";
         Text[ turkish ] = "~Orta bölüm";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área ~central";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_CENTER
@@ -797,6 +808,7 @@ TabPage RID_HFBASE
         Text[ korean ] = "¿À¸¥ÂÊ ¿µ¿ª(~R)";
         Text[ turkish ] = "~Sað bölüm";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área ~derecha";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_RIGHT
@@ -844,6 +856,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "ÅØ½ºÆ®¡¡¼Ó¼º!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Textattribute";
+        QuickHelpText[ catalan ] = "Atributos de texto";
     };
     ImageButton BTN_FILE
     {
@@ -882,6 +895,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "ÆÄÀÏ¡¡ÀÌ¸§!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dateiname";
+        QuickHelpText[ catalan ] = "Nombre de archivo";
     };
 
     Menu RID_POPUP_FCOMMAND
@@ -915,6 +929,7 @@ TabPage RID_HFBASE
                 Text[ korean ] = "Á¦¸ñ";
                 Text[ turkish ] = "Baþlýk";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Título";
             };
             MenuItem
             {
@@ -944,6 +959,7 @@ TabPage RID_HFBASE
                 Text[ korean ] = "ÆÄÀÏ ÀÌ¸§";
                 Text[ turkish ] = "Dosya adý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Nombre del archivo";
             };
             MenuItem
             {
@@ -973,6 +989,7 @@ TabPage RID_HFBASE
                 Text[ korean ] = "°æ·Î/ÆÄÀÏ¡¡ÀÌ¸§";
                 Text[ turkish ] = "Yol/dosya adý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Ruta/Nombre de archivo";
             };
         };
     };
@@ -1014,6 +1031,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "Ç¥¡¡ÀÌ¸§!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenname";
+        QuickHelpText[ catalan ] = "Nombre de la hoja";
     };
     ImageButton BTN_PAGE
     {
@@ -1052,6 +1070,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "ÂÊ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seite";
+        QuickHelpText[ catalan ] = "Página";
     };
     ImageButton BTN_PAGES
     {
@@ -1090,6 +1109,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "ÂÊµé!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seiten";
+        QuickHelpText[ catalan ] = "Páginas";
     };
     ImageButton BTN_DATE
     {
@@ -1128,6 +1148,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "³¯Â¥!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum";
+        QuickHelpText[ catalan ] = "Fecha";
     };
     ImageButton BTN_TIME
     {
@@ -1166,6 +1187,7 @@ TabPage RID_HFBASE
         QuickHelpText[ korean ] = "½Ã°£!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Uhrzeit";
+        QuickHelpText[ catalan ] = "Hora";
     };
     FixedText FT_INFO
     {
@@ -1198,6 +1220,7 @@ TabPage RID_HFBASE
         Text[ korean ] = "±Û²ÃÀ» º¯°æÇÏ°Å³ª ³¯Â¥, ½Ã°£µîÀÇ ÇÊµå ¸í·É¾î¸¦ »ðÀÔÇÏ±â À§ÇØ¼­´Â ¹öÆ°À» »ç¿ëÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "Yazýtipini deðiþtirmek ya da tarih, saat gibi alan komutlarý eklemek için düðmeleri kullanýnýz.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Utilice los botones para modificar la fuente o para insertar comandos como fecha, hora, etc.";
     };
     GroupBox GB_INFO
     {
@@ -1228,6 +1251,7 @@ TabPage RID_HFBASE
         Text[ korean ] = "ÁÖ";
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Indicación";
     };
 };
  // Kombinationen: Header/Footer links/rechts
