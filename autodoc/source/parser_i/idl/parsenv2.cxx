@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenv2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:40:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <ary/ary.hxx>
 #include <ary/qualiname.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <ary/idl/i_gate.hxx>
@@ -91,7 +92,15 @@ UnoIDL_PE::EstablishContacts( UnoIDL_PE *               io_pParentPE,
                               ary::n22::Repository &    io_rRepository,
                               TokenProcessing_Result &  o_rResult )
 {
-    aMyNode.EstablishContacts(io_pParentPE, io_rRepository, o_rResult);
+    aMyNode.EstablishContacts(io_pParentPE, io_rRepository.Gate_Idl(), o_rResult);
+}
+
+void
+UnoIDL_PE::EstablishContacts( UnoIDL_PE *               io_pParentPE,
+                              ary::idl::Gate &          io_rGate,
+                              TokenProcessing_Result &  o_rResult )
+{
+    aMyNode.EstablishContacts(io_pParentPE, io_rGate, o_rResult);
 }
 
 void
