@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneShellManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-28 16:25:17 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ void TaskPaneShellManager::AddSubShell (SfxShell* pShell)
 {
     ViewShellManager::UpdateLock aLocker (mrViewShellManager);
 
-    maShellStack.push_back (pShell);
+    maShellStack.push_back(pShell);
 }
 
 
@@ -99,7 +99,7 @@ void TaskPaneShellManager::RemoveSubShell (SfxShell* pShell)
     {
         ViewShellManager::UpdateLock aLocker (mrViewShellManager);
 
-        maShellStack.erase (aFoundShell);
+        maShellStack.erase(aFoundShell);
     }
 }
 
@@ -110,7 +110,7 @@ void TaskPaneShellManager::MoveToTop (SfxShell* pShell)
 {
     ViewShellManager::UpdateLock aLocker (mrViewShellManager);
 
-    if (maShellStack.empty() || maShellStack.front()!=pShell)
+    if (maShellStack.empty() || maShellStack.back()!=pShell)
     {
         // Tell the ViewShellManager to rebuild the stack at least from the
         // current position of the shell.
