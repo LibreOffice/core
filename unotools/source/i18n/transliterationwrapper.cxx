@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:15:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
-using namespace ::drafts::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 using namespace ::utl;
 
