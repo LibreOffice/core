@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEndnoteView.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:18:13 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,7 @@ module com {  module sun {  module star {  module text {
 //=============================================================================
 
 /** The accessible view of endnotes.
-
-
-     @since #107627#
+    @since #107627#
  */
 service AccessibleEndnoteView
 {
@@ -92,22 +90,29 @@ service AccessibleEndnoteView
         partially visible on the screen.
 
         <ul>
-            <li>The parent returned by <type>getAccessibleParent</type>
+            <li>The parent returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleParent</method>
                 is either the accessible view of a text document,
                 a page of the accessible page preview of a text document,
                 or the accessible page preview of a spreadsheet document.
-            <li>The children returned by <type>getAccessibleChild</type> all
+            <li>The children returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleChild</method> all
                 support the interface XAccessible. Calling
-                <type>getAccessibleContext</type> for these children returns
+                <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleContext</method> for these children returns
                 an object that supports one of the following services.
                 <ul>
-                    <li><type>com.sun.star.text.AccessibleParagraphView</type>:
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleParagraphView</type>:
                         A child of this kind is returned for every paragraph
                         fragment that is contained in the document body and
                         is at least partially visible. A paragraph fragment is
                         the part of a paragraph that is displayed on a
                         certain page.
-                    <li><type>com.sun.star.table.AccessibleTableView</type>:
+                    <li><type scope="::com::sun::star::table"
+                        >AccessibleTableView</type>:
                         A child of this kind is returned for every table
                         fragment that is contained in the document body
                         and is at least partially visible. A table fragment is
@@ -115,7 +120,8 @@ service AccessibleEndnoteView
                 </ul>
                 <p>The logical order of paragraph and table fragments is never
                    changed.
-            <li>The role is <type>ENDNOTE</type>
+            <li>The role is <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::ENDNOTE</const>
             <li>The name is "endnote" (or the equivalent term
                 in application's language) with a number appended.
             <li>The description is endnote" (or the equivalent term
@@ -125,16 +131,23 @@ service AccessibleEndnoteView
             <li>There are no relations. <em>TODO: One might specify a relation
                 to the endnote anchor's paragraph.</em>
             <li>The following states might be contained in the state set
-                returned by <type>getAccessibleStateSet</type>:
+                returned by <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleStateSet</method>:
                 <ul>
-                    <li><type>DEFUNC</type> (indicates that the document
-                        window has been closed or the endnote is
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::DEFUNC</const> (indicates that the
+                        document window has been closed or the endnote is
                         not existing any longer)
-                    <li><type>EDITABLE</type>
-                    <li><type>ENABLED</type> (always contained)
-                    <li><type>OPAQUE</type>
-                    <li><type>SHOWING</type>
-                    <li><type>VISIBLE</type>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::EDITABLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::ENABLED</const> (always contained)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::OPAQUE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::SHOWING</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::VISIBLE</const>
                 </ul>
             <li>Depending of the application's region setting, the locale is
                 the western, asian or complex default language of the document.
