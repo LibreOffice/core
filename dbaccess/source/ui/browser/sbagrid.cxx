@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-09 09:52:06 $
+ *  last change: $Author: oj $ $Date: 2002-10-28 08:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1090,24 +1090,36 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
 
     // prepend some new items
     sal_Bool bColAttrs = (nColId != (sal_uInt16)-1) && (nColId != 0);
-    if (bColAttrs)
+    if ( bColAttrs && !bDBIsReadOnly)
     {
-        sal_uInt16 nPos = 0;
         PopupMenu aNewItems(ModuleRes(RID_SBA_GRID_COLCTXMENU));
-        if (!bDBIsReadOnly)
+        sal_uInt16 nPos = 0;
+        sal_uInt16 nModelPos = ((SbaGridControl*)GetParent())->GetModelColumnPos(nColId);
+        Reference< XPropertySet >  xField = ((SbaGridControl*)GetParent())->getField(nModelPos);
+
+        if ( xField.is() )
         {
-            rMenu.InsertItem(ID_BROWSER_COLATTRSET, aNewItems.GetItemText(ID_BROWSER_COLATTRSET), 0, nPos++);
-            rMenu.SetHelpId(ID_BROWSER_COLATTRSET, aNewItems.GetHelpId(ID_BROWSER_COLATTRSET));
-            rMenu.InsertSeparator(nPos++);
-
-            rMenu.InsertItem(ID_BROWSER_COLWIDTH, aNewItems.GetItemText(ID_BROWSER_COLWIDTH), 0, nPos++);
-            rMenu.SetHelpId(ID_BROWSER_COLWIDTH, aNewItems.GetHelpId(ID_BROWSER_COLWIDTH));
-            rMenu.InsertSeparator(nPos++);
-
-//          rMenu.InsertItem(ID_BROWSER_COLUMNINFO, aNewItems.GetItemText(ID_BROWSER_COLUMNINFO), 0, nPos++);
-//          rMenu.SetHelpId(ID_BROWSER_COLUMNINFO, aNewItems.GetHelpId(ID_BROWSER_COLUMNINFO));
-//          rMenu.InsertSeparator(nPos++);
+            switch( ::comphelper::getINT32(xField->getPropertyValue(PROPERTY_TYPE)) )
+            {
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+            case DataType::SQLNULL:
+            case DataType::OBJECT:
+            case DataType::BLOB:
+            case DataType::CLOB:
+            case DataType::REF:
+                break;
+            default:
+                rMenu.InsertItem(ID_BROWSER_COLATTRSET, aNewItems.GetItemText(ID_BROWSER_COLATTRSET), 0, nPos++);
+                rMenu.SetHelpId(ID_BROWSER_COLATTRSET, aNewItems.GetHelpId(ID_BROWSER_COLATTRSET));
+                rMenu.InsertSeparator(nPos++);
+            }
         }
+
+        rMenu.InsertItem(ID_BROWSER_COLWIDTH, aNewItems.GetItemText(ID_BROWSER_COLWIDTH), 0, nPos++);
+        rMenu.SetHelpId(ID_BROWSER_COLWIDTH, aNewItems.GetHelpId(ID_BROWSER_COLWIDTH));
+        rMenu.InsertSeparator(nPos++);
     }
 }
 
