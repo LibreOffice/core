@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-23 07:36:56 $
+ *  last change: $Author: mba $ $Date: 2002-04-24 11:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include <timer.hxx>
 #endif
 #include <unowrap.hxx>
+#include <salframe.hxx>
 
 #pragma hdrstop
 
@@ -989,4 +990,20 @@ Size DockingWindow::GetOutputSizePixel() const
         return mpFloatWin->GetOutputSizePixel();
     else
         return Window::GetOutputSizePixel();
+}
+
+Point DockingWindow::GetFloatingPos() const
+{
+    if ( mpFloatWin )
+    {
+        //Rectangle aRect = mpFloatWin->GetWindow( WINDOW_CLIENT)->GetWindowExtentsRelative( mpFloatWin->GetParent() );
+        WindowStateData aData;
+        aData.SetMask( WINDOWSTATE_MASK_POS );
+        mpFloatWin->GetWindowStateData( aData );
+        Point aPos( aData.GetX(), aData.GetY() );
+        aPos = mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
+        return aPos;
+    }
+    else
+        return maFloatPos;
 }
