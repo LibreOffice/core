@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-11 10:05:38 $
+ *  last change: $Author: mib $ $Date: 2001-07-25 14:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,8 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
         else if( USHRT_MAX != nUnknownWhich &&
                  // TODO: PI
                    (XML_NAMESPACE_NONE == nPrefix ||
-                  XML_NAMESPACE_UNKNOWN == nPrefix) )
+                  XML_NAMESPACE_UNKNOWN == nPrefix ||
+                  (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) != 0) )
         {
             if( !pUnknownItem )
             {
