@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:02:02 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2385,6 +2385,7 @@ ShellResource* ViewShell::GetShellRes()
 {
     return pShellRes;
 }
+
 void ViewShell::SetCareWin( Window* pNew )
 {
     pCareWindow = pNew;
@@ -2394,3 +2395,23 @@ String ViewShell::GetMarkListDescription() const
 {
     return Imp()->GetMarkListDescription();
 }
+
+
+// --> FME 2004-06-15 #i12836# enhanced pdf export
+sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const
+{
+    ASSERT( GetLayout(), "GetPageNumAndSetOffsetForPDF assumes presence of layout" )
+    const SwPageFrm* pPage = GetLayout()->GetPageAtPos( rRect.Center() );
+    ASSERT( pPage, "GetPageNumAndSetOffsetForPDF: No page found" )
+
+    Point aOffset( pPage->Frm().Pos() );
+    aOffset.X() = -aOffset.X();
+    aOffset.Y() = -aOffset.Y();
+
+    MapMode aMapMode( rOut.GetMapMode() );
+    aMapMode.SetOrigin( aOffset );
+    rOut.SetMapMode( aMapMode );
+
+    return pPage->GetPhyPageNum() - 1;
+}
+// <--
