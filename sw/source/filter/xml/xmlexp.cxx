@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-21 13:37:02 $
+ *  last change: $Author: dvo $ $Date: 2001-05-29 14:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ void SwXMLExport::_ExportFontDecls()
     SvXMLExport::_ExportFontDecls();
 }
 
-#define NUM_EXPORTED_VIEW_SETTINGS 10
+#define NUM_EXPORTED_VIEW_SETTINGS 9
 void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
 {
     Reference< XMultiServiceFactory > xServiceFactory =
@@ -542,11 +542,6 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineChanges") );
     pValue[nIndex++].Value.setValue( &bShowRedlineChanges, ::getBooleanCppuType() );
-
-    sal_Bool bRecordRedlineChanges = IsRedlineOn ( pDoc->GetRedlineMode() );
-
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "RecordRedlineChanges") );
-    pValue[nIndex++].Value.setValue( &bRecordRedlineChanges, ::getBooleanCppuType() );
 
     sal_Bool bShowHead = pDoc->IsHeadInBrowse();
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowHeaderWhileBrowsing") );
