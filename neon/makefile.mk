@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kso $ $Date: 2002-10-24 11:50:58 $
+#   last change: $Author: rt $ $Date: 2004-09-08 16:51:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,11 @@ TARGET=so_neon
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
+
+.IF "$(SYSTEM_NEON)" == "YES"
+@all:
+    @echo "Using system neon...."
+.ENDIF
 
 NEON_NAME=neon-0.23.5
 
