@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnaut.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
-#ifndef _SV_COLOR_HXX //autogen
-#include <vcl/color.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 #include "swtypes.hxx"
