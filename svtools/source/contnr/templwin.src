@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:26:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,34 +76,8 @@ Control CTRL_FILEVIEW
 
 String STR_SVT_NEWDOC
 {
-    Text = "Neues Dokument";
-    Text [ english_us ] = "New Document";
-    Text[ portuguese ] = "Novo documento";
-    Text[ russian ] = "Ñîçäàòü äîêóìåíò";
-    Text[ greek ] = "Äçìéïõñãßá åããñÜöïõ";
-    Text[ dutch ] = "Nieuw document";
-    Text[ french ] = "Nouveau document";
-    Text[ spanish ] = "Documento nuevo";
-    Text[ finnish ] = "Uusi asiakirja";
-    Text[ italian ] = "Nuovo documento";
-    Text[ danish ] = "Nyt dokument";
-    Text[ swedish ] = "Nytt dokument";
-    Text[ polish ] = "Nowy dokument";
-    Text[ portuguese_brazilian ] = "Novo documento";
-    Text[ japanese ] = "æ–°ã—ã„ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "ìƒˆ ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "æ–°å»ºæ–‡æ¡£";
-    Text[ chinese_traditional ] = "æ–°å¢æ–‡ä»¶";
-    Text[ turkish ] = "Yeni döküman";
-    Text[ arabic ] = "ãÓÊäÏ ÌÏíÏ";
-    Text[ catalan ] = "Document nou";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹ƒà¸«à¸¡à¹ˆ";
-    Text[ czech ] = "NovÃ½ dokument";
-    Text[ hebrew ] = "â€®××¡××š ×—×“×©â€¬";
-    Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°";
-    Text[ slovak ] = "NovÃ½ dokument";
-    Text[ hungarian ] = "Ãšj dokumentum";
-    Text[ slovenian ] = "Nov dokument";
+    Text [ de ] = "Neues Dokument";
+    Text [ en-US ] = "New Document";
 };
 
 Image IMG_SVT_NEWDOC
@@ -120,34 +94,8 @@ Image IMG_SVT_NEWDOC_HC
 
 String STR_SVT_MYDOCS
 {
-    Text = "Eigene Dateien";
-    Text [ english_us ] = "My Documents";
-    Text[ portuguese ] = "Meus documentos";
-    Text[ russian ] = "Ìîè äîêóìåíòû";
-    Text[ greek ] = "Ôá İããñáöÜ ìïõ";
-    Text[ dutch ] = "Eigen bestanden";
-    Text[ french ] = "Mes documents";
-    Text[ spanish ] = "Mis documentos";
-    Text[ finnish ] = "Omat asiakirjat";
-    Text[ italian ] = "Documenti";
-    Text[ danish ] = "Dokumenter";
-    Text[ swedish ] = "Mina dokument";
-    Text[ polish ] = "Moje dokumenty";
-    Text[ portuguese_brazilian ] = "Meus documentos";
-    Text[ japanese ] = "ãƒã‚¤ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "ë‚´ ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "æˆ‘çš„æ–‡æ¡£";
-    Text[ chinese_traditional ] = "æˆ‘çš„æ–‡ä»¶å¤¾";
-    Text[ turkish ] = "Belgelerim";
-    Text[ arabic ] = "ãÓÊäÏÇÊí";
-    Text[ catalan ] = "Els meus documents";
-    Text[ thai ] = "My Documents";
-    Text[ czech ] = "Moje dokumenty";
-    Text[ hebrew ] = "â€®×”××¡××›×™× ×©×œ×™â€¬";
-    Text[ hindi ] = "My Documents";
-    Text[ slovak ] = " Moje dokumenty";
-    Text[ hungarian ] = "Dokumentumok";
-    Text[ slovenian ] = "Moji dokumenti";
+    Text [ de ] = "Eigene Dateien";
+    Text [ en-US ] = "My Documents";
 };
 
 Image IMG_SVT_MYDOCS
@@ -164,34 +112,8 @@ Image IMG_SVT_MYDOCS_HC
 
 String STR_SVT_TEMPLATES
 {
-    Text = "Vorlagen";
-    Text [ english_us ] = "Templates";
-    Text[ portuguese ] = "Modelos";
-    Text[ russian ] = "Øàáëîíû";
-    Text[ greek ] = "Ğñüôõğá";
-    Text[ dutch ] = "Sjablonen";
-    Text[ french ] = "Modèles";
-    Text[ spanish ] = "Plantillas";
-    Text[ finnish ] = "Mallit";
-    Text[ italian ] = "Modelli";
-    Text[ danish ] = "Skabeloner";
-    Text[ swedish ] = "Mallar";
-    Text[ polish ] = "Szablony";
-    Text[ portuguese_brazilian ] = "Modelos";
-    Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ korean ] = "ì„œì‹ íŒŒì¼";
-    Text[ chinese_simplified ] = "æ ·å¼";
-    Text[ chinese_traditional ] = "æ¨£å¼";
-    Text[ turkish ] = "Şablonlar";
-    Text[ arabic ] = "ÃäãÇØ";
-    Text[ catalan ] = "Plantilles";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸š";
-    Text[ czech ] = "Å ablony";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ªâ€¬";
-    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‡";
-    Text[ slovak ] = "Å ablÃ³ny";
-    Text[ hungarian ] = "Sablonok";
-    Text[ slovenian ] = "Predloge";
+    Text [ de ] = "Vorlagen";
+    Text [ en-US ] = "Templates";
 };
 
 Image IMG_SVT_TEMPLATES
@@ -208,34 +130,8 @@ Image IMG_SVT_TEMPLATES_HC
 
 String STR_SVT_SAMPLES
 {
-    Text = "Beispiele";
-    Text [ english_us ] = "Samples";
-    Text[ portuguese ] = "Exemplos";
-    Text[ russian ] = "Ïğèìåğû";
-    Text[ greek ] = "Äåßãìáôá";
-    Text[ dutch ] = "Voorbeelden";
-    Text[ french ] = "Exemples";
-    Text[ spanish ] = "Ejemplos";
-    Text[ italian ] = "Esempi";
-    Text[ danish ] = "Eksempler";
-    Text[ swedish ] = "Exempel";
-    Text[ polish ] = "Przyk³ady";
-    Text[ portuguese_brazilian ] = "Exemplos";
-    Text[ japanese ] = "ã‚µãƒ³ãƒ—ãƒ«æ–‡æ›¸";
-    Text[ korean ] = "ìƒ˜í”Œ";
-    Text[ chinese_simplified ] = "ç¤ºä¾‹æ–‡æ¡£";
-    Text[ chinese_traditional ] = "ç¤ºä¾‹";
-    Text[ turkish ] = "Örnekler";
-    Text[ arabic ] = "ÃãËáÉ";
-    Text[ catalan ] = "Mostres";
-    Text[ finnish ] = "Esimerkit";
-    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡";
-    Text[ czech ] = "PÅ™Ã­klady";
-    Text[ hebrew ] = "â€®×“×•×’×××•×ªâ€¬";
-    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "PrÃ­klady";
-    Text[ hungarian ] = "MintÃ¡k";
-    Text[ slovenian ] = "Vzorci";
+    Text [ de ] = "Beispiele";
+    Text [ en-US ] = "Samples";
 };
 
 Image IMG_SVT_SAMPLES
@@ -260,69 +156,17 @@ ToolBox TB_SVT_FILEVIEW
         {
             Identifier = TI_DOCTEMPLATE_BACK;
             HelpId = HID_TEMPLATEDLG_TB_BACK;
-            Text = "Zurück" ;
-            Text [ english_us ] = "Back" ;
-            Text[ language_user1 ] = " ";
-            Text[ portuguese ] = "Anterior";
-            Text[ russian ] = "Íàçàä";
-            Text[ greek ] = "Ğßóù";
-            Text[ dutch ] = "Vorige";
-            Text[ french ] = "Précédent";
-            Text[ spanish ] = "Regresar";
-            Text[ italian ] = "Indietro";
-            Text[ danish ] = "Tilbage";
-            Text[ swedish ] = "Tillbaka";
-            Text[ polish ] = "Wstecz";
-            Text[ portuguese_brazilian ] = "Voltar";
-            Text[ japanese ] = "æˆ»ã‚‹";
-            Text[ korean ] = "ë’¤ë¡œ";
-            Text[ chinese_simplified ] = "è¿”å›";
-            Text[ chinese_traditional ] = "è¿”å›";
-            Text[ turkish ] = "Geri";
-            Text[ arabic ] = "ÅÚÇÏÉ";
-            Text[ catalan ] = "Cap enrere";
-            Text[ finnish ] = "Edellinen";
-            Text[ thai ] = "à¸à¸¥à¸±à¸šà¹„à¸›";
-            Text[ czech ] = "ZpÄ›t";
-            Text[ hebrew ] = "â€®×”×§×•×“×â€¬";
-            Text[ hindi ] = "à¤ªà¥€à¤›à¥‡";
-            Text[ slovak ] = "SpÃ¤Å¥";
-            Text[ hungarian ] = "Vissza";
-            Text[ slovenian ] = "Nazaj";
+            Text [ de ] = "Zurück" ;
+            Text [ en-US ] = "Back" ;
+            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             Identifier = TI_DOCTEMPLATE_PREV;
             HelpId = HID_TEMPLATEDLG_TB_PREV;
-            Text = "Ein Verzeichnis hoch" ;
-            Text [ english_us ] = "Up One Level" ;
-            Text[ language_user1 ] = " ";
-            Text[ portuguese ] = "Subir um nível";
-            Text[ russian ] = "Íà óğîâåíü ââåğõ";
-            Text[ greek ] = "¸íá åğßğåäï åğÜíù";
-            Text[ dutch ] = "Een niveau hoger";
-            Text[ french ] = "Au répertoire supérieur";
-            Text[ spanish ] = "Subir un nivel";
-            Text[ italian ] = "Alla cartella superiore";
-            Text[ danish ] = "Et niveau op";
-            Text[ swedish ] = "Upp en nivå";
-            Text[ polish ] = "Jeden poziom wy¿ej";
-            Text[ portuguese_brazilian ] = "Subir um nível";
-            Text[ japanese ] = "ï¼‘ã¤ä¸Šã®ãƒ•ã‚©ãƒ«ãƒ€ã¸";
-            Text[ korean ] = "í•œ ìˆ˜ì¤€ ìœ„ë¡œ";
-            Text[ chinese_simplified ] = "ç›®å½•å‘ä¸Šä¸€å±‚";
-            Text[ chinese_traditional ] = "ç›®éŒ„å‘ä¸Šä¸€å±¤";
-            Text[ turkish ] = "Bir Seviye Yukarı";
-            Text[ arabic ] = "Higher";
-            Text[ catalan ] = "Un nivell amunt";
-            Text[ finnish ] = "Tasoa ylemmäs";
-            Text[ thai ] = "à¸‚à¸¶à¹‰à¸™à¸«à¸™à¸¶à¹ˆà¸‡à¸£à¸°à¸”à¸±à¸š";
-            Text[ czech ] = "O ÃºroveÅˆ vÃ½Å¡e";
-            Text[ hebrew ] = "â€®×¨××” ××—×ª ×œ××¢×œ×”â€¬";
-            Text[ hindi ] = "à¤à¤• à¤¸à¥à¤¤à¤° à¤Šà¤ªà¤°";
-            Text[ slovak ] = "O ÃºroveÅˆ vyÅ¡Å¡ie";
-            Text[ hungarian ] = "Egy szinttel feljebb";
-            Text[ slovenian ] = "Eno raven viÅ¡je";
+            Text [ de ] = "Ein Verzeichnis hoch" ;
+            Text [ en-US ] = "Up One Level" ;
+            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
@@ -332,35 +176,9 @@ ToolBox TB_SVT_FILEVIEW
         {
             Identifier = TI_DOCTEMPLATE_PRINT;
             HelpId = HID_TEMPLATEDLG_TB_PRINT;
-            Text = "Drucken" ;
-            Text [ english_us ] = "Print" ;
-            Text[ language_user1 ] = " ";
-            Text[ portuguese ] = "Imprimir";
-            Text[ russian ] = "Ïå÷àòü";
-            Text[ greek ] = "Åêôığùóç";
-            Text[ dutch ] = "Afdrukken";
-            Text[ french ] = "Imprimer";
-            Text[ spanish ] = "Imprimir";
-            Text[ italian ] = "Stampa";
-            Text[ danish ] = "Udskriv";
-            Text[ swedish ] = "Skriv ut";
-            Text[ polish ] = "Drukuj";
-            Text[ portuguese_brazilian ] = "Imprimir";
-            Text[ japanese ] = "å°åˆ·";
-            Text[ korean ] = "ì¸ì‡„";
-            Text[ chinese_simplified ] = "æ‰“å°";
-            Text[ chinese_traditional ] = "åˆ—å°";
-            Text[ turkish ] = "Yazdır";
-            Text[ arabic ] = "ØÈÇÚÉ";
-            Text[ catalan ] = "Imprimeix";
-            Text[ finnish ] = "Tulosta";
-            Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œ";
-            Text[ czech ] = "Tisk";
-            Text[ hebrew ] = "â€®×”×“×¤×¡×”â€¬";
-            Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ";
-            Text[ slovak ] = "TlaÄ";
-            Text[ hungarian ] = "NyomtatÃ¡s";
-            Text[ slovenian ] = "Natisni";
+            Text [ de ] = "Drucken" ;
+            Text [ en-US ] = "Print" ;
+            Text [ x-comment ] = " ";
         };
     };
 };
@@ -438,34 +256,8 @@ ToolBox TB_SVT_FRAMEWIN
             AutoCheck = TRUE;
             Identifier = TI_DOCTEMPLATE_DOCINFO;
             HelpId = HID_TEMPLATEDLG_TB_DOCINFO;
-            Text = "Dokumenteigenschaften" ;
-            Text [ english_us ] = "Document Properties" ;
-            Text[ portuguese ] = "Propriedades do documento";
-            Text[ russian ] = "Ñâîéñòâà äîêóìåíòà";
-            Text[ greek ] = "Éäéüôçôåò åããñÜöïõ";
-            Text[ dutch ] = "Documenteigenschappen";
-            Text[ french ] = "Propriétés du document";
-            Text[ spanish ] = "Propiedades del documento";
-            Text[ finnish ] = "Asiakirjan ominaisuudet";
-            Text[ italian ] = "Proprietà documento";
-            Text[ danish ] = "Dokumentegenskaber";
-            Text[ swedish ] = "Dokumentegenskaper";
-            Text[ polish ] = "W³aœciwoœci dokumentu";
-            Text[ portuguese_brazilian ] = "Propriedades do Documento";
-            Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£";
-            Text[ korean ] = "ë¬¸ì„œ ë“±ë¡ ì •ë³´";
-            Text[ chinese_simplified ] = "æ–‡æ¡£å±æ€§";
-            Text[ chinese_traditional ] = "æ–‡ä»¶å±¬æ€§";
-            Text[ turkish ] = "Belge Özellikleri";
-            Text[ arabic ] = "Docinfo";
-            Text[ catalan ] = "Propietats del document";
-            Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´à¹€à¸­à¸à¸ªà¸²à¸£";
-            Text[ czech ] = "Vlastnosti dokumentu";
-            Text[ hebrew ] = "â€®×ª×›×•× ×•×ª ×§×•×‘×¥â€¬";
-            Text[ hindi ] = "Document Properties";
-            Text[ slovak ] = "Vlastnosti dokumentu";
-            Text[ hungarian ] = "Dokumentum tulajdonsÃ¡ga";
-            Text[ slovenian ] = "Lastnosti dokumenta";
+            Text [ de ] = "Dokumenteigenschaften" ;
+            Text [ en-US ] = "Document Properties" ;
         };
         ToolBoxItem
         {
@@ -473,34 +265,8 @@ ToolBox TB_SVT_FRAMEWIN
             AutoCheck = TRUE;
             Identifier = TI_DOCTEMPLATE_PREVIEW;
             HelpId = HID_TEMPLATEDLG_TB_PREVIEW;
-            Text = "Vorschau" ;
-            Text [ english_us ] = "Preview" ;
-            Text[ portuguese ] = "Previsualizar";
-            Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
-            Text[ greek ] = "Ğñïåğéóêüğçóç";
-            Text[ dutch ] = "Voorbeeld";
-            Text[ french ] = "Aperçu";
-            Text[ spanish ] = "Previsualización";
-            Text[ finnish ] = "Esikatselu";
-            Text[ italian ] = "Anteprima";
-            Text[ danish ] = "Eksempel";
-            Text[ swedish ] = "Förhandsvisning";
-            Text[ polish ] = "Podgl¹d";
-            Text[ portuguese_brazilian ] = "Visualizar";
-            Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼";
-            Text[ korean ] = "ë¯¸ë¦¬ ë³´ê¸°";
-            Text[ chinese_simplified ] = "é¢„è§ˆ";
-            Text[ chinese_traditional ] = "é è¦½";
-            Text[ turkish ] = "Önizleme";
-            Text[ arabic ] = "ãÚÇíäÉ";
-            Text[ catalan ] = "Previsualiza";
-            Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡";
-            Text[ czech ] = "NÃ¡hled";
-            Text[ hebrew ] = "â€®×ª×¦×•×’×” ××§×“×™××”â€¬";
-            Text[ hindi ] = "à¤ªà¥‚à¤°à¥à¤µà¤¦à¥ƒà¤¶à¥à¤¯";
-            Text[ slovak ] = "NÃ¡hÄ¾ad";
-            Text[ hungarian ] = "ElÅ‘nÃ©zet";
-            Text[ slovenian ] = "Predogled";
+            Text [ de ] = "Vorschau" ;
+            Text [ en-US ] = "Preview" ;
         };
     };
 };
@@ -552,27 +318,8 @@ ModalDialog DLG_DOCTEMPLATE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 320, 234 );
-    Text = "Vorlagen und Dokumente" ;
-    Text [ english_us ] = "Templates and Documents" ;
-    Text[ portuguese ] = "Modelos e documentos";
-    Text[ russian ] = "Øàáëîíû è äîêóìåíòû";
-    Text[ greek ] = "Ğñüôõğá êáé ¸ããñáöá";
-    Text[ dutch ] = "Sjablonen en documenten";
-    Text[ french ] = "Modèles et documents";
-    Text[ spanish ] = "Plantillas y documentos";
-    Text[ italian ] = "Modelli e documenti";
-    Text[ danish ] = "Skabeloner og dokumenter";
-    Text[ swedish ] = "Mallar och dokument";
-    Text[ polish ] = "Szablony i dokumenty";
-    Text[ portuguese_brazilian ] = "Modelos e documentos";
-    Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¨ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "ì„œì‹ íŒŒì¼ ë° ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "æ ·å¼å’Œæ–‡æ¡£";
-    Text[ chinese_traditional ] = "æ¨£å¼å’Œæ–‡ä»¶";
-    Text[ turkish ] = "Şablonlar ve dökümanlar";
-    Text[ arabic ] = "Templates and Documents";
-    Text[ catalan ] = "Templates and Documents";
-    Text[ finnish ] = "Mallit ja asiakirjat";
+    Text [ de ] = "Vorlagen und Dokumente" ;
+    Text [ en-US ] = "Templates and Documents" ;
     Moveable = TRUE ;
     FixedLine FL_DOCTEMPLATE
     {
@@ -583,101 +330,23 @@ ModalDialog DLG_DOCTEMPLATE
     {
         Pos = MAP_APPFONT( 3, 214 );
         Size = MAP_APPFONT( 50, 14 );
-        Text = "~Verwalten...";
-        Text [ english_us ] = "Organi~ze...";
-        Text[ portuguese ] = "~Gerir...";
-        Text[ russian ] = "Óïğàâëåíèå...";
-        Text[ greek ] = "ÏñãÜ~íùóç...";
-        Text[ dutch ] = "Be~heren...";
-        Text[ french ] = "~Gérer...";
-        Text[ spanish ] = "~Administrar...";
-        Text[ italian ] = "Gestisci...";
-        Text[ danish ] = "~Administrer...";
-        Text[ swedish ] = "~Administrera...";
-        Text[ polish ] = "Organi~zator...";
-        Text[ portuguese_brazilian ] = "~Organizar...";
-        Text[ japanese ] = "ç®¡ç†(~Z)...";
-        Text[ korean ] = "ê´€ë¦¬(~Z)...";
-        Text[ chinese_simplified ] = "ç®¡ç†(~Z)...";
-        Text[ chinese_traditional ] = "ç®¡ç†(~Z)...";
-        Text[ turkish ] = "Yönet...";
-        Text[ arabic ] = "Manage...";
-        Text[ catalan ] = "~Organitza...";
-        Text[ finnish ] = "~Järjestä...";
-        Text[ thai ] = "à¸ˆà¸±à¸”à¸£à¸°à¹€à¸šà¸µ~à¸¢à¸š...";
-        Text[ czech ] = "UspoÅ™Ã¡dat...";
-        Text[ hebrew ] = "â€®×¡×™×“×•×¨...â€¬";
-        Text[ hindi ] = "à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ ~à¤•à¤°à¥‹...";
-        Text[ slovak ] = "Organi~zovaÅ¥...";
-        Text[ hungarian ] = "~SzervezÅ‘...";
-        Text[ slovenian ] = "Organi~ziraj...";
+        Text [ de ] = "~Verwalten...";
+        Text [ en-US ] = "Organi~ze...";
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
         Pos = MAP_APPFONT( 56, 214 );
         Size = MAP_APPFONT( 50, 14 );
-        Text = "~Bearbeiten";
-        Text [ english_us ] = "~Edit";
-        Text[ portuguese ] = "~Editar";
-        Text[ russian ] = "Èçìåíèòü";
-        Text[ greek ] = "~Åğåîåñãáóßá";
-        Text[ dutch ] = "Be~werken";
-        Text[ french ] = "Éditer";
-        Text[ spanish ] = "Edi~tar";
-        Text[ italian ] = "Modifica";
-        Text[ danish ] = "~Rediger";
-        Text[ swedish ] = "~Redigera";
-        Text[ polish ] = "~Edytuj";
-        Text[ portuguese_brazilian ] = "~Editar";
-        Text[ japanese ] = "ç·¨é›†(~E)";
-        Text[ korean ] = "í¸ì§‘(~E)";
-        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
-        Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
-        Text[ turkish ] = "Düzenle";
-        Text[ arabic ] = "Edit";
-        Text[ catalan ] = "~Edita";
-        Text[ finnish ] = "~Muokkaa";
-        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
-        Text[ czech ] = "Upravit";
-        Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
-        Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-        Text[ slovak ] = "~UpraviÅ¥";
-        Text[ hungarian ] = "~SzerkesztÃ©s";
-        Text[ slovenian ] = "~Uredi";
+        Text [ de ] = "~Bearbeiten";
+        Text [ en-US ] = "~Edit";
     };
     OKButton BTN_DOCTEMPLATE_OPEN
     {
         Pos = MAP_APPFONT( 158, 214 );
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
-        Text = "Ö~ffnen";
-        Text [ english_us ] = "~Open";
-        Text[ portuguese ] = "~Abrir";
-        Text[ russian ] = "~Îòêğûòü";
-        Text[ greek ] = "¢~íïéãìá";
-        Text[ dutch ] = "O~penen";
-        Text[ french ] = "~Ouvrir";
-        Text[ spanish ] = "~Abrir";
-        Text[ italian ] = "~Apri";
-        Text[ danish ] = "Å~bn";
-        Text[ swedish ] = "Ö~ppna";
-        Text[ polish ] = "~Otwórz";
-        Text[ portuguese_brazilian ] = "~Abrir";
-        Text[ japanese ] = "é–‹ã(~O)";
-        Text[ korean ] = "ì—´ê¸°(~O)";
-        Text[ chinese_simplified ] = "æ‰“å¼€(~O)";
-        Text[ chinese_traditional ] = "é–‹å•ŸèˆŠæª”(~O)";
-        Text[ turkish ] = "Aç";
-        Text[ arabic ] = "Open";
-        Text[ catalan ] = "~Open";
-        Text[ finnish ] = "~Avaa";
-        Text[ thai ] = "à¹€~à¸›à¸´à¸”";
-        Text[ czech ] = "OtevÅ™Ã­t";
-        Text[ hebrew ] = "â€®×¤×ª×™×—×”â€¬";
-        Text[ hindi ] = "~à¤–à¥‹à¤²à¥‹";
-        Text[ slovak ] = "~OtvoriÅ¥";
-        Text[ hungarian ] = "~MegnyitÃ¡s";
-        Text[ slovenian ] = "~Odpri";
+        Text [ de ] = "Ö~ffnen";
+        Text [ en-US ] = "~Open";
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
     {
@@ -689,18 +358,11 @@ ModalDialog DLG_DOCTEMPLATE
         Pos = MAP_APPFONT( 267, 214 );
         Size = MAP_APPFONT( 50, 14 );
     };
-    Text[ thai ] = "Templates and Documents";
-    Text[ czech ] = "Å ablony a dokumenty";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ª ×•××¡××›×™×â€¬";
-    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‡à¤‚ à¤”à¤° à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Å ablÃ³ny a dokumenty";
-    Text[ hungarian ] = "Sablonok Ã©s dokumentumok";
-    Text[ slovenian ] = "Predloge in dokumenti";
 };
 
 StringArray STRARY_SVT_DOCINFO
 {
-    ItemList =
+    ItemList [ de ] =
     {
         < "Titel" ; DI_TITLE ; > ;
         < "Von" ; DI_FROM ; > ;
@@ -715,7 +377,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Thema" ; DI_THEME ; > ;
         < "Größe" ; DI_SIZE ; > ;
     };
-    ItemList [ english_us ] =
+    ItemList [ en-US ] =
     {
         < "Title" ; DI_TITLE ; > ;
         < "By" ; DI_FROM ; > ;
@@ -730,7 +392,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Subject" ; DI_THEME ; > ;
         < "Size" ; DI_SIZE ; > ;
     };
-    ItemList [ language_user1 ] =
+    ItemList [ x-comment ] =
     {
          < "Titel" ; DI_TITLE ; > ;
         < "Von" ; DI_FROM ; > ;
@@ -745,521 +407,27 @@ StringArray STRARY_SVT_DOCINFO
         < "Thema" ; DI_THEME ; > ;
         < "Größe" ; DI_SIZE ; > ;
     };
-    ItemList [ portuguese ] =
-    {
-         < "Título" ; DI_TITLE ; > ;
-        < "De" ; DI_FROM ; > ;
-        < "Data " ; DI_DATE ; > ;
-        < "Palavras-chave" ; DI_KEYWORDS ; > ;
-        < "Descrição" ; DI_DESCRIPTION ; > ;
-        < "Tipo de conteúdo" ; DI_MIMETYPE ; > ;
-        < "Modificado em" ; DI_MODIFIEDDATE ; > ;
-        < "Modificado por" ; DI_MODIFIEDBY ; > ;
-        < "Impresso em" ; DI_PRINTDATE ; > ;
-        < "Impresso por" ; DI_PRINTBY ; > ;
-        < "Assunto" ; DI_THEME ; > ;
-        < "Tamanho" ; DI_SIZE ; > ;
-    };
-    ItemList [ russian ] =
-    {
-         < "Çàãîëîâîê" ; DI_TITLE ; > ;
-        < "Èç" ; DI_FROM ; > ;
-        < "Äàòà" ; DI_DATE ; > ;
-        < "Êëş÷åâûå ñëîâà" ; DI_KEYWORDS ; > ;
-        < "Îïèñàíèå" ; DI_DESCRIPTION ; > ;
-        < "Òèï" ; DI_MIMETYPE ; > ;
-        < "Äàòà èçìåíåíèÿ" ; DI_MODIFIEDDATE ; > ;
-        < "Èçìåíåí" ; DI_MODIFIEDBY ; > ;
-        < "Äàòà ïå÷àòè" ; DI_PRINTDATE ; > ;
-        < "Íàïå÷àòàí" ; DI_PRINTBY ; > ;
-        < "Òåìà" ; DI_THEME ; > ;
-        < "Ğàçìåğ" ; DI_SIZE ; > ;
-    };
-    ItemList [ greek ] =
-    {
-        < "Ôßôëïò" ; DI_TITLE ; > ;
-        < "ÊáôÜ" ; DI_FROM ; > ;
-        < "Çìåñïìçíßá" ; DI_DATE ; > ;
-        < "Ëİîåéò êëåéäéÜ" ; DI_KEYWORDS ; > ;
-        < "ĞåñéãñáöŞ" ; DI_DESCRIPTION ; > ;
-        < "Ôığïò" ; DI_MIMETYPE ; > ;
-        < "ÔñïğïğïéŞèçêå óôéò" ; DI_MODIFIEDDATE ; > ;
-        < "ÔñïğïğïéŞèçêå áğü" ; DI_MODIFIEDBY ; > ;
-        < "Åêôõğşèçêå óôéò" ; DI_PRINTDATE ; > ;
-        < "Åêôõğşèçêå áğü" ; DI_PRINTBY ; > ;
-        < "Èİìá" ; DI_THEME ; > ;
-        < "Ìİãåèïò" ; DI_SIZE ; > ;
-    };
-    ItemList [ dutch ] =
-    {
-        < "Titel" ; DI_TITLE ; > ;
-        < "Van" ; DI_FROM ; > ;
-        < "Datum" ; DI_DATE ; > ;
-        < "Sleutelwoorden" ; DI_KEYWORDS ; > ;
-        < "Omschrijving" ; DI_DESCRIPTION ; > ;
-        < "Inhoudstype:" ; DI_MIMETYPE ; > ;
-        < "Gewijzigd op" ; DI_MODIFIEDDATE ; > ;
-        < "Gewijzigd door" ; DI_MODIFIEDBY ; > ;
-        < "Afdrukdatum" ; DI_PRINTDATE ; > ;
-        < "Afgedrukt door" ; DI_PRINTBY ; > ;
-        < "Onderwerp" ; DI_THEME ; > ;
-        < "Grootte" ; DI_SIZE ; > ;
-    };
-    ItemList [ french ] =
-    {
-        < "Titre" ; DI_TITLE ; > ;
-        < "De" ; DI_FROM ; > ;
-        < "Date" ; DI_DATE ; > ;
-        < "Mots-clés" ; DI_KEYWORDS ; > ;
-        < "Description" ; DI_DESCRIPTION ; > ;
-        < "Type de contenu" ; DI_MIMETYPE ; > ;
-        < "Date de modification" ; DI_MODIFIEDDATE ; > ;
-        < "Modifié par" ; DI_MODIFIEDBY ; > ;
-        < "Date d'impression" ; DI_PRINTDATE ; > ;
-        < "Imprimé par" ; DI_PRINTBY ; > ;
-        < "Sujet" ; DI_THEME ; > ;
-        < "Taille" ; DI_SIZE ; > ;
-    };
-    ItemList [ spanish ] =
-    {
-        < "Título" ; DI_TITLE ; > ;
-        < "De" ; DI_FROM ; > ;
-        < "Fecha" ; DI_DATE ; > ;
-        < "Palabras clave" ; DI_KEYWORDS ; > ;
-        < "Descripción" ; DI_DESCRIPTION ; > ;
-        < "Tipo de contenido" ; DI_MIMETYPE ; > ;
-        < "Fecha de modificación" ; DI_MODIFIEDDATE ; > ;
-        < "Modificado por" ; DI_MODIFIEDBY ; > ;
-        < "Fecha de impresión" ; DI_PRINTDATE ; > ;
-        < "Impreso por" ; DI_PRINTBY ; > ;
-        < "Asunto" ; DI_THEME ; > ;
-        < "Tamaño" ; DI_SIZE ; > ;
-    };
-    ItemList [ finnish ] =
-    {
-        < "Otsikko" ; DI_TITLE ; > ;
-        < "Tekijä" ; DI_FROM ; > ;
-        < "Päivämäärä" ; DI_DATE ; > ;
-        < "Avainsanat" ; DI_KEYWORDS ; > ;
-        < "Kuvaus" ; DI_DESCRIPTION ; > ;
-        < "Tyyppi" ; DI_MIMETYPE ; > ;
-        < "Muokattu viimeksi" ; DI_MODIFIEDDATE ; > ;
-        < "Muokkaaja" ; DI_MODIFIEDBY ; > ;
-        < "Tulostuspäivä" ; DI_PRINTDATE ; > ;
-        < "Tulostanut" ; DI_PRINTBY ; > ;
-        < "Aihe" ; DI_THEME ; > ;
-        < "Koko" ; DI_SIZE ; > ;
-    };
-    ItemList [ italian ] =
-    {
-        < "Titolo" ; DI_TITLE ; > ;
-        < "da" ; DI_FROM ; > ;
-        < "Data" ; DI_DATE ; > ;
-        < "Parole chiave" ; DI_KEYWORDS ; > ;
-        < "Descrizione" ; DI_DESCRIPTION ; > ;
-        < "Tipo" ; DI_MIMETYPE ; > ;
-        < "Data modifica" ; DI_MODIFIEDDATE ; > ;
-        < "Cambiato" ; DI_MODIFIEDBY ; > ;
-        < "Stampato il" ; DI_PRINTDATE ; > ;
-        < "Stampato" ; DI_PRINTBY ; > ;
-        < "Argomento" ; DI_THEME ; > ;
-        < "Dimensioni" ; DI_SIZE ; > ;
-    };
-    ItemList [ danish ] =
-    {
-        < "Titel" ; DI_TITLE ; > ;
-        < "Af" ; DI_FROM ; > ;
-        < "Dato" ; DI_DATE ; > ;
-        < "Stikord" ; DI_KEYWORDS ; > ;
-        < "Beskrivelse" ; DI_DESCRIPTION ; > ;
-        < "Type" ; DI_MIMETYPE ; > ;
-        < "Ændringsdato" ; DI_MODIFIEDDATE ; > ;
-        < "Ændret af" ; DI_MODIFIEDBY ; > ;
-        < "Udskriftsdato" ; DI_PRINTDATE ; > ;
-        < "Udskrevet af" ; DI_PRINTBY ; > ;
-        < "Emne" ; DI_THEME ; > ;
-        < "Størrelse" ; DI_SIZE ; > ;
-    };
-    ItemList [ swedish ] =
-    {
-        < "Namn" ; DI_TITLE ; > ;
-        < "Av" ; DI_FROM ; > ;
-        < "Datum" ; DI_DATE ; > ;
-        < "Nyckelord" ; DI_KEYWORDS ; > ;
-        < "Beskrivning" ; DI_DESCRIPTION ; > ;
-        < "Innehållstyp" ; DI_MIMETYPE ; > ;
-        < "Ändringsdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Ändrat av" ; DI_MODIFIEDBY ; > ;
-        < "Utskriftsdatum" ; DI_PRINTDATE ; > ;
-        < "Utskrivet av" ; DI_PRINTBY ; > ;
-        < "Ämne" ; DI_THEME ; > ;
-        < "Storlek" ; DI_SIZE ; > ;
-    };
-    ItemList [ polish ] =
-    {
-        < "Tytu³" ; DI_TITLE ; > ;
-        < "od" ; DI_FROM ; > ;
-        < "Data" ; DI_DATE ; > ;
-        < "S³owa kluczowe" ; DI_KEYWORDS ; > ;
-        < "Opis" ; DI_DESCRIPTION ; > ;
-        < "Typ" ; DI_MIMETYPE ; > ;
-        < "Data modyfikacji" ; DI_MODIFIEDDATE ; > ;
-        < "Zmodyfikowa³(a)" ; DI_MODIFIEDBY ; > ;
-        < "Data wydruku" ; DI_PRINTDATE ; > ;
-        < "Wydrukowa³(a)" ; DI_PRINTBY ; > ;
-        < "Temat" ; DI_THEME ; > ;
-        < "Rozmiar" ; DI_SIZE ; > ;
-    };
-    ItemList [ portuguese_brazilian ] =
-    {
-        < "Título" ; DI_TITLE ; > ;
-        < "Por" ; DI_FROM ; > ;
-        < "Data" ; DI_DATE ; > ;
-        < "Palavras-chave" ; DI_KEYWORDS ; > ;
-        < "Descrição" ; DI_DESCRIPTION ; > ;
-        < "Tipo" ; DI_MIMETYPE ; > ;
-        < "Modificado em" ; DI_MODIFIEDDATE ; > ;
-        < "Modificado por" ; DI_MODIFIEDBY ; > ;
-        < "Impresso em" ; DI_PRINTDATE ; > ;
-        < "Impresso por" ; DI_PRINTBY ; > ;
-        < "Assunto" ; DI_THEME ; > ;
-        < "Tamanho" ; DI_SIZE ; > ;
-    };
-    ItemList [ japanese ] =
-    {
-        < "ã‚¿ã‚¤ãƒˆãƒ«" ; DI_TITLE ; > ;
-        < "ä½œæˆè€…" ; DI_FROM ; > ;
-        < "æ—¥æ™‚" ; DI_DATE ; > ;
-        < "ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰" ; DI_KEYWORDS ; > ;
-        < "æ¦‚è¦" ; DI_DESCRIPTION ; > ;
-        < "æ§‹æˆå†…å®¹" ; DI_MIMETYPE ; > ;
-        < "æ›´æ–°æ—¥æ™‚" ; DI_MODIFIEDDATE ; > ;
-        < "æ›´æ–°è€…" ; DI_MODIFIEDBY ; > ;
-        < "å°åˆ·æ—¥æ™‚" ; DI_PRINTDATE ; > ;
-        < "å°åˆ·æ—¥æ™‚" ; DI_PRINTBY ; > ;
-        < "ãƒ†ãƒ¼ãƒ" ; DI_THEME ; > ;
-        < "ã‚µã‚¤ã‚º" ; DI_SIZE ; > ;
-    };
-    ItemList [ korean ] =
-    {
-        < "ì œëª©" ; DI_TITLE ; > ;
-        < "ì‘ì„±ì" ; DI_FROM ; > ;
-        < "ë‚ ì§œ" ; DI_DATE ; > ;
-        < "í‚¤ì›Œë“œ" ; DI_KEYWORDS ; > ;
-        < "ì„¤ëª…" ; DI_DESCRIPTION ; > ;
-        < "ìœ í˜•" ; DI_MIMETYPE ; > ;
-        < "ë³€ê²½ ë‚ ì§œ" ; DI_MODIFIEDDATE ; > ;
-        < "ë³€ê²½ì" ; DI_MODIFIEDBY ; > ;
-        < "ì¸ì‡„ ë‚ ì§œ" ; DI_PRINTDATE ; > ;
-        < "ì¸ì‡„ ë‚ ì§œ" ; DI_PRINTBY ; > ;
-        < "ì£¼ì œ" ; DI_THEME ; > ;
-        < "í¬ê¸°" ; DI_SIZE ; > ;
-    };
-    ItemList [ chinese_simplified ] =
-    {
-        < "å¤§æ ‡é¢˜" ; DI_TITLE ; > ;
-        < "ä½œè€…" ; DI_FROM ; > ;
-        < "æ—¥æœŸ" ; DI_DATE ; > ;
-        < "å…³é”®å­—" ; DI_KEYWORDS ; > ;
-        < "è¯´æ˜" ; DI_DESCRIPTION ; > ;
-        < "å†…å®¹ç±»å‹" ; DI_MIMETYPE ; > ;
-        < "ä¿®æ”¹çš„æ—¥æœŸ" ; DI_MODIFIEDDATE ; > ;
-        < "ç¼–è¾‘ä¿®æ”¹è€…" ; DI_MODIFIEDBY ; > ;
-        < "æ‰“å°çš„æ—¥æœŸ" ; DI_PRINTDATE ; > ;
-        < "æ‰“å°çš„æ—¥æœŸ" ; DI_PRINTBY ; > ;
-        < "ä¸»é¢˜" ; DI_THEME ; > ;
-        < "å¤§å°" ; DI_SIZE ; > ;
-    };
-    ItemList [ chinese_traditional ] =
-    {
-        < "å¤§æ¨™é¡Œ" ; DI_TITLE ; > ;
-        < "ä½œè€…" ; DI_FROM ; > ;
-        < "æ—¥æœŸ" ; DI_DATE ; > ;
-        < "é—œéµå­—" ; DI_KEYWORDS ; > ;
-        < "æè¿°" ; DI_DESCRIPTION ; > ;
-        < "å…§å®¹é¡å‹" ; DI_MIMETYPE ; > ;
-        < "ä¿®æ”¹çš„æ—¥æœŸ" ; DI_MODIFIEDDATE ; > ;
-        < "ç·¨è¼¯ä¿®æ”¹è€…" ; DI_MODIFIEDBY ; > ;
-        < "åˆ—å°çš„æ—¥æœŸ" ; DI_PRINTDATE ; > ;
-        < "åˆ—å°çš„æ—¥æœŸ" ; DI_PRINTBY ; > ;
-        < "ä¸»é¡Œ" ; DI_THEME ; > ;
-        < "å¤§å°" ; DI_SIZE ; > ;
-    };
-    ItemList [ turkish ] =
-    {
-        < "Başlık" ; DI_TITLE ; > ;
-        < "Hazırlayan" ; DI_FROM ; > ;
-        < "Tarih" ; DI_DATE ; > ;
-        < "Anahtar Kelimeler" ; DI_KEYWORDS ; > ;
-        < "Açıklama" ; DI_DESCRIPTION ; > ;
-        < "Tür" ; DI_MIMETYPE ; > ;
-        < "Değiştirildi" ; DI_MODIFIEDDATE ; > ;
-        < "Değiştiren" ; DI_MODIFIEDBY ; > ;
-        < "Bastırıldı" ; DI_PRINTDATE ; > ;
-        < "Bastıran" ; DI_PRINTBY ; > ;
-        < "Konu" ; DI_THEME ; > ;
-        < "Boyut" ; DI_SIZE ; > ;
-    };
-    ItemList [ arabic ] =
-    {
-             < "ÇááŞÈ Çáãåäí" ; DI_TITLE ; > ;
-        < "ãä" ; DI_FROM ; > ;
-        < "ÇáÊÇÑíÎ" ; DI_DATE ; > ;
-        < "Schlüsselwörter" ; DI_KEYWORDS ; > ;
-        < "ÇáæÕİ" ; DI_DESCRIPTION ; > ;
-        < "Type" ; DI_MIMETYPE ; > ;
-        < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Geändert von" ; DI_MODIFIEDBY ; > ;
-        < "Printed on" ; DI_PRINTDATE ; > ;
-        < "Printed by" ; DI_PRINTBY ; > ;
-        < "ÇáãæÖæÚ" ; DI_THEME ; > ;
-        < "Größe" ; DI_SIZE ; > ;
-    };
-    ItemList [ catalan ] =
-    {
-         < "Title" ; DI_TITLE ; > ;
-        < "By" ; DI_FROM ; > ;
-        < "Date" ; DI_DATE ; > ;
-        < "Keywords" ; DI_KEYWORDS ; > ;
-        < "Description" ; DI_DESCRIPTION ; > ;
-        < "Type" ; DI_MIMETYPE ; > ;
-        < "Modified on" ; DI_MODIFIEDDATE ; > ;
-        < "Modified by" ; DI_MODIFIEDBY ; > ;
-        < "Printed on" ; DI_PRINTDATE ; > ;
-        < "Printed by" ; DI_PRINTBY ; > ;
-        < "Subject" ; DI_THEME ; > ;
-        < "Size" ; DI_SIZE ; > ;
-    };
-    ItemList [ thai ] =
-    {
-         < "Title" ; DI_TITLE ; > ;
-        < "By" ; DI_FROM ; > ;
-        < "Date" ; DI_DATE ; > ;
-        < "Keywords" ; DI_KEYWORDS ; > ;
-        < "Description" ; DI_DESCRIPTION ; > ;
-        < "Type" ; DI_MIMETYPE ; > ;
-        < "Modified on" ; DI_MODIFIEDDATE ; > ;
-        < "Modified by" ; DI_MODIFIEDBY ; > ;
-        < "Printed on" ; DI_PRINTDATE ; > ;
-        < "Printed by" ; DI_PRINTBY ; > ;
-        < "Subject" ; DI_THEME ; > ;
-        < "Size" ; DI_SIZE ; > ;
-    };
-ItemList [ czech ] =
-    {
-         < "NÃ¡zev" ; DI_TITLE ; > ;
-        < "Autor" ; DI_FROM ; > ;
-        < "Datum" ; DI_DATE ; > ;
-        < "KlÃ­ÄovÃ¡ slova" ; DI_KEYWORDS ; > ;
-        < "Popis" ; DI_DESCRIPTION ; > ;
-        < "Typ" ; DI_MIMETYPE ; > ;
-        < "Upraveno" ; DI_MODIFIEDDATE ; > ;
-        < "Upravil" ; DI_MODIFIEDBY ; > ;
-        < "VytiÅ¡tÄ›no" ; DI_PRINTDATE ; > ;
-        < "Vytiskl" ; DI_PRINTBY ; > ;
-        < "PÅ™edmÄ›t" ; DI_THEME ; > ;
-        < "Velikost" ; DI_SIZE ; > ;
-    };
-    ItemList [ hebrew ] =
-    {
-         < "â€®×›×•×ª×¨×ªâ€¬" ; DI_TITLE ; > ;
-        < "â€®×××ªâ€¬" ; DI_FROM ; > ;
-        < "â€®×ª××¨×™×šâ€¬" ; DI_DATE ; > ;
-        < "â€®××™×œ×•×ª ××¤×ª×—â€¬" ; DI_KEYWORDS ; > ;
-        < "â€®×ª×™××•×¨â€¬" ; DI_DESCRIPTION ; > ;
-        < "â€®×¡×•×’â€¬" ; DI_MIMETYPE ; > ;
-        < "â€®×ª××¨×™×š ×©×™× ×•×™ ××—×¨×•×Ÿâ€¬" ; DI_MODIFIEDDATE ; > ;
-        < "â€®×©×•× ×” ×¢×œ ×™×“×™â€¬" ; DI_MODIFIEDBY ; > ;
-        < "â€®×ª××¨×™×š ×”×“×¤×¡×” ××—×¨×•× ×”â€¬" ; DI_PRINTDATE ; > ;
-        < "â€®×”×•×“×¤×¡ ×¢×œ ×™×“×™â€¬" ; DI_PRINTBY ; > ;
-        < "â€®× ×•×©×â€¬" ; DI_THEME ; > ;
-        < "â€®×’×•×“×œâ€¬" ; DI_SIZE ; > ;
-    };
-    ItemList [ hindi ] =
-    {
-         < "à¤¶à¥€à¤°à¥à¤·à¤•" ; DI_TITLE ; > ;
-        < "à¤¸à¥‡" ; DI_FROM ; > ;
-        < "à¤¦à¤¿à¤¨à¤¾à¤‚à¤•" ; DI_DATE ; > ;
-        < "à¤ªà¥à¤°à¤§à¤¾à¤¨ à¤¶à¤¬à¥à¤¦" ; DI_KEYWORDS ; > ;
-        < "à¤µà¤¿à¤µà¤°à¤£" ; DI_DESCRIPTION ; > ;
-        < "à¤µà¤°à¥à¤—" ; DI_MIMETYPE ; > ;
-        < "à¤®à¥‡à¤‚ à¤¸à¥à¤§à¤¾à¤° à¤•à¤¿à¤¯à¤¾" ; DI_MODIFIEDDATE ; > ;
-        < "à¤¨à¥‡ à¤¸à¥à¤§à¤¾à¤° à¤•à¤¿à¤¯à¤¾" ; DI_MODIFIEDBY ; > ;
-        < "à¤®à¥‡à¤‚ à¤›à¤ªà¤¾à¤ˆ à¤•à¤¿à¤¯à¤¾" ; DI_PRINTDATE ; > ;
-        < "à¤¨à¥‡ à¤›à¤ªà¤¾à¤ˆ à¤•à¤¿à¤¯à¤¾" ; DI_PRINTBY ; > ;
-        < "à¤µà¤¿à¤·à¤¯" ; DI_THEME ; > ;
-        < "à¤ªà¤°à¤¿à¤®à¤¾à¤£" ; DI_SIZE ; > ;
-    };
-    ItemList [ slovak ] =
-    {
-         < "Titul" ; DI_TITLE ; > ;
-        < "Autor" ; DI_FROM ; > ;
-        < "DÃ¡tum" ; DI_DATE ; > ;
-        < "KÄ¾ÃºÄovÃ© slovÃ¡" ; DI_KEYWORDS ; > ;
-        < "Popis" ; DI_DESCRIPTION ; > ;
-        < "Typ" ; DI_MIMETYPE ; > ;
-        < "UpravenÃ©" ; DI_MODIFIEDDATE ; > ;
-        < "Upravil" ; DI_MODIFIEDBY ; > ;
-        < "VytlaÄenÃ©" ; DI_PRINTDATE ; > ;
-        < "VytlaÄil" ; DI_PRINTBY ; > ;
-        < "Predmet" ; DI_THEME ; > ;
-        < "VeÄ¾kosÅ¥" ; DI_SIZE ; > ;
-    };
-    ItemList [ hungarian ] =
-    {
-         < "CÃ­m" ; DI_TITLE ; > ;
-        < "SzerzÅ‘" ; DI_FROM ; > ;
-        < "DÃ¡tum" ; DI_DATE ; > ;
-        < "Kulcsszavak" ; DI_KEYWORDS ; > ;
-        < "LeÃ­rÃ¡s" ; DI_DESCRIPTION ; > ;
-        < "TÃ­pus" ; DI_MIMETYPE ; > ;
-        < "VÃ¡ltoztatÃ¡s dÃ¡tuma" ; DI_MODIFIEDDATE ; > ;
-        < "UtolsÃ³ vÃ¡ltozÃ¡s szerzÅ‘je" ; DI_MODIFIEDBY ; > ;
-        < "NyomtatÃ¡s dÃ¡tuma" ; DI_PRINTDATE ; > ;
-        < "UtoljÃ¡ra nyomtatta" ; DI_PRINTBY ; > ;
-        < "TÃ¡rgy" ; DI_THEME ; > ;
-        < "MÃ©ret" ; DI_SIZE ; > ;
-    };
-    ItemList [ slovenian ] =
-    {
-         < "Naslov" ; DI_TITLE ; > ;
-        < "Od" ; DI_FROM ; > ;
-        < "Datum" ; DI_DATE ; > ;
-        < "KljuÄne besede" ; DI_KEYWORDS ; > ;
-        < "Opis" ; DI_DESCRIPTION ; > ;
-        < "Vrsta" ; DI_MIMETYPE ; > ;
-        < "Spremenjeno dne" ; DI_MODIFIEDDATE ; > ;
-        < "Spremenil" ; DI_MODIFIEDBY ; > ;
-        < "Natisnjeno dne" ; DI_PRINTDATE ; > ;
-        < "Natisnil" ; DI_PRINTBY ; > ;
-        < "Zadeva" ; DI_THEME ; > ;
-        < "Velikost" ; DI_SIZE ; > ;
-    };
     };
 
 String STR_SVT_NEWDOC_HELP
 {
-    Text = "Von hier können Sie neue Dokumente erstellen.";
-    Text [ english_us ] = "Click here to create new documents.";
-    Text[ portuguese ] = "Click here to create new documents.";
-    Text[ russian ] = "Click here to create new documents.";
-    Text[ greek ] = "Click here to create new documents.";
-    Text[ dutch ] = "Klik hier om nieuwe documenten aan te maken.";
-    Text[ french ] = "Point de départ pour la création de nouveaux documents";
-    Text[ spanish ] = "Pulse aquí para crear documentos nuevos.";
-    Text[ finnish ] = "Click here to create new documents.";
-    Text[ italian ] = "Cliccate il simbolo per creare nuovi documenti.";
-    Text[ danish ] = "Klik her for at oprette nye dokumenter.";
-    Text[ swedish ] = "Klicka här för att skapa nya dokument.";
-    Text[ polish ] = "Click here to create new documents.";
-    Text[ japanese ] = "ã“ã“ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨ã€æ–°ã—ã„ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãŒä½œæˆã§ãã¾ã™ã€‚";
-    Text[ korean ] = "ìƒˆ ë¬¸ì„œë¥¼ ë§Œë“¤ë ¤ë©´ ì—¬ê¸°ë¥¼ í´ë¦­í•´ì£¼ì‹­ì‹œì˜¤.";
-    Text[ chinese_simplified ] = "åœ¨è¿™é‡Œæ‚¨èƒ½å¤Ÿå»ºç«‹æ–°çš„æ–‡æ¡£ã€‚";
-    Text[ chinese_traditional ] = "æ‚¨åœ¨æ­¤èƒ½å¤ å»ºç«‹æ–°çš„æ–‡ä»¶ã€‚";
-    Text[ turkish ] = "Yeni belge oluşturmak için buraya tıklayın";
-    Text[ arabic ] = "Click here to create new documents.";
-    Text[ czech ] = "KliknutÃ­m zde vytvoÅ™Ã­te novÃ½ dokument.";
-    Text[ hebrew ] = "â€®×œ×—×™×¦×” ×›××Ÿ ×™×•×¦×¨×ª ××¡××›×™× ×—×“×©×™×.â€¬";
-    Text[ catalan ] = "Click here to create new documents.";
-    Text[ portuguese_brazilian ] = "Clique aqui para criar novos documentos.";
-    Text[ thai ] = "Click here to create new documents.";
-    Text[ hindi ] = "Click here to create new documents.";
-    Text[ slovak ] = "Kliknite tu pre vytvÃ¡ranie novÃ½ch dokumentov.";
-    Text[ hungarian ] = "Kattintson ide Ãºj dokumentum lÃ©trehozÃ¡sÃ¡hoz.";
-    Text[ slovenian ] = "Kliknite tukaj, da ustvarite nove dokumente.";
+    Text [ de ] = "Von hier können Sie neue Dokumente erstellen.";
+    Text [ en-US ] = "Click here to create new documents.";
 };
 String STR_SVT_MYDOCS_HELP
 {
-    Text = "Enthält Ihre Briefe, Berichte und andere Dokumente";
-    Text [ english_us ] = "Contains your letters, reports and other documents";
-    Text[ portuguese ] = "Contains your letters, reports and other documents";
-    Text[ russian ] = "Contains your letters, reports and other documents";
-    Text[ greek ] = "Contains your letters, reports and other documents";
-    Text[ dutch ] = "Bevat uw brieven, rapporten en andere documenten";
-    Text[ french ] = "Contient vos lettres, rapports et autres documents";
-    Text[ spanish ] = "Contiene cartas, informes y otros documentos.";
-    Text[ finnish ] = "Contains your letters, reports and other documents";
-    Text[ italian ] = "Contiene lettere, rapporti e altri documenti.";
-    Text[ danish ] = "Indeholder dine breve, rapporter og andre dokumenter";
-    Text[ swedish ] = "Innehåller dina brev, rapporter och andra dokument";
-    Text[ polish ] = "Contains your letters, reports and other documents";
-    Text[ japanese ] = "ãƒ¬ã‚¿ãƒ¼ã€ãƒ¬ãƒãƒ¼ãƒˆã€ãã®ä»–ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãŒå«ã¾ã‚Œã¦ã„ã¾ã™";
-    Text[ korean ] = "ì‚¬ìš©ìì˜ í¸ì§€, ë³´ê³ ì„œ ë° ê¸°íƒ€ ë¬¸ì„œê°€ ìˆ˜ë¡ë˜ì–´ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å­˜æ”¾æ‚¨çš„ä¿¡ä»¶ã€æŠ¥è¡¨åŠå…¶å®ƒæ–‡æ¡£";
-    Text[ chinese_traditional ] = "å­˜æ”¾æ‚¨çš„ä¿¡ä»¶ã€å ±è¡¨åŠå…¶å®ƒæ–‡ä»¶";
-    Text[ turkish ] = "Size ait mektupları, raporları ve diğer belgeleri içerir";
-    Text[ arabic ] = "Contains your letters, reports and other documents";
-    Text[ czech ] = "Obsahuje vaÅ¡e dopisy, reporty a ostatnÃ­ dokumenty";
-    Text[ hebrew ] = "â€®××›×™×œ ××›×ª×‘×™×, ×“×•\"×—×•×ª ×•××¡××›×™× ××—×¨×™×â€¬";
-    Text[ catalan ] = "Contains your letters, reports and other documents";
-    Text[ portuguese_brazilian ] = "Contém suas cartas, relatórios e outros documentos";
-    Text[ thai ] = "Contains your letters, reports and other documents";
-    Text[ hindi ] = "Contains your letters, reports and other documents";
-    Text[ slovak ] = "Obsahuje vaÅ¡e listy, sprÃ¡vy a inÃ© dokumenty";
-    Text[ hungarian ] = "Leveleket, jelentÃ©seket Ã©s mÃ¡s dokumentumokat tartalmaz.";
-    Text[ slovenian ] = "Vsebuje vaÅ¡a pisma, poroÄila in ostale dokumente.";
+    Text [ de ] = "Enthält Ihre Briefe, Berichte und andere Dokumente";
+    Text [ en-US ] = "Contains your letters, reports and other documents";
 };
 String STR_SVT_TEMPLATES_HELP
 {
-    Text = "Enthält Vorlagen aus denen Sie neue Dokumente erstellen können";
-    Text [ english_us ] = "Contains templates for creating new documents";
-    Text[ portuguese ] = "Contains templates for creating new documents";
-    Text[ russian ] = "Contains templates for creating new documents";
-    Text[ greek ] = "Contains templates for creating new documents";
-    Text[ dutch ] = "Bevat sjablonen voor het maken van nieuwe documenten";
-    Text[ french ] = "Contient des modèles pour la création de nouveaux documents";
-    Text[ spanish ] = "Contiene plantillas para la creación de documentos nuevos.";
-    Text[ finnish ] = "Contains templates for creating new documents";
-    Text[ italian ] = "Contiene modelli per creare nuovi documenti.";
-    Text[ danish ] = "Indeholder skabeloner til oprettelse af nye dokumenter";
-    Text[ swedish ] = "Innehåller mallar för att skapa nya dokument";
-    Text[ polish ] = "Contains templates for creating new documents";
-    Text[ japanese ] = "æ–°ã—ã„ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãŒä½œæˆã§ãã‚‹ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãŒå«ã¾ã‚Œã¦ã„ã¾ã™";
-    Text[ korean ] = "ìƒˆ ë¬¸ì„œ ë§Œë“¤ê¸°ìš© ì„œì‹ íŒŒì¼ì´ ìˆ˜ë¡ë˜ì–´ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å­˜æ”¾ç”¨æ¥æ–°å¢æ–‡æ¡£çš„æ ·å¼æ–‡æ¡£";
-    Text[ chinese_traditional ] = "å­˜æ”¾ç”¨ä¾†æ–°å¢æ–‡ä»¶çš„æ¨£å¼æ–‡ä»¶";
-    Text[ turkish ] = "Yeni belge oluºturmak için gereken ºablonlar? içerir";
-    Text[ arabic ] = "Contains templates for creating new documents";
-    Text[ czech ] = "Obsahuje Å¡ablony pro vytvÃ¡Å™enÃ­ novÃ½ch dokumentÅ¯";
-    Text[ hebrew ] = "â€®××›×™×œ ×ª×‘× ×™×•×ª ×œ×™×¦×™×¨×ª ××¡××›×™× ×—×“×©×™×.â€¬";
-    Text[ catalan ] = "Contains templates for creating new documents";
-    Text[ portuguese_brazilian ] = "Contém modelos para criar novos documentos";
-    Text[ thai ] = "Contains templates for creating new documents";
-    Text[ hindi ] = "Contains templates for creating new documents";
-    Text[ slovak ] = "Obsahuje Å¡ablÃ³ny pre vytvÃ¡ranie novÃ½ch dokumentov";
-    Text[ hungarian ] = "Ãšj dokumentumok lÃ©trehozÃ¡sÃ¡hoz valÃ³ sablonokat tartalmaz.";
-    Text[ slovenian ] = "Vsebuje predloge za sestavljanje novih dokumentov.";
+    Text [ de ] = "Enthält Vorlagen aus denen Sie neue Dokumente erstellen können";
+    Text [ en-US ] = "Contains templates for creating new documents";
 };
 String STR_SVT_SAMPLES_HELP
 {
-    Text = "Enthält Beispieldokumente für Briefe, Berichte und andere Dokumente";
-    Text [ english_us ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ portuguese ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ russian ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ greek ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ dutch ] = "Bevat een assortiment van voorbeeldbrieven, -rapporten en andere documenten";
-    Text[ french ] = "Contient des exemples de document (lettres, rapports, etc.)";
-    Text[ spanish ] = "Contiene ejemplos de cartas, informes y otros documentos.";
-    Text[ finnish ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ italian ] = "Contiene una selezione di documenti di esempio per lettere, rapporti e altro.";
-    Text[ danish ] = "Indeholder et udvalg af prøver på breve, rapporter og andre dokumenter";
-    Text[ swedish ] = "Innehåller exempeldokument för brev, rapporter och andra dokument";
-    Text[ polish ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ japanese ] = "ãƒ¬ã‚¿ãƒ¼ã€ãƒ¬ãƒãƒ¼ãƒˆã€ãã®ä»–ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«ä½¿ãˆã‚‹ã‚µãƒ³ãƒ—ãƒ«æ–‡æ›¸ãŒå«ã¾ã‚Œã¦ã„ã¾ã™";
-    Text[ korean ] = "í¸ì§€, ë³´ê³ ì„œ ë° ê¸°íƒ€ ë¬¸ì„œìš©ì˜ ìƒ˜í”Œ ë¬¸ì„œê°€ ìˆ˜ë¡ë˜ì–´ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å­˜æ”¾ä¸€å¥—ä¿¡ä»¶ã€æŠ¥è¡¨åŠå…¶ä»–æ–‡æ¡£çš„äº‹ä¾‹æ–‡æ¡£";
-    Text[ chinese_traditional ] = "å­˜æ”¾ä¸€å¥—ä¿¡ä»¶ã€å ±è¡¨åŠå…¶å®ƒæ–‡ä»¶çš„ç¯„ä¾‹æ–‡ä»¶";
-    Text[ turkish ] = "Örnek mektuplardan, raporlardan ve diğer dökümanlardan seçim içerir";
-    Text[ arabic ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ czech ] = "Obsahuje vÃ½bÄ›r ukÃ¡zkovÃ½ch dopisÅ¯, reportÅ¯ a jinÃ½ch dokumentÅ¯";
-    Text[ hebrew ] = "â€®××›×™×œ ××‘×—×¨ ××›×ª×‘×™× ×œ×“×•×’××”, ×“×•\"×—×•×ª ×•××¡××›×™× ××—×¨×™×.â€¬";
-    Text[ catalan ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ portuguese_brazilian ] = "Contém uma seleção de exemplos de cartas, relatórios e outros documentos";
-    Text[ thai ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ hindi ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ slovak ] = "Obsahuje vÃ½ber vzorovÃ½ch listov, sprÃ¡v a inÃ½ch dokumetov";
-    Text[ hungarian ] = "Mintaleveleket, jelentÃ©seket Ã©s mÃ¡s dokumentumokat tartalmaz.";
-    Text[ slovenian ] = "Vsebuje izbor vzorÄnih pisem, poroÄil in ostalih dokumentov.";
+    Text [ de ] = "Enthält Beispieldokumente für Briefe, Berichte und andere Dokumente";
+    Text [ en-US ] = "Contains a selection of sample letters, reports and other documents";
 };
 
 
