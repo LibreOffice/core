@@ -14,329 +14,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::ucb;
 
 
-// Return class for XStream_impl::getInputStream
-
-class fileaccess::XInputStreamForStream
-    : public cppu::OWeakObject,
-      public io::XInputStream,
-      public io::XSeekable
-{
-public:
-
-    XInputStreamForStream( XStream_impl* xPtr )
-        : m_xPtr( xPtr )
-    {
-        m_xPtr->acquire();
-    }
-
-    ~XInputStreamForStream()
-    {
-        if ( m_xPtr )
-            m_xPtr->release();
-    }
-
-    uno::Any SAL_CALL
-    queryInterface(
-        const uno::Type& rType )
-        throw( uno::RuntimeException)
-    {
-        uno::Any aRet = cppu::queryInterface( rType,
-                                              SAL_STATIC_CAST( io::XInputStream*,this ),
-                                              SAL_STATIC_CAST( io::XSeekable*,this ) );
-        return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-    }
-
-
-    void SAL_CALL
-    acquire(
-        void )
-        throw( uno::RuntimeException)
-    {
-        OWeakObject::acquire();
-    }
-
-    void SAL_CALL
-    release(
-        void )
-        throw( uno::RuntimeException )
-    {
-        OWeakObject::release();
-    }
-
-    sal_Int32 SAL_CALL
-    readBytes(
-        uno::Sequence< sal_Int8 >& aData,
-        sal_Int32 nBytesToRead )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException)
-    {
-        if( m_xPtr )
-            return m_xPtr->readBytes( aData,nBytesToRead );
-        else
-            throw io::IOException();
-    }
-
-    sal_Int32 SAL_CALL
-    readSomeBytes(
-        uno::Sequence< sal_Int8 >& aData,
-        sal_Int32 nMaxBytesToRead )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException)
-    {
-        if( m_xPtr )
-            return m_xPtr->readSomeBytes( aData,nMaxBytesToRead );
-        else
-            throw io::IOException();
-    }
-
-    void SAL_CALL
-    skipBytes(
-        sal_Int32 nBytesToSkip )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException )
-    {
-        if( m_xPtr )
-            m_xPtr->skipBytes( nBytesToSkip );
-        else
-            throw io::IOException();
-    }
-
-    sal_Int32 SAL_CALL
-    available(
-        void )
-        throw( io::NotConnectedException,
-               io::IOException,
-               uno::RuntimeException )
-    {
-        if( m_xPtr )
-            return m_xPtr->available();
-        else
-            return 0;
-    }
-
-    void SAL_CALL
-    closeInput(
-        void )
-        throw( io::NotConnectedException,
-               io::IOException,
-               uno::RuntimeException )
-    {
-        if( m_xPtr )
-        {
-            m_xPtr->closeInput();
-            m_xPtr->release();
-            m_xPtr = 0;
-        }
-    }
-
-    void SAL_CALL
-    seek(
-        sal_Int64 location )
-        throw( lang::IllegalArgumentException,
-               io::IOException,
-               uno::RuntimeException )
-    {
-        if( m_xPtr )
-            m_xPtr->seek( location );
-        else
-            throw io::IOException();
-    }
-
-    sal_Int64 SAL_CALL
-    getPosition(
-        void )
-        throw( io::IOException,
-               uno::RuntimeException )
-    {
-        if( m_xPtr )
-            return m_xPtr->getPosition();
-        else
-            throw io::IOException();
-    }
-
-    sal_Int64 SAL_CALL
-    getLength(
-        void )
-        throw( io::IOException,
-               uno::RuntimeException )
-    {
-        if( m_xPtr )
-            return m_xPtr->getLength();
-        else
-            throw io::IOException();
-    }
-
-
-private:
-
-    XStream_impl* m_xPtr;
-};
-
-
-
-
-// Return class for XStream_impl::getOutputStream
-
-
-class fileaccess::XOutputStreamForStream
-    : public cppu::OWeakObject,
-      public io::XOutputStream,
-      public io::XSeekable,
-      public io::XTruncate
-{
-public:
-
-    XOutputStreamForStream( XStream_impl* xPtr )
-        : m_xPtr( xPtr )
-    {
-        m_xPtr->acquire();
-    }
-
-    ~XOutputStreamForStream()
-    {
-        if ( m_xPtr )
-            m_xPtr->release();
-    }
-
-    // XInterface
-
-    uno::Any SAL_CALL
-    queryInterface(
-        const uno::Type& rType )
-        throw( uno::RuntimeException)
-    {
-        uno::Any aRet = cppu::queryInterface( rType,
-                                              SAL_STATIC_CAST( io::XOutputStream*,this ),
-                                              SAL_STATIC_CAST( io::XSeekable*,this ),
-                                              SAL_STATIC_CAST( io::XTruncate*,this )
-        );
-        return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-    }
-
-
-    void SAL_CALL
-    acquire(
-        void )
-        throw( uno::RuntimeException)
-    {
-        OWeakObject::acquire();
-    }
-
-    void SAL_CALL
-    release(
-        void )
-        throw( uno::RuntimeException )
-    {
-        OWeakObject::release();
-    }
-
-    // XTruncate
-
-    void SAL_CALL truncate( void )
-        throw( io::IOException,
-               uno::RuntimeException )
-    {
-        if ( m_xPtr )
-            m_xPtr->truncate();
-        else
-            throw io::IOException();
-    }
-
-    // XSeekable
-
-    void SAL_CALL
-    seek(
-        sal_Int64 location )
-        throw( lang::IllegalArgumentException,
-               io::IOException,
-               uno::RuntimeException )
-    {
-        if( m_xPtr )
-            m_xPtr->seek( location );
-        else
-            throw io::IOException();
-    }
-
-    sal_Int64 SAL_CALL
-    getPosition(
-        void )
-        throw( io::IOException,
-               uno::RuntimeException )
-    {
-        if( m_xPtr )
-            return m_xPtr->getPosition();
-        else
-            throw io::IOException();
-    }
-
-    sal_Int64 SAL_CALL
-    getLength(
-        void )
-        throw( io::IOException,
-               uno::RuntimeException )
-    {
-        if( m_xPtr )
-            return m_xPtr->getLength();
-        else
-            throw io::IOException();
-    }
-
-
-    // XOutputStream
-
-    void SAL_CALL
-    writeBytes( const uno::Sequence< sal_Int8 >& aData )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException)
-    {
-        if( m_xPtr )
-            m_xPtr->writeBytes( aData );
-        else
-            throw io::IOException();
-    }
-
-    void SAL_CALL
-    flush(  )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException)
-    {
-        if( m_xPtr )
-            m_xPtr->flush();
-        else
-            throw io::IOException();
-    }
-
-    void SAL_CALL
-    closeOutput(  )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException)
-    {
-        if( m_xPtr )
-        {
-            m_xPtr->closeOutput();
-            m_xPtr->release();
-            m_xPtr = 0;
-        }
-    }
-
-private:
-
-    XStream_impl* m_xPtr;
-};
-
-
 
 /******************************************************************************/
 /*                                                                            */
@@ -381,10 +58,6 @@ XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
     : m_pMyShell( pMyShell ),
       m_aFile( aUncPath ),
       m_xProvider( m_pMyShell->m_pProvider ),
-      m_pInputStream( 0 ),
-      m_pOutputStream( 0 ),
-      m_bInputStreamClosed( false ),
-      m_bOutputStreamClosed( false ),
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
@@ -393,7 +66,6 @@ XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
     {
         m_nIsOpen = false;
         m_aFile.close();
-        m_bOutputStreamClosed = m_bInputStreamClosed = true;
 
         m_nErrorCode = TASKHANDLING_OPEN_FOR_STREAM;
         m_nMinorErrorCode = err;
@@ -425,12 +97,9 @@ sal_Int32 SAL_CALL XStream_impl::getMinorError()
 
 uno::Reference< io::XInputStream > SAL_CALL
 XStream_impl::getInputStream(  )
-    throw( uno::RuntimeException)
+  throw( uno::RuntimeException)
 {
-    if( ! m_bInputStreamClosed && ! m_pInputStream )
-        m_pInputStream = new XInputStreamForStream( this );
-
-    return uno::Reference< io::XInputStream >( m_pInputStream );
+    return uno::Reference< io::XInputStream >( this );
 }
 
 
@@ -438,10 +107,7 @@ uno::Reference< io::XOutputStream > SAL_CALL
 XStream_impl::getOutputStream(  )
     throw( uno::RuntimeException )
 {
-    if( ! m_bOutputStreamClosed && ! m_pOutputStream )
-        m_pOutputStream = new XOutputStreamForStream( this );
-
-    return uno::Reference< io::XOutputStream >( m_pOutputStream );
+    return uno::Reference< io::XOutputStream >( this );
 }
 
 
@@ -564,10 +230,6 @@ XStream_impl::closeStream(
 
         m_nIsOpen = false;
     }
-    m_pInputStream = 0;
-    m_pOutputStream = 0;
-    m_bOutputStreamClosed = true;
-    m_bInputStreamClosed = true;
 }
 
 void SAL_CALL
@@ -577,7 +239,7 @@ XStream_impl::closeInput(
            io::IOException,
            uno::RuntimeException )
 {
-    closeStream();
+    // closeStream();
 }
 
 
@@ -588,7 +250,7 @@ XStream_impl::closeOutput(
            io::IOException,
            uno::RuntimeException )
 {
-    closeStream();
+    // closeStream();
 }
 
 
