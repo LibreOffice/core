@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-25 08:28:40 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,6 +772,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
             if ( pFrame->GetViewShell() == pShell )
             {
                 REFERENCE < XFRAME > aXFrame;
+                pFrame->GetBindings().ENTERREGISTRATIONS();
                 pFrame->GetFrame()->SetFrameInterface_Impl(  aXFrame );
                 pFrame->GetFrame()->DoClose();
             }
