@@ -42,12 +42,12 @@ CFLAGSOUTOBJ=-o
 SOLARVERSHLLIBS=$(shell find $(SOLARVERSION)$/$(INPATH)$/lib -name $(DLLPRE)\*$(DLLPOST))
 LINK=cc
 LINKFLAGS=-dynamic -framework System -framework Cocoa -lcc_dynamic \
-  -lstdc++ $(foreach,i,$(SOLARVERSHLLIBS) '-dylib_file @executable_path$/..$/lib$/$(i:f):$i')
+  -lstdc++ $(foreach,i,$(SOLARVERSHLLIBS) '-dylib_file @executable_path$/$(i:f):$i')
 LINKFLAGSAPPGUI=
-LINKFLAGSSHLGUI=-dynamiclib -install_name '@executable_path$/..$/lib$/$(@:f)' \
+LINKFLAGSSHLGUI=-dynamiclib -install_name '@executable_path$/$(@:f)' \
   -Wl,-U,___progname -Wl,-U,_environ
 LINKFLAGSAPPCUI=
-LINKFLAGSSHLCUI=-dynamiclib -install_name '@executable_path$/..$/lib$/$(@:f)' \
+LINKFLAGSSHLCUI=-dynamiclib -install_name '@executable_path$/$(@:f)' \
   -Wl,-U,___progname -Wl,-U,_environ
 LINKFLAGSTACK=
 LINKFLAGSPROF=
