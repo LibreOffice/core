@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:05:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1847,7 +1847,7 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
     while ( pPage && !pPage->Frm().IsNear( rPt, nFuzzy ) )
         pPage = (SwPageFrm*)pPage->GetNext();
 
-    const SwFrm *pFrm = 0;
+    const SwCellFrm *pFrm = 0;
     if ( pPage )
     {
         //Per GetCrsrOfst oder GetCntntPos koennen wir hier die Box leider
@@ -1879,37 +1879,41 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
 }
 
 // --> FME 2004-07-30 #i32329# Enhanced table selection
-bool SwFEShell::SelTblRowCol( const Point& rPt )
+bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd )
 {
-    // --> FME 2004-10-20 #i35543# SelTblRowCol should remove any existing
-    // table cursor:
-    if ( IsTableMode() )
-    {
-        KillPams();
-        ClearMark();
-    }
-    // <--
-
     bool bRet = false;
-    bool bRow = 0;
-    bool bCol = 0;
-    const SwCellFrm* pFrm =
-            static_cast<const SwCellFrm*>(GetBox( rPt, &bRow, &bCol ) );
-
-    if( pFrm )
+    Point aEndPt( rPt );
+    if ( pEnd )
     {
-        while( pFrm->Lower() && pFrm->Lower()->IsRowFrm() )
-            pFrm = (SwCellFrm*)((SwLayoutFrm*)pFrm->Lower())->Lower();
-        if( pFrm && pFrm->GetTabBox()->GetSttNd() &&
-            pFrm->GetTabBox()->GetSttNd()->IsInProtectSect() )
-            pFrm = 0;
+        if ( 0 != pEnd->X() ) aEndPt.X() = pEnd->X();
+        else if ( 0 != pEnd->Y() ) aEndPt.Y() = pEnd->Y();
     }
+    SwPosition*  ppPos[2] = { 0, 0 };
+    Point        paPt [2] = { rPt, aEndPt };
+    bool         pbRow[2] = { 0, 0 };
+    bool         pbCol[2] = { 0, 0 };
 
-    if( pFrm )
+    // pEnd is set during drag 'n' drop.
+    for ( USHORT i = 0; i < ( pEnd ? 2 : 1 ); ++i )
     {
-        const SwTabFrm* pTabFrm = pFrm->FindTabFrm();
+         const SwCellFrm* pFrm =
+             static_cast<const SwCellFrm*>(GetBox( paPt[i], &pbRow[i], &pbCol[i] ) );
+
+        if( pFrm )
         {
+            while( pFrm->Lower() && pFrm->Lower()->IsRowFrm() )
+                pFrm = static_cast<const SwCellFrm*>( static_cast<const SwLayoutFrm*>( pFrm->Lower() )->Lower() );
+            if( pFrm && pFrm->GetTabBox()->GetSttNd() &&
+                pFrm->GetTabBox()->GetSttNd()->IsInProtectSect() )
+                pFrm = 0;
+        }
+
+        if ( pFrm )
+        {
+            const SwTabFrm* pTabFrm = pFrm->FindTabFrm();
             const SwCntntFrm* pCntnt = pFrm->ContainsCntnt();
+
+            // Leave any inner table:
             while ( pCntnt && pFrm->IsAnLower( pCntnt ) )
             {
                 const SwTabFrm* pTmpTab = pCntnt->FindTabFrm();
@@ -1925,35 +1929,172 @@ bool SwFEShell::SelTblRowCol( const Point& rPt )
 
             if ( pCntnt && pCntnt->IsTxtFrm() )
             {
-                SwPosition aPos( *pCntnt->GetNode() );
+                ppPos[i] = new SwPosition( *pCntnt->GetNode() );
+                ppPos[i]->nContent.Assign( const_cast<SwCntntNode*>(pCntnt->GetNode()), 0 );
 
-                SwCursor* pCurCrsr = GetSwCrsr();
-                SwCrsrSaveState aSaveState( *pCurCrsr );
+                // paPt[i] will not be used any longer, now we use it to store
+                // a position inside the content frame
+                paPt[i] = pCntnt->Frm().Center();
+            }
+        }
 
-                *pCurCrsr->GetPoint() = aPos;
-                if ( pCurCrsr->IsInProtectTable( TRUE ) )
+        // no calculation of end frame if start frame has not been found.
+        if ( 0 == i )
+        {
+            if ( !ppPos[0] || !pEnd )
+                break;
+
+            const SwTabFrm* pCurrentTab = pFrm->FindTabFrm();
+            SWRECTFN( pCurrentTab )
+            const bool bColSelect = bVert ? ( 0 == pEnd->X() ) : ( 0 == pEnd->Y() );
+            long& rnEndY = bVert ? paPt[1].X() : paPt[1].Y();
+            long& rnEndX = bVert ? paPt[1].Y() : paPt[1].X();
+
+            // Restrict paPt[1] to current table boundaries:
+            // Note: Since the pages are layouted top to bottom, we have to restrict
+            // the row selection in a vertical table to the current table.
+            if ( bColSelect || bVert )
+            {
+                SwRect aTabRect( pCurrentTab->Prt() );
+                aTabRect += pCurrentTab->Frm().Pos();
+
+                if ( bColSelect )
                 {
-                    pCurCrsr->RestoreSavePos();
+                    if ( (*fnRect->fnXDiff)( rnEndX, (aTabRect.*fnRect->fnGetRight)() ) > 0 )
+                        rnEndX = (aTabRect.*fnRect->fnGetRight)();
+                    if ( (*fnRect->fnXDiff)( rnEndX, (aTabRect.*fnRect->fnGetLeft)() ) < 0 )
+                        rnEndX = (aTabRect.*fnRect->fnGetLeft)();
                 }
                 else
                 {
-                    if ( bRow && bCol )
-                    {
-                        bRet = SwCrsrShell::SelTbl();
-                    }
-                    else if ( bRow )
-                    {
-                        // --> FME 2004-07-30 #i36662# We take the common row
-                        // selection algorithm to prevent a crash. Set second
-                        // parameter to false.
-                        bRet = SwCrsrShell::_SelTblRowOrCol( true, false );
-                        // <--
-                    }
-                    else if ( bCol )
-                        bRet = SwCrsrShell::SelTblCol();
+                    if ( (*fnRect->fnYDiff)( rnEndY, (aTabRect.*fnRect->fnGetBottom)() ) > 0 )
+                        rnEndY = (aTabRect.*fnRect->fnGetBottom)();
+                    if ( (*fnRect->fnYDiff)( rnEndY, (aTabRect.*fnRect->fnGetTop)() ) < 0 )
+                        rnEndY = (aTabRect.*fnRect->fnGetTop)();
                 }
             }
+            else
+            {
+                // The table may have a couple of follows. Restriction
+                // in y direction is a bit more complex.
+                // Note: For vertical layout, we took the shortcut. So
+                // actually this all could be implemented without the *fnRect
+                // stuff.
+                if ( pCurrentTab->IsFollow() )
+                    pCurrentTab = pCurrentTab->FindMaster( true );
+
+                const SwRootFrm* pRootFrm = pCurrentTab->FindRootFrm();
+                const long nStartY = bVert ? rPt.X() : rPt.Y();
+                const bool bDown = (*fnRect->fnYDiff)( rnEndY, nStartY ) > 0;
+
+                do
+                {
+                    SwRect aRestrict( pCurrentTab->Prt() );
+                    aRestrict += pCurrentTab->Frm().Pos();
+
+                    if ( bDown )
+                    {
+                        if ( !pCurrentTab->GetFollow() )
+                            (aRestrict.*fnRect->fnSetBottom)( (pRootFrm->Frm().*fnRect->fnGetBottom)() );
+                        else
+                        {
+                            SwRect aFollowRect( pCurrentTab->GetFollow()->Prt() );
+                            aFollowRect += pCurrentTab->GetFollow()->Frm().Pos();
+                            (aRestrict.*fnRect->fnSetBottom)( (aFollowRect.*fnRect->fnGetTop)() );
+                        }
+                    }
+                    else
+                    {
+                        if ( !pCurrentTab->IsFollow() )
+                            (aRestrict.*fnRect->fnSetTop)( (pRootFrm->Frm().*fnRect->fnGetTop)() );
+                        else
+                        {
+                            const SwTabFrm* pMaster = pCurrentTab->FindMaster();
+                            SwRect aMasterRect( pMaster->Prt() );
+                            aMasterRect += pMaster->Frm().Pos();
+                            (aRestrict.*fnRect->fnSetTop)( (aMasterRect.*fnRect->fnGetBottom)() );
+                        }
+                    }
+
+                    if ( (*fnRect->fnYDiff)( rnEndY, (aRestrict.*fnRect->fnGetTop)() ) > 0 &&
+                         (*fnRect->fnYDiff)( rnEndY, (aRestrict.*fnRect->fnGetBottom)() ) < 0 )
+                    {
+                        // Yeah! I have my frame. We restrict rnEndY to the actual tab frame rectangle.
+                        aRestrict  = pCurrentTab->Prt();
+                        aRestrict += pCurrentTab->Frm().Pos();
+
+                        if ( (*fnRect->fnYDiff)( rnEndY, (aRestrict.*fnRect->fnGetBottom)() ) > 0 )
+                            rnEndY = (aRestrict.*fnRect->fnGetBottom)();
+                        if ( (*fnRect->fnYDiff)( rnEndY, (aRestrict.*fnRect->fnGetTop)() ) < 0 )
+                            rnEndY = (aRestrict.*fnRect->fnGetTop)();
+                        break;
+                    }
+
+                    pCurrentTab = pCurrentTab->GetFollow();
+                }
+                while ( pCurrentTab );
+            }
         }
+    }
+
+    if ( ppPos[0] )
+    {
+        SwShellCrsr* pCrsr = _GetCrsr();
+        SwCrsrSaveState aSaveState( *pCrsr );
+        SwPosition aOldPos( *pCrsr->GetPoint() );
+
+        pCrsr->DeleteMark();
+        *pCrsr->GetPoint() = *ppPos[0];
+        pCrsr->GetPtPos() = paPt[0];
+
+        if ( !pCrsr->IsInProtectTable( FALSE, TRUE ) )
+        {
+            bool bNewSelection = true;
+
+            if ( ppPos[1] )
+            {
+                if ( ppPos[1]->nNode.GetNode().FindStartNode() !=
+                     aOldPos.nNode.GetNode().FindStartNode() )
+                {
+                    pCrsr->SetMark();
+                    SwCrsrSaveState aSaveState2( *pCrsr );
+                    *pCrsr->GetPoint() = *ppPos[1];
+                    pCrsr->GetPtPos() = paPt[1];
+
+                    if ( pCrsr->IsInProtectTable( FALSE, FALSE ) )
+                    {
+                        pCrsr->RestoreSavePos();
+                        bNewSelection = false;
+                    }
+                }
+                else
+                {
+                    pCrsr->RestoreSavePos();
+                    bNewSelection = false;
+                }
+            }
+
+            if ( bNewSelection )
+            {
+                // --> FME 2004-10-20 #i35543# SelTblRowCol should remove any existing
+                // table cursor:
+                if ( IsTableMode() )
+                    TblCrsrToCursor();
+                // <--
+
+                if ( pbRow[0] && pbCol[0] )
+                    bRet = SwCrsrShell::SelTbl();
+                else if ( pbRow[0] )
+                    bRet = SwCrsrShell::_SelTblRowOrCol( true, true );
+                else if ( pbCol[0] )
+                    bRet = SwCrsrShell::_SelTblRowOrCol( false, true );
+            }
+            else
+                bRet = true;
+        }
+
+        delete ppPos[0];
+        delete ppPos[1];
     }
 
     return bRet;
@@ -2007,7 +2148,7 @@ BYTE SwFEShell::WhichMouseTabCol( const Point &rPt ) const
         else
         {
             const SwTabFrm* pTabFrm = pFrm->FindTabFrm();
-            if ( pFrm->IsVertical() )
+            if ( pTabFrm->IsVertical() )
             {
                 if ( bRow && bCol )
                 {
