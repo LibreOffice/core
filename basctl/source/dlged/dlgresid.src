@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:35:59 $
+ *  last change: $Author: tbe $ $Date: 2001-05-16 09:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,11 @@ String RID_STR_CLASS_DIALOG
 };
 String RID_STR_CLASS_BUTTON
 {
-    Text = "Button" ;
+    Text = "CommandButton" ;
 };
 String RID_STR_CLASS_RADIOBUTTON
 {
-    Text = "RadioButton" ;
+    Text = "OptionButton" ;
 };
 String RID_STR_CLASS_CHECKBOX
 {
@@ -89,15 +89,15 @@ String RID_STR_CLASS_COMBOBOX
 };
 String RID_STR_CLASS_GROUPBOX
 {
-    Text = "GroupBox" ;
+    Text = "FrameControl" ;
 };
 String RID_STR_CLASS_EDIT
 {
-    Text = "Edit" ;
+    Text = "TextField" ;
 };
 String RID_STR_CLASS_FIXEDTEXT
 {
-    Text = "FixedText" ;
+    Text = "Label" ;
 };
 String RID_STR_CLASS_IMAGECONTROL
 {
