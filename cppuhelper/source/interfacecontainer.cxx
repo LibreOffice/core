@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:35:06 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ void OInterfaceContainerHelper::copyAndResetInUse() SAL_THROW( () )
 
 sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> & rListener ) SAL_THROW( () )
 {
-    assert( rListener.is() );
+    OSL_ASSERT( rListener.is() );
     MutexGuard aGuard( rMutex );
     if( bInUse )
         copyAndResetInUse();
