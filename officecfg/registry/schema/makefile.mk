@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 16:54:13 $
+#   last change: $Author: kz $ $Date: 2004-01-28 19:31:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,19 +87,23 @@ XCSFILES= \
     org$/openoffice$/Office$/ProtocolHandler.xcs \
     org$/openoffice$/Office$/SFX.xcs \
     org$/openoffice$/Office$/Substitution.xcs \
-    org$/openoffice$/Office$/TypeDetection.xcs \
     org$/openoffice$/Office$/UI.xcs \
     org$/openoffice$/Office$/Views.xcs \
     org$/openoffice$/Office$/Writer.xcs \
     org$/openoffice$/Office$/WriterWeb.xcs \
     org$/openoffice$/Office$/Scripting.xcs \
     org$/openoffice$/Office$/Security.xcs \
+    org$/openoffice$/Office$/TypeDetection.xcs \
     org$/openoffice$/Setup.xcs \
     org$/openoffice$/UserProfile.xcs \
     org$/openoffice$/VCL.xcs \
     org$/openoffice$/ucb$/Configuration.xcs \
     org$/openoffice$/ucb$/Hierarchy.xcs \
-    org$/openoffice$/ucb$/Store.xcs
+    org$/openoffice$/ucb$/Store.xcs \
+    org$/openoffice$/TypeDetection$/Types.xcs \
+    org$/openoffice$/TypeDetection$/Filter.xcs \
+    org$/openoffice$/TypeDetection$/GraphicFilter.xcs \
+    org$/openoffice$/TypeDetection$/Misc.xcs
 
 # transform xcs format to properties format
 RESOURCES1=$(foreach,j,$(foreach,i,$(XCSFILES) $(MISC)$/registry$/res$/$i) $(foreach,k,$(alllangext) $(subst,$/res,$/res$/{$(iso_$(k))} $j)))
