@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-22 13:26:35 $
+ *  last change: $Author: cl $ $Date: 2001-11-27 13:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         std::vector< XMLPropertyState > xPropStates;
 
         sal_Int32 nCount = 0;
-        if( !bIsEmptyPresObj &&
+        if( /*!bIsEmptyPresObj && */
             (aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape) &&
             (aShapeInfo.meShapeType != XmlShapeTypeDrawTableShape) &&
             (aShapeInfo.meShapeType != XmlShapeTypePresChartShape) &&
@@ -356,7 +356,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         }
 
         // optionaly generate auto style for text attributes
-        if( !bIsEmptyPresObj && bObjSupportsText )
+        if( /*!bIsEmptyPresObj && */ bObjSupportsText )
         {
             xPropStates = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter( xPropSet );
 
