@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:37:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,10 +137,14 @@ XclImpString::XclImpString( XclImpStream& rStrm, XclStrFlags nFlags )
     maString = rStrm.ReadRawUniString( nChars, b16Bit );
 
     // --- formatting ---
-    ReadFormats( rStrm, nRunCount );
+    DBG_ASSERT( bRich == (nRunCount != 0), "XclImpString::XclImpString - corrupt formatting info" );
+    if( bRich )
+        ReadFormats( rStrm, nRunCount );
 
     // --- extended (FarEast) information ---
-    rStrm.SkipUniStringExtData( nExtInf );
+    DBG_ASSERT( bFarEast == (nExtInf != 0), "XclImpString::XclImpString - corrupt far-east info" );
+    if( bFarEast )
+        rStrm.SkipUniStringExtData( nExtInf );
 }
 
 XclImpString::~XclImpString()
@@ -149,8 +153,12 @@ XclImpString::~XclImpString()
 
 void XclImpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont )
 {
-    DBG_ASSERT( maFormats.empty() || ((maFormats.end() - 1)->mnChar < nChar), "XclImpString::AppendFormat - wrong char order" );
-    maFormats.push_back( XclFormatRun( nChar, nXclFont ) );
+    // #i33341# real life -- same character index may occur several times
+    DBG_ASSERT( maFormats.empty() || (maFormats.back().mnChar <= nChar), "XclImpString::AppendFormat - wrong char order" );
+    if( maFormats.empty() || (maFormats.back().mnChar < nChar) )
+        maFormats.push_back( XclFormatRun( nChar, nXclFont ) );
+    else
+        maFormats.back().mnXclFont = nXclFont;
 }
 
 void XclImpString::ReadFormats( XclImpStream& rStrm )
@@ -160,9 +168,16 @@ void XclImpString::ReadFormats( XclImpStream& rStrm )
 
 void XclImpString::ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount )
 {
-    maFormats.resize( nRunCount );
-    for( XclFormatRunVec::iterator aIt = maFormats.begin(), aEnd = maFormats.end(); aIt != aEnd; ++aIt )
-        rStrm >> aIt->mnChar >> aIt->mnXclFont;
+    maFormats.clear();
+    maFormats.reserve( nRunCount );
+    /*  #i33341# real life -- same character index may occur several times
+        -> use AppendFormat() to validate formats */
+    for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
+    {
+        sal_uInt16 nChar, nXclFont;
+        rStrm >> nChar >> nXclFont;
+        AppendFormat( nChar, nXclFont );
+    }
 }
 
 // String->EditEngine conversion ==============================================
