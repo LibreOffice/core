@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:54:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ using namespace ::com::sun::star::beans;
             {
                 case DataType::INTEGER:
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                 case DataType::TINYINT:
                 case DataType::SMALLINT:
                     if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
