@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 13:34:19 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 13:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #include "filterfactory.hxx"
-#include "querytokenizer.hxx"
 #include "macros.hxx"
 #include "constant.hxx"
 #include "versions.hxx"
@@ -275,70 +274,26 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL FilterFactory::getAvailableServic
 }
 
 /*-----------------------------------------------
-    01.08.2003 12:38
-    TODO replace _query_xxx completly with new schema!
+    11.03.2004 08:37
 -----------------------------------------------*/
 css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)
     throw (css::uno::RuntimeException)
 {
-    // transform oldest query format to the newest one ...
-    ::rtl::OUString sNewQuery(sQuery);
-
-    if (sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_textdocument_withdefault"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_writer:default_first:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_webdocument_withdefault"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_web:default_first:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_globaldocument_withdefault"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_global:default_first:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_chartdocument_withdefault"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_chart:default_first:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_spreadsheetdocument_withdefault"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_calc:default_first:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_presentationdocument_withdefault"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_impress:default_first:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_drawingdocument_withdefault"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_draw:default_first:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_formulaproperties_withdefault"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_math:default_first:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_textdocument"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_writer:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_webdocument"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_web:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_globaldocument"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_global:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_chartdocument"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_chart:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_spreadsheetdocument"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_calc:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_presentationdocument"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_impress:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_drawingdocument"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_draw:use_order:sort_prop=uiname");
-    else
-    if(sQuery.equalsIgnoreAsciiCaseAscii("_filterquery_formulaproperties"))
-        sNewQuery = ::rtl::OUString::createFromAscii("_query_math:use_order:sort_prop=uiname");
+    // reject old deprecated queries ...
+    if (sQuery.matchAsciiL("_filterquery_",13,0))
+        throw css::uno::RuntimeException(
+                    _FILTER_CONFIG_FROM_ASCII_("Use of deprecated and now unsupported query!"),
+                    static_cast< css::container::XContainerQuery* >(this));
 
     // convert "_query_xxx:..." to "getByDocService=xxx:..."
+    ::rtl::OUString sNewQuery(sQuery);
     sal_Int32 pos = sNewQuery.indexOf(::rtl::OUString::createFromAscii("_query_"),0);
     if (pos != -1)
     {
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use new query format: 'matchByDocumentService=...'");
         ::rtl::OUStringBuffer sPatchedQuery(256);
-        sPatchedQuery.appendAscii("getByDocService=");
-        sPatchedQuery.append     (sNewQuery.copy(7) );
+        sPatchedQuery.appendAscii("matchByDocumentService=");
+        sPatchedQuery.append     (sNewQuery.copy(7)        );
         sNewQuery = sPatchedQuery.makeStringAndClear();
     }
 
@@ -347,8 +302,35 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     QueryTokenizer::const_iterator  pIt;
     OUStringList                    lEnumSet;
 
+    // start query
+    // (see attention comment below!)
     if (lTokens.valid())
     {
+        // SAFE -> ----------------------
+        ::osl::ResettableMutexGuard aLock(m_aLock);
+        // May be not all filters was loaded ...
+        // But we need it now!
+        impl_loadOnDemand();
+        aLock.clear();
+        // <- SAFE ----------------------
+
+        if (lTokens.find(QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE) != lTokens.end())
+            OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use prop search at the TypeDetection container!");
+//            lEnumSet = impl_queryGetPreferredFilterForType(lTokens);
+        else
+        if (lTokens.find(QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE) != lTokens.end())
+            lEnumSet = impl_queryMatchByDocumentService(lTokens);
+    }
+
+    // pack list of item names as an enum list
+    // Attention: Do not return empty reference for empty list!
+    // The outside check "hasMoreElements()" should be enough, to detect this state :-)
+    size_t c = lEnumSet.size();
+    css::uno::Sequence< ::rtl::OUString > lSet = lEnumSet.getAsConstList();
+    ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSet);
+    return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
+}
+/*
         if (lEnumSet.empty())
         {
             //-------------------------------------------
@@ -360,18 +342,20 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
                 // SAFE ->
                 ::osl::ResettableMutexGuard aLock(m_aLock);
 
-                ::rtl::OUString sType = pIt->second;
                 // might not all types was loaded till now!
-                m_rCache->load(FilterCache::E_CONTAINS_TYPES);
-                if (m_rCache->hasItem(FilterCache::E_TYPE, sType))
+                impl_loadOnDemand();
+
+                ::rtl::OUString sType  = pIt->second;
+                FilterCache*    pCache = impl_getWorkingCache();
+                if (pCache->hasItem(FilterCache::E_TYPE, sType))
                 {
-                    CacheItem aType = m_rCache->getItem(FilterCache::E_TYPE, sType);
+                    CacheItem aType = pCache->getItem(FilterCache::E_TYPE, sType);
                     ::rtl::OUString sPreferredFilter;
                     aType[PROPNAME_PREFERREDFILTER] >>= sPreferredFilter;
 
                     if (
                         (sPreferredFilter.getLength()                              ) &&
-                        (m_rCache->hasItem(FilterCache::E_FILTER, sPreferredFilter))
+                        (pCache->hasItem(FilterCache::E_FILTER, sPreferredFilter))
                        )
                     {
                         lEnumSet.push_back(sPreferredFilter);
@@ -382,89 +366,141 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
                 // <- SAFE
             }
         }
+*/
 
-        if (lEnumSet.empty())
+/*-----------------------------------------------
+    11.03.2004 08:33
+-----------------------------------------------*/
+OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenizer& lTokens) const
+{
+    // analyze query
+    QueryTokenizer::const_iterator pIt;
+
+    ::rtl::OUString sDocumentService;
+    sal_Int32       nIFlags = 0;
+    sal_Int32       nEFlags = 0;
+
+    pIt = lTokens.find(QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE);
+    if (pIt != lTokens.end())
+        sDocumentService = pIt->second;
+
+#define COMP_HACK
+#ifdef COMP_HACK
+    if (sDocumentService.equalsAscii("writer"))
+    {
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
+    }
+    else
+    if (sDocumentService.equalsAscii("web"))
+    {
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.text.WebDocument");
+    }
+    else
+    if (sDocumentService.equalsAscii("global"))
+    {
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.text.GlobalDocument");
+    }
+    else
+    if (sDocumentService.equalsAscii("calc"))
+    {
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument");
+    }
+    else
+    if (sDocumentService.equalsAscii("draw"))
+    {
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.drawing.DrawingDocument");
+    }
+    else
+    if (sDocumentService.equalsAscii("impress"))
+    {
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.presentation.PresentationDocument");
+    }
+    else
+    if (sDocumentService.equalsAscii("math"))
+    {
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.formula.FormulaProperties");
+    }
+#endif
+
+    pIt = lTokens.find(QUERY_PARAM_IFLAGS);
+    if (pIt != lTokens.end())
+        nIFlags = ::rtl::OUString(pIt->second).toInt32();
+
+    pIt = lTokens.find(QUERY_PARAM_EFLAGS);
+    if (pIt != lTokens.end())
+        nEFlags = ::rtl::OUString(pIt->second).toInt32();
+
+    // SAFE -> ----------------------
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+
+    // search suitable filters
+    FilterCache* pCache       = impl_getWorkingCache();
+    OUStringList lFilterNames = pCache->getItemNames(FilterCache::E_FILTER);
+    OUStringList lResult      ;
+
+    for (OUStringList::const_iterator pName  = lFilterNames.begin();
+                                      pName != lFilterNames.end()  ;
+                                    ++pName                        )
+    {
+        const ::rtl::OUString&          sName   = *pName;
+        const CacheItem                 aFilter = pCache->getItem(FilterCache::E_FILTER, sName);
+              CacheItem::const_iterator pProp   ;
+
+        // "matchByDocumentService="                    => any filter will be adressed here
+        // "matchByDocumentService=all"                 => any filter will be adressed here
+        // "matchByDocumentService=com.sun.star..."     => only filter matching this document service will be adressed
+        ::rtl::OUString sCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_DOCUMENTSERVICE, ::rtl::OUString());
+        if (
+            ( sDocumentService.getLength()                 ) &&
+            (!sDocumentService.equals(QUERY_CONSTVALUE_ALL)) &&
+            (!sCheckValue.equals(sDocumentService)         )
+           )
         {
-            //-------------------------------------------
-            // n) getByDocService=xxx:...
-            /* TODO ... not realy useable yet!
-                    there is no support for default, order ... */
-
-            pIt = lTokens.find(::rtl::OUString::createFromAscii("getByDocService"));
-            if (pIt != lTokens.end())
-            {
-                // SAFE -> ----------------------
-                ::osl::ResettableMutexGuard aLock(m_aLock);
-
-                // might not all types was loaded till now!
-                m_rCache->load(FilterCache::E_CONTAINS_TYPES);
-
-                ::rtl::OUString sDocService = pIt->second;
-
-                if (sDocService.equalsAscii("writer"))
-                    sDocService = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
-                else
-                if (sDocService.equalsAscii("web"))
-                    sDocService = ::rtl::OUString::createFromAscii("com.sun.star.text.WebDocument");
-                else
-                if (sDocService.equalsAscii("global"))
-                    sDocService = ::rtl::OUString::createFromAscii("com.sun.star.text.GlobalDocument");
-                else
-                if (sDocService.equalsAscii("calc"))
-                    sDocService = ::rtl::OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument");
-                else
-                if (sDocService.equalsAscii("draw"))
-                    sDocService = ::rtl::OUString::createFromAscii("com.sun.star.drawing.DrawingDocument");
-                else
-                if (sDocService.equalsAscii("impress"))
-                    sDocService = ::rtl::OUString::createFromAscii("com.sun.star.presentation.PresentationDocument");
-                else
-                if (sDocService.equalsAscii("math"))
-                    sDocService = ::rtl::OUString::createFromAscii("com.sun.star.formula.FormulaProperties");
-                else
-                if (sDocService.equalsAscii("chart"))
-                    sDocService = ::rtl::OUString::createFromAscii("com.sun.star.chart.ChartDocument");
-
-                ::comphelper::SequenceAsHashMap lPropQuery;
-                if (sDocService.getLength() && !sDocService.equalsIgnoreAsciiCaseAscii("all"))
-                    lPropQuery[PROPNAME_DOCUMENTSERVICE] <<= sDocService;
-
-                /*pIt = lTokens.find(::rtl::OUString::createFromAscii("iflags"));
-                if (pIt != lTokens.end())
-                    lPropQuery[PROPNAME_FLAGS] <<= pIt->second;*/
-
-                css::uno::Reference< css::container::XEnumeration > xSet = createSubSetEnumerationByProperties(lPropQuery.getAsConstNamedValueList());
-                while(xSet->hasMoreElements())
-                {
-                    ::comphelper::SequenceAsHashMap aFilter(xSet->nextElement());
-
-                    // get name -> reject invalid results
-                    ::rtl::OUString sName = aFilter.getUnpackedValueOrDefault(PROPNAME_NAME, ::rtl::OUString());
-                    if (!sName.getLength())
-                        continue;
-
-                    // check flags -> default filter must be sorted as first one
-                    sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, (sal_Int32)0);
-                    if ((nFlags & FLAGVAL_DEFAULT) == FLAGVAL_DEFAULT)
-                        lEnumSet.insert(lEnumSet.begin(), sName);
-                    else
-                        lEnumSet.push_back(sName);
-                }
-
-                aLock.clear();
-                // <- SAFE ----------------------
-            }
+            continue; // ignore filter -> try next one!
         }
+
+        // "iflags="        => not allowed
+        // "iflags=-1"      => not allowed
+        // "iflags=0"       => not usefull
+        // "iflags=283648"  => only filter, which has set these flag field will be adressed
+        sal_Int32 nCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, (sal_Int32)0);
+        if (
+            (nIFlags > 0                       ) &&
+            ((nCheckValue & nIFlags) != nIFlags)
+           )
+        {
+            continue; // ignore filter -> try next one!
+        }
+
+        // "eflags="        => not allowed
+        // "eflags=-1"      => not allowed
+        // "eflags=0"       => not usefull
+        // "eflags=283648"  => only filter, which has not set these flag field will be adressed
+        if (
+            (nEFlags > 0                       ) &&
+            ((nCheckValue & nEFlags) == nEFlags)
+           )
+        {
+            continue; // ignore filter -> try next one!
+        }
+
+        // OK - this filter passed all checks.
+        // It match the query ...
+        lResult.push_back(sName);
     }
 
-    // pack list of item names as an enum list
-    // Attention: Do not return empty reference for empty list!
-    // The outside check "hasMoreElements()" should be enough, to detect this state :-)
-    size_t c = lEnumSet.size();
-    css::uno::Sequence< ::rtl::OUString > lSet = lEnumSet.getAsConstList();
-    ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSet);
-    return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
-}
+    aLock.clear();
+    // <- SAFE ----------------------
+
+    return lResult;
+ }
 
 /*-----------------------------------------------
     09.07.2003 07:43
