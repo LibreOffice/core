@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-11 16:39:09 $
+ *  last change: $Author: dr $ $Date: 2000-11-21 08:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@ static const sal_Char*          pWrkbkNameExcel97 = "Workbook";
 const sal_Char*                 pPivotCacheStorageName = "_SX_DB_CUR";
 const sal_Char*                 pVBAStorageName = "_VBA_PROJECT_CUR";
 const sal_Char*                 pVBASubStorageName = "VBA";
+const sal_Char*                 pUserNamesStreamName = "User Names";
+const sal_Char*                 pRevLogStreamName = "Revision Log";
 
 
 FltError ScImportExcel( SvStream& rStream, ScDocument* pDocument )

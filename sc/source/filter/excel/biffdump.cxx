@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
+ *  last change: $Author: dr $ $Date: 2000-11-21 08:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,31 +65,41 @@
 
 #pragma hdrstop
 
-
+#ifndef _BIFFDUMP_HXX
 #include "biffdump.hxx"
-
+#endif
 
 #ifdef DEBUGGING
 
+#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
+#endif
+#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
+#endif
 
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <document.hxx>
-
-#include "flttools.hxx"
-#include "fltprgrs.hxx"
-
-#include "imp_op.hxx"
-
-#ifndef SC_SCGLOB_HXX
-#include <global.hxx>
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
 #endif
-
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
+#endif
+#ifndef _FLTTOOLS_HXX
+#include "flttools.hxx"
+#endif
+#ifndef _FLTPRGRS_HXX
+#include "fltprgrs.hxx"
+#endif
+#ifndef _IMP_OP_HXX
+#include "imp_op.hxx"
+#endif
 
 #define GETSTR(s)       ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
@@ -117,6 +127,9 @@ static UINT16           nXFCount = 0;
 
 static UINT16           nSXLISize[2] = {0, 0};      // array size for SXLI records [rows/cols]
 static UINT16           nSXLIIndex = 0;             // current index for SXLI records
+
+extern const sal_Char*  pUserNamesStreamName;
+extern const sal_Char*  pRevLogStreamName;
 
 Biff8RecDumper          __aDummyBiff8RecDumperInstance();
 
@@ -681,6 +694,7 @@ DUMP_ERR::~DUMP_ERR()
 #define ADDBIN(n)               __AddBin( t, Read##n( rIn ) )
 #define ADDHEX(n)               __AddHex( t, Read##n( rIn ) )
 #define ADDDEC(n)               __AddDec( t, Read##n( rIn ) )
+#define ADDDOUBLE()             {double f; rIn >> f; __AddDouble( t, f );}
 #define ADD16P16()              __Add16p16( t, Read4( rIn ) )
 #define ADDTEXT(T)              t += T
 #define ADDCOLROW(c,r)          __AddRef( t, c, r )
@@ -688,303 +702,8 @@ DUMP_ERR::~DUMP_ERR()
 #define PreDump(LEN)            {UINT32 nOldPos=rIn.Tell();ContDump(LEN);rIn.Seek(nOldPos);}
 #define ADDCELLHEAD()           {UINT16 nR,nC,nX;rIn>>nR>>nC>>nX;__AddCellHead(t,nC,nR,nX);}
 #define CHECKBREAK(n)           {{nLeft-=n;if(nLeft<0)break;}}
-#define STARTFLAG()             ADDTEXT( "flags (" ); __AddHex( t, __nFlags ); ADDTEXT( "):" );
-#define ADDFLAG(mask,text)      {if( __nFlags&mask ) t+=text;}
-
-
-void Biff8RecDumper::DumpPivotCache( const UINT16 nStrId )
-{
-    ByteString      t;
-    const sal_Char* pPre = "   ";
-    UINT16          __nFlags;
-    if( !pPivotCache )
-    {
-        LINESTART();
-        ADDTEXT( "-- no cache storage available --" );
-        PRINT();
-        return;
-    }
-
-    __AddPureHex( t, nStrId );
-
-    SvStorageStream*    pStIn = pPivotCache->OpenStream( String::CreateFromAscii( t.GetBuffer() ), STREAM_STD_READ );
-
-    if( !pStIn )
-    {
-        LINESTART();
-        ADDTEXT( "-- no cache stream available --" );
-        PRINT();
-        return;
-    }
-
-    SvStream*           pOldIn = pIn;
-
-    pIn = pStIn;
-    SvStream&           rIn = *pIn;
-
-    // -- dump from here --
-    rIn.Seek( STREAM_SEEK_TO_END );
-    UINT32              nTotalLen = rIn.Tell();
-    UINT16              nStrLen = ( nTotalLen > 0x0000FFFFL )? 0xFFFF : ( UINT16 ) nTotalLen;
-    rIn.Seek( 0 );
-
-//  PreDump( nStrLen );
-
-    INT32               n = ( INT32 ) nTotalLen;
-    UINT16              nId, nLen;
-    UINT32              nFieldCnt = 0;
-    UINT32              nItemCnt;
-    UINT32              nTabIndexCnt = 0;
-
-    while( n > 3 )      // 7 = min len (End-Marke)
-    {
-        rIn >> nId >> nLen;
-        n -= 4;
-
-        LINESTART();
-
-        switch( nId )
-        {
-            case 0x000A:                                    // EOC
-            {
-                ADDTEXT( "<end of cache>" );
-                PRINT();
-            }
-            break;
-            case 0x00C6:                                    // SXDB - cache info
-            {
-                ADDTEXT( "[0x00C6] SXDB" );
-                PRINT();
-                LINESTART();
-                ADDTEXT( pPre );
-                ADDTEXT( "number of recs: " );
-                ADDDEC( 4 );
-                ADDTEXT( "   stream id: " );
-                ADDHEX( 2 );
-                ADDTEXT( "   flags: " );
-                ADDHEX( 2 );
-                PRINT();
-                LINESTART();
-                ADDTEXT( pPre );
-                ADDTEXT( "DB block recs: " );
-                ADDDEC( 2 );
-                ADDTEXT( "   base fields: " );
-                ADDDEC( 2 );
-                ADDTEXT( "   all fields: " );
-                ADDDEC( 2 );
-                PRINT();
-                LINESTART();
-                ADDTEXT( pPre );
-                ADDTEXT( "reserved: " );
-                ADDHEX( 2 );
-                ADDTEXT( "   type: " );
-                ADDHEX( 2 );
-                ADDTEXT( "   changed by:" );
-                PRINT();
-                n -= 18;
-                LINESTART();
-                ADDTEXT( pPre );
-                AddUNICODEString( t, rIn, n );
-                PRINT();
-            }
-            break;
-            case 0x00C7:                                    // Pivot Field
-            {
-                nItemCnt = 0;
-
-                ADDTEXT( "[0x00C7] #" );
-                __AddDec( t, nFieldCnt, 3 );
-                nFieldCnt++;
-                ADDTEXT( " (pivot field): " );
-                if( n < 14 )
-                {
-                    n = 0;
-                    ADDTEXT( "<break in pivot field start>" );
-                    PRINT();
-                }
-                else
-                {
-                    PRINT();
-                    LINESTART();
-                    ADDTEXT( pPre );
-                    ADDTEXT( pPre );
-                    rIn >> __nFlags;
-                    STARTFLAG();
-                    ADDFLAG( 0x0001, " fInIndexList" );
-                    ADDFLAG( 0x0002, " fNotInList" );
-                    ADDFLAG( 0x0200, " fLongIndex" );
-                    ADDTEXT( "   data type: " );
-                    __nFlags &= 0x0DFC;
-                    switch( __nFlags )
-                    {
-                        case 0x0480:    ADDTEXT( "string" ); break;
-                        case 0x0520:    ADDTEXT( "double (fraction)" ); break;
-                        case 0x0560:    ADDTEXT( "double (int only)" ); break;
-                        case 0x05A0:    ADDTEXT( "string & double (fraction)" ); break;
-                        case 0x05E0:    ADDTEXT( "string & double (int only)" ); break;
-                        case 0x0900:    ADDTEXT( "date" ); break;
-                        case 0x0D00:    ADDTEXT( "date & (any) double" ); break;
-                        case 0x0D80:    ADDTEXT( "date & string (& double?)" ); break;
-                        default:        ADDTEXT( pU );
-                    }
-                    PRINT();
-                    LINESTART();
-                    ADDTEXT( pPre );
-                    ADDTEXT( pPre );
-                    ADDTEXT( "unknown: " );
-                    ADDHEX( 2 );
-                    ADDTEXT( "   unknown: " );
-                    ADDHEX( 2 );
-                    ADDTEXT( "   item count #1: " );
-                    ADDDEC( 2 );
-                    PRINT();
-                    LINESTART();
-                    ADDTEXT( pPre );
-                    ADDTEXT( pPre );
-                    ADDTEXT( "unknown: " );
-                    ADDHEX( 2 );
-                    ADDTEXT( "   unknown: " );
-                    ADDHEX( 2 );
-                    ADDTEXT( "   item count #2: " );
-                    ADDDEC( 2 );
-                    PRINT();
-                    LINESTART();
-                    ADDTEXT( pPre );
-                    ADDTEXT( pPre );
-                    n -= 14;
-                    if( n < 3 )
-                    {
-                        n = 0;
-                        ADDTEXT( "<break in pivot field name>" );
-                        PRINT();
-                    }
-                    else
-                    {
-                        ADDTEXT( "name: " );
-                        AddUNICODEString( t, rIn, n );
-                        PRINT();
-                    }
-                }
-            }
-            break;
-            case 0x00C8:                                    // indexes to source data
-            {
-                if( !nTabIndexCnt )
-                {
-                    ADDTEXT( "array of indexes to source data (0x00C8 records):" );
-                    PRINT();
-                    LINESTART();
-                }
-                ADDTEXT( pPre );
-                ADDTEXT( "[0x00C8] #" );
-                __AddDec( t, nTabIndexCnt, 3 );
-                nTabIndexCnt++;
-                ADDTEXT( " (index list):" );
-                for( UINT16 iIndex = 0; iIndex < nLen; iIndex++ )
-                {
-                    ADDTEXT( " " );
-                    ADDHEX( 1 );
-                }
-                n -= nLen;
-                PRINT();
-            }
-                break;
-            case 0x00C9:                                    // double
-            {
-                ADDTEXT( pPre );
-                ADDTEXT( "[0x00C9] #" );
-                __AddDec( t, nItemCnt, 3 );
-                ADDTEXT( " (double): " );
-                nItemCnt++;
-                double  fVal;
-                rIn >> fVal;
-                n -= 8;
-                ADDTEXT( "  " );
-                __AddDouble( t, fVal );
-                PRINT();
-            }
-                break;
-            case 0x00CD:                                    // ByteString
-            {
-                ADDTEXT( pPre );
-                ADDTEXT( "[0x00CD] #" );
-                __AddDec( t, nItemCnt, 3 );
-                ADDTEXT( " (string): " );
-                nItemCnt++;
-                AddUNICODEString( t, rIn, n );
-                PRINT();
-            }
-                break;
-            case 0x00CE:                                    // date & time special format
-            {
-                ADDTEXT( pPre );
-                ADDTEXT( "[0x00CE] #" );
-                __AddDec( t, nItemCnt, 3 );
-                ADDTEXT( " (date/time): " );
-                nItemCnt++;
-                UINT8   nDay, nHour, nMin, nSec;
-                UINT16  nYear, nMonth;
-                rIn >> nYear >> nMonth >> nDay >> nHour >> nMin >> nSec;
-                n -= 8;
-                if( nDay )
-                {
-                    __AddDec( t, nDay );
-                    ADDTEXT( "." );
-                    __AddDec( t, nMonth );
-                    ADDTEXT( "." );
-                    __AddDec( t, nYear );
-                    ADDTEXT( " " );
-                }
-                __AddDec( t, nHour, 2, '0' );
-                ADDTEXT( ":" );
-                __AddDec( t, nMin, 2, '0' );
-                ADDTEXT( ":" );
-                __AddDec( t, nSec, 2, '0' );
-                PRINT();
-            }
-            break;
-            case 0x0122:                                    // SXDBEX - ext. cache info
-            {
-                ADDTEXT( "[0x0122] SXDBEX -- last changed: " );
-                double  fDate;
-                rIn >> fDate;
-                __AddDouble( t, fDate );
-                ADDTEXT( "   SXFORMULA recs: " );
-                ADDDEC( 4 );
-                PRINT();
-                n -= 12;
-            }
-            break;
-            case 0x01BB:                                    // SXFDBTYPE - SQL data type
-            {
-                ADDTEXT( pPre );
-                ADDTEXT( "[0x01BB] SXFDBTYPE -- SQL data type: " );
-                ADDHEX( 2 );
-                PRINT();
-                n -= 2;
-            }
-            break;
-            default:
-            {
-                ADDTEXT( pPre );
-                ADDTEXT( "? [" );
-                __AddHex( t, nId );
-                ADDTEXT( "] [" );
-                __AddDec( t, nLen );
-                ADDTEXT( "]:" );
-                for( UINT16 nC = 0 ; nC < nLen ; nC++ )
-                {
-                    ADDTEXT( " " );
-                    ADDHEX( 1 );
-                }
-                n -= nLen;
-                PRINT();
-            }
-        }
-    }
-
-    pIn = pOldIn;
-}
+#define STARTFLAG()             {ADDTEXT( "flags (" ); __AddHex( t, __nFlags ); ADDTEXT( "):" );}
+#define ADDFLAG(mask,text)      {if( __nFlags & mask ) t += text;}
 
 
 UINT16 Biff8RecDumper::DumpXF( SvStream& rIn, const sal_Char* pPre )
@@ -1216,7 +935,27 @@ void Biff8RecDumper::DumpValidPassword( SvStream& rIn, const sal_Char* pPre )
 }
 
 
-void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
+void __AddGUID( ByteString& rStr, SvStream& rIn )
+{
+    UINT16 nIndex;
+    for( nIndex = 0; nIndex < 4; nIndex++ )
+        __AddPureHex( rStr, Read1( rIn ) );
+    rStr += "-";
+    for( nIndex = 0; nIndex < 2; nIndex++ )
+        __AddPureHex( rStr, Read1( rIn ) );
+    rStr += "-";
+    for( nIndex = 0; nIndex < 2; nIndex++ )
+        __AddPureHex( rStr, Read1( rIn ) );
+    rStr += "-";
+    for( nIndex = 0; nIndex < 4; nIndex++ )
+        __AddPureHex( rStr, Read1( rIn ) );
+    rStr += "-";
+    for( nIndex = 0; nIndex < 4; nIndex++ )
+        __AddPureHex( rStr, Read1( rIn ) );
+}
+
+
+void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream )
 {
     const sal_Char*     p;
     BOOL                bDec = FALSE;
@@ -1224,7 +963,6 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
     const ByteString*   pName = GetName( nR );
     INT32               nLeft = nL;
     UINT16              __nFlags;
-
 
     switch( nR )
     {
@@ -1261,8 +999,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
 
     ByteString      aT;
     ByteString&     t = aT;
-//  const sal_Char* pPre = "   ";
-    const sal_Char* pPre = ( ( pLevelPre + 1 ) >= pLevelPreString )? pLevelPre - 1 : pLevelPre;
+    const sal_Char* pPre = (pLevelPre > pLevelPreString) ? pLevelPre - 1 : pLevelPre;
 
     if( nR || nL )      // skip dummy-zero DIMENSIONS at eof
     {
@@ -1304,12 +1041,11 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
         {
             case 0x06:
             {
-//              LINESTART();
                 ADDCELLHEAD();
                 PRINT();
                 LINESTART();
                 ADDTEXT( "val = " );
-                __AddDouble( t, Read8( rIn ) );
+                ADDDOUBLE();
                 rIn >> __nFlags;
                 if( __nFlags )
                 {
@@ -1330,12 +1066,11 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 FormulaDump( n, FT_CellFormula );
             }
             break;
-            case 0x13:          // PASSWORD
+            case 0x0013:        // PASSWORD
                 DumpValidPassword( rIn, pPre );
                 break;
             case 0x17:
             {
-//              LINESTART();
                 UINT16  n;
                 rIn >> n;
                 ADDTEXT( "# of XTI: " );
@@ -1435,9 +1170,34 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 rIn.Seek( nStop );
             }
             break;
+            case 0x001D:        // SELECTION - list of selections
+            {
+                ADDTEXT( "pane: " );                ADDDEC( 1 );
+                ADDTEXT( "   active cell: " );
+                UINT16 nR, nC;
+                rIn >> nR >> nC;
+                __AddRef( t, nC, nR );
+                ADDTEXT( "   active index: " );     ADDDEC( 2 );
+                ADDTEXT( "   ref count: " );
+                UINT16 nCount;
+                rIn >> nCount;
+                __AddDec( t, nCount );
+                PRINT();
+                for( UINT16 nIndex = 0; nIndex < nCount; nIndex++ )
+                {
+                    LINESTART();
+                    UINT16 nR1, nR2;
+                    UINT8 nC1, nC2;
+                    rIn >> nR1 >> nR2 >> nC1 >> nC2;
+                    ADDTEXT( "ref#" );      __AddDec( t, nIndex, 3 );
+                    ADDTEXT( ": " );        __AddRef( t, nC1, nR1 );
+                    ADDTEXT( ":" );         __AddRef( t, nC2, nR2 );
+                    PRINT();
+                }
+            }
+            break;
             case 0x51:
             {
-//              LINESTART();
                 UINT16  nR1, nR2;
                 UINT8   nC1, nC2;
                 rIn >> nR1 >> nR2 >> nC1 >> nC2;
@@ -1725,62 +1485,44 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 ContDump( nRest );
             }
             break;
-            case 0xB0:                                                          // SXVIEW
+            case 0xB0:      // SXVIEW
             {
                 UINT16  nColFirst, nColLast, nRowFirst, nRowLast;
                 rIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
                 nSXLIIndex = 0;     // new pivot table
                 LINESTART();
-                ADDTEXT( "PivotTable: " );
-                __AddDec( t, nColFirst );
-                ADDTEXT( " / " );
-                __AddDec( t, nRowFirst );
-                ADDTEXT( " - " );
-                __AddDec( t, nColLast );
-                ADDTEXT( " / " );
-                __AddDec( t, nRowLast );
+                ADDTEXT( "PivotTable: " );          __AddDec( t, nColFirst );
+                ADDTEXT( " / " );                   __AddDec( t, nRowFirst );
+                ADDTEXT( " - " );                   __AddDec( t, nColLast );
+                ADDTEXT( " / " );                   __AddDec( t, nRowLast );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "1st Head: " );
-                ADDDEC( 2 );
+                ADDTEXT( "1st Head: " );            ADDDEC( 2 );
                 rIn >> nRowFirst;
-                ADDTEXT( "    First Data: " );
-                ADDDEC( 2 );
-                ADDTEXT( " / " );
-                __AddDec( t, nRowFirst );
+                ADDTEXT( "    First Data: " );      ADDDEC( 2 );
+                ADDTEXT( " / " );                   __AddDec( t, nRowFirst );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "Cache index: " );
-                ADDDEC( 2 );
-                ADDTEXT( "    reserved: " );
-                ADDHEX( 2 );
+                ADDTEXT( "Cache index: " );         ADDDEC( 2 );
+                ADDTEXT( "    reserved: " );        ADDHEX( 2 );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "axis 4 data: " );
-                ADDDEC( 2 );
-                ADDTEXT( "     pos 4 Data: " );
-                ADDDEC( 2 );
+                ADDTEXT( "axis 4 data: " );         ADDDEC( 2 );
+                ADDTEXT( "     pos 4 Data: " );     ADDDEC( 2 );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "num of fields: " );
-                ADDDEC( 2 );
+                ADDTEXT( "num of fields: " );       ADDDEC( 2 );
                 rIn >> nSXLISize[0] >> nSXLISize[1];
-                ADDTEXT( "     ...row fields: " );
-                __AddDec( t, nSXLISize[0] );
-                ADDTEXT( "     ...col fields: " );
-                __AddDec( t, nSXLISize[1] );
+                ADDTEXT( "     ...row fields: " );  __AddDec( t, nSXLISize[0] );
+                ADDTEXT( "     ...col fields: " );  __AddDec( t, nSXLISize[1] );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "num of page fields: " );
-                ADDDEC( 2 );
-                ADDTEXT( "     ...data fields: " );
-                ADDDEC( 2 );
+                ADDTEXT( "num of page fields: " );  ADDDEC( 2 );
+                ADDTEXT( "     ...data fields: " ); ADDDEC( 2 );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "data rows: " );
-                ADDDEC( 2 );
-                ADDTEXT( "     data cols: " );
-                ADDDEC( 2 );
+                ADDTEXT( "data rows: " );           ADDDEC( 2 );
+                ADDTEXT( "     data cols: " );      ADDDEC( 2 );
                 rIn >> __nFlags;
                 PRINT();
                 if( __nFlags )
@@ -2106,7 +1848,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 PRINT();
             }
             break;
-            case 0xC5:                                                          // SXDI
+            case 0x00C5:        // SXDI
             {
                 INT32   nCntDwn = nL;
                 LINESTART();
@@ -2119,10 +1861,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 const sal_Char*     pFunc[] = { "Sum", "Count", "Average", "Max", "Min",
                                             "Product", "Count Nums", "StdDev", "StdDevp", "Var",
                                             "Varp" };
-                if( nFunc > 0x0A )
-                    p = pU;
-                else
-                    p = pFunc[ nFunc ];
+                p = (nFunc > 0x0A) ? pU : pFunc[ nFunc ];
                 ADDTEXT( p );
                 ADDTEXT( "   display format (" );
                 const sal_Char*     pDispl[] = {
@@ -2131,19 +1870,13 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 UINT16  nDispl = Read2( rIn );
                 __AddHex( t, nDispl );
                 ADDTEXT( "): " );
-                if( nDispl > 0x08 )
-                    p = pU;
-                else
-                    p = pDispl[ nDispl ];
+                p = (nDispl > 0x08) ? pU : pDispl[ nDispl ];
                 ADDTEXT( p );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "ind. to SXVD: " );
-                ADDDEC( 2 );
-                ADDTEXT( "   ind. to SXVI: " );
-                ADDDEC( 2 );
-                ADDTEXT( "   num format: " );
-                ADDDEC( 2 );
+                ADDTEXT( "ind. to SXVD: " );        ADDDEC( 2 );
+                ADDTEXT( "   ind. to SXVI: " );     ADDDEC( 2 );
+                ADDTEXT( "   num format: " );       ADDDEC( 2 );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "name: " );
@@ -2158,15 +1891,160 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 PRINT();
             }
             break;
-            case 0xCD:      // SXSTRING
+            case 0x00C6:        // SXDB - cache info
             {
-                long nDummy;
+                ADDTEXT( "number of recs: " );  ADDDEC( 4 );
+                ADDTEXT( "   stream id: " );    ADDHEX( 2 );
+                ADDTEXT( "   flags: " );        ADDHEX( 2 );
+                PRINT();
                 LINESTART();
-                AddUNICODEString( t, rIn, nDummy );
+                ADDTEXT( "DB block recs: " );   ADDDEC( 2 );
+                ADDTEXT( "   base fields: " );  ADDDEC( 2 );
+                ADDTEXT( "   all fields: " );   ADDDEC( 2 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "reserved: " );        ADDHEX( 2 );
+                ADDTEXT( "   type: " );         ADDHEX( 2 );
+                ADDTEXT( "   changed by:" );
+                PRINT();
+                nLeft -= 18;
+                LINESTART();
+                AddUNICODEString( t, rIn, nLeft );
                 PRINT();
             }
             break;
-            case 0xD5:      // SXIDSTM - pivot table cache stream id
+            case 0x00C7:        // SXFIELD - Pivot Field
+            {
+                nItemCnt = 0;
+
+                ADDTEXT( "#" );
+                __AddDec( t, nFieldCnt, 3 );
+                nFieldCnt++;
+                ADDTEXT( " (pivot field): " );
+                if( nLeft < 14 )
+                {
+                    ADDTEXT( "<break in pivot field start>" );
+                    PRINT();
+                }
+                else
+                {
+                    PRINT();
+                    LINESTART();
+                    ADDTEXT( pPre );
+                    rIn >> __nFlags;
+                    STARTFLAG();
+                    ADDFLAG( 0x0001, " fInIndexList" );
+                    ADDFLAG( 0x0002, " fNotInList" );
+                    ADDFLAG( 0x0200, " fLongIndex" );
+                    ADDTEXT( "   data type: " );
+                    __nFlags &= 0x0DFC;
+                    switch( __nFlags )
+                    {
+                        case 0x0480:    ADDTEXT( "string" ); break;
+                        case 0x0520:    ADDTEXT( "double (fraction)" ); break;
+                        case 0x0560:    ADDTEXT( "double (int only)" ); break;
+                        case 0x05A0:    ADDTEXT( "string & double (fraction)" ); break;
+                        case 0x05E0:    ADDTEXT( "string & double (int only)" ); break;
+                        case 0x0900:    ADDTEXT( "date" ); break;
+                        case 0x0D00:    ADDTEXT( "date & (any) double" ); break;
+                        case 0x0D80:    ADDTEXT( "date & string (& double?)" ); break;
+                        default:        ADDTEXT( pU );
+                    }
+                    PRINT();
+                    LINESTART();
+                    ADDTEXT( pPre );
+                    ADDTEXT( "unknown: " );             ADDHEX( 2 );
+                    ADDTEXT( "   unknown: " );          ADDHEX( 2 );
+                    ADDTEXT( "   item count #1: " );    ADDDEC( 2 );
+                    PRINT();
+                    LINESTART();
+                    ADDTEXT( pPre );
+                    ADDTEXT( "unknown: " );             ADDHEX( 2 );
+                    ADDTEXT( "   unknown: " );          ADDHEX( 2 );
+                    ADDTEXT( "   item count #2: " );    ADDDEC( 2 );
+                    PRINT();
+                    LINESTART();
+                    ADDTEXT( pPre );
+                    nLeft -= 14;
+                    if( nLeft < 3 )
+                    {
+                        ADDTEXT( "<break in pivot field name>" );
+                        PRINT();
+                    }
+                    else
+                    {
+                        ADDTEXT( "name: " );
+                        AddUNICODEString( t, rIn, nLeft );
+                        PRINT();
+                    }
+                }
+            }
+            break;
+            case 0x00C8:        // SXINDEXLIST - indexes to source data
+            {
+                ADDTEXT( "#" );
+                __AddDec( t, nTabIndexCnt, 3 );
+                nTabIndexCnt++;
+                ADDTEXT( " (index list):" );
+                for( UINT16 iIndex = 0; iIndex < nLeft; iIndex++ )
+                {
+                    ADDTEXT( " " );
+                    ADDHEX( 1 );
+                }
+                PRINT();
+            }
+                break;
+            case 0x00C9:        // SXDOUBLE - cache entry: double value
+            {
+                ADDTEXT( "#" );
+                __AddDec( t, nItemCnt, 3 );
+                ADDTEXT( " (double): " );
+                nItemCnt++;
+                ADDTEXT( "  " );
+                ADDDOUBLE();
+                PRINT();
+            }
+                break;
+            case 0x00CD:        // SXSTRING - ByteString
+            {
+                if( bSubStream )
+                {
+                    ADDTEXT( "#" );
+                    __AddDec( t, nItemCnt, 3 );
+                    ADDTEXT( " (string): " );
+                    nItemCnt++;
+                }
+                AddUNICODEString( t, rIn, nLeft );
+                PRINT();
+            }
+                break;
+            case 0x00CE:        // SXDATETIME - date & time special format
+            {
+                ADDTEXT( "#" );
+                __AddDec( t, nItemCnt, 3 );
+                ADDTEXT( " (date/time): " );
+                nItemCnt++;
+                UINT8   nDay, nHour, nMin, nSec;
+                UINT16  nYear, nMonth;
+                rIn >> nYear >> nMonth >> nDay >> nHour >> nMin >> nSec;
+                if( nDay )
+                {
+                    __AddDec( t, nDay );
+                    ADDTEXT( "." );
+                    __AddDec( t, nMonth );
+                    ADDTEXT( "." );
+                    __AddDec( t, nYear );
+                    ADDTEXT( " " );
+                }
+                __AddDec( t, nHour, 2, '0' );
+                ADDTEXT( ":" );
+                __AddDec( t, nMin, 2, '0' );
+                ADDTEXT( ":" );
+                __AddDec( t, nSec, 2, '0' );
+                PRINT();
+            }
+            break;
+            case 0x00D5:        // SXIDSTM - pivot table cache stream id
             {
                 LINESTART();
                 UINT16      nStrId = Read2( rIn );
@@ -2199,7 +2077,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 PRINT();
             }
             break;
-            case 0xE5:      // CELLMERGING
+            case 0x00E5:        // CELLMERGING
             {
                 UINT16 nCount, nInd;
                 UINT16 nRow1, nRow2, nCol1, nCol2;
@@ -2275,7 +2153,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 PRINT();
             }
             break;
-            case 0x0100:                                                        // SXVDEX
+            case 0x0100:        // SXVDEX
             {
                 LINESTART();
                 UINT32 __nFlags = Read4( rIn );
@@ -2339,6 +2217,476 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 PRINT();
             }
             break;
+            case 0x0122:        // SXDBEX - ext. cache info
+            {
+                ADDTEXT( "last changed: " );        ADDDOUBLE();
+                ADDTEXT( "   SXFORMULA recs: " );   ADDDEC( 4 );
+                PRINT();
+            }
+            break;
+            case 0x0138:        // CHTRINFO - change tracking info
+            {
+                ADDTEXT( "14 bytes of unknown data..." );
+                PRINT();
+                ContDump( 14 );
+                LINESTART();
+                ADDTEXT( "16 bytes unknown identification:" );
+                PRINT();
+                ContDump( 16 );
+                LINESTART();
+                ADDTEXT( "unknown: " );         ADDHEX( 2 );
+                ADDTEXT( "   user: " );
+                nLeft -= 32;
+                if( nLeft > 3 )
+                    AddUNICODEString( t, rIn, nLeft );
+                PRINT();
+                LINESTART();
+                __AddDec( t, (UINT16)(nLeft - 10) );
+                ADDTEXT( " bytes of unknown data..." );
+                PRINT();
+                ContDump( nLeft - 10 );
+                LINESTART();
+                ADDTEXT( "date/time: " );       ADDDEC( 2 );
+                ADDTEXT( "-" );                 ADDDEC( 1 );
+                ADDTEXT( "-" );                 ADDDEC( 1 );
+                ADDTEXT( " " );                 ADDDEC( 1 );
+                ADDTEXT( ":" );                 ADDDEC( 1 );
+                ADDTEXT( ":" );                 ADDDEC( 1 );
+                ADDTEXT( "   unknown: " );      ADDHEX( 1 );
+                ADDTEXT( " " );                 ADDHEX( 2 );
+                PRINT();
+            }
+            break;
+            case 0x0137:        // CHTRINSERT - change tracking: insert/remove
+            {
+                ADDTEXT( "len: " );             ADDDEC( 4 );
+                ADDTEXT( "   index: " );        ADDDEC( 4 );
+                ADDTEXT( "   op: " );
+                UINT16 nOp;
+                rIn >> nOp;
+                switch( nOp )
+                {
+                    case 0x0000:    ADDTEXT( "insert row" );    break;
+                    case 0x0001:    ADDTEXT( "insert column" ); break;
+                    case 0x0002:    ADDTEXT( "delete row" );    break;
+                    case 0x0003:    ADDTEXT( "delete column" ); break;
+                    default:
+                        __AddHex( t, nOp );
+                        ADDTEXT( " *UNKNOWN*" );
+                }
+                ADDTEXT( "   accept: " );       ADDHEX( 2 );
+                ADDTEXT( "   tab: " );          ADDDEC( 2 );
+                PRINT();
+                LINESTART();
+                UINT16 __nFlags = Read2( rIn );
+                STARTFLAG();
+                ADDFLAG( 0x0001, " fAuto" );
+                ADDFLAG( 0xFFFE, " *UNKNOWN*" );
+                UINT16 nCol1, nRow1, nCol2, nRow2;
+                rIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
+                ADDTEXT( "   range: " );        __AddRef( t, nCol1, nRow1 );
+                ADDTEXT( ":" );                 __AddRef( t, nCol2, nRow2 );
+                ADDTEXT( "   unknown: " );      ADDHEX( 4 );
+                PRINT();
+            }
+            break;
+            case 0x013B:        // CHTRCELLCONTENT: change tracking: changed cell
+            {
+                ADDTEXT( "len: " );             ADDDEC( 4 );
+                ADDTEXT( "   index: " );        ADDDEC( 4 );
+                ADDTEXT( "   opcode: " );       ADDHEX( 2 );
+                ADDTEXT( "   accept: " );       ADDHEX( 2 );
+                ADDTEXT( "   tab: " );          ADDDEC( 2 );
+                PRINT();
+                LINESTART();
+                UINT16 nChg, nOldType, nNewType;
+                rIn >> nChg;
+                nOldType = (nChg & 0x0038) >> 3;
+                nNewType = nChg & 0x0007;
+                ADDTEXT( "change (" );          __AddHex( t, nChg );
+                ADDTEXT( "): " );
+                switch( nOldType )
+                {
+                    case 0x0000:    ADDTEXT( "empty->" );   break;
+                    case 0x0001:    ADDTEXT( "RK->" );      break;
+                    case 0x0002:    ADDTEXT( "double->" );  break;
+                    case 0x0003:    ADDTEXT( "string->" );  break;
+                    case 0x0004:    ADDTEXT( "bool->" );    break;
+                    case 0x0005:    ADDTEXT( "formula->" ); break;
+                    default:        ADDTEXT( "*UNKNOWN*->" );
+                }
+                switch( nNewType )
+                {
+                    case 0x0000:    ADDTEXT( "empty" );     break;
+                    case 0x0001:    ADDTEXT( "RK" );        break;
+                    case 0x0002:    ADDTEXT( "double" );    break;
+                    case 0x0003:    ADDTEXT( "string" );    break;
+                    case 0x0004:    ADDTEXT( "bool" );      break;
+                    case 0x0005:    ADDTEXT( "formula" );   break;
+                    default:        ADDTEXT( "*UNKNOWN*" );
+                }
+                BOOL bHasFormatData = ((nChg & 0xFF00) == 0x1100);
+                if( bHasFormatData )
+                    ADDTEXT( "; contains add. data" );
+                if( nChg & 0xEEC0 )
+                    ADDTEXT( "; *UNKNOWN* data" );
+                ADDTEXT( "   format: " );       ADDHEX( 2 );
+                UINT16 nCol, nRow;
+                rIn >> nRow >> nCol;
+                ADDTEXT( "   address: " );      __AddRef( t, nCol, nRow );
+                PRINT();
+                LINESTART();
+                UINT16 nOldLen;
+                rIn >> nOldLen;
+                ADDTEXT( "old value len: " );   __AddHex( t, nOldLen );
+                if( nOldType == 0x0003 )
+                    nOldLen >>= 1;
+                ADDTEXT( "   unknown: " );      ADDHEX( 4 );
+                PRINT();
+                nLeft -= 28;
+                if( bHasFormatData )
+                {
+                    LINESTART();
+                    ADDTEXT( "additional format data:" );
+                    for( UINT16 nIndex = 0; nIndex < 8; nIndex ++ )
+                    {
+                        ADDTEXT( " " );
+                        ADDHEX( 2 );
+                    }
+                    PRINT();
+                    nLeft -= 16;
+                }
+                if( nOldType )
+                {
+                    LINESTART();
+                    ADDTEXT( "old value: " );
+                    switch( nOldType )
+                    {
+                        case 0x0001:
+                            __AddDouble( t, ImportExcel::RkToDouble( Read4( rIn ) ) );
+                            nLeft -= 4;
+                            PRINT();
+                        break;
+                        case 0x0002:
+                            ADDDOUBLE();
+                            nLeft -= 8;
+                            PRINT();
+                        break;
+                        case 0x0003:
+                            AddUNICODEString( t, rIn, nLeft );
+                            PRINT();
+                        break;
+                        case 0x0004:
+                            if( Read2( rIn ) )
+                                ADDTEXT( "true" );
+                            else
+                                ADDTEXT( "false" );
+                            nLeft -= 2;
+                            PRINT();
+                        break;
+                        case 0x0005:
+                        {
+                            UINT16 nLen;
+                            rIn >> nLen;
+                            nLeft -= 2;
+                            FormulaDump( nLen, FT_CellFormula );
+                            nLeft -= nLen;
+                            IGNORE( 1 );
+                            nLeft--;
+                        }
+                        break;
+                    }
+                }
+                if( nNewType )
+                {
+                    LINESTART();
+                    ADDTEXT( "new value: " );
+                    switch( nNewType )
+                    {
+                        case 0x0001:
+                            __AddDouble( t, ImportExcel::RkToDouble( Read4( rIn ) ) );
+                            PRINT();
+                            nLeft -= 4;
+                        break;
+                        case 0x0002:
+                            ADDDOUBLE();
+                            PRINT();
+                            nLeft -= 8;
+                        break;
+                        case 0x0003:
+                            AddUNICODEString( t, rIn, nLeft );
+                            PRINT();
+                        break;
+                        case 0x0004:
+                            if( Read2( rIn ) )
+                                ADDTEXT( "true" );
+                            else
+                                ADDTEXT( "false" );
+                            PRINT();
+                            nLeft -= 2;
+                        break;
+                        case 0x0005:
+                        {
+                            UINT16 nLen;
+                            rIn >> nLen;
+                            nLeft -= 2;
+                            FormulaDump( nLen, FT_CellFormula );
+                            nLeft -= nLen;
+                            IGNORE( 1 );
+                            nLeft--;
+                        }
+                        break;
+                    }
+                }
+                if( nLeft )
+                {
+                    LINESTART();
+                    ADDTEXT( "*UNKNOWN* data:" );
+                    PRINT();
+                    PreDump( nLeft );
+                }
+            }
+            break;
+            case 0x013D:        // TABID
+            {
+                ADDTEXT( "tab ids:" );
+                while( nLeft )
+                {
+                    ADDTEXT( " " );
+                    ADDDEC( 2 );
+                    nLeft -= 2;
+                }
+                PRINT();
+            }
+            break;
+            case 0x0140:        // CHTRMOVE - change tracking: moved range
+            {
+                ADDTEXT( "len: " );             ADDDEC( 4 );
+                ADDTEXT( "   index: " );        ADDDEC( 4 );
+                ADDTEXT( "   opcode: " );       ADDHEX( 2 );
+                ADDTEXT( "   accept: " );       ADDHEX( 2 );
+                PRINT();
+                UINT16 nTab1, nTab2;
+                UINT16 nCol11, nCol12, nCol21, nCol22;
+                UINT16 nRow11, nRow12, nRow21, nRow22;
+                rIn >> nTab2 >> nRow11 >> nRow12 >> nCol11 >> nCol12 >> nRow21 >> nRow22 >> nCol21 >> nCol22 >> nTab1;
+                LINESTART();
+                ADDTEXT( "move range from: tab=" );     __AddDec( t, nTab1 );
+                ADDTEXT( " " );                         __AddRef( t, nCol11, nRow11 );
+                ADDTEXT( ":" );                         __AddRef( t, nCol12, nRow12 );
+                ADDTEXT( "   to: tab=" );               __AddDec( t, nTab2 );
+                ADDTEXT( " " );                         __AddRef( t, nCol21, nRow21 );
+                ADDTEXT( ":" );                         __AddRef( t, nCol22, nRow22 );
+                ADDTEXT( "   unknown: " );              ADDHEX( 4 );
+                PRINT();
+            }
+            break;
+            case 0x014D:        // CHTRINSERTTAB - change tracking: insert tab
+            {
+                ADDTEXT( "len: " );             ADDDEC( 4 );
+                ADDTEXT( "   index: " );        ADDDEC( 4 );
+                ADDTEXT( "   opcode: " );       ADDHEX( 2 );
+                ADDTEXT( "   accept: " );       ADDHEX( 2 );
+                ADDTEXT( "   tab: " );          ADDDEC( 2 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "unknown: " );         ADDHEX( 4 );
+                ADDTEXT( "   table name: " );
+                nLeft -= 18;
+                AddUNICODEString( t, rIn, nLeft );
+                PRINT();
+                LINESTART();
+                __AddDec( t, nLeft );
+                ADDTEXT( " bytes of unknown data:" );
+                PRINT();
+                ContDump( nLeft );
+            }
+            break;
+            case 0x0193:
+            {
+                ADDTEXT( "unknown: " );         ADDHEX( 4 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "16 bytes unknown identification:" );
+                PRINT();
+                ContDump( 16 );
+                LINESTART();
+                ADDTEXT( "date/time: " );       ADDDEC( 2 );
+                ADDTEXT( "-" );                 ADDDEC( 1 );
+                ADDTEXT( "-" );                 ADDDEC( 1 );
+                ADDTEXT( " " );                 ADDDEC( 1 );
+                ADDTEXT( ":" );                 ADDDEC( 1 );
+                ADDTEXT( ":" );                 ADDDEC( 1 );
+                ADDTEXT( "   unknown: " );      ADDHEX( 1 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "user: " );
+                nLeft -= 24;
+                if( nLeft > 3 )
+                    AddUNICODEString( t, rIn, nLeft );
+                PRINT();
+            }
+            break;
+            case 0x0194:
+            {
+                ADDTEXT( "unknown: " );         ADDHEX( 4 );
+                ADDTEXT( "   date/time: " );    ADDDEC( 2 );
+                ADDTEXT( "-" );                 ADDDEC( 1 );
+                ADDTEXT( "-" );                 ADDDEC( 1 );
+                ADDTEXT( " " );                 ADDDEC( 1 );
+                ADDTEXT( ":" );                 ADDDEC( 1 );
+                ADDTEXT( ":" );                 ADDDEC( 1 );
+                ADDTEXT( "   unknown: " );      ADDHEX( 1 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "user: " );
+                nLeft -= 12;
+                if( nLeft > 3 )
+                    AddUNICODEString( t, rIn, nLeft );
+                PRINT();
+                LINESTART();
+                __AddDec( t, nLeft );
+                ADDTEXT( " bytes of unknown data:" );
+                PRINT();
+                ContDump( nLeft );
+            }
+            break;
+            case 0x0196:
+            {
+                ADDTEXT( "unknown: " );             ADDHEX( 2 );
+                ADDTEXT( " " );                     ADDHEX( 2 );
+                ADDTEXT( " " );                     ADDHEX( 2 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "16 bytes unknown identification:" );
+                PRINT();
+                ContDump( 16 );
+                LINESTART();
+                ADDTEXT( "16 bytes unknown identification:" );
+                PRINT();
+                ContDump( 16 );
+                LINESTART();
+                ADDTEXT( "count of changes: " );    ADDDEC( 2 );
+                nLeft -= 40;
+                ADDTEXT( "   " );
+                __AddDec( t, nLeft );
+                ADDTEXT( " bytes of unknown data:" );
+                PRINT();
+                ContDump( nLeft );
+            }
+            break;
+            case 0x01A9:        // USERBVIEW
+            {
+                LINESTART();
+                ADDTEXT( "view id: " );     ADDHEX( 4 );
+                ADDTEXT( "   tab id: " );   ADDDEC( 4 );
+                ADDTEXT( "   guid: " );     __AddGUID( t, rIn );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "window x: " );    ADDDEC( 4 );
+                ADDTEXT( "   y: " );        ADDDEC( 4 );
+                ADDTEXT( "   width: " );    ADDDEC( 4 );
+                ADDTEXT( "   height: " );   ADDDEC( 4 );
+                ADDTEXT( "   ratio: " );    ADDDEC( 2 );
+                PRINT();
+                LINESTART();
+                UINT16 __nFlags = Read2( rIn );
+                STARTFLAG();
+                ADDFLAG( 0x0001, " fDsplFormulaBar" );
+                ADDFLAG( 0x0002, " fDsplStatus" );
+                ADDFLAG( 0x0004, " fNoteOff" );
+                ADDFLAG( 0x0008, " fDsplHScroll" );
+                ADDFLAG( 0x0010, " fDsplVScroll" );
+                ADDFLAG( 0x0020, " fBotAdornment" );
+                ADDFLAG( 0x0040, " fZoom" );
+                ADDFLAG( 0x0080, " fShowPlaceHld" );
+                ADDFLAG( 0x0100, " fHideAll" );
+                if( !(__nFlags && 0x0180) )
+                    ADDTEXT( " fShowAll" );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "flags2: " );          ADDHEX( 2 );
+                ADDTEXT( "   merge int: " );    ADDDEC( 2 );
+                ADDTEXT( "   reserved: " );     ADDHEX( 2 );
+                PRINT();
+                INT32 nLeft = nL - 50;
+                if( nLeft > 3 )
+                {
+                    LINESTART();
+                    ADDTEXT( "name: " );
+                    AddUNICODEString( t, rIn, nLeft );
+                    PRINT();
+                }
+            }
+            break;
+            case 0x01AA:        // USERSVIEWBEGIN
+            {
+                LINESTART();
+                ADDTEXT( "guid: " );        __AddGUID( t, rIn );
+                ADDTEXT( "   tab id: " );   ADDDEC( 4 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "wscale: " );      ADDDEC( 4 );
+                ADDTEXT( "   icolor: " );   ADDDEC( 4 );
+                ADDTEXT( "   pane: " );     ADDDEC( 4 );
+                PRINT();
+                LINESTART();
+                UINT32 __nFlags = Read4( rIn );
+                STARTFLAG();
+                if( __nFlags & 0x000000FF )
+                {
+                    ADDFLAG( 0x00000001, " fShowPgBrk" );
+                    ADDFLAG( 0x00000002, " fDsplForml" );
+                    ADDFLAG( 0x00000004, " fDsplGrid" );
+                    ADDFLAG( 0x00000008, " fDsplRCHead" );
+                    ADDFLAG( 0x00000010, " fDsplGuts" );
+                    ADDFLAG( 0x00000020, " fDsplZeros" );
+                    ADDFLAG( 0x00000040, " fPrintHorC" );
+                    ADDFLAG( 0x00000080, " fPrintVerC" );
+                    PRINT();
+                    LINESTART();
+                }
+                if( __nFlags & 0x00007F00 )
+                {
+                    ADDTEXT( "   " );
+                    ADDFLAG( 0x00000100, " fPrintRCHead" );
+                    ADDFLAG( 0x00000200, " fPrintGrid" );
+                    ADDFLAG( 0x00000400, " fFitToPage" );
+                    ADDFLAG( 0x00000800, " fPrintArea" );
+                    ADDFLAG( 0x00001000, " fOnePrintArea" );
+                    ADDFLAG( 0x00002000, " fFilter" );
+                    ADDFLAG( 0x00004000, " fAutoFilter" );
+                    PRINT();
+                    LINESTART();
+                }
+                if( __nFlags & 0xFFF80000 )
+                {
+                    ADDTEXT( "   " );
+                    ADDFLAG( 0x00020000, " fSplitV" );
+                    ADDFLAG( 0x00040000, " fSplitH" );
+                    ADDFLAG( 0x00180000, " fHiddenRow" );
+                    ADDFLAG( 0x00200000, " fHiddenCol" );
+                    ADDFLAG( 0x01000000, " fChartSize" );
+                    ADDFLAG( 0x02000000, " fFilterUnique" );
+                    ADDFLAG( 0x04000000, " fLayoutView" );
+                    ADDFLAG( 0xF8C18000, " !RESERVED!" );
+                    PRINT();
+                    LINESTART();
+                }
+                if( !__nFlags )
+                    PRINT();
+                ADDTEXT( "pane pos vert: " );       ADDDOUBLE();
+                ADDTEXT( "   hor: " );              ADDDOUBLE();
+                ADDTEXT( "   1st vis right: " );    ADDDEC( 2 );
+                ADDTEXT( "   bott: " );             ADDDEC( 2 );
+                PRINT();
+            }
+            break;
+            case 0x01AB:        // USERSVIEWEND
+            {
+                ADDTEXT( "settings are valid: " );  ADDHEX( 2 );
+            }
+            break;
             case 0x01AE:
             {
                 LINESTART();
@@ -2378,7 +2726,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
 
             }
             break;
-            case 0x01B0:                                                        // CONDFMT
+            case 0x01B0:        // CONDFMT
             {
                 PreDump( nL );
 
@@ -2445,7 +2793,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                     ContDump( ( UINT16 ) nCntDwn );
             }
             break;
-            case 0x01B1:                                                        // CF
+            case 0x01B1:        // CF - conditional format
             {
                 INT32           nCntDwn = nL;
                 UINT8           nCcf, nCp;
@@ -2693,7 +3041,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 PRINT();
             }
             break;
-            case 0x01B8:                // HLINK
+            case 0x01B8:        // HLINK
             {
                 PreDump( nL );
 
@@ -2808,6 +3156,12 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                 }
             }
             break;
+            case 0x01BB:        // SXFDBTYPE - SQL data type
+            {
+                ADDTEXT( "SQL data type: " );       ADDHEX( 2 );
+                PRINT();
+            }
+            break;
             case 0x0201:
             {
                 LINESTART();
@@ -2818,16 +3172,11 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
             case 0x0208:        // ROW - row info
             {
                 LINESTART();
-                ADDTEXT( "row #: " );
-                ADDDEC( 2 );
-                ADDTEXT( "   def. cols: " );
-                ADDDEC( 2 );
-                ADDTEXT( "-" );
-                ADDDEC( 2 );
-                ADDTEXT( "   ht: " );
-                ADDDEC( 2 );
-                ADDTEXT( "   reserved: " );
-                ADDHEX( 4 );
+                ADDTEXT( "row #: " );               ADDDEC( 2 );
+                ADDTEXT( "   def. cols: " );        ADDDEC( 2 );
+                ADDTEXT( "-" );                     ADDDEC( 2 );
+                ADDTEXT( "   ht: " );               ADDDEC( 2 );
+                ADDTEXT( "   reserved: " );         ADDHEX( 4 );
                 PRINT();
                 rIn >> __nFlags;
                 LINESTART();
@@ -2845,10 +3194,8 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
                     UINT16 nXF;
                     rIn >> nXF;
                     LINESTART();
-                    ADDTEXT( "ix to XF: "  );
-                    __AddDec( t, (UINT16)(nXF & 0x0FFF) );
-                    ADDTEXT( "   add. flags(" );
-                    __AddHex( t, nXF );
+                    ADDTEXT( "ix to XF: "  );       __AddDec( t, (UINT16)(nXF & 0x0FFF) );
+                    ADDTEXT( "   add. flags(" );    __AddHex( t, nXF );
                     ADDTEXT( "):" );
                     ADDFLAG( 0x1000, " fExAsc" );
                     ADDFLAG( 0x2000, " fExDsc" );
@@ -2940,10 +3287,8 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
             {
                 INT32 nDummy;
                 LINESTART();
-                ADDTEXT( "repeated recnum: " );
-                ADDHEX( 2 );
-                ADDTEXT( "   unknown: " );
-                ADDHEX( 2 );
+                ADDTEXT( "repeated recnum: " );     ADDHEX( 2 );
+                ADDTEXT( "   unknown: " );          ADDHEX( 2 );
                 PRINT();
                 if( nL > 6 )
                 {
@@ -3400,20 +3745,15 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
             case 0x101F:        // ChartValuerange
             {
                 LINESTART();
-                ADDTEXT( "min val = " );
-                __AddDouble( t, Read8( rIn ) );
-                ADDTEXT( "  max val = " );
-                __AddDouble( t, Read8( rIn ) );
+                ADDTEXT( "min val = " );        ADDDOUBLE();
+                ADDTEXT( "  max val = " );      ADDDOUBLE();
                 PRINT();
                 LINESTART();
-                ADDTEXT( "major incr = " );
-                __AddDouble( t, Read8( rIn ) );
-                ADDTEXT( "  minor incr = " );
-                __AddDouble( t, Read8( rIn ) );
+                ADDTEXT( "major incr = " );     ADDDOUBLE();
+                ADDTEXT( "  minor incr = " );   ADDDOUBLE();
                 PRINT();
                 LINESTART();
-                ADDTEXT( "cross val = " );
-                __AddDouble( t, Read8( rIn ) );
+                ADDTEXT( "cross val = " );      ADDDOUBLE();
                 PRINT();
                 rIn >> __nFlags;
                 if( __nFlags )
@@ -3917,6 +4257,82 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL )
 
     if( bDec )
         pLevelPre -= nLevelInc;
+}
+
+
+void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const sal_Char* pStreamName )
+{
+    ByteString sOutput;
+
+    if( !pStorage )
+    {
+        sOutput = "-- no storage available --";
+        Print( sOutput );
+        DBG_ERROR( "Biff8RecDumper::DumpSubStream - storage missing" );
+        return;
+    }
+
+    String sName;
+    sName.AppendAscii( pStreamName );
+    if( !pStorage->IsContained( sName ) || !pStorage->IsStream( sName ) )
+        return;
+
+    SvStream* pStream = pStorage->OpenStream( sName, STREAM_STD_READ );
+
+    if( !pStream )
+    {
+        sOutput = "-- no stream available --";
+        Print( sOutput );
+        DBG_ERROR( "Biff8RecDumper::DumpSubStream - no stream available" );
+        return;
+    }
+
+    sOutput = "-- substream dump --";
+    Print( sOutput );
+    sOutput = "Stream name: ";
+    sOutput += pStreamName;
+    Print( sOutput );
+
+    SvStream* pOldStream = pIn;
+    pIn = pStream;
+    SvStream& rIn = *pIn;
+
+    // -- dump from here --
+    rIn.Seek( STREAM_SEEK_TO_END );
+    UINT32  nTotalLen   = rIn.Tell();
+    UINT16  nStrLen     = (nTotalLen > 0x0000FFFF) ? 0xFFFF : (UINT16) nTotalLen;
+    rIn.Seek( 0 );
+
+    INT32   n = (INT32) nTotalLen;
+    UINT16  nId, nLen;
+
+    while( n > 3 )      // 7 = min len (End-Marke)
+    {
+        rIn >> nId >> nLen;
+        n -= 4;
+        INT32 nNextRecStart = rIn.Tell() + nLen;
+
+        if( HasModeDump( nId ) )
+            RecDump( nId, nLen, TRUE );
+
+        if( nId == 0x000A )
+            n = 0;
+        else
+            n -= nLen;
+        rIn.Seek( nNextRecStart );
+    }
+
+    sOutput = "-- end of stream --\n";
+    Print( sOutput );
+    pIn = pOldStream;
+}
+
+
+void Biff8RecDumper::DumpPivotCache( const UINT16 nStrId )
+{
+    ByteString sByteStrName;
+    __AddPureHex( sByteStrName, nStrId );
+    DumpSubStream( pPivotCache, sByteStrName.GetBuffer() );
 }
 
 
@@ -6302,6 +6718,8 @@ Biff8RecDumper::Biff8RecDumper( RootData& rRootData ) :  ExcRoot( &rRootData )
     cParSep = ',';
     cComm1 = cComm2 = '/';
 
+    nFieldCnt = nItemCnt = nTabIndexCnt = 0;
+
     Init();
 }
 
@@ -6442,6 +6860,10 @@ BOOL Biff8RecDumper::Dump( SvStream& r )
         r.Seek( nStartPos );
 
         pPivotCache = NULL;
+
+        // dump substreams
+        DumpSubStream( pExcRoot->pRootStorage, pUserNamesStreamName );
+        DumpSubStream( pExcRoot->pRootStorage, pRevLogStreamName );
     }
 
     return !bEndLoading;
@@ -6449,7 +6871,4 @@ BOOL Biff8RecDumper::Dump( SvStream& r )
 
 
 #endif
-
-
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 13:48:08 $
+ *  last change: $Author: dr $ $Date: 2000-11-21 08:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,25 +59,32 @@
  *
  ************************************************************************/
 
-
-
 #ifndef _BIFFDUMP_HXX
 #define _BIFFDUMP_HXX
 
-
 #ifdef DEBUG
-#define DEBUGGING_________
+#define DEBUGGING________
 #endif
 
 #ifdef DEBUGGING
 
 
+#ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
+#ifndef _LIST_HXX
 #include <tools/list.hxx>
+#endif
+#ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
+#endif
 
+#ifndef _EXCFORM_HXX
 #include "excform.hxx"
+#endif
+#ifndef _ROOT_HXX
 #include "root.hxx"
+#endif
 
 
 #define MODE_DUMP               0x0000
@@ -180,6 +187,10 @@ protected:
     BOOL                        bSkipOffset;
     BOOL                        bClearFile;
 
+    UINT32                      nFieldCnt;
+    UINT32                      nItemCnt;
+    UINT32                      nTabIndexCnt;
+
     static const UINT16         nRecCnt;
     UINT16*                     pDumpModes;
     ByteString**                ppRecNames;
@@ -202,10 +213,11 @@ protected:
 
     void                        Print( const ByteString& rStr );
     void                        Print( const sal_Char* pStr );
+    void                        DumpSubStream( SvStorage* pStorage, const sal_Char* pStreamName );
     void                        DumpPivotCache( const UINT16 nStrId );
     UINT16                      DumpXF( SvStream& rIn, const sal_Char* pPre );
     void                        DumpValidPassword( SvStream& rIn, const sal_Char* pPre );
-    void                        RecDump( const UINT16 nR, const UINT16 nL );
+    void                        RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream = FALSE );
     void                        EscherDump( const UINT16 nL );
     void                        ObjDump( const UINT16 nL );
     void                        ContDump( const UINT16 nL );
@@ -545,7 +557,4 @@ inline BOOL Biff8RecDumper::IsPrintable( const UINT8 n )
 #endif
 
 #endif
-
-
-
 
