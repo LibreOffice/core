@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: svesik $ $Date: 2001-05-02 00:28:55 $
+#   last change: $Author: tbe $ $Date: 2001-07-25 07:43:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -199,7 +199,6 @@ SHL2STDLIBS= \
     $(SCLIB) \
     $(UCBHELPERLIB) \
     $(XMLOFFLIB) \
-    $(BASCTLLIB) \
     $(COMPHELPERLIB)
 
 

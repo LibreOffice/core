@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-17 08:48:51 $
+ *  last change: $Author: tbe $ $Date: 2001-07-25 07:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
-#ifndef _BASOBJ_HXX //autogen
-#include <basctl/basobj.hxx>
+#ifndef _OFF_APP_HXX //autogen
+#include <offmgr/app.hxx>
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
@@ -1900,7 +1900,7 @@ BOOL SwFldMgr::ChooseMacro(const String &rSelMacro)
         }
     }
 
-    String aMacroURL = BasicIDE::SelectMacro(FALSE, TRUE, sSelMacro);
+    String aMacroURL = OfficeApplication::ChooseMacro(FALSE, TRUE, sSelMacro);
     BOOL bRet = FALSE;
 
     // aMacroURL has the following format:
