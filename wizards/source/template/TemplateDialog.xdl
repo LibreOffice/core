@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="TemplateDialog" dlg:left="170" dlg:top="93" dlg:width="220" dlg:height="60" dlg:page="1" dlg:help-url="HID:34630">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="TemplateDialog" dlg:left="170" dlg:top="93" dlg:width="220" dlg:height="60" dlg:page="1" dlg:help-url="HID:34630" dlg:closeable="true" dlg:moveable="true">
  <dlg:bulletinboard>
   <dlg:radiogroup>
    <dlg:radio dlg:id="OptAgenda1" dlg:tab-index="0" dlg:left="12" dlg:top="20" dlg:width="144" dlg:height="10" dlg:page="1" dlg:tag="TOP2;PT1" dlg:help-url="HID:34632" dlg:value="OptAgenda1">
@@ -20,7 +20,7 @@
   <dlg:button dlg:id="CmdAgdGoon" dlg:tab-index="5" dlg:left="164" dlg:top="11" dlg:width="50" dlg:height="14" dlg:page="1" dlg:help-url="HID:34634" dlg:value="CmdAgdGoOn">
    <script:event script:event-name="on-performaction" script:macro-name="Template.ModuleAgenda.ModifyTemplate" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="CmdCancel" dlg:tab-index="6" dlg:left="164" dlg:top="28" dlg:width="50" dlg:height="14" dlg:help-url="HID:34631" dlg:value="CmdCancel">
+  <dlg:button dlg:id="CmdCancel" dlg:tab-index="6" dlg:left="164" dlg:top="28" dlg:width="50" dlg:height="14" dlg:help-url="HID:34631" dlg:value="CmdCancel" dlg:button-type="cancel">
    <script:event script:event-name="on-performaction" script:macro-name="Template.ModuleAgenda.DisposeDocument" script:language="StarBasic"/>
   </dlg:button>
   <dlg:fixedline dlg:id="FrmLetter" dlg:tab-index="7" dlg:left="6" dlg:top="6" dlg:width="150" dlg:height="10" dlg:page="2" dlg:value="FrmLetter"/>

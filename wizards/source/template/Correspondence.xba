@@ -17,6 +17,7 @@ Sub Main
 	DialogModel.Optmerge.State = True
 	LoadLanguageCorrespondence()
 	TemplateDialog.Execute
+	TemplateDialog.Dispose()
 End Sub
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ModuleAgenda" script:language="StarBasic">&apos; All variables must be declared before use
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ModuleAgenda" script:language="StarBasic">&apos; All variables must be declared before use
 Option Explicit
 
 &apos; Used for &quot;disabling&quot; the cancel button of the dialog
@@ -77,9 +77,6 @@ End Sub
 
 
 &apos; Attention This Sub is also called from the correspondence stuff
-Sub DisposeDocument
-  TemplateDialog.EndExecute
-End Sub
 
 
 Sub NewTopic
