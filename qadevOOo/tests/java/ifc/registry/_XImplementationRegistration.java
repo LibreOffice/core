@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XImplementationRegistration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:27:18 $
+ *  last change:$Date: 2003-09-08 10:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,15 @@
 
 package ifc.registry;
 
+import lib.MultiMethodTest;
+import util.RegistryTools;
+import util.utils;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.registry.CannotRegisterImplementationException;
 import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.uno.RuntimeException;
-import lib.MultiMethodTest;
-import util.RegistryTools;
-import util.utils;
 
 /**
 * Testing <code>com.sun.star.registry.XImplementationRegistration</code>
@@ -224,7 +225,7 @@ public class _XImplementationRegistration extends MultiMethodTest {
             e.printStackTrace(log);
         }
 
-        tRes.tested("revokeImplementation()", true) ;
+        tRes.tested("revokeImplementation()", result) ;
     }
 
     public void after() {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSimpleRegistry.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:27:26 $
+ *  last change:$Date: 2003-09-08 10:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,18 @@
  *
  *
  ************************************************************************/
-
 package ifc.registry;
+
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+import util.RegistryTools;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.registry.InvalidRegistryException;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.registry.XSimpleRegistry;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
-import util.RegistryTools;
+
 
 /**
 * Testing <code>com.sun.star.registry.XSimpleRegistry</code>
@@ -103,31 +104,44 @@ import util.RegistryTools;
 * @see com.sun.star.registry.XSimpleRegistry
 */
 public class _XSimpleRegistry extends MultiMethodTest {
-
     public XSimpleRegistry oObj = null;
     protected String nr = null;
-    protected String openF = null ;
-    protected String destroyF = null ;
-    protected String mergeF = null ;
+    protected boolean configuration = false;
+    protected String openF = null;
+    protected String destroyF = null;
+    protected String mergeF = null;
 
     /**
     * Retrieves object relations.
     * @throws StatusException If one of required relations not found.
     */
     protected void before() {
-          nr = (String) tEnv.getObjRelation("NR");
+        if (tEnv.getObjRelation("configuration") != null) {
+            configuration = true;
+        }
 
-          openF = (String) tEnv.getObjRelation("XSimpleRegistry.open") ;
-          if (openF == null) throw new StatusException
-            (Status.failed("Relation 'XSimpleRegistry.open' not found")) ;
+        nr = (String) tEnv.getObjRelation("NR");
 
-          destroyF = (String) tEnv.getObjRelation("XSimpleRegistry.destroy") ;
-          if (destroyF == null) throw new StatusException
-            (Status.failed("Relation 'XSimpleRegistry.destroy' not found")) ;
+        openF = (String) tEnv.getObjRelation("XSimpleRegistry.open");
 
-          mergeF = (String) tEnv.getObjRelation("XSimpleRegistry.merge") ;
-          if (mergeF == null) throw new StatusException
-            (Status.failed("Relation 'XSimpleRegistry.merge' not found")) ;
+        if (openF == null) {
+            throw new StatusException(Status.failed(
+                                              "Relation 'XSimpleRegistry.open' not found"));
+        }
+
+        destroyF = (String) tEnv.getObjRelation("XSimpleRegistry.destroy");
+
+        if (destroyF == null) {
+            throw new StatusException(Status.failed(
+                                              "Relation 'XSimpleRegistry.destroy' not found"));
+        }
+
+        mergeF = (String) tEnv.getObjRelation("XSimpleRegistry.merge");
+
+        if (mergeF == null) {
+            throw new StatusException(Status.failed(
+                                              "Relation 'XSimpleRegistry.merge' not found"));
+        }
     }
 
     /**
@@ -142,16 +156,19 @@ public class _XSimpleRegistry extends MultiMethodTest {
         if (nr != null) {
             log.println("'open()' isn't supported by '" + nr + "'");
             tRes.tested("open()", true);
+
             return;
         }
 
         log.println("Trying to open registry :" + openF);
+
         try {
             oObj.open(openF, false, true);
             oObj.close();
         } catch (InvalidRegistryException e) {
             e.printStackTrace(log);
             tRes.tested("open()", false);
+
             return;
         }
 
@@ -168,6 +185,7 @@ public class _XSimpleRegistry extends MultiMethodTest {
     */
     public void _isReadOnly() {
         boolean result = false;
+
         try {
             openReg(oObj, openF, false, true);
             result = !oObj.isReadOnly();
@@ -190,8 +208,10 @@ public class _XSimpleRegistry extends MultiMethodTest {
     */
     public void _getRootKey() {
         boolean result = false;
+
         try {
             openReg(oObj, openF, false, true);
+
             XRegistryKey rootKey = oObj.getRootKey();
             result = rootKey != null;
             closeReg(oObj);
@@ -220,9 +240,18 @@ public class _XSimpleRegistry extends MultiMethodTest {
     * above are recursively equal. <p>
     */
     public void _mergeKey() {
+        if (configuration) {
+            log.println(
+                    "You can't merge into this registry. It's just a wrapper for a configuration node, which has a fixed structure which can not be modified");
+            tRes.tested("mergeKey()", true);
+
+            return;
+        }
+
         if (nr != null) {
             log.println("'mergeKey()' isn't supported by '" + nr + "'");
             tRes.tested("mergeKey()", true);
+
             return;
         }
 
@@ -235,41 +264,46 @@ public class _XSimpleRegistry extends MultiMethodTest {
         } catch (com.sun.star.registry.MergeConflictException e) {
             e.printStackTrace(log);
             tRes.tested("mergeKey()", false);
+
             return;
         } catch (com.sun.star.registry.InvalidRegistryException e) {
             e.printStackTrace(log);
             tRes.tested("mergeKey()", false);
+
             return;
         }
 
         boolean isEqual = false;
         XSimpleRegistry reg = null;
+
         try {
-            reg = RegistryTools.
-                createRegistryService((XMultiServiceFactory)tParam.getMSF()) ;
+            reg = RegistryTools.createRegistryService((XMultiServiceFactory) tParam.getMSF());
         } catch (com.sun.star.uno.Exception e) {
             log.print("Can't create registry service: ");
             e.printStackTrace(log);
             tRes.tested("mergeKey()", false);
+
             return;
         }
+
         openReg(reg, mergeF, false, true);
 
         try {
-            XRegistryKey  key = oObj.getRootKey().openKey("MergeKey");
+            XRegistryKey key = oObj.getRootKey().openKey("MergeKey");
             XRegistryKey mergeKey = reg.getRootKey();
             isEqual = RegistryTools.compareKeyTrees(key, mergeKey);
         } catch (com.sun.star.registry.InvalidRegistryException e) {
             log.print("Can't get root key: ");
             e.printStackTrace(log);
             tRes.tested("mergeKey()", false);
+
             return;
         }
 
         closeReg(reg);
         closeReg(oObj);
 
-        tRes.tested("mergeKey()", isEqual) ;
+        tRes.tested("mergeKey()", isEqual);
     }
 
     /**
@@ -282,10 +316,11 @@ public class _XSimpleRegistry extends MultiMethodTest {
     */
     public void _getURL() {
         openReg(oObj, openF, false, true);
+
         String url = oObj.getURL();
         closeReg(oObj);
-        log.println("Getting URL: " + url);
-        tRes.tested("getURL()", url != null && url.length() > 0);
+        log.println("Getting URL: " + url+";");
+        tRes.tested("getURL()", (url != null));
     }
 
     /**
@@ -302,6 +337,7 @@ public class _XSimpleRegistry extends MultiMethodTest {
         if (nr != null) {
             log.println("'close()' isn't supported by '" + nr + "'");
             tRes.tested("close()", true);
+
             return;
         }
 
@@ -311,6 +347,7 @@ public class _XSimpleRegistry extends MultiMethodTest {
         } catch (com.sun.star.registry.InvalidRegistryException e) {
             e.printStackTrace(log);
             tRes.tested("close()", false);
+
             return;
         }
 
@@ -328,9 +365,18 @@ public class _XSimpleRegistry extends MultiMethodTest {
     * relation <code>'NR'</code> isn't null). <p>
     */
     public void _destroy() {
-        if (nr != null) {
-            log.println("'destroy()' isn't supported by '" +nr + "'");
+        if (configuration) {
+            log.println(
+                    "This registry is a wrapper for a configuration access. It can not be destroyed.");
             tRes.tested("destroy()", true);
+
+            return;
+        }
+
+        if (nr != null) {
+            log.println("'destroy()' isn't supported by '" + nr + "'");
+            tRes.tested("destroy()", true);
+
             return;
         }
 
@@ -340,11 +386,12 @@ public class _XSimpleRegistry extends MultiMethodTest {
         } catch (com.sun.star.registry.InvalidRegistryException e) {
             e.printStackTrace(log);
             tRes.tested("destroy()", false);
+
             return;
         }
 
         tRes.tested("destroy()", !oObj.isValid());
-     }
+    }
 
     /**
     * Test opens the registry key with the URL from
@@ -371,8 +418,8 @@ public class _XSimpleRegistry extends MultiMethodTest {
     * @param arg2 specifies if the data source should be created if it does not
     * already exist
     */
-    public void openReg(XSimpleRegistry reg, String url,
-            boolean arg1, boolean arg2) {
+    public void openReg(XSimpleRegistry reg, String url, boolean arg1,
+                        boolean arg2) {
         if (nr == null) {
             try {
                 reg.open(url, arg1, arg2);
@@ -399,4 +446,3 @@ public class _XSimpleRegistry extends MultiMethodTest {
         }
     }
 }
-
