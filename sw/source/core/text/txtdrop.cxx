@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
+ *  last change: $Author: fme $ $Date: 2002-05-22 07:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,12 +853,10 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
             pCurrPart = pDrop->GetPart();
             sal_Bool bFirstGlyphRect = sal_True;
             sal_Bool bHaveGlyphRect = sal_False;
-            Rectangle aCommonRect, aTmp, aRect;
+            Rectangle aCommonRect, aRect;
 
             while ( pCurrPart )
             {
-                XubString aTmpStr( rInf.GetTxt(), nIdx, pCurrPart->GetLen() );
-
                 // current font
                 SwFont& rFnt = pCurrPart->GetFont();
 
@@ -878,21 +876,9 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                           rFnt.GetLeading( rInf.GetVsh(), pOut );
 
                 // Wir besorgen uns das alle Buchstaben umfassende Rechteck:
-                bHaveGlyphRect = sal_False;
-                for ( xub_StrLen i = 0; i < pCurrPart->GetLen(); i++ )
-                {
-                    if( pOut->GetGlyphBoundRect( aTmpStr.GetChar(i), aTmp, sal_False )
-                        && !aTmp.IsEmpty() )
-                    {
-                        if ( bHaveGlyphRect )
-                            aRect.Union( aTmp );
-                        else
-                        {
-                            aRect = aTmp;
-                            bHaveGlyphRect = sal_True;
-                        }
-                    }
-                }
+                bHaveGlyphRect = pOut->GetTextBoundRect( aRect, rInf.GetTxt(), 0,
+                                     nIdx, pCurrPart->GetLen() ) &&
+                                 ! aRect.IsEmpty();
 
                 if ( ! bHaveGlyphRect )
                 {
@@ -909,20 +895,9 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                         }
                         pWin->SetFont( rFnt.GetActualFont() );
 
-                        for ( xub_StrLen i = 0; i < pCurrPart->GetLen(); i++ )
-                        {
-                            if( pWin->GetGlyphBoundRect( aTmpStr.GetChar(i), aTmp, sal_False )
-                                && !aTmp.IsEmpty() )
-                            {
-                                if ( bHaveGlyphRect )
-                                    aRect.Union( aTmp );
-                                else
-                                {
-                                    aRect = aTmp;
-                                    bHaveGlyphRect = sal_True;
-                                }
-                            }
-                        }
+                        bHaveGlyphRect = pWin->GetTextBoundRect( aRect, rInf.GetTxt(), 0,
+                                            nIdx, pCurrPart->GetLen() ) &&
+                                        ! aRect.IsEmpty();
                     }
                     if ( bHaveGlyphRect )
                     {
@@ -942,23 +917,6 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 // reset font size and proportion
                 rFnt.SetSize( aOldSize, rFnt.GetActual() );
                 rFnt.SetProportion( nOldProp );
-
-                // shift aRect to have baseline 0
-#ifdef VERTICAL_LAYOUT
-                if ( rInf.GetTxtFrm()->IsVertical() )
-                {
-                    aRect.Right() += nAscent;
-                    aRect.Left() += nAscent;
-                }
-                else
-                {
-                    aRect.Top() -= nAscent;
-                    aRect.Bottom() -= nAscent;
-                }
-#else
-                aRect.Top() -= nAscent;
-                aRect.Bottom() -= nAscent;
-#endif
 
                 if ( bFirstGlyphRect )
                 {
