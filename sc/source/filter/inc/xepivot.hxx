@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:33:35 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,8 @@ public:
     virtual void        Save( XclExpStream& rStrm );
 
 private:
-    typedef XclExpRecordList< XclExpPCItem > XclExpPCItemList;
+    typedef XclExpRecordList< XclExpPCItem >    XclExpPCItemList;
+    typedef XclExpPCItemList::RecordRefType     XclExpPCItemRef;
 
     /** Returns the item list that contains the visible items.
         @descr  Visible items are equal to source items in standard fields,
@@ -168,7 +169,7 @@ private:
     void                InitDateGroupField( const ScDPObject& rDPObj, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nDatePart );
 
     /** Inserts the passed index into the item index array of original items. */
-    void                InsertItemArrayIndex( ULONG nListPos );
+    void                InsertItemArrayIndex( size_t nListPos );
     /** Inserts an original source item. Updates item index array. */
     void                InsertOrigItem( XclExpPCItem* pNewItem );
     /** Inserts an original text item, if it is not contained already. */
@@ -274,7 +275,8 @@ private:
     void                WriteSxidarrayList( XclExpStream& rStrm ) const;
 
 private:
-    typedef XclExpRecordList< XclExpPCField > XclExpPCFieldList;
+    typedef XclExpRecordList< XclExpPCField >   XclExpPCFieldList;
+    typedef XclExpPCFieldList::RecordRefType    XclExpPCFieldRef;
 
     XclPCInfo           maPCInfo;           /// Pivot cache settings (SXDB record).
     XclExpPCFieldList   maFieldList;        /// List of all pivot cache fields.
@@ -377,6 +379,7 @@ private:
 private:
     typedef ::std::vector< XclPTDataFieldInfo > XclPTDataFieldInfoVec;
     typedef XclExpRecordList< XclExpPTItem >    XclExpPTItemList;
+    typedef XclExpPTItemList::RecordRefType     XclExpPTItemRef;
 
     const XclExpPivotTable& mrPTable;       /// Parent pivot table containing this field.
     const XclExpPCField* mpCacheField;      /// The referred pivot cache field.
@@ -450,6 +453,7 @@ private:
     // ------------------------------------------------------------------------
 private:
     typedef XclExpRecordList< XclExpPTField >   XclExpPTFieldList;
+    typedef XclExpPTFieldList::RecordRefType    XclExpPTFieldRef;
     typedef ::std::vector< XclPTDataFieldPos >  XclPTDataFieldPosVec;
 
     const XclExpPivotCache& mrPCache;       /// The pivot cache this pivot table bases on.
@@ -495,7 +499,9 @@ private:
 
 private:
     typedef XclExpRecordList< XclExpPivotCache >    XclExpPivotCacheList;
+    typedef XclExpPivotCacheList::RecordRefType     XclExpPivotCacheRef;
     typedef XclExpRecordList< XclExpPivotTable >    XclExpPivotTableList;
+    typedef XclExpPivotTableList::RecordRefType     XclExpPivotTableRef;
 
     XclExpPivotCacheList maPCacheList;      /// List of all pivot caches.
     XclExpPivotTableList maPTableList;      /// List of all pivot tables.
