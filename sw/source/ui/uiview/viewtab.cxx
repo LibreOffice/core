@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:41:44 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,17 +772,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     {
         SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)rReq.
                                         GetArgs()->Get(nSlot));
-
-        long nLDist = 0;
-        long nRDist = 0;
-
         if(nFrmType & FRMTYPE_FLY_ANY)
         {
-// os: Wegen #42444# wird hier der Umrandungsabstand eingefuegt
-            SfxItemSet aCoreSet( GetPool(),
-                                    RES_BOX, RES_BOX,
-                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
-
             sal_Bool bFirstColumn = sal_True;
             sal_Bool bLastColumn = sal_True;
             if(nFrmType & FRMTYPE_COLUMN)
@@ -795,40 +786,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 USHORT nColumnCount = rCols.Count();
                 bLastColumn = nColumnCount == nCurFrameCol + 1;
             }
-
-            if(bFirstColumn || bLastColumn)
-            {
-                SvxBoxInfoItem aBoxInfo;
-                aCoreSet.Put( aBoxInfo );
-                rSh.GetFlyFrmAttr( aCoreSet );
-                const SvxBoxItem& rBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
-
-                if(bFirstColumn)
-                    nLDist = rBox.GetDistance(BOX_LINE_LEFT);
-                if(bLastColumn)
-                    nRDist = rBox.GetDistance(BOX_LINE_RIGHT);
-            }
         }
-        else if ( IsTabColFromDoc() ||
-            ( rSh.GetTableFmt() && !bFrmSelection &&
-            !(nFrmType & FRMTYPE_COLSECT ) ) )
-        {
-            SfxItemSet aCoreSet( GetPool(),
-                                    RES_BOX, RES_BOX,
-                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
-            SvxBoxInfoItem aBoxInfo;
-            aCoreSet.Put( aBoxInfo );
-            aBoxInfo.SetTable(FALSE);
-            aBoxInfo.SetDist((BOOL) TRUE);
-            aCoreSet.Put(aBoxInfo);
-            rSh.GetTabBorders( aCoreSet );
-            const SvxBoxItem& rBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
-            SvxLRSpaceItem aDistLR(SID_RULER_BORDER_DISTANCE);
-            nLDist = rBox.GetDistance(BOX_LINE_LEFT);
-            nRDist = rBox.GetDistance(BOX_LINE_RIGHT);
-        }
-        aParaMargin.SetRight( aParaMargin.GetRight() - nRDist );
-        aParaMargin.SetTxtLeft(aParaMargin.GetTxtLeft() - nLDist);
+        aParaMargin.SetRight( aParaMargin.GetRight() - nRightBorderDistance );
+        aParaMargin.SetTxtLeft(aParaMargin.GetTxtLeft() - nLeftBorderDistance );
 
         DEBUGPARAMARGIN(aParaMargin);
 
@@ -1321,6 +1281,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         }
         case SID_RULER_BORDER_DISTANCE:
         {
+            nLeftBorderDistance = 0;
+            nRightBorderDistance = 0;
             if ( nSelectionType & SwWrtShell::SEL_GRF ||
                     nSelectionType & SwWrtShell::SEL_FRM ||
                     nSelectionType & SwWrtShell::SEL_OLE ||
@@ -1331,7 +1293,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 SvxLRSpaceItem aDistLR(SID_RULER_BORDER_DISTANCE);
                 if(nFrmType & FRMTYPE_FLY_ANY)
                 {
-//                    USHORT nLDist, nRDist;
                     if( IsTabColFromDoc() )
                     {
                         const SwRect& rPrtRect = rSh.GetAnyCurRect(
@@ -1350,8 +1311,16 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         const SvxBoxItem& rBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
                         aDistLR.SetLeft((USHORT)rBox.GetDistance(BOX_LINE_LEFT ));
                         aDistLR.SetRight((USHORT)rBox.GetDistance(BOX_LINE_RIGHT));
+
+                        //add the paragraph border distance
+                        rSh.GetAttr( aCoreSet );
+                        const SvxBoxItem& rParaBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
+                        aDistLR.SetLeft(aDistLR.GetLeft() + (USHORT)rParaBox.GetDistance(BOX_LINE_LEFT ));
+                        aDistLR.SetRight(aDistLR.GetRight() + (USHORT)rParaBox.GetDistance(BOX_LINE_RIGHT));
                     }
                     rSet.Put(aDistLR);
+                    nLeftBorderDistance = aDistLR.GetLeft();
+                    nRightBorderDistance = aDistLR.GetRight();
                 }
                 else if ( IsTabColFromDoc() ||
                     ( rSh.GetTableFmt() && !bFrmSelection &&
@@ -1361,7 +1330,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                             RES_BOX, RES_BOX,
                                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
                     SvxBoxInfoItem aBoxInfo;
-                    aCoreSet.Put( aBoxInfo );
                     aBoxInfo.SetTable(FALSE);
                     aBoxInfo.SetDist((BOOL) TRUE);
                     aCoreSet.Put(aBoxInfo);
@@ -1370,7 +1338,56 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     SvxLRSpaceItem aDistLR(SID_RULER_BORDER_DISTANCE);
                     aDistLR.SetLeft((USHORT)rBox.GetDistance(BOX_LINE_LEFT ));
                     aDistLR.SetRight((USHORT)rBox.GetDistance(BOX_LINE_RIGHT));
+
+                    //add the border distance of the paragraph
+                    rSh.GetAttr( aCoreSet );
+                    const SvxBoxItem& rParaBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
+                    aDistLR.SetLeft(aDistLR.GetLeft() + (USHORT)rParaBox.GetDistance(BOX_LINE_LEFT ));
+                    aDistLR.SetRight(aDistLR.GetRight() + (USHORT)rParaBox.GetDistance(BOX_LINE_RIGHT));
                     rSet.Put(aDistLR);
+                    nLeftBorderDistance = aDistLR.GetLeft();
+                    nRightBorderDistance = aDistLR.GetRight();
+                }
+                else if ( !rSh.IsDirectlyInSection() )
+                {
+                    //get the page/header/footer border distance
+                    const SwFrmFmt& rMaster = rDesc.GetMaster();
+                    const SvxBoxItem& rBox = (const SvxBoxItem&)rMaster.GetAttrSet().Get(RES_BOX);
+                    SvxLRSpaceItem aDistLR(SID_RULER_BORDER_DISTANCE);
+                    aDistLR.SetLeft((USHORT)rBox.GetDistance(BOX_LINE_LEFT ));
+                    aDistLR.SetRight((USHORT)rBox.GetDistance(BOX_LINE_RIGHT));
+
+                    const SvxBoxItem* pBox = 0;
+                    if(nFrmType & FRMTYPE_HEADER)
+                    {
+                        rMaster.GetHeader();
+                        const SwFmtHeader& rHeaderFmt = rMaster.GetHeader();
+                        SwFrmFmt *pHeaderFmt = (SwFrmFmt*)rHeaderFmt.GetHeaderFmt();
+                        pBox = & (const SvxBoxItem&)pHeaderFmt->GetBox();
+                    }
+                    else if(nFrmType & FRMTYPE_FOOTER )
+                    {
+                        const SwFmtFooter& rFooterFmt = rMaster.GetFooter();
+                        SwFrmFmt *pFooterFmt = (SwFrmFmt*)rFooterFmt.GetFooterFmt();
+                        pBox = & (const SvxBoxItem&)pFooterFmt->GetBox();
+                    }
+                    if(pBox)
+                    {
+                        aDistLR.SetLeft((USHORT)pBox->GetDistance(BOX_LINE_LEFT ));
+                        aDistLR.SetRight((USHORT)pBox->GetDistance(BOX_LINE_RIGHT));
+                    }
+
+                    //add the border distance of the paragraph
+                    SfxItemSet aCoreSet( GetPool(),
+                                            RES_BOX, RES_BOX,
+                                            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
+                    rSh.GetAttr( aCoreSet );
+                    const SvxBoxItem& rParaBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
+                    aDistLR.SetLeft(aDistLR.GetLeft() + (USHORT)rParaBox.GetDistance(BOX_LINE_LEFT ));
+                    aDistLR.SetRight(aDistLR.GetRight() + (USHORT)rParaBox.GetDistance(BOX_LINE_RIGHT));
+                    rSet.Put(aDistLR);
+                    nLeftBorderDistance = aDistLR.GetLeft();
+                    nRightBorderDistance = aDistLR.GetRight();
                 }
             }
         }
