@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XImportable.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-02-03 12:29:19 $
+ *  last change:$Date: 2004-03-19 15:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ public class _XImportable extends MultiMethodTest {
     public XImportable oObj;
     protected PropertyValue[] descriptor = null;
     protected String[] names = new String[] {
-        "DatabaseName", "SourceType", "SourceObject", "Native"
+        "DatabaseName", "SourceType", "SourceObject", "IsNative"
     };
     protected Type[] types = new Type[] {
         new Type(String.class), new Type(com.sun.star.sheet.DataImportMode.class),
@@ -179,7 +179,7 @@ public class _XImportable extends MultiMethodTest {
             if (!locResult) {
                 log.println("PropertyName differs for index " + i);
                 log.println("\tGetting: " + props[i].Name);
-                log.println("\tExpected: " + props[i].Value);
+                log.println("\tExpected: " + names[i]);
             }
 
             res &= locResult;
