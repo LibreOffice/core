@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:55:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #include "swfntcch.hxx"     // SwFontAccess
 #include "flyfrm.hxx"
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include "txtpaint.hxx"
 #endif
 
