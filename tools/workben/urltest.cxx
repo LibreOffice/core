@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:33:09 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 11:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,32 @@
 
 #include <cstddef>
 #include <cstdlib>
+#include <iostream>
+#include <ostream>
 #include <stdio.h>
 
 using namespace com::sun;
+
+std::ostream & operator <<(std::ostream & out, rtl::OUString const & value) {
+    out << rtl::OUStringToOString(value, RTL_TEXTENCODING_ASCII_US).getStr();
+    return out;
+}
+
+namespace {
+
+template< typename T > bool assertEqual(
+    rtl::OUString const & message, T const & expected, T const & actual)
+{
+    bool success = expected == actual;
+    if (!success) {
+        std::cout
+            << "FAILED " << message << ": " << expected << " != " << actual
+            << '\n';
+    }
+    return success;
+}
+
+}
 
 //============================================================================
 //
@@ -1297,7 +1320,7 @@ main()
 
     if (true) { // #112130#
         INetURLObject url1(rtl::OUString::createFromAscii(".uno:abc%3Fdef"));
-        if (!url1.GetProtocol() == INET_PROT_UNO) {
+        if (url1.GetProtocol() != INET_PROT_UNO) {
             printf("BAD .uno:abc%3Fdef\n");
             bSuccess = false;
         }
@@ -1315,7 +1338,7 @@ main()
             bSuccess = false;
         }
         INetURLObject url2(rtl::OUString::createFromAscii(".uno:abc?def?ghi"));
-        if (!url2.GetProtocol() == INET_PROT_UNO) {
+        if (url2.GetProtocol() != INET_PROT_UNO) {
             printf("BAD .uno:abc?def?ghi\n");
             bSuccess = false;
         }
@@ -1341,6 +1364,117 @@ main()
                     osl_getThreadTextEncoding()).getStr());
             bSuccess = false;
         }
+    }
+
+    if (true) { // #116269#
+        rtl::OUString url;
+        INetURLObject urlobj;
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("A-b.3:/%2f?x#y"));
+        urlobj = INetURLObject(url);
+        bSuccess &= assertEqual(url, INET_PROT_GENERIC, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a-b.3:/%2F?x#y")),
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+        bSuccess &= assertEqual(url, false, urlobj.HasUserData());
+        bSuccess &= assertEqual(url, false, urlobj.hasPassword());
+        bSuccess &= assertEqual(url, false, urlobj.HasPort());
+        bSuccess &= assertEqual(
+            url, rtl::OUString(), rtl::OUString(urlobj.GetHost()));
+        bSuccess &= assertEqual(
+            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/%2F?x")),
+            rtl::OUString(urlobj.GetURLPath()));
+        bSuccess &= assertEqual(url, false, urlobj.HasParam());
+        bSuccess &= assertEqual(url, true, urlobj.HasMark());
+        bSuccess &= assertEqual(
+            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("y")),
+            rtl::OUString(urlobj.GetMark()));
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo:"));
+        urlobj = INetURLObject(url);
+        bSuccess &= assertEqual(url, true, urlobj.HasError());
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo:#"));
+        urlobj = INetURLObject(url);
+        bSuccess &= assertEqual(url, true, urlobj.HasError());
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo:/"));
+        urlobj = INetURLObject(url);
+        bSuccess &= assertEqual(url, INET_PROT_GENERIC, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, url,
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".foo:/"));
+        urlobj = INetURLObject(url);
+        bSuccess &= assertEqual(url, true, urlobj.HasError());
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("C:\\bla"));
+        urlobj = INetURLObject(url);
+        bSuccess &= assertEqual(url, INET_PROT_GENERIC, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("c:%5Cbla")),
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+
+        url = rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter"));
+        urlobj = INetURLObject(url);
+        bSuccess &= assertEqual(
+            url, INET_PROT_PRIV_SOFFICE, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, url,
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("A-b.3:/%2f?x#y"));
+        urlobj = INetURLObject(url, INET_PROT_CID);
+        bSuccess &= assertEqual(url, INET_PROT_GENERIC, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a-b.3:/%2F?x#y")),
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo:"));
+        urlobj = INetURLObject(url, INET_PROT_CID);
+        bSuccess &= assertEqual(url, INET_PROT_CID, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cid:foo:")),
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo:#"));
+        urlobj = INetURLObject(url, INET_PROT_CID);
+        bSuccess &= assertEqual(url, INET_PROT_CID, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cid:foo:#")),
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo:/"));
+        urlobj = INetURLObject(url, INET_PROT_CID);
+        bSuccess &= assertEqual(url, INET_PROT_GENERIC, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, url,
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".foo:/"));
+        urlobj = INetURLObject(url, INET_PROT_CID);
+        bSuccess &= assertEqual(url, INET_PROT_CID, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cid:.foo:/")),
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("C:\\bla"));
+        urlobj = INetURLObject(url, INET_PROT_CID);
+        bSuccess &= assertEqual(url, INET_PROT_FILE, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///C:/bla")),
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+
+        url = rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter"));
+        urlobj = INetURLObject(url, INET_PROT_CID);
+        bSuccess &= assertEqual(
+            url, INET_PROT_PRIV_SOFFICE, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, url,
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
     }
 
     return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
