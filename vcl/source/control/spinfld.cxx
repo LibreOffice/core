@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:25:30 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,6 +678,13 @@ void SpinField::DataChanged( const DataChangedEvent& rDCEvt )
         Resize();
         Invalidate();
     }
+}
+
+// -----------------------------------------------------------------------
+
+long SpinField::PreNotify( NotifyEvent& rNEvt )
+{
+    return Control::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
