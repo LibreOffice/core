@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drbezob.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:32:46 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,20 @@
  *
  ************************************************************************/
 
+#include "BezierObjectBar.hxx"
+
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
-#ifndef _SFX_SHELL_HXX //autogen
-#include <sfx2/shell.hxx>
+#ifndef _SFXMSG_HXX
+#include <sfx2/msg.hxx>
 #endif
+
+
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
+
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -87,22 +92,43 @@
 #include <sfx2/dispatch.hxx>
 #endif
 
-#pragma hdrstop
 
+#ifndef SD_RESID_HXX
+#include "sdresid.hxx"
+#endif
+
+
+#pragma hdrstop
 
 #include "res_bmp.hrc"
 #include "glob.hrc"
 #include "strings.hrc"
 
-#include "docshell.hxx"
-#include "viewshel.hxx"
-#include "sdwindow.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
-#include "drbezob.hxx"
+#ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
+#endif
+#ifndef SD_FU_CONSTRUCT_BEZIER_HXX
 #include "fuconbez.hxx"
+#endif
+
+
+using namespace sd;
+#define BezierObjectBar
+#include "sdslots.hxx"
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -110,18 +136,16 @@
 |*
 \************************************************************************/
 
-#define SdDrawBezierObjectBar
 
 SFX_DECL_TYPE(13);
 
-#include "sdslots.hxx"
 
-SFX_IMPL_INTERFACE(SdDrawBezierObjectBar, SfxShell, SdResId(STR_BEZIEROBJECTBARSHELL))
+SFX_IMPL_INTERFACE(BezierObjectBar, ::SfxShell, SdResId(STR_BEZIEROBJECTBARSHELL))
 {
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT, SdResId(RID_BEZIER_TOOLBOX) );
 }
 
-TYPEINIT1( SdDrawBezierObjectBar, SfxShell );
+TYPEINIT1(BezierObjectBar, ::SfxShell);
 
 /*************************************************************************
 |*
@@ -129,13 +153,14 @@ TYPEINIT1( SdDrawBezierObjectBar, SfxShell );
 |*
 \************************************************************************/
 
-SdDrawBezierObjectBar::SdDrawBezierObjectBar(SdViewShell* pSdViewShell,
-                                             SdView* pSdView) :
-    SfxShell(pSdViewShell),
-    pView(pSdView),
-    pViewSh(pSdViewShell)
+BezierObjectBar::BezierObjectBar(
+    ViewShell* pSdViewShell,
+    ::sd::View* pSdView)
+    : SfxShell(pSdViewShell->GetViewShell()),
+      pView(pSdView),
+      pViewSh(pSdViewShell)
 {
-    SdDrawDocShell* pDocShell = pViewSh->GetDocSh();
+    DrawDocShell* pDocShell = pViewSh->GetDocSh();
     SetPool(&pDocShell->GetPool());
     SetUndoManager(pDocShell->GetUndoManager());
     SetRepeatTarget(pView);
@@ -149,7 +174,7 @@ SdDrawBezierObjectBar::SdDrawBezierObjectBar(SdViewShell* pSdViewShell,
 |*
 \************************************************************************/
 
-SdDrawBezierObjectBar::~SdDrawBezierObjectBar()
+BezierObjectBar::~BezierObjectBar()
 {
     SetRepeatTarget(NULL);
 }
@@ -161,7 +186,7 @@ SdDrawBezierObjectBar::~SdDrawBezierObjectBar()
 |*
 \************************************************************************/
 
-void SdDrawBezierObjectBar::GetAttrState(SfxItemSet& rSet)
+void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 {
     SfxItemSet aAttrSet( pView->GetDoc()->GetPool() );
     pView->GetAttributes( aAttrSet );
@@ -176,9 +201,11 @@ void SdDrawBezierObjectBar::GetAttrState(SfxItemSet& rSet)
             USHORT nEditMode = ((FuSelection*) pFuActual)->GetEditMode();
             rSet.Put(SfxBoolItem(nEditMode, TRUE));
         }
-        else if (pFuActual->ISA(FuConstBezPoly))
+        else if (pFuActual->ISA(FuConstructBezierPolygon))
         {
-            USHORT nEditMode = ((FuConstBezPoly*) pFuActual)->GetEditMode();
+            USHORT nEditMode =
+                static_cast<FuConstructBezierPolygon*>(pFuActual)
+                ->GetEditMode();
             rSet.Put(SfxBoolItem(nEditMode, TRUE));
         }
     }
@@ -247,7 +274,7 @@ void SdDrawBezierObjectBar::GetAttrState(SfxItemSet& rSet)
 |*
 \************************************************************************/
 
-void SdDrawBezierObjectBar::Execute(SfxRequest& rReq)
+void BezierObjectBar::Execute(SfxRequest& rReq)
 {
     USHORT nSId = rReq.GetSlot();
 
@@ -338,9 +365,10 @@ void SdDrawBezierObjectBar::Execute(SfxRequest& rReq)
                 {
                     ((FuSelection*) pFuActual)->SetEditMode(rReq.GetSlot());
                 }
-                else if (pFuActual->ISA(FuConstBezPoly))
+                else if (pFuActual->ISA(FuConstructBezierPolygon))
                 {
-                    ((FuConstBezPoly*) pFuActual)->SetEditMode(rReq.GetSlot());
+                    static_cast<FuConstructBezierPolygon*>(pFuActual)
+                        ->SetEditMode(rReq.GetSlot());
                 }
             }
 
@@ -356,4 +384,4 @@ void SdDrawBezierObjectBar::Execute(SfxRequest& rReq)
 }
 
 
-
+} // end of namespace sd
