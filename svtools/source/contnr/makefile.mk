@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dr $ $Date: 2002-10-02 14:36:02 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:41:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=svcontnr
 
 PROJECTPCH4DLL=TRUE
@@ -71,32 +71,9 @@ PROJECTPCHSOURCE=cont_pch
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
-
-.IF "$(COM)"=="WTC"
-CFLAGS=$(CFLAGS) -od -3r
-.ENDIF
-
-.IF "$(header)" == ""
-
-CXXFILES=   svtabbx.cxx		\
-            svicnvw.cxx		\
-            svimpicn.cxx	\
-            treelist.cxx	\
-            svlbox.cxx		\
-            svimpbox.cxx	\
-            svlbitm.cxx		\
-            svtreebx.cxx	\
-            cont_pch.cxx	\
-            ctrdll.cxx		\
-            imivctl1.cxx	\
-            imivctl2.cxx	\
-            ivctrl.cxx		\
-            fileview.cxx
 
 SLOFILES=   $(SLO)$/svtabbx.obj		\
             $(SLO)$/svicnvw.obj		\
@@ -118,7 +95,6 @@ EXCEPTIONSFILES=\
             $(SLO)$/templwin.obj
 
 # Fuer das Setup bauen wir noch mal statisch
-.IF "$(VCSID)" != "OV"
 
 OBJFILES=	$(OBJ)$/svtabbx.obj	\
             $(OBJ)$/svicnvw.obj	\
@@ -129,11 +105,8 @@ OBJFILES=	$(OBJ)$/svtabbx.obj	\
             $(OBJ)$/svlbitm.obj	\
             $(OBJ)$/svtreebx.obj
 
-.ENDIF
-
-.ENDIF
-
-SRCFILES =\
+SRS1NAME=$(TARGET)
+SRC1FILES =\
             fileview.src	\
             templwin.src	\
             svcontnr.src
@@ -151,3 +124,4 @@ HXX1EXCL=	-E:*include*
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
