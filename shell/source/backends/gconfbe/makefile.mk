@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 11:41:41 $
+#   last change: $Author: rt $ $Date: 2005-01-31 13:15:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,9 @@ PKGCONFIG_LIBS!:=-Wl,--export-dynamic $(PKGCONFIG_LIBS)
 SLOFILES=\
     $(SLO)$/gconfbecdef.obj \
     $(SLO)$/gconfbackend.obj \
-    $(SLO)$/gconflayer.obj
+    $(SLO)$/gconfvcllayer.obj \
+    $(SLO)$/gconfinetlayer.obj \
+    $(SLO)$/gconfcommonlayer.obj
         
 SHL1NOCHECK=TRUE
 SHL1TARGET=$(TARGET)1.uno   
