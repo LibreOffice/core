@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:54:49 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1600,6 +1600,9 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
     while ( nFlagTab < MAXTAB && !ppClipTab[nFlagTab] )
         ++nFlagTab;
 
+    const ScBitMaskCompressedArray< SCROW, BYTE> & rSourceFlags =
+        pCBFCP->pClipDoc->GetRowFlagsArray( nFlagTab);
+
     SCROW nSourceRow = pCBFCP->pClipDoc->aClipRange.aStart.Row();
     SCROW nSourceEnd = pCBFCP->pClipDoc->aClipRange.aEnd.Row();
     SCROW nDestRow = nRow1;
@@ -1607,17 +1610,16 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
     while ( nSourceRow <= nSourceEnd && nDestRow <= nRow2 )
     {
         // skip filtered rows
-        while ( nSourceRow <= nSourceEnd &&
-                ( pCBFCP->pClipDoc->GetRowFlags( nSourceRow, nFlagTab ) & CR_FILTERED ) != 0 )
-            ++nSourceRow;
+        nSourceRow = rSourceFlags.GetFirstForCondition( nSourceRow, nSourceEnd, CR_FILTERED, 0);
 
         if ( nSourceRow <= nSourceEnd )
         {
             // look for more non-filtered rows following
-            SCROW nFollow = 0;
-            while ( nSourceRow + nFollow < nSourceEnd && nDestRow + nFollow < nRow2 &&
-                    ( pCBFCP->pClipDoc->GetRowFlags( nSourceRow + nFollow + 1, nFlagTab ) & CR_FILTERED ) == 0 )
-                ++nFollow;
+            SCROW nFollow = rSourceFlags.GetBitStateEnd( nSourceRow, CR_FILTERED, 0) - nSourceRow;
+            if (nFollow > nSourceEnd - nSourceRow)
+                nFollow = nSourceEnd - nSourceRow;
+            if (nFollow > nRow2 - nDestRow)
+                nFollow = nRow2 - nDestRow;
 
             SCsROW nNewDy = ((SCsROW)nDestRow) - nSourceRow;
             CopyBlockFromClip( nCol1, nDestRow, nCol2, nDestRow + nFollow, rMark, nDx, nNewDy, pCBFCP );
@@ -1875,11 +1877,9 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, BOOL bIncludeFiltered
             while ( nCountTab < MAXTAB && !pTab[nCountTab] )
                 ++nCountTab;
 
-            SCROW nEndRow = aClipRange.aEnd.Row();
-            USHORT nResult = 0;
-            for (SCROW nRow = aClipRange.aStart.Row(); nRow <= nEndRow; nRow++)
-                if ( ( GetRowFlags( nRow, nCountTab ) & CR_FILTERED ) == 0 )
-                    ++nResult;
+            SCROW nResult = GetRowFlagsArray( nCountTab).CountForCondition(
+                    aClipRange.aStart.Row(), aClipRange.aEnd.Row(),
+                    CR_FILTERED, 0);
 
             if ( nResult > 0 )
                 nClipY = nResult - 1;
@@ -1911,12 +1911,8 @@ BOOL ScDocument::HasClipFilteredRows()
     while ( nCountTab < MAXTAB && !pTab[nCountTab] )
         ++nCountTab;
 
-    SCROW nEndRow = aClipRange.aEnd.Row();
-    for (SCROW nRow = aClipRange.aStart.Row(); nRow <= nEndRow; nRow++)
-        if ( ( GetRowFlags( nRow, nCountTab ) & CR_FILTERED ) != 0 )
-            return TRUE;
-
-    return FALSE;
+    return GetRowFlagsArray( nCountTab).HasCondition( aClipRange.aStart.Row(),
+            aClipRange.aEnd.Row(), CR_FILTERED, CR_FILTERED);
 }
 
 
@@ -2536,6 +2532,64 @@ USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab ) const
 }
 
 
+ULONG ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const
+{
+    if (nStartRow == nEndRow)
+        return GetRowHeight( nStartRow, nTab);  // faster for a single row
+
+    // check bounds because this method replaces former for(i=start;i<=end;++i) loops
+    if (nStartRow > nEndRow)
+        return 0;
+
+    if ( ValidTab(nTab) && pTab[nTab] )
+        return pTab[nTab]->GetRowHeight( nStartRow, nEndRow);
+
+    DBG_ERROR("wrong sheet number");
+    return 0;
+}
+
+
+ULONG ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
+        SCTAB nTab, double fScale ) const
+{
+    // faster for a single row
+    if (nStartRow == nEndRow)
+        return (ULONG) (GetRowHeight( nStartRow, nTab) * fScale);
+
+    // check bounds because this method replaces former for(i=start;i<=end;++i) loops
+    if (nStartRow > nEndRow)
+        return 0;
+
+    if ( ValidTab(nTab) && pTab[nTab] )
+        return pTab[nTab]->GetScaledRowHeight( nStartRow, nEndRow, fScale);
+
+    DBG_ERROR("wrong sheet number");
+    return 0;
+}
+
+
+const ScSummableCompressedArray< SCROW, USHORT> & ScDocument::GetRowHeightArray(
+        SCTAB nTab ) const
+{
+    const ScSummableCompressedArray< SCROW, USHORT> * pHeight;
+    if ( ValidTab(nTab) && pTab[nTab] )
+        pHeight = pTab[nTab]->GetRowHeightArray();
+    else
+    {
+        DBG_ERROR("wrong sheet number");
+        pHeight = 0;
+    }
+    if (!pHeight)
+    {
+        DBG_ERROR("no row heights at sheet");
+        static ScSummableCompressedArray< SCROW, USHORT> aDummy( MAXROW,
+                ScGlobal::nStdRowHeight);
+        pHeight = &aDummy;
+    }
+    return *pHeight;
+}
+
+
 SCROW ScDocument::GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
@@ -2645,6 +2699,13 @@ void ScDocument::SetRowFlags( SCROW nRow, SCTAB nTab, BYTE nNewFlags )
 }
 
 
+void ScDocument::SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, BYTE nNewFlags )
+{
+    if ( ValidTab(nTab) && pTab[nTab] )
+        pTab[nTab]->SetRowFlags( nStartRow, nEndRow, nNewFlags );
+}
+
+
 BYTE ScDocument::GetColFlags( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
@@ -2659,6 +2720,33 @@ BYTE ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
         return pTab[nTab]->GetRowFlags( nRow );
     DBG_ERROR("Falsche Tabellennummer");
     return 0;
+}
+
+ScBitMaskCompressedArray< SCROW, BYTE> & ScDocument::GetRowFlagsArrayModifiable(
+        SCTAB nTab )
+{
+    return const_cast< ScBitMaskCompressedArray< SCROW, BYTE> & >(
+            GetRowFlagsArray( nTab));
+}
+
+const ScBitMaskCompressedArray< SCROW, BYTE> & ScDocument::GetRowFlagsArray(
+        SCTAB nTab ) const
+{
+    const ScBitMaskCompressedArray< SCROW, BYTE> * pFlags;
+    if ( ValidTab(nTab) && pTab[nTab] )
+        pFlags = pTab[nTab]->GetRowFlagsArray();
+    else
+    {
+        DBG_ERROR("wrong sheet number");
+        pFlags = 0;
+    }
+    if (!pFlags)
+    {
+        DBG_ERROR("no row flags at sheet");
+        static ScBitMaskCompressedArray< SCROW, BYTE> aDummy( MAXROW, 0);
+        pFlags = &aDummy;
+    }
+    return *pFlags;
 }
 
 
@@ -2718,8 +2806,9 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCa
         USHORT nStartHeight = pTab[nTab]->GetOriginalHeight(nStart);
         for (SCROW nRow = nStart + 1; nRow <= MAXROW; nRow++)
         {
-            if (((nStartFlags & CR_MANUALBREAK) != (pTab[nTab]->GetRowFlags(nRow) & CR_MANUALBREAK)) ||
-                ((nStartFlags & CR_MANUALSIZE) != (pTab[nTab]->GetRowFlags(nRow) & CR_MANUALSIZE)) ||
+            BYTE nFlags = pTab[nTab]->GetRowFlags(nRow);
+            if (((nStartFlags & CR_MANUALBREAK) != (nFlags & CR_MANUALBREAK)) ||
+                ((nStartFlags & CR_MANUALSIZE) != (nFlags & CR_MANUALSIZE)) ||
                 (bCareManualSize && (nStartFlags & CR_MANUALSIZE) && (nStartHeight != pTab[nTab]->GetOriginalHeight(nRow))) ||
                 (!bCareManualSize && ((nStartHeight != pTab[nTab]->GetOriginalHeight(nRow)))))
                 return nRow;
