@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 10:51:54 $
+ *  last change: $Author: jp $ $Date: 2001-05-29 13:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,7 @@ void SwXViewSettings::setPropertyValue(const OUString& rPropertyName,
             case WID_VIEWSET_ONLINE_LAYOUT :
             {
                 bApply = sal_False;
-                if(pView)
+                if( pView && bVal != pView->GetWrtShell().IsBrowseMode() )
                     pView->GetDocShell()->ToggleBrowserMode(bVal, pView );
             }
             break;
@@ -557,11 +557,12 @@ void SwXViewSettings::setPropertyValue(const OUString& rPropertyName,
         throw beans::UnknownPropertyException();
 
     if(bApplyZoom && pView)
-    {
-            pView->SetZoom( (SvxZoomType)aVOpt.GetZoomType(), aVOpt.GetZoom(), sal_True );
-    }
-    SW_MOD()->ApplyUsrPref(aVOpt, pView, pView ? VIEWOPT_DEST_VIEW_ONLY : bWeb ? VIEWOPT_DEST_WEB : VIEWOPT_DEST_TEXT );
+        pView->SetZoom( (SvxZoomType)aVOpt.GetZoomType(),
+                        aVOpt.GetZoom(), sal_True );
 
+    SW_MOD()->ApplyUsrPref( aVOpt, pView, pView ? VIEWOPT_DEST_VIEW_ONLY
+                                                  : bWeb ? VIEWOPT_DEST_WEB
+                                                          : VIEWOPT_DEST_TEXT );
 }
 /*-- 18.12.98 11:01:12---------------------------------------------------
 
@@ -701,6 +702,9 @@ Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( Runt
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/04/27 10:51:54  os
+    new zoom type for preview added
+
     Revision 1.4  2001/04/17 11:44:03  os
     #84807# SwXModule and SwXAutoTextContainer correctly registered
 
