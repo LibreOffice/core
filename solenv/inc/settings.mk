@@ -7,8 +7,8 @@
 #*                      Entwicklungtools-Definitionen
 #*
 #*    Ersterstellung    TH 28.03.94
-#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-10 11:22:29 $
-#*    $Revision: 1.9 $
+#*    Letzte Aenderung  $Author: kz $ $Date: 2000-10-10 16:11:50 $
+#*    $Revision: 1.10 $
 #*
 #*    $Logfile:   T:/solar/inc/settings.mkv  $
 #*
@@ -601,10 +601,10 @@ common_build_sign_jar=true
 
 %worldremote.mk :
     @+_mkout -r
-    @+echo "#" > $(OUT)$/inc$/myworldremote.mk
+    @+echo # > $(OUT)$/inc$/myworldremote.mk
 .IF "$(common_build)"!=""
     @+_mkout -r $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
-    @+echo "#" > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworldremote.mk
+    @+echo # > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworldremote.mk
 .ENDIF			# "$(common_build)"!=""
 
 .INCLUDE .IGNORE : $(OUT)$/inc$/myworldremote.mk
