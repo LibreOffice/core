@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-24 15:14:00 $
+ *  last change: $Author: mtg $ $Date: 2001-05-03 18:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,13 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 
 using namespace vos;
 using namespace rtl;
@@ -162,6 +169,8 @@ using namespace ::com::sun::star::lang;
 #define FID_RIGHT_MARGIN                            52
 #define FID_TOP_MARGIN                              53
 #define FID_BOTTOM_MARGIN                           54
+#define FID_PRINTER_NAME                            55
+#define FID_PRINTER_SETUP                           56
 
 #define UNO_NAME_FORMULA                                "Formula"
 #define UNO_NAME_FONT_NAME_VARIABLES                    "FontNameVariables"
@@ -218,6 +227,8 @@ using namespace ::com::sun::star::lang;
 #define UNO_NAME_RIGHT_MARGIN                           "RightMargin"
 #define UNO_NAME_TOP_MARGIN                             "TopMargin"
 #define UNO_NAME_BOTTOM_MARGIN                          "BottomMargin"
+#define UNO_NAME_PRINTER_NAME                           "PrinterName"
+#define UNO_NAME_PRINTER_SETUP                          "PrinterSetup"
 
 
 //must be sorted by names!
@@ -259,6 +270,8 @@ SfxItemPropertyMap aMathModelMap_Impl[] =
     { MAP_CHAR_LEN(UNO_NAME_IS_SCALE_ALL_BRACKETS              ), FID_IS_SCALE_ALL_BRACKETS              ,      &::getBooleanCppuType(),    PROPERTY_NONE, 0},
     { MAP_CHAR_LEN(UNO_NAME_IS_TEXT_MODE                       ), FID_IS_TEXT_MODE                       ,      &::getBooleanCppuType(),    PROPERTY_NONE, 0},
     { MAP_CHAR_LEN(UNO_NAME_LEFT_MARGIN                       ), FID_LEFT_MARGIN                           ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_LEFTSPACE                 },
+    { MAP_CHAR_LEN(UNO_NAME_PRINTER_NAME                       ), FID_PRINTER_NAME                       ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0                  },
+    { MAP_CHAR_LEN(UNO_NAME_PRINTER_SETUP                      ), FID_PRINTER_SETUP                      ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0                  },
     { MAP_CHAR_LEN(UNO_NAME_RELATIVE_BRACKET_DISTANCE          ), FID_RELATIVE_BRACKET_DISTANCE          ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BRACKETSPACE },
     { MAP_CHAR_LEN(UNO_NAME_RELATIVE_BRACKET_EXCESS_SIZE       ), FID_RELATIVE_BRACKET_EXCESS_SIZE       ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BRACKETSIZE  },
     { MAP_CHAR_LEN(UNO_NAME_RELATIVE_FONT_HEIGHT_FUNCTIONS     ), FID_RELATIVE_FONT_HEIGHT_FUNCTIONS     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_FUNCTION},
@@ -569,6 +582,53 @@ void SmModel::_setPropertyValue(const uno::Any& aValue,
         case FID_IS_SCALE_ALL_BRACKETS              :
             aFormat.SetScaleNormalBrackets(*(sal_Bool*)aValue.getValue());
         break;
+        case FID_PRINTER_NAME:
+        {
+            SfxPrinter *pPrinter = static_cast < SmDocShell * > (pObjShell)->GetPrinter ( );
+            if (pPrinter)
+            {
+                OUString sPrinterName;
+                if (aValue >>= sPrinterName )
+                {
+                    SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                    if (pNewPrinter->IsKnown())
+                        static_cast < SmDocShell * > ( pObjShell )->SetPrinter ( pNewPrinter );
+                    else
+                        delete pNewPrinter;
+                }
+                else
+                    throw lang::IllegalArgumentException();
+            }
+        }
+        break;
+        case FID_PRINTER_SETUP:
+        {
+            OUString aString;
+            if ( aValue >>= aString )
+            {
+                Sequence < sal_Int8 > aSequence;
+                SvXMLUnitConverter::decodeBase64 ( aSequence, aString );
+                SmDocShell * pDoc = static_cast < SmDocShell * > (pObjShell);
+                sal_uInt32 nSize = aSequence.getLength();
+                SvMemoryStream aStream;
+                aStream.Write ( aSequence.getArray(), nSize );
+                aStream.Flush();
+                aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                static sal_uInt16 __READONLY_DATA nRange[] =
+                {
+                    SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                    0
+                };
+                SfxItemSet *pItemSet = new SfxItemSet( pDoc->GetPool(), nRange );
+                SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+
+                pDoc->SetPrinter( pPrinter );
+            }
+            else
+                throw IllegalArgumentException();
+        }
+        break;
     }
 }
 void SmModel::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
@@ -697,8 +757,33 @@ void SmModel::_getPropertyValue(Any & rValue,  SfxObjectShell *pObjShell,
             rValue <<= (sal_Int16)rFormat.GetDistance(pMap->nMemberId);
         break;
         case FID_IS_SCALE_ALL_BRACKETS              :
+        {
             sal_Bool bVal = rFormat.IsScaleNormalBrackets();
             rValue.setValue(&bVal, ::getBooleanCppuType());
+        }
+        break;
+        case FID_PRINTER_NAME:
+        {
+            SfxPrinter *pPrinter = static_cast < SmDocShell * > (pObjShell)->GetPrinter ( );
+            rValue <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
+        }
+        break;
+        case FID_PRINTER_SETUP:
+        {
+            SfxPrinter *pPrinter = static_cast < SmDocShell * > (pObjShell)->GetPrinter ();
+            if (pPrinter)
+            {
+                SvMemoryStream aStream;
+                pPrinter->Store( aStream );
+                sal_uInt32 nSize = aStream.GetSize();
+                Sequence < sal_Int8 > aSequence ( nSize );
+                memcpy ( aSequence.getArray(), aStream.GetData(), nSize );
+                OUStringBuffer aBuffer;
+                SvXMLUnitConverter::encodeBase64 ( aBuffer, aSequence );
+                OUString aString = aBuffer.makeStringAndClear();
+                rValue <<= aString;
+            }
+        }
         break;
     }
 }
@@ -976,6 +1061,7 @@ void SmModel::_getPropertyDefault(Any & rValue,  SfxObjectShell *pObjShell,
     switch(pMap->nWID)
     {
         case FID_FORMULA:
+        case FID_PRINTER_NAME:
             break;
         case FID_CUSTOM_FONT_NAME_SANS              :
             rValue <<= OUString(RTL_CONSTASCII_USTRINGPARAM ( FNTNAME_HELV ) );
@@ -993,7 +1079,7 @@ void SmModel::_getPropertyDefault(Any & rValue,  SfxObjectShell *pObjShell,
         case FID_FONT_VARIABLES_POSTURE   :
         case FID_FONT_TEXT_POSTURE        :
         {
-            sal_Bool bVal = sal_True;
+            sal_Bool bVal = sal_False;
             rValue.setValue ( &bVal, ::getBooleanCppuType());
         }
         break;
