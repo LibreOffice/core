@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:30:48 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "T~ype";
         Text[ chinese_simplified ] = "ÀàĞÍ(~Y)";
         Text[ greek ] = "Ôı~ğïò";
-        Text[ korean ] = "À¯Çü";
+        Text[ korean ] = "À¯Çü(~Y)";
         Text[ turkish ] = "T~ip";
         Text[ language_user1 ] = " ";
     };
@@ -194,7 +194,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "~Vaste breedte";
         Text[ chinese_simplified ] = "¹Ì¶¨µÄ¿í¶È(~F)";
         Text[ greek ] = "Óôáèåñü ğëÜôïò";
-        Text[ korean ] = "°íÁ¤µÈ ³Êºñ";
+        Text[ korean ] = "°íÁ¤µÈ ³Êºñ(~F)";
         Text[ turkish ] = "~Sabit genişlik";
         Text[ language_user1 ] = " ";
     };
@@ -215,16 +215,16 @@ ModalDialog RID_SCDLG_ASCII
         Text [ PORTUGUESE ] = "Separado" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "·Ö¸ô(~B)";
+        Text[ chinese_simplified ] = "·Ö¸ô(~S)";
         Text[ russian ] = "Ğàçäåëüíî";
         Text[ polish ] = "Rozdzielony";
-        Text[ japanese ] = "‹æØ‚é(~B)";
+        Text[ japanese ] = "‹æØ‚é(~S)";
         Text[ chinese_traditional ] = "¤À¹j(~S)";
         Text[ arabic ] = "ãİÕæá";
         Text[ dutch ] = "~Gescheiden";
-        Text[ chinese_simplified ] = "·Ö¸ô(~B)";
+        Text[ chinese_simplified ] = "·Ö¸ô(~S)";
         Text[ greek ] = "Äéá÷ùñéæüìåíá";
-        Text[ korean ] = "·Î ³ª´©±â";
+        Text[ korean ] = "·Î ³ª´©±â(~S)";
         Text[ turkish ] = "~Ayrı";
         Text[ language_user1 ] = " ";
     };
@@ -253,7 +253,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ chinese_simplified ] = "×ÖÌå(~H)";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ó~åô ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚÁıÇÕ";
+        Text[ korean ] = "¹®ÀÚÁıÇÕ(~H)";
         Text[ turkish ] = "~Karakter kümesi";
     };
     ListBox LB_CHARSET
@@ -316,7 +316,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "T~ekstafscheiding";
         Text[ chinese_simplified ] = "ÎÄ×Ö·Ö¸ô·û(~X)";
         Text[ greek ] = "Äéá÷ùñéóôéêü êåéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® ±¸ºĞ ±âÈ£";
+        Text[ korean ] = "ÅØ½ºÆ® ±¸ºĞ ±âÈ£(~X)";
         Text[ turkish ] = "Me~tin ayırma işareti";
         Text[ language_user1 ] = " ";
     };
@@ -423,7 +423,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "~Tabulator";
         Text[ chinese_simplified ] = "ÖÆ±í·û(~T)";
         Text[ greek ] = "Óôçëïèİôçò";
-        Text[ korean ] = "ÅÇ";
+        Text[ korean ] = "ÅÇ(~T)";
         Text[ turkish ] = "~Sekme";
         Text[ language_user1 ] = " ";
     };
@@ -443,16 +443,16 @@ ModalDialog RID_SCDLG_ASCII
         Text [ french ] = "~Point-virgule" ;
         Text [ dutch ] = "~Puntkomma" ;
         Text [ portuguese ] = "~Ponto e vírgula" ;
-        Text[ chinese_simplified ] = "·ÖºÅ(~S)";
+        Text[ chinese_simplified ] = "·ÖºÅ(~E)";
         Text[ russian ] = "Òî÷êà ñ çàïÿòîé";
         Text[ polish ] = "Œrednik";
-        Text[ japanese ] = "¾ĞºÛİ(~S)";
+        Text[ japanese ] = "¾ĞºÛİ(~E)";
         Text[ chinese_traditional ] = "¤À¸¹(~E)";
         Text[ arabic ] = "İÇÕáÉ ãäŞæØÉ";
         Text[ dutch ] = "~Puntkomma";
-        Text[ chinese_simplified ] = "·ÖºÅ(~S)";
+        Text[ chinese_simplified ] = "·ÖºÅ(~E)";
         Text[ greek ] = "¢íù ôåëåßá";
-        Text[ korean ] = "¼¼¹ÌÄİ·Ğ";
+        Text[ korean ] = "¼¼¹ÌÄİ·Ğ(~E)";
         Text[ turkish ] = "~Noktalı virgül";
         Text[ language_user1 ] = " ";
     };
@@ -481,7 +481,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "~Komma";
         Text[ chinese_simplified ] = "¶ººÅ(~C)";
         Text[ greek ] = "Êüììá";
-        Text[ korean ] = "ÄŞ¸¶";
+        Text[ korean ] = "ÄŞ¸¶(~C)";
         Text[ turkish ] = "~Virgül";
         Text[ language_user1 ] = " ";
     };
@@ -510,7 +510,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "~Spatie";
         Text[ chinese_simplified ] = "¿Õ¸ñ(~P)";
         Text[ greek ] = "Êåíü";
-        Text[ korean ] = "°ø¹é";
+        Text[ korean ] = "°ø¹é(~P)";
         Text[ turkish ] = "B~oşluk";
         Text[ language_user1 ] = " ";
     };
@@ -539,7 +539,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "~Andere";
         Text[ chinese_simplified ] = "ÆäËû(~O)";
         Text[ greek ] = "¢ëëá";
-        Text[ korean ] = "±âÅ¸";
+        Text[ korean ] = "±âÅ¸(~O)";
         Text[ turkish ] = "~Diğer";
         Text[ language_user1 ] = " ";
     };
@@ -575,7 +575,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "Vanaf  ~rij";
         Text[ chinese_simplified ] = "¿ªÊ¼µÄĞĞÊı(~W)";
         Text[ greek ] = "Áğü ãñáììŞ";
-        Text[ korean ] = "£®£®ÇàºÎÅÍ";
+        Text[ korean ] = "£®£®ÇàºÎÅÍ(~W)";
         Text[ turkish ] = "İlk sa~tır";
         Text[ language_user1 ] = " ";
     };
@@ -634,7 +634,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "Vel~dscheidingstekens samenvatten";
         Text[ chinese_simplified ] = "Ñ¹ËõÏÔÊ¾(~D)";
         Text[ greek ] = "Óıíïøç äéá÷ùñéóôéêşí ğåäßùí";
-        Text[ korean ] = "ÇÊµå ±¸ºĞÀÚ  ¿ä¾à";
+        Text[ korean ] = "ÇÊµå ±¸ºĞÀÚ  ¿ä¾à(~D)";
         Text[ turkish ] = "Ay~ırma işaretlerini özetle";
         Text[ language_user1 ] = " ";
     };
