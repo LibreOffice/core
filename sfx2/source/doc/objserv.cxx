@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:53:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,6 @@ public:
 };
 
 //====================================================================
-
-BOOL ShallSetBaseURL_Impl( SfxMedium &rMed );
 
 #define SfxObjectShell
 #include "sfxslots.hxx"
@@ -921,11 +919,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 //REMOVE                BOOL bHasTemplateConfig = HasTemplateConfig();
 //REMOVE                SetTemplateConfig( FALSE );
             BOOL bOK = FALSE;
-            const String aOldURL( INetURLObject::GetBaseURL() );
-            if( ShallSetBaseURL_Impl( aMedium ) )
-                INetURLObject::SetBaseURL( aMedium.GetBaseURL() );
-            else
-                INetURLObject::SetBaseURL( String() );
 
             aMedium.CreateTempFileNoCopy();
 
@@ -952,8 +945,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 bOK = TRUE;
                 pTemplates->NewTemplate( nRegion, aTemplateName, aFileName );
             }
-
-            INetURLObject::SetBaseURL( aOldURL );
 
             DELETEX(pDlg);
 
