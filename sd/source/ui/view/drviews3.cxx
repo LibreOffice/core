@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-18 14:58:14 $
+ *  last change: $Author: aw $ $Date: 2001-09-24 14:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,9 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
 
                 aEditAttr.Put( rItem );
                 pDrView->SetAttributes( aEditAttr );
+
+                // #91081# Invalidate is missing here
+                Invalidate(SID_ATTR_TABSTOP);
             }
             break;
         }
