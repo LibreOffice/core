@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tv $ $Date: 2002-05-30 09:45:23 $
+ *  last change: $Author: bc $ $Date: 2002-06-27 12:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ public class CallReportWizard {
                                 try
                             {
                                XComponentLoader xcomponentloader = ( XComponentLoader ) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop" ));
-                                 ReportDocument.createReport(xmultiservicefactory);
+                                 Dataimport.createReport(xmultiservicefactory);
                             }
                             catch( Exception exception )
                             {
