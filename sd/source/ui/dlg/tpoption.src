@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-13 12:20:11 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,8 @@
     Text[ thai ] = "สเกล";  \
     Text[ czech ] = "Měřítko";   \
     Text[ hebrew ] = "‮התאמת גודל‬";   \
-    Text[ hindi ] = "नापना";
+    Text[ hindi ] = "नापना";  \
+    Text[ slovak ] = "Pravítko";
 
  // Contents (Inhalte)
 TabPage TP_OPTIONS_CONTENTS
@@ -140,6 +141,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ czech ] = "Alternativní zobrazení";
         Text[ hebrew ] = "Ersatzdarstellung";
         Text[ hindi ] = "विकल्प प्रदर्शन";
+        Text[ slovak ] = "Alternatívne zobrazenie";
     };
     CheckBox CBX_EXTERN_GRAPHIC
     {
@@ -174,6 +176,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ czech ] = "Zástupce za obrázky";
         Text[ hebrew ] = "~Fremdgrafiken andeuten";
         Text[ hindi ] = "~चित्र स्थानधारकें";
+        Text[ slovak ] = "Zástupcov~ia obrázku";
     };
     CheckBox CBX_OUTLINEMODE
     {
@@ -207,6 +210,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ czech ] = "Režim obrysů";
         Text[ hebrew ] = "~Umrissmodus";
         Text[ hindi ] = "~परिवेश प्रकार";
+        Text[ slovak ] = "Režim ~obrysov";
     };
     CheckBox CBX_NOTEXT
     {
@@ -240,6 +244,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ czech ] = "Zástupce za texty";
         Text[ hebrew ] = "~Text andeuten";
         Text[ hindi ] = "~टेक्स्ट् स्थानधारक";
+        Text[ slovak ] = "~Zástupca za texty";
     };
     CheckBox CBX_HAIRLINEMODE
     {
@@ -274,6 +279,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ czech ] = "Pouze čárové obrysy";
         Text[ hebrew ] = "~Nur Haarlinien anzeigen";
         Text[ hindi ] = "~केवल रेखा परिवेश";
+        Text[ slovak ] = "~Iba čiarová kontúra";
     };
     FixedLine GRP_DISPLAY
     {
@@ -306,6 +312,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ czech ] = "Zobrazení";
         Text[ hebrew ] = "Anzeigen";
         Text[ hindi ] = "दिखओ";
+        Text[ slovak ] = "Zobraziť";
     };
     CheckBox CBX_RULER
     {
@@ -340,6 +347,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ czech ] = "Viditelná pravítka";
         Text[ hebrew ] = "~Lineale sichtbar";
         Text[ hindi ] = "~रूलर गोचर";
+        Text[ slovak ] = "P~ravítka viditeľné";
     };
     CheckBox CBX_HELPLINES
     {
@@ -373,6 +381,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ czech ] = "Vodítka při přesouvání";
         Text[ hebrew ] = "‮הנחיה בזמן הזזה‬";
         Text[ hindi ] = "~स्थान परिवर्तन के समय सलाह देना";
+        Text[ slovak ] = "~Vodiace čiary";
     };
     CheckBox CBX_HANDLES_BEZIER
     {
@@ -406,6 +415,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ czech ] = "Všechny kontrolní body při úpravách Bézierových křivek";
         Text[ hebrew ] = "~Alle Steuerpunkte im Bezier-Editor";
         Text[ hindi ] = "~BÃ©zier संपादक का सभी नियंत्रण बिन्दु";
+        Text[ slovak ] = "Všetky kontrolné ~body v Bézierovom editore";
     };
     CheckBox CBX_MOVE_OUTLINE
     {
@@ -439,6 +449,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ czech ] = "Obrysy všech jednotlivých objektů";
         Text[ hebrew ] = "U~mriss jedes einzelnen Objektes";
         Text[ hindi ] = "~हरेक वस्तु केलिए परिवेश";
+        Text[ slovak ] = "O~brysy každého individuálneho objektu";
     };
     Text[ chinese_simplified ] = "内容";
     Text[ russian ] = "����������";
@@ -456,6 +467,7 @@ TabPage TP_OPTIONS_CONTENTS
     Text[ czech ] = "Obsah";
     Text[ hebrew ] = "‮תוכן עיניינים‬";
     Text[ hindi ] = "विषयसूची";
+    Text[ slovak ] = "Obsah";
 };
  // MISC (Sonstiges)
 TabPage TP_OPTIONS_MISC
@@ -505,6 +517,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Textové objekty";
         Text[ hebrew ] = "Textobjekte";
         Text[ hindi ] = "टेक्स्ट् वस्तु";
+        Text[ slovak ] = "Textové objekty";
     };
     CheckBox CBX_QUICKEDIT
     {
@@ -538,6 +551,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Povolit rychlé úpravy";
         Text[ hebrew ] = "~Schnellbearbeitung zulassen";
         Text[ hindi ] = "शीघ्र संपादन स्वीकृत";
+        Text[ slovak ] = "Povoliť rýchlu editáciu";
     };
     CheckBox CBX_PICKTHROUGH
     {
@@ -571,6 +585,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Lze vybrat pouze textovou oblast";
         Text[ hebrew ] = "~Nur Textbereich selektierbar";
         Text[ hindi ] = "केवल टेक्स्ट् विस्तीर्ण चुनने योग्य है";
+        Text[ slovak ] = "Možné vybrať iba textovú oblasť";
     };
     FixedLine GRP_PROGRAMSTART
     {
@@ -603,6 +618,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Nový dokument";
         Text[ hebrew ] = "Neues Dokument";
         Text[ hindi ] = "नया लेखपत्र";
+        Text[ slovak ] = "Nový dokument";
     };
     CheckBox CBX_START_WITH_TEMPLATE
     {
@@ -636,6 +652,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Začít s průvodcem";
         Text[ hebrew ] = "Mit ~Autopiloten starten";
         Text[ hindi ] = "ओटोपैलट् सहित प्रारंभ";
+        Text[ slovak ] = "Spustiť so sprievodcom";
     };
     FixedLine GRP_SETTINGS
     {
@@ -667,6 +684,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
+        Text[ slovak ] = "Nastavenia";
     };
     CheckBox CBX_MASTERPAGE_CACHE
     {
@@ -700,6 +718,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Použít vyrovnávací paměť pozadí";
         Text[ hebrew ] = "~Cache für Hintergrund benutzen";
         Text[ hindi ] = "पृष्टभूमि कॉश का उपयोग करो";
+        Text[ slovak ] = "Použiť background cache";
     };
     CheckBox CBX_COPY
     {
@@ -733,6 +752,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Kopírovat při přesunu";
         Text[ hebrew ] = "~Kopie beim Verschieben";
         Text[ hindi ] = "स्थान परिवर्तन के समय प्रतिलिपि";
+        Text[ slovak ] = "Kopírovať pri presune";
     };
     CheckBox CBX_MARKED_HIT_MOVES_ALWAYS
     {
@@ -767,6 +787,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Objekty vždy přesunovatelné";
         Text[ hebrew ] = "~Objekte immer verschiebbar";
         Text[ hindi ] = "वस्तु हमेशा स्थान परिवर्तन करने योग्य";
+        Text[ slovak ] = "Vždy presúvateľné objekty";
     };
     CheckBox CBX_CROOK_NO_CONTORTION
     {
@@ -802,6 +823,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Nedeformovat objekty na křivce";
         Text[ hebrew ] = "S~etzen auf Kreis: nicht verzerren";
         Text[ hindi ] = "वक्र के वस्तुओं को डिसटोर्ट मत करो";
+        Text[ slovak ] = "Nedeformovať objekty na krivke";
     };
     FixedText FT_METRIC
     {
@@ -835,6 +857,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Jednotky měr";
         Text[ hebrew ] = "~Maßeinheit";
         Text[ hindi ] = "नापने का ~यूनिट्";
+        Text[ slovak ] = "Jednotka ~miery";
     };
     ListBox LB_METRIC
     {
@@ -875,6 +898,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Kroky tabulátoru";
         Text[ hebrew ] = "~Tabulatorabstand";
         Text[ hindi ] = "~टॉब रुकावट";
+        Text[ slovak ] = "Kroky ta~bulátoru";
     };
     MetricField MTR_FLD_TABSTOP
     {
@@ -924,6 +948,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Spustit prezentaci";
         Text[ hebrew ] = "Starten der Präsentation";
         Text[ hindi ] = "प्रस्तुति प्रारंभ करो";
+        Text[ slovak ] = "Spustiť prezentáciu";
     };
     CheckBox CBX_START_WITH_ACTUAL_PAGE
     {
@@ -936,7 +961,7 @@ TabPage TP_OPTIONS_MISC
         Text [ portuguese_brazilian ] = "Sempre com a p�gina atual" ;
         Text [ swedish ] = "Allt~id med aktuell sida" ;
         Text [ danish ] = "Altid med aktuel side" ;
-        Text [ italian ] = "Sempre con la pagina corrente" ;
+        Text [ italian ] = "Sempre con la pagina attiva" ;
         Text [ spanish ] = "~Siempre con la p�gina actual" ;
         Text [ french ] = "Toujours avec la page active" ;
         Text [ dutch ] = "Stee~ds met huidige pagina" ;
@@ -957,6 +982,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Vždy s aktuální stránkou";
         Text[ hebrew ] = "~Immer mit aktueller Seite";
         Text[ hindi ] = "हमेशा वर्तमान पृष्ठ के सहित";
+        Text[ slovak ] = "Vždy s aktuálnou stránkou";
     };
     FixedLine FT_COMPATIBILITY
     {
@@ -969,17 +995,17 @@ TabPage TP_OPTIONS_MISC
         Text[ russian ] = "�������������";
         Text[ greek ] = "�����������";
         Text[ dutch ] = "Compatibiliteit";
-        Text[ french ] = "Compatibilit� (param�tres document)";
-        Text[ spanish ] = "Compatibilidad (configuraci�n espec�fica del documento)";
-        Text[ italian ] = "Compatibilit� (parametri documento)";
+        Text[ french ] = "Compatibilit�";
+        Text[ spanish ] = "Compatibilidad";
+        Text[ italian ] = "Compatibilit�";
         Text[ danish ] = "Kompatibilitet";
-        Text[ swedish ] = "Kompatibilitet (dokumentspecifika inst�llningar)";
+        Text[ swedish ] = "Kompatibilitet";
         Text[ polish ] = "Zgodno��";
         Text[ portuguese_brazilian ] = "Compatibilidade";
-        Text[ japanese ] = "互換性（ドキュメントの特殊設定）";
-        Text[ korean ] = "호환성(문서의 특수 설정)";
-        Text[ chinese_simplified ] = "兼容性(文档特殊的设定)";
-        Text[ chinese_traditional ] = "相容性(文件特殊的設定)";
+        Text[ japanese ] = "互換性";
+        Text[ korean ] = "호환성";
+        Text[ chinese_simplified ] = "兼容性";
+        Text[ chinese_traditional ] = "相容性";
         Text[ turkish ] = "Uyumluluk";
         Text[ arabic ] = "�����";
         Text[ finnish ] = "Yhteensopivuus";
@@ -988,6 +1014,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Kompatibilita";
         Text[ hebrew ] = "Kompatibilität";
         Text[ hindi ] = "योग्य";
+        Text[ slovak ] = "Kompatibilita";
     };
     CheckBox CB_USE_PRINTER_METRICS
     {
@@ -1006,6 +1033,21 @@ TabPage TP_OPTIONS_MISC
         Text[ korean ] = "프린터 메트릭스로 문서의 서식 설정";
         Text[ chinese_simplified ] = "文档格式采用打印机的字体尺度(~E)";
         Text[ chinese_traditional ] = "文件使用印表機的字型尺度(~E)";
+        Text[ portuguese ] = "Us~e printer metrics for document formatting";
+        Text[ russian ] = "Us~e printer metrics for document formatting";
+        Text[ greek ] = "Us~e printer metrics for document formatting";
+        Text[ dutch ] = "Us~e printer metrics for document formatting";
+        Text[ finnish ] = "Us~e printer metrics for document formatting";
+        Text[ czech ] = "Us~e printer metrics for document formatting";
+        Text[ danish ] = "Us~e printer metrics for document formatting";
+        Text[ polish ] = "Us~e printer metrics for document formatting";
+        Text[ portuguese_brazilian ] = "Us~e printer metrics for document formatting";
+        Text[ turkish ] = "Us~e printer metrics for document formatting";
+        Text[ arabic ] = "Us~e printer metrics for document formatting";
+        Text[ hebrew ] = "Us~e printer metrics for document formatting";
+        Text[ catalan ] = "Us~e printer metrics for document formatting";
+        Text[ thai ] = "Us~e printer metrics for document formatting";
+        Text[ slovak ] = "Použiť mi~erky tlačiarne pri formátovaní textu";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
@@ -1018,15 +1060,15 @@ TabPage TP_OPTIONS_MISC
         Text[ russian ] = "�������� � ������� ��������� ��������� ����� ��������";
         Text[ greek ] = "�������� ��� ���������� ��� ��������~�� ��� ������ �������";
         Text[ dutch ] = "Alle a~fstanden tussen alinea's optellen";
-        Text[ french ] = "~Additionner les espacements entre les paragraphes dans le document actif";
-        Text[ spanish ] = "Su~mar espacios de p�rrafo en el documento actual";
-        Text[ italian ] = "Aggiungi tutti gli spazi tra ~paragrafi nel documento attuale";
+        Text[ french ] = "Additionner les espacements entre paragraphes et tables (document actif)";
+        Text[ spanish ] = "~A�adir los espacios entre p�rrafos y tablas (en el documento actual)";
+        Text[ italian ] = "Aggiungi gli spazi tra ~paragrafi e tabelle nel documento attuale";
         Text[ danish ] = "Adder alle afsnitsafst~ande i det aktuelle dokument";
-        Text[ swedish ] = "A~ddera alla styckeavst�nd i det aktuella dokumentet";
+        Text[ swedish ] = "A~ddera avst�nd mellan stycken och tabeller (i det aktuella dokumentet)";
         Text[ polish ] = "D~odaj odst�py mi�dzy akapitami bie��cego dokumentu";
         Text[ portuguese_brazilian ] = "Aumentar a~fastamento entre par�grafos no documento atual";
-        Text[ japanese ] = "現在のドキュメントですべての段落の間隔を加算する(~S)";
-        Text[ korean ] = "현재 문서에서 모든 단락 간격을 합산합니다(~S)";
+        Text[ japanese ] = "現在のドキュメントの段落間隔と表間隔を加算する(~S)";
+        Text[ korean ] = "현재 문서에서 모든 단락 간격을 합산(~S)";
         Text[ chinese_simplified ] = "当前文档之中所有段落间格相加(~S)";
         Text[ chinese_traditional ] = "目前的文件之中所有的段落間隔相加(~S)";
         Text[ turkish ] = "Paragraflar arasina bo�luk ekle";
@@ -1037,6 +1079,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Přidat proklad mezi odstavci v aktuálním dokumentu";
         Text[ hebrew ] = "Im aktuellen Dokument alle Absatzabst~ände addieren";
         Text[ hindi ] = "वर्त~मान लेखपत्र में परिच्छेदों के बीच अंतर जोड़ो";
+        Text[ slovak ] = "Zväčšiť rozo~stupy medzi odstavcami v aktuálnom dokumente";
     };
     FixedLine GRP_SCALE
     {
@@ -1076,6 +1119,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Původní";
         Text[ hebrew ] = "Original";
         Text[ hindi ] = "यथार्थ";
+        Text[ slovak ] = "Pôvodná";
     };
     FixedText FT_EQUIVALENT
     {
@@ -1108,6 +1152,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Shodný s";
         Text[ hebrew ] = "Entspricht";
         Text[ hindi ] = "के समान";
+        Text[ slovak ] = "Zhodný s";
     };
     FixedText FT_SCALE
     {
@@ -1140,6 +1185,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Měřítko kresby";
         Text[ hebrew ] = "Zeichn~ungsmaßstab";
         Text[ hindi ] = "~रेखाचित्र स्केल";
+        Text[ slovak ] = "~Mierka kresby";
     };
     ComboBox CB_SCALE
     {
@@ -1181,6 +1227,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Šířka stránky";
         Text[ hebrew ] = "Seiten~breite";
         Text[ hindi ] = "~पृष्ठ चौड़ाई";
+        Text[ slovak ] = "Šírka ~stránky";
     };
     FixedText FI_INFO_1
     {
@@ -1238,6 +1285,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Výška stránky";
         Text[ hebrew ] = "Se~itenhöhe";
         Text[ hindi ] = "~पृष्ठ ऊँचाई";
+        Text[ slovak ] = "Výška strá~nky";
     };
     FixedText FI_INFO_2
     {
@@ -1280,7 +1328,10 @@ TabPage TP_OPTIONS_MISC
     Text[ czech ] = "Ostatní";
     Text[ hebrew ] = "Sonstiges";
     Text[ hindi ] = "अन्य";
+    Text[ slovak ] = "Ostatné";
 };
+
+
 
 
 
