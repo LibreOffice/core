@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:13:13 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 15:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef SC_SC_HRC
 #include "sc.hrc"
 #endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
+#endif
 
 //===================================================================
 
@@ -103,8 +106,7 @@ ScDPFieldWindow::ScDPFieldWindow(
     Init();
     if (eType != TYPE_SELECT && pFtCaption)
     {
-        aName = pFtCaption->GetText();
-        aName.EraseAllChars('~');
+        aName = MnemonicGenerator::EraseAllMnemonicChars( pFtCaption->GetText() );
     }
 }
 
