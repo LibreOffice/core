@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:12:20 $
+ *  last change: $Author: hr $ $Date: 2004-06-22 12:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@
 
 #define SEARCH_PATH_DELIMITER_STRING ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SEARCH_PATH_DELIMITER_CHAR_STRING ) )
 
+#if 0 /* @@@ */
 #ifdef OSL_BIGENDIAN
 static inline sal_Int16 NTOHS( sal_Int16 x )
 {
@@ -145,6 +146,7 @@ static inline sal_Int32 NTOHL( sal_Int32 x )
     return SWAPLONG(x);
 }
 #endif
+#endif /* @@@ */
 
 // =======================================================================
 
@@ -1089,14 +1091,20 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
 
 INT16 ResMgr::GetShort( void * pShort )
 {
-    return NTOHS( *((sal_Int16 *)pShort) );
+    // @@@ return NTOHS( *((sal_Int16 *)pShort) );
+    return ((*((sal_uInt8*)pShort + 0) << 8) |
+            (*((sal_uInt8*)pShort + 1) << 0)   );
 }
 
 // ------------------------------------------------------------------
 
 INT32 ResMgr::GetLong( void * pLong )
 {
-    return NTOHL( *((sal_Int32 *)pLong) );
+    // @@@ return NTOHL( *((sal_Int32 *)pLong) );
+    return ((*((sal_uInt8*)pLong + 0) << 24) |
+            (*((sal_uInt8*)pLong + 1) << 16) |
+            (*((sal_uInt8*)pLong + 2) <<  8) |
+            (*((sal_uInt8*)pLong + 3) <<  0)   );
 }
 
 // -----------------------------------------------------------------------
