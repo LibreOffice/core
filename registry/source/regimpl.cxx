@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jsc $ $Date: 2002-06-18 17:28:00 $
+ *  last change: $Author: dbo $ $Date: 2002-07-30 12:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,7 +485,17 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
         m_readOnly = sal_True;
     }
 
-    if (errCode = rRegFile.create(regName, sAccessMode, REG_PAGESIZE))
+    if (0 == regName.getLength() &&
+        store_AccessCreate == sAccessMode)
+    {
+        errCode = rRegFile.createInMemory();
+    }
+    else
+    {
+        errCode = rRegFile.create(regName, sAccessMode, REG_PAGESIZE);
+    }
+
+    if (errCode)
     {
         switch (errCode)
         {
@@ -580,14 +590,17 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
             m_file.close();
             m_isOpen = sal_False;
 
-            OUString systemName;
-            if ( FileBase::getSystemPathFromFileURL(m_name, systemName) != FileBase::E_None )
-                systemName = m_name;
-
-            OString name( OUStringToOString(systemName, osl_getThreadTextEncoding()) );
-            if (unlink(name.getStr()) != 0)
+            if (m_name.getLength())
             {
-                return REG_DESTROY_REGISTRY_FAILED;
+                OUString systemName;
+                if ( FileBase::getSystemPathFromFileURL(m_name, systemName) != FileBase::E_None )
+                    systemName = m_name;
+
+                OString name( OUStringToOString(systemName, osl_getThreadTextEncoding()) );
+                if (unlink(name.getStr()) != 0)
+                {
+                    return REG_DESTROY_REGISTRY_FAILED;
+                }
             }
         } else
         {
