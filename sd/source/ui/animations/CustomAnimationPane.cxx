@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:18:44 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,24 +464,9 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             onChangeCurrentPage();
             break;
         case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
-        {
-            SdrObject* pObj = static_cast< SdrObject* >( pEvent->mpUserData );
-            if( pObj )
-            {
-                Reference< XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
-                if( xShape.is() )
-                {
-                    EffectSequence::iterator aIter;
-                    for( aIter = mpMainSequence->getBegin(); aIter != mpMainSequence->getEnd(); aIter++ )
-                    {
-                        if( (*aIter)->getTargetShape() == xShape )
-                            (*aIter)->checkForText();
-                    }
-                }
-            }
-            mpCustomAnimationList->update( mpMainSequence );
-        }
-        break;
+            if( mpMainSequence.get() )
+                mpCustomAnimationList->update( mpMainSequence );
+            break;
     }
     return 0;
 }
@@ -1234,7 +1219,13 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         addValue( pSet, nHandleMasterRel, makeAny( pEffect->getMasterRel() ) );
         addValue( pSet, nHandleDimColor, pEffect->getDimColor() );
         addValue( pSet, nHandleIterateType, makeAny( pEffect->getIterateType() ) );
-        addValue( pSet, nHandleIterateInterval, makeAny( pEffect->getIterateInterval() ) );
+
+        // convert absolute time to percentage value
+        float fIterateInterval = pEffect->getIterateInterval();
+        if( pEffect->getDuration() )
+            fIterateInterval = fIterateInterval / pEffect->getDuration();
+        fIterateInterval *= 100.0;
+        addValue( pSet, nHandleIterateInterval, makeAny( (double)fIterateInterval ) );
 
         addValue( pSet, nHandleBegin, makeAny( pEffect->getBegin() ) );
         addValue( pSet, nHandleDuration, makeAny( pEffect->getDuration() ) );
@@ -1327,6 +1318,16 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
     {
         CustomAnimationEffectPtr pEffect = (*aIter++);
 
+        double fDuration; // we might need this for iterate-interval
+        if( pResultSet->getPropertyState( nHandleDuration ) == STLPropertyState_DIRECT )
+        {
+            pResultSet->getPropertyValue( nHandleDuration ) >>= fDuration;
+        }
+        else
+        {
+            fDuration = pEffect->getDuration();
+        }
+
         if( pResultSet->getPropertyState( nHandleIterateType ) == STLPropertyState_DIRECT )
         {
             sal_Int16 nIterateType;
@@ -1346,7 +1347,8 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
                 pResultSet->getPropertyValue( nHandleIterateInterval ) >>= fIterateInterval;
                 if( pEffect->getIterateInterval() != fIterateInterval )
                 {
-                    pEffect->setIterateInterval( fIterateInterval );
+                    const double f = fIterateInterval * pEffect->getDuration() / 100;
+                    pEffect->setIterateInterval( f );
                     bChanged = true;
                 }
             }
@@ -1365,8 +1367,6 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleDuration ) == STLPropertyState_DIRECT )
         {
-            double fDuration;
-            pResultSet->getPropertyValue( nHandleDuration ) >>= fDuration;
             if( pEffect->getDuration() != fDuration )
             {
                 pEffect->setDuration( fDuration );
