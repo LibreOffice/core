@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHyphenatedWord.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 16:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,9 @@
 module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
-/** gives information obtained by a successfull hyphenation attempt.
+/** gives information obtained by a successful hyphenation attempt.
 
-    <P>This interface is used as a return value for some of the hyphenators
+    <P>This interface is used as a return value for some of the hyphenator
     functions.</P>
 
     @see    com::sun::star::linguistic2::XHyphenator
@@ -115,7 +115,7 @@ interface XHyphenatedWord : com::sun::star::uno::XInterface
     /**
          @returns
              the hyphenated word as it should be written (without the hyphen
-             character though).
+             character).
      */
     string getHyphenatedWord();
 
