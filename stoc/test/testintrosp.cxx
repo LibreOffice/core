@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testintrosp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 17:19:49 $
+ *  last change: $Author: dbo $ $Date: 2001-05-15 13:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1366,7 +1366,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 {
                     // XExactName pruefen, dafuer alles gross machen
                     // (Introspection ist mit LowerCase implementiert, also anders machen)
-                    OUString aUpperUStr = aPropName.toUpperCase();
+                    OUString aUpperUStr = aPropName.toAsciiUpperCase();
                     OUString aExactName = xExactName->getExactName( aUpperUStr );
                     if( aExactName != aPropName )
                     {
