@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 17:25:46 $
+ *  last change: $Author: pl $ $Date: 2001-10-11 15:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,8 @@
 #include <i18n_status.hxx>
 #endif
 
+#include <algorithm>
+
 using namespace vcl_sal;
 using namespace vcl;
 
@@ -187,7 +189,7 @@ SalFrame *SalInstance::CreateFrame( SalFrame *pParent,
 
     pFrame->maFrameData.mpParent = pParent;
     if( pParent )
-        pParent->maFrameData.maChildren.Insert( pFrame );
+        pParent->maFrameData.maChildren.push_back( pFrame );
     pFrame->maFrameData.Init( nSalFrameStyle );
 
     return pFrame;
@@ -676,7 +678,7 @@ SalFrame::~SalFrame()
 {
     // aus papis child liste entfernen
     if( maFrameData.mpParent )
-        maFrameData.mpParent->maFrameData.maChildren.Remove( this );
+        maFrameData.mpParent->maFrameData.maChildren.remove( this );
     // einige kommen trotzdem immer noch durch
     XSelectInput( _GetXDisplay(), maFrameData.GetShellWindow(), 0 );
     XSelectInput( _GetXDisplay(), maFrameData.GetWindow(), 0 );
@@ -898,8 +900,9 @@ void SalFrame::ToTop( USHORT nFlags )
         XtMapWidget( maFrameData.hShell_ );
 
     XRaiseWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
-    for( i=0; i < maFrameData.maChildren.Count(); i++ )
-        maFrameData.maChildren.GetObject( i )->ToTop( nFlags );
+    for( ::std::list< SalFrame* >::const_iterator it = maFrameData.maChildren.begin();
+         it != maFrameData.maChildren.end(); ++it )
+        (*it)->ToTop( nFlags );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2377,9 +2380,10 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
 void SalFrameData::RepositionFloatChildren()
 {
     // move SAL_FRAME_STYLE_FLOAT children to new position
-    for( int nChild = 0; nChild < maChildren.Count(); nChild++ )
+    for( ::std::list< SalFrame* >::const_iterator it = maChildren.begin();
+         it != maChildren.end(); ++it )
     {
-        SalFrameData* pData = &maChildren.GetObject( nChild )->maFrameData;
+        SalFrameData* pData = &(*it)->maFrameData;
         if( pData->nStyle_ & SAL_FRAME_STYLE_FLOAT )
         {
 #ifdef DEBUG
@@ -2393,17 +2397,21 @@ void SalFrameData::RepositionFloatChildren()
 void SalFrameData::RepositionChildren()
 {
     RepositionFloatChildren();
-    int nChild;
-    for( nChild = 0; nChild < maChildren.Count(); nChild++ )
+
+    if( ! GetDisplay()->getWMAdaptor()->isTransientBehaviourAsExpected() )
     {
-        SalFrameData* pData = &maChildren.GetObject( nChild )->maFrameData;
-        if( pData->bMapped_ )
-            XRaiseWindow( GetXDisplay(), pData->GetStackingWindow() ? pData->GetStackingWindow() : pData->GetShellWindow() );
-    }
-    for( nChild = 0; nChild < maChildren.Count(); nChild++ )
-    {
-        SalFrameData* pData = &maChildren.GetObject( nChild )->maFrameData;
-        pData->RepositionChildren();
+        ::std::list< SalFrame* >::const_iterator it;
+        for( it = maChildren.begin(); it != maChildren.end(); ++it )
+        {
+            SalFrameData* pData = &(*it)->maFrameData;
+            if( pData->bMapped_ )
+                XRaiseWindow( GetXDisplay(), pData->GetStackingWindow() ? pData->GetStackingWindow() : pData->GetShellWindow() );
+        }
+        for( it = maChildren.begin(); it != maChildren.end(); ++it )
+        {
+            SalFrameData* pData = &(*it)->maFrameData;
+            pData->RepositionChildren();
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-14 12:46:16 $
+ *  last change: $Author: pl $ $Date: 2001-10-11 15:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ protected:
     bool                    m_bEqualWorkAreas;
     ::std::vector< Rectangle >
                             m_aWMWorkAreas;
+    bool                    m_bTransientBehaviour;
 
     WMAdaptor( SalDisplay * )
 ;
@@ -254,6 +255,13 @@ public:
             return CenterGravity;
         return StaticGravity;
     }
+
+    /*
+     *  expected behaviour is that the WM will not allow transient
+     *  windows to get stacked behind the windows they are transient for
+     */
+    bool isTransientBehaviourAsExpected() const
+    { return m_bTransientBehaviour; }
 };
 
 } // namespace

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-08 16:03:08 $
+ *  last change: $Author: pl $ $Date: 2001-10-11 15:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,8 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
  */
 
 WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
-        m_pSalDisplay( pDisplay )
+        m_pSalDisplay( pDisplay ),
+        m_bTransientBehaviour( false )
 {
     Atom                aRealType   = None;
     int                 nFormat     = 8;
@@ -309,6 +310,9 @@ WMAdaptor::~WMAdaptor()
 NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
         WMAdaptor( pSalDisplay )
 {
+    // currently all _NET WMs do transient like expected
+    m_bTransientBehaviour = true;
+
     Atom                aRealType   = None;
     int                 nFormat     = 8;
     unsigned long       nItems      = 0;
@@ -474,6 +478,9 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
         WMAdaptor( pSalDisplay ),
         m_bValid( false )
 {
+    // currently all Gnome WMs do transient like expected
+    m_bTransientBehaviour = true;
+
     Atom                aRealType   = None;
     int                 nFormat     = 8;
     unsigned long       nItems      = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-10 11:53:02 $
+ *  last change: $Author: pl $ $Date: 2001-10-11 15:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,6 @@
 #include <ptrstyle.hxx>
 #endif
 
-#ifndef _LIST_HXX
-#include <tools/list.hxx>
-#endif
-
 #ifndef _SV_SALINST_HXX
 #include <salinst.hxx>
 #endif
@@ -89,6 +85,7 @@
 #endif
 
 #include <salunx.h>
+#include <list>
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class   SalDisplay;
@@ -121,7 +118,6 @@ class SalFrameDelData
 #define SHOWSTATE_MINIMIZED     0
 #define SHOWSTATE_NORMAL        1
 
-DECLARE_LIST( SalFrameList, SalFrame *);
 class SalFrameData
 {
     friend  class           SalFrame;
@@ -139,7 +135,7 @@ class SalFrameData
 
             SalFrame*       mpParent;            // pointer to parent frame
                                     // which should never obscur this frame
-             SalFrameList    maChildren;         // List of child frames
+             ::std::list< SalFrame* > maChildren;         // List of child frames
 
             SALFRAMEPROC    pProc_;             // callback proc
             void           *pInst_;             // instance handle for callback
