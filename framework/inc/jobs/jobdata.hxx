@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobdata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:12:55 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ class JobData : private ThreadHelpBase
         static const sal_Char* PROP_EVENTNAME;
         static const sal_Char* PROP_ENVTYPE;
         static const sal_Char* PROP_FRAME;
+        static const sal_Char* PROP_MODEL;
         static const sal_Char* PROP_SERVICE;
 
     //___________________________________
@@ -203,7 +204,9 @@ class JobData : private ThreadHelpBase
             /// this job is used by the global JobExecutor service
             E_EXECUTION,
             /// this job is used by the global dispatch framework
-            E_DISPATCH
+            E_DISPATCH,
+            /// this job is used by the global event broadcaster
+            E_DOCUMENTEVENT
         };
 
     //___________________________________
