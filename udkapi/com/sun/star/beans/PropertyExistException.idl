@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyExistException.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 
     @see PropertyContainer
  */
-exception PropertyExistException: com::sun::star::uno::Exception
+published exception PropertyExistException: com::sun::star::uno::Exception
 {
 };
 
