@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-27 08:49:50 $
+ *  last change: $Author: nn $ $Date: 2000-12-13 11:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <so3/pastedlg.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/whiter.hxx>
@@ -818,4 +819,65 @@ String ScEditShell::GetSelectionText( BOOL bWholeWord )
     return aStrSelection;
 }
 
+void ScEditShell::ExecuteUndo(SfxRequest& rReq)
+{
+    //  #81733# Undo must be handled here because it's called for both EditViews
+
+    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    DBG_ASSERT(pHdl,"no ScInputHandler");
+    EditView* pTopView   = pHdl->GetTopView();
+    EditView* pTableView = pHdl->GetTableView();
+    DBG_ASSERT(pTableView,"no EditView");
+
+    pHdl->DataChanging();
+
+    USHORT nSlot = rReq.GetSlot();
+    switch ( nSlot )
+    {
+        case SID_UNDO:
+            pTableView->Undo();
+            if (pTopView)
+                pTopView->Undo();
+            break;
+        case SID_REDO:
+            pTableView->Redo();
+            if (pTopView)
+                pTopView->Redo();
+            break;
+    }
+    pViewData->GetBindings().InvalidateAll(FALSE);
+
+    pHdl->DataChanged();
+}
+
+void ScEditShell::GetUndoState(SfxItemSet &rSet)
+{
+    //  Undo state is taken from normal ViewFrame state function
+
+    SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
+    if ( pViewFrm && GetUndoManager() )
+    {
+        SfxWhichIter aIter(rSet);
+        USHORT nWhich = aIter.FirstWhich();
+        while( nWhich )
+        {
+            pViewFrm->GetSlotState( nWhich, NULL, &rSet );
+            nWhich = aIter.NextWhich();
+        }
+    }
+
+    //  disable if no action in input line EditView
+
+    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    DBG_ASSERT(pHdl,"no ScInputHandler");
+    EditView* pTopView = pHdl->GetTopView();
+    if (pTopView)
+    {
+        SfxUndoManager& rTopMgr = pTopView->GetEditEngine()->GetUndoManager();
+        if ( rTopMgr.GetUndoActionCount() == 0 )
+            rSet.DisableItem( SID_UNDO );
+        if ( rTopMgr.GetRedoActionCount() == 0 )
+            rSet.DisableItem( SID_REDO );
+    }
+}
 
