@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:13:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 12:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1509,8 +1509,8 @@ bool SentenceEditWindow_Impl::MarkNextError()
 void SentenceEditWindow_Impl::MoveErrorMarkTo(USHORT nStart, USHORT nEnd)
 {
     TextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTCOLOR );
-    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTWEIGHT );
+    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTCOLOR, TRUE );
+    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTWEIGHT, TRUE );
     pTextEngine->SetAttrib( TextAttribFontWeight(WEIGHT_BOLD), 0, nStart, nEnd );
     pTextEngine->SetAttrib( TextAttribFontColor(COL_LIGHTRED), 0, nStart, nEnd );
     m_nErrorStart = nStart;
@@ -1858,8 +1858,8 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
 
     //remove error marks
     TextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTCOLOR );
-    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTWEIGHT );
+    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTCOLOR, TRUE );
+    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTWEIGHT, TRUE );
 
     //put the appropriate action on the Undo-stack
     SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
