@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: tl $ $Date: 2001-02-19 11:19:32 $
+#   last change: $Author: os $ $Date: 2001-03-20 10:33:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,8 @@ CXXFILES = \
         ldapdlg.cxx		\
         multipat.cxx	\
         multifil.cxx	\
-        optextbr.cxx
+        optextbr.cxx    \
+        srchcfg.cxx
 
 SRCFILES =  \
         optasian.src	\
@@ -134,7 +135,8 @@ SLOFILES=	\
         $(SLO)$/optinet2.obj	\
         $(SLO)$/multipat.obj    \
         $(SLO)$/multifil.obj    \
-        $(SLO)$/optextbr.obj
+        $(SLO)$/optextbr.obj    \
+        $(SLO)$/srchcfg.obj
 
 SVXLIGHTOBJFILES= \
         $(OBJ)$/adritem.obj
