@@ -108,12 +108,28 @@ DESTDIRBIN=$(DESTDIR)$/linux$/bin
 DESTDIRLIB=$(DESTDIR)$/linux$/lib
 DESTDIRDLL=$(DESTDIRLIB)
 
+.ELIF "$(OS)"=="NETBSD"
+###########
+# NETBSD
+###########
+DESTDIRBIN=$(DESTDIR)$/netbsd$/bin
+DESTDIRLIB=$(DESTDIR)$/netbsd$/lib
+DESTDIRDLL=$(DESTDIRLIB)
+
 .ELIF "$(OS)"=="IRIX "
 ###########
 # IRIX
 ###########
 DESTDIRBIN=$(DESTDIR)$/irix$/bin
 DESTDIRLIB=$(DESTDIR)$/irix$/lib
+DESTDIRDLL=$(DESTDIRLIB)
+
+.ELIF "$(OS)"=="MACOSX"
+###########
+# MACOSX
+###########
+DESTDIRBIN=$(DESTDIR)$/macosx$/bin
+DESTDIRLIB=$(DESTDIR)$/macosx$/lib
 DESTDIRDLL=$(DESTDIRLIB)
 .ENDIF
 
