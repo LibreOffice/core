@@ -25,7 +25,34 @@ CUSTOMMANIFESTFILEDEP:=..$/misc$/$(TARGET)_$(CUSTOMMANIFESTFILE:f)
     +$(COPY) $< $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 
-$(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP) 
+.IF "$(USE_EXTENDED_MANIFESTFILE)"!=""
+EXTENDEDMANIFESTFILE=..$/misc$/$(JARTARGET:b)
+.IF "$(JARMANIFEST)"!=""
+$(JARMANIFEST) : $(EXTENDEDMANIFESTFILE)
+.ENDIF			# "$(JARMANIFEST)"!=""
+..$/misc$/$(JARTARGET:b) : $(SOLARINCDIR)$/$(UPD)minor.mk
+    @+echo Specification-Title: $(SPECTITLE) > $@
+    @+echo Specification-Version: $(VERSION) >> $@
+    @+echo Specification-Vendor: $(VENDOR) >> $@
+    @+echo Implementation-Title: $(IMPLTITLE) >> $@
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+    @+echo "Implementation-Version: $(RSCREVISION)" >> $@
+.ELSE			# "$(GUI)"=="UNX"" || "$(USE_SHELL)"!="4nt"
+    @+echo Implementation-Version: $(RSCREVISION) >> $@
+.ENDIF			# "$(GUI)"=="UNX"" || "$(USE_SHELL)"!="4nt"
+    @+echo Implementation-Vendor: $(VENDOR) >> $@
+.ENDIF			# "$(USE_EXTENDED_MANIFESTFILE)"!=""
+
+.IF "$(EXTENDEDMANIFESTFILE)"!=""
+
+EXTENDEDMANIFESTFILEDEP:=..$/misc$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f)
+
+..$/misc$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f) : $(EXTENDEDMANIFESTFILE)
+    +-$(RM) $@
+    +$(COPY) $(EXTENDEDMANIFESTFILE) $@
+.ENDIF			# "$(EXTENDEDMANIFESTFILE)"!=""
+
+$(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP) $(EXTENDEDMANIFESTFILEDEP)
     +-$(MKDIR) .$/META-INF >& $(NULLDEV)
     +-$(RM) $@ >& $(NULLDEV)
     +echo Manifest-Version: 1.0 > $@
@@ -34,6 +61,9 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
 .ELSE			# "$(GUI)"=="UNX"" || "$(USE_SHELL)"!="4nt"
     +echo Solar-Version: $(RSCREVISION) >> $@
 .ENDIF			# "$(GUI)"=="UNX"" || "$(USE_SHELL)"!="4nt"
+.IF "$(EXTENDEDMANIFESTFILE)"!=""
+    +$(TYPE) ..$/misc$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f) >> $@
+.ENDIF			# "$(EXTENDEDMANIFESTFILE)"!=""
 .IF "$(CUSTOMMANIFESTFILE)"!=""
     +$(TYPE) ..$/misc$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
