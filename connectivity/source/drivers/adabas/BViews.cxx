@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 11:03:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,11 +197,7 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     if(m_bInDrop)
         return;
 
-    ObjectIter aIter = m_aElements[_nPos];
-
-    if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
-        aIter->second = createObject(_sElementName);
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
     sal_Bool bIsNew = sal_False;
     if(xTunnel.is())
     {
