@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: mtg $ $Date: 2001-09-06 09:42:31 $
+#   last change: $Author: mtg $ $Date: 2001-09-14 15:24:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,8 +74,8 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : sv.mk
 
 # --- Files --------------------------------------------------------
-# the following flag un-inlines function calls
-# CFLAGS+=/Ob2
+# the following flag un-inlines function calls and disables optimisations
+#CFLAGS+=/Ob0 /Od
 
 SLOFILES= \
         $(SLO)$/ZipPackage.obj			\
