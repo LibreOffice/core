@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
                     ResMgr*     pResMgr;
 
                     aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-                    pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+                    pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
                     aFltCallDlgPara.pResMgr = pResMgr;
                     // JPEG-Dialog
                     if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
