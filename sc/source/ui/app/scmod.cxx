@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:22:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,9 @@
 #include <svx/outliner.hxx>
 #include <basic/sbstar.hxx>
 
-#include <offmgr/hyprlink.hxx>
-#include <offmgr/osplcfg.hxx>
-#ifndef _OFFAPP_INTERNATIONALOPTIONS_HXX_
-#include <offmgr/internationaloptions.hxx>
-#endif
+#include <sfx2/sfxdlg.hxx>
+
+#include <svx/hyprlink.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/ctloptions.hxx>
@@ -99,16 +97,15 @@
 #include <svtools/colorcfg.hxx>
 
 #include <svtools/whiter.hxx>
-#include <offmgr/app.hxx>
 #include <svx/selctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/zoomctrl.hxx>
 #include <svx/modctrl.hxx>
 #include <svx/pszctrl.hxx>
 #include <vcl/msgbox.hxx>
-#include <offmgr/ofaids.hrc>
 #include <svtools/inethist.hxx>
 #include <vcl/waitobj.hxx>
+#include <svx/svxerr.hxx>
 
 #define ITEMID_SPELLCHECK 0
 
@@ -167,7 +164,7 @@ SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
 //------------------------------------------------------------------
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
-    SfxModule( SFX_APP()->CreateResManager( "sc" ), FALSE, pFact, NULL ),
+    SfxModule( SfxApplication::CreateResManager( "sc" ), FALSE, pFact, NULL ),
     bIsWaterCan( FALSE ),
     bIsInEditCommand( FALSE ),
     pSelTransfer( NULL ),
@@ -199,7 +196,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
 
     //  ErrorHandler anlegen - war in Init()
     //  zwischen OfficeApplication::Init und ScGlobal::Init
-//  pSvxErrorHdl = new SvxErrorHandler();
+    SvxErrorHandler::Get();
     pErrorHdl    = new SfxErrorHandler( RID_ERRHDLSC,
                                         ERRCODE_AREA_SC,
                                         ERRCODE_AREA_APP2-1,
@@ -2142,7 +2139,16 @@ SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         case SID_SC_TP_CALC:            pRet = ScTpCalcOptions::Create(pParent, rSet); break;
         case SID_SC_TP_CHANGES:         pRet = ScRedlineOptionsTabPage::Create(pParent, rSet); break;
         case RID_SC_TP_PRINT:           pRet = ScTpPrintOptions::Create(pParent, rSet); break;
-        case RID_OFA_TP_INTERNATIONAL:  pRet = ::offapp::InternationalOptionsPage::CreateSc( pParent, rSet ); break;
+        case RID_OFA_TP_INTERNATIONAL:
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+                if ( fnCreatePage )
+                    pRet = (*fnCreatePage)( pParent, rSet );
+            }
+        }
     }
 
     DBG_ASSERT( pRet, "ScModule::CreateTabPage(): no valid ID for TabPage!" );
