@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:29:33 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,16 +532,15 @@ class Complex
 {
     double                  r;
     double                  i;
+    sal_Unicode             c;
 
 public:
-//  inline                  Complex( void );
-    inline                  Complex( double fReal, double fImag = 0.0 );
-    inline                  Complex( const Complex& rCopy );
+    inline                  Complex( double fReal, double fImag = 0.0, sal_Char cC = 'i' );
                             Complex( const STRING& rComplexAsString ) THROWDEF_RTE_IAE;
 
     inline static sal_Bool  IsImagUnit( sal_Unicode c );
     static sal_Bool         ParseString( const STRING& rComplexAsString, Complex& rReturn );
-    STRING                  GetString( sal_Bool bUse_i = sal_True ) const THROWDEF_RTE_IAE;
+    STRING                  GetString() const THROWDEF_RTE_IAE;
 
     inline double           Real( void ) const;
     inline double           Imag( void ) const;
@@ -872,23 +871,8 @@ inline const FuncData* FuncDataList::Get( sal_uInt32 n ) const
 }
 
 
-
-
-/*inline Complex::Complex( void )
-{
-//#ifdef DEBUG
-//  SetNAN( i );
-//  r = i;
-//#endif
-}*/
-
-
-inline Complex::Complex( double fReal, double fImag ) : r( fReal ), i( fImag )
-{
-}
-
-
-inline Complex::Complex( const Complex& rCpy ) : r( rCpy.r ), i( rCpy.i )
+inline Complex::Complex( double fReal, double fImag, sal_Char cC ) :
+        r( fReal ), i( fImag ), c( cC )
 {
 }
 
