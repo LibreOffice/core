@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-09 15:16:04 $
+ *  last change: $Author: mt $ $Date: 2002-09-11 11:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,7 +849,7 @@ void EditorWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if ( (long)nWidth != nCurTextWidth )
                 {
                     nCurTextWidth = nWidth;
-                    pModulWindow->GetHScrollBar()->SetRange( Range( 0, (long)nCurTextWidth) );
+                    pModulWindow->GetHScrollBar()->SetRange( Range( 0, (long)nCurTextWidth-1) );
                     pModulWindow->GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
                 }
             }
@@ -880,9 +880,9 @@ void EditorWindow::SetScrollBarRanges()
         return;
 
     if ( pModulWindow->GetHScrollBar() )
-        pModulWindow->GetHScrollBar()->SetRange( Range( 0, nCurTextWidth ) );
+        pModulWindow->GetHScrollBar()->SetRange( Range( 0, nCurTextWidth-1 ) );
 
-    pModulWindow->GetEditVScrollBar().SetRange( Range( 0, pEditEngine->GetTextHeight() ) );
+    pModulWindow->GetEditVScrollBar().SetRange( Range( 0, pEditEngine->GetTextHeight()-1 ) );
 }
 
 void EditorWindow::InitScrollBars()
