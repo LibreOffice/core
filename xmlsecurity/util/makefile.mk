@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mmi $ $Date: 2004-07-15 08:25:37 $
+#   last change: $Author: mt $ $Date: 2004-07-19 15:32:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -170,7 +170,7 @@ SHL4STDLIBS=\
                 $(SALLIB)			\
                 $(VOSLIB)			\
                 $(SOTLIB)			\
-                $(SVLIB)			\
+                $(SVLLIB)			\
                 $(SFXLIB)			\
                 $(XMLOFFLIB)		\
                 $(SVXLIB)
