@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:03:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //==================================================================
 //  SvxColorTableItem
 //==================================================================
@@ -82,7 +86,7 @@
 #ifdef ITEMID_COLOR_TABLE
 class XColorTable;
 
-class SvxColorTableItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxColorTableItem: public SfxPoolItem
 {
     XColorTable*            pColorTable;
 
@@ -117,7 +121,7 @@ public:
 #ifdef ITEMID_GRADIENT_LIST
 class XGradientList;
 
-class SvxGradientListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxGradientListItem: public SfxPoolItem
 {
     XGradientList*              pGradientList;
 
@@ -152,7 +156,7 @@ public:
 #ifdef ITEMID_HATCH_LIST
 class XHatchList;
 
-class SvxHatchListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxHatchListItem: public SfxPoolItem
 {
     XHatchList*             pHatchList;
 
@@ -187,7 +191,7 @@ public:
 #ifdef ITEMID_BITMAP_LIST
 class XBitmapList;
 
-class SvxBitmapListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxBitmapListItem: public SfxPoolItem
 {
     XBitmapList*                pBitmapList;
 
@@ -222,7 +226,7 @@ public:
 #ifdef ITEMID_DASH_LIST
 class XDashList;
 
-class SvxDashListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxDashListItem: public SfxPoolItem
 {
     XDashList*              pDashList;
 
@@ -256,7 +260,7 @@ public:
 #ifdef ITEMID_LINEEND_LIST
 class XLineEndList;
 
-class SvxLineEndListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxLineEndListItem: public SfxPoolItem
 {
     XLineEndList*           pLineEndList;
 
