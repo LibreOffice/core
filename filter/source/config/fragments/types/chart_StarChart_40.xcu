@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>StarChart 4.0</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">StarChart 4.0</value>
+            <value>StarChart 4.0</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>StarChartDocument 4.0</value></prop>
     </node>
