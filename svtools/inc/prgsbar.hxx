@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prgsbar.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:52 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ Diese Klasse dient zur Anzeige einer Progress-Anzeige.
 WinBits
 
 WB_BORDER           Border um das Fenster
-WB_SVLOOK           3D-Darstellung
+WB_3DLOOK           3D-Darstellung
 
 --------------------------------------------------------------------------
 
