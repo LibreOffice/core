@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:55:45 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ TabDialog DLG_FLD_INSERT
                 Text[ hebrew ] = "Dokument";
                 Text[ hindi ] = "लेखपत्र";
                 Text[ slovak ] = "Dokument";
+                Text[ hungarian ] = "Dokumentum";
+                Text[ slovenian ] = "Dokument";
             };
             PageItem
             {
@@ -118,7 +120,7 @@ TabDialog DLG_FLD_INSERT
                 Text [ english_us ] = "References" ;
                 Text [ portuguese_brazilian ] = "Refer�ncias" ;
                 Text [ swedish ] = "Referenser" ;
-                Text [ danish ] = "Referencer" ;
+                Text [ danish ] = "Henvisninger" ;
                 Text [ italian ] = "Riferimenti" ;
                 Text [ spanish ] = "Referencias" ;
                 Text [ french ] = "R�f�rences" ;
@@ -141,6 +143,8 @@ TabDialog DLG_FLD_INSERT
                 Text[ hebrew ] = "Referenzen";
                 Text[ hindi ] = "रेफरेन्स";
                 Text[ slovak ] = "Odkazy";
+                Text[ hungarian ] = "Hivatkozások";
+                Text[ slovenian ] = "Sklici";
             };
             PageItem
             {
@@ -174,6 +178,8 @@ TabDialog DLG_FLD_INSERT
                 Text[ hebrew ] = "Funktionen";
                 Text[ hindi ] = "फंक्शन्स";
                 Text[ slovak ] = "Funkcie";
+                Text[ hungarian ] = "Függvények";
+                Text[ slovenian ] = "Funkcije";
             };
             PageItem
             {
@@ -184,7 +190,7 @@ TabDialog DLG_FLD_INSERT
                 Text [ english_us ] = "DocInformation" ;
                 Text [ portuguese_brazilian ] = "Info. do Doc." ;
                 Text [ swedish ] = "Dokumentinfo" ;
-                Text [ danish ] = "Dokumentinfo" ;
+                Text [ danish ] = "Dokumentinformation" ;
                 Text [ italian ] = "Info documento" ;
                 Text [ spanish ] = "Informaci�n del documento" ;
                 Text [ french ] = "Info document" ;
@@ -207,6 +213,8 @@ TabDialog DLG_FLD_INSERT
                 Text[ hebrew ] = "Dokumentinfo";
                 Text[ hindi ] = "DocInformation";
                 Text[ slovak ] = "Informácie o dokumente";
+                Text[ hungarian ] = "Dokumentum-információ";
+                Text[ slovenian ] = "Podatki o dokumentu";
             };
             PageItem
             {
@@ -240,6 +248,8 @@ TabDialog DLG_FLD_INSERT
                 Text[ hebrew ] = "Variablen";
                 Text[ hindi ] = "वेरिऐबल";
                 Text[ slovak ] = "Premenné";
+                Text[ hungarian ] = "Változók";
+                Text[ slovenian ] = "Spremenljivke";
             };
             PageItem
             {
@@ -273,6 +283,8 @@ TabDialog DLG_FLD_INSERT
                 Text[ hebrew ] = "Datenbank";
                 Text[ hindi ] = "लेखासंचय";
                 Text[ slovak ] = "Databáza";
+                Text[ hungarian ] = "Adatbázis";
+                Text[ slovenian ] = "Zbirka podatkov";
             };
         };
     };
@@ -307,6 +319,8 @@ TabDialog DLG_FLD_INSERT
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
         Text[ slovak ] = "~Vložiť";
+        Text[ hungarian ] = "Bes~zúrás";
+        Text[ slovenian ] = "~Vstavi";
     };
     String STR_FLD_CLOSE
     {
@@ -318,7 +332,7 @@ TabDialog DLG_FLD_INSERT
         Text [ french ] = "Fermer" ;
         Text [ dutch ] = "~Sluiten" ;
         Text [ swedish ] = "~St�ng" ;
-        Text [ danish ] = "Luk" ;
+        Text [ danish ] = "~Luk" ;
         Text [ portuguese_brazilian ] = "~Fechar" ;
         Text [ portuguese ] = "~Fechar" ;
         Text[ chinese_simplified ] = "关闭(~C)";
@@ -338,6 +352,8 @@ TabDialog DLG_FLD_INSERT
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
         Text[ slovak ] = "~Zavrieť";
+        Text[ hungarian ] = "~Bezárás";
+        Text[ slovenian ] = "~Zapri";
     };
     Text [ english_us ] = "Fields" ;
     Text [ portuguese_brazilian ] = "Campos" ;
@@ -365,7 +381,10 @@ TabDialog DLG_FLD_INSERT
     Text[ hebrew ] = "‮שדות‬";
     Text[ hindi ] = "क्षेत्र";
     Text[ slovak ] = "Polia";
+    Text[ hungarian ] = "Mezők";
+    Text[ slovenian ] = "Polja";
 };
+
 
 
 
