@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLineCursor.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module view {
     @see com::sun::star::text::TextCursor
     @see com::sun::star::text::XTextViewCursor
  */
-interface XLineCursor: com::sun::star::uno::XInterface
+published interface XLineCursor: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** determines if the cursor is positioned at the start of a line.
