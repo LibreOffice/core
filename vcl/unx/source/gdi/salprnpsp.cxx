@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-04 16:31:08 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 17:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,6 +854,13 @@ static inline String getTmpName()
     char tmpNam[ L_tmpnam ];
 #if defined( FREEBSD ) || defined (IRIX)
     mkstemp ( tmpNam );
+#elif defined( MACOSX )
+    {
+        char    *tempFileName;
+        tempFileName = macxp_tempnam( NULL, NULL );
+        strncpy( tmpNam, tempFileName, L_tmpnam );
+        free( tempFileName );
+    }
 #else
     tmpnam_r( tmpNam );
 #endif
