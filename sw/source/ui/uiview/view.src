@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:07:10 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ InfoBox MSG_NOT_FOUND
     Message[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΛωÒªΛΡΡ°µΔ¶ΤΟσ΅£";
     Message[ russian ] = "Ρλξβξ νε νΰιδενξ.";
     Message[ polish ] = "Szukane has³o nie zosta³o znalezione.";
-    Message[ japanese ] = "υ€–Ϊ‚ª©‚Β‚©‚θ‚ά‚Ή‚ρ";
+    Message[ japanese ] = "υ·°‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρB";
     Message[ chinese_traditional ] = "¨S¦³§δ¨μ©Ò­n·j΄MªΊª«¥σ΅C";
     Message[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ ΗαΘνΗδΗΚ ΗαΚν ΚΘΝΛ ΪδεΗ.";
     Message[ greek ] = "Δεν βρέθηκαν τα δεδομένα που αναζητάτε.";
@@ -633,7 +633,7 @@ String STR_NB_REPLACED
     Text[ chinese_simplified ] = "ΛΡΡ°ΔΪΘέ±» XX ΄ΞΈόΜζ΅£";
     Text[ russian ] = "Θρκξμξε ρλξβξ ηΰμενενξ XXπΰη.";
     Text[ polish ] = "Szukane has³o zosta³o XX razy zastΉpione.";
-    Text[ japanese ] = "υ€–Ϊ‚πXX“x’u‚«·‚¦‚ά‚µ‚½";
+    Text[ japanese ] = "υ·°‚Ν XX ‰ρ‚ΰ’u·‚³‚κ‚Δ‚Ά‚ά‚·B";
     Text[ chinese_traditional ] = "·j΄M¤Ί®e³Q XX ¦Έ¥N΄ΐ΅C";
     Text[ arabic ] = "Κγ ΗΣΚΘΟΗα ΘνΗδΗΚ ΗαΘΝΛ ΧΧΧ γΡΙ.";
     Text[ greek ] = "Ζητούμενο στοιχείο αντικαταστάθηκε XX φορές.";
