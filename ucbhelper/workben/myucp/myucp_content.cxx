@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_content.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-05 15:04:47 $
+ *  last change: $Author: oj $ $Date: 2002-01-10 15:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,6 @@ Content::~Content()
 
 // virtual
 void SAL_CALL Content::acquire()
-    throw( uno::RuntimeException )
 {
     ContentImplHelper::acquire();
 }
@@ -164,7 +163,6 @@ void SAL_CALL Content::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL Content::release()
-    throw( uno::RuntimeException )
 {
     ContentImplHelper::release();
 }
