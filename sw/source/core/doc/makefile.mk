@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 19:03:49 $
+#   last change: $Author: obo $ $Date: 2004-11-16 10:22:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,7 +116,8 @@ SLOFILES =	\
         $(SLO)$/tblcpy.obj \
         $(SLO)$/tblrwcl.obj \
         $(SLO)$/visiturl.obj \
-        $(SLO)$/htmltbl.obj
+        $(SLO)$/htmltbl.obj \
+        $(SLO)$/docxforms.obj
 
 EXCEPTIONSFILES = \
         $(SLO)$/doclay.obj
