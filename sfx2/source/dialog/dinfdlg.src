@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:12:32 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1402,6 +1402,8 @@ TabDialog SID_DOCINFO
     Text[ hindi ] = "का स्वभाव ";
     Text[ slovak ] = "Vlastnosti ";
 };
+
+
 
 
 
