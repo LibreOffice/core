@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:24:03 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 08:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,6 @@
 #define RID_SVXIMG_GALLERY_VIEW_LIST_HC         (RID_SVX_GALLERY_START + 59)
 
 // Gallery-Bitmaps fuer Sounds
-#define RID_SVXBMP_GALLERY_SOUND                (RID_SVX_GALLERY_START + 60)
 #define RID_SVXBMP_GALLERY_SOUND_0              (RID_SVX_GALLERY_START + 61)
 #define RID_SVXBMP_GALLERY_SOUND_1              (RID_SVX_GALLERY_START + 62)
 #define RID_SVXBMP_GALLERY_SOUND_2              (RID_SVX_GALLERY_START + 63)
@@ -147,6 +146,7 @@
 #define RID_SVXBMP_GALLERY_SOUND_5              (RID_SVX_GALLERY_START + 66)
 #define RID_SVXBMP_GALLERY_SOUND_6              (RID_SVX_GALLERY_START + 67)
 #define RID_SVXBMP_GALLERY_SOUND_7              (RID_SVX_GALLERY_START + 68)
+#define RID_SVXBMP_GALLERY_MEDIA                (RID_SVX_GALLERY_START + 71)
 
 // weitere IDs
 #define RID_SVXSTR_GALLERY_DIALOGID             (RID_SVX_GALLERY_START + 80)
