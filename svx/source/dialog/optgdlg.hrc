@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:10:29 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,8 +196,15 @@
 #define LB_LOCALESETTING        17
 #define FT_CURRENCY             18
 #define LB_CURRENCY             19
-#define FT_DECIMALSEPARATOR     20
-#define CB_DECIMALSEPARATOR     21
+#define FI_WEST_LANG            20
+#define FI_ASIAN_LANG           21
+#define FI_COMPLEX_LANG         22
+#define FI_ASIANSUPPORT         23
+#define FI_CTLSUPPORT           24
+#define FI_LOCALESETTING        25
+#define FI_CURRENCY             26
+#define FT_DECIMALSEPARATOR     27
+#define CB_DECIMALSEPARATOR     28
 
 #define FL_FILEDLG              53
 #define CB_FILEDLG              54
@@ -236,6 +243,12 @@
 #define ED_DOCMANAGER              25
 #define PB_DOCMANAGER              26
 #define STR_DEFAULT_FILENAME       27
+#define FI_PROGRAM                 28
+#define FI_HTTP                    29
+#define FI_HTTPS                   30
+#define FI_FTP                     31
+#define FI_MAILER                  32
+#define FI_DOCMANAGER              33
 
 #endif // #ifndef _OFA_OPTGDLG_HRC
 
