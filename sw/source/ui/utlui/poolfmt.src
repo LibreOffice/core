@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 18:01:55 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4961,7 +4961,7 @@ String STR_POOLCHR_RUBYTEXT
     Text [ English ] = "Phonetic Symbols" ;
     Text[ english_us ] = "Phonetic Symbols";
     Text[ portuguese ] = "Phonetic Symbols";
-    Text[ russian ] = "Phonetic Symbols";
+    Text[ russian ] = "Ôîíåòè÷åñêèå çíàêè";
     Text[ greek ] = "ÖùíçôéêÜ óıìâïëá";
     Text[ dutch ] = "Phonetic Symbols";
     Text[ french ] = "Symboles phonétiques";
@@ -4974,7 +4974,7 @@ String STR_POOLCHR_RUBYTEXT
     Text[ japanese ] = "‚Ó‚è‚ª‚È";
     Text[ korean ] = "Phonetic Symbols";
     Text[ chinese_simplified ] = "×¢Òô·ûºÅ";
-    Text[ chinese_traditional ] = "Phonetic Symbols";
+    Text[ chinese_traditional ] = "ª`­µ¦r¤¸";
     Text[ turkish ] = "Phonetic Symbols";
     Text[ arabic ] = "ÑãæÒ ÕæÊíÉ";
 };
