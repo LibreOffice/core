@@ -432,9 +432,11 @@ Sub SetupXMLConfiguration()
 	XMLFilterName(5,1) = &quot;calc_StarOffice_XML_Calc_Template&quot;
 	XMLFilterName(5,2) = &quot;stc&quot;
 
-	XMLFilterName(6,0) = &quot;application/x-openoffice-starimpress|application/x-openoffice-stardraw&quot;
-	XMLFilterName(6,1) = &quot;impress_StarOffice_XML_Impress_Template|draw_StarOffice_XML_Draw_Template&quot;
-	XMLFilterName(6,2) = &quot;sti|std&quot;
+	&apos; due to bug #108942# impress templates of the version 4.0 have to be handled in a special way because their mimetype 
+	&apos; falsely points to the draw application.
+	XMLFilterName(6,0) = &quot;application/x-openoffice-starimpress|application/x-openoffice-stardraw|StarDrawDocument 4.0&quot;
+	XMLFilterName(6,1) = &quot;impress_StarOffice_XML_Impress_Template|draw_StarOffice_XML_Draw_Template|impress_StarOffice_XML_Impress_Template&quot;
+	XMLFilterName(6,2) = &quot;sti|std|sti&quot;
 
 	XMLFilterName(7,0) = &quot;sgl&quot;
 	XMLFilterName(7,1) = &quot;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
