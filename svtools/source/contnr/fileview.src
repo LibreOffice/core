@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:09:03 $
+ *  last change: $Author: vg $ $Date: 2002-11-27 16:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ String STR_SVT_FILEVIEW_COLUMN_TYPE
     Text[ dutch ] = "Type";
     Text[ french ] = "Type";
     Text[ spanish ] = "Tipo";
-    Text[ finnish ] = "Type";
+    Text[ finnish ] = "Tyyppi";
     Text[ italian ] = "Tipo";
     Text[ danish ] = "Type";
     Text[ swedish ] = "Typ";
@@ -180,9 +180,9 @@ String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
     Text = "Der Ordner %1 konnte nicht angelegt werden.";
     Text[ english_us ] = "Could not create the folder %1.";
     Text[ portuguese ] = "Foi impossнvel criar a pasta %1.";
-    Text[ russian ] = "Создать папку %1 невозможно.";
+    Text[ russian ] = "Невозможно создать папку %1.";
     Text[ greek ] = "Could not create the folder %1.";
-    Text[ dutch ] = "Map %1 kon niet worden aangelegd.";
+    Text[ dutch ] = "Map %1 kan niet worden gemaakt.";
     Text[ french ] = "Impossible de crйer le dossier %1 !";
     Text[ spanish ] = "No se pudo crear la carpeta %1.";
     Text[ finnish ] = "Kansion %1 luominen ei onnistunut.";
@@ -236,13 +236,13 @@ String STR_SVT_KB
     Text [ english_us ] = "KB" ;
     Text [ portuguese_brazilian ] = "KB" ;
     Text [ swedish ] = "kB" ;
-    Text [ danish ] = "kB" ;
+    Text [ danish ] = "KB" ;
     Text [ italian ] = "KB" ;
     Text [ spanish ] = "KB" ;
     Text [ french ] = "Ko" ;
     Text [ dutch ] = "KB" ;
     Text[ chinese_simplified ] = "еЌѓе­—иЉ‚";
-    Text[ russian ] = "КБ";
+    Text[ russian ] = "кБ";
     Text[ polish ] = "KB";
     Text[ japanese ] = "г‚­гѓ­гѓђг‚¤гѓ€";
     Text[ chinese_traditional ] = "KB";
@@ -269,7 +269,7 @@ String STR_SVT_MB
     Text [ french ] = "Mo" ;
     Text [ dutch ] = "MB" ;
     Text[ chinese_simplified ] = "е…†е­—иЉ‚";
-    Text[ russian ] = "МБ";
+    Text[ russian ] = "Мб";
     Text[ polish ] = "MB";
     Text[ japanese ] = "MB";
     Text[ chinese_traditional ] = "MB";
@@ -297,7 +297,7 @@ String STR_SVT_GB
     Text [ french ] = "Go" ;
     Text [ dutch ] = "GB" ;
     Text[ chinese_simplified ] = "еЌѓе…†";
-    Text[ russian ] = "ГБ";
+    Text[ russian ] = "Гб";
     Text[ polish ] = "GB";
     Text[ japanese ] = "GB";
     Text[ chinese_traditional ] = "GB";
@@ -337,7 +337,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ dutch ] = "~Wissen";
             Text[ french ] = "~Supprimer";
             Text[ spanish ] = "~Eliminar";
-            Text[ finnish ] = "Delete";
+            Text[ finnish ] = "~Poista";
             Text[ italian ] = "~Elimina";
             Text[ danish ] = "~Slet";
             Text[ swedish ] = "~Radera";
@@ -365,7 +365,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ dutch ] = "~Naam wijzigen";
             Text[ french ] = "~Renommer";
             Text[ spanish ] = "~Cambiar nombre";
-            Text[ finnish ] = "Rename";
+            Text[ finnish ] = "~Nimeд uudelleen";
             Text[ italian ] = "~Rinomina";
             Text[ danish ] = "~Omdшb";
             Text[ swedish ] = "~Byt namn";
@@ -401,7 +401,7 @@ ModalDialog DLG_SVT_QUERYDELETE
     Text [ portuguese_brazilian ] = "L?chbest?tigung" ;
     Text [ portuguese ] = "Confirmar Eliminar" ;
     Text [ chinese_simplified ] = "зЎ®и®¤е€ й™¤";
-    Text [ russian ] = "Подтверждение удаления";
+    Text [ russian ] = "Подтвердить удаление";
     Text [ polish ] = "Potwierdzenie usuniкcia";
     Text [ japanese ] = "е‰Љй™¤гЃ®зўєиЄЌ";
     Text [ chinese_traditional ] = "зўєиЄЌе€Єй™¤";
@@ -431,7 +431,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text [ portuguese_brazilian ] = "Eintrag:" ;
         Text [ portuguese ] = "Entrada:" ;
         Text [ chinese_simplified ] = "жќЎз›®пјљ";
-        Text [ russian ] = "Запись:";
+        Text [ russian ] = "Элемент:";
         Text [ polish ] = "Wpis:";
         Text [ japanese ] = "й …з›®:";
         Text [ chinese_traditional ] = "й …з›®пјљ";
@@ -470,7 +470,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text [ portuguese_brazilian ] = "Sind Sie sicher, da? Sie die selektierten Daten l?chen wollen?" ;
         Text [ portuguese ] = "Deseja realmente eliminar os dados seleccionados?" ;
         Text [ chinese_simplified ] = "зњџи¦Ѓе€ й™¤йЂ‰дё­зљ„ж•°жЌ®пјџ";
-        Text [ russian ] = "Вы уверены в том, что хотите удалить выделенные данные?";
+        Text [ russian ] = "Вы действительно хотите удалить выбранные данные?";
         Text [ polish ] = "Czy na pewno usun№ж zaznaczone dane?";
         Text [ japanese ] = "йЃёжЉћгЃ—гЃџгѓ‡гѓјг‚їг‚’жњ¬еЅ“гЃ«е‰Љй™¤гЃ—гЃѕгЃ™гЃ‹гЂ‚";
         Text [ chinese_traditional ] = "зњџи¦Ѓе€Єй™¤йЃёеЏ–зљ„иі‡ж–™пјџ";
