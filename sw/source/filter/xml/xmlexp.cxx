@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-08 19:06:46 $
+ *  last change: $Author: mib $ $Date: 2001-11-13 18:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,12 @@
 #endif
 #ifndef _XMLEOHLP_HXX
 #include <svx/xmleohlp.hxx>
+#endif
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
+#endif
+#ifndef _SVDDEF_HXX
+#include <svx/svddef.hxx>
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -322,59 +328,38 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
         const SfxPoolItem* pItem;
         const SfxItemPool& rPool = pDoc->GetAttrPool();
-        sal_uInt16 i=0, nItems = rPool.GetItemCount( RES_UNKNOWNATR_CONTAINER );
-        for( i = 0; i < nItems; ++i )
+        sal_uInt16 aWhichIds[5] = { RES_UNKNOWNATR_CONTAINER,
+                                    RES_TXTATR_UNKNOWN_CONTAINER,
+                                    SDRATTR_XMLATTRIBUTES,
+                                    EE_PARA_XMLATTRIBS,
+                                    EE_CHAR_XMLATTRIBS };
+
+        sal_uInt16 nWhichIds = rPool.GetSecondaryPool() ? 5 : 2;
+        for( sal_uInt16 j=0; j < nWhichIds; j++ )
         {
-            if( 0 != (pItem = rPool.GetItem( RES_UNKNOWNATR_CONTAINER, i ) ) )
+            sal_uInt16 nWhichId = aWhichIds[j];
+            sal_uInt16 i=0, nItems = rPool.GetItemCount( nWhichId );
+            for( i = 0; i < nItems; ++i )
             {
-                const SvXMLAttrContainerItem *pUnknown =
-                            (const SvXMLAttrContainerItem *)pItem;
-                if( (pUnknown->GetAttrCount() > 0) )
+                if( 0 != (pItem = rPool.GetItem( nWhichId , i ) ) )
                 {
-                    sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
-                    while( USHRT_MAX != nIdx )
+                    const SvXMLAttrContainerItem *pUnknown =
+                                PTR_CAST( SvXMLAttrContainerItem, pItem );
+                    ASSERT( pUnknown, "illegal attribute container item" );
+                    if( pUnknown && (pUnknown->GetAttrCount() > 0) )
                     {
-                        if( (XML_NAMESPACE_UNKNOWN_FLAG & nIdx) != 0 )
+                        sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
+                        while( USHRT_MAX != nIdx )
                         {
-                            const OUString& rPrefix = pUnknown->GetPrefix( nIdx );
-                            // Add namespace declaration for unknown attributes if
-                            // there aren't existing ones for the prefix used by the
-                            // attibutes
+                            const OUString& rPrefix =
+                                pUnknown->GetPrefix( nIdx );
                             _GetNamespaceMap().Add( rPrefix,
-                                                    pUnknown->GetNamespace( nIdx ),
-                                                    XML_NAMESPACE_UNKNOWN );
+                                                pUnknown->GetNamespace( nIdx ),
+                                                XML_NAMESPACE_UNKNOWN );
+                            nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
                         }
-                        nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
+                        bExtended = sal_True;
                     }
-                    bExtended = sal_True;
-                }
-            }
-        }
-        nItems = rPool.GetItemCount( RES_TXTATR_UNKNOWN_CONTAINER );
-        for( i = 0; i < nItems; ++i )
-        {
-            if( 0 != (pItem = rPool.GetItem( RES_TXTATR_UNKNOWN_CONTAINER, i ) ) )
-            {
-                const SvXMLAttrContainerItem *pUnknown =
-                            (const SvXMLAttrContainerItem *)pItem;
-                if( (pUnknown->GetAttrCount() > 0) )
-                {
-                    sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
-                    while( USHRT_MAX != nIdx )
-                    {
-                        if( (XML_NAMESPACE_UNKNOWN_FLAG & nIdx) != 0 )
-                        {
-                            const OUString& rPrefix = pUnknown->GetPrefix( nIdx );
-                            // Add namespace declaration for unknown attributes if
-                            // there aren't existing ones for the prefix used by the
-                            // attibutes
-                            _GetNamespaceMap().Add( rPrefix,
-                                                    pUnknown->GetNamespace( nIdx ),
-                                                    XML_NAMESPACE_UNKNOWN );
-                        }
-                        nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
-                    }
-                    bExtended = sal_True;
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-30 15:53:20 $
+ *  last change: $Author: mib $ $Date: 2001-11-13 18:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,10 +198,10 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
         if( pEntry )
         {
-                // we have a valid map entry here, so lets use it...
-                if( 0 == (pEntry->nMemberId & (MID_FLAG_NO_ITEM_IMPORT|
-                                           MID_FLAG_ELEMENT_ITEM_IMPORT)) )
-                {
+            // we have a valid map entry here, so lets use it...
+            if( 0 == (pEntry->nMemberId & (MID_FLAG_NO_ITEM_IMPORT|
+                                       MID_FLAG_ELEMENT_ITEM_IMPORT)) )
+            {
                 // first get item from itemset
                 const SfxPoolItem* pItem = 0;
                 SfxItemState eState = rSet.GetItemState( pEntry->nWhichId, TRUE,
@@ -250,11 +250,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                               rNamespaceMap );
             }
         }
-        else if( USHRT_MAX != nUnknownWhich &&
-                 // TODO: PI
-                   (XML_NAMESPACE_NONE == nPrefix ||
-                  XML_NAMESPACE_UNKNOWN == nPrefix ||
-                  (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) != 0) )
+        else if( USHRT_MAX != nUnknownWhich )
         {
             if( !pUnknownItem )
             {
