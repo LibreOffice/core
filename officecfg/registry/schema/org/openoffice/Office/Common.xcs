@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-07 09:07:13 $
+ *  last change: $Author: pb $ $Date: 2002-08-07 09:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@
 			</info>
 		</group>
 		<group oor:name="DialogSize">
+			<!--Responsible: PB-->
 			<prop oor:name="Height" oor:type="xs:int">
 				<info>
 					<desc xml:lang="en-US">Height of the dialog  [UNIT=pixel]</desc>
@@ -136,6 +137,9 @@
 					<desc xml:lang="en-US">Width of the dialog  [UNIT=pixel]</desc>
 				</info>
 			</prop>
+			<info>
+				<desc xml:lang="en-US">Contains the width and height of a dialog size.</desc>
+			</info>
 		</group>
 		<group oor:name="Font">
 			<!-- Responsible: OJ-->
@@ -1917,6 +1921,7 @@
 			</group>
 		</group>
 		<group oor:name="View">
+			<!--Responsible: MBA-->
 			<prop oor:name="FontScaling" oor:type="xs:short">
 				<!-- OldPath: General/View -->
 				<!-- OldLocation: soffice.cfg -->
@@ -1965,6 +1970,9 @@
 					</enumeration>
 				</constraints>
 			</prop>
+			<info>
+				<desc xml:lang="en-US">Contains window and dialog settings</desc>
+			</info>
 			<group oor:name="AppWindow">
 				<!-- Responsible: MBA -->
 				<prop oor:name="FullScreen" oor:type="xs:boolean">
@@ -2134,6 +2142,7 @@
 				</prop>
 			</group>
 			<group oor:name="Menu">
+				<!--Responsible: PB-->
 				<prop oor:name="DontHideDisabledEntry" oor:type="xs:boolean">
 					<!-- OldPath: Desktop/DontHideDisabledEntry -->
 					<!-- OldLocation: soffice.ini -->
@@ -2142,6 +2151,15 @@
 					<value>false</value>
 					<info>
 						<desc xml:lang="en-US">Activate this field for viewing all deactivated menu entries. Menu commands that are normally not necessary are hidden by default</desc>
+					</info>
+				</prop>
+				<prop oor:name="ShowIconsInMenues" oor:type="xs:boolean">
+					<!-- OldPath: General/View -->
+					<!-- Responsible: CD -->
+					<!-- UIHints: Tools  Options - General  View  [Section] Options -->
+					<value>true</value>
+					<info>
+						<desc xml:lang="en-US">Indicates whether icons in the office menus should be displayed or not</desc>
 					</info>
 				</prop>
 				<prop oor:name="FollowMouse" oor:type="xs:boolean">
@@ -2155,15 +2173,9 @@
 						<label xml:lang="en-US">Menu follows mouse pointer</label>
 					</info>
 				</prop>
-				<prop oor:name="ShowIconsInMenues" oor:type="xs:boolean">
-					<!-- OldPath: General/View -->
-					<!-- Responsible: CD -->
-					<!-- UIHints: Tools  Options - General  View  [Section] Options -->
-					<value>true</value>
-					<info>
-						<desc xml:lang="en-US">Indicates whether icons in the office menus should be displayed or not</desc>
-					</info>
-				</prop>
+				<info>
+					<desc xml:lang="en-US">Contains menu view settings</desc>
+				</info>
 			</group>
 			<group oor:name="Window">
 				<!-- Responsible: MBA -->
@@ -4279,6 +4291,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 			</set>
 		</group>
 		<group oor:name="SearchOptions">
+			<!--Responsible: OS / PB-->
 			<prop oor:name="IsWholeWordsOnly" oor:type="xs:boolean">
 				<!-- OldPath: -->
 				<!-- OldLocation: -->
@@ -4349,6 +4362,9 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 					<desc xml:lang="en-US">Search with the use of asian options</desc>
 				</info>
 			</prop>
+			<info>
+				<desc xml:lang="en-US">Contains all options for search.</desc>
+			</info>
 			<group oor:name="Japanese">
 				<!-- Responsible: OS -->
 				<prop oor:name="IsMatchFullHalfWidthForms" oor:type="xs:boolean">
