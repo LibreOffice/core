@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:26:20 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ TabDialog TAB_PARAGRAPH
                 Text[ korean ] = "µé¿©¾²±â¿Í °£°Ý";
                 Text[ turkish ] = "Girintiler ve aralýklar";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sangrías y espacios";
             };
             PageItem
             {
@@ -141,6 +142,7 @@ TabDialog TAB_PARAGRAPH
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
+                Text[ catalan ] = "Tipografía asiática";
             };
             PageItem
             {
@@ -167,6 +169,7 @@ TabDialog TAB_PARAGRAPH
                 Text[ korean ] = "¸ÂÃã";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Alineación";
             };
             /*
             PageItem  {
@@ -214,6 +217,7 @@ TabDialog TAB_PARAGRAPH
                 Text[ korean ] = "ÅÇ Á¤Áö";
                 Text[ turkish ] = "Sekmeler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Tabulación";
             };
         };
     };
@@ -264,6 +268,7 @@ TabDialog TAB_PARAGRAPH
         Text[ korean ] = "µÇµ¹¾Æ°¡±â";
         Text[ turkish ] = "Geri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Regresar";
     };
     Text[ chinese_simplified ] = "¶ÎÂä";
     Text[ russian ] = "Àáçàö";
@@ -275,4 +280,5 @@ TabDialog TAB_PARAGRAPH
     Text[ korean ] = "´Ü¶ô";
     Text[ turkish ] = "Paragraf";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Párrafo";
 };
