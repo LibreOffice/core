@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 16:58:31 $
+ *  last change: $Author: jb $ $Date: 2002-08-12 16:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,16 @@ bool PropertyUpdate::setValueFor(OUString const & _aLocale, uno::Any const & _aV
     OSL_ENSURE(m_aValues.find(_aLocale) == m_aValues.end(),
                 "PropertyUpdate: Locale being added already has a value in this property.");
 
+    if (_aValueUpdate.hasValue())
+    {
+        if (m_aType == uno::Type())
+            m_aType = _aValueUpdate.getValueType();
+
+        else
+            OSL_ENSURE( m_aType == _aValueUpdate.getValueType() ||
+                        m_aType.getTypeClass() == uno::TypeClass_ANY,
+                        "ValueType mismatch in PropertyUpdate");
+    }
     return m_aValues.insert( ValueList::value_type(_aLocale,_aValueUpdate) ).second;
 }
 // -----------------------------------------------------------------------------

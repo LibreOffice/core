@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerwriter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 17:23:01 $
+ *  last change: $Author: jb $ $Date: 2002-08-12 16:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ void SAL_CALL LayerWriter::overrideProperty( const OUString& aName, sal_Int16 aA
 
     m_aFormatter.prepareElement(aInfo);
 
-    this->startProp(aType, false);
+    this->startProp(aType, aType.getTypeClass() != uno::TypeClass_VOID);
 }
 // -----------------------------------------------------------------------------
 
