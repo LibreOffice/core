@@ -1,29 +1,29 @@
 
 .IF "$(GUI)"!="UNX"
 .IF "$(GUI)"!="MAC"
-AWK=awk
+AWK*=awk
 SED*=sed
-TYPE=type
-RENAME=ren
-COPY=copy
+TYPE*=type
+RENAME*=ren
+COPY*=copy
 COPYUPDATE=/u
 MKDIR*=mkdir
-MKDIRHIER*=$(MKDIR) 
-ECHON=echos
+MKDIRHIER=$(MKDIR) 
+ECHON*=echos
 .IF "$(GUI)"=="OS2"
-GREP=echo which grep ?
-FIND=$(SOLARROOT)$/util$/os2$/find.exe
-LS=dir /b
+GREP*=echo which grep ?
+FIND*=$(SOLARROOT)$/util$/os2$/find.exe
+LS*=dir /b
 .ENDIF
 .IF "$(GUI)"=="WNT"
-GREP=$(ENV_TOOLS)$/grep32.exe
-FIND=$(BUILD_TOOLS)$/find.exe
-LS=$(BUILD_TOOLS)$/ls.exe
-GNUCOPY=$(BUILD_TOOLS)$/cp.exe
+GREP*=$(ENV_TOOLS)$/grep32.exe
+FIND*=$(BUILD_TOOLS)$/find.exe
+LS*=$(BUILD_TOOLS)$/ls.exe
+GNUCOPY*=$(BUILD_TOOLS)$/cp.exe
 #wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
 MKDIR=+$(BUILD_TOOLS)$/mkdir.btm
-TOUCH=$(BUILD_TOOLS)$/touch.exe
-PERL=$(BUILD_TOOLS)$/perl.exe
+TOUCH*=$(BUILD_TOOLS)$/touch.exe
+PERL*=$(BUILD_TOOLS)$/perl.exe
 #signing for win32 only
 SIGNCODE=$(BUILD_TOOLS)$/PackSign$/signcode
 CABARC=$(BUILD_TOOLS)$/PackSign$/cabarc
