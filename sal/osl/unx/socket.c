@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:46:59 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,10 +865,9 @@ static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
             dup2  (p[1], 1);
             close (p[1]);
 
-            if (execvp ("/bin/domainname", argv) < 0)
-            {
-                _exit(-1);
-            }
+            execv ("/bin/domainname", argv);
+            // arriving here means exec failed
+            _exit(-1);
         }
         else if (pid > 0)
         {
@@ -883,14 +882,13 @@ static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
                 result = sal_True;
             }
             close (p[0]);
+            waitpid (pid, &nStatus, 0);
         }
         else
         {
             close (p[0]);
             close (p[1]);
         }
-
-        waitpid (pid, &nStatus, 0);
     }
     return (result);
 }
@@ -1423,11 +1421,12 @@ oslSocketResult SAL_CALL osl_psz_getLocalHostname (
         if ((strlen(uts.nodename) + 1) > nBufLen)
             return osl_Socket_Error;
 
-        strcpy(LocalHostname, uts.nodename);
+        strncpy(LocalHostname, uts.nodename, sizeof( LocalHostname ));
 #else  /* BSD compatible */
 
-        if (gethostname(LocalHostname, sizeof(LocalHostname)) != 0)
+        if (gethostname(LocalHostname, sizeof(LocalHostname)-1) != 0)
             return osl_Socket_Error;
+        LocalHostname[sizeof(LocalHostname)-1] = 0;
 #endif /* SYSV */
 
         /* check if we have an FQDN */
