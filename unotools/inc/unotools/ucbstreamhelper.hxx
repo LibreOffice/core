@@ -4,6 +4,12 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
+#endif
 
 #include <tools/stream.hxx>
 
