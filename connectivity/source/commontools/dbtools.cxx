@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:41:29 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,10 +460,17 @@ Reference< XConnection> calcConnection(
             {
                 try
                 {
-                    xRowSetProps->setPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection"), makeAny(xReturn));
+                    ::rtl::OUString aTemp(::rtl::OUString::createFromAscii("ActiveConnection"));
+                    // dispose the old active connection
+                    Reference<XComponent>  xAggregationComponent;
+                    xRowSetProps->getPropertyValue(aTemp) >>= xAggregationComponent;
+                    if(xAggregationComponent.is())
+                        xAggregationComponent->dispose();
+                    xRowSetProps->setPropertyValue(aTemp, makeAny(xReturn));
                 }
-                catch(...)
+                catch(Exception&)
                 {
+                    OSL_ENSHURE(0,"EXception when we set the new active connection!");
                 }
             }
         }
@@ -1033,7 +1040,7 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
             }
         }
     }
-    catch(...)
+    catch(Exception&)
     {
         OSL_ENSHURE(sal_False, "::getCurrentSettingsComposer : catched an exception !");
         xReturn = NULL;
@@ -1128,6 +1135,9 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2000/11/14 13:41:29  oj
+ *  use of statis strings
+ *
  *  Revision 1.9  2000/11/13 07:13:52  oj
  *  wrong use of replaceAt
  *
