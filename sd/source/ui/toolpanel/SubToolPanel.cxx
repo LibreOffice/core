@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SubToolPanel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:35:51 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,8 @@ void SubToolPanel::ListHasChanged (void)
 
 void SubToolPanel::AddControl (
     ::std::auto_ptr<TreeNode> pControl,
-    const String& rTitle)
+    const String& rTitle,
+    ULONG nHelpId)
 {
     pControl->GetWindow()->AddEventListener (
         LINK(this,SubToolPanel,WindowEventListener));
@@ -146,6 +147,7 @@ void SubToolPanel::AddControl (
         rTitle,
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
     pTitledControl->GetWindow()->SetParent(this);
+    pTitledControl->GetTitleBar()->SetHelpId(nHelpId);
     ::std::auto_ptr<TreeNode> pChild (pTitledControl);
 
     // Add a down link only for the first control so that when
