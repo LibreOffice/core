@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-20 13:21:50 $
+ *  last change: $Author: sj $ $Date: 2002-04-11 13:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@
 DECLARE_CREATEINSTANCE( SvNumberFormatsSupplierServiceObject )
 DECLARE_CREATEINSTANCE( ImageProducer )
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
+DECLARE_CREATEINSTANCE( SvFilterOptionsDialog )
 
 IMPL_CREATEINSTANCE( ImageProducer );
 
@@ -277,6 +278,10 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
         xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.FolderPicker/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" ) );
 
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.SvFilterOptionsDialog/UNO/SERVICES" ) );
+        xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilterOptionsDialog" ) );
+
+
         // the product registration component
         ::svt::RegisterImplementation(
             xRegistryKey,
@@ -333,6 +338,12 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
                                                     ::rtl::OUString::createFromAscii( sImplementationName ),
                                                     SvtFolderPicker::impl_createInstance,
                                                     aServiceNames );
+        }
+        else if ( rtl_str_compare( sImplementationName, "com.sun.star.svtools.SvFilterOptionsDialog") == 0 )
+        {
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+            aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilterOptionsDialog" );
+            xFactory = ::cppu::createSingleFactory( xServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvFilterOptionsDialog_CreateInstance, aServiceNames );
         }
         else
         {

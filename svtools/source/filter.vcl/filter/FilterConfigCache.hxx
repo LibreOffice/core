@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-07 13:03:23 $
+ *  last change: $Author: sj $ $Date: 2002-04-11 13:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ class FilterConfigCache
 {
         struct FilterConfigCacheEntry
         {
+            ::rtl::OUString sInternalFilterName;
             ::rtl::OUString sType;
             ::com::sun::star::uno::Sequence< ::rtl::OUString > lExtensionList;
             ::rtl::OUString sUIName;
@@ -126,7 +127,8 @@ class FilterConfigCache
                                                 const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::beans::PropertyValue >& rFilterProperties,
                                                     const ::com::sun::star::uno::Reference<
-                                                        ::com::sun::star::container::XNameAccess >& xTypeAccess );
+                                                        ::com::sun::star::container::XNameAccess >& xTypeAccess,
+                                                            const ::rtl::OUString& rInternalFilterName );
 
         static sal_Bool   bInitialized;
         static sal_Int32  nIndType;
@@ -173,6 +175,7 @@ class FilterConfigCache
         String      GetExportFormatShortName( sal_uInt16 nFormat );
         String      GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
         String      GetExportFilterTypeName( sal_uInt16 nFormat );
+        String      GetExportInternalFilterName( sal_uInt16 nFormat );
 
         sal_Bool    IsExportInternalFilter( sal_uInt16 nFormat );
         sal_Bool    IsExportPixelFormat( sal_uInt16 nFormat );

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: thb $ $Date: 2001-08-14 13:49:40 $
+#   last change: $Author: sj $ $Date: 2002-04-11 13:07:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,40 +93,45 @@ UNOTYPES=\
     com.sun.star.io.XActiveDataSource					\
     com.sun.star.io.XOutputStream						\
     com.sun.star.svg.XSVGWriter							\
-    com.sun.star.xml.sax.XDocumentHandler				
+    com.sun.star.xml.sax.XDocumentHandler				\
+    com.sun.star.ui.dialogs.XExecutableDialog
+
 
 
 # --- Files --------------------------------------------------------
 
-CXXFILES= filter.cxx          \
-          filter2.cxx		  \
-          dlgexpor.cxx		  \
-          dlgejpg.cxx		  \
-          sgfbram.cxx         \
-          sgvmain.cxx         \
-          sgvtext.cxx         \
-          sgvspln.cxx         \
-          FilterConfigItem.cxx\
-          FilterConfigCache.cxx	
+CXXFILES= filter.cxx				\
+          filter2.cxx				\
+          dlgexpor.cxx				\
+          dlgejpg.cxx				\
+          sgfbram.cxx				\
+          sgvmain.cxx				\
+          sgvtext.cxx				\
+          sgvspln.cxx				\
+          FilterConfigItem.cxx		\
+          FilterConfigCache.cxx		\
+          SvFilterOptionsDialog.cxx
 
 SRCFILES= strings.src		  \
           dlgexpor.src		  \
           dlgejpg.src
 
-SLOFILES= $(SLO)$/filter.obj   \
-          $(SLO)$/filter2.obj  \
-          $(SLO)$/dlgexpor.obj \
-          $(SLO)$/dlgejpg.obj  \
-          $(SLO)$/sgfbram.obj  \
-          $(SLO)$/sgvmain.obj  \
-          $(SLO)$/sgvtext.obj  \
-          $(SLO)$/sgvspln.obj  \
-          $(SLO)$/FilterConfigItem.obj	\
-          $(SLO)$/FilterConfigCache.obj
+SLOFILES= $(SLO)$/filter.obj				\
+          $(SLO)$/filter2.obj				\
+          $(SLO)$/dlgexpor.obj				\
+          $(SLO)$/dlgejpg.obj				\
+          $(SLO)$/sgfbram.obj				\
+          $(SLO)$/sgvmain.obj				\
+          $(SLO)$/sgvtext.obj				\
+          $(SLO)$/sgvspln.obj				\
+          $(SLO)$/FilterConfigItem.obj		\
+          $(SLO)$/FilterConfigCache.obj		\
+          $(SLO)$/SvFilterOptionsDialog.obj
 
 EXCEPTIONSNOOPTFILES=	$(SLO)$/filter.obj				\
                         $(SLO)$/FilterConfigItem.obj	\
-                        $(SLO)$/FilterConfigCache.obj
+                        $(SLO)$/FilterConfigCache.obj	\
+                        $(SLO)$/SvFilterOptionsDialog.obj
 
 # --- Targets -------------------------------------------------------
 

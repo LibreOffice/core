@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-05 12:28:44 $
+ *  last change: $Author: sj $ $Date: 2002-04-11 13:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
 #include "filter.hxx"
+#ifndef _FILTER_CONFIG_CACHE_HXX_
 #include "FilterConfigCache.hxx"
+#endif
 #include <FilterConfigItem.hxx>
 #include "fltcall.hxx"
 #include "wmf.hxx"
@@ -82,8 +84,6 @@
 #include "xpmread.hxx"
 #include "solar.hrc"
 #include "strings.hrc"
-#include "dlgexpor.hxx"
-#include "dlgejpg.hxx"
 #include "sgffilt.hxx"
 #ifndef _VOS_MODULE_HXX_
 #include "vos/module.hxx"
@@ -138,6 +138,11 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <pathoptions.hxx>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#include "SvFilterOptionsDialog.hxx"
 
 #if defined WIN || (defined OS2 && !defined ICC)
 
@@ -163,6 +168,9 @@
 // -----------
 // - statics -
 // -----------
+
+using namespace ::rtl;
+using namespace ::com::sun::star;
 
 static List* pFilterHdlList = NULL;
 
@@ -2094,59 +2102,27 @@ BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat )
 
 BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat, FieldUnit eFieldUnit )
 {
-    String  aFilterName( pConfig->GetExportFilterName( nFormat ) );
-
     sal_Bool bRet = sal_False;
+     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+        xSMgr( ::comphelper::getProcessServiceFactory() );
 
-    if ( pConfig->IsExportInternalFilter( nFormat ) )
+    uno::Reference< com::sun::star::uno::XInterface > xFilterOptionsDialog
+        ( xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.svtools.SvFilterOptionsDialog" ) ),
+            com::sun::star::uno::UNO_QUERY );
+    if ( xFilterOptionsDialog.is() )
     {
-        // Export-Dialog fuer Bitmap's, SVM's und WMF's
-        if( ( aFilterName.EqualsIgnoreCaseAscii( EXP_BMP ) ) ||
-            ( aFilterName.EqualsIgnoreCaseAscii( EXP_SVMETAFILE ) ) ||
-            ( aFilterName.EqualsIgnoreCaseAscii( EXP_WMF ) ) ||
-            ( aFilterName.EqualsIgnoreCaseAscii( EXP_EMF ) ) ||
-            ( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) ) )
+        com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XExecutableDialog > xExecutableDialog
+            ( xFilterOptionsDialog, ::com::sun::star::uno::UNO_QUERY );
+        com::sun::star::uno::Reference< com::sun::star::beans::XPropertyAccess > xPropertyAccess
+            ( xFilterOptionsDialog, ::com::sun::star::uno::UNO_QUERY );
+        if ( xExecutableDialog.is() && xPropertyAccess.is() )
         {
-            ByteString  aResMgrName( "svt", 3 );
-            ResMgr*     pResMgr;
-
-            aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-            pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
-
-            FltCallDialogParameter aFltCallDlgPara( pWindow, pResMgr, eFieldUnit );
-
-            // JPEG-Dialog
-            if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
-                bRet = ( DlgExportEJPG( aFltCallDlgPara ).Execute() == RET_OK );
-            // Fuer Bitmaps nehmen wir den Pixel-Dialog
-            else if( !aFilterName.EqualsIgnoreCaseAscii( EXP_BMP ) )
-            {
-                aFltCallDlgPara.aFilterExt = pConfig->GetExportFormatShortName( nFormat );
-                bRet = ( DlgExportVec( aFltCallDlgPara ).Execute() == RET_OK );
-            }
-            // Fuer Vektorformate nehmen wir den Vektor-Dialog
-            else
-            {
-                aFltCallDlgPara.aFilterExt = pConfig->GetExportFormatShortName( nFormat );
-                bRet = ( DlgExportPix( aFltCallDlgPara ).Execute() == RET_OK );
-            }
-            delete pResMgr;
-        }
-    }
-    else    // ladbare Filter
-    {
-        xub_StrLen i, nTokenCount = aFilterPath.GetTokenCount( ';' );
-        for ( i = 0; i < nTokenCount; i++ )
-        {
-            String aPhysicalName( ImpCreateFullFilterPath( aFilterPath.GetToken( i ), aFilterName ) );
-            ::vos::OModule aLibrary( aPhysicalName );
-            PFilterDlgCall  pFunc = (PFilterDlgCall) aLibrary.getSymbol( UniString( EXPDLG_FUNCTION_NAME, RTL_TEXTENCODING_UTF8 ) );
-            // Dialog in DLL ausfuehren
-            if( pFunc )
-            {
-                FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, eFieldUnit );
-                bRet = (*pFunc)( aFltCallDlgPara );
-            }
+            com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aMediaDescriptor( 1 );
+            aMediaDescriptor[ 0 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+            rtl::OUString aStr( pConfig->GetExportInternalFilterName( nFormat ) );
+            aMediaDescriptor[ 0 ].Value <<= aStr;
+            xPropertyAccess->setPropertyValues( aMediaDescriptor );
+            bRet = xExecutableDialog->execute() == com::sun::star::ui::dialogs::ExecutableDialogResults::OK;
         }
     }
     return bRet;

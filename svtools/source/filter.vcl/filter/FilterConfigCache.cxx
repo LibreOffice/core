@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-07 13:03:10 $
+ *  last change: $Author: sj $ $Date: 2002-04-11 13:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,8 @@ sal_Bool FilterConfigCache::ImplIsOwnFilter( const Sequence< PropertyValue >& rF
 
 sal_Bool FilterConfigCache::ImplAddFilterEntry( sal_Int32& nFlags,
                                                 const Sequence< PropertyValue >& rFilterProperties,
-                                                    const Reference< XNameAccess >& xTypeAccess )
+                                                    const Reference< XNameAccess >& xTypeAccess,
+                                                        const OUString& rInternalFilterName )
 {
     static OUString sExtensions         ( RTL_CONSTASCII_USTRINGPARAM( "Extensions" ) );
     static OUString sMediaType          ( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
@@ -239,6 +240,7 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( sal_Int32& nFlags,
 
         if ( aEntry.IsValid() )
         {
+            aEntry.sInternalFilterName = rInternalFilterName;
             // trying to get the corresponding type for this filter
             if ( xTypeAccess->hasByName( aEntry.sType ) )
             {
@@ -299,8 +301,8 @@ void FilterConfigCache::ImplInit()
 
     for ( i = 0; i < nAllFilterCount; i++ )
     {
-        OUString sInternalTypeName = lAllFilter[ i ];
-        Any aTypePropertySet = xFilterAccess->getByName( sInternalTypeName );
+        OUString sInternalFilterName = lAllFilter[ i ];
+        Any aTypePropertySet = xFilterAccess->getByName( sInternalFilterName );
 
         Sequence< PropertyValue > lProperties;
         aTypePropertySet >>= lProperties;
@@ -332,7 +334,7 @@ void FilterConfigCache::ImplInit()
         if ( ImplIsOwnFilter( lProperties ) )
         {
             sal_Int32 nFlags = 0;
-            if ( ImplAddFilterEntry( nFlags, lProperties, xTypeAccess ) )
+            if ( ImplAddFilterEntry( nFlags, lProperties, xTypeAccess, sInternalFilterName ) )
             {
                 if ( ( nFlags & 1 ) && ( nIndType >= 0 )  )  // import filter ?
                 {
@@ -673,9 +675,18 @@ String FilterConfigCache::GetExportFilterTypeName( sal_uInt16 nFormat )
 {
     CacheVector::iterator aIter( aExport.begin() + nFormat );
     String aFilterType;
-    if ( aIter < aImport.end() )
+    if ( aIter < aExport.end() )
         aFilterType = aIter->sFilterType;
     return aFilterType;
+}
+
+String FilterConfigCache::GetExportInternalFilterName( sal_uInt16 nFormat )
+{
+    CacheVector::iterator aIter( aExport.begin() + nFormat );
+    String aInternalFilterName;
+    if ( aIter < aExport.end() )
+        aInternalFilterName = aIter->sInternalFilterName;
+    return aInternalFilterName;
 }
 
 String FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
