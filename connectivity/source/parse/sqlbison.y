@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.46 2004-03-15 12:48:59 obo Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.47 2004-06-25 18:34:34 hjs Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: obo $ $Date: 2004-03-15 12:48:59 $ $Revision: 1.46 $
+//	$Author: hjs $ $Date: 2004-06-25 18:34:34 $ $Revision: 1.47 $
 //
 // Description:
 //
@@ -3101,6 +3101,7 @@ IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_REAL_COMPARE,	"The field can not b
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_INT_COMPARE,	"The field can not be compared with a number!");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE,	"The table \"#\" is unknown in the database!");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COLUMN,	"The column \"#\" is unknown in the table \"#\"!");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE_EXIST,	"The table or view \"#\" is already in the database!");
 
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_LIKE, "LIKE");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_NOT, "NOT");
@@ -3631,6 +3632,14 @@ sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 				s_nRuleIDs[eRule] = StrToRuleID("char_substring_fct"); break;
 			case OSQLParseNode::selection:
 				s_nRuleIDs[eRule] = StrToRuleID("selection"); break;
+			case OSQLParseNode::base_table_def:
+				s_nRuleIDs[eRule] = StrToRuleID("base_table_def"); break;
+			case OSQLParseNode::base_table_element_commalist:
+				s_nRuleIDs[eRule] = StrToRuleID("base_table_element_commalist"); break;
+			case OSQLParseNode::data_type:
+				s_nRuleIDs[eRule] = StrToRuleID("data_type"); break;
+			case OSQLParseNode::column_def:
+				s_nRuleIDs[eRule] = StrToRuleID("column_def"); break;
 			default:
 				OSL_ENSURE(0,"interner Fehler: Regel nicht bekannt, in OSQLParser::RuleID nachtragen!");
 		}
