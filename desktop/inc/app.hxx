@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:53:12 $
+ *  last change: $Author: cd $ $Date: 2001-07-19 12:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ class Desktop : public Application //public SfxApplicationClass
         virtual void        DeInit();
         virtual BOOL        QueryExit();
         virtual USHORT      Exception(USHORT nError);
-        virtual void        Property( ApplicationProperty& );
         virtual void        SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
         virtual void        AppEvent( const ApplicationEvent& rAppEvent );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-17 08:34:12 $
+ *  last change: $Author: cd $ $Date: 2001-07-19 12:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,10 +481,6 @@ USHORT Desktop::Exception(USHORT nError)
     // ConfigManager is disposed, so no way to continue
     // bInException = sal_False;
     // return Application::Exception( nError );
-}
-
-void Desktop::Property( ApplicationProperty& )
-{
 }
 
 void Desktop::AppEvent( const ApplicationEvent& rAppEvent )

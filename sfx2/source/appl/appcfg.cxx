@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-06 05:13:22 $
+ *  last change: $Author: cd $ $Date: 2001-07-19 12:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1243,119 +1243,6 @@ static void CorrectUpdateNumber_Impl(String& rName)
     while ( nCount );
 }
 */
-
-void SfxApplicationClass::Property( ApplicationProperty& rProp )
-{
-#if SUPD<613//MUSTINI
-    SfxApplication* pApp = SFX_APP();
-    SfxIniManager* pIni = pApp->GetIniManager();
-
-    // AppIniManger?
-    SfxAppIniManagerProperty* pAppIniMgr = PTR_CAST(SfxAppIniManagerProperty, &rProp);
-    if ( pAppIniMgr )
-    {
-        pAppIniMgr->SetIniManager( pIni );
-        return;
-    }
-#endif
-    TTProperties* pTTProperties = PTR_CAST( TTProperties, &rProp );
-    if ( pTTProperties )
-    {
-        pTTProperties->nPropertyVersion = TT_PROPERTIES_VERSION;
-        switch ( pTTProperties->nActualPR )
-        {
-            case TT_PR_SLOTS:
-            {
-                pTTProperties->nSidOpenUrl = SID_OPENURL;
-                pTTProperties->nSidFileName = SID_FILE_NAME;
-                pTTProperties->nSidNewDocDirect = SID_NEWDOCDIRECT;
-                pTTProperties->nSidCopy = SID_COPY;
-                pTTProperties->nSidPaste = SID_PASTE;
-                pTTProperties->nSidSourceView = SID_SOURCEVIEW;
-                pTTProperties->nSidSelectAll = SID_SELECTALL;
-                pTTProperties->nSidReferer = SID_REFERER;
-                pTTProperties->nActualPR = 0;
-            }
-            break;
-            case TT_PR_DISPATCHER:
-            {
-                // interface for TestTool
-                SfxViewFrame* pViewFrame;
-                SfxDispatcher* pDispatcher;
-                pViewFrame = SfxViewFrame::Current();
-                if ( !pViewFrame )
-                    pViewFrame = SfxViewFrame::GetFirst();
-                if ( pViewFrame )
-                    pDispatcher = pViewFrame->GetDispatcher();
-                else
-                    pDispatcher = NULL;
-                if ( !pDispatcher )
-                    pTTProperties->nActualPR = TT_PR_ERR_NODISPATCHER;
-                else
-                {
-                    pDispatcher->SetExecuteMode(EXECUTEMODE_DIALOGASYNCHRON);
-                    if ( pTTProperties->mnSID == SID_NEWDOCDIRECT )
-                    {
-                        pTTProperties->mnSID = SID_OPENDOC;
-                        SfxPoolItem** pArgs = pTTProperties->mppArgs;
-                        SfxAllItemSet aSet( SFX_APP()->GetPool() );
-                        String aFactory = String::CreateFromAscii("private:factory/");
-                        if ( pArgs && *pArgs )
-                        {
-                            for ( SfxPoolItem **pArg = pArgs; *pArg; ++pArg )
-                                aSet.Put( **pArg );
-
-                            SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, FALSE );
-                            if ( pFactoryName )
-                                aFactory += pFactoryName->GetValue();
-                            else
-                                aFactory += String::CreateFromAscii("swriter");
-                        }
-                        else
-                            aFactory += String::CreateFromAscii("swriter");
-
-                        aSet.Put( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") ) );
-                        aSet.Put( SfxStringItem( SID_FILE_NAME, aFactory ) );
-                        aSet.ClearItem( SID_NEWDOCDIRECT );
-
-                        if ( pDispatcher->ExecuteFunction( pTTProperties->mnSID, aSet, pTTProperties->mnMode )
-                                    == EXECUTE_NO )
-                            pTTProperties->nActualPR = TT_PR_ERR_NOEXECUTE;
-                        else
-                            pTTProperties->nActualPR = 0;
-                    }
-                    else
-                    {
-                        if ( pDispatcher->ExecuteFunction(
-                                pTTProperties->mnSID, pTTProperties->mppArgs, pTTProperties->mnMode )
-                            == EXECUTE_NO )
-                            pTTProperties->nActualPR = TT_PR_ERR_NOEXECUTE;
-                        else
-                            pTTProperties->nActualPR = 0;
-                    }
-                }
-            }
-            break;
-/*
-            case TT_PR_IMG:
-            {
-                SvDataMemberObjectRef aDataObject = new SvDataMemberObject();
-                SvData* pDataBmp = new SvData( FORMAT_BITMAP );
-                pDataBmp->SetData( pTTProperties->mpBmp );
-                aDataObject->Append( pDataBmp );
-                aDataObject->CopyClipboard();
-                pTTProperties->nActualPR = 0;
-            }
-            break;
-*/
-            default:
-            {
-                pTTProperties->nPropertyVersion = 0;
-            }
-        }
-        return;
-    }
-}
 
 IMPL_OBJHINT( SfxStringHint, String )
 
