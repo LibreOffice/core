@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-07 11:07:28 $
+ *  last change: $Author: dg $ $Date: 2001-06-14 10:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,7 +1072,7 @@ namespace configmgr
         if (!isSessionTypeKnown()) return false;
 
         OUString const sSessionType = getSessionType();
-        return  (0 == sSessionType.compareToAscii(PORTAL_SESSION_IDENTIFIER)) &&
+        return  (0 == sSessionType.compareToAscii(PORTAL_SESSION_IDENTIFIER)) ||
                 (0 == sSessionType.compareToAscii(REMOTE_SESSION_IDENTIFIER));
 
     }
