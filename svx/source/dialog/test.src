@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:40:21 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ TabPage RID_SVXPAGE_POSITION
         stringlist [ italian ] =
         {
             < "Al paragrafo" ; > ;
-            < "Quale carattere" ; > ;
+            < "Come carattere" ; > ;
             < "Alla pagina" ; > ;
             < "Alla cornice" ; > ;
         };
@@ -403,7 +403,7 @@ TabPage RID_SVXPAGE_POSITION
     {
             < "?<???-?" ; > ;
         < "???????" ; > ;
-        < "????-?" ; > ;
+        < "????????-??\"?" ; > ;
         < "?\"\"?????\"?-?" ; > ;
     };
     StringList [ chinese_simplified ] =
@@ -642,7 +642,7 @@ TabPage RID_SVXPAGE_POSITION
     {
             < "Z g??y" ; > ;
         < "W g??ze" ; > ;
-        < "Wy?>rodkowany" ; > ;
+        < "Do ?>rodka" ; > ;
         < "W dole" ; > ;
         < "Znak w g??ze" ; > ;
         < "Wy?>rodkowany znak" ; > ;
@@ -792,10 +792,10 @@ TabPage RID_SVXPAGE_POSITION
         Text[ russian ] = "???,????????? ???????";
         Text[ greek ] = "????~???\"??????";
         Text[ polish ] = "Chro?\"";
-        Text[ japanese ] = "?????(~P)";
-        Text[ korean ] = "?????~P)";
-        Text[ chinese_simplified ] = "??????(~P)";
-        Text[ chinese_traditional ] = "กลกล?กลกล(~P)";
+        Text[ japanese ] = "?????(~O)";
+        Text[ korean ] = "?????~O)";
+        Text[ chinese_simplified ] = "??????(~O)";
+        Text[ chinese_traditional ] = "กลกล?กลกล(~O)";
         Text[ arabic ] = "????????";
         Text[ turkish ] = "~Koru";
         Text[ language_user1 ] = " ";
@@ -1039,10 +1039,10 @@ TabPage RID_SVXPAGE_SIZE
         Text[ russian ] = "???,????????? ???????";
         Text[ greek ] = "????~???\"??????";
         Text[ polish ] = "Chro?\"";
-        Text[ japanese ] = "?????(~P)";
-        Text[ korean ] = "?????~P)";
-        Text[ chinese_simplified ] = "??????(~P)";
-        Text[ chinese_traditional ] = "กลกล?กลกล(~P)";
+        Text[ japanese ] = "?????(~O)";
+        Text[ korean ] = "?????~O)";
+        Text[ chinese_simplified ] = "??????(~O)";
+        Text[ chinese_traditional ] = "กลกล?กลกล(~O)";
         Text[ arabic ] = "????????";
         Text[ turkish ] = "~Koru";
         Text[ language_user1 ] = " ";
@@ -1788,6 +1788,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "Posici?? y tama??";
 };
  // ********************************************************************** EOF
+
 
 
 
