@@ -874,21 +874,30 @@ sub copy_windows_installer_files_into_installset
 
 sub copy_child_projects_into_installset
 {
-    my ($installdir) = @_;
+    my ($installdir, $allvariables) = @_;
+
+    my $sourcefile = "";
+    my $destdir = "";
 
     # adding Java
 
-    my $sourcefile = $installer::globals::javafile->{'sourcepath'};
-    my $destdir = $installdir . $installer::globals::separator . $installer::globals::javafile->{'Subdir'};
-    if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
-    installer::systemactions::copy_one_file($sourcefile, $destdir);
+    if ( $allvariables->{'JAVAPRODUCT'} )
+    {
+        $sourcefile = $installer::globals::javafile->{'sourcepath'};
+        $destdir = $installdir . $installer::globals::separator . $installer::globals::javafile->{'Subdir'};
+        if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
+        installer::systemactions::copy_one_file($sourcefile, $destdir);
+    }
 
     # adding Adabas ( complete directory )
 
-    $sourcefile = $installer::globals::adafile->{'sourcepath'};
-    $destdir = $installdir . $installer::globals::separator . $installer::globals::adafile->{'Subdir'};
-    if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
-    installer::systemactions::copy_one_file($sourcefile, $destdir);
+    if ( $allvariables->{'ADAPRODUCT'} )
+    {
+        $sourcefile = $installer::globals::adafile->{'sourcepath'};
+        $destdir = $installdir . $installer::globals::separator . $installer::globals::adafile->{'Subdir'};
+        if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
+        installer::systemactions::copy_one_file($sourcefile, $destdir);
+    }
 }
 
 #################################################################
