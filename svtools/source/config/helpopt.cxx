@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-03-22 14:21:28 $
+ *  last change: $Author: pb $ $Date: 2001-04-11 10:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,9 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
 
 void SvtHelpOptions_Impl::Commit()
 {
-    Sequence< OUString > aNames = GetPropertyNames();
+    Sequence< OUString > aNames( 2 );
+    aNames[0] = OUString::createFromAscii("ExtendedTip");
+    aNames[1] = OUString::createFromAscii("Tip");
     OUString* pNames = aNames.getArray();
     Sequence< Any > aValues( aNames.getLength() );
     Any* pValues = aValues.getArray();
@@ -243,14 +245,6 @@ void SvtHelpOptions_Impl::Commit()
             case HELPTIPS :
                 pValues[nProp] <<= bHelpTips;
                 break;
-
-            case LOCALE:
-            case SYSTEM:
-                // readonly property -> do nothing
-                break;
-
-            default:
-                DBG_ERRORFILE( "invalid index to save a path" );
         }
     }
 
