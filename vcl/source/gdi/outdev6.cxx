@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:00:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,8 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                 case( 25 ): nMove = nBaseExtent * 3; break;
                 case( 50 ): nMove = nBaseExtent * 4; break;
                 case( 75 ): nMove = nBaseExtent * 6; break;
+                            // TODO What is the correct VALUE???
+                default:    nMove = 0; break;
             }
 
             Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
