@@ -6607,3 +6607,5 @@ __CTA3?AVDisposedException@lang@star@sun@com@@
 ??_7SfxMiscCfg@@6B@
 ??_GSfxMiscCfg@@UAEPAXI@Z
 ?CreateType@SfxEventHint@@SAPAXXZ
+?importLibraryElement@SfxDialogLibraryContainer@@EAA?AVAny@uno@star@sun@com@@ABVOUString@rtl@@VSotStorageStreamRef@@@Z
+?importLibraryElement@SfxScriptLibraryContainer@@EAA?AVAny@uno@star@sun@com@@ABVOUString@rtl@@VSotStorageStreamRef@@@Z
