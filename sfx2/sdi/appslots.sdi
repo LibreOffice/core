@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: hr $ $Date: 2003-03-27 11:27:31 $
-#*    $Revision: 1.10 $
+#*    last change       $Author: rt $ $Date: 2003-09-19 07:55:01 $
+#*    $Revision: 1.11 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -378,6 +378,130 @@ shell SfxApplication
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
+    ]
+
+    //----------------------------------------------------------------------
+    SID_BASICIDE_APPEAR // status(final|play)
+    [
+        ExecMethod = OfaExec_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    SID_BASICCHOOSER  // status(final|play)
+    [
+        ExecMethod = OfaExec_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    SID_INET_DLG  // status(final)
+    [
+        ExecMethod = OfaExec_Impl;
+    ]
+
+        //----------------------------------------------------------------------
+
+    SID_ONLINE_REGISTRATION
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    SID_OFFICE_CHECK_PLZ
+    [
+        ExecMethod = OfaExec_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    SID_SD_AUTOPILOT // status(final|play)
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    SID_NEWSD // status(final|play)
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    FN_LABEL  // status(final|play)
+
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    FN_BUSINESS_CARD  // status(final|play)
+
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    SID_SW_AGENDA_WIZZARD  // status(final|play)
+
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    SID_SW_FAX_WIZZARD    // status(final|play)
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    SID_SW_LETTER_WIZZARD // status(final|play)
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    SID_SW_MEMO_WIZZARD  //  status(final|play)
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
+
+    //----------------------------------------------------------------------
+
+    SID_COMP_BIBLIOGRAPHY
+    [
+        ExecMethod = OfaExec_Impl;
+    ]
+
+    SID_DATASOURCE_ADMINISTRATION
+    [
+        ExecMethod = OfaExec_Impl;
+    ]
+
+    SID_SDB52_IMPORT_WIZARD
+    [
+        ExecMethod = OfaExec_Impl;
+    ]
+
+    SID_ADDRESS_DATA_SOURCE
+    [
+        ExecMethod = OfaExec_Impl;
     ]
 }
 
