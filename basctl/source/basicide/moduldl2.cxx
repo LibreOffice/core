@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-26 15:39:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 
 #define GLOBALOVERFLOW
 
+#ifndef _SFX_IPFRM_HXX
+#include <sfx2/ipfrm.hxx>
+#endif
 
 #include <ide_pch.hxx>
 
@@ -443,8 +446,12 @@ BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNe
             }
 
             BasicIDE::MarkDocShellModified( pShell );
-            BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR );
-            BasicIDE::GetBindings().Update( SID_BASICIDE_LIBSELECTOR );
+            SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+            if ( pBindings )
+            {
+                pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
+                pBindings->Update( SID_BASICIDE_LIBSELECTOR );
+            }
         }
         catch ( container::ElementExistException& )
         {
@@ -686,11 +693,16 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
     {
         //ActivateCurrentLibSettings();
         SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pViewFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+        SfxDispatcher* pDispatcher = ( pViewFrame && !pViewFrame->ISA( SfxInPlaceFrame ) ) ? pViewFrame->GetDispatcher() : NULL;
         if ( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
+        }
+        else
+        {
+            SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+            SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+            SFX_APP()->ExecuteSlot( aRequest );
         }
         SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
