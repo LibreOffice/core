@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-12 16:47:08 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 09:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2570,6 +2570,11 @@ void SfxMedium::CreateTempFile()
 
     pImp->pTempFile->EnableKillingFile( sal_True );
     aName = pImp->pTempFile->GetFileName();
+    if ( !aName.Len() )
+    {
+        SetError( ERRCODE_IO_CANTWRITE );
+        return;
+    }
 
     if ( bCopy )
     {
@@ -2623,6 +2628,11 @@ void SfxMedium::CreateTempFileNoCopy()
 
     pImp->pTempFile->EnableKillingFile( sal_True );
     aName = pImp->pTempFile->GetFileName();
+    if ( !aName.Len() )
+    {
+        SetError( ERRCODE_IO_CANTWRITE );
+        return;
+    }
 
     CloseOutStream_Impl();
     CloseStorage();
