@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:52:03 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,23 +148,23 @@ public:
                                 return pInfo;
                             }
 
-    virtual void            ReadData( SvStream& rIStm )
-                            {
-                                SdrObjUserData::ReadData( rIStm );
-                                SdrDownCompat   aIO( rIStm, STREAM_READ, TRUE );
-                                UINT16          nVer;
-                                rIStm >> nVer;
-                                rIStm >> aImageMap;
-                            }
+    //BFS01virtual void         ReadData( SvStream& rIStm )
+    //BFS01                     {
+    //BFS01                         SdrObjUserData::ReadData( rIStm );
+    //BFS01                         SdrDownCompat   aIO( rIStm, STREAM_READ, TRUE );
+    //BFS01                         UINT16          nVer;
+    //BFS01                         rIStm >> nVer;
+    //BFS01                         rIStm >> aImageMap;
+    //BFS01                     }
 
-    virtual void            WriteData( SvStream& rOStm )
-                            {
-                                SdrObjUserData::WriteData( rOStm );
-                                SdrDownCompat   aIO( rOStm, STREAM_WRITE, TRUE );
-                                const UINT16    nVer = 1;
-                                rOStm << nVer;
-                                rOStm << aImageMap;
-                            }
+    //BFS01virtual void         WriteData( SvStream& rOStm )
+    //BFS01                     {
+    //BFS01                         SdrObjUserData::WriteData( rOStm );
+    //BFS01                         SdrDownCompat   aIO( rOStm, STREAM_WRITE, TRUE );
+    //BFS01                         const UINT16    nVer = 1;
+    //BFS01                         rOStm << nVer;
+    //BFS01                         rOStm << aImageMap;
+    //BFS01                     }
 
     const ImageMap&         GetImageMap() const { return aImageMap; }
 };
