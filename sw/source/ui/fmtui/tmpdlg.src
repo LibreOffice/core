@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-11 23:21:51 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,8 +189,8 @@ TabDialog DLG_TEMPLATE_1
                 Text[ portuguese_brazilian ] = "Asian layout";
                 Text[ japanese ] = "˜a•¶Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
-                Text[ chinese_simplified ] = "ÑÇÖŞÎÄ×ÖµÄ°æÊ½";
-                Text[ chinese_traditional ] = "¨È¬w¤å¦rª©¦¡";
+                Text[ chinese_simplified ] = "ÖĞÈÕº«°æÊ½";
+                Text[ chinese_traditional ] = "¤¤¤éÁúª©¦¡";
                 Text[ turkish ] = "Asian layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
             };
@@ -349,14 +349,14 @@ TabDialog DLG_TEMPLATE_2
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Asian typography";
-                Text[ russian ] = "Asian typography";
-                Text[ greek ] = "Asian typography";
-                Text[ dutch ] = "Asian typography";
+                Text[ russian ] = "Àçèàòñêèå øğèôòû";
+                Text[ greek ] = "ÁóéÜôéêç ôõğïãñáößá";
+                Text[ dutch ] = "Asiatische typografie";
                 Text[ french ] = "Typographie asiatique";
-                Text[ spanish ] = "Asian typography";
-                Text[ italian ] = "Asian typography";
+                Text[ spanish ] = "Tipografía asiática";
+                Text[ italian ] = "Tipografia asiatica";
                 Text[ danish ] = "Asian typography";
-                Text[ swedish ] = "Asian typography";
+                Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
@@ -467,8 +467,8 @@ TabDialog DLG_TEMPLATE_2
                 Text[ portuguese_brazilian ] = "Asian layout";
                 Text[ japanese ] = "˜a•¶Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
-                Text[ chinese_simplified ] = "ÑÇÖŞÎÄ×ÖµÄ°æÊ½";
-                Text[ chinese_traditional ] = "¨È¬w¤å¦rª©¦¡";
+                Text[ chinese_simplified ] = "ÖĞÈÕº«°æÊ½";
+                Text[ chinese_traditional ] = "¤¤¤éÁúª©¦¡";
                 Text[ turkish ] = "Asian layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
             };
