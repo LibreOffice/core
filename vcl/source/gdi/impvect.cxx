@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impvect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 // !!! ggf. einkommentieren, um Bitmaps zu erzeugen (nur, wenn File mit Debug uebersetzt wurde)
 // #define DEBUG_BMPOUTPUT
 
-#if defined DEBUG && defined DEBUG_BMPOUTPUT
+#if (OSL_DEBUG_LEVEL > 1) && defined DEBUG_BMPOUTPUT
 #define DBG_BMP 1
 #else
 #undef  DBG_BMP
