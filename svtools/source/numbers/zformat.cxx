@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:24:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 12:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3781,7 +3781,8 @@ const String* SvNumberformat::GetNumForString( USHORT nNumFor, USHORT nPos,
             pType++;
             nPos++;
         }
-        if ( (*pType != SYMBOLTYPE_STRING) && (*pType != SYMBOLTYPE_CURRENCY) )
+        if ( nPos >= nAnz || ((*pType != SYMBOLTYPE_STRING) &&
+                    (*pType != SYMBOLTYPE_CURRENCY)) )
             return NULL;
     }
     return &NumFor[nNumFor].Info().sStrArray[nPos];
