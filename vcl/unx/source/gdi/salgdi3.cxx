@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-20 16:00:27 $
+ *  last change: $Author: hdu $ $Date: 2002-07-26 16:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2201,11 +2201,13 @@ ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 // ---------------------------------------------------------------------------
 
 #ifdef ENABLE_CTL
-BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, bool bIsGlyphIndex, Rectangle& rRect )
 {
 #ifdef USE_BUILTIN_RASTERIZER
     if( maGraphicsData.mpServerSideFont != NULL )
     {
+        if( !bIsGlyphIndex )
+            return FALSE;
         ServerFont& rSF = *maGraphicsData.mpServerSideFont;
         const GlyphMetric& rGM = rSF.GetGlyphMetric( nGlyphIndex );
 
@@ -2256,19 +2258,20 @@ SalGraphics::GetGlyphBoundRect( xub_Unicode cChar,
 // ---------------------------------------------------------------------------
 
 #ifdef ENABLE_CTL
-BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
+BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, bool bIsGlyphIndex, PolyPolygon& rPolyPoly )
 {
+    BOOL bRet = FALSE;
+
 #ifdef USE_BUILTIN_RASTERIZER
     if( maGraphicsData.mpServerSideFont != NULL )
     {
         ServerFont& rSF = *maGraphicsData.mpServerSideFont;
-        bool bRet = rSF.GetGlyphOutline( nGlyphIndex, rPolyPoly );
-        if( bRet )
-            return TRUE;
+        if( bIsGlyphIndex && rSF.GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
+            bRet = TRUE;
     }
 #endif // USE_BUILTIN_RASTERIZER
 
-    return FALSE;
+    return bRet;
 }
 
 #else // ENABLE_CTL
