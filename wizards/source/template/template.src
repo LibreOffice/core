@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 12:58:24 $
+ *  last change: $Author: kz $ $Date: 2002-09-09 21:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ String CorrespondenceMsgError
 {
     Text = "Es ist ein Fehler aufgetreten!";
     Text[English] = "Error";
-    Text[ english_us ] = "Error";
+    Text[ english_us ] = "An error has occurred.";
     Text[ portuguese ] = "Erro";
     Text[ dutch ] = "Fout";
     Text[ french ] = "Erreur";
@@ -448,7 +448,7 @@ String CorrespondenceMsgError
     Text[ portuguese_brazilian ] = "Error";
     Text[ japanese ] = "エラー";
     Text[ korean ] = "오류";
-    Text[ chinese_simplified ] = "错误";
+    Text[ chinese_simplified ] = "已经发生一个错误！";
     Text[ chinese_traditional ] = "錯誤";
     Text[ arabic ] = "���";
     Text[ turkish ] = "Hata";
