@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:32:11 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,11 +118,15 @@
 #ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
 #endif
+#include <svx/svxids.hrc>
 #include "FrameView.hxx"
 #include "sdpage.hxx"
 #include "stlpool.hxx"
 #include "unmovss.hxx"
 #include <sfx2/request.hxx>
+#ifndef _SFXITEMPOOL_HXX //autogen
+#include <svtools/itempool.hxx>
+#endif
 
 using namespace ::sd::toolpanel::controls;
 #define MasterPagesSelector
@@ -131,9 +135,10 @@ using namespace ::sd::toolpanel::controls;
 using namespace ::com::sun::star::text;
 
 namespace {
-typedef ::std::pair<int, ::sd::toolpanel::controls::MasterPageContainer::Token>
-    UserData;
-}
+
+typedef ::std::pair<int, ::sd::toolpanel::controls::MasterPageContainer::Token> UserData;
+
+} //end of anonymous namespace
 
 
 
@@ -434,9 +439,8 @@ void MasterPagesSelector::AssignMasterPageToPageList (
         }
 
         // Add copies of the master pages.
-        SdPage* pClonedMasterPage = AddMasterPage (
-            &mrDocument, pMasterPage, nInsertionIndex);
-        AddMasterPage (&mrDocument, pNotesMasterPage, nInsertionIndex+2);
+        SdPage* pClonedMasterPage = AddMasterPage (&mrDocument, pMasterPage, nInsertionIndex);
+        AddMasterPage (&mrDocument, pNotesMasterPage, nInsertionIndex+1);
 
         // Assign the master pages to the selected pages.
         for (iPage=rPageList.begin();
@@ -548,6 +552,18 @@ SdPage* MasterPagesSelector::AddMasterPage (
         // Now that the styles are available we can insert the cloned master
         // page.
         pTargetDocument->InsertMasterPage (pClonedMasterPage, nInsertionIndex);
+
+        // Adapt the size of the new master page to that of the pages in the
+        // document.
+        Size aNewSize (pTargetDocument->GetSdPage(0, PK_STANDARD)->GetSize());
+        Rectangle aBorders (
+            pClonedMasterPage->GetLftBorder(),
+            pClonedMasterPage->GetUppBorder(),
+            pClonedMasterPage->GetRgtBorder(),
+            pClonedMasterPage->GetLwrBorder());
+        pClonedMasterPage->ScaleObjects(aNewSize, aBorders, TRUE);
+        pClonedMasterPage->SetSize(aNewSize);
+        pClonedMasterPage->CreateTitleAndLayout(TRUE);
     }
 
     return pClonedMasterPage;
