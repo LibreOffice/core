@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_content.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:51:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #ifndef INCLUDED_TDOC_PROVIDER_HXX
 #include "tdoc_provider.hxx"
 #endif
+
+#define NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT 1
 
 namespace com { namespace sun { namespace star {
     namespace sdbc  { class XRow; }
