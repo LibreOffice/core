@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 12:00:45 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ String STR_POOLCHR_JUMPEDIT
     Text [ portuguese ] = "Marcador de posição" ;
     Text [ portuguese_brazilian ] = "Platzhalter" ;
     Text[ chinese_simplified ] = "Í¨Åä·û";
-    Text[ russian ] = "Ìåòêà-çàïîëíèòåëü";
+    Text[ russian ] = "Ìåñòîçàïîëíèòåëü";
     Text[ polish ] = "Symbol wieloznaczny";
     Text[ japanese ] = "Ü²ÙÄŞ¶°ÄŞ";
     Text[ chinese_traditional ] = "³q°t²Å";
@@ -960,7 +960,7 @@ String STR_POOLCOLL_STANDARD
     Text [ portuguese_brazilian ] = "Standard" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Standard";
+    Text[ polish ] = "Domyœlnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ arabic ] = "ŞíÇÓí";
@@ -4427,7 +4427,7 @@ String STR_POOLPAGE_STANDARD
     Text [ portuguese_brazilian ] = "Standard" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Standard";
+    Text[ polish ] = "Domyœlnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ arabic ] = "ŞíÇÓí";
