@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-31 13:53:40 $
+ *  last change: $Author: abi $ $Date: 2001-02-02 16:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,10 +988,16 @@ BaseContent::setPropertyValues(
 
                     aDstName += NewTitle;
 
-                    m_pMyShell->move( nMyCommandIdentifier,     // move notifies the childs also ;
-                                      m_aUncPath,
-                                      aDstName,
-                                      NameClash::KEEP );
+                    try
+                    {
+                        m_pMyShell->move( nMyCommandIdentifier,     // move notifies the childs also ;
+                                          m_aUncPath,
+                                          aDstName,
+                                          NameClash::KEEP );
+                    }
+                    catch( const CommandAbortedException& e )
+                    {
+                    }
                 }
                 // NameChanges come back trough a ContentEvent
                 //
