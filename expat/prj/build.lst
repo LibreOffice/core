@@ -1,2 +1,2 @@
-ft	freetype	:	NULL
-ft	freetype			nmake	-	all	ft_mkout NULL
+ep	expat	:	NULL
+ep	expat			nmake	-	all	ft_mkout NULL
