@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:57:18 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,9 @@ BOOL SwDoc::BalanceRowHeight( const SwCursor& rCursor, BOOL bTstOnly )
             if( !bTstOnly )
             {
                 long nHeight = 0;
-                for ( USHORT i = 0; i < aRowArr.Count(); ++i )
+                USHORT i;
+
+                for ( i = 0; i < aRowArr.Count(); ++i )
                 {
                     SwClientIter aIter( *((SwTableLine*)aRowArr[i])->GetFrmFmt() );
                     SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
@@ -1433,7 +1435,9 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
     const BYTE nTmp = (BYTE)Max( USHORT(255), USHORT(aTabCols.Count() + 1) );
     SvUShorts aWish( nTmp, nTmp ),
               aMins( nTmp, nTmp );
-    for ( USHORT i = 0; i <= aTabCols.Count(); ++i )
+    USHORT i;
+
+    for ( i = 0; i <= aTabCols.Count(); ++i )
     {
         aWish.Insert( USHORT(0), aWish.Count() );
         aMins.Insert( USHORT(0), aMins.Count() );
