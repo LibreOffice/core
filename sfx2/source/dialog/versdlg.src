@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 14:44:28 $
+ *  last change: $Author: kz $ $Date: 2001-08-14 15:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,6 +615,7 @@ String DLG_COMMENTS
     Text[ catalan ] = "Comentario sobre la versión";
     Text[ finnish ] = "Versiohuomautus";
 };
+
 
 
 
