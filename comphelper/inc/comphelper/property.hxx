@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:31 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /
 template <class ENUMTYPE>
 sal_Bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
 {
-    if (::getCppuType(&_rCurrentValue).getTypeClass() != staruno::TypeClass_ENUM)
+    if (getCppuType(&_rCurrentValue).getTypeClass() != staruno::TypeClass_ENUM)
         return tryPropertyValue(_rConvertedValue, _rOldValue, _rValueToSet, _rCurrentValue);
 
     sal_Bool bModified(sal_False);
