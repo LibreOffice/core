@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:35:33 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3678,7 +3678,7 @@ bool PrintFontManager::getAlternativeFamilyNames( fontID nFont, ::std::list< OUS
 bool PrintFontManager::createFontSubset(
                                         fontID nFont,
                                         const OUString& rOutFile,
-                                        long* pGlyphIDs,
+                                        sal_Int32* pGlyphIDs,
                                         sal_uInt8* pNewEncoding,
                                         sal_Int32* pWidths,
                                         int nGlyphs,
