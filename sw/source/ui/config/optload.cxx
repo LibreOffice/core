@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
+ *  last change: $Author: os $ $Date: 2001-05-04 12:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aTabMF        ( this,   SW_RES( MF_TAB      ) ),
     aMergeDistCB(this, ResId(CB_MERGE_PARA_DIST )),
     aMergeDistPageStartCB(this, ResId(CB_MERGE_PARA_DIST_PAGESTART  )),
+    aTabAlignment(this, ResId(CB_TAB_ALIGNMENT  )),
     aCompatGB   (this, ResId(GB_COMPAT  )),
     pWrtShell   (0),
     nLastTab(0),
@@ -266,6 +267,8 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
             pWrtShell->SetParaSpaceMax(aMergeDistCB.IsChecked(),
                                 aMergeDistPageStartCB.IsChecked());
         }
+        if(aTabAlignment.IsChecked() != aTabAlignment.GetSavedValue())
+            pWrtShell->SetTabCompat(aTabAlignment.IsChecked());
 
     }
     const USHORT nMPos = aMetricLB.GetSelectEntryPos();
@@ -319,9 +322,11 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
         nOldLinkMode = pWrtShell->GetLinkUpdMode(TRUE);
         aMergeDistCB.Check(pWrtShell->IsParaSpaceMax());
         aMergeDistPageStartCB.Check(pWrtShell->IsParaSpaceMaxAtPages());
+        aTabAlignment.Check(pWrtShell->IsTabCompat());
 
         aMergeDistCB.SaveValue();
         aMergeDistPageStartCB.SaveValue();
+        aTabAlignment.SaveValue();
     }
     if(GLOBALSETTING == nOldLinkMode)
         nOldLinkMode = pUsrPref->GetUpdateLinkMode();
@@ -334,6 +339,7 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 
     aMergeDistCB.Enable(pWrtShell != 0);
     aMergeDistPageStartCB.Enable(pWrtShell != 0);
+    aTabAlignment.Enable(pWrtShell != 0);
     aCompatGB.Enable(pWrtShell != 0);
 
     switch (nOldLinkMode)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:34 $
+ *  last change: $Author: os $ $Date: 2001-05-04 12:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ private:
     FixedLine   aCompatGB;
     CheckBox    aMergeDistCB;
     CheckBox    aMergeDistPageStartCB;
+    CheckBox    aTabAlignment;
 
     SwWrtShell* pWrtShell;
     sal_Bool    bHTMLMode;
