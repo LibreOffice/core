@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:15:33 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ String STR_HUMAN_SWGLOBDOC_NAME
     Text[ korean ] = "∏∂Ω∫≈Õ πÆº≠";
     Text[ turkish ] = "Ana belge";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Documento maestro";
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE_40
 {
@@ -99,21 +100,22 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     Text = "%PRODUCTNAME 6.0 Global Dokument" ;
     TEXT [ English ] = "%PRODUCTNAME 6.0 Master Document" ;
     TEXT[ english_us ] = "%PRODUCTNAME 6.0 Master Document";
-    TEXT[ portuguese ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ portuguese ] = "%PRODUCTNAME 6.0 Documento-mestre";
     TEXT[ russian ] = "√Î‡‚Ì˚È ‰ÓÍÛÏÂÌÚ (%PRODUCTNAME 6.0)";
     TEXT[ greek ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ dutch ] = "%PRODUCTNAME 6.0 Master Document";
-    TEXT[ french ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ french ] = "%PRODUCTNAME 6.0 Document maÓtre";
     TEXT[ spanish ] = "%PRODUCTNAME 6.0 Documento maestro";
-    TEXT[ italian ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ italian ] = "Documento master %PRODUCTNAME 6.0";
     TEXT[ danish ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ swedish ] = "Samlingsdokument %PRODUCTNAME 6.0";
     TEXT[ polish ] = "%PRODUCTNAME 6.0 - Dokument g≥Ûwny";
     TEXT[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Master Document";
-    TEXT[ japanese ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ japanese ] = "%PRODUCTNAME 6.0 œΩ¿∞ƒﬁ∑≠“›ƒ";
     TEXT[ korean ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ chinese_simplified ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ chinese_traditional ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ turkish ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ arabic ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ catalan ] = "%PRODUCTNAME 6.0 Master Document";
 };
