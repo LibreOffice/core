@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:02:29 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ InfoBox MSG_NO_RULER
     Message [ english_us ] = "There are no bitmaps in the Gallery theme 'Rulers'." ;
     Message [ portuguese_brazilian ] = "N�o existem imagens bitmap no tema 'R�guas' da Galeria." ;
     Message [ swedish ] = "Det finns ingen grafik i Gallery-temat 'Rulers'." ;
-    Message [ danish ] = "Der findes ingen grafik i Gallery-emnet 'Rulers'." ;
+    Message [ danish ] = "Der findes ingen grafik i Galleritemaet 'Linealer'." ;
     Message [ italian ] = "Nella gallery con argomento 'Ruler' non ci sono immagini." ;
     Message [ spanish ] = "No hay im�genes en el tema de Gallery 'Rulers'." ;
     Message [ french ] = "Il n'existe pas d'image pour le th�me 'Rulers' dans la Gallery." ;
@@ -97,6 +97,8 @@ InfoBox MSG_NO_RULER
     Message[ hebrew ] = "Es sind keine Grafiken im Gallery-Thema 'Rulers' vorhanden.";
     Message[ hindi ] = "गेलरी प्रकरण 'रूलर' में कोई बिटमॉप नहीं है ।";
     Message[ slovak ] = "V Galérii 'Čiary' nie sú žiadne obrázky.";
+    Message[ hungarian ] = "Nincsenek bitképek a \"Vonalzók (rulers)\" képtárban.";
+    Message[ slovenian ] = "V galerijski temi 'Ravnila' ni bitnih slik.";
 };
 String STR_GRFILTER_OPENERROR
 {
@@ -107,7 +109,7 @@ String STR_GRFILTER_OPENERROR
     Text [ portuguese_brazilian ] = "N�o foi poss�vel abrir o arquivo da figura" ;
     Text [ portuguese ] = "Imposs�vel abrir ficheiro gr�fico." ;
     Text [ finnish ] = "Grafiikkatiedostoa ei voi avata." ;
-    Text [ danish ] = "Det er ikke muligt at �bne grafikfilen" ;
+    Text [ danish ] = "Grafikfil kan ikke �bnes" ;
     Text [ french ] = "Impossible d'ouvrir le fichier graphique !" ;
     Text [ swedish ] = "Grafikfil kan inte �ppnas" ;
     Text [ dutch ] = "Grafisch bestand kan niet worden geopend" ;
@@ -131,6 +133,8 @@ String STR_GRFILTER_OPENERROR
     Text[ hebrew ] = "Grafikdatei kann nicht geöffnet werden";
     Text[ hindi ] = "सुचित्र फाइल को नहीं खोल सकते है";
     Text[ slovak ] = "Nie je možné otvoriť grafický súbor";
+    Text[ hungarian ] = "A képfájlt nem lehet megnyitni.";
+    Text[ slovenian ] = "Grafične datoteke ni mogoče odpreti";
 };
 String STR_GRFILTER_IOERROR
 {
@@ -141,7 +145,7 @@ String STR_GRFILTER_IOERROR
     Text [ portuguese_brazilian ] = "N�o foi poss�vel ler o arquivo da figura" ;
     Text [ portuguese ] = "Imposs�vel ler o ficheiro gr�fico." ;
     Text [ finnish ] = "Grafiikkatiedostoa ei voi lukea." ;
-    Text [ danish ] = "Det er ikke muligt at l�se grafikfilen" ;
+    Text [ danish ] = "Grafikfil kan ikke l�ses" ;
     Text [ french ] = "Impossible de lire le fichier graphique !" ;
     Text [ swedish ] = "Grafikfil kan inte l�sas" ;
     Text [ dutch ] = "Grafisch bestand is onleesbaar" ;
@@ -165,6 +169,8 @@ String STR_GRFILTER_IOERROR
     Text[ hebrew ] = "Grafikdatei kann nicht gelesen werden";
     Text[ hindi ] = "सुचित्र फाइल को नहीं पढ़ सकते है";
     Text[ slovak ] = "Nie je možné načítať grafický súbor";
+    Text[ hungarian ] = "A képfájl nem olvasható.";
+    Text[ slovenian ] = "Grafične datoteke ni mogoče brati";
 };
 String STR_GRFILTER_FORMATERROR
 {
@@ -199,6 +205,8 @@ String STR_GRFILTER_FORMATERROR
     Text[ hebrew ] = "Unbekanntes Grafikformat";
     Text[ hindi ] = "अज्ञात सुचित्र रचना";
     Text[ slovak ] = "Neznámy grafický formát";
+    Text[ hungarian ] = "Ismeretlen képformátum";
+    Text[ slovenian ] = "Neznana oblika zapisa grafike";
 };
 String STR_GRFILTER_VERSIONERROR
 {
@@ -209,7 +217,7 @@ String STR_GRFILTER_VERSIONERROR
     Text [ portuguese_brazilian ] = "A vers�o do arquivo da figura n�o tem suporte." ;
     Text [ portuguese ] = "Vers�o do ficheiro gr�fico n�o suportada." ;
     Text [ finnish ] = "T�t� grafiikkatiedoston versiota ei tueta." ;
-    Text [ danish ] = "Grafikfilens version bliver ikke underst�ttet" ;
+    Text [ danish ] = "Grafikfilens version underst�ttes ikke" ;
     Text [ french ] = "Version du fichier graphique non support�e" ;
     Text [ swedish ] = "Grafikfilens version st�ds inte" ;
     Text [ dutch ] = "Deze versie van het grafisch bestand wordt niet ondersteund" ;
@@ -233,6 +241,8 @@ String STR_GRFILTER_VERSIONERROR
     Text[ hebrew ] = "Die Version der Grafikdatei wird nicht unterstützt";
     Text[ hindi ] = "इस सुचित्र फाइल आवर्तन समर्थित नहीं है";
     Text[ slovak ] = "Tato verzia grafického súboru nie je podporovná";
+    Text[ hungarian ] = "Ez a képfájlverzió nem használható.";
+    Text[ slovenian ] = "Ta rezličica grafične datoteke ni podprta";
 };
 String STR_GRFILTER_FILTERERROR
 {
@@ -267,6 +277,8 @@ String STR_GRFILTER_FILTERERROR
     Text[ hebrew ] = "Grafikfilter nicht gefunden";
     Text[ hindi ] = "सुचित्र फिल्टर नहीं मिला";
     Text[ slovak ] = "Grafický filter nebol nájdený";
+    Text[ hungarian ] = "A grafikus szűrő nem található.";
+    Text[ slovenian ] = "Grafičnega filtra ni mogoče najti";
 };
 String STR_GRFILTER_TOOBIG
 {
@@ -277,7 +289,7 @@ String STR_GRFILTER_TOOBIG
     Text [ portuguese_brazilian ] = "N�o h� mem�ria suficiente para inserir a imagem." ;
     Text [ portuguese ] = "Mem�ria insuficiente para inserir gr�fico." ;
     Text [ finnish ] = "Muisti ei riit� grafiikan lis��miseen." ;
-    Text [ danish ] = "Ikke nok hukommelse til at inds�tte grafiken" ;
+    Text [ danish ] = "Ikke tilstr�kkelig hukommelse til at inds�tte grafiken" ;
     Text [ french ] = "M�moire insuffisante pour l'insertion de l'image" ;
     Text [ swedish ] = "Inte tillr�ckligt med minne f�r att infoga grafiken" ;
     Text [ dutch ] = "Niet genoeg geheugen voor het invoegen van de afbeelding" ;
@@ -301,6 +313,8 @@ String STR_GRFILTER_TOOBIG
     Text[ hebrew ] = "Nicht genug Speicher zum Einfügen der Grafik";
     Text[ hindi ] = "चित्र जोड़ने केलिए मेमरी पर्याप्त नहीं है ।";
     Text[ slovak ] = "Nedostatok pamäte na vloženie obrázku.";
+    Text[ hungarian ] = "A kép beillesztéséhez kevés a memória.";
+    Text[ slovenian ] = "Ni dovolj pomnilnika za vstavljanje slike.";
 };
 String STR_INSERT_GRAPHIC
 {
@@ -335,6 +349,8 @@ String STR_INSERT_GRAPHIC
     Text[ hebrew ] = "‮הוספת גרפיקה‬";
     Text[ hindi ] = "सुचित्र जोड़ो";
     Text[ slovak ] = "Vložiť obrázok";
+    Text[ hungarian ] = "Kép beszúrása";
+    Text[ slovenian ] = "Vstavi grafiko";
 };
 String STR_NO_ADDRESSBOOK
 {
@@ -368,6 +384,8 @@ String STR_NO_ADDRESSBOOK
     Text[ hebrew ] = "Kein Adressbuch vorhanden";
     Text[ hindi ] = "पता पुस्तक अस्तित्व में नहीं है";
     Text[ slovak ] = "Databáza kontaktov neexistuje";
+    Text[ hungarian ] = "A címjegyzék nem létezik";
+    Text[ slovenian ] = "Adresar ne obstaja";
 };
 String STR_NOTIZ_INSERT
 {
@@ -402,6 +420,8 @@ String STR_NOTIZ_INSERT
     TEXT[ hebrew ] = "‮הוספת הערה‬";
     TEXT[ hindi ] = "सूचना जोड़ो";
     TEXT[ slovak ] = "Vložiť poznámku";
+    TEXT[ hungarian ] = "Jegyzet beszúrása";
+    TEXT[ slovenian ] = "Vstavi opombo";
 };
 String STR_REDLINE_COMMENT
 {
@@ -410,7 +430,7 @@ String STR_REDLINE_COMMENT
     Text [ english_us ] = "Comment: " ;
     Text [ portuguese_brazilian ] = "Coment�rio:" ;
     Text [ swedish ] = "Kommentera:  " ;
-    Text [ danish ] = "Kommenter: " ;
+    Text [ danish ] = "Kommentar: " ;
     Text [ italian ] = "Commento: " ;
     Text [ spanish ] = "Comentario:  " ;
     Text [ french ] = "Commentaire : " ;
@@ -435,6 +455,8 @@ String STR_REDLINE_COMMENT
     Text[ hebrew ] = "‮הערות:‬";
     Text[ hindi ] = "अपवाद: ";
     Text[ slovak ] = "Komentár: ";
+    Text[ hungarian ] = "Megjegyzés:";
+    Text[ slovenian ] = "Komentar:";
 };
 String STR_REDLINE_INSERTED
 {
@@ -468,6 +490,8 @@ String STR_REDLINE_INSERTED
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ना";
     Text[ slovak ] = "Vloženie";
+    Text[ hungarian ] = "Beszúrás";
+    Text[ slovenian ] = "Vstavek";
 };
 String STR_REDLINE_DELETED
 {
@@ -501,6 +525,8 @@ String STR_REDLINE_DELETED
     Text[ hebrew ] = "‮מחיקה‬";
     Text[ hindi ] = "मिटाना";
     Text[ slovak ] = "Zmazanie";
+    Text[ hungarian ] = "Törlés";
+    Text[ slovenian ] = "Izbris";
 };
 String STR_REDLINE_AUTOFMT
 {
@@ -534,6 +560,8 @@ String STR_REDLINE_AUTOFMT
     TEXT[ hebrew ] = "‮עיצוב אוטומטי‬";
     TEXT[ hindi ] = "स्वचालित रचना";
     TEXT[ slovak ] = "Automatický formát";
+    TEXT[ hungarian ] = "Automatikus formázás";
+    TEXT[ slovenian ] = "Samooblikovanje";
 };
 String STR_REDLINE_FORMATED
 {
@@ -542,7 +570,7 @@ String STR_REDLINE_FORMATED
     Text [ english_us ] = "Formats" ;
     Text [ portuguese_brazilian ] = "Formatos" ;
     Text [ swedish ] = "Attributering" ;
-    Text [ danish ] = "Formateret" ;
+    Text [ danish ] = "Formateringer" ;
     Text [ italian ] = "Attribuzione" ;
     Text [ spanish ] = "Formateado" ;
     Text [ french ] = "Formatage" ;
@@ -567,6 +595,8 @@ String STR_REDLINE_FORMATED
     Text[ hebrew ] = "‮עיצוב‬";
     Text[ hindi ] = "रचनाएँ";
     Text[ slovak ] = "Formáty";
+    Text[ hungarian ] = "Formázás";
+    Text[ slovenian ] = "Oblike";
 };
 String STR_REDLINE_TABLECHG
 {
@@ -575,7 +605,7 @@ String STR_REDLINE_TABLECHG
     Text [ english_us ] = "Table Changes" ;
     Text [ portuguese_brazilian ] = "Modifica��es da Tabela" ;
     Text [ swedish ] = "Tabell�ndring" ;
-    Text [ danish ] = "�ndret tabel" ;
+    Text [ danish ] = "Tabel�ndringer" ;
     Text [ italian ] = "Modifica tabella" ;
     Text [ spanish ] = "Modificaci�n de tabla" ;
     Text [ french ] = "Modification de tableau" ;
@@ -600,6 +630,8 @@ String STR_REDLINE_TABLECHG
     Text[ hebrew ] = "‮שינויים בטבלה‬";
     Text[ hindi ] = "सारणी परिवर्तनें";
     Text[ slovak ] = "Zmeny v tabuľke";
+    Text[ hungarian ] = "Táblázat módosítása";
+    Text[ slovenian ] = "Spremembe tabele";
 };
 String STR_REDLINE_FMTCOLLSET
 {
@@ -608,7 +640,7 @@ String STR_REDLINE_FMTCOLLSET
     Text[ italian ] = "Modello di paragrafo impostato";
     Text[ portuguese_brazilian ] = "Estilos de Par�grafo Aplicados";
     Text[ portuguese ] = "Estilo de par�grafo definido";
-    Text[ danish ] = "Afsnitstypografi defineret";
+    Text[ danish ] = "Anvendte afsnitstypografier";
     Text[ french ] = "Le style de paragraphe a �t� d�fini";
     Text[ swedish ] = "Styckeformatmall definierad";
     Text[ dutch ] = "Alinea-opmaakprofiel gedefinieerd";
@@ -633,6 +665,8 @@ String STR_REDLINE_FMTCOLLSET
     Text[ hebrew ] = "Absatzvorlage gesetzt";
     Text[ hindi ] = "लागू किया हुआ परिच्छेद शैलियाँ";
     Text[ slovak ] = "Použité štýly odstavca";
+    Text[ hungarian ] = "Alkalmazott bekezdésstílusok";
+    Text[ slovenian ] = "Uporabljeni slogi odstavkov";
 };
 String STR_REDLINE_TITLE
 {
@@ -666,6 +700,8 @@ String STR_REDLINE_TITLE
     Text[ hebrew ] = "‮עיצוב אוטומטי‬";
     Text[ hindi ] = "स्वचालित रचना";
     Text[ slovak ] = "Automatický formát";
+    Text[ hungarian ] = "Automatikus formázás";
+    Text[ slovenian ] = "Samooblikovanje";
 };
 String STR_REDLINE_MSG
 {
@@ -674,7 +710,7 @@ String STR_REDLINE_MSG
     Text[ italian ] = "La formattazione automatica � terminata.\nPotete accettare o rifiutare tutte le modifiche oppure\naccettare o rifiutare singolarmente le modifiche.";
     Text[ portuguese_brazilian ] = "AutoFormata��o completada.\nPode-se aceitar ou rejeitar todas as modifica��es em bloco\nou uma por uma.";
     Text[ portuguese ] = "Conclu�do AutoFormato.\nPoder� aceitar ou rejeitar todas as modifica��es de\numa s� vez ou uma a uma.";
-    Text[ danish ] = "AutoFormat er fuldf�rt.\nDu kan nu acceptere eller forkaste alle �ndringer,\neller acceptere eller forkaste dem enkeltvis.";
+    Text[ danish ] = "AutoFormat er fuldf�rt.\nDu kan nu acceptere eller afvise alle �ndringer,\neller acceptere eller afvise dem enkeltvis.";
     Text[ french ] = "L'AutoFormat a termin�.\nVous pouvez choisir d'en accepter ou rejeter en une seule fois toutes les modifications, ou\n de vous faire afficher toutes les modifications pour les revoir.";
     Text[ swedish ] = "Autoformatet �r f�rdigt.\nDu kan acceptera eller avb�ja alla �ndringar\neller acceptera eller avb�ja �ndringar en och en.";
     Text[ dutch ] = "AutoOpmaak voltooid.\nU kunt nu alle wijzigingen accepteren of verwerpen,\nof afzonderlijke wijzigingen accepteren of verwerpen.";
@@ -699,6 +735,8 @@ String STR_REDLINE_MSG
     Text[ hebrew ] = "Das AutoFormat ist beendet.\nSie können jetzt alle Änderungen annehmen oder ablehnen,\noder sie einzeln annehmen oder ablehnen.";
     Text[ hindi ] = "स्वचालित रचना समाप्त हुआ ।\nआप सब परिवर्तनों को स्वीकार कर सकते है अथवा उपेक्षा कर सकते है,\nअथवा कुछ परिवर्तनों को स्वीकार कर सकते है अथवा उपेक्षा कर सकते है ।";
     Text[ slovak ] = "Automatické formátovanie dokončené.\nMôžete prijať či odmietnuť všetky alebo len niektoré zmeny.";
+    Text[ hungarian ] = "Az automatikus formázás befejeződött.\nElfogadhatja vagy elutasíthatja a változtatásokat.";
+    Text[ slovenian ] = "Samooblikovanje je končano.\nLahko sprejmete ali zavrnete vse spremembe,\nali pa sprejmete ali zavrnete posamezne spremembe.";
 };
 String STR_REDLINE_ACCEPT_ALL
 {
@@ -732,6 +770,8 @@ String STR_REDLINE_ACCEPT_ALL
     Text[ hebrew ] = "‮קבלת כל השינוים‬";
     Text[ hindi ] = "सब स्वीकार करो";
     Text[ slovak ] = "Prijať všetko";
+    Text[ hungarian ] = "Összes elfogadása";
+    Text[ slovenian ] = "Sprejmi vse";
 };
 String STR_REDLINE_REJECT_ALL
 {
@@ -740,7 +780,7 @@ String STR_REDLINE_REJECT_ALL
     Text[ italian ] = "Rifiuta tutto";
     Text[ portuguese_brazilian ] = "Rejeitar Tudo";
     Text[ portuguese ] = "~Rejeitar tudo";
-    Text[ danish ] = "Forkast alle";
+    Text[ danish ] = "Afvis alle";
     Text[ french ] = "~Tout rejeter";
     Text[ swedish ] = "A~vb�j allt";
     Text[ dutch ] = "~Alles verwerpen";
@@ -765,6 +805,8 @@ String STR_REDLINE_REJECT_ALL
     Text[ hebrew ] = "‮דחית כל השינוים‬";
     Text[ hindi ] = "सब उपेक्षा करो";
     Text[ slovak ] = "Odmietnuť všetko";
+    Text[ hungarian ] = "Összes elutasítása";
+    Text[ slovenian ] = "Zavrni vse";
 };
 String STR_REDLINE_EDIT
 {
@@ -798,6 +840,8 @@ String STR_REDLINE_EDIT
     Text[ hebrew ] = "Änderungen ~bearbeiten";
     Text[ hindi ] = "परिवर्तनों का संपादन";
     Text[ slovak ] = "Upraviť zmeny";
+    Text[ hungarian ] = "Megerősítés egyenként >>";
+    Text[ slovenian ] = "Uredi spremembe";
 };
 QueryBox DLG_IMPORT_DBNAME
 {
@@ -833,6 +877,8 @@ QueryBox DLG_IMPORT_DBNAME
     Message[ hebrew ] = "Soll der Datenbankname als Standarddatenbank für das Dokument übernommen werden?";
     Message[ hindi ] = "लेखासंचय नाम को लेखपत्र केलिए अनुपस्थिति लेखासंचय जैसे उपयोग करना है?";
     Message[ slovak ] = "Použiť databázu názvov ako východziu databázu dokumentu?";
+    Message[ hungarian ] = "Alapértelmezett adatbázisként használja az adatbázisnevet a dokumentumban?";
+    Message[ slovenian ] = "Ali naj bo zbirka podatkov uporabljena kot privzeta za dokument?";
 };
 String STR_PAGE
 {
@@ -867,6 +913,8 @@ String STR_PAGE
     TEXT[ hebrew ] = "Seite";
     TEXT[ hindi ] = "पृष्ठ ";
     TEXT[ slovak ] = "Strana ";
+    TEXT[ hungarian ] = "Oldal: ";
+    TEXT[ slovenian ] = "Stran ";
 };
 String RID_TEXT_TOOLBOX
 {
@@ -901,6 +949,8 @@ String RID_TEXT_TOOLBOX
     Text[ hebrew ] = "Textobjektleiste";
     Text[ hindi ] = "टेक्स्ट् वस्तु पट्टी";
     Text[ slovak ] = "Panel textu";
+    Text[ hungarian ] = "Szövegobjektum eszköztár";
+    Text[ slovenian ] = "Predmetna vrstica za besedilo";
 };
 ToolBox RID_TEXT_TOOLBOX
 {
@@ -988,6 +1038,8 @@ String RID_TABLE_TOOLBOX
     Text[ hebrew ] = "Tabellenobjektleiste";
     Text[ hindi ] = "सारणी वस्तु पट्टी";
     Text[ slovak ] = "Panel tabuliek";
+    Text[ hungarian ] = "Táblázatobjektum eszköztár";
+    Text[ slovenian ] = "Predmetna vrstica za tabele";
 };
 ToolBox RID_TABLE_TOOLBOX
 {
@@ -1180,6 +1232,8 @@ String RID_FRAME_TOOLBOX
     Text[ hebrew ] = "Rahmenobjektleiste";
     Text[ hindi ] = "फ्रेम वस्तु पट्टी";
     Text[ slovak ] = "Panel ohraničenia";
+    Text[ hungarian ] = "Keretobjektum eszköztár";
+    Text[ slovenian ] = "Predmetna vrstica za okvire";
 };
 ToolBox RID_FRAME_TOOLBOX
 {
@@ -1265,6 +1319,8 @@ String RID_GRAFIK_TOOLBOX
     Text[ hebrew ] = "Grafikobjektleiste";
     Text[ hindi ] = "सुचित्र वस्तु पट्टी";
     Text[ slovak ] = "Panel obrázkov";
+    Text[ hungarian ] = "Képobjektum eszköztár";
+    Text[ slovenian ] = "Predmetna vrstica za grafiko";
 };
 ToolBox RID_GRAFIK_TOOLBOX
 {
@@ -1386,6 +1442,8 @@ String RID_OLE_TOOLBOX
     Text[ hebrew ] = "‮אוביקט‬";
     Text[ hindi ] = "वस्तु";
     Text[ slovak ] = "Objekt";
+    Text[ hungarian ] = "Objektum";
+    Text[ slovenian ] = "Predmet";
 };
 ToolBox RID_OLE_TOOLBOX
 {
@@ -1457,6 +1515,8 @@ String RID_DRAW_TOOLBOX
     Text[ hebrew ] = "Zeichenobjektleiste";
     Text[ hindi ] = "खींचने का वस्तु पट्टी";
     Text[ slovak ] = "Panel kresliacich objektov";
+    Text[ hungarian ] = "Rajzobjektum eszköztár";
+    Text[ slovenian ] = "Predmetna vrstica za risanje";
 };
 ToolBox RID_DRAW_TOOLBOX
 {
@@ -1649,6 +1709,8 @@ String RID_DRAWFORM_TOOLBOX
     Text[ hebrew ] = "Kontrollfeldleiste";
     Text[ hindi ] = "नियंत्रण पट्टी";
     Text[ slovak ] = "Kontrolný panel";
+    Text[ hungarian ] = "Vezérlők eszköztár";
+    Text[ slovenian ] = "Krmilna vrstica";
 };
 ToolBox RID_DRAWFORM_TOOLBOX
 {
@@ -1761,7 +1823,7 @@ String RID_BEZIER_TOOLBOX
     Text [ English ] = "Bezier objectbar" ;
     Text [ english_us ] = "B�zier Object Bar" ;
     Text [ swedish ] = "B�zierobjektlist" ;
-    Text [ danish ] = "Bezierobjektlinje" ;
+    Text [ danish ] = "B�zierobjektlinje" ;
     Text [ italian ] = "Barra degli oggetti di B�zier" ;
     Text [ spanish ] = "Barra de objetos B�zier" ;
     Text [ french ] = "Barre d'objets B�zier" ;
@@ -1787,6 +1849,8 @@ String RID_BEZIER_TOOLBOX
     Text[ hebrew ] = "Bezierobjektleiste";
     Text[ hindi ] = "बेज़ियर वस्तु पट्टी";
     Text[ slovak ] = "Bézierova objektová lišta";
+    Text[ hungarian ] = "Bézier-objektum eszköztár";
+    Text[ slovenian ] = "Predmetna vrstica za Bezierove krivulje";
 };
 ToolBox RID_BEZIER_TOOLBOX
 {
@@ -1920,6 +1984,8 @@ String RID_DRAW_TEXT_TOOLBOX
     Text[ hebrew ] = "Textobjektleiste/Grafik";
     Text[ hindi ] = "टेक्स्ट् वस्तु पट्टी";
     Text[ slovak ] = "Panel textu";
+    Text[ hungarian ] = "Szövegobjektum eszköztár/Kép";
+    Text[ slovenian ] = "Predmetna vrstica za besedilo/Grafike";
 };
 ToolBox RID_DRAW_TEXT_TOOLBOX
 {
@@ -2070,6 +2136,8 @@ String RID_NUM_TOOLBOX
     Text[ hebrew ] = "Nummerierungsobjektleiste";
     Text[ hindi ] = "संख्या देने का वस्तु पट्टी";
     Text[ slovak ] = "Panel číslovania";
+    Text[ hungarian ] = "Számozás eszköztár";
+    Text[ slovenian ] = "Predmetna vrstica za oštevilčevanje";
 };
 ToolBox RID_NUM_TOOLBOX
 {
@@ -2200,6 +2268,8 @@ String STR_SHELLNAME_TEXT
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
     Text[ slovak ] = "Text";
+    Text[ hungarian ] = "Szöveg";
+    Text[ slovenian ] = "Besedilo";
 };
 String STR_SHELLNAME_TABLE
 {
@@ -2233,6 +2303,8 @@ String STR_SHELLNAME_TABLE
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
     Text[ slovak ] = "Tabuľka";
+    Text[ hungarian ] = "Táblázat";
+    Text[ slovenian ] = "Tabela";
 };
 String STR_SHELLNAME_FRAME
 {
@@ -2266,6 +2338,8 @@ String STR_SHELLNAME_FRAME
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम ";
     Text[ slovak ] = "Rámček";
+    Text[ hungarian ] = "Keret";
+    Text[ slovenian ] = "Okvir";
 };
 String STR_SHELLNAME_GRAPHIC
 {
@@ -2299,6 +2373,8 @@ String STR_SHELLNAME_GRAPHIC
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázky";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Grafika";
 };
 String STR_SHELLNAME_OBJECT
 {
@@ -2332,6 +2408,8 @@ String STR_SHELLNAME_OBJECT
     Text[ hebrew ] = "‮אוביקט‬";
     Text[ hindi ] = "वस्तु";
     Text[ slovak ] = "Objekt";
+    Text[ hungarian ] = "Objektum";
+    Text[ slovenian ] = "Predmet";
 };
 String STR_SHELLNAME_LIST
 {
@@ -2365,6 +2443,8 @@ String STR_SHELLNAME_LIST
     Text[ hebrew ] = "Liste";
     Text[ hindi ] = "सूची";
     Text[ slovak ] = "Zoznam";
+    Text[ hungarian ] = "Lista";
+    Text[ slovenian ] = "Seznam";
 };
 String STR_SHELLNAME_DRAW
 {
@@ -2398,6 +2478,8 @@ String STR_SHELLNAME_DRAW
     Text[ hebrew ] = "‮ציור‬";
     Text[ hindi ] = "रेखाचित्र";
     Text[ slovak ] = "Kresba";
+    Text[ hungarian ] = "Rajz";
+    Text[ slovenian ] = "Risba";
 };
 String STR_SHELLNAME_DRAWFORM
 {
@@ -2406,7 +2488,7 @@ String STR_SHELLNAME_DRAWFORM
     Text [ english_us ] = "Forms" ;
     Text [ portuguese_brazilian ] = "Formul�rios" ;
     Text [ swedish ] = "Forms" ;
-    Text [ danish ] = "Formular" ;
+    Text [ danish ] = "Formularer" ;
     Text [ italian ] = "Forms" ;
     Text [ spanish ] = "Formas" ;
     Text [ french ] = "Formulaires" ;
@@ -2431,6 +2513,8 @@ String STR_SHELLNAME_DRAWFORM
     Text[ hebrew ] = "Forms";
     Text[ hindi ] = "फ़ॉर्म";
     Text[ slovak ] = "Formuláre";
+    Text[ hungarian ] = "Űrlap";
+    Text[ slovenian ] = "Obrazci";
 };
 String STR_SHELLNAME_BEZIER
 {
@@ -2439,7 +2523,7 @@ String STR_SHELLNAME_BEZIER
     Text [ english_us ] = "B�zier" ;
     Text [ portuguese_brazilian ] = "B�zier" ;
     Text [ swedish ] = "B�zier" ;
-    Text [ danish ] = "Bezier" ;
+    Text [ danish ] = "B�zier" ;
     Text [ italian ] = "Bezier" ;
     Text [ spanish ] = "B�zier" ;
     Text [ french ] = "B�zier" ;
@@ -2464,6 +2548,8 @@ String STR_SHELLNAME_BEZIER
     Text[ hebrew ] = "Bezier";
     Text[ hindi ] = "बेज़ियर";
     Text[ slovak ] = "Bézierove krivky";
+    Text[ hungarian ] = "Bézier";
+    Text[ slovenian ] = "Bezierova krivulja";
 };
 String STR_SHELLNAME_DRAW_TEXT
 {
@@ -2497,6 +2583,8 @@ String STR_SHELLNAME_DRAW_TEXT
     Text[ hebrew ] = "Zeichentext";
     Text[ hindi ] = "टेक्स्ट् खींचो";
     Text[ slovak ] = "Text kresby";
+    Text[ hungarian ] = "Rajzfelirat";
+    Text[ slovenian ] = "Risano besedilo";
 };
  //Strings fuer Gallery/Hintergrund
 String STR_SWBG_PARAGRAPH
@@ -2531,6 +2619,8 @@ String STR_SWBG_PARAGRAPH
     Text[ hebrew ] = "‮פסקאות‬";
     Text[ hindi ] = "परिच्छेद";
     Text[ slovak ] = "Odstavec";
+    Text[ hungarian ] = "Bekezdés";
+    Text[ slovenian ] = "Odstavek";
 };
 String STR_SWBG_GRAPHIC
 {
@@ -2564,6 +2654,8 @@ String STR_SWBG_GRAPHIC
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázky";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Grafika";
 };
 String STR_SWBG_OLE
 {
@@ -2597,6 +2689,8 @@ String STR_SWBG_OLE
     Text[ hebrew ] = "OLE‮אוביקט ‬";
     Text[ hindi ] = "OLE वस्तु";
     Text[ slovak ] = "Objekt OLE";
+    Text[ hungarian ] = "OLE-objektum";
+    Text[ slovenian ] = "OLE predmet";
 };
 String STR_SWBG_FRAME
 {
@@ -2630,6 +2724,8 @@ String STR_SWBG_FRAME
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम ";
     Text[ slovak ] = "Rámček";
+    Text[ hungarian ] = "Keret";
+    Text[ slovenian ] = "Okvir";
 };
 String STR_SWBG_TABLE
 {
@@ -2663,6 +2759,8 @@ String STR_SWBG_TABLE
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
     Text[ slovak ] = "Tabuľka";
+    Text[ hungarian ] = "Táblázat";
+    Text[ slovenian ] = "Tabela";
 };
 String STR_SWBG_TABLE_ROW
 {
@@ -2696,6 +2794,8 @@ String STR_SWBG_TABLE_ROW
     Text[ hebrew ] = "Tabellenzeile";
     Text[ hindi ] = "सारणी पंक्ति";
     Text[ slovak ] = "Riadok tabuľky";
+    Text[ hungarian ] = "Táblázat sora";
+    Text[ slovenian ] = "Vrstica tabele";
 };
 String STR_SWBG_TABLE_CELL
 {
@@ -2729,6 +2829,8 @@ String STR_SWBG_TABLE_CELL
     Text[ hebrew ] = "Tabellenzelle";
     Text[ hindi ] = "सारणी कोष्ठ";
     Text[ slovak ] = "Bunka tabuľky";
+    Text[ hungarian ] = "Cella";
+    Text[ slovenian ] = "Celica tabele";
 };
 String STR_SWBG_PAGE
 {
@@ -2762,6 +2864,8 @@ String STR_SWBG_PAGE
     Text[ hebrew ] = "‮דף‬";
     Text[ hindi ] = "पृष्ठ";
     Text[ slovak ] = "Stránka";
+    Text[ hungarian ] = "Oldal";
+    Text[ slovenian ] = "Stran";
 };
 String STR_SWBG_HEADER
 {
@@ -2795,6 +2899,8 @@ String STR_SWBG_HEADER
     Text[ hebrew ] = "‮כותרת עליונה‬";
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
     Text[ slovak ] = "Záhlavie";
+    Text[ hungarian ] = "Élőfej";
+    Text[ slovenian ] = "Glava";
 };
 String STR_SWBG_FOOTER
 {
@@ -2828,6 +2934,8 @@ String STR_SWBG_FOOTER
     Text[ hebrew ] = "‮כותרת תחתונה‬";
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";
     Text[ slovak ] = "Zápätie";
+    Text[ hungarian ] = "Élőláb";
+    Text[ slovenian ] = "Noga";
 };
  //Ende: Strings fuer Gallery/Hintergrund
 String STR_NAME_GROUP_LABEL
@@ -2859,6 +2967,8 @@ String STR_NAME_GROUP_LABEL
     Text[ portuguese_brazilian ] = "Nome";
     Text[ hindi ] = "Name";
     Text[ slovak ] = "Názov";
+    Text[ hungarian ] = "Név";
+    Text[ slovenian ] = "Ime";
 };
 String STR_NAME_GROUP_DIALOG
 {
@@ -2889,7 +2999,13 @@ String STR_NAME_GROUP_DIALOG
     Text[ portuguese_brazilian ] = "Nomear o objeto";
     Text[ hindi ] = "Name object";
     Text[ slovak ] = "Názov objektu";
+    Text[ hungarian ] = "Objektum neve";
+    Text[ slovenian ] = "Poimenuj predmet";
 };
+
+
+
+
 
 
 
