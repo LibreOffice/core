@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderCache.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 13:58:22 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
 
 #include "ScriptingContext.hxx"
 
@@ -81,7 +81,6 @@ namespace func_provider
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsss ::drafts::com::sun::star::script
 
 //Typedefs
 //=============================================================================
@@ -90,7 +89,7 @@ struct ProviderDetails
 {
     //css::uno::Reference< css::lang::XSingleServiceFactory > factory;
     css::uno::Reference< css::lang::XSingleComponentFactory > factory;
-    css::uno::Reference< dcsss::provider::XScriptProvider > provider;
+    css::uno::Reference< css::script::provider::XScriptProvider > provider;
 };
 typedef ::std::hash_map < ::rtl::OUString, ProviderDetails , ::rtl::OUStringHash,
             ::std::equal_to< ::rtl::OUString > > ProviderDetails_hash;
@@ -106,15 +105,15 @@ public:
         const css::uno::Sequence< ::rtl::OUString >& blackList )
         throw ( css::uno::RuntimeException );
     ~ProviderCache();
-     css::uno::Reference< dcsss::provider::XScriptProvider >
+     css::uno::Reference< css::script::provider::XScriptProvider >
          getProvider( const ::rtl::OUString& providerName );
-     css::uno::Sequence < css::uno::Reference< dcsss::provider::XScriptProvider > >
+     css::uno::Sequence < css::uno::Reference< css::script::provider::XScriptProvider > >
          getAllProviders() throw ( css::uno::RuntimeException );
 private:
     void populateCache()
         throw ( css::uno::RuntimeException );
 
-   css::uno::Reference< dcsss::provider::XScriptProvider >
+   css::uno::Reference< css::script::provider::XScriptProvider >
         createProvider( ProviderDetails& details ) throw ( css::uno::RuntimeException );
     bool isInBlackList( const ::rtl::OUString& serviceName )
     {
