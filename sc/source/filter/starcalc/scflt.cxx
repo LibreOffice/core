@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,9 +988,9 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             ScRange* pRepeatCol = NULL;
 
             if ( pPage->ColRepeatStart >= 0 )
-                pRepeatCol = new ScRange( pPage->ColRepeatStart, 0, 0 );
+                pRepeatCol = new ScRange( static_cast<SCCOL> (pPage->ColRepeatStart), 0, 0 );
             if ( pPage->RowRepeatStart >= 0 )
-                pRepeatRow = new ScRange( 0, pPage->RowRepeatStart, 0 );
+                pRepeatRow = new ScRange( 0, static_cast<SCROW> (pPage->RowRepeatStart), 0 );
 
 
             if ( pRepeatRow || pRepeatCol )
@@ -998,8 +998,8 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
                 //
                 // an allen Tabellen setzen
                 //
-                const USHORT nLast = pDoc->GetMaxTableNumber();
-                for ( USHORT i=0; i < nLast; i++ )
+                const SCTAB nLast = pDoc->GetMaxTableNumber();
+                for ( SCTAB i=0; i < nLast; i++ )
                 {
                     pDoc->SetRepeatColRange( i, pRepeatCol );
                     pDoc->SetRepeatRowRange( i, pRepeatRow );
@@ -1154,7 +1154,7 @@ void Sc10Import::LoadEditStateInfo()
     //lcl_ReadEditStateInfo(rStream, EditStateInfo);
 
     nError = rStream.GetError();
-    nShowTab = EditStateInfo.DeltaZ;
+    nShowTab = static_cast<SCTAB>(EditStateInfo.DeltaZ);
     // Achtung Cursorposition und Offset der Tabelle Uebertragen (soll man das machen??)
 }
 
@@ -1467,11 +1467,11 @@ void Sc10Import::LoadDataBaseCollection()
     {
         Sc10DataBaseData* pOldData = pDataBaseCollection->At(i);
         ScDBData* pNewData = new ScDBData( SC10TOSTRING( pOldData->DataBaseRec.Name ),
-                                    ( USHORT ) pOldData->DataBaseRec.Tab,
-                                    ( USHORT ) pOldData->DataBaseRec.Block.x1,
-                                    ( USHORT ) pOldData->DataBaseRec.Block.y1,
-                                    ( USHORT ) pOldData->DataBaseRec.Block.x2,
-                                    ( USHORT ) pOldData->DataBaseRec.Block.y2,
+                                    ( SCTAB ) pOldData->DataBaseRec.Tab,
+                                    ( SCCOL ) pOldData->DataBaseRec.Block.x1,
+                                    ( SCROW ) pOldData->DataBaseRec.Block.y1,
+                                    ( SCCOL ) pOldData->DataBaseRec.Block.x2,
+                                    ( SCROW ) pOldData->DataBaseRec.Block.y2,
                                     TRUE,
                                     ( BOOL) pOldData->DataBaseRec.RowHeader );
         pDoc->GetDBCollection()->Insert( pNewData );
@@ -1503,7 +1503,6 @@ void Sc10Import::LoadTables()
         USHORT           DataValue;
         USHORT           Count;
         USHORT           i;
-        USHORT           j;
         String           aStr;  // Universal-Konvertierungs-String
 
 
@@ -1522,7 +1521,7 @@ void Sc10Import::LoadTables()
         uno::Sequence<sal_Int8> aPass;
         SvPasswordHelper::GetHashPassword(aPass, SC10TOSTRING( TabProtect.PassWord ));
 
-        pDoc->SetTabProtection( Tab, TabProtect.Protect, aPass);
+        pDoc->SetTabProtection( static_cast<SCTAB>(Tab), TabProtect.Protect, aPass);
 
         rStream >> TabNo;
 
@@ -1579,13 +1578,13 @@ void Sc10Import::LoadTables()
         if (nError != 0) return;
 
         if (TabNo == 0)
-            pDoc->RenameTab(TabNo, SC10TOSTRING( TabName ), FALSE);
+            pDoc->RenameTab(static_cast<SCTAB> (TabNo), SC10TOSTRING( TabName ), FALSE);
         else
             pDoc->InsertTab(SC_TAB_APPEND, SC10TOSTRING( TabName ) );
 
-        pDoc->SetPageStyle( Tab, aPageName );
+        pDoc->SetPageStyle( static_cast<SCTAB>(Tab), aPageName );
 
-        if (Visible == 0) pDoc->SetVisible(TabNo, FALSE);
+        if (Visible == 0) pDoc->SetVisible(static_cast<SCTAB> (TabNo), FALSE);
 
         // ColWidth
         rStream >> ID;
@@ -1601,7 +1600,7 @@ void Sc10Import::LoadTables()
         {
             rStream >> DataEnd;
             rStream >> DataValue;
-            for (j = DataStart; j <= DataEnd; j++) pDoc->SetColWidth(j, TabNo, DataValue);
+            for (SCCOL j = static_cast<SCCOL>(DataStart); j <= static_cast<SCCOL>(DataEnd); j++) pDoc->SetColWidth(j, static_cast<SCTAB> (TabNo), DataValue);
             DataStart = DataEnd + 1;
         }
         pPrgrsBar->Progress();
@@ -1630,7 +1629,7 @@ void Sc10Import::LoadTables()
                     nFlags |= CR_MANUALBREAK;
                 if ((DataValue & crfHidden) == crfHidden)
                     nFlags |= CR_HIDDEN;
-                for (j = DataStart; j <= DataEnd; j++) pDoc->SetColFlags(j, TabNo, nFlags);
+                for (SCCOL k = static_cast<SCCOL>(DataStart); k <= static_cast<SCCOL>(DataEnd); k++) pDoc->SetColFlags(k, static_cast<SCTAB> (TabNo), nFlags);
             }
             DataStart = DataEnd + 1;
         }
@@ -1651,7 +1650,7 @@ void Sc10Import::LoadTables()
         {
             rStream >> DataEnd;
             rStream >> DataValue;
-            pDoc->SetRowHeightRange(DataStart, DataEnd, TabNo, DataValue);
+            pDoc->SetRowHeightRange(static_cast<SCROW> (DataStart), static_cast<SCROW> (DataEnd), static_cast<SCTAB> (TabNo), DataValue);
             DataStart = DataEnd + 1;
         }
         pPrgrsBar->Progress();
@@ -1680,7 +1679,7 @@ void Sc10Import::LoadTables()
                     nFlags |= CR_MANUALBREAK;
                 if ((DataValue & crfHidden) == crfHidden)
                     nFlags |= CR_HIDDEN;
-                for (j = DataStart; j <= DataEnd; j++) pDoc->SetRowFlags(j, TabNo, nFlags);
+                for (SCROW l = static_cast<SCROW>(DataStart); l <= static_cast<SCROW>(DataEnd); l++) pDoc->SetRowFlags(l, static_cast<SCTAB> (TabNo), nFlags);
             }
             DataStart = DataEnd + 1;
         }
@@ -1694,12 +1693,12 @@ void Sc10Import::LoadTables()
             nError = errUnknownID;
             return;
         }
-        for (USHORT Col = 0; (Col <= MAXCOL) && (nError == 0); Col++)
+        for (SCCOL Col = 0; (Col <= MAXCOL) && (nError == 0); Col++)
         {
             rStream >> Count;
             nError = rStream.GetError();
             if ((Count != 0) && (nError == 0))
-                LoadCol(Col, TabNo);
+                LoadCol(Col, static_cast<SCTAB> (TabNo));
         }
         DBG_ASSERT( nError == 0, "Stream" );
     }
@@ -1709,7 +1708,7 @@ void Sc10Import::LoadTables()
 }
 
 
-void Sc10Import::LoadCol(USHORT Col, USHORT Tab)
+void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
 {
     LoadColAttr(Col, Tab);
 
@@ -1717,7 +1716,7 @@ void Sc10Import::LoadCol(USHORT Col, USHORT Tab)
     BYTE   CellType;
     USHORT Row;
     rStream >> CellCount;
-    if (CellCount > MAXROW) nError = errUnknownFormat;
+    if (static_cast<SCROW>(CellCount) > MAXROW) nError = errUnknownFormat;
     for (USHORT i = 0; (i < CellCount) && (nError == 0); i++)
     {
         rStream >> CellType;
@@ -1729,7 +1728,7 @@ void Sc10Import::LoadCol(USHORT Col, USHORT Tab)
             {
                 case ctValue :
                 {
-                    const SfxPoolItem* pValueFormat = pDoc->GetAttr(Col, Row, Tab, ATTR_VALUE_FORMAT);
+                    const SfxPoolItem* pValueFormat = pDoc->GetAttr(Col, static_cast<SCROW> (Row), Tab, ATTR_VALUE_FORMAT);
                     ULONG nFormat = ((SfxUInt32Item*)pValueFormat)->GetValue();
                     double Value = ScfTools::ReadLongDouble(rStream);
                     //rStream.Read(&Value, sizeof(Value));
@@ -1740,7 +1739,7 @@ void Sc10Import::LoadCol(USHORT Col, USHORT Tab)
                     // Value += 0;
                     if ((nFormat >= 40) && (nFormat <= 45))
                         Value /= 86400.0;
-                    pDoc->SetValue(Col, Row, Tab, Value);
+                    pDoc->SetValue(Col, static_cast<SCROW> (Row), Tab, Value);
                     break;
                 }
                 case ctString :
@@ -1751,7 +1750,7 @@ void Sc10Import::LoadCol(USHORT Col, USHORT Tab)
                     rStream.Read(s, Len);
                     s[Len] = 0;
 
-                    pDoc->SetString( Col, Row, Tab, SC10TOSTRING( s ) );
+                    pDoc->SetString( Col, static_cast<SCROW> (Row), Tab, SC10TOSTRING( s ) );
                     break;
                 }
                 case ctFormula :
@@ -1764,9 +1763,9 @@ void Sc10Import::LoadCol(USHORT Col, USHORT Tab)
                     rStream.Read(&s[1], Len);
                     s[0] = '=';
                     s[Len + 1] = 0;
-                    ScFormulaCell* pCell = new ScFormulaCell( pDoc, ScAddress( Col, Row, Tab ) );
+                    ScFormulaCell* pCell = new ScFormulaCell( pDoc, ScAddress( Col, static_cast<SCROW> (Row), Tab ) );
                     pCell->SetString( SC10TOSTRING( s ) );
-                    pDoc->PutCell( Col, Row, Tab, pCell, (BOOL)TRUE );
+                    pDoc->PutCell( Col, static_cast<SCROW> (Row), Tab, pCell, (BOOL)TRUE );
                     break;
                 }
                 case ctNote :
@@ -1782,7 +1781,7 @@ void Sc10Import::LoadCol(USHORT Col, USHORT Tab)
                 sal_Char Note[4096];
                 rStream.Read(Note, NoteLen);
                 Note[NoteLen] = 0;
-                pDoc->SetNote(Col, Row, Tab, ScPostIt( SC10TOSTRING( Note )) );
+                pDoc->SetNote(Col, static_cast<SCROW> (Row), Tab, ScPostIt( SC10TOSTRING( Note )) );
             }
         }
         pPrgrsBar->Progress();
@@ -1790,7 +1789,7 @@ void Sc10Import::LoadCol(USHORT Col, USHORT Tab)
 }
 
 
-void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
+void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 {
     Sc10ColAttr aFont;
     Sc10ColAttr aAttr;
@@ -1816,8 +1815,8 @@ void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
 
     if (nError == 0)
     {
-        USHORT nStart;
-        USHORT nEnd;
+        SCROW nStart;
+        SCROW nEnd;
         USHORT i;
         UINT16 nLimit;
         UINT16 nValue;
@@ -1831,7 +1830,7 @@ void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
         for( i = 0 ; i < nLimit ; i++, pColData++ )
         {
             //nEnd = aFont.pData[i].Row;
-            nEnd = pColData->Row;
+            nEnd = static_cast<SCROW>(pColData->Row);
             //if ((nStart <= nEnd) && (aFont.pData[i].Value != 0))
             if ((nStart <= nEnd) && (pColData->Value))
             {
@@ -1863,7 +1862,7 @@ void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
         //nEnd = aColor.pData[i].Row;
-        nEnd = pColData->Row;
+        nEnd = static_cast<SCROW>(pColData->Row);
         //if ((nStart <= nEnd) && (aColor.pData[i].Value != 0))
         if ((nStart <= nEnd) && (pColData->Value))
         {
@@ -1883,7 +1882,7 @@ void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
     pColData = aAttr.pData;
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
-        nEnd = pColData->Row;
+        nEnd = static_cast<SCROW>(pColData->Row);
         nValue = pColData->Value;
         if ((nStart <= nEnd) && (nValue))
         {
@@ -1908,7 +1907,7 @@ void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
     pColData = aJustify.pData;
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
-        nEnd = pColData->Row;
+        nEnd = static_cast<SCROW>(pColData->Row);
         nValue = pColData->Value;
         if ((nStart <= nEnd) && (nValue))
         {
@@ -2012,7 +2011,7 @@ void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
         Color   ColorRight( COL_BLACK );
         Color   ColorBottom( COL_BLACK );
         USHORT  nFrmColVal  = aFrameColor.pData[ nColorIndex ].Value;
-        USHORT  nFrmColRow  = aFrameColor.pData[ nColorIndex ].Row;
+        SCROW   nFrmColRow  = static_cast<SCROW>(aFrameColor.pData[ nColorIndex ].Row);
         USHORT  cLeft       = ( nFrmColVal & 0x000F );
         USHORT  cTop        = ( nFrmColVal & 0x00F0 ) >> 4;
         USHORT  cRight      = ( nFrmColVal & 0x0F00 ) >> 8;
@@ -2023,15 +2022,15 @@ void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
         lcl_ChangeColor( cRight, ColorRight );
         lcl_ChangeColor( cBottom, ColorBottom );
 
-        if( pColData->Row < nFrmColRow )
+        if( static_cast<SCROW>(pColData->Row) < nFrmColRow )
         {
-            nEnd = pColData->Row;
+            nEnd = static_cast<SCROW>(pColData->Row);
             if( nFrameIndex < ( aFrame.Count - 1 ) )
                 nFrameIndex++;
         }
-        else if( pColData->Row > nFrmColRow )
+        else if( static_cast<SCROW>(pColData->Row) > nFrmColRow )
         {
-            nEnd = aFrameColor.pData[ nColorIndex ].Row;
+            nEnd = static_cast<SCROW>(aFrameColor.pData[ nColorIndex ].Row);
             if( nColorIndex < ( aFrameColor.Count - 1 ) )
                 nColorIndex++;
         }
@@ -2137,19 +2136,19 @@ void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
         }
         if( aRaster.pData[ nRasterIndex ].Row < aColor.pData[ nColorIndex ].Row )
         {
-            nEnd = aRaster.pData[ nRasterIndex ].Row;
+            nEnd = static_cast<SCROW>(aRaster.pData[ nRasterIndex ].Row);
             if( nRasterIndex < ( aRaster.Count - 1 ) )
                 nRasterIndex++;
         }
         else if( aRaster.pData[ nRasterIndex ].Row > aColor.pData[ nColorIndex ].Row )
         {
-            nEnd = aColor.pData[ nColorIndex ].Row;
+            nEnd = static_cast<SCROW>(aColor.pData[ nColorIndex ].Row);
             if( nColorIndex < ( aColor.Count - 1 ) )
                 nColorIndex++;
         }
         else
         {
-            nEnd = aColor.pData[ nColorIndex ].Row;
+            nEnd = static_cast<SCROW>(aColor.pData[ nColorIndex ].Row);
             if( nRasterIndex < ( aRaster.Count - 1 ) )
                 nRasterIndex++;
             if( nColorIndex < ( aColor.Count - 1 ) )
@@ -2181,7 +2180,7 @@ void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
     pColData = aValue.pData;
     for (i=0; i<nLimit; i++, pColData++)
     {
-        nEnd = pColData->Row;
+        nEnd = static_cast<SCROW>(pColData->Row);
         nValue = pColData->Value;
         if ((nStart <= nEnd) && (nValue))
         {
@@ -2201,7 +2200,7 @@ void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
     nEnd = 0;
     for (i=0; i<aFlag.Count; i++)
     {
-        nEnd = aFlag.pData[i].Row;
+        nEnd = static_cast<SCROW>(aFlag.pData[i].Row);
         if ((nStart <= nEnd) && (aFlag.pData[i].Value != 0))
         {
             BOOL bProtect  = ((aFlag.pData[i].Value & paProtect) == paProtect);
@@ -2218,11 +2217,11 @@ void Sc10Import::LoadColAttr(USHORT Col, USHORT Tab)
     // ZellVorlagen
     nStart = 0;
     nEnd = 0;
-    USHORT Row = 10;
+    SCROW Row = 10;
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     for (i=0; i<aPattern.Count; i++)
     {
-        nEnd = aPattern.pData[i].Row;
+        nEnd = static_cast<SCROW>(aPattern.pData[i].Row);
         if ((nStart <= nEnd) && (aPattern.pData[i].Value != 0))
         {
             USHORT nPatternIndex = (aPattern.pData[i].Value & 0x00FF) - 1;
@@ -2424,9 +2423,9 @@ void Sc10Import::LoadObjects()
     // Achtung nur zu Debugzwecken
     //-----------------------------------
     pDoc->InsertTab(SC_TAB_APPEND, "GraphObjects");
-    USHORT nCol = 0;
-    USHORT nRow = 0;
-    USHORT nTab = 0;
+    SCCOL nCol = 0;
+    SCROW nRow = 0;
+    SCTAB nTab = 0;
     pDoc->GetTable("GraphObjects", nTab);
     pDoc->SetString(nCol++, nRow, nTab, "ObjectTyp");
     pDoc->SetString(nCol++, nRow, nTab, "Col");
@@ -2459,14 +2458,14 @@ void Sc10Import::LoadObjects()
         double nPPTY = ScGlobal::nScreenPPTY;
 
         long nStartX = 0;
-        for (short nX=0; nX<GraphHeader.CarretX; nX++)
-            nStartX += pDoc->GetColWidth(nX, GraphHeader.CarretZ);
+        for (SCsCOL nX=0; nX<GraphHeader.CarretX; nX++)
+            nStartX += pDoc->GetColWidth(nX, static_cast<SCTAB>(GraphHeader.CarretZ));
         nStartX = (long) ( nStartX * HMM_PER_TWIPS );
         nStartX += (long) ( GraphHeader.x / nPPTX * HMM_PER_TWIPS );
         long nSizeX = (long) ( GraphHeader.w / nPPTX * HMM_PER_TWIPS );
         long nStartY = 0;
-        for (short nY=0; nY<GraphHeader.CarretY; nY++)
-            nStartY += pDoc->FastGetRowHeight(nY, GraphHeader.CarretZ);
+        for (SCsROW nY=0; nY<static_cast<SCsROW>(GraphHeader.CarretY); nY++)
+            nStartY += pDoc->FastGetRowHeight(nY, static_cast<SCTAB>(GraphHeader.CarretZ));
         nStartY = (long) ( nStartY * HMM_PER_TWIPS );
         nStartY += (long) ( GraphHeader.y / nPPTY * HMM_PER_TWIPS );
         long nSizeY = (long) ( GraphHeader.h / nPPTY * HMM_PER_TWIPS );
@@ -2540,8 +2539,8 @@ void Sc10Import::LoadObjects()
             lcl_ReadChartTypeData(rStream, *pTypeData);
 
             Rectangle aRect( Point(nStartX,nStartY), Size(nSizeX,nSizeY) );
-            Sc10InsertObject::InsertChart( pDoc, GraphHeader.CarretZ, aRect,
-                                GraphHeader.CarretZ,
+            Sc10InsertObject::InsertChart( pDoc, static_cast<SCTAB>(GraphHeader.CarretZ), aRect,
+                                static_cast<SCTAB>(GraphHeader.CarretZ),
                                 ChartSheetData.DataX1, ChartSheetData.DataY1,
                                 ChartSheetData.DataX2, ChartSheetData.DataY2 );
 
