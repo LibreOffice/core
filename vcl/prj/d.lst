@@ -77,6 +77,7 @@ hedabu: ..\inc\fldunit.hxx %_DEST%\inc%_EXT%\vcl\fldunit.hxx
 hedabu: ..\inc\floatwin.hxx %_DEST%\inc%_EXT%\vcl\floatwin.hxx
 hedabu: ..\inc\fntstyle.hxx %_DEST%\inc%_EXT%\vcl\fntstyle.hxx
 hedabu: ..\inc\font.hxx %_DEST%\inc%_EXT%\vcl\font.hxx
+hedabu: ..\inc\fontcvt.hxx %_DEST%\inc%_EXT%\vcl\fontcvt.hxx
 hedabu: ..\inc\fonttype.hxx %_DEST%\inc%_EXT%\vcl\fonttype.hxx
 hedabu: ..\inc\gdimtf.hxx %_DEST%\inc%_EXT%\vcl\gdimtf.hxx
 hedabu: ..\inc\gdiobj.hxx %_DEST%\inc%_EXT%\vcl\gdiobj.hxx
