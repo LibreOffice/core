@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: as $ $Date: 2002-06-27 09:40:36 $
+ *  last change: $Author: mt $ $Date: 2002-07-01 14:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXCheckBox;
             break;
             case WINDOW_COMBOBOX:
-                pNewWindow = new ComboBox( pParent, nWinBits );
+                pNewWindow = new ComboBox( pParent, nWinBits|WB_AUTOHSCROLL );
                 ((ComboBox*)pNewWindow)->EnableAutoSize( sal_False );
                 *ppNewComp = new VCLXComboBox;
             break;
@@ -763,7 +763,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WINDOW_LISTBOX:
-                pNewWindow = new ListBox( pParent, nWinBits|WB_SIMPLEMODE );
+                pNewWindow = new ListBox( pParent, nWinBits|WB_SIMPLEMODE|WB_AUTOHSCROLL );
                 ((ListBox*)pNewWindow)->EnableAutoSize( sal_False );
                 *ppNewComp = new VCLXListBox;
             break;
