@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 10:25:39 $
+ *  last change: $Author: fs $ $Date: 2002-05-16 15:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ protected:
 
 inline sal_Bool OFilterItemExchange::hasFormat( const DataFlavorExVector& _rFormats )
 {
-    return implHasFormat( _rFormats, getFormatId() );
+    return OLocalExchange::hasFormat( _rFormats, getFormatId() );
 }
 
 //====================================================================
