@@ -60,7 +60,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\client
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\daemons
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\daemons\sadmind
-mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\daemons\sofficed
+mkdir: %_DEST%\XAccessibleinc%_EXT%\com\sun\star\portal\daemons\sofficed
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\system
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
 
@@ -69,6 +69,7 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star
 
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\frame
+mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\accessibility
 
 ..\%__SRC%\inc\com\sun\star\awt\*.hdl %_DEST%\inc%_EXT%\com\sun\star\awt\*.hdl
 ..\%__SRC%\inc\com\sun\star\awt\*.hpp %_DEST%\inc%_EXT%\com\sun\star\awt\*.hpp
@@ -191,6 +192,9 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\frame
 
 ..\%__SRC%\inc\drafts\com\sun\star\frame\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\frame\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\*.hdl
+
+..\%__SRC%\inc\drafts\com\sun\star\accessibility\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\accessibility\*.hpp
+..\%__SRC%\inc\drafts\com\sun\star\accessibility\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\accessibility\*.hdl
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
