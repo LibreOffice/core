@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-02 12:31:59 $
+ *  last change: $Author: ka $ $Date: 2002-04-04 09:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
                 const Size aSize( aBmp.GetSizePixel() );
 
                 if( !aSize.Width() || !aSize.Height() )
-                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "WARNING: Bitmap is missing: " ) ).Append( aString ), EXIT_MISSING_BITMAP );
+                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "WARNING: Bitmap is missing: " ) ).Append( aString )/*, EXIT_MISSING_BITMAP*/ );
                 else
                 {
                     if( aTotalBmp.IsEmpty() )
@@ -288,9 +288,9 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
                     }
 
                     if( ( aSize.Width() > aOneSize.Width() ) || ( aSize.Height() > aOneSize.Height() ) )
-                         Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different dimensions in file: " ) ).Append( aString ), EXIT_DIMENSIONERROR );
+                         Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different dimensions in file: " ) ).Append( aString )/*, EXIT_DIMENSIONERROR*/ );
                     else if( aBmp.GetBitCount() != aTotalBmp.GetBitCount() )
-                         Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different color depth in file: ") ).Append( aString ), EXIT_COLORDEPTHERROR );
+                         Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different color depth in file: ") ).Append( aString )/*, EXIT_COLORDEPTHERROR*/ );
                     else
                     {
                         Point           aPoint;
