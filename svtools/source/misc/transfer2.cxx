@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-28 11:02:11 $
+ *  last change: $Author: ka $ $Date: 2001-10-18 11:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #endif
 
+#include "urlbmk.hxx"
+#include "inetimg.hxx"
+#include "imap.hxx"
 #include "transfer.hxx"
 
 // --------------
@@ -367,25 +370,7 @@ void DropTargetHelper::ImplBeginDrag( const Sequence< DataFlavor >& rSupportedDa
     const DataFlavor*   pFlavor = rSupportedDataFlavors.getConstArray();
 
     mpFormats->clear();
-
-    for( sal_uInt32 i = 0, nCount = rSupportedDataFlavors.getLength(); i < nCount; i++, pFlavor++ )
-    {
-        aFlavorEx.MimeType = pFlavor->MimeType;
-        aFlavorEx.HumanPresentableName = pFlavor->HumanPresentableName;
-        aFlavorEx.DataType = pFlavor->DataType;
-        aFlavorEx.mnSotId = SotExchange::RegisterFormat( *pFlavor );
-
-        mpFormats->push_back( aFlavorEx );
-
-        if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) && !IsDropFormatSupported( SOT_FORMAT_GDIMETAFILE ) )
-        {
-            if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
-            {
-                aFlavorEx.mnSotId = SOT_FORMAT_GDIMETAFILE;
-                mpFormats->push_back( aFlavorEx );
-            }
-        }
-    }
+    TransferableDataHelper::FillDataFlavorExVector( rSupportedDataFlavors, *mpFormats );
 }
 
 // -----------------------------------------------------------------------------
@@ -447,3 +432,258 @@ sal_Bool DropTargetHelper::IsDropFormatSupported( const DataFlavor& rFlavor )
     return bRet;
 }
 
+// -----------------------------------------------------------------------------
+// TransferDataContainer
+// -----------------------------------------------------------------------------
+
+struct TDataCntnrEntry_Impl
+{
+    ::com::sun::star::uno::Any aAny;
+    SotFormatStringId nId;
+};
+
+// -----------------------------------------------------------------------------
+
+typedef ::std::list< TDataCntnrEntry_Impl > TDataCntnrEntryList;
+
+// -----------------------------------------------------------------------------
+
+struct TransferDataContainer_Impl
+{
+    TDataCntnrEntryList aFmtList;
+    Link aFinshedLnk;
+    INetBookmark* pBookmk;
+    Graphic* pGrf;
+
+    TransferDataContainer_Impl()
+        : pBookmk( 0 ), pGrf( 0 )
+    {
+    }
+
+    ~TransferDataContainer_Impl()
+    {
+        delete pBookmk;
+        delete pGrf;
+    }
+};
+
+// -----------------------------------------------------------------------------
+
+TransferDataContainer::TransferDataContainer()
+    : pImpl( new TransferDataContainer_Impl )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+TransferDataContainer::~TransferDataContainer()
+{
+    delete pImpl;
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::AddSupportedFormats()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferDataContainer::GetData( const
+            ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+{
+    TDataCntnrEntryList::iterator   aIter( pImpl->aFmtList.begin() ),
+                                    aEnd( pImpl->aFmtList.end() );
+    sal_Bool bFnd = sal_False;
+    ULONG nFmtId = SotExchange::GetFormat( rFlavor );
+
+    // test first the list
+    for( ; aIter != aEnd; ++aIter )
+    {
+        TDataCntnrEntry_Impl& rEntry = (TDataCntnrEntry_Impl&)*aIter;
+        if( nFmtId == rEntry.nId )
+        {
+            bFnd = SetAny( rEntry.aAny, rFlavor );
+            break;
+        }
+    }
+
+    // test second the bookmark pointer
+    if( !bFnd )
+        switch( nFmtId )
+        {
+         case SOT_FORMAT_STRING:
+         case SOT_FORMATSTR_ID_SOLK:
+         case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
+         case SOT_FORMATSTR_ID_FILECONTENT:
+         case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
+         case SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR:
+            if( pImpl->pBookmk )
+                bFnd = SetINetBookmark( *pImpl->pBookmk, rFlavor );
+            break;
+
+        case SOT_FORMATSTR_ID_SVXB:
+        case SOT_FORMAT_BITMAP:
+        case SOT_FORMAT_GDIMETAFILE:
+            if( pImpl->pGrf )
+                bFnd = SetGraphic( *pImpl->pGrf, rFlavor );
+            break;
+        }
+
+    return bFnd;
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::ClearData()
+{
+    delete pImpl;
+    pImpl = new TransferDataContainer_Impl;
+    ClearFormats();
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::CopyINetBookmark( const INetBookmark& rBkmk )
+{
+    if( !pImpl->pBookmk )
+        pImpl->pBookmk = new INetBookmark( rBkmk );
+    else
+        *pImpl->pBookmk = rBkmk;
+
+     AddFormat( SOT_FORMAT_STRING );
+     AddFormat( SOT_FORMATSTR_ID_SOLK );
+     AddFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
+     AddFormat( SOT_FORMATSTR_ID_FILECONTENT );
+     AddFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR );
+     AddFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR );
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::CopyAnyData( ULONG nFormatId,
+                                        const sal_Char* pData, ULONG nLen )
+{
+    if( nLen )
+    {
+        TDataCntnrEntry_Impl aEntry;
+        aEntry.nId = nFormatId;
+
+        Sequence< sal_Int8 > aSeq( nLen  );
+        memcpy( aSeq.getArray(), pData, nLen );
+        aEntry.aAny <<= aSeq;
+        pImpl->aFmtList.push_back( aEntry );
+         AddFormat( nFormatId );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::CopyByteString( ULONG nFormatId,
+                                            const ByteString& rStr )
+{
+    CopyAnyData( nFormatId, rStr.GetBuffer(), rStr.Len() );
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::CopyINetImage( const INetImage& rINtImg )
+{
+    SvMemoryStream aMemStm( 1024, 1024 );
+    aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
+    rINtImg.Write( aMemStm, SOT_FORMATSTR_ID_INET_IMAGE );
+    CopyAnyData( SOT_FORMATSTR_ID_INET_IMAGE, (sal_Char*)aMemStm.GetData(),
+                    aMemStm.Seek( STREAM_SEEK_TO_END ) );
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::CopyImageMap( const ImageMap& rImgMap )
+{
+    SvMemoryStream aMemStm( 8192, 8192 );
+    aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
+    aMemStm << rImgMap;
+    CopyAnyData( SOT_FORMATSTR_ID_SVIM, (sal_Char*)aMemStm.GetData(),
+                    aMemStm.Seek( STREAM_SEEK_TO_END ) );
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
+{
+    USHORT nType = rGrf.GetType();
+    if( GRAPHIC_NONE != nType )
+    {
+        if( !pImpl->pGrf )
+            pImpl->pGrf = new Graphic( rGrf );
+        else
+            *pImpl->pGrf = rGrf;
+
+        AddFormat( SOT_FORMATSTR_ID_SVXB );
+        if( GRAPHIC_BITMAP == nType )
+            AddFormat( SOT_FORMAT_BITMAP );
+        else if( GRAPHIC_GDIMETAFILE == nType )
+            AddFormat( SOT_FORMAT_GDIMETAFILE );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::CopyString( USHORT nFmt, const String& rStr )
+{
+    if( rStr.Len() )
+    {
+        TDataCntnrEntry_Impl aEntry;
+        aEntry.nId = nFmt;
+        rtl::OUString aStr( rStr );
+        aEntry.aAny <<= aStr;
+        pImpl->aFmtList.push_back( aEntry );
+         AddFormat( aEntry.nId );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::CopyString( const String& rStr )
+{
+    CopyString( SOT_FORMAT_STRING, rStr );
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::CopyAny( USHORT nFmt,
+                                    const ::com::sun::star::uno::Any& rAny )
+{
+    TDataCntnrEntry_Impl aEntry;
+    aEntry.nId = nFmt;
+    aEntry.aAny = rAny;
+    pImpl->aFmtList.push_back( aEntry );
+    AddFormat( aEntry.nId );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferDataContainer::HasAnyData() const
+{
+    return pImpl->aFmtList.begin() != pImpl->aFmtList.end() ||
+            0 != pImpl->pBookmk;
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::StartDrag(
+        Window* pWindow, sal_Int8 nDragSourceActions,
+        const Link& rLnk, sal_Int32 nDragPointer, sal_Int32 nDragImage )
+{
+    pImpl->aFinshedLnk = rLnk;
+    TransferableHelper::StartDrag( pWindow, nDragSourceActions,
+                                    nDragPointer, nDragImage );
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferDataContainer::DragFinished( sal_Int8 nDropAction )
+{
+    if( pImpl->aFinshedLnk.IsSet() )
+        pImpl->aFinshedLnk.Call( &nDropAction );
+}
