@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:48:38 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,10 +1493,27 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
 
         if(rText.Len())
         {
-            if( !pDoc->Insert(aNewCrsr, rText) )
+
+            // scan for CR characters in order to insert paragraph breaks
+            // at those positions by calling SplitNode
+            OUString aTxt;
+            xub_StrLen nStartIdx = 0;
+            xub_StrLen nIdx = rText.Search( '\r', nStartIdx );
+            while (nIdx != STRING_NOTFOUND)
             {
-                ASSERT( sal_False, "Doc->Insert(Str) failed." )
+                DBG_ASSERT( nIdx - nStartIdx >= 0, "index negative!" );
+                aTxt = rText.Copy( nStartIdx, nIdx - nStartIdx );
+                if (aTxt.getLength() && !pDoc->Insert( aNewCrsr, aTxt ))
+                    DBG_ERROR( "Doc->Insert(Str) failed." );
+                if (!pDoc->SplitNode( *aNewCrsr.GetPoint() ))
+                    DBG_ERROR( "SplitNode failed" );
+                nStartIdx = nIdx + 1;
+                nIdx = rText.Search( '\r', nStartIdx );
             }
+            aTxt = rText.Copy( nStartIdx );
+            if (aTxt.getLength() && !pDoc->Insert( aNewCrsr, aTxt ))
+                DBG_ERROR( "Doc->Insert(Str) failed." );
+
             SwXTextCursor::SelectPam(aNewCrsr, sal_True);
             aNewCrsr.Left(rText.Len(), CRSR_SKIP_CHARS);
         }
