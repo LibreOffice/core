@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plugin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:56:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,12 +138,6 @@ sal_Bool SAL_CALL PluginObject::load( const uno::Sequence < com::sun::star::bean
 
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
-        uno::Reference < util::XCloseable > xClose( xFrame, uno::UNO_QUERY );
-        if ( xClose.is() )
-            xClose->addCloseListener( static_cast < util::XCloseListener* >(this) );
-        else
-            xFrame->addEventListener( static_cast < lang::XEventListener* >(this) );
-
         Window* pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
         PluginWindow_Impl* pWin = new PluginWindow_Impl( pParent );
         pWin->SetSizePixel( pParent->GetOutputSizePixel() );
@@ -196,6 +190,9 @@ sal_Bool SAL_CALL PluginObject::load( const uno::Sequence < com::sun::star::bean
         }
 
         uno::Reference < awt::XWindow > xWindow( pWin->GetComponentInterface(), uno::UNO_QUERY );
+
+        // we must destroy the plugin before the parent is destroyed
+        xWindow->addEventListener( this );
         xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
         return TRUE;
     }
@@ -221,15 +218,6 @@ void SAL_CALL PluginObject::addCloseListener( const com::sun::star::uno::Referen
 
 void SAL_CALL PluginObject::removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException )
 {
-}
-
-void SAL_CALL PluginObject::queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) throw (com::sun::star::uno::RuntimeException)
-{
-}
-
-void SAL_CALL PluginObject::notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException)
-{
-    cancel();
 }
 
 void SAL_CALL PluginObject::disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException)
