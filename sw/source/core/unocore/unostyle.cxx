@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-24 14:41:24 $
+ *  last change: $Author: tl $ $Date: 2002-09-26 07:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,11 +1322,13 @@ BOOL SwXStyle::supportsService(const OUString& rServiceName) throw( RuntimeExcep
     BOOL bRet = C2U("com.sun.star.style.Style") == rServiceName;
     if(!bRet && SFX_STYLE_FAMILY_CHAR == eFamily)
         bRet = !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties")||
-        !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesAsian")||
-        !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesComplex");
+               !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesAsian")||
+               !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesComplex");
     if(!bRet && SFX_STYLE_FAMILY_PARA == eFamily)
         bRet = (C2U("com.sun.star.style.ParagraphStyle") == rServiceName)||
-            (C2U("com.sun.star.style.ParagraphProperties") == rServiceName);
+               (C2U("com.sun.star.style.ParagraphProperties") == rServiceName) ||
+               (C2U("com.sun.star.style.ParagraphPropertiesAsian") == rServiceName) ||
+               (C2U("com.sun.star.style.ParagraphPropertiesComplex") == rServiceName);
     if(!bRet && SFX_STYLE_FAMILY_PAGE == eFamily)
         bRet = (C2U("com.sun.star.style.PageProperties") == rServiceName);
 
@@ -1340,7 +1342,7 @@ Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( RuntimeExce
     long nCount = 1;
     if(SFX_STYLE_FAMILY_PARA == eFamily)
     {
-        nCount = 3;
+        nCount = 5;
         if(bIsConditional)
             nCount++;
     }
@@ -1364,8 +1366,10 @@ Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( RuntimeExce
         case SFX_STYLE_FAMILY_PARA:
             pArray[1] = C2U("com.sun.star.style.ParagraphStyle");
             pArray[2] = C2U("com.sun.star.style.ParagraphProperties");
+            pArray[3] = C2U("com.sun.star.style.ParagraphPropertiesAsian");
+            pArray[4] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
         if(bIsConditional)
-            pArray[3] = C2U("com.sun.star.style.ConditionalParagraphStyle");
+            pArray[5] = C2U("com.sun.star.style.ConditionalParagraphStyle");
         break;
     }
     return aRet;

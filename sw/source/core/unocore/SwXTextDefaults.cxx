@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-24 14:34:51 $
+ *  last change: $Author: tl $ $Date: 2002-09-26 07:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,7 @@ sal_Bool SAL_CALL SwXTextDefaults::supportsService( const ::rtl::OUString& rServ
             rServiceName == C2U("com.sun.star.style.CharacterPropertiesAsian") ||
             rServiceName == C2U("com.sun.star.style.CharacterPropertiesComplex") ||
             rServiceName == C2U("com.sun.star.style.ParagraphProperties") ||
+            rServiceName == C2U("com.sun.star.style.ParagraphPropertiesAsian") ||
             rServiceName == C2U("com.sun.star.style.ParagraphPropertiesComplex");
 }
 
@@ -270,14 +271,15 @@ sal_Bool SAL_CALL SwXTextDefaults::supportsService( const ::rtl::OUString& rServ
 uno::Sequence< ::rtl::OUString > SAL_CALL SwXTextDefaults::getSupportedServiceNames(  )
     throw (RuntimeException)
 {
-    uno::Sequence< OUString > aRet(6);
+    uno::Sequence< OUString > aRet(7);
     OUString* pArr = aRet.getArray();
     *pArr++ = C2U("com.sun.star.text.Defaults");
     *pArr++ = C2U("com.sun.star.style.CharacterProperties");
     *pArr++ = C2U("com.sun.star.style.CharacterPropertiesAsian");
     *pArr++ = C2U("com.sun.star.style.CharacterPropertiesComplex");
     *pArr++ = C2U("com.sun.star.style.ParagraphProperties");
-    *pArr++ = C2U("com.sun.star.style.ParagraphComplex");
+    *pArr++ = C2U("com.sun.star.style.ParagraphPropertiesAsian");
+    *pArr++ = C2U("com.sun.star.style.ParagraphPropertiesComplex");
     return aRet;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-12 13:08:16 $
+ *  last change: $Author: tl $ $Date: 2002-09-26 07:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3769,20 +3769,24 @@ BOOL SwXCellRange::supportsService(const OUString& rServiceName) throw( RuntimeE
          rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.CharacterProperties" ) ) ||
         rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.CharacterPropertiesAsian" ) ) ||
         rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.CharacterPropertiesComplex") ) ||
-        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.ParagraphProperties" ) );
+        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.ParagraphProperties" ) ) ||
+        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.ParagraphPropertiesAsian" ) ) ||
+        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.ParagraphPropertiesComplex" ) );
 }
 /* -----------------------------19.04.00 15:21--------------------------------
 
  ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXCellRange::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(5);
+    Sequence< OUString > aRet(7);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.CellRange");
      pArray[1] = C2U("com.sun.star.style.CharacterProperties");
     pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
     pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
     pArray[4] = C2U("com.sun.star.style.ParagraphProperties");
+    pArray[5] = C2U("com.sun.star.style.ParagraphPropertiesAsian");
+    pArray[6] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
     return aRet;
 }
 /*-- 11.12.98 14:27:32---------------------------------------------------

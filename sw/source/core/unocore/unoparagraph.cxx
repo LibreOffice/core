@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-24 14:40:26 $
+ *  last change: $Author: tl $ $Date: 2002-09-26 07:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,21 +175,25 @@ BOOL SwXParagraph::supportsService(const OUString& rServiceName) throw( RuntimeE
          sServiceName.EqualsAscii("com.sun.star.style.CharacterProperties")||
         sServiceName.EqualsAscii("com.sun.star.style.CharacterPropertiesAsian")||
         sServiceName.EqualsAscii("com.sun.star.style.CharacterPropertiesComplex")||
-        sServiceName.EqualsAscii("com.sun.star.style.ParagraphProperties");
+        sServiceName.EqualsAscii("com.sun.star.style.ParagraphProperties") ||
+        sServiceName.EqualsAscii("com.sun.star.style.ParagraphPropertiesAsian") ||
+        sServiceName.EqualsAscii("com.sun.star.style.ParagraphPropertiesComplex");
 }
 /* -----------------------------06.04.00 16:37--------------------------------
 
  ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXParagraph::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(6);
+    Sequence< OUString > aRet(8);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.Paragraph");
      pArray[1] = C2U("com.sun.star.style.CharacterProperties");
     pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
     pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
     pArray[4] = C2U("com.sun.star.style.ParagraphProperties");
-    pArray[5] = C2U("com.sun.star.text.TextContent");
+    pArray[5] = C2U("com.sun.star.style.ParagraphPropertiesAsian");
+    pArray[6] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
+    pArray[7] = C2U("com.sun.star.text.TextContent");
     return aRet;
 }
 /*-- 11.12.98 08:12:47---------------------------------------------------
