@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-14 09:41:41 $
+ *  last change: $Author: tl $ $Date: 2002-09-24 14:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,7 +1438,7 @@ Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
         if(pMap)
         {
             if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pMap->nWID < RES_FRMATR_END && pFmt)
             {
                 const SfxPoolItem& rDefItem =

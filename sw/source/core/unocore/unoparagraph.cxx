@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-12 13:06:55 $
+ *  last change: $Author: tl $ $Date: 2002-09-24 14:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,7 +590,7 @@ void SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
         if(pMap)
         {
             if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only:" ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only:" ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
             if(pMap->nWID < RES_FRMATR_END)
             {
@@ -649,7 +649,7 @@ uno::Any SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
         if(pMap)
         {
             if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only:" ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only:" ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pMap->nWID < RES_FRMATR_END)
             {
                 const SfxPoolItem& rDefItem =

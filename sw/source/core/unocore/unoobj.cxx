@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-14 09:42:58 $
+ *  last change: $Author: tl $ $Date: 2002-09-24 14:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2106,7 +2106,7 @@ Any SwXTextCursor::GetPropertyDefault(
     if(pMap)
     {
         if ( pMap->nFlags & PropertyAttribute::READONLY)
-            throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
+            throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
         if(pMap->nWID < RES_FRMATR_END)
         {
             const SfxPoolItem& rDefItem = pDoc->GetAttrPool().GetDefaultItem(pMap->nWID);
@@ -2368,7 +2368,7 @@ Sequence< Any > SAL_CALL SwXTextCursor::getPropertyDefaults( const Sequence< OUS
                         throw UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( 0 ) );
                 }
                 if ( pMap->nFlags & PropertyAttribute::READONLY)
-                    throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( 0 ) );
+                    throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( 0 ) );
                 if(pMap->nWID < RES_FRMATR_END)
                 {
                     const SfxPoolItem& rDefItem = pDoc->GetAttrPool().GetDefaultItem(pMap->nWID);
