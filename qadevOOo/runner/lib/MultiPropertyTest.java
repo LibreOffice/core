@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiPropertyTest.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-10 13:32:13 $
+ *  last change:$Date: 2003-11-18 16:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,6 @@ public class MultiPropertyTest extends MultiMethodTest {
                             log.println("old = " + toString(oldValue));
                             log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
-                            log.println("expected = " + toString(oldValue));
                         } catch(com.sun.star.lang.IllegalArgumentException iae) {
                         }
 
@@ -351,7 +350,6 @@ public class MultiPropertyTest extends MultiMethodTest {
                             log.println("old = " + toString(oldValue));
                             log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
-                            log.println("expected = " + toString(oldValue));
                         } catch(com.sun.star.lang.IllegalArgumentException iae) {
                         }
                         if (resValue != null ) {
@@ -377,7 +375,6 @@ public class MultiPropertyTest extends MultiMethodTest {
                             log.println("old = " + toString(oldValue));
                             log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
-                            log.println("expected = " + toString(oldValue));
                         } catch(com.sun.star.lang.IllegalArgumentException iae) {
                         }
                         tRes.tested(propName, true);
