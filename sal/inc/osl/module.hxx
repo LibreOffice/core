@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-19 17:11:38 $
+ *  last change: $Author: kr $ $Date: 2001-04-18 09:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,11 @@ public:
 
     void SAL_CALL unload()
     {
-       osl_unloadModule(m_Module);
-       m_Module = 0;
+        if (m_Module)
+        {
+            osl_unloadModule(m_Module);
+            m_Module = 0;
+        }
     }
 
     sal_Bool SAL_CALL is() const
