@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:23:42 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,9 @@
 #ifndef _FMTINFMT_HXX
 #include <fmtinfmt.hxx>
 #endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
 
 #include "swabstdlg.hxx" //CHINA001
 #include "dialog.hrc" //CHINA001
@@ -316,6 +319,9 @@
 #endif
 #ifndef _INSTABLE_HXX
 #include <instable.hxx>
+#endif
+#ifndef _SVX_FMSHELL_HXX
+#include <svx/fmshell.hxx> // for FN_XFORMS_DESIGN_MODE
 #endif
 #ifndef _SW_REWRITER_HXX
 #include <SwRewriter.hxx>
@@ -1238,6 +1244,29 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             }
             break;
 
+        case FN_XFORMS_DESIGN_MODE:
+            if( pArgs != NULL
+                && pArgs->GetItemState( nSlot, TRUE, &pItem ) == SFX_ITEM_SET
+                && pItem != NULL
+                && pItem->ISA( SfxBoolItem ) )
+            {
+                BOOL bDesignMode =
+                    static_cast<const SfxBoolItem*>( pItem )->GetValue();
+
+                // set form design mode
+                DBG_ASSERT( GetView().GetFormShell() != NULL, "form shell?" );
+                SfxRequest aReq( GetView().GetViewFrame(), SID_FM_DESIGN_MODE );
+                aReq.AppendItem( SfxBoolItem( SID_FM_DESIGN_MODE, bDesignMode ) );
+                GetView().GetFormShell()->Execute( aReq );
+                aReq.Done();
+
+                // also set suitable view options
+                SwViewOption aViewOption = *rSh.GetViewOptions();
+                aViewOption.SetFormView( ! bDesignMode );
+                rSh.ApplyViewOptions( aViewOption );
+            }
+            break;
+
         default:
             bMore = TRUE;
     }
@@ -1797,6 +1826,17 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_UPDATE_ALL_LINKS:
                 if ( !rSh.GetLinkManager().GetLinks().Count() )
                     rSet.DisableItem(nWhich);
+                break;
+            case FN_XFORMS_DESIGN_MODE:
+                // enable if in XForms document
+                if( rSh.GetDoc()->isXForms() )
+                {
+                    // determine current state from view options
+                    sal_Bool bValue = ! rSh.GetViewOptions()->IsFormView();
+                    rSet.Put( SfxBoolItem( nWhich, bValue ) );
+                }
+                else
+                    rSet.DisableItem( nWhich );
                 break;
         }
         nWhich = aIter.NextWhich();
