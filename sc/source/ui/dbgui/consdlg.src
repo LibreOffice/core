@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-04 17:27:08 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,15 +175,15 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         };
         StringList [ finnish ] =
         {
-            < "Sum" ; Default ; > ;
-            < "Lukumддrд" ; Default ; > ;
+            < "Summa" ; Default ; > ;
+            < "LASKE" ; Default ; > ;
             < "Keskiarvo" ; Default ; > ;
-            < "Enint" ; Default ; > ;
-            < "Vдh" ; Default ; > ;
-            < "Tuote" ; Default ; > ;
-            < "Lukumддrд (vain numerot)" ; Default ; > ;
-            < "StDev (otos)" ; Default ; > ;
-            < "StDevP (populaatio)" ; Default ; > ;
+            < "MAKS" ; Default ; > ;
+            < "MIN" ; Default ; > ;
+            < "Tulo" ; Default ; > ;
+            < "LASKE (vain luvut)" ; Default ; > ;
+            < "KESKIHAJONTA (otos)" ; Default ; > ;
+            < "KESKIHAJONTAP (populaatio)" ; Default ; > ;
             < "Var (otos)" ; Default ; > ;
             < "VarP (Populaatio)" ; Default ; > ;
         };
@@ -293,7 +293,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         < "Максимум" ; Default ; > ;
         < "Минимум" ; Default ; > ;
         < "Произведение" ; Default ; > ;
-        < "Количество (только чисел)" ; Default ; > ;
+        < "Количество (только числа)" ; Default ; > ;
         < "Смещенное отклонение (Образец)" ; Default ; > ;
         < "Несмещенное отклонение (Совокупность)" ; Default ; > ;
         < "Смещенная дисперсия (Образец)" ; Default ; > ;
@@ -550,15 +550,15 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Fun~zione" ;
         Text [ portuguese_brazilian ] = "Fun~??o" ;
         Text [ portuguese ] = "U~sar funзгo" ;
-        Text [ finnish ] = "~Toiminto" ;
+        Text [ finnish ] = "~Funktio" ;
         Text [ danish ] = "Beregningsfunktion" ;
         Text [ french ] = "~Fonction" ;
         Text [ swedish ] = "Be~rдkningsregler" ;
         Text [ dutch ] = "Be~rekeningsvoorschrift" ;
-        Text [ spanish ] = "~Instrucciуn de cбlculo" ;
+        Text [ spanish ] = "~Funciуn" ;
         Text [ english_us ] = "~Function" ;
         Text[ chinese_simplified ] = "и®Ўз®—и§„е€™(~F)";
-        Text[ russian ] = "Инструкция по вычислениям";
+        Text[ russian ] = "Функция";
         Text[ polish ] = "Instrukcja obliczania";
         Text[ japanese ] = "иЁ€з®—ж–№жі•(~F)";
         Text[ chinese_traditional ] = "иЁ€з®—и¦Џе‰‡(~F)";
@@ -588,7 +588,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ spanish ] = "Бreas de consolidaciуn" ;
         Text [ english_us ] = "~Consolidation ranges" ;
         Text[ chinese_simplified ] = "еђ€е№¶и®Ўз®—еЊєеџџ(~C)";
-        Text[ russian ] = "Области консолидации";
+        Text[ russian ] = "Области объединения";
         Text[ polish ] = "Obszary konsolidacji";
         Text[ japanese ] = "зµ±еђ€зЇ„е›І(~C)";
         Text[ chinese_traditional ] = "еђ€дЅµиЁ€з®—еЌЂеџџ(~C)";
@@ -610,7 +610,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Area dati di sorgente" ;
         Text [ portuguese_brazilian ] = "~?rea de origem dos dados" ;
         Text [ portuguese ] = "~Бrea dos dados fonte" ;
-        Text [ finnish ] = "~Lдhdetietoalue" ;
+        Text [ finnish ] = "Lдhdetietoalue" ;
         Text [ danish ] = "Kildedataomrеde" ;
         Text [ french ] = "Plage de donnйes source" ;
         Text [ swedish ] = "Kдlldata~omrеde" ;
@@ -648,7 +648,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ spanish ] = "Re~sultado a partir de" ;
         Text [ english_us ] = "Copy results ~to" ;
         Text[ chinese_simplified ] = "е¤Ќе€¶з»“жћње€°(~T)";
-        Text[ russian ] = "Начать с";
+        Text[ russian ] = "Пометить результат в";
         Text[ polish ] = "Kopiuj wynik od";
         Text[ japanese ] = "зµђжћњиІјг‚Љд»гЃ‘е…€(~T)";
         Text[ chinese_traditional ] = "и¤‡иЈЅзµђжћње€°(~T)";
@@ -670,7 +670,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Dicitura righe" ;
         Text [ portuguese_brazilian ] = "por fi~leiras" ;
         Text [ portuguese ] = "Legenda para ~linhas" ;
-        Text [ finnish ] = "~Rivinimiцt" ;
+        Text [ finnish ] = "~Riviselitteet" ;
         Text [ danish ] = "Rжkkeetiketter" ;
         Text [ french ] = "Й~tiquette de ligne" ;
         Text [ swedish ] = "Ra~detikett" ;
@@ -679,7 +679,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ english_us ] = "~Row labels" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "иЎЊж•°жЌ®ж ‡еї—(~R)";
-        Text[ russian ] = "подписи строк";
+        Text[ russian ] = "Подписи строк";
         Text[ polish ] = "Etykiety wierszy";
         Text[ japanese ] = "е·¦з«Їе€—(~R)";
         Text[ chinese_traditional ] = "е€—жЁ™йЎЊ(~R)";
@@ -710,7 +710,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ english_us ] = "C~olumn labels" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "е€—ж ‡йў(~O)";
-        Text[ russian ] = "названию столбцов";
+        Text[ russian ] = "Заголовки столбцов";
         Text[ polish ] = "Nagіуwki kolumn";
         Text[ japanese ] = "дёЉз«ЇиЎЊ(~O)";
         Text[ chinese_traditional ] = "ж¬„жЁ™йЎЊ(~O)";
@@ -740,7 +740,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ spanish ] = "Consolidar segъn" ;
         Text [ english_us ] = "Consolidate by" ;
         Text[ chinese_simplified ] = "еђ€е№¶жЊ‰з…§";
-        Text[ russian ] = "Консолидировать по";
+        Text[ russian ] = "Объединить по";
         Text[ polish ] = "Konsoliduj wedіug";
         Text[ japanese ] = "зµ±еђ€гЃ®еџєжє–";
         Text[ chinese_traditional ] = "еђ€дЅµжЊ‰з…§";
@@ -797,7 +797,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Collega con dati origine" ;
         Text [ portuguese_brazilian ] = "Dados da fonte de re~fer?ncia" ;
         Text [ portuguese ] = "~Ligar aos dados da fonte" ;
-        Text [ finnish ] = "~Linkki lдhdetietoihin" ;
+        Text [ finnish ] = "Linkki lдhdetietoihin" ;
         Text [ danish ] = "Opret kжde til kildedata" ;
         Text [ french ] = "~Lier aux donnйes source" ;
         Text [ swedish ] = "R~eferensdata" ;
@@ -908,7 +908,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ thai ] = "а№Ђ~аёћаёґа№€аёЎ";
     };
     Text[ chinese_simplified ] = "еђ€е№¶и®Ўз®—";
-    Text[ russian ] = "Консолидировать";
+    Text[ russian ] = "Объединить";
     Text[ polish ] = "Konsoliduj";
     Text[ japanese ] = "зµ±еђ€";
     Text[ chinese_traditional ] = "еђ€дЅµиЁ€з®—";
