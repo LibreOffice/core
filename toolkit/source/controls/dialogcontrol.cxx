@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,7 +791,7 @@ void UnoControlDialogModel::implUpdateGroupStructure()
     sal_Int32   nCurrentGroupStep = -1;                 // the step which all controls of the current group belong to
     sal_Bool    bIsRadioButton;                         // is it a radio button?
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::vector< ::rtl::OUString > aCurrentGroupLabels;
 #endif
 
@@ -822,7 +822,7 @@ void UnoControlDialogModel::implUpdateGroupStructure()
                 // new state: looking for further members
                 eState = eExpandingGroup;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                 ::rtl::OUString sLabel;
                 if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString::createFromAscii( "Label" ) ) )
@@ -838,7 +838,7 @@ void UnoControlDialogModel::implUpdateGroupStructure()
                 {   // no radio button -> the group is done
                     aCurrentGroup = maGroups.end();
                     eState = eLookingForGroup;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     aCurrentGroupLabels.clear();
 #endif
                     continue;
@@ -855,7 +855,7 @@ void UnoControlDialogModel::implUpdateGroupStructure()
                     // state still is eExpandingGroup - we're looking for further elements
                     eState = eExpandingGroup;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                     ::rtl::OUString sLabel;
                     if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString::createFromAscii( "Label" ) ) )
@@ -870,7 +870,7 @@ void UnoControlDialogModel::implUpdateGroupStructure()
 
                 // close the old group
                 aCurrentGroup = maGroups.end();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 aCurrentGroupLabels.clear();
 #endif
 
@@ -885,7 +885,7 @@ void UnoControlDialogModel::implUpdateGroupStructure()
 
                 // state is the same: we still are looking for further elements of the current group
                 eState = eExpandingGroup;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                 ::rtl::OUString sLabel;
                 if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString::createFromAscii( "Label" ) ) )
