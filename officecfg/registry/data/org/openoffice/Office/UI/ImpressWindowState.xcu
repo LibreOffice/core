@@ -3,9 +3,9 @@
  *
  *  $RCSfile: ImpressWindowState.xcu,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:45:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,8 +263,8 @@
             </node>
             <node oor:name="private:resource/toolbar/formcontrols" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">Controls</value>
-                    <value xml:lang="de">Steuerelemente</value>
+                    <value xml:lang="en-US">Form Controls</value>
+                    <value xml:lang="de">Formular Steuerelemente</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
