@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-21 07:45:40 $
+ *  last change: $Author: cd $ $Date: 2002-06-03 09:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,7 +898,7 @@ void SfxBindings::InvalidateAll
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame
         ( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
 
-    if ( xFrame.is() )
+    if ( bWithMsg && xFrame.is() )
         xFrame->contextChanged();
 
     pImp->nMsgPos = 0;
@@ -1501,15 +1501,16 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
         };
     }
 
-    // synchronisieren
     SfxDispatcher &rDispatcher = *pDispatcher;
     rDispatcher.Flush();
     SfxViewFrame *pFrame = rDispatcher.GetFrame();
 
-    // vom cache den Server (Slot+ShellLevel) und die Shell etc. abholen
+    // get SlotServer (Slot+ShellLevel) and Shell from cache
     sal_Bool bDeleteCache = sal_False;
     if ( !pCache )
     {
+        // Execution of non cached slots (Accelerators don't use Controllers)
+        // slot is uncached, use SlotCache to handle external dispatch providers
         pCache = new SfxStateCache( nId );
         pCache->GetSlotServer( rDispatcher, pImp->xProv );
         bDeleteCache = sal_True;
@@ -1517,6 +1518,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
 
     if ( pCache && pCache->GetDispatch().is() )
     {
+        // cache binds to an external dispatch provider
         pCache->Dispatch( nCallMode == SFX_CALLMODE_SYNCHRON );
         if ( bDeleteCache )
             DELETEZ( pCache );
@@ -1525,29 +1527,19 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
         return pVoid;
     }
 
-    // Zur Sicherheit!
+    // slot is handled internally by SfxDispatcher
     if ( pImp->bMsgDirty )
         UpdateSlotServer_Impl();
 
-    // Neuerdings k"onnen wir auch nicht gecachete Slots executen
-    // ( wg. Acceleratoren, deren Controller aus Performance-Gr"unden nicht mehr
-    // gebunden werden ).
     SfxShell *pShell=0;
     const SfxSlot *pSlot=0;
 
+    // if slot was uncached, we should have created a cache in this method!
+    DBG_ASSERT( pCache, "This code needs a cache!");
     const SfxSlotServer* pServer = pCache ? pCache->GetSlotServer( rDispatcher, pImp->xProv ) : 0;
     if ( !pServer )
     {
-        SfxSlotServer aServer;
-        if ( !rDispatcher._FindServer( nId, aServer, sal_False ) )
-        {
-            if ( bDeleteCache )
-                delete pCache;
-            return NULL;
-        }
-
-        pShell = rDispatcher.GetShell( aServer.GetShellLevel() );
-        pSlot = aServer.GetSlot();
+        return NULL;
     }
     else
     {
