@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sysplug.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:18:10 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,9 @@ UnxPluginComm::UnxPluginComm(
 
     if( ! ( m_nCommPID = fork() ) )
       {
-          execvp( pArgs[0], pArgs );
+         execvp( pArgs[0], pArgs );
           fprintf( stderr, "Error: could not exec %s\n", pArgs[0] );
-          exit(255);
+          _exit(255);
       }
 
     if( m_nCommPID != -1 )
