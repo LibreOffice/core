@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-29 16:18:11 $
+ *  last change: $Author: mba $ $Date: 2002-05-29 17:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,6 +575,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         bOk = sal_True;
     else if( xFilterCFG.is() )
     {
+        BOOL bAbort = FALSE;
         try {
             Sequence < PropertyValue > aProps;
             Any aAny = xFilterCFG->getByName( pFilter->GetName() );
@@ -625,11 +626,10 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                                                      SID_FILTER_DATA,
                                                      sal_False );
                                        if ( pData )
-                                    {
                                            GetMedium()->GetItemSet()->Put( *pData );
-                                        bOk = sal_True;
-                                    }
                                 }
+                                else
+                                    bAbort = TRUE;
                             }
                         }
 
@@ -637,7 +637,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                     }
             }
 
-            if( !bOk )
+            if( bAbort )
             {
                 // filter options were not entered
                 SetError( ERRCODE_ABORT );
@@ -655,7 +655,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     }
 
 
-    if ( bOk && bHasStorage && !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
+    if ( GetError() == ERRCODE_NONE && bHasStorage && !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
     {
         SvStorageRef xStor( pMed->GetStorage() );
         DBG_ASSERT( pFilter, "No filter for storage found!" );
@@ -717,7 +717,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 SetError( ERRCODE_ABORT );
         }
     }
-    else if ( bOk && InitNew(0) )
+    else if ( GetError() == ERRCODE_NONE && InitNew(0) )
     {
         // Name vor ConvertFrom setzen, damit GetSbxObject() schon funktioniert
         bHasName = sal_True;
