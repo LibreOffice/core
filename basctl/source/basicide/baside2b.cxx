@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:11:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-24 13:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,7 +839,7 @@ void EditorWindow::ImpDoHighlight( ULONG nLine )
     }
 
     BOOL bWasModified = pEditEngine->IsModified();
-    pEditEngine->RemoveAttribs( nLine, TRUE );
+    pEditEngine->RemoveAttribs( nLine, (BOOL)TRUE );
     HighlightPortions aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
     USHORT nCount = aPortions.Count();
