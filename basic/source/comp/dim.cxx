@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:35:22 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,17 +95,18 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, BOOL bStatic, BOOL bConst )
 // Aufloesen einer AS-Typdeklaration
 // Der Datentyp wird in die uebergebene Variable eingetragen
 
-void SbiParser::TypeDecl( SbiSymDef& rDef )
+void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
 {
     SbxDataType eType = rDef.GetType();
     short nSize = 0;
-    if( Peek() == AS )
+    if( bAsNewAlreadyParsed || Peek() == AS )
     {
-        Next();
+        if( !bAsNewAlreadyParsed )
+            Next();
         rDef.SetDefinedAs();
         String aType;
         SbiToken eTok = Next();
-        if( eTok == NEW )
+        if( !bAsNewAlreadyParsed && eTok == NEW )
         {
             rDef.SetNew();
             eTok = Next();
@@ -208,6 +209,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
     SbiSymPool* pOldPool = pPool;
     BOOL bSwitchPool = FALSE;
     BOOL bPersistantGlobal = FALSE;
+    SbiToken eFirstTok = eCurTok;
     if( pProc && ( eCurTok == GLOBAL || eCurTok == PUBLIC || eCurTok == PRIVATE ) )
         Error( SbERR_NOT_IN_SUBR, eCurTok );
     if( eCurTok == PUBLIC || eCurTok == GLOBAL )
@@ -223,6 +225,26 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         bConst = TRUE;
     else if( Peek() == _CONST_ )
         Next(), bConst = TRUE;
+
+    // #110004 It can also be a sub/function
+    if( !bConst && (eCurTok == SUB || eCurTok == FUNCTION || eCurTok == STATIC ) )
+    {
+        // Next token is read here, because !bConst
+        bool bPrivate = ( eFirstTok == PRIVATE );
+
+        if( eCurTok == STATIC )
+        {
+            Next();
+            DefStatic( bPrivate );
+        }
+        else if( eCurTok == SUB || eCurTok == FUNCTION )
+        {
+            Next();
+            DefProc( FALSE, bPrivate );
+            return;
+        }
+    }
+
 #ifdef SHARED
 #define tmpSHARED
 #undef SHARED
@@ -269,6 +291,11 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             if( pOld )
                 bRtlSym = TRUE;
         }
+        if( pOld && !(eOp == _REDIM || eOp == _REDIMP) )
+        {
+            if( pDef->GetScope() == SbLOCAL && pOld->GetScope() != SbLOCAL )
+                pOld = NULL;
+        }
         if( pOld )
         {
             bDefined = TRUE;
@@ -276,7 +303,18 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             if( !bRtlSym && (eOp == _REDIM || eOp == _REDIMP) )
             {
                 // Bei REDIM die Attribute vergleichen
-                if( pOld->IsStatic() || pOld->GetType() != pDef->GetType() )
+                SbxDataType eDefType;
+                bool bError = false;
+                if( pOld->IsStatic() )
+                {
+                    bError = true;
+                }
+                else if( pOld->GetType() != ( eDefType = pDef->GetType() ) )
+                {
+                    if( !( eDefType == SbxVARIANT && !pDef->IsDefinedAs() ) )
+                        bError = true;
+                }
+                if( bError )
                     Error( SbERR_VAR_DEFINED, pDef->GetName() );
             }
             else
@@ -318,10 +356,15 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         // Initialisierung fuer selbstdefinierte Datentypen
         // und per NEW angelegte Variable
         if( pDef->GetType() == SbxOBJECT
-         && pDef->GetTypeId()
-         && pDef->IsNew() )
-//      && ( pDef->IsNew() || pDef->HabIchAlsTypeDefiniert() ) )
+         && pDef->GetTypeId() )
         {
+            if( !bCompatible && !pDef->IsNew() )
+            {
+                String aTypeName( aGblStrings.Find( pDef->GetTypeId() ) );
+                if( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) == NULL )
+                    Error( SbERR_UNDEF_TYPE, aTypeName );
+            }
+
             if( bConst )
             {
                 Error( SbERR_SYNTAX );
@@ -495,15 +538,17 @@ void SbiParser::Type()
 
     while( !bDone && !IsEof() )
     {
-        switch (Next())
+        switch( Peek() )
         {
             case ENDTYPE :
                 pElem = NULL;
                 bDone = TRUE;
+                Next();
             break;
 
             case EOLN :
                 pElem = NULL;
+                Next();
             break;
 
             default:
@@ -525,11 +570,15 @@ void SbiParser::Type()
             else
             {
                 SbxProperty *pTypeElem = new SbxProperty (pElem->GetName(),pElem->GetType());
-                pTypeMembers -> Insert (pTypeElem,pTypeMembers->Count());
+                pTypeMembers->Insert( pTypeElem, pTypeMembers->Count() );
             }
             delete pElem;
         }
     }
+
+    pType->Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_DONTCARE );
+    pType->Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Parent") ), SbxCLASS_DONTCARE );
+
     rTypeArray->Insert (pType,rTypeArray->Count());
 }
 /**********************************************************
@@ -641,9 +690,10 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
           for(;;) {
             BOOL bByVal = FALSE;
             BOOL bOptional = FALSE;
-            while( Peek() == BYVAL || Peek() == _OPTIONAL_ )
+            while( Peek() == BYVAL || Peek() == BYREF || Peek() == _OPTIONAL_ )
             {
                 if      ( Peek() == BYVAL )     Next(), bByVal = TRUE;
+                else if ( Peek() == BYREF )     Next(), bByVal = FALSE;
                 else if ( Peek() == _OPTIONAL_ )    Next(), bOptional = TRUE;
             }
             SbiSymDef* pPar = VarDecl( NULL, FALSE, FALSE );
@@ -657,8 +707,30 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
             SbiToken eTok = Next();
             if( eTok != COMMA && eTok != RPAREN )
             {
-                Error( SbERR_EXPECTED, RPAREN );
-                break;
+                BOOL bError = TRUE;
+                if( bOptional && bCompatible && eTok == EQ )
+                {
+                    SbiConstExpression* pDefaultExpr = new SbiConstExpression( this );
+                    SbxDataType eType = pDefaultExpr->GetType();
+
+                    USHORT nStringId;
+                    if( eType == SbxSTRING )
+                        nStringId = aGblStrings.Add( pDefaultExpr->GetString(), eType );
+                    else
+                        nStringId = aGblStrings.Add( pDefaultExpr->GetValue(), eType );
+
+                    pPar->SetDefaultId( nStringId );
+                    delete pDefaultExpr;
+
+                    eTok = Next();
+                    if( eTok == COMMA || eTok == RPAREN )
+                        bError = FALSE;
+                }
+                if( bError )
+                {
+                    Error( SbERR_EXPECTED, RPAREN );
+                    break;
+                }
             }
             if( eTok == RPAREN )
                 break;
@@ -723,14 +795,14 @@ void SbiParser::Call()
 
 void SbiParser::SubFunc()
 {
-    DefProc( FALSE );
+    DefProc( FALSE, FALSE );
 }
 
 // Einlesen einer Prozedur
 
 BOOL runsInSetup( void );
 
-void SbiParser::DefProc( BOOL bStatic )
+void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
 {
     USHORT l1 = nLine, l2 = nLine;
     BOOL bSub = BOOL( eCurTok == SUB );
@@ -770,6 +842,7 @@ void SbiParser::DefProc( BOOL bStatic )
 
     if( !pProc )
         return;
+    pProc->SetPublic( !bPrivate );
 
     // Nun setzen wir die Suchhierarchie fuer Symbole sowie die aktuelle
     // Prozedur.
@@ -805,12 +878,17 @@ void SbiParser::DefProc( BOOL bStatic )
 
 void SbiParser::Static()
 {
+    DefStatic( FALSE );
+}
+
+void SbiParser::DefStatic( BOOL bPrivate )
+{
     switch( Peek() )
     {
         case SUB:
         case FUNCTION:
             Next();
-            DefProc( TRUE );
+            DefProc( TRUE, bPrivate );
             break;
         default: {
             if( !pProc )
