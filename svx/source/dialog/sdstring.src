@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 16:26:18 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1826,7 +1826,7 @@ String RID_SVXSTR_TRANSPARENCE
     Text [ portuguese_brazilian ] = "Transparenz" ;
     Text[ chinese_simplified ] = "Í¸Ã÷";
     Text[ russian ] = "Ïğîçğà÷íîñòü";
-    Text[ polish ] = "Prze?roczysto?æ";
+    Text[ polish ] = "PrzeŸroczystoœæ";
     Text[ japanese ] = "“§‰ß«";
     Text[ chinese_traditional ] = "³z©ú";
     Text[ arabic ] = "ÔÇİíÉ";
@@ -1852,7 +1852,7 @@ String RID_SVXSTR_CENTERED
     Text [ portuguese_brazilian ] = "Zentriert" ;
     Text[ chinese_simplified ] = "¾ÓÖĞ";
     Text[ russian ] = "Ïî öåíòğó";
-    Text[ polish ] = "Wy?rodkowany";
+    Text[ polish ] = "Do œrodka";
     Text[ japanese ] = "’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "¸m¤¤";
     Text[ arabic ] = "ÊæÓíØ";
@@ -1878,7 +1878,7 @@ String RID_SVXSTR_NOTCENTERED
     Text [ portuguese_brazilian ] = "Nicht Zentriert" ;
     Text[ chinese_simplified ] = "²»¾ÓÖĞ";
     Text[ russian ] = "Íå ïî öåíòğó";
-    Text[ polish ] = "Nie wy?rodkowany";
+    Text[ polish ] = "Nie wyœrodkowany";
     Text[ japanese ] = "’†‰›‘µ‚¦‚Å‚È‚¢";
     Text[ chinese_traditional ] = "¤£¸m¤¤";
     Text[ arabic ] = "ÛíÑ ãæÓØ";
@@ -1903,7 +1903,7 @@ String RID_SVXSTR_GRAFMODE_STANDARD
     Text[ italian ] = "Standard";
     Text[ danish ] = "Standard";
     Text[ swedish ] = "Standard";
-    Text[ polish ] = "Domy?lnie";
+    Text[ polish ] = "Domyœlnie";
     Text[ portuguese_brazilian ] = "Padr?o";
     Text[ japanese ] = "•W€";
     Text[ korean ] = "±âº»";
@@ -1928,7 +1928,7 @@ String RID_SVXSTR_GRAFMODE_GREYS
     Text[ italian ] = "Toni di grigio";
     Text[ danish ] = "Gråtoner";
     Text[ swedish ] = "Gråskalor";
-    Text[ polish ] = "Odcienie szaro?ci";
+    Text[ polish ] = "Odcienie szaroœci";
     Text[ portuguese_brazilian ] = "Greyscales";
     Text[ japanese ] = "¸ŞÚ°½¹°Ù";
     Text[ korean ] = "È¸»öµµ";
@@ -2033,7 +2033,7 @@ String STR_INSERT_VIDEO_EXTFILTER_AVI
     Text[ polish ] = "Video dla Windows (*.avi)";
     Text[ portuguese_brazilian ] = "Video for Windows (*.avi)";
     Text[ japanese ] = "Video for Windows (*.avi)";
-    Text[ korean ] = "ºñµğ¿ÀÆ÷À©µµ (*.avi)";
+    Text[ korean ] = "À©µµ¿ì¿ë ºñµğ¿À (*.avi)";
     Text[ chinese_simplified ] = "Video for Windows (*.avi)";
     Text[ chinese_traditional ] = "Video for Windows (*.avi)";
     Text[ arabic ] = "İíÏíæ áÜ (*.avi) Windows";
@@ -2134,7 +2134,7 @@ String STR_INSERT_SOUND_TITLE
     Text[ italian ] = "Inserisci audio";
     Text[ danish ] = "Indsæt lyd";
     Text[ swedish ] = "Infoga ljud";
-    Text[ polish ] = "Wstaw d?wiêk";
+    Text[ polish ] = "Wstaw dŸwiêk";
     Text[ portuguese_brazilian ] = "Insert sound";
     Text[ japanese ] = "»³İÄŞ‚Ì‘}“ü";
     Text[ korean ] = "»ç¿îµå »ğÀÔ";
@@ -2805,7 +2805,7 @@ String RID_SVXSTR_LINEJOINT_MIDDLE
     Text[ italian ] = "Giuntura, media";
     Text[ danish ] = "Linjeovergang, middelværdi";
     Text[ swedish ] = "Linjeövergång, medelvärde";
-    Text[ polish ] = "Wy?rodkowane po³¹czenie linii";
+    Text[ polish ] = "Wyœrodkowane po³¹czenie linii";
     Text[ portuguese_brazilian ] = "Line joint middle";
     Text[ japanese ] = "ü‚ÌŒp‚¬–Ú ‹Ï•ª";
     Text[ korean ] = "¼± ÀÌÀ½ Áß°£";
@@ -4181,7 +4181,7 @@ String RID_SVXSTR_BMP15
     Text[ italian ] = "Foglie";
     Text[ danish ] = "Løv";
     Text[ swedish ] = "Löv";
-    Text[ polish ] = "Li?cie";
+    Text[ polish ] = "Liœcie";
     Text[ portuguese_brazilian ] = "Leaves";
     Text[ japanese ] = "’Ó";
     Text[ korean ] = "³ª¹µÀÙ";
@@ -4330,7 +4330,7 @@ String RID_SVXSTR_BMP21
     Text[ french ] = "Bitmap";
     Text[ spanish ] = "Bitmap";
     Text[ italian ] = "Bitmap";
-    Text[ danish ] = "Bitmap";
+    Text[ danish ] = "Til bitmap";
     Text[ swedish ] = "Bitmap";
     Text[ polish ] = "Mapa bitowa";
     Text[ portuguese_brazilian ] = "Bitmap";
@@ -5101,7 +5101,7 @@ String RID_SVXSTR_TRASNGR0
     Text[ italian ] = "Trasparenza";
     Text[ danish ] = "Fladetransparens";
     Text[ swedish ] = "Yttransparens";
-    Text[ polish ] = "Przezroczysto?æ powierzchni";
+    Text[ polish ] = "Przezroczystoœæ powierzchni";
     Text[ portuguese_brazilian ] = "Transparence";
     Text[ japanese ] = "•\\–Ê‚Ì“§‰»«";
     Text[ chinese_simplified ] = "Í¸Ã÷";
