@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: hr $ $Date: 2004-07-23 11:10:50 $
+#   last change: $Author: obo $ $Date: 2004-08-12 10:50:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.75 $$"
+LIBSMKREV!:="$$Revision: 1.76 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -70,6 +70,7 @@ LIBPRE=libr
 #
 #externe libs in plattform.mk
 #
+AVMEDIALIB=-lavmedia$(OFFICEUPD)$(DLLPOSTFIX)
 ICUINLIB=-licui18n
 ICULELIB=-licule
 ICUUCLIB=-licuuc
@@ -261,6 +262,7 @@ USED_RCLIENT_LIBS =	$(VCLLIB) $(SOTLIB) $(TOOLSLIB) $(UNOLIB) \
                     $(USED_UNO_LIBS)
 
 .ELSE				# "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+AVMEDIALIB=$(LIBPRE) iavmedia.lib
 ICUINLIB=icuin.lib
 ICULELIB=icule.lib
 ICUUCLIB=icuuc.lib
