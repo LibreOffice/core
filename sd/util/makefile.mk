@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ka $ $Date: 2001-02-13 12:17:06 $
+#   last change: $Author: ka $ $Date: 2001-02-13 13:11:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,7 +150,7 @@ SHL1STDLIBS+=\
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
-SHL1STDLIBS+= $(SIMLIB) $(SMLIB)
+SHL1STDLIBS+= $(SMLIB)
 .ENDIF
 
 .IF "$(GUI)" == "MAC"
