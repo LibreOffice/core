@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 12:46:52 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 15:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,162 +106,27 @@ namespace dbaui
                     const ::rtl::OUString&  _rCommand,
                     const Reference< XConnection >& _rxConnection,
                     const Reference< XNumberFormatter >& _rxFormatter,
-                    const Reference< XMultiServiceFactory >& _rxORB,
-                    const sal_Int32 _nFormats)
-        :m_pHtml(NULL)
+                    const Reference< XMultiServiceFactory >& _rxORB)
+        :ODataAccessObjectTransferable( _rDatasource, _nCommandType, _rCommand, _rxConnection )
+        ,m_pHtml(NULL)
         ,m_pRtf(NULL)
-        ,m_nObjectType(CommandType::TABLE)
-        ,m_nFormats(_nFormats)
     {
-        // build the descriptor (the property sequence)
-        ODataAccessDescriptor aDescriptor;
-        aDescriptor[daDataSource]   <<= _rDatasource;
-        aDescriptor[daConnection]   <<= _rxConnection;
-        aDescriptor[daCommand]      <<= _rCommand;
-        aDescriptor[daCommandType]  <<= _nCommandType;
-        m_aSeq = aDescriptor.createPropertyValueSequence();
+        Sequence< PropertyValue > aProps = getDescriptor().createPropertyValueSequence();
+        m_pHtml = new OHTMLImportExport(aProps, _rxORB, _rxFormatter);
+        m_xHtml = m_pHtml;
 
-        // calculate some stuff which helps us providing the different formats
-        if (DCF_OBJECT_DESCRIPTOR == (m_nFormats & DCF_OBJECT_DESCRIPTOR))
-        {
-            // extract the single values from the sequence
-            ::rtl::OUString sDatasourceName;
-            ::rtl::OUString sObjectName;
-            sal_Bool bEscapeProcessing = sal_True;
-            sDatasourceName = _rDatasource;
-            m_nObjectType = _nCommandType;
-            sObjectName = _rCommand;
-
-            // for compatibility: create a string which can be used for the SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
-
-            sal_Bool bTreatAsStatement = (CommandType::COMMAND == m_nObjectType);
-                // statements are - in this old and ugly format - described as queries
-
-            const sal_Unicode       cSeparator = sal_Unicode(11);
-            const ::rtl::OUString   sSeparator(&cSeparator, 1);
-
-            const sal_Unicode       cTableMark = '1';
-            const sal_Unicode       cQueryMark = '0';
-
-            // build the descriptor string
-            m_sCompatibleObjectDescription += sDatasourceName;
-            m_sCompatibleObjectDescription += sSeparator;
-            m_sCompatibleObjectDescription += bTreatAsStatement ? ::rtl::OUString() : sObjectName;
-            m_sCompatibleObjectDescription += sSeparator;
-            switch (m_nObjectType)
-            {
-                case CommandType::TABLE:
-                    m_sCompatibleObjectDescription += ::rtl::OUString(&cTableMark, 1);
-                    break;
-                case CommandType::QUERY:
-                    m_sCompatibleObjectDescription += ::rtl::OUString(&cQueryMark, 1);
-                    break;
-                case CommandType::COMMAND:
-                    m_sCompatibleObjectDescription += ::rtl::OUString(&cQueryMark, 1);
-                    // think of it as a query
-                    break;
-            }
-            m_sCompatibleObjectDescription += sSeparator;
-            m_sCompatibleObjectDescription += bTreatAsStatement ? sObjectName : ::rtl::OUString();
-            m_sCompatibleObjectDescription += sSeparator;
-        }
-
-        if (DCF_HTML_TABLE == (m_nFormats & DCF_HTML_TABLE))
-        {
-            m_pHtml = new OHTMLImportExport(m_aSeq, _rxORB, _rxFormatter);
-            m_xHtml = m_pHtml;
-        }
-
-        if (DCF_RTF_TABLE == (m_nFormats & DCF_RTF_TABLE))
-        {
-            m_pRtf = new ORTFImportExport(m_aSeq, _rxORB, _rxFormatter);
-            m_xRtf = m_pRtf;
-        }
+        m_pRtf = new ORTFImportExport(aProps, _rxORB, _rxFormatter);
+        m_xRtf = m_pRtf;
     }
 
     // -----------------------------------------------------------------------------
-    ODataClipboard::ODataClipboard(const Reference< XPropertySet >& _rxLivingForm, const Reference< XSQLQueryComposer >& _rxComposer)
-        :m_pHtml(NULL)
+    ODataClipboard::ODataClipboard(const Reference< XPropertySet >& _rxLivingForm, const Sequence< Any >& _rSelectedRows)
+        :ODataAccessObjectTransferable( _rxLivingForm )
+        ,m_pHtml(NULL)
         ,m_pRtf(NULL)
-        ,m_nObjectType(CommandType::TABLE)
-        ,m_nFormats(DCF_OBJECT_DESCRIPTOR)
     {
-        // collect some properties of the form
-        ::rtl::OUString sDatasourceName;
-        sal_Int32       nObjectType = CommandType::COMMAND;
-        ::rtl::OUString sObjectName;
-        try
-        {
-            _rxLivingForm->getPropertyValue(PROPERTY_COMMANDTYPE) >>= nObjectType;
-            _rxLivingForm->getPropertyValue(PROPERTY_COMMAND) >>= sObjectName;
-            _rxLivingForm->getPropertyValue(PROPERTY_DATASOURCENAME) >>= sDatasourceName;
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(sal_False, "ODataClipboard::ODataClipboard: could not collect essential form attributes !");
-            m_nFormats = 0;
-            return;
-        }
-
-        sal_Bool bIsStatement = CommandType::COMMAND == nObjectType;
-        String sObjectKind = (CommandType::TABLE == nObjectType) ? String('1') : String('0');
-
-        // check if the SQL-statement is modified
-        sal_Bool bHasFilterOrSort(sal_False);
-        ::rtl::OUString sCompleteStatement;
-        try
-        {
-            ::rtl::OUString sFilter;
-            if (::cppu::any2bool(_rxLivingForm->getPropertyValue(PROPERTY_APPLYFILTER)))
-                _rxLivingForm->getPropertyValue(PROPERTY_FILTER) >>= sFilter;
-            ::rtl::OUString sSort;
-            _rxLivingForm->getPropertyValue(PROPERTY_ORDER) >>= sSort;
-            bHasFilterOrSort = (sFilter.getLength()>0) || (sSort.getLength()>0);
-
-            _rxLivingForm->getPropertyValue(PROPERTY_ACTIVECOMMAND) >>= sCompleteStatement;
-            if (_rxComposer.is())
-            {
-                _rxComposer->setQuery(sCompleteStatement);
-                _rxComposer->setFilter(sFilter);
-                _rxComposer->setOrder(sSort);
-                sCompleteStatement = _rxComposer->getComposedQuery();
-            }
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(sal_False, "ODataClipboard::ODataClipboard: could not collect essential form attributes (part two) !");
-            m_nFormats = 0;
-            return;
-        }
-
-        // build the object description (as string)
-        const sal_Unicode       cSeparator(11);
-        const ::rtl::OUString   sSeparator(&cSeparator, 1);
-
-        m_sCompatibleObjectDescription = sDatasourceName;
-        m_sCompatibleObjectDescription  += sSeparator;
-        m_sCompatibleObjectDescription  += bIsStatement ? ::rtl::OUString() : sObjectName;
-        m_sCompatibleObjectDescription  += sSeparator;
-        m_sCompatibleObjectDescription  += sObjectKind;
-        m_sCompatibleObjectDescription  += sSeparator;
-        m_sCompatibleObjectDescription  +=
-                (CommandType::QUERY == nObjectType) && !bHasFilterOrSort
-                ? ::rtl::OUString()
-            : sCompleteStatement;
-            // compatibility says : always add the statement, but don't if it is a "pure" query
-        m_sCompatibleObjectDescription  += sSeparator;
-    }
-
-    // -----------------------------------------------------------------------------
-    void ODataClipboard::addRow(sal_Int32 _nRow)
-    {
-        OSL_ENSURE(m_nFormats & DCF_OBJECT_DESCRIPTOR, "ODataClipboard::addRow: don't have this (object descriptor) format!");
-
-        const sal_Unicode       cSeparator(11);
-        const ::rtl::OUString   sSeparator(&cSeparator, 1);
-
-        m_sCompatibleObjectDescription += ::rtl::OUString::valueOf((sal_Int32)_nRow);
-        m_sCompatibleObjectDescription += sSeparator;
+        getDescriptor()[daSelection] <<= _rSelectedRows;
+        addCompatibleSelectionDescription( _rSelectedRows );
     }
 
     // -----------------------------------------------------------------------------
@@ -283,42 +148,17 @@ namespace dbaui
     void ODataClipboard::AddSupportedFormats()
     {
         // RTF?
-        if (DCF_RTF_TABLE == (m_nFormats & DCF_RTF_TABLE))
+        if (m_pRtf)
             AddFormat(SOT_FORMAT_RTF);
 
         // HTML?
-        if (DCF_HTML_TABLE == (m_nFormats & DCF_HTML_TABLE))
+        if (m_pHtml)
         {
             AddFormat(SOT_FORMATSTR_ID_HTML);
             AddFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
         }
 
-        // object descriptor?
-        if (DCF_OBJECT_DESCRIPTOR == (m_nFormats & DCF_OBJECT_DESCRIPTOR))
-        {
-            switch (m_nObjectType)
-            {
-                case CommandType::TABLE:
-                    AddFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE);
-                    break;
-                case CommandType::QUERY:
-                    AddFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
-                    break;
-                case CommandType::COMMAND:
-                    AddFormat(SOT_FORMATSTR_ID_DBACCESS_COMMAND);
-                    break;
-            }
-
-            sal_Int32 nDescriptorLen = m_sCompatibleObjectDescription.getLength();
-            if (nDescriptorLen)
-            {
-                if (m_sCompatibleObjectDescription.getStr()[nDescriptorLen] == 11)
-                    m_sCompatibleObjectDescription = m_sCompatibleObjectDescription.copy(0, nDescriptorLen - 1);
-
-                if (nDescriptorLen)
-                    AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
-            }
-        }
+        ODataAccessObjectTransferable::AddSupportedFormats();
     }
 
     // -----------------------------------------------------------------------------
@@ -329,33 +169,28 @@ namespace dbaui
         {
             case SOT_FORMAT_RTF:
                 m_pRtf->initialize();
-                return SetObject(m_pRtf,SOT_FORMAT_RTF,rFlavor);
+                return SetObject(m_pRtf, SOT_FORMAT_RTF, rFlavor);
 
             case SOT_FORMATSTR_ID_HTML:
                 m_pHtml->initialize();
-                return SetObject(m_pHtml,SOT_FORMATSTR_ID_HTML,rFlavor);
+                return SetObject(m_pHtml, SOT_FORMATSTR_ID_HTML, rFlavor);
+
             case SOT_FORMATSTR_ID_HTML_SIMPLE:
                 m_pHtml->initialize();
-                return SetObject(m_pHtml,SOT_FORMATSTR_ID_HTML_SIMPLE,rFlavor);
-
-            case SOT_FORMATSTR_ID_DBACCESS_TABLE:
-            case SOT_FORMATSTR_ID_DBACCESS_QUERY:
-            case SOT_FORMATSTR_ID_DBACCESS_COMMAND:
-                return SetAny(makeAny(m_aSeq), rFlavor);
-
-            case SOT_FORMATSTR_ID_SBA_DATAEXCHANGE:
-                return SetString(m_sCompatibleObjectDescription, rFlavor);
+                return SetObject(m_pHtml, SOT_FORMATSTR_ID_HTML_SIMPLE, rFlavor);
         }
-        return sal_False;
+
+        return ODataAccessObjectTransferable::GetData( rFlavor );
     }
 
     // -----------------------------------------------------------------------------
     void ODataClipboard::ObjectReleased()
     {
-        m_xHtml = m_xRtf = NULL;
         m_pHtml = NULL;
         m_pRtf = NULL;
-        m_aSeq.realloc(0);
+        m_xHtml = m_xRtf = NULL;
+
+        ODataAccessObjectTransferable::ObjectReleased( );
     }
 
     // -----------------------------------------------------------------------------
