@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:59:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1253,28 +1253,28 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             // Fall 2:
             bForceMeeting=TRUE;
             if (bHor1) { // beide waagerecht
-                // 9 Moeglichkeiten:                   ù ù ù
-                //   2.1 Gegenueber, Ueberschneidung   Ã ´ ù
-                //       nur auf der Y-Achse           ù ù ù
-                //   2.2, 2.3 Gegenueber, vertikal versetzt. Ã ù ù   ù ù ù
-                //            Ueberschneidung weder auf der  ù ´ ù   ù ´ ù
-                //            X- noch auf der Y-Achse        ù ù ù   Ã ù ù
-                //   2.4, 2.5 Untereinander,   ù Ã ù   ù ù ù
-                //            Ueberschneidung  ù ´ ù   ù ´ ù
-                //            nur auf X-Achse  ù ù ù   ù Ã ù
-                //   2.6, 2.7 Gegeneinander, vertikal versetzt. ù ù Ã   ù ù ù
-                //            Ueberschneidung weder auf der     ù ´ ù   ù ´ ù
-                //            X- noch auf der Y-Achse.          ù ù ù   ù ù Ã
-                //   2.8 Gegeneinander.       ù ù ù
-                //       Ueberschneidung nur  ù ´ Ã
-                //       auf der Y-Achse.     ù ù ù
-                //   2.9 Die BewareRects der Objekte ueberschneiden
-                //       sich auf X- und Y-Achse.
-                // Die Faelle gelten entsprechend umgesetzt auch fuer
-                // senkrechte Linienaustritte.
-                // Die Faelle 2.1-2.7 werden mir dem Default-Meeting ausreichend
-                // gut behandelt. Spezielle MeetingPoints werden hier also nur
-                // fuer 2.8 und 2.9 bestimmt.
+                /* 9 Moeglichkeiten:                   ù ù ù                    */
+                /*   2.1 Gegenueber, Ueberschneidung   Ã ´ ù                    */
+                /*       nur auf der Y-Achse           ù ù ù                    */
+                /*   2.2, 2.3 Gegenueber, vertikal versetzt. Ã ù ù   ù ù ù      */
+                /*            Ueberschneidung weder auf der  ù ´ ù   ù ´ ù      */
+                /*            X- noch auf der Y-Achse        ù ù ù   Ã ù ù      */
+                /*   2.4, 2.5 Untereinander,   ù Ã ù   ù ù ù                    */
+                /*            Ueberschneidung  ù ´ ù   ù ´ ù                    */
+                /*            nur auf X-Achse  ù ù ù   ù Ã ù                    */
+                /*   2.6, 2.7 Gegeneinander, vertikal versetzt. ù ù Ã   ù ù ù   */
+                /*            Ueberschneidung weder auf der     ù ´ ù   ù ´ ù   */
+                /*            X- noch auf der Y-Achse.          ù ù ù   ù ù Ã   */
+                /*   2.8 Gegeneinander.       ù ù ù                             */
+                /*       Ueberschneidung nur  ù ´ Ã                             */
+                /*       auf der Y-Achse.     ù ù ù                             */
+                /*   2.9 Die BewareRects der Objekte ueberschneiden             */
+                /*       sich auf X- und Y-Achse.                               */
+                /* Die Faelle gelten entsprechend umgesetzt auch fuer           */
+                /* senkrechte Linienaustritte.                                  */
+                /* Die Faelle 2.1-2.7 werden mit dem Default-Meeting ausreichend*/
+                /* gut behandelt. Spezielle MeetingPoints werden hier also nur  */
+                /* fuer 2.8 und 2.9 bestimmt.                                   */
 
                 // Normalisierung. aR1 soll der nach rechts und
                 // aR2 der nach links austretende sein.
@@ -1399,39 +1399,39 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 }
             }
         } else if (nMainCase==3) { // Fall 3: Einer waagerecht und der andere senkrecht. Sehr viele Fallunterscheidungen
-            // Kleine Legende: ù ú ù ú ù -> Ohne Ueberschneidung, maximal Beruehrung.
-            //                 ú ú ú ú ú -> Ueberschneidung
-            //                 ù ú Ã ú ù -> Selbe Hoehe
-            //                 ú ú ú ú ú -> Ueberschneidung
-            //                 ù ú ù ú ù -> Ohne Ueberschneidung, maximal Beruehrung.
-            // Linienaustritte links ´, rechts Ã, oben Á und unten Â.
-            // Insgesamt sind 96 Konstellationen moeglich, wobei einige nicht einmal
-            // eindeutig einem Fall und damit einer Behandlungsmethode zugeordnet werden
-            // koennen.
-            // 3.1: Hierzu moegen alle Konstellationen zaehlen, die durch den
-            //      Default-MeetingPoint zufriedenstellend abgedeckt sind (20+12).
-            //   Â Â Â ú Á    Á ú Â Â Â   Diese 12  ù ú ù Â ù    ù ú ù ú ù    ù Â ù ú ù    ù ú ù ú ù
-            //   ú ú ú ú Á    Á ú ú ú ú   Konstel.  ú ú ú ú ú    ú ú ú ú Â    ú ú ú ú ú    Â ú ú ú ú
-            //   ù ú Ã ú ù    ù ú ´ ú ù   jedoch    ù ú Ã ú Á    ù ú Ã ú Â    Á ú ´ ú ù    Â ú ´ ú ù
-            //   ú ú ú ú Â    Â ú ú ú ú   nur zum   ú ú ú ú Á    ú ú ú ú ú    Á ú ú ú ú    ú ú ú ú ú
-            //   Á Á Á ú Â    Â ú Á Á Á   Teil:     ù ú ù Á ù    ù ú ù ú ù    ù Á ù ú ù    ù ú ù ú ù
-            //   Letztere 16 Faelle scheiden aus, sobald sich die Objekte offen
-            //   gegenueberstehen (siehe Fall 3.2).
-            // 3.2: Die Objekte stehen sich offen gegenueber und somit ist eine
-            //      Verbindung mit lediglich 2 Linien moeglich (4+20).
-            //      Dieser Fall hat 1. Prioritaet.
-            //   ù ú ù ú Â   Â ú ù ú ù   Diese 20  ù ú ù Â ù   ù Â ù ú ù   ù ú ù ú ù   ù ú ù ú ù
-            //   ú ú ú ú ú   ú ú ú ú ú   Konstel.  ú ú ú Â Â   Â Â ú ú ú   ú ú ú ú ú   ú ú ú ú ú
-            //   ù ú Ã ú ù   ù ú ´ ú ù   jedoch    ù ú Ã Á Á   Á Á ´ ú ù   ù ú Ã Â Â   Â Â ´ ú ù
-            //   ú ú ú ú ú   ú ú ú ú ú   nur zum   ú ú ú Á Á   Á Á ú ú ú   ú ú ú ú ú   ú ú ú ú ú
-            //   ù ú ù ú Á   Á ú ù ú ù   Teil:     ù ú ù Á ù   ù Á ù ú ù   ù ú ù ú ù   ù ú ù ú ù
-            // 3.3: Die Linienaustritte zeigen vom anderen Objekt weg bzw. hinter
-            //      dessen Ruecken vorbei (52+4).
-            //   Á Á Á Á ù   ù Á Á Á Á   ù ú ú ú ù   ù ú ù ú ù   Diese 4   ù ú ù ú ù   ù ú ù ú ù
-            //   Á Á Á Á ú   ú Á Á Á Á   Â Â Â ú ú   ú ú Â Â Â   Konstel.  ú ú ú Â ú   ú Â ú ú ú
-            //   Á Á Ã ú ù   ù ú ´ Á Á   Â Â Ã ú ù   ù ú ´ Â Â   jedoch    ù ú Ã ú ù   ù ú ´ ú ù
-            //   Á Á Á ú ú   ú ú Á Á Á   Â Â Â Â ú   ú Â Â Â Â   nur zum   ú ú ú Á ú   ú Á ú ú ú
-            //   ù ú ù ú ù   ù ú ù ú ù   Â Â Â Â ù   ù Â Â Â Â   Teil:     ù ú ù ú ù   ù ú ù ú ù
+            /* Kleine Legende: ù ú ù ú ù -> Ohne Ueberschneidung, maximal Beruehrung.                   */
+            /*                 ú ú ú ú ú -> Ueberschneidung                                             */
+            /*                 ù ú Ã ú ù -> Selbe Hoehe                                                 */
+            /*                 ú ú ú ú ú -> Ueberschneidung                                             */
+            /*                 ù ú ù ú ù -> Ohne Ueberschneidung, maximal Beruehrung.                   */
+            /* Linienaustritte links ´, rechts Ã, oben Á und unten Â.                                   */
+            /* Insgesamt sind 96 Konstellationen moeglich, wobei einige nicht einmal                    */
+            /* eindeutig einem Fall und damit einer Behandlungsmethode zugeordnet werden                */
+            /* koennen.                                                                                 */
+            /* 3.1: Hierzu moegen alle Konstellationen zaehlen, die durch den                           */
+            /*      Default-MeetingPoint zufriedenstellend abgedeckt sind (20+12).                      */
+            /*   Â Â Â ú Á    Á ú Â Â Â   Diese 12  ù ú ù Â ù    ù ú ù ú ù    ù Â ù ú ù    ù ú ù ú ù    */
+            /*   ú ú ú ú Á    Á ú ú ú ú   Konstel.  ú ú ú ú ú    ú ú ú ú Â    ú ú ú ú ú    Â ú ú ú ú    */
+            /*   ù ú Ã ú ù    ù ú ´ ú ù   jedoch    ù ú Ã ú Á    ù ú Ã ú Â    Á ú ´ ú ù    Â ú ´ ú ù    */
+            /*   ú ú ú ú Â    Â ú ú ú ú   nur zum   ú ú ú ú Á    ú ú ú ú ú    Á ú ú ú ú    ú ú ú ú ú    */
+            /*   Á Á Á ú Â    Â ú Á Á Á   Teil:     ù ú ù Á ù    ù ú ù ú ù    ù Á ù ú ù    ù ú ù ú ù    */
+            /*   Letztere 16 Faelle scheiden aus, sobald sich die Objekte offen                         */
+            /*   gegenueberstehen (siehe Fall 3.2).                                                     */
+            /* 3.2: Die Objekte stehen sich offen gegenueber und somit ist eine                         */
+            /*      Verbindung mit lediglich 2 Linien moeglich (4+20).                                  */
+            /*      Dieser Fall hat 1. Prioritaet.                                                      */
+            /*   ù ú ù ú Â   Â ú ù ú ù   Diese 20  ù ú ù Â ù   ù Â ù ú ù   ù ú ù ú ù   ù ú ù ú ù        */
+            /*   ú ú ú ú ú   ú ú ú ú ú   Konstel.  ú ú ú Â Â   Â Â ú ú ú   ú ú ú ú ú   ú ú ú ú ú        */
+            /*   ù ú Ã ú ù   ù ú ´ ú ù   jedoch    ù ú Ã Á Á   Á Á ´ ú ù   ù ú Ã Â Â   Â Â ´ ú ù        */
+            /*   ú ú ú ú ú   ú ú ú ú ú   nur zum   ú ú ú Á Á   Á Á ú ú ú   ú ú ú ú ú   ú ú ú ú ú        */
+            /*   ù ú ù ú Á   Á ú ù ú ù   Teil:     ù ú ù Á ù   ù Á ù ú ù   ù ú ù ú ù   ù ú ù ú ù        */
+            /* 3.3: Die Linienaustritte zeigen vom anderen Objekt weg bzw. hinter                       */
+            /*      dessen Ruecken vorbei (52+4).                                                       */
+            /*   Á Á Á Á ù   ù Á Á Á Á   ù ú ú ú ù   ù ú ù ú ù   Diese 4   ù ú ù ú ù   ù ú ù ú ù        */
+            /*   Á Á Á Á ú   ú Á Á Á Á   Â Â Â ú ú   ú ú Â Â Â   Konstel.  ú ú ú Â ú   ú Â ú ú ú        */
+            /*   Á Á Ã ú ù   ù ú ´ Á Á   Â Â Ã ú ù   ù ú ´ Â Â   jedoch    ù ú Ã ú ù   ù ú ´ ú ù        */
+            /*   Á Á Á ú ú   ú ú Á Á Á   Â Â Â Â ú   ú Â Â Â Â   nur zum   ú ú ú Á ú   ú Á ú ú ú        */
+            /*   ù ú ù ú ù   ù ú ù ú ù   Â Â Â Â ù   ù Â Â Â Â   Teil:     ù ú ù ú ù   ù ú ù ú ù        */
 
             // Fall 3.2
             Rectangle aTmpR1(aBewareRect1);
@@ -1535,8 +1535,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         else if (nPntAnz==4) { // Z oder U
             if (nAngle1==nAngle2) cForm='U';
             else cForm='Z';
-        } else if (nPntAnz==4) { // Ú-¿  Ú-¿
-            // ...                 -Ù     -Ù
+        } else if (nPntAnz==4) { /* Ú-¿  Ú-¿  */
+            /* ...                 -Ù     -Ù  */
         } else if (nPntAnz==6) { // S oder C oder ...
             if (nAngle1!=nAngle2) {
                 // Fuer Typ S hat Linie2 dieselbe Richtung wie Linie4.
