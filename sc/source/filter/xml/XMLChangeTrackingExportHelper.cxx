@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:14 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 12:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,9 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
         if (rExport.GetDocument() && rExport.GetDocument()->GetFormatTable()->IsNumberFormat(sValue, nIndex, fTempValue))
         {
             sal_uInt16 nType = rExport.GetDocument()->GetFormatTable()->GetType(nIndex);
-            switch(nType & NUMBERFORMAT_DEFINED)
+            if ((nType & NUMBERFORMAT_DEFINED) == NUMBERFORMAT_DEFINED)
+                nType -= NUMBERFORMAT_DEFINED;
+            switch(nType)
             {
                 case NUMBERFORMAT_DATE:
                     {
@@ -374,11 +376,11 @@ void ScChangeTrackingExportHelper::WriteValueCell(const ScBaseCell* pCell, const
     {
         SetValueAttributes(pValueCell->GetValue(), sValue);
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, sal_True, sal_True);
-        /*if (sText.getLength())
+/*      if (sValue.Len())
         {
             SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
             sal_Bool bPrevCharWasSpace(sal_True);
-            rExport.GetTextParagraphExport()->exportText(sText, bPrevCharWasSpace);
+            rExport.GetTextParagraphExport()->exportText(sValue, bPrevCharWasSpace);
         }*/
     }
 }
