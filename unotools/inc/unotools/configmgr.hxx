@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:18:12 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ namespace utl
                 PRODUCTVERSION,
                 PRODUCTEXTENSION,
                 DEFAULTCURRENCY,
-                PRODUCTXMLFILEFORMATVERSION
+                PRODUCTXMLFILEFORMATVERSION,
+                WRITERCOMPATIBILITYVERSIONOOO11
             };
             //direct readonly access to some special configuration elements
             static com::sun::star::uno::Any GetDirectConfigProperty(ConfigProperty eProp);
