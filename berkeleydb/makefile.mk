@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mh $ $Date: 2002-11-20 10:35:32 $
+#   last change: $Author: hr $ $Date: 2003-03-19 13:32:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,7 @@ BUILD_ACTION=make
 OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*.so
 
 OUT2BIN=java$/classes$/db.jar
-    
+
 .ENDIF			# "$(GUI)"=="UNX"
 
 .IF "$(GUI)"=="WNT"
@@ -96,7 +96,11 @@ OUT2BIN=java$/classes$/db.jar
 EXT_USE_STLPORT=TRUE
 
 BUILD_DIR=build_win32
+.IF "$(COMEX)"=="8"
+BUILD_ACTION=wdevenv Berkeley_DB Release
+.ELSE
 BUILD_ACTION=msdev Berkeley_DB.dsw /useenv /MAKE "db_buildall - RELEASE" /MAKE "db_java - RELEASE"
+.ENDIF
 
 OUT2BIN=java$/classes$/db.jar \
     $(BUILD_DIR)$/Release$/libdb_java32.dll \
@@ -105,7 +109,7 @@ OUT2BIN=java$/classes$/db.jar \
 OUT2LIB= \
     $(BUILD_DIR)$/Release$/libdb_java32.lib \
     $(BUILD_DIR)$/Release$/libdb32.lib
-    
+
 .ENDIF			# "$(GUI)"=="WNT"
 
 OUT2INC= \
@@ -120,11 +124,4 @@ OUT2CLASS=java$/classes$/db.jar
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
-
-TG_DELIVER : $(INPATH)$/misc$/build$/so_predeliver
-        $(DELIVER)
-
-.IF "$(BUILD_PREDELIVER)"!=""
-ALLTAR : TG_DELIVER
-.ENDIF			# "$(BUILD_PREDELIVER)"!=""
 
