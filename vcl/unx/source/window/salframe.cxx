@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:44:31 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
     {
         // plugin parent may be killed unexpectedly by
         // plugging process; ignore XErrors in that case
-        GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
+        GetDisplay()->setHaveSystemChildFrame();
 
         nStyle_ |= SAL_FRAME_STYLE_CHILD;
         Attributes.override_redirect = True;
@@ -368,11 +368,12 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 
         // check if this is really one of our own frames
         // do not change the input mask in that case
-        X11SalFrame* pFrame = GetSalData()->pFirstFrame_;
-        while( pFrame && mhForeignParent != pFrame->GetWindow() )
-            pFrame = pFrame->GetNextFrame();
+        const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
+        std::list< SalFrame* >::const_iterator it = rFrames.begin();
+        while( it != rFrames.end() && mhForeignParent != static_cast<X11SalFrame*>(*it)->GetWindow() )
+            ++it;
 
-        if( ! pFrame )
+        if( it == rFrames.end() )
         {
             XSelectInput( GetDisplay()->GetDisplay(), mhForeignParent, StructureNotifyMask | FocusChangeMask );
             XSelectInput( GetDisplay()->GetDisplay(), mhShellWindow, StructureNotifyMask | FocusChangeMask );
@@ -402,17 +403,24 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         if( ! mpParent )
         {
             // find the last document window (if any)
-            X11SalFrame* pFrame = GetNextFrame();
-            while( pFrame &&
-                   ( pFrame->mpParent
-                     || pFrame->mbFullScreen
-                     || ! ( pFrame->nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
-                     || ! pFrame->GetUnmirroredGeometry().nWidth
-                     || ! pFrame->GetUnmirroredGeometry().nHeight
-                     )
-                   )
-                pFrame = pFrame->GetNextFrame();
-            if( pFrame )
+            X11SalFrame* pFrame = NULL;
+            const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
+            std::list< SalFrame* >::const_iterator it = rFrames.begin();
+            while( it != rFrames.end() )
+            {
+                pFrame = static_cast< X11SalFrame* >(*it);
+                if( ! ( pFrame->mpParent
+                        || pFrame->mbFullScreen
+                        || ! ( pFrame->nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+                        || ! pFrame->GetUnmirroredGeometry().nWidth
+                        || ! pFrame->GetUnmirroredGeometry().nHeight
+                        )
+                    )
+                    break;
+                ++it;
+            }
+
+            if( it != rFrames.end() )
             {
                 // set a document position and size
                 // the first frame gets positioned by the window manager
@@ -480,15 +488,15 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
     }
 
     mhWindow = XCreateWindow( GetXDisplay(),
-                               aFrameParent,
-                               x, y,
-                               w, h,
-                               0,
-                               pVis->GetDepth(),
-                               InputOutput,
-                               pVis->GetVisual(),
-                               nAttrMask,
-                               &Attributes );
+                              aFrameParent,
+                              x, y,
+                              w, h,
+                              0,
+                              pVis->GetDepth(),
+                              InputOutput,
+                              pVis->GetVisual(),
+                              nAttrMask,
+                              &Attributes );
     mhShellWindow = pParentData ? mhShellWindow : mhWindow;
 
     maGeometry.nX       = x;
@@ -593,14 +601,14 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     // initialize frame geometry
     memset( &maGeometry, 0, sizeof(maGeometry) );
 
-    // insert frame in framelist
-    mpNextFrame                 = pSalData->pFirstFrame_;
     mpParent                    = static_cast< X11SalFrame* >( pParent );
 
-    pSalData->pFirstFrame_      = this;
     mbTransientForRoot          = false;
 
-    pDisplay_                   = pSalData->GetCurDisp();
+    pDisplay_                   = pSalData->GetDisplay();
+    // insert frame in framelist
+    pDisplay_->registerFrame( this );
+
     mhWindow                    = None;
     mhShellWindow               = None;
     mhStackingWindow            = None;
@@ -675,17 +683,25 @@ void X11SalFrame::passOnSaveYourSelf()
         SalData* pSalData = GetSalData();
 
         // pass on SaveYourself
-        X11SalFrame* pFrame = pSalData->pFirstFrame_;
-        while( pFrame && ( ( pFrame->nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_CHILD) ) || pFrame->mpParent  ) )
-            pFrame = pFrame->GetNextFrame();
-        s_pSaveYourselfFrame = pFrame;
-        if( pFrame )
+        X11SalFrame* pFrame = NULL;
+        const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
+        std::list< SalFrame* >::const_iterator it = rFrames.begin();
+        while( it != rFrames.end() )
+        {
+            pFrame = static_cast< X11SalFrame* >(*it);
+            if( ! (pFrame->nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_CHILD) || pFrame->mpParent ) )
+                break;
+            ++it;
+        }
+
+        s_pSaveYourselfFrame = (it != rFrames.end() ) ? pFrame : NULL;
+        if( s_pSaveYourselfFrame )
         {
             Atom a[4];
             int  n = 0;
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_SAVE_YOURSELF );
-            XSetWMProtocols( GetXDisplay(), pFrame->GetShellWindow(), a, n );
+            XSetWMProtocols( GetXDisplay(), s_pSaveYourselfFrame->GetShellWindow(), a, n );
         }
     }
 }
@@ -698,6 +714,9 @@ X11SalFrame::~X11SalFrame()
     // remove from parent's list
     if( mpParent )
         mpParent->maChildren.remove( this );
+
+    // deregister on SalDisplay
+    pDisplay_->deregisterFrame( this );
 
     // unselect all events, some may be still in the queue anyway
     XSelectInput( GetXDisplay(), GetShellWindow(), 0 );
@@ -739,28 +758,16 @@ X11SalFrame::~X11SalFrame()
 
     XDestroyWindow( GetXDisplay(), mhWindow );
 
-    SalData* pSalData = GetSalData();
-
-    if( this == pSalData->pFirstFrame_ )
-        pSalData->pFirstFrame_ = GetNextFrame();
-    else
-    {
-        X11SalFrame *pTemp = pSalData->pFirstFrame_;
-        while( pTemp->GetNextFrame() != this )
-            pTemp = pTemp->GetNextFrame();
-
-        pTemp->mpNextFrame = GetNextFrame();
-    }
-
     /*
-     *  check if there is only the status frame is left
+     *  check if there is only the status frame left
      *  if so, free it
      */
     SalFrame* pStatusFrame = I18NStatus::get().getStatusFrame();
+    std::list< SalFrame* >::const_iterator sit = GetDisplay()->getFrames().begin();
     if( pStatusFrame
-        && pSalData->pFirstFrame_ == pStatusFrame
-        && pSalData->pFirstFrame_->GetNextFrame() == NULL )
-        ::vcl::I18NStatus::free();
+        && *sit == pStatusFrame
+        && ++sit == GetDisplay()->getFrames().end() )
+        vcl::I18NStatus::free();
 
     passOnSaveYourSelf();
 }
@@ -980,13 +987,14 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
         mbInShow = TRUE;
         if( ! (nStyle_ & SAL_FRAME_STYLE_INTRO) )
         {
-            X11SalFrame* pFrame = GetSalData()->pFirstFrame_;
-            while( pFrame )
+            // hide all INTRO frames
+            const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
+            for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
             {
+                X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
                 // look for intro bit map; if present, hide it
                 if( pFrame->nStyle_ & SAL_FRAME_STYLE_INTRO )
                     pFrame->Show( FALSE );
-                pFrame = pFrame->GetNextFrame();
             }
         }
 
@@ -2356,8 +2364,10 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
             // see if the user clicks outside all of the floats
             // if yes release the grab
             bool bInside = false;
-             for( X11SalFrame* pFrame = GetSalData()->pFirstFrame_; pFrame; pFrame = pFrame->GetNextFrame() )
+            const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
+            for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
             {
+                X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
                 if( pFrame->IsFloatGrabWindow()                                     &&
                     pFrame->bMapped_                                                &&
                     pEvent->xbutton.x_root >= pFrame->maGeometry.nX                             &&
@@ -2393,8 +2403,10 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                     && aChild // pointer may not be in any child
                     )
                 {
-                    for( X11SalFrame* pFrame = GetSalData()->pFirstFrame_; pFrame; pFrame = pFrame->GetNextFrame() )
+                    const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
+                    for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
                     {
+                        X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
                         if( ! pFrame->IsFloatGrabWindow()
                             && ( pFrame->GetWindow() == aChild ||
                                  pFrame->GetShellWindow() == aChild ||
@@ -2863,7 +2875,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
         if( FocusIn == pEvent->type )
         {
 #ifndef _USE_PRINT_EXTENSION_
-            if( GetSalData()->pInstance_->isPrinterInit() )
+            if( static_cast< X11SalInstance* >(GetSalData()->pInstance_)->isPrinterInit() )
                 vcl_sal::PrinterUpdate::update();
 #endif
             mbInputFocus = True;
