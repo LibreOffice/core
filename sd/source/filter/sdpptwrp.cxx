@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpptwrp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 17:41:14 $
+ *  last change: $Author: sj $ $Date: 2002-06-19 11:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,16 @@ sal_Bool SdPPTFilter::Import()
 
     if( ( pStorage = mrMedium.GetStorage() ) != NULL )
     {
+        /* check if there is a dualstorage, then the
+        document is propably a PPT95 containing PPT97 */
+        SvStorageRef xDualStorage;
+        String sDualStorage( RTL_CONSTASCII_USTRINGPARAM( "PP97_DUALSTORAGE" ) );
+        if ( pStorage->IsContained( sDualStorage ) )
+        {
+            xDualStorage = pStorage->OpenStorage( sDualStorage, STREAM_STD_READ );
+            pStorage = xDualStorage;
+        }
         SvStream* pDocStream = pStorage->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM("PowerPoint Document") ), STREAM_STD_READ );
-
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );
