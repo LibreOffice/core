@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:41:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <idetemp.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <svtools/aeitem.hxx>
+#include <vcl/toolbox.hxx>
 
 using namespace ::com::sun::star::uno;
 
