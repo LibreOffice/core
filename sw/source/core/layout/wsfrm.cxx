@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:08:16 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,6 +436,21 @@ void SwFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             rInvFlags |= 0x0F;
             break;
 
+        case RES_ROW_SPLIT:
+        {
+            if ( IsRowFrm() )
+            {
+                BOOL bInFollowFlowRow = 0 != IsInFollowFlowRow();
+                if ( bInFollowFlowRow || 0 != IsInSplitTableRow() )
+                {
+                    SwTabFrm* pTab = FindTabFrm();
+                    if ( bInFollowFlowRow )
+                        pTab = pTab->FindMaster();
+                    pTab->SetRemoveFollowFlowLinePending( TRUE );
+                }
+            }
+            break;
+        }
         case RES_COL:
             ASSERT( FALSE, "Spalten fuer neuen FrmTyp?" );
             break;
