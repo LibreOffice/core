@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:27:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,9 @@
 #endif
 
 
-ExcelToSc8::ExcelToSc8( RootData* pRD, XclImpStream& aStr ) :
-    ExcelToSc( pRD, aStr ),
-    rLinkMan( pRD->pIR->GetLinkManager() )
+ExcelToSc8::ExcelToSc8( XclImpStream& rStrm ) :
+    ExcelToSc( rStrm ),
+    rLinkMan( rStrm.GetRoot().GetLinkManager() )
 {
 }
 
@@ -115,7 +115,7 @@ BOOL ExcelToSc8::Read3DTabReference( SCTAB& rFirstTab, SCTAB& rLastTab )
 ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen, const FORMULA_TYPE eFT )
 {
     BYTE                    nOp, nLen, nByte;
-    UINT16                  nUINT16, nIndexToFunc;
+    UINT16                  nUINT16;
     double                  fDouble;
     String                  aString;
     BOOL                    bError = FALSE;
@@ -247,6 +247,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                 break;
             case 0x11: // Range                                 [314 265]
             {
+                aStack >> nMerk0;
+                aPool << aStack << ocRange << nMerk0;
+                aPool >> aStack;
+#if 0
                 // wenn erster und zweiter Ausdruck auf'm Stack Single Referenzen
                 // sind, dann Area Reference erzeugen, ansonsten Fehlerhaften Aus-
                 // druck generieren
@@ -277,9 +281,12 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
 
                     aPool >> aStack;
                 }
+#endif
             }
                 break;
             case 0x12: // Unary Plus                            [312 264]
+                aPool << ocAdd << aStack;
+                aPool >> aStack;
                 break;
             case 0x13: // Unary Minus                           [312 264]
                 aPool << ocNegSub << aStack;
@@ -296,7 +303,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x16: // Missing Argument                      [314 266]
                 aPool << ocMissing;
                 aPool >> aStack;
-                pExcRoot->pIR->GetTracer().TraceFormulaMissingArg();
+                GetTracer().TraceFormulaMissingArg();
                 break;
             case 0x17: // String Constant                       [314 266]
                 aIn >> nLen;        // und?
@@ -321,7 +328,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                     case 0x07:              //  ColV        4       -       val
                         aIn >> nRow >> nCol;
 
-                        aSRD.InitAddress( ScAddress( static_cast<SCCOL>(nCol & 0x7FFFF), static_cast<SCROW>(nRow), aEingPos.Tab() ) );
+                        aSRD.InitAddress( ScAddress( static_cast<SCCOL>(nCol & 0xFF), static_cast<SCROW>(nRow), aEingPos.Tab() ) );
 
                         if( nEptg == 0x02 || nEptg == 0x06 )
                             aSRD.SetRowRel( TRUE );
@@ -336,7 +343,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                         aIn >> nRow >> nCol;
                         aIn.Ignore( 9 );
 
-                        aSRD.InitAddress( ScAddress( static_cast<SCCOL>(nCol & 0x7FFFF), static_cast<SCROW>(nRow), aEingPos.Tab() ) );
+                        aSRD.InitAddress( ScAddress( static_cast<SCCOL>(nCol & 0xFF), static_cast<SCROW>(nRow), aEingPos.Tab() ) );
 
                         aSRD.SetColRel( TRUE );
 
@@ -449,21 +456,29 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x41:
             case 0x61:
             case 0x21: // Function, Fixed Number of Arguments   [333 282]
-                aIn >> nIndexToFunc;
-
-                DoDefArgs( nIndexToFunc );
-                break;
+            {
+                sal_uInt16 nXclFunc;
+                aIn >> nXclFunc;
+                if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
+                    DoMulArgs( pFuncInfo->meOpCode, pFuncInfo->mnMaxParamCount );
+                else
+                    DoMulArgs( ocNoName, 0 );
+            }
+            break;
             case 0x42:
             case 0x62:
             case 0x22: // Function, Variable Number of Arg.     [333 283]
             {
-                BYTE nAnz;
-                aIn >> nAnz >> nIndexToFunc;
-                nAnz &= 0x7F;
-
-                DoMulArgs( IndexToToken( nIndexToFunc ), nAnz );
+                sal_uInt16 nXclFunc;
+                sal_uInt8 nParamCount;
+                aIn >> nParamCount >> nXclFunc;
+                nParamCount &= 0x7F;
+                if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
+                    DoMulArgs( pFuncInfo->meOpCode, nParamCount );
+                else
+                    DoMulArgs( ocNoName, 0 );
             }
-                break;
+            break;
             case 0x43:
             case 0x63:
             case 0x23: // Name                                  [318 269]
@@ -471,7 +486,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             {
                 aIn.Ignore( 2 );
                 //Determine if this is a user-defined Macro name.
-                const XclImpName* pName = pExcRoot->pIR->GetNameBuffer().GetNameFromIndex(nUINT16);
+                const XclImpName* pName = GetNameBuffer().GetNameFromIndex(nUINT16);
                 if(pName && !pName->GetScRangeData())
                     aStack << aPool.Store( ocMacro, pName->GetXclName() );
                 else
@@ -562,15 +577,15 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x67:
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
                 aIn.Ignore( 6 );    // mehr steht da nicht!
-                aPool << ocBad;
-                aPool >> aStack;
+//               aPool << ocBad;
+//               aPool >> aStack;
                 break;
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
                 aIn.Ignore( 6 );    // mehr steht da nicht!
-                aPool << ocBad;
-                aPool >> aStack;
+//               aPool << ocBad;
+//               aPool >> aStack;
                 break;
             case 0x49:
             case 0x69:
@@ -625,15 +640,15 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x6E:
             case 0x2E: // Reference Subexpression Within a Name [332 282]
                 aIn.Ignore( 2 );    // mehr steht da nicht!
-                aPool << ocBad;
-                aPool >> aStack;
+//               aPool << ocBad;
+//               aPool >> aStack;
                 break;
             case 0x4F:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
                 aIn.Ignore( 2 );    // mehr steht da nicht!
-                aPool << ocBad;
-                aPool >> aStack;
+//               aPool << ocBad;
+//               aPool >> aStack;
                 break;
             case 0x58:
             case 0x78:
@@ -665,7 +680,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                         case xlExtName:
                         {
                             aStack << aPool.Store( ocNoName, pExtName->GetName() );
-                            pExcRoot->pIR->GetTracer().TraceFormulaExtName();
+                            GetTracer().TraceFormulaExtName();
                         }
                         break;
 
@@ -686,7 +701,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                                 aPool   << ocDde << ocOpen << nPar1 << ocSep << nPar2 << ocSep
                                         << nMerk0 << ocClose;
                                 aPool >> aStack;
-                                pExtName->CreateDdeData(*(pExcRoot->pDoc), aApplic, aTopic );
+                                pExtName->CreateDdeData( GetDoc(), aApplic, aTopic );
                             }
                         }
                         break;
@@ -1225,7 +1240,7 @@ void ExcelToSc8::ExcRelToScRel( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, con
         // T A B
         // #67965# abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = pExcRoot->pIR->GetCurrScTab();
+            rSRD.nTab = GetCurrScTab();
     }
     else
     {
@@ -1244,7 +1259,7 @@ void ExcelToSc8::ExcRelToScRel( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, con
         // T A B
         // #i10184# abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = pExcRoot->pIR->GetCurrScTab() + rSRD.nRelTab;
+            rSRD.nTab = GetCurrScTab() + rSRD.nRelTab;
     }
 }
 
@@ -1279,7 +1294,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
 
                 nRow2 = nRow1;
                 nCol2 = nCol1;
-                nTab1 = nTab2 = pExcRoot->pIR->GetCurrScTab();
+                nTab1 = nTab2 = GetCurrScTab();
                 goto _common;
             case 0x45:
             case 0x65:
@@ -1290,7 +1305,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
                        // Area Reference Within a Shared Formula[    274]
                 aIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
 
-                nTab1 = nTab2 = pExcRoot->pIR->GetCurrScTab();
+                nTab1 = nTab2 = GetCurrScTab();
                 goto _common;
             case 0x5A:
             case 0x7A:
@@ -1415,7 +1430,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
     }
     aIn.Seek( nMaxPos );
 
-    pExcRoot->pIR->CheckCellRangeList( r );
+    CheckCellRangeList( r );
     return r.Count() != 0;
 }
 
