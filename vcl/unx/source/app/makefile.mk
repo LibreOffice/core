@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+#   last change: $Author: hjs $ $Date: 2001-02-09 11:48:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,9 +134,7 @@ EXCEPTIONSFILES=$(SLO)$/salmain.obj	\
 
 .INCLUDE :  $(PRJ)$/util$/target.pmk
 
-$(SLO)$/getfpsols.obj: getfpsols.s
-    CC -c -o $(SLO)$/getfpsols.o getfpsols.s && touch $(SLO)$/getfpsols.obj
 
-$(SLO)$/getfpsoli.obj: getfpsoli.s
-    CC -c -o $(SLO)$/getfpsoli.o getfpsoli.s && touch $(SLO)$/getfpsoli.obj
+$(SLO)$/%.obj: %.s
+    CC -c -o $(@:b).o $< && touch $@
 
