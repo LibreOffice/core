@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-28 17:06:29 $
+ *  last change: $Author: sab $ $Date: 2000-09-29 07:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,6 +635,7 @@ XML_CONSTASCII_ACTION( sXML_new, "new" );
 XML_CONSTASCII_ACTION( sXML_next, "next" );
 XML_CONSTASCII_ACTION( sXML_next_style_name, "next-style-name" );
 XML_CONSTASCII_ACTION( sXML_no_limit, "no-limit" );
+XML_CONSTASCII_ACTION( sXML_no_wrap, "no-wrap" );
 XML_CONSTASCII_ACTION( sXML_noempty, "!empty");
 XML_CONSTASCII_ACTION( sXML_nomatch, "!match");
 XML_CONSTASCII_ACTION( sXML_none, "none" );
@@ -1050,6 +1051,7 @@ XML_CONSTASCII_ACTION( sXML_width, "width" );
 XML_CONSTASCII_ACTION( sXML_word, "word" );
 XML_CONSTASCII_ACTION( sXML_word_count, "word-count" );
 XML_CONSTASCII_ACTION( sXML_wrap, "wrap" );
+XML_CONSTASCII_ACTION( sXML_wrap_option, "wrap-option" );
 XML_CONSTASCII_ACTION( sXML_wrap_contour, "wrap-contour" );
 XML_CONSTASCII_ACTION( sXML_wrap_contour_mode, "wrap-contour-mode" );
 XML_CONSTASCII_ACTION( sXML_x, "x" );
