@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-28 14:47:05 $
+ *  last change: $Author: kr $ $Date: 2001-02-19 10:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ import java.net.MalformedURLException;
  * service. Therefor the <code>JavaLoader</code> activates external UNO components which are implemented in Java.
  * The loader is used by the <code>ServiceManger</code>.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-11-28 14:47:05 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-02-19 10:01:01 $
  * @author      Markus Herzog
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
@@ -425,7 +425,7 @@ public class JavaLoader implements XImplementationLoader,
  * the registration at a registry in a default manner. The class is used by the <code>JavaLoader</code> if the
  * a component does not comes with its own methods for creating a factory or for the registration.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-11-28 14:47:05 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-02-19 10:01:01 $
  * @author      Markus Herzog
  * @since       UDK1.0
  */
@@ -512,7 +512,7 @@ class ComponentFactoryWrapper
                 throw new CannotRegisterImplementationException("Can not register " + implName + " because " + e.toString() );
             }
             catch (InvocationTargetException e) {
-                throw new CannotRegisterImplementationException("Can not register " + implName + " because " + e.toString() );
+                throw new CannotRegisterImplementationException("Can not register " + implName + " because " + e.getTargetException() );
             }
 
 
@@ -762,7 +762,7 @@ class ComponentFactoryWrapper
                 }
                 catch (InvocationTargetException e) {
                     throw new com.sun.star.uno.Exception("Can not create instance with arguments for "
-                                                         + implName + " because " + e.toString() );
+                                                         + implName + " because " + e.getTargetException() );
                 }
             }
 
