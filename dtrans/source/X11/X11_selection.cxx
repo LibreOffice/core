@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-10 16:37:20 $
+ *  last change: $Author: pl $ $Date: 2001-07-23 16:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1545,16 +1545,20 @@ bool SelectionManager::updateDragAction( int modifierState )
         nNewDropAction = DNDConstants::ACTION_COPY;
     nNewDropAction &= m_nSourceActions;
 
-    if( ! nNewDropAction && ! ( modifierState & ( ControlMask | ShiftMask )  ) )
+    if( ! ( modifierState & ( ControlMask | ShiftMask ) ) )
     {
-        // default to a default action so the user does not have to press
-        // keys explicitly
-        if( m_nSourceActions & DNDConstants::ACTION_MOVE )
-            nNewDropAction = DNDConstants::ACTION_MOVE;
-        else if( m_nSourceActions & DNDConstants::ACTION_COPY )
-            nNewDropAction = DNDConstants::ACTION_COPY;
-        else if( m_nSourceActions & DNDConstants::ACTION_LINK )
-            nNewDropAction = DNDConstants::ACTION_LINK;
+        if( ! nNewDropAction )
+        {
+            // default to an action so the user does not have to press
+            // keys explicitly
+            if( m_nSourceActions & DNDConstants::ACTION_MOVE )
+                nNewDropAction = DNDConstants::ACTION_MOVE;
+            else if( m_nSourceActions & DNDConstants::ACTION_COPY )
+                nNewDropAction = DNDConstants::ACTION_COPY;
+            else if( m_nSourceActions & DNDConstants::ACTION_LINK )
+                nNewDropAction = DNDConstants::ACTION_LINK;
+        }
+        nNewDropAction |= DNDConstants::ACTION_DEFAULT;
     }
 
     if( nNewDropAction != m_nUserDragAction )
@@ -1939,14 +1943,14 @@ void SelectionManager::accept( sal_Int8 dragOperation, Window aDropWindow, Time 
     if( aDropWindow == m_aCurrentDropWindow )
     {
         Atom nAction = None;
-        switch( dragOperation )
+        switch( dragOperation & (DNDConstants::ACTION_MOVE | DNDConstants::ACTION_COPY | DNDConstants::ACTION_LINK) )
         {
             case DNDConstants::ACTION_LINK:
                 nAction = m_nXdndActionLink;
                 break;
             case DNDConstants::ACTION_MOVE:
                 nAction = m_nXdndActionMove;
-            break;
+                break;
             case DNDConstants::ACTION_COPY:
                 nAction = m_nXdndActionCopy;
                 break;
@@ -2348,7 +2352,7 @@ void SelectionManager::startDrag(
         XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, (unsigned char*)pTypes, m_aDragFlavors.getLength() );
         delete pTypes;
 
-        m_nSourceActions                = sourceActions;
+        m_nSourceActions                = sourceActions | DNDConstants::ACTION_DEFAULT;
         m_nUserDragAction               = DNDConstants::ACTION_MOVE & m_nSourceActions;
         if( ! m_nUserDragAction )
             m_nUserDragAction           = DNDConstants::ACTION_COPY & m_nSourceActions;
@@ -2476,13 +2480,12 @@ void SelectionManager::dragDoDispatch()
         m_aDragExecuteThread = NULL;
         m_aDragRunning.reset();
 
+        aGuard.clear();
         if( xListener.is() )
         {
-            aGuard.clear();
             xTransferable.clear();
             xListener->dragDropEnd( dsde );
         }
-
     }
     osl_destroyThread( aThread );
 }
