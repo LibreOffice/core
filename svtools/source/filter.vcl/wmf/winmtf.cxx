@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:03:09 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 13:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
             aFontSize.Height() /= nHeight;
         }
     }
-    else
+    else if ( aFontSize.Height() < 0 )
         aFontSize.Height() *= -1;
 
     aFont.SetSize( aFontSize );
@@ -783,7 +783,11 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
     if ( pStyle )
     {
         if ( eType == GDI_FONT )
+        {
             ImplMap( ((WinMtfFontStyle*)pStyle)->aFont );
+            if (!((WinMtfFontStyle*)pStyle)->aFont.GetHeight() )
+                ((WinMtfFontStyle*)pStyle)->aFont.SetHeight( 423 );     // defaulting to 12pt
+        }
         else if ( eType == GDI_PEN )
         {
             Size aSize( ((WinMtfLineStyle*)pStyle)->aLineInfo.GetWidth(), 0 );
@@ -1427,6 +1431,8 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
 {
     UpdateClipRegion();
 
+    VirtualDevice* pVDev = NULL;
+
     rPosition = ImplMap( nGfxMode == GM_ADVANCED ? Point() : rPosition );
     sal_Int32 nOldGfxMode = GetGfxMode();
     SetGfxMode( GM_COMPATIBLE );
@@ -1478,7 +1484,6 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         bChangeFont = sal_True;
         mpGDIMetaFile->AddAction( new MetaTextFillColorAction( maFont.GetFillColor(), !maFont.IsTransparent() ) );
     }
-
     Font aTmp( maFont );
     aTmp.SetColor( maTextColor );
     aTmp.SetFillColor( maBkColor );
@@ -1512,31 +1517,23 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         fOrientation += 90;
         aTmp.SetOrientation( sal_Int16( fOrientation * 10.0 ) );
     }
-    if ( bChangeFont || ( maLatestFont != aTmp ) )
-    {
-        maLatestFont = aTmp;
-        mpGDIMetaFile->AddAction( new MetaFontAction( aTmp ) );
-        mpGDIMetaFile->AddAction( new MetaTextAlignAction( aTmp.GetAlign() ) );
-        mpGDIMetaFile->AddAction( new MetaTextColorAction( aTmp.GetColor() ) );
-        mpGDIMetaFile->AddAction( new MetaTextFillColorAction( aTmp.GetFillColor(), !aTmp.IsTransparent() ) );
-    }
+
     if( mnTextAlign & ( TA_UPDATECP | TA_RIGHT_CENTER ) )
     {
-        VirtualDevice   aVDev;
-        sal_Int32       nTextWidth;
-
-        aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
-        aVDev.SetFont( maFont );
-
+        if ( !pVDev )
+            pVDev = new VirtualDevice;
+        sal_Int32 nTextWidth;
+        pVDev->SetMapMode( MapMode( MAP_100TH_MM ) );
+        pVDev->SetFont( maFont );
         if( pDXArry )
         {
             UINT32 nLen = rText.Len();
-            nTextWidth = aVDev.GetTextWidth( rText.GetChar( (sal_uInt16)( nLen - 1 ) ) );
+            nTextWidth = pVDev->GetTextWidth( rText.GetChar( (sal_uInt16)( nLen - 1 ) ) );
             if( nLen > 1 )
                 nTextWidth += pDXArry[ nLen - 2 ];
         }
         else
-            nTextWidth = aVDev.GetTextWidth( rText );
+            nTextWidth = pVDev->GetTextWidth( rText );
 
         if( mnTextAlign & TA_UPDATECP )
             rPosition = maActPos;
@@ -1551,26 +1548,38 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         if( mnTextAlign & TA_UPDATECP )
             maActPos.X() = rPosition.X() + nTextWidth;
     }
+    if ( bChangeFont || ( maLatestFont != aTmp ) )
+    {
+        maLatestFont = aTmp;
+        mpGDIMetaFile->AddAction( new MetaFontAction( aTmp ) );
+        mpGDIMetaFile->AddAction( new MetaTextAlignAction( aTmp.GetAlign() ) );
+        mpGDIMetaFile->AddAction( new MetaTextColorAction( aTmp.GetColor() ) );
+        mpGDIMetaFile->AddAction( new MetaTextFillColorAction( aTmp.GetFillColor(), !aTmp.IsTransparent() ) );
+    }
     if ( bRecordPath )
     {
         // ToDo
     }
     else
     {
-        if( pDXArry )
-            mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDXArry, 0, STRING_LEN ) );
-        else
+        /* because text without dx array is badly scaled, we
+           will create such an array if necessary */
+        sal_Int32* pDX = pDXArry;
+        if ( !pDXArry )
         {
-            VirtualDevice   aVDev;
-            aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
-            aVDev.SetFont( maFont );
-            long* pOwnDx = new long[ rText.Len() ];
-            aVDev.GetTextArray( rText, pOwnDx, 0, STRING_LEN );
-            mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pOwnDx, 0, STRING_LEN ) );
-            delete[] pOwnDx;
+            pDX = new sal_Int32[ rText.Len() ];
+            if ( !pVDev )
+                pVDev = new VirtualDevice;
+            pVDev->SetMapMode( MAP_100TH_MM );
+            pVDev->SetFont( maLatestFont );
+            pVDev->GetTextArray( rText, pDX, 0, STRING_LEN );
         }
+        mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, STRING_LEN ) );
+        if ( !pDXArry )     // this means we have created our own array
+            delete[] pDX;   // which must be deleted
     }
     SetGfxMode( nOldGfxMode );
+    delete pVDev;
 }
 
 //-----------------------------------------------------------------------------------
