@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageFileAccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:41:21 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 10:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ JNIEXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
         }
         catch(Exception& e)
         {
-            OSL_ENSURE(0,"Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement");
+            OSL_ENSURE(0,"Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement");
             if (JNI_FALSE != env->ExceptionCheck())
                 env->ExceptionClear();
             ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
@@ -145,6 +145,12 @@ JNIEXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement
   (JNIEnv * env, jobject obj_this,jstring key, jstring name)
 {
+#if OSL_DEBUG_LEVEL > 1
+    {
+        ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
+        ::rtl::OUString sName = StorageContainer::jstring2ustring(env,name);
+    }
+#endif
     TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
     if ( aStoragePair.first.first.is() )
     {
@@ -159,7 +165,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_rem
         }
         catch(Exception& e)
         {
-            OSL_ENSURE(0,"Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement");
+            OSL_ENSURE(0,"Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement");
             StorageContainer::throwJavaException(e,env);
         }
     }
@@ -174,12 +180,28 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_rem
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement
   (JNIEnv * env, jobject obj_this,jstring key, jstring oldname, jstring newname)
 {
+#if OSL_DEBUG_LEVEL > 1
+    {
+        ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
+        ::rtl::OUString sNewName = StorageContainer::jstring2ustring(env,newname);
+        ::rtl::OUString sOldName = StorageContainer::jstring2ustring(env,oldname);
+    }
+#endif
     TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
     if ( aStoragePair.first.first.is() )
     {
         try
         {
-            aStoragePair.first.first->renameElement(StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,oldname),aStoragePair.first.second),StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname),aStoragePair.first.second));
+            aStoragePair.first.first->renameElement(
+                StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,oldname),aStoragePair.first.second),
+                StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname),aStoragePair.first.second)
+            );
+#if OSL_DEBUG_LEVEL > 1
+            {
+                ::rtl::OUString sNewName = StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname),aStoragePair.first.second);
+                OSL_ENSURE(aStoragePair.first.first->isStreamElement(sNewName),"Stream could not be renamed");
+            }
+#endif
         }
         catch(NoSuchElementException&)
         {
