@@ -1,0 +1,7 @@
+    <node oor:name="StarDraw 3.0 Vorlage (StarImpress)" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">StarDraw 3.0 Template (StarOffice Impress)</value>
+            <value xml:lang="de">StarDraw 3.0 Vorlage (StarOffice Impress)</value>
+            <value xml:lang="x-translate">StarDraw 3.0 Template (StarOffice Impress)</value>
+        </prop>
+    </node>
