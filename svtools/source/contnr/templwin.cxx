@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-30 10:43:42 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 14:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,13 +150,28 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
+#endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -831,10 +846,10 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
 
     Window( pParent, WB_3DLOOK ),
 
-    aFileViewTB     ( this, SvtResId( TB_SVT_FILEVIEW ) ),
-    aFrameWinTB     ( this, SvtResId( TB_SVT_FRAMEWIN ) ),
-    aSplitWin       ( this, WB_DOCKBORDER | WB_FLATSPLITDRAW ),
-    pHistoryList    ( NULL )
+    aFileViewTB             ( this, SvtResId( TB_SVT_FILEVIEW ) ),
+    aFrameWinTB             ( this, SvtResId( TB_SVT_FRAMEWIN ) ),
+    aSplitWin               ( this, WB_DOCKBORDER | WB_FLATSPLITDRAW ),
+    pHistoryList            ( NULL )
 
 {
     // create windows
@@ -939,7 +954,6 @@ IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, pView )
     }
     else
     {
-        pFrameWin->OpenFile( aURL, sal_False, pFileWin->IsTemplateFolder(), pFileWin->IsTemplateFolder() );
         aDoubleClickHdl.Call( this );
     }
     return 0;
@@ -1127,6 +1141,11 @@ void SvtTemplateWindow::Resize()
     aSplitWin.SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
 }
 
+String SvtTemplateWindow::GetSelectedFile() const
+{
+    return pFileWin->GetSelectedFile();
+}
+
 sal_Bool SvtTemplateWindow::IsFileSelected() const
 {
     String aURL = pFileWin->GetSelectedFile();
@@ -1166,12 +1185,33 @@ struct SvtTmplDlg_Impl
     SvtTemplateWindow*  pWin;
     String              aTitle;
     Timer               aUpdateTimer;
+    sal_Bool            bSelectNoOpen;
 
-    SvtTmplDlg_Impl( Window* pParent ) : pWin( new SvtTemplateWindow( pParent ) ) {}
+    SvtTmplDlg_Impl( Window* pParent ) : pWin( new SvtTemplateWindow( pParent ) ), bSelectNoOpen( sal_False ) {}
     ~SvtTmplDlg_Impl() { delete pWin; }
 };
 
 // class SvtDocumentTemplateDialog ---------------------------------------
+
+SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* _pParent, SelectOnly ) :
+    ModalDialog( _pParent, SvtResId( DLG_DOCTEMPLATE ) ),
+
+    aLine       ( this, ResId( FL_DOCTEMPLATE ) ),
+    aManageBtn  ( this, ResId( BTN_DOCTEMPLATE_MANAGE ) ),
+    aEditBtn    ( this, ResId( BTN_DOCTEMPLATE_EDIT ) ),
+    aOKBtn      ( this, ResId( BTN_DOCTEMPLATE_OPEN ) ),
+    aCancelBtn  ( this, ResId( BTN_DOCTEMPLATE_CANCEL ) ),
+    aHelpBtn    ( this, ResId( BTN_DOCTEMPLATE_HELP ) ),
+    pImpl       ( NULL )
+{
+    FreeResource();
+    InitImpl( );
+
+    // no editing of templates
+    aEditBtn.Hide();
+
+    pImpl->bSelectNoOpen = sal_True;
+}
 
 SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
 
@@ -1183,10 +1223,16 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
     aOKBtn      ( this, ResId( BTN_DOCTEMPLATE_OPEN ) ),
     aCancelBtn  ( this, ResId( BTN_DOCTEMPLATE_CANCEL ) ),
     aHelpBtn    ( this, ResId( BTN_DOCTEMPLATE_HELP ) ),
-    pImpl       ( new SvtTmplDlg_Impl( this ) )
-
+    pImpl       ( NULL )
 {
     FreeResource();
+    InitImpl( );
+}
+
+
+void SvtDocumentTemplateDialog::InitImpl( )
+{
+    pImpl = new SvtTmplDlg_Impl( this );
 
     pImpl->aTitle = GetText();
 
@@ -1221,6 +1267,16 @@ SvtDocumentTemplateDialog::~SvtDocumentTemplateDialog()
     delete pImpl;
 }
 
+sal_Bool SvtDocumentTemplateDialog::IsFileSelected( ) const
+{
+    return pImpl->pWin->IsFileSelected();
+}
+
+String SvtDocumentTemplateDialog::GetSelectedFileURL( ) const
+{
+    return pImpl->pWin->GetSelectedFile();
+}
+
 IMPL_LINK ( SvtDocumentTemplateDialog , SelectHdl_Impl, SvtTemplateWindow *, EMPTYARG )
 {
     sal_Bool bEnable = pImpl->pWin->IsFileSelected();
@@ -1231,6 +1287,9 @@ IMPL_LINK ( SvtDocumentTemplateDialog , SelectHdl_Impl, SvtTemplateWindow *, EMP
 
 IMPL_LINK ( SvtDocumentTemplateDialog , DoubleClickHdl_Impl, SvtTemplateWindow *, EMPTYARG )
 {
+    if ( !pImpl->bSelectNoOpen )
+        pImpl->pWin->OpenFile( !pImpl->pWin->IsTemplateFolderOpen() );
+
     EndDialog( RET_OK );
     return 0;
 }
@@ -1267,7 +1326,8 @@ IMPL_LINK ( SvtDocumentTemplateDialog , OKHdl_Impl, PushButton *, pBtn )
 {
     if ( pImpl->pWin->IsFileSelected() )
     {
-        pImpl->pWin->OpenFile( &aEditBtn == pBtn );
+        if ( !pImpl->bSelectNoOpen )
+            pImpl->pWin->OpenFile( &aEditBtn == pBtn );
         EndDialog( RET_OK );
     }
     return 0;
@@ -1318,7 +1378,10 @@ void SvtDocumentTemplateDialog::UpdateDocumentTemplates_Impl()
     Reference< XDocumentTemplates > xTemplates(
         ::comphelper::getProcessServiceFactory()->createInstance( aService ), UNO_QUERY );
     if ( xTemplates.is() )
+    {
+        WaitObject aWaitCursor( this );
         xTemplates->update();
+    }
 }
 
 long SvtDocumentTemplateDialog::PreNotify( NotifyEvent& rNEvt )
