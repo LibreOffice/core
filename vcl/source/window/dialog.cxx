@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-14 18:11:46 $
+ *  last change: $Author: mt $ $Date: 2001-02-16 11:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,35 +839,24 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULO
 {
     ImplInitSettings();
 
-    Point aPos = pDev->LogicToPixel( rPos );
-    Size aSize = pDev->LogicToPixel( rSize );
-//  Font aFont = GetDrawPixelFont( pDev );
-    OutDevType eOutDevType = pDev->GetOutDevType();
-
     pDev->Push();
     pDev->SetMapMode();
-//  pDev->SetFont( aFont );
-//  pDev->SetTextFillColor();
-
-    // Border/Background
     pDev->SetLineColor();
-    pDev->SetFillColor();
-    BOOL bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
-    BOOL bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
-    if ( bBorder || bBackground )
-    {
-        Rectangle aRect( aPos, aSize );
-        if ( bBorder )
-        {
-            DecorationView aDecoView( pDev );
-            aRect = aDecoView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
-        }
-        if ( bBackground )
-        {
-            pDev->SetFillColor( GetControlBackground() );
-            pDev->DrawRect( aRect );
-        }
-    }
+    pDev->SetFillColor( GetBackground().GetColor() );
+
+    Point aPos = pDev->LogicToPixel( rPos );
+    Size aSize = pDev->LogicToPixel( rSize );
+
+    pDev->DrawRect( Rectangle( aPos, aSize ) );
+
+    ImplBorderWindow aImplWin( this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
+    aImplWin.SetText( GetText() );
+    aImplWin.SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
+    aImplWin.SetDisplayActive( TRUE );
+    aImplWin.InitView();
+
+    aImplWin.Draw( Rectangle( aPos, aSize ), pDev, aPos );
+
     pDev->Pop();
 }
 
