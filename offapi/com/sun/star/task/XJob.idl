@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJob.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-14 09:47:49 $
+ *  last change: $Author: fs $ $Date: 2001-09-25 14:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,12 +90,14 @@ interface XJob : com::sun::star::uno::XInterface
         are arguments for executing the job. Their semantics is completely implementation dependent. Usually,
         a concrete implementation of a job specifies in its service descriptions which parameters are allowed
         (or expected).
+    @return
+        the result of the job. The concrete semantics is service-dependent.
     */
-    void    execute(
+    any execute(
         [in] com::sun::star::uno::XInterface                xContext,
         [in] sequence< com::sun::star::beans::NamedValue >  aArgs
     )
-    raises( com::sun::star::lang::IllegalArgumentException );
+    raises( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::Exception );
 };
 
 //.............................................................................
@@ -107,6 +109,9 @@ interface XJob : com::sun::star::uno::XInterface
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/09/14 09:47:49  fs
+ *  initial checkin - specification for a simple executable job
+ *
  *
  *  Revision 1.0 13.09.01 17:03:45  fs
  ************************************************************************/
