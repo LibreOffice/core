@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:16:19 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,11 +276,17 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
                     pResManager = new ResMgr( aResourceFileName );
                 }
 
+                if (!pResManager)
+                {
+                    LOG_WARNING("MenuDispatcher::dispatch()", "no res manager!")
+                    return;
+                }
+
                 nResId = aResourceString.copy( nResIdIndex+1 ).toInt32();
                 ResId aMenuBarResId( nResId, pResManager );
                 aMenuBarResId.SetRT( RSC_MENU );
 
-                if ( Resource::GetResManager()->IsAvailable(aMenuBarResId ) )
+                if ( pResManager->IsAvailable(aMenuBarResId ) )
                 {
                     pMenuBar = new MenuBar( aMenuBarResId );
                     pMenuBar->SetCloserHdl( LINK( this, MenuDispatcher, Close_Impl ) );
