@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdservice.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 08:07:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 #include "registry/reader.hxx"
 #include "registry/version.h"
@@ -362,8 +363,9 @@ sal_Bool ServiceTypeDescriptionImpl::isSingleInterfaceBased()
     return _xInterfaceTD.is();
 }
 
-Reference< XInterfaceTypeDescription >
-ServiceTypeDescriptionImpl::getInterface() throw (RuntimeException) {
+Reference< XTypeDescription > ServiceTypeDescriptionImpl::getInterface()
+    throw (RuntimeException)
+{
     getReferences();
     return _xInterfaceTD;
 }
@@ -419,10 +421,10 @@ void ServiceTypeDescriptionImpl::getReferences()
                         "Service is single-interface--based but also has"
                         " references and/or properties" ) ),
                 static_cast< OWeakObject * >( this ) );
-        Any aBase;
+        Reference< XTypeDescription > ifc;
         try
         {
-            aBase = _xTDMgr->getByHierarchicalName( aBaseName );
+            _xTDMgr->getByHierarchicalName( aBaseName ) >>= ifc;
         }
         catch ( NoSuchElementException const & e )
         {
@@ -433,15 +435,18 @@ void ServiceTypeDescriptionImpl::getReferences()
                 + e.Message,
                 static_cast< OWeakObject * >( this ) );
         }
+        OSL_ASSERT(ifc.is());
+        if (resolveTypedefs(ifc)->getTypeClass() != TypeClass_INTERFACE) {
+            throw RuntimeException(
+                OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "Single-interface--based service is not based on"
+                        " interface type" ) ),
+                static_cast< OWeakObject * >( this ) );
+        }
         MutexGuard guard(getMutex());
         if (!_bInitReferences) {
-            if ( !( aBase >>= _xInterfaceTD ) )
-                throw RuntimeException(
-                    OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "Service is not based on interface" ) ),
-                    static_cast< OWeakObject * >( this ) );
-            OSL_ASSERT( _xInterfaceTD.is() );
+            _xInterfaceTD = ifc;
             _bInitReferences = true;
         }
     }
