@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrapcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:54 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef CONFIGMGR_BOOTSTRAPCONTEXT_HXX_
 #define CONFIGMGR_BOOTSTRAPCONTEXT_HXX_
 
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#include <cppuhelper/compbase3.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -91,6 +91,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif // _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -108,9 +111,10 @@ namespace configmgr
     namespace beans = ::com::sun::star::beans;
     using ::rtl::OUString;
 // -----------------------------------------------------------------------------
-    typedef ::cppu::WeakComponentImplHelper2 <
+    typedef ::cppu::WeakComponentImplHelper3 <
                     uno::XComponentContext,
-                    uno::XCurrentContext
+                    uno::XCurrentContext,
+                    lang::XServiceInfo
                 > ComponentContext_Base;
     /** Base class for customized ComponentContext using bootstrap data and overrides
     */
