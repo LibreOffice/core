@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.41 $
- *  last change: $Author: bmahbod $ $Date: 2001-01-07 06:23:39 $
+ *  $Revision: 1.42 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-10 08:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,9 +181,9 @@ static inline void GetQDRect ( const long   nX,
 
 // -----------------------------------------------------------------------
 
-static inline void SalTwoRect2SQDDstRect ( const SalTwoRect  *pPosAry,
-                                           Rect              *rDstRect
-                                         )
+static inline void SalTwoRect2QDDstRect ( const SalTwoRect  *pPosAry,
+                                          Rect              *rDstRect
+                                        )
 {
     SetRect( rDstRect,
              pPosAry->mnDestX,
@@ -195,9 +195,9 @@ static inline void SalTwoRect2SQDDstRect ( const SalTwoRect  *pPosAry,
 
 // -----------------------------------------------------------------------
 
-static inline void SalTwoRect2SQDSrcRect ( const SalTwoRect  *pPosAry,
-                                           Rect              *rSrcRect
-                                         )
+static inline void SalTwoRect2QDSrcRect ( const SalTwoRect  *pPosAry,
+                                          Rect              *rSrcRect
+                                        )
 {
     SetRect( rSrcRect,
              pPosAry->mnSrcX,
@@ -205,7 +205,7 @@ static inline void SalTwoRect2SQDSrcRect ( const SalTwoRect  *pPosAry,
              pPosAry->mnSrcX + pPosAry->mnSrcWidth,
              pPosAry->mnSrcY + pPosAry->mnSrcHeight
            );
-} // SalTwoRect2SQDSrcRect
+} // SalTwoRect2QDSrcRect
 
 // -----------------------------------------------------------------------
 
@@ -266,7 +266,7 @@ static RgnHandle GetPolygonRgn ( const unsigned long   nPolyCount,
 
                     // Begin polygon construction
 
-                    MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
+                    MoveTo( pPtAry[0].mnX,  pPtAry[0].mnY );
 
                     for ( nPolyEdgeIndex = 1;
                           nPolyEdgeIndex < nPolyEdges;
@@ -652,17 +652,7 @@ static OSStatus GetGDeviceBitDepth ( unsigned short  *rGDeviceBitDepth )
 
     if ( ( pGDevice != NULL ) && ( nQDStatus == noErr ) )
     {
-        PixMapPtr  pPixMap = NULL;
-
-        pPixMap = *pGDevice->gdPMap;
-
-        if ( pPixMap != NULL )
-        {
-            // From the PixMap data get the current bits-per-pixel
-            // as associated with the current GDevice
-
-            *rGDeviceBitDepth = (unsigned short)pPixMap->pixelSize;
-        } // if
+        *rGDeviceBitDepth = GetPixDepth( pGDevice->gdPMap );
     } // if
 
     return nQDStatus;
@@ -720,7 +710,7 @@ static OSStatus BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
         if ( rSalGraphicsData->mpCGrafPort != NULL )
         {
-            // What is the current pen mode associated with this graph port?
+            // Get the port pen attributes
 
             rSalGraphicsData->mnPenModePort
                 = GetPortPenMode( rSalGraphicsData->mpCGrafPort );
@@ -740,31 +730,46 @@ static OSStatus BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
             rSalGraphicsData->mnMacOSStatus = QDErr();
 
-            // Set background color to white on this GWorld
-
-            SetWhiteBackColor();
-
-            // Set foreground color to black on this GWorld
-
-            SetBlackForeColor();
-
-            // Now begin to set the clip region
-
-            if (    ( rSalGraphicsData->mbClipRegionChanged == TRUE )
-                 && ( rSalGraphicsData->mhClipRgn != NULL )
-               )
+            if ( rSalGraphicsData->mnMacOSStatus == noErr )
             {
-                // Set the clip region
+                // Lock the port bits of our GWorld
 
-                SetClip( rSalGraphicsData->mhClipRgn );
+                rSalGraphicsData->mnMacOSStatus
+                    = LockPortBits( rSalGraphicsData->mpCGrafPort );
 
-                // Was there an error after setting the clipping region?
+                // Was there a QD error when we locked our port bits?
 
                 rSalGraphicsData->mnMacOSStatus = QDErr();
 
-                // Set the new status flag for our port
+                if ( rSalGraphicsData->mnMacOSStatus == noErr )
+                {
+                    // Set background color to white on this GWorld
 
-                rSalGraphicsData->mbClipRegionChanged = FALSE;
+                    SetWhiteBackColor();
+
+                    // Set foreground color to black on this GWorld
+
+                    SetBlackForeColor();
+
+                    // Now begin to set the clip region
+
+                    if (    ( rSalGraphicsData->mbClipRegionChanged == TRUE )
+                         && ( rSalGraphicsData->mhClipRgn != NULL )
+                       )
+                    {
+                        // Set the clip region
+
+                        SetClip( rSalGraphicsData->mhClipRgn );
+
+                        // Was there an error after setting the clip region?
+
+                        rSalGraphicsData->mnMacOSStatus = QDErr();
+
+                        // Set the new status flag for our port
+
+                        rSalGraphicsData->mbClipRegionChanged = FALSE;
+                    } // if
+                } // if
             } // if
         } // if
     } // if
@@ -780,7 +785,7 @@ static OSStatus EndGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
     if ( rSalGraphicsData->mnMacOSStatus == noErr )
     {
-        // Reset the port to its original pen mode
+        // Reset the port to its original attributes
 
         SetPortPenMode( rSalGraphicsData->mpCGrafPort,
                         rSalGraphicsData->mnPenModePort
@@ -801,7 +806,11 @@ static OSStatus EndGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
         PortChanged( rSalGraphicsData->mpCGrafPort );
 
-        // Was there a QD error?
+        // Unlock the port bits
+
+        UnlockPortBits( rSalGraphicsData->mpCGrafPort );
+
+        // Was there a QD error  when we unlocked the port bits?
 
         rSalGraphicsData->mnMacOSStatus = QDErr();
 
@@ -857,6 +866,7 @@ static void InitPen ( SalGraphicsDataPtr rSalGraphicsData )
 
     rSalGraphicsData->maPenColor       = aBlackColor;
     rSalGraphicsData->mnPenMode        = patCopy;
+    rSalGraphicsData->mnPenModePort    = patCopy;
     rSalGraphicsData->mbPenTransparent = FALSE;
 } // InitPen
 
@@ -890,7 +900,6 @@ static void InitStatusFlags ( SalGraphicsDataPtr rSalGraphicsData )
 
 // =======================================================================
 
-
 // =======================================================================
 
 SalGraphics::SalGraphics()
@@ -905,7 +914,7 @@ SalGraphics::SalGraphics()
 
     // Font attributes
 
-    InitFont(  &maGraphicsData );
+    InitFont( &maGraphicsData );
 
     // Pen attributes and status
 
@@ -913,11 +922,11 @@ SalGraphics::SalGraphics()
 
     // Brush attributes and status
 
-    InitBrush(  &maGraphicsData );
+    InitBrush( &maGraphicsData );
 
     // Miscellaneous status flags
 
-    InitStatusFlags(  &maGraphicsData );
+    InitStatusFlags( &maGraphicsData );
 
 } // SalGraphics Class Constructor
 
@@ -1324,7 +1333,7 @@ void SalGraphics::DrawPolyLine( ULONG           nPoints,
 
                 if ( hPolygon != NULL )
                 {
-                    MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
+                    MoveTo( pPtAry[0].mnX,  pPtAry[0].mnY );
 
                     for ( nPolyEdges = 1;
                           nPolyEdges < nPoints;
@@ -1387,7 +1396,7 @@ void SalGraphics::DrawPolygon( ULONG            nPoints,
 
                 if ( hPolygon != NULL )
                 {
-                    MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
+                    MoveTo( pPtAry[0].mnX,  pPtAry[0].mnY );
 
                     for ( nPolyEdges = 1;
                           nPolyEdges < nPoints;
@@ -1492,67 +1501,59 @@ void SalGraphics::CopyBits( const SalTwoRect  *pPosAry,
 
             if ( pDstBitMap != NULL )
             {
-                maGraphicsData.mnMacOSStatus = LockPortBits( maGraphicsData.mpCGrafPort );
+                Rect       aSrcRect;
+                Rect       aDstRect;
+                Rect       aPortBoundsRect;
+                RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
+                short      nCopyMode = 0;
 
-                if ( maGraphicsData.mnMacOSStatus == noErr )
+                SalTwoRect2QDSrcRect( pPosAry, &aSrcRect );
+
+                SalTwoRect2QDDstRect( pPosAry, &aDstRect );
+
+                GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
+
+                CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
+
+                nCopyMode = SelectCopyMode( &maGraphicsData );
+
+                // Now we can call QD CopyBits to copy the bits from source rectangle
+                // to the destination rectangle
+
+                if ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
                 {
-                    Rect       aSrcRect;
-                    Rect       aDstRect;
-                    Rect       aPortBoundsRect;
-                    RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
-                    short      nCopyMode = 0;
+                    maGraphicsData.mnMacOSStatus
+                        = LockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
 
-                    SalTwoRect2SQDSrcRect( pPosAry, &aSrcRect );
-
-                    SalTwoRect2SQDDstRect( pPosAry, &aDstRect );
-
-                    GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
-
-                    CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
-
-                    nCopyMode = SelectCopyMode( &maGraphicsData );
-
-                    // Now we can call QD CopyBits to copy the bits from source rectangle
-                    // to the destination rectangle
-
-                    if (    ( pSrcGraphics != NULL )
-                         && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
-                       )
+                    if ( maGraphicsData.mnMacOSStatus == noErr )
                     {
-                        const BitMap  *pSrcBitMap = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                        const BitMap  *pSrcBitMap
+                            = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
 
                         if ( pSrcBitMap != NULL )
                         {
-                            maGraphicsData.mnMacOSStatus
-                                = LockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
-
-                            if ( maGraphicsData.mnMacOSStatus == noErr )
-                            {
-                                ::CopyBits (  pSrcBitMap,
-                                              pDstBitMap,
-                                             &aSrcRect,
-                                             &aDstRect,
-                                              nCopyMode,
-                                              hMaskRgn
-                                           );
-
-                                UnlockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
-                            } // if
+                            ::CopyBits (  pSrcBitMap,
+                                          pDstBitMap,
+                                         &aSrcRect,
+                                         &aDstRect,
+                                          nCopyMode,
+                                          hMaskRgn
+                                       );
                         } // if
-                    } // if
-                    else
-                    {
-                        ::CopyBits (  pDstBitMap,
-                                      pDstBitMap,
-                                     &aSrcRect,
-                                     &aDstRect,
-                                      nCopyMode,
-                                      hMaskRgn
-                                   );
-                    } // else
 
-                    UnlockPortBits( maGraphicsData.mpCGrafPort );
+                        UnlockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                    } // if
                 } // if
+                else
+                {
+                    ::CopyBits (  pDstBitMap,
+                                  pDstBitMap,
+                                 &aSrcRect,
+                                 &aDstRect,
+                                  nCopyMode,
+                                  hMaskRgn
+                               );
+                } // else
             } // if
 
             EndGraphics( &maGraphicsData );
@@ -1581,46 +1582,38 @@ void SalGraphics::CopyArea( long    nDstX,
 
         if ( aQDStatus == noErr )
         {
-            const BitMap  *pSrcBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
-            const BitMap  *pDstBitMap = pSrcBitMap;
+            const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
 
-            if ( pSrcBitMap != NULL )
+            if ( pDstBitMap != NULL )
             {
-                maGraphicsData.mnMacOSStatus = LockPortBits( maGraphicsData.mpCGrafPort );
+                short      nCopyMode  = 0;
+                long       nDstWidth  = nSrcWidth;
+                long       nDstHeight = nSrcHeight;
+                RgnHandle  hMaskRgn   = NULL;  // Mask Region for QD CopyBits
+                Rect       aSrcRect;
+                Rect       aDstRect;
+                Rect       aPortBoundsRect;
 
-                if ( maGraphicsData.mnMacOSStatus == noErr )
-                {
-                    short      nCopyMode  = 0;
-                    long       nDstWidth  = nSrcWidth;
-                    long       nDstHeight = nSrcHeight;
-                    RgnHandle  hMaskRgn   = NULL;  // Mask Region for QD CopyBits
-                    Rect       aSrcRect;
-                    Rect       aDstRect;
-                    Rect       aPortBoundsRect;
+                GetQDRect ( nSrcX, nSrcY, nSrcWidth, nSrcHeight, &aSrcRect );
 
-                    GetQDRect ( nSrcX, nSrcY, nSrcWidth, nSrcHeight, &aSrcRect );
+                GetQDRect ( nDstX, nDstY, nDstWidth, nDstHeight, &aDstRect );
 
-                    GetQDRect ( nDstX, nDstY, nDstWidth, nDstHeight, &aDstRect );
+                GetPortBounds( maGraphicsData.mpCGrafPort, &aPortBoundsRect );
 
-                    GetPortBounds( maGraphicsData.mpCGrafPort, &aPortBoundsRect );
+                CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
 
-                    CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
+                nCopyMode = SelectCopyMode( &maGraphicsData );
 
-                    nCopyMode = SelectCopyMode( &maGraphicsData );
+                // Now we can call QD CopyBits to copy the bits from source rectangle
+                // to the destination rectangle
 
-                    // Now we can call QD CopyBits to copy the bits from source rectangle
-                    // to the destination rectangle
-
-                    ::CopyBits (  pSrcBitMap,
-                                  pDstBitMap,
-                                 &aSrcRect,
-                                 &aDstRect,
-                                  nCopyMode,
-                                  hMaskRgn
-                               );
-
-                    UnlockPortBits( maGraphicsData.mpCGrafPort );
-                } // if
+                ::CopyBits (  pDstBitMap,
+                              pDstBitMap,
+                             &aSrcRect,
+                             &aDstRect,
+                              nCopyMode,
+                              hMaskRgn
+                           );
             } // if
 
             EndGraphics( &maGraphicsData );
@@ -1634,9 +1627,71 @@ void SalGraphics::DrawBitmap( const SalTwoRect*  pPosAry,
                               const SalBitmap&   rSalBitmap
                             )
 {
-    fprintf( stderr,
-             "<<WARNING>> SalGraphics::DrawBitmap 1 not yet implemented!\n"
-           );
+    SalGraphics *pSrcGraphics = rSalBitmap.GetGraphics();
+
+    if (    ( maGraphicsData.mpCGrafPort               != NULL )
+         && ( pPosAry                                  != NULL )
+         && ( pSrcGraphics                             != NULL )
+         && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
+       )
+    {
+        OSStatus aQDStatus = noErr;
+
+        aQDStatus = BeginGraphics( &maGraphicsData );
+
+        if ( aQDStatus == noErr )
+        {
+            const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
+
+            if ( pDstBitMap != NULL )
+            {
+                maGraphicsData.mnMacOSStatus
+                    = LockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                if ( maGraphicsData.mnMacOSStatus == noErr )
+                {
+                    const BitMap  *pSrcBitMap
+                        = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                    if ( pSrcBitMap != NULL )
+                    {
+                        Rect       aSrcRect;
+                        Rect       aDstRect;
+                        Rect       aPortBoundsRect;
+                        RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
+                        short      nCopyMode = 0;
+
+                        SalTwoRect2QDSrcRect( pPosAry, &aSrcRect );
+
+                        SalTwoRect2QDDstRect( pPosAry, &aDstRect );
+
+                        GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
+
+                        CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
+
+                        nCopyMode = SelectCopyMode( &maGraphicsData );
+
+                        // Now we can call QD CopyBits to copy the bits from source rectangle
+                        // to the destination rectangle
+
+                        ::CopyBits (  pSrcBitMap,
+                                      pDstBitMap,
+                                     &aSrcRect,
+                                     &aDstRect,
+                                      nCopyMode,
+                                      hMaskRgn
+                                   );
+                    } // if
+
+                    UnlockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                } // if
+            } // if
+
+            EndGraphics( &maGraphicsData );
+        } // if
+
+        rSalBitmap.ReleaseGraphics( pSrcGraphics );
+    } // if
 } // SalGraphics::DrawBitmap
 
 // -----------------------------------------------------------------------
@@ -1646,9 +1701,74 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
                               SalColor          nTransparentColor
                             )
 {
-    fprintf( stderr,
-             "<<WARNING>> SalGraphics::DrawBitmap 2 not yet implemented!\n"
-           );
+    SalGraphics *pSrcGraphics = rSalBitmap.GetGraphics();
+
+    if (    ( maGraphicsData.mpCGrafPort               != NULL )
+         && ( pPosAry                                  != NULL )
+         && ( pSrcGraphics                             != NULL )
+         && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
+       )
+    {
+        OSStatus aQDStatus = noErr;
+
+        aQDStatus = BeginGraphics( &maGraphicsData );
+
+        if ( aQDStatus == noErr )
+        {
+            const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
+
+            if ( pDstBitMap != NULL )
+            {
+                maGraphicsData.mnMacOSStatus
+                    = LockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                if ( maGraphicsData.mnMacOSStatus == noErr )
+                {
+                    const BitMap  *pSrcBitMap
+                        = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                    if ( pSrcBitMap != NULL )
+                    {
+                        Rect       aSrcRect;
+                        Rect       aDstRect;
+                        Rect       aPortBoundsRect;
+                        RGBColor   aBackColor;
+                        RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
+                        short      nCopyMode = transparent;
+
+                        SalTwoRect2QDSrcRect( pPosAry, &aSrcRect );
+
+                        SalTwoRect2QDDstRect( pPosAry, &aDstRect );
+
+                        GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
+
+                        CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
+
+                        aBackColor = SALColor2RGBColor( nTransparentColor );
+
+                        RGBBackColor( &aBackColor );
+
+                        // Now we can call QD CopyBits to copy the bits from source rectangle
+                        // to the destination rectangle
+
+                        ::CopyBits (  pSrcBitMap,
+                                      pDstBitMap,
+                                     &aSrcRect,
+                                     &aDstRect,
+                                      nCopyMode,
+                                      hMaskRgn
+                                   );
+                    } // if
+
+                    UnlockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                } // if
+            } // if
+
+            EndGraphics( &maGraphicsData );
+        } // if
+
+        rSalBitmap.ReleaseGraphics( pSrcGraphics );
+    } // if
 } // SalGraphics::DrawBitmap
 
 // -----------------------------------------------------------------------
@@ -1658,9 +1778,100 @@ void SalGraphics::DrawBitmap( const SalTwoRect*  pPosAry,
                               const SalBitmap&   rTransparentBitmap
                             )
 {
-    fprintf( stderr,
-             "<<WARNING>> SalGraphics::DrawBitmap 3 not yet implemented!\n"
-           );
+    SalGraphics *pSrcGraphics = rSalBitmap.GetGraphics();
+
+    if (    ( maGraphicsData.mpCGrafPort               != NULL )
+         && ( pPosAry                                  != NULL )
+         && ( pSrcGraphics                             != NULL )
+         && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
+       )
+    {
+        SalGraphics *pMskGraphics = rTransparentBitmap.GetGraphics();
+
+        if (    ( pMskGraphics                             != NULL )
+             && ( pMskGraphics->maGraphicsData.mpCGrafPort != NULL )
+           )
+        {
+            OSStatus aQDStatus = noErr;
+
+            aQDStatus = BeginGraphics( &maGraphicsData );
+
+            if ( aQDStatus == noErr )
+            {
+                const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
+
+                if ( pDstBitMap != NULL )
+                {
+                    maGraphicsData.mnMacOSStatus
+                        = LockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                    if ( maGraphicsData.mnMacOSStatus == noErr )
+                    {
+                        const BitMap  *pSrcBitMap
+                            = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                        if ( pSrcBitMap != NULL )
+                        {
+                            maGraphicsData.mnMacOSStatus
+                                = LockPortBits( pMskGraphics->maGraphicsData.mpCGrafPort );
+
+                            if ( maGraphicsData.mnMacOSStatus == noErr )
+                            {
+                                const BitMap  *pMskBitMap
+                                    = GetPortBitMapForCopyBits
+                                        ( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                                if ( pMskBitMap != NULL )
+                                {
+                                    Rect       aSrcRect;
+                                    Rect       aDstRect;
+                                    Rect       aPortBoundsRect;
+                                    RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
+                                    short      nCopyMode = 0;
+
+                                    SalTwoRect2QDSrcRect( pPosAry, &aSrcRect );
+
+                                    SalTwoRect2QDDstRect( pPosAry, &aDstRect );
+
+                                    GetPortBounds(  pSrcGraphics->maGraphicsData.mpCGrafPort,
+                                                   &aPortBoundsRect
+                                                 );
+
+                                    CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
+
+                                    nCopyMode = SelectCopyMode( &maGraphicsData );
+
+                                    // Now we can call QD CopyDeepMask to copy the bits from
+                                    // source rectangle to the destination rectangle using the
+                                                                        // the mask bits
+
+                                    ::CopyDeepMask(  pSrcBitMap,
+                                                     pMskBitMap,
+                                                     pDstBitMap,
+                                            &aSrcRect,
+                                                    &aSrcRect,
+                                                    &aDstRect,
+                                                     nCopyMode,
+                                                     hMaskRgn
+                                                  );
+                                } // if
+
+                                UnlockPortBits( pMskGraphics->maGraphicsData.mpCGrafPort );
+                            } // if
+                        } // if
+
+                        UnlockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                    } // if
+                } // if
+
+                EndGraphics( &maGraphicsData );
+            } // if
+
+            rSalBitmap.ReleaseGraphics( pMskGraphics );
+        } // if
+
+        rSalBitmap.ReleaseGraphics( pSrcGraphics );
+    } // if
 } // SalGraphics::DrawBitmap
 
 // -----------------------------------------------------------------------
@@ -1670,9 +1881,79 @@ void SalGraphics::DrawMask( const SalTwoRect*  pPosAry,
                             SalColor           nMaskColor
                           )
 {
-    fprintf( stderr,
-             "<<WARNING>> SalGraphics::DrawMask not yet implemented!\n"
-           );
+    SalGraphics *pSrcGraphics = rSalBitmap.GetGraphics();
+
+    if (    ( maGraphicsData.mpCGrafPort               != NULL )
+         && ( pPosAry                                  != NULL )
+         && ( pSrcGraphics                             != NULL )
+         && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
+       )
+    {
+        OSStatus aQDStatus = noErr;
+
+        aQDStatus = BeginGraphics( &maGraphicsData );
+
+        if ( aQDStatus == noErr )
+        {
+            const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
+
+            if ( pDstBitMap != NULL )
+            {
+                maGraphicsData.mnMacOSStatus
+                    = LockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                if ( maGraphicsData.mnMacOSStatus == noErr )
+                {
+                    const BitMap  *pSrcBitMap
+                        = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                    if ( pSrcBitMap != NULL )
+                    {
+                        Rect       aSrcRect;
+                        Rect       aDstRect;
+                        Rect       aPortBoundsRect;
+                        RGBColor   aMaskBackColor;
+                        RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
+                        short      nCopyMode = 0;
+
+                        SalTwoRect2QDSrcRect( pPosAry, &aSrcRect );
+
+                        SalTwoRect2QDDstRect( pPosAry, &aDstRect );
+
+                        GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
+
+                        CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
+
+                        aMaskBackColor = SALColor2RGBColor( nMaskColor );
+
+                        RGBBackColor( &aMaskBackColor );
+
+                        nCopyMode = SelectCopyMode( &maGraphicsData );
+
+                        // Now we can call QD CopyDeepMask to copy the bits from
+                        // source rectangle to the destination rectangle using the
+                        // the mask bits
+
+                        ::CopyDeepMask(  pSrcBitMap,
+                                         pSrcBitMap,
+                                         pDstBitMap,
+                                &aSrcRect,
+                                        &aSrcRect,
+                                        &aDstRect,
+                                         nCopyMode,
+                                         hMaskRgn
+                                      );
+                    } // if
+
+                    UnlockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                } // if
+            } // if
+
+            EndGraphics( &maGraphicsData );
+        } // if
+
+        rSalBitmap.ReleaseGraphics( pSrcGraphics );
+    } // if
 } // SalGraphics::DrawMask
 
 // -----------------------------------------------------------------------
@@ -1728,15 +2009,15 @@ void SalGraphics::Invert( long       nX,
 
         if ( aQDStatus == noErr )
         {
-            Rect   aRect;
             short  left   = (short)nX;
             short  top    = (short)nY;
             short  right  = (short)nX + (short)nWidth;
             short  bottom = (short)nY + (short)nHeight;
+            Rect   aRect;
 
             MacSetRect( &aRect, left, top, right, bottom );
 
-            ::MacInvertRect ( &aRect );
+            ::MacInvertRect( &aRect );
 
             EndGraphics( &maGraphicsData );
         } // if
@@ -1750,9 +2031,83 @@ void SalGraphics::Invert( ULONG            nPoints,
                           SalInvert        nSalFlags
                         )
 {
-    fprintf( stderr,
-             "<<WARNING>> SalGraphics::Invert 2 not yet implemented!\n"
-           );
+    #pragma unused(nSalFlags)
+
+    // Implementation not yet complete
+
+    if (    ( maGraphicsData.mpCGrafPort != NULL )
+         && ( pPtAry                     != NULL )
+         && ( nPoints                     > 1    )
+       )
+    {
+        OSStatus aQDStatus = noErr;
+
+        aQDStatus = BeginGraphics( &maGraphicsData );
+
+        if ( aQDStatus == noErr )
+        {
+            unsigned long   nPolyEdges     = nPoints;
+            unsigned long   nPolyEdgeIndex = 0;
+            short           nX             = 0;
+            short           nY             = 0;
+            short           nPenMode       = patXor;
+            RgnHandle       hPolyRgn       = NULL;
+            CGrafPtr        pCGrafPort     = maGraphicsData.mpCGrafPort;
+            Pattern         aPenPatGray;
+
+            hPolyRgn = NewRgn ();
+
+            if ( hPolyRgn != NULL )
+            {
+                GetQDGlobalsGray( &aPenPatGray );
+
+                PenPat( &aPenPatGray );
+
+                SetPortPenMode( pCGrafPort, nPenMode );
+
+                // Begin region construction
+
+                OpenRgn();
+
+                    // Begin polygon regin construction
+
+                    MoveTo( pPtAry[0].mnX,  pPtAry[0].mnY );
+
+                    for ( nPolyEdgeIndex = 1;
+                          nPolyEdgeIndex < nPolyEdges;
+                          nPolyEdgeIndex++
+                        )
+                    {
+                        MacLineTo( pPtAry[nPolyEdgeIndex].mnX,
+                                   pPtAry[nPolyEdgeIndex].mnY
+                                 );
+                    } // for
+
+                    MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
+
+                    // End polygon region construction
+
+                CloseRgn( hPolyRgn );
+
+                // End region construction
+
+                maGraphicsData.mnMacOSStatus = QDErr();
+
+                if ( maGraphicsData.mnMacOSStatus == noErr )
+                {
+                    MacInvertRgn( hPolyRgn );
+
+                    DisposeRgn( hPolyRgn );
+
+                    hPolyRgn = NULL;
+                } // if
+            } // if
+
+            maGraphicsData.mnPenModePort = patCopy;
+
+            EndGraphics( &maGraphicsData );
+        } // if
+    } // if
 } // SalGraphics::Invert
 
 // -----------------------------------------------------------------------
