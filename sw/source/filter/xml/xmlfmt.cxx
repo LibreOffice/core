@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-15 12:14:45 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 09:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,10 +465,9 @@ SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         sal_uInt16 nFamily,
         SvXMLStylesContext& rStyles ) :
-    XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles ),
+    XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
     pConditions( 0 )
 {
-    SetFamily( nFamily );
 }
 
 SwXMLTextStyleContext_Impl::~SwXMLTextStyleContext_Impl()
@@ -845,6 +844,9 @@ protected:
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList );
+    virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
+        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
+        const Reference< xml::sax::XAttributeList > & xAttrList );
     // HACK
     virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         sal_uInt16 nFamily ) const;
@@ -902,7 +904,7 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
         // As long as there are no element items, we can use the text
         // style class.
         pStyle = new XMLTextStyleContext( GetImport(), nPrefix,
-                            rLocalName, xAttrList, *this );
+                            rLocalName, xAttrList, *this, nFamily );
         break;
     default:
         pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily,
@@ -914,6 +916,37 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
 
     return pStyle;
 }
+
+SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
+        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLStyleContext *pStyle = 0;
+
+    switch( nFamily )
+    {
+    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+        pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
+                                          xAttrList, *this, nFamily,
+                                          sal_True );
+        break;
+    case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+        // As long as there are no element items, we can use the text
+        // style class.
+        pStyle = new XMLTextStyleContext( GetImport(), nPrefix,
+                            rLocalName, xAttrList, *this, nFamily, sal_True );
+        break;
+    default:
+        pStyle = SvXMLStylesContext::CreateDefaultStyleStyleChildContext( nFamily,
+                                                                   nPrefix,
+                                                              rLocalName,
+                                                              xAttrList );
+        break;
+    }
+
+    return pStyle;
+}
+
 
 SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,

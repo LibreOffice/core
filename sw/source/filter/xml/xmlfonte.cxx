@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfonte.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-14 12:03:30 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 09:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,11 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
     for( sal_uInt16 i=0; i<3; i++ )
     {
         sal_uInt16 nWhichId = aWhichIds[i];
+
+        const SvxFontItem& rFont =
+            (const SvxFontItem&)rPool.GetDefaultItem( nWhichId );
+        Add( rFont.GetFamilyName(), rFont.GetStyleName(),
+             rFont.GetFamily(), rFont.GetPitch(), rFont.GetCharSet() );
         sal_uInt16 nItems = rPool.GetItemCount( nWhichId );
         for( sal_uInt16 j = 0; j < nItems; ++j )
         {

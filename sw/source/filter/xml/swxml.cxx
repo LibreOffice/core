@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 09:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,15 +257,15 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     {
         xParser->parseStream( aParserInput );
     }
-    catch( xml::sax::SAXParseException& )
+    catch( xml::sax::SAXParseException& r )
     {
         nRet = ERR_SWG_READ_ERROR;
     }
-    catch( xml::sax::SAXException&)
+    catch( xml::sax::SAXException& r )
     {
         nRet = ERR_SWG_READ_ERROR;
     }
-    catch( io::IOException& )
+    catch( io::IOException& r )
     {
         nRet = ERR_SWG_READ_ERROR;
     }
@@ -282,6 +282,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/01/03 11:40:56  mib
+      support for OLE objects in XML files
+
       Revision 1.6  2000/12/06 08:39:34  mib
       #81388#: Content stream now is called Content.xml
 
