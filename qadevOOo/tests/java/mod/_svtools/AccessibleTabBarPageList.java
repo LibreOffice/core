@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabBarPageList.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:34:27 $
+ *  last change:$Date: 2005-02-24 17:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ public class AccessibleTabBarPageList extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
 
         try {
-            log.println("creating a spreadsheet document");
+            log.println("creating a draw document");
             xDoc = SOF.createDrawDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
