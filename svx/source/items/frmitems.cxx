@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-31 18:43:23 $
+ *  last change: $Author: os $ $Date: 2000-11-01 16:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,6 +546,9 @@ sal_Bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nLeftMargin) : nLeftMargin);
             break;
 
+        case MID_TXT_LMARGIN :
+            rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nTxtLeft) : nTxtLeft);
+        break;
         case MID_R_MARGIN:
             rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nRightMargin) : nRightMargin);
             break;
@@ -592,6 +595,10 @@ sal_Bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_L_MARGIN:
             SetLeft((sal_Int32)bConvert ? MM100_TO_TWIP(nVal) : nVal);
             break;
+
+        case MID_TXT_LMARGIN :
+            SetTxtLeft((sal_Int32)bConvert ? MM100_TO_TWIP(nVal) : nVal);
+        break;
 
         case MID_R_MARGIN:
             SetRight((sal_Int32)    bConvert ? MM100_TO_TWIP(nVal) : nVal);
