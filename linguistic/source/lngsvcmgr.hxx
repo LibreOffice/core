@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-28 03:13:10 $
+ *  last change: $Author: tl $ $Date: 2000-11-29 16:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@ class LngSvcMgr :
     void    SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp );
     void    SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp );
     void    SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
+
+    BOOL    SaveCfgSvcs( const String &rServiceName );
 
     DECL_LINK( TimeOut, Timer* );
 
