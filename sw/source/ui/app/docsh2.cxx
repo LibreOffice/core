@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-14 17:42:40 $
+ *  last change: $Author: os $ $Date: 2002-04-22 10:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1366,29 +1366,27 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         {
                             SfxStringItem aName( SID_FILE_NAME, aFileName );
                             SfxStringItem aReferer( SID_REFERER, aEmptyStr );
-                            SfxFrameItem* pFrameItem = 0;
-
-                            SfxViewShell* pViewShell;
-                            if( GetView() )
+                            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+                            while(pViewShell)
                             {
-                                pViewShell = (SfxViewShell*)GetView();
-                                pFrameItem = new SfxFrameItem( SID_DOCFRAME,
-                                                    pViewShell->GetViewFrame() );
+                                //search for the view that created the call
+                                if(pViewShell->GetObjectShell() == this && pViewShell->GetDispatcher())
+                                {
+                                    SfxFrameItem* pFrameItem = new SfxFrameItem( SID_DOCFRAME,
+                                                        pViewShell->GetViewFrame() );
+                                    SfxDispatcher* pDispatch = pViewShell->GetDispatcher();
+                                    pDispatch->Execute(
+                                            SID_OPENDOC,
+                                            SFX_CALLMODE_ASYNCHRON,
+                                            &aName,
+                                            &aReferer,
+                                            pFrameItem, 0L );
+
+                                    delete pFrameItem;
+                                    break;
+                                }
+                                pViewShell = SfxViewShell::GetNext(*pViewShell);
                             }
-                            else
-                                pViewShell = SfxViewShell::Current();
-
-                            pViewShell->GetDispatcher()->Execute(
-                                    SID_OPENDOC,
-                                    SFX_CALLMODE_ASYNCHRON,
-                                    &aName,
-                                    &aReferer,
-                                    pFrameItem, 0L );
-
-                            if( pFrameItem )
-                                delete pFrameItem;
-                            else
-                                DoClose();
                         }
                     }
                     if( !bDone && !rReq.IsAPI() )
