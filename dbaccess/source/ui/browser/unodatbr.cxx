@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 11:46:47 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 11:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,9 @@ SbaTableQueryBrowser::~SbaTableQueryBrowser()
 //------------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::dispose()
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+        // doin' a lot of VCL stuff here -> lock the SolarMutex
+
     // reset the content's tree view: it holds a reference to our model which is to be deleted immediately,
     // and it will live longer than we do.
     if (getBrowserView())
