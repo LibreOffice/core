@@ -23,7 +23,7 @@ ANT_CLASSPATH!:=$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/antprj.jar
 .ENDIF
 .ENDIF
 
-ANT=java -Xmx128 org.apache.tools.ant.Main -Djava.home=$(JAVA_HOME) -Dant.home=$(ANT_HOME)
+ANT=java -Xmx128m org.apache.tools.ant.Main -Djava.home=$(JAVA_HOME) -Dant.home=$(ANT_HOME)
 
 .IF "$(ANT_BUILDFILE)"==""
 ANT_BUILDFILE=build.xml
