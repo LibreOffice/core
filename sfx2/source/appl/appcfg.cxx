@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 15:54:58 $
+ *  last change: $Author: os $ $Date: 2001-05-18 12:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,70 +452,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                                 aSecurityOptions.GetBasicMode())))
                         bRet = TRUE;
                     break;
-                case SID_INET_JAVA_ENABLE:
-                {
-                    DBG_ERROR( "Not implemented!" );
-/*
-                    String aIniEntry = GetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Java") );
-                    if ( rSet.Put( SfxBoolItem(
-                            rPool.GetWhich( SID_INET_JAVA_ENABLE ), ( aIniEntry == aTRUEStr ) ) ) )
-                        bRet = TRUE;
-*/
-                    break;
-                }
-
-                case SID_INET_EXE_APPLETS :
-                {
-                    DBG_ERROR( "Not implemented!" );
-/*
-                    String aIniEntry = GetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Applets") );
-                    if ( rSet.Put( SfxBoolItem(
-                            rPool.GetWhich( SID_INET_EXE_APPLETS ), ( aIniEntry == aTRUEStr ) ) ) )
-                        bRet = TRUE;
- */
-                    break;
-                }
-                case SID_INET_JAVA_ACCESSTYPE:
-                {
-                    DBG_ERROR( "Not implemented!" );
-/*
-                    SjNetAccess eAccess = NET_HOST;
-                    String aNetAccess = GetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("NetAccess") );
-                    if ( aNetAccess.Len() )
-                    {
-                        if ( aNetAccess.CompareIgnoreCaseToAscii( "UNRESTRICTED" ) == COMPARE_EQUAL )
-                            eAccess = NET_UNRESTRICTED;
-                        else if ( aNetAccess.CompareIgnoreCaseToAscii( "NONE" ) == COMPARE_EQUAL )
-                            eAccess = NET_NONE;
-                    }
-
-                    if ( rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_INET_JAVA_ACCESSTYPE ), (USHORT)eAccess ) ) )
-                        bRet = TRUE;
- */
-                    break;
-                }
-                case SID_INET_JAVA_SECURITY:
-                {
-                    DBG_ERROR( "Not implemented!" );
-/*
-                    String aIniEntry = GetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Security") );
-                    if ( rSet.Put( SfxBoolItem(
-                            rPool.GetWhich( SID_INET_JAVA_SECURITY ), ( aIniEntry.CompareToAscii("0") != COMPARE_EQUAL ) ) ) )
-                        bRet = TRUE;
- */
-                    break;
-                }
-                case SID_INET_JAVA_CLASSPATH :
-                {
-                    DBG_ERROR( "Not implemented!" );
-/*
-                    String aIniEntry = GetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("UserClassPath") );
-                    if ( rSet.Put( SfxStringItem( rPool.GetWhich( SID_INET_JAVA_CLASSPATH ), aIniEntry ) ) )
-                        bRet = TRUE;
- */
-                    break;
-                }
-
                 case SID_INET_EXE_PLUGIN  :
                 case SID_INET_USERAGENT :
                 case SID_INET_NONCACHED_SERVER :
@@ -982,75 +918,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "SfxInt16Item expected");
         aSecurityOptions.SetBasicMode( (EBasicSecurityMode)( (const SfxUInt16Item*)pItem )->GetValue() );
-    }
-
-    // Java Enable
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_INET_JAVA_ENABLE, TRUE, &pItem ) )
-    {
-                    DBG_ERROR( "Not implemented!" );
-/*
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
-        BOOL bJava = ( (const SfxBoolItem*)pItem )->GetValue();
-        String aVal = bJava ? 0x0031 : 0x0030; // ^= '1' or '0'
-        BOOL bSet = SetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Java"), aVal );
-        bResetSession = TRUE;
- */
-    }
-    // Applets Enable
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_INET_EXE_APPLETS, TRUE, &pItem ) )
-    {
-                    DBG_ERROR( "Not implemented!" );
-/*
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
-        BOOL bApplets = ( (const SfxBoolItem*)pItem )->GetValue();
-        String aVal = bApplets ? 0x0031 : 0x0030; // ^= '1' or '0'
-        BOOL bSet = SetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Applets"), aVal );
-        bResetSession = TRUE;
- */
-    }
-
-    // Java AccessType
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_JAVA_ACCESSTYPE), TRUE, &pItem))
-    {
-                    DBG_ERROR( "Not implemented!" );
-/*
-        DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
-        SjNetAccess eAccess = (SjNetAccess) ((const SfxUInt16Item *)pItem)->GetValue();
-        String aVal;
-        if ( eAccess == NET_HOST )
-            aVal = DEFINE_CONST_UNICODE("HOST");
-        else if ( eAccess == NET_UNRESTRICTED )
-            aVal = DEFINE_CONST_UNICODE("UNRESTRICTED");
-        else
-            aVal = DEFINE_CONST_UNICODE("NONE");
-        BOOL bSet = SetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("NetAccess"), aVal );
-        bResetSession = TRUE;
- */
-    }
-
-    // Java Security
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_JAVA_SECURITY, TRUE, &pItem))
-    {
-                    DBG_ERROR( "Not implemented!" );
-/*
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
-        BOOL bSecurity = ((const SfxBoolItem *)pItem)->GetValue();
-        String aVal = bSecurity ? 0x0031 : 0x0030; // ^= '1' or '0'
-        BOOL bSet = SetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Security"), aVal );
-        bResetSession = TRUE;
- */
-    }
-
-    // Java ClassPath
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_JAVA_CLASSPATH, TRUE, &pItem))
-    {
-                    DBG_ERROR( "Not implemented!" );
-/*
-        DBG_ASSERT( pItem->ISA(SfxStringItem), "SfxStringItem expected" );
-        String aVal = ( (const SfxStringItem *)pItem )->GetValue();
-        BOOL bSet = SetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("UserClassPath"), aVal );
-        bResetSession = TRUE;
- */
     }
 
     // Execute PlugIns
