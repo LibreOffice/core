@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-20 07:20:59 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 09:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1267,44 +1267,44 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         case SID_CLOSEDOC:
         {
-            if ( !rReq.IsAPI() )
+            SfxViewFrame *pFrame = GetFrame();
+            if ( pFrame && pFrame->GetFrame()->GetParentFrame() )
             {
-                SfxViewFrame *pFrame = GetFrame();
-                if ( pFrame && pFrame->GetFrame()->GetParentFrame() )
-                {
-                    // Wenn SID_CLOSEDOC "uber Menue etc. ausgef"uhrt wird, das
-                    // aktuelle Dokument aber in einem Frame liegt, soll eigentlich
-                    // das FrameSetDocument geclosed werden
-                    pFrame->GetTopViewFrame()->GetObjectShell()->ExecuteSlot( rReq );
-                    rReq.Done();
-                    return;
-                }
+                // Wenn SID_CLOSEDOC "uber Menue etc. ausgef"uhrt wird, das
+                // aktuelle Dokument aber in einem Frame liegt, soll eigentlich
+                // das FrameSetDocument geclosed werden
+                pFrame->GetTopViewFrame()->GetObjectShell()->ExecuteSlot( rReq );
+                rReq.Done();
+                return;
+            }
 
-                BOOL bInFrameSet = FALSE;
+            BOOL bInFrameSet = FALSE;
+            USHORT nFrames=0;
+            pFrame = SfxViewFrame::GetFirst( this );
+            while ( pFrame )
+            {
+                if ( pFrame->GetFrame()->GetParentFrame() )
+                {
+                    // Auf dieses Dokument existiert noch eine Sicht, die
+                    // in einem FrameSet liegt; diese darf nat"urlich nicht
+                    // geclosed werden
+                    bInFrameSet = TRUE;
+                }
+                else
+                    nFrames++;
+
+                pFrame = SfxViewFrame::GetNext( *pFrame, this );
+            }
+
+            if ( bInFrameSet )
+            {
+                // Alle Sichten, die nicht in einem FrameSet liegen, closen
                 pFrame = SfxViewFrame::GetFirst( this );
                 while ( pFrame )
                 {
-                    if ( pFrame->GetFrame()->GetParentFrame() )
-                    {
-                        // Auf dieses Dokument existiert noch eine Sicht, die
-                        // in einem FrameSet liegt; diese darf nat"urlich nicht
-                        // geclosed werden
-                        bInFrameSet = TRUE;
-                    }
-
+                    if ( !pFrame->GetFrame()->GetParentFrame() )
+                        pFrame->GetFrame()->DoClose();
                     pFrame = SfxViewFrame::GetNext( *pFrame, this );
-                }
-
-                if ( bInFrameSet )
-                {
-                    // Alle Sichten, die nicht in einem FrameSet liegen, closen
-                    pFrame = SfxViewFrame::GetFirst( this );
-                    while ( pFrame )
-                    {
-                        if ( !pFrame->GetFrame()->GetParentFrame() )
-                            pFrame->GetFrame()->DoClose();
-                        pFrame = SfxViewFrame::GetNext( *pFrame, this );
-                    }
                 }
             }
 
@@ -1365,19 +1365,28 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
             }
 
-            if ( rReq.IsAPI() )
-                // falls Handler eines Controls dies ruft, sonst GPF nach return
+            com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
+                    xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                    com::sun::star::uno::UNO_QUERY );
+            com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > xList ( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
+            sal_Int32 nCount = xList->getCount();
+            if ( nCount == nFrames )
             {
-                if( !pImp->pCloser )
-                {
+                SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
+                SfxViewFrame* pLastFrame = SfxViewFrame::Current();
+                if ( pLastFrame->GetObjectShell() != this )
+                    pLastFrame = pFrame;
 
-                    if ( pPendingCloser )
-                        pPendingCloser->ForcePendingCall();
-                    pImp->pCloser = new svtools::AsynchronLink(
-                        Link( 0, SfxObjectShellClose_Impl ) );
-                    pImp->pCloser->Call( this );
-                    pPendingCloser = pImp->pCloser;
+                SfxViewFrame* pNextFrame = pFrame;
+                while ( pNextFrame )
+                {
+                    pNextFrame = SfxViewFrame::GetNext( *pFrame, this );
+                    if ( pFrame != pLastFrame )
+                        pFrame->GetFrame()->DoClose();
+                    pFrame = pNextFrame;
                 }
+
+                pLastFrame->GetFrame()->CloseDocument_Impl();
             }
             else
                 DoClose();
