@@ -11580,3 +11580,29 @@ SfxVoidItem OpenXMLFilterSettings SID_OPEN_XML_FILTERSETTINGS
         ToolBoxConfig = TRUE,
         GroupId = GID_OPTIONS;
 ]
+
+//--------------------------------------------------------------------------
+SfxVoidItem HangulHanjaConversion SID_HANGUL_HANJA_CONVERSION
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
