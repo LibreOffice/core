@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:40:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2608,7 +2608,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ turkish ] = "Yazdırma seçenekleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones de impresión";
-        Text[ finnish ] = "Druck Optionen";
+        Text[ finnish ] = "Tulostusasetukset";
     };
     CheckBox CB_TITLEROW
     {
@@ -2637,7 +2637,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ turkish ] = "Başlık satırı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fila del título";
-        Text[ finnish ] = "~Titelzeile";
+        Text[ finnish ] = "~Otsikkorivi";
     };
     CheckBox CB_EQUATION_TEXT
     {
@@ -2666,7 +2666,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ turkish ] = "Formül metni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Texto de la fórmula";
-        Text[ finnish ] = "~Formeltext";
+        Text[ finnish ] = "~Kaavan teksti";
     };
     CheckBox CB_FRAME
     {
@@ -2695,7 +2695,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ turkish ] = "Çerçeve";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Marco";
-        Text[ finnish ] = "~Rahmen";
+        Text[ finnish ] = "~Kehys";
     };
     FixedLine GB_PRINT_FORMAT
     {
@@ -2707,7 +2707,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ italian ] = "Formato stampa" ;
         Text [ portuguese_brazilian ] = "Imprimir formato" ;
         Text [ portuguese ] = "Formato de impressão" ;
-        Text [ finnish ] = "Druckformat" ;
+        Text [ finnish ] = "Tulostusmuoto" ;
         Text [ danish ] = "Udskriftsformat" ;
         Text [ french ] = "Format d'impression" ;
         Text [ swedish ] = "Utskriftsformat" ;
@@ -2737,7 +2737,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ italian ] = "Dimensione ~originale" ;
         Text [ portuguese_brazilian ] = "~Tamanho original" ;
         Text [ portuguese ] = "~Tamanho original" ;
-        Text [ finnish ] = "~Originalgröße" ;
+        Text [ finnish ] = "Alkuperäinen koko" ;
         Text [ danish ] = "Oprindelig størrelse" ;
         Text [ french ] = "~Taille d'origine" ;
         Text [ swedish ] = "~Originalstorlek" ;
@@ -2767,7 +2767,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ italian ] = "Adatta alla p~agina" ;
         Text [ portuguese_brazilian ] = "~Encaixar na Página" ;
         Text [ portuguese ] = "~Ajustar página" ;
-        Text [ finnish ] = "~Seite anpassen" ;
+        Text [ finnish ] = "~Sovita sivulle" ;
         Text [ danish ] = "Tilpas til siden" ;
         Text [ french ] = "~Adapter à la page" ;
         Text [ swedish ] = "Anpassa ~sida" ;
@@ -2781,7 +2781,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ chinese_traditional ] = "¹ïÀ³­¶­±(~P)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÕİÍÉ";
         Text[ greek ] = "Ğñï~óáñìïãŞ óåëßäáò";
-        Text[ korean ] = "ÆäÀÌÁö Á¶Á¤(~P)";
+        Text[ korean ] = "ÂÊ Á¶Á¤(~P)";
         Text[ turkish ] = "Sayfaya sığdır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ajustar ~página";
@@ -2796,7 +2796,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ italian ] = "~Scala" ;
         Text [ portuguese_brazilian ] = "~Dimensionar" ;
         Text [ portuguese ] = "~Escala" ;
-        Text [ finnish ] = "S~kalierung" ;
+        Text [ finnish ] = "~Skaalataan" ;
         Text [ danish ] = "Skalering" ;
         Text [ french ] = "~Échelle" ;
         Text [ swedish ] = "S~kalning" ;
@@ -2852,11 +2852,11 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ chinese_traditional ] = "¨ä¥L¿ï¶µ";
         Text[ arabic ] = "ÎíÇÑÇÊ ÃÎÑì";
         Text[ greek ] = "¢ëëåò åğéëïãİò";
-        Text[ korean ] = "°¢Á¾ ¿É¼Ç";
+        Text[ korean ] = "±âÅ¸ ¿É¼Ç";
         Text[ turkish ] = "Diğer seçenekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Otras opciones";
-        Text[ finnish ] = "Sonstige Optionen";
+        Text[ finnish ] = "Sekalaiset asetukset";
     };
     CheckBox CB_IGNORE_SPACING
     {
@@ -2881,11 +2881,11 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ chinese_traditional ] = "©¿²¤¦æ¥½ªº²Å¸¹ ~~ ©M `";
         Text[ arabic ] = "ÊÌÇåá ~~ æ ` ÚäÏ äåÇíÉ ÇáÓØÑ";
         Text[ greek ] = "ĞáñÜâëåøç ôùí ~~ êáé ` óôï ôİëïò ôçò óåéñÜò";
-        Text[ korean ] = "ÁÙÀÇ ¸¶Áö¸·¿¡¼­~~ ¿Í ` ¹«½Ã";
+        Text[ korean ] = "~~ ¿Í ` ÁÙÀÇ ¸¶Áö¸·¿¡¼­ ¹«½Ã";
         Text[ turkish ] = "Satır sonundaki ~~ ve ` işaretlerini dikkate alma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ignorar ~~ y ` al ~final de línea";
-        Text[ finnish ] = "~~ und ` am ~Zeilenende ignorieren";
+        Text[ finnish ] = "Ohita merkit ~~ ja ` rivin lopussa";
     };
     Text[ catalan ] = "Opciones de fórmulas: Configuración";
     Text[ finnish ] = "Kaavavalinnat:Asetukset";
@@ -9364,7 +9364,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ swedish ] = "Oändlig";
                 TEXT[ dutch ] = "oneindig";
                 TEXT[ spanish ] = "infinito";
-                TEXT[ english_us ] = "Infinity";
+                TEXT[ english_us ] = "infinite";
                 TEXT[ chinese_simplified ] = "ÎŞÏŞ";
                 TEXT[ russian ] = "Áåñêîíå÷íî";
                 TEXT[ polish ] = "nieskoñczonoœæ";
@@ -10380,7 +10380,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_60
     Text[ polish ] = "StarOffice 6.0 - Formu³a";
     Text[ portuguese_brazilian ] = "StarOffice 6.0 Formula";
     Text[ japanese ] = "%PRODUCTNAME 6.0 ”®";
-    Text[ korean ] = "StarOffice 6.0 Formula";
+    Text[ korean ] = "StarOffice 6.0 ¼ö½Ä";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 ¹«Ê½";
     Text[ chinese_traditional ] = "StarOffice 6.0 ¤½¦¡";
     Text[ turkish ] = "StarOffice 6.0 Formula";
