@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-21 11:07:16 $
+ *  last change: $Author: thb $ $Date: 2001-08-14 17:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,8 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 
-#ifdef VCL
 #ifndef _SV_PRINTDLG_HXX
 #include <svtools/printdlg.hxx>
-#endif
 #endif
 
 #ifndef _SFXDISPATCH_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 08:32:55 $
+ *  last change: $Author: thb $ $Date: 2001-08-14 17:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,10 +171,8 @@ void SdPopupWindowTbx::PopupModeEnd()
 /*-------------------------------------------------------------------------*/
 IMPL_LINK( SdPopupWindowTbx, TbxSelectHdl, void*, EMPTYARG)
 {
-#ifdef VCL
     if( IsInPopupMode() )
         EndPopupMode();
-#endif
 
     aSelectLink.Call( &aTbx.GetToolBox() );
 
