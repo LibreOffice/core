@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:16:20 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,6 +614,10 @@ public:
         AutoLayout eNotesLayout,
         BOOL bIsPageBack,
         BOOL bIsPageObj);
+
+    /** return the document fonts for latin, cjk and ctl according to the current
+        languages set at this document */
+    void getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont );
 
 private:
     /** This member stores the printer independent layout mode.  Please
