@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:23:06 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,34 @@ static XMLTransformerActionInit aActionTable[] =
     // rename <office:script> to <office:scripts>
     ENTRY1Q( OFFICE, SCRIPT, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_OFFICE, XML_SCRIPTS ),
+
+    // rename <office:script-data> to <office:script> and process attributes
+    ENTRY2QN( OFFICE, SCRIPT_DATA, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
+                        XML_NAMESPACE_OFFICE, XML_SCRIPT,
+                        OOO_SCRIPT_ACTIONS ),
+
+    // rename <script:libraries> to <ooo:libraries>
+    ENTRY1Q( SCRIPT, LIBRARIES, XML_ETACTION_RENAME_ELEM,
+                        XML_NAMESPACE_OOO, XML_LIBRARIES ),
+
+    // rename <script:library-linked> to <ooo:library-linked> and process attributes
+    ENTRY2QN( SCRIPT, LIBRARY_LINKED, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
+                        XML_NAMESPACE_OOO, XML_LIBRARY_LINKED,
+                        OOO_SCRIPT_ACTIONS ),
+
+    // rename <script:library-embedded> to <ooo:library-embedded> and process attributes
+    ENTRY2QN( SCRIPT, LIBRARY_EMBEDDED, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
+                        XML_NAMESPACE_OOO, XML_LIBRARY_EMBEDDED,
+                        OOO_SCRIPT_ACTIONS ),
+
+    // rename <script:module> to <ooo:module> and process attributes
+    ENTRY2QN( SCRIPT, MODULE, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
+                        XML_NAMESPACE_OOO, XML_MODULE,
+                        OOO_SCRIPT_ACTIONS ),
+
+    // rename <script:source-code> to <ooo:source-code>
+    ENTRY1Q( SCRIPT, SOURCE_CODE, XML_ETACTION_RENAME_ELEM,
+                        XML_NAMESPACE_OOO, XML_SOURCE_CODE ),
 
     // rename <office:font-decls> to <office:font-face-decl>,
     // rename <style:font-decl> to <style:font-face>, process attrs
@@ -985,6 +1013,15 @@ static XMLTransformerActionInit aChartActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
+// OOO_SCRIPT_ACTIONS
+static XMLTransformerActionInit aScriptActionTable[] =
+{
+    ENTRY1( SCRIPT, LANGUAGE, XML_ATACTION_ADD_NAMESPACE_PREFIX, XML_NAMESPACE_OOO ),
+    ENTRY1Q( SCRIPT, NAME, XML_ATACTION_RENAME, XML_NAMESPACE_OOO, XML_NAME ),
+    ENTRY1Q( SCRIPT, READONLY, XML_ATACTION_RENAME, XML_NAMESPACE_OOO, XML_READONLY ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
 static XMLTokenEnum aTokenMap[] =
 {
     XML_NONE, XML_SINGLE, XML_DOUBLE, XML_BOLD, XML_BOLD_DOTTED,
@@ -1564,6 +1601,9 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                 case OOO_CHART_ACTIONS:
                     m_aActions[OOO_CHART_ACTIONS] =
                         new XMLTransformerActions( aChartActionTable );
+                case OOO_SCRIPT_ACTIONS:
+                    m_aActions[OOO_SCRIPT_ACTIONS] =
+                        new XMLTransformerActions( aScriptActionTable );
             }
         }
         pActions = m_aActions[n];
