@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:29:50 $
+ *  last change: $Author: af $ $Date: 2002-08-21 14:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ void SdModule::FillStatusBar(StatusBar& rStatusBar)
 
 
     // Seite
-    rStatusBar.InsertItem( SID_STATUS_PAGE, TEXT_WIDTH( String().Fill( 16, 'X' ) ),
+    rStatusBar.InsertItem( SID_STATUS_PAGE, TEXT_WIDTH( String().Fill( 24, 'X' ) ),
                             SIB_IN | SIB_LEFT );
 
     // Praesentationslayout
