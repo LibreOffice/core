@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-28 16:25:52 $
+ *  last change: $Author: sab $ $Date: 2000-11-30 09:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ class ScXMLExport : public SvXMLExport
     sal_Bool                    bHasRowHeader;
     sal_Bool                    bRowHeaderOpen;
     sal_Bool                    mbShowProgress : 1;
+    sal_Bool                    bShapeStyles;
     sal_Int32                   nOpenRow;
     sal_Int32                   nProgressReference;
     sal_Int32                   nProgressValue;

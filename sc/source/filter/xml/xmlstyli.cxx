@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 18:35:05 $
+ *  last change: $Author: sab $ $Date: 2000-11-30 09:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,12 +567,12 @@ void XMLTableStyleContext::FillPropertySet(
     if (sDataStyleName.len())
     {
         SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-            XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
+            XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_False);
         if (!pStyle)
         {
             XMLTableStylesContext* pMyStyles = (XMLTableStylesContext *)&GetScImport().GetStyles();
             pStyle = (SvXMLNumFormatContext *)pMyStyles->
-                FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
+                FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_False);
         }
         if (pStyle)
         {
@@ -593,16 +593,6 @@ void XMLTableStyleContext::FillPropertySet(
             aItr++;
         }
     }
-}
-
-void XMLTableStyleContext::CreateAndInsert( sal_Bool bOverwrite )
-{
-    XMLPropStyleContext::CreateAndInsert( bOverwrite );
-}
-
-void XMLTableStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
-{
-    XMLPropStyleContext::CreateAndInsertLate( bOverwrite );
 }
 
 void XMLTableStyleContext::Finish( sal_Bool bOverwrite )

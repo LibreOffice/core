@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-28 16:25:52 $
+ *  last change: $Author: sab $ $Date: 2000-11-30 09:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,8 +302,8 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
     nProgressReference(0),
     nProgressValue(0),
     nProgressObjects(0),
-    nOldProgressValue(0)
-
+    nOldProgressValue(0),
+    bShapeStyles (sal_False)
 {
     pDoc = ScXMLConverter::GetScDocument( xTempModel );
     DBG_ASSERT( pDoc, "ScXMLImport::ScXMLImport - no ScDocument!" );
@@ -405,6 +405,7 @@ void ScXMLExport::_ExportMeta()
                                                     if (pSdrObj)
                                                     {
                                                         GetShapeExport()->collectShapeAutoStyles(xShape);
+                                                        bShapeStyles = sal_True;
                                                         nShapesCount++;
                                                         if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
                                                         {
@@ -1537,8 +1538,12 @@ void ScXMLExport::_ExportAutoStyles()
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL,
                 GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
             GetTextParagraphExport()->exportTextAutoStyles();
-            GetShapeExport()->exportAutoStyles();
-            GetChartExport()->exportAutoStyles();
+
+            if (bShapeStyles)
+            {
+                GetShapeExport()->exportAutoStyles();
+                GetChartExport()->exportAutoStyles();
+            }
 
             GetPageExport()->exportAutoStyles();
 
@@ -1853,7 +1858,7 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
         {
             uno::Reference<text::XText> xText(aCell.xCell, uno::UNO_QUERY);
             if ( xText.is())
-                GetTextParagraphExport()->exportText(xText, sal_False);
+                GetTextParagraphExport()->exportText(xText, sal_False, sal_False);
         }
         else
         {

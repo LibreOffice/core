@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:05:03 $
+ *  last change: $Author: sab $ $Date: 2000-11-30 09:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,8 +191,6 @@ public:
     void FillPropertySet(const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & rPropSet );
 
-    virtual void CreateAndInsert( sal_Bool bOverwrite );
-    virtual void CreateAndInsertLate( sal_Bool bOverwrite );
     virtual void Finish( sal_Bool bOverwrite );
 };
 
