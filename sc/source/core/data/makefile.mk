@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:42:13 $
+#   last change: $Author: vg $ $Date: 2003-12-17 19:50:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -200,8 +200,13 @@ SLOFILES =  \
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
 NOOPTFILES= \
                 $(SLO)$/cell.obj \
-        $(SLO)$/column2.obj
+        $(SLO)$/column2.obj \
+        $(SLO)$/column3.obj \
+        $(SLO)$/table3.obj \
+        $(SLO)$/table4.obj  \
+        $(SLO)$/documen4.obj
 .ENDIF
+# table4 opt=2 fill down
 
 EXCEPTIONSFILES= \
     $(SLO)$/documen6.obj \
