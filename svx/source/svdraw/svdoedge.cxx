@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: aw $ $Date: 2001-03-09 16:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1506,47 +1506,20 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         } else cForm='?';  //
         // Weitere Formen:
         if (bInfo) {
-#ifdef DBG_UTIL
-            ByteString aMsg;
-#endif
             pInfo->cOrthoForm=cForm;
             if (cForm=='I' || cForm=='L' || cForm=='Z' || cForm=='U') {
-#ifdef DBG_UTIL
-                if (pInfo->nObj1Lines!=1) { aMsg+="\n- nObj1Lines korregiert von "; aMsg+=pInfo->nObj1Lines; aMsg+=" auf 1"; }
-                if (pInfo->nObj2Lines!=1) { aMsg+="\n- nObj2Lines korregiert von "; aMsg+=pInfo->nObj1Lines; aMsg+=" auf 1"; }
-#endif
                 pInfo->nObj1Lines=1;
                 pInfo->nObj2Lines=1;
                 if (cForm=='Z' || cForm=='U') {
-#ifdef DBG_UTIL
-                    if (pInfo->nMiddleLine!=1) { aMsg+="\n- nMiddleLine korregiert von "; aMsg+=pInfo->nMiddleLine; aMsg+=" auf 1"; }
-#endif
                     pInfo->nMiddleLine=1;
                 } else {
-#ifdef DBG_UTIL
-                    if (pInfo->nMiddleLine!=0xFFFF) { aMsg+="\n- nMiddleLine korregiert von "; aMsg+=pInfo->nMiddleLine; aMsg+=" auf 0xFFFF"; }
-#endif
                     pInfo->nMiddleLine=0xFFFF;
                 }
             } else if (cForm=='S' || cForm=='C') {
-#ifdef DBG_UTIL
-                if (pInfo->nObj1Lines !=2) { aMsg+="\n- nObj1Lines korregiert von "; aMsg+=pInfo->nObj1Lines; aMsg+=" auf 2";   }
-                if (pInfo->nObj2Lines !=2) { aMsg+="\n- nObj2Lines korregiert von "; aMsg+=pInfo->nObj1Lines; aMsg+=" auf 2";   }
-                if (pInfo->nMiddleLine!=2) { aMsg+="\n- nMiddleLine korregiert von "; aMsg+=pInfo->nMiddleLine; aMsg+=" auf 2"; }
-#endif
                 pInfo->nObj1Lines=2;
                 pInfo->nObj2Lines=2;
                 pInfo->nMiddleLine=2;
             }
-#ifdef DBG_UTIL
-            if(aMsg.Len())
-            {
-                ByteString aMsg1("SdrEdgeObj::ImpCalcEdgeTrack(): Nachtraegliche Korrektur der Infodaten. cForm=");
-                aMsg1 += cForm;
-                aMsg1 += aMsg;
-                DBG_ERROR(aMsg1.GetBuffer());
-            }
-#endif
         }
     }
     if (pnQuality!=NULL) {
