@@ -3,10 +3,9 @@ inp  i18npool                                    usr1    -   all inp_mkout NULL
 inp  i18npool\source\unotypes                    nmake   -   all inp_utypes NULL
 inp  i18npool\source\registerservices            nmake   -   all inp_rserv inp_utypes NULL
 inp  i18npool\source\localedata                  nmake   -   all inp_localedata inp_utypes NULL
-inp  i18npool\source\localedata_ascii            nmake   -   all inp_locdata_ascii inp_localedata inp_xmlparser NULL
-inp  i18npool\source\localedata_CJK              nmake   -   all inp_locdata_cjk inp_locdata_ascii inp_xmlparser NULL
+inp  i18npool\source\localedata\data             nmake   -   all inp_locdata_data inp_localedata NULL
 inp  i18npool\source\numberformatcode            nmake   -   all inp_numformat inp_utypes NULL
 inp  i18npool\source\xmlparser                   nmake   -   all inp_xmlparser inp_utypes NULL
 inp  i18npool\source\defaultnumberingprovider    nmake   -   all inp_dnum inp_utypes NULL
 inp  i18npool\source\indexentry    nmake   -   all inp_index inp_utypes NULL
-inp  i18npool\util                               nmake   -   all inp_util inp_dnum inp_localedata inp_locdata_ascii inp_locdata_cjk inp_numformat inp_rserv inp_xmlparser inp_index NULL
+inp  i18npool\util                               nmake   -   all inp_util inp_dnum inp_localedata inp_locdata_data inp_numformat inp_rserv inp_xmlparser inp_index NULL
