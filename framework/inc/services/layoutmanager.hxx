@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-20 16:41:34 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,14 @@ namespace framework
         private:
             struct UIElement
             {
-                UIElement() {}
+                UIElement() : m_bFloating( sal_False ),
+                              m_bVisible( sal_True ),
+                              m_bUserActive( sal_False ),
+                              m_bCreateNewRowCol0( sal_False ),
+                              m_bDeactiveHide( sal_False ),
+                              m_bMasterHide( sal_False ),
+                              m_nStyle( BUTTON_SYMBOL ) {}
+
                 UIElement( const rtl::OUString& rName,
                            const rtl::OUString& rType,
                            const com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement >& rUIElement,
@@ -469,6 +476,16 @@ namespace framework
                                                                const ::Size& rContainerSize );
             void    implts_doLayout( sal_Bool bForceRequestBorderSpace );
 
+            // internal methods to control status/progress bar
+            ::Size      implts_getStatusBarSize();
+            void        implts_destroyStatusBar();
+            void        implts_createStatusBar( const rtl::OUString& rStatusBarName );
+            void        implts_createProgressBar();
+            void        implts_destroyProgressBar();
+            void        implts_setStatusBarPosSize( const ::Point& rPos, const ::Size& rSize );
+            sal_Bool    implts_showProgressBar();
+            sal_Bool    implts_hideProgressBar();
+
             void implts_updateUIElementsVisibleState( sal_Bool bShow );
             sal_Bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
 
@@ -515,6 +532,8 @@ namespace framework
             css::uno::Reference< ::com::sun::star::lang::XComponent >                   m_xInplaceMenuBar;
             MenuBarManager*                                                             m_pInplaceMenuBar;
             css::uno::Reference< ::drafts::com::sun::star::ui::XUIElement >             m_xMenuBar;
+            UIElement                                                                   m_aStatusBarElement;
+            UIElement                                                                   m_aProgressBarElement;
             css::uno::Reference< ::drafts::com::sun::star::frame::XModuleManager >      m_xModuleManager;
             css::uno::Reference< ::drafts::com::sun::star::ui::XUIElementFactory >      m_xUIElementFactoryManager;
             css::uno::Reference< ::com::sun::star::frame::XStatusListener >             m_xMenuBarCloseListener;
@@ -522,6 +541,7 @@ namespace framework
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
             rtl::OUString                                                               m_aModuleIdentifier;
             rtl::OUString                                                               m_aCustomTbxPrefix;
+            rtl::OUString                                                               m_aStatusBarAlias;
             AddonsOptions*                                                              m_pAddonOptions;
             SvtMiscOptions*                                                             m_pMiscOptions;
             sal_Int16                                                                   m_eSymbolSet;
