@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:06:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ Menu RID_CONTEXTMENU
             Text[ turkish ] = "Aç";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Abrir";
+            Text[ finnish ] = "~Avaa";
         };
         MenuItem
         {
@@ -127,6 +128,7 @@ Menu RID_CONTEXTMENU
             Text[ turkish ] = "Yeni bir pencerede aç";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Abrir en ~ventana nueva";
+            Text[ finnish ] = "~Avaa uudessa ikkunassa";
         };
         MenuItem
         {
@@ -156,6 +158,7 @@ Menu RID_CONTEXTMENU
             Text[ turkish ] = "Ýndir...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Descargar...";
+            Text[ finnish ] = "~Nouda";
         };
         MenuItem
         {
@@ -189,6 +192,7 @@ Menu RID_CONTEXTMENU
             Text[ turkish ] = "Baðlantýyý ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Añadir vínculo";
+            Text[ finnish ] = "~Lisää linkki";
         };
         MenuItem
         {
@@ -222,6 +226,7 @@ Menu RID_CONTEXTMENU
             Text[ turkish ] = "Baðlantýyý kopyala";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Copiar ~vínculo";
+            Text[ finnish ] = "~Kopioi linkki";
         };
     };
 };
