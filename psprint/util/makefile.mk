@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-01 08:58:57 $
+#   last change: $Author: kz $ $Date: 2005-03-03 17:33:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,7 @@ SHL1TARGET= psp$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= ipsp
 SHL1LIBS=$(LIB1FILES)
 
-.IF "$(OS)"=="SOLARIS"
+.IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
 SHL1VERSIONMAP=libpsp_solaris.map
 .ELSE   # should work for all gcc/binutils based linker (ld)
 SHL1VERSIONMAP=libpsp_linux.map
