@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:10:55 $
+ *  last change: $Author: jb $ $Date: 2002-05-16 10:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,10 +345,10 @@ namespace configmgr
         uno::Any    getUserValue()  const {return m_aValuePair.getFirst();}
         uno::Any    getDefault()    const {return m_aValuePair.getSecond();}
 
-        void setValue(uno::Any const& _aValue);
+        bool setValue(uno::Any const& _aValue);
         void setDefault();
 
-        void changeDefault(uno::Any const& _aValue);
+        bool changeDefault(uno::Any const& _aValue);
 
         virtual std::auto_ptr<INode> clone() const;
 

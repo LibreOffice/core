@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
+ *  last change: $Author: jb $ $Date: 2002-05-16 10:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,8 @@ namespace configmgr
 
     void INode::modifyAccess(bool _bWritable,bool _bFinalized)
     {
-        // this state can only occurs a s a result of forceWritableToFinalized()
-        OSL_ENSURE(!(_bWritable && _bFinalized),"Invalid access state: Node is both writable and finalized");
+        // this state can only occurs a s a result of (?)
+        OSL_ENSURE( _bWritable || !_bFinalized,"Invalid access state: Node is both read-only and finalized");
 
         m_aAttributes.bWritable  = _bWritable;
         m_aAttributes.bFinalized = _bFinalized;
@@ -319,15 +319,16 @@ namespace configmgr
       }
 
 //  // -------------------------- ValueNode implementation --------------------------
-    void ValueNode::setValue(Any const& _aValue)
+    bool ValueNode::setValue(Any const& _aValue)
     {
-        m_aValuePair.setFirst(_aValue);
-        this->markAsDefault(false);
+        sal_Bool bRet = m_aValuePair.setFirst(_aValue);
+        if (bRet) this->markAsDefault(false);
+        return !! bRet;
     }
 
-    void ValueNode::changeDefault(Any const& _aValue)
+    bool ValueNode::changeDefault(Any const& _aValue)
     {
-        m_aValuePair.setSecond(_aValue);
+        return !! m_aValuePair.setSecond(_aValue);
     }
 
     void ValueNode::setDefault()
