@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: cl $ $Date: 2001-01-23 11:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,11 @@ void SvxOutlinerForwarder::QuickInsertText( const String& rText, const ESelectio
     }
     else
         rOutliner.QuickInsertText( rText, rSel );
+}
+
+void SvxOutlinerForwarder::QuickInsertLineBreak( const ESelection& rSel )
+{
+    rOutliner.QuickInsertLineBreak( rSel );
 }
 
 void SvxOutlinerForwarder::QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel )

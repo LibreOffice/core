@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 20:16:08 $
+ *  last change: $Author: cl $ $Date: 2001-01-23 11:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,13 @@ SvxTextEditSource::SvxTextEditSource( SdrObject* pObject ) :
     pObj            ( pObject ),
     pOutliner       ( NULL ),
     pTextForwarder  ( NULL ),
-    bDataValid      ( FALSE )
+    bDataValid      ( FALSE ),
+    bDestroyed      ( FALSE )
 {
-    DBG_ASSERT( pObj, "pObject muss gueltig sein" );
+    DBG_ASSERT( pObj, "invalid pObject!" );
 
-    StartListening( *pObj->GetModel() );
+    if( pObj )
+        StartListening( *pObj->GetModel() );
 }
 
 //------------------------------------------------------------------------
@@ -123,6 +125,9 @@ SvxEditSource* SvxTextEditSource::Clone() const
 //------------------------------------------------------------------------
 SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
 {
+    if( bDestroyed || pObj == NULL )
+        return NULL;
+
     if (!pTextForwarder)
     {
         if( pOutliner == NULL )
@@ -163,7 +168,7 @@ SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
 //------------------------------------------------------------------------
 void SvxTextEditSource::UpdateData()
 {
-    if( pOutliner )
+    if( pOutliner && pObj && !bDestroyed )
     {
         OutlinerParaObject* pOutlinerParaObject = pOutliner->CreateParaObject();
         pObj->SetOutlinerParaObject( pOutlinerParaObject );
@@ -174,8 +179,6 @@ void SvxTextEditSource::UpdateData()
 void SvxTextEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-
-    BOOL bDestroyed = FALSE;
 
     if( pSdrHint )
     {
@@ -205,9 +208,8 @@ void SvxTextEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         delete pOutliner;
         pOutliner = NULL;
 
-        pTextForwarder = new SvxDummyTextSource();
+        pTextForwarder = NULL;
     }
-
 }
 
 

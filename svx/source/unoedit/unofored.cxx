@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-21 17:34:23 $
+ *  last change: $Author: cl $ $Date: 2001-01-23 11:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,11 @@ void SvxEditEngineForwarder::GetPortions( USHORT nPara, SvUShorts& rList ) const
 void SvxEditEngineForwarder::QuickInsertText( const String& rText, const ESelection& rSel )
 {
     rEditEngine.QuickInsertText( rText, rSel );
+}
+
+void SvxEditEngineForwarder::QuickInsertLineBreak( const ESelection& rSel )
+{
+    rEditEngine.QuickInsertLineBreak( rSel );
 }
 
 void SvxEditEngineForwarder::QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel )

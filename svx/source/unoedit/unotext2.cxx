@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 17:19:57 $
+ *  last change: $Author: cl $ $Date: 2001-01-23 11:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,10 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoText& _r
 : rText( _rText )
 {
     xParentText =  (text::XText*)&_rText;
-    pEditSource = rText.GetEditSource()->Clone();
+    if( rText.GetEditSource() )
+        pEditSource = rText.GetEditSource()->Clone();
+    else
+        pEditSource = NULL;
     nNextParagraph = 0;
 }
 
@@ -275,7 +278,8 @@ void SAL_CALL SvxUnoTextContent::dispose()
     aEvt.Source = *(OWeakAggObject*) this;
     aDisposeListeners.disposeAndClear(aEvt);
 
-    // todo:: removemyself
+    if( xParentText.is() )
+        xParentText->removeTextContent( this );
 }
 
 void SAL_CALL SvxUnoTextContent::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
@@ -311,11 +315,17 @@ sal_Bool SAL_CALL SvxUnoTextContent::hasElements()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SvUShorts aPortions;
-    SvxTextForwarder* pForwarder = GetEditSource()->GetTextForwarder();
-    pForwarder->GetPortions( nParagraph, aPortions );
-
-    return aPortions.Count() > 0;
+    SvxTextForwarder* pForwarder = GetEditSource() ? GetEditSource()->GetTextForwarder() : NULL;
+    if( pForwarder )
+    {
+        SvUShorts aPortions;
+        pForwarder->GetPortions( nParagraph, aPortions );
+        return aPortions.Count() > 0;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 // XPropertySet
@@ -379,9 +389,17 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoText& rText,
     nParagraph( nPara ),
     nNextPortion( 0 )
 {
-    pEditSource = rText.GetEditSource()->Clone();
-    pPortions = new SvUShorts;
-    pEditSource->GetTextForwarder()->GetPortions( nPara, *pPortions );
+    pEditSource = rText.GetEditSource() ? rText.GetEditSource()->Clone() : NULL;
+
+    if( pEditSource && pEditSource->GetTextForwarder() )
+    {
+        pPortions = new SvUShorts;
+        pEditSource->GetTextForwarder()->GetPortions( nPara, *pPortions );
+    }
+    else
+    {
+        pPortions = NULL;
+    }
 }
 
 SvxUnoTextRangeEnumeration::~SvxUnoTextRangeEnumeration() throw()
@@ -397,10 +415,7 @@ sal_Bool SAL_CALL SvxUnoTextRangeEnumeration::hasMoreElements()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pPortions == NULL)
-        throw uno::RuntimeException();
-
-    return nNextPortion < pPortions->Count();
+    return pPortions ? nNextPortion < pPortions->Count() : 0;
 }
 
 uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
@@ -408,7 +423,7 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( nNextPortion >= pPortions->Count() )
+    if( pPortions == NULL || nNextPortion >= pPortions->Count() )
         throw container::NoSuchElementException();
 
     sal_uInt16 nStartPos = 0;
