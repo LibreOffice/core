@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:32:34 $
+ *  last change: $Author: hr $ $Date: 2001-10-26 14:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+
+#include <algorithm>
 
 
 using namespace dbaui;
