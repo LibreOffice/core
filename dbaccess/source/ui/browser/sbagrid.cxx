@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:35:45 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 08:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1377,7 +1377,7 @@ void SbaGridControl::SetBrowserAttrs()
             );
         if (!xDialog.is())
         {
-            ShowServiceNotAvailableError(this, ::rtl::OUString::createFromAscii("com.sun.star.form.ControlFontDialog"), sal_True);
+            ShowServiceNotAvailableError(this, String::CreateFromAscii("com.sun.star.form.ControlFontDialog"), sal_True);
             return;
         }
 
