@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2001-05-03 13:46:01 $
+#   last change: $Author: hr $ $Date: 2001-05-21 16:41:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.6 $ ';
+$id_str = ' $Revision: 1.7 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -244,7 +244,7 @@ sub init_globals {
     $common_outdir = $common_outdir . ".pro" if $inpath =~ /\.pro$/;
 
     $ext = "";
-    if ( $opt_minor || $updminor ) {
+    if ( ($opt_minor || $updminor) && !$dest ) {
         if ( $updminor ) {
             $ext = ".$updminor";
         }
