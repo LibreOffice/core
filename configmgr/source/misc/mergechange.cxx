@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:26 $
+ *  last change: $Author: jb $ $Date: 2001-10-08 15:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -938,7 +938,8 @@ namespace configmgr
     void OStripDefaults::handle(SubtreeChange& _rSubtree)
     {
         if ( strip(_rSubtree) )
-            stripOne(_rSubtree);
+            if (_rSubtree.isToDefault() || !_rSubtree.isSetNodeChange())
+                stripOne(_rSubtree);
     }
 
     OStripDefaults& OStripDefaults::strip()
