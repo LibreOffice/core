@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-10-15 06:45:22 $
+ *  last change: $Author: mhu $ $Date: 2001-10-17 20:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,11 +167,33 @@ static void* __rtl_memory_vmalloc (size_t n)
 
 typedef CRITICAL_SECTION mutex_type;
 
-#if 0  /* upon contention DebugInfo=NULL leads to Access Violation */
+/* Static initializer (struct declared in WINNT.H). */
 #define RTL_MUTEX_INITIALIZER { NULL, -1, 0, NULL, NULL, 0 }
-#else
-#define RTL_MUTEX_INIT(a) InitializeCriticalSection((a))
-#endif
+
+/*
+ * __rtl_mutex_init (dynamic initialization).
+ *
+ * Static initialization (with DebugInfo == NULL)
+ * leads to Access Violation upon first contention.
+ */
+static void __rtl_mutex_init (LPCRITICAL_SECTION lpCriticalSection)
+{
+    static LONG g_spinlock = 0;
+
+    while (InterlockedExchange (&g_spinlock, 1) == 1)
+    {
+        /* Already locked, spin */
+        Sleep (0);
+    }
+    if (!(lpCriticalSection->DebugInfo))
+    {
+        /* Dynamic initialization */
+        InitializeCriticalSection (lpCriticalSection);
+    }
+    InterlockedExchange (&g_spinlock, 0);
+}
+
+#define RTL_MUTEX_INIT(a)  __rtl_mutex_init((LPCRITICAL_SECTION)(a))
 #define RTL_MUTEX_ACQUIRE(a)  EnterCriticalSection((a))
 #define RTL_MUTEX_RELEASE(a)  LeaveCriticalSection((a))
 
@@ -282,10 +304,18 @@ typedef struct __rtl_memory_stat_st
     size_t m_enqueue;
 } memory_stat;
 
+#define RTL_MEMORY_ALIGN(n, m) (((n) + ((m) - 1)) & ~((m) - 1))
+#define RTL_MEMORY_SIZEOF(a) RTL_MEMORY_ALIGN(sizeof(a), sizeof(memory_type))
+
 struct __rtl_memory_global_st
 {
+    sal_uInt32  m_magic;
     sal_uInt32  m_align;
-    mutex_type  m_mutex;
+
+    union {
+        mutex_type m_lock;
+        char       m_data[RTL_MEMORY_SIZEOF(mutex_type)];
+    } m_mutex;
 
     memory_type m_alloc_head;
     memory_type m_queue_head[__N__];
@@ -294,29 +324,33 @@ struct __rtl_memory_global_st
 
 static struct __rtl_memory_global_st g_memory =
 {
-#if defined(RTL_MUTEX_INITIALIZER)
-    0, RTL_MUTEX_INITIALIZER
-#else
-    0
-#endif /* RTL_MUTEX_INITIALIZER */
+    0, 0, { RTL_MUTEX_INITIALIZER }
 };
 
-void SAL_CALL ___rtl_memory_init (void)
-{
-#if defined(RTL_MUTEX_INIT)
-    RTL_MUTEX_INIT (&(g_memory.m_mutex));
-#endif /* RTL_MUTEX_INIT */
+void SAL_CALL ___rtl_memory_init (void);
+void SAL_CALL ___rtl_memory_fini (void);
+
+#define RTL_MEMORY_ENTER() \
+{ \
+    if (!(g_memory.m_align)) ___rtl_memory_init(); \
+    RTL_MUTEX_ACQUIRE(&(g_memory.m_mutex.m_lock)); \
 }
-void SAL_CALL ___rtl_memory_fini (void)
-{
+
+#define RTL_MEMORY_LEAVE() \
+{ \
+    RTL_MUTEX_RELEASE(&(g_memory.m_mutex.m_lock)); \
 }
 
 /*
- * __rtl_memory_initialize.
+ * ___rtl_memory_init.
  */
-static void __rtl_memory_initialize (void)
+void SAL_CALL ___rtl_memory_init (void)
 {
-    RTL_MUTEX_ACQUIRE(&(g_memory.m_mutex));
+#if defined(RTL_MUTEX_INIT)
+    RTL_MUTEX_INIT (&(g_memory.m_mutex.m_lock));
+#endif /* RTL_MUTEX_INIT */
+
+    RTL_MUTEX_ACQUIRE(&(g_memory.m_mutex.m_lock));
     if (!(g_memory.m_align))
     {
         int i;
@@ -331,20 +365,14 @@ static void __rtl_memory_initialize (void)
 
         g_memory.m_align = __rtl_memory_vmpagesize();
     }
-    RTL_MUTEX_RELEASE(&(g_memory.m_mutex));
+    RTL_MUTEX_RELEASE(&(g_memory.m_mutex.m_lock));
 }
 
-#define RTL_MEMORY_ALIGN(n, m) (((n) + ((m) - 1)) & ~((m) - 1))
-
-#define RTL_MEMORY_ENTER() \
-{ \
-    if (!(g_memory.m_align)) __rtl_memory_initialize(); \
-    RTL_MUTEX_ACQUIRE(&(g_memory.m_mutex)); \
-}
-
-#define RTL_MEMORY_LEAVE() \
-{ \
-    RTL_MUTEX_RELEASE(&(g_memory.m_mutex)); \
+/*
+ * ___rtl_memory_fini (NYI).
+ */
+void SAL_CALL ___rtl_memory_fini (void)
+{
 }
 
 /*===========================================================================
@@ -795,6 +823,10 @@ static void __rtl_memory_enqueue (memory_type **ppMemory)
         {
             /* next not used, merge */
             OSL_ASSERT(!(next == next->m_flink));
+
+            OSL_ASSERT(__dbg_memory_ensure(next->m_flink));
+            OSL_ASSERT(__dbg_memory_ensure(next->m_blink));
+
             queue_remove (next);
             __rtl_memory_merge (head, next);
         }
@@ -810,6 +842,10 @@ static void __rtl_memory_enqueue (memory_type **ppMemory)
         {
             /* prev not used, merge */
             OSL_ASSERT(!(prev == prev->m_flink));
+
+            OSL_ASSERT(__dbg_memory_ensure(prev->m_flink));
+            OSL_ASSERT(__dbg_memory_ensure(prev->m_blink));
+
             queue_remove (prev);
             __rtl_memory_merge (prev, head);
             head = prev;
