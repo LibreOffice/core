@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  last change: $Author: mib $
  *
@@ -300,8 +300,8 @@ SvStorageRef SvXMLEmbeddedObjectHelper::ImplGetContainerStorage(
             StreamMode eMode = EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode
                                     ? STREAM_STD_READWRITE
                                     : STREAM_STD_READ;
-            mxContainerStorage = mpRootStorage->OpenUCBStorage( rStorageName,
-                                                                eMode );
+            mxContainerStorage = mpRootStorage->OpenStorage( rStorageName,
+                                                             eMode );
         }
         else
         {
@@ -327,10 +327,7 @@ SvStorageRef SvXMLEmbeddedObjectHelper::ImplGetObjectStorage(
         StreamMode eMode = EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode
                                 ? STREAM_STD_READWRITE
                                 : STREAM_STD_READ;
-        if( bUCBStorage )
-            xObjStor = xCntnrStor->OpenUCBStorage( rObjectStorageName, eMode );
-        else
-            xObjStor = xCntnrStor->OpenStorage( rObjectStorageName, eMode );
+        xObjStor = xCntnrStor->OpenStorage( rObjectStorageName, eMode );
     }
 
     return xObjStor;
