@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: as $ $Date: 2001-11-01 09:24:27 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 17:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,8 +581,6 @@ void SvtViewOptionsBase_Impl::SetUserData( const ::rtl::OUString&               
 
     if( m_aList[sName].getUserData() != lData )
     {
-        m_aList[sName].setUserData( lData );
-
         // User data are special properties of a view item.
         // They are a subset of a set entry in configuration.
         // Normaly a set entry is FULL created with default values,
@@ -591,10 +589,12 @@ void SvtViewOptionsBase_Impl::SetUserData( const ::rtl::OUString&               
         // check for default items ( they shouldnt exist on disk ... !)
         // but they must be created, if we whish to set new real value on
         // UserData!!!
-        if( m_aList[sName].isDefault() == sal_False )
+        if( m_aList[sName].isDefault() == sal_True )
         {
             impl_createEmptySetNode( sName );
         }
+
+        m_aList[sName].setUserData( lData );
 
         impl_writeDirectProp( sName, PROPERTY_USERDATA, &lData );
     }
