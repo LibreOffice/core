@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_attri.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: mh $ $Date: 2002-08-13 14:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,13 @@
 
 // USED SERVICES
     // BASE CLASSES
+
+// [ed] 6/15/02 The OS X compilers require full class definitions at the time
+// of template instantiation
+#ifdef MACOSX
+#include <ary_i/codeinf2.hxx>
+#endif
+
 #include <s2_luidl/parsenv2.hxx>
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
