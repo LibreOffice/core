@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:03:34 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,11 @@ GalleryTheme::~GalleryTheme()
     ImplWrite();
 
     for( GalleryObject* pEntry = aObjectList.First(); pEntry; pEntry = aObjectList.Next() )
+    {
+        Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
         delete pEntry;
+        Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -276,6 +280,21 @@ void GalleryTheme::ImplWrite()
 
 // ------------------------------------------------------------------------
 
+const GalleryObject* GalleryTheme::ImplGetGalleryObject( const INetURLObject& rURL )
+{
+    GalleryObject*  pEntry = aObjectList.First();
+    GalleryObject*  pFoundEntry = NULL;
+    ULONG           nUpdatePos = LIST_APPEND;
+
+    for( ; pEntry && !pFoundEntry; pEntry = aObjectList.Next() )
+        if( pEntry->aURL == rURL )
+            pFoundEntry = pEntry;
+
+    return pFoundEntry;
+}
+
+// ------------------------------------------------------------------------
+
 INetURLObject GalleryTheme::ImplGetURL( const GalleryObject* pObject ) const
 {
     INetURLObject aURL;
@@ -306,7 +325,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFor
     INetURLObject   aInfoFileURL( GetParent()->GetUserURL() );
     INetURLObject   aNewURL;
     sal_uInt32      nNextNumber;
-    sal_Char*       pExt;
+    sal_Char*       pExt = NULL;
     BOOL            bExists;
 
     aDir.Append( String( RTL_CONSTASCII_USTRINGPARAM( "dragdrop" ) ) );
@@ -489,7 +508,10 @@ BOOL GalleryTheme::RemoveObject( ULONG nPos )
         if( SGA_OBJ_SVDRAW == pEntry->eObjKind )
             aSvDrawStorageRef->Remove( pEntry->aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
+        Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
         delete pEntry;
+        Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
+
         ImplSetModified( TRUE );
         ImplBroadcast( nPos );
     }
@@ -617,7 +639,10 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         {
             if( pEntry->bDummy )
             {
+                Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
                 delete aObjectList.Remove( pEntry );
+                Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
+
                 pEntry = aObjectList.GetCurObject();
             }
             else
@@ -1460,7 +1485,11 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         BOOL            bRel;
 
         for( pObj = aObjectList.First(); pObj; pObj = aObjectList.Next() )
+        {
+            Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< ULONG >( pObj ) ) );
             delete pObj;
+            Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< ULONG >( pObj ) ) );
+        }
 
         aObjectList.Clear();
 
