@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:58:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,9 @@ static inline sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
         break;
 
         case typelib_TypeClass_STRUCT:
+            nSize = (sal_Int32)sizeof( typelib_StructTypeDescription );
+        break;
+
         case typelib_TypeClass_EXCEPTION:
             nSize = (sal_Int32)sizeof( typelib_CompoundTypeDescription );
         break;
@@ -705,8 +708,25 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         }
         break;
 
-        case typelib_TypeClass_EXCEPTION:
         case typelib_TypeClass_STRUCT:
+        {
+            // FEATURE_EMPTYCLASS
+            typelib_StructTypeDescription * pTmp;
+            pTmp = new typelib_StructTypeDescription();
+            pRet = (typelib_TypeDescription *)pTmp;
+#if OSL_DEBUG_LEVEL > 1
+            osl_incrementInterlockedCount( &aInit.nCompoundTypeDescriptionCount );
+#endif
+            pTmp->aBase.pBaseTypeDescription = 0;
+            pTmp->aBase.nMembers = 0;
+            pTmp->aBase.pMemberOffsets = 0;
+            pTmp->aBase.ppTypeRefs = 0;
+            pTmp->aBase.ppMemberNames = 0;
+            pTmp->pParameterizedTypes = 0;
+        }
+        break;
+
+        case typelib_TypeClass_EXCEPTION:
         {
             // FEATURE_EMPTYCLASS
             typelib_CompoundTypeDescription * pTmp;
@@ -722,6 +742,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pTmp->ppMemberNames = 0;
         }
         break;
+
         case typelib_TypeClass_ENUM:
         {
             typelib_EnumTypeDescription * pTmp = new typelib_EnumTypeDescription();
@@ -820,15 +841,17 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescription_new(
-    typelib_TypeDescription ** ppRet,
-    typelib_TypeClass eTypeClass,
-    rtl_uString * pTypeName,
-    typelib_TypeDescriptionReference * pType,
-    sal_Int32 nMembers,
-    typelib_CompoundMember_Init * pMembers )
-    SAL_THROW_EXTERN_C()
+namespace {
+
+void newTypeDescription(
+    typelib_TypeDescription ** ppRet, typelib_TypeClass eTypeClass,
+    rtl_uString * pTypeName, typelib_TypeDescriptionReference * pType,
+    sal_Int32 nMembers, typelib_CompoundMember_Init * pCompoundMembers,
+    typelib_StructMember_Init * pStructMembers)
 {
+    OSL_ASSERT(
+        (pCompoundMembers == 0 || pStructMembers == 0)
+        && (pStructMembers == 0 || eTypeClass == typelib_TypeClass_STRUCT));
     if (typelib_TypeClass_TYPEDEF == eTypeClass)
     {
         OSL_TRACE( "### unexpected typedef!" );
@@ -868,21 +891,47 @@ extern "C" void SAL_CALL typelib_typedescription_new(
                 pTmp->pMemberOffsets = new sal_Int32[ nMembers ];
                 pTmp->ppTypeRefs = new typelib_TypeDescriptionReference *[ nMembers ];
                 pTmp->ppMemberNames = new rtl_uString *[ nMembers ];
+                bool polymorphic = eTypeClass == typelib_TypeClass_STRUCT
+                    && rtl::OUString::unacquired(&pTypeName).indexOf('<') >= 0;
+                OSL_ASSERT(!polymorphic || pStructMembers != 0);
+                if (polymorphic) {
+                    reinterpret_cast< typelib_StructTypeDescription * >(pTmp)->
+                        pParameterizedTypes = new sal_Bool[nMembers];
+                }
                 for( sal_Int32 i = 0 ; i < nMembers; i++ )
                 {
-                    // read the type name
+                    // read the type and member names
                     pTmp->ppTypeRefs[i] = 0;
-                    typelib_typedescriptionreference_new(
-                        pTmp->ppTypeRefs +i, pMembers[i].eTypeClass, pMembers[i].pTypeName );
-                    // read the member name
-                    rtl_uString_acquire( pTmp->ppMemberNames[i] = pMembers[i].pMemberName );
+                    if (pCompoundMembers != 0) {
+                        typelib_typedescriptionreference_new(
+                            pTmp->ppTypeRefs +i, pCompoundMembers[i].eTypeClass,
+                            pCompoundMembers[i].pTypeName );
+                        rtl_uString_acquire(
+                            pTmp->ppMemberNames[i]
+                            = pCompoundMembers[i].pMemberName );
+                    } else {
+                        typelib_typedescriptionreference_new(
+                            pTmp->ppTypeRefs +i,
+                            pStructMembers[i].aBase.eTypeClass,
+                            pStructMembers[i].aBase.pTypeName );
+                        rtl_uString_acquire(
+                            pTmp->ppMemberNames[i]
+                            = pStructMembers[i].aBase.pMemberName );
+                    }
                     // write offset
                     typelib_TypeDescription * pTD = 0;
                     TYPELIB_DANGER_GET( &pTD, pTmp->ppTypeRefs[i] );
                     OSL_ENSURE( pTD->nSize, "### void member?" );
-                    nOffset = newAlignedSize( nOffset, pTD->nSize, pTD->nAlignment );
+                    nOffset = newAlignedSize(
+                        nOffset, pTD->nSize, pTD->nAlignment );
                     pTmp->pMemberOffsets[i] = nOffset - pTD->nSize;
                     TYPELIB_DANGER_RELEASE( pTD );
+
+                    if (polymorphic) {
+                        reinterpret_cast< typelib_StructTypeDescription * >(
+                            pTmp)->pParameterizedTypes[i]
+                            = pStructMembers[i].bParameterizedType;
+                    }
                 }
             }
         }
@@ -896,6 +945,34 @@ extern "C" void SAL_CALL typelib_typedescription_new(
         (*ppRet)->nSize = typelib_typedescription_getAlignedUnoSize( (*ppRet), 0, (*ppRet)->nAlignment );
         (*ppRet)->nAlignment = adjustAlignment( (*ppRet)->nAlignment );
     }
+}
+
+}
+
+extern "C" void SAL_CALL typelib_typedescription_new(
+    typelib_TypeDescription ** ppRet,
+    typelib_TypeClass eTypeClass,
+    rtl_uString * pTypeName,
+    typelib_TypeDescriptionReference * pType,
+    sal_Int32 nMembers,
+    typelib_CompoundMember_Init * pMembers )
+    SAL_THROW_EXTERN_C()
+{
+    newTypeDescription(
+        ppRet, eTypeClass, pTypeName, pType, nMembers, pMembers, 0);
+}
+
+extern "C" void SAL_CALL typelib_typedescription_newStruct(
+    typelib_TypeDescription ** ppRet,
+    rtl_uString * pTypeName,
+    typelib_TypeDescriptionReference * pType,
+    sal_Int32 nMembers,
+    typelib_StructMember_Init * pMembers )
+    SAL_THROW_EXTERN_C()
+{
+    newTypeDescription(
+        ppRet, typelib_TypeClass_STRUCT, pTypeName, pType, nMembers, 0,
+        pMembers);
 }
 
 //------------------------------------------------------------------------
@@ -1314,7 +1391,7 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceAttribute(
 {
     typelib_typedescription_newExtendedInterfaceAttribute(
         ppRet, nAbsolutePosition, pTypeName, eAttributeTypeClass,
-        pAttributeTypeName, bReadOnly, false, 0, 0, 0, 0);
+        pAttributeTypeName, bReadOnly, 0, 0, 0, 0);
 }
 
 //------------------------------------------------------------------------
@@ -1324,7 +1401,7 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     rtl_uString * pTypeName,
     typelib_TypeClass eAttributeTypeClass,
     rtl_uString * pAttributeTypeName,
-    sal_Bool bReadOnly, sal_Bool bBound,
+    sal_Bool bReadOnly,
     sal_Int32 nGetExceptions, rtl_uString ** ppGetExceptionNames,
     sal_Int32 nSetExceptions, rtl_uString ** ppSetExceptionNames )
     SAL_THROW_EXTERN_C()
@@ -1370,7 +1447,6 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
         && nAbsolutePosition < pInterface->nAllMembers);
     (*ppRet)->nIndex = nAbsolutePosition
         - (pInterface->nAllMembers - pInterface->nMembers);
-    (*ppRet)->bBound = bBound;
     (*ppRet)->nGetExceptions = nGetExceptions;
     (*ppRet)->ppGetExceptions = copyExceptions(
         nGetExceptions, ppGetExceptionNames);
@@ -1446,6 +1522,8 @@ static inline void typelib_typedescription_destructExtendedMembers(
     }
     break;
     case typelib_TypeClass_STRUCT:
+        delete[] reinterpret_cast< typelib_StructTypeDescription * >(pTD)->
+            pParameterizedTypes;
     case typelib_TypeClass_EXCEPTION:
     {
         typelib_CompoundTypeDescription * pCTD = (typelib_CompoundTypeDescription*)pTD;
@@ -1824,8 +1902,8 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                     typelib_TypeDescriptionReference * pMemberRef = pTmp->ppTypeRefs[i];
 
                     sal_Int32 nMaxIntegral;
-                    if (pMemberRef->eTypeClass == typelib_TypeClass_INTERFACE ||
-                        pMemberRef->eTypeClass == typelib_TypeClass_SEQUENCE)
+                    if (pMemberRef->eTypeClass == typelib_TypeClass_INTERFACE
+                        || pMemberRef->eTypeClass == typelib_TypeClass_SEQUENCE)
                     {
                         nMaxIntegral = sizeof(void *);
                         nStructSize = newAlignedSize( nStructSize, nMaxIntegral, nMaxIntegral );
@@ -1997,7 +2075,6 @@ bool createDerivedInterfaceMemberDescription(
                         interface);
                 newAttribute->pBaseRef = baseRef;
                 newAttribute->nIndex = index;
-                newAttribute->bBound = baseAttribute->bBound;
                 newAttribute->nGetExceptions = baseAttribute->nGetExceptions;
                 newAttribute->ppGetExceptions = copyExceptions(
                     baseAttribute->nGetExceptions,
