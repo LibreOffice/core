@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: avy $ $Date: 2001-08-07 15:04:08 $
+#   last change: $Author: rt $ $Date: 2001-09-06 10:29:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -414,7 +414,7 @@ LINKFLAGS=/PDB:NONE
 .ENDIF
 .ENDIF
 .ELSE
-LINKFLAGS=/MAP /NODEFAULTLIB /ORDER:@$(FUNCORD) /OPT:NOREF
+LINKFLAGS=/MAP /NODEFAULTLIB /OPT:NOREF
 #LINKFLAGS=/MAP /NODEFAULTLIB
 .ENDIF
 
