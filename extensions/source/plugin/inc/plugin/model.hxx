@@ -2,9 +2,9 @@
  *
  *  $RCSfile: model.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-02 11:34:07 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ class BroadcasterHelperHolder
 protected:
     ::cppu::OBroadcastHelper  m_aHelper;
 public:
-    BroadcasterHelperHolder( ::osl::Mutex& rMutex ) :
+    BroadcasterHelperHolder( osl::Mutex& rMutex ) :
             m_aHelper( rMutex ) {}
     ~BroadcasterHelperHolder() {}
 
@@ -111,59 +111,61 @@ public:
 };
 
 class PluginModel : public BroadcasterHelperHolder,
-                    public ::cppu::OPropertySetHelper,
-                    public ::cppu::OPropertyArrayHelper,
-                    public ::cppu::OWeakAggObject,
-                    public ::com::sun::star::lang::XComponent,
-                    public ::com::sun::star::io::XPersistObject,
-                    public ::com::sun::star::awt::XControlModel
+                    public cppu::OPropertySetHelper,
+                    public cppu::OPropertyArrayHelper,
+                    public cppu::OWeakAggObject,
+                    public com::sun::star::lang::XComponent,
+                    public com::sun::star::io::XPersistObject,
+                    public com::sun::star::awt::XControlModel
 {
   private:
-    ::rtl::OUString m_aCreationURL;
+    rtl::OUString m_aCreationURL;
+    rtl::OUString m_aMimeType;
 
-    ::std::list< Reference< ::com::sun::star::lang::XEventListener > >
-                 m_aDisposeListeners;
+    std::list< Reference< com::sun::star::lang::XEventListener > >
+        m_aDisposeListeners;
   public:
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new( size_t nSize ) throw()
-        { return ::rtl_allocateMemory( nSize ); }
+        { return rtl_allocateMemory( nSize ); }
     static void SAL_CALL operator delete( void * pMem ) throw()
-        { ::rtl_freeMemory( pMem ); }
+        { rtl_freeMemory( pMem ); }
 
     PluginModel();
-    PluginModel( const ::rtl::OUString& );
+    PluginModel( const rtl::OUString& rURL, const rtl::OUString& rMimeType );
     virtual ~PluginModel();
 
 
-    const ::rtl::OUString& getCreationURL() { return m_aCreationURL; }
+    const rtl::OUString& getCreationURL() { return m_aCreationURL; }
+    void setMimeType( const rtl::OUString& rMime ) { m_aMimeType = rMime; }
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( ::com::sun::star::uno::RuntimeException )
+    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( com::sun::star::uno::RuntimeException )
         { return OWeakAggObject::queryInterface( rType ); }
     virtual void SAL_CALL acquire()  throw()
     { OWeakAggObject::acquire(); }
     virtual void SAL_CALL release()  throw()
     { OWeakAggObject::release(); }
 
-    virtual Any SAL_CALL queryAggregation( const Type& ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual Any SAL_CALL queryAggregation( const Type& ) throw( com::sun::star::uno::RuntimeException );
 
 
-    // ::com::sun::star::lang::XTypeProvider
+    // com::sun::star::lang::XTypeProvider
 
-    // ::com::sun::star::lang::XServiceInfo
+    // com::sun::star::lang::XServiceInfo
     ::rtl::OUString SAL_CALL getImplementationName() throw(  );
 
-    sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
-    Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
-    static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static(void) throw(  );
-    static ::rtl::OUString SAL_CALL getImplementationName_Static() throw(  )
+    sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw(  );
+    Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
+    static Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames_Static(void) throw(  );
+    static rtl::OUString SAL_CALL getImplementationName_Static() throw(  )
     {
         /** the soplayer uses this name in its source! maybe not after 5.2 */
-        return ::rtl::OUString::createFromAscii( "com.sun.star.extensions.PluginModel" );
+        return rtl::OUString::createFromAscii( "com.sun.star.extensions.PluginModel" );
     }
 
     // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     virtual sal_Bool  SAL_CALL convertFastPropertyValue( Any & rConvertedValue,
                                                          Any & rOldValue,
                                                          sal_Int32 nHandle,
@@ -172,18 +174,18 @@ class PluginModel : public BroadcasterHelperHolder,
                                                             const Any& rValue )
         throw();
     virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw();
-    virtual Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw();
+    virtual Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw();
 
-    // ::com::sun::star::io::XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw();
-    virtual void SAL_CALL write(const Reference< ::com::sun::star::io::XObjectOutputStream > & OutStream) throw();
-    virtual void SAL_CALL read(const Reference< ::com::sun::star::io::XObjectInputStream > & InStream) throw();
+    // com::sun::star::io::XPersistObject
+    virtual rtl::OUString SAL_CALL getServiceName() throw();
+    virtual void SAL_CALL write(const Reference< com::sun::star::io::XObjectOutputStream > & OutStream) throw();
+    virtual void SAL_CALL read(const Reference< com::sun::star::io::XObjectInputStream > & InStream) throw();
 
-    // ::com::sun::star::lang::XComponent
-    virtual void SAL_CALL addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw();
-    virtual void SAL_CALL removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw();
+    // com::sun::star::lang::XComponent
+    virtual void SAL_CALL addEventListener( const Reference< com::sun::star::lang::XEventListener > & l ) throw();
+    virtual void SAL_CALL removeEventListener( const Reference< com::sun::star::lang::XEventListener > & l ) throw();
     virtual void SAL_CALL dispose() throw();
 };
-Reference< XInterface >  SAL_CALL PluginModel_CreateInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );
+Reference< XInterface >  SAL_CALL PluginModel_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );
 
 #endif // __PLUGIN_MODEL_HXX
