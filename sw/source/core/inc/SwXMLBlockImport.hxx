@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-13 11:40:05 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,11 @@ protected:
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
-    SwXMLBlockListImport ( SwXMLTextBlocks &rBlocks );
+    // #110680#
+    SwXMLBlockListImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        SwXMLTextBlocks &rBlocks );
+
     SwXMLTextBlocks& getBlockList ( void )
     {
         return rBlockList;
@@ -104,7 +108,11 @@ public:
     sal_Bool bTextOnly;
     String &m_rText;
 
-    SwXMLTextBlockImport ( SwXMLTextBlocks &rBlocks, String &rNewText, sal_Bool bNewTextOnly );
+    // #110680#
+    SwXMLTextBlockImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        SwXMLTextBlocks &rBlocks, String &rNewText, sal_Bool bNewTextOnly );
+
     SwXMLTextBlocks& getBlockList ( void )
     {
         return rBlockList;
