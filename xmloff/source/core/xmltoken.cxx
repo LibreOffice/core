@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.92 $
+*  $Revision: 1.93 $
 *
-*  last change: $Author: rt $ $Date: 2005-03-29 12:48:55 $
+*  last change: $Author: rt $ $Date: 2005-03-29 13:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2881,7 +2881,7 @@ namespace xmloff { namespace token {
 #endif
     };
 
-
+    sal_Int32 nRescheduleCount = 0;
 
     // get OUString representation of token
     const OUString& GetXMLToken( enum XMLTokenEnum eToken )
@@ -2926,14 +2926,31 @@ namespace xmloff { namespace token {
     // gives all allocated memory for OUString* back
     void ResetTokens()
     {
-        for (sal_Int16 i=0, nEnd = sizeof ( aTokenList ) / sizeof ( XMLTokenEntry );
-             i < nEnd;
-             i++)
+        if (nRescheduleCount == 0)
         {
-            delete aTokenList[i].pOUString;
-            aTokenList[i].pOUString = NULL;
+            for (sal_Int16 i=0, nEnd = sizeof ( aTokenList ) / sizeof ( XMLTokenEntry );
+                 i < nEnd;
+                 i++)
+            {
+                delete aTokenList[i].pOUString;
+                aTokenList[i].pOUString = NULL;
+            }
         }
     }
+
+    void IncRescheduleCount()
+    {
+        ++nRescheduleCount;
+    }
+
+    void DecRescheduleCount()
+    {
+        if (nRescheduleCount > 0)
+            --nRescheduleCount;
+        else
+            DBG_ERROR("RescheduleCount not increased");
+    }
+
 }
 }
 
