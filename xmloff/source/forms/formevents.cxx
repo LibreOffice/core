@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formevents.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:56:27 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ namespace xmloff
         { "XRowSetListener::cursorMoved",               "on-cursormove" },
         { "XDatabaseParameterListener::approveParameter","on-supplyparameter" },
         { "XSQLErrorListener::errorOccured",            "on-error" },
+        { "XAdjustmentListener::adjustmentValueChanged","on-adjust" },
         { 0, 0 }
     };
 
@@ -120,6 +121,12 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.212.1  2003/10/22 13:17:43  fs
+ *  #21277# new implementations for exporting/importing scrollbar controls as form:value-range elements
+ *
+ *  Revision 1.1  2001/01/02 15:56:27  fs
+ *  initial checkin - code common to event ex- and import
+ *
  *
  *  Revision 1.0 21.12.00 15:19:52  fs
  ************************************************************************/
