@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:58:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,11 @@ public:
     // versteckte Bereiche, versteckte Absaetze
     BOOL RemoveInvisibleContent();
 
+    // replace fields by text - mailmerge support
+    BOOL ConvertFieldsToText();
+
+    // embedded alle lokalen Links (Bereiche/Grafiken)
+    BOOL EmbedAllLinks();
     USHORT GetLinkUpdMode(BOOL bDocSettings = FALSE) const;
     void SetLinkUpdMode( USHORT nMode );
 
@@ -287,6 +292,7 @@ public:
     BOOL _CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pNdInsPos = 0 );
 
     long SplitNode( BOOL bAutoFormat = FALSE, BOOL bCheckTableStart = TRUE );
+    sal_Bool AppendTxtNode();
     void AutoFmtBySplitNode();
 
     // ist der Cursor in einem INetAttribut, dann wird das komplett
