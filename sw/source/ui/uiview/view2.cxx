@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-23 11:58:17 $
+ *  last change: $Author: jp $ $Date: 2000-10-23 12:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1254,7 +1254,7 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
                 pMed->SetFilter( pFilter );
         }
         else
-            pMed = new SfxMedium(rFileName, STREAM_READ, TRUE, TRUE, pFilter, 0);
+            pMed = new SfxMedium(rFileName, STREAM_READ, TRUE, pFilter, 0);
     }
     else
     {
@@ -1349,5 +1349,4 @@ extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
     delete pMed;
     return nFound;
 }
-
 
