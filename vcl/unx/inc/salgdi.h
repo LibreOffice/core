@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:56:33 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,6 @@ class X11SalGraphics : public SalGraphics
     friend class            X11FontLayout;
     friend class            ServerFontLayout;
 
-    STDAPI( X11SalGraphics );
     SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL
     X11SalVirtualDevice*    m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 
@@ -178,24 +177,18 @@ class X11SalGraphics : public SalGraphics
     void            SetClipRegion( GC          pGC,
                                    XLIB_Region pXReg = NULL ) const;
 
-#if defined(_SV_SALGDI_CXX) || defined (_SV_SALGDI2_CXX)
     GC              GetTrackingGC();
     GC              GetInvertGC();
     GC              GetInvert50GC();
     GC              CreateGC( Drawable      hDrawable,
                               unsigned long nMask = GCGraphicsExposures );
-#endif
 
-#if defined _SV_SALGDI_CXX
     GC              SelectPen();
     GC              SelectBrush();
     void            DrawLines( ULONG              nPoints,
                                const SalPolyLine &rPoints,
                                GC                 pGC );
     BOOL            GetDitherPixmap ( SalColor nSalColor );
-#endif
-
-#if defined _SV_SALGDI2_CXX
 
     inline  GC              GetMonoGC( Pixmap hPixmap );
     inline  GC              GetCopyGC();
@@ -226,7 +219,6 @@ class X11SalGraphics : public SalGraphics
                                 const SalBitmap  &rSalBitmap,
                                 const SalBitmap  &rTransparentBitmap,
                                 SalColor          nTransparentColor );
-#endif
 
     GC                      SelectFont();
     bool                    setFont( const ImplFontSelectData* pEntry, int nFallbackLevel );
