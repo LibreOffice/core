@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:58:17 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,10 @@ enum FieldIdEnum {
 
     FIELD_ID_TABLE_FORMULA,         // DEPRECATED: table formulas (Writer 2.0)
     FIELD_ID_DROP_DOWN,             // DEPRECATED: dropdown fields (WW8)
+
+    FIELD_ID_DRAW_HEADER,
+    FIELD_ID_DRAW_FOOTER,
+    FIELD_ID_DRAW_DATE_TIME,
 
     FIELD_ID_UNKNOWN        // invalid or unknown field type!
 };
@@ -463,6 +467,7 @@ private:
     // service names
     const ::rtl::OUString sServicePrefix;
     const ::rtl::OUString sFieldMasterPrefix;
+    const ::rtl::OUString sPresentationServicePrefix;
 
     // property names
     const ::rtl::OUString sPropertyContent;
