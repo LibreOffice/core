@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdbcoretools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:15:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,11 @@ namespace dbaccess
 //.........................................................................
 
     // -----------------------------------------------------------------------------
-    void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent,sal_Bool _bModified);
+    void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject,sal_Bool _bModified);
+
+    // -----------------------------------------------------------------------------
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        getDataSource( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDependentObject );
 
 //.........................................................................
 }   // namespace dbaccess
