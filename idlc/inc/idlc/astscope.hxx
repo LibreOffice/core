@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astscope.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,19 +86,19 @@ public:
 
     sal_uInt32 nMembers()
         { return m_declarations.size(); }
-    DeclList::iterator getIteratorBegin()
+    DeclList::const_iterator getIteratorBegin() const
         { return m_declarations.begin(); }
-    DeclList::iterator getIteratorEnd()
+    DeclList::const_iterator getIteratorEnd() const
         { return m_declarations.end(); }
     sal_uInt16 getNodeCount(NodeType nType);
 
     // Name look up mechanism
     AstDeclaration* lookupByName(const ::rtl::OString& scopedName);
     // Look up the identifier 'name' specified only in the local scope
-    AstDeclaration* lookupByNameLocal(const ::rtl::OString& name);
+    AstDeclaration* lookupByNameLocal(const ::rtl::OString& name) const;
 
     AstDeclaration* lookupInForwarded(const ::rtl::OString& scopedName);
-    AstDeclaration* lookupInInherited(const ::rtl::OString& scopedName);
+    AstDeclaration* lookupInInherited(const ::rtl::OString& scopedName) const;
 
     // Look up a predefined type by its ExprType
     AstDeclaration* lookupPrimitiveType(ExprType type);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astsequence.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,10 @@ public:
     AstType* getMemberType()
         { return m_pMemberType; }
 
-    virtual const sal_Char* getRelativName();
+    virtual const sal_Char* getRelativName() const;
 private:
     AstType*        m_pMemberType;
-    ::rtl::OString* m_pRelativName;
+    mutable ::rtl::OString* m_pRelativName;
 };
 
 #endif // _IDLC_ASTSEQUENCE_HXX_
