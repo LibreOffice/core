@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: vg $ $Date: 2001-09-20 16:57:26 $
+#   last change: $Author: vg $ $Date: 2001-10-16 10:05:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.39 $ ';
+$id_str = ' $Revision: 1.40 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -103,6 +103,7 @@ $CurrentPrj = '';
 $StandDir = &get_stand_dir();
 $build_from = '';
 $build_from_opt = '';
+$build_since = '';
 &get_options;
 $ENV{mk_tmp}++;
 %prj_platform = ();
@@ -178,6 +179,15 @@ sub BuildAll {
                 } else {
                     $build_from_opt = '';
                 };
+            };
+            if ($build_since) {
+                if ($build_since ne $Prj) {
+                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
+                } else {
+                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
+                    $build_since = '';
+                };
+                next;
             };
             print "\n=============\n";
             print "Building project $Prj\n";
@@ -629,19 +639,27 @@ sub get_options {
     #&usage() && exit(0) if ($#ARGV == -1);
     #$QuantityToBuild
     while ($arg = shift @ARGV) {
-        $arg =~ /^PP$/      and $QuantityToBuild = shift @ARGV  and next;
-        $arg =~ /^-all$/    and $BuildAllParents = 1            and next;
-        $arg =~ /^-show$/   and $show = 1                       and next;
-        $arg =~ /^-deliver$/and $deliver = 1                    and next;
-        $arg =~ /^-from$/   and $BuildAllParents = 1
-                            and $build_from = shift @ARGV       and next;
+        $arg =~ /^PP$/          and $QuantityToBuild = shift @ARGV  and next;
+        $arg =~ /^-all$/        and $BuildAllParents = 1            and next;
+        $arg =~ /^-show$/       and $show = 1                       and next;
+        $arg =~ /^-deliver$/    and $deliver = 1                    and next;
+        $arg =~ /^-from$/       and $BuildAllParents = 1
+                                and $build_from = shift @ARGV       and next;
         $arg =~ /^-from_opt$/   and $BuildAllParents = 1
-                            and $build_from_opt = shift @ARGV       and next;
-        $arg =~ /^-help$/   and &usage                          and exit(0);
+                                and $build_from_opt = shift @ARGV   and next;
+
+        $arg =~ /^-since$/  and $BuildAllParents = 1
+                                and $build_since = shift @ARGV      and next;
+        $arg =~ /^-help$/       and &usage                          and exit(0);
         push (@dmake_args, $arg);
     };
     if ($build_from && $build_from_opt) {
         &print_error('Switches -from an -from_opt collision');
+        exit(1);
+    };
+
+    if ($build_from && $build_since) {
+        &print_error('Switches -from an -since collision');
         exit(1);
     };
     @ARGV = @dmake_args;
@@ -654,13 +672,15 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:   build [-help|-all|-from prj_name] \n";
+    print STDERR "Syntax:   build [-help|-all|-from|-from_opt|since prj_name] \n";
     print STDERR "Example:  build -from sfx2\n";
     print STDERR "              - build all projects including current one from sfx2\n";
     print STDERR "Example:  build -from_opt sfx2\n";
     print STDERR "              - the same as -from, but skip all projects that could have been built (no secure way, use ONLY when -all or -from is already been run and there no external dependensies\' changes occurred)\n";
     print STDERR "Keys:     -all        - build all projects from very beginning till current one\n";
     print STDERR "      -from       - build all projects beginning from the specified till current one\n";
+    print STDERR "      -from_opt   - build all projects beginning from the specified till current one (optimized version)\n";
+    print STDERR "      -since      - build all projects beginning from the specified till current one (optimized version, skips specified project)\n";
     print STDERR "      -show       - show what is gonna be built\n";
     print STDERR "      -deliver    - only deliver, no build (usable for \'-all\' and \'-from\' keys)\n";
     print STDERR "      -help       - print help info\n";
