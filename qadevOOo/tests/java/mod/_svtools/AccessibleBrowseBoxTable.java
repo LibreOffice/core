@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleBrowseBoxTable.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-04-28 12:17:26 $
+ *  last change:$Date: 2003-05-27 13:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -115,8 +116,8 @@ public class AccessibleBrowseBoxTable extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
-                                                        DesktopTools.createDesktop(
-                                                                Param.getMSF()));
+                            DesktopTools.createDesktop(
+                                    (XMultiServiceFactory)Param.getMSF()));
     }
 
     /**
@@ -163,7 +164,8 @@ public class AccessibleBrowseBoxTable extends TestCase {
         }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                    (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println("creating a text document");
@@ -181,7 +183,7 @@ public class AccessibleBrowseBoxTable extends TestCase {
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
+        XDispatchProvider aProv = (XDispatchProvider)UnoRuntime.queryInterface(
                                           XDispatchProvider.class,
                                           secondController);
 
@@ -208,9 +210,9 @@ public class AccessibleBrowseBoxTable extends TestCase {
 
         the_frame2.setName("DatasourceBrowser");
 
-        final XInitialization xInit = (XInitialization) UnoRuntime.queryInterface(
-                                              XInitialization.class,
-                                              the_frame2.getController());
+        final XInitialization xInit =
+            (XInitialization)UnoRuntime.queryInterface(
+                        XInitialization.class, the_frame2.getController());
 
         Object[] params = new Object[3];
         PropertyValue param1 = new PropertyValue();
@@ -233,8 +235,8 @@ public class AccessibleBrowseBoxTable extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) tParam.getMSF()
-                                      .createInstance("com.sun.star.awt.Toolkit");
+            oObj = (XInterface)((XMultiServiceFactory)tParam.getMSF())
+                                .createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
