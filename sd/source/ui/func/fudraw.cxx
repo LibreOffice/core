@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:01:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
 
 #include "anminfo.hxx"
 #include "anmdef.hxx"
@@ -568,10 +570,8 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                     OSL_ASSERT (pViewShell->GetViewShell()!=NULL);
                     Client* pIPClient = static_cast<Client*>(
                         pViewShell->GetViewShell()->GetIPClient());
-                    if (pIPClient && pIPClient->IsInPlaceActive())
-                    {
+                    if (pIPClient && pIPClient->IsObjectInPlaceActive())
                         pIPClient->SetSdrGrafObj(NULL);
-                    }
 
                     // wait-mousepointer while deleting object
                     WaitObject aWait( (Window*)pViewShell->GetActiveWindow() );
