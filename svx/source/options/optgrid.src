@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:21:57 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH ] = "Fangen" ;
         Text [ NORWEGIAN ] = "Fangen" ;
         Text [ DANISH ] = "Indfang" ;
-        Text [ ENGLISH_US ] = "Snap to" ;
+        Text [ ENGLISH_US ] = "Snap" ;
         Text [ SPANISH ] = "Capturar" ;
         Text [ FINNISH ] = "Kohdistuspaikka" ;
         Text [ FRENCH ] = "Capturer" ;
@@ -455,10 +455,10 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH ] = "An Fanglinien" ;
         Text [ NORWEGIAN ] = "An Fanglinien" ;
         Text [ DANISH ] = "Til fanglinjer" ;
-        Text [ ENGLISH_US ] = "Snap lines" ;
+        Text [ ENGLISH_US ] = "To snap lines" ;
         Text [ SPANISH ] = "En ~líneas de captura" ;
         Text [ FINNISH ] = "Koh~dista viivat" ;
-        Text [ FRENCH ] = "Aux lignes de ~capture" ;
+        Text [ FRENCH ] = "Aux lignes de capture" ;
         Text [ ITALIAN ] = "Alle linee di cattura" ;
         Text [ DUTCH ] = "Aan ~vanglijnen" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "An Hilfslinien" ;
@@ -484,16 +484,16 @@ TabPage RID_SVXPAGE_GRID
         Size = MAP_APPFONT ( 106 , 10 ) ;
         Text = "An den Se~itenrändern" ;
         Text [ ENGLISH ] = "An den Seitenrändern" ;
-        Text [ english_us ] = "~Page margins" ;
+        Text [ english_us ] = "To the ~page margins" ;
         Text [ italian ] = "Ai margini delle pagine" ;
         Text [ spanish ] = "En los ~márgenes de página" ;
-        Text [ french ] = "~Aux marges" ;
+        Text [ french ] = "Aux marges" ;
         Text [ dutch ] = "Aan de ~marges" ;
-        Text [ swedish ] = "Mot sid~marginalerna" ;
+        Text [ swedish ] = "Mot s~idmarginalerna" ;
         Text [ danish ] = "På sidemargenen" ;
         Text [ portuguese ] = "Nas margens" ;
         Text [ portuguese_brazilian ] = "An den Seitenr?ndern" ;
-        Text[ chinese_simplified ] = "Ò³±ß";
+        Text[ chinese_simplified ] = "Ò³Ãæ±ß¾à";
         Text[ russian ] = "Ê ïîëÿì ñòðàíèöû";
         Text[ polish ] = "Przy marginesach stron";
         Text[ japanese ] = "Íß°¼Þ—]”’‚É(~M)";
@@ -516,14 +516,14 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH ] = "Am Objektrahmen" ;
         Text [ NORWEGIAN ] = "Am Objektrahmen" ;
         Text [ DANISH ] = "På objektrammen" ;
-        Text [ ENGLISH_US ] = "Object ~frame" ;
+        Text [ ENGLISH_US ] = "To object ~frame" ;
         Text [ SPANISH ] = "Al m~arco del objeto" ;
         Text [ FINNISH ] = "Objektin ~kehys" ;
-        Text [ FRENCH ] = "Au cadre de l'~objet" ;
+        Text [ FRENCH ] = "Au cadre de l'objet" ;
         Text [ ITALIAN ] = "Alla cornice dell'oggetto" ;
         Text [ DUTCH ] = "Aan object~kader" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Am Objektrahmen" ;
-        Text [ SWEDISH ] = "Mot ~objektram" ;
+        Text [ SWEDISH ] = "Mot obje~ktram" ;
         Text [ PORTUGUESE ] = "Na moldura do objecto" ;
         Text[ chinese_simplified ] = "¶ÔÏó¿ò";
         Text[ russian ] = "Ê ðàìêå îáúåêòà";
@@ -547,7 +547,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH ] = "An Objektpunkten" ;
         Text [ NORWEGIAN ] = "An Objektpunkten" ;
         Text [ DANISH ] = "På objektpunkterne" ;
-        Text [ ENGLISH_US ] = "Obje~ct points" ;
+        Text [ ENGLISH_US ] = "To obje~ct points" ;
         Text [ SPANISH ] = "En los ~puntos del objeto" ;
         Text [ FINNISH ] = "Objekti~pisteet" ;
         Text [ FRENCH ] = "~Aux points de l'objet" ;
@@ -617,7 +617,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText [ ENGLISH ] = " Pixel" ;
         CustomUnitText [ NORWEGIAN ] = " Pixel" ;
         CustomUnitText [ DANISH ] = "pixler" ;
-        CustomUnitText [ ENGLISH_US ] = "Pixels" ;
+        CustomUnitText [ ENGLISH_US ] = " Pixels" ;
         CustomUnitText [ SPANISH ] = "Píxel" ;
         CustomUnitText [ FINNISH ] = " Kuvapisteet" ;
         CustomUnitText [ FRENCH ] = " Pixels" ;
@@ -878,3 +878,4 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ catalan ] = "grados";
     };
 };
+
