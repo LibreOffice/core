@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_jar.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 12:12:03 $
+#   last change: $Author: obo $ $Date: 2005-03-18 10:14:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,11 +94,8 @@ $(MISC)$/$(JARTARGET:b) : $(SOLARINCDIR)$/$(UPD)minor.mk
     @+echo Specification-Version: $(VERSION) >> $@
     @+echo Specification-Vendor: $(VENDOR) >> $@
     @+echo Implementation-Title: $(IMPLTITLE) >> $@
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    @+echo "Implementation-Version: $(RSCREVISION)" >> $@
-.ELSE			# "$(GUI)"=="UNX"" || "$(USE_SHELL)"!="4nt"
-    @+echo Implementation-Version: $(RSCREVISION) >> $@
-.ENDIF			# "$(GUI)"=="UNX"" || "$(USE_SHELL)"!="4nt"
+# $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
+    @+echo $(USQ)Implementation-Version: $(RSCREVISION)$(USQ) >> $@
     @+echo Implementation-Vendor: $(VENDOR) >> $@
 .ENDIF			# "$(USE_EXTENDED_MANIFESTFILE)"!=""
 
@@ -115,11 +112,8 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP) $(EXTENDEDMANIFESTFILEDEP)
     +-$(MKDIR) $(@:d) >& $(NULLDEV)
     +-$(RM) $@ >& $(NULLDEV)
     +echo Manifest-Version: 1.0 > $@
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    +echo "Solar-Version: $(RSCREVISION)" >> $@
-.ELSE			# "$(GUI)"=="UNX"" || "$(USE_SHELL)"!="4nt"
-    +echo Solar-Version: $(RSCREVISION) >> $@
-.ENDIF			# "$(GUI)"=="UNX"" || "$(USE_SHELL)"!="4nt"
+# $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
+    +echo $(USQ)Solar-Version: $(RSCREVISION)$(USQ) >> $@
 .IF "$(EXTENDEDMANIFESTFILE)"!=""
     +$(TYPE) $(MISC)$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f) >> $@
 .ENDIF			# "$(EXTENDEDMANIFESTFILE)"!=""
