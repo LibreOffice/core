@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:39:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,14 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 nOpenMode = SFX_STREAM_READONLY;
             }
             else
+            {
                 nOpenMode = SFX_STREAM_READWRITE;
+                pSh->SetReadOnlyUI( sal_False );
+
+                // if only the view was in the readonly mode then there is no need to do the reload
+                if ( !pSh->IsReadOnly() )
+                    return;
+            }
 
             // Parameter auswerten
             // sal_Bool bReload = sal_True;
@@ -537,6 +544,13 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         // Umschalten ohne Reload ist moeglich
                         // TODO/LATER: the reloading code must be rewritten
 //REMOVE                            pSh->DoHandsOff();
+                        if ( pMed->HasStorage_Impl() && pMed->GetStorage() == pSh->GetStorage() )
+                        {
+                            // TODO/LATER: faster creation of copy
+                            if ( !pSh->ConnectTmpStorage_Impl( pMed->GetStorage() ) )
+                                return;
+                        }
+
                         pMed->Close();
                         pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & STREAM_WRITE ) ) );
                         pMed->SetOpenMode( nOpenMode, pMed->IsDirect() );
@@ -605,8 +619,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pSh->Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
                         rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), sal_True ) );
                         rReq.Done( sal_True );
-                        if( nOpenMode == SFX_STREAM_READONLY )
-                            pMed->Close();
+                        // if( nOpenMode == SFX_STREAM_READONLY )
+                        //    pMed->Close();
 
                         // ReloadForEdit bei Framesets schaltet auch FramesetEditmode
                         sal_Bool bIsReadonly = GetObjectShell()->IsReadOnly();
@@ -794,16 +808,14 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     //pView->pImp->pMenuBar = pView->GetViewShell()->GetMenuBar_Impl();
                     //pView->GetViewShell()->ReleaseMenuBar_Impl();
                     //pView->ReleaseObjectShell_Impl( bRestoreView );
-                    if ( pMedium->GetStorage() == xOldObj->GetStorage() )
+                    if ( pMedium->HasStorage_Impl() && pMedium->GetStorage() == xOldObj->GetStorage() )
                     {
                         // TODO/LATER: faster creation of copy
-                        uno::Reference< embed::XStorage > xTempStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                        xOldObj->GetStorage()->copyToStorage( xTempStorage );
-                        if ( !xOldObj->DoSaveCompleted( xTempStorage ) )
+                        if ( !xOldObj->ConnectTmpStorage_Impl( pMedium->GetStorage() ) )
                             return;
                     }
-                    else
-                        pMedium->Close();
+
+                    pMedium->Close();
                 }
 
                 xNewObj = SfxObjectShell::CreateObject( pOldFilter->GetServiceName(), SFX_CREATE_MODE_STANDARD );
