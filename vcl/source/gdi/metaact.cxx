@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-22 17:51:28 $
+ *  last change: $Author: ka $ $Date: 2002-04-05 14:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2908,6 +2908,15 @@ MetaFontAction::MetaFontAction( const Font& rFont ) :
     MetaAction  ( META_FONT_ACTION ),
     maFont      ( rFont )
 {
+    // #96876: because RTL_TEXTENCODING_SYMBOL is often set at the StarSymbol font,
+    // we change the textencoding to RTL_TEXTENCODING_UNICODE here, which seems
+    // to be the right way; changing the textencoding at other sources
+    // is too dangerous at the moment
+    if( ( maFont.GetName().SearchAscii( "StarSymbol" ) != STRING_NOTFOUND ) &&
+        ( maFont.GetCharSet() != RTL_TEXTENCODING_UNICODE ) )
+    {
+        maFont.SetCharSet( RTL_TEXTENCODING_UNICODE );
+    }
 }
 
 // ------------------------------------------------------------------------
