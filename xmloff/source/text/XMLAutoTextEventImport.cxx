@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventImport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:37:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ SvXMLImportContext* XMLAutoTextEventImport::CreateContext(
     const OUString& rLocalName,
     const Reference<XAttributeList > & xAttrList )
 {
-    if ( xEvents.is() && (XML_NAMESPACE_OFFICE == nPrefix) &&
+    if ( xEvents.is() && (XML_NAMESPACE_OOO == nPrefix) &&
          IsXMLToken( rLocalName, XML_AUTO_TEXT_EVENTS) )
     {
         return new XMLAutoTextContainerEventImport(
@@ -191,7 +191,7 @@ Sequence< OUString > SAL_CALL
 OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLAutotextEventsImporter" ) );
+        "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter" ) );
 }
 
 Reference< XInterface > SAL_CALL XMLAutoTextEventImport_createInstance(
