@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-01 18:48:57 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,8 +1056,8 @@ void SwXMLTextParagraphExport::exportTable(
         const Reference < XTextContent > & rTextContent,
         sal_Bool bAutoStyles, sal_Bool bProgress )
 {
-    ASSERT( ((SwXMLExport&)GetExport()).IsShowProgress() == bProgress,
-            "inconsistent progress flags" );
+//  ASSERT( ((SwXMLExport&)GetExport()).IsShowProgress() == bProgress,
+//          "inconsistent progress flags" );
 
 //  Reference < XPropertySet > xPropSet( rTextContent, UNO_QUERY );
 //  Any aAny = xPropSet->getPropertyValue( sTextTable );

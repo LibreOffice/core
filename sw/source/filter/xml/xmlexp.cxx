@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 13:44:40 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
 
 #ifdef XML_CORE_API
 void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
@@ -178,9 +179,10 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
              const OUString& rFileName,
              const Reference< xml::sax::XDocumentHandler > & rHandler,
+             const Reference< XIndexContainer > & rEmbeddedGrfObjs,
              sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
-             sal_Bool bShowProg ) :
-    SvXMLExport( rFileName, rHandler, rModel,
+             sal_Bool bShowProg, SvStorage *pPkg ) :
+    SvXMLExport( rFileName, rHandler, rModel, rEmbeddedGrfObjs,
                  SW_MOD()->GetMetric( rPaM.GetDoc()->IsHTMLMode() ) ),
     pDoc( rPaM.GetDoc() ),
 #ifdef XML_CORE_API
@@ -194,7 +196,8 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
     bExportFirstTableOnly( bExpFirstTableOnly ),
     bShowProgress( bShowProg ),
     sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
-    sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
+    sCell(RTL_CONSTASCII_USTRINGPARAM("Cell")),
+    xPackage( pPkg )
 {
     const SfxPoolItem* pItem;
     const SfxItemPool& rPool = pDoc->GetAttrPool();
@@ -406,6 +409,7 @@ const SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
     return  pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTxtNode();
 }
 
+#if 0
 OUString SwXMLTextParagraphExport::exportTextEmbeddedGraphic(
     const Reference < XPropertySet >& rPropSet )
 {
@@ -427,6 +431,7 @@ OUString SwXMLTextParagraphExport::exportTextEmbeddedGraphic(
     }
     return aName;
 }
+#endif
 
 OUString SwXMLTextParagraphExport::exportTextEmbeddedObject(
     const Reference < XPropertySet >& rPropSet )

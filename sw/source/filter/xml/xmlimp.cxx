@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-28 11:48:49 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,8 +269,10 @@ SwXMLImport::SwXMLImport(
         SwDoc& rDoc, const SwPaM& rPaM,
         sal_Bool bLDoc, sal_Bool bInsertMode, sal_uInt16 nStyleFamMask,
         const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::frame::XModel > & rModel ) :
-    SvXMLImport( rModel ),
+                 ::com::sun::star::frame::XModel > & rModel,
+         const ::com::sun::star::uno::Reference<
+                ::com::sun::star::container::XIndexContainer > & rEGO ) :
+    SvXMLImport( rModel, rEGO ),
     bLoadDoc( bLDoc ),
     bInsert( bInsertMode ),
     nStyleFamilyMask( nStyleFamMask ),

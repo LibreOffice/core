@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:18:37 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
 #include <sfx2/docfile.hxx>
 #endif
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
 
 #ifndef _SWSWERROR_H
 #include <swerror.h>
@@ -102,6 +105,9 @@
 #ifndef _DOCSH_HXX //autogen wg. SwDoc
 #include <docsh.hxx>
 #endif
+#ifndef _XMLGRHLP_HXX
+#include <svx/xmlgrhlp.hxx>
+#endif
 
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -109,10 +115,16 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 using namespace ::rtl;
 
 XMLReader::XMLReader()
 {
+}
+
+int XMLReader::GetReaderType()
+{
+    return SW_STORAGE_READER | SW_STREAM_READER;
 }
 
 sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
@@ -137,47 +149,58 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         return ERR_SWG_READ_ERROR;
 
     // Get data source ...
+    DBG_ASSERT( pMedium, "There is the medium" );
+    if( !pMedium )
+        return ERR_SWG_READ_ERROR;
+
     Reference< io::XActiveDataSource > xSource;
-    if( pMedium /* && pMedium->GetLoadEnvironment_Impl() */ )
+    Reference< XInterface > xPipe;
+
+     xml::sax::InputSource aParserInput;
+    aParserInput.sSystemId = rName;
+
+    Reference< XIndexContainer > xEmbeddedGraphicExport;
+    SvXMLGraphicHelper *pGraphicHelper = 0;
+    SvStorageStreamRef xDocStream;
+    SvStorage *pStorage = pMedium->GetStorage();
+    if( pStorage )
+    {
+        pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
+                                                     GRAPHICHELPER_MODE_READ,
+                                                     sal_False );
+        xEmbeddedGraphicExport = pGraphicHelper;
+
+        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content" ) );
+        xDocStream = pStorage->OpenStream( sDocName,
+                                  STREAM_READ | STREAM_NOCREATE );
+        xDocStream->SetBufferSize( 16*1024 );
+        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
+    }
+    else
     {
         // if there is a medium and if this medium has a load environment,
         // we get an active data source from the medium.
         pMedium->GetInStream()->Seek( 0 );
         xSource = pMedium->GetDataSource();
         ASSERT( xSource.is(), "XMLReader:: got no data source from medium" );
-    }
-    if( !xSource.is() )
-    {
-        // If we didn't get a data source from a medium, we have to create
-        // one.
-        Reference< XInterface > xFactory = xServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.frame.DataSourceFactory") );
-        if( xFactory.is() )
-        {
-            Reference< lang::XMultiServiceFactory > xMFactory( xFactory,
-                                                               UNO_QUERY );
-            if( xMFactory.is() )
-            {
-                OUString sURL( rName );
-                Sequence< Any > aArgs(1);
-                Any* pArgs = aArgs.getArray();
-                *pArgs <<= sURL;
+        if( !xSource.is() )
+            return ERR_SWG_READ_ERROR;
 
-                Reference< XInterface > xSrc =
-                    xMFactory->createInstanceWithArguments( sURL, aArgs );
-                if( xSrc.is() )
-                {
-                    Reference< io::XActiveDataSource > xTmp( xSrc, UNO_QUERY );
-                    xSource = xTmp;
-                }
-            }
-        }
-    }
+        // get a pipe for connecting the data source to the parser
+        xPipe = xServiceFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.io.Pipe") );
+        ASSERT( xPipe.is(),
+                "XMLReader::Read: com.sun.star.io.Pipe service missing" );
+        if( !xPipe.is() )
+            return ERR_SWG_READ_ERROR;
 
-    // get data source
-    ASSERT( xSource.is(), "XMLReader::Read: data source missing" );
-    if( !xSource.is() )
-        return ERR_SWG_READ_ERROR;
+        // connect pipe's output stream to the data source
+        Reference< io::XOutputStream > xPipeOutput( xPipe, UNO_QUERY );
+        xSource->setOutputStream( xPipeOutput );
+
+        aParserInput.aInputStream = Reference< io::XInputStream >( xPipe,
+                                                                   UNO_QUERY );
+    }
 
     // get parser
     Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
@@ -185,14 +208,6 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     ASSERT( xXMLParser.is(),
             "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
     if( !xXMLParser.is() )
-        return ERR_SWG_READ_ERROR;
-
-    // get a pipe for connecting the data source to the parser
-    Reference< XInterface > xPipe = xServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.io.Pipe") );
-    ASSERT( xPipe.is(),
-            "XMLReader::Read: com.sun.star.io.Pipe service missing" );
-    if( !xPipe.is() )
         return ERR_SWG_READ_ERROR;
 
     sal_uInt16 nStyleFamilyMask = SFX_STYLE_FAMILY_ALL;
@@ -223,17 +238,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     // get filter
     Reference< xml::sax::XDocumentHandler > xFilter =
             new SwXMLImport( rDoc, rPaM, bLoadDoc, bInsert, nStyleFamilyMask,
-                               xModel );
-
-    // connect pipe's output stream to the data source
-    Reference< io::XOutputStream > xPipeOutput( xPipe, UNO_QUERY );
-    xSource->setOutputStream( xPipeOutput );
-
-    // connect pipe's input stream to the parser
-     xml::sax::InputSource aParserInput;
-    Reference< io::XInputStream > xPipeInput( xPipe, UNO_QUERY );
-    aParserInput.aInputStream = xPipeInput;
-    aParserInput.sSystemId = rName;
+                               xModel, xEmbeddedGraphicExport );
 
     // connect parser and filter
     Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
@@ -243,8 +248,11 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     sal_uInt32 nRet = 0;
 
     // parse
-    Reference< io::XActiveDataControl > xSourceControl( xSource, UNO_QUERY );
-    xSourceControl->start();
+    if( xSource.is() )
+    {
+        Reference< io::XActiveDataControl > xSourceControl( xSource, UNO_QUERY );
+        xSourceControl->start();
+    }
     try
     {
         xParser->parseStream( aParserInput );
@@ -262,6 +270,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         nRet = ERR_SWG_READ_ERROR;
     }
 
+    if( pGraphicHelper )
+        SvXMLGraphicHelper::Destroy( pGraphicHelper );
+    xEmbeddedGraphicExport = 0;
     rDoc.RemoveLink();
 
     return nRet;
@@ -271,6 +282,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/20 09:18:37  jp
+      must change: processfactory moved
+
       Revision 1.3  2000/10/26 09:38:52  mib
       tables within headers and footers
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 13:44:40 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,20 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
+#endif
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
+#ifndef _XMLGRHLP_HXX
+#include <svx/xmlgrhlp.hxx>
 #endif
 
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
@@ -101,8 +110,10 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 
-SwXMLWriter::SwXMLWriter()
+SwXMLWriter::SwXMLWriter( sal_Bool bPl ) :
+    bPlain( bPl )
 {
 }
 
@@ -114,6 +125,13 @@ __EXPORT SwXMLWriter::~SwXMLWriter()
 sal_uInt32 SwXMLWriter::WriteStream()
 {
     ASSERT( !this, "SwXMLWriter::WriteStream: use Write!" );
+
+    return ERR_SWG_WRITE_ERROR;
+}
+
+sal_uInt32 SwXMLWriter::WriteStorage()
+{
+    ASSERT( !this, "SwXMLWriter::WriteStorage: use Write!" );
 
     return ERR_SWG_WRITE_ERROR;
 }
@@ -145,18 +163,49 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
     PutNumFmtFontsInAttrPool();
 //  PutEditEngFontsInAttrPool();
 
-    Reference< io::XOutputStream > xOut = rMed.GetDataSink();
+    Reference< io::XOutputStream > xOut;
+    SvStorageStreamRef xDocStream;
+    SvStorage *pStorage = bPlain ? 0 : rMed.GetOutputStorage( sal_True );
+    if( pStorage )
+    {
+        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content" ) );
+        xDocStream = pStorage->OpenStream( sDocName,
+                                  STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+//      xDocStream->SetBufferSize( 16*1024 );
+        xOut = new utl::OOutputStreamWrapper( *xDocStream );
+    }
+    else
+    {
+        xOut = rMed.GetDataSink();
+    }
+
     Reference< io::XActiveDataSource > xSrc( xWriter, UNO_QUERY );
     xSrc->setOutputStream( xOut );
+
+    Reference< XIndexContainer > xEmbeddedGraphicExport;
+    SvXMLGraphicHelper *pGraphicHelper = 0;
+    if( pStorage )
+    {
+        pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
+                                                     GRAPHICHELPER_MODE_WRITE,
+                                                     sal_False );
+        xEmbeddedGraphicExport = pGraphicHelper;
+    }
 
     Reference< xml::sax::XDocumentHandler > xHandler( xWriter, UNO_QUERY );
 
     SwXMLExport *pExp = new SwXMLExport( xModel, rPaM, *pFileName, xHandler,
+                                         xEmbeddedGraphicExport,
                                          bWriteAll, bWriteOnlyFirstTable,
-                                         bShowProgress );
+                                         bShowProgress, pStorage );
 
     sal_uInt32 nRet = pExp->exportDoc( sXML_text );
+    if( xDocStream.Is() )
+        xDocStream->Commit();
 
+    if( pGraphicHelper )
+        SvXMLGraphicHelper::Destroy( pGraphicHelper );
+    xEmbeddedGraphicExport = 0;
     delete pExp;
 
     ResetWriter();
@@ -166,9 +215,9 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
 
 // -----------------------------------------------------------------------
 
-void GetXMLWriter( const String&, WriterRef& xRet )
+void GetXMLWriter( const String& rName, WriterRef& xRet )
 {
-    xRet = new SwXMLWriter;
+    xRet = new SwXMLWriter( rName.EqualsAscii( "XML" ) );
 }
 
 // -----------------------------------------------------------------------
@@ -177,11 +226,14 @@ void GetXMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.6 2000-11-27 13:44:40 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.7 2000-12-02 10:57:15 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/11/27 13:44:40  mib
+      #80795#: Use packages within XML filter
+
       Revision 1.5  2000/11/20 11:17:53  mib
       Put edit engine's and numbering rules' fonts into the pool
 

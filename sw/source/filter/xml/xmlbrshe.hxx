@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbrshe.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,50 +71,23 @@
 #endif
 
 
-class SvXMLNamespaceMap;
-class SvXMLUnitConverter;
 class SvxBrushItem;
+class SwXMLExport;
 
 class SwXMLBrushItemExport
 {
-    const ::rtl::OUString sCDATA;
-
-    // the handler
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XDocumentHandler >  xHandler;
-
-    // a common attribute list and an interface of it
-    SvXMLAttributeList          *pAttrList;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList >    xAttrList;
-
-    const SvXMLNamespaceMap     *pNamespaceMap; // the namepspace map
-    const SvXMLUnitConverter&   rUnitConv;
+    SwXMLExport&        rExport;
 
 protected:
 
-    // Check if common attribute list is empty.
-#ifdef PRODUCT
-    void CheckAttrList() {}
-#else
-    void CheckAttrList();
-#endif
-    void ClearAttrList();
-    void AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
-                       const ::rtl::OUString& rValue );
-    ::rtl::OUString GetQNameByKey( sal_uInt16 nKey,
-                                   const ::rtl::OUString& rLocalName ) const;
+    SwXMLExport& GetExport() { return rExport; }
 public:
 
-    SwXMLBrushItemExport(
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-               const SvXMLUnitConverter& rUnitConverter );
+    SwXMLBrushItemExport( SwXMLExport& rExport );
     ~SwXMLBrushItemExport();
 
     // core API
-    void exportXML( const SvxBrushItem& rItem,
-                    const SvXMLNamespaceMap& rNamespMap );
+    void exportXML( const SvxBrushItem& rItem );
 };
 
 

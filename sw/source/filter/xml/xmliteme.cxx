@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmliteme.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,10 +149,9 @@ extern SvXMLItemMapEntry aXMLTableCellItemMap[];
 class SwXMLTableItemMapper_Impl: public SvXMLExportItemMapper
 {
     const OUString sCDATA;
+    SwXMLBrushItemExport aBrushItemExport;
 
 protected:
-    SvXMLUnitConverter& mrUnitConverter;
-    const Reference< xml::sax::XDocumentHandler > & mrHandler;
 
     sal_uInt32 nAbsWidth;
 
@@ -165,8 +164,7 @@ public:
 
     SwXMLTableItemMapper_Impl(
             SvXMLItemMapEntriesRef rMapEntries,
-            SvXMLUnitConverter& rUnitConverter,
-            const Reference< xml::sax::XDocumentHandler > & rHandler );
+            SwXMLExport& rExp );
 
     virtual ~SwXMLTableItemMapper_Impl();
 
@@ -191,12 +189,10 @@ public:
 
 SwXMLTableItemMapper_Impl::SwXMLTableItemMapper_Impl(
         SvXMLItemMapEntriesRef rMapEntries,
-        SvXMLUnitConverter& rUnitConverter,
-        const Reference< xml::sax::XDocumentHandler > & rHandler ) :
+        SwXMLExport& rExp ) :
     SvXMLExportItemMapper( rMapEntries ),
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
-    mrUnitConverter(rUnitConverter),
-    mrHandler( rHandler ),
+    aBrushItemExport( rExp ),
     nAbsWidth( USHRT_MAX )
 {
 }
@@ -304,9 +300,8 @@ void SwXMLTableItemMapper_Impl::handleElementItem(
     {
     case RES_BACKGROUND:
         {
-            SwXMLBrushItemExport aBrushItemExport( rHandler, rUnitConverter );
-            aBrushItemExport.exportXML( (const SvxBrushItem&)rItem,
-                                         rNamespaceMap );
+            ((SwXMLTableItemMapper_Impl *)this)->aBrushItemExport.exportXML(
+                                                (const SvxBrushItem&)rItem );
         }
         break;
     }
@@ -328,9 +323,7 @@ void SwXMLExport::_InitItemExport()
     xTableRowItemMap = new SvXMLItemMapEntries( aXMLTableRowItemMap );
     xTableCellItemMap = new SvXMLItemMapEntries( aXMLTableCellItemMap );
 
-    pTableItemMapper = new SwXMLTableItemMapper_Impl( xTableItemMap,
-                                                       *pTwipUnitConv,
-                                                       GetDocHandler() );
+    pTableItemMapper = new SwXMLTableItemMapper_Impl( xTableItemMap, *this );
 }
 
 void SwXMLExport::_FinitItemExport()

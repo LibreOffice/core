@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 13:44:40 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,8 +186,10 @@ public:
                  SwPaM& rPaM, const ::rtl::OUString& rFileName,
                  const ::com::sun::star::uno::Reference<
                      ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+                 const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::container::XIndexContainer > &,
                  sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
-                 sal_Bool bShowProgr );
+                 sal_Bool bShowProgr, SvStorage *pPkg );
     virtual ~SwXMLExport();
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;

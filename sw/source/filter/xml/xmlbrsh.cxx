@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbrsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,13 @@
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
 
 #include "xmlbrshi.hxx"
 #include "xmlbrshe.hxx"
+#include "xmlexp.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -133,7 +137,8 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
         switch( aTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_BGIMG_HREF:
-            pItem->importXML( rValue, MID_GRAPHIC_LINK, rUnitConv );
+            pItem->importXML( GetImport().ResolveGraphicObjectURL( rValue,sal_False),
+                                   MID_GRAPHIC_LINK, rUnitConv );
             break;
         case XML_TOK_BGIMG_TYPE:
         case XML_TOK_BGIMG_ACTUATE:
@@ -189,100 +194,57 @@ SwXMLBrushItemImportContext::~SwXMLBrushItemImportContext()
     delete pItem;
 }
 
-OUString SwXMLBrushItemExport::GetQNameByKey(
-        sal_uInt16 nKey,
-         const OUString& rLocalName ) const
+SwXMLBrushItemExport::SwXMLBrushItemExport( SwXMLExport& rExp ) :
+    rExport( rExp )
 {
-    if( pNamespaceMap )
-        return pNamespaceMap->GetQNameByKey( nKey, rLocalName );
-    else
-        return rLocalName;
-}
-
-void SwXMLBrushItemExport::ClearAttrList()
-{
-    pAttrList->Clear();
-}
-
-#ifndef PRODUCT
-void SwXMLBrushItemExport::CheckAttrList()
-{
-    DBG_ASSERT( !pAttrList->getLength(),
-                "SvxXMLBrsuhItemExport::CheckAttrList: list is not empty" );
-}
-#endif
-
-void SwXMLBrushItemExport::AddAttribute( sal_uInt16 nPrefixKey,
-                                          const sal_Char *pName,
-                                          const OUString& rValue )
-{
-    OUString sName( OUString::createFromAscii( pName ) );
-
-    pAttrList->AddAttribute( GetQNameByKey( nPrefixKey, sName ),
-                             sCDATA, rValue );
-}
-
-SwXMLBrushItemExport::SwXMLBrushItemExport(
-        const Reference< xml::sax::XDocumentHandler >& rHandler,
-        const SvXMLUnitConverter& rUnitConverter ) :
-    sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
-    pNamespaceMap( 0 ),
-    rUnitConv( rUnitConverter ),
-    pAttrList( new SvXMLAttributeList )
-{
-    xHandler = rHandler;
-    xAttrList = pAttrList;
 }
 
 SwXMLBrushItemExport::~SwXMLBrushItemExport()
 {
 }
 
-void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem,
-                                         const SvXMLNamespaceMap& rNamespaceMap )
+void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 {
-    pNamespaceMap = &rNamespaceMap;
-
-    CheckAttrList();
+    GetExport().CheckAttrList();
 
     OUString sValue;
+    const SvXMLUnitConverter& rUnitConv = GetExport().GetTwipUnitConverter();
     if( rItem.exportXML( sValue, MID_GRAPHIC_LINK, rUnitConv ) )
     {
-        AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sValue );
-        AddAttribute( XML_NAMESPACE_XLINK, sXML_type,
+        GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href,
+                        GetExport().AddEmbeddedGraphicObject( sValue ) );
+        GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_type,
                       OUString::createFromAscii(sXML_simple) );
 //      AddAttribute( XML_NAMESPACE_XLINK, sXML_show, ACP2WS(sXML_embed) );
-        AddAttribute( XML_NAMESPACE_XLINK, sXML_actuate,
+        GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_actuate,
                       OUString::createFromAscii(sXML_onLoad) );
 
         if( rItem.exportXML( sValue, MID_GRAPHIC_POSITION, rUnitConv ) )
-            AddAttribute( XML_NAMESPACE_STYLE, sXML_position, sValue );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_position, sValue );
 
         if( rItem.exportXML( sValue, MID_GRAPHIC_REPEAT, rUnitConv ) )
-            AddAttribute( XML_NAMESPACE_STYLE, sXML_repeat, sValue );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_repeat, sValue );
 
         if( rItem.exportXML( sValue, MID_GRAPHIC_FILTER, rUnitConv ) )
-            AddAttribute( XML_NAMESPACE_STYLE, sXML_filter_name, sValue );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_filter_name, sValue );
     }
 
-    OUString sElem( GetQNameByKey( XML_NAMESPACE_STYLE,
-                        OUString::createFromAscii(sXML_background_image) ) );
-    xHandler->startElement( sElem, xAttrList );
-    ClearAttrList();
-    xHandler->endElement( sElem );
-
-    pNamespaceMap = 0;
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, sXML_background_image,
+                              sal_True, sal_True );
 }
 
 /*************************************************************************
 
       Source Code Control ::com::sun::star::chaos::System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlbrsh.cxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlbrsh.cxx,v 1.2 2000-12-02 10:57:15 mib Exp $
 
       Source Code Control ::com::sun::star::chaos::System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:59  hr
+      initial import
+
       Revision 1.2  2000/09/18 16:05:05  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 14:42:37 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,12 +453,19 @@ void SwXMLExport::_ExportAutoStyles()
         pProgress->SetValue( nContentProgressStart );
         GetTextParagraphExport()->SetProgress( nContentProgressStart );
     }
+
+    // The order in which styles are collected *MUST* be the same as
+    // the order in which they are exported. Otherwise, caching will
+    // fail.
+    // exported in _ExportMasterStyles
+    GetPageExport()->collectAutoStyles( sal_False );
+
+    // exported in _ExportContent
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
 
     GetTextParagraphExport()->collectFrameBoundToPageAutoStyles( bShowProgress );
     GetTextParagraphExport()->collectTextAutoStyles( xText, bShowProgress );
-    GetPageExport()->collectAutoStyles( sal_False );
 
     GetTextParagraphExport()->exportTextAutoStyles();
     GetPageExport()->exportAutoStyles();
