@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:41:27 $
+#   last change: $Author: pjunck $ $Date: 2004-10-22 12:34:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,13 @@ PROJECTPCHSOURCE=cont_pch
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=   $(SLO)$/svtabbx.obj		\
+EXCEPTIONSFILES=\
+            $(SLO)$/contentenumeration.obj	\
+            $(SLO)$/fileview.obj	\
+            $(SLO)$/templwin.obj
+
+SLOFILES=   $(EXCEPTIONSFILES) \
+            $(SLO)$/svtabbx.obj		\
             $(SLO)$/svicnvw.obj		\
             $(SLO)$/svimpicn.obj	\
             $(SLO)$/treelist.obj	\
@@ -86,13 +92,7 @@ SLOFILES=   $(SLO)$/svtabbx.obj		\
             $(SLO)$/imivctl1.obj	\
             $(SLO)$/imivctl2.obj	\
             $(SLO)$/ivctrl.obj		\
-            $(SLO)$/fileview.obj	\
-            $(SLO)$/templwin.obj	\
             $(SLO)$/tooltiplbox.obj
-
-EXCEPTIONSFILES=\
-            $(SLO)$/fileview.obj	\
-            $(SLO)$/templwin.obj
 
 # Fuer das Setup bauen wir noch mal statisch
 
