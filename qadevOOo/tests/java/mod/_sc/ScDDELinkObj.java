@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScDDELinkObj.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 15:53:07 $
+ *  last change:$Date: 2003-05-27 13:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ public class ScDDELinkObj extends TestCase {
     * Creates Spreadsheet document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
@@ -179,7 +179,7 @@ public class ScDDELinkObj extends TestCase {
 
         // create testobject here
 
-        XMultiServiceFactory oMSF = Param.getMSF();
+        XMultiServiceFactory oMSF = (XMultiServiceFactory)Param.getMSF();
         try {
             oInterface = oMSF.createInstance("com.sun.star.frame.Desktop");
         } catch(com.sun.star.uno.Exception e) {
