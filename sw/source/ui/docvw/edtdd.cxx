@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-08-09 05:36:54 $
+ *  last change: $Author: jp $ $Date: 2001-08-13 22:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,7 +454,8 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
         bDropCursor = FALSE;
 
     USHORT nEventAction;
-    sal_Int8 nUserOpt = rEvt.mnAction;
+    sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT
+                                       : rEvt.mnAction;
 
     nDropAction = SotExchange::GetExchangeAction(
                                 GetDataFlavorExVector(),
@@ -483,14 +484,14 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
             {
                 bCleanup = TRUE;
             }
-//!!            else if( rEvt.IsDefaultAction() )
-//!!            {
-//!!                // JP 13.08.98: internes Drag&Drop: bei gleichem Doc ein Move
-//!!                //              ansonten ein Copy - Task 54974
-//!!                nEventAction = pSrcSh->GetDoc() == rSh.GetDoc()
-//!!                                    ? DND_ACTION_MOVE
-//!!                                    : DND_ACTION_COPY;
-//!!            }
+            else if( rEvt.mbDefault )
+            {
+                // JP 13.08.98: internes Drag&Drop: bei gleichem Doc ein Move
+                //              ansonten ein Copy - Task 54974
+                nEventAction = pSrcSh->GetDoc() == rSh.GetDoc()
+                                    ? DND_ACTION_MOVE
+                                    : DND_ACTION_COPY;
+            }
             if ( bCleanup )
             {
                 CleanupDropUserMarker();
@@ -569,6 +570,9 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/08/09 05:36:54  os
+    #89714# default drag and drop of the navigator works again
+
     Revision 1.5  2001/08/01 10:12:08  jp
     Bug #90411#: DragFinished calls also the DropCleanUp for showing the correct TextCursor
 
