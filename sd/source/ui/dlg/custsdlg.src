@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ english_us ] = "~Use Custom Slide Show" ;
         Text [ portuguese_brazilian ] = "~Individuelle Präsentation benutzen" ;
         Text [ swedish ] = "Använd ~individuell bildskärmspresentation" ;
-        Text [ danish ] = "Brug individuelt diasshow" ;
+        Text [ danish ] = "Brug individuel præsentation" ;
         Text [ italian ] = "Usa presentaz~ione su schermo personalizzata" ;
         Text [ spanish ] = "~Utilizar presentación personalizada" ;
         Text [ french ] = "~Utiliser la présentation à l'écran personnalisée" ;
@@ -280,7 +280,7 @@ ModalDialog DLG_CUSTOMSHOW
     Text [ english_us ] = "Custom Slide Shows" ;
     Text [ portuguese_brazilian ] = "Individuelle Präsentationen" ;
     Text [ swedish ] = "Individuella bildskärmspresentationer" ;
-    Text [ danish ] = "Individuelt diasshow" ;
+    Text [ danish ] = "Individuel præsentation" ;
     Text [ italian ] = "Presentazioni su schermo personalizzate" ;
     Text [ spanish ] = "Presentación personalizada" ;
     Text [ french ] = "Présentations à l'écran personnalisées" ;
@@ -445,7 +445,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text [ english_us ] = "Define Custom Slide Show" ;
     Text [ portuguese_brazilian ] = "Individuelle Präsentation definieren" ;
     Text [ swedish ] = "Definiera individuell bildskärmspresentation" ;
-    Text [ danish ] = "Definer individuelt diasshow" ;
+    Text [ danish ] = "Definer individuel præsentation" ;
     Text [ italian ] = "Definisci presentazione su schermo personalizzata" ;
     Text [ spanish ] = "Definir presentación personalizada" ;
     Text [ french ] = "Définir une présentation à l'écran personnalisée" ;
