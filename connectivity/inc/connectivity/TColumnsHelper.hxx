@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TColumnsHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:57:33 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,11 @@ namespace connectivity
         virtual void appendObject( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
     public:
-        OColumnsHelper( ::cppu::OWeakObject& _rParent,
-                    sal_Bool _bCase,
-                    ::osl::Mutex& _rMutex,
-                    const TStringVector &_rVector
+        OColumnsHelper( ::cppu::OWeakObject& _rParent
+                        ,sal_Bool _bCase
+                        ,::osl::Mutex& _rMutex
+                        ,const TStringVector &_rVector
+                        ,sal_Bool _bUseHardRef = sal_True
                     );
         virtual ~OColumnsHelper();
 
