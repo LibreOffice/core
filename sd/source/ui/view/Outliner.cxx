@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:14:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
+#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -324,7 +325,8 @@ void Outliner::PrepareSpelling (void)
 
         ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
         if (pBase != NULL)
-            SetViewShell (pBase->GetSubShellManager().GetMainSubShell());
+            SetViewShell (pBase->GetMainViewShell());
+        SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
 
         SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
 
@@ -434,7 +436,7 @@ void Outliner::EndSpelling (void)
     {
         ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
         if (pBase != NULL)
-            mpViewShell = pBase->GetSubShellManager().GetMainSubShell();
+            mpViewShell = pBase->GetMainViewShell();
         else
             mpViewShell = NULL;
 
@@ -553,7 +555,7 @@ BOOL Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         bool bAbort = false;
         if (pBase != NULL)
         {
-            ViewShell* pShell = pBase->GetSubShellManager().GetMainSubShell();
+            ViewShell* pShell = pBase->GetMainViewShell();
             SetViewShell (pShell);
             if (pShell == NULL)
                 bAbort = true;
@@ -965,6 +967,7 @@ void Outliner::RestoreStartPosition (void)
             if (pDrawViewShell != NULL)
                 SetPage (meStartEditMode, mnStartPageIndex);
 
+
             if (mpStartEditedObject != NULL)
             {
                 SdrPageView* pPageView = mpView->GetPageViewPvNum(0);
@@ -1309,9 +1312,9 @@ void Outliner::SetViewMode (PageKind ePageKind)
 
         ViewShellBase& rBase = mpViewShell->GetViewShellBase();
         SetViewShell (NULL);
-        rBase.GetSubShellManager().RequestMainSubShellChange (
+        rBase.GetPaneManager().RequestMainViewShellChange (
             eType,
-            true /* synchronous */);
+            PaneManager::CM_SYNCHRONOUS);
         // Switching to another view shell has intermediatly called
         // EndSpelling().  A PrepareSpelling() is pending, so call that now.
         PrepareSpelling();
@@ -1490,6 +1493,7 @@ bool Outliner::HandleFailedSearch (void)
 
     if (pParent == NULL)
         pParent = Application::GetDefDialogParent();
+    //1.30->1.31 of sdoutl.cxx        pParent = Application::GetDefModalDialogParent();
 
     return pParent;
 }
@@ -1607,7 +1611,7 @@ void Outliner::BeginConversion (void)
 
     ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
     if (pBase != NULL)
-        SetViewShell (pBase->GetSubShellManager().GetMainSubShell());
+        SetViewShell (pBase->GetMainViewShell());
 
     if (mpViewShell != NULL)
     {
