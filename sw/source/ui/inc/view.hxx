@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:57:45 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 09:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE void          SpellEnd( SwHHCWrapper *pConvWrapper = 0 );
 
     SW_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
-    SW_DLLPRIVATE void          _SpellDocument( const String* pStr, BOOL bAllRight );
     SW_DLLPRIVATE BOOL          CheckSpecialCntnt();
     SW_DLLPRIVATE void          SpellKontext(BOOL bOn = TRUE)
                             { bCenterCrsr = bOn; bAllwaysShowSel = bOn; }
