@@ -59,18 +59,14 @@ $(LIB1TARGET) :	$(LIB1FILES) \
     @+cat /dev/null $(LIB1FILES) | xargs -n 1 >> $@
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
-# wnt ist hier
-# $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB1FILES) $(LIB1OBJFILES))
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
-# os2icci3 hier
     @+-$(RM) $@
 .IF "$(COM)"=="ICC"
     $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB1FILES:+"&\n") \
     $(LIB1OBJFILES:+"&\n");)
 .ELSE
-# os2gcci hier
     +echo $(LIBMGR) r $@ $(LIB1OBJFILES)
     $(LIBMGR) r $@ $(LIB1OBJFILES) $(LIB1FILES) bla.lib
 .ENDIF
@@ -142,18 +138,14 @@ $(LIB2TARGET) :	$(LIB2FILES) \
     @+cat /dev/null $(LIB2FILES) | xargs -n 1 >> $@
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
-# wnt ist hier
-# $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB2FILES) $(LIB2OBJFILES))
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
-# os2icci3 hier
     @+-$(RM) $@
 .IF "$(COM)"=="ICC"
     $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB2FILES:+"&\n") \
     $(LIB2OBJFILES:+"&\n");)
 .ELSE
-# os2gcci hier
     +echo $(LIBMGR) r $@ $(LIB2OBJFILES)
     $(LIBMGR) r $@ $(LIB2OBJFILES) $(LIB2FILES) bla.lib
 .ENDIF
@@ -225,18 +217,14 @@ $(LIB3TARGET) :	$(LIB3FILES) \
     @+cat /dev/null $(LIB3FILES) | xargs -n 1 >> $@
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
-# wnt ist hier
-# $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB3FILES) $(LIB3OBJFILES))
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
-# os2icci3 hier
     @+-$(RM) $@
 .IF "$(COM)"=="ICC"
     $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB3FILES:+"&\n") \
     $(LIB3OBJFILES:+"&\n");)
 .ELSE
-# os2gcci hier
     +echo $(LIBMGR) r $@ $(LIB3OBJFILES)
     $(LIBMGR) r $@ $(LIB3OBJFILES) $(LIB3FILES) bla.lib
 .ENDIF
@@ -308,18 +296,14 @@ $(LIB4TARGET) :	$(LIB4FILES) \
     @+cat /dev/null $(LIB4FILES) | xargs -n 1 >> $@
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
-# wnt ist hier
-# $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB4FILES) $(LIB4OBJFILES))
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
-# os2icci3 hier
     @+-$(RM) $@
 .IF "$(COM)"=="ICC"
     $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB4FILES:+"&\n") \
     $(LIB4OBJFILES:+"&\n");)
 .ELSE
-# os2gcci hier
     +echo $(LIBMGR) r $@ $(LIB4OBJFILES)
     $(LIBMGR) r $@ $(LIB4OBJFILES) $(LIB4FILES) bla.lib
 .ENDIF
@@ -391,18 +375,14 @@ $(LIB5TARGET) :	$(LIB5FILES) \
     @+cat /dev/null $(LIB5FILES) | xargs -n 1 >> $@
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
-# wnt ist hier
-# $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB5FILES) $(LIB5OBJFILES))
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
-# os2icci3 hier
     @+-$(RM) $@
 .IF "$(COM)"=="ICC"
     $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB5FILES:+"&\n") \
     $(LIB5OBJFILES:+"&\n");)
 .ELSE
-# os2gcci hier
     +echo $(LIBMGR) r $@ $(LIB5OBJFILES)
     $(LIBMGR) r $@ $(LIB5OBJFILES) $(LIB5FILES) bla.lib
 .ENDIF
@@ -474,18 +454,14 @@ $(LIB6TARGET) :	$(LIB6FILES) \
     @+cat /dev/null $(LIB6FILES) | xargs -n 1 >> $@
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
-# wnt ist hier
-# $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB6FILES) $(LIB6OBJFILES))
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
-# os2icci3 hier
     @+-$(RM) $@
 .IF "$(COM)"=="ICC"
     $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB6FILES:+"&\n") \
     $(LIB6OBJFILES:+"&\n");)
 .ELSE
-# os2gcci hier
     +echo $(LIBMGR) r $@ $(LIB6OBJFILES)
     $(LIBMGR) r $@ $(LIB6OBJFILES) $(LIB6FILES) bla.lib
 .ENDIF
@@ -557,18 +533,14 @@ $(LIB7TARGET) :	$(LIB7FILES) \
     @+cat /dev/null $(LIB7FILES) | xargs -n 1 >> $@
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
-# wnt ist hier
-# $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB7FILES) $(LIB7OBJFILES))
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
-# os2icci3 hier
     @+-$(RM) $@
 .IF "$(COM)"=="ICC"
     $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB7FILES:+"&\n") \
     $(LIB7OBJFILES:+"&\n");)
 .ELSE
-# os2gcci hier
     +echo $(LIBMGR) r $@ $(LIB7OBJFILES)
     $(LIBMGR) r $@ $(LIB7OBJFILES) $(LIB7FILES) bla.lib
 .ENDIF
@@ -640,18 +612,14 @@ $(LIB8TARGET) :	$(LIB8FILES) \
     @+cat /dev/null $(LIB8FILES) | xargs -n 1 >> $@
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
-# wnt ist hier
-# $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB8FILES) $(LIB8OBJFILES))
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
-# os2icci3 hier
     @+-$(RM) $@
 .IF "$(COM)"=="ICC"
     $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB8FILES:+"&\n") \
     $(LIB8OBJFILES:+"&\n");)
 .ELSE
-# os2gcci hier
     +echo $(LIBMGR) r $@ $(LIB8OBJFILES)
     $(LIBMGR) r $@ $(LIB8OBJFILES) $(LIB8FILES) bla.lib
 .ENDIF
@@ -723,18 +691,14 @@ $(LIB9TARGET) :	$(LIB9FILES) \
     @+cat /dev/null $(LIB9FILES) | xargs -n 1 >> $@
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
-# wnt ist hier
-# $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB9FILES) $(LIB9OBJFILES))
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
-# os2icci3 hier
     @+-$(RM) $@
 .IF "$(COM)"=="ICC"
     $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB9FILES:+"&\n") \
     $(LIB9OBJFILES:+"&\n");)
 .ELSE
-# os2gcci hier
     +echo $(LIBMGR) r $@ $(LIB9OBJFILES)
     $(LIBMGR) r $@ $(LIB9OBJFILES) $(LIB9FILES) bla.lib
 .ENDIF
@@ -806,18 +770,14 @@ $(LIB10TARGET) :	$(LIB10FILES) \
     @+cat /dev/null $(LIB10FILES) | xargs -n 1 >> $@
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
-# wnt ist hier
-# $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB10FILES) $(LIB10OBJFILES))
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
-# os2icci3 hier
     @+-$(RM) $@
 .IF "$(COM)"=="ICC"
     $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB10FILES:+"&\n") \
     $(LIB10OBJFILES:+"&\n");)
 .ELSE
-# os2gcci hier
     +echo $(LIBMGR) r $@ $(LIB10OBJFILES)
     $(LIBMGR) r $@ $(LIB10OBJFILES) $(LIB10FILES) bla.lib
 .ENDIF

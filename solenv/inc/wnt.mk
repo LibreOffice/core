@@ -7,8 +7,8 @@
 #*						Fuer WindowsNT-Envrionments
 #*
 #*    Ersterstellung    MH 9.2.96
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-20 14:43:18 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-13 17:00:19 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/solar/inc/wnt.mkv  $
 #*
@@ -617,7 +617,7 @@ CFLAGSOUTOBJ=-Fo
 
 LINK=link
 LINKFLAGS=/MAP /NODEFAULTLIB /MACHINE:PPC /FORCE:MULTIPLE
-.IF "$(seg)" != ""      # hier fehlten die schliessenden "          RT
+.IF "$(seg)" != ""
 LINKFLAGS=$(LINKFLAGS) /ORDER:@$(FUNCORD)
 .ENDIF
 LINKFLAGSAPPGUI=/SUBSYSTEM:WINDOWS /BASE:0x1c000000

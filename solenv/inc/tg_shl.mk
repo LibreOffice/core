@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_shl.mk  $
 #*
 #*    Ersterstellung    MH 01.09.97
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-11 20:40:12 $
-#*    $Revision: 1.5 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-13 17:00:19 $
+#*    $Revision: 1.6 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_shl.mkv  $
 #*
@@ -189,14 +189,13 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(GUI)"=="OS2"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="ICC"
-        @+echo Hier CompilerAufruf
         $(CC) -c -Fo$(SLO)$/_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE			# "$(COM)"=="ICC" 
         $(CC) -c -o$(SLO)$/_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF			# "$(COM)"=="ICC" 
 .ENDIF			# "$(UPDATER)"=="YES"
 #
-#	mal mit $(LINKEXTENDLINE) versuchen!!
+#	todo: try with $(LINKEXTENDLINE)!
 #
     +-$(RM) $@
 .IF "$(COM)"=="ICC"
@@ -223,7 +222,6 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(GUI)" == "WNT"
     @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE
@@ -355,7 +353,6 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx

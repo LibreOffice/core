@@ -5,8 +5,8 @@
 #*	  Beschreibung		TARGET-Rules
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-10-13 15:03:55 $
-#*	  $Revision: 1.9 $
+#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-10-13 17:00:19 $
+#*	  $Revision: 1.10 $
 #*
 #*	  $Logfile:   T:/solar/inc/target.mkv  $
 #*
@@ -1610,7 +1610,7 @@ DEF6TARGETN=$(MISC)$/$(DEF6NAME).def
 DEF6 ?= TNR!:=6
 .ENDIF
 
-# MISCX fuer NO_REC_RES hier unkritisch
+# MISCX for NO_REC_RES uncritical here
 .IF "$(IDLNAME)"!=""
 IDLTARGET=$(MISCX)$/$(IDLNAME).don
 IDL0 ?= TNR!:=

@@ -137,14 +137,13 @@ $(SHL1TARGETN) : \
 .IF "$(GUI)"=="OS2"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="ICC"
-        @+echo Hier CompilerAufruf
         $(CC) -c -Fo$(SLO)$/_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE			# "$(COM)"=="ICC" 
         $(CC) -c -o$(SLO)$/_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF			# "$(COM)"=="ICC" 
 .ENDIF			# "$(UPDATER)"=="YES"
 #
-#	mal mit $(LINKEXTENDLINE) versuchen!!
+#	todo: try with $(LINKEXTENDLINE)!
 #
     +-$(RM) $@
 .IF "$(COM)"=="ICC"
@@ -171,7 +170,6 @@ $(SHL1TARGETN) : \
 .IF "$(GUI)" == "WNT"
     @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE
@@ -303,7 +301,6 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -541,14 +538,13 @@ $(SHL2TARGETN) : \
 .IF "$(GUI)"=="OS2"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="ICC"
-        @+echo Hier CompilerAufruf
         $(CC) -c -Fo$(SLO)$/_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE			# "$(COM)"=="ICC" 
         $(CC) -c -o$(SLO)$/_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF			# "$(COM)"=="ICC" 
 .ENDIF			# "$(UPDATER)"=="YES"
 #
-#	mal mit $(LINKEXTENDLINE) versuchen!!
+#	todo: try with $(LINKEXTENDLINE)!
 #
     +-$(RM) $@
 .IF "$(COM)"=="ICC"
@@ -575,7 +571,6 @@ $(SHL2TARGETN) : \
 .IF "$(GUI)" == "WNT"
     @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE
@@ -707,7 +702,6 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -945,14 +939,13 @@ $(SHL3TARGETN) : \
 .IF "$(GUI)"=="OS2"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="ICC"
-        @+echo Hier CompilerAufruf
         $(CC) -c -Fo$(SLO)$/_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE			# "$(COM)"=="ICC" 
         $(CC) -c -o$(SLO)$/_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF			# "$(COM)"=="ICC" 
 .ENDIF			# "$(UPDATER)"=="YES"
 #
-#	mal mit $(LINKEXTENDLINE) versuchen!!
+#	todo: try with $(LINKEXTENDLINE)!
 #
     +-$(RM) $@
 .IF "$(COM)"=="ICC"
@@ -979,7 +972,6 @@ $(SHL3TARGETN) : \
 .IF "$(GUI)" == "WNT"
     @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE
@@ -1111,7 +1103,6 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -1349,14 +1340,13 @@ $(SHL4TARGETN) : \
 .IF "$(GUI)"=="OS2"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="ICC"
-        @+echo Hier CompilerAufruf
         $(CC) -c -Fo$(SLO)$/_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE			# "$(COM)"=="ICC" 
         $(CC) -c -o$(SLO)$/_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF			# "$(COM)"=="ICC" 
 .ENDIF			# "$(UPDATER)"=="YES"
 #
-#	mal mit $(LINKEXTENDLINE) versuchen!!
+#	todo: try with $(LINKEXTENDLINE)!
 #
     +-$(RM) $@
 .IF "$(COM)"=="ICC"
@@ -1383,7 +1373,6 @@ $(SHL4TARGETN) : \
 .IF "$(GUI)" == "WNT"
     @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE
@@ -1515,7 +1504,6 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -1753,14 +1741,13 @@ $(SHL5TARGETN) : \
 .IF "$(GUI)"=="OS2"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="ICC"
-        @+echo Hier CompilerAufruf
         $(CC) -c -Fo$(SLO)$/_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE			# "$(COM)"=="ICC" 
         $(CC) -c -o$(SLO)$/_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF			# "$(COM)"=="ICC" 
 .ENDIF			# "$(UPDATER)"=="YES"
 #
-#	mal mit $(LINKEXTENDLINE) versuchen!!
+#	todo: try with $(LINKEXTENDLINE)!
 #
     +-$(RM) $@
 .IF "$(COM)"=="ICC"
@@ -1787,7 +1774,6 @@ $(SHL5TARGETN) : \
 .IF "$(GUI)" == "WNT"
     @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE
@@ -1919,7 +1905,6 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -2157,14 +2142,13 @@ $(SHL6TARGETN) : \
 .IF "$(GUI)"=="OS2"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="ICC"
-        @+echo Hier CompilerAufruf
         $(CC) -c -Fo$(SLO)$/_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE			# "$(COM)"=="ICC" 
         $(CC) -c -o$(SLO)$/_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF			# "$(COM)"=="ICC" 
 .ENDIF			# "$(UPDATER)"=="YES"
 #
-#	mal mit $(LINKEXTENDLINE) versuchen!!
+#	todo: try with $(LINKEXTENDLINE)!
 #
     +-$(RM) $@
 .IF "$(COM)"=="ICC"
@@ -2191,7 +2175,6 @@ $(SHL6TARGETN) : \
 .IF "$(GUI)" == "WNT"
     @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE
@@ -2323,7 +2306,6 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -2561,14 +2543,13 @@ $(SHL7TARGETN) : \
 .IF "$(GUI)"=="OS2"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="ICC"
-        @+echo Hier CompilerAufruf
         $(CC) -c -Fo$(SLO)$/_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE			# "$(COM)"=="ICC" 
         $(CC) -c -o$(SLO)$/_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF			# "$(COM)"=="ICC" 
 .ENDIF			# "$(UPDATER)"=="YES"
 #
-#	mal mit $(LINKEXTENDLINE) versuchen!!
+#	todo: try with $(LINKEXTENDLINE)!
 #
     +-$(RM) $@
 .IF "$(COM)"=="ICC"
@@ -2595,7 +2576,6 @@ $(SHL7TARGETN) : \
 .IF "$(GUI)" == "WNT"
     @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE
@@ -2727,7 +2707,6 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -2965,14 +2944,13 @@ $(SHL8TARGETN) : \
 .IF "$(GUI)"=="OS2"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="ICC"
-        @+echo Hier CompilerAufruf
         $(CC) -c -Fo$(SLO)$/_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE			# "$(COM)"=="ICC" 
         $(CC) -c -o$(SLO)$/_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF			# "$(COM)"=="ICC" 
 .ENDIF			# "$(UPDATER)"=="YES"
 #
-#	mal mit $(LINKEXTENDLINE) versuchen!!
+#	todo: try with $(LINKEXTENDLINE)!
 #
     +-$(RM) $@
 .IF "$(COM)"=="ICC"
@@ -2999,7 +2977,6 @@ $(SHL8TARGETN) : \
 .IF "$(GUI)" == "WNT"
     @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE
@@ -3131,7 +3108,6 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -3369,14 +3345,13 @@ $(SHL9TARGETN) : \
 .IF "$(GUI)"=="OS2"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="ICC"
-        @+echo Hier CompilerAufruf
         $(CC) -c -Fo$(SLO)$/_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE			# "$(COM)"=="ICC" 
         $(CC) -c -o$(SLO)$/_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF			# "$(COM)"=="ICC" 
 .ENDIF			# "$(UPDATER)"=="YES"
 #
-#	mal mit $(LINKEXTENDLINE) versuchen!!
+#	todo: try with $(LINKEXTENDLINE)!
 #
     +-$(RM) $@
 .IF "$(COM)"=="ICC"
@@ -3403,7 +3378,6 @@ $(SHL9TARGETN) : \
 .IF "$(GUI)" == "WNT"
     @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE
@@ -3535,7 +3509,6 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -3773,14 +3746,13 @@ $(SHL10TARGETN) : \
 .IF "$(GUI)"=="OS2"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="ICC"
-        @+echo Hier CompilerAufruf
         $(CC) -c -Fo$(SLO)$/_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE			# "$(COM)"=="ICC" 
         $(CC) -c -o$(SLO)$/_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF			# "$(COM)"=="ICC" 
 .ENDIF			# "$(UPDATER)"=="YES"
 #
-#	mal mit $(LINKEXTENDLINE) versuchen!!
+#	todo: try with $(LINKEXTENDLINE)!
 #
     +-$(RM) $@
 .IF "$(COM)"=="ICC"
@@ -3807,7 +3779,6 @@ $(SHL10TARGETN) : \
 .IF "$(GUI)" == "WNT"
     @+if not exist $(FUNCORD) $(TOUCH) $(FUNCORD)
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ELSE
@@ -3939,7 +3910,6 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(UPDATER)"=="YES"
-        @+echo Hier CompilerAufruf
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx

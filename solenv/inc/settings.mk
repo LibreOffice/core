@@ -7,8 +7,8 @@
 #*                      Entwicklungtools-Definitionen
 #*
 #*    Ersterstellung    TH 28.03.94
-#*    Letzte Aenderung  $Author: kz $ $Date: 2000-10-10 16:11:50 $
-#*    $Revision: 1.10 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-13 17:00:19 $
+#*    $Revision: 1.11 $
 #*
 #*    $Logfile:   T:/solar/inc/settings.mkv  $
 #*
@@ -525,7 +525,7 @@ TARGETTYPE=CUI
 # --- Pfade setzen -------------------------------------------------
 
 # Output-Pfad
-# profile muss als erstes sein, weil dabei auch product gesetzt ist
+# profile has to be first for not getting the .pro extension
 .IF "$(profile)"!=""
 OUT=$(PRJ)$/$(OUTPATH).cap
 ROUT=$(OUTPATH).cap
@@ -544,7 +544,7 @@ ROUT=$(OUTPATH).cap
 OUT=$(PRJ)$/$(OUTPATH).w
 ROUT=$(OUTPATH).w
 .ENDIF
-# kann vor dem includen von settings.mak gesetzt werden
+# could already be set by makefile.mk
 .IF "$(OUT)" == ""
 OUT*=$(PRJ)$/$(OUTPATH)
 ROUT*=$(OUTPATH)
@@ -677,8 +677,6 @@ SLB=$(OUT)$/slb
 # wir haben ein ucr verzeichnis
 UCR=$(OUT)$/ucr
 
-# braucht den hier schon wer?
-# SOLARIDLDIR=das ist hier doppelt
 SOLARIDLDIR=$(SOLARVERSION)$/$(INPATH)$/idl$(EXT_UPDMINOR)
 
 # $(L) nur noch pfad ins solver\upd\...\lib
@@ -926,7 +924,7 @@ SOLARLIB!:=-L$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/lib $(SOLARLIB)
 ILIB!:=$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/lib;$(ILIB)
 .ENDIF			# "$(UDKVERSION)"!=""
 
-# muss expandiert sein!!!
+# needs to be expanded!!!
 
 # NETBSD_SDO
 .IF "$(OS)"=="NETBSD"

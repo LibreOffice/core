@@ -1,7 +1,7 @@
 MKFILENAME:=tg_lib.mk
 
 #######################################################
-# Anweisungen fuer Rekursion
+# lines needed for rekursion
 
 .IF "$(MULTI_LIB_FLAG)" == ""
 $(LIB1TARGETN) .NULL : LIB1
@@ -93,18 +93,14 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @+cat /dev/null $(LIB$(TNR)FILES) | xargs -n 1 >> $@
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
-# wnt ist hier
-# $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES))
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
-# os2icci3 hier
     @+-$(RM) $@
 .IF "$(COM)"=="ICC"
     $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB$(TNR)FILES:+"&\n") \
     $(LIB$(TNR)OBJFILES:+"&\n");)
 .ELSE
-# os2gcci hier
     +echo $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES)
     $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES) $(LIB$(TNR)FILES) bla.lib
 .ENDIF
