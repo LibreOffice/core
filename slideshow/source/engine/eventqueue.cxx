@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventqueue.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:53:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,10 @@ namespace presentation
         }
 
 
-        EventQueue::EventQueue() :
-            maEvents(),
-            maElapsedTime()
+        EventQueue::EventQueue(
+            boost::shared_ptr<canvas::tools::ElapsedTime> const & pPresTimer )
+            : maEvents(),
+              mpTimer( pPresTimer )
         {
         }
 
@@ -122,7 +123,7 @@ namespace presentation
             // prepare entry
             EventEntry entry;
 
-            const double nCurrTime( maElapsedTime.getElapsedTime() );
+            const double nCurrTime( mpTimer->getElapsedTime() );
             entry.pEvent = rEvent;
             entry.nTime  = rEvent->getActivationTime( nCurrTime );
 
@@ -138,14 +139,14 @@ namespace presentation
             return true;
         }
 
-        void EventQueue::process( double* pTimeoutForNextCall )
+        double EventQueue::process()
         {
             VERBOSE_TRACE( "EventQueue: heartbeat" );
 
             // perform topmost, ready-to-execute event
             // =======================================
 
-            const double nCurrTime( maElapsedTime.getElapsedTime() );
+            const double nCurrTime( mpTimer->getElapsedTime() );
 
             // process ready/elapsed events. Note that the 'perceived'
             // current time remains constant for this loop, thus we're
@@ -197,23 +198,10 @@ namespace presentation
                 }
             }
 
-            // setup optional timeout value
-            if( pTimeoutForNextCall )
-            {
-                if( maEvents.empty() )
-                {
-                    // no further events available,
-                    *pTimeoutForNextCall = ::std::numeric_limits<double>::max();
-                }
-                else
-                {
-                    // ensure nothing negative is returned. Fetch
-                    // fresh current time, event processing above
-                    // might have taken significant time
-                    *pTimeoutForNextCall = ::std::max(0.0,
-                                                      maEvents.top().nTime - maElapsedTime.getElapsedTime());
-                }
-            }
+            // return time for next entry (if any)
+            return maEvents.empty() ?
+                ::std::numeric_limits<double>::max() :
+                maEvents.top().nTime;
         }
 
         bool EventQueue::isEmpty()
