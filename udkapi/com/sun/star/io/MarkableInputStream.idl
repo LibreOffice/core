@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkableInputStream.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 13:41:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,11 @@ module com {  module sun {  module star {  module io {
 //==========================================================================
 /** allows to set marks in an inputstream and to later jump back to these
     marks.
-
     <p>The implementation reads the original data from the input stream,
     that has been set previously at the <type>XActiveDataSink</type>
     interface. In general the implementation must buffer the data. </p>
  */
-service MarkableInputStream
+published service MarkableInputStream
 {
     /** allows to access the data of this stream
      */
