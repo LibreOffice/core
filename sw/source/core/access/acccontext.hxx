@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 15:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,9 @@ public:
 
     // Check states
     void InvalidateStates( sal_uInt8 nStates );
+
+    // the XAccessibleRelationSet may have changed
+    void InvalidateRelation( sal_uInt16 nType );
 
     const ::rtl::OUString& GetName() const { return sName; }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-19 12:59:38 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 15:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,14 @@
 #include <ndtyp.hxx>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+
+
 using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
@@ -223,6 +231,7 @@ public:
     inline void SetStates( sal_uInt8 nSt ) { mnStates |= nSt; }
     inline sal_Bool IsUpdateCursorPos() const { return (mnStates & ACC_STATE_CARET) != 0; }
     inline sal_Bool IsInvalidateStates() const { return (mnStates & ACC_STATE_MASK) != 0; }
+    inline sal_Bool IsInvalidateRelation() const { return (mnStates & ACC_STATE_RELATION_MASK) != 0; }
     inline sal_uInt8 GetStates() const { return mnStates & ACC_STATE_MASK; }
     inline sal_uInt8 GetAllStates() const { return mnStates; }
 };
@@ -318,6 +327,11 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
                 xAccImpl->InvalidateCursorPos();
             if( rEvent.IsInvalidateStates() )
                 xAccImpl->InvalidateStates( rEvent.GetStates() );
+            if( rEvent.IsInvalidateRelation() )
+                xAccImpl->InvalidateRelation(
+                    (rEvent.GetAllStates() & ACC_STATE_RELATION_FROM) != 0 ?
+                    AccessibleEventId::CONTENT_FLOWS_FROM :
+                    AccessibleEventId::CONTENT_FLOWS_TO );
         }
     }
 }
@@ -1050,6 +1064,60 @@ void SwAccessibleMap::InvalidateStates( sal_uInt8 nStates )
         pAccImpl->InvalidateStates( nStates );
     }
 }
+
+void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
+                                              sal_Bool bFrom )
+{
+    // first, see if this frame is accessible, and if so, get the respective
+    SwFrmOrObj aFrmOrObj( pFrm );
+    if( aFrmOrObj.IsAccessible() )
+    {
+        Reference < XAccessible > xAcc;
+        Reference < XAccessible > xParentAcc;
+        {
+            vos::OGuard aGuard( maMutex );
+
+            if( mpMap )
+            {
+                SwAccessibleContextMap_Impl::iterator aIter =
+                    mpMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpMap->end() )
+                {
+                    xAcc = (*aIter).second;
+                }
+            }
+        }
+
+        // deliver event directly, or queue event
+        if( xAcc.is() )
+        {
+            SwAccessibleContext *pAccImpl =
+                static_cast< SwAccessibleContext *>( xAcc.get() );
+            if( GetShell()->ActionPend() )
+            {
+                SwAccessibleEvent_Impl aEvent(
+                    SwAccessibleEvent_Impl::CARET_OR_STATES, pAccImpl,
+                        pFrm, bFrom ? ACC_STATE_RELATION_FROM
+                                    : ACC_STATE_RELATION_TO );
+                AppendEvent( aEvent );
+            }
+            else
+            {
+                pAccImpl->InvalidateRelation( bFrom ?
+                    AccessibleEventId::CONTENT_FLOWS_FROM :
+                    AccessibleEventId::CONTENT_FLOWS_TO );
+            }
+        }
+    }
+}
+
+void SwAccessibleMap::InvalidateRelationSet( const SwFrm* pMaster,
+                                             const SwFrm* pFollow )
+{
+    _InvalidateRelationSet( pMaster, sal_False );
+    _InvalidateRelationSet( pFollow, sal_True );
+}
+
 
 void SwAccessibleMap::FireEvents()
 {

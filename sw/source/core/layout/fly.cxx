@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:14:23 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 15:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,6 +514,14 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
         pFrm->Cut();
         delete pFrm;
     }
+
+#ifdef ACCESSIBLE_LAYOUT
+    // invalidate accessible relation set (accessibility wrapper)
+    ViewShell* pSh = pMaster->GetShell();
+    if( pSh )
+        pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
+#endif
+
 }
 
 void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
@@ -553,6 +561,13 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
     ::_InsertCnt( pFollow->Lower() ? (SwLayoutFrm*)((SwLayoutFrm*)pFollow->Lower())->Lower()
                                    : (SwLayoutFrm*)pFollow,
                   pFollow->GetFmt()->GetDoc(), ++nIndex );
+
+#ifdef ACCESSIBLE_LAYOUT
+    // invalidate accessible relation set (accessibility wrapper)
+    ViewShell* pSh = pMaster->GetShell();
+    if( pSh )
+        pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
+#endif
 }
 
 /*************************************************************************

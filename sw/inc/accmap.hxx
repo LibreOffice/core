@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-17 14:26:24 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 15:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,12 @@ class ViewShell;
 
 // pseudo states for events
 #define ACC_STATE_CARET 0x80
+#define ACC_STATE_RELATION_FROM 0x40
+#define ACC_STATE_RELATION_TO 0x20
 
-#define ACC_STATE_MASK 0x7F
+#define ACC_STATE_RELATION_MASK 0x60
+
+#define ACC_STATE_MASK 0x1F
 
 class SwAccessibleMap
 {
@@ -116,6 +120,8 @@ class SwAccessibleMap
     void InvalidateCursorPosition(
         const ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessible>& rAcc );
+
+    void _InvalidateRelationSet( const SwFrm* pFrm, sal_Bool bFrom );
 
 public:
 
@@ -153,6 +159,8 @@ public:
     // Invalidate state of whole tree. If an action is open, this call
     // is processed when the last action ends.
     void InvalidateStates( sal_uInt8 nStates );
+
+    void InvalidateRelationSet( const SwFrm* pMaster, const SwFrm* pFollow );
 
     void FireEvents();
 };

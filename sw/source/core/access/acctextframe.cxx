@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctextframe.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:07:23 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 15:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,15 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATION_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRelation.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONSET_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
@@ -91,6 +100,12 @@
 #ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
 #endif
+#ifndef _ACCMAP_HXX
+#include <accmap.hxx>
+#endif
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/AccessibleRelationSetHelper.hxx>
+#endif
 
 #ifndef _ACCTEXTFRAME_HXX
 #include "acctextframe.hxx"
@@ -100,6 +115,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
+
+using utl::AccessibleRelationSetHelper;
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextFrameView";
 const sal_Char sImplementationName[] = "SwAccessibleTextFrame";
@@ -149,4 +166,58 @@ Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNames()
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
     return aRet;
+}
+
+
+//
+// XAccessibleRelationSet
+//
+
+
+SwFlyFrm* SwAccessibleTextFrame::getFlyFrm() const
+{
+    SwFlyFrm* pFlyFrm = NULL;
+
+    const SwFrm* pFrm = GetFrm();
+    DBG_ASSERT( pFrm != NULL, "frame expected" );
+    if( pFrm->IsFlyFrm() )
+    {
+        pFlyFrm = static_cast<SwFlyFrm*>( const_cast<SwFrm*>( pFrm ) );
+    }
+
+    return pFlyFrm;
+}
+
+AccessibleRelation SwAccessibleTextFrame::makeRelation( sal_Int16 nType, const SwFlyFrm* pFrm )
+{
+    Sequence<Reference<XInterface> > aSequence(1);
+    aSequence[0] = GetMap()->GetContext( pFrm );
+    return AccessibleRelation( nType, aSequence );
+}
+
+
+Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccessibleRelationSet( )
+    throw ( RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+
+    // get the frame, and insert prev/next relations into helper
+
+    AccessibleRelationSetHelper* pHelper = new AccessibleRelationSetHelper();
+
+    SwFlyFrm* pFlyFrm = getFlyFrm();
+    DBG_ASSERT( pFlyFrm != NULL, "fly frame expected" );
+
+    const SwFlyFrm* pPrevFrm = pFlyFrm->GetPrevLink();
+    if( pPrevFrm != NULL )
+        pHelper->AddRelation( makeRelation(
+            AccessibleRelationType::CONTENT_FLOWS_FROM, pPrevFrm ) );
+
+    const SwFlyFrm* pNextFrm = pFlyFrm->GetNextLink();
+    if( pNextFrm != NULL )
+        pHelper->AddRelation( makeRelation(
+            AccessibleRelationType::CONTENT_FLOWS_TO, pNextFrm ) );
+
+    return pHelper;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-04-12 10:36:00 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 15:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,6 +473,20 @@ void SwViewImp::InvalidateAccessibleOpaqueState()
     {
         if( pTmp->Imp()->IsAccessible() )
             pTmp->Imp()->GetAccessibleMap().InvalidateStates( ACC_STATE_OPAQUE );
+        pTmp = (ViewShell *)pTmp->GetNext();
+    } while ( pTmp != pVSh );
+}
+
+void SwViewImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
+                                                 const SwFlyFrm *pFollow )
+{
+    ViewShell *pVSh = GetShell();
+    ViewShell *pTmp = pVSh;
+    do
+    {
+        if( pTmp->Imp()->IsAccessible() )
+            pTmp->Imp()->GetAccessibleMap().InvalidateRelationSet( pMaster,
+                                                                   pFollow );
         pTmp = (ViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }

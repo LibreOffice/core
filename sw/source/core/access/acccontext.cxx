@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 15:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1162,6 +1162,14 @@ void SwAccessibleContext::InvalidateStates( sal_uInt8 nStates )
 
         InvalidateChildrenStates( GetFrm(), nStates );
     }
+}
+
+void SwAccessibleContext::InvalidateRelation( sal_uInt16 nType )
+{
+    AccessibleEventObject aEvent;
+    aEvent.EventId = nType;
+
+    FireAccessibleEvent( aEvent );
 }
 
 sal_Bool SwAccessibleContext::HasCursor()

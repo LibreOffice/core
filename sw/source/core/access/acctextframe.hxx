@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctextframe.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:07:34 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 15:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #endif
 
 class SwFlyFrm;
+namespace utl { class AccessibleRelationSetHelper; }
+namespace drafts { namespace com { namespace star {
+    namespace accessibility { struct AccessibleRelation; }
+} } }
 
 class SwAccessibleTextFrame : public SwAccessibleFrameBase
 {
@@ -109,6 +113,26 @@ public:
     */
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+
+    //=====  XAccessibleContext::getAccessibleRelationSet  ====================
+
+    // text frame may have accessible relations to their
+    // predocesor/successor frames
+
+private:
+    // helper methods for getAccessibleRelationSet:
+    SwFlyFrm* getFlyFrm() const;
+
+    drafts::com::sun::star::accessibility::AccessibleRelation makeRelation(
+        sal_Int16 nType, const SwFlyFrm* pFrm );
+
+public:
+
+    virtual ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
+        getAccessibleRelationSet (void)
         throw (::com::sun::star::uno::RuntimeException);
 };
 
