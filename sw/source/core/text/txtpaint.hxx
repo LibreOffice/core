@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtpaint.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-06 09:45:22 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,24 +87,15 @@ class SwSaveClip
     const sal_Bool     bOn;
           sal_Bool     bChg;
 protected:
-    OutputDevice *pOut;
-#ifdef VERTICAL_LAYOUT
+    OutputDevice* pOut;
     void _ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
                    sal_Bool bEnlargeRect );
-#else
-    void _ChgClip( const SwRect &rRect, sal_Bool bEnlargeRect );
-#endif
 public:
-    inline SwSaveClip( OutputDevice *pOut );
+    inline SwSaveClip( OutputDevice* pOut );
     inline ~SwSaveClip();
-#ifdef VERTICAL_LAYOUT
     inline void ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm = 0,
                          sal_Bool bEnlargeRect = sal_False)
              { if( pOut ) _ChgClip( rRect, pFrm, bEnlargeRect ); }
-#else
-    inline void ChgClip( const SwRect &rRect, sal_Bool bEnlargeRect = sal_False )
-             { if( pOut ) _ChgClip( rRect, bEnlargeRect ); }
-#endif
            void Reset();
     inline sal_Bool IsOn()  const { return bOn; }
     inline sal_Bool IsChg() const { return bChg; }
@@ -112,7 +103,7 @@ public:
     inline OutputDevice *GetOut() { return pOut; }
 };
 
-inline SwSaveClip::SwSaveClip( OutputDevice *pOut ) :
+inline SwSaveClip::SwSaveClip( OutputDevice* pOut ) :
     pOut(pOut),
     bOn( pOut && pOut->IsClipRegion() ),
     bChg( sal_False )
@@ -132,23 +123,10 @@ inline SwSaveClip::~SwSaveClip()
 class SwDbgOut
 {
 protected:
-        OutputDevice *pOut;
+        OutputDevice* pOut;
 public:
-        inline SwDbgOut( OutputDevice *pOutDev, const sal_Bool bOn = sal_True );
+        inline SwDbgOut( OutputDevice* pOutDev, const sal_Bool bOn = sal_True );
 };
-
-/*************************************************************************
- *                          class DbgPen
- *************************************************************************/
-
-//class DbgPen : public SwDbgOut
-//{
-//      Pen aPen;
-//public:
-//      inline DbgPen( OutputDevice *pOutDev, const sal_Bool bOn = sal_True,
-//                     const ColorName eColor = COL_BLACK );
-//      inline ~DbgPen();
-//};
 
 /*************************************************************************
  *                          class DbgColor
@@ -172,7 +150,7 @@ class DbgBackColor : public SwDbgOut
 {
         Color   aOldFillColor;
 public:
-        DbgBackColor( OutputDevice *pOut, const sal_Bool bOn = sal_True,
+        DbgBackColor( OutputDevice* pOut, const sal_Bool bOn = sal_True,
                   ColorData nColor = COL_YELLOW );
        ~DbgBackColor();
 };
@@ -184,7 +162,7 @@ public:
 class DbgRect : public SwDbgOut
 {
 public:
-        DbgRect( OutputDevice *pOut, const Rectangle &rRect,
+        DbgRect( OutputDevice* pOut, const Rectangle &rRect,
                  const sal_Bool bOn = sal_True,
                  ColorData eColor = COL_LIGHTBLUE );
 };
@@ -193,28 +171,10 @@ public:
  *                      Inline-Implementierung
  *************************************************************************/
 
-inline SwDbgOut::SwDbgOut( OutputDevice *pOutDev, const sal_Bool bOn )
+inline SwDbgOut::SwDbgOut( OutputDevice* pOutDev, const sal_Bool bOn )
                :pOut( bOn ? pOutDev : 0 )
 { }
 
-//inline DbgPen::DbgPen( OutputDevice *pOutDev, const sal_Bool bOn,
-//             const ColorName eColor )
-//  : SwDbgOut( pOutDev, bOn)
-//{
-//  if( pOut )
-//  {
-//      const Color aColor( eColor );
-//      Pen aTmpPen( aColor );
-//      aPen = pOut->GetPen( );
-//      pOut->SetPen( aTmpPen );
-//  }
-//}
-
-//inline DbgPen::~DbgPen()
-//{
-//  if( pOut )
-//      pOut->SetPen(aPen);
-//}
 
 inline DbgColor::DbgColor( Font *pFont, const sal_Bool bOn,
                  const ColorData eColor )
@@ -233,7 +193,7 @@ inline DbgColor::~DbgColor()
         pFnt->SetColor( aColor );
 }
 
-inline DbgBackColor::DbgBackColor( OutputDevice *pOutDev, const sal_Bool bOn,
+inline DbgBackColor::DbgBackColor( OutputDevice* pOutDev, const sal_Bool bOn,
                            ColorData eColor )
     :SwDbgOut( pOutDev, bOn )
 {
@@ -252,7 +212,7 @@ inline DbgBackColor::~DbgBackColor()
     }
 }
 
-inline DbgRect::DbgRect( OutputDevice *pOutDev, const Rectangle &rRect,
+inline DbgRect::DbgRect( OutputDevice* pOutDev, const Rectangle &rRect,
                          const sal_Bool bOn,
                          ColorData eColor )
     : SwDbgOut( pOutDev, bOn )
