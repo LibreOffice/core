@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:35:27 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1217,7 +1217,7 @@ SdrObject* XclImpDffManager::ProcessObj(
     if( pRetSdrObj && ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) &&
         ( IsProperty( DFF_Prop_fillColor ) == 0 ) )
     {   // maybe if there is no color, we could do this in ApplyAttributes ( writer ?, calc ? )
-        pRetSdrObj->SetItem(XFillColorItem(XubString(), Color(0xffffff)));
+        pRetSdrObj->SetMergedItem(XFillColorItem(XubString(), Color(0xffffff)));
     }
 
     // #98132# don't ask for the text-ID, Escher export doesn't set one
@@ -1308,7 +1308,7 @@ SdrObject* XclImpDffManager::ProcessObj(
             if( ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) &&
                 ( IsProperty( DFF_Prop_fillColor ) == 0 ) )
             {   // maybe if there is no color, we could do this in ApplyAttributes ( writer ?, calc ? )
-                pTextSdrObj->SetItem(XFillColorItem(XubString(), Color(0xffffff)));
+                pTextSdrObj->SetMergedItem(XFillColorItem(XubString(), Color(0xffffff)));
             }
 
             ApplyAttributes( rStrm, aItemSet, pTextSdrObj );
@@ -1361,13 +1361,13 @@ SdrObject* XclImpDffManager::ProcessObj(
         // #96092# SetModel() modifies the height of the text box -> restore it with NbcSetSnapRect()
         pTextSdrObj->NbcSetSnapRect( rTextRect );
 
-        pTextSdrObj->SetItemSet( aItemSet );
+        pTextSdrObj->SetMergedItemSet( aItemSet );
 
         // Apply the text data from the Escher object to the SdrObj
         pTxoObj->ApplyTextOnSdrObj( *pTextSdrObj );
 
         // #i12188# this item has to be set after the text
-        pTextSdrObj->SetItem( SvxAdjustItem( eEEHorAlign, EE_PARA_JUST ) );
+        pTextSdrObj->SetMergedItem( SvxAdjustItem( eEEHorAlign, EE_PARA_JUST ) );
 
         // rotate text with shape ?
         if( mnFix16Angle )
