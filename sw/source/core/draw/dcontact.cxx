@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-19 11:56:49 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 17:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,8 +421,9 @@ void SwDrawContact::_Changed(const SdrObject& rObj, SdrUserCallType eType,
             {
                 if( bNotify )
                     lcl_Notify( this, pOldBoundRect );
+                DisconnectFromLayout( FALSE );
                 SetMaster( NULL );
-                GetFmt()->GetDoc()->DelLayoutFmt( GetFmt() );
+//              GetFmt()->GetDoc()->DelLayoutFmt( GetFmt() );
                 delete this;
                 break;
             }
