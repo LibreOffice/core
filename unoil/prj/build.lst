@@ -34,4 +34,4 @@ ul	unoil\com\sun\star\sync					nmake	-	all	ul_sync ul_ucb NULL
 ul	unoil\com\sun\star\view					nmake	-	all	ul_view ul_awt NULL
 ul	unoil\com\sun\star\xml					nmake	-	all	ul_xml NULL
 ul	unoil\com\sun\star\xml\sax				nmake	-	all	ul_xml_sax ul_xml NULL
-ul	unoil\util								nmake	-	all	ul_util ul_chart ul_dattrans ul_dattrans_clip ul_dattrans_dnd ul_document ul_form ul_installation ul_linguistic2 ul_mozilla ul_pgp ul_plugin ul_presentation ul_resource ul_scanner ul_setup ul_sheet ul_style ul_sync ul_view ul_xml_sax NULL
+ul	unoil\util								nmake	-	all	ul_util ul_chart ul_configuration ul_dattrans ul_dattrans_clip ul_dattrans_dnd ul_document ul_form ul_installation ul_linguistic2 ul_mozilla ul_pgp ul_plugin ul_presentation ul_resource ul_scanner ul_setup ul_sheet ul_style ul_sync ul_view ul_xml_sax NULL
