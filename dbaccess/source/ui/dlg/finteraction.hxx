@@ -2,9 +2,9 @@
  *
  *  $RCSfile: finteraction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:01:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,6 @@ namespace dbaui
         // XInteractionHandler
         virtual void SAL_CALL handle( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& _rxRequest ) throw (::com::sun::star::uno::RuntimeException);
 
-    private:
         virtual ~OFilePickerInteractionHandler();
     };
 
