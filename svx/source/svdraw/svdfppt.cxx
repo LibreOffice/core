@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-08 11:35:28 $
+ *  last change: $Author: sj $ $Date: 2002-10-22 12:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1137,62 +1137,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                             && ( pRet->ISA( SdrOle2Obj ) == FALSE ) )
                     delete pRet, pRet = NULL;
             }
-
-            SdrObject* pTObj = NULL;
-            SdrObjKind eTextKind = OBJ_TEXT;
-            if ( ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_NOTESSLIDEIMAGE )
-                || ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE ) )
-            {
-                aTextObj.SetInstance( 2 );
-                eTextKind = OBJ_TITLETEXT;
-            }
-
-            sal_uInt32 nInstanceInSheet = aTextObj.GetInstance();
-            if ( ( rPersistEntry.ePageKind == PPT_MASTERPAGE ) )
-            {
-                if ( !rPersistEntry.pPresentationObjects )
-                {
-                    rPersistEntry.pPresentationObjects = new UINT32[ PPT_STYLESHEETENTRYS ];
-                    memset( rPersistEntry.pPresentationObjects, 0, PPT_STYLESHEETENTRYS * 4 );
-                }
-                if ( !rPersistEntry.pPresentationObjects[ nInstanceInSheet ] )
-                    rPersistEntry.pPresentationObjects[ nInstanceInSheet ] = rObjData.nOldFilePos;
-            }
-            switch ( nInstanceInSheet )
-            {
-                case TSS_TYPE_PAGETITLE :
-                case TSS_TYPE_TITLE :
-                {
-                    if ( GetSlideLayoutAtom()->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE )
-                        nInstanceInSheet = TSS_TYPE_TITLE;
-                    else
-                        nInstanceInSheet = TSS_TYPE_PAGETITLE;
-                }
-                break;
-                case TSS_TYPE_BODY :
-//              case TSS_TYPE_SUBTITLE :
-                case TSS_TYPE_HALFBODY :
-                case TSS_TYPE_QUARTERBODY :
-                    nInstanceInSheet = TSS_TYPE_BODY;
-                break;
-            }
-            aTextObj.SetMappedInstance( (sal_uInt16)nInstanceInSheet );
-
-            switch ( aTextObj.GetInstance() )
-            {
-                case TSS_TYPE_PAGETITLE :
-                case TSS_TYPE_TITLE : eTextKind = OBJ_TITLETEXT; break;
-                case TSS_TYPE_SUBTITLE : eTextKind = OBJ_TEXT; break;
-                case TSS_TYPE_BODY :
-                case TSS_TYPE_HALFBODY :
-                case TSS_TYPE_QUARTERBODY : eTextKind = OBJ_OUTLINETEXT; break;
-            }
-            pTObj = new SdrRectObj( eTextKind );
-            pTObj->SetModel( pSdrModel );
-            SfxItemSet aSet( pSdrModel->GetItemPool() );
-            if ( !pRet )
-                ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, pTObj );
-
             sal_uInt32 nTextFlags = aTextObj.GetTextFlags();
             sal_Bool  bVerticalText = aTextObj.GetVertical();
             sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 25 * 3600 );   // 0.25 cm (emu)
@@ -1222,26 +1166,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 eTVA = SDRTEXTVERTADJUST_TOP;
                 eTHA = SDRTEXTHORZADJUST_CENTER;
 
-                sal_Int32 nMod = ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ) ? 1 : 0;
-                nMod += ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) ? 2 : 0;
-                switch ( nMod )
-                {
-                    case 0 :        // - this appends just only one obj
-                    case 2 :        // - we have to get a single textobj
-                    {
-                        bAutoGrowHeight = sal_True;
-                        bAutoGrowWidth = sal_True;
-                    }
-                    break;
-
-                    case 1 :
-                    case 3 :        // - we have to get a single textobj
-                    {
-                        bAutoGrowHeight = sal_False;
-                        bAutoGrowWidth = sal_True;
-                    }
-                    break;
-                }
                 // Textverankerung lesen
                 MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
 
@@ -1299,27 +1223,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 eTVA = SDRTEXTVERTADJUST_CENTER;
                 eTHA = SDRTEXTHORZADJUST_BLOCK;
 
-                sal_Int32 nMod = ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ) ? 1 : 0;
-                nMod += ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) ? 2 : 0;
-                switch ( nMod )
-                {
-                    case 0 :        // - this appends just only one obj
-                    case 2 :        // - we have to get a single textobj
-                    {
-                        bAutoGrowWidth = sal_True;
-                        bAutoGrowHeight = sal_True;
-                    }
-                    break;
-
-                    case 1 :
-                    case 3 :        // - we have to get a single textobj
-                    {
-                        bAutoGrowWidth = sal_False;
-                        bAutoGrowHeight = sal_True;
-                    }
-                    break;
-                }
-
                 // Textverankerung lesen
                 MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
 
@@ -1375,7 +1278,85 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
             }
 
+            SdrObjKind eTextKind = OBJ_TEXT;
+            if ( ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_NOTESSLIDEIMAGE )
+                || ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE ) )
+            {
+                aTextObj.SetInstance( 2 );
+                eTextKind = OBJ_TITLETEXT;
+            }
 
+            sal_uInt32 nInstanceInSheet = aTextObj.GetInstance();
+            if ( ( rPersistEntry.ePageKind == PPT_MASTERPAGE ) )
+            {
+                if ( !rPersistEntry.pPresentationObjects )
+                {
+                    rPersistEntry.pPresentationObjects = new UINT32[ PPT_STYLESHEETENTRYS ];
+                    memset( rPersistEntry.pPresentationObjects, 0, PPT_STYLESHEETENTRYS * 4 );
+                }
+                if ( !rPersistEntry.pPresentationObjects[ nInstanceInSheet ] )
+                    rPersistEntry.pPresentationObjects[ nInstanceInSheet ] = rObjData.nOldFilePos;
+            }
+            switch ( nInstanceInSheet )
+            {
+                case TSS_TYPE_PAGETITLE :
+                case TSS_TYPE_TITLE :
+                {
+                    if ( GetSlideLayoutAtom()->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE )
+                        nInstanceInSheet = TSS_TYPE_TITLE;
+                    else
+                        nInstanceInSheet = TSS_TYPE_PAGETITLE;
+                }
+                break;
+                case TSS_TYPE_BODY :
+//              case TSS_TYPE_SUBTITLE :
+                case TSS_TYPE_HALFBODY :
+                case TSS_TYPE_QUARTERBODY :
+                    nInstanceInSheet = TSS_TYPE_BODY;
+                break;
+            }
+            aTextObj.SetMappedInstance( (sal_uInt16)nInstanceInSheet );
+
+            switch ( aTextObj.GetInstance() )
+            {
+                case TSS_TYPE_PAGETITLE :
+                case TSS_TYPE_TITLE : eTextKind = OBJ_TITLETEXT; break;
+                case TSS_TYPE_SUBTITLE : eTextKind = OBJ_TEXT; break;
+                case TSS_TYPE_BODY :
+                case TSS_TYPE_HALFBODY :
+                case TSS_TYPE_QUARTERBODY : eTextKind = OBJ_OUTLINETEXT; break;
+            }
+            SdrObject* pTObj = NULL;
+            sal_Bool bWordWrap = (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone;
+            sal_Bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0;
+            if ( bWordWrap || ( eTextKind != OBJ_TEXT ) )
+            {
+                pTObj = new SdrRectObj( eTextKind );
+                if ( bVerticalText )
+                {
+                    bAutoGrowWidth = bFitShapeToText;   // bFitShapeToText; can't be used, because we cut the text if it is too height,
+                    bAutoGrowHeight = sal_False;
+                }
+                else
+                {
+                    bAutoGrowWidth = sal_False;
+                    bAutoGrowHeight = sal_True;         // bFitShapeToText; can't be used, because we cut the text if it is too height,
+                }
+            }
+            else
+            {
+                pTObj = new SdrRectObj();
+                bAutoGrowHeight = bAutoGrowWidth = bFitShapeToText;
+            }
+            pTObj->SetModel( pSdrModel );
+            SfxItemSet aSet( pSdrModel->GetItemPool() );
+            if ( !pRet )
+                ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, pTObj );
+            else if ( !((SdrRectObj*)pTObj)->IsTextFrame() )
+            {
+                aSet.Put( XLineStyleItem( XLINE_NONE ) );
+                aSet.Put( XFillStyleItem( XFILL_NONE ) );
+            }
             aSet.Put( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
 
              aSet.Put( SdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
@@ -1400,8 +1381,45 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             pTObj->SetItemSet( aSet );
             pTObj->SetSnapRect( rTextRect );
             pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
+
             if ( pTObj )
-            {   // rotate text with shape ?
+            {
+                /* check if our new snaprect makes trouble,
+                   because we do not display the ADJUST_BLOCK
+                   properly if the textsize is bigger than the
+                   snaprect of the object. Then we will use
+                   ADJUST_CENTER instead of ADJUST_BLOCK.
+                */
+                if ( !bFitShapeToText && !bWordWrap )
+                {
+                    SdrTextObj* pText = PTR_CAST( SdrTextObj, pTObj );
+                    if ( pText )
+                    {
+                        if ( bVerticalText )
+                        {
+                            if ( eTVA == SDRTEXTVERTADJUST_BLOCK )
+                            {
+                                Size aTextSize( pText->GetTextSize() );
+                                aTextSize.Width() += nTextLeft + nTextRight;
+                                aTextSize.Height() += nTextTop + nTextBottom;
+                                if ( rTextRect.GetHeight() < aTextSize.Height() )
+                                    pTObj->SetItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+                            }
+                        }
+                        else
+                        {
+                            if ( eTHA == SDRTEXTHORZADJUST_BLOCK )
+                            {
+                                Size aTextSize( pText->GetTextSize() );
+                                aTextSize.Width() += nTextLeft + nTextRight;
+                                aTextSize.Height() += nTextTop + nTextBottom;
+                                if ( rTextRect.GetWidth() < aTextSize.Width() )
+                                    pTObj->SetItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
+                            }
+                        }
+                    }
+                }
+                // rotate text with shape ?
                 sal_Int32 nAngle = ( rObjData.nSpFlags & SP_FFLIPV ) ? -mnFix16Angle : mnFix16Angle;    // #72116# vertical flip -> rotate by using the other way
                 nAngle += nTextRotationAngle;
 
