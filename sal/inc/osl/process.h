@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-19 12:14:30 $
+ *  last change: $Author: hro $ $Date: 2001-07-20 16:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,6 @@ typedef void* oslProcess;
     @param strEnviroments [in] is an array of strings wich describes the enviroment to set.
     Each string has the form "variable=value".
     @param nEnvironmentVars [in] the number of environment vars to set.
-    @param pResource [in] is a NULL terminated array of resources to transmit to the client process.
     @param pProcess [out] points to a oslProcess variable, in wich the processhandle is returned.
     @return osl_Process_E_None if the executable could be started, otherwise an error-code.
     @see osl_executeProcess_WithRedirectedIO
@@ -210,13 +209,13 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
     @param pProcess [out] points to a oslProcess variable, in wich the processhandle is returned.
     @param pChildInputWrite [out] points to a oslFileHandle variable that receives the handle which can
     be used to write to child process standard input device. Handle has to be closed with osl_closeFile
-    id no longer used.
+    if no longer used.
     @param pChildOutputRead [out] points to a oslFileHandle variable that receives the handle which can
     be used to read from child process standard output device. Handle has to be closed with osl_closeFile
-    id no longer used.
+    if no longer used.
     @param pChildErrorRead [out] points to a oslFileHandle variable that receives the handle which can
     be used to read from child process standard error device. Handle has to be closed with osl_closeFile
-    id no longer used.
+    if no longer used.
     @return osl_Process_E_None if the executable could be started, otherwise an error-code.
     @see osl_executeProcess
     @see osl_freeProcessHandle
