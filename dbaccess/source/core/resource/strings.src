@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-25 21:55:56 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 20:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ String RID_STR_TRIED_OPEN_TABLE
     Text[ turkish ] = "Tried to open the table $name$";
     Text[ arabic ] = " „ „Õ«Ê·… › Õ «·ÃœÊ· $name$.";
     Text[ finnish ] = "Es wurde versucht, die Tabelle $name$ zu ˆffnen.";
-    Text[ catalan ] = "Se intentÛ abrir la tabla $name$";
+    Text[ catalan ] = "S'ha intentat obrir la taula $name$.";
 };
 String RID_STR_CONNECTION_INVALID
 {
@@ -109,7 +109,7 @@ String RID_STR_CONNECTION_INVALID
     Text[ turkish ] = "Not possible to create a connection!";
     Text[ arabic ] = "Not possible to create a connection!";
     Text[ finnish ] = "Es konnte keine Verbindung erstellt werden.";
-    Text[ catalan ] = "Not possible to create a connection!";
+    Text[ catalan ] = "No s'ha pogut establir una connexiÛ";
 };
 
 String RID_STR_TABLE_IS_FILTERED
@@ -135,7 +135,7 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ turkish ] = "the table $name$ already exists. She is only filtered!";
     Text[ arabic ] = "the table $name$ already exists. She is only filtered!";
     Text[ finnish ] = "Die Tabelle $name$ existiert bereits. Sie wurde gefiltert!";
-    Text[ catalan ] = "the table $name$ already exists. She is only filtered!";
+    Text[ catalan ] = "La taula $name$ ja existeix i ha estat filtrada.";
 };
 
 String RID_STR_NEED_CONFIG_WRITE_ACCESS
@@ -161,7 +161,7 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
     Text[ chinese_traditional ] = "ÊÇ®Ê≤íÊúâÊ¨äÈôêÂ≠òÂèñÈÄôÂÄãÁâ©‰ª∂ÁöÑÈÖçÁΩÆË≥áÊñô„ÄÇ";
     Text[ turkish ] = "You have no write access to the configuration data the object is based on.";
     Text[ arabic ] = "You have no write access to the configuration data the object is based on.";
-    Text[ catalan ] = "You have no write access to the configuration data the object is based on.";
+    Text[ catalan ] = "No teniu accÈs d'escriptura a les dades de configuraciÛ en quË est‡ basat l'objecte.";
 };
 
 
@@ -242,6 +242,7 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text[ arabic ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
     Text[ catalan ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
 };
+
 
 
 
