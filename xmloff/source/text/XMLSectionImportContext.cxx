@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: mib $ $Date: 2000-11-17 07:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,8 @@ SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
     {
         // otherwise: text context
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList);
+            GetImport(), nPrefix, rLocalName, xAttrList,
+            XML_TEXT_TYPE_SECTION );
 
         // if that fails, default context
         if (NULL == pContext)
