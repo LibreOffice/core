@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-27 15:02:48 $
+ *  last change: $Author: cl $ $Date: 2001-10-12 16:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class SdDrawDocument;
 class SdrTextObj;
 class SdPageLink;
 class StarBASIC;
+class SfxItemSet;
 struct StyleRequestData;
 
 enum PresObjKind
@@ -146,6 +147,10 @@ protected:
     Rectangle   GetLayoutRect() const;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
+
+    SfxItemSet* mpItems;
+
+    SfxItemSet* getOrCreateItems();
 
 public:
     TYPEINFO();
@@ -261,6 +266,11 @@ public:
     Orientation GetOrientation() const { return eOrientation; }
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
+
+#ifndef SVX_LIGHT
+    sal_Bool setAlienAttributes( const com::sun::star::uno::Any& rAttributes );
+    void getAlienAttributes( com::sun::star::uno::Any& rAttributes );
+#endif
 };
 
 #endif     // _SDPAGE_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 08:34:08 $
+ *  last change: $Author: cl $ $Date: 2001-10-12 16:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,12 @@
 #include <svx/outlobj.hxx>
 #endif
 #include <svtools/urihelper.hxx>
+
+#ifndef SVX_LIGHT
+#ifndef _SVX_XMLCNITM_HXX
+#include <svx/xmlcnitm.hxx>
+#endif
+#endif
 
 #pragma hdrstop
 
@@ -798,4 +804,47 @@ SfxStyleSheet* SdPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 
     return FmFormPage::GetTextStyleSheetForObject( pObj );
 }
+
+SfxItemSet* SdPage::getOrCreateItems()
+{
+    if( mpItems == NULL )
+        mpItems = new SfxItemSet( pModel->GetItemPool(), SDRATTR_XMLATTRIBUTES, SDRATTR_XMLATTRIBUTES );
+
+    return mpItems;
+}
+
+
+#ifndef SVX_LIGHT
+sal_Bool SdPage::setAlienAttributes( const com::sun::star::uno::Any& rAttributes )
+{
+    SfxItemSet* pSet = getOrCreateItems();
+
+    SvXMLAttrContainerItem aAlienAttributes( SDRATTR_XMLATTRIBUTES );
+    if( aAlienAttributes.PutValue( rAttributes, 0 ) )
+    {
+        pSet->Put( aAlienAttributes );
+        return sal_True;
+    }
+
+    return sal_False;
+}
+#endif
+
+#ifndef SVX_LIGHT
+void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
+{
+    const SfxPoolItem* pItem;
+
+    if( (mpItems == NULL) || ( SFX_ITEM_SET != mpItems->GetItemState( SDRATTR_XMLATTRIBUTES, sal_False, &pItem ) ) )
+    {
+        SvXMLAttrContainerItem aAlienAttributes;
+        aAlienAttributes.QueryValue( rAttributes, 0 );
+    }
+    else
+    {
+        ((SvXMLAttrContainerItem*)pItem)->QueryValue( rAttributes, 0 );
+    }
+}
+
+#endif
 

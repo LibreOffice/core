@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-09 12:48:54 $
+ *  last change: $Author: cl $ $Date: 2001-10-12 16:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,8 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, BOOL bMasterPage) :
     bScaleObjects(TRUE),
     pPageLink(NULL),
     bBackgroundFullSize( FALSE ),
-    nPaperBin(PAPERBIN_PRINTER_SETTINGS)
+    nPaperBin(PAPERBIN_PRINTER_SETTINGS),
+    mpItems(NULL)
 {
     // Der Layoutname der Seite wird von SVDRAW benutzt, um die Praesentations-
     // vorlagen der Gliederungsobjekte zu ermitteln. Darum enthaelt er bereits
@@ -207,6 +208,9 @@ SdPage::~SdPage()
 #endif
 
     EndListenOutlineText();
+
+    if( mpItems )
+        delete mpItems;
 }
 
 
