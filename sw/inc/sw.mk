@@ -2,9 +2,9 @@
 #
 #   $RCSfile: sw.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2001-02-08 14:55:12 $
+#   last change: $Author: hjs $ $Date: 2001-02-08 16:54:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,12 +66,6 @@
 
 #CDEFS+=-DXML_CORE_API
 CDEFS+=-DNUM_RELSPACE
-
-# MakeDepn nicht das segdefs.hxx und die PCHs auswerten lassen
-# PCHs werden nur in den ..._1st Verzeichnissen aufgenommen
-EXCDEPN=segdefs.hxx
-EXCDEPNPCH=core_pch.hxx;filt_pch.hxx;ui_pch.hxx
-#MKDEPFLAGS+=-E:$(EXCDEPN);$(EXCDEPNPCH)
 
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 CDEFS+=-DSBASIC
