@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestIWorkAt.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:14:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@ package com.sun.star.lib.uno.environments.remote;
 
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
+import com.sun.star.uno.XInterface;
 
-
-public interface TestIWorkAt {
+public interface TestIWorkAt extends XInterface {
     void syncCall() throws Throwable ;
     void asyncCall() throws Throwable ;
 
@@ -76,8 +76,8 @@ public interface TestIWorkAt {
 
     public static final TypeInfo UNOTYPEINFO[] = {
         new MethodTypeInfo("increment", 0, 0),
-        new MethodTypeInfo("notifyme", 0, 0),
-        new MethodTypeInfo("syncCall", 0, 0),
-        new MethodTypeInfo("asyncCall", 0, 0)
+        new MethodTypeInfo("notifyme", 1, 0),
+        new MethodTypeInfo("syncCall", 2, 0),
+        new MethodTypeInfo("asyncCall", 3, 0)
             };
 }
