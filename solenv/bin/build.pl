@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: vg $ $Date: 2002-05-06 15:38:22 $
+#   last change: $Author: vg $ $Date: 2002-05-06 16:24:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ $^W = 1;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.53 $ ';
+$id_str = ' $Revision: 1.54 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -94,7 +94,6 @@ if ($ENV{GUI} eq 'UNX') {
 #########################
 $QuantityToBuild = 0;
 # delete $pid when not needed
-$pid = 0;
 %projects_deps_hash = ();   # hash of undependent projects,
                             # that could be built now
 %broken_build = ();         # hash of hashes of the modules,
@@ -106,7 +105,6 @@ $cmd_file = '';
 $BuildAllParents = 0;
 $show = 0;
 $deliver = 0;
-$child_nick = '';
 %LocalDepsHash = ();
 %BuildQueue = ();
 %PathHash = ();
@@ -273,10 +271,6 @@ sub dmake_dir {
     my ($folder_nick, $BuildDir);
     $folder_nick = shift;
     $BuildDir = &CorrectPath($StandDir . $PathHash{$folder_nick});
-### Next 2 strings are to remove after debugging
-#   sleep(3); # RAD
-#   _exit(0);     # RAD
-#   print "cd $BuildDir\n";
     if ($cmd_file) {
         print "cd $BuildDir\n";
         print $check_error_string;
@@ -751,7 +745,6 @@ sub get_options {
     @ARGV = @dmake_args;
     if ($show) {
         $cmd_file = '';
-#$QuantityToBuild = 0;
     };
     if (($ENV{GUI} eq 'WNT') && $QuantityToBuild) {
         $QuantityToBuild = 0;
@@ -845,8 +838,6 @@ sub BuildDependent {
     my $pid = 0;
     my $child_nick = '';
     while ($child_nick = &PickPrjToBuild($dependencies_hash)) {
-#       print "Build dependent\n";
-#       &print_hash($dependencies_hash);
         if (($QuantityToBuild) ) { # multyprocessing not for $BuildAllParents (-all etc)!!
             &register_signal_handler if (!$handler_set);
             do {
@@ -872,15 +863,6 @@ sub BuildDependent {
     };
 };
 
-#
-# Debugging only!!
-#
-sub print_hash {
-    my $hash_ref = shift;
-    my @hash_keys = keys %$hash_ref;
-    print $hash_ref, "@hash_keys \n";
-};
-
 sub children_number {
     return scalar (keys %processes_hash);
 };
@@ -904,12 +886,11 @@ sub start_child {
 # Build everything that should be built multiprocessing version
 #
 sub build_multiprocessing {
-    my ($Prj, $i);
+    my $Prj;
     my @build_queue = ();       # array, containing queue of projects
                                 # to build
     do {
         while ($Prj = &PickPrjToBuild(\%ParentDepsHash)) {
-            $build_finished = $no_projects;
             sleep and last if ($only_dependent);
             if ($build_from_opt) {
                 if ($build_from_opt ne $Prj) {
@@ -928,7 +909,6 @@ sub build_multiprocessing {
                 };
                 next;
             };
-            print $new_line;
             print $echo.    "=============\n";
             print $echo.    "Building project $Prj\n";
             print $echo.    "=============\n";
@@ -937,36 +917,7 @@ sub build_multiprocessing {
             &get_deps_hash(&CorrectPath($StandDir.$Prj), $projects_deps_hash{$Prj});
         };
         sleep(1) if (!$Prj);
-        # Here the built queue is built as long
-        # as possible
-        $i = 0;
-        do {
-            while ($i <= $#build_queue) {
-                $Prj = $build_queue[$i];
-                $only_dependent = 0;
-                $no_projects = 0;
-                if (defined $broken_build{$projects_deps_hash{$Prj}}) {
-                    if ($i == 0) {
-                        &print_error("error occurred while making $Prj");
-                        &cancel_build($broken_build{$projects_deps_hash{$Prj}});
-                    } else {
-                        next;
-                    };
-                };
-                &BuildDependent($projects_deps_hash{$Prj});
-                if ($no_projects) {
-                    chdir(&CorrectPath($StandDir.$Prj));
-                    system ("$deliver_commando") if (!$show);
-                    delete $projects_deps_hash{$Prj};
-                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
-                    splice (@build_queue, $i, 1);
-                    next;
-                };
-                $i++;
-            }
-            $i = 0;
-        } while (!&are_all_dependent(\@build_queue));
-#       &build_actual_queue(\@build_queue);
+        &build_actual_queue(\@build_queue);
     } while (scalar (keys %ParentDepsHash));
     while (&children_number()) {
         sleep(5);
@@ -975,38 +926,45 @@ sub build_multiprocessing {
     exit(0);
 };
 
-#sub build_actual_queue {
-#   my $build_queue = shift;
-#   my $i = 0;
-#   do {
-#       while ($i <= scalar(@$build_queue)) {
-#           $Prj = $$build_queue[$i];
-#           $only_dependent = 0;
-#           $no_projects = 0;
-#           &BuildDependent($projects_deps_hash{$Prj});
-#           if ($no_projects) {
-#               chdir(&CorrectPath($StandDir.$Prj));
-#               system ("$deliver_commando") if (!$show);
-#               delete $projects_deps_hash{$Prj};
-#               &RemoveFromDependencies($Prj, \%ParentDepsHash);
-#               print "######## $Prj is built ########";
-#               splice (@$build_queue, $i, 1);
-#               next;
-#           };
-#           $i++;
-#       }
-#       sleep(3);
-#       print "\nFirst loop is through\n";
-#       $i = 0;
-#   } while (!&are_all_dependent($build_queue));
-#};
+#
+# Here the built queue is built as long as possible
+#
+sub build_actual_queue {
+    my $build_queue = shift;
+    my $i = 0;
+    do {
+        while ($i <= (scalar(@$build_queue) - 1)) {
+            $Prj = $$build_queue[$i];
+            $only_dependent = 0;
+            $no_projects = 0;
+            if (defined $broken_build{$projects_deps_hash{$Prj}}) {
+                if ($i == 0) {
+                    &print_error("error occurred while making $Prj");
+                    &cancel_build($broken_build{$projects_deps_hash{$Prj}});
+                } else {
+                    next;
+                };
+            };
+            &BuildDependent($projects_deps_hash{$Prj});
+            if ($no_projects) {
+                chdir(&CorrectPath($StandDir.$Prj));
+                system ("$deliver_commando") if (!$show);
+                delete $projects_deps_hash{$Prj};
+                &RemoveFromDependencies($Prj, \%ParentDepsHash);
+                splice (@$build_queue, $i, 1);
+                next;
+            };
+            $i++;
+        };
+        $i = 0;
+    } while (!&are_all_dependent($build_queue));
+};
 
 sub are_all_dependent {
     my $build_queue = shift;
     my $folder = '';
     foreach my $prj (@$build_queue) {
         $folder = &FindIndepPrj($projects_deps_hash{$prj});
-#print "found indep project: $folder\n";
         return '' if ($folder);
     };
     return '1';
