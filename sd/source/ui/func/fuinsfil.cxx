@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:02:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,33 +335,23 @@ FuInsertFile::FuInsertFile (
     if( pMedium->IsStorage() )
     {
         // Storage
-        SvStorage* pStorage = pMedium->GetStorage();
-
-        if( pStorage )
+        uno::Reference < embed::XStorage > xStorage = pMedium->GetStorage();
+        if( xStorage.is() )
         {
-            BOOL bOwnDocument = FALSE;
+            uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
+            sal_Bool bIsStream = xAccess->hasByName( pStarDrawXMLContent ) && xStorage->isStreamElement( pStarDrawXMLContent ) ||
+                xAccess->hasByName( pStarDrawOldXMLContent ) && xStorage->isStreamElement( pStarDrawOldXMLContent );
 
-            if( pStorage->IsStream( pStarDrawDoc ) || pStorage->IsStream( pStarDrawDoc3 ) )
-            {
-                // binary document
-                bOwnDocument = TRUE;
-            }
-            else if( ( pStorage->IsStream( pStarDrawXMLContent ) || pStorage->IsStream( pStarDrawOldXMLContent ) ) &&
-                     ( !pFilter ||
-                       ( aFilterName.SearchAscii( "StarOffice XML (Draw)" ) != STRING_NOTFOUND ||
-                         aFilterName.SearchAscii( "StarOffice XML (Impress)" ) != STRING_NOTFOUND ||
-                         aFilterName.SearchAscii( "draw_StarOffice_XML_Impress" ) != STRING_NOTFOUND ||
-                         aFilterName.SearchAscii( "impress_StarOffice_XML_Draw" ) != STRING_NOTFOUND ||
-                         aFilterName.SearchAscii( "impress_StarOffice_XML_Impress_Template" ) != STRING_NOTFOUND ||
-                         aFilterName.SearchAscii( "draw_StarOffice_XML_Draw_Template" ) != STRING_NOTFOUND ||
-                         aFilterName.SearchAscii( "draw_StarOffice_XML_Draw" ) != STRING_NOTFOUND ||
-                         aFilterName.SearchAscii( "impress_StarOffice_XML_Impress" ) != STRING_NOTFOUND ) ) )
-            {
-                // XML document
-                bOwnDocument = TRUE;
-            }
-
-            if( bOwnDocument )
+            if ( bIsStream &&
+                    ( !pFilter ||
+                    ( aFilterName.SearchAscii( "StarOffice XML (Draw)" ) != STRING_NOTFOUND ||
+                        aFilterName.SearchAscii( "StarOffice XML (Impress)" ) != STRING_NOTFOUND ||
+                        aFilterName.SearchAscii( "draw_StarOffice_XML_Impress" ) != STRING_NOTFOUND ||
+                        aFilterName.SearchAscii( "impress_StarOffice_XML_Draw" ) != STRING_NOTFOUND ||
+                        aFilterName.SearchAscii( "impress_StarOffice_XML_Impress_Template" ) != STRING_NOTFOUND ||
+                        aFilterName.SearchAscii( "draw_StarOffice_XML_Draw_Template" ) != STRING_NOTFOUND ||
+                        aFilterName.SearchAscii( "draw_StarOffice_XML_Draw" ) != STRING_NOTFOUND ||
+                        aFilterName.SearchAscii( "impress_StarOffice_XML_Impress" ) != STRING_NOTFOUND ) ) )
             {
                 pMedium->Close();
 
@@ -383,11 +373,6 @@ FuInsertFile::FuInsertFile (
               aFilterName.SearchAscii( "Rich" ) != STRING_NOTFOUND ||
               aFilterName.SearchAscii( "RTF" )  != STRING_NOTFOUND ||
               aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ) )
-        {
-            bFound = TRUE;
-        }
-
-        if( bFound )
         {
             if( bDrawMode )
                 InsTextOrRTFinDrMode(pMedium);
