@@ -69,6 +69,8 @@ foreach $i (@files)
             # change the links for the C++/Java examples in the ODK
             s#((http:\/\/api\.openoffice\.org\/source\/browse\/api\/odk\/examples\/)(java\/*))#$3#go;
             s#((http:\/\/api\.openoffice\.org\/source\/browse\/api\/odk\/examples\/)(cpp\/*))#$3#go;
+            s#((http:\/\/api\.openoffice\.org\/source\/browse\/api\/odk\/examples\/)(basic\/*))#$3#go;
+            s#((http:\/\/api\.openoffice\.org\/source\/browse\/api\/odk\/examples\/)(OLE\/*))#$3#go;
 
             # change link api specific stuff
             s#((http:\/\/api\.openoffice\.org\/)(design_guide.html))#$relPath\/www\/$3#go;
