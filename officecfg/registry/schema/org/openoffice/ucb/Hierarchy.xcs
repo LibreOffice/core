@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Hierarchy.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:37:34 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 				<desc xml:lang="th">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
 				<desc xml:lang="hi-IN">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
 				<desc xml:lang="x-comment">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
+				<desc xml:lang="sk">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
 			</info>
 			<prop oor:name="Title" oor:type="xs:string">
 				<info>
@@ -121,6 +122,7 @@
 					<desc xml:lang="th">Specifies the title of an entry of the hierarchy.</desc>
 					<desc xml:lang="hi-IN">Specifies the title of an entry of the hierarchy.</desc>
 					<desc xml:lang="x-comment">Specifies the title of an entry of the hierarchy.</desc>
+					<desc xml:lang="sk">Specifies the title of an entry of the hierarchy.</desc>
 				</info>
 			</prop>
 			<prop oor:name="TargetURL" oor:type="xs:string">
@@ -150,6 +152,7 @@
 					<desc xml:lang="th">Specifies the target URL of the entry of the hierarchy.</desc>
 					<desc xml:lang="hi-IN">Specifies the target URL of the entry of the hierarchy.</desc>
 					<desc xml:lang="x-comment">Specifies the target URL of the entry of the hierarchy.</desc>
+					<desc xml:lang="sk">Specifies the target URL of the entry of the hierarchy.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Type" oor:type="xs:int">
@@ -179,6 +182,7 @@
 					<desc xml:lang="th">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
 					<desc xml:lang="hi-IN">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
 					<desc xml:lang="x-comment">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
+					<desc xml:lang="sk">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
 				</info>
 			</prop>
 			<set oor:name="Children" oor:node-type="Entry">
@@ -208,6 +212,7 @@
 					<desc xml:lang="th">Specifies the children (other hierarchy entries) of the item.</desc>
 					<desc xml:lang="hi-IN">Specifies the children (other hierarchy entries) of the item.</desc>
 					<desc xml:lang="x-comment">Specifies the children (other hierarchy entries) of the item.</desc>
+					<desc xml:lang="sk">Specifies the children (other hierarchy entries) of the item.</desc>
 				</info>
 			</set>
 		</group>
@@ -240,10 +245,15 @@
 				<desc xml:lang="th">Contains a set of top-level entries of the hierarchy.</desc>
 				<desc xml:lang="hi-IN">Contains a set of top-level entries of the hierarchy.</desc>
 				<desc xml:lang="x-comment">Contains a set of top-level entries of the hierarchy.</desc>
+				<desc xml:lang="sk">Contains a set of top-level entries of the hierarchy.</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
+
+
+
 
 
 

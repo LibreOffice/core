@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Configuration.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:37:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 				<desc xml:lang="th">Contains data describing the configuration parameters of a Content Provider.</desc>
 				<desc xml:lang="hi-IN">Contains data describing the configuration parameters of a Content Provider.</desc>
 				<desc xml:lang="x-comment">; Contains data describing the configuration parameters of a Content Provider.</desc>
+				<desc xml:lang="sk">Contains data describing the configuration parameters of a Content Provider.</desc>
 			</info>
 			<prop oor:name="ServiceName" oor:type="xs:string">
 				<info>
@@ -121,6 +122,7 @@
 					<desc xml:lang="th">Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
 					<desc xml:lang="x-comment">; Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
+					<desc xml:lang="sk">Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
 				</info>
 			</prop>
 			<prop oor:name="URLTemplate" oor:type="xs:string">
@@ -150,6 +152,7 @@
 					<desc xml:lang="th">Contains the URL template.</desc>
 					<desc xml:lang="hi-IN">Contains the URL template.</desc>
 					<desc xml:lang="x-comment">; Contains the URL template.</desc>
+					<desc xml:lang="sk">Contains the URL template.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Arguments" oor:type="xs:string">
@@ -179,6 +182,7 @@
 					<desc xml:lang="th">Contains additional arguments for UCP creation.</desc>
 					<desc xml:lang="hi-IN">Contains additional arguments for UCP creation.</desc>
 					<desc xml:lang="x-comment">; Contains additional arguments for UCP creation.</desc>
+					<desc xml:lang="sk">Contains additional arguments for UCP creation.</desc>
 				</info>
 			</prop>
 		</group>
@@ -209,6 +213,7 @@
 				<desc xml:lang="th">Specifies secondary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="hi-IN">Specifies secondary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="x-comment">; Specifies secondary keys for Content Provider configuration data.</desc>
+				<desc xml:lang="sk">Specifies secondary keys for Content Provider configuration data.</desc>
 			</info>
 			<set oor:name="ProviderData" oor:node-type="ContentProviderData">
 				<info>
@@ -237,6 +242,7 @@
 					<desc xml:lang="th">Specifies a set of Content Provider configuration data for the UCB.</desc>
 					<desc xml:lang="hi-IN">Specifies a set of Content Provider configuration data for the UCB.</desc>
 					<desc xml:lang="x-comment">; Specifies a set of Content Provider configuration data for the UCB.</desc>
+					<desc xml:lang="sk">Specifies a set of Content Provider configuration data for the UCB.</desc>
 				</info>
 			</set>
 		</group>
@@ -267,6 +273,7 @@
 				<desc xml:lang="th">Specifies primary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="hi-IN">Specifies primary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="x-comment">; Specifies primary keys for Content Provider configuration data.</desc>
+				<desc xml:lang="sk">Specifies primary keys for Content Provider configuration data.</desc>
 			</info>
 			<set oor:name="SecondaryKeys" oor:node-type="ContentProvidersDataSecondaryKeys">
 				<info>
@@ -295,6 +302,7 @@
 					<desc xml:lang="th">Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
 					<desc xml:lang="hi-IN">Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
 					<desc xml:lang="x-comment">; Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
+					<desc xml:lang="sk">Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
 				</info>
 			</set>
 		</group>
@@ -327,10 +335,15 @@
 				<desc xml:lang="th">Contains a root entry for Content Provider configurations.</desc>
 				<desc xml:lang="hi-IN">Contains a root entry for Content Provider configurations.</desc>
 				<desc xml:lang="x-comment">; Contains a root entry for Content Provider configurations.</desc>
+				<desc xml:lang="sk">Contains a root entry for Content Provider configurations.</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
+
+
+
 
 
 
