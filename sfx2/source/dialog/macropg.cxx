@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-22 13:02:21 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,11 +530,21 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         sGroup = pImpl->pGroupLB->GetGroup();
         sNew = pMacro->GetMacroName();
 
-        String sBasicName(SfxResId(STR_BASICNAME));
-        if ( aLanguage == sBasicName )
-            pThis->aTbl.Insert( nEvent, new SvxMacro( sMacro, sGroup, STARBASIC ) );
+        if( sMacro.CompareToAscii( "vnd.sun.star.script:", 20 ) == COMPARE_EQUAL )
+        {
+            OSL_TRACE("ASSIGN_DELETE: Its a script");
+            pThis->aTbl.Insert(
+                nEvent, new SvxMacro( sMacro, String::CreateFromAscii("Script") ) );
+        }
         else
-            pThis->aTbl.Insert( nEvent, new SvxMacro( sMacro, aLanguage ) );
+        {
+            OSL_TRACE("ASSIGN_DELETE: Its a basic macro");
+            String sBasicName(SfxResId(STR_BASICNAME));
+            if ( aLanguage == sBasicName )
+                pThis->aTbl.Insert( nEvent, new SvxMacro( sMacro, sGroup, STARBASIC ) );
+            else
+                pThis->aTbl.Insert( nEvent, new SvxMacro( sMacro, aLanguage ) );
+        }
     }
 
     pImpl->pEventLB->SetUpdateMode( FALSE );
