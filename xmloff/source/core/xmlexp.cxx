@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-03 10:16:56 $
+ *  last change: $Author: ka $ $Date: 2000-12-06 20:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,13 +725,13 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
                              sGraphicObjectProtocol.getLength() ) &&
         xEmbeddedGraphicObjects.is() )
     {
-        Any aAny;
-        aAny <<= rGraphicObjectURL;
-        xEmbeddedGraphicObjects->insertByIndex(
-                xEmbeddedGraphicObjects->getCount(), aAny );
+        Any                 aAny;
+        const sal_uInt32    nCount = xEmbeddedGraphicObjects->getCount();
 
-        sRet = sPicturesPath;
-        sRet += rGraphicObjectURL.copy( sGraphicObjectProtocol.getLength() );
+        aAny <<= rGraphicObjectURL;
+        xEmbeddedGraphicObjects->insertByIndex( nCount, aAny );
+        aAny = xEmbeddedGraphicObjects->getByIndex( nCount );
+        aAny >>= sRet;
     }
     else
         sRet = INetURLObject::AbsToRel( sRet );
