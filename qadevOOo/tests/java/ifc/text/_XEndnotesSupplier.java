@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XEndnotesSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:15 $
+ *  last change:$Date: 2003-09-08 11:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.text;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.text.XEndnotesSupplier;
-import lib.MultiMethodTest;
 
 
 /**
