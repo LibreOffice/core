@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-07 14:51:05 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ japanese ] = "ﾏｲﾅｽ/ﾊｲﾌﾝ/長音[－/‐/ー](~M)";
         Text[ korean ] = "마이너스/대시/cho-on(~M)";
         Text[ chinese_simplified ] = "负数符号/连字符/長音[－/‐/ー](~M)";
-        Text[ chinese_traditional ] = "負數符號/連字符/長音(~M)";
+        Text[ chinese_traditional ] = "負數符號/連字符/長音[－/‐/ー](~M)";
         Text[ turkish ] = "Match minus/dash/cho-on";
         Text[ arabic ] = "Match minus/dash/cho-on";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -262,7 +262,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ japanese ] = "繰り返し記号[ヽヾゝゞ々](~P)";
         Text[ korean ] = "반복 기호(~P)";
         Text[ chinese_simplified ] = "重复的字符[ヽヾゝゞ々](~P)";
-        Text[ chinese_traditional ] = "重復的字元(~P)";
+        Text[ chinese_traditional ] = "重復的字元[ヽヾゝゞ々](~P)";
         Text[ turkish ] = "Match 'repeat character' marks";
         Text[ arabic ] = "��� �������";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -346,7 +346,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ japanese ] = "ﾁﾞ/ｼﾞ、ﾂﾞ/ｽﾞ(~D)";
         Text[ korean ] = "~di/zi, du/zu";
         Text[ chinese_simplified ] = "ヂ/ジ、ヅ/ズ(~D)";
-        Text[ chinese_traditional ] = "~di/zi, du/zu";
+        Text[ chinese_traditional ] = "ヂ/ジ、ヅ/ズ";
         Text[ turkish ] = "Match di/zi, du/zu";
         Text[ arabic ] = "Match di/zi, du/zu";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -374,7 +374,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ japanese ] = "ﾊﾞ/ｳﾞｧ、ﾊ/ﾌｧ(~B)";
         Text[ korean ] = "~ba/va, ha/fa";
         Text[ chinese_simplified ] = "バ/ヴァ、ハ/ファ(~B)";
-        Text[ chinese_traditional ] = "~ba/va, ha/fa";
+        Text[ chinese_traditional ] = "バ/ヴァ、ハ/ファ";
         Text[ turkish ] = "Match ba/va, ha/fa";
         Text[ arabic ] = "Match ba/va, ha/fa";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -402,7 +402,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ japanese ] = "ﾂｨ/ﾃｨ/ﾁ、ﾃﾞｨ/ｼﾞ(~T)";
         Text[ korean ] = "~tsi/thi/chi, dhi/zi";
         Text[ chinese_simplified ] = "バ/ヴァ、ハ/ファ(~T)";
-        Text[ chinese_traditional ] = "~tsi/thi/chi, dhi/zi";
+        Text[ chinese_traditional ] = "バ/ヴァ、ハ/ファ";
         Text[ turkish ] = "Match tsi/thi/chi, dhi/zi";
         Text[ arabic ] = "Match tsi/thi/chi, dhi/zi";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -430,7 +430,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ japanese ] = "ﾋｭ/ﾌｭ、ﾋﾞｭ/ｳﾞｭ(~Y)";
         Text[ korean ] = "h~yu/fyu, byu/vyu";
         Text[ chinese_simplified ] = "ヒュ/フュ、ビュ/ヴュ(~Y)";
-        Text[ chinese_traditional ] = "h~yu/fyu, byu/vyu";
+        Text[ chinese_traditional ] = "ヒュ/フュ、ビュ/ヴュ";
         Text[ turkish ] = "Match hyu/fyu, byu/vyu";
         Text[ arabic ] = "Match hyu/fyu, byu/vyu";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -458,7 +458,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ japanese ] = "ｾ/ｼｪ、ｾﾞ/ｼﾞｪ(~S)";
         Text[ korean ] = "~se/she, ze/je";
         Text[ chinese_simplified ] = "バ/ヴァ、ハ/ファ(~S)";
-        Text[ chinese_traditional ] = "~se/she, ze/je";
+        Text[ chinese_traditional ] = "バ/ヴァ、ハ/ファ";
         Text[ turkish ] = "Match se/she, ze/je";
         Text[ arabic ] = "Match se/she, ze/je";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -486,7 +486,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ japanese ] = "ｲ段、ｴ段に続くｱ/ﾔ (ﾋﾟｱﾉ/ﾋﾟﾔﾉ)(~I)";
         Text[ korean ] = "~ia/iya (piano/piyano)";
         Text[ chinese_simplified ] = "イ段、エ段的连接(ピアノ/ピヤノ)(~I)";
-        Text[ chinese_traditional ] = "~ia/iya (piano/piyano)";
+        Text[ chinese_traditional ] = "イ段及エ段的連接(ピアノ/ピヤノ)";
         Text[ turkish ] = "Match ia/iya (piano/piyano)";
         Text[ arabic ] = "Match ia/iya (piano/piyano)";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -514,7 +514,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ japanese ] = "ｻ行の前のｷ/ｸ (ﾃｷｽﾄ/ﾃｸｽﾄ)(~K)";
         Text[ korean ] = "~ki/ku (tekisuto/tekusuto)";
         Text[ chinese_simplified ] = "サ行之前的用法 キ/ク(テキスト/テクスト)(~K)";
-        Text[ chinese_traditional ] = "~ki/ku (tekisuto/tekusuto)";
+        Text[ chinese_traditional ] = "サ行之前的用法 キ/ク(テキスト/テクスト)";
         Text[ turkish ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ arabic ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -623,7 +623,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ japanese ] = "長音(母音でのばす音) [ー](~G)";
         Text[ korean ] = "길어진 모음 (cho-on)(~G)";
         Text[ chinese_simplified ] = "長音[ー](~G)";
-        Text[ chinese_traditional ] = "日語的長音(~G)";
+        Text[ chinese_traditional ] = "長音[ー](~G)";
         Text[ turkish ] = "Prolonged soundmarks (cho-on)";
         Text[ arabic ] = "Prolonged soundmarks (cho-on)";
         Text[ catalan ] = "Vocales largas (cho-on)";
@@ -678,6 +678,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     Text[ catalan ] = "Searching in Japanese";
 };
 // end TabPage
+
 
 
 
