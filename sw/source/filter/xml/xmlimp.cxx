@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-12 13:13:38 $
+ *  last change: $Author: mtg $ $Date: 2001-03-19 13:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,14 @@
 #include "xmlimp.hxx"
 #endif
 
+#ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
+#include <xmloff/DocumentSettingsContext.hxx>
+#endif
+
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -152,6 +160,7 @@ enum SwXMLDocTokens
     XML_TOK_DOC_META,
     XML_TOK_DOC_BODY,
     XML_TOK_DOC_SCRIPT,
+    XML_TOK_DOC_SETTINGS,
     XML_TOK_OFFICE_END=XML_TOK_UNKNOWN
 };
 
@@ -164,6 +173,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_meta,       XML_TOK_DOC_META       },
     { XML_NAMESPACE_OFFICE, sXML_body,       XML_TOK_DOC_BODY       },
     { XML_NAMESPACE_OFFICE, sXML_script,     XML_TOK_DOC_SCRIPT     },
+    { XML_NAMESPACE_OFFICE, sXML_settings,   XML_TOK_DOC_SETTINGS       },
     XML_TOKEN_MAP_END
 };
 
@@ -269,6 +279,9 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         break;
     case XML_TOK_DOC_BODY:
         pContext = GetSwImport().CreateBodyContext( rLocalName );
+        break;
+    case XML_TOK_DOC_SETTINGS:
+        pContext = new XMLDocumentSettingsContext ( GetImport(), nPrefix, rLocalName, xAttrList );
         break;
     }
 
@@ -702,6 +715,87 @@ SvXMLImportContext *SwXMLImport::CreateFontDeclsContext(
     SetFontDecls( pFSContext );
     return pFSContext;
 }
+void SwXMLImport::SetViewSettings(Sequence<beans::PropertyValue> aViewProps)
+{
+    sal_Int32 nCount = aViewProps.getLength();
+    beans::PropertyValue *pValue = aViewProps.getArray();
+
+    long nTop = 0, nLeft = 0, nWidth = 0, nHeight = 0;
+    sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
+
+    for (sal_Int32 i = 0; i < nCount ; i++)
+    {
+        if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaTop" ) ) )
+        {
+            pValue[i].Value >>= nTop;
+        }
+        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaLeft" ) ) )
+        {
+            pValue[i].Value >>= nLeft;
+        }
+        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaWidth" ) ) )
+        {
+            pValue[i].Value >>= nWidth;
+        }
+        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaHeight" ) ) )
+        {
+            pValue[i].Value >>= nHeight;
+        }
+        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineInsertions" ) ) )
+        {
+            pValue[i].Value >>= bShowInserts;
+        }
+        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineDeletions" ) ) )
+        {
+            pValue[i].Value >>= bShowDeletes;
+        }
+        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowHeaderWhileBrowsing" ) ) )
+        {
+            pValue[i].Value >>= bShowHeader;
+        }
+        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowFooterWhileBrowsing" ) ) )
+        {
+            pValue[i].Value >>= bShowFooter;
+        }
+    }
+    if( !GetModel().is() )
+        return;
+
+    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+    Reference < XText > xText = xTextDoc->getText();
+    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+    if( !xTextTunnel.is() )
+        return;
+
+    SwXText *pText = (SwXText *)xTextTunnel->getSomething(
+                                        SwXText::getUnoTunnelId() );
+    ASSERT( pText, "SwXText missing" );
+    if( !pText )
+        return;
+
+    SwDoc *pDoc = pText->GetDoc();
+    Rectangle aRect ( nLeft, nTop, nLeft + nWidth, nTop + nHeight );
+    pDoc->GetDocShell()->SetVisArea ( aRect );
+
+    pDoc->SetHeadInBrowse ( bShowHeader );
+    pDoc->SetFootInBrowse ( bShowFooter );
+
+    SwRedlineMode eOld = pDoc->GetRedlineMode();
+
+    if ( bShowInserts )
+    {
+        if ( bShowDeletes )
+            pDoc->SetRedlineMode ( eOld | REDLINE_SHOW_DELETE | REDLINE_SHOW_INSERT );
+        else
+            pDoc->SetRedlineMode ( eOld | REDLINE_SHOW_INSERT );
+    }
+    else if ( bShowDeletes )
+        pDoc->SetRedlineMode ( eOld | REDLINE_SHOW_DELETE );
+}
+void SwXMLImport::SetConfigurationSettings(uno::Sequence<beans::PropertyValue> aConfigProps)
+{
+}
 
 void SwXMLImport::SetProgressRef( sal_Int32 nParagraphs )
 {
@@ -830,4 +924,25 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(
     throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SwXMLImport( IMPORT_META );
+}
+
+OUString SAL_CALL SwXMLImportSettings_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLSettingsImporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SwXMLImportSettings_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName( SwXMLImportSettings_getImplementationName() );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(
+        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLImport( IMPORT_SETTINGS );
 }

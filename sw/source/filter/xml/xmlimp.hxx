@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:05:07 $
+ *  last change: $Author: mtg $ $Date: 2001-03-19 13:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,8 @@ public:
                              ::rtl::OUString *pParent=0 ) const;
 
     virtual void SetStatisticAttributes(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs);
+    virtual void SetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> aViewProps);
+    virtual void SetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> aConfigProps);
 
     SvStorage *GetPackage() { return &xPackage; }
 };
