@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: nf $ $Date: 2001-12-07 13:44:05 $
+ *  last change: $Author: obo $ $Date: 2001-12-10 22:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1887,7 +1887,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "Busta Monarch" ; PAPERSIZE_C65 ; > ;
         < "Busta #9" ; PAPERSIZE_DL ; > ;
         < "Busta #10" ; PAPERSIZE_COM675; > ;
-        < "Busta #11" ; PAPERSIZE_MONARCH; > ;
+        < "Busta Monarch" ; PAPERSIZE_MONARCH; > ;
         < "Busta #12" ; PAPERSIZE_COM9; > ;
         < "Env. #10" ; PAPERSIZE_COM10; > ;
         < "Env. #11" ; PAPERSIZE_COM11; > ;
@@ -2950,6 +2950,7 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ finnish ] = "[Tulostinasetuksien mukaan]";
 };
  // ********************************************************************** EOF
+
 
 
 
