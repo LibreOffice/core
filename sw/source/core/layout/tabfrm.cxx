@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:36:25 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 09:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3567,8 +3567,23 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
         bool bIsFollow( false );
         if ( pTmp->IsTxtFrm() && static_cast<const SwTxtFrm*>(pTmp)->IsFollow() )
         {
-            pObjs = static_cast<const SwTxtFrm*>(pTmp)->FindMaster()->GetDrawObjs();
-            bIsFollow = true;
+            const SwFrm* pMaster;
+            // --> FME 2005-04-01 #i46450# Master does not necessarily have
+            // to exist if this function is called from JoinFrm() ->
+            // Cut() -> Shrink()
+            const SwTxtFrm* pTmpFrm = static_cast<const SwTxtFrm*>(pTmp);
+            if ( pTmpFrm->GetPrev() && pTmpFrm->GetPrev()->IsTxtFrm() &&
+                 static_cast<const SwTxtFrm*>(pTmpFrm->GetPrev())->GetFollow() &&
+                 static_cast<const SwTxtFrm*>(pTmpFrm->GetPrev())->GetFollow() != pTmp )
+                 pMaster = 0;
+            else
+                 pMaster = pTmpFrm->FindMaster();
+
+            if ( pMaster )
+            {
+                 pObjs = static_cast<const SwTxtFrm*>(pTmp)->FindMaster()->GetDrawObjs();
+                bIsFollow = true;
+            }
         }
         else
         {
