@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:10:22 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,34 +325,12 @@ void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
     }
 }
 
-
-
-// all attributes that are on rPos will but changed so that their Point or their
-// Mark (whichever had been on rPos) will be set to the next node
-void SwFltControlStack::MoveAttrsToNextNode( const SwNodeIndex& rNdIdx )
-{
-    USHORT nCnt = Count();
-    SwFltStackEntry* pEntry;
-
-    for (USHORT i=0; i < nCnt; i++)
-    {
-        pEntry = (*this)[ i ];
-        if(    ( pEntry->nMkNode  == rNdIdx ) )
-            pEntry->nMkNode++;
-
-        if(    ( pEntry->nPtNode  == rNdIdx ) )
-            pEntry->nPtNode++;
-    }
-}
-
-
 void SwFltControlStack::MarkAllAttrsOld()
 {
     USHORT nCnt = Count();
     for (USHORT i=0; i < nCnt; i++)
         (*this)[ i ]->bOld = TRUE;
 }
-
 
 void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr )
 {
@@ -775,29 +753,6 @@ SfxPoolItem* SwFltControlStack::GetFmtStackAttr(USHORT nWhich, USHORT * pPos)
     return 0;
 }
 
-const SfxPoolItem* SwFltControlStack::GetOpenStackAttr(const SwPosition& rPos, USHORT nWhich)
-{
-    SwFltStackEntry* pEntry;
-    USHORT nSize = Count();
-    SwNodeIndex aAktNode( rPos.nNode, -1 );
-    USHORT nAktIdx = rPos.nContent.GetIndex();
-
-    while (nSize)
-    {
-        // ist es das gesuchte Attribut ? (gueltig sind nur gelockte,
-        // also akt. gesetzte, noch offene Attribute!!)
-        pEntry = (*this)[ --nSize ];
-        if(    pEntry->bLocked
-            && (pEntry->pAttr->Which() == nWhich)
-            && (pEntry->nMkNode  == aAktNode)
-            && (pEntry->nMkCntnt == nAktIdx ))
-        {
-            return (SfxPoolItem*)pEntry->pAttr;     // Ok, dann Ende
-        }
-    }
-    return 0;
-}
-
 const SfxPoolItem* SwFltControlStack::GetFmtAttr(const SwPosition& rPos, USHORT nWhich)
 {
     SfxPoolItem* pHt = GetFmtStackAttr(nWhich);
@@ -811,23 +766,6 @@ const SfxPoolItem* SwFltControlStack::GetFmtAttr(const SwPosition& rPos, USHORT 
     if (!pNd)           // kein ContentNode, dann das dflt. Attribut
         return &pDoc->GetAttrPool().GetDefaultItem(nWhich);
     return &pNd->GetAttr(nWhich);
-}
-
-BOOL SwFltControlStack::IsAttrOpen(USHORT nAttrId)
-{
-    USHORT nCnt = Count();
-
-    if (!nCnt)  return FALSE;
-
-    SwFltStackEntry* pEntry;
-
-    for (USHORT i=0; i < nCnt; i++)
-    {
-        pEntry = (*this)[ i ];
-        if (pEntry->bLocked && nAttrId == pEntry->pAttr->Which())
-            return TRUE;
-    }
-    return FALSE;
 }
 
 //------ hier stehen die Methoden von SwFltAnchor -----------
@@ -941,34 +879,6 @@ int SwFltSection::operator==(const SfxPoolItem& rItem) const
 SfxPoolItem* __EXPORT SwFltSection::Clone(SfxItemPool*) const
 {
     return new SwFltSection(*this);
-}
-
-//------ hier stehen die Methoden von SwFltEndStack -----------
-
-// Bei Auftreten einer Referenz wird die entsprechende Textmarke als
-// RefMark statt als Bookmark behandelt
-
-void SwFltEndStack::SetBookRef( const String& rName, BOOL bPgRef)
-{
-    SfxPoolItem* pAttr;
-    USHORT nSize = Count();
-
-    while( nSize )
-    {
-        // ist es das gesuchte Attribut ?
-        pAttr = (*this)[ --nSize ]->pAttr;
-        if( (pAttr->Which() == RES_FLTR_BOOKMARK ) &&
-//JP 11.05.00 - UNICODE-FRAGE - reicht ein EqualsIgnoreCaseAscii oder
-//                              muß man das ueber die International machen?
-             ((SwFltBookmark*)pAttr)->GetName().EqualsIgnoreCaseAscii( rName ))
-        {
-            if (bPgRef)
-                ((SwFltBookmark*)pAttr)->SetPgRef();
-            else
-                ((SwFltBookmark*)pAttr)->SetRef();
-            break;
-        }
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1090,10 +1000,6 @@ void SwFltShell::ConvertUStr( String& rInOut )
 {
     GetAppCharClass().toUpper( rInOut );
 }
-void SwFltShell::ConvertLStr( String& rInOut )
-{
-    GetAppCharClass().toLower( rInOut );
-}
 
 // QuoteString() wandelt CRs abhaengig von nFieldIniFlags in '\n' oder "\0x0d"
 String SwFltShell::QuoteStr( const String& rIn )
@@ -1144,18 +1050,6 @@ SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
     return *this;
 }
 
-SwFltShell& SwFltShell::AddLinkedSection( const String& rFileName )
-{
-    String aStr( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Ww1" )));
-    SwSection* pSection = new SwSection( FILE_LINK_SECTION,
-                                     GetDoc().GetUniqueSectionName( &aStr ));
-    pSection->SetLinkFileName( INetURLObject::RelToAbs( rFileName ) );
-    pSection->SetProtect( TRUE );
-    *this << SwFltSection(pSection);
-    EndItem( RES_FLTR_SECTION);
-    return *this;
-}
-
 SwFltShell& SwFltShell::operator << (Graphic& rGraphic)
 {
     // embedded Grafik !!
@@ -1191,19 +1085,9 @@ SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
     return *this;
 }
 
-/*SwFltShell& SwFltShell::operator << (SwFltCharSet nCharSet)
-{
-    eSrcCharSet = nCharSet;
-    return *this;
-}*/
-
 SwFltShell& SwFltShell::SetStyle( USHORT nStyle )
 {
-#ifndef MAC
     SwFltFormatCollection* p = pColls[ nStyle ];
-#else
-    SwFltFormatCollection* p = pColls[ nStyle ];
-#endif
 
     if (p)
     {
@@ -1265,12 +1149,6 @@ SwFltShell& SwFltShell::operator << (const SwField& rField)
 /*virtual*/ SwFltOutBase& SwFltOutDoc::operator << (const SfxPoolItem& rItem)
 {
     rStack.NewAttr(*pPaM->GetPoint(), rItem);
-    return *this;
-}
-
-SwFltShell& SwFltShell::operator << (const SwFltTOX& rItem)
-{
-    aEndStack.NewAttr(*pPaM->GetPoint(), rItem);
     return *this;
 }
 
