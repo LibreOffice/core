@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:07:33 $
+ *  last change: $Author: rt $ $Date: 2000-11-24 16:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,9 +758,9 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ spanish ] = "Grados" ;
         CustomUnitText [ danish ] = "grader" ;
-        CustomUnitText [ swedish ] = "grader" ;
+        CustomUnitText [ swedish ] = " grader" ;
         CustomUnitText [ finnish ] = "Degrees" ;
-        CustomUnitText [ english_us ] = "degrees" ;
+        CustomUnitText [ english_us ] = " degrees" ;
         First = -5000000 ;
         Last = 5000000 ;
         SpinSize = 50 ;
