@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-24 17:22:04 $
+ *  last change: $Author: pl $ $Date: 2002-05-29 17:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,7 +692,6 @@ void StatusBar::Move()
 void StatusBar::Resize()
 {
     // Breite und Hoehe abfragen und merken
-    long nOldDY = mnDX;
     Size aSize = GetOutputSizePixel();
     mnDX = aSize.Width();
     mnDY = aSize.Height();
@@ -822,7 +821,11 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
                 pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
             pItem = mpItemList->Next();
         }
-        SetSizePixel( CalcWindowSizePixel() );
+        Size aSize = GetSizePixel();
+        // do not disturb current width, since
+        // CalcWindowSizePixel calculates a minimum width
+        aSize.Height() = CalcWindowSizePixel().Height();
+        SetSizePixel( aSize );
         Invalidate();
     }
 }
