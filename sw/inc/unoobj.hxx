@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 10:17:34 $
+ *  last change: $Author: os $ $Date: 2001-03-08 15:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,8 @@ enum CursorType
     CURSOR_FOOTER,
     CURSOR_REDLINE,
     CURSOR_ALL,          // fuer Search&Replace
-    CURSOR_SELECTION    // create a paragraph enumeration from a text range or cursor
+    CURSOR_SELECTION,    // create a paragraph enumeration from a text range or cursor
+    CURSOR_SELECTION_IN_TABLE
 };
 
 /* -----------------29.04.98 07:35-------------------

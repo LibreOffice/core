@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 10:15:23 $
+ *  last change: $Author: os $ $Date: 2001-03-08 15:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,7 +642,15 @@ Reference< XEnumeration >  SwXTextCursor::createEnumeration(void) throw( Runtime
         pParentText = (SwXText*)xTunnel->getSomething(SwXText::getUnoTunnelId());
     }
     DBG_ASSERT(pParentText, "parent is not a SwXText")
-    Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pUnoCrsr, CURSOR_SELECTION);
+
+    SwUnoCrsr* pNewCrsr = pUnoCrsr->GetDoc()->CreateUnoCrsr(*pUnoCrsr->GetPoint());
+    if(pUnoCrsr->HasMark())
+    {
+        pNewCrsr->SetMark();
+        *pNewCrsr->GetMark() = *pUnoCrsr->GetMark();
+    }
+    CursorType eSetType = eType == CURSOR_TBLTEXT ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
+    Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pNewCrsr, eSetType);
 
     return xRet;
 }
@@ -853,7 +861,7 @@ SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
         eCursorType(eType),
         nEndIndex(pCrsr->End()->nNode.GetIndex())
 {
-    if(CURSOR_SELECTION == eCursorType)
+    if(CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType)
     {
         if(*pCrsr->GetPoint() > *pCrsr->GetMark())
             pCrsr->Exchange();
@@ -888,19 +896,20 @@ sal_Bool SwXParagraphEnumeration::hasMoreElements(void) throw( uno::RuntimeExcep
             SwPosition* pStart = pUnoCrsr->Start();
             SwUnoCrsr* pNewCrsr = pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False);
             //man soll hier auch in Tabellen landen duerfen
-            if(CURSOR_TBLTEXT != eCursorType)
+            if(CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType)
                 pNewCrsr->SetRemainInSection( sal_False );
 
             //was mache ich, wenn ich schon in einer Tabelle stehe?
             SwTableNode* pTblNode = pNewCrsr->GetNode()->FindTableNode();
-            if(CURSOR_TBLTEXT != eCursorType && pTblNode)
+            if((CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType) && pTblNode)
             {
                 pNewCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
                 bRet = pNewCrsr->Move(fnMoveForward, fnGoNode);
             }
             else
                 bRet = pNewCrsr->MovePara(fnParaNext, fnParaStart);
-            if(CURSOR_SELECTION == eCursorType && nEndIndex < pNewCrsr->Start()->nNode.GetIndex())
+            if((CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType)
+                        && nEndIndex < pNewCrsr->Start()->nNode.GetIndex())
                 bRet = FALSE;
             delete pNewCrsr;
         }
@@ -923,7 +932,7 @@ uno::Any SwXParagraphEnumeration::nextElement(void)
         if(!bFirstParagraph)
         {
             //man soll hier auch in Tabellen landen duerfen
-            if(CURSOR_TBLTEXT != eCursorType)
+            if(CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType)
             {
                 pUnoCrsr->SetRemainInSection( sal_False );
                 //was mache ich, wenn ich schon in einer Tabelle stehe?
@@ -950,11 +959,11 @@ uno::Any SwXParagraphEnumeration::nextElement(void)
             //steht man nun in einer Tabelle, oder in einem einfachen Absatz?
 
             SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
-            if(CURSOR_TBLTEXT != eCursorType && pTblNode)
+            if(CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType && pTblNode)
             {
                 // wir haben es mit einer Tabelle zu tun
                 SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
-             XTextTable* pTable = SwXTextTables::GetObject( *pTableFmt );
+                XTextTable* pTable = SwXTextTables::GetObject( *pTableFmt );
                 aRef =  (XTextContent*)(SwXTextTable*)pTable;
             }
             else
@@ -1731,7 +1740,8 @@ Reference< XEnumeration >  SwXTextRange::createEnumeration(void) throw( RuntimeE
         pParentText = (SwXText*)xTunnel->getSomething(SwXText::getUnoTunnelId());
     }
     DBG_ASSERT(pParentText, "parent is not a SwXText")
-    Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pNewCrsr, CURSOR_SELECTION);
+    CursorType eSetType = RANGE_IN_CELL == eRangePosition ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
+    Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pNewCrsr, eSetType);
     return xRet;
 }
 /* -----------------------------07.03.01 15:43--------------------------------
