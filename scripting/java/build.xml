@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-06-03 09:32:48 $
+#   last change: $Author: npower $ $Date: 2003-08-19 08:50:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,6 @@
   <property name="bindir" value="${out}/bin"/>
   <property name="idesupport.dir" value="org/openoffice/idesupport"/>
   <property name="netbeans.dir" value="org/openoffice/netbeans/modules/office"/>
-  <property name="jedit.dir" value="org/openoffice/jedit/OfficeScripting"/>
   <property name="framework.dir" value="Framework/com/sun/star/script/framework/security"/>
   <property name="scriptingjarname" value="ScriptRuntimeForJava.jar"/>
 
@@ -95,18 +94,12 @@
   <path id="idesupport.class.path">
     <!-- <pathelement path="${solar.jar}/jaxp.jar"/>
     <pathelement path="${solar.jar}/parser.jar"/> -->
-    <pathelement path="${install.dir}/xerces.jar"/>
+    <!-- <pathelement path="${install.dir}/xerces.jar"/> -->
   </path>
 
   <path id="openide.class.path">
     <pathelement path="${netbeans.home}/lib/openide.jar"/>
-    <pathelement path="${install.dir}/xerces.jar"/>
-  </path>
-
-  <path id="jedit.class.path">
-    <pathelement path="${jedit.install.dir}/jedit.jar"/>
-    <pathelement path="${install.dir}/Console.jar"/>
-    <pathelement path="${install.dir}/xerces.jar"/>
+    <!-- <pathelement path="${install.dir}/xerces.jar"/> -->
   </path>
 
   <!-- ===================== Prepare Directories ========================= -->
@@ -143,14 +136,6 @@
       <classpath refid="idlclasspath"/>
       <exclude name="${idesupport.dir}/localoffice/.*/*"/>
       <include name="${idesupport.dir}/localoffice/*.java"/>
-    </javac>
-  </target>
-
-  <target name="jedit.compile" depends="idesupport.compile, prepare">
-    <javac srcdir="." destdir="${jardir}"
-           debug="${debug}" deprecation="on" includeJavaRuntime="yes">
-      <classpath refid="jedit.class.path"/>
-      <include name="${jedit.dir}/**/*.java"/>
     </javac>
   </target>
 
@@ -236,22 +221,6 @@
       <fileset dir="${jardir}">
         <include name="${idesupport.dir}/localoffice/*.class"/>
         <include name="drafts/com/sun/star/script/framework/storage/*.class"/>
-      </fileset>
-    </jar>
-  </target>
-
-  <target name="jedit.jar" depends="jedit.compile">
-    <jar jarfile="${jardir}/OfficeScripting.jar">
-      <fileset dir="${jardir}">
-        <include name="OfficeScripting/**/*.class"/>
-      </fileset>
-      <fileset dir="${jedit.dir}">
-        <include name="actions.xml"/>
-        <include name="dockables.xml"/>
-        <include name="**/*.props"/>
-        <include name="**/*.gif"/>
-        <include name="**/*.java_"/>
-        <include name="index.html"/>
       </fileset>
     </jar>
   </target>
