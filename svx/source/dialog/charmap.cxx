@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hdu $ $Date: 2001-08-14 17:30:17 $
+ *  last change: $Author: hdu $ $Date: 2001-08-15 14:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,32 +600,41 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
     if( nNewIndex < 0 )
     {
         // need to scroll see closest unicode
-        int nNewPos = aVscrollSB.GetThumbPos();
         sal_Unicode cPrev = maFontCharMap.GetPrevChar( cSelectedChar );
         int nMapIndex = UnicodeToMapIndex( maFontCharMap, cPrev );
-        nNewPos = nMapIndex / COLUMN_COUNT;
+        int nNewPos = nMapIndex / COLUMN_COUNT;
         aVscrollSB.SetThumbPos( nNewPos );
         nSelectedIndex = bFocus ? nMapIndex+1 : -1;
         Invalidate();
+        Update();
     }
     else if( nNewIndex < FirstInView() )
     {
         // need to scroll up to see selected item
-        int nNewPos = aVscrollSB.GetThumbPos();
-        nNewPos -= (FirstInView() - nNewIndex + COLUMN_COUNT-1) / COLUMN_COUNT;
-        aVscrollSB.SetThumbPos( nNewPos );
+        int nOldPos = aVscrollSB.GetThumbPos();
+        int nDelta = (FirstInView() - nNewIndex + COLUMN_COUNT-1) / COLUMN_COUNT;
+        aVscrollSB.SetThumbPos( nOldPos - nDelta );
         nSelectedIndex = nNewIndex;
         Invalidate();
+        if( nDelta )
+            Update();
     }
     else if( nNewIndex > LastInView() )
     {
         // need to scroll down to see selected item
-        int nNewPos = aVscrollSB.GetThumbPos();
-        nNewPos += (nNewIndex - LastInView() + COLUMN_COUNT) / COLUMN_COUNT;
-        aVscrollSB.SetThumbPos( nNewPos );
+        int nOldPos = aVscrollSB.GetThumbPos();
+        int nDelta = (nNewIndex - LastInView() + COLUMN_COUNT) / COLUMN_COUNT;
+        aVscrollSB.SetThumbPos( nOldPos + nDelta );
         if( nNewIndex < maFontCharMap.GetCharCount() )
+        {
             nSelectedIndex = nNewIndex;
-        Invalidate();
+            Invalidate();
+        }
+        if( nOldPos != aVscrollSB.GetThumbPos() )
+        {
+            Invalidate();
+            Update();
+        }
     }
     else
     {
