@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:28 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     Text [ italian ] = "Selezione campo";
     Text [ danish ] = "Feltudvalg";
     Text [ swedish ] = "F�lturval";
-    Text [ polish ] = "Wyb�r pola";
-    Text [ portuguese_brazilian ] = "Feldauswahl";
+    Text [ polish ] = "Wyb�r p�l";
+    Text [ portuguese_brazilian ] = "Sele��o de campo";
     Text [ japanese ] = "フィールドの選択";
     Text [ chinese_simplified ] = "选择字段";
     Text [ chinese_traditional ] = "選擇欄位";
@@ -100,7 +100,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ english_us ] = "Table element";
         Text[ portuguese ] = "Elemento de tabela";
         Text[ russian ] = "����� �����";
-        Text[ greek ] = "Table Element";
+        Text[ greek ] = "Table element";
         Text[ dutch ] = "Tabelelement";
         Text[ french ] = "�l�ment de table";
         Text[ spanish ] = "Elemento de tabla";
@@ -109,15 +109,18 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text[ danish ] = "Tabelelement";
         Text[ swedish ] = "Tabellelement";
         Text[ polish ] = "Element tabeli";
-        Text[ portuguese_brazilian ] = "Table Element";
+        Text[ portuguese_brazilian ] = "Elemento de tabela";
         Text[ japanese ] = "テーブル構成要素";
         Text[ korean ] = "테이블 요소";
         Text[ chinese_simplified ] = "表单元件";
         Text[ chinese_traditional ] = "表單元件";
-        Text[ turkish ] = "Table Element";
-        Text[ arabic ] = "Table Element";
+        Text[ turkish ] = "Tablo Elemean�";
+        Text[ arabic ] = "Table element";
         Text[ catalan ] = "Element de la taula";
         Text[ thai ] = "องค์ประกอบของตาราง";
+        Text[ czech ] = "Tabulkový prvek";
+        Text[ hebrew ] = "Tabellenelement";
+        Text[ hindi ] = "सारणी ऐलिमेन्ट्";
     };
 
     FixedText FT_EXISTING_FIELDS
@@ -136,7 +139,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ danish ] = "Eksisterende felter";
         Text [ swedish ] = "Existerande f�lt";
         Text [ polish ] = "Istniej�ce pola";
-        Text [ portuguese_brazilian ] = "Vorhandene Felder";
+        Text [ portuguese_brazilian ] = "Campos dispon�veis";
         Text [ japanese ] = "使用できるフィールド";
         Text [ chinese_simplified ] = "现有的字段(V)";
         Text [ chinese_traditional ] = "現存的欄位";
@@ -149,6 +152,9 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text[ catalan ] = "Camps existents";
         Text[ finnish ] = "Nykyiset kent�t";
         Text[ thai ] = "เขตข้อมูลที่มีอยู่";
+        Text[ czech ] = "Existující pole";
+        Text[ hebrew ] = "Vorhandene Felder";
+        Text[ hindi ] = "अस्तित्व में रहनेवाला क्षेत्रें";
     };
     ListBox LB_EXISTING_FIELDS
     {
@@ -200,7 +206,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ danish ] = "Udvalgte felter";
         Text [ swedish ] = "Utvalda f�lt";
         Text [ polish ] = "Wybrane pola";
-        Text [ portuguese_brazilian ] = "Ausgew?hlte Felder";
+        Text [ portuguese_brazilian ] = "Campos selecionados";
         Text [ japanese ] = "選択したフィールド";
         Text [ chinese_simplified ] = "已经选择的字段";
         Text [ chinese_traditional ] = "選中的欄位";
@@ -209,10 +215,13 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ chinese_simplified ] = "已经选择的字段";
         Text [ greek ] = "���������� �����";
         Text [ korean ] = "선택된 필드";
-        Text [ turkish ] = "Se�ilmi� alanlar";
+        Text [ turkish ] = "Se�ili alanlar";
         Text[ catalan ] = "Camps seleccionats";
         Text[ finnish ] = "Valitut kent�t";
         Text[ thai ] = "เลือกเขตข้อมูล";
+        Text[ czech ] = "Vybraná pole";
+        Text[ hebrew ] = "Ausgewählte Felder";
+        Text[ hindi ] = "चुने हुए क्षेत्र";
     };
     ListBox LB_SELECTED_FIELDS
     {
@@ -227,6 +236,9 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     Text[ catalan ] = "Selecci� de camp";
     Text[ finnish ] = "Kent�n valinta";
     Text[ thai ] = "เลือกเขตข้อมูล";
+    Text[ czech ] = "Výběr polí";
+    Text[ hebrew ] = "Feldauswahl";
+    Text[ hindi ] = "क्षेत्र चुनाव";
 };
 
 String RID_STR_DATEPOSTFIX
@@ -241,8 +253,8 @@ String RID_STR_DATEPOSTFIX
     Text [ italian ] = "(Data)";
     Text [ danish ] = " (Dato)";
     Text [ swedish ] = " (Datum)";
-    Text [ polish ] = " (Data)";
-    Text [ portuguese_brazilian ] = "(Datum)";
+    Text [ polish ] = "(Data)";
+    Text [ portuguese_brazilian ] = " (Data)";
     Text [ japanese ] = "(日付)";
     Text [ chinese_simplified ] = "(日期)";
     Text [ chinese_traditional ] = "(日期)";
@@ -256,6 +268,9 @@ String RID_STR_DATEPOSTFIX
     Text[ catalan ] = " (Data)";
     Text[ finnish ] = " (P�iv�m��r�)";
     Text[ thai ] = " (วันที่)";
+    Text[ czech ] = " (Datum)";
+    Text[ hebrew ] = " (Datum)";
+    Text[ hindi ] = " (दिनांक)";
 };
 
 String RID_STR_TIMEPOSTFIX
@@ -270,8 +285,8 @@ String RID_STR_TIMEPOSTFIX
     Text [ italian ] = " (Ora)";
     Text [ danish ] = " (Klokkesl�t)";
     Text [ swedish ] = " (Tid)";
-    Text [ polish ] = " (Godzina)";
-    Text [ portuguese_brazilian ] = " (Zeit)";
+    Text [ polish ] = "(Godzina)";
+    Text [ portuguese_brazilian ] = " (Hora)";
     Text [ japanese ] = "(時刻)";
     Text [ chinese_simplified ] = " (时间)";
     Text [ chinese_traditional ] = " (時間)";
@@ -280,16 +295,31 @@ String RID_STR_TIMEPOSTFIX
     Text [ chinese_simplified ] = " (时间)";
     Text [ greek ] = " (���)";
     Text [ korean ] = "(시간)";
-    Text [ turkish ] = " (Saat)";
+    Text [ turkish ] = "(Zaman)";
     Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks";
     Text[ catalan ] = " (Temps)";
     Text[ finnish ] = " (Aika)";
     Text[ thai ] = " (เวลา)";
+    Text[ czech ] = " (Čas)";
+    Text[ hebrew ] = " (Zeit)";
+    Text[ hindi ] = " (समय)";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15.2.7.6.3.2.1.26.3  2003/04/29 08:35:40  gh
+ *  final merge for Beta2
+ *
+ *  Revision 1.15.2.7.6.3.2.1.26.2  2003/04/16 18:58:48  gh
+ *  RESYNC: (1.15.2.7.6.3.2.1-1.22); FILE MERGED
+ *
+ *  Revision 1.15.2.7.6.3.2.1.26.1  2003/04/14 14:46:28  gh
+ *  merging all languages
+ *
+ *  Revision 1.22  2003/03/25 16:03:28  hr
+ *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
+ *
  *  Revision 1.15.2.7.6.3.2.1  2003/02/22 16:36:39  hr
  *  INTEGRATION: CWS mergep (1.15.2.7.6.3.20); FILE MERGED
  *  2003/02/22 10:35:03 nf 1.15.2.7.6.3.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
@@ -379,6 +409,20 @@ String RID_STR_TIMEPOSTFIX
  *
  *  Revision 1.0 05.03.01 09:50:25  fs
  ************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
