@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-08 17:05:25 $
+#   last change: $Author: hjs $ $Date: 2001-06-11 12:16:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,7 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 .IF "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
     +cd $(PACKAGE_DIR) && echo no patch needed...
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
-    +cd $(PACKAGE_DIR) && ($(TYPE) ..$/..$/$(PATCH_FILE_NAME) | patch -R -b -p 2) && $(TOUCH) $(PATCH_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && ($(TYPE) ..$/..$/$(PATCH_FILE_NAME) | patch -b -p 2) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
@@ -159,7 +159,7 @@ create_patch : $(MISC)$/$(TARFILE_ROOTDIR)
     @+-$(RM) $(MISC)$/$(TARFILE_NAME).patch.tmp >& $(NULLDEV)
     @+-$(RM) $(TARFILE_NAME).patch.bak >& $(NULLDEV)
 #ignore returncode of 1 (indicates differences...)	
-    +-diff -rc $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(MISC)$/$(TARFILE_ROOTDIR) | $(GREP) -v "diff -rc" | $(GREP) -v "Only in" | $(GREP) -v "Common sub" > $(MISC)$/$(TARFILE_NAME).patch.tmp
+    +-diff -rc $(MISC)$/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) | $(GREP) -v "diff -rc" | $(GREP) -v "Only in" | $(GREP) -v "Common sub" > $(MISC)$/$(TARFILE_NAME).patch.tmp
     @+-mv $(TARFILE_NAME).patch $(TARFILE_NAME).patch.bak >& $(NULLDEV)
     @+-mv $(MISC)$/$(TARFILE_NAME).patch.tmp $(TARFILE_NAME).patch >& $(NULLDEV)
     @+echo still some problems with win32 generated patches...
