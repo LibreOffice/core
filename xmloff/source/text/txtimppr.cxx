@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-28 15:58:38 $
+ *  last change: $Author: cl $ $Date: 2002-11-04 08:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
                                                        aAny );
         }
 
-        if( pFontFamilyName || !pFontCharSet )
+        if( !pFontCharSet )
         {
             aAny <<= (sal_Int16)gsl_getSystemTextEncoding();
     #ifndef PRODUCT
