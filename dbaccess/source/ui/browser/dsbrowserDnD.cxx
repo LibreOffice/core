@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:57:50 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 09:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,20 +633,30 @@ namespace dbaui
             implPasteTable( _pApplyTo, ODataAccessObjectTransferable::extractObjectDescriptor(_rTransData) );
         else
         {
-            sal_Bool bHtml = _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) || _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
-            if ( bHtml || _rTransData.HasFormat(SOT_FORMAT_RTF))
+            try
             {
-                DropDescriptor aTrans;
-                if ( bHtml )
-                    const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(_rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) ? SOT_FORMATSTR_ID_HTML : SOT_FORMATSTR_ID_HTML_SIMPLE,aTrans.aHtmlRtfStorage);
-                else
-                    const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMAT_RTF,aTrans.aHtmlRtfStorage);
+                sal_Bool bHtml = _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) || _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
+                if ( bHtml || _rTransData.HasFormat(SOT_FORMAT_RTF))
+                {
+                    DropDescriptor aTrans;
+                    if ( bHtml )
+                        const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(_rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) ? SOT_FORMATSTR_ID_HTML : SOT_FORMATSTR_ID_HTML_SIMPLE,aTrans.aHtmlRtfStorage);
+                    else
+                        const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMAT_RTF,aTrans.aHtmlRtfStorage);
 
-                aTrans.pDroppedAt       = _pApplyTo;
-                aTrans.bTable           = etTableContainer;
-                aTrans.bHtml            = bHtml;
-                if ( !copyHtmlRtfTable(aTrans,sal_False) )
-                    showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
+                    aTrans.pDroppedAt       = _pApplyTo;
+                    aTrans.bTable           = etTableContainer;
+                    aTrans.bHtml            = bHtml;
+                    if ( !copyHtmlRtfTable(aTrans,sal_False) )
+                        showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
+                }
+            }
+            catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
+            catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
+            catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
+            catch(Exception& )
+            {
+                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implPasteTable: caught a generic exception!");
             }
         }
     }
@@ -1418,6 +1428,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.58  2002/11/14 07:57:50  oj
+ *  #105110# some reorg and code movements
+ *
  *  Revision 1.57  2002/11/05 08:33:33  oj
  *  #104698# use new ctor and check if entry is container
  *
