@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-14 12:02:42 $
+ *  last change: $Author: cp $ $Date: 2001-09-27 13:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,32 +64,70 @@
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
 
+namespace psp {
+
+::rtl::OUString getOfficeInstallPath( ::utl::ConfigManager::ConfigProperty eWhich )
+{
+    ::com::sun::star::uno::Any  aConfigProperty;
+    ::rtl::OUString             aPath;
+
+    aConfigProperty = ::utl::ConfigManager::GetDirectConfigProperty( eWhich );
+    aConfigProperty >>= aPath;
+    return aPath;
+}
+
+::rtl::OUString getEnvironmentPath( const char* pKey, sal_Unicode cPrefix )
+{
+    ::rtl::OUString aPath;
+
+    const char* pValue = getenv( pKey );
+    if( pValue && *pValue )
+    {
+        aPath  = ::rtl::OUString( cPrefix );
+        aPath += ::rtl::OUString( pValue, strlen( pValue ), gsl_getSystemTextEncoding() );
+    }
+    return aPath;
+}
+
+} // namespace psp
+
 const ::rtl::OUString& psp::getPrinterPath()
 {
     static ::rtl::OUString aPath;
 
     if( ! aPath.getLength() )
     {
-        ::com::sun::star::uno::Any aPathEntry;
-        ::rtl::OUString aEntry;
-
-        aPathEntry = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::OFFICEINSTALL );
-        aPathEntry >>= aPath;
+        aPath  = ::psp::getOfficeInstallPath( ::utl::ConfigManager::OFFICEINSTALL );
         aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/share/psprint:" ) );
-        aPathEntry = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::INSTALLPATH );
-        aPathEntry >>= aEntry;
-        aPath += aEntry;
+        aPath += ::psp::getOfficeInstallPath( ::utl::ConfigManager::INSTALLPATH );
         aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/psprint" ) );
+        aPath += ::psp::getEnvironmentPath( "SAL_PSPRINT", (sal_Unicode)':' );
 
-        const char* pEnv = getenv( "SAL_PSPRINT" );
-        if( pEnv && *pEnv )
-        {
-            aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":" ) );
-            aEntry = ::rtl::OUString( pEnv ? pEnv : "", pEnv ? strlen( pEnv ) : 0, gsl_getSystemTextEncoding() );
-            aPath += aEntry;
-        }
 #ifdef DEBUG
         fprintf( stderr, "initalizing printer path to \"%s\"\n", ::rtl::OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
+    }
+    return aPath;
+}
+
+const ::rtl::OUString& psp::getFontPath()
+{
+    static ::rtl::OUString aPath;
+
+    if( ! aPath.getLength() )
+    {
+        ::rtl::OUString aOfficeFontPath = ::psp::getOfficeInstallPath(
+                                                   ::utl::ConfigManager::OFFICEINSTALL );
+        aPath  = aOfficeFontPath;
+        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/truetype;") );
+        aPath += aOfficeFontPath;
+        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/type1;") );
+        aPath += ::psp::getOfficeInstallPath( ::utl::ConfigManager::INSTALLPATH );
+        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/fonts" ) );
+        aPath += ::psp::getEnvironmentPath( "SAL_FONTPATH_PRIVATE", (sal_Unicode)';' );
+
+#ifdef DEBUG
+        fprintf( stderr, "initalizing font path to \"%s\"\n", ::rtl::OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
     }
     return aPath;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 15:15:32 $
+ *  last change: $Author: cp $ $Date: 2001-09-27 13:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ namespace psp {
 typedef int fontID;
 
 const ::rtl::OUString& getPrinterPath();
+const ::rtl::OUString& getFontPath();
 
 bool convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile );
 } // namespace

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-26 15:20:24 $
+ *  last change: $Author: cp $ $Date: 2001-09-27 13:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1423,13 +1423,13 @@ void PrintFontManager::initialize( void* pInitDisplay )
 
     // part one - look for downloadable fonts
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    static const char* pSalPrivatePath = getenv( "SAL_FONTPATH_PRIVATE" );
+    const ::rtl::OUString &rSalPrivatePath = psp::getFontPath();
 
     // search for the fonts in SAL_PRIVATE_FONTPATH first; those are
     // the TrueType fonts installed with the office
-    if( pSalPrivatePath )
+    if( rSalPrivatePath.getLength() )
     {
-        ByteString aPath( pSalPrivatePath );
+        ByteString aPath = ::rtl::OUStringToOString( rSalPrivatePath, aEncoding );
         int nTokens = aPath.GetTokenCount( ';' );
         for( int i = 0; i < nTokens; i++ )
         {
