@@ -2,9 +2,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 14:19:35 $
+#   last change: $Author: rt $ $Date: 2004-08-12 08:28:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -739,7 +739,25 @@ sub make_prototypefile_relocatable
     {
         if ( ${$prototypefile}[$i] =~ /^\s*\w\s+\w+\s+\/\w+/ )  # this is an object line
         {
-            ${$prototypefile}[$i] =~ s/$relocatablepath//;
+            ${$prototypefile}[$i] =~ s/$relocatablepath//;  # Important: $relocatablepath has a "/" at the end. Example "/opt/"
+        }
+    }
+
+    # If the $relocatablepath is "/opt/openoffice20/" the line "d none /opt/openoffice20" was not changed.
+    # This line has to be removed now
+
+    $relocatablepath =~ s/\/\s*$//;     # removing the ending slash
+
+    for ( my $i = 0; $i <= $#{$prototypefile}; $i++ )
+    {
+        if ( ${$prototypefile}[$i] =~ /^\s*d\s+\w+\s+\Q$relocatablepath\E/ )
+        {
+            my $line = ${$prototypefile}[$i];
+            splice(@{$prototypefile},$i,1); # removing the line
+            $line =~ s/\s*$//;
+            my $infoline = "Info: Removed line \"$line\" from prototype file!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            last;
         }
     }
 }
@@ -762,6 +780,7 @@ sub replace_variables_in_shellscripts
         if ( ${$scriptfile}[$i] =~ /\Q$oldstring\E/ )
         {
             ${$scriptfile}[$i] =~ s/\Q$oldstring\E/$newstring/;
+            ${$scriptfile}[$i] =~ s/\/\//\//;   # replacing "//" by "/" , if path $newstring is empty!
             my $infoline = "Info: Substituting in $scriptfilename $oldstring by $newstring\n";
             push(@installer::globals::logfileinfo, $infoline);
         }
@@ -997,7 +1016,9 @@ sub create_packages_without_epm
             push( @installer::globals::logfileinfo, $infoline);
         }
 
+        ######################
         # making pkg files
+        ######################
 
         # my $streamname = $packagename . ".pkg";
         # $systemcall = "pkgtrans $destinationdir $streamname $packagename";
@@ -1019,27 +1040,29 @@ sub create_packages_without_epm
         #   push( @installer::globals::logfileinfo, $infoline);
         # }
 
+        #########################
         # making tar.gz files
+        #########################
 
-        my $targzname = $packagename . ".tar.gz";
-        $systemcall = "cd $destinationdir; tar -cf - $packagename | gzip > $targzname";
-        print "... $systemcall ...\n";
+        # my $targzname = $packagename . ".tar.gz";
+        # $systemcall = "cd $destinationdir; tar -cf - $packagename | gzip > $targzname";
+        # print "... $systemcall ...\n";
 
-        $returnvalue = system($systemcall);
+        # $returnvalue = system($systemcall);
 
-        $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        # $infoline = "Systemcall: $systemcall\n";
+        # push( @installer::globals::logfileinfo, $infoline);
 
-        if ($returnvalue)
-        {
-            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-        else
-        {
-            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
+        # if ($returnvalue)
+        # {
+        #   $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        #   push( @installer::globals::logfileinfo, $infoline);
+        # }
+        # else
+        # {
+        #   $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        #   push( @installer::globals::logfileinfo, $infoline);
+        # }
     }
 
     # Linux: rpm -bb so8m35.spec    ( -> dependency check abklemmen? )
@@ -1194,6 +1217,31 @@ sub remove_temporary_epm_files
 }
 
 ######################################################
+# Making the systemcall
+######################################################
+
+sub make_systemcall
+{
+    my ($systemcall) = @_;
+
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+######################################################
 # Creating a better directory structure in the solver.
 # This is also preparation for the Java installer.
 # Linux: Removing the directory "linux-..."
@@ -1304,21 +1352,62 @@ sub put_childprojects_into_installset
 
         my $destdir = "$newdir";
 
-        if ( $installer::globals::issolarissparcbuild ) { $sourcedirjava = $sourcedir . $installer::globals::separator . "java" . $installer::globals::separator . "solaris_sparc"; }
-        if ( $installer::globals::issolarisx86build ) { $sourcedirjava = $sourcedir . $installer::globals::separator . "java" . $installer::globals::separator . "solaris_x86"; }
-        if ( $installer::globals::islinuxbuild ) { $sourcedirjava = $sourcedir . $installer::globals::separator . "java" . $installer::globals::separator . "linux"; }
+        # adding Java
 
-        installer::systemactions::copy_directory($sourcedirjava, $destdir);
+        if ( $installer::globals::issolarissparcbuild )
+        {
+            $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "solaris_sparc" . $installer::globals::separator . $installer::globals::javafilename;
+            installer::systemactions::copy_one_file($sourcedirjava, $destdir);
+            $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "solaris_sparc" . $installer::globals::separator . $installer::globals::javafilename2;
+            installer::systemactions::copy_one_file($sourcedirjava, $destdir);
+        }
+        if ( $installer::globals::issolarisx86build )
+        {
+            $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "solaris_x86" . $installer::globals::separator . $installer::globals::javafilename;
+            installer::systemactions::copy_one_file($sourcedirjava, $destdir);
+            $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "solaris_x86" . $installer::globals::separator . $installer::globals::javafilename2;
+            installer::systemactions::copy_one_file($sourcedirjava, $destdir);
+        }
+        if ( $installer::globals::islinuxbuild )
+        {
+            $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "linux" . $installer::globals::separator . $installer::globals::javafilename;
+            installer::systemactions::copy_one_file($sourcedirjava, $destdir);
+        }
 
-        if ( $installer::globals::issolarissparcbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas" . $installer::globals::separator . "solaris_sparc"; }
-        if ( $installer::globals::islinuxbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas" . $installer::globals::separator . "linux"; }
+        # adding Ada
+
+        if ( $installer::globals::issolarissparcbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas2" . $installer::globals::separator . "solaris_sparc" . $installer::globals::separator . $installer::globals::adafilename; }
+        if ( $installer::globals::islinuxbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas2" . $installer::globals::separator . "linux" . $installer::globals::separator . $installer::globals::adafilename; }
 
         if (( $installer::globals::issolarissparcbuild ) || ( $installer::globals::islinuxbuild ))
         {
-            installer::systemactions::copy_directory($sourcedirada, $destdir);
+            installer::systemactions::copy_one_file($sourcedirada, $destdir);
         }
 
-        # unpacking tar.gz files
+        # unpacking and removing the ada tar.gz file
+
+        if ( $installer::globals::issolarisbuild )
+        {
+            # determining the tar.gz files in directory $destdir
+
+            my $fileextension = "gz";
+            my $targzfiles = installer::systemactions::find_file_with_file_extension($fileextension, $destdir);
+
+            for ( my $i = 0; $i <= $#{$targzfiles}; $i++ )
+            {
+                # unpacking
+
+                my $systemcall = "cd $destdir; cat ${$targzfiles}[$i] | gunzip | tar -xf -";
+
+                make_systemcall($systemcall);
+
+                # deleting the tar.gz files
+
+                $systemcall = "cd $destdir; rm -f ${$targzfiles}[$i]";
+
+                make_systemcall($systemcall);
+            }
+        }
     }
 }
 
@@ -1411,27 +1500,21 @@ sub put_systemintegration_into_installset
         my $destfile = $destdir . $installer::globals::separator . $systemfiles[$i];
         installer::systemactions::copy_one_file($$sourcepathref, $destfile);
 
-        # unpacking the tar.gz file for Solaris
+        # unpacking and deleting the tar.gz files for Solaris
 
         if ( $installer::globals::issolarisbuild )
         {
+            # unpacking
+
             my $systemcall = "cd $destdir; cat $systemfiles[$i] | gunzip | tar -xf -";
 
-            $returnvalue = system($systemcall);
+            make_systemcall($systemcall);
 
-            my $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            # deleting the tar.gz files
 
-            if ($returnvalue)
-            {
-                $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-                push( @installer::globals::logfileinfo, $infoline);
-            }
-            else
-            {
-                $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-                push( @installer::globals::logfileinfo, $infoline);
-            }
+            $systemcall = "cd $destdir; rm -f $systemfiles[$i]";
+
+            make_systemcall($systemcall);
         }
     }
 }
@@ -1449,13 +1532,27 @@ sub analyze_rootpath
 
     $rootpath =~ s/\/\s*$//;    # removing ending slash
 
-    my $staticpath = $rootpath;
-    installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$staticpath);
-    $$staticpathref = $staticpath;              # will be "openofficeorg20"
+    ##############################################################
+    # Version 1: "/opt" is variable and "openofficeorg20" fixed
+    ##############################################################
 
-    my $relocatablepath = $rootpath;
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$relocatablepath);
-    $$relocatablepathref = $relocatablepath;        # will be "/opt/"
+    # my $staticpath = $rootpath;
+    # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$staticpath);
+    # $$staticpathref = $staticpath;                # will be "openofficeorg20"
+
+    # my $relocatablepath = $rootpath;
+    # installer::pathanalyzer::get_path_from_fullqualifiedname(\$relocatablepath);
+    # $$relocatablepathref = $relocatablepath;      # will be "/opt/"
+
+    ##############################################################
+    # Version 2: "/opt/openofficeorg20" is variable and "" fixed
+    ##############################################################
+
+    my $staticpath = "";
+    $$staticpathref = $staticpath;              # will be ""
+
+    my $relocatablepath = $rootpath . "\/";
+    $$relocatablepathref = $relocatablepath;    # will be "/opt/openofficeorg20/"
 }
 
 1;
