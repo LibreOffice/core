@@ -1,0 +1,76 @@
+// Guard against multiple includes
+#ifndef _COM_SUN_STAR_SHEET_ADDIN_IDL_
+#define _COM_SUN_STAR_SHEET_ADDIN_IDL__
+
+/// Template for StarOffice Calc add-in component idl file.
+
+
+/** Provides lifetime control by reference counting and the possibility of
+    querying for other interfaces of the same logical object.
+ */
+#include <com/sun/star/uno/XInterface.idl>
+
+/** Provides information about and access to the properties from an
+    implementation.
+ */
+#include <com/sun/star/beans/XPropertySet.idl>
+
+module com {
+  module sun {
+    module star {
+      module sheet {
+        module addin {
+      /** Interface with your additional methods.
+
+              You may declare several methods. Each method may have
+              any number of arguments after xOptions.
+              Furthermore, you could replace the name of the service and
+              the interface, but only if you want to replace this name in all
+              your project files. This example will work with the default
+              names.
+              All interfaces specified in UNOIDL must be derived from
+              com.sun.star.uno.XInterface .
+              Interface names should start with an X prefix.
+           */
+      interface XCalcAddins : com::sun::star::uno::XInterface
+      {
+            /** Declare your methods:
+                This is where you could add the declarations of your methods.
+                If you want to learn more about
+                the IDL syntax including the base types, you could
+                visit the following web page:
+                http://www.openoffice.org/project/udk/common/man/idl_syntax.html .
+             */
+            long getMyFirstValue(
+                 /** Parameters:
+                     You could insert further arguments after the
+                     parameter xOptions.
+                  */
+                 [in] com::sun::star::beans::XPropertySet xOptions
+            );
+
+            long getMySecondValue(
+                 /** Parameters:
+                     You could insert further arguments after the
+                     parameter xOptions.
+                  */
+                 [in] com::sun::star::beans::XPropertySet xOptions,
+                 [in] long intDummy
+            );
+       };
+
+       service CalcAddins
+       {
+            /** Exported interfaces:
+        This is where you put all interfaces that this service exports. The service
+        supports its main interface only.
+             */
+           interface XCalcAddins;
+       };
+        };
+      };
+    };
+  };
+};
+
+#endif
