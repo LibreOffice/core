@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 17:19:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2152,7 +2152,7 @@ void Desktop::OpenDefault()
         else if ( pArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_IMPRESS );
         else if ( pArgs->IsBase() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
-            aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("service:com.sun.star.sdb.DatabaseWizardDialog"));
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DATABASE );
         else if ( pArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DRAW );
         else if ( pArgs->IsMath() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
@@ -2173,7 +2173,7 @@ void Desktop::OpenDefault()
         else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_IMPRESS );
         else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
-            aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("service:com.sun.star.sdb.DatabaseWizardDialog"));
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DATABASE );
         else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DRAW );
         else
