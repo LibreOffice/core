@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-19 11:13:17 $
+ *  last change: $Author: jl $ $Date: 2001-09-17 14:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 #define INVOCATION_SERVICE  L"com.sun.star.script.Invocation"
 #define JSCRIPT_VALUE_FUNC  L"_GetValueObject"
 #define GET_STRUCT_FUNC     L"_GetStruct"
+#define BRIDGE_VALUE_FUNC L"Bridge_GetValueObject"
+#define BRIDGE_GET_STRUCT_FUNC L"Bridge_GetStruct"
 
 #define DISPID_JSCRIPT_VALUE_FUNC   -10l
 #define DISPID_GET_STRUCT_FUNC      -102
