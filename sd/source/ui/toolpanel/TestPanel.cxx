@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestPanel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:24:50 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,28 @@
  ************************************************************************/
 
 #include "TestPanel.hxx"
-#include "ScrollPanel.hxx"
+#include "taskpane/ScrollPanel.hxx"
+#include "taskpane/TaskPaneControlFactory.hxx"
 
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 
 namespace sd { namespace toolpanel {
+
+/** This factory class is used to create instances of TestPanel.  It can be
+    extended so that its constructor stores arguments that later are passed
+    to new TestPanel objects.
+*/
+class TestPanelFactory
+    : public ControlFactory
+{
+protected:
+    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    {
+        return new TestPanel (pTreeNode);
+    }
+};
+
 
 class Wrapper
     : public TreeNode
@@ -177,5 +193,14 @@ TestPanel::TestPanel (TreeNode* pParent)
 TestPanel::~TestPanel (void)
 {
 }
+
+
+
+
+std::auto_ptr<ControlFactory> TestPanel::CreateControlFactory (void)
+{
+    return std::auto_ptr<ControlFactory>(new TestPanelFactory());
+}
+
 
 } } // end of namespace ::sd::toolpanel
