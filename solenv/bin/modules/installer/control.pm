@@ -2,9 +2,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-30 12:47:33 $
+#   last change: $Author: rt $ $Date: 2004-08-12 08:57:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -424,12 +424,22 @@ sub check_updatepack
                     $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproducts[0] . "_test";
                     $directory = $shipdrive . $installer::globals::separator . $directory;
 
+                    $infoline = "Try to create directory: $directory\n";
+                    push(@installer::globals::globallogfileinfo, $infoline);
+
                     if ( installer::systemactions::try_to_create_directory($directory))
                     {
                         my $systemcall = "rmdir $directory";
                         my $returnvalue = system($systemcall);
                         $installer::globals::updatepack = 1;
                         $infoline = "Write access on Ship drive\n";
+                        push(@installer::globals::globallogfileinfo, $infoline);
+                    }
+                    else
+                    {
+                        $infoline = "No write access on Ship drive\n";
+                        push(@installer::globals::globallogfileinfo, $infoline);
+                        $infoline = "Failed to create directory $directory\n";
                         push(@installer::globals::globallogfileinfo, $infoline);
                     }
                 }
