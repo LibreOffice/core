@@ -55,8 +55,6 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel;
 
-// import java.awt.Color;
-
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
@@ -139,9 +137,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
     /**
      *  This method returns the priority of operators for the RPN conversion
      *
-     *  @return  Returns a <code>PxlDocument</code>
-     *
-     *  @throws  IOException  If any I/O error occurs.
+     *  @return the operator priority level
      */
     private int getPriority(String op) {
 
@@ -165,11 +161,9 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
 
     /**
      *  This method converts a String containing a formula in infix notation
-     *  to a String in Reverse Polish Notation
+     *  to a String in Reverse Polish Notation (RPN)
      *
-     *  @return  Returns a <code>PxlDocument</code>
-     *
-     *  @throws  IOException  If any I/O error occurs.
+     *  @return a parsed pexcel formula in RPN
      */
     protected String parseFormula(String formula) {
 
