@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 09:17:12 $
+ *  last change: $Author: sab $ $Date: 2001-05-14 10:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1421,7 +1421,7 @@ void ScXMLExport::_ExportContent()
                         sal_Int32 nEqualCells(0);
                         ScMyCell aCell;
                         ScMyCell aPrevCell;
-                        while(aCellsItr.GetNext(aCell))
+                        while(aCellsItr.GetNext(aCell, pCellStyles))
                         {
                             if (bIsFirst)
                             {
@@ -2029,18 +2029,18 @@ sal_Int32 ScXMLExport::GetCellNumberFormat(const com::sun::star::uno::Reference 
     return 0;
 }
 
-sal_Bool ScXMLExport::GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex,
+/*sal_Bool ScXMLExport::GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex,
     sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat)
 {
     sal_Int32 nIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet, aCell.aCellAddress.Column, aCell.aCellAddress.Row,
         bIsAutoStyle, nValidationIndex, nNumberFormat);
-    if (nIndex > -1)
+    if (aCell.nIndex > -1)
     {
-        nStyleNameIndex = nIndex;
+        nStyleNameIndex = aCell.nIndex;
         return sal_True;
     }
     return sal_False;
-}
+}*/
 
 OUString ScXMLExport::GetPrintRanges()
 {
@@ -2056,14 +2056,10 @@ OUString ScXMLExport::GetPrintRanges()
 
 void ScXMLExport::WriteCell (const ScMyCell& aCell)
 {
-    sal_Int32 nIndex;
-    sal_Bool bIsAutoStyle;
-    sal_Int32 nValidationIndex;
-    sal_Int32 nNumberFormat;
-    if (GetCellStyleNameIndex(aCell, nIndex, bIsAutoStyle, nValidationIndex, nNumberFormat))
-        AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
-    if (nValidationIndex > -1)
-        AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, pValidationsContainer->GetValidationName(nValidationIndex));
+    if (aCell.nStyleIndex != -1)
+        AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pCellStyles->GetStyleNameByIndex(aCell.nStyleIndex, aCell.bIsAutoStyle));
+    if (aCell.nValidationIndex > -1)
+        AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, pValidationsContainer->GetValidationName(aCell.nValidationIndex));
     sal_Bool bIsMatrix(aCell.bIsMatrixBase || aCell.bIsMatrixCovered);
     sal_Bool bIsFirstMatrixCell(aCell.bIsMatrixBase);
     if (bIsFirstMatrixCell)
@@ -2089,7 +2085,7 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
     case table::CellContentType_VALUE :
         {
             XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
-                *this, nNumberFormat/*GetCellNumberFormat(aCell.xCell)*/, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
+                *this, aCell.nNumberFormat, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
         }
         break;
     case table::CellContentType_TEXT :
@@ -2125,7 +2121,7 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
                     if (pFormulaCell->IsValue())
                     {
                         sal_Bool bIsStandard = sal_True;
-                        GetCellType(nNumberFormat/*GetCellNumberFormat(aCell.xCell)*/, bIsStandard);
+                        GetCellType(aCell.nNumberFormat, bIsStandard);
                         if (bIsStandard)
                         {
                             uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
@@ -2142,7 +2138,7 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
                         }
                         else
                             XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(*this,
-                                nNumberFormat/*GetCellNumberFormat(aCell.xCell)*/, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
+                                aCell.nNumberFormat, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
                     }
                     else
                     {
@@ -2540,67 +2536,60 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
         aCell1.bHasAreaLink == aCell2.bHasAreaLink &&
         !aCell1.bHasDetectiveObj && !aCell2.bHasDetectiveObj)
     {
-        if( aCell1.bHasAreaLink &&
+        if( (aCell1.bHasAreaLink &&
             (aCell1.aAreaLink.GetColCount() == 1) &&
             (aCell2.aAreaLink.GetColCount() == 1) &&
-            aCell1.aAreaLink.Compare( aCell2.aAreaLink ) )
+            aCell1.aAreaLink.Compare( aCell2.aAreaLink ) ) ||
+            !aCell1.bHasAreaLink )
         {
             if (!aCell1.bHasAnnotation || (aCell1.bHasAnnotation && IsAnnotationEqual(aCell1.xCell, aCell2.xCell)))
             {
-                sal_Int32 nIndex1, nIndex2;
-                sal_Bool bIsAutoStyle1, bIsAutoStyle2;
-                sal_Int32 nValidationIndex1, nValidationIndex2;
-                sal_Int32 nNumberFormat1, nNumberFormat2;
-                if (GetCellStyleNameIndex(aCell1, nIndex1, bIsAutoStyle1, nValidationIndex1, nNumberFormat1) &&
-                    GetCellStyleNameIndex(aCell2, nIndex2, bIsAutoStyle2, nValidationIndex2, nNumberFormat2))
+                if (((aCell1.nStyleIndex == aCell2.nStyleIndex) && (aCell1.bIsAutoStyle == aCell2.bIsAutoStyle) ||
+                    (aCell1.nStyleIndex == aCell2.nStyleIndex) && (aCell1.nStyleIndex == -1)) &&
+                    (aCell1.nValidationIndex == aCell2.nValidationIndex) &&
+                    IsCellTypeEqual(aCell1, aCell2))
                 {
-                    if (((nIndex1 == nIndex2) && (bIsAutoStyle1 == bIsAutoStyle2) ||
-                        (nIndex1 == nIndex2) && (nIndex1 == -1)) &&
-                        (nValidationIndex1 == nValidationIndex2) &&
-                        IsCellTypeEqual(aCell1, aCell2))
+                    table::CellContentType eCellType = aCell1.xCell->getType();
+                    switch ( eCellType )
                     {
-                        table::CellContentType eCellType = aCell1.xCell->getType();
-                        switch ( eCellType )
+                    case table::CellContentType_EMPTY :
                         {
-                        case table::CellContentType_EMPTY :
-                            {
-                                bIsEqual = sal_True;
-                            }
-                            break;
-                        case table::CellContentType_VALUE :
-                            {
-                                double fCell1 = aCell1.xCell->getValue();
-                                double fCell2 = aCell2.xCell->getValue();
-                                bIsEqual = (fCell1 == fCell2);
-                            }
-                            break;
-                        case table::CellContentType_TEXT :
-                            {
-                                if (IsEditCell(aCell1.xCell) || IsEditCell(aCell2.xCell))
-                                    bIsEqual = sal_False;
-                                else
-                                {
-                                    OUString sOUCell1, sOUCell2;
-                                    if (GetCellText(aCell1.xCell, sOUCell1) && GetCellText(aCell2.xCell, sOUCell2))
-                                    {
-                                        bIsEqual = (sOUCell1 == sOUCell2);
-                                    }
-                                    else
-                                        bIsEqual = sal_False;
-                                }
-                            }
-                            break;
-                        case table::CellContentType_FORMULA :
-                            {
-                                bIsEqual = sal_False;
-                            }
-                            break;
-                        default :
-                            {
-                                bIsEqual = sal_False;
-                            }
-                            break;
+                            bIsEqual = sal_True;
                         }
+                        break;
+                    case table::CellContentType_VALUE :
+                        {
+                            double fCell1 = aCell1.xCell->getValue();
+                            double fCell2 = aCell2.xCell->getValue();
+                            bIsEqual = (fCell1 == fCell2);
+                        }
+                        break;
+                    case table::CellContentType_TEXT :
+                        {
+                            if (IsEditCell(aCell1.xCell) || IsEditCell(aCell2.xCell))
+                                bIsEqual = sal_False;
+                            else
+                            {
+                                OUString sOUCell1, sOUCell2;
+                                if (GetCellText(aCell1.xCell, sOUCell1) && GetCellText(aCell2.xCell, sOUCell2))
+                                {
+                                    bIsEqual = (sOUCell1 == sOUCell2);
+                                }
+                                else
+                                    bIsEqual = sal_False;
+                            }
+                        }
+                        break;
+                    case table::CellContentType_FORMULA :
+                        {
+                            bIsEqual = sal_False;
+                        }
+                        break;
+                    default :
+                        {
+                            bIsEqual = sal_False;
+                        }
+                        break;
                     }
                 }
             }
