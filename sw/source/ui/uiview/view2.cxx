@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:52:49 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _AEITEM_HXX
+#include <svtools/aeitem.hxx>
 #endif
 
 #ifndef _HINTIDS_HXX
@@ -846,6 +849,58 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     break;
             }
             GenerateFormLetter(bUseCurrentDocument);
+        }
+        break;
+        case SID_ALIGN_ANY_LEFT :
+        case SID_ALIGN_ANY_HCENTER  :
+        case SID_ALIGN_ANY_RIGHT    :
+        case SID_ALIGN_ANY_JUSTIFIED:
+        case SID_ALIGN_ANY_TOP      :
+        case SID_ALIGN_ANY_VCENTER  :
+        case SID_ALIGN_ANY_BOTTOM   :
+        case SID_ALIGN_ANY_HDEFAULT :
+        case SID_ALIGN_ANY_VDEFAULT :
+        {
+            USHORT nAlias = 0;
+            SwWrtShell &rSh = GetWrtShell();
+            int nNewSelectionType = (rSh.GetSelectionType()
+                                & ~SwWrtShell::SEL_TBL_CELLS);
+            if( nSelectionType & (SwWrtShell::SEL_DRW_TXT|SwWrtShell::SEL_TXT) )
+            {
+                switch( nSlot )
+                {
+                    case SID_ALIGN_ANY_LEFT :       nAlias = SID_ATTR_PARA_ADJUST_LEFT; break;
+                    case SID_ALIGN_ANY_HCENTER  :   nAlias = SID_ATTR_PARA_ADJUST_CENTER; break;
+                    case SID_ALIGN_ANY_RIGHT    :   nAlias = SID_ATTR_PARA_ADJUST_RIGHT; break;
+                    case SID_ALIGN_ANY_JUSTIFIED:   nAlias = SID_ATTR_PARA_ADJUST_BLOCK; break;
+                    case SID_ALIGN_ANY_TOP      :   nAlias = FN_TABLE_VERT_NONE; break;
+                    case SID_ALIGN_ANY_VCENTER  :   nAlias = FN_TABLE_VERT_CENTER; break;
+                    case SID_ALIGN_ANY_BOTTOM   :   nAlias = FN_TABLE_VERT_BOTTOM; break;
+                }
+            }
+            else
+            {
+                switch( nSlot )
+                {
+                    case SID_ALIGN_ANY_LEFT :       nAlias = SID_OBJECT_ALIGN_LEFT    ; break;
+                    case SID_ALIGN_ANY_HCENTER  :   nAlias = SID_OBJECT_ALIGN_CENTER ; break;
+                    case SID_ALIGN_ANY_RIGHT    :   nAlias = SID_OBJECT_ALIGN_RIGHT  ; break;
+                    case SID_ALIGN_ANY_TOP      :   nAlias = SID_OBJECT_ALIGN_UP     ;  break;
+                    case SID_ALIGN_ANY_VCENTER  :   nAlias = SID_OBJECT_ALIGN_MIDDLE ;  break;
+                    case SID_ALIGN_ANY_BOTTOM   :   nAlias = SID_OBJECT_ALIGN_DOWN    ; break;
+                }
+            }
+            //special handling for the draw shell
+            if(nAlias && (nSelectionType & (SwWrtShell::SEL_DRW)))
+            {
+                SfxAllEnumItem aEnumItem(SID_OBJECT_ALIGN, nAlias - SID_OBJECT_ALIGN_LEFT);
+                GetViewFrame()->GetDispatcher()->Execute(
+                                SID_OBJECT_ALIGN, SFX_CALLMODE_ASYNCHRON, &aEnumItem, 0);
+            }
+            else if(nAlias)
+            //these slots are either re-mapped to text or object alignment
+                GetViewFrame()->GetDispatcher()->Execute(
+                                nAlias, SFX_CALLMODE_ASYNCHRON);
         }
         break;
         default:
