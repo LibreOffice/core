@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnectionPool.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:44:01 $
+ *  last change:$Date: 2005-01-25 15:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ import com.sun.star.uno.XInterface;
 * <ul>
 *  <li> <code>com::sun::star::sdbc::XDriverManager</code></li>
 * </ul>
-* @see com.sun.star.sdbñ.XDriverManager
+* @see com.sun.star.sdbc.XDriverManager
 * @see ifc.sdbc.XDriverManager
 */
 public class OConnectionPool extends TestCase {
