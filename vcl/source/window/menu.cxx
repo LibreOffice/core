@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:56:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,8 +737,13 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
         {
             // Ist eine ID vorhanden, dann Hilfe mit der ID aufrufen, sonst
             // den Hilfe-Index
-            ULONG nHelpId = pMenu->GetHelpId( nId );
-            if ( nHelpId )
+            sal_Bool bHelpIndex( sal_False );
+            String aCommand = pMenu->GetItemCommand( nId );
+            ULONG  nHelpId  = pMenu->GetHelpId( nId );
+
+            if ( aCommand.Len() )
+                pHelp->Start( aCommand, NULL );
+            else if ( nHelpId )
                 pHelp->Start( nHelpId, NULL );
             else
                 pHelp->Start( HELP_INDEX, NULL );
