@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scabstdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:56:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 11:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ public:
                                                                     const String*   pStrTitle = NULL ) = 0;
 
     virtual AbstractScInsertTableDlg * CreateScInsertTableDlg ( Window* pParent, ScViewData& rViewData,  //add for ScInsertTableDlg
-                                                                USHORT nTabCount, const ResId& rResId) = 0;
+                                                                SCTAB nTabCount, bool bFromFile, const ResId& rResId) = 0;
 
     virtual AbstractScSelEntryDlg * CreateScSelEntryDlg ( Window* pParent, // add for ScSelEntryDlg
                                                             USHORT  nResId,
