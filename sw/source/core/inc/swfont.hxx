@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:18 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,10 @@ class SwSubFont : public SvxFont
 
     short _CheckKerning( );
 
-    BOOL ChgFnt( ViewShell *pSh, OutputDevice *pOut );
+    BOOL ChgFnt( ViewShell *pSh, OutputDevice& rOut );
     BOOL IsSymbol( ViewShell *pSh );
-    USHORT GetAscent( ViewShell *pSh, const OutputDevice *pOut );
-    USHORT GetHeight( ViewShell *pSh, const OutputDevice *pOut );
+    USHORT GetAscent( ViewShell *pSh, const OutputDevice& rOut );
+    USHORT GetHeight( ViewShell *pSh, const OutputDevice& rOut );
     Size _GetTxtSize( SwDrawTextInfo& rInf );
     Size GetCapitalSize( SwDrawTextInfo& rInf );
     void _DrawText( SwDrawTextInfo &rInf, const BOOL bGrey );
@@ -205,8 +205,8 @@ public:
     SwFont( const SwAttrSet* pSet, const SwDoc *pDoc );
     SwFont( const SwFont& rFont );
 
-    inline void ChgFnt( ViewShell *pSh, OutputDevice *pOut )
-        { bPaintBlank = aSub[nActual].ChgFnt( pSh, pOut ); }
+    inline void ChgFnt( ViewShell *pSh, OutputDevice& rOut )
+        { bPaintBlank = aSub[nActual].ChgFnt( pSh, rOut ); }
 
     ~SwFont(){ delete pBackColor; }
 
@@ -355,14 +355,14 @@ public:
         { return aSub[nWhich].GetEmphasisMark(); }
 
     // Macht den logischen Font im OutputDevice wirksam.
-    void ChgPhysFnt( ViewShell *pSh, OutputDevice *pOut );
+    void ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut );
 
     Size GetCapitalSize( SwDrawTextInfo& rInf )
         { return aSub[nActual].GetCapitalSize( rInf ); }
 
-    xub_StrLen GetCapitalBreak( ViewShell *pSh, const OutputDevice *pOut,
-        const SwScriptInfo* pScript, const XubString &rTxt,
-        long nTextWidth, xub_StrLen *pExtra, const xub_StrLen nIdx,
+    xub_StrLen GetCapitalBreak( ViewShell* pSh,  const OutputDevice* pOut,
+        const SwScriptInfo* pScript, const XubString& rTxt,
+        long nTextWidth, xub_StrLen* pExtra, const xub_StrLen nIdx,
         const xub_StrLen nLen );
 
     xub_StrLen GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
@@ -382,13 +382,13 @@ public:
 
     xub_StrLen GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth );
 
-    xub_StrLen GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
-        const SwScriptInfo* pScript, const XubString &rTxt,
+    xub_StrLen GetTxtBreak( ViewShell* pSh, const OutputDevice* pOut,
+        const SwScriptInfo* pScript, const XubString& rTxt,
         long nTextWidth, xub_StrLen& rExtraCharPos,
         const xub_StrLen nIdx, const xub_StrLen nLen );
 
-    xub_StrLen GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
-        const SwScriptInfo* pScript, const XubString &rTxt,
+    xub_StrLen GetTxtBreak( ViewShell* pSh,  const OutputDevice* pOut,
+        const SwScriptInfo* pScript, const XubString& rTxt,
         long nTextWidth, const xub_StrLen nIdx,
         const xub_StrLen nLen );
 
@@ -403,11 +403,13 @@ public:
 
     inline short CheckKerning()
         { return aSub[nActual].CheckKerning(); }
-    inline USHORT GetAscent( ViewShell *pSh, const OutputDevice *pOut )
-        { return aSub[nActual].GetAscent( pSh, pOut ); }
-    USHORT GetLeading( ViewShell *pSh, const OutputDevice *pOut );
-    inline USHORT GetHeight( ViewShell *pSh, const OutputDevice *pOut )
-        { return aSub[nActual].GetHeight( pSh, pOut ); }
+
+    inline USHORT GetAscent( ViewShell *pSh, const OutputDevice& rOut )
+        { return aSub[nActual].GetAscent( pSh, rOut ); }
+    inline USHORT GetHeight( ViewShell *pSh, const OutputDevice& rOut )
+        { return aSub[nActual].GetHeight( pSh, rOut ); }
+    USHORT GetGuessedLeading( ViewShell *pSh, const OutputDevice& rOut );
+
     inline void Invalidate()
         { bFntChg = bOrgChg = TRUE; }
 };
