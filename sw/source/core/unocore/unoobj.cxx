@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-04-03 07:28:56 $
+ *  last change: $Author: os $ $Date: 2001-04-05 13:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1993,6 +1993,7 @@ Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
         }
         pStates[i] = ::lcl_SwXTextCursor_GetPropertyState( &pSet, &pSetParent,
                                             rPaM, rPropSet, *pMap );
+        pMap++;
     }
     delete pSet;
     delete pSetParent;
