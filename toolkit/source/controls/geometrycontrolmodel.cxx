@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:20 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,11 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#include <algorithm>
+#include <functional>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 
 
@@ -339,12 +344,18 @@
     }
 
     //--------------------------------------------------------------------
-    OGeometryControlModel_Base::~OGeometryControlModel_Base()
+    void OGeometryControlModel_Base::releaseAggregation()
     {
         // release the aggregate (_before_ clearing m_xAggregate)
         if (m_xAggregate.is())
             m_xAggregate->setDelegator(NULL);
         setAggregation(NULL);
+    }
+
+    //--------------------------------------------------------------------
+    OGeometryControlModel_Base::~OGeometryControlModel_Base()
+    {
+        releaseAggregation();
     }
 
     //--------------------------------------------------------------------
@@ -481,59 +492,183 @@
             xComp->dispose();
     }
 
+    //====================================================================
+    //= OCommonGeometryControlModel
+    //====================================================================
+    //--------------------------------------------------------------------
+    OCommonGeometryControlModel::HashMapString2Int  OCommonGeometryControlModel::s_aServiceSpecifierMap;
+    OCommonGeometryControlModel::PropSeqArray       OCommonGeometryControlModel::s_aAggregateProperties;
+    OCommonGeometryControlModel::IntArrayArray      OCommonGeometryControlModel::s_aAmbiguousPropertyIds;
+
+    //--------------------------------------------------------------------
+    OCommonGeometryControlModel::OCommonGeometryControlModel( Reference< XCloneable >& _rxAgg, const ::rtl::OUString& _rServiceSpecifier )
+        :OGeometryControlModel_Base( _rxAgg )
+        ,m_sServiceSpecifier( _rServiceSpecifier )
+        ,m_nPropertyMapId( 0 )
+    {
+        Reference< XPropertySetInfo > xPI;
+        if ( m_xAggregateSet.is() )
+            xPI = m_xAggregateSet->getPropertySetInfo();
+        if ( !xPI.is() )
+        {
+            releaseAggregation();
+            throw IllegalArgumentException();
+        }
+
+        HashMapString2Int::const_iterator aPropMapIdPos = s_aServiceSpecifierMap.find( m_sServiceSpecifier );
+        if ( s_aServiceSpecifierMap.end() == aPropMapIdPos )
+        {
+            m_nPropertyMapId = s_aAggregateProperties.size();
+            s_aAggregateProperties.push_back( xPI->getProperties() );
+            s_aAmbiguousPropertyIds.push_back( IntArrayArray::value_type() );
+
+            s_aServiceSpecifierMap[ m_sServiceSpecifier ] = m_nPropertyMapId;
+        }
+        else
+            m_nPropertyMapId = aPropMapIdPos->second;
+    }
+
+    //--------------------------------------------------------------------
+    struct PropertyNameLess : public ::std::binary_function< Property, Property, bool >
+    {
+        bool operator()( const Property& _rLHS, const Property& _rRHS )
+        {
+            return _rLHS.Name < _rRHS.Name ? true : false;
+        }
+    };
+
+    //--------------------------------------------------------------------
+    struct PropertyNameEqual : public ::std::unary_function< Property, bool >
+    {
+        const ::rtl::OUString&  m_rCompare;
+        PropertyNameEqual( const ::rtl::OUString& _rCompare ) : m_rCompare( _rCompare ) { }
+
+        bool operator()( const Property& _rLHS )
+        {
+            return _rLHS.Name == m_rCompare ? true : false;
+        }
+    };
+
+    //--------------------------------------------------------------------
+    ::cppu::IPropertyArrayHelper* OCommonGeometryControlModel::createArrayHelper( sal_Int32 _nId ) const
+    {
+        OSL_ENSURE( _nId == m_nPropertyMapId, "OCommonGeometryControlModel::createArrayHelper: invalid argument!" );
+        OSL_ENSURE( _nId < (sal_Int32)s_aAggregateProperties.size(), "OCommonGeometryControlModel::createArrayHelper: invalid status info (1)!" );
+        OSL_ENSURE( _nId < (sal_Int32)s_aAmbiguousPropertyIds.size(), "OCommonGeometryControlModel::createArrayHelper: invalid status info (2)!" );
+
+        // our own properties
+        Sequence< Property > aProps;
+        OPropertyContainer::describeProperties( aProps );
+
+        // the aggregate properties
+        Sequence< Property > aAggregateProps;
+        aAggregateProps = s_aAggregateProperties[ _nId ];
+
+        // look for duplicates, and remember them
+        IntArrayArray::value_type& rDuplicateIds = s_aAmbiguousPropertyIds[ _nId ];
+        // for this, sort the aggregate properties
+        ::std::sort(
+            aAggregateProps.getArray(),
+            aAggregateProps.getArray() + aAggregateProps.getLength(),
+            PropertyNameLess()
+        );
+        const Property* pAggProps = aAggregateProps.getConstArray();
+        const Property* pAggPropsEnd = aAggregateProps.getConstArray() + aAggregateProps.getLength();
+
+        // now loop through our own props
+        const Property* pProp = aProps.getConstArray();
+        const Property* pPropEnd = aProps.getConstArray() + aProps.getLength();
+        while ( pProp < pPropEnd )
+        {
+            // look for the current property in the properties of our aggregate
+            const Property* pAggPropPos = ::std::find_if( pAggProps, pAggPropsEnd, PropertyNameEqual( pProp->Name ) );
+            if ( pAggPropPos != pAggPropsEnd )
+            {   // found a duplicate
+                // -> remove from the aggregate property sequence
+                ::comphelper::removeElementAt( aAggregateProps, pAggPropPos - pAggProps );
+                // which means we have to adjust the pointers
+                pAggProps = aAggregateProps.getConstArray(),
+                pAggPropsEnd = aAggregateProps.getConstArray() + aAggregateProps.getLength(),
+
+                // and additionally, remember the id of this property
+                rDuplicateIds.push_back( pProp->Handle );
+            }
+
+            ++pProp;
+        }
+
+        // now, finally, sort the duplicates
+        ::std::sort( rDuplicateIds.begin(), rDuplicateIds.end(), ::std::less< sal_Int32 >() );
+
+        return new OPropertyArrayAggregationHelper(aProps, aAggregateProps);
+    }
+
+    //--------------------------------------------------------------------
+    ::cppu::IPropertyArrayHelper& SAL_CALL OCommonGeometryControlModel::getInfoHelper()
+    {
+        return *getArrayHelper( m_nPropertyMapId );
+    }
+
+    //--------------------------------------------------------------------
+    OGeometryControlModel_Base* OCommonGeometryControlModel::createClone_Impl( Reference< XCloneable >& _rxAggregateInstance )
+    {
+        return new OCommonGeometryControlModel( _rxAggregateInstance, m_sServiceSpecifier );
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< sal_Int8 > SAL_CALL OCommonGeometryControlModel::getImplementationId(  ) throw (RuntimeException)
+    {
+        static ::cppu::OImplementationId * pId = NULL;
+        if ( !pId )
+        {
+            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+            if ( !pId )
+            {
+                static ::cppu::OImplementationId s_aId;
+                pId = &s_aId;
+            }
+        }
+        return pId->getImplementationId();
+    }
+
+    //--------------------------------------------------------------------
+    struct Int32Equal : public ::std::unary_function< sal_Int32, bool >
+    {
+        sal_Int32   m_nCompare;
+        Int32Equal( sal_Int32 _nCompare ) : m_nCompare( _nCompare ) { }
+
+        bool operator()( sal_Int32 _nLHS )
+        {
+            return _nLHS == m_nCompare ? true  : false;
+        }
+    };
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OCommonGeometryControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception )
+    {
+        OGeometryControlModel_Base::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
+
+        // look if this id is one we recognized as duplicate
+        IntArrayArray::value_type& rDuplicateIds = s_aAmbiguousPropertyIds[ m_nPropertyMapId ];
+
+        IntArrayArray::value_type::const_iterator aPos = ::std::find_if(
+            rDuplicateIds.begin(),
+            rDuplicateIds.end(),
+            Int32Equal( _nHandle )
+        );
+
+        if ( rDuplicateIds.end() != aPos )
+        {
+            // yes, it is such a property
+            ::rtl::OUString sPropName;
+            sal_Int16 nAttributes(0);
+            static_cast< OPropertyArrayAggregationHelper* >( getArrayHelper( m_nPropertyMapId ) )->fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
+
+            if ( m_xAggregateSet.is() && sPropName.getLength() )
+                m_xAggregateSet->setPropertyValue( sPropName, _rValue );
+        }
+    }
+
 //........................................................................
 // }    // namespace toolkit
 //........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.15  2002/01/08 13:21:40  fs
- *  #96008# be an ComponentImplHelper
- *
- *  Revision 1.14  2001/11/23 17:37:21  jbu
- *  #95097# temporary bug on solaris platforms fixed
- *
- *  Revision 1.13  2001/09/05 06:41:27  fs
- *  #88891# override the XTypeProvider methods
- *
- *  Revision 1.12  2001/05/15 10:38:19  ab
- *  #85996# Clone ScriptEventsSupplier
- *
- *  Revision 1.11  2001/04/12 11:30:28  tbe
- *  changed tabindex default from 0 to -1
- *
- *  Revision 1.10  2001/04/10 07:33:49  dbo
- *  #85862# have to use namespace due to symbol ambiguity
- *
- *  Revision 1.9  2001/03/23 14:47:53  tbe
- *  removed HelpText property from geometry model
- *
- *  Revision 1.8  2001/03/22 15:34:23  tbe
- *  added HelpText property
- *
- *  Revision 1.7  2001/03/08 16:44:03  tbe
- *  OPropertyStateHelper overridables
- *
- *  Revision 1.6  2001/03/07 14:27:23  tbe
- *  added step and tag property
- *
- *  Revision 1.5  2001/03/02 12:33:21  tbe
- *  clone geometry control model
- *
- *  Revision 1.4  2001/03/01 14:26:33  tbe
- *  removed ClassId from geometry control model
- *
- *  Revision 1.3  2001/02/28 10:49:53  tbe
- *  added additional properties to geometry model
- *
- *  Revision 1.2  2001/02/21 17:31:20  ab
- *  Support for XScriptEventsSupplier added
- *
- *  Revision 1.1  2001/01/24 14:55:12  mt
- *  model for dialog controls (weith pos/size)
- *
- *
- *  Revision 1.0 17.01.01 11:35:20  fs
- ************************************************************************/
-
