@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-07 15:44:48 $
+ *  last change: $Author: sj $ $Date: 2001-08-10 15:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3601,116 +3601,12 @@ static sal_Unicode PPTExportMapper( sal_Unicode nUni, BOOL& bNeedsStarBats )
         return cLo;
 }
 
-
+// no longer needed
 sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
                                         UINT32& nMappedFontId, Font& rFont, char nDefault ) const
 {
-    nMappedFontId = nFont;
-    PptFontEntityAtom* pAtom = GetFontEnityAtom( nFont );
-    if ( pAtom )
-    {
-        CharSet eCharSet( pAtom->eCharSet );
-        rFont.SetName( pAtom->aName );
-        rFont.SetCharSet( eCharSet );
-        rFont.SetFamily( pAtom->eFamily );
-        rFont.SetPitch( pAtom->ePitch );
-    }
-    return nChar;
+    return 0;
 }
-
-/*
-// SJ: this is the old version, using our new unicode font it won't be necessary to
-//     do any fontmapping
-
-sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
-                                        UINT32& nMappedFontId, Font& rFont, char nDefault ) const
-{
-    static String aStarBats( String( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) ) );
-    static String aTimes( String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ) );
-    BOOL bNeedsStarBats = FALSE;
-
-    sal_Unicode c = 0;
-    nMappedFontId = nFont;
-
-    PptFontEntityAtom* pAtom = GetFontEnityAtom( nFont );
-    if ( pAtom )
-    {
-        CharSet eCharSet( pAtom->eCharSet );
-
-        UINT32  nSourceFontId( pAtom->nUniqueFontId );
-
-        sal_uInt8 nHiByte = nChar >> 8;
-        if ( nHiByte && ( nHiByte != 0xf0 ) )   // may be it is not possible to display this
-        {                                       // character by using a symbol font
-            eCharSet = eCharSetSystem;
-            rFont.SetName( aTimes );
-        }
-        else
-            rFont.SetName( pAtom->aName );
-
-        rFont.SetCharSet( eCharSet );
-        rFont.SetFamily( pAtom->eFamily );
-        rFont.SetPitch( pAtom->ePitch );
-
-        if ( eCharSet != RTL_TEXTENCODING_SYMBOL )
-        {
-#ifndef WNT
-            c = PPTExportMapper( nChar, bNeedsStarBats );
-            if ( !c )
-#endif
-            c = nChar;                      // String::ConvertFromUnicode( nChar, eCharSet );
-        }
-        else
-        {
-            if ( !pAtom->bAvailable )   // the original font is not available
-            {
-                if ( nSourceFontId == PPT_UNIQUE_FONT_ID_MONOTYPE_SORTS )
-                {   // this is a special mapping for monotype sorts
-                    UniString aString( (sal_Unicode)nChar );
-                    if ( SymCharConverter::Convert( rFont, aString ) )
-                        c = aString.GetChar( 0 );
-                    bNeedsStarBats = TRUE;
-                }
-                else
-                {
-                    if ( IsWingdingsAvailable() )           // mapping all fonts not available to wingdings
-                    {
-                        rFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Wingdings" ) ) );
-                        c = nChar;
-                        if ( nIWingdings & 0x80000000 )
-                            nMappedFontId = nIWingdings &~0x80000000;
-                    }
-                    else                                    // on the other way if wingdings is not available we
-                    {                                       // have to map to starbats
-                        UniString aString( (sal_Unicode)nChar );
-                        if ( SymCharConverter::Convert( rFont, aString ) )
-                            c = aString.GetChar( 0 );
-                        bNeedsStarBats = TRUE;
-                    }
-                }
-            }
-            else
-            {
-                c = nChar;
-            }
-        }
-        if ( bNeedsStarBats )
-        {
-            if ( nIStarBats & 0x80000000 )
-            {
-                rFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
-                rFont.SetName( aStarBats );
-                nMappedFontId = nIStarBats &~0x80000000;
-            }
-            else
-                c = 0;
-        }
-    }
-    if ( !c )
-        c = nDefault ? nDefault : nChar;
-    return c;
-}
-*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -4218,16 +4114,20 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
 
 void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, UINT32 nLevel )
 {
+    Font aFont;
+    PptFontEntityAtom* pAtom = rManager.GetFontEnityAtom( nBulletFont );
+    if ( pAtom )
+    {
+        CharSet eCharSet( pAtom->eCharSet );
+        aFont.SetName( pAtom->aName );
+        aFont.SetCharSet( eCharSet );
+        aFont.SetFamily( pAtom->eFamily );
+        aFont.SetPitch( pAtom->ePitch );
+    }
     Color aCol( rManager.MSO_CLR_ToColor( nBulletColor ) );
-
-    UINT32  nMappedFontId;
-    Font    aFont;
-
     aFont.SetColor( aCol );
-    sal_Unicode c = rManager.PPTSubstitute( (sal_uInt16)nBulletFont, (sal_uInt16)nBulletChar, nMappedFontId, aFont, ( nLevel & 1 ) ? 150 : 149 );
-
     rNumberFormat.SetBulletFont( &aFont );
-    rNumberFormat.SetBulletChar( c );
+    rNumberFormat.SetBulletChar( (sal_uInt16)nBulletChar );
     rNumberFormat.SetBulletRelSize( (UINT16)nBulletHeight );
     rNumberFormat.SetBulletColor( aCol );
     UINT16 nAbsLSpace = (UINT16)( ( (UINT32)nTextOfs * 2540 ) / 576 );
@@ -5144,26 +5044,8 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 break;
             if ( ( nChar & 0xff00 ) == 0xf000 )         // in this special case we got a symbol
                 aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_SYMBOL ), LIST_APPEND );
-            else
-            {
-                if ( nChar == 0xd )
-                    aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_NEWLINE ), LIST_APPEND );
-/*
-// SJ: this is the old version, using our new unicode font it won't be necessary to
-//     do any fontmapping
-#ifndef WNT
-                else if ( nChar >= 128 )
-                {
-                    BOOL bNeedsStarBats;
-                    sal_Unicode cReplace = PPTExportMapper( nChar, bNeedsStarBats );
-                    if ( bNeedsStarBats )
-                        aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_USE_STARBATS | ( cReplace << 24 ) ), LIST_APPEND );
-                    else if ( cReplace )
-                        *pPtr = cReplace;
-                }
-#endif
-*/
-            }
+            else if ( nChar == 0xd )
+                aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_NEWLINE ), LIST_APPEND );
         }
         if ( i )
             aString = String( pBuf, (sal_uInt16)i );
@@ -5480,39 +5362,13 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                             nCharAnzRead += nLen;
                         }
                         PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet, nCurrentPara );
-
-                        Font    aFont;
-                        UINT32  nMappedFontId;
-
-                        pCPropSet->maString =  rMan.PPTSubstitute( aCharPropSet.pCharSet->mnSymbolFont,
-                                                    aString.GetChar( (sal_uInt16)nCharAnzRead ), nMappedFontId, aFont, 0 );
-
-                        pCPropSet->SetFont( (sal_uInt16)nMappedFontId );
+                        pCPropSet->maString = (sal_Unicode)( (sal_uInt8)aString.GetChar( (sal_uInt16)nCharAnzRead ) );
+                        pCPropSet->SetFont( aCharPropSet.pCharSet->mnSymbolFont );
                         aCharPropList.Insert( pCPropSet, LIST_APPEND );
                         nCharCount--;
                         nCharAnzRead++;
                         bEmptyParaPossible = FALSE;
                     }
-#ifndef WNT
-                    else if ( nCurrentSpecMarker & PPT_SPEC_USE_STARBATS )
-                    {
-                        if ( ( nCurrentSpecMarker & 0xffff ) != nCharAnzRead )
-                        {
-                            nLen = ( nCurrentSpecMarker & 0xffff ) - nCharAnzRead;
-                            aCharPropSet.maString = String( aString, (UINT16)nCharAnzRead, (UINT16)nLen );
-                            aCharPropList.Insert( new PPTCharPropSet( aCharPropSet, nCurrentPara ), LIST_APPEND );
-                            nCharCount -= nLen;
-                            nCharAnzRead += nLen;
-                        }
-                        PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet, nCurrentPara );
-                        pCPropSet->SetFont( rMan.pFonts->Count() - 1 );
-                        pCPropSet->maString = (sal_uInt8)( nCurrentSpecMarker >> 24 );
-                        aCharPropList.Insert( pCPropSet, LIST_APPEND );
-                        nCharCount--;
-                        nCharAnzRead++;
-                        bEmptyParaPossible = FALSE;
-                    }
-#endif
                     nCurrentSpecMarker = (UINT32)aSpecMarkerList.Next();
                 }
                 else
