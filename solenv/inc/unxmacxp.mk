@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-20 03:48:53 $
+#   last change: $Author: pluby $ $Date: 2001-03-23 17:59:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,11 +109,7 @@ OBJCFLAGS=-no-precomp
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-CFLAGSCXX=-pipe -fno-for-scope -fpermissive -fno-operator-names
-
-.IF "$(shell uname -r)"!="1.2"
-CFLAGSCXX+=-fno-coalesce
-.ENDIF
+CFLAGSCXX=-pipe -fno-for-scope -fpermissive -fno-operator-names -fno-coalesce
 
 CFLAGSOBJGUIST=-fPIC
 CFLAGSOBJCUIST=-fPIC
