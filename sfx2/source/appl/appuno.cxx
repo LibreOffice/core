@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 07:50:32 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 08:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,6 +808,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_OPENURL )
                         continue;
                     if ( nId == SID_CHARSET )
+                        continue;
+                    if ( nId == SID_MACROEXECMODE )
                         continue;
                 }
 
