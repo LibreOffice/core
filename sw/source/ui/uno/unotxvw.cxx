@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-27 18:50:22 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 13:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,9 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1188,7 +1191,7 @@ sal_Bool SwXTextViewCursor::goLeft(sal_Int16 nCount, sal_Bool bExpand) throw( un
     if(pView)
     {
         for( sal_uInt16 i = 0; i < nCount; i++ )
-            bRet = pView->GetWrtShell().Left( bExpand, 1, sal_True );
+            bRet = pView->GetWrtShell().Left( CRSR_SKIP_CHARS, bExpand, 1, sal_True );
     }
     else
         throw uno::RuntimeException();
@@ -1204,7 +1207,7 @@ sal_Bool SwXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand) throw( u
     if(pView)
     {
         for( sal_uInt16 i = 0; i < nCount; i++ )
-            bRet = pView->GetWrtShell().Right( bExpand, 1, sal_True );
+            bRet = pView->GetWrtShell().Right( CRSR_SKIP_CHARS, bExpand, 1, sal_True );
     }
     else
         throw uno::RuntimeException();
