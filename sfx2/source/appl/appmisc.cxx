@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:49:33 $
+ *  last change: $Author: mba $ $Date: 2001-06-14 11:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@
 #include <framework/menuconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <svtools/moduleoptions.hxx>
 #include <osl/file.hxx>
 
 #include "sfxresid.hxx"
@@ -498,7 +499,21 @@ void SfxApplication::OpenClients()
          */
         String aName;
         if ( !aName.Len() )
-            aName = String( DEFINE_CONST_UNICODE("private:factory/swriter" ) );
+        {
+            aName = String( DEFINE_CONST_UNICODE("private:factory/" ) );
+            SvtModuleOptions aOpt;
+            if ( aOpt.IsWriter() )
+                aName += DEFINE_CONST_UNICODE("swriter");
+            else if ( aOpt.IsCalc() )
+                aName += DEFINE_CONST_UNICODE("scalc");
+            else if ( aOpt.IsImpress() )
+                aName += DEFINE_CONST_UNICODE("simpress");
+            else if ( aOpt.IsDraw() )
+                aName += DEFINE_CONST_UNICODE("sdraw");
+            else
+                return;
+        }
+
         SfxStringItem aNameItem( SID_FILE_NAME, aName );
         aSet.Put( aNameItem, aNameItem.Which() );
         aSet.Put( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") ) );
@@ -1084,101 +1099,3 @@ SfxMenuBarManager* SfxApplication::GetMenuBarManager() const
     else
         return 0;
 }
-
-#if SUPD<613
-SfxIniManager* SfxApplication::GetIniManager() const
-
-/*  [Beschreibung]
-
-    Diese Methode liefert den Ini-Manager der Dokument-Factory
-    des aktiven Dokuments, insofern ein Dokument aktiv ist.
-    Ansonsten liefert sie den Ini-Manager der Applikation.
-
-    W"ahrend 'Application:Execute()' ist der R"uckgabewert
-    immer ein g"ultiger Pointer, ansonsten kann es auch ein
-    0-Pointer sein.
-*/
-
-{
-    return pAppIniMgr;
-}
-
-//--------------------------------------------------------------------
-#ifdef WNT
-extern String GetUserID();
-#endif
-
-SfxIniManager* SfxApplication::CreateIniManager()
-{
-    SfxIniManager *pIniMgr = NULL;
-    try
-    {
-        pIniMgr = SfxIniManager::Get();
-        if ( pIniMgr )
-        {
-            pIniMgr->EnterLock();
-
-            // Dialog-Mnemonics/Scaling
-            LanguageType eLang = Application::GetAppInternational().GetLanguage();
-            Application::EnableAutoMnemonic( pIniMgr->Get( SFX_KEY_INTERNATIONAL_AUTOMNEMONIC,(sal_uInt16) eLang ).CompareToAscii("1") == COMPARE_EQUAL );
-            Application::SetDialogScaleX( (short)
-                    pIniMgr->Get( SFX_KEY_INTERNATIONAL_DIALOGSCALEX,
-                                (sal_uInt16) eLang ).ToInt32() );
-            return pIniMgr;
-        }
-    }
-    catch ( ::com::sun::star::registry::InvalidRegistryException& )
-    {
-        pIniMgr = NULL;
-    }
-
-    // If some configurtation files are missing or corrupt
-    // try to start setup. If starting failed show a errorbox and exit application with an error code.
-    INetURLObject aSetupObj( Application::GetAppFileName(), INET_PROT_FILE );
-    #if defined(UNX)
-    aSetupObj.setName( DEFINE_CONST_UNICODE("setup") );
-    #endif
-    #if defined(WIN) || defined(WNT) || defined(OS2)
-    aSetupObj.setName( DEFINE_CONST_UNICODE("setup.exe") );
-    #endif
-    #if defined(MAC)
-    aSetupObj.setName( DEFINE_CONST_UNICODE("Setup") );
-    #endif
-
-    // We must use different messages for fat office and portal.
-    // A fat office can be repaired by user himself ...
-    // but portal problems must fixed by an admin!
-    String aMsg;
-    // Changed as per BugID 79541 Branding/Configuration
-    ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-    UNOANY MyAny = pMgr->GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME);
-    UNOOUSTRING aProductName ;
-
-    MyAny >>= aProductName;
-
-    if( Application::IsRemoteServer())
-    {
-        aMsg += DEFINE_CONST_UNICODE("Your user account is not configured correctly.\n");
-            aMsg += DEFINE_CONST_UNICODE("Please contact your %PRODUCTNAME administator.\n");
-    }
-    else
-    {
-        aMsg += DEFINE_CONST_UNICODE("Configuration files could not be found.\n");
-            aMsg += DEFINE_CONST_UNICODE("Can't start neither %PRODUCTNAME nor Setup.\n");
-        aMsg += DEFINE_CONST_UNICODE("Please try to start setup by yourself.");
-    }
-
-    // merge Productname into the String
-    aMsg.SearchAndReplaceAscii("%PRODUCTNAME" , aProductName );
-
-    String aImageName( aSetupObj.PathToFileName() );
-    ::vos::OProcess aProcess( aImageName.GetBuffer() );
-    ::rtl::OUString aArg = ::rtl::OUString::createFromAscii( "/officemode" );
-    ::vos::OArgumentList aList( 1, &aArg );
-    if ( 0 != aProcess.execute( ::vos::OProcess::TOption_Detached, aList ) )
-        Application::Abort( aMsg );
-    exit(-1);
-    return 0;
-}
-#endif
-
