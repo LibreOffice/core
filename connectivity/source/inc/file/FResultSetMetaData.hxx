@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:08:51 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ namespace connectivity
             ::vos::ORef<connectivity::OSQLColumns>  m_xColumns;
             OFileTable*         m_pTable;
 
+            void checkColumnIndex(sal_Int32 column) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable);

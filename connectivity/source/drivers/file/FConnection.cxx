@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 09:58:40 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,25 +164,22 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 {
     osl_incrementInterlockedCount( &m_refCount );
 
-    sal_Int32 nLen = url.indexOf(':');
-    nLen = url.indexOf(':',nLen+1);
-    ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
-
-    String aFileName = aDSN;
-    INetURLObject aURL;
-    aURL.SetSmartProtocol(INET_PROT_FILE);
     {
-        SvtPathOptions aPathOptions;
-        aFileName = aPathOptions.SubstituteVariable(aFileName);
+        sal_Int32 nLen = url.indexOf(':');
+        nLen = url.indexOf(':',nLen+1);
+        ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
+
+        String aFileName = aDSN;
+        INetURLObject aURL;
+        aURL.SetSmartProtocol(INET_PROT_FILE);
+        {
+            SvtPathOptions aPathOptions;
+            aFileName = aPathOptions.SubstituteVariable(aFileName);
+        }
+        aURL.SetSmartURL(aFileName);
+
+        m_aURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
     }
-    aURL.SetSmartURL(aFileName);
-
-    aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
-    m_aURL = aFileName;
-
-    if(!aFileName.Len())
-        aFileName = aDSN;
-    String aWildcard;
 
     ::rtl::OUString aExt;
     const PropertyValue *pBegin  = info.getConstArray();
@@ -214,6 +211,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     if(aExt.getLength())
         m_aFilenameExtension = aExt;
+
 
     ::ucb::Content aFile;
     try
@@ -295,16 +293,11 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
     return NULL;
 }
 // --------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OConnection::nativeSQL( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     return sql;
 }
 // --------------------------------------------------------------------------------
@@ -312,7 +305,6 @@ void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
 
     m_bAutoCommit = autoCommit;
 }
@@ -322,26 +314,15 @@ sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeExce
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-
     return m_bAutoCommit;
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-
-
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-
-
 }
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException)
@@ -387,43 +368,24 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
 }
 // --------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-
     return ::rtl::OUString();
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-
 }
 // --------------------------------------------------------------------------------
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-
     return 0;
 }
 // --------------------------------------------------------------------------------
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-
     return NULL;
 }
 // --------------------------------------------------------------------------------
@@ -482,8 +444,7 @@ void OConnection::disposing()
     Reference< XTablesSupplier > xTab = m_xCatalog;
     if(!m_xCatalog.get().is())
     {
-        OFileCatalog *pCat = new OFileCatalog(this);
-        xTab = pCat;
+        xTab = new OFileCatalog(this);
         m_xCatalog = xTab;
     }
     return xTab;
@@ -492,13 +453,13 @@ void OConnection::disposing()
 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet > OConnection::getDir() const
 {
     Reference<XDynamicResultSet> xContent;
+    Sequence< ::rtl::OUString > aProps(1);
+    ::rtl::OUString* pProps = aProps.getArray();
+    pProps[ 0 ] = ::rtl::OUString::createFromAscii( "Title" );
     try
     {
         Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();
         ::ucb::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
-        Sequence< ::rtl::OUString > aProps(1);
-        ::rtl::OUString* pProps = aProps.getArray();
-        pProps[ 0 ] = ::rtl::OUString::createFromAscii( "Title" );
         xContent = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
     }
     catch(Exception&)

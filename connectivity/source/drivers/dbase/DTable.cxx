@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-20 12:21:43 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,7 +642,6 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
         ::rtl::OUString aName;
         xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aName;
         // Laengen je nach Datentyp:
-        // nyi: eine zentrale Funktion, die die Laenge liefert!
         sal_Int32 nLen;
         sal_Int32 nType;
         if(_bUseTableDefs)
@@ -1323,19 +1322,8 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(const ::rtl::OUString&
 //------------------------------------------------------------------
 double toDouble(const ByteString& rString)
 {
-    static International aInter(LANGUAGE_ENGLISH);
-    static int nErrno=0;
-    BOOL bInitialized = sal_False;
-    if (!bInitialized)
-    {   // ensure that the two members we're interested in are really set
-        // (if the system doesn't know the locale en_US aIntl would be initialized with the
-        // system language which may be anything - which we don't want ...)
-        // 74342 - 21.03.00 - FS
-        aInter.SetNumThousandSep(',');
-        aInter.SetNumDecimalSep('.');
-        bInitialized = TRUE;
-    }
-    return SolarMath::StringToDouble(UniString(rString,gsl_getSystemTextEncoding()).GetBuffer(),aInter,nErrno);
+    int nErrno;
+    return SolarMath::StringToDouble(UniString(rString,gsl_getSystemTextEncoding()).GetBuffer(),',','.',nErrno);
 }
 
 //------------------------------------------------------------------
@@ -1406,14 +1394,16 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
 
         // Laengen je nach Datentyp:
-        // nyi: eine zentrale Funktion, die die Laenge liefert!
-        sal_Int32 nLen = getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
-        sal_Int32 nType = getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
+        sal_Int32 nLen;
+        sal_Int32 nType;
+        nLen    = m_aPrecisions[i];
+        nType   = m_aTypes[i];
+
         switch (nType)
         {
             case DataType::DATE:        nLen = 8; break;
             case DataType::DECIMAL:
-                nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
+                nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,m_aScales[i]);
                 break;  // das Vorzeichen und das Komma
             case DataType::BIT:         nLen = 1; break;
             case DataType::LONGVARCHAR: nLen = 10; break;
@@ -1492,7 +1482,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
                     double n = rRow[nPos];
 
-                    int nPrecision      = (int)getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
+                    int nPrecision      = (int)m_aPrecisions[i];
                     int nScale          = (int)getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
                     // ein const_cast, da GetFormatPrecision am SvNumberFormat nicht const ist, obwohl es das eigentlich
                     // sein koennte und muesste

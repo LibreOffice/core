@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 12:22:36 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,9 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             // return true when the select statement is "select count(*) from table"
             sal_Bool isCount() const;
             void checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
+
+            const ORowSetValue& getValue(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
+            void updateValue(sal_Int32 columnIndex,const ORowSetValue& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         protected:
 
             using OResultSet_BASE::rBHelper;

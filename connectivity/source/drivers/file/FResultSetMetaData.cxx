@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:20 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,22 +99,22 @@ OResultSetMetaData::~OResultSetMetaData()
 {
     m_xColumns = NULL;
 }
-
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
+// -----------------------------------------------------------------------------
+void OResultSetMetaData::checkColumnIndex(sal_Int32 column)  throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
         throwInvalidIndexException(*this);
-
-    return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
+{
+    return getPrecision(column);
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
-
+    checkColumnIndex(column);
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 }
 // -------------------------------------------------------------------------
@@ -127,26 +127,19 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, Ru
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
-
     return sal_False;
 }
 // -------------------------------------------------------------------------
 
 ::rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
-
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkColumnIndex(column);
 
     Any aName((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
     return aName.hasValue() ? getString(aName) : getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
@@ -154,124 +147,92 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
-
     return m_aTableName;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkColumnIndex(column);
     return getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
-    return getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
+    return getColumnName(column);
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkColumnIndex(column);
     return getBOOL((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)));
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
-    return getBOOL((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)));
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkColumnIndex(column);
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkColumnIndex(column);
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
+    checkColumnIndex(column);
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
     return sal_True;
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
-    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
-        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION))))
-        return sal_True;
-    return m_pTable->isReadOnly();
+    checkColumnIndex(column);
+    sal_Bool bReadOnly = (*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
+                         ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)));
+
+    return bReadOnly || m_pTable->isReadOnly();
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
-    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
-        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION))))
-        return sal_False;
-    return !m_pTable->isReadOnly();
-;
+    return !isReadOnly(column);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throwInvalidIndexException(*this);
-    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
-        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION))))
-        return sal_False;
-    return !m_pTable->isReadOnly();
+    return !isReadOnly(column);
 }
 // -------------------------------------------------------------------------
 

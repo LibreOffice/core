@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:14:12 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ namespace connectivity
     namespace ado
     {
 
+        class WpADOField;
         class ADOS
         {
         public:
@@ -127,6 +128,8 @@ namespace connectivity
             static sal_Int32        mapAdoType2Object(ObjectTypeEnum objType);
             static sal_Int32        mapAdoRights2Sdbc(RightsEnum eRights);
             static sal_Int32        mapRights2Ado(sal_Int32 nRights);
+
+            static WpADOField       getField(ADORecordset* _pRecordSet,sal_Int32 _nColumnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
 
 
@@ -140,17 +143,6 @@ namespace connectivity
             aVar = aProp.GetValue();                                \
         else                                                        \
             ADOS::ThrowException(*m_pADOConnection,*this);
-
-
-#define ADO_GETFIELD(Name)                          \
-    ADOFields* pFields  = NULL;                     \
-    m_pRecordSet->get_Fields(&pFields);             \
-    WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(pFields);                   \
-    if(Name <= 0 || Name > aFields.GetItemCount())  \
-        ::dbtools::throwInvalidIndexException(*this); \
-    WpADOField aField(aFields.GetItem(Name-1));     \
-    if(!aField.IsValid())                           \
-        ::dbtools::throwInvalidIndexException(*this);
 
 
 #endif //_CONNECTIVITY_ADO_ADOIMP_HXX_

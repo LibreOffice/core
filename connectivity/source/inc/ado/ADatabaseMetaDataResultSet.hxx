@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:10:29 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ namespace connectivity
 
             inline sal_Int32 mapColumn (sal_Int32   column);
             void checkRecordSet() throw(::com::sun::star::sdbc::SQLException);
+            OLEVariant getValue(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         protected:
 

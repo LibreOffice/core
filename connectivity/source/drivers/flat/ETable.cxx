@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-17 12:37:19 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,10 @@ void OFlatTable::fillColumns()
             bRead = m_pFileStream->ReadLine(aHeaderLine);
         }
     }
+
+    m_aTypes.clear();
+    m_aPrecisions.clear();
+    m_aScales.clear();
 
     // read first row
     OFlatString aFirstLine;
@@ -340,6 +344,9 @@ void OFlatTable::fillColumns()
                                                 getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
         Reference< XPropertySet> xCol = pColumn;
         m_aColumns->push_back(xCol);
+        m_aTypes.push_back(eType);
+        m_aPrecisions.push_back(nPrecision);
+        m_aScales.push_back(nScale);
     }
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 }
@@ -365,11 +372,8 @@ OFlatTable::OFlatTable(OFlatConnection* _pConnection,
 {
 
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-#if SUPD > 612
     LanguageType eLanguage = ConvertIsoStringToLanguage(comphelper::getString(aValue),'-');
-#else
-    LanguageType eLanguage = ConvertIsoStringToLanguage(comphelper::getString(aValue),'_');
-#endif
+
     String sLanguage, sCountry;
     ConvertLanguageToIsoNames(eLanguage, sLanguage, sCountry);
     ::com::sun::star::lang::Locale aAppLocale(sLanguage,sCountry,rtl::OUString());
@@ -436,11 +440,7 @@ String OFlatTable::getEntry()
         if ((sName == m_Name) && (sExt == sNeededExt))
         {
             Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
-#if SUPD>611
             aURL = xContentAccess->queryContentIdentifierString();
-#else
-            aURL = xContentAccess->queryContentIdentfierString();
-#endif
             break;
         }
     }
@@ -537,93 +537,103 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 //------------------------------------------------------------------
 sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
 {
-    OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
     (*_rRow)[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return TRUE;
 
+    OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
     sal_Int32 nByteOffset = 1;
     // Felder:
     OSQLColumns::const_iterator aIter = _rCols.begin();
     for (sal_Int32 i = 1; aIter != _rCols.end();++aIter, i++)
     {
-        Reference< XPropertySet> xColumn = *aIter;
-
-        // Laengen je nach Datentyp:
-        // nyi: eine zentrale Funktion, die die Laenge liefert!
-        sal_Int32 nLen;
-        xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nLen;
-        sal_Int32 nType = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
         ByteString aStr(m_aCurrentLine.GetToken(i-1,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter()));
 
         if (aStr.Len() == 0)
             (*_rRow)[i].setNull();
-        else switch(nType)
+        else
         {
-            case DataType::TIMESTAMP:
-            case DataType::DATE:
-            case DataType::TIME:
+            // Laengen je nach Datentyp:
+            sal_Int32   nLen,
+                        nType;
+            if(bIsTable)
             {
-                double nRes = 0.0;
-                try
-                {
-                    nRes = m_xNumberFormatter->convertStringToNumber(::com::sun::star::util::NumberFormat::ALL,String(aStr, pConnection->getTextEncoding()));
-                    Reference<XPropertySet> xProp(m_xNumberFormatter->getNumberFormatsSupplier()->getNumberFormatSettings(),UNO_QUERY);
-                    com::sun::star::util::Date aDate;
-                    xProp->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= aDate;
-
-                    switch(nType)
-                    {
-                        case DataType::DATE:
-                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
-                            break;
-                        case DataType::TIMESTAMP:
-                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
-                            break;
-                        default:
-                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
-                    }
-                }
-                catch(Exception&)
-                {
-                    (*_rRow)[i].setNull();
-                }
-            }   break;
-            case DataType::DOUBLE:
-            case DataType::INTEGER:
-            {
-                char cDecimalDelimiter = pConnection->getDecimalDelimiter();
-                char cThousandDelimiter = pConnection->getThousandDelimiter();
-                ByteString aStrConverted;
-
-                OSL_ENSURE(cDecimalDelimiter && nType != DataType::INTEGER ||
-                           !cDecimalDelimiter && nType == DataType::INTEGER,
-                           "FalscherTyp");
-
-                // In Standard-Notation (DezimalPUNKT ohne Tausender-Komma) umwandeln:
-                for (xub_StrLen j = 0; j < aStr.Len(); j++)
-                {
-                    if (cDecimalDelimiter && aStr.GetChar(j) == cDecimalDelimiter)
-                        aStrConverted += '.';
-                    else if (cThousandDelimiter && aStr.GetChar(j) == cThousandDelimiter)
-                    {
-                        // weglassen
-                    }
-                    else
-                        aStrConverted += aStr.GetChar(j) ;
-                }
-                double nVal = toDouble(aStrConverted,pConnection->getTextEncoding());
-                (*_rRow)[i] = nVal;
-            } break;
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-            default:
-            {
-                // Wert als String in Variable der Row uebernehmen
-                (*_rRow)[i] = String(aStr, pConnection->getTextEncoding());
+                nLen    = m_aPrecisions[i-1];
+                nType   = m_aTypes[i-1];
             }
-            break;
+            else
+            {
+                Reference< XPropertySet> xColumn = *aIter;
+                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))  >>= nLen;
+                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))       >>= nType;
+            }
+            switch(nType)
+            {
+                case DataType::TIMESTAMP:
+                case DataType::DATE:
+                case DataType::TIME:
+                {
+                    double nRes = 0.0;
+                    try
+                    {
+                        nRes = m_xNumberFormatter->convertStringToNumber(::com::sun::star::util::NumberFormat::ALL,String(aStr, pConnection->getTextEncoding()));
+                        Reference<XPropertySet> xProp(m_xNumberFormatter->getNumberFormatsSupplier()->getNumberFormatSettings(),UNO_QUERY);
+                        com::sun::star::util::Date aDate;
+                        xProp->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= aDate;
+
+                        switch(nType)
+                        {
+                            case DataType::DATE:
+                                (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
+                                break;
+                            case DataType::TIMESTAMP:
+                                (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
+                                break;
+                            default:
+                                (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
+                        }
+                    }
+                    catch(Exception&)
+                    {
+                        (*_rRow)[i].setNull();
+                    }
+                }   break;
+                case DataType::DOUBLE:
+                case DataType::INTEGER:
+                {
+                    char cDecimalDelimiter = pConnection->getDecimalDelimiter();
+                    char cThousandDelimiter = pConnection->getThousandDelimiter();
+                    ByteString aStrConverted;
+
+                    OSL_ENSURE(cDecimalDelimiter && nType != DataType::INTEGER ||
+                               !cDecimalDelimiter && nType == DataType::INTEGER,
+                               "FalscherTyp");
+
+                    // In Standard-Notation (DezimalPUNKT ohne Tausender-Komma) umwandeln:
+                    for (xub_StrLen j = 0; j < aStr.Len(); j++)
+                    {
+                        if (cDecimalDelimiter && aStr.GetChar(j) == cDecimalDelimiter)
+                            aStrConverted += '.';
+                        else if (cThousandDelimiter && aStr.GetChar(j) == cThousandDelimiter)
+                        {
+                            // weglassen
+                        }
+                        else
+                            aStrConverted += aStr.GetChar(j) ;
+                    }
+                    double nVal = toDouble(aStrConverted,pConnection->getTextEncoding());
+                    (*_rRow)[i] = nVal;
+                } break;
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
+                default:
+                {
+                    // Wert als String in Variable der Row uebernehmen
+                    (*_rRow)[i] = String(aStr, pConnection->getTextEncoding());
+                }
+                break;
+            }
         }
     }
     return sal_True;
@@ -664,19 +674,8 @@ void OFlatTable::AllocBuffer()
 //------------------------------------------------------------------
 double toDouble(const ByteString& rString,rtl_TextEncoding _nTextEncoding)
 {
-    static International aInter(LANGUAGE_ENGLISH);
-    static int nErrno=0;
-    BOOL bInitialized = sal_False;
-    if (!bInitialized)
-    {   // ensure that the two members we're interested in are really set
-        // (if the system doesn't know the locale en_US aIntl would be initialized with the
-        // system language which may be anything - which we don't want ...)
-        // 74342 - 21.03.00 - FS
-        aInter.SetNumThousandSep(',');
-        aInter.SetNumDecimalSep('.');
-        bInitialized = TRUE;
-    }
-    return SolarMath::StringToDouble(UniString(rString,_nTextEncoding).GetBuffer(),aInter,nErrno);
+    int nErrno;
+    return SolarMath::StringToDouble(UniString(rString,_nTextEncoding).GetBuffer(),',','.',nErrno);
 }
 
 //------------------------------------------------------------------
@@ -684,5 +683,7 @@ BOOL OFlatTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refere
 {
     return sal_True;
 }
+// -----------------------------------------------------------------------------
+
 
 

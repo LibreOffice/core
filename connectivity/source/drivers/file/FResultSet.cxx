@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:17:52 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include "connectivity/dbconversion.hxx"
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
 #endif
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
@@ -286,6 +289,19 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
     return i;
 }
 // -----------------------------------------------------------------------------
+const ORowSetValue& OResultSet::getValue(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
+
+    checkIndex(columnIndex );
+
+    columnIndex = mapColumn(columnIndex);
+    m_bWasNull = (*m_aRow)[columnIndex].isNull();
+    return (*m_aRow)[columnIndex];
+}
+// -----------------------------------------------------------------------------
 void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)
 {
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
@@ -297,10 +313,6 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinarySt
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 // -------------------------------------------------------------------------
@@ -309,118 +321,49 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacte
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    return (*m_aRow)[columnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    return (*m_aRow)[columnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    // it could happen that values are updated as string and then called for as getBytes
-    sal_Int32 nType = (*m_aRow)[columnIndex].getTypeKind();
-    if(nType == DataType::VARCHAR)
-    {
-        ::rtl::OUString aStr = (*m_aRow)[columnIndex];
-        return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),sizeof(sal_Unicode)*aStr.getLength());
-    }
-
-    return (*m_aRow)[columnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 
 ::com::sun::star::util::Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    m_bWasNull = (*m_aRow)[columnIndex].isNull();
-
-    return (*m_aRow)[columnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 
 double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    return (*m_aRow)[columnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 
 float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    return (*m_aRow)[columnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    return (*m_aRow)[columnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 
@@ -442,13 +385,6 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 
 sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    checkIndex(columnIndex );
-
-
-    columnIndex = mapColumn(columnIndex);
     return sal_Int64();
 }
 // -------------------------------------------------------------------------
@@ -466,13 +402,6 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 
@@ -480,109 +409,45 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw
 
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 // -------------------------------------------------------------------------
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 // -------------------------------------------------------------------------
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 // -------------------------------------------------------------------------
 
 Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    return Any();
+    return getValue(columnIndex).makeAny();
 }
 // -------------------------------------------------------------------------
 
 sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    return (*m_aRow)[columnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-
-
 ::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    return (*m_aRow)[columnIndex];
+    return getValue(columnIndex);
 }
-
 // -------------------------------------------------------------------------
-
-
 ::com::sun::star::util::Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-
-    columnIndex = mapColumn(columnIndex);
-    return (*m_aRow)[columnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-
-
 ::com::sun::star::util::DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    return (*m_aRow)[columnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 
@@ -648,48 +513,28 @@ void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 
 sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
     return SkipDeleted(OFileTable::FILE_FIRST,1,sal_True);
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
     // here I know definitely that I stand on the last record
     return SkipDeleted(OFileTable::FILE_LAST,1,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
     return SkipDeleted(OFileTable::FILE_ABSOLUTE,row,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
     return SkipDeleted(OFileTable::FILE_RELATIVE,row,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
     return SkipDeleted(OFileTable::FILE_PRIOR,0,sal_True);
 }
 // -------------------------------------------------------------------------
@@ -776,11 +621,7 @@ sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
-    if(!m_pTable)
-        return sal_False;
-
-    return SkipDeleted(OFileTable::FILE_NEXT,1,sal_True);
+    return m_pTable ? SkipDeleted(OFileTable::FILE_NEXT,1,sal_True) : sal_False;
 }
 // -------------------------------------------------------------------------
 
@@ -796,9 +637,6 @@ sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 
 void SAL_CALL OResultSet::cancel(  ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::clearWarnings(  ) throw(SQLException, RuntimeException)
@@ -935,6 +773,17 @@ void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
 {
 }
 // -------------------------------------------------------------------------
+void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
+    checkIndex(columnIndex );
+    columnIndex = mapColumn(columnIndex);
+    (*m_aInsertRow)[columnIndex].setBound(sal_True);
+    (*m_aInsertRow)[columnIndex] = x;
+}
+// -----------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -953,168 +802,66 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
 
 void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
 {
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    throw RuntimeException();
+    ::dbtools::throwFunctionSequenceException(*this);
 }
 // -----------------------------------------------------------------------
 void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
 
@@ -1126,63 +873,33 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
     if(!x.is())
         ::dbtools::throwFunctionSequenceException(*this);
 
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
     Sequence<sal_Int8> aSeq;
     x->readSomeBytes(aSeq,length);
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = aSeq;
+    updateValue(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    if(!x.is())
-        ::dbtools::throwFunctionSequenceException(*this);
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    Sequence<sal_Int8> aSeq;
-    x->readSomeBytes(aSeq,length);
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = aSeq;
+    updateBinaryStream(columnIndex,x,length);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = x;
+    if (!::dbtools::implUpdateObject(this, columnIndex, x))
+        throw SQLException();
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    checkIndex(columnIndex );
-
-    columnIndex = mapColumn(columnIndex);
-    OSL_ENSURE(0,"OResultSet::updateNumericObject: NYI");
+    if (!::dbtools::implUpdateObject(this, columnIndex, x))
+        throw SQLException();
 }
 // -------------------------------------------------------------------------
 IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
@@ -1544,6 +1261,9 @@ Error:
 //------------------------------------------------------------------
 BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
     OSL_ENSURE(eCursorPosition != OFileTable::FILE_BOOKMARK,"OResultSet::SkipDeleted can't be called for BOOKMARK");
 
@@ -2591,8 +2311,7 @@ UINT32 OResultSet::AddParameter(OSQLParseNode * pParameter, const Reference<XPro
         nNullable = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));;
     }
 
-    Reference<XPropertySet> xParaColumn;
-    connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(aParameterName
+    Reference<XPropertySet> xParaColumn = new connectivity::sdbcx::OColumn(aParameterName
                                                     ,::rtl::OUString()
                                                     ,::rtl::OUString()
                                                     ,nNullable
@@ -2603,7 +2322,6 @@ UINT32 OResultSet::AddParameter(OSQLParseNode * pParameter, const Reference<XPro
                                                     ,sal_False
                                                     ,sal_False
                                                     ,m_aSQLIterator.isCaseSensitive());
-    xParaColumn = pRet;
     m_xParamColumns->push_back(xParaColumn);
     return nParameter;
 }

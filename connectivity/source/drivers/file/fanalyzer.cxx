@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-27 10:02:11 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,65 +109,66 @@ void OSQLAnalyzer::setIndexes(const Reference< XNameAccess>& _xIndexes)
 //------------------------------------------------------------------
 void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 {
-    if (!pSQLParseNode)
-        return;
-
-    // Parse Tree analysieren (je nach Statement-Typ)
-    // und Zeiger auf WHERE-Klausel setzen:
-    OSQLParseNode* pWhereClause     = NULL;
-    OSQLParseNode* pOrderbyClause   = NULL;
-
-    if (SQL_ISRULE(pSQLParseNode,select_statement))
+    if (pSQLParseNode)
     {
-        OSL_ENSURE(pSQLParseNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
 
-        OSQLParseNode * pTableExp = pSQLParseNode->getChild(3);
-        OSL_ENSURE(pTableExp != NULL,"Fehler im Parse Tree");
-        OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp)," Fehler im Parse Tree");
-        OSL_ENSURE(pTableExp->count() == 5,"Fehler im Parse Tree");
+        // Parse Tree analysieren (je nach Statement-Typ)
+        // und Zeiger auf WHERE-Klausel setzen:
+        OSQLParseNode* pWhereClause     = NULL;
+        OSQLParseNode* pOrderbyClause   = NULL;
 
-        pWhereClause    = pTableExp->getChild(1);
-        pOrderbyClause  = pTableExp->getChild(4);
-    }
-    else if (SQL_ISRULE(pSQLParseNode,update_statement_searched))
-    {
-        OSL_ENSURE(pSQLParseNode->count() == 5,"OFILECursor: Fehler im Parse Tree");
-        pWhereClause = pSQLParseNode->getChild(4);
-    }
-    else if (SQL_ISRULE(pSQLParseNode,update_statement_positioned))
-    {
-        // nyi
-        DBG_ERROR("OPredicateCompiler: update positioned nyi");
-    }
-    else if (SQL_ISRULE(pSQLParseNode,delete_statement_searched))
-    {
-        OSL_ENSURE(pSQLParseNode->count() == 4,"Fehler im Parse Tree");
-        pWhereClause = pSQLParseNode->getChild(3);
-    }
-    else if (SQL_ISRULE(pSQLParseNode,delete_statement_positioned))
-    {
-        // nyi
-        DBG_ERROR("OPredicateCompiler: positioned nyi");
-    }
-    else
-            // Anderes Statement. Keine Selektionskriterien.
-        return;
+        if (SQL_ISRULE(pSQLParseNode,select_statement))
+        {
+            OSL_ENSURE(pSQLParseNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
 
-    if (SQL_ISRULE(pWhereClause,where_clause))
-    {
-        // Wenn es aber eine where_clause ist, dann darf sie nicht leer sein:
-        OSL_ENSURE(pWhereClause->count() == 2,"OFILECursor: Fehler im Parse Tree");
+            OSQLParseNode * pTableExp = pSQLParseNode->getChild(3);
+            OSL_ENSURE(pTableExp != NULL,"Fehler im Parse Tree");
+            OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp)," Fehler im Parse Tree");
+            OSL_ENSURE(pTableExp->count() == 5,"Fehler im Parse Tree");
 
-        OSQLParseNode * pComparisonPredicate = pWhereClause->getChild(1);
-        OSL_ENSURE(pComparisonPredicate != NULL,"OFILECursor: Fehler im Parse Tree");
+            pWhereClause    = pTableExp->getChild(1);
+            pOrderbyClause  = pTableExp->getChild(4);
+        }
+        else if (SQL_ISRULE(pSQLParseNode,update_statement_searched))
+        {
+            OSL_ENSURE(pSQLParseNode->count() == 5,"OFILECursor: Fehler im Parse Tree");
+            pWhereClause = pSQLParseNode->getChild(4);
+        }
+        else if (SQL_ISRULE(pSQLParseNode,update_statement_positioned))
+        {
+            // nyi
+            DBG_ERROR("OPredicateCompiler: update positioned nyi");
+        }
+        else if (SQL_ISRULE(pSQLParseNode,delete_statement_searched))
+        {
+            OSL_ENSURE(pSQLParseNode->count() == 4,"Fehler im Parse Tree");
+            pWhereClause = pSQLParseNode->getChild(3);
+        }
+        else if (SQL_ISRULE(pSQLParseNode,delete_statement_positioned))
+        {
+            // nyi
+            DBG_ERROR("OPredicateCompiler: positioned nyi");
+        }
+        else
+                // Anderes Statement. Keine Selektionskriterien.
+            return;
 
-        m_aCompiler.execute(pComparisonPredicate);
-    }
-    else
-    {
-        // Die Where Clause ist meistens optional, d. h. es koennte sich auch
-        // um "optional_where_clause" handeln.
-        OSL_ENSURE(SQL_ISRULE(pWhereClause,opt_where_clause),"OFILECursor: Fehler im Parse Tree");
+        if (SQL_ISRULE(pWhereClause,where_clause))
+        {
+            // Wenn es aber eine where_clause ist, dann darf sie nicht leer sein:
+            OSL_ENSURE(pWhereClause->count() == 2,"OFILECursor: Fehler im Parse Tree");
+
+            OSQLParseNode * pComparisonPredicate = pWhereClause->getChild(1);
+            OSL_ENSURE(pComparisonPredicate != NULL,"OFILECursor: Fehler im Parse Tree");
+
+            m_aCompiler.execute(pComparisonPredicate);
+        }
+        else
+        {
+            // Die Where Clause ist meistens optional, d. h. es koennte sich auch
+            // um "optional_where_clause" handeln.
+            OSL_ENSURE(SQL_ISRULE(pWhereClause,opt_where_clause),"OFILECursor: Fehler im Parse Tree");
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGEOBJECT_HPP_
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #endif
-
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
+#endif
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif
@@ -346,6 +348,19 @@ sal_Int32 ADOS::mapRights2Ado(sal_Int32 nRights)
         eRights |= adRightDrop;
 
     return eRights;
+}
+// -----------------------------------------------------------------------------
+WpADOField ADOS::getField(ADORecordset* _pRecordSet,sal_Int32 _nColumnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+{
+    ADOFields* pFields  = NULL;
+    _pRecordSet->get_Fields(&pFields);
+    WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(pFields);                   \
+    if(_nColumnIndex <= 0 || _nColumnIndex > aFields.GetItemCount())
+        ::dbtools::throwInvalidIndexException(NULL);
+    WpADOField aField(aFields.GetItem(_nColumnIndex-1));
+    if(!aField.IsValid())
+        ::dbtools::throwInvalidIndexException(NULL);
+    return aField;
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:29:22 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,15 @@ namespace connectivity
 
         class OFlatTable :  public OFlatTable_BASE
         {
-            sal_Int32 m_nRowPos;
-            sal_Int32 m_nMaxRowCount; // will be set if stream is once eof
             // maps a row postion to a file position
             ::std::map<sal_Int32,sal_Int32> m_aRowToFilePos;
-            OFlatString m_aCurrentLine;
+            ::std::vector<sal_Int32>        m_aTypes;       // holds all type for columns just to avoid to ask the propertyset
+            ::std::vector<sal_Int32>        m_aPrecisions;  // same as aboth
+            ::std::vector<sal_Int32>        m_aScales;
+            OFlatString                     m_aCurrentLine;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > m_xNumberFormatter;
+            sal_Int32                       m_nRowPos;
+            sal_Int32                       m_nMaxRowCount; // will be set if stream is once eof
         public:
 
         private:

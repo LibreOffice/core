@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDriver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:11 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,13 +148,12 @@ Sequence< ::rtl::OUString > SAL_CALL OFileDriver::getSupportedServiceNames(  ) t
 Reference< XConnection > SAL_CALL OFileDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODriver_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    checkDisposed(ODriver_BASE::rBHelper.bDisposed);
 
     OConnection* pCon = new OConnection(this);
+    Reference< XConnection > xCon = pCon;
     pCon->construct(url,info);
-        Reference< XConnection > xCon = pCon;
-        m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     return xCon;
 }
@@ -162,16 +161,12 @@ Reference< XConnection > SAL_CALL OFileDriver::connect( const ::rtl::OUString& u
 sal_Bool SAL_CALL OFileDriver::acceptsURL( const ::rtl::OUString& url )
                 throw(SQLException, RuntimeException)
 {
-    if(!url.compareTo(::rtl::OUString::createFromAscii("sdbc:file:"),10))
-    {
-        return sal_True;
-    }
-    return sal_False;
+    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:file:"),10));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-        return Sequence< DriverPropertyInfo >();
+    return Sequence< DriverPropertyInfo >();
 }
 // --------------------------------------------------------------------------------
 sal_Int32 SAL_CALL OFileDriver::getMajorVersion(  ) throw(RuntimeException)
@@ -189,8 +184,7 @@ sal_Int32 SAL_CALL OFileDriver::getMinorVersion(  ) throw(RuntimeException)
 Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection( const Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODriver_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    checkDisposed(ODriver_BASE::rBHelper.bDisposed);
 
     Reference< XTablesSupplier > xTab = NULL;
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
