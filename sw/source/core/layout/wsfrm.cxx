@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:31:25 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,6 +1039,13 @@ void SwCntntFrm::Cut()
             if( IsInFtn() )
                 pFrm->Prepare( PREP_QUOVADIS, 0, FALSE );
         }
+        // --> OD 2004-07-15 #i26250# - invalidate printing area of previous
+        // table frame.
+        else if ( pFrm && pFrm->IsTabFrm() )
+        {
+            pFrm->InvalidatePrt();
+        }
+        // <--
     }
 
     SwFrm *pNxt = FindNextCnt();
@@ -2667,20 +2674,16 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
     // declare and init variables <bVert>, <bRev> and <fnRect>
     SWRECTFN( this )
 
-    // handle special case as short cut:
-    // if method called for a body frame belonging to the flow text body
-    //  and the first lower of the body isn't a column frame (body contains real content)
-    //  and its fixed size (in vertical layout its height; in horizontal layout its
-    //      width) doesn't changed
-    //  and the body frame doesn't belong to a locked section,
-    // then only invalidate lowers that are influence by the change.
-    // "Only" the variable size (in vertical layout its width; in horizontal
-    // layout its height) of body frame has changed.
-    if ( IsBodyFrm() && IsInDocBody() &&
-         !Lower()->IsColumnFrm() &&
-         !( bVert ? bHeightChgd : bWidthChgd ) &&
-         ( !IsInSct() || !FindSctFrm()->IsColLocked() )
-       )
+    // This shortcut basically tries to handle only lower frames that
+    // are affected by the size change. Otherwise much more lower frames
+    // are invalidated.
+    if ( !( bVert ? bHeightChgd : bWidthChgd ) &&
+         ! Lower()->IsColumnFrm() &&
+           ( ( IsBodyFrm() && IsInDocBody() && ( !IsInSct() || !FindSctFrm()->IsColLocked() ) ) ||
+                // --> FME 2004-07-21 #i10826# Section frames without columns should not
+                // invalidate all lowers!
+               IsSctFrm() ) )
+               // <--
     {
         // Determine page frame the body frame belongs to.
         SwPageFrm *pPage = FindPageFrm();
@@ -3046,7 +3049,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         }
 
         if ( pColAttr->IsOrtho() && pColAttr->GetNumCols() > 1 )
-            AdjustColumns( pColAttr, sal_False, sal_True );
+            AdjustColumns( pColAttr, sal_False );
     }
 }
 
@@ -3425,37 +3428,21 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             //Bei der Gelegenheit stellen wir auch gleich mal die
             //Breiten und Hoehen der Spalten ein (so sie denn falsch sind).
             SwLayoutFrm *pCol = (SwLayoutFrm*)Lower();
-            SwTwips nAvail = (Prt().*fnRect->fnGetWidth)();
-            USHORT nPrtWidth = (USHORT)nAvail;
+
+            // --> FME 2004-07-19 #i27399#
+            // Simply setting the column width based on the values returned by
+            // CalcColWidth does not work for automatic column width.
+            AdjustColumns( &rCol, sal_False );
+            // <--
+
             for ( USHORT i = 0; i < nNumCols; ++i )
             {
-                SwTwips nWidth = rCol.CalcColWidth( i, nPrtWidth );
-                if ( i == (nNumCols - 1) ) //Dem Letzten geben wir wie
-                    nWidth = nAvail;       //immer den Rest.
-
-                SwTwips nWidthDiff = nWidth - (pCol->Frm().*fnRect->fnGetWidth)();
-                if( nWidthDiff )
-                {
-                    (pCol->Frm().*fnRect->fnAddRight)( nWidthDiff );
-                    pCol->_InvalidatePrt();
-                    if ( pCol->GetNext() )
-                        pCol->GetNext()->_InvalidatePos();
-                }
-
-                SwTwips nHeightDiff = (Prt().*fnRect->fnGetHeight)() -
-                                      (pCol->Frm().*fnRect->fnGetHeight)();
-                if( nHeightDiff )
-                {
-                    (pCol->Frm().*fnRect->fnAddBottom)( nHeightDiff );
-                    pCol->_InvalidatePrt();
-                }
                 pCol->Calc();
                 // ColumnFrms besitzen jetzt einen BodyFrm, der auch kalkuliert werden will
                 pCol->Lower()->Calc();
                 if( pCol->Lower()->GetNext() )
                     pCol->Lower()->GetNext()->Calc();  // SwFtnCont
                 pCol = (SwLayoutFrm*)pCol->GetNext();
-                nAvail -= nWidth;
             }
 
             // OD 14.03.2003 #i11760# - adjust method call <CalcCntnt(..)>:
