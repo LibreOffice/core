@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:41:30 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,14 @@
 //
 
 /*****************************************************************************/
-LngParser::LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat )
+LngParser::LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat , bool bQuiet_in )
 /*****************************************************************************/
                 : sSource( rLngFile ),
                 nError( LNG_OK ),
                 pLines( NULL ),
                 bDBIsUTF8( bUTF8 ),
-                bULF( bULFFormat )
+                bULF( bULFFormat ),
+                bQuiet( bQuiet_in )
 {
     pLines = new LngLineList( 100, 100 );
     DirEntry aEntry( String( sSource, RTL_TEXTENCODING_ASCII_US ));
