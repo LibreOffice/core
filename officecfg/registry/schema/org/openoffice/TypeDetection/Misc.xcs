@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: Misc.xcs,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:32:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema oor:name="Misc" oor:package="org.openoffice.TypeDetection" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <info>
+        <author>AS</author>
+        <desc xml:lang="en-US">Contains common content types, filters, deep detection services, as well as the frame loader and the content handler for Office.</desc>
+    </info>
+    <templates>
+        <group oor:name="FrameLoader">
+            <info><desc xml:lang="en-US">Can load a type as visible component into a com.sun.star.frame.Frame.</desc></info>
+            <prop oor:name="Types" oor:type="oor:string-list">
+                <info><desc xml:lang="en-US">List of internal type names, which can be interpreted by this loader implementation.</desc></info>
+            </prop>
+		</group>
+        <group oor:name="ContentHandler">
+            <info><desc xml:lang="en-US">Can load a type as non visible component, e.g. sounds.</desc></info>
+            <prop oor:name="Types" oor:type="oor:string-list">
+                <info><desc xml:lang="en-US">List of internal type names, which can be interpreted by this handler implementation.</desc></info>
+            </prop>
+        </group>
+	</templates>
+	<component>
+        <set oor:name="FrameLoaders" oor:node-type="FrameLoader">
+            <info><desc xml:lang="en-US">Lists the registered frame loader services.</desc></info>
+        </set>
+        <set oor:name="ContentHandlers" oor:node-type="ContentHandler">
+            <info><desc xml:lang="en-US">Lists the registered content handler services.</desc></info>
+        </set>
+		<group oor:name="Defaults">
+            <info><desc xml:lang="en-US">Contains default objects that are used if no specialized service was registered or values which specify special behaviour of type/filter environment.</desc></info>
+			<prop oor:name="DefaultFrameLoader" oor:type="xs:string">
+                <info><desc xml:lang="en-US">Specify a generic frame loader, which can use filter services for loading documents into frames.</desc></info>
+				<value>com.sun.star.comp.office.FrameLoader</value>
+			</prop>
+            <prop oor:name="ShowAlienFilterWarning" oor:type="xs:boolean">
+                <info><author>OS</author><desc xml:lang="en-US">Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc></info>
+                <value>true</value>
+            </prop>
+		</group>
+	</component>
+</oor:component-schema>
