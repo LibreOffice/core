@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.110 $
+#   $Revision: 1.111 $
 #
-#   last change: $Author: vg $ $Date: 2004-04-22 16:56:16 $
+#   last change: $Author: vg $ $Date: 2004-05-07 09:05:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.110 $ ';
+    $id_str = ' $Revision: 1.111 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -103,7 +103,7 @@
         } else {
             print_error("Can't determine VCSID. Please use setsolar.", 5);
         };
-        $log = Logging->new();
+        $log = Logging->new() if (defined $ENV{CWS_WORK_STAMP});
     };
     $modules_number++;
     $perl = "";
@@ -797,7 +797,7 @@ sub GetDirectoryList {
 };
 
 sub finish_logging {
-    return if (!defined $ENV{CWS_WORK_STAMP} || $show);
+    return if ($show || (!defined $log));
     my $message = shift;
     $message = 'SUCCESS.'  if (!$message);
     $message .= " Built $modules_number modules.";
@@ -841,7 +841,7 @@ sub usage {
 };
 
 sub init_logging {
-    return if (!defined $ENV{CWS_WORK_STAMP} || $show);
+    return if ($show || (!defined $log));
     my $parameter_list = '';
     foreach (@ARGV) {$parameter_list .= "$_\;"};
     $parameter_list = $` if ($parameter_list =~ /;$/o);
