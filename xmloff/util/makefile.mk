@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: aw $ $Date: 2000-11-24 17:51:07 $
+#   last change: $Author: ab $ $Date: 2000-11-28 11:29:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ LIB1TARGET= $(SLB)$/xo.lib
 LIB1FILES=	\
     $(SLB)$/core.lib \
     $(SLB)$/meta.lib \
+    $(SLB)$/script.lib \
     $(SLB)$/style.lib \
     $(SLB)$/text.lib \
     $(SLB)$/draw.lib \
