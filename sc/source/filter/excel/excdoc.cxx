@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:42:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,10 @@
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
 #endif
-
-#ifndef SC_XCLEXPPIVOTTABLES_HXX
-#include "XclExpPivotTables.hxx"
+#ifndef SC_XEPIVOT_HXX
+#include "xepivot.hxx"
 #endif
+
 #ifndef SC_XCLEXPCHANGETRACK_HXX
 #include "XclExpChangeTrack.hxx"
 #endif
@@ -363,19 +363,8 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         Add( new XclExpRefRecord( rRoot.GetPalette() ) );
 
         // Pivot Cache
-        ScDPCollection*     pDPColl = rDoc.GetDPCollection();
-        if( pDPColl )
-        {
-            XclPivotCacheList* pPCList = new XclPivotCacheList( &rR, *pDPColl );
-            rR.pPivotCacheList = pPCList;
-
-            for( const XclPivotCache* pCache = pPCList->First(); pCache; pCache = pPCList->Next() )
-            {
-                Add( new XclSxIdStm( *pCache ) );
-                Add( new XclSxVs( *pCache ) );
-                Add( new XclDConRef( pCache->GetRange(), pCache->GetWorkbook() ) );
-            }
-        }
+        rRoot.GetPivotTableManager().CreatePivotTables();
+        Add( new XclExpPivotCacheRefRecord( rRoot ) );
 
         // Change tracking
         if( rDoc.GetChangeTrack() )
@@ -937,23 +926,7 @@ void ExcTable::FillAsTable( void )
         Add( pNoteList );
 
         // pivot tables
-        ScDPCollection*     pDPColl = rDoc.GetDPCollection();
-        XclPivotCacheList*  pPCList = rR.pPivotCacheList;
-        if( pDPColl && pPCList )
-        {
-            for( USHORT nObjCnt = 0; nObjCnt < pDPColl->GetCount(); nObjCnt++ )
-            {
-                ScDPObject*             pDPObject   = (*pDPColl)[ nObjCnt ];
-                const XclPivotCache*    pCache      = pPCList->Get( nObjCnt );
-
-                if( pDPObject && pCache )
-                {
-                    const ScRange& rRange = pDPObject->GetOutRange();
-                    if( rRange.aStart.Tab() == nScTab )
-                        Add( new XclPivotTableRecs( *pCache, nObjCnt ) );
-                }
-            }
-        }
+        Add( new XclExpPivotTablesRefRecord( rRoot ) );
 
         // WINDOW2
         Add( new ExcWindow28( rRoot, nScTab ) );
@@ -1147,8 +1120,6 @@ void ExcDocument::Write( SvStream& rSvStrm )
         }
 
     }
-    if( mpRD->pPivotCacheList )
-        mpRD->pPivotCacheList->Write();
     if( pExpChangeTrack )
         pExpChangeTrack->Write();
 }
