@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:54:36 $
+ *  last change: $Author: gt $ $Date: 2001-03-14 14:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5425,6 +5425,8 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 {
                     ADD("NAME [");
                 }
+                __AddDec( t, nINT16 );
+                ADD(", ");
                 __AddDec( t, nUINT16 );
                 t += "]";
             }
