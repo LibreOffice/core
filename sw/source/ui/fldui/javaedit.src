@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:47:13 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,7 @@ ModalDialog DLG_JAVAEDIT
     Text[ finnish ] = "Muokkaa komentosarjaa";
 };
  // ********************************************************************** EOF
+
 
 
 
