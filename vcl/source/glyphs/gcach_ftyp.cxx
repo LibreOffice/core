@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.80 $
- *  last change: $Author: hdu $ $Date: 2002-10-29 13:13:28 $
+ *  $Revision: 1.81 $
+ *  last change: $Author: hdu $ $Date: 2002-11-12 11:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,8 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, ULONG* pLength ) co
 // =======================================================================
 
 FreetypeManager::FreetypeManager()
-:   mnNextFontId( 0x10000 )
+:   mnNextFontId( 0x1000 ),
+    mnMaxFontId( 0 )
 {
     FT_Error rcFT = FT_Init_FreeType( &aLibFT );
 }
@@ -308,6 +309,8 @@ void FreetypeManager::AddFontFile( const rtl::OString& rNormalizedName,
 
     FtFontInfo* pFI = new FtFontInfo( *pData, rNormalizedName, nFaceNum, nFontId, 0 );
     maFontList[ nFontId ] = pFI;
+    if( mnMaxFontId < nFontId )
+        mnMaxFontId = nFontId;
 }
 
 // -----------------------------------------------------------------------
@@ -424,10 +427,11 @@ long FreetypeManager::FetchFontList( ImplDevFontList* pToAdd ) const
     long nCount = 0;
     for( FontList::const_iterator it(maFontList.begin()); it != maFontList.end(); ++it, ++nCount )
     {
-        ImplFontData* pFontData = new ImplFontData( it->second->GetFontData() );
+        const FtFontInfo& rFFI = *it->second;
+        ImplFontData* pFontData = new ImplFontData( rFFI.GetFontData() );
 
         // boost UI font quality if UI language matches
-        const ::rtl::OString* pCFileName = it->second->GetFontFileName();
+        const ::rtl::OString* pCFileName = rFFI.GetFontFileName();
         int nPos = pCFileName->lastIndexOf( '_' );
         if( nPos == -1 || (*pCFileName)[nPos+1] == '.' )
             pFontData->mnQuality += 5;      // filenames without langinfo => good
@@ -436,6 +440,9 @@ long FreetypeManager::FetchFontList( ImplDevFontList* pToAdd ) const
             if( pLangBoost && !strncasecmp( pLangBoost, &pCFileName->getStr()[nPos+1], 3 ) )
                pFontData->mnQuality += 10;  // filenames with correct langinfo => better
         }
+
+        // boost low font IDs
+        pFontData->mnQuality += mnMaxFontId - rFFI.GetFontId();
 
         pToAdd->Add( pFontData );
     }
