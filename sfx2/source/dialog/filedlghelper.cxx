@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-30 14:12:46 $
+ *  last change: $Author: fs $ $Date: 2001-11-07 15:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,9 +260,6 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
 
     Reference < XFilePicker >   mxFileDlg;
 
-    static ::std::vector< Reference < XFilePicker > >
-                            maDialogQueue;
-
     SfxFilterMatcher       *mpMatcher;
     GraphicFilter          *mpGraphicFilter;
 
@@ -314,9 +311,6 @@ private:
     void                    postExecute( sal_Int16 _nResult );
     sal_Int16               implDoExecute();
 
-    void                    pushBackPicker();
-    void                    popPicker();
-
     void                    correctVirtualDialogType();
 
     void                    setControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId );
@@ -363,15 +357,11 @@ public:
     OUString                getRealFilter() const;
 
     ErrCode                 getGraphic( Graphic& rGraphic ) const;
-
-    static Reference< XFilePicker > getTopMostFilePicker( );
 };
 
 // ------------------------------------------------------------------------
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
-
-::std::vector< Reference < XFilePicker > > FileDialogHelper_Impl::maDialogQueue;
 
 // ------------------------------------------------------------------------
 // XFilePickerListener Methods
@@ -1126,34 +1116,6 @@ void FileDialogHelper_Impl::setDialogHelpId( const sal_Int32 _nHelpId )
 }
 
 // ------------------------------------------------------------------------
-Reference< XFilePicker > FileDialogHelper_Impl::getTopMostFilePicker( )
-{
-    Reference< XFilePicker > xReturn;
-    DBG_ASSERT( !maDialogQueue.empty(), "FileDialogHelper_Impl::getTopMostFilePicker: no active picker!" );
-    if ( !maDialogQueue.empty() )
-        xReturn = *maDialogQueue.begin();
-    return xReturn;
-}
-
-// ------------------------------------------------------------------------
-void FileDialogHelper_Impl::pushBackPicker()
-{
-    DBG_ASSERT( mxFileDlg.is(), "FileDialogHelper_Impl::pushBackPicker: have no picker!" );
-    maDialogQueue.push_back( mxFileDlg );
-}
-
-// ------------------------------------------------------------------------
-void FileDialogHelper_Impl::popPicker()
-{
-    DBG_ASSERT( !maDialogQueue.empty(), "FileDialogHelper_Impl::popPicker: no picker pushed!" );
-    if ( !maDialogQueue.empty() )
-    {
-        DBG_ASSERT( maDialogQueue.begin()->get() == mxFileDlg.get(), "FileDialogHelper_Impl::popPicker: invalid top-most queue element!" );
-        maDialogQueue.pop_back();
-    }
-}
-
-// ------------------------------------------------------------------------
 IMPL_LINK( FileDialogHelper_Impl, InitControls, void*, NOTINTERESTEDIN )
 {
     enablePasswordBox( );
@@ -1169,7 +1131,6 @@ void FileDialogHelper_Impl::preExecute()
     setDefaultValues( );
     enablePasswordBox( );
     updateFilterOptionsBox( );
-    pushBackPicker( );
 
     // allow for dialog implementations which need to be executed before they return valid values for
     // current filter and such
@@ -1179,7 +1140,6 @@ void FileDialogHelper_Impl::preExecute()
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::postExecute( sal_Int16 _nResult )
 {
-    popPicker();
     if ( ExecutableDialogResults::CANCEL != _nResult )
         saveConfig();
 }
@@ -1932,12 +1892,6 @@ void FileDialogHelper::SetControlHelpIds( const sal_Int16* _pControlId, const sa
 void FileDialogHelper::SetDialogHelpId( const sal_Int32 _nHelpId )
 {
     mpImp->setDialogHelpId( _nHelpId );
-}
-
-// ------------------------------------------------------------------------
-Reference< XFilePicker > FileDialogHelper::GetTopMostFilePicker( )
-{
-    return FileDialogHelper_Impl::getTopMostFilePicker();
 }
 
 // ------------------------------------------------------------------------
