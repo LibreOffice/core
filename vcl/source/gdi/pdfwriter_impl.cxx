@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-29 13:11:26 $
+ *  last change: $Author: pl $ $Date: 2002-11-06 15:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3250,7 +3250,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
         long nLineWidth = nLineHeight;
 
         if ( eUnderline == UNDERLINE_BOLDWAVE )
-            nLineWidth *= 2;
+            nLineWidth = 3*nLineWidth/2;
 
         m_aPages.back().appendMappedLength( nLineWidth, aLine );
         aLine.append( " w " );
@@ -3282,7 +3282,8 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
         }
         else
         {
-            nLinePos -= nLineWidth/2;
+            if( eUnderline != UNDERLINE_BOLDWAVE )
+                nLinePos -= nLineWidth/2;
             m_aPages.back().appendWaveLine( nWidth, -nLinePos, nLineHeight, aLine );
         }
 
@@ -3339,6 +3340,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
                     m_pReferenceDevice->ImplInitTextLineSize();
                 nLineHeight = HCONV( pFontEntry->maMetric.mnBUnderlineSize );
                 nLinePos    = HCONV( pFontEntry->maMetric.mnBUnderlineOffset );
+                nLinePos += nLineHeight/2;
             }
         }
         else if ( eUnderline == UNDERLINE_DOUBLE )
