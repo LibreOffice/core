@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-21 17:39:50 $
+ *  last change: $Author: ma $ $Date: 2001-03-26 09:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,8 +434,8 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 105 , 8 ) ;
-        Text = "Län~ge bezogen auf Seitenbreite" ;
-        Text [ ENGLISH ] = "~Length relative to page width" ;
+        Text = "Län~ge" ;
+        Text [ ENGLISH ] = "~Length" ;
         Left = TRUE ;
         Text [ portuguese ] = "~Comprimento" ;
         Text [ english_us ] = "~Length" ;
