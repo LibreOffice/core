@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-03-26 12:58:41 $
+ *  last change: $Author: er $ $Date: 2002-03-28 00:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,9 @@
 
 #define INDEXENTRYSUPPLIER_ALL
 #include <indexentrysupplier.hxx>
-#include <indexentrysupplier_cjk.hxx>
-#include <indexentrysupplier_euro.hxx>
-#include <indexentrysupplier_unicode.hxx>
+#include <indexentrysupplier_asian.hxx>
+#include <indexentrysupplier_western.hxx>
+#include <indexentrysupplier_default.hxx>
 
 #define CCLASS_ALL
 #include <characterclassificationImpl.hxx>
