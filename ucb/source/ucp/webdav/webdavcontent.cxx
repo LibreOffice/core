@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:44:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #define BUG_110335 1
-#define CACHE_RESPONSE_HEADERS 1
 
 /**************************************************************************
                                 TODO
@@ -604,182 +603,7 @@ uno::Any SAL_CALL Content::execute(
             // Unreachable
         }
 
-        sal_Bool bOpenFolder =
-            ( ( aOpenCommand.Mode == star::ucb::OpenMode::ALL ) ||
-                ( aOpenCommand.Mode == star::ucb::OpenMode::FOLDERS ) ||
-                ( aOpenCommand.Mode == star::ucb::OpenMode::DOCUMENTS ) );
-
-        if ( bOpenFolder )
-        {
-            if ( isFolder( Environment ) )
-            {
-                // Open collection.
-
-                uno::Reference< star::ucb::XDynamicResultSet > xSet
-                    = new DynamicResultSet(
-                            m_xSMgr, this, aOpenCommand, Environment );
-                aRet <<= xSet;
-            }
-            else
-            {
-                // Error: Not a folder!
-
-                rtl::OUStringBuffer aMsg;
-                if ( getResourceType( Environment ) == FTP )
-                {
-                    // #114653#
-                    aMsg.appendAscii( "FTP over HTTP proxy: resource cannot "
-                                      "be opened as folder! Wrong Open Mode!" );
-                }
-                else
-                {
-                    aMsg.appendAscii( "Non-folder resource cannot be "
-                                      "opened as folder! Wrong Open Mode!" );
-                }
-
-                ucbhelper::cancelCommandExecution(
-                    uno::makeAny(
-                        lang::IllegalArgumentException(
-                            aMsg.makeStringAndClear(),
-                            static_cast< cppu::OWeakObject * >( this ),
-                            -1 ) ),
-                    Environment );
-                // Unreachable
-            }
-        }
-
-        if ( aOpenCommand.Sink.is() )
-        {
-            // Open document.
-
-            if ( ( aOpenCommand.Mode
-                    == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
-                 ( aOpenCommand.Mode
-                    == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
-            {
-                // Currently(?) unsupported.
-                ucbhelper::cancelCommandExecution(
-                    uno::makeAny(
-                        star::ucb::UnsupportedOpenModeException(
-                                rtl::OUString(),
-                                static_cast< cppu::OWeakObject * >( this ),
-                                sal_Int16( aOpenCommand.Mode ) ) ),
-                    Environment );
-                // Unreachable
-            }
-
-            rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
-            uno::Reference< io::XOutputStream > xOut
-                = uno::Reference< io::XOutputStream >(
-                    aOpenCommand.Sink, uno::UNO_QUERY );
-            if ( xOut.is() )
-            {
-                // PUSH: write data
-                try
-                {
-#ifdef CACHE_RESPONSE_HEADERS
-                    // throw away previously cached headers.
-                    m_xCachedProps.reset();
-
-                    DAVResource aResource;
-                    std::vector< rtl::OUString > aHeaders;
-//                    // Obtain list containing all HTTP headers that can
-//                    // be mapped to UCB properties.
-//                    ContentProperties::getMappableHTTPHeaders( aHeaders );
-
-                    m_xResAccess->GET( xOut, aHeaders, aResource, Environment );
-
-                    // cache headers.
-                    m_xCachedProps.reset( new ContentProperties( aResource ) );
-#else
-                    m_xResAccess->GET( xOut, Environment );
-#endif
-                }
-                catch ( DAVException const & e )
-                {
-                    cancelCommandExecution( e, Environment );
-                    // Unreachable
-                }
-            }
-            else
-            {
-                uno::Reference< io::XActiveDataSink > xDataSink
-                    = uno::Reference< io::XActiveDataSink >(
-                                        aOpenCommand.Sink, uno::UNO_QUERY );
-                if ( xDataSink.is() )
-                {
-                    // PULL: wait for client read
-                    try
-                    {
-#ifdef BUG_110335
-#ifdef CACHE_RESPONSE_HEADERS
-                        m_xCachedProps.reset();
-#endif
-                        DAVResourceAccessThread* th =
-                            new DAVResourceAccessThread(
-                                m_xSMgr,
-                                m_xResAccess->getSessionFactory(),
-                                m_xIdentifier->getContentIdentifier(),
-                                Environment,
-                                bool(CACHE_RESPONSE_HEADERS));
-
-                        if(! th->Get(xDataSink)) {
-                            DAVException e = th->GetException();
-                            delete th;
-                            throw e;
-                        }
-
-#ifdef CACHE_RESPONSE_HEADERS
-                        m_xCachedProps.reset(
-                            new ContentProperties( th->getResource() ) );
-#endif
-#else  //NOT BUG_110335
-#ifdef CACHE_RESPONSE_HEADERS
-                        // throw away previously cached headers.
-                        m_xCachedProps.reset();
-
-                        DAVResource aResource;
-                        std::vector< rtl::OUString > aHeaders;
-//                        // Obtain list containing all HTTP headers that can
-//                        // be mapped to UCB properties.
-//                        ContentProperties::getMappableHTTPHeaders( aHeaders );
-
-                        uno::Reference< io::XInputStream > xIn
-                            = m_xResAccess->GET(
-                                aHeaders, aResource, Environment );
-
-                        // cache headers.
-                        m_xCachedProps.reset(
-                            new ContentProperties( aResource ) );
-#else
-                        uno::Reference< io::XInputStream > xIn
-                            = m_xResAccess->GET( Environment );
-#endif
-                        xDataSink->setInputStream( xIn );
-#endif // NOT BUG_110335
-                    }
-                    catch ( DAVException const & e )
-                    {
-                        cancelCommandExecution( e, Environment );
-                        // Unreachable
-                    }
-                }
-                else
-                {
-                    // Note: aOpenCommand.Sink may contain an XStream
-                    //       implementation. Support for this type of
-                    //       sink is optional...
-                    ucbhelper::cancelCommandExecution(
-                        uno::makeAny(
-                            star::ucb::UnsupportedDataSinkException(
-                                rtl::OUString(),
-                                static_cast< cppu::OWeakObject * >( this ),
-                                aOpenCommand.Sink ) ),
-                        Environment );
-                    // Unreachable
-                }
-            }
-        }
+        aRet = open( aOpenCommand, Environment );
     }
       else if ( aCommand.Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
@@ -820,6 +644,7 @@ uno::Any SAL_CALL Content::execute(
 //      {
             try
             {
+                osl::MutexGuard aGuard( m_aMutex );
                 m_xResAccess->DESTROY( Environment );
             }
             catch ( DAVException const & e )
@@ -879,57 +704,7 @@ uno::Any SAL_CALL Content::execute(
             // Unreachable
         }
 
-        uno::Reference< io::XActiveDataSink > xSink(
-                                        aArg.Sink, uno::UNO_QUERY );
-        if ( xSink.is() )
-        {
-            try
-            {
-                uno::Reference< io::XInputStream > xResult
-                    = m_xResAccess->POST( aArg.MediaType,
-                                          aArg.Referer,
-                                          aArg.Source,
-                                          Environment );
-                xSink->setInputStream( xResult );
-            }
-            catch ( DAVException const & e )
-            {
-                cancelCommandExecution( e, Environment, sal_True );
-                // Unreachable
-            }
-        }
-        else
-        {
-            uno::Reference< io::XOutputStream > xResult(
-                                            aArg.Sink, uno::UNO_QUERY );
-            if ( xResult.is() )
-            {
-                try
-                {
-                    m_xResAccess->POST( aArg.MediaType,
-                                        aArg.Referer,
-                                        aArg.Source,
-                                        xResult,
-                                        Environment );
-                }
-                catch ( DAVException const & e )
-                {
-                    cancelCommandExecution( e, Environment, sal_True );
-                    // Unreachable
-                }
-            }
-            else
-            {
-                ucbhelper::cancelCommandExecution(
-                    uno::makeAny(
-                        star::ucb::UnsupportedDataSinkException(
-                            rtl::OUString(),
-                            static_cast< cppu::OWeakObject * >( this ),
-                            aArg.Sink ) ),
-                    Environment );
-                // Unreachable
-            }
-        }
+        post( aArg, Environment );
     }
       else
     {
@@ -2054,6 +1829,240 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 }
 
 //=========================================================================
+uno::Any Content::open(
+                const star::ucb::OpenCommandArgument2 & rArg,
+                const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+    throw( uno::Exception )
+{
+    uno::Any aRet;
+
+    sal_Bool bOpenFolder = ( ( rArg.Mode == star::ucb::OpenMode::ALL ) ||
+                             ( rArg.Mode == star::ucb::OpenMode::FOLDERS ) ||
+                             ( rArg.Mode == star::ucb::OpenMode::DOCUMENTS ) );
+    if ( bOpenFolder )
+    {
+        if ( isFolder( xEnv ) )
+        {
+            // Open collection.
+
+            uno::Reference< star::ucb::XDynamicResultSet > xSet
+                = new DynamicResultSet( m_xSMgr, this, rArg, xEnv );
+            aRet <<= xSet;
+        }
+        else
+        {
+            // Error: Not a folder!
+
+            rtl::OUStringBuffer aMsg;
+            if ( getResourceType( xEnv ) == FTP )
+            {
+                // #114653#
+                aMsg.appendAscii( "FTP over HTTP proxy: resource cannot "
+                                  "be opened as folder! Wrong Open Mode!" );
+            }
+            else
+            {
+                aMsg.appendAscii( "Non-folder resource cannot be "
+                                  "opened as folder! Wrong Open Mode!" );
+            }
+
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny(
+                    lang::IllegalArgumentException(
+                        aMsg.makeStringAndClear(),
+                        static_cast< cppu::OWeakObject * >( this ),
+                        -1 ) ),
+                xEnv );
+            // Unreachable
+        }
+    }
+
+    if ( rArg.Sink.is() )
+    {
+        // Open document.
+
+        if ( ( rArg.Mode == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
+             ( rArg.Mode == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
+        {
+            // Currently(?) unsupported.
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny(
+                    star::ucb::UnsupportedOpenModeException(
+                            rtl::OUString(),
+                            static_cast< cppu::OWeakObject * >( this ),
+                            sal_Int16( rArg.Mode ) ) ),
+                xEnv );
+            // Unreachable
+        }
+
+        osl::MutexGuard aGuard( m_aMutex );
+
+        rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
+        uno::Reference< io::XOutputStream > xOut
+            = uno::Reference< io::XOutputStream >( rArg.Sink, uno::UNO_QUERY );
+        if ( xOut.is() )
+        {
+            // PUSH: write data
+            try
+            {
+                // throw away previously cached headers.
+                m_xCachedProps.reset();
+
+                DAVResource aResource;
+                std::vector< rtl::OUString > aHeaders;
+//                    // Obtain list containing all HTTP headers that can
+//                    // be mapped to UCB properties.
+//                    ContentProperties::getMappableHTTPHeaders( aHeaders );
+
+                m_xResAccess->GET( xOut, aHeaders, aResource, xEnv );
+
+                // cache headers.
+                m_xCachedProps.reset( new ContentProperties( aResource ) );
+            }
+            catch ( DAVException const & e )
+            {
+                cancelCommandExecution( e, xEnv );
+                // Unreachable
+            }
+        }
+        else
+        {
+            uno::Reference< io::XActiveDataSink > xDataSink
+                = uno::Reference< io::XActiveDataSink >( rArg.Sink,
+                                                         uno::UNO_QUERY );
+            if ( xDataSink.is() )
+            {
+                // PULL: wait for client read
+                try
+                {
+#ifdef BUG_110335
+                    // throw away previously cached headers.
+                    m_xCachedProps.reset();
+
+                    DAVResourceAccessThread * th =
+                        new DAVResourceAccessThread(
+                            m_xSMgr,
+                            m_xResAccess->getSessionFactory(),
+                            m_xIdentifier->getContentIdentifier(),
+                            xEnv,
+                            true /* include headers */ );
+
+                    if ( !th->Get( xDataSink ) )
+                    {
+                        DAVException e = th->GetException();
+                        delete th;
+                        throw e;
+                    }
+
+                    m_xCachedProps.reset(
+                        new ContentProperties( th->getResource() ) );
+#else
+                    // throw away previously cached headers.
+                    m_xCachedProps.reset();
+
+                    DAVResource aResource;
+                    std::vector< rtl::OUString > aHeaders;
+//                        // Obtain list containing all HTTP headers that can
+//                        // be mapped to UCB properties.
+//                        ContentProperties::getMappableHTTPHeaders( aHeaders );
+
+                    uno::Reference< io::XInputStream > xIn
+                        = m_xResAccess->GET( aHeaders, aResource, xEnv );
+
+                    // cache headers.
+                    m_xCachedProps.reset( new ContentProperties( aResource ) );
+
+                    xDataSink->setInputStream( xIn );
+#endif
+                }
+                catch ( DAVException const & e )
+                {
+                    cancelCommandExecution( e, xEnv );
+                    // Unreachable
+                }
+            }
+            else
+            {
+                // Note: aOpenCommand.Sink may contain an XStream
+                //       implementation. Support for this type of
+                //       sink is optional...
+                ucbhelper::cancelCommandExecution(
+                    uno::makeAny(
+                        star::ucb::UnsupportedDataSinkException(
+                            rtl::OUString(),
+                            static_cast< cppu::OWeakObject * >( this ),
+                            rArg.Sink ) ),
+                    xEnv );
+                // Unreachable
+            }
+        }
+    }
+
+    return aRet;
+}
+
+//=========================================================================
+void Content::post(
+                const star::ucb::PostCommandArgument2 & rArg,
+                const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+    throw( uno::Exception )
+{
+    uno::Reference< io::XActiveDataSink > xSink( rArg.Sink, uno::UNO_QUERY );
+    if ( xSink.is() )
+    {
+        try
+        {
+            osl::MutexGuard aGuard( m_aMutex );
+
+            uno::Reference< io::XInputStream > xResult
+                = m_xResAccess->POST( rArg.MediaType,
+                                      rArg.Referer,
+                                      rArg.Source,
+                                      xEnv );
+            xSink->setInputStream( xResult );
+        }
+        catch ( DAVException const & e )
+        {
+            cancelCommandExecution( e, xEnv, sal_True );
+            // Unreachable
+        }
+    }
+    else
+    {
+        uno::Reference< io::XOutputStream > xResult( rArg.Sink, uno::UNO_QUERY );
+        if ( xResult.is() )
+        {
+            try
+            {
+                osl::MutexGuard aGuard( m_aMutex );
+
+                m_xResAccess->POST( rArg.MediaType,
+                                    rArg.Referer,
+                                    rArg.Source,
+                                    xResult,
+                                    xEnv );
+            }
+            catch ( DAVException const & e )
+            {
+                cancelCommandExecution( e, xEnv, sal_True );
+                // Unreachable
+            }
+        }
+        else
+        {
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny(
+                    star::ucb::UnsupportedDataSinkException(
+                        rtl::OUString(),
+                        static_cast< cppu::OWeakObject * >( this ),
+                        rArg.Sink ) ),
+                xEnv );
+            // Unreachable
+        }
+    }
+}
+
+//=========================================================================
 void Content::queryChildren( ContentRefList& rChildren )
 {
     // Obtain a list with a snapshot of all currently instanciated contents
@@ -2396,6 +2405,8 @@ void Content::transfer(
         uno::Reference< star::ucb::XContentIdentifier > xTargetId
             = new ::ucb::ContentIdentifier( m_xSMgr, aTargetURL );
 
+        osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+
         DAVResourceAccess aSourceAccess( m_xSMgr,
                                          m_xResAccess->getSessionFactory(),
                                          sourceURI.GetURI() );
@@ -2463,6 +2474,8 @@ void Content::transfer(
         rtl::Reference< Content > xTarget
             = static_cast< Content * >(
                     m_xProvider->queryContent( xTargetId ).get() );
+
+        aGuard.clear();
 
         // Announce transfered content in its new folder.
         xTarget->inserted();
@@ -2623,9 +2636,11 @@ sal_Bool Content::isFolder(
             const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
-    if ( m_bTransient )
     {
-        return m_bCollection;
+        osl::MutexGuard aGuard( m_aMutex );
+
+        if ( m_bTransient )
+            return m_bCollection;
     }
 
     uno::Sequence< beans::Property > aProperties( 1 );
