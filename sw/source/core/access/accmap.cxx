@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
+ *  last change: $Author: mib $ $Date: 2002-02-11 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ class SwAccessibleMap_Impl: public _SwAccessibleMap_Impl
 };
 
 SwAccessibleMap::SwAccessibleMap() :
-    pMap( new SwAccessibleMap_Impl ),
+    pMap( 0  ),
     nPara( 1 )
 {
 }
@@ -136,6 +136,8 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView(
 
     Reference < XAccessible > xAcc;
 
+    if( !pMap )
+        pMap = new SwAccessibleMap_Impl;
     SwAccessibleMap_Impl::iterator aIter = pMap->find( pRootFrm );
     if( aIter != pMap->end() )
         xAcc = (*aIter).second;
@@ -162,17 +164,20 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView(
 }
 
 Reference< XAccessible> SwAccessibleMap::GetContext( const Rectangle& rVisArea,
-                                                      const SwFrm *pFrm )
+                                                      const SwFrm *pFrm,
+                                                     sal_Bool bCreate )
 {
     vos::OGuard aGuard( aMutex );
 
     Reference < XAccessible > xAcc;
 
+    if( !pMap )
+        pMap = new SwAccessibleMap_Impl;
     SwAccessibleMap_Impl::iterator aIter = pMap->find( pFrm );
     if( aIter != pMap->end() )
         xAcc = (*aIter).second;
 
-    if( !xAcc.is() )
+    if( !xAcc.is() && bCreate )
     {
         if( pFrm->IsTxtFrm() )
             xAcc = new SwAccessibleParagraph( nPara++, rVisArea,
@@ -198,12 +203,13 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const Rectangle& rVisArea,
 
 ::vos::ORef < SwAccessibleContext > SwAccessibleMap::GetContextImpl(
             const Rectangle& rVisArea,
-            const SwFrm *pFrm )
+            const SwFrm *pFrm,
+            sal_Bool bCreate )
 {
-    Reference < XAccessible > xAcc( GetContext( rVisArea, pFrm ) );
+    Reference < XAccessible > xAcc( GetContext( rVisArea, pFrm, bCreate ) );
 
     ::vos::ORef < SwAccessibleContext > xAccImpl(
-         (SwAccessibleDocument *)xAcc.get() );
+         (SwAccessibleContext *)xAcc.get() );
 
     return xAccImpl;
 }
@@ -212,7 +218,75 @@ void SwAccessibleMap::RemoveContext( SwAccessibleContext *pAcc )
 {
     vos::OGuard aGuard( aMutex );
 
-    SwAccessibleMap_Impl::iterator aIter = pMap->find( pAcc->GetFrm() );
-    if( aIter != pMap->end() )
-        pMap->erase( aIter );
+    if( pMap )
+    {
+        SwAccessibleMap_Impl::iterator aIter = pMap->find( pAcc->GetFrm() );
+        if( aIter != pMap->end() )
+        {
+            pMap->erase( aIter );
+            if( pMap->empty() )
+            {
+                delete pMap;
+                pMap = 0;
+            }
+        }
+    }
+}
+
+void SwAccessibleMap::DisposeFrm( const SwFrm *pFrm )
+{
+    if( SwAccessibleContext::IsAccessible( pFrm ) )
+    {
+        vos::OGuard aGuard( aMutex );
+
+        if( pMap )
+        {
+            SwAccessibleMap_Impl::iterator aIter = pMap->find( pFrm );
+            if( aIter != pMap->end() )
+            {
+                Reference < XAccessible > xAcc = (*aIter).second;
+                if( xAcc.is() )
+                    ((SwAccessibleContext *)xAcc.get())->Dispose();
+            }
+        }
+    }
+}
+
+void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
+{
+    if( SwAccessibleContext::IsAccessible( pFrm ) )
+    {
+        vos::OGuard aGuard( aMutex );
+
+        if( pMap )
+        {
+            SwAccessibleMap_Impl::iterator aIter = pMap->find( pFrm );
+            if( aIter != pMap->end() )
+            {
+                // If there is an accesible object already it is
+                // notified directly.
+                Reference < XAccessible > xAcc = (*aIter).second;
+                ((SwAccessibleContext *)xAcc.get())->PosChanged();
+            }
+            else
+            {
+                // Otherwise we look if the parent is accessible.
+                // If not, there is nothing to do.
+                const SwLayoutFrm *pUpper = pFrm->GetUpper();
+                while( pUpper && !SwAccessibleContext::IsAccessible( pUpper ) )
+                    pUpper = pUpper->GetUpper();
+
+                if( pUpper )
+                {
+                    aIter = pMap->find( pUpper );
+                    if( aIter != pMap->end() )
+                    {
+                        Reference < XAccessible > xAcc = (*aIter).second;
+                        ((SwAccessibleContext *)xAcc.get())
+                            ->ChildPosChanged( pFrm, rOldFrm );
+                    }
+                }
+            }
+        }
+    }
 }

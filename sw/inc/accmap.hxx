@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-04 14:09:35 $
+ *  last change: $Author: mib $ $Date: 2002-02-11 12:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,15 +68,23 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_ //autogen
+#include <vos/mutex.hxx>
+#endif
 
 class Rectangle;
 class SwFrm;
 class SwRootFrm;
 class SwAccessibleContext;
 class SwAccessibleMap_Impl;
+class SwRect;
 
 class SwAccessibleMap
 {
+    ::vos::OMutex aMutex;
     SwAccessibleMap_Impl *pMap;
     sal_Int32 nPara;
 
@@ -92,9 +100,20 @@ public:
                 const Rectangle& rVisArea,
                 const SwRootFrm *pRootFrm );
 
-    SwAccessibleContext *GetContext( const Rectangle& rVisArea,
-                                     const SwFrm *pFrm );
+    ::vos::ORef < SwAccessibleContext > GetContextImpl(
+                                                const Rectangle& rVisArea,
+                                                 const SwFrm *pFrm,
+                                                sal_Bool bCreate = sal_True );
+    ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible> GetContext(
+                                                const Rectangle& rVisArea,
+                                                 const SwFrm *pFrm,
+                                                sal_Bool bCreate = sal_True );
     void RemoveContext( SwAccessibleContext *pAcc );
+
+    void DisposeFrm( const SwFrm *pFrm );
+
+    void MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
 };
 
 

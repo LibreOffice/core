@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
+ *  last change: $Author: mib $ $Date: 2002-02-11 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,22 +107,26 @@ class SwAccessibleContext :
     ::cppu::OInterfaceContainerHelper aPropChangedListeners;
     ::cppu::OInterfaceContainerHelper aFocusListeners;
 
+    // The parent if it has been retrieved. This is always an
+    // SwAccessibleContext.
+    ::com::sun::star::uno::WeakReference <
+        ::drafts::com::sun::star::accessibility::XAccessible > xWeakParent;
+
     sal_Int16 nRole;
 
 protected:
     void SetName( const ::rtl::OUString& rName ) { sName = rName; }
 
+    inline void SetParent( SwAccessibleContext *pParent );
+
     // A child has been added while setting the vis area
-    virtual void LowerAdded( const SwFrm *pFrm );
+    virtual sal_Bool ChildScrolledIn( const SwFrm *pFrm );
 
     // A child has been removed while setting the vis area
-    virtual void LowerRemoved( const SwFrm *pFrm );
+    virtual sal_Bool ChildScrolledOut( const SwFrm *pFrm );
 
     // A child has been moved while setting the vis area
-    virtual void LowerMoved( const SwFrm *pFrm );
-
-    // The object is not visible an longer and should be destroyed
-    void Dispose();
+    virtual sal_Bool ChildScrolled( const SwFrm *pFrm );
 
     void PropertyChanged( ::com::sun::star::beans::PropertyChangeEvent& rEvent );
 
@@ -134,6 +138,13 @@ protected:
     // This base class sets DEFUNC(0/1), EDITABLE(0/1), ENABLED(1),
     // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).
     virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+
+    // broadcast dispose event and remove object from map.
+    void _Dispose();
+
+    // broadcast visual data event
+    void _Moved();
+
 
 public:
 
@@ -288,15 +299,26 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames (void)
              throw (::com::sun::star::uno::RuntimeException);
-#ifdef DEBUG
-#define DBG_MSG( a ) DbgMsg( a, 0 )
-#define DBG_MSG2( a, b ) DbgMsg( a, b )
-    void DbgMsg( const char *pName, const SwAccessibleContext *pAcc=0 );
-#else
-#define DBG_MSG( a )
-#define DBG_MSG2( a, b )
-#endif
+
+    //====== C++ interface ====================================================
+
+    // The object is not visible an longer and should be destroyed
+    virtual void Dispose();
+
+    // The object has been moved by the layout
+    void PosChanged();
+
+    // The object has been moved by the layout
+    void ChildPosChanged( const SwFrm *pFrm, const SwRect& rFrm );
+
+    const ::rtl::OUString& GetName() const { return sName; }
 };
+
+inline void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
+{
+    ::com::sun::star::uno::Reference < ::drafts::com::sun::star::accessibility::XAccessible > xParent( pParent );
+    xWeakParent = xParent;
+}
 
 // some heaviliy used exception support
 const sal_Char sDefunc[] = "object is defunctional";

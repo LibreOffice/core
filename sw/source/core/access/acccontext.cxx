@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
+ *  last change: $Author: mib $ $Date: 2002-02-11 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifdef PRECOMPILED
 #include "core_pch.hxx"
 #endif
-#ifdef DEBUG
+#if defined DEBUG && defined TEST_MIB
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -104,6 +104,26 @@
 #include <acccontext.hxx>
 #endif
 
+#if defined DEBUG && defined TEST_MIB
+#define DBG_MSG( _msg ) \
+    lcl_SwAccessibleContext_DbgMsg( this, _msg, 0, sal_False );
+#define DBG_MSG_CD( _msg ) \
+    lcl_SwAccessibleContext_DbgMsg( this, _msg, 0, sal_True );
+#define DBG_MSG_PARAM( _msg, _param ) \
+    lcl_SwAccessibleContext_DbgMsg( this, _msg, _param, sal_False );
+#define DBG_MSG_THIS_PARAM( _msg, _this, _param ) \
+    lcl_SwAccessibleContext_DbgMsg( _this, _msg, _param, sal_False );
+
+void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
+                                     const char *pMsg,
+                                     SwAccessibleContext *pChildAcc,
+                                       sal_Bool bConstrDestr );
+#else
+#define DBG_MSG( _msg )
+#define DBG_MSG_PARAM( _msg, _param )
+#define DBG_MSG_THIS_PARAM( _msg, _this, _param )
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -111,82 +131,206 @@ using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
 
-void SwAccessibleContext::LowerAdded( const SwFrm *pFrm )
+void SwAccessibleContext::_Dispose()
 {
-    ::vos::ORef < SwAccessibleContext > xChildImpl(
-            aAccMap.GetContextImpl( GetVisArea(), pFrm ) );
-
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "AccessibleChild" ) );
-    PropertyChangeEvent aEvent;
-    aEvent.PropertyName = sPropName;
-    Reference < XAccessible > xChild( xChildImpl.getBodyPtr() );
-    aEvent.NewValue <<= xChild;
-
-    DBG_MSG2( "child added", xChildImpl.getBodyPtr() );
-    PropertyChanged( aEvent );
-
-    // Now update the frames childs. In fact, they are updated after
-    // the update event for the parent has been send. This ensures
-    // that the parent is valid when some of the child broadcasts an
-    // event.
-    xChildImpl->SetVisArea( GetVisArea() );
-}
-
-void SwAccessibleContext::LowerRemoved( const SwFrm *pFrm )
-{
-    // get child
-    ::vos::ORef < SwAccessibleContext > xChildImpl(
-            aAccMap.GetContextImpl( GetVisArea(), pFrm ) );
-
-    // Now update the frame's children. They might vanish now, too. Updating
-    // them now however makes sure they vanish before the current
-    // object (and therfore their parent) is destroyed.
-    xChildImpl->SetVisArea( GetVisArea() );
-
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "AccessibleChild" ) );
-    PropertyChangeEvent aEvent;
-    aEvent.PropertyName = sPropName;
-    Reference < XAccessible > xChild( xChildImpl.getBodyPtr() );
-    aEvent.OldValue <<= xChild;
-
-    DBG_MSG2( "child removed", xChildImpl.getBodyPtr() );
-    PropertyChanged( aEvent );
-
-    xChildImpl->Dispose();
-}
-
-void SwAccessibleContext::LowerMoved( const SwFrm *pFrm )
-{
-    // get child
-    ::vos::ORef < SwAccessibleContext > xChildImpl(
-            aAccMap.GetContextImpl( GetVisArea(), pFrm ) );
-
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "AccessibleVisibleData" ) );
-    PropertyChangeEvent aEvent;
-    aEvent.PropertyName = sPropName;
-
-    DBG_MSG2( "child moved", xChildImpl.getBodyPtr() );
-    xChildImpl->PropertyChanged( aEvent );
-
-    // Now update the frame's children. In fact, they are updated after
-    // the update event for the parent has been send.
-    xChildImpl->SetVisArea( GetVisArea() );
-
-}
-
-void SwAccessibleContext::Dispose()
-{
-    DBG_MSG( "disposed" );
     EventObject aEvent;
     Reference < XAccessibleContext > xThis( this );
     aEvent.Source = xThis;
     aPropChangedListeners.disposeAndClear( aEvent );
     aFocusListeners.disposeAndClear( aEvent );
+    DBG_MSG_CD( "dispose" )
+
     ASSERT( GetFrm(), "already disposed" );
     if( GetFrm() )
         aAccMap.RemoveContext( this );
     ClearFrm();
 }
+
+void SwAccessibleContext::_Moved()
+{
+    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "AccessibleVisibleData" ) );
+    PropertyChangeEvent aEvent;
+    aEvent.PropertyName = sPropName;
+
+    PropertyChanged( aEvent );
+    DBG_MSG( "AccessibleVisibleData" )
+}
+
+sal_Bool SwAccessibleContext::ChildScrolledIn( const SwFrm *pFrm )
+{
+    WeakReference < XAccessible > xWeakChild;
+    SwAccessibleContext *pChildImpl = 0;
+
+    {
+        ::vos::ORef < SwAccessibleContext > xChildImpl(
+                aAccMap.GetContextImpl( GetVisArea(), pFrm ) );
+        xChildImpl->SetParent( this );
+
+        // The accessible should be freshly created, because it
+        // was not visisble before. Therfor, its vis area must already
+        // the scrolling.
+        ASSERT( GetVisArea() == xChildImpl->GetVisArea(),
+                "Vis area of child is wrong. Did it exist already?" );
+
+        // Send a child event
+        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "AccessibleChild" ) );
+        PropertyChangeEvent aEvent;
+        aEvent.PropertyName = sPropName;
+        Reference < XAccessible > xChild( xChildImpl.getBodyPtr() );
+        aEvent.NewValue <<= xChild;
+
+        PropertyChanged( aEvent );
+        DBG_MSG_PARAM( "AccessibleChild (added)", xChildImpl.getBodyPtr() )
+
+        xWeakChild = xChild;
+        pChildImpl = xChildImpl.getBodyPtr();
+    }
+
+    Reference < XAccessible > xChild( xWeakChild );
+    if( xChild.is() )
+    {
+        // If the AT tool remembered the child, then we send
+        // notifcations for the child's children, too. Otherwise
+        // there is nothing to do, because children can only created
+        // by a parent itself, so there could in fact be children now,
+        // but these children already inherited the correct vis area.
+        // This vis area in update this area is the same as the old one,
+        // because
+        pChildImpl->SetVisArea( GetVisArea() );
+    }
+
+    return sal_False;
+}
+
+sal_Bool SwAccessibleContext::ChildScrolledOut( const SwFrm *pFrm )
+{
+    sal_Bool bUpdateChildren = sal_True;
+    WeakReference < XAccessible > xWeakChild;
+    SwAccessibleContext *pChildImpl = 0;
+
+    {
+        // If the child is existing, the child's chilren have to be
+        // removed, too. If not, some grandchildren might exist anyway.
+        // They are removed by seekaing the SwFrm tree. This is indicated
+        // by the return value.
+        ::vos::ORef < SwAccessibleContext > xChildImpl(
+                aAccMap.GetContextImpl( GetVisArea(), pFrm, sal_False ) );
+
+        if( xChildImpl.isValid() )
+        {
+            xChildImpl->SetVisArea( GetVisArea() );
+            bUpdateChildren = sal_False;
+
+            pChildImpl = xChildImpl.getBodyPtr();
+            xWeakChild = Reference < XAccessible >( pChildImpl );
+        }
+    }
+
+    Reference < XAccessible > xChild( xWeakChild );
+    if( !xChild.is() )
+    {
+        ::vos::ORef < SwAccessibleContext > xChildImpl(
+                aAccMap.GetContextImpl( GetVisArea(), pFrm ) );
+        pChildImpl = xChildImpl.getBodyPtr();
+        xChild = pChildImpl;
+    }
+
+    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "AccessibleChild" ) );
+    PropertyChangeEvent aEvent;
+    aEvent.PropertyName = sPropName;
+    aEvent.OldValue <<= xChild;
+
+    PropertyChanged( aEvent );
+    DBG_MSG_PARAM( "AccessibleChild (removed)", pChildImpl )
+
+    pChildImpl->_Dispose();
+
+    return bUpdateChildren;
+}
+
+sal_Bool SwAccessibleContext::ChildScrolled( const SwFrm *pFrm )
+{
+    sal_Bool bUpdateChildren = sal_True;
+
+    // get child
+    ::vos::ORef < SwAccessibleContext > xChildImpl(
+            aAccMap.GetContextImpl( GetVisArea(), pFrm, sal_False ) );
+
+    if( xChildImpl.isValid() )
+    {
+
+        // Now update the frame's children. In fact, they are updated before
+        // the update event for the parent has been send.
+        xChildImpl->SetVisArea( GetVisArea() );
+
+        xChildImpl->_Moved();
+        bUpdateChildren = sal_False;
+    }
+
+    return bUpdateChildren;
+}
+
+void SwAccessibleContext::Dispose()
+{
+    // get parent
+    Reference< XAccessible > xParent( xWeakParent );
+
+    if( xParent.is() )
+    {
+        SwAccessibleContext *pAcc = (SwAccessibleContext *)xParent.get();
+
+        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "AccessibleChild" ) );
+        PropertyChangeEvent aEvent;
+        aEvent.PropertyName = sPropName;
+        Reference < XAccessibleContext > xThis( this );
+        aEvent.OldValue <<= xThis;
+        pAcc->PropertyChanged( aEvent );
+        DBG_MSG_THIS_PARAM( "AccessibleChild (removed)", pAcc, this )
+    }
+
+    _Dispose();
+}
+
+void SwAccessibleContext::PosChanged()
+{
+    if( IsShowing() )
+    {
+        // The frame stays visible -> broadcast event
+        _Moved();
+    }
+    else
+    {
+        // The frame is now invisible -> dispose it
+        Dispose();
+    }
+}
+
+void SwAccessibleContext::ChildPosChanged( const SwFrm *pFrm,
+                                           const SwRect& rOldFrm )
+{
+    if( IsShowing( pFrm ) )
+    {
+        // If the object was not showing before, than there is nothing to do,
+        // because no wrapper exists and therefor no one is interested to
+        // get notified of the movement.
+        if( rOldFrm.IsEmpty() || !IsShowing( rOldFrm.SVRect() ) )
+        {
+            // The frame becomes visible. A child event for the parent
+            // must be send.
+            ChildScrolledIn( pFrm );
+        }
+    }
+    else
+    {
+        // If the frame was visible before, than a child event for the parent
+        // needs to be send. However, there is no wrapper existing, and so
+        // no notifications for grandchildren are required. If the are
+        // grandgrandchildren, they would be notified by the layout.
+        if( IsShowing( rOldFrm.SVRect() ) )
+            ChildScrolledOut( pFrm );
+    }
+}
+
 
 void SwAccessibleContext::PropertyChanged( PropertyChangeEvent& rEvent )
 {
@@ -209,7 +353,7 @@ void SwAccessibleContext::SetStates(
     // DEFUNC and SHOWING
     if( GetFrm() )
     {
-        ASSERT( GetBounds( GetFrm() ).IsOver( GetVisArea() ),
+        ASSERT(  IsShowing(),
                 "invisible object is not disposed" );
         rStateSet.AddState( AccessibleStateType::SHOWING );
     }
@@ -268,7 +412,7 @@ SwAccessibleContext::SwAccessibleContext( sal_Int16 nR,
     aFocusListeners( aMutex ),
     nRole( nR )
 {
-    DBG_MSG( "constructed" );
+    DBG_MSG_CD( "constructed" )
 }
 
 SwAccessibleContext::SwAccessibleContext( const OUString& rName,
@@ -281,12 +425,12 @@ SwAccessibleContext::SwAccessibleContext( const OUString& rName,
     aFocusListeners( aMutex ),
     nRole( nR )
 {
-    DBG_MSG( "constructed" );
+    DBG_MSG_CD( "constructed" )
 }
 
 SwAccessibleContext::~SwAccessibleContext()
 {
-    DBG_MSG( "destructed" );
+    DBG_MSG_CD( "destructed" )
     if( GetFrm() )
         aAccMap.RemoveContext( this );
 }
@@ -304,7 +448,7 @@ long SAL_CALL SwAccessibleContext::getAccessibleChildCount( void )
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
-    return GetLowerCount();
+    return GetChildCount();
 }
 
 Reference< XAccessible> SAL_CALL
@@ -316,7 +460,7 @@ Reference< XAccessible> SAL_CALL
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    const SwFrm *pChild = GetLower( nIndex );
+    const SwFrm *pChild = GetChild( nIndex );
     if( 0 == pChild )
     {
         Reference < XAccessibleContext > xThis( this );
@@ -326,9 +470,12 @@ Reference< XAccessible> SAL_CALL
         throw aExcept;
     }
 
-    Reference< XAccessible > xAcc( aAccMap.GetContext( GetVisArea(), pChild ) );
+    ::vos::ORef < SwAccessibleContext > xChildImpl(
+            aAccMap.GetContextImpl( GetVisArea(), pChild )  );
+    xChildImpl->SetParent( this );
+    Reference< XAccessible > xChild( xChildImpl.getBodyPtr() );
 
-    return xAcc;
+    return xChild;
 }
 
 Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
@@ -338,7 +485,7 @@ Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    const SwFrm *pUpper = GetUpper();
+    const SwFrm *pUpper = GetParent();
     ASSERT( pUpper, "no upper found" );
 
     Reference< XAccessible > xAcc;
@@ -351,6 +498,9 @@ Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
         THROW_RUNTIME_EXCEPTION( XAccessibleContext, "parent missing" );
     }
 
+    // Remember the parent as weak ref.
+    xWeakParent = xAcc;
+
     return xAcc;
 }
 
@@ -361,7 +511,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent (void)
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    const SwFrm *pUpper = GetUpper();
+    const SwFrm *pUpper = GetParent();
     ASSERT( pUpper, "no upper found" );
 
     sal_Int32 nIndex = -1;
@@ -371,7 +521,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent (void)
             aAccMap.GetContextImpl( GetVisArea(), pUpper )  );
         ASSERT( xAccImpl.isValid(), "no parent found" );
         if( xAccImpl.isValid() )
-            nIndex = xAccImpl->GetLowerIndex( GetFrm() );
+            nIndex = xAccImpl->GetChildIndex( GetFrm() );
     }
     if( -1 == nIndex )
     {
@@ -435,7 +585,7 @@ void SAL_CALL SwAccessibleContext::addPropertyChangeListener (
             const Reference< XPropertyChangeListener>& xListener)
         throw (com::sun::star::uno::RuntimeException)
 {
-    DBG_MSG( "property listener added" );
+    DBG_MSG( "property change listener added" )
     aPropChangedListeners.addInterface( xListener );
 }
 
@@ -443,7 +593,7 @@ void SAL_CALL SwAccessibleContext::removePropertyChangeListener (
             const Reference< XPropertyChangeListener>& xListener)
         throw (com::sun::star::uno::RuntimeException)
 {
-    DBG_MSG( "dlistener removed" );
+    DBG_MSG( "property change listener removed" )
     aPropChangedListeners.removeInterface( xListener );
 }
 
@@ -483,7 +633,7 @@ Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAt(
     Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
     Point aLogPoint( pWin->PixelToLogic( aPixPoint ) ); // twip rel to doc root
 
-    const SwFrm *pFrm = GetDescendantAt( aLogPoint );
+    const SwFrm *pFrm = GetChildAt( aLogPoint );
     if( pFrm )
         xAcc = aAccMap.GetContext( GetVisArea(), pFrm );
 
@@ -498,7 +648,7 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
 
     CHECK_FOR_DEFUNC( XAccessibleComponent )
 
-    const SwFrm *pUpper = GetUpper();
+    const SwFrm *pUpper = GetParent();
     ASSERT( pUpper, "no upper found" );
     Window *pWin = GetWindow();
 
@@ -522,7 +672,7 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
 
     CHECK_FOR_DEFUNC( XAccessibleComponent )
 
-    const SwFrm *pUpper = GetUpper();
+    const SwFrm *pUpper = GetParent();
     ASSERT( pUpper, "no upper found" );
     Window *pWin = GetWindow();
 
@@ -579,7 +729,7 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
 sal_Bool SAL_CALL SwAccessibleContext::isShowing()
         throw (RuntimeException)
 {
-    return sal_True;
+    return IsShowing();
 }
 
 
@@ -602,7 +752,7 @@ void SAL_CALL SwAccessibleContext::addFocusListener(
                 ::com::sun::star::awt::XFocusListener >& xListener )
         throw (RuntimeException)
 {
-    DBG_MSG( "focus listener added" );
+    DBG_MSG( "focus listener added" )
     aFocusListeners.addInterface( xListener );
 }
 
@@ -612,7 +762,7 @@ void SAL_CALL SwAccessibleContext::removeFocusListener(
                 ::com::sun::star::awt::XFocusListener >& xListener )
         throw (RuntimeException)
 {
-    DBG_MSG( "focus listener removed" );
+    DBG_MSG( "focus listener removed" )
     aFocusListeners.removeInterface( xListener );
 }
 
@@ -655,32 +805,60 @@ Sequence< OUString > SAL_CALL SwAccessibleContext::getSupportedServiceNames()
     THROW_RUNTIME_EXCEPTION( XServiceInfo, "supported services needs to be overloaded" )
 }
 
-#ifdef DEBUG
-void SwAccessibleContext::DbgMsg( const char *pMsg,
-                                  const SwAccessibleContext *pAcc )
+#if defined DEBUG && defined TEST_MIB
+void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
+                                     const char *pMsg,
+                                     SwAccessibleContext *pChildAcc,
+                                       sal_Bool bConstrDestr )
 {
     static SvFileStream aStrm( String::CreateFromAscii("j:\\acc.log"),
                     STREAM_WRITE|STREAM_TRUNC|STREAM_SHARE_DENYNONE );
-    ByteString aName( String(sName), RTL_TEXTENCODING_ASCII_US );
-    aStrm << aName.GetBuffer();
-    aStrm << " (";
-    aStrm << ByteString::CreateFromInt32( GetVisArea().Left() ).GetBuffer();
-    aStrm << ",";
-    aStrm << ByteString::CreateFromInt32( GetVisArea().Top() ).GetBuffer();
-    aStrm << ",";
-    aStrm << ByteString::CreateFromInt32( GetVisArea().GetWidth() ).GetBuffer();
-    aStrm << ",";
-    aStrm << ByteString::CreateFromInt32( GetVisArea().GetHeight() ).GetBuffer();
-    aStrm << "): ";
-    aStrm << pMsg;
-    if( pAcc )
+    ByteString aName( String(pThisAcc->GetName()),
+                      RTL_TEXTENCODING_ISO_8859_1 );
+    if( aName.Len() )
     {
-        ByteString aChild( String(pAcc->sName),
-                              RTL_TEXTENCODING_ASCII_US );
-        aStrm << ": ";
-        aStrm << aChild.GetBuffer();
+        aStrm << aName.GetBuffer()
+              << ": ";
     }
-    aStrm << "\r\n";
+    aStrm << pMsg;
+    if( pChildAcc )
+    {
+        ByteString aChild( String(pChildAcc->GetName()),
+                           RTL_TEXTENCODING_ISO_8859_1 );
+        aStrm << ": "
+              << aChild.GetBuffer();
+    }
+    aStrm << "\r\n    (";
+
+    if( !bConstrDestr )
+    {
+        ByteString aDesc( String(pThisAcc->getAccessibleDescription()),
+                           RTL_TEXTENCODING_ISO_8859_1 );
+        aStrm << aDesc.GetBuffer()
+              << ", ";
+    }
+
+    Rectangle aVisArea( pThisAcc->GetVisArea() );
+    aStrm << "VA: "
+          << ByteString::CreateFromInt32( aVisArea.Left() ).GetBuffer()
+          << ","
+          << ByteString::CreateFromInt32( aVisArea.Top() ).GetBuffer()
+          << ","
+          << ByteString::CreateFromInt32( aVisArea.GetWidth() ).GetBuffer()
+          << ","
+          << ByteString::CreateFromInt32( aVisArea.GetHeight() ).GetBuffer();
+
+    Rectangle aBounds( pThisAcc->GetBounds( pThisAcc->GetFrm() ) );
+    aStrm << ", BB: "
+          << ByteString::CreateFromInt32( aBounds.Left() ).GetBuffer()
+          << ","
+          << ByteString::CreateFromInt32( aBounds.Top() ).GetBuffer()
+          << ","
+          << ByteString::CreateFromInt32( aBounds.GetWidth() ).GetBuffer()
+          << ","
+          << ByteString::CreateFromInt32( aBounds.GetHeight() ).GetBuffer()
+          << ")\r\n";
+
     aStrm.Flush();
 }
 #endif

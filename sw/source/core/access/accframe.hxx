@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
+ *  last change: $Author: mib $ $Date: 2002-02-11 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,10 @@
 #ifndef _SV_GEN_HXX
 #include <vcl/gen.hxx>
 #endif
+#ifndef _FRAME_HXX
+#include <frame.hxx>
+#endif
 
-class SwFrm;
 class Window;
 
 class SwAccessibleFrame
@@ -76,40 +78,38 @@ class SwAccessibleFrame
     Rectangle aVisArea;
     const SwFrm *pFrm;
 
-    static sal_Bool IsAccessible( const SwFrm *pFrm );
-    static sal_Int32 GetLowerCount( const Rectangle& rVisArea,
+    static sal_Int32 GetChildCount( const Rectangle& rVisArea,
                                     const SwFrm *pFrm );
-    static const SwFrm *GetDescendant( const Rectangle& rVisArea,
-                                       const SwFrm *pFrm,
-                                       sal_Int32& rPos );
-    static sal_Bool GetDescendantIndex( const Rectangle& rVisArea,
+    static const SwFrm *GetChild( const Rectangle& rVisArea,
+                                  const SwFrm *pFrm,
+                                  sal_Int32& rPos );
+    static sal_Bool GetChildIndex( const Rectangle& rVisArea,
                                         const SwFrm *pFrm,
                                         const SwFrm *pChild,
                                         sal_Int32& rPos );
-    static const SwFrm *GetDescendantAt( const Rectangle& rVisArea,
-                                         const SwFrm *pFrm,
-                                           const Point& rPos );
-    static void SetVisArea( SwAccessibleFrame *pAcc,
-                            const SwFrm *pFrm,
-                            const Rectangle& rOldVisArea );
+    static const SwFrm *GetChildAt( const Rectangle& rVisArea,
+                                    const SwFrm *pFrm,
+                                    const Point& rPos );
 protected:
 
     // A child has been added while setting the vis area
-    virtual void LowerAdded( const SwFrm *pFrm );
+    virtual sal_Bool ChildScrolledIn( const SwFrm *pFrm );
 
     // A child has been removed while setting the vis area
-    virtual void LowerRemoved( const SwFrm *pFrm );
+    virtual sal_Bool ChildScrolledOut( const SwFrm *pFrm );
 
     // A child has been moved while setting the vis area
-    virtual void LowerMoved( const SwFrm *pFrm );
-
-    Rectangle GetBounds( const SwFrm *pFrm=0 );
+    virtual sal_Bool ChildScrolled( const SwFrm *pFrm );
 
     Window *GetWindow();
 
     sal_Bool IsEditable() const;
 
     sal_Bool IsOpaque() const;
+
+    inline sal_Bool IsShowing( const Rectangle& rFrm ) const;
+    inline sal_Bool IsShowing( const SwFrm *pFrm ) const;
+    inline sal_Bool IsShowing() const { return IsShowing( GetFrm() ); }
 
     void ClearFrm() { pFrm = 0; }
 
@@ -118,42 +118,77 @@ public:
     SwAccessibleFrame( const Rectangle& rVisArea, const SwFrm *pFrm );
     virtual ~SwAccessibleFrame();
 
+    // Does a frame of theis type may have an accessible?
+    inline static sal_Bool IsAccessible( const SwFrm *pFrm );
+
     // Return the SwFrm this context is attached to.
     const SwFrm *GetFrm() const { return pFrm; };
 
+    // Return the bounding box of the frame clipped to the vis area. If
+    // no frame is specified, use this' frame.
+    Rectangle GetBounds( const SwFrm *pFrm=0 );
+
     // Return the upper that has a context attached. This might be
     // another one than the immediate upper.
-    const SwFrm *GetUpper() const;
+    const SwFrm *GetParent() const;
 
     // Return the lower count or the nth lower, there the lowers have a
     // not be same one as the SwFrm's lowers
-    inline sal_Int32 GetLowerCount() const;
-    inline const SwFrm *GetLower( sal_Int32 nPos ) const;
-    inline sal_Int32 GetLowerIndex( const SwFrm *pFrm ) const;
-    inline const SwFrm *GetDescendantAt( const Point& rPos ) const;
+    inline sal_Int32 GetChildCount() const;
+    inline const SwFrm *GetChild( sal_Int32 nPos ) const;
+    inline sal_Int32 GetChildIndex( const SwFrm *pFrm ) const;
+    inline const SwFrm *GetChildAt( const Point& rPos ) const;
 
+    static void SetVisArea( const SwFrm *pFrm,
+                            const Rectangle& rOldVisArea,
+                            const Rectangle& rNewVisArea,
+                            SwAccessibleFrame *pAcc = 0 );
     void SetVisArea( const Rectangle& rNewVisArea );
     const Rectangle& GetVisArea() const { return aVisArea; }
 };
 
-inline sal_Int32 SwAccessibleFrame::GetLowerCount() const
+inline sal_Bool SwAccessibleFrame::IsShowing( const Rectangle& rFrm ) const
 {
-    return GetLowerCount( aVisArea, pFrm );
-}
-inline const SwFrm *SwAccessibleFrame::GetLower( sal_Int32 nPos ) const
-{
-    return GetDescendant( aVisArea, pFrm, nPos );
+    return rFrm.IsOver( aVisArea );
 }
 
-inline sal_Int32 SwAccessibleFrame::GetLowerIndex( const SwFrm *pChild ) const
+inline sal_Bool SwAccessibleFrame::IsShowing( const SwFrm *pFrm ) const
+{
+    return IsShowing( pFrm->Frm().SVRect() );
+}
+
+inline sal_Int32 SwAccessibleFrame::GetChildCount() const
+{
+    return GetChildCount( aVisArea, pFrm );
+}
+
+inline const SwFrm *SwAccessibleFrame::GetChild( sal_Int32 nPos ) const
+{
+    return GetChild( aVisArea, pFrm, nPos );
+}
+
+inline sal_Int32 SwAccessibleFrame::GetChildIndex( const SwFrm *pChild ) const
 {
     sal_Int32 nPos = 0;
-    return GetDescendantIndex( aVisArea, pFrm, pChild, nPos ) ? nPos : -1L;
+    return GetChildIndex( aVisArea, pFrm, pChild, nPos ) ? nPos : -1L;
 }
 
-inline const SwFrm *SwAccessibleFrame::GetDescendantAt( const Point& rPos ) const
+inline const SwFrm *SwAccessibleFrame::GetChildAt( const Point& rPos ) const
 {
-    return GetDescendantAt( aVisArea, pFrm, rPos );
+    return GetChildAt( aVisArea, pFrm, rPos );
+}
+
+inline sal_Bool SwAccessibleFrame::IsAccessible( const SwFrm *pFrm )
+{
+    return pFrm->IsTxtFrm() || pFrm->IsRootFrm();
+}
+
+inline void SwAccessibleFrame::SetVisArea( const Rectangle& rNewVisArea )
+{
+    Rectangle aOldVisArea( aVisArea );
+    aVisArea = rNewVisArea;
+
+    SetVisArea( GetFrm(), aOldVisArea, aVisArea, this );
 }
 
 #endif

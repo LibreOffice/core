@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
+ *  last change: $Author: mib $ $Date: 2002-02-11 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,24 +111,23 @@
 #include <accframe.hxx>
 #endif
 
-sal_Bool SwAccessibleFrame::IsAccessible( const SwFrm *pFrm )
-{
-    return pFrm->IsTxtFrm() || pFrm->IsRootFrm();
-}
-
-sal_Int32 SwAccessibleFrame::GetLowerCount( const Rectangle& rVisArea,
+// Regarding visibilily (or in terms of accessibility: regarding the showing
+// state): A frame is visible and therfor contained in the tree if its frame
+// size overlaps with the visible area. The bounding box however is the
+// frame's paint area.
+sal_Int32 SwAccessibleFrame::GetChildCount( const Rectangle& rVisArea,
                                             const SwFrm *pFrm )
 {
     sal_Int32 nCount = 0;
     const SwFrm *pLower = pFrm->GetLower();
     while( pLower )
     {
-        if( pLower->PaintArea().IsOver( rVisArea ) )
+        if( pLower->Frm().IsOver( rVisArea ) )
         {
             if( IsAccessible( pLower ) )
                 nCount++;
             else
-                nCount += GetLowerCount( rVisArea, pLower );
+                nCount += GetChildCount( rVisArea, pLower );
         }
         pLower = pLower->GetNext();
     }
@@ -136,7 +135,7 @@ sal_Int32 SwAccessibleFrame::GetLowerCount( const Rectangle& rVisArea,
     return nCount;
 }
 
-const SwFrm *SwAccessibleFrame::GetDescendant( const Rectangle& rVisArea,
+const SwFrm *SwAccessibleFrame::GetChild( const Rectangle& rVisArea,
                                          const SwFrm *pFrm,
                                          sal_Int32& rPos )
 {
@@ -147,7 +146,7 @@ const SwFrm *SwAccessibleFrame::GetDescendant( const Rectangle& rVisArea,
         const SwFrm *pLower = pFrm->GetLower();
         while( pLower && !pDesc )
         {
-            if( pLower->PaintArea().IsOver( rVisArea ) )
+            if( pLower->Frm().IsOver( rVisArea ) )
             {
                 if( IsAccessible( pLower ) )
                 {
@@ -158,7 +157,7 @@ const SwFrm *SwAccessibleFrame::GetDescendant( const Rectangle& rVisArea,
                 }
                 else
                 {
-                    pDesc = GetDescendant( rVisArea, pLower, rPos );
+                    pDesc = GetChild( rVisArea, pLower, rPos );
                 }
             }
             pLower = pLower->GetNext();
@@ -168,7 +167,7 @@ const SwFrm *SwAccessibleFrame::GetDescendant( const Rectangle& rVisArea,
     return pDesc;
 }
 
-sal_Bool SwAccessibleFrame::GetDescendantIndex( const Rectangle& rVisArea,
+sal_Bool SwAccessibleFrame::GetChildIndex( const Rectangle& rVisArea,
                                                  const SwFrm *pFrm,
                                                   const SwFrm *pChild,
                                                  sal_Int32& rPos )
@@ -177,7 +176,7 @@ sal_Bool SwAccessibleFrame::GetDescendantIndex( const Rectangle& rVisArea,
     sal_Bool bFound = sal_False;
     while( pLower && !bFound )
     {
-        if( pLower->PaintArea().IsOver( rVisArea ) )
+        if( pLower->Frm().IsOver( rVisArea ) )
         {
             if( IsAccessible( pLower ) )
             {
@@ -188,7 +187,7 @@ sal_Bool SwAccessibleFrame::GetDescendantIndex( const Rectangle& rVisArea,
             }
             else
             {
-                bFound = GetDescendantIndex( rVisArea, pLower, pChild, rPos );
+                bFound = GetChildIndex( rVisArea, pLower, pChild, rPos );
             }
         }
         pLower = pLower->GetNext();
@@ -197,26 +196,27 @@ sal_Bool SwAccessibleFrame::GetDescendantIndex( const Rectangle& rVisArea,
     return bFound;
 }
 
-const SwFrm *SwAccessibleFrame::GetDescendantAt(
+const SwFrm *SwAccessibleFrame::GetChildAt(
                                         const Rectangle& rVisArea,
-                                         const SwFrm *pFrm,
+                                        const SwFrm *pFrm,
                                         const Point& rPos )
 {
     const SwFrm *pLower = pFrm->GetLower();
     const SwFrm *pDesc = 0;
     while( pLower && !pDesc )
     {
-        SwRect aPaintArea( pLower->PaintArea() );
-        if( aPaintArea.IsOver( rVisArea ) )
+        // A frame is returned if it's frame size is inside the visarea
+        // and the positiion is inside the frame's paint area.
+        if( pFrm->Frm().IsOver( rVisArea ) )
         {
             if( IsAccessible( pLower ) )
             {
-                if( aPaintArea.IsInside( rPos ) )
+                if( pLower->PaintArea().IsInside( rPos ) )
                     pDesc = pLower;
             }
             else
             {
-                pDesc = GetDescendantAt( rVisArea, pLower, rPos );
+                pDesc = GetChildAt( rVisArea, pLower, rPos );
             }
         }
         pLower = pLower->GetNext();
@@ -225,53 +225,70 @@ const SwFrm *SwAccessibleFrame::GetDescendantAt(
     return pDesc;
 }
 
-void SwAccessibleFrame::SetVisArea( SwAccessibleFrame *pAcc,
-                                    const SwFrm *pFrm,
-                                    const Rectangle& rOldVisArea )
+void SwAccessibleFrame::SetVisArea( const SwFrm *pFrm,
+                                    const Rectangle& rOldVisArea,
+                                    const Rectangle& rNewVisArea,
+                                    SwAccessibleFrame *pAcc )
 {
     const SwFrm *pLower = pFrm->GetLower();
     while( pLower )
     {
-        SwRect aPaintArea( pLower->PaintArea() );
+        SwRect aFrm( pLower->Frm() );
         if( IsAccessible( pLower ) )
         {
-            if( aPaintArea.IsOver( pAcc->GetVisArea() ) )
+            sal_Bool bUpdateLower = sal_False;
+            if( aFrm.IsOver( rNewVisArea ) )
             {
-                if( aPaintArea.IsOver( rOldVisArea ) )
-                    pAcc->LowerMoved( pLower );
+                if( pAcc )
+                {
+                    if( aFrm.IsOver( rOldVisArea ) )
+                        bUpdateLower = pAcc->ChildScrolled( pLower );
+                    else
+                        bUpdateLower = pAcc->ChildScrolledIn( pLower );
+                }
                 else
-                    pAcc->LowerAdded( pLower );
+                    bUpdateLower = sal_True;
             }
-            else if( aPaintArea.IsOver( rOldVisArea ) )
+            else if( aFrm.IsOver( rOldVisArea ) )
             {
-                pAcc->LowerRemoved( pLower );
+                if( pAcc )
+                    bUpdateLower = pAcc->ChildScrolledOut( pLower );
+                else
+                    bUpdateLower = sal_True;
             }
+            if( bUpdateLower )
+                SetVisArea( pLower, rOldVisArea, rNewVisArea  );
         }
-        else if( aPaintArea.IsOver( rOldVisArea ) ||
-                 aPaintArea.IsOver( pAcc->GetVisArea() ) )
+        else if( aFrm.IsOver( rOldVisArea ) ||
+                 aFrm.IsOver( rNewVisArea ) )
         {
-            SetVisArea( pAcc, pLower, rOldVisArea );
+            SetVisArea( pLower, rOldVisArea, rNewVisArea, pAcc );
         }
+
         pLower = pLower->GetNext();
     }
 }
 
-void SwAccessibleFrame::LowerAdded( const SwFrm *pFrm )
+sal_Bool SwAccessibleFrame::ChildScrolledIn( const SwFrm *pFrm )
 {
+    return sal_True;
 }
 
-void SwAccessibleFrame::LowerRemoved( const SwFrm *pFrm )
+sal_Bool SwAccessibleFrame::ChildScrolledOut( const SwFrm *pFrm )
 {
+    return sal_True;
 }
 
-void SwAccessibleFrame::LowerMoved( const SwFrm *pFrm )
+sal_Bool SwAccessibleFrame::ChildScrolled( const SwFrm *pFrm )
 {
+    return sal_True;
 }
 
 Rectangle SwAccessibleFrame::GetBounds( const SwFrm *pFrm )
 {
     if( !pFrm )
         pFrm = GetFrm();
+    // The bounds are the paint area!
     SwRect aPaintArea( pFrm->PaintArea() );
     Rectangle aBounds( aPaintArea.SVRect().Intersection( aVisArea ) );
     return aBounds;
@@ -370,7 +387,7 @@ SwAccessibleFrame::~SwAccessibleFrame()
 {
 }
 
-const SwFrm *SwAccessibleFrame::GetUpper() const
+const SwFrm *SwAccessibleFrame::GetParent() const
 {
     const SwLayoutFrm *pUpper = pFrm->GetUpper();
     while( pUpper && !IsAccessible( pUpper ) )
@@ -379,11 +396,4 @@ const SwFrm *SwAccessibleFrame::GetUpper() const
     return pUpper;
 }
 
-void SwAccessibleFrame::SetVisArea( const Rectangle& rNewVisArea )
-{
-    Rectangle aOldVisArea( aVisArea );
-    aVisArea = rNewVisArea;
-
-    SetVisArea( this, GetFrm(), aOldVisArea );
-}
 
