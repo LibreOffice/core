@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:42:45 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ turkish ] = "Renkler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Colores";
+        Text[ finnish ] = "Värit";
     };
     FixedText FT_1
     {
@@ -135,6 +136,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ turkish ] = "Kaynak renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Color fuente";
+        Text[ finnish ] = "Lähdeväri";
     };
     FixedText FT_2
     {
@@ -162,6 +164,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ turkish ] = "Tolerans";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tolerancia";
+        Text[ finnish ] = "Toleranssi";
     };
     FixedText FT_3
     {
@@ -189,6 +192,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ turkish ] = "Yeni renk...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar con...";
+        Text[ finnish ] = "Korvaa kohteella";
     };
     CheckBox CBX_1
     {
@@ -248,6 +252,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ turkish ] = "Saydamlýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Transparencia";
+        Text[ finnish ] = "~Läpinäkyvyys";
     };
     MetricField SP_1
     {
@@ -331,6 +336,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ turkish ] = "Deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar";
+        Text[ finnish ] = "~Korvaa";
     };
     ListBox LB_1
     {
@@ -415,6 +421,7 @@ DockingWindow RID_SVXDLG_BMPMASK
                 Text[ turkish ] = "Renk örneði al";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Pipeta";
+                Text[ finnish ] = "Värivalitsin";
             };
         };
     };
@@ -445,6 +452,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     Text[ turkish ] = "Renk örneði al";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pipeta";
+    Text[ finnish ] = "Värivalitsin";
 };
 
 String RID_SVXDLG_BMPMASK_STR_TRANSP
@@ -470,6 +478,7 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
     Text[ turkish ] = "Saydam";
     Text[ arabic ] = "ÔÝÇÝ";
     Text[ catalan ] = "Transparente";
+    Text[ finnish ] = "Läpinäkyvä";
 };
 
  // ********************************************************************** EOF
