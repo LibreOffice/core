@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:24:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
     Text [ italian ] = "Attributi di testo" ;
     Text [ portuguese_brazilian ] = "Texto-Atributos" ;
     Text [ portuguese ] = "Atributos do texto" ;
-    Text [ finnish ] = "Tekstin määritteet" ;
+    Text [ finnish ] = "Tekstin muotoilu" ;
     Text [ danish ] = "Tekstattributter" ;
     Text [ french ] = "Attributs de texte" ;
     Text [ swedish ] = "Textattribut" ;
@@ -111,6 +111,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ turkish ] = "Font";
                 Text[ arabic ] = "ÇÇáÎØ";
                 Text[ catalan ] = "Fuente";
+                Text[ finnish ] = "Fontti";
             };
             PageItem
             {
@@ -135,6 +136,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ turkish ] = "Font Effects";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
                 Text[ catalan ] = "Efectos de fuente";
+                Text[ finnish ] = "Fonttitehosteet";
             };
             PageItem
             {
@@ -148,7 +150,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ french ] = "Position";
                 Text[ spanish ] = "Posición";
                 Text[ italian ] = "Posizione";
-                Text[ danish ] = "Position";
+                Text[ danish ] = "Start_ved";
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
@@ -156,9 +158,10 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ korean ] = "À§Ä¡";
                 Text[ chinese_simplified ] = "Î»ÖÃ";
                 Text[ chinese_traditional ] = "¦ì¸m";
-                Text[ turkish ] = "Position";
+                Text[ turkish ] = "Pozisyon";
                 Text[ arabic ] = "ÇáãæÖÚ";
                 Text[ catalan ] = "Posición";
+                Text[ finnish ] = "Sijainti";
             };
             PageItem
             {
@@ -183,6 +186,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ turkish ] = "Asian Layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
                 Text[ catalan ] = "Diseño asiático";
+                Text[ finnish ] = "Aasialainen asettelu";
             };
             PageItem
             {
@@ -195,7 +199,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ italian ] = "Rientri e distanze" ;
                 Text [ portuguese_brazilian ] = "Parágrafo" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
-                Text [ finnish ] = "Kappale" ;
+                Text [ finnish ] = "Sisennys ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
                 Text [ french ] = "Retraits et écarts" ;
                 Text [ swedish ] = "Indrag och avstånd" ;
@@ -239,6 +243,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alineación";
+                Text[ finnish ] = "Tasaus";
             };
             PageItem
             {
@@ -294,6 +299,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
                 Text[ catalan ] = "Tipografía asiática";
+                Text[ finnish ] = "Aasialaiset merkit";
             };
             PageItem
             {
@@ -376,7 +382,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text [ italian ] = "Scelta" ;
         Text [ portuguese_brazilian ] = "Escolha" ;
         Text [ portuguese ] = "Opções" ;
-        Text [ finnish ] = "Määritykset" ;
+        Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Udvalg" ;
         Text [ french ] = "Sélection" ;
         Text [ swedish ] = "Urval" ;
@@ -466,6 +472,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ turkish ] = "Ka~rakter deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cambiar caracteres";
+        Text[ finnish ] = "~Vaihda merkit";
     };
     NumericField NF_OTHER
     {
@@ -510,6 +517,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ turkish ] = "~Karakter ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Añadir caracteres";
+        Text[ finnish ] = "~Lisää merkkejä";
     };
     NumericField NF_LONGER
     {
@@ -552,6 +560,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ turkish ] = "Kar~akter kaldýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar caracteres";
+        Text[ finnish ] = "~Poista merkit";
     };
     NumericField NF_SHORTER
     {
@@ -595,6 +604,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ turkish ] = "~Birleþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~mbinar";
+        Text[ finnish ] = "~Yhdistä";
     };
     GroupBox GB_SIMILARITY
     {
@@ -622,6 +632,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Configuración";
+        Text[ finnish ] = "Asetukset";
     };
     OKButton BTN_ATTR_OK
     {
@@ -656,5 +667,6 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ turkish ] = "Benzerleri ara";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Búsqueda por semejanza";
+    Text[ finnish ] = "Vastaavuushaku";
 };
  // ********************************************************************** EOF
