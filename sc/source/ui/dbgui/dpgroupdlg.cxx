@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpgroupdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:30:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@
 #include "sc.hrc"
 #endif
 
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDGROUPBY_HPP_
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#endif
+
 // ============================================================================
 
 namespace {
@@ -91,13 +95,13 @@ namespace {
 /** Date part flags in order of the list box entries. */
 static const sal_Int32 spnDateParts[] =
 {
-    SC_DP_DATE_SECONDS,
-    SC_DP_DATE_MINUTES,
-    SC_DP_DATE_HOURS,
-    SC_DP_DATE_DAYS,
-    SC_DP_DATE_MONTHS,
-    SC_DP_DATE_QUARTERS,
-    SC_DP_DATE_YEARS
+    com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS,
+    com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES,
+    com::sun::star::sheet::DataPilotFieldGroupBy::HOURS,
+    com::sun::star::sheet::DataPilotFieldGroupBy::DAYS,
+    com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS,
+    com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS,
+    com::sun::star::sheet::DataPilotFieldGroupBy::YEARS
 };
 
 } // namespace
@@ -294,7 +298,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
     maEndHelper.SetValue( rInfo.AutoEnd, rInfo.End );
 
     if( nDatePart == 0 )
-        nDatePart = SC_DP_DATE_MONTHS;
+        nDatePart = com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS;
     for( ULONG nIdx = 0, nCount = maLbUnits.GetEntryCount(); nIdx < nCount; ++nIdx )
         maLbUnits.CheckEntryPos( static_cast< USHORT >( nIdx ), (nDatePart & spnDateParts[ nIdx ]) != 0 );
 
@@ -356,7 +360,7 @@ sal_Int32 ScDPDateGroupDlg::GetDatePart() const
 {
     // return DAYS for special "number of days" mode
     if( maRbNumDays.IsChecked() )
-        return SC_DP_DATE_DAYS;
+        return com::sun::star::sheet::DataPilotFieldGroupBy::DAYS;
 
     // return listbox contents for "units" mode
     sal_Int32 nDatePart = 0;
