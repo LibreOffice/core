@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-19 09:21:14 $
+ *  last change: $Author: mt $ $Date: 2002-07-19 10:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,12 +856,14 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
 
     TextDirectionality eTextDirection = TextDirectionality_LeftToRight_TopToBottom;
     if ( IsVertical() )
+        eTextDirection = TextDirectionality_TopToBottom_RightToLeft;
+    else if ( IsRightToLeft( GetEditDoc().GetPos( aPaM.GetNode() ) ) )
         eTextDirection = TextDirectionality_RightToLeft_TopToBottom;
 
     KeyEvent aTranslatedKeyEvent = rKeyEvent.LogicalTextDirectionality( eTextDirection );
 
-    BOOL bCtrl = rKeyEvent.GetKeyCode().IsMod1() ? TRUE : FALSE;
-    USHORT nCode = rKeyEvent.GetKeyCode().GetCode();
+    BOOL bCtrl = aTranslatedKeyEvent.GetKeyCode().IsMod1() ? TRUE : FALSE;
+    USHORT nCode = aTranslatedKeyEvent.GetKeyCode().GetCode();
 
     switch ( nCode )
     {
@@ -897,10 +899,10 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
 
     // Bewirkt evtl. ein CreateAnchor oder Deselection all
     aSelEngine.SetCurView( pEditView );
-    aSelEngine.CursorPosChanging( rKeyEvent.GetKeyCode().IsShift(), rKeyEvent.GetKeyCode().IsMod1() );
+    aSelEngine.CursorPosChanging( aTranslatedKeyEvent.GetKeyCode().IsShift(), aTranslatedKeyEvent.GetKeyCode().IsMod1() );
     EditPaM aOldEnd( pEditView->pImpEditView->GetEditSelection().Max() );
     pEditView->pImpEditView->GetEditSelection().Max() = aPaM;
-    if ( rKeyEvent.GetKeyCode().IsShift() )
+    if ( aTranslatedKeyEvent.GetKeyCode().IsShift() )
     {
         // Dann wird die Selektion erweitert...
         EditSelection aTmpNewSel( aOldEnd, aPaM );
