@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-31 15:07:16 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 08:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,7 +771,7 @@ ModalDialog RID_DLG_LIBS
         Text [ spanish ] = "Reemplazar bibliotecas existentes" ;
         Text [ french ] = "Remplacer les bibliothèques existantes" ;
         Text [ dutch ] = "Bestaande bibliotheken vervangen" ;
-        Text[ chinese_simplified ] = "¸üÌæÏÖ´æµÄ³ÌĞò¿â";
+        Text[ chinese_simplified ] = "Ìæ»»ÏÖ´æµÄ³ÌĞò¿â";
         Text[ russian ] = "Çàìåíèòü ñóùåñòâóşùèå áèáëèîòåêè";
         Text[ polish ] = "Zamieñ istniej¹ce biblioteki";
         Text[ japanese ] = "Šù‘¶×²ÌŞ×Ø‚Ì’uŠ·";
@@ -868,6 +868,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ finnish ] = "~Luo erillinen tiedosto";
     };
 };
+
 
 
 
