@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ Menu MN_REDLINE_POPUP
             Text [ English ] = "Edit Comment..." ;
             Text [ english_us ] = "Edit Comment..." ;
             Text [ portuguese_brazilian ] = "Kommentar bearbeiten..." ;
-            Text [ swedish ] = "Bearbeta kommentar..." ;
+            Text [ swedish ] = "Redigera kommentar..." ;
             Text [ danish ] = "Rediger kommentar..." ;
             Text [ italian ] = "Modifica commento..." ;
             Text [ spanish ] = "Modificar comentario..." ;
