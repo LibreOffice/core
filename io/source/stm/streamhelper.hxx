@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-26 15:55:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,18 @@
  *
  *
  ************************************************************************/
+
+// Save NDEBUG state
+#ifdef NDEBUG
+#define STREAMHELPER_HXX_HAD_NDEBUG
+#undef NDEBUG
+#endif
+
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
+#include <assert.h>
+
 #define Max( a, b )     (((a)>(b)) ? (a) : (b) )
 #define Min( a, b )     (((a)<(b)) ? (a) : (b) )
 
@@ -173,5 +185,12 @@ public:
                         { MemRingBuffer::shrink(); }
 
 };
+
+// Restore NDEBUG state
+#ifdef STREAMHELPER_HXX_HAD_NDEBUG
+#define NDEBUG
+#else
+#undef NDEBUG
+#endif
 
 }
