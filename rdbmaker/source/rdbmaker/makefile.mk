@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 14:28:44 $
+#   last change: $Author: rt $ $Date: 2003-04-17 10:23:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,9 @@ UNOTYPES= \
         com.sun.star.beans.XPropertySet	\
         com.sun.star.uno.XComponentContext	\
         com.sun.star.reflection.XInterfaceTypeDescription	\
+        com.sun.star.reflection.XModuleTypeDescription	\
+        com.sun.star.reflection.XConstantTypeDescription	\
+        com.sun.star.reflection.XConstantsTypeDescription	\
         com.sun.star.reflection.XInterfaceMemberTypeDescription	\
         com.sun.star.reflection.XInterfaceMethodTypeDescription	\
         com.sun.star.reflection.XInterfaceAttributeTypeDescription	\
