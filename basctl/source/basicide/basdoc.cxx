@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basdoc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:20:06 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 09:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ SFX_IMPL_SIMPLE_OBJECTFACTORY( BasicDocShell, SFXOBJECTSHELL_STD_NORMAL, sbasic 
 {
     Factory().SetExplorerImageId( IMG_MACROLIB );
     Factory().RegisterHelpFile( String( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) ) );
-    Factory().SetDocumentServiceName( String::CreateFromAscii("com.sun.star.comp.basic.BasicIDE") );
+    Factory().SetDocumentServiceName( String::CreateFromAscii("com.sun.star.script.BasicIDE") );
     Factory().RegisterMenuBar( IDEResId(RID_BASICMENU) );
 }
 
