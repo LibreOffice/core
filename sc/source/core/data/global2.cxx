@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:26:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -961,6 +961,26 @@ void ScConsolidateParam::Store( SvStream& rStream ) const
     for (USHORT i=0; i<nDataAreaCount; i++)
         rStream << *ppDataAreas[i];
 #endif
+}
+
+// -----------------------------------------------------------------------
+
+PivotField::PivotField( short nNewCol, USHORT nNewFuncMask ) :
+    nCol( nNewCol ),
+    nFuncMask( nNewFuncMask ),
+    nFuncCount( 0 )
+{
+}
+
+bool PivotField::operator==( const PivotField& r ) const
+{
+    return (nCol                            == r.nCol)
+        && (nFuncMask                       == r.nFuncMask)
+        && (nFuncCount                      == r.nFuncCount)
+        && (maFieldRef.ReferenceType        == r.maFieldRef.ReferenceType)
+        && (maFieldRef.ReferenceField       == r.maFieldRef.ReferenceField)
+        && (maFieldRef.ReferenceItemType    == r.maFieldRef.ReferenceItemType)
+        && (maFieldRef.ReferenceItemName    == r.maFieldRef.ReferenceItemName);
 }
 
 //------------------------------------------------------------------------
