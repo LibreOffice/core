@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusldlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:27:46 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fusldlg.hxx"
+
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
 #endif
@@ -74,13 +76,18 @@
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "sdattr.hxx"
-#include "fusldlg.hxx"
 #include "glob.hrc"
-
 #include "sdmod.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "optsitem.hxx"
 
+
+namespace sd {
 
 #define ITEMVALUE(ItemSet,Id,Cast) ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
@@ -93,9 +100,13 @@ TYPEINIT1( FuSlideShowDlg, FuPoor );
 |*
 \************************************************************************/
 
-FuSlideShowDlg::FuSlideShowDlg( SdViewShell* pViewSh, SdWindow*  pWin,
-                                SdView* pView, SdDrawDocument* pDoc, SfxRequest& rReq) :
-            FuPoor( pViewSh, pWin, pView, pDoc, rReq )
+FuSlideShowDlg::FuSlideShowDlg (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
 {
     SfxItemSet      aDlgSet( pDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
     List            aPageNameList;
@@ -154,7 +165,7 @@ FuSlideShowDlg::FuSlideShowDlg( SdViewShell* pViewSh, SdWindow*  pWin,
     aDlgSet.Put( SfxUInt32Item( ATTR_PRESENT_PAUSE_TIMEOUT, pDoc->GetPresPause() ) );
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_SHOW_PAUSELOGO, pDoc->IsPresShowLogo() ) );
 
-    SdStartPresentationDlg aDlg( (Window*) pWindow, aDlgSet, aPageNameList, pCustomShowList );
+    SdStartPresentationDlg aDlg (pWindow, aDlgSet, aPageNameList, pCustomShowList );
 
     if( aDlg.Execute() == RET_OK )
     {
@@ -273,3 +284,4 @@ FuSlideShowDlg::FuSlideShowDlg( SdViewShell* pViewSh, SdWindow*  pWin,
         delete (String*) pStr;
 }
 
+} // end of namespace sd
