@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:53:42 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@
 #ifndef _TOOLKIT_AWT_VCLXMENU_HXX_
 #include <toolkit/awt/vclxmenu.hxx>
 #endif
+#include <comphelper/mediadescriptor.hxx>
 
 #include <algorithm>
 
@@ -315,6 +316,31 @@ bool LayoutManager::UIElement::operator< ( const UIElement& aUIElement ) const
             }
         }
     }
+}
+
+static Reference< XModel > impl_getModelFromFrame( const Reference< XFrame >& rFrame )
+{
+    // Query for the model to get check the context information
+    Reference< XModel > xModel;
+    if ( rFrame.is() )
+    {
+        Reference< XController > xController( rFrame->getController(), UNO_QUERY );
+        if ( xController.is() )
+            xModel = xController->getModel();
+    }
+
+    return xModel;
+}
+
+static sal_Bool implts_isPreviewModel( const Reference< XModel >& xModel )
+{
+    if ( xModel.is() )
+    {
+        ::comphelper::MediaDescriptor aDesc( xModel->getArgs() );
+        return aDesc.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_PREVIEW(), (sal_Bool)sal_False);
+    }
+    else
+        return sal_False;
 }
 
 //*****************************************************************************************************************
@@ -568,10 +594,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                 }
             }
 
-            Reference< XController > xController = xFrame->getController();
-            if ( xController.is() )
-                xModel = xController->getModel();
-
+            xModel = impl_getModelFromFrame( xFrame );
             if ( xModel.is() )
             {
                 Reference< XUIConfigurationManagerSupplier > xUIConfigurationManagerSupplier( xModel, UNO_QUERY );
@@ -3249,12 +3272,15 @@ throw (RuntimeException)
     ReadGuard aReadLock( m_aLock );
     Reference< XFrame > xFrame = m_xFrame;
     Reference< XURLTransformer > xURLTransformer = m_xURLTransformer;
+    Reference< XModel >          xModel;
     sal_Bool    bInPlaceMenu = m_bInplaceMenuSet;
     aReadLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     if ( !xFrame.is() )
         return;
+
+    xModel = impl_getModelFromFrame( xFrame );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
@@ -3318,7 +3344,8 @@ throw (RuntimeException)
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ))
         {
-            if ( aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ) && !bInPlaceMenu )
+            sal_Bool bPreview( implts_isPreviewModel( xModel ));
+            if ( aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ) && !bInPlaceMenu && !bPreview )
             {
                 vos::OGuard aGuard( Application::GetSolarMutex() );
                 if ( !m_xMenuBar.is() )
