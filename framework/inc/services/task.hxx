@@ -2,9 +2,9 @@
  *
  *  $RCSfile: task.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:23 $
+ *  last change: $Author: as $ $Date: 2000-10-23 13:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,126 +342,87 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             Frame::initialize( xWindow );
         }
 
-        /*-*******************************************************************************************************/
         virtual REFERENCE< XWINDOW > SAL_CALL getContainerWindow() throw( RUNTIMEEXCEPTION )
         {
             return Frame::getContainerWindow();
         }
 
-        /*-****************************************************************************************************/
         virtual void SAL_CALL setCreator( const REFERENCE< XFRAMESSUPPLIER >& xCreator ) throw( RUNTIMEEXCEPTION )
         {
             Frame::setCreator( xCreator );
         }
 
-        /*-****************************************************************************************************/
         virtual REFERENCE< XFRAMESSUPPLIER > SAL_CALL getCreator() throw( RUNTIMEEXCEPTION )
         {
             return Frame::getCreator();
         }
 
-        /*-****************************************************************************************************/
         virtual OUSTRING SAL_CALL getName() throw( RUNTIMEEXCEPTION )
         {
             return Frame::getName();
         }
 
-        /*-****************************************************************************************************/
         virtual void SAL_CALL setName( const OUSTRING& sName ) throw( RUNTIMEEXCEPTION )
         {
             Frame::setName( sName );
         }
 
-        /*-*******************************************************************************************************/
         virtual sal_Bool SAL_CALL isTop() throw( RUNTIMEEXCEPTION )
         {
             return Frame::isTop();
         }
 
-        /*-*******************************************************************************************************/
         virtual void SAL_CALL activate() throw( RUNTIMEEXCEPTION )
         {
             Frame::activate();
         }
 
-        /*-*******************************************************************************************************/
         virtual void SAL_CALL deactivate() throw( RUNTIMEEXCEPTION )
         {
             Frame::deactivate();
         }
 
-        /*-*******************************************************************************************************/
         virtual sal_Bool SAL_CALL isActive() throw( RUNTIMEEXCEPTION )
         {
             return Frame::isActive();
         }
 
-        /*-*******************************************************************************************************/
         virtual sal_Bool SAL_CALL setComponent( const   REFERENCE< XWINDOW >&       xComponentWindow    ,
                                                 const   REFERENCE< XCONTROLLER >&   xController         ) throw( RUNTIMEEXCEPTION )
         {
             return Frame::setComponent( xComponentWindow, xController );
         }
 
-        /*-*******************************************************************************************************/
         virtual REFERENCE< XWINDOW > SAL_CALL getComponentWindow() throw( RUNTIMEEXCEPTION )
         {
             return Frame::getComponentWindow();
         }
 
-        /*-*******************************************************************************************************/
         virtual REFERENCE< XCONTROLLER > SAL_CALL getController() throw( RUNTIMEEXCEPTION )
         {
             return Frame::getController();
         }
 
-        /*-*******************************************************************************************************/
         virtual void SAL_CALL contextChanged() throw( RUNTIMEEXCEPTION )
         {
             Frame::contextChanged();
         }
 
-        /*-*******************************************************************************************************/
         virtual void SAL_CALL addFrameActionListener( const REFERENCE< XFRAMEACTIONLISTENER >& xListener ) throw( RUNTIMEEXCEPTION )
         {
             Frame::addFrameActionListener( xListener );
         }
 
-        /*-*******************************************************************************************************/
         virtual void SAL_CALL removeFrameActionListener( const REFERENCE< XFRAMEACTIONLISTENER >& xListener ) throw( RUNTIMEEXCEPTION )
         {
             Frame::removeFrameActionListener( xListener );
         }
 
-        /*-****************************************************************************************************//**
-            @short      -
-
-            @descr      This method searches for a frame with the specified name.
-                        Frames may contain other frames (e.g. a frameset) and may
-                        be contained in other frames. This hierarchie ist searched by
-                        this method.
-                        First some special names are taken into account, i.e. "",
-                         "_self", "_top", "_active" etc. The FrameSearchFlags are ignored
-                        when comparing these names with aTargetFrameName, further steps are
-                        controlled by the FrameSearchFlags. If allowed, the name of the frame
-                        itself is compared with the desired one, then ( again if allowed )
-                        the method findFrame is called for all children of the frame.
-                        At last findFrame may be called for the parent frame ( if allowed ).
-                        If no Frame with the given name is found until the top frames container,
-                        a new top Frame is created, if this is allowed by a special
-                        FrameSearchFlag. The new Frame also gets the desired name.
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         virtual REFERENCE< XFRAME > SAL_CALL findFrame( const   OUSTRING&   sTargetFrameName    ,
-                                                                sal_Int32   nSearchFlags        ) throw( RUNTIMEEXCEPTION );
+                                                                sal_Int32   nSearchFlags        ) throw( RUNTIMEEXCEPTION )
+        {
+            return Frame::findFrame( sTargetFrameName, nSearchFlags );
+        }
 
         //---------------------------------------------------------------------------------------------------------
         //   XTopWindowListener

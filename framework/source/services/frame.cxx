@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-10-18 12:22:44 $
+ *  last change: $Author: as $ $Date: 2000-10-23 13:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,9 @@
 #include <services/frame.hxx>
 #endif
 
-/*OBSOLETE
 #ifndef __FRAMEWORK_HELPER_ODISPATCHPROVIDER_HXX_
 #include <helper/odispatchprovider.hxx>
 #endif
-*/
 
 #ifndef __FRAMEWORK_HELPER_OINTERCEPTIONHELPER_HXX_
 #include <helper/ointerceptionhelper.hxx>
@@ -83,6 +81,10 @@
 
 #ifndef __FRAMEWORK_HELPER_OSTATUSINDICATORFACTORY_HXX_
 #include <helper/ostatusindicatorfactory.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
+#include <classes/targetfinder.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -160,7 +162,6 @@ using namespace ::rtl                                       ;
 #define DEFAULT_BISFRAMETOP                                 sal_True
 #define DEFAULT_BALREADYDISPOSED                            sal_False
 #define DEFAULT_BCONNECTED                                  sal_True
-#define DEFAULT_BILOADLASTCOMPONENT                         sal_False
 #define DEFAULT_SNAME                                       OUString()
 
 //_________________________________________________________________________________________________________________
@@ -193,22 +194,21 @@ Frame::Frame( const Reference< XMultiServiceFactory >& xFactory )
         ,   m_bIsFrameTop               ( DEFAULT_BISFRAMETOP               )
         ,   m_bAlreadyDisposed          ( DEFAULT_BALREADYDISPOSED          )
         ,   m_bConnected                ( DEFAULT_BCONNECTED                )
-        ,   m_bILoadLastComponent       ( DEFAULT_BILOADLASTCOMPONENT       )
         ,   m_sName                     ( DEFAULT_SNAME                     )
 {
     // We cant create the dispatchhelper and frameshelper, because they hold wekreferences to us!
     // But with a HACK (++refcount) its "OK" :-(
     ++m_refCount ;
-/*OBSOLETE
-    // Initialize a new dispatchhelper-object to handle dispatches PRIVATE!
+
+    // Initialize a new dispatchhelper-object to handle dispatches for SELF private and fast!
+    // We use these helper as slave for our interceptor helper ...
+    // (Attention: These helper hold a weakreference to us!)
     ODispatchProvider* pDispatchHelper = new ODispatchProvider( m_xFactory, this, m_aMutex );
-    m_xDispatchHelper = Reference< XDispatchProvider >( (OWeakObject*)pDispatchHelper, UNO_QUERY );
-*/
-    // Initialize a new dispatch helper object to handle dispatches and interceptor mechanism PRIVATE!
-    // These helper use an ODispatchProvider which hold a weakreference to us.
-    // OInterceptionHelper don't do it.
-    OInterceptionHelper* pDispatchHelper = new OInterceptionHelper( m_xFactory, this, m_aMutex );
-    m_xDispatchHelper = Reference< XDispatchProvider >( static_cast< OWeakObject* >(pDispatchHelper), UNO_QUERY );
+
+    // Initialize a new interception helper object to handle dispatches and interceptor mechanism PRIVATE!
+    // These helper don't need any reference to use ...
+    OInterceptionHelper* pInterceptionHelper = new OInterceptionHelper( Reference< XDispatchProvider >( static_cast< OWeakObject* >( pDispatchHelper ), UNO_QUERY ) );
+    m_xDispatchHelper = Reference< XDispatchProvider >( static_cast< OWeakObject* >(pInterceptionHelper), UNO_QUERY );
 
     // Initialize a new frameshelper-object to handle indexaccess and elementaccess!
     // Attention: OFrames need the this-pointer for initializing. You must use "this" directly.
@@ -220,8 +220,8 @@ Frame::Frame( const Reference< XMultiServiceFactory >& xFactory )
 
     // Safe impossible cases
     // We can't work without these helpers!
-    LOG_ASSERT( !(m_xDispatchHelper.is()==sal_False), "Frame::Frame()\nDispatchHelper is not valid. XDispatchProvider and XDispatch are not supported!\n"       )
-    LOG_ASSERT( !(m_xFramesHelper.is  ()==sal_False), "Frame::Frame()\nFramesHelper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!\n" )
+    LOG_ASSERT( !(m_xDispatchHelper.is()==sal_False), "Frame::Frame()\nDispatchHelper is not valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not supported!\n"   )
+    LOG_ASSERT( !(m_xFramesHelper.is  ()==sal_False), "Frame::Frame()\nFramesHelper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!\n"                         )
 
     // Don't forget these - or we live for ever!
     --m_refCount ;
@@ -346,34 +346,8 @@ Reference< XDispatch > SAL_CALL Frame::queryDispatch(   const   URL&        aURL
                                                         const   OUString&   sTargetFrameName,
                                                                 sal_Int32   nSearchFlags    ) throw( RuntimeException )
 {
-/*OBSOLETE
-    // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Frame::queryDispatch()" )
-    // Safe impossible cases
-    LOG_ASSERT( impldbg_checkParameter_queryDispatch( aURL, sTargetFrameName, nSearchFlags ), "Frame::queryDispatch()\nInvalid parameter detected.\n" )
-
-    // Set default return value.
-    Reference< XDispatch > xReturn;
-
-    // An interceptor can break ouer path to dispatch queries!
-    // Is there an interceptor set on this instance?
-    if ( m_xInterceptor.is() == sal_True )
-    {
-        // Yes; Then forward query to this instance and set results for return.
-        xReturn = m_xInterceptor->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
-    }
-    else
-    {
-        // No; Then use ouer own dispatchhelper to do this and set results for return.
-        xReturn = m_xDispatchHelper->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
-    }
-
-    // Return results of this operation.
-    return xReturn;
-*/
     // We use a helper to support these interface and an interceptor mechanism.
-    // These helper implementation use the same mutex and check incoming parameter!
-    // We don't must do it!
+    // These helper implementation use his own mutex and check incoming parameter for us!
     return m_xDispatchHelper->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
 }
 
@@ -382,34 +356,8 @@ Reference< XDispatch > SAL_CALL Frame::queryDispatch(   const   URL&        aURL
 //*****************************************************************************************************************
 Sequence< Reference< XDispatch > > SAL_CALL Frame::queryDispatches( const Sequence< DispatchDescriptor >& seqDescriptor ) throw( RuntimeException )
 {
-/*OBSOLETE
-    // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Frame::queryDispatches()" )
-    // Safe impossible cases
-    LOG_ASSERT( impldbg_checkParameter_queryDispatches( seqDescriptor ), "Frame::queryDispatches()\nInvalid parameter detected.\n" )
-
-    // Set default return value.
-    Sequence< Reference< XDispatch > > seqReturn;
-
-    // An interceptor can break ouer path to dispatch queries!
-    // Is there an interceptor set on this instance?
-    if ( m_xInterceptor.is() == sal_True )
-    {
-        // Yes; Then forward query to this instance and set results for return.
-        seqReturn = m_xInterceptor->queryDispatches( seqDescriptor );
-    }
-    else
-    {
-        // No; Then use ouer own dispatchhelper to do this and set results for return.
-        seqReturn = m_xDispatchHelper->queryDispatches( seqDescriptor );
-    }
-
-    // Return results of this operation.
-    return seqReturn;
-*/
     // We use a helper to support these interface and an interceptor mechanism.
-    // These helper implementation use the same mutex and check incoming parameter!
-    // We don't must do it!
+    // These helper implementation use his own mutex and check incoming parameter for us!
     return m_xDispatchHelper->queryDispatches( seqDescriptor );
 }
 
@@ -418,32 +366,8 @@ Sequence< Reference< XDispatch > > SAL_CALL Frame::queryDispatches( const Sequen
 //*****************************************************************************************************************
 void SAL_CALL Frame::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& xInterceptor ) throw( RuntimeException )
 {
-/*OBSOLETE
-    // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Frame::registerDispatchProviderInterceptor()" )
-    // Safe impossible cases
-    LOG_ASSERT( impldbg_checkParameter_registerDispatchProviderInterceptor( xInterceptor ), "Frame::registerDispatchProviderInterceptor()\nInvalid parameter detected.\n" )
-
-    if ( m_xInterceptor.is() )
-    {
-        // There is already an interceptor; the new one will become it as master.
-        xInterceptor->setSlaveDispatchProvider      ( Reference< XDispatchProvider >( m_xInterceptor, UNO_QUERY ) );
-        m_xInterceptor->setMasterDispatchProvider   ( Reference< XDispatchProvider >( xInterceptor  , UNO_QUERY ) );
-    }
-    else
-    {
-        // It is the first interceptor; pass own dispatch provider as a slave.
-        xInterceptor->setSlaveDispatchProvider( m_xDispatchHelper );
-    }
-
-    // Set the new interceptor at frame.
-    // Frame is the master of the first interceptor.
-    m_xInterceptor = xInterceptor;
-    m_xInterceptor->setMasterDispatchProvider( this );
-*/
     // We use a helper to support these interface and an interceptor mechanism.
-    // These helper implementation use the same mutex and check incoming parameter!
-    // We don't must do it!
+    // These helper implementation use his own mutex and check incoming parameter for us!
     Reference< XDispatchProviderInterception > xHelper( m_xDispatchHelper, UNO_QUERY );
     xHelper->registerDispatchProviderInterceptor( xInterceptor );
 }
@@ -453,42 +377,8 @@ void SAL_CALL Frame::registerDispatchProviderInterceptor( const Reference< XDisp
 //*****************************************************************************************************************
 void SAL_CALL Frame::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& xInterceptor ) throw( RuntimeException )
 {
-/*OBSOLETE
-    // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Frame::releaseDispatchProviderInterceptor()" )
-    // Safe impossible cases
-    LOG_ASSERT( impldbg_checkParameter_releaseDispatchProviderInterceptor( xInterceptor ), "Frame::releaseDispatchProviderInterceptor()\nInvalid parameter detected.\n" )
-
-    // Get slave and master of given interceptor.
-    Reference< XDispatchProvider >              xSlave  ( xInterceptor->getSlaveDispatchProvider()  , UNO_QUERY );
-    Reference< XDispatchProviderInterceptor >   xMaster ( xInterceptor->getMasterDispatchProvider() , UNO_QUERY );
-
-    if ( xMaster.is() == sal_True )
-    {
-        // Old master may be an interceptor too, must be reconnected.
-        if ( xSlave.is() == sal_True )
-        {
-            xMaster->setSlaveDispatchProvider( xSlave );
-        }
-        else
-        {
-            xMaster->setSlaveDispatchProvider( m_xDispatchHelper );
-        }
-    }
-
-    // Unchain the interceptor that has to be removed.
-    xInterceptor->setSlaveDispatchProvider( Reference< XDispatchProvider >() );
-    xInterceptor->setMasterDispatchProvider( Reference< XDispatchProvider >() );
-
-    if ( m_xInterceptor == xInterceptor )
-    {
-        // First interceptor was removed; its old slave will become the new interceptor.
-        m_xInterceptor = Reference< XDispatchProviderInterceptor >( xSlave, UNO_QUERY );
-    }
-*/
     // We use a helper to support these interface and an interceptor mechanism.
-    // These helper implementation use the same mutex and check incoming parameter!
-    // We don't must do it!
+    // These helper implementation use his own mutex and check incoming parameter for us!
     Reference< XDispatchProviderInterception > xHelper( m_xDispatchHelper, UNO_QUERY );
     xHelper->releaseDispatchProviderInterceptor( xInterceptor );
 }
@@ -709,6 +599,77 @@ Reference< XFrame > SAL_CALL Frame::findFrame(  const   OUString&   sTargetFrame
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::findFrame()" )
     // Safe impossible cases
     LOG_ASSERT( impldbg_checkParameter_findFrame( sTargetFrameName, nSearchFlags ), "Frame::findFrame()\nInvalid parameter detected.\n" )
+
+    // Set default return value if method failed.
+    Reference< XFrame > xSearchedFrame;
+
+    // Protection against recursion while searching in parent frames!
+    // See switch-statement eSIBLINGS, eALL for further informations.
+    if ( m_bRecursiveSearchProtection == sal_False )
+    {
+        // Use helper to classify search direction.
+        IMPL_ETargetClass eDirection = TargetFinder::classify(  this                ,
+                                                                sTargetFrameName    ,
+                                                                nSearchFlags        );
+        // Use returned recommendation to search right frame!
+        switch( eDirection )
+        {
+            case eSELF      :   {
+                                    xSearchedFrame = this;
+                                }
+                                break;
+
+            case ePARENT    :   {
+                                    xSearchedFrame = Reference< XFrame >( m_xParent, UNO_QUERY );
+                                }
+                                break;
+
+            case eUP        :   {
+                                    xSearchedFrame = m_xParent->findFrame( sTargetFrameName, nSearchFlags );
+                                }
+                                break;
+
+            case eDOWN      :   {
+                                    xSearchedFrame = TargetFinder::helpDownSearch( m_xFramesHelper, sTargetFrameName );
+                                }
+                                break;
+
+            case eSIBLINGS  :   {
+                                    m_bRecursiveSearchProtection = sal_True;
+                                    xSearchedFrame = m_xParent->findFrame( sTargetFrameName, FrameSearchFlag::CHILDREN );
+                                    m_bRecursiveSearchProtection = sal_False;
+                                }
+                                break;
+
+            case eALL       :   {
+                                    m_bRecursiveSearchProtection = sal_True;
+                                    xSearchedFrame = TargetFinder::helpDownSearch( m_xFramesHelper, sTargetFrameName );
+                                    if( xSearchedFrame.is() == sal_False )
+                                    {
+                                        xSearchedFrame = m_xParent->findFrame( sTargetFrameName, nSearchFlags );
+                                    }
+                                    m_bRecursiveSearchProtection = sal_True;
+                                }
+                                break;
+        }
+    }
+    // Return result of operation.
+    return xSearchedFrame;
+}
+
+/*TODO
+     If new implementation of findFrame/queryDispatch works correctly we can delete these old code!
+
+//*****************************************************************************************************************
+//   XFrame
+//*****************************************************************************************************************
+Reference< XFrame > SAL_CALL Frame::findFrame(  const   OUString&   sTargetFrameName    ,
+                                                            sal_Int32   nSearchFlags        ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    LOCK_MUTEX( aGuard, m_aMutex, "Frame::findFrame()" )
+    // Safe impossible cases
+    LOG_ASSERT( impldbg_checkParameter_findFrame( sTargetFrameName, nSearchFlags ), "Frame::findFrame()\nInvalid parameter detected.\n" )
     // Log some special informations about search. (Active in debug version only, if special mode is set!)
     LOG_PARAMETER_FINDFRAME( "Frame", m_sName, sTargetFrameName, nSearchFlags )
 
@@ -799,15 +760,13 @@ Reference< XFrame > SAL_CALL Frame::findFrame(  const   OUString&   sTargetFrame
             //  At first we must filter all other special target names!
             //  You can disable this statement if all these cases are handled before ...
             //*********************************************************************************************************
-/*
-            if  (
-                    ( sTargetFrameName              !=  FRAMETYPE_SELF  )   &&
-                    ( sTargetFrameName              !=  FRAMETYPE_PARENT)   &&
-                    ( sTargetFrameName              !=  FRAMETYPE_TOP   )   &&
-                    ( sTargetFrameName              !=  FRAMETYPE_BLANK )   &&
-                    ( sTargetFrameName.getLength()  >   0               )
-                )
-*/
+//          if  (
+//                  ( sTargetFrameName              !=  FRAMETYPE_SELF  )   &&
+//                  ( sTargetFrameName              !=  FRAMETYPE_PARENT)   &&
+//                  ( sTargetFrameName              !=  FRAMETYPE_TOP   )   &&
+//                  ( sTargetFrameName              !=  FRAMETYPE_BLANK )   &&
+//                  ( sTargetFrameName.getLength()  >   0               )
+//              )
             {
                 //*****************************************************************************************************
                 //  5)  If SELF searched and given name is the right one, we can return us as result.
@@ -952,12 +911,10 @@ Reference< XFrame > SAL_CALL Frame::findFrame(  const   OUString&   sTargetFrame
                 //*************************************************************************************************************
                 //  10) If CREATE is set we must forward call to desktop. He is the only one, who can do that.
                 //*************************************************************************************************************
-                /*
-                    Praeprozessor Bug!
-                    Wenn nach CREATE ein Space steht wird versucht es durch das Define CREATE aus tools/rtti.hxx zu ersetzen
-                    was fehlschlaegt und die naechsten 3 Klammern ")){" unterschlaegt!
-                    Dann meckert der Compiler das natuerlich an ...
-                 */
+//                  Praeprozessor Bug!
+//                  Wenn nach CREATE ein Space steht wird versucht es durch das Define CREATE aus tools/rtti.hxx zu ersetzen
+//                  was fehlschlaegt und die naechsten 3 Klammern ")){" unterschlaegt!
+//                  Dann meckert der Compiler das natuerlich an ...
                 if((xReturn.is()==sal_False)&&(nSearchFlags&FrameSearchFlag::CREATE)&&(m_xParent.is()==sal_True))
                 {
                     LOG_TARGETINGSTEP( "Frame", m_sName, "forward CREATE to parent" )
@@ -972,7 +929,7 @@ Reference< XFrame > SAL_CALL Frame::findFrame(  const   OUString&   sTargetFrame
     // Return with result of operation.
     return xReturn;
 }
-
+*/
 //*****************************************************************************************************************
 //   XFrame
 //*****************************************************************************************************************
@@ -1328,13 +1285,6 @@ void SAL_CALL Frame::dispose() throw( RuntimeException )
             m_xParent->getFrames()->remove( xThis );
             m_xParent=Reference< XFramesSupplier >();
         }
-/*OBSOLETE
-        // Release current interceptor.
-        while ( m_xInterceptor.is() == sal_True )
-        {
-            releaseDispatchProviderInterceptor( m_xInterceptor );
-        }
-*/
         // Release current indicator factory helper.
         m_xIndicatorFactoryHelper = Reference< XStatusIndicatorFactory >();
 
@@ -1358,7 +1308,6 @@ void SAL_CALL Frame::dispose() throw( RuntimeException )
         m_bIsFrameTop                   = DEFAULT_BISFRAMETOP               ;
         m_bAlreadyDisposed              = DEFAULT_BALREADYDISPOSED          ;
         m_bConnected                    = DEFAULT_BCONNECTED                ;
-        m_bILoadLastComponent           = DEFAULT_BILOADLASTCOMPONENT       ;
         m_sName                         = DEFAULT_SNAME                     ;
     }
 }
@@ -1638,46 +1587,6 @@ void Frame::impl_resizeComponentWindow()
     }
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-Reference< XFrame > Frame::impl_searchLastLoadedComponent()
-{
-    // Set default return value if search failed.
-    Reference< XFrame > xReturn;
-
-    // If I am the searched frame ...
-    if ( m_bILoadLastComponent == sal_True )
-    {
-        // ... return this as result of search and reset help flag.
-        xReturn = Reference< XFrame >( (OWeakObject*)this, UNO_QUERY );
-        m_bILoadLastComponent = sal_False;
-    }
-    else
-    {
-        // Else; we must search at ouer childs. We make a deep search.
-        // Lock the container. Nobody should append or remove elements during next time.
-        // But don't forget to unlock it again!
-        m_aChildFrameContainer.lock();
-        // Break loop, if something was found or all container items was compared.
-        sal_uInt32 nCount       = m_aChildFrameContainer.getCount();
-        sal_uInt32 nPosition    = 0;
-        while   (
-                    ( xReturn.is()  ==  sal_False   )   &&
-                    ( nPosition     <   nCount      )
-                )
-        {
-            xReturn = ((Frame*)(m_aChildFrameContainer[nPosition].get()))->impl_searchLastLoadedComponent();
-            ++nPosition;
-        }
-        // Don't forget to unlock the container!
-        m_aChildFrameContainer.unlock();
-    }
-
-    // Return result of this operation.
-    return xReturn;
-}
-
 //_________________________________________________________________________________________________________________
 //  debug methods
 //_________________________________________________________________________________________________________________
@@ -1790,98 +1699,7 @@ sal_Bool Frame::impldbg_checkParameter_setActiveFrame( const Reference< XFrame >
     // Return result of check.
     return bOK ;
 }
-/*OBSOLETE
-//*****************************************************************************************************************
-sal_Bool Frame::impldbg_checkParameter_queryDispatch(   const   URL&        aURL            ,
-                                                          const OUString&   sTargetFrameName,
-                                                                  sal_Int32 nSearchFlags    )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
 
-    // Check parameter.
-    if  (
-            ( &aURL                         ==  NULL        )   ||
-//          ( aURL.Complete.getLength()     <   1           )   ||
-            ( &sTargetFrameName             ==  NULL        )   ||
-            // sTargetFrameName can be ""!
-            (
-                (    nSearchFlags != FrameSearchFlag::AUTO        ) &&
-                ( !( nSearchFlags &  FrameSearchFlag::PARENT    ) ) &&
-                ( !( nSearchFlags &  FrameSearchFlag::SELF      ) ) &&
-                ( !( nSearchFlags &  FrameSearchFlag::CHILDREN  ) ) &&
-                ( !( nSearchFlags &  FrameSearchFlag::CREATE    ) ) &&
-                ( !( nSearchFlags &  FrameSearchFlag::SIBLINGS  ) ) &&
-                ( !( nSearchFlags &  FrameSearchFlag::TASKS     ) ) &&
-                ( !( nSearchFlags &  FrameSearchFlag::ALL       ) ) &&
-                ( !( nSearchFlags &  FrameSearchFlag::GLOBAL    ) )
-            )
-        )
-    {
-        bOK = sal_False ;
-    }
-
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-sal_Bool Frame::impldbg_checkParameter_queryDispatches( const Sequence< DispatchDescriptor >& seqDescriptor )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-
-    // Check parameter.
-    if  (
-            ( &seqDescriptor            ==  NULL    )   ||
-            ( seqDescriptor.getLength() <   1       )
-        )
-    {
-        bOK = sal_False ;
-    }
-
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-sal_Bool Frame::impldbg_checkParameter_registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& xInterceptor )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-
-    // Check parameter.
-    if  (
-            ( &xInterceptor     ==  NULL        )   ||
-            ( xInterceptor.is() ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-sal_Bool Frame::impldbg_checkParameter_releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& xInterceptor )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-
-    // Check parameter.
-    if  (
-            ( &xInterceptor     ==  NULL        )   ||
-            ( xInterceptor.is() ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-
-    // Return result of check.
-    return bOK ;
-}
-*/
 //*****************************************************************************************************************
 sal_Bool Frame::impldbg_checkParameter_updateViewData( const Any& aValue )
 {

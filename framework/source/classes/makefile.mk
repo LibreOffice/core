@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: as $ $Date: 2000-10-16 11:55:24 $
+#   last change: $Author: as $ $Date: 2000-10-23 13:56:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/wildcard.obj							\
                     $(SLO)$/framecontainer.obj						\
                     $(SLO)$/taskcreator.obj							\
-                    $(SLO)$/asyncquit.obj
+                    $(SLO)$/asyncquit.obj							\
+                    $(SLO)$/targetfinder.obj
 
 # --- Targets ------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-10-18 12:22:41 $
+ *  last change: $Author: as $ $Date: 2000-10-23 13:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1172,7 +1172,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XFRAME > impl_searchLastLoadedComponent();
+//OBSOLETE      REFERENCE< XFRAME > impl_searchLastLoadedComponent();
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -1385,8 +1385,7 @@ class Frame :   public XTYPEPROVIDER                    ,
         // Make it protected for directly access.
         OUSTRING                                        m_sName                             ;   /// name of this frame
         REFERENCE< XFRAMESSUPPLIER >                    m_xParent                           ;   /// parent of this frame
-//OBSOLETE      REFERENCE< XDISPATCHPROVIDERINTERCEPTOR >       m_xInterceptor                      ;   /// current interceptor for dispatches
-        REFERENCE< XDISPATCHPROVIDER >                  m_xDispatchHelper                   ;   /// helper for XDispatchProvider and XDispatch interfaces
+        REFERENCE< XDISPATCHPROVIDER >                  m_xDispatchHelper                   ;   /// helper for XDispatchProvider, XDispatch, XDispatchProviderInterception interfaces
         REFERENCE< XMULTISERVICEFACTORY >               m_xFactory                          ;   /// reference to factory, which has create this instance
         REFERENCE< XWINDOW >                            m_xContainerWindow                  ;   /// containerwindow of this frame for embedded components
         sal_Bool                                        m_bRecursiveSearchProtection        ;   /// protect against recursion while searching in parent frames
@@ -1401,7 +1400,7 @@ class Frame :   public XTYPEPROVIDER                    ,
         sal_Bool                                        m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop
         sal_Bool                                        m_bConnected                        ;   /// due to FrameActionEvent
         sal_Bool                                        m_bAlreadyDisposed                  ;   /// protect egainst recursive dispose calls
-        sal_Bool                                        m_bILoadLastComponent               ;   /// help flag to find last destination of dispatch(...) in tree! see impl_searchLastLoadedComponent() for further informations
+//OBSOLETE      sal_Bool                                        m_bILoadLastComponent               ;   /// help flag to find last destination of dispatch(...) in tree! see impl_searchLastLoadedComponent() for further informations
         OMULTITYPEINTERFACECONTAINERHELPER              m_aListenerContainer                ;   /// container for ALL Listener
         REFERENCE< XFRAMES >                            m_xFramesHelper                     ;   /// helper for XFrames, XIndexAccess and XElementAccess interfaces
 
