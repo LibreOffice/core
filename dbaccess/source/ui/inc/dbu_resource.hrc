@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:33:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #define RID_UNTYPED_START               RID_DBACCESS_START
 #define RID_WARN_START                  RID_DBACCESS_START
 #define RID_CONTROL_START               RID_DBACCESS_START
+#define RID_MISC_START                  RID_DBACCESS_START
 
 // new defines to make the strings folder specific
 #define RID_STR_BRW_START               RID_DBACCESS_START
@@ -190,14 +191,14 @@
 #define QUERY_BRW_SAVEMODIFIED          RID_QUERYBOX_START +  1
 #define QUERY_CONNECTION_LOST           RID_QUERYBOX_START +  2
 #define QUERY_BRW_DELETE_QUERY_CONFIRM  RID_QUERYBOX_START +  3
-#define QUERY_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  4
+    // FREE
 #define TABLE_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  5
 #define TABLE_QUERY_CONNECTION_LOST     RID_QUERYBOX_START +  6
 #define QUERY_SAVE_CURRENT_INDEX        RID_QUERYBOX_START +  7
 #define QUERY_SAVE_TABLE_EDIT_INDEXES   RID_QUERYBOX_START +  8
 #define RELATION_DESIGN_SAVEMODIFIED    RID_QUERYBOX_START +  9
 #define QUERY_NEED_TO_SAVE_FILTER       RID_QUERYBOX_START + 10
-#define QUERY_VIEW_DESIGN_SAVEMODIFIED  RID_QUERYBOX_START + 11
+    // FREE
 #define QUERY_USERADMIN_DELETE_USER     RID_QUERYBOX_START + 12
 #define TABLE_DESIGN_ALL_ROWS_DELETED   RID_QUERYBOX_START + 13
 
@@ -351,14 +352,12 @@
 
 #define RSC_DATASOURCE_TYPES            RID_UNTYPED_START +  1
 #define RSC_CHARSETS                    RID_UNTYPED_START +  2
-#define PB_FORMAT                       RID_UNTYPED_START +  3
-#define FIXED_NO_CONNECTION             RID_UNTYPED_START +  4
-#define LB_LEFT_TABLE                   RID_UNTYPED_START +  5
-#define LB_RIGHT_TABLE                  RID_UNTYPED_START +  6
-#define LB_CONTROL                      RID_UNTYPED_START +  7
-#define FL_INVOLVED_TABLES              RID_UNTYPED_START +  8
-#define FL_INVOLVED_FIELDS              RID_UNTYPED_START +  9
+#define RSC_QUERY_OBJECT_TYPE           RID_UNTYPED_START +  4
 
+//========================================================================
+// various
+
+#define PB_FORMAT                       RID_MISC_START +  0
 
 #endif // _DBU_RESOURCE_HRC_
 
