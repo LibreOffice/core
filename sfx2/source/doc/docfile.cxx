@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:57:33 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,6 @@ public:
     String aBaseURL;
     sal_Bool bUpdatePickList : 1;
     sal_Bool bIsTemp        : 1;
-    sal_Bool bUsesCache     : 1;
     sal_Bool bForceSynchron : 1;
     sal_Bool bDontCreateCancellable : 1;
     sal_Bool bDownloadDone          : 1;
@@ -396,8 +395,6 @@ public:
     sal_Bool bAllowDefaultIntHdl: 1;
     sal_Bool bIsDiskSpannedJAR: 1;
     sal_Bool bIsCharsetInitialized: 1;
-
-    sal_uInt16       nPrio;
 
     SfxPoolCancelManagerRef xCancelManager;
     UcbLockBytesCancellable_Impl* pCancellable;
@@ -412,9 +409,7 @@ public:
     String           aReferer;
     DateTime         aExpireTime;
     SfxFrameWeak     wLoadTargetFrame;
-    LoadEnvironment_Impl* pLoadEnv;
     SvKeyValueIteratorRef xAttributes;
-    SvRefBaseRef    xLoadRef;
 
     svtools::AsynchronLink  aDoneLink;
     svtools::AsynchronLink  aAvailableLink;
@@ -488,10 +483,10 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
  :
     SvCompatWeakBase( pAntiImplP ),
     bUpdatePickList(sal_True), bIsTemp( sal_False ), pOrigFilter( 0 ),
-    bUsesCache(sal_True), pCancellable( 0 ),
-    nPrio( 99 ), aExpireTime( Date() + 10, Time() ),
+    pCancellable( 0 ),
+    aExpireTime( Date() + 10, Time() ),
     bForceSynchron( sal_False ), bStreamReady( sal_False ), bIsStorage( sal_False ),
-    pLoadEnv( 0 ), pAntiImpl( pAntiImplP ),
+    pAntiImpl( pAntiImplP ),
     bDontCreateCancellable( sal_False ), pTempDir( NULL ), bIsDiskSpannedJAR( sal_False ),
     bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL ),
     nLastStorageError( 0 ),
@@ -612,6 +607,7 @@ Reference < XContent > SfxMedium::GetContent() const
         }
         else
         {
+            // TODO: DBG_ERROR("SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
             String aURL;
             if ( aName.Len() )
                 ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
@@ -1459,7 +1455,6 @@ void SfxMedium::Transfer_Impl()
             }
         }
 
-        sal_Bool bSuccess = sal_False;
         INetURLObject aDest( GetURLObject() );
 
         // source is the temp file written so far
@@ -1490,7 +1485,27 @@ void SfxMedium::Transfer_Impl()
             if ( !aFileName.Len() )
                 aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
-            if ( ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, aTransferContent ) )
+            try
+            {
+                aTransferContent = ::ucb::Content( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
+            }
+            catch (const ::com::sun::star::ucb::ContentCreationException& ex)
+            {
+                eError = ERRCODE_IO_GENERAL;
+                if (
+                    (ex.eError == ::com::sun::star::ucb::ContentCreationError_NO_CONTENT_PROVIDER    ) ||
+                    (ex.eError == ::com::sun::star::ucb::ContentCreationError_CONTENT_CREATION_FAILED)
+                   )
+                {
+                    eError = ERRCODE_IO_NOTEXISTSPATH;
+                }
+            }
+            catch (const ::com::sun::star::uno::Exception&)
+            {
+                eError = ERRCODE_IO_GENERAL;
+            }
+
+            if (!eError)
             {
                 // free resources, otherwise the transfer may fail
                 Close();
@@ -1516,7 +1531,8 @@ void SfxMedium::Transfer_Impl()
 
                 try
                 {
-                    bSuccess = aTransferContent.transferContent( aSourceContent, ::ucb::InsertOperation_COPY, aFileName, nNameClash );
+                    if (!aTransferContent.transferContent( aSourceContent, ::ucb::InsertOperation_COPY, aFileName, nNameClash ))
+                        eError = ERRCODE_IO_GENERAL;
                 }
                 catch ( ::com::sun::star::ucb::CommandAbortedException& )
                 {
@@ -1733,6 +1749,8 @@ void SfxMedium::GetMedium_Impl()
         }
         else
         {
+            // TODO: DBG_ERROR("SfxMedium::GetMediumImpl()\nCreate Stream? This code exists as fallback only. Please clarify, why its used.");
+
             SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
             BOOL bAllowReadOnlyMode = pItem ? pItem->GetValue() : TRUE;
             BOOL bIsWritable = ( nStorOpenMode & STREAM_WRITE );
@@ -2418,20 +2436,6 @@ sal_uInt32 SfxMedium::GetMIMEAndRedirect( String &rName )
 
 //----------------------------------------------------------------
 
-void SfxMedium::SetUsesCache( sal_Bool bUse )
-{
-    pImp->bUsesCache = bUse;
-}
-//----------------------------------------------------------------
-
-sal_Bool SfxMedium::UsesCache() const
-{
-    return pImp->bUsesCache;
-}
-//----------------------------------------------------------------
-
-//----------------------------------------------------------------
-
 void SfxMedium::SetReferer( const String& rRefer )
 {
     pImp->aReferer = rRefer;
@@ -2442,18 +2446,7 @@ const String& SfxMedium::GetReferer( ) const
 {
     return pImp->aReferer;
 }
-//----------------------------------------------------------------
 
-void SfxMedium::SetTransferPriority( sal_uInt16 nPrio )
-{
-    pImp->nPrio = nPrio;
-}
-//----------------------------------------------------------------
-
-sal_uInt16 SfxMedium::GetTransferPriority( ) const
-{
-    return pImp->nPrio;
-}
 //----------------------------------------------------------------
 
 void SfxMedium::SetExpired_Impl( const DateTime& rDateTime )
@@ -2530,18 +2523,6 @@ SfxItemSet* SfxMedium::GetItemSet() const
     if( !pSet ) ((SfxMedium*)this)->pSet =
                     new SfxAllItemSet( SFX_APP()->GetPool() );
     return pSet;
-}
-//----------------------------------------------------------------
-
-void SfxMedium::SetLoadEnvironment_Impl( LoadEnvironment_Impl* pEnv )
-{
-    pImp->pLoadEnv = pEnv;
-}
-//----------------------------------------------------------------
-
-LoadEnvironment_Impl* SfxMedium::GetLoadEnvironment_Impl() const
-{
-    return pImp->pLoadEnv;
 }
 //----------------------------------------------------------------
 
@@ -2902,16 +2883,6 @@ void SfxMedium::CreateTempFileNoCopy()
     CloseStorage();
 }
 
-void SfxMedium::SetLoadEnvironment( SfxLoadEnvironment* pEnv )
-{
-    pImp->xLoadRef = pEnv;
-}
-
-SfxLoadEnvironment* SfxMedium::GetLoadEnvironment() const
-{
-    return (SfxLoadEnvironment*) &pImp->xLoadRef;
-}
-
 ::rtl::OUString SfxMedium::GetCharset()
 {
     if( !pImp->bIsCharsetInitialized )
@@ -3039,4 +3010,3 @@ SvStringsDtor* SfxVersionTableDtor::GetVersions() const
 
     return pList;
 }
-
