@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:08:12 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ class SwTxtFrm: public SwCntntFrm
 
     // Wechselt den Frame oder auch nicht (vgl. FlyCnt)
     sal_Bool _GetCrsrOfst(SwPosition *pPos, const Point &rPoint,
-                      const sal_Bool bChgFrm, const SwCrsrMoveState* = 0 ) const;
+                      const sal_Bool bChgFrm, SwCrsrMoveState* = 0 ) const;
     void FillCrsrPos( SwFillData &rFill ) const;
 
     // formatiert genau eine Zeile ...
@@ -297,7 +297,7 @@ public:
     //naechsten ist. Wenn der SPoint ausserhalb der SSize liegt,
     //liefert die Funktion sal_False, sal_True sonst.
     virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
-                              const SwCrsrMoveState* = 0) const;
+                                  SwCrsrMoveState* = 0) const;
 
     // GetKeyCrsrOfst sorgt dafuer, dass der Frame nicht gewechselt wird
     // (z.B. Wechsel in den zeichengebundenen Frame).
