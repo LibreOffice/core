@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:31 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,35 +214,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
     if ( ! xDesktop.is())
         return NULL;
 
-    css::uno::Reference< css::frame::XFrames >          xContainer( xDesktop->getFrames(), css::uno::UNO_QUERY );
-    css::uno::Reference< css::container::XIndexAccess > xAccess   ( xContainer           , css::uno::UNO_QUERY );
-
-    // search for any plugin frame to decide which type the new created task must have
-    css::uno::Reference< css::mozilla::XPluginInstance > xPlugin     ;
-    sal_Bool                                             bPluginMode = sal_False;
-    sal_Int32                                            nCount      = xAccess->getCount();
-    for( sal_Int32 i=0; i<nCount; ++i )
-    {
-        css::uno::Any                             aFrame = xAccess->getByIndex(i);
-        css::uno::Reference< css::frame::XFrame > xFrame ;
-        if ( !(aFrame>>=xFrame) || !xFrame.is() )
-            continue;
-
-        xPlugin = css::uno::Reference< css::mozilla::XPluginInstance >( xFrame, css::uno::UNO_QUERY );
-        if (xPlugin.is())
-        {
-            bPluginMode = sal_True;
-            break;
-        }
-    }
-
-    // If information about plugin mode exists - we can call right creation helper
-    css::uno::Reference< css::frame::XFrame > xTask;
-    if (bPluginMode)
-        xTask = implts_createBrowserTask(xDesktop, xPlugin, sRightName, bVisible);
-    else
-        xTask = implts_createSystemTask(xDesktop, sRightName, bVisible);
-
+    css::uno::Reference< css::frame::XFrame > xTask = implts_createSystemTask(xDesktop, sRightName, bVisible);
     return xTask;
 }
 
@@ -336,38 +308,6 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::implts_createSystemTask( 
     }
 
     return xTask;
-}
-
-/*-****************************************************************************************************//**
-    @short      create a new task by using browser window as parent for own one
-    @descr      With this method you can create a new empty browser task. We create the task and the container
-                window inside of it. Created node will be a child of given parent - which can be the desktop only.
-
-    @attention  Currently it's not possible to create such browser tasks - because the browser doesn't support
-                synchronous creation of a new empty window. So we create system tasks here too , till
-                a solution exists.
-
-    @param      xDesktop
-                    only the desktop can be the parent of such new created task frame
-    @param      xPlugin
-                    we need this instance as "gateway" to the browser
-    @param      sName
-                    the new name for this task (filtered!)
-    @param      bVisible
-                    used to set the state of frame container window after creation
-
-    @return     A reference to the new created task or <NULL/> if it failed.
-
-    @threadsafe yes
-    @modified   16.05.2002 10:37, as96863
-*//*-*****************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > TaskCreator::implts_createBrowserTask( const css::uno::Reference< css::frame::XFramesSupplier >&   xDesktop ,
-                                                                                 const css::uno::Reference< css::mozilla::XPluginInstance >& xPlugin  ,
-                                                                                 const ::rtl::OUString&                                      sName    ,
-                                                                                       sal_Bool                                              bVisible )
-{
-    LOG_WARNING("TaskCreator::implts_createBrowserTask()", "Not supported yet. I create a system task instead of a real browser task.")
-    return implts_createSystemTask(xDesktop, sName, bVisible);
 }
 
 /*-****************************************************************************************************//**
