@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:36:53 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,15 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
             const SfxPoolItem* pRet = pApp->ExecuteSlot( aReq );
             if ( pRet )
             {
+                // default must be set to true, because some return values
+                // cant be checked ... but indicates "success"!
                 bLoadState = sal_True;
+
+                // On the other side some special slots return a boolean state,
+                // which can be set to FALSE.
+                SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, pRet );
+                if (pItem)
+                    bLoadState = pItem->GetValue();
             }
             else
             {
@@ -399,7 +407,15 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
                 const SfxPoolItem* pRet = pApp->ExecuteSlot( aReq );
                 if (pRet)
                 {
+                    // default must be set to true, because some return values
+                    // cant be checked ... but indicates "success"!
                     bLoadState = sal_True;
+
+                    // On the other side some special slots return a boolean state,
+                    // which can be set to FALSE.
+                    SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, pRet );
+                    if (pItem)
+                        bLoadState = pItem->GetValue();
                 }
                 else if ( xListener.is() )
                 {
