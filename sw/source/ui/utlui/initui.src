@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-07-02 12:10:25 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "­¶";
         TEXT[ arabic ] = "ÇáÕİÍÉ";
         TEXT[ greek ] = "Óåëßäá";
-        TEXT[ korean ] = "ÂÊ";
+        TEXT[ korean ] = "ÆäÀÌÁö";
         TEXT[ turkish ] = "Sayfa";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Página";
@@ -253,7 +253,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "** ®Ú¨ç¼Æ·¸­È **";
         TEXT[ arabic ] = "** İÇÆÖ İí ÇáÏÇáÉ ÇáÊÑÈíÚíÉ **";
         TEXT[ greek ] = "** Õğåñ÷åßëéóç óôç ëåéôïõñãßá ôåôñáãşíïõ **";
-        TEXT[ korean ] = "**Á¦°ö ÇÔ¼ö ¿À¹öÇÃ·Î **";
+        TEXT[ korean ] = "**Á¦°ö ÇÔ¼ö ¿À¹öÇÃ·Î¿ì **";
         TEXT[ turkish ] = "** Kare fonksiyonu taşması **";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "** Desbordamiento en función al cuadrado **";
@@ -280,7 +280,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "** ¨S¦³§ä¨ìÅÜ¶q **";
         TEXT[ arabic ] = "** ÊÚĞÑ ÇáÚËæÑ Úáì ÇáãÊÛíÑÉ **";
         TEXT[ greek ] = "** Äåí âñİèçêå ç ìåôáâëçôŞ **";
-        TEXT[ korean ] = "**º¯¼ö¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù. **";
+        TEXT[ korean ] = "**º¯¼ö¸¦ Ã£Áö ¸øÇß½À´Ï´Ù. **";
         TEXT[ turkish ] = "** Değişken bulunamadı **";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "** No se ha encontrado la variable **";
@@ -309,7 +309,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "** ·¸­È **";
         TEXT[ arabic ] = "** İÇÆÖ **";
         TEXT[ greek ] = "** Õğåñ÷åßëéóç **";
-        TEXT[ korean ] = "** ¿À¹ö ÇÃ·Î **";
+        TEXT[ korean ] = "**¿À¹ö ÇÃ·Î¿ì **";
         TEXT[ turkish ] = "** Taşma **";
         TEXT[ catalan ] = "** Desbordamiento **";
     };
@@ -389,7 +389,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "** ¿ù»~ªºªí¹F¦¡ **";
         TEXT[ arabic ] = "** ÊÚÈíÑ ÎÇØÆ **";
         TEXT[ greek ] = "** Åóöáëìİíç İêöñáóç **";
-        TEXT[ korean ] = "**Æ²¸°¡¡Ç¥Çö½Ä **";
+        TEXT[ korean ] = "**Æ²¸° Ç¥Çö **";
         TEXT[ turkish ] = "** Yanlış ifade **";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "** Expresión errónea **";
@@ -547,7 +547,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı";
         TEXT[ arabic ] = "İåÑÓ ÃÈÌÏí";
         TEXT[ greek ] = "ÅõñåôŞñéï ëİîåùí";
-        TEXT[ korean ] = "Å°¿öµå¡¡»öÀÎ";
+        TEXT[ korean ] = "Å°¿öµå »öÀÎ";
         TEXT[ turkish ] = "Alfabetik dizin";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Índice alfabético";
@@ -570,7 +570,7 @@ Resource RID_SW_SHELLRES
         TEXT [ english_us ] = "User-Defined" ;
         TEXT[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨";
         TEXT[ russian ] = "Îïğåäåëÿåìûé ïîëüçîâàòåëåì";
-        TEXT[ polish ] = "Zdefiniowany przez u¿ytkownika";
+        TEXT[ polish ] = "Ustawienia indywidualne";
         TEXT[ japanese ] = "Õ°»Ş°’è‹`";
         TEXT[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q";
         TEXT[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã";
@@ -956,7 +956,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "²£¥Í";
         TEXT[ arabic ] = "ÅäÔÇÁ";
         TEXT[ greek ] = "Äçìéïõñãßá";
-        TEXT[ korean ] = "ÀÛ¼º.";
+        TEXT[ korean ] = "ÀÛ¼º";
         TEXT[ turkish ] = "Oluşturma";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Creación";
@@ -984,7 +984,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "ÅÜ§ó";
         TEXT[ arabic ] = "ÊÚÏíá";
         TEXT[ greek ] = "ÁëëáãŞ";
-        TEXT[ korean ] = "¼öÁ¤";
+        TEXT[ korean ] = "º¯°æ";
         TEXT[ turkish ] = "Değiştirme";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Modificación";
@@ -1155,6 +1155,26 @@ String STR_AUTH_TYPE_ARTICLE
 {
     Text = "Artikel" ;
     Text [ English ] = "Article" ;
+    Text[ english_us ] = "Magazine Article";
+    Text[ portuguese ] = "Artigo de revista";
+    Text[ russian ] = "Ñòàòüÿ èç ãàçåòû/æóğíàëà";
+    Text[ greek ] = "¢ñèñï ğåñéïäéêïı";
+    Text[ dutch ] = "Krantenartikel";
+    Text[ french ] = "Article (revue)";
+    Text[ spanish ] = "Artículo de revista";
+    Text[ finnish ] = "Lehtiartikkeli";
+    Text[ italian ] = "Articolo di rivista";
+    Text[ danish ] = "Tidsskriftsartikel";
+    Text[ swedish ] = "Artikel";
+    Text[ polish ] = "Artyku³";
+    Text[ portuguese_brazilian ] = "Article";
+    Text[ japanese ] = "‹L–";
+    Text[ korean ] = "ÀâÁö ±â»ç";
+    Text[ chinese_simplified ] = "ÎÄÕÂ";
+    Text[ chinese_traditional ] = "¤å³¹";
+    Text[ turkish ] = "Dergi makalesi";
+    Text[ arabic ] = "ãŞÇáÉ İí ãÌáÉ";
+    Text[ catalan ] = "Artículo de revista";
 };
 String STR_AUTH_TYPE_BOOK
 {
@@ -1253,7 +1273,7 @@ String STR_AUTH_TYPE_INBOOK
     Text[ japanese ] = "´–{";
     Text[ korean ] = "¹ßÃé";
     Text[ chinese_simplified ] = "Êé¼®ÕªÂ¼ÎÄ";
-    Text[ chinese_traditional ] = "®ÑÄyªº¤Ş¥Î¤å";
+    Text[ chinese_traditional ] = "®ÑÄy¤å³¹ºK­n";
     Text[ arabic ] = "ãŞÊÈÓÇÊ ãä ßÊÇÈ";
     Text[ turkish ] = "Kitap bölümü";
     Text[ language_user1 ] = " ";
@@ -1279,7 +1299,7 @@ String STR_AUTH_TYPE_INCOLLECTION
     Text[ japanese ] = "À²ÄÙ•t‚«‚Ì´–{";
     Text[ korean ] = "Ã¥ ¹ßÃé (Á¦¸ñ Æ÷ÇÔ)";
     Text[ chinese_simplified ] = "×¢Ã÷±êÌâµÄÊé¼®ÕªÂ¼ÎÄ";
-    Text[ chinese_traditional ] = "µù©ú¼ĞÃDªº®ÑÄy¤Ş¥Î¤å";
+    Text[ chinese_traditional ] = "§t¦³¼ĞÃDªº®ÑÄy¤å³¹ºK­n";
     Text[ arabic ] = "ãŞÊÈÓÇÊ ãä ßÊÇÈ ĞÇÊ ÚäæÇä";
     Text[ turkish ] = "Başlıklı kitap bölümü";
     Text[ language_user1 ] = " ";
@@ -1407,7 +1427,7 @@ String STR_AUTH_TYPE_MISC
     Text[ polish ] = "Ró¿ne";
     Text[ portuguese_brazilian ] = "Miscellaneous";
     Text[ japanese ] = "”õl";
-    Text[ korean ] = "±âÅ¸";
+    Text[ korean ] = "¿©·¯ °¡Áö";
     Text[ chinese_simplified ] = "ÆäËü";
     Text[ chinese_traditional ] = "¨ä¥L";
     Text[ arabic ] = "ãäæÚÇÊ";
@@ -1536,7 +1556,7 @@ String STR_AUTH_TYPE_EMAIL
     Text[ swedish ] = "e-post";
     Text[ polish ] = "e-mail";
     Text[ portuguese_brazilian ] = "eMail";
-    Text[ japanese ] = "EÒ°Ù";
+    Text[ japanese ] = "E-mail";
     Text[ korean ] = "e-mail";
     Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş";
     Text[ chinese_traditional ] = "¹q¤l¶l¥ó";
@@ -1758,11 +1778,51 @@ String STR_AUTH_FIELD_ADDRESS
 {
     Text = "Adresse";
     Text [ENGLISH] = "Address";
+    Text[ english_us ] = "Publisher address";
+    Text[ portuguese ] = "~Endereço da editora";
+    Text[ russian ] = "Àäğåñ èçäàòåëüñòâà";
+    Text[ greek ] = "Äéåıèõíóç åêäüôç";
+    Text[ dutch ] = "~Adres uitgeverij";
+    Text[ french ] = "Adresse de l'édition";
+    Text[ spanish ] = "~Dirección editorial";
+    Text[ finnish ] = "Julkaisijan osoite";
+    Text[ italian ] = "Indirizzo editore";
+    Text[ danish ] = "Forlagsadresse";
+    Text[ swedish ] = "Adress";
+    Text[ polish ] = "Adres";
+    Text[ portuguese_brazilian ] = "Publisher address";
+    Text[ japanese ] = "ZŠ";
+    Text[ korean ] = "ÃâÆÇ»ç ÁÖ¼Ò";
+    Text[ chinese_simplified ] = "µØÖ·";
+    Text[ chinese_traditional ] = "¦a§}";
+    Text[ turkish ] = "~Yayınevi adresi";
+    Text[ arabic ] = "ÚäæÇä ÏÇÑ ÇáäÔÑ";
+    Text[ catalan ] = "~Dirección editorial";
 };
 String STR_AUTH_FIELD_ANNOTE
 {
     Text = "~Anmerkung" ;
     Text [ ENGLISH ] = "Annotation" ;
+    Text[ english_us ] = "Notes";
+    Text[ portuguese ] = "A~notações";
+    Text[ russian ] = "Êîììåíòàğèé";
+    Text[ greek ] = "ĞáñáôŞñçóç";
+    Text[ dutch ] = "~Commentaar";
+    Text[ french ] = "~Commentaire";
+    Text[ spanish ] = "~Notas";
+    Text[ finnish ] = "Huomautukset";
+    Text[ italian ] = "~Annotazione";
+    Text[ danish ] = "Anmærkning";
+    Text[ swedish ] = "Anmärkning";
+    Text[ polish ] = "Adnotacja";
+    Text[ portuguese_brazilian ] = "Annotation";
+    Text[ japanese ] = "’ß";
+    Text[ korean ] = "ÁÖ";
+    Text[ chinese_simplified ] = "ËµÃ÷(~M)";
+    Text[ chinese_traditional ] = "³Æµù(~M)";
+    Text[ turkish ] = "~Not";
+    Text[ arabic ] = "ãáÇÍÙÉ";
+    Text[ catalan ] = "~Notas";
 };
 String STR_AUTH_FIELD_AUTHOR
 {
@@ -2147,7 +2207,7 @@ String STR_AUTH_FIELD_SCHOOL
     Text[ japanese ] = "‘åŠw";
     Text[ korean ] = "´ëÇĞ";
     Text[ chinese_simplified ] = "´óÑ§";
-    Text[ chinese_traditional ] = "°ª±M°|®Õ";
+    Text[ chinese_traditional ] = "°ªµ¥°|®Õ";
     Text[ arabic ] = "ÌÇãÚÉ";
     Text[ turkish ] = "Üniversite";
     Text[ language_user1 ] = " ";
@@ -2158,6 +2218,26 @@ String STR_AUTH_FIELD_SERIES
 {
     Text = "Ser~ie";
     Text[English]= "Series";
+    Text[ english_us ] = "Series name";
+    Text[ portuguese ] = "Nome da ~série";
+    Text[ russian ] = "Íàçâàíèå ñåğèè";
+    Text[ greek ] = "¼íïìá óåéñÜò";
+    Text[ dutch ] = "Naam van de ~serie";
+    Text[ french ] = "Nom de la série";
+    Text[ spanish ] = "No~mbre de la serie";
+    Text[ finnish ] = "Sarjan nimi";
+    Text[ italian ] = "Nome ~della serie";
+    Text[ danish ] = "Seriens navn";
+    Text[ swedish ] = "Ser~ie";
+    Text[ polish ] = "Seria";
+    Text[ portuguese_brazilian ] = "Series name";
+    Text[ japanese ] = "‘p‘";
+    Text[ korean ] = "½Ã¸®Áî ÀÌ¸§";
+    Text[ chinese_simplified ] = "ÏµÁĞ";
+    Text[ chinese_traditional ] = "¨t¦C";
+    Text[ turkish ] = "Seri ~adı";
+    Text[ arabic ] = "ÇÓã ÇáÓáÓáÉ";
+    Text[ catalan ] = "No~mbre de la serie";
 };
 String STR_AUTH_FIELD_TITLE
 {
@@ -2203,8 +2283,8 @@ String STR_AUTH_FIELD_TYPE
     Text[ portuguese_brazilian ] = "Type of proceedings";
     Text[ japanese ] = "•ñ‚Ìí—Ş";
     Text[ korean ] = "º¸°í¼­ ÇüÅÂ";
-    Text[ chinese_simplified ] = "±¨¸æÀàĞÍ";
-    Text[ chinese_traditional ] = "³ø§iÃş«¬";
+    Text[ chinese_simplified ] = "±¨±íµÄÀàĞÍ";
+    Text[ chinese_traditional ] = "³øªíªºÃş«¬";
     Text[ arabic ] = "äæÚ ÇáÊŞÑíÑ";
     Text[ turkish ] = "Rapor türü";
     Text[ language_user1 ] = " ";
@@ -2215,11 +2295,51 @@ String STR_AUTH_FIELD_VOLUME
 {
     Text = "Band" ;
     Text [ ENGLISH ] = "Volume" ;
+    Text[ english_us ] = "Volume number";
+    Text[ portuguese ] = "Volume";
+    Text[ russian ] = "Íîìåğ òîìà";
+    Text[ greek ] = "Áñéèìüò ôüìïõ";
+    Text[ dutch ] = "Deel nummer";
+    Text[ french ] = "No. de volume";
+    Text[ spanish ] = "Número de tomo";
+    Text[ finnish ] = "Osan numero";
+    Text[ italian ] = "Numero del volume";
+    Text[ danish ] = "Bind";
+    Text[ swedish ] = "Band";
+    Text[ polish ] = "Tom";
+    Text[ portuguese_brazilian ] = "Volume";
+    Text[ japanese ] = "Šª";
+    Text[ korean ] = "±Ç ¹øÈ£";
+    Text[ chinese_simplified ] = "²á";
+    Text[ chinese_traditional ] = "¥U";
+    Text[ turkish ] = "Cilt sayısı";
+    Text[ arabic ] = "ÑŞã ÇáãÌáÏ";
+    Text[ catalan ] = "Número de tomo";
 };
 String STR_AUTH_FIELD_YEAR
 {
     Text = "~Jahr" ;
     Text [ ENGLISH ] = "Year" ;
+    Text[ english_us ] = "Year of publication";
+    Text[ portuguese ] = "~Ano de publicação";
+    Text[ russian ] = "Ãîä èçäàíèÿ";
+    Text[ greek ] = "¸ôïò İêäïóçò";
+    Text[ dutch ] = "Verschijnings~jaar";
+    Text[ french ] = "Année de parution";
+    Text[ spanish ] = "Año de publi~cación";
+    Text[ finnish ] = "Julkaisuvuosi";
+    Text[ italian ] = "Anno di pubblicazione";
+    Text[ danish ] = "Udgivelsesår";
+    Text[ swedish ] = "Å~r";
+    Text[ polish ] = "Rok";
+    Text[ portuguese_brazilian ] = "Year";
+    Text[ japanese ] = "”N";
+    Text[ korean ] = "ÃâÆÇ³âµµ";
+    Text[ chinese_simplified ] = "Äê·İ";
+    Text[ chinese_traditional ] = "¦~¥÷";
+    Text[ turkish ] = "Yayım yılı";
+    Text[ arabic ] = "ÓäÉ ÇáÅÕÏÇÑ";
+    Text[ catalan ] = "Año de publi~cación";
 };
 String STR_AUTH_FIELD_URL
 {
@@ -2403,6 +2523,7 @@ String STR_AUTH_FIELD_ISBN
     Text[ catalan ] = "ISBN";
     Text[ finnish ] = "ISBN";
 };
+
 
 
 
