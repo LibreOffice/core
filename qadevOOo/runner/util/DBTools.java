@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBTools.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:05 $
+ *  last change:$Date: 2003-11-18 16:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ public class DBTools {
 
     private XMultiServiceFactory xMSF = null ;
     private XNamingService dbContext = null ;
-    private Exception lastException = null ;
 
     //JDBC driver
     public final static String TST_JDBC_DRIVER = "org.gjt.mm.mysql.Driver";
@@ -127,12 +126,12 @@ public class DBTools {
     * Values for filling test table.
     */
     public final static Object[][] TST_TABLE_VALUES = new Object[][] {
-        {new String("String1"), new Integer(1), null, null, new Double(1.1),
+        {"String1", new Integer(1), null, null, new Double(1.1),
          new Date((short) 1,(short) 1, (short) 2001), null, null, null,
-         new Boolean(true), null, null},
-        {new String("String2"), new Integer(2), null, null, new Double(1.2),
+         Boolean.TRUE, null, null},
+        {"String2", new Integer(2), null, null, new Double(1.2),
          new Date((short) 2, (short) 1,(short)  2001), null, null, null,
-         new Boolean(false), null, null},
+         Boolean.FALSE, null, null},
         {null, null, null, null, null,
          null, null, null, null,
          null, null, null}
@@ -381,7 +380,7 @@ public class DBTools {
     */
     public XConnection connectToTextDB(String contextName,
         String dbDir, String fileExtension)
-        throws com.sun.star.uno.Exception {
+                            throws com.sun.star.uno.Exception {
 
         try {
             XInterface newSource = (XInterface) xMSF.createInstance
@@ -409,7 +408,6 @@ public class DBTools {
 
             XConnection con = xSrcCon.connectWithCompletion(xHandler) ;
 
-            lastException = null ;
             return con ;
         } finally {
             try {
@@ -441,7 +439,6 @@ public class DBTools {
 
             XConnection con = connectToSource(newSource) ;
 
-            lastException = null ;
             return con ;
         } catch(com.sun.star.uno.Exception e) {
             try {
