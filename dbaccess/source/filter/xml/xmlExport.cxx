@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:21:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,7 @@ void ODBExport::exportDataSourceSettings()
 
             if ( !bIsSequence )
             {
-                SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_True);
+                SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False);
                 // (no whitespace inside the tag)
                 Characters(implConvertAny(aValue.Value));
             }
@@ -523,7 +523,7 @@ void ODBExport::exportDataSourceSettings()
                     ::rtl::OUString sCurrent;
                     while (pSequenceIterator->hasMoreElements())
                     {
-                        SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_True);
+                        SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False);
                         // (no whitespace inside the tag)
                         Characters(implConvertAny(pSequenceIterator->nextElement()));
                     }

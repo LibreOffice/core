@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlDataSourceSetting.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:20:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,11 @@ namespace dbaxml
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> m_aInfoSequence;
         OXMLDataSource& m_rParent;
         OXMLDataSourceSetting* m_pContainer;
+        ::com::sun::star::uno::Type m_aPropType;            // the type of the property the instance imports currently
         sal_Bool m_bIsList;
 
         ODBFilter& GetOwnImport();
+        ::com::sun::star::uno::Any convertString(const ::com::sun::star::uno::Type& _rExpectedType, const ::rtl::OUString& _rReadCharacters);
     public:
 
         OXMLDataSourceSetting( ODBFilter& rImport, sal_uInt16 nPrfx,
