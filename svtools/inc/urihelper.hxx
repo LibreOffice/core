@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:54 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 14:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #define SVTOOLS_URIHELPER_HXX
 
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+
 #ifndef _RTL_TEXTENC_H
 #include <rtl/textenc.h>
 #endif
@@ -75,9 +79,6 @@
 #include <tools/urlobj.hxx>
 #endif
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class RuntimeException;
-} } } }
 class ByteString;
 class CharClass;
 class UniString;
