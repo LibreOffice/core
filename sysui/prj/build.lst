@@ -10,8 +10,8 @@ su	sysui\desktop\gnome			nmake	-	u	su_gnome su_dtshare.u NULL
 su	sysui\desktop\menus			get     -   all su_dtmenus NULL
 su	sysui\desktop\mimetypes		get     -   all su_dtmime NULL
 su	sysui\desktop\gnome\legacy	nmake	-	u	su_lgnome NULL
-su	sysui\desktop\redhat		nmake	-	u	su_dtredhat NULL
-su	sysui\desktop\suse			nmake	-	u	su_dtsuse NULL
-su	sysui\desktop\solaris		nmake	-	u	su_dtsolaris NULL
-su	sysui\desktop\cde			nmake	-	u	su_dtcde NULL
+su	sysui\desktop\redhat		nmake	-	u	su_dtredhat su_dtshare.u NULL
+su	sysui\desktop\suse			nmake	-	u	su_dtsuse su_dtshare.u NULL
+su	sysui\desktop\solaris		nmake	-	u	su_dtsolaris su_dtshare.u NULL
+su	sysui\desktop\cde			nmake	-	u	su_dtcde su_dtshare.u NULL
 su	sysui\desktop\util			nmake	-	u	su_desktop su_kde.u su_gnome.u NULL
