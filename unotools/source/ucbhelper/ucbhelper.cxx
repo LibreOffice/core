@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 16:34:48 $
+ *  last change: $Author: mba $ $Date: 2001-11-27 11:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIODEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
 #endif
 
 #include <tools/wldcrd.hxx>
@@ -620,6 +623,16 @@ sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Cont
 
                 return sal_True;
             }
+        }
+    }
+    catch ( InteractiveIOException& r )
+    {
+        if ( r.Code == IOErrorCode_ALREADY_EXISTING )
+        {
+            INetURLObject aObj( aCnt.getURL() );
+            aObj.Append( aTitle );
+            rNew = Content( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference < XCommandEnvironment >() );
+            return TRUE;
         }
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
