@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 13:00:07 $
+ *  last change: $Author: dr $ $Date: 2002-07-19 10:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,9 +196,7 @@ USHORT TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
 //-----------------------------------------------------------------------
 SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle, BOOL bCheck ) :
     ListBox( pParent, nWinStyle ),
-#if SUPD >= 637
     m_pSpellUsedLang( NULL ),
-#endif
     m_bWithCheckmark( bCheck )
 {
     Init();
@@ -206,9 +204,7 @@ SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle, BOOL bCheck 
 //------------------------------------------------------------------------
 SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId, BOOL bCheck ) :
     ListBox( pParent, rResId ),
-#if SUPD >= 637
     m_pSpellUsedLang( NULL ),
-#endif
     m_bWithCheckmark( bCheck )
 {
     Init();
@@ -219,6 +215,7 @@ void SvxLanguageBox::Init()
     m_pLangTable = new SvxLanguageTable;
     m_aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
     m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
+    m_aCheckedImageHC = Image( SVX_RES( RID_SVXIMG_CHECKED_H ) );
     m_aAllString            = String( SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL ) );
     m_nLangList             = LANG_LIST_EMPTY;
     m_bHasLangNone          = FALSE;
@@ -253,10 +250,22 @@ void SvxLanguageBox::Init()
 
 SvxLanguageBox::~SvxLanguageBox()
 {
-#if SUPD >= 637
     delete m_pSpellUsedLang;
-#endif
     delete m_pLangTable;
+}
+
+//------------------------------------------------------------------------
+
+USHORT SvxLanguageBox::ImplInsertImgEntry( const String& rEntry, USHORT nPos, bool bChecked )
+{
+    USHORT nRet = 0;
+    if( !bChecked )
+        nRet = InsertEntry( rEntry, m_aNotCheckedImage, nPos );
+    else if( GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+        nRet = InsertEntry( rEntry, m_aCheckedImageHC, nPos );
+    else
+        nRet = InsertEntry( rEntry, m_aCheckedImage, nPos );
+    return nRet;
 }
 
 //------------------------------------------------------------------------
@@ -398,7 +407,6 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
     {
         sal_Bool bFound = sal_False;
 
-#if SUPD >= 637
         if (!m_pSpellUsedLang)
         {
             Reference< XSpellChecker1 > xSpell( SvxGetSpellChecker(), UNO_QUERY );
@@ -407,16 +415,8 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
         }
         bFound = m_pSpellUsedLang ?
                     lcl_SeqHasLang( *m_pSpellUsedLang, nLangType ) : FALSE;
-#else
-        Reference< XSpellChecker1 > xSpell( SvxGetSpellChecker(), UNO_QUERY );
-        if ( xSpell.is() )
-            bFound = lcl_SeqHasLang( xSpell->getLanguages(), nLangType );
-#endif
 
-        if ( !bFound )
-            nAt = InsertEntry( aStrEntry, m_aNotCheckedImage, nPos );
-        else
-            nAt = InsertEntry( aStrEntry, m_aCheckedImage, nPos );
+        nAt = ImplInsertImgEntry( aStrEntry, nPos, bFound );
     }
     else
         nAt = InsertEntry( aStrEntry, nPos );
@@ -434,11 +434,7 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
     if (LANGUAGE_NONE == nLangType && m_bHasLangNone && m_bLangNoneIsLangAll)
         aStrEntry = m_aAllString;
 
-    USHORT nAt = 0;
-    if ( !bCheckEntry )
-        nAt = InsertEntry( aStrEntry, m_aNotCheckedImage, nPos );
-    else
-        nAt = InsertEntry( aStrEntry, m_aCheckedImage, nPos );
+    USHORT nAt = ImplInsertImgEntry( aStrEntry, nPos, bCheckEntry );
     SetEntryData( nAt, (void*)(ULONG)nLangType );
 
     return nPos;

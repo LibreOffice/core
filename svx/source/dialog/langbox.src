@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-19 05:49:34 $
+ *  last change: $Author: dr $ $Date: 2002-07-19 10:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,16 @@
 Image RID_SVXIMG_NOTCHECKED
 {
     ImageBitmap = Bitmap { File = "notcheck.bmp" ; } ;
-    MaskColor = Color { Red=0xC000; Green=0xC000; Blue=0xC000; } ;
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 };
 Image RID_SVXIMG_CHECKED
 {
     ImageBitmap = Bitmap { File = "lngcheck.bmp" ; } ;
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+};
+Image RID_SVXIMG_CHECKED_H
+{
+    ImageBitmap = Bitmap { File = "lngcheck_h.bmp" ; } ;
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 };
 
