@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 08:01:16 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 15:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,8 @@ public:
 
     void        SetAlign( WinBits nWinStyle );
 
+    void        InitFromStyle( WinBits nWinStyle );
+
     TextWindow* GetTextWindow() { return mpTextWindow; }
     ScrollBar*  GetHScrollBar() { return mpHScrollBar; }
     ScrollBar*  GetVScrollBar() { return mpVScrollBar; }
@@ -196,18 +198,77 @@ public:
 
 
 ImpSvMEdit::ImpSvMEdit( MultiLineEdit* pEdt, WinBits nWinStyle )
+    :mpHScrollBar(NULL)
+    ,mpVScrollBar(NULL)
+    ,mpScrollBox(NULL)
 {
     pSvMultiLineEdit = pEdt;
 
     mnTextWidth = 0;
 
     mpTextWindow = new TextWindow( pEdt );
-    mpHScrollBar = ( nWinStyle & WB_HSCROLL ) ? new ScrollBar( pEdt, WB_HSCROLL|WB_DRAG ) : NULL;
-    mpVScrollBar = ( nWinStyle & WB_VSCROLL ) ? new ScrollBar( pEdt, WB_VSCROLL|WB_DRAG ) : NULL;
-    mpScrollBox = ( mpVScrollBar && mpHScrollBar ) ? new ScrollBarBox( pEdt, WB_SIZEABLE ) : NULL;
+    mpTextWindow->Show();
+
+    InitFromStyle( nWinStyle );
+
+    StartListening( *mpTextWindow->GetTextEngine() );
+}
+
+void ImpSvMEdit::InitFromStyle( WinBits nWinStyle )
+{
+    const sal_Bool bHaveVScroll = (NULL != mpVScrollBar);
+    const sal_Bool bHaveHScroll = (NULL != mpHScrollBar);
+    const sal_Bool bHaveScrollBox = (NULL != mpScrollBox);
+
+    const sal_Bool bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
+    const sal_Bool bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
+    const sal_Bool bNeedScrollBox = bNeedVScroll || bNeedHScroll;
+
+    sal_Bool bScrollbarsChanged = sal_False;
+    if (bHaveVScroll != bNeedVScroll)
+    {
+        delete mpVScrollBar;
+        mpVScrollBar = bNeedVScroll ? new ScrollBar( pSvMultiLineEdit, WB_VSCROLL|WB_DRAG ) : NULL;
+
+        if ( bNeedVScroll )
+        {
+            mpVScrollBar->Show();
+            mpVScrollBar->SetScrollHdl( LINK( this, ImpSvMEdit, ScrollHdl ) );
+        }
+
+        bScrollbarsChanged = sal_True;
+    }
+
+    if (bHaveHScroll != bNeedHScroll)
+    {
+        delete mpHScrollBar;
+        mpHScrollBar = bNeedHScroll ? new ScrollBar( pSvMultiLineEdit, WB_HSCROLL|WB_DRAG ) : NULL;
+
+        if ( bNeedHScroll )
+        {
+            mpHScrollBar->Show();
+            mpHScrollBar->SetScrollHdl( LINK( this, ImpSvMEdit, ScrollHdl ) );
+        }
+
+        bScrollbarsChanged = sal_True;
+    }
+
+    if (bHaveScrollBox != bNeedScrollBox)
+    {
+        delete mpScrollBox;
+        mpScrollBox = bNeedScrollBox ? new ScrollBarBox( pSvMultiLineEdit, WB_SIZEABLE ) : NULL;
+
+        if ( bNeedScrollBox )
+            mpScrollBox->Show();
+    }
+
+    if (bScrollbarsChanged)
+    {
+        ImpInitScrollBars();
+        Resize();
+    }
 
     SetAlign( nWinStyle );
-    StartListening( *mpTextWindow->GetTextEngine() );
 
     if ( nWinStyle & WB_NOHIDESELECTION )
         mpTextWindow->SetAutoFocusHide( FALSE );
@@ -216,25 +277,13 @@ ImpSvMEdit::ImpSvMEdit( MultiLineEdit* pEdt, WinBits nWinStyle )
 
     if ( nWinStyle & WB_READONLY )
         mpTextWindow->GetTextView()->SetReadOnly( TRUE );
+    else
+        mpTextWindow->GetTextView()->SetReadOnly( FALSE );
 
     if ( nWinStyle & WB_IGNORETAB )
         mpTextWindow->SetIgnoreTab( TRUE );
-
-    mpTextWindow->Show();
-    if ( mpHScrollBar )
-    {
-        mpHScrollBar->Show();
-        mpHScrollBar->SetScrollHdl( LINK( this, ImpSvMEdit, ScrollHdl ) );
-    }
-    if ( mpVScrollBar )
-    {
-        mpVScrollBar->Show();
-        mpVScrollBar->SetScrollHdl( LINK( this, ImpSvMEdit, ScrollHdl ) );
-    }
-    if ( mpScrollBox )
-        mpScrollBox->Show();
-
-    ImpInitScrollBars();
+    else
+        mpTextWindow->SetIgnoreTab( FALSE );
 }
 
 ImpSvMEdit::~ImpSvMEdit()
@@ -401,8 +450,6 @@ void ImpSvMEdit::Resize()
 
     if ( mpScrollBox )
         mpScrollBox->SetPosSizePixel( aSz.Width(), aSz.Height(), nSBWidth, nSBWidth );
-
-    ImpInitScrollBars();
 }
 
 void ImpSvMEdit::GetFocus()
@@ -1155,7 +1202,7 @@ void MultiLineEdit::StateChanged( StateChangedType nType )
     }
     else if ( nType == STATE_CHANGE_STYLE )
     {
-        pImpSvMEdit->SetAlign( GetStyle() );
+        pImpSvMEdit->InitFromStyle( GetStyle() );
         SetStyle( ImplInitStyle( GetStyle() ) );
     }
 
