@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-02 15:48:49 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 10:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,24 +378,12 @@ In addition WW7- has only one character language identifier while WW8+ has two
 BOOL SwWW8Writer::CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich)
 {
     BOOL bRet=TRUE;
-    if (nScript != com::sun::star::i18n::ScriptType::ASIAN)
+    if (nScript == com::sun::star::i18n::ScriptType::ASIAN)
     {
-        switch (nWhich)
-        {
-            case RES_CHRATR_CJK_FONTSIZE:
-            case RES_CHRATR_CJK_POSTURE:
-            case RES_CHRATR_CJK_WEIGHT:
-                bRet = FALSE;
-                break;
-            case RES_CHRATR_CJK_LANGUAGE:
-                if (bWrtWW8 == 0)
-                    bRet = FALSE;
-            default:
-                break;
-        }
-    }
-    else
-    {
+        //for asian in ww8, there is only one fontsize
+        //and one fontstyle (posture/weight) for ww6
+        //there is the additional problem that there
+        //is only one font setting for all three scripts
         switch (nWhich)
         {
             case RES_CHRATR_FONTSIZE:
@@ -404,12 +392,67 @@ BOOL SwWW8Writer::CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich)
                 bRet = FALSE;
                 break;
             case RES_CHRATR_LANGUAGE:
+            case RES_CHRATR_CTL_FONT:
+            case RES_CHRATR_CTL_FONTSIZE:
+            case RES_CHRATR_CTL_LANGUAGE:
+            case RES_CHRATR_CTL_POSTURE:
+            case RES_CHRATR_CTL_WEIGHT:
                 if (bWrtWW8 == 0)
                     bRet = FALSE;
             default:
                 break;
         }
-
+    }
+    else if (nScript == com::sun::star::i18n::ScriptType::COMPLEX)
+    {
+        //Complex is ok in ww8, but for ww6 there is only
+        //one font, one fontsize, one fontsize (weight/posture)
+        //and only one language
+        if (bWrtWW8 == 0)
+        {
+            switch (nWhich)
+            {
+                case RES_CHRATR_CJK_FONT:
+                case RES_CHRATR_CJK_FONTSIZE:
+                case RES_CHRATR_CJK_POSTURE:
+                case RES_CHRATR_CJK_WEIGHT:
+                case RES_CHRATR_CJK_LANGUAGE:
+                case RES_CHRATR_FONT:
+                case RES_CHRATR_FONTSIZE:
+                case RES_CHRATR_POSTURE:
+                case RES_CHRATR_WEIGHT:
+                case RES_CHRATR_LANGUAGE:
+                    bRet = FALSE;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    else
+    {
+        //for western in ww8, there is only one fontsize
+        //and one fontstyle (posture/weight) for ww6
+        //there is the additional problem that there
+        //is only one font setting for all three scripts
+        switch (nWhich)
+        {
+            case RES_CHRATR_CJK_FONTSIZE:
+            case RES_CHRATR_CJK_POSTURE:
+            case RES_CHRATR_CJK_WEIGHT:
+                bRet = FALSE;
+                break;
+            case RES_CHRATR_CJK_LANGUAGE:
+            case RES_CHRATR_CTL_FONT:
+            case RES_CHRATR_CTL_FONTSIZE:
+            case RES_CHRATR_CTL_LANGUAGE:
+            case RES_CHRATR_CTL_POSTURE:
+            case RES_CHRATR_CTL_WEIGHT:
+                if (bWrtWW8 == 0)
+                    bRet = FALSE;
+            default:
+                break;
+        }
     }
     return bRet;
 }
@@ -1008,12 +1051,19 @@ static Writer& OutWW8_SwSize( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
     USHORT nId = 0;
-    if( rWrtWW8.bWrtWW8 )
-        switch ( rHt.Which() )
+    if (rWrtWW8.bWrtWW8)
+    {
+        switch (rHt.Which())
         {
-        case RES_CHRATR_FONTSIZE:
-        case RES_CHRATR_CJK_FONTSIZE:   nId = 0x4A43;   break;
+            case RES_CHRATR_FONTSIZE:
+            case RES_CHRATR_CJK_FONTSIZE:
+                nId = 0x4A43;
+                break;
+            case RES_CHRATR_CTL_FONTSIZE:
+                nId = 0x4A61;
+                break;
         }
+    }
     else
         nId = 99;
 
@@ -4054,7 +4104,7 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_CJK_POSTURE */        OutWW8_SwPosture,
 /* RES_CHRATR_CJK_WEIGHT */         OutWW8_SwWeight,
 /* RES_CHRATR_CTL_FONT */           0,
-/* RES_CHRATR_CTL_FONTSIZE */       0,
+/* RES_CHRATR_CTL_FONTSIZE */       OutWW8_SwSize,
 /* RES_CHRATR_CTL_LANGUAGE */       0,
 /* RES_CHRATR_CTL_POSTURE */        0,
 /* RES_CHRATR_CTL_WEIGHT */         0,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-18 12:29:10 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 10:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3308,6 +3308,14 @@ void WW8RStyle::Set1StyleDefaults()
             pIo->pAktColl->SetAttr(aAttr);
         }
 
+        // Style has no FontSize ? WinWord Default is 10pt for western and asian
+        if( !bFCTLSizeChanged )
+        {
+            SvxFontHeightItem aAttr(200);
+            aAttr.SetWhich(RES_CHRATR_CTL_FONTSIZE);
+            pIo->pAktColl->SetAttr(aAttr);
+        }
+
         if( pIo->pWDop->fWidowControl && !bWidowsChanged )  // Widows ?
         {
             pIo->pAktColl->SetAttr( SvxWidowsItem( 2 ) );
@@ -3610,7 +3618,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
 
     pStyRule = 0;                   // falls noetig, neu anlegen
     bTxtColChanged = bFontChanged = bCJKFontChanged = bFSizeChanged =
-        bWidowsChanged = FALSE;
+        bFCTLSizeChanged = bWidowsChanged = FALSE;
     pIo->SetNAktColl( nNr );
     pIo->bStyNormal = nNr == 0;
 

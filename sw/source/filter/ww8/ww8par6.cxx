@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-18 12:29:11 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 10:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3792,11 +3792,15 @@ void SwWW8ImplReader::Read_FontSize( USHORT nId, const BYTE* pData, short nLen )
 {
     switch( nId )
     {
-    case 99:
-    case 0x4a43:    nId = RES_CHRATR_FONTSIZE;      break;
-//  case 0x4a61:    nId = RES_CHRATR_CTL_FONTSIZE;  break;
-    default:
-        return ;
+        case 99:
+        case 0x4a43:
+            nId = RES_CHRATR_FONTSIZE;
+            break;
+        case 0x4a61:
+            nId = RES_CHRATR_CTL_FONTSIZE;
+            break;
+        default:
+            return ;
     }
 
     if( nLen < 0 )          // Ende des Attributes
@@ -3817,8 +3821,14 @@ void SwWW8ImplReader::Read_FontSize( USHORT nId, const BYTE* pData, short nLen )
             aSz.SetWhich( RES_CHRATR_CJK_FONTSIZE );
             NewAttr( aSz );
         }
-        if( pAktColl && pStyles )           // Style-Def ?
-            pStyles->bFSizeChanged = TRUE;  // merken zur Simulation Default-FontSize
+        if (pAktColl && pStyles)            // Style-Def ?
+        {
+            // merken zur Simulation Default-FontSize
+            if (nId == RES_CHRATR_CTL_FONTSIZE)
+                pStyles->bFCTLSizeChanged = TRUE;
+            else
+                pStyles->bFSizeChanged = TRUE;
+        }
     }
 }
 
@@ -5380,7 +5390,7 @@ SprmReadInfo aSprmReadTab[] = {
 //0x4A5E, ? ? ?  , "sprmCFtcBi", // ;;;
     0x485F, (FNReadRecord)0, // "sprmCLidBi", // ;;;
 //0x4A60, ? ? ?  , "sprmCIcoBi", // ;;;
-//0x4A61, &SwWW8ImplReader::Read_FontSize,  // "sprmCHpsBi", // ;;;
+    0x4A61, &SwWW8ImplReader::Read_FontSize,    // "sprmCHpsBi", // ;;;
     0xCA62, (FNReadRecord)0, //"sprmCDispFldRMark" // chp.fDispFldRMark, chp.ibstDispFldRMark, chp.dttmDispFldRMark ;Complex (see below);variable length always recorded as 39 bytes;
     0x4863, (FNReadRecord)0, //"sprmCIbstRMarkDel" // chp.ibstRMarkDel;index into sttbRMark;short;
     0x6864, (FNReadRecord)0, //"sprmCDttmRMarkDel" // chp.dttmRMarkDel;DTTM;long;
