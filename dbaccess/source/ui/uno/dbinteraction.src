@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:22:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,78 +65,27 @@
 
 String STR_REMEMBERPASSWORD_SESSION
 {
-    Text = "Kennwort bis Applikationsende ~merken";
-    Text[ english ] = "~Remember password until application ends";
-    Text[ arabic ] = "ÊĞßøÑ ßáãÉ ÇáÓÑ ÍÊì äåÇíÉ ÌáÓÉ ÇáÚãá";
-    Text[ chinese_simplified ] = "ç»“æŸç¨‹åºä¹‹å‰ä¸€ç›´è®°ä½å¯†ç (~R)";
-    Text[ chinese_simplified ] = "ç»“æŸç¨‹åºä¹‹å‰ä¸€ç›´è®°ä½å¯†ç (~R)";
-    Text[ chinese_traditional ] = "çµæŸç¨‹å¼ä¹‹å‰ä¸€ç›´è¨˜ä½å¯†ç¢¼(~R)";
-    Text[ danish ] = "~Husk adgangskode til programmet lukkes";
-    Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van programma";
-    Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van programma";
-    Text[ english_us ] = "~Remember password till end of session";
-    Text[ french ] = "Mémoriser le ~mot de passe jusqu'à la fin de la session";
-    Text[ greek ] = "Ìüíéìç áğïèŞêåõóç êùäéêïı İùò ôï ôİëïò ôçò óõíåäñßáò";
-    Text[ italian ] = "Memorizza password fino alla fine dell'applicazione";
-    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ã¾ã§ä¿å­˜ã—ã¦ãŠã(~R)";
-    Text[ korean ] = "ì‘ìš© í”„ë¡œê·¸ë¨ ì¢…ë£Œê¹Œì§€ ì•”í˜¸ ë³´ì¡´(~R)";
-    Text[ polish ] = "~Zapamiêtaj has³o do koñca sesji";
-    Text[ portuguese ] = "~Lembrar senha até terminar a aplicação";
-    Text[ portuguese_brazilian ] = "~Lembrar a senha até o fim da sessão";
-    Text[ russian ] = "Çàïîìíèòü ïàğîëü äî êîíöà ñåàíñà";
-    Text[ spanish ] = "~Recordar la contraseña hasta el fin de la aplicación";
-    Text[ swedish ] = "Ko~m ihåg lösenordet tills programmet avslutas";
-    Text[ turkish ] = "~Oturum kapanana kadar şifreyi hatırla";
-    Text[ catalan ] = "~Recorda la contrasenya fins a la fi de la sessió";
-    Text[ finnish ] = "~Muista salasana istunnon loppuun asti";
-    Text[ thai ] = "~à¸ˆà¸”à¸ˆà¸³à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¸ˆà¸™à¸à¸§à¹ˆà¸²à¸ªà¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¸—à¸³à¸­à¸¢à¸¹à¹ˆà¸ˆà¸°à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”";
-    Text[ czech ] = "Zapamatovat heslo do konce sezenÃ­";
-    Text[ hebrew ] = "Kennwort bis Applikationsende ~merken";
-    Text[ hindi ] = "à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤•à¥‹ à¤•à¤¾à¤°à¥à¤¯-à¤•à¤¾à¤² à¤•à¥‡ à¤…à¤‚à¤¤ à¤¤à¤• ~à¤¸à¥à¤®à¤°à¤£ à¤®à¥‡à¤‚ à¤°à¤–à¥‹";
-    Text[ slovak ] = "Za~pamÃ¤taÅ¥ si heslo do konca sedenia";
-    Text[ hungarian ] = "~JelszÃ³ tÃ¡rolÃ¡sa a munkamenet vÃ©gÃ©ig";
-    Text[ slovenian ] = "~Zapomni si geslo do konca seje";
+    Text [ de ] = "Kennwort bis Applikationsende ~merken";
+    Text [ en-US ] = "~Remember password till end of session";
 };
 
 String STR_REMEMBERPASSWORD_PERSISTENT
 {
-    Text = "Kennwort dauerhaft ~speichern";
-    Text[ english ] = "~Save password permanently";
-    Text[ arabic ] = "ÍİÙ ÏÇÆã áßáãÉ ÇáÓÑ";
-    Text[ chinese_simplified ] = "ä¿å­˜å¯†ç (~R)";
-    Text[ chinese_simplified ] = "ä¿å­˜å¯†ç (~R)";
-    Text[ chinese_traditional ] = "å„²å­˜å¯†ç¢¼(~R)";
-    Text[ danish ] = "~Husk adgangskode";
-    Text[ dutch ] = "Wachtwoord ~opslaan";
-    Text[ dutch ] = "Wachtwoord ~opslaan";
-    Text[ english_us ] = "~Remember password";
-    Text[ french ] = "~Enregistrer le mot de passe";
-    Text[ greek ] = "Ìüíéìç áğïèŞêåõ~óç êùäéêïı ğñüóâáóçò";
-    Text[ italian ] = "Memorizza pa~ssword";
-    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ã—ã¦ãŠã(~R)";
-    Text[ korean ] = "ì•”í˜¸ ë³´ì¡´(~R)";
-    Text[ polish ] = "~Zapamiêtaj has³o";
-    Text[ portuguese ] = "~Guardar senha";
-    Text[ portuguese_brazilian ] = "~Lembrar a senha";
-    Text[ russian ] = "Çàïîìíèòü ïàğîëü";
-    Text[ spanish ] = "~Guardar contraseña";
-    Text[ swedish ] = "~Spara lösenord permanent";
-    Text[ turkish ] = "~Şifreyi hatırla";
-    Text[ catalan ] = "~Recorda la contrasenya";
-    Text[ finnish ] = "~Muista salasana";
-    Text[ thai ] = "~à¸ˆà¸”à¸ˆà¸³à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
-    Text[ czech ] = "Zapamatovat heslo";
-    Text[ hebrew ] = "Kennwort dauerhaft ~speichern";
-    Text[ hindi ] = "~à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤¯à¤¾à¤¦ à¤•à¤°à¥‹";
-    Text[ slovak ] = "~ZapamÃ¤taÅ¥ si heslo";
-    Text[ hungarian ] = "~JelszÃ³ tÃ¡rolÃ¡sa";
-    Text[ slovenian ] = "~Zapomni si geslo";
+    Text [ de ] = "Kennwort dauerhaft ~speichern";
+    Text [ en-US ] = "~Remember password";
 };
 
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23.26.3  2004/04/21 05:58:42  hjs
+ *  RESYNC: (1.23-1.24); FILE MERGED
+ *
+ *  Revision 1.24  2003/12/17 15:22:29  vg
+ *  INTEGRATION: CWS geordi2q11 (1.23.72); FILE MERGED
+ *  2003/12/16 11:05:29 hr 1.23.72.1: #111934#: join CWS ooo111fix1
+ *
  *  Revision 1.23.72.1  2003/12/16 11:05:29  hr
  *  #111934#: join CWS ooo111fix1
  *
