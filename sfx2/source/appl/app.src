@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:25:13 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 10:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,35 +417,6 @@ Resource BMP_SFX_MONO
     };
     Bitmap BMP_SFX_SMALL { File = "smo.bmp" ; };
     Bitmap BMP_SFX_LARGE { File = "lmo.bmp" ; };
-};
-
-WarningBox STR_RECOVER_PREPARED
-{
-    Message = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und können voraussichtlich beim nächsten\nProgrammstart wiederhergestellt werden." ;
-    Message [ ENGLISH ] = "An unrecoverable error has occured.\n\nAll modified files are saved and can\nprobably be recovered on application restart." ;
-    Message [ portuguese ] = "Surgiu um erro irrecuperável. Contudo, todos os ficheiros \nmodificados foram guardados e poderão provavelmente \nser recuperados ao reiniciar o programa." ;
-    Message [ english_us ] = "An unrecoverable error has occurred.\n\nAll modified files have been saved and can\nprobably be recovered at program restart." ;
-    Message [ portuguese_brazilian ] = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und k?nen voraussichtlich beim n?chsten\nProgrammstart wiederhergestellt werden." ;
-    Message [ swedish ] = "Ett irreparabelt fel har uppstått.\n\nMen alla ändrade filer sparades\noch kan förmodligen återställas\nvid nästa programstart." ;
-    Message [ danish ] = "Der opstod en irreparabel fejl.\n\nAlle ændrede filer er dog\nblevet gemt og kan sandsynligvis gendannes\nved næste programstart." ;
-    Message [ italian ] = "Si è verificato un errore irrimediabile.\n\nTutti i file modificati sono stati \nsalvati e probabilmente verranno recuperati \nal prossimo avvio del programma." ;
-    Message [ spanish ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los cambios realizados\nen los archivos y quizás podrán recuperarse\nal iniciar de nuevo el programa." ;
-    Message [ french ] = "Une erreur irrécupérable s'est produite.\n\nTous les fichiers édités ont été sauvegardés\net devraient être restaurés au\nredémarrage du programme." ;
-    Message [ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden." ;
-    Message[ chinese_simplified ] = "ÕæÊÇ·Ç³£±§Ç¸£¬ÄúµÄ²Ù×÷Òı·¢ÁËÒ»¸öÎŞ·¨ÅÅ³ıµÄ´íÎó¡£\nÄú¸Õ²ÅĞŞ¸Ä¹ıµÄÎÄ¼şÒÑ¾­±»±£´æ¡£\nÔÚÏÂÒ»´ÎÆô¶¯³ÌĞòÊ±ºÜ¿ÉÄÜÖØĞÂ»Ö¸´ÕâĞ©ÎÄ¼ş¡£";
-    Message[ russian ] = "Ïğîèçîøëà íåóñòğàíèìàÿ îøèáêà.\n\nÂñå èçìåíåííûå ôàéëû áóäóò ñîõğàíåíû\nè èõ ìîæíî áóäåò âîññòàíîâèòü ïğè ñëåäóşùåì\nçàïóñêå ïğîãğàììû.";
-    Message[ polish ] = "Wyst¹pi³ nieodwracalny b³¹d.\n\nWszystkie zmodyfikowane pliki zosta³y jednak\nzabezpieczone i zostan¹ prawdopodobnie przywrócone przy nastêpnym rozpoczêciu programu.\n.";
-    Message[ japanese ] = "œ‹‚Å‚«‚È‚¢´×°‚ª”­¶‚µ‚Ü‚µ‚½B\n\n•ÏX‚µ‚½‚·‚×‚Ä‚ÌÌ§²Ù‚Í•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·‚Ì‚Å\nŸ‰ñ‚ÌÌßÛ¸Ş×ÑŠJn‚É•œŒ³‚³‚ê‚éŒ©‚İ‚Å‚·B";
-    Message[ chinese_traditional ] = "¯u¬O«D±`©êºp¡M±zªº°Ê§@¤Şµo¤F¤@­ÓµLªk±Æ°£ªº¿ù»~¡C\n¥ı«e­×§ï¹LªºÀÉ®×¤w¸gÀx¦s¡C\n¦b¤U¤@¦¸±Ò°Êµ{¦¡®É«Ü¥i¯à­«·s«ì´_³o¨ÇÀÉ®×¡C";
-    Message[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ŞÇÈá ááÅÕáÇÍ.\n\nÊã ÍİÙ ßÇİÉ ÇáãáİÇÊ ÇáÊí Êã ÊÚÏíáåÇ¡ \nÈÍíË íãßä ÇÓÊÚÇÏÊåÇ ÚäÏ ÅÚÇÏÉ\n ÊÔÛíá ÇáÈÑäÇãÌ.";
-    Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
-    Message[ chinese_simplified ] = "ÕæÊÇ·Ç³£±§Ç¸£¬ÄúµÄ²Ù×÷Òı·¢ÁËÒ»¸öÎŞ·¨ÅÅ³ıµÄ´íÎó¡£\nÄú¸Õ²ÅĞŞ¸Ä¹ıµÄÎÄ¼şÒÑ¾­±»±£´æ¡£\nÔÚÏÂÒ»´ÎÆô¶¯³ÌĞòÊ±ºÜ¿ÉÄÜÖØĞÂ»Ö¸´ÕâĞ©ÎÄ¼ş¡£";
-    Message[ greek ] = "ĞáñïõóéÜóôçêå êÜğïéï áíåğáíüñèùôï óöÜëìá.\n\n¼ëá ôá ôñïğïğïéçìİíá áñ÷åßá áğïèçêåıôçêáí\nşóôå íá åßíáé äõíáôŞ (ğéèáíüôáôá) ç åğáíáöïñÜ ôïõò\n ";
-    Message[ korean ] = "Á¦°ÅÇÒ ¼ö ¾ø´Â ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.\n\nÇÏÁö¸¸ º¯°æµÈ  ¸ğµç ÆÄÀÏÀº\nÀúÀåµÇ¾úÀ¸¹Ç·Î,  ´ÙÀ½\nÇÁ·Î±×·¥ ½ÃÀÛ½Ã¿¡´Â º¹±¸µÉ ¼ö ÀÖÀ» °ÍÀÔ´Ï´Ù.";
-    Message[ turkish ] = "Düzeltilemeyen bir hata oluştu.\n\nDeğiştirilen tüm dosyalar\nkaydedildi ve muhtemelen uygulama yeniden başlatıldığında\nkurtarılabilecek.";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los cambios realizados\nen los archivos y quizás podrán recuperarse\nal iniciar de nuevo el programa.";
-    Message[ finnish ] = "On ilmennyt peruuttamaton virhe.\n\nKaikki muokatut tiedostot on tallennettu\nja ne voidaan ehkä palauttaa, kun käynnistät ohjelman uudelleen.";
 };
 
 WarningBox RID_WARN_POST_MAILTO
