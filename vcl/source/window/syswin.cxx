@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-03-23 12:31:35 $
+ *  last change: $Author: ssa $ $Date: 2001-07-04 16:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,10 +104,6 @@
 
 #include <unowrap.hxx>
 
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
-#include <com/sun/star/lang/XComponent.hpp>
-#endif
-
 #ifdef REMOTE_APPSERVER
 #include "rmwindow.hxx"
 #endif
@@ -160,25 +156,6 @@ long SystemWindow::Notify( NotifyEvent& rNEvt )
 
 BOOL SystemWindow::Close()
 {
-    if ( mbFrame && mpFrameData )
-    {
-        try
-        {
-            // shutdown drag and drop for this window
-            Reference< XComponent > xComponent( mpFrameData->mxDropTarget, UNO_QUERY );
-
-            // DNDEventDispatcher does not hold a reference of the DropTarget,
-            // so it's ok if it does not support XComponent
-            if( xComponent.is() )
-                xComponent->dispose();
-        }
-
-        catch ( Exception exc )
-        {
-            // can be safely ignored here.
-        }
-    }
-
     if ( mxWindowPeer.is() )
     {
         // #76482# This window can be destroyed in WindowEvent_Close.
