@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:26:08 $
+#   last change: $Author: rt $ $Date: 2005-01-31 17:22:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,8 +78,9 @@ if (-d "$StartDir") {
     # check binaries
     print "check binaries: ";
     if (-d "$StartDir/$OperatingSystem/bin") {
-    my @binarylist = ( "idlc","idlcpp","cppumaker","javamaker","rdbmaker","sp2bv",
-                "regcompare","regmerge","regview","autodoc", "uno", "xml2cmp", "unoapploader" );
+    my @binarylist = ( "idlc","idlcpp","cppumaker","javamaker","rdbmaker",
+               "sp2bv","regcompare","regmerge","regview","autodoc",
+               "xml2cmp", "unoapploader" );
 
     foreach $i (@binarylist)
     {
@@ -124,9 +125,18 @@ if (-d "$StartDir") {
     $return++;
     }
     if (-d "$StartDir/docs") {
-    my @filelist = ( "install.html","DevelopersGuide_intro.html","notsupported.html",
-             "sdk_styles.css", "tools.html", "images/black_dot.gif",
-             "images/logo.gif", "images/sdk_logo.gif", "images/nada.gif");
+    my @filelist = ( "install.html","DevelopersGuide_intro.html",
+             "notsupported.html","sdk_styles.css","tools.html",
+             "images/nada.gif","images/arrow-1.gif",
+             "images/arrow-2.gif","images/arrow-3.gif",
+             "images/bg_table.gif","images/bluball.gif",
+             "images/nada.gif","images/nav_down.png",
+             "images/nav_home.png","images/nav_left.png",
+             "images/nav_right.png","images/nav_up.png",
+             "images/sdk_head-1.gif", "images/sdk_head-2.gif",
+             "images/sdk_head-3.gif", "images/sdk_line-1.gif",
+             "images/sdk_line-2.gif", "images/so-main-app_32.png",
+             "images/ooo-main-app_32.png");
 
     foreach $i (@filelist)
     {
@@ -174,8 +184,16 @@ if (-d "$StartDir") {
         print "\nERROR: \"$StartDir/configure.pl\" is missing\n";
         $return++;
     }
-    if (! -e "$StartDir/setsdkenv_unix.in") {
-        print "\nERROR: \"$StartDir/setsdkenv_unix.in\" is missing\n";
+    if (! -e "$StartDir/setsdkenv_unix") {
+        print "\nERROR: \"$StartDir/setsdkenv_unix\" is missing\n";
+        $return++;
+    }
+    if (! -e "$StartDir/setsdkenv_unix.sh.in") {
+        print "\nERROR: \"$StartDir/setsdkenv_unix.sh.in\" is missing\n";
+        $return++;
+    }
+    if (! -e "$StartDir/setsdkenv_unix.csh.in") {
+        print "\nERROR: \"$StartDir/setsdkenv_unix.csh.in\" is missing\n";
         $return++;
     }
     }
@@ -218,7 +236,97 @@ if (-d "$StartDir") {
         $return++;
     }
 
-    my @dir_list = ( "com","com/sun","com/sun/star","com/sun/star/uno","com/sun/star/uno/Any","com/sun/star/uno/Type","com/sun/star/uno/Array","com/sun/star/uno/WeakReferenceHelper","com/sun/star/uno/Reference","com/sun/star/uno/WeakReference","com/sun/star/uno/Environment","com/sun/star/uno/Sequence","com/sun/star/uno/BaseReference","com/sun/star/uno/Mapping","com/sun/star/uno/ContextLayer","com/sun/star/uno/TypeDescription","osl","osl/File","osl/Pipe","osl/FileStatus","osl/FileBase","osl/Guard","osl/Mutex","osl/VolumeInfo","osl/GetGlobalMutex","osl/Security","osl/Profile","osl/DatagramSocket","osl/SocketAddr","osl/StreamPipe","osl/ResettableGuard","osl/AcceptorSocket","osl/ClearableGuard","osl/VolumeDevice","rtl","rtl/Uri","rtl/math","rtl/OUStringHash","rtl/MalformedUriException","rtl/OUStringBuffer","rtl/OUString","rtl/Reference","rtl/ByteSequence","rtl/OLocale","rtl/Logfile","rtl/OString","rtl/IReference","rtl/OStringBuffer","rtl/OStringHash","_typelib_CompoundTypeDescription","cppu","cppu/ContextEntry_Init","cppu/ImplInheritanceHelper10","cppu/ImplInheritanceHelper11","cppu/ImplInheritanceHelper12","cppu/WeakAggImplHelper1","cppu/WeakAggImplHelper2","cppu/WeakAggImplHelper3","cppu/WeakAggImplHelper4","cppu/WeakAggImplHelper5","cppu/WeakAggImplHelper6","cppu/WeakAggImplHelper7","cppu/WeakAggImplHelper8","cppu/WeakAggImplHelper9","cppu/OMultiTypeInterfaceContainerHelperInt32","cppu/AccessControl","cppu/OPropertyArrayHelper","cppu/ImplHelper1","cppu/ImplHelper2","cppu/ImplHelper3","cppu/ImplHelper4","cppu/ImplHelper5","cppu/ImplHelper6","cppu/ImplHelper7","cppu/ImplHelper8","cppu/ImplHelper9","cppu/WeakComponentImplHelper10","cppu/WeakComponentImplHelper11","cppu/WeakComponentImplHelper12","cppu/UnoUrl","cppu/WeakComponentImplHelper1","cppu/WeakComponentImplHelper2","cppu/WeakComponentImplHelper3","cppu/WeakComponentImplHelper4","cppu/WeakComponentImplHelper5","cppu/WeakComponentImplHelper6","cppu/WeakComponentImplHelper7","cppu/WeakComponentImplHelper8","cppu/WeakComponentImplHelper9","cppu/OInterfaceIteratorHelper","cppu/OMultiTypeInterfaceContainerHelper","cppu/UnoUrlDescriptor","cppu/IPropertyArrayHelper","cppu/OBroadcastHelperVar","cppu/OComponentHelper","cppu/OWeakAggObject","cppu/ImplementationEntry","cppu/WeakImplHelper10","cppu/WeakImplHelper11","cppu/WeakImplHelper12","cppu/OPropertySetHelper","cppu/ImplHelper10","cppu/ImplHelper11","cppu/ImplHelper12","cppu/WeakAggImplHelper10","cppu/WeakAggImplHelper11","cppu/WeakAggImplHelper12","cppu/ImplInheritanceHelper1","cppu/ImplInheritanceHelper2","cppu/ImplInheritanceHelper3","cppu/ImplInheritanceHelper4","cppu/ImplInheritanceHelper5","cppu/ImplInheritanceHelper6","cppu/ImplInheritanceHelper7","cppu/ImplInheritanceHelper8","cppu/ImplInheritanceHelper9","cppu/OTypeCollection","cppu/WeakAggComponentImplHelper10","cppu/WeakAggComponentImplHelper11","cppu/WeakAggComponentImplHelper12","cppu/WeakAggComponentImplHelper1","cppu/WeakAggComponentImplHelper2","cppu/WeakAggComponentImplHelper3","cppu/WeakAggComponentImplHelper4","cppu/WeakAggComponentImplHelper5","cppu/WeakAggComponentImplHelper6","cppu/WeakAggComponentImplHelper7","cppu/WeakAggComponentImplHelper8","cppu/WeakAggComponentImplHelper9","cppu/OMultiTypeInterfaceContainerHelperVar","cppu/OInterfaceContainerHelper","cppu/OImplementationId","cppu/AggImplInheritanceHelper1","cppu/AggImplInheritanceHelper2","cppu/AggImplInheritanceHelper3","cppu/AggImplInheritanceHelper4","cppu/AggImplInheritanceHelper5","cppu/AggImplInheritanceHelper6","cppu/AggImplInheritanceHelper7","cppu/AggImplInheritanceHelper8","cppu/AggImplInheritanceHelper9","cppu/AggImplInheritanceHelper10","cppu/AggImplInheritanceHelper11","cppu/AggImplInheritanceHelper12","cppu/WeakImplHelper1","cppu/WeakImplHelper2","cppu/WeakImplHelper3","cppu/WeakImplHelper4","cppu/WeakImplHelper5","cppu/WeakImplHelper6","cppu/WeakImplHelper7","cppu/WeakImplHelper8","cppu/WeakImplHelper9","cppu/OWeakObject","__store_FindData","_rtl_StandardModuleCount","RTUik","RTConstValue","_typelib_TypeDescriptionReference","_typelib_InterfaceMethodTypeDescription","store","RegistryKey","_typelib_Union_Init","_sal_Sequence","_typelib_Parameter_Init","_typelib_TypeDescription","_uno_Environment","_typelib_InterfaceAttributeTypeDescription","uno_Context","RegistryTypeReaderLoader","_rtl_ModuleCount","_uno_ExtEnvironment","_typelib_IndirectTypeDescription","remote_DisposingListener","remote_Interface","Registry_Api","_oslFileStatus","_typelib_InterfaceMemberTypeDescription","RegistryValueList","RegistryTypeWriter_Api","_rtl_TextEncodingInfo","namespace_anonymous_1","remote_Connection","RegistryLoader","_oslVolumeInfo","_uno_Interface","RegistryTypeWriterLoader","_typelib_InterfaceTypeDescription","_uno_Mapping","Registry","RegistryTypeReader_Api","remote_Context","_typelib_Uik","remote_InstanceProvider","_typelib_ArrayTypeDescription","RegistryKeyArray","RegistryTypeReader","RegistryKeyNames","RTConstValueUnion","_typelib_UnionTypeDescription","_uno_Any","RegistryTypeWriter","_rtl_Locale","_typelib_CompoundMember_Init","_typelib_EnumTypeDescription","_typelib_MethodParameter");
+    my @dir_list = ( "com","com/sun","com/sun/star","com/sun/star/uno",
+             "com/sun/star/uno/Any","com/sun/star/uno/Type",
+             "com/sun/star/uno/Array","com/sun/star/uno/WeakReferenceHelper",
+             "com/sun/star/uno/Reference","com/sun/star/uno/WeakReference",
+             "com/sun/star/uno/Environment","com/sun/star/uno/Sequence",
+             "com/sun/star/uno/BaseReference","com/sun/star/uno/Mapping",
+             "com/sun/star/uno/ContextLayer","com/sun/star/uno/TypeDescription",
+             "osl","osl/File","osl/Pipe","osl/FileStatus","osl/FileBase",
+             "osl/Guard","osl/Mutex","osl/VolumeInfo","osl/GetGlobalMutex",
+             "osl/Security","osl/Profile","osl/DatagramSocket","osl/SocketAddr",
+             "osl/StreamPipe","osl/ResettableGuard","osl/AcceptorSocket",
+             "osl/ClearableGuard","osl/VolumeDevice","rtl","rtl/Uri","rtl/math",
+             "rtl/OUStringHash","rtl/MalformedUriException","rtl/OUStringBuffer",
+             "rtl/OUString","rtl/Reference","rtl/ByteSequence","rtl/OLocale",
+             "rtl/Logfile","rtl/OString","rtl/IReference","rtl/OStringBuffer",
+             "rtl/OStringHash","_typelib_CompoundTypeDescription","cppu",
+             "cppu/ContextEntry_Init","cppu/ImplInheritanceHelper10",
+             "cppu/ImplInheritanceHelper11","cppu/ImplInheritanceHelper12",
+             "cppu/WeakAggImplHelper1","cppu/WeakAggImplHelper2",
+             "cppu/WeakAggImplHelper3","cppu/WeakAggImplHelper4",
+             "cppu/WeakAggImplHelper5","cppu/WeakAggImplHelper6",
+             "cppu/WeakAggImplHelper7","cppu/WeakAggImplHelper8",
+             "cppu/WeakAggImplHelper9",
+             "cppu/OMultiTypeInterfaceContainerHelperInt32","cppu/AccessControl",
+             "cppu/OPropertyArrayHelper","cppu/ImplHelper1","cppu/ImplHelper2",
+             "cppu/ImplHelper3","cppu/ImplHelper4","cppu/ImplHelper5",
+             "cppu/ImplHelper6","cppu/ImplHelper7","cppu/ImplHelper8",
+             "cppu/ImplHelper9","cppu/WeakComponentImplHelper10",
+             "cppu/WeakComponentImplHelper11","cppu/WeakComponentImplHelper12",
+             "cppu/UnoUrl","cppu/WeakComponentImplHelper1",
+             "cppu/WeakComponentImplHelper2","cppu/WeakComponentImplHelper3",
+             "cppu/WeakComponentImplHelper4","cppu/WeakComponentImplHelper5",
+             "cppu/WeakComponentImplHelper6","cppu/WeakComponentImplHelper7",
+             "cppu/WeakComponentImplHelper8","cppu/WeakComponentImplHelper9",
+             "cppu/OInterfaceIteratorHelper",
+             "cppu/OMultiTypeInterfaceContainerHelper","cppu/UnoUrlDescriptor",
+             "cppu/IPropertyArrayHelper","cppu/OBroadcastHelperVar",
+             "cppu/OComponentHelper","cppu/OWeakAggObject",
+             "cppu/ImplementationEntry","cppu/WeakImplHelper10",
+             "cppu/WeakImplHelper11","cppu/WeakImplHelper12",
+             "cppu/OPropertySetHelper","cppu/ImplHelper10","cppu/ImplHelper11",
+             "cppu/ImplHelper12","cppu/WeakAggImplHelper10",
+             "cppu/WeakAggImplHelper11","cppu/WeakAggImplHelper12",
+             "cppu/ImplInheritanceHelper1","cppu/ImplInheritanceHelper2",
+             "cppu/ImplInheritanceHelper3","cppu/ImplInheritanceHelper4",
+             "cppu/ImplInheritanceHelper5","cppu/ImplInheritanceHelper6",
+             "cppu/ImplInheritanceHelper7","cppu/ImplInheritanceHelper8",
+             "cppu/ImplInheritanceHelper9","cppu/OTypeCollection",
+             "cppu/WeakAggComponentImplHelper10",
+             "cppu/WeakAggComponentImplHelper11",
+             "cppu/WeakAggComponentImplHelper12",
+             "cppu/WeakAggComponentImplHelper1",
+             "cppu/WeakAggComponentImplHelper2",
+             "cppu/WeakAggComponentImplHelper3",
+             "cppu/WeakAggComponentImplHelper4",
+             "cppu/WeakAggComponentImplHelper5",
+             "cppu/WeakAggComponentImplHelper6",
+             "cppu/WeakAggComponentImplHelper7",
+             "cppu/WeakAggComponentImplHelper8",
+             "cppu/WeakAggComponentImplHelper9",
+             "cppu/OMultiTypeInterfaceContainerHelperVar",
+             "cppu/OInterfaceContainerHelper","cppu/OImplementationId",
+             "cppu/AggImplInheritanceHelper1","cppu/AggImplInheritanceHelper2",
+             "cppu/AggImplInheritanceHelper3","cppu/AggImplInheritanceHelper4",
+             "cppu/AggImplInheritanceHelper5","cppu/AggImplInheritanceHelper6",
+             "cppu/AggImplInheritanceHelper7","cppu/AggImplInheritanceHelper8",
+             "cppu/AggImplInheritanceHelper9","cppu/AggImplInheritanceHelper10",
+             "cppu/AggImplInheritanceHelper11","cppu/AggImplInheritanceHelper12",
+             "cppu/WeakImplHelper1","cppu/WeakImplHelper2","cppu/WeakImplHelper3",
+             "cppu/WeakImplHelper4","cppu/WeakImplHelper5","cppu/WeakImplHelper6",
+             "cppu/WeakImplHelper7","cppu/WeakImplHelper8","cppu/WeakImplHelper9",
+             "cppu/OWeakObject","__store_FindData","_rtl_StandardModuleCount",
+             "RTUik","RTConstValue","_typelib_TypeDescriptionReference",
+             "_typelib_InterfaceMethodTypeDescription","store","RegistryKey",
+             "_typelib_Union_Init","_sal_Sequence","_typelib_Parameter_Init",
+             "_typelib_TypeDescription","_uno_Environment",
+             "_typelib_InterfaceAttributeTypeDescription","uno_Context",
+             "RegistryTypeReaderLoader","_rtl_ModuleCount","_uno_ExtEnvironment",
+             "_typelib_IndirectTypeDescription","remote_DisposingListener",
+             "remote_Interface","Registry_Api","_oslFileStatus",
+             "_typelib_InterfaceMemberTypeDescription","RegistryValueList",
+             "RegistryTypeWriter_Api","_rtl_TextEncodingInfo",
+             "namespace_anonymous_1","remote_Connection","RegistryLoader",
+             "_oslVolumeInfo","_uno_Interface","RegistryTypeWriterLoader",
+             "_typelib_InterfaceTypeDescription","_uno_Mapping","Registry",
+             "RegistryTypeReader_Api","remote_Context","_typelib_Uik",
+             "remote_InstanceProvider","_typelib_ArrayTypeDescription",
+             "RegistryKeyArray","RegistryTypeReader","RegistryKeyNames",
+             "RTConstValueUnion","_typelib_UnionTypeDescription","_uno_Any",
+             "RegistryTypeWriter","_rtl_Locale","_typelib_CompoundMember_Init",
+             "_typelib_EnumTypeDescription","_typelib_MethodParameter");
 
     foreach $i (@dir_list)
     {
@@ -246,11 +354,13 @@ if (-d "$StartDir") {
         $return++;
         }
 
-        my @dir_list = ( "lib","lib/uno","lib/uno/helper","lib/uno/helper/class-use","uno",
-                 "uno/class-use","comp","comp/helper","comp/helper/class-use","tools",
-                 "tools/uno","tools/uno/class-use");
+        my @dir_list = ( "lib","lib/uno","lib/uno/helper","lib/uno/helper/class-use",
+                 "uno","uno/class-use","comp","comp/helper",
+                 "comp/helper/class-use","tools","tools/uno",
+                 "tools/uno/class-use");
 
-        foreach $i (@dir_list) {
+        foreach $i (@dir_list)
+        {
         if (! -d "$StartDir/docs/java/ref/com/sun/star/$i") {
             $return++;
             print "\nERROR: \"$StartDir/docs/java/ref/com/sun/star/$i\" is missing\n";
@@ -277,8 +387,98 @@ if (-d "$StartDir") {
         $return++;
     }
 
-    my @dirlist = ( "OLE","OLE/vbscript","OLE/delphi","OLE/delphi/InsertTables","OLE/activex","cpp","cpp/counter","cpp/remoteclient","cpp/DocumentLoader","cpp/SimpleBootstrap","java","java/Text","java/ToDo","java/NotesAccess","java/ConverterServlet","java/Inspector","java/Drawing","java/MinimalComponent","java/PropertySet","java/Spreadsheet","java/DocumentHandling","java/DocumentHandling/test","basic","basic/text","basic/text/modifying_text_automatically","basic/text/creating_an_index","basic/sheet","basic/drawing","basic/forms_and_controls","basic/stock_quotes_updater","DevelopersGuide","DevelopersGuide/UCB","DevelopersGuide/UCB/data","DevelopersGuide/Text","DevelopersGuide/Charts","DevelopersGuide/Config","DevelopersGuide/Forms","DevelopersGuide/FirstSteps","DevelopersGuide/OfficeDev","DevelopersGuide/OfficeDev/FilterDevelopment","DevelopersGuide/OfficeDev/FilterDevelopment/AsciiFilter","DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp","DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java","DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection","DevelopersGuide/OfficeDev/Linguistic","DevelopersGuide/OfficeDev/Clipboard","DevelopersGuide/OfficeDev/PathSettings","DevelopersGuide/OfficeDev/TerminationTest","DevelopersGuide/OfficeDev/DesktopEnvironment","DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib","DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib/unix","DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib/windows","DevelopersGuide/OfficeDev/DisableCommands","DevelopersGuide/OfficeDev/PathSubstitution","DevelopersGuide/Components","DevelopersGuide/Components/JavaComponent","DevelopersGuide/Components/Thumbs","DevelopersGuide/Components/Thumbs/org","DevelopersGuide/Components/Thumbs/org/openoffice","DevelopersGuide/Components/Thumbs/org/openoffice/comp","DevelopersGuide/Components/Thumbs/org/openoffice/comp/test","DevelopersGuide/Components/Thumbs/org/openoffice/test","DevelopersGuide/Components/CppComponent","DevelopersGuide/Components/Addons","DevelopersGuide/Components/Addons/JobsAddon","DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java","DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp","DevelopersGuide/BasicAndDialogs","DevelopersGuide/BasicAndDialogs/ToolkitControls","DevelopersGuide/BasicAndDialogs/CreatingDialogs","DevelopersGuide/ProfUNO","DevelopersGuide/ProfUNO/CppBinding","DevelopersGuide/ProfUNO/InterprocessConn","DevelopersGuide/ProfUNO/Lifetime","DevelopersGuide/Drawing","DevelopersGuide/Accessibility","DevelopersGuide/OfficeBean","DevelopersGuide/Database","DevelopersGuide/Database/DriverSkeleton","DevelopersGuide/Spreadsheet");
-    foreach $i (@dirlist)
+    my @ex_dirlist = ( "OLE",
+               "OLE/vbscript",
+               "OLE/delphi",
+               "OLE/delphi/InsertTables",
+               "OLE/activex",
+               "CLI/C#/Spreadsheet",
+               "CLI/VB.NET/WriterDemo",
+               "cpp",
+               "cpp/counter",
+               "cpp/remoteclient",
+               "cpp/DocumentLoader",
+               "java",
+               "java/Text",
+               "java/ToDo",
+               "java/NotesAccess",
+               "java/ConverterServlet",
+               "java/Inspector",
+               "java/Drawing",
+               "java/MinimalComponent",
+               "java/PropertySet",
+               "java/Spreadsheet",
+               "java/DocumentHandling",
+               "java/DocumentHandling/test",
+               "basic",
+               "basic/text",
+               "basic/text/modifying_text_automatically",
+               "basic/text/creating_an_index",
+               "basic/sheet",
+               "basic/drawing",
+               "basic/forms_and_controls",
+               "basic/stock_quotes_updater",
+               "DevelopersGuide",
+               "DevelopersGuide/UCB",
+               "DevelopersGuide/UCB/data",
+               "DevelopersGuide/Text",
+               "DevelopersGuide/Charts",
+               "DevelopersGuide/Config",
+               "DevelopersGuide/Forms",
+               "DevelopersGuide/FirstSteps",
+               "DevelopersGuide/OfficeDev",
+               "DevelopersGuide/OfficeDev/FilterDevelopment",
+               "DevelopersGuide/OfficeDev/FilterDevelopment/AsciiFilter",
+               "DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp",
+               "DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java",
+               "DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection",
+               "DevelopersGuide/OfficeDev/Linguistic",
+               "DevelopersGuide/OfficeDev/Clipboard",
+               "DevelopersGuide/OfficeDev/PathSettings",
+               "DevelopersGuide/OfficeDev/TerminationTest",
+               "DevelopersGuide/OfficeDev/DesktopEnvironment",
+               "DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib",
+               "DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib/unix",
+               "DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib/windows",
+               "DevelopersGuide/OfficeDev/DisableCommands",
+               "DevelopersGuide/OfficeDev/PathSubstitution",
+               "DevelopersGuide/Components",
+               "DevelopersGuide/Components/JavaComponent",
+               "DevelopersGuide/Components/Thumbs",
+               "DevelopersGuide/Components/Thumbs/org",
+               "DevelopersGuide/Components/Thumbs/org/openoffice",
+               "DevelopersGuide/Components/Thumbs/org/openoffice/comp",
+               "DevelopersGuide/Components/Thumbs/org/openoffice/comp/test",
+               "DevelopersGuide/Components/Thumbs/org/openoffice/test",
+               "DevelopersGuide/Components/CppComponent",
+               "DevelopersGuide/Components/Addons",
+               "DevelopersGuide/Components/Addons/JobsAddon",
+               "DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java",
+               "DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp",
+               "DevelopersGuide/BasicAndDialogs",
+               "DevelopersGuide/BasicAndDialogs/ToolkitControls",
+               "DevelopersGuide/BasicAndDialogs/CreatingDialogs",
+               "DevelopersGuide/ProfUNO",
+               "DevelopersGuide/ProfUNO/CppBinding",
+               "DevelopersGuide/ProfUNO/InterprocessConn",
+               "DevelopersGuide/ProfUNO/Lifetime",
+               "DevelopersGuide/ProfUNO/SimpleBootstrap_java",
+               "DevelopersGuide/ProfUNO/SimpleBootstrap_cpp",
+               "DevelopersGuide/Drawing",
+               "DevelopersGuide/Accessibility",
+               "DevelopersGuide/OfficeBean",
+               "DevelopersGuide/Database",
+               "DevelopersGuide/Database/DriverSkeleton",
+               "DevelopersGuide/Spreadsheet",
+               "DevelopersGuide/ScriptingFramework",
+               "DevelopersGuide/ScriptingFramework/SayHello",
+               "DevelopersGuide/ScriptingFramework/SayHello/SayHello",
+               "DevelopersGuide/ScriptingFramework/SayHello/META-INF",
+               "DevelopersGuide/ScriptingFramework/ScriptSelector",
+               "DevelopersGuide/ScriptingFramework/ScriptSelector/ScriptSelector",
+               "DevelopersGuide/ScriptingFramework/ScriptSelector/META-INF" );
+
+    foreach $i (@ex_dirlist)
     {
         if (! -d "$StartDir/examples/$i") {
         $return++;
