@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:45:14 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,7 +812,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ chinese_simplified ] = "å…è®¸ç©ºå•å…ƒæ ¼(~B)";
         Text[ russian ] = "Ïğîïóñê ïóñòûõ ÿ÷ååê";
         Text[ polish ] = "Dopuœæ puste komórki";
-        Text[ japanese ] = "ç©ºç™½ï½¾ï¾™ã‚‚ä½¿ã†(~B)";
+        Text[ japanese ] = "ç©ºç™½ï½¾ï¾™ã‚’è¨±å¯ã™ã‚‹(~B)";
         Text[ chinese_traditional ] = "å…è¨±ç©ºæ ¼(~B)";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÎáÇíÇ ÇáİÇÑÛÉ";
         Text[ greek ] = "Íá åğéôñáğïıí êåíÜ êåëéÜ";
@@ -1355,6 +1355,7 @@ TabPage TP_VALIDATION_ERROR
     Text[ catalan ] = "Mensaje de error";
     Text[ finnish ] = "Virhehälytys";
 };
+
 
 
 
