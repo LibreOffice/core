@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:37:54 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,12 +1205,6 @@ public:
 
 class SwUndoInsLayFmt : public SwUndoFlyBase
 {
-    // -> #i30295#
-    mutable const SdrObject * pSdrObjLast;
-    mutable SdrObject * pSdrObjCopy;
-    mutable SdrUndoNewObj * pSdrUndo;
-    // <- #i30295#
-
 public:
     SwUndoInsLayFmt( SwFrmFmt* pFormat );
     ~SwUndoInsLayFmt();
