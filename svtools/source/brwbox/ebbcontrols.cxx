@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ebbcontrols.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:20:58 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,14 @@ namespace svt
         pBox->SetPosSizePixel(Point(0,0),GetSizePixel());
     }
 
-    //------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void CheckBoxControl::DataChanged( const DataChangedEvent& _rEvent )
+    {
+        if ( _rEvent.GetType() == DATACHANGED_SETTINGS )
+            pBox->SetSettings( GetSettings() );
+    }
+
+    //------------------------------------------------------------------------------
     void CheckBoxControl::StateChanged( StateChangedType nStateChange )
     {
         Control::StateChanged(nStateChange);
