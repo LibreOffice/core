@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 13:34:20 $
+ *  last change: $Author: nn $ $Date: 2002-10-24 17:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ public:
     void                InputCancelHandler();
     void                InputSelection( EditView* pView );
     void                InputChanged( EditView* pView );
-    ScInputHandler*     GetInputHdl( ScTabViewShell* pViewSh = NULL );
+    ScInputHandler*     GetInputHdl( ScTabViewShell* pViewSh = NULL, BOOL bUseRef = TRUE );
 
     void                SetRefInputHdl( ScInputHandler* pNew );
     ScInputHandler*     GetRefInputHdl();

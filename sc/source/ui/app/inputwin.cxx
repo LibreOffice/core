@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-22 15:36:32 $
+ *  last change: $Author: nn $ $Date: 2002-10-24 17:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     aWndPos     .Show();
     aTextWindow .Show();
 
-    pInputHdl = SC_MOD()->GetInputHdl();
+    pInputHdl = SC_MOD()->GetInputHdl( NULL, FALSE );   // use own handler even if ref-handler is set
     if (pInputHdl)
         pInputHdl->SetInputWindow( this );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-27 12:48:45 $
+ *  last change: $Author: nn $ $Date: 2002-10-24 17:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1367,9 +1367,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 //
 //------------------------------------------------------------------
 
-ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh )
+ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, BOOL bUseRef )
 {
-    if ( pRefInputHandler )
+    if ( pRefInputHandler && bUseRef )
         return pRefInputHandler;
 
     ScInputHandler* pHdl = NULL;
@@ -1640,7 +1640,7 @@ BOOL ScModule::IsModalMode(SfxObjectShell* pDocSh)
         if ( pChildWnd )
         {
             ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
-            bIsModal = pRefDlg->IsVisible() &&
+            bIsModal = pChildWnd->IsVisible() &&
                 !( pRefDlg->IsRefInputMode() && pRefDlg->IsDocAllowed(pDocSh) );
         }
         else
@@ -1696,7 +1696,7 @@ BOOL ScModule::IsRefDialogOpen()
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         if ( pChildWnd )
-            bIsOpen = ((ScAnyRefDlg*)pChildWnd->GetWindow())->IsVisible();
+            bIsOpen = pChildWnd->IsVisible();
         else
             bIsOpen = TRUE;     // for other views, see IsModalMode
     }
@@ -1717,7 +1717,7 @@ BOOL ScModule::IsFormulaMode()
         if ( pChildWnd )
         {
             ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
-            bIsFormula = pRefDlg->IsVisible() && pRefDlg->IsRefInputMode();
+            bIsFormula = pChildWnd->IsVisible() && pRefDlg->IsRefInputMode();
         }
     }
     else
