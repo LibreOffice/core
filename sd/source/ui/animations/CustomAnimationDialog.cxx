@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:54:09 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1706,7 +1706,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
     // ---
 
     {
-        double fIterateInterval = mpMFTextDelay->GetValue() / 10.0;
+        double fIterateInterval = static_cast< double >( mpMFTextDelay->GetValue() ) / 10;
         double fOldIterateInterval = -1.0;
 
         if( mpSet->getPropertyState( nHandleIterateInterval ) != STLPropertyState_AMBIGUOUS )
