@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-19 15:36:39 $
+#   last change: $Author: mh $ $Date: 2001-06-19 17:33:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1034,12 +1034,10 @@ CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
 .ENDIF
 
 #to be removed soon!!!
-.IF "$(BUILD_SOSL)" == ""
 .IF "$(USE_XPRINTER)" == ""
 .IF "$(OS)" != "MACOSX"
 CDEFS += -DUSE_PSPRINT
 PSPRINT=true
-.ENDIF
 .ENDIF
 .ENDIF
 
