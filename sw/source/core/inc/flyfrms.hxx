@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrms.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:47:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,12 @@
 
 #include "flyfrm.hxx"
 
+// OD 01.08.2003 #110978#
+namespace objectpositioning
+{
+    class SwAnchoredObjectPosition;
+}
+
 //Basisklasse fuer diejenigen Flys, die sich relativ frei Bewegen koennen -
 //also die nicht _im_ Inhalt gebundenen Flys.
 class SwFlyFreeFrm : public SwFlyFrm
@@ -118,6 +124,13 @@ public:
 //Die Flys, die an einem Cntnt haengen nicht aber im Inhalt
 class SwFlyAtCntFrm : public SwFlyFreeFrm
 {
+    // OD 01.08.2003 #110978# - access for calculation of position
+    friend class objectpositioning::SwAnchoredObjectPosition;
+    // OD 06.10.2003 #110978# - data of position calculation
+    // frame vertical position is orient at - typically its the anchor frame,
+    // but it could also by a follow or a following layout frame in the text flow.
+    const SwFrm* mpVertPosOrientFrm;
+
     SwRect aLastCharRect; // Fuer autopositionierte Frames ( LAYER_IMPL )
 protected:
     //Stellt sicher, das der Fly an der richtigen Seite haengt.
@@ -144,6 +157,13 @@ public:
         { return aLastCharRect.Bottom() - pFrm->Frm().Top(); }
 
     void AddLastCharY( long nDiff ){ aLastCharRect.Pos().Y() += nDiff; }
+
+    // accessors to data of position calculation
+    // frame vertical position is orient at
+    inline const SwFrm* GetVertPosOrientFrm() const
+    {
+        return mpVertPosOrientFrm;
+    }
 };
 
 //Die Flys, die an einem Zeichen in einem Cntnt haengen.
