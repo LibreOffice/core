@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 22:39:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ korean ] = "URL ÀÌ¸§!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Name der URL";
+        QuickHelpText[ catalan ] = "Nombre de la URL";
     };
     FixedText FT_URL
     {
@@ -134,6 +135,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         Text[ korean ] = "URL:";
         Text[ turkish ] = "URL:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "URL:";
     };
     ComboBox CB_URL
     {
@@ -166,6 +168,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ korean ] = "ÀÎÅÍ³Ý URL!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Sammelbox für Internet-URLs";
+        QuickHelpText[ catalan ] = "URLs de Internet";
     };
     ToolBox TB
     {
@@ -199,6 +202,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ greek ] = "Õðåñ-óýíäåóç";
                 Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
                 Text[ turkish ] = "Hyperlink";
+                Text[ catalan ] = "Hiperenlace";
             };
             ToolBoxItem
             {
@@ -226,6 +230,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ korean ] = "Ã¥°¥ÇÇ";
                 Text[ turkish ] = "Yer iþareti";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Marcador";
             };
             ToolBoxItem
             {
@@ -253,6 +258,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ korean ] = "°Ë»ö";
                 Text[ turkish ] = "Ara";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Buscar";
             };
         };
     };
@@ -275,6 +281,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
     Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ© »ðÀÔ";
     Text[ turkish ] = "Hyperlink ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar hiperenlace";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMN_HYPERLINK
@@ -305,6 +312,7 @@ Menu RID_SVXMN_HYPERLINK
             Text[ korean ] = "ÅØ½ºÆ®·Î";
             Text[ turkish ] = "Metin olarak";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Como ~texto";
         };
         MenuItem
         {
@@ -330,6 +338,7 @@ Menu RID_SVXMN_HYPERLINK
             Text[ korean ] = "¹öÆ°À¸·Î(~B)";
             Text[ turkish ] = "Düðme olarak";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Como ~botón";
         };
     };
 };
@@ -361,6 +370,7 @@ QueryBox RID_SVXQB_NOCONNECT
     Message[ korean ] = "ÀÌ URLÀº Á¢¼ÓÀÌ ÀÌ·ç¾îÁø ÈÄ¿¡¾ß °Ë»çÇÒ ¼ö ÀÖ½À´Ï´Ù. Á¢¼ÓÀ» ±¸ÃàÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Bu URL baðlantý kurulduktan sonra kontrol edilebilir.\nBaðlantý kurulsun mu?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "La URL solo puede ser verificada después de haberse establecido una conexión.\n¿Desea establecer la conexión?";
 };
 QueryBox RID_SVXQB_DONTEXIST
 {
@@ -389,4 +399,5 @@ QueryBox RID_SVXQB_DONTEXIST
     Message[ korean ] = "ÀÌ URLÀº Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.±×·¡µµ »ðÀÔÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Bu URL mevcut deðil.\nYine de URL'yi eklemek istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "La URL no existe.\n¿Desea insertarla de todas formas?";
 };
