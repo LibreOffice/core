@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-11 18:06:07 $
+#   last change: $Author: hr $ $Date: 2002-01-14 15:08:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,13 +71,8 @@ TARGET=so_stlport
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COMID)"=="gcc3" || "$(COMID)"=="MSC"
 TARFILE_NAME=STLport-4.5
 PATCH_FILE_NAME=STLport-4.5.patch
-.ELSE			# "$(COMID)"=="gcc3" || "$(COMID)"=="MSC"
-TARFILE_NAME=STLport-4.0
-PATCH_FILE_NAME=STLport-4.0.patch
-.ENDIF			# "$(COMID)"=="gcc3" || "$(COMID)"=="MSC"
 
 .IF "$(GUI)"=="WNT"
 TAR_EXCLUDES=*/SC5/*
@@ -107,7 +102,7 @@ BUILD_ACTION=make
 
 .IF "$(COM)"=="C52"
 BUILD_ACTION=make
-BUILD_FLAGS=-f sunpro6.mak
+BUILD_FLAGS=-f sunpro.mak
 .ENDIF
 
 .IF "$(COM)"=="C52"
