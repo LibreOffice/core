@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:44:12 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ ModalDialog DLG_BREAK
         Text [ italian ] = "Interr~uzione colonna" ;
         Text [ portuguese_brazilian ] = "~Quebra de coluna" ;
         Text [ portuguese ] = "~Quebra de coluna" ;
-        Text [ finnish ] = "~Palstanvaihto" ;
+        Text [ finnish ] = "~Sarakkeen vaihto" ;
         Text [ danish ] = "Spalteskift" ;
         Text [ french ] = "Saut de ~colonne" ;
         Text [ swedish ] = "Kolumnbrytning" ;
@@ -209,7 +209,7 @@ ModalDialog DLG_BREAK
         Text [ italian ] = "Tipo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "Tyyppi" ;
         Text [ danish ] = "Type" ;
         Text [ french ] = "Type" ;
         Text [ swedish ] = "Typ" ;
@@ -292,7 +292,7 @@ ModalDialog DLG_BREAK
         };
         StringList [ finnish ] =
         {
-            < "[Ohne]" ; > ;
+            < "[Ei mitään]" ; > ;
         };
         StringList [ danish ] =
         {
@@ -374,7 +374,7 @@ ModalDialog DLG_BREAK
         Text [ italian ] = "Cambia numero pagina" ;
         Text [ portuguese_brazilian ] = "Mudar número de página" ;
         Text [ portuguese ] = "Alterar número de página" ;
-        Text [ finnish ] = "Muuttaa sivunumeroa" ;
+        Text [ finnish ] = "~Muuta sivunumero" ;
         Text [ danish ] = "Modificer sidetal" ;
         Text [ french ] = "Modifier ~no. de page" ;
         Text [ swedish ] = "~Ändra sidnummer" ;
