@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 09:28:34 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,7 @@
 #include "xmloff/nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmloff/xmlkywd.hxx"
-#endif
+#include "xmloff/xmltoken.hxx"
 
 #ifndef _XMLOFF_XMLMETAE_HXX
 #include "xmloff/xmlmetae.hxx"
@@ -344,11 +342,11 @@ void SvxXMLTableImportContext::importColor( USHORT nPrfx, const OUString& rLocal
 
         if( XML_NAMESPACE_DRAW == nPrefix )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_name ) ) )
+            if( aLocalName == GetXMLToken(XML_NAME) )
             {
                 rName = xAttrList->getValueByIndex( i );
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_color ) ) )
+            else if( aLocalName == GetXMLToken(XML_COLOR) )
             {
                 Color aColor;
                 SvXMLUnitConverter::convertColor(aColor, xAttrList->getValueByIndex( i ));
