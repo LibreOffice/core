@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:31:22 $
+ *  last change: $Author: nn $ $Date: 2000-10-19 18:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,6 @@
 #pragma optimize ("", off)
 #endif
 
-#include <basctl/idetemp.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/ipfrm.hxx>
 #include <svtools/aeitem.hxx>
@@ -278,7 +277,6 @@
 #include "fuconrec.hxx"
 #include "fuconpol.hxx"
 #include "fuconarc.hxx"
-#include "fuconctl.hxx"
 #include "fuconuno.hxx"
 #include "fusel.hxx"
 #include "futext.hxx"
@@ -359,40 +357,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         {
             rReq.Done();
             return;
-        }
-    }
-
-    //
-    //  Pseudo-Slots von Control-Toolbox auswerten
-    //
-
-    if (nNewId == SID_CHOOSE_CONTROLS && pArgs)
-    {
-        const SvxChooseControlItem* pItem = (const SvxChooseControlItem*)&pArgs->Get( SID_CHOOSE_CONTROLS );
-        SvxChooseControlEnum eSel = (SvxChooseControlEnum) pItem->GetValue();
-
-        nCtrlSfxId = ((USHORT)eSel==nCtrlSfxId) ? USHRT_MAX : (USHORT) eSel;
-
-        if( (eSel == SVX_SNAP_PREVIEW)) // || (eSel==SVX_SNAP_URLBUTTON))
-        {
-            rReq.Done();
-            return;
-        }
-        switch (eSel)
-        {
-            case SVX_SNAP_PUSHBUTTON:       nNewId = SID_INSERT_PUSHBUTTON; break;
-            case SVX_SNAP_CHECKBOX:         nNewId = SID_INSERT_CHECKBOX;   break;
-            case SVX_SNAP_RADIOBUTTON:      nNewId = SID_INSERT_RADIOBUTTON;break;
-            case SVX_SNAP_SPINBUTTON:       nNewId = SID_INSERT_SPINBUTTON; break;
-            case SVX_SNAP_FIXEDTEXT:        nNewId = SID_INSERT_FIXEDTEXT;  break;
-            case SVX_SNAP_GROUPBOX:         nNewId = SID_INSERT_GROUPBOX;   break;
-            case SVX_SNAP_LISTBOX:          nNewId = SID_INSERT_LISTBOX;    break;
-            case SVX_SNAP_COMBOBOX:         nNewId = SID_INSERT_COMBOBOX;   break;
-            case SVX_SNAP_EDIT:             nNewId = SID_INSERT_EDIT;       break;
-            case SVX_SNAP_HSCROLLBAR:       nNewId = SID_INSERT_HSCROLLBAR; break;
-            case SVX_SNAP_VSCROLLBAR:       nNewId = SID_INSERT_VSCROLLBAR; break;
-            case SVX_SNAP_URLBUTTON:        nNewId = SID_INSERT_URLBUTTON;  break;
-            case SVX_SNAP_SELECT:           nNewId = SID_OBJECT_SELECT;     break;
         }
     }
 
@@ -517,21 +481,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             pTabView->SetDrawFuncPtr(new FuText(this, pWin, pView, pDoc, aNewReq));
             break;
 
-        case SID_INSERT_PUSHBUTTON:
-        case SID_INSERT_CHECKBOX:
-        case SID_INSERT_RADIOBUTTON:
-        case SID_INSERT_SPINBUTTON:
-        case SID_INSERT_FIXEDTEXT:
-        case SID_INSERT_GROUPBOX:
-        case SID_INSERT_LISTBOX:
-        case SID_INSERT_COMBOBOX:
-        case SID_INSERT_EDIT:
-        case SID_INSERT_HSCROLLBAR:
-        case SID_INSERT_VSCROLLBAR:
-        case SID_INSERT_URLBUTTON:
-            pTabView->SetDrawFuncPtr(new FuConstControl(this, pWin, pView, pDoc, aNewReq));
-            break;
-
         case SID_FM_CREATE_CONTROL:
             SetDrawFormShell(TRUE);
             pTabView->SetDrawFuncPtr(new FuConstUnoControl(this, pWin, pView, pDoc, aNewReq));
@@ -553,10 +502,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     rReq.Done();
 
     rBindings.Invalidate( SID_INSERT_DRAW );
-    rBindings.Invalidate( SID_CHOOSE_CONTROLS );
-
     rBindings.Update( SID_INSERT_DRAW );
-    rBindings.Update( SID_CHOOSE_CONTROLS );
 }
 
 void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
@@ -590,13 +536,6 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
                          nPutId != SID_DRAW_CAPTION )
                         nPutId = USHRT_MAX;
                     SfxAllEnumItem aItem( nWhich, nPutId );
-                    rSet.Put( aItem );
-                }
-                break;
-            case SID_CHOOSE_CONTROLS:
-                if (nCtrlSfxId != USHRT_MAX)
-                {
-                    SfxAllEnumItem aItem( nWhich, nCtrlSfxId );
                     rSet.Put( aItem );
                 }
                 break;
