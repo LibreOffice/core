@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-28 10:56:57 $
+ *  last change: $Author: dr $ $Date: 2000-12-06 15:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2682,6 +2682,12 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 }
                 if( !__nFlags )
                     PRINT();
+                ADDTEXT( "visible: " );             ADDHEX( 2 );
+                ADDTEXT( " " );                     ADDHEX( 2 );
+                ADDTEXT( " " );                     ADDHEX( 2 );
+                ADDTEXT( " " );                     ADDHEX( 2 );
+                PRINT();
+                LINESTART();
                 ADDTEXT( "pane pos vert: " );       ADDDOUBLE();
                 ADDTEXT( "   hor: " );              ADDDOUBLE();
                 ADDTEXT( "   1st vis right: " );    ADDDEC( 2 );
