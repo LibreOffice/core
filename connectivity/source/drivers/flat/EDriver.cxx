@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EDriver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:04:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _CONNECTIVITY_FLAT_EDRIVER_HXX_
 #include "flat/EDriver.hxx"
 #endif
@@ -179,7 +178,7 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::O
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
                 ,aBoolean)
                 );
-        return ::comphelper::concatSequences(OFileDriver::getPropertyInfo(url,info ),Sequence< DriverPropertyInfo >(aDriverInfo.begin(),aDriverInfo.size()));
+        return ::comphelper::concatSequences(OFileDriver::getPropertyInfo(url,info ),Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size()));
     }
     ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     return Sequence< DriverPropertyInfo >();
