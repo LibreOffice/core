@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-20 13:24:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2187,13 +2187,13 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "¸ñÊ½(~M)";
+            Text[ chinese_simplified ] = "¸ñÊ½»¯(~M)";
             Text[ russian ] = "Ôîğìàòû";
             Text[ polish ] = "Formatowania";
             Text[ japanese ] = "‘®İ’è(~M)";
-            Text[ chinese_traditional ] = "®æ¦¡(~M)";
+            Text[ chinese_traditional ] = "®æ¦¡¤Æ(~M)";
             Text[ dutch ] = "~Opmaak";
-            Text[ chinese_simplified ] = "¸ñÊ½(~M)";
+            Text[ chinese_simplified ] = "¸ñÊ½»¯(~M)";
             Text[ greek ] = "Ìïñ~öïğïéŞóåéò";
             Text[ korean ] = "Æ÷¸ËÆÃ(~M)";
             Text[ arabic ] = "ÊäÓíŞ";
@@ -2362,6 +2362,7 @@ Menu RID_COMMANDMENU
         };
     };
 };
+
 
 
 
