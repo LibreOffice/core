@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ String RID_SVX_3D_CREATE_LATHE
     Text[ chinese_simplified ] = "½¨Á¢ 3 Î¬Ğı×ªÌå";
     Text[ russian ] = "Ñîçäàòü îáúåêò âğàùåíèÿ";
     Text[ polish ] = "Utwórz 3-W obiekt obrotowy";
-    Text[ japanese ] = "3D ‘Ì‰ñ“]µÌŞ¼Şª¸Ä‚Ìì¬";
+    Text[ japanese ] = "3D‘Ì‰ñ“]µÌŞ¼Şª¸Ä‚Ìì¬";
     Text[ chinese_traditional ] = "«Ø¥ß 3 ºû±ÛÂàÅé";
     Text[ arabic ] = "ÅäÔÇÁ ßÇÆä ÇÓÊÏÇÑÉ ËáÇËí ÇáÃÈÚÇÏ";
     Text[ greek ] = "Äçìéïõñãßá ğåñéóôñåöüìåíïõ áíôéêåéìİíïõ 3Ä";
@@ -227,7 +227,7 @@ String RID_SVX_3D_UNDO_ROTATE
     Text[ chinese_simplified ] = "Ğı×ª 3 Î¬¶ÔÏó";
     Text[ russian ] = "Âğàùàòü îáúåêò";
     Text[ polish ] = "Obróæ obiekt 3-W";
-    Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä‚Ì‰ñ“]";
+    Text[ japanese ] = "3D‘ÌµÌŞ¼Şª¸Ä‚Ì‰ñ“]";
     Text[ chinese_traditional ] = "±ÛÂà 3 ºûª«¥ó";
     Text[ arabic ] = "ÇÓÊÏÇÑÉ ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
     Text[ greek ] = "ĞåñéóôñïöŞ áíôéêåéìİíïõ 3Ä";
@@ -269,7 +269,7 @@ String RID_SVX_3D_UNDO_LATHE
     Text [ dutch ] = "Rotatieobject maken" ;
     Text [ italian ] = "Creare un oggetto di rotazione" ;
     Text [ spanish ] = "Crear cuerpo de rotación" ;
-    Text [ french ] = "Créer corps de révolution" ;
+    Text [ french ] = "Créer un corps de révolution" ;
     Text [ swedish ] = "Skapa rotationsobjekt" ;
     Text [ danish ] = "Opret rotationslegeme" ;
     Text [ portuguese ] = "Criar objecto de rotação" ;
@@ -327,7 +327,7 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text[ chinese_simplified ] = "3 Î¬ÊôĞÔ";
     Text[ russian ] = "Àòğèáóòû 3-Ì";
     Text[ polish ] = "Atrybuty 3-W";
-    Text[ japanese ] = "3D ‘Ì‚Ì‘®«";
+    Text[ japanese ] = "3D‘Ì‚Ì‘®«";
     Text[ chinese_traditional ] = "3 ºûÄİ©Ê";
     Text[ arabic ] = "ÓãÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ greek ] = "Éäéüôçôåò 3Ä";
