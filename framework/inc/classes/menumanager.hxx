@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 09:09:40 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,11 @@
 #include <macros/debug.hxx>
 #endif
 
+// #110897#
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 #define REFERENCE                                       ::com::sun::star::uno::Reference
 #define XFRAME                                          ::com::sun::star::frame::XFrame
 #define XDISPATCH                                       ::com::sun::star::frame::XDispatch
@@ -136,25 +141,34 @@ class MenuManager : public XSTATUSLISTENER      ,
                     public ::cppu::OWeakObject
 {
     public:
-        MenuManager( REFERENCE< XFRAME >& rFrame,
-                     Menu* pMenu,
-                     sal_Bool bDelete,
-                     sal_Bool bDeleteChildren );
+        // #110897#
+        MenuManager(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            REFERENCE< XFRAME >& rFrame,
+            Menu* pMenu,
+            sal_Bool bDelete,
+            sal_Bool bDeleteChildren );
 
-        MenuManager( REFERENCE< XFRAME >& rFrame,
-                     BmkMenu*           pBmkMenu,
-                     sal_Bool           bDelete,
-                     sal_Bool           bDeleteChildren );
+        MenuManager(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            REFERENCE< XFRAME >& rFrame,
+            BmkMenu*            pBmkMenu,
+            sal_Bool            bDelete,
+            sal_Bool            bDeleteChildren );
 
-        MenuManager( REFERENCE< XFRAME >& rFrame,
-                     AddonMenu*         pAddonMenu,
-                     sal_Bool           bDelete,
-                     sal_Bool           bDeleteChildren );
+        MenuManager(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            REFERENCE< XFRAME >& rFrame,
+            AddonMenu*          pAddonMenu,
+            sal_Bool            bDelete,
+            sal_Bool            bDeleteChildren );
 
-        MenuManager( REFERENCE< XFRAME >& rFrame,
-                     AddonPopupMenu*    pAddonMenu,
-                     sal_Bool           bDelete,
-                     sal_Bool           bDeleteChildren );
+        MenuManager(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            REFERENCE< XFRAME >& rFrame,
+            AddonPopupMenu* pAddonMenu,
+            sal_Bool            bDelete,
+            sal_Bool            bDeleteChildren );
 
         virtual ~MenuManager();
 
@@ -177,6 +191,9 @@ class MenuManager : public XSTATUSLISTENER      ,
         Menu*   GetMenu() const { return m_pVCLMenu; }
 
         void    RemoveListener();
+
+        // #110897#
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
     protected:
         DECL_LINK( Highlight, Menu * );
@@ -220,6 +237,9 @@ class MenuManager : public XSTATUSLISTENER      ,
         Menu*                               m_pVCLMenu;
         REFERENCE< XFRAME >                 m_xFrame;
         ::std::vector< MenuItemHandler* >   m_aMenuItemHandlerVector;
+
+        // #110897#
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
 };
 
 } // namespace
