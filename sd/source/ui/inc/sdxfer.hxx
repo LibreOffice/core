@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-11 14:54:59 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,24 +76,71 @@
 // - SdTransferable -
 // ------------------
 
-class SdView;
 class SdDrawDocument;
 class INetBookmark;
 class ImageMap;
 class VirtualDevice;
-class SdDrawDocShell;
+
+namespace sd {
+class DrawDocShell;
+class View;
+}
 
 class SdTransferable : public TransferableHelper
 {
+public:
+
+                                    SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, BOOL bInitOnGetData );
+                                    ~SdTransferable();
+
+    void                            SetDocShell( const SvEmbeddedObjectRef& rRef ) { aDocShellRef = rRef; }
+    const SvEmbeddedObjectRef&      GetDocShell() const { return aDocShellRef; }
+
+    void                            SetWorkDocument( const SdDrawDocument* pWorkDoc ) { pSdDrawDocument = pSdDrawDocumentIntern = (SdDrawDocument*) pWorkDoc; }
+    const SdDrawDocument*           GetWorkDocument() const { return pSdDrawDocument; }
+
+    void                            SetView( const ::sd::View* pView ) { pSdView = pView; }
+    const ::sd::View*                   GetView() const { return pSdView; }
+
+    void                            SetObjectDescriptor( const TransferableObjectDescriptor& rObjDesc );
+
+    void                            SetStartPos( const Point& rStartPos ) { aStartPos = rStartPos; }
+    const Point&                    GetStartPos() const { return aStartPos; }
+
+    void                            SetInternalMove( BOOL bSet ) { bInternalMove = bSet; }
+    BOOL                            IsInternalMove() const { return bInternalMove; }
+
+    BOOL                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( pSourceDoc == pDoc ); }
+
+    void                            SetPageBookmarks( const List& rPageBookmarks, BOOL bPersistent );
+    BOOL                            IsPageTransferable() const { return bPageTransferable; }
+    BOOL                            HasPageBookmarks() const { return( pPageDocShell && ( aPageBookmarks.Count() > 0 ) ); }
+    const List&                     GetPageBookmarks() const { return aPageBookmarks; }
+    ::sd::DrawDocShell*                 GetPageDocShell() const { return pPageDocShell; }
+
+
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+    static SdTransferable*          getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
+
+protected:
+
+    virtual void                    AddSupportedFormats();
+    virtual sal_Bool                GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual sal_Bool                WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual void                    DragFinished( sal_Int8 nDropAction );
+    virtual void                    ObjectReleased();
+
+    virtual sal_Int64 SAL_CALL      getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
+
 private:
 
     SvEmbeddedObjectRef             aDocShellRef;
-    SdDrawDocShell*                 pPageDocShell;
+    ::sd::DrawDocShell*                 pPageDocShell;
     List                            aPageBookmarks;
     TransferableDataHelper*         pOLEDataHelper;
     TransferableObjectDescriptor*   pObjDesc;
-    const SdView*                   pSdView;
-    SdView*                         pSdViewIntern;
+    const ::sd::View*                   pSdView;
+    ::sd::View*                         pSdViewIntern;
     SdDrawDocument*                 pSdDrawDocument;
     SdDrawDocument*                 pSdDrawDocumentIntern;
     SdDrawDocument*                 pSourceDoc;
@@ -119,50 +166,6 @@ private:
     void                            CreateObjectReplacement( SdrObject* pObj );
     void                            CreateData();
 
-protected:
-
-    virtual void                    AddSupportedFormats();
-    virtual sal_Bool                GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual sal_Bool                WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void                    DragFinished( sal_Int8 nDropAction );
-    virtual void                    ObjectReleased();
-
-    virtual sal_Int64 SAL_CALL      getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
-
-public:
-
-                                    SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView, BOOL bInitOnGetData );
-                                    ~SdTransferable();
-
-    void                            SetDocShell( const SvEmbeddedObjectRef& rRef ) { aDocShellRef = rRef; }
-    const SvEmbeddedObjectRef&      GetDocShell() const { return aDocShellRef; }
-
-    void                            SetWorkDocument( const SdDrawDocument* pWorkDoc ) { pSdDrawDocument = pSdDrawDocumentIntern = (SdDrawDocument*) pWorkDoc; }
-    const SdDrawDocument*           GetWorkDocument() const { return pSdDrawDocument; }
-
-    void                            SetView( const SdView* pView ) { pSdView = pView; }
-    const SdView*                   GetView() const { return pSdView; }
-
-    void                            SetObjectDescriptor( const TransferableObjectDescriptor& rObjDesc );
-
-    void                            SetStartPos( const Point& rStartPos ) { aStartPos = rStartPos; }
-    const Point&                    GetStartPos() const { return aStartPos; }
-
-    void                            SetInternalMove( BOOL bSet ) { bInternalMove = bSet; }
-    BOOL                            IsInternalMove() const { return bInternalMove; }
-
-    BOOL                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( pSourceDoc == pDoc ); }
-
-    void                            SetPageBookmarks( const List& rPageBookmarks, BOOL bPersistent );
-    BOOL                            IsPageTransferable() const { return bPageTransferable; }
-    BOOL                            HasPageBookmarks() const { return( pPageDocShell && ( aPageBookmarks.Count() > 0 ) ); }
-    const List&                     GetPageBookmarks() const { return aPageBookmarks; }
-    SdDrawDocShell*                 GetPageDocShell() const { return pPageDocShell; }
-
-public:
-
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-    static SdTransferable*          getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
 };
 
 #endif // _SD_SDXFER_HXX
