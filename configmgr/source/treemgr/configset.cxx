@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 13:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,25 +709,44 @@ void TreeSetUpdater::implValidateTree(ElementTree const& aElementTree)
 
 UnoAny ValueSetUpdater::implValidateValue(UnoAny const& aValue)
 {
-    UnoType aValType        = aValue.getValueType();
-    UnoType aThisType       = m_aTemplate->getInstanceType();
+    UnoType const aThisType = m_aTemplate->getInstanceType();
 
-    if (aValType.getTypeClass() == uno::TypeClass_INTERFACE)
-        throw TypeMismatch(aValType.getTypeName(), aThisType.getTypeName(), " - cannot replace value by complex tree in Set update");
+    OSL_ENSURE( aThisType.getTypeClass() == uno::TypeClass_ANY || isPossibleValueType(aThisType),
+                "Invalid element type for value set" );
 
-    UnoAny aRet(aValue);
+    UnoAny aRet;
     if (aValue.hasValue())
     {
-        if (aValType != aThisType && uno::TypeClass_ANY != aThisType.getTypeClass())
+        UnoType const aValType = aValue.getValueType();
+
+        if (aValType.getTypeClass() == uno::TypeClass_INTERFACE)
+            throw TypeMismatch(aValType.getTypeName(), aThisType.getTypeName(), " - cannot replace value by complex tree in Set update");
+
+        if (aValType == aThisType)
+        {
+            aRet = aValue;
+        }
+
+        else if ( uno::TypeClass_ANY == aThisType.getTypeClass() )
+        {
+            if ( ! isPossibleValueType(aValType) )
+                throw TypeMismatch(aValType.getTypeName(), aThisType.getTypeName(), " - new element has no legal configuration data type");
+
+            aRet = aValue;
+        }
+
+        else
         {
             if (!convertCompatibleValue(m_xTypeConverter, aRet, aValue, aThisType))
-                throw TypeMismatch(aValType.getTypeName(), aThisType.getTypeName(), " - new element does not match template in SetUpdate");
+                throw TypeMismatch(aValType.getTypeName(), aThisType.getTypeName(), " - new element does not match template type in SetUpdate");
         }
+
+        OSL_ASSERT( isPossibleValueType(aRet.getValueType()) );
     }
     else
     {
         //  cannot do anything about null values here
-        OSL_ASSERT(aValType.getTypeClass() == uno::TypeClass_VOID);
+        OSL_ASSERT(aValue.getValueTypeClass() == uno::TypeClass_VOID);
 
     }
     return aRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 13:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef CONFIGMGR_VALUENODEBEHAVIOR_HXX_
 #include "valuenodeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_TYPECONVERTER_HXX
+#include "typeconverter.hxx"
 #endif
 
 #ifndef _CONFIGMGR_TRACER_HXX_
@@ -180,10 +183,52 @@ static inline UnoType getUnoAnyType()
 }
 //-----------------------------------------------------------------------------
 
+bool isPossibleValueType(UnoType const& aValueType)
+{
+    switch(aValueType.getTypeClass())
+    {
+    case uno::TypeClass_BOOLEAN:
+    case uno::TypeClass_SHORT:
+    case uno::TypeClass_LONG:
+    case uno::TypeClass_HYPER:
+    case uno::TypeClass_DOUBLE:
+    case uno::TypeClass_STRING:
+        return true;
+
+    case uno::TypeClass_SEQUENCE:
+        switch(getSequenceElementType(aValueType).getTypeClass())
+        {
+        case uno::TypeClass_BYTE:  // scalar binary
+
+        case uno::TypeClass_BOOLEAN:
+        case uno::TypeClass_SHORT:
+        case uno::TypeClass_LONG:
+        case uno::TypeClass_HYPER:
+        case uno::TypeClass_DOUBLE:
+        case uno::TypeClass_STRING:
+            return true;
+
+        case uno::TypeClass_SEQUENCE:
+            {
+                uno::Sequence< uno::Sequence< sal_Int8 > > const * const forBinaryList = 0;
+                return !!(aValueType == ::getCppuType(forBinaryList));
+            }
+
+        default:
+            return false;
+        }
+
+    default:
+        return false;
+    }
+}
+
+//-----------------------------------------------------------------------------
 bool convertCompatibleValue(UnoTypeConverter const& xTypeConverter, uno::Any& rConverted, UnoAny const& rNewValue, UnoType const& rTargetType)
 {
-    if (rTargetType == rNewValue.getValueType()
-        || rTargetType == getUnoAnyType())
+    OSL_ASSERT( isPossibleValueType(rTargetType) );
+
+    if (rTargetType == rNewValue.getValueType())
     {
         rConverted = rNewValue;
         return true;
@@ -193,6 +238,8 @@ bool convertCompatibleValue(UnoTypeConverter const& xTypeConverter, uno::Any& rC
     try
     {
         rConverted = xTypeConverter->convertTo(rNewValue,rTargetType);
+
+        OSL_ASSERT( rConverted.getValueType() == rTargetType );
     }
     catch(uno::RuntimeException&) { throw; }
     catch(css::lang::IllegalArgumentException&)
@@ -231,6 +278,16 @@ GroupUpdater::GroupUpdater(Tree const& aParentTree, NodeRef const& aGroupNode, U
 
 UnoAny GroupUpdater::implValidateValue(Tree const& aTree, ValueRef const& aNode, UnoAny const& aValue) const
 {
+    UnoType aValueType  = aValue.getValueType();
+    UnoType aTargetType = aTree.getUnoType(aNode);
+
+    OSL_ENSURE( aTargetType.getTypeClass() == uno::TypeClass_ANY || isPossibleValueType(aTargetType),
+                "Invalid value type found on existing property" );
+
+    OSL_ASSERT( aValueType.getTypeClass() != uno::TypeClass_ANY);
+
+    UnoAny aRet;
+
     if (!aValue.hasValue())
     {
         if (!aTree.getAttributes(aNode).bNullable)
@@ -240,29 +297,31 @@ UnoAny GroupUpdater::implValidateValue(Tree const& aTree, ValueRef const& aNode,
             sError += ") is not nullable !";
             throw ConstraintViolation( sError );
         }
+        OSL_ASSERT( !aRet.hasValue() );
     }
 
-    UnoType aValueType  = aValue.getValueType();
-    UnoType aTargetType = aTree.getUnoType(aNode);
-
-    OSL_ASSERT(aTargetType.getTypeClass() != uno::TypeClass_VOID);
-    OSL_ASSERT(aTargetType.getTypeClass() != uno::TypeClass_INTERFACE); // on a value node ??
-    OSL_ASSERT( aValueType.getTypeClass() != uno::TypeClass_ANY);
-
-    UnoAny aRet;
-
-    if (aValueType == aTargetType)
-    { aRet = aValue; }
+    else if (aValueType == aTargetType)
+    {
+        aRet = aValue;
+    }
 
     else if (aTargetType == getUnoAnyType())
-    { aRet = aValue; } // OK - any type
+    {
+        if ( ! isPossibleValueType(aValueType) )
+            throw TypeMismatch(aValueType.getTypeName(), aTargetType.getTypeName(), " - new property value has no legal configuration data type");
 
-    else if (aValueType.getTypeClass() == uno::TypeClass_VOID)
-        OSL_ASSERT(!aRet.hasValue()); // legality has been checked elsewhere
+        // OK - any type
+        aRet = aValue;
+    }
 
-    else if (!convertCompatibleValue(m_xTypeConverter, aRet, aValue,aTargetType))
-        throw TypeMismatch(aValueType.getTypeName(), aTargetType.getTypeName(), " cannot set incompatible value");
+    else
+    {
+        if (!convertCompatibleValue(m_xTypeConverter, aRet, aValue,aTargetType))
+            throw TypeMismatch(aValueType.getTypeName(), aTargetType.getTypeName(), " cannot set incompatible value");
+    }
 
+
+    OSL_ASSERT( !aRet.hasValue() || isPossibleValueType(aRet.getValueType()) );
 
     return aRet;
 }

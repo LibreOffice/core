@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 13:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,8 @@ namespace configmgr
             static bool isDataAvailable(TreeRef const& _aParentTree, NodeRef const& _aGroupNode);
             static bool ensureDataAvailable(TreeRef const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aSource);
         };
+//-----------------------------------------------------------------------------
+        bool isPossibleValueType(UnoType const& aValueType);
 //-----------------------------------------------------------------------------
         bool convertCompatibleValue(UnoTypeConverter const& xConverter, uno::Any& rConverted,
                                     UnoAny const& rNewValue, UnoType const& rTargetType);
