@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:40 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 #include "sdmod.hxx"
 #include "dlgfield.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 
 /*************************************************************************
 |*
@@ -188,7 +188,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
             eFormat = (SvxFileFormat) ( aLbFormat.GetSelectEntryPos() );
 
-            SdDrawDocShell* pDocSh = PTR_CAST( SdDrawDocShell,
+            ::sd::DrawDocShell* pDocSh = PTR_CAST( ::sd::DrawDocShell,
                                                SfxObjectShell::Current() );
 
             if( pDocSh )
