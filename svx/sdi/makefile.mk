@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:06 $
+#   last change: $Author: mba $ $Date: 2002-03-28 16:24:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,6 @@ TARGET=svxslots
 
 SDINAME=$(TARGET)
 #SDI1NAME=baside
-SDIEXPORT=svxnew
 
 # --- Files --------------------------------------------------------
 
@@ -84,7 +83,6 @@ SRC1FILES=enumslot.src
 SVSDIDEPEND= \
         svxitems.sdi \
     fmslots.sdi \
-    svxnew.sdi \
     svx.sdi	\
     $(SOLARINCXDIR)$/sfxslots.ilb	\
     xoitems.sdi \
