@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoutil.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,14 @@
 #ifndef SC_UNDOUTIL_HXX
 #define SC_UNDOUTIL_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
 
-class ScTripel;
 class ScRange;
 class ScDocShell;
 class ScDBData;
@@ -79,11 +82,11 @@ class ScUndoUtil
 public:
                     //  Block markieren (unsichtbar, muss repainted werden)
     static void MarkSimpleBlock( ScDocShell* pDocShell,
-                                USHORT nStartX, USHORT nStartY, USHORT nStartZ,
-                                USHORT nEndX, USHORT nEndY, USHORT nEndZ );
+                                SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                                SCCOL nEndX, SCROW nEndY, SCTAB nEndZ );
     static void MarkSimpleBlock( ScDocShell* pDocShell,
-                                const ScTripel& rBlockStart,
-                                const ScTripel& rBlockEnd );
+                                const ScAddress& rBlockStart,
+                                const ScAddress& rBlockEnd );
     static void MarkSimpleBlock( ScDocShell* pDocShell,
                                 const ScRange& rRange );
 
@@ -93,8 +96,8 @@ public:
 
                     //  DB-Bereich im Dokument suchen ("unbenannt" oder nach Bereich)
                     //  legt neu an, wenn nicht gefunden
-    static ScDBData* GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, USHORT nTab,
-                                    USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2 );
+    static ScDBData* GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB nTab,
+                                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 };
 
 
