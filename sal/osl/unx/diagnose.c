@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: mfe $ $Date: 2000-10-18 16:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
 
 sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nLine, const sal_Char* pszMessage)
 {
-    sal_Char szMessage[512] = "";
+/*      sal_Char szMessage[512] = ""; */
 
     /* get app name or NULL if unknown (don't call assert) */
     sal_Char* lpszAppName = "OSL";
@@ -99,7 +99,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
 #ifdef S390
     if(pszMessage != 0)
     {
-        s390_printf( "Assertion Failed: %s: File %s, Line %d: %s",
+        s390_printf( "Assertion Failed: %s: File %s, Line %d: %s\n",
                      lpszAppName, pszFileName, nLine, pszMessage);
     } else {
         s390_printf( "Assertion Failed: %s: File %s, Line %d:\n",
@@ -108,14 +108,14 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
 #else
     if(pszMessage != 0)
     {
-        sprintf(szMessage, "Assertion Failed: %s: File %s, Line %lu: %s",
+        fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu: %s",
                 lpszAppName, pszFileName, nLine, pszMessage);
     } else {
-        sprintf(szMessage, "Assertion Failed: %s: File %s, Line %lu:\n",
+        fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu ",
                 lpszAppName, pszFileName, nLine);
     }
-    szMessage[sizeof(szMessage)-1] = '\0';
-    fputs(szMessage, stderr);
+/*      szMessage[sizeof(szMessage)-1] = '\0'; */
+/*      fputs(szMessage, stderr); */
 #endif
 
     return sal_False;   /* no abort */
