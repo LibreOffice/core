@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableSortDescriptor2.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:14:43 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@ module com {  module sun {  module star {  module table {
 
 /** specifies properties which describe sorting of fields (rows or columns)
     in a table.
+
+    @since #107627#
  */
 service TableSortDescriptor2
 {

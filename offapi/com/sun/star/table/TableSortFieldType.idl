@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableSortFieldType.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:14:58 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@ module com {  module sun {  module star {  module table {
 
 /** enumeration used to specify the type of contents in a sort field
     (row/column) of a table.
+
+    @since #107627#
  */
 enum TableSortFieldType
 {
