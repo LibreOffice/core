@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-18 17:05:11 $
+ *  last change: $Author: kz $ $Date: 2002-05-02 23:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2002-04-18 17:05:11 $ $Revision: 1.37 $
+ // $Author: kz $ $Date: 2002-05-02 23:53:31 $ $Revision: 1.38 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -155,6 +155,7 @@ String SCSTR_QHELP_POSWND
     Text[ turkish ] = "Tablo b�l�m�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "�rea del full";
+    Text[ thai ] = "พื้นที่แผ่นงาน";
 };
 
 String SCSTR_QHELP_INPUTWND
@@ -183,6 +184,7 @@ String SCSTR_QHELP_INPUTWND
     Text[ turkish ] = "Giri� sat�r�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "L�nia d'entrada";
+    Text[ thai ] = "ป้อนบรรทัด";
 };
 
 String SCSTR_QHELP_BTNCALC
@@ -211,6 +213,7 @@ String SCSTR_QHELP_BTNCALC
     Text[ turkish ] = "Fonksyon OtoPilotu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPilot: funcions";
+    Text[ thai ] = "นำร่องอัตโนมัติ: ฟังก์ชั่น";
 };
 
 String SCSTR_QHELP_BTNOK
@@ -240,6 +243,7 @@ String SCSTR_QHELP_BTNOK
     Text[ turkish ] = "Kabul";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Accepta";
+    Text[ thai ] = "ยอมรับ";
 };
 
 String SCSTR_QHELP_BTNCANCEL
@@ -268,6 +272,7 @@ String SCSTR_QHELP_BTNCANCEL
     Text[ turkish ] = "�ptal";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cancel�la";
+    Text[ thai ] = "ยกเลิก";
 };
 
 String SCSTR_QHELP_BTNSUM
@@ -296,6 +301,7 @@ String SCSTR_QHELP_BTNSUM
     Text[ turkish ] = "Toplam";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suma";
+    Text[ thai ] = "ผลรวม";
 };
 
 String SCSTR_QHELP_BTNEQUAL
@@ -324,6 +330,7 @@ String SCSTR_QHELP_BTNEQUAL
     Text[ turkish ] = "��lev";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funci�";
+    Text[ thai ] = "ฟังก์ชั่น";
 };
 
  //-----------------------------------------------------------------------------
@@ -356,6 +363,7 @@ String RID_OBJECTBAR_APP
     Text[ turkish ] = "��lev �ubu�u";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de funcions";
+    Text[ thai ] = "แถบฟังก์ชั่น";
 };
 
 ToolBox RID_OBJECTBAR_APP
@@ -542,6 +550,7 @@ String RID_PLUGINTOOLBOX
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis�osien toimintopalkki";
     Text[ catalan ] = "Barra de funcions per als connectors";
+    Text[ thai ] = "แถบฟังก์ชั่นสำหรับปลั๊กอิน";
 };
 
 ToolBox RID_PLUGINTOOLBOX
@@ -718,6 +727,7 @@ String RID_OBJECTBAR_FORMAT
     Text[ turkish ] = "Tablo nesne �ubu�u";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes del full de c�lcul";
+    Text[ thai ] = "แถบวัตถุกระดาษคำนวณ";
 };
 
 ToolBox RID_OBJECTBAR_FORMAT
@@ -995,6 +1005,7 @@ String RID_OBJECTBAR_PREVIEW
     Text[ turkish ] = "Sayfa �nizleme nesne �ubu�u";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes de la visualitzaci� de p�gina";
+    Text[ thai ] = "แถบวัตถุมุมมองหน้า";
 };
 
 ToolBox RID_OBJECTBAR_PREVIEW
@@ -1111,6 +1122,7 @@ String RID_OBJECTBAR_TOOLS
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "P��ty�kalurivi";
     Text[ catalan ] = "Barra d'eines principal";
+    Text[ thai ] = "แถบเครื่องมือหลัก";
 };
 
 ToolBox RID_OBJECTBAR_TOOLS
@@ -1314,6 +1326,7 @@ FloatingWindow RID_TBXCTL_INSERT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis��";
     Text[ catalan ] = "Insereix";
+    Text[ thai ] = "แทรก";
 };
 
 FloatingWindow RID_TBXCTL_INSCELLS
@@ -1377,6 +1390,7 @@ FloatingWindow RID_TBXCTL_INSCELLS
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis�� solut";
     Text[ catalan ] = "Insereix cel�les";
+    Text[ thai ] = "แทรกเซลล์";
 };
 
 FloatingWindow RID_TBXCTL_INSOBJ
@@ -1453,6 +1467,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis�� objekti";
     Text[ catalan ] = "Insereix un objecte";
+    Text[ thai ] = "แทรกวัตถุ";
 };
 
  // Image-Liste fuer ToolBoxen -----------------------------------------------
