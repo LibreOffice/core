@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 15:07:31 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:48:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -232,4 +232,32 @@ INCLUDEFILELIST=\
 INCLUDELIST=\
     {$(subst,/,$/ $(shell $(FIND) $(INCLUDETOPDIRLIST) -type f -print))} \
     $(INCLUDEFILELIST)
+
+SDK_CONTENT_CHECK_FILES= \
+    $(MISC)$/copying_files.txt \
+    $(MISC)$/ex_cpp_files.txt \
+    $(MISC)$/ex_java_files.txt \
+    $(MISC)$/ex_basic_files.txt \
+    $(MISC)$/ex_ole_files.txt \
+    $(MISC)$/devguide_accessibility.txt \
+    $(MISC)$/devguide_basicanddialogs.txt \
+    $(MISC)$/devguide_charts.txt \
+    $(MISC)$/devguide_components.txt \
+    $(MISC)$/devguide_config.txt \
+    $(MISC)$/devguide_database.txt \
+    $(MISC)$/devguide_drawing.txt \
+    $(MISC)$/devguide_firststeps.txt \
+    $(MISC)$/devguide_forms.txt \
+    $(MISC)$/devguide_officebean.txt \
+    $(MISC)$/devguide_officedev.txt \
+    $(MISC)$/devguide_profuno.txt \
+    $(MISC)$/devguide_spreadsheet.txt \
+    $(MISC)$/devguide_text.txt \
+    $(MISC)$/devguide_ucb.txt
+
+SDK_CHECK_FLAGS= \
+    $(MISC)$/checkbin.txt \
+    $(MISC)$/checkidl.txt \
+    $(MISC)$/checkinc.txt \
+    $(MISC)$/checkinc2.txt
 
