@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2002-09-06 13:10:07 $
+ *  last change: $Author: bm $ $Date: 2002-09-09 07:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,12 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 
                         // disable DataBrowseBox for editing chart data
                         pMemChart->SetReadOnly( TRUE );
+
+                        // #102706# The new NumberFormatter is set at the
+                        // SchMemChart, but not at the corresponding
+                        // ChartModel. Therefore, an Update is needed, because
+                        // the MemChart doesn't know its ChartModel.
+                        SchDLL::Update( xIPObj, pMemChart );
                     }
                 }
             }
