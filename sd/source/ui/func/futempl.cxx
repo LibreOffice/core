@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:08:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 09:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,19 @@
  *
  ************************************************************************/
 
+
 #pragma hdrstop
+#ifndef  _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
 
 #include "futempl.hxx"
 
@@ -175,7 +187,24 @@ FuTemplate::FuTemplate (
     SfxStyleSheetBasePool* pSSPool = pDoc->GetDocSh()->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = NULL;
 
-    USHORT nFamily = ( (const SfxUInt16Item &) pArgs->Get( SID_STYLE_FAMILY ) ).GetValue();
+    const SfxPoolItem* pItem;
+    USHORT nFamily = USHRT_MAX;
+    if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY,
+        FALSE, &pItem ))
+    {
+        nFamily = ( (const SfxUInt16Item &) pArgs->Get( SID_STYLE_FAMILY ) ).GetValue();
+    }
+    else
+    if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME,
+        FALSE, &pItem ))
+    {
+        String sFamily = ( (const SfxStringItem &) pArgs->Get( SID_STYLE_FAMILYNAME ) ).GetValue();
+        if (sFamily.CompareToAscii("graphics") == COMPARE_EQUAL)
+            nFamily = SFX_STYLE_FAMILY_PARA;
+        else
+            nFamily = SFX_STYLE_FAMILY_PSEUDO;
+    }
+
     String aStyleName;
     USHORT nRetMask = 0xffff;
 
@@ -187,6 +216,28 @@ FuTemplate::FuTemplate (
         case SID_STYLE_FAMILY:
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
+            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_APPLY_STYLE, sal_False );
+            SFX_REQUEST_ARG( rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME, sal_False );
+            if ( pFamilyItem && pNameItem )
+            {
+                com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier > xModel(pDoc->GetDocSh()->GetModel(), com::sun::star::uno::UNO_QUERY);
+                try
+                {
+                    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xStyles;
+                    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xCont = xModel->getStyleFamilies();
+                    xCont->getByName(pFamilyItem->GetValue()) >>= xStyles;
+                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xInfo;
+                    xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
+                    ::rtl::OUString aUIName;
+                    xInfo->getPropertyValue( ::rtl::OUString::createFromAscii("DisplayName") ) >>= aUIName;
+                    if ( aUIName.getLength() )
+                        rReq.AppendItem( SfxStringItem( nSlotId, aUIName ) );
+                }
+                catch( com::sun::star::uno::Exception& )
+                {
+                }
+            }
+
             if (pArgs->GetItemState(nSlotId) == SFX_ITEM_SET)
                 aStyleName = ( ( (const SfxStringItem &) pArgs->Get( nSlotId ) ).GetValue() );
         }
