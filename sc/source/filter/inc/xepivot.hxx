@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:05:04 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,7 @@ private:
     const XclExpPivotCache& mrPCache;       /// The pivot cache for this pivot table.
 
     XclPTInfo           maPTInfo;           /// Info about the pivot table (SXVIEW record).
+    XclPTExtInfo        maPTExtInfo;        /// Extended info about the pivot table (SXEX record).
     XclExpPTFieldList   maFieldList;        /// All fields in pivot cache order.
     ScfUInt16Vec        maRowFields;        /// Row field indexes.
     ScfUInt16Vec        maColFields;        /// Column field indexes.
@@ -379,6 +380,7 @@ private:
     XclExpPTField       maDataOrientField;  /// Special data field orientation field.
     ScRange             maOutputRange;      /// Output range in the Calc document.
     bool                mbValid;            /// true = The pivot table is valid for export.
+    bool                mbFilterBtn;        /// true = DataPilot has filter button.
 };
 
 // ============================================================================
