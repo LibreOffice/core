@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 10:36:33 $
+ *  last change: $Author: pl $ $Date: 2001-02-14 16:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1255,6 +1255,7 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
     ::std::hash_map< Window, DropTargetEntry >::iterator it =
           m_aDropTargets.find( aTarget );
     if( it != m_aDropTargets.end() &&
+        it->second.m_pTarget->m_bActive &&
         ( m_aDropEnterEvent.data.l[0] == None || m_aDropEnterEvent.data.l[0] == aSource )
         )
     {
@@ -1501,17 +1502,20 @@ void SelectionManager::sendDropPosition( bool bForce, Time eventTime )
           m_aDropTargets.find( m_aDropWindow );
     if( it != m_aDropTargets.end() )
     {
-        int x, y;
-        Window aChild;
-        XTranslateCoordinates( m_pDisplay, it->second.m_aRootWindow, m_aDropWindow, m_nLastDragX, m_nLastDragY, &x, &y, &aChild );
-        DropTargetDragEvent dtde;
-        dtde.Source         = static_cast< OWeakObject* >(it->second.m_pTarget );
-        dtde.Context        = new DropTargetDragContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
-        dtde.Location.X     = x;
-        dtde.Location.Y     = y;
-        dtde.DropAction     = m_nUserDragAction;
-        dtde.SourceActions  = m_nSourceActions;
-        it->second->dragOver( dtde );
+        if( it->second.m_pTarget->m_bActive )
+        {
+            int x, y;
+            Window aChild;
+            XTranslateCoordinates( m_pDisplay, it->second.m_aRootWindow, m_aDropWindow, m_nLastDragX, m_nLastDragY, &x, &y, &aChild );
+            DropTargetDragEvent dtde;
+            dtde.Source         = static_cast< OWeakObject* >(it->second.m_pTarget );
+            dtde.Context        = new DropTargetDragContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
+            dtde.Location.X     = x;
+            dtde.Location.Y     = y;
+            dtde.DropAction     = m_nUserDragAction;
+            dtde.SourceActions  = m_nSourceActions;
+            it->second->dragOver( dtde );
+        }
     }
     else if( bForce ||
 
@@ -1725,19 +1729,23 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         {
             if( it != m_aDropTargets.end() )
             {
-                int x, y;
-                Window aChild;
-                XTranslateCoordinates( m_pDisplay, rMessage.xbutton.root, m_aDropWindow, rMessage.xbutton.x_root, rMessage.xbutton.y_root, &x, &y, &aChild );
-                DropTargetDropEvent dtde;
-                dtde.Source         = static_cast< OWeakObject* >(it->second.m_pTarget );
-                dtde.Context        = new DropTargetDropContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
-                dtde.Location.X     = x;
-                dtde.Location.Y     = y;
-                dtde.DropAction     = m_nUserDragAction;
-                dtde.SourceActions  = m_nSourceActions;
-                dtde.Transferable   = m_xDragSourceTransferable;
-                it->second->drop( dtde );
-                bCancel = false;
+                if( it->second.m_pTarget->m_bActive )
+                {
+                    int x, y;
+                    Window aChild;
+                    XTranslateCoordinates( m_pDisplay, rMessage.xbutton.root, m_aDropWindow, rMessage.xbutton.x_root, rMessage.xbutton.y_root, &x, &y, &aChild );
+                    DropTargetDropEvent dtde;
+                    dtde.Source         = static_cast< OWeakObject* >(it->second.m_pTarget );
+                    dtde.Context        = new DropTargetDropContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
+                    dtde.Location.X     = x;
+                    dtde.Location.Y     = y;
+                    dtde.DropAction     = m_nUserDragAction;
+                    dtde.SourceActions  = m_nSourceActions;
+                    dtde.Transferable   = m_xDragSourceTransferable;
+                    it->second->drop( dtde );
+                    bCancel = false;
+                }
+                else bCancel = true;
             }
             else if( m_nCurrentProtocolVersion >= 0 )
             {
@@ -2027,6 +2035,10 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
         m_nCurrentProtocolVersion   = nNewProtocolVersion;
         m_aDropWindow               = aNewCurrentWindow;
         m_aDropProxy                = aNewProxy != None ? aNewProxy : m_aDropWindow;
+
+        it = m_aDropTargets.find( m_aDropWindow );
+        if( it != m_aDropTargets.end() && ! it->second.m_pTarget->m_bActive )
+            m_aDropProxy = None;
 
         if( m_aDropProxy != None )
             m_xDragSourceListener->dragEnter( dsde );
