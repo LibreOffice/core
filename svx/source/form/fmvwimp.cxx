@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 13:29:51 $
+ *  last change: $Author: fs $ $Date: 2002-11-12 11:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,7 +790,7 @@ void FmXFormView::Deactivate(BOOL bDeactivateController)
 
     FmXFormShell* pShImpl =  m_pView->GetFormShell() ? m_pView->GetFormShell()->GetImpl() : NULL;
     if (pShImpl && bDeactivateController)
-        pShImpl->setActiveController();
+        pShImpl->setActiveController( NULL );
 }
 
 //------------------------------------------------------------------------------
