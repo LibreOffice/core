@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageSelector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:20:10 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef SD_SLIDESORTER_PAGE_SELECTOR_HXX
 #define SD_SLIDESORTER_PAGE_SELECTOR_HXX
+
+#include <set>
+#include <memory>
 
 class SdPage;
 
@@ -162,6 +165,28 @@ public:
             but has been cleared.
     */
     model::PageDescriptor* GetMostRecentlySelectedPage (void) const;
+
+
+    typedef ::std::set<int> PageSelection;
+
+    /** Return an object that describes the current selection.  The caller
+        can use that object to later restore the selection.
+        @return
+            The object returned describes the selection via indices.  So
+            even if pages are exchanged a later call to SetPageSelection()
+            is valid.
+    */
+    ::std::auto_ptr<PageSelection> GetPageSelection (void);
+
+    /** Restore a page selection according to the given selection object.
+        @param rSelection
+            Typically obtained by calling GetPageSelection() this object
+            is used to restore the selection.  If pages were exchanged since
+            the last call to GetPageSelection() it is still valid to call
+            this method with the selection.  When pages have been inserted
+            or removed the result may be unexpected.
+    */
+    void SetPageSelection (const PageSelection& rSelection);
 
 private:
     model::SlideSorterModel& mrModel;
