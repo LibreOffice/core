@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 11:30:50 $
+#   last change: $Author: kz $ $Date: 2004-03-25 14:55:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,8 @@ UNOTYPES= \
     com.sun.star.uno.TypeClass	\
     com.sun.star.awt.XControl	\
     com.sun.star.lang.XMultiServiceFactory	\
-    com.sun.star.java.XJavaVM				\
-    com.sun.star.java.XJavaThreadRegister_11
+    com.sun.star.java.XJavaVM				
+
 
 
 CXXFILES=	\
