@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:57:20 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,12 +147,12 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #endif
 
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERFACTORY_HPP_
-#include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERFACTORY_HPP_
+#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
@@ -328,7 +328,7 @@ using namespace com::sun::star;
 #define XPRINTJOBLISTENER                       ::com::sun::star::view::XPrintJobListener
 #define XUICONFIGURATIONSTORAGE                 ::drafts::com::sun::star::ui::XUIConfigurationStorage
 #define XPROPERTYSET                            ::com::sun::star::beans::XPropertySet
-#define XSCRIPTPROVIDERFACTORY ::drafts::com::sun::star::script::provider::XScriptProviderFactory
+#define XSCRIPTPROVIDERFACTORY ::com::sun::star::script::provider::XScriptProviderFactory
 //________________________________________________________________________________________________________
 //  namespaces
 //________________________________________________________________________________________________________
@@ -3344,7 +3344,7 @@ REFERENCE< XSCRIPTPROVIDER > SAL_CALL SfxBaseModel::getScriptProvider()
     {
         REFERENCE< XSCRIPTPROVIDERFACTORY > xFac(
             xCtx->getValueByName(
-                ::rtl::OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY );
+                ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY );
         if ( xFac.is() )
         {
             Any aContext;
