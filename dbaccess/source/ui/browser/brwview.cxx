@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:02:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _SBA_BWRCTRLR_HXX
+#include "brwctrlr.hxx"
+#endif
 #ifndef _SBX_BRWVIEW_HXX
 #include "brwview.hxx"
 #endif
@@ -88,9 +91,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
-#endif
-#ifndef _SBA_BWRCTRLR_HXX
-#include "brwctrlr.hxx"
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
