@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:48:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
-#define __EXTENSIONS_INC_EXTENSIO_HRC__
+#ifndef EXTENSIONS_INC_EXTENSIO_HRC
+#define EXTENSIONS_INC_EXTENSIO_HRC
 
 #include <svtools/solar.hrc>
 
@@ -281,7 +281,7 @@
     // FREE
 #define HID_PROP_TITLE                          (HID_FORMS_START +  115)
 #define HID_PROP_STEP                           (HID_FORMS_START +  116)
-#define HID_PROP_VALUE                          (HID_FORMS_START +  117)
+    // FREE
 #define HID_PROP_PROGRESSVALUE                  (HID_FORMS_START +  118)
 #define HID_PROP_PROGRESSVALUE_MIN              (HID_FORMS_START +  119)
 #define HID_PROP_PROGRESSVALUE_MAX              (HID_FORMS_START +  120)
@@ -331,8 +331,19 @@
 #define HID_PROP_AUTOLINEBREAK                  (HID_FORMS_START +  164)
 #define HID_PROP_TEXTTYPE                       (HID_FORMS_START +  165)
 #define HID_PROP_LINEEND_FORMAT                 (HID_FORMS_START +  166)
-
-// ----------------------------------------------------------------------------
+#define HID_PROP_XSD_TOTAL_DIGITS               (HID_FORMS_START +  167)
+#define HID_PROP_XSD_FRACTION_DIGITS            (HID_FORMS_START +  168)
+#define HID_PROP_XSD_MAX_INCLUSIVE              (HID_FORMS_START +  169)
+#define HID_PROP_XSD_MAX_EXCLUSIVE              (HID_FORMS_START +  170)
+#define HID_PROP_XSD_MIN_INCLUSIVE              (HID_FORMS_START +  171)
+#define HID_PROP_XSD_MIN_EXCLUSIVE              (HID_FORMS_START +  172)
+#define HID_PROP_UNCHECKEDREFVALUE              (HID_FORMS_START +  173)
+#define HID_PROP_SUBMISSION_ID                  (HID_FORMS_START +  174)
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
 #define UID_PROP_DLG_FONT_TYPE                  (HID_FORMS_START +  180)
 #define UID_PROP_DLG_IMAGE_URL                  (HID_FORMS_START +  181)
 #define UID_PROP_DLG_BACKGROUNDCOLOR            (HID_FORMS_START +  182)
@@ -349,7 +360,6 @@
 #define UID_PROP_DLG_ORDER                      (HID_FORMS_START +  193)
 #define UID_PROP_DLG_SELECTION                  (HID_FORMS_START +  194)
 #define UID_EVT_MACRODLG                        (HID_FORMS_START +  195)
-
 #define UID_BRWEVT_APPROVEACTIONPERFORMED       (HID_FORMS_START +  196)
 #define UID_BRWEVT_ACTIONPERFORMED              (HID_FORMS_START +  197)
 #define UID_BRWEVT_CHANGED                      (HID_FORMS_START +  198)
@@ -383,6 +393,28 @@
 #define UID_BRWEVT_APPROVEPARAMETER             (HID_FORMS_START +  226)
 #define UID_BRWEVT_ERROROCCURED                 (HID_FORMS_START +  227)
 #define UID_BRWEVT_ADJUSTMENTVALUECHANGED       (HID_FORMS_START +  228)
+#define HID_PROP_XML_DATA_MODEL                 (HID_FORMS_START +  229)
+#define HID_PROP_BIND_EXPRESSION                (HID_FORMS_START +  230)
+#define HID_PROP_XSD_REQUIRED                   (HID_FORMS_START +  231)
+#define HID_PROP_XSD_RELEVANT                   (HID_FORMS_START +  232)
+#define HID_PROP_XSD_READONLY                   (HID_FORMS_START +  233)
+#define HID_PROP_XSD_CONSTRAINT                 (HID_FORMS_START +  234)
+#define HID_PROP_XSD_CALCULATION                (HID_FORMS_START +  235)
+#define HID_PROP_XSD_DATA_TYPE                  (HID_FORMS_START +  236)
+#define HID_PROP_XSD_WHITESPACES                (HID_FORMS_START +  237)
+#define HID_PROP_XSD_PATTERN                    (HID_FORMS_START +  238)
+#define HID_PROP_XSD_LENGTH                     (HID_FORMS_START +  239)
+#define HID_PROP_XSD_MIN_LENGTH                 (HID_FORMS_START +  230)
+#define HID_PROP_XSD_MAX_LENGTH                 (HID_FORMS_START +  241)
+#define UID_PROP_DLG_BIND_EXPRESSION            (HID_FORMS_START +  242)
+#define UID_PROP_DLG_XSD_REQUIRED               (HID_FORMS_START +  243)
+#define UID_PROP_DLG_XSD_RELEVANT               (HID_FORMS_START +  244)
+#define UID_PROP_DLG_XSD_READONLY               (HID_FORMS_START +  245)
+#define UID_PROP_DLG_XSD_CONSTRAINT             (HID_FORMS_START +  246)
+#define UID_PROP_DLG_XSD_CALCULATION            (HID_FORMS_START +  247)
+#define UID_PROP_ADD_DATA_TYPE                  (HID_FORMS_START +  248)
+#define UID_PROP_REMOVE_DATA_TYPE               (HID_FORMS_START +  249)
+#define HID_PROP_LIST_BINDING                   (HID_FORMS_START +  250)
 
 #define HID_EVT_ACTIONPERFORMED                 (HID_FORMS_START + 300)
 #define HID_EVT_AFTERUPDATE                     (HID_FORMS_START + 301)
@@ -424,5 +456,13 @@
 #define HID_PROP_BORDERCOLOR                    (HID_FORMS_START + 337)
 #define UID_PROP_DLG_BORDERCOLOR                (HID_FORMS_START + 338)
 #define HID_PROP_IMAGEPOSITION                  (HID_FORMS_START + 339)
+
+    // please adjust HID_LAST_FORMS_ID if you add new ids here!
+
+#define HID_LAST_FORMS_ID   HID_PROP_IMAGEPOSITION
+
+#if HID_LAST_FORMS_ID > HID_FORMS_END
+    #error id overflow
+#endif
 
 #endif
