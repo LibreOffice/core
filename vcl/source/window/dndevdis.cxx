@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:37:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,6 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
 {   MutexGuard aImplGuard( m_aMutex );
 
     Point origin( dge.DragOriginX, dge.DragOriginY );
-    sal_Int32 nListeners;
 
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
