@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-22 07:44:54 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 10:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,11 @@ namespace dbaui
 
         if (aExceptionInfo.isValid())
             showError(aExceptionInfo, this, m_xORB);
+        else
+        {
+            m_aUnique.SaveValue();
+            m_pFields->SaveValue();
+        }
 
         return !aExceptionInfo.isValid();
     }
@@ -398,7 +403,16 @@ namespace dbaui
 
         SvLBoxEntry* pNewEntry = m_aIndexes.InsertEntry(sNewIndexName);
         OIndexCollection::iterator aIndexDescriptor = m_pIndexes->insert(sNewIndexName);
-        pNewEntry->SetUserData(aIndexDescriptor);
+//      pNewEntry->SetUserData(aIndexDescriptor);
+
+        // update the user data on the entries in the list box:
+        // they're iterators of the index collection, and thus they have changed when removing the index
+        for (SvLBoxEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
+        {
+            OIndexCollection::iterator aAfterInsertPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
+            DBG_ASSERT(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with on of the entries!");
+            pAdjust->SetUserData(aAfterInsertPos);
+        }
 
         // select the entry and start in-place editing
         m_aIndexes.SelectNoHandlerCall(pNewEntry);
@@ -604,6 +618,8 @@ namespace dbaui
         DBG_ASSERT(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
             "DbaIndexDialog::OnEntryEdited: invalid entry!");
 
+        aPosition->sName = m_aIndexes.GetEntryText(_pEntry);
+
         // rename can be done by a drop/insert combination only
         if (aPosition->isNew())
         {
@@ -612,7 +628,6 @@ namespace dbaui
             return 0L;
         }
 
-        aPosition->sName = m_aIndexes.GetEntryText(_pEntry);
         if (aPosition->sName != aPosition->getOriginalName())
         {
             aPosition->setModified(sal_True);
@@ -794,6 +809,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/03/22 07:44:54  avy
+ *  Some error checked for linux
+ *
  *  Revision 1.2  2001/03/19 05:59:23  fs
  *  check plausibility before saving
  *
