@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:21:31 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
-#include "QueryTableView.hxx"
+#ifndef DBAUI_JOINTABLEVIEW_HXX
+#include "JoinTableView.hxx"
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -87,7 +87,7 @@ TYPEINIT0(OTableConnection);
 //========================================================================
 DBG_NAME(OTableConnection);
 //------------------------------------------------------------------------
-OTableConnection::OTableConnection( OQueryTableView* _pContainer, OTableConnectionData* _pTabConnData )
+OTableConnection::OTableConnection( OJoinTableView* _pContainer, OTableConnectionData* _pTabConnData )
     :m_bSelected( FALSE )
     ,m_pParent( _pContainer )
     ,m_pData( _pTabConnData )

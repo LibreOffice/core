@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,41 +169,30 @@ OQueryDesignView::OQueryDesignView(Window* _pParent, OQueryController* _pControl
     {
     }
 
-    m_pScrollWindow = new OScrollWindowHelper(this);
-    m_pTableView    = new OQueryTableView(m_pScrollWindow,this);
-    m_pScrollWindow->setTableView(m_pTableView);
-    m_pScrollWindow->Show();
-    m_pTableView->Show();
-
-    m_pAddTabDlg = new OAddTableDlg(m_pTableView);
     m_pSelectionBox = new OSelectionBrowseBox(this);
-    m_pSelectionBox->SetNoneVisbleRow(getController()->getVisibleRows());
+    m_pSelectionBox->SetNoneVisbleRow(static_cast<OQueryController*>(getController())->getVisibleRows());
     m_pSelectionBox->Show();
     // Splitter einrichten
     m_aSplitter.SetSplitHdl(LINK(this, OQueryDesignView,SplitHdl));
     m_aSplitter.Show();
 
-    SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
 }
 // -----------------------------------------------------------------------------
 OQueryDesignView::~OQueryDesignView()
 {
-    delete m_pAddTabDlg;
-    delete m_pTableView;
     delete m_pSelectionBox;
-    delete m_pScrollWindow;
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OQueryDesignView, SplitHdl, void*, p )
 {
-    if (!getController()->isReadOnly())
+    if (!static_cast<OQueryController*>(getController())->isReadOnly())
     {
         long nTest = m_aSplitter.GetPosPixel().Y();
         m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),m_aSplitter.GetSplitPosPixel() ) );
-        if(!getController()->isReadOnly())
+        if(!static_cast<OQueryController*>(getController())->isReadOnly())
         {
-            getController()->setSplitPos(m_aSplitter.GetSplitPosPixel());
-            getController()->setModified();
+            static_cast<OQueryController*>(getController())->setSplitPos(m_aSplitter.GetSplitPosPixel());
+            static_cast<OQueryController*>(getController())->setModified();
         }
         Resize();
     }
@@ -212,19 +201,20 @@ IMPL_LINK( OQueryDesignView, SplitHdl, void*, p )
 // -------------------------------------------------------------------------
 void OQueryDesignView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
 {
+    m_pTableView    = new OQueryTableView(m_pScrollWindow,this);
     OQueryView::Construct(xModel); // initialize m_xMe
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::initialize()
 {
-    if(getController()->getSplitPos() != -1)
+    if(static_cast<OQueryController*>(getController())->getSplitPos() != -1)
     {
-        m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),getController()->getSplitPos() ) );
-        m_aSplitter.SetSplitPosPixel(getController()->getSplitPos());
+        m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),static_cast<OQueryController*>(getController())->getSplitPos() ) );
+        m_aSplitter.SetSplitPosPixel(static_cast<OQueryController*>(getController())->getSplitPos());
     }
     m_pSelectionBox->initialize();
     m_pSelectionBox->ClearAll();
-    m_pSelectionBox->SetReadOnly(getController()->isReadOnly());
+    m_pSelectionBox->SetReadOnly(static_cast<OQueryController*>(getController())->isReadOnly());
     m_pSelectionBox->Fill();
 }
 // -------------------------------------------------------------------------
@@ -234,11 +224,11 @@ void OQueryDesignView::resizeControl(Rectangle& _rRect)
 
     Size aSize = GetOutputSizePixel();
 
-    sal_Int32 nSplitPos = getController()->getSplitPos();
+    sal_Int32 nSplitPos = static_cast<OQueryController*>(getController())->getSplitPos();
     if( nSplitPos == -1 || nSplitPos >= aSize.Height())
     {
-        nSplitPos = aSize.Height()*0.5;
-        getController()->setSplitPos(nSplitPos);
+        nSplitPos = sal_Int32(aSize.Height()*0.5);
+        static_cast<OQueryController*>(getController())->setSplitPos(nSplitPos);
     }
 
     Size aToolBoxSize;
@@ -262,7 +252,7 @@ void OQueryDesignView::resizeControl(Rectangle& _rRect)
     if( aSplitPos.Y() <= 0)
         aSplitPos.Y() = LogicToPixel( Size(0,sal_Int32(aSize.Height() * 0.2) ), MAP_APPFONT ).Height();
 
-    Size aTableView(aSize.Width(),aSplitPos.Y());
+    Size aTableView(aSize.Width(),aSplitPos.Y()-aToolBoxSize.Height());
     m_pScrollWindow->SetPosSizePixel(aTopLeft,aTableView);
 
     Point aPos(0,aSplitPos.Y()+aSplitSize.Height());
@@ -283,7 +273,7 @@ void OQueryDesignView::setReadOnly(sal_Bool _bReadOnly)
 // -----------------------------------------------------------------------------
 void OQueryDesignView::clear()
 {
-    SfxUndoManager* pUndoMgr = getController()->getUndoMgr();
+    SfxUndoManager* pUndoMgr = static_cast<OQueryController*>(getController())->getUndoMgr();
     m_pSelectionBox->ClearAll(); // clear the whole selection
     m_pSelectionBox->Fill();    // fill with empty the fields
     m_pTableView->ClearAll();
@@ -309,19 +299,19 @@ sal_Bool OQueryDesignView::isCutAllowed()
 // -----------------------------------------------------------------------------
 void OQueryDesignView::cut()
 {
-    getController()->setModified(sal_True);
+    static_cast<OQueryController*>(getController())->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::paste()
 {
-    getController()->setModified(sal_True);
+    static_cast<OQueryController*>(getController())->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::TableDeleted(const ::rtl::OUString& rAliasName)
 {
     // Nachricht, dass Tabelle aus dem Fenster gel"oscht wurde
     DeleteFields(rAliasName);
-    getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);    // view nochmal bescheid sagen
+    static_cast<OQueryController*>(getController())->InvalidateFeature(ID_BROWSER_ADDTABLE);    // view nochmal bescheid sagen
 }
 //------------------------------------------------------------------------------
 void OQueryDesignView::DeleteFields( const ::rtl::OUString& rAliasName )
@@ -331,7 +321,7 @@ void OQueryDesignView::DeleteFields( const ::rtl::OUString& rAliasName )
 // -----------------------------------------------------------------------------
 void OQueryDesignView::SaveTabWinUIConfig(OQueryTableWindow* pWin)
 {
-    getController()->SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos());
+    static_cast<OQueryController*>(getController())->SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos());
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::InsertField( const OTableFieldDesc& rInfo, sal_Bool bVis, sal_Bool bActivate)
@@ -347,8 +337,8 @@ sal_Bool OQueryDesignView::InsertField( const OTableFieldDesc& rInfo, sal_Bool b
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::getColWidth( const ::rtl::OUString& rAliasName, const ::rtl::OUString& rFieldName, sal_uInt32& nWidth )
 {
-    ::std::vector<OTableFieldDesc*>::iterator aIter = getController()->getTableFieldDesc()->begin();
-    for(;aIter != getController()->getTableFieldDesc()->end();++aIter)
+    ::std::vector<OTableFieldDesc*>::iterator aIter = static_cast<OQueryController*>(getController())->getTableFieldDesc()->begin();
+    for(;aIter != static_cast<OQueryController*>(getController())->getTableFieldDesc()->end();++aIter)
     {
         if( rAliasName == (*aIter)->GetFieldAlias())
         {
@@ -442,7 +432,7 @@ long OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::HasFields()
 {
-    ::std::vector<OTableFieldDesc*>* pList = getController()->getTableFieldDesc();
+    ::std::vector<OTableFieldDesc*>* pList = static_cast<OQueryController*>(getController())->getTableFieldDesc();
     ::std::vector<OTableFieldDesc*>::iterator aIter = pList->begin();
     ::rtl::OUString aFieldName;
     for(;aIter != pList->end();++aIter)
@@ -463,7 +453,7 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
     ::rtl::OUString aDBName(pEntryTab->GetComposedName());
 
 
-    Reference< XDatabaseMetaData >  xMetaData = getController()->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
     ::rtl::OUString aCatalog,aSchema,aTable,aComposedName;
     ::dbtools::qualifiedNameComponents(xMetaData,aDBName,aCatalog,aSchema,aTable);
     ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_True);
@@ -522,7 +512,7 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
 {
     ::rtl::OUString aCondition;
     ::std::vector<OConnectionLineData*>::iterator aIter = pLineDataList->begin();
-    Reference< XDatabaseMetaData >  xMetaData = getController()->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
     for(;aIter != pLineDataList->end();++aIter)
@@ -566,7 +556,7 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
     if(nVis == 1)
         bAsterix = sal_False;
 
-    Reference< XDatabaseMetaData >  xMetaData = getController()->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
     aIter = _pFieldList->begin();
@@ -798,7 +788,7 @@ void OQueryDesignView::GetNextJoin(OQueryTableConnection* pEntryConn,::rtl::OUSt
     // ----------------- Feldliste aufbauen ----------------------
     // erst die Felder zaehlen
     sal_uInt32 nFieldcount = 0;
-    ::std::vector<OTableFieldDesc*>* pFieldList = getController()->getTableFieldDesc();
+    ::std::vector<OTableFieldDesc*>* pFieldList = static_cast<OQueryController*>(getController())->getTableFieldDesc();
     ::std::vector<OTableFieldDesc*>::iterator aIter = pFieldList->begin();
     for(;aIter != pFieldList->end();++aIter)
     {
@@ -848,7 +838,7 @@ void OQueryDesignView::GetNextJoin(OQueryTableConnection* pEntryConn,::rtl::OUSt
     }
     // ----------------- Statement aufbauen ----------------------
     ::rtl::OUString aSqlCmd(::rtl::OUString::createFromAscii("SELECT "));
-    if(getController()->isDistinct())
+    if(static_cast<OQueryController*>(getController())->isDistinct())
         aSqlCmd += ::rtl::OUString::createFromAscii(" DISTINCT ");
     aSqlCmd += aFieldListStr;
     aSqlCmd += ::rtl::OUString::createFromAscii(" FROM ");
@@ -876,7 +866,7 @@ void OQueryDesignView::GetNextJoin(OQueryTableConnection* pEntryConn,::rtl::OUSt
 ::rtl::OUString OQueryDesignView::GenerateGroupBy(::std::vector<OTableFieldDesc*>* pFieldList, sal_Bool bMulti )
 {
 
-    Reference< XDatabaseMetaData >  xMetaData = getController()->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
     ::rtl::OUString aGroupByStr;
@@ -923,7 +913,7 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
     {
         nMaxCriteria = ::std::max<sal_uInt16>(nMaxCriteria,(*aIter)->GetCriteria().size());
     }
-    Reference< XDatabaseMetaData >  xMetaData = getController()->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
     for (sal_uInt16 i=0 ; i < nMaxCriteria ; i++)
@@ -996,8 +986,8 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
                             ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName));
                     }
                     ::rtl::OUString aErrorMsg;
-                    ::connectivity::OSQLParser* pParser = getController()->getParser();
-                    ::connectivity::OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTmp, getController()->getNumberFormatter(), xColumn);
+                    ::connectivity::OSQLParser* pParser = static_cast<OQueryController*>(getController())->getParser();
+                    ::connectivity::OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTmp, static_cast<OQueryController*>(getController())->getNumberFormatter(), xColumn);
 
                     if (pParseNode)
                     {
@@ -1005,8 +995,8 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
                             pParseNode->replaceNodeValue(ConvertAlias(pEntryField->GetAlias()),aFieldName);
                         ::rtl::OUString aWhere = aWhereStr;
                         pParseNode->parseNodeToStr( aWhere,
-                                                    getController()->getConnection()->getMetaData(),
-                                                    &(getController()->getParser()->getContext())
+                                                    static_cast<OQueryController*>(getController())->getConnection()->getMetaData(),
+                                                    &(static_cast<OQueryController*>(getController())->getParser()->getContext())
                                                     ,sal_False,sal_True);
                         aWhereStr = aWhere;
                         delete pParseNode;
@@ -1063,7 +1053,7 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
     ::rtl::OUString aRetStr, aColumnName;
     String aWorkStr;
 
-    Reference< XDatabaseMetaData >  xMetaData = getController()->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
     // * darf keine Filter enthalten : habe ich die entsprechende Warnung schon angezeigt ?
     sal_Bool bCritsOnAsterikWarning = sal_False;        // ** TMFS **
@@ -1195,12 +1185,12 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
 sal_Int32 OQueryDesignView::GetColumnFormatKey(const ::connectivity::OSQLParseNode* pColumnRef)
 {
     ::rtl::OUString aTableRange,aColumnName;
-    ::connectivity::OSQLParseTreeIterator& rParseIter = getController()->getParseIterator();
+    ::connectivity::OSQLParseTreeIterator& rParseIter = static_cast<OQueryController*>(getController())->getParseIterator();
     rParseIter.getColumnRange( pColumnRef, aColumnName, aTableRange );
 
     OQueryTableWindow* pSTW = NULL;
     if (aTableRange.getLength())
-        pSTW = m_pTableView->FindTable( aTableRange );
+        pSTW = static_cast<OQueryTableView*>(m_pTableView)->FindTable( aTableRange );
     else if(m_pTableView->GetTabWinMap()->size())
         pSTW = static_cast<OQueryTableWindow*>(m_pTableView->GetTabWinMap()->begin()->second);
 
@@ -1227,17 +1217,17 @@ sal_Bool OQueryDesignView::FillDragInfo(const ::connectivity::OSQLParseNode* pCo
 
     ::rtl::OUString aTableRange,aColumnName;
     sal_uInt16 nCntAccount;
-    ::connectivity::OSQLParseTreeIterator& rParseIter = getController()->getParseIterator();
+    ::connectivity::OSQLParseTreeIterator& rParseIter = static_cast<OQueryController*>(getController())->getParseIterator();
     rParseIter.getColumnRange( pColumnRef, aColumnName, aTableRange );
 
     if (aTableRange.getLength())
     {
-        OQueryTableWindow*  pSTW = m_pTableView->FindTable( aTableRange );
+        OQueryTableWindow*  pSTW = static_cast<OQueryTableView*>(m_pTableView)->FindTable( aTableRange );
         if(!( pSTW && pSTW->ExistsField( aColumnName, aDragInfo ) ))
             bErg = sal_False;
     }
     else
-        bErg = m_pTableView->FindTableFromField(aColumnName, aDragInfo, nCntAccount);
+        bErg = static_cast<OQueryTableView*>(m_pTableView)->FindTableFromField(aColumnName, aDragInfo, nCntAccount);
 
     return bErg;
 }
@@ -1376,10 +1366,10 @@ int OQueryDesignView::GetANDCriteria(const  ::connectivity::OSQLParseNode * pCon
         {
             ::rtl::OUString aColumnName;
             // the international doesn't matter I have a string
-            pCondition->parseNodeToPredicateStr(aCondition,getController()->getConnection()->getMetaData(), getController()->getNumberFormatter(),
+            pCondition->parseNodeToPredicateStr(aCondition,static_cast<OQueryController*>(getController())->getConnection()->getMetaData(), static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                         m_aLocale,
                                         m_sDecimalSep.toChar());
-            pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,getController()->getConnection()->getMetaData(), getController()->getNumberFormatter(), m_aLocale,
+            pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,static_cast<OQueryController*>(getController())->getConnection()->getMetaData(), static_cast<OQueryController*>(getController())->getNumberFormatter(), m_aLocale,
                                         m_sDecimalSep.toChar());
 
             // don't display the column name
@@ -1410,8 +1400,8 @@ int OQueryDesignView::GetANDCriteria(const  ::connectivity::OSQLParseNode * pCon
             // Bedingung parsen
             for(sal_uInt16 i=1;i< pCondition->count();i++)
                 pCondition->getChild(i)->parseNodeToPredicateStr(aCondition,
-                                getController()->getConnection()->getMetaData(),
-                                getController()->getNumberFormatter(),
+                                static_cast<OQueryController*>(getController())->getConnection()->getMetaData(),
+                                static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                 m_aLocale,
                                 m_sDecimalSep.toChar());
         }
@@ -1432,8 +1422,8 @@ int OQueryDesignView::GetANDCriteria(const  ::connectivity::OSQLParseNode * pCon
         // Funktions-Bedingung parsen
         for(sal_uInt16 i=0;i< pCondition->count();i++)
             pCondition->getChild(i)->parseNodeToPredicateStr(aCondition,
-                                        getController()->getConnection()->getMetaData(),
-                                        getController()->getNumberFormatter(),
+                                        static_cast<OQueryController*>(getController())->getConnection()->getMetaData(),
+                                        static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                         m_aLocale,
                                         m_sDecimalSep.toChar());
 
@@ -1498,8 +1488,8 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
             // Bedingung parsen
             for(;i< pCondition->count();i++)
                 pCondition->getChild(i)->parseNodeToPredicateStr(aCondition,
-                                                                getController()->getConnection()->getMetaData(),
-                                                                getController()->getNumberFormatter(),
+                                                                static_cast<OQueryController*>(getController())->getConnection()->getMetaData(),
+                                                                static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                                                 m_aLocale,
                                                                 m_sDecimalSep.toChar());
         }
@@ -1540,8 +1530,8 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
             // go backward
             for (; i >= 0; i--)
                 pCondition->getChild(i)->parseNodeToPredicateStr(aCondition,
-                                        getController()->getConnection()->getMetaData(),
-                                        getController()->getNumberFormatter(),
+                                        static_cast<OQueryController*>(getController())->getConnection()->getMetaData(),
+                                        static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                         m_aLocale,
                                         m_sDecimalSep.toChar());
         }
@@ -1565,13 +1555,13 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
 
         ::rtl::OUString aColumnName;
         pCondition->parseNodeToPredicateStr(aCondition,
-                                            getController()->getConnection()->getMetaData(),
-                                            getController()->getNumberFormatter(),
+                                            static_cast<OQueryController*>(getController())->getConnection()->getMetaData(),
+                                            static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                             m_aLocale,
                                             m_sDecimalSep.toChar());
         pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,
-                                            getController()->getConnection()->getMetaData(),
-                                            getController()->getNumberFormatter(),
+                                            static_cast<OQueryController*>(getController())->getConnection()->getMetaData(),
+                                            static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                             m_aLocale,
                                             m_sDecimalSep.toChar());
 
@@ -1613,15 +1603,15 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
         // Feldnamen
         for(sal_uInt16 i=0;i< pLhs->count();i++)
             pCondition->getChild(i)->parseNodeToStr(aName,
-                                        getController()->getConnection()->getMetaData(),
-                                        &getController()->getParser()->getContext(),
+                                        static_cast<OQueryController*>(getController())->getConnection()->getMetaData(),
+                                        &static_cast<OQueryController*>(getController())->getParser()->getContext(),
                                         sal_True);
         // Kriterium
         aCondition = pCondition->getChild(1)->getTokenValue();
         for(i=0;i< pRhs->count();i++)
             pCondition->getChild(i)->parseNodeToPredicateStr(aCondition,
-                                                        getController()->getConnection()->getMetaData(),
-                                                        getController()->getNumberFormatter(),
+                                                        static_cast<OQueryController*>(getController())->getConnection()->getMetaData(),
+                                                        static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                                         m_aLocale,
                                                         m_sDecimalSep.toChar());
 
@@ -1648,7 +1638,7 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
             return rValue;
     }
 
-    Reference< XDatabaseMetaData >  xMetaData = getController()->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
     switch( aType )
@@ -1737,10 +1727,10 @@ sal_Bool OQueryDesignView::InsertJoinConnection(const ::connectivity::OSQLParseN
             aInfoData.InitFromDrag(aDragLeft, aDragRight);
             aInfoData.SetJoinType(_eJoinType);
 
-            OQueryTableConnection aInfo(m_pTableView, &aInfoData);
+            OQueryTableConnection aInfo(static_cast<OQueryTableView*>(m_pTableView), &aInfoData);
             // da ein OQueryTableConnection-Objekt nie den Besitz der uebergebenen Daten uebernimmt, sondern sich nur den Zeiger merkt,
             // ist dieser Zeiger auf eine lokale Variable hier unkritisch, denn aInfoData und aInfo haben die selbe Lebensdauer
-            m_pTableView->NotifyTabConnection( aInfo );
+            static_cast<OQueryTableView*>(m_pTableView)->NotifyTabConnection( aInfo );
         }
         else
         {
@@ -1810,13 +1800,13 @@ void OQueryDesignView::InitFromParseNode()
     m_pSelectionBox->ClearAll();
     m_pSelectionBox->Fill();
 
-    ::connectivity::OSQLParseTreeIterator& aIterator = getController()->getParseIterator();
+    ::connectivity::OSQLParseTreeIterator& aIterator = static_cast<OQueryController*>(getController())->getParseIterator();
     const ::connectivity::OSQLParseNode* pParseTree = aIterator.getParseTree();
     const ::connectivity::OSQLParseNode* pTableRefCommaList = 0;
 
     if (pParseTree)
     {
-        if (!getController()->isEsacpeProcessing())
+        if (!static_cast<OQueryController*>(getController())->isEsacpeProcessing())
         {
             WarningBox( this, ModuleRes(WARN_QRY_NATIVE) ).Execute();
         }
@@ -1828,7 +1818,7 @@ void OQueryDesignView::InitFromParseNode()
             const OSQLTables& aMap = aIterator.getTables();
             ::comphelper::UStringMixEqual aKeyComp(static_cast< ::comphelper::UStringMixLess*>(&aMap.key_comp())->isCaseSensitive());
 
-            Reference< XDatabaseMetaData >  xMetaData = getController()->getConnection()->getMetaData();
+            Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
 
             sal_Int32 nMax = xMetaData->getMaxTablesInSelect();
             if(!nMax || nMax >= (sal_Int32)aMap.size()) // Anzahl der Tabellen im Select-Statement "uberpr"ufen
@@ -1842,7 +1832,7 @@ void OQueryDesignView::InitFromParseNode()
                     OSQLTable xTable = aIter->second;
                     ::dbaui::composeTableName(xMetaData,Reference<XPropertySet>(xTable,UNO_QUERY),aComposedName,sal_False);
 
-                    OQueryTableWindow* pExistentWin = m_pTableView->FindTable(aIter->first);
+                    OQueryTableWindow* pExistentWin = static_cast<OQueryTableView*>(m_pTableView)->FindTable(aIter->first);
                     if (!pExistentWin)
                     {
                         m_pTableView->AddTabWin(aComposedName, aIter->first,sal_True);
@@ -1860,14 +1850,14 @@ void OQueryDesignView::InitFromParseNode()
 
                 // now delete the data for which we haven't any tablewindow
                 OJoinTableView::OTableWindowMap* pTableMap = m_pTableView->GetTabWinMap();
-                ::std::vector< OTableWindowData*>::iterator aDataIter = getController()->getTableWindowData()->begin();
-                for(;aDataIter != getController()->getTableWindowData()->end();)
+                ::std::vector< OTableWindowData*>::iterator aDataIter = static_cast<OQueryController*>(getController())->getTableWindowData()->begin();
+                for(;aDataIter != static_cast<OQueryController*>(getController())->getTableWindowData()->end();)
                 {
                     OQueryTableWindowData* pData = static_cast<OQueryTableWindowData*>(*aDataIter);
                     if(pTableMap->find(pData->GetAliasName()) == pTableMap->end())
                     {
                         delete *aDataIter;
-                        aDataIter = getController()->getTableWindowData()->erase(aDataIter);
+                        aDataIter = static_cast<OQueryController*>(getController())->getTableWindowData()->erase(aDataIter);
                     }
                     else
                         ++aDataIter;
@@ -1878,8 +1868,8 @@ void OQueryDesignView::InitFromParseNode()
                 // check if we have a distinct statement
                 if(SQL_ISTOKEN(pParseTree->getChild(1),DISTINCT))
                 {
-                    getController()->setDistinct(sal_True);
-                    getController()->InvalidateFeature(ID_BROWSER_QUERY_DISTINCT_VALUES);
+                    static_cast<OQueryController*>(getController())->setDistinct(sal_True);
+                    static_cast<OQueryController*>(getController())->InvalidateFeature(ID_BROWSER_QUERY_DISTINCT_VALUES);
                 }
                 if (!InstallFields(pParseTree, m_pTableView->GetTabWinMap()))
                 {
@@ -1906,7 +1896,7 @@ void OQueryDesignView::InitFromParseNode()
     }
 
     // Durch das Neuerzeugen wurden wieder Undo-Actions in den Manager gestellt
-    getController()->getUndoMgr()->Clear();
+    static_cast<OQueryController*>(getController())->getUndoMgr()->Clear();
 }
 // -----------------------------------------------------------------------------
 int OQueryDesignView::InstallFields(const ::connectivity::OSQLParseNode* pNode, OJoinTableView::OTableWindowMap* pTabList )
@@ -1969,7 +1959,7 @@ int OQueryDesignView::InstallFields(const ::connectivity::OSQLParseNode* pNode, 
             }
             else if (SQL_ISRULE(pColumnRef,derived_column))
             {
-                ::rtl::OUString aColumnAlias(getController()->getParseIterator().getColumnAlias(pColumnRef)); // kann leer sein
+                ::rtl::OUString aColumnAlias(static_cast<OQueryController*>(getController())->getParseIterator().getColumnAlias(pColumnRef)); // kann leer sein
                 pColumnRef = pColumnRef->getChild(0);
                 if (SQL_ISRULE(pColumnRef,column_ref))
                 {
@@ -1993,8 +1983,8 @@ int OQueryDesignView::InstallFields(const ::connectivity::OSQLParseNode* pNode, 
                     ::rtl::OUString aColumns;
 
                     pColumnRef->parseNodeToStr( aColumns,
-                                                getController()->getConnection()->getMetaData(),
-                                                &getController()->getParser()->getContext(),
+                                                static_cast<OQueryController*>(getController())->getConnection()->getMetaData(),
+                                                &static_cast<OQueryController*>(getController())->getParser()->getContext(),
                                                 sal_True,
                                                 sal_False);
 
@@ -2049,8 +2039,8 @@ int OQueryDesignView::InstallFields(const ::connectivity::OSQLParseNode* pNode, 
                 {
                     ::rtl::OUString aColumns;
                     pColumnRef->parseNodeToStr( aColumns,
-                                                getController()->getConnection()->getMetaData(),
-                                                &getController()->getParser()->getContext(),
+                                                static_cast<OQueryController*>(getController())->getConnection()->getMetaData(),
+                                                &static_cast<OQueryController*>(getController())->getParser()->getContext(),
                                                 sal_True,sal_False);
 
                     OTableFieldDesc aInfo;
@@ -2103,10 +2093,10 @@ void OQueryDesignView::GetOrderCriteria(const ::connectivity::OSQLParseNode* pPa
                 else // it could be a alias name for a field
                 {
                     ::rtl::OUString aTableRange,aColumnName;
-                    ::connectivity::OSQLParseTreeIterator& rParseIter = getController()->getParseIterator();
+                    ::connectivity::OSQLParseTreeIterator& rParseIter = static_cast<OQueryController*>(getController())->getParseIterator();
                     rParseIter.getColumnRange( pChild->getChild(0), aColumnName, aTableRange );
 
-                    ::std::vector<OTableFieldDesc*>* pList = getController()->getTableFieldDesc();
+                    ::std::vector<OTableFieldDesc*>* pList = static_cast<OQueryController*>(getController())->getTableFieldDesc();
                     ::std::vector<OTableFieldDesc*>::iterator aIter = pList->begin();
                     for(;aIter != pList->end();++aIter)
                     {
@@ -2189,7 +2179,7 @@ int OQueryDesignView::InsertColumnRef(const ::connectivity::OSQLParseNode * pCol
 {
 
     // Tabellennamen zusammen setzen
-    ::connectivity::OSQLParseTreeIterator& rParseIter = getController()->getParseIterator();
+    ::connectivity::OSQLParseTreeIterator& rParseIter = static_cast<OQueryController*>(getController())->getParseIterator();
     rParseIter.getColumnRange( pColumnRef, aColumnName, aTableRange );
 
     DBG_ASSERT(aColumnName.getLength(),"Columnname darf nicht leer sein");
@@ -2221,7 +2211,7 @@ int OQueryDesignView::InsertColumnRef(const ::connectivity::OSQLParseNode * pCol
     else
     {
         // SELECT range.column, ...
-        OQueryTableWindow* pTabWin = m_pTableView->FindTable(aTableRange);
+        OQueryTableWindow* pTabWin = static_cast<OQueryTableView*>(m_pTableView)->FindTable(aTableRange);
 
         if (pTabWin && pTabWin->ExistsField(aColumnName, aInfo))
         {
@@ -2320,7 +2310,7 @@ void OQueryDesignView::zoomTableView(const Fraction& _rFraction)
 // -----------------------------------------------------------------------------
 void OQueryDesignView::SaveUIConfig()
 {
-    OQueryController* pCtrl = getController();
+    OQueryController* pCtrl = static_cast<OQueryController*>(getController());
     if (pCtrl)
     {
         pCtrl->SaveTabWinsPosSize( m_pTableView->GetTabWinMap(), m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos() );

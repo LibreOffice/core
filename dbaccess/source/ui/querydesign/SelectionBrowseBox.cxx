@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ OSelectionBrowseBox::~OSelectionBrowseBox()
 // -----------------------------------------------------------------------------
 void OSelectionBrowseBox::initialize()
 {
-    Reference< XDatabaseMetaData >  xMetaData = getDesignView()->getController()->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData();
     // Diese Funktionen stehen nur unter CORE zur Verfügung
     if(xMetaData->supportsCoreSQLGrammar())
     {
@@ -277,7 +277,7 @@ void OSelectionBrowseBox::Init()
             m_nVisibleCount++;
     }
     RowInserted(0, m_nVisibleCount, sal_False);
-    Reference< XDatabaseMetaData >  xMetaData = getDesignView()->getController()->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData();
 
     m_nMaxColumns = xMetaData->getMaxColumnsInSelect();
 }
@@ -291,10 +291,12 @@ void OSelectionBrowseBox::ClearAll()
     if (GetCurRow() != 0)
         GoToRow(0);
 
-    ::std::vector<OTableFieldDesc*>::iterator aIter = getDesignView()->getController()->getTableFieldDesc()->begin();
-    for(;aIter != getDesignView()->getController()->getTableFieldDesc()->end();++aIter)
+    OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
+
+    ::std::vector<OTableFieldDesc*>::iterator aIter = pController->getTableFieldDesc()->begin();
+    for(;aIter != pController->getTableFieldDesc()->end();++aIter)
         delete *aIter;
-    getDesignView()->getController()->getTableFieldDesc()->clear();
+    pController->getTableFieldDesc()->clear();
 
     sal_uInt16 nCurCol  = GetCurColumnId();
     long nCurRow        = GetCurRow();
@@ -332,13 +334,15 @@ void OSelectionBrowseBox::SetReadOnly(sal_Bool bRO)
 DbCellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    OTableFieldDesc* pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColId-1];
+    OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
+
+    OTableFieldDesc* pEntry = (*pController->getTableFieldDesc())[nColId-1];
     DBG_ASSERT(pEntry, "OSelectionBrowseBox::GetController : keine FieldDescription !");
 
     if (!pEntry)
         return NULL;
 
-    if (getDesignView()->getController()->isReadOnly())
+    if (static_cast<OQueryController*>(getDesignView()->getController())->isReadOnly())
         return NULL;
 
     long nCellIndex = GetRealRow(nRow);
@@ -363,8 +367,10 @@ DbCellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColI
 void OSelectionBrowseBox::InitController(DbCellControllerRef& rController, long nRow, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    OSL_ENSURE(getDesignView()->getController()->getTableFieldDesc()->size() > sal_uInt16(nColId-1),"ColID is to great!");
-    OTableFieldDesc* pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColId-1];
+    OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
+
+    OSL_ENSURE(pController->getTableFieldDesc()->size() > sal_uInt16(nColId-1),"ColID is to great!");
+    OTableFieldDesc* pEntry = (*pController->getTableFieldDesc())[nColId-1];
     DBG_ASSERT(pEntry, "OSelectionBrowseBox::InitController : keine FieldDescription !");
     long nCellIndex = GetRealRow(nRow);
 
@@ -486,7 +492,7 @@ void OSelectionBrowseBox::InitController(DbCellControllerRef& rController, long 
             break;
         case BROW_FUNCTION_ROW:
         {
-            Reference< XDatabaseMetaData >  xMetaData = getDesignView()->getController()->getConnection()->getMetaData();
+            Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData();
             // Diese Funktionen stehen nur unter CORE zur Verfügung
             if(xMetaData->supportsCoreSQLGrammar())
             {
@@ -558,8 +564,9 @@ sal_Bool OSelectionBrowseBox::SaveModified()
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     OTableFieldDesc* pEntry = NULL;
-    if(getDesignView()->getController()->getTableFieldDesc()->size() > sal_uInt16(GetCurColumnId() - 1))
-        pEntry = (*getDesignView()->getController()->getTableFieldDesc())[GetCurColumnId() - 1];
+    OQueryController* pController = static_cast<OQueryController*>(getDesignView()->getController());
+    if(pController->getTableFieldDesc()->size() > sal_uInt16(GetCurColumnId() - 1))
+        pEntry = (*pController->getTableFieldDesc())[GetCurColumnId() - 1];
 
     sal_Bool bWasEmpty = pEntry ? pEntry->IsEmpty() : sal_False;
     sal_Bool bError = sal_False;
@@ -621,9 +628,11 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 {
                     ::rtl::OUString aErrorMsg;
                     bIsPredicate = sal_True; // #72670#
-                    ::connectivity::OSQLParser* pParser = getDesignView()->getController()->getParser();
+                    OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
+
+                    ::connectivity::OSQLParser* pParser = pController->getParser();
                     OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTest,
-                                                                        getDesignView()->getController()->getNumberFormatter(),
+                                                                        pController->getNumberFormatter(),
                                                                         xColumn);
                     if (pParseNode)
                     {
@@ -669,7 +678,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     pEntry->SetField(aFieldName);
 
                     // Falls nur COUNT(*) erlaubt wird
-                    Reference< XDatabaseMetaData >  xMetaData = getDesignView()->getController()->getConnection()->getMetaData();
+                    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData();
                     if(xMetaData->supportsCoreSQLGrammar()
                         && aFieldName.GetChar(0) != '*' && pEntry->GetFunction().getLength())
                     {
@@ -762,12 +771,12 @@ sal_Bool OSelectionBrowseBox::SaveModified()
 
                 if (!aFieldName.Len())
                 {
-                    ::std::replace(getDesignView()->getController()->getTableFieldDesc()->begin(),getDesignView()->getController()->getTableFieldDesc()->end(),pEntry,new OTableFieldDesc);
+                    ::std::replace(pController->getTableFieldDesc()->begin(),static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end(),pEntry,new OTableFieldDesc);
                     sal_uInt16 nCol = GetCurColumnId();
                     for (int i = 0; i < m_nVisibleCount; i++)   // Spalte neu zeichnen
                         RowModified(i,nCol);
                 }
-                getDesignView()->getController()->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
+                pController->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
             }
             break;
 
@@ -820,7 +829,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 {
                     strOldCellContents = pEntry->GetFunction();
                     sal_uInt16 nPos = m_pFunctionCell->GetSelectEntryPos();
-                    Reference< XDatabaseMetaData >  xMetaData = getDesignView()->getController()->getConnection()->getMetaData();
+                    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData();
                     // Diese Funktionen stehen nur unter CORE zur Verfügung
                     sal_uInt16 nFunctionCount =
                                         xMetaData->supportsCoreSQLGrammar()
@@ -863,7 +872,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 ::rtl::OUString aCrit;
                 if(aText.Len())
                 {
-                    ::connectivity::OSQLParser* pParser = getDesignView()->getController()->getParser();
+                    ::connectivity::OSQLParser* pParser = static_cast<OQueryController*>(getDesignView()->getController())->getParser();
                     OQueryTableWindow* pWin = static_cast<OQueryTableWindow*>(pEntry->GetTabWindow());
 
                     String aTest(aText);
@@ -877,16 +886,16 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     }
 
                     ::rtl::OUString aErrorMsg;
-                    OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTest, getDesignView()->getController()->getNumberFormatter(), xColumn);
+                    OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTest, static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(), xColumn);
                     if (pParseNode)
                     {
                         pParseNode->parseNodeToPredicateStr(aCrit,
-                                                            getDesignView()->getController()->getConnection()->getMetaData(),
-                                                            getDesignView()->getController()->getNumberFormatter(),
+                                                            static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData(),
+                                                            static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(),
                                                             xColumn,
                                                             getDesignView()->getLocale(),
                                                             getDesignView()->getDecimalSeparator().toChar(),
-                                                            &(getDesignView()->getController()->getParser()->getContext()));
+                                                            &(static_cast<OQueryController*>(getDesignView()->getController())->getParser()->getContext()));
                         delete pParseNode;
                     }
                     else
@@ -911,16 +920,16 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 default:
                                     ;
                             }
-                            pParseNode = pParser->predicateTree(aErrorMsg, aTest, getDesignView()->getController()->getNumberFormatter(), xColumn);
+                            pParseNode = pParser->predicateTree(aErrorMsg, aTest, static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(), xColumn);
                             if (pParseNode)
                             {
                                 pParseNode->parseNodeToPredicateStr(aCrit,
-                                                                    getDesignView()->getController()->getConnection()->getMetaData(),
-                                                                    getDesignView()->getController()->getNumberFormatter(),
+                                                                    static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData(),
+                                                                    static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(),
                                                                     xColumn,
                                                                     getDesignView()->getLocale(),
                                                                     getDesignView()->getDecimalSeparator().toChar(),
-                                                                    &(getDesignView()->getController()->getParser()->getContext()));
+                                                                    &(static_cast<OQueryController*>(getDesignView()->getController())->getParser()->getContext()));
                                 delete pParseNode;
                             }
                             else
@@ -958,7 +967,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
         pUndoAct->SetCellIndex(GetCurRow());
         pUndoAct->SetColId(GetCurColumnId());
         pUndoAct->SetCellContents(strOldCellContents);
-        getDesignView()->getController()->getUndoMgr()->AddUndoAction(pUndoAct);
+        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction(pUndoAct);
     }
 
     // habe ich Daten in einer FieldDescription gespeichert, die vorher leer war und es nach den Aenderungen nicht mehr ist ?
@@ -996,8 +1005,8 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, 
     rDev.SetClipRegion( rRect );
     OTableFieldDesc* pEntry = NULL;
 
-    if(getDesignView()->getController()->getTableFieldDesc()->size() > sal_uInt16(nColumnId - 1))
-        pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColumnId - 1];
+    if(static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size() > sal_uInt16(nColumnId - 1))
+        pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[nColumnId - 1];
 
     if (!pEntry)
         return;
@@ -1037,9 +1046,9 @@ sal_Bool OSelectionBrowseBox::QueryDrop(const BrowserDropEvent& rEvt)
 void OSelectionBrowseBox::RemoveColumn(sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT(getDesignView()->getController()->getTableFieldDesc()->size() == sal_uInt16(ColCount() - 1), "OSelectionBrowseBox::RemoveColumn : inkonsistent state !");
+    DBG_ASSERT(static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size() == sal_uInt16(ColCount() - 1), "OSelectionBrowseBox::RemoveColumn : inkonsistent state !");
         // das Control sollte immer genau eine Spalte mehr haben, naemlich die HandleColumn
-    DBG_ASSERT((nColId == 0) || (nColId <= getDesignView()->getController()->getTableFieldDesc()->size()), "OSelectionBrowseBox::RemoveColumn : invalid parameter nColId");
+    DBG_ASSERT((nColId == 0) || (nColId <= static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size()), "OSelectionBrowseBox::RemoveColumn : invalid parameter nColId");
         // ColId ist bei mir gleichbedeutend mit Position, und da sollte die Bedingung natuerlich zutreffen
 
     sal_uInt16 nCurCol = GetCurColumnId();
@@ -1047,12 +1056,12 @@ void OSelectionBrowseBox::RemoveColumn(sal_uInt16 nColId)
 
     DeactivateCell();
     // Spalteninfo rausnehmen und am Ende neues Info einfuegen
-    OTableFieldDesc* pOld = (*getDesignView()->getController()->getTableFieldDesc())[((sal_uInt32)nColId - 1)];
-    getDesignView()->getController()->getTableFieldDesc()->erase( getDesignView()->getController()->getTableFieldDesc()->begin() + ((sal_uInt32)nColId - 1) );
+    OTableFieldDesc* pOld = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[((sal_uInt32)nColId - 1)];
+    static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->erase( static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->begin() + ((sal_uInt32)nColId - 1) );
         // der Aufrufer ist dafuer verantwortlich, sich vorher die Description zu besorgen und die irgendwie aufzuraeumen
         // (im Normalfall wohl erst mal in ein Undo zu schieben)
     OTableFieldDesc* pNew = new OTableFieldDesc;
-    getDesignView()->getController()->getTableFieldDesc()->push_back(pNew);
+    static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->push_back(pNew);
 
     // Nachfolgende Spalten optisch verschieben
     sal_uInt16 nCount = (sal_uInt16)ColCount();
@@ -1070,11 +1079,11 @@ void OSelectionBrowseBox::RemoveColumn(sal_uInt16 nColId)
 
     ActivateCell( nCurRow, nCurCol );
 
-    getDesignView()->getController()->setModified();
+    static_cast<OQueryController*>(getDesignView()->getController())->setModified();
 
-    getDesignView()->getController()->InvalidateFeature( ID_BROWSER_UNDO );
-    getDesignView()->getController()->InvalidateFeature( ID_BROWSER_REDO );
-    getDesignView()->getController()->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_UNDO );
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_REDO );
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
 
 }
 
@@ -1082,9 +1091,9 @@ void OSelectionBrowseBox::RemoveColumn(sal_uInt16 nColId)
 void OSelectionBrowseBox::RemoveField(sal_uInt16 nId, sal_Bool bActivate)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    OSL_ENSURE(getDesignView()->getController()->getTableFieldDesc()->size() > sal_uInt16(nId-1),"ID is to great!");
+    OSL_ENSURE(static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size() > sal_uInt16(nId-1),"ID is to great!");
 
-    OTableFieldDesc* pDesc = (*getDesignView()->getController()->getTableFieldDesc())[(sal_uInt32)(nId - 1)] ;
+    OTableFieldDesc* pDesc = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[(sal_uInt32)(nId - 1)] ;
     pDesc->SetColWidth( (sal_uInt16)GetColumnWidth(nId) );  // hat er sich vorher leider nicht gemerkt
 
     // UndoAction erzeugen
@@ -1092,15 +1101,15 @@ void OSelectionBrowseBox::RemoveField(sal_uInt16 nId, sal_Bool bActivate)
     pUndoAction->SetTabFieldDescr(pDesc);
     pUndoAction->SetOwnership(sal_True);
     pUndoAction->SetColId( nId );
-    getDesignView()->getController()->getUndoMgr()->AddUndoAction( pUndoAction );
+    static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction( pUndoAction );
 
     RemoveColumn(nId);
 
     // damit das Ganze potentiell unendlich ist, zieht ein Remove auch gleich ein Insert einer leeren Spalte nach sich
 //  AppendNewCol(1);
 
-    getDesignView()->getController()->InvalidateFeature(ID_BROWSER_UNDO);
-    getDesignView()->getController()->InvalidateFeature(ID_BROWSER_REDO);
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature(ID_BROWSER_UNDO);
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature(ID_BROWSER_REDO);
 }
 
 //------------------------------------------------------------------------------
@@ -1142,7 +1151,7 @@ void OSelectionBrowseBox::MouseButtonUp(const BrowserMouseEvent& rEvt)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DbBrowseBox::MouseButtonUp( rEvt );
-    getDesignView()->getController()->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
 }
 
 //------------------------------------------------------------------------------
@@ -1186,24 +1195,24 @@ OTableFieldDesc* OSelectionBrowseBox::AppendNewCol( sal_uInt16 nCnt )
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     // es koennen mehrere angelegt werden, aber der Erste
     // wird returnt
-    sal_uInt32 nCount = getDesignView()->getController()->getTableFieldDesc()->size();
+    sal_uInt32 nCount = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size();
     OTableFieldDesc* pNewDesc;
     for (sal_uInt16 i=0 ; i<nCnt ; i++)
     {
         pNewDesc = new OTableFieldDesc;
         pNewDesc->SetColWidth(DEFAULT_SIZE);
-        getDesignView()->getController()->getTableFieldDesc()->push_back(pNewDesc);
-        InsertDataColumn((sal_uInt16)getDesignView()->getController()->getTableFieldDesc()->size(), String(), DEFAULT_SIZE, HIB_STDSTYLE, HEADERBAR_APPEND);
+        static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->push_back(pNewDesc);
+        InsertDataColumn((sal_uInt16)static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size(), String(), DEFAULT_SIZE, HIB_STDSTYLE, HEADERBAR_APPEND);
     }
 
-    return (*getDesignView()->getController()->getTableFieldDesc())[nCount];
+    return (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[nCount];
 }
 
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::DeleteFields(const String& rAliasName)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    if (getDesignView()->getController()->getTableFieldDesc()->size())
+    if (static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size())
     {
         sal_uInt16 nColId = GetCurColumnId();
         sal_uInt32 nRow = GetCurRow();
@@ -1212,9 +1221,9 @@ void OSelectionBrowseBox::DeleteFields(const String& rAliasName)
         if (bWasEditing)
             DeactivateCell();
 
-        ::std::vector<OTableFieldDesc*>::reverse_iterator aIter = getDesignView()->getController()->getTableFieldDesc()->rbegin();
+        ::std::vector<OTableFieldDesc*>::reverse_iterator aIter = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->rbegin();
         OTableFieldDesc* pEntry = NULL;
-        for(sal_Int32 nPos=getDesignView()->getController()->getTableFieldDesc()->size();aIter != getDesignView()->getController()->getTableFieldDesc()->rend();++aIter,--nPos)
+        for(sal_Int32 nPos=static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size();aIter != static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->rend();++aIter,--nPos)
         {
             pEntry = *aIter;
             if (pEntry->GetAlias() == ::rtl::OUString(rAliasName) )
@@ -1236,7 +1245,7 @@ void OSelectionBrowseBox::SetColWidth()
 
     for( sal_uInt16 nColId=1; nColId<=nColCount; nColId++ )
     {
-        nColWidth = getDesignView()->getController()->getColWidth( nColId );
+        nColWidth = static_cast<OQueryController*>(getDesignView()->getController())->getColWidth( nColId );
 
         if( nColWidth == 0)
             nColWidth = DEFAULT_SIZE;
@@ -1256,7 +1265,7 @@ void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, long nNewWidth)
     SetColumnWidth(nColId, nNewWidth);
 
     // der FieldDescription Bescheid sagen
-    OTableFieldDesc* pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColId - 1];
+    OTableFieldDesc* pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[nColId - 1];
     if (pEntry)
         pEntry->SetColWidth(sal_uInt16(GetColumnWidth(nColId)));
 
@@ -1284,9 +1293,9 @@ Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
 void OSelectionBrowseBox::InsertColumn(OTableFieldDesc* pEntry, long& nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT(getDesignView()->getController()->getTableFieldDesc()->size() == sal_uInt16(ColCount() - 1), "OSelectionBrowseBox::InsertColumn : inkonsistent state !");
+    DBG_ASSERT(static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size() == sal_uInt16(ColCount() - 1), "OSelectionBrowseBox::InsertColumn : inkonsistent state !");
         // das Control sollte immer genau eine Spalte mehr haben, naemlich die HandleColumn
-    DBG_ASSERT(sal_uInt16(nColId == -1) || (nColId <= getDesignView()->getController()->getTableFieldDesc()->size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
+    DBG_ASSERT(sal_uInt16(nColId == -1) || (nColId <= static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
         // -1 heisst ganz hinten, Count heisst ganz hinten, der Rest bezeichnet eine richtige Position
 
     sal_uInt16 nCurCol = GetCurColumnId();
@@ -1296,33 +1305,33 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDesc* pEntry, long& nColId)
 
     // Gueltigkeit von nColId pruefen (ColId von 1 bis ...)
     // Wenn zu klein oder zu gross, auf Ende der Liste setzen
-    if ((nColId == -1) || (sal_uInt16(nColId) >= getDesignView()->getController()->getTableFieldDesc()->size()))     // Anhaengen des Feldes
+    if ((nColId == -1) || (sal_uInt16(nColId) >= static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size()))     // Anhaengen des Feldes
     {
         if (FindFirstFreeCol(nColId) == NULL)   // keine freie Column mehr
         {
             AppendNewCol(1);
-            nColId = getDesignView()->getController()->getTableFieldDesc()->size();
+            nColId = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size();
         }
         else
             nColId++; // innerhalb der vorgegebenen Liste
     }
 
     // in Liste der Spaltenbeschreibungen neues Element
-    getDesignView()->getController()->getTableFieldDesc()->insert( getDesignView()->getController()->getTableFieldDesc()->begin()+(sal_uInt32)nColId-1 ,pEntry);
+    static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->insert( static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->begin()+(sal_uInt32)nColId-1 ,pEntry);
     // da ich meine Spaltenzahl immer auf dem selben Wert wie die Zahl der FieldDescriptions halten muss (plus 1, da es eine
     // HandleClumn gibt), muss ich fuer diese gerade eingefuegte Description auch eine loeschen
     long nFirstFreeCol = -1;
     CheckFreeColumns(nFirstFreeCol);
         // (es kann sein, dass es keine leere gab, dann erzwingt CheckFreeColumns das)
 
-    delete (*getDesignView()->getController()->getTableFieldDesc())[(sal_uInt16)nFirstFreeCol];
-    getDesignView()->getController()->getTableFieldDesc()->erase(getDesignView()->getController()->getTableFieldDesc()->begin()+(sal_uInt16)nFirstFreeCol);
+    delete (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[(sal_uInt16)nFirstFreeCol];
+    static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->erase(static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->begin()+(sal_uInt16)nFirstFreeCol);
 
     // jetzt kann wieder keine leere Spalte vorhanden sein (falls naemlich die soeben geloeschte die einzige war) ...
     CheckFreeColumns(nFirstFreeCol);
 
     // Nachfolgende Spalten optisch verschieben
-    sal_uInt16 nCount = (sal_uInt16)getDesignView()->getController()->getTableFieldDesc()->size();
+    sal_uInt16 nCount = (sal_uInt16)static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size();
     for (sal_uInt16 i = nCount-1; i > nColId; --i)
         SetColumnWidth(i, GetColumnWidth(i - 1));
 
@@ -1334,11 +1343,11 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDesc* pEntry, long& nColId)
     Invalidate( aInvalidRect );
 
     ActivateCell( nCurRow, nCurCol );
-    getDesignView()->getController()->setModified();
+    static_cast<OQueryController*>(getDesignView()->getController())->setModified();
 
-    getDesignView()->getController()->InvalidateFeature( ID_BROWSER_UNDO );
-    getDesignView()->getController()->InvalidateFeature( ID_BROWSER_REDO );
-    getDesignView()->getController()->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_UNDO );
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_REDO );
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
 }
 
 //------------------------------------------------------------------------------
@@ -1397,7 +1406,7 @@ OTableFieldDesc* OSelectionBrowseBox::InsertField(const OTableFieldDesc& rInfo, 
     pUndoAction->SetTabFieldDescr( pEntry );
     pUndoAction->SetOwnership(sal_False);
     pUndoAction->SetColId( nColId );
-    getDesignView()->getController()->getUndoMgr()->AddUndoAction( pUndoAction );
+    static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction( pUndoAction );
 
     return pEntry;
 }
@@ -1406,10 +1415,10 @@ OTableFieldDesc* OSelectionBrowseBox::InsertField(const OTableFieldDesc& rInfo, 
 sal_uInt16 OSelectionBrowseBox::FieldsCount()
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    ::std::vector<OTableFieldDesc*>::iterator aIter = getDesignView()->getController()->getTableFieldDesc()->begin();
+    ::std::vector<OTableFieldDesc*>::iterator aIter = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->begin();
     sal_uInt16 nCount = 0;
 
-    while (aIter != getDesignView()->getController()->getTableFieldDesc()->end())
+    while (aIter != static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end())
     {
         if ((*aIter) && !(*aIter)->IsEmpty())
             nCount++;
@@ -1423,9 +1432,9 @@ sal_uInt16 OSelectionBrowseBox::FieldsCount()
 OTableFieldDesc* OSelectionBrowseBox::FindFirstFreeCol( long& rCol )
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    ::std::vector<OTableFieldDesc*>::iterator aIter = getDesignView()->getController()->getTableFieldDesc()->begin();
+    ::std::vector<OTableFieldDesc*>::iterator aIter = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->begin();
     rCol = -1;
-    while (aIter != getDesignView()->getController()->getTableFieldDesc()->end())
+    while (aIter != static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end())
     {
         ++rCol;
         if ((*aIter) && (*aIter)->IsEmpty())
@@ -1453,9 +1462,9 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDesc& rInfo )
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DBG_ASSERT(!rInfo.IsEmpty(),"AddGroupBy:: OTableFieldDesc sollte nicht Empty sein!");
     OTableFieldDesc* pEntry;
-    ::comphelper::UStringMixEqual bCase(getDesignView()->getController()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
-    ::std::vector<OTableFieldDesc*>::iterator aIter = getDesignView()->getController()->getTableFieldDesc()->begin();
-    for(;aIter != getDesignView()->getController()->getTableFieldDesc()->end();++aIter)
+    ::comphelper::UStringMixEqual bCase(static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    ::std::vector<OTableFieldDesc*>::iterator aIter = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->begin();
+    for(;aIter != static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end();++aIter)
     {
         pEntry = *aIter;
         OSL_ENSURE(pEntry,"OTableFieldDesc was null!");
@@ -1479,7 +1488,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDesc& rInfo )
         }
     }
 
-    if (aIter == getDesignView()->getController()->getTableFieldDesc()->end())
+    if (aIter == static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end())
     {
         OTableFieldDesc* pTmp = InsertField(rInfo, -1, sal_False, sal_False );
         if((pTmp->GetFunctionType() == FKT_AGGREGATE && rInfo.IsGroupBy())) // das GroupBy wird bereits von rInfo "ubernommen
@@ -1492,10 +1501,10 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDesc& rInfo, const Stri
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DBG_ASSERT(!rInfo.IsEmpty(),"AddCondition:: OTableFieldDesc sollte nicht Empty sein!");
     OTableFieldDesc* pEntry;
-    ::comphelper::UStringMixEqual bCase(getDesignView()->getController()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual bCase(static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
 
-    ::std::vector<OTableFieldDesc*>::iterator aIter = getDesignView()->getController()->getTableFieldDesc()->begin();
-    for(;aIter != getDesignView()->getController()->getTableFieldDesc()->end();++aIter)
+    ::std::vector<OTableFieldDesc*>::iterator aIter = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->begin();
+    for(;aIter != static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end();++aIter)
     {
         pEntry = *aIter;
         ::rtl::OUString aField = pEntry->GetField();
@@ -1527,7 +1536,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDesc& rInfo, const Stri
         }
     }
 
-    if (aIter == getDesignView()->getController()->getTableFieldDesc()->end())
+    if (aIter == static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end())
     {
         OTableFieldDesc* pTmp = InsertField(rInfo, -1, sal_False, sal_False );
         if((pTmp->GetFunctionType() == FKT_AGGREGATE && rInfo.IsGroupBy())) // das GroupBy wird bereits von rInfo "ubernommen
@@ -1553,10 +1562,10 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDesc& rInfo, const EOrderDi
     // nPos merkt sich die Spalte in die Sortierung eingetragen wird,
     // da weitere Sortierungen nur dahinter abgelegt werden duerfen
     OTableFieldDesc* pEntry;
-    ::comphelper::UStringMixEqual bCase(getDesignView()->getController()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual bCase(static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
 
-    ::std::vector<OTableFieldDesc*>::iterator aIter = getDesignView()->getController()->getTableFieldDesc()->begin();
-    for(;aIter != getDesignView()->getController()->getTableFieldDesc()->end();++aIter)
+    ::std::vector<OTableFieldDesc*>::iterator aIter = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->begin();
+    for(;aIter != static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end();++aIter)
     {
         pEntry = *aIter;
         ::rtl::OUString aField = pEntry->GetField();
@@ -1568,12 +1577,12 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDesc& rInfo, const EOrderDi
             if(!m_bOrderByUnRelated)
                 pEntry->SetVisible(sal_True);
             pEntry->SetOrderDir( eDir );
-            nPos = getDesignView()->getController()->getTableFieldDesc()->end() - aIter;
+            nPos = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end() - aIter;
             break;
         }
     }
 
-    if (aIter == getDesignView()->getController()->getTableFieldDesc()->end())
+    if (aIter == static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end())
     {
         OTableFieldDesc* pTmp = InsertField(rInfo, -1, sal_False, sal_False );
         if(pTmp)
@@ -1583,7 +1592,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDesc& rInfo, const EOrderDi
             pTmp->SetOrderDir( eDir );
         }
 
-        nPos = (sal_uInt16)( getDesignView()->getController()->getTableFieldDesc()->size()-1 );
+        nPos = (sal_uInt16)( static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size()-1 );
     }
 }
 
@@ -1611,7 +1620,7 @@ void OSelectionBrowseBox::CellModified()
     {
         case BROW_VIS_ROW:
             {
-                OTableFieldDesc*    pEntry = (*getDesignView()->getController()->getTableFieldDesc())[GetCurColumnId() - 1];
+                OTableFieldDesc*    pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[GetCurColumnId() - 1];
                 sal_uInt16 nIdx = m_pOrderCell->GetSelectEntryPos();
                 if(!m_bOrderByUnRelated && nIdx > 0 && nIdx != sal_uInt16(-1))
                 {
@@ -1623,7 +1632,7 @@ void OSelectionBrowseBox::CellModified()
             }
             break;
     }
-    getDesignView()->getController()->setModified();
+    static_cast<OQueryController*>(getDesignView()->getController())->setModified();
 }
 
 //------------------------------------------------------------------------------
@@ -1657,7 +1666,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
 
             if (nRow < 0 && nColId > HANDLE_ID && IsColumnSelected(nColId) )
             {
-                if (!getDesignView()->getController()->isReadOnly())
+                if (!static_cast<OQueryController*>(getDesignView()->getController())->isReadOnly())
                 {
                     PopupMenu aContextMenu(ModuleRes(RID_QUERYCOLPOPUPMENU));
                     switch (aContextMenu.Execute(this, aPoint))
@@ -1670,36 +1679,36 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
             }
             else if(nRow >= 0 && nColId <= HANDLE_ID)
             {
-                if (!getDesignView()->getController()->isReadOnly())
+                if (!static_cast<OQueryController*>(getDesignView()->getController())->isReadOnly())
                 {
                     PopupMenu aContextMenu(ModuleRes(RID_QUERYFUNCTION_POPUPMENU));
                     aContextMenu.CheckItem( ID_QUERY_FUNCTION, m_bVisibleRow[BROW_FUNCTION_ROW]);
                     aContextMenu.CheckItem( ID_QUERY_TABLENAME, m_bVisibleRow[BROW_TABLE_ROW]);
                     aContextMenu.CheckItem( ID_QUERY_ALIASNAME, m_bVisibleRow[BROW_COLUMNALIAS_ROW]);
-                    aContextMenu.CheckItem( ID_QUERY_DISTINCT, getDesignView()->getController()->isDistinct());
+                    aContextMenu.CheckItem( ID_QUERY_DISTINCT, static_cast<OQueryController*>(getDesignView()->getController())->isDistinct());
 
                     switch (aContextMenu.Execute(this, aPoint))
                     {
                         case ID_QUERY_FUNCTION:
                             SetRowVisible(BROW_FUNCTION_ROW, !IsRowVisible(BROW_FUNCTION_ROW));
-                            getDesignView()->getController()->InvalidateFeature( ID_BROWSER_QUERY_VIEW_FUNCTIONS );
+                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_VIEW_FUNCTIONS );
                             break;
                         case ID_QUERY_TABLENAME:
                             SetRowVisible(BROW_TABLE_ROW, !IsRowVisible(BROW_TABLE_ROW));
-                            getDesignView()->getController()->InvalidateFeature( ID_BROWSER_QUERY_VIEW_TABLES );
+                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_VIEW_TABLES );
                             break;
                         case ID_QUERY_ALIASNAME:
                             SetRowVisible(BROW_COLUMNALIAS_ROW, !IsRowVisible(BROW_COLUMNALIAS_ROW));
-                            getDesignView()->getController()->InvalidateFeature( ID_BROWSER_QUERY_VIEW_ALIASES );
+                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_VIEW_ALIASES );
                             break;
                         case ID_QUERY_DISTINCT:
-                            getDesignView()->getController()->setDistinct(!getDesignView()->getController()->isDistinct());
-                            getDesignView()->getController()->setModified();
-                            getDesignView()->getController()->InvalidateFeature( ID_BROWSER_QUERY_DISTINCT_VALUES );
+                            static_cast<OQueryController*>(getDesignView()->getController())->setDistinct(!static_cast<OQueryController*>(getDesignView()->getController())->isDistinct());
+                            static_cast<OQueryController*>(getDesignView()->getController())->setModified();
+                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_DISTINCT_VALUES );
                             break;
                     }
 
-                    getDesignView()->getController()->setModified();
+                    static_cast<OQueryController*>(getDesignView()->getController())->setModified();
                 }
             }
             else
@@ -1816,7 +1825,7 @@ void OSelectionBrowseBox::SetNoneVisbleRow(long nRows)
 String OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    OTableFieldDesc* pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColId-1];
+    OTableFieldDesc* pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[nColId-1];
     DBG_ASSERT(pEntry != NULL, "OSelectionBrowseBox::GetCellText : invalid column id, prepare for GPF ... ");
     if(pEntry->IsEmpty())
         return String();
@@ -1900,7 +1909,7 @@ String OSelectionBrowseBox::GetCellContents(sal_uInt16 nCellIndex, long nColId)
     DBG_ASSERT(nCellIndex < (GetRowCount()-1),"CellIndex ist zu gross");
     SaveModified();
 
-    OTableFieldDesc* pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColId - 1];
+    OTableFieldDesc* pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[nColId - 1];
     DBG_ASSERT(pEntry != NULL, "OSelectionBrowseBox::GetCellContents : invalid column id, prepare for GPF ... ");
 
 
@@ -1929,7 +1938,7 @@ void OSelectionBrowseBox::SetCellContents(sal_uInt16 nRow, long nColId, const St
     if (bWasEditing)
         DeactivateCell();
 
-    OTableFieldDesc* pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColId - 1];
+    OTableFieldDesc* pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[nColId - 1];
     DBG_ASSERT(pEntry != NULL, "OSelectionBrowseBox::SetCellContents : invalid column id, prepare for GPF ... ");
 
     long nCellIndex = GetRealRow(nRow);
@@ -1974,13 +1983,13 @@ void OSelectionBrowseBox::SetCellContents(sal_uInt16 nRow, long nColId, const St
     if (bWasEditing)
         ActivateCell(nCellIndex, nColId);
 
-    getDesignView()->getController()->setModified();
+    static_cast<OQueryController*>(getDesignView()->getController())->setModified();
 }
 //------------------------------------------------------------------------------
 sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(long nRow, sal_uInt16 nColId) const
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    OTableFieldDesc* pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColId-1];
+    OTableFieldDesc* pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[nColId-1];
     if (!pEntry)
         return DEFAULT_SIZE;
 
@@ -1994,17 +2003,17 @@ sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(long nRow, sal_uInt16 nColId) 
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
 {
-    if (getDesignView()->getController()->isReadOnly())
+    if (static_cast<OQueryController*>(getDesignView()->getController())->isReadOnly())
         return;
     // The resizing of columns can't be suppressed (BrowseBox doesn't support that) so we have to do this
     // fake. It's not _that_ bad : the user may change column widths while in read-only mode to see all details
     // but the changes aren't permanent ...
 
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT(nColId <= getDesignView()->getController()->getTableFieldDesc()->size(),"ColumnResized:: nColId sollte nicht groesser als List::count sein!");
-    OTableFieldDesc* pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColId-1];
+    DBG_ASSERT(nColId <= static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size(),"ColumnResized:: nColId sollte nicht groesser als List::count sein!");
+    OTableFieldDesc* pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[nColId-1];
     DBG_ASSERT(pEntry, "OSelectionBrowseBox::ColumnResized : keine FieldDescription !");
-    getDesignView()->getController()->setModified();
+    static_cast<OQueryController*>(getDesignView()->getController())->setModified();
     DbBrowseBox::ColumnResized(nColId);
 
     if (pEntry)
@@ -2012,7 +2021,7 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
         OTabFieldSizedUndoAct* pUndo = new OTabFieldSizedUndoAct(this);
         pUndo->SetColId(nColId);
         pUndo->SetOriginalWidth(pEntry->GetColWidth());
-        getDesignView()->getController()->getUndoMgr()->AddUndoAction(pUndo);
+        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction(pUndo);
         pEntry->SetColWidth(sal_uInt16(GetColumnWidth(nColId)));
     }
 }
@@ -2021,9 +2030,9 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
 sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(long nRowId, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT((nColId == 0) || (nColId <= getDesignView()->getController()->getTableFieldDesc()->size()), "OSelectionBrowseBox::GetTotalCellWidth : invalid parameter nColId");
+    DBG_ASSERT((nColId == 0) || (nColId <= static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size()), "OSelectionBrowseBox::GetTotalCellWidth : invalid parameter nColId");
 
-    OTableFieldDesc* pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColId-1];
+    OTableFieldDesc* pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[nColId-1];
     DBG_ASSERT(pEntry!=NULL, "OSelectionBrowseBox::GetTotalCellWidth : invalid FieldDescription !");
 
     long nRow = GetRealRow(nRowId);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,22 +177,22 @@ OTableWindow::~OTableWindow()
     DBG_DTOR(OTableWindow,NULL);
 }
 // -----------------------------------------------------------------------------
-const OQueryTableView* OTableWindow::getTableView() const
+const OJoinTableView* OTableWindow::getTableView() const
 {
-    OSL_ENSURE(static_cast<OQueryTableView*>(GetParent()),"No OQueryTableView!");
-    return static_cast<OQueryTableView*>(GetParent());
+    OSL_ENSURE(static_cast<OJoinTableView*>(GetParent()),"No OJoinTableView!");
+    return static_cast<OJoinTableView*>(GetParent());
 }
 // -----------------------------------------------------------------------------
-OQueryTableView* OTableWindow::getTableView()
+OJoinTableView* OTableWindow::getTableView()
 {
-    OSL_ENSURE(static_cast<OQueryTableView*>(GetParent()),"No OQueryTableView!");
-    return static_cast<OQueryTableView*>(GetParent());
+    OSL_ENSURE(static_cast<OJoinTableView*>(GetParent()),"No OJoinTableView!");
+    return static_cast<OJoinTableView*>(GetParent());
 }
 // -----------------------------------------------------------------------------
-OQueryDesignView* OTableWindow::getDesignView()
+OJoinDesignView* OTableWindow::getDesignView()
 {
-    OSL_ENSURE(static_cast<OQueryDesignView*>(GetParent()->GetParent()->GetParent()),"No OQueryDesignView!");
-    return static_cast<OQueryDesignView*>(GetParent()->GetParent()->GetParent());
+    OSL_ENSURE(static_cast<OJoinDesignView*>(GetParent()->GetParent()->GetParent()),"No OJoinDesignView!");
+    return static_cast<OJoinDesignView*>(GetParent()->GetParent()->GetParent());
 }
 //------------------------------------------------------------------------------
 void OTableWindow::SetPosPixel( const Point& rNewPos )
@@ -294,13 +294,13 @@ void OTableWindow::EmptyListBox()
 BOOL OTableWindow::Init()
 {
     // get the from the connection
-    OQueryDesignView* pParent = getDesignView();
+    OJoinDesignView* pParent = getDesignView();
     Reference<XConnection > xConnection = pParent->getController()->getConnection();
     Reference<XTablesSupplier> xSups(xConnection,UNO_QUERY);
     OSL_ENSURE(xSups.is(),"The connection isn't a tablessupplier!");
     Reference<XNameAccess> xTables = xSups->getTables();
 
-    ::rtl::OUString aName = GetTableName();
+    ::rtl::OUString aName = GetComposedName();
     if(!xTables->hasByName(aName))
         return FALSE;
 
@@ -396,7 +396,7 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
 {
     Window::MouseMove(rEvt);
 
-    OQueryTableView* pCont = getTableView();
+    OJoinTableView* pCont = getTableView();
     if (pCont->getDesignView()->getController()->isReadOnly())
         return;
 
@@ -469,7 +469,7 @@ void OTableWindow::Resize()
     // Modify Flag des Documents nicht beim ersten Resize setzen
     if( IsVisible() )
     {
-        OQueryTableView* pTabWinCont = getTableView();
+        OJoinTableView* pTabWinCont = getTableView();
 //      pTabWinCont->GetViewShell()->GetShell->SetModified( TRUE );
     }
 
@@ -536,7 +536,7 @@ void OTableWindow::Remove()
 {
     //////////////////////////////////////////////////////////////////
     // Fenster loeschen
-    OQueryTableView* pTabWinCont = getTableView();
+    OJoinTableView* pTabWinCont = getTableView();
     pTabWinCont->RemoveTabWin( this );
     pTabWinCont->Invalidate();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-06 13:19:38 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,17 @@ using namespace ::com::sun::star::lang;
 
 
 OQueryViewSwitch::OQueryViewSwitch(Window* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
-    :OQueryView(_pParent,_pController,_rFactory)
+    //  :OQueryView(_pParent,_pController,_rFactory)
 {
-    m_pTextView = new OQueryTextView(this,_pController,_rFactory);
-    m_pTextView->Show();
-    m_pDesignView = new OQueryDesignView(this,_pController,_rFactory);
+    ToolBox* pToolBox = new ToolBox(_pParent, ModuleRes(RID_BRW_QUERYDESIGN_TOOLBOX));
 
-    ToolBox* pToolBox = new ToolBox(this, ModuleRes(RID_BRW_QUERYDESIGN_TOOLBOX));
-    setToolBox(pToolBox);
+    m_pTextView     = new OQueryTextView(_pParent,pToolBox);
+    m_pDesignView   = new OQueryDesignView(_pParent,_pController,_rFactory);
+
+    m_pDesignView->setToolBox(pToolBox);
+    m_pTextView->Show();
+    pToolBox->SetParent(m_pTextView); // change owner ship
+    pToolBox->Show();
 
     if(pToolBox && m_pTextView->IsVisible())
     {
@@ -118,29 +121,32 @@ OQueryViewSwitch::OQueryViewSwitch(Window* _pParent, OQueryController* _pControl
 // -----------------------------------------------------------------------------
 OQueryViewSwitch::~OQueryViewSwitch()
 {
+    ToolBox* pToolBox = m_pDesignView->getToolBox();
+    pToolBox->SetParent(m_pDesignView); // change owner ship again to real owner
+
     delete m_pTextView;
-    delete m_pDesignView;
+    //  delete m_pDesignView; // will be deleted by XFrame
 }
 // -------------------------------------------------------------------------
 void OQueryViewSwitch::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
 {
-    OQueryView::Construct(xModel); // initialize m_xMe
+    m_pDesignView->Construct(xModel); // initialize the table view
+    //  OQueryView::Construct(xModel); // initialize m_xMe
     //  m_pTextView->Construct(xModel);
-    //  m_pDesignView->Construct(xModel);
+
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::initialize()
 {
-    m_pTextView->initialize();
     m_pDesignView->initialize();
-    if(getController()->isDesignMode())
+    if(static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode())
         switchView();
 }
 // -------------------------------------------------------------------------
 void OQueryViewSwitch::resizeControl(Rectangle& _rRect)
 {
     Size aToolBoxSize;
-    ToolBox* pToolBox = getToolBox();
+    ToolBox* pToolBox = m_pDesignView->getToolBox();
     if(pToolBox)
         aToolBoxSize = pToolBox->GetOutputSizePixel();
 
@@ -220,9 +226,10 @@ void OQueryViewSwitch::switchView()
 {
     m_pTextView->Show(!m_pTextView->IsVisible());
 
-    ToolBox* pToolBox = getToolBox();
+    ToolBox* pToolBox = m_pDesignView->getToolBox();
     if(pToolBox && m_pTextView->IsVisible())
     {
+        pToolBox->SetParent(m_pTextView); // change owner ship
         m_pDesignView->Show(FALSE);
         pToolBox->HideItem(ID_BROWSER_QUERY_DISTINCT_VALUES);
         pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_ALIASES);
@@ -235,10 +242,11 @@ void OQueryViewSwitch::switchView()
         //  ToolBoxItemType eType = pToolBox->GetItemType(pToolBox->GetItemPos(ID_BROWSER_SQL)+1);
         //  pToolBox->HideItem(pToolBox->GetItemId(pToolBox->GetItemPos(ID_BROWSER_SQL))+1); // hide the separator
         m_pTextView->clear();
-        m_pTextView->setStatement(getController()->getStatement());
+        m_pTextView->setStatement(static_cast<OQueryController*>(m_pDesignView->getController())->getStatement());
     }
     else if(pToolBox)
     {
+        pToolBox->SetParent(m_pDesignView); // change owner ship
         //  pToolBox->ShowItem(pToolBox->GetItemId(pToolBox->GetItemPos(ID_BROWSER_ADDTABLE)-1)); // hide the separator
         pToolBox->HideItem(ID_BROWSER_ESACPEPROCESSING);
         pToolBox->ShowItem(ID_BROWSER_ADDTABLE);
@@ -294,3 +302,15 @@ void OQueryViewSwitch::SaveUIConfig()
         m_pDesignView->SaveUIConfig();
 }
 // -----------------------------------------------------------------------------
+void OQueryViewSwitch::SetPosSizePixel( Point _rPt,Size _rSize)
+{
+    m_pDesignView->SetPosSizePixel( _rPt,_rSize);
+    m_pTextView->SetPosSizePixel( _rPt,_rSize);
+}
+// -----------------------------------------------------------------------------
+Reference< XMultiServiceFactory > OQueryViewSwitch::getORB() const
+{
+    return m_pDesignView->getORB();
+}
+// -----------------------------------------------------------------------------
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLine.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:23:23 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _INC_MATH
 #include <math.h>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 
 using namespace dbaui;
@@ -87,7 +90,7 @@ const long HIT_SENSITIVE_RADIUS = 5;
 //========================================================================
 // class OConnectionLine
 //========================================================================
-
+DBG_NAME(OConnectionLine);
 //------------------------------------------------------------------------
 OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineData* _pLineData )
     : m_pTabConn( _pConn )
@@ -95,6 +98,7 @@ OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineData*
      ,m_pSourceEntry( NULL )
      ,m_pDestEntry( NULL )
 {
+    DBG_CTOR(OConnectionLine,NULL);
 }
 
 //------------------------------------------------------------------------
@@ -104,6 +108,7 @@ OConnectionLine::OConnectionLine( OTableConnection* _pConn, const String& _rSour
      ,m_pSourceEntry( NULL )
      ,m_pDestEntry( NULL )
 {
+    DBG_CTOR(OConnectionLine,NULL);
     m_pData->SetSourceFieldName( _rSourceFieldName );
     m_pData->SetDestFieldName( _rDestFieldName );
 }
@@ -111,6 +116,7 @@ OConnectionLine::OConnectionLine( OTableConnection* _pConn, const String& _rSour
 //------------------------------------------------------------------------
 OConnectionLine::OConnectionLine( const OConnectionLine& _rLine )
 {
+    DBG_CTOR(OConnectionLine,NULL);
     m_pData = new OConnectionLineData( *_rLine.GetData() );
     *this = _rLine;
 }
@@ -118,6 +124,7 @@ OConnectionLine::OConnectionLine( const OConnectionLine& _rLine )
 //------------------------------------------------------------------------
 OConnectionLine::~OConnectionLine()
 {
+    DBG_DTOR(OConnectionLine,NULL);
 }
 
 //------------------------------------------------------------------------
@@ -330,7 +337,7 @@ BOOL OConnectionLine::RecalcLine()
 }
 
 //------------------------------------------------------------------------
-Rectangle OConnectionLine::GetSourceTextPos()
+Rectangle OConnectionLine::GetSourceTextPos() const
 {
     const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
     OTableWindowListBox* pListBox = pDestWin ? pDestWin->GetListBox() : NULL;
@@ -356,7 +363,7 @@ Rectangle OConnectionLine::GetSourceTextPos()
 }
 
 //------------------------------------------------------------------------
-Rectangle OConnectionLine::GetDestTextPos()
+Rectangle OConnectionLine::GetDestTextPos() const
 {
     const OTableWindow* pSourceWin = m_pTabConn->GetSourceWin();
     OTableWindowListBox* pListBox = pSourceWin ? pSourceWin->GetListBox() : NULL;
@@ -450,7 +457,8 @@ double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
     double l = (v.X() * w.Y() - v.Y() * w.X()) / a;
     double a2 = w.X()*v.X()+w.Y()*v.Y();
     a = a2 / (a * a);
-    q.X() = (long)p1.X() + a * v.X(); q.Y() = (long)p1.Y() + a * v.Y();
+    q.X() = long(p1.X() + a * v.X());
+    q.Y() = long(p1.Y() + a * v.Y());
     return l;
 }
 //------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 16:44:04 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
 #ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
 #endif
-#include "QueryDesignView.hxx"
+#ifndef DBAUI_JOINDESIGNVIEW_HXX
+#include "JoinDesignView.hxx"
+#endif
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
@@ -77,9 +79,9 @@
 #ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
 #endif
-#ifndef DBAUI_QUERY_TABLEWINDOWDATA_HXX
-#include "QTableWindowData.hxx"
-#endif
+//#ifndef DBAUI_QUERY_TABLEWINDOWDATA_HXX
+//#include "QTableWindowData.hxx"
+//#endif
 #ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #include "TableWindowListBox.hxx"
 #endif
@@ -110,7 +112,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
+#ifndef DBAUI_TABLEWINDOWDATA_HXX
+#include "TableWindowData.hxx"
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -204,7 +208,7 @@ TYPEINIT0(OJoinTableView);
 //const long WINDOW_HEIGHT = 1000;
 DBG_NAME(OJoinTableView);
 //------------------------------------------------------------------------------
-OJoinTableView::OJoinTableView( Window* pParent, OQueryDesignView* pView ) :
+OJoinTableView::OJoinTableView( Window* pParent, OJoinDesignView* pView ) :
      Window( pParent,WB_BORDER )
     ,m_pView( pView )
     ,m_pDragWin( NULL )
@@ -227,6 +231,21 @@ OJoinTableView::OJoinTableView( Window* pParent, OQueryDesignView* pView ) :
 OJoinTableView::~OJoinTableView()
 {
     DBG_DTOR(OJoinTableView,NULL);
+    //////////////////////////////////////////////////////////////////////
+    // Listen loeschen
+    OTableWindowMapIterator aIter = GetTabWinMap()->begin();
+    for(;aIter != GetTabWinMap()->end();++aIter)
+        delete aIter->second;
+
+    GetTabWinMap()->clear();
+
+    ::std::vector<OTableConnection*>::iterator aIter2 = GetTabConnList()->begin();
+    for(;aIter2 != GetTabConnList()->end();++aIter2)
+        delete *aIter2;
+
+    // den Undo-Manager des Dokuments leeren (da die UndoActions sich eventuell TabWins von mir halten, das gibt sonst eine
+    // Assertion in Window::~Window)
+    m_pView->getController()->getUndoMgr()->Clear();
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar )
@@ -365,9 +384,10 @@ BOOL OJoinTableView::RemoveConnection( OTableConnection* pConn )
     pConn->Invalidate();
         // damit der Bereich neu gezeichntet wird
 
-    m_pView->getController()->removeConnectionData( pConn->GetData() );
-    delete *(m_vTableConnection.erase( ::std::find(m_vTableConnection.begin(),m_vTableConnection.end(),pConn) ));
-
+    m_pView->getController()->removeConnectionData( ::std::auto_ptr<OTableConnectionData>(pConn->GetData()) );
+    m_vTableConnection.erase( ::std::find(m_vTableConnection.begin(),m_vTableConnection.end(),pConn) );
+    delete pConn;
+    pConn = NULL;
     return TRUE;
 }
 
@@ -377,7 +397,12 @@ OTableWindow* OJoinTableView::GetWindow( const String& rName )
     DBG_CHKTHIS(OJoinTableView,NULL);
     return m_aTableMap[rName];
 }
-
+// -----------------------------------------------------------------------------
+OTableWindowData* OJoinTableView::CreateImpl(const ::rtl::OUString& _rComposedName,
+                                             const ::rtl::OUString& _rWinName)
+{
+    return new OTableWindowData( _rComposedName, _rWinName );
+}
 //------------------------------------------------------------------------------
 void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable)
 {
@@ -386,25 +411,32 @@ void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rt
 
     //////////////////////////////////////////////////////////////////
     // Neue Datenstruktur in DocShell eintragen
-    OQueryTableWindowData* pNewTabWinData = new OQueryTableWindowData( _rComposedName, rWinName,String() );
-    m_pView->getController()->getTableWindowData()->push_back( pNewTabWinData);
+    OTableWindowData* pNewTabWinData = CreateImpl( _rComposedName, rWinName );
+
 
     //////////////////////////////////////////////////////////////////
     // Neues Fenster in Fensterliste eintragen
     OTableWindow* pNewTabWin = new OTableWindow( this, pNewTabWinData );
-    pNewTabWin->Init();
+    if(pNewTabWin->Init())
+    {
+        m_pView->getController()->getTableWindowData()->push_back( pNewTabWinData);
+        // when we already have a table with this name insert the full qualified one instead
+        if(m_aTableMap.find(rWinName) != m_aTableMap.end())
+            m_aTableMap[_rComposedName] = pNewTabWin;
+        else
+            m_aTableMap[rWinName] = pNewTabWin;
 
-    // when we already have a table with this name insert the full qualified one instead
-    if(m_aTableMap.find(rWinName) != m_aTableMap.end())
-        m_aTableMap[_rComposedName] = pNewTabWin;
+        SetDefaultTabWinPosSize( pNewTabWin );
+        pNewTabWin->Show();
+
+        m_pView->getController()->setModified( sal_True );
+        m_pView->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
+    }
     else
-        m_aTableMap[rWinName] = pNewTabWin;
-
-    SetDefaultTabWinPosSize( pNewTabWin );
-    pNewTabWin->Show();
-
-    m_pView->getController()->setModified( sal_True );
-    m_pView->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
+    {
+        delete pNewTabWinData;
+        delete pNewTabWin;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1088,7 +1120,7 @@ void OJoinTableView::ClearAll()
     ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
     for(;aIter != m_vTableConnection.end();++aIter)
     {
-        OTableConnectionData* pData = (*aIter)->GetData();
+        ::std::auto_ptr<OTableConnectionData> pData((*aIter)->GetData());
         m_pView->getController()->removeConnectionData(pData);
         delete (*aIter);
     }

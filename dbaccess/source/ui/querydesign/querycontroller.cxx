@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,26 +229,21 @@ Reference< XInterface > SAL_CALL OQueryController::Create(const Reference<XMulti
     return *(new OQueryController(_rxFactory));
 }
 // -----------------------------------------------------------------------------
-OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM) : OGenericUnoController(_rM)
-    ,m_bEditable(sal_True)
+OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM)
+        : OJoinController(_rM)
     ,m_bDesign(sal_False)
     ,m_bDistinct(sal_False)
     ,m_bViewAlias(sal_False)
     ,m_bViewTable(sal_False)
     ,m_bViewFunction(sal_False)
-    ,m_bModified(sal_False)
     ,m_bEsacpeProcessing(sal_True)
-    ,m_bOwnConnection(sal_False)
-    ,m_pAddTabDlg(NULL)
     ,m_pSqlIterator(NULL)
-    ,m_aZoom(1,1)
     ,m_nSplitPos(-1)
     ,m_nVisibleRows(0x400)
 {
     m_pParseContext = new OQueryParseContext();
     m_pSqlParser    = new OSQLParser(_rM,m_pParseContext);
     InvalidateAll();
-
 }
 // -----------------------------------------------------------------------------
 OQueryController::~OQueryController()
@@ -257,10 +252,6 @@ OQueryController::~OQueryController()
 // -----------------------------------------------------------------------------
 void OQueryController::dispose()
 {
-    OGenericUnoController::dispose();
-    m_pAddTabDlg = NULL;
-    delete m_pView;
-
     if(m_pSqlIterator)
     {
         delete m_pSqlIterator->getParseTree();
@@ -272,18 +263,6 @@ void OQueryController::dispose()
     delete m_pParseContext;
 
     {
-        ::std::vector< OTableConnectionData*>::iterator aIter = m_vTableConnectionData.begin();
-        for(;aIter != m_vTableConnectionData.end();++aIter)
-            delete *aIter;
-        m_vTableConnectionData.clear();
-    }
-    {
-        ::std::vector< OTableWindowData*>::iterator aIter = m_vTableData.begin();
-        for(;aIter != m_vTableData.end();++aIter)
-            delete *aIter;
-        m_vTableData.clear();
-    }
-    {
         ::std::vector< OTableFieldDesc*>::iterator aIter = m_vTableFieldDesc.begin();
         for(;aIter != m_vTableFieldDesc.end();++aIter)
             delete *aIter;
@@ -294,18 +273,7 @@ void OQueryController::dispose()
     m_pWindow   = NULL; // don't delete this window it will be deleted by the frame
 
     ::comphelper::disposeComponent(m_xComposer);
-    if(m_bOwnConnection)
-    {
-        // we have to remove ourself before dispoing the connection
-        Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-        if (xComponent.is())
-        {
-            Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-            xComponent->removeEventListener(xEvtL);
-        }
-        ::comphelper::disposeComponent(m_xConnection);
-    }
-    m_xConnection = NULL;
+    OJoinController::dispose();
 }
 // -----------------------------------------------------------------------------
 FeatureState OQueryController::GetState(sal_uInt16 _nId)
@@ -343,21 +311,9 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
         case ID_BROWSER_PASTE:
             aReturn.bEnabled = m_bEditable;
             break;
-        case ID_BROWSER_UNDO:
-            aReturn.bEnabled = m_bEditable && m_aUndoManager.GetUndoActionCount() != 0;
-            break;
-        case ID_BROWSER_REDO:
-            aReturn.bEnabled = m_bEditable && m_aUndoManager.GetRedoActionCount() != 0;
-            break;
         case ID_BROWSER_SQL:
             aReturn.bEnabled = m_bEsacpeProcessing;
             aReturn.aState = ::cppu::bool2any(m_bDesign);
-            break;
-        case ID_BROWSER_ADDTABLE:
-            if(aReturn.bEnabled = static_cast<OQueryViewSwitch*>(getQueryView())->IsAddAllowed())
-                aReturn.aState = ::cppu::bool2any(m_pAddTabDlg && m_pAddTabDlg->IsVisible());
-            else
-                aReturn.aState = ::cppu::bool2any(sal_False);
             break;
         case ID_BROWSER_CLEAR_QUERY:
             aReturn.bEnabled = m_bEditable;
@@ -365,13 +321,16 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
         case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
         case ID_BROWSER_QUERY_VIEW_TABLES:
         case ID_BROWSER_QUERY_VIEW_ALIASES:
-            aReturn.aState = ::cppu::bool2any(static_cast<OQueryViewSwitch*>(getQueryView())->isSlotEnabled(_nId));
+            aReturn.aState = ::cppu::bool2any(m_pWindow->getView()->isSlotEnabled(_nId));
             break;
         case ID_BROWSER_QUERY_DISTINCT_VALUES:
             aReturn.aState = ::cppu::bool2any(m_bDistinct);
             break;
         case ID_BROWSER_QUERY_EXECUTE:
             aReturn.bEnabled = sal_True;
+            break;
+        default:
+            aReturn = OJoinController::GetState(_nId);
             break;
     }
     return aReturn;
@@ -471,7 +430,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
 
                             // now we save the layout information
                             //  create the output stream
-                            static_cast<OQueryViewSwitch*>(m_pView)->SaveUIConfig();
+                            m_pWindow->getView()->SaveUIConfig();
                             Sequence< sal_Int8 > aOutputSeq;
                             {
                                 Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
@@ -516,14 +475,6 @@ void OQueryController::Execute(sal_uInt16 _nId)
         case ID_BROWSER_PASTE:
             getQueryView()->paste();
             break;
-        case ID_BROWSER_UNDO:
-            m_aUndoManager.Undo();
-            InvalidateFeature(ID_BROWSER_REDO);
-            break;
-        case ID_BROWSER_REDO:
-            m_aUndoManager.Redo();
-            InvalidateFeature(ID_BROWSER_UNDO);
-            break;
         case ID_BROWSER_SQL:
             {
                 try
@@ -553,7 +504,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                             else
                             {
                                 const OSQLTables& xTabs = m_pSqlIterator->getTables();
-                                if( m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT && m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT_COUNT || xTabs.begin() != xTabs.end())
+                                if( m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT && m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT_COUNT || xTabs.begin() == xTabs.end())
                                 {
                                     ErrorBox aBox( getQueryView(), ModuleRes( ERR_QRY_NOSELECT ) );
                                     aBox.Execute();
@@ -567,7 +518,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                                             m_xConnection->getMetaData(),
                                                             &getParser()->getContext(),
                                                             sal_True,sal_True);
-                                    static_cast<OQueryViewSwitch*>(m_pView)->SaveUIConfig();
+                                    m_pWindow->getView()->SaveUIConfig();
                                     m_pWindow->switchView();
                                 }
                             }
@@ -591,14 +542,6 @@ void OQueryController::Execute(sal_uInt16 _nId)
                     InvalidateFeature(ID_BROWSER_ADDTABLE);
             }
             break;
-        case ID_BROWSER_ADDTABLE:
-            if(!m_pAddTabDlg)
-                m_pAddTabDlg = static_cast<OQueryViewSwitch*>(m_pView)->getAddTableDialog();
-            if(m_pAddTabDlg->IsVisible())
-                m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
-            else if(static_cast<OQueryViewSwitch*>(getQueryView())->IsAddAllowed())
-                m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
-            break;
         case ID_BROWSER_CLEAR_QUERY:
             getQueryView()->clear();
             m_sStatement = ::rtl::OUString();
@@ -609,7 +552,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
         case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
         case ID_BROWSER_QUERY_VIEW_TABLES:
         case ID_BROWSER_QUERY_VIEW_ALIASES:
-            static_cast<OQueryViewSwitch*>(getQueryView())->setSlotEnabled(_nId,!static_cast<OQueryViewSwitch*>(getQueryView())->isSlotEnabled(_nId));
+            m_pWindow->getView()->setSlotEnabled(_nId,!m_pWindow->getView()->isSlotEnabled(_nId));
             break;
         case ID_BROWSER_QUERY_DISTINCT_VALUES:
             m_bDistinct = !m_bDistinct;
@@ -728,6 +671,9 @@ void OQueryController::Execute(sal_uInt16 _nId)
 //              static_cast<OQueryViewSwitch*>(getQueryView())->zoomTableView(m_aZoom);
             }
             break;
+        default:
+            OJoinController::Execute(_nId);
+            return; // else we would invalidate twice
     }
     InvalidateFeature(_nId);
 }
@@ -861,7 +807,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                 OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
             }
         }
-        getView()->initialize();
+        m_pWindow->getView()->initialize();
         getUndoMgr()->Clear();
         if(m_bDesign)
             Execute(ID_BROWSER_ADDTABLE);
@@ -912,7 +858,7 @@ sal_Bool OQueryController::Construct(Window* pParent)
     //  OQueryTextView *pView = new OQueryTextView(pParent,this,m_xMultiServiceFacatory);
     m_pWindow->getView()->Construct(NULL);
     //  m_pView  = pView;
-    m_pView  = m_pWindow->getView();
+    m_pView  = m_pWindow->getView()->getRealView();
     OGenericUnoController::Construct(pParent);
     //  getView()->Show();
     m_pWindow->Show();
@@ -976,67 +922,42 @@ ToolBox* OQueryController::CreateToolBox(Window* _pParent)
     return new ToolBox(_pParent, ModuleRes(RID_BRW_QUERYDESIGN_TOOLBOX));
 }
 // -----------------------------------------------------------------------------
-SfxUndoManager* OQueryController::getUndoMgr()
-{
-    return &m_aUndoManager;
-}
-// -----------------------------------------------------------------------------
 void OQueryController::setModified(sal_Bool _bModified)
 {
-    m_bModified = _bModified;
+    OJoinController::setModified(_bModified);
     InvalidateFeature(ID_BROWSER_CLEAR_QUERY);
-    InvalidateFeature(ID_BROWSER_SAVEDOC);
     InvalidateFeature(ID_BROWSER_SAVEASDOC);
     InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    if(Reference<XConnection>(Source.Source,UNO_QUERY) == m_xConnection)
-    {
-        // our connection was disposed so we need a new one
-        createNewConnection(sal_True);
-    }
-    else if(Reference<XFrame>(Source.Source,UNO_QUERY).is())
+    if(Reference<XFrame>(Source.Source,UNO_QUERY).is())
     { // the beamer was closed so resize our window
         m_pWindow->hideBeamer();
     }
-}
-// -----------------------------------------------------------------------------
-void OQueryController::removeConnectionData(const OTableConnectionData* _pData)
-{
-    delete *(m_vTableConnectionData.erase( ::std::find(m_vTableConnectionData.begin(),m_vTableConnectionData.end(),_pData) ));
+    else
+        OJoinController::disposing(Source);
 }
 // -----------------------------------------------------------------------------
 void OQueryController::createNewConnection(sal_Bool _bUI)
 {
     ::comphelper::disposeComponent(m_xComposer);
-    m_xConnection = NULL;
-    m_bOwnConnection = sal_False;
-
-    if (!_bUI || (RET_YES == QueryBox(getView(),ModuleRes(QUERY_CONNECTION_LOST)).Execute()))
+    OJoinController::createNewConnection(_bUI);
+    if (m_xConnection.is())
     {
-        m_xConnection = connect(m_sDataSourceName);
-        if (m_bOwnConnection = m_xConnection.is())
-        {
-            // we hide the add table dialog because the tables in it are from the old connection
-            if(m_pAddTabDlg)
-                m_pAddTabDlg->Hide();
-            InvalidateFeature(ID_BROWSER_ADDTABLE);
-            setQueryComposer();
-        }
+        // we hide the add table dialog because the tables in it are from the old connection
+        if(m_pAddTabDlg)
+            m_pAddTabDlg->Hide();
+        InvalidateFeature(ID_BROWSER_ADDTABLE);
+        setQueryComposer();
     }
 }
 // -----------------------------------------------------------------------------
 void OQueryController::Save(const Reference< XObjectOutputStream>& _rxOut)
 {
+    OJoinController::Save(_rxOut);
     OStreamSection aSection(_rxOut.get());
-
-    // save all tablewindow data
-    _rxOut << (sal_Int32)m_vTableData.size();
-    ::std::vector< OTableWindowData*>::const_iterator aIter = m_vTableData.begin();
-    for(;aIter != m_vTableData.end();++aIter)
-        (*aIter)->Save(_rxOut);
 
     // some data
     _rxOut << m_nSplitPos;
@@ -1051,25 +972,10 @@ void OQueryController::Save(const Reference< XObjectOutputStream>& _rxOut)
 // -----------------------------------------------------------------------------
 void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
 {
+    OJoinController::Load(_rxIn);
     OStreamSection aSection(_rxIn.get());
     try
     {
-        //////////////////////////////////////////////////////////////////////
-        // Liste loeschen
-        ::std::vector< OTableWindowData*>::iterator aIter = m_vTableData.begin();
-        for(;aIter != m_vTableData.end();++aIter)
-            delete *aIter;
-        m_vTableData.clear();
-
-        sal_Int32 nCount = 0;
-        _rxIn >> nCount;
-        for(sal_Int32 i=0;i<nCount;++i)
-        {
-            OQueryTableWindowData* pData = new OQueryTableWindowData();
-            pData->Load(_rxIn);
-            m_vTableData.push_back(pData);
-        }
-
         // some data
         _rxIn >> m_nSplitPos;
         _rxIn >> m_nVisibleRows;
@@ -1081,7 +987,7 @@ void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
             delete *aFieldIter;
         m_vTableFieldDesc.clear();
 
-        nCount = 0;
+        sal_Int32 nCount = 0;
         _rxIn >> nCount;
         for(sal_Int32 j=0;j<nCount;++j)
         {
@@ -1092,41 +998,6 @@ void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
     }
     catch(Exception&)
     {
-    }
-}
-// -----------------------------------------------------------------------------
-void OQueryController::SaveTabWinPosSize(OQueryTableWindow* pTabWin, long nOffsetX, long nOffsetY)
-{
-    // die Daten zum Fenster
-    OTableWindowData* pData = pTabWin->GetData();
-    DBG_ASSERT(pData != NULL, "SbaQueryDocSh::SaveTabWinPosSize : TabWin hat keine Daten !");
-
-    // Position & Size der Daten neu setzen (aus den aktuellen Fenster-Parametern)
-    Point aPos = pTabWin->GetPosPixel();
-    aPos.X() += nOffsetX;
-    aPos.Y() += nOffsetY;
-    pData->SetPosition(aPos);
-    pData->SetSize(pTabWin->GetSizePixel());
-
-}
-// -----------------------------------------------------------------------------
-void OQueryController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY )
-{
-    // Das Loeschen und Neuanlegen der alten Implementation ist unter dem aktuellen Modell nicht mehr richtig : Die TabWins
-    // habe einen Zeiger auf ihre Daten, verwaltet werden sie aber von mir. Wenn ich die alten loesche, haben die TabWins
-    // ploetzlich Zeiger auf nicht mehr existente Objekte.
-    // Wenn die TabWins ein SetData haetten, koennte ich mir das sparen ... haben sie aber nicht, ausserdem muesste ich dann immer
-    // noch Informationen, die sich eigentlich nicht geaendert haben, auch neu setzen.
-    // Also loesche ich die TabWinDatas nicht, sondern aktualisiere sie nur.
-    DBG_ASSERT(m_vTableData.size() == pTabWinList->size(),
-        "SbaQueryDocSh::SaveTabWinsPosSize : inkonsistenter Zustand : sollte genausviel TabWinDatas haben wie TabWins !");
-
-    OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->begin();
-    OQueryTableWindow* pTabWinLoop;// = (QueryTabWin*)pTabWinList->First();
-    for(;aIter != pTabWinList->end();++aIter)
-    {
-        pTabWinLoop = static_cast<OQueryTableWindow*>(aIter->second);
-        SaveTabWinPosSize(pTabWinLoop, nOffsetX, nOffsetY);
     }
 }
 // -----------------------------------------------------------------------------

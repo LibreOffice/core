@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ void OTableWindowData::Load(const Reference<XObjectInputStream>& _rxIn)
     _rxIn >> m_aPosition.Y();
     _rxIn >> m_aSize.Width();
     _rxIn >> m_aSize.Height();
+    _rxIn >> m_bShowAll;
 }
 //------------------------------------------------------------------------------
 void OTableWindowData::Save(const Reference<XObjectOutputStream>& _rxOut)
@@ -147,4 +148,7 @@ void OTableWindowData::Save(const Reference<XObjectOutputStream>& _rxOut)
     _rxOut << m_aPosition.Y();
     _rxOut << m_aSize.Width();
     _rxOut << m_aSize.Height();
+    _rxOut << m_bShowAll;
 }
+// -----------------------------------------------------------------------------
+

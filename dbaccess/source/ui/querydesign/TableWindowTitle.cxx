@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@
 #ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #include "QueryDesignView.hxx"
 #endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
-#include "querycontroller.hxx"
+#ifndef DBAUI_JOINCONTROLLER_HXX
+#include "JoinController.hxx"
 #endif
 
 using namespace dbaui;
@@ -238,6 +238,7 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
                 (*aIter)->RecalcLines();
 
             pView->InvalidateConnections();
+            pView->getDesignView()->getController()->setModified(sal_True);
         }
         else
         {

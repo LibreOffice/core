@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:19:54 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,20 @@
 #ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 
 using namespace dbaui;
+DBG_NAME(OConnectionLineData);
 //==================================================================
 //class OConnectionLineData
 //==================================================================
 //------------------------------------------------------------------------
 OConnectionLineData::OConnectionLineData()
 {
+    DBG_CTOR(OConnectionLineData,NULL);
 }
 
 //------------------------------------------------------------------------
@@ -76,17 +82,20 @@ OConnectionLineData::OConnectionLineData( const ::rtl::OUString& rSourceFieldNam
     :m_aSourceFieldName( rSourceFieldName )
     ,m_aDestFieldName( rDestFieldName )
 {
+    DBG_CTOR(OConnectionLineData,NULL);
 }
 
 //------------------------------------------------------------------------
 OConnectionLineData::OConnectionLineData( const OConnectionLineData& rConnLineData )
 {
+    DBG_CTOR(OConnectionLineData,NULL);
     *this = rConnLineData;
 }
 
 //------------------------------------------------------------------------
 OConnectionLineData::~OConnectionLineData()
 {
+    DBG_DTOR(OConnectionLineData,NULL);
 }
 
 //------------------------------------------------------------------------

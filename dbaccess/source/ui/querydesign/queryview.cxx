@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryview.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:34:25 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
+#ifndef DBAUI_QUERYCONTROLLER_HXX
+#include "querycontroller.hxx"
+#endif
 
 
 using namespace dbaui;
@@ -77,8 +80,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
 OQueryView::OQueryView(Window* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
-    :ODataView(_pParent,_rFactory)
-    ,m_pController(_pController)
+    :OJoinDesignView(_pParent,_pController,_rFactory)
 {
 }
 // -----------------------------------------------------------------------------
@@ -88,12 +90,13 @@ OQueryView::~OQueryView()
 // -------------------------------------------------------------------------
 void OQueryView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
 {
-    ODataView::Construct(xModel); // initialize m_xMe
+    OJoinDesignView::Construct(xModel); // initialize m_xMe
 
 }
 // -------------------------------------------------------------------------
 void OQueryView::resizeControl(Rectangle& _rRect)
 {
+    OJoinDesignView::resizeControl(_rRect);
 }
 // -----------------------------------------------------------------------------
 

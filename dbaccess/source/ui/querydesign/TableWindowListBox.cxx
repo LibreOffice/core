@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,8 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
     // Liste durchiterieren
     SvTreeList* pTreeList = GetModel();
     SvLBoxEntry* pEntry = (SvLBoxEntry*)pTreeList->First();
-    OQueryDesignView* pView = m_pTabWin->getDesignView();
-    OQueryController* pController = pView->getController();
+    OJoinDesignView* pView = m_pTabWin->getDesignView();
+    OJoinController* pController = pView->getController();
     Reference<XDatabaseMetaData> xMeta = pController->getConnection()->getMetaData();
 
     BOOL bCase = xMeta->storesMixedCaseQuotedIdentifiers();

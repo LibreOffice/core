@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1363,7 +1363,6 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
 */
     };
 };
-
 QueryBox QUERY_DESIGN_SAVEMODIFIED
 {
     Buttons = WB_YES_NO_CANCEL ;

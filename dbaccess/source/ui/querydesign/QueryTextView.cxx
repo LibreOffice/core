@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:25:27 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef DBAUI_QUERYDESIGNVIEW_HXX
+#include "QueryDesignView.hxx"
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -106,7 +109,6 @@ OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController* 
     ,m_pBeamer(NULL)
 {
     m_pView = new OQueryViewSwitch(this,_pController,_rFactory);
-    m_pView->Show();
 
     m_pSplitter = new Splitter(this,WB_VSCROLL);
     m_pSplitter->Hide();
@@ -125,6 +127,7 @@ OQueryContainerWindow::~OQueryContainerWindow()
     m_xMe       = NULL;
     delete m_pBeamer;
     delete m_pSplitter;
+    delete m_pView;
 }
 // -----------------------------------------------------------------------------
 void OQueryContainerWindow::switchView()
@@ -170,7 +173,6 @@ void OQueryContainerWindow::Resize()
 
         Point aPos(0,aSplitPos.Y()+aSplitSize.Height());
         m_pView->SetPosSizePixel(aPos,Size( aSize.Width(), aSize.Height() - aSplitSize.Height() - aSplitPos.Y() ));
-
     }
 }
 // -----------------------------------------------------------------------------
@@ -209,7 +211,7 @@ void OQueryContainerWindow::showBeamer(const Reference<XFrame>& _xFrame)
 
 
     Size aSize = GetOutputSizePixel();
-    Size aBeamer(aSize.Width(),aSize.Height()*0.33);
+    Size aBeamer(aSize.Width(),sal_Int32(aSize.Height()*0.33));
 
     const long  nFrameHeight = LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
     Point aPos(0,aBeamer.Height()+nFrameHeight);
@@ -229,49 +231,39 @@ void OQueryContainerWindow::showBeamer(const Reference<XFrame>& _xFrame)
 
 // end of temp classes
 // -------------------------------------------------------------------------
-OQueryTextView::OQueryTextView(Window* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
-    :OQueryView(_pParent,_pController,_rFactory)
+OQueryTextView::OQueryTextView(Window* _pParent,ToolBox*    _pToolBox)
+    :Window(_pParent)
+    ,m_pToolBox(_pToolBox)
 {
     m_pEdit = new OSqlEdit(this);
     m_pEdit->ClearModifyFlag();
     m_pEdit->SaveValue();
     m_pEdit->Show();
     m_pEdit->GrabFocus();
-
-    ToolBox* pToolBox = getToolBox();
-    if(pToolBox)
-    {
-        pToolBox->HideItem(pToolBox->GetItemId(pToolBox->GetItemPos(ID_BROWSER_ADDTABLE)-1)); // hide the separator
-        pToolBox->HideItem(ID_BROWSER_ADDTABLE);
-        pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS);
-        pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_TABLES);
-        pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_ALIASES);
-        pToolBox->HideItem(ID_BROWSER_QUERY_DISTINCT_VALUES);
-    }
 }
 // -----------------------------------------------------------------------------
 OQueryTextView::~OQueryTextView()
 {
+    m_pToolBox = NULL;
     delete m_pEdit;
 }
 // -------------------------------------------------------------------------
 void OQueryTextView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
 {
-    OQueryView::Construct(xModel); // initialize m_xMe
-
 }
 // -------------------------------------------------------------------------
-void OQueryTextView::resizeControl(Rectangle& _rRect)
+void OQueryTextView::Resize()
 {
     Size aToolBoxSize;
-    ToolBox* pToolBox = getToolBox();
+    ToolBox* pToolBox = m_pToolBox;
     if(pToolBox)
         aToolBoxSize = pToolBox->GetOutputSizePixel();
-    Point aTopLeft(_rRect.TopLeft());
+
+    Size aSize = GetOutputSizePixel();
+    Point aTopLeft(0,0);
     aTopLeft.Y() += aToolBoxSize.Height();
-    m_pEdit->SetPosSizePixel(aTopLeft,Size(_rRect.getWidth(),_rRect.GetHeight()-aTopLeft.Y()));
-    aToolBoxSize.Width() += _rRect.getWidth();
-    _rRect.SetSize(aToolBoxSize);
+    m_pEdit->SetPosSizePixel(aTopLeft,Size(aSize.Width(),aSize.Height()-aTopLeft.Y()));
+    m_pToolBox->SetPosSizePixel(Point(0,0),Size(aSize.Width(),aToolBoxSize.Height()));
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OQueryTextView::getStatement()
@@ -286,8 +278,7 @@ void OQueryTextView::setReadOnly(sal_Bool _bReadOnly)
 // -----------------------------------------------------------------------------
 void OQueryTextView::clear()
 {
-
-    SfxUndoManager* pUndoMgr = getController()->getUndoMgr();
+    SfxUndoManager* pUndoMgr = static_cast<OQueryContainerWindow*>(GetParent())->getView()->getRealView()->getController()->getUndoMgr();
     OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( m_pEdit );
 
     pUndoAct->SetOriginalText( m_pEdit->GetText() );
@@ -317,13 +308,13 @@ void OQueryTextView::cut()
 {
     if(!m_pEdit->IsInAccelAct() )
         m_pEdit->Cut();
-    getController()->setModified(sal_True);
+    static_cast<OQueryContainerWindow*>(GetParent())->getView()->getRealView()->getController()->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OQueryTextView::paste()
 {
     if(!m_pEdit->IsInAccelAct() )
         m_pEdit->Paste();
-    getController()->setModified(sal_True);
+    static_cast<OQueryContainerWindow*>(GetParent())->getView()->getRealView()->getController()->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
+#endif
 #ifndef DBAUI_QUERY_TABLEWINDOW_HXX
 #include "QTableWindow.hxx"
 #endif
@@ -141,6 +143,9 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
+#ifndef DBAUI_QUERYDESIGNVIEW_HXX
+#include "QueryDesignView.hxx"
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -195,21 +200,6 @@ OQueryTableView::OQueryTableView( Window* pParent,OQueryDesignView* pView)
 OQueryTableView::~OQueryTableView()
 {
     DBG_DTOR(OQueryTableView,NULL);
-    //////////////////////////////////////////////////////////////////////
-    // Listen loeschen
-    OTableWindowMapIterator aIter = GetTabWinMap()->begin();
-    for(;aIter != GetTabWinMap()->end();++aIter)
-        delete aIter->second;
-
-    GetTabWinMap()->clear();
-
-    ::std::vector<OTableConnection*>::iterator aIter2 = GetTabConnList()->begin();
-    for(;aIter2 != GetTabConnList()->end();++aIter2)
-        delete *aIter2;
-
-    // den Undo-Manager des Dokuments leeren (da die UndoActions sich eventuell TabWins von mir halten, das gibt sonst eine
-    // Assertion in Window::~Window)
-    m_pView->getController()->getUndoMgr()->Clear();
 }
 
 //------------------------------------------------------------------------
@@ -387,7 +377,12 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
         pNewConn->Invalidate();
     }
 }
-
+// -----------------------------------------------------------------------------
+OTableWindowData* OQueryTableView::CreateImpl(const ::rtl::OUString& _rComposedName,
+                                             const ::rtl::OUString& _rWinName)
+{
+    return new OQueryTableWindowData( _rComposedName, _rWinName ,String());
+}
 //------------------------------------------------------------------------------
 void OQueryTableView::AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, sal_Bool bNewTable)
 {
@@ -832,7 +827,7 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
     DBG_ASSERT(pTabWin->ISA(OQueryTableWindow), "OQueryTableView::RemoveTabWin : Fenster sollte ein OQueryTableWindow sein !");
 
     // mein Parent brauche ich, da es vom Loeschen erfahren soll
-    OQueryDesignView* pParent = getDesignView();
+    OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
 
     SfxUndoManager* pUndoMgr = m_pView->getController()->getUndoMgr();
     pUndoMgr->EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
@@ -1082,7 +1077,7 @@ void OQueryTableView::InsertField(const OTableFieldDesc& rInfo)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     DBG_ASSERT(getDesignView() != NULL, "OQueryTableView::InsertField : habe kein Parent !");
-    getDesignView()->InsertField(rInfo);
+    static_cast<OQueryDesignView*>(getDesignView())->InsertField(rInfo);
 }
 
 //------------------------------------------------------------------------------
