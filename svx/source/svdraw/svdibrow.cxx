@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdibrow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:46:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
