@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ab $ $Date: 2001-12-13 09:09:45 $
+ *  last change: $Author: ab $ $Date: 2001-12-19 15:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const ContainerEvent&
         if( pLib )
         {
             USHORT nLibId = mpMgr->GetLibId( aName );
-            mpMgr->RemoveLib( nLibId );
+            mpMgr->RemoveLib( nLibId, FALSE );
         }
     }
     else
