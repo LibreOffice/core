@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-24 13:49:15 $
+ *  last change: $Author: dr $ $Date: 2001-07-26 10:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,11 +744,11 @@ void ImportExcel8::Dconref( void )
     UINT16  nR1, nR2;
     UINT8   nC1, nC2;
     String  aFileName, aTabName;
-    BOOL    bSelf;
+    BOOL    bSelf, bEnc;
 
     aIn >> nR1 >> nR2 >> nC1 >> nC2;
 
-    XclImpHelper::DecodeExternsheetUni( aIn, aFileName, aTabName, bSelf );
+    XclImpHelper::DecodeExternsheetUni( aIn, aFileName, aTabName, bSelf, bEnc );
 
     if( !aTabName.Len() )
     {
