@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:46:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,7 +978,7 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
             // writing the view data to the frame view (see bug #107803#).
             USHORT nSdPgNum = (nPgNum - 1) / 2;
             SdUnoDrawView* pUnoDrawView = static_cast<SdUnoDrawView*>(
-                pDrViewSh->GetSubController());
+                pDrViewSh->GetController());
             if (pUnoDrawView != NULL)
             {
                 ::com::sun::star::uno::Reference<
