@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:36:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 08:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,123 +578,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         break;
 
     case FN_INSERT_TABLE:
-        if( !rSh.GetTableFmt() && !(rSh.GetFrmType(0,TRUE) & FRMTYPE_FOOTNOTE))
-        {
-            SwView &rView = GetView(); // Da GetView() nach Shellwechsel nicht mehr geht
-            BOOL bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
-            BOOL bCallEndUndo = FALSE;
-
-            if( !pArgs && rSh.IsSelection() && !rSh.IsInClickToEdit() )
-            {
-                const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-                SwInsertTableOptions aInsTblOpts = pModOpt->GetInsTblFlags(bHTMLMode);
-
-                rSh.StartUndo(UNDO_INSTABLE);
-                bCallEndUndo = TRUE;
-
-                BOOL bInserted = rSh.TextToTable( aInsTblOpts, '\t', HORI_FULL );
-                rSh.EnterStdMode();
-                if (bInserted)
-                    rView.AutoCaption(TABLE_CAP);
-                rReq.Done();
-            }
-            else
-            {
-                USHORT nCols = 0;
-                USHORT nRows = 0;
-                SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
-                String aTableName, aAutoName;
-                SwTableAutoFmt* pTAFmt = 0;
-
-                if( pArgs && pArgs->Count() >= 2 )
-                {
-                    SFX_REQUEST_ARG( rReq, pName, SfxStringItem, FN_INSERT_TABLE, sal_False );
-                    SFX_REQUEST_ARG( rReq, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN, sal_False );
-                    SFX_REQUEST_ARG( rReq, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW, sal_False );
-                    SFX_REQUEST_ARG( rReq, pFlags, SfxInt32Item, FN_PARAM_1, sal_False );
-                    SFX_REQUEST_ARG( rReq, pAuto, SfxStringItem, FN_PARAM_2, sal_False );
-
-                    if ( pName )
-                        aTableName = pName->GetValue();
-                    if ( pCols )
-                        nCols = pCols->GetValue();
-                    if ( pRows )
-                        nRows = pRows->GetValue();
-                    if ( pAuto )
-                    {
-                        aAutoName = pAuto->GetValue();
-                        if ( aAutoName.Len() )
-                        {
-                            SwTableAutoFmtTbl aTableTbl;
-                            aTableTbl.Load();
-                            for ( USHORT n=0; n<aTableTbl.Count(); n++ )
-                            {
-                                if ( aTableTbl[n]->GetName() == aAutoName )
-                                {
-                                    pTAFmt = new SwTableAutoFmt( *aTableTbl[n] );
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if ( pFlags )
-                        aInsTblOpts.mnInsMode = (USHORT) pFlags->GetValue();
-                    else
-                    {
-                        const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-                        aInsTblOpts = pModOpt->GetInsTblFlags(bHTMLMode);
-                    }
-                }
-
-                if( !nCols || !nRows )
-                {
-                    //CHINA001 SwInsTableDlg *pDlg = new SwInsTableDlg(rView);
-                    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                    AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg( ResId(DLG_INSERT_TABLE), rView );
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-                    if( RET_OK == pDlg->Execute() )
-                    {
-                        pDlg->GetValues( aTableName, nRows, nCols, aInsTblOpts, aAutoName, pTAFmt );
-                    }
-                    else
-                        rReq.Ignore();
-                    delete pDlg;
-                }
-
-                if( nCols && nRows )
-                {
-                    // record before shell change
-                    rReq.AppendItem( SfxStringItem( FN_INSERT_TABLE, aTableName ) );
-                    if ( aAutoName.Len() )
-                        rReq.AppendItem( SfxStringItem( FN_PARAM_2, aAutoName ) );
-                    rReq.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_COLUMN, nCols ) );
-                    rReq.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_ROW, nRows ) );
-                    rReq.AppendItem( SfxInt32Item( FN_PARAM_1, (sal_Int32) aInsTblOpts.mnInsMode ) );
-                    rReq.Done();
-
-                    rSh.StartUndo(UNDO_INSTABLE);
-                    bCallEndUndo = TRUE;
-
-                    rSh.StartAllAction();
-                    if( rSh.HasSelection() )
-                        rSh.DelRight();
-
-                    rSh.InsertTable( aInsTblOpts, nRows, nCols, HORI_FULL, pTAFmt );
-                    rSh.MoveTable( fnTablePrev, fnTableStart );
-
-                    if( aTableName.Len() && !rSh.GetTblStyle( aTableName ) )
-                        rSh.GetTableFmt()->SetName( aTableName );
-
-                    rSh.EndAllAction();
-                    rView.AutoCaption(TABLE_CAP);
-                }
-                delete pTAFmt;
-            }
-            if( bCallEndUndo )
-                rSh.EndUndo(UNDO_INSTABLE); // wegen moegl. Shellwechsel
-        }
+        InsertTable( rReq );
         break;
 
     case FN_INSERT_FRAME_INTERACT_NOCOL:
