@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-19 16:28:20 $
+ *  last change: $Author: ssa $ $Date: 2002-02-15 08:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,13 @@ long SystemWindow::Notify( NotifyEvent& rNEvt )
     }
 
     return Window::Notify( rNEvt );
+}
+
+// -----------------------------------------------------------------------
+
+long SystemWindow::PreNotify( NotifyEvent& rNEvt )
+{
+    return Window::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------

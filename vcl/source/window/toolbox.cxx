@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-24 15:25:03 $
+ *  last change: $Author: ssa $ $Date: 2002-02-15 08:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4221,3 +4221,25 @@ void ToolBox::GetAccessObject( AccessObjectRef& rAcc ) const
 {
     rAcc = new AccessObject( (void*) this, ACCESS_TYPE_TOOLBOX );
 }
+
+// -----------------------------------------------------------------------
+
+void ToolBox::GetFocus()
+{
+    DockingWindow::GetFocus();
+}
+
+// -----------------------------------------------------------------------
+
+void ToolBox::LoseFocus()
+{
+    DockingWindow::LoseFocus();
+}
+
+// -----------------------------------------------------------------------
+
+void ToolBox::KeyInput( const KeyEvent& rKEvt )
+{
+    DockingWindow::KeyInput( rKEvt );
+}
+
