@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxGraphicObject.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:37:09 $
+ *  last change:$Date: 2004-01-05 19:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ public class SvxGraphicObject extends TestCase {
      */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xDrawDoc " );
-        xDrawDoc.dispose();
+        util.DesktopTools.closeDoc(xDrawDoc);
     }
 
     /**
