@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 12:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,7 @@ public:
     short TrueFrameDirection(const SwFrmFmt &rFlyFmt) const;
     short GetCurrentPageDirection() const;
     const SvxBrushItem* GetCurrentPageBgBrush() const;
-    const SvxBrushItem* TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const;
+    SvxBrushItem TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const;
     void OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd );
     void OutWW8FlyFrm( const SwFrmFmt& rFlyFrmFmt, const Point& rNdTopLeft );
     void OutFlyFrm(const SwCntntNode& rNode, const SwFrmFmt& rFmt);
