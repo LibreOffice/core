@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 08:45:22 $
+ *  last change: $Author: fs $ $Date: 2000-11-17 09:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,7 +707,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
     }
     aParam.searchString = strExpression;
     buildApplicationLocale(aParam.Locale);
-    TextSearch aLocalEngine(aParam);
+    ::utl::TextSearch aLocalEngine(aParam);
 #else
     SearchParam aParam(strExpression, m_bRegular ? SearchParam::SRCH_REGEXP : SearchParam::SRCH_LEVDIST, m_bCase, sal_False, sal_False);
     if (m_bLevenshtein)
