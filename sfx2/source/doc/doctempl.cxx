@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-04 09:28:29 $
+ *  last change: $Author: dv $ $Date: 2000-12-04 10:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ struct NamePair_Impl
 DECLARE_LIST( NameList_Impl, NamePair_Impl* );
 
 // ------------------------------------------------------------------------
-class SfxDocTemplate_Impl
+class SfxDocTemplate_Impl : public SvRefBase
 {
     Reference< XMultiServiceFactory >   mxFactory;
     ::osl::Mutex        maMutex;
@@ -343,6 +343,13 @@ public:
 
 SfxDocTemplate_Impl *gpTemplateData = 0;
 String  gaEmptyString;
+
+#ifndef SFX_DECL_DOCTEMPLATES_DEFINED
+#define SFX_DECL_DOCTEMPLATES_DEFINED
+SV_DECL_REF(SfxDocTemplate_Impl)
+#endif
+
+SV_IMPL_REF(SfxDocTemplate_Impl)
 
 //------------------------------------------------------------------------
 class OpenNotifier_Impl : public SfxListener
@@ -1975,8 +1982,10 @@ void SfxDocumentTemplates::Construct()
 //  verz"ogerter Aufbau der Verwaltungsdaten
 
 {
-    if ( !pImp )
-        pImp = new SfxDocTemplate_Impl;
+    if ( !gpTemplateData )
+        gpTemplateData = new SfxDocTemplate_Impl;
+
+    pImp = gpTemplateData;
 
     pImp->Construct( aDirs );
 }
@@ -1992,7 +2001,7 @@ SfxDocumentTemplates::~SfxDocumentTemplates()
 */
 
 {
-    delete pImp;
+    pImp = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -2301,7 +2310,6 @@ int RegionData_Impl::Compare( RegionData_Impl* pCompare,
 
 SfxDocTemplate_Impl::SfxDocTemplate_Impl()
 {
-    mnRefCount = 0;
     mbConstructed = sal_False;
 }
 
@@ -2315,6 +2323,8 @@ SfxDocTemplate_Impl::~SfxDocTemplate_Impl()
         delete pRegData;
         pRegData = maRegions.Next();
     }
+
+    gpTemplateData = NULL;
 }
 
 // -----------------------------------------------------------------------
