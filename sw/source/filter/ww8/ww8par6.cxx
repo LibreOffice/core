@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-22 14:24:59 $
+ *  last change: $Author: cmc $ $Date: 2002-05-28 13:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4162,7 +4162,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         case     19:
         case 0x8411:
             /*
-            #94672#
+            #94672# #99584#
             As part of an attempt to break my spirit ww 8+ formats can contain
             ww 7- lists. If they do and the list is part of the style, then
             when removing the list from a paragraph of that style there
@@ -4176,8 +4176,12 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
             if (pCollA[nAktColl].bHasBrokenWW6List && pPlcxMan)
             {
                 const BYTE *pIsZeroed = pPlcxMan->GetPapPLCF()->HasSprm(0x460B);
-                if (*pIsZeroed == 0)
-                    nPara +=aLR.GetTxtFirstLineOfst();
+                if (pIsZeroed && *pIsZeroed == 0)
+                {
+                    const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)
+                        pCollA[nAktColl].pFmt->GetAttr( RES_LR_SPACE );
+                    nPara -= rLR.GetTxtFirstLineOfst();
+                }
             }
 
             aLR.SetTxtFirstLineOfst( nPara );

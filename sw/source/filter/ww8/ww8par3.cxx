@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-24 16:48:25 $
+ *  last change: $Author: cmc $ $Date: 2002-05-28 13:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1676,14 +1676,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             required, some more details about that in
             ww8par6.cxx#SwWW8ImplReader::Read_LR
             */
-            SvxLRSpaceItem aLR;
-            if (pCollA[nAktColl].bHasBrokenWW6List)
-            {
-                const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)
-                    pCollA[nAktColl].pFmt->GetAttr( RES_LR_SPACE );
-                aLR.SetTxtFirstLineOfst(-rLR.GetTxtFirstLineOfst());
-            }
-            NewAttr( aLR );
+            NewAttr(SvxLRSpaceItem());
 
             nLFOPosition = USHRT_MAX;
         }
