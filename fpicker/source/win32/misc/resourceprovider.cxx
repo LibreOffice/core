@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-10 12:28:56 $
+ *  last change: $Author: tra $ $Date: 2001-08-24 07:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,14 @@
 
 #ifndef _RESOURCEPROVIDER_HXX_
 #include "resourceprovider.hxx"
+#endif
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 #ifndef _TOOLS_RESMGR_HXX
@@ -195,6 +203,8 @@ public:
     {
         String   aResString;
         OUString aResOUString;
+
+        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         try
         {
