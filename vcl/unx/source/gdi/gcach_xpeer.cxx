@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hdu $ $Date: 2001-10-10 13:51:42 $
+ *  last change: $Author: hdu $ $Date: 2001-11-19 15:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,14 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 
     mpDisplay = _pDisplay;
 
-    int nEnvAntiAlias = ~0;
+    int nEnvAntiAlias = 0;
     const char* pEnvAntiAlias = getenv( "SAL_ANTIALIAS_DISABLE" );
     if( pEnvAntiAlias )
+    {
         nEnvAntiAlias = atoi( pEnvAntiAlias );
-    if( nEnvAntiAlias == 0 )
-        return;
+        if( nEnvAntiAlias == 0 )
+            return;
+    }
 
     // we can do anti aliasing on the client side
     // when the display's visuals are suitable
@@ -107,12 +109,17 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     if( pXVisualInfo != NULL )
         XFree( pXVisualInfo );
 
-    if( (nEnvAntiAlias & 1) == 0 )
+    if( (nEnvAntiAlias & 1) != 0 )
         mbForcedAA = false;
 
     // but we prefer the hardware accelerated solution
     int nDummy;
     if( !XQueryExtension( mpDisplay, "RENDER", &nDummy, &nDummy, &nDummy ) )
+        return;
+
+    // #93033# disable XRENDER for now if XINERAMA is present
+    // TODO: enable it once an XRENDER version is happy with xinerama
+    if( XQueryExtension( mpDisplay, "XINERAMA", &nDummy, &nDummy, &nDummy ) )
         return;
 
     // we don't know if we are running on a system with xrender library
@@ -180,7 +187,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
             mbUsingXRender = true;
     }
 
-    if( (nEnvAntiAlias & 2) == 0 )
+    if( (nEnvAntiAlias & 2) != 0 )
         mbUsingXRender = false;
 }
 
