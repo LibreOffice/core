@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergetbl.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:25:08 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ czech ] = "Režim";
         Text[ hebrew ] = "Modus";
         Text[ hindi ] = "प्रकार ";
+        Text[ slovak ] = "Režim";
     };
     RadioButton RB_MERGE_PREV
     {
@@ -156,6 +157,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ czech ] = "Spojit s předchozí tabulkou";
         Text[ hebrew ] = "mit der ~vorherigen Tabelle verbinden";
         Text[ hindi ] = "~पिछले सारणी के साथ जोड़ो";
+        Text[ slovak ] = "Spojiť s ~predchádzajúcou tabuľkou";
     };
     RadioButton RB_MERGE_NEXT
     {
@@ -188,6 +190,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ czech ] = "Spojit s následující tabulkou";
         Text[ hebrew ] = "mit der ~nachfolgenden Tabelle verbinden";
         Text[ hindi ] = "~अगले सारणी के साथ जोड़ो";
+        Text[ slovak ] = "Spojiť s ~nasledujúcou tabuľkou";
     };
     Text[ english_us ] = "Merge Tables";
     Text[ portuguese ] = "Unir tabelas";
@@ -214,7 +217,10 @@ ModalDialog DLG_MERGE_TABLE
     Text[ czech ] = "Sloučit tabulky";
     Text[ hebrew ] = "Tabellen verbinden";
     Text[ hindi ] = "सारणियों को मिलाओ";
+    Text[ slovak ] = "Zlúčiť tabuľky";
 };
+
+
 
 
 
