@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:15:35 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,8 @@ ModalDialog DLG_DOC_TEMPLATE
     Text[ hindi ] = "नमूनें";
     Text[ slovak ] = "Šablóny";
 };
+
+
 
 
 
