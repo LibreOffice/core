@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-24 13:17:13 $
+ *  last change: $Author: ka $ $Date: 2001-09-26 14:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,18 +242,18 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
         if( pObj->ISA( SdrOle2Obj ) )
         {
-            const SvInPlaceObjectRef& rOldObjRef = ((SdrOle2Obj*)pObj)->GetObjRef();
+            const SvInPlaceObjectRef& rOldObjRef = static_cast< SdrOle2Obj* >( pObj )->GetObjRef();
 
             if( rOldObjRef.Is() )
                 pOLEDataHelper = new TransferableDataHelper( rOldObjRef->CreateTransferableSnapshot() );
         }
         else if( pObj->ISA( SdrGrafObj ) && !pSourceDoc->GetAnimationInfo( pObj ) )
         {
-            pGraphic = new Graphic( ( (SdrGrafObj*) pObj )->GetTransformedGraphic() );
+            pGraphic = new Graphic( static_cast< SdrGrafObj* >( pObj )->GetTransformedGraphic() );
         }
         else if( pObj->IsUnoObj() && FmFormInventor == pObj->GetObjInventor() && ( nIdent == (UINT16) OBJ_FM_BUTTON ) )
         {
-            SdrUnoObj* pUnoCtrl = (SdrUnoObj*) pObj;
+            SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >( pObj );
 
             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
             {
@@ -285,7 +285,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
         {
             const OutlinerParaObject* pPara;
 
-            if( pPara = ( (SdrTextObj*) pObj )->GetOutlinerParaObject() )
+            if( pPara = static_cast< SdrTextObj* >( pObj )->GetOutlinerParaObject() )
             {
                 const SvxFieldItem* pField;
 
@@ -295,7 +295,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
                     if( pData && pData->ISA( SvxURLField ) )
                     {
-                        const SvxURLField* pURL = (const SvxURLField*) pData;
+                        const SvxURLField* pURL = (SvxURLField*) pData;
 
                         pBookmark = new INetBookmark( pURL->GetURL(), pURL->GetRepresentation() );
                     }
@@ -303,7 +303,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
             }
         }
 
-        SdIMapInfo* pInfo = ( (SdDrawDocument*) pObj->GetModel() )->GetIMapInfo( (SdrObject*) pObj );
+        SdIMapInfo* pInfo = static_cast< SdDrawDocument* >( pObj->GetModel() )->GetIMapInfo( static_cast< SdrObject* >( pObj ) );
 
         if( pInfo )
             pImageMap = new ImageMap( pInfo->GetImageMap() );
@@ -397,6 +397,9 @@ void SdTransferable::AddSupportedFormats()
 {
     if( !bPageTransferable || bPageTransferablePersistent )
     {
+        if( !bLateInit )
+            CreateData();
+
         if( pOLEDataHelper )
         {
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
