@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 13:03:19 $
+#   last change: $Author: rt $ $Date: 2004-08-20 09:16:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,22 @@ TARGET := bridgetest_idl
 .INCLUDE: settings.mk
 .INCLUDE: target.mk
 
+ALLTAR: $(MISC)$/$(TARGET).cppumaker.done $(MISC)$/$(TARGET).javamaker.done
+
+$(MISC)$/$(TARGET).cppumaker.done: $(BIN)$/bridgetest.rdb
+    $(CPPUMAKER) -O$(INCCOM) -BUCR $< -X$(SOLARBINDIR)/types.rdb
+    $(TOUCH) $@
+
+$(MISC)$/$(TARGET).javamaker.done: $(BIN)$/bridgetest.rdb
+    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -X$(SOLARBINDIR)/types.rdb $<
+    $(TOUCH) $@
+
+$(BIN)$/bridgetest.rdb: bridgetest.idl
+    $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
+    + $(RM) $@
+    $(REGMERGE) $@ /UCR $(MISC)$/$(TARGET)$/bridgetest.urd
+
+.IF "$(GUI)" == "WNT"
 
 CLIMAKERFLAGS =
 .IF "$(debug)" != ""
@@ -76,23 +92,9 @@ ALLTAR: $(MISC)$/$(TARGET).cppumaker.done \
     $(MISC)$/$(TARGET).javamaker.done \
     $(BIN)$/cli_types_bridgetest.dll 
 
-$(MISC)$/$(TARGET).cppumaker.done: $(BIN)$/bridgetest.rdb
-    $(CPPUMAKER) -O$(INCCOM) -BUCR $< -X$(SOLARBINDIR)/types.rdb
+$(BIN)$/cli_types_bridgetest.dll: $(BIN)$/bridgetest.rdb
+    $(CLIMAKER) $(CLIMAKERFLAGS) --out $@ -r $(SOLARBINDIR)$/cli_types.dll \
+        -X $(SOLARBINDIR)$/types.rdb $< 
     $(TOUCH) $@
 
-$(MISC)$/$(TARGET).javamaker.done: $(BIN)$/bridgetest.rdb
-    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -X$(SOLARBINDIR)/types.rdb $<
-    $(TOUCH) $@
-
-$(BIN)$/cli_types_bridgetest.dll : $(BIN)$/bridgetest.rdb
-    $(CLIMAKER) $(CLIMAKERFLAGS) \
-        --out $@ \
-        -r $(SOLARBINDIR)$/cli_types.dll \
-        -X $(SOLARBINDIR)$/types.rdb \
-        $< 
-    $(TOUCH) $@
-
-$(BIN)$/bridgetest.rdb: bridgetest.idl
-    $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
-    + $(RM) $@
-    $(REGMERGE) $@ /UCR $(MISC)$/$(TARGET)$/bridgetest.urd
+.ENDIF # GUI, WNT
