@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,6 @@ Inflater::~Inflater()
     end();
 }
 void SAL_CALL Inflater::setInputSegment( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(RuntimeException)
 {
     sInBuffer = rBuffer;
     nOffset = nNewOffset;
@@ -118,7 +117,6 @@ void SAL_CALL Inflater::setInputSegment( const Sequence< sal_Int8 >& rBuffer, sa
 }
 
 void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
-        throw(RuntimeException)
 {
     sInBuffer = rBuffer;
     nOffset = 0;
@@ -126,7 +124,6 @@ void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
 }
 
 void SAL_CALL Inflater::setDictionarySegment( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(RuntimeException)
 {
     if (pStream == NULL)
     {
@@ -141,7 +138,6 @@ void SAL_CALL Inflater::setDictionarySegment( const Sequence< sal_Int8 >& rBuffe
 }
 
 void SAL_CALL Inflater::setDictionary( const Sequence< sal_Int8 >& rBuffer )
-        throw(RuntimeException)
 {
     if (pStream == NULL)
     {
@@ -152,36 +148,30 @@ void SAL_CALL Inflater::setDictionary( const Sequence< sal_Int8 >& rBuffer )
 }
 
 sal_Int32 SAL_CALL Inflater::getRemaining(  )
-        throw(RuntimeException)
 {
     return nLength;
 }
 
 sal_Bool SAL_CALL Inflater::needsInput(  )
-        throw(RuntimeException)
 {
     return nLength <=0;
 }
 
 sal_Bool SAL_CALL Inflater::needsDictionary(  )
-        throw(RuntimeException)
 {
     return bNeedDict;
 }
 
 void SAL_CALL Inflater::finish(  )
-        throw(RuntimeException)
 {
     bFinish = sal_True;
 }
 sal_Bool SAL_CALL Inflater::finished(  )
-        throw(RuntimeException)
 {
     return bFinished;
 }
 
 sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(RuntimeException)
 {
     if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
     {
@@ -191,31 +181,26 @@ sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sa
 }
 
 sal_Int32 SAL_CALL Inflater::doInflate( Sequence< sal_Int8 >& rBuffer )
-        throw(RuntimeException)
 {
     return doInflateBytes(rBuffer, 0, rBuffer.getLength());
 }
 
 sal_Int32 SAL_CALL Inflater::getAdler(  )
-        throw(RuntimeException)
 {
     return pStream->adler;
 }
 
 sal_Int32 SAL_CALL Inflater::getTotalIn(  )
-        throw(RuntimeException)
 {
     return pStream->total_in;
 }
 
 sal_Int32 SAL_CALL Inflater::getTotalOut(  )
-        throw(RuntimeException)
 {
     return pStream->total_out;
 }
 
 void SAL_CALL Inflater::reset(  )
-        throw(RuntimeException)
 {
     z_inflateReset(pStream);
     bFinish = bNeedDict = bFinished = sal_False;
@@ -223,7 +208,6 @@ void SAL_CALL Inflater::reset(  )
 }
 
 void SAL_CALL Inflater::end(  )
-        throw(RuntimeException)
 {
     if (pStream != NULL)
     {
