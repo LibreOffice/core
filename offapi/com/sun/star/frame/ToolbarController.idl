@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ToolbarController.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:22:47 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 18:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@
     <p>
 
     @see com::sun::star::frame::XDispatchProvider
+
+    @since OOo 2.0.0
  */
 
 service ToolbarController
