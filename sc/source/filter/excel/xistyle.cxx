@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:36:19 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,7 @@ void XclImpFont::GuessScriptType()
     mbAscii = true;
     mbCjk = mbCtl = false;
 
-    // #91658# find the script types for which the font contains characters
+    // #91658# #113783# find the script types for which the font contains characters
     if( SfxPrinter* pPrinter = GetPrinter() )
     {
         Font aFont( maData.maName, Size( 0, 10 ) );
@@ -449,13 +449,28 @@ void XclImpFont::GuessScriptType()
         pPrinter->SetFont( aFont );
         if( pPrinter->GetFontCharMap( aCharMap ) )
         {
-            mbCjk = (aCharMap.HasChar( 0x4E01 ) ||      // CJK unified ideographs
-                     aCharMap.HasChar( 0x7E01 ) ||      // CJK unified ideographs
-                     aCharMap.HasChar( 0xAC01 ) ||      // Hangul syllables
-                     aCharMap.HasChar( 0xCC01 ) ||      // Hangul syllables
-                     aCharMap.HasChar( 0xF901 ));       // CJK compatibility ideographs
-            mbCtl = false;  //! TODO
-            mbAscii = aCharMap.HasChar( 'A' ) || (!mbCjk && !mbCtl);
+            // #91658# CJK fonts
+            mbCjk = aCharMap.HasChar( 0x3041 ) ||   // 3040-309F: Hiragana
+                    aCharMap.HasChar( 0x30A1 ) ||   // 30A0-30FF: Katakana
+                    aCharMap.HasChar( 0x3111 ) ||   // 3100-312F: Bopomofo
+                    aCharMap.HasChar( 0x3131 ) ||   // 3130-318F: Hangul Compatibility Jamo
+                    aCharMap.HasChar( 0x3301 ) ||   // 3300-33FF: CJK Compatibility
+                    aCharMap.HasChar( 0x3401 ) ||   // 3400-4DBF: CJK Unified Ideographs Extension A
+                    aCharMap.HasChar( 0x4E01 ) ||   // 4E00-9FAF: CJK Unified Ideographs
+                    aCharMap.HasChar( 0x7E01 ) ||   // 4E00-9FAF: CJK unified ideographs
+                    aCharMap.HasChar( 0xA001 ) ||   // A001-A48F: Yi Syllables
+                    aCharMap.HasChar( 0xAC01 ) ||   // AC00-D7AF: Hangul Syllables
+                    aCharMap.HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
+                    aCharMap.HasChar( 0xF901 ) ||   // F900-FAFF: CJK Compatibility Ideographs
+                    aCharMap.HasChar( 0xFF71 );     // FF00-FFEF: Halfwidth/Fullwidth Forms
+            // #113783# CTL fonts
+            mbCtl = aCharMap.HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
+                    aCharMap.HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
+                    aCharMap.HasChar( 0x0721 ) ||   // 0700-074F: Syriac
+                    aCharMap.HasChar( 0xFB51 ) ||   // FB50-FDFF: Arabic Presentation Forms-A
+                    aCharMap.HasChar( 0xFE71 );     // FE70-FEFF: Arabic Presentation Forms-B
+            // Western fonts
+            mbAscii = (!mbCjk && !mbCtl) || aCharMap.HasChar( 'A' );
         }
     }
 }
@@ -1283,9 +1298,8 @@ void XclImpXF::SetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel )
 }
 
 void XclImpXF::ApplyPattern(
-        sal_uInt16 nFirstCol, sal_uInt16 nFirstRow,
-        sal_uInt16 nLastCol, sal_uInt16 nLastRow,
-        sal_uInt16 nTab, sal_uInt32 nForcedNumFmt )
+        USHORT nScCol1, USHORT nScRow1, USHORT nScCol2, USHORT nScRow2,
+        USHORT nScTab, sal_uInt32 nForcedNumFmt )
 {
     // force creation of cell style and hard formatting, do it here to have mpStyleSheet
     const ScPatternAttr& rPattern = CreatePattern();
@@ -1293,15 +1307,15 @@ void XclImpXF::ApplyPattern(
     // insert into document
     ScDocument& rDoc = GetDoc();
     if( IsCellXF() && mpStyleSheet )
-        rDoc.ApplyStyleAreaTab( nFirstCol, nFirstRow, nLastCol, nLastRow, nTab, *mpStyleSheet );
-    rDoc.ApplyPatternAreaTab( nFirstCol, nFirstRow, nLastCol, nLastRow, nTab, rPattern );
+        rDoc.ApplyStyleAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, *mpStyleSheet );
+    rDoc.ApplyPatternAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, rPattern );
 
     // #108770# apply special number format
     if( nForcedNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         ScPatternAttr aPattern( GetDoc().GetPool() );
         GetNumFmtBuffer().FillScFmtToItemSet( aPattern.GetItemSet(), nForcedNumFmt );
-        rDoc.ApplyPatternAreaTab( nFirstCol, nFirstRow, nLastCol, nLastRow, nTab, aPattern );
+        rDoc.ApplyPatternAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, aPattern );
     }
 }
 
@@ -1495,12 +1509,11 @@ bool XclImpXFBuffer::HasEscapement( sal_uInt32 nXFIndex ) const
 }
 
 void XclImpXFBuffer::ApplyPattern(
-        sal_uInt16 nFirstCol, sal_uInt16 nFirstRow,
-        sal_uInt16 nLastCol, sal_uInt16 nLastRow,
-        sal_uInt16 nTab, sal_uInt16 nXFIndex, sal_uInt32 nForcedNumFmt )
+        USHORT nScCol1, USHORT nScRow1, USHORT nScCol2, USHORT nScRow2,
+        USHORT nScTab, sal_uInt16 nXFIndex, sal_uInt32 nForcedNumFmt )
 {
     if( XclImpXF* pXF = GetXF( nXFIndex ) )
-        pXF->ApplyPattern( nFirstCol, nFirstRow, nLastCol, nLastRow, nTab, nForcedNumFmt );
+        pXF->ApplyPattern( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, nForcedNumFmt );
 }
 
 
@@ -1508,19 +1521,19 @@ void XclImpXFBuffer::ApplyPattern(
 
 IMPL_FIXEDMEMPOOL_NEWDEL( XclImpXFIndex, 100, 500 )
 
-bool XclImpXFIndex::Expand( sal_uInt16 nRow, sal_uInt32 nEncXFIndex )
+bool XclImpXFIndex::Expand( USHORT nScRow, sal_uInt32 nEncXFIndex )
 {
     if( mnEncXF != nEncXFIndex )
         return false;
 
-    if( mnLastRow + 1 == nRow )
+    if( mnScRow2 + 1 == nScRow )
     {
-        ++mnLastRow;
+        ++mnScRow2;
         return true;
     }
-    if( mnFirstRow && (mnFirstRow - 1 == nRow) )
+    if( mnScRow1 && (mnScRow1 - 1 == nScRow) )
     {
-        --mnFirstRow;
+        --mnScRow1;
         return true;
     }
 
@@ -1529,10 +1542,10 @@ bool XclImpXFIndex::Expand( sal_uInt16 nRow, sal_uInt32 nEncXFIndex )
 
 bool XclImpXFIndex::Expand( const XclImpXFIndex& rNextStyle )
 {
-    DBG_ASSERT( mnLastRow < rNextStyle.mnFirstRow, "XclImpXFIndex::Expand - rows out of order" );
-    if( (mnEncXF == rNextStyle.mnEncXF) && (mnLastRow + 1 == rNextStyle.mnFirstRow) )
+    DBG_ASSERT( mnScRow2 < rNextStyle.mnScRow1, "XclImpXFIndex::Expand - rows out of order" );
+    if( (mnEncXF == rNextStyle.mnEncXF) && (mnScRow2 + 1 == rNextStyle.mnScRow1) )
     {
-        mnLastRow = rNextStyle.mnLastRow;
+        mnScRow2 = rNextStyle.mnScRow2;
         return true;
     }
     return false;
@@ -1547,63 +1560,63 @@ void XclImpXFIndexColumn::SetDefaultXF( sal_uInt32 nEncXFIndex )
     DBG_ASSERT( maIndexList.Empty(), "Setting Default Column XF is not empty");
 
     // insert a complete row range with one insert.
-    maIndexList.Append( new XclImpXFIndex( 0, MAXROW, nEncXFIndex ));
+    maIndexList.Append( new XclImpXFIndex( 0, MAXROW, nEncXFIndex ) );
 }
 
 // ----------------------------------------------------------------------------
 
-void XclImpXFIndexColumn::SetXF( sal_uInt16 nRow, sal_uInt32 nEncXFIndex )
+void XclImpXFIndexColumn::SetXF( USHORT nScRow, sal_uInt32 nEncXFIndex )
 {
     XclImpXFIndex* pPrevStyle;
     XclImpXFIndex* pNextStyle;
     sal_uInt32 nNextIndex;
 
-    Find( pPrevStyle, pNextStyle, nNextIndex, nRow );
+    Find( pPrevStyle, pNextStyle, nNextIndex, nScRow );
 
     // previous range:
     // try to overwrite XF (if row is contained in) or try to expand range
     if( pPrevStyle )
     {
-        if( pPrevStyle->Contains( nRow ) )              // overwrite old XF
+        if( pPrevStyle->Contains( nScRow ) )        // overwrite old XF
         {
             if( nEncXFIndex == pPrevStyle->mnEncXF )
                 return;
 
-            sal_uInt16 nFirst = pPrevStyle->mnFirstRow;
-            sal_uInt16 nLast = pPrevStyle->mnLastRow;
+            USHORT nFirstScRow = pPrevStyle->mnScRow1;
+            USHORT nLastScRow = pPrevStyle->mnScRow2;
             sal_uInt32 nIndex = nNextIndex - 1;
             XclImpXFIndex* pThisStyle = pPrevStyle;
             pPrevStyle = nIndex ? maIndexList.GetObject( nIndex - 1 ) : NULL;
 
-            if( nFirst == nLast )                   // replace solely XF
+            if( nFirstScRow == nLastScRow )         // replace solely XF
             {
                 pThisStyle->mnEncXF = nEncXFIndex;
                 TryConcatPrev( nNextIndex );        // try to concat. next with this
                 TryConcatPrev( nIndex );            // try to concat. this with previous
             }
-            else if( nFirst == nRow )               // replace first XF
+            else if( nFirstScRow == nScRow )        // replace first XF
             {
-                ++(pThisStyle->mnFirstRow);
+                ++(pThisStyle->mnScRow1);
                 // try to concatenate with previous of this
-                if( !pPrevStyle || !pPrevStyle->Expand( nRow, nEncXFIndex ) )
-                    maIndexList.Insert( new XclImpXFIndex( nRow, nEncXFIndex ), nIndex );
+                if( !pPrevStyle || !pPrevStyle->Expand( nScRow, nEncXFIndex ) )
+                    maIndexList.Insert( new XclImpXFIndex( nScRow, nEncXFIndex ), nIndex );
             }
-            else if( nLast == nRow )                // replace last XF
+            else if( nLastScRow == nScRow )         // replace last XF
             {
-                --(pThisStyle->mnLastRow);
-                if( !pNextStyle || !pNextStyle->Expand( nRow, nEncXFIndex ) )
-                    maIndexList.Insert( new XclImpXFIndex( nRow, nEncXFIndex ), nNextIndex );
+                --(pThisStyle->mnScRow2);
+                if( !pNextStyle || !pNextStyle->Expand( nScRow, nEncXFIndex ) )
+                    maIndexList.Insert( new XclImpXFIndex( nScRow, nEncXFIndex ), nNextIndex );
             }
             else                                    // insert in the middle of the range
             {
-                pThisStyle->mnFirstRow = nRow + 1;
+                pThisStyle->mnScRow1 = nScRow + 1;
                 // List::Insert() moves entries towards end of list, so insert twice at nIndex
-                maIndexList.Insert( new XclImpXFIndex( nRow, nEncXFIndex ), nIndex );
-                maIndexList.Insert( new XclImpXFIndex( nFirst, nRow - 1, pThisStyle->mnEncXF ), nIndex );
+                maIndexList.Insert( new XclImpXFIndex( nScRow, nEncXFIndex ), nIndex );
+                maIndexList.Insert( new XclImpXFIndex( nFirstScRow, nScRow - 1, pThisStyle->mnEncXF ), nIndex );
             }
             return;
         }
-        else if( pPrevStyle->Expand( nRow, nEncXFIndex ) ) // try to expand
+        else if( pPrevStyle->Expand( nScRow, nEncXFIndex ) )    // try to expand
         {
             TryConcatPrev( nNextIndex );    // try to concatenate next with expanded
             return;
@@ -1611,18 +1624,16 @@ void XclImpXFIndexColumn::SetXF( sal_uInt16 nRow, sal_uInt32 nEncXFIndex )
     }
 
     // try to expand next range
-    if( pNextStyle && pNextStyle->Expand( nRow, nEncXFIndex ) )
+    if( pNextStyle && pNextStyle->Expand( nScRow, nEncXFIndex ) )
         return;
 
     // create new range
-    maIndexList.Insert( new XclImpXFIndex( nRow, nEncXFIndex ), nNextIndex );
+    maIndexList.Insert( new XclImpXFIndex( nScRow, nEncXFIndex ), nNextIndex );
 }
 
 void XclImpXFIndexColumn::Find(
-        XclImpXFIndex*& rpPrevStyle,
-        XclImpXFIndex*& rpNextStyle,
-        sal_uInt32& rnNextIndex,
-        sal_uInt16 nRow ) const
+        XclImpXFIndex*& rpPrevStyle, XclImpXFIndex*& rpNextStyle,
+        sal_uInt32& rnNextIndex, USHORT nScRow ) const
 {
 
     // test whether list is empty
@@ -1638,7 +1649,7 @@ void XclImpXFIndexColumn::Find(
 
     // test whether row is at end of list (contained in or behind last range)
     // rpPrevStyle will contain a possible existing row
-    if( rpNextStyle->mnFirstRow <= nRow )
+    if( rpNextStyle->mnScRow1 <= nScRow )
     {
         rpPrevStyle = rpNextStyle;
         rpNextStyle = NULL;
@@ -1647,7 +1658,7 @@ void XclImpXFIndexColumn::Find(
     }
 
     // test whether row is at beginning of list (really before first range)
-    if( nRow < rpPrevStyle->mnFirstRow )
+    if( nScRow < rpPrevStyle->mnScRow1 )
     {
         rpNextStyle = rpPrevStyle;
         rpPrevStyle = NULL;
@@ -1657,17 +1668,17 @@ void XclImpXFIndexColumn::Find(
 
     // loop: find style entries before and after new row
     // break the loop if there is no more range between first and last -or-
-    // if rpPrevStyle contains nRow (rpNextStyle will never contain nRow)
+    // if rpPrevStyle contains nScRow (rpNextStyle will never contain nScRow)
     sal_uInt32 nPrevIndex = 0;
     sal_uInt32 nMidIndex;
     rnNextIndex = maIndexList.Count() - 1;
     XclImpXFIndex* pMidStyle;
-    while( ((rnNextIndex - nPrevIndex) > 1) && (rpPrevStyle->mnLastRow < nRow) )
+    while( ((rnNextIndex - nPrevIndex) > 1) && (rpPrevStyle->mnScRow2 < nScRow) )
     {
         nMidIndex = (nPrevIndex + rnNextIndex) / 2;
         pMidStyle = maIndexList.GetObject( nMidIndex );
         DBG_ASSERT( pMidStyle, "XclImpXFIndexColumn::Find - missing style" );
-        if( nRow < pMidStyle->mnFirstRow )   // row is really before pMidStyle
+        if( nScRow < pMidStyle->mnScRow1 )      // row is really before pMidStyle
         {
             rpNextStyle = pMidStyle;
             rnNextIndex = nMidIndex;
@@ -1679,8 +1690,8 @@ void XclImpXFIndexColumn::Find(
         }
     }
 
-    // find next rpNextStyle if rpPrevStyle contains nRow
-    if( nRow <= rpPrevStyle->mnLastRow )
+    // find next rpNextStyle if rpPrevStyle contains nScRow
+    if( nScRow <= rpPrevStyle->mnScRow2 )
     {
         rnNextIndex = nPrevIndex + 1;
         rpNextStyle = maIndexList.GetObject( rnNextIndex );
@@ -1713,8 +1724,7 @@ const sal_uInt32 EXC_XFBUFF_BOOLFLAG    = 0x00010000;
 
 XclImpXFIndexBuffer::XclImpXFIndexBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    mppColumns( new XclImpXFIndexColumnPtr[ EXC_XFBUFF_COLUMNS ] ),
-    mnUsedCount( 0 )
+    mppColumns( new XclImpXFIndexColumnPtr[ EXC_XFBUFF_COLUMNS ] )
 {
 }
 
@@ -1725,9 +1735,8 @@ XclImpXFIndexBuffer::~XclImpXFIndexBuffer()
 
 void XclImpXFIndexBuffer::Clear()
 {
-    for( sal_uInt32 nCol = 0; nCol < mnUsedCount; ++nCol )
-        mppColumns[ nCol ].reset();
-    mnUsedCount = 0;
+    for( sal_uInt32 nIndex = 0; nIndex < EXC_XFBUFF_COLUMNS; ++nIndex )
+        mppColumns[ nIndex ].reset();
 
     maMergeList.RemoveAll();
 }
@@ -1747,18 +1756,16 @@ void XclImpXFIndexBuffer::DecodeXFIndex( sal_uInt16& rnXFIndex, sal_uInt32& rnFo
     rnForcedNumFmt = ::get_flag( nEncXFIndex, EXC_XFBUFF_BOOLFLAG ) ? GetNumFmtBuffer().GetStandardFormat() : NUMBERFORMAT_ENTRY_NOT_FOUND;
 }
 
-void XclImpXFIndexBuffer::SetXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex, XclImpXFInsertMode eMode )
+void XclImpXFIndexBuffer::SetXF( USHORT nScCol, USHORT nScRow, sal_uInt16 nXFIndex, XclImpXFInsertMode eMode )
 {
-    DBG_ASSERT( (nCol <= MAXCOL) && (nRow <= MAXROW), "XclImpXFIndexBuffer::SetXF - out of range" );
+    DBG_ASSERT( (nScCol <= MAXCOL) && (nScRow <= MAXROW), "XclImpXFIndexBuffer::SetXF - out of range" );
     // #108770# remember all Boolean cells, they will get 'Standard' number format
     sal_uInt32 nEncXFIndex = EncodeXFIndex( nXFIndex, eMode );
 
     // set cell XF's
-    if( !mppColumns[ nCol ].get() )
-        mppColumns[ nCol ].reset( new XclImpXFIndexColumn );
-    if( nCol >= mnUsedCount )
-        mnUsedCount = nCol + 1;
-    mppColumns[ nCol ]->SetXF( nRow, nEncXFIndex );
+    if( !mppColumns[ nScCol ].get() )
+        mppColumns[ nScCol ].reset( new XclImpXFIndexColumn );
+    mppColumns[ nScCol ]->SetXF( nScRow, nEncXFIndex );
 
     // set "center across selection" attribute
     // #97130# ignore it on row default XFs
@@ -1769,91 +1776,88 @@ void XclImpXFIndexBuffer::SetXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nX
         {
             // expand last merged range if this attribute is set repeatedly
             ScRange* pRange = maMergeList.Last();
-            if( pRange && (pRange->aEnd.Row() == nRow) && (pRange->aEnd.Col() + 1 == nCol) && (eMode == xlXFModeBlank) )
+            if( pRange && (pRange->aEnd.Row() == nScRow) && (pRange->aEnd.Col() + 1 == nScCol) && (eMode == xlXFModeBlank) )
                 pRange->aEnd.IncCol();
             else if( eMode != xlXFModeBlank )   // #108781# do not merge empty cells
-                SetMerge( nCol, nRow );
+                SetMerge( nScCol, nScRow );
         }
     }
 }
 
-void XclImpXFIndexBuffer::SetXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex )
+void XclImpXFIndexBuffer::SetXF( USHORT nScCol, USHORT nScRow, sal_uInt16 nXFIndex )
 {
-    SetXF( nCol, nRow, nXFIndex, xlXFModeCell );
+    SetXF( nScCol, nScRow, nXFIndex, xlXFModeCell );
 }
 
-void XclImpXFIndexBuffer::SetBlankXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex )
+void XclImpXFIndexBuffer::SetBlankXF( USHORT nScCol, USHORT nScRow, sal_uInt16 nXFIndex )
 {
-    SetXF( nCol, nRow, nXFIndex, xlXFModeBlank );
+    SetXF( nScCol, nScRow, nXFIndex, xlXFModeBlank );
 }
 
-void XclImpXFIndexBuffer::SetBoolXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex )
+void XclImpXFIndexBuffer::SetBoolXF( USHORT nScCol, USHORT nScRow, sal_uInt16 nXFIndex )
 {
-    SetXF( nCol, nRow, nXFIndex, xlXFModeBoolCell );
+    SetXF( nScCol, nScRow, nXFIndex, xlXFModeBoolCell );
 }
 
-void XclImpXFIndexBuffer::SetRowDefXF( sal_uInt16 nRow, sal_uInt16 nXFIndex )
+void XclImpXFIndexBuffer::SetRowDefXF( USHORT nScRow, sal_uInt16 nXFIndex )
 {
-    for( sal_uInt16 nCol = 0; nCol <= MAXCOL; ++nCol )
-        SetXF( nCol, nRow, nXFIndex, xlXFModeRow );
+    for( USHORT nScCol = 0; nScCol <= MAXCOL; ++nScCol )
+        SetXF( nScCol, nScRow, nXFIndex, xlXFModeRow );
 }
 
-void XclImpXFIndexBuffer::SetColumnDefXF( sal_uInt16 nCol, sal_uInt16 nXFIndex )
+void XclImpXFIndexBuffer::SetColumnDefXF( USHORT nScCol, sal_uInt16 nXFIndex )
 {
     // our array should not have values when creating the default column format.
-    DBG_ASSERT( !mppColumns[ nCol ].get(), "Default Column of XFs already has values.");
-
-    mppColumns[ nCol ].reset( new XclImpXFIndexColumn );
-    if( nCol >= mnUsedCount )
-        mnUsedCount = nCol + 1;
-    mppColumns[ nCol ]->SetDefaultXF( nXFIndex );
+    DBG_ASSERT( !mppColumns[ nScCol ].get(), "XclImpXFIndexBuffer::SetColumnDefXF - default column of XFs already has values" );
+    mppColumns[ nScCol ].reset( new XclImpXFIndexColumn );
+    mppColumns[ nScCol ]->SetDefaultXF( nXFIndex );
 }
 
-void XclImpXFIndexBuffer::SetBorderLine( const ScRange& rRange, sal_uInt16 nTab, sal_uInt16 nLine )
+void XclImpXFIndexBuffer::SetBorderLine( const ScRange& rRange, USHORT nScTab, USHORT nLine )
 {
-    sal_uInt16 nFromCol = (nLine == BOX_LINE_RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();
-    sal_uInt16 nFromRow = (nLine == BOX_LINE_BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();
+    USHORT nFromScCol = (nLine == BOX_LINE_RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();
+    USHORT nFromScRow = (nLine == BOX_LINE_BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();
     ScDocument& rDoc = GetDoc();
 
     const SvxBoxItem* pFromItem = static_cast< const SvxBoxItem* >(
-        rDoc.GetAttr( nFromCol, nFromRow, nTab, ATTR_BORDER ) );
+        rDoc.GetAttr( nFromScCol, nFromScRow, nScTab, ATTR_BORDER ) );
     const SvxBoxItem* pToItem = static_cast< const SvxBoxItem* >(
-        rDoc.GetAttr( rRange.aStart.Col(), rRange.aStart.Row(), nTab, ATTR_BORDER ) );
+        rDoc.GetAttr( rRange.aStart.Col(), rRange.aStart.Row(), nScTab, ATTR_BORDER ) );
 
     SvxBoxItem aNewItem( *pToItem );
     aNewItem.SetLine( pFromItem->GetLine( nLine ), nLine );
-    rDoc.ApplyAttr( rRange.aStart.Col(), rRange.aStart.Row(), nTab, aNewItem );
+    rDoc.ApplyAttr( rRange.aStart.Col(), rRange.aStart.Row(), nScTab, aNewItem );
 }
 
-void XclImpXFIndexBuffer::SetMerge( sal_uInt16 nCol, sal_uInt16 nRow )
+void XclImpXFIndexBuffer::SetMerge( USHORT nScCol, USHORT nScRow )
 {
-    maMergeList.Append( ScRange( nCol, nRow, 0 ) );
+    maMergeList.Append( ScRange( nScCol, nScRow, 0 ) );
 }
 
-void XclImpXFIndexBuffer::SetMerge( sal_uInt16 nFirstCol, sal_uInt16 nFirstRow, sal_uInt16 nLastCol, sal_uInt16 nLastRow )
+void XclImpXFIndexBuffer::SetMerge( USHORT nScCol1, USHORT nScRow1, USHORT nScCol2, USHORT nScRow2 )
 {
-    maMergeList.Append( ScRange( nFirstCol, nFirstRow, 0, nLastCol, nLastRow, 0 ) );
+    maMergeList.Append( ScRange( nScCol1, nScRow1, 0, nScCol2, nScRow2, 0 ) );
 }
 
 void XclImpXFIndexBuffer::Apply()
 {
     ScDocument& rDoc = GetDoc();
-    sal_uInt16 nTab = GetScTab();
+    USHORT nScTab = GetCurrScTab();
 
     // apply patterns
     XclImpXFBuffer& rXFBuffer = GetXFBuffer();
     sal_uInt16 nXFIndex;
     sal_uInt32 nForcedNumFmt;
-    for( sal_uInt16 nCol = 0; nCol < mnUsedCount; ++nCol )
+    for( USHORT nScCol = 0; nScCol < EXC_XFBUFF_COLUMNS; ++nScCol )
     {
         // apply all cell styles of an existing column
-        if( mppColumns[ nCol ].get() )
+        if( mppColumns[ nScCol ].get() )
         {
-            XclImpXFIndexColumn& rColumn = *mppColumns[ nCol ];
+            XclImpXFIndexColumn& rColumn = *mppColumns[ nScCol ];
             for( XclImpXFIndex* pStyle = rColumn.First(); pStyle; pStyle = rColumn.Next() )
             {
                 DecodeXFIndex( nXFIndex, nForcedNumFmt, pStyle->mnEncXF );
-                rXFBuffer.ApplyPattern( nCol, pStyle->mnFirstRow, nCol, pStyle->mnLastRow, nTab, nXFIndex, nForcedNumFmt );
+                rXFBuffer.ApplyPattern( nScCol, pStyle->mnScRow1, nScCol, pStyle->mnScRow2, nScTab, nXFIndex, nForcedNumFmt );
             }
         }
     }
@@ -1865,13 +1869,13 @@ void XclImpXFIndexBuffer::Apply()
         bool bMultiRow = (pRange->aStart.Row() != pRange->aEnd.Row());
         // set correct right border
         if( bMultiCol )
-            SetBorderLine( *pRange, nTab, BOX_LINE_RIGHT );
+            SetBorderLine( *pRange, nScTab, BOX_LINE_RIGHT );
         // set correct lower border
         if( bMultiRow )
-            SetBorderLine( *pRange, nTab, BOX_LINE_BOTTOM );
+            SetBorderLine( *pRange, nScTab, BOX_LINE_BOTTOM );
         // do merge
         if( bMultiCol || bMultiRow )
-            rDoc.DoMerge( nTab, pRange->aStart.Col(), pRange->aStart.Row(),
+            rDoc.DoMerge( nScTab, pRange->aStart.Col(), pRange->aStart.Row(),
                 pRange->aEnd.Col(), pRange->aEnd.Row() );
     }
 
