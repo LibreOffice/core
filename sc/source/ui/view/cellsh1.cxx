@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:24:33 $
+ *  last change: $Author: nn $ $Date: 2001-04-23 12:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include <svx/postattr.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/charmap.hxx>
+#include <svx/clipfmtitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svtools/sbxcore.hxx>
@@ -1062,6 +1063,36 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
             break;
 
+        case SID_CLIPBOARD_FORMAT_ITEMS:
+            {
+                WaitObject aWait( GetViewData()->GetDialogParent() );
+
+                ULONG nFormat = 0;
+                const SfxPoolItem* pItem;
+                if ( pReqArgs &&
+                     pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
+                     pItem->ISA(SfxUInt32Item) )
+                {
+                    nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+                }
+
+                if ( nFormat )
+                {
+                    BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard() != NULL );
+
+                    if ( bDraw && nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
+                        pTabViewShell->PasteDraw();
+                    else
+                        pTabViewShell->PasteFromSystem(nFormat);
+                }
+                //?else
+                //? pTabViewShell->PasteFromSystem();
+
+                rReq.Done();
+            }
+            pTabViewShell->CellContentChanged();
+            break;
+
         case FID_INS_CELL_CONTENTS:
             {
                 USHORT nFlags = IDF_NONE;
@@ -1108,7 +1139,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         if (pTabViewShell->SelectionEditable())
                         {
-                            ScInsertContentsDlg* pDlg = new ScInsertContentsDlg(    pTabViewShell->GetDialogParent() );
+                            ScInsertContentsDlg* pDlg = new ScInsertContentsDlg( pTabViewShell->GetDialogParent() );
                             pDlg->SetOtherDoc( bOtherDoc );
                             // #53661# bei ChangeTrack MoveMode disablen
                             pDlg->SetChangeTrack( pDoc->GetChangeTrack() != NULL );
@@ -1223,37 +1254,43 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard() != NULL );
 
-                    SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
-                    if (pClipObj.Is())
+                    SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+                    GetPossibleClipboardFormats( aFormats );
+
+                    USHORT nFormatCount = aFormats.Count();
+                    if ( nFormatCount )
                     {
                         SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
-                        //  nOle ist special, stellvertretend fuer alle vier ?!?
-                        ULONG nOle  = SOT_FORMATSTR_ID_EMBED_SOURCE;
-                        ULONG nSdr  = SOT_FORMATSTR_ID_DRAWING;
-                        pDlg->Insert( nSdr,                 Clipboard::GetFormatName( nSdr ) );
-                        pDlg->Insert( SOT_FORMATSTR_ID_SVXB,Clipboard::GetFormatName( SOT_FORMATSTR_ID_SVXB ) );
-                        pDlg->Insert( FORMAT_GDIMETAFILE,   Clipboard::GetFormatName( FORMAT_GDIMETAFILE ) );
-                        pDlg->Insert( FORMAT_BITMAP,        Clipboard::GetFormatName( FORMAT_BITMAP ) );
-                        pDlg->Insert( nOle,                 String('*') );
-                        if (!bDraw)
+
+                        for (USHORT i=0; i<nFormatCount; i++)
                         {
-                            ULONG nBiff = Exchange::RegisterFormatName(
-                                String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff5")));
-                            pDlg->Insert( SOT_FORMATSTR_ID_LINK,ScResId( SCSTR_CLIP_DDE ) );
-                            pDlg->Insert( FORMAT_STRING,        ScResId( SCSTR_CLIP_STRING ) );
-                            pDlg->Insert( SOT_FORMATSTR_ID_DIF, ScResId( SCSTR_CLIP_DIF ) );
-                            pDlg->Insert( FORMAT_RTF,           ScResId( SCSTR_CLIP_RTF ) );
-                            pDlg->Insert( SOT_FORMATSTR_ID_HTML,Clipboard::GetFormatName( SOT_FORMATSTR_ID_HTML ) );
-                            pDlg->Insert( SOT_FORMATSTR_ID_HTML_SIMPLE,Clipboard::GetFormatName( SOT_FORMATSTR_ID_HTML_SIMPLE ) );
-                            pDlg->Insert( nBiff,                Clipboard::GetFormatName( nBiff ) );
+                            ULONG nFormatId = aFormats.GetClipbrdFormatId( i );
+                            String aName = aFormats.GetClipbrdFormatName( i );
+                            if ( !aName.Len() )
+                            {
+                                USHORT nResId = 0;
+                                switch ( nFormatId )
+                                {
+                                    case SOT_FORMATSTR_ID_LINK: nResId = SCSTR_CLIP_DDE;    break;
+                                    case SOT_FORMAT_STRING:     nResId = SCSTR_CLIP_STRING; break;
+                                    case SOT_FORMATSTR_ID_DIF:  nResId = SCSTR_CLIP_DIF;    break;
+                                    case SOT_FORMAT_RTF:        nResId = SCSTR_CLIP_RTF;    break;
+                                }
+                                if ( nResId )
+                                    aName = String( ScResId( nResId ) );
+                                else
+                                    aName = Clipboard::GetFormatName( nFormatId );
+                            }
+                            pDlg->Insert( nFormatId, aName );
                         }
 
-                        ULONG nFormat = pDlg->Execute(  pTabViewShell->GetDialogParent(), pClipObj );
+                        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+                        ULONG nFormat = pDlg->Execute( pTabViewShell->GetDialogParent(), aDataHelper.GetTransferable() );
                         if (nFormat > 0)
                         {
                             {
                                 WaitObject aWait( GetViewData()->GetDialogParent() );
-                                if ( bDraw && nFormat == nOle )
+                                if ( bDraw && nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
                                     pTabViewShell->PasteDraw();
                                 else
                                     pTabViewShell->PasteFromSystem(nFormat);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:29:04 $
+ *  last change: $Author: nn $ $Date: 2001-04-23 12:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <svx/hlnkitem.hxx>
 #include <sfx2/app.hxx>
 //#include <sfx2/objitem.hxx>
+#include <svx/clipfmtitem.hxx>
 #include <svx/langitem.hxx>
 #include <vcl/system.hxx>
 
@@ -299,6 +300,38 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
     }
 }
 
+inline void TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper& rDataHelper,
+                        SotFormatStringId nFormatId )
+{
+    if ( rDataHelper.HasFormat( nFormatId ) )
+        rFormats.AddClipbrdFormat( nFormatId );
+}
+
+// static
+void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
+{
+    BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard() != NULL );
+
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+
+    TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_DRAWING );
+    TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_SVXB );
+    TestFormat( rFormats, aDataHelper, SOT_FORMAT_GDIMETAFILE );
+    TestFormat( rFormats, aDataHelper, SOT_FORMAT_BITMAP );
+    TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_EMBED_SOURCE );
+
+    if ( !bDraw )
+    {
+        TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_LINK );
+        TestFormat( rFormats, aDataHelper, SOT_FORMAT_STRING );
+        TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_DIF );
+        TestFormat( rFormats, aDataHelper, SOT_FORMAT_RTF );
+        TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_HTML );
+        TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_HTML_SIMPLE );
+        TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_BIFF_5 );
+    }
+}
+
 //  Einfuegen, Inhalte einfuegen
 
 void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
@@ -307,27 +340,31 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
 
 // SID_PASTE
 // FID_PASTE_CONTENTS
+// SID_CLIPBOARD_FORMAT_ITEMS
 
     if ( ScTransferObj::GetOwnClipboard() || ScDrawTransferObj::GetOwnClipboard() )
         bDisable = FALSE;
     else
     {
-        SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
-        if (pClipObj.Is())
-        {
-            const SvDataTypeList& rTypeLst = pClipObj->GetTypeList();
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
 
-            if( rTypeLst.Get( FORMAT_BITMAP ) ||
-                rTypeLst.Get( FORMAT_GDIMETAFILE ) ||
-                rTypeLst.Get( SOT_FORMATSTR_ID_SVXB ) ||
-                rTypeLst.Get( FORMAT_PRIVATE ) ||
-                rTypeLst.Get( FORMAT_RTF ) ||
-                rTypeLst.Get( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
-                rTypeLst.Get( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
-                rTypeLst.Get( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ||
-                rTypeLst.Get( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
-                ScImportExport::IsFormatSupported( pClipObj ) )
-                bDisable = FALSE;
+        if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) ||
+             aDataHelper.HasFormat( SOT_FORMAT_GDIMETAFILE ) ||
+             aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) ||
+             aDataHelper.HasFormat( FORMAT_PRIVATE ) ||
+             aDataHelper.HasFormat( SOT_FORMAT_RTF ) ||
+             aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
+             aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
+             aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ||
+             aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
+             aDataHelper.HasFormat( SOT_FORMAT_STRING ) ||
+             aDataHelper.HasFormat( SOT_FORMATSTR_ID_SYLK ) ||
+             aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK ) ||
+             aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML ) ||
+             aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML_SIMPLE ) ||
+             aDataHelper.HasFormat( SOT_FORMATSTR_ID_DIF ) )
+        {
+            bDisable = FALSE;
         }
     }
 
@@ -350,6 +387,13 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
     {
         rSet.DisableItem( SID_PASTE );
         rSet.DisableItem( FID_PASTE_CONTENTS );
+        rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
+    }
+    else if ( rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) != SFX_ITEM_UNKNOWN )
+    {
+        SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+        GetPossibleClipboardFormats( aFormats );
+        rSet.Put( aFormats );
     }
 }
 
