@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:28:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,8 @@ enum XMLUserDefinedTransformerAction
     XML_ETACTION_CHART,
     XML_ETACTION_TRACKED_CHANGES,
     XML_ETACTION_CHART_PLOT_AREA,
-    XML_ETACTION_DOCUMENT_RENAME
+    XML_ETACTION_DOCUMENT_RENAME,
+    XML_ETACTION_TABLE
 };
 
 #define ENTRY3( n, l, a, p1, p2, p3 ) \
@@ -434,7 +435,9 @@ static XMLTransformerActionInit aActionTable[] =
     // --> OD 2005-01-10 #i40011#, #i40015#
     // - consider also attribute table:style-name for <table:table>,
     //   <table:table-row> and <table:table-column>.
-    ENTRY1( TABLE, TABLE, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
+//    ENTRY1( TABLE, TABLE, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
+    ENTRY0( TABLE, TABLE, XML_ETACTION_TABLE ),
+
     ENTRY1( TABLE, TABLE_ROW, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
     ENTRY1( TABLE, TABLE_COLUMN, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
     // <--
@@ -1105,8 +1108,8 @@ static XMLTransformerActionInit aChartActionTable[] =
     ENTRY1( CHART, CLASS, XML_ATACTION_ADD_NAMESPACE_PREFIX,
                      XML_NAMESPACE_CHART ),
     ENTRY0( CHART, ADD_IN_NAME, XML_ATACTION_REMOVE ),
-    ENTRY0( SVG, WIDTH, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
-    ENTRY0( SVG, HEIGHT, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
+    ENTRY0( SVG, WIDTH, XML_ATACTION_INCH2IN ),
+    ENTRY0( SVG, HEIGHT, XML_ATACTION_INCH2IN ),
     ENTRY0( CHART, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
@@ -1534,6 +1537,80 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
     XMLTransformerContext::StartElement( xAttrList );
 }
 
+// -----------------------------------------------------------------------------
+
+class XMLTableOOoTransformerContext_Impl : public XMLTransformerContext
+{
+    ::rtl::OUString m_aElemQName;
+
+public:
+    TYPEINFO();
+
+    XMLTableOOoTransformerContext_Impl( XMLTransformerBase& rTransformer,
+                           const ::rtl::OUString& rQName );
+
+    virtual ~XMLTableOOoTransformerContext_Impl();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
+};
+
+TYPEINIT1( XMLTableOOoTransformerContext_Impl, XMLTransformerContext );
+
+XMLTableOOoTransformerContext_Impl::XMLTableOOoTransformerContext_Impl(
+        XMLTransformerBase& rImp,
+        const OUString& rQName ) :
+    XMLTransformerContext( rImp, rQName ),
+    m_aElemQName( rQName )
+{
+}
+
+XMLTableOOoTransformerContext_Impl::~XMLTableOOoTransformerContext_Impl()
+{
+}
+
+void XMLTableOOoTransformerContext_Impl::StartElement(
+        const Reference< XAttributeList >& rAttrList )
+{
+    if( IsXMLToken( GetTransformer().GetClass(), XML_SPREADSHEET  ) )
+    {
+        Reference< XAttributeList > xAttrList( rAttrList );
+        sal_Bool bPrintRanges(sal_False);
+
+        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        {
+            const OUString& rAttrName = xAttrList->getNameByIndex( i );
+            OUString aLocalName;
+            sal_uInt16 nPrefix =
+                GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                                    &aLocalName );
+            if( XML_NAMESPACE_TABLE == nPrefix &&
+                IsXMLToken( aLocalName, XML_PRINT_RANGES ) )
+            {
+                bPrintRanges = sal_True;
+            }
+        }
+        XMLMutableAttributeList *pMutableAttrList =
+            GetTransformer().ProcessAttrList( xAttrList, OOO_STYLE_REF_ACTIONS, sal_False );
+        if (!bPrintRanges)
+        {
+            xAttrList = pMutableAttrList;
+            pMutableAttrList->AddAttribute(GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_TABLE,
+                                GetXMLToken( XML_PRINT ) ), GetXMLToken ( XML_FALSE ));
+        }
+        GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
+    }
+    else
+        GetTransformer().GetDocHandler()->startElement( m_aElemQName, rAttrList );
+}
+
+void XMLTableOOoTransformerContext_Impl::EndElement()
+{
+    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+}
+
 
 //-----------------------------------------------------------------------------
 
@@ -1592,6 +1669,9 @@ XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
                             rAction.GetQNameTokenFromParam1() );
     case XML_ETACTION_CHART_PLOT_AREA:
         return new XMLChartPlotAreaOOoTContext( *this, rQName );
+        break;
+    case XML_ETACTION_TABLE:
+        return new XMLTableOOoTransformerContext_Impl( *this, rQName );
         break;
     default:
         OSL_ENSURE( !this, "no user defined context found!" );
