@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 11:05:33 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 14:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1693,7 +1693,8 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     }
     else if (&aLinguDicsNewPB == pBtn)
     {
-        SvxNewDictionaryDialog aDlg( this, Reference< XSpellChecker1 >() );
+        Reference< XSpellChecker1 > xSpellChecker1;
+        SvxNewDictionaryDialog aDlg( this,  xSpellChecker1);
 
         Reference< XDictionary1 >  xNewDic;
         if ( aDlg.Execute() == RET_OK )
@@ -1715,8 +1716,9 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                 xDic = aDics.getConstArray()[ nDicPos ];
                 if (xDic.is())
                 {
+                    Reference< XSpellChecker1 > xSpellChecker1;
                     SvxEditDictionaryDialog aDlg( this,
-                            xDic->getName(), Reference< XSpellChecker1 >() );
+                            xDic->getName(), xSpellChecker1 );
                     aDlg.Execute();
 
                     USHORT nOldPos = aLinguDicsCLB.GetSelectEntryPos();
@@ -2304,7 +2306,8 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
     SvLBoxTreeList *pModel = aModulesCLB.GetModel();
 
     ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
-    SvLBoxEntry* pToInsert = CreateEntry( aModulesCLB.GetEntryText(pEntry), CBCOL_FIRST );
+    String aStr(aModulesCLB.GetEntryText(pEntry));
+    SvLBoxEntry* pToInsert = CreateEntry( aStr, CBCOL_FIRST );
     pToInsert->SetUserData( (void *)pData);
     BOOL bIsChecked = aModulesCLB.IsChecked(nCurPos);
 
