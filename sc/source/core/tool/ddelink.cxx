@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-18 13:35:37 $
+ *  last change: $Author: sab $ $Date: 2000-11-21 16:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,12 @@ void __EXPORT ScDdeLink::DataChanged(SvData& rData)
         aHint.SetDdeLink( aAppl, aTopic, aItem, nMode );
         pDoc->BroadcastUno( aHint );
     }
+}
+
+void ScDdeLink::NewData(USHORT nCols, USHORT nRows)
+{
+    delete pResult;
+    pResult = new ScMatrix( nCols, nRows );
 }
 
 void ScDdeLink::ResetValue()

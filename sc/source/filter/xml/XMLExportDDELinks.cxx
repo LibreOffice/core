@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-17 17:22:07 $
+ *  last change: $Author: sab $ $Date: 2000-11-21 16:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_number_columns_repeated, sBuffer.makeStringAndClear());
         }
         {
-            SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_table_column, sal_True, sal_True);
+            SvXMLElementExport aElemCol(rExport, XML_NAMESPACE_TABLE, sXML_table_column, sal_True, sal_True);
         }
         sal_Bool bPrevString(sal_True);
         sal_Bool bPrevEmpty(sal_True);
@@ -178,7 +178,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
         sal_Int32 nRepeatColsCount(1);
         for(sal_Int32 nRow = 0; nRow < nRowCount; nRow++)
         {
-            SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_table_row, sal_True, sal_True);
+            SvXMLElementExport aElemRow(rExport, XML_NAMESPACE_TABLE, sXML_table_row, sal_True, sal_True);
             for(sal_Int32 nColumn = 0; nColumn < nColCount; nColumn++)
             {
                 if (nColumn == 0)
@@ -188,7 +188,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
                     double fValue;
                     String sValue;
                     sal_Bool bString(sal_True);
-                    sal_Bool bEmpty = rExport.GetDocument()->GetDdeLinkResult(pMatrix, nColumn, nRow, sPrevValue, fPrevValue, bPrevString);
+                    sal_Bool bEmpty = rExport.GetDocument()->GetDdeLinkResult(pMatrix, nColumn, nRow, sValue, fValue, bString);
                     if (CellsEqual(bPrevEmpty, bPrevString, sPrevValue, fPrevValue,
                                 bEmpty, bString, sValue, fValue))
                         nRepeatColsCount++;
@@ -220,18 +220,30 @@ void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocume
             sal_Int32 nCount = xIndex->getCount();
             if (nCount)
             {
-                SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_dde_links, sal_True, sal_True);
+                SvXMLElementExport aElemDDEs(rExport, XML_NAMESPACE_TABLE, sXML_dde_links, sal_True, sal_True);
                 for (sal_Int32 nDDELink = 0; nDDELink < nCount; nDDELink++)
                 {
                     uno::Any aDDELink = xIndex->getByIndex(nDDELink);
                     uno::Reference<sheet::XDDELink> xDDELink;
                     if (aDDELink >>= xDDELink)
                     {
-                        SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_dde_link, sal_True, sal_True);
+                        SvXMLElementExport aElemDDE(rExport, XML_NAMESPACE_TABLE, sXML_dde_link, sal_True, sal_True);
                         {
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_application, xDDELink->getApplication());
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_topic, xDDELink->getTopic());
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_item, xDDELink->getItem());
+                            rExport.AddAttributeASCII(XML_NAMESPACE_OFFICE, sXML_automatic_update, sXML_true);
+                            sal_uInt16 nMode;
+                            if (rExport.GetDocument()->GetDdeLinkMode(nDDELink, nMode))
+                            {
+                                switch (nMode)
+                                {
+                                    case SC_DDE_ENGLISH :
+                                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_conversion_mode, sXML_into_english_number);
+                                    case SC_DDE_TEXT :
+                                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_conversion_mode, sXML_let_text);
+                                }
+                            }
                             SvXMLElementExport(rExport, XML_NAMESPACE_OFFICE, sXML_dde_source, sal_True, sal_True);
                         }
                         WriteTable(nDDELink);

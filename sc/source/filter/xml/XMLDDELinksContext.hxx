@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 11:34:54 $
+ *  last change: $Author: sab $ $Date: 2000-11-21 16:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <xmloff/xmlictxt.hxx>
 #endif
 
+#ifndef __SGI_STL_VECTOR
+#include <stl/vector>
+#endif
+
 class ScXMLImport;
 
 class ScXMLDDELinksContext : public SvXMLImportContext
@@ -79,6 +83,179 @@ public:
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLDDELinksContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
+struct ScDDELinkCell
+{
+    rtl::OUString sValue;
+    double fValue;
+    sal_Bool bString;
+    sal_Bool bEmpty;
+};
+
+typedef std::vector<ScDDELinkCell> ScDDELinkCells;
+
+class ScXMLDDELinkContext : public SvXMLImportContext
+{
+    ScDDELinkCells  aDDELinkTable;
+    ScDDELinkCells  aDDELinkRow;
+    rtl::OUString   sApplication;
+    rtl::OUString   sTopic;
+    rtl::OUString   sItem;
+    sal_uInt8       nMode;
+    sal_Int32       nPosition;
+    sal_Int32       nColumns;
+    sal_Int32       nRows;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+public:
+    ScXMLDDELinkContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    virtual ~ScXMLDDELinkContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    void SetApplication(const rtl::OUString& sValue) { sApplication = sValue; }
+    void SetTopic(const rtl::OUString& sValue) { sTopic = sValue; }
+    void SetItem(const rtl::OUString& sValue) { sItem = sValue; }
+    void SetMode(const sal_uInt8 nValue) { nMode = nValue; }
+    void CreateDDELink();
+    void AddColumns(const sal_Int32 nValue) { nColumns += nValue; }
+    void AddRows(const sal_Int32 nValue) { nRows += nValue; }
+    void AddCellToRow(const ScDDELinkCell& aCell);
+    void AddRowsToTable(const sal_Int32 nRows);
+
+    virtual void EndElement();
+};
+
+class ScXMLDDESourceContext : public SvXMLImportContext
+{
+    ScXMLDDELinkContext* pDDELink;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+public:
+    ScXMLDDESourceContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDDELinkContext* pDDELink);
+
+    virtual ~ScXMLDDESourceContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
+class ScXMLDDETableContext : public SvXMLImportContext
+{
+    ScXMLDDELinkContext* pDDELink;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+public:
+    ScXMLDDETableContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDDELinkContext* pDDELink);
+
+    virtual ~ScXMLDDETableContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
+class ScXMLDDEColumnContext : public SvXMLImportContext
+{
+    ScXMLDDELinkContext* pDDELink;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+public:
+    ScXMLDDEColumnContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDDELinkContext* pDDELink);
+
+    virtual ~ScXMLDDEColumnContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
+class ScXMLDDERowContext : public SvXMLImportContext
+{
+    ScXMLDDELinkContext*    pDDELink;
+    sal_Int32               nRows;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+public:
+    ScXMLDDERowContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDDELinkContext* pDDELink);
+
+    virtual ~ScXMLDDERowContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
+class ScXMLDDECellContext : public SvXMLImportContext
+{
+    rtl::OUString   sValue;
+    double          fValue;
+    sal_Int32       nCells;
+    sal_Bool        bString;
+    sal_Bool        bString2;
+    sal_Bool        bEmpty;
+
+    ScXMLDDELinkContext* pDDELink;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+public:
+    ScXMLDDECellContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDDELinkContext* pDDELink);
+
+    virtual ~ScXMLDDECellContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const NAMESPACE_RTL(OUString)& rLocalName,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:06:04 $
+ *  last change: $Author: sab $ $Date: 2000-11-21 16:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,7 @@ static __FAR_DATA SvXMLTokenMapEntry aBodyTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_database_range,         XML_TOK_BODY_DATABASE_RANGE         },
     { XML_NAMESPACE_TABLE, sXML_data_pilot_tables,      XML_TOK_BODY_DATA_PILOT_TABLES      },
     { XML_NAMESPACE_TABLE, sXML_consolidation,          XML_TOK_BODY_CONSOLIDATION          },
+    { XML_NAMESPACE_TABLE, sXML_dde_links,              XML_TOK_BODY_DDE_LINKS              },
     XML_TOKEN_MAP_END
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 18:26:09 $
+ *  last change: $Author: sab $ $Date: 2000-11-21 16:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ public:
                                             // von SvBaseLink ueberladen:
     virtual void    Closed();
     virtual void    DataChanged( SvData& );
+    void            NewData(USHORT nCols, USHORT nRows);
 
                                             // von SfxBroadcaster ueberladen:
     virtual void    ListenersGone();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
+ *  last change: $Author: sab $ $Date: 2000-11-21 16:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _SC_XMLCONSOLIDATIONCONTEXT_HXX
 #include "XMLConsolidationContext.hxx"
 #endif
+#ifndef _SC_XMLDDELINKSCONTEXT_HXX
+#include "XMLDDELinksContext.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 
@@ -160,6 +163,10 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
         break;
     case XML_TOK_BODY_CONSOLIDATION:
         pContext = new ScXMLConsolidationContext ( GetScImport(), nPrefix, rLocalName,
+                                                        xAttrList );
+        break;
+    case XML_TOK_BODY_DDE_LINKS:
+        pContext = new ScXMLDDELinksContext ( GetScImport(), nPrefix, rLocalName,
                                                         xAttrList );
         break;
     }

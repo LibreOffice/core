@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 19:07:20 $
+ *  last change: $Author: sab $ $Date: 2000-11-21 16:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1227,7 +1227,103 @@ BOOL ScDocument::GetDdeLinkResult(const ScMatrix* pMatrix, USHORT nCol, USHORT n
             rDoubValue = pMatrix->GetDouble(nCol, nRow);
         return bIsEmpty;
     }
-    return sal_True;
+    return TRUE;
+}
+
+void ScDocument::CreateDdeLink(const String& rAppl, const String& rTopic, const String& rItem, const BYTE nMode )
+{
+    //  DDE-Link anlegen und nicht updaten (z.B. fuer Excel-Import,
+    //  damit nicht ohne Nachfrage Verbindungen aufgebaut werden)
+    //  zuerst suchen, ob schon vorhanden
+    //! Dde-Links (zusaetzlich) effizienter am Dokument speichern?
+    const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    USHORT nCount = rLinks.Count();
+    for (USHORT i=0; i<nCount; i++)
+    {
+        SvBaseLink* pBase = *rLinks[i];
+        if (pBase->ISA(ScDdeLink))
+        {
+            ScDdeLink* pLink = (ScDdeLink*)pBase;
+            if ( pLink->GetAppl() == rAppl &&
+                 pLink->GetTopic() == rTopic &&
+                 pLink->GetItem() == rItem &&
+                 pLink->GetMode() == nMode )
+                return;                                     // dann nichts tun
+        }
+    }
+
+    //  neu anlegen, aber kein TryUpdate
+    ScDdeLink* pNew = new ScDdeLink( this, rAppl, rTopic, rItem, nMode );
+    pLinkManager->InsertDDELink( *pNew, rAppl, rTopic, rItem );
+}
+
+BOOL ScDocument::FindDdeLink(const String& rAppl, const String& rTopic, const String& rItem, const BYTE nMode, USHORT& nPos )
+{
+    const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    USHORT nCount = rLinks.Count();
+    for (USHORT i=0; i<nCount; i++)
+    {
+        SvBaseLink* pBase = *rLinks[i];
+        if (pBase->ISA(ScDdeLink))
+        {
+            ScDdeLink* pLink = (ScDdeLink*)pBase;
+            if ( pLink->GetAppl() == rAppl &&
+                 pLink->GetTopic() == rTopic &&
+                 pLink->GetItem() == rItem &&
+                 pLink->GetMode() == nMode )
+            {
+                nPos = i;
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
+BOOL ScDocument::CreateDdeLinkResultDimension(USHORT nPos, USHORT nCols, USHORT nRows, ScMatrix*& pMatrix)
+{
+    USHORT nDdeCount = 0;
+    if (pLinkManager)
+    {
+        const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
+        {
+            SvBaseLink* pBase = *rLinks[i];
+            if (pBase->ISA(ScDdeLink))
+            {
+                if ( nDdeCount == nPos )
+                {
+                    ScDdeLink* pDde = (ScDdeLink*)pBase;
+                    pDde->NewData(nCols, nRows);
+                    pMatrix = pDde->GetResult();
+                    if (pMatrix)
+                        return TRUE;
+                    else
+                        return FALSE;
+                }
+                ++nDdeCount;
+            }
+        }
+    }
+    return FALSE;
+}
+
+void ScDocument::SetDdeLinkResult(ScMatrix* pMatrix, const USHORT nCol, const USHORT nRow, const String& rStrValue, const double& rDoubValue, BOOL bString, BOOL bEmpty)
+{
+    DBG_ASSERT(pMatrix, "there is no matrix");
+    if (pMatrix)
+    {
+        if(bEmpty)
+            pMatrix->PutEmpty(nCol, nRow);
+        else
+        {
+            if (bString)
+                pMatrix->PutString(rStrValue, nCol, nRow);
+            else
+                pMatrix->PutDouble(rDoubValue, nCol, nRow);
+        }
+    }
 }
 
 //------------------------------------------------------------------------
