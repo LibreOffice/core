@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:31:07 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:56:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=frmdlg
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -78,21 +76,8 @@ BMP_IN=$(PRJ)$/win/imglst
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        bbmgr.cxx \
-        colmgr.cxx \
-        column.cxx \
-        colex.cxx  \
-        cption.cxx \
-        frmdlg.cxx \
-        frmex.cxx \
-        frmmgr.cxx \
-        frmpage.cxx \
-        pattern.cxx \
-        uiborder.cxx \
-        wrap.cxx
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         column.src \
         cption.src \
         frmpage.src \
