@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:18:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,8 +680,8 @@ void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
             pPool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
             SfxStyleSheetBase * pBase = pPool->Find(rName);
 
-            pPool->Broadcast
-                (SfxStyleSheetHint( nOp, *pBase ));
+            if (pBase != NULL)
+                pPool->Broadcast(SfxStyleSheetHint( nOp, *pBase ));
         }
     }
 }
