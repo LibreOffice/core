@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 13:59:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ private:
     bool                                        m_bColorDevice;
     bool                                        m_bType42Capable;
     ULONG                                       m_nLanguageLevel;
+    rtl_TextEncoding                            m_aFileEncoding;
 
 
     // shortcuts to important keys and their default values
@@ -221,10 +222,12 @@ private:
     PPDParser( const String& rFile );
     ~PPDParser();
 
-    void parseOrderDependency( const String& rLine );
-    void parseOpenUI( const String& rLine );
-    void parseConstraint( const String& rLine );
-    void parse( ::std::list< String >& rLines );
+    void parseOrderDependency( const ByteString& rLine );
+    void parseOpenUI( const ByteString& rLine );
+    void parseConstraint( const ByteString& rLine );
+    void parse( std::list< ByteString >& rLines );
+
+    String handleTranslation( const ByteString& rString );
 
     static void scanPPDDir( const String& rDir );
     static void initPPDFiles();
