@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-10 11:29:29 $
+ *  last change: $Author: mba $ $Date: 2000-11-10 12:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,36 +694,28 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     Any aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALL );
     OUString aOfficePath;
     if ( aAny >>= aOfficePath )
-    {
-        OUString aTmp;
-        FileBase::getSystemPathFromNormalizedPath( aOfficePath, aTmp );
-        if ( aTmp.getLength() )
-            m_aInstPath = aTmp;
-        else
-            m_aInstPath = aOfficePath;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aInstPath, m_aInstURL );
-    }
+        m_aInstPath = aOfficePath;
     else
-    {
         DBG_ERRORFILE( "wrong any type" );
-    }
+
+    aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALLURL );
+    if ( aAny >>= aOfficePath )
+        m_aInstURL = aOfficePath;
+    else
+        DBG_ERRORFILE( "wrong any type" );
 
     aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::INSTALLPATH );
     OUString aUserPath;
     if ( aAny >>= aUserPath )
-    {
-        OUString aTmp;
-        FileBase::getSystemPathFromNormalizedPath( aUserPath, aTmp );
-        if ( aTmp.getLength() )
-            m_aUserPath = aTmp;
-        else
-            m_aUserPath = aOfficePath;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aUserPath, m_aUserURL );
-    }
+        m_aUserPath = aUserPath;
     else
-    {
         DBG_ERRORFILE( "wrong any type" );
-    }
+
+    aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::USERINSTALLURL );
+    if ( aAny >>= aUserPath )
+        m_aUserURL = aUserPath;
+    else
+        DBG_ERRORFILE( "wrong any type" );
 
     OUString aProgName;
     ::vos::OStartupInfo aInfo;
