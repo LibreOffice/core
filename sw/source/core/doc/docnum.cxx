@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-14 18:29:22 $
+ *  last change: $Author: od $ $Date: 2002-12-10 16:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2012,7 +2012,8 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
                 const SwNodeNum* pPrevNdNum = pPrev->GetNum();
                 if( pPrevNdNum->GetLevel() & NO_NUMLEVEL )
                 {
-                    BYTE nSrchLvl = GetRealLevel( pPrevNdNum->GetLevel() );
+                    // OD 10.12.2002 #106111# - use correct search level
+                    BYTE nSrchLvl = GetRealLevel( pStt->GetNum()->GetLevel() );
                     pPrevNdNum = 0;
                     ULONG nArrPos = nUpdPos-1;
                     while( nArrPos-- )
@@ -2047,6 +2048,9 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
                 }
             }
             nInitLevels = 0;
+            // OD 10.12.2002 #106111# - sublevels have to be restarted.
+            for ( int nSubLvl = GetRealLevel( aNum.GetLevel() ) + 1; nSubLvl < MAXLEVEL; ++nSubLvl)
+                nInitLevels |= ( 1 << nSubLvl );
             nNumVal = aNum.GetLevelVal()[ GetRealLevel( aNum.GetLevel() ) ];
         }
 
@@ -2073,8 +2077,9 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
                 if( pStt->GetNum()->IsStart() )
                 {
                     aNum.SetStart( TRUE );
-                    memset( aNum.GetLevelVal(), 0,
-                            (MAXLEVEL) * sizeof( aNum.GetLevelVal()[0]) );
+                    // OD 10.12.2002 #106111# - correct reset of level numbers
+                    for ( int nSubLvl = nLevel; nSubLvl < MAXLEVEL; ++nSubLvl)
+                        aNum.GetLevelVal()[ nSubLvl ] = 0;
                     if( pRule->IsContinusNum() )
                     {
                         nNumVal = pRule->Get( 0 ).GetStart();
@@ -2084,7 +2089,13 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
                         nInitLevels |= ( 1 << GetRealLevel( nLevel ));
                 }
                 else if( USHRT_MAX != pStt->GetNum()->GetSetValue() )
+                {
                     aNum.SetSetValue( nNumVal = pStt->GetNum()->GetSetValue() );
+                    // OD 10.12.2002 #106111# - init <nInitLevels> for continues
+                    // numbering.
+                    if( pRule->IsContinusNum() )
+                        nInitLevels |= 1;
+                }
             }
 
             if( NO_NUMLEVEL & nLevel )      // NoNum mit Ebene
@@ -2118,6 +2129,8 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
                                        SVX_NUM_NUMBER_NONE == pNumFmt->GetNumberingType() )))
                         ++nNumVal;
                     aNum.GetLevelVal()[ nLevel ] = nNumVal;
+                    // OD 10.12.2002 #106111# - reset <nInitLevels>
+                    nInitLevels &= ~1;
                 }
                 else
                 {
@@ -2151,6 +2164,15 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
                 }
                 nInitLevels &= ~( 1 << nLevel );
                 aNum.SetLevel( nLevel );
+
+                // OD 10.12.2002 #106111# - reset numbers of all sublevels and
+                // note in <nInitLevels> that numbering of all sublevels have
+                // to be restarted.
+                for ( int nSubLvl = nLevel+1; nSubLvl < MAXLEVEL; ++nSubLvl)
+                {
+                    aNum.GetLevelVal()[ nSubLvl ] = 0;
+                    nInitLevels |= ( 1 << nSubLvl );
+                }
 
                 pStt->UpdateNum( aNum );
             }
