@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-01-10 16:34:15 $
+ *  last change: $Author: os $ $Date: 2001-01-26 15:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,6 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     aFormatData.aLocale.Language = sLanguage;
     aFormatData.aLocale.Country = sCountry;
 
-    DBG_ERROR("pFormat unset!")
     rResult = SwNewDBMgr::GetDBField( xColumnProps, aFormatData, pNumber);
     return TRUE;
 };
@@ -405,11 +404,27 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         return FALSE;
     }
     pMergeData = new SwDSParam(sDataSource, sDataTableOrQuery, SW_DB_SELECT_UNKNOWN, xResSet, aSelection);
-    //set to start position
-    pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
-            (ULONG)pMergeData->aSelection.getConstArray()[ pMergeData->nSelectionIndex++ ] );
-    if(pMergeData->nSelectionIndex >= pMergeData->aSelection.getLength())
+
+    try{
+        //set to start position
+        if(pMergeData->aSelection.getLength())
+        {
+            pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
+                    (ULONG)pMergeData->aSelection.getConstArray()[ pMergeData->nSelectionIndex++ ] );
+            if(pMergeData->nSelectionIndex >= pMergeData->aSelection.getLength())
+                pMergeData->bEndOfDB = TRUE;
+        }
+        else
+        {
+            pMergeData->bEndOfDB = !pMergeData->xResultSet->first();
+        }
+    }
+    catch(Exception& rExcept)
+    {
         pMergeData->bEndOfDB = TRUE;
+        DBG_ERROR("exception in MergeNew()")
+    }
+
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     Reference<XDataSource> xSource = dbtools::getDataSource(sDataSource, xMgr);
     if( xMgr.is() )
