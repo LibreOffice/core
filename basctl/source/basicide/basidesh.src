@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:32:25 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1918,7 +1918,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ italian ] = "Passo singolo" ;
             Text [ spanish ] = "Paso único" ;
             Text [ french ] = "Étape par étape" ;
-            Text [ swedish ] = "Enkelsteg" ;
+            Text [ swedish ] = "Enkelt steg" ;
             Text [ danish ] = "Enkelt trin" ;
             Text [ portuguese ] = "Passo único" ;
             Text [ portuguese_brazilian ] = "Einzelschritt" ;
