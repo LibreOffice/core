@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:16:04 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 10:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,8 +551,11 @@ void SfxObjectShell::SetTitle
 //  FlushDocInfo();
 
     // Benachrichtigungen
-    SfxShell::SetName( GetTitle(SFX_TITLE_APINAME) );
-    Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+    if ( GetMedium() )
+    {
+        SfxShell::SetName( GetTitle(SFX_TITLE_APINAME) );
+        Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+    }
 }
 
 //--------------------------------------------------------------------
