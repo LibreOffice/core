@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2004-02-12 17:33:43 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 
 #ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 
 #include <vector>
@@ -220,11 +224,10 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
+namespace { struct DefaultPolyPolygon: public rtl::Static<ImplB2DPolyPolygon, DefaultPolyPolygon> {}; }
+
 namespace basegfx
 {
-    // init static default Polygon
-    static ImplB2DPolyPolygon maStaticDefaultPolyPolygon;
-
     void B2DPolyPolygon::implForceUniqueCopy()
     {
         if(mpPolyPolygon->getRefCount())
@@ -235,7 +238,7 @@ namespace basegfx
     }
 
     B2DPolyPolygon::B2DPolyPolygon()
-    :   mpPolyPolygon(&maStaticDefaultPolyPolygon)
+    :   mpPolyPolygon(&DefaultPolyPolygon::get())
     {
         mpPolyPolygon->incRefCount();
     }
@@ -395,7 +398,7 @@ namespace basegfx
             delete mpPolyPolygon;
         }
 
-        mpPolyPolygon = &maStaticDefaultPolyPolygon;
+        mpPolyPolygon = &DefaultPolyPolygon::get();
         mpPolyPolygon->incRefCount();
     }
 
