@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,8 @@ Text[ swedish ] = "%PRODUCTNAME-kalender";
     Text[ russian ] = "��������� %PRODUCTNAME";
     Text[ greek ] = "���������� %PRODUCTNAME";
     Text[ danish ] = "%PRODUCTNAME kalender";
-    Text[ polish ] = "Kalendarz %PRODUCTNAME";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME Calendar";
+    Text[ polish ] = "%PRODUCTNAME - Kalendarz";
+    Text[ portuguese_brazilian ] = "Calend�rio %PRODUCTNAME";
     Text[ japanese ] = "%PRODUCTNAME カレンダー";
     Text[ korean ] = "%PRODUCTNAME 칼렌더";
     Text[ chinese_simplified ] = "%PRODUCTNAME 日历";
@@ -136,6 +136,9 @@ Text[ swedish ] = "%PRODUCTNAME-kalender";
     Text[ catalan ] = "%PRODUCTNAME Calendari";
     Text[ finnish ] = "%PRODUCTNAME-kalenteri";
     Text[ thai ] = "ปฏิทิน %PRODUCTNAME ";
+    Text[ czech ] = "Kalendář %PRODUCTNAME";
+    Text[ hebrew ] = "‮לוח שנה %PRODUCTNAME‬";
+    Text[ hindi ] = "%PRODUCTNAME केलन्डर";
 };
 
 String  dlgCalTitleBack
@@ -153,7 +156,7 @@ Text[ swedish ] = "Tillbaka";
     Text[ greek ] = "����";
     Text[ danish ] = "Tilbage";
     Text[ polish ] = "Wstecz";
-    Text[ portuguese_brazilian ] = "Back";
+    Text[ portuguese_brazilian ] = "Voltar";
     Text[ japanese ] = "戻る";
     Text[ korean ] = "뒤로";
     Text[ chinese_simplified ] = "返回";
@@ -163,6 +166,9 @@ Text[ swedish ] = "Tillbaka";
     Text[ catalan ] = "Enrere";
     Text[ finnish ] = "Edellinen";
     Text[ thai ] = "กลับไป";
+    Text[ czech ] = "Zpět";
+    Text[ hebrew ] = "‮קודם‬";
+    Text[ hindi ] = "पीछे";
 };
 
 String  dlgCalTitleOwnData
@@ -180,7 +186,7 @@ Text[ swedish ] = "Egna data";
     Text[ greek ] = "��������� ��������";
     Text[ danish ] = "Egne data";
     Text[ polish ] = "Dane osobiste";
-    Text[ portuguese_brazilian ] = "Personal Data";
+    Text[ portuguese_brazilian ] = "Dados pessoais";
     Text[ japanese ] = "独自のデータ";
     Text[ korean ] = "고유 데이터";
     Text[ chinese_simplified ] = "个人数据";
@@ -190,6 +196,9 @@ Text[ swedish ] = "Egna data";
     Text[ catalan ] = "Dades personals";
     Text[ finnish ] = "Henkil�tiedot";
     Text[ thai ] = "ข้อมูลส่วนตัว";
+    Text[ czech ] = "Osobní data";
+    Text[ hebrew ] = "‮פרטים אישיים‬";
+    Text[ hindi ] = "वैयक्तिक ड़ॉटा";
 };
 
 String dlgSchdlTitle
@@ -206,18 +215,21 @@ Text[ swedish ] = "Ber�kna helgdagar";
     Text[ russian ] = "�������� ��������� � ���������";
     Text[ greek ] = "����������� ������ ������";
     Text[ danish ] = "Beregn helligdage";
-    Text[ polish ] = "Oblicz dni �wi�teczne";
-    Text[ portuguese_brazilian ] = "Add Holidays to Calendar";
+    Text[ polish ] = "Dodaj dni wolne od pracy do kalendarza";
+    Text[ portuguese_brazilian ] = "Adicionar Feriados ao Calend�rio";
     Text[ japanese ] = "祝日を数える";
     Text[ korean ] = "공휴일 계산";
     Text[ chinese_simplified ] = "节假日计算";
     Text[ chinese_traditional ] = "計算節假日";
     Text[ arabic ] = "���� �������";
-    Text[ turkish ] = "Tatil g�nlerinin hesaplanmas�";
+    Text[ turkish ] = "Tatil g�nlerinin takvime ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Afegeix les vacances al calendari";
     Text[ finnish ] = "Lis�� lomat kalenteriin";
     Text[ thai ] = "เพิ่มวันหยุดลงในปฏิทิน";
+    Text[ czech ] = "Vložit svátky do kalendáře";
+    Text[ hebrew ] = "‮הוספת חגים ללוח שנה‬";
+    Text[ hindi ] = "छुट्टियों का दिनों को केलन्डर में जोड़ो";
 };
 
 String dlgOK
@@ -235,7 +247,7 @@ Text[ swedish ] = "F�rdigst�ll";
     Text[ greek ] = "����������";
     Text[ danish ] = "Udf�r";
     Text[ polish ] = "Utw�rz";
-    Text[ portuguese_brazilian ] = "Create";
+    Text[ portuguese_brazilian ] = "Criar";
     Text[ japanese ] = "完了";
     Text[ korean ] = "만들기";
     Text[ chinese_simplified ] = "完成";
@@ -245,6 +257,9 @@ Text[ swedish ] = "F�rdigst�ll";
     Text[ catalan ] = "Crea";
     Text[ finnish ] = "Luo";
     Text[ thai ] = "สร้าง";
+    Text[ czech ] = "Vytvořit";
+    Text[ hebrew ] = "‮יצירה‬";
+    Text[ hindi ] = "उत्पन्न करो";
 };
 
 String dlgCancel
@@ -262,7 +277,7 @@ Text[ swedish ] = "Avbryt";
     Text[ greek ] = "�������";
     Text[ danish ] = "Annuller";
     Text[ polish ] = "Anuluj";
-    Text[ portuguese_brazilian ] = "Cancel";
+    Text[ portuguese_brazilian ] = "Cancelar";
     Text[ japanese ] = "キャンセル";
     Text[ korean ] = "취소";
     Text[ chinese_simplified ] = "取消";
@@ -272,6 +287,9 @@ Text[ swedish ] = "Avbryt";
     Text[ catalan ] = "Cancel.la";
     Text[ finnish ] = "Peruuta";
     Text[ thai ] = "ยกเลิก";
+    Text[ czech ] = "Zrušit";
+    Text[ hebrew ] = "‮ביטול‬";
+    Text[ hindi ] = "रद्द करो";
 };
 
 String  dlgCalFrameOption
@@ -289,7 +307,7 @@ Text[ swedish ] = "Kalender";
     Text[ greek ] = "����������";
     Text[ danish ] = "Kalendar";
     Text[ polish ] = "Kalendarz";
-    Text[ portuguese_brazilian ] = "Calendar";
+    Text[ portuguese_brazilian ] = "Calend�rio";
     Text[ japanese ] = "カレンダー";
     Text[ korean ] = "칼렌더";
     Text[ chinese_simplified ] = "日历";
@@ -299,6 +317,9 @@ Text[ swedish ] = "Kalender";
     Text[ catalan ] = "Calendari";
     Text[ finnish ] = "Kalenteri";
     Text[ thai ] = "ปฏิทิน";
+    Text[ czech ] = "Kalendář";
+    Text[ hebrew ] = "‮לוח שנה‬";
+    Text[ hindi ] = "केलन्डर";
 };
 
 String  dlgCalOptionYear
@@ -315,8 +336,8 @@ Text[ swedish ] = "~�rs�versikt";
     Text[ russian ] = "~������� �����";
     Text[ greek ] = "~������ �����";
     Text[ danish ] = "~�rsoversigt";
-    Text[ polish ] = "~Przegl�d roku";
-    Text[ portuguese_brazilian ] = "~Year Overview";
+    Text[ polish ] = "Przegl�d ~roczny";
+    Text[ portuguese_brazilian ] = "~Vis�o geral anual";
     Text[ japanese ] = "年間(~Y)";
     Text[ korean ] = "연도 개요(~Y)";
     Text[ chinese_simplified ] = "年检视图(~Y)";
@@ -326,6 +347,9 @@ Text[ swedish ] = "~�rs�versikt";
     Text[ catalan ] = "~Resum de l'any";
     Text[ finnish ] = "~Vuoden yleiskuvaus";
     Text[ thai ] = "ภาพรวมของ~ปี";
+    Text[ czech ] = "Roční přehled";
+    Text[ hebrew ] = "‮מבט שנתי‬";
+    Text[ hindi ] = "~वार्षिक दृश्य";
 };
 
 String  dlgCalOptionMonth
@@ -343,7 +367,7 @@ Text[ swedish ] = "~M�nad";
     Text[ greek ] = "~�����";
     Text[ danish ] = "~M�ned";
     Text[ polish ] = "~Miesi�c";
-    Text[ portuguese_brazilian ] = "~Month";
+    Text[ portuguese_brazilian ] = "~M�s";
     Text[ japanese ] = "月間(~M)";
     Text[ korean ] = "월(~M)";
     Text[ chinese_simplified ] = "月(~M)";
@@ -353,6 +377,9 @@ Text[ swedish ] = "~M�nad";
     Text[ catalan ] = "~Mes";
     Text[ finnish ] = "~Kuukausi";
     Text[ thai ] = "เ~ดือน";
+    Text[ czech ] = "Měsíc";
+    Text[ hebrew ] = "‮חודש‬";
+    Text[ hindi ] = "~मास";
 };
 
 String dlgSchdlDescription
@@ -369,18 +396,21 @@ Text[ swedish ] = "Ber�kna helgdagar f�r";
     Text[ russian ] = "�������� ��������� ���";
     Text[ greek ] = "����������� ������ ������ ���";
     Text[ danish ] = "Beregn helligdage for";
-    Text[ polish ] = "Obliczenie dni �wi�tecznych dla";
-    Text[ portuguese_brazilian ] = "Add holidays for";
+    Text[ polish ] = "Dodaj dni wolne od pracy dla";
+    Text[ portuguese_brazilian ] = "Adicionar feriados para";
     Text[ japanese ] = "祝日を数える対象";
     Text[ korean ] = "공휴일 계산";
     Text[ chinese_simplified ] = "计算节假日为";
     Text[ chinese_traditional ] = "計算節假日的所在地";
     Text[ arabic ] = "���� ������� ������� ��";
-    Text[ turkish ] = "Tatil g�nleri hesaplamas�";
+    Text[ turkish ] = "Tatil g�nleri ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Afegeix les vacances per";
     Text[ finnish ] = "Lis�� lomat:";
     Text[ thai ] = "เพิ่มวันหยุดสำหรับ";
+    Text[ czech ] = "Přidat svátky pro";
+    Text[ hebrew ] = "‮הוספת החגים של‬";
+    Text[ hindi ] = "केलिए छुट्टियों का दिनों को जोड़ो";
 };
 
 String dlgSchdlCountry
@@ -398,17 +428,20 @@ Text[ swedish ] = "Sverige";
     Text[ greek ] = "������";
     Text[ danish ] = "Danmark";
     Text[ polish ] = "Polska";
-    Text[ portuguese_brazilian ] = "USA";
+    Text[ portuguese_brazilian ] = "Brasil";
     Text[ japanese ] = "日本";
     Text[ korean ] = "한국";
     Text[ chinese_simplified ] = "中国";
     Text[ chinese_traditional ] = "台灣";
     Text[ arabic ] = "���";
-    Text[ turkish ] = "T�rkiye";
+    Text[ turkish ] = "ABD";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Catalunya";
     Text[ finnish ] = "USA";
     Text[ thai ] = "ประเทศไทย";
+    Text[ czech ] = "USA";
+    Text[ hebrew ] = "‮ישראל‬";
+    Text[ hindi ] = "USA";
 };
 
 String dlgTime
@@ -426,7 +459,7 @@ Text[ swedish ] = "Tidsrymd";
     Text[ greek ] = "������� ��������";
     Text[ danish ] = "Tidsperiode";
     Text[ polish ] = "Okres";
-    Text[ portuguese_brazilian ] = "Time Frame";
+    Text[ portuguese_brazilian ] = "Per�odo";
     Text[ japanese ] = "期間";
     Text[ korean ] = "기간";
     Text[ chinese_simplified ] = "时间";
@@ -436,6 +469,9 @@ Text[ swedish ] = "Tidsrymd";
     Text[ catalan ] = "Marc d'hora";
     Text[ finnish ] = "Aikakehys";
     Text[ thai ] = "กรอบเวลา";
+    Text[ czech ] = "Časový rámec";
+    Text[ hebrew ] = "‮טווח זמן‬";
+    Text[ hindi ] = "समय फ्रेम";
 };
 
 String dlgYear
@@ -453,7 +489,7 @@ Text[ swedish ] = "�r";
     Text[ greek ] = "����";
     Text[ danish ] = "�r";
     Text[ polish ] = "Rok";
-    Text[ portuguese_brazilian ] = "Year";
+    Text[ portuguese_brazilian ] = "Ano";
     Text[ japanese ] = "西暦年";
     Text[ korean ] = "년";
     Text[ chinese_simplified ] = "年";
@@ -464,6 +500,9 @@ Text[ swedish ] = "�r";
     Text[ catalan ] = "Any";
     Text[ finnish ] = "Vuosi";
     Text[ thai ] = "ปี";
+    Text[ czech ] = "Rok";
+    Text[ hebrew ] = "‮שנה‬";
+    Text[ hindi ] = "वर्ष";
 };
 
 String dlgCalMonth
@@ -481,7 +520,7 @@ Text[ swedish ] = "M�nad";
     Text[ greek ] = "�����";
     Text[ danish ] = "M�ned";
     Text[ polish ] = "Miesi�c";
-    Text[ portuguese_brazilian ] = "Month";
+    Text[ portuguese_brazilian ] = "M�s";
     Text[ japanese ] = "月";
     Text[ korean ] = "월";
     Text[ chinese_simplified ] = "月";
@@ -492,6 +531,9 @@ Text[ swedish ] = "M�nad";
     Text[ catalan ] = "Mes";
     Text[ finnish ] = "Kuukausi";
     Text[ thai ] = "เดือน";
+    Text[ czech ] = "Měsíc";
+    Text[ hebrew ] = "‮חודש‬";
+    Text[ hindi ] = "मास";
 };
 
 String  dlgSpecificBankholidays
@@ -511,6 +553,9 @@ Text[ swedish ] = "-";
     Text[ turkish ] = "-";
     Text[ korean ] = "-";
     Text[ catalan ] = "-";
+    Text[ japanese ] = "-";
+    Text[ chinese_simplified ] = "-";
+    Text[ hebrew ] = "‮חג ישראלי‬";
 };
 
 String  dlgCalOwnData
@@ -528,7 +573,7 @@ Text[ swedish ] = "Egna data";
     Text[ greek ] = "��������� ��������";
     Text[ danish ] = "Egne data";
     Text[ polish ] = "Dane osobiste";
-    Text[ portuguese_brazilian ] = "Personal Data";
+    Text[ portuguese_brazilian ] = "Dados pessoais";
     Text[ japanese ] = "独自のデータ";
     Text[ korean ] = "고유 데이터";
     Text[ chinese_simplified ] = "个人数据";
@@ -538,6 +583,9 @@ Text[ swedish ] = "Egna data";
     Text[ catalan ] = "Dades personals";
     Text[ finnish ] = "Henkil�tiedot";
     Text[ thai ] = "ข้อมูลส่วนตัว";
+    Text[ czech ] = "Osobní data";
+    Text[ hebrew ] = "‮פרטים אישיים‬";
+    Text[ hindi ] = "वैयक्तिक ड़ॉटा";
 };
 
 String dlgCalInsert
@@ -554,8 +602,8 @@ Text[ swedish ] = "~Infoga";
     Text[ russian ] = "~��������";
     Text[ greek ] = "~��������";
     Text[ danish ] = "~Inds�t";
-    Text[ polish ] = "~Wstaw";
-    Text[ portuguese_brazilian ] = "~Insert";
+    Text[ polish ] = "W~staw";
+    Text[ portuguese_brazilian ] = "~Inserir";
     Text[ japanese ] = "挿入(~I)";
     Text[ korean ] = "삽입(~I)";
     Text[ chinese_simplified ] = "插入(~I)";
@@ -565,6 +613,9 @@ Text[ swedish ] = "~Infoga";
     Text[ catalan ] = "~Insereix";
     Text[ finnish ] = "~Lis��";
     Text[ thai ] = "แ~ทรก";
+    Text[ czech ] = "Vložit";
+    Text[ hebrew ] = "‮הוספה‬";
+    Text[ hindi ] = "~जोड़ो";
 };
 
 String dlgCalDelete
@@ -582,7 +633,7 @@ Text[ swedish ] = "Ta ~bort";
     Text[ greek ] = "������~��";
     Text[ danish ] = "~Fjern";
     Text[ polish ] = "~Usu�";
-    Text[ portuguese_brazilian ] = "~Delete";
+    Text[ portuguese_brazilian ] = "~Excluir";
     Text[ japanese ] = "削除(~D)";
     Text[ korean ] = "삭제(~D)";
     Text[ chinese_simplified ] = "删除(~D)";
@@ -592,6 +643,9 @@ Text[ swedish ] = "Ta ~bort";
     Text[ catalan ] = "~Suprimeix";
     Text[ finnish ] = "~Poista";
     Text[ thai ] = "~ลบ";
+    Text[ czech ] = "Smazat";
+    Text[ hebrew ] = "‮מחיקה‬";
+    Text[ hindi ] = "~मिटाओ";
 };
 
 String dlgCalNewEvent
@@ -608,8 +662,8 @@ Text[ swedish ] = "Ny h�ndelse";
     Text[ russian ] = "������� �������";
     Text[ greek ] = "��� �������";
     Text[ danish ] = "Ny begivenhed";
-    Text[ polish ] = "Nowe wydarzenie";
-    Text[ portuguese_brazilian ] = "New Event";
+    Text[ polish ] = "Nowe zdarzenie";
+    Text[ portuguese_brazilian ] = "Novo evento";
     Text[ japanese ] = "新しい予定";
     Text[ korean ] = "새 이벤트";
     Text[ chinese_simplified ] = "重大事件";
@@ -619,6 +673,9 @@ Text[ swedish ] = "Ny h�ndelse";
     Text[ catalan ] = "Esdeveniment nou";
     Text[ finnish ] = "Uusi tapahtuma";
     Text[ thai ] = "เหตุการณ์ใหม่";
+    Text[ czech ] = "Nová událost";
+    Text[ hebrew ] = "‮אירוע חדש‬";
+    Text[ hindi ] = "नया घटना";
 };
 
 String dlgCalEvent
@@ -636,7 +693,7 @@ Text[ swedish ] = "H�ndelse";
     Text[ greek ] = "�������";
     Text[ danish ] = "Begivenhed";
     Text[ polish ] = "Wydarzenie";
-    Text[ portuguese_brazilian ] = "Event";
+    Text[ portuguese_brazilian ] = "Evento";
     Text[ japanese ] = "イベント";
     Text[ korean ] = "이벤트";
     Text[ chinese_simplified ] = "事件";
@@ -646,6 +703,9 @@ Text[ swedish ] = "H�ndelse";
     Text[ catalan ] = "Esdeveniment";
     Text[ finnish ] = "Tapahtuma";
     Text[ thai ] = "เหตุการณ์";
+    Text[ czech ] = "Událost";
+    Text[ hebrew ] = "‮אירוע‬";
+    Text[ hindi ] = "घटना";
 };
 
 String dlgCalEventOnce
@@ -663,7 +723,7 @@ Text[ swedish ] = "Eng�ngsf�reteelse";
     Text[ greek ] = "�������� ����";
     Text[ danish ] = "�n gang";
     Text[ polish ] = "Jednorazowo";
-    Text[ portuguese_brazilian ] = "One-Time";
+    Text[ portuguese_brazilian ] = "�nico";
     Text[ japanese ] = "1回のみ";
     Text[ korean ] = "일회";
     Text[ chinese_simplified ] = "一次性";
@@ -673,6 +733,9 @@ Text[ swedish ] = "Eng�ngsf�reteelse";
     Text[ catalan ] = "Un cop";
     Text[ finnish ] = "Kerran";
     Text[ thai ] = "หนึ่งครั้ง";
+    Text[ czech ] = "Jednorázová";
+    Text[ hebrew ] = "‮חד-פעמי‬";
+    Text[ hindi ] = "एक-बार";
 };
 
 String dlgCalEventDay
@@ -690,7 +753,7 @@ Text[ swedish ] = "Dag";
     Text[ greek ] = "�����";
     Text[ danish ] = "Dag";
     Text[ polish ] = "Dzie�";
-    Text[ portuguese_brazilian ] = "Day";
+    Text[ portuguese_brazilian ] = "Dia";
     Text[ japanese ] = "日";
     Text[ korean ] = "일";
     Text[ chinese_simplified ] = "天";
@@ -701,6 +764,9 @@ Text[ swedish ] = "Dag";
     Text[ catalan ] = "Dia";
     Text[ finnish ] = "P�iv�";
     Text[ thai ] = "วัน";
+    Text[ czech ] = "Den";
+    Text[ hebrew ] = "‮יום‬";
+    Text[ hindi ] = "दिन";
 };
 
 String dlgCalEventMonth
@@ -718,7 +784,7 @@ Text[ swedish ] = "M�nad";
     Text[ greek ] = "�����";
     Text[ danish ] = "M�ned";
     Text[ polish ] = "Miesi�c";
-    Text[ portuguese_brazilian ] = "Month";
+    Text[ portuguese_brazilian ] = "M�s";
     Text[ japanese ] = "月";
     Text[ korean ] = "월";
     Text[ chinese_simplified ] = "月";
@@ -729,6 +795,9 @@ Text[ swedish ] = "M�nad";
     Text[ catalan ] = "Mes";
     Text[ finnish ] = "Kuukausi";
     Text[ thai ] = "เดือน";
+    Text[ czech ] = "Měsíc";
+    Text[ hebrew ] = "‮חודש‬";
+    Text[ hindi ] = "मास";
 };
 
 String dlgCalEventYear
@@ -746,7 +815,7 @@ Text[ swedish ] = "�r";
     Text[ greek ] = "����";
     Text[ danish ] = "�r";
     Text[ polish ] = "Rok";
-    Text[ portuguese_brazilian ] = "Year";
+    Text[ portuguese_brazilian ] = "Ano";
     Text[ japanese ] = "年";
     Text[ korean ] = "년";
     Text[ chinese_simplified ] = "年";
@@ -757,6 +826,9 @@ Text[ swedish ] = "�r";
     Text[ catalan ] = "Any";
     Text[ finnish ] = "Julkaisuvuosi";
     Text[ thai ] = "ปี";
+    Text[ czech ] = "Rok";
+    Text[ hebrew ] = "‮שנה‬";
+    Text[ hindi ] = "वर्ष";
 };
 
 // --------------------------------------------------------------------
@@ -777,18 +849,21 @@ Text[ swedish ] = "sweden.bmp";
     Text[ greek ] = "greece.bmp";
     Text[ danish ] = "germany.wmf";
     Text[ polish ] = "polska.bmp";
-    Text[ portuguese_brazilian ] = "usa.bmp";
+    Text[ portuguese_brazilian ] = "brasil.bmp";
     Text[ japanese ] = "japan.bmp";
     Text[ korean ] = "korea.bmp";
     Text[ chinese_simplified ] = "china.gif";
     Text[ chinese_traditional ] = "taiwan.bmp";
     Text[ arabic ] = "egypt.bmp";
-    Text[ turkish ] = "turkiye.bmp";
+    Text[ turkish ] = "abd.bmp";
     Text[ catalan ] = "usa.bmp";
     Text[ finnish ] = "usa.bmp";
     Text[ language_user1 ] = "Only for Germany we will use a '.wmf' file. For other localizations only bitmaps. The name of the resource refers to the bitmap 'share/template/wizard/bitmap";
 
     Text[ thai ] = "thailand.bmp";
+    Text[ czech ] = "usa.bmp";
+    Text[ hebrew ] = "israel.bmp";
+    Text[ hindi ] = "usa.bmp";
 };
 
 // --------------------------------------------------------------------
@@ -806,7 +881,7 @@ Text[ dutch ] = "Algemene feestdagen";
 Text[ swedish ] = "Allm�nna helgdagar";
     Text[ russian ] = "����������� ���������";
     Text[ danish ] = "Almindelige helligdage";
-    Text[ polish ] = "Og�lne dni �wi�teczne";
+    Text[ polish ] = "�wi�ta urz�dowe";
     Text[ chinese_traditional ] = "一般節假日";
     Text[ arabic ] = "����� ����";
     Text[ greek ] = "������� ������";
@@ -815,6 +890,12 @@ Text[ swedish ] = "Allm�nna helgdagar";
     Text[ catalan ] = "Festius";
     Text[ finnish ] = "Yleiset lomap�iv�t";
     Text[ thai ] = "วันหยุดราชการ";
+    Text[ japanese ] = "-";
+    Text[ chinese_simplified ] = "-";
+    Text[ czech ] = "Státní svátky";
+    Text[ hebrew ] = "‮חגים‬";
+    Text[ portuguese_brazilian ] = "Feriados oficiais";
+    Text[ hindi ] = "सार्वजनिक छुट्ठियाँ";
 };
 
 
@@ -835,7 +916,7 @@ Text[ swedish ] = "Januari";
     Text[ greek ] = "����������";
     Text[ danish ] = "Januar";
     Text[ polish ] = "Stycze�";
-    Text[ portuguese_brazilian ] = "January";
+    Text[ portuguese_brazilian ] = "Janeiro";
     Text[ japanese ] = "1月";
     Text[ korean ] = "1월";
     Text[ chinese_simplified ] = "一月";
@@ -845,6 +926,9 @@ Text[ swedish ] = "Januari";
     Text[ catalan ] = "Gener";
     Text[ finnish ] = "Tammikuu";
     Text[ thai ] = "มกราคม";
+    Text[ czech ] = "Leden";
+    Text[ hebrew ] = "‮ינואר‬";
+    Text[ hindi ] = "जनवरी";
 };
 
 String dlgMonth+1
@@ -862,7 +946,7 @@ Text[ swedish ] = "Februari";
     Text[ greek ] = "�����������";
     Text[ danish ] = "Februar";
     Text[ polish ] = "Luty";
-    Text[ portuguese_brazilian ] = "February";
+    Text[ portuguese_brazilian ] = "Fevereiro";
     Text[ japanese ] = "2月";
     Text[ korean ] = "2월";
     Text[ chinese_simplified ] = "二月";
@@ -872,6 +956,9 @@ Text[ swedish ] = "Februari";
     Text[ catalan ] = "Febrer";
     Text[ finnish ] = "Helmikuu";
     Text[ thai ] = "กุมภาพันธ์";
+    Text[ czech ] = "Únor";
+    Text[ hebrew ] = "‮פברואר‬";
+    Text[ hindi ] = "फरवरी";
 };
 
 String dlgMonth+2
@@ -889,7 +976,7 @@ Text[ swedish ] = "Mars";
     Text[ greek ] = "�������";
     Text[ danish ] = "Marts";
     Text[ polish ] = "Marzec";
-    Text[ portuguese_brazilian ] = "March";
+    Text[ portuguese_brazilian ] = "Mar�o";
     Text[ japanese ] = "3月";
     Text[ korean ] = "3월";
     Text[ chinese_simplified ] = "三月";
@@ -899,6 +986,9 @@ Text[ swedish ] = "Mars";
     Text[ catalan ] = "Mar�";
     Text[ finnish ] = "Maaliskuu";
     Text[ thai ] = "มีนาคม";
+    Text[ czech ] = "Březen";
+    Text[ hebrew ] = "‮מרץ‬";
+    Text[ hindi ] = "मार्च";
 };
 
 String dlgMonth+3
@@ -916,7 +1006,7 @@ Text[ swedish ] = "April";
     Text[ greek ] = "��������";
     Text[ danish ] = "April";
     Text[ polish ] = "Kwiecie�";
-    Text[ portuguese_brazilian ] = "April";
+    Text[ portuguese_brazilian ] = "Abril";
     Text[ japanese ] = "4月";
     Text[ korean ] = "4월";
     Text[ chinese_simplified ] = "四月";
@@ -926,6 +1016,9 @@ Text[ swedish ] = "April";
     Text[ catalan ] = "Abril";
     Text[ finnish ] = "Huhtikuu";
     Text[ thai ] = "เมษายน";
+    Text[ czech ] = "Duben";
+    Text[ hebrew ] = "‮אפריל‬";
+    Text[ hindi ] = "अप्रैल";
 };
 
 String dlgMonth+4
@@ -943,7 +1036,7 @@ Text[ swedish ] = "Maj";
     Text[ greek ] = "�����";
     Text[ danish ] = "Maj";
     Text[ polish ] = "Maj";
-    Text[ portuguese_brazilian ] = "May";
+    Text[ portuguese_brazilian ] = "Maio";
     Text[ japanese ] = "5月";
     Text[ korean ] = "5월";
     Text[ chinese_simplified ] = "五月";
@@ -953,6 +1046,9 @@ Text[ swedish ] = "Maj";
     Text[ catalan ] = "Maig";
     Text[ finnish ] = "Toukokuu";
     Text[ thai ] = "พฤษภาคม";
+    Text[ czech ] = "Květen";
+    Text[ hebrew ] = "‮מאי‬";
+    Text[ hindi ] = "मेइ";
 };
 
 String dlgMonth+5
@@ -970,7 +1066,7 @@ Text[ swedish ] = "Juni";
     Text[ greek ] = "�������";
     Text[ danish ] = "Juni";
     Text[ polish ] = "Czerwiec";
-    Text[ portuguese_brazilian ] = "June";
+    Text[ portuguese_brazilian ] = "Junho";
     Text[ japanese ] = "6月";
     Text[ korean ] = "6월";
     Text[ chinese_simplified ] = "六月";
@@ -980,6 +1076,9 @@ Text[ swedish ] = "Juni";
     Text[ catalan ] = "Juny";
     Text[ finnish ] = "Kes�kuu";
     Text[ thai ] = "มิถุนายน";
+    Text[ czech ] = "Červen";
+    Text[ hebrew ] = "‮יוני‬";
+    Text[ hindi ] = "जून";
 };
 
 String dlgMonth+6
@@ -997,7 +1096,7 @@ Text[ swedish ] = "Juli";
     Text[ greek ] = "�������";
     Text[ danish ] = "Juli";
     Text[ polish ] = "Lipiec";
-    Text[ portuguese_brazilian ] = "July";
+    Text[ portuguese_brazilian ] = "Julho";
     Text[ japanese ] = "7月";
     Text[ korean ] = "7월";
     Text[ chinese_simplified ] = "七月";
@@ -1007,6 +1106,9 @@ Text[ swedish ] = "Juli";
     Text[ catalan ] = "Juliol";
     Text[ finnish ] = "Hein�kuu";
     Text[ thai ] = "กรกฎาคม";
+    Text[ czech ] = "Červenec";
+    Text[ hebrew ] = "‮יולי‬";
+    Text[ hindi ] = "जुलाई";
 };
 
 String dlgMonth+7
@@ -1024,7 +1126,7 @@ Text[ swedish ] = "Augusti";
     Text[ greek ] = "���������";
     Text[ danish ] = "August";
     Text[ polish ] = "Sierpie�";
-    Text[ portuguese_brazilian ] = "August";
+    Text[ portuguese_brazilian ] = "Agosto";
     Text[ japanese ] = "8月";
     Text[ korean ] = "8월";
     Text[ chinese_simplified ] = "八月";
@@ -1034,6 +1136,9 @@ Text[ swedish ] = "Augusti";
     Text[ catalan ] = "Agost";
     Text[ finnish ] = "Elokuu";
     Text[ thai ] = "สิงหาคม";
+    Text[ czech ] = "Srpen";
+    Text[ hebrew ] = "‮אוגוסט‬";
+    Text[ hindi ] = "अगस्त";
 };
 
 String dlgMonth+8
@@ -1051,7 +1156,7 @@ Text[ swedish ] = "September";
     Text[ greek ] = "�����������";
     Text[ danish ] = "September";
     Text[ polish ] = "Wrzesie�";
-    Text[ portuguese_brazilian ] = "September";
+    Text[ portuguese_brazilian ] = "Setembro";
     Text[ japanese ] = "9月";
     Text[ korean ] = "9월";
     Text[ chinese_simplified ] = "九月";
@@ -1061,6 +1166,9 @@ Text[ swedish ] = "September";
     Text[ catalan ] = "Setembre";
     Text[ finnish ] = "Syyskuu";
     Text[ thai ] = "กันยายน";
+    Text[ czech ] = "Září";
+    Text[ hebrew ] = "‮ספטמבר‬";
+    Text[ hindi ] = "सितंबर";
 };
 
 String dlgMonth+9
@@ -1078,7 +1186,7 @@ Text[ swedish ] = "Oktober";
     Text[ greek ] = "���������";
     Text[ danish ] = "Oktober";
     Text[ polish ] = "Pa�dziernik";
-    Text[ portuguese_brazilian ] = "October";
+    Text[ portuguese_brazilian ] = "Outubro";
     Text[ japanese ] = "10月";
     Text[ korean ] = "10월";
     Text[ chinese_simplified ] = "十月";
@@ -1088,6 +1196,9 @@ Text[ swedish ] = "Oktober";
     Text[ catalan ] = "Octubre";
     Text[ finnish ] = "Lokakuu";
     Text[ thai ] = "ตุลาคม";
+    Text[ czech ] = "Říjen";
+    Text[ hebrew ] = "‮אוקטובר‬";
+    Text[ hindi ] = "अक्तूबर";
 };
 
 String dlgMonth+10
@@ -1105,7 +1216,7 @@ Text[ swedish ] = "November";
     Text[ greek ] = "���������";
     Text[ danish ] = "November";
     Text[ polish ] = "Listopad";
-    Text[ portuguese_brazilian ] = "November";
+    Text[ portuguese_brazilian ] = "Novembro";
     Text[ japanese ] = "11月";
     Text[ korean ] = "11월";
     Text[ chinese_simplified ] = "十一月";
@@ -1115,6 +1226,9 @@ Text[ swedish ] = "November";
     Text[ catalan ] = "Novembre";
     Text[ finnish ] = "Marraskuu";
     Text[ thai ] = "พฤศจิกายน";
+    Text[ czech ] = "Listopad";
+    Text[ hebrew ] = "‮נובמבר‬";
+    Text[ hindi ] = "नवंबर";
 };
 
 String dlgMonth+11
@@ -1132,7 +1246,7 @@ Text[ swedish ] = "December";
     Text[ greek ] = "����������";
     Text[ danish ] = "December";
     Text[ polish ] = "Grudzie�";
-    Text[ portuguese_brazilian ] = "December";
+    Text[ portuguese_brazilian ] = "Dezembro";
     Text[ japanese ] = "12月";
     Text[ korean ] = "12월";
     Text[ chinese_simplified ] = "十二月";
@@ -1142,6 +1256,9 @@ Text[ swedish ] = "December";
     Text[ catalan ] = "Desembre";
     Text[ finnish ] = "Joulukuu";
     Text[ thai ] = "ธันวาคม";
+    Text[ czech ] = "Prosinec";
+    Text[ hebrew ] = "‮דצמבר‬";
+    Text[ hindi ] = "दिसंबर";
 };
 
 // --------------------------------------------------------------------
@@ -1160,8 +1277,8 @@ Text[ swedish ] = "�rs-/m�nadskalender";
     Text[ russian ] = "��������� �� ��� / �� �����";
     Text[ greek ] = "���������� ������ / M������";
     Text[ danish ] = "�rs- / m�nedskalender";
-    Text[ polish ] = "Kalendarz roczny / miesi�czny";
-    Text[ portuguese_brazilian ] = "Yearly- / Monthly Calendar";
+    Text[ polish ] = "Kalendarz roczny/miesi�czny";
+    Text[ portuguese_brazilian ] = "Calend�rio Anual / Mensal";
     Text[ japanese ] = "年間/月間 カレンダー";
     Text[ korean ] = "연간/월간 칼렌더";
     Text[ chinese_simplified ] = "年历和月历";
@@ -1171,6 +1288,9 @@ Text[ swedish ] = "�rs-/m�nadskalender";
     Text[ catalan ] = "Calendari anual / mensual";
     Text[ finnish ] = "Vuosi-/kuukausikalenteri";
     Text[ thai ] = "ปฏิทินประจำปี / ประจำเดือน";
+    Text[ czech ] = "Roční / měsíční kalendář";
+    Text[ hebrew ] = "‮לוח שנתי\\חודשי‬";
+    Text[ hindi ] = "वार्षिक / मासिक केलन्डर";
 };
 
 String msgCalError
@@ -1187,8 +1307,8 @@ Text[ swedish ] = "Ett fel uppstod n�r kalendern skapades.";
     Text[ russian ] = "������ �������� ���������.";
     Text[ greek ] = "������������� ������ ���� ��� ���������� ��� �����������.";
     Text[ danish ] = "Der opstod en fejl under oprettelsen af kalenderen.";
-    Text[ polish ] = "Podczas tworzenia kalendarza zaszed� b��d.";
-    Text[ portuguese_brazilian ] = "An error occurred during the creation of the calendar.";
+    Text[ polish ] = "Wyst�pi� b��d podczas tworzenia kalendarza.";
+    Text[ portuguese_brazilian ] = "Ocorreu um erro ao criar o calend�rio.";
     Text[ japanese ] = "カレンダーの作成の際にエラー発生。";
     Text[ korean ] = "칼렌더 만드는 중 오류가 발생했습니다.";
     Text[ chinese_simplified ] = "在制作日历时出现了一个错误。";
@@ -1198,6 +1318,9 @@ Text[ swedish ] = "Ett fel uppstod n�r kalendern skapades.";
     Text[ catalan ] = "S'ha produ�t un error en crear el calendari.";
     Text[ finnish ] = "On ilmennyt virhe luotaessa kalenteria.";
     Text[ thai ] = "เกิดข้อผิดพลาดขึ้นขณะกำลังสร้างปฏิทิน";
+    Text[ czech ] = "Při vytváření kalendáře došlo k chybě.";
+    Text[ hebrew ] = "‮שגיאה בעת יצירת הלוח‬";
+    Text[ hindi ] = "केलन्डर को उत्पन्न करने के समय गलती घटित हुआ ।";
 };
 
 String msgCalRemoveTitle
@@ -1215,7 +1338,7 @@ Text[ swedish ] = "Ta bort h�ndelseposter";
     Text[ greek ] = "�������� �������� ���������";
     Text[ danish ] = "Fjern begivenhedselementer";
     Text[ polish ] = "Usu� wpisy wydarze�";
-    Text[ portuguese_brazilian ] = "Delete Event Entries";
+    Text[ portuguese_brazilian ] = "Excluir eventos";
     Text[ japanese ] = "イベント項目の削除";
     Text[ korean ] = "이벤트 항목 제거";
     Text[ chinese_simplified ] = "删除事件条目";
@@ -1225,6 +1348,9 @@ Text[ swedish ] = "Ta bort h�ndelseposter";
     Text[ catalan ] = "Suprimeix les entrades de l'esdeveniment";
     Text[ finnish ] = "Poista tapahtumamerkinn�t";
     Text[ thai ] = "ลบรายการเหตุการณ์";
+    Text[ czech ] = "Odstranit události";
+    Text[ hebrew ] = "‮מחיקת ערכי ארועים‬";
+    Text[ hindi ] = "घटना प्रविष्टियों को मिटाओ";
 };
 
 String msgCalRemove
@@ -1242,7 +1368,7 @@ Text[ swedish ] = "Skall de markerade posterna tas bort?";
     Text[ greek ] = "�������� ��� ����������� ��������;";
     Text[ danish ] = "Er du sikker p�, at du vil fjerne de markerede elementer?";
     Text[ polish ] = "Czy usun�� zaznaczone wpisy?";
-    Text[ portuguese_brazilian ] = "Delete the selected entries?";
+    Text[ portuguese_brazilian ] = "Deseja excluir as entradas selecionadas?";
     Text[ japanese ] = "選択した項目を削除しますか。";
     Text[ korean ] = "선택된 항목을 제거하시겠습니까?";
     Text[ chinese_simplified ] = "要删除选中的条目吗？";
@@ -1253,6 +1379,9 @@ Text[ swedish ] = "Skall de markerade posterna tas bort?";
     Text[ catalan ] = "Voleu suprimir les entrades seleccionades?";
     Text[ finnish ] = "Poistetaanko valitut merkinn�t?";
     Text[ thai ] = "ลบรายการที่เลือกหรือไม่?";
+    Text[ czech ] = "Smazat vybrané položky?";
+    Text[ hebrew ] = "‮מחיקת ערכים שנבחרו?‬";
+    Text[ hindi ] = "चुने हुए प्रविष्टियों को मिटाना है?";
 };
 
 // --------------------------------------------------------------------
@@ -1278,7 +1407,7 @@ Text[ swedish ] = "";
     Text[ danish ] = "Arbejdsuge";
     Text[ swedish ] = "Arbetsvecka";
     Text[ polish ] = "Tydzie� roboczy";
-    Text[ portuguese_brazilian ] = "Workday";
+    Text[ portuguese_brazilian ] = "Dias �teis";
     Text[ japanese ] = "労働週日";
     Text[ korean ] = "근무 주";
     Text[ chinese_simplified ] = "工作周";
@@ -1289,6 +1418,9 @@ Text[ swedish ] = "";
     Text[ catalan ] = "Setmana laboral";
     Text[ finnish ] = "Ty�viikko";
     Text[ thai ] = "สัปดาห์ทำงาน";
+    Text[ czech ] = "Pracovní týden";
+    Text[ hebrew ] = "‮שבוע העבודה‬";
+    Text[ hindi ] = "कार्य सप्ताह";
 };
 
 String stlWeekend
@@ -1312,7 +1444,7 @@ Text[ swedish ] = "";
     Text[ danish ] = "Weekend";
     Text[ swedish ] = "Veckoslut";
     Text[ polish ] = "Weekend";
-    Text[ portuguese_brazilian ] = "Weekend";
+    Text[ portuguese_brazilian ] = "Fim de semana";
     Text[ japanese ] = "週末";
     Text[ korean ] = "주말";
     Text[ chinese_simplified ] = "周末";
@@ -1323,6 +1455,9 @@ Text[ swedish ] = "";
     Text[ catalan ] = "Cap de setmana";
     Text[ finnish ] = "Viikonloppu";
     Text[ thai ] = "วันหยุดประจำสัปดาห์";
+    Text[ czech ] = "Víkend";
+    Text[ hebrew ] = "‮סוף שבוע‬";
+    Text[ hindi ] = "छुट्ठी के दिन";
 };
 
 // --------------------------------------------------------------------
@@ -1342,7 +1477,7 @@ Text[ swedish ] = "Kalender";
     Text[ greek ] = "����������";
     Text[ danish ] = "Kalendar";
     Text[ polish ] = "Kalendarz";
-    Text[ portuguese_brazilian ] = "Calendar";
+    Text[ portuguese_brazilian ] = "Calend�rio";
     Text[ japanese ] = "カレンダー";
     Text[ korean ] = "칼렌더";
     Text[ chinese_simplified ] = "日历";
@@ -1352,6 +1487,9 @@ Text[ swedish ] = "Kalender";
     Text[ catalan ] = "Calendari";
     Text[ finnish ] = "Kalenteri";
     Text[ thai ] = "ปฏิทิน";
+    Text[ czech ] = "Kalendář";
+    Text[ hebrew ] = "‮לוח שנה‬";
+    Text[ hindi ] = "केलन्डर";
 };
 
 String  nameCalMonth
@@ -1369,7 +1507,7 @@ Text[ swedish ] = "M�nad";
     Text[ greek ] = "�����";
     Text[ danish ] = "M�ned";
     Text[ polish ] = "Miesi�c";
-    Text[ portuguese_brazilian ] = "Month";
+    Text[ portuguese_brazilian ] = "M�s";
     Text[ japanese ] = "";
     Text[ korean ] = "월";
     Text[ chinese_simplified ] = "月";
@@ -1381,6 +1519,9 @@ Text[ swedish ] = "M�nad";
     Text[ finnish ] = "Kuukausi";
     Text[ language_user1 ] = "This Resource is the prefix for a sheet name eg. in the form like 'Month February'.";
     Text[ thai ] = "เดือน";
+    Text[ czech ] = "Měsíc";
+    Text[ hebrew ] = "‮חודש‬";
+    Text[ hindi ] = "मास";
 };
 
 
@@ -1400,17 +1541,33 @@ Text[ English_us ] = "Progress:";
     Text[ danish ] = "Fremgang:";
     Text[ swedish ] = "Framsteg:";
     Text[ polish ] = "Post�p:";
-    Text[ portuguese_brazilian ] = "Progress";
+    Text[ portuguese_brazilian ] = "Progresso:";
     Text[ japanese ] = "進捗状況:";
     Text[ korean ] = "진행 상태:";
     Text[ chinese_simplified ] = "已经完成：";
     Text[ chinese_traditional ] = "已經完成：";
-    Text[ turkish ] = "Progress";
+    Text[ turkish ] = "�lerleme:";
     Text[ arabic ] = "������:";
     Text[ catalan ] = "Progr�s:";
     Text[ finnish ] = "Tilanne:";
     Text[ thai ] = "ความคืบหน้า:";
+    Text[ czech ] = "Průběh:";
+    Text[ hebrew ] = "‮התקדמות:‬";
+    Text[ hindi ] = "प्रस्थान:";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
