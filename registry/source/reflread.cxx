@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:43:56 $
+ *  last change: $Author: hr $ $Date: 2004-06-23 11:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #include "registry/version.h"
 
 #include "reflcnst.hxx"
+
+#include <cstddef>
 
 using namespace salhelper;
 
@@ -1149,7 +1151,7 @@ TypeRegistryEntry::TypeRegistryEntry(
     m_pMethods(NULL), m_pReferences(NULL), m_refCount(1), m_nSuperTypes(0),
     m_offset_SUPERTYPES(0)
 {
-    sal_uInt16 entrySize = sizeof(sal_uInt16);
+    std::size_t const entrySize = sizeof(sal_uInt16);
     sal_uInt16 nHeaderEntries = readUINT16(OFFSET_N_ENTRIES);
     sal_uInt16 offset_N_SUPERTYPES = OFFSET_N_ENTRIES + entrySize + (nHeaderEntries * entrySize);
     m_offset_SUPERTYPES = offset_N_SUPERTYPES + entrySize;
