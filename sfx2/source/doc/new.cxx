@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:42:45 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #ifndef _SV_MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
 #ifndef _SVMEDIT_HXX
 #include <svtools/svmedit.hxx>
 #endif
@@ -128,9 +125,6 @@
 #endif
 #ifndef _VIEWFAC_HXX
 #include "viewfac.hxx"
-#endif
-#ifndef _SFX_INTERNO_HXX
-#include "interno.hxx"
 #endif
 #ifndef _SFX_SFXRESID_HXX
 #include "sfxresid.hxx"
@@ -288,28 +282,21 @@ void SfxPreviewWin::Paint( const Rectangle& rRect )
         return;
     }
 
-    SfxInPlaceObject* pObj = rDocShell->GetInPlaceObject();
+    Size            aTmpSize( rDocShell->GetFirstPageSize() );
+    GDIMetaFile     aMtf;
+    VirtualDevice   aDevice;
 
-    DBG_ASSERT( pObj, "No Inplace object => no preview graphic" );
+    DBG_ASSERT( aTmpSize.Height() * aTmpSize.Width(), "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
 
-    if( pObj )
-    {
-        Size            aTmpSize( rDocShell->GetFirstPageSize() );
-        GDIMetaFile     aMtf;
-        VirtualDevice   aDevice;
-
-        DBG_ASSERT( aTmpSize.Height() * aTmpSize.Width(), "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
-
-        aMtf.SetPrefSize( aTmpSize );
-        aDevice.EnableOutput( FALSE );
-        aDevice.SetMapMode( pObj->GetMapUnit() );
-        aDevice.SetDrawMode( GetDrawMode() );
-        aMtf.Record( &aDevice );
-        pObj->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), ASPECT_THUMBNAIL );
-        aMtf.Stop();
-        aMtf.WindStart();
-        SfxPreviewWin_Impl::ImpPaint( rRect, &aMtf, this );
-    }
+    aMtf.SetPrefSize( aTmpSize );
+    aDevice.EnableOutput( FALSE );
+    aDevice.SetMapMode( rDocShell->GetMapUnit() );
+    aDevice.SetDrawMode( GetDrawMode() );
+    aMtf.Record( &aDevice );
+    rDocShell->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), ASPECT_THUMBNAIL );
+    aMtf.Stop();
+    aMtf.WindStart();
+    SfxPreviewWin_Impl::ImpPaint( rRect, &aMtf, this );
 }
 
 void SfxPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
@@ -872,13 +859,15 @@ BOOL SfxNewFileDialog::FillDocumentInfo
     SfxDocumentInfo &rInfo  // DocInfo, die gefuellt werden soll
 )
 {
-    SvStorageRef aStor = new SvStorage(
-        rFile, STREAM_READ |STREAM_NOCREATE | STREAM_SHARE_DENYWRITE, STORAGE_TRANSACTED );
-    if ( SVSTREAM_OK != aStor->GetError() )
-        return FALSE;
-    BOOL bLoadOk;
-    bLoadOk=rInfo.Load(aStor);
-    return bLoadOk;
+    // TODO: may need reimplementation, but didn't work for xml anyway
+    return sal_False;
+//REMOVE        SvStorageRef aStor = new SvStorage(
+//REMOVE            rFile, STREAM_READ |STREAM_NOCREATE | STREAM_SHARE_DENYWRITE, STORAGE_TRANSACTED );
+//REMOVE        if ( SVSTREAM_OK != aStor->GetError() )
+//REMOVE            return FALSE;
+//REMOVE        BOOL bLoadOk;
+//REMOVE        bLoadOk=rInfo.Load(aStor);
+//REMOVE        return bLoadOk;
 }
 //-------------------------------------------------------------------------
 USHORT SfxNewFileDialog::GetTemplateFlags()const
