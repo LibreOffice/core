@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.82 2002-10-21 16:44:56 cl Exp $
+	$Id: drawing.mod,v 1.83 2003-03-27 18:19:53 hr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -690,6 +690,8 @@
 <!ATTLIST style:properties dr3d:diffuse-color %color; #IMPLIED>
 <!ATTLIST style:properties dr3d:shininess %percentage; #IMPLIED>
 <!ATTLIST style:properties dr3d:shadow (visible|hidden) #IMPLIED>
+<!ATTLIST style:properties dr3d:close-front %boolean; #IMPLIED>
+<!ATTLIST style:properties dr3d:close-back %boolean; #IMPLIED>
 
 <!ELEMENT dr3d:light EMPTY>
 <!ATTLIST dr3d:light dr3d:diffuse-color %color; #IMPLIED>

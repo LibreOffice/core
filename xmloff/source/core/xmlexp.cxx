@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,6 @@ void SvXMLExport::_InitCtor()
 
 SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags ) :
     pImpl( 0 ), meClass( eClass ),
-    sCDATA( GetXMLToken(XML_CDATA) ),
     sWS( GetXMLToken(XML_WS) ),
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit ) ),
@@ -387,7 +386,6 @@ SvXMLExport::SvXMLExport(
         const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
         MapUnit eDfltUnit   ) :
     pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
-    sCDATA( GetXMLToken(XML_CDATA) ),
     sWS( GetXMLToken(XML_WS) ),
     sOrigFileName( rFileName ),
     pNamespaceMap( new SvXMLNamespaceMap ),
@@ -418,7 +416,6 @@ SvXMLExport::SvXMLExport(
         const Reference< XModel >& rModel,
         sal_Int16 eDfltUnit ) :
     pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
-    sCDATA( GetXMLToken(XML_CDATA) ),
     sWS( GetXMLToken(XML_WS) ),
     sOrigFileName( rFileName ),
     pNamespaceMap( new SvXMLNamespaceMap ),
@@ -452,7 +449,6 @@ SvXMLExport::SvXMLExport(
         const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
         sal_Int16 eDfltUnit ) :
     pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
-    sCDATA( GetXMLToken(XML_CDATA) ),
     sWS( GetXMLToken(XML_WS) ),
     sOrigFileName( rFileName ),
     pNamespaceMap( new SvXMLNamespaceMap ),
@@ -793,7 +789,7 @@ void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
 
     pAttrList->AddAttribute( pNamespaceMap->GetQNameByKey( nPrefixKey,
                                                            sName ),
-                             sCDATA, sValue );
+                             sValue );
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
@@ -803,14 +799,14 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
 
     pAttrList->AddAttribute( pNamespaceMap->GetQNameByKey( nPrefixKey,
                                                            sName ),
-                             sCDATA, rValue );
+                             rValue );
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const OUString& rName,
                               const OUString& rValue )
 {
     pAttrList->AddAttribute( pNamespaceMap->GetQNameByKey( nPrefixKey, rName ),
-                             sCDATA, rValue );
+                             rValue );
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
@@ -819,7 +815,7 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
 {
     pAttrList->AddAttribute(
         pNamespaceMap->GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
-        sCDATA, rValue );
+        rValue );
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
@@ -828,7 +824,23 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
 {
     pAttrList->AddAttribute(
         pNamespaceMap->GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
-        sCDATA, GetXMLToken(eValue) );
+        GetXMLToken(eValue) );
+}
+
+void SvXMLExport::AddAttribute( const ::rtl::OUString& rQName,
+                                const ::rtl::OUString& rValue )
+{
+      pAttrList->AddAttribute(
+        rQName,
+        rValue );
+}
+
+void SvXMLExport::AddAttribute( const ::rtl::OUString& rQName,
+                                enum ::xmloff::token::XMLTokenEnum eValue )
+{
+      pAttrList->AddAttribute(
+        rQName,
+        GetXMLToken(eValue) );
 }
 
 void SvXMLExport::AddAttributeList( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
@@ -1013,7 +1025,6 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     while( USHRT_MAX != nPos )
     {
         pAttrList->AddAttribute( pNamespaceMap->GetAttrNameByKey( nPos ),
-                                 sCDATA,
                                  pNamespaceMap->GetNameByKey( nPos ) );
         nPos = pNamespaceMap->GetNextKey( nPos );
     }
@@ -1952,6 +1963,18 @@ SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
 {
     if( bDoSomething )
         StartElement( rExport, nPrefixKey, GetXMLToken(eLName), bIWSOutside );
+}
+
+SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
+                                        const OUString& rQName,
+                                        sal_Bool bIWSOutside,
+                                        sal_Bool bIWSInside ) :
+    rExport( rExp ),
+    bIgnWS( bIWSInside ),
+    bDoSomething( sal_True )
+{
+    aName = rQName;
+    rExp.StartElement( rQName, bIWSOutside );
 }
 
 SvXMLElementExport::~SvXMLElementExport()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1744,24 +1744,29 @@ sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName,
                                               sStyleName, sal_True );
 
     // get appropriate context
-    SvXMLNumFormatContext* pNumStyle = PTR_CAST( SvXMLNumFormatContext, pStyle );
-    if( pNumStyle )
-    {
-        if( pIsSystemLanguage != NULL )
-            *pIsSystemLanguage = pNumStyle->IsSystemLanguage();
 
-        // return key
-        return pNumStyle->GetKey();
+
+    // first check if its a impress and draw only number format
+    // this is needed since its also a SvXMLNumFormatContext,
+    // that was needed to support them for controls in impress/draw also
+    SdXMLNumberFormatImportContext* pSdNumStyle = PTR_CAST( SdXMLNumberFormatImportContext, pStyle );
+    if( pSdNumStyle )
+    {
+        return pSdNumStyle->GetDrawKey();
     }
     else
     {
-        // for the impress and draw application that do not have a number formater
-        // check if its one of their styles.
-        SdXMLNumberFormatImportContext* pSdNumStyle = PTR_CAST( SdXMLNumberFormatImportContext, pStyle );
+        SvXMLNumFormatContext* pNumStyle = PTR_CAST( SvXMLNumFormatContext, pStyle );
+        if( pNumStyle )
+        {
+            if( pIsSystemLanguage != NULL )
+                *pIsSystemLanguage = pNumStyle->IsSystemLanguage();
 
-        // return key or default (-1)
-        return (0 != pSdNumStyle) ? pSdNumStyle->GetKey() : -1;
+            // return key
+            return pNumStyle->GetKey();
+        }
     }
+    return -1;
 }
 
 const SvxXMLListStyleContext *XMLTextImportHelper::FindAutoListStyle( const OUString& rName ) const

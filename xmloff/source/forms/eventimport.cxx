@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-17 12:47:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,22 +196,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2001/09/04 10:19:41  fs
- *  #91865# correctly im- and export application events
- *
- *  Revision 1.3  2001/08/27 16:55:44  fs
- *  #91537# recognize the library attribute when reading events
- *
- *  Revision 1.2  2001/03/16 14:36:39  sab
- *  did the required change (move of extract.hxx form cppuhelper to comphelper)
- *
- *  Revision 1.1  2001/01/02 15:55:58  fs
- *  initial checkin - helper for importing script events
- *
- *
- *  Revision 1.0 21.12.00 15:21:15  fs
- ************************************************************************/
 

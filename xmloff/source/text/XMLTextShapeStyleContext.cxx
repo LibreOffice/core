@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-29 17:47:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,3 +284,8 @@ void XMLTextShapeStyleContext::CreateAndInsert( sal_Bool bOverwrite )
     }
 }
 
+
+void XMLTextShapeStyleContext::Finish( sal_Bool bOverwrite )
+{
+    XMLPropStyleContext::Finish( bOverwrite );
+}

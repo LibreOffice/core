@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 10:31:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,8 +599,8 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // see above
     // RES_BACKGROUND
     M_ED( "BackColorRGB",   FO, BACKGROUND_COLOR,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
-    M_ED( "BackTransparent",    FO, BACKGROUND_COLOR,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    M_ED( "BackColorTransparency", STYLE, BACKGROUND_TRANSPARENCY, XML_TYPE_PERCENT8, 0 ),
+    M_ED( "BackTransparent",    FO, BACKGROUND_COLOR,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, CTF_BACKGROUND_TRANSPARENT ),
+    M_ED( "BackColorTransparency", STYLE, BACKGROUND_TRANSPARENCY, XML_TYPE_PERCENT8, CTF_BACKGROUND_TRANSPARENCY ),
 
     M_E( "BackGraphicTransparency", STYLE, BACKGROUND_IMAGE_TRANSPARENCY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_PERCENT8, CTF_BACKGROUND_TRANSPARENCY ),
     M_E( "BackGraphicLocation", STYLE,  POSITION,   MID_FLAG_SPECIAL_ITEM|XML_TYPE_BUILDIN_CMP_ONLY, CTF_BACKGROUND_POS  ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-22 14:39:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,16 @@ namespace xmloff
         */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         createElement();
+
+    protected:
+        /** can be used to handle properties where the attribute default and the property default differ.
+            <p>In such case, if the property had the attribute default upon writing, nothing is read, so upon reading,
+            the property is still at it's own default (which is not the attribute default).<p/>
+            <p>This method, if told the attribute and the property, and the (implied) attribute default, sets the
+            property value as if the attribute was encountered.</p>
+            @see encounteredAttribute
+        */
+        void        simulateDefaultedAttribute(const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName, const sal_Char* _pAttributeDefault);
 
     private:
         ::rtl::OUString implGetDefaultName() const;
@@ -674,62 +684,4 @@ namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_ELEMENTIMPORT_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.17  2002/11/06 10:37:03  fs
- *  #102407# (on behalf of BerryJia@openoffice.org) when importing a control model which can be ALIGNed, initialize this property to the XML default
- *
- *  Revision 1.16  2002/10/25 13:14:15  fs
- *  #104402# importing grid column styles now
- *
- *  Revision 1.15  2002/10/02 14:31:09  fs
- *  #103388# some performance logging
- *
- *  Revision 1.14  2001/11/05 15:24:12  fs
- *  #94194# +m_bEncounteredLSAttrib
- *
- *  Revision 1.13  2001/06/25 13:32:38  fs
- *  #88691# TargetURL property value must be saved relative to own document
- *
- *  Revision 1.12  2001/05/21 13:33:48  fs
- *  #85388# +m_nEmptyXXXItems/+implEmptyXXXFound
- *
- *  Revision 1.11  2001/03/29 09:45:16  fs
- *  #85386# +OTextLikeImport / handle attributes which's defaults differ from the property defaults
- *
- *  Revision 1.10  2001/03/28 14:00:56  fs
- *  #85371# +OButtonImport / for buttons and forms, correctly handle the target frame attribute
- *
- *  Revision 1.9  2001/03/28 12:26:53  fs
- *  #85391# corrected OComboItemImport
- *
- *  Revision 1.8  2001/02/13 09:09:32  fs
- *  #83529# introducing ORadioImport - need special handling for DefaultState / State
- *
- *  Revision 1.7  2001/01/24 09:37:58  fs
- *  OFormImport: call enter-/leaveEventContext when starting/ending the element
- *
- *  Revision 1.6  2001/01/03 16:25:34  fs
- *  file format change (extra wrapper element for controls, similar to columns)
- *
- *  Revision 1.5  2001/01/02 15:58:21  fs
- *  event ex- & import
- *
- *  Revision 1.4  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.3  2000/12/13 10:40:15  fs
- *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
- *
- *  Revision 1.2  2000/12/12 12:01:05  fs
- *  new implementations for the import - still under construction
- *
- *  Revision 1.1  2000/12/06 17:31:12  fs
- *  initial checkin - implementations for formlayer import/export - still under construction
- *
- *
- *  Revision 1.0 04.12.00 14:52:28  fs
- ************************************************************************/
 

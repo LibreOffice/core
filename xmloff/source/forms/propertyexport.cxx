@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-01 12:30:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,71 +812,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.20  2002/10/25 08:01:56  fs
- *  during #104402# changed signature of some exportAttribute* methods for performance reasons
- *
- *  Revision 1.19  2002/08/22 07:36:10  oj
- *  #99721# now save image url relative
- *
- *  Revision 1.18  2001/06/25 13:32:38  fs
- *  #88691# TargetURL property value must be saved relative to own document
- *
- *  Revision 1.17  2001/05/28 15:00:42  fs
- *  #86712# don't export DateFormat and TimeFormat directly anymore - the format settings are stored as style now
- *
- *  Revision 1.16  2001/04/17 07:58:12  fs
- *  #85427# +_bVoidDefault parameter for addEnumPropertyAttribute
- *
- *  Revision 1.15  2001/04/11 13:44:23  fs
- *  #85904# exportRemainingProperties: create the form:properties element only if there is at least one sub element (form:property)
- *
- *  Revision 1.14  2001/03/29 12:18:58  fs
- *  #85097# when exporting boolean properties, allow for MAYBEVOID props
- *
- *  Revision 1.13  2001/03/28 13:58:52  fs
- *  #85371# write target frame attribute even if the prop value is an empty string
- *
- *  Revision 1.12  2001/03/16 14:36:39  sab
- *  did the required change (move of extract.hxx form cppuhelper to comphelper)
- *
- *  Revision 1.11  2001/02/26 10:28:04  aw
- *  Changed double import/export to use it's own conversion routines
- *  so iots more clear what type is used
- *
- *  Revision 1.10  2001/02/01 09:46:47  fs
- *  no own style handling anymore - the shape exporter is responsible for our styles now
- *
- *  Revision 1.9  2001/01/03 16:25:34  fs
- *  file format change (extra wrapper element for controls, similar to columns)
- *
- *  Revision 1.8  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.7  2000/12/18 13:25:01  mib
- *  #82036#: new graphic properties
- *
- *  Revision 1.6  2000/12/13 10:38:49  fs
- *  slightly modified some documentations
- *
- *  Revision 1.5  2000/12/12 11:58:32  fs
- *  generic properies: writer shorts really as shorts
- *
- *  Revision 1.4  2000/12/06 17:28:05  fs
- *  changes for the formlayer import - still under construction
- *
- *  Revision 1.3  2000/11/29 10:36:05  mh
- *  add: stdio.h for Solaris8
- *
- *  Revision 1.2  2000/11/19 15:41:32  fs
- *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
- *
- *  Revision 1.1  2000/11/17 19:03:06  fs
- *  initial checkin - export and/or import the applications form layer
- *
- *
- *  Revision 1.0 15.11.00 17:50:20  fs
- ************************************************************************/
 

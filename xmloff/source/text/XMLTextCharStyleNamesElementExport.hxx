@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: formevents.hxx,v $
+ *  $RCSfile: XMLTextCharStyleNamesElementExport.hxx,v $
  *
  *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -58,24 +58,37 @@
  *
  *
  ************************************************************************/
+#ifndef _XMLOFF_XMLTEXTCHARSTYLENAMESELEMENTEXPORT_HXX
+#define _XMLOFF_XMLTEXTCHARSTYLENAMESELEMENTEXPORT_HXX
 
-#ifndef _XMLOFF_FORMS_FORMEVENTS_HXX_
-#define _XMLOFF_FORMS_FORMEVENTS_HXX_
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
 
-struct XMLEventNameTranslation;
-//.........................................................................
-namespace xmloff
+
+namespace com { namespace sun { namespace star {
+    namespace beans { class XPropertySet; }
+} } }
+
+class SvXMLExport;
+
+class XMLTextCharStyleNamesElementExport
 {
-//.........................................................................
+    SvXMLExport& rExport;
+    ::rtl::OUString aName;
+    sal_Int32 nCount;
 
-    //=====================================================================
-    //= event translation table
-    //=====================================================================
-    extern const XMLEventNameTranslation* g_pFormsEventTranslation;
+public:
 
-//.........................................................................
-}   // namespace xmloff
-//.........................................................................
+    XMLTextCharStyleNamesElementExport(
+                        SvXMLExport& rExp, sal_Bool bDoSomething,
+                        const ::com::sun::star::uno::Reference <
+                            ::com::sun::star::beans::XPropertySet > & rPropSet,
+                            const ::rtl::OUString& rPropName );
+    ~XMLTextCharStyleNamesElementExport();
+};
 
-#endif // _XMLOFF_FORMS_FORMEVENTS_HXX_
-
+#endif

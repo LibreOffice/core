@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrlist.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-26 07:26:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
@@ -75,20 +77,19 @@
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 struct SvXMLTagAttribute_Impl
 {
     SvXMLTagAttribute_Impl(){}
-    SvXMLTagAttribute_Impl( const OUString &rName, const OUString &rType,
+    SvXMLTagAttribute_Impl( const OUString &rName,
                          const OUString &rValue )
         : sName(rName),
-        sType(rType),
         sValue(rValue)
     {
     }
 
     OUString sName;
-    OUString sType;
     OUString sValue;
 };
 
@@ -127,10 +128,7 @@ OUString SAL_CALL SvXMLAttributeList::getNameByIndex(sal_Int16 i) throw( ::com::
 
 OUString SAL_CALL SvXMLAttributeList::getTypeByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException )
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
-        return m_pImpl->vecAttribute[i].sType;
-    }
-    return OUString();
+    return sType;
 }
 
 OUString SAL_CALL  SvXMLAttributeList::getValueByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException )
@@ -144,14 +142,7 @@ OUString SAL_CALL  SvXMLAttributeList::getValueByIndex(sal_Int16 i) throw( ::com
 
 OUString SAL_CALL SvXMLAttributeList::getTypeByName( const OUString& sName ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
-
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
-            return (*ii).sType;
-        }
-    }
-    return OUString();
+    return sType;
 }
 
 OUString SAL_CALL SvXMLAttributeList::getValueByName(const OUString& sName) throw( ::com::sun::star::uno::RuntimeException )
@@ -175,6 +166,7 @@ uno::Reference< ::com::sun::star::util::XCloneable >  SvXMLAttributeList::create
 
 
 SvXMLAttributeList::SvXMLAttributeList()
+    : sType( GetXMLToken(XML_CDATA) )
 {
     m_pImpl = new SvXMLAttributeList_Impl;
 }
@@ -188,10 +180,9 @@ SvXMLAttributeList::~SvXMLAttributeList()
 
 
 void SvXMLAttributeList::AddAttribute(  const OUString &sName ,
-                                        const OUString &sType ,
                                         const OUString &sValue )
 {
-    m_pImpl->vecAttribute.push_back( SvXMLTagAttribute_Impl( sName , sType , sValue ) );
+    m_pImpl->vecAttribute.push_back( SvXMLTagAttribute_Impl( sName , sValue ) );
 }
 
 void SvXMLAttributeList::Clear()
@@ -231,7 +222,6 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< ::com::sun::
     for( sal_Int32 i = 0 ; i < nMax ; i ++ ) {
         m_pImpl->vecAttribute.push_back( SvXMLTagAttribute_Impl(
             r->getNameByIndex( i ) ,
-            r->getTypeByIndex( i ) ,
             r->getValueByIndex( i )));
     }
 

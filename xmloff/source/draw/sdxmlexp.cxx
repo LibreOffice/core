@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-28 09:34:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2547,6 +2547,9 @@ void SdXMLExport::exportAutoDataStyles()
         if( (mnUsedTimeStyles & nIndex) != 0 )
             SdXMLNumberStylesExporter::exportTimeStyle( *this, nTimeFormat );
     }
+
+    if(HasFormExport())
+        GetFormExport()->exportAutoControlNumberStyles();
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-20 08:21:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,16 +103,4 @@ namespace xmloff
 
 #endif // _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2002/10/25 07:37:42  fs
- *  #104402# +OFormExportPropertyMapper - handle the data-style attribute to store grid column styles
- *
- *  Revision 1.1  2000/12/18 15:15:39  fs
- *  initial checkin - property maps
- *
- *
- *  Revision 1.0 14.12.00 10:26:48  fs
- ************************************************************************/
 

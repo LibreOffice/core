@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueproperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-09 13:53:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,19 +210,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2002/05/30 08:39:14  fs
- *  #99693# corrected value property name for hidden controls
- *
- *  Revision 1.2  2001/02/13 09:07:25  fs
- *  #83528# no CurrentValue property for password fields
- *
- *  Revision 1.1  2000/12/13 10:36:36  fs
- *  initial checkin - helper class for meta data for the different value properties
- *
- *
- *  Revision 1.0 12.12.00 14:14:36  fs
- ************************************************************************/
 

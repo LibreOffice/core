@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-25 13:13:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,7 @@ void SdXMLShapeContext::SetTransformation()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLShapeContext::SetStyle()
+void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 {
     try
     {
@@ -610,40 +610,48 @@ void SdXMLShapeContext::SetStyle()
 
             if( !xStyle.is() && aStyleName.getLength() )
             {
-                uno::Reference< style::XStyleFamiliesSupplier > xFamiliesSupplier( GetImport().GetModel(), uno::UNO_QUERY );
-
-                if( xFamiliesSupplier.is() )
+                try
                 {
-                    uno::Reference< container::XNameAccess > xFamilies( xFamiliesSupplier->getStyleFamilies() );
-                    if( xFamilies.is() )
+
+                    uno::Reference< style::XStyleFamiliesSupplier > xFamiliesSupplier( GetImport().GetModel(), uno::UNO_QUERY );
+
+                    if( xFamiliesSupplier.is() )
                     {
-
-                        uno::Reference< container::XNameAccess > xFamily;
-
-                        if( XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily )
+                        uno::Reference< container::XNameAccess > xFamilies( xFamiliesSupplier->getStyleFamilies() );
+                        if( xFamilies.is() )
                         {
-                            sal_Int32 nPos = aStyleName.lastIndexOf( sal_Unicode('-') );
-                            if( -1 != nPos )
+
+                            uno::Reference< container::XNameAccess > xFamily;
+
+                            if( XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily )
                             {
-                                OUString aFamily( aStyleName.copy( 0, nPos ) );
+                                sal_Int32 nPos = aStyleName.lastIndexOf( sal_Unicode('-') );
+                                if( -1 != nPos )
+                                {
+                                    OUString aFamily( aStyleName.copy( 0, nPos ) );
 
-                                xFamilies->getByName( aFamily ) >>= xFamily;
-                                aStyleName = aStyleName.copy( nPos + 1 );
+                                    xFamilies->getByName( aFamily ) >>= xFamily;
+                                    aStyleName = aStyleName.copy( nPos + 1 );
+                                }
                             }
-                        }
-                        else
-                        {
-                                // get graphics familie
-                                xFamilies->getByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) ) ) >>= xFamily;
-                        }
+                            else
+                            {
+                                    // get graphics familie
+                                    xFamilies->getByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) ) ) >>= xFamily;
+                            }
 
-                        if( xFamily.is() )
-                            xFamily->getByName( aStyleName ) >>= xStyle;
+                            if( xFamily.is() )
+                                xFamily->getByName( aStyleName ) >>= xStyle;
+                        }
                     }
+                }
+                catch( uno::Exception& )
+                {
+                    DBG_ERROR( "could not find style for shape!" );
                 }
             }
 
-            if( xStyle.is() )
+            if( bSupportsStyle && xStyle.is() )
             {
                 try
                 {
@@ -1702,43 +1710,64 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
 
 void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create Connector shape
-    // add, set style and properties from base shape
-    AddShape("com.sun.star.drawing.ConnectorShape");
-    if(mxShape.is())
+    // #107928#
+    // For security reasons, do not add empty connectors. There may have been an error in EA2
+    // that created empty, far set off connectors (e.g. 63 meters below top of document). This
+    // is not guaranteed, but it's definitely safe to not add empty connectors.
+    sal_Bool bDoAdd(sal_True);
+
+    if(    -1 == mnStartShapeId
+        && -1 == mnEndShapeId
+        && maStart.X == maEnd.X
+        && maStart.Y == maEnd.Y
+        && 0 == mnDelta1
+        && 0 == mnDelta2
+        && 0 == mnDelta3
+        )
     {
-        // add connection ids
-        if( mnStartShapeId != -1 )
-            GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_True, mnStartShapeId, mnStartGlueId );
-        if( mnEndShapeId != -1 )
-            GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_False, mnEndShapeId, mnEndGlueId );
+        bDoAdd = sal_False;
+    }
 
-        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
-        if( xProps.is() )
+    if(bDoAdd)
+    {
+        // create Connector shape
+        // add, set style and properties from base shape
+        AddShape("com.sun.star.drawing.ConnectorShape");
+        if(mxShape.is())
         {
-            uno::Any aAny;
-            aAny <<= maStart;
-            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")), aAny);
+            // add connection ids
+            if( mnStartShapeId != -1 )
+                GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_True, mnStartShapeId, mnStartGlueId );
+            if( mnEndShapeId != -1 )
+                GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_False, mnEndShapeId, mnEndGlueId );
 
-            aAny <<= maEnd;
-            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")), aAny );
+            uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+            if( xProps.is() )
+            {
+                uno::Any aAny;
+                aAny <<= maStart;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")), aAny);
 
-            aAny <<= (drawing::ConnectorType)mnType;
-            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeKind")), aAny );
+                aAny <<= maEnd;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")), aAny );
 
-            aAny <<= mnDelta1;
-            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine1Delta")), aAny );
+                aAny <<= (drawing::ConnectorType)mnType;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeKind")), aAny );
 
-            aAny <<= mnDelta2;
-            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine2Delta")), aAny );
+                aAny <<= mnDelta1;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine1Delta")), aAny );
 
-            aAny <<= mnDelta3;
-            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine3Delta")), aAny );
+                aAny <<= mnDelta2;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine2Delta")), aAny );
+
+                aAny <<= mnDelta3;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine3Delta")), aAny );
+            }
+            SetStyle();
+            SetLayer();
+
+            SdXMLShapeContext::StartElement(xAttrList);
         }
-        SetStyle();
-        SetLayer();
-
-        SdXMLShapeContext::StartElement(xAttrList);
     }
 }
 

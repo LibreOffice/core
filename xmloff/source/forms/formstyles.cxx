@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstyles.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 13:17:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,11 +99,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 25.10.2002 13:59:41  fs
- ************************************************************************/
 

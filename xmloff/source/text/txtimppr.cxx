@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-04 08:37:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,8 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pAnchorType = 0;
     XMLPropertyState* pVertOrient = 0;
     XMLPropertyState* pVertOrientRelAsChar = 0;
+    XMLPropertyState* pBackTransparency = NULL; // transparency in %
+    XMLPropertyState* pBackTransparent = NULL;  // transparency as boolean
 
     for( ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
          property != rProperties.end();
@@ -411,6 +413,8 @@ void XMLTextImportPropertyMapper::finished(
         case CTF_FRAMEHEIGHT_REL:
 //      case CTF_SYNCHEIGHT:
                                         bHasAnyHeight = sal_True; break;
+        case CTF_BACKGROUND_TRANSPARENCY: pBackTransparency = property; break;
+        case CTF_BACKGROUND_TRANSPARENT:  pBackTransparent = property; break;
 
         }
     }
@@ -591,6 +595,13 @@ void XMLTextImportPropertyMapper::finished(
     FontDefaultsCheck( pFontFamilyNameCTL,
                        pFontStyleNameCTL, pFontFamilyCTL, pFontPitchCTL, pFontCharSetCTL,
                        &pNewFontStyleNameCTL, &pNewFontFamilyCTL, &pNewFontPitchCTL, &pNewFontCharSetCTL );
+
+    // #i5775# don't overwrite %transparency with binary transparency
+    if( ( pBackTransparency != NULL ) && ( pBackTransparent != NULL ) )
+    {
+        if( ! *(sal_Bool*)(pBackTransparent->maValue.getValue()) )
+            pBackTransparent->mnIndex = -1;
+    }
 
 
     // insert newly created properties. This inavlidates all iterators!

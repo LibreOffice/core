@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSourceBaseContext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2002-01-09 12:57:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,8 @@ enum IndexSourceParamEnum
     XML_TOK_INDEXSOURCE_SORT_ALGORITHM,
     XML_TOK_INDEXSOURCE_LANGUAGE,
     XML_TOK_INDEXSOURCE_COUNTRY,
-    XML_TOK_INDEXSOURCE_USER_INDEX_NAME
+    XML_TOK_INDEXSOURCE_USER_INDEX_NAME,
+    XML_TOK_INDEXSOURCE_USE_OUTLINE_LEVEL
 };
 
 

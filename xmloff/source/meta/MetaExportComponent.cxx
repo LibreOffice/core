@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,15 +134,12 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum eClass )
     {
         GetAttrList().AddAttribute(
             GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_DC ),
-            sCDATA,
             GetNamespaceMap().GetNameByKey( XML_NAMESPACE_DC ) );
         GetAttrList().AddAttribute(
             GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_META ),
-            sCDATA,
             GetNamespaceMap().GetNameByKey( XML_NAMESPACE_META ) );
         GetAttrList().AddAttribute(
             GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_OFFICE ),
-            sCDATA,
             GetNamespaceMap().GetNameByKey( XML_NAMESPACE_OFFICE ) );
 
         SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,

@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.52 2002-09-30 09:33:38 mib Exp $
+	$Id: text.mod,v 1.53 2003-03-27 18:19:53 hr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -752,6 +752,7 @@
 										text:table-of-content-entry-template*,
 										text:index-source-styles* ) >
 <!ATTLIST text:table-of-content-source text:outline-level %integer; #IMPLIED>
+<!ATTLIST text:table-of-content-source text:use-outline-level %boolean; "true">
 <!ATTLIST text:table-of-content-source text:use-index-marks %boolean; "true">
 <!ATTLIST text:table-of-content-source text:use-index-source-styles 
 															%boolean; "false">

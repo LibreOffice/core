@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mib $ $Date: 2002-12-05 09:58:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,29 +695,20 @@ void XMLSectionExport::ExportTableOfContentStart(
 
         // TOC specific index source attributes:
 
-        // outline-level (none|1..10)
-        aAny = rPropertySet->getPropertyValue(sCreateFromOutline);
-        if (*(sal_Bool*)aAny.getValue())
+        // outline-level: 1..10
+        sal_Int16 nLevel;
+        if( rPropertySet->getPropertyValue(sLevel) >>= nLevel )
         {
-            // outline-level: 1..10
-            aAny = rPropertySet->getPropertyValue(sLevel);
-            sal_Int16 nLevel;
-            aAny >>= nLevel;
-
             OUStringBuffer sBuffer;
-            SvXMLUnitConverter::convertNumber(sBuffer,
-                                              (sal_Int32)nLevel);
-
+            SvXMLUnitConverter::convertNumber(sBuffer, (sal_Int32)nLevel);
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_OUTLINE_LEVEL,
                                      sBuffer.makeStringAndClear());
         }
-        else
-        {
-            // outline-level: none
-            GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                     XML_OUTLINE_LEVEL, XML_NONE);
-        }
+
+        // use outline level
+        ExportBoolean(rPropertySet, sCreateFromOutline,
+                          XML_USE_OUTLINE_LEVEL, sal_True);
 
         // use index marks
         ExportBoolean(rPropertySet, sCreateFromMarks,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-08 12:12:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONPAGE_HPP_
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #endif
@@ -117,6 +121,10 @@
 #include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
 #include "xmlprcon.hxx"
 #endif
@@ -127,6 +135,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
@@ -1005,12 +1017,17 @@ SdXMLStylesContext::SdXMLStylesContext(
 :   SvXMLStylesContext(rImport, nPrfx, rLName, xAttrList),
     mbIsAutoStyle(bIsAutoStyle)
 {
+    Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    mpNumFormatter = new SvNumberFormatter( xMSF, LANGUAGE_SYSTEM );
+    mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter );
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLStylesContext::~SdXMLStylesContext()
 {
+    delete mpNumFmtHelper;
+    delete mpNumFormatter;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1037,11 +1054,28 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
             pContext = new SdXMLPresentationPageLayoutContext(GetSdImport(), nPrefix, rLocalName, xAttrList);
             break;
         }
-        case XML_TOK_STYLES_DATE_STYLE:
-        case XML_TOK_STYLES_TIME_STYLE:
+    }
+
+    if(!pContext)
+    {
+        const SvXMLTokenMap& rTokenMap = mpNumFmtHelper->GetStylesElemTokenMap();
+        sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
+        switch (nToken)
         {
-            // number:date-style or number:time-style
-            pContext = new SdXMLNumberFormatImportContext( GetSdImport(), nPrefix, rLocalName, xAttrList );
+            case XML_TOK_STYLES_DATE_STYLE:
+            case XML_TOK_STYLES_TIME_STYLE:
+                // number:date-style or number:time-style
+                pContext = new SdXMLNumberFormatImportContext( GetSdImport(), nPrefix, rLocalName, mpNumFmtHelper->getData(), nToken, xAttrList, *this );
+                break;
+
+            case XML_TOK_STYLES_NUMBER_STYLE:
+            case XML_TOK_STYLES_CURRENCY_STYLE:
+            case XML_TOK_STYLES_PERCENTAGE_STYLE:
+            case XML_TOK_STYLES_BOOLEAN_STYLE:
+            case XML_TOK_STYLES_TEXT_STYLE:
+                pContext = new SvXMLNumFormatContext( GetSdImport(), nPrefix, rLocalName,
+                                                        mpNumFmtHelper->getData(), nToken, xAttrList, *this );
+                break;
         }
     }
 
@@ -1170,10 +1204,11 @@ void SdXMLStylesContext::EndElement()
         // AutoStyles for text import
         GetImport().GetTextImport()->SetAutoStyles( this );
 
-#ifndef SVX_LIGHT
         // AutoStyles for chart
         GetImport().GetChartImport()->SetAutoStylesContext( this );
-#endif
+
+        // AutoStyles for forms
+        GetImport().GetFormImport()->setAutoStyleContext( this );
 
         // associate AutoStyles with styles in preparation to setting Styles on shapes
         for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
@@ -1392,26 +1427,23 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
             const UniString aStyleName(pStyle->GetName(), (sal_uInt16)pStyle->GetName().getLength());
             sal_uInt16 nStylePrefLen = aStyleName.SearchBackward( sal_Unicode('-') ) + 1;
 
-            if(!nPrefLen || ((nPrefLen == nStylePrefLen) && aStyleName.Equals(rPrefix, 0, nPrefLen)))
+            if(pStyle->GetName().getLength() && (!nPrefLen || ((nPrefLen == nStylePrefLen) && aStyleName.Equals(rPrefix, 0, nPrefLen))))
             {
-                if(pStyle->GetParent().getLength())
+                try
                 {
-                    const OUString aPureStyleName = nPrefLen ? pStyle->GetName().copy((sal_Int32)nPrefLen) : pStyle->GetName();
+
                     uno::Reference< style::XStyle > xStyle;
-                    aAny = xPageStyles->getByName(aPureStyleName);
-                    aAny >>= xStyle;
+                    const OUString aPureStyleName = nPrefLen ? pStyle->GetName().copy((sal_Int32)nPrefLen) : pStyle->GetName();
+                    xPageStyles->getByName(aPureStyleName) >>= xStyle;
 
                     if(xStyle.is())
                     {
-                        try
-                        {
                             // set parent style name
                             xStyle->setParentStyle(pStyle->GetParent());
-                        }
-                        catch( container::NoSuchElementException e )
-                        {
-                        }
                     }
+                }
+                catch( container::NoSuchElementException e )
+                {
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2003-03-06 06:43:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,9 +333,7 @@ void SvXMLImportPropertyMapper::importXML(
 
                     OSL_ENSURE( nIndex != -1,
                                 "not able to store alien attribute");
-
-                    // #106963#; use userdefined attribute only if it is in the specified property range
-                    if( nIndex != -1 && nIndex >= nStartIdx && nIndex < nEndIdx)
+                    if( nIndex != -1 )
                     {
                         Any aAny;
                         aAny <<= xAttrContainer;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeforms.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-02 14:33:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ namespace xmloff
             const ::rtl::OUString& _rPropName, sal_Bool _bDefault)
     {
         // the complete attribute name to look for
-        ::rtl::OUString sCompleteAttributeName = GetImport().GetNamespaceMap().GetQNameByKey(
+        ::rtl::OUString sCompleteAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
             getOfficeFormsAttributeNamespace(_eAttribute),
             ::rtl::OUString::createFromAscii(getOfficeFormsAttributeName(_eAttribute)));
 
@@ -242,22 +242,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2002/04/10 07:58:39  fs
- *  #98553# allow for empty document model - happens when copy'n'pasting form controls between documents
- *
- *  Revision 1.3  2001/07/10 17:07:05  mtg
- *  updated namespace handling
- *
- *  Revision 1.2  2001/06/29 21:07:14  dvo
- *  #86004# changes sXML_* strings to XML_* tokens
- *
- *  Revision 1.1  2001/03/20 13:41:05  fs
- *  initial checkin - importing/exporting the office:forms element
- *
- *
- *  Revision 1.0 20.03.01 13:12:35  fs
- ************************************************************************/
 

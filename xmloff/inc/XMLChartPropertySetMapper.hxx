@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartPropertySetMapper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ public:
 class XMLChartExportPropertyMapper : public SvXMLExportPropertyMapper
 {
 private:
-    const rtl::OUString msCDATA;
     const rtl::OUString msTrue;
     const rtl::OUString msFalse;
 

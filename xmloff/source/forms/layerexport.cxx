@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-06 10:05:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ namespace xmloff
 
         // add our style family to the export context's style pool
         m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
-        ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper( aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr() );
+        ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper( getControlStylePropertyMap(), m_xPropertyHandlerFactory.getBodyPtr() );
         m_xExportMapper = new OFormExportPropertyMapper( xStylePropertiesMapper.getBodyPtr() );
 
         // our style family
@@ -363,7 +363,10 @@ namespace xmloff
     void OFormLayerXMLExport_Impl::exportAutoStyles()
     {
         m_rContext.GetAutoStylePool()->exportXML(
-            XML_STYLE_FAMILY_CONTROL_ID
+            XML_STYLE_FAMILY_CONTROL_ID,
+            m_rContext.GetDocHandler(),
+            m_rContext.GetMM100UnitConverter(),
+            m_rContext.GetNamespaceMap()
         );
     }
 
@@ -805,18 +808,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.18  2002/10/25 08:00:09  fs
- *  #104402# now exporting the style of a grid column (Align/formatting) as style
- *
- *  Revision 1.17  2002/09/25 12:05:08  fs
- *  #103597# +excludeFromExport/m_aIgnoreList
- *
- *  Revision 1.16  2001/10/19 18:43:58  dvo
- *  #93467# eliminated (most) direct calls on XDocumentHandler
- *
- *  Revision 1.0 17.11.00 17:22:45  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logging.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2002-10-16 19:48:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,16 +93,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2002/10/09 11:55:05  obo
- *  #100000# change include path
- *
- *  Revision 1.1  2002/10/02 14:26:19  fs
- *  initial checkin - helper for timestamp logging
- *
- *
- *  Revision 1.0 27.09.2002 17:28:44  fs
- ************************************************************************/
 

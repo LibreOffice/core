@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: aw $ $Date: 2002-06-27 11:09:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,8 @@ protected:
     com::sun::star::awt::Size   maSize;
     com::sun::star::awt::Point  maPosition;
 
-    void SetStyle();
+    /** if bSupportsStyle is false, auto styles will be set but not a style */
+    void SetStyle( bool bSupportsStyle = true );
     void SetLayer();
     void SetThumbnail();
 

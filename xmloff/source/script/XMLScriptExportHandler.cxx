@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLScriptExportHandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-19 12:06:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ using ::com::sun::star::beans::PropertyValue;
 
 
 XMLScriptExportHandler::XMLScriptExportHandler() :
-    sURL(RTL_CONSTASCII_USTRINGPARAM("URL"))
+    sURL(RTL_CONSTASCII_USTRINGPARAM("Script"))
 {
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COM_SUN_STAR_VIEW_PAPERORIENTATION_HPP_
 #include <com/sun/star/view/PaperOrientation.hpp>
 #endif
+
+class SvNumberFormatter;
+class SvXMLNumFmtHelper;
 
 //////////////////////////////////////////////////////////////////////////////
 // special style:style context inside style:page-master context
@@ -244,6 +247,8 @@ class SdXMLStylesContext : public SvXMLStylesContext
 {
     UniReference< SvXMLImportPropertyMapper > xPresImpPropMapper;
     sal_Bool                    mbIsAutoStyle;
+    SvXMLNumFmtHelper*          mpNumFmtHelper;
+    SvNumberFormatter*          mpNumFormatter;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }

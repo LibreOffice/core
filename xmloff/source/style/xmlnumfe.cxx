@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-25 17:23:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <svtools/numuno.hxx>
 #include <tools/isolang.hxx>
 #include <tools/debug.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -632,8 +632,8 @@ void SvXMLNumFmtExport::WriteAMPMElement_Impl()
 
 void SvXMLNumFmtExport::WriteNumberElement_Impl(
                             sal_Int32 nDecimals, sal_Int32 nInteger,
-                            const OUString& rDashStr, sal_Bool bGrouping,
-                            sal_Int32 nTrailingThousands,
+                            const OUString& rDashStr, sal_Bool bVarDecimals,
+                            sal_Bool bGrouping, sal_Int32 nTrailingThousands,
                             const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries )
 {
     FinishTextElement_Impl();
@@ -652,9 +652,10 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
                               OUString::valueOf( nInteger ) );
     }
 
-    //  decimal replacement (dashes)
-    if ( rDashStr.getLength() )
+    //  decimal replacement (dashes) or variable decimals (#)
+    if ( rDashStr.getLength() || bVarDecimals )
     {
+        //  variable decimals means an empty replacement string
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_REPLACEMENT,
                               rDashStr );
     }
@@ -669,7 +670,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
     if ( nTrailingThousands )
     {
         //  each separator character removes three digits
-        double fFactor = SolarMath::Pow10Exp( 1.0, 3 * nTrailingThousands );
+        double fFactor = ::rtl::math::pow10Exp( 1.0, 3 * nTrailingThousands );
 
         OUStringBuffer aFactStr;
         SvXMLUnitConverter::convertDouble( aFactStr, fFactor );
@@ -796,9 +797,9 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
             default:
                 DBG_ERROR("unknown operator");
         }
-        String aValStr;
-        SolarMath::DoubleToString( aValStr, fLimit, 'A', INT_MAX, '.', TRUE );
-        aCondStr.append( aValStr );
+        ::rtl::math::doubleToUStringBuffer( aCondStr, fLimit,
+                rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                '.', true );
 
         rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_CONDITION,
                               aCondStr.makeStringAndClear() );
@@ -1230,7 +1231,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     if ( eBuiltIn == NF_NUMBER_STANDARD )
     {
         //  default number format contains just one number element
-        WriteNumberElement_Impl( -1, 1, OUString(), sal_False, 0, aEmbeddedEntries );
+        WriteNumberElement_Impl( -1, 1, OUString(), sal_False, sal_False, 0, aEmbeddedEntries );
         bAnyContent = sal_True;
     }
     else if ( eBuiltIn == NF_BOOLEAN )
@@ -1244,6 +1245,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         //  first loop to collect attributes
 
         sal_Bool bDecDashes  = sal_False;
+        sal_Bool bVarDecimals = sal_False;
         sal_Bool bExpFound   = sal_False;
         sal_Bool bCurrFound  = sal_False;
         sal_Bool bInInteger  = sal_True;
@@ -1269,6 +1271,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         nExpDigits += pElemStr->Len();
                     else if ( !bDecDashes && pElemStr && pElemStr->GetChar(0) == '-' )
                         bDecDashes = TRUE;
+                    else if ( !bVarDecimals && !bInInteger && pElemStr && pElemStr->GetChar(0) == '#' )
+                    {
+                        //  If the decimal digits string starts with a '#', variable
+                        //  decimals is assumed (for 0.###, but not 0.0##).
+                        bVarDecimals = sal_True;
+                    }
                     if ( bInInteger && pElemStr )
                         nIntegerSymbols += pElemStr->Len();
                     nTrailingThousands = 0;
@@ -1402,7 +1410,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     }
                     break;
                 case NF_KEY_GENERAL :
-                        WriteNumberElement_Impl( -1, 1, OUString(), sal_False, 0, aEmbeddedEntries );
+                        WriteNumberElement_Impl( -1, 1, OUString(), sal_False, sal_False, 0, aEmbeddedEntries );
                     break;
                 case NF_KEY_CCC:
                     if (pElemStr)
@@ -1469,8 +1477,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                     if ( bDecDashes && nPrecision > 0 )
                                         sDashStr.Fill( nPrecision, '-' );
 
-                                    WriteNumberElement_Impl( nDecimals, nInteger, sDashStr, bThousand,
-                                                            nTrailingThousands, aEmbeddedEntries );
+                                    WriteNumberElement_Impl( nDecimals, nInteger, sDashStr, bVarDecimals,
+                                                        bThousand, nTrailingThousands, aEmbeddedEntries );
                                     bAnyContent = sal_True;
                                 }
                                 break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-01 12:31:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,18 +160,9 @@ namespace xmloff
         */
         sal_Bool    encounteredAttribute(const sal_Char* _pAttributeName) const { return encounteredAttribute(::rtl::OUString::createFromAscii(_pAttributeName)); }
 
-        /** can be used to handle properties where the attribute default and the property default differ.
-            <p>In such case, if the property had the attribute default upon writing, nothing is read, so upon reading,
-            the property is still at it's own default (which is not the attribute default).<p/>
-            <p>This method, if told the attribute and the property, and the (implied) attribute default, sets the
-            property value as if the attribute was encountered.</p>
-            @see encounteredAttribute
-        */
-        void        simluateDefaultedAttribute(const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName, const sal_Char* _pAttributeDefault);
-
         /** enables the tracking of the encountered attributes
-            <p>The tracking will raise the import, but allow derived classes' instances to use
-            <method>simluateDefaultedAttribute</method>.</p>
+            <p>The tracking will raise the import costs a little but, but it's cheaper than
+            derived classes tracking this themself.</p>
         */
         void        enableTrackAttributes() { m_bTrackAttributes = sal_True; }
 
@@ -280,37 +271,4 @@ namespace xmloff
 
 #endif // _XMLOFF_FORMS_PROPERTYIMPORT_HXX_
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.9  2002/10/25 13:19:34  fs
- *  #104402# importing grid column styles now
- *
- *  Revision 1.8  2001/03/29 09:44:19  fs
- *  enableTrackAttributes to prevent the (expensive) attribute tracking
- *
- *  Revision 1.7  2001/03/28 13:59:54  fs
- *  #85371# +simulateDefaultedAttribute / +encounteredAttribute
- *
- *  Revision 1.6  2001/03/28 09:59:38  fs
- *  #85097# correctly import boolean properties with inverse semantics
- *
- *  Revision 1.5  2001/02/01 09:46:47  fs
- *  no own style handling anymore - the shape exporter is responsible for our styles now
- *
- *  Revision 1.4  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.3  2000/12/13 10:40:15  fs
- *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
- *
- *  Revision 1.2  2000/12/12 12:01:05  fs
- *  new implementations for the import - still under construction
- *
- *  Revision 1.1  2000/12/06 17:32:01  fs
- *  initial checkin - implementations for formlayer import/export - still under construction
- *
- *
- *  Revision 1.0 04.12.00 15:10:13  fs
- ************************************************************************/
 

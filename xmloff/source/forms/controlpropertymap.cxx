@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 07:37:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,36 +96,46 @@ namespace xmloff
 //.........................................................................
 
 #define MAP_ASCII( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type, context }
-#define MAP_CONST( name, prefix, token, type, context )  { name, name.length,   prefix, token, type, context }
+#define MAP_CONST( name, prefix, token, type, context )  { name.ascii, name.length, prefix, token, type, context }
 #define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0 }
 
-    XMLPropertyMapEntry aControlStyleProperties[] =
+    XMLPropertyMapEntry* getControlStylePropertyMap_Access( )
     {
-        MAP_CONST( PROPERTY_BACKGROUNDCOLOR, XML_NAMESPACE_FO,      XML_BACKGROUND_COLOR,       XML_TYPE_COLOR, 0 ),
-        MAP_CONST( PROPERTY_ALIGN,          XML_NAMESPACE_STYLE,    XML_TEXT_ALIGN,             XML_TYPE_TEXT_ALIGN, 0 ),
-        MAP_CONST( PROPERTY_BORDER,         XML_NAMESPACE_FO,       XML_BORDER,                 XML_TYPE_CONTROL_BORDER, 0 ),
-        MAP_ASCII( "FontCharWidth",         XML_NAMESPACE_STYLE,    XML_FONT_CHAR_WIDTH,        XML_TYPE_NUMBER16, 0 ),
-        MAP_ASCII( "FontCharset",           XML_NAMESPACE_STYLE,    XML_FONT_CHARSET,           XML_TYPE_TEXT_FONTENCODING, 0 ),
-        MAP_ASCII( "FontFamily",                XML_NAMESPACE_STYLE,    XML_FONT_FAMILY_GENERIC,    XML_TYPE_TEXT_FONTFAMILY, 0 ),
-        MAP_ASCII( "FontHeight",                XML_NAMESPACE_FO,       XML_FONT_SIZE,              XML_TYPE_CHAR_HEIGHT, 0 ),
-        MAP_ASCII( "FontKerning",           XML_NAMESPACE_STYLE,    XML_LETTER_KERNING,         XML_TYPE_BOOL, 0 ),
-        MAP_ASCII( "FontName",              XML_NAMESPACE_STYLE,    XML_FONT_NAME,              XML_TYPE_STRING, 0 ),
-        MAP_ASCII( "FontOrientation",       XML_NAMESPACE_STYLE,    XML_ROTATION_ANGLE,         XML_TYPE_ROTATION_ANGLE, 0 ),
-        MAP_ASCII( "FontPitch",             XML_NAMESPACE_STYLE,    XML_FONT_PITCH,             XML_TYPE_TEXT_FONTPITCH, 0 ),
-        MAP_ASCII( "FontSlant",             XML_NAMESPACE_FO,       XML_FONT_STYLE,             XML_TYPE_TEXT_POSTURE, 0 ),
-        MAP_ASCII( "FontStrikeout",         XML_NAMESPACE_STYLE,    XML_TEXT_CROSSING_OUT,      XML_TYPE_TEXT_CROSSEDOUT, 0 ),
-        MAP_ASCII( "FontStyleName",         XML_NAMESPACE_STYLE,    XML_FONT_STYLE_NAME,        XML_TYPE_STRING, 0 ),
-        MAP_ASCII( "FontUnderline",         XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE,         XML_TYPE_TEXT_UNDERLINE, 0 ),
-        MAP_ASCII( "FontWeight",                XML_NAMESPACE_FO,       XML_FONT_WEIGHT,            XML_TYPE_TEXT_WEIGHT, 0 ),
-        MAP_ASCII( "FontWidth",             XML_NAMESPACE_STYLE,    XML_FONT_WIDTH,             XML_TYPE_FONT_WIDTH, 0 ),
-        MAP_ASCII( "FontWordLineMode",      XML_NAMESPACE_FO,       XML_SCORE_SPACES,           XML_TYPE_NBOOL, 0 ),
-        MAP_ASCII( "TextColor",             XML_NAMESPACE_FO,       XML_COLOR,                  XML_TYPE_COLOR, 0 ),
-        MAP_CONST( PROPERTY_FORMATKEY,      XML_NAMESPACE_STYLE,    XML_DATA_STYLE_NAME,        XML_TYPE_STRING | MID_FLAG_NO_PROPERTY_EXPORT | MID_FLAG_SPECIAL_ITEM, CTF_FORMS_DATA_STYLE ),
-        MAP_ASCII( "FontEmphasisMark",      XML_NAMESPACE_STYLE,    XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 ),
-        MAP_ASCII( "FontRelief",                XML_NAMESPACE_STYLE,    XML_FONT_RELIEF,            XML_TYPE_TEXT_FONT_RELIEF|MID_FLAG_MULTI_PROPERTY, 0 ),
-        MAP_ASCII( "TextLineColor",         XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_COLOR,   XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
-        MAP_END()
-    };
+        static XMLPropertyMapEntry aControlStyleProperties[] =
+        {
+            MAP_CONST( PROPERTY_BACKGROUNDCOLOR, XML_NAMESPACE_FO,      XML_BACKGROUND_COLOR,       XML_TYPE_COLOR, 0 ),
+            MAP_CONST( PROPERTY_ALIGN,          XML_NAMESPACE_STYLE,    XML_TEXT_ALIGN,             XML_TYPE_TEXT_ALIGN, 0 ),
+            MAP_CONST( PROPERTY_BORDER,         XML_NAMESPACE_FO,       XML_BORDER,                 XML_TYPE_CONTROL_BORDER, 0 ),
+            MAP_ASCII( "FontCharWidth",         XML_NAMESPACE_STYLE,    XML_FONT_CHAR_WIDTH,        XML_TYPE_NUMBER16, 0 ),
+            MAP_ASCII( "FontCharset",           XML_NAMESPACE_STYLE,    XML_FONT_CHARSET,           XML_TYPE_TEXT_FONTENCODING, 0 ),
+            MAP_ASCII( "FontFamily",                XML_NAMESPACE_STYLE,    XML_FONT_FAMILY_GENERIC,    XML_TYPE_TEXT_FONTFAMILY, 0 ),
+            MAP_ASCII( "FontHeight",                XML_NAMESPACE_FO,       XML_FONT_SIZE,              XML_TYPE_CHAR_HEIGHT, 0 ),
+            MAP_ASCII( "FontKerning",           XML_NAMESPACE_STYLE,    XML_LETTER_KERNING,         XML_TYPE_BOOL, 0 ),
+            MAP_ASCII( "FontName",              XML_NAMESPACE_STYLE,    XML_FONT_NAME,              XML_TYPE_STRING, 0 ),
+            MAP_ASCII( "FontOrientation",       XML_NAMESPACE_STYLE,    XML_ROTATION_ANGLE,         XML_TYPE_ROTATION_ANGLE, 0 ),
+            MAP_ASCII( "FontPitch",             XML_NAMESPACE_STYLE,    XML_FONT_PITCH,             XML_TYPE_TEXT_FONTPITCH, 0 ),
+            MAP_ASCII( "FontSlant",             XML_NAMESPACE_FO,       XML_FONT_STYLE,             XML_TYPE_TEXT_POSTURE, 0 ),
+            MAP_ASCII( "FontStrikeout",         XML_NAMESPACE_STYLE,    XML_TEXT_CROSSING_OUT,      XML_TYPE_TEXT_CROSSEDOUT, 0 ),
+            MAP_ASCII( "FontStyleName",         XML_NAMESPACE_STYLE,    XML_FONT_STYLE_NAME,        XML_TYPE_STRING, 0 ),
+            MAP_ASCII( "FontUnderline",         XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE,         XML_TYPE_TEXT_UNDERLINE, 0 ),
+            MAP_ASCII( "FontWeight",                XML_NAMESPACE_FO,       XML_FONT_WEIGHT,            XML_TYPE_TEXT_WEIGHT, 0 ),
+            MAP_ASCII( "FontWidth",             XML_NAMESPACE_STYLE,    XML_FONT_WIDTH,             XML_TYPE_FONT_WIDTH, 0 ),
+            MAP_ASCII( "FontWordLineMode",      XML_NAMESPACE_FO,       XML_SCORE_SPACES,           XML_TYPE_NBOOL, 0 ),
+            MAP_ASCII( "TextColor",             XML_NAMESPACE_FO,       XML_COLOR,                  XML_TYPE_COLOR, 0 ),
+            MAP_CONST( PROPERTY_FORMATKEY,      XML_NAMESPACE_STYLE,    XML_DATA_STYLE_NAME,        XML_TYPE_STRING | MID_FLAG_NO_PROPERTY_EXPORT | MID_FLAG_SPECIAL_ITEM, CTF_FORMS_DATA_STYLE ),
+            MAP_ASCII( "FontEmphasisMark",      XML_NAMESPACE_STYLE,    XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 ),
+            MAP_ASCII( "FontRelief",                XML_NAMESPACE_STYLE,    XML_FONT_RELIEF,            XML_TYPE_TEXT_FONT_RELIEF|MID_FLAG_MULTI_PROPERTY, 0 ),
+            MAP_ASCII( "TextLineColor",         XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_COLOR,   XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
+            MAP_END()
+        };
+
+        return aControlStyleProperties;
+    }
+
+    const XMLPropertyMapEntry* getControlStylePropertyMap( )
+    {
+        return getControlStylePropertyMap_Access();
+    }
 
     //=====================================================================
     //---------------------------------------------------------------------
@@ -152,7 +162,7 @@ namespace xmloff
         static sal_Bool bSorted = sal_False;
         if (!bSorted)
         {
-            implSortMap(aControlStyleProperties);
+            implSortMap(getControlStylePropertyMap_Access());
             bSorted = sal_True;
         }
     }
@@ -180,49 +190,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.14  2002/10/22 13:37:16  fs
- *  #102407# corrected the MAP macro - old version generated invalid lengths for the PROPERTY_xxx strings
- *
- *  Revision 1.13  2002/02/21 15:07:27  hr
- *  #65293#: include <string.h>
- *
- *  Revision 1.12  2001/07/13 16:08:24  dvo
- *  #86004# PropertMap construction improved: strings have lengths
- *
- *  Revision 1.11  2001/06/29 21:07:14  dvo
- *  #86004# changes sXML_* strings to XML_* tokens
- *
- *  Revision 1.10  2001/06/07 12:28:30  fs
- *  #86096# FontEmphasisMark/FontRelief/TextLineColor
- *
- *  Revision 1.9  2001/05/28 15:01:19  fs
- *  #86712# added a format key property
- *
- *  Revision 1.8  2001/04/19 13:23:48  fs
- *  arggghhhh .... remove the (double) TextColor entry
- *
- *  Revision 1.7  2001/04/19 13:21:29  fs
- *  #85097# add TextColor to the styles map, so it won't be exported as ordinary property
- *
- *  Revision 1.6  2001/04/02 05:58:40  fs
- *  added TextColor to the property map
- *
- *  Revision 1.5  2001/02/01 17:41:18  mh
- *  chg: header
- *
- *  Revision 1.4  2001/01/18 13:51:30  fs
- *  the background-color is part of the fo (not style) namespace
- *
- *  Revision 1.3  2000/12/19 12:13:57  fs
- *  some changes ... now the exported styles are XSL conform
- *
- *  Revision 1.1  2000/12/18 15:15:32  fs
- *  initial checkin - property maps
- *
- *
- *  Revision 1.0 14.12.00 10:09:14  fs
- ************************************************************************/
 

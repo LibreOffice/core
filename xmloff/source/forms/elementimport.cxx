@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-22 14:39:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,20 @@ namespace xmloff
         m_rEventManager.registerEvents(m_xElement, _rEvents);
     }
 
+    //---------------------------------------------------------------------
+    void OElementImport::simulateDefaultedAttribute(const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName, const sal_Char* _pAttributeDefault)
+    {
+        Reference< XPropertySetInfo > xPropsInfo = m_xElement->getPropertySetInfo();
+        OSL_ENSURE( xPropsInfo.is(), "OPropertyImport::simulateDefaultedAttribute: the component should be more gossipy about it's properties!" );
+
+        if ( !xPropsInfo.is() || xPropsInfo->hasPropertyByName( _rPropertyName ) )
+        {
+            ::rtl::OUString sLocalAttrName = ::rtl::OUString::createFromAscii(_pAttributeName);
+            if ( !encounteredAttribute( sLocalAttrName ) )
+                handleAttribute( XML_NAMESPACE_FORM, sLocalAttrName, ::rtl::OUString::createFromAscii( _pAttributeDefault ) );
+        }
+    }
+
     //=====================================================================
     //= OControlImport
     //=====================================================================
@@ -659,7 +673,7 @@ namespace xmloff
 
             // look up this property in our sequence
             for (   ConstPropertyValueArrayIterator aCheck = m_aValues.begin();
-                    (aCheck != m_aValues.end() ) && !bRestoreValuePropertyValue;
+                    ( aCheck != m_aValues.end() );
                     ++aCheck
                 )
             {
@@ -876,7 +890,7 @@ namespace xmloff
         OControlImport::StartElement(_rxAttrList);
 
         // handle the target-frame attribute
-        simluateDefaultedAttribute(getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
+        simulateDefaultedAttribute(getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
     }
 
     //=====================================================================
@@ -909,7 +923,7 @@ namespace xmloff
         }
 
         if (bHaveEmptyIsNull)
-            simluateDefaultedAttribute(getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, "false");
+            simulateDefaultedAttribute(getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, "false");
     }
 
     //=====================================================================
@@ -956,10 +970,10 @@ namespace xmloff
             // for the auto-completion
             // the attribute default does not equal the property default, so in case we did not read this attribute,
             // we have to simulate it
-            simluateDefaultedAttribute(getSpecialAttributeName(SCA_AUTOMATIC_COMPLETION), PROPERTY_AUTOCOMPLETE, "false");
+            simulateDefaultedAttribute( getSpecialAttributeName( SCA_AUTOMATIC_COMPLETION ), PROPERTY_AUTOCOMPLETE, "false");
 
             // same for the convert-empty-to-null attribute, which's default is different from the property default
-            simluateDefaultedAttribute(getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, "false");
+            simulateDefaultedAttribute( getDatabaseAttributeName( DA_CONVERT_EMPTY ), PROPERTY_EMPTY_IS_NULL, "false");
         }
     }
 
@@ -1347,7 +1361,7 @@ namespace xmloff
         OFormImport_Base::StartElement(_rxAttrList);
 
         // handle the target-frame attribute
-        simluateDefaultedAttribute(getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
+        simulateDefaultedAttribute(getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
     }
 
     //---------------------------------------------------------------------
@@ -1450,46 +1464,4 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.32  2002/11/06 10:37:04  fs
- *  #102407# (on behalf of BerryJia@openoffice.org) when importing a control model which can be ALIGNed, initialize this property to the XML default
- *
- *  Revision 1.31  2002/10/25 13:14:15  fs
- *  #104402# importing grid column styles now
- *
- *  Revision 1.30  2002/10/02 14:31:10  fs
- *  #103388# some performance logging
- *
- *  Revision 1.29  2002/09/09 13:55:30  fs
- *  #102475# OControlImport::EndElement: when reading a 'default value' property (such as 'DefaultText'), ensure that it does not wrongly overwrite the 'value' property (such as 'Text')
- *
- *  Revision 1.28  2002/08/22 07:36:10  oj
- *  #99721# now save image url relative
- *
- *  Revision 1.27  2001/12/12 16:35:19  fs
- *  #95892# moved the assertion in ListAndComboImport::EndElement to the proper place
- *
- *  Revision 1.26  2001/11/02 12:34:13  fs
- *  #94196# in case of a non-valuelist-ListBox, do not import the ListSource property twice
- *
- *  Revision 1.25  2001/10/18 13:19:57  mh
- *  add: include
- *
- *  Revision 1.24  2001/07/10 17:06:23  mtg
- *  updated namespace handling
- *
- *  Revision 1.23  2001/06/25 13:32:38  fs
- *  #88691# TargetURL property value must be saved relative to own document
- *
- *  Revision 1.22  2001/05/21 13:33:04  fs
- *  #85388# when exporting the ListSource as attribs, store form:option elements as long as there are valid 'selected' or 'default-selected' entries
- *
- *  Revision 1.21  2001/05/17 12:40:01  fs
- *  #86895# #86825# implTranslateValueProperty: special handling for EffectiveValue and EffectiveDefault
- *
- *  Revision 1.0 05.12.00 11:09:36  fs
- ************************************************************************/
 

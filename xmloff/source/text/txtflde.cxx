@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 #include "XMLEventExport.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLTEXTCHARSTYLENAMESELEMENTEXPORT_HXX
+#include "XMLTextCharStyleNamesElementExport.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
@@ -192,8 +196,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
+#include <com/sun/star/container/XNameReplace.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
@@ -220,8 +224,8 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #include <vector>
@@ -483,6 +487,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
       sPropertyIsConditionTrue(RTL_CONSTASCII_USTRINGPARAM("IsConditionTrue")),
       sPropertyDataCommandType(RTL_CONSTASCII_USTRINGPARAM("DataCommandType")),
       sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM("IsFixedLanguage")),
+      sPropertyCharStyleNames(RTL_CONSTASCII_USTRINGPARAM("CharStyleNames")),
       pCombinedCharactersPropertyState(pCombinedCharState)
 {
     SetExportOnlyUsedFieldDeclarations();
@@ -1080,36 +1085,63 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
 
     // find out whether we need to set the style or hyperlink
     sal_Bool bHasHyperlink;
+    sal_Bool bIsUICharStyle;
     OUString sStyle = GetExport().GetTextParagraphExport()->
-        FindTextStyleAndHyperlink( xRangePropSet, bHasHyperlink, pStates );
+        FindTextStyleAndHyperlink( xRangePropSet, bHasHyperlink, bIsUICharStyle,
+                                  pStates );
     sal_Bool bHasStyle = (sStyle.getLength() > 0);
 
     // export hyperlink (if we have one)
+    Reference < XPropertySetInfo > xRangePropSetInfo;
     if( bHasHyperlink )
     {
         Reference<XPropertyState> xRangePropState( xRangePropSet, UNO_QUERY );
+        xRangePropSetInfo = xRangePropSet->getPropertySetInfo();
         bHasHyperlink =
             GetExport().GetTextParagraphExport()->addHyperlinkAttributes(
                 xRangePropSet, xRangePropState,
-                xRangePropSet->getPropertySetInfo() );
+                xRangePropSetInfo );
     }
     SvXMLElementExport aHyperlink( GetExport(), bHasHyperlink,
                                    XML_NAMESPACE_TEXT, XML_A,
                                    sal_False, sal_False );
 
-    // export span with style (if necessary)
-    // (except for combined characters field)
-    if( bHasStyle )
+    if( bHasHyperlink )
     {
-        // export <text:span> element
-        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME, sStyle );
+        // export events (if supported)
+        OUString sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM(
+            "HyperLinkEvents"));
+        if (xRangePropSetInfo->hasPropertyByName(sHyperLinkEvents))
+        {
+            Any aAny = xRangePropSet->getPropertyValue(sHyperLinkEvents);
+            Reference<XNameReplace> xName;
+            aAny >>= xName;
+            GetExport().GetEventExport().Export(xName, sal_False);
+        }
     }
-    SvXMLElementExport aSpan( GetExport(), bHasStyle,
-                              XML_NAMESPACE_TEXT, XML_SPAN,
-                              sal_False, sal_False);
 
-    // finally, export the field itself
-    ExportFieldHelper( rTextField, xPropSet, xRangePropSet, nToken );
+    {
+        XMLTextCharStyleNamesElementExport aCharStylesExport(
+            GetExport(), bIsUICharStyle &&
+                         GetExport().GetTextParagraphExport()
+                             ->GetCharStyleNamesPropInfoCache().hasProperty(
+                                        xRangePropSet, xRangePropSetInfo ),
+            xRangePropSet, sPropertyCharStyleNames );
+
+        // export span with style (if necessary)
+        // (except for combined characters field)
+        if( bHasStyle )
+        {
+            // export <text:span> element
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME, sStyle );
+        }
+        SvXMLElementExport aSpan( GetExport(), bHasStyle,
+                                  XML_NAMESPACE_TEXT, XML_SPAN,
+                                  sal_False, sal_False);
+
+        // finally, export the field itself
+        ExportFieldHelper( rTextField, xPropSet, xRangePropSet, nToken );
+    }
 }
 
 /// export the given field to XML. Called on second pass through document
@@ -2490,14 +2522,14 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
     // truncate for date granularity
     if (bIsDate)
     {
-        dValue = SolarMath::ApproxFloor(dValue);
+        dValue = ::rtl::math::approxFloor(dValue);
     }
 
     OUStringBuffer aBuffer;
     if (bIsDuration)
     {
         // date/time durationM handle bOmitDurationIfZero
-        if (!bOmitDurationIfZero || !SolarMath::ApproxEqual(dValue, 0.0))
+        if (!bOmitDurationIfZero || !::rtl::math::approxEqual(dValue, 0.0))
         {
             rExport.GetMM100UnitConverter().convertTime(aBuffer, dValue);
         }

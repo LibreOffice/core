@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: sab $ $Date: 2002-12-02 12:56:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,7 +591,8 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     for( INT16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        if( rAttrName.compareToAscii( sXML_xmlns, 5 ) == 0 &&
+        if( ( rAttrName.getLength() >= 5 ) &&
+            ( rAttrName.compareToAscii( sXML_xmlns, 5 ) == 0 ) &&
             ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
         {
             if( !pRewindMap )
@@ -600,15 +601,11 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
                 pNamespaceMap = new SvXMLNamespaceMap( *pNamespaceMap );
             }
             const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-            if( rAttrName.getLength() == 5 )
-            {
-//              pNamespaceMap->SetDefault( aName );
-            }
-            else
-            {
-                OUString aPrefix( rAttrName.copy( 6 ) );
-                pNamespaceMap->Add( aPrefix, rAttrValue );
-            }
+
+            OUString aPrefix( ( rAttrName.getLength() == 5 )
+                                 ? OUString()
+                                 : rAttrName.copy( 6 ) );
+            pNamespaceMap->Add( aPrefix, rAttrValue );
         }
     }
 

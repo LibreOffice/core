@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dvo $ $Date: 2002-09-19 10:04:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+
+#ifndef _TOOLS_STRINGS_HXX
+#include <tools/string.hxx>
 #endif
 
 #ifndef _SVARRAY_HXX
@@ -1413,6 +1417,7 @@ class XMLAlphaIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Imp
     const OUString sTextReading;
     const OUString sPrimaryKeyReading;
     const OUString sSecondaryKeyReading;
+    const OUString sMainEntry;
 
 public:
     TYPEINFO();
@@ -1445,7 +1450,8 @@ XMLAlphaIndexMarkImportContext_Impl::XMLAlphaIndexMarkImportContext_Impl(
         sSecondaryKey(RTL_CONSTASCII_USTRINGPARAM("SecondaryKey")),
         sTextReading(RTL_CONSTASCII_USTRINGPARAM("TextReading")),
         sPrimaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("PrimaryKeyReading")),
-        sSecondaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeyReading"))
+        sSecondaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeyReading")),
+        sMainEntry(RTL_CONSTASCII_USTRINGPARAM("IsMainEntry"))
 {
 }
 
@@ -1484,6 +1490,17 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
             Any aAny;
             aAny <<= sValue;
             rPropSet->setPropertyValue(sTextReading, aAny);
+        }
+        else if ( IsXMLToken( sLocalName, XML_MAIN_ENTRY ) )
+        {
+            sal_Bool bMainEntry = sal_False, bTmp;
+
+            if (SvXMLUnitConverter::convertBool(bTmp, sValue))
+                bMainEntry = bTmp;
+
+            Any aAny;
+            aAny.setValue(&bMainEntry, ::getBooleanCppuType());
+            rPropSet->setPropertyValue(sMainEntry, aAny);
         }
         else
         {

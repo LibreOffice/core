@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: mib $ $Date: 2001-10-23 14:25:56 $
+#   last change: $Author: hr $ $Date: 2003-03-27 18:20:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,7 @@ CXXFILES = \
         ImageStyle.cxx					\
         MarkerStyle.cxx					\
         MultiPropertySetHelper.cxx		\
+        SinglePropertySetInfoCache.cxx	\
         DashStyle.cxx					\
         AttributeContainerHandler.cxx	\
         NamedBoolPropertyHdl.cxx		\
@@ -219,6 +220,7 @@ SLOFILES =	\
         $(SLO)$/ImageStyle.obj					\
         $(SLO)$/MarkerStyle.obj					\
         $(SLO)$/MultiPropertySetHelper.obj		\
+        $(SLO)$/SinglePropertySetInfoCache.obj	\
         $(SLO)$/NamedBoolPropertyHdl.obj		\
         $(SLO)$/TransGradientStyle.obj			\
         $(SLO)$/XMLBackgroundImageContext.obj	\
@@ -299,6 +301,7 @@ SVXLIGHTOBJFILES =	\
         $(OBJ)$/ImageStyle.obj					\
         $(OBJ)$/MarkerStyle.obj					\
         $(OBJ)$/MultiPropertySetHelper.obj		\
+        $(SLO)$/SinglePropertySetInfoCache.obj	\
         $(OBJ)$/NamedBoolPropertyHdl.obj		\
         $(OBJ)$/TransGradientStyle.obj			\
         $(OBJ)$/XMLBackgroundImageContext.obj	\

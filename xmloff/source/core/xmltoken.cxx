@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-30 17:26:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2131,6 +2131,14 @@ namespace xmloff { namespace token {
 
         TOKEN( "dynamic-spacing" ),            // XML_DYNAMIC_SPACING
 
+        TOKEN( "main-etry" ),                 // XML_MAIN_ENTRY
+
+        TOKEN( "use-outline-level" ),          // XML_USE_OUTLINE_LEVEL,
+
+        // #107245# New 3D properties which are possible for lathe and extrude 3d objects
+        TOKEN( "close-front" ),                 // XML_CLOSE_FRONT
+        TOKEN( "close-back" ),                  // XML_CLOSE_BACK
+
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
 
@@ -2174,3 +2182,4 @@ namespace xmloff { namespace token {
     }
 }
 }
+

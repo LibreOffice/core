@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-17 15:51:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,7 @@ enum SdXMLStylesElemTokenMap
     XML_TOK_STYLES_MASTER_PAGE,
     XML_TOK_STYLES_STYLE,
     XML_TOK_STYLES_PAGE_MASTER,
-    XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT,
-    XML_TOK_STYLES_DATE_STYLE,
-    XML_TOK_STYLES_TIME_STYLE
+    XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT
 };
 
 enum SdXMLAutoStylesElemTokenMap

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 07:53:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,18 +528,23 @@ namespace xmloff
         // --------------------------------------------------------------------
         // some integer properties
         {
+            // now the common handling
             static sal_Int32 nIntegerPropertyAttributeIds[] =
             {   // attribute flags
-                CCA_MAX_LENGTH, CCA_SIZE, CCA_TAB_INDEX
+                CCA_SIZE, CCA_TAB_INDEX
             };
             static const ::rtl::OUString* pIntegerPropertyNames[] =
             {   // property names
-                &PROPERTY_MAXTEXTLENGTH, &PROPERTY_LINECOUNT, &PROPERTY_TABINDEX
+                &PROPERTY_LINECOUNT, &PROPERTY_TABINDEX
             };
             static const sal_Int16 nIntegerPropertyAttrDefaults[] =
             {   // attribute defaults
-                0, 5, 0
+                5, 0
             };
+
+            if ( m_nIncludeCommon & CCA_MAX_LENGTH )
+                exportedProperty(PROPERTY_MAXTEXTLENGTH);
+
         #ifdef DBG_UTIL
             sal_Int32 nIdCount = sizeof(nIntegerPropertyAttributeIds) / sizeof(nIntegerPropertyAttributeIds[0]);
             sal_Int32 nNameCount = sizeof(pIntegerPropertyNames) / sizeof(pIntegerPropertyNames[0]);
@@ -560,6 +565,8 @@ namespace xmloff
                     m_nIncludeCommon = m_nIncludeCommon & ~nIntegerPropertyAttributeIds[i];
         #endif
                 }
+
+
         }
 
         // --------------------------------------------------------------------
@@ -591,6 +598,35 @@ namespace xmloff
         #ifdef DBG_UTIL
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_TARGET_FRAME;
+        #endif
+        }
+
+        // max text length
+        if ( m_nIncludeCommon & CCA_MAX_LENGTH )
+        {
+            // normally, the respective property would be "MaxTextLen"
+            // However, if the model has a property "PersistenceMaxTextLength", then we prefer this
+
+            // determine the name of the property to export
+            ::rtl::OUString sTextLenPropertyName = PROPERTY_MAXTEXTLENGTH;
+            if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_PERSISTENCE_MAXTEXTLENGTH ) )
+                sTextLenPropertyName = PROPERTY_PERSISTENCE_MAXTEXTLENGTH;
+
+            // export it
+            exportInt16PropertyAttribute(
+                getCommonControlAttributeNamespace( CCA_MAX_LENGTH ),
+                getCommonControlAttributeName( CCA_MAX_LENGTH ),
+                sTextLenPropertyName,
+                0
+            );
+
+            // in either way, both properties count as "exported"
+            exportedProperty( PROPERTY_MAXTEXTLENGTH );
+            exportedProperty( PROPERTY_PERSISTENCE_MAXTEXTLENGTH );
+
+        #ifdef DBG_UTIL
+            //  reset the bit for later checking
+            m_nIncludeCommon = m_nIncludeCommon & ~CCA_MAX_LENGTH;
         #endif
         }
 
@@ -1561,77 +1597,3 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.22  2002/08/22 07:36:10  oj
- *  #99721# now save image url relative
- *
- *  Revision 1.21  2001/11/02 11:45:36  fs
- *  #94196# do not export the only ListSource element in case of a non-valuelist-ListBox
- *
- *  Revision 1.20  2001/10/12 16:30:53  hr
- *  #92830#: required change: std::min()/std::max()
- *
- *  Revision 1.19  2001/07/04 14:03:11  mib
- *  #89118#: Don't export xlink:href twice
- *
- *  Revision 1.18  2001/06/25 13:32:38  fs
- *  #88691# TargetURL property value must be saved relative to own document
- *
- *  Revision 1.17  2001/06/14 13:39:35  fs
- *  #88016# corrected the condition for the assertion
- *
- *  Revision 1.16  2001/05/21 13:30:17  fs
- *  #85388# when exporting the ListSource as attribs, store form:option elements as long as there are valid 'selected' or 'default-selected' entries
- *
- *  Revision 1.15  2001/04/17 07:58:31  fs
- *  #85427# TabCycle has a void-default
- *
- *  Revision 1.14  2001/03/29 12:19:43  fs
- *  #85097# changed the signature of exportBooleanPropertyAttribute
- *
- *  Revision 1.13  2001/03/28 13:06:55  fs
- *  #85427# corrected the default for NavigationBarMode
- *
- *  Revision 1.12  2001/03/21 16:54:16  jl
- *  Replaced OSL_ENSHURE by OSL_ENSURE
- *
- *  Revision 1.11  2001/03/16 14:36:39  sab
- *  did the required change (move of extract.hxx form cppuhelper to comphelper)
- *
- *  Revision 1.10  2001/02/01 09:46:47  fs
- *  no own style handling anymore - the shape exporter is responsible for our styles now
- *
- *  Revision 1.9  2001/01/03 16:25:34  fs
- *  file format change (extra wrapper element for controls, similar to columns)
- *
- *  Revision 1.8  2001/01/02 15:58:21  fs
- *  event ex- & import
- *
- *  Revision 1.7  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.6  2000/12/18 13:25:01  mib
- *  #82036#: new graphic properties
- *
- *  Revision 1.5  2000/12/13 10:38:10  fs
- *  moved some code to a more central place to reuse it
- *
- *  Revision 1.4  2000/12/06 17:28:05  fs
- *  changes for the formlayer import - still under construction
- *
- *  Revision 1.3  2000/11/29 10:36:05  mh
- *  add: stdio.h for Solaris8
- *
- *  Revision 1.2  2000/11/19 15:41:32  fs
- *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
- *
- *  Revision 1.1  2000/11/17 19:01:21  fs
- *  initial checkin - export and/or import the applications form layer
- *
- *
- *  Revision 1.0 13.11.00 18:56:13  fs
- ************************************************************************/
-

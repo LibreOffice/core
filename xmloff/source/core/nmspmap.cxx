@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-23 11:54:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,56 +285,59 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
 {
     sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN;
 
-    sal_Int32 nColonPos = rAttrName.indexOf( sal_Unicode(':') );
-    if( -1L != nColonPos )
+    NameSpaceHash::const_iterator aIter = aNameCache.find ( rAttrName );
+    if ( aIter != aNameCache.end() )
     {
-        NameSpaceHash::const_iterator aIter = aNameCache.find ( rAttrName );
-        if ( aIter != aNameCache.end() )
+        const NameSpaceEntry &rEntry = (*aIter).second.getBody();
+        if ( pPrefix )
+            *pPrefix = rEntry.sPrefix;
+        if ( pLocalName )
+            *pLocalName = rEntry.sName;
+        nKey = rEntry.nKey;
+        if ( pNamespace )
         {
-            const NameSpaceEntry &rEntry = (*aIter).second.getBody();
-            if ( pPrefix )
-                *pPrefix = rEntry.sPrefix;
-            if ( pLocalName )
-                *pLocalName = rEntry.sName;
-            nKey = rEntry.nKey;
-            if ( pNamespace )
-            {
-                NameSpaceMap::const_iterator aMapIter = aNameMap.find (nKey);
-                *pNamespace = aMapIter != aNameMap.end() ? (*aMapIter).second->sName : sEmpty;
-            }
-        }
-        else
-        {
-            NameSpaceEntry *pEntry = new NameSpaceEntry;
-            pEntry->sPrefix = rAttrName.copy( 0L, nColonPos );
-            pEntry->sName = rAttrName.copy( nColonPos + 1L );
-
-            if( pPrefix )
-                *pPrefix = pEntry->sPrefix;
-            if( pLocalName )
-                *pLocalName = pEntry->sName;
-
-            NameSpaceHash::const_iterator aIter = aNameHash.find( pEntry->sPrefix );
-            if ( aIter != aNameHash.end() )
-            {
-                nKey = pEntry->nKey = (*aIter).second->nKey;
-                if ( pNamespace )
-                    *pNamespace = (*aIter).second->sName;
-            }
-            else if ( pEntry->sPrefix == sXMLNS )
-                nKey = pEntry->nKey = XML_NAMESPACE_XMLNS;
-            const_cast < NameSpaceHash* > ( &aNameCache )->operator[] ( rAttrName ) = pEntry;
+            NameSpaceMap::const_iterator aMapIter = aNameMap.find (nKey);
+            *pNamespace = aMapIter != aNameMap.end() ? (*aMapIter).second->sName : sEmpty;
         }
     }
     else
     {
-        nKey = XML_NAMESPACE_NONE;
+        sal_Int32 nColonPos = rAttrName.indexOf( sal_Unicode(':') );
+        NameSpaceEntry *pEntry = new NameSpaceEntry;
+        if( -1L == nColonPos )
+        {
+            // case: no ':' found -> default namespace
+            pEntry->sPrefix = OUString();
+            pEntry->sName = rAttrName;
+        }
+        else
+        {
+            // normal case: ':' found -> get prefix/suffix
+            pEntry->sPrefix = rAttrName.copy( 0L, nColonPos );
+            pEntry->sName = rAttrName.copy( nColonPos + 1L );
+        }
+
         if( pPrefix )
-            *pPrefix = sEmpty;
+            *pPrefix = pEntry->sPrefix;
         if( pLocalName )
-            *pLocalName = rAttrName;
-        if( pNamespace )
-            *pNamespace = sEmpty;
+            *pLocalName = pEntry->sName;
+
+        NameSpaceHash::const_iterator aIter = aNameHash.find( pEntry->sPrefix );
+        if ( aIter != aNameHash.end() )
+        {
+            // found: retrieve namespace key
+            nKey = pEntry->nKey = (*aIter).second->nKey;
+            if ( pNamespace )
+                *pNamespace = (*aIter).second->sName;
+        }
+        else if ( pEntry->sPrefix == sXMLNS )
+            // not found, but xmlns prefix: return xmlns 'namespace'
+            nKey = pEntry->nKey = XML_NAMESPACE_XMLNS;
+        else if( nColonPos == -1L )
+            // not found, and no namespace: 'namespace' none
+            nKey = pEntry->nKey = XML_NAMESPACE_NONE;
+
+        const_cast < NameSpaceHash* > ( &aNameCache )->operator[] ( rAttrName ) = pEntry;
     }
 
     return nKey;

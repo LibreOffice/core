@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCSourceContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,9 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
         case XML_TOK_INDEXSOURCE_OUTLINE_LEVEL:
             if ( IsXMLToken( rValue, XML_NONE ) )
             {
+                // #104651# use OUTLINE_LEVEL and USE_OUTLINE_LEVEL instead of
+                // OUTLINE_LEVEL with values none|1..10. For backwards
+                // compatibility, 'none' must still be read.
                 bUseOutline = sal_False;
             }
             else
@@ -187,6 +190,17 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
                 }
             }
             break;
+
+        case XML_TOK_INDEXSOURCE_USE_OUTLINE_LEVEL:
+        {
+            sal_Bool bTmp;
+            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            {
+                bUseOutline = bTmp;
+            }
+            break;
+        }
+
 
         case XML_TOK_INDEXSOURCE_USE_INDEX_MARKS:
         {

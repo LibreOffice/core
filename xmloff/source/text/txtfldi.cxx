@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,8 +217,8 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -1382,7 +1382,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
             if (SvXMLUnitConverter::convertTime(fTmp, sAttrValue))
             {
                 // convert to minutes
-                nAdjust = (sal_Int32)SolarMath::ApproxFloor(fTmp * 60 * 24);
+                nAdjust = (sal_Int32)::rtl::math::approxFloor(fTmp * 60 * 24);
             }
             break;
         }
@@ -1750,7 +1750,7 @@ XMLDatabaseNumberImportContext::XMLDatabaseNumberImportContext(
         sPropertyNumberingType(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_numbering_type)),
         sPropertySetNumber(RTL_CONSTASCII_USTRINGPARAM(sAPI_set_number)),
-        sNumberFormat('1'),
+        sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("1")),
         sNumberSync(GetXMLToken(XML_FALSE)),
         nValue(0),
         bValueOK(sal_False)
@@ -3249,38 +3249,51 @@ void XMLDdeFieldDeclImportContext::StartElement(
                                                  UNO_QUERY);
         if( xFactory.is() )
         {
-            Reference<XInterface> xIfc =
-                xFactory->createInstance(sBuf.makeStringAndClear());
-            if( xIfc.is() )
+            /* #i6432# There might be multiple occurances of one DDE
+               declaration if it is used in more than one of
+               header/footer/body. createInstance will throw an exception if we
+               try to create the second, third, etc. instance of such a
+               declaration. Thus we ignore the exception. Otherwise this will
+               lead to an unloadable document. */
+            try
             {
-                Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
-                if (xPropSet.is() &&
-                    xPropSet->getPropertySetInfo()->hasPropertyByName(
-                        sPropertyDDECommandType))
+                Reference<XInterface> xIfc =
+                    xFactory->createInstance(sBuf.makeStringAndClear());
+                if( xIfc.is() )
                 {
-                    Any aAny;
+                    Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
+                    if (xPropSet.is() &&
+                        xPropSet->getPropertySetInfo()->hasPropertyByName(
+                                                                          sPropertyDDECommandType))
+                    {
+                        Any aAny;
 
-                    aAny <<= sName;
-                    xPropSet->setPropertyValue(sPropertyName, aAny);
+                        aAny <<= sName;
+                        xPropSet->setPropertyValue(sPropertyName, aAny);
 
-                    aAny <<= sCommandApplication;
-                    xPropSet->setPropertyValue(sPropertyDDECommandType, aAny);
+                        aAny <<= sCommandApplication;
+                        xPropSet->setPropertyValue(sPropertyDDECommandType, aAny);
 
-                    aAny <<= sCommandTopic;
-                    xPropSet->setPropertyValue(sPropertyDDECommandFile, aAny);
+                        aAny <<= sCommandTopic;
+                        xPropSet->setPropertyValue(sPropertyDDECommandFile, aAny);
 
-                    aAny <<= sCommandItem;
-                    xPropSet->setPropertyValue(sPropertyDDECommandElement,
-                                               aAny);
+                        aAny <<= sCommandItem;
+                        xPropSet->setPropertyValue(sPropertyDDECommandElement,
+                                                   aAny);
 
-                    aAny.setValue(&bUpdate, ::getBooleanCppuType());
-                    xPropSet->setPropertyValue(sPropertyIsAutomaticUpdate,
-                                               aAny);
+                        aAny.setValue(&bUpdate, ::getBooleanCppuType());
+                        xPropSet->setPropertyValue(sPropertyIsAutomaticUpdate,
+                                                   aAny);
+                    }
+                    // else: ignore (can't get XPropertySet, or DDE
+                    //               properties are not supported)
                 }
-                // else: ignore (can't get XPropertySet, or DDE
-                //               properties are not supported)
+                // else: ignore
             }
-            // else: ignore
+            catch (Exception & aException)
+            {
+                //ignore
+            }
         }
         // else: ignore
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: bm $ $Date: 2002-02-22 11:33:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,6 @@ XMLChartPropertySetMapper::~XMLChartPropertySetMapper()
 XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
                                                             SvXMLExport& rExport) :
         SvXMLExportPropertyMapper( rMapper ),
-        msCDATA( GetXMLToken( XML_CDATA )),
         msTrue( GetXMLToken( XML_TRUE )),
         msFalse( GetXMLToken( XML_FALSE )),
         mrExport( rExport )
@@ -444,7 +443,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
         {
             sValue = sValueBuffer.makeStringAndClear();
             sAttrName = rNamespaceMap.GetQNameByKey( nNameSpace, sAttrName );
-            rAttrList.AddAttribute( sAttrName, msCDATA, sValue );
+            rAttrList.AddAttribute( sAttrName, sValue );
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 10:35:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,36 +300,39 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     // ------------------------------
     // compute the shape parent style
     // ------------------------------
-    if( xPropSet.is() && bObjSupportsStyle )
+    if( xPropSet.is() )
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
         OUString aParentName;
         uno::Reference< style::XStyle > xStyle;
 
-        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) )
-            xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) >>= xStyle;
-
-        if(xStyle.is())
+        if( bObjSupportsStyle )
         {
-            // get family ID
-            uno::Reference< beans::XPropertySet > xStylePropSet(xStyle, uno::UNO_QUERY);
-            DBG_ASSERT( xStylePropSet.is(), "style without a XPropertySet?" );
-            if(xStylePropSet.is())
-            {
-                OUString aFamilyName;
-                xStylePropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Family"))) >>= aFamilyName;
-                if(aFamilyName.getLength() && aFamilyName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("presentation"))))
-                    aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
-            }
+            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) )
+                xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) >>= xStyle;
 
-            // get parent-style name
-            if(XML_STYLE_FAMILY_SD_PRESENTATION_ID == aShapeInfo.mnFamily)
+            if(xStyle.is())
             {
-                aParentName = msPresentationStylePrefix;
-            }
+                // get family ID
+                uno::Reference< beans::XPropertySet > xStylePropSet(xStyle, uno::UNO_QUERY);
+                DBG_ASSERT( xStylePropSet.is(), "style without a XPropertySet?" );
+                if(xStylePropSet.is())
+                {
+                    OUString aFamilyName;
+                    xStylePropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Family"))) >>= aFamilyName;
+                    if(aFamilyName.getLength() && aFamilyName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("presentation"))))
+                        aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
+                }
 
-            aParentName += xStyle->getName();
+                // get parent-style name
+                if(XML_STYLE_FAMILY_SD_PRESENTATION_ID == aShapeInfo.mnFamily)
+                {
+                    aParentName = msPresentationStylePrefix;
+                }
+
+                aParentName += xStyle->getName();
+            }
         }
 
         // filter propset

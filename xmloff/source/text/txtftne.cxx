@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -112,6 +115,9 @@
 #ifndef _COM_SUN_STAR_TEXT_FOOTNOTENUMBERING_HPP_
 #include <com/sun/star/text/FootnoteNumbering.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
+#include <com/sun/star/container/XNameReplace.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
@@ -137,6 +143,12 @@
 #ifndef _XMLOFF_XMLNUME_HXX
 #include "xmlnume.hxx"
 #endif
+#ifndef _XMLOFF_XMLTEXTCHARSTYLENAMESELEMENTEXPORT_HXX
+#include "XMLTextCharStyleNamesElementExport.hxx"
+#endif
+#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
+#include "XMLEventExport.hxx"
+#endif
 #ifndef _XMLOFF_TXTPARAE_HXX
 #include "txtparae.hxx"
 #endif
@@ -147,6 +159,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
 
 
@@ -179,20 +192,58 @@ void XMLTextParagraphExport::exportTextFootnote(
     {
         // create span (for citation mark) if necessary; footnote content
         // wil be handled via exportTextFootnoteHelper, exportText
-        OUString sStyle = FindTextStyle( rPropSet );
-        if( sStyle.getLength() )
+        sal_Bool bHasHyperlink;
+        sal_Bool bIsUICharStyle = sal_False;
+        OUString sStyle = FindTextStyleAndHyperlink( rPropSet, bHasHyperlink,
+                                                     bIsUICharStyle );
+        sal_Bool bHasStyle = (sStyle.getLength() > 0);
+        // export hyperlink (if we have one)
+        Reference < XPropertySetInfo > xPropSetInfo;
+        if( bHasHyperlink )
         {
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                      sStyle );
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                      XML_SPAN, sal_False, sal_False );
-            exportTextFootnoteHelper(xFootnote, xText, sText,
-                                     bAutoStyles, bIsEndnote, bProgress );
+            Reference<XPropertyState> xPropState( rPropSet, UNO_QUERY );
+            xPropSetInfo = rPropSet->getPropertySetInfo();
+            bHasHyperlink =
+                addHyperlinkAttributes( rPropSet, xPropState, xPropSetInfo );
         }
-        else
+        SvXMLElementExport aHyperlink( GetExport(), bHasHyperlink,
+                                       XML_NAMESPACE_TEXT, XML_A,
+                                       sal_False, sal_False );
+
+        if( bHasHyperlink )
         {
-            exportTextFootnoteHelper(xFootnote, xText, sText,
-                                     bAutoStyles, bIsEndnote, bProgress );
+            // export events (if supported)
+            OUString sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM(
+                "HyperLinkEvents"));
+            if (xPropSetInfo->hasPropertyByName(sHyperLinkEvents))
+            {
+                Any aAny = rPropSet->getPropertyValue(sHyperLinkEvents);
+                Reference<XNameReplace> xName;
+                aAny >>= xName;
+                GetExport().GetEventExport().Export(xName, sal_False);
+            }
+        }
+
+        {
+            XMLTextCharStyleNamesElementExport aCharStylesExport(
+                GetExport(), bIsUICharStyle &&
+                             aCharStyleNamesPropInfoCache.hasProperty(
+                                                    rPropSet ),
+                rPropSet, sCharStyleNames );
+            if( sStyle.getLength() )
+            {
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                                          sStyle );
+                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                                          XML_SPAN, sal_False, sal_False );
+                exportTextFootnoteHelper(xFootnote, xText, sText,
+                                         bAutoStyles, bIsEndnote, bProgress );
+            }
+            else
+            {
+                exportTextFootnoteHelper(xFootnote, xText, sText,
+                                         bAutoStyles, bIsEndnote, bProgress );
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcnitm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:12:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ BOOL SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
                                            const OUString& rLName,
                                             const OUString& rValue )
 {
-    USHORT nPos = aNamespaceMap.GetKeyByPrefix( rPrefix );
+    USHORT nPos = aNamespaceMap.GetIndexByPrefix( rPrefix );
     if( USHRT_MAX == nPos )
         return FALSE;
 
@@ -210,7 +210,7 @@ BOOL SvXMLAttrContainerData::SetAt( USHORT i,
     if( i >= GetAttrCount() )
         return FALSE;
 
-    USHORT nPos = aNamespaceMap.GetKeyByPrefix( rPrefix );
+    USHORT nPos = aNamespaceMap.GetIndexByPrefix( rPrefix );
     if( USHRT_MAX == nPos )
         return FALSE;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLNumberStylesImport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-09 14:37:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
 #define _XMLOFF_NUMBERSTYLESIMPORT_HXX
 
-#ifndef _XMLOFF_XMLSTYLE_HXX
-#include "xmlstyle.hxx"
+#ifndef _XMLOFF_XMLNUMFI_HXX
+#include "xmlnumfi.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
@@ -76,7 +76,7 @@
 struct SdXMLFixedDataStyle;
 class SdXMLImport;
 
-class SdXMLNumberFormatImportContext : public SvXMLStyleContext
+class SdXMLNumberFormatImportContext : public SvXMLNumFormatContext
 {
 private:
     friend class SdXMLNumberFormatMemberImportContext;
@@ -101,7 +101,9 @@ public:
     SdXMLNumberFormatImportContext( SdXMLImport& rImport,
         sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+        SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        SvXMLStylesContext& rStyles);
     virtual ~SdXMLNumberFormatImportContext();
 
     virtual void EndElement();
@@ -109,7 +111,7 @@ public:
     virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    sal_Int32 GetKey() const { return mnKey; }
+    sal_Int32 GetDrawKey() const { return mnKey; }
 };
 
 #endif  //  _XMLOFF_NUMBERSTYLESIMPORT_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2002-06-28 13:13:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1298,54 +1298,61 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(drawing::PointSequence* pPoints,
     const sal_Bool bClosed)
 :   maPoly( 0L )
 {
+    DBG_ASSERT(pPoints, "Empty PointSequence handed over to SdXMLImExPointsElement(!)");
+
     // add polygon to string
-    OUString aNewString;
     sal_Int32 nCnt(pPoints->getLength());
-    awt::Point* pArray = pPoints->getArray();
 
-    // last point same? Ignore it.
-    // #96328# ...but only when polygon is CLOSED
-    if(bClosed && (pArray->X == (pArray + (nCnt - 1))->X) && (pArray->Y == (pArray + (nCnt - 1))->Y))
-        nCnt--;
-
-    // object size and ViewBox size different?
-    sal_Bool bScale(rObjectSize.Width != rViewBox.GetWidth()
-        || rObjectSize.Height != rViewBox.GetHeight());
-    sal_Bool bTranslate(rViewBox.GetX() != 0L || rViewBox.GetY() != 0L);
-
-    for(sal_Int32 a(0L); a < nCnt; a++)
+    // #104076# Convert to string only when at last one point included
+    if(nCnt > 0)
     {
-        // prepare coordinates
-        sal_Int32 nX( pArray->X - rObjectPos.X );
-        sal_Int32 nY( pArray->Y - rObjectPos.Y );
+        OUString aNewString;
+        awt::Point* pArray = pPoints->getArray();
 
-        if(bScale)
+        // last point same? Ignore it.
+        // #96328# ...but only when polygon is CLOSED
+        if(bClosed && (pArray->X == (pArray + (nCnt - 1))->X) && (pArray->Y == (pArray + (nCnt - 1))->Y))
+            nCnt--;
+
+        // object size and ViewBox size different?
+        sal_Bool bScale(rObjectSize.Width != rViewBox.GetWidth()
+            || rObjectSize.Height != rViewBox.GetHeight());
+        sal_Bool bTranslate(rViewBox.GetX() != 0L || rViewBox.GetY() != 0L);
+
+        for(sal_Int32 a(0L); a < nCnt; a++)
         {
-            nX = (nX * rViewBox.GetWidth()) / rObjectSize.Width;
-            nY = (nY * rViewBox.GetHeight()) / rObjectSize.Height;
+            // prepare coordinates
+            sal_Int32 nX( pArray->X - rObjectPos.X );
+            sal_Int32 nY( pArray->Y - rObjectPos.Y );
+
+            if(bScale)
+            {
+                nX = (nX * rViewBox.GetWidth()) / rObjectSize.Width;
+                nY = (nY * rViewBox.GetHeight()) / rObjectSize.Height;
+            }
+
+            if(bTranslate)
+            {
+                nX += rViewBox.GetX();
+                nY += rViewBox.GetY();
+            }
+
+            // X and comma
+            Imp_PutNumberChar(aNewString, rConv, nX);
+            aNewString += OUString(sal_Unicode(','));
+
+            // Y and space (not for last)
+            Imp_PutNumberChar(aNewString, rConv, nY);
+            if(a + 1 != nCnt)
+                aNewString += OUString(sal_Unicode(' '));
+
+            // next point
+            pArray++;
         }
 
-        if(bTranslate)
-        {
-            nX += rViewBox.GetX();
-            nY += rViewBox.GetY();
-        }
-
-        // X and comma
-        Imp_PutNumberChar(aNewString, rConv, nX);
-        aNewString += OUString(sal_Unicode(','));
-
-        // Y and space (not for last)
-        Imp_PutNumberChar(aNewString, rConv, nY);
-        if(a + 1 != nCnt)
-            aNewString += OUString(sal_Unicode(' '));
-
-        // next point
-        pArray++;
+        // set new string
+        msString = aNewString;
     }
-
-    // set new string
-    msString = aNewString;
 }
 
 // #100617# svg:polyline or svg:polygon values may be double precision.
@@ -1516,154 +1523,340 @@ void SdXMLImExSvgDElement::AddPolygon(
     const SvXMLUnitConverter& rConv,
     sal_Bool bClosed, sal_Bool bRelative)
 {
-    // append polygon to string
-    OUString aNewString;
+    DBG_ASSERT(pPoints, "Empty PointSequence handed over to SdXMLImExSvgDElement(!)");
+
     sal_Int32 nCnt(pPoints->getLength());
-    sal_Unicode aLastCommand;
-    awt::Point* pPointArray = pPoints->getArray();
 
-    // are the flags used at all? If not forget about them
-    if(pFlags)
+    // #104076# Convert to string only when at last one point included
+    if(nCnt > 0)
     {
-        sal_Int32 nFlagCnt(pFlags->getLength());
+        // append polygon to string
+        OUString aNewString;
+        sal_Unicode aLastCommand;
+        awt::Point* pPointArray = pPoints->getArray();
 
-        if(nFlagCnt)
-        {
-            sal_Bool bFlagsUsed(sal_False);
-            drawing::PolygonFlags* pFlagArray = pFlags->getArray();
-
-            for(sal_Int32 a(0); !bFlagsUsed && a < nFlagCnt; a++)
-                if(drawing::PolygonFlags_NORMAL != *pFlagArray++)
-                    bFlagsUsed = sal_True;
-
-            if(!bFlagsUsed)
-                pFlags = 0L;
-        }
-        else
-        {
-            pFlags = 0L;
-        }
-    }
-
-    // object size and ViewBox size different?
-    sal_Bool bScale(rObjectSize.Width != mrViewBox.GetWidth()
-        || rObjectSize.Height != mrViewBox.GetHeight());
-    sal_Bool bTranslate(mrViewBox.GetX() != 0L || mrViewBox.GetY() != 0L);
-
-    // #87202# rework of point reduction:
-    // Test for Last point same -> closed, ignore last point. Take
-    // some more circumstances in account when looking at curve segments.
-    drawing::PolygonFlags* pFlagArray = (pFlags) ? pFlags->getArray() : 0L;
-    if((pPointArray->X == (pPointArray + (nCnt - 1))->X) && (pPointArray->Y == (pPointArray + (nCnt - 1))->Y))
-    {
+        // are the flags used at all? If not forget about them
         if(pFlags)
         {
-            // point needs to be ignored if point before it is
-            // NO control point. Else the last point is needed
-            // for exporting the last segment of the curve. That means
-            // that the last and the first point will be saved double,
-            // but SVG does not support a better solution here.
-            if(nCnt >= 2 && drawing::PolygonFlags_CONTROL != *(pFlagArray + (nCnt - 2)))
+            sal_Int32 nFlagCnt(pFlags->getLength());
+
+            if(nFlagCnt)
             {
+                sal_Bool bFlagsUsed(sal_False);
+                drawing::PolygonFlags* pFlagArray = pFlags->getArray();
+
+                for(sal_Int32 a(0); !bFlagsUsed && a < nFlagCnt; a++)
+                    if(drawing::PolygonFlags_NORMAL != *pFlagArray++)
+                        bFlagsUsed = sal_True;
+
+                if(!bFlagsUsed)
+                    pFlags = 0L;
+            }
+            else
+            {
+                pFlags = 0L;
+            }
+        }
+
+        // object size and ViewBox size different?
+        sal_Bool bScale(rObjectSize.Width != mrViewBox.GetWidth()
+            || rObjectSize.Height != mrViewBox.GetHeight());
+        sal_Bool bTranslate(mrViewBox.GetX() != 0L || mrViewBox.GetY() != 0L);
+
+        // #87202# rework of point reduction:
+        // Test for Last point same -> closed, ignore last point. Take
+        // some more circumstances in account when looking at curve segments.
+        drawing::PolygonFlags* pFlagArray = (pFlags) ? pFlags->getArray() : 0L;
+        if((pPointArray->X == (pPointArray + (nCnt - 1))->X) && (pPointArray->Y == (pPointArray + (nCnt - 1))->Y))
+        {
+            if(pFlags)
+            {
+                // point needs to be ignored if point before it is
+                // NO control point. Else the last point is needed
+                // for exporting the last segment of the curve. That means
+                // that the last and the first point will be saved double,
+                // but SVG does not support a better solution here.
+                if(nCnt >= 2 && drawing::PolygonFlags_CONTROL != *(pFlagArray + (nCnt - 2)))
+                {
+                    nCnt--;
+                }
+            }
+            else
+            {
+                // no curve, ignore last point
                 nCnt--;
             }
         }
-        else
+
+        // bezier poly, handle curves
+        BOOL bDidWriteStart(FALSE);
+
+        for(sal_Int32 a(0L); a < nCnt; a++)
         {
-            // no curve, ignore last point
-            nCnt--;
-        }
-    }
-
-    // bezier poly, handle curves
-    BOOL bDidWriteStart(FALSE);
-
-    for(sal_Int32 a(0L); a < nCnt; a++)
-    {
-        if(!pFlags || drawing::PolygonFlags_CONTROL != *pFlagArray)
-        {
-            BOOL bDidWriteAsCurve(FALSE);
-
-            if(bDidWriteStart)
+            if(!pFlags || drawing::PolygonFlags_CONTROL != *pFlagArray)
             {
-                if(pFlags)
+                BOOL bDidWriteAsCurve(FALSE);
+
+                if(bDidWriteStart)
                 {
-                    // real curve point, get previous to see if it's a control point
-                    awt::Point* pPrevPos1;
-                    drawing::PolygonFlags aPrevFlag1;
-
-                    Imp_GetPrevPos(pPrevPos1, aPrevFlag1, bClosed, pPoints->getArray(),
-                        pFlags->getArray(), a, nCnt, 1);
-
-                    if(pPrevPos1 && drawing::PolygonFlags_CONTROL == aPrevFlag1)
+                    if(pFlags)
                     {
-                        // get previous2 to see if it's a control point, too
-                        awt::Point* pPrevPos2;
-                        drawing::PolygonFlags aPrevFlag2;
+                        // real curve point, get previous to see if it's a control point
+                        awt::Point* pPrevPos1;
+                        drawing::PolygonFlags aPrevFlag1;
 
-                        Imp_GetPrevPos(pPrevPos2, aPrevFlag2, bClosed, pPoints->getArray(),
-                            pFlags->getArray(), a, nCnt, 2);
+                        Imp_GetPrevPos(pPrevPos1, aPrevFlag1, bClosed, pPoints->getArray(),
+                            pFlags->getArray(), a, nCnt, 1);
 
-                        if(pPrevPos2 && drawing::PolygonFlags_CONTROL == aPrevFlag2)
+                        if(pPrevPos1 && drawing::PolygonFlags_CONTROL == aPrevFlag1)
                         {
-                            // get previous3 to see if it's a curve point and if,
-                            // if it is fully symmetric or not
-                            awt::Point* pPrevPos3;
-                            drawing::PolygonFlags aPrevFlag3;
+                            // get previous2 to see if it's a control point, too
+                            awt::Point* pPrevPos2;
+                            drawing::PolygonFlags aPrevFlag2;
 
-                            Imp_GetPrevPos(pPrevPos3, aPrevFlag3, bClosed, pPoints->getArray(),
-                                pFlags->getArray(), a, nCnt, 3);
+                            Imp_GetPrevPos(pPrevPos2, aPrevFlag2, bClosed, pPoints->getArray(),
+                                pFlags->getArray(), a, nCnt, 2);
 
-                            if(pPrevPos3)
+                            if(pPrevPos2 && drawing::PolygonFlags_CONTROL == aPrevFlag2)
                             {
-                                // prepare coordinates
-                                sal_Int32 nX, nY;
+                                // get previous3 to see if it's a curve point and if,
+                                // if it is fully symmetric or not
+                                awt::Point* pPrevPos3;
+                                drawing::PolygonFlags aPrevFlag3;
 
-                                Imp_PrepareCoorExport(nX, nY, pPointArray, rObjectPos, rObjectSize,
-                                    mrViewBox, bScale, bTranslate);
+                                Imp_GetPrevPos(pPrevPos3, aPrevFlag3, bClosed, pPoints->getArray(),
+                                    pFlags->getArray(), a, nCnt, 3);
 
-                                // #100617# test if this curve segment may be written as
-                                // a quadratic bezier
-                                // That's the case if both control points are in the same place
-                                // when they are prolonged to the common quadratic control point
-                                // Left:  P = (3P1 - P0) / 2
-                                // Right: P = (3P2 - P3) / 2
-                                sal_Bool bIsQuadratic(sal_False);
-                                sal_Int32 nPX_L(FRound((double)((3 * pPrevPos2->X) - pPrevPos3->X) / 2.0));
-                                sal_Int32 nPY_L(FRound((double)((3 * pPrevPos2->Y) - pPrevPos3->Y) / 2.0));
-                                sal_Int32 nPX_R(FRound((double)((3 * pPrevPos1->X) - pPointArray->X) / 2.0));
-                                sal_Int32 nPY_R(FRound((double)((3 * pPrevPos1->Y) - pPointArray->Y) / 2.0));
-                                sal_Int32 nDist(0);
-
-                                if(nPX_L != nPX_R)
+                                if(pPrevPos3)
                                 {
-                                    nDist += abs(nPX_L - nPX_R);
-                                }
+                                    // prepare coordinates
+                                    sal_Int32 nX, nY;
 
-                                if(nPY_L != nPY_R)
-                                {
-                                    nDist += abs(nPY_L - nPY_R);
-                                }
+                                    Imp_PrepareCoorExport(nX, nY, pPointArray, rObjectPos, rObjectSize,
+                                        mrViewBox, bScale, bTranslate);
 
-                                if(nDist <= BORDER_INTEGERS_ARE_EQUAL)
-                                {
-                                    bIsQuadratic = sal_True;
-                                }
+                                    // #100617# test if this curve segment may be written as
+                                    // a quadratic bezier
+                                    // That's the case if both control points are in the same place
+                                    // when they are prolonged to the common quadratic control point
+                                    // Left:  P = (3P1 - P0) / 2
+                                    // Right: P = (3P2 - P3) / 2
+                                    sal_Bool bIsQuadratic(sal_False);
+                                    const sal_Bool bEnableSaveQuadratic(sal_False);
 
-#ifdef TEST_QUADRATIC_CURVES
-                                if(bDoTestHere)
-                                {
-                                    bIsQuadratic = sal_False;
+                                    sal_Int32 nPX_L(FRound((double)((3 * pPrevPos2->X) - pPrevPos3->X) / 2.0));
+                                    sal_Int32 nPY_L(FRound((double)((3 * pPrevPos2->Y) - pPrevPos3->Y) / 2.0));
+                                    sal_Int32 nPX_R(FRound((double)((3 * pPrevPos1->X) - pPointArray->X) / 2.0));
+                                    sal_Int32 nPY_R(FRound((double)((3 * pPrevPos1->Y) - pPointArray->Y) / 2.0));
+                                    sal_Int32 nDist(0);
 
-                                    if(pPrevPos1->X == pPrevPos2->X && pPrevPos1->Y == pPrevPos2->Y)
-                                        bIsQuadratic = sal_True;
-                                }
-#endif // TEST_QUADRATIC_CURVES
+                                    if(nPX_L != nPX_R)
+                                    {
+                                        nDist += abs(nPX_L - nPX_R);
+                                    }
 
-                                if(bIsQuadratic)
-                                {
+                                    if(nPY_L != nPY_R)
+                                    {
+                                        nDist += abs(nPY_L - nPY_R);
+                                    }
+
+                                    if(nDist <= BORDER_INTEGERS_ARE_EQUAL)
+                                    {
+                                        if(bEnableSaveQuadratic)
+                                        {
+                                            bIsQuadratic = sal_True;
+                                        }
+                                    }
+
 #ifdef TEST_QUADRATIC_CURVES
                                     if(bDoTestHere)
+                                    {
+                                        bIsQuadratic = sal_False;
+
+                                        if(pPrevPos1->X == pPrevPos2->X && pPrevPos1->Y == pPrevPos2->Y)
+                                            bIsQuadratic = sal_True;
+                                    }
+#endif // TEST_QUADRATIC_CURVES
+
+                                    if(bIsQuadratic)
+                                    {
+#ifdef TEST_QUADRATIC_CURVES
+                                        if(bDoTestHere)
+                                        {
+                                            sal_Bool bPrevPointIsSymmetric(sal_False);
+
+                                            if(drawing::PolygonFlags_SYMMETRIC == aPrevFlag3)
+                                            {
+                                                // get previous4 to see if it's a control point
+                                                awt::Point* pPrevPos4;
+                                                drawing::PolygonFlags aPrevFlag4;
+
+                                                Imp_GetPrevPos(pPrevPos4, aPrevFlag4, bClosed, pPoints->getArray(),
+                                                    pFlags->getArray(), a, nCnt, 4);
+
+                                                if(drawing::PolygonFlags_CONTROL == aPrevFlag4)
+                                                {
+                                                    // okay, prevPos3 is symmetric (c2) and prevPos4
+                                                    // is existing control point, the 's' statement can be used
+                                                    bPrevPointIsSymmetric = sal_True;
+                                                }
+                                            }
+
+                                            if(bPrevPointIsSymmetric)
+                                            {
+                                                // write a shorthand/smooth quadratic curveto entry (T)
+                                                if(bRelative)
+                                                {
+                                                    if(aLastCommand != sal_Unicode('t'))
+                                                        aNewString += OUString(sal_Unicode('t'));
+
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+
+                                                    aLastCommand = sal_Unicode('t');
+                                                }
+                                                else
+                                                {
+                                                    if(aLastCommand != sal_Unicode('T'))
+                                                        aNewString += OUString(sal_Unicode('T'));
+
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+
+                                                    aLastCommand = sal_Unicode('T');
+                                                }
+                                            }
+                                            else
+                                            {
+                                                // prepare coordinates
+                                                sal_Int32 nX1, nY1;
+
+                                                Imp_PrepareCoorExport(nX1, nY1, pPrevPos1, rObjectPos, rObjectSize,
+                                                    mrViewBox, bScale, bTranslate);
+
+                                                // write a quadratic curveto entry (Q)
+                                                if(bRelative)
+                                                {
+                                                    if(aLastCommand != sal_Unicode('q'))
+                                                        aNewString += OUString(sal_Unicode('q'));
+
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX1 - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY1 - mnLastY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+
+                                                    aLastCommand = sal_Unicode('q');
+                                                }
+                                                else
+                                                {
+                                                    if(aLastCommand != sal_Unicode('Q'))
+                                                        aNewString += OUString(sal_Unicode('Q'));
+
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX1);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY1);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+
+                                                    aLastCommand = sal_Unicode('Q');
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+#endif // TEST_QUADRATIC_CURVES
+                                            awt::Point aNewPoint(nPX_L, nPY_L);
+                                            sal_Bool bPrevPointIsSmooth(sal_False);
+
+                                            if(drawing::PolygonFlags_SMOOTH == aPrevFlag3)
+                                            {
+                                                // get previous4 to see if it's a control point
+                                                awt::Point* pPrevPos4;
+                                                drawing::PolygonFlags aPrevFlag4;
+
+                                                Imp_GetPrevPos(pPrevPos4, aPrevFlag4, bClosed, pPoints->getArray(),
+                                                    pFlags->getArray(), a, nCnt, 4);
+
+                                                if(drawing::PolygonFlags_CONTROL == aPrevFlag4)
+                                                {
+                                                    // okay, prevPos3 is smooth (c1) and prevPos4
+                                                    // is existing control point. Test if it's even symmetric
+                                                    // and thus the 'T' statement may be used.
+                                                    Vector2D aVec1(pPrevPos4->X - pPrevPos3->X, pPrevPos4->Y - pPrevPos3->Y);
+                                                    Vector2D aVec2(aNewPoint.X - pPrevPos3->X, aNewPoint.Y - pPrevPos3->Y);
+                                                    sal_Bool bSameLength(FALSE);
+                                                    sal_Bool bSameDirection(FALSE);
+
+                                                    // get vector values
+                                                    Imp_CalcVectorValues(aVec1, aVec2, bSameLength, bSameDirection);
+
+                                                    if(bSameLength && bSameDirection)
+                                                        bPrevPointIsSmooth = sal_True;
+                                                }
+                                            }
+
+                                            if(bPrevPointIsSmooth)
+                                            {
+                                                // write a shorthand/smooth quadratic curveto entry (T)
+                                                if(bRelative)
+                                                {
+                                                    if(aLastCommand != sal_Unicode('t'))
+                                                        aNewString += OUString(sal_Unicode('t'));
+
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+
+                                                    aLastCommand = sal_Unicode('t');
+                                                }
+                                                else
+                                                {
+                                                    if(aLastCommand != sal_Unicode('T'))
+                                                        aNewString += OUString(sal_Unicode('T'));
+
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+
+                                                    aLastCommand = sal_Unicode('T');
+                                                }
+                                            }
+                                            else
+                                            {
+                                                // prepare coordinates
+                                                sal_Int32 nX1, nY1;
+
+                                                Imp_PrepareCoorExport(nX1, nY1, &aNewPoint, rObjectPos, rObjectSize,
+                                                    mrViewBox, bScale, bTranslate);
+
+                                                // write a quadratic curveto entry (Q)
+                                                if(bRelative)
+                                                {
+                                                    if(aLastCommand != sal_Unicode('q'))
+                                                        aNewString += OUString(sal_Unicode('q'));
+
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX1 - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY1 - mnLastY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+
+                                                    aLastCommand = sal_Unicode('q');
+                                                }
+                                                else
+                                                {
+                                                    if(aLastCommand != sal_Unicode('Q'))
+                                                        aNewString += OUString(sal_Unicode('Q'));
+
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX1);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY1);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+
+                                                    aLastCommand = sal_Unicode('Q');
+                                                }
+                                            }
+#ifdef TEST_QUADRATIC_CURVES
+                                        }
+#endif // TEST_QUADRATIC_CURVES
+                                    }
+                                    else
                                     {
                                         sal_Bool bPrevPointIsSymmetric(sal_False);
 
@@ -1684,326 +1877,175 @@ void SdXMLImExSvgDElement::AddPolygon(
                                             }
                                         }
 
-                                        if(bPrevPointIsSymmetric)
-                                        {
-                                            // write a shorthand/smooth quadratic curveto entry (T)
-                                            if(bRelative)
-                                            {
-                                                if(aLastCommand != sal_Unicode('t'))
-                                                    aNewString += OUString(sal_Unicode('t'));
-
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
-
-                                                aLastCommand = sal_Unicode('t');
-                                            }
-                                            else
-                                            {
-                                                if(aLastCommand != sal_Unicode('T'))
-                                                    aNewString += OUString(sal_Unicode('T'));
-
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
-
-                                                aLastCommand = sal_Unicode('T');
-                                            }
-                                        }
-                                        else
-                                        {
-                                            // prepare coordinates
-                                            sal_Int32 nX1, nY1;
-
-                                            Imp_PrepareCoorExport(nX1, nY1, pPrevPos1, rObjectPos, rObjectSize,
-                                                mrViewBox, bScale, bTranslate);
-
-                                            // write a quadratic curveto entry (Q)
-                                            if(bRelative)
-                                            {
-                                                if(aLastCommand != sal_Unicode('q'))
-                                                    aNewString += OUString(sal_Unicode('q'));
-
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX1 - mnLastX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY1 - mnLastY);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
-
-                                                aLastCommand = sal_Unicode('q');
-                                            }
-                                            else
-                                            {
-                                                if(aLastCommand != sal_Unicode('Q'))
-                                                    aNewString += OUString(sal_Unicode('Q'));
-
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX1);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY1);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
-
-                                                aLastCommand = sal_Unicode('Q');
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-#endif // TEST_QUADRATIC_CURVES
-                                        awt::Point aNewPoint(nPX_L, nPY_L);
-                                        sal_Bool bPrevPointIsSmooth(sal_False);
-
-                                        if(drawing::PolygonFlags_SMOOTH == aPrevFlag3)
-                                        {
-                                            // get previous4 to see if it's a control point
-                                            awt::Point* pPrevPos4;
-                                            drawing::PolygonFlags aPrevFlag4;
-
-                                            Imp_GetPrevPos(pPrevPos4, aPrevFlag4, bClosed, pPoints->getArray(),
-                                                pFlags->getArray(), a, nCnt, 4);
-
-                                            if(drawing::PolygonFlags_CONTROL == aPrevFlag4)
-                                            {
-                                                // okay, prevPos3 is smooth (c1) and prevPos4
-                                                // is existing control point. Test if it's even symmetric
-                                                // and thus the 'T' statement may be used.
-                                                Vector2D aVec1(pPrevPos4->X - pPrevPos3->X, pPrevPos4->Y - pPrevPos3->Y);
-                                                Vector2D aVec2(aNewPoint.X - pPrevPos3->X, aNewPoint.Y - pPrevPos3->Y);
-                                                sal_Bool bSameLength(FALSE);
-                                                sal_Bool bSameDirection(FALSE);
-
-                                                // get vector values
-                                                Imp_CalcVectorValues(aVec1, aVec2, bSameLength, bSameDirection);
-
-                                                if(bSameLength && bSameDirection)
-                                                    bPrevPointIsSmooth = sal_True;
-                                            }
-                                        }
-
-                                        if(bPrevPointIsSmooth)
-                                        {
-                                            // write a shorthand/smooth quadratic curveto entry (T)
-                                            if(bRelative)
-                                            {
-                                                if(aLastCommand != sal_Unicode('t'))
-                                                    aNewString += OUString(sal_Unicode('t'));
-
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
-
-                                                aLastCommand = sal_Unicode('t');
-                                            }
-                                            else
-                                            {
-                                                if(aLastCommand != sal_Unicode('T'))
-                                                    aNewString += OUString(sal_Unicode('T'));
-
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
-
-                                                aLastCommand = sal_Unicode('T');
-                                            }
-                                        }
-                                        else
-                                        {
-                                            // prepare coordinates
-                                            sal_Int32 nX1, nY1;
-
-                                            Imp_PrepareCoorExport(nX1, nY1, &aNewPoint, rObjectPos, rObjectSize,
-                                                mrViewBox, bScale, bTranslate);
-
-                                            // write a quadratic curveto entry (Q)
-                                            if(bRelative)
-                                            {
-                                                if(aLastCommand != sal_Unicode('q'))
-                                                    aNewString += OUString(sal_Unicode('q'));
-
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX1 - mnLastX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY1 - mnLastY);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
-
-                                                aLastCommand = sal_Unicode('q');
-                                            }
-                                            else
-                                            {
-                                                if(aLastCommand != sal_Unicode('Q'))
-                                                    aNewString += OUString(sal_Unicode('Q'));
-
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX1);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY1);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
-
-                                                aLastCommand = sal_Unicode('Q');
-                                            }
-                                        }
-#ifdef TEST_QUADRATIC_CURVES
-                                    }
-#endif // TEST_QUADRATIC_CURVES
-                                }
-                                else
-                                {
-                                    sal_Bool bPrevPointIsSymmetric(sal_False);
-
-                                    if(drawing::PolygonFlags_SYMMETRIC == aPrevFlag3)
-                                    {
-                                        // get previous4 to see if it's a control point
-                                        awt::Point* pPrevPos4;
-                                        drawing::PolygonFlags aPrevFlag4;
-
-                                        Imp_GetPrevPos(pPrevPos4, aPrevFlag4, bClosed, pPoints->getArray(),
-                                            pFlags->getArray(), a, nCnt, 4);
-
-                                        if(drawing::PolygonFlags_CONTROL == aPrevFlag4)
-                                        {
-                                            // okay, prevPos3 is symmetric (c2) and prevPos4
-                                            // is existing control point, the 's' statement can be used
-                                            bPrevPointIsSymmetric = sal_True;
-                                        }
-                                    }
-
-                                    // prepare coordinates
-                                    sal_Int32 nX2, nY2;
-
-                                    Imp_PrepareCoorExport(nX2, nY2, pPrevPos1, rObjectPos, rObjectSize,
-                                        mrViewBox, bScale, bTranslate);
-
-                                    if(bPrevPointIsSymmetric)
-                                    {
-                                        // write a shorthand/smooth curveto entry (S)
-                                        if(bRelative)
-                                        {
-                                            if(aLastCommand != sal_Unicode('s'))
-                                                aNewString += OUString(sal_Unicode('s'));
-
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX2 - mnLastX);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY2 - mnLastY);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
-
-                                            aLastCommand = sal_Unicode('s');
-                                        }
-                                        else
-                                        {
-                                            if(aLastCommand != sal_Unicode('S'))
-                                                aNewString += OUString(sal_Unicode('S'));
-
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX2);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY2);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
-
-                                            aLastCommand = sal_Unicode('S');
-                                        }
-                                    }
-                                    else
-                                    {
                                         // prepare coordinates
-                                        sal_Int32 nX1, nY1;
+                                        sal_Int32 nX2, nY2;
 
-                                        Imp_PrepareCoorExport(nX1, nY1, pPrevPos2, rObjectPos, rObjectSize,
+                                        Imp_PrepareCoorExport(nX2, nY2, pPrevPos1, rObjectPos, rObjectSize,
                                             mrViewBox, bScale, bTranslate);
 
-                                        // write a curveto entry (C)
-                                        if(bRelative)
+                                        if(bPrevPointIsSymmetric)
                                         {
-                                            if(aLastCommand != sal_Unicode('c'))
-                                                aNewString += OUString(sal_Unicode('c'));
+                                            // write a shorthand/smooth curveto entry (S)
+                                            if(bRelative)
+                                            {
+                                                if(aLastCommand != sal_Unicode('s'))
+                                                    aNewString += OUString(sal_Unicode('s'));
 
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX1 - mnLastX);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY1 - mnLastY);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX2 - mnLastX);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY2 - mnLastY);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX2 - mnLastX);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY2 - mnLastY);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
 
-                                            aLastCommand = sal_Unicode('c');
+                                                aLastCommand = sal_Unicode('s');
+                                            }
+                                            else
+                                            {
+                                                if(aLastCommand != sal_Unicode('S'))
+                                                    aNewString += OUString(sal_Unicode('S'));
+
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX2);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY2);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+
+                                                aLastCommand = sal_Unicode('S');
+                                            }
                                         }
                                         else
                                         {
-                                            if(aLastCommand != sal_Unicode('C'))
-                                                aNewString += OUString(sal_Unicode('C'));
+                                            // prepare coordinates
+                                            sal_Int32 nX1, nY1;
 
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX1);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY1);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX2);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY2);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+                                            Imp_PrepareCoorExport(nX1, nY1, pPrevPos2, rObjectPos, rObjectSize,
+                                                mrViewBox, bScale, bTranslate);
 
-                                            aLastCommand = sal_Unicode('C');
+                                            // write a curveto entry (C)
+                                            if(bRelative)
+                                            {
+                                                if(aLastCommand != sal_Unicode('c'))
+                                                    aNewString += OUString(sal_Unicode('c'));
+
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX1 - mnLastX);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY1 - mnLastY);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX2 - mnLastX);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY2 - mnLastY);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+
+                                                aLastCommand = sal_Unicode('c');
+                                            }
+                                            else
+                                            {
+                                                if(aLastCommand != sal_Unicode('C'))
+                                                    aNewString += OUString(sal_Unicode('C'));
+
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX1);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY1);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX2);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY2);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
+                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+
+                                                aLastCommand = sal_Unicode('C');
+                                            }
                                         }
                                     }
+
+                                    // remember that current point IS written
+                                    bDidWriteAsCurve = TRUE;
+
+                                    // remember new last position
+                                    mnLastX = nX;
+                                    mnLastY = nY;
                                 }
-
-                                // remember that current point IS written
-                                bDidWriteAsCurve = TRUE;
-
-                                // remember new last position
-                                mnLastX = nX;
-                                mnLastY = nY;
                             }
                         }
                     }
                 }
-            }
 
-            if(!bDidWriteAsCurve)
-            {
-                // current point not yet written, prepare coordinates
-                sal_Int32 nX, nY;
-
-                Imp_PrepareCoorExport(nX, nY, pPointArray, rObjectPos, rObjectSize,
-                    mrViewBox, bScale, bTranslate);
-
-                if(bDidWriteStart)
+                if(!bDidWriteAsCurve)
                 {
-                    // write as normal point
-                    if(mnLastX == nX)
+                    // current point not yet written, prepare coordinates
+                    sal_Int32 nX, nY;
+
+                    Imp_PrepareCoorExport(nX, nY, pPointArray, rObjectPos, rObjectSize,
+                        mrViewBox, bScale, bTranslate);
+
+                    if(bDidWriteStart)
                     {
-                        if(bRelative)
+                        // write as normal point
+                        if(mnLastX == nX)
                         {
-                            if(aLastCommand != sal_Unicode('v'))
-                                aNewString += OUString(sal_Unicode('v'));
+                            if(bRelative)
+                            {
+                                if(aLastCommand != sal_Unicode('v'))
+                                    aNewString += OUString(sal_Unicode('v'));
 
-                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
 
-                            aLastCommand = sal_Unicode('v');
+                                aLastCommand = sal_Unicode('v');
+                            }
+                            else
+                            {
+                                if(aLastCommand != sal_Unicode('V'))
+                                    aNewString += OUString(sal_Unicode('V'));
+
+                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+
+                                aLastCommand = sal_Unicode('V');
+                            }
+                        }
+                        else if(mnLastY == nY)
+                        {
+                            if(bRelative)
+                            {
+                                if(aLastCommand != sal_Unicode('h'))
+                                    aNewString += OUString(sal_Unicode('h'));
+
+                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
+
+                                aLastCommand = sal_Unicode('h');
+                            }
+                            else
+                            {
+                                if(aLastCommand != sal_Unicode('H'))
+                                    aNewString += OUString(sal_Unicode('H'));
+
+                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
+
+                                aLastCommand = sal_Unicode('H');
+                            }
                         }
                         else
                         {
-                            if(aLastCommand != sal_Unicode('V'))
-                                aNewString += OUString(sal_Unicode('V'));
+                            if(bRelative)
+                            {
+                                if(aLastCommand != sal_Unicode('l'))
+                                    aNewString += OUString(sal_Unicode('l'));
 
-                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
+                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
 
-                            aLastCommand = sal_Unicode('V');
-                        }
-                    }
-                    else if(mnLastY == nY)
-                    {
-                        if(bRelative)
-                        {
-                            if(aLastCommand != sal_Unicode('h'))
-                                aNewString += OUString(sal_Unicode('h'));
+                                aLastCommand = sal_Unicode('l');
+                            }
+                            else
+                            {
+                                if(aLastCommand != sal_Unicode('L'))
+                                    aNewString += OUString(sal_Unicode('L'));
 
-                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
+                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
+                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
 
-                            aLastCommand = sal_Unicode('h');
-                        }
-                        else
-                        {
-                            if(aLastCommand != sal_Unicode('H'))
-                                aNewString += OUString(sal_Unicode('H'));
-
-                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-
-                            aLastCommand = sal_Unicode('H');
+                                aLastCommand = sal_Unicode('L');
+                            }
                         }
                     }
                     else
                     {
+                        // write as start point
                         if(bRelative)
                         {
-                            if(aLastCommand != sal_Unicode('l'))
-                                aNewString += OUString(sal_Unicode('l'));
+                            aNewString += OUString(sal_Unicode('m'));
 
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
@@ -2012,64 +2054,41 @@ void SdXMLImExSvgDElement::AddPolygon(
                         }
                         else
                         {
-                            if(aLastCommand != sal_Unicode('L'))
-                                aNewString += OUString(sal_Unicode('L'));
+                            aNewString += OUString(sal_Unicode('M'));
 
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
 
                             aLastCommand = sal_Unicode('L');
                         }
+
+                        // remember start written
+                        bDidWriteStart = TRUE;
                     }
+
+                    // remember new last position
+                    mnLastX = nX;
+                    mnLastY = nY;
                 }
-                else
-                {
-                    // write as start point
-                    if(bRelative)
-                    {
-                        aNewString += OUString(sal_Unicode('m'));
-
-                        Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                        Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
-
-                        aLastCommand = sal_Unicode('l');
-                    }
-                    else
-                    {
-                        aNewString += OUString(sal_Unicode('M'));
-
-                        Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                        Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
-
-                        aLastCommand = sal_Unicode('L');
-                    }
-
-                    // remember start written
-                    bDidWriteStart = TRUE;
-                }
-
-                // remember new last position
-                mnLastX = nX;
-                mnLastY = nY;
             }
+
+            // next point
+            pPointArray++;
+            pFlagArray++;
         }
 
-        // next point
-        pPointArray++;
-        pFlagArray++;
-    }
+        // close path if closed poly
+        if(bClosed)
+        {
+            if(bRelative)
+                aNewString += OUString(sal_Unicode('z'));
+            else
+                aNewString += OUString(sal_Unicode('Z'));
+        }
 
-    // close path if closed poly
-    if(bClosed)
-    {
-        if(bRelative)
-            aNewString += OUString(sal_Unicode('z'));
-        else
-            aNewString += OUString(sal_Unicode('Z'));
+        // append new string
+        msString += aNewString;
     }
-
-    // append new string
-    msString += aNewString;
 }
 
 // #100617# Linear double reader
@@ -2231,6 +2250,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
 
     // first loop: count polys and get flags
     Imp_SkipSpaces(aStr, nPos, nLen);
+
     while(nPos < nLen)
     {
         switch(aStr[nPos++])
@@ -2238,7 +2258,6 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
             case 'Z' :
             case 'z' :
             {
-                mbIsClosed = TRUE;
                 break;
             }
             case 'M' :
@@ -2296,6 +2315,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
         sal_uInt32 nPointCount(0L);
         nPos = 0;
         Imp_SkipSpaces(aStr, nPos, nLen);
+
+        // #104076# reset closed flag for next to be started polygon
+        mbIsClosed = FALSE;
+
         while(nPos < nLen)
         {
             switch(aStr[nPos])
@@ -2305,25 +2328,41 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 {
                     nPos++;
                     Imp_SkipSpaces(aStr, nPos, nLen);
-                    // closed: one more point
-                    nPointCount++;
+
+                    // #104076# remember closed state of current polygon
+                    mbIsClosed = TRUE;
+
                     break;
                 }
                 case 'm' :
                 case 'M' :
                 {
-                    // new poly starts, alloc current poly (if points are used)
+                    // new poly starts, end-process current poly
                     if(nPointCount)
                     {
+                        // #104076# If this partial polygon is closed, use one more point
+                        // to represent that
+                        if(mbIsClosed)
+                        {
+                            nPointCount++;
+                        }
+
                         pOuterSequence->realloc(nPointCount);
                         pOuterSequence++;
+
                         if(pOuterFlags)
                         {
                             pOuterFlags->realloc(nPointCount);
                             pOuterFlags++;
                         }
+
+                        // reset point count for next polygon
                         nPointCount = 0L;
                     }
+
+                    // #104076# reset closed flag for next to be started polygon
+                    mbIsClosed = FALSE;
+
                     // NO break, continue in next case
                 }
                 case 'L' :
@@ -2461,8 +2500,16 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
         // alloc last poly (when points used)
         if(nPointCount)
         {
+            // #104076# If this partial polygon is closed, use one more point
+            // to represent that
+            if(mbIsClosed)
+            {
+                nPointCount++;
+            }
+
             pOuterSequence->realloc(nPointCount);
             pOuterSequence++;
+
             if(pOuterFlags)
             {
                 pOuterFlags->realloc(nPointCount);
@@ -2481,6 +2528,9 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
         nPos = 0;
         Imp_SkipSpaces(aStr, nPos, nLen);
 
+        // #104076# reset closed flag for next to be started polygon
+        mbIsClosed = FALSE;
+
         while(nPos < nLen)
         {
             BOOL bRelative(FALSE);
@@ -2492,10 +2542,15 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 {
                     nPos++;
                     Imp_SkipSpaces(aStr, nPos, nLen);
+
+                    // #104076# remember closed state of current polygon
+                    mbIsClosed = TRUE;
+
                     // closed: add first point again
-                    sal_Int32 nX(pInnerSequence[0].X);
-                    sal_Int32 nY(pInnerSequence[0].Y);
-                    Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
+                    // sal_Int32 nX(pInnerSequence[0].X);
+                    // sal_Int32 nY(pInnerSequence[0].Y);
+                    // Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
+
                     break;
                 }
 
@@ -2505,6 +2560,21 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 }
                 case 'M' :
                 {
+                    // #104076# end-process current poly
+                    if(mbIsClosed)
+                    {
+                        if(pInnerSequence)
+                        {
+                            // closed: add first point again
+                            sal_Int32 nX(pInnerSequence[0].X);
+                            sal_Int32 nY(pInnerSequence[0].Y);
+                            Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
+                        }
+
+                        // reset closed flag for next to be started polygon
+                        mbIsClosed = FALSE;
+                    }
+
                     // next poly
                     pInnerSequence = pOuterSequence->getArray();
                     pOuterSequence++;
@@ -2885,6 +2955,18 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                     DBG_ERROR("XMLIMP: non-interpreted tags in svg:d element (unknown)!");
                     break;
                 }
+            }
+        }
+
+        // #104076# end-process closed state of last poly
+        if(mbIsClosed)
+        {
+            if(pInnerSequence)
+            {
+                // closed: add first point again
+                sal_Int32 nX(pInnerSequence[0].X);
+                sal_Int32 nY(pInnerSequence[0].Y);
+                Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
             }
         }
 

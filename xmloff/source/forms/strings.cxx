@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:03:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,4 @@
 #undef XMLFORM_IMPLEMENT_STRINGS
 #endif
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 13.11.00 17:05:20  fs
- ************************************************************************/
 

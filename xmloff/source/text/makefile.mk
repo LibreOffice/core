@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: mib $ $Date: 2001-07-25 07:09:04 $
+#   last change: $Author: hr $ $Date: 2003-03-27 18:20:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,6 +136,7 @@ SLOFILES =	\
         $(SLO)$/XMLSectionImportContext.obj \
         $(SLO)$/XMLSectionSourceDDEImportContext.obj \
         $(SLO)$/XMLSectionSourceImportContext.obj \
+        $(SLO)$/XMLTextCharStyleNamesElementExport.obj \
         $(SLO)$/XMLTextColumnsContext.obj \
         $(SLO)$/XMLTextColumnsExport.obj \
         $(SLO)$/XMLTextFrameContext.obj \
@@ -178,6 +179,7 @@ SVXLIGHTOBJFILES =	\
         $(OBJ)$/XMLLineNumberingImportContext.obj \
         $(OBJ)$/XMLLineNumberingSeparatorImportContext.obj \
         $(OBJ)$/XMLPropertyBackpatcher.obj \
+        $(SLO)$/XMLTextCharStyleNamesElementExport.obj \
         $(OBJ)$/XMLTextFrameContext.obj \
         $(OBJ)$/XMLTextFrameHyperlinkContext.obj \
         $(OBJ)$/XMLTextHeaderFooterContext.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: bm $ $Date: 2002-10-02 12:37:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,17 @@
 #include <xmltoken.hxx>
 #endif
 
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #ifndef _TOOLS_DATE_HXX
 #include <tools/date.hxx>
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+
 #endif
 
 #ifndef _VCL_FLDUNIT_HXX
@@ -731,7 +736,7 @@ sal_Bool SvXMLUnitConverter::convertNumber( sal_Int32& rValue,
     return nPos == nLen;
 }
 
-/** convert double number to string (using SolarMath) */
+/** convert double number to string (using ::rtl::math) */
 void SvXMLUnitConverter::convertDouble(::rtl::OUStringBuffer& rBuffer,
     double fNumber, BOOL bWriteUnits) const
 {
@@ -739,42 +744,36 @@ void SvXMLUnitConverter::convertDouble(::rtl::OUStringBuffer& rBuffer,
         bWriteUnits, meCoreMeasureUnit, meXMLMeasureUnit);
 }
 
-/** convert double number to string (using SolarMath) */
+/** convert double number to string (using ::rtl::math) */
 void SvXMLUnitConverter::convertDouble( ::rtl::OUStringBuffer& rBuffer,
     double fNumber, BOOL bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit)
 {
     if(MAP_RELATIVE == eCoreUnit)
     {
         DBG_ASSERT(eDstUnit == MAP_RELATIVE, "MAP_RELATIVE only maps to MAP_RELATIVE!" );
-        String aResult;
-        SolarMath::DoubleToString(aResult, fNumber, 'A', INT_MAX, '.', sal_True);
-        rBuffer.append(rtl::OUString(aResult));
+        ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', sal_True);
         if(bWriteUnits)
             rBuffer.append(sal_Unicode('%'));
     }
     else
     {
         OUStringBuffer sUnit;
-        String aResult;
         double fFactor = SvXMLExportHelper::GetConversionFactor(sUnit, eCoreUnit, eDstUnit);
         if(fFactor != 1.0)
             fNumber *= fFactor;
-        SolarMath::DoubleToString(aResult, fNumber, 'A', INT_MAX, '.', sal_True);
-        rBuffer.append(rtl::OUString(aResult));
+        ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', sal_True);
         if(bWriteUnits)
             rBuffer.append(sUnit);
     }
 }
 
-/** convert double number to string (using SolarMath) */
+/** convert double number to string (using ::rtl::math) */
 void SvXMLUnitConverter::convertDouble( ::rtl::OUStringBuffer& rBuffer, double fNumber)
 {
-    String aResult;
-    SolarMath::DoubleToString(aResult, fNumber, 'A', INT_MAX, '.', sal_True);
-    rBuffer.append(rtl::OUString(aResult));
+    ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', sal_True);
 }
 
-/** convert string to double number (using SolarMath) */
+/** convert string to double number (using ::rtl::math) */
 sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
     const ::rtl::OUString& rString, BOOL bLookForUnits) const
 {
@@ -791,14 +790,14 @@ sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
     }
 }
 
-/** convert string to double number (using SolarMath) */
+/** convert string to double number (using ::rtl::math) */
 sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
     const ::rtl::OUString& rString, MapUnit eSrcUnit, MapUnit eCoreUnit)
 {
-    int nErr;
-    rValue = SolarMath::StringToDouble( rString, (sal_Unicode)(','), (sal_Unicode)('.'), nErr );
+    rtl_math_ConversionStatus eStatus;
+    rValue = ::rtl::math::stringToDouble( rString, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
 
-    if(nErr == 0)
+    if(eStatus == rtl_math_ConversionStatus_Ok)
     {
         OUStringBuffer sUnit;
         double fFactor = SvXMLExportHelper::GetConversionFactor(sUnit, eCoreUnit, eSrcUnit);
@@ -806,15 +805,15 @@ sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
             rValue /= fFactor;
     }
 
-    return ( nErr == 0 );
+    return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
-/** convert string to double number (using SolarMath) */
+/** convert string to double number (using ::rtl::math) */
 sal_Bool SvXMLUnitConverter::convertDouble(double& rValue, const ::rtl::OUString& rString)
 {
-    int nErr;
-    rValue = SolarMath::StringToDouble( rString, (sal_Unicode)(','), (sal_Unicode)('.'), nErr );
-    return ( nErr == 0 );
+    rtl_math_ConversionStatus eStatus;
+    rValue = ::rtl::math::stringToDouble( rString, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
+    return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
 /** get the Null Date of the XModel and set it to the UnitConverter */
@@ -851,24 +850,19 @@ void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
         fValue = - fValue;
     }
 
-    String sDate = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "PT" ));
+    rBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM( "PT" ));
     fValue *= 24;
-    double fHoursValue = SolarMath::ApproxFloor (fValue);
+    double fHoursValue = ::rtl::math::approxFloor (fValue);
     fValue -= fHoursValue;
     fValue *= 60;
-    double fMinsValue = SolarMath::ApproxFloor (fValue);
+    double fMinsValue = ::rtl::math::approxFloor (fValue);
     fValue -= fMinsValue;
     fValue *= 60;
-    double fSecsValue = SolarMath::ApproxFloor (fValue);
+    double fSecsValue = ::rtl::math::approxFloor (fValue);
     fValue -= fSecsValue;
     double f100SecsValue;
     if (fValue > 0.00001)
-    {
-        String sTemp;
-        SolarMath::DoubleToString(sTemp, fValue, 'A', XML_MAXDIGITSCOUNT_TIME - 5, '.', sal_True);
-        rtl::OUString sOUDate(sTemp);
-        f100SecsValue = sOUDate.toDouble();
-    }
+        f100SecsValue = ::rtl::math::round( fValue, XML_MAXDIGITSCOUNT_TIME - 5);
     else
         f100SecsValue = 0.0;
 
@@ -889,29 +883,28 @@ void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
     }
 
     if (fHoursValue < 10)
-        sDate += '0';
-    SolarMath::DoubleToString(sDate, fHoursValue, 'A', INT_MAX, '.', sal_True);
-    sDate += 'H';
+        rBuffer.append( sal_Unicode('0'));
+    rBuffer.append( sal_Int32( fHoursValue));
+    rBuffer.append( sal_Unicode('H'));
     if (fMinsValue < 10)
-        sDate += '0';
-    SolarMath::DoubleToString(sDate, fMinsValue, 'A', INT_MAX, '.', sal_True);
-    sDate += 'M';
+        rBuffer.append( sal_Unicode('0'));
+    rBuffer.append( sal_Int32( fMinsValue));
+    rBuffer.append( sal_Unicode('M'));
     if (fSecsValue < 10)
-        sDate += '0';
-    SolarMath::DoubleToString(sDate, fSecsValue, 'A', INT_MAX, '.', sal_True);
+        rBuffer.append( sal_Unicode('0'));
+    rBuffer.append( sal_Int32( fSecsValue));
     if (f100SecsValue > 0.0)
     {
-        sDate += ',';
-        xub_StrLen nDateLen = sDate.Len();
-        SolarMath::DoubleToString(sDate, fValue, 'A', XML_MAXDIGITSCOUNT_TIME - 5, '.', sal_True);
-        if (nDateLen + 2 < sDate.Len())
-            sDate.Erase(nDateLen, 2);
-        else
-            sDate.Erase(nDateLen - 1, 2);
+        ::rtl::OUString a100th( ::rtl::math::doubleToUString( fValue,
+                    rtl_math_StringFormat_F, XML_MAXDIGITSCOUNT_TIME - 5, '.',
+                    sal_True));
+        if ( a100th.getLength() > 2 )
+        {
+            rBuffer.append( sal_Unicode(','));
+            rBuffer.append( a100th.copy( 2 ) );     // strip 0.
+        }
     }
-    sDate += 'S';
-
-    rBuffer.append(sDate);
+    rBuffer.append( sal_Unicode('S'));
 }
 
 /** convert ISO Time String to double; negative durations allowed */
@@ -1070,13 +1063,13 @@ sal_Bool SvXMLUnitConverter::convertTime( ::com::sun::star::util::DateTime& rDat
         // (gcc 3.0.1 Linux)
         volatile double fTempTime = fCalculatedTime;
         fTempTime *= 24;
-        double fHoursValue = SolarMath::ApproxFloor (fTempTime);
+        double fHoursValue = ::rtl::math::approxFloor (fTempTime);
         fTempTime -= fHoursValue;
         fTempTime *= 60;
-        double fMinsValue = SolarMath::ApproxFloor (fTempTime);
+        double fMinsValue = ::rtl::math::approxFloor (fTempTime);
         fTempTime -= fMinsValue;
         fTempTime *= 60;
-        double fSecsValue = SolarMath::ApproxFloor (fTempTime);
+        double fSecsValue = ::rtl::math::approxFloor (fTempTime);
         fTempTime -= fSecsValue;
         double f100SecsValue = 0.0;
 
@@ -1101,15 +1094,15 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
                             const double& fDateTime, const com::sun::star::util::Date& aTempNullDate)
 {
     double fValue = fDateTime;
-    sal_Int32 nValue = static_cast <sal_Int32> (SolarMath::ApproxFloor (fValue));
+    sal_Int32 nValue = static_cast <sal_Int32> (::rtl::math::approxFloor (fValue));
     Date aDate (aTempNullDate.Day, aTempNullDate.Month, aTempNullDate.Year);
     aDate += nValue;
     fValue -= nValue;
     double fCount;
     if (nValue > 0)
-         fCount = SolarMath::ApproxFloor (log10(nValue)) + 1;
+         fCount = ::rtl::math::approxFloor (log10(nValue)) + 1;
     else if (nValue < 0)
-         fCount = SolarMath::ApproxFloor (log10(nValue * -1)) + 1;
+         fCount = ::rtl::math::approxFloor (log10(nValue * -1)) + 1;
     else
         fCount = 0.0;
     sal_Int16 nCount = sal_Int16(fCount);
@@ -1122,21 +1115,16 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
     {
         bHasTime = sal_True;
         fValue *= 24;
-        fHoursValue = SolarMath::ApproxFloor (fValue);
+        fHoursValue = ::rtl::math::approxFloor (fValue);
         fValue -= fHoursValue;
         fValue *= 60;
-        fMinsValue = SolarMath::ApproxFloor (fValue);
+        fMinsValue = ::rtl::math::approxFloor (fValue);
         fValue -= fMinsValue;
         fValue *= 60;
-        fSecsValue = SolarMath::ApproxFloor (fValue);
+        fSecsValue = ::rtl::math::approxFloor (fValue);
         fValue -= fSecsValue;
         if (fValue > 0.0)
-        {
-            String sTemp;
-            SolarMath::DoubleToString(sTemp, fValue, 'A', XML_MAXDIGITSCOUNT_TIME - nCount, '.', sal_True);
-            rtl::OUString sOUDate(sTemp);
-            f100SecsValue = sOUDate.toDouble();
-        }
+            f100SecsValue = ::rtl::math::round( fValue, XML_MAXDIGITSCOUNT_TIME - nCount);
         else
             f100SecsValue = 0.0;
 
@@ -1161,44 +1149,43 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
             aDate += 1;
         }
     }
-    String sDate;
-    SolarMath::DoubleToString(sDate, static_cast <double> (aDate.GetYear()), 'A', INT_MAX, '.', sal_True);
-    sDate += '-';
+    rBuffer.append( sal_Int32( aDate.GetYear()));
+    rBuffer.append( sal_Unicode('-'));
     USHORT nTemp = aDate.GetMonth();
     if (nTemp < 10)
-        sDate += '0';
-    SolarMath::DoubleToString(sDate, static_cast <double> (nTemp), 'A', INT_MAX, '.', sal_True);
-    sDate += '-';
+        rBuffer.append( sal_Unicode('0'));
+    rBuffer.append( sal_Int32( nTemp));
+    rBuffer.append( sal_Unicode('-'));
     nTemp = aDate.GetDay();
     if (nTemp < 10)
-        sDate += '0';
-    SolarMath::DoubleToString(sDate, static_cast <double> (nTemp), 'A', INT_MAX, '.', sal_True);
+        rBuffer.append( sal_Unicode('0'));
+    rBuffer.append( sal_Int32( nTemp));
     if(bHasTime)
     {
-        sDate += 'T';
+        rBuffer.append( sal_Unicode('T'));
         if (fHoursValue < 10)
-            sDate += '0';
-        SolarMath::DoubleToString(sDate, fHoursValue, 'A', INT_MAX, '.', sal_True);
-        sDate += ':';
+            rBuffer.append( sal_Unicode('0'));
+        rBuffer.append( sal_Int32( fHoursValue));
+        rBuffer.append( sal_Unicode(':'));
         if (fMinsValue < 10)
-            sDate += '0';
-        SolarMath::DoubleToString(sDate, fMinsValue, 'A', INT_MAX, '.', sal_True);
-        sDate += ':';
+            rBuffer.append( sal_Unicode('0'));
+        rBuffer.append( sal_Int32( fMinsValue));
+        rBuffer.append( sal_Unicode(':'));
         if (fSecsValue < 10)
-            sDate += '0';
-        SolarMath::DoubleToString(sDate, fSecsValue, 'A', INT_MAX, '.', sal_True);
+            rBuffer.append( sal_Unicode('0'));
+        rBuffer.append( sal_Int32( fSecsValue));
         if (f100SecsValue > 0.0)
         {
-            sDate += ',';
-            xub_StrLen nDateLen = sDate.Len();
-            SolarMath::DoubleToString(sDate, fValue, 'A', XML_MAXDIGITSCOUNT_TIME - nCount, '.', sal_True);
-            if (nDateLen + 2 < sDate.Len())
-                sDate.Erase(nDateLen, 2);
-            else
-                sDate.Erase(nDateLen - 1, 2);
+            ::rtl::OUString a100th( ::rtl::math::doubleToUString( fValue,
+                        rtl_math_StringFormat_F,
+                        XML_MAXDIGITSCOUNT_TIME - nCount, '.', sal_True));
+            if ( a100th.getLength() > 2 )
+            {
+                rBuffer.append( sal_Unicode(','));
+                rBuffer.append( a100th.copy( 2 ) );     // strip 0.
+            }
         }
     }
-    rBuffer.append(sDate);
 }
 
 /** convert ISO Date Time String to double */
@@ -1546,21 +1533,25 @@ sal_Bool SvXMLUnitConverter::convertVector3D( Vector3D& rVector,
 
     OUString aContentZ = rValue.copy(nPos, nFound - nPos);
 
-    int nErr;
+    rtl_math_ConversionStatus eStatus;
 
-    rVector.X() = SolarMath::StringToDouble(aContentX, sal_Unicode(','), sal_Unicode('.'),nErr);
+    rVector.X() = ::rtl::math::stringToDouble(aContentX, sal_Unicode('.'),
+            sal_Unicode(','), &eStatus, NULL);
 
-    if(nErr)
+    if( eStatus != rtl_math_ConversionStatus_Ok )
         return sal_False;
 
-    rVector.Y() = SolarMath::StringToDouble(aContentY, sal_Unicode(','), sal_Unicode('.'),nErr);
+    rVector.Y() = ::rtl::math::stringToDouble(aContentY, sal_Unicode('.'),
+            sal_Unicode(','), &eStatus, NULL);
 
-    if(nErr)
+    if( eStatus != rtl_math_ConversionStatus_Ok )
         return sal_False;
 
-    rVector.Z() = SolarMath::StringToDouble(aContentZ, sal_Unicode(','), sal_Unicode('.'),nErr);
+    rVector.Z() = ::rtl::math::stringToDouble(aContentZ, sal_Unicode('.'),
+            sal_Unicode(','), &eStatus, NULL);
 
-    return (nErr == 0L);
+
+    return ( eStatus != rtl_math_ConversionStatus_Ok );
 }
 
 /** convert vector3D to string */

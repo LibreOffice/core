@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 08:01:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,51 +431,4 @@ namespace xmloff
 
 #endif // _XMLOFF_FORMS_PROPERTYEXPORT_HXX_
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.14  2002/08/22 07:36:10  oj
- *  #99721# now save image url relative
- *
- *  Revision 1.13  2001/06/25 13:32:38  fs
- *  #88691# TargetURL property value must be saved relative to own document
- *
- *  Revision 1.12  2001/04/17 07:58:12  fs
- *  #85427# +_bVoidDefault parameter for addEnumPropertyAttribute
- *
- *  Revision 1.11  2001/03/29 12:18:58  fs
- *  #85097# when exporting boolean properties, allow for MAYBEVOID props
- *
- *  Revision 1.10  2001/02/01 09:46:47  fs
- *  no own style handling anymore - the shape exporter is responsible for our styles now
- *
- *  Revision 1.9  2001/01/03 16:25:34  fs
- *  file format change (extra wrapper element for controls, similar to columns)
- *
- *  Revision 1.8  2001/01/03 11:08:56  mib
- *  syntax
- *
- *  Revision 1.7  2001/01/02 15:58:22  fs
- *  event ex- & import
- *
- *  Revision 1.6  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.5  2000/12/13 10:38:49  fs
- *  slightly modified some documentations
- *
- *  Revision 1.4  2000/12/06 17:28:05  fs
- *  changes for the formlayer import - still under construction
- *
- *  Revision 1.3  2000/11/21 13:38:45  hr
- *  #65293#: includes
- *
- *  Revision 1.2  2000/11/19 15:41:32  fs
- *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
- *
- *  Revision 1.1  2000/11/17 19:03:18  fs
- *  initial checkin - export and/or import the applications form layer
- *
- *
- *  Revision 1.0 15.11.00 17:49:03  fs
- ************************************************************************/
+

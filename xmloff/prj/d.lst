@@ -110,6 +110,9 @@ hedabu: ..\inc\XMLEventExport.hxx %_DEST%\inc%_EXT%\xmloff\XMLEventExport.hxx
 hedabu: ..\inc\xmlevent.hxx %_DEST%\inc%_EXT%\xmloff\xmlevent.hxx
 hedabu: ..\inc\XMLEventsImportContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLEventsImportContext.hxx
 hedabu: ..\inc\xmlerror.hxx %_DEST%\inc%_EXT%\xmloff\xmlerror.hxx
+hedabu: ..\inc\SinglePropertySetInfoCache.hxx %_DEST%\inc%_EXT%\xmloff\SinglePropertySetInfoCache.hxx
+hedabu: ..\inc\PropertySetInfoHash.hxx %_DEST%\inc%_EXT%\xmloff\PropertySetInfoHash.hxx
+hedabu: ..\inc\PropertySetInfoKey.hxx %_DEST%\inc%_EXT%\xmloff\PropertySetInfoKey.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx

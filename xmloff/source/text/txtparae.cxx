@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: mib $ $Date: 2002-12-05 09:58:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,9 @@
 #ifndef _XMLOFF_FORMLAYEREXPORT_HXX_
 #include "formlayerexport.hxx"
 #endif
+#ifndef _XMLOFF_XMLTEXTCHARSTYLENAMESELEMENTEXPORT_HXX
+#include "XMLTextCharStyleNamesElementExport.hxx"
+#endif
 
 
 using namespace ::rtl;
@@ -336,6 +339,7 @@ enum eParagraphPropertyNamesEnum
     PARA_STYLE_NAME = 2,
     TEXT_SECTION = 3
 };
+
 
 
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
@@ -485,18 +489,6 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
         xPropMapper = GetParaPropMapper();
         break;
-//  case XML_STYLE_FAMILY_TEXT_TEXT:
-//      xPropMapper = GetTextPropMapper();
-//      break;
-//  case XML_STYLE_FAMILY_TEXT_FRAME:
-//      xPropMapper = GetAutoFramePropMapper();
-//      break;
-//  case XML_STYLE_FAMILY_TEXT_SECTION:
-//      xPropMapper = GetSectionPropMapper();
-//      break;
-//  case XML_STYLE_FAMILY_TEXT_RUBY:
-//      xPropMapper = GetRubyPropMapper();
-//      break;
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
 
@@ -565,24 +557,6 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                 }
             }
             break;
-//      case XML_STYLE_FAMILY_TEXT_TEXT:
-//          if( xPropSetInfo->hasPropertyByName( sCharStyleName ) )
-//          {
-//              aAny = rPropSet->getPropertyValue( sCharStyleName );
-//              aAny >>= sParent;
-//          }
-//          break;
-//      case XML_STYLE_FAMILY_TEXT_FRAME:
-//          if( xPropSetInfo->hasPropertyByName( sFrameStyleName ) )
-//          {
-//              aAny = rPropSet->getPropertyValue( sFrameStyleName );
-//              aAny >>= sParent;
-//          }
-//          break;
-//      case XML_STYLE_FAMILY_TEXT_SECTION:
-//      case XML_STYLE_FAMILY_TEXT_RUBY:
-//          ; // section styles have no parents
-//          break;
         }
         if( xPropStates.size() > 0 )
         {
@@ -606,9 +580,6 @@ OUString XMLTextParagraphExport::Find(
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
         xPropMapper = GetParaPropMapper();
         break;
-    case XML_STYLE_FAMILY_TEXT_TEXT:
-        xPropMapper = GetTextPropMapper();
-        break;
     case XML_STYLE_FAMILY_TEXT_FRAME:
         xPropMapper = GetAutoFramePropMapper();
         break;
@@ -620,6 +591,8 @@ OUString XMLTextParagraphExport::Find(
         break;
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
+    if( !xPropMapper.is() )
+        return sName;
     vector< XMLPropertyState > xPropStates =
             xPropMapper->Filter( rPropSet );
     if( ppAddStates )
@@ -628,35 +601,6 @@ OUString XMLTextParagraphExport::Find(
         {
             xPropStates.push_back( **ppAddStates );
             ppAddStates++;
-        }
-    }
-    OSL_ENSURE( XML_STYLE_FAMILY_TEXT_TEXT != nFamily,
-                "Calling find for text styles is inefficent and might go wrong, use FindTextStyle" );
-    if( XML_STYLE_FAMILY_TEXT_TEXT == nFamily )
-    {
-        // Get parent and remove hyperlinks (they aren't of interest)
-        UniReference< XMLPropertySetMapper > xPM =
-            xPropMapper->getPropertySetMapper();
-        for( ::std::vector< XMLPropertyState >::iterator
-                i = xPropStates.begin();
-              i != xPropStates.end();
-             i++ )
-        {
-            switch( xPM->GetEntryContextId(i->mnIndex) )
-            {
-            case CTF_CHAR_STYLE_NAME:
-                {
-                    OUString sTmp;
-                    i->maValue >>= sTmp;
-                    i->mnIndex = -1;
-                    OSL_ENSURE( sTmp == sName, "parent inconsistent" );
-                    sName = sTmp;
-                }
-                break;
-            case CTF_HYPERLINK_URL:
-                i->mnIndex = -1;
-                break;
-            }
         }
     }
 
@@ -669,6 +613,7 @@ OUString XMLTextParagraphExport::Find(
 OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
            const Reference < XPropertySet > & rPropSet,
         sal_Bool& rHyperlink,
+        sal_Bool& rHasCharStyle,
         const XMLPropertyState** ppAddStates ) const
 {
     UniReference < SvXMLExportPropertyMapper > xPropMapper
@@ -678,7 +623,7 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
 
     // Get parent and remove hyperlinks (they aren't of interest)
     OUString sName;
-    rHyperlink = sal_False;
+    rHyperlink = rHasCharStyle = sal_False;
     sal_uInt16 nIgnoreProps = 0;
     UniReference< XMLPropertySetMapper > xPM =
         xPropMapper->getPropertySetMapper();
@@ -692,6 +637,7 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
         case CTF_CHAR_STYLE_NAME:
             i->maValue >>= sName;
             i->mnIndex = -1;
+            rHasCharStyle = sName.getLength() > 0;
             nIgnoreProps++;
             break;
         case CTF_HYPERLINK_URL:
@@ -716,10 +662,11 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
 }
 
 OUString XMLTextParagraphExport::FindTextStyle(
-           const Reference < XPropertySet > & rPropSet ) const
+           const Reference < XPropertySet > & rPropSet,
+        sal_Bool& rHasCharStyle ) const
 {
     sal_Bool bDummy;
-    return FindTextStyleAndHyperlink( rPropSet, bDummy );
+    return FindTextStyleAndHyperlink( rPropSet, bDummy, rHasCharStyle );
 }
 
 
@@ -927,6 +874,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sParaConditionalStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaConditionalStyleName")),
     sParaChapterNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("ParaChapterNumberingLevel")),
     sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
+    sCharStyleNames(RTL_CONSTASCII_USTRINGPARAM("CharStyleNames")),
     sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName")),
     sTextField(RTL_CONSTASCII_USTRINGPARAM("TextField")),
     sText(RTL_CONSTASCII_USTRINGPARAM("Text")),
@@ -992,10 +940,11 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sRubyAdjust(RTL_CONSTASCII_USTRINGPARAM("RubyAdjust")),
     sRubyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("RubyCharStyleName")),
 #if SUPD < 628 && !defined( TEST_MIB )
-    nProgress( nProg )
+    nProgress( nProg ),
 #else
-    bProgress( sal_False )
+    bProgress( sal_False ),
 #endif
+    aCharStyleNamesPropInfoCache( sCharStyleNames )
 {
     UniReference < XMLPropertySetMapper > xPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
@@ -2271,6 +2220,106 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     return nShapeFeatures;
 }
 
+void XMLTextParagraphExport::exportAnyTextFrame(
+        const Reference < XTextContent > & rTxtCntnt,
+        FrameType eType,
+        sal_Bool bAutoStyles,
+        sal_Bool bProgress,
+        const Reference < XPropertySet > *pRangePropSet)
+{
+    Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
+
+    if( bAutoStyles )
+    {
+        if( FT_EMBEDDED == eType )
+            _collectTextEmbeddedAutoStyles( xPropSet );
+        else
+            Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
+
+        if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
+                                            xPropSet->getPropertySetInfo() ) )
+            Add( XML_STYLE_FAMILY_TEXT_TEXT, *pRangePropSet );
+
+        switch( eType )
+        {
+        case FT_TEXT:
+            {
+                // frame bound frames
+                Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
+                Reference < XText > xTxt = xTxtFrame->getText();
+                collectFramesBoundToFrameAutoStyles( xTxtFrame, bProgress );
+
+                exportText( xTxt, bAutoStyles, bProgress, sal_True );
+            }
+            break;
+        case FT_SHAPE:
+            {
+                Reference < XShape > xShape( rTxtCntnt, UNO_QUERY );
+                GetExport().GetShapeExport()->collectShapeAutoStyles( xShape );
+            }
+            break;
+        }
+    }
+    else
+    {
+        Reference< XPropertySetInfo > xPropSetInfo =
+            xPropSet->getPropertySetInfo();
+        Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
+        {
+            sal_Bool bAddCharStyles = pRangePropSet &&
+                lcl_txtpara_isBoundAsChar( xPropSet, xPropSetInfo );
+            sal_Bool bIsUICharStyle;
+            OUString sStyle;
+            if( bAddCharStyles )
+                   sStyle = FindTextStyle( *pRangePropSet, bIsUICharStyle );
+            else
+                bIsUICharStyle = sal_False;
+
+            XMLTextCharStyleNamesElementExport aCharStylesExport(
+                GetExport(), bIsUICharStyle &&
+                             aCharStyleNamesPropInfoCache.hasProperty(
+                                            *pRangePropSet ),
+                *pRangePropSet, sCharStyleNames );
+
+            if( sStyle.getLength() )
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                                          sStyle );
+            {
+                SvXMLElementExport aElem( GetExport(), sStyle.getLength() > 0,
+                    XML_NAMESPACE_TEXT, XML_SPAN, sal_False, sal_False );
+                {
+                    SvXMLElementExport aElem( GetExport(),
+                        FT_SHAPE != eType &&
+                        addHyperlinkAttributes( xPropSet,
+                                                xPropState,xPropSetInfo ),
+                        XML_NAMESPACE_DRAW, XML_A, sal_False, sal_False );
+                    switch( eType )
+                    {
+                    case FT_TEXT:
+                        _exportTextFrame( xPropSet, xPropSetInfo, bProgress );
+                        break;
+                    case FT_GRAPHIC:
+                        _exportTextGraphic( xPropSet, xPropSetInfo );
+                        break;
+                    case FT_EMBEDDED:
+                        _exportTextEmbedded( xPropSet, xPropSetInfo );
+                        break;
+                    case FT_SHAPE:
+                        {
+                            Reference < XShape > xShape( rTxtCntnt, UNO_QUERY );
+                            sal_Int32 nFeatures =
+                                addTextFrameAttributes( xPropSet, sal_True );
+                            GetExport().GetShapeExport()
+                                ->exportShape( xShape, nFeatures );
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 void XMLTextParagraphExport::_exportTextFrame(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo,
@@ -2319,49 +2368,6 @@ void XMLTextParagraphExport::_exportTextFrame(
     GetExport().GetImageMapExport().Export( rPropSet );
 
     exportText( xTxt, sal_False, bProgress, sal_True );
-}
-
-void XMLTextParagraphExport::exportTextFrame(
-        const Reference < XTextContent > & rTxtCntnt,
-        sal_Bool bAutoStyles,
-        sal_Bool bProgress,
-        const Reference < XPropertySet > *pRangePropSet)
-{
-    Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
-
-    if( bAutoStyles )
-    {
-        Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
-        Reference < XText > xTxt = xTxtFrame->getText();
-        Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
-        if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
-                                            xPropSet->getPropertySetInfo() ) )
-            Add( XML_STYLE_FAMILY_TEXT_TEXT, *pRangePropSet );
-
-        // frame bound frames
-        collectFramesBoundToFrameAutoStyles( xTxtFrame, bProgress );
-
-        exportText( xTxt, bAutoStyles, bProgress, sal_True );
-    }
-    else
-    {
-        Reference< XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
-        Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-        {
-            SvXMLElementExport aElem( GetExport(),
-                pRangePropSet &&
-                lcl_txtpara_isBoundAsChar( xPropSet, xPropSetInfo ) &&
-                addTextStyleAttribute( *pRangePropSet ),
-                XML_NAMESPACE_TEXT, XML_SPAN, sal_False, sal_False );
-            {
-                SvXMLElementExport aElem( GetExport(),
-                    addHyperlinkAttributes( xPropSet, xPropState,xPropSetInfo ),
-                    XML_NAMESPACE_DRAW, XML_A, sal_False, sal_False );
-                _exportTextFrame( xPropSet, xPropSetInfo, bProgress );
-            }
-        }
-    }
 }
 
 void XMLTextParagraphExport::exportContour(
@@ -2575,70 +2581,6 @@ void XMLTextParagraphExport::_exportTextGraphic(
     exportContour( rPropSet, rPropSetInfo );
 }
 
-void XMLTextParagraphExport::exportTextGraphic(
-        const Reference < XTextContent > & rTextContent,
-        sal_Bool bAutoStyles,
-        const Reference < XPropertySet > *pRangePropSet )
-{
-    Reference < XPropertySet > xPropSet( rTextContent, UNO_QUERY );
-
-    if( bAutoStyles )
-    {
-        Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
-
-        if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
-                                            xPropSet->getPropertySetInfo() ) )
-            Add( XML_STYLE_FAMILY_TEXT_TEXT, *pRangePropSet );
-    }
-    else
-    {
-        Reference< XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
-        Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-        {
-            SvXMLElementExport aElem( GetExport(),
-                pRangePropSet &&
-                lcl_txtpara_isBoundAsChar( xPropSet, xPropSetInfo ) &&
-                addTextStyleAttribute( *pRangePropSet ),
-                XML_NAMESPACE_TEXT, XML_SPAN, sal_False, sal_False );
-            {
-                SvXMLElementExport aElem( GetExport(),
-                    addHyperlinkAttributes( xPropSet, xPropState,xPropSetInfo ),
-                    XML_NAMESPACE_DRAW, XML_A, sal_False, sal_False );
-                _exportTextGraphic( xPropSet, xPropSetInfo );
-            }
-        }
-    }
-}
-
-void XMLTextParagraphExport::exportShape(
-        const Reference < XTextContent > & rTxtCntnt,
-        sal_Bool bAutoStyles,
-        const Reference < XPropertySet > *pRangePropSet )
-{
-    Reference < XShape > xShape( rTxtCntnt, UNO_QUERY );
-    Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
-
-    if( bAutoStyles )
-    {
-        GetExport().GetShapeExport()->collectShapeAutoStyles( xShape );
-        if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
-                                            xPropSet->getPropertySetInfo() ) )
-            Add( XML_STYLE_FAMILY_TEXT_TEXT, *pRangePropSet );
-    }
-    else
-    {
-        SvXMLElementExport aElem( GetExport(),
-            pRangePropSet &&
-            lcl_txtpara_isBoundAsChar( xPropSet,
-                xPropSet->getPropertySetInfo() ) &&
-            addTextStyleAttribute( *pRangePropSet ),
-            XML_NAMESPACE_TEXT, XML_SPAN, sal_False, sal_False );
-        sal_Int32 nFeatures = addTextFrameAttributes( xPropSet, sal_True );
-        GetExport().GetShapeExport()->exportShape( xShape, nFeatures );
-    }
-}
-
 void XMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
         const Reference < XPropertySet > & rPropSet )
 {
@@ -2678,40 +2620,6 @@ void XMLTextParagraphExport::exportAlternativeText(
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
                                       XML_DESC, sal_True, sal_False );
             GetExport().Characters( sAltText );
-        }
-    }
-}
-void XMLTextParagraphExport::exportTextEmbedded(
-        const Reference < XTextContent > & rTextContent,
-        sal_Bool bAutoStyles,
-        const Reference < XPropertySet > *pRangePropSet )
-{
-    Reference < XPropertySet > xPropSet( rTextContent, UNO_QUERY );
-
-    if( bAutoStyles )
-    {
-        _collectTextEmbeddedAutoStyles( xPropSet );
-        if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
-                                            xPropSet->getPropertySetInfo() ) )
-            Add( XML_STYLE_FAMILY_TEXT_TEXT, *pRangePropSet );
-    }
-    else
-    {
-        Reference< XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
-        Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-        {
-            SvXMLElementExport aElem( GetExport(),
-                pRangePropSet &&
-                lcl_txtpara_isBoundAsChar( xPropSet, xPropSetInfo ) &&
-                addTextStyleAttribute( *pRangePropSet ),
-                XML_NAMESPACE_TEXT, XML_SPAN, sal_False, sal_False );
-            {
-                SvXMLElementExport aElem( GetExport(),
-                    addHyperlinkAttributes( xPropSet, xPropState,xPropSetInfo ),
-                    XML_NAMESPACE_DRAW, XML_A, sal_False, sal_False );
-                _exportTextEmbedded( xPropSet, xPropSetInfo );
-            }
         }
     }
 }
@@ -2827,21 +2735,6 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
     return bExport;
 }
 
-sal_Bool XMLTextParagraphExport::addTextStyleAttribute(
-        const Reference < XPropertySet > & rPropSet )
-{
-    sal_Bool bRet = sal_False;
-    OUString sStyle = FindTextStyle( rPropSet );
-    if( sStyle.getLength() )
-    {
-        GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                  XML_STYLE_NAME, sStyle );
-        bRet = sal_True;
-    }
-
-    return bRet;
-}
-
 void XMLTextParagraphExport::exportTextRange(
         const Reference < XTextRange > & rTextRange,
         sal_Bool bAutoStyles,
@@ -2854,14 +2747,15 @@ void XMLTextParagraphExport::exportTextRange(
     }
     else
     {
-        sal_Bool bHyperlink = sal_False;
-        OUString sStyle = FindTextStyleAndHyperlink( xPropSet, bHyperlink );
+        sal_Bool bHyperlink = sal_False, bIsUICharStyle = sal_False;
+        OUString sStyle = FindTextStyleAndHyperlink( xPropSet, bHyperlink,
+                                                        bIsUICharStyle );
         Reference < XPropertySetInfo > xPropSetInfo;
         if( bHyperlink )
         {
             Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
             xPropSetInfo = xPropSet->getPropertySetInfo();
-            addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
+            bHyperlink = addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
         }
         SvXMLElementExport aElem( GetExport(), bHyperlink, XML_NAMESPACE_TEXT,
                                   XML_A, sal_False, sal_False );
@@ -2879,16 +2773,24 @@ void XMLTextParagraphExport::exportTextRange(
             }
         }
 
-        OUString sText = rTextRange->getString();
-        if( sStyle.getLength() )
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                      sStyle );
         {
-            // in a block to make sure it is destroyed before the text:a element
-            SvXMLElementExport aElem( GetExport(), sStyle.getLength() > 0,
-                                      XML_NAMESPACE_TEXT, XML_SPAN, sal_False,
-                                      sal_False );
-            exportText( sText, rPrevCharIsSpace );
+            XMLTextCharStyleNamesElementExport aCharStylesExport(
+                GetExport(), bIsUICharStyle &&
+                             aCharStyleNamesPropInfoCache.hasProperty(
+                                                    xPropSet, xPropSetInfo ),
+                xPropSet, sCharStyleNames );
+
+            OUString sText = rTextRange->getString();
+            if( sStyle.getLength() )
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                                          sStyle );
+            {
+                // in a block to make sure it is destroyed before the text:a element
+                SvXMLElementExport aElem( GetExport(), sStyle.getLength() > 0,
+                                          XML_NAMESPACE_TEXT, XML_SPAN, sal_False,
+                                          sal_False );
+                exportText( sText, rPrevCharIsSpace );
+            }
         }
     }
 }

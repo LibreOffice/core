@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,6 +519,7 @@ private:
     const ::rtl::OUString sPropertyIsConditionTrue;
     const ::rtl::OUString sPropertyDataCommandType;
     const ::rtl::OUString sPropertyIsFixedLanguage;
+    const ::rtl::OUString sPropertyCharStyleNames;
 
     const ::rtl::OUString sEmpty;
 

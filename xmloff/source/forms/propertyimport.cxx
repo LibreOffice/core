@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-01 12:34:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@
 #endif
 #ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
-#endif
-#ifndef _XMLOFF_PRSTYLEI_HXX_
-#include "prstylei.hxx"
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -178,13 +175,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OPropertyImport::Characters(const ::rtl::OUString& _rChars)
-    {
-        // ignore them (should be whitespaces only)
-        OSL_ENSURE(0 == _rChars.trim().getLength(), "OPropertyImport::Characters: non-whitespace characters!");
-    }
-
-    //---------------------------------------------------------------------
     sal_Bool OPropertyImport::encounteredAttribute(const ::rtl::OUString& _rAttributeName) const
     {
         OSL_ENSURE(m_bTrackAttributes, "OPropertyImport::encounteredAttribute: attribute tracking not enabled!");
@@ -192,11 +182,10 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OPropertyImport::simluateDefaultedAttribute(const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName, const sal_Char* _pAttributeDefault)
+    void OPropertyImport::Characters(const ::rtl::OUString& _rChars)
     {
-        ::rtl::OUString sLocalAttrName = ::rtl::OUString::createFromAscii(_pAttributeName);
-        if (!encounteredAttribute(sLocalAttrName))
-            handleAttribute(XML_NAMESPACE_FORM, sLocalAttrName, ::rtl::OUString::createFromAscii(_pAttributeDefault));
+        // ignore them (should be whitespaces only)
+        OSL_ENSURE(0 == _rChars.trim().getLength(), "OPropertyImport::Characters: non-whitespace characters!");
     }
 
     //---------------------------------------------------------------------
@@ -211,14 +200,10 @@ namespace xmloff
 
             // convert the value string into the target type
             aNewValue.Value = convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap, pProperty->bInverseSemantics);
-            m_aValues.push_back(aNewValue);
+            implPushBackPropertyValue( aNewValue );
         }
         else
-        if ( 0 != _rLocalName.compareToAscii("column-style-name") )
-            // TODO: importing the column-style-name not yet implemented
-        {
-            OSL_ENSURE(sal_False, "OPropertyImport::handleAttribute: can't handle attributes which do not describe properties or the style!");
-        }
+            OSL_ENSURE( sal_False, "OPropertyImport::handleAttribute: can't handle attributes which do not describe properties!" );
     }
 
     //---------------------------------------------------------------------
@@ -480,9 +465,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OSinglePropertyContext::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
     {
-        ::rtl::OUString sNameAttribute = GetImport().GetNamespaceMap().GetQNameByKey(
+        ::rtl::OUString sNameAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
             GetPrefix(), ::rtl::OUString::createFromAscii("property-name"));
-        ::rtl::OUString sTypeAttribute = GetImport().GetNamespaceMap().GetQNameByKey(
+        ::rtl::OUString sTypeAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
             GetPrefix(), ::rtl::OUString::createFromAscii("property-type"));
 
         // the name of the property
@@ -580,54 +565,4 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.14  2002/10/25 08:54:58  fs
- *  #104402# importing of column-style-name not yet imported
- *
- *  Revision 1.13  2001/07/10 17:07:50  mtg
- *  updated namespace handling
- *
- *  Revision 1.12  2001/03/29 09:44:19  fs
- *  enableTrackAttributes to prevent the (expensive) attribute tracking
- *
- *  Revision 1.11  2001/03/28 13:59:54  fs
- *  #85371# +simulateDefaultedAttribute / +encounteredAttribute
- *
- *  Revision 1.10  2001/03/28 09:59:38  fs
- *  #85097# correctly import boolean properties with inverse semantics
- *
- *  Revision 1.9  2001/03/16 14:36:39  sab
- *  did the required change (move of extract.hxx form cppuhelper to comphelper)
- *
- *  Revision 1.8  2001/02/28 16:44:38  fs
- *  convertString: for SHORTs, use sal_Int16 ...
- *
- *  Revision 1.7  2001/02/26 10:28:04  aw
- *  Changed double import/export to use it's own conversion routines
- *  so iots more clear what type is used
- *
- *  Revision 1.6  2001/02/13 09:10:03  fs
- *  prevent an assertion because of an outdated file format ('til SUPD>=622)
- *
- *  Revision 1.5  2001/02/01 09:46:47  fs
- *  no own style handling anymore - the shape exporter is responsible for our styles now
- *
- *  Revision 1.4  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.3  2000/12/13 10:40:15  fs
- *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
- *
- *  Revision 1.2  2000/12/12 12:01:05  fs
- *  new implementations for the import - still under construction
- *
- *  Revision 1.1  2000/12/06 17:31:52  fs
- *  initial checkin - implementations for formlayer import/export - still under construction
- *
- *
- *  Revision 1.0 04.12.00 15:36:58  fs
- ************************************************************************/
 

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: formevents.hxx,v $
+ *  $RCSfile: XMLTextCharStyleNamesElementExport.cxx,v $
  *
  *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -59,23 +59,69 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_FORMS_FORMEVENTS_HXX_
-#define _XMLOFF_FORMS_FORMEVENTS_HXX_
+#ifndef _XMLOFF_XMLTEXTCHARSTYLENAMESELEMENTEXPORT_HXX
+#include "XMLTextCharStyleNamesElementExport.hxx"
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
+#endif
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
+#endif
 
-struct XMLEventNameTranslation;
-//.........................................................................
-namespace xmloff
+namespace com { namespace sun { namespace star {
+    namespace beans { class XPropertySet; }
+} } }
+
+using namespace ::com::sun::star::uno;
+using ::com::sun::star::beans::XPropertySet;
+using ::rtl::OUString;
+using namespace ::xmloff::token;
+
+XMLTextCharStyleNamesElementExport::XMLTextCharStyleNamesElementExport(
+    SvXMLExport& rExp,
+    sal_Bool bDoSth,
+    const Reference < XPropertySet > & rPropSet,
+    const OUString& rPropName ) :
+    rExport( rExp ),
+    nCount( 0 )
 {
-//.........................................................................
+    if( bDoSth )
+    {
+        Any aAny = rPropSet->getPropertyValue( rPropName );
+        Sequence < OUString > aNames;
+        if( aAny >>= aNames )
+        {
+            nCount = aNames.getLength();
+            OSL_ENSURE( nCount > 0, "no char style found" );
+            if( nCount > 1 )
+            {
+                aName = rExport.GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_TEXT, GetXMLToken(XML_SPAN) );
+                sal_Int32 i = nCount;
+                const OUString *pName = aNames.getConstArray();
+                while( --i )
+                {
+                    rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                                          *pName );
+                    rExport.StartElement( aName, sal_False );
+                    ++pName;
+                }
+            }
+        }
+    }
+}
 
-    //=====================================================================
-    //= event translation table
-    //=====================================================================
-    extern const XMLEventNameTranslation* g_pFormsEventTranslation;
-
-//.........................................................................
-}   // namespace xmloff
-//.........................................................................
-
-#endif // _XMLOFF_FORMS_FORMEVENTS_HXX_
+XMLTextCharStyleNamesElementExport::~XMLTextCharStyleNamesElementExport()
+{
+    if( nCount > 1 )
+    {
+        sal_Int32 i = nCount;
+        while( --i )
+            rExport.EndElement( aName, sal_False );
+    }
+}
 

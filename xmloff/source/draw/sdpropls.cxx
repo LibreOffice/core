@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-11 09:11:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,10 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     MAP( "D3DEndAngle",                     XML_NAMESPACE_DR3D, XML_END_ANGLE,              XML_TYPE_NUMBER, 0 ),
     MAP( "D3DDepth",                        XML_NAMESPACE_DR3D, XML_DEPTH,                  XML_TYPE_MEASURE, 0 ),
     MAP( "D3DDoubleSided",                  XML_NAMESPACE_DR3D, XML_BACKFACE_CULLING,       XML_SD_TYPE_BACKFACE_CULLING, 0 ),
+
+    // #107245# New 3D properties which are possible for lathe and extrude 3d objects
+    MAP( "D3DCloseFront",                   XML_NAMESPACE_DR3D, XML_CLOSE_FRONT,            XML_TYPE_BOOL, 0 ),
+    MAP( "D3DCloseBack",                    XML_NAMESPACE_DR3D, XML_CLOSE_BACK,             XML_TYPE_BOOL, 0 ),
 
     // 3D lighting attributes
     MAP( "D3DNormalsKind",                  XML_NAMESPACE_DR3D, XML_NORMALS_KIND,           XML_SD_TYPE_NORMALS_KIND, 0 ),

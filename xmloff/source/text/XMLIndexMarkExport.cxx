@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexMarkExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2002-07-03 16:18:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,9 @@ XMLIndexMarkExport::XMLIndexMarkExport(
         sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
         sTextReading(RTL_CONSTASCII_USTRINGPARAM("TextReading")),
         sPrimaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("PrimaryKeyReading")),
-        sSecondaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeyReading"))
+        sSecondaryKeyReading(RTL_CONSTASCII_USTRINGPARAM
+                             ("SecondaryKeyReading")),
+        sMainEntry(RTL_CONSTASCII_USTRINGPARAM("IsMainEntry"))
 {
 }
 
@@ -271,6 +273,24 @@ void lcl_ExportPropertyString( SvXMLExport& rExport,
     }
 }
 
+void lcl_ExportPropertyBool( SvXMLExport& rExport,
+                             const Reference<XPropertySet> & rPropSet,
+                             const OUString sProperty,
+                             XMLTokenEnum eToken,
+                             Any& rAny )
+{
+    rAny = rPropSet->getPropertyValue( sProperty );
+
+    sal_Bool bValue;
+    if( rAny >>= bValue )
+    {
+        if( bValue )
+        {
+            rExport.AddAttribute( XML_NAMESPACE_TEXT, eToken, XML_TRUE );
+        }
+    }
+}
+
 void XMLIndexMarkExport::ExportUserIndexMarkAttributes(
     const Reference<XPropertySet> & rPropSet)
 {
@@ -293,7 +313,7 @@ void XMLIndexMarkExport::ExportAlphabeticalIndexMarkAttributes(
     lcl_ExportPropertyString( rExport, rPropSet, sPrimaryKeyReading, XML_KEY1_PHONETIC, aAny );
     lcl_ExportPropertyString( rExport, rPropSet, sSecondaryKey, XML_KEY2, aAny );
     lcl_ExportPropertyString( rExport, rPropSet, sSecondaryKeyReading, XML_KEY2_PHONETIC, aAny );
-
+    lcl_ExportPropertyBool( rExport, rPropSet, sMainEntry, XML_MAIN_ENTRY, aAny );
 }
 
 void XMLIndexMarkExport::GetID(

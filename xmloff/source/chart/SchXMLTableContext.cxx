@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -472,7 +472,7 @@ void SchXMLTableHelper::applyTableSimple(
         {
             // get NaN
             double fSolarNaN;
-            SolarMath::SetNAN( fSolarNaN, FALSE );
+            ::rtl::math::setNan( &fSolarNaN );
             double fNaN = fSolarNaN;
             sal_Bool bConvertNaN = sal_False;
 
@@ -480,7 +480,7 @@ void SchXMLTableHelper::applyTableSimple(
             if( xChartData.is())
             {
                 fNaN = xChartData->getNotANumber();
-                bConvertNaN = ( ! SolarMath::IsNAN( fNaN ));
+                bConvertNaN = ( ! ::rtl::math::isNan( fNaN ));
             }
 
             sal_Int32 nRowCount = rTable.aData.size();
@@ -512,7 +512,7 @@ void SchXMLTableHelper::applyTableSimple(
                 {
                     fVal = (*iRow)[ nCol ].fValue;
                     if( bConstConvertNan &&
-                        SolarMath::IsNAN( fVal ))
+                        ::rtl::math::isNan( fVal ))
                         aData[ nRow ][ nCol - 1 ] = fNaN;
                     else
                         aData[ nRow ][ nCol - 1 ] = fVal;
@@ -558,7 +558,7 @@ void SchXMLTableHelper::applyTable(
                 {
                     // get NaN
                     double fSolarNaN;
-                    SolarMath::SetNAN( fSolarNaN, FALSE );
+                    ::rtl::math::setNan( &fSolarNaN );
                     double fNaN = fSolarNaN;
                     fNaN = xChartData->getNotANumber();
 
@@ -752,7 +752,7 @@ void SchXMLTableHelper::PutTableContentIntoSequence(
             {
                 DBG_ASSERT( rTable.aData[ nRow ][ rAddress.nCol1 ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
                 fValue = rTable.aData[ nRow ][ rAddress.nCol1 ].fValue;
-                if( ! SolarMath::IsNAN( fValue ))
+                if( ! ::rtl::math::isNan( fValue ))
                     pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
             }
         }
@@ -762,7 +762,7 @@ void SchXMLTableHelper::PutTableContentIntoSequence(
             {
                 DBG_ASSERT( rTable.aData[ nRow ][ rAddress.nCol1 ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
                 fValue = rTable.aData[ nRow ][ rAddress.nCol1 ].fValue;
-                if( ! SolarMath::IsNAN( fValue ))
+                if( ! ::rtl::math::isNan( fValue ))
                     pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
             }
         }
@@ -777,7 +777,7 @@ void SchXMLTableHelper::PutTableContentIntoSequence(
             {
                 DBG_ASSERT( rTable.aData[ rAddress.nRow1 ][ nCol ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
                 fValue = rTable.aData[ rAddress.nRow1 ][ nCol ].fValue;
-                if( ! SolarMath::IsNAN( fValue ))
+                if( ! ::rtl::math::isNan( fValue ))
                     pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
             }
         }
@@ -787,7 +787,7 @@ void SchXMLTableHelper::PutTableContentIntoSequence(
             {
                 DBG_ASSERT( rTable.aData[ rAddress.nRow1 ][ nCol ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
                 fValue = rTable.aData[ rAddress.nRow1 ][ nCol ].fValue;
-                if( ! SolarMath::IsNAN( fValue ))
+                if( ! ::rtl::math::isNan( fValue ))
                     pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
             }
         }

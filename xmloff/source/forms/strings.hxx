@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 08:03:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( PROPERTY_FORMATSTRING,       "FormatString");
     XMLFORM_CONSTASCII_STRING( PROPERTY_DATEFORMAT,         "DateFormat");
     XMLFORM_CONSTASCII_STRING( PROPERTY_TIMEFORMAT,         "TimeFormat");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_PERSISTENCE_MAXTEXTLENGTH,  "PersistenceMaxTextLength");
 
     // services
     XMLFORM_CONSTASCII_STRING( SERVICE_FORMSCOLLECTION,         "com.sun.star.form.Forms" );
@@ -283,35 +284,3 @@ namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_STRINGS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.8  2002/05/30 08:38:35  fs
- *  #99693# +PROPERTY_HIDDEN_VALUE
- *
- *  Revision 1.7  2001/09/04 10:18:40  fs
- *  #91865# some script related strings
- *
- *  Revision 1.6  2001/05/28 14:57:50  fs
- *  #86712# redesigned ConstAsciiString so that it's reusing an rtl_uString / added some properties constants
- *
- *  Revision 1.5  2001/03/20 13:40:33  fs
- *  #83970# +AutomaticControlFocus / +ApplyFormDesignMode
- *
- *  Revision 1.4  2001/01/02 15:58:22  fs
- *  event ex- & import
- *
- *  Revision 1.3  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.2  2000/11/19 15:41:32  fs
- *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
- *
- *  Revision 1.1  2000/11/17 19:03:33  fs
- *  initial checkin - export and/or import the applications form layer
- *
- *
- *  Revision 1.0 13.11.00 17:00:01  fs
- ************************************************************************/
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLNumberStyles.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,7 @@ private:
     sal_Bool mbTextual;
     sal_Bool mbDecimal02;
     OUString maText;
+    SvXMLImportContext* mpSlaveContext;
 
 public:
     TYPEINFO();
@@ -497,8 +498,15 @@ public:
         sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        SdXMLNumberFormatImportContext* pParent );
+        SdXMLNumberFormatImportContext* pParent,
+        SvXMLImportContext* pSlaveContext );
     virtual ~SdXMLNumberFormatMemberImportContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                   const ::rtl::OUString& rLocalName,
+                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
 
@@ -507,10 +515,11 @@ public:
 
 TYPEINIT1( SdXMLNumberFormatMemberImportContext, SvXMLImportContext );
 
-SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SdXMLNumberFormatImportContext* pParent )
+SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SdXMLNumberFormatImportContext* pParent, SvXMLImportContext* pSlaveContext )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpParent( pParent ),
-    maNumberStyle( rLocalName )
+    maNumberStyle( rLocalName ),
+    mpSlaveContext( pSlaveContext )
 {
     mbLong = sal_False;
     mbTextual = sal_False;
@@ -547,22 +556,37 @@ SdXMLNumberFormatMemberImportContext::~SdXMLNumberFormatMemberImportContext()
 {
 }
 
+SvXMLImportContext *SdXMLNumberFormatMemberImportContext::CreateChildContext( USHORT nPrefix,
+                           const ::rtl::OUString& rLocalName,
+                           const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
+    return mpSlaveContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+
+void SdXMLNumberFormatMemberImportContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
+    mpSlaveContext->StartElement( xAttrList );
+}
+
 void SdXMLNumberFormatMemberImportContext::EndElement()
 {
+    mpSlaveContext->EndElement();
+
     if( mpParent )
         mpParent->add( maNumberStyle, mbLong, mbTextual, mbDecimal02, maText );
 }
 
 void SdXMLNumberFormatMemberImportContext::Characters( const ::rtl::OUString& rChars )
 {
+    mpSlaveContext->Characters( rChars );
     maText += rChars;
 }
 
 TYPEINIT1( SdXMLNumberFormatImportContext, SvXMLImportContext );
 
 
-SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList),
+SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, SvXMLNumImpData* pNewData, sal_uInt16 nNewType, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
+:   SvXMLNumFormatContext(rImport, nPrfx, rLocalName, pNewData, nNewType, xAttrList, rStyles),
     mbAutomatic( sal_False ), mnIndex(0), mrImport( rImport ), mnKey( -1 )
 {
     mbTimeStyle = IsXMLToken( rLocalName, XML_TIME_STYLE );
@@ -629,6 +653,8 @@ sal_Bool SdXMLNumberFormatImportContext::compareStyle( const SdXMLFixedDataStyle
 
 void SdXMLNumberFormatImportContext::EndElement()
 {
+    SvXMLNumFormatContext::EndElement();
+
     for( ; mnIndex < 8; mnIndex++ )
     {
         mnElements[mnIndex] = 0;
@@ -662,5 +688,5 @@ void SdXMLNumberFormatImportContext::EndElement()
 
 SvXMLImportContext * SdXMLNumberFormatImportContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-    return new SdXMLNumberFormatMemberImportContext( GetImport(), nPrefix, rLocalName, xAttrList, this );
+    return new SdXMLNumberFormatMemberImportContext( GetImport(), nPrefix, rLocalName, xAttrList, this, SvXMLNumFormatContext::CreateChildContext( nPrefix, rLocalName, xAttrList ) );
 }

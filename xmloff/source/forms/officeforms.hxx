@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeforms.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-02 14:31:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,13 +142,4 @@ namespace xmloff
 
 #endif // _XMLOFF_FORMS_OFFICEFORMS_HXX_
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/03/20 13:41:12  fs
- *  initial checkin - importing/exporting the office:forms element
- *
- *
- *  Revision 1.0 20.03.01 13:04:49  fs
- ************************************************************************/
 

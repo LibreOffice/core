@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logging.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-02 14:26:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,11 +108,4 @@ namespace xmloff
 //.........................................................................
 
 #endif // XMLOFF_FORMS_LOGGING_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 27.09.2002 17:25:56  fs
- ************************************************************************/
 

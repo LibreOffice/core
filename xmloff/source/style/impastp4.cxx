@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
             }
         }
 
-        delete aExpStyles;
+        delete[] aExpStyles;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexMarkExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2002-07-03 16:18:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ class XMLIndexMarkExport
     ::rtl::OUString sTextReading;
     ::rtl::OUString sPrimaryKeyReading;
     ::rtl::OUString sSecondaryKeyReading;
+    ::rtl::OUString sMainEntry;
 
 
     SvXMLExport& rExport;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: bm $ $Date: 2002-10-23 13:32:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@
 #ifndef _XEXPTRANSFORM_HXX
 #include "xexptran.hxx"
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 // header for any2enum
 #ifndef _COMPHELPER_EXTRACT_HXX_
@@ -814,14 +814,14 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
 
         // get NaN
         double fSolarNaN;
-        SolarMath::SetNAN( fSolarNaN, FALSE );
+        ::rtl::math::setNan( &fSolarNaN );
         double fNaN = fSolarNaN;
         sal_Bool bConvertNaN = sal_False;
         uno::Reference< chart::XChartData > xChartData( rData, uno::UNO_QUERY );
         if( xChartData.is())
         {
             fNaN = xChartData->getNotANumber();
-            bConvertNaN = ( ! SolarMath::IsNAN( fNaN ));
+            bConvertNaN = ( ! ::rtl::math::isNan( fNaN ));
         }
 
         uno::Sequence< uno::Sequence< double > > xValues = rData->getData();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
 #include <svtools/numuno.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 #include <tools/isolang.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -156,13 +156,14 @@ struct SvXMLNumberInfo
     sal_Int32   nDenomDigits;
     sal_Bool    bGrouping;
     sal_Bool    bDecReplace;
+    sal_Bool    bVarDecimals;
     double      fDisplayFactor;
     SvXMLEmbeddedElementArr aEmbeddedElements;
 
     SvXMLNumberInfo()
     {
         nDecimals = nInteger = nExpDigits = nNumerDigits = nDenomDigits = -1;
-        bGrouping = bDecReplace = sal_False;
+        bGrouping = bDecReplace = bVarDecimals = sal_False;
         fDisplayFactor = 1.0;
     }
 };
@@ -267,17 +268,6 @@ public:
 
 
 //-------------------------------------------------------------------------
-
-enum SvXMLStylesTokens
-{
-    XML_TOK_STYLES_NUMBER_STYLE,
-    XML_TOK_STYLES_CURRENCY_STYLE,
-    XML_TOK_STYLES_PERCENTAGE_STYLE,
-    XML_TOK_STYLES_DATE_STYLE,
-    XML_TOK_STYLES_TIME_STYLE,
-    XML_TOK_STYLES_BOOLEAN_STYLE,
-    XML_TOK_STYLES_TEXT_STYLE
-};
 
 enum SvXMLStyleTokens
 {
@@ -900,6 +890,8 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
             case XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT:
                 if ( sValue.getLength() > 0 )
                     aNumInfo.bDecReplace = sal_True;    // only a default string is supported
+                else
+                    aNumInfo.bVarDecimals = sal_True;   // empty replacement string: variable decimals
                 break;
             case XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS:
                 if ( SvXMLUnitConverter::convertNumber( nAttrVal, sValue, 0 ) )
@@ -1548,6 +1540,14 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
                 xub_StrLen  nErrPos = 0;
                 short       nType   = 0;
                 sal_Bool bOk = pFormatter->PutEntry( aFormatStr, nErrPos, nType, nIndex, nFormatLang );
+                if ( !bOk && nErrPos == 0 && aFormatStr != String(sFormat) )
+                {
+                    //  if the string was modified by PutEntry, look for an existing format
+                    //  with the modified string
+                    nIndex = pFormatter->GetEntryKey( aFormatStr, nFormatLang );
+                    if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND )
+                        bOk = sal_True;
+                }
                 if (!bOk)
                     nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
             }
@@ -1715,7 +1715,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     }
 
     sal_uInt16 nGenPrec = nPrec;
-    if ( rInfo.bDecReplace )
+    if ( rInfo.bDecReplace || rInfo.bVarDecimals )
         nGenPrec = 0;               // generate format without decimals...
 
     sal_Bool bGrouping = rInfo.bGrouping;
@@ -1762,7 +1762,10 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             if ( nFormatPos >= 0 && nInsertPos >= 0 )
             {
                 rtl::OUStringBuffer aContent( pObj->aText );
-                lcl_EnquoteIfNecessary( aContent, nType );
+                //  #107805# always quote embedded strings - even space would otherwise
+                //  be recognized as thousands separator in French.
+                aContent.insert( 0, (sal_Unicode) '"' );
+                aContent.append( (sal_Unicode) '"' );
 
                 aNumStr.Insert( String( aContent.makeStringAndClear() ), (xub_StrLen)nInsertPos );
             }
@@ -1771,11 +1774,14 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
 
     aFormatCode.append( aNumStr );
 
-    if ( rInfo.bDecReplace && nPrec )       // add decimal replacement (dashes)
+    if ( ( rInfo.bDecReplace || rInfo.bVarDecimals ) && nPrec )     // add decimal replacement (dashes)
     {
+        //  add dashes for explicit decimal replacement, # for variable decimals
+        sal_Unicode cAdd = rInfo.bDecReplace ? '-' : '#';
+
         aFormatCode.append( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
         for ( sal_uInt16 i=0; i<nPrec; i++)
-            aFormatCode.append( (sal_Unicode)'-' );
+            aFormatCode.append( cAdd );
     }
 
     //  add extra thousands separators for display factor
@@ -1785,7 +1791,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         //  test for 1.0 is just for optimization - nSepCount would be 0
 
         //  one separator for each factor of 1000
-        sal_Int32 nSepCount = (sal_Int32) SolarMath::Round( log10(rInfo.fDisplayFactor) / 3.0 );
+        sal_Int32 nSepCount = (sal_Int32) ::rtl::math::round( log10(rInfo.fDisplayFactor) / 3.0 );
         if ( nSepCount > 0 )
         {
             OUString aSep = pData->GetLocaleData( nFormatLang ).getNumThousandSep();
@@ -2107,6 +2113,11 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     pData = new SvXMLNumImpData( pFormatter );
 }
 
+SvXMLNumFmtHelper::SvXMLNumFmtHelper( SvNumberFormatter* pNumberFormatter )
+{
+    pData = new SvXMLNumImpData( pNumberFormatter );
+}
+
 SvXMLNumFmtHelper::~SvXMLNumFmtHelper()
 {
     //  remove temporary (volatile) formats from NumberFormatter
@@ -2140,6 +2151,11 @@ SvXMLStyleContext*  SvXMLNumFmtHelper::CreateChildContext( SvXMLImport& rImport,
 
     // return NULL if not a data style, caller must handle other elements
     return pContext;
+}
+
+const SvXMLTokenMap& SvXMLNumFmtHelper::GetStylesElemTokenMap()
+{
+    return pData->GetStylesElemTokenMap();
 }
 
 /*sal_uInt32 SvXMLNumFmtHelper::GetKeyForName( const rtl::OUString& rName )
