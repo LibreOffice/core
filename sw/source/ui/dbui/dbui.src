@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:51:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,8 @@ ModalDialog DLG_DBSELECTION
     Text[ hebrew ] = "Datenbankauswahl";
     Text[ hindi ] = "लेखासंचय चुनाव";
     Text[ slovak ] = "Výber databázy";
+    Text[ hungarian ] = "Adatbázis kiválasztása";
+    Text[ slovenian ] = "Izbor zbirke podatkov";
 };
  // DLG_PRINTMONITOR ------------------------------------------------------
 ModelessDialog DLG_PRINTMONITOR
@@ -168,7 +170,7 @@ ModelessDialog DLG_PRINTMONITOR
         Text [ english_us ] = "is being printed on" ;
         Text [ portuguese_brazilian ] = "est� sendo impresso em" ;
         Text [ swedish ] = "skrivs ut p�" ;
-        Text [ danish ] = "udskrives som" ;
+        Text [ danish ] = "udskrives p�" ;
         Text [ italian ] = "viene stampato su" ;
         Text [ spanish ] = "se est� imprimiendo en" ;
         Text [ french ] = "en cours d'impression sur" ;
@@ -191,6 +193,8 @@ ModelessDialog DLG_PRINTMONITOR
         Text[ hebrew ] = "wird ausgegeben als";
         Text[ hindi ] = "के दिन छपाई किया ";
         Text[ slovak ] = "sa tlačí na";
+        Text[ hungarian ] = "nyomtatás alatt a következő nyomtatón:";
+        Text[ slovenian ] = "se tiska na";
     };
     FixedText FT_SENDING
     {
@@ -232,6 +236,8 @@ ModelessDialog DLG_PRINTMONITOR
         TEXT[ hebrew ] = "wird versandt an";
         TEXT[ hindi ] = "के दिन भेजा";
         TEXT[ slovak ] = "sa posiela komu";
+        TEXT[ hungarian ] = "küldés:";
+        TEXT[ slovenian ] = "se pošilja";
     };
     FixedText FT_PRINTER
     {
@@ -302,12 +308,14 @@ ModelessDialog DLG_PRINTMONITOR
         Text[ hebrew ] = "Versenden-Monitor";
         Text[ hindi ] = "भेजो-मोनिटर";
         Text[ slovak ] = "Kontrola odosielania";
+        Text[ hungarian ] = "Küldések felügyelete";
+        Text[ slovenian ] = "Nadzornik pošiljanja";
     };
     Text [ portuguese ] = "Monitor de impress�o" ;
     Text [ english_us ] = "Print monitor" ;
     Text [ portuguese_brazilian ] = "Monitor de impress�o" ;
     Text [ swedish ] = "Skriv ut sk�rmbild" ;
-    Text [ danish ] = "Gem-monitor" ;
+    Text [ danish ] = "Udskriftsoversigt" ;
     Text [ italian ] = "Controllo stampa" ;
     Text [ spanish ] = "Monitor de impresi�n" ;
     Text [ french ] = "Moniteur d'impression" ;
@@ -329,6 +337,8 @@ ModelessDialog DLG_PRINTMONITOR
     Text[ hebrew ] = "Speichern-Monitor";
     Text[ hindi ] = "छपाई मोनिटर";
     Text[ slovak ] = "Monitorovanie tlače";
+    Text[ hungarian ] = "Nyomtatás felügyelete";
+    Text[ slovenian ] = "Nadzornik tiskanja";
 };
 
 String STR_DB_EMAIL
@@ -361,7 +371,11 @@ String STR_DB_EMAIL
     Text[ hebrew ] = "E-mail";
     Text[ hindi ] = "E-mail";
     Text[ slovak ] = "E-mail";
+    Text[ hungarian ] = "E-mail";
+    Text[ slovenian ] = "E-pošta";
 };
+
+
 
 
 
