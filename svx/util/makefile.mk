@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-10 10:49:15 $
+#   last change: $Author: mt $ $Date: 2002-07-16 10:51:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,8 @@ SHL1STDLIBS= \
             $(CPPUHELPERLIB)	\
             $(COMPHELPERLIB) \
             $(UCBHELPERLIB)	\
-            $(UNOTOOLSLIB)
+            $(UNOTOOLSLIB) \
+            $(ICUI18NLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=\
