@@ -10,7 +10,7 @@ UDK_3.1 {
         __1cJjvmaccessOVirtualMachineLAttachGuard2t5B6MrknDrtlJReference4n0B____v_; # jvmaccess::VirtualMachine::AttachGuard::AttachGuard #Nvariant 1(rtl::Reference< VirtualMachine > const &)
         __1cJjvmaccessOVirtualMachineLAttachGuard2T6M_v_; # jvmaccess::VirtualMachine::AttachGuard::~AttachGuard()
         __1cJjvmaccessOVirtualMachineLAttachGuard2T5B6M_v_; # jvmaccess::VirtualMachine::AttachGuard::~AttachGuard #Nvariant 1()
-        __1cJjvmaccessOVirtualMachine2t6MpnHJavaVM__lbpnHJNIEnv___v_; # jvmaccess::VirtualMachine::VirtualMachine(JavaVM *, jint, bool, JNIEnv *)
+        __1cJjvmaccessOVirtualMachine2t6MpnHJavaVM__ibpnHJNIEnv___v_; # jvmaccess::VirtualMachine::VirtualMachine(JavaVM *, jint, bool, JNIEnv *)
 
     local:
         *;
