@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasbitmaphelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:11:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,29 +104,29 @@ namespace vclcanvas
 
         void disposing();
 
-        ::drafts::com::sun::star::geometry::IntegerSize2D SAL_CALL getSize();
+        ::com::sun::star::geometry::IntegerSize2D SAL_CALL getSize();
 
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmapCanvas > SAL_CALL queryBitmapCanvas();
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > SAL_CALL queryBitmapCanvas();
 
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmap > SAL_CALL
-            getScaledBitmap( const ::drafts::com::sun::star::geometry::RealSize2D&  newSize,
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL
+            getScaledBitmap( const ::com::sun::star::geometry::RealSize2D&  newSize,
                              sal_Bool                                               beFast );
 
         ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
-            getData( const ::drafts::com::sun::star::geometry::IntegerRectangle2D& rect );
+            getData( const ::com::sun::star::geometry::IntegerRectangle2D& rect );
 
         void SAL_CALL setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&               data,
-                               const ::drafts::com::sun::star::geometry::IntegerRectangle2D&    rect );
+                               const ::com::sun::star::geometry::IntegerRectangle2D&    rect );
 
         void SAL_CALL setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&          color,
-                                const ::drafts::com::sun::star::geometry::IntegerPoint2D&   pos );
+                                const ::com::sun::star::geometry::IntegerPoint2D&   pos );
 
         ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
-            getPixel( const ::drafts::com::sun::star::geometry::IntegerPoint2D& pos );
+            getPixel( const ::com::sun::star::geometry::IntegerPoint2D& pos );
 
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmapPalette > SAL_CALL getPalette();
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapPalette > SAL_CALL getPalette();
 
-        ::drafts::com::sun::star::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout();
+        ::com::sun::star::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout();
 
         /// @internal
         BitmapEx getBitmap() const;
