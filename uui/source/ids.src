@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:53:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,7 +530,7 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ catalan ] = "Acci� no permesa: $(ARG1) i $(ARG2) s�n dispositius diferents";
         Text[ thai ] = "Action impossible: $(ARG1) and $(ARG2) are different devices (drives)";
-        Text[ czech ] = "Neproveditelná akce: $(ARG1) a $(ARG2) jsou různá zařízení";
+        Text[ czech ] = "Neproveditelná akce: $(ARG1) a $(ARG2) jsou různá zařízení (mechaniky)";
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה כי $(ARG1) ו $(ARG2) נמצאים על כוננים שונים‬";
         Text[ hindi ] = "कार्य असंभव: $(ARG1) और $(ARG2) अलग अलग साधन है (ड्रइव्स)";
         Text[ slovak ] = "Neuskutočniteľná akcia: $(ARG1) a $(ARG2) sú rôzne zariadenia";
@@ -1336,7 +1336,7 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "Folder $(ARG1) does not exist";
         Text[ catalan ] = "La carpeta $(ARG1) no existeix";
         Text[ thai ] = "ไม่มีโฟลเดอร์ $(ARG1) อยู่";
-        Text[ czech ] = "Složka $(ARG1) neexistuje";
+        Text[ czech ] = "Adresář $(ARG1) neexistuje";
         Text[ hebrew ] = "‮תקיית $(ARG1) לא קיימת‬";
         Text[ hindi ] = "$(ARG1) कोष्ठ अस्तित्व में नहीं है";
         Text[ slovak ] = "Priečinok $(ARG1) neexistuje";
@@ -1679,6 +1679,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Nelze vytvořit objekt v adresáři $(ARG2)";
         Text[ hebrew ] = "‮לא ניתן ליצור את העצם בספרית $(ARG2)‬";
         Text[ slovak ] = "Nie je možné vytvoriť objekt v adresári $(ARG2)";
+        Text[ hindi ] = "$(ARG2) डैरक्टरी में वस्तु को उत्पन्न नहीं कर सकते है";
     };
 
     String (ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE & ERRCODE_RES_MASK)
@@ -1775,6 +1776,8 @@ Resource RID_UUI_ERRHDL
     };
 
 };
+
+
 
 
 
