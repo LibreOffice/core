@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:41:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,12 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef DBA_CONTAINERMEDIATOR_HXX
+#include "ContainerMediator.hxx"
+#endif
+#ifndef DBACCESS_CORE_API_SINGLESELECTQUERYCOMPOSER_HXX
 #include "SingleSelectQueryComposer.hxx"
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -127,7 +132,6 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 using namespace ::dbtools;
-using namespace ::utl;
 
 //........................................................................
 namespace dbaccess
@@ -342,10 +346,10 @@ void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap) throw( SQ
 //==========================================================================
 DBG_NAME(OConnection)
 //--------------------------------------------------------------------------
-OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTablesConfig,const OConfigurationTreeRoot& _rCommitLocation,
-                         Reference< XConnection >& _rxMaster, const Reference< XMultiServiceFactory >& _rxORB)
+OConnection::OConnection(ODatabaseSource& _rDB
+                         , Reference< XConnection >& _rxMaster
+                         , const Reference< XMultiServiceFactory >& _rxORB)
             :OSubComponent(m_aMutex, static_cast< OWeakObject* >(&_rDB))
-            ,m_aQueries(*this, m_aMutex, static_cast< XNameContainer* >(&_rDB.m_aCommandDefinitions), _rDB.m_aCommandDefinitions.getConfigLocation().cloneAsRoot(), _rxORB, this)
                 // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
                 // container would do it's own refcounting, it would have to aquire m_pMutex
                 // same for tables
@@ -360,24 +364,33 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
     DBG_CTOR(OConnection,NULL);
     osl_incrementInterlockedCount(&m_refCount);
 
-    Reference< XProxyFactory > xProxyFactory(
-            _rxORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
-    Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster.get());
-    setDelegation(xAgg,m_refCount);
-    DBG_ASSERT(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");
-    if (!m_xProxyConnection->queryAggregation(getCppuType( (Reference<XWarningsSupplier>*)0)).hasValue())
+    try
     {
-        DBG_ERROR("OConnection::OConnection : the connection is assumed to be a warnings supplier ! Won't use it !");
-        // as we're the owner of the conn and don't want to use it -> dispose
-        Reference< XComponent > xConnComp;
-        ::comphelper::query_aggregation(m_xProxyConnection,xConnComp);
-        if (xConnComp.is())
-            xConnComp->dispose();
+        Reference< XProxyFactory > xProxyFactory(
+                _rxORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
+        Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster.get());
+        setDelegation(xAgg,m_refCount);
+        DBG_ASSERT(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");
+        if (!m_xProxyConnection->queryAggregation(getCppuType( (Reference<XWarningsSupplier>*)0)).hasValue())
+        {
+            DBG_ERROR("OConnection::OConnection : the connection is assumed to be a warnings supplier ! Won't use it !");
+            // as we're the owner of the conn and don't want to use it -> dispose
+            Reference< XComponent > xConnComp;
+            ::comphelper::query_aggregation(m_xProxyConnection,xConnComp);
+            if (xConnComp.is())
+                xConnComp->dispose();
 
-        m_xMasterConnection = NULL;
+            m_xMasterConnection = NULL;
+        }
+    }
+    catch(const Exception&)
+    {
     }
     try
     {
+        m_pQueries = new OQueryContainer(Reference< XNameContainer >(_rDB.getQueryDefinitions( ),UNO_QUERY), this,_rxORB, this);
+        m_xQueries = m_pQueries;
+
         sal_Bool bCase = sal_True;
         Reference<XDatabaseMetaData> xMeta;
         try
@@ -388,7 +401,9 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
         catch(SQLException&)
         {
         }
-        m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex,this, bCase, this,this);
+        Reference< XNameContainer > xDefNames(_rDB.getTables(),UNO_QUERY);
+        m_pTables = new OTableContainer(*this, m_aMutex,this, bCase, xDefNames,this,this);
+
         // check if we supports types
         if ( xMeta.is() )
         {
@@ -412,7 +427,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
             {
                 Reference< XViewsSupplier > xMaster;
                 m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(xMeta->getURL(),m_xMasterConnection,m_xORB);
-                xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
+                xMaster.set(m_xMasterTables,UNO_QUERY);
 
                 if (xMaster.is() && xMaster->getViews().is())
                     m_bSupportsViews = sal_True;
@@ -428,8 +443,6 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
     catch(const SQLException&)
     {
     }
-    // initialize the queries
-    DBG_ASSERT(_rDB.m_aConfigurationNode.isValid(), "OConnection::OConnection : invalid configuration location of my parent !");
     osl_decrementInterlockedCount( &m_refCount );
 }
 
@@ -578,33 +591,39 @@ void OConnection::disposing()
     MutexGuard aGuard(m_aMutex);
 
     OSubComponent::disposing();
-    for (OWeakRefArrayIterator i = m_aStatements.begin(); m_aStatements.end() != i; i++)
+    OConnectionWrapper::disposing();
+
+    for (OWeakRefArrayIterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
     {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
+        Reference<XComponent> xComp(i->get(),UNO_QUERY);
+        ::comphelper::disposeComponent(xComp);
     }
     m_aStatements.clear();
     m_xMasterTables = NULL;
-
 
     if(m_pTables)
         m_pTables->dispose();
     if(m_pViews)
         m_pViews->dispose();
-    m_aQueries.dispose();
 
-    for (OWeakRefArrayIterator j = m_aComposers.begin(); m_aComposers.end() != j; j++)
+    ::comphelper::disposeComponent(m_xQueries);
+
+    for (OWeakRefArrayIterator j = m_aComposers.begin(); m_aComposers.end() != j; ++j)
     {
-        Reference< XComponent > xComp(j->get(), UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
+        Reference<XComponent> xComp(j->get(),UNO_QUERY);
+        ::comphelper::disposeComponent(xComp);
     }
 
     m_aComposers.clear();
 
-    if (m_xMasterConnection.is())
-        m_xMasterConnection->close();
+    try
+    {
+        if (m_xMasterConnection.is())
+            m_xMasterConnection->close();
+    }
+    catch(Exception)
+    {
+    }
     m_xMasterConnection = NULL;
 }
 
@@ -629,11 +648,6 @@ Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( Ru
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-
-    // get the supplier of the database
-    ODatabaseSource* pParent = NULL;
-    if (!comphelper::getImplementation(pParent, m_xParent))
-        throw RuntimeException();
 
     //  Reference< XNumberFormatsSupplier >  xSupplier = pParent->getNumberFormatsSupplier();
     Reference< XSQLQueryComposer >  xComposer(new OQueryComposer(getTables(),this, m_xORB));
@@ -686,7 +700,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
                     Reference<XDatabaseMetaData> xMeta = getMetaData();
                     if ( xMeta.is() )
                         m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(xMeta->getURL(),m_xMasterConnection,m_xORB);
-                    xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
+                    xMaster.set(m_xMasterTables,UNO_QUERY);
                 }
                 catch(SQLException&)
                 {
@@ -730,7 +744,7 @@ Reference< XNameAccess >  OConnection::getQueries(void) throw( RuntimeException 
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    return static_cast<XNameAccess*>(&m_aQueries);
+    return m_xQueries;
 }
 
 // ::com::sun::star::sdb::XCommandPreparation
@@ -744,14 +758,17 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::r
     switch (commandType)
     {
         case CommandType::TABLE:
-            aStatement = rtl::OUString::createFromAscii("SELECT * FROM ");
-            aStatement += ::dbtools::quoteTableName(getMetaData(), command,::dbtools::eInDataManipulation);
+            {
+                sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(*this,PROPERTY_USECATALOGINSELECT,sal_True);
+                sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(*this,PROPERTY_USESCHEMAINSELECT,sal_True);
+                aStatement = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
+                aStatement += ::dbtools::quoteTableName(getMetaData(), command,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+            }
             break;
         case CommandType::QUERY:
-            if (m_aQueries.hasByName(command))
+            if ( m_xQueries->hasByName(command) )
             {
-                Reference< XPropertySet > xQuery;
-                ::cppu::extractInterface(xQuery,m_aQueries.getByName(command));
+                Reference< XPropertySet > xQuery(m_xQueries->getByName(command),UNO_QUERY);
                 xQuery->getPropertyValue(PROPERTY_COMMAND) >>= aStatement;
             }
             break;
@@ -760,45 +777,6 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::r
     }
     // TODO EscapeProcessing
     return prepareStatement(aStatement);
-}
-//--------------------------------------------------------------------------
-Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
-{
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-// -----------------------------------------------------------------------------
-// com::sun::star::XUnoTunnel
-sal_Int64 SAL_CALL OConnection::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
-{
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return 0;
-}
-// -----------------------------------------------------------------------------
-void OConnection::flushMembers()
-{
-    if(m_pTables)
-        m_pTables->flush();
-    m_aQueries.flush();
-}
-// -----------------------------------------------------------------------------
-void OConnection::setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode)
-{
-    if(m_pTables)
-        m_pTables->setNewConfigNode(_aConfigTreeNode);
-
-    m_aQueries.setNewConfigNode(_aConfigTreeNode.openNode(CONFIGKEY_DBLINK_QUERYDOCUMENTS).cloneAsRoot());
 }
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUString& _sServiceSpecifier ) throw (Exception, RuntimeException)
