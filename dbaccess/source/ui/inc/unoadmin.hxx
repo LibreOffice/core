@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 12:34:56 $
+ *  last change: $Author: fs $ $Date: 2001-07-30 11:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@ namespace dbaui
 {
 //.........................................................................
 
+class ODbAdminDialog;
+
+//=========================================================================
+//= ODatabaseAdministrationDialog
 //=========================================================================
 typedef ::svt::OGenericUnoDialog ODatabaseAdministrationDialogBase;
 class ODatabaseAdministrationDialog
@@ -95,6 +99,7 @@ protected:
     ODsnTypeCollection*     m_pCollection;          // datasource type collection
 
     ::rtl::OUString         m_sInitialSelection;
+    ::rtl::OUString         m_sOperationMode;
 
 protected:
     ODatabaseAdministrationDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
@@ -126,6 +131,9 @@ protected:
     virtual Dialog* createDialog(Window* _pParent);
     virtual void destroyDialog();
     virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
+
+private:
+    void    implSetOperationMode(ODbAdminDialog* _pDialog);
 };
 
 //.........................................................................
@@ -137,6 +145,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/06/18 12:34:56  fs
+ *  #88389# OGenericUnoDialog moved to svtools
+ *
  *  Revision 1.4  2001/05/17 09:16:15  fs
  *  #86511# hold the type collection as pointer, not as object - allows construction in createDialog, where it can be guarded by the solar mutex
  *
