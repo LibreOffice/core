@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2000-11-17 13:30:08 $
+ *  last change: $Author: ssa $ $Date: 2001-05-18 07:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,8 +302,15 @@ VirtualDevice::~VirtualDevice()
     {
         virdevInterfacePair aPair( mpVirDev->GetInterface(), mpGraphics->GetInterface() );
         CHECK_FOR_RVPSYNC_NORMAL();
-        aPair.first->Create( 0, 0, 0, 0 );
-        pRemoteVirdevCache->putInterface( aPair );
+        try
+        {
+            aPair.first->Create( 0, 0, 0, 0 );
+            pRemoteVirdevCache->putInterface( aPair );
+        }
+        catch ( RuntimeException &e )
+        {
+            rvpExceptionHandler();
+        }
     }
 
     mpGraphics->SetInterface( REF( NMSP_CLIENT::XRmOutputDevice )() );
