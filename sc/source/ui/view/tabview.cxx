@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-18 16:49:51 $
+ *  last change: $Author: nn $ $Date: 2001-07-09 16:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,7 @@
 #include "viewutil.hxx"
 #include "globstr.hrc"
 #include "drawview.hxx"
+#include "docsh.hxx"
 
 #include <string>
 #include <algorithm>
@@ -482,6 +483,9 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
         bHScroll = bVScroll = FALSE;
     else if ( eMode == SCROLLING_YES || eMode == SCROLLING_AUTO )   //! Auto ???
         bHScroll = bVScroll = TRUE;
+
+    if ( aViewData.GetDocShell()->IsPreview() )
+        bHScroll = bVScroll = bTabControl = bHeaders = bOutlMode = bHOutline = bVOutline = FALSE;
 
     long nBarX = 0;
     long nBarY = 0;
@@ -1612,6 +1616,9 @@ void ScTabView::UpdateShow()
         bHScrollMode = bVScrollMode = FALSE;
     else if ( eMode == SCROLLING_YES || eMode == SCROLLING_AUTO )   //! Auto ???
         bHScrollMode = bVScrollMode = TRUE;
+
+    if ( aViewData.GetDocShell()->IsPreview() )
+        bHScrollMode = bVScrollMode = bTabMode = bHeader = bOutlMode = bHOutline = bVOutline = FALSE;
 
         //
         //  Windows anlegen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:17:56 $
+ *  last change: $Author: nn $ $Date: 2001-07-09 16:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,8 @@ void ScTabViewShell::WriteUserDataSequence (uno::Sequence < beans::PropertyValue
 
 void __EXPORT ScTabViewShell::ReadUserData(const String& rData, BOOL bBrowse)
 {
-    DoReadUserData( rData );
+    if ( !GetViewData()->GetDocShell()->IsPreview() )
+        DoReadUserData( rData );
 }
 
 void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::PropertyValue >& rSettings, sal_Bool bBrowse )
@@ -1679,9 +1680,17 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
 
     Construct();
 
-    Fraction aFract( rAppOpt.GetZoom(), 100 );
-    SetZoom( aFract, aFract );
-    SetZoomType( rAppOpt.GetZoomType() );
+    if ( GetViewData()->GetDocShell()->IsPreview() )
+    {
+        //  preview for template dialog: always show whole page
+        SetZoomType( SVX_ZOOM_WHOLEPAGE );      // zoom value is recalculated at next Resize
+    }
+    else
+    {
+        Fraction aFract( rAppOpt.GetZoom(), 100 );
+        SetZoom( aFract, aFract );
+        SetZoomType( rAppOpt.GetZoomType() );
+    }
 
     uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame()->GetFrameInterface();
     if (xFrame.is())
