@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:11:28 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace xmloff
 
 #define MAP_ASCII( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TEXT, context }
 #define MAP_CONST( name, prefix, token, type, context )  { name.ascii, name.length, prefix, token, type|XML_TYPE_PROP_TEXT, context }
+#define MAP_CONST_P( name, prefix, token, type, context )  { name.ascii, name.length,   prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context }
 #define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0 }
 
     XMLPropertyMapEntry* getControlStylePropertyMap_Access( )
@@ -104,7 +105,7 @@ namespace xmloff
         static XMLPropertyMapEntry aControlStyleProperties[] =
         {
             MAP_CONST( PROPERTY_BACKGROUNDCOLOR, XML_NAMESPACE_FO,      XML_BACKGROUND_COLOR,       XML_TYPE_COLOR, 0 ),
-            MAP_CONST( PROPERTY_ALIGN,          XML_NAMESPACE_STYLE,    XML_TEXT_ALIGN,             XML_TYPE_TEXT_ALIGN, 0 ),
+            MAP_CONST_P( PROPERTY_ALIGN,          XML_NAMESPACE_FO,       XML_TEXT_ALIGN,             XML_TYPE_TEXT_ALIGN, 0 ),
             MAP_CONST( PROPERTY_BORDER,         XML_NAMESPACE_FO,       XML_BORDER,                 XML_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
             MAP_ASCII( "FontCharWidth",         XML_NAMESPACE_STYLE,    XML_FONT_CHAR_WIDTH,        XML_TYPE_NUMBER16, 0 ),
             MAP_ASCII( "FontCharset",           XML_NAMESPACE_STYLE,    XML_FONT_CHARSET,           XML_TYPE_TEXT_FONTENCODING, 0 ),
