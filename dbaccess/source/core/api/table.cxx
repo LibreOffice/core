@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 09:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,26 +213,25 @@ void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
             if (xCurrentRow.is())
             {
                 ::rtl::OUString sUserWorkingFor = m_xMetaData->getUserName();
-                xPrivileges->next();
+                ;
                     // after creation the set is positioned before the first record, per definitionem
 
                 ::rtl::OUString sPrivilege, sGrantee;
-                while (!xPrivileges->isAfterLast())
+                while (xPrivileges->next())
                 {
 #ifdef DBG_UTIL
                     ::rtl::OUString sCat, sSchema, sName, sGrantor, sGrantable;
-                    sCat = xCurrentRow->getString(1);
-                    sSchema = xCurrentRow->getString(2);
-                    sName = xCurrentRow->getString(3);
-                    sGrantor = xCurrentRow->getString(4);
+                    sCat        = xCurrentRow->getString(1);
+                    sSchema     = xCurrentRow->getString(2);
+                    sName       = xCurrentRow->getString(3);
+                    sGrantor    = xCurrentRow->getString(4);
 #endif
-                    sGrantee = xCurrentRow->getString(5);
-                    sPrivilege = xCurrentRow->getString(6);
+                    sGrantee    = xCurrentRow->getString(5);
+                    sPrivilege  = xCurrentRow->getString(6);
 #ifdef DBG_UTIL
-                    sGrantable = xCurrentRow->getString(7);
+                    sGrantable  = xCurrentRow->getString(7);
 #endif
 
-                    xPrivileges->next();
                     if (sUserWorkingFor != sGrantee)
                         continue;
 
@@ -289,6 +288,9 @@ void ODBTable::construct()
 
     registerMayBeVoidProperty(PROPERTY_TEXTCOLOR, PROPERTY_ID_TEXTCOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
                     &m_aTextColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+
+    registerProperty(PROPERTY_PRIVILEGES, PROPERTY_ID_PRIVILEGES, PropertyAttribute::BOUND ,
+                    &m_nPrivileges, ::getCppuType(static_cast<sal_Int32*>(NULL)));
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
