@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-27 09:59:35 $
+ *  last change: $Author: mtg $ $Date: 2001-07-31 09:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2099,19 +2099,13 @@ namespace xmloff { namespace token {
     // gives all allocated memory for OUString* back
     void ResetTokens()
     {
-        sal_uInt16 i(1);
-        XMLTokenEntry* pToken = &aTokenList[i];
-        while (pToken->pChar)
+        for (sal_Int16 i=0, nEnd = sizeof ( aTokenList ) / sizeof ( XMLTokenEntry );
+             i < nEnd;
+             i++)
         {
-            if (pToken->pOUString)
-            {
-                delete pToken->pOUString;
-                pToken->pOUString = NULL;
-            }
-            i++;
-            pToken = &aTokenList[i];
+            delete aTokenList[i].pOUString;
+            aTokenList[i].pOUString = NULL;
         }
     }
-
-
-} }
+}
+}
