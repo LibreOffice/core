@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:36:41 $
+#   last change: $Author: kz $ $Date: 2004-06-11 12:16:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,32 +74,11 @@ CDEFS+=-D_TOOLS_STRINGLIST
 
 # --- Files --------------------------------------------------------
 
-#APP2TARGET=	include
-#APP2OBJS=   $(OBJ)$/include.obj
-#APP2LIBS=	$(LB)$/bootstrp.lib
+APP1TARGET= txtrepl
+APP1OBJS= $(OBJ)$/replace.obj
+APP1STDLIBS=$(TOOLSLIB)
 
-#APP4TARGET=	readmap
-#APP4OBJS=   $(OBJ)$/readmap.obj $(OBJ)$/deco.obj
-#APP4STDLIBS=$(STATIC_LIBS) $(LIBCIMT)
-#APP4LIBS=	$(LB)$/bootstrp.lib
-
-#APP5TARGET=	deco
-#APP5OBJS=   $(OBJ)$/deco.obj $(OBJ)$/deco2.obj
-#APP5STDLIBS=$(LIBCIMT)
-#APP5LIBS=	$(LB)$/bootstrp.lib
-
-#APP6TARGET= urlconv
-#APP6OBJS= $(OBJ)$/urlconv.obj
-#APP6STDLIBS=\
-#    $(TOOLSLIB)	\
-#	$(SALLIB)
-
-#APP7TARGET= replace
-APP7TARGET= txtrepl
-APP7OBJS= $(OBJ)$/replace.obj
-APP7STDLIBS=$(TOOLSLIB)
-
-DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
+DEPOBJFILES		=	$(APP1OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
