@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 11:38:45 $
+ *  last change: $Author: ka $ $Date: 2001-06-18 15:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,17 +285,28 @@ PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     }
     else if( rGraphic.GetType() != GRAPHIC_NONE )
     {
+        const Graphic   aTmpGrf( rGraphic.GetGDIMetaFile().GetMonochromeMtf( Color( COL_BLACK ) ) );
         VirtualDevice   aVDev;
-        const MapMode   aMap( rGraphic.GetPrefMapMode() );
-        const Size      aPrefSize( rGraphic.GetPrefSize() );
-        const Point     aNullPt;
+        Size            aSizePix( aVDev.LogicToPixel( aTmpGrf.GetPrefSize(), aTmpGrf.GetPrefMapMode() ) );
 
-        if ( aVDev.SetOutputSizePixel( aVDev.LogicToPixel( Rectangle( aNullPt, aPrefSize ), aMap ).GetSize() ) )
+        if( aSizePix.Width() && aSizePix.Height() && ( aSizePix.Width() > 512 || aSizePix.Height() > 512 ) )
         {
-            rGraphic.Draw( &aVDev, aNullPt, aVDev.LogicToPixel( aPrefSize, aMap ) );
-            aBmp = aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() );
-            nContourFlags |= XOUTBMP_CONTOUR_EDGEDETECT;
+            double fWH = (double) aSizePix.Width() / aSizePix.Height();
+
+            if( fWH <= 1.0 )
+                aSizePix.Width() = FRound( ( aSizePix.Height() = 512 ) * fWH );
+            else
+                aSizePix.Height() = FRound( ( aSizePix.Width() = 512 ) / fWH );
         }
+
+        if( aVDev.SetOutputSizePixel( aSizePix ) )
+        {
+            const Point aPt;
+            aTmpGrf.Draw( &aVDev, aPt, aSizePix );
+            aBmp = aVDev.GetBitmap( aPt, aSizePix );
+        }
+
+        nContourFlags |= XOUTBMP_CONTOUR_EDGEDETECT;
     }
 
     aBmp.SetPrefSize( rGraphic.GetPrefSize() );
