@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_javafilter.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:09:35 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 10:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,6 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Xmlfa, xmlfa )
-
-STD_UNO_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
-
 File gid_File_Oo_Office_Filter_Palm_Pkg
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -107,7 +103,5 @@ STD_JAR_FILE( gid_File_Jar_Pocketword, pocketword )
 STD_JAR_FILE( gid_File_Jar_Xflatxml, XFlatXml )
 STD_JAR_FILE( gid_File_Jar_Xmerge, xmerge )
 STD_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
-STD_JAR_FILE( gid_File_Jar_Xsltfilter, XSLTFilter )
-STD_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
 
 #endif
