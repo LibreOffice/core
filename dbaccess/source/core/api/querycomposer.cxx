@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,12 +368,12 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
     ::rtl::OUString aErrorMsg;
     m_pSqlParseNode = m_aSqlParser.parseTree(aErrorMsg,m_aQuery);
     if(!m_pSqlParseNode)
-        throw SQLException();
+        throw SQLException(aErrorMsg,*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
 
     m_aSqlIterator.setParseTree(m_pSqlParseNode);
     m_aSqlIterator.traverseAll();
     if( m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT && m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT_COUNT)
-        throw SQLException();
+        throw SQLException(::rtl::OUString::createFromAscii("No select statement!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
 
     m_aWorkSql = STR_SELECT;
     m_pSqlParseNode->getChild(1)->parseNodeToStr(m_aWorkSql,m_xConnection->getMetaData());
@@ -529,7 +529,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     column->getPropertyValue(PROPERTY_TYPE) >>= nType;
     sal_Int32 nSearchable = dbtools::getSearchColumnFlag(m_xConnection,nType);
     if(nSearchable == ColumnSearch::NONE)
-        throw SQLException();
+        throw SQLException(::rtl::OUString::createFromAscii("Column not searchable!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -623,7 +623,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
     ::rtl::OUString aName;
     column->getPropertyValue(PROPERTY_NAME) >>= aName;
     if(!m_xConnection->getMetaData()->supportsOrderByUnrelated() && !m_pColumns->hasByName(aName))
-        throw SQLException();
+        throw SQLException(::rtl::OUString::createFromAscii("Column not in select clause!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
 
     // filter anhaengen
     // select ohne where und order by aufbauen
