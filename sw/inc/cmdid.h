@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-10-16 11:12:11 $
+ *  last change: $Author: mtg $ $Date: 2001-10-24 17:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,6 +892,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_ACTUAL_SIZE                  (FN_EXTRA2 + 85)
 #define FN_UNO_GRAPHIC_U_R_L                (FN_EXTRA2 + 86)
 #define FN_UNO_GRAPHIC_FILTER               (FN_EXTRA2 + 87)
+#define FN_UNO_CELL_NAME                    (FN_EXTRA2 + 88)
 
 /*--------------------------------------------------------------------
     Bereich: Fenster
