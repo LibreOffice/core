@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-05 12:00:53 $
+ *  last change: $Author: fs $ $Date: 2002-09-06 09:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,11 @@
 #include "svtools.hrc"
 #endif
 
+// #102891# --------------------
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+
 #define NODE_BMP_TABDIST_NOTVALID -2000000
 
 Image   SvImpLBox::s_aDefCollapsed;
@@ -104,6 +109,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     aOutputSize( 0,0 ),
     aSelEng( pLBView, (FunctionSet*)0 ),
     aFctSet( this, &aSelEng, pLBView ),
+    pIntlWrapper( NULL ), // #102891# -----------------------
     pTabBar(0)
 {
     pView = pLBView;
@@ -165,6 +171,29 @@ SvImpLBox::~SvImpLBox()
 {
     aEditTimer.Stop();
     StopUserEvent();
+
+    // #102891# ---------------------
+    if( pIntlWrapper )
+        delete pIntlWrapper;
+}
+
+// #102891# --------------------
+void SvImpLBox::UpdateIntlWrapper()
+{
+    const ::com::sun::star::lang::Locale & aNewLocale = Application::GetSettings().GetLocale();
+    if( !pIntlWrapper )
+        pIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), aNewLocale );
+    else
+    {
+        const ::com::sun::star::lang::Locale &aLocale = pIntlWrapper->getLocale();
+        if( aLocale.Language != aNewLocale.Language || // different Locale from the older one
+            aLocale.Country != aNewLocale.Country ||
+            aLocale.Variant != aNewLocale.Variant )
+        {
+            delete pIntlWrapper;
+            pIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), aNewLocale );
+        }
+    }
 }
 
 void SvImpLBox::SetWindowBits( WinBits nWinStyle )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 13:21:14 $
+ *  last change: $Author: fs $ $Date: 2002-09-06 09:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #endif
 #ifndef _VCL_VCLEVENT_HXX
 #include <vcl/vclevent.hxx>
+#endif
+// #102891# ----------------
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
 #endif
 
 class SvTreeListBox;
@@ -192,6 +196,10 @@ private:
 
     Point               aEditClickPos;
     Timer               aEditTimer;
+
+    // #102891# -------------------
+    IntlWrapper *       pIntlWrapper;
+
     DECL_LINK( EditTimerCall, Timer * );
 
     DECL_LINK( BeginDragHdl, void* );
@@ -262,6 +270,10 @@ private:
                             { return IsExpandable() && !pView->IsExpanded( pCursor ); }
 
     static  void        implInitDefaultNodeImages();
+
+    // #102891# -------------------
+    void                UpdateIntlWrapper();
+
 public:
     SvImpLBox( SvTreeListBox* pView, SvLBoxTreeList*, WinBits nWinStyle );
     ~SvImpLBox();
