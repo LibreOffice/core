@@ -2,9 +2,9 @@
  *
  *  $RCSfile: activity.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:11:46 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,17 @@ namespace presentation
             */
             virtual bool perform() = 0;
 
+            /** Calculates whether the activity lags time.
+
+                If this method returns a time lag greater than 0.0,
+                the ActivitiesQueue will adjust the global slideshow
+                time, by subtracting the given amount of lag.
+
+                @return time lag or 0.0. Value must be greater or
+                equal than zero.
+            */
+            virtual double calcTimeLag() const = 0;
+
             /** Query whether this activity is still continuing
 
                 @return true, if this activity still
@@ -114,13 +125,15 @@ namespace presentation
              */
             virtual bool needsScreenUpdate() const = 0;
 
-            /** End the activity prematurely
+            /** Notifies the Activity that it has now left the
+                ActivitiesQueue
 
-                This method ends the activity prematurely, i.e. before
-                time or number of iterations is reached. The next time
-                perform() or isActive() are called, false is returned.
+                Use this method to react on the queue removal
+                event. For animated shapes, this is e.g. used to
+                switch back to the non-sprite presentation mode of the
+                shape.
              */
-            virtual void end() = 0;
+            virtual void dequeued() = 0;
         };
 
         typedef ::boost::shared_ptr< Activity > ActivitySharedPtr;
