@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dg $ $Date: 2001-01-29 08:47:27 $
+ *  last change: $Author: lla $ $Date: 2001-02-01 15:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,10 +200,11 @@ namespace configmgr
         m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
         m_xDefaultOptions->setDefaultUser(sDefaultUser);
 
-        OProviderImplDisposingListener *pListener = new OProviderImplDisposingListener(*this);
+        OProviderImplDisposingListener *pListener = new OProviderImplDisposingListener(this);
         m_xEventListener = pListener;
 
         uno::Reference<com::sun::star::lang::XComponent> xComponent(_rModule.getServiceManager(), uno::UNO_QUERY);
+        m_xComponent = xComponent;
         if (xComponent.is())
         {
             xComponent->addEventListener(m_xEventListener);
@@ -217,6 +218,12 @@ namespace configmgr
         delete m_pNewProviders;
         m_pTreeMgr->release();
         m_pTreeMgr = NULL;
+
+        // Second fall, Providerimpl will be destroyed befor ServiceMgr send disposing
+        if (m_xEventListener.is() && m_xComponent.is())
+        {
+            m_xComponent->removeEventListener(m_xEventListener);
+        }
     }
 
     // --------------------------------- disposing ---------------------------------
@@ -224,7 +231,18 @@ namespace configmgr
     void SAL_CALL OProviderImpl::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
     {
         // stop lasy writing
-        m_pTreeMgr->disableAsync();
+        if (m_pTreeMgr)
+        {
+            m_pTreeMgr->disableAsync();
+
+            // first fall, ServiceMgr send disposing
+            // if (m_xComponent.is())
+            // {
+            //     m_xComponent->removeEventListener(m_xEventListener);
+            // }
+            m_xComponent = NULL;
+            m_xEventListener = NULL;
+        }
     }
 
     //-----------------------------------------------------------------------------
