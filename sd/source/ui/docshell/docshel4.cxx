@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:47:10 $
+ *  last change: $Author: ka $ $Date: 2002-07-26 08:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,22 +210,7 @@ SfxPrinter* SdDrawDocShell::GetPrinter(BOOL bCreate)
         MapMode aMM (pPrinter->GetMapMode());
         aMM.SetMapUnit(MAP_100TH_MM);
         pPrinter->SetMapMode(aMM);
-
-        // der Drawing Engine den neuen Printer als Referenz-Device setzen
-        if (pDoc)
-        {
-            pDoc->SetRefDevice(pPrinter);
-
-            SdOutliner* pOutl = pDoc->GetOutliner(FALSE);
-
-            if (pOutl)
-                pOutl->SetRefDevice(pPrinter);
-
-            SdOutliner* pInternalOutl = pDoc->GetInternalOutliner(FALSE);
-
-            if (pInternalOutl)
-                pInternalOutl->SetRefDevice(pPrinter);
-        }
+        UpdateRefDevice();
     }
     return pPrinter;
 }
@@ -257,24 +242,8 @@ void SdDrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
     pFontList = new FontList( GetPrinter(TRUE), Application::GetDefaultDevice(), FALSE );
     SvxFontListItem aFontListItem( pFontList );
     PutItem( aFontListItem );
-
-    // der Drawing Engine den neuen Printer als Referenz-Device setzen
-    if (pDoc)
-    {
-        pDoc->SetRefDevice(pPrinter);
-
-        SdOutliner* pOutl = pDoc->GetOutliner(FALSE);
-
-        if (pOutl)
-            pOutl->SetRefDevice(pPrinter);
-
-        SdOutliner* pInternalOutl = pDoc->GetInternalOutliner(FALSE);
-
-        if (pInternalOutl)
-            pInternalOutl->SetRefDevice(pPrinter);
-    }
+    UpdateRefDevice();
 }
-
 
 /*************************************************************************
 |*
@@ -303,6 +272,30 @@ void SdDrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
     }
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+void SdDrawDocShell::UpdateRefDevice()
+{
+    if( pDoc )
+    {
+        OutputDevice* pRefDevice = SD_MOD()->IsPrinterRefDevice() ? pPrinter : SD_MOD()->GetRefDevice( *this );
+
+        pDoc->SetRefDevice( pRefDevice );
+
+        SdOutliner* pOutl = pDoc->GetOutliner( FALSE );
+
+        if( pOutl )
+            pOutl->SetRefDevice( pRefDevice );
+
+        SdOutliner* pInternalOutl = pDoc->GetInternalOutliner( FALSE );
+
+        if( pInternalOutl )
+            pInternalOutl->SetRefDevice( pRefDevice );
+    }
+}
 
 /*************************************************************************
 |*

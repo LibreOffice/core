@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-23 10:41:58 $
+ *  last change: $Author: ka $ $Date: 2002-07-26 08:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ class SdDrawDocShell;
 class SvNumberFormatter;
 class SfxErrorHandler;
 class SdView;
+class OutputDevice;
 
 // ----------------------
 // - SdOptionStreamMode -
@@ -129,6 +130,7 @@ protected:
     BOOL                    bAutoSave;
     BOOL                    bWaterCan;
     SfxErrorHandler*        mpErrorHdl;
+    OutputDevice*           mpRefDevice;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -167,6 +169,9 @@ public:
 
     SvxSearchItem*          GetSearchItem() { return (pSearchItem); }
     void                    SetSearchItem(SvxSearchItem* pItem) { pSearchItem = pItem; }
+
+    OutputDevice*           GetRefDevice( SdDrawDocShell& rDocShell );
+    sal_Bool                IsPrinterRefDevice() const;
 
     SvNumberFormatter*      GetNumberFormatter();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: aw $ $Date: 2002-04-26 12:17:10 $
+ *  last change: $Author: ka $ $Date: 2002-07-26 08:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,8 +237,7 @@ SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
             pOutliner->OverwriteLevel0Bullet( aFormat );
         }
 
-        SfxPrinter* pPrinter = pDocSh->GetPrinter(TRUE);
-        pOutliner->SetRefDevice(pPrinter);
+        pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
         ULONG nWidth = OUTLINE_PAPERWIDTH;
         pOutliner->SetPaperSize(Size(nWidth, 4000000000));
     }
@@ -1109,8 +1108,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
         pTempLiner->SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
 
         // Referenz-Device setzen
-        SfxPrinter* pPrinter = pDocSh->GetPrinter(TRUE);
-        pTempLiner->SetRefDevice(pPrinter);
+        pTempLiner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
         SfxStyleSheetBasePool* pSPool   = pDoc->GetStyleSheetPool();
         pTempLiner->SetMinDepth(0);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-25 14:43:27 $
+ *  last change: $Author: ka $ $Date: 2002-07-26 08:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2702,8 +2702,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner,
         {
             SfxItemPool* pPool = ((SdDrawDocument*) GetModel())->GetDrawOutliner().GetEmptyItemSet().GetPool();
             pOutl = new Outliner( pPool, OUTLINERMODE_OUTLINEOBJECT );
-            pOutl->SetRefDevice( ((SdDrawDocument*) GetModel())->GetDocSh()
-                                 ->GetPrinter(TRUE) );
+            pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *( (SdDrawDocument*) GetModel() )->GetDocSh() ) );
             pOutl->SetEditTextObjectPool(pPool);
             pOutl->SetStyleSheetPool((SfxStyleSheetPool*)GetModel()->GetStyleSheetPool());
             pOutl->SetMinDepth(0);

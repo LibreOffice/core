@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-09 08:05:15 $
+ *  last change: $Author: ka $ $Date: 2002-07-26 08:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,8 +594,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         pOutliner->SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
 
         // Referenz-Device setzen
-        SfxPrinter* pPrinter = pDocSh->GetPrinter(TRUE);
-        pOutliner->SetRefDevice(pPrinter);
+        pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
 
         SdPage* pPage = ((SdDrawViewShell*)pViewShell)->GetActualPage();
         aLayoutName = pPage->GetLayoutName();
@@ -742,8 +741,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pDoc->GetStyleSheetPool());
 
     // Referenz-Device setzen
-    SfxPrinter* pPrinter = pDocSh->GetPrinter(TRUE);
-    pOutliner->SetRefDevice(pPrinter);
+    pOutliner->SetRefDevice(SD_MOD()->GetRefDevice( *pDocSh ));
     pOutliner->SetPaperSize(Size(0x7fffffff, 0x7fffffff));
 
     SvStream* pStream = pMedium->GetInStream();

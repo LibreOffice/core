@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-23 10:43:51 $
+ *  last change: $Author: ka $ $Date: 2002-07-26 08:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
@@ -82,6 +85,9 @@
 #endif
 #ifndef _SFXOBJFACE_HXX //autogen
 #include <sfx2/objface.hxx>
+#endif
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
 #endif
 #ifndef _SVX_PSZCTRL_HXX //autogen
 #include <svx/pszctrl.hxx>
@@ -167,6 +173,9 @@ SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
                                          ERRCODE_AREA_SD,
                                          ERRCODE_AREA_SD_END,
                                          GetResMgr() );
+
+    mpRefDevice = new VirtualDevice;
+    mpRefDevice->SetMapMode( MAP_100TH_MM );
 }
 
 
@@ -180,9 +189,12 @@ SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
 SdModule::~SdModule()
 {
     delete pSearchItem;
+
     if( pNumberFormatter )
         delete pNumberFormatter;
+
     delete mpErrorHdl;
+    delete static_cast< VirtualDevice* >( mpRefDevice );
 }
 
 
@@ -377,4 +389,20 @@ SvNumberFormatter* SdModule::GetNumberFormatter()
     return pNumberFormatter;
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
 
+OutputDevice* SdModule::GetRefDevice( SdDrawDocShell& rDocShell )
+{
+    return( IsPrinterRefDevice() ? rDocShell.GetPrinter( sal_True ) : mpRefDevice );
+}
+
+/*************************************************************************
+|*
+\************************************************************************/
+
+sal_Bool SdModule::IsPrinterRefDevice() const
+{
+    return sal_True;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusumry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:46:17 $
+ *  last change: $Author: ka $ $Date: 2002-07-26 08:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ FuSummaryPage::FuSummaryPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView
                     pOutl->EnableUndo(FALSE);
 
                     if (pDocSh)
-                        pOutl->SetRefDevice(pDocSh->GetPrinter(TRUE));
+                        pOutl->SetRefDevice(SD_MOD()->GetRefDevice( *pDocSh ));
 
                     pOutl->SetDefTab( pDoc->GetDefaultTabulator() );
                     pOutl->SetStyleSheetPool((SfxStyleSheetPool*) pDoc->GetStyleSheetPool());

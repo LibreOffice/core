@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-19 12:06:18 $
+ *  last change: $Author: ka $ $Date: 2002-07-26 08:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1648,9 +1648,8 @@ SdOutliner* SdDrawDocument::GetOutliner(BOOL bCreateOutliner)
 #endif
 
         if (pDocSh)
-        {
-            pOutliner->SetRefDevice( pDocSh->GetPrinter(TRUE) );
-        }
+            pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
+
         pOutliner->SetDefTab( nDefaultTabulator );
         pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
         pOutliner->SetMinDepth(0);
@@ -1685,9 +1684,8 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(BOOL bCreateOutliner)
         pInternalOutliner->EnableUndo( FALSE );
 
         if (pDocSh)
-        {
-            pInternalOutliner->SetRefDevice( pDocSh->GetPrinter(TRUE) );
-        }
+            pInternalOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
+
         pInternalOutliner->SetDefTab( nDefaultTabulator );
         pInternalOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
         pInternalOutliner->SetMinDepth(0);

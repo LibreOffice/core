@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuexpand.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-07 14:04:19 $
+ *  last change: $Author: ka $ $Date: 2002-07-26 08:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 #include "docshell.hxx"
 #include "sdresid.hxx"
 #include "optsitem.hxx"
+#include "sdmod.hxx"
 
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -136,7 +137,7 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         pOutl->EnableUndo(FALSE);
 
         if (pDocSh)
-            pOutl->SetRefDevice(pDocSh->GetPrinter(TRUE));
+            pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
 
         pOutl->SetDefTab( pDoc->GetDefaultTabulator() );
         pOutl->SetStyleSheetPool((SfxStyleSheetPool*) pDoc->GetStyleSheetPool());
