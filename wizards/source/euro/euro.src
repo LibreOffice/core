@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:27:05 $
+ *  last change: $Author: kz $ $Date: 2001-04-10 20:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ Text[ english_us ] = "Complete ~Directory";
     Text[ spanish ] = "~Directorio completo";
     Text[ italian ] = "Tutte le cartelle";
     Text[ danish ] = "Hele ~biblioteket";
-    Text[ swedish ] = "~Hela mappen";
+    Text[ swedish ] = "H~ela katalogen";
     Text[ polish ] = "~Ca³y katalog";
     Text[ portuguese_brazilian ] = "Complete ~Directory";
     Text[ japanese ] = "‘SÃÞ¨Ú¸ÄØ";
