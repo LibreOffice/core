@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-19 14:17:12 $
+ *  last change: $Author: mt $ $Date: 2001-05-14 15:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,43 +226,6 @@ String Outliner::GetWord( USHORT nPara, USHORT nIndex )
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetWord( nPara, nIndex );
-}
-
-
-BOOL Outliner::CopyClipboard() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->CopyClipboard();
-}
-
-BOOL Outliner::CopyClipboard( const ESelection& rSelection ) const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->CopyClipboard( rSelection );
-}
-
-BOOL Outliner::PasteClipboard()
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->PasteClipboard();
-}
-
-BOOL Outliner::CopyDragServer() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->CopyDragServer();
-}
-
-BOOL Outliner::CopyDragServer( const ESelection& rSelection ) const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->CopyDragServer( rSelection );
-}
-
-BOOL Outliner::PasteDragServer( USHORT nItem )
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->PasteDragServer( nItem );
 }
 
 void Outliner::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect )
