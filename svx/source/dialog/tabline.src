@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:35:12 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ chinese_traditional ] = "ΓC¦β(~C)";
         Text[ arabic ] = "αζδ";
         Text[ greek ] = "Χρώμα";
-        Text[ korean ] = "»φ»σ(~C)";
+        Text[ korean ] = "»φ(~C)";
         Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
     };
