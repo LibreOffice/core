@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-10 17:57:11 $
+ *  last change: $Author: mt $ $Date: 2002-06-12 10:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@ using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
 using namespace ::comphelper;
 
+
+DBG_NAME(VCLXAccessibleComponent);
+
+
 //  ----------------------------------------------------
 //  class VCLXAccessibleComponent
 //  ----------------------------------------------------
@@ -128,6 +132,7 @@ VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXindow )
     : VCLXAccessibleComponentBase( new VCLExternalSolarLock() )
     , OAccessibleImplementationAccess( )
 {
+    DBG_CTOR( VCLXAccessibleComponent, 0 );
     mpVCLXindow = pVCLXindow;
     mxWindow = pVCLXindow;
 
@@ -146,12 +151,14 @@ VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXindow )
 
 VCLXAccessibleComponent::~VCLXAccessibleComponent()
 {
+    DBG_DTOR( VCLXAccessibleComponent, 0 );
+
     ensureDisposed();
 
     if ( mpVCLXindow && mpVCLXindow->GetWindow() )
     {
         mpVCLXindow->GetWindow()->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
-        mpVCLXindow->GetWindow()->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
+        mpVCLXindow->GetWindow()->RemoveChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
     }
 
     delete m_pSolarLock;
@@ -169,11 +176,13 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleComponent, VCLXAccessibleCompone
 
 IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent )
 {
+    DBG_CHKTHIS(VCLXAccessibleComponent,0);
+
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
-        if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
+        if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
             ProcessWindowEvent( *(VclWindowEvent*)pEvent );
     }
     return 0;
@@ -181,6 +190,8 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
 
 IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclSimpleEvent*, pEvent )
 {
+    DBG_CHKTHIS(VCLXAccessibleComponent,0);
+
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
@@ -195,9 +206,11 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::GetChildAc
 {
     // checks if the data in the window event is our direct child
     // and returns its accessible
+
+    // MT: Change this later, normaly a show/hide event shouldn't have the Window* in pData.
     Window* pChildWindow = (Window *) rVclWindowEvent.GetData();
     if( pChildWindow && GetWindow() == pChildWindow->GetAccessibleParentWindow() )
-        return pChildWindow->GetAccessible();
+        return pChildWindow->GetAccessible( rVclWindowEvent.GetId() == VCLEVENT_WINDOW_SHOW );
     else
         return uno::Reference< accessibility::XAccessible > ();
 }
@@ -241,6 +254,14 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
 
     switch ( rVclWindowEvent.GetId() )
     {
+        case VCLEVENT_OBJECT_DYING:
+        {
+            pWindow->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
+            pWindow->RemoveChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
+            mxWindow.clear();
+            mpVCLXindow = NULL;
+        }
+        break;
         //
         // dont handle CHILDCREATED events here
         // they are handled separately as child events, see ProcessWindowChildEvent above
@@ -259,8 +280,11 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             Window* pWindow = (Window*) rVclWindowEvent.GetData();
             DBG_ASSERT( pWindow, "VCLEVENT_WINDOW_CHILDDESTROYED - Window=?" );
-            aOldValue <<= pWindow->GetAccessible();
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+            if ( pWindow->GetAccessible( FALSE ).is() )
+            {
+                aOldValue <<= pWindow->GetAccessible( FALSE );
+                NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+            }
         }
         break;
 
@@ -346,7 +370,7 @@ void VCLXAccessibleComponent::disposing()
     if ( mpVCLXindow && mpVCLXindow->GetWindow() )
     {
         mpVCLXindow->GetWindow()->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
-        mpVCLXindow->GetWindow()->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
+        mpVCLXindow->GetWindow()->RemoveChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
     }
 
     VCLXAccessibleComponentBase::disposing();
