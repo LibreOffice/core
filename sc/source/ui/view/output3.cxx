@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:58:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,8 @@ void ScOutputData::DrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaint
     MapMode aOldMode = pDev->GetMapMode();
 
                             // Area auch fuer Metafiles
-    USHORT nCol;
-    USHORT nRow;
+    SCCOL nCol;
+    SCROW nRow;
 
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
@@ -417,7 +417,7 @@ void ScOutputData::DrawingSingle(const sal_uInt16 nLayer, const sal_uInt16 nPain
 
     BOOL    bHad    = FALSE;
     long    nPosY   = nScrY;
-    USHORT  nArrY;
+    SCSIZE  nArrY;
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         BOOL bChanged = FALSE;
