@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-07 09:24:22 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 14:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,9 +270,13 @@ String getFullPath( const String& aRelPath )
     }
     else
     {
+#ifdef TF_FILEURL
+        File::getFileURLFromSystemPath( aRelPath, aFileURL );
+#else
         OUString aUNCStr;
         FileBase::RC nRet = File::normalizePath( aRelPath, aUNCStr );
         nRet = File::getFileURLFromNormalizedPath( aUNCStr, aFileURL );
+#endif
     }
     return aFileURL;
 }
@@ -294,11 +298,19 @@ String getFullPathUNC( const String& aRelPath )
     if( aURLObj.GetProtocol() == INET_PROT_FILE )
     {
         OUString aFileURL = aURLObj.GetMainURL();
+#ifdef TF_FILEURL
+        aNormPath = aFileURL;
+#else
         FileBase::RC nRet = File::getNormalizedPathFromFileURL( aFileURL, aNormPath );
+#endif
     }
     else
     {
+#ifdef TF_FILEURL
+        File::getFileURLFromSystemPath( aRelPath, aNormPath );
+#else
         FileBase::RC nRet = File::normalizePath( aRelPath, aNormPath );
+#endif
     }
     return aNormPath;
 }
