@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoapi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-28 12:34:18 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 13:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
 
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+
 #ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
 #endif
@@ -93,6 +97,26 @@ GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw() 
     with that name
 */
 SvxNumBulletItem* SvxGetNumBulletItemByName( SfxItemPool* pPool, const ::rtl::OUString& aName ) throw();
+
+/** maps the API constant MeasureUnit to a vcl MapUnit enum.
+    Returns false if conversion is not supported.
+*/
+sal_Bool SvxMeasureUnitToMapUnit( const short eApi, short& nVcl ) throw();
+
+/** maps the vcl MapUnit enum to a API constant MeasureUnit.
+    Returns false if conversion is not supported.
+*/
+sal_Bool SvxMapUnitToMeasureUnit( const short nVcl, short& eApi ) throw();
+
+/** maps the API constant MeasureUnit to a vcl MapUnit enum.
+    Returns false if conversion is not supported.
+*/
+sal_Bool SvxMeasureUnitToFieldUnit( const short eApi, short& nVcl ) throw();
+
+/** maps the vcl MapUnit enum to a API constant MeasureUnit.
+    Returns false if conversion is not supported.
+*/
+sal_Bool SvxFieldUnitToMeasureUnit( const short nVcl, short& eApi ) throw();
 
 #endif _SVX_UNOAPI_HXX_
 

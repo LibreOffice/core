@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-19 16:07:43 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 13:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,14 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_MEASUREUNIT_HPP_
+#include <com/sun/star/util/MeasureUnit.hpp>
+#endif
+
+#ifndef _VCL_FLDUNIT_HXX
+#include <vcl/fldunit.hxx>
 #endif
 
 #include "unotext.hxx"
@@ -649,3 +657,105 @@ void SvxServiceInfoHelper::addToSequence( ::com::sun::star::uno::Sequence< ::rtl
 
 
 
+/** maps the API constant MeasureUnit to a vcl MapUnit enum.
+    Returns false if conversion is not supported.
+*/
+sal_Bool SvxMeasureUnitToMapUnit( const short eApi, int& eVcl ) throw()
+{
+    switch( eVcl )
+    {
+    case util::MeasureUnit::MM_100TH:       eVcl = MAP_100TH_MM;    break;
+    case util::MeasureUnit::MM_10TH:        eVcl = MAP_10TH_MM;     break;
+    case util::MeasureUnit::MM:             eVcl = MAP_MM;          break;
+    case util::MeasureUnit::CM:             eVcl = MAP_CM;          break;
+    case util::MeasureUnit::INCH_1000TH:    eVcl = MAP_1000TH_INCH; break;
+    case util::MeasureUnit::INCH_100TH:     eVcl = MAP_100TH_INCH;  break;
+    case util::MeasureUnit::INCH_10TH:      eVcl = MAP_10TH_INCH;   break;
+    case util::MeasureUnit::INCH:           eVcl = MAP_INCH;        break;
+    case util::MeasureUnit::POINT:          eVcl = MAP_POINT;       break;
+    case util::MeasureUnit::TWIP:           eVcl = MAP_TWIP;        break;
+    case util::MeasureUnit::PERCENT:        eVcl = MAP_RELATIVE;    break;
+    default:
+        return false;
+    }
+
+    return true;
+}
+
+/** maps the vcl MapUnit enum to a API constant MeasureUnit.
+    Returns false if conversion is not supported.
+*/
+sal_Bool SvxMapUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
+{
+    switch( eVcl )
+    {
+    case MAP_100TH_MM:      eApi = util::MeasureUnit::MM_100TH;     break;
+    case MAP_10TH_MM:       eApi = util::MeasureUnit::MM_10TH;      break;
+    case MAP_MM:            eApi = util::MeasureUnit::MM;           break;
+    case MAP_CM:            eApi = util::MeasureUnit::CM;           break;
+    case MAP_1000TH_INCH:   eApi = util::MeasureUnit::INCH_1000TH;  break;
+    case MAP_100TH_INCH:    eApi = util::MeasureUnit::INCH_100TH;   break;
+    case MAP_10TH_INCH:     eApi = util::MeasureUnit::INCH_10TH;    break;
+    case MAP_INCH:          eApi = util::MeasureUnit::INCH;         break;
+    case MAP_POINT:         eApi = util::MeasureUnit::POINT;        break;
+    case MAP_TWIP:          eApi = util::MeasureUnit::TWIP;         break;
+    case MAP_RELATIVE:      eApi = util::MeasureUnit::PERCENT;      break;
+    default:
+        return false;
+    }
+
+    return true;
+}
+
+/** maps the API constant MeasureUnit to a vcl MapUnit enum.
+    Returns false if conversion is not supported.
+*/
+
+sal_Bool SvxMeasureUnitToFieldUnit( const short eApi, short& eVcl ) throw()
+{
+    switch( eApi )
+    {
+    case util::MeasureUnit::MM:         eVcl = FUNIT_MM;        break;
+    case util::MeasureUnit::CM:         eVcl = FUNIT_CM;        break;
+    case util::MeasureUnit::M:          eVcl = FUNIT_M;         break;
+    case util::MeasureUnit::KM:         eVcl = FUNIT_KM;        break;
+    case util::MeasureUnit::TWIP:       eVcl = FUNIT_TWIP;      break;
+    case util::MeasureUnit::POINT:      eVcl = FUNIT_POINT;     break;
+    case util::MeasureUnit::PICA:       eVcl = FUNIT_PICA;      break;
+    case util::MeasureUnit::INCH:       eVcl = FUNIT_INCH;      break;
+    case util::MeasureUnit::FOOT:       eVcl = FUNIT_FOOT;      break;
+    case util::MeasureUnit::MILE:       eVcl = FUNIT_MILE;      break;
+    case util::MeasureUnit::PERCENT:    eVcl = FUNIT_PERCENT;   break;
+    case util::MeasureUnit::MM_100TH:   eVcl = FUNIT_100TH_MM;  break;
+    default:
+        return sal_False;
+    }
+
+    return sal_True;
+}
+
+/** maps the vcl MapUnit enum to a API constant MeasureUnit.
+    Returns false if conversion is not supported.
+*/
+sal_Bool SvxFieldUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
+{
+    switch( eVcl )
+    {
+    case FUNIT_MM:          eApi = util::MeasureUnit::MM;       break;
+    case FUNIT_CM:          eApi = util::MeasureUnit::CM;       break;
+    case FUNIT_M:           eApi = util::MeasureUnit::M;        break;
+    case FUNIT_KM:          eApi = util::MeasureUnit::KM;       break;
+    case FUNIT_TWIP:        eApi = util::MeasureUnit::TWIP;     break;
+    case FUNIT_POINT:       eApi = util::MeasureUnit::POINT;    break;
+    case FUNIT_PICA:        eApi = util::MeasureUnit::PICA;     break;
+    case FUNIT_INCH:        eApi = util::MeasureUnit::INCH;     break;
+    case FUNIT_FOOT:        eApi = util::MeasureUnit::FOOT;     break;
+    case FUNIT_MILE:        eApi = util::MeasureUnit::MILE;     break;
+    case FUNIT_PERCENT:     eApi = util::MeasureUnit::PERCENT;  break;
+    case FUNIT_100TH_MM:    eApi = util::MeasureUnit::MM_100TH; break;
+    default:
+        return sal_False;
+    }
+
+    return sal_True;
+}
