@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _TextSection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-10 13:27:31 $
+ *  last change:$Date: 2003-09-08 11:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 package ifc.text;
 
-import com.sun.star.text.XTextColumns;
 import lib.MultiPropertyTest;
 
+import com.sun.star.text.XTextColumns;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 
