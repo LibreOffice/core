@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:17:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,14 +124,14 @@ TabPage RID_SFXPAGE_SAVE
     CheckBox BTN_AUTOSAVE
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "~Automatisch speichern alle" ;
-        Text [ en-US ] = "~AutoSave every" ;
+        Size = MAP_APPFONT ( 150 , 8 ) ;
+        Text [ de ] = "Speichern von ~AutoWiederherstellungsinfo alle" ;
+        Text [ en-US ] = "Save ~AutoRecovery information every" ;
     };
     NumericField ED_AUTOSAVE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 115 , 60 ) ;
+        Pos = MAP_APPFONT ( 180 , 60 ) ;
         Size = MAP_APPFONT ( 21 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -146,24 +146,17 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedText FT_MINUTE
     {
-        Pos = MAP_APPFONT ( 139 , 62 ) ;
+        Pos = MAP_APPFONT ( 204 , 62 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text [ de ] = "Minuten" ;
         Text [ en-US ] = "Minutes" ;
     };
-    CheckBox BTN_AUTOSAVEPROMPT
-    {
-        Pos = MAP_APPFONT ( 22 , 74 ) ;
-        Size = MAP_APPFONT ( 226 , 8 ) ;
-        Text [ de ] = "Mit ~Rückfrage" ;
-        Text [ en-US ] = "~Prompt to save" ;
-    };
 
     CheckBox BTN_NOPRETTYPRINTING
     {
-        Pos = MAP_APPFONT ( 12 , 85 ) ;
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 236 , 8 ) ;
-        Text [ de ] = "XML-Format auf Größe optimieren (ohne Pretty Printing)" ;
+        Text [ de ] = "XML-Format auf Grï¿½ï¿½e optimieren (ohne Pretty Printing)" ;
         Text [ en-US ] = "Size optimization for XML format (no pretty printing)" ;
     };
 
@@ -222,19 +215,19 @@ TabPage RID_SFXPAGE_SAVE
             < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
             < "Globaldokument" ;    APP_WRITER_GLOBAL;  > ;
             < "Tabellendokument" ; APP_CALC      ; > ;
-            < "Präsentation" ;     APP_IMPRESS   ; > ;
+            < "Prï¿½sentation" ;     APP_IMPRESS   ; > ;
             < "Zeichnung" ;        APP_DRAW      ; > ;
             < "Formel" ;           APP_MATH      ; > ;
         };
         StringList [ x-comment ] =
         {
             < "; Textdokument" ;     APP_WRITER    ; > ;
-            < "; HTML-Dokument" ;    APP_WRITER_WEB;  > ;
-            < "; Globaldokument" ;    APP_WRITER_GLOBAL;  > ;
-            < "; Tabellendokument" ; APP_CALC      ; > ;
-            < "; Präsentation" ;     APP_IMPRESS   ; > ;
-            < "; Zeichnung" ;        APP_DRAW      ; > ;
-            < "; Formel" ;           APP_MATH      ; > ;
+        < "; HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+        < "; Globaldokument" ;    APP_WRITER_GLOBAL;  > ;
+        < "; Tabellendokument" ; APP_CALC      ; > ;
+        < "; Prï¿½sentation" ;     APP_IMPRESS   ; > ;
+        < "; Zeichnung" ;        APP_DRAW      ; > ;
+        < "; Formel" ;           APP_MATH      ; > ;
         };
         StringList [ en-US ] =
         {
@@ -283,8 +276,8 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Pos = MAP_APPFONT( 39, 6 );
         Size = MAP_APPFONT( 175, 4 * 9 );
         Wordbreak = TRUE;
-        Text [ de ] = "Verwenden von \"%1\" als Standard-Dateiformat kann zu Informationsverlust führen.\n"\
-        "Sollen die Dateiformatänderungen übernommen werden?" ;
+        Text [ de ] = "Verwenden von \"%1\" als Standard-Dateiformat kann zu Informationsverlust fï¿½hren.\n"\
+        "Sollen die Dateiformatï¿½nderungen ï¿½bernommen werden?" ;
         Text [ en-US ] = "Using \"%1\" as default file format may cause information loss.\n";
     };
     OKButton PB_OK
