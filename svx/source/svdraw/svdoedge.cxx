@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-19 14:48:24 $
+ *  last change: $Author: aw $ $Date: 2001-10-08 15:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,26 +487,29 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 
     if(n != nValAnz || nVals[0] != nVal1 || nVals[1] != nVal2 || nVals[2] != nVal3)
     {
+        // #75371# Here no more notifying is necessary, just local changes are OK.
+        ImpForceItemSet();
+
         if(n != nValAnz)
-            SetItem(SdrEdgeLineDeltaAnzItem(n));
+            mpObjectItemSet->Put(SdrEdgeLineDeltaAnzItem(n));
 
         if(nVals[0] != nVal1)
-            SetItem(SdrEdgeLine1DeltaItem(nVals[0]));
+            mpObjectItemSet->Put(SdrEdgeLine1DeltaItem(nVals[0]));
 
         if(nVals[1] != nVal2)
-            SetItem(SdrEdgeLine2DeltaItem(nVals[1]));
+            mpObjectItemSet->Put(SdrEdgeLine2DeltaItem(nVals[1]));
 
         if(nVals[2] != nVal3)
-            SetItem(SdrEdgeLine3DeltaItem(nVals[2]));
+            mpObjectItemSet->Put(SdrEdgeLine3DeltaItem(nVals[2]));
 
         if(n < 3)
-            ClearItem(SDRATTR_EDGELINE3DELTA);
+            mpObjectItemSet->ClearItem(SDRATTR_EDGELINE3DELTA);
 
         if(n < 2)
-            ClearItem(SDRATTR_EDGELINE2DELTA);
+            mpObjectItemSet->ClearItem(SDRATTR_EDGELINE2DELTA);
 
         if(n < 1)
-            ClearItem(SDRATTR_EDGELINE1DELTA);
+            mpObjectItemSet->ClearItem(SDRATTR_EDGELINE1DELTA);
     }
 }
 
@@ -2306,12 +2309,16 @@ void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const F
     SdrTextObj::NbcResize(rRefPnt,aXFact,aXFact);
     ResizeXPoly(*pEdgeTrack,rRefPnt,aXFact,aYFact);
 
-    // #75735#
-    aEdgeInfo.aObj1Line2 = Point();
-    aEdgeInfo.aObj1Line3 = Point();
-    aEdgeInfo.aObj2Line2 = Point();
-    aEdgeInfo.aObj2Line3 = Point();
-    aEdgeInfo.aMiddleLine = Point();
+    // #75371# if resize is not from paste, forget user distances
+    if(!GetModel()->IsPasteResize())
+    {
+        // #75735#
+        aEdgeInfo.aObj1Line2 = Point();
+        aEdgeInfo.aObj1Line3 = Point();
+        aEdgeInfo.aObj2Line2 = Point();
+        aEdgeInfo.aObj2Line3 = Point();
+        aEdgeInfo.aMiddleLine = Point();
+    }
 }
 
 SdrObject* SdrEdgeObj::DoConvertToPolyObj(BOOL bBezier) const
