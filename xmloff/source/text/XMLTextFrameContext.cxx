@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-16 13:23:56 $
+ *  last change: $Author: mib $ $Date: 2000-11-16 13:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,6 +426,9 @@ XMLTextFrameContext::XMLTextFrameContext(
             break;
         }
     }
+
+    if( XML_TEXT_FRAME_GRAPHIC == nType && !sHRef.getLength() )
+        return; // no URL, no image
 
     Reference<XMultiServiceFactory> xFactory( GetImport().GetModel(),
                                               UNO_QUERY );
