@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:17:00 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 07:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,13 +110,13 @@ TabPage RID_SVXPAGE_PAGE
         Text[ polish ] = "~Format";
         Text[ portuguese_brazilian ] = "~Format";
         Text[ japanese ] = "èëéÆ(~F)";
-        Text[ korean ] = "~Format";
+        Text[ korean ] = "~∆˜∏À";
         Text[ chinese_simplified ] = "∏Ò Ω";
         Text[ chinese_traditional ] = "ÆÊ¶°";
         Text[ turkish ] = "Format";
         Text[ arabic ] = "«· ‰”Ìﬁ";
         Text[ catalan ] = "~Format";
-        Text[ finnish ] = "~Format";
+        Text[ finnish ] = "~Muotoile";
     };
     ListBox LB_PAPER_SIZE
     {
@@ -319,7 +319,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "Layout di pagina" ;
         Text [ portuguese_brazilian ] = "Layout da p·gina" ;
         Text [ portuguese ] = "Configurar p·gina" ;
-        Text [ finnish ] = "Seitenlayout" ;
+        Text [ finnish ] = "Sivun taitto" ;
         Text [ danish ] = "Sidelayout" ;
         Text [ french ] = "Mise en page" ;
         Text [ swedish ] = "Sidlayout" ;
@@ -486,7 +486,7 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ korean ] =
         {
-                < "∏µŒ" ; Default ; > ;
+                < "ø¿∏•¬ ∞˙ øﬁ¬ " ; Default ; > ;
             < "¥Îƒ™" ; Default ; > ;
             < "ø¿∏•¬ " ; Default ; > ;
             < "øﬁ¬ " ; Default ; > ;
@@ -524,7 +524,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "Formato foglio" ;
         Text [ portuguese_brazilian ] = "Formato de papel" ;
         Text [ portuguese ] = "Formato do papel" ;
-        Text [ finnish ] = "Papierformat" ;
+        Text [ finnish ] = "Paperikoko" ;
         Text [ danish ] = "Papirformat" ;
         Text [ french ] = "Format de papier" ;
         Text [ swedish ] = "Pappersformat" ;
@@ -538,7 +538,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_traditional ] = "Ø»±iÆÊ¶°";
         Text[ arabic ] = "ÕÃ„ «·Ê—ﬁ";
         Text[ greek ] = "Ã›„ÂËÔÚ ˜·ÒÙÈÔ˝";
-        Text[ korean ] = "øÎ¡ˆ º≠Ωƒ";
+        Text[ korean ] = "øÎ¡ˆ ∆˜∏À";
         Text[ turkish ] = "Ka˝t format˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formato de papel";
@@ -731,7 +731,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "Margini" ;
         Text [ portuguese_brazilian ] = "Margens" ;
         Text [ portuguese ] = "Margens" ;
-        Text [ finnish ] = "R‰nder" ;
+        Text [ finnish ] = "Marginaalit" ;
         Text [ danish ] = "Margener" ;
         Text [ french ] = "Marges" ;
         Text [ swedish ] = "Marginaler" ;
@@ -770,13 +770,13 @@ TabPage RID_SVXPAGE_PAGE
         Text[ polish ] = "For~mat";
         Text[ portuguese_brazilian ] = "For~mat";
         Text[ japanese ] = "èëéÆ(~M)";
-        Text[ korean ] = "For~mat";
+        Text[ korean ] = "∆˜∏À~";
         Text[ chinese_simplified ] = "∏Ò Ω";
         Text[ chinese_traditional ] = "ÆÊ¶°";
         Text[ turkish ] = "For~mat";
         Text[ arabic ] = "«· ‰”Ìﬁ";
         Text[ catalan ] = "For~mat";
-        Text[ finnish ] = "For~mat";
+        Text[ finnish ] = "~Muotoile";
     };
     ListBox LB_NUMBER_FORMAT
     {
@@ -1011,7 +1011,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "Numerazione" ;
         Text [ portuguese_brazilian ] = "NumeraÁ„o" ;
         Text [ portuguese ] = "NumeraÁ„o" ;
-        Text [ finnish ] = "Nummerierung" ;
+        Text [ finnish ] = "Numerointi" ;
         Text [ danish ] = "Nummerering" ;
         Text [ french ] = "NumÈrotation" ;
         Text [ swedish ] = "Numrering" ;
@@ -1144,7 +1144,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "Modello successivo" ;
         Text [ portuguese_brazilian ] = "P·gina" ;
         Text [ portuguese ] = "Estilo seguinte" ;
-        Text [ finnish ] = "Folgevorlage" ;
+        Text [ finnish ] = "Seuraava tyyli" ;
         Text [ danish ] = "NÊste typografi" ;
         Text [ french ] = "Style suivant" ;
         Text [ swedish ] = "N‰sta formatmall" ;
@@ -1260,7 +1260,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ turkish ] = "E˛it sat˝r y¸kseklii";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Conformidad registro";
-        Text[ finnish ] = "Registerhaltigkeit";
+        Text[ finnish ] = "Rekisteri-tosi";
     };
 
 
@@ -2037,8 +2037,8 @@ ItemList [ chinese_simplified ] =
         < "A5 148 x 210 ≤@¶Ã" ; PAPERSIZE_A5 ; > ;
         < "B4 250 x 353 ≤@¶Ã" ; PAPERSIZE_B4 ; > ;
         < "B5 176 x 250 ≤@¶Ã" ; PAPERSIZE_B5 ; > ;
-        < "¨¸¶°≥WÆÊ 8,5 x 11 ≠^§o" ; PAPERSIZE_LETTER ; > ;
-        < "¨¸¶°≥WÆÊ 8,5 x 14 ≠^§o" ; PAPERSIZE_LEGAL ; > ;
+        < "¨¸¶°≥WÆÊ 8,5 x 11 ≠^¶T" ; PAPERSIZE_LETTER ; > ;
+        < "¨¸¶°≥WÆÊ 8,5 x 14 ≠^¶T" ; PAPERSIZE_LEGAL ; > ;
         < "§Â∫K" ; PAPERSIZE_TABLOID ; > ;
         < "¶€≠q" ; PAPERSIZE_USER ; > ;
         < "B6 125 x 176 ≤@¶Ã" ; PAPERSIZE_B6 ; > ;
@@ -2047,12 +2047,12 @@ ItemList [ chinese_simplified ] =
         < "C6 114 x 162 ≤@¶Ã" ; PAPERSIZE_C6 ; > ;
         < "C65 114 x 227 ≤@¶Ã" ; PAPERSIZE_C65 ; > ;
         < "DL 110 x 220 ≤@¶Ã" ; PAPERSIZE_DL ; > ;
-        < "´H´ ÆÊ¶° #6?3,625 x 6,5 ≠^§o" ; PAPERSIZE_COM675; > ;
-        < "¨¸¶°´H´  3,875 x 7,5 ≠^§o" ; PAPERSIZE_MONARCH; > ;
-        < "´H´ ÆÊ¶° #9 3,875 x 8,875 ≠^§o" ; PAPERSIZE_COM9; > ;
-        < "´H´ ÆÊ¶° #10 4,125 x 9,5 ≠^§o" ; PAPERSIZE_COM10; > ;
-        < "´H´ ÆÊ¶° #11 4,5 x 10,375 ≠^§o" ; PAPERSIZE_COM11; > ;
-        < "´H´ ÆÊ¶° #12 4,75 x 11 ≠^§o" ; PAPERSIZE_COM12; > ;
+        < "´H´ ÆÊ¶° #6?3,625 x 6,5 ≠^¶T" ; PAPERSIZE_COM675; > ;
+        < "¨¸¶°´H´  3,875 x 7,5 ≠^¶T" ; PAPERSIZE_MONARCH; > ;
+        < "´H´ ÆÊ¶° #9 3,875 x 8,875 ≠^¶T" ; PAPERSIZE_COM9; > ;
+        < "´H´ ÆÊ¶° #10 4,125 x 9,5 ≠^¶T" ; PAPERSIZE_COM10; > ;
+        < "´H´ ÆÊ¶° #11 4,5 x 10,375 ≠^¶T" ; PAPERSIZE_COM11; > ;
+        < "´H´ ÆÊ¶° #12 4,75 x 11 ≠^¶T" ; PAPERSIZE_COM12; > ;
         < "16 ∂} 184 x 260 ≤@¶Ã" ; PAPERSIZE_KAI16; > ;
         < "32 ∂} 130 x 184 ≤@¶Ã" ; PAPERSIZE_KAI32; > ;
         < "32 §j∂} 140 x 203 ≤@¶Ã" ; PAPERSIZE_KAI32BIG; > ;
@@ -2221,29 +2221,29 @@ ItemList [ chinese_simplified ] =
     };
     ItemList [ finnish ] =
     {
-            < "A3 297 x 420 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "A4 210 x 297 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "A5 148 x 210 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "B4.250 x 353 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "B5 176 x 250 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "Letter 8,5 x 11 tuumaa" ; PAPERSIZE_KAI32BIG; > ;
-        < "Legal 8,5 x 14 tuumaa" ; PAPERSIZE_KAI32BIG; > ;
-        < "Tabloidi" ; PAPERSIZE_KAI32BIG; > ;
-        < "K‰ytt‰j‰" ; PAPERSIZE_KAI32BIG; > ;
-        < "B6.125 x 176 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C4.229 x 324 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C5.162 x 229 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C6.114 x 162 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C65.114 x 227 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "DL 110 x 220 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "Env. 63/4 3,6252\" x 6,5\"" ; PAPERSIZE_KAI32BIG; > ;
-        < "Env. Monarch 3,875\" x 7,5\"" ; PAPERSIZE_KAI32BIG; > ;
-        < "Env. 9 3,875\" x 8,875\"" ; PAPERSIZE_KAI32BIG; > ;
-        < "Env. 10 4,125\" x 9,5\"" ; PAPERSIZE_KAI32BIG; > ;
-        < "Env. 11 4,5\" x 10,375\"" ; PAPERSIZE_KAI32BIG; > ;
-        < "Env. 12 4,75\" x 11\"" ; PAPERSIZE_KAI32BIG; > ;
-        < "16 kai 184 mm x 260 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "32 kai 130 mm x 184 mm" ; PAPERSIZE_KAI32BIG; > ;
+            < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4.250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 tuumaa" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 tuumaa" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloidi" ; PAPERSIZE_TABLOID ; > ;
+        < "K‰ytt‰j‰" ; PAPERSIZE_USER ; > ;
+        < "B6.125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4.229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5.162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6.114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65.114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Env. 63/4 3,6252\" x 6,5\"" ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch 3,875\" x 7,5\"" ; PAPERSIZE_MONARCH; > ;
+        < "Env. 9 3,875\" x 8,875\"" ; PAPERSIZE_COM9; > ;
+        < "Env. 10 4,125\" x 9,5\"" ; PAPERSIZE_COM10; > ;
+        < "Env. 11 4,5\" x 10,375\"" ; PAPERSIZE_COM11; > ;
+        < "Env. 12 4,75\" x 11\"" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 mm x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 mm x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai groﬂ 140 mm x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
     };
     };
@@ -2649,8 +2649,8 @@ ItemList [ chinese_simplified ] =
         < "A5 148 x 210 ≤@¶Ã" ; PAPERSIZE_A5 ; > ;
         < "B4 250 x 353 ≤@¶Ã" ; PAPERSIZE_B4 ; > ;
         < "B5 176 x 250 ≤@¶Ã" ; PAPERSIZE_B5 ; > ;
-        < "¨¸¶°≥WÆÊ 8,5 x 11 ≠^§o" ; PAPERSIZE_LETTER ; > ;
-        < "¨¸¶°≥WÆÊ 8,5 x 14 ≠^§o" ; PAPERSIZE_LEGAL ; > ;
+        < "¨¸¶°≥WÆÊ 8,5 x 11 ≠^¶T" ; PAPERSIZE_LETTER ; > ;
+        < "¨¸¶°≥WÆÊ 8,5 x 14 ≠^¶T" ; PAPERSIZE_LEGAL ; > ;
         < "§Â∫K" ; PAPERSIZE_TABLOID ; > ;
         < "®œ•Œ™Ã" ; PAPERSIZE_USER ; > ;
         < "B6 125 x 176 ≤@¶Ã" ; PAPERSIZE_B6 ; > ;
@@ -2823,28 +2823,28 @@ ItemList [ chinese_simplified ] =
     };
     ItemList [ finnish ] =
     {
-            < "A0 841 x 1189 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "A1 594 x 841 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "A2 420 x 594 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "A3 297 x 420 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "A4 210 x 297 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "A5 148 x 210 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "B4.250 x 353 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "B5 176 x 250 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "Letter 8,5 x 11 tuumaa" ; PAPERSIZE_KAI32BIG; > ;
-        < "Legal 8,5 x 14 tuumaa" ; PAPERSIZE_KAI32BIG; > ;
-        < "Tabloidi" ; PAPERSIZE_KAI32BIG; > ;
-        < "K‰ytt‰j‰n m‰‰ritt‰m‰" ; PAPERSIZE_KAI32BIG; > ;
-        < "B6.125 x 176 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C4.229 x 324 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C5.162 x 229 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C6.114 x 162 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C65.114 x 227 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "DL 110 x 220 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "Dia" ; PAPERSIZE_KAI32BIG; > ;
-        < "Ruutu" ; PAPERSIZE_KAI32BIG; > ;
-        < "16 kai 184 mm x 260 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "32 kai 130 mm x 184 mm" ; PAPERSIZE_KAI32BIG; > ;
+            < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4.250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 tuumaa" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 tuumaa" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloidi" ; PAPERSIZE_TABLOID ; > ;
+        < "K‰ytt‰j‰n m‰‰ritt‰m‰" ; PAPERSIZE_USER ; > ;
+        < "B6.125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4.229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5.162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6.114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65.114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Dia" ; PAPERSIZE_DIA ; > ;
+        < "Ruutu" ; PAPERSIZE_SCREEN ; > ;
+        < "16 kai 184 mm x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 mm x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai groﬂ 140 mm x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
     };
     };
