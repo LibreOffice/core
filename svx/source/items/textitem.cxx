@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-09 14:48:03 $
+ *  last change: $Author: os $ $Date: 2001-04-18 09:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1049,7 +1049,7 @@ sal_Bool SvxWeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_WEIGHT:
         {
-            float fValue;
+            double fValue;
             if(!(rVal >>= fValue))
             {
                 sal_Int32 nValue;
