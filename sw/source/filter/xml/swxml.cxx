@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-29 12:55:39 $
+ *  last change: $Author: dvo $ $Date: 2001-05-29 14:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,11 +597,6 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                 aFilterArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
                 aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
                 IsOrganizerMode() );
-
-        // update redline view mode (was set in view settings)
-        bTmp = IsShowChanges(rDoc.GetRedlineMode());
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        xInfoSet->setPropertyValue( sShowChanges, aAny );
 
         nRet = ReadThroughComponent(
             pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
