@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Task.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:09:42 $
+ *  last change: $Author: vg $  $Date: 2005-03-08 15:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,6 @@ public class Task {
         for (int i = 0; i<listeners.size(); i++)
           ((TaskListener)listeners.get(i)).subtaskNameChanged(te);
     }
-
 
 
     /**
