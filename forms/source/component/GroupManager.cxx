@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-25 17:55:52 $
+ *  last change: $Author: fs $ $Date: 2002-10-02 14:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,29 +392,33 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) thro
 //------------------------------------------------------------------
 void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    Reference<XPropertySet>  xSet(*(InterfaceRef *)Event.Element.getValue(), UNO_QUERY);
-    if (xSet.is())
-        InsertElement( xSet );
+    Reference< XPropertySet > xProps;
+    Event.Element >>= xProps;
+    if ( xProps.is() )
+        InsertElement( xProps );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    Reference<XPropertySet>  xSet(*(InterfaceRef *)Event.Element.getValue(), UNO_QUERY);
-    if (xSet.is())
-        RemoveElement( xSet );
+    Reference<XPropertySet> xProps;
+    Event.Element >>= xProps;
+    if ( xProps.is() )
+        RemoveElement( xProps );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL OGroupManager::elementReplaced(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    Reference<XPropertySet>  xSet(*(InterfaceRef *)Event.ReplacedElement.getValue(), UNO_QUERY);
-    if (xSet.is())
-        RemoveElement( xSet );
+    Reference<XPropertySet> xProps;
+    Event.ReplacedElement >>= xProps;
+    if ( xProps.is() )
+        RemoveElement( xProps );
 
-    xSet = Reference<XPropertySet> (*(InterfaceRef *)Event.Element.getValue(), UNO_QUERY);
-    if (xSet.is())
-        InsertElement( xSet );
+    xProps.clear();
+    Event.Element >>= xProps;
+    if ( xProps.is() )
+        InsertElement( xProps );
 }
 
 // Other functions
