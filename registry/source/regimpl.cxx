@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:00:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,8 @@ static sal_Bool dumpType(RegistryTypeReader& reader, const OString& sIndent)
         {
             fprintf(stdout, "%smethod #%d: ", indent, i);
 
-            switch (reader.getMethodMode(i))
+            RTMethodMode mode = reader.getMethodMode(i);
+            switch (mode)
             {
                 case RT_MODE_INVALID:
                     fprintf(stdout, "<invalid mode> ");
@@ -350,7 +351,8 @@ static sal_Bool dumpType(RegistryTypeReader& reader, const OString& sIndent)
                     fprintf(stdout, "[const] ");
                     break;
                 default:
-                    fprintf(stdout, "<unknown mode> ");
+                    fprintf(
+                        stdout, "<unknown mode %d> ", static_cast< int >(mode));
                     break;
             }
 
@@ -360,7 +362,9 @@ static sal_Bool dumpType(RegistryTypeReader& reader, const OString& sIndent)
 
             for (j = 0; j < reader.getMethodParamCount(i); j++)
             {
-                switch (reader.getMethodParamMode(i, j))
+                RTParamMode mode = reader.getMethodParamMode(i, j);
+                bool rest = (mode & RT_PARAM_REST) != 0;
+                switch (mode & ~RT_PARAM_REST)
                 {
                     case RT_PARAM_INVALID:
                         fprintf(stdout, "<invalid mode> ");
@@ -375,12 +379,15 @@ static sal_Bool dumpType(RegistryTypeReader& reader, const OString& sIndent)
                         fprintf(stdout, "[inout] ");
                         break;
                     default:
-                        fprintf(stdout, "<unknown mode> ");
+                        fprintf(
+                            stdout, "<unknown mode %d> ",
+                            static_cast< int >(mode));
                         break;
                 }
 
-                fprintf(stdout, "%s %s",
+                fprintf(stdout, "%s%s %s",
                         OUStringToOString(reader.getMethodParamType(i, j), RTL_TEXTENCODING_UTF8).getStr(),
+                        rest ? "..." : "",
                         OUStringToOString(reader.getMethodParamName(i, j), RTL_TEXTENCODING_UTF8).getStr());
 
                 if (j != reader.getMethodParamCount(i) - 1)
