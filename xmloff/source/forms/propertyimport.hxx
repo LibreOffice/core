@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:11:09 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ namespace xmloff
         friend class OSinglePropertyContext;
 
     protected:
-        DECLARE_STL_VECTOR( ::com::sun::star::beans::PropertyValue, PropertyValueArray );
+        typedef ::std::vector< ::com::sun::star::beans::PropertyValue > PropertyValueArray;
         PropertyValueArray          m_aValues;
             // the values which the instance collects between StartElement and EndElement
 
