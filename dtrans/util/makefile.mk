@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-14 14:43:03 $
+#   last change: $Author: hro $ $Date: 2002-08-15 10:49:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,9 +83,13 @@ SHL1LIBS=$(SLB)$/mcnttype.lib
 SHL1STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
-        $(CPPUHELPERLIB) \
+        $(CPPUHELPERLIB) 
+
+.IF "$(GUI)"=="WNT"
+SHL1STDLIBS+= \
         uwinapi.lib \
         unicows.lib
+.ENDIF
 
 
 
