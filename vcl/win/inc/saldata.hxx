@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:34:54 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,11 @@
 
 
 class AutoTimer;
-class SalInstance;
-class SalObject;
-class SalFrame;
-class SalVirtualDevice;
-class SalPrinter;
+class WinSalInstance;
+class WinSalObject;
+class WinSalFrame;
+class WinSalVirtualDevice;
+class WinSalPrinter;
 class Font;
 struct HDCCache;
 struct TempFontItem;
@@ -139,16 +139,15 @@ struct SalData
     ULONG                   mnTimerMS;              // Current Time (in MS) of the Timer
     ULONG                   mnTimerOrgMS;           // Current Original Time (in MS)
     UINT                    mnTimerId;              // windows timer id
-    SALTIMERPROC            mpTimerProc;            // timer callback proc
     BOOL                    mbInTimerProc;          // timer event is currently being dispatched
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
-    SalInstance*            mpFirstInstance;        // pointer of first instance
-    SalFrame*               mpFirstFrame;           // pointer of first frame
-    SalObject*              mpFirstObject;          // pointer of first object window
-    SalVirtualDevice*       mpFirstVD;              // first VirDev
-    SalPrinter*             mpFirstPrinter;         // first printing printer
+    WinSalInstance*         mpFirstInstance;        // pointer of first instance
+    WinSalFrame*            mpFirstFrame;           // pointer of first frame
+    WinSalObject*           mpFirstObject;          // pointer of first object window
+    WinSalVirtualDevice*    mpFirstVD;              // first VirDev
+    WinSalPrinter*          mpFirstPrinter;         // first printing printer
     HDCCache*               mpHDCCache;             // Cache for three DC's
     HBITMAP                 mh50Bmp;                // 50% Bitmap
     HBRUSH                  mh50Brush;              // 50% Brush
@@ -266,7 +265,7 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam );
 BOOL ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult );
 
 // \WIN\SOURCE\WINDOW\SALOBJ.CXX
-SalObject* ImplFindSalObject( HWND hWndChild );
+WinSalObject* ImplFindSalObject( HWND hWndChild );
 BOOL ImplSalPreDispatchMsg( MSG* pMsg );
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT nDispatchResult );
 
@@ -383,24 +382,24 @@ WIN_BOOL    ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMs
 WIN_BOOL    ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg );
 LONG        ImplDispatchMessage( CONST MSG *lpMsg );
 
-inline void SetWindowPtr( HWND hWnd, SalFrame* pThis )
+inline void SetWindowPtr( HWND hWnd, WinSalFrame* pThis )
 {
     ImplSetWindowLong( hWnd, SAL_FRAME_THIS, (LONG)pThis );
 }
 
-inline SalFrame* GetWindowPtr( HWND hWnd )
+inline WinSalFrame* GetWindowPtr( HWND hWnd )
 {
-    return (SalFrame*)ImplGetWindowLong( hWnd, SAL_FRAME_THIS );
+    return (WinSalFrame*)ImplGetWindowLong( hWnd, SAL_FRAME_THIS );
 }
 
-inline void SetSalObjWindowPtr( HWND hWnd, SalObject* pThis )
+inline void SetSalObjWindowPtr( HWND hWnd, WinSalObject* pThis )
 {
     ImplSetWindowLong( hWnd, SAL_OBJECT_THIS, (LONG)pThis );
 }
 
-inline SalObject* GetSalObjWindowPtr( HWND hWnd )
+inline WinSalObject* GetSalObjWindowPtr( HWND hWnd )
 {
-    return (SalObject*)ImplGetWindowLong( hWnd, SAL_OBJECT_THIS );
+    return (WinSalObject*)ImplGetWindowLong( hWnd, SAL_OBJECT_THIS );
 }
 
 #endif  // _SV_SALDATA_HXX
