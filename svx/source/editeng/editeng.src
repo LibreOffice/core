@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:22:46 $
+ *  last change: $Author: mt $ $Date: 2002-08-20 17:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,30 +329,10 @@ Menu RID_MENU_SPELL
         {
             Identifier = MN_SPELLING ;
             HelpId = HID_EDITENG_SPELLER_START;
-            Text = "~Rechtschreibung" ;
-            Text [ English ] = "~Spelling" ;
-            Text [ english_us ] = "~Spellcheck" ;
-            Text [ italian ] = "Controllo ~ortografico" ;
-            Text [ spanish ] = "~Ortografía" ;
-            Text [ french ] = "~Orthographe" ;
-            Text [ dutch ] = "~Spellingcontrole" ;
-            Text [ swedish ] = "~Rättstavning" ;
-            Text [ danish ] = "Stavekont~rol" ;
-            Text [ portuguese ] = "Or~tografia" ;
-            Text [ portuguese_brazilian ] = "~Rechtschreibung" ;
-            Text [ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)";
-            Text[ russian ] = "~Ïðàâîïèñàíèå";
-            Text[ polish ] = "~Pisownia";
-            Text[ japanese ] = "æ–‡ç« æ ¡æ­£(~S)";
-            Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥(~S)";
-            Text[ arabic ] = "ÊÏ~ÞíÞ ÅãáÇÆí";
-            Text[ dutch ] = "~Spellingcontrole";
-            Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)";
-            Text[ greek ] = "Ï~ñèïãñáößá";
-            Text[ korean ] = "ë§žì¶¤ë²•(~S)";
-            Text[ turkish ] = "~Yazým kýlavuzu";
-            Text[ catalan ] = "~Ortografía";
-            Text[ finnish ] = "~Oikeinkirjoituksen tarkistus";
+            Text = "~Rechtschreibung..." ;
+            Text [ English ] = "~Spelling..." ;
+            Text [ english_us ] = "~Spellcheck..." ;
+            Text[ language_user1 ] = "triple dots (...) are required now at the end of the text";
         };
         MenuItem
         {
@@ -452,13 +432,14 @@ Menu RID_MENU_SPELL
 };
 
 
+String RID_STR_WORD
+{
+    Text = "Wort ist %x";
+    Text [ ENGLISH ] = "Word is %x";
+};
 
-
-
-
-
-
-
-
-
-
+String RID_STR_PARAGRAPH
+{
+    Text = "Absatz ist %x";
+    Text [ ENGLISH ] = "Paragraph is %x";
+};

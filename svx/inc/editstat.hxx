@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editstat.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-01 13:29:12 $
+ *  last change: $Author: mt $ $Date: 2002-08-20 17:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,16 +158,26 @@ public:
 #define SPELLCMD_IGNOREWORD         0x0001
 #define SPELLCMD_STARTSPELLDLG      0x0002
 #define SPELLCMD_ADDTODICTIONARY    0x0003
+#define SPELLCMD_WORDLANGUAGE       0x0004
+#define SPELLCMD_PARALANGUAGE       0x0005
 
 struct SpellCallbackInfo
 {
-    USHORT      nCommand;
-    String      aWord;
+    USHORT          nCommand;
+    String          aWord;
+    LanguageType    eLanguage;
 
     SpellCallbackInfo( USHORT nCMD, const String& rWord )
     : aWord( rWord )
     {
         nCommand = nCMD;
+        eLanguage = LANGUAGE_DONTKNOW;
+    }
+
+    SpellCallbackInfo( USHORT nCMD, LanguageType eLang )
+    {
+        nCommand = nCMD;
+        eLanguage = eLang;
     }
 };
 
