@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:10:13 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,15 @@ void VCLXCheckBox::setState( short n ) throw(::com::sun::star::uno::RuntimeExcep
     CheckBox* pCheckBox = (CheckBox*)GetWindow();
     if ( pCheckBox)
     {
-        pCheckBox->SetState( (TriState)n );
+        TriState eState;
+        switch ( n )
+        {
+            case 0:     eState = STATE_NOCHECK;     break;
+            case 1:     eState = STATE_CHECK;       break;
+            case 2:     eState = STATE_DONTKNOW;    break;
+            default:    eState = STATE_NOCHECK;
+        }
+        pCheckBox->SetState( eState );
 
         // #105198# call C++ click listeners (needed for accessibility)
         // pCheckBox->GetClickHdl().Call( pCheckBox );
@@ -665,8 +673,20 @@ short VCLXCheckBox::getState() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
+    short nState = -1;
     CheckBox* pCheckBox = (CheckBox*)GetWindow();
-    return pCheckBox ? pCheckBox->GetState() : 0;
+    if ( pCheckBox )
+    {
+        switch ( pCheckBox->GetState() )
+        {
+            case STATE_NOCHECK:     nState = 0; break;
+            case STATE_CHECK:       nState = 1; break;
+            case STATE_DONTKNOW:    nState = 2; break;
+            default:                DBG_ERROR( "VCLXCheckBox::getState(): unknown TriState!" );
+        }
+    }
+
+    return nState;
 }
 
 void VCLXCheckBox::enableTriState( sal_Bool b ) throw(::com::sun::star::uno::RuntimeException)
