@@ -7,13 +7,23 @@
 '*
 '*  $RCSfile: i18n_XTransliteration.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:50:34 $ 
+'*  last change:$Date: 2003-10-06 13:23:22 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
-'*
+'*echo > forms_OCheckBoxModel
+echo > forms_ORadioButtonModel
+echo > svx_SvxUnoTextContent
+echo > svx_SvxUnoTextRange
+echo > sw_SwXAutoTextGroup
+echo > sw_SwXStyle
+echo > sw_SwXTextPortion
+echo > sw_SwXTextSection
+echo > sw_SwAccessiblePageView
+echo > toolkit_AccessibleComboBox
+echo > simplereg_uno_SimpleRegistry
 '*         - GNU Lesser General Public License Version 2.1
 '*         - Sun Industry Standards Source License Version 1.1
 '*
@@ -211,7 +221,7 @@ On Error Goto ErrHndl
     bOK = bOK AND testString("aaa" + chr(9) + chr(10) + "b", "aaa" + chr(9) + chr(10) + "a", 1)
     Test.MethodTested("compareString()", bOK)
 
-    Test.StartMethod("compareSubstring")
+    Test.StartMethod("compareSubstring()")
     bOK = true
     ' substrings below must be equal
     bOK = bOK AND testSubstring("", 0, 0, "", 0, 0, 0)
