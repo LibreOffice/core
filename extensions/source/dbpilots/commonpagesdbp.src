@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:35:22 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ hebrew ] = "Daten";
         Text[ hindi ] = "ड़ॉटा";
         Text[ slovak ] = "Dáta";
+        Text[ hungarian ] = "Adat";
+        Text[ slovenian ] = "Podatki";
     };
     FixedText FT_EXPLANATION
     {
@@ -140,6 +142,8 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ hebrew ] = "Das Formular, zu dem das Kontrollfeld gehört, ist im Augenblick noch nicht (oder noch nicht vollständig) an eine Datenquelle gebunden.\n\nBitte wählen Sie eine Datenquelle und eine Tabelle aus.\n\n\nBitte beachten Sie, dass die Einstellungen, die sie auf dieser Seiter für das Formular vornehmen, sofort beim Verlassen der Seite wirksam werden.";
         Text[ hindi ] = "वर्तमान में, नियंत्रण जो फ़ॉर्म से मिला हुआ है वह ड़ॉटा मूल से नहीं जुड़ा (अथवा पूर्ण रूप से) है ।\n\nकृपया ड़ॉटा मूल और सारणी को चुनिए ।\n\n\nकृपया ध्यान दीजिए कि इस पृष्ठ में की हुयी निर्धारणें इस पृष्ठ से बाहर आते ही लागू होगा ।";
         Text[ slovak ] = "Formulár, ku ktorému patria ovládacie prvky, nie je (alebo nie úplne) zviazaný so zdrojom dát.\n\nProsíme, vyberte zdroj dát a tabuľku.\n\n\nUpozorňujeme, že nastavenia urobené na tejto stránke, sa uplatnia hneď po opustení tejto stránky.";
+        Text[ hungarian ] = "A vezérlőhöz tartozó űrlap nincs (vagy nem teljesen van) hozzákötve egy adatforráshoz. \n\nKérem válasszon másik adatforrást és táblát. \n\n\nAz oldalon végzett beállítások az oldal elhagyása után azonnal életbe lépnek.";
+        Text[ slovenian ] = "Trenutno obrazec, ki mu pripada kontrolnik, ni (ali ni v celoti) povezan z virom podatkov.\n\nIzberite vir podatkov in tabelo.\n\n\nNastavitve, nastavljene na tej strani, bodo začele veljati, takoj ko boste zapustili stran.";
     };
     FixedText FT_DATASOURCE
     {
@@ -173,6 +177,8 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ hebrew ] = "~Datenquelle:";
         Text[ hindi ] = "~ड़ॉटा मूल:";
         Text[ slovak ] = "Zdroj ~dát:";
+        Text[ hungarian ] = "~Adatforrás:";
+        Text[ slovenian ] = "Vir pod~atkov:";
     };
     ListBox LB_DATASOURCE
     {
@@ -215,6 +221,8 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ hebrew ] = "~Tabelle:";
         Text[ hindi ] = "~सारणी:";
         Text[ slovak ] = "~Tabuľka:";
+        Text[ hungarian ] = "~Tábla:";
+        Text[ slovenian ] = "~Tabela:";
     };
     ListBox LB_TABLE
     {
@@ -248,6 +256,8 @@ TabPage RID_PAGE_TABLESELECTION
     Text[ hebrew ] = "Daten";
     Text[ hindi ] = "ड़ॉटा";
     Text[ slovak ] = "Dáta";
+    Text[ hungarian ] = "Adat";
+    Text[ slovenian ] = "Podatki";
 };
 
 TabPage RID_PAGE_OPTION_DBFIELD
@@ -302,7 +312,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ french ] = "Souhaitez-vous enregistrer la valeur dans un champ de base de donn�es ?";
         Text [ spanish ] = "�Desea guardar el valor en un campo de base de datos?";
         Text [ italian ] = "Volete salvare il valore in un campo database ?";
-        Text [ danish ] = "Skal v�rdien gemmes i et databasefelt?";
+        Text [ danish ] = "Vil du gemme v�rdien i et databasefelt?";
         Text [ swedish ] = "Vill du spara v�rdet i ett databasf�lt ?";
         Text [ polish ] = "Czy chcesz zapisa� warto�� w polu bazy danych?";
         Text [ portuguese_brazilian ] = "Deseja salvar o valor num campo da base de dados?";
@@ -322,6 +332,8 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text[ hebrew ] = "Möchten Sie den Wert in einem Datenbankfeld speichern?";
         Text[ hindi ] = "आप लेखासंचय क्षेत्र में मूल्य को संचित करना चाहते है?";
         Text[ slovak ] = "Chcete uložiť hodnotu v poli databázy?";
+        Text[ hungarian ] = "Kívánja az értéket adatbázismezőbe menteni?";
+        Text[ slovenian ] = "Ali želite shraniti vrednost v polje zbirke podatkov?";
     };
     RadioButton RB_STOREINFIELD_YES
     {
@@ -358,6 +370,8 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text[ hebrew ] = "~Ja, und zwar in folgendem Datenbankfeld :";
         Text[ hindi ] = "~हाँ, मैं निम्नलिखित लेखासंचय क्षेत्र में संचित करना चाहता हूँ:";
         Text[ slovak ] = "Á~no, chcem uložiť v nasledujúcom databázovom poli:";
+        Text[ hungarian ] = "~Igen, a következő adatbázismezőbe kívánom menteni:";
+        Text[ slovenian ] = "~Da, želim jo shraniti v sledeče polje zbirke podatkov:";
     };
     ListBox LB_STOREINFIELD
     {
@@ -403,6 +417,8 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text[ hebrew ] = "~Nein, ich möchte den Wert nur im Formular speichern.";
         Text[ hindi ] = "न~हीं, मैं मूल्य को केवल फ़ार्म में संचित करना चाहता हूँ ।";
         Text[ slovak ] = "N~ie, chcem uložiť len hodnotu z formulára.";
+        Text[ hungarian ] = "~Nem, csak az űrlapba kívánom menteni az értéket.";
+        Text[ slovenian ] = "~Ne, vrednost želim shraniti samo v obrazcu.";
     };
     Text[ catalan ] = "Camp de la base de dades";
     Text[ finnish ] = "Tietokantakentt�";
@@ -411,6 +427,8 @@ TabPage RID_PAGE_OPTION_DBFIELD
     Text[ hebrew ] = "Datenbankfeld";
     Text[ hindi ] = "लेखासंचय क्षेत्र";
     Text[ slovak ] = "Pole databázy";
+    Text[ hungarian ] = "adatbázismező";
+    Text[ slovenian ] = "Polje zbirke podatkov";
 };
 
 TabPage RID_PAGE_FORM_DATASOURCE_STATUS
@@ -446,6 +464,8 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ hebrew ] = "‮טופס‬";
         Text[ hindi ] = "फ़ॉर्म";
         Text[ slovak ] = "Formulár";
+        Text[ hungarian ] = "Űrlap";
+        Text[ slovenian ] = "Obrazec";
     };
     FixedText FT_FORMDATASOURCELABEL
     {
@@ -478,6 +498,8 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ hebrew ] = "‮מקור הנתונים‬";
         Text[ hindi ] = "ड़ॉटा मूल";
         Text[ slovak ] = "Zdroj dát";
+        Text[ hungarian ] = "Adatforrás";
+        Text[ slovenian ] = "Vir podatkov";
     };
     FixedText FT_FORMDATASOURCE
     {
@@ -516,6 +538,8 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ hebrew ] = "Art des Inhaltes";
         Text[ hindi ] = "विषय वर्ग";
         Text[ slovak ] = "Obsah";
+        Text[ hungarian ] = "Tartalomtípus";
+        Text[ slovenian ] = "Vrsta vsebine";
     };
     FixedText FT_FORMCONTENTTYPE
     {
@@ -554,6 +578,8 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ hebrew ] = "Inhalt";
         Text[ hindi ] = "विषय";
         Text[ slovak ] = "Obsah";
+        Text[ hungarian ] = "Tartalom";
+        Text[ slovenian ] = "Vsebina";
     };
     FixedText FT_FORMTABLE
     {
@@ -591,6 +617,8 @@ String RID_STR_TYPE_TABLE
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
     Text[ slovak ] = "Tabuľka";
+    Text[ hungarian ] = "Tábla";
+    Text[ slovenian ] = "Tabela";
 };
 
 String RID_STR_TYPE_QUERY
@@ -622,6 +650,8 @@ String RID_STR_TYPE_QUERY
     Text[ hebrew ] = "Abfrage";
     Text[ hindi ] = "जानकारी";
     Text[ slovak ] = "Dotaz";
+    Text[ hungarian ] = "Lekérdezés";
+    Text[ slovenian ] = "Poizvedba";
 };
 
 String RID_STR_TYPE_COMMAND
@@ -653,11 +683,23 @@ String RID_STR_TYPE_COMMAND
     Text[ hebrew ] = "SQL-Befehl";
     Text[ hindi ] = "SQL आज्ञा";
     Text[ slovak ] = "SQL príkaz";
+    Text[ hungarian ] = "SQL-parancs";
+    Text[ slovenian ] = "SQL-ukaz";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.33.90.1  2003/12/16 11:43:23  hr
+ *  #111934#: join CWS ooo111fix1
+ *
+ *  Revision 1.33.44.1  2003/11/24 13:32:08  ihi
+ *  OOo 1.1.1 merge
+ *
+ *  Revision 1.33  2003/07/17 12:35:22  hr
+ *  INTEGRATION: CWS mergerc3 (1.32.6); FILE MERGED
+ *  2003/07/16 17:08:00 ihi 1.32.6.1: rc-3 merge all languages
+ *
  *  Revision 1.32.6.1  2003/07/16 17:08:00  ihi
  *  rc-3 merge all languages
  *
@@ -803,6 +845,7 @@ String RID_STR_TYPE_COMMAND
  *
  *  Revision 1.0 14.02.01 11:05:25  fs
  ************************************************************************/
+
 
 
 
