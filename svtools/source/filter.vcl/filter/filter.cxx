@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 12:22:53 $
+ *  last change: $Author: ka $ $Date: 2000-11-07 14:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,8 +635,8 @@ static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, B
             rFormatExtension = UniString::CreateFromAscii( "SVM", 3 );
             return TRUE;
         }
-        else if( sFirstBytes[2]==0x56 && sFirstBytes[3]==0x43 && sFirstBytes[4]==0x4C &&
-                 sFirstBytes[5]==0x4D && sFirstBytes[6]==0x54 && sFirstBytes[7]==0x46 )
+        else if( sFirstBytes[0]==0x56 && sFirstBytes[1]==0x43 && sFirstBytes[2]==0x4C &&
+                 sFirstBytes[3]==0x4D && sFirstBytes[4]==0x54 && sFirstBytes[5]==0x46 )
         {
             rFormatExtension = UniString::CreateFromAscii( "SVM", 3 );
             return TRUE;

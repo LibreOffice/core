@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: ka $ $Date: 2000-11-07 14:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1303,8 +1303,7 @@ BOOL GraphicDescriptor::ImpDetectSVM( SvStream& rStm, BOOL bExtendedInfo )
     }
     else
     {
-        // StringLen-Feld ueberlesen
-        rStm.SeekRel( -2L );
+        rStm.SeekRel( -4L );
         rStm >> nTemp32;
 
         if( nTemp32 == 0x4D4C4356 )
