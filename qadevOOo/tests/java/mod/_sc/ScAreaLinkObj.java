@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAreaLinkObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:43 $
+ *  last change:$Date: 2003-01-31 14:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.sheet.CellAreaLink</code>.
@@ -139,39 +142,42 @@ public class ScAreaLinkObj extends TestCase {
     * link is passed as a tested object.
     */
     public synchronized TestEnvironment createTestEnvironment
-            ( TestParameters Param, PrintWriter log )
-            throws StatusException {
+            ( TestParameters Param, PrintWriter log ) throws StatusException {
 
-          XInterface oObj = null;
+        XInterface oObj = null;
 
-          try {
+        try {
 
             // creation of testobject here
             XPropertySet props = (XPropertySet) UnoRuntime.queryInterface
                 (XPropertySet.class, xSheetDoc);
-            XAreaLinks links = (XAreaLinks) props.getPropertyValue("AreaLinks") ;
+            XAreaLinks links = (XAreaLinks) AnyConverter.toObject(
+                new Type(XAreaLinks.class),props.getPropertyValue("AreaLinks")) ;
             CellAddress addr = new CellAddress ((short) 1,2,3) ;
             links.insertAtPosition (addr, "", "a2:b5", "", "") ;
 
-            oObj = (XInterface) links.getByIndex(0) ;
-          } catch (com.sun.star.beans.UnknownPropertyException e) {
+            oObj = (XInterface) AnyConverter.toObject(
+                        new Type(XInterface.class), links.getByIndex(0)) ;
+        } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println ("Exception occured while creating test Object.") ;
             e.printStackTrace(log) ;
             throw new StatusException("Couldn't create test object", e);
-          } catch (com.sun.star.lang.WrappedTargetException e) {
+        } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println ("Exception occured while creating test Object.") ;
             e.printStackTrace(log) ;
             throw new StatusException("Couldn't create test object", e);
-          } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println ("Exception occured while creating test Object.") ;
             e.printStackTrace(log) ;
             throw new StatusException("Couldn't create test object", e);
-          }
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            log.println ("Exception occured while creating test Object.") ;
+            e.printStackTrace(log) ;
+            throw new StatusException("Couldn't create test object", e);
+        }
 
-          TestEnvironment tEnv = new TestEnvironment(oObj) ;
+        TestEnvironment tEnv = new TestEnvironment(oObj) ;
 
-          return tEnv;
+        return tEnv;
     }
-
 }
-

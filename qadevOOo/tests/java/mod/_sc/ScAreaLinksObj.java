@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAreaLinksObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:42 $
+ *  last change:$Date: 2003-01-31 14:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 
 /**
 * Test for object which is represented by service
@@ -145,7 +149,8 @@ public class ScAreaLinksObj extends TestCase {
         // creation of testobject here
         XPropertySet props = (XPropertySet)UnoRuntime.queryInterface
             (XPropertySet.class, xSheetDoc);
-        oObj = (XInterface) props.getPropertyValue("AreaLinks") ;
+        oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),props.getPropertyValue("AreaLinks")) ;
         XAreaLinks links = null ;
 
         // adding one link into collection (for best testing)
@@ -161,6 +166,10 @@ public class ScAreaLinksObj extends TestCase {
         e.printStackTrace(log) ;
         throw new StatusException("Couldn't create test object", e);
       } catch (com.sun.star.lang.WrappedTargetException e) {
+        log.println ("Exception occured while creating test Object.") ;
+        e.printStackTrace(log) ;
+        throw new StatusException("Couldn't create test object", e);
+      } catch (com.sun.star.lang.IllegalArgumentException e) {
         log.println ("Exception occured while creating test Object.") ;
         e.printStackTrace(log) ;
         throw new StatusException("Couldn't create test object", e);
