@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:24:51 $
+ *  last change: $Author: ka $ $Date: 2001-06-08 13:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,8 +228,6 @@ SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
 {
     Graphic aGraphic;
     String  aFilter;
-
-    aGraphic.SetLink( GfxLink() );
 
     if ( SGA_IMPORT_NONE != SGAImport( rURL, aGraphic, aFilter ) )
         Init( aGraphic, rURL );

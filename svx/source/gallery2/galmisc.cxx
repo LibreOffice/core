@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 10:53:16 $
+ *  last change: $Author: ka $ $Date: 2001-06-08 13:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,60 +304,6 @@ String GetReducedString( const INetURLObject& rURL )
         aStr = rURL.GetMainURL();
 
     return aStr;
-}
-
-// ------------------------
-// - CreateUniqueFileName -
-// ------------------------
-
-INetURLObject CreateUniqueURL( Gallery* pGallery, SgaObjKind eObjKind )
-{
-    INetURLObject   aURL( pGallery->GetUserURL() );
-    sal_uInt32      nNextNumber;
-
-    aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "sdddndx1" ) ) );
-
-    if( FileExists( aURL ) )
-    {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ );
-
-        if( pIStm )
-        {
-            *pIStm >> nNextNumber;
-            delete pIStm;
-        }
-    }
-    else
-        nNextNumber = 1999;
-
-    String aNextFileName( RTL_CONSTASCII_USTRINGPARAM( "dd" ) );
-    aNextFileName += String::CreateFromInt32( ++nNextNumber % ( eObjKind == SGA_OBJ_SVDRAW ? 99999999L : 999999L ) );
-
-    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE );
-
-    if( pOStm )
-    {
-        *pOStm << nNextNumber;
-        delete pOStm;
-    }
-
-    if( SGA_OBJ_SVDRAW == eObjKind )
-    {
-        const static String aBaseURLStr( RTL_CONSTASCII_USTRINGPARAM( "gallery/svdraw/" ) );
-
-        String aSvDrawURLStr( aBaseURLStr );
-        aURL = INetURLObject( aSvDrawURLStr += aNextFileName, INET_PROT_PRIV_SOFFICE );
-    }
-    else
-    {
-        aURL.removeSegment();
-        aURL.removeFinalSlash();
-        aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "dragdrop" ) ) );
-        CreateDir( aURL );
-        aURL.Append( aNextFileName += String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) ) );
-    }
-
-    return aURL;
 }
 
 // -----------------------------------------------------------------------------

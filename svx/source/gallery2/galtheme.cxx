@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-31 10:38:26 $
+ *  last change: $Author: ka $ $Date: 2001-06-08 13:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,99 @@ INetURLObject GalleryTheme::ImplGetURL( const GalleryObject* pObject ) const
 
 // ------------------------------------------------------------------------
 
+INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFormat )
+{
+    INetURLObject   aDir( GetParent()->GetUserURL() );
+    INetURLObject   aInfoFileURL( GetParent()->GetUserURL() );
+    INetURLObject   aNewURL;
+    sal_uInt32      nNextNumber;
+    sal_Char*       pExt;
+    BOOL            bExists;
+
+    aDir.Append( String( RTL_CONSTASCII_USTRINGPARAM( "dragdrop" ) ) );
+    CreateDir( aDir );
+
+    aInfoFileURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "sdddndx1" ) ) );
+
+    // read next possible number
+    if( FileExists( aInfoFileURL ) )
+    {
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL(), STREAM_READ );
+
+        if( pIStm )
+        {
+            *pIStm >> nNextNumber;
+            delete pIStm;
+        }
+    }
+    else
+        nNextNumber = 1999;
+
+    // create extension
+    if( nFormat )
+    {
+        switch( nFormat )
+        {
+            case( CVT_BMP ): pExt = ".bmp"; break;
+            case( CVT_GIF ): pExt = ".gif"; break;
+            case( CVT_JPG ): pExt = ".jpg"; break;
+            case( CVT_MET ): pExt = ".met"; break;
+            case( CVT_PCT ): pExt = ".pct"; break;
+            case( CVT_PNG ): pExt = ".png"; break;
+            case( CVT_SVM ): pExt = ".svm"; break;
+            case( CVT_TIF ): pExt = ".tif"; break;
+            case( CVT_WMF ): pExt = ".wmf"; break;
+            case( CVT_EMF ): pExt = ".emf"; break;
+
+            default:
+                pExt = ".grf";
+            break;
+        }
+    }
+
+    do
+    {
+        // get URL
+        if( SGA_OBJ_SVDRAW == eObjKind )
+        {
+            String aFileName( RTL_CONSTASCII_USTRINGPARAM( "gallery/svdraw/dd" ) );
+            aNewURL = INetURLObject( aFileName += String::CreateFromInt32( ++nNextNumber % 99999999 ), INET_PROT_PRIV_SOFFICE );
+
+            bExists = FALSE;
+
+            for( GalleryObject* pEntry = aObjectList.First(); pEntry && !bExists; pEntry = aObjectList.Next() )
+                if( pEntry->aURL == aNewURL )
+                    bExists = TRUE;
+        }
+        else
+        {
+            String aFileName( RTL_CONSTASCII_USTRINGPARAM( "dd" ) );
+
+            aFileName += String::CreateFromInt32( ++nNextNumber % 999999 );
+            aFileName += String( pExt, RTL_TEXTENCODING_ASCII_US );
+
+            aNewURL = aDir;
+            aNewURL.Append( aFileName );
+
+            bExists = FileExists( aNewURL );
+        }
+    }
+    while( bExists );
+
+    // write updated number
+    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL(), STREAM_WRITE );
+
+    if( pOStm )
+    {
+        *pOStm << nNextNumber;
+        delete pOStm;
+    }
+
+    return aNewURL;
+}
+
+// ------------------------------------------------------------------------
+
 void GalleryTheme::ImplBroadcast( ULONG nUpdatePos )
 {
     if( !IsBroadcasterLocked() )
@@ -446,8 +539,10 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                 pProgress->Update( i, nCount - 1 );
 
             pEntry = aObjectList.GetObject( i );
-            aActualizeURL = pEntry->aURL;
-            rActualizeLink.Call( this );
+
+            const INetURLObject aURL( pEntry->aURL );
+
+            rActualizeLink.Call( (void*) &aURL );
 
             // SvDraw-Objekte werden spaeter aktualisiert
             if( pEntry->eObjKind != SGA_OBJ_SVDRAW )
@@ -461,21 +556,18 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                 if( TRUE )
 #endif
                 {
-                    // vermeiden, dass ein native Link angelegt wird,
-                    // da dies an dieser Stelle nicht noetig ist
                     aGraphic.Clear();
-                    aGraphic.SetLink( GfxLink() );
 
-                    if ( SGAImport( aActualizeURL, aGraphic, aFormat ) )
+                    if ( SGAImport( aURL, aGraphic, aFormat ) )
                     {
                         SgaObject* pNewObj;
 
                         if ( SGA_OBJ_INET == pEntry->eObjKind )
-                            pNewObj = (SgaObject*) new SgaObjectINet( aGraphic, aActualizeURL, aFormat );
+                            pNewObj = (SgaObject*) new SgaObjectINet( aGraphic, aURL, aFormat );
                         else if ( aGraphic.IsAnimated() )
-                            pNewObj = (SgaObject*) new SgaObjectAnim( aGraphic, aActualizeURL, aFormat );
+                            pNewObj = (SgaObject*) new SgaObjectAnim( aGraphic, aURL, aFormat );
                         else
-                            pNewObj = (SgaObject*) new SgaObjectBmp( aGraphic, aActualizeURL, aFormat );
+                            pNewObj = (SgaObject*) new SgaObjectBmp( aGraphic, aURL, aFormat );
 
                         if( !InsertObject( *pNewObj ) )
                             pEntry->bDummy = TRUE;
@@ -488,7 +580,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                 // restliche Sachen als Sound-Objekte aufnehmen
                 else
                 {
-                    SgaObjectSound aObjSound( aActualizeURL );
+                    SgaObjectSound aObjSound( aURL );
                     if( !InsertObject( aObjSound ) )
                         pEntry->bDummy = TRUE;
                 }
@@ -820,48 +912,62 @@ BOOL GalleryTheme::InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos )
 
     if( rGraphic.GetType() != GRAPHIC_NONE )
     {
-        INetURLObject aURL( CreateUniqueURL( GetParent(), SGA_OBJ_BMP ) );
-        DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+        ULONG           nExportFormat = CVT_UNKNOWN;
+        const GfxLink   aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
 
-        if( rGraphic.GetType() == GRAPHIC_BITMAP )
+        if( aGfxLink.GetDataSize() )
         {
-            ULONG nExportFormat;
-
-            if( rGraphic.IsAnimated() )
+            switch( aGfxLink.GetType() )
             {
-                aURL.SetExtension( String( RTL_CONSTASCII_USTRINGPARAM( "gif" ) ) );
-                nExportFormat = CVT_GIF;
-            }
-            else
-            {
-                aURL.SetExtension( String( RTL_CONSTASCII_USTRINGPARAM( "png" ) ) );
-                nExportFormat = CVT_PNG;
-            }
-
-            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
-
-            if( pOStm )
-            {
-                pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
-                bRet = ( GraphicConverter::Export( *pOStm, rGraphic, nExportFormat ) == ERRCODE_NONE );
-                delete pOStm;
+                case( GFX_LINK_TYPE_EPS_BUFFER ): nExportFormat = CVT_SVM; break;
+                case( GFX_LINK_TYPE_NATIVE_GIF ): nExportFormat = CVT_GIF; break;
+                case( GFX_LINK_TYPE_NATIVE_JPG ): nExportFormat = CVT_JPG; break;
+                case( GFX_LINK_TYPE_NATIVE_PNG ): nExportFormat = CVT_PNG; break;
+                case( GFX_LINK_TYPE_NATIVE_TIF ): nExportFormat = CVT_TIF; break;
+                case( GFX_LINK_TYPE_NATIVE_WMF ): nExportFormat = CVT_WMF; break;
+                case( GFX_LINK_TYPE_NATIVE_MET ): nExportFormat = CVT_MET; break;
+                case( GFX_LINK_TYPE_NATIVE_PCT ): nExportFormat = CVT_PCT; break;
             }
         }
         else
         {
-            aURL.SetExtension( String( RTL_CONSTASCII_USTRINGPARAM( "svm" ) ) );
-
-            GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
-
-            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
-
-            if( pOStm )
+            if( rGraphic.GetType() == GRAPHIC_BITMAP )
             {
-                pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
+                if( rGraphic.IsAnimated() )
+                    nExportFormat = CVT_GIF;
+                else
+                    nExportFormat = CVT_PNG;
+            }
+            else
+                nExportFormat = CVT_SVM;
+        }
+
+        const INetURLObject aURL( ImplCreateUniqueURL( SGA_OBJ_BMP, nExportFormat ) );
+        SvStream*           pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
+
+        if( pOStm )
+        {
+            pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
+
+            if( CVT_SVM == nExportFormat )
+            {
+                GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
+
                 aMtf.Write( *pOStm );
                 bRet = ( pOStm->GetError() == ERRCODE_NONE );
-                delete pOStm;
             }
+            else
+            {
+                if( aGfxLink.GetDataSize() )
+                {
+                    pOStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
+                    bRet = ( pOStm->GetError() == ERRCODE_NONE );
+                }
+                else
+                    bRet = ( GraphicConverter::Export( *pOStm, rGraphic, nExportFormat ) == ERRCODE_NONE );
+            }
+
+            delete pOStm;
         }
 
         if( bRet )
@@ -907,7 +1013,7 @@ BOOL GalleryTheme::GetModel( ULONG nPos, FmFormModel& rModel, BOOL bProgress )
 
 BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
 {
-    INetURLObject   aURL( CreateUniqueURL( GetParent(), SGA_OBJ_SVDRAW ) );
+    INetURLObject   aURL( ImplCreateUniqueURL( SGA_OBJ_SVDRAW ) );
     SvStorageRef    xStor( GetSvDrawStorage() );
     BOOL            bRet = FALSE;
 
@@ -974,8 +1080,6 @@ BOOL GalleryTheme::InsertURL( const INetURLObject& rURL, ULONG nInsertPos )
     SgaObject*      pNewObj = NULL;
     const USHORT    nImportRet = SGAImport( rURL, aGraphic, aFormat );
     BOOL            bRet = FALSE;
-
-    aGraphic.SetLink( GfxLink() );
 
     if( nImportRet != SGA_IMPORT_NONE )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-31 10:37:09 $
+ *  last change: $Author: ka $ $Date: 2001-06-08 13:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     mpIconView->SetSelectHdl( aSelectHdl );
     mpListView->SetSelectHdl( aSelectHdl );
 
-    SetMode( GalleryBrowser2::meInitMode );
+    SetMode( ( GALLERYBROWSERMODE_PREVIEW != GalleryBrowser2::meInitMode ) ? GalleryBrowser2::meInitMode : GALLERYBROWSERMODE_ICON );
 }
 
 // -----------------------------------------------------------------------------
@@ -477,7 +477,7 @@ void GalleryBrowser2::ShowContextMenu( Window* pWindow, const Point* pContextPoi
 {
     const ULONG nItemId = ImplGetSelectedItemId( pContextPoint );
 
-    if( nItemId && mpCurTheme && ( nItemId <= mpCurTheme->GetObjectCount() ) )
+    if( mpCurTheme && nItemId && ( nItemId <= mpCurTheme->GetObjectCount() ) )
     {
         ImplSelectItemId( nItemId );
 
@@ -583,12 +583,14 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                        mpIconView->Hide();
                     mpListView->Hide();
 
-                    mpCurTheme->GetGraphic( nPos, aGraphic );
+                    if( mpCurTheme )
+                        mpCurTheme->GetGraphic( nPos, aGraphic );
+
                     mpPreview->SetGraphic( aGraphic );
                      mpPreview->Show();
                     mpPreview->GrabFocus();
 
-                    if( mpCurTheme->GetObjectKind( nPos ) == SGA_OBJ_SOUND )
+                    if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SGA_OBJ_SOUND )
                         mpPreview->PreviewSound( mpCurTheme->GetObjectURL( nPos ) );
 
                     maViewBox.EnableItem( TBX_ID_ICON, FALSE );
@@ -826,7 +828,7 @@ IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
         const USHORT    nId = pMenu->GetCurItemId();
         const ULONG     nItemId = ImplGetSelectedItemId( NULL );
 
-        if( nItemId )
+        if( mpCurTheme && nItemId )
         {
             mnCurActionPos = nItemId - 1;
 

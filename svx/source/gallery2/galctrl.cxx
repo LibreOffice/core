@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-06 12:10:59 $
+ *  last change: $Author: ka $ $Date: 2001-06-08 13:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,6 @@ void GalleryPreview::Paint( const Rectangle& rRect )
 
 void GalleryPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    Window::MouseButtonDown( rMEvt );
-
     if( mpTheme && ( rMEvt.GetClicks() == 2 ) )
         ( (GalleryBrowser2*) GetParent() )->TogglePreview( this );
 }
@@ -393,8 +391,7 @@ void GalleryIconView::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
     // call this to initiate dragging for ValueSet
     ValueSet::StartDrag( aEvt, aRegion );
-
-    ( (GalleryBrowser2*) GetParent() )->StartDrag( this, &rPosPixel );
+    ( (GalleryBrowser2*) GetParent() )->StartDrag( this );
 }
 
 // -------------------
@@ -541,14 +538,28 @@ void GalleryListView::Select()
 
 sal_Int8 GalleryListView::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 {
-    return( ( (GalleryBrowser2*) GetParent() )->AcceptDrop( *this, rEvt ) );
+    sal_Int8 nRet = DND_ACTION_NONE;
+
+       if( mpTheme && !mpTheme->IsReadOnly() && !mpTheme ->IsImported() )
+    {
+        if( !mpTheme->IsDragging() )
+            nRet = DND_ACTION_COPY;
+        else
+            nRet = DND_ACTION_MOVE;
+    }
+
+    return nRet;
 }
 
 // ------------------------------------------------------------------------
 
 sal_Int8 GalleryListView::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 {
-    return( ( (GalleryBrowser2*) GetParent() )->ExecuteDrop( *this, rEvt ) );
+    ExecuteDropEvent aEvt( rEvt );
+
+    aEvt.maPosPixel.Y() += GetTitleHeight();
+
+    return( ( (GalleryBrowser2*) GetParent() )->ExecuteDrop( *this, aEvt ) );
 }
 
 // ------------------------------------------------------------------------
