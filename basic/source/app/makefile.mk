@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ab $ $Date: 2000-11-14 11:06:22 $
+#   last change: $Author: hjs $ $Date: 2001-02-06 11:15:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,39 +65,16 @@ PRJ=..$/..
 PRJNAME=BASIC
 TARGET=app
 
+LIBTARGET = NO
+
 # --- Settings ------------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Allgemein ------------------------------------------------------------
 
 .INCLUDE :  minor.mk
 RSCUPDVER=$(RSCREVISION)SV$(UPD)$(UPDMINOR)
-
-
-CXXFILES = \
-    ttstrhlp.cxx			\
-    ttbasic.cxx				\
-    basicrt.cxx				\
-    processw.cxx            \
-    process.cxx             \
-    brkpnts.cxx             \
-    app.cxx                 \
-    mybasic.cxx             \
-    status.cxx              \
-    printer.cxx             \
-    appwin.cxx              \
-    appedit.cxx             \
-    appbased.cxx            \
-    apperror.cxx            \
-    textedit.cxx            \
-    msgedit.cxx             \
-    dialogs.cxx             \
-    comm_bas.cxx            \
-    testbasi.cxx            
-
 
 OBJFILES = \
     $(OBJ)$/ttstrhlp.obj	\
@@ -117,8 +94,7 @@ OBJFILES = \
     $(OBJ)$/textedit.obj    \
     $(OBJ)$/msgedit.obj     \
     $(OBJ)$/dialogs.obj     \
-    $(OBJ)$/comm_bas.obj	\
-    $(SLO)$/sbintern.obj
+    $(OBJ)$/comm_bas.obj
 
 EXCEPTIONSFILES = \
     $(OBJ)$/app.obj
@@ -131,37 +107,30 @@ SRCFILES = \
     svtmsg.src				\
     testtool.src
 
-LIBTARGET = NO
-
 LIB1TARGET=$(LB)$/app.lib
 LIB1ARCHIV=$(LB)$/libapp.a
 LIB1OBJFILES = \
         $(OBJ)$/ttstrhlp.obj	\
         $(OBJ)$/basicrt.obj	\
         $(OBJ)$/processw.obj     \
-              $(OBJ)$/process.obj      \
-              $(OBJ)$/brkpnts.obj      \
-              $(OBJ)$/app.obj          \
+        $(OBJ)$/process.obj      \
+        $(OBJ)$/brkpnts.obj      \
+        $(OBJ)$/app.obj          \
         $(OBJ)$/mybasic.obj	\
-              $(OBJ)$/status.obj       \
-              $(OBJ)$/printer.obj      \
-              $(OBJ)$/appwin.obj       \
-              $(OBJ)$/appedit.obj      \
-              $(OBJ)$/appbased.obj     \
-              $(OBJ)$/apperror.obj     \
-              $(OBJ)$/textedit.obj     \
-              $(OBJ)$/msgedit.obj      \
-              $(OBJ)$/dialogs.obj      \
-              $(OBJ)$/comm_bas.obj	\
-        $(SLO)$/sbintern.obj
-
-.IF "$(depend)" == ""
-
-ALL:    $(LB)$/app.lib  \
-        ALLTAR
-
-.ENDIF
+        $(OBJ)$/status.obj       \
+        $(OBJ)$/printer.obj      \
+        $(OBJ)$/appwin.obj       \
+        $(OBJ)$/appedit.obj      \
+        $(OBJ)$/appbased.obj     \
+        $(OBJ)$/apperror.obj     \
+        $(OBJ)$/textedit.obj     \
+        $(OBJ)$/msgedit.obj      \
+        $(OBJ)$/dialogs.obj      \
+        $(OBJ)$/comm_bas.obj	\
+        $(OBJ)$/sbintern.obj
 
 # --- Targets ------------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+

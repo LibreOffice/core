@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 18:49:48 $
+#   last change: $Author: hjs $ $Date: 2001-02-06 11:15:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,11 +69,7 @@ TARGET=classes
 
 ENABLE_EXCEPTIONS=TRUE
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-
 
 # --- Allgemein -----------------------------------------------------------
 
@@ -86,6 +82,9 @@ SLOFILES=	\
     $(SLO)$/propacc.obj	\
     $(SLO)$/disas.obj
 
+OBJFILES=	\
+    $(OBJ)$/sbintern.obj
+
 SRCFILES=	sb.src
 
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
@@ -96,3 +95,4 @@ SLOFILES+=$(SLO)$/staticmb.obj
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
+
