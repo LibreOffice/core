@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-10 15:19:15 $
+ *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1530,22 +1530,6 @@ SwDefFontSave::~SwDefFontSave()
         // SwFont zurueckstellen
         pFnt->Invalidate();
         pInf->SetFont( pFnt );
-    }
-}
-
-/*************************************************************************
- *                     SwFtnSave::~SwFtnSave()
- *************************************************************************/
-
-SwFtnSave::~SwFtnSave()
-{
-    if( pFnt )
-    {
-        // SwFont zurueckstellen
-        *pFnt = *pOld;
-        pFnt->GetTox() = pOld->GetTox();
-        pFnt->ChgPhysFnt( pInf->GetVsh(), pInf->GetOut() );
-        delete pOld;
     }
 }
 

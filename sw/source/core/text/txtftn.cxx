@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-20 13:08:45 $
+ *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,12 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 
 #include "txtcfg.hxx"
 #include "swfont.hxx"   // new SwFont
@@ -103,6 +109,7 @@
 #include "frmtool.hxx"
 #include "ndindex.hxx"
 
+using namespace ::com::sun::star;
 
 /*************************************************************************
  *                              _IsFtnNumFrm()
@@ -1267,6 +1274,21 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
         SwFmtFtn& rFtn = (SwFmtFtn&)pTxtFtn->GetFtn();
         const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
 
+        // examine text and set script
+        if ( pBreakIt->xBreak.is() )
+        {
+            const XubString& rTxt = rFtn.GetViewNumStr( *pDoc );
+            USHORT nTxtScript = pBreakIt->xBreak->getScriptType( rTxt, 0 );
+
+            BYTE nScript = SW_LATIN;
+            switch ( nTxtScript ) {
+                case i18n::ScriptType::ASIAN : nScript = SW_CJK; break;
+                case i18n::ScriptType::COMPLEX : nScript = SW_CTL; break;
+            }
+
+            pFnt->SetActual( nScript );
+        }
+
         const SwEndNoteInfo* pInfo;
         if( rFtn.IsEndNote() )
             pInfo = &pDoc->GetEndNoteInfo();
@@ -1296,12 +1318,28 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
 }
 
 /*************************************************************************
+ *                     SwFtnSave::~SwFtnSave()
+ *************************************************************************/
+
+SwFtnSave::~SwFtnSave()
+{
+    if( pFnt )
+    {
+        // SwFont zurueckstellen
+        *pFnt = *pOld;
+        pFnt->GetTox() = pOld->GetTox();
+        pFnt->ChgPhysFnt( pInf->GetVsh(), pInf->GetOut() );
+        delete pOld;
+    }
+}
+
+/*************************************************************************
  *                      SwFtnPortion::SwFtnPortion()
  *************************************************************************/
 
-SwFtnPortion::SwFtnPortion( const XubString &rExpand,
-                            SwTxtFrm *pFrm, SwTxtFtn *pFtn, KSHORT nReal )
-        : aExpand( rExpand ), pFrm(pFrm), pFtn(pFtn), nOrigHeight( nReal )
+SwFtnPortion::SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrm,
+                            SwTxtFtn *pFtn, KSHORT nReal )
+        : SwFldPortion( rExpand, 0 ), pFrm(pFrm), pFtn(pFtn), nOrigHeight( nReal )
 {
     SetLen(1);
     SetWhichPor( POR_FTN );
@@ -1338,9 +1376,10 @@ sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
     // this flag indicates, that a footnote is allowed to trigger
     // an underflow during SwTxtGuess::Guess
     rInf.SetFakeLineStart( rInf.GetIdx() > rInf.GetLineStart() );
-    sal_Bool bFull = SwExpandPortion::Format( rInf );
+    sal_Bool bFull = SwFldPortion::Format( rInf );
     rInf.SetFakeLineStart( sal_False );
     SetAscent( rInf.GetAscent() );
+    Height( rInf.GetTxtHeight() );
     rInf.SetFtnDone( !bFull );
     if( !bFull )
         rInf.SetParaFtn();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-09 09:56:17 $
+ *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
     // Zu beobachten in 8081.sdw, wenn man in der ersten Zeile Text eingibt.
 
     const xub_StrLen nSoftHyphPos = rInf.GetSoftHyphPos();
+    const xub_StrLen nUnderScorePos = rInf.GetUnderScorePos();
 
     // 8358, 8359: Flys sichern und auf 0 setzen, sonst GPF
     // 3983: Nicht ClearFly(rInf) !
@@ -276,6 +277,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
     // Truncate() untergehen wird.
     rInf.SetUnderFlow(0);
     rInf.SetSoftHyphPos( nSoftHyphPos );
+    rInf.SetUnderScorePos( nUnderScorePos );
     rInf.SetPaintOfst( GetLeftMargin() );
 
     // Wir suchen die Portion mit der Unterlaufposition
@@ -488,7 +490,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
         // We have to check the script for fields in order to set the
         // correct nActual value for the font.
-        if( pPor->InFldGrp() )
+        if( pPor->InFldGrp() && ! pPor->IsFtnPortion() )
             ((SwFldPortion*)pPor)->CheckScript( rInf );
 
         if( rInf.HasScriptSpace() && rInf.GetLast() && rInf.GetLast()->InTxtGrp()
@@ -872,12 +874,14 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     if ( nLeftScanIdx <= rInf.GetIdx() && rInf.GetIdx() <= nRightScanIdx )
     {
         if ( nNextChg > nRightScanIdx )
-            nNextChg = nRightScanIdx = rInf.ScanPortionEnd( nRightScanIdx, nNextChg );
+            nNextChg = nRightScanIdx =
+                rInf.ScanPortionEnd( nRightScanIdx, nNextChg );
     }
     else
     {
         nLeftScanIdx = rInf.GetIdx();
-        nNextChg = nRightScanIdx = rInf.ScanPortionEnd( rInf.GetIdx(), nNextChg );
+        nNextChg = nRightScanIdx =
+                rInf.ScanPortionEnd( rInf.GetIdx(), nNextChg );
     }
 
     pPor->SetLen( nNextChg - rInf.GetIdx() );
@@ -1258,7 +1262,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     SwLinePortion* pFld = GetInfo().GetRest();
     SwFldPortion* pSaveFld = 0;
 
-    if ( pFld && pFld->InFldGrp() )
+    if ( pFld && pFld->InFldGrp() && ! pFld->IsFtnPortion() )
         pSaveFld = new SwFldPortion( *((SwFldPortion*)pFld) );
 
     // for an optimal repaint rectangle, we want to compare fly portions

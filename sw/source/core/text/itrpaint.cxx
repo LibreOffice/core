@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-10 09:20:04 $
+ *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,9 +657,10 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
         //
         // here starts the algorithm for calculating the underline font
         //
-        SwScriptInfo aScriptInfo;
+        SwScriptInfo& rScriptInfo = GetInfo().GetParaPortion()->GetScriptInfo();
+//        SwScriptInfo aScriptInfo;
         SwAttrIter aIter( *(SwTxtNode*)GetInfo().GetTxtFrm()->GetTxtNode(),
-                        aScriptInfo );
+                          rScriptInfo );
 
         xub_StrLen nTmpIdx = nIndx;
         ULONG nSumWidth = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-10 15:19:15 $
+ *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,9 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             // the height depending on the fields font is set,
             // this is required for SwTxtGuess::Guess
             Height( rInf.GetTxtHeight() );
+            // If a kerning portion is inserted after our field portion,
+            // the ascent and height must be known
+            SetAscent( rInf.GetAscent() );
             bFull = SwTxtPortion::Format( rInf );
             rInf.SetNotEOL( sal_False );
             rInf.SetLineStart( nOldLineStart );
@@ -461,10 +464,6 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         // Das Zeichen wird in der ersten Portion gehalten.
         // Unbedingt nach Format!
         SetLen( nFollow );
-
-        // 7634 mit ASSERT: bad ascent
-        if( pFnt && nTmpLen )
-            SetAscent( rInf.GetAscent() );
 
         if( nRest )
         {

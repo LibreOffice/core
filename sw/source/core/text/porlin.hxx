@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,7 @@ class SwTxtFormatInfo;
 
 #define POR_EXP         0xc080
 #define POR_BLANK       0xc081
-#define POR_FTN         0xc082
-#define POR_POSTITS     0xc083
+#define POR_POSTITS     0xc082
 
 #define POR_HYPH        0xd080
 #define POR_HYPHSTR     0xd081
@@ -132,6 +131,7 @@ class SwTxtFormatInfo;
 #define POR_QUOVADIS    0xe082
 #define POR_ERGOSUM     0xe083
 #define POR_COMBINED    0xe084
+#define POR_FTN         0xe085
 
 #define POR_FTNNUM      0xe880
 #define POR_NUMBER      0xe881
