@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:10:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,7 @@ class PrintFontManager
         weight::type                                m_eWeight;
         pitch::type                                 m_ePitch;
         rtl_TextEncoding                            m_aEncoding;
+        bool                                        m_bFontEncodingOnly; // set if font should be only accessed by builtin encoding
         CharacterMetric                             m_aGlobalMetricX;
         CharacterMetric                             m_aGlobalMetricY;
         PrintFontMetrics*                           m_pMetrics;
@@ -473,6 +474,13 @@ public:
         return pFont ? pFont->m_aEncoding : RTL_TEXTENCODING_DONTKNOW;
     }
 
+    // should i only use font's builtin encoding ?
+    bool getUseOnlyFontEncoding( fontID nFontID ) const
+    {
+        PrintFont* pFont = getFont( nFontID );
+        return pFont ? pFont->m_bFontEncodingOnly : false;
+    }
+
     // get a specific fonts system dependent filename
     rtl::OString getFontFileSysPath( fontID nFontID ) const
     {
@@ -536,24 +544,15 @@ public:
     bool isFontDownloadingAllowed( fontID nFont ) const;
 
     // helper for type 1 fonts
-    std::pair< std::hash_multimap< sal_Unicode, rtl::OString >::const_iterator,
-                 std::hash_multimap< sal_Unicode, rtl::OString >::const_iterator >
-    getAdobeNameFromUnicode( sal_Unicode aChar ) const
-    {
-        return m_aUnicodeToAdobename.equal_range( aChar );
-    }
+    std::list< rtl::OString > getAdobeNameFromUnicode( sal_Unicode aChar ) const;
+
     std::pair< std::hash_multimap< sal_Unicode, sal_uInt8 >::const_iterator,
-                 std::hash_multimap< sal_Unicode, sal_uInt8 >::const_iterator >
+               std::hash_multimap< sal_Unicode, sal_uInt8 >::const_iterator >
     getAdobeCodeFromUnicode( sal_Unicode aChar ) const
     {
         return m_aUnicodeToAdobecode.equal_range( aChar );
     }
-    std::pair< std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator,
-                 std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator >
-    getUnicodeFromAdobeName( const rtl::OString& rName ) const
-    {
-        return m_aAdobenameToUnicode.equal_range( rName );
-    }
+    std::list< sal_Unicode >  getUnicodeFromAdobeName( const rtl::OString& rName ) const;
     std::pair< std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator,
                  std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator >
     getUnicodeFromAdobeCode( sal_uInt8 aChar ) const
