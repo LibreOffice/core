@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:01:13 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ using namespace ::osl;
 
 // -------------------------------------------------------------------------
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
-                           const Reference< XSQLQueryComposer >& _xComposer,
+                           const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
                            const Reference< XMultiServiceFactory >& _xServiceFactory,
                            const ORowSetValueVector&    _rParameterRow,
                            const ::rtl::OUString& _rUpdateTableName,
@@ -665,7 +665,7 @@ sal_Bool ORowSetCache::moveToBookmark( const Any& bookmark )
             if ( !m_bAfterLast )
             {
                 m_aMatrixIter = calcPosition();
-                OSL_ENSURE(m_aMatrixIter->isValid(),"Iterator after moveto bookmark not valid");
+                OSL_ENSURE(m_aMatrixIter->isValid(),"Iterator after moveToBookmark not valid");
             }
             else
                 m_aMatrixIter = m_pMatrix->end();
@@ -1646,7 +1646,7 @@ void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
 }
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
-                                 const Reference< XSQLQueryComposer >& _xComposer,
+                                 const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
                                  const ::rtl::OUString& _sUpdateTableName )
 {
     sal_Bool bOk = sal_False;
