@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:26:23 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 08:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,14 @@ Any SAL_CALL SbaXGridControl::queryInterface(const Type& _rType) throw (RuntimeE
 void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt::XToolkit > & rToolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & rParentPeer) throw( RuntimeException )
 {
     FmXGridControl::createPeer(rToolkit, rParentPeer);
-    if (0 == m_nPeerCreationLevel)
+
+    DBG_ASSERT(/*(0 == m_nPeerCreationLevel) && */!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
+        // see the base class' createPeer for a comment on this
+        // 14.05.2001 - 86836 - frank.schoenheit@germany.sun.com
+
+    // TODO: why the hell this whole class does not use any mutex?
+
+//  if (0 == m_nPeerCreationLevel)
     {
         Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, UNO_QUERY);
         for (   StatusMultiplexerArray::iterator aIter = m_aStatusMultiplexer.begin();
