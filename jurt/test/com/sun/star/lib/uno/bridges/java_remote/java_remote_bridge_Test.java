@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge_Test.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:55 $
+ *  last change: $Author: kr $ $Date: 2000-11-23 15:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ public class java_remote_bridge_Test {
         boolean passed = true;
 
 //          XInterface theProxy = (XInterface)__java_remote_bridge_B.mapInterfaceFrom("testinstance", XInterface.class); // map the instance back from oid world to Bs real world
-        XInterface theProxy = (XInterface)Proxy.create(__java_remote_bridge_B, "testinstance", XInterface.class, true);
+        XInterface theProxy = (XInterface)Proxy.create(__java_remote_bridge_B, "testinstance", XInterface.class, true, false);
 
 
         TestInterface theProxy_TestInterfaces[] = new TestInterface[objects];
