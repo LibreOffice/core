@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-02 13:00:58 $
+ *  last change: $Author: jp $ $Date: 2001-04-05 17:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,12 +696,6 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
             {
                 xStream->Commit();
                 bRet = ERRCODE_NONE == xStream->GetError();
-            }
-            else
-            {
-                // then we need the link anymore
-                ::com::sun::star::uno::Any aValue;
-                pDdeLnk->DataChanged( aEmptyStr, aValue );
             }
         }
 #endif
