@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRowUpdate.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:55:03 $
+ *  last change:$Date: 2003-11-18 16:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,7 +721,7 @@ public class _XRowUpdate extends MultiMethodTest {
     * Disposes environment.
     */
     public void after() {
-        //disposeEnvironment() ;
+        disposeEnvironment() ;
     }
 
 }  // finish class _XRow
