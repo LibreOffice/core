@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 23:00:52 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 23:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ chinese_traditional ] = "η•«ε»δΈ»ι΅[ι …η›®η¬¦θ™]ε…§ζ²’ζ‰ε–ε½Άγ€‚";
         Text[ arabic ] = "αΗ ΚζΜΟ ΓνΙ ΥζΡ έν γζΦζΪ ΗαΜΗανΡν 'Bullets'.";
         Text[ greek ] = "Δεν υπάρχουν γραφικά στη γκαλερί με θέμα 'κουκίδες'.";
-        Text[ korean ] = "κ°¤λ¬λ¦¬ -μ£Όμ  'κΈ€λ¨Έλ¦¬κΈ°νΈ'μ—λ” κ·Έλν”½μ΄ μ—†μµλ‹λ‹¤.";
+        Text[ korean ] = "κ°¤λ¬λ¦¬ μ£Όμ  'κΈ€λ¨Έλ¦¬ κΈ°νΈ'μ— κ·Έλν”½μ΄ μ—†μµλ‹λ‹¤.";
         Text[ turkish ] = "'Madde iώaretleri' galeri konusu altύnda grafik mevcut deπil.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No hay imαgenes en el tema 'Bullets' de la Galerνa.";
@@ -406,7 +406,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "η·¨θ™(~N)";
         Text[ arabic ] = "ΗαΚΡήνγ";
         Text[ greek ] = "Αρίθμηση";
-        Text[ korean ] = "λ²νΈλ§¤κΈ°κΈ°(~N)";
+        Text[ korean ] = "λ²νΈ λ§¤κΈ°κΈ°(~N)";
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nu~meraciσn";
@@ -638,9 +638,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
             < "μ—†μ" ;    9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
             < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-            < "κΈ€λ¨Έλ¦¬κΈ°νΈ" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "κΈ€λ¨Έλ¦¬ κΈ°νΈ" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
             < "κ·Έλν”½" ;                     8/*SVX_NUM_BITMAP              */; > ;
-            < "κ·Έλν”½γ€€λ§ν¬λ¨" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "κ·Έλν”½ μ—°κ²°λ¨" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
             < "μ—†μ" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
         };
         StringList [ chinese_simplified ] =
@@ -842,7 +842,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "ε­—ε…ƒζ¨£εΌ(~C)";
         Text[ arabic ] = "δγΨ ΗαΓΝΡέ:";
         Text[ greek ] = "Στυλ χαρακτήρων:";
-        Text[ korean ] = "λ¬Έμ μ ν•(~C)";
+        Text[ korean ] = "λ¬Έμ ν…ν”λ¦Ώ(~C)";
         Text[ turkish ] = "Karakter ώablonu:";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "Es~tilo de carαcter:";
@@ -1050,7 +1050,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "ι΅―η¤Ίε–η¤Ί";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΡγÒ";
         Text[ greek ] = "Εμφάνιση συμβόλου";
-        Text[ korean ] = "κΈ°νΈ λ³΄μ΄κΈ°";
+        Text[ korean ] = "κΈ°νΈ ν‘μ‹";
         Text[ turkish ] = "Simgeyi gφrόntόle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar sνmbolo";
@@ -1504,7 +1504,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "εζ­¥ε–";
         Text[ arabic ] = "ΚÒΗγδ";
         Text[ greek ] = "Ανα~λογικά";
-        Text[ korean ] = "μ΅°μ •";
+        Text[ korean ] = "μλ™ λ§μ¶¤";
         Text[ turkish ] = "Orantύlύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sincronizaciσn";
@@ -1777,15 +1777,15 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         };
         StringList [ korean ] =
         {
-            < "κΈ°μ¤€οΌμ„" ; > ;
-            < "κΈ°μ¤€οΌκ°€μ΄λ°" ; > ;
-            < "κΈ°μ¤€οΌμ•„λ" ; > ;
-            < "λ¬ΈμοΌμ„" ; > ;
-            < "λ¬ΈμοΌκ°€μ΄λ°" ; > ;
-            < "λ¬ΈμοΌμ•„λ" ; > ;
-            < "ν–‰οΌμ„" ; > ;
-            < "ν–‰οΌκ°€μ΄λ°" ; > ;
-            < "ν–‰οΌμ•„λ" ; > ;
+            < "κΈ°μ¤€, μ„" ; > ;
+            < "κΈ°μ¤€, κ°€μ΄λ°" ; > ;
+            < "κΈ°μ¤€, μ•„λ" ; > ;
+            < "λ¬Έμ, μ„" ; > ;
+            < "λ¬Έμ, κ°€μ΄λ°" ; > ;
+            < "λ¬Έμ, μ•„λ" ; > ;
+            < "ν–‰, μ„" ; > ;
+            < "ν–‰, κ°€μ΄λ°" ; > ;
+            < "ν–‰, μ•„λ" ; > ;
         };
         StringList [ turkish ] =
         {
@@ -1874,7 +1874,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "ι€£ηΊη·¨θ™(~C)";
         Text[ arabic ] = "ΗαΚΡήνγ ΘΤία γΚΣαΣα";
         Text[ greek ] = "Συνεχόμενη αρίθμηση";
-        Text[ korean ] = "μ—°μ† λ²νΈλ§¤κΈ°κΈ°(~C)";
+        Text[ korean ] = "μ—°μ† λ²νΈ λ§¤κΈ°κΈ°(~C)";
         Text[ turkish ] = "Sόrekli numaralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Numeraciσn c~onsecutiva";
@@ -1903,7 +1903,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ polish ] = "Brak grafik w temacie Galerii 'Znaki wypunktowania'.";
         Text[ portuguese_brazilian ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
         Text[ japanese ] = "ο½·οΎο½¬οΎ—οΎοΎƒο½°οΎγ€η®‡ζ΅ζ›Έγθ¨ε·γ€γ«ε›³γ―γ‚γ‚γΎγ›γ‚“γ€‚";
-        Text[ korean ] = "κ°¤λ¬λ¦¬-μ£Όμ  'κΈ€λ¨Έλ¦¬κΈ°νΈ'μ— κ·Έλν”½μ΄ μ—†μµλ‹λ‹¤.";
+        Text[ korean ] = "κ°¤λ¬λ¦¬ μ£Όμ  'κΈ€λ¨Έλ¦¬ κΈ°νΈ'μ— κ·Έλν”½μ΄ μ—†μµλ‹λ‹¤.";
         Text[ chinese_simplified ] = "η”»ε»ζ–‡δ»¶β€ι΅Ήη›®η¬¦ε·β€™ε†…δΈε­ε¨ε›Ύε½Άγ€‚";
         Text[ chinese_traditional ] = "η•«ε»δΈ»ι΅[ι …η›®η¬¦θ™]δΈ­ζ²’ζ‰ε–ε½Άγ€‚";
         Text[ turkish ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
@@ -2041,7 +2041,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ chinese_traditional ] = "η›Έε°η„(~V)";
         Text[ arabic ] = "δΣΘν";
         Text[ greek ] = "Σχετικά";
-        Text[ korean ] = "λΉ„λ΅€(~V)";
+        Text[ korean ] = "μƒλ€μ (~V)";
         Text[ turkish ] = "Gφreceli";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Relati~vo";
@@ -2133,7 +2133,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ chinese_traditional ] = "η·¨θ™ε’ε…§ζ–‡δΉ‹ι–“η„ζ€ε°‘ι–“ι”";
         Text[ arabic ] = "Γήα γΣΗέΙ Θνδ ΗαΡήγ <-> ΗαδΥ";
         Text[ greek ] = "Ελάχιστη απόσταση Αριθ~μός <-> Κείμενο";
-        Text[ korean ] = "μµμ†κ°„κ²©,  λ²νΈ <-> ν…μ¤νΈ";
+        Text[ korean ] = "μµμ† κ°„κ²©,  λ²νΈ <-> ν…μ¤νΈ";
         Text[ turkish ] = "Asgari aralύk: Numara <-> Metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Distancia mνnima nϊmero <-> texto";
@@ -2179,7 +2179,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ chinese_traditional ] = "η·¨θ™ε°ι½(~U)";
         Text[ arabic ] = "γΝΗΠΗΙ ΗαΚΡήνγ";
         Text[ greek ] = "Στοίχιση αρίθμησης";
-        Text[ korean ] = "λ²νΈλ§¤κΈ°κΈ° λ§μ¶¤(~U)";
+        Text[ korean ] = "λ²νΈ λ§¤κΈ°κΈ° λ§μ¶¤(~U)";
         Text[ turkish ] = "Numara hizalama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Alineaciσn de numeraciσn";
@@ -2402,6 +2402,7 @@ String RID_STR_FULLNUMS_6 { Text = "A.|I.|a.|i.|61589" ; };
 String RID_STR_FULLNUMS_7 { Text = "1|1.1|1.1.1|1.1.1.1|1.1.1.1.1" ; };
 String RID_STR_FULLNUMS_8 { Text = "61487|61488|61485|61589|61589" ; };
 String RID_STR_FULLNUMS_7_HTML { Text = "I.|I.|I|I.|I." ; };
+
 
 
 
