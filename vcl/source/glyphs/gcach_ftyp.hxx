@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-23 17:03:51 $
+ *  last change: $Author: hdu $ $Date: 2001-02-27 18:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,13 @@ class FreetypeServerFont : public ServerFont
 {
     public:
                                 FreetypeServerFont( const ImplFontSelectData&, const FtFontInfo& );
+    virtual                     ~FreetypeServerFont();
 
     virtual const ::rtl::OString*   GetFontFileName() const { return &mrFontInfo.aNativeFileName; }
     virtual int                 GetFontFaceNum() const { return mrFontInfo.nFaceNum; }
     virtual int                 GetFontId() const { return mrFontInfo.nFontId; }
     virtual void                SetFontId( int nFontId ) { mrFontInfo.nFontId = nFontId; }
+    virtual bool                TestFont() { return (maFaceFT != NULL); }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
 
@@ -118,7 +120,6 @@ class FreetypeServerFont : public ServerFont
 
 protected:
 friend GlyphCache;
-    virtual                     ~FreetypeServerFont();
 
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
