@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-31 19:34:08 $
+ *  last change: $Author: ssa $ $Date: 2001-11-01 17:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,21 +383,21 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
 
 FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Point& rPos, USHORT& rHitTest )
 {
+    // compare coordinates in absolute screen coordinates
     FloatingWindow* pWin = this;
     Point aAbsolute( pReference->OutputToAbsoluteScreenPixel(
         pReference->ScreenToOutputPixel(rPos) ) );
 
     do
     {
-        Point aRelative( AbsoluteScreenToOutputPixel( aAbsolute ) );
-        Rectangle aRect( pWin->GetPosPixel(), pWin->GetSizePixel() );
-        if ( aRect.IsInside( aRelative ) )
+        Rectangle devRect( OutputToAbsoluteScreenPixel( ScreenToOutputPixel(pWin->GetPosPixel()) ), pWin->GetSizePixel() ) ;
+        if ( devRect.IsInside( aAbsolute ) )
         {
             rHitTest = IMPL_FLOATWIN_HITTEST_WINDOW;
             return pWin;
         }
 
-        // Testen, ob Maus im Rechteck
+        // test, if mouse in rectangle
         /*
          *  maFloatRect is set in startpopup mode and
          *  already is in parent coordinates.
