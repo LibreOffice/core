@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:29:28 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2420,7 +2420,7 @@ TabPage TP_FRM_ADD
         Text[ russian ] = "ΐλόςεπνΰςθβνϋι ςεκρς";
         Text[ polish ] = "Tekst alternatywny";
         Text[ japanese ] = "‘I‘π•¶‘(~A)";
-        Text[ chinese_traditional ] = "ªώ¥[¤ε¦r(~A)";
+        Text[ chinese_traditional ] = "΄ΐ¥N¤ε¦r(~A)";
         Text[ arabic ] = "δΥ ΘΟνα";
         Text[ greek ] = "Εν~αλλακτικά (Μόνο κείμενο)";
         Text[ korean ] = "΄λΓΌ (ΕΨ½ΊΖ®ΈΈ)(~A)";
