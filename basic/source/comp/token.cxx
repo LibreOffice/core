@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:07:02 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { GOTO,     "GoTo" },
     { IF,       "If" },
     { IMP,      "Imp" },
+    { IMPLEMENTS, "Implements" },
     { _IN_,     "In" },
     { INPUT,    "Input" },              // auch INPUT #
     { TINTEGER, "Integer" },
@@ -206,6 +207,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { THEN,     "Then" },
     { TO,       "To", },
     { TYPE,     "Type" },
+    { TYPEOF,   "TypeOf" },
     { UNTIL,    "Until" },
     { TVARIANT, "Variant" },
     { WEND,     "Wend" },
@@ -631,10 +633,12 @@ special:
     {
         SbiToken eTok = tp->t;
         if( eTok == CLASSMODULE ||
+            eTok == IMPLEMENTS ||
             eTok == PARAMARRAY ||
             eTok == ENUM ||
             eTok == PROPERTY ||
-            eTok == GET )
+            eTok == GET ||
+            eTok == TYPEOF )
         {
             eCurTok = SYMBOL;
         }
