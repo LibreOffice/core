@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: svesik $ $Date: 2001-04-18 14:41:33 $
+#   last change: $Author: mh $ $Date: 2003-07-04 13:58:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,12 +73,14 @@ LIBTARGET=NO
 
 # --- Files --------------------------------------------------------
 
+.IF "$(WITH_GPC)"!="NO"
 SLOFILES = $(SLO)$/gpc.obj	
 
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1ARCHIV=$(LB)$/lib$(TARGET).a
 LIB1OBJFILES=$(SLOFILES)
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
