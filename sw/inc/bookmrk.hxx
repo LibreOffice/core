@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmrk.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _CALBCK_HXX
 #include <calbck.hxx>
 #endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
 #define SW_DECL_SWSERVEROBJECT_DEFINED
@@ -95,6 +98,7 @@ class SwBookmark : public SwModify
     friend class Sw3IoImp;      // fuers Setzen der Position(en)
 
     SwPosition *pPos1, *pPos2;  // wird im CTOR gesetzt, im DTOR geloescht
+                                // pPos1 is always != 0, pPos2 may be 0
     SwServerObjectRef refObj;   // falls DataServer -> Pointer gesetzt
 
 protected:
@@ -151,6 +155,17 @@ public:
     const SwServerObject* GetObject() const     {  return &refObj; }
           SwServerObject* GetObject()           {  return &refObj; }
     BOOL IsServer() const                       {  return refObj.Is(); }
+
+    // to access start and end of a bookmark.
+    // start and end may be the same
+    const SwPosition *Start() const
+    {
+        return pPos2 ? (*pPos1 <= *pPos2 ? pPos1 : pPos2) : pPos1;
+    }
+    const SwPosition *End()   const
+    {
+        return pPos2 ? (*pPos1 >= *pPos2 ? pPos1 : pPos2) : pPos1;
+    }
 
 private:
     // fuer METWARE:
