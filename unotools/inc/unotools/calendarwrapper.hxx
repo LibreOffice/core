@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-07-25 09:53:17 $
+ *  last change: $Author: er $ $Date: 2002-09-24 14:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,14 @@ public:
     ::com::sun::star::i18n::Calendar getLoadedCalendar() const;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getAllCalendars( const ::com::sun::star::lang::Locale& rLocale ) const;
     ::rtl::OUString getUniqueID() const;
+    /// set UTC date/time
     void setDateTime( double nTimeInDays );
+    /// get UTC date/time
     double getDateTime() const;
+    /// convenience method to set local date/time
+    void setLocalDateTime( double nTimeInDays );
+    /// convenience method to get local date/time
+    double getLocalDateTime() const;
     void setValue( sal_Int16 nFieldIndex, sal_Int16 nValue );
     sal_Bool isValid() const;
     sal_Int16 getValue( sal_Int16 nFieldIndex ) const;
@@ -140,13 +146,13 @@ public:
     inline  const DateTime&     getEpochStart() const
                                     { return aEpochStart; }
 
-    /// set a gregorian DateTime
+    /// set a local (!) Gregorian DateTime
     inline  void                setGregorianDateTime( const DateTime& rDateTime )
-                                    { setDateTime( rDateTime - aEpochStart ); }
+                                    { setLocalDateTime( rDateTime - aEpochStart ); }
 
-    /// get the DateTime as a gregorian DateTime
+    /// get the DateTime as a local (!) Gregorian DateTime
     inline  DateTime            getGregorianDateTime() const
-                                    { return aEpochStart + getDateTime(); }
+                                    { return aEpochStart + getLocalDateTime(); }
 
 };
 

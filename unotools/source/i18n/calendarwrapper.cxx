@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-07-25 09:53:57 $
+ *  last change: $Author: er $ $Date: 2002-09-24 14:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 
 #ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
 #include <comphelper/componentfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_CALENDARFIELDINDEX_HPP_
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_XEXTENDEDCALENDAR_HPP_
 #include <drafts/com/sun/star/i18n/XExtendedCalendar.hpp>
@@ -273,6 +276,62 @@ double CalendarWrapper::getDateTime() const
     {
 #ifndef PRODUCT
         ByteString aMsg( "getDateTime: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    return 0.0;
+}
+
+
+void CalendarWrapper::setLocalDateTime( double nTimeInDays )
+{
+    try
+    {
+        if ( xC.is() )
+        {
+            sal_Int16 nZone = xC->getValue( CalendarFieldIndex::ZONE_OFFSET );
+            sal_Int16 nDST1 = xC->getValue( CalendarFieldIndex::DST_OFFSET );
+            double nLoc = nTimeInDays - (double)(nZone + nDST1) / 60.0 / 24.0;
+            xC->setDateTime( nLoc );
+            sal_Int16 nDST2 = xC->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
+            if ( nDST1 != nDST2 )
+            {
+                nLoc = nTimeInDays - (double)(nZone + nDST2) / 60.0 / 24.0;
+                xC->setDateTime( nLoc );
+            }
+        }
+    }
+    catch ( Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "setLocalDateTime: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+}
+
+
+double CalendarWrapper::getLocalDateTime() const
+{
+    try
+    {
+        if ( xC.is() )
+        {
+            double nTimeInDays = xC->getDateTime();
+            sal_Int16 nZone = xC->getValue(
+                    com::sun::star::i18n::CalendarFieldIndex::ZONE_OFFSET );
+            sal_Int16 nDST = xC->getValue(
+                    com::sun::star::i18n::CalendarFieldIndex::DST_OFFSET );
+            nTimeInDays += (double)(nZone + nDST) / 60.0 / 24.0;
+            return nTimeInDays;
+        }
+    }
+    catch ( Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "getLocalDateTime: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
