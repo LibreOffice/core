@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-11 09:14:41 $
+ *  last change: $Author: ssa $ $Date: 2001-07-18 12:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1949,25 +1949,19 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
 
 void ImplUpdateCursorRect( Window *pWindow )
 {
-    RmFrameWindow *pFrame =  pWindow->ImplGetFrame();
-    if( !pFrame )
-        return;
-    if( pFrame->IsInEvtHandler() )
-        return;     // we'll update later
-
-    Rectangle rRect;
-    long rWidth;
-    ImplHandleExtTextInputPos( pWindow, rRect, rWidth );
-    pFrame->SetCursorRect( &rRect, rWidth );
+    RmFrameWindow *pFrame;
+    if( pWindow && ( ( pFrame = pWindow->ImplGetFrame() ) != NULL ) )
+    {
+        Rectangle rRect;
+        long rWidth;
+        ImplHandleExtTextInputPos( pWindow, rRect, rWidth );
+        pFrame->SetCursorRect( &rRect, rWidth );
+    }
 }
 
 void ImplRemoteWindowFrameProc( ExtRmEvent* pEvent )
 {
     DBG_TESTSOLARMUTEX();
-
-    // disable updates like remote CursorRect
-    if( pEvent->GetWindow() && pEvent->GetWindow()->ImplGetFrame() )
-        pEvent->GetWindow()->ImplGetFrame()->IsInEvtHandler( true );
 
     ULONG nId = pEvent->GetId();
     switch ( nId )
@@ -2088,13 +2082,6 @@ void ImplRemoteWindowFrameProc( ExtRmEvent* pEvent )
             ImplHandleInputContextChange( pEvent->GetWindow(), *pL );
         }
         break;
-    }
-
-    // enable updates like remote CursorRect
-    if( pEvent->GetWindow() && pEvent->GetWindow()->ImplGetFrame() )
-    {
-        pEvent->GetWindow()->ImplGetFrame()->IsInEvtHandler( false );
-        ImplUpdateCursorRect( pEvent->GetWindow() );
     }
 }
 
