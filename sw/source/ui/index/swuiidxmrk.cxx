@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swuiidxmrk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:05:37 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,17 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
+
+#include "swuiidxmrk.hxx"
 
 #define POS_CONTENT 0
 #define POS_INDEX   1
@@ -574,13 +585,24 @@ void SwIndexMarkDlg::Apply()
 
 void SwIndexMarkDlg::InsertUpdate()
 {
-    pSh->StartUndo(UNDO_INSATTR);
+    pSh->StartUndo(bDel ? UNDO_INDEX_ENTRY_DELETE : UNDO_INDEX_ENTRY_INSERT);
     pSh->StartAllAction();
 
+    SwRewriter aRewriter;
+
     if( bNewMark )
+    {
         InsertMark();
+
+        if ( pTOXMgr->GetCurTOXMark())
+            aRewriter.AddRule(UNDO_ARG1, pTOXMgr->GetCurTOXMark()->GetText());
+    }
     else if( !pSh->HasReadonlySel() )
     {
+        if ( pTOXMgr->GetCurTOXMark())
+            aRewriter.AddRule(UNDO_ARG1,
+                              pTOXMgr->GetCurTOXMark()->GetText());
+
         if( bDel )
             pTOXMgr->DeleteTOXMark();
         else if( pTOXMgr->GetCurTOXMark() )
@@ -588,7 +610,7 @@ void SwIndexMarkDlg::InsertUpdate()
     }
 
     pSh->EndAllAction();
-    pSh->EndUndo(UNDO_INSATTR);
+    pSh->EndUndo(bDel ? UNDO_INDEX_ENTRY_DELETE : UNDO_INDEX_ENTRY_INSERT);
 
     if((nTypePos = aTypeDCB.GetEntryPos(aTypeDCB.GetSelectEntry())) == LISTBOX_ENTRY_NOTFOUND)
         nTypePos = 0;
