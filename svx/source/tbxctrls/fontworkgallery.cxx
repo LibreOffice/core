@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkgallery.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:29:08 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ SfxPopupWindowType FontWorkShapeTypeControl::GetPopupWindowType() const
 
 SfxPopupWindow* FontWorkShapeTypeControl::CreatePopupWindow()
 {
-    rtl::OUString aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/fontworkshapetypes" ) );
+    rtl::OUString aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/fontworkshapetype" ) );
     createAndPositionSubToolBar( aSubTbxResName );
     return NULL;
 }
@@ -375,13 +375,6 @@ SfxPopupWindow* FontWorkShapeTypeControl::CreatePopupWindow()
 
 void FontWorkShapeTypeControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-/*
-    USHORT nId = GetId();
-    ToolBox& rTbx = GetToolBox();
-
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
-*/
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
 }
 
