@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextImpl.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-07 12:09:59 $
+ *  last change: $Author: cdt $ $Date: 2001-02-06 16:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,12 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
 
     public URL getBase() {
         return codeBase;
+    }
+
+    // For OS/2
+    public URL getCodeBase()
+    {
+      return getBase();
     }
 
     public boolean hasThreadGroup() {
