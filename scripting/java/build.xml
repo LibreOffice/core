@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-09-23 15:02:07 $
+#   last change: $Author: jmrice $ $Date: 2002-09-27 10:43:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,8 +78,8 @@
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
-    <!-- <pathelement location="${solar.jar}/unoil.jar"/> -->
-    <pathelement location="${prj}/../unoil/unxsols3/class/unoil.jar"/>
+    <pathelement location="${solar.jar}/unoil.jar"/>
+    <!-- <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/> -->
     <pathelement location="${solar.jar}/jurt.jar"/>
     <pathelement location="${solar.jar}/jut.jar"/>
     <pathelement location="${solar.jar}/juh.jar"/>
