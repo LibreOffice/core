@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-23 11:45:36 $
+ *  last change: $Author: mav $ $Date: 2002-04-23 12:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,6 @@ String STR_SFX_EXPLORERFILE_EXPORT
 {
     Text = "Exporten" ;
     Text[ English ] = "Export" ;
-};
-
-String STR_SFX_EXPLORERFILE_BUTTONEXPORT
-{
-    Text = "~Exporten" ;
-    Text[ English ] = "~Export" ;
 };
 
 String STR_SFX_EXPLORERFILE_INSERT
