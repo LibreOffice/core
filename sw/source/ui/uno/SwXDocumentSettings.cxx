@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:42:17 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,9 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_UPDATE_FROM_TEMPLATE,
     HANDLE_PRINTER_INDEPENDENT_LAYOUT,
     HANDLE_IS_LABEL_DOC,
-    HANDLE_IS_ADD_FLY_OFFSET
+    HANDLE_IS_ADD_FLY_OFFSET,
+    /* Stampit It disable the print cancel button of the shown progress dialog. */
+    HANDLE_ALLOW_PRINTJOB_CANCEL
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -196,6 +198,8 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("PrinterIndependentLayout"),   HANDLE_PRINTER_INDEPENDENT_LAYOUT,      CPPUTYPE_INT16,             0,   0},
         { RTL_CONSTASCII_STRINGPARAM("IsLabelDocument"),            HANDLE_IS_LABEL_DOC,                    CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("AddFrameOffsets"),            HANDLE_IS_ADD_FLY_OFFSET,               CPPUTYPE_BOOLEAN,           0,   0},
+        /* Stampit It disable the print cancel button of the shown progress dialog. */
+        { RTL_CONSTASCII_STRINGPARAM("AllowPrintJobCancel"),        HANDLE_ALLOW_PRINTJOB_CANCEL,           CPPUTYPE_BOOLEAN,           0,   0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -531,6 +535,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetAddFlyOffsets( bTmp );
         }
         break;
+        case HANDLE_ALLOW_PRINTJOB_CANCEL:
+        {
+            sal_Bool bState;
+            if (!(rValue >>= bState))
+                throw IllegalArgumentException();
+            mpDocSh->Stamp_SetPrintCancelState(bState);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -705,6 +717,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bTmp = mpDoc->IsAddFlyOffsets();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_ALLOW_PRINTJOB_CANCEL:
+        {
+            sal_Bool bPrintCancelState = mpDocSh->Stamp_GetPrintCancelState();
+            rValue.setValue(&bPrintCancelState, ::getBooleanCppuType());
         }
         break;
         default:
