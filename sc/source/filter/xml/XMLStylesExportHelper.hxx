@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
+ *  last change: $Author: sab $ $Date: 2001-05-30 16:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,9 +149,11 @@ public:
 struct ScMyDefaultStyle
 {
     sal_Int32   nIndex;
+    sal_Int32   nRepeat;
     sal_Bool    bIsAutoStyle;
 
-    ScMyDefaultStyle() : nIndex(-1), bIsAutoStyle(sal_True) {}
+    ScMyDefaultStyle() : nIndex(-1), bIsAutoStyle(sal_True),
+        nRepeat(1) {}
 };
 
 typedef std::vector<ScMyDefaultStyle> ScMyDefaultStyleList;
@@ -163,8 +165,16 @@ class ScMyDefaultStyles
     ScMyDefaultStyleList* pRowDefaults;
     ScMyDefaultStyleList* pColDefaults;
 
+    sal_Int32 GetStyleNameIndex(const ScFormatRangeStyles* pCellStyles,
+        const sal_uInt16 nTable, const sal_Int32 nPos,
+        const sal_Int32 i, const sal_Bool bRow, sal_Bool& bIsAutoStyle);
+    void FillDefaultStyles(const sal_uInt16 nTable,
+        const sal_Int32 nLastRow, const sal_Int32 nLastCol,
+        const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc,
+        const sal_Bool bRow);
 public:
     ScMyDefaultStyles() : pRowDefaults(NULL), pColDefaults(NULL) {}
+    ~ScMyDefaultStyles();
 
     void FillDefaultStyles(const sal_uInt16 nTable,
         const sal_Int32 nLastRow, const sal_Int32 nLastCol,
@@ -251,7 +261,7 @@ public:
     // does not delete ranges
     sal_Int32 GetStyleNameIndex(const sal_uInt16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
         sal_Bool& bIsAutoStyle) const;
-    // deletes not necessary ranges
+    // deletes not necessary ranges if wanted
     sal_Int32 GetStyleNameIndex(const sal_uInt16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
         sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Bool bRemoveRange = sal_True );
     void GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
