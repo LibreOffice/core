@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:24:51 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,11 @@ ScStyleSheetPool& XclRoot::GetStyleSheetPool() const
 ScRangeName& XclRoot::GetNamedRanges() const
 {
     return *GetDoc().GetRangeName();
+}
+
+ScDBCollection& XclRoot::GetDatabaseRanges() const
+{
+    return *GetDoc().GetDBCollection();
 }
 
 SdrPage* XclRoot::GetSdrPage( SCTAB nScTab ) const
