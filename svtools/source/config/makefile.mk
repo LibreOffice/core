@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 14:35:10 $
+#   last change: $Author: vg $ $Date: 2005-03-11 10:41:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,7 +141,6 @@ LIB1OBJFILES=  \
     $(SLO)$/moduleoptions.obj           \
     $(SLO)$/pathoptions.obj             \
     $(SLO)$/saveopt.obj					\
-    $(SLO)$/helpopt.obj                 \
     $(SLO)$/javaoptions.obj             \
     $(SLO)$/securityoptions.obj			\
     $(SLO)$/localisationoptions.obj		\
@@ -179,6 +178,7 @@ LIB2OBJFILES=  \
     $(SLO)$/misccfg.obj				\
     $(SLO)$/apearcfg.obj				\
     $(SLO)$/fltrcfg.obj				\
+    $(SLO)$/helpopt.obj                 \
         $(SLO)$/languageoptions.obj     \
         $(SLO)$/ctloptions.obj          \
         $(SLO)$/cjkoptions.obj          \
