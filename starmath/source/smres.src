@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 12:05:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Zählerhöhe: : ~Zählerhöhe: */
-            Text [ de ] = "~ZÃ¤hlerhöhe" ;
+            Text [ de ] = "~Zählerhöhe" ;
             Text [ en-US ] = "~Numerator";
         };
         Bitmap 20
