@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:53:51 $
+ *  last change: $Author: oj $ $Date: 2002-12-02 12:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,8 @@ namespace frm
 #define PROPERTY_ID_FONTEMPHASISMARK    (PROPERTY_ID_START +210)
 #define PROPERTY_ID_FONTRELIEF          (PROPERTY_ID_START +211)
 
+#define PROPERTY_ID_DISPATCHURLINTERNAL (PROPERTY_ID_START +212)    // BOOL
+
 
 // start ID fuer aggregierte Properties
 #define PROPERTY_ID_AGGREGATE_ID        (PROPERTY_ID_START + 10000)
@@ -420,6 +422,7 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_CONTROLSOURCEPROPERTY);
 DECLARE_CONSTASCII_USTRING(PROPERTY_REALNAME);
 DECLARE_CONSTASCII_USTRING(PROPERTY_USER);
 DECLARE_CONSTASCII_USTRING(PROPERTY_PASSWORD);
+DECLARE_CONSTASCII_USTRING(PROPERTY_DISPATCHURLINTERNAL);
 
 //.........................................................................
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:33 $
+ *  last change: $Author: oj $ $Date: 2002-12-02 12:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ void OImageControlModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(8)
+    FRM_BEGIN_PROP_HELPER(9)
 //      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_IMAGE_URL, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP2(CLASSID,             sal_Int16,                  READONLY, TRANSIENT);
@@ -437,6 +437,7 @@ void OImageControlModel::fillProperties(
         DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,   READONLY, TRANSIENT);
         DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
+        DECL_PROP1(DISPATCHURLINTERNAL, sal_Bool,                   BOUND);
     FRM_END_PROP_HELPER();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:33 $
+ *  last change: $Author: oj $ $Date: 2002-12-02 12:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,9 +149,10 @@ void OImageButtonModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(7)
+    FRM_BEGIN_PROP_HELPER(8)
         DECL_PROP2(CLASSID,         sal_Int16,                  READONLY, TRANSIENT);
-        DECL_PROP1(BUTTONTYPE,      FormButtonType, BOUND);
+        DECL_PROP1(BUTTONTYPE,      FormButtonType,             BOUND);
+        DECL_PROP1(DISPATCHURLINTERNAL, sal_Bool,               BOUND);
         DECL_PROP1(TARGET_URL,      ::rtl::OUString,            BOUND);
         DECL_PROP1(TARGET_FRAME,    ::rtl::OUString,            BOUND);
         DECL_PROP1(NAME,            ::rtl::OUString,            BOUND);

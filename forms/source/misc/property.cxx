@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 11:21:56 $
+ *  last change: $Author: oj $ $Date: 2002-12-02 12:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_REALNAME, "RealName");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CONTROLSOURCEPROPERTY, "DataFieldProperty");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_USER, "User");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PASSWORD, "Password");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DISPATCHURLINTERNAL, "DispatchURLInternal");
 
 //.........................................................................
 }
