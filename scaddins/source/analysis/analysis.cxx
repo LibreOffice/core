@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:28:55 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ void AnalysisAddIn::InitData( void )
     OString             aModName( "analysis" );
     aModName += OString::valueOf( sal_Int32( SUPD ) );
     pResMgr = ResMgr::CreateResMgr( ( const sal_Char* ) aModName,
-                                        ConvertIsoNamesToLanguage( aFuncLoc.Language, aFuncLoc.Country ) );
+                                        aFuncLoc );
 
     if( pFD )
         delete pFD;
