@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: os $ $Date: 2002-06-13 12:36:51 $
+ *  last change: $Author: os $ $Date: 2002-06-20 08:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,6 +991,7 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
     if(0 != nX || 0 != nY)
     {
         SwWrtShell &rSh = rView.GetWrtShell();
+        BYTE nProtect = rSh.IsSelObjProtected( FlyProtectType(FLYPROTECT_POS|FLYPROTECT_SIZE) );
         Size aSnap( rSh.GetViewOptions()->GetSnapSize() );
         short nDiv = rSh.GetViewOptions()->GetDivisionX();
         if ( nDiv > 0 )
@@ -1010,9 +1011,10 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
         SdrHdl* pHdl = rHdlList.GetFocusHdl();
         if(0L == pHdl)
         {
-
             // now move the selected draw objects
-            pSdrView->MoveAllMarked(Size(nX, nY));
+            // if the object's position is not protected
+            if(0 == (nProtect&FLYPROTECT_POS))
+                pSdrView->MoveAllMarked(Size(nX, nY));
         }
         else
         {
@@ -1021,9 +1023,12 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
             {
                 if(HDL_ANCHOR == pHdl->GetKind())
                 {
-                    rSh.MoveAnchor( nAnchorDir );
+                    // anchor move cannot be allowed when position is protected
+                    if(0 == (nProtect&FLYPROTECT_POS))
+                        rSh.MoveAnchor( nAnchorDir );
                 }
-                else
+                //now resize if size is protected
+                else if(0 == (nProtect&FLYPROTECT_SIZE))
                 {
                     // now move the Handle (nX, nY)
                     Point aStartPoint(pHdl->GetPos());
