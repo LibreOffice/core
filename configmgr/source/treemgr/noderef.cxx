@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-14 11:50:10 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "tracer.hxx"
 
 #include <algorithm> // for swap
+#include <functional> // for less
 
 namespace configmgr
 {
@@ -706,6 +707,16 @@ NodeOffset NodeID::toIndex() const
         n -= m_pTree->root();
     }
     return n;
+}
+
+//-----------------------------------------------------------------------------
+bool operator < (NodeID const& lhs, NodeID const& rhs)
+{
+    using std::less;
+    if (lhs.m_pTree == rhs.m_pTree)
+        return lhs.m_nNode < rhs.m_nNode;
+    else
+        return less<TreeImpl*>()(lhs.m_pTree,rhs.m_pTree);
 }
 
 //-----------------------------------------------------------------------------
