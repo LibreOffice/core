@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 14:06:11 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 11:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,6 +392,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
     for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
         aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
     m_pColumns = new OPrivateColumns(*aCols,*this,m_aMutex,aNames);
+    getTables();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryComposer::getComposedQuery(  ) throw(RuntimeException)
