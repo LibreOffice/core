@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:05:21 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,7 +658,7 @@ sal_Bool OSelectionBrowseBox::fillColumnRef(const ::rtl::OUString& _sColumnName,
         if ( !_pEntry->GetTabWindow() )
         { // fill tab window
             ::rtl::OUString sOldAlias = _pEntry->GetAlias();
-            if ( fillEntryTable(_pEntry,_pEntry->GetTable()) )
+            if ( !fillEntryTable(_pEntry,_pEntry->GetTable()) )
                 fillEntryTable(_pEntry,_pEntry->GetAlias()); // only when the first failed
             if ( !bCase(sOldAlias,_pEntry->GetAlias()) )
                 notifyTableFieldChanged(sOldAlias,_pEntry->GetAlias(),_bListAction,GetCurColumnId());
