@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 14:58:06 $
+ *  last change: $Author: kso $ $Date: 2001-05-28 11:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#include <hash_map>
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -69,14 +67,15 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #endif
 
+#ifndef _UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX
+#include <ucbhelper/simpleauthenticationrequest.hxx>
+#endif
+
 #ifndef _DAVAUTHLISTENER_HXX_
 #include "DAVAuthListener.hxx"
 #endif
 #ifndef _DAVRESOURCEACCESS_HXX_
 #include "DAVResourceAccess.hxx"
-#endif
-#ifndef _WEBDAV_UCP_AUTHINTERACTION_HXX
-#include "authinteraction.hxx"
 #endif
 #ifndef _NEONURI_HXX_
 #include "NeonUri.hxx"
@@ -135,23 +134,31 @@ int AuthListener::authenticate( const ::rtl::OUString & inRealm,
               = Environment->getInteractionHandler();
         if ( xIH.is() )
         {
-            vos::ORef< InteractionRequest_Impl > xRequest
-                  = new InteractionRequest_Impl( inHostName,
-                                               inRealm,
-                                               inUserName,
-                                               inPassWord );
-
+            vos::ORef< ucbhelper::SimpleAuthenticationRequest > xRequest
+                = new ucbhelper::SimpleAuthenticationRequest(
+                                                inHostName,
+                                                inRealm,
+                                                rtl::OUString( inUserName ),
+                                                rtl::OUString( inPassWord ) );
               xIH->handle( xRequest.getBodyPtr() );
 
-            vos::ORef< InteractionContinuation_Impl > xSelection
+            vos::ORef< ucbhelper::InteractionContinuation > xSelection
                 = xRequest->getSelection();
 
             if ( xSelection.isValid() )
             {
+                // Handler handled the request.
                 uno::Reference< task::XInteractionAbort > xAbort(
                                     xSelection.getBodyPtr(), uno::UNO_QUERY );
                 if ( !xAbort.is() )
                 {
+                    const vos::ORef<
+                        ucbhelper::InteractionSupplyAuthentication > & xSupp
+                            = xRequest->getAuthenticationSupplier();
+
+                    inUserName = xSupp->getUserName();
+                    inPassWord = xSupp->getPassword();
+
                     // go on.
                     return 0;
                 }
