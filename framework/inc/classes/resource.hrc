@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:50:06 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 12:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 #define RID_STR_START       2000
 #define RID_MENU_START      10000
+#define RID_IMAGE_START     15000
 #define RID_FWK_DIALOG_START 0
 
 #define STR_MENU_ADDONS                         (RID_STR_START+0)
@@ -74,6 +75,7 @@
 #define STR_SAVECOPYDOC                         (RID_STR_START+5)
 #define STR_NODOCUMENT                          (RID_STR_START+6)
 #define STR_TOOLBAR_TITLE_ADDON                 (RID_STR_START+7)
+#define STR_STATUSBAR_LOGOTEXT                  (RID_STR_START+8)
 #define POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION    (RID_MENU_START+0)
 
 #define MENUITEM_TOOLBAR_VISIBLEBUTTON          1
@@ -81,6 +83,8 @@
 #define MENUITEM_TOOLBAR_DOCKTOOLBAR            3
 #define MENUITEM_TOOLBAR_DOCKALLTOOLBAR         4
 #define MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION    5
+
+#define RID_IMAGE_STATUSBAR_LOGO                (RID_IMAGE_START+0)
 
 // License Dialog
 #define DLG_LICENSE                         (RID_FWK_DIALOG_START+256)
