@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:39:07 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1310,7 +1310,7 @@ void __EXPORT BreakPointWindow::Command( const CommandEvent& rCEvt )
                 case RID_BRKPROPS:
                 {
                     BreakPointDialog aBrkDlg( this, GetBreakPoints() );
-                    aBrkDlg.SetCurrentBreakPoint( *pBrk );
+                    aBrkDlg.SetCurrentBreakPoint( pBrk );
                     aBrkDlg.Execute();
                     Invalidate();
                 }
@@ -1558,6 +1558,8 @@ StackWindow::StackWindow( Window* pParent ) :
     aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox.SetHighlightRange();
+    aTreeListBox.SetSelectionMode( NO_SELECTION );
+    aTreeListBox.InsertEntry( String(), 0, FALSE, LIST_APPEND );
     aTreeListBox.Show();
 
     SetText( String( IDEResId( RID_STR_STACKNAME ) ) );
@@ -1633,55 +1635,63 @@ void __EXPORT StackWindow::UpdateCalls()
 {
     aTreeListBox.SetUpdateMode( FALSE );
     aTreeListBox.Clear();
-    USHORT nScope = 0;
-    String aCaller;
 
-    SbxError eOld = SbxBase::GetError();
-
-    SbMethod* pMethod = StarBASIC::GetActiveMethod( nScope );
-    while ( pMethod )
+    if ( StarBASIC::IsRunning() )
     {
-        String aEntry( String::CreateFromInt32(nScope ));
-        if ( aEntry.Len() < 2 )
-            aEntry.Insert( ' ', 0 );
-        aEntry += String( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
-        aEntry += pMethod->GetName();
-        SbxArray* pParams = pMethod->GetParameters();
-        SbxInfo* pInfo = pMethod->GetInfo();
-        if ( pParams )
-        {
-            aEntry += '(';
-            // 0 ist der Name der Sub...
-            for ( USHORT nParam = 1; nParam < pParams->Count(); nParam++ )
-            {
-                SbxVariable* pVar = pParams->Get( nParam );
-                DBG_ASSERT( pVar, "Parameter?!" );
-                if ( pVar->GetName().Len() )
-                    aEntry += pVar->GetName();
-                else if ( pInfo )
-                {
-                    const SbxParamInfo* pParam = pInfo->GetParam( nParam );
-                    if ( pParam )
-                        aEntry += pParam->aName;
-                }
-                aEntry += '=';
-                if( pVar->GetType() & SbxARRAY )
-                    aEntry += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
-                else
-                    aEntry += pVar->GetString();
-                if ( nParam < ( pParams->Count() - 1 ) )
-                    aEntry += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
-            }
-            aEntry += ')';
-        }
-        aTreeListBox.InsertEntry( aEntry, 0, FALSE, LIST_APPEND );
-        nScope++;
-        pMethod = StarBASIC::GetActiveMethod( nScope );
-    }
+        SbxError eOld = SbxBase::GetError();
+        aTreeListBox.SetSelectionMode( SINGLE_SELECTION );
 
-    SbxBase::ResetError();
-    if( eOld != SbxERR_OK )
-        SbxBase::SetError( eOld );
+        USHORT nScope = 0;
+        SbMethod* pMethod = StarBASIC::GetActiveMethod( nScope );
+        while ( pMethod )
+        {
+            String aEntry( String::CreateFromInt32(nScope ));
+            if ( aEntry.Len() < 2 )
+                aEntry.Insert( ' ', 0 );
+            aEntry += String( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+            aEntry += pMethod->GetName();
+            SbxArray* pParams = pMethod->GetParameters();
+            SbxInfo* pInfo = pMethod->GetInfo();
+            if ( pParams )
+            {
+                aEntry += '(';
+                // 0 ist der Name der Sub...
+                for ( USHORT nParam = 1; nParam < pParams->Count(); nParam++ )
+                {
+                    SbxVariable* pVar = pParams->Get( nParam );
+                    DBG_ASSERT( pVar, "Parameter?!" );
+                    if ( pVar->GetName().Len() )
+                        aEntry += pVar->GetName();
+                    else if ( pInfo )
+                    {
+                        const SbxParamInfo* pParam = pInfo->GetParam( nParam );
+                        if ( pParam )
+                            aEntry += pParam->aName;
+                    }
+                    aEntry += '=';
+                    if( pVar->GetType() & SbxARRAY )
+                        aEntry += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+                    else
+                        aEntry += pVar->GetString();
+                    if ( nParam < ( pParams->Count() - 1 ) )
+                        aEntry += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
+                }
+                aEntry += ')';
+            }
+            aTreeListBox.InsertEntry( aEntry, 0, FALSE, LIST_APPEND );
+            nScope++;
+            pMethod = StarBASIC::GetActiveMethod( nScope );
+        }
+
+        SbxBase::ResetError();
+        if( eOld != SbxERR_OK )
+            SbxBase::SetError( eOld );
+    }
+    else
+    {
+        aTreeListBox.SetSelectionMode( NO_SELECTION );
+        aTreeListBox.InsertEntry( String(), 0, FALSE, LIST_APPEND );
+    }
 
     aTreeListBox.SetUpdateMode( TRUE );
 }
