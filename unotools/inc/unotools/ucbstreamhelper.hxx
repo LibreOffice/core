@@ -18,9 +18,9 @@ namespace com
             namespace task
             {
                 class XInteractionHandler;
-            };
-        };
-    };
+            }
+        }
+    }
 };
 
 #define NS_UNO ::com::sun::star::uno

@@ -40,9 +40,9 @@ namespace com
             namespace task
             {
                 class XInteractionHandler;
-            };
-        };
-    };
+            }
+        }
+    }
 };
 
 namespace utl
