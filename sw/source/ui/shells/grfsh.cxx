@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:43:37 $
+ *  last change: $Author: rt $ $Date: 2005-02-09 14:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,8 +302,14 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                aSet.Put( SvxBrushItem( rSh.GetGraphicObj(), GPOS_LT,
-                                        SID_ATTR_GRAF_GRAPHIC ));
+                // --> OD 2005-02-09 #119353# - robust
+                const GraphicObject* pGrfObj = rSh.GetGraphicObj();
+                if ( pGrfObj )
+                {
+                    aSet.Put( SvxBrushItem( *pGrfObj, GPOS_LT,
+                                            SID_ATTR_GRAF_GRAPHIC ) );
+                }
+                // <--
             }
             aSet.Put( SfxBoolItem( FN_PARAM_GRF_CONNECT, sGrfNm.Len() > 0 ) );
 
@@ -582,12 +588,17 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         case SID_GRFFILTER_SOLARIZE:
             if( GRAPHIC_BITMAP == nGrfType )
             {
-                GraphicObject aFilterObj( GetShell().GetGraphicObj() );
-
-                if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
-                    SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ))
-                    GetShell().ReRead( aEmptyStr, aEmptyStr,
-                                        &aFilterObj.GetGraphic() );
+                // --> OD 2005-02-09 #119353# - robust
+                const GraphicObject* pFilterObj( GetShell().GetGraphicObj() );
+                if ( pFilterObj )
+                {
+                    GraphicObject aFilterObj( *pFilterObj );
+                    if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
+                        SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ))
+                        GetShell().ReRead( aEmptyStr, aEmptyStr,
+                                           &aFilterObj.GetGraphic() );
+                }
+                // <--
             }
             break;
 
@@ -692,13 +703,17 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_ATTR_GRAF_TRANSPARENCE:
             if( !bParentCntProt )
             {
-                const GraphicObject& rGrfObj = rSh.GetGraphicObj();
-                if( rGrfObj.IsAnimated() ||
-                    GRAPHIC_GDIMETAFILE == rGrfObj.GetType() )
-                    bDisable = TRUE;
-                else
-                    rSet.Put( SfxUInt16Item( nWhich, ((SwTransparencyGrf&)
-                        aCoreSet.Get(RES_GRFATR_TRANSPARENCY)).GetValue() ));
+                // --> OD 2005-02-09 #119353# - robust
+                const GraphicObject* pGrfObj = rSh.GetGraphicObj();
+                if ( pGrfObj )
+                {
+                    if( pGrfObj->IsAnimated() ||
+                        GRAPHIC_GDIMETAFILE == pGrfObj->GetType() )
+                        bDisable = TRUE;
+                    else
+                        rSet.Put( SfxUInt16Item( nWhich, ((SwTransparencyGrf&)
+                            aCoreSet.Get(RES_GRFATR_TRANSPARENCY)).GetValue() ));
+                }
             }
             break;
         case SID_ATTR_GRAF_INVERT:
