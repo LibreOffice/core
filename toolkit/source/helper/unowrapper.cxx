@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 11:08:18 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 18:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,9 @@ void ImplInitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseE
 //  class UnoWrapper
 //  ----------------------------------------------------
 
-UnoWrapper::UnoWrapper()
+UnoWrapper::UnoWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& rxToolkit )
 {
+    mxToolkit = rxToolkit;
 }
 
 void UnoWrapper::Destroy()

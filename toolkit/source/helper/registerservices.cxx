@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-26 12:32:27 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 18:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ) \
     { return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new ImplName ); }
 
+#define IMPL_CREATEINSTANCE2( ImplName ) \
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSMgr) \
+    { return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new ImplName( rSMgr ) ); }
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL UnoControlDialogModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
 {
     return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new OGeometryControlModel<UnoControlDialogModel> );
@@ -125,7 +129,7 @@
     }
 
 
-IMPL_CREATEINSTANCE( VCLXToolkit )
+IMPL_CREATEINSTANCE2( VCLXToolkit )
 IMPL_CREATEINSTANCE( StdTabController )
 IMPL_CREATEINSTANCE( StdTabControllerModel )
 IMPL_CREATEINSTANCE( UnoButtonControl )

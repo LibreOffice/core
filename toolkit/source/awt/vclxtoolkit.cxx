@@ -1,10 +1,10 @@
-/*************************************************************************
+ /*************************************************************************
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-21 15:24:30 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 18:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,10 @@
  *
  *
  ************************************************************************/
-#ifdef WNT
 #ifndef _SVWIN_HXX
 #include <tools/svwin.h>
 #endif
 #include <stdio.h>
-#endif
 
 #ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -82,6 +80,7 @@
 #endif
 
 #include <cppuhelper/typeprovider.hxx>
+#include <osl/conditn.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <rtl/process.h>
@@ -93,6 +92,7 @@
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <toolkit/helper/unowrapper.hxx>
 
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -347,20 +347,146 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
 //  class VCLXToolkit
 //  ----------------------------------------------------
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXToolkit::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+//static sal_Int32                          nVCLToolkitInstanceCount = 0;
+static BOOL                                 bInitedByVCLToolkit = sal_False;
+//static cppu::OInterfaceContainerHelper *  pToolkits = 0;
+
+static osl::Mutex & getInitMutex()
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XToolkit*, this ),
-                                        static_cast < ::com::sun::star::awt::XDataTransfer * > (this),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
-    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
+    static osl::Mutex * pM;
+    if( !pM )
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if( !pM )
+        {
+            static osl::Mutex aMutex;
+            pM = &aMutex;
+        }
+    }
+    return *pM;
 }
 
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXToolkit )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>* ) NULL )
-IMPL_XTYPEPROVIDER_END
+static osl::Condition & getInitCondition()
+{
+    static osl::Condition * pC = 0;
+    if( !pC )
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if( !pC )
+        {
+            static osl::Condition aCondition;
+            pC = &aCondition;
+        }
+    }
+    return *pC;
+}
+
+struct ToolkitThreadData
+{
+    VCLXToolkit * pTk;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
+
+    ToolkitThreadData( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr, VCLXToolkit * pTk_ )
+        : pTk( pTk_ )
+        , xSMgr( rSMgr )
+    {
+    }
+};
+
+static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
+{
+    ToolkitThreadData * pTTD = (ToolkitThreadData *)pArgs;
+    bInitedByVCLToolkit = InitVCL( pTTD->xSMgr );
+    if( bInitedByVCLToolkit )
+    {
+        UnoWrapper* pUnoWrapper = new UnoWrapper( pTTD->pTk );
+        Application::SetUnoWrapper( pUnoWrapper );
+    }
+    getInitCondition().set();
+    if( bInitedByVCLToolkit )
+    {
+        {
+        osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+        Application::Execute();
+        }
+        try
+        {
+            pTTD->pTk->dispose();
+        }
+        catch( com::sun::star::uno::Exception & )
+        {
+        }
+        /*
+        if( pToolkits )
+        {
+            cppu::OInterfaceIteratorHelper aIt( *pToolkits );
+            ::com::sun::star::uno::XInterface * pI;
+            while( pI = aIt.next() )
+                ((::com::sun::star::lang::XComponent *)pI)->dispose();
+
+            // delete toolkit container
+            osl::Guard< osl::Mutex > aGuard( getInitMutex() );
+            delete pToolkits;
+            pToolkits = 0;
+        }
+        */
+        DeInitVCL();
+    }
+    delete pTTD;
+}
+
+
+// contructor, which might initialize VCL
+VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
+    : cppu::WeakComponentImplHelper2< ::com::sun::star::awt::XToolkit, ::com::sun::star::awt::XDataTransfer >( GetMutex() )
+{
+    osl::Guard< osl::Mutex > aGuard( getInitMutex() );
+//  if( nVCLToolkitInstanceCount++ == 0 )
+    {
+        // setup execute thread
+        CreateMainLoopThread( ToolkitWorkerFunction, new ToolkitThreadData( rSMgr, this ) );
+        getInitCondition().wait();
+        /*
+        if( bInitedByVCLToolkit )
+        {
+            // insert in disposing list
+            if( !pToolkits )
+                pToolkits = new cppu::OInterfaceContainerHelper( getInitMutex() );
+            pToolkits->addInterface( (::com::sun::star::lang::XComponent *)this );
+        }
+        */
+    }
+}
+
+VCLXToolkit::~VCLXToolkit()
+{
+}
+
+
+void SAL_CALL VCLXToolkit::disposing()
+{
+    osl::Guard< osl::Mutex > aGuard( getInitMutex() );
+//  if( --nVCLToolkitInstanceCount == 0 )
+    {
+        if( bInitedByVCLToolkit )
+        {
+            Application::Quit();
+            JoinMainLoopThread();
+            bInitedByVCLToolkit = sal_False;
+        }
+    }
+
+/*
+    osl::Guard< osl::Mutex > aGuard( getInitMutex() );
+    // insert in disposing list
+    if( pToolkits )
+    {
+        // remove from the disposing list
+        pToolkits->removeInterface( (::com::sun::star::lang::XComponent *)this );
+    }
+*/
+}
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::getDesktopWindow(  ) throw(::com::sun::star::uno::RuntimeException)
 {

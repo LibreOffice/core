@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 10:51:20 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 18:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
 #endif
@@ -109,6 +113,11 @@
 //  ----------------------------------------------------
 //  class ExtUnoWrapper
 //  ----------------------------------------------------
+
+ExtUnoWrapper::ExtUnoWrapper()
+    : UnoWrapper( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>() )
+{}
+
 void ExtUnoWrapper::RegisterUnoServices()
 {
 /*

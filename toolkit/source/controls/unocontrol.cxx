@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-05 15:25:14 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 18:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 
+#include <vos/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/table.hxx>
 #include <tools/date.hxx>
@@ -182,7 +183,12 @@ UnoControl::~UnoControl()
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xMe;
         aAny >>= xMe;
 
-        xMe->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >(), lcl_GetDefaultWindow()->GetComponentInterface( sal_True ) );
+        WorkWindow* pWW;
+        {
+        osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+        pWW = lcl_GetDefaultWindow();
+        }
+        xMe->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >(), pWW->GetComponentInterface( sal_True ) );
         xP = mxPeer;
         mxPeer = xCurrentPeer;
 

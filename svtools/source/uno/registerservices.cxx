@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-13 11:16:04 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 18:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ) \
     { return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new ImplName ); }
 
+#define IMPL_CREATEINSTANCE2( ImplName ) \
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSMgr) \
+    { return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new ImplName( rSMgr ) ); }
+
 // for CreateInstance functions implemented elsewhere
 #define DECLARE_CREATEINSTANCE( ImplName ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
@@ -99,7 +103,7 @@
 
 // -------------------------------------------------------------------------------------
 IMPL_CREATEINSTANCE( SvtTextLoader )
-IMPL_CREATEINSTANCE( ExtVCLXToolkit )
+IMPL_CREATEINSTANCE2( ExtVCLXToolkit )
 DECLARE_CREATEINSTANCE( SvNumberFormatsSupplierServiceObject )
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
 
