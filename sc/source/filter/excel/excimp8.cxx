@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-01-22 09:14:01 $
+ *  last change: $Author: os $ $Date: 2001-01-23 09:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,16 +675,16 @@ UINT32 Biff8MSDffManager::GetImportOpts( OfaFilterOptions* p )
     UINT32      n = 0;
     if( p )
     {
-        if( p->IsMathType2StarMath() )
+        if( p->IsMathType2Math() )
             n |= OLE_MATHTYPE_2_STARMATH;
 
-        if( p->IsWinWord2StarWriter() )
+        if( p->IsWinWord2Writer() )
             n |= OLE_WINWORD_2_STARWRITER;
 
-        if( p->IsExcel2StarCalc() )
+        if( p->IsExcel2Calc() )
             n |= OLE_EXCEL_2_STARCALC;
 
-        if( p->IsPowerPoint2StarImpress() )
+        if( p->IsPowerPoint2Impress() )
             n |= OLE_POWERPOINT_2_STARIMPRESS;
     }
 
