@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-20 12:07:36 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,7 @@ void SwModule::StateViewOptions(SfxItemSet &rSet)
                 case FN_VIEW_META_CHARS:
                     aBool.SetValue( pOpt->IsViewMetaChars() ); break;
                 case FN_VIEW_TABLEGRID:
-                    aBool.SetValue( !SwViewOption::IsTableBoundaries() ); break;
+                    aBool.SetValue( SwViewOption::IsTableBoundaries() ); break;
                 case FN_VIEW_HIDDEN_PARA:
                     aBool.SetValue( pOpt->IsShowHiddenPara()); break;
                 case SID_GRID_VISIBLE:
