@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.80 $
+#   $Revision: 1.81 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:47:51 $
+#   last change: $Author: vg $ $Date: 2003-03-28 13:53:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.80 $ ';
+$id_str = ' $Revision: 1.81 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1081,7 +1081,10 @@ sub checkout_module {
     # Quick hack, should not be there
     # if Heiner's Cws has error handling
     if (!-d &CorrectPath($StandDir.$prj_name)) {
-        &print_error ("Cannot checkout $prj_name. Check if you has login to server");
+        $cvs_module->checkout($StandDir, '', '');
+        if (!-d &CorrectPath($StandDir.$prj_name)) {
+            &print_error ("Cannot checkout $prj_name. Check if you have login to server");
+        };
     };
 };
 
