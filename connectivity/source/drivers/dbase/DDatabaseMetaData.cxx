@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 10:58:52 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _CONNECTIVITY_FILE_ADATABASEMETADATARESULTSET_HXX_
-#include "file/FDatabaseMetaDataResultSet.hxx"
+#ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
+#include "FDatabaseMetaDataResultSet.hxx"
 #endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -101,7 +101,7 @@
 #include "propertyids.hxx"
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
-#include "file/FValue.hxx"
+#include "FValue.hxx"
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -511,5 +511,20 @@ sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLExc
     return 128;
 }
 // -----------------------------------------------------------------------------
+sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    return sal_False;
+}
+// -----------------------------------------------------------------------------
+
 
 

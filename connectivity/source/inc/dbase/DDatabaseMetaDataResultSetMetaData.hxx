@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaDataResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:25 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _VECTOR_
 #include <vector>
 #endif
-#ifndef _CONNECTIVITY_FILE_ADATABASEMETADATARESULTSET_HXX_
-#include "file/FDatabaseMetaDataResultSet.hxx"
+#ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
+#include "FDatabaseMetaDataResultSet.hxx"
 #endif
 #ifndef _CONNECTIVITY_COLUMN_HXX_
 #include "OColumn.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-13 14:33:06 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <tools/stream.hxx>
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
-#include "file/FValue.hxx"
+#include "FValue.hxx"
 #endif
 
 namespace connectivity
@@ -148,9 +148,12 @@ namespace connectivity
             {
                 return sal_False;
             }
-            virtual BOOL UpdateRow(OValueVector& rRow, file::OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
+            virtual BOOL UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
             {
                 return sal_False;
+            }
+            virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor)
+            {
             }
 
             ::rtl::OUString SAL_CALL getName() { return m_Name; }

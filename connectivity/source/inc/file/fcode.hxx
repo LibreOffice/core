@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:49:39 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
-#include "file/FValue.hxx"
+#include "FValue.hxx"
 #endif
 
 

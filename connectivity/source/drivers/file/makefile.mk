@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-19 09:35:30 $
+#   last change: $Author: oj $ $Date: 2001-03-28 11:31:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,9 +79,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 SLOFILES=\
     $(SLO)$/FConnection.obj			\
-    $(SLO)$/FValue.obj				\
-    $(SLO)$/FDatabaseMetaDataResultSetMetaData.obj	\
-    $(SLO)$/FDatabaseMetaDataResultSet.obj	\
     $(SLO)$/FResultSetMetaData.obj	\
     $(SLO)$/FColumns.obj			\
     $(SLO)$/FTables.obj				\

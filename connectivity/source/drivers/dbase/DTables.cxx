@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 10:56:00 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,9 @@ void SAL_CALL ODbaseTables::dropByName( const ::rtl::OUString& elementName ) thr
     if( aIter == m_aNameMap.end())
         throw NoSuchElementException(elementName,*this);
 
+    if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
+        aIter->second = createObject(elementName);
+
     Reference< XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
     if(xTunnel.is())
     {
@@ -174,6 +177,8 @@ void SAL_CALL ODbaseTables::dropByName( const ::rtl::OUString& elementName ) thr
         if(pTable && pTable->DropImpl())
             ODbaseTables_BASE_BASE::dropByName(elementName);
     }
+    else
+        throw SQLException(::rtl::OUString::createFromAscii("Can't drop table ") + elementName,*this,SQLSTATE_SEQUENCE,1000,Any());
 
 }
 // -------------------------------------------------------------------------

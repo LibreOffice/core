@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-19 09:35:26 $
+#   last change: $Author: oj $ $Date: 2001-03-28 11:31:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,13 +75,16 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
-        $(SLO)$/emptymetadata.obj	\
-        $(SLO)$/dbcharset.obj		\
-        $(SLO)$/dbtools.obj			\
-        $(SLO)$/dbexception.obj		\
-        $(SLO)$/dbconversion.obj	\
-        $(SLO)$/CommonTools.obj		\
-        $(SLO)$/DateConversion.obj	\
+        $(SLO)$/emptymetadata.obj						\
+        $(SLO)$/dbcharset.obj							\
+        $(SLO)$/dbtools.obj								\
+        $(SLO)$/dbexception.obj							\
+        $(SLO)$/dbconversion.obj						\
+        $(SLO)$/CommonTools.obj							\
+        $(SLO)$/FDatabaseMetaDataResultSetMetaData.obj	\
+        $(SLO)$/FDatabaseMetaDataResultSet.obj			\
+        $(SLO)$/FValue.obj								\
+        $(SLO)$/DateConversion.obj						\
         $(SLO)$/TDatabaseMetaDataBase.obj
 
 .IF "$(COM)"=="GCC"

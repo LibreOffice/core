@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 08:40:53 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include "dbase/DIndexPage.hxx"
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
-#include "file/FValue.hxx"
+#include "FValue.hxx"
 #endif
 
 namespace connectivity
@@ -81,7 +81,6 @@ namespace connectivity
 
         class ONDXNode;
         class ODbaseIndex;
-        typedef file::ORowSetValue ORowSetValue_BASE;
         //==================================================================
         // Index Key
         //==================================================================
@@ -90,11 +89,11 @@ namespace connectivity
         {
             friend class ONDXNode;
             UINT32              nRecord;                /* Satzzeiger               */
-            ORowSetValue_BASE   xValue;                 /* Schluesselwert           */
+            ORowSetValue    xValue;                 /* Schluesselwert           */
 
         public:
             ONDXKey():nRecord(0){}
-            inline ONDXKey(const ORowSetValue_BASE& rVal, sal_Int32 eType, UINT32 nRec)
+            inline ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, UINT32 nRec)
                 : ONDXKey_BASE(eType)
                 , nRecord(nRec)
                 , xValue(rVal)
@@ -325,7 +324,7 @@ namespace connectivity
         //==================================================================
         // inline implementation
         //==================================================================
-//      inline ONDXKey::ONDXKey(const ORowSetValue_BASE& rVal, sal_Int32 eType, UINT32 nRec)
+//      inline ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, UINT32 nRec)
 //          : ONDXKey_BASE(eType)
 //          , nRecord(nRec),xValue(rVal)
 //      {

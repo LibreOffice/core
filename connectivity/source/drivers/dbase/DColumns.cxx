@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DColumns.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,16 +68,20 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
 #endif
+#ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#endif
 
 using namespace connectivity::dbase;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-
+typedef file::OColumns ODbaseColumns_BASE;
 Reference< XNamed > ODbaseColumns::createObject(const ::rtl::OUString& _rName)
 {
 
@@ -102,4 +106,40 @@ Reference< XPropertySet > ODbaseColumns::createEmptyObject()
     Reference< XPropertySet > xRet = pRet;
     return xRet;
 }
+// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+// XAppend
+void SAL_CALL ODbaseColumns::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    if(!m_pTable->isNew())
+        m_pTable->addColumn(descriptor);
+    ODbaseColumns_BASE::appendByDescriptor(descriptor);
+}
+// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+// XDrop
+void SAL_CALL ODbaseColumns::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    if(!m_pTable->isNew())
+    {
+    }
+    ODbaseColumns_BASE::dropByName(elementName);
+}
+// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+void SAL_CALL ODbaseColumns::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    if (index < 0 || index >= getCount())
+        throw IndexOutOfBoundsException();
+
+    if(!m_pTable->isNew())
+    {
+
+    }
+    ODbaseColumns_BASE::dropByIndex(index);
+}
+// -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:39:51 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<X
 
 // -------------------------------------------------------------------------
 
-void lcl_SetValue( file::ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
+void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
                     sal_Int32 nStartCol, sal_Int32 nStartRow, sal_Bool bHasHeaders,
                     const ::Date& rNullDate,
                     sal_Int32 nDBRow, sal_Int32 nDBColumn, sal_Int32 nType )
@@ -860,7 +860,7 @@ End:
     return sal_True;
 }
 //------------------------------------------------------------------
-sal_Bool OCalcTable::fetchRow( file::OValueRow _rRow, const OSQLColumns & _rCols,
+sal_Bool OCalcTable::fetchRow( OValueRow _rRow, const OSQLColumns & _rCols,
                                 sal_Bool _bUseTableDefs, sal_Bool bRetrieveData )
 {
     // read the bookmark
@@ -919,7 +919,7 @@ BOOL OCalcTable::InsertRow(OValueVector& rRow, BOOL bFlush,const Reference<XInde
 }
 
 //------------------------------------------------------------------
-BOOL OCalcTable::UpdateRow(file::OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
+BOOL OCalcTable::UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
 {
     return sal_False;       // read-only for now
 }

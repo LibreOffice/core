@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-15 13:05:08 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CONNECTIVITY_FILE_ODATABASEMETADATA_HXX_
 #include "file/FDatabaseMetaData.hxx"
 #endif
-#ifndef _CONNECTIVITY_FILE_ORESULTSET_HXX_
-#include "file/FDatabaseMetaDataResultSet.hxx"
+#ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
+#include "FDatabaseMetaDataResultSet.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>

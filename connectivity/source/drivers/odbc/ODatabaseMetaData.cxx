@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _CONNECTIVITY_ODBC_ORESULTSET_HXX_
 #include "odbc/ODatabaseMetaDataResultSet.hxx"
+#endif
+#ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
+#include "FDatabaseMetaDataResultSet.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -662,18 +665,45 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, 
 {
     sal_Int32 nValue;
     OTools::GetInfo(m_aConnectionHandle,SQL_OJ_CAPABILITIES,nValue,*this);
-    return nValue;
+    return ((nValue & SQL_OJ_FULL|SQL_OJ_LEFT|SQL_OJ_RIGHT|SQL_OJ_NESTED|SQL_OJ_NOT_ORDERED|SQL_OJ_ALL_COMPARISON_OPS|SQL_OJ_INNER) != 0);
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
-    SQLHANDLE hStmt;
-    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
-    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
+    // there exists no possibility to get table types so we have to check
+    static ::rtl::OUString sTableTypes[] =
+    {
+        ::rtl::OUString::createFromAscii("TABLE"),
+        ::rtl::OUString::createFromAscii("VIEW"),
+        ::rtl::OUString::createFromAscii("SYSTEM TABLE"),
+        ::rtl::OUString::createFromAscii("GLOBAL TEMPORARY"),
+        ::rtl::OUString::createFromAscii("LOCAL TEMPORARY"),
+        ::rtl::OUString::createFromAscii("ALIAS"),
+        ::rtl::OUString::createFromAscii("SYNONYM")
+    };
+    sal_Int32  nSize = sizeof(sTableTypes) / sizeof(::rtl::OUString);
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
     Reference< XResultSet > xRef = pResult;
-    pResult->openTablesTypes();
+    pResult->setTableTypes();
+    sal_Int32 nValue = 0;
+    OTools::GetInfo(m_aConnectionHandle,SQL_CREATE_VIEW,nValue,*this);
+    sal_Bool bViewsSupported = (nValue & SQL_CV_CREATE_VIEW) == SQL_CV_CREATE_VIEW;
+
+    ORows aRows;
+    for(sal_Int32 i=0;i < nSize;++i)
+    {
+        if( !bViewsSupported && i == 1)
+            continue; // no views supported
+        ORow aRow;
+        aRow.push_back(ORowSetValue());
+        aRow.push_back(ORowSetValue(sTableTypes[i]));
+        // bound row
+        ORow::iterator aIter = aRow.begin();
+        for(;aIter != aRow.end();++aIter)
+            aIter->setBound(sal_True);
+        aRows.push_back(aRow);
+    }
+    pResult->setRows(aRows);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -1056,28 +1086,28 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInProcedureCalls(  ) throw(S
 {
     sal_Int32 nValue;
     OTools::GetInfo(m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
-    return nValue & SQL_SU_PROCEDURE_INVOCATION;
+    return (nValue & SQL_SU_PROCEDURE_INVOCATION) == SQL_SU_PROCEDURE_INVOCATION;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue;
     OTools::GetInfo(m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
-    return nValue & SQL_SU_PRIVILEGE_DEFINITION;
+    return (nValue & SQL_SU_PRIVILEGE_DEFINITION) == SQL_SU_PRIVILEGE_DEFINITION;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue;
     OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
-    return nValue & SQL_CU_PROCEDURE_INVOCATION;
+    return (nValue & SQL_CU_PROCEDURE_INVOCATION) == SQL_CU_PROCEDURE_INVOCATION;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue;
     OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
-    return nValue & SQL_CU_PRIVILEGE_DEFINITION;
+    return (nValue & SQL_CU_PRIVILEGE_DEFINITION) == SQL_CU_PRIVILEGE_DEFINITION;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCorrelatedSubqueries(  ) throw(SQLException, RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:53:38 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,10 +162,10 @@ namespace connectivity
             BOOL IsText() const                 {return m_aHeader.db_keytype == 0;}
             USHORT GetMaxNodes() const          {return m_aHeader.db_maxkeys;}
 
-            virtual BOOL Insert(sal_uInt32 nRec, const ORowSetValue_BASE& rValue);
-            virtual BOOL Update(sal_uInt32 nRec, const ORowSetValue_BASE&, const ORowSetValue_BASE&);
-            virtual BOOL Delete(sal_uInt32 nRec, const ORowSetValue_BASE& rValue);
-            virtual BOOL Find(sal_uInt32 nRec, const ORowSetValue_BASE& rValue);
+            virtual BOOL Insert(sal_uInt32 nRec, const ORowSetValue& rValue);
+            virtual BOOL Update(sal_uInt32 nRec, const ORowSetValue&, const ORowSetValue&);
+            virtual BOOL Delete(sal_uInt32 nRec, const ORowSetValue& rValue);
+            virtual BOOL Find(sal_uInt32 nRec, const ORowSetValue& rValue);
 
             void createINFEntry();
             BOOL CreateImpl();
@@ -183,7 +183,7 @@ namespace connectivity
             // Tree operationen
             void Insert(ONDXPagePtr aCurPage, ONDXNode& rNode);
             void Release(BOOL bSave = TRUE);
-            BOOL ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue_BASE& rValue);
+            BOOL ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue);
         };
 
         SvStream& operator << (SvStream &rStream, ODbaseIndex&);
