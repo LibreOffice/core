@@ -1,0 +1,3 @@
+moz	moz : NULL
+moz	moz					usr1	-	all	moz_mkout NULL
+moz	moz\zipped			nmake	-	all	moz_zipped NULL
