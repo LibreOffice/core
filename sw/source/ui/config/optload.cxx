@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:25:36 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,10 @@
 
 #include <svtools/insdlg.hxx>
 #include <sot/clsids.hxx>
+
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
 
 #ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
@@ -610,27 +614,58 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
         bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
     }
 
-    USHORT nPos = 0;
-
     DelUserData();
-    aCheckLB.GetModel()->Clear();   // Alle Eintraege entfernen
+    aCheckLB.GetModel()->Clear();   // remove all entries
 
-    aCheckLB.InsertEntry(sSWTable);     SetOptions(nPos++, TABLE_CAP);
-    aCheckLB.InsertEntry(sSWFrame);     SetOptions(nPos++, FRAME_CAP);
-    aCheckLB.InsertEntry(sSWGraphic);   SetOptions(nPos++, GRAPHIC_CAP);
+    // Writer objects
+    USHORT nPos = 0;
+    aCheckLB.InsertEntry(sSWTable);
+    SetOptions(nPos++, TABLE_CAP);
+    aCheckLB.InsertEntry(sSWFrame);
+    SetOptions(nPos++, FRAME_CAP);
+    aCheckLB.InsertEntry(sSWGraphic);
+    SetOptions(nPos++, GRAPHIC_CAP);
+
+    // get Productname and -version
+    String sComplete, sWithoutVersion;
+    ::rtl::OUString sTemp;
+    ::com::sun::star::uno::Any aAny =
+        ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+    if ( aAny >>= sTemp )
+    {
+        sComplete = sTemp;
+        sWithoutVersion = sTemp;
+        aAny = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+        if ( !( aAny >>= sTemp ) )
+        {
+            DBG_ERRORFILE( "Couldn't get PRODUCTVERSION variable" );
+        }
+        else
+        {
+            sComplete += ' ';
+            sComplete += String( sTemp );
+        }
+    }
+    else
+    {
+        DBG_ERRORFILE( "Couldn't get PRODUCTNAME variable" );
+    }
 
     SvObjectServerList aObjS;
     aObjS.FillInsertObjects();
-    aObjS.Remove(*SwDocShell::ClassFactory());  // Writer-Id wieder entfernen
+    aObjS.Remove( SvGlobalName( SO3_SW_CLASSID ) ); // remove Writer-ID
 
-    for (ULONG i = 0; i < aObjS.Count(); i++)
+    for ( ULONG i = 0; i < aObjS.Count(); ++i )
     {
         const SvGlobalName &rOleId = aObjS[i].GetClassName();
-        const String *pClassName = &aObjS[i].GetHumanName();
-        if (rOleId == SvGlobalName(SO3_OUT_CLASSID))
+        const String* pClassName = &aObjS[i].GetHumanName();
+        if ( rOleId == SvGlobalName( SO3_OUT_CLASSID ) )
             pClassName = &sOLE;
-        aCheckLB.InsertEntry(*pClassName);
-        SetOptions(nPos++, OLE_CAP, &rOleId);
+        String sClass( *pClassName );
+        // don't show product version
+        sClass.SearchAndReplace( sComplete, sWithoutVersion );
+        aCheckLB.InsertEntry( sClass );
+        SetOptions( nPos++, OLE_CAP, &rOleId );
     }
 
     ModifyHdl();
