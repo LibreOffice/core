@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-03 07:58:21 $
+ *  last change: $Author: as $ $Date: 2001-07-16 08:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
             case E_DEEP_BOTH     :
             case E_FLAT_BOTH     :  {
                                         sal_Int32 nNewFlags  = nSearchFlags                       ;
-                                                  nNewFlags &= css::frame::FrameSearchFlag::CREATE;
+                                                  nNewFlags -= css::frame::FrameSearchFlag::CREATE;
                                         css::uno::Reference< css::frame::XFrame > xFrame = xOwner->findFrame( sTargetFrameName, nNewFlags );
                                         if( xFrame.is() == sal_True )
                                         {
