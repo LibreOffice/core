@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:50:59 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,10 +214,11 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                 ((sal_Int8*)_pData)[_nColumnSize] = '\0';
             }   break;
         case SQL_BIT:
+        case SQL_TINYINT:
             *((sal_Int8*)_pData) = *(sal_Int8*)_pValue;
             *pLen = sizeof(sal_Int8);
             break;
-        case SQL_TINYINT:
+
         case SQL_SMALLINT:
             *((sal_Int16*)_pData) = *(sal_Int16*)_pValue;
             *pLen = sizeof(sal_Int16);
@@ -374,10 +375,11 @@ void OTools::bindValue( OConnection* _pConnection,
                     _pData = (void*)((::rtl::OString*)_pData)->getStr();
                 }   break;
                 case SQL_BIT:
+                case SQL_TINYINT:
                     *((sal_Int8*)_pData) = *(sal_Int8*)_pValue;
                     *pLen = sizeof(sal_Int8);
                     break;
-                case SQL_TINYINT:
+
                 case SQL_SMALLINT:
                     *((sal_Int16*)_pData) = *(sal_Int16*)_pValue;
                     *pLen = sizeof(sal_Int16);
@@ -907,7 +909,7 @@ void OTools::getBindTypes(sal_Bool _bUseWChar,
                                     fSqlType    = SQL_NUMERIC; break;
         case SQL_BIT:               fCType      = SQL_C_TINYINT;
                                     fSqlType    = SQL_INTEGER; break;
-        case SQL_TINYINT:           fCType      = SQL_C_SHORT;
+        case SQL_TINYINT:           fCType      = SQL_C_TINYINT;
                                     fSqlType    = SQL_TINYINT; break;
         case SQL_SMALLINT:          fCType      = SQL_C_SHORT;
                                     fSqlType    = SQL_SMALLINT; break;
