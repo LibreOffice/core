@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-14 19:03:30 $
+ *  last change: $Author: cl $ $Date: 2001-11-22 14:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1546,6 +1546,9 @@ void SdrObject::RecalcBoundRect()
 
 void SdrObject::SendRepaintBroadcast(const Rectangle& rRect) const
 {
+    if( pModel && pModel->isLocked() )
+        return;
+
     BOOL bBrd(pPlusData && pPlusData->pBroadcast);
     BOOL bPnt(bInserted && pModel);
 
@@ -1566,6 +1569,9 @@ void SdrObject::SendRepaintBroadcast(const Rectangle& rRect) const
 
 void SdrObject::SendRepaintBroadcast(BOOL bNoPaintNeeded) const
 {
+    if( pModel && pModel->isLocked() )
+        return;
+
     BOOL bBrd(pPlusData && pPlusData->pBroadcast);
     BOOL bPnt(bInserted && pModel);
 
