@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-09 17:24:57 $
+#   last change: $Author: vg $ $Date: 2005-03-23 15:48:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,13 +97,8 @@ SHL1STDLIBS= \
             $(VOSLIB)
 
 
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+= -lapp
-.ENDIF
-
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
-        $(LIBPRE) app.lib \
         $(LIBPRE) advapi32.lib	\
         $(LIBPRE) gdi32.lib
 .ENDIF
