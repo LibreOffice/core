@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextTableCursor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:14 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module text {
+module com {  module sun {  module star {  module text {
 
 //=============================================================================
 
@@ -93,6 +93,12 @@ interface XTextTableCursor: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::text::XTextTableCursor::gotoCellByName
     /** moves the cursor to the cell with the specified name.
+
+        @param aCellName
+            specifies the name of the cell to go to.
+
+        @param bExpand
+            determines wether the selection is to be expanded.
      */
     boolean gotoCellByName( [in] string aCellName,
              [in] boolean bExpand );
@@ -101,6 +107,12 @@ interface XTextTableCursor: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::text::XTextTableCursor::goLeft
     /** moves the cursor to the left neighbor.
+
+        @param nCount
+            the number of cells to move.
+
+        @param bExpand
+            determines wether the selection is to be expanded.
      */
     boolean goLeft( [in] short nCount,
              [in] boolean bExpand );
@@ -109,6 +121,12 @@ interface XTextTableCursor: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::text::XTextTableCursor::goRight
     /** moves the cursor to the right neighbor.
+
+        @param nCount
+            the number of cells to move.
+
+        @param bExpand
+            determines wether the selection is to be expanded.
      */
     boolean goRight( [in] short nCount,
              [in] boolean bExpand );
@@ -117,6 +135,12 @@ interface XTextTableCursor: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::text::XTextTableCursor::goUp
     /** moves the cursor to the top neighbor.
+
+        @param nCount
+            the number of cells to move.
+
+        @param bExpand
+            determines wether the selection is to be expanded.
      */
     boolean goUp( [in] short nCount,
              [in] boolean bExpand );
@@ -125,6 +149,12 @@ interface XTextTableCursor: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::text::XTextTableCursor::goDown
     /** moves the cursor to the bottom neighbor cell.
+
+        @param nCount
+            the number of cells to move.
+
+        @param bExpand
+            determines wether the selection is to be expanded.
      */
     boolean goDown( [in] short nCount,
              [in] boolean bExpand );
@@ -133,6 +163,9 @@ interface XTextTableCursor: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::text::XTextTableCursor::gotoStart
     /** moves the cursor to the top left cell of the table.
+
+        @param bExpand
+            determines wether the selection is to be expanded.
      */
     void gotoStart( [in] boolean bExpand );
 
@@ -140,6 +173,9 @@ interface XTextTableCursor: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::text::XTextTableCursor::gotoEnd
     /** moves the cursor to the bottom right cell of the table.
+
+        @param bExpand
+            determines wether the selection is to be expanded.
      */
     void gotoEnd( [in] boolean bExpand );
 
@@ -153,11 +189,14 @@ interface XTextTableCursor: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XTextTableCursor::splitRange
-    /** splits the range of cells. The count specifies the number of new cells
-        that will be created for each cell contained in the range.
+    /** splits the range of cells.
+
+        @param nCount
+            specifies the number of new cells that will be created
+            for each cell contained in the range.
      */
-    boolean splitRange( [in] short Count,
-             [in] boolean Horizontal );
+    boolean splitRange( [in] short nCount,
+             [in] boolean bHorizontal );
 
 };
 
