@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartArea.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:01:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
     background area, the diagram wall, and the diagram floor of
    three-dimensional charts.
  */
-service ChartArea
+published service ChartArea
 {
     service com::sun::star::drawing::FillProperties;
     service com::sun::star::drawing::LineProperties;
