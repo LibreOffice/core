@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jp $ $Date: 2001-10-17 09:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,21 +319,25 @@ BOOL SwFEShell::DeleteCol()
     StartAllAction();
 
     // lasse ueber das Layout die Boxen suchen
+    BOOL bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, TBLSEARCH_COL );
+    if ( aBoxes.Count() )
+    {
+        TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
 
-    TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
+        // die Crsr muessen noch aus dem Loesch Bereich entfernt
+        // werden. Setze sie immer hinter/auf die Tabelle; ueber die
+        // Dokument-Position werden sie dann immer an die alte Position gesetzt.
+        while( !pFrm->IsCellFrm() )
+            pFrm = pFrm->GetUpper();
+        ParkCrsr( SwNodeIndex( *((SwCellFrm*)pFrm)->GetTabBox()->GetSttNd() ));
 
-    // die Crsr muessen noch aus dem Loesch Bereich entfernt
-    // werden. Setze sie immer hinter/auf die Tabelle; ueber die
-    // Dokument-Position werden sie dann immer an die alte Position gesetzt.
-    while( !pFrm->IsCellFrm() )
-        pFrm = pFrm->GetUpper();
-    ParkCrsr( SwNodeIndex( *((SwCellFrm*)pFrm)->GetTabBox()->GetSttNd() ));
-
-    // dann loesche doch die Spalten
-    BOOL bRet = GetDoc()->DeleteRowCol( aBoxes );
-
+        // dann loesche doch die Spalten
+        bRet = GetDoc()->DeleteRowCol( aBoxes );
+    }
+    else
+        bRet = FALSE;
     EndAllActionAndCall();
     return bRet;
 }
@@ -356,96 +360,102 @@ BOOL SwFEShell::DeleteRow()
     StartAllAction();
 
     // lasse ueber das Layout die Boxen suchen
+    BOOL bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, TBLSEARCH_ROW );
 
-    TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
-
-    // die Crsr aus dem Loeschbereich entfernen.
-    // Der Cursor steht danach:
-    //  - es folgt noch eine Zeile, in dieser
-    //  - vorher steht noch eine Zeile, in dieser
-    //  - sonst immer dahinter
+    if( aBoxes.Count() )
     {
-        SwTableNode* pTblNd = ((SwCntntFrm*)pFrm)->GetNode()->FindTableNode();
+        TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
 
-        // suche alle Boxen / Lines
-        _FndBox aFndBox( 0, 0 );
+        // die Crsr aus dem Loeschbereich entfernen.
+        // Der Cursor steht danach:
+        //  - es folgt noch eine Zeile, in dieser
+        //  - vorher steht noch eine Zeile, in dieser
+        //  - sonst immer dahinter
         {
-            _FndPara aPara( aBoxes, &aFndBox );
-            pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-        }
+            SwTableNode* pTblNd = ((SwCntntFrm*)pFrm)->GetNode()->FindTableNode();
 
-        if( !aFndBox.GetLines().Count() )
-        {
-            EndAllActionAndCall();
-            return FALSE;
-        }
+            // suche alle Boxen / Lines
+            _FndBox aFndBox( 0, 0 );
+            {
+                _FndPara aPara( aBoxes, &aFndBox );
+                pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
+            }
 
-        KillPams();
+            if( !aFndBox.GetLines().Count() )
+            {
+                EndAllActionAndCall();
+                return FALSE;
+            }
 
-        _FndBox* pFndBox = &aFndBox;
-        while( 1 == pFndBox->GetLines().Count() &&
-                1 == pFndBox->GetLines()[0]->GetBoxes().Count() )
-        {
-            _FndBox* pTmp = pFndBox->GetLines()[0]->GetBoxes()[0];
-            if( pTmp->GetBox()->GetSttNd() )
-                break;      // das ist sonst zu weit
-            pFndBox = pTmp;
-        }
+            KillPams();
 
-        SwTableLine* pDelLine = pFndBox->GetLines()[
-                        pFndBox->GetLines().Count()-1 ]->GetLine();
-        SwTableBox* pDelBox = pDelLine->GetTabBoxes()[
-                            pDelLine->GetTabBoxes().Count() - 1 ];
-        while( !pDelBox->GetSttNd() )
-        {
-            SwTableLine* pLn = pDelBox->GetTabLines()[
-                        pDelBox->GetTabLines().Count()-1 ];
-            pDelBox = pLn->GetTabBoxes()[ pLn->GetTabBoxes().Count() - 1 ];
-        }
-        SwTableBox* pNextBox = pDelLine->FindNextBox( pTblNd->GetTable(),
-                                                        pDelBox, TRUE );
-        while( pNextBox &&
-                pNextBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
-            pNextBox = pNextBox->FindNextBox( pTblNd->GetTable(), pNextBox );
+            _FndBox* pFndBox = &aFndBox;
+            while( 1 == pFndBox->GetLines().Count() &&
+                    1 == pFndBox->GetLines()[0]->GetBoxes().Count() )
+            {
+                _FndBox* pTmp = pFndBox->GetLines()[0]->GetBoxes()[0];
+                if( pTmp->GetBox()->GetSttNd() )
+                    break;      // das ist sonst zu weit
+                pFndBox = pTmp;
+            }
 
-        if( !pNextBox )         // keine nachfolgende? dann die vorhergehende
-        {
-            pDelLine = pFndBox->GetLines()[ 0 ]->GetLine();
-            pDelBox = pDelLine->GetTabBoxes()[ 0 ];
+            SwTableLine* pDelLine = pFndBox->GetLines()[
+                            pFndBox->GetLines().Count()-1 ]->GetLine();
+            SwTableBox* pDelBox = pDelLine->GetTabBoxes()[
+                                pDelLine->GetTabBoxes().Count() - 1 ];
             while( !pDelBox->GetSttNd() )
-                pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0];
-            pNextBox = pDelLine->FindPreviousBox( pTblNd->GetTable(),
-                                                        pDelBox, TRUE );
+            {
+                SwTableLine* pLn = pDelBox->GetTabLines()[
+                            pDelBox->GetTabLines().Count()-1 ];
+                pDelBox = pLn->GetTabBoxes()[ pLn->GetTabBoxes().Count() - 1 ];
+            }
+            SwTableBox* pNextBox = pDelLine->FindNextBox( pTblNd->GetTable(),
+                                                            pDelBox, TRUE );
             while( pNextBox &&
                     pNextBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
-                pNextBox = pNextBox->FindPreviousBox( pTblNd->GetTable(), pNextBox );
+                pNextBox = pNextBox->FindNextBox( pTblNd->GetTable(), pNextBox );
+
+            if( !pNextBox )         // keine nachfolgende? dann die vorhergehende
+            {
+                pDelLine = pFndBox->GetLines()[ 0 ]->GetLine();
+                pDelBox = pDelLine->GetTabBoxes()[ 0 ];
+                while( !pDelBox->GetSttNd() )
+                    pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0];
+                pNextBox = pDelLine->FindPreviousBox( pTblNd->GetTable(),
+                                                            pDelBox, TRUE );
+                while( pNextBox &&
+                        pNextBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
+                    pNextBox = pNextBox->FindPreviousBox( pTblNd->GetTable(), pNextBox );
+            }
+
+            ULONG nIdx;
+            if( pNextBox )      // dann den Cursor hier hinein
+                nIdx = pNextBox->GetSttIdx() + 1;
+            else                // ansonsten hinter die Tabelle
+                nIdx = pTblNd->EndOfSectionIndex() + 1;
+
+            SwNodeIndex aIdx( GetDoc()->GetNodes(), nIdx );
+            SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
+            if( !pCNd )
+                pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
+
+            if( pCNd )
+            {
+                SwPaM* pPam = GetCrsr();
+                pPam->GetPoint()->nNode = aIdx;
+                pPam->GetPoint()->nContent.Assign( pCNd, 0 );
+                pPam->SetMark();            // beide wollen etwas davon haben
+                pPam->DeleteMark();
+            }
         }
 
-        ULONG nIdx;
-        if( pNextBox )      // dann den Cursor hier hinein
-            nIdx = pNextBox->GetSttIdx() + 1;
-        else                // ansonsten hinter die Tabelle
-            nIdx = pTblNd->EndOfSectionIndex() + 1;
-
-        SwNodeIndex aIdx( GetDoc()->GetNodes(), nIdx );
-        SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
-        if( !pCNd )
-            pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-
-        if( pCNd )
-        {
-            SwPaM* pPam = GetCrsr();
-            pPam->GetPoint()->nNode = aIdx;
-            pPam->GetPoint()->nContent.Assign( pCNd, 0 );
-            pPam->SetMark();            // beide wollen etwas davon haben
-            pPam->DeleteMark();
-        }
+        // dann loesche doch die Zeilen
+        bRet = GetDoc()->DeleteRowCol( aBoxes );
     }
-
-    // dann loesche doch die Zeilen
-    BOOL bRet = GetDoc()->DeleteRowCol( aBoxes );
+    else
+        bRet = FALSE;
 
     EndAllActionAndCall();
     return bRet;
@@ -513,15 +523,20 @@ BOOL SwFEShell::SplitTab( BOOL bVert, USHORT nCnt )
     }
     StartAllAction();
     // lasse ueber das Layout die Boxen suchen
+    BOOL bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes );
+    if( aBoxes.Count() )
+    {
+        TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.Count() );
 
-    TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.Count() );
+        // dann loesche doch die Spalten
+        bRet = GetDoc()->SplitTbl( aBoxes, bVert, nCnt );
 
-    // dann loesche doch die Spalten
-    BOOL bRet = GetDoc()->SplitTbl( aBoxes, bVert, nCnt );
-
-    DELETEZ( pLastCols );
+        DELETEZ( pLastCols );
+    }
+    else
+        bRet = FALSE;
     EndAllActionAndCall();
     return bRet;
 }
@@ -785,12 +800,14 @@ BOOL SwFEShell::HasWholeTabSelection() const
     {
         SwSelBoxes aBoxes;
         ::GetTblSelCrs( *this, aBoxes );
-        const SwTableNode *pTblNd = IsCrsrInTbl();
-
-        return ( aBoxes[0]->GetSttIdx()-1 == pTblNd->
-            EndOfSectionNode()->StartOfSectionIndex() &&
-            aBoxes[aBoxes.Count()-1]->GetSttNd()->EndOfSectionIndex()+1
-            ==  pTblNd->EndOfSectionIndex() );
+        if( aBoxes.Count() )
+        {
+            const SwTableNode *pTblNd = IsCrsrInTbl();
+            return ( aBoxes[0]->GetSttIdx()-1 == pTblNd->
+                EndOfSectionNode()->StartOfSectionIndex() &&
+                aBoxes[aBoxes.Count()-1]->GetSttNd()->EndOfSectionIndex()+1
+                ==  pTblNd->EndOfSectionIndex() );
+        }
     }
     return FALSE;
 }
@@ -893,7 +910,8 @@ void SwFEShell::UnProtectCells()
         }
     }
 
-    GetDoc()->UnProtectCells( aBoxes );
+    if( aBoxes.Count() )
+        GetDoc()->UnProtectCells( aBoxes );
 
     EndAllActionAndCall();
 }
@@ -1064,12 +1082,17 @@ BOOL SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
         }
     }
 
-    SET_CURR_SHELL( this );
-    StartAllAction();
-    BOOL bRet = GetDoc()->SetTableAutoFmt( aBoxes, rNew );
-    DELETEZ( pLastCols );
-    EndAllActionAndCall();
-
+    BOOL bRet;
+    if( aBoxes.Count() )
+    {
+        SET_CURR_SHELL( this );
+        StartAllAction();
+        bRet = GetDoc()->SetTableAutoFmt( aBoxes, rNew );
+        DELETEZ( pLastCols );
+        EndAllActionAndCall();
+    }
+    else
+        bRet = FALSE;
     return bRet;
 }
 
@@ -1124,21 +1147,26 @@ BOOL SwFEShell::DeleteTblSel()
     StartAllAction();
 
     // lasse ueber das Layout die Boxen suchen
+    BOOL bRet;
     SwSelBoxes aBoxes;
     GetTblSelCrs( *this, aBoxes );
+    if( aBoxes.Count() )
+    {
+        TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
 
-    TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
+        // die Crsr muessen noch aus dem Loesch Bereich entfernt
+        // werden. Setze sie immer hinter/auf die Tabelle; ueber die
+        // Dokument-Position werden sie dann immer an die alte Position gesetzt.
+        while( !pFrm->IsCellFrm() )
+            pFrm = pFrm->GetUpper();
+        ParkCrsr( SwNodeIndex( *((SwCellFrm*)pFrm)->GetTabBox()->GetSttNd() ));
 
-    // die Crsr muessen noch aus dem Loesch Bereich entfernt
-    // werden. Setze sie immer hinter/auf die Tabelle; ueber die
-    // Dokument-Position werden sie dann immer an die alte Position gesetzt.
-    while( !pFrm->IsCellFrm() )
-        pFrm = pFrm->GetUpper();
-    ParkCrsr( SwNodeIndex( *((SwCellFrm*)pFrm)->GetTabBox()->GetSttNd() ));
+        bRet = GetDoc()->DeleteRowCol( aBoxes );
 
-    BOOL bRet = GetDoc()->DeleteRowCol( aBoxes );
-
-    DELETEZ( pLastCols );
+        DELETEZ( pLastCols );
+    }
+    else
+        bRet = FALSE;
     EndAllActionAndCall();
     return bRet;
 }
