@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:36:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,8 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     aScrollTimer.Stop();
 
     Size aSize = pWindow->GetSizePixel();
-    short dx = 0, dy = 0;
+    SCsCOL dx = 0;
+    SCsROW dy = 0;
 
     if ( aPixPos.X() <= 0              ) dx = -1;
     if ( aPixPos.X() >= aSize.Width()  ) dx =  1;
