@@ -4,12 +4,8 @@ mkdir: %_DEST%\inc%_EXT%\registry
 ..\inc\registry\*.hxx %_DEST%\inc%_EXT%\registry\*.hxx
 
 ..\%__SRC%\lib\ireg.lib %_DEST%\lib%_EXT%\ireg.lib
-..\%__SRC%\lib\libreg*.so %_DEST%\lib%_EXT%\libreg*.so
-..\%__SRC%\lib\libreg*.so.* %_DEST%\lib%_EXT%\libreg*.so.*
-..\%__SRC%\lib\librgt*.so %_DEST%\lib%_EXT%\librgt*.so
+..\%__SRC%\lib\libreg.*.* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\bin\reg*.dll %_DEST%\bin%_EXT%\reg*.dll
-..\%__SRC%\lib\libreg*.dylib %_DEST%\lib%_EXT%\libreg*.dylib
-..\%__SRC%\lib\libreg*.dylib.* %_DEST%\lib%_EXT%\libreg*.dylib.*
 
 ..\%__SRC%\bin\checksingleton.exe %_DEST%\bin%_EXT%\checksingleton.exe
 ..\%__SRC%\bin\regcompare.exe %_DEST%\bin%_EXT%\regcompare.exe
@@ -20,7 +16,4 @@ mkdir: %_DEST%\inc%_EXT%\registry
 ..\%__SRC%\bin\regmerge %_DEST%\bin%_EXT%\regmerge
 ..\%__SRC%\bin\regview %_DEST%\bin%_EXT%\regview
 
-
-
-
-linklib: libreg.so.*.*.*
+linklib: libreg.*.*
