@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:48:56 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,6 +982,9 @@ ATTR_SETUNDERLINE:
                                 PLAINID->nColor ));
                 }
                 break;
+#if 0
+            //#i12501# While cb is clearly documented in the rtf spec, word
+            //doesn't accept it at all
             case RTF_CB:
                 if( PLAINID->nBgColor )
                 {
@@ -989,7 +992,7 @@ ATTR_SETUNDERLINE:
                                 PLAINID->nBgColor ));
                 }
                 break;
-
+#endif
             case RTF_LANG:
                 if( PLAINID->nLanguage )
                 {
