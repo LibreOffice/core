@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2001-08-06 06:18:54 $
+ *  last change: $Author: cl $ $Date: 2001-08-06 15:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,11 +470,13 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         eType = NumberingType::CHAR_SPECIAL;
         nCount = cBullet ? 10 : 9;
     }
-    if( bImage && (sImageURL.getLength() > 0L || xBase64Stream.is()) &&
-        nImageWidth > 0L && nImageHeight > 0L )
+    if( bImage )
     {
         eType = NumberingType::BITMAP;
-        nCount = 11L;
+        nCount = 10L;
+
+        if( (sImageURL.getLength() > 0L) || xBase64Stream.is() )
+            nCount++;
     }
     if( bNum )
     {
@@ -592,9 +594,13 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                 sImageURL = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
                 xBase64Stream = 0;
             }
-            pProps[nPos].Name =
-                    OUString::createFromAscii( XML_UNO_NAME_NRULE_GRAPHICURL );
-            pProps[nPos++].Value <<= sImageURL;
+
+            if( sImageURL.getLength() )
+            {
+                pProps[nPos].Name =
+                        OUString::createFromAscii( XML_UNO_NAME_NRULE_GRAPHICURL );
+                pProps[nPos++].Value <<= sImageURL;
+            }
 
             awt::Size aSize( nImageWidth, nImageHeight );
             pProps[nPos].Name =
