@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: er $ $Date: 2002-06-26 17:15:48 $
+ *  last change: $Author: er $ $Date: 2002-07-18 16:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3336,7 +3336,8 @@ void SvNumberFormatter::GetCompatibilityCurrency( String& rSymbol, String& rAbbr
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency >
         xCurrencies = xLocaleData->getAllCurrencies();
     sal_Int32 nCurrencies = xCurrencies.getLength();
-    for ( sal_Int32 j=0; j < nCurrencies; ++j )
+    sal_Int32 j;
+    for ( j=0; j < nCurrencies; ++j )
     {
         if ( xCurrencies[j].UsedInCompatibleFormatCodes )
         {
@@ -3347,7 +3348,10 @@ void SvNumberFormatter::GetCompatibilityCurrency( String& rSymbol, String& rAbbr
     }
     if ( j >= nCurrencies )
     {
-        DBG_ERRORFILE( "GetCompatibilityCurrency: none?" );
+#ifndef PRODUCT
+        ByteString aMsg( "GetCompatibilityCurrency: none?" );
+        DBG_ERRORFILE( xLocaleData->AppendLocaleInfo( aMsg ).GetBuffer() );
+#endif
         rSymbol = xLocaleData->getCurrSymbol();
         rAbbrev = xLocaleData->getCurrBankSymbol();
     }
