@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerimport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 13:15:25 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,12 @@ namespace xmloff
         m_pImpl->applyControlNumberStyle(_rxControlModel, _rControlNumerStyleName);
     }
 
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport::documentDone( )
+    {
+        m_pImpl->documentDone( );
+    }
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -168,6 +174,18 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9.160.1  2003/10/01 09:55:22  fs
+ *  #i18994# merging the changes from the CWS fs002
+ *
+ *  Revision 1.9.156.1  2003/09/25 14:28:40  fs
+ *  #18994# merging the changes from cws_srx645_fs002 branch
+ *
+ *  Revision 1.9.152.1  2003/09/17 12:26:55  fs
+ *  #18999# #19367# persistence for cell value and cell range bindings
+ *
+ *  Revision 1.9  2002/10/25 13:15:25  fs
+ *  #104402# +createControlStyleContext
+ *
  *  Revision 1.8  2001/05/28 14:59:18  fs
  *  #86712# added control number style related functionality
  *
