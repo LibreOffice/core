@@ -3,8 +3,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
 
-import com.sun.star.uno.UnoRuntime;
 import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleComponent;
@@ -13,10 +14,13 @@ import drafts.com.sun.star.accessibility.XAccessibleComponent;
     object with graphical representation is represented by an
     AccessibleObject object and has to be added by the
     <member>addAccessible</member> member function.
+
+    <p>The canvas listens to selection events of the associated JTree and
+    highlights the first selected node of that tree.</p>
 */
 class Canvas
     extends JPanel
-    implements MouseListener, MouseMotionListener
+    implements MouseListener, MouseMotionListener, TreeSelectionListener
 {
     public MessageInterface maMessageDisplay;
     public final int nMaximumWidth = 1000;
@@ -28,6 +32,7 @@ class Canvas
     {
         super (true);
         maObjects = new Vector ();
+        maNodes = new Vector ();
         maContexts = new Vector ();
         addMouseListener (this);
         addMouseMotionListener (this);
@@ -43,7 +48,11 @@ class Canvas
 
     public void setTree (JTree aTree)
     {
+        if (maTree != null)
+            maTree.removeTreeSelectionListener (this);
         maTree = aTree;
+        if (maTree != null)
+            maTree.addTreeSelectionListener (this);
     }
 
     public void addAccessible (AccessibleObject aObject)
@@ -54,46 +63,72 @@ class Canvas
         else
             maBoundingBox = maBoundingBox.union (aObject.getBBox());
 
-        if( maObjects.indexOf( aObject ) == -1 )
-        {
+        if ( maObjects.indexOf( aObject ) == -1 )
             maObjects.add (aObject);
-            maContexts.add (aObject.getContext());
-        }
         repaint ();
     }
 
     public void removeAccessible (AccessibleObject aObject)
     {
         maObjects.remove (aObject);
-        maContexts.remove (aObject.getContext());
         repaint ();
     }
 
 
-    public void addContext(XAccessibleContext xContext, TreePath aPath)
+    public void addNode (AccTreeNode aNode)
     {
-        if( maContexts.indexOf( xContext ) == -1 )
-            addAccessible( new AccessibleObject( xContext, aPath ) );
+        if (maNodes.indexOf (aNode) == -1)
+        {
+            maNodes.add (aNode);
+            addAccessible (new AccessibleObject (aNode));
+        }
     }
 
-    public void removeContext(XAccessibleContext xContext)
+    public void removeNode (AccTreeNode aNode)
     {
-        int i = maContexts.indexOf( xContext );
+        int i = maNodes.indexOf (aNode);
         if( i != -1 )
+        {
             removeAccessible( (AccessibleObject)maObjects.elementAt( i ) );
+            maNodes.remove (aNode);
+        }
     }
 
-    public void updateContext(XAccessibleContext aContext)
+    public void updateNode (AccTreeNode aNode)
     {
-        int i = maContexts.indexOf( aContext );
-        if( i != -1 )
-            ((AccessibleObject)maObjects.elementAt( i )).update();
+        int i = maNodes.indexOf (aNode);
+        if (i != -1)
+            ((AccessibleObject)maObjects.elementAt(i)).update();
     }
 
     public void clear ()
     {
+        maNodes.clear();
         maObjects.clear();
-        maContexts.clear();
+    }
+
+    public boolean getShowDescriptions ()
+    {
+        return mbShowDescriptions;
+    }
+
+    public void setShowDescriptions (boolean bNewValue)
+    {
+        System.out.println ("setting show descriptions to " + bNewValue);
+        mbShowDescriptions = bNewValue;
+        repaint ();
+    }
+
+    public boolean getShowNames ()
+    {
+        return mbShowNames;
+    }
+
+    public void setShowNames (boolean bNewValue)
+    {
+        System.out.println ("setting show names to " + bNewValue);
+        mbShowNames = bNewValue;
+        repaint ();
     }
 
     public void paintComponent (Graphics g)
@@ -122,33 +157,35 @@ class Canvas
         for (int i=0; i<n; i++)
         {
             AccessibleObject aAccessibleObject = (AccessibleObject)maObjects.elementAt(i);
-            if ( ! aAccessibleObject.isSelected())
-                aAccessibleObject.paint (
-                    g,
-                    mnXOffset, mnYOffset, mnScaleFactor);
+            aAccessibleObject.paint (
+                g,
+                mnXOffset, mnYOffset, mnScaleFactor,
+                mbShowDescriptions, mbShowNames);
         }
+
+        // Paint highlighted frame around active object as the last thing.
         if (maActiveObject != null)
-            maActiveObject.paint (
-                    g,
-                    mnXOffset, mnYOffset, mnScaleFactor);
+            maActiveObject.paint_highlight (
+                g,
+                mnXOffset, mnYOffset, mnScaleFactor);
     }
 
+    /**  Call getAccessibleAt to determine accessible object under mouse.
+    */
     public void mouseClicked (MouseEvent e)
     {
+        FindAccessibleObjectUnderMouse (e);
         // Because we have no access (at the moment) to the root node of the
         // accessibility tree we use the first accessible object inserted
         // into the canvas instead.
         com.sun.star.awt.Point aPosition = new com.sun.star.awt.Point (
             (int)((e.getX() + mnXOffset) / mnScaleFactor),
                     (int)((e.getY() + mnYOffset) / mnScaleFactor));
-        if (maObjects.size() > 0)
+        if (maObjects.size() > 0 && maActiveObject != null)
         {
             // Get component interface of object which is to be queried
             // about accessible object at mouse position.
-            XAccessibleContext xContext = maActiveObject.getContext();
-            XAccessibleComponent xComponent =
-                (XAccessibleComponent) UnoRuntime.queryInterface (
-                    XAccessibleComponent.class, xContext);
+            XAccessibleComponent xComponent = maActiveObject.getComponent();
             if (xComponent != null)
             {
                 XAccessible xAccessible = xComponent.getAccessibleAt (aPosition);
@@ -169,6 +206,7 @@ class Canvas
 
     public void mousePressed (MouseEvent e)
     {
+        FindAccessibleObjectUnderMouse (e);
     }
 
     public void mouseReleased (MouseEvent e)
@@ -192,28 +230,14 @@ class Canvas
 
     public void mouseDragged (MouseEvent e)
     {
-        if (maActiveObject != null)
-        {
-            int dx = e.getX() - mnXAnchor;
-            int dy = e.getY() - mnYAnchor;
-
-            if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
-            {
-                maActiveObject.translate (dx,dy);
-            }
-            else if ((e.getModifiers() & MouseEvent.BUTTON2_MASK) != 0)
-            {
-                maActiveObject.resize (maResizeFlag, dx,dy);
-            }
-
-            mnXAnchor = e.getX();
-            mnYAnchor = e.getY();
-
-            repaint ();
-        }
     }
 
     public void mouseMoved (MouseEvent e)
+    {
+        if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0)
+            FindAccessibleObjectUnderMouse (e);
+    }
+    protected void FindAccessibleObjectUnderMouse (MouseEvent e)
     {
         int nObjects = maObjects.size();
         AccessibleObject aNewActiveObject = null;
@@ -227,6 +251,21 @@ class Canvas
                     break;
                 }
         }
+        if (selectObject (aNewActiveObject))
+        {
+            if (maActiveObject != null && maTree != null)
+            {
+                maTree.scrollPathToVisible (maActiveObject.getPath());
+                maTree.setSelectionPath (maActiveObject.getPath());
+                maTree.repaint ();
+            }
+
+            repaint ();
+        }
+    }
+
+    protected boolean selectObject (AccessibleObject aNewActiveObject)
+    {
         if (aNewActiveObject != maActiveObject)
         {
             if (maActiveObject != null)
@@ -236,16 +275,29 @@ class Canvas
             if (maActiveObject != null)
             {
                 maActiveObject.select ();
-
-                if (maTree != null)
-                {
-                    maTree.scrollPathToVisible (maActiveObject.getPath());
-                    maTree.setSelectionPath (maActiveObject.getPath());
-                    maTree.repaint ();
-                }
             }
+            return true;
+        }
+        else
+            return false;
+    }
 
-            repaint ();
+    /** Called when the selection of the tree changes.  Highlight the
+        corresponding graphical representation of the first selected object.
+    */
+    public void valueChanged (javax.swing.event.TreeSelectionEvent event)
+    {
+        TreePath aPath = event.getPath();
+        Object aObject = aPath.getLastPathComponent();
+        if (aObject instanceof AccTreeNode)
+        {
+            int i = maNodes.indexOf ((AccTreeNode)aObject);
+            if (i != -1)
+            {
+                AccessibleObject aAccessibleObject = (AccessibleObject)maObjects.elementAt(i);
+                if (selectObject (aAccessibleObject))
+                    repaint();
+            }
         }
     }
 
@@ -261,9 +313,13 @@ class Canvas
         maActiveObject;
     protected Vector
         maObjects,
-        maContexts;
+        maContexts,
+        maNodes;
     protected Rectangle
         maBoundingBox;
     protected JTree
         maTree;
+    protected boolean
+        mbShowDescriptions = true,
+        mbShowNames = true;
 }
