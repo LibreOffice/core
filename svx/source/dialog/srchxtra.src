@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:36:44 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 19:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ swedish ] = "Teckensnitt";
                 Text[ polish ] = "Czcionka";
                 Text[ portuguese_brazilian ] = "Font";
-                Text[ japanese ] = "οΎο½«οΎοΎ„";
+                Text[ japanese ] = "γƒ•γ‚©γƒ³γƒ";
                 Text[ korean ] = "κΈ€κΌ΄";
                 Text[ chinese_simplified ] = "ε­—δ½“";
                 Text[ chinese_traditional ] = "ε­—ε‹";
@@ -128,7 +128,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ swedish ] = "Teckeneffekt";
                 Text[ polish ] = "Efekty czcionki";
                 Text[ portuguese_brazilian ] = "Font Effects";
-                Text[ japanese ] = "οΎο½«οΎοΎ„εΉζ";
+                Text[ japanese ] = "γƒ•γ‚©γƒ³γƒεΉζ";
                 Text[ korean ] = "κΈ€κΌ΄ ν¨κ³Ό";
                 Text[ chinese_simplified ] = "ε­—δ½“ζ•ζ";
                 Text[ chinese_traditional ] = "ε­—ε‹ζ•ζ";
@@ -178,7 +178,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian Layout";
-                Text[ japanese ] = "ζ—¥ζ¬θªοΎο½²ο½±ο½³οΎ„";
+                Text[ japanese ] = "ζ—¥ζ¬θªγƒ¬γ‚¤γ‚Άγ‚¦γƒ";
                 Text[ korean ] = "μ•„μ‹μ•„ λ μ΄μ•„μ›ƒ";
                 Text[ chinese_simplified ] = "δΈ­ζ—¥ι©η‰εΌ";
                 Text[ chinese_traditional ] = "δΈ­ζ—¥ι“η‰εΌ";
@@ -206,7 +206,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_simplified ] = "ηΌ©θΏ›ε’ι—΄ι”";
                 Text[ russian ] = "Ξςρςσοϋ θ θνςεπβΰλϋ";
                 Text[ polish ] = "Wciκcia i odstκpy";
-                Text[ japanese ] = "ο½²οΎοΎƒοΎο½―ο½Έο½½γ¨ι–“ι”";
+                Text[ japanese ] = "γ‚¤γƒ³γƒ‡γƒƒγ‚―γ‚Ήγ¨ι–“ι”";
                 Text[ chinese_traditional ] = "ηΈ®ζ’ε’ι–“ι”";
                 Text[ arabic ] = "ΗαΕÒΗΝΙ ζΗαΚΘΗΪΟ";
                 Text[ greek ] = "Εσοχές και αποστάσεις";
@@ -329,7 +329,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
     Text[ chinese_simplified ] = "ζ–‡ε­—ε±ζ€§";
     Text[ russian ] = "ΐςπθασςϋ ςεκρςΰ";
     Text[ polish ] = "Atrybuty tekstu";
-    Text[ japanese ] = "οΎƒο½·ο½½οΎ„γ®ε±ζ€§";
+    Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ®ε±ζ€§";
     Text[ chinese_traditional ] = "ζ–‡ε­—ζ ΌεΌ";
     Text[ arabic ] = "ΣγΗΚ ΗαδΥ";
     Text[ greek ] = "Ιδιότητες κειμένου";
@@ -650,7 +650,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ chinese_simplified ] = "η±»δΌΌζε―»";
     Text[ russian ] = "Οξθρκ οξυξζθυ";
     Text[ polish ] = "Szukaj podobnych";
-    Text[ japanese ] = "ι΅δΌΌο½½οΎοΎοΎ™γ®ζ¤η΄Ά";
+    Text[ japanese ] = "ι΅δΌΌγ‚Ήγƒγƒ«γ®ζ¤η΄Ά";
     Text[ chinese_traditional ] = "η›ΈδΌΌε­—ζε°‹";
     Text[ arabic ] = "ΗαΘΝΛ Ϊδ ίαγΗΚ γΚΤΗΘεΙ";
     Text[ greek ] = "Αναζήτηση ομοιότητας";
@@ -661,6 +661,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ finnish ] = "Vastaavuushaku";
 };
  // ********************************************************************** EOF
+
 
 
 
