@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:18:49 $
+ *  last change: $Author: os $ $Date: 2001-03-20 10:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,9 +178,9 @@ public:
                                     const International*    pIntl = 0 ) const;
     virtual USHORT           GetVersion( USHORT nFFVer ) const;
 
-    virtual BOOL        importXML( const NAMESPACE_RTL(OUString)& rValue,USHORT,
+    virtual BOOL        importXML( const ::rtl::OUString& rValue,USHORT,
                                    const SvXMLUnitConverter& rUnitConv );
-    virtual BOOL        exportXML( NAMESPACE_RTL(OUString)& rValue, USHORT,
+    virtual BOOL        exportXML( ::rtl::OUString& rValue, USHORT,
                                    const SvXMLUnitConverter& rUnitConv ) const;
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtornt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: os $ $Date: 2001-03-20 10:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,9 @@ public:
     SwTwips GetPosConvertedToSw31( const SvxULSpaceItem *pULSpace ) const;
     SwTwips GetPosConvertedFromSw31( const SvxULSpaceItem *pULSpace ) const;
 
-    virtual BOOL        importXML( const NAMESPACE_RTL(OUString)& rValue,USHORT,
+    virtual BOOL        importXML( const ::rtl::OUString& rValue,USHORT,
                                    const SvXMLUnitConverter& rUnitConv );
-    virtual BOOL        exportXML( NAMESPACE_RTL(OUString)& rValue, USHORT,
+    virtual BOOL        exportXML( ::rtl::OUString& rValue, USHORT,
                                    const SvXMLUnitConverter& rUnitConv ) const;
 };
 
@@ -169,9 +169,9 @@ public:
     BOOL IsPosToggle() const { return bPosToggle; }
     void SetPosToggle( BOOL bNew ) { bPosToggle = bNew; }
 
-    virtual BOOL        importXML( const NAMESPACE_RTL(OUString)& rValue,USHORT,
+    virtual BOOL        importXML( const ::rtl::OUString& rValue,USHORT,
                                    const SvXMLUnitConverter& rUnitConv );
-    virtual BOOL        exportXML( NAMESPACE_RTL(OUString)& rValue, USHORT,
+    virtual BOOL        exportXML( ::rtl::OUString& rValue, USHORT,
                                    const SvXMLUnitConverter& rUnitConv ) const;
 };
 
