@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.51 2001-05-18 07:21:40 cl Exp $
+	$Id: drawing.mod,v 1.52 2001-05-21 10:18:49 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -596,14 +596,14 @@
 <!ATTLIST draw:object draw:id %shapeId;>
 <!ATTLIST draw:object draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:object-ole (office:events?, draw:image-map?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!-- one of the elements is allowed only, but this cannot be expressed by DTDs -->
+<!ELEMENT draw:object-ole (#PCDATA|office:events|draw:image-map|svg:desc|draw:contour-polygon|draw:contour-path)*>
 <!ATTLIST draw:object-ole %draw-style-name;>
 <!ATTLIST draw:object-ole draw:name %string; #IMPLIED>
-<!ATTLIST draw:object-ole xlink:href %uriReference; #REQUIRED>
-<!ATTLIST draw:object-ole xlink:type (simple) #FIXED "simple">
-<!ATTLIST draw:object-ole xlink:show (embed) "embed">
-<!ATTLIST draw:object-ole xlink:actuate (onLoad) "onLoad">
-<!ATTLIST draw:object-ole draw:class-id CDATA #REQUIRED>
+<!ATTLIST draw:object-ole xlink:href %uriReference; #IMPLIED>
+<!ATTLIST draw:object-ole xlink:type (simple) #IMPLIED>
+<!ATTLIST draw:object-ole xlink:show (embed) #IMPLIED>
+<!ATTLIST draw:object-ole xlink:actuate (onLoad) #IMPLIED>
 <!ATTLIST draw:object-ole %text-anchor;>
 <!ATTLIST draw:object-ole %draw-position;>
 <!ATTLIST draw:object-ole %draw-end-position; >
@@ -750,7 +750,7 @@
 <!ATTLIST presentation:event presentation:start-scale %percentage; "100%">
 <!ATTLIST presentation:event xlink:href %uriReference; #IMPLIED>
 <!ATTLIST presentation:event xlink:type (simple) #IMPLIED>
-<!ATTLIST presentation:event xlink:show (new|replace) #IMPLIED>
+<!ATTLIST presentation:event xlink:show (embed) #IMPLIED>
 <!ATTLIST presentation:event xlink:actuate (onRequest) #IMPLIED>
 <!ATTLIST presentation:event presentation:verb %nonNegativeInteger; #IMPLIED>
 
@@ -758,12 +758,12 @@
 <!ELEMENT draw:applet (draw:param*, svg:desc?)>
 <!ATTLIST draw:applet xlink:href %uriReference; #IMPLIED>
 <!ATTLIST draw:applet xlink:type (simple) #IMPLIED>
-<!ATTLIST draw:applet xlink:show (new|replace) #IMPLIED>
-<!ATTLIST draw:applet xlink:actuate (onRequest) #IMPLIED>
+<!ATTLIST draw:applet xlink:show (embed) #IMPLIED>
+<!ATTLIST draw:applet xlink:actuate (onLoad) #IMPLIED>
 <!ATTLIST draw:applet draw:code CDATA #REQUIRED>
 <!ATTLIST draw:applet draw:object CDATA #IMPLIED>
 <!ATTLIST draw:applet draw:archive CDATA #IMPLIED>
-<!ATTLIST draw:applet draw:mayscript %boolean; "false">
+<!ATTLIST draw:applet draw:may-script %boolean; "false">
 <!ATTLIST draw:applet draw:name CDATA #IMPLIED>
 <!ATTLIST draw:applet %draw-style-name;>
 <!ATTLIST draw:applet svg:width %lengthOrPercentage; #IMPLIED>
@@ -777,9 +777,9 @@
 <!ELEMENT draw:plugin (draw:param*, svg:desc?)>
 <!ATTLIST draw:plugin xlink:href %uriReference; #IMPLIED>
 <!ATTLIST draw:plugin xlink:type (simple) #IMPLIED>
-<!ATTLIST draw:plugin xlink:show (new|replace) #IMPLIED>
-<!ATTLIST draw:plugin xlink:actuate (onRequest) #IMPLIED>
-<!ATTLIST draw:plugin draw:mimetype CDATA #REQUIRED>
+<!ATTLIST draw:plugin xlink:show (embed) #IMPLIED>
+<!ATTLIST draw:plugin xlink:actuate (onLoad) #IMPLIED>
+<!ATTLIST draw:plugin draw:mime-type CDATA #REQUIRED>
 <!ATTLIST draw:plugin draw:name CDATA #IMPLIED>
 <!ATTLIST draw:plugin %draw-style-name;>
 <!ATTLIST draw:plugin svg:width %lengthOrPercentage; #IMPLIED>
@@ -798,9 +798,10 @@
 <!ELEMENT draw:floating-frame (svg:desc?)>
 <!ATTLIST draw:floating-frame xlink:href %uriReference; #IMPLIED>
 <!ATTLIST draw:floating-frame xlink:type (simple) #IMPLIED>
-<!ATTLIST draw:floating-frame xlink:show (new|replace) #IMPLIED>
-<!ATTLIST draw:floating-frame xlink:actuate (onRequest) #IMPLIED>
+<!ATTLIST draw:floating-frame xlink:show (embed) #IMPLIED>
+<!ATTLIST draw:floating-frame xlink:actuate (onLoad) #IMPLIED>
 <!ATTLIST draw:floating-frame draw:name CDATA #IMPLIED>
+<!ATTLIST draw:floating-frame draw:frame-name CDATA #IMPLIED>
 <!ATTLIST draw:floating-frame %draw-style-name;>
 <!ATTLIST draw:floating-frame svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:floating-frame svg:height %lengthOrPercentage; #IMPLIED>
