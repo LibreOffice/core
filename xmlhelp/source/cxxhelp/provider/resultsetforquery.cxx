@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetforquery.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:27:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,14 @@
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_XEXTENDEDTRANSLITERATION_HPP_
+#include <com/sun/star/i18n/XExtendedTransliteration.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
 #endif
 #ifndef _RESULTSETFORROOT_HXX
 #include <provider/resultsetforquery.hxx>
@@ -92,7 +98,9 @@ using namespace xmlsearch::excep;
 using namespace xmlsearch::qe;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
-
+using namespace com::sun::star::i18n;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
 
 ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceFactory >&  xMSF,
                                       const uno::Reference< XContentProvider >&  xProvider,
@@ -105,6 +113,16 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
       m_aURLParameter( aURLParameter ),
       m_pDatabases( pDatabases )
 {
+    Reference< XTransliteration > xTrans(
+        xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.Transliteration" ) ),
+        UNO_QUERY );
+    Locale aLocale( aURLParameter.get_language(),
+                    rtl::OUString(),
+                    rtl::OUString() );
+    if(xTrans.is())
+        xTrans->loadModule(TransliterationModules_UPPERCASE_LOWERCASE,
+                           aLocale );
+
     unsigned int i;
     vector< vector< rtl::OUString > > queryList;
 
@@ -118,7 +136,14 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                 idx = query.getLength();
 
             vector< rtl::OUString > currentQuery;
-            currentQuery.push_back( query.copy( 0,idx ) );
+            rtl::OUString tmp(query.copy( 0,idx ));
+            rtl:: OUString toliterate = tmp;
+            if(xTrans.is()) {
+                Sequence<sal_Int32> aSeq;
+                toliterate = xTrans->transliterate(
+                    tmp,0,tmp.getLength(),aSeq);
+            }
+            currentQuery.push_back( toliterate );
             queryList.push_back( currentQuery );
             query = query.copy( 1 + idx );
         }
