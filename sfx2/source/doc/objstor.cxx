@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: as $ $Date: 2002-07-08 11:41:13 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 07:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2120,14 +2120,7 @@ sal_Bool SfxObjectShell::CanReload_Impl()
 */
 
 {
-    const SfxMedium *pMedium = GetMedium();
-    const SfxFilter *pFilter = pMedium ? pMedium->GetFilter() : 0;
-    return pMedium && HasName() &&
-        ( !pFilter || ! pFilter->GetFilterName().EqualsAscii( SFX_FILTER_DOWNLOAD ) ) &&
-        !IsInModalMode() && !Application::IsInModalMode() &&
-        !pImp->bForbidReload;
-    // Fuer AutoLoad muss Reload immer enabled sein, also NICHT:
-    // ( IsModified() || GetMedium()->IsRemote()
+    return pMedium && HasName() && !IsInModalMode() && !pImp->bForbidReload;
 }
 
 //-------------------------------------------------------------------------
