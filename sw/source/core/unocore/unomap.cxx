@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-18 10:16:54 $
+ *  last change: $Author: tl $ $Date: 2002-10-22 10:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,6 +1042,9 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE), RES_CHRATR_ROTATE,       CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID,        MID_FITTOLINE  },
                     { SW_PROP_NMID(UNO_NAME_CHAR_SCALE_WIDTH), RES_CHRATR_SCALEW,       CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID,         0 },
                     { SW_PROP_NMID(UNO_NAME_CHAR_RELIEF), RES_CHRATR_RELIEF,      CPPU_E2T(CPPUTYPE_INT16),    PropertyAttribute::MAYBEVOID,      MID_RELIEF },
+
+                    { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::MAYBEVOID, 0 },
+
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aRangePropertyMap_Impl;
