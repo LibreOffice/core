@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 08:58:31 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,230 +515,50 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_CONFIGEVENT:
         {
             Window *pParent = GetTopWindow();
-            const SfxStringItem *pStringItem=0;
-            const SfxUInt16Item *pItem=0;
-            USHORT nId=0;
+            SfxItemSet aSet( GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
+            SfxConfigDialog *pDlg = new SfxConfigDialog( pParent, &aSet, pViewFrame );
 
-            // Versuche, einen "ubergebenen ConfigNamen zu holen
-            const SfxItemSet *pArgs = rReq.GetArgs();
-            if ( pArgs && pArgs->GetItemState(SID_CFGFILE) >= SFX_ITEM_AVAILABLE )
+            switch ( rReq.GetSlot() )
             {
-                const SfxPoolItem *pSfxItem = &pArgs->Get(SID_CFGFILE);
-                DBG_ASSERT(pSfxItem->ISA(SfxStringItem),"Fehlerhafte Parameter!");
-                pStringItem = (const SfxStringItem*) pSfxItem;
-
-            }
-
-            // Versuche, eine "ubergebene ConfigID zu holen
-            if (pArgs && pArgs->GetItemState(SID_CONFIGITEMID) >= SFX_ITEM_AVAILABLE)
-            {
-                const SfxPoolItem *pSfxItem = &pArgs->Get(SID_CONFIGITEMID);
-                DBG_ASSERT(pSfxItem->ISA(SfxUInt16Item),"Fehlerhafte Parameter!");
-                pItem = (const SfxUInt16Item*) pSfxItem;
-                nId = pItem->GetValue();
-                bDone = TRUE;
-            }
-            else
-            {
-                switch ( rReq.GetSlot() )
+                case SID_CONFIG:
                 {
-                    case SID_CONFIGSTATUSBAR:
-                        if ( GetStatusBarManager() )
-                            nId = GetStatusBarManager()->GetType();
-                        break;
-                    case SID_CONFIGMENU:
-                        nId = GetMenuBarManager()->GetType();
-                        break;
-                    case SID_CONFIGACCEL:
-                        nId = GetAcceleratorManager()->GetType();
-                        break;
-                    case SID_TOOLBOXOPTIONS:
-                        nId = SfxToolBoxConfig::GetOrCreate()->GetType();
-                        break;
-                    default:
-                        break;
+                    // Soll ein Macro vorselektiert werden ?
+                    SFX_REQUEST_ARG( rReq, pMacroItem, SfxMacroInfoItem, SID_MACROINFO, FALSE );
+                    if ( pMacroItem )
+                        pDlg->ActivateMacroConfig( pMacroItem );
+                    break;
                 }
-            }
 
-            if ( pStringItem && nId )
-            {
-                // Ausf"uhren ohne Dialog
-                SfxConfigManager *pCfgMgr = new SfxConfigManager(pStringItem->GetValue());
-                pAppData_Impl->pAppCfg->CopyItem(nId, pCfgMgr);
-                GetDispatcher_Impl()->Update_Impl(TRUE);
-                if ( nId == GetMenuBarManager()->GetType() || nId == SID_CONFIG )
-                    GetMenuBarManager()->ReconfigureObjectMenus();
-            }
-            else
-            {
-                SfxItemSet aSet( GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
-                SfxConfigDialog *pDlg = new SfxConfigDialog( pParent, &aSet );
-
-                switch ( rReq.GetSlot() )
+                case SID_TOOLBOXOPTIONS:
                 {
-                    case SID_CONFIG:
+                    // Versuche, eine "ubergebene ConfigID zu holen
+                    SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_CONFIGITEMID, FALSE );
+                    if ( pItem )
                     {
-                        // Soll ein Macro vorselektiert werden ?
-                        if (pArgs && pArgs->GetItemState(SID_MACROINFO) >= SFX_ITEM_AVAILABLE)
-                        {
-                            const SfxPoolItem *pSfxItem = &pArgs->Get(SID_MACROINFO);
-                            DBG_ASSERT(pSfxItem->ISA(SfxMacroInfoItem),"Fehlerhafte Parameter!");
-                            const SfxMacroInfoItem *pMItem = (const SfxMacroInfoItem*) pSfxItem;
-                            if (pMItem)
-                                pDlg->ActivateMacroConfig(pMItem);
-                        }
-                        break;
-                    }
-
-                    case SID_TOOLBOXOPTIONS:
-                    {
+                        bDone = TRUE;
+                        USHORT nId = pItem->GetValue();
                         if ( nId )
                             // Es soll eine Objektleiste vorselektiert werden
                             pDlg->ActivateToolBoxConfig(nId);
                     }
-                }
 
-                const short nRet = pDlg->Execute();
-                GetDispatcher_Impl()->Update_Impl(TRUE);
-
-                if (nRet)
-                    bDone = TRUE;
-
-                if (nRet == 3)
-                {
-                    pViewFrame->SetChildWindow( SfxToolboxCustomWindow::GetChildWindowId(), TRUE );
-                    Invalidate(rReq.GetSlot());
-                }
-                delete pDlg;
-            }
-            break;
-        }
-
-        case SID_SAVECONFIG:
-        {
-            SfxConfigManager *pMgr = 0;
-            BOOL bCreated = TRUE;
-            String aCfgName;
-
-            // Versuche, einen "ubergebenen ConfigNamen zu holen
-            const SfxItemSet *pArgs = rReq.GetArgs();
-            if ( !rReq.IsAPI() || pArgs )
-            {
-                if ( !pArgs )
-                {
-                    // Kein Parameter, kein API, also Dialog
-                    aCfgName = SfxConfigDialog::FileDialog_Impl(
-                        GetTopWindow(), WB_SAVEAS | WB_STDMODAL | WB_3DLOOK, String() );
-                }
-                else
-                {
-                    // Name "uber Parameter
-                    const SfxPoolItem *pSfxItem = &pArgs->Get( SID_CFGFILE );
-                    DBG_ASSERT( pSfxItem && pSfxItem->ISA(SfxStringItem), "Fehlerhafte Parameter!" );
-                    const SfxStringItem *pStringItem = (const SfxStringItem*) pSfxItem;
-                    if ( pStringItem )
-                    {
-                        aCfgName = pStringItem->GetValue();
-                        INetURLObject aObj( pStringItem->GetValue() );
-                        DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
-
-                        if ( aObj.HasError() )
-                        {
-                            // Wenn relativ, ConfigDir verwenden
-                            aObj.SetURL( SvtPathOptions().GetUserConfigPath() );
-                            aObj.insertName( pStringItem->GetValue() );
-                            aCfgName = aObj.PathToFileName();
-                        }
-                    }
+                    break;
                 }
             }
-            else
+
+            const short nRet = pDlg->Execute();
+            DBG_ERROR("Notify is missing!");
+
+            if ( nRet )
+                bDone = TRUE;
+
+            if ( nRet == 3 )
             {
-                pAppData_Impl->pAppCfg->Backup();
+                pViewFrame->SetChildWindow( SfxToolboxCustomWindow::GetChildWindowId(), TRUE );
+                Invalidate(rReq.GetSlot());
             }
 
-            if ( aCfgName.Len() )
-            {
-                // ConfigManager anlegen
-//(mba)/task                SfxWaitCursor aWait;
-                BOOL bCreated = FALSE;
-                pMgr = SfxConfigDialog::MakeCfgMgr_Impl( aCfgName, bCreated );
-
-                // Wenn es nicht der globale ConfigManager ist, kopieren
-                if ( pMgr && pAppData_Impl->pAppCfg != pMgr )
-                    pMgr->CopyItems( pAppData_Impl->pAppCfg );
-
-                // Dann abspeichern
-                if ( !pMgr->SaveConfig() )
-                    HandleConfigError_Impl( (USHORT)pMgr->GetErrorCode() );
-                if ( bCreated )
-                    delete pMgr;
-            }
-
-            bDone = TRUE;
-            break;
-        }
-
-        case SID_LOADCONFIG:
-        {
-            SfxConfigManager *pMgr = 0;
-            BOOL bCreated = TRUE;
-            String aCfgName;
-
-            // Versuche, einen "ubergebenen ConfigNamen zu holen
-            const SfxItemSet *pArgs = rReq.GetArgs();
-            if ( !rReq.IsAPI() || pArgs )
-            {
-                if ( !pArgs )
-                {
-                    // Kein Parameter, kein API, also Dialog
-                    aCfgName = SfxConfigDialog::FileDialog_Impl(
-                        GetTopWindow(), WB_OPEN | WB_STDMODAL | WB_3DLOOK, String() );
-                }
-                else
-                {
-                    // Name "uber Parameter
-                    const SfxPoolItem *pSfxItem = &pArgs->Get( SID_CFGFILE );
-                    DBG_ASSERT( pSfxItem && pSfxItem->ISA(SfxStringItem), "Fehlerhafte Parameter!" );
-                    const SfxStringItem *pStringItem = (const SfxStringItem*) pSfxItem;
-                    if ( pStringItem )
-                    {
-                        aCfgName = pStringItem->GetValue();
-                        INetURLObject aObj( pStringItem->GetValue() );
-                        DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
-                        if ( aObj.HasError() )
-                        {
-                            // Wenn relativ, ConfigDir verwenden
-                            aObj.SetURL( SvtPathOptions().GetUserConfigPath() );
-                            aObj.insertName( pStringItem->GetValue() );
-                            aCfgName = aObj.PathToFileName();
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // Aus dem aktuellen Backup laden
-                pAppData_Impl->pAppCfg->Restore();
-            }
-
-            if ( aCfgName.Len() )
-            {
-                // ConfigManager anlegen
-//(mba)/task                SfxWaitCursor aWait;
-                BOOL bCreated = FALSE;
-                pMgr = SfxConfigDialog::MakeCfgMgr_Impl( aCfgName, bCreated );
-
-                // Wenn es nicht der globale ConfigManager ist, kopieren
-                if ( pMgr && pAppData_Impl->pAppCfg != pMgr )
-                    pAppData_Impl->pAppCfg->CopyItems( pMgr );
-
-                if ( bCreated )
-                    delete pMgr;
-            }
-
-            GetDispatcher_Impl()->Update_Impl(TRUE);
-            bDone = TRUE;
+            delete pDlg;
             break;
         }
 
