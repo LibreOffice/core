@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2002-04-15 11:22:15 $
+ *  last change: $Author: sab $ $Date: 2002-10-21 11:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,7 +911,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
                                     aSourceRange.aEnd.SetRow( aPos.Row() + nRows - 1 );
                                     aValue.Erase( 0, 1 );
                                     aValue.Erase( aValue.Len()-1, 1 );
-                                    GetDocFunc().EnterMatrix( aSourceRange, NULL, aValue, FALSE );
+                                    GetDocFunc().EnterMatrix( aSourceRange, NULL, aValue, FALSE, FALSE );
                                 }
                                 break;
                                 case MM_REFERENCE :     // do nothing

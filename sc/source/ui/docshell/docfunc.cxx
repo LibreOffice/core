@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-18 13:02:04 $
+ *  last change: $Author: sab $ $Date: 2002-10-21 11:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2799,7 +2799,7 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 //------------------------------------------------------------------------
 
 BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
-                                const String& rString, BOOL bApi )
+                                const String& rString, BOOL bApi, BOOL bEnglish )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -2843,6 +2843,14 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,EMPTY_STRING,pCode);
             delete pCode;
             pDoc->IncXMLImportedFormulaCount( rString.Len() );
+        }
+        else if (bEnglish)
+        {
+            ScCompiler aComp( pDoc, rRange.aStart );
+            aComp.SetCompileEnglish( TRUE );
+            ScTokenArray* pCode = aComp.CompileString( rString );
+            pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,EMPTY_STRING,pCode);
+            delete pCode;
         }
         else
             pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,rString);
@@ -3758,11 +3766,11 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 
         if ( DeleteContents( aMark, IDF_CONTENTS, TRUE, bApi ) )
         {
-            bRet = EnterMatrix( aNewRange, &aMark, aFormula, bApi );
+            bRet = EnterMatrix( aNewRange, &aMark, aFormula, bApi, FALSE );
             if (!bRet)
             {
                 //  versuchen, alten Zustand wiederherzustellen
-                EnterMatrix( rOldRange, &aMark, aFormula, bApi );
+                EnterMatrix( rOldRange, &aMark, aFormula, bApi, FALSE );
             }
         }
 

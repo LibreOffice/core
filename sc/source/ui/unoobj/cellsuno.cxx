@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-17 11:40:16 $
+ *  last change: $Author: sab $ $Date: 2002-10-21 11:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4631,7 +4631,7 @@ void SAL_CALL ScCellRangeObj::setArrayFormula( const rtl::OUString& aFormula )
                 throw uno::RuntimeException();
             }
 
-            aFunc.EnterMatrix( aRange, NULL, aString, TRUE );
+            aFunc.EnterMatrix( aRange, NULL, aString, TRUE, TRUE );
         }
         else
         {

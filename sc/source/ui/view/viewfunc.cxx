@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-09 10:58:59 $
+ *  last change: $Author: sab $ $Date: 2002-10-21 11:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,7 +884,7 @@ void ScViewFunc::EnterMatrix( const String& rString )
     if (pData->GetSimpleArea(aRange))
     {
         ScDocShell* pDocSh = pData->GetDocShell();
-        BOOL bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, rString, FALSE );
+        BOOL bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, rString, FALSE, FALSE );
         if (bSuccess)
             pDocSh->UpdateOle(GetViewData());
     }

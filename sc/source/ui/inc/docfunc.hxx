@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-09 10:58:12 $
+ *  last change: $Author: sab $ $Date: 2002-10-21 11:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ public:
                                     USHORT nFormatNo, BOOL bRecord, BOOL bApi );
 
     BOOL            EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
-                                    const String& rString, BOOL bApi );
+                                    const String& rString, BOOL bApi, BOOL bEnglish );
 
     BOOL            TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
                             const ScTabOpParam& rParam, BOOL bRecord, BOOL bApi );
