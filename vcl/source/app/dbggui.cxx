@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-27 09:19:16 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+
 
 #ifdef DBG_UTIL
 
@@ -1097,11 +1097,7 @@ DbgDialog::DbgDialog() :
     }
 
     {
-#ifdef REMOTE_APPSERVER
-    SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "VCL Debug Options (Server)" ) ) );
-#else
     SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "VCL Debug Options" ) ) );
-#endif
     SetOutputSizePixel( LogicToPixel( Size( 340, 265 ), aAppMap ) );
     }
 }
@@ -1711,10 +1707,6 @@ void DbgPrintShell( const char* pLine );
 
 void DbgPrintMsgBox( const char* pLine )
 {
-#ifdef REMOTE_APPSERVER
-    DbgPrintShell( pLine );
-    return;
-#endif
     if ( Application::IsDialogCancelEnabled() )
     {
 #if defined( WNT )
@@ -1738,7 +1730,6 @@ void DbgPrintMsgBox( const char* pLine )
 #endif
     }
 
-#ifndef REMOTE_APPSERVER
 #ifdef UNX
     sal_Bool bAcquire = Application::GetSolarMutex().tryToAcquire();
     if (!bAcquire)
@@ -1747,7 +1738,6 @@ void DbgPrintMsgBox( const char* pLine )
         DbgPrintShell (pLine);
         return;
     }
-#endif
 #endif
 
     strcpy( aDbgOutBuf, pLine );
@@ -1760,7 +1750,6 @@ void DbgPrintMsgBox( const char* pLine )
     if ( pSVData->maWinData.mpCaptureWin )
         pSVData->maWinData.mpCaptureWin->ReleaseMouse();
 
-#ifndef REMOTE_APPSERVER
 #if defined( WNT )
     BOOL bOldCallTimer = pSVData->mbNoCallTimer;
     pSVData->mbNoCallTimer = TRUE;
@@ -1811,23 +1800,12 @@ void DbgPrintMsgBox( const char* pLine )
     Application::SetSystemWindowMode( nOldMode );
     short nRet = aBox.Execute();
 #endif
-#else
-    USHORT nOldMode = Application::GetSystemWindowMode();
-    Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
-    ErrorBox aBox( Application::GetAppWindow(), WB_YES_NO_CANCEL | WB_DEF_NO,
-                   UniString( aDbgOutBuf, RTL_TEXTENCODING_UTF8 ) );
-    aBox.SetText( String( RTL_CONSTASCII_USTRINGPARAM("Debug Output (Server)") ) );
-    Application::SetSystemWindowMode( nOldMode );
-    short nRet = aBox.Execute();
-#endif
 
-#ifndef REMOTE_APPSERVER
 #ifdef UNX
     if (bAcquire)
     {
         Application::GetSolarMutex().release();
     }
-#endif
 #endif
 
     if ( nRet == RET_YES )
@@ -1882,7 +1860,7 @@ void DbgPrintShell( const char* pLine )
 
 // =======================================================================
 
-#if defined( REMOTE_APPSERVER ) || defined( WNT ) || defined( OS2 )
+#if defined( WNT ) || defined( OS2 )
 void ImplDbgTestSolarMutex();
 #endif
 
@@ -1893,7 +1871,7 @@ void DbgGUIInit()
     DbgSetPrintMsgBox( DbgPrintMsgBox );
     DbgSetPrintWindow( DbgPrintWindow );
     DbgSetPrintShell( DbgPrintShell );
-#if defined( REMOTE_APPSERVER ) || defined( WNT ) || defined( OS2 )
+#if defined( WNT ) || defined( OS2 )
     DbgSetTestSolarMutex( ImplDbgTestSolarMutex );
 #endif
 }
@@ -1905,7 +1883,7 @@ void DbgGUIDeInit()
     DbgSetPrintMsgBox( NULL );
     DbgSetPrintWindow( NULL );
     DbgSetPrintShell( NULL );
-#if defined( REMOTE_APPSERVER ) || defined( WNT ) || defined( OS2 )
+#if defined( WNT ) || defined( OS2 )
     DbgSetTestSolarMutex( NULL );
 #endif
 
