@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:06:22 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1348,7 +1348,8 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
     SdrView *pView = Imp()->GetDrawView();
 
     //Drop auf bestehendes Objekt: Objekt ersetzen oder neu Attributieren.
-    if( 1 == pModel->GetPage(0)->GetObjCount() &&
+    if( pModel->GetPageCount() > 0 &&
+        1 == pModel->GetPage(0)->GetObjCount() &&
         1 == pView->GetMarkedObjectList().GetMarkCount() )
     {
         // OD 10.07.2003 #110742# - replace a marked 'virtual' drawing object
