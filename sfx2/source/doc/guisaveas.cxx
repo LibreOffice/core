@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:13:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-17 08:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,10 +789,16 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
       && !GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "RepairPackage" ),
                                                                       sal_False ) )
     {
+        // --> PB 2004-11-05 #i36524# - aLastName must be an URL, not only a filename
+        /*
         ::rtl::OUString aLastName = INetURLObject( GetStorable()->getLocation() ).getName(
                                                         INetURLObject::LAST_SEGMENT,
                                                         sal_True,
                                                         INetURLObject::DECODE_WITH_CHARSET);
+        */
+        ::rtl::OUString aLastName = GetStorable()->getLocation();
+        // <--
+
         if ( !aLastName.getLength() )
             aLastName = GetDocProps().getUnpackedValueOrDefault(
                                                         ::rtl::OUString::createFromAscii( "Title" ),
