@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 19:35:34 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 05:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,7 @@ public:
 
     static sal_Bool         GetBoolFromAny( const com::sun::star::uno::Any& aAny );
     static sal_Int16        GetInt16FromAny( const com::sun::star::uno::Any& aAny );
+    static sal_Int32        GetInt32FromAny( const com::sun::star::uno::Any& aAny );
     static sal_Int32        GetEnumFromAny( const com::sun::star::uno::Any& aAny );
     static void             SetBoolInAny( com::sun::star::uno::Any& rAny, sal_Bool bValue );
 };
