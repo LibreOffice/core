@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 09:51:28 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 11:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,6 @@ SO2_DECL_REF(SvLinkName)
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-
 
 SV_IMPL_PTRARR(SwFrmFmts,SwFrmFmtPtr)
 SV_IMPL_PTRARR(SwCharFmts,SwCharFmtPtr)
@@ -556,6 +555,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                         RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                         RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+
                         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                         0 );
     SfxItemSet aOtherSet( pDoc->GetAttrPool(),
@@ -606,12 +606,12 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
         // TextAttribute mit Ende expandieren nie ihren Bereich
         {
-            // CharFnt wird gesondert behandelt !!!
+            // CharFmt wird gesondert behandelt !!!
             // JP 22.08.96: URL-Attribute auch!!
             SfxItemSet aTxtSet( pDoc->GetAttrPool(),
-                                RES_TXTATR_DUMMY4,
-                                // RES_TXTATR_REFMARK,
-                                RES_TXTATR_TOXMARK );
+                                RES_TXTATR_DUMMY4, RES_TXTATR_TOXMARK,
+                                RES_TXTATR_TWO_LINES, RES_TXTATR_WITHEND_END-1,
+                                0 );
 
             aTxtSet.Put( rChgSet );
             if( aTxtSet.Count() )
