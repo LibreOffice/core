@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:41:26 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,8 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
 
     if (xMaster.is())
     {
+        // at this point we have to reset the formatter for the new form
+        initFormatter();
         // assume that the master form is already loaded, we have no chance to check this
         m_bLoadCanceled = sal_False;
         FormLoaded(sal_True);
