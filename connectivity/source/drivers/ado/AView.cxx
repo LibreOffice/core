@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 10:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,15 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
 
 // -------------------------------------------------------------------------
+using namespace comphelper;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -90,37 +94,8 @@ using namespace com::sun::star::sdbc;
 //  IMPLEMENT_SERVICE_INFO(OAdoView,"com.sun.star.sdbcx.AView","com.sun.star.sdbcx.View");
 // -------------------------------------------------------------------------
 OAdoView::OAdoView(sal_Bool _bCase,ADOView* _pView) : OView_ADO(_bCase,NULL)
+,m_aView(_pView)
 {
-    construct();
-
-    if(_pView)
-        m_aView = WpADOView(_pView);
-    else
-        m_aView.Create();
-}
-// -------------------------------------------------------------------------
-OAdoView::OAdoView(sal_Bool _bCase, const ::rtl::OUString& _Name,
-                sal_Int32 _CheckOption,
-                const ::rtl::OUString& _Command,
-                const ::rtl::OUString& _SchemaName,
-                const ::rtl::OUString& _CatalogName)
-     : OView_ADO(  _bCase,
-                    _Name,
-                    NULL,
-                    _CheckOption,
-                    _Command,
-                    _SchemaName,
-                    _CatalogName)
-{
-    construct();
-    m_aView.Create();
-    WpADOCommand aCommand;
-    aCommand.Create();
-    aCommand.put_Name(_Name);
-    aCommand.put_CommandText(_Command);
-
-    m_aView.put_Command(OLEVariant((IDispatch*)aCommand));
-
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoView::getUnoTunnelImplementationId()
@@ -149,11 +124,6 @@ sal_Int64 OAdoView::getSomething( const Sequence< sal_Int8 > & rId ) throw (Runt
             OView_ADO::getSomething(rId);
 }
 
-// -------------------------------------------------------------------------
-void OAdoView::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
-{
-        throw Exception();
-}
 // -------------------------------------------------------------------------
 void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
@@ -184,8 +154,9 @@ void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
                 break;
         }
     }
+    else
+        OView_ADO::getFastPropertyValue(rValue,nHandle);
 }
-// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 void SAL_CALL OAdoView::acquire() throw(::com::sun::star::uno::RuntimeException)
 {

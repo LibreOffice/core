@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 06:59:00 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 10:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ namespace connectivity
             {
                 OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
             }
+            void appendNew(const ::rtl::OUString& _rsNewTable);
         };
     }
 }

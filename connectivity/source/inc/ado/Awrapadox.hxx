@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapadox.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 06:59:00 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 10:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,8 +240,6 @@ namespace connectivity
 
             inline WpADOView& operator=(const WpADOView& rhs)
                 {WpOLEBase<ADOView>::operator=(rhs); return *this;}
-
-            void Create();
 
             ::rtl::OUString get_Name() const;
             void get_Command(OLEVariant& _rVar) const;

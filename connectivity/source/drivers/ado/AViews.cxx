@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AViews.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 10:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,20 +64,8 @@
 #ifndef _CONNECTIVITY_ADO_VIEW_HXX_
 #include "ado/AView.hxx"
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
-#include <com/sun/star/sdbc/KeyRule.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
-#include <com/sun/star/sdbcx/KeyType.hpp>
+#ifndef _CONNECTIVITY_ADO_TABLES_HXX_
+#include "ado/ATables.hxx"
 #endif
 #ifndef _CONNECTIVITY_ADO_CATALOG_HXX_
 #include "ado/ACatalog.hxx"
@@ -107,7 +95,9 @@ using namespace com::sun::star::container;
 
 Reference< XNamed > OViews::createObject(const ::rtl::OUString& _rName)
 {
-    return new OAdoView(isCaseSensitive(),m_aCollection.GetItem(_rName));
+    OAdoView* pView = new OAdoView(isCaseSensitive(),m_aCollection.GetItem(_rName));
+    pView->setNew(sal_False);
+    return pView;
 }
 // -------------------------------------------------------------------------
 void OViews::impl_refresh(  ) throw(RuntimeException)
@@ -127,9 +117,24 @@ void OViews::appendObject( const Reference< XPropertySet >& descriptor )
     OAdoView* pView = NULL;
     if(getImplementation(pView,descriptor) && pView != NULL)
     {
-        ADOViews* pViews = (ADOViews*)m_aCollection;
-        if(FAILED(pViews->Append(OLEString(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))),pView->getImpl())))
-            ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+        WpADOCommand aCommand;
+        aCommand.Create();
+        if(aCommand.IsValid())
+        {
+            ::rtl::OUString sName;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sName;
+            aCommand.put_Name(sName);
+            aCommand.put_CommandText(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND))));
+            ADOViews* pViews = (ADOViews*)m_aCollection;
+            if(FAILED(pViews->Append(OLEString(sName),aCommand)))
+                ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+
+            OTables* pTables = static_cast<OTables*>(static_cast<OCatalog&>(m_rParent).getPrivateTables());
+            if(pTables)
+                pTables->appendNew(sName);
+        }
+        else
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
     else
         throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());

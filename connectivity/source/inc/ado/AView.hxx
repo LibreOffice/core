@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:13:31 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 10:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,21 +82,12 @@ namespace connectivity
 
         protected:
             // OPropertySetHelper
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                    sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue)
-                                 throw (::com::sun::star::uno::Exception);
             virtual void SAL_CALL getFastPropertyValue(
                                 ::com::sun::star::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const;
         public:
             OAdoView(sal_Bool _bCase, ADOView* _pView=NULL);
-            OAdoView(sal_Bool _bCase,  const ::rtl::OUString& _rName,
-                    sal_Int32 _nCheckOption = 0,
-                    const ::rtl::OUString& _rCommand = ::rtl::OUString(),
-                    const ::rtl::OUString& _rSchemaName = ::rtl::OUString(),
-                    const ::rtl::OUString& _rCatalogName = ::rtl::OUString());
 
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);

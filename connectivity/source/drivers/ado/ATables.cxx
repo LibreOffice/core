@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 10:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,11 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
+#include <cppuhelper/interfacecontainer.h>
+#endif
 
+using namespace ::cppu;
 using namespace connectivity;
 using namespace comphelper;
 using namespace connectivity::ado;
@@ -156,6 +160,20 @@ Reference< XNamed > OTables::cloneObject(const Reference< XPropertySet >& _xDesc
         return new OAdoTable(this,isCaseSensitive(),m_pCatalog,aTable);
     }
     return Reference< XNamed >();
+}
+// -----------------------------------------------------------------------------
+void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
+{
+    OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
+    m_aCollection.Refresh();
+
+    insertElement(_rsNewTable,NULL);
+
+    // notify our container listeners
+    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rsNewTable), Any(), Any());
+    OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
+    while (aListenerLoop.hasMoreElements())
+        static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
 }
 // -----------------------------------------------------------------------------
 

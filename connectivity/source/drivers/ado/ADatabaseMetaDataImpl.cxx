@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-17 14:09:15 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 10:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,24 +665,6 @@ void WpADOUser::Create()
     if( !FAILED( hr ) )
         operator=(pCommand);
 }
-// -------------------------------------------------------------------------
-void WpADOView::Create()
-{
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
-    HRESULT         hr = -1;
-    ADOView* pCommand;
-    hr = CoCreateInstance(ADOS::CLSID_ADOVIEW_25,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOVIEW_25,
-                          (void**)&pCommand );
-
-
-    if( !FAILED( hr ) )
-        operator=(pCommand);
-}
-
 // -------------------------------------------------------------------------
 
 
