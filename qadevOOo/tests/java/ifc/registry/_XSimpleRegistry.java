@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSimpleRegistry.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:22 $
+ *  last change:$Date: 2003-05-27 12:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.registry;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.registry.InvalidRegistryException;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.registry.XSimpleRegistry;
@@ -245,7 +246,7 @@ public class _XSimpleRegistry extends MultiMethodTest {
         XSimpleRegistry reg = null;
         try {
             reg = RegistryTools.
-                createRegistryService(tParam.getMSF()) ;
+                createRegistryService((XMultiServiceFactory)tParam.getMSF()) ;
         } catch (com.sun.star.uno.Exception e) {
             log.print("Can't create registry service: ");
             e.printStackTrace(log);

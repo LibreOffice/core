@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XImplementationRegistration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:23 $
+ *  last change:$Date: 2003-05-27 12:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.registry;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.registry.CannotRegisterImplementationException;
 import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.registry.XSimpleRegistry;
@@ -116,10 +117,10 @@ public class _XImplementationRegistration extends MultiMethodTest {
         String name = null;
 
         try {
-            name = utils.getOfficeTempDir(tParam.getMSF()) +
+            name = utils.getOfficeTempDir((XMultiServiceFactory)tParam.getMSF()) +
                 "XImplementationRegistration_tmp.rdb";
             reg = RegistryTools.openRegistry
-                (name, tParam.getMSF()) ;
+                (name, (XMultiServiceFactory)tParam.getMSF()) ;
 
             oObj.registerImplementation(loader, url, reg) ;
 
