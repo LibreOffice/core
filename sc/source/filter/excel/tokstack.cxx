@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokstack.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:45:02 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,9 +351,12 @@ void TokenPool::GetElement( const UINT16 nId )
                 EXTCONT*        p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
 
                 if( p )
-                    /*ScToken*  pTok = */pScToken->AddExternal( p->aText.GetBuffer() );
+                {
+                        ScToken *pTok = pScToken->AddExternal( p->aText );
+                        pTok->NewOpCode (p->eId);
                 }
                 break;
+                }
             case T_Nlf:
                 {
                 UINT16          n = pElement[ nId ];
@@ -419,7 +422,10 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     EXTCONT*    p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
 
                     if( p )
-                        /*ScToken*  pTok = */pScToken->AddExternal( p->aText.GetBuffer() );
+                    {
+                        ScToken *pTok = pScToken->AddExternal( p->aText );
+                        pTok->NewOpCode (p->eId);
+                    }
                     }
                     break;
                 case T_Nlf:
