@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-28 17:11:33 $
+#   last change: $Author: hjs $ $Date: 2001-10-23 15:15:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -266,8 +266,18 @@ SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)T
 .IF "$(SHL$(TNR)TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(SHL$(TNR)TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls
 $(SHL$(TNR)TARGETN) : $(LINKINCTARGETS)
+
+.ELSE
+$(MISC)$/%linkinc.ls:
+    echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 $(SHL$(TNR)TARGETN) : \
