@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-08 10:42:11 $
+ *  last change: $Author: mt $ $Date: 2001-05-03 12:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,7 @@ void TEIMEInfos::DestroyAttribs()
 {
     delete pAttribs;
     pAttribs = NULL;
+    nLen = 0;
 }
 
 
