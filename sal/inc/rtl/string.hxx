@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-14 11:12:38 $
+ *  last change: $Author: pl $ $Date: 2000-11-15 11:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,15 +816,15 @@ public:
     sal_Int32           search( const sal_Char* pchar, sal_Int32 nIndex = 0) const { return indexOf( pchar, nIndex ); }
 };
 
-#ifdef _USE_NAMESPACE
-}
-#endif
-
 struct OStringHash
 {
      size_t operator()(const rtl::OString& rString) const
          { return (size_t)rString.hashCode(); }
 };
+
+#ifdef _USE_NAMESPACE
+}
+#endif
 
 #endif /* __cplusplus */
 #endif /* _RTL_STRING_HXX_ */
