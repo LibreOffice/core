@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:33:30 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 
 #pragma hdrstop
@@ -489,7 +493,8 @@ void SwGlossaryDlg::Apply()
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
-        String sTemp(*pCurrGlosGroup);
+        //CHINA001 String sTemp(*pCurrGlosGroup);
+        String sTemp(*::GetCurrGlosGroup());
         // der nullte Pfad wird nicht aufgezeichnet!
         if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
             sTemp = sTemp.GetToken(0, GLOS_DELIM);
@@ -679,7 +684,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
                 {
                     SfxRequest aReq(pSh->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
-                    String sTemp(*pCurrGlosGroup);
+                    //CHINA001 String sTemp(*pCurrGlosGroup);
+                    String sTemp(*::GetCurrGlosGroup());
                     // der nullte Pfad wird nicht aufgezeichnet!
                     if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
                         sTemp = sTemp.GetToken(0, GLOS_DELIM);
@@ -781,7 +787,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 
             SvtPathOptions aPathOpt;
             xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
-            String sWW8( C2S(FILTER_WW8) );
+            String sWW8( C2S(SwGetFILTER_WW8()) );
 
             Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
             SfxFilterMatcher aMatcher( String::CreateFromAscii(SwDocShell::Factory().GetShortName()) );
