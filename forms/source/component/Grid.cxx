@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-25 17:55:17 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,7 +658,16 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
             }
             break;
         case PROPERTY_ID_ROWHEIGHT:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aRowHeight, ::getCppuType((const sal_Int32*)NULL));
+            {
+                bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aRowHeight, ::getCppuType((const sal_Int32*)NULL));
+
+                sal_Int32 nNewVal( 0 );
+                if ( ( rConvertedValue >>= nNewVal ) && ( nNewVal <= 0 ) )
+                {
+                    rConvertedValue.clear();
+                    bModified = m_aRowHeight.hasValue();
+                }
+            }
             break;
         case PROPERTY_ID_FONT_NAME:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aFont.Name);
