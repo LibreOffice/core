@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-14 11:26:10 $
+ *  last change: $Author: fs $ $Date: 2001-09-04 09:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,25 +71,18 @@
 #include <vcl/filedlg.hxx>
 #endif
 
-#include <filedlg.hxx>
+#ifndef _SVTOOLS_SVTDATA_HXX
 #include <svtdata.hxx>
+#endif
 
+#ifndef _SV_FILECTRL_HXX
 #include <filectrl.hxx>
+#endif
+#ifndef _SV_FILECTRL_HRC
 #include <filectrl.hrc>
+#endif
 
 #pragma hdrstop
-
-#include <vcl/unohelp.hxx>
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#endif
-
-using namespace ::com::sun::star;
 
 // =======================================================================
 
@@ -242,24 +235,7 @@ void FileControl::Resize()
 
 IMPL_LINK( FileControl, ButtonHdl, PushButton*, EMPTYARG )
 {
-    XubString aNewText;
-
-    uno::Reference< lang::XMultiServiceFactory > xMSF = vcl::unohelper::GetMultiServiceFactory();
-    uno::Reference < ui::dialogs::XFilePicker > xFilePicker( xMSF->createInstance( String(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ) ), uno::UNO_QUERY );
-    if ( xFilePicker.is() && xFilePicker->execute() )
-    {
-        uno::Sequence < rtl::OUString > aPathSeq = xFilePicker->getFiles();
-
-        if ( aPathSeq.getLength() )
-        {
-            aNewText = aPathSeq[0];
-            INetURLObject aObj( aNewText );
-            if ( aObj.GetProtocol() == INET_PROT_FILE )
-                aNewText = aObj.PathToFileName();
-            SetText( aNewText );
-            maEdit.GetModifyHdl().Call( &maEdit );
-        }
-    }
+    ImplBrowseFile( );
 
     return 0;
 }
