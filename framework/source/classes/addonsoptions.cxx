@@ -2,8 +2,8 @@
  *
  *  $RCSfile: addonsoptions.cxx,v $
  *
- *  $Revision: 1.3 $
- *  last change: $Author: hr $ $Date: 2003-04-04 17:13:34 $
+ *  $Revision: 1.4 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,23 +67,21 @@
 #ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 #include <classes/addonsoptions.hxx>
 #endif
-
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
-
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
-
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
-
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
@@ -91,14 +89,26 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMACROEXPANDER_HPP_
+#include "com/sun/star/util/XMacroExpander.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include "com/sun/star/uno/XComponentContext.hpp"
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include "com/sun/star/beans/XPropertySet.hpp"
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
+#include <comphelper/processfactory.hxx>
 
 #include <hash_map>
 #include <algorithm>
@@ -113,6 +123,7 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::beans ;
+using namespace ::com::sun::star::lang  ;
 
 //_________________________________________________________________________________________________________________
 //  const
@@ -138,6 +149,7 @@ using namespace ::com::sun::star::beans ;
 #define PROPERTYNAME_IMAGEBIGHC                         OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigHC" ))
 
 #define IMAGES_NODENAME                                 OUString(RTL_CONSTASCII_USTRINGPARAM("UserDefinedImages" ))
+#define PRIVATE_IMAGE_URL                               OUString(RTL_CONSTASCII_USTRINGPARAM("private:image/" ))
 
 #define PROPERTYCOUNT_MENUITEM                          6
 #define OFFSET_MENUITEM_URL                             0
@@ -165,6 +177,8 @@ using namespace ::com::sun::star::beans ;
 #define OFFSET_IMAGES_BIG                               1
 #define OFFSET_IMAGES_SMALLHC                           2
 #define OFFSET_IMAGES_BIGHC                             3
+
+#define EXPAND_PROTOCOL                                 "vnd.sun.star.expand"
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -299,6 +313,8 @@ class AddonsOptions_Impl : public ConfigItem
         sal_Bool             ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
         sal_Bool             ReadImagesItem( const OUString& aImagesItemNodeName, Sequence< PropertyValue >& aImagesItem );
         ImageEntry*          ReadImageData( const OUString& aImagesNodeName );
+        void                 ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId );
+        sal_Bool             HasAssociatedImages( const OUString& aURL );
 
         sal_Bool             ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenu );
         void                 InsertToolBarSeparator( Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq );
@@ -316,20 +332,21 @@ class AddonsOptions_Impl : public ConfigItem
 
     private:
         ImageEntry* ReadOptionalImageData( const OUString& aMenuNodeName );
-        void        AddImageEntryToImageManager( const OUString& aURL, ImageEntry* pImageEntry );
 
-        sal_Int32                               m_nRootAddonPopupMenuId;
-        OUString                                m_aPropNames[PROPERTYCOUNT_MENUITEM];
-        OUString                                m_aPropImagesNames[PROPERTYCOUNT_IMAGES];
-        OUString                                m_aEmpty;
-        OUString                                m_aPathDelimiter;
-        OUString                                m_aSeparator;
-        OUString                                m_aRootAddonPopupMenuURLPrexfix;
-        Sequence< Sequence< PropertyValue > >   m_aCachedMenuProperties;
-        Sequence< Sequence< PropertyValue > >   m_aCachedMenuBarPartProperties;
-        Sequence< Sequence< PropertyValue > >   m_aCachedToolBarPartProperties;
-        Sequence< Sequence< PropertyValue > >   m_aCachedHelpMenuProperties;
-        ImageManager                            m_aImageManager;
+        sal_Int32                                           m_nRootAddonPopupMenuId;
+        OUString                                            m_aPropNames[PROPERTYCOUNT_MENUITEM];
+        OUString                                            m_aPropImagesNames[PROPERTYCOUNT_IMAGES];
+        OUString                                            m_aEmpty;
+        OUString                                            m_aPathDelimiter;
+        OUString                                            m_aSeparator;
+        OUString                                            m_aRootAddonPopupMenuURLPrexfix;
+        OUString                                            m_aPrivateImageURL;
+        Sequence< Sequence< PropertyValue > >               m_aCachedMenuProperties;
+        Sequence< Sequence< PropertyValue > >               m_aCachedMenuBarPartProperties;
+        Sequence< Sequence< PropertyValue > >               m_aCachedToolBarPartProperties;
+        Sequence< Sequence< PropertyValue > >               m_aCachedHelpMenuProperties;
+        Reference< com::sun::star::util::XMacroExpander >   m_xMacroExpander;
+        ImageManager                                        m_aImageManager;
 };
 
 //_________________________________________________________________________________________________________________
@@ -345,7 +362,8 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     m_aPathDelimiter( PATHDELIMITER ),
     m_aSeparator( SEPARATOR_URL ),
     m_nRootAddonPopupMenuId( 0 ),
-    m_aRootAddonPopupMenuURLPrexfix( ADDONSPOPUPMENU_URL_PREFIX )
+    m_aRootAddonPopupMenuURLPrexfix( ADDONSPOPUPMENU_URL_PREFIX ),
+    m_aPrivateImageURL( PRIVATE_IMAGE_URL )
 {
     // initialize array with fixed property names
     m_aPropNames[ OFFSET_MENUITEM_URL               ] = PROPERTYNAME_URL;
@@ -360,6 +378,16 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     m_aPropImagesNames[ OFFSET_IMAGES_BIG               ] = PROPERTYNAME_IMAGEBIG;
     m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC           ] = PROPERTYNAME_IMAGESMALLHC;
     m_aPropImagesNames[ OFFSET_IMAGES_BIGHC             ] = PROPERTYNAME_IMAGEBIGHC;
+
+    Reference< XComponentContext > xContext;
+    Reference< com::sun::star::beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+    xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+    if ( xContext.is() )
+    {
+        m_xMacroExpander =  Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
+                                UNO_QUERY );
+    }
 
     ReadAddonMenuSet( m_aCachedMenuProperties );
     ReadOfficeMenuBarSet( m_aCachedMenuBarPartProperties );
@@ -714,8 +742,11 @@ sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 
         Sequence< Any > aAddonImageItemNodeValues = GetProperties( aAddonImageItemNodePropNames );
 
-        // An user-defined image entry must have an URL.
-        if (( aAddonImageItemNodeValues[0] >>= aURL ) && aURL.getLength() > 0 )
+        // An user-defined image entry must have an URL. As "ImageIdentifier" has a higher priority
+        // we also check if we already have an images association.
+        if (( aAddonImageItemNodeValues[0] >>= aURL ) &&
+            aURL.getLength() > 0 &&
+            !HasAssociatedImages( aURL ))
         {
             OUStringBuffer aBuf( aImagesItemNode );
             aBuf.append( m_aPathDelimiter );
@@ -729,7 +760,7 @@ sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
             {
                 // Successfully read a user-defined images item, put it into our image manager
                 aImageManager.insert( ImageManager::value_type( aURL, *pImageEntry ));
-                delete pImageEntry; // We have to ownership of the pointer
+                delete pImageEntry; // We have the ownership of the pointer
             }
         }
     }
@@ -773,13 +804,17 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
         if ( aRootSubMenuNodeNames.getLength() > 0 && !bIgnoreSubMenu )
         {
             // Set a unique prefixed Add-On popup menu URL so it can be identified later
-            OUString aPopupMenuURL = GeneratePrefixURL();
+            OUString aPopupMenuURL     = GeneratePrefixURL();
+            OUString aPopupMenuImageId;
+
+            aMenuItemNodePropValues[ OFFSET_MENUITEM_IMAGEIDENTIFIER ] >>= aPopupMenuImageId;
+            ReadAndAssociateImages( aPopupMenuURL, aPopupMenuImageId );
 
             // A popup menu must have a title and can have a URL and ImageIdentifier
             // Set the other property values to empty
             aMenuItem[ OFFSET_MENUITEM_URL              ].Value <<= aPopupMenuURL;
             aMenuItem[ OFFSET_MENUITEM_TARGET           ].Value <<= m_aEmpty;
-            aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Value <<= aMenuItemNodePropValues[ OFFSET_MENUITEM_IMAGEIDENTIFIER ];
+            aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Value <<= aPopupMenuImageId;
             aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Value <<= aMenuItemNodePropValues[ OFFSET_MENUITEM_CONTEXT ];
 
             // Continue to read the sub menu nodes
@@ -794,11 +829,14 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
         else if (( aMenuItemNodePropValues[ OFFSET_MENUITEM_URL ] >>= aStrValue ) && aStrValue.getLength() > 0 )
         {
             // A simple menu item => read the other properties;
-            OUString aString;
+            OUString aMenuImageId;
+
+            aMenuItemNodePropValues[ OFFSET_MENUITEM_IMAGEIDENTIFIER ] >>= aMenuImageId;
+             ReadAndAssociateImages( aStrValue, aMenuImageId );
 
             aMenuItem[ OFFSET_MENUITEM_URL              ].Value <<= aStrValue;
             aMenuItem[ OFFSET_MENUITEM_TARGET           ].Value <<= aMenuItemNodePropValues[ OFFSET_MENUITEM_TARGET         ];
-            aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Value <<= aMenuItemNodePropValues[ OFFSET_MENUITEM_IMAGEIDENTIFIER];
+            aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Value <<= aMenuImageId;
             aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Value <<= aMenuItemNodePropValues[ OFFSET_MENUITEM_CONTEXT        ];
             aMenuItem[ OFFSET_MENUITEM_SUBMENU          ].Value <<= Sequence< Sequence< PropertyValue > >(); // Submenu set!
 
@@ -891,10 +929,16 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeNa
         else if (( aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_TITLE ] >>= aTitle ) && aTitle.getLength() > 0 )
         {
             // A normal toolbar item must also have title => read the other properties;
+            OUString aImageId;
+
+            // Try to map a user-defined image URL to our internal private image URL
+            aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER ] >>= aImageId;
+             ReadAndAssociateImages( aURL, aImageId );
+
             aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Value <<= aURL;
             aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Value <<= aTitle;
             aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Value <<= aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_TARGET          ];
-            aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Value <<= aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER ];
+            aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Value <<= aImageId;
             aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Value <<= aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_CONTEXT         ];
 
             bResult = sal_True;
@@ -932,6 +976,90 @@ sal_Bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSu
     }
 
     return sal_True;
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+sal_Bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
+{
+    ImageManager::const_iterator pIter = m_aImageManager.find( aURL );
+    return ( pIter != m_aImageManager.end() );
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId )
+{
+    const int   MAX_NUM_IMAGES = 4;
+    const Color aTransparentColor( COL_LIGHTMAGENTA );
+    const char* aExtArray[MAX_NUM_IMAGES] = { "_16", "_26", "_16h", "_26h" };
+    const char* pBmpExt = ".bmp";
+
+    if ( aImageId.getLength() == 0 )
+        return;
+
+    bool        bImageFound = true;
+    ImageEntry  aImageEntry;
+    Bitmap      aBitmap;
+    OUString    aImageURL( aImageId );
+
+    if (( aImageURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL ":" )) == 0 ) &&
+        m_xMacroExpander.is() )
+    {
+        // cut protocol
+        OUString macro( aImageURL.copy( sizeof (EXPAND_PROTOCOL ":") -1 ) );
+        // decode uric class chars
+        macro = Uri::decode(
+            macro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+        // expand macro string
+        aImageURL = m_xMacroExpander->expandMacros( macro );
+    }
+    else return;
+
+    // Loop to create the four possible image names and try to read the bitmap files
+    for ( int i = 0; i < MAX_NUM_IMAGES; i++ )
+    {
+        OUStringBuffer aFileNameBuf( aImageURL );
+        aFileNameBuf.appendAscii( aExtArray[i] );
+        aFileNameBuf.appendAscii( pBmpExt );
+
+        OUString aFileName( aFileNameBuf.makeStringAndClear() );
+        SvStream* pStream = UcbStreamHelper::CreateStream( aFileName, STREAM_STD_READ );
+        if ( pStream && ( pStream->GetErrorCode() == 0 ))
+        {
+            aBitmap.Read( *pStream );
+
+            const Size aSize = ((i == 0) || (i == 2))  ? Size( 16, 16 ) : Size( 26, 26 ); // Sizes used for menu/toolbox images
+            if ( aBitmap.GetSizePixel() != aSize )
+                aBitmap.Scale( aSize, BMP_SCALE_INTERPOLATE );
+
+            Image aImage( aBitmap, aTransparentColor );
+            switch ( i )
+            {
+                case 0:
+                    aImageEntry.aImageSmall     = aImage;
+                    break;
+                case 1:
+                    aImageEntry.aImageBig       = aImage;
+                    break;
+                case 2:
+                    aImageEntry.aImageSmallHC   = aImage;
+                    break;
+                case 3:
+                    aImageEntry.aImageBigHC     = aImage;
+                    break;
+            }
+            bImageFound = true;
+        }
+
+        if ( pStream )
+            delete pStream;
+    }
+
+    if ( bImageFound )
+        m_aImageManager.insert( ImageManager::value_type( aURL, aImageEntry ));
 }
 
 //*****************************************************************************************************************
