@@ -7,7 +7,7 @@ PLATFORM := $(shell uname -s)
 # special check for windows because normally we have no uname under windows
 ifeq "$(PLATFORM)" ""
 PLATFORM = windows
-else
+endif
 ifeq "$(PLATFORM)" "WINNT"
 PLATFORM = windows
 endif
@@ -20,6 +20,11 @@ endif
 ifeq "$(PLATFORM)" "CYGWIN_NT-5.1"
 PLATFORM = windows
 endif
+ifeq "$(PLATFORM)" "MINGW32_NT-5.0"
+PLATFORM = windows
+endif
+ifeq "$(PLATFORM)" "MINGW32_NT-5.1"
+PLATFORM = windows
 endif
 
 # debug option, default is no debug
@@ -128,7 +133,7 @@ PACKAGE_LIB_DIR=solaris_sparc.plt
 JAVA_PROC_TYPE=sparc
 else
 PLATFORM=solintel
-PACKAGE_LIB_DIR=solaris_intel.plt
+PACKAGE_LIB_DIR=solaris_x86.plt
 JAVA_PROC_TYPE=i386
 endif
 
