@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+#   last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ CXXFILES = \
     msg.cxx \
     bindings.cxx \
     macrconf.cxx \
+        macro.cxx \
     minfitem.cxx \
     srchitem.cxx \
     $(PROJECTPCHSOURCE).cxx
@@ -112,6 +113,7 @@ SLOFILES = \
     $(SLO)$/bindings.obj \
     $(SLO)$/minfitem.obj \
     $(SLO)$/srchitem.obj \
+        $(SLO)$/macro.obj \
     $(SLO)$/macrconf.obj
 
 # --- Targets -------------------------------------------------------

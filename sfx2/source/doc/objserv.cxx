@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mav $ $Date: 2002-03-26 16:25:24 $
+ *  last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,6 +789,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 {
                     // Dokument gilt als ver"andert
                     FlushDocInfo();
+
+                    // ggf. Recorden
+                    if ( !rReq.IsRecording() )
+                        rReq.AppendItem( SfxDocumentInfoItem( GetTitle(), GetDocInfo() ) );
                    rReq.Done();
                 }
                 else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-27 17:24:00 $
+ *  last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,6 @@
 
 #ifndef _IPENV_HXX //autogen
 #include <so3/ipenv.hxx>
-#endif
-#ifdef ENABLE_INIMANAGER//MUSTINI
-    #ifndef _SFXINIMGR_HXX
-    #include <svtools/iniman.hxx>
-    #endif
 #endif
 #ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
@@ -171,8 +166,8 @@ using namespace ::com::sun::star::frame;
 #include "sfxbasecontroller.hxx"
 #include "sfx.hrc"
 #include "view.hrc"
-#include <intfrm.hxx>
-#include <frmdescr.hxx>
+#include "intfrm.hxx"
+#include "frmdescr.hxx"
 #include "appdata.hxx"
 #include "sfxuno.hxx"
 #include "progress.hxx"
@@ -181,6 +176,7 @@ using namespace ::com::sun::star::frame;
 #include "tbxconf.hxx"
 #include "mnumgr.hxx"
 #include "virtmenu.hxx"
+#include "macro.hxx"
 
 //-------------------------------------------------------------------------
 DBG_NAME(SfxViewFrame);
@@ -219,6 +215,7 @@ struct SfxViewFrame_Impl
     SfxViewFrame*       pParentViewFrame;
     SfxObjectShell*     pImportShell;
     Window*             pFocusWin;
+    SfxMacro*           pMacro;
     SfxMenuBarManager*  pMenuBar;
     sal_uInt16          nDocViewNo;
     sal_uInt16          nCurViewId;
@@ -234,6 +231,7 @@ struct SfxViewFrame_Impl
 
                         SfxViewFrame_Impl()
                         : pReloader(0 )
+                        , pMacro( 0 )
                         {}
 
                         ~SfxViewFrame_Impl()
@@ -3223,13 +3221,20 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
     FASTBOOL bDone = FALSE;
     switch ( rReq.GetSlot() )
     {
+        case SID_RECORDMACRO :
+        {
+            if ( pImp->pMacro )
+                DELETEZ( pImp->pMacro );
+            else
+                pImp->pMacro = new SfxMacro( SFX_MACRO_RECORDINGRELATIVE );
+            rReq.Done();
+            break;
+        }
+
         case SID_TOGGLESTATUSBAR:
         {
-#if SUPD<635
-            SfxToolBoxConfig *pTbxCfg = SfxToolBoxConfig::GetOrCreate();
-#else
             SfxToolBoxConfig* pTbxCfg = GetObjectShell()->GetToolBoxConfig_Impl();
-#endif
+
             // Parameter auswerten
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, rReq.GetSlot(), FALSE);
             BOOL bShow = pShowItem  ? pShowItem->GetValue()
@@ -3283,13 +3288,15 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
         {
             switch(nWhich)
             {
+                case SID_RECORDMACRO :
+                {
+                    rSet.Put( SfxBoolItem( nWhich, pImp->pMacro != NULL ) );
+                    break;
+                }
+
                 case SID_TOGGLESTATUSBAR:
                 {
-#if SUPD<635
-                    rSet.Put( SfxBoolItem( nWhich, SfxToolBoxConfig::GetOrCreate()->IsStatusBarVisible() ) );
-#else
                     rSet.Put( SfxBoolItem( nWhich, GetObjectShell()->GetToolBoxConfig_Impl()->IsStatusBarVisible() ) );
-#endif
                     break;
                 }
 
@@ -3629,9 +3636,12 @@ SfxChildWindow* SfxViewFrame::GetChildWindow(USHORT nId)
     return pWork ? pWork->GetChildWindow_Impl(nId) : NULL;
 }
 
-#if SUPD>=635
 SfxImageManager* SfxViewFrame::GetImageManager()
 {
     return GetObjectShell()->GetImageManager_Impl();
 }
-#endif
+
+SfxMacro* SfxViewFrame::GetRecordingMacro_Impl()
+{
+    return pImp->pMacro;
+}

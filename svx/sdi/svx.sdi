@@ -41,6 +41,7 @@ SvxChooseControlItem ChooseControls SID_CHOOSE_CONTROLS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -140,10 +141,11 @@ SfxBoolItem BezierFill SID_DRAW_BEZIER_FILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -191,7 +193,7 @@ SfxVoidItem Square_Rounded_Unfilled SID_DRAW_SQUARE_ROUND_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -251,6 +253,7 @@ SfxBoolItem ShowFmExplorer SID_FM_SHOW_FMEXPLORER
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -305,6 +308,7 @@ SfxBoolItem Init3D SID_3D_INIT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -331,6 +335,7 @@ SfxBoolItem FormProperties SID_FM_PROPERTIES
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -428,10 +433,11 @@ SfxBoolItem Line SID_DRAW_LINE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -508,6 +514,7 @@ XFillHatchItem FillHatch SID_ATTR_FILL_HATCH
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -530,10 +537,11 @@ SfxBoolItem Label SID_INSERT_FIXEDTEXT
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -585,6 +593,7 @@ SfxBoolItem BmpMaskPipette SID_BMPMASK_PIPETTE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -635,10 +644,11 @@ SfxBoolItem Groupbox SID_INSERT_GROUPBOX
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -736,7 +746,7 @@ SfxVoidItem CircleCut_Unfilled SID_DRAW_CIRCLECUT_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -768,6 +778,7 @@ SfxInt16Item GrafBlue SID_ATTR_GRAF_BLUE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -794,6 +805,7 @@ SfxInt16Item GrafContrast SID_ATTR_GRAF_CONTRAST
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -873,6 +885,7 @@ SfxBoolItem SpellOnline SID_AUTOSPELL_CHECK
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -899,6 +912,7 @@ XLineDashItem LineDash SID_ATTR_LINE_DASH
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -921,10 +935,11 @@ SfxBoolItem Spinbutton SID_INSERT_SPINBUTTON
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -976,6 +991,7 @@ SfxBoolItem BmpMask SID_BMPMASK
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1002,6 +1018,7 @@ SvxAdjustItem Alignment SID_ATTR_PARA_ADJUST
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1024,10 +1041,11 @@ SfxBoolItem ConvertToEdit SID_FM_CONVERTTO_EDIT
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1054,6 +1072,7 @@ SfxUInt16Item Config SID_FM_CONFIG
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1082,6 +1101,7 @@ SfxBoolItem ListBox SID_FM_LISTBOX
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1104,10 +1124,11 @@ SfxBoolItem ConvertToCheckBox SID_FM_CONVERTTO_CHECKBOX
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1134,6 +1155,7 @@ SfxUInt32Item GrafGamma SID_ATTR_GRAF_GAMMA
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1181,10 +1203,11 @@ SfxBoolItem Line_Diagonal SID_DRAW_XLINE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1207,10 +1230,11 @@ SfxBoolItem ConvertToGrid SID_FM_CONVERTTO_GRID
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1237,6 +1261,7 @@ SvxWidowsItem Widow SID_ATTR_PARA_WIDOWS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1263,6 +1288,7 @@ SvxFontHeightItem FontHeight SID_ATTR_CHAR_FONTHEIGHT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1289,6 +1315,7 @@ SfxBoolItem OpenReadOnly SID_FM_OPEN_READONLY
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1315,6 +1342,7 @@ SfxBoolItem DateField SID_FM_DATEFIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1366,6 +1394,7 @@ XFormTextAdjustItem FontWorkTextAdjust SID_FORMTEXT_ADJUST
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1392,6 +1421,7 @@ SfxBoolItem FileControl SID_FM_FILECONTROL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1439,7 +1469,7 @@ SfxVoidItem Arc SID_DRAW_ARC
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     /* status: */
@@ -1499,6 +1529,7 @@ SfxBoolItem ControlProperties SID_FM_CTL_PROPERTIES
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1549,7 +1580,7 @@ SfxVoidItem CircleCut SID_DRAW_CIRCLECUT
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     /* status: */
@@ -1606,6 +1637,7 @@ SfxBoolItem ColorControl SID_COLOR_CONTROL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1632,6 +1664,7 @@ XLineWidthItem LineWidth SID_ATTR_LINE_WIDTH
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1654,10 +1687,11 @@ SfxBoolItem Combobox SID_INSERT_COMBOBOX
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1684,6 +1718,7 @@ SvxDrawToolItem DrawSelect SID_INSERT_DRAW
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -1762,6 +1797,7 @@ SfxBoolItem CheckBox SID_FM_CHECKBOX
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1888,6 +1924,7 @@ SvxTabStopItem Tabstops SID_ATTR_TABSTOP
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1914,6 +1951,7 @@ SfxBoolItem Grid SID_FM_DBGRID
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1993,6 +2031,7 @@ SfxBoolItem SuperScript SID_SET_SUPER_SCRIPT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2019,6 +2058,7 @@ SfxBoolItem CurrencyField SID_FM_CURRENCYFIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2041,7 +2081,7 @@ SfxVoidItem Rect_Rounded SID_DRAW_RECT_ROUND
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -2069,7 +2109,7 @@ SfxVoidItem Rect_Rounded_Unfilled SID_DRAW_RECT_ROUND_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -2097,7 +2137,7 @@ SfxVoidItem Square SID_DRAW_SQUARE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -2129,6 +2169,7 @@ SvxBrushItem BackgroundPatternController SID_BACKGROUND_PATTERN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2151,10 +2192,11 @@ SfxBoolItem Polygon_Unfilled SID_DRAW_POLYGON_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2177,7 +2219,7 @@ SfxVoidItem Rect_Unfilled SID_DRAW_RECT_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -2205,10 +2247,11 @@ SfxBoolItem Text_Marquee SID_DRAW_TEXT_MARQUEE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2235,6 +2278,7 @@ SfxBoolItem ToolSelect SID_OBJECT_SELECT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2257,10 +2301,11 @@ SfxBoolItem Polygon_Diagonal_Unfilled SID_DRAW_XPOLYGON_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2283,7 +2328,7 @@ SfxVoidItem Square_Unfilled SID_DRAW_SQUARE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -2311,7 +2356,7 @@ SfxVoidItem Square_Rounded SID_DRAW_SQUARE_ROUND
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -2339,13 +2384,14 @@ SfxBoolItem Text SID_DRAW_TEXT
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2397,6 +2443,7 @@ SfxBoolItem PatternField SID_FM_PATTERNFIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2423,6 +2470,7 @@ SvxColorItem Color SID_ATTR_CHAR_COLOR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2474,6 +2522,7 @@ SfxBoolItem NumericField SID_FM_NUMERICFIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2553,6 +2602,7 @@ SfxBoolItem HelplinesMove SID_HELPLINES_MOVE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2579,6 +2629,7 @@ SfxBoolItem ShowHidden SID_SHOW_HIDDEN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2605,6 +2656,7 @@ SfxBoolItem Pushbutton SID_FM_PUSHBUTTON
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2631,6 +2683,7 @@ SfxBoolItem RadioButton SID_FM_RADIOBUTTON
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2707,6 +2760,7 @@ SfxBoolItem Label SID_FM_FIXEDTEXT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2733,6 +2787,7 @@ SfxBoolItem Edit SID_FM_EDIT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2780,10 +2835,11 @@ SfxObjectItem FieldController SID_FM_FIELDS_CONTROL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2810,6 +2866,7 @@ SfxBoolItem ImageControl SID_FM_IMAGECONTROL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2882,10 +2939,11 @@ SfxObjectItem FmExplorerController SID_FM_FMEXPLORER_CONTROL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2912,6 +2970,7 @@ SfxBoolItem GroupBox SID_FM_GROUPBOX
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2938,6 +2997,7 @@ SfxBoolItem Imagebutton SID_FM_IMAGEBUTTON
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2964,6 +3024,7 @@ SfxBoolItem BezierAppend SID_BEZIER_APPEND
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2990,6 +3051,7 @@ SfxStringItem BezierClose SID_BEZIER_CLOSE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3041,6 +3103,7 @@ SfxBoolItem HideSpellMark SID_AUTOSPELL_MARKOFF
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3067,6 +3130,7 @@ SvxColorItem BackgroundColor SID_BACKGROUND_COLOR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3093,6 +3157,7 @@ SfxBoolItem BezierInsert SID_BEZIER_INSERT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3119,6 +3184,7 @@ SvxShadowedItem Shadowed SID_ATTR_CHAR_SHADOWED
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3145,6 +3211,7 @@ SfxBoolItem BezierCutLine SID_BEZIER_CUTLINE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3171,6 +3238,7 @@ SfxStringItem BezierConvert SID_BEZIER_CONVERT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3193,7 +3261,7 @@ SfxVoidItem Circle SID_DRAW_CIRCLE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -3250,6 +3318,7 @@ SfxPointItem Position SID_ATTR_POSITION
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3276,6 +3345,7 @@ SfxBoolItem Window3D SID_3D_WIN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3302,6 +3372,7 @@ SvxSizeItem Size SID_ATTR_SIZE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3328,6 +3399,7 @@ SvxOrphansItem Orphan SID_ATTR_PARA_ORPHANS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3354,6 +3426,7 @@ SvxFmtBreakItem Pagebreak SID_ATTR_PARA_PAGEBREAK
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3380,6 +3453,7 @@ SvxFmtSplitItem ParaSplit SID_ATTR_PARA_SPLIT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3431,6 +3505,7 @@ SvxULSpaceItem TopBottomMargin SID_ATTR_ULSPACE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3457,6 +3532,7 @@ SvxContourItem OutlineFont SID_ATTR_CHAR_CONTOUR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3483,6 +3559,7 @@ SfxBoolItem TwainTransfer SID_TWAIN_TRANSFER
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3534,6 +3611,7 @@ SdrTextFitToSizeTypeItem TextFitToSize SID_ATTR_TEXT_FITTOSIZE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3556,7 +3634,7 @@ SfxVoidItem CircleArc SID_DRAW_CIRCLEARC
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -3584,7 +3662,7 @@ SfxVoidItem Ellipse SID_DRAW_ELLIPSE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     /* status: */
@@ -3612,10 +3690,11 @@ SfxBoolItem Bezier_Unfilled SID_DRAW_BEZIER_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3642,6 +3721,7 @@ XFormTextShadowYValItem FontWorkTextShadowYVal SID_FORMTEXT_SHDWYVAL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3664,10 +3744,11 @@ SfxBoolItem Caption SID_DRAW_CAPTION
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3690,10 +3771,11 @@ SfxBoolItem Freeline_Unfilled SID_DRAW_FREELINE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3716,7 +3798,7 @@ SfxVoidItem Pie SID_DRAW_PIE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     /* status: */
@@ -3744,7 +3826,7 @@ SfxVoidItem Pie_Unfilled SID_DRAW_PIE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -3772,7 +3854,7 @@ SfxVoidItem Ellipse_Unfilled SID_DRAW_ELLIPSE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -3800,7 +3882,7 @@ SfxVoidItem EllipseCut_Unfilled SID_DRAW_ELLIPSECUT_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -3828,10 +3910,11 @@ SfxBoolItem Freeline SID_DRAW_FREELINE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3858,6 +3941,7 @@ SfxObjectItem Border SID_BORDER_OBJECT
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3880,7 +3964,7 @@ SfxVoidItem FontDialog SID_CHAR_DLG
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Asynchron;
 
     /* config: */
@@ -3934,6 +4018,7 @@ SfxBoolItem BezierSmooth SID_BEZIER_SMOOTH
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3985,6 +4070,7 @@ SfxBoolItem BmpMaskExec SID_BMPMASK_EXEC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4064,6 +4150,7 @@ SfxBoolItem BezierEliminatePoints SID_BEZIER_ELIMINATE_POINTS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4090,6 +4177,7 @@ SfxBoolItem ChoosePolygon SID_CHOOSE_POLYGON
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4116,6 +4204,7 @@ SfxBoolItem ContourDialog SID_CONTOUR_DLG
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4142,6 +4231,7 @@ SvxKerningItem Spacing SID_ATTR_CHAR_KERNING
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4218,6 +4308,7 @@ SfxBoolItem GridVisible SID_GRID_VISIBLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4244,6 +4335,7 @@ SfxBoolItem BezierDelete SID_BEZIER_DELETE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4291,10 +4383,11 @@ SfxBoolItem Polygon_Diagonal SID_DRAW_XPOLYGON
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4396,6 +4489,7 @@ SfxBoolItem SubScript SID_SET_SUB_SCRIPT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4497,6 +4591,7 @@ SvxBrushItem BackgroundPattern SID_ATTR_BRUSH
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4523,6 +4618,7 @@ SfxBoolItem UseWizards SID_FM_USE_WIZARDS
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4574,6 +4670,7 @@ SfxBoolItem GalleryEnableAddCopy SID_GALLERY_ENABLE_ADDCOPY
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4596,7 +4693,7 @@ SfxVoidItem ParagraphDialog SID_PARA_DLG
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Asynchron;
 
     /* config: */
@@ -4675,6 +4772,7 @@ SfxPointItem RulerNullOffset SID_RULER_NULL_OFFSET
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4701,6 +4799,7 @@ SfxRectangleItem HeaderFooterBorder SID_RULER_LR_MIN_MAX
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4727,6 +4826,7 @@ SfxBoolItem Grid SID_GRID
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4774,10 +4874,11 @@ SfxBoolItem HScrollbar SID_INSERT_HSCROLLBAR
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4800,10 +4901,11 @@ SfxBoolItem Pushbutton SID_INSERT_PUSHBUTTON
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4826,10 +4928,11 @@ SfxBoolItem Preview SID_INSERT_PREVIEW
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4906,6 +5009,7 @@ SfxBoolItem ImageMapExecute SID_IMAP_EXEC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4957,6 +5061,7 @@ SfxBoolItem ImageMapDialog SID_IMAP
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5004,10 +5109,11 @@ SfxBoolItem Edit SID_INSERT_EDIT
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5180,10 +5286,11 @@ SfxBoolItem VScrollbar SID_INSERT_VSCROLLBAR
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5206,10 +5313,11 @@ SfxBoolItem URLButton SID_INSERT_URLBUTTON
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5232,10 +5340,11 @@ SfxBoolItem Radiobutton SID_INSERT_RADIOBUTTON
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5287,6 +5396,7 @@ SvxHyperlinkItem Hyperlink SID_HYPERLINK_GETLINK
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5338,6 +5448,7 @@ XFormTextDistanceItem FontWorkTextDistance SID_FORMTEXT_DISTANCE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5364,6 +5475,7 @@ XFormTextHideFormItem FormatFontWorkClose SID_FORMTEXT_HIDEFORM
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5393,6 +5505,7 @@ SfxBoolItem TabDialog SID_FM_TAB_DIALOG
     SlotType = SfxBoolItem
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5444,6 +5557,7 @@ SfxBoolItem UrlButton SID_FM_URLBUTTON
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5470,6 +5584,7 @@ XFormTextShadowXValItem FontWorkTextShadowXVal SID_FORMTEXT_SHDWXVAL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5496,6 +5611,7 @@ XFormTextStartItem FontWorkTextStart SID_FORMTEXT_START
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5547,6 +5663,7 @@ XFormTextMirrorItem FontWorkTextMirror SID_FORMTEXT_MIRROR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5573,6 +5690,7 @@ XFormTextShadowItem FontWorkTextShadow SID_FORMTEXT_SHADOW
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5599,6 +5717,7 @@ XFormTextShadowColorItem FontWorkTextShadowColor SID_FORMTEXT_SHDWCOLOR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5625,6 +5744,7 @@ SfxBoolItem OutlineFormat SID_OUTLINE_FORMAT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5787,10 +5907,11 @@ SfxBoolItem ShowProperties SID_FM_SHOW_PROPERTIES
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5867,6 +5988,7 @@ SdrShadowItem Shadow SID_ATTR_FILL_SHADOW
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5921,6 +6043,7 @@ SvxDrawAlignItem ObjectAlign SID_OBJECT_ALIGN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6074,6 +6197,7 @@ SfxBoolItem ShowForms SID_SHOW_FORMS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6100,6 +6224,7 @@ SfxBoolItem Gallery SID_GALLERY
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6176,6 +6301,7 @@ SfxBoolItem ShowItemBrowser SID_SHOW_ITEMBROWSER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -6202,6 +6328,7 @@ SfxBoolItem AddField SID_FM_ADD_FIELD
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6278,6 +6405,7 @@ SvxColorItem LineColor SID_FRAME_LINECOLOR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6304,6 +6432,7 @@ XFormTextStdFormItem FontWorkTextClearAttributes SID_FORMTEXT_STDFORM
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6330,6 +6459,7 @@ XFormTextStyleItem FontWorkTextStyle SID_FORMTEXT_STYLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6356,6 +6486,7 @@ SvxProtectItem RulerProtect SID_RULER_PROTECT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6382,6 +6513,7 @@ SfxBoolItem GridUse SID_GRID_USE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6408,6 +6540,7 @@ SvxLineItem LineStyle SID_FRAME_LINESTYLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6509,6 +6642,7 @@ SfxBoolItem ToolEdit SID_TEXTEDIT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6531,10 +6665,11 @@ SfxBoolItem ConvertToCurrency SID_FM_CONVERTTO_CURRENCY
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6607,10 +6742,11 @@ SfxBoolItem ConvertToPattern SID_FM_CONVERTTO_PATTERN
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6633,10 +6769,11 @@ SfxBoolItem ConvertToFormatted SID_FM_CONVERTTO_FORMATTED
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6688,6 +6825,7 @@ SfxInt16Item GrafRed SID_ATTR_GRAF_RED
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6714,6 +6852,7 @@ SfxBoolItem BezierSymmetric SID_BEZIER_SYMMTR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6736,10 +6875,11 @@ SfxObjectItem FmFilterNavigatorController SID_FM_FILTER_NAVIGATOR_CONTROL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6766,6 +6906,7 @@ SfxInt16Item GrafLuminance SID_ATTR_GRAF_LUMINANCE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6788,10 +6929,11 @@ SfxBoolItem ConvertToList SID_FM_CONVERTTO_LISTBOX
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6818,6 +6960,7 @@ SvxWordLineModeItem WordMode SID_ATTR_CHAR_WORDLINEMODE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6840,10 +6983,11 @@ SfxBoolItem ConvertToCombo SID_FM_CONVERTTO_COMBOBOX
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6866,7 +7010,7 @@ SfxVoidItem Rect SID_DRAW_RECT
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     /* status: */
@@ -6894,10 +7038,11 @@ SfxBoolItem ConvertToRadio SID_FM_CONVERTTO_RADIOBUTTON
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6920,10 +7065,11 @@ SfxBoolItem ConvertToImageBtn SID_FM_CONVERTTO_IMAGEBUTTON
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6946,10 +7092,11 @@ SfxBoolItem ConvertToNumeric SID_FM_CONVERTTO_NUMERIC
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6976,6 +7123,7 @@ XFormTextOutlineItem FontWorkTextOutline SID_FORMTEXT_OUTLINE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6998,10 +7146,11 @@ SfxBoolItem ConvertToFileControl SID_FM_CONVERTTO_FILECONTROL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7024,10 +7173,11 @@ SfxBoolItem ConvertToDate SID_FM_CONVERTTO_DATE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7054,6 +7204,7 @@ SvxAddressItem _Address SID_ATTR_ADDRESS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7076,7 +7227,7 @@ SfxVoidItem Circle_Unfilled SID_DRAW_CIRCLE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -7108,6 +7259,7 @@ SfxUInt32Item State3D SID_3D_STATE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7134,6 +7286,7 @@ SfxBoolItem Assign3D SID_3D_ASSIGN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7160,6 +7313,7 @@ SvxBoxInfoItem BorderInner SID_ATTR_BORDER_INNER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7186,6 +7340,7 @@ SvxPagePosSizeItem RulerPagePos SID_RULER_PAGE_POS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7212,6 +7367,7 @@ SfxBoolItem Text SID_ATTR_CHAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7238,6 +7394,7 @@ SvxBoxItem BorderOuter SID_ATTR_BORDER_OUTER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7264,6 +7421,7 @@ SwShadowItem Shadow SID_ATTR_BORDER_SHADOW
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7290,6 +7448,7 @@ SfxInt16Item GrafGreen SID_ATTR_GRAF_GREEN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7316,6 +7475,7 @@ SfxUInt16Item GrafMode SID_ATTR_GRAF_MODE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7338,10 +7498,11 @@ SfxBoolItem ConvertToTime SID_FM_CONVERTTO_TIME
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7368,6 +7529,7 @@ SfxUInt16Item GrafTransparence SID_ATTR_GRAF_TRANSPARENCE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7394,6 +7556,7 @@ SfxBoolItem GrafInvert SID_ATTR_GRAF_INVERT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7445,6 +7608,7 @@ SfxBoolItem JustifyPara FN_SET_JUSTIFY_PARA
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7496,6 +7660,7 @@ SfxBoolItem SpacePara1 SID_ATTR_PARA_LINESPACE_10
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7575,6 +7740,7 @@ SfxBoolItem ComboBox SID_FM_COMBOBOX
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7626,6 +7792,7 @@ SfxBoolItem DrawSelect SID_DRAW_SELECT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7680,6 +7847,7 @@ SvxLRSpaceItem LeftRightMargin SID_ATTR_LRSPACE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7706,6 +7874,7 @@ XFillStyleItem FillStyle SID_ATTR_FILL_STYLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7782,6 +7951,7 @@ SfxBoolItem RightPara SID_ATTR_PARA_ADJUST_RIGHT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7804,7 +7974,7 @@ SfxVoidItem CirclePie SID_DRAW_CIRCLEPIE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -7857,10 +8027,11 @@ SfxBoolItem ConvertToImageControl SID_FM_CONVERTTO_IMAGECONTROL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7887,6 +8058,7 @@ SvxBoxItem BorderStyle SID_ATTR_BORDER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7909,10 +8081,11 @@ SfxBoolItem Listbox SID_INSERT_LISTBOX
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7939,6 +8112,7 @@ SfxBoolItem InsertMode SID_ATTR_INSERT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8015,6 +8189,7 @@ SfxBoolItem ContourExecute SID_CONTOUR_EXEC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8090,7 +8265,7 @@ SfxVoidItem ViewFormAsGrid SID_FM_VIEW_AS_GRID
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     /* status: */
@@ -8147,6 +8322,7 @@ SfxBoolItem TimeField SID_FM_TIMEFIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8194,10 +8370,11 @@ SfxBoolItem ConvertToButton SID_FM_CONVERTTO_BUTTON
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8220,10 +8397,11 @@ SfxBoolItem ConvertToFixed SID_FM_CONVERTTO_FIXEDTEXT
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8246,10 +8424,11 @@ SfxBoolItem FormattedField SID_FM_FORMATTEDFIELD
     Toggle = TRUE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8272,10 +8451,11 @@ SfxBoolItem ChangeControlType SID_FM_CHANGECONTROLTYPE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8355,6 +8535,7 @@ SwPageSizeItem PageSize SID_ATTR_PAGE_SIZE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8377,7 +8558,7 @@ SfxVoidItem CirclePie_Unfilled SID_DRAW_CIRCLEPIE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -8405,10 +8586,11 @@ SfxObjectItem PropertyController SID_FM_PROPERTY_CONTROL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8460,6 +8642,7 @@ SfxBoolItem BezierEdge SID_BEZIER_EDGE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8482,10 +8665,11 @@ SfxBoolItem Checkbox SID_INSERT_CHECKBOX
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8537,6 +8721,7 @@ SvxPageModelItem PageStyle SID_ATTR_PARA_MODEL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8563,6 +8748,7 @@ XLineStyleItem XLineStyle SID_ATTR_LINE_STYLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8589,6 +8775,7 @@ XLineColorItem XLineColor SID_ATTR_LINE_COLOR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8611,10 +8798,11 @@ SfxBoolItem ConvertToGroup SID_FM_CONVERTTO_GROUPBOX
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8637,7 +8825,7 @@ SfxVoidItem EllipseCut SID_DRAW_ELLIPSECUT
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordManual;
     Synchron;
 
     /* status: */
@@ -8669,6 +8857,7 @@ SvxLongLRSpaceItem SetLongLeftRightMargin SID_ATTR_LONG_LRSPACE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8748,6 +8937,7 @@ SvxWeightItem Bold SID_ATTR_CHAR_WEIGHT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8774,6 +8964,7 @@ SvxUnderlineItem Underline SID_ATTR_CHAR_UNDERLINE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8800,6 +8991,7 @@ SfxBoolItem ShowRuler SID_RULER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8826,6 +9018,7 @@ SfxBoolItem Flash SID_ATTR_FLASH
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8852,6 +9045,7 @@ XFillGradientItem FillGradient SID_ATTR_FILL_GRADIENT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8878,6 +9072,7 @@ XFillColorItem FillColor SID_ATTR_FILL_COLOR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8904,6 +9099,7 @@ XFillBitmapItem FillBitmap SID_ATTR_FILL_BITMAP
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8930,6 +9126,7 @@ SvxLineSpacingItem LineSpacing SID_ATTR_PARA_LINESPACE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8956,6 +9153,7 @@ SvxFmtKeepItem ParaKeepTogether SID_ATTR_PARA_KEEP
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8982,6 +9180,7 @@ SvxPaperBinItem PagePaperBin SID_ATTR_PAGE_PAPERBIN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9058,6 +9257,7 @@ SfxBoolItem SpacePara2 SID_ATTR_PARA_LINESPACE_20
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9084,6 +9284,7 @@ SfxBoolItem SpacePara15 SID_ATTR_PARA_LINESPACE_15
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9135,6 +9336,7 @@ SvxPageItem PageStyle SID_ATTR_PAGE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9186,6 +9388,7 @@ SvxHyphenZoneItem SetHyphenZone SID_ATTR_PARA_HYPHENZONE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9212,6 +9415,7 @@ SfxBoolItem LeftPara SID_ATTR_PARA_ADJUST_LEFT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9238,6 +9442,7 @@ SfxBoolItem CenterPara SID_ATTR_PARA_ADJUST_CENTER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9264,6 +9469,7 @@ SfxBoolItem JustifyPara SID_ATTR_PARA_ADJUST_BLOCK
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9290,6 +9496,7 @@ SvxPostureItem Italic SID_ATTR_CHAR_POSTURE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9316,6 +9523,7 @@ SvxCaseMapItem CaseMap SID_ATTR_CHAR_CASEMAP
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9342,6 +9550,7 @@ SfxBoolItem DesignMode SID_FM_DESIGN_MODE
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9368,6 +9577,7 @@ SfxBoolItem BezierMove SID_BEZIER_MOVE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9394,6 +9604,7 @@ SvxLanguageItem Language SID_ATTR_CHAR_LANGUAGE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9420,6 +9631,7 @@ SvxZoomItem Zoom SID_ATTR_ZOOM
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9446,6 +9658,7 @@ SvxCrossedOutItem Strikeout SID_ATTR_CHAR_STRIKEOUT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9472,6 +9685,7 @@ SvxColumnItem RulerBorders SID_RULER_BORDERS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9498,6 +9712,7 @@ SvxAutoKernItem PairKerning SID_ATTR_CHAR_AUTOKERN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9524,6 +9739,7 @@ SfxBoolItem FontWork SID_FONTWORK
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9550,6 +9766,7 @@ SvxEscapementItem Escapement SID_ATTR_CHAR_ESCAPEMENT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9576,6 +9793,7 @@ SvxFontItem CharFontName SID_ATTR_CHAR_FONT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9752,6 +9970,7 @@ SfxBoolItem ImageControl SID_INSERT_IMAGECONTROL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9778,6 +9997,7 @@ SfxBoolItem ProgressBar SID_INSERT_PROGRESSBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9804,6 +10024,7 @@ SfxBoolItem HFixedLine SID_INSERT_HFIXEDLINE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9830,6 +10051,7 @@ SfxBoolItem VFixedLine SID_INSERT_VFIXEDLINE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9856,6 +10078,7 @@ SfxBoolItem DateField SID_INSERT_DATEFIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9882,6 +10105,7 @@ SfxBoolItem TimeField SID_INSERT_TIMEFIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9908,6 +10132,7 @@ SfxBoolItem NumericField SID_INSERT_NUMERICFIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9934,6 +10159,7 @@ SfxBoolItem CurrencyField SID_INSERT_CURRENCYFIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9960,6 +10186,7 @@ SfxBoolItem FormattedField SID_INSERT_FORMATTEDFIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9986,6 +10213,7 @@ SfxBoolItem PatternField SID_INSERT_PATTERNFIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -10012,6 +10240,7 @@ SfxBoolItem FileControl SID_INSERT_FILECONTROL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -10038,6 +10267,7 @@ SfxBoolItem ShowPropBrowser SID_SHOW_PROPERTYBROWSER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -10064,6 +10294,7 @@ SfxBoolItem DSBrowserExplorer SID_DSBROWSER_EXPLORER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -10090,6 +10321,7 @@ TbxImageItem GraphicFilterToolbox SID_GRFFILTER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -10416,6 +10648,7 @@ SfxBoolItem AutoControlFocus SID_FM_AUTOCONTROLFOCUS
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -10442,6 +10675,7 @@ SfxBoolItem VerticalText SID_ATTR_CHAR_VERTICAL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -10468,6 +10702,7 @@ SfxBoolItem VerticalCaption SID_DRAW_CAPTION_VERTICAL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -10494,6 +10729,7 @@ SfxBoolItem TextdirectionLeftToRight SID_TEXTDIRECTION_LEFT_TO_RIGHT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -10520,6 +10756,7 @@ SfxBoolItem TextdirectionTopToBottom SID_TEXTDIRECTION_TOP_TO_BOTTOM
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -10546,6 +10783,7 @@ SvxClipboardFmtItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -10572,6 +10810,7 @@ SfxStringListItem GetUndoStrings SID_GETUNDOSTRINGS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -10598,6 +10837,7 @@ SfxStringListItem GetRedoStrings SID_GETREDOSTRINGS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -10624,6 +10864,7 @@ SfxBoolItem ReadOnlyMode SID_READONLY_MODE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -10650,6 +10891,7 @@ SfxBoolItem Gallery SID_ATTR_AUTO_COLOR_INVALID
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -10676,6 +10918,7 @@ SvxLRSpaceItem RulerBorderDistance SID_RULER_BORDER_DISTANCE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -10727,6 +10970,7 @@ SvxTabStopItem TabstopsVertical SID_ATTR_TABSTOP_VERTICAL
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -10753,6 +10997,7 @@ SvxColumnItem RulerBordersVertical SID_RULER_BORDERS_VERTICAL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,

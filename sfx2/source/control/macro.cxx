@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macro.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -59,31 +59,18 @@
  *
  ************************************************************************/
 
-#ifndef _ARGS_HXX //autogen
-#include <svtools/args.hxx>
+#ifdef DEBUG
+#include <tools/stream.hxx>
 #endif
 
-#ifndef _SBXVAR_HXX //autogen
-#include <svtools/sbxvar.hxx>
-#endif
-#pragma hdrstop
-
-#include <app.hxx>
-#include <module.hxx>
-#include <shell.hxx>
-#include <request.hxx>
-#include <objsh.hxx>
-#include <viewsh.hxx>
-#include <viewfrm.hxx>
-#include <msg.hxx>
-#include <macro.hxx>
-#include <sfxtypes.hxx>
+#include "macro.hxx"
+#include "request.hxx"
+#include "msg.hxx"
 
 //====================================================================
 
 SV_DECL_PTRARR_DEL( SfxStatements_Impl, SfxMacroStatement*, 16, 8 );
 SV_IMPL_PTRARR( SfxStatements_Impl, SfxMacroStatement* );
-TYPEINIT1(SfxMacroItem,SfxPoolItem);
 
 //--------------------------------------------------------------------
 
@@ -98,7 +85,6 @@ struct SfxMacro_Impl
     SfxMacroMode        eMode;  /*  Zweck der <SfxMacro>-Instanz,
                                     Bedeutung siehe enum <SfxMacroMode> */
     SfxStatements_Impl  aList;  /*  Liste von aufgezeichneten Statements */
-    USHORT              nObjNo; //  Durchnumerierung der SbxObjects
 };
 
 //====================================================================
@@ -110,7 +96,7 @@ SfxMacroStatement::SfxMacroStatement
     BOOL            bAbsolute,      // obsolet
     const SfxSlot&  rSlot,          // der <SfxSlot>, der das Statement abspielen kann
     BOOL            bRequestDone,   // wurde der Request tats"achlich ausgef"uhrt
-    SfxArguments*   pArguments      // aktuelle Parameter  (werden "ubernommen)
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
 )
 
 /*  [Beschreibung]
@@ -162,14 +148,14 @@ SfxMacroStatement::SfxMacroStatement
 */
 
 :   nSlotId( rSlot.GetSlotId() ),
-    pArgs( pArguments ),
+    aArgs( rArgs ),
     bDone( bRequestDone ),
     pDummy( 0 )
 {
     // Workaround Recording nicht exportierter Slots (#25386#)
     if ( !rSlot.pName )
         return;
-
+/*
     // Objekt-Typ bestimmen
     FASTBOOL bIsApp = rShell.ISA(SfxApplication);
     FASTBOOL bIsDoc = rShell.ISA(SfxObjectShell);
@@ -200,7 +186,7 @@ SfxMacroStatement::SfxMacroStatement
             else if ( rShell.ISA(SfxViewFrame) )
             {
                 aStatement = 0x005B;
-                aStatement += rShell.GetSbxObject()->GetName();
+                aStatement += String::CreateFromAscii("ViewFrame");//rShell.GetSbxObject()->GetName();
                 aStatement += 0x005D;
             }
 
@@ -209,7 +195,7 @@ SfxMacroStatement::SfxMacroStatement
                 // an der View oder Sub-Shell
                 SfxViewShell *pViewShell = rShell.GetViewShell();
                 aStatement = 0x005B;
-                aStatement += pViewShell->GetViewFrame()->GetSbxObject()->GetName();
+                aStatement += String::CreateFromAscii("ViewShell");//pViewShell->GetViewFrame()->GetSbxObject()->GetName();
                 aStatement += 0x005D;
                 if ( !rShell.ISA(SfxViewFrame) )
                     // an einer Sub-Shell zus"atlich ï.Selectionï anh"angen
@@ -239,7 +225,7 @@ SfxMacroStatement::SfxMacroStatement
                 aStatement = DEFINE_CONST_UNICODE("Selection");
         }
     }
-/*
+
     if ( bIsSel )
     {
         // bei Selection ggf. noch den Namen der SubShell anh"angen
@@ -262,9 +248,10 @@ SfxMacroStatement::SfxMacroStatement
             DBG_ASSERT( rSlot.pName[0] != '0', "recording unnamed object" );
     }
 */
+    aStatement = DEFINE_CONST_UNICODE("Selection");
+
     // an diesen Objekt-Ausdruck den Methoden-/Property-Namen und Parameter
-    GenerateNameAndArgs_Impl( SfxRequest::GetRecordingMacro(),
-                              rSlot, bRequestDone, pArgs);
+    GenerateNameAndArgs_Impl( SfxRequest::GetRecordingMacro(), rSlot, bRequestDone, aArgs);
 }
 
 //--------------------------------------------------------------------
@@ -274,7 +261,7 @@ SfxMacroStatement::SfxMacroStatement
     const String&   rTarget,        // Objekt, was beim Playing angesprochen wird
     const SfxSlot&  rSlot,          // der <SfxSlot>, der das Statement abspielen kann
     BOOL            bRequestDone,   // wurde der Request tats"achlich ausgef"uhrt
-    SfxArguments*   pArguments      // aktuelle Parameter (werden "ubernommen)
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
 )
 
 /*  [Beschreibung]
@@ -287,14 +274,13 @@ SfxMacroStatement::SfxMacroStatement
 */
 
 :   nSlotId( rSlot.GetSlotId() ),
-    pArgs( pArguments ),
+    aArgs( rArgs ),
     bDone( bRequestDone ),
     pDummy( 0 )
 {
     aStatement = rTarget;
     aStatement += 0x002E; // '.' = 2Eh
-    GenerateNameAndArgs_Impl( SfxRequest::GetRecordingMacro(),
-            rSlot, bRequestDone, pArgs);
+    GenerateNameAndArgs_Impl( SfxRequest::GetRecordingMacro(), rSlot, bRequestDone, aArgs);
 }
 
 //--------------------------------------------------------------------
@@ -321,7 +307,6 @@ SfxMacroStatement::SfxMacroStatement
 
 :   aStatement( rStatement ),
     nSlotId( 0 ),
-    pArgs( 0 ),
     bDone( TRUE ),
     pDummy( 0 )
 {
@@ -341,12 +326,10 @@ SfxMacroStatement::SfxMacroStatement
 
 :   aStatement( rOrig.aStatement ),
     nSlotId( rOrig.nSlotId ),
-    pArgs( 0 ),
     bDone( rOrig.bDone ),
     pDummy( 0 )
 {
-    if ( rOrig.pArgs )
-        pArgs = new SfxArguments( *rOrig.pArgs );
+    aArgs = rOrig.aArgs;
 }
 
 //--------------------------------------------------------------------
@@ -360,7 +343,6 @@ SfxMacroStatement::~SfxMacroStatement()
 */
 
 {
-    delete pArgs;
 }
 
 //--------------------------------------------------------------------
@@ -370,7 +352,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
     SfxMacro*       pMacro,         // darin wird aufgezeichnet
     const SfxSlot&  rSlot,          // der Slot, der das Statement abspielen kann
     BOOL            bRequestDone,   // TRUE=wurde ausgef"uhrt, FALSE=abgebrochen
-    SfxArguments*   pArgs           // die aktuellen Parameter
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
 )
 
 /*  [Beschreibung]
@@ -382,7 +364,6 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
 */
 
 {
-    // ï.ï zwsischen Object und Prop/Meth-Name
     // '.' = 2Eh
     if ( aStatement.Len() && aStatement.GetChar( aStatement.Len() - 1 ) != 0x002E &&
         rSlot.pName[0] != 0x002E )
@@ -396,116 +377,93 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
         aStatement += DEFINE_CONST_UNICODE(" = ");
 
     // alle zusammengesuchten Parameter rausschreiben
-    if ( pArgs && pArgs->Count() ) // Abfrage doppelt wegen BLC-Bug
-        for ( USHORT nArg = 0; nArg < pArgs->Count(); ++nArg )
+    if ( aArgs.getLength() )
+        for ( USHORT nArg = 0; nArg < aArgs.getLength(); ++nArg )
         {
             // den Parameter textuell darstellen
             String aArg;
-            const SbxVariable& rVar = pArgs->Get(nArg);
-            switch ( rVar.GetType() & (2*SbxUSERn+1) )
+            ::com::sun::star::uno::Any& rValue = aArgs[nArg].Value;
+            ::com::sun::star::uno::Type pType = rValue.getValueType();
+            if ( pType == ::getBooleanCppuType() )
             {
-                case SbxEMPTY:
-                case SbxNULL:
-                    // kein Argument
-                    break;
+                sal_Bool bTemp;
+                rValue >>= bTemp;
+                aArg = bTemp ? DEFINE_CONST_UNICODE("TRUE") : DEFINE_CONST_UNICODE("FALSE");
+            }
+            else if ( pType == ::getCppuType((const sal_Int16*)0) )
+            {
+                sal_uInt16 nTemp;
+                rValue >>= nTemp;
+                aArg = String::CreateFromInt32( (sal_Int32) nTemp );
+            }
+            else if ( pType == ::getCppuType((const sal_Int32*)0) )
+            {
+                sal_uInt32 nTemp;
+                rValue >>= nTemp;
+                aArg = String::CreateFromInt32( nTemp );
+            }
+            else if ( pType == ::getCppuType((const ::rtl::OUString*)0) )
+            {
+                ::rtl::OUString sTemp;
+                rValue >>= sTemp;
 
-                case SbxSTRING:
+                // Anf"uhrungszeichen werden verdoppelt
+                XubString aRecordable( sTemp );
+                USHORT nPos = 0;
+                while ( TRUE )
                 {
-                    // Anf"uhrungszeichen werden verdoppelt
-                    XubString aRecordable( rVar.GetString() );
-                    USHORT nPos = 0;
-                    while ( TRUE )
-                    {
-                        nPos = aRecordable.SearchAndReplace( DEFINE_CONST_UNICODE('"'), DEFINE_CONST_UNICODE("\"\""), nPos );
-                        if ( STRING_NOTFOUND == nPos )
-                            break;
-                        nPos += 2;
-                    }
+                    nPos = aRecordable.SearchAndReplace( DEFINE_CONST_UNICODE('"'), DEFINE_CONST_UNICODE("\"\""), nPos );
+                    if ( STRING_NOTFOUND == nPos )
+                        break;
+                    nPos += 2;
+                }
 
-                    // nicht druckbare Zeichen werden als chr$(...) geschrieben
-                    FASTBOOL bPrevReplaced = FALSE;
-                    for ( USHORT n = 0; n < aRecordable.Len(); ++n )
+                // nicht druckbare Zeichen werden als chr$(...) geschrieben
+                FASTBOOL bPrevReplaced = FALSE;
+                for ( USHORT n = 0; n < aRecordable.Len(); ++n )
+                {
+                    sal_Unicode cChar = aRecordable.GetChar(n);
+                    if ( !( cChar>=32 && cChar!=127 ) ) // ALS ERSATZ FUER String::IsPrintable()!
                     {
-                        sal_Unicode cChar = aRecordable.GetChar(n);
-                        if ( !( cChar>=32 && cChar!=127 ) ) // ALS ERSATZ FUER String::IsPrintable()!
+                        XubString aReplacement( DEFINE_CONST_UNICODE("+chr$(") );
+                        aReplacement += cChar;
+
+                        if ( bPrevReplaced )
                         {
-                            XubString aReplacement( DEFINE_CONST_UNICODE("+chr$(") );
-                            aReplacement += cChar;
-
-                            if ( bPrevReplaced )
-                            {
-                                aRecordable.Insert( aReplacement, n - 2 );
-                                n += aReplacement.Len();
-                                aRecordable.SetChar((unsigned short) (n-2), 0x0029);// ')' = 29h
-                                aRecordable.Replace( n-1, 2, DEFINE_CONST_UNICODE("+\"") );
-                                // ++n;
-                            }
-                            else
-                            {
-                                aReplacement += DEFINE_CONST_UNICODE(")+\"");
-                                aRecordable.SetChar(n, 0x0022 );// '"' = 22h
-                                aRecordable.Insert( aReplacement, n + 1 );
-                                n += aReplacement.Len();
-                            }
-                            bPrevReplaced = TRUE;
+                            aRecordable.Insert( aReplacement, n - 2 );
+                            n += aReplacement.Len();
+                            aRecordable.SetChar((unsigned short) (n-2), 0x0029);// ')' = 29h
+                            aRecordable.Replace( n-1, 2, DEFINE_CONST_UNICODE("+\"") );
+                            // ++n;
                         }
                         else
-                            bPrevReplaced = FALSE;
+                        {
+                            aReplacement += DEFINE_CONST_UNICODE(")+\"");
+                            aRecordable.SetChar(n, 0x0022 );// '"' = 22h
+                            aRecordable.Insert( aReplacement, n + 1 );
+                            n += aReplacement.Len();
+                        }
+                        bPrevReplaced = TRUE;
                     }
+                    else
+                        bPrevReplaced = FALSE;
 
                     // Argument in Anf"uhrungszeichen
                     aArg = 0x0022; // '"' = 22h
                     aArg += aRecordable;
                     aArg += 0x0022;
-                    break;
                 }
-
-                case SbxBOOL:
-                {
-                    // symbolisch als TRUE und FALSE
-                    aArg = rVar.GetBool() ? DEFINE_CONST_UNICODE("TRUE") : DEFINE_CONST_UNICODE("FALSE");
-                    break;
-                }
-
+/*
                 case SbxBYTE:
                 {
                     // als Zahl darstellen
                     aArg = (USHORT) rVar.GetByte();
                     break;
                 }
-
-                case SbxOBJECT:
-                {
-                    HACK(only an experimental implementation)
-                    SbxObjectRef xObj = (SbxObject*) rVar.GetObject();
-
-                    // einen Objektnamen generieren
-                    String aObjectName( 'a' );
-                    aObjectName += xObj->GetClassName();
-                    aObjectName += pMacro->NextObjectNo();
-
-                    // das Objekt mit Daten belegen
-                    String aObjectDef( DEFINE_CONST_UNICODE("\nDIM ") );
-                    aObjectDef += aObjectName;
-                    aObjectDef += DEFINE_CONST_UNICODE(" AS NEW ");
-                    aObjectDef += xObj->GetClassName();
-                    aObjectDef += DEFINE_CONST_UNICODE("\nWITH ");
-                    aObjectDef += aObjectName;
-                    aObjectDef += DEFINE_CONST_UNICODE("\n");
-                    aObjectDef += xObj->GenerateSource( DEFINE_CONST_UNICODE("\t"), 0 );
-                    aObjectDef += DEFINE_CONST_UNICODE("\nEND WITH\n");
-                    aStatement.Insert( aObjectDef, 0 );
-                    aObjectDef += DEFINE_CONST_UNICODE("\n\n");
-
-                    // Objektname als Parameter anh"angen
-                    aArg = aObjectName;
-                    break;
-                }
-
-                default:
-                    // alles andere als String ohne Anf"uhrungszeichen
-                    aArg = rVar.GetString();
+*/
             }
+            else if ( pType != ::getVoidCppuType() )
+                DBG_ERROR("Unknown Type in recorder!");
 
             // den Parameter anh"angen
             aStatement += aArg;
@@ -513,7 +471,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
         }
 
     // Statement beeden
-    if ( pArgs && pArgs->Count() )
+    if ( aArgs.getLength() )
         aStatement.Erase( aStatement.Len() - 2, 1 );
     else
         aStatement.Erase( aStatement.Len() - 1, 1 );
@@ -555,7 +513,6 @@ SfxMacro::SfxMacro
 
 {
     pImp->eMode = eMode;
-    pImp->nObjNo = 0;
 }
 
 //--------------------------------------------------------------------
@@ -576,13 +533,9 @@ SfxMacro::~SfxMacro()
 */
 
 {
-#ifdef DBG_UTIL
-#ifdef MAC
-    SvFileStream aStream( DEFINE_CONST_UNICODE("record.bas"), STREAM_STD_WRITE );
-#else
-    SvFileStream aStream( DEFINE_CONST_UNICODE("/tmp/record.bas"), STREAM_STD_WRITE );
-#endif
-    aStream.WriteLine( ByteString(U2S(GenerateSource())) );
+#ifdef DEBUG
+    SvFileStream aStream( String::CreateFromAscii("file:///f:/testmacro.bas" ), STREAM_STD_READWRITE | STREAM_TRUNC );
+    aStream << ByteString( GenerateSource(), RTL_TEXTENCODING_UTF8 ).GetBuffer();
 #endif
     delete pImp;
 }
@@ -604,22 +557,6 @@ SfxMacroMode SfxMacro::GetMode() const
 
 {
     return pImp->eMode;
-}
-
-//--------------------------------------------------------------------
-
-USHORT SfxMacro::NextObjectNo()
-
-/*  [Beschreibung]
-
-    Liefert eine Nummer, die als Namens-Erweiterung f"ur SbxObjects,
-    die per DIM angelegt werden m"ussen, verwendet werden kann. Bei jedem
-    Abfragen kommt eine um 1 erh"ohte Nummer zur"uck, die in diesem Makro
-    einmalig ist.
-*/
-
-{
-    return ++pImp->nObjNo;
 }
 
 //--------------------------------------------------------------------
@@ -648,8 +585,7 @@ void SfxMacro::Record
 */
 
 {
-    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING,
-                "invalid call to non-recording SfxMacro" );
+    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
     pImp->aList.C40_INSERT( SfxMacroStatement, pStatement, pImp->aList.Count() );
 }
 
@@ -693,8 +629,7 @@ void SfxMacro::Replace
 */
 
 {
-    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING,
-                "invalid call to non-recording SfxMacro" );
+    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
     DBG_ASSERT( pImp->aList.Count(), "no replaceable statement available" )
     pImp->aList.Remove( pImp->aList.Count() - 1 );
     pImp->aList.C40_INSERT( SfxMacroStatement,pStatement, pImp->aList.Count() );
@@ -735,8 +670,7 @@ void SfxMacro::Remove()
 */
 
 {
-    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING,
-                "invalid call to non-recording SfxMacro" );
+    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
     DBG_ASSERT( pImp->aList.Count(), "no replaceable statement available" )
     pImp->aList.Remove( pImp->aList.Count() - 1 );
 }
@@ -764,8 +698,7 @@ const SfxMacroStatement* SfxMacro::GetLastStatement() const
 */
 
 {
-    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING,
-                "invalid call to non-recording SfxMacro" );
+    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
     if ( pImp->aList.Count() )
         return pImp->aList.GetObject( pImp->aList.Count() - 1 );
     return 0;
@@ -790,8 +723,7 @@ String SfxMacro::GenerateSource() const
 */
 
 {
-    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING,
-                "invalid call to non-recording SfxMacro" );
+    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
     String aSource;
     for ( USHORT n = 0; n < pImp->aList.Count(); ++n )
     {
@@ -802,57 +734,4 @@ String SfxMacro::GenerateSource() const
 
     return aSource;
 }
-
-//--------------------------------------------------------------------
-
-SbxError SfxMacro::Call
-(
-    SbxArray*   pArgs           // aktuelle Parameter f"ur den Aufruf
-)
-
-/*  [Beschreibung]
-
-    Diese Methode sollte von Suklassen "uberladen werden, damit der
-    SFx das in der Ableitung beschriebene BASIC-Programm rufen kann,
-    wenn es an ein Event oder in einem Controller gebunden ist.
-
-    Der Aufruf ist nur g"ultig, wenn es sich um ein SfxMacro handelt,
-    welches mit SFX_MACRO_RECORDINGABSOLUTE oder SFX_MACRO_RECORDINGRELATIVE
-    konstruiert wurde.
-
-    Die Basisimplementierung liefert immer SbxERR_NOTIMP zur"uck.
-
-
-    [Anmerkung]
-
-    I.d.R. ist pArgs == 0, der Parameter ist f"ur Zuk"unftige Erweiterungen
-    gedacht.
-*/
-
-{
-    return SbxERR_NOTIMP;
-}
-
-//--------------------------------------------------------------------
-
-SfxMacroItem::SfxMacroItem( USHORT nWhich, SfxMacro *pTheMacro )
-:   SfxPoolItem( nWhich ),
-    pMacro( pTheMacro )
-{
-}
-
-//--------------------------------------------------------------------
-
-SfxPoolItem* SfxMacroItem::Clone( SfxItemPool *pPool ) const
-{
-    return new SfxMacroItem( Which(), pMacro );
-}
-
-//--------------------------------------------------------------------
-
-int SfxMacroItem::operator==( const SfxPoolItem &rOther ) const
-{
-    return pMacro == ((const SfxMacroItem&)rOther).pMacro;
-}
-
 

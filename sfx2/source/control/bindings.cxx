@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-07 18:07:50 $
+ *  last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1592,7 +1592,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
         const sal_uInt16 nSlotId = pRealSlot->GetSlotId();
         aReq.SetSlot( nSlotId );
         aReq.AppendItem( SfxAllEnumItem( rPool.GetWhich(nSlotId), pSlot->GetValue() ) );
-        pDispatcher->_Execute( *pShell, *pRealSlot, aReq, aReq.GetCallMode() );
+        pDispatcher->_Execute( *pShell, *pRealSlot, aReq, aReq.GetCallMode() | SFX_CALLMODE_RECORD );
     }
     else if ( SFX_KIND_ATTR == pSlot->GetKind() )
     {
@@ -1663,10 +1663,10 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                 DBG_ERROR( "suspicious Toggle-Slot" );
         }
 
-        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() );
+        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() | SFX_CALLMODE_RECORD );
     }
     else
-        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() );
+        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() | SFX_CALLMODE_RECORD );
 }
 
 //--------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-07 14:47:07 $
+ *  last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,11 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
     SfxApplication *pSfxApp = SFX_APP();
     if ( rSlot.IsMode(SFX_SLOT_FASTCALL) || rShell.CanExecuteSlot_Impl(rSlot) )
     {
+        // ggf. Recording anwerfen
+        SfxMacro *pMacro = GetFrame() ? GetFrame()->GetRecordingMacro_Impl() : NULL;
+        if ( bRecord && pMacro && !rSlot.IsMode(SFX_SLOT_NORECORD) )
+            rReq.Record_Impl( rShell, rSlot, pMacro );
+
         // ggf. die Bindings locken (MI: warum?)
         SfxBindings *pBindings = GetBindings();
 #if modal_mode_sinnlos
