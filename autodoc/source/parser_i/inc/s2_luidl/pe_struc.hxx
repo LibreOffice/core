@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_struc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,9 +264,11 @@ class PE_Struct : public UnoIDL_PE
     virtual void        TransferData();
     virtual void        ReceiveData();
 
-    public: void        store_Struct(); private:
+    public:
 
-    friend class PE_StructState;
+    void        store_Struct();
+
+    private:
 
     S_Stati &           Stati()                 { return *pStati; }
     S_Work &            Work()                  { return aWork; }
