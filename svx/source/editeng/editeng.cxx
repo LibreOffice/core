@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-26 15:11:35 $
+ *  last change: $Author: mt $ $Date: 2002-09-06 11:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,18 @@ BOOL EditEngine::IsVertical() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->IsVertical();
+}
+
+void EditEngine::SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->SetDefaultHorizontalTextDirection( eHTextDir );
+}
+
+EEHorizontalTextDirection EditEngine::GetDefaultHorizontalTextDirection() const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->GetDefaultHorizontalTextDirection();
 }
 
 USHORT EditEngine::GetScriptType( const ESelection& rSelection ) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-28 15:20:20 $
+ *  last change: $Author: mt $ $Date: 2002-09-06 11:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,6 +481,8 @@ private:
     USHORT              nAsianCompressionMode;
     BOOL                bKernAsianPunctuation;
 
+    EEHorizontalTextDirection eDefaultHorizontalTextDirection;
+
     sal_uInt16          nBigTextObjectStart;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 > xSpeller;
@@ -720,6 +722,10 @@ public:
 
     void                    SetVertical( BOOL bVertical );
     BOOL                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
+
+    void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir ) { eDefaultHorizontalTextDirection = eHTextDir; }
+    EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const { return eDefaultHorizontalTextDirection; }
+
 
     void                    InitWritingDirections( USHORT nPara );
     BOOL                    IsRightToLeft( USHORT nPara ) const;
