@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:07:10 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,6 @@ String STR_PAGE_COUNT_MACRO
         FN_INSERT_CAPTION;\
         FN_INSERT_REF_FIELD;\
         FN_INSERT_REGION;\
-        SID_AUTOSPELL_CHECK;\
         SID_EXTRUSION_TOOGLE;\
         SID_EXTRUSION_TILT_DOWN;\
         SID_EXTRUSION_TILT_UP;\
