@@ -4214,7 +4214,7 @@ SfxVoidItem InsertFrame FN_INSERT_FRAME
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertFrameInteract FN_INSERT_FRAME_INTERACT
-()
+(SfxUInt16Item Columns SID_ATTR_COLUMNS, SfxUInt16Item Modifier SID_MODIFIER)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6492,7 +6492,7 @@ SfxVoidItem PreviewPrintOptions FN_PREVIEW_PRINT_OPTIONS
 
 //--------------------------------------------------------------------------
 SfxVoidItem PreviewZoom FN_PREVIEW_ZOOM
-()
+( SfxUInt16Item PreviewZoom FN_PREVIEW_ZOOM )
 [
     /* flags: */
     AutoUpdate = FALSE,
