@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:44:10 $
+ *  last change: $Author: mtg $ $Date: 2001-10-17 16:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1408,7 +1408,7 @@ sal_Bool SwXTextViewCursor::jumpToNextPage(void) throw( uno::RuntimeException )
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
     if(pView)
-        pView->GetWrtShell().SttNxtPg();
+        bRet = pView->GetWrtShell().SttNxtPg();
     else
         throw uno::RuntimeException();
     return bRet;
