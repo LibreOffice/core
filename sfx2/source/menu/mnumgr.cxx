@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 11:02:18 $
+ *  last change: $Author: cd $ $Date: 2002-05-22 15:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,7 @@ void SfxMenuManager::UseDefault()
         if ( Resource::GetResManager()->IsAvailable( aId ) )
         {
             MenuBar *pSvMenu = new MenuBar( ResId(GetType(), pResMgr) );
+            SfxMenuManager::EraseItemCmds( pSvMenu ); // Remove .uno cmds to be compatible with 6.0/src641
             TryToHideDisabledEntries_Impl( pSvMenu );
             pVMenu = new SfxVirtualMenu( pSvMenu, FALSE, *pBindings, bOLE, TRUE );
         }
@@ -573,6 +574,7 @@ void SfxMenuManager::UseDefault()
         aResId.SetRT(RSC_MENU);
         aResId.SetResMgr(pResMgr);
         Menu *pSVMenu = new PopupMenu( aResId );
+        SfxMenuManager::EraseItemCmds( pSVMenu ); // Remove .uno cmds to be compatible with 6.0/src641
 
         if ( bAddClipboardFuncs )
         {
@@ -1228,57 +1230,24 @@ BOOL SfxMenuBarManager::Load( SvStream& rStream, BOOL bOLEServer )
 }
 */
 
-// Menubars loaded from XML configuration doesn't have correct item ids as
-// the framework based implementation has no access to the SlotPool. This method
-// remaps the uno command names to the correct SlotIDs.
-void SfxMenuBarManager::RestoreSlotIds( Menu* pMenu, USHORT nPopupMenuId )
+// To be compatible to 6.0/src641 we have to erase .uno commands we got
+// from resource file. Otherwise these commands get saved to our XML configurations
+// files and 6.0/src641 is not able to map these to slot ids again!!!
+void SfxMenuManager::EraseItemCmds( Menu* pMenu )
 {
     USHORT nCount = pMenu->GetItemCount();
     for ( USHORT nSVPos = 0; nSVPos < nCount; nSVPos++ )
     {
         USHORT nId = pMenu->GetItemId( nSVPos );
-
         PopupMenu* pPopupMenu = pMenu->GetPopupMenu( nId );
         if ( pPopupMenu )
-            RestoreSlotIds( pPopupMenu, nId );
-        else
+            EraseItemCmds( pPopupMenu );
+        else if ( nId > 0 )
         {
-            if ( nId < SID_SFX_START )
-            {
-                String aLabel = pMenu->GetItemText( nId );
-                String aCommand = pMenu->GetItemCommand( nId );
-                if ( aCommand.CompareToAscii(".uno:", 5 ) == COMPARE_EQUAL )
-                {
-                    // Non mapped ID, have to retrieve ID from command name through matching it with SlotPool entries
-                    SfxShell *pShell=0;
-                    USHORT nIdx;
-                    for (nIdx=0; (pShell=pBindings->GetDispatcher()->GetShell(nIdx)); nIdx++)
-                    {
-                        const SfxInterface *pIFace = pShell->GetInterface();
-                        const SfxSlot* pSlot = pIFace->GetSlot( aCommand );
-                        if ( pSlot )
-                        {
-                            USHORT          nNewId      = pSlot->GetSlotId();
-                            ULONG           nHelpId     = pMenu->GetHelpId( nId );
-                            ULONG           nUserValue  = pMenu->GetUserValue( nId );
-                            MenuItemBits    nBits       = pMenu->GetItemBits( nId );
-
-                            // There is no VCL method to reset the item ID, so I have to remove/insert the menu entry
-                            pMenu->RemoveItem( nSVPos );
-                            pMenu->InsertItem( nNewId, aLabel, nBits, nSVPos );
-                            pMenu->SetUserValue( nNewId, nUserValue );
-                            pMenu->SetItemCommand( nNewId, aCommand );
-
-                            // Set help ID correctly
-                            if ( nHelpId > 0 )
-                                pMenu->SetHelpId( nNewId, nHelpId );
-                            else
-                                pMenu->SetHelpId( nNewId, nNewId );
-                            break;
-                        }
-                    }
-                }
-            }
+            // Remove .uno commands to be compatible with 6.0/src641
+            String aCommand = pMenu->GetItemCommand( nId );
+            if ( aCommand.CompareToAscii(".uno:", 5 ) == COMPARE_EQUAL )
+                pMenu->SetItemCommand( nId, String() );
         }
     }
 }
@@ -1616,8 +1585,6 @@ int SfxMenuBarManager::Load( SotStorage& rStorage )
         Menu *pSVMenu = LoadMenuBar( *xStream );
         if ( pSVMenu )
         {
-            // Restore slot ids
-            RestoreSlotIds( pSVMenu, 0 );
             Construct_Impl( pSVMenu, FALSE );
             SetDefault( FALSE );
             return ERR_OK;
