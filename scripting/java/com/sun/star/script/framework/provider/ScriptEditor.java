@@ -1,6 +1,6 @@
 package com.sun.star.script.framework.provider;
 
-import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.framework.container.ScriptMetaData;
 
 public interface ScriptEditor
