@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hdu $ $Date: 2002-12-05 17:04:26 $
+ *  last change: $Author: hdu $ $Date: 2002-12-12 18:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,6 +724,16 @@ bool SalGraphicsData::SetFont( const ImplFontSelectData *pEntry, int nFallbackLe
 {
     nFontOrientation_   = pEntry->mnOrientation;
     bFontVertical_      = pEntry->mbVertical;
+
+#ifdef DEBUG
+    ByteString aName( pEntry->maName, osl_getThreadTextEncoding() );
+    fprintf( stderr, "SetFont(lvl=%d,\"%s\",naa=%d,b=%d,i=%d)\n", nFallbackLevel, aName.GetBuffer(), pEntry->mbNonAntialiased, pEntry->meWeight, pEntry->meItalic );
+    if( pEntry->mpFontData )
+    {
+        aName = ByteString( pEntry->mpFontData->maName, osl_getThreadTextEncoding() );
+        fprintf( stderr, "\t(pFD=\"%s\",b=%d,i=%d)\n",aName.GetBuffer(),pEntry->mpFontData->meWeight,pEntry->mpFontData->meItalic);
+    }
+#endif
 
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
     {
@@ -1924,31 +1934,37 @@ ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 
 BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, bool /*bIsGlyphIndex*/, Rectangle& rRect, const OutputDevice* )
 {
-    if( maGraphicsData.mpServerFont[0] )
-    {
-        ServerFont& rSF = *maGraphicsData.mpServerFont[0];
-        const GlyphMetric& rGM = rSF.GetGlyphMetric( nGlyphIndex );
-        rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
-        return TRUE;
-    }
+    int nLevel = nGlyphIndex >> GF_FONTSHIFT;
+    if( nLevel >= MAX_FALLBACK )
+        return FALSE;
 
-    return FALSE;
+    ServerFont* pSF = maGraphicsData.mpServerFont[ nLevel ];
+    if( !pSF )
+        return FALSE;
+
+    nGlyphIndex &= ~GF_FONTMASK;
+    const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
+    rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
+    return TRUE;
 }
 
 // ---------------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, bool bIsGlyphIndex, PolyPolygon& rPolyPoly, const OutputDevice* )
+BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, bool /*bIsGlyphIndex*/, PolyPolygon& rPolyPoly, const OutputDevice* )
 {
-    BOOL bRet = FALSE;
+    int nLevel = nGlyphIndex >> GF_FONTSHIFT;
+    if( nLevel >= MAX_FALLBACK )
+        return FALSE;
 
-    if( maGraphicsData.mpServerFont[0] )
-    {
-        ServerFont& rSF = *maGraphicsData.mpServerFont[0];
-        if( bIsGlyphIndex && rSF.GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
-            bRet = TRUE;
-    }
+    ServerFont* pSF = maGraphicsData.mpServerFont[ nLevel ];
+    if( !pSF )
+        return FALSE;
 
-    return bRet;
+    nGlyphIndex &= ~GF_FONTMASK;
+    if( pSF->GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
+        return TRUE;
+
+    return FALSE;
 }
 
 //--------------------------------------------------------------------------
