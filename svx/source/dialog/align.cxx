@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:39:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
 // include ---------------------------------------------------------------
 
