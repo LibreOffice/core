@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:25:34 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 10:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7103,39 +7103,6 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ catalan ] = "Ha ocurrido un error al cargar este Control. Por ello se ha reemplazado con un comodín.";
     Text[ finnish ] = "Ohjainta ladattaessa on ilmennyt virhe. Ohjain korvattiin paikkamerkillä.";
 };
-String RID_STR_CREATECONTROLS_INVALIDSOURCE
-{
-    Text = "Sie können fuer diese Spalten in diesem Dokument keine Formular-Kontrollfelder anlegen:\n"
-            "Das Dokument gehört zu einer festen Datenbank ($docname$), die deshalb von allen Formular-Elementen als "
-            "Datenquelle benutzt wird.\n"
-            "Die von Ihnen benutzten Spalten gehören jedoch zu einer Tabelle oder Abfrage in einer anderen "
-            "Datenbank ($dropname$).";
-    Text [ english ] = "For this columns you can't create form controls within this document:\n"
-            "The document belongs to a fixed database ($docname$) which has to be used as data source for "
-            "all form elements.\n"
-            "But the columns You dropped are part of a table or query within another database ($dropname$).";
-    Text [ english_us ] = "You can't create form control fields in this document for these columns:\nThe document is part of a fixed database ($docname$) which is used as the data source by all form elements.\nThe columns used belong to a table or query in another database ($dropname$).";
-    Text[ portuguese ] = "Neste documento, é impossível criar para estas colunas campos de controlo para formulários.\nO documento pertence a uma base de dados fixa ($docname$) utilizada por todos os elementos de formulários como fonte de dados.\nAs colunas que eestá a utilizar pertencem a uma tabela ou consulta de outra base de dados ($dropname$).";
-    Text[ russian ] = "Ñîçäàòü ıëåìåíòû óïğàâëåíèÿ ôîğìóëÿğà äëÿ ñòîëáöà ıòîãî äîêóìåíòà íåâîçìîæíî:\nİòîò äîêóìåíò îòíîñèòñÿ ê ïîñòîÿííîé áàçå äàííûõ ($docname$), êîòîğàÿ èñïîëüçóåòñÿ êàê èñòî÷íèê äàííûõ äëÿ âñåõ ıëåìåíòîâ ôîğìóëÿğà.\nÈñïîëüçóåìûå Âàìè ñòîëáöû ïğèíàäëåæàò ê òàáëèöå èëè çàïğîñó èç äğóãîé áàçû äàííûõ ($dropname$).";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá äçìéïõñãŞóåôå óå áõôü ôï İããñáöï ğåäßá åëİã÷ïõ öüñìáò ãéá áõôİò ôéò óôŞëåò:\nÔï İããñáöï áíŞêåé óå ìéá óôáèåñŞ âÜóç äåäïìİíùí ($docname$) ç ïğïßá ÷ñçóéìïğïéåßôáé ãéá áõôü ôï ëüãï áğü üëá ôá óôïé÷åßá ôçò öüñìáò ùò ğñïİëåõóç ôùí äåäïìİíùí.\nÏé óôŞëåò ğïõ åğéëİîáôå áíŞêïõí üìùò óå İíáí ğßíáêá Ş İíá åñşôçìá êÜğïéáò Üëëçò âÜóçò äåäïìİíùí ($dropname$).";
-    Text[ dutch ] = "U kunt voor deze kolommen in dit document geen formuliercontrolevelden maken:\nhet document behoort tot een vaste database ($docname$), die daarom door alle formulierelementen als gegevensbron wordt gebruikt.\nDe door u gebruikte kolommen horen echter bij een tabel of query in een andere database ($docname$).";
-    Text[ french ] = "Aucun contrôle de formulaire ne peut être créé pour ces colonnes dans ce document :\ncelui-ci appartient à une base de données fixe ($docname$) qui est utilisée comme source de données par tous les éléments de formulaire.\nLes colonnes que vous utilisez font cependant partie d'une table ou d'une requête appartenant à une autre base de données ($dropname$).";
-    Text[ spanish ] = "Para estas columnas en este documento no puede crear campos de control:\nEl documento pertenece a una base de datos fija ($docname$), que es usada por todos los elementos del formulario como fuente de datos.\nLas columnas que usted usa pertenecen a una tabla o consulta en otra base de datos ($dropname$).";
-    Text[ italian ] = "Nelle colonne di questo documento non è possibile creare nessun campo di controllo per i formulari.\nIl documento appartiene a un database fisso ($docname$) che, in quanto tale, viene usato da tutti gli elementi del formulario come sorgente dati.\nLe colonne da voi usate appartengono a una tabella o a una query di un altro database ($dropname$).";
-    Text[ danish ] = "Du kan ikke oprette formularkontrolelementer for kolonnerne i dette dokument:\nDokumentet hører til en fast database ($docname$), som derfor bruges som datakilde af alle formular-elementer.\nDe kolonner, du bruger, hører dog til en tabel eller forespørgsel i en anden database ($dropname$).";
-    Text[ swedish ] = "Du kan inte skapa några formulärkontrollfält för de här kolumnerna i det här dokumentet:\nDokumentet hör till en fast databas ($docname$) som används som datakälla av alla formulärelement.\nMen kolumnerna som Du använder hör till en tabell eller sökning i en annan databas ($dropname$).";
-    Text[ polish ] = "Dla kolumn w tym dokumencie nie mozna utworzyc pól kontrolnych formularza:\nDokument ten jest czescia stalej bazy danych ($docname$), która wykorzystywana jest przez wszystkie elementy formularza jako zródlo danych.\nUzywane przez ciebie kolumny sa skladnikiem tabeli lub kwerendy innej bazy danych ($dropname$).";
-    Text[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚Å‚±‚ê‚ç‚Ì—ñ‚ÉÌ«°Ñ¥ºİÄÛ°Ù‚Íì¬‚Å‚«‚Ü‚¹‚ñB\nÄŞ·­ÒİÄ‚ªŒÅ’è‚µ‚½ÃŞ°ÀÍŞ°½‚É‚Â‚È‚ª‚Á‚Ä‚¢‚ÄA($docname$) ‚·‚×‚Ä‚ÌÌ«°Ñ—v‘f‚©‚ç‚à‚±‚ê‚ªÃŞ°À¿°½‚Æ‚µ‚Äg‚í‚ê‚é‚½‚ß‚Å‚·B\nw’è‚µ‚½—ñ‚Í•Ê‚ÌÃŞ°ÀÍŞ°½ ($dropname$) ‚ÌÃ°ÌŞÙA‚Ü‚½‚Í¸´Ø°‚É‚Â‚È‚ª‚Á‚Ä‚¢‚Ü‚·B";
-    Text[ korean ] = "ÀÌ ¹®¼­ÀÇ ÀÌ ¿­¿¡ ´ëÇØ¼­´Â Æû-ÄÁÆ®·Ñ ÇÊµå¸¦ »ı¼ºÇÒ ¼ö ¾ø½À´Ï´Ù:\n ¹®¼­´Â °íÁ¤µÈ µ¥ÀÌÅÍ º£ÀÌ½º($docname$)¿¡ ¼ÓÇÏ¸ç, µû¶ó¼­ ¸ğµç Æû ¿ä¼Ò¿¡ ÀÇÇØ µ¥ÀÌÅÍ¼Ò½º·Î¼­ »ç¿ëµË´Ï´Ù.\n ÇÏÁö¸¸ »ç¿ëÀÚ¿¡ ÀÇÇØ »ç¿ëµÈ¡¡¿­Àº ´Ù¸¥ µ¥ÀÌÅÍº£ÀÌ½º($dropname$)ÀÇ Ç¥ ¶Ç´Â ÁúÀÇ¿¡ ¼ÓÇÕ´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÎŞ·¨ÎªÎÄµµÖĞµÄÕâÒ»ÁĞ½¨Á¢±íµ¥¿ØÖÆ×Ö¶Î£º\nÕâ¸öÎÄµµ¹éÊôÓÚÒ»¸öÓÉËùÓĞ±íµ¥ÔªËØµ±×÷Êı¾İÔ´Ê¹ÓÃµÄÊı¾İ¿â($docname$)¡£\nÄúÊ¹ÓÃµÄÕâÒ»ÁĞÈ´¹éÊôÓÚÁíÒ»¸öÊı¾İ¿â($dropname$)ÖĞµÄÒ»¸ö±í¸ñ»òÕß²éÑ¯¡£";
-    Text[ chinese_traditional ] = "µLªk¬°³o­Ó¤å¥óªºÄæ¦ì«Ø¥ß±±¨î¶µ¡G\n³o­Ó¤å¥óÄİ©ó¤@­Ó©T©wªº¸ê®Æ®w¡C¦]¬°©Ò¦³ªí³æª«É²³£¨Ï¥Î³o­Ó¸ê®Æ®w¨Ó·½¡C\n¨Ï¥ÎªºÄæ¦ìÄİ©ó¥t¤@­Ó¸ê®Æ®w($dropname$)ªºªí®æ©M¬d¸ß¡C";
-    Text[ arabic ] = "áÇ íãßäß ÅäÔÇÁ ÍŞæá ÊÍßã ÎÇÕÉ ÈÇÓÊãÇÑÉ İí åĞÇ ÇáãÓÊäÏ áåĞå ÇáÃÚãÏÉ:\níäÊãí åĞÇ ÇáãÓÊäÏ Åáì ŞÇÚÏÉ ÈíÇäÇÊ ËÇÈÊÉ ($docname$) íÊã ÇÓÊÎÏÇãåÇ ãä ŞÈá ßÇİÉ ÚäÇÕÑ ÇáÇÓÊãÇÑÉ ßãÕÏÑ ááÈíÇäÇÊ. \nÃãÇ ÇáÃÚãÏÉ ÇáÊí ÊÓÊÎÏãåÇ İåí ÊäÊãí Åáì ÌÏæá Ãæ ÇÓÊİÓÇÑ İí ŞÇÚÏÉ ÈíÇäÇÊ ÃÎÑì ($dropname$).";
-    Text[ portuguese_brazilian ] = "For this columns you can't create form controls within this document:\nThe document belongs to a fixed database ($docname$) which has to be used as data source for all form elements.\nBut the columns You dropped are part of a table or query within another database ($dropname$).";
-    Text[ turkish ] = "Bu sütun için form komut öğeleri oluşturamazsınız:\nBelge, tüm form öğeleri tarafından veri kaynağı olarak kullanılan, sabit bir veritabanı ($docname$).\nAncak sizin kullandığınız sütunlar, başka bir veritabanındaki ($dropname$) tabl";
-    Text[ catalan ] = "Para estas columnas en este documento no puede crear campos de control:\nEl documento pertenece a una base de datos fija ($docname$), que es usada por todos los elementos del formulario como fuente de datos.\nLas columnas que usted usa pertenecen a una tabla o consulta en otra base de datos ($dropname$).";
-    Text[ finnish ] = "Et voi luoda lomakeohjauskenttiä näihin sarakkeisiin tässä asiakirjassa:\nAsiakirja ($docname$) on osa kiinteää tietokantaa, jota kaikki lomakeosat käyttävät tietolähteenä.\nSarakkeet kuuluvat toisen tietokannan taulukkoon tai kyselyyn ($dropna";
-};
-
 Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
 {
     String RID_SUB_GRIDCONTROL_WIZARD
