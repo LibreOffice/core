@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:31:35 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,9 @@ sal_Unicode GetVerticalChar( sal_Unicode nChar )
         // #104627# special treatment for some unicodes
         case 0x002C: nVert = 0x3001; break;
         case 0x002E: nVert = 0x3002; break;
-#if 0 // to few fonts have the compatibility forms, using
-      // them will then cause more trouble than good
-      // TODO: decide on a font specific basis
+#if 0  // to few fonts have the compatibility forms, using
+       // them will then cause more trouble than good
+       // TODO: decide on a font specific basis
         case 0x2018: nVert = 0xFE41; break;
         case 0x2019: nVert = 0xFE42; break;
         case 0x201C: nVert = 0xFE43; break;
@@ -456,7 +456,7 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
 
     UBiDiLevel nLevel = UBIDI_DEFAULT_LTR;
     if( mnFlags & SAL_LAYOUT_BIDI_RTL )
-        nLevel = UBIDI_DEFAULT_RTL;
+        nLevel = UBIDI_RTL;
 
     // prepare substring for BiDi analysis
     UErrorCode rcI18n = U_ZERO_ERROR;
@@ -474,15 +474,21 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
     }
 
     // run BiDi algorithm
-    int nRunCount = ubidi_countRuns( pLineBidi, &rcI18n );
+    int nRunCount = ubidi_countRuns( pLineBidi, &rcI18n);
     //maRuns.resize( 2 * nRunCount );
+    // TODO: see comment about #110273# below, remove when external issue fixed
+    const UBiDiLevel* pParaLevels = ubidi_getLevels( pParaBidi, &rcI18n);
     for( int i = 0; i < nRunCount; ++i )
     {
         int32_t nMinPos, nLength;
         UBiDiDirection nDir = ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nLength );
         int nPos0 = nMinPos + mnMinCharPos;
         int nPos1 = nPos0 + nLength;
-        bool bRTL = (nDir != UBIDI_LTR);
+#if 0
+        bool bRTL = (nDir == UBIDI_RTL);
+#else // workaround for #110273# (probably ICU problem TODO: analyze there)
+        bool bRTL = ((pParaLevels[ nPos0 ] & 1) != 0);
+#endif
 
         // remove control characters from runs by splitting it up
         if( !bRTL )
@@ -1339,10 +1345,6 @@ bool MultiSalLayout::AddFallback( SalLayout& rFallback,
     if( mnLevel >= MAX_FALLBACK )
         return false;
 
-    // TODO: remove test below when issues are fixed
-    if( mnUnitsPerPixel != rFallback.GetUnitsPerPixel() )
-        return false;
-
     mpFallbackFonts[ mnLevel ]  = pFallbackFont;
     mpLayouts[ mnLevel ]        = &rFallback;
     maFallbackRuns[ mnLevel-1 ] = rFallbackRuns;
@@ -1401,6 +1403,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         // now adjust the individual components
         if( n > 0 )
             aMultiArgs.maRuns = maFallbackRuns[ n-1 ];
+
         mpLayouts[n]->AdjustLayout( aMultiArgs );
 
         // remove unused parts of component
@@ -1447,7 +1450,8 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         if( n < nLevel )
         {
             // use base(n==0) or fallback(n>=1) level
-            mpLayouts[n]->MoveGlyph( nStartOld[n], nXPos );
+            long nNewPos = nXPos * mpLayouts[n]->GetUnitsPerPixel() / mnUnitsPerPixel;
+            mpLayouts[n]->MoveGlyph( nStartOld[n], nNewPos );
         }
         else
         {
@@ -1462,7 +1466,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         if( n >= 0 )
         {
             // use glyph from best matching layout
-            nXPos += nGlyphAdv[n];
+            nXPos += nGlyphAdv[n] * mnUnitsPerPixel / mpLayouts[n]->GetUnitsPerPixel();
 
             // complete this glyph cluster, then advance to next
             for( int nActivePos = nCharPos[0];; )
@@ -1472,7 +1476,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                     nStartNew[n], &nGlyphAdv[n], &nCharPos[n] );
                 if( !nValid[n] || (nCharPos[n] != nActivePos) )
                     break;
-                nXPos += nGlyphAdv[n];
+                nXPos += nGlyphAdv[n] * mnUnitsPerPixel / mpLayouts[n]->GetUnitsPerPixel();
             }
 
             // performance optimization (fallback level is completed)
@@ -1484,7 +1488,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         {
             // drop NotDef glyph from base layout
             mpLayouts[0]->DropGlyph( nStartOld[0] );
-            mpLayouts[0]->MoveGlyph( nStartNew[0], nXPos );
+            mpLayouts[0]->MoveGlyph( nStartNew[0], nXPos*mpLayouts[0]->GetUnitsPerPixel()/mnUnitsPerPixel );
 
             // get next glyph in base layout
             nStartOld[0] = nStartNew[0];
@@ -1548,10 +1552,13 @@ int MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
         SalLayout& rLayout = *mpLayouts[ n ];
         rLayout.FillDXArray( pCharWidths + nCharCount );
         for( int i = 0; i < nCharCount; ++i )
-            pCharWidths[ i ] += pCharWidths[ i + nCharCount ];
+        {
+            long w = pCharWidths[i+nCharCount] * mnUnitsPerPixel;
+            w /= rLayout.GetUnitsPerPixel();
+            pCharWidths[ i ] += w;
+        }
     }
 
-    // TODO: fix nUnitsPerPixel cases
     long nWidth = 0;
     for( int i = 0; i < nCharCount; ++i )
     {
@@ -1579,11 +1586,17 @@ long MultiSalLayout::FillDXArray( long* pCharWidths ) const
         for( int n = 1; n < mnLevel; ++n )
         {
             long nWidth = mpLayouts[n]->FillDXArray( pTempWidths );
+            nWidth *= mnUnitsPerPixel;
+            nWidth /= mpLayouts[n]->GetUnitsPerPixel();
             if( nMaxWidth < nWidth )
                 nMaxWidth = nWidth;
             if( pCharWidths )
                 for( int i = 0; i < nCharCount; ++i )
+                {
+                    pTempWidths[ i ] *= mnUnitsPerPixel;
+                    pTempWidths[ i ] /= mpLayouts[n]->GetUnitsPerPixel();
                     pCharWidths[ i ] += pTempWidths[ i ];
+                }
         }
     }
 
@@ -1606,7 +1619,11 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
             // TODO: fix exotic cases like partly fallback
             for( int i = 0; i < nMaxIndex; ++i )
                 if( pTempPos[i] >= 0 )
-                    pCaretXArray[i] = pTempPos[i];
+                {
+                    long w = pTempPos[i] * mnUnitsPerPixel;
+                    w /= mpLayouts[n]->GetUnitsPerPixel();
+                    pCaretXArray[i] = w;
+                }
         }
     }
 }
@@ -1634,7 +1651,15 @@ int MultiSalLayout::GetNextGlyphs( int nLen, long* pGlyphIdxAry, Point& rPos,
             int nFontTag = nLevel << GF_FONTSHIFT;
             nStart |= nFontTag;
             for( int i = 0; i < nRetVal; ++i )
+            {
+                if( pGlyphAdvAry )
+                {
+                    long w = pGlyphAdvAry[i] * mnUnitsPerPixel;
+                    w /= mpLayouts[nLevel]->GetUnitsPerPixel();
+                    pGlyphAdvAry[i] = w;
+                }
                 pGlyphIdxAry[ i ] |= nFontTag;
+            }
             rPos += maDrawBase;
             rPos += maDrawOffset;
             return nRetVal;
