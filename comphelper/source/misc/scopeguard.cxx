@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scopeguard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 14:00:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ ScopeGuard::~ScopeGuard()
 {
     if (m_func)
     {
-        if (m_bIgnoreExceptions)
+        if (m_excHandling == IGNORE_EXCEPTIONS)
         {
             try {
                 m_func();
