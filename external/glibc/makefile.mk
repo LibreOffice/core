@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: csaba.borbola $ $Date: 2000-09-22 18:23:26 $
+#   last change: $Author: pluby $ $Date: 2000-10-18 20:19:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,9 @@ patchsuffix=btm
 patchsuffix=sh
 .ENDIF
 .IF "$(OS)" == "SOLARIS"
+patchsuffix=sh
+.ENDIF
+.IF "$(OS)" == "MACOSX"
 patchsuffix=sh
 .ENDIF
 
