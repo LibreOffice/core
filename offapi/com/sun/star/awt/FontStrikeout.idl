@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontStrikeout.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:33 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,58 +68,50 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::FontStrikeout
 /** These values are used to specify the kind of strikeout.
 
-        <p>They may be expanded in future versions.
+    <p>They may be expanded in future versions.</p>
  */
 constants FontStrikeout
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontStrikeout::NONE
     /** specifies not to strike out the characters.
      */
     const short NONE = 0;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontStrikeout::SINGLE
     /** specifies to strike out the characters with a single line.
      */
     const short SINGLE = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontStrikeout::DOUBLE
     /** specifies to strike out the characters with a double line.
      */
     const short DOUBLE = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontStrikeout::DONTKNOW
     /** The strikeout mode is not specified.
      */
     const short DONTKNOW = 3;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontStrikeout::BOLD
     /** specifies to strike out the characters with a bold line.
      */
     const short BOLD = 4;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontStrikeout::SLASH
     /** specifies to strike out the characters with slashes.
      */
     const short SLASH = 5;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontStrikeout::X
     /** specifies to strike out the characters with X's.
      */
     const short X = 6;

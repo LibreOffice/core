@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontType.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:33 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,37 +68,32 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::FontType
 /** These values are used to specify the technology of the font representation.
 
-        <p>They may be expanded in future versions.
+    <p>They may be expanded in future versions.</p>
  */
 constants FontType
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontType::DONTKNOW
     /** The type of the font is not known.
      */
     const short DONTKNOW = 0;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontType::RASTER
     /** specifies a raster font.
      */
     const short RASTER = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontType::DEVICE
     /** specifies a device font.
      */
     const short DEVICE = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontType::SCALABLE
     /** specifies a scalable font.
      */
     const short SCALABLE = 4;
