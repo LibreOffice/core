@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-25 16:39:54 $
+ *  last change: $Author: ka $ $Date: 2002-03-05 15:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,10 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
         aEvtObject.OldValue = rOldValue;
 
         while( aIter != aTmpListeners.end() )
-            (*aIter++)->notifyEvent( aEvtObject );
+        {
+            (*aIter)->notifyEvent( aEvtObject );
+            aIter++;
+        }
     }
 }
 
@@ -339,8 +342,10 @@ void SAL_CALL ValueSetAcc::addEventListener( const uno::Reference< accessibility
 
         while( !bFound && ( aIter != mxEventListeners.end() ) )
         {
-            if( *aIter++ == rxListener )
+            if( *aIter == rxListener )
                 bFound = sal_True;
+            else
+                aIter++;
         }
 
         if (!bFound)
@@ -379,9 +384,10 @@ sal_Bool SAL_CALL ValueSetAcc::contains( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    const Rectangle     aOutRect( Point(), mpParent->GetOutputSizePixel() );
+    const Point         aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
+    const Rectangle     aOutRect( aNullPoint, mpParent->GetOutputSizePixel() );
 
-    return aOutRect.IsInside( Point( aPoint.X, aPoint.Y ) );
+    return aOutRect.IsInside( aTestPoint );
 }
 
 // -----------------------------------------------------------------------------
@@ -512,8 +518,10 @@ void SAL_CALL ValueSetAcc::addFocusListener( const uno::Reference< awt::XFocusLi
 
         while( !bFound && ( aIter != mxFocusListeners.end() ) )
         {
-            if( *aIter++ == rxListener )
+            if( *aIter == rxListener )
                 bFound = sal_True;
+            else
+                aIter++;
         }
 
         if (!bFound)
@@ -853,8 +861,10 @@ void SAL_CALL ValueItemAcc::addEventListener( const uno::Reference< accessibilit
 
         while( !bFound && ( aIter != mxEventListeners.end() ) )
         {
-            if( *aIter++ == rxListener )
+            if( *aIter == rxListener )
                 bFound = sal_True;
+            else
+                aIter++;
         }
 
         if (!bFound)
@@ -896,7 +906,10 @@ sal_Bool SAL_CALL ValueItemAcc::contains( const awt::Point& aPoint )
     sal_Bool            bRet = sal_False;
 
     if( mpParent )
-        bRet = Rectangle( Point(), mpParent->maRect.GetSize() ).IsInside( Point( aPoint.X, aPoint.Y ) );
+    {
+        const Point aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
+        bRet = Rectangle( aNullPoint, mpParent->maRect.GetSize() ).IsInside( aTestPoint );
+    }
 
     return bRet;
 }
