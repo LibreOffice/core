@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:57:03 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ BOOL SwAuthorField::QueryValue( uno::Any& rAny, BYTE nMId ) const
     switch( nMId )
     {
     case FIELD_PROP_BOOL1:
-        bVal = GetFormat() == AF_NAME;
+        bVal = (GetFormat() & 0xff) == AF_NAME;
         rAny.setValue(&bVal, ::getBooleanCppuType());
         break;
 
