@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 07:18:26 $
+ *  last change: $Author: as $ $Date: 2002-04-22 13:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,11 +247,13 @@ namespace framework{
 //  non exported const
 //_________________________________________________________________________________________________________________
 
-#define PROPERTYNAME_TITLE          DECLARE_ASCII("Title")
+#define PROPERTYNAME_TITLE                          DECLARE_ASCII("Title"                   )
+#define PROPERTYNAME_DISPATCHRECORDERSUPPLIER       DECLARE_ASCII("DispatchRecorderSupplier")
 
-#define PROPERTYHANDLE_TITLE        1
+#define PROPERTYHANDLE_TITLE                        1
+#define PROPERTYHANDLE_DISPATCHRECORDERSUPPLIER     2
 
-#define PROPERTYCOUNT               1
+#define PROPERTYCOUNT                               2
 
 //_________________________________________________________________________________________________________________
 //  non exported definitions
@@ -1442,9 +1444,10 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
 
     // Release some other references.
     // This calls should be easy ... I hope it :-)
-    m_xDispatchHelper     = css::uno::Reference< css::frame::XDispatchProvider >();
-    m_xFactory            = css::uno::Reference< css::lang::XMultiServiceFactory >();
-    m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
+    m_xDispatchHelper           = css::uno::Reference< css::frame::XDispatchProvider >();
+    m_xFactory                  = css::uno::Reference< css::lang::XMultiServiceFactory >();
+    m_xDropTargetListener       = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
+    m_xDispatchRecorderSupplier = NULL;
 
     // Disable this instance for further working realy!
     m_aTransactionManager.setWorkingMode( E_CLOSE );
@@ -2021,8 +2024,14 @@ sal_Bool SAL_CALL Frame::convertFastPropertyValue(          css::uno::Any&      
 
     switch( nHandle )
     {
-        case PROPERTYHANDLE_TITLE   :   bReturn = impl_tryToChangeProperty( implts_getTitleFromWindow(), aValue, aOldValue, aConvertedValue );
-                                        break;
+        case PROPERTYHANDLE_TITLE :
+                bReturn = impl_tryToChangeProperty( implts_getTitleFromWindow(), aValue, aOldValue, aConvertedValue );
+                break;
+
+        case PROPERTYHANDLE_DISPATCHRECORDERSUPPLIER :
+                bReturn = impl_tryToChangeProperty( m_xDispatchRecorderSupplier, aValue, aOldValue, aConvertedValue );
+                break;
+
         #ifdef ENABLE_WARNINGS
         default :   LOG_WARNING( "Frame::convertFastPropertyValue()", "Invalid handle detected!" )
                     break;
@@ -2059,15 +2068,22 @@ void SAL_CALL Frame::setFastPropertyValue_NoBroadcast(          sal_Int32       
     // Search for right handle ... and try to set property value.
     switch ( nHandle )
     {
-        case PROPERTYHANDLE_TITLE   :   {
-                                            ::rtl::OUString sTitle;
-                                            aValue >>= sTitle;
-                                            implts_setTitleOnWindow( sTitle );
-                                        }
-                                        break;
+        case PROPERTYHANDLE_TITLE :
+                {
+                    ::rtl::OUString sTitle;
+                    aValue >>= sTitle;
+                    implts_setTitleOnWindow( sTitle );
+                }
+                break;
+
+        case PROPERTYHANDLE_DISPATCHRECORDERSUPPLIER :
+                aValue >>= m_xDispatchRecorderSupplier;
+                break;
+
         #ifdef ENABLE_WARNINGS
-        default :   LOG_WARNING( "Frame::setFastPropertyValue_NoBroadcast()", "Invalid handle detected!" )
-                    break;
+        default :
+                LOG_WARNING( "Frame::setFastPropertyValue_NoBroadcast()", "Invalid handle detected!" )
+                break;
         #endif
     }
 }
@@ -2096,11 +2112,18 @@ void SAL_CALL Frame::getFastPropertyValue(  css::uno::Any&  aValue  ,
     // Search for right handle ... and try to set property value.
     switch( nHandle )
     {
-        case PROPERTYHANDLE_TITLE   :   aValue <<= implts_getTitleFromWindow();
-                                        break;
+        case PROPERTYHANDLE_TITLE :
+                aValue <<= implts_getTitleFromWindow();
+                break;
+
+        case PROPERTYHANDLE_DISPATCHRECORDERSUPPLIER :
+                aValue <<= m_xDispatchRecorderSupplier;
+                break;
+
         #ifdef ENABLE_WARNINGS
-        default :   LOG_WARNING( "Frame::getFastPropertyValue()", "Invalid handle detected!" )
-                    break;
+        default :
+                LOG_WARNING( "Frame::getFastPropertyValue()", "Invalid handle detected!" )
+                break;
         #endif
     }
 }
@@ -2204,7 +2227,8 @@ const css::uno::Sequence< css::beans::Property > Frame::impl_getStaticPropertyDe
 
     static const css::beans::Property pPropertys[] =
     {
-        css::beans::Property( PROPERTYNAME_TITLE, PROPERTYHANDLE_TITLE, ::getCppuType((const ::rtl::OUString*)NULL), css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( PROPERTYNAME_DISPATCHRECORDERSUPPLIER, PROPERTYHANDLE_DISPATCHRECORDERSUPPLIER, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL), css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( PROPERTYNAME_TITLE                   , PROPERTYHANDLE_TITLE                   , ::getCppuType((const ::rtl::OUString*)NULL)                                             , css::beans::PropertyAttribute::TRANSIENT ),
     };
     // Use it to initialize sequence!
     static const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pPropertys, PROPERTYCOUNT );
@@ -2238,6 +2262,39 @@ sal_Bool Frame::impl_tryToChangeProperty(   const   ::rtl::OUString&    sPropert
         // ... set information of change.
         aOldValue.setValue      ( &sProperty, ::getCppuType((const ::rtl::OUString*)NULL) );
         aConvertedValue.setValue( &sNewValue, ::getCppuType((const ::rtl::OUString*)NULL) );
+        // Return OK - "value will be change ..."
+        bReturn = sal_True;
+    }
+
+    return bReturn;
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+sal_Bool Frame::impl_tryToChangeProperty(   const   css::uno::Reference< css::frame::XDispatchRecorderSupplier >&   xProperty       ,
+                                            const   css::uno::Any&                                                  aValue          ,
+                                                    css::uno::Any&                                                  aOldValue       ,
+                                                    css::uno::Any&                                                  aConvertedValue ) throw( css::lang::IllegalArgumentException )
+{
+    // Set default return value.
+    sal_Bool bReturn = sal_False;
+
+    // Clear information of return parameter!
+    aOldValue.clear();
+    aConvertedValue.clear();
+
+    // Get new value from any.
+    // IllegalArgumentException() can be thrown!
+    css::uno::Reference< css::frame::XDispatchRecorderSupplier > xNewValue;
+    ::cppu::convertPropertyValue( xNewValue, aValue );
+
+    // If value change ...
+    if( xNewValue != xProperty )
+    {
+        // ... set information of change.
+        aOldValue.setValue      ( &xProperty, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL) );
+        aConvertedValue.setValue( &xNewValue, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL) );
         // Return OK - "value will be change ..."
         bReturn = sal_True;
     }

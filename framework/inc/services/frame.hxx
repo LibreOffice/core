@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 07:05:16 $
+ *  last change: $Author: as $ $Date: 2002-04-22 13:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,10 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
+#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
@@ -494,6 +498,10 @@ class Frame :   // interfaces
                                                                                                   const css::uno::Any&                                  aValue           ,
                                                                                                         css::uno::Any&                                  aOldValue        ,
                                                                                                         css::uno::Any&                                  aConvertedValue  ) throw( css::lang::IllegalArgumentException );
+        sal_Bool                                                impl_tryToChangeProperty        ( const css::uno::Reference< css::frame::XDispatchRecorderSupplier >& xProperty        ,
+                                                                                                  const css::uno::Any&                                                aValue           ,
+                                                                                                        css::uno::Any&                                                aOldValue        ,
+                                                                                                        css::uno::Any&                                                aConvertedValue  ) throw( css::lang::IllegalArgumentException );
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor(                                                                        );
         static void                                             impl_filterSpecialTargets       (       ::rtl::OUString&                                sTarget          );
 
@@ -566,6 +574,7 @@ class Frame :   // interfaces
         sal_Bool                                                                m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop
         sal_Bool                                                                m_bConnected                        ;   /// due to FrameActionEvent
         sal_Int16                                                               m_nExternalLockCount                ;
+        css::uno::Reference< css::frame::XDispatchRecorderSupplier >            m_xDispatchRecorderSupplier         ;   /// is used for dispatch recording and will be set/get from outside. Frame provide it only!
         SvtCommandOptions                                                       m_aCommandOptions                   ;   /// ref counted class to support disabling commands defined by configuration file
 
     protected:
