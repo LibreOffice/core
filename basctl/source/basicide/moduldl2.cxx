@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ab $ $Date: 2002-07-30 13:10:24 $
+ *  last change: $Author: tbe $ $Date: 2002-11-26 15:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -880,12 +880,12 @@ void LibPage::InsertLib()
         if( xMSF.is() )
         {
             Sequence <Any> aSeqModURL(1);
-            aSeqModURL[0] <<= ::rtl::OUString( aModURLObj.GetMainURL() );
+            aSeqModURL[0] <<= ::rtl::OUString( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
             xModLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.ScriptLibraryContainer" ) ), aSeqModURL ), UNO_QUERY );
 
             Sequence <Any> aSeqDlgURL(1);
-            aSeqDlgURL[0] <<= ::rtl::OUString( aDlgURLObj.GetMainURL() );
+            aSeqDlgURL[0] <<= ::rtl::OUString( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
             xDlgLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DialogLibraryContainer" ) ), aSeqDlgURL ), UNO_QUERY );
         }
@@ -1046,7 +1046,7 @@ void LibPage::InsertLib()
                                         aModStorageURLObj.setExtension( aLibExtension );
                                         aModStorageURLObj.setFinalSlash();
                                     }
-                                    ::rtl::OUString aModStorageURL( aModStorageURLObj.GetMainURL() );
+                                    ::rtl::OUString aModStorageURL( aModStorageURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                                     // create library link
                                     xModLib = Reference< container::XNameContainer >( xModLibContainer->createLibraryLink( aOULibName, aModStorageURL, TRUE ), UNO_QUERY);
@@ -1115,7 +1115,7 @@ void LibPage::InsertLib()
                                         aDlgStorageURLObj.setExtension( aLibExtension );
                                         aDlgStorageURLObj.setFinalSlash();
                                     }
-                                    ::rtl::OUString aDlgStorageURL( aDlgStorageURLObj.GetMainURL() );
+                                    ::rtl::OUString aDlgStorageURL( aDlgStorageURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                                     // create library link
                                     xDlgLib = Reference< container::XNameContainer >( xDlgLibContainer->createLibraryLink( aOULibName, aDlgStorageURL, TRUE ), UNO_QUERY);
