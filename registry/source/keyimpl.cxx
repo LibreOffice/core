@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keyimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-01-10 10:15:53 $
+ *  last change: $Author: jsc $ $Date: 2001-07-23 15:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,11 +421,6 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
     }
 
     sal_uInt32 size = vSize;
-
-//    if (vType == RG_VALUETYPE_UNICODE)
-//    {
-//        size = (rtl_ustr_getLength((sal_Unicode*)value)+1) * 2;
-//    }
 
     sal_uInt8 type = (sal_uInt8)vType;
     pBuffer = (sal_uInt8*)rtl_allocateMemory(VALUE_HEADERSIZE + size);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-18 15:32:31 $
+ *  last change: $Author: jsc $ $Date: 2001-07-23 15:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include    "keyimpl.hxx"
 #endif
 
+#ifndef _OSL_THREAD_H_
+#include    <osl/thread.h>
+#endif
+
 #ifndef _RTL_ALLOC_H_
 #include    <rtl/alloc.h>
 #endif
@@ -101,6 +105,10 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include    <rtl/ustrbuf.hxx>
 #endif
+#ifndef _ODL_FILE_HXX_
+#include    <osl/file.hxx>
+#endif
+
 
 #if defined ( GCC ) && ( defined ( SCO ) || defined ( OS2 ) )
 sal_helper::ORealDynamicLoader* sal_helper::ODynamicLoader<RegistryTypeReader_Api>::m_pLoader = NULL;
@@ -536,7 +544,11 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
         {
             delete pReg;
 
-            OString name( OUStringToOString(regName, RTL_TEXTENCODING_UTF8) );
+            OUString systemName;
+            if ( FileBase::getSystemPathFromFileURL(regName, systemName) != FileBase::E_None )
+                systemName = regName;
+
+            OString name( OUStringToOString(systemName, osl_getThreadTextEncoding()) );
             if (unlink(name) != 0)
             {
                 return REG_DESTROY_REGISTRY_FAILED;
@@ -558,8 +570,12 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
             m_file.close();
             m_isOpen = sal_False;
 
-            OString name( OUStringToOString(m_name, RTL_TEXTENCODING_UTF8) );
-            if (unlink(name) != 0)
+            OUString systemName;
+            if ( FileBase::getSystemPathFromFileURL(m_name, systemName) != FileBase::E_None )
+                systemName = m_name;
+
+            OString name( OUStringToOString(systemName, osl_getThreadTextEncoding()) );
+            if (unlink(name.getStr()) != 0)
             {
                 return REG_DESTROY_REGISTRY_FAILED;
             }
@@ -1558,7 +1574,7 @@ RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
     OStoreDirectory             rStoreDir(pKey->getStoreDir());
     storeError                  _err = rStoreDir.first(iter);
 
-    OString regName( OUStringToOString( getName(), RTL_TEXTENCODING_UTF8 ) );
+    OString regName( OUStringToOString( getName(), osl_getThreadTextEncoding() ) );
     OString keyName( OUStringToOString( pKey->getName(), RTL_TEXTENCODING_UTF8 ) );
     fprintf(stdout, "Registry \"%s\":\n\n%s\n", regName.getStr(), keyName.getStr());
 
