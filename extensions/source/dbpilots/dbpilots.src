@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:35:33 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Text[ hebrew ] = "AutoPilot Gruppenelement";
     Text[ hindi ] = "ओटोपैलट् समूह ऐलिमेन्ट्";
     Text[ slovak ] = "Sprievodca skupinovým prvkom";
+    Text[ hungarian ] = "Csoportelem-tündér";
+    Text[ slovenian ] = "Avtopilot za elemente skupine";
 };
 
 ModalDialog RID_DLG_LISTCOMBOWIZARD
@@ -147,6 +149,8 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text[ hebrew ] = "AutoPilot Tabellenelement";
     Text[ hindi ] = "ओटोपैलट् सारणी ऐलिमेन्ट्";
     Text[ slovak ] = "Sprievodca prvkom tabuľky";
+    Text[ hungarian ] = "Táblaelem-tündér";
+    Text[ slovenian ] = "Avtopilot za elemente tabele";
 };
 
 String RID_STR_LISTWIZARD_TITLE
@@ -180,6 +184,8 @@ String RID_STR_LISTWIZARD_TITLE
     Text[ hebrew ] = "AutoPilot Listenfeld";
     Text[ hindi ] = "ओटोपैलट् सूची बॉक्स";
     Text[ slovak ] = "Sprievodca zoznamom";
+    Text[ hungarian ] = "Listapanel-tündér";
+    Text[ slovenian ] = "Avtopilot za seznamsko polje";
 };
 
 String RID_STR_COMBOWIZARD_TITLE
@@ -213,6 +219,8 @@ String RID_STR_COMBOWIZARD_TITLE
     Text[ hebrew ] = "AutoPilot Kombinationsfeld";
     Text[ hindi ] = "ओटोपैलट् कॉम्बो बॉक्स";
     Text[ slovak ] = "Sprievodca ";
+    Text[ hungarian ] = "Kombinált lista tündér";
+    Text[ slovenian ] = "Avtopilot za kombinirano polje";
 };
 
 String RID_STR_COULDNOTOPENTABLE
@@ -244,11 +252,23 @@ String RID_STR_COULDNOTOPENTABLE
     Text[ hebrew ] = "Die Tabelle Verbindung zur Datenquelle konnte nicht hergestellt werden.";
     Text[ hindi ] = "ड़ॉटा मूल केलिए सारणी कनेक्शन को स्थापित नहीं कर सकते है ।";
     Text[ slovak ] = "Tabuľkové spojenie so zdrojom dát sa nepodarilo uskutočniť.";
+    Text[ hungarian ] = "Nem hozható létre az adatbázishoz a táblakapcsolat.";
+    Text[ slovenian ] = "Ni mogoče vzpostaviti povezave s tabelo vira podatkov.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31.90.1  2003/12/16 11:43:24  hr
+ *  #111934#: join CWS ooo111fix1
+ *
+ *  Revision 1.31.44.1  2003/11/24 13:32:09  ihi
+ *  OOo 1.1.1 merge
+ *
+ *  Revision 1.31  2003/07/17 12:35:33  hr
+ *  INTEGRATION: CWS mergerc3 (1.30.6); FILE MERGED
+ *  2003/07/16 17:08:00 ihi 1.30.6.1: rc-3 merge all languages
+ *
  *  Revision 1.30.6.1  2003/07/16 17:08:00  ihi
  *  rc-3 merge all languages
  *
@@ -382,6 +402,7 @@ String RID_STR_COULDNOTOPENTABLE
  *
  *  Revision 1.0 14.02.01 10:47:53  fs
  ************************************************************************/
+
 
 
 
