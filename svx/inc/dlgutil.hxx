@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgutil.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 09:29:36 $
+ *  last change: $Author: pb $ $Date: 2000-11-10 07:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,9 @@ long    MMToPica(long nIn );
 // generische Wandlung
 long    TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew );
 
+// replacement of the SfxIniManager
+String      ConvertPosSizeToIniString( const Point& rPos, const Size& rSize );
+sal_Bool    ConvertIniStringToPosSize(  const String& rIniStr, Point& rPos, Size& rSize );
 
 #endif
 

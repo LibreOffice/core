@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 09:21:29 $
+ *  last change: $Author: pb $ $Date: 2000-11-10 08:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -939,4 +939,33 @@ long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
     return ConvertTable[nOld][nNew]( nVal );
 }
 
+String ConvertPosSizeToIniString( const Point& rPos, const Size& rSize )
+{
+    String aRet = String::CreateFromInt32( rPos.X() );
+    aRet += '/';
+    aRet += String::CreateFromInt32( rPos.Y() );
+    aRet += '/';
+    aRet += String::CreateFromInt32( rSize.Width() );
+    aRet += '/';
+    aRet += String::CreateFromInt32( rSize.Height() );
+    return aRet;
+}
+
+sal_Bool ConvertIniStringToPosSize( const String& rIniStr, Point& rPos, Size& rSize )
+{
+    if ( rIniStr.GetTokenCount('/') != 4 )
+        return sal_False;
+
+    USHORT nIdx = 0;
+    rPos.X() = rIniStr.GetToken( 0, '/', nIdx ).ToInt32();
+    rPos.Y() = rIniStr.GetToken( 0, '/', nIdx ).ToInt32();
+    rSize.Width() = rIniStr.GetToken( 0, '/', nIdx ).ToInt32();
+    rSize.Height() = rIniStr.GetToken( 0, '/', nIdx ).ToInt32();
+
+    // negative sizes are invalid
+    if ( rSize.Width() < 0 || rSize.Height() < 0 )
+        return sal_False;
+
+    return sal_True;
+}
 
