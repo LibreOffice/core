@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:40:48 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ String STR_ALL_TABLES
     Text[ polish ] = "Wszystkie tabele";
     Text[ portuguese_brazilian ] = "All tables";
     Text[ japanese ] = "‚·‚×‚Ä‚ÌÃ°ÌÞÙ";
-    Text[ korean ] = "All tables";
+    Text[ korean ] = "¸ðµç Å×ÀÌºí";
     Text[ chinese_simplified ] = "È«²¿µÄ±í¸ñ";
     Text[ chinese_traditional ] = "¥þ³¡ªºªí®æ";
     Text[ turkish ] = "All tables";
@@ -314,7 +314,7 @@ String STR_ALL_VIEWS
     Text[ polish ] = "Wszystkie widoki tabeli";
     Text[ portuguese_brazilian ] = "All views";
     Text[ japanese ] = "‚·‚×‚Ä‚ÌÃ°ÌÞÙËÞ­°";
-    Text[ korean ] = "All views";
+    Text[ korean ] = "¸ðµç ½ÃÆ® º¸±â";
     Text[ chinese_simplified ] = "È«²¿µÄ±í¸ñÊÓÍ¼";
     Text[ chinese_traditional ] = "©Ò¦³ªºªí®æÀËµø";
     Text[ turkish ] = "All views";
@@ -339,7 +339,7 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ polish ] = "Wszystkie tabele i widoki tabeli";
     Text[ portuguese_brazilian ] = "All tables and views";
     Text[ japanese ] = "‚·‚×‚Ä‚ÌÃ°ÌÞÙ‚ÆÃ°ÌÞÙËÞ­°";
-    Text[ korean ] = "All tables and views";
+    Text[ korean ] = "¸ðµç Å×ÀÌºí°ú º¸±â";
     Text[ chinese_simplified ] = "È«²¿µÄ±í¸ñºÍ±í¸ñÊÓÍ¼";
     Text[ chinese_traditional ] = "©Ò¦³ªºªí®æ©Mªí®æÀËµø";
     Text[ turkish ] = "All tables and views";
@@ -351,6 +351,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/05/10 05:40:48  rt
+ *  Merge SRC631: 10.05.01 - 07:40:06 (NoBranch)
+ *
  *  Revision 1.9  2001/05/04 19:48:56  rt
  *  Merge SRC630: 04.05.01 - 21:48:13 (NoBranch)
  *
