@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:51:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
             const SvxHyperlinkItem& rHLinkItem = *(const SvxHyperlinkItem *)pItem;
             bool bConvertToText = rHLinkItem.GetInsertMode() == HLINK_DEFAULT ||
                             rHLinkItem.GetInsertMode() == HLINK_FIELD;
-            const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
             if (rMarkList.GetMark(0))
             {
                 SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetObj());
@@ -236,7 +236,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
             case SID_HYPERLINK_GETLINK:
             {
                 SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
-                const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 SvxHyperlinkItem aHLinkItem;
                 if (rMarkList.GetMark(0))
                 {
