@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:11:08 $
+ *  last change: $Author: kz $ $Date: 2004-09-07 10:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,10 +607,10 @@ void ScTable::StartAllListeners()
 }
 
 
-void ScTable::StartNameListeners( BOOL bOnlyRelNames )
+void ScTable::StartNeededListeners()
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].StartNameListeners( bOnlyRelNames );
+        aCol[i].StartNeededListeners();
 }
 
 
