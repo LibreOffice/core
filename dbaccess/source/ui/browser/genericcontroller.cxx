@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:33:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeEx
     {
         Reference<XModifiable> xModi(aEvent.Source,UNO_QUERY);
         if ( xModi.is() )
-            m_bCurrentlyModified = m_bCurrentlyModified || xModi->isModified(); // can only be reset by save
+            m_bCurrentlyModified = xModi->isModified(); // can only be reset by save
         else
             m_bCurrentlyModified = sal_True;
     }
