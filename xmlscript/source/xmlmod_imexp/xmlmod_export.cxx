@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmod_export.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:57 $
+ *  last change: $Author: ab $ $Date: 2001-05-22 14:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@ SAL_CALL exportScriptModule(
         SAL_THROW( (Exception) )
 {
     xOut->startDocument();
+
+    OUString aDocTypeStr( RTL_CONSTASCII_USTRINGPARAM(
+        "<!DOCTYPE script:module PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
+        " \"module.dtd\">" ) );
+    xOut->unknown( aDocTypeStr );
+    xOut->ignorableWhitespace( OUString() );
 
     OUString aModuleName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":module") );
     XMLElement* pModElement = new XMLElement( aModuleName );
