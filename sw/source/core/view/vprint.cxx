@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:48:12 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <sfx2/printer.hxx>
 #endif
 #ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
+// #include <tools/intn.hxx>
 #endif
 #ifndef _SFX_PROGRESS_HXX //autogen
 #include <sfx2/progress.hxx>
