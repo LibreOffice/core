@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 22:20:24 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,5 +275,6 @@ ModalDialog DLG_PASSWD
 };
 
 // ********************************************************************** EOF
+
 
 
