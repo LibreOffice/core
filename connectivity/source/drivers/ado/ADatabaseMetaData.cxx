@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,6 +688,8 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation(  ) thro
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException)
 {
+    if ( ADOS::isJetEngine(m_pConnection->getEngineType()) )
+        return sal_True;
     return getBoolProperty(::rtl::OUString::createFromAscii("Outer Join Capabilities"));
 }
 // -------------------------------------------------------------------------
@@ -1059,6 +1061,8 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLExce
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsFullOuterJoins(  ) throw(SQLException, RuntimeException)
 {
+    if ( ADOS::isJetEngine(m_pConnection->getEngineType()) )
+        return sal_True;
     return (getInt32Property(::rtl::OUString::createFromAscii("Outer Join Capabilities")) & 0x00000004L) == 0x00000004L;
 }
 // -------------------------------------------------------------------------
