@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:45:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-03 15:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1293,21 +1293,16 @@ sal_Bool XclExpChangeTrack::WriteUserNamesStream()
 {
     sal_Bool bRet = sal_False;
     String sStreamName( pUserNamesStreamName, RTL_TEXTENCODING_ASCII_US );
-    SvStream* pSvStrm = pExcRoot->pRootStorage->OpenStream( sStreamName, STREAM_READWRITE | STREAM_TRUNC );
-    DBG_ASSERT( pSvStrm, "XclExpChangeTrack::WriteUserNamesStream - no stream" );
-    if( pSvStrm )
+    SvStorageStreamRef xSvStrm = pExcRoot->pRootStorage->OpenStream( sStreamName, STREAM_READWRITE | STREAM_TRUNC );
+    DBG_ASSERT( xSvStrm.Is(), "XclExpChangeTrack::WriteUserNamesStream - no stream" );
+    if( xSvStrm.Is() )
     {
-        XclExpStream* pXclStrm = new XclExpStream( *pSvStrm, EXC_MAXRECLEN_BIFF8 );
-        DBG_ASSERT( pXclStrm, "XclExpChangeTrack::WriteUserNamesStream - no stream" );
-        if( pXclStrm )
-        {
-            { XclExpChTr0x0191().Save( *pXclStrm ); }
-            { XclExpChTr0x0198().Save( *pXclStrm ); }
-            { XclExpChTr0x0192().Save( *pXclStrm ); }
-            { XclExpChTr0x0197().Save( *pXclStrm ); }
-            delete pXclStrm;
-        }
-        delete pSvStrm;
+        XclExpStream aXclStrm( *xSvStrm, EXC_MAXRECLEN_BIFF8 );
+        XclExpChTr0x0191().Save( aXclStrm );
+        XclExpChTr0x0198().Save( aXclStrm );
+        XclExpChTr0x0192().Save( aXclStrm );
+        XclExpChTr0x0197().Save( aXclStrm );
+        xSvStrm->Commit();
         bRet = sal_True;
     }
     return bRet;
