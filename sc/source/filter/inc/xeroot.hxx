@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:30:56 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ struct XclExpRootData : public XclRootData
     explicit                    XclExpRootData(
                                     XclBiff eBiff,
                                     ScDocument& rDocument,
-                                    const String& rBasePath,
+                                    const String& rDocUrl,
                                     CharSet eCharSet,
                                     bool bRelUrl );
     virtual                     ~XclExpRootData();
