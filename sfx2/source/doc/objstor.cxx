@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-04 12:07:54 $
+ *  last change: $Author: as $ $Date: 2002-07-08 11:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,7 +1096,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         // it's a "SaveAs" in an alien format
         if ( rMedium.GetFilter() && ( rMedium.GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
-            bOk = ExportTo( rMedium, *pSet );
+            bOk = ExportTo( rMedium );
         else
             bOk = ConvertTo( rMedium );
 
@@ -1535,7 +1535,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
     return sal_False;
 }
 
-sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium, const SfxItemSet& rSet )
+sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 {
     ::rtl::OUString aTypeName( rMedium.GetFilter()->GetTypeName() );
     ::rtl::OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
@@ -1575,9 +1575,12 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium, const SfxItemSet& rSet )
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  xComp( GetModel(), ::com::sun::star::uno::UNO_QUERY );
         ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xFilter( xExporter, ::com::sun::star::uno::UNO_QUERY );
         xExporter->setSourceDocument( xComp );
-        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOldArgs ( GetModel()->getArgs() );
-        const com::sun::star::beans::PropertyValue * pOldValue = aOldArgs.getConstArray();
 
+        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOldArgs;
+        SfxItemSet* pItems = rMedium.GetItemSet();
+        TransformItems( SID_SAVEASDOC, *pItems, aOldArgs );
+
+        const com::sun::star::beans::PropertyValue * pOldValue = aOldArgs.getConstArray();
         com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( aOldArgs.getLength() + 1 );
         com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
 
