@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:12 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,8 @@ private:
     sal_uInt16                  mnRecSize;      /// Size of current record content (without CONTINUE).
     sal_uInt32                  mnRecLeft;      /// Count of bytes left in current record.
 
+    sal_Unicode                 mcNulSubst;     /// Replacement for NUL characters.
+
     bool                        mbCont;         /// Automatic CONTINUE lookup on/off.
 #if SC_XCL_USEDECR
     bool                        mbUseDecr;      /// Usage of decryption.
@@ -391,7 +393,7 @@ public:
     // ext. header = (3), (4)
     // ext. data = (6), (7)
 
-    // *** special string functions - use with care ***
+    // *** special string functions ***
 
     /** Reads ext. header, detects 8/16 bit mode, sets all ext. info.
         @return  Size of ext. data. */
@@ -404,6 +406,12 @@ public:
     /** Skips ext. data after character array. */
     inline void                 SkipUniStringExtData( sal_uInt32 nExtSize )
                                     { Ignore( nExtSize ); }
+
+    /** Sets a replacement character for NUL characters.
+        @descr  NUL characters must be replaced, because Tools strings cannot handle them.
+        @param cNulSubst  The character to use for NUL replacement. It is possible to specify
+        NUL here. in this case strings are terminated when the first NUL occurs during string import. */
+    inline void                 SetNulSubstChar( sal_Unicode cNulSubst = '?' ) { mcNulSubst = cNulSubst; }
 
     // *** read/ignore unicode strings ***
     // - look for CONTINUE records even if CONTINUE handling disabled
