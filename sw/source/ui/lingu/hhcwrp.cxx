@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:42:47 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
 #endif
@@ -101,6 +100,9 @@
 
 #ifndef _HHCWRP_HXX
 #include <hhcwrp.hxx>
+#endif
+#ifndef _SDRHHCWRAP_HXX_
+#include <sdrhhcwrap.hxx>
 #endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>       // Progress
@@ -162,22 +164,45 @@ SwHHCWrapper::SwHHCWrapper(
 {
     nLastPos        = 0;
     nUnitOffset     = 0;
+    nLang           = SvxLocaleToLanguage( rLocale );
+
+    // currently this implementation only works for Korean (Hangu/Hanja conversion)
+    // since it is derived by 'HangulHanjaConversion' and there is not
+    // a more general base class for text conversion yet...
+    DBG_ASSERT( nLang == LANGUAGE_KOREAN, "unexpected language" );
+
     pView           = pSwView;
     pWin            = &pSwView->GetEditWin();
+    bIsDrawObj      = sal_False;
     bIsStart        = bStart;
     bIsOtherCntnt   = bStartChk     = bOther;
     bIsConvSpecial  = sal_True;
     bIsSelection    = bSelection;
     bInfoBox        = sal_False;
-    bStartDone = bOther || bStart;
-    bEndDone   = sal_False;
-    nPageCount = nPageStart = 0;
+    bStartDone  = bOther || bStart;
+    bEndDone    = sal_False;
+//    bLastRet    = sal_True;
+    nPageCount  = nPageStart = 0;
 }
 
 
 SwHHCWrapper::~SwHHCWrapper()
 {
     rWrtShell.SetCareWin( NULL );
+
+    // check for existence of a draw view which means that there are
+    // (or previously were) draw objects present in the document.
+    // I.e. we like to check those too.
+    if ( IsDrawObj() /*&& bLastRet*/ && pView->GetWrtShell().HasDrawView() )
+    {
+        Cursor *pSave = pView->GetWindow()->GetCursor();
+        {
+            SdrHHCWrapper aSdrSpell( pView, nLang );
+            aSdrSpell.StartTextConversion();
+        }
+        pView->GetWindow()->SetCursor( pSave );
+    }
+
     if( nPageCount )
         ::EndProgress( pView->GetDocShell() );
 /*
@@ -217,7 +242,7 @@ void SwHHCWrapper::HandleNewUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd )
 {
     DBG_ASSERT( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
-    if (!(nUnitStart >= 0 && nUnitEnd >= nUnitStart))
+    if (!(0 <= nUnitStart && nUnitStart <= nUnitEnd))
         return;
 
     lcl_ActivateTextShell( rWrtShell );
@@ -342,6 +367,12 @@ void SwHHCWrapper::ReplaceUnit(
 }
 
 
+sal_Bool SwHHCWrapper::HasRubySupport() const
+{
+    return sal_True;
+}
+
+
 void SwHHCWrapper::Convert()
 {
     if ( bIsOtherCntnt )
@@ -462,7 +493,7 @@ sal_Bool SwHHCWrapper::HasOtherCnt_impl()
 
 void SwHHCWrapper::ConvStart_impl( SvxSpellArea eSpell )
 {
-    //SetDrawObj( SVX_SPELL_OTHER == eSpell );
+    SetDrawObj( SVX_SPELL_OTHER == eSpell );
     pView->SpellStart( eSpell, bStartDone, bEndDone, TRUE );
 }
 
@@ -476,7 +507,8 @@ void SwHHCWrapper::ConvEnd_impl()
 
 sal_Bool SwHHCWrapper::ConvContinue_impl()
 {
-    sal_Bool bProgress = /* !bDrawObj && */ !bIsSelection;
+    sal_Bool bProgress = !bIsDrawObj && !bIsSelection;
+//    bLastRet = aConvText.getLength() == 0;
     aConvText = OUString();
     uno::Any  aRet = bProgress ?
         pView->GetWrtShell().SpellContinue( &nPageCount, &nPageStart, TRUE ) :
