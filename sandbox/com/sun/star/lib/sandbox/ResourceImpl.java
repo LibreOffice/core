@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceImpl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-13 09:31:04 $
+ *  last change: $Author: jl $ $Date: 2002-10-08 07:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ import java.net.MalformedURLException;
 
 import java.util.Enumeration;
 import java.util.Vector;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import sun.awt.image.ByteArrayImageSource;
 import sun.awt.image.URLImageSource;
@@ -182,11 +184,18 @@ class ResourceImpl implements Resource {
         if(object != null)
             imageProducer = (ImageProducer)object;
         else {
-            if(bytes != null)
-                imageProducer = new ByteArrayImageSource(bytes, 0, bytes.length);
-            else
-                imageProducer = new URLImageSource(url);
-
+            // we use a PrivilegedAction here because otherwise the system classloader
+            // will call our SecurityManager's checkPackageAccess method which will
+            // refuse to access sun.* packages and hence ByteArrayInputStream and
+            // URLImageSource
+            imageProducer= (ImageProducer)
+                AccessController.doPrivileged( new PrivilegedAction() {
+                    public Object run() {
+                        if(bytes != null)
+                            return new ByteArrayImageSource(bytes, 0, bytes.length);
+                        else
+                            return new URLImageSource(url);
+                    }});
             object = imageProducer;
         }
 
@@ -199,11 +208,18 @@ class ResourceImpl implements Resource {
         if(object != null)
             audioClip = (AudioClip)object;
         else {
-            if(bytes != null)
-                audioClip = new AppletAudioClip(bytes);
-            else
-                audioClip = new AppletAudioClip(url);
-
+            // we use a PrivilegedAction here because otherwise the system classloader
+            // will call our SecurityManager's checkPackageAccess method which will
+            // refuse to access sun.* packages and hence AppletAudioClip
+            audioClip= (AppletAudioClip)
+                AccessController.doPrivileged( new PrivilegedAction() {
+                    public Object run() {
+                        if(bytes != null)
+                            return new AppletAudioClip(bytes);
+                        else
+                            return new AppletAudioClip(url);
+                    }
+            });
             object = audioClip;
         }
 
