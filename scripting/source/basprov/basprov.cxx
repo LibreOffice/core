@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:46 $
+ *  last change: $Author: tbe $ $Date: 2003-11-07 13:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,18 +479,18 @@ namespace basprov
 
                     if ( m_bIsUserCtx && ( isLibLink == sal_False ) )
                     {
-                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
+                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_xScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
                         continue;
                     }
                     if ( !m_bIsUserCtx && ( isLibLink == sal_True ) )
                     {
-                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
+                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_xScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
                         continue;
                     }
                 }
                 else
                 {
-                    pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
+                    pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_xScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
                 }
             }
             if ( i != childsFound )

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: basmodnode.hxx,v $
+ *  $RCSfile: bcholder.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: tbe $ $Date: 2003-11-07 13:49:38 $
+ *  last change: $Author: tbe $ $Date: 2003-11-07 13:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,66 +59,40 @@
  *
  ************************************************************************/
 
-#ifndef SCRIPTING_BASMODNODE_HXX
-#define SCRIPTING_BASMODNODE_HXX
+#ifndef SCRIPTING_BCHOLDER_HXX
+#define SCRIPTING_BCHOLDER_HXX
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
-#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
+#include <cppuhelper/interfacecontainer.h>
 #endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-
-class SbModule;
 
 
 //.........................................................................
-namespace basprov
+namespace scripting_helper
 {
 //.........................................................................
 
     //  ----------------------------------------------------
-    //  class BasicModuleNodeImpl
+    //  class OBroadcastHelperHolder
     //  ----------------------------------------------------
 
-    typedef ::cppu::WeakImplHelper1<
-        ::drafts::com::sun::star::script::browse::XBrowseNode > BasicModuleNodeImpl_BASE;
-
-
-    class BasicModuleNodeImpl : public BasicModuleNodeImpl_BASE
+    class OBroadcastHelperHolder
     {
-    private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xScriptingContext;
-        SbModule* m_pModule;
-        bool m_bIsAppScript;
+    protected:
+        ::cppu::OBroadcastHelper    m_aBHelper;
 
     public:
-        BasicModuleNodeImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxScriptingContext,
-            SbModule* pModule, bool isAppScript = true );
-        virtual ~BasicModuleNodeImpl();
+        OBroadcastHelperHolder( ::osl::Mutex& rMutex ) : m_aBHelper( rMutex ) { }
 
-        // XBrowseNode
-        virtual ::rtl::OUString SAL_CALL getName(  )
-            throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
-            throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasChildNodes(  )
-            throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Int16 SAL_CALL getType(  )
-            throw (::com::sun::star::uno::RuntimeException);
+        ::cppu::OBroadcastHelper&       GetBroadcastHelper()        { return m_aBHelper; }
+        const ::cppu::OBroadcastHelper& GetBroadcastHelper() const  { return m_aBHelper; }
     };
 
 //.........................................................................
-}   // namespace basprov
+}   // namespace scripting_helper
 //.........................................................................
 
-#endif // SCRIPTING_BASMODNODE_HXX
+#endif // SCRIPTING_BCHOLDER_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baslibnode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:42 $
+ *  last change: $Author: tbe $ $Date: 2003-11-07 13:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,15 @@ namespace basprov
     // BasicLibraryNodeImpl
     // =============================================================================
 
-    BasicLibraryNodeImpl::BasicLibraryNodeImpl( BasicManager* pBasicManager,
+    BasicLibraryNodeImpl::BasicLibraryNodeImpl( const Reference< XComponentContext >& rxContext,
+        const Reference< beans::XPropertySet >& rxScriptingContext, BasicManager* pBasicManager,
         const Reference< script::XLibraryContainer >& xLibContainer, const ::rtl::OUString& sLibName, bool isAppScript )
-        :m_pBasicManager( pBasicManager )
+        :m_xContext( rxContext )
+        ,m_xScriptingContext( rxScriptingContext )
+        ,m_pBasicManager( pBasicManager )
         ,m_xLibContainer( xLibContainer )
-        ,m_sLibName( sLibName ),m_bIsAppScript( isAppScript )
+        ,m_sLibName( sLibName )
+        ,m_bIsAppScript( isAppScript )
     {
         if ( m_xLibContainer.is() )
         {
@@ -150,7 +154,7 @@ namespace basprov
                 {
                     SbModule* pModule = pBasic->FindModule( pNames[i] );
                     if ( pModule )
-                        pChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicModuleNodeImpl( pModule, m_bIsAppScript ) );
+                        pChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicModuleNodeImpl( m_xContext, m_xScriptingContext, pModule, m_bIsAppScript ) );
                 }
             }
         }

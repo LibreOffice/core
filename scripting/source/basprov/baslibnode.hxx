@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baslibnode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:43 $
+ *  last change: $Author: tbe $ $Date: 2003-11-07 13:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,17 @@
 #ifndef SCRIPTING_BASLIBNODE_HXX
 #define SCRIPTING_BASLIBNODE_HXX
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
 #include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -92,13 +98,18 @@ namespace basprov
     class BasicLibraryNodeImpl : public BasicLibraryNodeImpl_BASE
     {
     private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xScriptingContext;
         BasicManager* m_pBasicManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xLibrary;
         ::rtl::OUString m_sLibName;
         bool m_bIsAppScript;
+
     public:
-        BasicLibraryNodeImpl( BasicManager* pBasicManager,
+        BasicLibraryNodeImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxScriptingContext,
+            BasicManager* pBasicManager,
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer,
             const ::rtl::OUString& sLibName, bool isAppScript=true );
         virtual ~BasicLibraryNodeImpl();
