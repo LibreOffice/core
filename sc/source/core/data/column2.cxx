@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:20:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #include "markdata.hxx"
 #include "compiler.hxx"         // ScTokenArray GetCodeLen
 #include "dbcolect.hxx"
+#include "fillinfo.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -755,13 +756,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
 
         //  get other attributes from pattern and conditional formatting
 
-        SvxCellOrientation eOrient;
-        if (pCondSet &&
-                pCondSet->GetItemState(ATTR_ORIENTATION, TRUE, &pCondItem) == SFX_ITEM_SET)
-            eOrient = (SvxCellOrientation)((const SvxOrientationItem*)pCondItem)->GetValue();
-        else
-            eOrient = (SvxCellOrientation)((const SvxOrientationItem&)
-                                            pPattern->GetItem(ATTR_ORIENTATION)).GetValue();
+        SvxCellOrientation eOrient = pPattern->GetCellOrientation( pCondSet );
         BOOL bAsianVertical = ( eOrient == SVX_ORIENTATION_STACKED &&
                 ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN, pCondSet )).GetValue() );
         if ( bAsianVertical )
@@ -791,6 +786,14 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                 if ( nRotate == 18000 )
                     eRotMode = SVX_ROTATE_MODE_STANDARD;    // keinen Ueberlauf
             }
+        }
+
+        if ( eHorJust == SVX_HOR_JUSTIFY_REPEAT )
+        {
+            // ignore orientation/rotation if "repeat" is active
+            eOrient = SVX_ORIENTATION_STANDARD;
+            nRotate = 0;
+            bAsianVertical = FALSE;
         }
 
         const SvxMarginItem* pMargin;
@@ -1283,8 +1286,7 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
         else
         {
             SCROW nRow;
-            BOOL bStdAllowed = ((const SvxOrientationItem&) pPattern->GetItem(ATTR_ORIENTATION)).
-                                        GetValue() == (USHORT) SVX_ORIENTATION_STANDARD;
+            BOOL bStdAllowed = (pPattern->GetCellOrientation() == SVX_ORIENTATION_STANDARD);
             BOOL bStdOnly = FALSE;
             if (bStdAllowed)
             {
