@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Class.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:36:09 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,12 @@ sal_Bool java_lang_Class::isAssignableFrom( java_lang_Class * _par0 )
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        char * cSignature = "(Ljava/lang/Class;)Z";
-        char * cMethodName = "isAssignableFrom";
+        static char * cSignature = "(Ljava/lang/Class;)Z";
+        static char * cMethodName = "isAssignableFrom";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             jvalue args[1];
             // Parameter konvertieren
@@ -144,10 +146,12 @@ java_lang_Object * java_lang_Class::newInstance()
     SDBThreadAttach t;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        char * cSignature = "()Ljava/lang/Object;";
-        char * cMethodName = "newInstance";
+        static char * cSignature = "()Ljava/lang/Object;";
+        static char * cMethodName = "newInstance";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
@@ -164,10 +168,12 @@ jobject java_lang_Class::newInstanceObject()
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        char * cSignature = "()Ljava/lang/Object;";
-        char * cMethodName = "newInstance";
+        static char * cSignature = "()Ljava/lang/Object;";
+        static char * cMethodName = "newInstance";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
@@ -179,20 +185,20 @@ jobject java_lang_Class::newInstanceObject()
 
 ::rtl::OUString java_lang_Class::getName()
 {
-    jstring out = (jstring)NULL;
     SDBThreadAttach t;
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        char * cSignature = "()Ljava/lang/String;";
-        char * cMethodName = "getName";
+        static char * cSignature = "()Ljava/lang/String;";
+        static char * cMethodName = "getName";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
-            out = (jstring)t.pEnv->CallObjectMethod( object, mID);
+            jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
-            if(out)
-                aStr = JavaString2String(t.pEnv, (jstring)out );
+            aStr = JavaString2String(t.pEnv, (jstring)out );
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
