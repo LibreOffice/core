@@ -40,8 +40,10 @@
 #include <tools/urlobj.hxx>
 
 #include "stg.hxx"
-#include "stgelem.hxx"
 #include "storinfo.hxx"
+#include "exchange.hxx"
+#include "formats.hxx"
+#include "clsids.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -55,6 +57,31 @@ TYPEINIT1( UCBStorage, BaseStorage );
 #define COMMIT_RESULT_FAILURE           0
 #define COMMIT_RESULT_NOTHING_TO_DO     1
 #define COMMIT_RESULT_SUCCESS           2
+
+SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
+{
+    switch ( nFormat )
+    {
+        case SOT_FORMATSTR_ID_STARWRITER_60 :
+            return SvGlobalName( SO3_SW_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARWRITERWEB_60 :
+            return SvGlobalName( SO3_SWWEB_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARWRITERGLOB_60 :
+            return SvGlobalName( SO3_SWGLOB_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARDRAW_60 :
+            return SvGlobalName( SO3_SDRAW_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARIMPRESS_60 :
+            return SvGlobalName( SO3_SIMPRESS_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARCALC_60 :
+            return SvGlobalName( SO3_SC_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARCHART_60 :
+            return SvGlobalName( SO3_SCH_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARMATH_60 :
+            return SvGlobalName( SO3_SM_CLASSID_60 );
+        default :
+            return SvGlobalName();
+    }
+}
 
 // All storage and streams are refcounted internally; outside of this classes they are only accessible through a handle
 // class, that uses the refcounted object as impl-class.
@@ -129,7 +156,6 @@ public:
                                                 // reference is destroyed
     BOOL                        m_bIsRoot;      // marks this storage as root storages that manages all oommits and reverts
     BOOL                        m_bDirty;       // ???
-    SvGlobalName                m_aGlobalName;
     ULONG                       m_nFormat;
     String                      m_aUserTypeName;
     ClsId                       m_aClassId;
@@ -735,6 +761,17 @@ void UCBStorage_Impl::Init()
 
     if ( m_pContent )
     {
+        Any aAny = m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
+        rtl::OUString aTmp;
+        if ( ( aAny >>= aTmp ) && aTmp.getLength() )
+        {
+            m_aContentType = m_aOriginalContentType = aTmp;
+            m_nFormat = SotExchange::RegisterFormatName( m_aContentType );
+            m_aClassId = (const ClsId& ) GetClassId_Impl( m_nFormat ).GetCLSID();
+            DBG_ASSERT( !(m_aClassId == SvGlobalName ), "Unknown UCB storage format!" );
+//            m_aUserTypeName = rUserTypeName;
+        }
+
         // create cursor for access to children
         Sequence< ::rtl::OUString > aProps(4);
         ::rtl::OUString* pProps = aProps.getArray();
@@ -958,6 +995,12 @@ sal_Int16 UCBStorage_Impl::Commit()
             {
                 try
                 {
+                    // commit the media type to the JAR file
+                    // clipboard format and ClassId will be retrieved from the media type when the file is loaded again
+                    Any aType;
+                    aType <<= (rtl::OUString) m_aContentType;
+                    m_pContent->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), aType );
+
                     DELETEZ( m_pSource );
                     Any aAny;
                     m_pContent->executeCommand( ::rtl::OUString::createFromAscii("flush"), aAny );
@@ -1072,6 +1115,21 @@ BOOL UCBStorage::IsRoot() const
     return pImp->m_bIsRoot;
 }
 
+void UCBStorage::SetDirty()
+{
+    pImp->m_bDirty = TRUE;
+}
+
+void UCBStorage::SetClass( const SvGlobalName & rClass, ULONG nOriginalClipFormat, const String & rUserTypeName )
+{
+    pImp->m_aClassId = (const ClsId&) rClass.GetCLSID();
+    pImp->m_nFormat = nOriginalClipFormat;
+    pImp->m_aUserTypeName = rUserTypeName;
+    pImp->m_aContentType = SotExchange::GetFormatName( nOriginalClipFormat );
+    if ( !pImp->m_aOriginalContentType.Len() )
+        pImp->m_aOriginalContentType = pImp->m_aContentType;
+}
+
 void UCBStorage::SetClassId( const ClsId& rClsId )
 {
     pImp->m_aClassId = rClsId;
@@ -1080,44 +1138,6 @@ void UCBStorage::SetClassId( const ClsId& rClsId )
 const ClsId& UCBStorage::GetClassId() const
 {
     return pImp->m_aClassId;
-}
-
-void UCBStorage::SetDirty()
-{
-    pImp->m_bDirty = TRUE;
-}
-
-#include "stgole.hxx"
-
-void UCBStorage::SetClass( const SvGlobalName & rClass, ULONG nOriginalClipFormat, const String & rUserTypeName )
-{
-    pImp->m_aGlobalName = rClass;
-    pImp->m_nFormat = nOriginalClipFormat;
-    pImp->m_aUserTypeName = rUserTypeName;
-
-    if( Validate( TRUE ) )
-    {
-        // set the class name in the root entry
-        SetClassId( (const ClsId&) rClass.GetCLSID() );
-        SetDirty();
-
-        // then create the streams
-        StgCompObjStream aCompObj( *this, TRUE );
-        aCompObj.GetClsId() = (const ClsId&) rClass.GetCLSID();
-        aCompObj.GetCbFormat() = nOriginalClipFormat;
-        aCompObj.GetUserName() = rUserTypeName;
-        if( !aCompObj.Store() )
-            SetError( aCompObj.GetError() );
-        else
-        {
-            StgOleStream aOle( *this, STREAM_WRITE );
-            if( !aOle.Store() )
-                SetError( aOle.GetError() );
-        }
-    }
-    else
-        SetError( SVSTREAM_ACCESS_DENIED );
-
 }
 
 void UCBStorage::SetConvertClass( const SvGlobalName & rConvertClass, ULONG nOriginalClipFormat, const String & rUserTypeName )
@@ -1133,34 +1153,17 @@ BOOL UCBStorage::ShouldConvert()
 
 SvGlobalName UCBStorage::GetClassName()
 {
-
-    StgCompObjStream aCompObj( *this, FALSE );
-    if( aCompObj.Load() )
-        return SvGlobalName( (const CLSID&) aCompObj.GetClsId() );
-    return SvGlobalName();
-
-    return pImp->m_aGlobalName;
+    return  SvGlobalName( (const CLSID&) pImp->m_aClassId );
 }
 
 ULONG UCBStorage::GetFormat()
 {
-
-    StgCompObjStream aCompObj( *this, FALSE );
-    if( aCompObj.Load() )
-        return aCompObj.GetCbFormat();
-    return 0;
-
     return pImp->m_nFormat;
 }
 
 String UCBStorage::GetUserName()
 {
-
-    StgCompObjStream aCompObj( *this, FALSE );
-    if( aCompObj.Load() )
-        return aCompObj.GetUserName();
-    return String();
-
+    DBG_ERROR("UserName is not implemented in UCB storages!" );
     return pImp->m_aUserTypeName;
 }
 
