@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-13 08:31:16 $
+ *  last change: $Author: fme $ $Date: 2001-06-18 09:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,52 +305,51 @@ USHORT SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
             if ( nMaxWidthDiff && !nRepaintOfst )
                 nRepaintOfst = nX + GetLeftMargin();
         }
-        else if( pPos->InGlueGrp() )
+        else if( pPos->InGlueGrp() && pPos->InFixMargGrp() )
         {
-            if( pPos->InFixMargGrp() )
+            if ( nKanaIdx == pCurr->GetKanaComp().Count() )
+                pCurr->GetKanaComp().Insert( nNull, nKanaIdx );
+
+            USHORT nRest;
+
+            if ( pPos->InTabGrp() )
             {
-                if ( nKanaIdx == pCurr->GetKanaComp().Count() )
-                    pCurr->GetKanaComp().Insert( nNull, nKanaIdx );
-                if( nKanaDiffSum )
-                {
-                    USHORT nRest;
+                nRest = ! bNoCompression &&
+                        ( pPos->Width() > MIN_TAB_WIDTH ) ?
+                        pPos->Width() - MIN_TAB_WIDTH :
+                        0;
 
-                    if ( pPos->InTabGrp() )
-                    {
-                        nRest = ! bNoCompression &&
-                                ( pPos->Width() > MIN_TAB_WIDTH ) ?
-                                pPos->Width() - MIN_TAB_WIDTH :
-                                0;
-
-                        // for simplifying the handling of left, right ... tabs,
-                        // we do expand portions, which are lying behind
-                        // those special tabs
-                        bNoCompression = !pPos->IsTabLeftPortion();
-                    }
-                    else
-                    {
-                        nRest = ! bNoCompression ?
-                                ((SwGluePortion*)pPos)->GetPrtGlue() :
-                                0;
-
-                        bNoCompression = sal_False;
-                    }
-
-                    ULONG nCompress = ( 10000 * nRest ) / nKanaDiffSum;
-
-                    if ( nCompress >= 10000 )
-                        // kanas can be expanded to 100%, and there is still
-                        // some space remaining
-                        nCompress = 0;
-
-                    else
-                        nCompress = 10000 - nCompress;
-
-                    ( pCurr->GetKanaComp() )[ nKanaIdx ] = (USHORT)nCompress;
-                    nKanaDiffSum = 0;
-                }
-                nKanaIdx++;
+                // for simplifying the handling of left, right ... tabs,
+                // we do expand portions, which are lying behind
+                // those special tabs
+                bNoCompression = !pPos->IsTabLeftPortion();
             }
+            else
+            {
+                nRest = ! bNoCompression ?
+                        ((SwGluePortion*)pPos)->GetPrtGlue() :
+                        0;
+
+                bNoCompression = sal_False;
+            }
+
+            if( nKanaDiffSum )
+            {
+                ULONG nCompress = ( 10000 * nRest ) / nKanaDiffSum;
+
+                if ( nCompress >= 10000 )
+                    // kanas can be expanded to 100%, and there is still
+                    // some space remaining
+                    nCompress = 0;
+
+                else
+                    nCompress = 10000 - nCompress;
+
+                ( pCurr->GetKanaComp() )[ nKanaIdx ] = (USHORT)nCompress;
+                nKanaDiffSum = 0;
+            }
+
+            nKanaIdx++;
         }
 
         nX += pPos->Width();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 08:49:47 $
+ *  last change: $Author: fme $ $Date: 2001-06-18 09:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1543,6 +1543,10 @@ long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
     // something of our text has moved to the next line
         return 0;
 
+    xub_StrLen nReformat = rInf.GetReformatStart();
+
+    // in case we do not have any fly in our line, our repaint position
+    // is the changed position - 1
     if ( ! pFlyStart && ! pCurr->IsFly() )
     {
         // this is the maximum repaint offset determined during formatting
@@ -1550,10 +1554,6 @@ long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
         // if this value is 0, this means that we do not have an upper
         // limit for the repaint offset
         const long nFormatRepaint = rInf.GetPaintOfst();
-
-        // in case we do not have any fly in our line, our repaint position
-        // is the changed position - 1
-        xub_StrLen nReformat = rInf.GetReformatStart();
 
         if ( nReformat <= rInf.GetLineStart() )
             return 0;
@@ -1577,6 +1577,7 @@ long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
         long nPOfst = 0;
         USHORT nCnt = 0;
         USHORT nX = 0;
+        USHORT nIdx = rInf.GetLineStart();
         SwLinePortion* pPor = pCurr->GetFirstPortion();
 
         while ( pPor )
@@ -1586,7 +1587,9 @@ long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
                 // compare start of fly with former start of fly
                 if ( pFlyStart &&
                      nCnt < pFlyStart->Count() &&
-                     nX == (*pFlyStart)[ nCnt ] )
+                     nX == (*pFlyStart)[ nCnt ] &&
+                     nIdx < nReformat
+                   )
                     // found fix position, nothing has changed left from nX
                     nPOfst = nX + pPor->Width();
                 else
@@ -1595,6 +1598,7 @@ long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
                 nCnt++;
             }
             nX += pPor->Width();
+            nIdx += pPor->GetLen();
             pPor = pPor->GetPortion();
         }
 
