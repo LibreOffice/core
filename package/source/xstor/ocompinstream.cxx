@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocompinstream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:57:40 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,8 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPr
     if ( aPropertyName.equalsAscii( "MediaType" )
       || aPropertyName.equalsAscii( "Size" )
       || aPropertyName.equalsAscii( "Encrypted" )
-      || aPropertyName.equalsAscii( "Compressed" ) )
+      || aPropertyName.equalsAscii( "Compressed" )
+      || aPropertyName.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
     {
         for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
         {
@@ -371,7 +372,7 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPr
             }
         }
     }
-    else if ( aPropertyName.equalsAscii( "EncriptionKey" ) )
+    else if ( aPropertyName.equalsAscii( "EncryptionKey" ) )
         throw lang::WrappedTargetException(); // TODO: PropertyVetoException
 
     throw beans::UnknownPropertyException();
