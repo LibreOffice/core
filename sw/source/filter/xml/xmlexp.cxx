@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-24 11:44:18 $
+ *  last change: $Author: dvo $ $Date: 2001-01-24 16:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,31 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
     if( pModel )
         pModel->GetPage( 0 )->RecalcObjOrdNums();
 
+    // switch redline mode
+    Reference<XPropertySet> xPropSet(GetModel(), UNO_QUERY);
+    OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
+    sal_Bool bSaveShowRedline = sal_False;
+    if (xPropSet.is())
+    {
+        // record old mode
+        Any aAny = xPropSet->getPropertyValue(sShowChanges);
+        bSaveShowRedline = *(sal_Bool*)aAny.getValue();
+
+        // set show = false
+        sal_Bool bTmp = sal_False;
+        aAny.setValue(&bTmp, ::getBooleanCppuType());
+        xPropSet->setPropertyValue(sShowChanges, aAny);
+    }
+
     sal_uInt32 nRet = SvXMLExport::exportDoc( pClass );
+
+    // switch redline mode back
+    if (xPropSet.is())
+    {
+        Any aAny;
+        aAny.setValue(&bSaveShowRedline, ::getBooleanCppuType());
+        xPropSet->setPropertyValue(sShowChanges, aAny);
+    }
 
 #ifdef XML_CORE_API
     if( pCurPaM )
@@ -395,22 +419,6 @@ void SwXMLExport::_ExportContent()
     } while( bContinue );
 #else
 
-    // switch redline mode
-    Reference<XPropertySet> xPropSet(GetModel(), UNO_QUERY);
-    OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
-    sal_Bool bSaveShowRedline = sal_False;
-    if (xPropSet.is())
-    {
-        // record old mode
-        Any aAny = xPropSet->getPropertyValue(sShowChanges);
-        bSaveShowRedline = *(sal_Bool*)aAny.getValue();
-
-        // set show = false
-        sal_Bool bTmp = sal_False;
-        aAny.setValue(&bTmp, ::getBooleanCppuType());
-        xPropSet->setPropertyValue(sShowChanges, aAny);
-    }
-
     // export forms
     Reference<XDrawPageSupplier> xDrawPageSupplier(GetModel(), UNO_QUERY);
     if (xDrawPageSupplier.is())
@@ -438,14 +446,6 @@ void SwXMLExport::_ExportContent()
 
     GetTextParagraphExport()->exportFramesBoundToPage( bShowProgress );
     GetTextParagraphExport()->exportText( xText, bShowProgress );
-
-    // switch redline mode back
-    if (xPropSet.is())
-    {
-        Any aAny;
-        aAny.setValue(&bSaveShowRedline, ::getBooleanCppuType());
-        xPropSet->setPropertyValue(sShowChanges, aAny);
-    }
 
 #endif
 }
