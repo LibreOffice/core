@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 20:13:09 $
+ *  last change: $Author: kz $ $Date: 2002-05-23 20:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,13 +213,13 @@ ModalDialog DLG_QRY_JOIN
         Text[ finnish ] = "~Type";
         Text[ italian ] = "~Type";
         Text[ danish ] = "~Type";
-        Text[ swedish ] = "~Type";
+        Text[ swedish ] = "~Typ";
         Text[ polish ] = "~Type";
         Text[ portuguese_brazilian ] = "~Type";
         Text[ japanese ] = "~Type";
         Text[ korean ] = "~Type";
         Text[ chinese_simplified ] = "~Type";
-        Text[ chinese_traditional ] = "~Type";
+        Text[ chinese_traditional ] = "類型(~T)";
         Text[ turkish ] = "~Type";
         Text[ arabic ] = "~Type";
         Text[ catalan ] = "~Type";
@@ -327,10 +327,10 @@ ModalDialog DLG_QRY_JOIN
     };
     StringList [ swedish ] =
     {
-         < "Innerer" ; Default; > ;
-        < "Linker" ; Default; > ;
-        < "Rechter" ; Default; > ;
-        < "Vollst�ndiger"  ; Default; > ;
+         < "Inre" ; Default; > ;
+        < "V�nster" ; Default; > ;
+        < "H�ger" ; Default; > ;
+        < "Fullst�ndig"  ; Default; > ;
     };
     StringList [ polish ] =
     {
@@ -369,10 +369,10 @@ ModalDialog DLG_QRY_JOIN
     };
     StringList [ chinese_traditional ] =
     {
-         < "Innerer" ; Default; > ;
-        < "Linker" ; Default; > ;
-        < "Rechter" ; Default; > ;
-        < "Vollst�ndiger"  ; Default; > ;
+         < "內部連結" ; Default; > ;
+        < "左向連結" ; Default; > ;
+        < "右向連結" ; Default; > ;
+        < "完整的連結"  ; Default; > ;
     };
     StringList [ turkish ] =
     {
