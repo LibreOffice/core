@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-09-16 15:22:59 $
+ *  last change: $Author: er $ $Date: 2001-11-12 16:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,20 +65,24 @@
 #ifndef _COM_SUN_STAR_I18N_XINDEXENTRYSUPPLIER_HPP_
 #include <com/sun/star/i18n/XIndexEntrySupplier.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx> // helper for implementations
 #endif
 #ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 
 //  ----------------------------------------------------
 //  class BreakIterator
 //  ----------------------------------------------------
-class IndexEntrySupplier : public cppu::WeakImplHelper1
+class IndexEntrySupplier : public cppu::WeakImplHelper2
 <
-    ::com::sun::star::i18n::XIndexEntrySupplier
+    ::com::sun::star::i18n::XIndexEntrySupplier,
+    ::com::sun::star::lang::XServiceInfo
 >
 {
     ::com::sun::star::uno::Reference <
@@ -101,6 +105,14 @@ public:
         getIndexFollowPageWord( sal_Bool MorePages,
                             const ::com::sun::star::lang::Locale& aLocale )
                             throw (::com::sun::star::uno::RuntimeException);
+
+    //XServiceInfo
+    virtual rtl::OUString SAL_CALL getImplementationName(void)
+                throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+                throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+                throw( ::com::sun::star::uno::RuntimeException );
 };
 
 #endif
