@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:19:00 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,6 @@
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-
-#ifndef _SV_SYSTEM_HXX
-#include <vcl/system.hxx>
-#endif
 
 #include <numitem.hxx>
 #include <bulitem.hxx>
