@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:53:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ void __EXPORT ScTabViewShell::Activate(BOOL bMDI)
             {
                 GetViewData()->ReadExtOptions(*pExtOpt);        // Excel view settings
                 SetTabNo( GetViewData()->GetTabNo(), TRUE );
-                pExtOpt->SetChanged( FALSE );
+                pExtOpt->SetChanged( false );
             }
         }
 
