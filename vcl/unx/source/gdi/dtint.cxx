@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:58:57 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator()
     // check dt type
     // CDE
     nDtAtom = XInternAtom( pDisplay, "_DT_WM_READY", True );
-    if( nDtAtom && ( pLibrary = dlopen( "libDtSvc.so", DLOPEN_MODE ) ) )
+    if( nDtAtom && ( pLibrary = dlopen( "/usr/dt/lib/libDtSvc.so", DLOPEN_MODE ) ) )
     {
         dlclose( pLibrary );
         return new CDEIntegrator();
