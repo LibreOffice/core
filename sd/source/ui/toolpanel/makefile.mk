@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 14:42:15 $
+#   last change: $Author: kz $ $Date: 2005-03-18 17:00:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ SLOFILES =      								\
     $(SLO)$/TitleToolBox.obj					\
     $(SLO)$/TitledControl.obj 					\
     $(SLO)$/ToolPanel.obj						\
+    $(SLO)$/TaskPaneControlFactory.obj 			\
     $(SLO)$/TaskPaneFocusManager.obj 			\
     $(SLO)$/TaskPaneShellManager.obj 			\
     $(SLO)$/TaskPaneTreeNode.obj 			    \
@@ -97,8 +98,7 @@ SLOFILES =      								\
     $(SLO)$/EmptyWindow.obj						\
     $(SLO)$/LayoutMenu.obj                      \
     $(SLO)$/TestMenu.obj                        \
-    $(SLO)$/TestPanel.obj                       \
-    $(SLO)$/SlideSorterPanel.obj
+    $(SLO)$/TestPanel.obj
 
 EXCEPTIONSFILES=
 
