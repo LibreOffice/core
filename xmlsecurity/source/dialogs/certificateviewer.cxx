@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:51:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,27 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
 
     maIssuedToFI.SetText( XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id ) );
     maIssuedByFI.SetText( XmlSec::GetContentPart( xCert->getIssuerName(), aCN_Id ) );
+
+    // dynamic length because of the different languages
+    long nWidth1 = maIssuedToLabelFI.GetTextWidth( maIssuedToLabelFI.GetText() );
+    long nWidth2 = maIssuedByLabelFI.GetTextWidth( maIssuedByLabelFI.GetText() );
+    long nNewWidth = Max( nWidth1, nWidth2 ) + 5;
+    Size aNewSize = maIssuedToLabelFI.GetSizePixel();
+    aNewSize.Width() = nNewWidth;
+    maIssuedToLabelFI.SetSizePixel( aNewSize );
+    maIssuedByLabelFI.SetSizePixel( aNewSize );
+    long nNewX = maIssuedToLabelFI.GetPosPixel().X() + nNewWidth + 1;
+    Point aNewPos = maIssuedToFI.GetPosPixel();
+    aNewPos.X() = nNewX;
+    maIssuedToFI.SetPosPixel( aNewPos );
+    aNewPos = maIssuedByFI.GetPosPixel();
+    aNewPos.X() = nNewX;
+    maIssuedByFI.SetPosPixel( aNewPos );
+    nNewWidth = maValidDateFI.GetSizePixel().Width() - nNewX;
+    aNewSize = maIssuedToFI.GetSizePixel();
+    aNewSize.Width() = nNewWidth;
+    maIssuedToFI.SetSizePixel( aNewSize );
+    maIssuedByFI.SetSizePixel( aNewSize );
 
     DateTime aDateTimeStart;
     DateTime aDateTimeEnd;
@@ -390,41 +411,37 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     ,maViewCertPB           ( this, ResId( BTN_VIEWCERT ) )
     ,maCertStatusFT         ( this, ResId( FT_CERTSTATUS ) )
     ,maCertStatusML         ( this, ResId( ML_CERTSTATUS ) )
+    ,mpParent               ( _pDlg )
+    ,mbFirstActivateDone    ( false )
     ,maCertImage            ( ResId( IMG_CERT_SMAL ) )
 {
-    // fill list box
-    maCertPathLB.SetNodeDefaultImages();
-    maCertPathLB.SetSublistOpenWithLeftRight();
-
-    Sequence< Reference< security::XCertificate > > aCertPath = _pDlg->mxSecurityEnvironment->buildCertificatePath( _pDlg->mxCert );
-    const Reference< security::XCertificate >* pCertPath = aCertPath.getConstArray();
-
-    String          aCN_Id( String::CreateFromAscii( "CN" ) );
-    String          aState;
-    int             nCnt = aCertPath.getLength();
-    SvLBoxEntry*    pParent = NULL;
-    for( int i = nCnt; i; )
-    {
-        const Reference< security::XCertificate > rCert = pCertPath[ --i ];
-           pParent = InsertCert( pParent, XmlSec::GetContentPart( rCert->getSubjectName(), aCN_Id ), rCert );
-    }
-
-    maCertPathLB.Select( pParent );
-    maViewCertPB.Disable(); // Own certificate selected
-
-    while( pParent )
-    {
-        maCertPathLB.Expand( pParent );
-        pParent = maCertPathLB.GetParent( pParent );
-    }
 
     FreeResource();
 
-    maViewCertPB.SetClickHdl( LINK( this, CertificateViewerCertPathTP, ViewCertHdl ) );
+    maCertPathLB.SetNodeDefaultImages();
+    maCertPathLB.SetSublistOpenWithLeftRight();
     maCertPathLB.SetSelectHdl( LINK( this, CertificateViewerCertPathTP, CertSelectHdl ) );
+    maViewCertPB.SetClickHdl( LINK( this, CertificateViewerCertPathTP, ViewCertHdl ) );
 
-    // MT->GT: After EA, please move path stuff to ActivatePage() and asure it's only done once.
-    // Who knows how expensive buildCertificatePath can be, and maybe nobody looks at this page.
+    // check if buttontext is to wide
+    const long nOffset = 10;
+    String sText = maViewCertPB.GetText();
+    long nTxtW = maViewCertPB.GetTextWidth( sText );
+    if ( sText.Search( '~' ) == STRING_NOTFOUND )
+        nTxtW += nOffset;
+    long nBtnW = maViewCertPB.GetSizePixel().Width();
+    if ( nTxtW > nBtnW )
+    {
+        // broaden the button
+        long nDelta = nTxtW - nBtnW;
+        Size aNewSize = maViewCertPB.GetSizePixel();
+        aNewSize.Width() += nDelta;
+        maViewCertPB.SetSizePixel( aNewSize );
+        // and give it a new position
+        Point aNewPos = maViewCertPB.GetPosPixel();
+        aNewPos.X() -= nDelta;
+        maViewCertPB.SetPosPixel( aNewPos );
+    }
 }
 
 CertificateViewerCertPathTP::~CertificateViewerCertPathTP()
@@ -434,6 +451,47 @@ CertificateViewerCertPathTP::~CertificateViewerCertPathTP()
 
 void CertificateViewerCertPathTP::ActivatePage()
 {
+    if ( !mbFirstActivateDone )
+    {
+        mbFirstActivateDone = true;
+        Sequence< Reference< security::XCertificate > > aCertPath =
+            mpParent->mxSecurityEnvironment->buildCertificatePath( mpParent->mxCert );
+        const Reference< security::XCertificate >* pCertPath = aCertPath.getConstArray();
+
+        static char* aIDs[] = { "CN", "OU", "O", "E", NULL };
+        String aUnknown( String::CreateFromAscii( "unknown" ) );
+        String aState;
+        sal_Int32 i, j, nCnt = aCertPath.getLength();
+        SvLBoxEntry* pParent = NULL;
+        for( i = nCnt; i; )
+        {
+            bool bNameFound = false;
+            const Reference< security::XCertificate > rCert = pCertPath[ --i ];
+            j = 0;
+            while ( aIDs[j] )
+            {
+                String sName = XmlSec::GetContentPart(
+                    rCert->getSubjectName(), String::CreateFromAscii( aIDs[j++] ) );
+                if ( sName.Len() > 0 )
+                {
+                    pParent = InsertCert( pParent, sName, rCert );
+                    bNameFound = true;
+                    break;
+                }
+            }
+            if ( !bNameFound )
+                pParent = InsertCert( pParent, aUnknown, rCert );
+        }
+
+        maCertPathLB.Select( pParent );
+        maViewCertPB.Disable(); // Own certificate selected
+
+        while( pParent )
+        {
+            maCertPathLB.Expand( pParent );
+            pParent = maCertPathLB.GetParent( pParent );
+        }
+    }
 }
 
 IMPL_LINK( CertificateViewerCertPathTP, ViewCertHdl, void*, EMPTYARG )
