@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:05:10 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,8 @@ SwDoc::SwDoc() :
     SetParaSpaceMax( aOptions.IsAddSpacing(), aOptions.IsAddSpacingAtPages() );
     SetAddParaSpacingToTableCells( aOptions.IsAddTableSpacing() );
     SetUseFormerLineSpacing( aOptions.IsUseLineSpacing() );
+//! SetAddParaSpacingToTableCells( aOptions.IsAddTableSpacing() ); only exists in cws swformatcells
+    SetUseFormerObjectPositioning( aOptions.IsUseObjectPositioning() );
 
     ResetModified();
 }
