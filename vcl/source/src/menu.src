@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 11:57:19 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ String SV_RESID_STRING_NOSELECTIONPOSSIBLE
     Text[ chinese_traditional ] = "<µLªk¿ï¾Ü>";
     Text[ arabic ] = "<áÇ íãßä ÇáÊÍÏíÏ>";
     Text[ turkish ] = "<Seçim yapýlamaz>";
+    Text[ catalan ] = "<Ninguna selección posible>";
 };
 
 Menu SV_RESID_MENU_EDIT
@@ -115,6 +116,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ arabic ] = "ÊÑÇÌÚ";
             Text[ turkish ] = "Geri al";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Deshacer";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
@@ -143,6 +145,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ arabic ] = "ÞÕ";
             Text[ turkish ] = "~Kes";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "C~ortar";
         };
         MenuItem
         {
@@ -170,6 +173,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ arabic ] = "äÓÎ";
             Text[ turkish ] = "K~opyala";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Copiar";
         };
         MenuItem
         {
@@ -197,6 +201,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ arabic ] = "áÕÞ";
             Text[ turkish ] = "~Yapýþtýr";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Pegar";
         };
         MenuItem
         {
@@ -224,6 +229,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ arabic ] = "ÍÐÝ";
             Text[ turkish ] = "~Sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
@@ -252,6 +258,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ arabic ] = "ÊÍÏíÏ Çáßá";
             Text[ turkish ] = "Tümünü seç";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Seleccionar ~todo";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
@@ -279,6 +286,7 @@ Menu SV_RESID_MENU_EDIT
             TEXT[ arabic ] = "ÅÏÑÇÌ ÑãæÒ ÎÇÕÉ";
             TEXT[ turkish ] = "Özel karakter ekle...";
             TEXT[ language_user1 ] = " ";
+            TEXT[ catalan ] = "Insertar ~símbolo...";
         };
     };
 };
