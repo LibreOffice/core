@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 10:00:53 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 14:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1230,7 +1230,7 @@ void SbaXDataBrowserController::dispose()
         ::com::sun::star::lang::EventObject aDisposeEvent;
         aDisposeEvent.Source = (::com::sun::star::lang::XComponent*)this;
 
-#ifdef DEBUG
+#ifdef DBG_UTIL
         sal_Int32 nSize = m_arrStatusListener.size();
 #endif
         rCurrent.xListener->disposing(aDisposeEvent);
@@ -2380,10 +2380,10 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
     {
         Reference< XInterface >  xCurrent(*(Reference< XInterface > *)aColumnControls->getByIndex(nViewPos).getValue(), UNO_QUERY);
         if (IsSearchableControl(xCurrent))
-            if (!pInfo->nFieldPos)
-                break;
-            else
+            if (pInfo->nFieldPos)
                 --pInfo->nFieldPos;
+            else
+                break;
     }
 
     Reference< ::com::sun::star::form::XGrid >  xGrid(m_pContent->getGridControl(), UNO_QUERY);
