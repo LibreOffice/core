@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:28:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,8 @@ LoggerGuard::~LoggerGuard()
         g_bHasBeenCalled = sal_False;
     }
 }
-
-static LoggerGuard guard;
 }
+
 using namespace rtl;
 
 static Mutex & getLogMutex()
@@ -198,6 +197,9 @@ extern "C" void SAL_CALL rtl_logfile_trace  ( const char *pszFormat, ... )
                 if( osl_File_E_None == e )
                 {
                     TimeValue aCurrentTime;
+                    //Allocing a g_buffer implies the need for a LoggerGuard, this
+                    //method is already double-locked, so no need for rtl::Static
+                    static LoggerGuard guard;
                     g_buffer = ( sal_Char * ) rtl_allocateMemory( g_BUFFERSIZE );
                     sal_Int64 nConverted = 0;
                     sal_Int64 nWritten = 0;
