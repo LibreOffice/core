@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: as $ $Date: 2002-08-22 10:05:56 $
+ *  last change: $Author: as $ $Date: 2002-09-05 12:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,10 @@
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
 #include <com/sun/star/document/XTypeDetection.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -616,22 +620,9 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
         // If controller has no fun to dispatch these URL - we must search another right dispatcher.
         // Search for any registered protocol handler first.
-        // Note: member "m_aProtocolHandlerCache" use singleton mechanism to implement an internal threadsafe data container
-        //       and use a ref count member too. On the other side he lives till we die. So we can use it without a lock.
-        if ( ! xDispatcher.is() )
-        {
-            ProtocolHandler aHandler;
-            if (m_aProtocolHandlerCache.search(aURL,&aHandler))
-            {
-                /* SAFE { */
-                ReadGuard aReadLock( m_aLock );
-                css::uno::Reference< css::frame::XDispatchProvider > xHandler( m_xFactory->createInstance(aHandler.m_sUNOName), css::uno::UNO_QUERY);
-                aReadLock.unlock();
-                /* } SAFE */
-                if (xHandler.is())
-                    xDispatcher = xHandler->queryDispatch(aURL,SPECIALTARGET_SELF,0);
-            }
-        }
+        if (!xDispatcher.is())
+            xDispatcher = implts_searchProtocolHandler(aURL);
+
         // Not for controller - not for protocol handler
         // It should be a loadable content - may be a file. Check it ...
         // This check is neccessary to found out, that
@@ -759,24 +750,64 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryPlugi
 
 /**
     @short      search for a registered protocol handler and ask him for a dispatch object
-    @descr      Such protocol handler doesn't need any target frame. They handle special URL protocols.
+    @descr      Wes earch a suitable handler inside our cfg package org.openoffice.Office.ProtocolHandler.
+                If we found anyone, we create and initialize it. Initialize means: we set our owner frame on it
+                as context information. He can use it or leave it. Of course - we are aware of handler implementations,
+                which doesn't support initialization. It's an optional feature.
 
     @param      aURL
                     the dispatch URL for which may a handler is registered
-    @return     A dispatch object if a handler was found or <NULL/> if not.
+
+    @return     A dispatch object if a handler was found and agree with the given URL or <NULL/> otherwhise.
 
     @threadsafe yes
-    @modified   16.05.2002 15:52, as96863
+    @modified   05.09.2002 13:43, as96863
 */
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProtocolHandler( const css::util::URL& aURL )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
     ProtocolHandler                              aHandler   ;
-    if (m_aProtocolHandlerCache.search(aURL,&aHandler)) // This member is threadsafe by himself and lives if we live - we doesn't need any mutex here.
+
+    // This member is threadsafe by himself and lives if we live - we doesn't need any mutex here.
+    if (m_aProtocolHandlerCache.search(aURL,&aHandler))
     {
         /* SAFE { */
-        css::uno::Reference< css::frame::XDispatchProvider > xHandler( m_xFactory->createInstance(aHandler.m_sUNOName), css::uno::UNO_QUERY );
+        ReadGuard aReadLock( m_aLock );
+
+        // create it
+        css::uno::Reference< css::frame::XDispatchProvider > xHandler;
+        try
+        {
+            xHandler = css::uno::Reference< css::frame::XDispatchProvider >(
+                            m_xFactory->createInstance(aHandler.m_sUNOName),
+                            css::uno::UNO_QUERY);
+        }
+        catch(css::uno::Exception&) {}
+
+        // look if initialization is neccessary
+        css::uno::Reference< css::lang::XInitialization > xInit( xHandler, css::uno::UNO_QUERY );
+        if (xInit.is())
+        {
+            css::uno::Reference< css::frame::XFrame > xOwner( m_xFrame.get(), css::uno::UNO_QUERY );
+            LOG_ASSERT(xOwner.is(), "DispatchProvider::implts_searchProtocolHandler()\nCouldn't get reference to my owner frame. So I can't set may needed context information for this protocol handler.")
+            if (xOwner.is())
+            {
+                try
+                {
+                    // but do it only, if all context informations are OK
+                    css::uno::Sequence< css::uno::Any > lContext(1);
+                    lContext[0] <<= xOwner;
+                    xInit->initialize(lContext);
+                }
+                catch(css::uno::Exception&) {}
+            }
+        }
+
+        aReadLock.unlock();
         /* } SAFE */
+
+        // ask for his (sub)dispatcher for the given URL
+        LOG_ASSERT(xHandler.is(), "DispatchProvider::implts_searchProtocolHandler()\nThere is one non realy useable protocol handler, which couldn't be created.")
         if (xHandler.is())
             xDispatcher = xHandler->queryDispatch(aURL,SPECIALTARGET_SELF,0);
     }
