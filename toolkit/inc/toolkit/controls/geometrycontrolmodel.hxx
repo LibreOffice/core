@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-01 14:27:14 $
+ *  last change: $Author: tbe $ $Date: 2001-03-02 12:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,13 +80,15 @@
 #ifndef _CPPUHELPER_WEAKAGG_HXX_
 #include <cppuhelper/weakagg.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTEVENTSSUPPLIER_HPP_
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_XNAMECONTAINER_HPP_
-//#include <com/sun/star/container/XNameContainer.hpp>
-//#endif
-
 
 FORWARD_DECLARE_INTERFACE( lang, XMultiServiceFactory )
 FORWARD_DECLARE_INTERFACE( script, XNameContainer )
@@ -99,12 +101,14 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
     //====================================================================
     //= OGeometryControlModel_Base
     //====================================================================
+    typedef ::cppu::WeakAggImplHelper2  <   ::com::sun::star::util::XCloneable
+                                        ,   ::com::sun::star::script::XScriptEventsSupplier
+                                        >   OGCM_Base;
     class OGeometryControlModel_Base
         :public ::comphelper::OMutexAndBroadcastHelper
         ,public ::comphelper::OPropertySetAggregationHelper
         ,public ::comphelper::OPropertyContainer
-        ,public ::cppu::OWeakAggObject
-        ,public ::com::sun::star::script::XScriptEventsSupplier
+        ,public OGCM_Base
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
@@ -121,12 +125,21 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         sal_Int16       m_nTabIndex;
         // </properties>
 
-    public:
+        sal_Bool        m_bCloneable;
+
+    protected:
         /**
             @param _pAggregateInstance
                 the object to be aggregated. The refcount of the instance given MUST be 0!
         */
         OGeometryControlModel_Base(::com::sun::star::uno::XAggregation* _pAggregateInstance);
+
+        /**
+            @param _rxAggregateInstance
+                is the object to be aggregated. Must be aquired excatly once (by the reference object given).<br/>
+                Will be reset to NULL upon leaving
+        */
+        OGeometryControlModel_Base(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);
 
     protected:
         ~OGeometryControlModel_Base();
@@ -152,16 +165,25 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         virtual void SAL_CALL getFastPropertyValue(
             ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle) const;
 
-        // XPropertyset
+        // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
 
         // OPropertySetAggregationHelper overridables
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() = 0;
 
+        // XCloneable
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw(::com::sun::star::uno::RuntimeException);
+
         //XScriptEventsSupplier
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
             SAL_CALL getEvents(  ) throw(::com::sun::star::uno::RuntimeException);
 
+        // XCloneable implementation - to be overwritten
+        virtual OGeometryControlModel_Base* createClone_Impl(
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance) = 0;
+
+    protected:
+        void registerProperties();
     };
 
     //====================================================================
@@ -186,6 +208,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
     public:
         OGeometryControlModel();
 
+    private:
+        OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);
+
     protected:
         // OAggregationArrayUsageHelper overridables
         virtual void fillProperties(
@@ -195,6 +220,10 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 
         // OPropertySetAggregationHelper overridables
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+        // OGeometryControlModel_Base
+        virtual OGeometryControlModel_Base* createClone_Impl(
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);
     };
 
 #include "toolkit/controls/geometrycontrolmodel_impl.hxx"
@@ -208,6 +237,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/01 14:27:14  tbe
+ *  removed ClassId from geometry control model
+ *
  *  Revision 1.3  2001/02/28 10:51:22  tbe
  *  added additional properties to geometry model
  *

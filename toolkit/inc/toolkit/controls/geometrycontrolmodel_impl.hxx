@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel_impl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:57:30 $
+ *  last change: $Author: tbe $ $Date: 2001-03-02 12:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,13 @@ OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel()
 
 //--------------------------------------------------------------------
 template <class CONTROLMODEL>
+OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance)
+    :OGeometryControlModel_Base(_rxAggregateInstance)
+{
+}
+
+//--------------------------------------------------------------------
+template <class CONTROLMODEL>
 ::cppu::IPropertyArrayHelper& SAL_CALL OGeometryControlModel<CONTROLMODEL>::getInfoHelper()
 {
     return *getArrayHelper();
@@ -89,10 +96,21 @@ void OGeometryControlModel<CONTROLMODEL>::fillProperties(::com::sun::star::uno::
         _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
 }
 
+//--------------------------------------------------------------------
+template <class CONTROLMODEL>
+OGeometryControlModel_Base* OGeometryControlModel<CONTROLMODEL>::createClone_Impl(
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance)
+{
+    return new OGeometryControlModel<CONTROLMODEL>(_rxAggregateInstance);
+}
+
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/24 14:57:30  mt
+ *  model for dialog controls (weith pos/size)
+ *
  *
  *  Revision 1.0 17.01.01 12:50:24  fs
  ************************************************************************/

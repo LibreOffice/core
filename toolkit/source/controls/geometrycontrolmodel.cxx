@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-01 14:26:33 $
+ *  last change: $Author: tbe $ $Date: 2001-03-02 12:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::container;
     using namespace ::comphelper;
 
@@ -109,27 +110,66 @@
     //= OGeometryControlModel_Base
     //====================================================================
     //--------------------------------------------------------------------
-    OGeometryControlModel_Base::OGeometryControlModel_Base(XAggregation* _pAggregateInstance)
+    OGeometryControlModel_Base::OGeometryControlModel_Base(::com::sun::star::uno::XAggregation* _pAggregateInstance)
         :OPropertySetAggregationHelper(m_aBHelper)
         ,OPropertyContainer(m_aBHelper)
         ,m_nPosX(0)
         ,m_nPosY(0)
         ,m_nWidth(0)
         ,m_nHeight(0)
+        ,m_bCloneable(sal_False)
         ,m_nName(::rtl::OUString())
         ,m_nTabIndex(0)
     {
         OSL_ENSURE(NULL != _pAggregateInstance, "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid aggregate!");
 
-        // create our aggregate
         increment(m_refCount);
         {
             m_xAggregate = _pAggregateInstance;
+
+            {   // check if the aggregat is cloneable
+                Reference< XCloneable > xCloneAccess(m_xAggregate, UNO_QUERY);
+                m_bCloneable = xCloneAccess.is();
+            }
+
             setAggregation(m_xAggregate);
             m_xAggregate->setDelegator(static_cast< XWeak* >(this));
         }
         decrement(m_refCount);
 
+        registerProperties();
+    }
+
+    //--------------------------------------------------------------------
+    OGeometryControlModel_Base::OGeometryControlModel_Base(Reference< XCloneable >& _rxAggregateInstance)
+        :OPropertySetAggregationHelper(m_aBHelper)
+        ,OPropertyContainer(m_aBHelper)
+        ,m_nPosX(0)
+        ,m_nPosY(0)
+        ,m_nWidth(0)
+        ,m_nHeight(0)
+        ,m_bCloneable(_rxAggregateInstance.is())
+    {
+        increment(m_refCount);
+        {
+            m_xAggregate = Reference< XAggregation >(_rxAggregateInstance, UNO_QUERY);
+            OSL_ENSURE(m_xAggregate.is(), "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid object given!");
+
+            // now the aggregate has a ref count of 2, but before setting the delegator it must be 1
+            _rxAggregateInstance.clear();
+            // now it should be the 1 we need here ...
+
+            setAggregation(m_xAggregate);
+            m_xAggregate->setDelegator(static_cast< XWeak* >(this));
+        }
+        decrement(m_refCount);
+
+        registerProperties();
+    }
+
+    //--------------------------------------------------------------------
+    void OGeometryControlModel_Base::registerProperties()
+    {
         // register our members for the property handling of the OPropertyContainer
         registerProperty(GCM_PROPERTY_POS_X,    GCM_PROPERTY_ID_POS_X,      DEFAULT_ATTRIBS(), &m_nPosX, ::getCppuType(&m_nPosX));
         registerProperty(GCM_PROPERTY_POS_Y,    GCM_PROPERTY_ID_POS_Y,      DEFAULT_ATTRIBS(), &m_nPosY, ::getCppuType(&m_nPosY));
@@ -142,7 +182,15 @@
     //--------------------------------------------------------------------
     Any SAL_CALL OGeometryControlModel_Base::queryAggregation( const Type& _rType ) throw(RuntimeException)
     {
-        Any aReturn = OWeakAggObject::queryAggregation(_rType);
+        Any aReturn;
+        if (_rType.equals(::getCppuType(static_cast< Reference< XCloneable>* >(NULL))) && !m_bCloneable)
+            // somebody is asking for the XCloneable interface, but our aggregate does not support it
+            // -> outta here
+            // (need this extra check, cause OGCM_Base::queryAggregation would return this interface
+            // in every case)
+            return aReturn;
+
+        aReturn = OGCM_Base::queryAggregation(_rType);
             // the basic interfaces (XInterface, XAggregation etc)
 
         if (!aReturn.hasValue())
@@ -165,19 +213,19 @@
     //--------------------------------------------------------------------
     Any SAL_CALL OGeometryControlModel_Base::queryInterface( const Type& _rType ) throw(RuntimeException)
     {
-        return OWeakAggObject::queryInterface(_rType);
+        return OGCM_Base::queryInterface(_rType);
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OGeometryControlModel_Base::acquire(  ) throw()
     {
-        OWeakAggObject::acquire();
+        OGCM_Base::acquire();
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OGeometryControlModel_Base::release(  ) throw()
     {
-        OWeakAggObject::release();
+        OGCM_Base::release();
     }
 
     //--------------------------------------------------------------------
@@ -222,6 +270,41 @@
     }
 
     //--------------------------------------------------------------------
+    Reference< XCloneable > SAL_CALL OGeometryControlModel_Base::createClone(  ) throw(RuntimeException)
+    {
+        OSL_ENSURE(m_bCloneable, "OGeometryControlModel_Base::createClone: invalid call!");
+        if (!m_bCloneable)
+            return Reference< XCloneable >();
+
+        // let the aggregate create it's own clone
+        // the interface
+        Reference< XCloneable > xCloneAccess;
+        m_xAggregate->queryAggregation(::getCppuType(&xCloneAccess)) >>= xCloneAccess;
+        OSL_ENSURE(xCloneAccess.is(), "OGeometryControlModel_Base::createClone: suspicious aggregate!");
+        if (!xCloneAccess.is())
+            return Reference< XCloneable >();
+        // the aggregate's clone
+        Reference< XCloneable > xAggregateClone = xCloneAccess->createClone();
+        OSL_ENSURE(xAggregateClone.is(), "OGeometryControlModel_Base::createClone: suspicious return of the aggregate!");
+
+        // create a new wrapper aggregating this return value
+        OGeometryControlModel_Base* pOwnClone = createClone_Impl(xAggregateClone);
+        OSL_ENSURE(pOwnClone, "OGeometryControlModel_Base::createClone: invalid derivee behaviour!");
+        OSL_ENSURE(!xAggregateClone.is(), "OGeometryControlModel_Base::createClone: invalid ctor behaviour!");
+            // should have been reset
+
+        // set properties
+        pOwnClone->m_nPosX      = m_nPosX;
+        pOwnClone->m_nPosY      = m_nPosY;
+        pOwnClone->m_nWidth     = m_nWidth;
+        pOwnClone->m_nHeight    = m_nHeight;
+        pOwnClone->m_nName      = m_nName;
+        pOwnClone->m_nTabIndex  = m_nTabIndex;
+
+        return pOwnClone;
+    }
+
+    //--------------------------------------------------------------------
     Reference< XNameContainer > SAL_CALL OGeometryControlModel_Base::getEvents() throw(RuntimeException)
     {
         if( !mxEventContainer.is() )
@@ -236,6 +319,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/01 14:26:33  tbe
+ *  removed ClassId from geometry control model
+ *
  *  Revision 1.3  2001/02/28 10:49:53  tbe
  *  added additional properties to geometry model
  *
