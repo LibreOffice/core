@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatehelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:38:40 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,8 +180,8 @@ private:
 
 class ApplyUpdate : public ChangeTreeModification
 {
-    data::NodeAddress           m_aCurrentNode;
     memory::UpdateAccessor &    m_rUpdateAccess;
+    data::NodeAddress           m_aCurrentNode;
 public:
     ApplyUpdate(memory::UpdateAccessor & _rUpdateAccess, data::NodeAddress _aNode)
     : m_rUpdateAccess(_rUpdateAccess)
