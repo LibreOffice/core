@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-11 12:59:46 $
+ *  last change: $Author: mt $ $Date: 2000-10-11 15:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1692,7 +1692,7 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust )
                     pRefDev->SetFont( aBulletFont );
                     FontMetric aMetric( pRefDev->GetFontMetric() );
                     // Leading der ersten Zeile...
-                    aTopLeft.Y() = aInfos.nFirstLineOffset + aInfos.nFirstLineHeight - aInfos.nFirstLineTextHeight + aInfos.nFirstLineMaxAscent;
+                    aTopLeft.Y() = aInfos.nFirstLineOffset + aInfos.nFirstLineMaxAscent;
                     aTopLeft.Y() -= aMetric.GetAscent();
                     pRefDev->SetFont( aOldFont );
                 }
