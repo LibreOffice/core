@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:21:14 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include "ww8scan.hxx"
@@ -5862,6 +5861,38 @@ struct WW8_FFN_Ver8 : public WW8_FFN_BASE
                         // font does not exist on this system.
 };
 
+// #i43762# check font name for illegal characters
+void lcl_checkFontname( String& sString )
+{
+    // for efficiency, we'd like to use String methods as far as possible.
+    // Hence, we will:
+    // 1) convert all invalid chars to \u0001
+    // 2) then erase all \u0001 chars (if any were found), and
+    // 3) erase leading/trailing ';', in case a font name was
+    //    completely removed
+
+    // convert all invalid chars to \u0001
+    sal_Unicode* pBuffer = sString.GetBufferAccess();
+    xub_StrLen nLen = sString.Len();
+    bool bFound = false;
+    for( xub_StrLen n = 0; n < nLen; n++ )
+    {
+        if( pBuffer[n] < sal_Unicode( 0x20 ) )
+        {
+            pBuffer[n] = sal_Unicode( 1 );
+            bFound = true;
+        }
+    }
+    sString.ReleaseBufferAccess();
+
+    // if anything was found, remove \u0001 + leading/trailing ';'
+    if( bFound )
+    {
+        sString.EraseAllChars( sal_Unicode( 1 ) );
+        sString.EraseLeadingAndTrailingChars( sal_Unicode( ';' ) );
+    }
+}
+
 WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     : pFontA(0), nMax(0)
 {
@@ -6017,6 +6048,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                     }
                 }
 #endif
+                // #i43762# check font name for illegal characters
+                lcl_checkFontname( p->sFontname );
 
                 // Zeiger auf Ursprungsarray einen Font nach hinten setzen
                 pVer8 = (WW8_FFN_Ver8*)( ((BYTE*)pVer8) + pVer8->cbFfnM1 + 1 );
