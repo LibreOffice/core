@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-15 14:12:40 $
+ *  last change: $Author: cmc $ $Date: 2002-07-16 15:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,6 @@ class WW8_AttrIter;
 class WW8_WrFkp;
 class WW8_WrPlc0;
 class WW8_WrPlc1;
-class WW8_WrPlcDrawObj;
 class WW8_WrPlcFld;
 class WW8_WrMagicTable;
 class WW8_WrPlcFtnEdn;
@@ -334,6 +333,58 @@ public:
     void WriteFontTable(SvStream *pTableStream, WW8Fib& pFib );
 };
 
+class DrawObj
+{
+public:
+    WW8_CP mnCp;                // CP-Pos der Verweise
+    UINT32 mnShapeId;           // ShapeId for the SwFrmFmts
+    const SwFrmFmt &mrCntnt;    // SwFrmFmt
+    Point maParentPos;          // Points
+    INT32 mnThick;              // Border Thicknesses
+
+    DrawObj(const SwFrmFmt &rCntnt, WW8_CP nCp, Point aParentPos)
+        : mnCp(nCp), mnShapeId(0), mrCntnt(rCntnt), maParentPos(aParentPos),
+        mnThick(0) {}
+};
+
+class PlcDrawObj // PC for DrawObjects and Text-/OLE-/GRF-Boxes
+{
+private:
+    ::std::vector<DrawObj> maDrawObjs;  // vector of drawobjs
+    //No copying
+    PlcDrawObj(const PlcDrawObj&);
+    PlcDrawObj& operator=(const PlcDrawObj&);
+protected:
+    virtual void RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
+        sal_uInt32 nLen) const = 0;
+    virtual WW8_CP GetCpOffset(const WW8Fib &rFib) const = 0;
+public:
+    PlcDrawObj() {}
+    void WritePlc(SwWW8Writer& rWrt) const;
+    bool Append( SwWW8Writer&, WW8_CP nCp, const SwFrmFmt& rFmt,
+        const Point& rNdTopLeft );
+    int size() { return maDrawObjs.size(); };
+    const ::std::vector<DrawObj> &GetObjArr() const { return maDrawObjs; }
+    void SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId, INT32 nThick );
+    virtual ~PlcDrawObj();
+};
+
+class MainTxtPlcDrawObj : public PlcDrawObj
+{
+private:
+    virtual void RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
+        sal_uInt32 nLen) const;
+    virtual WW8_CP GetCpOffset(const WW8Fib &rFib) const;
+};
+
+class HdFtPlcDrawObj : public PlcDrawObj
+{
+private:
+    virtual void RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
+        sal_uInt32 nLen) const;
+    virtual WW8_CP GetCpOffset(const WW8Fib &rFib) const;
+};
+
 // der WW8-Writer
 class SwWW8Writer: public StgWriter
 {
@@ -424,8 +475,8 @@ public:
     const SwAttrSet* pStyAttr;      // StyleAttr fuer Tabulatoren
     const SwModify* pOutFmtNode;    // write Format or Node
 
-    WW8_WrPlcDrawObj *pSdrObjs,     // Draw-/Fly-Objects
-                     *pHFSdrObjs;   // Draw-/Fly-Objects in header or footer
+    MainTxtPlcDrawObj *pSdrObjs;   // Draw-/Fly-Objects
+    HdFtPlcDrawObj *pHFSdrObjs;     // Draw-/Fly-Objects in header or footer
 
     WW8Bytes* pO;
 
@@ -671,35 +722,6 @@ public:
     void Append( const SdrObject& rObj, UINT32 nShapeId );
     USHORT Count() const { return aCntnt.Count(); }
     USHORT GetPos( const VoidPtr& p ) const { return aCntnt.GetPos( p ); }
-};
-
-SV_DECL_VARARR( SvInt32s, INT32, 1, 1 )
-
-class WW8_WrPlcDrawObj      // PC for DrawObjects and Text-/OLE-/GRF-Boxes
-{
-private:
-    SvULongs aCps;                  // VARARR CP-Pos der Verweise
-    SvULongs aShapeIds;             // VARARR of ShapeIds for the SwFrmFmts
-    SvPtrarr aCntnt;                // PTRARR of SwFrmFmt
-    SvPtrarr aParentPos;            // PTRARR of Points
-    ::std::vector<INT32> maThick;   // VARARR of Border Thicknesses
-    BYTE nTTyp;
-
-    //No copying
-    WW8_WrPlcDrawObj(const WW8_WrPlcDrawObj&);
-    WW8_WrPlcDrawObj& operator=(const WW8_WrPlcDrawObj&);
-public:
-    WW8_WrPlcDrawObj( BYTE nType );
-    ~WW8_WrPlcDrawObj();
-
-    void WritePlc( SwWW8Writer& rWrt ) const;
-    BOOL Append( SwWW8Writer&, WW8_CP nCp, const SwFrmFmt& rFmt,
-        const Point& rNdTopLeft );
-    const SvPtrarr& GetCntntArr() const { return aCntnt; }
-    void SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId, INT32 nThick );
-    UINT32 GetShapeId( USHORT n ) const { return aShapeIds[ n ]; }
-    INT32 GetShapeBorder(USHORT n) const { return maThick[n]; }
-
 };
 
 typedef WW8_WrFkp* WW8_FkpPtr;  // Plc fuer Chpx und Papx ( incl PN-Plc )

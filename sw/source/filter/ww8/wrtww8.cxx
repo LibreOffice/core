@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-15 09:55:22 $
+ *  last change: $Author: cmc $ $Date: 2002-07-16 15:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,6 @@ public:
 
 
 SV_IMPL_VARARR( WW8Bytes, BYTE )
-SV_IMPL_VARARR( SvInt32s, INT32 )
 SV_IMPL_PTRARR( WW8_WrFkpPtrs, WW8_FkpPtr )
 
 typedef WW8_WrPc* WW8_WrPcPtr;
@@ -2189,9 +2188,8 @@ ULONG SwWW8Writer::StoreDoc()
     pTxtBxs = new WW8_WrPlcTxtBoxes( TXT_TXTBOX );
     pHFTxtBxs = new WW8_WrPlcTxtBoxes( TXT_HFTXTBOX );
 
-    pSdrObjs = new WW8_WrPlcDrawObj( TXT_TXTBOX );      // Draw-/Fly-Objects
-    pHFSdrObjs = new WW8_WrPlcDrawObj( TXT_HFTXTBOX );  // Draw-/Fly-Objects
-                                                        // in header or footer
+    pSdrObjs = new MainTxtPlcDrawObj;   // Draw-/Fly-Objects for main text
+    pHFSdrObjs = new HdFtPlcDrawObj;    // Draw-/Fly-Objects for header/footer
 
     pBkmks = new WW8_WrtBookmarks;                          // Bookmarks
     CreateBookmarkTbl();
