@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2001-04-18 13:47:26 $
+#   last change: $Author: jb $ $Date: 2001-05-18 16:08:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@ PRJINC=$(PRJ)$/source
 PRJNAME=configmgr
 TARGET=misc
 
-#ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 
@@ -74,18 +74,8 @@ TARGET=misc
 
 # --- Files -------------------------------------
 
-EXCEPTIONSFILES = \
-        $(SLO)$/providerfactory.obj	\
-        $(SLO)$/saxtools.obj	\
-        $(SLO)$/oslstream.obj	\
-        $(SLO)$/attributelist.obj	\
-        $(SLO)$/confname.obj	\
-        $(SLO)$/filehelper.obj	\
-        $(SLO)$/configunoreg.obj
-
-#		$(SLO)$/configmodule.obj	\
-
 SLOFILES=	\
+        $(SLO)$/bootstrap.obj	\
         $(SLO)$/providerfactory.obj	\
         $(SLO)$/tracer.obj	\
         $(SLO)$/saxtools.obj	\
