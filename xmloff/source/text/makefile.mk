@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: dvo $ $Date: 2001-01-02 14:38:40 $
+#   last change: $Author: mib $ $Date: 2001-01-05 17:05:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,6 +140,7 @@ CXXFILES = \
         XMLTextNumRuleInfo.cxx \
         XMLTextPropertySetContext.cxx \
         XMLTextShapeImportHelper.cxx \
+        XMLTextShapeStyleContext.cxx \
         XMLTextTableContext.cxx
 
 SLOFILES =	\
@@ -206,6 +207,7 @@ SLOFILES =	\
         $(SLO)$/XMLTextNumRuleInfo.obj \
         $(SLO)$/XMLTextPropertySetContext.obj \
         $(SLO)$/XMLTextShapeImportHelper.obj \
+        $(SLO)$/XMLTextShapeStyleContext.obj \
         $(SLO)$/XMLTextTableContext.obj
 
 
