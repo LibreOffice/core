@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:46:43 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,8 @@
     HelpId = SID_DRAW_CHART ;
 
 #define ITEM_TOOLBAR_SPELLING \
-    Identifier = SID_SPELLING ; \
-    HelpId = SID_SPELLING ;
+    Identifier = SID_SPELL_DIALOG ; \
+    HelpId = SID_SPELL_DIALOG ;
 
 #define ITEM_TOOLBAR_THESAURUS \
     Identifier = SID_THESAURUS ; \
@@ -1413,7 +1413,6 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_AUTO_FILTER;                /* 20325    */  \
         SID_OUTLINE_MAKE;               /* 20331    */  \
         SID_OUTLINE_REMOVE;             /* 20332    */  \
-        SID_SPELLING;                   /* 10243    */  \
         SID_THESAURUS;                                  \
         SID_EXTENDEDHELP;               /* 5402     */  \
 /*27*/  SID_RECORDMACRO;                /* xxx      */  \
