@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:27:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,8 @@ void OTools::ThrowException(OConnection* _pConnection,
     SDB_ODBC_CHAR szSqlState[5];
     SDWORD pfNativeError;
     SDB_ODBC_CHAR szErrorMessage[SQL_MAX_MESSAGE_LENGTH];
-    SWORD pcbErrorMsg;
+    szErrorMessage[0] = '\0';
+    SWORD pcbErrorMsg = 0;
 
     // Informationen zur letzten Operation:
     // wenn hstmt != SQL_NULL_HSTMT ist (Benutzung von SetStatus in SdbCursor, SdbTable, ...),
@@ -533,6 +534,8 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
         return Sequence<sal_Int8>();
 
     SQLINTEGER nBytes = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : nMaxLen;
+    if ( ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen) && aCharArray[nBytes-1] == 0  && nBytes > 0 )
+        --nBytes;
     Sequence<sal_Int8> aData((sal_Int8*)aCharArray, nBytes);
 
 
@@ -654,6 +657,8 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
 
             SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
             aCharArray[nLen] = 0;
+            if ( ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen) && aCharArray[nLen-1] == 0 && nLen > 0 )
+                --nLen;
             aData = ::rtl::OUString((const sal_Char*)aCharArray,nLen, _nTextEncoding);
 
             // Es handelt sich um Binaerdaten, um einen String, der fuer
@@ -662,24 +667,18 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             // speichern.
             while ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen)
             {
-                // Bei Strings wird der Puffer nie ganz ausgenutzt
-                // (das letzte Byte ist immer ein NULL-Byte, das
-                // aber bei pcbValue nicht mitgezaehlt wird)
-                if (pcbValue != SQL_NO_TOTAL && (pcbValue - nMaxLen) < nMaxLen)
-                    nLen = pcbValue - nMaxLen;
-                else
-                    nLen = nMaxLen;
-
                 // Solange eine "truncation"-Warnung vorliegt, weiter Daten abholen
                 //  GETDATA(SQL_C_CHAR,aCharArray, nLen + 1);
                 OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_CHAR,
                                                 &aCharArray,
-                                                (SQLINTEGER)nLen +1,
+                                                (SQLINTEGER)nMaxLen,
                                                 &pcbValue),
                                     _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
                 nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
+                if ( ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen) && aCharArray[nLen-1] == 0 && nLen > 0 )
+                    --nLen;
                 aCharArray[nLen] = 0;
 
                 aData += ::rtl::OUString((const sal_Char*)aCharArray,nLen,_nTextEncoding);
