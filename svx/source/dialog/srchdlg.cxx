@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-19 11:17:18 $
+ *  last change: $Author: obo $ $Date: 2001-02-20 09:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
-#include <com/sun/star/i18n/transliterationmodules.hpp>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
 
 #pragma hdrstop
