@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:18:47 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,14 +292,14 @@ namespace frm
 #define PROPERTY_ID_SPIN_VALUE                  ( PROPERTY_ID_START + 217 ) // sal_Int32
 #define PROPERTY_ID_ICONSIZE                    ( PROPERTY_ID_START + 218 ) // sal_Int16
 
-#define PROPERTY_ID_FONT_CHARWIDTH         ( PROPERTY_ID_START + 218 )      // float
-#define PROPERTY_ID_FONT_KERNING           ( PROPERTY_ID_START + 219 )      // sal_Bool
-#define PROPERTY_ID_FONT_ORIENTATION       ( PROPERTY_ID_START + 220 )      // float
-#define PROPERTY_ID_FONT_PITCH             ( PROPERTY_ID_START + 221 )      // sal_Int16
-#define PROPERTY_ID_FONT_TYPE              ( PROPERTY_ID_START + 222 )      // sal_Int16
-#define PROPERTY_ID_FONT_WIDTH             ( PROPERTY_ID_START + 223 )      // sal_Int16
+#define PROPERTY_ID_FONT_CHARWIDTH         ( PROPERTY_ID_START + 219 )      // float
+#define PROPERTY_ID_FONT_KERNING           ( PROPERTY_ID_START + 220 )      // sal_Bool
+#define PROPERTY_ID_FONT_ORIENTATION       ( PROPERTY_ID_START + 221 )      // float
+#define PROPERTY_ID_FONT_PITCH             ( PROPERTY_ID_START + 222 )      // sal_Int16
+#define PROPERTY_ID_FONT_TYPE              ( PROPERTY_ID_START + 223 )      // sal_Int16
+#define PROPERTY_ID_FONT_WIDTH             ( PROPERTY_ID_START + 224 )      // sal_Int16
 
-#define PROPERTY_ID_RICH_TEXT              ( PROPERTY_ID_START + 224 )      // sal_Bool
+#define PROPERTY_ID_RICH_TEXT              ( PROPERTY_ID_START + 225 )      // sal_Bool
 
 #define PROPERTY_ID_DYNAMIC_CONTROL_BORDER      ( PROPERTY_ID_START + 218 ) // sal_Bool
 #define PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS  ( PROPERTY_ID_START + 219 ) // sal_Int32
