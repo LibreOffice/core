@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-06-19 14:00:31 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,12 @@
 #ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
 #endif
-
+#ifndef _SVX_PARAPREV_HXX
+#include <svx/paraprev.hxx>
+#endif
+#ifndef _SVX_LRSPITEM_HXX
+#include <svx/lrspitem.hxx>
+#endif
 class SwWrtShell;
 class EditRegionDlg;
 class DropEvent;
@@ -137,6 +142,7 @@ class SectRepr
     SwFmtEndAtTxtEnd        aEndNtAtEnd;
     SwFmtNoBalancedColumns  aBalance;
     SvxFrameDirectionItem   aFrmDirItem;
+    SvxLRSpaceItem          aLRSpaceItem;
     USHORT                  nArrPos;
     USHORT                  nColumn;
     BOOL                    bContent    : 1; //zeigt an, ob evtl. Textinhalt im Bereich ist
@@ -157,6 +163,7 @@ public:
     SwFmtEndAtTxtEnd&   GetEndNtAtEnd()     { return aEndNtAtEnd; }
     SwFmtNoBalancedColumns& GetBalance()        { return aBalance; }
     SvxFrameDirectionItem&  GetFrmDir()         { return aFrmDirItem; }
+    SvxLRSpaceItem&         GetLRSpace()        { return aLRSpaceItem; }
 
     USHORT              GetArrPos() const {return nArrPos;}
     const String&       GetCondition() const {return aSection.GetCondition();}
@@ -395,6 +402,32 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 };
+/* -----------------13.06.2003 09:51-----------------
+
+ --------------------------------------------------*/
+class SwSectionIndentTabPage : public SfxTabPage
+{
+    FixedLine           aIndentFL;
+    FixedText           aBeforeFT;
+    MetricField         aBeforeMF;
+    FixedText           aAfterFT;
+    MetricField         aAfterMF;
+
+    SvxParaPrevWindow   aPreviewWin;
+
+    DECL_LINK(IndentModifyHdl, MetricField*);
+public:
+    SwSectionIndentTabPage( Window *pParent, const SfxItemSet &rAttrSet );
+    virtual ~SwSectionIndentTabPage();
+
+    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual void        Reset( const SfxItemSet& );
+
+    static SfxTabPage*  Create( Window* pParent,
+                                const SfxItemSet& rAttrSet);
+
+    void    SetWrtShell(SwWrtShell& rSh);
+};
 
 /* -----------------21.05.99 13:07-------------------
  *
@@ -419,6 +452,7 @@ public:
  * --------------------------------------------------*/
 class SwSectionPropertyTabDialog : public SfxTabDialog
 {
+    SwWrtShell& rWrtSh;
 protected:
     virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
 public:
