@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:59:19 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,9 +201,12 @@ void VirtDevServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 // TODO:    vdev.GetCharWidth( nGlyphIndex, nGlyphIndex, &nCharWidth );
     rGD.SetCharWidth( nCharWidth );
 
-    const Rectangle aRect = vdev.GetTextRect( aRect, nGlyphIndex );
+    const Rectangle aRect = vdev.GetTextRect(
+        aRect, String(static_cast< sal_Unicode >(nGlyphIndex)) );
     rGD.SetOffset( aRect.Top(), aRect.Left() );
-    rGD.SetDelta( vdev.GetTextWidth( nGlyphIndex ), 0 );
+    rGD.SetDelta(
+        vdev.GetTextWidth( String(static_cast< sal_Unicode >(nGlyphIndex)) ),
+        0 );
     rGD.SetSize( aRect.GetSize() );
 }
 
