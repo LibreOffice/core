@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: os $ $Date: 2001-04-19 10:44:37 $
+ *  last change: $Author: os $ $Date: 2001-04-19 12:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1196,7 +1196,6 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_WIDOWS),               RES_PARATR_WIDOWS,      &::getCppuType((const sal_Int8*)0),PropertyAttribute::MAYBEVOID,     0},
                     { SW_PROP_NAME(UNO_NAME_PARA_ORPHANS),              RES_PARATR_ORPHANS,      &::getCppuType((const sal_Int8*)0),PropertyAttribute::MAYBEVOID,     0},
                     { SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),                 RES_BOXATR_FORMAT,      &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID ,0             },
-                    { SW_PROP_NAME(UNO_NAME_PAGE_NUMBER_OFFSET),            RES_PAGEDESC,           &::getCppuType((const sal_Int16*)0),        PROPERTY_NONE, MID_PAGEDESC_PAGENUMOFFSET},
                     { SW_PROP_NAME(UNO_NAME_PARA_ADJUST),                   RES_PARATR_ADJUST,      &::getCppuType((const sal_Int16*)0),        PROPERTY_NONE, MID_PARA_ADJUST},
                     { SW_PROP_NAME(UNO_NAME_PARA_EXPAND_SINGLE_WORD),     RES_PARATR_ADJUST,      &::getBooleanCppuType()  ,        PROPERTY_NONE, MID_EXPAND_SINGLE   },
                     { SW_PROP_NAME(UNO_NAME_PARA_LAST_LINE_ADJUST),       RES_PARATR_ADJUST,      &::getCppuType((const sal_Int16*)0),          PROPERTY_NONE, MID_LAST_LINE_ADJUST},
@@ -1699,7 +1698,6 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_WIDOWS),               RES_PARATR_WIDOWS,      &::getCppuType((const sal_Int8*)0),PropertyAttribute::MAYBEVOID,     0},
                     { SW_PROP_NAME(UNO_NAME_PARA_ORPHANS),              RES_PARATR_ORPHANS,      &::getCppuType((const sal_Int8*)0),PropertyAttribute::MAYBEVOID,     0},
                     { SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),                 RES_BOXATR_FORMAT,      &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID ,0             },
-                    { SW_PROP_NAME(UNO_NAME_PAGE_NUMBER_OFFSET),            RES_PAGEDESC,           &::getCppuType((const sal_Int16*)0),        PROPERTY_NONE, MID_PAGEDESC_PAGENUMOFFSET},
                     { SW_PROP_NAME(UNO_NAME_PARA_ADJUST),                   RES_PARATR_ADJUST,      &::getCppuType((const sal_Int16*)0),        PROPERTY_NONE, MID_PARA_ADJUST},
                     { SW_PROP_NAME(UNO_NAME_PARA_EXPAND_SINGLE_WORD),     RES_PARATR_ADJUST,      &::getBooleanCppuType()  ,        PROPERTY_NONE, MID_EXPAND_SINGLE   },
                     { SW_PROP_NAME(UNO_NAME_PARA_LAST_LINE_ADJUST),       RES_PARATR_ADJUST,      &::getCppuType((const sal_Int16*)0),          PROPERTY_NONE, MID_LAST_LINE_ADJUST},
