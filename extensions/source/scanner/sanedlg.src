@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:06:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "ÀåÄ¡ Á¤º¸(~I)";
         Text[ turkish ] = "Cihaz hakkýnda";
         Text[ catalan ] = "Información sobre\n ~dispositivo";
+        Text[ finnish ] = "Tietoja\n la~itteesta";
     };
     PushButton RID_PREVIEW_BTN
     {
@@ -136,6 +137,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ turkish ] = "Önizleme\noluþtur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crear\n~Previsualización";
+        Text[ finnish ] = "Luo\nesikatselu";
     };
     GroupBox RID_PREVIEW_BOX
     {
@@ -164,6 +166,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ catalan ] = "Previsualización";
+        Text[ finnish ] = "Esikatselu";
     };
     GroupBox RID_SCANAREA_BOX
     {
@@ -192,6 +195,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "½ºÄµ ¿µ¿ª";
         Text[ turkish ] = "Tarama alaný";
         Text[ catalan ] = "Área de escaneado";
+        Text[ finnish ] = "Skannausalue";
     };
     FixedText RID_SCAN_LEFT_TXT
     {
@@ -220,6 +224,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "¿ÞÂÊ:";
         Text[ turkish ] = "Sol:";
         Text[ catalan ] = "I~zquierda:";
+        Text[ finnish ] = "Vasen:";
     };
     MetricField RID_SCAN_LEFT_BOX
     {
@@ -257,6 +262,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ turkish ] = "Üst:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Arriba:";
+        Text[ finnish ] = "Yläosa:";
     };
     MetricField RID_SCAN_TOP_BOX
     {
@@ -294,6 +300,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ turkish ] = "Sað:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Derecha:";
+        Text[ finnish ] = "Oikea:";
     };
     MetricField RID_SCAN_RIGHT_BOX
     {
@@ -330,6 +337,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "¾Æ·¡:";
         Text[ turkish ] = "Alt:";
         Text[ catalan ] = "~Abajo:";
+        Text[ finnish ] = "Alaosa:";
     };
     MetricField RID_SCAN_BOTTOM_BOX
     {
@@ -366,6 +374,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "»ç¿ëÇÑ ÀåÄ¡:";
         Text[ turkish ] = "Kullanýlan cihaz:";
         Text[ catalan ] = "Dispositivo ~utilizado:";
+        Text[ finnish ] = "Käytetty laite:";
     };
     ListBox RID_DEVICE_BOX
     {
@@ -400,6 +409,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ arabic ] = "ÇÓÊÈÇäÉ [~DPI]";
         Text[ turkish ] = "Çözünürlük [~DPI]";
         Text[ catalan ] = "Resolución [~DPI]:";
+        Text[ finnish ] = "Tarkkuus [~DPI]";
     };
     NumericBox RID_SCAN_RESOLUTION_BOX
     {
@@ -434,6 +444,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "È®ÀåµÈ ¿É¼Ç ³ªÅ¸³»±â";
         Text[ turkish ] = "Ek seçenekleri görüntüle";
         Text[ catalan ] = "Mostrar otras ~opciones";
+        Text[ finnish ] = "Näytä lisäasetukset";
     };
     CheckBox RID_SCAN_ADVANCED_BOX
     {
@@ -469,6 +480,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ turkish ] = "Seçenekler:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones:";
+        Text[ finnish ] = "Asetukset";
     };
     Control RID_SCAN_OPTION_BOX
     {
@@ -546,6 +558,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "º¤ÅÍ ¿ä¼Ò";
         Text[ turkish ] = "Vektör öðesi";
         Text[ catalan ] = "Elemento vectorial";
+        Text[ finnish ] = "Vektorielementti";
     };
     NumericField RID_SCAN_NUMERIC_VECTOR_BOX
     {
@@ -582,6 +595,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "¼³Á¤";
         Text[ turkish ] = "Tanýmla";
         Text[ catalan ] = "Definir";
+        Text[ finnish ] = "Määritä";
     };
     Bitmap RID_SCAN_BITMAP_PLUS
     {
@@ -612,6 +626,7 @@ ModalDialog RID_SANE_DIALOG
     Text[ korean ] = "½ºÄ³³Ê";
     Text[ turkish ] = "Tarayýcý";
     Text[ catalan ] = "Escáner";
+    Text[ finnish ] = "Skanneri";
 };
 String RID_SANE_DEVICEINFO_TXT
 {
@@ -638,6 +653,7 @@ String RID_SANE_DEVICEINFO_TXT
     Text[ korean ] = "ÀåÄ¡: %s\nÁ¦Á¶¾÷Ã¼: %s\n¸ðµ¨: %s\nÀ¯Çü: %s";
     Text[ turkish ] = "Cihaz: %s\nÜretici: %s\nModel: %s\nTip: %s";
     Text[ catalan ] = "Dispositivo: %s\nFabricante: %s\nModelo: %s\nTipo: %s";
+    Text[ finnish ] = "Laite: %s\nToimittaja: %s\nMalli: %s\nTyyppi: %s";
 };
 String RID_SANE_SCANERROR_TXT
 {
@@ -664,6 +680,7 @@ String RID_SANE_SCANERROR_TXT
     Text[ korean ] = "½ºÄµÇÒ ¶§ ¿À·ù°¡ ¹ß»ýÇß½À´Ï´Ù.";
     Text[ turkish ] = "Tarama sýrasýnda hata oluþtu.";
     Text[ catalan ] = "Se ha producido un error durante el escaneado.";
+    Text[ finnish ] = "Skannauksessa on ilmennyt virhe.";
 };
 String RID_SANE_NORESOLUTIONOPTION_TXT
 {
@@ -690,6 +707,7 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text[ korean ] = "ÀåÄ¡´Â ¹Ì¸®º¸±â ¿É¼ÇÀ» Á¦°øÇÏÁö ¾Ê½À´Ï´Ù. ±× ´ë½Å ÀÏ¹Ý ½ºÄµÀÌ ¹Ì¸®º¸±â·Î ÀÌ¿ëµÉ °ÍÀÔ´Ï´Ù. ÀÌ ½ºÄµÀº ½Ã°£ÀÌ ÈÎ¾À ´õ ¿À·¡ °É¸± ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Cihaz önizleme iþlevine desteklemiyor. Bunun yerine önizleme olarak normal bir tarama görüntüsü kullanýlacak. Bu iþlem daha fazla zaman alabilir.";
     Text[ catalan ] = "El dispositivo no está preparado para ofrecer opción de previsualización. En lugar de esta se utilizará un escaneado normal, que puede tardar considerablemente más.";
+    Text[ finnish ] = "Laitteessa ei ole esikatselutoimintoa. Tavallista skannausta käytetään esikatseluskannauksen sijasta. Tavallinen skannaus saattaa kestää huomattavan kauan.";
 };
 String RID_SANE_NOSANELIB_TXT
 {
@@ -716,4 +734,5 @@ String RID_SANE_NOSANELIB_TXT
     Text[ korean ] = "SANE ÀÎÅÍÆäÀÌ½º¸¦ ÃÊ±âÈ­ÇÏÁö ¸øÇØ ½ºÄµ°úÁ¤À» ÁøÇàÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "SANE arabirimi baþlatýlamadý. Tarama iþlemi yürütülemez.";
     Text[ catalan ] = "La interfaz SANE no se pudo inicializar. No se puede realizar ningún proceso de digitalización.";
+    Text[ finnish ] = "SANE-liittymää ei voitu alustaa. Skannausta ei voida suorittaa.";
 };
