@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-19 09:34:49 $
+ *  last change: $Author: od $ $Date: 2002-12-10 14:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1106,6 +1106,9 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             {
                 SetDerivedR2L( sal_False );
                 CheckDirChange();
+                // OD 09.12.2002 #105576# - Force complete paint due to existing
+                // indents.
+                SetCompletePaint();
             }
 
 
