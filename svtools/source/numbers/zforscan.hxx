@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:27:47 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 10:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,34 +82,11 @@ class SvNumberFormatter;
 struct ImpSvNumberformatInfo;
 
 
-#define SC_MAX_ANZ_FORMAT_STRINGS   100
-#define SC_MAX_ANZ_STANDARD_FARBEN  10
-#define FLAG_STANDARD_IN_FORMAT     1000
-                                            // Hack: nThousand=1000
-                                            // => Standard kommt im
-                                            // Format vor
+const size_t NF_MAX_FORMAT_SYMBOLS   = 100;
+const size_t NF_MAX_DEFAULT_COLORS   = 10;
 
-enum Sc_SymbolType
-{
-    SYMBOLTYPE_STRING = -1,                     // literal string in output
-    SYMBOLTYPE_DEL    = -2,                     // special character
-    SYMBOLTYPE_BLANK  = -3,                     // blank for '_'
-    SYMBOLTYPE_STAR   = -4,                     // *-character
-    SYMBOLTYPE_DIGIT  = -5,                     // digit place holder
-    SYMBOLTYPE_DECSEP = -6,                     // decimal separator
-    SYMBOLTYPE_THSEP  = -7,                     // group AKA thousand separator
-    SYMBOLTYPE_EXP    = -8,                     // exponent E
-    SYMBOLTYPE_FRAC   = -9,                     // fraction /
-    SYMBOLTYPE_EMPTY  = -10,                    // deleted symbols
-    SYMBOLTYPE_FRACBLANK = -11,                 // delimiter between integer and fraction
-    SYMBOLTYPE_COMMENT = -12,                   // comment is following
-    SYMBOLTYPE_CURRENCY = -13,                  // currency symbol
-    SYMBOLTYPE_CURRDEL  = -14,                  // currency symbol delimiter [$]
-    SYMBOLTYPE_CURREXT  = -15,                  // currency symbol extension -xxx
-    SYMBOLTYPE_CALENDAR = -16,                  // calendar ID
-    SYMBOLTYPE_CALDEL   = -17                   // calendar delimiter [~]
-};
-
+// Hack: nThousand==1000 => "Default" occurs in format string
+const USHORT FLAG_STANDARD_IN_FORMAT = 1000;
 
 class ImpSvNumberformatScan
 {
@@ -215,15 +192,15 @@ public:
 
 private:                            // ---- privater Teil
     NfKeywordTable sKeyword;                    // Schluesselworte der Syntax
-    Color StandardColor[SC_MAX_ANZ_STANDARD_FARBEN];
+    Color StandardColor[NF_MAX_DEFAULT_COLORS];
                                                 // Array der Standardfarben
     Date* pNullDate;                            // 30Dec1899
     String sNameStandardFormat;             // "Standard"
     short nStandardPrec;                        // default Precision fuer Standardformat (2)
     SvNumberFormatter* pFormatter;              // Pointer auf die Formatliste
 
-    String sStrArray[SC_MAX_ANZ_FORMAT_STRINGS];// Array der Symbole
-    short nTypeArray[SC_MAX_ANZ_FORMAT_STRINGS];// Array der Infos
+    String sStrArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Symbole
+    short nTypeArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Infos
                                                 // externe Infos:
     USHORT nAnzResStrings;                      // Anzahl der Ergebnissymbole
 #if !(defined SOLARIS && defined X86)
