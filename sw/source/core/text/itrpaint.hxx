@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-16 12:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "itrtxt.hxx"
 
 class SwSaveClip;          // SwTxtPainter
+class SwMultiPortion;
 
 /*************************************************************************
  *                      class SwTxtPainter
@@ -84,6 +85,7 @@ public:
     void DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                        const sal_Bool bUnderSz );
     void PaintDropPortion();
+    void PaintMultiPortion( const SwRect &rPaint, SwMultiPortion& rMulti );
     inline void SetPaintDrop( const sal_Bool bNew ) { bPaintDrop = bNew; }
     inline IsPaintDrop() const { return bPaintDrop; }
     inline SwTxtPaintInfo &GetInfo()
