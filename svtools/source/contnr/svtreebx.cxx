@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:14:25 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1838,7 +1838,11 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
                         pImg = &pImp->GetCollapsedNodeBmp( eBitmapMode );
                 }
                 aPos.Y() += (nTempEntryHeight - pImg->GetSizePixel().Height()) / 2;
-                DrawImage( aPos, *pImg );
+
+                USHORT nStyle = 0;
+                if ( !IsEnabled() )
+                    nStyle |= IMAGE_DRAW_DISABLE;
+                DrawImage( aPos, *pImg ,nStyle);
             }
         }
     }
