@@ -2,9 +2,9 @@
  *
  *  $RCSfile: headbar.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: vg $ $Date: 2001-04-18 13:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1607,7 +1607,7 @@ XubString HeaderBar::GetHelpText( USHORT nItemId ) const
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pItem->maHelpText = pHelp->GetHelpText( pItem->mnHelpId );
+                pItem->maHelpText = pHelp->GetHelpText( pItem->mnHelpId, this );
         }
 
         return pItem->maHelpText;
