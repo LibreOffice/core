@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:01:42 $
+ *  last change: $Author: fme $ $Date: 2002-09-17 14:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,15 +725,18 @@ void SwSelPaintRects::FillRects()
 void SwSelPaintRects::Get1PixelInLogic( const ViewShell& rSh,
                                         long* pX, long* pY )
 {
-    const Window& rOut = *rSh.GetWin();
-    const MapMode& rMM = rOut.GetMapMode();
+    const OutputDevice* pOut = rSh.GetWin();
+    if ( ! pOut )
+        pOut = rSh.GetOut();
+
+    const MapMode& rMM = pOut->GetMapMode();
     if( pMapMode->GetMapUnit() != rMM.GetMapUnit() ||
         pMapMode->GetScaleX() != rMM.GetScaleX() ||
         pMapMode->GetScaleY() != rMM.GetScaleY() )
     {
         *pMapMode = rMM;
         Size aTmp( 1, 1 );
-        aTmp = rOut.PixelToLogic( aTmp );
+        aTmp = pOut->PixelToLogic( aTmp );
         nPixPtX = aTmp.Width();
         nPixPtY = aTmp.Height();
     }
