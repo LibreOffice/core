@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-01-05 21:11:27 $
+#   last change: $Date: 2004-03-19 16:06:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,4 +66,4 @@ PRJNAME=sc
 TARGET=qa_unoapi
 
 ALLTAR:
-    +$(SOLARENV)$/bin$/checkapi -sce sc.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+    +$(SOLARENV)$/bin$/checkapi -sce sc.sce -TimeOut 0 -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments -ini $(PWD)$/runner.props
