@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-19 11:00:25 $
+ *  last change: $Author: dvo $ $Date: 2001-02-19 11:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,13 +167,13 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         break;
 
     case CTF_SECTION_FOOTNOTE_END:
-        XMLSectionFootnoteConfigExport::exportXML(GetExport(), sal_False,
+        XMLSectionFootnoteConfigExport::exportXML(rExport, sal_False,
                                                   pProperties, nIdx,
                                                   getPropertySetMapper());
         break;
 
     case CTF_SECTION_ENDNOTE_END:
-        XMLSectionFootnoteConfigExport::exportXML(GetExport(), sal_True,
+        XMLSectionFootnoteConfigExport::exportXML(rExport, sal_True,
                                                   pProperties, nIdx,
                                                   getPropertySetMapper());
         break;

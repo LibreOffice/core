@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-19 11:00:25 $
+ *  last change: $Author: dvo $ $Date: 2001-02-19 11:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,21 +124,12 @@ using ::rtl::OUStringBuffer;
 
 
 void XMLSectionFootnoteConfigExport::exportXML(
-    const SvXMLExport& _rExport,
+    SvXMLExport& rExport,
     sal_Bool bEndnote,
     const vector<XMLPropertyState> *pProperties,
     sal_uInt32 nIdx,
     const UniReference<XMLPropertySetMapper> & rMapper)
 {
-    // HACK: DO NOT COMMIT
-    // HACK: DO NOT COMMIT
-    // HACK: DO NOT COMMIT
-    // HACK: DO NOT COMMIT
-    // HACK: DO NOT COMMIT
-    // HACK: DO NOT COMMIT
-    // HACK: DO NOT COMMIT
-    SvXMLExport& rExport = (SvXMLExport&)_rExport;
-
 
 #ifndef PRODUCT
     // check whether the properties are in the property state vector as
