@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsource.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-07-31 14:25:47 $
+ *  last change: $Author: thb $ $Date: 2002-02-11 15:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ public:
     virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();
     virtual void                UpdateData();
+
+    virtual SfxBroadcaster&     GetBroadcaster() const;
 
 private:
     SvxEditEngineSource( SvxEditEngineSourceImpl* pImpl );
