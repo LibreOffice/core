@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:51 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,20 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
 
 #include <math.h>
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+#ifndef SC_STLPOOL_HXX
+#include "stlpool.hxx"
+#endif
+#ifndef SC_STLSHEET_HXX
+#include "stlsheet.hxx"
 #endif
 #ifndef SC_COMPILER_HXX
 #include "compiler.hxx"
@@ -269,6 +278,33 @@ const SvStorageStreamRef ScfTools::OpenStorageStreamWrite( SvStorage* pStorage, 
     if( pStorage )
         xStrm = pStorage->OpenStream( rStrmName/*, STREAM_READWRITE | STREAM_TRUNC*/ );
     return xStrm;
+}
+
+
+// *** style sheet handling ***
+
+ScStyleSheet& ScfTools::MakeCellStyleSheet( ScStyleSheetPool& rPool, const String& rStyleName, bool bForceName )
+{
+    // find an unused name
+    String aNewName( rStyleName );
+    sal_Int32 nIndex = 0;
+    SfxStyleSheetBase* pOldStyleSheet = NULL;
+    while( SfxStyleSheetBase* pStyleSheet = rPool.Find( aNewName, SFX_STYLE_FAMILY_PARA ) )
+    {
+        if( !pOldStyleSheet )
+            pOldStyleSheet = pStyleSheet;
+        aNewName.Assign( rStyleName ).Append( ' ' ).Append( String::CreateFromInt32( ++nIndex ) );
+    }
+
+    // rename existing style
+    if( pOldStyleSheet && bForceName )
+    {
+        pOldStyleSheet->SetName( aNewName );
+        aNewName = rStyleName;
+    }
+
+    // create new style sheet
+    return static_cast< ScStyleSheet& >( rPool.Make( aNewName, SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_USERDEF ) );
 }
 
 
