@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: os $ $Date: 2002-04-05 14:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ class SwInsertGrfRulerDlg  : public SfxModalDialog
 
     List            aGrfNames;
     String          sSimple;
-
+    String          sRulers;
     USHORT          nSelPos;
 
     SwRulerValueSet* pExampleVS;
@@ -91,7 +91,7 @@ protected:
     DECL_LINK(DoubleClickHdl, ValueSet*);
 
 public:
-    SwInsertGrfRulerDlg( Window* pParent, SwDocShell* pDocSh );
+    SwInsertGrfRulerDlg( Window* pParent );
     ~SwInsertGrfRulerDlg();
 
     String          GetGraphicName();

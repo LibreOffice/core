@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:47:56 $
+ *  last change: $Author: os $ $Date: 2002-04-05 14:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,9 +633,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         BOOL bSimpleLine = FALSE;
         BOOL bRet = FALSE;
         Window* pParent = GetView().GetWindow();
-        SwInsertGrfRulerDlg* pDlg = new SwInsertGrfRulerDlg(
-            pParent ,
-            GetView().GetDocShell());
+        SwInsertGrfRulerDlg* pDlg = new SwInsertGrfRulerDlg(pParent);
         // MessageBox fuer fehlende Grafiken
         if(!pDlg->HasImages())
             InfoBox( pParent, SW_RES(MSG_NO_RULER)).Execute();
@@ -1063,6 +1061,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.12  2002/02/01 12:47:56  jp
+    Task #92291#: add new character skip modifier
+
     Revision 1.11  2001/10/25 15:37:10  ka
     #93596#: SvxPluginFileDialog returns an error code
 

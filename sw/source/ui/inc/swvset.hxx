@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swvset.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: os $ $Date: 2002-04-05 14:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,17 +72,11 @@ class SwDocShell;
 
 class SwRulerValueSet : public SvxBmpNumValueSet
 {
-    SwDocShell*     pSwDocSh;
     public:
         SwRulerValueSet( Window* pParent,
-                        const ResId& rResId,
-                        const List& rStrNames,
-                        SwDocShell* pSwDocSh );
+                        const ResId& rResId );
         ~SwRulerValueSet();
-
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
-    DECL_STATIC_LINK(SwRulerValueSet, GraphicArrivedHdl_Impl, SvxBrushItem*);
-
 };
 #endif
 
