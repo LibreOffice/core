@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 10:08:37 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,17 +607,17 @@ void SwModule::ExecDB(SfxRequest &rReq)
         case FN_QRY_MERGE:
         case FN_QRY:
         {
-            String sDBName;
+            SwDBData aData;
 
             if (GetView())
             {
                 SwWrtShell &rSh = GetView()->GetWrtShell();
-                sDBName = rSh.GetDBName();
+                aData = rSh.GetDBData();
                 rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
                                     // das Mischen von DB-Feldern notwendig.
                 GetView()->AttrChangedNotify( &rSh );
                 pNewDBMgr->SetMergeType( DBMGR_MERGE );
-                ShowDBObj(rSh, sDBName, sal_True);
+                ShowDBObj(rSh, aData, sal_True);
             }
 
             if (pNewDBMgr && nSlot == FN_QRY_MERGE)
@@ -678,12 +678,9 @@ void SwModule::StateIsView(SfxItemSet& rSet)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwModule::ShowDBObj(SwWrtShell& rSh, const String& rDBName, sal_Bool bShowError)
+void SwModule::ShowDBObj(SwWrtShell& rSh, const SwDBData& rData, sal_Bool bShowError)
 {
-    String sDBName(rDBName.GetToken(0, DB_DELIM));
-
-    String sTable(rDBName.GetToken(1, DB_DELIM));
-    rSh.GetNewDBMgr()->ShowInBeamer( sDBName, sTable, SW_DB_SELECT_UNKNOWN, aEmptyStr );
+    rSh.GetNewDBMgr()->ShowInBeamer( rData.sDataSource, rData.sCommand, rData.nCommandType, aEmptyStr );
 }
 
 /*--------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 15:35:35 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,7 +548,7 @@ static sal_uInt16 nBCTitleNo = 0;
         if( rItem.aWriting.indexOf( '<' ) >= 0 )
         {
             // Datenbankbrowser mit zuletzt verwendeter Datenbank oeffnen
-            ShowDBObj( *pSh, pSh->GetDBName() );
+            ShowDBObj( *pSh, pSh->GetDBData() );
         }
 
         if( rItem.bSynchron )

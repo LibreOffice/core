@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-02-16 14:58:11 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _DBCONFIG_HXX
+#include <dbconfig.hxx>
 #endif
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
@@ -460,7 +463,13 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         // Bei Datenbankfeldern ohne DB-Name DB-Name von Dok einsetzen
         SvStringsDtor aDBNames(1, 1);
         aDBNames.Insert( new String(), 0);
-        rSh.ChangeDBFields( aDBNames, rSh.GetDBName());
+        SwDBData aData = rSh.GetDBData();
+        String sDBName = aData.sDataSource;
+        sDBName += DB_DELIM;
+        sDBName += (String)aData.sCommand;
+        sDBName += DB_DELIM;
+        sDBName += String::CreateFromInt32(aData.nCommandType);
+        rSh.ChangeDBFields( aDBNames, sDBName);
         SetInitDBFields(FALSE);
     }
 
@@ -530,7 +539,13 @@ BOOL SwNewDBMgr::Merge( USHORT nOpt, SwWrtShell* pSh,
         // Bei Datenbankfeldern ohne DB-Name DB-Name von Dok einsetzen
         SvStringsDtor aDBNames(1, 1);
         aDBNames.Insert( new String(), 0);
-        pSh->ChangeDBFields( aDBNames, pSh->GetDBName());
+        SwDBData aData = pSh->GetDBData();
+        String sDBName = aData.sDataSource;
+        sDBName += DB_DELIM;
+        sDBName += (String)aData.sCommand;
+        sDBName += DB_DELIM;
+        sDBName += String::CreateFromInt32(aData.nCommandType);
+        pSh->ChangeDBFields( aDBNames, sDBName);
         SetInitDBFields(FALSE);
     }
     const SbaSelectionList* pSelList = 0;
@@ -816,12 +831,11 @@ void SwNewDBMgr::ChgDBName(SwWrtShell* pSh,
 {
     if (pSh)
     {
-        String sNewDBName(rDataSource);
-        sNewDBName += DB_DELIM;
-        sNewDBName += rTableOrQuery;
-        sNewDBName += ';';
-        sNewDBName += rStatement;
-        pSh->ChgDBName(sNewDBName);
+        SwDBData aData;
+        aData.sDataSource = rDataSource;
+        aData.sCommand = rStatement.Len() ? rStatement : rTableOrQuery;
+        aData.nCommandType = rStatement.Len() ? CommandType::COMMAND : CommandType::TABLE;
+        pSh->ChgDBData(aData);
     }
 }
 
@@ -2164,17 +2178,9 @@ void    SwNewDBMgr::GetDSSelection(const String& rDBDesc, long& rSelStart, long&
 /* -----------------------------17.07.00 14:34--------------------------------
 
  ---------------------------------------------------------------------------*/
-const String&   SwNewDBMgr::GetAddressDBName()
+const SwDBData& SwNewDBMgr::GetAddressDBName()
 {
-#ifdef DBG_UTIL
-    static BOOL bShowError = TRUE;
-    if(bShowError)
-    {
-        DBG_ERROR("SwNewDBMgr::GetAddressDBName(): no address data base selection available")
-        bShowError=FALSE;
-    }
-#endif
-    return aEmptyStr;
+    return SW_MOD()->GetDBConfig()->GetAddressSource();
 }
 /* -----------------------------18.07.00 13:13--------------------------------
 
@@ -2295,9 +2301,10 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     Reference<XDataSource> xSource = dbtools::getDataSource(sDataSource, xMgr);
     Reference< XColumnsSupplier > xColSupp( xResSet, UNO_QUERY );
-    SwInsDBData aDBData;
-    aDBData.sDataBaseName = sDataSource;
-    aDBData.sDataTableName = sDataTableOrQuery;
+    SwDBData aDBData;
+    aDBData.sDataSource = sDataSource;
+    aDBData.sCommand = sDataTableOrQuery;
+    aDBData.nCommandType = nCmdType;
 
     SwInsertDBColAutoPilot *pDlg = new SwInsertDBColAutoPilot(
             rSh.GetView(),

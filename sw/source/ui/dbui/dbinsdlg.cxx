@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 12:42:44 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
 #include <com/sun/star/sdb/XColumn.hpp>
@@ -381,7 +384,7 @@ int SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const
 SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         Reference<XDataSource> xDataSource,
         Reference<sdbcx::XColumnsSupplier> xColSupp,
-        const SwInsDBData& rData )
+        const SwDBData& rData )
     : SfxModalDialog( rView.GetWindow(), SW_RES( DLG_AP_INSERT_DB_SEL )),
     ConfigItem(C2U("Office.Writer/InsertData/DataSet"), CONFIG_MODE_DELAYED_UPDATE),
     aFtInsertData( this, SW_RES( FT_INSERT_DATA )),
@@ -1138,11 +1141,8 @@ FASTBOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
                 if( bInsField )
                 {
                     SwWrtShell& rSh = pView->GetWrtShell();
-                    String sDBContent(aDBData.sDataBaseName);
-                    sDBContent += DB_DELIM;
-                    sDBContent += aDBData.sDataTableName;
                     SwDBFieldType aFldType( rSh.GetDoc(), aSrch.sColumn,
-                                            sDBContent );
+                                            aDBData );
                     pNew = new _DB_Column( rFndCol, *new SwDBField(
                             (SwDBFieldType*)rSh.InsertFldType( aFldType ),
                                                             nFormat ) );
@@ -1193,8 +1193,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
                 aResType <<= (sal_Int32)ResultSetType::SCROLL_INSENSITIVE;
                 xStatProp->setPropertyValue(C2U("ResultSetType"), aResType);
             }
-            if(xStatement.is())
-                xResultSet = xStatement->executeQuery(aDBData.sStatement);
+            if(xStatement.is() && sdb::CommandType::COMMAND == aDBData.nCommandType)
+                xResultSet = xStatement->executeQuery(aDBData.sCommand);
             xRow = Reference< sdbc::XRow >(xResultSet, UNO_QUERY);
         }
         catch(Exception& aExcept)
@@ -1486,14 +1486,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
                 aDBFormatData.aLocale = *(Locale*)aLoc.getValue();
             }
 
-            String sDBContent(aDBData.sDataBaseName);
-            sDBContent += DB_DELIM;
-            sDBContent += aDBData.sDataTableName;
-            sDBContent += ';';
-            sDBContent += aDBData.sStatement;
             SwDBNextSetField aNxtDBFld( (SwDBNextSetFieldType*)rSh.
                                         GetFldType( 0, RES_DBNEXTSETFLD ),
-                                        C2S("1"), aEmptyStr, sDBContent );
+                                        C2S("1"), aEmptyStr, aDBData );
 
 
             BOOL bSetCrsr = TRUE;
@@ -1835,7 +1830,7 @@ void SwInsertDBColAutoPilot::Commit()
         OUString sSource, sCommand;
         pSourceProps[0] >>= sSource;
         pSourceProps[1] >>= sCommand;
-        if(sSource.equals(aDBData.sDataBaseName) && sCommand.equals(aDBData.sDataTableName))
+        if(sSource.equals(aDBData.sDataSource) && sCommand.equals(aDBData.sCommand))
         {
             Sequence<OUString> aElements(1);
             aElements.getArray()[0] = pNames[nNode];
@@ -1856,9 +1851,9 @@ void SwInsertDBColAutoPilot::Commit()
         pValues[i].Name += pNodeNames[i];
     }
 
-    pValues[0].Value <<= OUString(aDBData.sDataBaseName);
-    pValues[1].Value <<= OUString(aDBData.sDataTableName);
-    pValues[2].Value <<= sal_Int16(0);
+    pValues[0].Value <<= OUString(aDBData.sDataSource);
+    pValues[1].Value <<= OUString(aDBData.sCommand);
+    pValues[2].Value <<= aDBData.nCommandType;
     pValues[3].Value <<= OUString(aEdDbText.GetText());
 
     String sTmp;
@@ -1968,7 +1963,7 @@ void SwInsertDBColAutoPilot::Load()
         pDataSourceProps[0] >>= sSource;
         pDataSourceProps[1] >>= sCommand;
         pDataSourceProps[2] >>= nCommandType;
-        if(sSource.equals(aDBData.sDataBaseName) && sCommand.equals(aDBData.sDataTableName))
+        if(sSource.equals(aDBData.sDataSource) && sCommand.equals(aDBData.sCommand))
         {
             _DB_ColumnConfigData* pNewData = new _DB_ColumnConfigData;
             pNewData->sSource = sSource;

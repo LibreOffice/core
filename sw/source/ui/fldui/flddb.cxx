@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:22 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,12 +207,9 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
         else
         {
             SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
-            String sTmp(pSh->GetDBName());
+            SwDBData aTmp(pSh->GetDBData());
 
-            aDatabaseTLB.Select(
-            sTmp.GetToken(0, DB_DELIM),
-            sTmp.GetToken(1, DB_DELIM),
-            sTmp.GetToken(2, DB_DELIM));
+            aDatabaseTLB.Select(aTmp.sDataSource, aTmp.sCommand, aEmptyStr);
         }
     }
 
@@ -222,7 +219,7 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
         if(sUserData.GetToken(0, ';').EqualsIgnoreCaseAscii(USER_DATA_VERSION_1))
         {
             String sVal = sUserData.GetToken(1, ';');
-            USHORT nVal = sVal.ToInt32();
+            USHORT nVal = (USHORT)sVal.ToInt32();
             if(nVal != USHRT_MAX)
             {
                 for(USHORT i = 0; i < aTypeLB.GetEntryCount(); i++)
@@ -257,24 +254,17 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
 BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
 {
     String sTableName, sColumnName;
-    String sDBName = aDatabaseTLB.GetDBName(sTableName, sColumnName);
+    SwDBData aData;
+    aData.sDataSource = aDatabaseTLB.GetDBName(sTableName, sColumnName);
+    aData.sCommand = sTableName;
     SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
 
-    if (!sDBName.Len())
-    {
-        String sTmp = pSh->GetDBName();
-        sDBName = sTmp.GetToken(0, DB_DELIM);
-        sTableName = sTmp.GetToken(1, DB_DELIM);
-    }
+    if (!aData.sDataSource.getLength())
+        aData = pSh->GetDBData();
     else
-    {
-        String sNewDBName = sDBName;
-        sNewDBName += DB_DELIM;
-        sNewDBName += sTableName;
-        pSh->ChgDBName(sNewDBName);
-    }
+        pSh->ChgDBData(aData);
 
-    if (sDBName.Len())      // Ohne Datenbank kein neuer Feldbefehl
+    if(aData.sDataSource.getLength())       // Ohne Datenbank kein neuer Feldbefehl
     {
         USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
         String aVal(aValueED.GetText());
@@ -282,8 +272,9 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
         ULONG nFormat = 0;
         USHORT nSubType = 0;
 
+        String sDBName = aData.sDataSource;
         sDBName += DB_DELIM;
-        sDBName += sTableName;
+        sDBName += (String)aData.sCommand;
         sDBName += DB_DELIM;
         if(sColumnName.Len())
         {
@@ -372,20 +363,18 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 
         if (IsFldEdit())
         {
-            String sDBName, sTableName, sColumnName;
+            SwDBData aData;
+            String sColumnName;
             if (nTypeId == TYP_DBFLD)
             {
-                sDBName = ((SwDBField*)GetCurField())->GetDBName();
+                aData = ((SwDBField*)GetCurField())->GetDBData();
                 sColumnName = ((SwDBFieldType*)GetCurField()->GetTyp())->GetColumnName();
             }
             else
             {
-                sDBName = ((SwDBNameInfField*)GetCurField())->GetDBName(pSh->GetDoc());
+                aData = ((SwDBNameInfField*)GetCurField())->GetDBData(pSh->GetDoc());
             }
-            sTableName = sDBName.GetToken(1, DB_DELIM);
-            sDBName = sDBName.GetToken(0, DB_DELIM);
-
-            aDatabaseTLB.Select(sDBName, sTableName, sColumnName);
+            aDatabaseTLB.Select(aData.sDataSource, aData.sCommand, sColumnName);
         }
 
         switch (nTypeId)
@@ -587,7 +576,7 @@ void    SwFldDBPage::FillUserData()
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else
-        nTypeSel = (ULONG)aTypeLB.GetEntryData( nTypeSel );
+        nTypeSel = (USHORT)aTypeLB.GetEntryData( nTypeSel );
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }

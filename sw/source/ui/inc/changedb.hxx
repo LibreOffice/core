@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 class SwFldMgr;
 class SwView;
 class SwWrtShell;
+struct SwDBData;
 
 /*--------------------------------------------------------------------
      Beschreibung: Datenbank an Feldern austauschen
@@ -125,7 +126,7 @@ class SwChangeDBDlg: public SvxStandardDialog
     void            UpdateFlds();
     void            FillDBPopup();
     SvLBoxEntry*    Insert(const String& rDBName);
-    void            ShowDBName(const String& rDBName);
+    void            ShowDBName(const SwDBData& rDBData);
 
 public:
     SwChangeDBDlg(SwView& rVw);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:26 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ public:
                                   const String &rValue);
 
     // Erfragen von Werten aus Datenbankfeldern (BASIC )
-    String          GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh);
+//  String          GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh);
     BOOL            IsDBNumeric(const String& rDBName, const String& rTblQryName,
                                         BOOL bIsTable, const String& rFldName);
 

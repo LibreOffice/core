@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-12-08 10:19:55 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _SWNUMFMTLB_HXX //autogen
 #include <numfmtlb.hxx>
 #endif
+#ifndef _SWDBDATA_HXX
+#include <swdbdata.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -136,12 +139,6 @@ struct SwInsDBColumn
     int operator<( const SwInsDBColumn& rCmp ) const;
 };
 
-struct SwInsDBData
-{
-    String sDataBaseName;
-    String sDataTableName;
-    String sStatement;
-};
 typedef SwInsDBColumn* SwInsDBColumnPtr;
 SV_DECL_PTRARR_SORT_DEL( SwInsDBColumns, SwInsDBColumnPtr, 32, 32 )
 
@@ -189,7 +186,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     HelpButton      aBtHelp;
 
     SwInsDBColumns  aDBColumns;
-    const SwInsDBData   aDBData;
+    const SwDBData  aDBData;
 
     Link            aOldNumFmtLnk;
     String          sNoTmpl;
@@ -223,7 +220,7 @@ public:
     SwInsertDBColAutoPilot( SwView& rView,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
         com::sun::star::uno::Reference<com::sun::star::sdbcx::XColumnsSupplier>,
-        const SwInsDBData& rData  );
+        const SwDBData& rData  );
 
     virtual ~SwInsertDBColAutoPilot();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 12:46:44 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,15 +251,14 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
         case TYP_DBSETNUMBERFLD:
             {
                 USHORT nPos, nTablePos, nExpPos;
-                String sDBName;
+                SwDBData aData;
 
                 // DBName aus rPar1 extrahieren. Format: DBName.TableName.ExpStrg
                 if ((nTablePos = rPar1.Search(DB_DELIM)) != STRING_NOTFOUND)
-                    sDBName = rPar1.Copy(0, nTablePos++);
+                    aData.sDataSource = rPar1.Copy(0, nTablePos++);
                 if ((nExpPos = rPar1.Search(DB_DELIM, nTablePos)) != STRING_NOTFOUND)
                 {
-                    sDBName += DB_DELIM;
-                    sDBName += rPar1.Copy(nTablePos, nExpPos++ - nTablePos);
+                    aData.sCommand = rPar1.Copy(nTablePos, nExpPos++ - nTablePos);
                 }
                 if (nExpPos != STRING_NOTFOUND)
                     nPos = nExpPos;
@@ -269,21 +268,21 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                     nPos = 0;
                 sPar1 = rPar1.Copy(nPos);
 
-                ((SwDBNameInfField*)pCurFld)->SetDBName(sDBName);
+                ((SwDBNameInfField*)pCurFld)->SetDBData(aData);
                 bDBChanged = TRUE;
             }
             break;
 
         case TYP_DBFLD:
             {
-                String sDBName = rPar1.GetToken(0, DB_DELIM);
-                sDBName += DB_DELIM;
-                sDBName += rPar1.GetToken(1, DB_DELIM);
+                SwDBData aData;
+                aData.sDataSource = rPar1.GetToken(0, DB_DELIM);
+                aData.sCommand = rPar1.GetToken(1, DB_DELIM);
                 String sColumn = rPar1.GetToken(2, DB_DELIM);
 
                 SwDBFieldType* pOldTyp = (SwDBFieldType*)pCurFld->GetTyp();
                 SwDBFieldType* pTyp = (SwDBFieldType*)pSh->InsertFldType(
-                        SwDBFieldType(pSh->GetDoc(), sColumn, sDBName));
+                        SwDBFieldType(pSh->GetDoc(), sColumn, aData));
 
                 SwClientIter aIter( *pOldTyp );
 

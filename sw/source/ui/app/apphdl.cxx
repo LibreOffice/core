@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-02-15 08:58:48 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,9 @@
 #ifndef _UINUMS_HXX //autogen
 #include <uinums.hxx>
 #endif
-
+#ifndef _DBCONFIG_HXX
+#include <dbconfig.hxx>
+#endif
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
 #endif
@@ -523,7 +525,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_QRY_MERGE:
             {
                 SwView *pView = ::GetActiveView();
-                if(!pView || !GetView()->GetWrtShell().GetDBName().Len())
+                if(!pView || !GetView()->GetWrtShell().GetDBData().sDataSource.getLength())
                     rSet.DisableItem(nWhich);
             }
             break;
@@ -985,8 +987,7 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     sal_uInt16 nCount = aDBNameList.Count();
                     if (nCount)
                     {   // Datenbankbeamer oeffnen
-                        String sDBName = pDoc->GetDBName();
-                        ShowDBObj(*pWrtSh, sDBName);
+                        ShowDBObj(*pWrtSh, pDoc->GetDBData());
                     }
                 }
                 break;
@@ -1028,6 +1029,7 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         DELETEZ(pToolbarConfig)     ;
         DELETEZ(pWebToolbarConfig)  ;
         DELETEZ(pAuthorNames)       ;
+        DELETEZ(pDBConfig);
     }
 }
 void SwModule::FillStatusBar( StatusBar& rStatusBar )
@@ -1083,7 +1085,6 @@ void SwModule::FillStatusBar( StatusBar& rStatusBar )
 /*-----------------18.11.96 10.42-------------------
 
 --------------------------------------------------*/
-
 SwSrcViewConfig* SwModule::GetSourceViewConfig()
 {
     if(!pSrcViewConfig)
@@ -1092,7 +1093,15 @@ SwSrcViewConfig* SwModule::GetSourceViewConfig()
     }
     return pSrcViewConfig;
 }
+/* -----------------------------20.02.01 12:43--------------------------------
 
+ ---------------------------------------------------------------------------*/
+SwDBConfig* SwModule::GetDBConfig()
+{
+    if(!pDBConfig)
+        pDBConfig = new SwDBConfig;
+    return pDBConfig;
+}
 /*-----------------30.01.97 08.30-------------------
 
 --------------------------------------------------*/

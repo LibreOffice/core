@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-26 13:06:16 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,8 +559,7 @@ static USHORT nTitleNo = 0;
                 pFrame->GetBindings().Invalidate( aInva );
 
                 // Datenbankbeamer oeffnen
-                String sDBName(pSh->GetDBName());
-                ShowDBObj(*pSh, sDBName);
+                ShowDBObj(*pSh, pSh->GetDBData());
             }
         }
     }

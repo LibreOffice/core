@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 14:29:46 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,10 @@ SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet) :
     aInsertBT      .SetClickHdl (LINK(this, SwEnvPage, FieldHdl        ));
     aSenderBox     .SetClickHdl (LINK(this, SwEnvPage, SenderHdl       ));
 
-    sActDBName = pSh->GetDBName();
+    SwDBData aData = pSh->GetDBData();
+    sActDBName = aData.sDataSource;
+    sActDBName += DB_DELIM;
+    sActDBName += (String)aData.sCommand;
     InitDatabaseBox();
 }
 

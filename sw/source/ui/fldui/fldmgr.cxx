@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:01:38 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,35 +1198,32 @@ BOOL SwFldMgr::InsertFld(USHORT         nType,
         }
         case TYP_DBFLD:
         {
-            String sDBName;
+            SwDBData aDBData;
             String sPar1;
 
             if (rPar1.Search(DB_DELIM) == STRING_NOTFOUND)
             {
-                sDBName = pSh->GetDBName();
+                aDBData = pSh->GetDBData();
                 sPar1 = rPar1;
             }
             else
             {
-                sDBName = rPar1.GetToken(0, DB_DELIM);
-                sDBName += DB_DELIM;
-                sDBName += rPar1.GetToken(1, DB_DELIM);
+                aDBData.sDataSource = rPar1.GetToken(0, DB_DELIM);
+                aDBData.sCommand = rPar1.GetToken(1, DB_DELIM);
                 sPar1 = rPar1.GetToken(2, DB_DELIM);
             }
 
-            if (sDBName.Len() && pSh->GetDBName() != sDBName)
-                pSh->ChgDBName(sDBName);
+            if(aDBData.sDataSource.getLength() && pSh->GetDBData() != aDBData)
+                pSh->ChgDBData(aDBData);
 
             SwDBFieldType* pTyp = (SwDBFieldType*)pSh->InsertFldType(
-                    SwDBFieldType(pSh->GetDoc(), sPar1, sDBName) );
+                    SwDBFieldType(pSh->GetDoc(), sPar1, aDBData) );
             pFld = new SwDBField(pTyp);
             pFld->SetSubType(nSubType);
 
             if( !(nSubType & SUB_OWN_FMT) ) // Datenbankformat ermitteln
             {
-                String sSourceName(sDBName.GetToken(0, DB_DELIM));
-                String sTableName(sDBName.GetToken(1, DB_DELIM));
-                nFormat = pSh->GetNewDBMgr()->GetColumnFmt( sSourceName, sTableName, sPar1,
+                nFormat = pSh->GetNewDBMgr()->GetColumnFmt( aDBData.sDataSource, aDBData.sCommand, sPar1,
                                         pSh->GetNumberFormatter(), GetCurrLanguage() );
             }
             pFld->ChangeFormat( nFormat );
@@ -1240,15 +1237,15 @@ BOOL SwFldMgr::InsertFld(USHORT         nType,
         case TYP_DBNAMEFLD:
         {
             USHORT nPos, nTablePos, nExpPos;
-            String sDBName, sPar1;
+            String sPar1;
+            SwDBData aDBData;
 
             // DBName aus rPar1 extrahieren. Format: DBName.TableName.ExpStrg
             if ((nTablePos = rPar1.Search(DB_DELIM)) != STRING_NOTFOUND)
-                sDBName = rPar1.Copy(0, nTablePos++);
+                aDBData.sDataSource = rPar1.Copy(0, nTablePos++);
             if ((nExpPos = rPar1.Search(DB_DELIM, nTablePos)) != STRING_NOTFOUND)
             {
-                sDBName += DB_DELIM;
-                sDBName += rPar1.Copy(nTablePos, nExpPos++ - nTablePos);
+                aDBData.sCommand = rPar1.Copy(nTablePos, nExpPos++ - nTablePos);
             }
             if (nExpPos != STRING_NOTFOUND)
                 nPos = nExpPos;
@@ -1258,8 +1255,8 @@ BOOL SwFldMgr::InsertFld(USHORT         nType,
                 nPos = 0;
             sPar1 = rPar1.Copy(nPos);
 
-            if (sDBName.Len() && pSh->GetDBName() != sDBName)
-                pSh->ChgDBName(sDBName);
+            if (aDBData.sDataSource.getLength() && pSh->GetDBData() != aDBData)
+                pSh->ChgDBData(aDBData);
 
             switch(nType)
             {
@@ -1267,7 +1264,7 @@ BOOL SwFldMgr::InsertFld(USHORT         nType,
                 {
                     SwDBNameFieldType* pTyp =
                         (SwDBNameFieldType*)pSh->GetFldType(0, RES_DBNAMEFLD);
-                    pFld = new SwDBNameField(pTyp, sDBName);
+                    pFld = new SwDBNameField(pTyp, aDBData);
 
                     break;
                 }
@@ -1275,7 +1272,7 @@ BOOL SwFldMgr::InsertFld(USHORT         nType,
                 {
                     SwDBNextSetFieldType* pTyp = (SwDBNextSetFieldType*)pSh->GetFldType(
                                                     0, RES_DBNEXTSETFLD);
-                    pFld = new SwDBNextSetField(pTyp, sPar1, rPar2, sDBName);
+                    pFld = new SwDBNextSetField(pTyp, sPar1, rPar2, aDBData);
                     bExp = TRUE;
                     break;
                 }
@@ -1283,7 +1280,7 @@ BOOL SwFldMgr::InsertFld(USHORT         nType,
                 {
                     SwDBNumSetFieldType* pTyp = (SwDBNumSetFieldType*)pSh->GetFldType(
                                                     0, RES_DBNUMSETFLD);
-                    pFld = new SwDBNumSetField( pTyp, sPar1, rPar2, sDBName);
+                    pFld = new SwDBNumSetField( pTyp, sPar1, rPar2, aDBData);
                     bExp = TRUE;
                     break;
                 }
@@ -1291,7 +1288,7 @@ BOOL SwFldMgr::InsertFld(USHORT         nType,
                 {
                     SwDBSetNumberFieldType* pTyp = (SwDBSetNumberFieldType*)
                                                 pSh->GetFldType(0, RES_DBSETNUMBERFLD);
-                    pFld = new SwDBSetNumberField( pTyp, sDBName, nFormat);
+                    pFld = new SwDBSetNumberField( pTyp, aDBData, nFormat);
                     bExp = TRUE;
                     break;
                 }
@@ -1646,7 +1643,7 @@ BOOL SwFldMgr::SetFieldValue(const String &rFieldName,
 /*------------------------------------------------------------------------
  Beschreibung: Wert Datenbankfeld erfragen
 ------------------------------------------------------------------------*/
-
+#if 0
 
 String SwFldMgr::GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh)
 {
@@ -1672,6 +1669,7 @@ String SwFldMgr::GetDataBaseFieldValue(const String &rDBName, const String &rFie
 
     return aEmptyStr;
 }
+#endif
 
 /*--------------------------------------------------------------------
      Beschreibung: Ist das Datenbankfeld numerisch?

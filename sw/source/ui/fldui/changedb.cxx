@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:22 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
 
     FreeResource();
 
-    ShowDBName(pSh->GetDBName());
+    ShowDBName(pSh->GetDBData());
     aOKBT.SetClickHdl(LINK(this, SwChangeDBDlg, ButtonHdl));
 
     aUsedDBTLB.SetSelectionMode(MULTIPLE_SELECTION);
@@ -200,9 +200,9 @@ void SwChangeDBDlg::FillDBPopup()
     }
     DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available")
 
-    String sDataBaseName(pSh->GetDBName());
-    String sDBName(sDataBaseName.GetToken(0, DB_DELIM));
-    String sTableName(sDataBaseName.GetToken(1, DB_DELIM));
+    const SwDBData& rDBData = pSh->GetDBData();
+    String sDBName(rDBData.sDataSource);
+    String sTableName(rDBData.sCommand);
     aAvailDBTLB.Select(sDBName, sTableName, aEmptyStr);
 
     SvStringsDtor aAllDBNames(5, 5);
@@ -326,13 +326,11 @@ void SwChangeDBDlg::UpdateFlds()
 IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, pBtn )
 {
     String sTableName, sColumnName;
-    String sTemp(aAvailDBTLB.GetDBName(sTableName, sColumnName));
-    sTemp += DB_DELIM;
-    sTemp += sTableName;
-    sTemp += DB_DELIM;
-    sTemp += sColumnName;
-    pSh->ChgDBName(sTemp);
-    ShowDBName(pSh->GetDBName());
+    SwDBData aData;
+    aData.sDataSource = aAvailDBTLB.GetDBName(sTableName, sColumnName);
+    aData.sCommand = sTableName;
+    pSh->ChgDBData(aData);
+    ShowDBName(pSh->GetDBData());
     EndDialog(RET_OK);
 
     return 0;
@@ -362,12 +360,12 @@ IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, pBox )
     Beschreibung: Datenbankname fuer Anzeige wandeln
  --------------------------------------------------------------------*/
 
-void SwChangeDBDlg::ShowDBName(const String& rDBName)
+void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 {
-    String sTmp(rDBName.GetToken(0, DB_DELIM));
+    String sTmp(rDBData.sDataSource);
     String sName;
     sTmp += '.';
-    sTmp += rDBName.GetToken(1, DB_DELIM);
+    sTmp += (String)rDBData.sCommand;
 
     for (USHORT i = 0; i < sTmp.Len(); i++)
     {

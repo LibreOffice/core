@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-12-05 12:27:39 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -333,10 +336,10 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String*, pString )
 
         if( xColSupp.is() )
         {
-            SwInsDBData aDBData;
-            aDBData.sDataBaseName = sSourceName;
-            aDBData.sDataTableName = sTblQryName;
-            aDBData.sStatement = sStatmnt;
+            SwDBData aDBData;
+            aDBData.sDataSource = sSourceName;
+            aDBData.sCommand = sStatmnt.Len() ? sStatmnt  : sTblQryName;
+            aDBData.nCommandType = sStatmnt.Len() ? sdb::CommandType::COMMAND : sdb::CommandType::TABLE;
             SwInsertDBColAutoPilot *pDlg = new SwInsertDBColAutoPilot(
                     pThis->GetView(),
                     xSource,
