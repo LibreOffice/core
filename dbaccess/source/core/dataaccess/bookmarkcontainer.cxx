@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmarkcontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 16:29:21 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ void OBookmarkContainer::flush_NoBroadcast_NoCommit()
     ConstConfigNodeMapIterator aNodes = m_aObjectKeys.begin();
 
     for (   ;
-            aLinks != m_aBookmarks.begin();
+            aLinks != m_aBookmarks.end();
             ++aLinks, ++aNodes
         )
     {

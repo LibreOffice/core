@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 09:55:07 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ void ODefinitionContainer::dispose()
 
     // dispose our elements
     for (   ConstDocumentsIterator aLoop = m_aDocuments.begin();
-            aLoop != m_aDocuments.begin();
+            aLoop != m_aDocuments.end();
             ++aLoop
         )
     {
@@ -189,15 +189,15 @@ void ODefinitionContainer::flush_NoBroadcast_NoCommit()
     DBG_ASSERT(m_bInitialized, "ODefinitionContainer::flush : not initialized !");
 
     for (   ConstDocumentsIterator aLoop = m_aDocuments.begin();
-            aLoop != m_aDocuments.begin();
+            aLoop != m_aDocuments.end();
             ++aLoop
         )
     {
-        if (aLoop->xObject.is())
+        if (aLoop->xObject.get().is())
         {
             // TODO: perhaps we should use the flush_NoBroadcast_NoCommit of the implementations of the objects
             // the method here is called flush_NoBroadcast_NoCommit, which is contradicted by a direct flush call ...
-            Reference< XFlushable > xFlush(aLoop->xObject, UNO_QUERY);
+            Reference< XFlushable > xFlush(aLoop->xObject.get(), UNO_QUERY);
             DBG_ASSERT(xFlush.is(), "ODefinitionContainer::flush : have a living object which is not flushable !");
             if (xFlush.is())
                 try
@@ -468,20 +468,22 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOu
         throw IndexOutOfBoundsException();
 
     DocumentsIterator aPos = m_aDocuments.begin() + _nIndex;
-    if (!aPos->xObject.is())
+    Reference<XPropertySet> xProp = aPos->xObject;
+    if (!xProp.is())
     {   // that's the first access to the object
         // -> create it
-        aPos->xObject = createObject(aPos->sName, m_aDocumentObjectKeys[aPos->sName]);
+        xProp = createObject(aPos->sName, m_aDocumentObjectKeys[aPos->sName]);
+        aPos->xObject = xProp;
         // and update the name-access map
         m_aDocumentMap[aPos->sName] = aPos->xObject;
 
 #if DBG_UTIL
-        Reference< XFlushable > xFlushable(aPos->xObject, UNO_QUERY);
+        Reference< XFlushable > xFlushable(aPos->xObject.get(), UNO_QUERY);
         DBG_ASSERT(xFlushable.is(), "ODefinitionContainer::getByIndex : createObject returned an invalid object (no XFlushable) !");
 #endif
     }
 
-    return makeAny(aPos->xObject);
+    return makeAny(xProp);
 }
 
 //--------------------------------------------------------------------------
@@ -500,12 +502,15 @@ Reference< XPropertySet > ODefinitionContainer::implGetByName(const ::rtl::OUStr
     if (aMapPos == m_aDocumentMap.end())
         throw NoSuchElementException();
 
-    if (_bReadIfNeccessary && !aMapPos->second.is())
+    Reference< XPropertySet > xProp = aMapPos->second;
+
+    if (_bReadIfNeccessary && !aMapPos->second.get().is())
     {   // the object has never been accessed before, so we have to read it now
         // (that's the expensive part)
 
         // create the object and insert it into the map
-        aMapPos->second = createObject(_rName, m_aDocumentObjectKeys[_rName]);
+        xProp = createObject(_rName, m_aDocumentObjectKeys[_rName]);
+        aMapPos->second = xProp;
 
         // update the vector for the index access
         for (   DocumentsIterator aSearch = m_aDocuments.begin();
@@ -515,14 +520,14 @@ Reference< XPropertySet > ODefinitionContainer::implGetByName(const ::rtl::OUStr
         {
             if (aSearch->sName.equals(_rName))
             {
-                aSearch->xObject = aMapPos->second;
+                aSearch->xObject = xProp;
                 addObjectListener(aSearch->xObject);
                 break;
             }
         }
     }
 
-    return aMapPos->second;
+    return xProp;
 }
 
 //--------------------------------------------------------------------------
@@ -560,16 +565,16 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
     Reference< XPropertySet > xSource(_rSource.Source, UNO_QUERY);
     // it's one of our documents ....
     for (   DocumentsIterator aLoop = m_aDocuments.begin();
-            aLoop != m_aDocuments.begin();
+            aLoop != m_aDocuments.end();
             ++aLoop
         )
     {
-        if (xSource.get() == aLoop->xObject.get())
+        if (xSource == aLoop->xObject.get().get())
         {
             removeObjectListener(aLoop->xObject);
             // and clear our document map/vector, so the object will be recreated on next access
-            aLoop->xObject.clear();
-            m_aDocumentMap[aLoop->sName].clear();
+            aLoop->xObject = PropertySetRef();//.clear();
+            m_aDocumentMap[aLoop->sName] = PropertySetRef();//.clear();
         }
     }
 }

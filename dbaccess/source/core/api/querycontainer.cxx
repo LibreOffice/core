@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,7 +644,7 @@ void OQueryContainer::flush_NoBroadcast_NoCommit()
     OConfigurationTreeRoot aQueryRootNode;
 
     for (   ConstQueriesIterator aLoop = m_aQueries.begin();
-            aLoop != m_aQueries.begin();
+            aLoop != m_aQueries.end();
             ++aLoop
         )
     {
