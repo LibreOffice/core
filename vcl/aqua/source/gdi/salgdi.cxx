@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.22 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-08 02:29:05 $
+ *  $Revision: 1.23 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-11 20:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ static OSErr OpenQDPort ( SalGraphicsDataPtr rSalGraphicsData )
 
         if ( rSalGraphicsData->mpCGrafPort != NULL )
         {
-            // Set the to the current graph port
+            // Set to the current graph port
 
             MacSetPort( rSalGraphicsData->mpCGrafPort );
 
@@ -203,6 +203,7 @@ static OSErr OpenQDPort ( SalGraphicsDataPtr rSalGraphicsData )
             rSalGraphicsData->mnMacOSErr = QDErr();
         } // if
     } // if
+
     return rSalGraphicsData->mnMacOSErr;
 } // OpenQDPort
 
@@ -221,6 +222,10 @@ static OSErr CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
         // Unlock focus on the current NSView
 
         VCLGraphics_UnLockFocusCGrafPort( rSalGraphicsData->mhDC );
+
+        // When we get here the the QD port must have changed(?)
+
+        PortChanged( rSalGraphicsData->mpCGrafPort );
 
         // Was there a QD error?
 
@@ -264,6 +269,15 @@ static void InitFont ( SalGraphicsDataPtr rSalGraphicsData )
 
 // -----------------------------------------------------------------------
 
+static void InitGDeviceAttr ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    rSalGraphicsData->mnBitDepth      = 0;
+    rSalGraphicsData->mnHorizontalRes = 0;
+    rSalGraphicsData->mnVerticalRes   = 0;
+} // InitQD
+
+// -----------------------------------------------------------------------
+
 static void InitPen ( SalGraphicsDataPtr rSalGraphicsData )
 {
     RGBColor aBlackColor;
@@ -276,6 +290,15 @@ static void InitPen ( SalGraphicsDataPtr rSalGraphicsData )
     rSalGraphicsData->mnPenMode        = patCopy;
     rSalGraphicsData->mbTransparentPen = FALSE;
 } // InitPen
+
+// -----------------------------------------------------------------------
+
+static void InitQD ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    rSalGraphicsData->mpCGrafPort       = NULL;
+    rSalGraphicsData->mpOffscreenGWorld = NULL;
+    rSalGraphicsData->mhGDevice         = NULL;
+} // InitQD
 
 // -----------------------------------------------------------------------
 
@@ -303,6 +326,14 @@ static void InitStatusFlags ( SalGraphicsDataPtr rSalGraphicsData )
 
 SalGraphics::SalGraphics()
 {
+    // QuickDraw graph port, offscreen graphic world, and graphic device handle
+
+    InitQD( &maGraphicsData );
+
+    // Current GDevice resolution, and bit-depth
+
+    InitGDeviceAttr( &maGraphicsData );
+
     // Regions within a current port
 
     InitRegions( &maGraphicsData );
@@ -535,6 +566,8 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
         short       nPenMode     = maGraphicsData.mnPenMode;
         CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
 
+        // What is the current pen mode associated with this graph port?
+
         nPortPenMode = GetPortPenMode( pCGraf );
 
         SetPortPenMode( pCGraf, nPenMode );
@@ -555,6 +588,8 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
         MacLineTo( nX2, nY2 );
 
         CloseQDPort( &maGraphicsData );
+
+        // Reset the port to its original pen mode
 
         SetPortPenMode( pCGraf, nPortPenMode );
     } // if
@@ -592,11 +627,15 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
             short       nPenMode     = maGraphicsData.mnPenMode;
             CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
 
+            // What is the current pen mode associated with this graph port?
+
             nPortPenMode = GetPortPenMode( pCGraf );
 
             SetPortPenMode( pCGraf, nPenMode );
 
             MacFrameRect( &aRect );
+
+            // Reset the port to its original pen mode
 
             SetPortPenMode( pCGraf, nPortPenMode );
         } // if
@@ -626,6 +665,8 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
             short       nPenMode     = maGraphicsData.mnPenMode;
             CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
             PolyHandle  hPolygon     = NULL;
+
+            // What is the current pen mode associated with this graph port?
 
             nPortPenMode = GetPortPenMode( pCGraf );
 
@@ -662,6 +703,8 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
                 KillPoly( hPolygon );
             } // if
 
+            // Reset the port to its original pen mode
+
             SetPortPenMode( pCGraf, nPortPenMode );
 
             CloseQDPort( &maGraphicsData );
@@ -687,6 +730,8 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
             CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
             PolyHandle  hPolygon     = NULL;
             RGBColor    aPolyColor   = maGraphicsData.maBrushColor;
+
+            // What is the current pen mode associated with this graph port?
 
             nPortPenMode = GetPortPenMode( pCGraf );
 
@@ -723,6 +768,8 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
                 KillPoly( hPolygon );
             } // if
 
+            // Reset the port to its original pen mode
+
             SetPortPenMode( pCGraf, nPortPenMode );
 
             CloseQDPort( &maGraphicsData );
@@ -744,74 +791,87 @@ void SalGraphics::CopyBits( const SalTwoRect* pPosAry,
 {
     if ( ( maGraphicsData.mpCGrafPort != NULL ) && ( pPosAry != NULL ) )
     {
-        VCLVIEW hView = maGraphicsData.mhDC;
+        OSErr aQDErr = noErr;
 
-        if ( hView != NULL )
+        aQDErr = OpenQDPort( &maGraphicsData );
+
+        if ( aQDErr == noErr )
         {
             const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
 
             if ( pDstBitMap != NULL )
             {
-                Rect   aSrcRect;
-                Rect   aDstRect;
-                Rect   aPortBoundsRect;
-                short  nMode;
+                maGraphicsData.mnMacOSErr = LockPortBits( maGraphicsData.mpCGrafPort );
 
-                SetRect( &aSrcRect,
-                          pPosAry->mnSrcX,
-                          pPosAry->mnSrcY,
-                          pPosAry->mnSrcX + pPosAry->mnSrcWidth,
-                          pPosAry->mnSrcY + pPosAry->mnSrcHeight
-                       );
-
-                SetRect( &aDstRect,
-                          pPosAry->mnDestX,
-                          pPosAry->mnDestY,
-                          pPosAry->mnDestX + pPosAry->mnDestWidth,
-                          pPosAry->mnDestY + pPosAry->mnDestHeight
-                       );
-
-                GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
-
-                CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
-
-                if ( maGraphicsData.mnPenMode == patCopy )
+                if ( maGraphicsData.mnMacOSErr == noErr )
                 {
-                    nMode = srcCopy;
-                } // if
-                else
-                {
-                    nMode = srcXor;
-                } // else
+                    Rect       aSrcRect;
+                    Rect       aDstRect;
+                    Rect       aPortBoundsRect;
+                    RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
+                    short      nCopyMode = 0;
 
-                if ( (  pSrcGraphics != NULL ) && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL ) )
-                {
-                    const BitMap  *pSrcBitMap = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                    SetRect( &aSrcRect,
+                              pPosAry->mnSrcX,
+                              pPosAry->mnSrcY,
+                              pPosAry->mnSrcX + pPosAry->mnSrcWidth,
+                              pPosAry->mnSrcY + pPosAry->mnSrcHeight
+                           );
 
-                    if ( pSrcBitMap != NULL )
+                    SetRect( &aDstRect,
+                              pPosAry->mnDestX,
+                              pPosAry->mnDestY,
+                              pPosAry->mnDestX + pPosAry->mnDestWidth,
+                              pPosAry->mnDestY + pPosAry->mnDestHeight
+                           );
+
+                    GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
+
+                    CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
+
+                    if ( maGraphicsData.mnPenMode == patCopy )
                     {
-                        VCLGraphics_CopyBits (  hView,
-                                                               pSrcBitMap,
-                                                                pDstBitMap,
-                                                               &aSrcRect,
-                                                               &aDstRect,
-                                                                nMode,
-                                                               NULL
-                                                           );
+                        nCopyMode = srcCopy;
                     } // if
+                    else
+                    {
+                        nCopyMode = srcXor;
+                    } // else
+
+                    // Now we can call QD CopyBits to copy the bits from source rectangle
+                    // to the destination rectangle
+
+                    if ( (  pSrcGraphics != NULL ) && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL ) )
+                    {
+                        const BitMap  *pSrcBitMap = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                        if ( pSrcBitMap != NULL )
+                        {
+                            ::CopyBits (  pSrcBitMap,
+                                          pDstBitMap,
+                                         &aSrcRect,
+                                         &aDstRect,
+                                          nCopyMode,
+                                          hMaskRgn
+                                       );
+                        } // if
+                    } // if
+                    else
+                    {
+                        ::CopyBits (  pDstBitMap,
+                                      pDstBitMap,
+                                     &aSrcRect,
+                                     &aDstRect,
+                                      nCopyMode,
+                                      hMaskRgn
+                                   );
+                    } // else
+
+                    UnlockPortBits( maGraphicsData.mpCGrafPort );
                 } // if
-                else
-                {
-                    VCLGraphics_CopyBits (  hView,
-                                                            pDstBitMap,
-                                                            pDstBitMap,
-                                                      &aSrcRect,
-                                                           &aDstRect,
-                                                       nMode,
-                                            NULL
-                                                   );
-                } // else
             } // if
+
+            CloseQDPort( &maGraphicsData );
         } // if
     } // if
 } // SalGraphics::CopyBits

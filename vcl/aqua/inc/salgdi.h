@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-12-08 02:29:03 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-11 20:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,17 @@ struct SalGraphicsData
     VCLVIEW         mhDC;           // VCLVIEW
     VCLWINDOW       mhWnd;          // Window-Handle, when Window-Graphics
 
-    // QuickDraw graph port
+    // QuickDraw graph port, offscreen graphic world, and graphic device handle
 
     CGrafPtr        mpCGrafPort;        // QD color graphics port
+    GWorldPtr               mpOffscreenGWorld;      // QD offscreen GWorld
+    GDHandle                mhGDevice;              // QD GDevice
+
+    // Current GDevice resolution, and bit-depth
+
+    long                   mnBitDepth;            // Current GDevice bit-depth
+    long                   mnHorizontalRes;        // Current GDevice horizontal resolution
+    long                   mnVerticalRes;          // Current GDevice vertical resolution
 
     // Regions within a current port
 
