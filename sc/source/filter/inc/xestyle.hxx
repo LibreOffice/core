@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:28:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,6 @@
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _VCL_VCLENUM_HXX
-#include <vcl/vclenum.hxx>
-#endif
-#ifndef _SVX_SVXENUM_HXX
-#include <svx/svxenum.hxx>
 #endif
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
@@ -281,52 +275,26 @@ private:
     bool                        mbHasColor;     /// false = Font does not use a color (i.e. chart).
 
 public:
-    explicit                    XclExpFont( const XclExpRoot& rRoot );
+    explicit                    XclExpFont( const XclExpRoot& rRoot, const Font& rFont );
+    explicit                    XclExpFont( const XclExpRoot& rRoot, const XclFontData& rFontData );
 
     /** Returns read-only access to font data. */
     inline const XclFontData&   GetFontData() const { return maData; }
-
-    void                        SetName( const String& rName );
-    inline void                 SetFamily( FontFamily eFamily ) { maData.mnFamily = GetXclFamily( eFamily ); }
-    inline void                 SetCharSet( rtl_TextEncoding eCharSet ) { maData.mnCharSet = GetXclCharSet( eCharSet ); }
-    void                        SetColor( const Color& rColor );
-    void                        SetColorId( sal_uInt32 nColorId );
-    void                        SetHeight( sal_Int32 nTwips );
-    inline void                 SetWeight( FontWeight eWeight ) { maData.mnWeight = GetXclWeight( eWeight ); }
-    inline void                 SetUnderline( FontUnderline eUnderl ) { maData.meUnderline = GetXclUnderline( eUnderl ); }
-    inline void                 SetEscapement( SvxEscapement eEscapem ) { maData.meEscapem = GetXclEscapement( eEscapem ); }
-    inline void                 SetItalic( bool bItalic )       { maData.mbItalic = bItalic; }
-    inline void                 SetStrikeout( bool bStrikeout ) { maData.mbStrikeout = bStrikeout; }
-    inline void                 SetOutline( bool bOutline )     { maData.mbOutline = bOutline; }
-    inline void                 SetShadow( bool bShadow )       { maData.mbShadow = bShadow; }
-
-    /** Initializes this record with the passed font data. */
-    void                        SetFont( const Font& rFont );
-
-    /** Calculates an internal hash value for faster comparison. */
-    void                        CalcHash();
-
     /** Compares this font with the passed font.
         @descr  Ignores color settings, if no color is set. */
-    bool                        operator==( const XclExpFont& rCmp ) const;
+    bool                        Equals( const XclExpFont& rCmpFont ) const;
 
     /** Returns true, if this font contains a specific color (if SetColor was called before). */
     inline bool                 HasColor() const { return mbHasColor; }
     /** Returns the unique color ID of the font color from palette. */
     inline sal_uInt32           GetColorId() const { return mnColorId; }
-
-    /** Converts a font family to Excel font family. */
-    static sal_uInt8            GetXclFamily( FontFamily eFamily );
-    /** Converts a text encoding to Excel character set. */
-    static sal_uInt8            GetXclCharSet( rtl_TextEncoding eCharSet );
-    /** Converts a font weight to Excel font weight. */
-    static sal_uInt16           GetXclWeight( FontWeight eWeight );
-    /** Converts a font underline style to Excel font underline style. */
-    static XclUnderline         GetXclUnderline( FontUnderline eUnderl );
-    /** Converts a font escapement to Excel font escapement. */
-    static XclEscapement        GetXclEscapement( SvxEscapement eEscapem );
+    /** Sets the color ID for this font. */
+    void                        SetColorId( sal_uInt32 nColorId );
 
 private:
+    /** Calculates an internal hash value for faster comparison. */
+    void                        CalcHash();
+
     /** Writes the contents of the FONT record. */
     virtual void                WriteBody( XclExpStream& rStrm );
 };
