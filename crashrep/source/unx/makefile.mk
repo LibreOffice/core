@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:39:33 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 15:12:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,9 @@ APP1STDLIBS=`pkg-config --libs gtk+-2.0` $(DYNAMIC) -lXext -lX11 -ldl -lnsl
 .IF "$(OS)" == "SOLARIS"
 APP1STDLIBS+=-lsocket
 .ENDIF
+.IF "$(OS)" == "FREEBSD"
+APP1STDLIBS=`pkg-config --libs gtk+-2.0` $(DYNAMIC) -lXext -lX11
+.ENDIF
 
 
 
@@ -118,6 +121,9 @@ APP2OBJS=$(OBJFILES)
 APP2STDLIBS=$(STATIC) `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff $(DYNAMIC) -lXext -lX11 -ldl -lnsl
 .IF "$(OS)" == "SOLARIS"
 APP2STDLIBS+=-lsocket
+.ENDIF
+.IF "$(OS)" == "FREEBSD"
+APP2STDLIBS=$(STATIC) `pkg-config --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff $(DYNAMIC) -lXext -lX11
 .ENDIF
 
 .ENDIF
