@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:48:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1277,7 +1277,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         rSh.InsertTable(
             pModOpt->GetInsTblFlags(bHTML),
             nRows, nCols, HORI_FULL, (pSelection ? pTAutoFmt : 0) );
-        rSh.MoveTable( SwuiGetfnTablePrev(), SwuiGetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTablePrev, fnTableStart );
+        rSh.MoveTable( GetfnTablePrev(), GetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTablePrev, fnTableStart );
 
         if( pSelection && pTblSet )
             SetTabSet();
@@ -1386,7 +1386,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 pWait = ::std::auto_ptr<SwWait>(new SwWait( *pView->GetDocShell(), TRUE ));
         }
 
-        rSh.MoveTable( SwuiGetfnTableCurr(), SwuiGetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableStart );
+        rSh.MoveTable( GetfnTableCurr(), GetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableStart );
         if( !pSelection && ( pTblSet || pTAutoFmt ))
         {
             if( pTblSet )
@@ -1658,14 +1658,14 @@ void SwInsertDBColAutoPilot::SetTabSet()
                     rSh.GetTableFmt()->GetName() )
         pTblSet->ClearItem( FN_PARAM_TABLE_NAME );
 
-    rSh.MoveTable( SwuiGetfnTableCurr(), SwuiGetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableStart );
+    rSh.MoveTable( GetfnTableCurr(), GetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableStart );
     rSh.SetMark();
-    rSh.MoveTable( SwuiGetfnTableCurr(), SwuiGetfnTableEnd() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableEnd );
+    rSh.MoveTable( GetfnTableCurr(), GetfnTableEnd() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableEnd );
 
     ItemSetToTableParam( *pTblSet, rSh );
 
     rSh.ClearMark();
-    rSh.MoveTable( SwuiGetfnTableCurr(), SwuiGetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableStart );
+    rSh.MoveTable( GetfnTableCurr(), GetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableStart );
 }
 
 /*  */
