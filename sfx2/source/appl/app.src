@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:30:29 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,15 +1379,15 @@ QueryBox RID_XMLSEC_QUERY_SAVEBEFORESIGN
 {
     HelpId = HID_XMLSEC_QUERY_SAVEBEFORESIGN;
     Buttons = WB_YES_NO ;
-    Message [ de ] = "Dieses Dokument muss im Open Office Dokumentformat gespeichert werden, bevor es digital signiert werden kann.\nMöchten Sie im Open Office Dokumentformat speichern und mit dem Signieren fortfahren?\n" ;
-    Message [ en-US ] = "This document must be saved in Open Office file format before it can be digitally signed.\nDo you want to save in the Open Office file format and continue signing?\n" ;
+    Message [ de ] = "Dieses Dokument muss im OpenDocument Dokumentformat gespeichert werden, bevor es digital signiert werden kann.\nMöchten Sie im OpenDocument Dokumentformat speichern und mit dem Signieren fortfahren?\n" ;
+    Message [ en-US ] = "This document must be saved in OpenDocument file format before it can be digitally signed.\nDo you want to save in the OpenDocument file format and continue signing?\n" ;
 };
 
 InfoBox RID_XMLSEC_INFO_WRONGDOCFORMAT
 {
     HelpId = HID_XMLSEC_INFO_WRONGDOCFORMAT;
-    Message [ de ] = "Dieses Dokument muss im Open Office Dokumentformat gespeichert werden, bevor es digital signiert werden kann." ;
-    Message [ en-US ] = "This document must be saved in Open Office file format before it can be digitally signed." ;
+    Message [ de ] = "Dieses Dokument muss im OpenDocument Dokumentformat gespeichert werden, bevor es digital signiert werden kann." ;
+    Message [ en-US ] = "This document must be saved in OpenDocument file format before it can be digitally signed." ;
 };
 
 String RID_XMLSEC_DOCUMENTSIGNED
