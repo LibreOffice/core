@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-09 07:29:32 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 20:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,114 +66,494 @@ String RID_SVXSTR_A11Y_LINE_COLOR
     Text = "Linienfarbe" ;
     Text[ ENGLISH ] = "line color" ;
     Text[ ENGLISH_US ] = "line color" ;
+    Text[ portuguese ] = "line color";
+    Text[ russian ] = "line color";
+    Text[ greek ] = "line color";
+    Text[ dutch ] = "line color";
+    Text[ french ] = "line color";
+    Text[ spanish ] = "line color";
+    Text[ finnish ] = "line color";
+    Text[ italian ] = "line color";
+    Text[ danish ] = "line color";
+    Text[ swedish ] = "line color";
+    Text[ polish ] = "line color";
+    Text[ portuguese_brazilian ] = "line color";
+    Text[ japanese ] = "line color";
+    Text[ korean ] = "line color";
+    Text[ chinese_simplified ] = "line color";
+    Text[ chinese_traditional ] = "line color";
+    Text[ turkish ] = "line color";
+    Text[ arabic ] = "line color";
+    Text[ catalan ] = "line color";
+    Text[ thai ] = "line color";
 };
 String RID_SVXSTR_A11Y_LINE_DASH_NAME
 {
     Text = "Strichelung" ;
     Text[ ENGLISH ] = "line dash" ;
     Text[ ENGLISH_US ] = "line dash" ;
+    Text[ portuguese ] = "line dash";
+    Text[ russian ] = "line dash";
+    Text[ greek ] = "line dash";
+    Text[ dutch ] = "line dash";
+    Text[ french ] = "line dash";
+    Text[ spanish ] = "line dash";
+    Text[ finnish ] = "line dash";
+    Text[ italian ] = "line dash";
+    Text[ danish ] = "line dash";
+    Text[ swedish ] = "line dash";
+    Text[ polish ] = "line dash";
+    Text[ portuguese_brazilian ] = "line dash";
+    Text[ japanese ] = "line dash";
+    Text[ korean ] = "line dash";
+    Text[ chinese_simplified ] = "line dash";
+    Text[ chinese_traditional ] = "line dash";
+    Text[ turkish ] = "line dash";
+    Text[ arabic ] = "line dash";
+    Text[ catalan ] = "line dash";
+    Text[ thai ] = "line dash";
 };
 String RID_SVXSTR_A11Y_LINE_WIDTH
 {
     Text = "Linienbreite" ;
     Text[ ENGLISH ] = "line width" ;
     Text[ ENGLISH_US ] = "line width" ;
+    Text[ portuguese ] = "line width";
+    Text[ russian ] = "line width";
+    Text[ greek ] = "line width";
+    Text[ dutch ] = "line width";
+    Text[ french ] = "line width";
+    Text[ spanish ] = "line width";
+    Text[ finnish ] = "line width";
+    Text[ italian ] = "line width";
+    Text[ danish ] = "line width";
+    Text[ swedish ] = "line width";
+    Text[ polish ] = "line width";
+    Text[ portuguese_brazilian ] = "line width";
+    Text[ japanese ] = "line width";
+    Text[ korean ] = "line width";
+    Text[ chinese_simplified ] = "line width";
+    Text[ chinese_traditional ] = "line width";
+    Text[ turkish ] = "line width";
+    Text[ arabic ] = "line width";
+    Text[ catalan ] = "line width";
+    Text[ thai ] = "line width";
 };
 String RID_SVXSTR_A11Y_FILL_COLOR
 {
     Text = "F¸llfarbe" ;
     Text[ ENGLISH ] = "fill color" ;
     Text[ ENGLISH_US ] = "fill color" ;
+    Text[ portuguese ] = "fill color";
+    Text[ russian ] = "fill color";
+    Text[ greek ] = "fill color";
+    Text[ dutch ] = "fill color";
+    Text[ french ] = "fill color";
+    Text[ spanish ] = "fill color";
+    Text[ finnish ] = "fill color";
+    Text[ italian ] = "fill color";
+    Text[ danish ] = "fill color";
+    Text[ swedish ] = "fill color";
+    Text[ polish ] = "fill color";
+    Text[ portuguese_brazilian ] = "fill color";
+    Text[ japanese ] = "fill color";
+    Text[ korean ] = "fill color";
+    Text[ chinese_simplified ] = "fill color";
+    Text[ chinese_traditional ] = "fill color";
+    Text[ turkish ] = "fill color";
+    Text[ arabic ] = "fill color";
+    Text[ catalan ] = "fill color";
+    Text[ thai ] = "fill color";
 };
 String RID_SVXSTR_A11Y_FILL_STYLE
 {
     Text = "F¸llstil" ;
     Text[ ENGLISH ] = "fill style" ;
     Text[ ENGLISH_US ] = "fill style" ;
+    Text[ portuguese ] = "fill style";
+    Text[ russian ] = "fill style";
+    Text[ greek ] = "fill style";
+    Text[ dutch ] = "fill style";
+    Text[ french ] = "fill style";
+    Text[ spanish ] = "fill style";
+    Text[ finnish ] = "fill style";
+    Text[ italian ] = "fill style";
+    Text[ danish ] = "fill style";
+    Text[ swedish ] = "fill style";
+    Text[ polish ] = "fill style";
+    Text[ portuguese_brazilian ] = "fill style";
+    Text[ japanese ] = "fill style";
+    Text[ korean ] = "fill style";
+    Text[ chinese_simplified ] = "fill style";
+    Text[ chinese_traditional ] = "fill style";
+    Text[ turkish ] = "fill style";
+    Text[ arabic ] = "fill style";
+    Text[ catalan ] = "fill style";
+    Text[ thai ] = "fill style";
 };
 String RID_SVXSTR_A11Y_3D_MATERIAL_COLOR
 {
     Text = "3D-Materialfarbe" ;
     Text[ ENGLISH ] = "3D material color" ;
     Text[ ENGLISH_US ] = "3D material color" ;
+    Text[ portuguese ] = "3D material color";
+    Text[ russian ] = "3D material color";
+    Text[ greek ] = "3D material color";
+    Text[ dutch ] = "3D material color";
+    Text[ french ] = "3D material color";
+    Text[ spanish ] = "3D material color";
+    Text[ finnish ] = "3D material color";
+    Text[ italian ] = "3D material color";
+    Text[ danish ] = "3D material color";
+    Text[ swedish ] = "3D material color";
+    Text[ polish ] = "3D material color";
+    Text[ portuguese_brazilian ] = "3D material color";
+    Text[ japanese ] = "3D material color";
+    Text[ korean ] = "3D material color";
+    Text[ chinese_simplified ] = "3D material color";
+    Text[ chinese_traditional ] = "3D material color";
+    Text[ turkish ] = "3D material color";
+    Text[ arabic ] = "3D material color";
+    Text[ catalan ] = "3D material color";
+    Text[ thai ] = "3D material color";
 };
 String RID_SVXSTR_A11Y_FILL_GRADIENT_NAME
 {
     Text = "Verlauf" ;
     Text[ ENGLISH ] = "gradient" ;
     Text[ ENGLISH_US ] = "gradient" ;
+    Text[ portuguese ] = "gradient";
+    Text[ russian ] = "gradient";
+    Text[ greek ] = "gradient";
+    Text[ dutch ] = "gradient";
+    Text[ french ] = "gradient";
+    Text[ spanish ] = "gradient";
+    Text[ finnish ] = "gradient";
+    Text[ italian ] = "gradient";
+    Text[ danish ] = "gradient";
+    Text[ swedish ] = "gradient";
+    Text[ polish ] = "gradient";
+    Text[ portuguese_brazilian ] = "gradient";
+    Text[ japanese ] = "gradient";
+    Text[ korean ] = "gradient";
+    Text[ chinese_simplified ] = "gradient";
+    Text[ chinese_traditional ] = "gradient";
+    Text[ turkish ] = "gradient";
+    Text[ arabic ] = "gradient";
+    Text[ catalan ] = "gradient";
+    Text[ thai ] = "gradient";
 };
 String RID_SVXSTR_A11Y_FILL_HATCH_NAME
 {
     Text = "Schraffur" ;
     Text[ ENGLISH ] = "hatch" ;
     Text[ ENGLISH_US ] = "hatch" ;
+    Text[ portuguese ] = "hatch";
+    Text[ russian ] = "hatch";
+    Text[ greek ] = "hatch";
+    Text[ dutch ] = "hatch";
+    Text[ french ] = "hatch";
+    Text[ spanish ] = "hatch";
+    Text[ finnish ] = "hatch";
+    Text[ italian ] = "hatch";
+    Text[ danish ] = "hatch";
+    Text[ swedish ] = "hatch";
+    Text[ polish ] = "hatch";
+    Text[ portuguese_brazilian ] = "hatch";
+    Text[ japanese ] = "hatch";
+    Text[ korean ] = "hatch";
+    Text[ chinese_simplified ] = "hatch";
+    Text[ chinese_traditional ] = "hatch";
+    Text[ turkish ] = "hatch";
+    Text[ arabic ] = "hatch";
+    Text[ catalan ] = "hatch";
+    Text[ thai ] = "hatch";
 };
 String RID_SVXSTR_A11Y_FILL_BITMAP_NAME
 {
     Text = "Bitmap" ;
     Text[ ENGLISH ] = "bitmap" ;
     Text[ ENGLISH_US ] = "bitmap" ;
+    Text[ portuguese ] = "bitmap";
+    Text[ russian ] = "bitmap";
+    Text[ greek ] = "bitmap";
+    Text[ dutch ] = "bitmap";
+    Text[ french ] = "bitmap";
+    Text[ spanish ] = "bitmap";
+    Text[ finnish ] = "Bittikartta";
+    Text[ italian ] = "Stile bitmap";
+    Text[ danish ] = "bitmap";
+    Text[ swedish ] = "bitmap";
+    Text[ polish ] = "Mapa bitowa";
+    Text[ portuguese_brazilian ] = "bitmap";
+    Text[ japanese ] = "„Éì„ÉÉ„Éà„Éû„ÉÉ„Éó";
+    Text[ korean ] = "ÎπÑÌä∏Îßµ";
+    Text[ chinese_simplified ] = "‰ΩçÂõæ";
+    Text[ chinese_traditional ] = "ÈªûÈô£Âúñ";
+    Text[ turkish ] = "Bit e˛lem";
+    Text[ arabic ] = "’Ê—… ‰ﬁÿÌ…";
+    Text[ catalan ] = "Mapa de bits";
+    Text[ thai ] = "‡∏ö‡∏¥‡∏ó‡πÅ‡∏°‡∏õ";
 };
 String RID_SVXSTR_A11Y_TEXT_COLOR
 {
     Text = "Textfarbe" ;
     Text[ ENGLISH ] = "text color" ;
     Text[ ENGLISH_US ] = "text color" ;
+    Text[ portuguese ] = "text color";
+    Text[ russian ] = "text color";
+    Text[ greek ] = "text color";
+    Text[ dutch ] = "text color";
+    Text[ french ] = "text color";
+    Text[ spanish ] = "text color";
+    Text[ finnish ] = "text color";
+    Text[ italian ] = "text color";
+    Text[ danish ] = "text color";
+    Text[ swedish ] = "text color";
+    Text[ polish ] = "text color";
+    Text[ portuguese_brazilian ] = "text color";
+    Text[ japanese ] = "text color";
+    Text[ korean ] = "text color";
+    Text[ chinese_simplified ] = "text color";
+    Text[ chinese_traditional ] = "text color";
+    Text[ turkish ] = "text color";
+    Text[ arabic ] = "text color";
+    Text[ catalan ] = "text color";
+    Text[ thai ] = "text color";
 };
 String RID_SVXSTR_A11Y_BACKGROUND_COLOR
 {
     Text = "Hintergrundfarbe" ;
     Text[ ENGLISH ] = "background color" ;
     Text[ ENGLISH_US ] = "background color" ;
+    Text[ portuguese ] = "background color";
+    Text[ russian ] = "background color";
+    Text[ greek ] = "background color";
+    Text[ dutch ] = "background color";
+    Text[ french ] = "background color";
+    Text[ spanish ] = "background color";
+    Text[ finnish ] = "background color";
+    Text[ italian ] = "background color";
+    Text[ danish ] = "background color";
+    Text[ swedish ] = "background color";
+    Text[ polish ] = "background color";
+    Text[ portuguese_brazilian ] = "background color";
+    Text[ japanese ] = "background color";
+    Text[ korean ] = "background color";
+    Text[ chinese_simplified ] = "background color";
+    Text[ chinese_traditional ] = "background color";
+    Text[ turkish ] = "background color";
+    Text[ arabic ] = "background color";
+    Text[ catalan ] = "background color";
+    Text[ thai ] = "background color";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_NONE
 {
     Text = "keiner" ;
     Text[ ENGLISH ] = "none" ;
     Text[ ENGLISH_US ] = "none" ;
+    Text[ portuguese ] = "none";
+    Text[ russian ] = "none";
+    Text[ greek ] = "none";
+    Text[ dutch ] = "none";
+    Text[ french ] = "none";
+    Text[ spanish ] = "none";
+    Text[ finnish ] = "none";
+    Text[ italian ] = "none";
+    Text[ danish ] = "none";
+    Text[ swedish ] = "none";
+    Text[ polish ] = "none";
+    Text[ portuguese_brazilian ] = "none";
+    Text[ japanese ] = "none";
+    Text[ korean ] = "none";
+    Text[ chinese_simplified ] = "none";
+    Text[ chinese_traditional ] = "none";
+    Text[ turkish ] = "none";
+    Text[ arabic ] = "none";
+    Text[ catalan ] = "none";
+    Text[ thai ] = "none";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_SOLID
 {
     Text = "ausgef¸llt" ;
     Text[ ENGLISH ] = "solid" ;
     Text[ ENGLISH_US ] = "solid" ;
+    Text[ portuguese ] = "solid";
+    Text[ russian ] = "solid";
+    Text[ greek ] = "solid";
+    Text[ dutch ] = "solid";
+    Text[ french ] = "solid";
+    Text[ spanish ] = "solid";
+    Text[ finnish ] = "solid";
+    Text[ italian ] = "solid";
+    Text[ danish ] = "solid";
+    Text[ swedish ] = "solid";
+    Text[ polish ] = "solid";
+    Text[ portuguese_brazilian ] = "solid";
+    Text[ japanese ] = "solid";
+    Text[ korean ] = "solid";
+    Text[ chinese_simplified ] = "solid";
+    Text[ chinese_traditional ] = "solid";
+    Text[ turkish ] = "solid";
+    Text[ arabic ] = "solid";
+    Text[ catalan ] = "solid";
+    Text[ thai ] = "solid";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
 {
     Text = "schraffiert" ;
     Text[ ENGLISH ] = "hatch" ;
     Text[ ENGLISH_US ] = "hatch" ;
+    Text[ portuguese ] = "hatch";
+    Text[ russian ] = "hatch";
+    Text[ greek ] = "hatch";
+    Text[ dutch ] = "hatch";
+    Text[ french ] = "hatch";
+    Text[ spanish ] = "hatch";
+    Text[ finnish ] = "hatch";
+    Text[ italian ] = "hatch";
+    Text[ danish ] = "hatch";
+    Text[ swedish ] = "hatch";
+    Text[ polish ] = "hatch";
+    Text[ portuguese_brazilian ] = "hatch";
+    Text[ japanese ] = "hatch";
+    Text[ korean ] = "hatch";
+    Text[ chinese_simplified ] = "hatch";
+    Text[ chinese_traditional ] = "hatch";
+    Text[ turkish ] = "hatch";
+    Text[ arabic ] = "hatch";
+    Text[ catalan ] = "hatch";
+    Text[ thai ] = "hatch";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
 {
     Text = "verlauf" ;
     Text[ ENGLISH ] = "gradient" ;
     Text[ ENGLISH_US ] = "gradient" ;
+    Text[ portuguese ] = "gradient";
+    Text[ russian ] = "gradient";
+    Text[ greek ] = "gradient";
+    Text[ dutch ] = "gradient";
+    Text[ french ] = "gradient";
+    Text[ spanish ] = "gradient";
+    Text[ finnish ] = "gradient";
+    Text[ italian ] = "gradient";
+    Text[ danish ] = "gradient";
+    Text[ swedish ] = "gradient";
+    Text[ polish ] = "gradient";
+    Text[ portuguese_brazilian ] = "gradient";
+    Text[ japanese ] = "gradient";
+    Text[ korean ] = "gradient";
+    Text[ chinese_simplified ] = "gradient";
+    Text[ chinese_traditional ] = "gradient";
+    Text[ turkish ] = "gradient";
+    Text[ arabic ] = "gradient";
+    Text[ catalan ] = "gradient";
+    Text[ thai ] = "gradient";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
 {
     Text = "bitmap" ;
     Text[ ENGLISH ] = "bitmap" ;
     Text[ ENGLISH_US ] = "bitmap" ;
+    Text[ portuguese ] = "bitmap";
+    Text[ russian ] = "bitmap";
+    Text[ greek ] = "bitmap";
+    Text[ dutch ] = "bitmap";
+    Text[ french ] = "bitmap";
+    Text[ spanish ] = "bitmap";
+    Text[ finnish ] = "Bittikartta";
+    Text[ italian ] = "Stile bitmap";
+    Text[ danish ] = "bitmap";
+    Text[ swedish ] = "bitmap";
+    Text[ polish ] = "Mapa bitowa";
+    Text[ portuguese_brazilian ] = "bitmap";
+    Text[ japanese ] = "„Éì„ÉÉ„Éà„Éû„ÉÉ„Éó";
+    Text[ korean ] = "ÎπÑÌä∏Îßµ";
+    Text[ chinese_simplified ] = "‰ΩçÂõæ";
+    Text[ chinese_traditional ] = "ÈªûÈô£Âúñ";
+    Text[ turkish ] = "Bit e˛lem";
+    Text[ arabic ] = "’Ê—… ‰ﬁÿÌ…";
+    Text[ catalan ] = "Mapa de bits";
+    Text[ thai ] = "‡∏ö‡∏¥‡∏ó‡πÅ‡∏°‡∏õ";
 };
 String RID_SVXSTR_A11Y_WITH
 {
     Text = "mit" ;
     Text[ ENGLISH ] = "with" ;
     Text[ ENGLISH_US ] = "with" ;
+    Text[ portuguese ] = "with";
+    Text[ russian ] = "with";
+    Text[ greek ] = "with";
+    Text[ dutch ] = "with";
+    Text[ french ] = "with";
+    Text[ spanish ] = "with";
+    Text[ finnish ] = "with";
+    Text[ italian ] = "with";
+    Text[ danish ] = "with";
+    Text[ swedish ] = "with";
+    Text[ polish ] = "with";
+    Text[ portuguese_brazilian ] = "with";
+    Text[ japanese ] = "with";
+    Text[ korean ] = "with";
+    Text[ chinese_simplified ] = "with";
+    Text[ chinese_traditional ] = "with";
+    Text[ turkish ] = "with";
+    Text[ arabic ] = "with";
+    Text[ catalan ] = "with";
+    Text[ thai ] = "with";
 };
 String RID_SVXSTR_A11Y_STYLE
 {
     Text = "Stil" ;
     Text[ ENGLISH ] = "style" ;
     Text[ ENGLISH_US ] = "style" ;
+    Text[ portuguese ] = "style";
+    Text[ russian ] = "style";
+    Text[ greek ] = "style";
+    Text[ dutch ] = "style";
+    Text[ french ] = "style";
+    Text[ spanish ] = "style";
+    Text[ finnish ] = "style";
+    Text[ italian ] = "style";
+    Text[ danish ] = "style";
+    Text[ swedish ] = "style";
+    Text[ polish ] = "style";
+    Text[ portuguese_brazilian ] = "style";
+    Text[ japanese ] = "style";
+    Text[ korean ] = "style";
+    Text[ chinese_simplified ] = "style";
+    Text[ chinese_traditional ] = "style";
+    Text[ turkish ] = "style";
+    Text[ arabic ] = "style";
+    Text[ catalan ] = "style";
+    Text[ thai ] = "style";
 };
 String RID_SVXSTR_A11Y_AND
 {
     Text = "und" ;
     Text[ ENGLISH ] = "and" ;
     Text[ ENGLISH_US ] = "and" ;
+    Text[ portuguese ] = "and";
+    Text[ russian ] = "and";
+    Text[ greek ] = "and";
+    Text[ dutch ] = "and";
+    Text[ french ] = "and";
+    Text[ spanish ] = "and";
+    Text[ finnish ] = "and";
+    Text[ italian ] = "and";
+    Text[ danish ] = "and";
+    Text[ swedish ] = "and";
+    Text[ polish ] = "and";
+    Text[ portuguese_brazilian ] = "and";
+    Text[ japanese ] = "and";
+    Text[ korean ] = "and";
+    Text[ chinese_simplified ] = "and";
+    Text[ chinese_traditional ] = "and";
+    Text[ turkish ] = "and";
+    Text[ arabic ] = "and";
+    Text[ catalan ] = "and";
+    Text[ thai ] = "and";
 };
 
 String RID_SVXSTR_A11Y_ST_RECTANGLE
@@ -181,18 +561,78 @@ String RID_SVXSTR_A11Y_ST_RECTANGLE
     Text = "Rechteck" ;
     Text[ ENGLISH ] = "Rectangle" ;
     Text[ ENGLISH_US ] = "Rectangle" ;
+    Text[ portuguese ] = "Rectangle";
+    Text[ russian ] = "Rectangle";
+    Text[ greek ] = "Rectangle";
+    Text[ dutch ] = "Rectangle";
+    Text[ french ] = "Rectangle";
+    Text[ spanish ] = "Rectangle";
+    Text[ finnish ] = "Rectangle";
+    Text[ italian ] = "Rectangle";
+    Text[ danish ] = "Rectangle";
+    Text[ swedish ] = "Rectangle";
+    Text[ polish ] = "Rectangle";
+    Text[ portuguese_brazilian ] = "Rectangle";
+    Text[ japanese ] = "Rectangle";
+    Text[ korean ] = "Rectangle";
+    Text[ chinese_simplified ] = "Rectangle";
+    Text[ chinese_traditional ] = "Rectangle";
+    Text[ turkish ] = "Rectangle";
+    Text[ arabic ] = "Rectangle";
+    Text[ catalan ] = "Rectangle";
+    Text[ thai ] = "Rectangle";
 };
 String RID_SVXSTR_A11Y_ST_ELLIPSE
 {
     Text = "Ellipse" ;
     Text[ ENGLISH ] = "Ellipse" ;
     Text[ ENGLISH_US ] = "Ellipse" ;
+    Text[ portuguese ] = "Elipse";
+    Text[ russian ] = "›ÎÎËÔÒ˚";
+    Text[ greek ] = "∏ÎÎÂÈ¯Á";
+    Text[ dutch ] = "Ellipse";
+    Text[ french ] = "Ellipse";
+    Text[ spanish ] = "Elipse";
+    Text[ finnish ] = "Ellipse";
+    Text[ italian ] = "Ellipse";
+    Text[ danish ] = "Ellipse";
+    Text[ swedish ] = "Ellipse";
+    Text[ polish ] = "Elipsa";
+    Text[ portuguese_brazilian ] = "Ellipse";
+    Text[ japanese ] = "Ê•ïÂÜÜÂΩ¢";
+    Text[ korean ] = "ÌÉÄÏõê";
+    Text[ chinese_simplified ] = "Ê§≠ÂúÜ";
+    Text[ chinese_traditional ] = "Ê©¢ÂúìÂΩ¢";
+    Text[ turkish ] = "Elips";
+    Text[ arabic ] = "‘ﬂ· »Ì÷ÊÌ";
+    Text[ catalan ] = "Ellipse";
+    Text[ thai ] = "‡∏ß‡∏á‡∏£‡∏µ";
 };
 String RID_SVXSTR_A11Y_ST_OPEN_BEZIER_CURVE
 {
     Text = "Offene Bezier Kurve" ;
     Text[ ENGLISH ] = "Open bezier curve" ;
     Text[ ENGLISH_US ] = "Open bezier curve" ;
+    Text[ portuguese ] = "Open bezier curve";
+    Text[ russian ] = "Open bezier curve";
+    Text[ greek ] = "Open bezier curve";
+    Text[ dutch ] = "Open bezier curve";
+    Text[ french ] = "Open bezier curve";
+    Text[ spanish ] = "Open bezier curve";
+    Text[ finnish ] = "Open bezier curve";
+    Text[ italian ] = "Open bezier curve";
+    Text[ danish ] = "Open bezier curve";
+    Text[ swedish ] = "Open bezier curve";
+    Text[ polish ] = "Open bezier curve";
+    Text[ portuguese_brazilian ] = "Open bezier curve";
+    Text[ japanese ] = "Open bezier curve";
+    Text[ korean ] = "Open bezier curve";
+    Text[ chinese_simplified ] = "Open bezier curve";
+    Text[ chinese_traditional ] = "Open bezier curve";
+    Text[ turkish ] = "Open bezier curve";
+    Text[ arabic ] = "Open bezier curve";
+    Text[ catalan ] = "Open bezier curve";
+    Text[ thai ] = "Open bezier curve";
 };
 
 
@@ -202,24 +642,104 @@ String RID_SVXSTR_RECTCTL_ACC_CORN_NAME
 {
     Text = "Ecken-Kontrollelement" ;
     Text [ english_us ] = "Corner control" ;
+    Text[ portuguese ] = "Corner control";
+    Text[ russian ] = "Corner control";
+    Text[ greek ] = "Corner control";
+    Text[ dutch ] = "Corner control";
+    Text[ french ] = "Corner control";
+    Text[ spanish ] = "Corner control";
+    Text[ finnish ] = "Corner control";
+    Text[ italian ] = "Corner control";
+    Text[ danish ] = "Corner control";
+    Text[ swedish ] = "Corner control";
+    Text[ polish ] = "Corner control";
+    Text[ portuguese_brazilian ] = "Corner control";
+    Text[ japanese ] = "Corner control";
+    Text[ korean ] = "Corner control";
+    Text[ chinese_simplified ] = "Corner control";
+    Text[ chinese_traditional ] = "Corner control";
+    Text[ turkish ] = "Corner control";
+    Text[ arabic ] = "Corner control";
+    Text[ catalan ] = "Corner control";
+    Text[ thai ] = "Corner control";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CORN_DESCR
 {
     Text = "Auswahl eines Eckpunktes." ;
     Text [ english_us ] = "Selection of a corner point." ;
+    Text[ portuguese ] = "Selection of a corner point.";
+    Text[ russian ] = "Selection of a corner point.";
+    Text[ greek ] = "Selection of a corner point.";
+    Text[ dutch ] = "Selection of a corner point.";
+    Text[ french ] = "Selection of a corner point.";
+    Text[ spanish ] = "Selection of a corner point.";
+    Text[ finnish ] = "Selection of a corner point.";
+    Text[ italian ] = "Selection of a corner point.";
+    Text[ danish ] = "Selection of a corner point.";
+    Text[ swedish ] = "Selection of a corner point.";
+    Text[ polish ] = "Selection of a corner point.";
+    Text[ portuguese_brazilian ] = "Selection of a corner point.";
+    Text[ japanese ] = "Selection of a corner point.";
+    Text[ korean ] = "Selection of a corner point.";
+    Text[ chinese_simplified ] = "Selection of a corner point.";
+    Text[ chinese_traditional ] = "Selection of a corner point.";
+    Text[ turkish ] = "Selection of a corner point.";
+    Text[ arabic ] = "Selection of a corner point.";
+    Text[ catalan ] = "Selection of a corner point.";
+    Text[ thai ] = "Selection of a corner point.";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_ANGL_NAME
 {
     Text = "Winkel-Kontrollelement" ;
     Text [ english_us ] = "Angle control" ;
+    Text[ portuguese ] = "Angle control";
+    Text[ russian ] = "Angle control";
+    Text[ greek ] = "Angle control";
+    Text[ dutch ] = "Angle control";
+    Text[ french ] = "Angle control";
+    Text[ spanish ] = "Angle control";
+    Text[ finnish ] = "Angle control";
+    Text[ italian ] = "Angle control";
+    Text[ danish ] = "Angle control";
+    Text[ swedish ] = "Angle control";
+    Text[ polish ] = "Angle control";
+    Text[ portuguese_brazilian ] = "Angle control";
+    Text[ japanese ] = "Angle control";
+    Text[ korean ] = "Angle control";
+    Text[ chinese_simplified ] = "Angle control";
+    Text[ chinese_traditional ] = "Angle control";
+    Text[ turkish ] = "Angle control";
+    Text[ arabic ] = "Angle control";
+    Text[ catalan ] = "Angle control";
+    Text[ thai ] = "Angle control";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR
 {
     Text = "Auswahl eines (Haupt-) Winkels." ;
     Text [ english_us ] = "Selection of a major angle" ;
+    Text[ portuguese ] = "Selection of a major angle";
+    Text[ russian ] = "Selection of a major angle";
+    Text[ greek ] = "Selection of a major angle";
+    Text[ dutch ] = "Selection of a major angle";
+    Text[ french ] = "Selection of a major angle";
+    Text[ spanish ] = "Selection of a major angle";
+    Text[ finnish ] = "Selection of a major angle";
+    Text[ italian ] = "Selection of a major angle";
+    Text[ danish ] = "Selection of a major angle";
+    Text[ swedish ] = "Selection of a major angle";
+    Text[ polish ] = "Selection of a major angle";
+    Text[ portuguese_brazilian ] = "Selection of a major angle";
+    Text[ japanese ] = "Selection of a major angle";
+    Text[ korean ] = "Selection of a major angle";
+    Text[ chinese_simplified ] = "Selection of a major angle";
+    Text[ chinese_traditional ] = "Selection of a major angle";
+    Text[ turkish ] = "Selection of a major angle";
+    Text[ arabic ] = "Selection of a major angle";
+    Text[ catalan ] = "Selection of a major angle";
+    Text[ thai ] = "Selection of a major angle";
 };
 
 
@@ -227,54 +747,234 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LT
 {
     Text = "Links oben" ;
     Text [ english_us ] = "Top left" ;
+    Text[ portuguese ] = "Top left";
+    Text[ russian ] = "Top left";
+    Text[ greek ] = "Top left";
+    Text[ dutch ] = "Top left";
+    Text[ french ] = "Top left";
+    Text[ spanish ] = "Top left";
+    Text[ finnish ] = "Top left";
+    Text[ italian ] = "Top left";
+    Text[ danish ] = "Top left";
+    Text[ swedish ] = "Top left";
+    Text[ polish ] = "Top left";
+    Text[ portuguese_brazilian ] = "Top left";
+    Text[ japanese ] = "Top left";
+    Text[ korean ] = "Top left";
+    Text[ chinese_simplified ] = "Top left";
+    Text[ chinese_traditional ] = "Top left";
+    Text[ turkish ] = "Top left";
+    Text[ arabic ] = "Top left";
+    Text[ catalan ] = "Top left";
+    Text[ thai ] = "Top left";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_MT
 {
     Text = "Mitte oben" ;
     Text [ english_us ] = "Top middle" ;
+    Text[ portuguese ] = "Top middle";
+    Text[ russian ] = "Top middle";
+    Text[ greek ] = "Top middle";
+    Text[ dutch ] = "Top middle";
+    Text[ french ] = "Top middle";
+    Text[ spanish ] = "Top middle";
+    Text[ finnish ] = "Top middle";
+    Text[ italian ] = "Top middle";
+    Text[ danish ] = "Top middle";
+    Text[ swedish ] = "Top middle";
+    Text[ polish ] = "Top middle";
+    Text[ portuguese_brazilian ] = "Top middle";
+    Text[ japanese ] = "Top middle";
+    Text[ korean ] = "Top middle";
+    Text[ chinese_simplified ] = "Top middle";
+    Text[ chinese_traditional ] = "Top middle";
+    Text[ turkish ] = "Top middle";
+    Text[ arabic ] = "Top middle";
+    Text[ catalan ] = "Top middle";
+    Text[ thai ] = "Top middle";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_RT
 {
     Text = "Rechts oben" ;
     Text [ english_us ] = "Top right" ;
+    Text[ portuguese ] = "Top right";
+    Text[ russian ] = "Top right";
+    Text[ greek ] = "Top right";
+    Text[ dutch ] = "Top right";
+    Text[ french ] = "Top right";
+    Text[ spanish ] = "Top right";
+    Text[ finnish ] = "Top right";
+    Text[ italian ] = "Top right";
+    Text[ danish ] = "Top right";
+    Text[ swedish ] = "Top right";
+    Text[ polish ] = "Top right";
+    Text[ portuguese_brazilian ] = "Top right";
+    Text[ japanese ] = "Top right";
+    Text[ korean ] = "Top right";
+    Text[ chinese_simplified ] = "Top right";
+    Text[ chinese_traditional ] = "Top right";
+    Text[ turkish ] = "Top right";
+    Text[ arabic ] = "Top right";
+    Text[ catalan ] = "Top right";
+    Text[ thai ] = "Top right";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_LM
 {
     Text = "Links mittig" ;
     Text [ english_us ] = "Left center" ;
+    Text[ portuguese ] = "Left center";
+    Text[ russian ] = "Left center";
+    Text[ greek ] = "Left center";
+    Text[ dutch ] = "Left center";
+    Text[ french ] = "Left center";
+    Text[ spanish ] = "Left center";
+    Text[ finnish ] = "Left center";
+    Text[ italian ] = "Left center";
+    Text[ danish ] = "Left center";
+    Text[ swedish ] = "Left center";
+    Text[ polish ] = "Left center";
+    Text[ portuguese_brazilian ] = "Left center";
+    Text[ japanese ] = "Left center";
+    Text[ korean ] = "Left center";
+    Text[ chinese_simplified ] = "Left center";
+    Text[ chinese_traditional ] = "Left center";
+    Text[ turkish ] = "Left center";
+    Text[ arabic ] = "Left center";
+    Text[ catalan ] = "Left center";
+    Text[ thai ] = "Left center";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_MM
 {
     Text = "Mitte" ;
     Text [ english_us ] = "Center" ;
+    Text[ portuguese ] = "Center";
+    Text[ russian ] = "Center";
+    Text[ greek ] = "Center";
+    Text[ dutch ] = "Center";
+    Text[ french ] = "Center";
+    Text[ spanish ] = "Center";
+    Text[ finnish ] = "Center";
+    Text[ italian ] = "Center";
+    Text[ danish ] = "Center";
+    Text[ swedish ] = "Center";
+    Text[ polish ] = "Center";
+    Text[ portuguese_brazilian ] = "Center";
+    Text[ japanese ] = "Center";
+    Text[ korean ] = "Center";
+    Text[ chinese_simplified ] = "Center";
+    Text[ chinese_traditional ] = "Center";
+    Text[ turkish ] = "Center";
+    Text[ arabic ] = "Center";
+    Text[ catalan ] = "Center";
+    Text[ thai ] = "Center";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_RM
 {
     Text = "Rechts mittig" ;
     Text [ english_us ] = "Right center" ;
+    Text[ portuguese ] = "Right center";
+    Text[ russian ] = "Right center";
+    Text[ greek ] = "Right center";
+    Text[ dutch ] = "Right center";
+    Text[ french ] = "Right center";
+    Text[ spanish ] = "Right center";
+    Text[ finnish ] = "Right center";
+    Text[ italian ] = "Right center";
+    Text[ danish ] = "Right center";
+    Text[ swedish ] = "Right center";
+    Text[ polish ] = "Right center";
+    Text[ portuguese_brazilian ] = "Right center";
+    Text[ japanese ] = "Right center";
+    Text[ korean ] = "Right center";
+    Text[ chinese_simplified ] = "Right center";
+    Text[ chinese_traditional ] = "Right center";
+    Text[ turkish ] = "Right center";
+    Text[ arabic ] = "Right center";
+    Text[ catalan ] = "Right center";
+    Text[ thai ] = "Right center";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_LB
 {
     Text = "Links unten" ;
     Text [ english_us ] = "Bottom left" ;
+    Text[ portuguese ] = "Bottom left";
+    Text[ russian ] = "Bottom left";
+    Text[ greek ] = "Bottom left";
+    Text[ dutch ] = "Bottom left";
+    Text[ french ] = "Bottom left";
+    Text[ spanish ] = "Bottom left";
+    Text[ finnish ] = "Bottom left";
+    Text[ italian ] = "Bottom left";
+    Text[ danish ] = "Bottom left";
+    Text[ swedish ] = "Bottom left";
+    Text[ polish ] = "Bottom left";
+    Text[ portuguese_brazilian ] = "Bottom left";
+    Text[ japanese ] = "Bottom left";
+    Text[ korean ] = "Bottom left";
+    Text[ chinese_simplified ] = "Bottom left";
+    Text[ chinese_traditional ] = "Bottom left";
+    Text[ turkish ] = "Bottom left";
+    Text[ arabic ] = "Bottom left";
+    Text[ catalan ] = "Bottom left";
+    Text[ thai ] = "Bottom left";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_MB
 {
     Text = "Mitte unten" ;
     Text [ english_us ] = "Bottom middle" ;
+    Text[ portuguese ] = "Bottom middle";
+    Text[ russian ] = "Bottom middle";
+    Text[ greek ] = "Bottom middle";
+    Text[ dutch ] = "Bottom middle";
+    Text[ french ] = "Bottom middle";
+    Text[ spanish ] = "Bottom middle";
+    Text[ finnish ] = "Bottom middle";
+    Text[ italian ] = "Bottom middle";
+    Text[ danish ] = "Bottom middle";
+    Text[ swedish ] = "Bottom middle";
+    Text[ polish ] = "Bottom middle";
+    Text[ portuguese_brazilian ] = "Bottom middle";
+    Text[ japanese ] = "Bottom middle";
+    Text[ korean ] = "Bottom middle";
+    Text[ chinese_simplified ] = "Bottom middle";
+    Text[ chinese_traditional ] = "Bottom middle";
+    Text[ turkish ] = "Bottom middle";
+    Text[ arabic ] = "Bottom middle";
+    Text[ catalan ] = "Bottom middle";
+    Text[ thai ] = "Bottom middle";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_RB
 {
     Text = "Rechts unten" ;
     Text [ english_us ] = "Bottom right" ;
+    Text[ portuguese ] = "Bottom right";
+    Text[ russian ] = "Bottom right";
+    Text[ greek ] = "Bottom right";
+    Text[ dutch ] = "Bottom right";
+    Text[ french ] = "Bottom right";
+    Text[ spanish ] = "Bottom right";
+    Text[ finnish ] = "Bottom right";
+    Text[ italian ] = "Bottom right";
+    Text[ danish ] = "Bottom right";
+    Text[ swedish ] = "Bottom right";
+    Text[ polish ] = "Bottom right";
+    Text[ portuguese_brazilian ] = "Bottom right";
+    Text[ japanese ] = "Bottom right";
+    Text[ korean ] = "Bottom right";
+    Text[ chinese_simplified ] = "Bottom right";
+    Text[ chinese_traditional ] = "Bottom right";
+    Text[ turkish ] = "Bottom right";
+    Text[ arabic ] = "Bottom right";
+    Text[ catalan ] = "Bottom right";
+    Text[ thai ] = "Bottom right";
 };
 
 
@@ -282,48 +982,208 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A000
 {
     Text = "0 Grad" ;
     Text [ english_us ] = "0 degrees" ;
+    Text[ portuguese ] = "0 degrees";
+    Text[ russian ] = "0 degrees";
+    Text[ greek ] = "0 degrees";
+    Text[ dutch ] = "0 degrees";
+    Text[ french ] = "0 degrees";
+    Text[ spanish ] = "0 degrees";
+    Text[ finnish ] = "0 degrees";
+    Text[ italian ] = "0 degrees";
+    Text[ danish ] = "0 degrees";
+    Text[ swedish ] = "0 degrees";
+    Text[ polish ] = "0 degrees";
+    Text[ portuguese_brazilian ] = "0 degrees";
+    Text[ japanese ] = "0 degrees";
+    Text[ korean ] = "0 degrees";
+    Text[ chinese_simplified ] = "0 degrees";
+    Text[ chinese_traditional ] = "0 degrees";
+    Text[ turkish ] = "0 degrees";
+    Text[ arabic ] = "0 degrees";
+    Text[ catalan ] = "0 degrees";
+    Text[ thai ] = "0 degrees";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A045
 {
     Text = "45 Grad" ;
     Text [ english_us ] = "45 degrees" ;
+    Text[ portuguese ] = "45 degrees";
+    Text[ russian ] = "45 degrees";
+    Text[ greek ] = "45 degrees";
+    Text[ dutch ] = "45 degrees";
+    Text[ french ] = "45 degrees";
+    Text[ spanish ] = "45 degrees";
+    Text[ finnish ] = "45 degrees";
+    Text[ italian ] = "45 degrees";
+    Text[ danish ] = "45 degrees";
+    Text[ swedish ] = "45 degrees";
+    Text[ polish ] = "45 degrees";
+    Text[ portuguese_brazilian ] = "45 degrees";
+    Text[ japanese ] = "45 degrees";
+    Text[ korean ] = "45 degrees";
+    Text[ chinese_simplified ] = "45 degrees";
+    Text[ chinese_traditional ] = "45 degrees";
+    Text[ turkish ] = "45 degrees";
+    Text[ arabic ] = "45 degrees";
+    Text[ catalan ] = "45 degrees";
+    Text[ thai ] = "45 degrees";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A090
 {
     Text = "90 Grad" ;
     Text [ english_us ] = "90 degrees" ;
+    Text[ portuguese ] = "90 degrees";
+    Text[ russian ] = "90 degrees";
+    Text[ greek ] = "90 degrees";
+    Text[ dutch ] = "90 degrees";
+    Text[ french ] = "90 degrees";
+    Text[ spanish ] = "90 degrees";
+    Text[ finnish ] = "90 degrees";
+    Text[ italian ] = "90 degrees";
+    Text[ danish ] = "90 degrees";
+    Text[ swedish ] = "90 degrees";
+    Text[ polish ] = "90 degrees";
+    Text[ portuguese_brazilian ] = "90 degrees";
+    Text[ japanese ] = "90 degrees";
+    Text[ korean ] = "90 degrees";
+    Text[ chinese_simplified ] = "90 degrees";
+    Text[ chinese_traditional ] = "90 degrees";
+    Text[ turkish ] = "90 degrees";
+    Text[ arabic ] = "90 degrees";
+    Text[ catalan ] = "90 degrees";
+    Text[ thai ] = "90 degrees";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A135
 {
     Text = "135 Grad" ;
     Text [ english_us ] = "135 degrees" ;
+    Text[ portuguese ] = "135 degrees";
+    Text[ russian ] = "135 degrees";
+    Text[ greek ] = "135 degrees";
+    Text[ dutch ] = "135 degrees";
+    Text[ french ] = "135 degrees";
+    Text[ spanish ] = "135 degrees";
+    Text[ finnish ] = "135 degrees";
+    Text[ italian ] = "135 degrees";
+    Text[ danish ] = "135 degrees";
+    Text[ swedish ] = "135 degrees";
+    Text[ polish ] = "135 degrees";
+    Text[ portuguese_brazilian ] = "135 degrees";
+    Text[ japanese ] = "135 degrees";
+    Text[ korean ] = "135 degrees";
+    Text[ chinese_simplified ] = "135 degrees";
+    Text[ chinese_traditional ] = "135 degrees";
+    Text[ turkish ] = "135 degrees";
+    Text[ arabic ] = "135 degrees";
+    Text[ catalan ] = "135 degrees";
+    Text[ thai ] = "135 degrees";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A180
 {
     Text = "180 Grad" ;
     Text [ english_us ] = "180 degrees" ;
+    Text[ portuguese ] = "180 degrees";
+    Text[ russian ] = "180 degrees";
+    Text[ greek ] = "180 degrees";
+    Text[ dutch ] = "180 degrees";
+    Text[ french ] = "180 degrees";
+    Text[ spanish ] = "180 degrees";
+    Text[ finnish ] = "180 degrees";
+    Text[ italian ] = "180 degrees";
+    Text[ danish ] = "180 degrees";
+    Text[ swedish ] = "180 degrees";
+    Text[ polish ] = "180 degrees";
+    Text[ portuguese_brazilian ] = "180 degrees";
+    Text[ japanese ] = "180 degrees";
+    Text[ korean ] = "180 degrees";
+    Text[ chinese_simplified ] = "180 degrees";
+    Text[ chinese_traditional ] = "180 degrees";
+    Text[ turkish ] = "180 degrees";
+    Text[ arabic ] = "180 degrees";
+    Text[ catalan ] = "180 degrees";
+    Text[ thai ] = "180 degrees";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A225
 {
     Text = "225 Grad" ;
     Text [ english_us ] = "225 degrees" ;
+    Text[ portuguese ] = "225 degrees";
+    Text[ russian ] = "225 degrees";
+    Text[ greek ] = "225 degrees";
+    Text[ dutch ] = "225 degrees";
+    Text[ french ] = "225 degrees";
+    Text[ spanish ] = "225 degrees";
+    Text[ finnish ] = "225 degrees";
+    Text[ italian ] = "225 degrees";
+    Text[ danish ] = "225 degrees";
+    Text[ swedish ] = "225 degrees";
+    Text[ polish ] = "225 degrees";
+    Text[ portuguese_brazilian ] = "225 degrees";
+    Text[ japanese ] = "225 degrees";
+    Text[ korean ] = "225 degrees";
+    Text[ chinese_simplified ] = "225 degrees";
+    Text[ chinese_traditional ] = "225 degrees";
+    Text[ turkish ] = "225 degrees";
+    Text[ arabic ] = "225 degrees";
+    Text[ catalan ] = "225 degrees";
+    Text[ thai ] = "225 degrees";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A270
 {
     Text = "270 Grad" ;
     Text [ english_us ] = "270 degrees" ;
+    Text[ portuguese ] = "270 degrees";
+    Text[ russian ] = "270 degrees";
+    Text[ greek ] = "270 degrees";
+    Text[ dutch ] = "270 degrees";
+    Text[ french ] = "270 degrees";
+    Text[ spanish ] = "270 degrees";
+    Text[ finnish ] = "270 degrees";
+    Text[ italian ] = "270 degrees";
+    Text[ danish ] = "270 degrees";
+    Text[ swedish ] = "270 degrees";
+    Text[ polish ] = "270 degrees";
+    Text[ portuguese_brazilian ] = "270 degrees";
+    Text[ japanese ] = "270 degrees";
+    Text[ korean ] = "270 degrees";
+    Text[ chinese_simplified ] = "270 degrees";
+    Text[ chinese_traditional ] = "270 degrees";
+    Text[ turkish ] = "270 degrees";
+    Text[ arabic ] = "270 degrees";
+    Text[ catalan ] = "270 degrees";
+    Text[ thai ] = "270 degrees";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A315
 {
     Text = "315 Grad" ;
     Text [ english_us ] = "315 degrees" ;
+    Text[ portuguese ] = "315 degrees";
+    Text[ russian ] = "315 degrees";
+    Text[ greek ] = "315 degrees";
+    Text[ dutch ] = "315 degrees";
+    Text[ french ] = "315 degrees";
+    Text[ spanish ] = "315 degrees";
+    Text[ finnish ] = "315 degrees";
+    Text[ italian ] = "315 degrees";
+    Text[ danish ] = "315 degrees";
+    Text[ swedish ] = "315 degrees";
+    Text[ polish ] = "315 degrees";
+    Text[ portuguese_brazilian ] = "315 degrees";
+    Text[ japanese ] = "315 degrees";
+    Text[ korean ] = "315 degrees";
+    Text[ chinese_simplified ] = "315 degrees";
+    Text[ chinese_traditional ] = "315 degrees";
+    Text[ turkish ] = "315 degrees";
+    Text[ arabic ] = "315 degrees";
+    Text[ catalan ] = "315 degrees";
+    Text[ thai ] = "315 degrees";
 };
 
 // SvxGraphCtrlAccessibleContext
@@ -331,10 +1191,50 @@ String RID_SVXSTR_GRAPHCTRL_ACC_NAME
 {
     Text = "Graph-Kontrollelement" ;
     Text [ english_us ] = "Graph control" ;
+    Text[ portuguese ] = "Graph control";
+    Text[ russian ] = "Graph control";
+    Text[ greek ] = "Graph control";
+    Text[ dutch ] = "Graph control";
+    Text[ french ] = "Graph control";
+    Text[ spanish ] = "Graph control";
+    Text[ finnish ] = "Graph control";
+    Text[ italian ] = "Graph control";
+    Text[ danish ] = "Graph control";
+    Text[ swedish ] = "Graph control";
+    Text[ polish ] = "Graph control";
+    Text[ portuguese_brazilian ] = "Graph control";
+    Text[ japanese ] = "Graph control";
+    Text[ korean ] = "Graph control";
+    Text[ chinese_simplified ] = "Graph control";
+    Text[ chinese_traditional ] = "Graph control";
+    Text[ turkish ] = "Graph control";
+    Text[ arabic ] = "Graph control";
+    Text[ catalan ] = "Graph control";
+    Text[ thai ] = "Graph control";
 };
 
 String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
 {
     Text = "Bearbeitung eines Graphen." ;
     Text [ english_us ] = "Editing of a graph" ;
+    Text[ portuguese ] = "Editing of a graph";
+    Text[ russian ] = "Editing of a graph";
+    Text[ greek ] = "Editing of a graph";
+    Text[ dutch ] = "Editing of a graph";
+    Text[ french ] = "Editing of a graph";
+    Text[ spanish ] = "Editing of a graph";
+    Text[ finnish ] = "Editing of a graph";
+    Text[ italian ] = "Editing of a graph";
+    Text[ danish ] = "Editing of a graph";
+    Text[ swedish ] = "Editing of a graph";
+    Text[ polish ] = "Editing of a graph";
+    Text[ portuguese_brazilian ] = "Editing of a graph";
+    Text[ japanese ] = "Editing of a graph";
+    Text[ korean ] = "Editing of a graph";
+    Text[ chinese_simplified ] = "Editing of a graph";
+    Text[ chinese_traditional ] = "Editing of a graph";
+    Text[ turkish ] = "Editing of a graph";
+    Text[ arabic ] = "Editing of a graph";
+    Text[ catalan ] = "Editing of a graph";
+    Text[ thai ] = "Editing of a graph";
 };
