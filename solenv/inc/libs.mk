@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:48:12 $
+#   last change: $Author: rt $ $Date: 2003-04-17 17:18:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.63 $$"
+LIBSMKREV!:="$$Revision: 1.64 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -145,9 +145,6 @@ SVUNZIPLIB=-lsvunzip
 SVUNZIPDLL=-lzip$(OFFICEUPD)$(DLLPOSTFIX)
 PLUGCTORLIB=-lplugctor
 # PLUGCTORLIB=
-INETLIB=-lni$(OFFICEUPD)$(DLLPOSTFIX)
-INETLIBSH=-linetdll
-INETLIBST=-linetwrap
 SO2LIB=-lso$(OFFICEUPD)$(DLLPOSTFIX)
 TKTLIB=-ltkt$(OFFICEUPD)$(DLLPOSTFIX)
 SJLIB=-lj$(OFFICEUPD)$(DLLPOSTFIX)_g
@@ -320,8 +317,6 @@ CHANELLIB=
 HELPLIB=$(LIBPRE) hlp.lib
 CHANELLIB=$(LIBPRE) ich.lib
 .ENDIF
-INETLIBSH=$(LIBPRE) inetdll.lib
-INETLIBST=$(LIBPRE) inetwrap.lib
 BASICLIB=$(LIBPRE) basic.lib
 BASICLIGHTLIB=$(LIBPRE) basicl.lib
 SO2LIB=$(LIBPRE) so2.lib
