@@ -16096,3 +16096,11 @@ _TI2?AVbad_alloc@std@@
 ?szServiceName2_UnoControlRoadmapModel@@3QBDB
 ?szServiceName_UnoControlRoadmap@@3QBDB
 ?szServiceName_UnoControlRoadmapModel@@3QBDB
+?acquire@OToolBoxWindowItem@?A0x187a0966@@OFM@AAXXZ
+?getImplementationId@OToolBoxWindowItem@?A0x187a0966@@OFI@AA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?getTypes@OToolBoxWindowItem@?A0x187a0966@@OFI@AA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ
+?queryInterface@OToolBoxWindowItem@?A0x187a0966@@OFM@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
+?release@OToolBoxWindowItem@?A0x187a0966@@OFM@AAXXZ
+?lcl_getSpinButtonValue@?A0x8f61e3cd@toolkit@@YAJAAVIMutex@vos@@PBVWindow@@P8SpinButton@@BEJXZ@Z
+?lcl_modifyStyle@?A0x8f61e3cd@toolkit@@YAXPAVWindow@@_JE@Z
+?lcl_setSpinButtonValue@?A0x8f61e3cd@toolkit@@YAXAAVIMutex@vos@@PAVWindow@@P8SpinButton@@AEXJ@ZJ@Z
