@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 22:47:51 $
+ *  last change: $Author: kz $ $Date: 2001-03-02 20:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ russian ] = "Οπξχθςΰςό γπΰτθχερκθι τΰιλ νε σδΰεςρÿ";
         TEXT[ polish ] = "Pliku graficznego nie moΏna otworzyζ";
         TEXT[ japanese ] = "ΈήΧΜ¨―Έ Μ§²Ω‚ª“Η‚ί‚ά‚Ή‚ρB";
-        TEXT[ chinese_traditional ] = "µLªkΕª¥XΉΟ¤ωΐΙ®Χ";
+        TEXT[ chinese_traditional ] = "µLªkΕª¥XΉΟ§ΞΐΙ®Χ";
         TEXT[ arabic ] = "αΗ νγίδ ήΡΗΑΙ γαέ ΗαΡΣζγΗΚ";
         TEXT[ greek ] = "Η ανάγνωση του αρχείου γραφικού δεν είναι δυνατή";
         TEXT[ korean ] = "±Χ·΅ΗΘΖΔΐΟΐ» ΐΠΐ» Όφ Ύψ½ΐ΄Ο΄Ω";
@@ -281,7 +281,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ russian ] = "Νεθηβερςνϋι γπΰτθχερκθι τξπμΰς";
         TEXT[ polish ] = "Nieznany format graficzny";
         TEXT[ japanese ] = "•s–Ύ‚ΘΈήΧΜ¨―Έ‘®";
-        TEXT[ chinese_traditional ] = "¤£©ϊªΊΉΟ¤ω®ζ¦΅";
+        TEXT[ chinese_traditional ] = "¤£©ϊªΊΉΟ§Ξ®ζ¦΅";
         TEXT[ arabic ] = "ΚδΣνή ΡΣζγΗΚ ΫνΡ γΪΡζέ";
         TEXT[ greek ] = "Άγνωστη μορφή γραφικού";
         TEXT[ korean ] = "ΎΛ·ΑΑ® ΐΦΑφ ΎΚΐΊ ±Χ·΅ΗΘΌ­½Δ";
@@ -307,7 +307,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ russian ] = "Βεπρθÿ γπΰτθχερκξγξ τΰιλΰ νε οξδδεπζθβΰεςρÿ";
         TEXT[ polish ] = "Wersja pliku graficznego nie bκdzie obs³ugiwana";
         TEXT[ japanese ] = "ΈήΧΜ¨―Έ Μ§²Ω‚ΜΚή°Όή®έ‚ª»Ξί°Δ‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
-        TEXT[ chinese_traditional ] = "¤£¤δ«ω³o­ΣΉΟ¤ωΐΙ®Χª©¥»";
+        TEXT[ chinese_traditional ] = "¤£¤δ«ω³o­ΣΉΟ§ΞΐΙ®Χª©¥»";
         TEXT[ arabic ] = "αδ νΚγ ΟΪγ ΕΥΟΗΡ γαέ ΗαΡΣζγΗΚ";
         TEXT[ greek ] = "Δεν υποστηρίζεται η έκδοση αυτού του γραφικού αρχείου.";
         TEXT[ korean ] = "±Χ·΅ΗΘΖΔΐΟΐΗ ΉφΐόΐΊ ΑφΏψµΗΑφ ΎΚΐ½";
@@ -333,7 +333,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ russian ] = "Γπΰτθχερκθι τθλόςπ νε νΰιδεν";
         TEXT[ polish ] = "Filtru graficznego nie znaleziono";
         TEXT[ japanese ] = "ΈήΧΜ¨―Έ Μ¨Ωΐ°‚ª©‚Β‚©‚θ‚ά‚Ή‚ρB";
-        TEXT[ chinese_traditional ] = "¨S¦³§δ¨μΉΟ¤ωΉLΒoΎΉ";
+        TEXT[ chinese_traditional ] = "¨S¦³§δ¨μΉΟ§ΞΉLΒoΎΉ";
         TEXT[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ έαΚΡ ΗαΡΣζγΗΚ";
         TEXT[ greek ] = "Το φίλτρο γραφικών δεν βρέθηκε";
         TEXT[ korean ] = "±Χ·΅ΗΘΗΚΕΝΈ¦ Γ£Αφ ΈψΗίΐ½";
@@ -359,7 +359,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ russian ] = "Νεδξρςΰςξχνξ οΰμÿςθ δλÿ βρςΰβκθ πθρσνκΰ";
         TEXT[ polish ] = "Brakuje pamiκci do wstawienia grafiki";
         TEXT[ japanese ] = "ΈήΧΜ¨―Έ‘}“ό‚Μ‚½‚ί‚ΜÒΣΨ‚ª•s[•ª‚Ε‚·B";
-        TEXT[ chinese_traditional ] = "°OΎΠΕι¤£¨¬΅MµLªk΄΅¤JΉΟ¤ω";
+        TEXT[ chinese_traditional ] = "°OΎΠΕι¤£¨¬΅MµLªk΄΅¤JΉΟ§Ξ";
         TEXT[ arabic ] = "αΗ νζΜΟ ΠΗίΡΙ ίΗένΙ αΕΟΡΗΜ ΗαΡΣγ";
         TEXT[ greek ] = "Δεν υπάρχει αρκετή μνήμη για την εισαγωγή του γραφικού";
         TEXT[ korean ] = "±Χ·΅ΗΘ »πΐΤΐ» ΐ§ΗΡ ΈήΈπΈ®°΅ ΊΞΑ·ΗΥ΄Ο΄Ω";
