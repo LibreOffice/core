@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-24 11:07:20 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 17:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,9 @@ OMarkableStreamBlock::~OMarkableStreamBlock()
     }
 }
 
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+
 //.........................................................................
 namespace frm
 {
@@ -252,9 +255,9 @@ protected:
     SvNumberFormatter*  m_pMyPrivateFormatter;
 
 public:
-    StandardFormatsSupplier();
+    StandardFormatsSupplier(const Reference<XMultiServiceFactory>& _rxFactory);
 
-        operator com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier> ();
+    operator com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier> ();
     SvNumberFormatsSupplierObj::operator new;
     SvNumberFormatsSupplierObj::operator delete;
 
@@ -264,9 +267,9 @@ protected:
 
 
 //------------------------------------------------------------------
-StandardFormatsSupplier::StandardFormatsSupplier()
+StandardFormatsSupplier::StandardFormatsSupplier(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
     :SvNumberFormatsSupplierObj()
-    ,m_pMyPrivateFormatter(new SvNumberFormatter(Application::GetAppInternational().GetLanguage()))
+    ,m_pMyPrivateFormatter(new SvNumberFormatter(_rxFactory, Application::GetAppInternational().GetLanguage()))
 {
     SetNumberFormatter(m_pMyPrivateFormatter);
 }
@@ -731,7 +734,7 @@ com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  OFormattedMode
 com::sun::star::uno::Reference<starutil::XNumberFormatsSupplier>  OFormattedModel::calcDefaultFormatsSupplier() const
 {
     if (!s_xDefaultFormatter.is())
-        s_xDefaultFormatter = *new StandardFormatsSupplier;
+        s_xDefaultFormatter = *new StandardFormatsSupplier(m_xServiceFactory);
     return s_xDefaultFormatter;
 }
 
