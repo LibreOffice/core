@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortDescriptor2.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-23 08:58:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module com {  module sun {  module star {  module util {
 
     @since #107627#
  */
-service SortDescriptor2
+published service SortDescriptor2
 {
 };
 
