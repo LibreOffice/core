@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:59:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,19 +685,19 @@ void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObj
             if ( xCon == i->get() )
             {
                 *i = OWeakConnection();
-                try
-                {
-                    Reference<XTransactedObject> xTrans(xCon,UNO_QUERY);
-                    if ( bStore = xTrans.is() )
-                    {
-                        xTrans->commit();
-                        bStore = commitEmbeddedStorage();
-                    }
-                }
-                catch(Exception&)
-                {
-                    OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
-                }
+//              try
+//              {
+//                  Reference<XTransactedObject> xTrans(xCon,UNO_QUERY);
+//                  if ( bStore = xTrans.is() )
+//                  {
+//                      xTrans->commit();
+//                      bStore = commitEmbeddedStorage();
+//                  }
+//              }
+//              catch(Exception&)
+//              {
+//                  OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
+//              }
             }
         }
 
@@ -830,13 +830,21 @@ void ODatabaseSource::disposing()
 
     try
     {
-        TStorages::iterator aIter = m_aStorages.begin();
-        TStorages::iterator aEnd = m_aStorages.end();
-        for (; aIter != aEnd ; ++aIter)
+        sal_Bool bStore = commitEmbeddedStorage();
+        disposeStorages();
+        if ( bStore )
         {
-            ::comphelper::disposeComponent(aIter->second);
+            try
+            {
+                Reference<XTransactedObject> xTransact(getStorage(),UNO_QUERY);
+                if ( xTransact.is() )
+                    xTransact->commit();
+            }
+            catch(Exception)
+            {
+                OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
+            }
         }
-        m_aStorages.clear();
         ::comphelper::disposeComponent(m_xStorage);
     }
     catch(Exception&)
@@ -1314,7 +1322,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
     {
         Reference< XComponent> xComp(xConn,UNO_QUERY);
         if ( xComp.is() )
-            xComp->addEventListener(this);
+            xComp->addEventListener(static_cast<XContainerListener*>(this));
         m_aConnections.push_back(OWeakConnection(xConn));
     }
 
