@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 08:37:59 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-10-02 08:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,10 @@ protected:
     // This base class sets DEFUNC(0/1), EDITABLE(0/1), ENABLED(1),
     // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL
+        getBoundsImpl(sal_Bool bRelative)
+        throw (::com::sun::star::uno::RuntimeException);
 
     virtual ~SwAccessibleContext();
 
