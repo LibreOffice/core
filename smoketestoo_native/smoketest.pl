@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 11:36:10 $
+#   last change: $Author: rt $ $Date: 2005-01-25 12:40:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -280,7 +280,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.10 $ ';
+$id_str = ' $Revision: 1.11 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -380,11 +380,9 @@ sub findSubDir {
 }
 
 sub prepare {
-    my ($Command);
     if ($gui eq "UNX") {
         $ENV{ignore_patch_check}="t";
-        $ENV{OOO_FORCE_DESKTOP}="none";
-        delete $ENV{LD_LIBRARY_PATH};
+        $ENV{OOO_FORCE_DESKTOP} = "none";
     }
 
 }
@@ -478,6 +476,9 @@ sub doTest {
 
     print "Starting Testtool ($INSTSETNAME)\n";
 
+    if ($gui eq "UNX") {
+        delete $ENV{LD_LIBRARY_PATH};
+    }
     if ((defined($ENV{OS})) && (defined($ENV{PROEXT})) && ($ENV{OS} eq "LINUX") && ($ENV{PROEXT} eq ".pro") && $is_do_statistics)  {
         print "collecting statistic...\n";
         $Command = "$PERL stats.pl -p=\"$programpath" . "soffice\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
