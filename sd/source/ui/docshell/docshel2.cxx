@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:52:40 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 09:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,11 @@
 #ifndef _SVX_SVXIFACT_HXX //autogen
 #include <svx/svxifact.hxx>
 #endif
-#ifndef _SVX_DLGNAME_HXX //autogen
-#include <svx/dlgname.hxx>
-#endif
-
+//CHINA001 #ifndef _SVX_DLGNAME_HXX //autogen
+//CHINA001 #include <svx/dlgname.hxx>
+//CHINA001 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 #pragma hdrstop
 
 #include "helpids.h"
@@ -457,21 +458,26 @@ BOOL DrawDocShell::CheckPageName (::Window* pWin, String& rName )
     if( ! bIsNameValid )
     {
         String aDesc( SdResId( STR_WARN_PAGE_EXISTS ) );
-        SvxNameDialog aNameDlg( pWin, aStrForDlg, aDesc );
-        aNameDlg.SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+        //CHINA001 SvxNameDialog aNameDlg( pWin, aStrForDlg, aDesc );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc, ResId(RID_SVXDLG_NAME) );
+        DBG_ASSERT(aNameDlg, "Dialogdiet fail!");//CHINA001
+        aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE ); //CHINA001 aNameDlg.SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
         if( pViewShell )
-            aNameDlg.SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) );
+            aNameDlg->SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) ); //CHINA001 aNameDlg.SetCheckNameHdl( LINK( this, SdDrawDocShell, RenameSlideHdl ) );
 
         FuPoor* pFunc = pViewShell->GetActualFunction();
         if( pFunc )
             pFunc->cancel();
 
-        if( aNameDlg.Execute() == RET_OK )
+        if( aNameDlg->Execute() == RET_OK ) //CHINA001 if( aNameDlg.Execute() == RET_OK )
         {
-            aNameDlg.GetName( rName );
+            aNameDlg->GetName( rName ); //CHINA001 aNameDlg.GetName( rName );
             bIsNameValid = IsNewPageNameValid( rName );
         }
+        delete aNameDlg; //add by CHINA001
     }
 
     return ( bIsNameValid ? TRUE : FALSE );
@@ -578,7 +584,7 @@ bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStrin
     return bCanUseNewName;
 }
 
-IMPL_LINK( DrawDocShell, RenameSlideHdl, SvxNameDialog*, pDialog )
+IMPL_LINK( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
 {
     if( ! pDialog )
         return 0;
