@@ -1,0 +1,13 @@
+# UNIX:
+#TestDocumentPath=file:///net/margritte/usr/qaapi/dev/cws/filtercfg/docTypes
+# WINDOWS
+TestDocumentPath=//margritte/qaapi/dev/cws/filtercfg/docTypes
+
+csv.files=files.csv
+csv.preselectedFilter=preselectedFilter.csv
+csv.preselectedType=preselectedType.csv
+csv.serviceName=serviceName.csv
+csv.streamFileTypes=streamFileTypes.csv
+placeHolder=%
+%SO6productname=StarOffice
+%SO6formatversion=6.0
