@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mba $ $Date: 2002-06-19 17:16:41 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:38:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,13 +69,10 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
 
 PRJNAME=svx
 TARGET=items
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
