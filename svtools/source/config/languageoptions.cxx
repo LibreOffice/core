@@ -2,9 +2,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:30:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,8 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
         case LANGUAGE_URDU:
         case LANGUAGE_URDU_PAKISTAN:
         case LANGUAGE_URDU_INDIA:
+        case LANGUAGE_USER_KURDISH_IRAQ:
+        case LANGUAGE_USER_KURDISH_IRAN:
         case LANGUAGE_VIETNAMESE: // not included in langtab.src?
             nScript = SCRIPTTYPE_COMPLEX;
             break;
