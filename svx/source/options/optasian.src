@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 09:22:53 $
+ *  last change: $Author: os $ $Date: 2001-10-08 14:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     RadioButton RB_CHAR_KERNING
     {
         Pos = MAP_APPFONT ( 12, 14 ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "~Nur westliche Zeichen" ;
         Text [ English ] = "Western characters only" ;
         Text[ english_us ] = "~Western characters only";
@@ -130,29 +130,9 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     RadioButton RB_CHAR_PUNCT
     {
         Pos = MAP_APPFONT ( 12, 27 ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text = "~Westlicher Text und asiatische Interpunktion" ;
-        Text [ English ] = "Western text and Asian punctuation" ;
-        Text[ english_us ] = "Western ~text and punctuation";
-        Text[ portuguese ] = "~Texto ocidental e pontuação";
-        Text[ russian ] = "Çàïàäíûé òåêñò è ïóíêòóàöèÿ";
-        Text[ greek ] = "Äõôéêü êåßìåíï êáé óçìåßá óôßîçò";
-        Text[ dutch ] = "~Westerse tekst en interpunctie";
-        Text[ french ] = "Texte ~occidental et ponctuation";
-        Text[ spanish ] = "Texto y puntuación occidentales";
-        Text[ italian ] = "Testo e punteggiatura occidentali";
-        Text[ danish ] = "Western text and punctuation";
-        Text[ swedish ] = "~Västlig text och interpunktion";
-        Text[ polish ] = "Tekst i interpunkcja zachodnia";
-        Text[ portuguese_brazilian ] = "Western text and punctuation";
-        Text[ japanese ] = "åŠè§’è‹±å­—ã¨åŒºåˆ‡ã‚Šè¨˜å·(~T)";
-        Text[ korean ] = "ì•ŒíŒŒë²³ ë¬¸ì í…ìŠ¤íŠ¸ì™€ êµ¬ë‘ì (~T)";
-        Text[ chinese_simplified ] = "è¥¿æ–‡å’Œæ ‡ç‚¹ç¬¦å·(~T)";
-        Text[ chinese_traditional ] = "è¥¿æ–‡å’Œæ¨™é»ç¬¦è™Ÿ(~T)";
-        Text[ turkish ] = "Western text and punctuation";
-        Text[ arabic ] = "äÕ ÛÑÈí æÚáÇãÇÊ ÊäŞíØ";
-        Text[ catalan ] = "Texto y puntuación occidentales";
-        Text[ finnish ] = "~Westlicher Text und Interpunktion";
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Text = "~Westliche Zeichen und asiatische Interpunktion" ;
+        Text [ English ] = "Western characters and Asian punctuation" ;
     };
     FixedLine GB_CHAR_DIST
     {
