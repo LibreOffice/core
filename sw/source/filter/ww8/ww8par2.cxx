@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:54:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
                 if (pTNd->GetTxt().GetChar(1) == 0x09)
                     pPaM->GetMark()->nContent++;
                 pPaM->GetMark()->nContent++;
-                pRefStck->Delete(*pPaM);
+                pReffingStck->Delete(*pPaM);
                 rDoc.Delete( *pPaM );
                 pPaM->DeleteMark();
             }
