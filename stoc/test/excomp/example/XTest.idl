@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTest.idl,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@ module example
  *
  * @author Juergen Schmidt
  */
-[ uik(46833373-3462-11d3-87A50070-24594732), ident("XTest", 1.0) ]
 interface XTest : com::sun::star::uno::XInterface
 {
     /**
