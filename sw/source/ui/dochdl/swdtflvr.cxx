@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 13:30:25 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 18:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1875,7 +1875,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
     }
 
     String aCmd;
-    ::MakeLnkName( aCmd, &aApp, aTopic, aItem );
+    so3::MakeLnkName( aCmd, &aApp, aTopic, aItem );
 
     // wollen wir jetzt eine Grafik einlesen ?
     ULONG nFormat;
@@ -1916,7 +1916,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             {
                 String sTmp( ((SwDDEFieldType*)pTyp)->GetCmd() );
                 if( 0 == rColl.compareString( sTmp, aCmd ) &&
-                    LINKUPDATE_ALWAYS == ((SwDDEFieldType*)pTyp)->GetType() )
+                    so3::LINKUPDATE_ALWAYS == ((SwDDEFieldType*)pTyp)->GetType() )
                 {
                     aName = pTyp->GetName();
                     bDoublePaste = TRUE;
@@ -1938,7 +1938,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
 
     if( !bDoublePaste )
     {
-        SwDDEFieldType aType( aName, aCmd, LINKUPDATE_ALWAYS );
+        SwDDEFieldType aType( aName, aCmd, so3::LINKUPDATE_ALWAYS );
         pTyp = rWrtShell.InsertFldType( aType );
     }
 
@@ -2421,9 +2421,11 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                                                     rData);
                 pConnectionItem = new SfxUsrAnyItem(FN_DB_CONNECTION_ANY, aColDesc[daConnection]);
                 pColumnItem = new SfxUsrAnyItem(FN_DB_COLUMN_ANY, aColDesc[daColumnObject]);
+#if SUP>=637
                 pSourceItem = new SfxUsrAnyItem(FN_DB_DATA_SOURCE_ANY, aColDesc[daDataSource]);
                 pCommandItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_ANY, aColDesc[daCommand]);
                 pCommandTypeItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_TYPE_ANY, aColDesc[daCommandType]);
+#endif
             }
 
             SwView& rView = rSh.GetView();
