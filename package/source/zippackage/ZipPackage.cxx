@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-07 16:06:55 $
+ *  last change: $Author: mtg $ $Date: 2001-03-08 12:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,11 @@ void ZipPackage::getZipFileContents()
                 nOldIndex = nIndex+1;
             }
             OUString sStreamName = rName.copy( nOldIndex, rName.getLength() - nOldIndex);
+            /*
+             * disabled this funky but useless functionality on 8/03/2001 due to problems
+             * with copying streams - mtg
+             *
+             * It may be of some use to future generations :)
             if (isZipFile(aEntry))
             {
                 Reference < XInputStream > xContentStream = pZipFile->getInputStream(aEntry);
@@ -256,6 +261,7 @@ void ZipPackage::getZipFileContents()
                 }
             }
             else
+            */
             {
                 pPkgStream = new ZipPackageStream( pZipFile );
                 pPkgStream->bPackageMember = sal_True;
