@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:28:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2292,179 +2292,244 @@ void ScViewData::ReadUserData(const String& rData)
     RecalcPixPos();
 }
 
-void ScViewData::WriteExtOptions(ScExtDocOptions& rOpt)
+void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
 {
-    // for Excel export
+    // *** Fill extended document data for export filters ***
 
     // document settings
-    rOpt.SetActTab( static_cast<sal_uInt16>(GetTabNo()) );
-    rOpt.nSelTabs = 0;
-    if( pOptions && (pOptions->GetGridColor().GetColor() != SC_STD_GRIDCOLOR) )
-        rOpt.SetGridCol( pOptions->GetGridColor() );
+    ScExtDocSettings& rDocSett = rDocOpt.GetDocSettings();
 
-    // table settings
-    SCTAB nTabCount = pDoc->GetTableCount();
-    for( SCTAB nTab = 0; nTab < nTabCount; nTab++ )
+    // displayed sheet
+    rDocSett.mnDisplTab = GetTabNo();
+
+    // width of the tabbar, relative to frame window width
+    rDocSett.mfTabBarWidth = pView->GetPendingRelTabBarWidth();
+    if( rDocSett.mfTabBarWidth < 0.0 )
+        rDocSett.mfTabBarWidth = pView->GetRelTabBarWidth();
+
+    // sheet settings
+    for( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
     {
-        ScViewDataTable* pViewTab = pTabData[ nTab ];
-        if( pViewTab )
+        if( const ScViewDataTable* pViewTab = pTabData[ nTab ] )
         {
-            ScExtTabOptions* pTabOpt = rOpt.GetExtTabOptions( nTab );
-            if( !pTabOpt )
-                rOpt.SetExtTabOptions( nTab, pTabOpt = new ScExtTabOptions );
+            ScExtTabSettings& rTabSett = rDocOpt.GetOrCreateTabSettings( nTab );
 
-            pTabOpt->nTabNum = static_cast<sal_uInt16>(nTab);
-            pTabOpt->bSelected = GetMarkData().GetTableSelect( nTab );
-            if( pTabOpt->bSelected )
-                rOpt.nSelTabs++;
+            // split mode
+            ScSplitMode eHSplit = pViewTab->eHSplitMode;
+            ScSplitMode eVSplit = pViewTab->eVSplitMode;
+            bool bHSplit = eHSplit != SC_SPLIT_NONE;
+            bool bVSplit = eVSplit != SC_SPLIT_NONE;
+            bool bRealSplit = (eHSplit == SC_SPLIT_NORMAL) || (eVSplit == SC_SPLIT_NORMAL);
+            bool bFrozen    = (eHSplit == SC_SPLIT_FIX)    || (eVSplit == SC_SPLIT_FIX);
+            DBG_ASSERT( !bRealSplit || !bFrozen, "ScViewData::WriteExtOptions - split and freeze in same sheet" );
+            rTabSett.mbFrozenPanes = !bRealSplit && bFrozen;
 
-            BOOL bHorSplit = (pViewTab->eHSplitMode != SC_SPLIT_NONE);
-            BOOL bVertSplit = (pViewTab->eVSplitMode != SC_SPLIT_NONE);
-            BOOL bNormalSplit = (pViewTab->eHSplitMode == SC_SPLIT_NORMAL) || (pViewTab->eVSplitMode == SC_SPLIT_NORMAL);
-            pTabOpt->bFrozen = (pViewTab->eHSplitMode == SC_SPLIT_FIX) || (pViewTab->eVSplitMode == SC_SPLIT_FIX);
-
-            if( bNormalSplit )
+            // split and freeze position
+            rTabSett.maSplitPos = Point( 0, 0 );
+            rTabSett.maFreezePos.Set( 0, 0, nTab );
+            if( bRealSplit )
             {
-                Point aPixel = Application::GetDefaultDevice()->PixelToLogic(
-                    Point( pViewTab->nHSplitPos, pViewTab->nVSplitPos ), MapMode( MAP_TWIP ) );
-                if ( pDocShell )
-                    aPixel.X() = (long)((double)aPixel.X() / pDocShell->GetOutputFactor());
-                pTabOpt->nSplitX = aPixel.X();
-                pTabOpt->nSplitY = aPixel.Y();
+                Point& rSplitPos = rTabSett.maSplitPos;
+                rSplitPos = Point( bHSplit ? pViewTab->nHSplitPos : 0, bVSplit ? pViewTab->nVSplitPos : 0 );
+                rSplitPos = Application::GetDefaultDevice()->PixelToLogic( rSplitPos, MapMode( MAP_TWIP ) );
+                if( pDocShell )
+                    rSplitPos.X() = (long)((double)rSplitPos.X() / pDocShell->GetOutputFactor());
             }
-            else if( pTabOpt->bFrozen )
+            else if( bFrozen )
             {
-                pTabOpt->nSplitX = (pViewTab->eHSplitMode == SC_SPLIT_FIX) ? static_cast<sal_uInt16>(pViewTab->nFixPosX) : 0;
-                pTabOpt->nSplitY = (pViewTab->eVSplitMode == SC_SPLIT_FIX) ? static_cast<sal_uInt16>(pViewTab->nFixPosY) : 0;
+                if( bHSplit ) rTabSett.maFreezePos.SetCol( pViewTab->nFixPosX );
+                if( bVSplit ) rTabSett.maFreezePos.SetRow( pViewTab->nFixPosY );
             }
 
-            pTabOpt->nLeftCol = static_cast<sal_uInt16>(pViewTab->nPosX[ SC_SPLIT_LEFT ]);
-            pTabOpt->nLeftSplitCol = static_cast<sal_uInt16>(pViewTab->nPosX[ SC_SPLIT_RIGHT ]);
-            pTabOpt->nTopRow = static_cast<sal_uInt16>(pViewTab->nPosY[ bVertSplit ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM ]);
-            pTabOpt->nTopSplitRow = static_cast<sal_uInt16>(pViewTab->nPosY[ SC_SPLIT_BOTTOM ]);
+            // first visible cell in top-left and additional panes
+            rTabSett.maFirstVis.Set( pViewTab->nPosX[ SC_SPLIT_LEFT ], pViewTab->nPosY[ bVSplit ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM ], nTab );
+            rTabSett.maSecondVis.Set( pViewTab->nPosX[ SC_SPLIT_RIGHT ], pViewTab->nPosY[ SC_SPLIT_BOTTOM ], nTab );
 
+            // active pane
             switch( pViewTab->eWhichActive )
             {
-                case SC_SPLIT_TOPLEFT:      pTabOpt->nActPane = 3;  break;
-                case SC_SPLIT_TOPRIGHT:     pTabOpt->nActPane = 1;  break;
-                case SC_SPLIT_BOTTOMLEFT:   pTabOpt->nActPane = 2;  break;
-                case SC_SPLIT_BOTTOMRIGHT:  pTabOpt->nActPane = 0;  break;
+                // no horizontal split -> always use left panes
+                // no vertical split -> always use top panes
+                case SC_SPLIT_TOPLEFT:
+                    rTabSett.meActivePane = SCEXT_PANE_TOPLEFT;
+                break;
+                case SC_SPLIT_TOPRIGHT:
+                    rTabSett.meActivePane = bHSplit ? SCEXT_PANE_TOPRIGHT : SCEXT_PANE_TOPLEFT;
+                break;
+                case SC_SPLIT_BOTTOMLEFT:
+                    rTabSett.meActivePane = bVSplit ? SCEXT_PANE_BOTTOMLEFT : SCEXT_PANE_TOPLEFT;
+                break;
+                case SC_SPLIT_BOTTOMRIGHT:
+                    rTabSett.meActivePane = bHSplit ?
+                        (bVSplit ? SCEXT_PANE_BOTTOMRIGHT : SCEXT_PANE_TOPRIGHT) :
+                        (bVSplit ? SCEXT_PANE_BOTTOMLEFT : SCEXT_PANE_TOPLEFT);
+                break;
             }
-            if( !bHorSplit )
-                pTabOpt->nActPane |= 2;
-            if( !bVertSplit )
-                pTabOpt->nActPane |= 1;
 
-            pTabOpt->aLastSel.aStart.Set( pViewTab->nCurX, pViewTab->nCurY, nTab );
-            pTabOpt->aLastSel.aEnd = pTabOpt->aLastSel.aStart;
+            // cursor position
+            rTabSett.maCursor.Set( pViewTab->nCurX, pViewTab->nCurY, nTab );
+
+            // sheet selection and selected ranges
+            const ScMarkData& rMarkData = GetMarkData();
+            rTabSett.mbSelected = rMarkData.GetTableSelect( nTab );
+            rMarkData.FillRangeListWithMarks( &rTabSett.maSelection, TRUE );
+
+            // grid color
+            rTabSett.maGridColor.SetColor( COL_AUTO );
+            if( pOptions )
+            {
+                const Color& rGridColor = pOptions->GetGridColor();
+                if( rGridColor.GetColor() != SC_STD_GRIDCOLOR )
+                    rTabSett.maGridColor = rGridColor;
+            }
+
+            // view mode and zoom
+            rTabSett.mbPageMode = bPagebreak;
+            rTabSett.mnNormalZoom = static_cast< long >( aZoomY * Fraction( 100.0 ) );
+            rTabSett.mnPageZoom = static_cast< long >( aPageZoomY * Fraction( 100.0 ) );
         }
     }
 }
 
-void ScViewData::ReadExtOptions( const ScExtDocOptions& rOpt )
+void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
 {
-    // for Excel import
-    if( !rOpt.IsChanged() ) return;
+    // *** Get extended document data from import filters ***
 
-    SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+    if( !rDocOpt.IsChanged() ) return;
+
+    // document settings
+    const ScExtDocSettings& rDocSett = rDocOpt.GetDocSettings();
+
+    // displayed sheet
+    SetTabNo( rDocSett.mnDisplTab );
+
+    /*  Width of the tabbar, relative to frame window width. We do not have the
+        correct width of the frame window here -> store in ScTabView, which sets
+        the size in the next resize. */
+    pView->SetPendingRelTabBarWidth( rDocSett.mfTabBarWidth );
+
+    // sheet settings
+    for( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
     {
-        const ScExtTabOptions* pExtTab = rOpt.GetExtTabOptions( nTab );
-        if ( pExtTab )
+        if( const ScExtTabSettings* pTabSett = rDocOpt.GetTabSettings( nTab ) )
         {
-            if (!pTabData[nTab])
-                pTabData[nTab] = new ScViewDataTable;
-            ScViewDataTable* pViewTab = pTabData[nTab];
+            if( !pTabData[ nTab ] )
+                pTabData[ nTab ] = new ScViewDataTable;
 
-            pViewTab->nPosX[SC_SPLIT_LEFT] = static_cast<SCCOL>(pExtTab->nLeftCol);
-            ScVSplitPos eDefV = pExtTab->nSplitY ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
-            pViewTab->nPosY[eDefV] = static_cast<SCROW>(pExtTab->nTopRow);
+            const ScExtTabSettings& rTabSett = *pTabSett;
+            ScViewDataTable& rViewTab = *pTabData[ nTab ];
 
-            if ( pExtTab->nSplitX || pExtTab->nSplitY )
+            // split mode initialization
+            bool bFrozen = rTabSett.mbFrozenPanes;
+            bool bHSplit = bFrozen ? (rTabSett.maFreezePos.Col() > 0) : (rTabSett.maSplitPos.X() > 0);
+            bool bVSplit = bFrozen ? (rTabSett.maFreezePos.Row() > 0) : (rTabSett.maSplitPos.Y() > 0);
+
+            // first visible cell of top-left pane and additional panes
+            rViewTab.nPosX[ SC_SPLIT_LEFT ] = rTabSett.maFirstVis.Col();
+            rViewTab.nPosY[ bVSplit ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM ] = rTabSett.maFirstVis.Row();
+            if( bHSplit ) rViewTab.nPosX[ SC_SPLIT_RIGHT ] = rTabSett.maSecondVis.Col();
+            if( bVSplit ) rViewTab.nPosY[ SC_SPLIT_BOTTOM ] = rTabSett.maSecondVis.Row();
+
+            // split mode, split and freeze position
+            rViewTab.eHSplitMode = rViewTab.eVSplitMode = SC_SPLIT_NONE;
+            rViewTab.nHSplitPos = rViewTab.nVSplitPos = 0;
+            rViewTab.nFixPosX = 0;
+            rViewTab.nFixPosY = 0;
+            if( bFrozen )
             {
-                if ( pExtTab->bFrozen )
+                if( bHSplit )
                 {
-                    if ( pExtTab->nSplitX )
-                    {
-                        pViewTab->eHSplitMode = SC_SPLIT_FIX;
-                        pViewTab->nFixPosX = static_cast<SCCOL>(pExtTab->nSplitX);
-                        pViewTab->nHSplitPos = 0;
-                        UpdateFixX(nTab);
-                        pViewTab->nPosX[SC_SPLIT_RIGHT]  = static_cast<SCCOL>(pExtTab->nLeftSplitCol);
-                    }
-                    if ( pExtTab->nSplitY )
-                    {
-                        pViewTab->eVSplitMode = SC_SPLIT_FIX;
-                        pViewTab->nFixPosY = static_cast<SCROW>(pExtTab->nSplitY);
-                        pViewTab->nVSplitPos = 0;
-                        UpdateFixY(nTab);
-                        pViewTab->nPosY[SC_SPLIT_BOTTOM] = static_cast<SCROW>(pExtTab->nTopSplitRow);
-                    }
+                    rViewTab.eHSplitMode = SC_SPLIT_FIX;
+                    rViewTab.nFixPosX = rTabSett.maFreezePos.Col();
+                    UpdateFixX( nTab );
                 }
-                else
+                if( bVSplit )
                 {
-                    Point aPixel = Application::GetDefaultDevice()->LogicToPixel(
-                                    Point( pExtTab->nSplitX, pExtTab->nSplitY ),
-                                    MapMode( MAP_TWIP ) );  //! Zoom?
-                    // #109648# - the test for use of printer metrics for text formatting here
-                    // effectively results in the nFactor = 1.0 regardless of the Option setting.
-                    if ( pDocShell && SC_MOD()->GetInputOptions().GetTextWysiwyg())
-                    {
-                        double nFactor = pDocShell->GetOutputFactor();
-                        aPixel.X() = (long)( aPixel.X() * nFactor + 0.5 );
-                    }
-                    if ( pExtTab->nSplitX )
-                    {
-                        pViewTab->eHSplitMode = SC_SPLIT_NORMAL;
-                        pViewTab->nHSplitPos = aPixel.X();
-                        pViewTab->nPosX[SC_SPLIT_RIGHT]  = static_cast<SCCOL>(pExtTab->nLeftSplitCol);
-                    }
-                    if ( pExtTab->nSplitY )
-                    {
-                        pViewTab->eVSplitMode = SC_SPLIT_NORMAL;
-                        pViewTab->nVSplitPos = aPixel.Y();
-                        pViewTab->nPosY[SC_SPLIT_BOTTOM] = static_cast<SCROW>(pExtTab->nTopSplitRow);
-                    }
+                    rViewTab.eVSplitMode = SC_SPLIT_FIX;
+                    rViewTab.nFixPosY = rTabSett.maFreezePos.Row();
+                    UpdateFixY( nTab );
                 }
-
-                ScSplitPos ePos = SC_SPLIT_BOTTOMLEFT;
-                switch ( pExtTab->nActPane )
+            }
+            else
+            {
+                Point aPixel = Application::GetDefaultDevice()->LogicToPixel(
+                                rTabSett.maSplitPos, MapMode( MAP_TWIP ) );  //! Zoom?
+                // #109648# - the test for use of printer metrics for text formatting here
+                // effectively results in the nFactor = 1.0 regardless of the Option setting.
+                if( pDocShell && SC_MOD()->GetInputOptions().GetTextWysiwyg())
                 {
-                    case 0: ePos = SC_SPLIT_BOTTOMRIGHT; break;
-                    case 1: ePos = SC_SPLIT_TOPRIGHT;    break;
-                    case 2: ePos = SC_SPLIT_BOTTOMLEFT;  break;
-                    case 3: ePos = SC_SPLIT_TOPLEFT;     break;
+                    double nFactor = pDocShell->GetOutputFactor();
+                    aPixel.X() = (long)( aPixel.X() * nFactor + 0.5 );
                 }
-                if ( pViewTab->eHSplitMode == SC_SPLIT_NONE )   // hor. nicht geteilt?
+                if( bHSplit )
                 {
-                    if (ePos == SC_SPLIT_BOTTOMRIGHT)           // dann immer links
-                        ePos = SC_SPLIT_BOTTOMLEFT;
-                    else if (ePos == SC_SPLIT_TOPRIGHT)
-                        ePos = SC_SPLIT_TOPLEFT;
+                    rViewTab.eHSplitMode = SC_SPLIT_NORMAL;
+                    rViewTab.nHSplitPos = aPixel.X();
                 }
-                if ( pViewTab->eVSplitMode == SC_SPLIT_NONE )   // vert. nicht geteilt?
+                if( bVSplit )
                 {
-                    if (ePos == SC_SPLIT_TOPLEFT)               // dann immer unten
-                        ePos = SC_SPLIT_BOTTOMLEFT;
-                    else if (ePos == SC_SPLIT_TOPRIGHT)
-                        ePos = SC_SPLIT_BOTTOMRIGHT;
+                    rViewTab.eVSplitMode = SC_SPLIT_NORMAL;
+                    rViewTab.nVSplitPos = aPixel.Y();
                 }
-                pViewTab->eWhichActive = ePos;
             }
 
-            if ( pExtTab->bValidSel )
+            // active pane
+            ScSplitPos ePos = SC_SPLIT_BOTTOMLEFT;
+            switch( rTabSett.meActivePane )
             {
-                ScRange aSelRange = pExtTab->aLastSel;
-                pViewTab->nCurX = aSelRange.aStart.Col();
-                pViewTab->nCurY = aSelRange.aStart.Row();
+                // no horizontal split -> always use left panes
+                // no vertical split -> always use *bottom* panes
+                case SCEXT_PANE_TOPLEFT:
+                    ePos = bVSplit ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT;
+                break;
+                case SCEXT_PANE_TOPRIGHT:
+                    ePos = bHSplit ?
+                        (bVSplit ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT) :
+                        (bVSplit ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT);
+                break;
+                case SCEXT_PANE_BOTTOMLEFT:
+                    ePos = SC_SPLIT_BOTTOMLEFT;
+                break;
+                case SCEXT_PANE_BOTTOMRIGHT:
+                    ePos = bHSplit ? SC_SPLIT_BOTTOMRIGHT : SC_SPLIT_BOTTOMLEFT;
+                break;
             }
-            GetMarkData().SelectTable( nTab, pExtTab->bSelected );
+            rViewTab.eWhichActive = ePos;
+
+            // cursor position
+            const ScAddress& rCursor = rTabSett.maCursor;
+            if( (rCursor.Col() >= 0) && (rCursor.Row() >= 0) )
+            {
+                rViewTab.nCurX = rCursor.Col();
+                rViewTab.nCurY = rCursor.Row();
+            }
+
+            // sheet selection and selected ranges
+            ScMarkData& rMarkData = GetMarkData();
+            rMarkData.SelectTable( nTab, rTabSett.mbSelected );
+
+            // get some settings from displayed Excel sheet, set at Calc document
+            if( nTab == GetTabNo() )
+            {
+                // selection only for displayed sheet, do not select single cell
+// Disabled, does not work correctly. Anyway, our own XML filters do not import a selection at all.
+//                const ScRangeList& rSel = rTabSett.maSelection;
+//                if( (rSel.Count() >= 2) || ((rSel.Count() == 1) && (*rSel.GetObject( 0 ) != ScRange( rCursor ))) )
+//                    rMarkData.MarkFromRangeList( rTabSett.maSelection, FALSE );
+
+                // grid color
+                if( pOptions && (rTabSett.maGridColor.GetColor() != COL_AUTO) )
+                    pOptions->SetGridColor( rTabSett.maGridColor, EMPTY_STRING );
+
+                // view mode and zoom
+                bPagebreak = rTabSett.mbPageMode;
+                if( rTabSett.mnNormalZoom )
+                    aZoomX = aZoomY = Fraction( rTabSett.mnNormalZoom, 100L );
+                if( rTabSett.mnPageZoom )
+                    aPageZoomX = aPageZoomY = Fraction( rTabSett.mnPageZoom, 100L );
+            }
         }
     }
-
-    SetTabNo( static_cast<SCTAB>(rOpt.nActTab) );
-    if( pOptions && rOpt.pGridCol )
-        pOptions->SetGridColor( *rOpt.pGridCol, EMPTY_STRING );
 
     // RecalcPixPos oder so - auch nMPos - auch bei ReadUserData ??!?!
 }
