@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:38:33 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ namespace basegfx
         {
             B2VectorOrientation eRetval(ORIENTATION_NEUTRAL);
 
-            if(rCandidate.count() > 2)
+            if(rCandidate.count() > 2L)
             {
                 const double fSignedArea(getSignedArea(rCandidate));
 
@@ -449,48 +449,52 @@ namespace basegfx
             bool bRetval(false);
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            for(sal_uInt32 a(0L); a < nPointCount; a++)
+            if(nPointCount > 2L)
             {
-                const B2DPoint aCurrentPoint(rCandidate.getB2DPoint(a));
+                B2DPoint aPreviousPoint(rCandidate.getB2DPoint(nPointCount - 1L));
 
-                if(bWithBorder && aCurrentPoint.equal(rPoint))
+                for(sal_uInt32 a(0L); a < nPointCount; a++)
                 {
-                    return true;
-                }
+                    const B2DPoint aCurrentPoint(rCandidate.getB2DPoint(a));
 
-                // cross-over in Y?
-                const B2DPoint aPreviousPoint(rCandidate.getB2DPoint((!a) ? nPointCount - 1L : a - 1L));
-                const bool bCompYA(fTools::more(aPreviousPoint.getY(), rPoint.getY()));
-                const bool bCompYB(fTools::more(aCurrentPoint.getY(), rPoint.getY()));
-
-                if(bCompYA != bCompYB)
-                {
-                    const bool bCompXA(fTools::more(aPreviousPoint.getX(), rPoint.getX()));
-                    const bool bCompXB(fTools::more(aCurrentPoint.getX(), rPoint.getX()));
-
-                    if(bCompXA == bCompXB)
+                    // test epsilon around points and line
+                    if(isPointOnLine(aPreviousPoint, aCurrentPoint, rPoint, true))
                     {
-                        if(bCompXA)
+                        return bWithBorder;
+                    }
+
+                    // cross-over in Y?
+                    const bool bCompYA(fTools::more(aPreviousPoint.getY(), rPoint.getY()));
+                    const bool bCompYB(fTools::more(aCurrentPoint.getY(), rPoint.getY()));
+
+                    if(bCompYA != bCompYB)
+                    {
+                        const bool bCompXA(fTools::more(aPreviousPoint.getX(), rPoint.getX()));
+                        const bool bCompXB(fTools::more(aCurrentPoint.getX(), rPoint.getX()));
+
+                        if(bCompXA == bCompXB)
                         {
-                            bRetval = !bRetval;
+                            if(bCompXA)
+                            {
+                                bRetval = !bRetval;
+                            }
+                        }
+                        else
+                        {
+                            const double fCompare =
+                                aCurrentPoint.getX() - (aCurrentPoint.getY() - rPoint.getY()) *
+                                (aPreviousPoint.getX() - aCurrentPoint.getX()) /
+                                (aPreviousPoint.getY() - aCurrentPoint.getY());
+
+                            if(fTools::moreOrEqual(fCompare, rPoint.getX()))
+                            {
+                                bRetval = !bRetval;
+                            }
                         }
                     }
-                    else
-                    {
-                        const double fCompare =
-                            aCurrentPoint.getX() - (aCurrentPoint.getY() - rPoint.getY()) *
-                            (aPreviousPoint.getX() - aCurrentPoint.getX()) /
-                            (aPreviousPoint.getY() - aCurrentPoint.getY());
 
-                        if(bWithBorder && fTools::more(fCompare, rPoint.getX()))
-                        {
-                            bRetval = !bRetval;
-                        }
-                        else if(fTools::moreOrEqual(fCompare, rPoint.getX()))
-                        {
-                            bRetval = !bRetval;
-                        }
-                    }
+                    // prepare next step
+                    aPreviousPoint = aCurrentPoint;
                 }
             }
 
@@ -1466,6 +1470,251 @@ namespace basegfx
             aRet.setClosed( true );
 
             return aRet;
+        }
+
+        bool hasNeutralPoints(const B2DPolygon& rCandidate)
+        {
+            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "hasNeutralPoints: ATM works not for curves (!)");
+
+            if(rCandidate.count() > 2L)
+            {
+                B2DPoint aPrevPoint(rCandidate.getB2DPoint(rCandidate.count() - 1L));
+                B2DPoint aCurrPoint(rCandidate.getB2DPoint(0L));
+
+                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+                {
+                    const bool bLast(a + 1L == rCandidate.count());
+                    const B2DPoint aNextPoint(rCandidate.getB2DPoint(bLast ? 0L : a + 1L));
+                    const B2DVector aPrevVec(aPrevPoint - aCurrPoint);
+                    const B2DVector aNextVec(aNextPoint - aCurrPoint);
+                    const B2VectorOrientation aOrientation(getOrientation(aNextVec, aPrevVec));
+
+                    if(ORIENTATION_NEUTRAL == aOrientation)
+                    {
+                        // current has neutral orientation
+                        return true;
+                    }
+                    else
+                    {
+                        // prepare next
+                        if(!bLast)
+                        {
+                            aPrevPoint = aCurrPoint;
+                            aCurrPoint = aNextPoint;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        B2DPolygon removeNeutralPoints(const B2DPolygon& rCandidate)
+        {
+            if(hasNeutralPoints(rCandidate))
+            {
+                B2DPolygon aRetval;
+                B2DPoint aPrevPoint(rCandidate.getB2DPoint(rCandidate.count() - 1L));
+                B2DPoint aCurrPoint(rCandidate.getB2DPoint(0L));
+
+                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+                {
+                    const bool bLast(a + 1L == rCandidate.count());
+                    const B2DPoint aNextPoint(rCandidate.getB2DPoint(bLast ? 0L : a + 1L));
+                    const B2DVector aPrevVec(aPrevPoint - aCurrPoint);
+                    const B2DVector aNextVec(aNextPoint - aCurrPoint);
+                    const B2VectorOrientation aOrientation(getOrientation(aNextVec, aPrevVec));
+
+                    if(ORIENTATION_NEUTRAL == aOrientation)
+                    {
+                        // current has neutral orientation, leave it out and prepare next
+                        if(!bLast)
+                        {
+                            aCurrPoint = aNextPoint;
+                        }
+                    }
+                    else
+                    {
+                        // add current point
+                        aRetval.append(aCurrPoint);
+
+                        // prepare next
+                        if(!bLast)
+                        {
+                            aPrevPoint = aCurrPoint;
+                            aCurrPoint = aNextPoint;
+                        }
+                    }
+                }
+
+                while(aRetval.count() && ORIENTATION_NEUTRAL == getOrientationForIndex(aRetval, 0L))
+                {
+                    aRetval.remove(0L);
+                }
+
+                // copy closed state
+                aRetval.setClosed(rCandidate.isClosed());
+
+                return aRetval;
+            }
+            else
+            {
+                return rCandidate;
+            }
+        }
+
+        bool isConvex(const B2DPolygon& rCandidate)
+        {
+            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "isConvex: ATM works not for curves (!)");
+
+            if(rCandidate.count() > 2L)
+            {
+                const B2DPoint aPrevPoint(rCandidate.getB2DPoint(rCandidate.count() - 1L));
+                B2DPoint aCurrPoint(rCandidate.getB2DPoint(0L));
+                B2DVector aCurrVec(aPrevPoint - aCurrPoint);
+                B2VectorOrientation aOrientation(ORIENTATION_NEUTRAL);
+
+                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+                {
+                    const bool bLast(a + 1L == rCandidate.count());
+                    const B2DPoint aNextPoint(rCandidate.getB2DPoint(bLast ? 0L : a + 1L));
+                    const B2DVector aNextVec(aNextPoint - aCurrPoint);
+                    const B2VectorOrientation aCurrentOrientation(getOrientation(aNextVec, aCurrVec));
+
+                    if(ORIENTATION_NEUTRAL == aOrientation)
+                    {
+                        // set start value, maybe neutral again
+                        aOrientation = aCurrentOrientation;
+                    }
+                    else
+                    {
+                        if(ORIENTATION_NEUTRAL != aCurrentOrientation && aCurrentOrientation != aOrientation)
+                        {
+                            // different orientations found, that's it
+                            return false;
+                        }
+                    }
+
+                    // prepare next
+                    if(!bLast)
+                    {
+                        aCurrPoint = aNextPoint;
+                        aCurrVec = -aNextVec;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        B2VectorOrientation getOrientationForIndex(const B2DPolygon& rCandidate, sal_uInt32 nIndex)
+        {
+            OSL_ENSURE(nIndex < rCandidate.count(), "getOrientationForIndex: index out of range (!)");
+            const B2DPoint aPrev(rCandidate.getB2DPoint(getIndexOfPredecessor(nIndex, rCandidate)));
+            const B2DPoint aCurr(rCandidate.getB2DPoint(nIndex));
+            const B2DPoint aNext(rCandidate.getB2DPoint(getIndexOfSuccessor(nIndex, rCandidate)));
+            const B2DVector aBack(aPrev - aCurr);
+            const B2DVector aForw(aNext - aCurr);
+
+            return getOrientation(aForw, aBack);
+        }
+
+        bool isPointOnLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidate, bool bWithPoints)
+        {
+            if(rCandidate.equal(rStart) || rCandidate.equal(rEnd))
+            {
+                // candidate is in epsilon around start or end -> inside
+                return bWithPoints;
+            }
+            else if(rStart.equal(rEnd))
+            {
+                // start and end are equal, but candidate is outside their epsilon -> outside
+                return false;
+            }
+            else
+            {
+                const B2DVector aEdgeVector(rEnd - rStart);
+                const B2DVector aTestVector(rCandidate - rStart);
+
+                if(areParallel(aEdgeVector, aTestVector))
+                {
+                    const double fZero(0.0);
+                    const double fOne(1.0);
+                    const double fParamTestOnCurr(fabs(aEdgeVector.getX()) > fabs(aEdgeVector.getY())
+                        ? aTestVector.getX() / aEdgeVector.getX()
+                        : aTestVector.getY() / aEdgeVector.getY());
+
+                    if(fTools::more(fParamTestOnCurr, fZero) && fTools::less(fParamTestOnCurr, fOne))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        bool isPointInTriangle(const B2DPoint& rA, const B2DPoint& rB, const B2DPoint& rC, const B2DPoint& rCandidate, bool bWithBorder)
+        {
+            if(arePointsOnSameSideOfLine(rA, rB, rC, rCandidate, bWithBorder))
+            {
+                if(arePointsOnSameSideOfLine(rB, rC, rA, rCandidate, bWithBorder))
+                {
+                    if(arePointsOnSameSideOfLine(rC, rA, rB, rCandidate, bWithBorder))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        bool arePointsOnSameSideOfLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidateA, const B2DPoint& rCandidateB, bool bWithLine)
+        {
+            const B2DVector aLineVector(rEnd - rStart);
+            const B2DVector aVectorToA(rEnd - rCandidateA);
+            const double fCrossA(aLineVector.cross(aVectorToA));
+
+            if(fTools::equalZero(fCrossA))
+            {
+                // one point on the line
+                return bWithLine;
+            }
+
+            const B2DVector aVectorToB(rEnd - rCandidateB);
+            const double fCrossB(aLineVector.cross(aVectorToB));
+
+            if(fTools::equalZero(fCrossB))
+            {
+                // one point on the line
+                return bWithLine;
+            }
+
+            // return true if they both have the same sign
+            return ((fCrossA > 0.0) == (fCrossB > 0.0));
+        }
+
+        void addTriangleFan(const B2DPolygon& rCandidate, B2DPolygon& rTarget)
+        {
+            const sal_uInt32 nCount(rCandidate.count());
+
+            if(nCount > 2L)
+            {
+                const B2DPoint aStart(rCandidate.getB2DPoint(0L));
+                B2DPoint aLast(rCandidate.getB2DPoint(1L));
+
+                for(sal_uInt32 a(2L); a < nCount; a++)
+                {
+                    const B2DPoint aCurrent(rCandidate.getB2DPoint(a));
+                    rTarget.append(aStart);
+                    rTarget.append(aLast);
+                    rTarget.append(aCurrent);
+
+                    // prepare next
+                    aLast = aCurrent;
+                }
+            }
         }
 
         bool isRectangle( const B2DPolygon& rPoly )
