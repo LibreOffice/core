@@ -11,7 +11,7 @@ ba	dbaccess\source\shared					nmake	-	all	ba_shared ba_cres NULL
 ba	dbaccess\source\ui\app					nmake	-	all	ba_uiapp ba_uiinc NULL
 ba	dbaccess\source\ui\browser				nmake	-	all	ba_uibrowser ba_uiinc NULL
 ba	dbaccess\source\ui\dlg					nmake	-	all	ba_uidlg ba_uiinc NULL
-ba	dbaccess\source\ui\control				nmake	-	all	ba_uicontrol NULL
+ba	dbaccess\source\ui\control				nmake	-	all	ba_uicontrol ba_uiinc NULL
 ba	dbaccess\source\ui\misc					nmake	-	all	ba_uimisc NULL
 ba	dbaccess\source\ui\querydesign			nmake	-	all	ba_uiquery ba_uiinc NULL
 ba	dbaccess\source\ui\relationdesign		nmake	-	all	ba_uirelationdesign ba_uiinc NULL
