@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:09 $
+ *  last change: $Author: mtg $ $Date: 2000-12-04 14:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             // should mean that something has gone very wrong somewhere, and someone
             // else should deal with it
 
-            nTest = xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId());
+            nTest = xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId());
             if (nTest == 0)
                 throw (uno::RuntimeException());
             pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
@@ -436,7 +436,7 @@ void ZipPackageFolder::updateReferences( ZipFile * pNewZipFile)
             // should mean that something has gone very wrong somewhere, and someone
             // else should deal with it
 
-            nTest = xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId());
+            nTest = xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId());
             if (nTest == 0)
                 throw (uno::RuntimeException());
             pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
