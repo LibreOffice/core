@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:49:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,18 +235,10 @@ DIGIT           [0-9]
 OCT_DIGIT       [0-7]
 HEX_DIGIT       [a-fA-F0-9]
 CAPITAL         [A-Z]
-SMALL           [a-z]
 ALPHA           [a-zA-Z]
 INT_LITERAL     [1-9][0-9]*
 OCT_LITERAL     0{OCT_DIGIT}*
 HEX_LITERAL     (0x|0X){HEX_DIGIT}*
-ESC_SEQUENCE1   "\\"[ntvbrfa\\\?\'\"]
-ESC_SEQUENCE2   "\\"{OCT_DIGIT}{1,3}
-ESC_SEQUENCE3   "\\"(x|X){HEX_DIGIT}{1,2}
-ESC_SEQUENCE    ({ESC_SEQUENCE1}|{ESC_SEQUENCE2}|{ESC_SEQUENCE3})
-CHAR            ([^\n\t\"\'\\]|{ESC_SEQUENCE})
-CHAR_LITERAL    "'"({CHAR}|\")"'"
-STRING_LITERAL  \"({CHAR}|"'")*\"
 
 IDENTIFIER_NEW  ({ALPHA}({ALPHA}|{DIGIT})*)|({CAPITAL}("_"?({ALPHA}|{DIGIT})+)*)
 IDENTIFIER      ("_"?({ALPHA}|{DIGIT})+)*
@@ -333,16 +325,6 @@ published       return IDL_PUBLISHED;
             	yylval.ival = asciiToInteger( 16, yytext+2 );
 				return IDL_INTEGER_LITERAL;
             }
-
-{CHAR_LITERAL}	{
-            	yylval.cval = *yytext;
-				return IDL_CHARACTER_LITERAL;
-			}
-
-{STRING_LITERAL}	{
-            	yylval.sval = new ::rtl::OString(yytext+1, (sal_Int32)(strlen(yytext)-2));
-				return IDL_STRING_LITERAL;
-			}
 
 ("-")?{DIGIT}+(e|E){1}(("+"|"-")?{DIGIT}+)+(f|F)?	|
 ("-")?"."{DIGIT}+((e|E)("+"|"-")?{DIGIT}+)?(f|F)?	|
