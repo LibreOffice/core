@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtqry.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:36:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String RID_SVXSTR_QRY_PRINT_TITLE
     Text[ czech ] = "Tisk vybraných částí";
     Text[ hebrew ] = "Drucken der Selektion";
     Text[ hindi ] = "छपाई का चुनाव";
+    Text[ slovak ] = "Tlač vybraných častí";
 };
 String RID_SVXSTR_QRY_PRINT_MSG
 {
@@ -119,6 +120,7 @@ String RID_SVXSTR_QRY_PRINT_MSG
     Text[ czech ] = "Chcete vytisknout pouze výběr nebo celý dokument?";
     Text[ hebrew ] = "Wollen Sie die Selektion oder das gesamte Dokument drucken?";
     Text[ hindi ] = "आप चुनाव को अथवा संपूर्ण लेखपत्र को छपाई करना चाहते है?";
+    Text[ slovak ] = "Chcete vytlačiť iba vybranú časť alebo celý dokument?";
 };
 String RID_SVXSTR_QRY_PRINT_ALL
 {
@@ -148,6 +150,7 @@ String RID_SVXSTR_QRY_PRINT_ALL
     Text[ czech ] = "Vše";
     Text[ hebrew ] = "‮הכל‬";
     Text[ hindi ] = "~सब";
+    Text[ slovak ] = "~Všetko";
 };
 String RID_SVXSTR_QRY_PRINT_SELECTION
 {
@@ -177,7 +180,10 @@ String RID_SVXSTR_QRY_PRINT_SELECTION
     Text[ czech ] = "Výběr";
     Text[ hebrew ] = "‮מבחר‬";
     Text[ hindi ] = "~चुनाव";
+    Text[ slovak ] = "~Výber";
 };
+
+
 
 
 
