@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:26:46 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2109,7 +2109,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             if( !pRowSpans[ nColCnt ] )
             {
                 // set new BoxPtr
-                SwWriteTableCell* pCell = rCells[ nBox++ ];
+                SwWriteTableCell* pCell = rCells[nBox++];
                 pBoxArr[ nColCnt ] = pCell;
                 pRowSpans[ nColCnt ] = pCell->GetRowSpan();
                 for( USHORT nCellSpan = pCell->GetColSpan(), nCS = 1;
@@ -2261,7 +2261,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         SwTwips nSz = 0, nCalc;
         SwWW8Writer::InsUInt16( aAt, (USHORT)nTblOffset );
 
-        for( nBox = 0, nRealBox = 0; nRealBox < nWWColMax; ++nBox )
+        for (nBox = 0, nRealBox = 0; nRealBox < nWWColMax; ++nBox)
         {
             if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
                 continue;
@@ -2279,7 +2279,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             ++nRealBox;
         }
 
-        for( nBox = 0, nRealBox = 0; nRealBox < nWWColMax; nBox++ )
+        for (nBox = 0, nRealBox = 0; nRealBox < nWWColMax; ++nBox)
         {
             if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
                 continue;
@@ -2331,7 +2331,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             const USHORT* pBrd = aBorders;
 
             //Export non default border spacing
-            for( nBox = 0, nRealBox = 0; nRealBox < nWWColMax; nBox++ )
+            for( nBox = 0, nRealBox = 0; nRealBox < nWWColMax; ++nBox)
             {
                 if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
                     continue;
@@ -2351,6 +2351,24 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                         aAt.Insert( BYTE(3), aAt.Count() );
                         SwWW8Writer::InsUInt16(aAt, nDist);
                     }
+                }
+                ++nRealBox;
+            }
+
+            //Export any vertical direction cells
+            for (nBox = 0, nRealBox = 0; nRealBox < nWWColMax; ++nBox)
+            {
+                if( nBox && pBoxArr[nBox-1] == pBoxArr[nBox])
+                    continue;
+                const SwFrmFmt& rFmt = *pBoxArr[ nBox ]->GetBox()->GetFrmFmt();
+                //a bit lazy, could calculate range of cells with equal
+                //direction to optimize size of exported document
+                if (FRMDIR_VERT_TOP_RIGHT == rWW8Wrt.TrueFrameDirection(rFmt))
+                {
+                    SwWW8Writer::InsUInt16(aAt, 0x7629);
+                    aAt.Insert(BYTE(nBox), aAt.Count());        //start range
+                    aAt.Insert(BYTE(nBox + 1), aAt.Count());    //end range
+                    SwWW8Writer::InsUInt16(aAt, 5); //Equals vertical writing
                 }
                 ++nRealBox;
             }
