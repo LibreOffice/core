@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:08:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,13 +161,13 @@ struct ScMyMoveRanges
             aSourceRange(aSource), aTargetRange(aTarget) {}
 };
 
-typedef std::list<sal_uInt32> ScMyDependences;
+typedef std::list<sal_uInt32> ScMyDependencies;
 
 struct ScMyBaseAction
 {
     ScMyActionInfo aInfo;
     ScBigRange aBigRange;
-    ScMyDependences aDependences;
+    ScMyDependencies aDependencies;
     ScMyDeletedList aDeletedList;
     sal_uInt32 nActionNumber;
     sal_uInt32 nRejectingNumber;
@@ -264,7 +264,7 @@ public:
     void SetBigRange(const ScBigRange& aBigRange) { pCurrentAction->aBigRange = aBigRange; }
     void SetPreviousChange(const sal_uInt32 nPreviousAction, ScMyCellInfo* pCellInfo);
     void SetPosition(const sal_Int32 nPosition, const sal_Int32 nCount, const sal_Int32 nTable);
-    void AddDependence(const sal_uInt32 nID) { pCurrentAction->aDependences.push_front(nID); }
+    void AddDependence(const sal_uInt32 nID) { pCurrentAction->aDependencies.push_front(nID); }
     void AddDeleted(const sal_uInt32 nID);
     void AddDeleted(const sal_uInt32 nID, ScMyCellInfo* pCellInfo);
     void SetMultiSpanned(const sal_Int16 nMultiSpanned);
@@ -276,10 +276,10 @@ public:
 
     void EndChangeAction();
 
-    void SetDeletionDependences(ScMyDelAction* pAction, ScChangeActionDel* pDelAct);
-    void SetMovementDependences(ScMyMoveAction* pAction, ScChangeActionMove* pMoveAct);
-    void SetContentDependences(ScMyContentAction* pAction, ScChangeActionContent* pActContent);
-    void SetDependences(ScMyBaseAction* pAction);
+    void SetDeletionDependencies(ScMyDelAction* pAction, ScChangeActionDel* pDelAct);
+    void SetMovementDependencies(ScMyMoveAction* pAction, ScChangeActionMove* pMoveAct);
+    void SetContentDependencies(ScMyContentAction* pAction, ScChangeActionContent* pActContent);
+    void SetDependencies(ScMyBaseAction* pAction);
 
     void SetNewCell(ScMyContentAction* pAction);
 
