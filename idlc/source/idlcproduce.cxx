@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcproduce.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:47:44 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 13:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,13 +121,14 @@ static OString getTempDir()
 
 static sal_Bool checkOutputPath(const OString& completeName)
 {
-    OStringBuffer buffer(completeName.getLength());
+    OString sysPathName = convertToAbsoluteSystemPath(completeName);
+    OStringBuffer buffer(sysPathName.getLength());
 
-    if ( completeName.indexOf( SEPARATOR ) == -1 )
+    if ( sysPathName.indexOf( SEPARATOR ) == -1 )
         return sal_True;
 
     sal_Int32 nIndex = 0;
-    OString token(completeName.getToken(0, SEPARATOR, nIndex));
+    OString token(sysPathName.getToken(0, SEPARATOR, nIndex));
     const sal_Char* p = token.getStr();
     if (strcmp(p, "..") == 0
         || *(p+1) == ':'
@@ -141,7 +142,7 @@ static sal_Bool checkOutputPath(const OString& completeName)
 
     do
     {
-        buffer.append(completeName.getToken(0, SEPARATOR, nIndex));
+        buffer.append(sysPathName.getToken(0, SEPARATOR, nIndex));
 
         if ( buffer.getLength() > 0 && nIndex != -1 )
         {
@@ -199,29 +200,20 @@ void removeIfExists(const OString& pathname)
     unlink(pathname.getStr());
 }
 
-sal_Int32 produceFile(const OString& filenameBase)
+sal_Int32 SAL_CALL produceFile(const OString& regFileName)
 {
     Options* pOptions = idlc()->getOptions();
 
-    OString regFileName;
-    if ( pOptions->isValid("-O") )
-    {
-        regFileName = convertToAbsoluteSystemPath(pOptions->getOption("-O"));
-        sal_Char c = regFileName.getStr()[regFileName.getLength()-1];
+    OString regTmpName = regFileName.replaceAt(regFileName.getLength() -3, 3, "_idlc_");
 
-        if ( c != SEPARATOR )
-            regFileName += OString::valueOf(SEPARATOR);
+    if ( !checkOutputPath(regFileName) )
+    {
+        fprintf(stderr, "%s: could not create path of registry file '%s'.\n",
+                pOptions->getProgramName().getStr(), regFileName.getStr());
+        return 1;
     }
 
-    OString tempName(filenameBase);
-    tempName += "_";
-    tempName += filenameBase;
-    tempName += "._idlc_";
-    OString regTmpName( makeTempName(tempName, "._idlc_"));
-    regFileName += filenameBase;
-    regFileName += ".urd";
-
-    RegistryLoader              regLoader;
+    RegistryLoader regLoader;
 
     if ( !regLoader.isLoaded() )
     {
@@ -288,17 +280,10 @@ sal_Int32 produceFile(const OString& filenameBase)
     }
 
     removeIfExists(regFileName);
-    if ( !checkOutputPath(regFileName) )
-    {
-        fprintf(stderr, "%s: could not create path of registry file '%s'.\n",
-                pOptions->getProgramName().getStr(), regFileName.getStr());
-        removeIfExists(regTmpName);
-        return 1;
-    }
 
-    if ( !copyFile(&regTmpName, regFileName) )
-    {
-        fprintf(stderr, "%s: cannot copy temporary registry '%s' to '%s'\n",
+    if ( File::move(OStringToOUString(regTmpName, osl_getThreadTextEncoding()),
+                    OStringToOUString(regFileName, osl_getThreadTextEncoding())) != FileBase::E_None ) {
+        fprintf(stderr, "%s: cannot rename temporary registry '%s' to '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 regTmpName.getStr(), regFileName.getStr());
         removeIfExists(regTmpName);
