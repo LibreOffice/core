@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:51:50 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #endif
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
@@ -113,7 +113,7 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData, const XclImpStream& r
     // Verify that the User Names stream exists before going any further. Excel adds both
     // "Revision Log" and "User Names" streams when Change Tracking is active but the Revision log
     // remains if Change Tracking is turned off.
-    SvStorageStreamRef xUserStrm = rRoot.OpenStream( EXC_STREAM_USERNAMES );
+    SotStorageStreamRef xUserStrm = rRoot.OpenStream( EXC_STREAM_USERNAMES );
     if( !xUserStrm.Is() )
         return;
 
