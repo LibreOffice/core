@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:54 $
+ *  last change: $Author: pb $ $Date: 2001-05-17 10:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <vcl/color.hxx>
 #endif
 
+#ifndef _VCL_VCLENUM_HXX
+#include <vcl/vclenum.hxx>
+#endif
+
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -79,6 +83,7 @@ class Font;
 #define TEXTATTR_INVALID    0
 #define TEXTATTR_FONTCOLOR  1
 #define TEXTATTR_HYPERLINK  2
+#define TEXTATTR_FONTWEIGHT 3
 
 
 
@@ -121,6 +126,20 @@ public:
     virtual int             operator==( const TextAttrib& rAttr ) const;
 };
 
+class TextAttribFontWeight : public TextAttrib
+{
+private:
+    FontWeight  meWeight;
+
+public:
+                            TextAttribFontWeight( FontWeight eWeight );
+                            TextAttribFontWeight( const TextAttribFontWeight& rAttr );
+                            ~TextAttribFontWeight();
+
+    virtual void            SetFont( Font& rFont ) const;
+    virtual TextAttrib*     Clone() const;
+    virtual int             operator==( const TextAttrib& rAttr ) const;
+};
 
 
 class TextAttribHyperLink : public TextAttrib

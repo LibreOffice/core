@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: pb $ $Date: 2001-05-17 10:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,36 @@ int TextAttribFontColor::operator==( const TextAttrib& rAttr ) const
 {
     return ( ( TextAttrib::operator==(rAttr ) ) &&
                 ( maColor == ((const TextAttribFontColor&)rAttr).maColor ) );
+}
+
+TextAttribFontWeight::TextAttribFontWeight( FontWeight eWeight )
+    : TextAttrib( TEXTATTR_FONTWEIGHT ), meWeight( eWeight )
+{
+}
+
+TextAttribFontWeight::TextAttribFontWeight( const TextAttribFontWeight& rAttr )
+    : TextAttrib( rAttr ), meWeight( rAttr.meWeight )
+{
+}
+
+TextAttribFontWeight::~TextAttribFontWeight()
+{
+}
+
+void TextAttribFontWeight::SetFont( Font& rFont ) const
+{
+    rFont.SetWeight( meWeight );
+}
+
+TextAttrib* TextAttribFontWeight::Clone() const
+{
+    return new TextAttribFontWeight( *this );
+}
+
+int TextAttribFontWeight::operator==( const TextAttrib& rAttr ) const
+{
+    return ( ( TextAttrib::operator==(rAttr ) ) &&
+                ( meWeight == ((const TextAttribFontWeight&)rAttr).meWeight ) );
 }
 
 
