@@ -11418,3 +11418,10 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?lcl_MoveControl@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx4099257@@YAXPAVControl@@JJAAJ@Z
 ?lcl_autoUpdateFileExtension@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx4099257@@YAXPAVSvtFileDialog@@@Z
 ?lcl_getHomeDirectory@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx4099257@@YAEABVString@@AAV2@@Z
+??RFilterTitleMatch@?%O:\SRX642\src\svtools\source\filepicker\filepicker.cxx2631419880@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx1741929296@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx1741929296@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx1741929296@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx1741929296@@YAXPAVControl@@JJAAJ@Z
+?lcl_autoUpdateFileExtension@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx1741929296@@YAXPAVSvtFileDialog@@@Z
+?lcl_getHomeDirectory@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx1741929296@@YAEABVString@@AAV2@@Z
