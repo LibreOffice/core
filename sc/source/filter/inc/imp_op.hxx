@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
+ *  last change: $Author: dr $ $Date: 2001-10-23 15:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@ protected:
     ScEditEngineDefaulter&  GetEdEng( void ) const;
     virtual void            EndAllChartObjects( void );     // -> excobj.cxx
 
+    virtual void            AdjustRowHeight();
     virtual void            PostDocLoad( void );
     virtual void            SetTextCell( const UINT16 nCol, const UINT16 nRow,
                                         String& rUnconvertedText, const UINT16 nXF );

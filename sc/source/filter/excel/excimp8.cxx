@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 12:17:21 $
+ *  last change: $Author: dr $ $Date: 2001-10-23 15:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,8 +555,6 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
     pExcRoot->pImpTabIdBuffer = new XclImpTabIdBuffer;
 
     pFormConv = new ExcelToSc8( pExcRoot, aIn, nTab );
-
-    pActChart = NULL;
 
     pExcRoot->pPivotCacheStorage = pPivotCache;
     pCurrPivTab = NULL;
@@ -1462,6 +1460,8 @@ void ImportExcel8::PostDocLoad( void )
     if( pWebQBuffer )
         pWebQBuffer->Apply( pD );
 
+    UINT32 nChartCnt = 0;
+
     if( aObjManager.HasEscherStream() )
     {
         Biff8MSDffManager*      pDffMan = new Biff8MSDffManager( *pExcRoot, aObjManager,
@@ -1485,7 +1485,6 @@ void ImportExcel8::PostDocLoad( void )
         if( pShpInf )
         {
             const UINT32                nMax = pShpInf->Count();
-            UINT32                      nChartCnt = 0;
             const SvxMSDffShapeInfo*    p;
             ULONG                       nShapeId;
             SvxMSDffImportData*         pMSDffImportData;
@@ -1560,8 +1559,6 @@ void ImportExcel8::PostDocLoad( void )
                     delete pMSDffImportData;
                 }
             }
-            if( pExcRoot->pProgress )
-                pExcRoot->pProgress->StartPostLoadProgress( nChartCnt );
         }
 
         if( bHasCtrls )
@@ -1570,7 +1567,16 @@ void ImportExcel8::PostDocLoad( void )
         delete pDffMan;
     }
 
+    if( (nChartCnt > 1) && !pExcRoot->pProgress )
+        pExcRoot->pProgress = new FilterProgressBar( nChartCnt );
+
     aObjManager.Apply();
+
+    if( pExcRoot->pProgress )
+    {
+        delete pExcRoot->pProgress;
+        pExcRoot->pProgress = NULL;
+    }
 
     // controls
 /*

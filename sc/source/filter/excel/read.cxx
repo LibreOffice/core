@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
+ *  last change: $Author: dr $ $Date: 2001-10-23 15:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,11 @@
 #include "document.hxx"
 #include "docoptio.hxx"
 #include "globstr.hrc"
-#include "scerrors.hxx"
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
+#ifndef _SCERRORS_HXX
+#include "scerrors.hxx"
+#endif
 
 #ifndef _SC_XCLIMPSTREAM_HXX
 #include "XclImpStream.hxx"
@@ -91,6 +93,9 @@
 #endif
 #ifndef _SC_XCLIMPEXTERNSHEET_HXX
 #include "XclImpExternsheet.hxx"
+#endif
+#ifndef _SC_XCLIMPCHARTS_HXX
+#include "XclImpCharts.hxx"
 #endif
 #ifndef _SC_XCLIMPCHANGETRACK_HXX
 #include "XclImpChangeTrack.hxx"
@@ -989,6 +994,7 @@ FltError ImportExcel::Read( void )
     for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
         pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
 
+    AdjustRowHeight();
     PostDocLoad();
 
     delete pPrgrsBar;
@@ -1000,7 +1006,7 @@ FltError ImportExcel::Read( void )
 }
 
 
-
+//___________________________________________________________________
 
 FltError ImportExcel8::Read( void )
 {
@@ -1198,7 +1204,7 @@ FltError ImportExcel8::Read( void )
                             NeueTabelle();
                             if( pExcRoot->eDateiTyp == Biff8C )
                             {
-                                if( bWithDrawLayer && aObjManager.GetCurrObjChart() )
+                                if( bWithDrawLayer && aObjManager.IsCurrObjChart() )
                                     ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
                                 else
                                 {// Stream-Teil mit Chart ueberlesen
@@ -1296,7 +1302,7 @@ FltError ImportExcel8::Read( void )
                         {
                             Bof5();
                             if( pExcRoot->eDateiTyp == Biff8C && bWithDrawLayer &&
-                                aObjManager.GetCurrObjChart() )
+                                aObjManager.IsCurrObjChart() )
                                 ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
                             else
                             {
@@ -1361,7 +1367,7 @@ FltError ImportExcel8::Read( void )
                                 aIn.StoreUserPosition();
                                 break;
                             case Biff8C:
-                                aObjManager.SetCurrObjChart();
+                                aObjManager.SetNewCurrObjChart();
                                 pExcRoot->bChartTab = TRUE;
                                 ReadChart8( *pPrgrsBar, TRUE );
                                 pExcRoot->bChartTab = FALSE;
@@ -1455,16 +1461,23 @@ FltError ImportExcel8::Read( void )
 
     pD->CalcAfterLoad();
 
-{
-    ScStyleSheetPool*       pPool = pD->GetStyleSheetPool();
+    {
+        ScStyleSheetPool*       pPool = pD->GetStyleSheetPool();
 
-    UINT16                  nTabLast = pExcRoot->pTabNameBuff->GetLastIndex();
+        UINT16                  nTabLast = pExcRoot->pTabNameBuff->GetLastIndex();
 
-    UINT16                  nTabCount;
-    for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
-        pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
-}
+        UINT16                  nTabCount;
+        for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
+            pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
+    }
 
+    if( pPrgrsBar )
+    {
+        delete pPrgrsBar;
+        pPrgrsBar = pExcRoot->pProgress = NULL;
+    }
+
+    AdjustRowHeight();
     PostDocLoad();
 
     // building pivot tables
@@ -1474,9 +1487,6 @@ FltError ImportExcel8::Read( void )
     XclImpChangeTrack aImpChTr( pExcRoot );
     aImpChTr.Apply();
 
-    pExcRoot->pProgress = NULL;
-    delete pPrgrsBar;
-
     if( bTabTruncated )
         eLastErr = eERR_RNGOVRFLW;
 
@@ -1484,182 +1494,98 @@ FltError ImportExcel8::Read( void )
 }
 
 
+//___________________________________________________________________
 
-
-#ifdef DBG_UTIL
-
-ByteString& AddRecordName( UINT16 nOpcode, ByteString& aDeb )
+FltError ImportExcel8::ReadChart8( FilterProgressBar& rPrgrs, const BOOL bOwnTab )
 {
-    switch( nOpcode )
+    bFirstScl   = TRUE;
+
+    FltError    eLastErr = eERR_OK;
+    BOOL        bLoop;
+    UINT16      nOpcode;            // current opcode
+
+    XclImpChart* pChart = aObjManager.GetCurrChartData();
+    if( !pChart )
     {
-        case 0x00:  aDeb += "DIMENSIONS [ 2  5]"; break;
-        case 0x01:  aDeb += "BLANK [ 2  5]"; break;
-        case 0x02:  aDeb += "INTEGER [ 2   ]"; break;
-        case 0x03:  aDeb += "NUMBER [ 2  5]"; break;
-        case 0x04:  aDeb += "LABEL [ 2  5]"; break;
-        case 0x05:  aDeb += "BOOLERR"; break;
-        case 0x06:  aDeb += "FORMULA [ 2  5]"; break;
-        case 0x07:  aDeb += "STRING"; break;
-        case 0x08:  aDeb += "ROW [ 2  5]"; break;
-        case 0x09:  aDeb += "BOF [ 2   ]"; break;
-        case 0x0A:  aDeb += "EOF [ 2345]"; break;
-        case 0x0B:  aDeb += "INDEX"; break;
-        case 0x0C:  aDeb += "CALCCOUNT"; break;
-        case 0x0D:  aDeb += "CALCMODE"; break;
-        case 0x0E:  aDeb += "PRECISION"; break;
-        case 0x0F:  aDeb += "REFMODE"; break;
-        case 0x10:  aDeb += "DELTA"; break;
-        case 0x11:  aDeb += "ITERATION"; break;
-        case 0x12:  aDeb += "PROTECT"; break;
-        case 0x13:  aDeb += "PASSWORD [ 2345]"; break;
-        case 0x14:  aDeb += "HEADER"; break;
-        case 0x15:  aDeb += "FOOTER"; break;
-        case 0x16:  aDeb += "EXTERNCOUNT"; break;
-        case 0x17:  aDeb += "EXTERNSHEET [ 2345]"; break;
-        case 0x18:  aDeb += "NAME [ 2  5]"; break;
-        case 0x19:  aDeb += "WINDOWPROTECT"; break;
-        case 0x1A:  aDeb += "VERTICALPAGEBREAKS"; break;
-        case 0x1B:  aDeb += "HORIZONTALPAGEBREAKS"; break;
-        case 0x1C:  aDeb += "NOTE [ 2345]"; break;
-        case 0x1D:  aDeb += "SELECTION"; break;
-        case 0x1E:  aDeb += "FORMAT [ 23 5]"; break;
-        case 0x1F:  aDeb += "FORMATCOUNT [ 2   ]"; break;
-        case 0x20:  aDeb += "COLUMNDEFAULT [ 2   ]"; break;
-        case 0x21:  aDeb += "ARRAY [ 2  5]"; break;
-        case 0x22:  aDeb += "1904 [ 2345]"; break;
-        case 0x23:  aDeb += "EXTERNNAME [ 2  5]"; break;
-        case 0x24:  aDeb += "COLWIDTH [ 2   ]"; break;
-        case 0x25:  aDeb += "DEFAULTROWHEI [ 2   ]"; break;
-        case 0x26:  aDeb += "LEFTMARGIN"; break;
-        case 0x27:  aDeb += "RIGHTMARGIN"; break;
-        case 0x28:  aDeb += "TOPMARGIN"; break;
-        case 0x29:  aDeb += "BOTTOMMARGIN"; break;
-        case 0x2A:  aDeb += "PRINTHEADERS"; break;
-        case 0x2B:  aDeb += "PRINTGRIDLINES"; break;
-        case 0x2F:  aDeb += "FILEPASS [ 2345]"; break;
-        case 0x31:  aDeb += "FONT [ 2  5]"; break;
-        case 0x36:  aDeb += "TABLE"; break;
-        case 0x3C:  aDeb += "CONTINUE"; break;
-        case 0x3D:  aDeb += "WINDOW1"; break;
-        case 0x3E:  aDeb += "WINDOW2"; break;
-        case 0x40:  aDeb += "BACKUP"; break;
-        case 0x41:  aDeb += "PANE"; break;
-        case 0x42:  aDeb += "CODEPAGE [ 2345]"; break;
-        case 0x43:  aDeb += "XF [ 2   ]"; break;
-        case 0x44:  aDeb += "IXFE [ 2   ]"; break;
-        case 0x4D:  aDeb += "PLS"; break;
-        case 0x50:  aDeb += "DCON"; break;
-        case 0x51:  aDeb += "DCONREF"; break;
-        case 0x53:  aDeb += "DCONNAME"; break;
-        case 0x55:  aDeb += "DEFCOLWIDTH [ 2345]"; break;
-        case 0x56:  aDeb += "BUILTINFMTCNT [  34 ]"; break;
-        case 0x59:  aDeb += "XCT"; break;
-        case 0x5A:  aDeb += "CRN"; break;
-        case 0x5B:  aDeb += "FILESHARING"; break;
-        case 0x5C:  aDeb += "WRITEACCESS"; break;
-        case 0x5D:  aDeb += "OBJ"; break;
-        case 0x5E:  aDeb += "UNCALCED"; break;
-        case 0x5F:  aDeb += "SAFERECALC"; break;
-        case 0x60:  aDeb += "TEMPLATE"; break;
-        case 0x63:  aDeb += "OBJPROTECT"; break;
-        case 0x7D:  aDeb += "COLINFO [  345]"; break;
-        case 0x7E:  aDeb += "RK [    5]"; break;
-        case 0x7F:  aDeb += "IMDATA"; break;
-        case 0x80:  aDeb += "GUTS"; break;
-        case 0x81:  aDeb += "WSBOOL"; break;
-        case 0x82:  aDeb += "GRIDSET"; break;
-        case 0x83:  aDeb += "HCENTER"; break;
-        case 0x84:  aDeb += "VCENTER"; break;
-        case 0x85:  aDeb += "BOUNDSHEET [    5]"; break;
-        case 0x86:  aDeb += "WRITEPROT"; break;
-        case 0x87:  aDeb += "ADDIN"; break;
-        case 0x88:  aDeb += "EDG"; break;
-        case 0x89:  aDeb += "PUB"; break;
-        case 0x8C:  aDeb += "COUNTRY [  345]"; break;
-        case 0x8D:  aDeb += "HIDEOBJ"; break;
-        case 0x8E:  aDeb += "BUNDLESOFFSET [   4 ]"; break;
-        case 0x8F:  aDeb += "BUNDLEHEADER [   4 ]"; break;
-        case 0x90:  aDeb += "SORT"; break;
-        case 0x91:  aDeb += "SUB"; break;
-        case 0x92:  aDeb += "PALETTE [  345]"; break;
-        case 0x93:  aDeb += "STYLE"; break;
-        case 0x94:  aDeb += "LHRECORD"; break;
-        case 0x95:  aDeb += "LHNGRAPH"; break;
-        case 0x96:  aDeb += "SOUND"; break;
-        case 0x98:  aDeb += "LPR"; break;
-        case 0x99:  aDeb += "STANDARDWIDTH [    5]"; break;
-        case 0x9A:  aDeb += "FNGROUPNAME"; break;
-        case 0x9B:  aDeb += "FILTERMODE"; break;
-        case 0x9C:  aDeb += "FNGROUPCOUNT"; break;
-        case 0x9D:  aDeb += "AUTOFILTERINFO"; break;
-        case 0x9E:  aDeb += "AUTOFILTER"; break;
-        case 0xA0:  aDeb += "SCL"; break;
-        case 0xA9:  aDeb += "COORDLIST"; break;
-        case 0xAB:  aDeb += "GCW"; break;
-        case 0xAE:  aDeb += "SCENMAN"; break;
-        case 0xAF:  aDeb += "SCENARIO"; break;
-        case 0xB0:  aDeb += "SXVIEW"; break;
-        case 0xB1:  aDeb += "SXVD"; break;
-        case 0xB2:  aDeb += "SXVI"; break;
-        case 0xB4:  aDeb += "SXIVD"; break;
-        case 0xB5:  aDeb += "SXLI"; break;
-        case 0xB6:  aDeb += "SXPI"; break;
-        case 0xB8:  aDeb += "DOCROUTE"; break;
-        case 0xB9:  aDeb += "RECIPNAME"; break;
-        case 0xBC:  aDeb += "SHRFMLA"; break;
-        case 0xBD:  aDeb += "MULRK [    5]"; break;
-        case 0xBE:  aDeb += "MULBLANK [    5]"; break;
-        case 0xC1:  aDeb += "MMS"; break;
-        case 0xC2:  aDeb += "ADDMENU"; break;
-        case 0xC3:  aDeb += "DELMENU"; break;
-        case 0xC5:  aDeb += "SXDI"; break;
-        case 0xCD:  aDeb += "SXSTRING"; break;
-        case 0xD0:  aDeb += "SXTBL"; break;
-        case 0xD1:  aDeb += "SXTBRGITEM"; break;
-        case 0xD2:  aDeb += "SXTBPG"; break;
-        case 0xD3:  aDeb += "OBPROJ"; break;
-        case 0xD5:  aDeb += "SXIDSTM"; break;
-        case 0xD6:  aDeb += "RSTRING [    5]"; break;
-        case 0xD7:  aDeb += "DBCELL"; break;
-        case 0xDA:  aDeb += "BOOKBOOL"; break;
-        case 0xDC:  aDeb += "SXEXT"; break;
-        case 0xDD:  aDeb += "SCENPROTECT"; break;
-        case 0xDE:  aDeb += "OLESIZE"; break;
-        case 0xDF:  aDeb += "UDDESC"; break;
-        case 0xE0:  aDeb += "XF [    5]"; break;
-        case 0xE1:  aDeb += "INTERFACEHDR"; break;
-        case 0xE2:  aDeb += "INTERFACEEND"; break;
-        case 0xE3:  aDeb += "SXVS"; break;
-        case 0x0200:    aDeb += "DIMENSIONS [  34 ]"; break;
-        case 0x0201:    aDeb += "BLANK [  34 ]"; break;
-        case 0x0203:    aDeb += "NUMBER [  34 ]"; break;
-        case 0x0204:    aDeb += "LABEL [  34 ]"; break;
-        case 0x0206:    aDeb += "FORMULA [  3  ]"; break;
-        case 0x0208:    aDeb += "ROW [  34 ]"; break;
-        case 0x0209:    aDeb += "BOF [  3  ]"; break;
-        case 0x0218:    aDeb += "NAME [  34 ]"; break;
-        case 0x0221:    aDeb += "ARRAY [  34 ]"; break;
-        case 0x0223:    aDeb += "EXTERNNAME [  34 ]"; break;
-        case 0x0225:    aDeb += "DEFAULTROWHEI [  345]"; break;
-        case 0x0231:    aDeb += "FONT [  34 ]"; break;
-        case 0x0243:    aDeb += "XF [  3  ]"; break;
-        case 0x027E:    aDeb += "RK [  34 ]"; break;
-        case 0x0406:    aDeb += "FORMULA [   4 ]"; break;
-        case 0x0409:    aDeb += "BOF [   4 ]"; break;
-        case 0x041E:    aDeb += "FORMAT [   4 ]"; break;
-        case 0x0443:    aDeb += "XF [   4 ]"; break;
-        case 0x04BC:    aDeb += "SHRFMLA [    5]"; break;
-        case 0x0809:    aDeb += "BOF [    5]"; break;
-        default:
+        bLoop = TRUE;
+        while( bLoop )
         {
-                sal_Char pTmpBuff[ 64 ];
-                sprintf( pTmpBuff, "<unbekannter Opcode %04X >", nOpcode );
-                aDeb += pTmpBuff;
+            bLoop = aIn.StartNextRecord();
+            if( bLoop )
+                bLoop = (aIn.GetRecNum() != 0x000A);
+        }
+        rPrgrs.Progress();
+
+        return eERR_OK;
+    }
+
+    bLoop = TRUE;
+    while( bLoop )
+    {
+        bLoop = aIn.StartNextRecord();
+        nOpcode = aIn.GetRecNum();
+
+        rPrgrs.Progress();
+
+        switch( nOpcode )
+        {
+            case 0x000A:    ChartEof(); bLoop = FALSE;                          break;  // EOF
+            case 0x0014:    Header();                                           break;  // HEADER
+            case 0x0015:    Footer();                                           break;  // FOOTER
+            case 0x0026:    Leftmargin();                                       break;  // LEFTMARGIN
+            case 0x0027:    Rightmargin();                                      break;  // RIGHTMARGIN
+            case 0x0028:    Topmargin();                                        break;  // TOPMARGIN
+            case 0x0029:    Bottommargin();                                     break;  // BOTTOMMARGIN
+            case 0x002A:    Printheaders();                                     break;  // PRINTHEADERS
+            case 0x00A0:    ChartScl();                                         break;  // SCL
+            case 0x00A1:    if( bOwnTab ) Setup();                              break;  // SETUP
+            case 0x1002:    pChart->ReadChart();                                break;  // CHART
+            case 0x1003:    pChart->ReadSeries();                               break;  // SERIES
+            case 0x1006:    pChart->ReadDataformat( aIn );                      break;  // DATAFORMAT
+            case 0x1007:    pChart->ReadLineformat( aIn );                      break;  // LINEFORMAT
+            case 0x1009:    pChart->ReadMarkerformat( aIn );                    break;  // MARKERFORMAT
+            case 0x100A:    pChart->ReadAreaformat( aIn );                      break;  // AREAFORMAT
+            case 0x100B:    pChart->ReadPieformat( aIn );                       break;  // PIEFORMAT
+            case 0x100C:    pChart->ReadAttachedlabel( aIn );                   break;  // ATTACHEDLABEL
+            case 0x100D:    pChart->ReadSeriestext( aIn );                      break;  // SERIESTEXT
+            case 0x1014:    pChart->ReadChartformat();                          break;  // CHARTFORMAT
+            case 0x1015:    pChart->ReadLegend( aIn );                          break;  // LEGEND
+            case 0x1017:    pChart = aObjManager.ReplaceChartData( aIn, ctBar );    break;  // BAR
+            case 0x1018:    pChart = aObjManager.ReplaceChartData( aIn, ctLine );   break;  // LINE
+            case 0x1019:    pChart = aObjManager.ReplaceChartData( aIn, ctPie );    break;  // PIE
+            case 0x101A:    pChart = aObjManager.ReplaceChartData( aIn, ctArea );   break;  // AREA
+            case 0x101B:    pChart = aObjManager.ReplaceChartData( aIn, ctScatter );break;  // SCATTER
+            case 0x101C:    pChart->ReadChartline( aIn );                       break;  // CHARTLINE
+            case 0x101D:    pChart->ReadAxis( aIn );                            break;  // AXIS
+            case 0x101E:    pChart->ReadTick( aIn );                            break;  // TICK
+            case 0x101F:    pChart->ReadValuerange( aIn );                      break;  // VALUERANGE
+            case 0x1020:    pChart->ReadCatserrange( aIn );                     break;  // CATSERRANGE
+            case 0x1021:    pChart->ReadAxislineformat( aIn );                  break;  // AXISLINEFORMAT
+            case 0x1024:    pChart->ReadDefaulttext( aIn );                     break;  // DEFAULTTEXT
+            case 0x1025:    pChart->ReadText( aIn );                            break;  // TEXT
+            case 0x1026:    pChart->ReadFontx( aIn );                           break;  // FONTX
+            case 0x1027:    pChart->ReadObjectlink( aIn );                      break;  // OBJECTLINK
+            case 0x1032:    pChart->ReadFrame();                                break;  // FRAME
+            case 0x1033:    pChart->ReadBegin();                                break;  // BEGIN
+            case 0x1034:    pChart->ReadEnd();                                  break;  // END
+            case 0x1035:    pChart->ReadPlotarea();                             break;  // PLOTAREA
+            case 0x103A:    pChart->Read3D( aIn );                              break;  // 3D
+            case 0x103D:    pChart->ReadDropbar( aIn );                         break;  // DROPBAR
+            case 0x103E:    pChart = aObjManager.ReplaceChartData( aIn, ctNet );    break;  // RADAR
+            case 0x103F:    pChart = aObjManager.ReplaceChartData( aIn, ctSurface );break;  // SURFACE
+            case 0x1041:    pChart->ReadAxisparent( aIn );                      break;  // AXISPARENT
+            case 0x1045:    pChart->ReadSertocrt( aIn );                        break;  // SERTOCRT
+            case 0x1046:    pChart->ReadAxesused( aIn );                        break;  // AXESUSED
+            case 0x104E:    pChart->ReadIfmt( aIn );                            break;  // IFMT
+            case 0x1051:    pChart->ReadAi( aIn, (ExcelToSc8&)*pFormConv );     break;  // AI
+            case 0x105D:    pChart->ReadSerfmt( aIn );                          break;  // SERFMT
+            case 0x105F:    pChart->Read3DDataformat( aIn );                    break;  // 3DDATAFORMAT
+            case 0x1066:    pChart->ReadGelframe( aIn );                        break;  // GELFRAME
         }
     }
-    return aDeb;
+
+    return eLastErr;
 }
 
-#endif
-
+//___________________________________________________________________
 

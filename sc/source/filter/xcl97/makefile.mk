@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dr $ $Date: 2001-07-12 17:08:09 $
+#   last change: $Author: dr $ $Date: 2001-10-23 15:04:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,37 +80,17 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        xcl97dum.cxx						\
-        xcl97esc.cxx						\
-        xcl97rec.cxx						\
-        XclImpCharts.cxx					\
-        XclImpChartsApi.cxx					\
-        XclImpPivotTables.cxx				\
-        XclImpChangeTrack.cxx				\
-        XclImpObjects.cxx					\
-        XclExpCharts.cxx					\
-        XclExpPivotTables.cxx				\
-        XclExpChangeTrack.cxx
-
-
 SLOFILES =	\
         $(SLO)$/xcl97dum.obj				\
         $(SLO)$/xcl97esc.obj				\
         $(SLO)$/xcl97rec.obj				\
-        $(SLO)$/XclImpCharts.obj			\
-        $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclImpPivotTables.obj		\
         $(SLO)$/XclImpChangeTrack.obj		\
-        $(SLO)$/XclImpObjects.obj			\
-        $(SLO)$/XclExpCharts.obj			\
         $(SLO)$/XclExpPivotTables.obj		\
         $(SLO)$/XclExpChangeTrack.obj
 
 
 EXCEPTIONSFILES = \
-        $(SLO)$/XclImpChartsApi.obj			\
-        $(SLO)$/XclExpCharts.obj			\
         $(SLO)$/XclExpPivotTables.obj
 
 

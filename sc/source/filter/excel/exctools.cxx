@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
+ *  last change: $Author: dr $ $Date: 2001-10-23 15:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,13 +523,19 @@ FilterProgressBar::FilterProgressBar( SvStream& rStream ) : pStr( &rStream ), pX
     rStream.Seek( STREAM_SEEK_TO_END );
     ULONG   nStrmLen = rStream.Tell();
     rStream.Seek( nOldPos );
-    Init( nOldPos, nStrmLen );
+    Init( nOldPos, nStrmLen, STR_LOAD_DOC );
 }
 
 
 FilterProgressBar::FilterProgressBar( XclImpStream& rStream ) : pStr( NULL ), pXIStr( &rStream )
 {
-    Init( rStream.GetStreamPos(), rStream.GetStreamLen() );
+    Init( rStream.GetStreamPos(), rStream.GetStreamLen(), STR_LOAD_DOC );
+}
+
+
+FilterProgressBar::FilterProgressBar( UINT32 nObjCount ) : pStr( NULL ), pXIStr( NULL )
+{
+    Init( 0, nObjCount, STR_PROGRESS_CALCULATING );
 }
 
 
@@ -542,7 +548,7 @@ FilterProgressBar::~FilterProgressBar()
 }
 
 
-void FilterProgressBar::Init( ULONG nStreamPos, ULONG nStreamLen )
+void FilterProgressBar::Init( ULONG nStartPos, ULONG nSize, USHORT nResStr )
 {
     nInstances++;
 
@@ -550,10 +556,10 @@ void FilterProgressBar::Init( ULONG nStreamPos, ULONG nStreamLen )
 
     if( nInstances == 1 )
     {
-        nUnitSize = nStreamLen / 128;   // I think, this number of steps is enough
+        nUnitSize = (nSize < 128) ? 1 : (nSize / 128);
         nNextUnit = 0;
-        pPrgrs = new ScProgress( NULL, ScGlobal::GetRscString( STR_LOAD_DOC ), nStreamLen );
-        pPrgrs->SetState( nStreamPos );
+        pPrgrs = new ScProgress( NULL, ScGlobal::GetRscString( nResStr ), nSize );
+        pPrgrs->SetState( nStartPos );
     }
     else
         pPrgrs = NULL;
@@ -580,28 +586,6 @@ void FilterProgressBar::Progress( void )
             pPrgrs->SetState( nNewState );
             nNextUnit += nUnitSize;
         }
-    }
-}
-
-
-void FilterProgressBar::StartPostLoadProgress( const UINT32 nObj )
-{
-    if( pPrgrs )
-    {
-        pStr = NULL;
-        pXIStr = NULL;
-        nCnt = 0;
-
-        delete pPrgrs;
-        if( nObj )
-        {
-            pPrgrs = new ScProgress( NULL, ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ), nObj );
-            nUnitSize = ( nObj < 128 )? 1 : nObj / 128; // I think, this number of steps is enough
-            nNextUnit = 0;
-        }
-        else
-            pPrgrs = NULL;
-
     }
 }
 

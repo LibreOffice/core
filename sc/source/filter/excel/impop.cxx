@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 12:17:21 $
+ *  last change: $Author: dr $ $Date: 2001-10-23 15:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2494,6 +2494,26 @@ EditTextObject* ImportExcel::CreateFormText( BYTE nAnzFrms, const String& rS, co
 ScEditEngineDefaulter& ImportExcel::GetEdEng( void ) const
 {
     return pExcRoot->GetEdEng();
+}
+
+
+void ImportExcel::AdjustRowHeight()
+{
+    // #93255# speed up chart import: import all sheets without charts, then
+    // update row heights (here), last load all charts -> do not any longer
+    // update inside of ScDocShell::ConvertFrom() (causes update of existing
+    // charts during each and every change of row height)
+    SfxObjectShell* pShell = pD->GetDocumentShell();
+    if( pShell )
+    {
+        uno::Reference< frame::XModel > xModel( pShell->GetModel() );
+        ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
+        if( pDocObj )
+        {
+            for( USHORT nTab = 0; nTab < pD->GetTableCount(); ++nTab )
+                pDocObj->AdjustRowHeight( 0, MAXROW, nTab );
+        }
+    }
 }
 
 

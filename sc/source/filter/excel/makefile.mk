@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
+#   last change: $Author: dr $ $Date: 2001-10-23 15:01:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,12 +85,15 @@ SLOFILES =	\
         $(SLO)$/XclImpHelper.obj			\
         $(SLO)$/XclImpExternsheet.obj		\
         $(SLO)$/XclImpStyleBuffer.obj		\
+        $(SLO)$/XclImpObjects.obj			\
+        $(SLO)$/XclImpCharts.obj			\
+        $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclExpStream.obj			\
         $(SLO)$/XclExpHelper.obj			\
         $(SLO)$/XclExpExternsheet.obj		\
+        $(SLO)$/XclExpCharts.obj			\
         $(SLO)$/flttools.obj				\
         $(SLO)$/read.obj					\
-        $(SLO)$/readchrt.obj				\
         $(SLO)$/impop.obj					\
         $(SLO)$/excimp8.obj					\
         $(SLO)$/excel.obj					\
@@ -111,6 +114,10 @@ SLOFILES =	\
         $(SLO)$/frmbase.obj					\
         $(SLO)$/exccomp.obj					\
         $(SLO)$/biffdump.obj
+
+EXCEPTIONSFILES = \
+        $(SLO)$/XclImpChartsApi.obj			\
+        $(SLO)$/XclExpCharts.obj
 
 # --- Targets -------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
+ *  last change: $Author: dr $ $Date: 2001-10-23 15:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,20 +95,18 @@
 #endif
 #include <string.h>
 
-class FilterProgressBar;
-class ExcChart;
-class ScBaseCell;
 class SvStorage;
+
+class ScBaseCell;
 class ScRangeList;
-
 class ScConditionalFormat;
-
 class ScDBData;
 
 class XclImpStream;
 class XclImpAutoFilterBuffer;
 class XclImpWebQueryBuffer;
 
+class FilterProgressBar;
 
 
 
@@ -177,7 +175,6 @@ class ImportExcel8 : public ImportExcel
         SharedStringTable       aSharedStringTable;
 
         XclImpObjectManager     aObjManager;
-        ExcChart*               pActChart;
         BOOL                    bObjSection;
 
         ExcScenarioList         aScenList;
@@ -267,58 +264,6 @@ class ImportExcel8 : public ImportExcel
 
         void                    ChartEof( void );               // 0x000A
         void                    ChartScl( void );               // 0x00A0
-        void                    ChartChart( void );             // 0x1002
-        void                    ChartSeries( void );            // 0x1003       changed from Biff5
-        void                    ChartDataformat( void );        // 0x1006
-        void                    ChartLineformat( void );        // 0x1007
-        void                    ChartMarkerformat( void );      // 0x1009
-        void                    ChartAreaformat( void );        // 0x100A
-        void                    ChartPieformat( void );         // 0x100B
-        void                    ChartAttachedlabel( void );     // 0x100C
-        void                    ChartSeriestext( void );        // 0x100D
-        void                    ChartChartformat( void );       // 0x1014
-        void                    ChartLegend( void );            // 0x1015
-        void                    ChartBar( void );               // 0x1017
-        void                    ChartLine( void );              // 0x1018
-        void                    ChartPie( void );               // 0x1019
-        void                    ChartArea( void );              // 0x101A
-        void                    ChartScatter( void );           // 0x101B
-        void                    ChartChartline( void );         // 0x101C
-        void                    ChartAxis( void );              // 0x101D
-        void                    ChartTick( void );              // 0x101E
-        void                    ChartValuerange( void );        // 0x101F
-        void                    ChartCatserrange( void );       // 0x1020
-        void                    ChartAxislineformat( void );    // 0x1021
-        void                    ChartDefaulttext( void );       // 0x1024
-        void                    ChartText( void );              // 0x1025
-        void                    ChartFontx( void );             // 0x1026
-        void                    ChartObjectlink( void );        // 0x1027
-        void                    ChartFrame( void );             // 0x1032
-        void                    ChartBegin( void );             // 0x1033
-        void                    ChartEnd( void );               // 0x1034
-        void                    ChartPlotarea( void );          // 0x1035
-        void                    Chart3D( void );                // 0x103A
-        void                    ChartPicf( void );              // 0x103C
-        void                    ChartDropbar( void );           // 0x103D
-        void                    ChartRadar( void );             // 0x103E
-        void                    ChartSurface( void );           // 0x103F
-        void                    ChartAxisparent( void );        // 0x1041
-        void                    ChartShtprops( void );          // 0x1044
-        void                    ChartSertocrt( void );          // 0x1045
-        void                    ChartAxesused( void );          // 0x1046
-        void                    ChartIfmt( void );              // 0x104E
-        void                    ChartAi( void );                // 0x1051 (ChartSelection)
-        void                    ChartAi_2_Series( void );       // 0x1051 (ChartSelection)
-        void                    ChartSerfmt( void );            // 0x105D
-        void                    Chart3DDataformat( void );      // 0x105F
-        void                    ChartFbi( void );               // 0x1060       new to Biff8
-        void                    ChartBoppop( void );            // 0x1061
-        void                    ChartAxcext( void );            // 0x1062
-        void                    ChartDat( void );               // 0x1063
-        void                    ChartPlotgrowth( void );        // 0x1064
-        void                    ChartSiindex( void );           // 0x1065
-        void                    ChartGelframe( void );          // 0x1066
-        void                    ChartBoppcustom( void );        // 0x1067
 
         virtual void            GetHFString( String& rStr );
         void                    EndSheet( void );
@@ -331,9 +276,6 @@ class ImportExcel8 : public ImportExcel
                                                     const String& rURL );
         void                    CreateTmpCtrlStorage( void );
                                     // if possible generate a SvxMSConvertOCXControls compatibel storage
-        inline void             SetActChartData( ExcChart* pNewData )
-                                                    { aObjManager.SetCurrChartData( pNewData ); }
-        inline ExcChart*        GetActChartData()   { return aObjManager.GetCurrChartData(); }
 
     public:
                                 ImportExcel8(
