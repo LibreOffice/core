@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:11:11 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,6 +777,9 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             break;
         case SID_GALLERY :
             GetViewFrame()->ChildWindowExecute(rReq);//ToggleChildWindow(SID_GALLERY);
+        break;
+        case SID_AVMEDIA_PLAYER :
+            GetViewFrame()->ChildWindowExecute(rReq);//ToggleChildWindow(SID_AVMEDIA_PLAYER);
         break;
         case SID_VIEW_DATA_SOURCE_BROWSER:
         {
