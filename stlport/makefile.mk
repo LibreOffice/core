@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-30 18:11:10 $
+#   last change: $Author: hjs $ $Date: 2001-11-14 12:58:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,13 +71,20 @@ TARGET=so_stlport
 
 # --- Files --------------------------------------------------------
 
+.IF "$(COMID)"=="gcc3"
+TARFILE_NAME=STLport-4.5
+PATCH_FILE_NAME=STLport-4.5.patch
+.ELSE			# "$(COMID)"=="gcc3"
 TARFILE_NAME=STLport-4.0
+PATCH_FILE_NAME=STLport-4.0.patch
+.ENDIF			# "$(COMID)"=="gcc3"
 
 .IF "$(GUI)"=="WNT"
 TAR_EXCLUDES=*/SC5/*
 .ENDIF          # "$(GUI)"=="WNT"
 
-PATCH_FILE_NAME=STLport-4.0.patch
+ADDITIONAL_FILES=src$/gcc-3.0.mak
+
 
 CONFIGURE_ACTION=none
 CONFIGURE_FLAGS=
@@ -90,8 +97,12 @@ BUILD_FLAGS=-f vc6.mak
 .ENDIF
 
 .IF "$(COM)"=="GCC"
-BUILD_ACTION=make
+.IF "$(COMID)"=="gcc3"
+BUILD_FLAGS=-f gcc-3.0.mak
+.ELSE # "$(COMID)"=="gcc3"
 BUILD_FLAGS=-f gcc.mak
+.ENDIF # "$(COMID)"=="gcc3"
+BUILD_ACTION=make
 .ENDIF
 
 .IF "$(COM)"=="C52"
