@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anytostring.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:52:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_ANYTOSTRING_HXX
-#define INCLUDED_ANYTOSTRING_HXX
+#if ! defined(INCLUDED_COMPHELPER_ANYTOSTRING_HXX)
+#define INCLUDED_COMPHELPER_ANYTOSTRING_HXX
 
 #ifndef _RTL_USTRING_HXX_
 #include "rtl/ustring.hxx"
