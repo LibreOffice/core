@@ -2,9 +2,9 @@
  *
  *  $RCSfile: class5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-15 12:26:20 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,15 +504,17 @@ void CGM::ImplDoClass5()
         break;
         case 0x7d : ComOut( CGM_UNKNOWN_LEVEL, "set Gradient Description" )
         {
-            long    nStepDesignator = ImplGetI( pElement->nIndexPrecision );
+            ImplGetI( pElement->nIndexPrecision ); // -Wall is this needed?
             sal_uInt32  nNumberOfStages = ImplGetI( pElement->nIndexPrecision );
             sal_uInt32  i, nColorFrom = 0;
             sal_uInt32  nColorTo = 0xffffff;
 
+            //FIXME,  does this loop actually do anything?
             for ( i = 0; i < nNumberOfStages; i++ )
             {
-                double aFloat = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
+                ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ); // -Wall is this needed
             }
+
             for ( i = 0; i <= nNumberOfStages; i++ )
             {
                 sal_uInt32 nPara = mnParaSize + 24;
