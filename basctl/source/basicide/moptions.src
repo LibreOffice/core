@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:30:17 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ ModalDialog RID_MACROOPTIONS
         Text[ japanese ] = "γƒγƒ«γƒ—ID";
         Text[ chinese_traditional ] = "θªªζθ­ε¥η¬¦";
         Text[ arabic ] = "ΚΪΡνέ ΗαγΣΗΪΟΙ";
-        Text[ greek ] = "Ταυτότητα βοήθειας";
+        Text[ greek ] = "Αναγνωριστικό βοήθειας";
         Text[ korean ] = "λ„μ›€λ§ ID";
         Text[ turkish ] = "Yardύm ID";
         Text[ language_user1 ] = " ";
@@ -290,6 +290,7 @@ ModalDialog RID_MACROOPTIONS
     Text[ hindi ] = "ΰ¤µΰ¤Ώΰ¤µΰ¤°ΰ¤£";
     Text[ slovak ] = "Popis";
 };
+
 
 
 
