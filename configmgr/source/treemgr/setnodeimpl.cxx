@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 18:00:16 $
+ *  last change: $Author: dg $ $Date: 2000-11-14 13:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ namespace
     }
     void CollectElementTrees::handle(ValueNode& rValue)
     {
+// Template handling for values not defined at the moment
+#if 0
         if (m_aTemplate.isValid())
         {
             OSL_ENSURE(m_aTemplate->isInstanceValue(),"ERROR: Found a value node in a Complex Template Set");
@@ -140,6 +142,7 @@ namespace
             //  throw TypeMismatch(aValueType.getTypeName(),aExpectedType.getTypeName(), "INTERNAL ERROR: - Corrupt tree contains mistyped value node within a value-set")));
             }
         }
+#endif
         add(rValue);
     }
     void CollectElementTrees::handle(ISubtree& rTree)
