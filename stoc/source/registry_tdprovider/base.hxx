@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:02:46 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@ using namespace com::sun::star::reflection;
 
 namespace stoc_rdbtdp
 {
+
+::osl::Mutex & getMutex();
+
 //--------------------------------------------------------------------------------------------------
 
 typedef ::std::list< ::com::sun::star::uno::Reference<
@@ -250,7 +253,6 @@ public:
 //==================================================================================================
 class InterfaceTypeDescriptionImpl : public WeakImplHelper1< XInterfaceTypeDescription2 >
 {
-    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
     Sequence< sal_Int8 >                  _aBytes;
 
@@ -284,7 +286,6 @@ public:
 //==================================================================================================
 class CompoundTypeDescriptionImpl : public WeakImplHelper1< XCompoundTypeDescription >
 {
-    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
     TypeClass                             _eTypeClass;
     Sequence< sal_Int8 >                  _aBytes;
@@ -326,7 +327,6 @@ public:
 //==================================================================================================
 class EnumTypeDescriptionImpl : public WeakImplHelper1< XEnumTypeDescription >
 {
-    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
     Sequence< sal_Int8 >                  _aBytes;
 
@@ -364,7 +364,6 @@ public:
 //==================================================================================================
 class TypedefTypeDescriptionImpl : public WeakImplHelper1< XIndirectTypeDescription >
 {
-    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
     OUString                              _aName;
 
@@ -393,7 +392,6 @@ public:
 //==================================================================================================
 class ServiceTypeDescriptionImpl : public WeakImplHelper1< XServiceTypeDescription >
 {
-    Mutex                                 _aMutex;
     OUString                              _aName;
     Sequence< sal_Int8 >                  _aBytes;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
@@ -459,7 +457,6 @@ private:
 //==================================================================================================
 class ModuleTypeDescriptionImpl : public WeakImplHelper1< XModuleTypeDescription >
 {
-    Mutex                                           _aMutex;
     OUString                                        _aName;
     Reference< XTypeDescriptionEnumerationAccess >  _xTDMgr;
 
@@ -523,7 +520,6 @@ public:
 //==================================================================================================
 class ConstantsTypeDescriptionImpl : public WeakImplHelper1< XConstantsTypeDescription >
 {
-    Mutex                _aMutex;
     OUString             _aName;
     Sequence< sal_Int8 > _aBytes;
     Sequence< Reference< XConstantTypeDescription > > * _pMembers;
@@ -554,7 +550,6 @@ public:
 //==================================================================================================
 class SingletonTypeDescriptionImpl : public WeakImplHelper1< XSingletonTypeDescription >
 {
-    Mutex    _aMutex;
     OUString _aName;
     OUString _aServiceName;
     Reference< XHierarchicalNameAccess >   _xTDMgr;
