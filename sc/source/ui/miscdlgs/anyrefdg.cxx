@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:46:35 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ void lcl_EnableInput( BOOL bEnable )
         while( pFrame )
         {
             //  #71577# enable everything except InPlace, including bean frames
-            if ( !pFrame->ISA(SfxInPlaceFrame) )
+            if ( !pFrame->GetFrame()->IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
@@ -144,7 +144,7 @@ void lcl_InvalidateWindows()
         while( pFrame )
         {
             //  #71577# enable everything except InPlace, including bean frames
-            if ( !pFrame->ISA(SfxInPlaceFrame) )
+            if ( !pFrame->GetFrame()->IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
@@ -585,7 +585,7 @@ void ScAnyRefDlg::EnableSpreadsheets(BOOL bFlag, BOOL bChilds)
         while( pFrame )
         {
             //  #71577# enable everything except InPlace, including bean frames
-            if ( !pFrame->ISA(SfxInPlaceFrame) )
+            if ( !pFrame->GetFrame()->IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
