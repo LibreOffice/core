@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>StarWriter 1.0</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">StarWriter 1.0</value>
+            <value>StarWriter 1.0</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>StarOffice XML (Writer)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">%productname% %formatversion% Textdokument</value>
+            <value>%productname% %formatversion% Textdokument</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>Writer 6.0</value></prop>
     </node>
