@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2002-10-17 14:13:45 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef NOOLDSV //autogen
-#include <vcl/system.hxx>
-#endif
 #ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
@@ -107,7 +104,7 @@ public:
 SvRTLInputBox::SvRTLInputBox( Window* pParent, const String& rPrompt,
         const String& rTitle, const String& rDefault,
         long nXTwips, long nYTwips ) :
-    ModalDialog( pParent,WB_SVLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
+    ModalDialog( pParent,WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
     aEdit( this,  WB_LEFT | WB_BORDER ),
     aOk( this ), aCancel( this ), aPromptText( this, WB_WORDBREAK )
 {
@@ -123,7 +120,7 @@ SvRTLInputBox::SvRTLInputBox( Window* pParent, const String& rPrompt,
     aPromptText.Show();
     SetText( rTitle );
     Font aFont( GetFont());
-    Color aColor( GetBackgroundBrush().GetFillColor());
+    Color aColor( GetBackground().GetColor() );
     aFont.SetFillColor( aColor );
     aEdit.SetFont( aFont );
     aEdit.SetText( rDefault );
@@ -222,7 +219,7 @@ RTLFUNC(InputBox)
             nX = rPar.Get(4)->GetLong();
             nY = rPar.Get(5)->GetLong();
         }
-        SvRTLInputBox *pDlg=new SvRTLInputBox(GetpApp()->GetDefModalDialogParent(),
+        SvRTLInputBox *pDlg=new SvRTLInputBox(GetpApp()->GetDefDialogParent(),
                     rPrompt,aTitle,aDefault,nX,nY);
         pDlg->Execute();
         rPar.Get(0)->PutString( pDlg->GetText() );
