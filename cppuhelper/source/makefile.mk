@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:11 $
+#   last change: $Author: jsc $ $Date: 2001-05-04 13:38:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,12 +69,7 @@ ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=	TRUE
 
 # --- Settings -----------------------------------------------------
-
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-.INCLUDE :  ..$/version.mk
 
 # --- Files --------------------------------------------------------
 
@@ -110,10 +105,6 @@ UNOTYPES= \
         com.sun.star.lang.XTypeProvider			\
         com.sun.star.lang.XComponent
 
-# LIB1TARGET=	$(LB)$/a$(TARGET).lib
-# LIB1ARCHIV=	$(LB)$/lib$(TARGET)$(CPPUHELPER_MAJOR)$(COM).a
-# LIB1FILES=	$(LB)$/$(TARGET).lib
-
 SLOFILES=	\
         $(SLO)$/typeprovider.obj 	\
         $(SLO)$/exc_thrower.obj 	\
@@ -127,7 +118,7 @@ SLOFILES=	\
         $(SLO)$/component.obj		\
         $(SLO)$/shlib.obj
 
-SHL1TARGET=	$(TARGET)$(CPPUHELPER_MAJOR)$(COM)
+SHL1TARGET=	$(TARGET)$(UDK_MAJOR)$(COM)
 
 SHL1STDLIBS= \
         $(CPPULIB)		\
