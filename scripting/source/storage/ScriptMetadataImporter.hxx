@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dsherwin $ $Date: 2002-09-24 13:20:47 $
+ *  last change: $Author: npower $ $Date: 2002-10-01 10:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,19 +77,156 @@
 
 namespace scripting_impl
 {
+// for simplification
+#define css ::com::sun::star
+#define dcsssf ::drafts::com::sun::star::script::framework
 
-typedef ::std::vector< ::drafts::com::sun::star::script::framework::storage::ScriptImplInfo > Impls_vec;
+typedef ::std::vector< dcsssf::storage::ScriptImplInfo > Impls_vec;
 typedef ::std::vector< ::rtl::OUString > Deps_vec;
 typedef ::std::vector< bool > Bool_vec;
 
 /**
  * Script Meta Data Importer
  */
-class ScriptMetadataImporter
-            : public ::cppu::WeakImplHelper1<
-                ::com::sun::star::xml::sax::XExtendedDocumentHandler >
+class ScriptMetadataImporter : public
+    ::cppu::WeakImplHelper1< css::xml::sax::XExtendedDocumentHandler >
 {
-    // private member
+public:
+
+    /**
+     * This function will begin the parser and parse the meta data
+     *
+     * @param xInput The XInputStream for the parser which contains the XML
+     * @param parcelURI The parcel's URI in the document or the application
+     *
+     * @see css::io::XInputStream
+     */
+    Impls_vec parseMetaData( css::uno::Reference< css::io::XInputStream > const & xInput,
+        const ::rtl::OUString & parcelURI )
+        throw ( css::xml::sax::SAXException, css::io::IOException,
+            css::uno::RuntimeException);
+
+    /**
+     * Constructor for the meta-data parser
+     *
+     * @param XComponentContext
+     */
+    explicit ScriptMetadataImporter(
+        const css::uno::Reference< css::uno::XComponentContext >&  );
+
+    /**
+     * Destructor for the parser
+     */
+    virtual ~ScriptMetadataImporter() SAL_THROW( () );
+
+    // XExtendedDocumentHandler impl
+    /**
+     * Function to handle the start of CDATA in XML
+     *
+     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
+     */
+    virtual void SAL_CALL startCDATA()
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
+
+    /**
+     * Function to handle the end of CDATA in XML
+     *
+     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
+     */
+    virtual void SAL_CALL endCDATA() throw ( css::uno::RuntimeException );
+
+    /**
+     * Function to handle comments in XML
+     *
+     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
+     */
+    virtual void SAL_CALL comment( const ::rtl::OUString & sComment )
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
+
+    /**
+     * Function to handle line breaks in XML
+     *
+     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
+     */
+    virtual void SAL_CALL allowLineBreak()
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
+
+    /**
+     * Function to handle unknowns in XML
+     *
+     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
+     */
+    virtual void SAL_CALL unknown( const ::rtl::OUString & sString )
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
+
+    /**
+     * Function to handle the start of XML document
+     *
+     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
+     */
+    // XDocumentHandler impl
+    virtual void SAL_CALL startDocument()
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
+
+    /**
+     * Function to handle the end of the XML document
+     *
+     * @see com::sun::star::xml::sax::XDocumentHandler
+     */
+    virtual void SAL_CALL endDocument()
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
+
+    /**
+     * Function to handle the start of an element
+     *
+     * @see com::sun::star::xml::sax::XDocumentHandler
+     */
+    virtual void SAL_CALL startElement( const ::rtl::OUString& aName,
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs )
+        throw ( css::xml::sax::SAXException,
+            css::uno::RuntimeException );
+
+    /**
+     * Function to handle the end of an element
+     *
+     * @see com::sun::star::xml::sax::XDocumentHandler
+     */
+    virtual void SAL_CALL endElement( const ::rtl::OUString & aName )
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
+
+    /**
+     * Function to handle characters in elements
+     *
+     * @see com::sun::star::xml::sax::XDocumentHandler
+     */
+    virtual void SAL_CALL characters( const ::rtl::OUString & aChars )
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
+
+    /**
+     * Function to handle whitespace
+     *
+     * @see com::sun::star::xml::sax::XDocumentHandler
+     */
+    virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString & aWhitespaces )
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
+
+    /**
+     * Function to handle XML processing instructions
+     *
+     * @see com::sun::star::xml::sax::XDocumentHandler
+     */
+    virtual void SAL_CALL processingInstruction(
+        const ::rtl::OUString & aTarget, const ::rtl::OUString & aData )
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
+
+    /**
+     * Function to set the document locator
+     *
+     * @see com::sun::star::xml::sax::XDocumentHandler
+     */
+    virtual void SAL_CALL setDocumentLocator(
+        const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
 private:
 
     /** Vector contains the ScriptImplInfo structs */
@@ -111,8 +248,7 @@ private:
     osl::Mutex     m_mutex;
 
     /** @internal */
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        m_xContext;
+    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
     /** Placeholder for the parcel URI */
     ::rtl::OUString ms_parcelURI;
@@ -121,11 +257,10 @@ private:
     enum { PARCEL, SCRIPT, LANGUAGE_NAME, LOGICALNAME, LANGUAGENAME,
            DEPENDENCIES, DESCRIPTION, DELIVERY, DELIVERFILE, DEPENDFILE } m_state;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > ms_dependFiles;
+    css::uno::Sequence< ::rtl::OUString > ms_dependFiles;
 
     /** Build up the struct during parsing the meta data */
-    ::drafts::com::sun::star::script::framework::storage::ScriptImplInfo
-        m_scriptImplInfo;
+    dcsssf::storage::ScriptImplInfo m_scriptImplInfo;
 
     /**
      *   Helper function to set the state
@@ -134,162 +269,6 @@ private:
      *           The current tag being processed
      */
     void setState(const ::rtl::OUString & tagName);
-
-    // public interface
-public:
-
-    /**
-     * This function will begin the parser and parse the meta data
-     *
-     * @param xInput The XInputStream for the parser which contains the XML
-     * @param parcelURI The parcel's URI in the document or the application
-     *
-     * @see ::com::sun::star::io::XInputStream
-     */
-    Impls_vec parseMetaData(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::io::XInputStream >
-        const & xInput, const ::rtl::OUString & parcelURI )
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::io::IOException,
-            ::com::sun::star::uno::RuntimeException);
-
-    /**
-     * Constructor for the meta-data parser
-     *
-     * @param XComponentContext
-     */
-    explicit ScriptMetadataImporter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext >&  );
-
-    /**
-     * Destructor for the parser
-     */
-    virtual ~ScriptMetadataImporter() SAL_THROW( () );
-
-    // XExtendedDocumentHandler impl
-    /**
-     * Function to handle the start of CDATA in XML
-     *
-     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
-     */
-    virtual void SAL_CALL startCDATA()
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to handle the end of CDATA in XML
-     *
-     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
-     */
-    virtual void SAL_CALL endCDATA()
-        throw ( ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to handle comments in XML
-     *
-     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
-     */
-    virtual void SAL_CALL comment( const ::rtl::OUString & sComment )
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to handle line breaks in XML
-     *
-     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
-     */
-    virtual void SAL_CALL allowLineBreak()
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to handle unknowns in XML
-     *
-     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
-     */
-    virtual void SAL_CALL unknown( const ::rtl::OUString & sString )
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to handle the start of XML document
-     *
-     * @see com::sun::star::xml::sax::XExtendedDocumentHandler
-     */
-    // XDocumentHandler impl
-    virtual void SAL_CALL startDocument()
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to handle the end of the XML document
-     *
-     * @see com::sun::star::xml::sax::XDocumentHandler
-     */
-    virtual void SAL_CALL endDocument()
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to handle the start of an element
-     *
-     * @see com::sun::star::xml::sax::XDocumentHandler
-     */
-    virtual void SAL_CALL startElement(
-        const ::rtl::OUString& aName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs )
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to handle the end of an element
-     *
-     * @see com::sun::star::xml::sax::XDocumentHandler
-     */
-    virtual void SAL_CALL endElement( const ::rtl::OUString & aName )
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to handle characters in elements
-     *
-     * @see com::sun::star::xml::sax::XDocumentHandler
-     */
-    virtual void SAL_CALL characters( const ::rtl::OUString & aChars )
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to handle whitespace
-     *
-     * @see com::sun::star::xml::sax::XDocumentHandler
-     */
-    virtual void SAL_CALL ignorableWhitespace(
-        const ::rtl::OUString & aWhitespaces )
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to handle XML processing instructions
-     *
-     * @see com::sun::star::xml::sax::XDocumentHandler
-     */
-    virtual void SAL_CALL processingInstruction(
-        const ::rtl::OUString & aTarget, const ::rtl::OUString & aData )
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
-
-    /**
-     * Function to set the document locator
-     *
-     * @see com::sun::star::xml::sax::XDocumentHandler
-     */
-    virtual void SAL_CALL setDocumentLocator(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator )
-        throw ( ::com::sun::star::xml::sax::SAXException,
-            ::com::sun::star::uno::RuntimeException );
 }
 ; // class ScriptMetadataImporter
 

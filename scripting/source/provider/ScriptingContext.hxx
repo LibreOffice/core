@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptingContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:25 $
+ *  last change: $Author: npower $ $Date: 2002-10-01 10:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,77 +73,71 @@
 
 namespace func_provider
 {
+// for simplification
+#define css ::com::sun::star
+#define dcsssf ::drafts::com::sun::star::script::framework
 
 //Typedefs
 //=============================================================================
-typedef ::std::hash_map < ::rtl::OUString, ::com::sun::star::uno::Any,
-::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ScriptingConext_hash;
+typedef ::std::hash_map < ::rtl::OUString, css::uno::Any, ::rtl::OUStringHash,
+    ::std::equal_to< ::rtl::OUString > > ScriptingConext_hash;
 typedef ::std::vector< ::rtl::OUString > OUString_vec;
 
-class ScriptingContext :
-            public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySet >
+class ScriptingContext : public ::cppu::WeakImplHelper1< css::beans::XPropertySet >
 {
+
+public:
+    ScriptingContext( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    ~ScriptingContext();
+
+    // XPropertySet implementation
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo( )
+        throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName,
+        const css::uno::Any& aValue )
+        throw ( css::beans::UnknownPropertyException,
+            css::beans::PropertyVetoException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
+        throw ( css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+        const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener )
+        throw ( css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+    virtual void SAL_CALL removePropertyChangeListener(
+        const ::rtl::OUString& aPropertyName,
+        const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener )
+        throw ( css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+    virtual void SAL_CALL addVetoableChangeListener(
+        const ::rtl::OUString& PropertyName,
+        const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
+        throw ( css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+    virtual void SAL_CALL removeVetoableChangeListener(
+        const ::rtl::OUString& PropertyName,
+        const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
+        throw ( css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+
 private:
     // to obtain other services if needed
     ScriptingConext_hash m_propertyMap;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     osl::Mutex m_mutex;
 
     // Private helper methods
     bool validateKey( const ::rtl::OUString& key );
-
-public:
-    ScriptingContext( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > & xContext );
-    ~ScriptingContext();
-
-    // XPropertySet implementation
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
-    SAL_CALL getPropertySetInfo( )
-    throw ( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL setPropertyValue(
-        const ::rtl::OUString& aPropertyName,
-        const ::com::sun::star::uno::Any& aValue )
-    throw ( ::com::sun::star::beans::UnknownPropertyException,
-            ::com::sun::star::beans::PropertyVetoException,
-            ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
-        const ::rtl::OUString& PropertyName )
-    throw ( ::com::sun::star::beans::UnknownPropertyException,
-            ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL addPropertyChangeListener(
-        const ::rtl::OUString& aPropertyName,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertyChangeListener >& xListener )
-    throw ( ::com::sun::star::beans::UnknownPropertyException,
-            ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL removePropertyChangeListener(
-        const ::rtl::OUString& aPropertyName,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertyChangeListener >& aListener )
-    throw ( ::com::sun::star::beans::UnknownPropertyException,
-            ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL addVetoableChangeListener(
-        const ::rtl::OUString& PropertyName,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XVetoableChangeListener >& aListener )
-    throw ( ::com::sun::star::beans::UnknownPropertyException,
-            ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL removeVetoableChangeListener(
-        const ::rtl::OUString& PropertyName,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XVetoableChangeListener >& aListener )
-    throw ( ::com::sun::star::beans::UnknownPropertyException,
-            ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException );
 
 };
 } // func_provider

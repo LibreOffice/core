@@ -2,9 +2,9 @@
 *
 *  $RCSfile: StorageBridge.hxx,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:26 $
+*  last change: $Author: npower $ $Date: 2002-10-01 10:45:11 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -71,9 +71,11 @@
 
 namespace scripting_runtimemgr
 {
-class StorageBridge :
-    public ::cppu::WeakImplHelper1<
-        ::drafts::com::sun::star::script::framework::storage::XScriptImplAccess >
+// for simplification
+#define css ::com::sun::star
+#define dcsssf ::drafts::com::sun::star::script::framework
+
+class StorageBridge : public ::cppu::WeakImplHelper1< dcsssf::storage::XScriptImplAccess >
 {
     friend class StorageBridgeFactory;
 public:
@@ -88,23 +90,18 @@ public:
      * @return XScriptURI
      *      The URIs of the implementations
      */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::script::framework::scripturi::XScriptURI > > SAL_CALL
-    getImplementations(
-    const ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::script::framework::scripturi::XScriptURI >& queryURI )
-    throw ( ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::uno::RuntimeException );
+    virtual css::uno::Sequence< css::uno::Reference< dcsssf::scripturi::XScriptURI > >
+        SAL_CALL getImplementations(
+            const css::uno::Reference< dcsssf::scripturi::XScriptURI >& queryURI )
+        throw ( css::lang::IllegalArgumentException,
+            css::uno::RuntimeException );
 private:
-    StorageBridge( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >& xContext, sal_uInt16 sid );
+    StorageBridge( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        sal_uInt16 sid );
 
-    void initStorage() throw ( ::com::sun::star::uno::RuntimeException );
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        m_xContext;
-    ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::script::framework::storage::XScriptImplAccess >
-            m_xScriptImplAccess;
+    void initStorage() throw ( css::uno::RuntimeException );
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< dcsssf::storage::XScriptImplAccess > m_xScriptImplAccess;
     sal_uInt16 m_sid;
 };
 }

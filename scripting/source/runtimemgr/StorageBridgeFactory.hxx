@@ -2,9 +2,9 @@
 *
 *  $RCSfile: StorageBridgeFactory.hxx,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: jmrice $ $Date: 2002-09-30 12:56:40 $
+*  last change: $Author: npower $ $Date: 2002-10-01 10:45:12 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -72,20 +72,21 @@
 
 namespace scripting_runtimemgr
 {
+// for simplification
+#define css ::com::sun::star
+#define dcsssf ::drafts::com::sun::star::script::framework
+
 class StorageBridgeFactory
 {
 
 public:
-    explicit StorageBridgeFactory( const ::com::sun::star::uno::Reference <
-                                   ::com::sun::star::uno::XComponentContext > & xContext
-                                   );
-    ::com::sun::star::uno::Reference <
-    ::drafts::com::sun::star::script::framework::storage::XScriptImplAccess >
-    getStorageInstance( sal_uInt16 sid );
+    explicit StorageBridgeFactory(
+        const css::uno::Reference < css::uno::XComponentContext > & xContext );
+    css::uno::Reference < dcsssf::storage::XScriptImplAccess >
+        getStorageInstance( sal_uInt16 sid );
 private:
     StorageBridgeFactory(); // No definition for default ctor
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-    m_xContext;
+    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 };
 } // scripting_runtimemgr
 #endif //_FRAMEWORK_SCRIPT_NAMERESOLVER_HXX_

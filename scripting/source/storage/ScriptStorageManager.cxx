@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: jmrice $ $Date: 2002-09-30 10:59:39 $
+*  last change: $Author: npower $ $Date: 2002-10-01 10:45:14 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -87,8 +87,6 @@ static OUString s_serviceName =
     ::rtl::OUString::createFromAscii(
         "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" );
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-const sal_uInt16 ScriptStorageManager::APP_SHARE_STORAGE_ID = 0;
-const sal_uInt16 ScriptStorageManager::APP_USER_STORAGE_ID = 1;
 extern ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
 
 //*************************************************************************

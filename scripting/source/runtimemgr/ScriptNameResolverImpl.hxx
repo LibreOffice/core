@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptNameResolverImpl.hxx,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: jmrice $ $Date: 2002-09-30 12:56:40 $
+*  last change: $Author: npower $ $Date: 2002-10-01 10:45:11 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -77,10 +77,12 @@
 
 namespace scripting_runtimemgr
 {
+// for simplification
+#define css ::com::sun::star
+#define dcsssf ::drafts::com::sun::star::script::framework
 
-class ScriptNameResolverImpl :
-            public ::cppu::WeakImplHelper1 <
-            ::drafts::com::sun::star::script::framework::XScriptNameResolver >
+class ScriptNameResolverImpl : public
+    ::cppu::WeakImplHelper1 < dcsssf::XScriptNameResolver >
 {
 public:
     /**********************************************
@@ -88,18 +90,16 @@ public:
      @param  the current context
     */
     ScriptNameResolverImpl(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext  >&
-        xContext );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
     ~ScriptNameResolverImpl();
 
     // XServiceInfo implementation
-    virtual ::rtl::OUString SAL_CALL getImplementationName( )
-    throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw( css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-    throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-    getSupportedServiceNames( )
-    throw( ::com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException );
 
     /**********************************************
      resolve method
@@ -114,30 +114,21 @@ public:
      @exception NullPointerException
      @return  the resolved XScriptURI
     */
-    ::com::sun::star::uno::Reference <
-    ::drafts::com::sun::star::script::framework::scripturi::XScriptURI > SAL_CALL
-    resolve( const ::com::sun::star::uno::Reference <
-             ::drafts::com::sun::star::script::framework::scripturi::XScriptURI > &
-             scriptURI,
-             ::com::sun::star::uno::Any& invocationCtx )
-    throw( ::com::sun::star::script::CannotConvertException,
-           ::com::sun::star::lang::IllegalArgumentException,
-           ::com::sun::star::uno::RuntimeException );
+    css::uno::Reference < dcsssf::scripturi::XScriptURI > SAL_CALL resolve(
+        const css::uno::Reference < dcsssf::scripturi::XScriptURI > & scriptURI,
+        css::uno::Any& invocationCtx )
+        throw( css::script::CannotConvertException, css::lang::IllegalArgumentException,
+           css::uno::RuntimeException );
 private:
-    ::com::sun::star::uno::Reference <
-    ::drafts::com::sun::star::script::framework::scripturi::XScriptURI >
-    resolveURIFromStorageID( sal_uInt16 sid,
-        const ::com::sun::star::uno::Reference <
-        ::drafts::com::sun::star::script::framework::scripturi::XScriptURI > &
-        nameToResolve )
-    SAL_THROW ( ( ::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException ) );
+    css::uno::Reference < dcsssf::scripturi::XScriptURI >
+    resolveURIFromStorageID( sal_uInt16 sid, const css::uno::Reference <
+        dcsssf::scripturi::XScriptURI > & nameToResolve )
+        SAL_THROW ( ( css::lang::IllegalArgumentException, css::uno::RuntimeException ) );
     /**********************************************
      Reference< XComponentContext > m_xContext
         to obtain other services if needed
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-    m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     StorageBridgeFactory m_StorageFactory;
     ::osl::Mutex m_mutex;
 

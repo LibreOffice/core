@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:29 $
+ *  last change: $Author: npower $ $Date: 2002-10-01 10:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,39 +73,53 @@
 #include <drafts/com/sun/star/script/framework/storage/XScriptInvocationPrep.hpp>
 
 namespace scripting_impl {
+// for simplification
+#define css ::com::sun::star
+#define dcsssf ::drafts::com::sun::star::script::framework
 
-class ScriptInfo :
-public ::cppu::WeakImplHelper4<
- ::com::sun::star::lang::XServiceInfo,
- ::com::sun::star::lang::XInitialization,
- ::drafts::com::sun::star::script::framework::storage::XScriptInfo,
- ::drafts::com::sun::star::script::framework::storage::XScriptInvocationPrep >
+class ScriptInfo : public ::cppu::WeakImplHelper4< css::lang::XServiceInfo,
+    css::lang::XInitialization, dcsssf::storage::XScriptInfo,
+    dcsssf::storage::XScriptInvocationPrep >
 {
 public:
-    explicit ScriptInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
+    explicit ScriptInfo(
+        const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~ScriptInfo();
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw(css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        throw(css::uno::RuntimeException);
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(css::uno::RuntimeException);
 
-    virtual void SAL_CALL initialize(::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > const & args) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception);
+    virtual void SAL_CALL initialize(css::uno::Sequence < css::uno::Any > const & args)
+        throw (css::uno::RuntimeException, css::uno::Exception);
 
     // XScriptInfo
-    virtual ::rtl::OUString SAL_CALL getLogicalName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setLogicalName( const ::rtl::OUString& name ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getDescription(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setDescription( const ::rtl::OUString& desc ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getLanguage(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getScriptLocation(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setLanguage( const ::rtl::OUString& language ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasSource(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getLanguageSpecificName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setLanguageSpecificName( const ::rtl::OUString& langName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getRoot(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getDependencies(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL extraProperties(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLogicalName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setLogicalName( const ::rtl::OUString& name )
+        throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getDescription()
+        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setDescription( const ::rtl::OUString& desc )
+        throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLanguage() throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getScriptLocation()
+        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setLanguage( const ::rtl::OUString& language )
+        throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasSource(  ) throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLanguageSpecificName()
+        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setLanguageSpecificName( const ::rtl::OUString& langName )
+        throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getRoot() throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getDependencies()
+        throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLocation() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL extraProperties()
+        throw (css::uno::RuntimeException);
     /**
         This function prepares the script for invocation and returns the full path
        to the prepared parcel folder
@@ -114,14 +128,15 @@ public:
         <type>::rtl::OUString</type> file URI to the prepared parcel
 
     */
-    virtual ::rtl::OUString SAL_CALL prepareForInvocation() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL prepareForInvocation()
+        throw (css::uno::RuntimeException);
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
+    css::uno::Reference< css::uno::XComponentContext> m_xContext;
 
     ::osl::Mutex     m_mutex;
 
-    ::drafts::com::sun::star::script::framework::storage::ScriptImplInfo m_scriptImplInfo;
+    dcsssf::storage::ScriptImplInfo m_scriptImplInfo;
     sal_uInt16 m_storageID;
 
 };

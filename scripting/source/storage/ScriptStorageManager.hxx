@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jmrice $ $Date: 2002-09-30 12:57:03 $
+ *  last change: $Author: npower $ $Date: 2002-10-01 10:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,41 +77,36 @@
 
 namespace scripting_impl
 {
+// for simplification
+#define css ::com::sun::star
+#define dcsssf ::drafts::com::sun::star::script::framework
 
 // Define a hash_map used to store the ScriptingStorages key;d by ID
-typedef ::std::hash_map <
-    sal_uInt16,
-    ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > >
+typedef ::std::hash_map < sal_uInt16, css::uno::Reference < css::uno::XInterface > >
     ScriptStorage_hash;
 
-class ScriptStorageManager :
-public ::cppu::WeakImplHelper3 <
- ::drafts::com::sun::star::script::framework::storage::XScriptStorageManager,
- ::com::sun::star::lang::XServiceInfo, ::com::sun::star::lang::XEventListener >
+class ScriptStorageManager : public
+    ::cppu::WeakImplHelper3 < dcsssf::storage::XScriptStorageManager,
+    css::lang::XServiceInfo, css::lang::XEventListener >
 {
 public:
     explicit ScriptStorageManager(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > & xContext )
-        SAL_THROW ( ( ::com::sun::star::uno::RuntimeException ) );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext )
+        SAL_THROW ( ( css::uno::RuntimeException ) );
 
 
     ~ScriptStorageManager() SAL_THROW ( () );
 
     // XServiceInfo implementation
     //======================================================================
-    virtual ::rtl::OUString SAL_CALL
-        getImplementationName()
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw(css::uno::RuntimeException);
     //----------------------------------------------------------------------
-    virtual sal_Bool SAL_CALL
-        supportsService(
-            const ::rtl::OUString& ServiceName )
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        throw(css::uno::RuntimeException);
     //----------------------------------------------------------------------
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        throw(css::uno::RuntimeException);
     //======================================================================
 
     //XScriptStorageManager
@@ -127,11 +122,9 @@ public:
         @returns an unsigned short ScriptStorage ID, which can be used in the
         getScriptStorage method
     */
-    virtual sal_uInt16 SAL_CALL
-        createScriptStorage(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::ucb::XSimpleFileAccess > & xSFA )
-            throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_uInt16 SAL_CALL createScriptStorage(
+            const css::uno::Reference< css::ucb::XSimpleFileAccess > & xSFA )
+            throw (css::uno::RuntimeException);
     //----------------------------------------------------------------------
     /**
         create a ScriptStorage using the XSimpleFileAccess, and a string URL
@@ -148,10 +141,9 @@ public:
     */
     virtual sal_uInt16 SAL_CALL
         createScriptStorageWithURI(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::ucb::XSimpleFileAccess >& xSFA,
+            const css::uno::Reference< css::ucb::XSimpleFileAccess >& xSFA,
             const ::rtl::OUString& stringURI )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (css::uno::RuntimeException);
     //----------------------------------------------------------------------
     /**
         get a ScriptStorage component using its scriptStorageID
@@ -164,46 +156,36 @@ public:
         @returns an XInterface to a component that implements the ScriptStorage
         service
     */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface > SAL_CALL
-        getScriptStorage( sal_uInt16 scriptStorageID )
-            throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getScriptStorage(
+        sal_uInt16 scriptStorageID )
+        throw (css::uno::RuntimeException);
     //======================================================================
 
 
     //XEventListener
     //======================================================================
-    virtual void SAL_CALL
-        disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw (::com::sun::star::uno::RuntimeException);
-
-    static const sal_uInt16 APP_SHARE_STORAGE_ID;
-    static const sal_uInt16 APP_USER_STORAGE_ID;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException);
 
 private:
     ScriptStorageManager(const ScriptStorageManager & );
     ScriptStorageManager& operator= (const ScriptStorageManager &);
 
     // to obtain other services if needed
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiComponentFactory > m_xMgr;
-    ::osl::Mutex     m_mutex;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
+    ::osl::Mutex m_mutex;
     ScriptStorage_hash m_ScriptStorageHash;
-    sal_uInt16  m_count;
+    sal_uInt16 m_count;
 
-    void setupAppStorage(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::util::XMacroExpander > & xME,
+    void setupAppStorage( const css::uno::Reference< css::util::XMacroExpander > & xME,
         const ::rtl::OUString & storageStr )
-        SAL_THROW ( ( ::com::sun::star::uno::RuntimeException ) );
+        SAL_THROW ( ( css::uno::RuntimeException ) );
 
     sal_uInt16 setupAnyStorage(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::ucb::XSimpleFileAccess> & xSFA,
+        const css::uno::Reference< css::ucb::XSimpleFileAccess> & xSFA,
         const ::rtl::OUString & storageStr )
-        SAL_THROW ( ( ::com::sun::star::uno::RuntimeException ) );
+        SAL_THROW ( ( css::uno::RuntimeException ) );
 
 };
 } // scripting_impl

@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptRuntimeManager.hxx,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:26 $
+*  last change: $Author: npower $ $Date: 2002-10-01 10:45:11 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -79,29 +79,30 @@
 
 namespace scripting_runtimemgr
 {
+// for simplification
+#define css ::com::sun::star
+#define dcsssf ::drafts::com::sun::star::script::framework
+
 /**
  * Class responsible for managing the various ScriptRuntime implementations.
  */
-class ScriptRuntimeManager :
-    public ::cppu::WeakImplHelper3<
-        ::drafts::com::sun::star::script::framework::XScriptInvocation,
-        ::com::sun::star::lang::XServiceInfo,
-        ::drafts::com::sun::star::script::framework::XScriptNameResolver >
+class ScriptRuntimeManager : public
+    ::cppu::WeakImplHelper3< dcsssf::XScriptInvocation, css::lang::XServiceInfo,
+    dcsssf::XScriptNameResolver >
 {
 public:
-    explicit ScriptRuntimeManager( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit ScriptRuntimeManager(
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
     ~ScriptRuntimeManager();
 
 
     // XServiceInfo implementation
-    virtual ::rtl::OUString SAL_CALL getImplementationName( )
-        throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw( css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-        throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-    getSupportedServiceNames( )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException );
 
     /**
      * implements XScriptInvocation, invokes the script named in scriptURI
@@ -137,17 +138,16 @@ public:
             rethrown as this exception type.
 
     */
-    virtual ::com::sun::star::uno::Any SAL_CALL invoke(
-        const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::script::framework::scripturi::XScriptURI > & scriptUri,
-        const ::com::sun::star::uno::Any& invocationCtx,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
-        ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam )
-        throw ( ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::script::CannotConvertException,
-                ::com::sun::star::reflection::InvocationTargetException,
-                ::com::sun::star::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL invoke(
+        const css::uno::Reference< dcsssf::scripturi::XScriptURI > & scriptUri,
+        const css::uno::Any& invocationCtx,
+        const css::uno::Sequence< css::uno::Any >& aParams,
+        css::uno::Sequence< sal_Int16 >& aOutParamIndex,
+        css::uno::Sequence< css::uno::Any >& aOutParam )
+        throw ( css::lang::IllegalArgumentException,
+                css::script::CannotConvertException,
+                css::reflection::InvocationTargetException,
+                css::uno::RuntimeException );
 
     /**
      * implements  XScriptNameResolver, attempts to resolve the script URI
@@ -161,28 +161,20 @@ public:
      same as the documentStorageID.
      * @return the resolved URI
      */
-    virtual ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::script::framework::scripturi::XScriptURI > SAL_CALL
-    resolve(
-        const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::script::framework::scripturi::XScriptURI >& scriptUri ,
-        ::com::sun::star::uno::Any& invocationCtx )
-    throw( ::com::sun::star::lang::IllegalArgumentException,
-           ::com::sun::star::script::CannotConvertException,
-           ::com::sun::star::uno::RuntimeException );
+    virtual css::uno::Reference< dcsssf::scripturi::XScriptURI > SAL_CALL resolve(
+        const css::uno::Reference< dcsssf::scripturi::XScriptURI >& scriptUri,
+        css::uno::Any& invocationCtx )
+        throw( css::lang::IllegalArgumentException, css::script::CannotConvertException,
+           css::uno::RuntimeException );
 
 private:
-    ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::script::framework::XScriptInvocation > SAL_CALL
-    getScriptRuntime( const ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::script::framework::scripturi::XScriptURI > & scriptUri )
-    throw( ::com::sun::star::uno::RuntimeException );
-    ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::script::framework::XScriptNameResolver > SAL_CALL
-    getScriptNameResolver() throw( ::com::sun::star::uno::RuntimeException );
-    // to obtain other services if needed
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        m_xContext;
+    css::uno::Reference< dcsssf::XScriptInvocation > SAL_CALL getScriptRuntime(
+        const css::uno::Reference< dcsssf::scripturi::XScriptURI > & scriptUri )
+        throw( css::uno::RuntimeException );
+    css::uno::Reference< dcsssf::XScriptNameResolver > SAL_CALL getScriptNameResolver()
+        throw( css::uno::RuntimeException );
+
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     ::osl::Mutex m_mutex;
 };
 } // scripting_runtimemgr
