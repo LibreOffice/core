@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 11:46:43 $
+ *  last change: $Author: os $ $Date: 2002-09-04 12:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,7 +580,7 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
     else
     {
         BOOL bFound = FALSE;
-        unsigned char cCh;
+        sal_Unicode cCh;
         USHORT nPos, nEndPos, nStartPos = (USHORT) aSelection.Min();
         if( nStartPos-- )
         {
