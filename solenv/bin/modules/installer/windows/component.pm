@@ -2,9 +2,9 @@
 #
 #   $RCSfile: component.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:56:29 $
+#   last change: $Author: vg $ $Date: 2005-02-24 16:22:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,7 +191,7 @@ sub get_file_component_attributes
 
     my $attributes;
 
-    $attributes = 8;
+    $attributes = 2;
 
     # special handling for font files
 
@@ -255,41 +255,6 @@ sub get_file_component_condition
     my ($componentname, $filesref) = @_;
 
     my $condition = "";
-
-    # Setting only a condition, if this is a multilingual installation set.
-    # This info is stored in the global variable $ismultilingual
-
-    if ( $installer::globals::ismultilingual )
-    {
-        my $found = 0;
-        my $onefile;
-
-        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-        {
-            $onefile =  ${$filesref}[$i];
-            my $component = $onefile->{'componentname'};
-
-            if ( $component eq $componentname )
-            {
-                $found = 1;
-                last;
-            }
-        }
-
-        if (!($found))
-        {
-            installer::exiter::exit_program("ERROR: Did not find component in file collection", "get_file_component_directory");
-        }
-
-        # Searching for multilingual files
-
-        if ( $onefile->{'ismultilingual'} )
-        {
-            my $officelanguage = $onefile->{'specificlanguage'};
-            my $windowslanguage = installer::windows::language::get_windows_language($officelanguage);  # converting to the Windows language
-            $condition = "IS" . $windowslanguage . "=1";     # Capitol letter "IS" !
-        }
-    }
 
     return $condition
 }
