@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrmediaobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:00:29 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,6 @@ namespace sdr
             // Create a Object-Specific ViewObjectContact, set ViewContact and
             // ObjectContact. Always needs to return something.
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
-
-            // Does this ViewContact support animation?
-            virtual sal_Bool SupportsAnimation() const;
 
             // get notified if some properties have changed
             virtual void mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
