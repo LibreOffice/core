@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-02 10:27:11 $
+ *  last change: $Author: mba $ $Date: 2000-11-03 12:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1407,13 +1407,35 @@ void SfxMedium::GetMedium_Impl()
         }
         else
         {
-            xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), STREAM_STD_READ, pHandler );
-            if ( xLockBytes.Is() && bSynchron )
-                xLockBytes->SetSynchronMode( sal_True );
+            SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
+            BOOL bAllowReadOnlyMode = pItem ? pItem->GetValue() : TRUE;
+            BOOL bIsWritable = ( nStorOpenMode & STREAM_WRITE );
+
+            // no callbacks for opening read/write because we might try readonly later
+            xLockBytes = ::utl::UcbLockBytes:: CreateLockBytes( GetContent(), nStorOpenMode, bIsWritable ? NULL : pHandler );
+            if ( ( !xLockBytes.Is() || xLockBytes->GetError() == ERRCODE_IO_NOTEXISTS )
+                    && bIsWritable && bAllowReadOnlyMode )
+            {
+                // later error code will be corrected to ERRCODE_ACCESS_DENIED !
+                xLockBytes = ::utl::UcbLockBytes:: CreateLockBytes( GetContent(), nStorOpenMode, pHandler );
+                QueryBox aBox( 0, SfxResId(MSG_OPEN_READONLY) );
+                BOOL bSilent = TRUE;    // don't ask at the moment
+                if ( bSilent || RET_YES == aBox.Execute() )
+                {
+                    GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                    SetOpenMode(SFX_STREAM_READONLY, sal_False);
+                    ResetError();
+                    xLockBytes = ::utl::UcbLockBytes:: CreateLockBytes( GetContent(), nStorOpenMode, pHandler );
+                }
+            }
+            else
+                Done_Impl( xLockBytes->GetError() );
         }
 
         if ( xLockBytes.Is() )
         {
+            if ( bSynchron )
+                xLockBytes->SetSynchronMode( sal_True );
             pImp->pCancellable = new UcbLockBytesCancellable_Impl( xLockBytes, pImp->GetCancelManager(), aLogicName );
             pInStream = new SvStream( xLockBytes );
             pImp->bStreamReady = sal_True;
@@ -1426,7 +1448,7 @@ void SfxMedium::GetMedium_Impl()
 
     // Download complete happened while pInStream was constructed
     if ( pImp->bDownloadDone )
-        Done_Impl(0);
+        Done_Impl( GetError() );
 
 #ifdef OLD_CODE_FOR_POSTING
 
@@ -1644,6 +1666,7 @@ SfxMedium::SfxMedium()
 :   IMPL_CTOR(),
     bRoot( sal_False ),
     pURLObj(0),
+
     pSet(0),
     pImp(new SfxMedium_Impl( this )),
     pFilter(0)
@@ -2063,151 +2086,6 @@ sal_Bool SfxMedium::IsExpired() const
 }
 //----------------------------------------------------------------
 
-ErrCode SfxMedium::CheckOpenMode_Impl( sal_Bool bSilent, sal_Bool bAllowModeChange )
-{
-    sal_uInt32 nErr = 0;
-    switch( GetURLObject().GetProtocol() )
-    {
-        case INET_PROT_FILE:
-        {
-            Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_IS_FOLDER ) );
-            sal_Bool bIsFolder = FALSE;
-            if ( ( aAny >>= bIsFolder ) && bIsFolder )
-                break;
-#if 0       // Don't use FSYS !!!!
-            // first check if file is a directory
-            if ( IsDirectory )
-                return ERRCODE_IO_NOTEXISTS;
-#endif
-            sal_Bool bTriesCopy(sal_False);
-            sal_Bool bReadOnly = GetOpenMode() == SFX_STREAM_READONLY;
-            if( !bReadOnly )
-            {
-                // Fuer MS und FL und Konsorten noch ueber die
-                // Dokumente huehnern wg. w95 Bug auf Netware-Servern
-                // bereits zum Schreiben ge"offnete Dokumente lassen sich
-                // nochmal zum Schreiben "offnen
-                for( SfxObjectShell* pFirst = SfxObjectShell::GetFirst();
-                     pFirst; pFirst = SfxObjectShell::GetNext( *pFirst ) )
-                {
-                    SfxMedium* pMed = pFirst->GetMedium();
-                    if( pMed->GetName() == GetName() && pMed->GetOpenMode() != SFX_STREAM_READONLY )
-                    {
-                        // ggf. r/o oeffnen
-                        if ( bAllowModeChange )
-                        {
-                            bReadOnly = sal_True;
-                            GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
-                            SetOpenMode(SFX_STREAM_READONLY, sal_False);
-                        }
-                        else
-                            nErr = ERRCODE_IO_ACCESSDENIED;
-                        break;
-                    }
-                }
-            }
-            while(1)
-            {
-                // erst der Zugriff auf den Storage erzeugt den Fehlercode
-                SvStorageRef aStor;
-                GetInStream();
-                if( aStor.Is() && bReadOnly && !bTriesCopy && !pImp->bIsTemp )
-                {
-                    SfxApplication *pSfxApp = SFX_APP();
-                    const SfxFilter* pFilter = pSfxApp->GetFilterMatcher().
-                            GetFilter4ClipBoardId( aStor->GetFormat() );
-                    if ( pFilter )
-                        pFilter = pSfxApp->GetFilterMatcher().
-                            ResolveRedirection( pFilter, *this );
-                    // Eigenes Storageformat readonly per Kopie oeffnen
-                    if( pFilter && pFilter->IsOwnFormat() )
-                    {
-                        nErr = ERRCODE_IO_ACCESSDENIED;
-                        Close();
-                    }
-                    else nErr = GetError();
-                }
-                else nErr = GetError();
-                switch ( nErr )
-                {
-                    default: return nErr;
-                    case ERRCODE_IO_LOCKVIOLATION:
-                        // Wg. Win95 Netware
-                    case ERRCODE_IO_NOTEXISTS:
-                    case ERRCODE_IO_ACCESSDENIED:
-                    {
-                        // Zur Zeit soll nicht nachgefragt werden
-                        bSilent = sal_True;
-                        if(!bReadOnly )
-                        {
-                            if( bAllowModeChange )
-                            {
-                                QueryBox aBox( 0, SfxResId(MSG_OPEN_READONLY) );
-                                if ( bSilent || RET_YES == aBox.Execute() )
-                                {
-                                    bReadOnly = sal_True;
-                                    if( GetItemSet() )
-                                        GetItemSet()->Put(
-                                            SfxBoolItem(SID_DOC_READONLY, sal_True));
-                                    SetOpenMode(SFX_STREAM_READONLY, sal_False);
-                                    ResetError();
-                                }
-                                else
-                                    return ERRCODE_ABORT;
-                            }
-                            else
-                                return nErr;
-                        }
-                        else
-                        {
-                            if( !bTriesCopy )
-                            {
-                                String aOldName( aName );
-                                CreateTempFile();
-                                if ( !SfxContentHelper::CopyTo( aOldName, aName ) )
-                                    nErr = ERRCODE_IO_GENERAL;
-                                ResetError();
-                                pImp->bIsTemp = sal_True;
-                                bTriesCopy = sal_True;
-                                CloseInStream_Impl();
-                            }
-                            else
-                                return nErr;
-                        }
-                    }
-                }
-            }
-            break;
-        }
-
-        case INET_PROT_DATA:
-        case INET_PROT_PRIVATE:
-        {
-            // Images und Docinfo nicht editieren
-            const INetURLObject& rObj = GetURLObject();
-            String aPath = rObj.GetURLPath();
-            if( rObj.GetProtocol() == INET_PROT_PRIVATE  &&
-                aPath.CompareIgnoreCaseToAscii( "image/", 6 ) !=
-                COMPARE_EQUAL &&
-                aPath.CompareIgnoreCaseToAscii( "docinfo/", 8 ) !=
-                COMPARE_EQUAL &&
-                aPath.CompareIgnoreCaseToAscii( "info/", 5 ) !=
-                COMPARE_EQUAL )
-                return 0;
-
-            if( GetOpenMode() & STREAM_WRITE )
-            {
-                if( bAllowModeChange )
-                    SetOpenMode(SFX_STREAM_READONLY, sal_False);
-                else
-                    return ERRCODE_IO_ACCESSDENIED;
-            }
-        }
-    }
-    return nErr;
-}
-//----------------------------------------------------------------
-
 void SfxMedium::ForceSynchronStream_Impl( sal_Bool bForce )
 {
     if( pInStream )
@@ -2511,7 +2389,7 @@ sal_Bool SfxMedium::IsReadOnly()
 */
     if ( !bReadOnly )
     {
-        // lo.Isch readonly ge"offnet
+        // logisch readonly ge"offnet
         SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
         if ( pItem )
             bReadOnly = pItem->GetValue();
