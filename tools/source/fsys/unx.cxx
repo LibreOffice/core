@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:04 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,13 +519,6 @@ FileStat::FileStat( const void *, const void * ):
 |*    Letzte Aenderung  MA 07.11.91
 |*
 *************************************************************************/
-#if SUPD < 345
-BOOL FileStat::Update( const DirEntry& rDirEntry )
-{
-    return Update( rDirEntry, FALSE );
-}
-#endif
-
 BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bAccessRemovableDevice )
 {
 
