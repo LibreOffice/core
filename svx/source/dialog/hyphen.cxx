@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 09:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,8 @@
 #include <tools/list.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_XPOSSIBLEHYPHENSSUPPLIER_HPP_
-#include <com/sun/star/linguistic/XPossibleHyphensSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XPOSSIBLEHYPHENS_HPP_
-#include <com/sun/star/linguistic/XPossibleHyphens.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XPOSSIBLEHYPHENS_HPP_
+#include <com/sun/star/linguistic2/XPossibleHyphens.hpp>
 #endif
 
 #ifndef _SV_MSGBOX_HXX
@@ -97,11 +94,12 @@
 #ifndef _USR_USTRING_HXX
 //#include <usr/ustring.hxx>
 #endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::linguistic;
+using namespace ::com::sun::star::linguistic2;
 
 #define S2U(s)                      StringToOUString(s, CHARSET_SYSTEM)
 #define U2S(s)                      OUStringToString(s, CHARSET_SYSTEM)
@@ -240,7 +238,6 @@ void SvxHyphenWordDialog::SelLeft()
     }
     nHyphPos = GetHyphIndex_Impl();
     EnableLRBtn_Impl();
-    //EnableCutBtn_Impl();
 }
 
 // -----------------------------------------------------------------------
@@ -266,29 +263,8 @@ void SvxHyphenWordDialog::SelRight()
     }
     nHyphPos = GetHyphIndex_Impl();
     EnableLRBtn_Impl();
-    //EnableCutBtn_Impl();
 }
 
-// -----------------------------------------------------------------------
-
-
-#ifdef NOT_YET
-// not used right no anymore
-void SvxHyphenWordDialog::EnableCutBtn_Impl()
-{
-    String  aStr( aWordEdit.GetText() );
-
-    sal_Bool bEnable = sal_False;
-
-    if (xPossHyph.is()  &&  aStr[nOldPos] == HYPHHERE)
-    {
-        if (nHyphPos - 1 <= nMaxHyphenationPos)
-            bEnable = sal_True;
-    }
-
-    aOkBtn.Enable( bEnable );
-}
-#endif
 // -----------------------------------------------------------------------
 
 void SvxHyphenWordDialog::EnableLRBtn_Impl()
@@ -350,7 +326,7 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
         aTxt = String( rxPossHyph->getPossibleHyphens() );
 
         Sequence< sal_Int16 > aHyphenationPositions(
-                rxPossHyph->getOrigHyphensPositions() );
+                rxPossHyph->getHyphenationPositions() );
         sal_Int32 nLen = aHyphenationPositions.getLength();
         const sal_Int16 *pHyphenationPos = aHyphenationPositions.getConstArray();
 
@@ -395,14 +371,13 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
 
 void SvxHyphenWordDialog::InitControls_Impl()
 {
-    Reference< XPossibleHyphensSupplier >  xSupp( xHyphenator, UNO_QUERY );
-
     String aTxt;
     xPossHyph = NULL;
-    if (xSupp.is())
+    if (xHyphenator.is())
     {
         lang::Locale aLocale( SvxCreateLocale(nActLanguage) );
-        xPossHyph = xSupp->createPossibleHyphens( aActWord, aLocale );
+        xPossHyph = xHyphenator->createPossibleHyphens( aActWord, aLocale,
+                                                        Sequence< PropertyValue >() );
         if (xPossHyph.is())
         {
             aTxt = EraseUnusableHyphens_Impl( xPossHyph, nMaxHyphenationPos );
@@ -437,7 +412,7 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_uInt16 nInsPos )
                     nIdxPos++;
             }
 
-            Sequence< sal_Int16 > aSeq = xPossHyph->getOrigHyphensPositions();
+            Sequence< sal_Int16 > aSeq = xPossHyph->getHyphenationPositions();
             sal_Int32 nLen = aSeq.getLength();
             DBG_ASSERT(nLen, "empty sequence");
             DBG_ASSERT(nIdxPos < nLen, "index out of range");

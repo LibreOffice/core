@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 09:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,10 @@
 // forward ---------------------------------------------------------------
 
 namespace com{namespace sun{namespace star{
-namespace linguistic{
+namespace linguistic2{
     class XHyphenator;
     class XPossibleHyphens;
-    }}}}
+}}}}
 
 class SvxSpellWrapper;
 
@@ -106,7 +106,9 @@ class SvxHyphenWordDialog : public SfxModalDialog
 {
 public:
     SvxHyphenWordDialog( const String &rWord, LanguageType nLang,
-                         Window* pParent, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XHyphenator >  &xHyphen,
+                         Window* pParent,
+                         ::com::sun::star::uno::Reference<
+                             ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
                          SvxSpellWrapper* pWrapper );
 
     void            SelLeft();
@@ -124,8 +126,10 @@ private:
     HelpButton          aHelpBtn;
     String              aLabel;
     SvxSpellWrapper*    pHyphWrapper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XHyphenator >       xHyphenator;
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XPossibleHyphens >  xPossHyph;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XHyphenator >        xHyphenator;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XPossibleHyphens >   xPossHyph;
     String              aActWord;       // actual (to be displayed) word
     LanguageType        nActLanguage;   // and language
     sal_uInt16              nMaxHyphenationPos; // right most valid hyphenation pos
@@ -137,8 +141,10 @@ private:
     void            EnableLRBtn_Impl();
     //void          EnableCutBtn_Impl();
     void            SetLabel_Impl( LanguageType nLang );
-    String          EraseUnusableHyphens_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XPossibleHyphens >  &rxPossHyph,
-                            sal_uInt16 nMaxHyphenationPos );
+    String          EraseUnusableHyphens_Impl(
+                        ::com::sun::star::uno::Reference<
+                            ::com::sun::star::linguistic2::XPossibleHyphens >  &rxPossHyph,
+                        sal_uInt16 nMaxHyphenationPos );
 
     void            InitControls_Impl();
     void            ContinueHyph_Impl( sal_uInt16 nInsPos = 0 );
