@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSelectionBase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-06 10:15:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
@@ -131,9 +131,9 @@ namespace accessibility
 
     //--------------------------------------------------------------------
 
-    void SAL_CALL AccessibleSelectionBase::deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    void SAL_CALL AccessibleSelectionBase::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( implGetMutex() );
-        OCommonAccessibleSelection::deselectSelectedAccessibleChild( nSelectedChildIndex );
+        OCommonAccessibleSelection::deselectAccessibleChild( nSelectedChildIndex );
     }
 };
