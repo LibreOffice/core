@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshcol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-06 17:37:38 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 11:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_DOCUMENT_EVENTOBJECT_HPP_
+#include <com/sun/star/document/EventObject.hpp>
+#endif
+
 #include "unoshcol.hxx"
 #include "unoprov.hxx"
 
@@ -74,7 +78,7 @@ using namespace ::com::sun::star::drawing;
 *                                                                      *
 ***********************************************************************/
 SvxShapeCollection::SvxShapeCollection() throw()
-: maShapeContainer( maShapeContainerMutex )
+: maShapeContainer( maMutex ), mrBHelper( maMutex )
 {
 }
 
@@ -90,6 +94,117 @@ Reference< uno::XInterface > SvxShapeCollection_NewInstance() throw()
     Reference< drawing::XShapes > xShapes( new SvxShapeCollection() );
     Reference< uno::XInterface > xRef( xShapes, UNO_QUERY );
     return xRef;
+}
+
+// XInterface
+void SvxShapeCollection::release() throw()
+{
+    uno::Reference< uno::XInterface > x( xDelegator );
+    if (! x.is())
+    {
+        if (osl_decrementInterlockedCount( &m_refCount ) == 0)
+        {
+            if (! mrBHelper.bDisposed)
+            {
+                uno::Reference< uno::XInterface > xHoldAlive( (uno::XWeak*)this );
+                // First dispose
+                try
+                {
+                    dispose();
+                }
+                catch(::com::sun::star::uno::Exception&)
+                {
+                    // release should not throw exceptions
+                }
+
+                // only the alive ref holds the object
+                OSL_ASSERT( m_refCount == 1 );
+                // destroy the object if xHoldAlive decrement the refcount to 0
+                return;
+            }
+        }
+        // restore the reference count
+        osl_incrementInterlockedCount( &m_refCount );
+    }
+    OWeakAggObject::release();
+}
+
+// XComponent
+void SvxShapeCollection::disposing() throw()
+{
+    maShapeContainer.clear();
+}
+
+// XComponent
+void SvxShapeCollection::dispose()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    // An frequently programming error is to release the last
+    // reference to this object in the disposing message.
+    // Make it rubust, hold a self Reference.
+    uno::Reference< lang::XComponent > xSelf( this );
+
+    // Guard dispose against multible threading
+    // Remark: It is an error to call dispose more than once
+    sal_Bool bDoDispose = sal_False;
+    {
+    osl::MutexGuard aGuard( mrBHelper.rMutex );
+    if( !mrBHelper.bDisposed && !mrBHelper.bInDispose )
+    {
+        // only one call go into this section
+        mrBHelper.bInDispose = sal_True;
+        bDoDispose = sal_True;
+    }
+    }
+
+    // Do not hold the mutex because we are broadcasting
+    if( bDoDispose )
+    {
+        // Create an event with this as sender
+        try
+        {
+            uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( (lang::XComponent *)this ) );
+            document::EventObject aEvt;
+            aEvt.Source = xSource;
+            // inform all listeners to release this object
+            // The listener container are automaticly cleared
+            mrBHelper.aLC.disposeAndClear( aEvt );
+            // notify subclasses to do their dispose
+            disposing();
+        }
+        catch(::com::sun::star::uno::Exception& e)
+        {
+            // catch exception and throw again but signal that
+            // the object was disposed. Dispose should be called
+            // only once.
+            mrBHelper.bDisposed = sal_True;
+            mrBHelper.bInDispose = sal_False;
+            throw e;
+        }
+
+        // the values bDispose and bInDisposing must set in this order.
+        // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
+        mrBHelper.bDisposed = sal_True;
+        mrBHelper.bInDispose = sal_False;
+    }
+    else
+    {
+        // in a multithreaded environment, it can't be avoided, that dispose is called twice.
+        // However this condition is traced, because it MAY indicate an error.
+        OSL_TRACE( "OComponentHelper::dispose() - dispose called twice" );
+    }
+}
+
+// XComponent
+void SAL_CALL SvxShapeCollection::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
+{
+    mrBHelper.addListener( ::getCppuType( &aListener ) , aListener );
+}
+
+// XComponent
+void SAL_CALL SvxShapeCollection::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
+{
+    mrBHelper.removeListener( ::getCppuType( &aListener ) , aListener );
 }
 
 // XShapes
