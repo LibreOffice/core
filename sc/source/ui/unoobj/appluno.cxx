@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:41:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,10 +255,10 @@ static void lcl_WriteInfo( registry::XRegistryKey* pRegistryKey,
                         const uno::Sequence< rtl::OUString >& rServices )
                     throw( registry::InvalidRegistryException )
 {
-    rtl::OUString aImpl = rtl::OUString::createFromAscii( "/" );
+    rtl::OUString aImpl(rtl::OUString::createFromAscii( "/" ));
     aImpl += rImplementationName;
     aImpl += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
-    uno::Reference<registry::XRegistryKey> xNewKey = pRegistryKey->createKey(aImpl);
+    uno::Reference<registry::XRegistryKey> xNewKey(pRegistryKey->createKey(aImpl));
 
     const rtl::OUString* pArray = rServices.getConstArray();
     for( sal_Int32 i = 0; i < rServices.getLength(); i++ )
@@ -385,84 +385,84 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         return NULL;
 
     uno::Reference<lang::XSingleServiceFactory> xFactory;
-    rtl::OUString aImpl = rtl::OUString::createFromAscii(pImplName);
+    rtl::OUString aImpl(rtl::OUString::createFromAscii(pImplName));
 
     if ( aImpl == ScSpreadsheetSettings::getImplementationName_Static() )
-        xFactory = cppu::createOneInstanceFactory(
+        xFactory.set(cppu::createOneInstanceFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScSpreadsheetSettings::getImplementationName_Static(),
                 ScSpreadsheetSettings_CreateInstance,
-                ScSpreadsheetSettings::getSupportedServiceNames_Static() );
+                ScSpreadsheetSettings::getSupportedServiceNames_Static() ));
 
     if ( aImpl == ScRecentFunctionsObj::getImplementationName_Static() )
-        xFactory = cppu::createOneInstanceFactory(
+        xFactory.set(cppu::createOneInstanceFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScRecentFunctionsObj::getImplementationName_Static(),
                 ScRecentFunctionsObj_CreateInstance,
-                ScRecentFunctionsObj::getSupportedServiceNames_Static() );
+                ScRecentFunctionsObj::getSupportedServiceNames_Static() ));
 
     if ( aImpl == ScFunctionListObj::getImplementationName_Static() )
-        xFactory = cppu::createOneInstanceFactory(
+        xFactory.set(cppu::createOneInstanceFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScFunctionListObj::getImplementationName_Static(),
                 ScFunctionListObj_CreateInstance,
-                ScFunctionListObj::getSupportedServiceNames_Static() );
+                ScFunctionListObj::getSupportedServiceNames_Static() ));
 
     if ( aImpl == ScAutoFormatsObj::getImplementationName_Static() )
-        xFactory = cppu::createOneInstanceFactory(
+        xFactory.set(cppu::createOneInstanceFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScAutoFormatsObj::getImplementationName_Static(),
                 ScAutoFormatsObj_CreateInstance,
-                ScAutoFormatsObj::getSupportedServiceNames_Static() );
+                ScAutoFormatsObj::getSupportedServiceNames_Static() ));
 
     if ( aImpl == ScFunctionAccess::getImplementationName_Static() )
-        xFactory = cppu::createOneInstanceFactory(
+        xFactory.set(cppu::createOneInstanceFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScFunctionAccess::getImplementationName_Static(),
                 ScFunctionAccess_CreateInstance,
-                ScFunctionAccess::getSupportedServiceNames_Static() );
+                ScFunctionAccess::getSupportedServiceNames_Static() ));
 
     if ( aImpl == ScFilterOptionsObj::getImplementationName_Static() )
-        xFactory = cppu::createSingleFactory(
+        xFactory.set(cppu::createSingleFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScFilterOptionsObj::getImplementationName_Static(),
                 ScFilterOptionsObj_CreateInstance,
-                ScFilterOptionsObj::getSupportedServiceNames_Static() );
+                ScFilterOptionsObj::getSupportedServiceNames_Static() ));
 
     if ( aImpl == ScXMLImport_getImplementationName() )
-        xFactory = cppu::createSingleFactory(
+        xFactory.set(cppu::createSingleFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScXMLImport_getImplementationName(),
                 ScXMLImport_createInstance,
-                ScXMLImport_getSupportedServiceNames() );
+                ScXMLImport_getSupportedServiceNames() ));
 
     if ( aImpl == ScXMLImport_Meta_getImplementationName() )
-        xFactory = cppu::createSingleFactory(
+        xFactory.set(cppu::createSingleFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScXMLImport_Meta_getImplementationName(),
                 ScXMLImport_Meta_createInstance,
-                ScXMLImport_Meta_getSupportedServiceNames() );
+                ScXMLImport_Meta_getSupportedServiceNames() ));
 
     if ( aImpl == ScXMLImport_Styles_getImplementationName() )
-        xFactory = cppu::createSingleFactory(
+        xFactory.set(cppu::createSingleFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScXMLImport_Styles_getImplementationName(),
                 ScXMLImport_Styles_createInstance,
-                ScXMLImport_Styles_getSupportedServiceNames() );
+                ScXMLImport_Styles_getSupportedServiceNames() ));
 
     if ( aImpl == ScXMLImport_Content_getImplementationName() )
-        xFactory = cppu::createSingleFactory(
+        xFactory.set(cppu::createSingleFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScXMLImport_Content_getImplementationName(),
                 ScXMLImport_Content_createInstance,
-                ScXMLImport_Content_getSupportedServiceNames() );
+                ScXMLImport_Content_getSupportedServiceNames() ));
 
     if ( aImpl == ScXMLImport_Settings_getImplementationName() )
-        xFactory = cppu::createSingleFactory(
+        xFactory.set(cppu::createSingleFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScXMLImport_Settings_getImplementationName(),
                 ScXMLImport_Settings_createInstance,
-                ScXMLImport_Settings_getSupportedServiceNames() );
+                ScXMLImport_Settings_getSupportedServiceNames() ));
 
     if ( aImpl == ScXMLOOoExport_getImplementationName() )
         xFactory = cppu::createSingleFactory(
@@ -505,28 +505,24 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                 ScXMLOasisExport_getImplementationName(),
                 ScXMLOasisExport_createInstance,
                 ScXMLOasisExport_getSupportedServiceNames() );
-
     if ( aImpl == ScXMLOasisExport_Meta_getImplementationName() )
         xFactory = cppu::createSingleFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScXMLOasisExport_Meta_getImplementationName(),
                 ScXMLOasisExport_Meta_createInstance,
                 ScXMLOasisExport_Meta_getSupportedServiceNames() );
-
     if ( aImpl == ScXMLOasisExport_Styles_getImplementationName() )
         xFactory = cppu::createSingleFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScXMLOasisExport_Styles_getImplementationName(),
                 ScXMLOasisExport_Styles_createInstance,
                 ScXMLOasisExport_Styles_getSupportedServiceNames() );
-
     if ( aImpl == ScXMLOasisExport_Content_getImplementationName() )
         xFactory = cppu::createSingleFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScXMLOasisExport_Content_getImplementationName(),
                 ScXMLOasisExport_Content_createInstance,
                 ScXMLOasisExport_Content_getSupportedServiceNames() );
-
     if ( aImpl == ScXMLOasisExport_Settings_getImplementationName() )
         xFactory = cppu::createSingleFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
@@ -535,11 +531,11 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                 ScXMLOasisExport_Settings_getSupportedServiceNames() );
 
     if ( aImpl == ScDocument_getImplementationName() )
-        xFactory = cppu::createSingleFactory(
+        xFactory.set(cppu::createSingleFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScDocument_getImplementationName(),
                 ScDocument_createInstance,
-                ScDocument_getSupportedServiceNames() );
+                ScDocument_getSupportedServiceNames() ));
 
 
     void* pRet = NULL;
@@ -569,7 +565,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
 {
     ScUnoGuard aGuard;
     ScDLL::Init();
-    static uno::Reference<uno::XInterface> xInst = (cppu::OWeakObject*)new ScSpreadsheetSettings();
+    static uno::Reference<uno::XInterface> xInst((cppu::OWeakObject*)new ScSpreadsheetSettings());
     return xInst;
 }
 
@@ -592,8 +588,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSpreadsheetSettings::getPrope
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -604,11 +600,11 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
 
     ScModule* pScMod = SC_MOD();
-    ScAppOptions   aAppOpt = pScMod->GetAppOptions();
-    ScInputOptions aInpOpt = pScMod->GetInputOptions();
+    ScAppOptions   aAppOpt(pScMod->GetAppOptions());
+    ScInputOptions aInpOpt(pScMod->GetInputOptions());
     BOOL bSaveApp = FALSE;
     BOOL bSaveInp = FALSE;
     // print options aren't loaded until needed
@@ -728,13 +724,13 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     }
     else if (aString.EqualsAscii( SC_UNONAME_PRALLSH ))
     {
-        ScPrintOptions aPrintOpt = pScMod->GetPrintOptions();
+        ScPrintOptions aPrintOpt(pScMod->GetPrintOptions());
         aPrintOpt.SetAllSheets( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         pScMod->SetPrintOptions( aPrintOpt );
     }
     else if (aString.EqualsAscii( SC_UNONAME_PREMPTY ))
     {
-        ScPrintOptions aPrintOpt = pScMod->GetPrintOptions();
+        ScPrintOptions aPrintOpt(pScMod->GetPrintOptions());
         aPrintOpt.SetSkipEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );    // reversed
         pScMod->SetPrintOptions( aPrintOpt );
         SFX_APP()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );    // update previews
@@ -795,7 +791,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const rtl::OUString& 
             rtl::OUString* pAry = aSeq.getArray();
             for (USHORT i=0; i<nCount; i++)
             {
-                String aEntry = (*pUserList)[i]->GetString();
+                String aEntry((*pUserList)[i]->GetString());
                 pAry[i] = aEntry;
             }
             aRet <<= aSeq;
@@ -828,7 +824,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
 {
     ScUnoGuard aGuard;
     ScDLL::Init();
-    static uno::Reference<uno::XInterface> xInst = (cppu::OWeakObject*)new ScRecentFunctionsObj();
+    static uno::Reference<uno::XInterface> xInst((cppu::OWeakObject*)new ScRecentFunctionsObj());
     return xInst;
 }
 
@@ -909,7 +905,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
 {
     ScUnoGuard aGuard;
     ScDLL::Init();
-    static uno::Reference<uno::XInterface> xInst = (cppu::OWeakObject*)new ScFunctionListObj();
+    static uno::Reference<uno::XInterface> xInst((cppu::OWeakObject*)new ScFunctionListObj());
     return xInst;
 }
 
@@ -1007,7 +1003,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameStr = aName;
+    String aNameStr(aName);
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
@@ -1020,9 +1016,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const rtl::OUString& aName )
             {
                 uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
                 lcl_FillSequence( aSeq, *pDesc );
-                uno::Any aAny;
-                aAny <<= aSeq;
-                return aAny;
+                return uno::makeAny(aSeq);
             }
         }
 
@@ -1061,9 +1055,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
             {
                 uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
                 lcl_FillSequence( aSeq, *pDesc );
-                uno::Any aAny;
-                aAny <<= aSeq;
-                return aAny;
+                return uno::makeAny(aSeq);
             }
         }
 
@@ -1122,7 +1114,7 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const rtl::OUString& aName )
                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameStr = aName;
+    String aNameStr(aName);
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
