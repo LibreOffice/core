@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: obo $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ public class AccessibleEditableTextPara extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println( "    disposing xSheetDoc " );
-        xSpreadsheetDoc.dispose();
+        util.DesktopTools.closeDoc(xSpreadsheetDoc);
     }
 
     /**
