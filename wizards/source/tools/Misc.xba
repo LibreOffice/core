@@ -78,8 +78,8 @@ Dim aLocLocale As New com.sun.star.lang.Locale
 Dim sLocale as String
 Dim sLocaleList(1)
 Dim oMasterKey
-	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.UserProfile/International/&quot;)
-	sLocale = oMasterKey.getByName(&quot;Locale&quot;)
+	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Setup/L10N/&quot;)
+	sLocale = oMasterKey.getByName(&quot;ooLocale&quot;)
 	sLocaleList() = ArrayoutofString(sLocale, &quot;-&quot;)
 	aLocLocale.Language = sLocaleList(0)
 	If Ubound(sLocaleList()) &gt; 0 Then
@@ -101,11 +101,12 @@ End Function
 
 Function GetProductname() as String
 Dim oProdNameAccess as Object
+Dim omyNames(100) as Object
 Dim sVersion as String
 Dim sProdName as String
 	oProdNameAccess = GetRegistryKeyContent(&quot;org.openoffice.Setup/Product&quot;)
-	sProdName = oProdNameAccess.getByName(&quot;Name&quot;)
-	sVersion = oProdNameAccess.getByName(&quot;Version&quot;)
+	sProdName = oProdNameAccess.getByName(&quot;ooName&quot;)
+	sVersion = oProdNameAccess.getByName(&quot;ooSetupVersion&quot;)
 	GetProductName = sProdName &amp; &quot;.&quot; &amp; sVersion
 End Function
 

@@ -158,7 +158,7 @@ End Function
 
 
 Sub GetFolderName(oRefModel as Object)
-Dim oFolderDialog
+Dim oFolderDialog as Object
 Dim iAccept as Integer
 Dim sPath as String
 Dim InitPath as String
@@ -187,11 +187,11 @@ Dim sPath as String
 Dim InitPath as String
 Dim RefControlName as String
 Dim oUcb as object
-Dim ListAny(0)
+&apos;Dim ListAny(0)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	oFileDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FilePicker&quot;)
-	ListAny(0) = com.sun.star.ui.dialogs.TemplateDescription.FILEOPEN_SIMPLE
-	oFileDialog.Initialize(ListAny())
+	&apos;ListAny(0) = com.sun.star.ui.dialogs.TemplateDescription.FILEOPEN_SIMPLE
+	&apos;oFileDialog.initialize(ListAny())
 	AddFiltersToDialog(FilterNames(), oFileDialog)
 
 	InitPath = ConvertToUrl(oRefModel.Text)
