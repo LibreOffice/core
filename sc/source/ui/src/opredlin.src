@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 00:30:04 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 23:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ chinese_traditional ] = "²Ύ°Κ(~M)";
         Text[ arabic ] = "ΕÒΗΝΗΚ";
         Text[ greek ] = "Μετακινήσεις";
-        Text[ korean ] = "ΐΜµΏ(~M)";
+        Text[ korean ] = "ΐΜµΏ";
         Text[ turkish ] = "~Taώύnan giriώler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Desplazamientos";
@@ -202,7 +202,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ chinese_traditional ] = "±m¦βΕγ¥άΕά§σªΊ³΅¤ΐ";
         Text[ arabic ] = "αζδ ΗαΚΫννΡΗΚ";
         Text[ greek ] = "Χρώματα των αλλαγών";
-        Text[ korean ] = "Ί―°ζΐΗ »φ»σ";
+        Text[ korean ] = "Ί―°ζ »φ»σ";
         Text[ turkish ] = "Deπiώiklikleri gφsteren renkler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Colores para las modificaciones";
@@ -263,6 +263,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ finnish ] = "Laatija";
     };
 };
+
 
 
 
