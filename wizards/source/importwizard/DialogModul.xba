@@ -8,6 +8,7 @@ Public Const SBFIRSTAPPLCHECKED = 0
 Public Const SBSECONDAPPLCHECKED = 1
 Public Const SBTHIRDAPPLCHECKED = 2
 Public Const SBFOURTHAPPLCHECKED = 3
+Public bFilterTracingAvailable as Boolean
 Public WizardMode as String
 Public Const SBMICROSOFTMODE = &quot;MS&quot;
 Public Const SBXMLMODE = &quot;SO&quot;
@@ -29,8 +30,12 @@ Public ApplCount as Integer
 Public sKeyName(SBMAXAPPLCOUNT-1) as String
 Public sValueName(SBMAXAPPLCOUNT-1) as String
 Public sCRLF as String
-Public MSFilterName(5,2) as String
-Public XMLFilterName(7,2) as String
+Public MSFilterName(5,4) as String
+Public XMLFilterName(7,3) as String
+Public FilterTracingLogPath(2) as String
+Public bMSApplFilterTracingAvailable(2) as String
+Public bTakeOverTargetName(2) as Boolean
+Public bTakeOverPathName(2) as Boolean
 
 &apos; e.g.:
 &apos; XMLFilterName(x,0) = &quot;sdw&quot; 						&apos; in documents we take the extensions; in SO-templates the appropriate Filtername
@@ -111,10 +116,6 @@ Dim oNullObject as Object
 		Else
 			SetupXMLConfiguration()
 		End If
-		&apos; chkTemplatePath-Captions
-		GetApplResourceArray(1009 + iApplSection, ApplCount, sTemplateCheckBox())
-		&apos; DocumentCheckbox- Captions
-		GetApplResourceArray(1009 + iApplSection + ApplCount, ApplCount, sDocumentCheckBox())
 		FillUpApplicationList()
 	End If
 	CurOffice = OfficeIndex
@@ -254,6 +255,7 @@ Dim Index as Integer
 Dim sAddText as String
 	For i = 0 To ApplCount -1
 		Index = Applications(i,SBAPPLKEY)
+		GetFilterTracingLogPath(i, Index)
 		If 	Applications(i,SBTEMPLCONVERT) Then
 			&apos; Templates are to be converted
 			sAddText = &quot;&quot;
@@ -328,11 +330,57 @@ Sub FillStep_Progress()
 End Sub
 
 
+Sub GetFilterTracingLogPath(i as Integer, Index as Integer)
+Dim aNodePath(0) as new com.sun.star.beans.PropertyValue
+Dim oMasterKey
+Dim oImportKey	
+Dim oWordKey
+Dim oExcelkey
+Dim oPowerpointKey
+Dim oFilterService
+	aNodePath(0).Name = &quot;nodepath&quot;
+	aNodePath(0).Value = &quot;org.openoffice.Office.Tracing&quot;
+	oFilterService = createUnoService(&quot;com.sun.star.util.FilterTracer&quot;)
+	bFilterTracingAvailable = Not IsNull(oFilterService)
+	If bFilterTracingAvailable Then
+		oMasterkey = GetRegistryKeyContent(&quot;org.openoffice.Office.Tracing/&quot;)
+		If oMasterKey.hasbyName(&quot;Import&quot;) Then
+			oImportKey = GetRegistryKeyContent(&quot;org.openoffice.Office.Tracing/Import&quot;)
+			bMSApplFilterTracingAvailable(i) = CheckMSImportAvailability(oImportkey, MSFiltername(Index, 4), FilterTracingLogPath(i), bTakeOverTargetName(i), bTakeOverPathName(i))
+		End If
+	End If
+End Sub
+
+
+Function CheckMSImportAvailability(oImportkey, MSApplName as String, MSLogPath as String, bTakeOverTargetname as String, bTakeOverpathName as String) as Boolean
+Dim bApplIsAvailable as Boolean
+Dim oApplKey
+Dim LocApplName as String
+Dim LocApplPath as String
+	bApplIsAvailable = oImportKey.hasbyName(MSApplName)
+	If bApplIsAvailable Then
+		oApplKey = oImportKey.getByName(MSApplName)
+		bApplIsAvailable = oApplKey.On
+		LocApplName = oApplKey.Name
+		LocApplPath = oApplKey.Path
+		bTakeOverTargetName = (LocApplName = &quot;&quot;)
+		bTakeOverPathName = (LocApplPath = &quot;&quot;)		
+		MSLogPath = LocApplPath &amp; &quot;/&quot; &amp; LocApplName &amp; &quot;.log&quot;
+	End If
+	CheckMSImportAvailability() = bApplIsAvailable
+End Function
+
+
+
 Sub	SetupMSConfiguration()
 	iApplSection = 0
 	Wizardmode = SBMICROSOFTMODE
 	MaxApplCount = 3
 	ApplCount = 3
+	&apos; chkTemplatePath-Captions
+	GetApplResourceArray(1009 + iApplSection, ApplCount, sTemplateCheckBox())
+	&apos; DocumentCheckbox- Captions
+	GetApplResourceArray(1009 + iApplSection + ApplCount, ApplCount, sDocumentCheckBox())
 
 	sKeyName(0) = &quot;Software\Microsoft\Office\8.0\Word\Options&quot;
 	sKeyName(1) = &quot;Software\Microsoft\Office\8.0\Excel\Microsoft Excel&quot;
@@ -346,26 +394,39 @@ Sub	SetupMSConfiguration()
 	MSFilterName(0,0) = &quot;doc&quot;
 	MSFilterName(0,1) = &quot;StarOffice XML (Writer)&quot;
 	MSFilterName(0,2) = &quot;sxw&quot;
+	MSFilterName(0,3) = sMSDocumentCheckBox(0)
+	MSFilterName(0,4) = &quot;Word&quot;
+	
 
 	MSFilterName(1,0) = &quot;xls&quot;
 	MSFilterName(1,1) = &quot;StarOffice XML (Calc)&quot;
 	MSFilterName(1,2) = &quot;sxc&quot;
+	MSFilterName(1,3) = sMSDocumentCheckBox(1)
+	MSFilterName(1,4) = &quot;Excel&quot;
 
-	MSFilterName(2,0) = &quot;ppt|pps&quot;
-	MSFilterName(2,1) = &quot;StarOffice XML (Impress)|StarOffice XML (Impress)&quot;
-	MSFilterName(2,2) = &quot;sxi|sxi&quot;
+	MSFilterName(2,0) = &quot;ppt&quot;
+	MSFilterName(2,1) = &quot;StarOffice XML (Impress)&quot;
+	MSFilterName(2,2) = &quot;sxi&quot;
+	MSFilterName(2,3) = sMSDocumentCheckBox(2)
+	MSFilterName(2,4) = &quot;PowerPoint&quot;
 
 	MSFilterName(3,0) = &quot;dot&quot;
 	MSFilterName(3,1) = &quot;writer_StarOffice_XML_Writer_Template&quot;
 	MSFilterName(3,2) = &quot;stw&quot;
-
+	MSFilterName(3,3) = sMSTemplateCheckBox(0)
+	MSFilterName(3,4) = &quot;Word&quot;	
+	
 	MSFilterName(4,0) = &quot;xlt&quot;
 	MSFilterName(4,1) = &quot;calc_StarOffice_XML_Calc_Template&quot;
 	MSFilterName(4,2) = &quot;stc&quot;
+	MSFilterName(4,3) = sMSTemplateCheckBox(1)
+	MSFilterName(4,4) = &quot;Excel&quot;	
 
 	MSFilterName(5,0) = &quot;pot&quot;
 	MSFilterName(5,1) = &quot;impress_StarOffice_XML_Impress_Template&quot;
 	MSFilterName(5,2) = &quot;sti&quot;
+	MSFilterName(5,3) = sMSTemplateCheckBox(2)
+	MSFilterName(5,4) = &quot;PowerPoint&quot;	
 End Sub
 
 
@@ -407,40 +468,55 @@ Sub SetupXMLConfiguration()
 	Wizardmode = SBXMLMODE
 	ApplCount = 4
 	MaxApplCount = 4
+	
+	&apos; chkTemplatePath-Captions
+	GetApplResourceArray(1009 + iApplSection, ApplCount, sTemplateCheckBox())
+	&apos; DocumentCheckbox- Captions
+	GetApplResourceArray(1009 + iApplSection + ApplCount, ApplCount, sDocumentCheckBox())
 
 	XMLFilterName(0,0) = &quot;sdw&quot;
 	XMLFilterName(0,1) = &quot;StarOffice XML (Writer)&quot;
 	XMLFilterName(0,2) = &quot;sxw&quot;
+	XMLFilterName(0,3) = sDocumentCheckBox(0)
 
 	XMLFilterName(1,0) = &quot;sdc&quot;
 	XMLFilterName(1,1) = &quot;StarOffice XML (Calc)&quot;
 	XMLFilterName(1,2) = &quot;sxc&quot;
+	XMLFilterName(1,3) = sDocumentCheckBox(1)
 
 	XMLFilterName(2,0) = &quot;sdd|sda&quot;
 	XMLFilterName(2,1) = &quot;StarOffice XML (Impress)|sdraw: StarOffice XML (Draw)&quot;
 	XMLFilterName(2,2) = &quot;sxi|sxd&quot;
+	XMLFilterName(2,3) = sDocumentCheckBox(2)
 
 	XMLFilterName(3,0) = &quot;smf&quot;
 	XMLFilterName(3,1) = &quot;StarOffice XML (Math)&quot;
 	XMLFilterName(3,2) = &quot;sxm&quot;
+	XMLFilterName(3,3) = sDocumentCheckBox(3)	
 
 	XMLFilterName(4,0) = &quot;application/x-openoffice-starwriter|application/vnd.stardivision.writer/web&quot;
 	XMLFilterName(4,1) = &quot;writer_StarOffice_XML_Writer_Template|writer_web_StarOffice_XML_Writer_Web_Template&quot;
 	XMLFilterName(4,2) = &quot;stw|stw&quot;
+	XMLFilterName(4,3) = sTemplateCheckBox(0)
+
 
 	XMLFilterName(5,0) = &quot;application/x-openoffice-starcalc&quot;
 	XMLFilterName(5,1) = &quot;calc_StarOffice_XML_Calc_Template&quot;
 	XMLFilterName(5,2) = &quot;stc&quot;
+	XMLFilterName(5,3) = sTemplateCheckBox(1)
 
 	&apos; due to bug #108942# impress templates of the version 4.0 have to be handled in a special way because their mimetype 
 	&apos; falsely points to the draw application.
 	XMLFilterName(6,0) = &quot;application/x-openoffice-starimpress|application/x-openoffice-stardraw-40|application/x-openoffice-stardraw&quot;
 	XMLFilterName(6,1) = &quot;impress_StarOffice_XML_Impress_Template|impress_StarOffice_XML_Impress_Template|draw_StarOffice_XML_Draw_Template&quot;
 	XMLFilterName(6,2) = &quot;sti|sti|std&quot;
+	XMLFilterName(6,3) = sTemplateCheckBox(2)
+	
 
 	XMLFilterName(7,0) = &quot;sgl&quot;
 	XMLFilterName(7,1) = &quot;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
 	XMLFilterName(7,2) = &quot;sxg&quot;
+	XMLFilterName(7,3) = sTemplateCheckBox(3)
 End Sub
 
 
