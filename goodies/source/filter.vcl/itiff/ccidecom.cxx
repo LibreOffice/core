@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccidecom.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:11:36 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,11 +611,11 @@ const CCIHuffmanTableEntry CCIUncompTableSave[CCIUncompTableSize]={
 
 CCIDecompressor::CCIDecompressor( ULONG nOpts, UINT32 nImageWidth ) :
     bTableBad   ( FALSE ),
-    pLastLine   ( NULL ),
     bStatus     ( FALSE ),
     pByteSwap   ( NULL ),
+    nWidth      ( nImageWidth ),
     nOptions    ( nOpts ),
-    nWidth      ( nImageWidth )
+    pLastLine   ( NULL )
 {
     if ( nOpts & CCI_OPTION_INVERSEBITORDER )
     {
