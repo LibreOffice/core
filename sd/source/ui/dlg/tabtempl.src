@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:21:48 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ TabDialog TAB_TEMPLATE
                 Text[ japanese ] = "•\\–Ê";
                 Text[ chinese_traditional ] = "¥R¶ñ";
                 Text[ greek ] = "ÅğéöÜíåéá";
-                Text[ korean ] = "¸é Ã¤¿ì±â";
+                Text[ korean ] = "¸é";
                 Text[ arabic ] = "ÊÚÈÆÉ";
                 Text[ turkish ] = "Yüzey";
                 Text[ language_user1 ] = " ";
@@ -247,7 +247,7 @@ TabDialog TAB_TEMPLATE
                 Text[ japanese ] = "²İÃŞİÄ‚ÆsŠÔŠu";
                 Text[ chinese_traditional ] = "ÁY±Æ©M¶¡¹j";
                 Text[ greek ] = "Åóï÷İò êáé áğïóôÜóåéò";
-                Text[ korean ] = "µé¿© ¾²±â¿Í °£°İ";
+                Text[ korean ] = "µé¿©¾²±â¿Í °£°İ";
                 Text[ arabic ] = "ÇáÅÒÇÍÉ æÇáÊÈÇÚÏ";
                 Text[ turkish ] = "Girintiler ve aralıklar";
                 Text[ language_user1 ] = " ";
@@ -351,7 +351,7 @@ TabDialog TAB_TEMPLATE
                 Text[ japanese ] = "ºÈ¸À";
                 Text[ chinese_traditional ] = "³s±µ²Å";
                 Text[ greek ] = "Óıíäåóç";
-                Text[ korean ] = "¿¬°á¼±";
+                Text[ korean ] = "Ä¿³ØÅÍ£¡";
                 Text[ arabic ] = "ÑÇÈØ";
                 Text[ turkish ] = "Bağlayıcı";
                 Text[ language_user1 ] = " ";
@@ -467,6 +467,6 @@ TabDialog TAB_TEMPLATE
     Text[ greek ] = "Óôõë áíôéêåéìİíùí ãñáöéêşí";
     Text[ korean ] = "±×·¡ÇÈ °³Ã¼ À¯Çü";
     Text[ arabic ] = "ÃäãÇØ ßÇÆäÇÊ ÕæÑÉ";
-    Text[ turkish ] = "Grafik nesneleri şablonu";
+    Text[ turkish ] = "Grafik nesne biçimi";
     Text[ language_user1 ] = " ";
 };
