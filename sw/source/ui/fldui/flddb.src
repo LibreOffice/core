@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:22:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,14 +159,14 @@ TabPage TP_FLD_DB
     RadioButton RB_DBOWNFORMAT
     {
         Pos = MAP_APPFONT ( 94 , 153 ) ;
-        Size = MAP_APPFONT ( 67 , 10 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         Text [ de ] = "A~us Datenbank" ;
         Check = TRUE ;
         Text [ en-US ] = "From database" ;
     };
     RadioButton RB_DBFORMAT
     {
-        Pos = MAP_APPFONT ( 94 , 165 ) ;
+        Pos = MAP_APPFONT ( 94 , 166 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ de ] = "Se~lbst definiert" ;
         Text [ en-US ] = "User-defined" ;
@@ -174,7 +174,7 @@ TabPage TP_FLD_DB
     ListBox LB_DBNUMFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 195 , 163 ) ;
+        Pos = MAP_APPFONT ( 195 , 164 ) ;
         Size = MAP_APPFONT ( 53 , 60 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
