@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-03 08:45:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 
 #include <rtl/ustring>
 #include <rtl/process.h>
-#include <osl/module.hxx>
 #include <osl/mutex.hxx>
 
 #include <tools/urlobj.hxx>
@@ -119,7 +118,6 @@ static void testJavaException(JNIEnv * pEnv)  throw(com::sun::star::uno::Runtime
 #ifdef UNX
 struct EmbeddedWindow {
     jobject _joWindow;
-    ::osl::Module  _jawt;
 
     EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException);
     void dispose(JNIEnv * pEnv);
@@ -397,6 +395,13 @@ void SjApplet2_Impl::close() throw(com::sun::star::uno::RuntimeException)
     testJavaException(jenv.pEnv);
     //blocks until the applet has destroyed itself and the container was disposed (stardiv.applet.AppletExecutionContext.dispose)
     jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmWaitForDispose);
+
+    // now that the applet is disposed, we dispose the AppletExecutionContext, that will end the thread
+    // which dispatches the applet methods, such as init, start, stop , destroy.
+    jmethodID jmAppletExecutionContext_dispose= jenv.pEnv->GetMethodID(_jcAppletExecutionContext,
+                "dispose", "()V"); testJavaException(jenv.pEnv);
+    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_dispose);
+    testJavaException(jenv.pEnv);
 
     if( _pParentWin )
     {
