@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:44:40 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 12:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 
     // RES_COLLAPSING_BORDERS: only occurs in tables, but we need to
     // read/write the default for this item
-    M_ED( "CollapsingBorders", TABLE, BORDER_MODEL, XML_TYPE_BORDER_MODEL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_BORDER_MODEL ),
+    MG_ED( "CollapsingBorders", TABLE, BORDER_MODEL, XML_TYPE_BORDER_MODEL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_BORDER_MODEL ),
 
     M_END()
 };
@@ -793,7 +793,7 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
     // chained to.
 
     // RES_FOLLOW_TEXT_FLOW - OD 2004-04-21 #i26791#
-    M_ED( "IsFollowingTextFlow", DRAW, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
+    MG_ED( "IsFollowingTextFlow", DRAW, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
 
     M_END()
 };

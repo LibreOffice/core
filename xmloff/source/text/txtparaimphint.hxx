@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparaimphint.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:55:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 12:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,9 @@ using namespace ::xmloff::token;
 #define XML_HINT_RUBY 4
 #define XML_HINT_INDEX_MARK 5
 #define XML_HINT_TEXT_FRAME 6
-
+// --> DVO, OD 2004-07-14 #i26791#
+#define XML_HINT_DRAW 7
+// <--
 
 class XMLHint_Impl
 {
@@ -210,17 +212,22 @@ public:
     const OUString& GetStyleName() const { return sStyleName; }
     void SetVisitedStyleName( const OUString& s ) { sVisitedStyleName = s; }
     const OUString& GetVisitedStyleName() const { return sVisitedStyleName; }
-    XMLEventsImportContext* GetEventsContext() const
-    {
-        return pEvents;
-    }
-    void SetEventsContext( XMLEventsImportContext* pCtxt )
-    {
-        pEvents = pCtxt;
-        if (pEvents != NULL)
-            pEvents->AddRef();
-    }
+    XMLEventsImportContext* GetEventsContext() const;
+    void SetEventsContext( XMLEventsImportContext* pCtxt );
 };
+
+XMLEventsImportContext* XMLHyperlinkHint_Impl::GetEventsContext() const
+{
+    return pEvents;
+}
+
+void XMLHyperlinkHint_Impl::SetEventsContext( XMLEventsImportContext* pCtxt )
+{
+    pEvents = pCtxt;
+    if (pEvents != NULL)
+        pEvents->AddRef();
+}
+
 
 class XMLIndexMarkHint_Impl : public XMLHint_Impl
 {
@@ -280,22 +287,14 @@ public:
 class XMLTextFrameHint_Impl : public XMLHint_Impl
 {
     // OD 2004-04-20 #i26791#
-    SvXMLImportContextRef mxContext;
-    TextContentAnchorType eAnchorType;
+    SvXMLImportContextRef xContext;
 
 public:
 
     XMLTextFrameHint_Impl( SvXMLImportContext* pContext,
-                              const Reference < XTextRange > & rPos ) :
+                           const Reference < XTextRange > & rPos ) :
         XMLHint_Impl( XML_HINT_TEXT_FRAME, rPos, rPos ),
-        mxContext( pContext ),
-        eAnchorType( TextContentAnchorType_AT_CHARACTER )
-    {
-    }
-
-    XMLTextFrameHint_Impl( const Reference < XTextRange > & rPos ) :
-        XMLHint_Impl( XML_HINT_TEXT_FRAME, rPos, rPos ),
-        eAnchorType( TextContentAnchorType_AS_CHARACTER )
+        xContext( pContext )
     {
     }
 
@@ -303,19 +302,57 @@ public:
     {
     }
 
-    TextContentAnchorType& GetAnchorTypeRef() { return eAnchorType; }
-
-    sal_Bool IsBoundAtChar() const { return TextContentAnchorType_AT_CHARACTER == eAnchorType; }
-
-    // OD 2004-04-20 #i26791#
-    SvXMLImportContextRef& GetContextRef()
+    Reference < XTextContent > GetTextContent() const
     {
-        return mxContext;
+        Reference <XTextContent > xTxt;
+        SvXMLImportContext *pContext = &xContext;
+        if( pContext->ISA( XMLTextFrameContext ) )
+            xTxt = PTR_CAST( XMLTextFrameContext, pContext )->GetTextContent();
+        else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
+            xTxt = PTR_CAST( XMLTextFrameHyperlinkContext, pContext )
+                        ->GetTextContent();
+
+        return xTxt;
     }
-    SvXMLImportContext* GetContext() const
+
+    sal_Bool IsBoundAtChar() const
     {
-        return &mxContext;
+        sal_Bool bRet = sal_False;
+        SvXMLImportContext *pContext = &xContext;
+        if( pContext->ISA( XMLTextFrameContext ) )
+            bRet = TextContentAnchorType_AT_CHARACTER ==
+                PTR_CAST( XMLTextFrameContext, pContext )
+                    ->GetAnchorType();
+        else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
+            bRet = TextContentAnchorType_AT_CHARACTER ==
+                PTR_CAST( XMLTextFrameHyperlinkContext, pContext )
+                    ->GetAnchorType();
+        return bRet;
     }
 };
 
+// --> DVO, OD 2004-07-14 #i26791#
+class XMLDrawHint_Impl : public XMLHint_Impl
+{
+    SvXMLImportContextRef xContext;
+
+public:
+
+    XMLDrawHint_Impl( SvXMLShapeContext* pContext,
+                      const Reference < XTextRange > & rPos ) :
+        XMLHint_Impl( XML_HINT_DRAW, rPos, rPos ),
+        xContext( pContext )
+    {
+    }
+
+    virtual ~XMLDrawHint_Impl()
+    {
+    }
+
+    SvXMLShapeContext* GetShapeContext() const
+    {
+    return static_cast<SvXMLShapeContext*>(&xContext);
+    }
+};
+// <--
 #endif
