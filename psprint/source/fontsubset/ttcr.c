@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttcr.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:14:27 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: ttcr.c,v 1.4 2003-04-15 16:14:27 vg Exp $ */
+/* $Id: ttcr.c,v 1.5 2004-02-04 11:52:11 hr Exp $ */
 
 /*
  * TrueTypeCreator method implementation
@@ -73,7 +73,9 @@
 #include <string.h>
 
 #if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
+#  ifndef NDEBUG
+#    define NDEBUG
+#  endif
 #endif
 #include <assert.h>
 
@@ -348,7 +350,7 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
     sal_uInt8 *ttf;
     int i=0, n;
     TableEntry *te;
-    sal_uInt8 *head;     /* saved pointer to the head table data for checkSumAdjustment calculation */
+    sal_uInt8 *head = NULL;  /* saved pointer to the head table data for checkSumAdjustment calculation */
 
     if ((n = listCount(_this->tables)) == 0) return SF_TTFORMAT;
 
