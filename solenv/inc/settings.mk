@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.92 $
+#   $Revision: 1.93 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-08 14:45:09 $
+#   last change: $Author: hjs $ $Date: 2002-01-14 15:39:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -737,6 +737,10 @@ CLASSPATH!:=$(CLASSPATH:s/tkt/no/)
 .ENDIF
 
 # Makros fuer die Librarynamen des Solar
+.INCLUDE .IGNORE : office.mk
+.IF "$(OFFICEUPD)"==""
+OFFICEUPD*:=$(UPD)
+.ENDIF			# "$(OFFICEUPD)"==""
 .INCLUDE : libs.mk
 
 .IF "$(GUI)"=="WNT"
@@ -972,6 +976,10 @@ SCPDEFS+=-DUDK_MINOR=$(UDK_MINOR)
 .IF "$(UDK_MICRO)"!=""
 SCPDEFS+=-DUDK_MICRO=$(UDK_MICRO)
 .ENDIF			# "$(UDK_MICRO)"!=""
+
+.IF "$(OFFICEUPD)"!=""
+SCPDEFS+=-DOFFICEUPD=$(OFFICEUPD)
+.ENDIF			# "$(OFFICEUPD)"!=""
 
 .IF "$(L10N_framework)"!=""
 SCPDEFS+=-DISO_CODE=$(L10N_framework)
@@ -1426,8 +1434,13 @@ UNOUCROUT*=$(OUT)$/inc
 UNOUCRRDB*=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRDEP*=$(SOLARBINDIR)$/udkapi.rdb
 .ELSE           # "$(UDKSTAMP)"==""
+.IF "$(remote)"!=""
+UNOUCRRDB*=$(SOLARBINDIR)$/remote/applicat.rdb
+UNOUCRDEP*=$(SOLARBINDIR)$/remote/applicat.rdb
+.ELSE			# "$(remote)"!=""
 UNOUCRRDB*=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRDEP*=$(SOLARBINDIR)$/applicat.rdb
+.ENDIF			# "$(remote)"!=""
 .ENDIF          # "$(UDKSTAMP)"==""
 
 # --- Compiler -----------------------------------------------------
