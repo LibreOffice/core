@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 16:14:22 $
+ *  last change: $Author: oj $ $Date: 2001-01-04 14:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
@@ -133,12 +132,11 @@ using namespace dbaccess;
 
 #define REGISTRYFILE    "dbaccess.rdb"
 
-
 //==========================================================================
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseContext()
 {
-    static OOneInstanceAutoRegistration< dbaccess::ODatabaseContext > aODatabaseContext_AutoRegistration;
+    static ::dbaccess::OOneInstanceAutoRegistration< ::dbaccess::ODatabaseContext > aODatabaseContext_AutoRegistration;
 }
 
 //........................................................................
