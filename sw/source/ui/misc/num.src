@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:07:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,22 +108,14 @@ TabPage TP_NUM_POSITION
     FixedText FT_BORDERDIST
     {
         Pos = MAP_APPFONT ( 53 , 16 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Size = MAP_APPFONT ( 132 , 10 ) ;
         Text [ de ] = "Ein~rückung";
         Text [ en-US ] = "Indent" ;
         Text [ x-comment ] = " ";
     };
-    CheckBox CB_RELATIVE
-    {
-        Pos = MAP_APPFONT ( 201 , 16 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
-        Text [ de ] = "Relati~v" ;
-        Text [ en-US ] = "Relati~ve" ;
-        Text [ x-comment ] = " ";
-    };
     MetricField MF_BORDERDIST
     {
-        Pos = MAP_APPFONT ( 158 , 14 ) ;
+        Pos = MAP_APPFONT ( 188 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -139,17 +131,25 @@ TabPage TP_NUM_POSITION
         Last = 1999 ;
         SpinSize = 5 ;
     };
+    CheckBox CB_RELATIVE
+    {
+        Pos = MAP_APPFONT ( 188 , 29 ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Text [ de ] = "Relati~v" ;
+        Text [ en-US ] = "Relati~ve" ;
+        Text [ x-comment ] = " ";
+    };
     FixedText FT_INDENT
     {
-        Pos = MAP_APPFONT ( 53 , 32 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Pos = MAP_APPFONT ( 53 , 44 ) ;
+        Size = MAP_APPFONT ( 132 , 10 ) ;
         Text [ de ] = "Abstand zum Te~xt" ;
         Text [ en-US ] = "Space to te~xt" ;
         Text [ x-comment ] = " ";
     };
     MetricField MF_INDENT
     {
-        Pos = MAP_APPFONT ( 158 , 30 ) ;
+        Pos = MAP_APPFONT ( 188 , 42 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -167,15 +167,15 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_NUMDIST
     {
-        Pos = MAP_APPFONT ( 53 , 48 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Pos = MAP_APPFONT ( 53 , 60 ) ;
+        Size = MAP_APPFONT ( 132 , 10 ) ;
         Text [ de ] = "~Mindestabstand Nummer <-> Text" ;
         Text [ en-US ] = "~Minimum space numbering <-> text" ;
         Text [ x-comment ] = " ";
     };
     MetricField MF_NUMDIST
     {
-        Pos = MAP_APPFONT ( 158 , 46 ) ;
+        Pos = MAP_APPFONT ( 188 , 58 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -193,16 +193,16 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_ALIGN
     {
-        Pos = MAP_APPFONT ( 53 , 64 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Pos = MAP_APPFONT ( 53 , 76 ) ;
+        Size = MAP_APPFONT ( 132 , 10 ) ;
         Text [ de ] = "Ausri~chtung der Nummerierung" ;
         Text [ en-US ] = "Numbering ~alignment" ;
         Text [ x-comment ] = " ";
     };
     ListBox LB_ALIGN
     {
-        Pos = MAP_APPFONT ( 158 , 62 ) ;
-        Size = MAP_APPFONT ( 40 , 40 ) ;
+        Pos = MAP_APPFONT ( 188 , 74 ) ;
+        Size = MAP_APPFONT ( 64 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList [ de ] =
@@ -226,7 +226,7 @@ TabPage TP_NUM_POSITION
     };
     PushButton PB_STANDARD
     {
-        Pos = MAP_APPFONT ( 201 , 78 ) ;
+        Pos = MAP_APPFONT ( 53 , 90 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "~Standard" ;
         Text [ en-US ] = "~Default" ;
@@ -234,8 +234,8 @@ TabPage TP_NUM_POSITION
     };
     Window WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 53 , 99 ) ;
-        Size = MAP_APPFONT ( 198 , 78 ) ;
+        Pos = MAP_APPFONT ( 53 , 111 ) ;
+        Size = MAP_APPFONT ( 198 , 66 ) ;
     };
 };
 
