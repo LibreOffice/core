@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:07 $
+ *  last change: $Author: mib $ $Date: 2000-09-21 09:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,27 +515,27 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
     sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyle")),
     sTextField(RTL_CONSTASCII_USTRINGPARAM("TextField")),
+    sText(RTL_CONSTASCII_USTRINGPARAM("Text")),
+    sFrame(RTL_CONSTASCII_USTRINGPARAM("Frame")),
     sCategory(RTL_CONSTASCII_USTRINGPARAM("Category")),
     sNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules")),
     sNumberingStyleName(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName")),
-    sPropertyTextPortionType(RTL_CONSTASCII_USTRINGPARAM("TextPortionType")),
-    sPropertyFootnote(RTL_CONSTASCII_USTRINGPARAM("Footnote")),
-    sPropertyBookmark(RTL_CONSTASCII_USTRINGPARAM("Bookmark")),
-    sPropertyReferenceMark(RTL_CONSTASCII_USTRINGPARAM("ReferenceMark")),
-    sPropertyIsCollapsed(RTL_CONSTASCII_USTRINGPARAM("IsCollapsed")),
-    sPropertyIsStart(RTL_CONSTASCII_USTRINGPARAM("IsStart")),
-    sPropertyReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId")),
-    sPropertyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
-    sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
-    sPropertyPageStyleName(RTL_CONSTASCII_USTRINGPARAM("PageStyleName")),
-    sPropertyParagraphStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")),
-    sPropertyPrefix(RTL_CONSTASCII_USTRINGPARAM("Prefix")),
-    sPropertyStartAt(RTL_CONSTASCII_USTRINGPARAM("StartAt")),
-    sPropertySuffix(RTL_CONSTASCII_USTRINGPARAM("Suffix")),
-    sPropertyPositionEndOfDoc(RTL_CONSTASCII_USTRINGPARAM("PositionEndOfDoc")),
-    sPropertyFootnoteCounting(RTL_CONSTASCII_USTRINGPARAM("FootnoteCounting")),
-    sPropertyEndNotice(RTL_CONSTASCII_USTRINGPARAM("EndNotice")),
-    sPropertyBeginNotice(RTL_CONSTASCII_USTRINGPARAM("BeginNotice")),
+    sTextPortionType(RTL_CONSTASCII_USTRINGPARAM("TextPortionType")),
+    sFootnote(RTL_CONSTASCII_USTRINGPARAM("Footnote")),
+    sBookmark(RTL_CONSTASCII_USTRINGPARAM("Bookmark")),
+    sReferenceMark(RTL_CONSTASCII_USTRINGPARAM("ReferenceMark")),
+    sIsCollapsed(RTL_CONSTASCII_USTRINGPARAM("IsCollapsed")),
+    sIsStart(RTL_CONSTASCII_USTRINGPARAM("IsStart")),
+    sReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId")),
+    sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
+    sPageStyleName(RTL_CONSTASCII_USTRINGPARAM("PageStyleName")),
+    sPrefix(RTL_CONSTASCII_USTRINGPARAM("Prefix")),
+    sStartAt(RTL_CONSTASCII_USTRINGPARAM("StartAt")),
+    sSuffix(RTL_CONSTASCII_USTRINGPARAM("Suffix")),
+    sPositionEndOfDoc(RTL_CONSTASCII_USTRINGPARAM("PositionEndOfDoc")),
+    sFootnoteCounting(RTL_CONSTASCII_USTRINGPARAM("FootnoteCounting")),
+    sEndNotice(RTL_CONSTASCII_USTRINGPARAM("EndNotice")),
+    sBeginNotice(RTL_CONSTASCII_USTRINGPARAM("BeginNotice")),
     sFrameWidthAbsolute(RTL_CONSTASCII_USTRINGPARAM("FrameWidthAbsolute")),
     sFrameWidthPercent(RTL_CONSTASCII_USTRINGPARAM("FrameWidthPercent")),
     sFrameHeightAbsolute(RTL_CONSTASCII_USTRINGPARAM("FrameHeightAbsolute")),
@@ -874,73 +874,72 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
         Reference < XTextRange > xTxtRange;
         aAny >>= xTxtRange;
 
-        Reference<XServiceInfo> xServiceInfo( xTxtRange, UNO_QUERY );
-        if( xServiceInfo->supportsService( sTextFieldService ) )
+        Reference<XPropertySet> xPropSet(xTxtRange, UNO_QUERY);
+        Reference<XPropertySetInfo> xPropInfo =
+            xPropSet->getPropertySetInfo();
+
+        if (xPropInfo->hasPropertyByName(sTextPortionType))
         {
-            exportTextField( xTxtRange, bAutoStyles );
-            bPrevCharIsSpace = sal_False;
-        }
-        else if( xServiceInfo->supportsService( sTextFrameService ) )
-        {
-            Reference < XTextContent > xTxtCntnt( xTxtRange, UNO_QUERY );
-            exportTextFrame( xTxtCntnt, bAutoStyles );
-            bPrevCharIsSpace = sal_False;
-        }
-        else if( xServiceInfo->supportsService( sTextGraphicService ) )
-        {
-            Reference < XTextContent > xTxtCntnt( xTxtRange, UNO_QUERY );
-            exportTextGraphic( xTxtCntnt, bAutoStyles );
-            bPrevCharIsSpace = sal_False;
-        }
-        else if( xServiceInfo->supportsService( sTextEmbeddedService ) )
-        {
-            Reference < XTextContent > xTxtCntnt( xTxtRange, UNO_QUERY );
-            exportTextEmbedded( xTxtCntnt, bAutoStyles );
-            bPrevCharIsSpace = sal_False;
+            Any aAny;
+            aAny = xPropSet->getPropertyValue(sTextPortionType);
+            OUString sType;
+            aAny >>= sType;
+
+            if( sType.equals(sText))
+            {
+                exportTextRange( xTxtRange, bAutoStyles,
+                                 bPrevCharIsSpace );
+            }
+            else if( sType.equals(sTextField))
+            {
+                exportTextField( xTxtRange, bAutoStyles );
+                bPrevCharIsSpace = sal_False;
+            }
+            else if( sType.equals( sFrame ) )
+            {
+                Reference < XEnumeration> xContentEnum;
+                Reference < XContentEnumerationAccess > xCEA( xTxtRange,
+                                                              UNO_QUERY );
+                if( xCEA.is() )
+                    xContentEnum = xCEA->createContentEnumeration(
+                                                    sTextContentService );
+                if( xContentEnum.is() )
+                    exportTextContentEnumeration( xContentEnum, bAutoStyles );
+                bPrevCharIsSpace = sal_False;
+            }
+            else if (sType.equals(sFootnote))
+            {
+                exportTextFootnote(xPropSet,
+                                   xTxtRange->getString(),
+                                   bAutoStyles);
+                bPrevCharIsSpace = sal_False;
+            }
+            else if (sType.equals(sBookmark))
+            {
+                exportTextMark(xPropSet,
+                               sBookmark,
+                               lcl_XmlBookmarkElements,
+                               bAutoStyles);
+                bPrevCharIsSpace = sal_False;
+            }
+            else if (sType.equals(sReferenceMark))
+            {
+                exportTextMark(xPropSet,
+                               sReferenceMark,
+                               lcl_XmlReferenceElements,
+                               bAutoStyles);
+                bPrevCharIsSpace = sal_False;
+            }
+            else
+                DBG_ERROR("unknown text portion type");
         }
         else
         {
-            Reference<XPropertySet> xPropSet(xTxtRange, UNO_QUERY);
-            Reference<XPropertySetInfo> xPropInfo =
-                xPropSet->getPropertySetInfo();
-
-            if (xPropInfo->hasPropertyByName(sPropertyTextPortionType))
+            Reference<XServiceInfo> xServiceInfo( xTxtRange, UNO_QUERY );
+            if( xServiceInfo->supportsService( sTextFieldService ) )
             {
-                Any aAny;
-                aAny = xPropSet->getPropertyValue(sPropertyTextPortionType);
-                OUString sType;
-                aAny >>= sType;
-
-                if (sType.equals(sPropertyFootnote))
-                {
-                    exportTextFootnote(xPropSet,
-                                       xTxtRange->getString(),
-                                       bAutoStyles);
-                    bPrevCharIsSpace = sal_False;
-                }
-                else if (sType.equals(sPropertyBookmark))
-                {
-                    exportTextMark(xPropSet,
-                                   sPropertyBookmark,
-                                   lcl_XmlBookmarkElements,
-                                   bAutoStyles);
-                    bPrevCharIsSpace = sal_False;
-                }
-                else if (sType.equals(sPropertyReferenceMark))
-                {
-                    exportTextMark(xPropSet,
-                                   sPropertyReferenceMark,
-                                   lcl_XmlReferenceElements,
-                                   bAutoStyles);
-                    bPrevCharIsSpace = sal_False;
-                }
-                else if (0 == sType.compareToAscii("Text"))
-                {
-                    exportTextRange( xTxtRange, bAutoStyles,
-                                     bPrevCharIsSpace );
-                }
-                else
-                    DBG_ERROR("unknown text portion type");
+                exportTextField( xTxtRange, bAutoStyles );
+                bPrevCharIsSpace = sal_False;
             }
             else
             {
@@ -1023,14 +1022,14 @@ void XMLTextParagraphExport::exportTextMark(
 
         // start, end, or point-reference?
         sal_Int8 nElement;
-        aAny = rPropSet->getPropertyValue(sPropertyIsCollapsed);
+        aAny = rPropSet->getPropertyValue(sIsCollapsed);
         if( *(sal_Bool *)aAny.getValue() )
         {
             nElement = 0;
         }
         else
         {
-            aAny = rPropSet->getPropertyValue(sPropertyIsStart);
+            aAny = rPropSet->getPropertyValue(sIsStart);
             nElement = *(sal_Bool *)aAny.getValue() ? 1 : 2;
         }
 

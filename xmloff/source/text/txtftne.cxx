@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-09-21 09:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void XMLTextParagraphExport::exportTextFootnote(
 {
     // get footnote and associated text
     Any aAny;
-    aAny = rPropSet->getPropertyValue(sPropertyFootnote);
+    aAny = rPropSet->getPropertyValue(sFootnote);
     Reference<XFootnote> xFootnote;
     aAny >>= xFootnote;
     Reference<XText> xText(xFootnote, UNO_QUERY);
@@ -212,7 +212,7 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
     {
         // export reference Id (for reference fields)
         Reference<XPropertySet> xPropSet(rFootnote, UNO_QUERY);
-        Any aAny = xPropSet->getPropertyValue(sPropertyReferenceId);
+        Any aAny = xPropSet->getPropertyValue(sReferenceId);
         sal_Int32 nNumber;
         aAny >>= nNumber;
         OUStringBuffer aBuf;
@@ -268,35 +268,35 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     OUString sTmp;
 
     // prefix
-    aAny = rFootnoteConfig->getPropertyValue(sPropertyPrefix);
+    aAny = rFootnoteConfig->getPropertyValue(sPrefix);
     aAny >>= sTmp;
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_num_prefix, sTmp);
 
     // suffix
-    aAny = rFootnoteConfig->getPropertyValue(sPropertySuffix);
+    aAny = rFootnoteConfig->getPropertyValue(sSuffix);
     aAny >>= sTmp;
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_num_suffix, sTmp);
 
     // citation style ???
-    aAny = rFootnoteConfig->getPropertyValue(sPropertyCharStyleName);
+    aAny = rFootnoteConfig->getPropertyValue(sCharStyleName);
     aAny >>= sTmp;
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_citation_style_name,
                              sTmp);
 
     // default/paragraph style
-    aAny = rFootnoteConfig->getPropertyValue(sPropertyParagraphStyleName);
+    aAny = rFootnoteConfig->getPropertyValue(sParaStyleName);
     aAny >>= sTmp;
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_default_style_name,
                              sTmp);
 
     // page style
-    aAny = rFootnoteConfig->getPropertyValue(sPropertyPageStyleName);
+    aAny = rFootnoteConfig->getPropertyValue(sPageStyleName);
     aAny >>= sTmp;
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_page_master_name,
                              sTmp);
 
     // numbering style
-    aAny = rFootnoteConfig->getPropertyValue(sPropertyNumberingType);
+    aAny = rFootnoteConfig->getPropertyValue(sNumberingType);
     sal_Int16 nNumbering;
     aAny >>= nNumbering;
     GetExport().AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_num_format,
@@ -311,7 +311,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     }
 
     // StartAt / offset
-    aAny = rFootnoteConfig->getPropertyValue(sPropertyStartAt);
+    aAny = rFootnoteConfig->getPropertyValue(sStartAt);
     sal_Int16 nOffset;
     aAny >>= nOffset;
     OUStringBuffer sBuffer;
@@ -324,13 +324,13 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     {
         // footnotes position
         aAny = rFootnoteConfig->getPropertyValue(
-            sPropertyPositionEndOfDoc);
+            sPositionEndOfDoc);
         GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
                                       sXML_footnotes_position,
                                       ( (*(sal_Bool *)aAny.getValue()) ?
                                         sXML_document : sXML_page ) );
 
-        aAny = rFootnoteConfig->getPropertyValue(sPropertyFootnoteCounting);
+        aAny = rFootnoteConfig->getPropertyValue(sFootnoteCounting);
         sal_Int16 nTmp;
         aAny >>= nTmp;
         sal_Char* pElement;
@@ -366,7 +366,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         {
             // end notice / quo vadis
             aAny = rFootnoteConfig->getPropertyValue(
-                sPropertyEndNotice);
+                sEndNotice);
             aAny >>= sTmp;
             SvXMLElementExport aElem(GetExport(),
                                      XML_NAMESPACE_TEXT, sXML_quo_vadis,
@@ -377,7 +377,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         {
             // begin notice / ergo sum
             aAny = rFootnoteConfig->getPropertyValue(
-                sPropertyBeginNotice);
+                sBeginNotice);
             aAny >>= sTmp;
             SvXMLElementExport aElem(GetExport(),
                                      XML_NAMESPACE_TEXT, sXML_ergo_sum,
