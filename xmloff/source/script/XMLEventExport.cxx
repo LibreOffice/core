@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:16:27 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,6 +367,7 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnViewCreated",      XML_NAMESPACE_OFFICE, "view-created" },
     { "OnPrepareViewClosing", XML_NAMESPACE_OFFICE, "prepare-view-closing" },
     { "OnViewClosed",       XML_NAMESPACE_OFFICE, "view-close" },
+    { "OnVisAreaChanged",   XML_NAMESPACE_OFFICE, "visarea-changed" }, // "on-visarea-changed"
 
     { NULL, NULL }
 };
