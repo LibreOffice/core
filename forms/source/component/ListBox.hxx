@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 10:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,14 +101,14 @@ class OListBoxModel
             ,public starutil::XRefreshable
             ,public ::comphelper::OAggregationArrayUsageHelper< OListBoxModel >
 {
-    staruno::Any                        m_aSaveValue;
+    ::com::sun::star::uno::Any                      m_aSaveValue;
 
     // <properties>
     starform::ListSourceType        m_eListSourceType;      // type der list source
-    staruno::Any                    m_aBoundColumn;
+    ::com::sun::star::uno::Any                  m_aBoundColumn;
     StringSequence                  m_aListSourceSeq;       //
     StringSequence                  m_aValueSeq;            // alle Werte, readonly
-    staruno::Sequence<sal_Int16>    m_aDefaultSelectSeq;    // DefaultSelected
+    ::com::sun::star::uno::Sequence<sal_Int16>  m_aDefaultSelectSeq;    // DefaultSelected
     // </properties>
 
     ::cppu::OInterfaceContainerHelper   m_aRefreshListeners;
@@ -123,33 +123,33 @@ class OListBoxModel
     // Helper functions
     StringSequence GetCurValueSeq() const;
 
-    virtual staruno::Sequence<staruno::Type>    _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
 protected:
     // UNO Anbindung
     virtual void _onValueChanged();
 
 public:
-    OListBoxModel(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OListBoxModel(const ::com::sun::star::uno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
     virtual ~OListBoxModel();
 
 // XServiceInfo
     IMPLEMENTATION_NAME(OListBoxModel);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(staruno::RuntimeException);
+    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
 // UNO Anbindung
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxModel, OBoundControlModel);
-    virtual staruno::Any SAL_CALL queryAggregation( const staruno::Type& _rType ) throw (staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
 
 // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle) const;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const staruno::Any& rValue )
-                throw (staruno::Exception);
+    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+                throw (::com::sun::star::uno::Exception);
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, sal_Int32 _nHandle, const staruno::Any& _rValue )
+                ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
                 throw (starlang::IllegalArgumentException);
 
 // XLoadListener
@@ -160,32 +160,32 @@ public:
     virtual sal_Bool _commit();
 
 // XPropertySet
-    virtual staruno::Reference<starbeans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<starbeans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
 // XPersistObject
-    virtual ::rtl::OUString SAL_CALL    getServiceName() throw(staruno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
-        write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream) throw(stario::IOException, staruno::RuntimeException);
+        write(const ::com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream) throw(stario::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
-        read(const staruno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, staruno::RuntimeException);
+        read(const ::com::sun::star::uno::Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, ::com::sun::star::uno::RuntimeException);
 
 // XReset
     virtual void _reset();
 
 // XRefreshable
-    virtual void SAL_CALL refresh() throw(staruno::RuntimeException);
-    virtual void SAL_CALL addRefreshListener(const staruno::Reference<starutil::XRefreshListener>& _rxListener) throw(staruno::RuntimeException);
-    virtual void SAL_CALL removeRefreshListener(const staruno::Reference<starutil::XRefreshListener>& _rxListener) throw(staruno::RuntimeException);
+    virtual void SAL_CALL refresh() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addRefreshListener(const ::com::sun::star::uno::Reference<starutil::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeRefreshListener(const ::com::sun::star::uno::Reference<starutil::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
 // XSQLErrorBroadcaster
-    virtual void SAL_CALL addSQLErrorListener(const staruno::Reference<starsdb::XSQLErrorListener>& _rxListener) throw(staruno::RuntimeException);
-    virtual void SAL_CALL removeSQLErrorListener(const staruno::Reference<starsdb::XSQLErrorListener>& _rxListener) throw(staruno::RuntimeException);
+    virtual void SAL_CALL addSQLErrorListener(const ::com::sun::star::uno::Reference<starsdb::XSQLErrorListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeSQLErrorListener(const ::com::sun::star::uno::Reference<starsdb::XSQLErrorListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
     // OAggregationArrayUsageHelper
     virtual void fillProperties(
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rProps,
-        staruno::Sequence< starbeans::Property >& /* [out] */ _rAggregateProps
+        ::com::sun::star::uno::Sequence< starbeans::Property >& /* [out] */ _rProps,
+        ::com::sun::star::uno::Sequence< starbeans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
 
@@ -206,38 +206,38 @@ class OListBoxControl   :public OBoundControl
 {
     ::cppu::OInterfaceContainerHelper       m_aChangeListeners;
 
-    staruno::Any                            m_aCurrentSelection;
+    ::com::sun::star::uno::Any                          m_aCurrentSelection;
     Timer                                   m_aChangeTimer;
 
 protected:
     // UNO Anbindung
-    virtual staruno::Sequence<staruno::Type>    _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
 public:
-    OListBoxControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OListBoxControl(const ::com::sun::star::uno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
     virtual ~OListBoxControl();
 
     // UNO Anbindung
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxControl, OBoundControl);
-    virtual staruno::Any SAL_CALL queryAggregation( const staruno::Type& _rType ) throw (staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
 // XServiceInfo
     IMPLEMENTATION_NAME(OListBoxControl);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(staruno::RuntimeException);
+    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
 // XChangeBroadcaster
-    virtual void SAL_CALL addChangeListener(const staruno::Reference<starform::XChangeListener>& _rxListener) throw(staruno::RuntimeException);
-    virtual void SAL_CALL removeChangeListener(const staruno::Reference<starform::XChangeListener>& _rxListener) throw(staruno::RuntimeException);
+    virtual void SAL_CALL addChangeListener(const ::com::sun::star::uno::Reference<starform::XChangeListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeChangeListener(const ::com::sun::star::uno::Reference<starform::XChangeListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
 // XFocusListener
-    virtual void SAL_CALL focusGained(const starawt::FocusEvent& _rEvent) throw(staruno::RuntimeException);
-    virtual void SAL_CALL focusLost(const starawt::FocusEvent& _rEvent) throw(staruno::RuntimeException);
+    virtual void SAL_CALL focusGained(const starawt::FocusEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL focusLost(const starawt::FocusEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException);
 
 // XItemListener
-    virtual void SAL_CALL itemStateChanged(const starawt::ItemEvent& _rEvent) throw(staruno::RuntimeException);
+    virtual void SAL_CALL itemStateChanged(const starawt::ItemEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException);
 
 // XEventListener
-    virtual void SAL_CALL disposing(const starlang::EventObject& Source) throw (staruno::RuntimeException);
+    virtual void SAL_CALL disposing(const starlang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
