@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localoutputstream.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-05-27 17:08:47 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,11 @@
 #include "localoutputstream.hxx"
 #endif // CONFIGMGR_LOCALBE_LOCALOUTPUTSTREAM_HXX_
 
-namespace configmgr {
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif // _RTL_USTRBUF_HXX_
+
+namespace configmgr { namespace localbe {
 
 //==============================================================================
 
@@ -72,9 +76,20 @@ namespace configmgr {
 LocalOutputStream::LocalOutputStream(const rtl::OUString& aFileUrl)
     throw (io::IOException)
 : mFileUrl(aFileUrl), mTemporaryFileUrl(mFileUrl), bIsClosed(sal_False) {
+    // First, ensure the directory where the file is supposed to be
+    // put exists.
     mTemporaryFileUrl += rtl::OUString::createFromAscii(".tmp") ;
-    mWriteFile = new osl::File(mTemporaryFileUrl) ;
+    rtl::OUString parentDirectory = FileHelper::getParentDir(aFileUrl) ;
+
+    if (!FileHelper::mkdirs(parentDirectory)) {
+        rtl::OUStringBuffer message ;
+
+        message.appendAscii("Impossible to create directory '") ;
+        message.append(parentDirectory).appendAscii("'") ;
+        throw io::IOException(message.makeStringAndClear(), *this) ;
+    }
     FileHelper::removeFile(mTemporaryFileUrl) ;
+    mWriteFile = new osl::File(mTemporaryFileUrl) ;
     osl::FileBase::RC errorCode = mWriteFile->open(OpenFlag_Write |
                                                    OpenFlag_Create) ;
 
@@ -102,4 +117,4 @@ void SAL_CALL LocalOutputStream::closeOutput(void)
 }
 //------------------------------------------------------------------------------
 
-} // configmgr
+} } // configmgr.localbe

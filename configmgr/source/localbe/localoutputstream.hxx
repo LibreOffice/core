@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localoutputstream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-11 15:29:56 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include "filehelper.hxx"
 #endif // _CONFIGMGR_FILEHELPER_HXX_
 
-namespace configmgr {
+namespace configmgr { namespace localbe {
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
@@ -133,6 +133,6 @@ class LocalOutputStream : public cppu::WeakImplHelper1<io::XOutputStream> {
         osl::File *mWriteFile ;
 } ;
 
-} // configmgr
+} } // configmgr.localbe
 
 #endif // CONFIGMGR_LOCALBE_LOCALOUTPUTSTREAM_HXX_
