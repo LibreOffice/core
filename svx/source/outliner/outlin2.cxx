@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-10 12:17:38 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,6 +727,19 @@ BOOL Outliner::IsVertical() const
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsVertical();
 }
+
+void Outliner::SetFixedCellHeight( BOOL bUseFixedCellHeight )
+{
+    DBG_CHKTHIS(Outliner,0);
+    pEditEngine->SetFixedCellHeight( bUseFixedCellHeight );
+}
+
+BOOL Outliner::IsFixedCellHeight() const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->IsFixedCellHeight();
+}
+
 
 void Outliner::SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir )
 {
