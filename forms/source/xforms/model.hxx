@@ -2,9 +2,9 @@
  *
  *  $RCSfile: model.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:54:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,13 @@ namespace xforms
  *
  * See http://www.w3.org/TR/xforms/ for more information.
  */
-typedef cppu::ImplInheritanceHelper4<PropertySetBase,com::sun::star::xforms::XModel,com::sun::star::xforms::XFormsUIHelper1,com::sun::star::util::XUpdatable,com::sun::star::lang::XUnoTunnel> Model_t;
+typedef cppu::ImplInheritanceHelper4<
+    PropertySetBase,
+    com::sun::star::xforms::XModel,
+    com::sun::star::xforms::XFormsUIHelper1,
+    com::sun::star::util::XUpdatable,
+    com::sun::star::lang::XUnoTunnel
+> Model_t;
 class Model : public Model_t
 {
     // a number of local typedefs, to make the remaining header readable
@@ -127,7 +133,7 @@ class Model : public Model_t
     typedef com::sun::star::uno::Reference<com::sun::star::xforms::XSubmission> XSubmission_t;
     typedef com::sun::star::uno::Reference<com::sun::star::frame::XModel> Frame_XModel_t;
     typedef com::sun::star::uno::Reference<com::sun::star::xforms::XModel> XModel_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::task::XInteractionHandler> XInteraction_t;
+    typedef com::sun::star::uno::Reference<com::sun::star::task::XInteractionHandler> XInteractionHandler_t;
 
     typedef com::sun::star::uno::Reference<com::sun::star::container::XSet> XSet_t;
     typedef com::sun::star::beans::PropertyVetoException PropertyVetoException_t;
@@ -164,7 +170,7 @@ private:
 
     bool mbInitialized;                     /// has model been initialized ?
 
-    static comphelper::PropertySetInfo* _getPropertySetInfo();
+    void initializePropertySet();
 
     void ensureAtLeastOneInstance();
 
@@ -191,6 +197,10 @@ public:
     // get/set the xforms:model/@schema attribute
     rtl::OUString getSchemaRef() const;
     void setSchemaRef( const rtl::OUString& );
+
+    // get/set namespaces for entire model
+    XNameContainer_t getNamespaces() const;
+    void setNamespaces( const XNameContainer_t& );
 
 
 #if OSL_DEBUG_LEVEL > 1
@@ -229,6 +239,9 @@ public:
     /// has model been initialized?
     bool isInitialized() const;
 
+    /// is model currently valid (for submission)?
+    bool isValid() const;
+
 
 
     //
@@ -261,7 +274,7 @@ public:
     virtual void SAL_CALL submit( const rtl::OUString& sID )
         throw( VetoException_t, WrappedTargetException_t, RuntimeException_t );
 
-    virtual void SAL_CALL submitWithInteraction( const ::rtl::OUString& id, const XInteraction_t& _rxHandler )
+    virtual void SAL_CALL submitWithInteraction( const ::rtl::OUString& id, const XInteractionHandler_t& _rxHandler )
         throw( VetoException_t, WrappedTargetException_t, RuntimeException_t );
 
     virtual XDataTypeRepository_t SAL_CALL getDataTypeRepository(  )
@@ -346,13 +359,21 @@ public:
                                                       sal_Bool bDetail )
         throw( RuntimeException_t );
 
+    virtual XPropertySet_t SAL_CALL cloneBindingAsGhost( const XPropertySet_t& )
+        throw( RuntimeException_t );
+
+    virtual void SAL_CALL removeBindingIfUseless( const XPropertySet_t& )
+        throw( RuntimeException_t );
+
     virtual XDocument_t SAL_CALL newInstance( const rtl::OUString& sName,
                                               const rtl::OUString& sURL,
                                               sal_Bool bURLOnce )
         throw( RuntimeException_t );
 
     virtual void SAL_CALL renameInstance( const rtl::OUString& sFrom,
-                                          const rtl::OUString& sTo )
+                                          const rtl::OUString& sTo,
+                                          const rtl::OUString& sURL,
+                                          sal_Bool bURLOnce )
         throw( RuntimeException_t );
 
     virtual void SAL_CALL removeInstance( const rtl::OUString& sName )
@@ -407,28 +428,6 @@ public:
         const XNode_t& xNode,
         const rtl::OUString& sValue )
         throw( RuntimeException_t );
-
-
-    //
-    // XPropertySet & friends:
-    //   implement abstract methods from PropertySetHelper
-    //
-
-protected:
-
-    virtual void _setPropertyValues(
-        const comphelper::PropertyMapEntry** ppEntries,
-        const Any_t* pValues )
-        throw( UnknownPropertyException_t,
-               PropertyVetoException_t,
-               IllegalArgumentException_t,
-               WrappedTargetException_t );
-
-    virtual void _getPropertyValues(
-        const comphelper::PropertyMapEntry** ppEntries,
-        Any_t* pValue )
-        throw( UnknownPropertyException_t,
-               WrappedTargetException_t );
 
 
     //
