@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-06 09:34:20 $
+ *  last change: $Author: sb $ $Date: 2001-08-29 13:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,20 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
+#include <com/sun/star/beans/PropertyState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>
@@ -124,6 +136,12 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XPERSISTENTPROPERTYSET_HPP_
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
@@ -585,12 +603,21 @@ uno::Any SAL_CALL HierarchyContent::execute(
         if ( !removeData() )
         {
             ucbhelper::cancelCommandExecution(
-                                        star::ucb::IOErrorCode_CANT_WRITE,
-                                        m_xIdentifier->getContentIdentifier(),
-                                        Environment,
-                                        rtl::OUString::createFromAscii(
-                                            "Cannot remove persistent data!" ),
-                                        this );
+                star::ucb::IOErrorCode_CANT_WRITE,
+                uno::Sequence< uno::Any >(
+                    &uno::makeAny(
+                         beans::PropertyValue(
+                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                               "Uri")),
+                             -1,
+                             uno::makeAny(m_xIdentifier->
+                                              getContentIdentifier()),
+                             beans::PropertyState_DIRECT_VALUE)),
+                    1),
+                Environment,
+                rtl::OUString::createFromAscii(
+                    "Cannot remove persistent data!" ),
+                this );
             // Unreachable
         }
 
@@ -1507,12 +1534,21 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             if ( !storeData() )
             {
                 ucbhelper::cancelCommandExecution(
-                                    star::ucb::IOErrorCode_CANT_WRITE,
-                                    m_xIdentifier->getContentIdentifier(),
-                                    xEnv,
-                                    rtl::OUString::createFromAscii(
-                                            "Cannot store persistent data!" ),
-                                    this );
+                    star::ucb::IOErrorCode_CANT_WRITE,
+                    uno::Sequence< uno::Any >(
+                        &uno::makeAny(
+                             beans::PropertyValue(
+                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                     "Uri")),
+                                 -1,
+                                 uno::makeAny(m_xIdentifier->
+                                                  getContentIdentifier()),
+                                 beans::PropertyState_DIRECT_VALUE)),
+                        1),
+                    xEnv,
+                    rtl::OUString::createFromAscii(
+                        "Cannot store persistent data!" ),
+                    this );
                 // Unreachable
             }
         }
@@ -1649,12 +1685,19 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     if ( !storeData() )
     {
         ucbhelper::cancelCommandExecution(
-                                    star::ucb::IOErrorCode_CANT_WRITE,
-                                    m_xIdentifier->getContentIdentifier(),
-                                    xEnv,
-                                    rtl::OUString::createFromAscii(
-                                        "Cannot store persistent data!" ),
-                                    this );
+            star::ucb::IOErrorCode_CANT_WRITE,
+            uno::Sequence< uno::Any >(
+                &uno::makeAny(beans::PropertyValue(
+                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                    "Uri")),
+                                  -1,
+                                  uno::makeAny(m_xIdentifier->
+                                                   getContentIdentifier()),
+                                  beans::PropertyState_DIRECT_VALUE)),
+                1),
+            xEnv,
+            rtl::OUString::createFromAscii( "Cannot store persistent data!" ),
+            this );
         // Unreachable
     }
 
@@ -1774,17 +1817,20 @@ void HierarchyContent::transfer(
         if ( aId.compareTo(
                 rInfo.SourceURL, rInfo.SourceURL.getLength() ) == 0 )
         {
-            uno::Sequence< uno::Any > aArgs( 2 );
-            aArgs[ 0 ] <<= rInfo.SourceURL;
-            aArgs[ 1 ] <<= aId;
-
             ucbhelper::cancelCommandExecution(
-                        star::ucb::IOErrorCode_RECURSIVE,
-                        aArgs,
-                        xEnv,
-                        rtl::OUString::createFromAscii(
-                            "Target is equal to or is a child of source!" ),
-                        this );
+                star::ucb::IOErrorCode_RECURSIVE,
+                uno::Sequence< uno::Any >(
+                    &uno::makeAny(beans::PropertyValue(
+                                      rtl::OUString(
+                                          RTL_CONSTASCII_USTRINGPARAM("Uri")),
+                                      -1,
+                                      uno::makeAny(rInfo.SourceURL),
+                                      beans::PropertyState_DIRECT_VALUE)),
+                    1),
+                xEnv,
+                rtl::OUString::createFromAscii(
+                    "Target is equal to or is a child of source!" ),
+                this );
             // Unreachable
         }
     }
@@ -1813,12 +1859,19 @@ void HierarchyContent::transfer(
     if ( !xSource.is() )
     {
         ucbhelper::cancelCommandExecution(
-                                    star::ucb::IOErrorCode_CANT_READ,
-                                    xId->getContentIdentifier(),
-                                    xEnv,
-                                    rtl::OUString::createFromAscii(
-                                        "Cannot instanciate source object!" ),
-                                    this );
+            star::ucb::IOErrorCode_CANT_READ,
+            uno::Sequence< uno::Any >(
+                &uno::makeAny(beans::PropertyValue(
+                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                      "Uri")),
+                                  -1,
+                                  uno::makeAny(xId->getContentIdentifier()),
+                                  beans::PropertyState_DIRECT_VALUE)),
+                1),
+            xEnv,
+            rtl::OUString::createFromAscii(
+                "Cannot instanciate source object!" ),
+            this );
         // Unreachable
     }
 
@@ -1841,13 +1894,19 @@ void HierarchyContent::transfer(
     if ( !xTarget.is() )
     {
         ucbhelper::cancelCommandExecution(
-                            star::ucb::IOErrorCode_CANT_CREATE,
-                            rtl::OUString(), // new URL
-                            aId,
-                            xEnv,
-                            rtl::OUString::createFromAscii(
-                                "XContentCreator::createNewContent failed!" ),
-                            this );
+            star::ucb::IOErrorCode_CANT_CREATE,
+            uno::Sequence< uno::Any >(
+                &uno::makeAny(beans::PropertyValue(
+                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                      "Folder")),
+                                  -1,
+                                  uno::makeAny(aId),
+                                  beans::PropertyState_DIRECT_VALUE)),
+                1),
+            xEnv,
+            rtl::OUString::createFromAscii(
+                "XContentCreator::createNewContent failed!" ),
+            this );
         // Unreachable
     }
 
@@ -1967,12 +2026,22 @@ void HierarchyContent::transfer(
         if ( !xSource->removeData() )
         {
             ucbhelper::cancelCommandExecution(
-                        star::ucb::IOErrorCode_CANT_WRITE,
-                        xSource->m_xIdentifier->getContentIdentifier(),
-                        xEnv,
-                        rtl::OUString::createFromAscii(
-                            "Cannot remove persistent data of source object!" ),
-                        this );
+                star::ucb::IOErrorCode_CANT_WRITE,
+                uno::Sequence< uno::Any >(
+                    &uno::makeAny(
+                         beans::PropertyValue(
+                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                               "Uri")),
+                             -1,
+                             uno::makeAny(
+                                 xSource->m_xIdentifier->
+                                              getContentIdentifier()),
+                             beans::PropertyState_DIRECT_VALUE)),
+                    1),
+                xEnv,
+                rtl::OUString::createFromAscii(
+                    "Cannot remove persistent data of source object!" ),
+                this );
             // Unreachable
         }
 
