@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: Embedding.xcs,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:34:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Embedding" oor:package="org.openoffice.Office" xml:lang="en-US">
+	<info>
+		<author>MAV</author>
+		<desc xml:lang="en-US">Contains embedding related information, such as the list of available for embedding objects.</desc>
+	</info>
+	<templates>
+		<group oor:name="Object">
+			<info>
+                <author>MAV</author>
+				<desc xml:lang="en-US">Describes an embedded object.</desc>
+			</info>
+			<!--The default must be written by the setup.-->
+			<prop oor:name="ObjectFactory" oor:type="xs:string">
+				<!-- UIHints: setup -->
+				<info>
+					<desc xml:lang="en-US">Specifies the service name of the object's factory.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ObjectDocumentServiceName" oor:type="xs:string">
+				<!-- UIHints: setup -->
+				<info>
+					<desc xml:lang="en-US">Optional entry that specifies the service name of the document that is used by the object.</desc>
+				</info>
+			</prop>
+                        <prop oor:name="ObjectMiscStatus" oor:type="xs:long">
+				<!-- UIHints: setup -->
+				<info>
+					<desc xml:lang="en-US">Specifies the miscellaneous properties of the object.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ObjectVerbs" oor:type="oor:string-list">
+				<!-- UIHints: setup -->
+				<info>
+					<desc xml:lang="en-US">Specifies the list of verbs supported by the object.</desc>
+				</info>
+			</prop>
+		</group>
+		<group oor:name="Verb">
+			<info>
+                <author>MAV</author>
+				<desc xml:lang="en-US">Describes possible verbs that can be supported by an embedded object.</desc>
+			</info>
+			<prop oor:name="VerbUIName" oor:localized="true" oor:type="xs:string">
+				<!-- UIHints: setup -->
+				<info>
+					<desc xml:lang="en-US">Specifies the localized name of the verb that can be shown in the UI.</desc>
+				</info>
+			</prop>
+			<prop oor:name="VerbID" oor:type="xs:int">
+				<!-- UIHints: setup -->
+				<info>
+					<desc xml:lang="en-US">Specifies the unique ID for the verb.</desc>
+				</info>
+			</prop>
+			<prop oor:name="VerbFlags" oor:type="xs:int">
+				<!-- UIHints: setup -->
+				<info>
+					<desc xml:lang="en-US">Specifies the flags of the verb that can control verb's representation in UI.</desc>
+				</info>
+			</prop>
+			<prop oor:name="VerbAttributes" oor:type="xs:int">
+				<!-- UIHints: setup -->
+				<info>
+					<desc xml:lang="en-US">Specifies the attributes of the verb.</desc>
+				</info>
+			</prop>
+		</group>
+		<group oor:name="ObjectName">
+			<info>
+                <author>MAV</author>
+				<desc xml:lang="en-US">Provides object name that appeares in UI.</desc>
+			</info>
+			<prop oor:name="ObjectUIName" oor:localized="true" oor:type="xs:string">
+				<!-- UIHints: setup -->
+				<info>
+					<desc xml:lang="en-US">Specifies the localized name of the object that can be shown in the UI.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ClassID" oor:type="xs:string">
+				<!-- UIHints: setup -->
+				<info>
+					<desc xml:lang="en-US">Class ID of the object.</desc>
+				</info>
+			</prop>
+		</group>
+	</templates>
+	<component>
+		<set oor:name="Objects" oor:node-type="Object">
+			<info>
+				<author>MAV</author>
+				<desc xml:lang="en-US">Contains the explicitly registered embedded objects. ClassID is used as a name for entry.</desc>
+			</info>
+		</set>
+		<set oor:name="Verbs" oor:node-type="Verb">
+			<info>
+				<author>MAV</author>
+				<desc xml:lang="en-US">Contains possible verbs for embedded objects.</desc>
+			</info>
+		</set>
+		<set oor:name="MimeTypeClassIDRelations" oor:node-type="xs:string">
+			<info>
+				<author>MAV</author>
+				<desc xml:lang="en-US">Contains convertion table from MimeType to ClassID. MimeType is used as a name for entry.</desc>
+			</info>
+		</set>
+		<set oor:name="UserFactories" oor:node-type="xs:string">
+			<info>
+				<author>MAV</author>
+				<desc xml:lang="en-US">List of additional factories that can be used to create embedded object.</desc>
+			</info>
+		</set>
+		<set oor:name="ObjectNames" oor:node-type="ObjectName">
+			<info>
+				<author>MAV</author>
+				<desc xml:lang="en-US">List of object names to be used in GUI and ClassIDs.</desc>
+			</info>
+		</set>
+	</component>
+</oor:component-schema>
+
