@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 15:15:19 $
+ *  last change: $Author: tbe $ $Date: 2001-05-15 13:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,7 @@ void ElementDescriptor::readLongAttr( OUString const & rPropName, OUString const
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_LONG)
         {
-            addAttribute( rAttrName, OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue() ) );
+            addAttribute( rAttrName, OUString::valueOf( *(sal_Int32 const *)a.getValue() ) );
         }
     }
 }
@@ -690,25 +690,25 @@ void ElementDescriptor::readDefaults()
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":left") ),
-                      OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue() ) );
+                      OUString::valueOf( *(sal_Int32 const *)a.getValue() ) );
     }
     a = _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ) );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":top") ),
-                      OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue() ) );
+                      OUString::valueOf( *(sal_Int32 const *)a.getValue() ) );
     }
     a = _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ) );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":width") ),
-                      OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue() ) );
+                      OUString::valueOf( *(sal_Int32 const *)a.getValue() ) );
     }
     a = _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ) );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":height") ),
-                      OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue() ) );
+                      OUString::valueOf( *(sal_Int32 const *)a.getValue() ) );
     }
 
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
