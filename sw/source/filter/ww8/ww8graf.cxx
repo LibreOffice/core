@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-20 15:26:15 $
+ *  last change: $Author: cmc $ $Date: 2001-03-27 12:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2081,30 +2081,25 @@ void SwWW8ImplReader::MatchWrapDistancesIntoFlyFmt( SvxMSDffImportRec* pRecord,
 }
 
 
-void SwWW8ImplReader::SetCropAtGrfNode( SvxMSDffImportRec* pRecord,
-                                        SwFrmFmt*          pFlyFmt,
-                                        WW8_FSPA*          pF )
+void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
+    SwFrmFmt *pFlyFmt, WW8_FSPA *pF )
 {
-    if( pRecord->nCropFromTop ||
-        pRecord->nCropFromBottom ||
-        pRecord->nCropFromLeft ||
-        pRecord->nCropFromRight )
+    const SwNodeIndex* pIdx = pFlyFmt->GetCntnt( FALSE ).GetCntntIdx();
+    SwGrfNode* pGrfNd;
+    if( pIdx && 0 != (pGrfNd = rDoc.GetNodes()[ pIdx->GetIndex()
+                                                    + 1 ]->GetGrfNode() ))
     {
-
-        const SwNodeIndex* pIdx = pFlyFmt->GetCntnt( FALSE ).GetCntntIdx();
-        SwGrfNode* pGrfNd;
-        if( pIdx && 0 != (pGrfNd = rDoc.GetNodes()[ pIdx->GetIndex()
-                                                        + 1 ]->GetGrfNode() ))
-        {
-            Size aSz( pGrfNd->GetTwipSize() );
-            ULONG rHeight = aSz.Height();
-            ULONG rWidth  = aSz.Width();
-            if( !rWidth )
-                rWidth  = pF->nXaRight  - pF->nXaLeft;
-            else if( !rHeight )
-                rHeight = pF->nYaBottom - pF->nYaTop;
+        Size aSz( pGrfNd->GetTwipSize() );
+        ULONG rHeight = aSz.Height();
+        ULONG rWidth  = aSz.Width();
+        if( !rWidth && pF)
+            rWidth  = pF->nXaRight  - pF->nXaLeft;
+        else if( !rHeight && pF)
+            rHeight = pF->nYaBottom - pF->nYaTop;
 #if SUPD>601
-
+        if( pRecord->nCropFromTop || pRecord->nCropFromBottom ||
+            pRecord->nCropFromLeft || pRecord->nCropFromRight )
+        {
             SwCropGrf aCrop;            // Cropping is stored in 'fixed floats'
                                         // 16.16 (it est fraction times total
             if( pRecord->nCropFromTop ) //        image width or height resp.)
@@ -2125,12 +2120,48 @@ void SwWW8ImplReader::SetCropAtGrfNode( SvxMSDffImportRec* pRecord,
                   + (((pRecord->nCropFromRight  & 0xffff) * rWidth  ) >> 16) ));
 
             pGrfNd->SetAttr( aCrop );
-#endif
         }
+
+        if (pRecord && pRecord->pObj)
+        {
+            const SfxItemSet& rOldSet = pRecord->pObj->GetItemSet();
+            //contrast
+            if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFCONTRAST,
+                SdrGrafContrastItem))
+            {
+                SwContrastGrf aContrast(
+                    WW8ITEMVALUE(rOldSet,
+                    SDRATTR_GRAFCONTRAST, SdrGrafContrastItem));
+                pGrfNd->SetAttr( aContrast );
+            }
+
+            //luminance
+            if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFLUMINANCE,
+                SdrGrafLuminanceItem))
+            {
+                SwLuminanceGrf aLuminance(WW8ITEMVALUE(rOldSet,
+                    SDRATTR_GRAFLUMINANCE, SdrGrafLuminanceItem));
+                pGrfNd->SetAttr( aLuminance );
+            }
+            //gamma
+            if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFGAMMA, SdrGrafGamma100Item))
+            {
+                SwGammaGrf aGamma(WW8ITEMVALUE(rOldSet, SDRATTR_GRAFGAMMA,
+                    SdrGrafGamma100Item));
+                pGrfNd->SetAttr( aGamma );
+            }
+
+            //drawmode
+            if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFMODE, SdrGrafModeItem))
+            {
+                SwDrawModeGrf aDrawMode(WW8ITEMVALUE(rOldSet, SDRATTR_GRAFMODE,
+                    SdrGrafModeItem));
+                pGrfNd->SetAttr( aDrawMode );
+            }
+        }
+#endif
     }
 }
-
-
 
 SdrObject* SwWW8ImplReader::CreateContactObject( SwFlyFrmFmt* pFlyFmt )
 {
@@ -2150,8 +2181,7 @@ SdrObject* SwWW8ImplReader::CreateContactObject( SwFlyFrmFmt* pFlyFmt )
 
 
 void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
-                                          WW8_FSPA&          rFSPA,
-                                          SfxItemSet&        rFlySet )
+    WW8_FSPA *pFSPA, SfxItemSet &rFlySet )
 {
     if( pRecord )
     {
@@ -2218,45 +2248,51 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
         UINT32 nXAlign = nCntXAlign > pRecord->nXAlign ? pRecord->nXAlign : 1;
         UINT32 nYAlign = nCntYAlign > pRecord->nYAlign ? pRecord->nYAlign : 1;
 
-        /*
-        #74188#
-        Strangely in this case the FSPA value seems to be considered before
-        the newer escher nXRelTo record.
-        */
-        if ((pRecord->nXRelTo == 2) && (rFSPA.nbx != pRecord->nXRelTo))
-            pRecord->nXRelTo = rFSPA.nbx;
-        if ((pRecord->nYRelTo == 2) && (rFSPA.nby != pRecord->nYRelTo))
-            pRecord->nYRelTo = rFSPA.nby;
-
+        if (pFSPA)
+        {
+            /*
+            #74188#
+            Strangely in this case the FSPA value seems to be considered before
+            the newer escher nXRelTo record.
+            */
+            if ((pRecord->nXRelTo == 2) && (pFSPA->nbx != pRecord->nXRelTo))
+                pRecord->nXRelTo = pFSPA->nbx;
+            if ((pRecord->nYRelTo == 2) && (pFSPA->nby != pRecord->nYRelTo))
+                pRecord->nYRelTo = pFSPA->nby;
+        }
 
         UINT32 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
         UINT32 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
 
-        RndStdIds        eAnchor;
-        SwHoriOrient     eHoriOri;
-        SwVertOrient     eVertOri;
-        SwRelationOrient eHoriRel;
-        SwRelationOrient eVertRel;
+        RndStdIds eAnchor;
 
         eAnchor = 3 == nXRelTo  ?  FLY_AUTO_CNTNT
-                                :  2 <= nYRelTo  ?  FLY_AT_CNTNT
-                                                 :  FLY_PAGE;
-        eHoriOri = aHoriOriTab[ nXAlign ];
-        eVertOri = aVertOriTab[ nYAlign ];
-
-        eHoriRel = aRelOriTab[  nXRelTo ];
-        eVertRel = FLY_AUTO_CNTNT == eAnchor ? REL_CHAR : aRelOriTab[  nYRelTo ];
+            :  2 <= nYRelTo  ?  FLY_AT_CNTNT :  FLY_PAGE;
 
         SwFmtAnchor aAnchor( eAnchor );
         aAnchor.SetAnchor( pPaM->GetPoint() );
-
-        SwFmtHoriOrient aHoriOri( rFSPA.nXaLeft, eHoriOri, eHoriRel );
-        if( 4 <= nXAlign )
-            aHoriOri.SetPosToggle( TRUE );
-
         rFlySet.Put( aAnchor );
-        rFlySet.Put( aHoriOri );
-        rFlySet.Put( SwFmtVertOrient( rFSPA.nYaTop,  eVertOri, eVertRel ) );
+
+        if (pFSPA)
+        {
+            SwHoriOrient eHoriOri;
+            eHoriOri = aHoriOriTab[ nXAlign ];
+            SwRelationOrient eHoriRel;
+            eHoriRel = aRelOriTab[  nXRelTo ];
+
+            SwFmtHoriOrient aHoriOri( pFSPA->nXaLeft, eHoriOri, eHoriRel );
+            if( 4 <= nXAlign )
+                aHoriOri.SetPosToggle( TRUE );
+            rFlySet.Put( aHoriOri );
+
+            SwVertOrient eVertOri;
+            eVertOri = aVertOriTab[ nYAlign ];
+            SwRelationOrient eVertRel;
+            eVertRel = FLY_AUTO_CNTNT == eAnchor ? REL_CHAR :
+                aRelOriTab[  nYRelTo ];
+
+            rFlySet.Put(SwFmtVertOrient( pFSPA->nYaTop,  eVertOri, eVertRel ));
+        }
     }
 }
 
@@ -2344,7 +2380,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             SvxMSDffImportRec* pRecord;
             BOOL bDone = FALSE;
             SdrObject* pOurNewObject = 0;
-            BOOL bSetCrop     = FALSE;
+            BOOL bSetAttributes     = FALSE;
             BOOL bOrgObjectWasReplace =
             (
                 (SdrInventor == pObject->GetObjInventor()) &&
@@ -2438,7 +2474,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 #if 0
                 }
 #endif
-                ProcessEscherAlign( pRecord, *pF, aFlySet );
+                ProcessEscherAlign( pRecord, pF, aFlySet );
 
                 aFlySet.Put(SwFmtFrmSize( ATT_VAR_SIZE, nWidthTw, nHeightTw));
 
@@ -2469,7 +2505,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 {
                     const Graphic& rGraph =
                         ((SdrGrafObj*)pObject)->GetGraphic();
-                    bSetCrop = TRUE;
+                    bSetAttributes = TRUE;
                     BOOL bDone2 = FALSE;
 
                     if( ((SdrGrafObj*)pObject)->IsLinkedGraphic() )
@@ -2511,8 +2547,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                     if( pRecord )
                     {
                         MatchWrapDistancesIntoFlyFmt( pRecord, pRetFrmFmt );
-                        if( bSetCrop )
-                            SetCropAtGrfNode( pRecord, pRetFrmFmt, pF );
+                        if( bSetAttributes )
+                            SetAttributesAtGrfNode( pRecord, pRetFrmFmt, pF );
                     }
                     // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
                     if( aObjectName.Len() )
@@ -2589,7 +2625,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 SwRelationOrient eRel;
                 ProcessEscherAlign( pRecord, eAnchor, eHori, eVert, eRel );
 */
-                ProcessEscherAlign( pRecord, *pF, aFlySet );
+                ProcessEscherAlign( pRecord, pF, aFlySet );
 /*
 
 
@@ -2798,8 +2834,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                         if( pTrueObject == pRecord->pObj )
                         {
                             MatchWrapDistancesIntoFlyFmt(pRecord, pRetFrmFmt);
-                            if( bSetCrop )
-                                SetCropAtGrfNode( pRecord, pRetFrmFmt, pF );
+                            if( bSetAttributes )
+                                SetAttributesAtGrfNode( pRecord, pRetFrmFmt, pF );
                         }
 
                         if( pRecord->aTextId.nTxBxS && !bOrgObjectWasReplace )
@@ -2988,11 +3024,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.15 2001-03-20 15:26:15 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.16 2001-03-27 12:01:49 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/03/20 15:26:15  cmc
+      ##572## accumulate escher text correctly, and clear on insertion
+
       Revision 1.14  2001/03/20 12:44:03  cmc
       ##572## stop Escher Text attribute cascade and silence some warnings
 

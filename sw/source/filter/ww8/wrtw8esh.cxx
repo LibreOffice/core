@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-20 17:03:58 $
+ *  last change: $Author: cmc $ $Date: 2001-03-27 12:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1913,6 +1913,85 @@ void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
 void SwEscherEx::WriteGrfAttr( const SwNoTxtNode& rNd, EscherPropertyContainer& rPropOpt )
 {
     const SfxPoolItem* pItem;
+    USHORT nMode = GRAPHICDRAWMODE_STANDARD;
+    sal_Int32 nContrast = 0;
+    sal_Int16 nBrightness = 0;
+
+    if( SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState( RES_GRFATR_CONTRAST,
+                                                        TRUE, &pItem ) )
+    {
+        nContrast = ((SfxInt16Item*)pItem)->GetValue();
+    }
+
+    if( SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState( RES_GRFATR_LUMINANCE,
+                                                        TRUE, &pItem ) )
+    {
+        nBrightness = ((SfxInt16Item*)pItem)->GetValue();
+    }
+
+
+    if( SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState( RES_GRFATR_DRAWMODE,
+                                                        TRUE, &pItem ) )
+    {
+        nMode = ((SfxEnumItem*)pItem)->GetValue();
+        if (nMode == GRAPHICDRAWMODE_WATERMARK)
+        {
+            /*
+            There is no real watermark mode in word, we must use standard
+            mode and modify our ones by 70% extra brightness and 70% less
+            contrast. This means that unmodified default OOo watermark
+            will turn back into watermark, and modified OOo watermark will
+            change into a close visual representation in standardmode
+            */
+            nBrightness += 70;
+            if (nBrightness > 100)
+                nBrightness = 100;
+            nContrast -= 70;
+            if (nContrast < -100)
+                nContrast = -100;
+            nMode = GRAPHICDRAWMODE_STANDARD;
+        }
+    }
+
+    if (nMode == GRAPHICDRAWMODE_GREYS)
+        nMode = 4;
+    else if (nMode == GRAPHICDRAWMODE_MONO)
+        nMode = 6;
+    else
+        nMode = 0;
+    rPropOpt.AddOpt( ESCHER_Prop_pictureActive, nMode );
+
+    if (nContrast != 0)
+    {
+        nContrast+=100;
+        if (nContrast == 100)
+            nContrast = 0x10000;
+        else if (nContrast < 100)
+        {
+            nContrast *= 0x10000;
+            nContrast /= 100;
+        }
+        else if (nContrast < 200)
+            nContrast = (100 * 0x10000) / (200-nContrast);
+        else
+            nContrast = 0x7fffffff;
+        rPropOpt.AddOpt( ESCHER_Prop_pictureContrast, nContrast);
+    }
+
+    if (nBrightness != 0)
+        rPropOpt.AddOpt( ESCHER_Prop_pictureBrightness, nBrightness * 327 );
+
+#if 0
+    //gamma not seen
+    if( SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState( RES_GRFATR_GAMMA,
+                                                        TRUE, &pItem ) )
+    {
+        double fGamma = ((SwGammaGrf*)pItem)->GetValue();
+        rPropOpt.AddOpt( ESCHER_Prop_pictureGamma,
+            static_cast<sal_uInt32>(fGamma * 655) );
+    }
+#endif
+
     if( SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState( RES_GRFATR_CROPGRF,
                                                         TRUE, &pItem ))
     {
@@ -2259,11 +2338,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.12 2001-03-20 17:03:58 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.13 2001-03-27 12:01:49 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/03/20 17:03:58  jp
+      use stdarr
+
       Revision 1.11  2001/03/14 15:54:34  jp
       remove hard mapping of EditEngine- and Writer WhichIds
 

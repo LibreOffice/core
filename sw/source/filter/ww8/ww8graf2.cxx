@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-27 10:59:05 $
+ *  last change: $Author: cmc $ $Date: 2001-03-27 12:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,7 +616,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf1( WW8_PIC& rPic, SvStream* pSt,
 }
 
 
-
+#if 0
 int SwWW8ImplReader::WW8QuickHackForMSDFF_DirectBLIPImport(SvStream& rSt,
     WW8PicDesc* pPD, Graphic& rData, String& rGraphName)
 {
@@ -688,6 +688,7 @@ int SwWW8ImplReader::WW8QuickHackForMSDFF_DirectBLIPImport(SvStream& rSt,
     delete pProps;
     return nOk;
 }
+#endif
 
 BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
 {
@@ -887,174 +888,209 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
             }
             */
 
-
             pFlyFmtOfJustInsertedGraphic = 0;
         }
         else if((0x64 == aPic.MFP.mm) || (0x66 == aPic.MFP.mm))
         {
+            // verlinkte Grafik im Escher-Objekt
             pDataStream->SeekRel( 2 );
-            // Tja, da haben wir wohl ein MSO Drawing File Format am Bein.
-            //
+
             SdrObject* pObject = 0;
             WW8PicDesc aPD( aPic );
             String aGrName;
-            if( 0x66 == aPic.MFP.mm )   // verlinkte Grafik im Escher-Objekt
-            {                           // ================    =============
-                BYTE nNameLen;
+            if( !pDrawModel )
+                GrafikCtor();
+            if (!pMSDffManager)
+                pMSDffManager = new SwMSDffManager(*this);
+            if( !pMSDffManager->GetModel() )
+                pMSDffManager->SetModel(pDrawModel, 1440);
+
+            if (0x66 == aPic.MFP.mm)
+            {
+                //These ones have names prepended
+                BYTE nNameLen=0;
                 *pDataStream >> nNameLen;
                 pDataStream->SeekRel( nNameLen );
+            }
 
-                Rectangle aRect( 0,0, aPD.nWidth,  aPD.nHeight);
-                SvxMSDffImportData aData( aRect );
-                pObject =
-//                  pMSDffManager->ImportObjAtCurrentStreamPos(*pDataStream,
-//                                                              aData );
-                    pMSDffManager->ImportObj(*pDataStream, &aData, &aRect);
-                if( pObject )
+            Rectangle aRect( 0,0, aPD.nWidth,  aPD.nHeight);
+            SvxMSDffImportData aData( aRect );
+            pObject = pMSDffManager->ImportObj(*pDataStream, &aData, &aRect);
+            if( pObject )
+            {
+                // fuer den Rahmen
+                SfxItemSet aAttrSet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
+                    RES_FRMATR_END-1 );
+
+                SvxMSDffImportRec *pRecord =
+                    (aData.HasRecords() && (1 == aData.GetRecCount() ) ) ?
+                    aData.GetRecord( 0 ) : 0;
+
+                if( pRecord )
                 {
-                    // fuer den Rahmen
-                    SfxItemSet aAttrSet( rDoc.GetAttrPool(),
-                                         RES_FRMATR_BEGIN,
-                                         RES_FRMATR_END-1 );
-                    // fuer die Grafik
-                    SfxItemSet aGrSet( rDoc.GetAttrPool(),
-                                       RES_GRFATR_BEGIN,
-                                       RES_GRFATR_END-1 );
-
-                    if( aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB )
+                    //A graphic of this type in this location is always inline
+                    if (0x64 == aPic.MFP.mm)
                     {
-                        SwCropGrf aCrop( aPD.nCL, aPD.nCR, aPD.nCT, aPD.nCB );
-                        aGrSet.Put( aCrop );
-                    }
-
-                    SwFrmFmt* pNewFlyFmt = 0;
-                    BOOL bTextObjWasGrouped = FALSE;
-                    // Groesse aus der WinWord PIC-Struktur als Grafik-Groesse nehmen
-                    aAttrSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, aPD.nWidth, aPD.nHeight ) );
-
-                    // ggfs. altes AttrSet uebernehmen und
-                    // horiz. Positionierungs-Relation korrigieren
-                    if( pOldFlyFmt )
-                    {
-                        aAttrSet.Put( pOldFlyFmt->GetAttrSet() );
-                        const SwFmtHoriOrient &rHori = pOldFlyFmt->GetHoriOrient();
-                        if( FRAME == rHori.GetRelationOrient() )
-                            aAttrSet.Put( SwFmtHoriOrient( rHori.GetPos(),
-                                                          HORI_NONE,
-                                                          REL_PG_PRTAREA ) );
-                    }
-
-                    XubString aObjectName( pObject->GetName() );
-                    if( UINT16( OBJ_OLE2 ) == pObject->GetObjIdentifier() )
-                    {
-                        SvInPlaceObjectRef xIPRef(
-                                    ((SdrOle2Obj*)pObject)->GetObjRef() );
-
-                        // kein GrafSet uebergeben, da nur fuer Cropp sinnvoll,
-                        // was die UI derzeit (27.1.99) noch nicht kann khz.
-                        pNewFlyFmt = rDoc.Insert( *pPaM, &xIPRef, &aAttrSet );
+                        SwFmtAnchor aAnchor(FLY_IN_CNTNT);
+                        aAnchor.SetAnchor(pPaM->GetPoint());
+                        aAttrSet.Put(aAnchor);
                     }
                     else
+                        ProcessEscherAlign(pRecord,0,aAttrSet);
+
+                    Rectangle aInnerDist(   pRecord->nDxTextLeft,
+                        pRecord->nDyTextTop, pRecord->nDxTextRight,
+                        pRecord->nDyTextBottom  );
+
+                    MatchSdrItemsIntoFlySet( pObject, aAttrSet,
+                        pRecord->eLineStyle, aInnerDist,
+                        !pRecord->bLastBoxInChain );
+                }
+
+                // for the Grafik
+                SfxItemSet aGrSet( rDoc.GetAttrPool(), RES_GRFATR_BEGIN,
+                    RES_GRFATR_END-1 );
+
+                if( aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB )
+                {
+                    SwCropGrf aCrop( aPD.nCL, aPD.nCR, aPD.nCT, aPD.nCB );
+                    aGrSet.Put( aCrop );
+                }
+
+                SwFrmFmt* pNewFlyFmt = 0;
+                BOOL bTextObjWasGrouped = FALSE;
+
+                //Groesse aus der WinWord PIC-Struktur als Grafik-Groesse nehmen
+                aAttrSet.Put( SwFmtFrmSize( ATT_FIX_SIZE,
+                    aPD.nWidth, aPD.nHeight ) );
+
+                // ggfs. altes AttrSet uebernehmen und
+                // horiz. Positionierungs-Relation korrigieren
+                if( pOldFlyFmt )
+                {
+                    aAttrSet.Put( pOldFlyFmt->GetAttrSet() );
+                    const SwFmtHoriOrient &rHori = pOldFlyFmt->GetHoriOrient();
+                    if( FRAME == rHori.GetRelationOrient() )
                     {
-                        SdrGrafObj* pGraphObject = 0;
-                        pGraphObject = PTR_CAST(SdrGrafObj, pObject);
-                        if( pGraphObject )
-                        {
-                            // Nun den Link bzw. die Grafik ins Doc stopfen
-                            const Graphic& rGraph = pGraphObject->GetGraphic();
-                            BOOL bDone = FALSE;
-
-                            if( pGraphObject->IsLinkedGraphic() )
-                            {
-                                aGrName = pGraphObject->GetFileName();
-                                DirEntry aGrfFileEntry( aGrName );
-                                if(    aGrfFileEntry.Exists()
-                                    || (GRAPHIC_NONE == rGraph.GetType()))
-                                {
-                                    if( pOldFlyFmt && pTextObj && pTextObj->GetUpGroup() )
-                                    {
-                                        bTextObjWasGrouped = TRUE;
-                                        /*
-                                            Hier *nichts* ins Doc inserten!
-                                            ( lediglich in der DrawPage statt
-                                              dem Sdr-Text-Objekt einen Grafik-
-                                              Link einbauen )
-                                        */
-                                        pNewFlyFmt= MakeGrafByFlyFmt(
-                                                        pTextObj, *pOldFlyFmt,
-                                                        aPD, 0, aGrName,
-                                                        aEmptyStr, aGrSet,
-                                                        bSetToBackground );
-                                    }
-                                    else
-                                        pNewFlyFmt= rDoc.Insert(*pPaM,
-                                                                aGrName,
-                                                                aEmptyStr,
-                                                                0,          // Graphic*
-                                                                &aAttrSet,  // SfxItemSet* Rahmen
-                                                                &aGrSet );  // SfxItemSet* Grafik
-                                    bDone = TRUE;
-                                }
-                            }
-
-                            if( !bDone )
-                                pNewFlyFmt= rDoc.Insert(*pPaM,
-                                                        aEmptyStr,
-                                                        aEmptyStr,
-                                                        &rGraph,
-                                                        &aAttrSet,      // SfxItemSet* Rahmen
-                                                        &aGrSet );      // SfxItemSet* Grafik
-
-                        }
+                        aAttrSet.Put( SwFmtHoriOrient( rHori.GetPos(),
+                            HORI_NONE, REL_PG_PRTAREA ) );
                     }
-                    if( pNewFlyFmt )  // also nur, wenn wir ein *Insert* gemacht haben
+                }
+
+                XubString aObjectName( pObject->GetName() );
+                if( UINT16( OBJ_OLE2 ) == pObject->GetObjIdentifier() )
+                {
+                    SvInPlaceObjectRef xIPRef(
+                                ((SdrOle2Obj*)pObject)->GetObjRef() );
+
+                    // kein GrafSet uebergeben, da nur fuer Cropp sinnvoll,
+                    // was die UI derzeit (27.1.99) noch nicht kann khz.
+                    pNewFlyFmt = rDoc.Insert( *pPaM, &xIPRef, &aAttrSet );
+                }
+                else
+                {
+                    SdrGrafObj* pGraphObject = 0;
+                    pGraphObject = PTR_CAST(SdrGrafObj, pObject);
+                    if( pGraphObject )
                     {
-                        pRet = pNewFlyFmt;
-                        // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
-                        if( aObjectName.Len() )
-                        {
-                            String aName;
-                            if( MakeUniqueGraphName( aName, aObjectName ))
-                                pNewFlyFmt->SetName( aName );
-                        }
-                        // Zeiger auf neues Objekt ermitteln und
-                        // Z-Order-Liste entsprechend korrigieren (oder Eintrag loeschen)
-                        SdrObject* pOurNewObject = pNewFlyFmt->FindSdrObject();
-                        if( !pOurNewObject )
-                        {
-                            if( !pDrawModel )   // 1. GrafikObjekt des Docs
-                                GrafikCtor();
+                        // Nun den Link bzw. die Grafik ins Doc stopfen
+                        const Graphic& rGraph = pGraphObject->GetGraphic();
+                        BOOL bDone = FALSE;
 
-                            SwFlyDrawContact* pContactObject
-                                = new SwFlyDrawContact( (SwFlyFrmFmt*)pNewFlyFmt,
-                                                        pDrawModel );
-                            pOurNewObject = pContactObject->GetMaster();
-                        }
-                        if( pOurNewObject )
+                        if( pGraphObject->IsLinkedGraphic() )
                         {
-                            pMSDffManager->ExchangeInShapeOrder( pObject, 0, 0, pOurNewObject );
-                            // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden,
-                            // damit in SwWW8ImplReader::LoadDoc1() die Z-Order
-                            // festgelegt werden kann !!!
-                            pDrawPg->InsertObject( pOurNewObject );
-
-                            // altes SdrGrafObj aus der Page loeschen und zerstoeren
-                            pDrawPg->RemoveObject( pObject->GetOrdNum() );
-                            delete pObject;
+                            aGrName = pGraphObject->GetFileName();
+                            DirEntry aGrfFileEntry( aGrName );
+                            if(    aGrfFileEntry.Exists()
+                                || (GRAPHIC_NONE == rGraph.GetType()))
+                            {
+                                if( pOldFlyFmt && pTextObj &&
+                                    pTextObj->GetUpGroup() )
+                                {
+                                    bTextObjWasGrouped = TRUE;
+                                    /*
+                                        Hier *nichts* ins Doc inserten!  (
+                                        lediglich in der DrawPage statt dem
+                                        Sdr-Text-Objekt einen Grafik- Link
+                                        einbauen )
+                                    */
+                                    pNewFlyFmt= MakeGrafByFlyFmt( pTextObj,
+                                        *pOldFlyFmt, aPD, 0, aGrName,
+                                        aEmptyStr, aGrSet, bSetToBackground );
+                                }
+                                else
+                                {
+                                    pNewFlyFmt= rDoc.Insert(*pPaM,
+                                        aGrName, aEmptyStr, 0 /* Graphic */,
+                                        &aAttrSet /* SfxItemSet* Rahmen*/,
+                                        &aGrSet /* SfxItemSet* Grafik*/ );
+                                }
+                                bDone = TRUE;
+                            }
                         }
-                        else
-                            pMSDffManager->RemoveFromShapeOrder( pObject );
+
+                        if( !bDone )
+                        {
+                            pNewFlyFmt= rDoc.Insert(*pPaM, aEmptyStr,
+                                aEmptyStr, &rGraph, &aAttrSet, &aGrSet );
+                        }
+
+                    }
+                }
+                // also nur, wenn wir ein *Insert* gemacht haben
+                if( pNewFlyFmt )
+                {
+                    pRet = pNewFlyFmt;
+                    if (pRecord)
+                        SetAttributesAtGrfNode(pRecord,pRet,0);
+                    // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
+                    if( aObjectName.Len() )
+                    {
+                        String aName;
+                        if( MakeUniqueGraphName( aName, aObjectName ))
+                            pNewFlyFmt->SetName( aName );
+                    }
+                    // Zeiger auf neues Objekt ermitteln und
+                    // Z-Order-Liste entsprechend korrigieren
+                    // (oder Eintrag loeschen)
+                    SdrObject* pOurNewObject = pNewFlyFmt->FindSdrObject();
+                    if( !pOurNewObject )
+                    {
+                        if( !pDrawModel )   // 1. GrafikObjekt des Docs
+                            GrafikCtor();
+
+                        SwFlyDrawContact* pContactObject
+                            = new SwFlyDrawContact( (SwFlyFrmFmt*)pNewFlyFmt,
+                                                    pDrawModel );
+                        pOurNewObject = pContactObject->GetMaster();
+                    }
+                    if( pOurNewObject )
+                    {
+                        pMSDffManager->ExchangeInShapeOrder( pObject, 0, 0,
+                            pOurNewObject );
+
+                        // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt
+                        // werden, damit in SwWW8ImplReader::LoadDoc1() die
+                        // Z-Order festgelegt werden kann !!!
+                        pDrawPg->InsertObject( pOurNewObject );
+
+                        // altes SdrGrafObj aus der Page loeschen und
+                        // zerstoeren
+                        pDrawPg->RemoveObject( pObject->GetOrdNum() );
+                        delete pObject;
                     }
                     else
                         pMSDffManager->RemoveFromShapeOrder( pObject );
-
-                    // auch das ggfs. uebergebene alte Sdr-Text-Objekt aus der Page
-                    // loeschen, falls nicht gruppiert,
-                    if( pTextObj && !bTextObjWasGrouped )
-                    {
-                        pDrawPg->RemoveObject( pTextObj->GetOrdNum() );
-                    }
                 }
+                else
+                    pMSDffManager->RemoveFromShapeOrder( pObject );
+
+                // auch das ggfs. uebergebene alte Sdr-Text-Objekt aus der
+                // Page loeschen, falls nicht gruppiert,
+                if( pTextObj && !bTextObjWasGrouped )
+                    pDrawPg->RemoveObject( pTextObj->GetOrdNum() );
+            }
+#if 0
             }
             else                        // eingebettete Grafik im Escher-Objekt
             {                           // ===================    =============
@@ -1106,7 +1142,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                             aPseudoRecord.nCropFromBottom = aPD.nCB;
                             aPseudoRecord.nCropFromRight = aPD.nCR;
                             aPseudoRecord.nCropFromTop = aPD.nCT;
-                            SetCropAtGrfNode(&aPseudoRecord,pRet,&aDummy);
+                            SetAttributesAtGrfNode(&aPseudoRecord,pRet,&aDummy);
                         }
                     }
                 }
@@ -1116,13 +1152,10 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                     ASSERT( !this, "Wo ist das Shape fuer die Grafik ?" );
                 }
             }
+#endif
         }
-        else if(   (aPic.lcb >= 58)
-                 && aPic.MFP.xExt
-                 && aPic.MFP.yExt )
-        {
+        else if ( (aPic.lcb >= 58) && aPic.MFP.xExt && aPic.MFP.yExt )
             pRet = ImportGraf1( aPic, pDataStream, nPicLocFc );
-        }
     }
     pDataStream->Seek( nOldPos );
     return pRet;
@@ -1204,11 +1237,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.5 2001-02-27 10:59:05 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.6 2001-03-27 12:01:49 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/02/27 10:59:05  cmc
+      #84122# Missing Cropping on DirectBLIP import
+
       Revision 1.4  2000/11/13 13:31:12  jp
       use new method GetStream from TempFile
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-19 21:29:17 $
+ *  last change: $Author: cmc $ $Date: 2001-03-27 12:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,9 +802,8 @@ friend class WW8FormulaControl;
     void MatchWrapDistancesIntoFlyFmt( SvxMSDffImportRec* pRecord,
                                        SwFrmFmt*          pFlyFmt );
 
-    void SetCropAtGrfNode( SvxMSDffImportRec* pRecord,
-                           SwFrmFmt*          pFlyFmt,
-                           WW8_FSPA*          pF );
+    void SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord, SwFrmFmt *pFlyFmt,
+        WW8_FSPA *pF );
 
     BOOL StartApo( BYTE* pSprm29, BOOL bNowStyleApo );
     void StopApo();
@@ -925,9 +924,8 @@ friend class WW8FormulaControl;
     void ReadGrafPrimitive( short& rLeft, WW8_DO* pDo );
     void ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp );
     SdrObject* CreateContactObject( SwFlyFrmFmt* pFlyFmt );
-    void ProcessEscherAlign( SvxMSDffImportRec* pRecord,
-                             WW8_FSPA&          rFSPA,
-                             SfxItemSet&        rFlySet );
+    void ProcessEscherAlign( SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
+        SfxItemSet &rFlySet );
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
     void GrafikCtor();
     void GrafikDtor();
@@ -953,11 +951,14 @@ friend class WW8FormulaControl;
                                     BYTE   nActLevel = nWW8MaxListLevel );
     void RegisterNumFmt(USHORT nActLFO, BYTE nActLevel);
 
+#if 0
 // Pictures mit Kode 100, die ueber MsoftbSpContainer abgespeichert sind.
     int WW8QuickHackForMSDFF_DirectBLIPImport( SvStream&    rSt,
                                                 WW8PicDesc* pPic,
                                                 Graphic&    rData,
                                                 String&     rGraphName);
+#endif
+
 // spaeter zu ersetzen durch Aufruf in entsprechend erweiterten SvxMSDffManager
 
 
@@ -1149,11 +1150,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.18 2001-03-19 21:29:17 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.19 2001-03-27 12:01:49 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.18  2001/03/19 21:29:17  jp
+      Bugfixes/Optimization for task #83168#
+
       Revision 1.17  2001/03/16 17:16:00  jp
       new: im-/export emboss / engrave attribute
 
