@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ProgressBar" script:language="StarBasic">REM  *****  BASIC  *****
+
+Dim oDialog As Object
+
+Sub Main()
+
+	Dim oLibContainer As Object, oLib As Object
+	Dim oInputStreamProvider As Object
+	Dim oProgressBar As Object
+			
+	Const sLibName = &quot;ToolkitControls&quot;
+	Const sDialogName = &quot;ProgressBarDlg&quot;
+
+	REM load/get library and input stream provider
+	oLibContainer = DialogLibraries	
+	oLibContainer.loadLibrary( sLibName )
+	oLib = oLibContainer.getByName( sLibName )	
+	oInputStreamProvider = oLib.getByName( sDialogName )
+
+	REM create dialog control
+	oDialog = CreateUnoDialog( oInputStreamProvider )
+
+	REM hide progress bar
+	oProgressBar = oDialog.getControl(&quot;ProgressBar1&quot;)	
+	oProgressBar.setVisible( False )
+											
+	REM show the dialog
+	oDialog.execute()
+			
+End Sub
+
+Sub ProgressBarDemo()
+
+	Dim oProgressBar As Object, oProgressBarModel As Object
+	Dim oCancelButtonModel As Object 
+	Dim oStartButtonModel As Object
+	Dim ProgressValue As Long
+	
+	REM progress bar settings
+	Const ProgressValueMin = 0
+	Const ProgressValueMax = 40
+	Const ProgressStep = 4		
+
+	REM set minimum and maximum progress value
+	oProgressBarModel = oDialog.Model.ProgressBar1
+	oProgressBarModel.ProgressValueMin = ProgressValueMin
+	oProgressBarModel.ProgressValueMax = ProgressValueMax
+
+	REM disable cancel and start button
+	oCancelButtonModel = oDialog.Model.CommandButton1
+	oCancelButtonModel.Enabled = False
+	oStartButtonModel = oDialog.Model.CommandButton2
+	oStartButtonModel.Enabled = False
+
+	REM show progress bar
+	oProgressBar = oDialog.getControl(&quot;ProgressBar1&quot;)	
+	oProgressBar.setVisible( True )
+
+	REM increase progress value every second
+	For ProgressValue = ProgressValueMin To ProgressValueMax Step ProgressStep
+   	    oProgressBarModel.ProgressValue = ProgressValue
+		Wait 1000	
+	Next ProgressValue
+
+	REM hide progress bar
+	oProgressBar.setVisible( False )
+
+	REM enable cancel and start button
+	oCancelButtonModel.Enabled = True
+	oStartButtonModel.Enabled = True
+
+End Sub
+
+</script:module>
