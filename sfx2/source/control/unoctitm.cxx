@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-11 09:12:09 $
+ *  last change: $Author: mba $ $Date: 2001-10-31 16:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,6 +392,25 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
         delete pControllerItem;
     }
 }
+
+#ifdef MACOSX
+    //MACOSX moved outside of class above
+    // {38 57 CA 80 09 36 11 d4 83 FE 00 50 04 52 6B 21}
+    static sal_uInt8 pGUID[16] = { 0x38, 0x57, 0xCA, 0x80, 0x09, 0x36, 0x11, 0xd4, 0x83, 0xFE, 0x00, 0x50, 0x04, 0x52, 0x6B, 0x21 };
+    static ::com::sun::star::uno::Sequence< sal_Int8 > seqID((sal_Int8*)pGUID,16) ;
+#endif
+
+const ::com::sun::star::uno::Sequence< sal_Int8 >& SfxOfficeDispatch::impl_getStaticIdentifier()
+{
+#ifndef MACOSX
+    //MACOSX moved outside of class above
+    // {38 57 CA 80 09 36 11 d4 83 FE 00 50 04 52 6B 21}
+    static sal_uInt8 pGUID[16] = { 0x38, 0x57, 0xCA, 0x80, 0x09, 0x36, 0x11, 0xd4, 0x83, 0xFE, 0x00, 0x50, 0x04, 0x52, 0x6B, 0x21 };
+    static ::com::sun::star::uno::Sequence< sal_Int8 > seqID((sal_Int8*)pGUID,16) ;
+#endif
+    return seqID ;
+}
+
 
 void SAL_CALL SfxOfficeDispatch::dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw ( ::com::sun::star::uno::RuntimeException )
 {
