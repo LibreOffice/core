@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-09 15:26:28 $
+ *  last change: $Author: hdu $ $Date: 2001-07-16 16:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1040,7 +1040,7 @@ static RecodeTable aRecodeTable[] =
     {"monotypesorts",   {aMonotypeSortsTab,"StarSymbol", NULL}},
     {"zapfdingbats",    {aMonotypeSortsTab,"StarSymbol", NULL}},  //ZapfDingbats=MonotypeSorts-X?
     {"dingbats",        {aMonotypeSortsTab,"StarSymbol", NULL}},
-    {"zapfchancery",    {aMonotypeSortsTab,"StarSymbol", NULL}},  //ZapfChancery=MonotypeSorts-X
+//  {"zapfchancery",    {aMonotypeSortsTab,"StarSymbol", NULL}},
 //  {"monotypesorts2",  {aMonotypeSorts2Tab,"StarSymbol", NULL}}
 
 //  {"wingdings",       {aWingDingsTab, "StarSymbol", NULL}},
@@ -1049,7 +1049,8 @@ static RecodeTable aRecodeTable[] =
 //  {"webdings",        {aWebDings2Tab, "StarSymbol", NULL}},
 };
 
-static ImplCvtChar aStarSymbolCvt = {NULL, "StarBats", ImplStarSymbolToStarBats};
+static ImplCvtChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStarBats };
+static ImplCvtChar aImplDingBatsCvt   = { aMonotypeSortsTab, "StarSymbol", NULL };
 
 // -----------------------------------------------------------------------
 
@@ -1072,11 +1073,14 @@ const ImplCvtChar* ImplGetRecodeData( const String& rOrgFontName,
             if( aOrgName.EqualsAscii( r.pOrgName ) )
                 { pCvt = &r.aCvt; break; }
         }
+
+        if( !pCvt ) // unknown symbol font => use Unicode DingBats/Adobe Symbols
+            pCvt = &aImplDingBatsCvt;
     }
     else if( aMapName.EqualsAscii( "starbats" ) )
     {
-        if( aOrgName.EqualsAscii( "starsymbol" ) )      pCvt = &aStarSymbolCvt;
-        else if( aOrgName.EqualsAscii( "opensymbol" ) ) pCvt = &aStarSymbolCvt;
+        if( aOrgName.EqualsAscii( "starsymbol" ) )      pCvt = &aImplStarSymbolCvt;
+        else if( aOrgName.EqualsAscii( "opensymbol" ) ) pCvt = &aImplStarSymbolCvt;
     }
 
     return pCvt;
@@ -1107,8 +1111,8 @@ FontToSubsFontConverter CreateFontToSubsFontConverter(
     else
     {
         // TODO: FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS
-        if( aName.EqualsAscii( "starsymbol" ) )       pCvt = &aStarSymbolCvt;
-        else if( aName.EqualsAscii( "opensymbol" ) )  pCvt = &aStarSymbolCvt;
+        if( aName.EqualsAscii( "starsymbol" ) )       pCvt = &aImplStarSymbolCvt;
+        else if( aName.EqualsAscii( "opensymbol" ) )  pCvt = &aImplStarSymbolCvt;
     }
 
     return (FontToSubsFontConverter)pCvt;
