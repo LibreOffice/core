@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-09 16:17:44 $
+ *  last change: $Author: sj $ $Date: 2002-08-20 10:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1524,7 +1524,7 @@ sal_Bool PPTWriter::ImplGetStyleSheets()
     bRetValue = aXNamed.is() && aXNameAccess.is() && aXStyleFamiliesSupplier.is();
     if  ( bRetValue )
     {
-        for ( nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_Other; nInstance++ )
+        for ( nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_CenterBody; nInstance++ )
         {
             String aStyle;
             String aFamily;
@@ -1546,6 +1546,12 @@ sal_Bool PPTWriter::ImplGetStyleSheets()
                 {
                     aStyle = String( RTL_CONSTASCII_USTRINGPARAM( "standard" ) );
                     aFamily = String( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
+                }
+                break;
+                case EPP_TEXTTYPE_CenterBody :
+                {
+                    aStyle = String( RTL_CONSTASCII_USTRINGPARAM( "subtitle" ) );
+                    aFamily = aXNamed->getName();
                 }
                 break;
             }
