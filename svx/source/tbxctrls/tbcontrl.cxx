@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-11 08:19:59 $
+ *  last change: $Author: vg $ $Date: 2002-06-12 10:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ public:
     inline BOOL     IsHighContrast( void ) const;
 };
 
-inline BOOL SvxFrameWindow::IsHighContrast( void ) const
+inline BOOL SvxFrameWindow_Impl::IsHighContrast( void ) const
 {
     return GetDisplayBackground().GetColor().IsDark();
 }
@@ -1188,7 +1188,7 @@ SfxPopupWindow* SvxFrameWindow_Impl::Clone() const
     return new SvxFrameWindow_Impl( GetId(), (SfxBindings&)GetBindings(), FALSE );
 }
 
-void SvxFrameWindow::DataChanged( const DataChangedEvent& rDCEvt )
+void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxPopupWindow::DataChanged( rDCEvt );
 
