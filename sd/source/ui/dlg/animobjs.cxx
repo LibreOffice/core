@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-07 11:17:26 $
+ *  last change: $Author: cl $ $Date: 2000-11-09 12:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#include <string>
-#include <algorithm>
-
 #ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONEFFECT_HPP_
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #endif
@@ -105,6 +102,9 @@
 #include "sdview.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
+
+#include <string>
+#include <algorithm>
 
 using namespace ::com::sun::star;
 SFX_IMPL_DOCKINGWINDOW( SdAnimationChildWindow, SID_ANIMATION_OBJECTS)
