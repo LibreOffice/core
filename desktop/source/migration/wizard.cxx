@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:50:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,9 @@ FirstStartWizard::FirstStartWizard(Window* pParent)
     m_pNextPage->SetHelpId(HID_FIRSTSTART_NEXT);
     m_pCancel->SetHelpId(HID_FIRSTSTART_CANCEL);
     m_pFinish->SetHelpId(HID_FIRSTSTART_FINISH);
-    m_pHelp->SetUniqueId(UID_FIRSTSTART_HELP);
+    // m_pHelp->SetUniqueId(UID_FIRSTSTART_HELP);
+    m_pHelp->Hide();
+    m_pHelp->Disable();
 
     // save button lables
     m_sNext = m_pNextPage->GetText();
@@ -199,6 +201,19 @@ FirstStartWizard::FirstStartWizard(Window* pParent)
     defaultButton(WZB_NEXT);
 
 }
+
+// catch F1 and disable help
+long FirstStartWizard::PreNotify( NotifyEvent& rNEvt )
+{
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
+        if( rKey.GetCode() == KEY_F1 && ! rKey.GetModifier() )
+            return TRUE;
+    }
+    return RoadmapWizard::PreNotify(rNEvt);
+}
+
 
 void FirstStartWizard::enterState(WizardState _nState)
 {
