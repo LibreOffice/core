@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 19:25:39 $
+ *  last change: $Author: kz $ $Date: 2001-06-01 19:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "Tekstinstellingen";
         Text[ french ] = "Paramètres de texte";
         Text[ spanish ] = "Configuración de texto";
-        Text[ italian ] = "TextMode";
+        Text[ italian ] = "Impostazioni testo";
         Text[ danish ] = "TextMode";
         Text[ swedish ] = "Textinställningar";
         Text[ polish ] = "Ustawienia tekstu";
@@ -546,8 +546,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ italian ] =
     {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "Esporta sempre Glyph Outlines" ; > ;
+        < "Non esportare mai Glyph Outlines" ; > ;
     };
     StringList [ danish ] =
     {
