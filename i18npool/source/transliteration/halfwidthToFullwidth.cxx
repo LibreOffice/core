@@ -2,9 +2,9 @@
  *
  *  $RCSfile: halfwidthToFullwidth.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:50:08 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ halfwidthToFullwidth::transliterate( const OUString& inStr, sal_Int32 startPos, 
     sal_Bool _useOffset = useOffset;
     // One to One mapping
     useOffset = sal_False;
-    OUString& newStr = transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset);
+    const OUString& newStr = transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset);
     useOffset = _useOffset;
 
     // Composition: KA + voice-mark --> GA

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fullwidthToHalfwidth.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:49:59 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,11 @@ fullwidthToHalfwidth::transliterate( const OUString& inStr, sal_Int32 startPos, 
   throw(RuntimeException)
 {
     // Decomposition: GA --> KA + voice-mark
-    OUString& newStr = widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
+    const OUString& newStr = widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
 
     // One to One mapping
     useOffset = sal_False;
-    OUString &tmp = transliteration_OneToOne::transliterate( newStr, 0, newStr.getLength(), offset);
+    const OUString &tmp = transliteration_OneToOne::transliterate( newStr, 0, newStr.getLength(), offset);
     useOffset = sal_True;
     return tmp;
 }
