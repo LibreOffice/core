@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 07:32:36 $
+ *  last change: $Author: nn $ $Date: 2001-08-20 08:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,9 +126,11 @@ BOOL __EXPORT ScDocShell::InitNew( SvStorage * pStor )
         SetVisAreaOrSize( Rectangle( Point(), aSize ), TRUE );
     }
 
+    // InitOptions sets the document languages, must be called before CreateStandardStyles
+    InitOptions();
+
     aDocument.GetStyleSheetPool()->CreateStandardStyles();
     aDocument.UpdStlShtPtrsFrmNms();
-    InitOptions(); // CLOOK
 
     //  SetDocumentModified ist in Load/InitNew nicht mehr erlaubt!
 
