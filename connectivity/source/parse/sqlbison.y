@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.47 2004-06-25 18:34:34 hjs Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.48 2004-08-02 17:16:20 hr Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hjs $ $Date: 2004-06-25 18:34:34 $ $Revision: 1.47 $
+//	$Author: hr $ $Date: 2004-08-02 17:16:20 $ $Revision: 1.48 $
 //
 // Description:
 //
@@ -148,7 +148,7 @@ using namespace connectivity;
 %token <pParseNode> SQL_TOKEN_CAST SQL_TOKEN_CHARACTER SQL_TOKEN_CHECK SQL_TOKEN_COLLATE SQL_TOKEN_COMMIT SQL_TOKEN_CONTINUE SQL_TOKEN_CONVERT SQL_TOKEN_COUNT SQL_TOKEN_CREATE SQL_TOKEN_CROSS
 %token <pParseNode> SQL_TOKEN_CURRENT SQL_TOKEN_CURSOR
 
-%token <pParseNode> SQL_TOKEN_DATE SQL_TOKEN_DAY SQL_TOKEN_DEC SQL_TOKEN_DECIMAL SQL_TOKEN_DECLARE SQL_TOKEN_DEFAULT SQL_TOKEN_DELETE SQL_TOKEN_DESC
+%token <pParseNode> SQL_TOKEN_DATE SQL_TOKEN_DATEVALUE SQL_TOKEN_DAY SQL_TOKEN_DEC SQL_TOKEN_DECIMAL SQL_TOKEN_DECLARE SQL_TOKEN_DEFAULT SQL_TOKEN_DELETE SQL_TOKEN_DESC
 %token <pParseNode> SQL_TOKEN_DISTINCT SQL_TOKEN_DOUBLE SQL_TOKEN_DROP
 
 %token <pParseNode> SQL_TOKEN_ESCAPE SQL_TOKEN_EXCEPT SQL_TOKEN_EXISTS SQL_TOKEN_FALSE SQL_TOKEN_FETCH SQL_TOKEN_FLOAT SQL_TOKEN_FOR SQL_TOKEN_FOREIGN SQL_TOKEN_FOUND SQL_TOKEN_FROM SQL_TOKEN_FULL
@@ -182,11 +182,11 @@ using namespace connectivity;
 %token <pParseNode> SQL_TOKEN_CURRENT_DATE SQL_TOKEN_CURRENT_TIME SQL_TOKEN_CURRENT_TIMESTAMP SQL_TOKEN_CURDATE SQL_TOKEN_CURTIME          
 %token <pParseNode> SQL_TOKEN_DAYNAME  SQL_TOKEN_DAYOFMONTH  SQL_TOKEN_DAYOFWEEK  SQL_TOKEN_DAYOFYEAR SQL_TOKEN_EXTRACT          
 %token <pParseNode> SQL_TOKEN_HOUR SQL_TOKEN_MINUTE  SQL_TOKEN_MONTH  SQL_TOKEN_MONTHNAME SQL_TOKEN_NOW SQL_TOKEN_QUARTER          
-%token <pParseNode> SQL_TOKEN_SECOND SQL_TOKEN_TIMESTAMPADD SQL_TOKEN_TIMESTAMPDIFF SQL_TOKEN_WEEK SQL_TOKEN_YEAR 
+%token <pParseNode> SQL_TOKEN_SECOND SQL_TOKEN_TIMESTAMPADD SQL_TOKEN_TIMESTAMPDIFF SQL_TOKEN_TIMEVALUE SQL_TOKEN_WEEK SQL_TOKEN_YEAR 
 
 /* numeric functions */
 %token <pParseNode> SQL_TOKEN_ABS SQL_TOKEN_ACOS SQL_TOKEN_ASIN SQL_TOKEN_ATAN SQL_TOKEN_ATAN2 SQL_TOKEN_CEILING 
-%token <pParseNode> SQL_TOKEN_COS SQL_TOKEN_COT SQL_TOKEN_DEGREES SQL_TOKEN_EXP SQL_TOKEN_DIV SQL_TOKEN_FLOOR SQL_TOKEN_LOGF SQL_TOKEN_LN   
+%token <pParseNode> SQL_TOKEN_COS SQL_TOKEN_COT SQL_TOKEN_DEGREES SQL_TOKEN_EXP SQL_TOKEN_DIV SQL_TOKEN_FLOOR SQL_TOKEN_LOGF  SQL_TOKEN_LN
 %token <pParseNode> SQL_TOKEN_LOG10 SQL_TOKEN_MOD SQL_TOKEN_PI SQL_TOKEN_POWER SQL_TOKEN_RADIANS SQL_TOKEN_RAND    
 %token <pParseNode> SQL_TOKEN_ROUND   SQL_TOKEN_SIGN    SQL_TOKEN_SIN     SQL_TOKEN_SQRT    SQL_TOKEN_TAN SQL_TOKEN_TRUNCATE
 
@@ -1875,7 +1875,9 @@ date_function_1Argument:
 	|	SQL_TOKEN_HOUR                
 	|	SQL_TOKEN_MINUTE              
 	|	SQL_TOKEN_SECOND         
-	|	SQL_TOKEN_YEAR                
+	|	SQL_TOKEN_YEAR
+	|	SQL_TOKEN_TIMEVALUE
+	|	SQL_TOKEN_DATEVALUE
 	;
 	
 date_function:
@@ -1900,7 +1902,7 @@ numeric_function_1Argument:
 	|	SQL_TOKEN_SQRT            
 	|	SQL_TOKEN_TAN             
 	|	SQL_TOKEN_EXP             
-	|	SQL_TOKEN_LOG10
+	|	SQL_TOKEN_LOG10           
 	|	SQL_TOKEN_LN
 	|	SQL_TOKEN_RADIANS         
 	;
@@ -3694,7 +3696,7 @@ sal_Int16 OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType, OSQL
 		case DataType::TIMESTAMP:
 		{
 			DateTime aDateTime = DBTypeConversion::toDateTime(fValue,DBTypeConversion::getNULLDate(m_xFormatter->getNumberFormatsSupplier()));
-			if (aDateTime.Seconds && aDateTime.Minutes && aDateTime.Hours)
+			if (aDateTime.Seconds || aDateTime.Minutes || aDateTime.Hours)
 			{
 				::rtl::OUString aString = DBTypeConversion::toDateTimeString(aDateTime);
 				pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_TS));
