@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:03:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
 #pragma warning( disable : 4290 )
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
 
 #include "sal/config.h"
@@ -203,6 +207,7 @@
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
@@ -985,7 +990,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         }
 
         // special treatment for slots that are *not* meant to be recorded as slots (except SaveAs/To)
-        if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||
+        if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||  nSlotId == SID_SAVEDOC ||
              nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF )
         {
             sal_Int32 nAdditional=0;
@@ -1109,7 +1114,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 if ( nArg<nFormalArgs )
                     continue;
 
-                if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||
+                if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||  nSlotId == SID_SAVEDOC ||
                      nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF )
                 {
                     if ( nId == SID_DOCFRAME )
@@ -1313,7 +1318,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             }
         }
 
-        if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||
+        if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||  nSlotId == SID_SAVEDOC ||
              nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF )
         {
             const SfxPoolItem *pItem=0;
@@ -1729,6 +1734,12 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 pDoc->AdjustMacroMode( String() );
                 if( pDoc->Get_Impl()->nMacroMode == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
                     // check forbids execution
+                    return ERRCODE_IO_ACCESSDENIED;;
+            }
+            else if ( pSh && pSh->GetMedium() )
+            {
+                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+                if ( pUpdateDocItem && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE )
                     return ERRCODE_IO_ACCESSDENIED;;
             }
 
