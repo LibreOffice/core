@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-27 11:55:54 $
+ *  last change: $Author: rt $ $Date: 2004-05-27 14:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #ifdef UNX
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #else
 #ifndef MAC
 #include <io.h>
@@ -1091,6 +1092,12 @@ ERRTYPE RscCompiler::Link()
                 aBuf.append( it->aOutputRc );
                 pTC->pEH->FatalError( ERR_RENAMEFILE, RscId(), aBuf.getStr() );
             }
+            else
+            {
+#ifdef UNX
+                chmod( it->aOutputRc.GetBuffer(), S_IRWXU | S_IRWXG | S_IROTH );
+#endif
+            }
 
             unlink( aSysList.getStr() );
             if( rename( aSysListTmp.getStr(), aSysList.getStr() ) )
@@ -1100,6 +1107,12 @@ ERRTYPE RscCompiler::Link()
                 aBuf.append( " -> " );
                 aBuf.append( aSysList );
                 pTC->pEH->FatalError( ERR_RENAMEFILE, RscId(), aBuf.getStr() );
+            }
+            else
+            {
+#ifdef UNX
+                chmod( aSysList.getStr(), S_IRWXU | S_IRWXG | S_IROTH );
+#endif
             }
         }
     }
