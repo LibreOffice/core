@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:29:30 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,9 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
-#ifndef _ENVLOP_HXX
-#include <envlop.hxx>
-#endif
+//CHINA001 #ifndef _ENVLOP_HXX
+//CHINA001 #include <envlop.hxx>
+//CHINA001 #endif
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
 #endif
@@ -191,6 +191,13 @@
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
 #endif
+#include "swabstdlg.hxx" //CHINA001
+#include "envelp.hrc" //CHINA001
+
+#ifndef _SFXTABDLG_HXX //autogen
+#include <sfx2/tabdlg.hxx> //CHINA001
+#endif
+#include "envimg.hxx" //CHINA001
 
 #define ENV_NEWDOC      RET_OK
 #define ENV_INSERT      RET_USER
@@ -339,13 +346,19 @@ static USHORT nTitleNo = 0;
     }
 
     Window *pParent = pOldSh ? pOldSh->GetWin() : 0;
-    SwEnvDlg* pDlg = NULL;
+    //CHINA001 SwEnvDlg* pDlg = NULL;
+    SfxAbstractTabDialog * pDlg=NULL;
     short nMode = ENV_INSERT;
 
     SFX_REQUEST_ARG( rReq, pItem, SwEnvItem, FN_ENVELOP, sal_False );
     if ( !pItem )
     {
-        pDlg = new SwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange);
+        //CHINA001 pDlg = new SwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange);
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+        pDlg = pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange,ResId( DLG_ENV ));
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         nMode = pDlg->Execute();
     }
     else
