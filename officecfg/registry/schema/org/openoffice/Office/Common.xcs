@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: pb $ $Date: 2002-12-04 10:48:17 $
+ *  last change: $Author: mav $ $Date: 2002-12-04 14:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,8 +668,18 @@
 				<author>MAV</author>
 				<desc xml:lang="en-US">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
 			</info>
-			<prop oor:name="Name" oor:type="xs:string" oor:localized="true"/>
-			<prop oor:name="Key" oor:type="xs:string"/>
+			<prop oor:name="Name" oor:type="xs:string" oor:localized="true">
+				<info>
+					<author>MAV</author>
+					<desc xml:lang="en-US">Specifies the object name for the Office module.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Key" oor:type="xs:string">
+				<info>
+					<author>MAV</author>
+					<desc xml:lang="en-US">Specifies the unique key for the Office module.</desc>
+				</info>
+			</prop>
 		</group>
 		<group oor:name="RecoveryEntry">
 			<info>
@@ -5063,6 +5073,7 @@
 		<set oor:name="OfficeObjects" oor:node-type="ObjectNames">
 			<info>
 				<author>MAV</author>
+				<desc xml:lang="en-US">Specifies the object names for the different Office modules. Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
 			</info>
 		</set>
 		<group oor:name="ExternalApps" oor:extensible="true">
