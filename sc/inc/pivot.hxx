@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:12:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,14 @@
 #define SC_PIVOT_HXX
 
 #ifndef SC_SCGLOB_HXX
-#include <global.hxx>
+#include "global.hxx"
 #endif
 
 #ifndef SC_ADDRESS_HXX
 #include "address.hxx"
 #endif
+
+#include <vector>
 
 class SubTotal;
 
@@ -96,6 +98,22 @@ class SubTotal;
 
 #define PIVOT_DATA_FIELD        (MAXCOLCOUNT)
 #define PIVOT_FUNC_REF          (MAXCOLCOUNT)
+
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDSORTINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDLAYOUTINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDAUTOSHOWINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
+#endif
 
 #define PIVOT_STYLE_INNER       0
 #define PIVOT_STYLE_RESULT      1
@@ -110,6 +128,70 @@ class ScUserListData;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 class ScProgress;
+struct LabelData;
+
+// -----------------------------------------------------------------------
+
+struct PivotField
+{
+    short               nCol;
+    USHORT              nFuncMask;
+    USHORT              nFuncCount;
+    ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
+
+    explicit            PivotField( short nNewCol = 0, USHORT nNewFuncMask = PIVOT_FUNC_NONE );
+
+    bool                operator==( const PivotField& r ) const;
+};
+
+// -----------------------------------------------------------------------
+
+// DR->ER: temporary workaround from CWS fieldoptions, remove
+typedef USHORT SCSIZE;
+
+// implementation still in global2.cxx
+struct ScPivotParam
+{
+    SCCOL           nCol;           // Cursor Position /
+    SCROW           nRow;           // bzw. Anfang des Zielbereiches
+    SCTAB           nTab;
+    LabelData**     ppLabelArr;
+    SCSIZE          nLabels;
+    PivotField      aPageArr[PIVOT_MAXPAGEFIELD];
+    PivotField      aColArr[PIVOT_MAXFIELD];
+    PivotField      aRowArr[PIVOT_MAXFIELD];
+    PivotField      aDataArr[PIVOT_MAXFIELD];
+    SCSIZE          nPageCount;
+    SCSIZE          nColCount;
+    SCSIZE          nRowCount;
+    SCSIZE          nDataCount;
+    BOOL            bIgnoreEmptyRows;
+    BOOL            bDetectCategories;
+    BOOL            bMakeTotalCol;
+    BOOL            bMakeTotalRow;
+
+    ScPivotParam();
+    ScPivotParam( const ScPivotParam& r );
+    ~ScPivotParam();
+
+    ScPivotParam&   operator=       ( const ScPivotParam& r );
+    BOOL            operator==      ( const ScPivotParam& r ) const;
+    void            Clear           ();
+    void            ClearLabelData  ();
+    void            ClearPivotArrays();
+    void            SetLabelData    ( LabelData**   ppLabArr,
+                                      SCSIZE        nLab );
+    void            SetPivotArrays  ( const PivotField* pPageArr,
+                                      const PivotField* pColArr,
+                                      const PivotField* pRowArr,
+                                      const PivotField* pDataArr,
+                                      SCSIZE            nPageCnt,
+                                      SCSIZE            nColCnt,
+                                      SCSIZE            nRowCnt,
+                                      SCSIZE            nDataCnt );
+};
+
+// -----------------------------------------------------------------------
 
 struct PivotColRef
 {
@@ -330,42 +412,45 @@ public:
 };
 
 //------------------------------------------------------------------------
+
 struct LabelData
 {
-    String* pStrColName;
-    SCsCOL  nCol;
-    BOOL    bIsValue; // Summe oder Anzahl im Data-Feld
-    USHORT  nFuncMask;
+    String              maName;         /// Visible name of the dimension.
+    SCsCOL              mnCol;
+    USHORT              mnFuncMask;     /// Page/Column/Row subtotal function.
+    sal_Int32           mnUsedHier;     /// Used hierarchy.
+    bool                mbShowAll;      /// true = Show all (also empty) results.
+    bool                mbIsValue;      /// true = Sum or count in data field.
 
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  maHiers;        /// Hierarchies.
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  maMembers;      /// Members.
+    ::com::sun::star::uno::Sequence< sal_Bool >         maVisible;      /// Visibility of members.
+    ::com::sun::star::sheet::DataPilotFieldSortInfo     maSortInfo;     /// Sorting info.
+    ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   /// Layout info.
+    ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.
 
-        LabelData( const String&    rColName,
-                   SCsCOL           nColumn,
-                   BOOL             bVal,
-                   USHORT           nMask = PIVOT_FUNC_NONE )
-            :   nCol        (nColumn),
-                bIsValue    (bVal),
-                nFuncMask   (nMask)
-            { pStrColName = new String( rColName ); }
-
-        LabelData( const LabelData& rCpy )
-            :   nCol        (rCpy.nCol),
-                bIsValue    (rCpy.bIsValue),
-                nFuncMask   (rCpy.nFuncMask)
-            { pStrColName = new String( *(rCpy.pStrColName) ); }
-
-        ~LabelData()
-            { delete pStrColName; }
-
-    LabelData& operator=( const LabelData& r )
-        {
-            nCol        = r.nCol;
-            bIsValue    = r.bIsValue;
-            nFuncMask   = r.nFuncMask;
-            pStrColName = new String( *(r.pStrColName) );
-
-            return *this;
-        }
+    explicit            LabelData( const String& rName, short nCol, bool bIsValue );
 };
 
+// ============================================================================
+
+struct ScDPFuncData
+{
+    short               mnCol;
+    USHORT              mnFuncMask;
+    ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
+
+    explicit            ScDPFuncData( short nNewCol, USHORT nNewFuncMask );
+    explicit            ScDPFuncData( short nNewCol, USHORT nNewFuncMask,
+                            const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
+};
+
+// ============================================================================
+
+typedef LabelData ScDPLabelData;
+typedef std::vector< ScDPLabelData > ScDPLabelDataVec;
+typedef std::vector< String > ScDPNameVec;
+
+// ============================================================================
 
 #endif
