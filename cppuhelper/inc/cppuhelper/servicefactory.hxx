@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 13:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace cppu
  * parameters contain a value then the service factory is initialized with a simple registry
  * or a nested registry. Otherwise the service factory must be initialized later with a valid
  * registry.
- *<BR>
+ *
  * @param rWriteRegistryFile    file name of the simple registry or the first registry file of
  *                              the nested registry which will be opened with read/write rights. This
  *                              file will be created if necessary.
@@ -98,8 +98,6 @@ namespace cppu
  * @param rBootstrapPath        specify a path where the bootstrap components could be find. If this
  *                              parameter is an empty string the compoents will be searched in the normal
  *                              path.
- *
- * @author Daniel Boelzle
  */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
     createRegistryServiceFactory( const ::rtl::OUString & rWriteRegistryFile,
@@ -111,14 +109,12 @@ namespace cppu
 
 /**
  * This bootstraps an initial service factory working on a registry file.
- *<BR>
+ *
  * @param rRegistryFile         file name of the registry to use/ create; if this is an empty
  *                              string, the default registry is used instead
  * @param bReadOnly             flag which specify that the registry file will be opened with
  *                              readonly rights. Default is FALSE. If this flag is used the registry
  *                              will not be created if not exist.
- *
- * @author Daniel Boelzle
  */
 inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
     createRegistryServiceFactory( const ::rtl::OUString & rRegistryFile,
@@ -131,9 +127,7 @@ inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFa
 
 
 /**
- * This bootstraps a service factory without initilaize a registry.
- *<BR>
- * @author Daniel Boelzle
+ * This bootstraps a service factory without initialize a registry.
  */
 inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
     createServiceFactory(const ::rtl::OUString & rBootstrapPath = ::rtl::OUString())
