@@ -137,7 +137,7 @@
 	<xsl:element name="article">
 		<xsl:attribute name="lang"><xsl:value-of select="/office:document/office:meta/dc:language"/>
 		</xsl:attribute>
-		<xsl:apply-templates />
+        <xsl:apply-templates select="office:body"/>
 	</xsl:element>
 </xsl:template>
 
@@ -604,13 +604,12 @@
 		</variablelist>
 	</xsl:when>
 	<xsl:when  test="@text:style-name='UnOrdered List'">
-		<variablelist>
+		<itemizedlist>
 			<xsl:apply-templates/>
-		</variablelist>
+		</itemizedlist>
 	</xsl:when>
 	<xsl:otherwise>
 	<itemizedlist>
-		<title></title>
 		<xsl:apply-templates/>
 	</itemizedlist>
 	</xsl:otherwise>
@@ -831,6 +830,14 @@
 				<xsl:apply-templates/>
 			</xsl:element>
 		</xsl:when>
+		<xsl:when test="contains(@xlink:href,'mailto:')"> 
+	        <xsl:element name="ulink">
+                <xsl:attribute name ="url"> 
+    	            <xsl:value-of select="@xlink:href"/> 
+                </xsl:attribute>
+                <xsl:apply-templates/>
+            </xsl:element> 
+        </xsl:when> 
 		<xsl:when test="not(contains(@xlink:href,'#'))">
 			<xsl:element name="olink">
 				<xsl:attribute name="targetdocent">
