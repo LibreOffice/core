@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:58:37 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,24 +420,88 @@ static void InitSalShlData()
 }
 
 // =======================================================================
+// -------
+// SalData
+// -------
+
+SalData::SalData()
+{
+    mhInst = 0;                 // default instance handle
+    mhPrevInst = 0;             // previous instance handle
+    mnCmdShow = 0;              // default frame show style
+    mhDitherPal = 0;            // dither palette
+    mhDitherDIB = 0;            // dither memory handle
+    mpDitherDIB = 0;            // dither memory
+    mpDitherDIBData = 0;        // beginning of DIB data
+    mpDitherDiff = 0;           // Dither mapping table
+    mpDitherLow = 0;            // Dither mapping table
+    mpDitherHigh = 0;           // Dither mapping table
+    mnTimerMS = 0;              // Current Time (in MS) of the Timer
+    mnTimerOrgMS = 0;           // Current Original Time (in MS)
+    mnTimerId = 0;              // windows timer id
+    mbInTimerProc = FALSE;      // timer event is currently being dispatched
+    mhSalObjMsgHook = 0;        // hook to get interesting msg for SalObject
+    mhWantLeaveMsg = 0;         // window handle, that want a MOUSELEAVE message
+    mpMouseLeaveTimer = 0;      // Timer for MouseLeave Test
+    mpFirstInstance = 0;        // pointer of first instance
+    mpFirstFrame = 0;           // pointer of first frame
+    mpFirstObject = 0;          // pointer of first object window
+    mpFirstVD = 0;              // first VirDev
+    mpFirstPrinter = 0;         // first printing printer
+    mpHDCCache = 0;             // Cache for three DC's
+    mh50Bmp = 0;                // 50% Bitmap
+    mh50Brush = 0;              // 50% Brush
+    int i;
+    for(i=0; i<MAX_STOCKPEN; i++)
+    {
+        maStockPenColorAry[i] = 0;
+        mhStockPenAry[i] = 0;
+    }
+    for(i=0; i<MAX_STOCKBRUSH; i++)
+    {
+        maStockBrushColorAry[i] = 0;
+        mhStockBrushAry[i] = 0;
+    }
+    mnStockPenCount = 0;        // count of static pens
+    mnStockBrushCount = 0;      // count of static brushes
+    mnSalObjWantKeyEvt = 0;     // KeyEvent, welcher vom SalObj-Hook verarbeitet werden soll
+    mnCacheDCInUse = 0;         // count of CacheDC in use
+    mbObjClassInit = FALSE;     // is SALOBJECTCLASS initialised
+    mbInPalChange = FALSE;      // is in WM_QUERYNEWPALETTE
+    mnAppThreadId = 0;          // Id from Applikation-Thread
+    mbScrSvrEnabled = FALSE;    // ScreenSaver enabled
+    mnSageStatus = 0;           // status of Sage-DLL (DISABLE_AGENT == nicht vorhanden)
+    mhSageInst = 0;             // instance handle for the Sage-DLL
+    mpSageEnableProc = 0;       // funktion to deactivate the system agent
+    mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
+    mpTempFontItem = 0;
+    mbThemeChanged = FALSE;     // true if visual theme was changed: throw away theme handles
+
+    SetSalData( this );
+    initNWF();
+}
+
+SalData::~SalData()
+{
+    deInitNWF();
+    SetSalData( NULL );
+}
 
 void InitSalData()
 {
     SalData* pSalData = new SalData;
-    memset( pSalData, 0, sizeof( SalData ) );
-    SetSalData( pSalData );
     CoInitialize(0);
 }
 
-// -----------------------------------------------------------------------
 
 void DeInitSalData()
 {
     CoUninitialize();
     SalData* pSalData = GetSalData();
     delete pSalData;
-    SetSalData( NULL );
 }
+
+// -----------------------------------------------------------------------
 
 void InitSalMain()
 {
