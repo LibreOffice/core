@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 11:56:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,10 @@
 
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONBROADCASTER_HPP_
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMAPMODES_HPP_
+#include <com/sun/star/embed/EmbedMapModes.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -511,6 +515,7 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
                                                 static_cast< XCLOSEBROADCASTER*     > ( this )  ,
                                             static_cast< XVIEWDATASUPPLIER*     > ( this )  ,
                                                static_cast< XEVENTBROADCASTER*      > ( this )  ,
+                                               static_cast< XVISUALOBJECT*          > ( this )  ,
                                                static_cast< XUNOTUNNEL*             > ( this )  ,
                                             static_cast< XUICONFIGURATIONMANAGERSUPPLIER* > ( this ) ,
                                                static_cast< XDOCUMENTSUBSTORAGESUPPLIER* > ( this ) ,
@@ -593,6 +598,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                          ::getCppuType(( const REFERENCE< XTRANSFERABLE          >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XPRINTJOBBROADCASTER   >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER        >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XVISUALOBJECT          >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XUNOTUNNEL             >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XDOCUMENTSUBSTORAGESUPPLIER >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XSCRIPTPROVIDERSUPPLIER >*)NULL ) ,
@@ -915,7 +921,7 @@ void SAL_CALL SfxBaseModel::disposing( const EVENTOBJECT& aObject )
 
     REFERENCE< XMODIFYLISTENER >  xMod( aObject.Source, UNOQUERY );
     REFERENCE< XEVENTLISTENER >  xListener( aObject.Source, UNOQUERY );
-    REFERENCE< XDOCEVENTLISTENER >  xDocListener( aObject.Source, UNO_QUERY );
+    REFERENCE< XDOCEVENTLISTENER >  xDocListener( aObject.Source, UNOQUERY );
 
     if ( xMod.is() )
         m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0), xMod );
@@ -2574,9 +2580,9 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     REFERENCE< XSTORAGE > xConfigStorage;
                     rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
 
-                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READWRITE );
+                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READWRITE );
                     if ( !xConfigStorage.is() )
-                        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READ );
+                        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READ );
 
                     Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
                     xUIConfigStorage->setStorage( xConfigStorage );
@@ -2598,9 +2604,9 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     REFERENCE< XSTORAGE > xConfigStorage;
                     rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
 
-                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READWRITE );
+                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READWRITE );
                     if ( !xConfigStorage.is() )
-                        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READ );
+                        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READ );
 
                     Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
                     xUIConfigStorage->setStorage( xConfigStorage );
@@ -3101,7 +3107,7 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
             REFERENCE< XSTORAGE > xConfigStorage;
 
             // First try to open with READWRITE and then READ
-            xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READWRITE );
+            xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READWRITE );
             if ( xConfigStorage.is() )
             {
                 rtl::OUString aMediaTypeProp( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ));
@@ -3116,7 +3122,7 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
                 }
             }
             else
-                xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READ );
+                xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READ );
 
             // initialize ui configuration manager with document substorage
             xUIConfigStorage->setStorage( xConfigStorage );
@@ -3125,3 +3131,75 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
 
     return m_pData->m_xUIConfigurationManager;
 }
+
+//____________________________________________________________________________________________________
+//  XVisualObject
+//____________________________________________________________________________________________________
+
+void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
+        throw ( lang::IllegalArgumentException,
+                embed::WrongStateException,
+                uno::Exception,
+                uno::RuntimeException )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    if ( !m_pData->m_pObjectShell.Is() )
+        throw uno::Exception(); // TODO: error handling
+
+    SfxInPlaceObject* pInPlaceObj = m_pData->m_pObjectShell->GetInPlaceObject();
+    if ( !pInPlaceObj )
+        throw uno::Exception(); // TODO: error handling
+
+    // TODO: for now always use MAP_100TH_MM, layter a native resolution can be used
+    Rectangle aTmpRect = pInPlaceObj->GetVisArea( ASPECT_CONTENT );
+    aTmpRect = OutputDevice::LogicToLogic( aTmpRect, pInPlaceObj->GetMapUnit(), MAP_100TH_MM );
+    aTmpRect.SetSize( Size( aSize.Width, aSize.Height ) );
+    aTmpRect = OutputDevice::LogicToLogic( aTmpRect, MAP_100TH_MM, pInPlaceObj->GetMapUnit() );
+
+    pInPlaceObj->SetVisArea( aTmpRect );
+}
+
+awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 nAspect )
+        throw ( lang::IllegalArgumentException,
+                embed::WrongStateException,
+                uno::Exception,
+                uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    if ( !m_pData->m_pObjectShell.Is() )
+        throw uno::Exception(); // TODO: error handling
+
+    SfxInPlaceObject* pInPlaceObj = m_pData->m_pObjectShell->GetInPlaceObject();
+    if ( !pInPlaceObj )
+        throw uno::Exception(); // TODO: error handling
+
+    // TODO: for now always use MAP_100TH_MM, layter a native resolution can be used
+    Rectangle aTmpRect = pInPlaceObj->GetVisArea( ASPECT_CONTENT );
+    aTmpRect = OutputDevice::LogicToLogic( aTmpRect, pInPlaceObj->GetMapUnit(), MAP_100TH_MM );
+
+    return awt::Size( aTmpRect.GetWidth(), aTmpRect.GetHeight() );
+}
+
+
+sal_Int32 SAL_CALL SfxBaseModel::getMapMode( sal_Int64 nAspect )
+        throw ( uno::Exception,
+                uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    if ( !m_pData->m_pObjectShell.Is() )
+        throw uno::Exception(); // TODO: error handling
+
+    // TODO: for now always use MAP_100TH_MM, layter a native resolution can be used
+    return embed::EmbedMapModes::ONE_100TH_MM;
+}
+
+
