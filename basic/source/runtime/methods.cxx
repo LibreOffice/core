@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 15:07:28 $
+ *  last change: $Author: ab $ $Date: 2001-03-29 15:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1974,6 +1974,12 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
         aPathStr = getFullPath( aFileParam );
     }
 
+    // #85023 If it's now recognized as folder everything
+    // is fine and we don't have to check for wildcards
+    Reference< XSimpleFileAccess > xSFI = getFileAccess();
+    if( xSFI->isFolder( aPathStr ) )
+        return aPathStr;
+
     sal_Char cWild = '*';
     sal_Char cDelim1 = (sal_Char)'/';
     sal_Char cDelim2 = (sal_Char)'\\';
@@ -2013,17 +2019,23 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
             xub_StrLen nLastWild = aPureFileName.SearchBackward( cWild );
             xub_StrLen nLastDot = aPureFileName.SearchBackward( cDot );
 
-            // Handle ".*"
+            // Handle ".*" and "x*"
             sal_Bool bAnyExtension = sal_False;
-            if( nLastWild == nPureLen-1 && nLastDot == nPureLen-2 )
+            if( nLastWild == nPureLen-1 )
             {
-                bAnyExtension = sal_True;
-                nLastWild = aPureFileName.SearchBackward( cWild, nLastDot );
+                if( nLastDot == nPureLen-2 )
+                {
+                    bAnyExtension = sal_True;
+                    nLastWild = aPureFileName.SearchBackward( cWild, nLastDot );
+                }
+                else if( nLastDot == STRING_NOTFOUND )
+                {
+                    bAnyExtension = sal_True;
+                }
             }
 
-            if( nLastWild != STRING_NOTFOUND &&
-                nLastDot  != STRING_NOTFOUND &&
-                nLastWild == nLastDot-1 )
+            if( nLastWild == nLastDot-1 ||
+                ( nLastDot == STRING_NOTFOUND && bAnyExtension ) )
             {
                 pRTLData->bNameCheck = sal_True;
                 if( !bAnyExtension )
@@ -2125,9 +2137,7 @@ RTLFUNC(Dir)
                     try
                     {
                         String aDirURLStr;
-                        sal_Bool bFolder = sal_False;
-                        try { bFolder = xSFI->isFolder( aFileURLStr ); }
-                        catch( Exception & ) {}
+                        sal_Bool bFolder = xSFI->isFolder( aFileURLStr );
 
                         if( bFolder )
                         {
@@ -2239,9 +2249,7 @@ RTLFUNC(Dir)
                             // Only directories?
                             if( bOnlyFolders )
                             {
-                                sal_Bool bFolder = sal_False;
-                                try { bFolder = xSFI->isFolder( aFile ); }
-                                catch( Exception & ) {}
+                                sal_Bool bFolder = xSFI->isFolder( aFile );
                                 if( !bFolder )
                                     continue;
                             }
@@ -2354,6 +2362,7 @@ RTLFUNC(Dir)
                 String aFileParam = rPar.Get(1)->GetString();
 
                 // #80200 HACK to provide minimum wildcard functionality
+                Reference< XSimpleFileAccess > xSFI;
                 String aDirUNCStr = implSetupWildcard( aFileParam, pRTLData, sal_True );
 
                 USHORT nFlags = 0;
