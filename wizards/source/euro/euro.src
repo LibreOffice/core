@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:22:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 12:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,17 +172,17 @@ Text[ english_us ] = "Remarks: currency amounts connected to external references
     Text[ greek ] = "ÓõìâïõëŞ: Ç ìåôáôñïğŞ åíüò ğïóïı íïìßóìáôïò ôï ïğïßï åßíáé óõíäåäåìİíï ìå åîùôåñéêİò áíáöïñİò üğùò åğßóçò êáé ğáñáãüíôùí ìåôáôñïğŞò íïìßóìáôïò ïé ïğïßïé õğÜñ÷ïõí óå ôığïõò äåí åßíáé äõíáôŞ.";
     Text[ dutch ] = "Tip: Bedragen in valuta die verbonden zijn met externe links en valuta omrekeningsfactoren in celformules kunnen niet worden omgerekend.";
     Text[ french ] = "Avertissement : Il est impossible de convertir les montants liés à des références externes, de même que les facteurs de conversion inclus dans des cellules contenant des formules.";
-    Text[ spanish ] = "Advertencia: No se pueden convertir los importes unidos a referencias externas ni los factores de conversión de moneda en fórmulas de celdas.";
+    Text[ spanish ] = "Advertencia: No se pueden convertir los importes monetarios de referencias externas ni los factores de conversión de moneda en fórmulas.";
     Text[ italian ] = "Nota: non è possibile convertire gli importi monetari connessi a riferimenti esterni, nonché a fattori di conversione monetaria in celle contenenti formule.";
     Text[ danish ] = "Henvisning: Det er ikke muligt at konvertere valutabeløb, som relaterer til eksterne referencer, og valutaomregningsfaktorer i celleformler.";
-    Text[ swedish ] = "OBS: Valutabelopp som har externa referenser, liksom valutaomräkningsfaktorer i cellformler kan inte konverteras.";
-    Text[ polish ] = "Wskazówka: Kwoty (waluty) po³¹czone z zewnêtrznymi odwo³aniami oraz przeliczniki waluty w formu³ach komórek nie podlegaj¹ konwersji.";
+    Text[ swedish ] = "OBS: valutabelopp som har externa referenser, liksom valutaomräkningsfaktorer i formler kan inte konverteras.";
+    Text[ polish ] = "Wskazówka: Kwot (waluty) z zewnêtrznych po³¹czeñ oraz przeliczników waluty w formu³ach komórek nie mo¿na skonwertowaæ.";
     Text[ portuguese_brazilian ] = "Hint: Currency amounts that refer to external Links as well as currency -converting factors in Cell formulas cannot be converted.";
-    Text[ japanese ] = "w¦: ŠO•”‚ÌQÆ‚ÆŠÖ˜A‚µ‚Ä‚¢‚é’Ê‰İ‹àŠzA‚ ‚é‚¢‚Í¾Ù‚Ì‘®‚Ì’Ê‰İŠ·ZÌ§¸À‚Í•ÏŠ·‚Å‚«‚Ü‚¹‚ñB";
+    Text[ japanese ] = "w¦: ŠO•”QÆ‚·‚éˆ×‘Ö‘Šê‚Æ”®‚Ì’Ê‰İŠ·ZÌ§¸À‚Í•ÏŠ·‚Å‚«‚Ü‚¹‚ñB";
     Text[ korean ] = "¾Ë¸²: ¼¿ ¼ö½Ä³»ÀÇ ÅëÈ­º¯È¯ ¿ä¼Ò¿Í  ¿ÜºÎÂüÁ¶¿¡ ¿¬°áµÈ ÅëÈ­·®Àº º¯È¯µÇÁö ¾Ê½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÌáÊ¾£ºÎŞ·¨×ª»»ÒıÓÃÍâ²¿Êı¾İµÄ»õ±Ò½ğ¶îÒÔ¼°µ¥Ôª¸ñ¹«Ê½ÖĞµÄ»õ±Ò»»ËãÏµÊı¡£";
-    Text[ chinese_traditional ] = "´£¥Ü¡G§t¦³¥~³¡¤Ş¥Îªº³f¹ô¼ÆÃB¤Î³æ¤¸®æ¤º³f¹ô´«ºâ­È¬OµLªk³QÂà´«ªº¡C";
-    Text[ arabic ] = "ãáÇÍÙÉ: ãÈÇáÛ ÇáÚãáÉ ÇáãÑÊÈØÉ ÈãÑÇÌÚ ÎÇÑÌíÉ¡ æÚæÇãá ÊÍæíá Şíã ÇáÚãáÉ İí ÕíÛ ÇáÎáÇíÇ ÛíÑ ŞÇÈáÉ ááÊÍæíá.";
+    Text[ chinese_simplified ] = "ÌáÊ¾£ºÎŞ·¨×ª»»ÒıÓÃÍâÀ´Êı¾İµÄ»õ±Ò½ğ¶îºÍ¹«Ê½ÖĞµÄ»õ±Ò»»ËãÏµÊı¡£";
+    Text[ chinese_traditional ] = "´£¥Ü¡GµLªkÂà´«§t¦³¥~¨Ó¤Ş¥Îªº³f¹ô¼ÆÃB¤Î¤½¦¡ªº³f¹ô´«ºâ­È¡C";
+    Text[ arabic ] = "ãáÇÍÙÉ: ãÈÇáÛ ÇáÚãáÉ ÇáãÑÊÈØÉ ÈãÑÇÌÚ ÎÇÑÌíÉ¡ æÚæÇãá ÊÍæíá Şíã ÇáÚãáÉ İí ÇáÕíÛ ÛíÑ ŞÇÈáÉ ááÊÍæíá.";
     Text[ turkish ] = "Bilgi: Dış referanslara bağlı para birimi meblağları ve hücre formülleri içindeki para birimi dönüştürme etkenleri dönüştürülemez.";
 };
 
@@ -1104,7 +1104,7 @@ Text[ english_us ] = "Warning!";
     Text[ russian ] = "Ïğåäóïğåæäåíèå!";
     Text[ greek ] = "Ğñïåéäïğïßçóç!";
     Text[ dutch ] = "Waarschuwing!";
-    Text[ french ] = "Attention !";
+    Text[ french ] = "Avertissement !";
     Text[ spanish ] = "¡Atención!";
     Text[ italian ] = "Attenzione!";
     Text[ danish ] = "Advarsel!";
