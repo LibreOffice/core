@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:41:44 $
+ *  last change: $Author: oj $ $Date: 2002-03-04 11:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,31 @@ Resource RSC_CHARSETS
         Text[ arabic ] = "UTF-8";
         Text[ catalan ] = "UTF-8";
     };
+    String 12
+    {
+        Text = "Big5-HKSCS";
+        Text [ english ] = "Big5-HKSCS";
+        Text [ english_us ] = "Big5-HKSCS";
+        Text[ portuguese ] = "Big5-HKSCS";
+        Text[ russian ] = "Big5-HKSCS";
+        Text[ greek ] = "Big5-HKSCS";
+        Text[ dutch ] = "Big5-HKSCS";
+        Text[ french ] = "Big5-HKSCS";
+        Text[ spanish ] = "Big5-HKSCS";
+        Text[ finnish ] = "Big5-HKSCS";
+        Text[ italian ] = "Big5-HKSCS";
+        Text[ danish ] = "Big5-HKSCS";
+        Text[ swedish ] = "Big5-HKSCS";
+        Text[ polish ] = "Big5-HKSCS";
+        Text[ portuguese_brazilian ] = "Big5-HKSCS";
+        Text[ japanese ] = "Big5-HKSCS";
+        Text[ korean ] = "Big5-HKSCS";
+        Text[ chinese_simplified ] = "Big5-HKSCS";
+        Text[ chinese_traditional ] = "Big5-HKSCS";
+        Text[ turkish ] = "Big5-HKSCS";
+        Text[ arabic ] = "Big5-HKSCS";
+        Text[ catalan ] = "Big5-HKSCS";
+    };
 };
 
 //-------------------------------------------------------------------------
@@ -553,6 +578,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.40  2001/10/31 21:41:44  kz
+ *  Merge SRC641: 31.10.01 - 22:41:50
+ *
  *  Revision 1.39  2001/10/25 20:29:45  kz
  *  Merge SRC641: 25.10.01 - 22:28:48
  *
@@ -565,68 +593,6 @@ String STR_BUTTON_TEXT_ALL
  *  Revision 1.36  2001/10/15 13:38:09  fs
  *  #93204# new supported charset IBM866 (cyrillic)
  *
- *  Revision 1.35  2001/08/29 13:53:33  rt
- *  Merge SRC638: 29.08.01 - 15:52:55
- *
- *  Revision 1.34  2001/08/24 10:58:50  kz
- *  Merge SRC638: 24.08.01 - 12:58:04
- *
- *  Revision 1.33  2001/08/21 22:01:57  kz
- *  Merge SRC638: 22.08.01 - 00:02:24
- *
- *  Revision 1.32  2001/08/14 16:40:01  kz
- *  Merge SRC638: 14.08.01 - 18:39:24
- *
- *  Revision 1.31  2001/08/07 14:49:46  kz
- *  Merge SRC638: 08/07/01 - 16:49:49
- *
- *  Revision 1.30  2001/07/13 20:46:08  kz
- *  Merge SRC638: 13.07.01 - 22:45:06
- *
- *  Revision 1.29  2001/07/03 22:18:04  kz
- *  Merge SRC633: 04.07.01 - 00:16:38
- *
- *  Revision 1.28  2001/06/13 22:18:58  kz
- *  Merge SRC633: 14.06.01 - 00:19:49
- *
- *  Revision 1.27  2001/06/08 22:08:16  kz
- *  Merge SRC633: 09.06.01 - 00:07:57
- *
- *  Revision 1.26  2001/06/01 19:30:11  kz
- *  Merge SRC633: 01.06.01 - 21:29:38
- *
- *  Revision 1.25  2001/05/30 19:39:05  kz
- *  Merge SRC633: 30.05.01 - 21:38:38
- *
- *  Revision 1.24  2001/05/29 13:11:51  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.23  2001/05/23 14:16:41  oj
- *  #87149# new helpids
- *
- *  Revision 1.22  2001/05/16 15:28:52  kz
- *  Merge SRC632: 16.05.01 - 17:28:14 (NoBranch)
- *
- *  Revision 1.21  2001/05/12 06:34:09  kz
- *  Merge SRC631: 12.05.01 - 08:34:37 (NoBranch)
- *
- *  Revision 1.20  2001/05/10 12:20:04  fs
- *  #86223# new strings
- *
- *  Revision 1.19  2001/05/10 05:46:03  rt
- *  Merge SRC631: 10.05.01 - 07:45:14 (NoBranch)
- *
- *  Revision 1.18  2001/05/03 19:16:38  rt
- *  Merge SRC630: 03.05.01 - 21:15:59 (NoBranch)
- *
- *  Revision 1.17  2001/04/27 08:06:19  fs
- *  #86370# add UTF-8 to the list of supported charsets
- *
- *  Revision 1.16  2001/04/26 12:08:25  fs
- *  added support for data source associated bookmarks
- *
- *  Revision 1.15  2001/03/19 11:35:13  kz
- *  Merge SRC625: 19.03.01 - 12:35:02 (NoBranch)
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
