@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:35:21 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,7 +790,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ russian ] = "~Убрать";
         Text[ greek ] = "~Remove";
         Text[ dutch ] = "~Verwijderen";
-        Text[ french ] = "~Supprimer";
+        Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Eliminar";
         Text[ italian ] = "Ri~muovi";
         Text[ danish ] = "~Remove";
@@ -1165,7 +1165,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ greek ] = "~Help";
         Text[ dutch ] = "~Help";
         Text[ french ] = "Aide";
-        Text[ spanish ] = "Ay~uda";
+        Text[ spanish ] = "Ayuda";
         Text[ italian ] = "~?";
         Text[ danish ] = "~Help";
         Text[ swedish ] = "~Hjдlp";
@@ -1191,7 +1191,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ russian ] = "~Убрать";
         Text[ greek ] = "~Remove";
         Text[ dutch ] = "~Verwijderen";
-        Text[ french ] = "~Supprimer";
+        Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Eliminar";
         Text[ italian ] = "Ri~muovi";
         Text[ danish ] = "~Remove";
