@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-08 13:55:46 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,6 @@ class OExtCommandLineImpl;
 class OExtCommandLine : public OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OExtCommandLine, vos));
-    static NAMESPACE_VOS(OMutex) aMutex;
     static NAMESPACE_VOS(OExtCommandLineImpl)* pExtImpl;
 
 public:
