@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HStorageMap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:51:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -309,6 +312,9 @@ namespace connectivity
                         {
                             try
                             {
+/*                              if ( _nMode == ElementModes::READ )
+                                    _nMode |= ElementModes::SEEKABLE;
+*/
                                 pHelper.reset(new StreamHelper(aStoragePair.first.first->openStreamElement(sName,_nMode)));
                             }
                             catch(Exception& )
@@ -321,13 +327,7 @@ namespace connectivity
                         catch(Exception& e)
                         {
                             OSL_ENSURE(0,"Exception catched!");
-                            if (JNI_FALSE != env->ExceptionCheck())
-                                env->ExceptionClear();
-                            ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-                            OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
-                            ThrowException( env,
-                                            "java/io/IOException",
-                                            cstr.getStr());
+                            StorageContainer::throwJavaException(e,env);
                         }
                     }
                 }
@@ -360,6 +360,14 @@ namespace connectivity
             return pRet;
         }
         // -----------------------------------------------------------------------------
+        void StorageContainer::throwJavaException(const Exception& _aException,JNIEnv * env)
+        {
+            if (JNI_FALSE != env->ExceptionCheck())
+                env->ExceptionClear();
+            ::rtl::OString cstr( ::rtl::OUStringToOString(_aException.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
+            OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
+            env->ThrowNew(env->FindClass("java/io/IOException"), cstr.getStr());
+        }
     //........................................................................
     }   // namespace hsqldb
     //........................................................................
