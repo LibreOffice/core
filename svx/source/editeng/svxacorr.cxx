@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:00:28 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _TOOLS_TABLE_HXX
 #include <tools/table.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
 #endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -1927,20 +1930,21 @@ BOOL SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
 String SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
                                             BOOL bNewFile, BOOL bTst ) const
 {
-    String sRet, sExt( String::CreateFromInt32( eLang ));
+    String sRet, sExt( ConvertLanguageToIsoString( eLang ) );
     sExt.AppendAscii( ".dat" );
-
     if( bNewFile )
-        ( sRet = sUserAutoCorrFile ) += sExt;
+        ( sRet = sUserAutoCorrFile ) ;
     else if( !bTst )
-        ( sRet = sShareAutoCorrFile ) += sExt;
+        ( sRet = sShareAutoCorrFile ) ;
     else
     {
         // test first in the user directory - if not exist, then
-        ( sRet = sUserAutoCorrFile ) += sExt;
+        ( sRet = sUserAutoCorrFile ) ;
         if( !FStatHelper::IsDocument( sRet ))
-            ( sRet = sShareAutoCorrFile ) += sExt;
+            ( sRet = sShareAutoCorrFile ) ;
     }
+    sRet.AppendAscii( "_" );
+    sRet += sExt;
     return sRet;
 }
 
