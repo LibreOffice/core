@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:03 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
     pWorkWin(pW),
     pDockArr( new SfxDockArr_Impl ),
     bLocked(FALSE),
-    bPinned(FALSE),
+    bPinned(TRUE),
     pEmptyWin(NULL),
     pActive(NULL)
 {
