@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 14:15:47 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 20:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,19 +297,6 @@ uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByInde
 
     {
         const SvxBrushItem* pBrush = rFmt.GetBrush();
-        uno::Reference< awt::XBitmap >  xBmp;
-
-        if(pBrush && pBrush->GetGraphic())
-        {
-            const Graphic* pGraphic = pBrush->GetGraphic();
-            if( pGraphic )
-                xBmp = VCLUnoHelper::CreateBitmap( pGraphic->GetBitmapEx() );
-        }
-
-        aVal <<= xBmp;
-        const beans::PropertyValue aGraphicProp( OUString(RTL_CONSTASCII_USTRINGPARAM("Graphic")), -1, aVal, beans::PropertyState_DIRECT_VALUE);
-        pArray[nIdx++] = aGraphicProp;
-
         if(pBrush && pBrush->GetGraphicObject())
         {
             const GraphicObject* pGrafObj = pBrush->GetGraphicObject();
