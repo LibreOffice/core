@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:26:48 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ String STR_STYLE_FILTER_AUTO
     TEXT [ English ] = "Automatic" ;
     TEXT [ norwegian ] = "Automatic" ;
     TEXT [ italian ] = "Automatico" ;
-    TEXT [ portuguese_brazilian ] = "Autom·tico" ;
+    TEXT [ portuguese_brazilian ] = "Autom?tico" ;
     TEXT [ portuguese ] = "Autom·tico" ;
     TEXT [ finnish ] = "Automaattinen" ;
     TEXT [ danish ] = "Automatisk" ;
@@ -204,7 +204,7 @@ String STR_STYLE_FILTER_USERDEF
     TEXT [ English ] = "User styles" ;
     TEXT [ norwegian ] = "Brukerstiler" ;
     TEXT [ italian ] = "Modelli utente" ;
-    TEXT [ portuguese_brazilian ] = "Estilos do usu·rio" ;
+    TEXT [ portuguese_brazilian ] = "Estilos do usu?rio" ;
     TEXT [ portuguese ] = "Estilos do utilizador" ;
     TEXT [ finnish ] = "Mukautetut tyylit" ;
     TEXT [ danish ] = "Brugertypografier" ;
@@ -266,8 +266,8 @@ String STR_STANDARD
     Text[ italian ] = "Standard";
     Text[ danish ] = "Standard";
     Text[ swedish ] = "Standard";
-    Text[ polish ] = "Domyúlnie";
-    Text[ portuguese_brazilian ] = "Padr„o";
+    Text[ polish ] = "Domy?lnie";
+    Text[ portuguese_brazilian ] = "Padr?o";
     Text[ japanese ] = "ïWèÄ";
     Text[ korean ] = "«•¡ÿ";
     Text[ chinese_simplified ] = "±Í◊º";
@@ -320,7 +320,7 @@ String STR_BYTES
     Text [ danish ] = "Bytes" ;
     Text [ italian ] = "Byte" ;
     Text [ spanish ] = "Bytes" ;
-    Text [ french ] = "Octet(s)" ;
+    Text [ french ] = "Octets" ;
     Text [ dutch ] = "Bytes" ;
     Text [ portuguese ] = "Bytes" ;
     Text[ chinese_simplified ] = "◊÷Ω⁄";
@@ -529,7 +529,7 @@ QueryBox MSG_QUERY_LASTVERSION
     Message [ English ] = "Cancel all changes?" ;
     Message [ norwegian ] = "Slett alle endringer?" ;
     Message [ italian ] = "Volete annullare tutte le modifiche?" ;
-    Message [ portuguese_brazilian ] = "Cancelar todas as modificaÁıes?" ;
+    Message [ portuguese_brazilian ] = "Cancelar todas as modifica??s?" ;
     Message [ portuguese ] = "Cancelar todas as modificaÁıes?" ;
     Message [ finnish ] = "Peruutetaanko kaikki muutokset?" ;
     Message [ danish ] = "Vil du annullere alle Êndringer?" ;
