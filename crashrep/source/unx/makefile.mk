@@ -2,15 +2,14 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2003-08-21 13:21:08 $
+#   last change: $Author: vg $ $Date: 2003-12-17 19:28:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
 #
 #          - GNU Lesser General Public License Version 2.1
-#          - Sun Industry Standards Source License Version 1.1
 #
 #   Sun Microsystems Inc., October, 2000
 #
@@ -33,20 +32,6 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #   MA  02111-1307  USA
 #
-#
-#   Sun Industry Standards Source License Version 1.1
-#   =================================================
-#   The contents of this file are subject to the Sun Industry Standards
-#   Source License Version 1.1 (the "License"); You may not use this file
-#   except in compliance with the License. You may obtain a copy of the
-#   License at http://www.openoffice.org/license.html.
-#
-#   Software provided under this License is provided on an "AS IS" basis,
-#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
-#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
-#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
-#   See the License for the specific provisions governing your rights and
-#   obligations concerning the Software.
 #
 #   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
 #
@@ -118,12 +103,20 @@ APP2NOSAL=TRUE
 APP2TARGET=$(TARGET2)
 APP2OBJS=$(OBJFILES)
 
+.IF "$(SYSTEM_ZLIB)"=="YES"
+APP2STDLIBS=$(STATIC) `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng $(ZLIB3RDLIB) -ljpeg -ltiff $(DYNAMIC) -lXext -lX11 -ldl -lnsl
+.ELSE
 APP2STDLIBS=$(STATIC) `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff $(DYNAMIC) -lXext -lX11 -ldl -lnsl
+.ENDIF
 .IF "$(OS)" == "SOLARIS"
 APP2STDLIBS+=-lsocket
 .ENDIF
 .IF "$(OS)" == "FREEBSD"
+.IF "$(SYSTEM_ZLIB)"=="YES"
+APP2STDLIBS=$(STATIC) `pkg-config --libs gtk+-2.0` -lpng $(ZLIB3RDLIB) -ljpeg -ltiff $(DYNAMIC) -lXext -lX11
+.ELSE
 APP2STDLIBS=$(STATIC) `pkg-config --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff $(DYNAMIC) -lXext -lX11
+.ENDIF
 .ENDIF
 
 .ENDIF
