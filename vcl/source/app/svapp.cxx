@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: th $ $Date: 2001-08-28 14:34:31 $
+ *  last change: $Author: ssa $ $Date: 2001-09-06 12:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,26 +576,47 @@ static void ImplRemoteDispatch( BOOL bWait )
 }
 
 // -----------------------------------------------------------------------
+// Sync counter:
+// Default: Call every 100th RVP call Sync to ensure that the client side
+// counts correctly.
+// The mnSyncCounter can be set by an environment variable called
+// FORCE_RVPSYNC_EVERY_NTH_CALL
+// -----------------------------------------------------------------------
 
 RVPSync::RVPSync( const REF( NMSP_CLIENT::XRmSync )& xRVPSync ) :
     mxRVPSync( xRVPSync ),
     mnRVPCount( 0 ),
-    mnLastThreadId( 0 )
+    mnLastThreadId( 0 ),
+    mnForceSyncCount( 100 ),
+    mnSyncCount( 1 )
 {
+    sal_Char* pSyncEnv = getenv( "FORCE_RVPSYNC_EVERY_NTH_CALL" );
+    if ( pSyncEnv )
+    {
+        ::rtl::OString aTmp( pSyncEnv );
+        mnForceSyncCount = aTmp.toInt32();
+    }
+    if( mnForceSyncCount == 0 ) // zero setting disables forced sync
+        mnSyncCount = 0;
 }
 
 void RVPSync::CheckForRVPSync( const char* )
 {
     vos::OThread::TThreadIdentifier aThreadId = vos::OThread::getCurrentIdentifier();
 
-    if ( mnLastThreadId != aThreadId )
+    if ( mnForceSyncCount > 0 ) // zero setting disables forced sync
+        ++mnSyncCount;
+
+    if ( mnLastThreadId != aThreadId || mnSyncCount > mnForceSyncCount )
     {
-        // thread has changed, we have to send a Sync to the client once!
-        mnLastThreadId = aThreadId;
+        // thread has changed or counter has reached max, we have to send a Sync to the client once!
         try
         {
             ::vos::OGuard aGuard( maMutex );
             {
+                mnLastThreadId = aThreadId;
+                if( mnSyncCount > mnForceSyncCount )
+                    mnSyncCount = 1;
                 if ( mxRVPSync.is() )
                     mxRVPSync->Sync( mnRVPCount );
 
