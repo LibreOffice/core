@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
+ *  last change: $Author: os $ $Date: 2002-08-30 10:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,20 @@
 #ifndef _TXTATTR_HXX //autogen
 #include <svtools/txtattr.hxx>
 #endif
+#ifndef _SVTOOLS_SOURCEVIEWCONFIG_HXX
+#include <svtools/sourceviewconfig.hxx>
+#endif
 #ifndef _SVX_COLORCFG_HXX
 #include <svx/colorcfg.hxx>
+#endif
+#ifndef _SVX_FLSTITEM_HXX
+#include <svx/flstitem.hxx>
+#endif
+#ifndef _SV_METRIC_HXX
+#include <vcl/metric.hxx>
+#endif
+#ifndef _CTRLTOOL_HXX
+#include <svtools/ctrltool.hxx>
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
@@ -112,9 +124,6 @@
 #ifndef _SRCEDTW_HXX
 #include <srcedtw.hxx>
 #endif
-#ifndef _SRCVCFG_HXX
-#include <srcvcfg.hxx>
-#endif
 
 #ifndef _HELPID_H
 #include <helpid.h>
@@ -122,10 +131,10 @@
 
 
 enum SwHtmlTextType {
-    TT_SGML     = SRC_SYN_SGML  ,
-    TT_COMMENT  = SRC_SYN_COMMENT   ,
-    TT_KEYWORD  = SRC_SYN_KEYWRD    ,
-    TT_UNKNOWN  = SRC_SYN_UNKNOWN
+    TT_SGML     = svx::HTMLSGML   ,
+    TT_COMMENT  = svx::HTMLCOMMENT,
+    TT_KEYWORD  = svx::HTMLKEYWORD,
+    TT_UNKNOWN  = svx::HTMLUNKNOWN
 };
 
 
@@ -307,24 +316,24 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     pHScrollbar(0),
     pVScrollbar(0),
     pSrcView(pParentView),
+    pSourceViewConfig(new svt::SourceViewConfig),
     nCurTextWidth(0),
     bDoSyntaxHighlight(TRUE),
     bHighlighting(FALSE),
-    pSrcVwConfig(SW_MOD()->GetSourceViewConfig()),
-    nStartLine(USHRT_MAX)
+    nStartLine(USHRT_MAX),
+    eSourceEncoding(gsl_getSystemTextEncoding())
 {
     SetHelpId(HID_SOURCE_EDITWIN);
     CreateTextEngine();
+    StartListening(*pSourceViewConfig);
 }
-
-
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
  SwSrcEditWindow::~SwSrcEditWindow()
 {
+    EndListening(*pSourceViewConfig);
+    delete pSourceViewConfig;
     aSyntaxIdleTimer.Stop();
     if ( pTextEngine )
     {
@@ -584,31 +593,13 @@ void SwSrcEditWindow::CreateTextEngine()
     pTextEngine->InsertView( pTextView );
 
     Font aFont;
-    aFont.SetCharSet( gsl_getSystemTextEncoding() );
-    aFont.SetSize( Size( 0, 12 ) );
-    aFont.SetPitch( PITCH_VARIABLE );
-    aFont.SetWeight( WEIGHT_NORMAL );
-    aFont.SetName( String::CreateFromAscii("Courier") );
-    aFont.SetFamily( FAMILY_MODERN );
-    aFont.SetPitch( PITCH_FIXED );
-//  Font aFont( System::GetStandardFont( STDFONT_FIXED ) );
     aFont.SetTransparent( FALSE );
-
-    Size aFontSize( 0, 10 );
-
-#ifdef MAC
-    aFont.SetName( "Monaco" );
-#endif
-
     aFont.SetFillColor( rCol );
-    aFont.SetSize( aFontSize );
     SetPointFont( aFont );
     aFont = GetFont();
     aFont.SetFillColor( rCol );
     pOutWin->SetFont( aFont );
-
     pTextEngine->SetFont( aFont );
-
 
     aSyntaxIdleTimer.SetTimeout( 200 );
     aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
@@ -622,7 +613,7 @@ void SwSrcEditWindow::CreateTextEngine()
 
     SfxBindings& rBind = GetSrcView()->GetViewFrame()->GetBindings();
     rBind.Invalidate( SID_TABLE_CELL );
-    rBind.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+//  rBind.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
 }
 
 /*--------------------------------------------------------------------
@@ -702,7 +693,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     USHORT nCount  = 0;
     // zuerst wird der Bereich um dem Cursor bearbeitet
     TextSelection aSel = pTextView->GetSelection();
-    USHORT nCur = aSel.GetStart().GetPara();
+    USHORT nCur = (USHORT)aSel.GetStart().GetPara();
     if(nCur > 40)
         nCur -= 40;
     else
@@ -855,24 +846,14 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
             continue;
         USHORT nCol = r.eType;
-        DBG_ASSERT( nCol < SYNTAX_COLOR_MAX, "Neue Syntax-Farbe?" );
-        if ( nCol < SYNTAX_COLOR_MAX )
-        {
-            svx::ColorConfigEntry eEntry;
-            switch(nCol)
-            {
-                case  SRC_SYN_SGML    : eEntry = svx::HTMLSGML   ; break;
-                case  SRC_SYN_COMMENT : eEntry = svx::HTMLCOMMENT; break;
-                case  SRC_SYN_KEYWRD  : eEntry = svx::HTMLKEYWORD; break;
-//                case  SRC_SYN_UNKNOWN :
-                default:
-                    eEntry = svx::HTMLUNKNOWN; break;
-            }
-
-            Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue(eEntry).nColor);
-            USHORT nLine = nLineOff+r.nLine; //
-            pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
-        }
+        if(r.eType !=  svx::HTMLSGML    &&
+            r.eType != svx::HTMLCOMMENT &&
+            r.eType != svx::HTMLKEYWORD &&
+            r.eType != svx::HTMLUNKNOWN)
+                r.eType = (SwHtmlTextType)svx::HTMLUNKNOWN;
+        Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svx::ColorConfigEntry)r.eType).nColor);
+        USHORT nLine = nLineOff+r.nLine; //
+        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
     }
 }
 /*-----------------21.04.97 09:42-------------------
@@ -909,9 +890,11 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if( rTextHint.GetId() == TEXT_HINT_FORMATPARA )
         {
-            DoDelayedSyntaxHighlight( rTextHint.GetValue() );
+            DoDelayedSyntaxHighlight( (USHORT)rTextHint.GetValue() );
         }
     }
+    else if(&rBC == pSourceViewConfig)
+        SetFont();
 }
 
 /*-----------------30.06.97 13:22-------------------
@@ -963,5 +946,208 @@ void SwSrcEditWindow::GetFocus()
 //  pOutWin->LoseFocus();
 //  rView.LostFocus();
 } */
+/* -----------------------------29.08.2002 13:21------------------------------
 
+ ---------------------------------------------------------------------------*/
+BOOL  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
+{
+    switch(eEnc)
+    {
+        case RTL_TEXTENCODING_UTF7             :
+        case RTL_TEXTENCODING_UTF8             :
+            // don#t fill - all LANGUAGE_SYSTEM means unicode font has to be used
+        break;
+
+
+        case RTL_TEXTENCODING_ISO_8859_3:
+        case RTL_TEXTENCODING_ISO_8859_1  :
+        case RTL_TEXTENCODING_MS_1252     :
+        case RTL_TEXTENCODING_APPLE_ROMAN :
+        case RTL_TEXTENCODING_IBM_850     :
+        case RTL_TEXTENCODING_ISO_8859_14 :
+        case RTL_TEXTENCODING_ISO_8859_15 :
+            //fill with western languages
+            aLanguages[0] = LANGUAGE_GERMAN;
+            aLanguages[1] = LANGUAGE_FRENCH;
+            aLanguages[2] = LANGUAGE_ITALIAN;
+            aLanguages[3] = LANGUAGE_SPANISH;
+        break;
+
+        case RTL_TEXTENCODING_IBM_865     :
+            //scandinavian
+            aLanguages[0] = LANGUAGE_FINNISH;
+            aLanguages[1] = LANGUAGE_NORWEGIAN;
+            aLanguages[2] = LANGUAGE_SWEDISH;
+            aLanguages[3] = LANGUAGE_DANISH;
+        break;
+
+        case RTL_TEXTENCODING_ISO_8859_10      :
+        case RTL_TEXTENCODING_ISO_8859_13      :
+        case RTL_TEXTENCODING_ISO_8859_2  :
+        case RTL_TEXTENCODING_IBM_852     :
+        case RTL_TEXTENCODING_MS_1250     :
+        case RTL_TEXTENCODING_APPLE_CENTEURO   :
+            aLanguages[0] = LANGUAGE_POLISH;
+            aLanguages[1] = LANGUAGE_CZECH;
+            aLanguages[2] = LANGUAGE_HUNGARIAN;
+            aLanguages[3] = LANGUAGE_SLOVAK;
+        break;
+
+        case RTL_TEXTENCODING_ISO_8859_4  :
+        case RTL_TEXTENCODING_IBM_775     :
+        case RTL_TEXTENCODING_MS_1257          :
+            aLanguages[0] = LANGUAGE_LATVIAN   ;
+            aLanguages[1] = LANGUAGE_LITHUANIAN;
+            aLanguages[2] = LANGUAGE_ESTONIAN  ;
+        break;
+
+        case RTL_TEXTENCODING_IBM_863       : aLanguages[0] = LANGUAGE_FRENCH_CANADIAN; break;
+        case RTL_TEXTENCODING_APPLE_FARSI   : aLanguages[0] = LANGUAGE_FARSI; break;
+        case RTL_TEXTENCODING_APPLE_ROMANIAN:aLanguages[0] = LANGUAGE_ROMANIAN; break;
+
+        case RTL_TEXTENCODING_IBM_861     :
+        case RTL_TEXTENCODING_APPLE_ICELAND    :
+            aLanguages[0] = LANGUAGE_ICELANDIC;
+        break;
+
+        case RTL_TEXTENCODING_APPLE_CROATIAN:aLanguages[0] = LANGUAGE_CROATIAN; break;
+
+        case RTL_TEXTENCODING_IBM_437     :
+        case RTL_TEXTENCODING_ASCII_US    : aLanguages[0] = LANGUAGE_ENGLISH; break;
+
+        case RTL_TEXTENCODING_IBM_862     :
+        case RTL_TEXTENCODING_MS_1255     :
+        case RTL_TEXTENCODING_APPLE_HEBREW     :
+        case RTL_TEXTENCODING_ISO_8859_8  :
+            aLanguages[0] = LANGUAGE_HEBREW;
+        break;
+
+        case RTL_TEXTENCODING_IBM_857     :
+        case RTL_TEXTENCODING_MS_1254     :
+        case RTL_TEXTENCODING_APPLE_TURKISH:
+        case RTL_TEXTENCODING_ISO_8859_9  :
+            aLanguages[0] = LANGUAGE_TURKISH;
+        break;
+
+        case RTL_TEXTENCODING_IBM_860     :
+            aLanguages[0] = LANGUAGE_PORTUGUESE;
+        break;
+
+        case RTL_TEXTENCODING_IBM_869     :
+        case RTL_TEXTENCODING_MS_1253     :
+        case RTL_TEXTENCODING_APPLE_GREEK :
+        case RTL_TEXTENCODING_ISO_8859_7  :
+        case RTL_TEXTENCODING_IBM_737     :
+            aLanguages[0] = LANGUAGE_GREEK;
+        break;
+
+        case RTL_TEXTENCODING_KOI8_R      :
+        case RTL_TEXTENCODING_ISO_8859_5  :
+        case RTL_TEXTENCODING_IBM_855     :
+        case RTL_TEXTENCODING_MS_1251     :
+        case RTL_TEXTENCODING_IBM_866     :
+        case RTL_TEXTENCODING_APPLE_CYRILLIC   :
+            aLanguages[0] = LANGUAGE_RUSSIAN;
+        break;
+
+        case RTL_TEXTENCODING_APPLE_UKRAINIAN  :aLanguages[0] = LANGUAGE_UKRAINIAN; break;
+
+        case RTL_TEXTENCODING_IBM_864     :
+        case RTL_TEXTENCODING_MS_1256          :
+        case RTL_TEXTENCODING_ISO_8859_6  :
+        case RTL_TEXTENCODING_APPLE_ARABIC :
+            aLanguages[0] = LANGUAGE_ARABIC;
+         break;
+
+        case RTL_TEXTENCODING_APPLE_CHINTRAD   :
+        case RTL_TEXTENCODING_MS_950           :
+        case RTL_TEXTENCODING_GBT_12345        :
+        case RTL_TEXTENCODING_BIG5             :
+        case RTL_TEXTENCODING_EUC_TW           :
+        case RTL_TEXTENCODING_BIG5_HKSCS       :
+            aLanguages[0] = LANGUAGE_CHINESE_TRADITIONAL;
+        break;
+
+        case RTL_TEXTENCODING_EUC_JP           :
+        case RTL_TEXTENCODING_ISO_2022_JP      :
+        case RTL_TEXTENCODING_JIS_X_0201       :
+        case RTL_TEXTENCODING_JIS_X_0208       :
+        case RTL_TEXTENCODING_JIS_X_0212       :
+        case RTL_TEXTENCODING_APPLE_JAPANESE   :
+        case RTL_TEXTENCODING_MS_932           :
+        case RTL_TEXTENCODING_SHIFT_JIS        :
+            aLanguages[0] = LANGUAGE_JAPANESE;
+        break;
+
+        case RTL_TEXTENCODING_GB_2312          :
+        case RTL_TEXTENCODING_MS_936           :
+        case RTL_TEXTENCODING_GBK              :
+        case RTL_TEXTENCODING_GB_18030         :
+        case RTL_TEXTENCODING_APPLE_CHINSIMP   :
+        case RTL_TEXTENCODING_EUC_CN           :
+        case RTL_TEXTENCODING_ISO_2022_CN      :
+            aLanguages[0] = LANGUAGE_CHINESE_SIMPLIFIED;
+        break;
+
+        case RTL_TEXTENCODING_APPLE_KOREAN     :
+        case RTL_TEXTENCODING_MS_949           :
+        case RTL_TEXTENCODING_EUC_KR           :
+        case RTL_TEXTENCODING_ISO_2022_KR      :
+        case RTL_TEXTENCODING_MS_1361          :
+            aLanguages[0] = LANGUAGE_KOREAN;
+        break;
+
+        case RTL_TEXTENCODING_APPLE_THAI       :
+        case RTL_TEXTENCODING_MS_874      :
+        case RTL_TEXTENCODING_TIS_620          :
+            aLanguages[0] = LANGUAGE_THAI;
+        break;
+//        case RTL_TEXTENCODING_SYMBOL      :
+//        case RTL_TEXTENCODING_DONTKNOW:        :
+        default: aLanguages[0] = Application::GetSettings().GetUILanguage();
+    }
+    return aLanguages[0] != LANGUAGE_SYSTEM;
+}
+void SwSrcEditWindow::SetFont()
+{
+    String sFontName = pSourceViewConfig->GetFontName();
+    if(!sFontName.Len())
+    {
+        LanguageType aLanguages[5] =
+        {
+            LANGUAGE_SYSTEM, LANGUAGE_SYSTEM, LANGUAGE_SYSTEM, LANGUAGE_SYSTEM, LANGUAGE_SYSTEM
+        };
+        Font aFont;
+        if(lcl_GetLanguagesForEncoding(eSourceEncoding, aLanguages))
+        {
+            //TODO: check for multiple languages
+            aFont = OutputDevice::GetDefaultFont(DEFAULTFONT_FIXED, aLanguages[0], 0, this);
+        }
+        else
+            aFont = OutputDevice::GetDefaultFont(DEFAULTFONT_SANS_UNICODE,
+                        Application::GetSettings().GetLanguage(), 0, this);
+        sFontName = aFont.GetName();
+    }
+    const SvxFontListItem* pFontListItem =
+        (const SvxFontListItem* )pSrcView->GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST );
+    const FontList*  pList = pFontListItem->GetFontList();
+    FontInfo aInfo = pList->Get(sFontName,WEIGHT_NORMAL, ITALIC_NONE);
+
+    const Font& rFont = GetTextEngine()->GetFont();
+    Font aFont(aInfo);
+    Size aSize(rFont.GetSize());
+    //font height is stored in point and set in twip
+    aSize.Height() = pSourceViewConfig->GetFontHeight() * 20;
+    aFont.SetSize(pOutWin->LogicToPixel(aSize, MAP_TWIP));
+    GetTextEngine()->SetFont( aFont );
+    pOutWin->SetFont(aFont);
+}
+/* -----------------------------29.08.2002 13:47------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwSrcEditWindow::SetTextEncoding(rtl_TextEncoding eEncoding)
+{
+    eSourceEncoding = eEncoding;
+    SetFont();
+}
 

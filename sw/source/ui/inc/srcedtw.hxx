@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-16 12:48:29 $
+ *  last change: $Author: os $ $Date: 2002-08-30 10:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 class ScrollBar;
 class SwSrcView;
 class SwSrcEditWindow;
-class SwSrcViewConfig;
 class TextEngine;
 class ExtTextView;
 class DataChangedEvent;
@@ -111,7 +110,7 @@ public:
 };
 
 //------------------------------------------------------------
-
+namespace svt{ class SourceViewConfig;}
 class SwSrcEditWindow : public Window, public SfxListener
 {
 private:
@@ -123,11 +122,11 @@ private:
                     *pVScrollbar;
 
     SwSrcView*      pSrcView;
-
-    const SwSrcViewConfig*  pSrcVwConfig;
+    svt::SourceViewConfig* pSourceViewConfig;
 
     long            nCurTextWidth;
     USHORT          nStartLine;
+    rtl_TextEncoding eSourceEncoding;
     BOOL            bReadonly;
     BOOL            bDoSyntaxHighlight;
     BOOL            bHighlighting;
@@ -136,6 +135,7 @@ private:
     Table           aSyntaxLineTable;
 
     void            ImpDoHighlight( const String& rSource, USHORT nLineOff );
+    void            SetFont();
 
     DECL_LINK( SyntaxTimerHdl, Timer * );
     DECL_LINK( TimeoutHdl, Timer * );
@@ -191,6 +191,8 @@ public:
 
     virtual void    Command( const CommandEvent& rCEvt );
     void            HandleWheelCommand( const CommandEvent& rCEvt );
+
+    void            SetTextEncoding(rtl_TextEncoding eEncoding);
 };
 
 #endif

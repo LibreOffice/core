@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-13 08:42:53 $
+ *  last change: $Author: os $ $Date: 2002-08-30 10:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,9 +174,6 @@
 #endif
 #ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
-#ifndef _SRCVCFG_HXX
-#include <srcvcfg.hxx>
 #endif
 #ifndef _SRCVIEW_HXX
 #include <srcview.hxx>

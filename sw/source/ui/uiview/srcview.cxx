@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-07-01 14:50:10 $
+ *  last change: $Author: os $ $Date: 2002-08-30 10:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,6 @@ SFX_IMPL_VIEWFACTORY(SwSrcView, SW_RES(STR_NONAME))
 SFX_IMPL_INTERFACE( SwSrcView, SfxViewShell, SW_RES(0) )
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_SRCVIEW_POPUPMENU));
-    SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_SRCVIEW_TOOLBOX));
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS|
                                 SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                 SW_RES(RID_WEBTOOLS_TOOLBOX) );
@@ -413,7 +412,6 @@ SwSrcView::SwSrcView(SfxViewFrame* pFrame, const SwSrcView&) :
     SfxViewShell( pFrame, SWSRCVIEWFLAGS ),
     aEditWin( &pFrame->GetWindow(), this ),
     pSearchItem(0),
-    pSrcViewConfig(0),
     bSourceSaved(FALSE),
     eLoadEncoding(RTL_TEXTENCODING_DONTKNOW)
 {
@@ -477,16 +475,6 @@ void SwSrcView::Init()
     SetHelpId(SW_SRC_VIEWSHELL);
     SetName(C2S("Source"));
     SetWindow( &aEditWin );
-    pSrcViewConfig = SW_MOD()->GetSourceViewConfig();
-    if(pSrcViewConfig->GetFontName().getLength())
-        lcl_SetFont( this, pSrcViewConfig->GetFontName());
-    TextViewOutWin* pOutWin = aEditWin.GetOutWin();
-    Font aFont(aEditWin.GetTextEngine()->GetFont());
-    Size aSize(aFont.GetSize());
-    aSize.Height() = pSrcViewConfig->GetFontHeight();
-    aFont.SetSize(pOutWin->LogicToPixel(aSize, MAP_TWIP));
-    aEditWin.GetTextEngine()->SetFont(aFont);
-    pOutWin->SetFont(aFont);
     SwDocShell* pDocShell = GetDocShell();
     // wird das Doc noch geladen, dann muss die DocShell das Load
     // anwerfen, wenn das Laden abgeschlossen ist
@@ -546,27 +534,6 @@ void SwSrcView::Execute(SfxRequest& rReq)
     TextView* pTextView = aEditWin.GetTextView();
     switch( nSlot )
     {
-        case SID_ATTR_CHAR_FONT:
-        {
-            const SvxFontItem& rFontItem = (const SvxFontItem&)pArgs->Get(RES_CHRATR_FONT);
-            String sStyle = rFontItem.GetFamilyName();
-            lcl_SetFont( this, sStyle );
-            pSrcViewConfig->SetFontName(sStyle);
-        }
-        break;
-        case SID_ATTR_CHAR_FONTHEIGHT:
-        {
-            TextViewOutWin* pOutWin = aEditWin.GetOutWin();
-
-            const SvxFontHeightItem& rFontHeight = (const SvxFontHeightItem&)pArgs->Get(RES_CHRATR_FONTSIZE);
-            Font aFont(aEditWin.GetTextEngine()->GetFont());
-            Size aSize(aFont.GetSize());
-            aSize.Height() = rFontHeight.GetHeight();
-            aFont.SetSize(pOutWin->LogicToPixel(aSize, MAP_TWIP));
-            aEditWin.GetTextEngine()->SetFont(aFont);
-            pSrcViewConfig->SetFontHeight(USHORT(rFontHeight.GetHeight()));
-        }
-        break;
         case SID_SAVEASDOC:
         {
             SvtPathOptions aPathOpt;
@@ -713,26 +680,6 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                 aPos += String::CreateFromInt32( aSel.GetEnd().GetIndex()+1 );
                 SfxStringItem aItem( nWhich, aPos );
                 rSet.Put( aItem );
-            }
-            break;
-            case RES_CHRATR_FONT:
-            {
-                Font aFont = aEditWin.GetTextEngine()->GetFont();
-                rSet.Put(SvxFontItem(
-                            aFont.GetFamily(),
-                            aFont.GetName(),
-                            aFont.GetStyleName()));
-            }
-            break;
-            case RES_CHRATR_FONTSIZE:
-            {
-                TextViewOutWin* pOutWin = aEditWin.GetOutWin();
-                SvxFontHeightItem aFontHeight;
-                Size aTemp(aEditWin.GetTextEngine()->GetFont().GetSize());
-                aTemp = pOutWin->PixelToLogic(aTemp, MAP_TWIP);
-                aFontHeight.SetHeight(aTemp.Height());
-                aFontHeight.SetWhich(RES_CHRATR_FONTSIZE);
-                rSet.Put(aFontHeight);
             }
             break;
             case SID_SEARCH_OPTIONS:
@@ -1101,6 +1048,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     eLoadEncoding = eDestEnc;
 
     aEditWin.SetReadonly(pDocShell->IsReadOnly());
+    aEditWin.SetTextEncoding(eLoadEncoding);
     SfxMedium* pMedium = pDocShell->GetMedium();
 
     const SfxFilter* pFilter = pMedium->GetFilter();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-03-04 14:58:40 $
+ *  last change: $Author: os $ $Date: 2002-08-30 10:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,6 @@
 #define STR_SHELLNAME_DRAW         (RC_SHELLS_BEGIN +  30)
 #define STR_SHELLNAME_DRAW_TEXT    (RC_SHELLS_BEGIN +  31)
 
-#define RID_SRCVIEW_TOOLBOX        (RC_SHELLS_BEGIN +  32)
 
 #define RID_BEZIER_TOOLBOX         (RC_SHELLS_BEGIN +  33)
 #define STR_SHELLNAME_BEZIER       (RC_SHELLS_BEGIN +  34)

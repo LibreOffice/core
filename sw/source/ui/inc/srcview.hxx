@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-01-11 09:43:07 $
+ *  last change: $Author: os $ $Date: 2002-08-30 10:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 
 class SwDocShell;
 class SvxSearchItem;
-class SwSrcViewConfig;
 class SfxMedium;
 
 /*--------------------------------------------------------------------
@@ -84,7 +83,6 @@ class SwSrcView: public SfxViewShell
     SwSrcEditWindow     aEditWin;
 
     SvxSearchItem*      pSearchItem;
-    SwSrcViewConfig*    pSrcViewConfig;
 
     BOOL                bSourceSaved    :1;
     rtl_TextEncoding    eLoadEncoding;
