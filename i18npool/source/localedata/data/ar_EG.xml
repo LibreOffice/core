@@ -44,11 +44,11 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
-<FormatCode>MM/YY</FormatCode>
+<FormatCode>YY/MM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
-<FormatCode>MMM DD</FormatCode>
+<FormatCode>DD MMM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
@@ -60,47 +60,47 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
-<FormatCode>MM/DD/YYYY</FormatCode>
+<FormatCode>YYYY/MM/DD</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
-<FormatCode>MM/DD/YY</FormatCode>
+<FormatCode>YY/MM/DD</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-<FormatCode>NNNNMMMM DD, YYYY</FormatCode>
+<FormatCode>NNN ,DD MMMM ,YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-<FormatCode>MMM D, YY</FormatCode>
+<FormatCode>D MMM ,YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-<FormatCode>MMM D, YYYY</FormatCode>
+<FormatCode>D MMM ,YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-<FormatCode>MMMM D, YYYY</FormatCode>
+<FormatCode>D MMMM ,YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-<FormatCode>NN, MMM D, YY</FormatCode>
+<FormatCode>NNN ,D MMM ,YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-<FormatCode>NN, MMMM D, YYYY</FormatCode>
+<FormatCode>D MMMM ,YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-<FormatCode>NNNNMMMM D, YYYY</FormatCode>
+<FormatCode>NNN ,D MMMM ,YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
-<FormatCode>D. MMM. YYYY</FormatCode>
+<FormatCode>D .MMMM .YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
-<FormatCode>D. MMMM YYYY</FormatCode>
+<FormatCode>MMMM YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
@@ -128,11 +128,11 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey3" default="false" type="short" usage="TIME"  formatindex="41">
-<FormatCode>HH:MM AM/PM</FormatCode>
+<FormatCode>MM:HHAM/PM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey4" default="false" type="medium" usage="TIME"  formatindex="42">
-<FormatCode>HH:MM:SS AM/PM</FormatCode>
+<FormatCode>SS:MM:HHAM/PM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME"  formatindex="43">
@@ -148,11 +148,11 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME"  formatindex="46">
-<FormatCode>MM/DD/YY HH:MM</FormatCode>
+<FormatCode>MM:HHAM/PM DD/MM/YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME"  formatindex="47">
-<FormatCode>MM/DD/YYYY HH:MM:SS</FormatCode>
+<FormatCode>YYYY/MM/DD HH:MM:SS</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
@@ -180,19 +180,19 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
+<FormatCode>[CURRENCY] #,##0;[CURRENCY] #,##0 -</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00</FormatCode>
+<FormatCode>[CURRENCY] #,##0.00;[CURRENCY] #,##0.00 -</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0</FormatCode>
+<FormatCode>[CURRENCY] #,##0;[RED][CURRENCY] #,##0 -</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00</FormatCode>
+<FormatCode>[CURRENCY] #,##0.00;[RED][CURRENCY] #,##0.00 -</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
@@ -200,7 +200,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--</FormatCode>
+<FormatCode>[CURRENCY] #,##0.--;[RED][CURRENCY] #,##0.-- -</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
