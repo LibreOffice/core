@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 17:16:07 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2629,7 +2629,14 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
             // If we have found a dropcap store the textnode
             pPreviousNode = pPaM->GetNode()->GetTxtNode();
 
-            if (const BYTE *pDCS = pPlcxMan->GetPapPLCF()->HasSprm(0x442C))
+            const BYTE *pDCS;
+
+            if (bVer67)
+                pDCS = pPlcxMan->GetPapPLCF()->HasSprm(46);
+            else
+                pDCS = pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
+
+            if (pDCS)
                 nDropLines = (*pDCS) >> 3;
             else    // There is no Drop Cap Specifier hence no dropcap
                 pPreviousNode = 0;
@@ -4071,6 +4078,29 @@ bool SwWW8ImplReader::InEqualApo(int nLvl) const
     if (nLvl)
         --nLvl;
     return maApos[nLvl];
+}
+
+namespace sw
+{
+    namespace hack
+    {
+        Position::Position(const SwPosition &rPos)
+            : maPtNode(rPos.nNode), mnPtCntnt(rPos.nContent.GetIndex())
+        {
+        }
+
+        Position::Position(const Position &rPos)
+            : maPtNode(rPos.maPtNode), mnPtCntnt(rPos.mnPtCntnt)
+        {
+        }
+
+        Position::operator SwPosition() const
+        {
+            SwPosition aRet(maPtNode);
+            aRet.nContent.Assign(maPtNode.GetNode().GetCntntNode(), mnPtCntnt);
+            return aRet;
+        }
+    }
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
