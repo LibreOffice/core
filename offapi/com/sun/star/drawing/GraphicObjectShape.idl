@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicObjectShape.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
+ *  last change: $Author: cl $ $Date: 2001-03-14 17:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 
 #ifndef __com_sun_star_drawing_ColorMode_idl__
 #include <com/sun/star/drawing/ColorMode.idl>
+#endif
+
+#ifndef __com_sun_star_container_XIndexContainer_idl__
+#include <com/sun/star/container/XIndexContainer.idl>
 #endif
 
 //=============================================================================
@@ -165,6 +169,13 @@ service GraphicObjectShape
     /** This property selects the color mode that is used for rendering.
     */
     [property] ColorMode GraphicColorMode;
+
+    //-------------------------------------------------------------------------
+    /** This property contains a image map for this graphic.
+        @see com.sun.star.image.ImageMap
+    */
+    [optional, property] com::sun::star::container::XIndexContainer ImageMap;
+
 };
 
 //=============================================================================
