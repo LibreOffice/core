@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:37:26 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #endif
+#ifndef _COM_SUN_STAR_PACKAGES_XDATASINKENCRSUPPORT_HPP_
+#include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
+#endif
+
 #ifndef _ZIP_PACKAGE_ENTRY_HXX
 #include <ZipPackageEntry.hxx>
 #endif
@@ -73,22 +77,29 @@
 #ifndef _ENCRYPTION_DATA_HXX_
 #include <EncryptionData.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX
+#include <cppuhelper/implbase2.hxx>
 #endif
 
+#define PACKAGE_STREAM_NOTSET           0
+#define PACKAGE_STREAM_PACKAGEMEMBER    1
+#define PACKAGE_STREAM_DETECT           2
+#define PACKAGE_STREAM_DATA             3
+#define PACKAGE_STREAM_RAW              4
 
 class ZipPackage;
 struct ZipEntry;
 #if defined( MACOSX ) && ( __GNUC__ < 3 )
 class ZipPackageStream : public ZipPackageEntry,
                                              public ::cppu::OWeakObject,
-                                                 public ::com::sun::star::io::XActiveDataSink
+                                                 public ::com::sun::star::io::XActiveDataSink,
+                                                public ::com::sun::star::package::XDataSinkEncrSupport
 #else
-class ZipPackageStream : public cppu::ImplInheritanceHelper1
+class ZipPackageStream : public cppu::ImplInheritanceHelper2
 <
     ZipPackageEntry,
-    ::com::sun::star::io::XActiveDataSink
+    ::com::sun::star::io::XActiveDataSink,
+    ::com::sun::star::packages::XDataSinkEncrSupport
 >
 #endif
 {
@@ -96,14 +107,19 @@ class ZipPackageStream : public cppu::ImplInheritanceHelper1
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     ZipPackage          &rZipPackage;
-    sal_Bool            bToBeCompressed, bToBeEncrypted, bPackageMember, bHaveOwnKey, bIsEncrypted;
+    sal_Bool            bToBeCompressed, bToBeEncrypted, bHaveOwnKey, bIsEncrypted;
     vos::ORef < EncryptionData > xEncryptionData;
+
+    sal_uInt8   m_nStreamMode;
+    sal_uInt32  m_nMagicalHackPos;
+    sal_uInt32  m_nMagicalHackSize;
+
 public:
     sal_Bool HasOwnKey ()        { return bHaveOwnKey;}
     sal_Bool IsToBeCompressed () { return bToBeCompressed;}
     sal_Bool IsToBeEncrypted ()  { return bToBeEncrypted;}
     sal_Bool IsEncrypted ()      { return bIsEncrypted;}
-    sal_Bool IsPackageMember ()  { return bPackageMember;}
+    sal_Bool IsPackageMember ()  { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
     vos::ORef < EncryptionData > & getEncryptionData ()
     { return xEncryptionData;}
     const com::sun::star::uno::Sequence < sal_Int8 >& getKey ()
@@ -119,6 +135,10 @@ public:
     const sal_Int32 getSize ()
     { return aEntry.nSize;}
 
+    sal_uInt8 GetStreamMode() { return m_nStreamMode; }
+    sal_uInt32 GetMagicalHackPos() { return m_nMagicalHackPos; }
+    sal_uInt32 GetMagicalHackSize() { return m_nMagicalHackSize; }
+
     void SetToBeCompressed (sal_Bool bNewValue) { bToBeCompressed = bNewValue;}
     void SetIsEncrypted (sal_Bool bNewValue) { bIsEncrypted = bNewValue;}
     void SetToBeEncrypted (sal_Bool bNewValue)
@@ -129,7 +149,7 @@ public:
         else if ( !bToBeEncrypted && !xEncryptionData.isEmpty() )
             xEncryptionData.unbind();
     }
-    void SetPackageMember (sal_Bool bNewValue)  { bPackageMember  = bNewValue;}
+    void SetPackageMember (sal_Bool bNewValue);
     void setKey (const com::sun::star::uno::Sequence < sal_Int8 >& rNewKey )
     { xEncryptionData->aKey = rNewKey;}
     void setInitialisationVector (const com::sun::star::uno::Sequence < sal_uInt8 >& rNewVector )
@@ -145,8 +165,10 @@ public:
     ZipPackageStream (ZipPackage & rNewPackage);
     virtual ~ZipPackageStream( void );
 
+    sal_Bool ParsePackageRawStream();
+
     void setZipEntry( const ZipEntry &rInEntry);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream( )
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData()
         throw(::com::sun::star::uno::RuntimeException);
 
     static ::com::sun::star::uno::Sequence < sal_Int8 >& static_getImplementationId()
@@ -169,6 +191,26 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  )
         throw(::com::sun::star::uno::RuntimeException);
+
+    // XDataSinkEncrSupport
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getDataStream()
+        throw ( ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream()
+        throw ( ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setDataStream(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
+        throw ( ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setRawStream(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
+        throw ( ::com::sun::star::packages::EncryptionNotAllowedException,
+                ::com::sun::star::packages::NoRawFormatException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::RuntimeException);
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
