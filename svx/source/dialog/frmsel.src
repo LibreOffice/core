@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:54 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,43 +109,43 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ portuguese ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ russian ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ greek ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ dutch ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ french ] =
     {
@@ -169,13 +169,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ finnish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ italian ] =
     {
@@ -189,13 +189,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ danish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ swedish ] =
     {
@@ -209,23 +209,23 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ polish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ portuguese_brazilian ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ japanese ] =
     {
@@ -269,43 +269,73 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ turkish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Kenarl�k ayarlar�" ; 0; > ;
+        < "Sol kenar �izgisi" ; 1; > ;
+        < "Sa� kenarl�k �izgisi" ; 2; > ;
+        < "�st Kenarl�k �izgisi" ; 3; > ;
+        < "Alt kenarl�k �izgisi" ; 4; > ;
+        < "Yatay kenarl�k �izgisi" ; 5; > ;
+        < "Dikey kenarl�k �izgisi" ; 6; > ;
     };
     ItemList [ arabic ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ catalan ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ thai ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
+    };
+    ItemList [ czech ] =
+    {
+         < "Nastavení okrajů" ; 0; > ;
+        < "Čára levého okraje" ; 1; > ;
+        < "Čára pravého okraje" ; 2; > ;
+        < "Čára horního okraje" ; 3; > ;
+        < "Čára dolního okraje" ; 4; > ;
+        < "Čára vodorovného okraje" ; 5; > ;
+        < "Čára svislého okraje" ; 6; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+         < "‮קביעת גבול‬" ; 0; > ;
+        < "‮קו גבול שמאלי‬" ; 1; > ;
+        < "‮קו גבול ימני‬" ; 2; > ;
+        < "‮קו גבול עליון‬" ; 3; > ;
+        < "‮קו גבול תחתון‬" ; 4; > ;
+        < "‮קו גבול אופקי‬" ; 5; > ;
+        < "‮קו גבול אנכי‬" ; 6; > ;
+    };
+    ItemList [ hindi ] =
+    {
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     };
     StringArray ARR_DESCRIPTIONS
@@ -352,43 +382,43 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ portuguese ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ russian ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ greek ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ dutch ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ french ] =
     {
@@ -412,13 +442,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ finnish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ italian ] =
     {
@@ -432,13 +462,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ danish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ swedish ] =
     {
@@ -452,23 +482,23 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ polish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ portuguese_brazilian ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ japanese ] =
     {
@@ -512,46 +542,85 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ turkish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "S�n�r ayarlar�" ; 0; > ;
+        < "Sol kenarl�k �izgisi" ; 1; > ;
+        < "Sa� kenarl�k �izgisi" ; 2; > ;
+        < "�st kenarl�k �izgisi" ; 3; > ;
+        < "Alt kenarl�k �izgisi" ; 4; > ;
+        < "Yatay kenarl�k �izgisi" ; 5; > ;
+        < "Dikey kenarl�k �izgisi" ; 6; > ;
     };
     ItemList [ arabic ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ catalan ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ thai ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
+    };
+    ItemList [ czech ] =
+    {
+         < "Nastavení okrajů" ; 0; > ;
+        < "Čára levého okraje" ; 1; > ;
+        < "Čára pravého okraje" ; 2; > ;
+        < "Čára horního okraje" ; 3; > ;
+        < "Čára dolního okraje" ; 4; > ;
+        < "Čára vodorovného okraje" ; 5; > ;
+        < "Čára svislého okraje" ; 6; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+         < "‮קביעת גבול‬" ; 0; > ;
+        < "‮קו גבול שמאלי‬" ; 1; > ;
+        < "‮קו גבול ימני‬" ; 2; > ;
+        < "‮קו גבול עליון‬" ; 3; > ;
+        < "‮קו גבול תחתון‬" ; 4; > ;
+        < "‮קו גבול אופקי‬" ; 5; > ;
+        < "‮קו גבול אנכי‬" ; 6; > ;
+    };
+    ItemList [ hindi ] =
+    {
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
