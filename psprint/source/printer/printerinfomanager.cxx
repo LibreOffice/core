@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:51:45 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1220,7 +1220,8 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername )
 {
     const PrinterInfo&   rPrinterInfo   = getPrinterInfo (rPrintername);
     const rtl::OUString& rCommand       = rPrinterInfo.m_aCommand;
-    const rtl::OString aShellCommand    = OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
+    rtl::OString aShellCommand  = OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
+    aShellCommand += rtl::OString( " 2>/dev/null" );
 
     return popen (aShellCommand.getStr(), "w");
 }
@@ -1355,6 +1356,7 @@ void SystemQueueInfo::run()
         else
 #endif
         {
+            aPrtQueueCmd += ByteString( " 2>/dev/null" );
             if( pPipe = popen( aPrtQueueCmd.GetBuffer(), "r" ) )
             {
                 while( fgets( pBuffer, 1024, pPipe ) )
