@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.10 $
- *  last change: $Author: vg $ $Date: 2001-02-26 16:08:40 $
+ *  $Revision: 1.11 $
+ *  last change: $Author: hdu $ $Date: 2001-02-27 18:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,12 +214,13 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
             for( int i = aFaceFT->num_charmaps; --i >= 0; )
             {
                 const FT_CharMap aCM = aFaceFT->charmaps[i];
-                if( (aCM->platform_id == TT_PLATFORM_MICROSOFT)
-                && (aCM->encoding_id == TT_MS_ID_SYMBOL_CS) )
+                if(
+                // TODO for FT>=2.0: "(aCM->platform_id == TT_PLATFORM_MICROSOFT) &&"
+                    (aCM->encoding_id == TT_MS_ID_SYMBOL_CS) )
                     rData.meCharSet = RTL_TEXTENCODING_SYMBOL;
             }
-            rData.meScript      = SCRIPT_DONTKNOW;
 
+            rData.meScript      = SCRIPT_DONTKNOW;
             rData.mePitch       = FT_IS_FIXED_WIDTH( aFaceFT ) ? PITCH_FIXED : PITCH_VARIABLE;
             rData.meWidthType   = WIDTH_DONTKNOW;
             rData.meWeight      = (aFaceFT->style_flags & FT_STYLE_FLAG_BOLD) ? WEIGHT_BOLD : WEIGHT_NORMAL;
@@ -294,7 +295,9 @@ FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD 
         if( it_best != aRange.second )
         {
             FreetypeServerFont* pFont = new FreetypeServerFont( rFSD, **it_best );
-            return pFont;
+            if( pFont->TestFont() )
+                return pFont;
+            delete pFont;
         }
     }
 
@@ -324,7 +327,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
     mnWidth = rFSD.mnWidth;
     if( !mnWidth )
         mnWidth = rFSD.mnHeight;
-    rc = FT_Set_Pixel_Sizes( maFaceFT, rFSD.mnHeight, mnWidth );
+    rc = FT_Set_Pixel_Sizes( maFaceFT, mnWidth, rFSD.mnHeight );
 
     //TODO: LanguageType aLanguage = GetLanguage();
     //TODO: GSUB glyph substitution
@@ -448,7 +451,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     FT_Glyph_Get_CBox( aGlyphFT, ft_glyph_bbox_pixels, &aBbox );
     if( aBbox.yMin > aBbox.yMax )   // circumvent freetype bug
     {
-        int t; t = aBbox.yMin, aBbox.yMin=aBbox.yMax, aBbox.yMax=t;
+        int t=aBbox.yMin; aBbox.yMin=aBbox.yMax, aBbox.yMax=t;
     }
     rGD.SetOffset( aBbox.xMin, -aBbox.yMax );
     rGD.SetSize( Size( (aBbox.xMax-aBbox.xMin+1), (aBbox.yMax-aBbox.yMin) ) );
@@ -481,6 +484,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     }
 
     const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(aGlyphFT);
+    // autohinting miscaculates the offsets below by +-1
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
 
@@ -610,8 +614,8 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
                 aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
                 for( int i = 0; i < nPairs; ++i )
                 {
-                    aKernPair.mnChar1   = NEXT_UShort( pBuffer );
-                    aKernPair.mnChar2   = NEXT_UShort( pBuffer );
+                    aKernPair.mnChar1 = NEXT_UShort( pBuffer );
+                    aKernPair.mnChar2 = NEXT_UShort( pBuffer );
                     /*long nUnscaledKern=*/ NEXT_Short( pBuffer );
                     aKernGlyphVector.push_back( aKernPair );
                 }
