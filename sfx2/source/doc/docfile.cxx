@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-30 10:19:04 $
+ *  last change: $Author: mba $ $Date: 2002-09-02 11:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1327,7 +1327,11 @@ void SfxMedium::Transfer_Impl()
             try
             {
                 Reference< XInputStream > aTempInput = aTempCont.openStream();
-                aOriginalContent.writeStream( aTempInput, sal_True );
+                SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
+                SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
+                sal_Bool bRename = pRename ? pRename->GetValue() : FALSE;
+                sal_Bool bOverWrite = pOverWrite ? pOverWrite->GetValue() : !bRename;
+                aOriginalContent.writeStream( aTempInput, bOverWrite );
                 bSuccess = sal_True;
             }
             catch( Exception& )
