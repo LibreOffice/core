@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:22:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,18 +220,18 @@ void DrawViewWrapper::setMarkHandleProvider( MarkHandleProvider* pMarkHandleProv
     m_pMarkHandleProvider = pMarkHandleProvider;
 }
 
-void DrawViewWrapper::InitRedraw( OutputDevice* pOut, const Region& rReg )
+void DrawViewWrapper::CompleteRedraw( OutputDevice* pOut, const Region& rReg )
 {
     svtools::ColorConfig aColorConfig;
     Color aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     this->SetApplicationBackgroundColor(aFillColor);
-    this->E3dView::InitRedraw( pOut, rReg );
+    this->E3dView::CompleteRedraw( pOut, rReg );
 }
 
 SdrObject* DrawViewWrapper::getSelectedObject() const
 {
     SdrObject* pObj(NULL);
-    const SdrMarkList& rMarkList = this->GetMarkList();
+    const SdrMarkList& rMarkList = this->GetMarkedObjectList();
     if(rMarkList.GetMarkCount() == 1)
     {
         SdrMark* pMark = rMarkList.GetMark(0);
