@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,6 @@ namespace dbp
         if (!xColumnFactory.is() || !xColumnContainer.is())
             return;
 
-        static const ::rtl::OUString s_sFieldTypeProperty   = ::rtl::OUString::createFromAscii("Type");
         static const ::rtl::OUString s_sDataFieldProperty   = ::rtl::OUString::createFromAscii("DataField");
         static const ::rtl::OUString s_sLabelProperty       = ::rtl::OUString::createFromAscii("Label");
         static const ::rtl::OUString s_sWidthProperty       = ::rtl::OUString::createFromAscii("Width");
@@ -184,16 +183,9 @@ namespace dbp
         {
             // get the information for the selected column
             sal_Int32 nFieldType = DataType::OTHER;
-            try
-            {
-                Reference< XPropertySet > xColumn;
-                rContext.xFields->getByName(*pSelectedFields) >>= xColumn;
-                xColumn->getPropertyValue(s_sFieldTypeProperty) >>= nFieldType;
-            }
-            catch(Exception&)
-            {
-                DBG_ERROR("OGridWizard::implApplySettings: unexpected exception while gathering column information!");
-            }
+            OControlWizardContext::TNameTypeMap::const_iterator aFind = rContext.aTypes.find(*pSelectedFields);
+            if ( aFind != rContext.aTypes.end() )
+                nFieldType = aFind->second;
 
             aFormFieldNames.push_back(*pSelectedFields);
             switch (nFieldType)
