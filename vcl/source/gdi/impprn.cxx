@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impprn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:57 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifndef REMOTE_APPSERVER
 
 #define _SV_IMPPRN_CXX
 #define _SPOOLPRINTER_EXT
@@ -476,5 +474,3 @@ void ImplQPrinter::AddQueuePage( GDIMetaFile* pPage, USHORT nPage, BOOL bNewJobS
         pQueuePage->mpSetup = new JobSetup( mpParent->GetJobSetup() );
     mpQueue->Put( pQueuePage );
 }
-
-#endif
