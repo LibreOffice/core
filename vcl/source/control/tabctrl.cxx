@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-11 16:28:03 $
+ *  last change: $Author: tbe $ $Date: 2002-12-05 11:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1716,6 +1716,7 @@ void TabControl::SetTabPage( USHORT nPageId, TabPage* pTabPage )
             pItem->mpTabPage = pTabPage;
             if ( pItem->mnId == mnCurPageId )
                 ImplChangeTabPage( pItem->mnId, 0 );
+            ImplCallEventListeners( VCLEVENT_TABPAGE_SET, (void*) nPageId );
         }
         else
             pItem->mpTabPage = NULL;
