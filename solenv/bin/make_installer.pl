@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-09 11:33:01 $
+#   last change: $Author: rt $ $Date: 2004-07-12 13:09:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ use installer::sorter;
 use installer::strip;
 use installer::worker;
 use installer::systemactions;
+use installer::windows::assembly;
 use installer::windows::binary;
 use installer::windows::component;
 use installer::windows::createfolder;
@@ -1215,6 +1216,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             installer::windows::selfreg::create_selfreg_table($filesinproductlanguageresolvedarrayref, $newidtdir);
 
             installer::windows::upgrade::create_upgrade_table($newidtdir);
+
+            # Adding Assemblies into the tables MsiAssembly and MsiAssemblyName dynamically
+            installer::windows::assembly::create_msiassembly_table($filesinproductlanguageresolvedarrayref, $newidtdir);
+            installer::windows::assembly::create_msiassemblyname_table($filesinproductlanguageresolvedarrayref, $newidtdir);
         }
 
         $infoline = "\n";
