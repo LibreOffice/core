@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-24 17:07:12 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ chinese_traditional ] = "«e¸m¹s(~Z)";
         Text[ arabic ] = "ÃÕİÇÑ ŞíÇÏíÉ";
         Text[ greek ] = "Áñ÷éêÜ ìçäå~íéêÜ";
-        Text[ korean ] = "¸®µù Á¦·Î(~Z)";
+        Text[ korean ] = "¼±Çà Á¦·Î(~Z)";
         Text[ turkish ] = "Virgül öncesi ~sıfır sayısı";
         Text[ language_user1 ] = " ";
     };
@@ -729,7 +729,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ chinese_traditional ] = "¥Î¬õ¦âÅã¥Ü­t­È(~N)";
         Text[ arabic ] = "ÇáÃÑŞÇã ÇáÓáÈíÉ ÈÇááæä ÇáÃÍãÑ";
         Text[ greek ] = "Áñíçôéêïß ìå êüêêéíï";
-        Text[ korean ] = "¸¶ÀÌ³Ê½º ¹øÈ£´Â Àû»öÀ¸·Î(~N)";
+        Text[ korean ] = "(-)´Â Àû»öÀ¸·Î(~N)";
         Text[ turkish ] = "Negatif sayılar ~kırmızı";
         Text[ language_user1 ] = " ";
     };
