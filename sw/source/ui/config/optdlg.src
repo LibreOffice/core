@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:53:42 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3223,76 +3223,26 @@ TabPage TP_OPTSHDWCRSR
         Text[ hungarian ] = "TÃ¶~rÃ©sek";
         Text[ slovenian ] = "Pre~lomi";
     };
-    CheckBox CB_HIDDEN
+    CheckBox CB_CHAR_HIDDEN
     {
         Pos = MAP_APPFONT ( 12 , 92 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "Verste~ckter Text" ;
-        Text [ ENGLISH ] = "~Hidden text" ;
-        Text [ norwegian ] = "~Hidden text" ;
-        Text [ italian ] = "Testo nascosto" ;
-        Text [ portuguese_brazilian ] = "~Texto oculto" ;
-        Text [ portuguese ] = "~Texto oculto" ;
-        Text [ finnish ] = "Piilo~teksti" ;
-        Text [ danish ] = "Skj~ult tekst" ;
-        Text [ french ] = "Texte ~masqué" ;
-        Text [ swedish ] = "Dold te~xt" ;
-        Text [ dutch ] = "On~zichtbare tekst" ;
-        Text [ spanish ] = "Te~xto oculto" ;
-        Text [ english_us ] = "Hidden te~xt" ;
-        Text[ chinese_simplified ] = "éšå…¥çš„æ–‡å­—(~X)";
-        Text[ russian ] = "Ñêğûòûé òåêñò";
-        Text[ polish ] = "Ukryty t~ekst";
-        Text[ japanese ] = "éš ã—ãƒ†ã‚­ã‚¹ãƒˆ(~X)";
-        Text[ chinese_traditional ] = "éš±å…¥çš„æ–‡å­—(~X)";
-        Text[ arabic ] = "äÕ ãÎİí";
-        Text[ greek ] = "Êñ~õöü êåßìåíï";
-        Text[ korean ] = "ìˆ¨ê²¨ì§„ í…ìŠ¤íŠ¸(~X)";
-        Text[ turkish ] = "Gizli metin";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Te~xt ocult";
-        Text[ thai ] = "à¸‚à¹‰à¸­~à¸„à¸§à¸²à¸¡à¸—à¸µà¹ˆà¸‹à¹ˆà¸­à¸™à¹„à¸§à¹‰";
-        Text[ czech ] = "SkrytÃ½ text";
-        Text[ hebrew ] = "Verste~ckter Text";
-        Text[ hindi ] = "à¤›à¤¿~à¤ªà¤¾ à¤¹à¥à¤† à¤Ÿà¥‡à¤•à¥à¤¸à¤Ÿà¥";
-        Text[ slovak ] = "SkrytÃ½ te~xt";
-        Text[ hungarian ] = "Re~jtett szÃ¶veg";
-        Text[ slovenian ] = "Skrito be~sedilo";
+        Text = "Aus~geblendeter Text" ;
+        Text [ english_us ] = "Hidden text" ;
     };
-    CheckBox CB_HIDDEN_PARA
+    CheckBox CB_FLD_HIDDEN
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "~Versteckte Absätze" ;
-        Text [ ENGLISH ] = "H~idden paragraphs" ;
-        Text [ english_us ] = "Hidden p~aragraphs" ;
-        Text [ portuguese_brazilian ] = "~Parágrafos ocultos" ;
-        Text [ swedish ] = "Dolda stycken" ;
-        Text [ danish ] = "Sk~julte afsnit" ;
-        Text [ italian ] = "~Paragrafi nascosti" ;
-        Text [ spanish ] = "Pá~rrafos ocultos" ;
-        Text [ french ] = "Paragraphes masqués" ;
-        Text [ dutch ] = "Verborgen al~inea's" ;
-        Text [ portuguese ] = "~Parágrafos ocultos" ;
-        Text[ chinese_simplified ] = "éšå…¥çš„æ®µè½(~A)";
-        Text[ russian ] = "Ñêğûòûå àáçàöû";
-        Text[ polish ] = "~Ukryte akapity";
-        Text[ japanese ] = "éš ã—æ®µè½(~A)";
-        Text[ chinese_traditional ] = "éš±å…¥çš„æ®µè½(~A)";
-        Text[ arabic ] = "İŞÑÇÊ ãÎİíÉ";
-        Text[ language_user1 ] = " ";
-        Text[ greek ] = "Êñõ~öİò ğáñÜãñáöïé";
-        Text[ korean ] = "ìˆ¨ê²¨ì§„ ë‹¨ë½(~A)";
-        Text[ turkish ] = "Gizli paragraf";
-        Text[ finnish ] = "Piilotetut ~kappaleet";
-        Text[ catalan ] = "Pa~ràgrafs ocults";
-        Text[ thai ] = "à¸¢à¹ˆ~à¸­à¸«à¸™à¹‰à¸²à¸—à¸µà¹ˆà¸‹à¹ˆà¸­à¸™à¹„à¸§à¹‰";
-        Text[ czech ] = "SkrytÃ© odstavce";
-        Text[ hebrew ] = "~Versteckte AbsÃ¤tze";
-        Text[ hindi ] = "à¤›à¤¿à¤ªà¤¾ à¤¹à¥~à¤† à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦";
-        Text[ slovak ] = "SkrytÃ© o~dstavce";
-        Text[ hungarian ] = "Rejtett bekez~dÃ©sek";
-        Text[ slovenian ] = "Skriti odst~avki";
+        Text = "Feldbefehle: Verste~ckter Text" ;
+        Text [ english_us ] = "Fields: Hidden te~xt" ;
+    };
+    CheckBox CB_FLD_HIDDEN_PARA
+    {
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text = "Feldbefehle: ~Versteckte Absätze" ;
+        Text [ english_us ] = "Fields: Hidden p~aragraphs" ;
     };
     FixedLine FL_SEPARATOR_SHDW
     {
