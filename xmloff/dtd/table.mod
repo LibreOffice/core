@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.41 2002-05-03 14:30:34 sab Exp $
+	$Id: table.mod,v 1.42 2002-11-08 08:40:55 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -436,7 +436,7 @@
 <!ELEMENT table:sort-by EMPTY>
 <!ATTLIST table:sort-by
 	table:field-number %nonNegativeInteger; #REQUIRED
-	table:data-type (text | number | automatic | qname-but-not-ncname) "automatic"
+	table:data-type CDATA "automatic"
 	table:order (ascending | descending) "ascending"
 >
 
@@ -448,7 +448,7 @@
 >
 <!ELEMENT table:sort-groups EMPTY>
 <!ATTLIST table:sort-groups
-	table:data-type (text | number | automatic | qname-but-not-ncname) "automatic"
+	table:data-type CDATA "automatic"
 	table:order (ascending | descending) "ascending"
 >
 <!ELEMENT table:subtotal-rule (table:subtotal-field)*>
