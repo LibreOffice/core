@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-08 10:46:32 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,7 +1035,7 @@ String STR_PRESVIEWSHELL
     Text[ polish ] = "Tryb prezentacji";
     Text[ portuguese_brazilian ] = "Presentation mode";
     Text[ japanese ] = "ｽﾗｲﾄﾞｼｮｰﾓｰﾄﾞ";
-    Text[ korean ] = "Presentation mode";
+    Text[ korean ] = "프리젠테이션 모드";
     Text[ chinese_simplified ] = "演示文稿模式";
     Text[ chinese_traditional ] = "簡報模式";
     Text[ turkish ] = "Presentation mode";
@@ -1046,6 +1046,26 @@ String STR_PREVIEWVIEWSHELL
 {
     Text = "Vorschaufenster" ;
     Text [ ENGLISH ] = "Preview window" ;
+    Text[ english_us ] = "Preview window";
+    Text[ portuguese ] = "Preview window";
+    Text[ russian ] = "Preview window";
+    Text[ greek ] = "Preview window";
+    Text[ dutch ] = "Preview window";
+    Text[ french ] = "Fen�tre d'aper�u";
+    Text[ spanish ] = "Preview window";
+    Text[ finnish ] = "Preview window";
+    Text[ italian ] = "Preview window";
+    Text[ danish ] = "Preview window";
+    Text[ swedish ] = "Preview window";
+    Text[ polish ] = "Preview window";
+    Text[ portuguese_brazilian ] = "Preview window";
+    Text[ japanese ] = "ﾌﾟﾚﾋﾞｭｰｳｨﾝﾄﾞｳ";
+    Text[ korean ] = "Preview window";
+    Text[ chinese_simplified ] = "Preview window";
+    Text[ chinese_traditional ] = "Preview window";
+    Text[ turkish ] = "Preview window";
+    Text[ arabic ] = "Preview window";
+    Text[ catalan ] = "Preview window";
 };
 String STR_TEXTOBJECTBARSHELL
 {
@@ -2194,6 +2214,7 @@ String STR_SAVE_DOC
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Guardar documento";
 };
+
 
 
 
