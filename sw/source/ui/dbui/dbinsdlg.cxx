@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 10:49:39 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 08:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,6 @@ using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::util;
 
 extern const USHORT __FAR_DATA aUITableAttrRange[];//CHINA001
 const char cDBFldStart  = '<';
@@ -461,17 +460,17 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         SvNumberFormatter* pNumFmtr = rSh.GetNumberFormatter();
         SvNumberFormatsSupplierObj* pNumFmt = new SvNumberFormatsSupplierObj( pNumFmtr );
         Reference< util::XNumberFormatsSupplier >  xDocNumFmtsSupplier = pNumFmt;
-        Reference< XNumberFormats > xDocNumberFormats = xDocNumFmtsSupplier->getNumberFormats();
-         Reference< XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, UNO_QUERY);
+        Reference< ::com::sun::star::util::XNumberFormats > xDocNumberFormats = xDocNumFmtsSupplier->getNumberFormats();
+         Reference< ::com::sun::star::util::XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, UNO_QUERY);
 
         Reference<XPropertySet> xSourceProps(xDataSource, UNO_QUERY);
-        Reference< XNumberFormats > xNumberFormats;
+        Reference< ::com::sun::star::util::XNumberFormats > xNumberFormats;
         if(xSourceProps.is())
         {
             Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
             if(aFormats.hasValue())
             {
-                Reference<XNumberFormatsSupplier> xSuppl;
+                Reference< ::com::sun::star::util::XNumberFormatsSupplier> xSuppl;
                 aFormats >>= xSuppl;
                 if(xSuppl.is())
                 {
@@ -1440,7 +1439,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
               Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
               if(aFormats.hasValue())
               {
-                  Reference<XNumberFormatsSupplier> xSuppl;
+                  Reference< ::com::sun::star::util::XNumberFormatsSupplier> xSuppl;
                   aFormats >>= xSuppl;
                   if(xSuppl.is())
                   {
