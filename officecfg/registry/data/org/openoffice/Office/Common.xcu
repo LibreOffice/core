@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 13:54:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,8 +190,8 @@
           <value >private:factory/sdatabase?Interactive</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">Datenbank</value>
-          <value xml:lang="en-US">Database</value>
+          <value xml:lang="de">Datenbank...</value>
+          <value xml:lang="en-US">Database...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
           <value >_default</value>
