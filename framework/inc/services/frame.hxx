@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:35:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -291,7 +295,7 @@ enum EActiveState
 
     @devstatus  ready to use
     @threadsafe yes
-    @modified   08.05.2002 09:38, as96863
+    @modified   04.10.2004 10:47, as96863
 *//*-*************************************************************************************************************/
 class Frame :   // interfaces
                 public  css::lang::XTypeProvider                    ,
@@ -299,6 +303,7 @@ class Frame :   // interfaces
                 public  css::frame::XFramesSupplier                 ,   // => XFrame => XComponent
                 public  css::frame::XDispatchProvider               ,
                 public  css::frame::XDispatchProviderInterception   ,
+                public  css::frame::XDispatchInformationProvider    ,
                 public  css::task::XStatusIndicatorFactory          ,
                 public  css::awt::XWindowListener                   ,   // => XEventListener
                 public  css::awt::XTopWindowListener                ,
@@ -400,6 +405,12 @@ class Frame :   // interfaces
         //---------------------------------------------------------------------------------------------------------
         virtual void                                                SAL_CALL registerDispatchProviderInterceptor(   const   css::uno::Reference< css::frame::XDispatchProviderInterceptor >&    xInterceptor        ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL releaseDispatchProviderInterceptor (   const   css::uno::Reference< css::frame::XDispatchProviderInterceptor >&    xInterceptor        ) throw( css::uno::RuntimeException );
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XDispatchInformationProvider
+        //---------------------------------------------------------------------------------------------------------
+        virtual css::uno::Sequence< sal_Int16 >                       SAL_CALL getSupportedCommandGroups         (                       ) throw (css::uno::RuntimeException);
+        virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup) throw (css::uno::RuntimeException);
 
         //---------------------------------------------------------------------------------------------------------
         //  XWindowListener
@@ -583,7 +594,7 @@ class Frame :   // interfaces
         sal_Bool                                                                m_bIsHidden                         ;   /// indicates, if this frame is used in hidden mode or not
         static css::uno::WeakReference< css::frame::XFrame >                    m_xCloserFrame                      ;   /// holds the only frame, which must show the special closer menu item (can be NULL!)
         css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >    m_xLayoutManager                    ;   /// is used to layout the child windows of the frame.
-
+        css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper               ;
     protected:
 
         FrameContainer                                                          m_aChildFrameContainer              ;   /// array of child frames
