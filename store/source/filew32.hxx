@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filew32.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:06:34 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ static const __store_errcode_mapping_st __store_errcode_map[] =
     { ERROR_LOCK_VIOLATION,    store_E_LockingViolation },
     { ERROR_INVALID_HANDLE,    store_E_InvalidHandle    },
     { ERROR_INVALID_PARAMETER, store_E_InvalidParameter },
+    { ERROR_DISK_FULL,         store_E_OutOfSpace       },
+    { ERROR_HANDLE_DISK_FULL,  store_E_OutOfSpace       },
 };
 
 /*
@@ -275,17 +277,23 @@ inline storeError __store_ftrunc (HSTORE h, sal_uInt32 n)
 /*
  * __store_fsync.
  */
-inline void __store_fsync (HSTORE h)
+inline storeError __store_fsync (HSTORE h)
 {
-    ::FlushFileBuffers (h);
+    if (!::FlushFileBuffers (h))
+        return ERROR_FROM_NATIVE(::GetLastError());
+    else
+        return store_E_None;
 }
 
 /*
  * __store_fclose.
  */
-inline void __store_fclose (HSTORE h)
+inline storeError __store_fclose (HSTORE h)
 {
-    ::CloseHandle (h);
+    if (!::CloseHandle (h))
+        return ERROR_FROM_NATIVE(::GetLastError());
+    else
+        return store_E_None;
 }
 
 #endif /* INCLUDED_STORE_FILEW32_HXX */
