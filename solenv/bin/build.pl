@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: vg $ $Date: 2001-07-06 09:11:03 $
+#   last change: $Author: vg $ $Date: 2001-08-07 14:03:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.29 $ ';
+$id_str = ' $Revision: 1.30 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -258,13 +258,18 @@ sub HowToBuild {
 # get folders' platform infos
 #
 sub get_prj_platform {
-    my $prj_alias;
+    my ($prj_alias, $line);
     while(<PrjBuildFile>) {
         s/\r\n//;
+        $line++;
         if ($_ =~ /nmake/) {
             if ($' =~ /\s+-\s+(\w+)[,\S+]*\s+(\S+)/ ) {
                 my $platform = $1;
                 my $alias = $2;
+                if ($alias eq 'NULL') {
+                    print "There is no correct alias set in the line $line!\n";
+                    exit (1);
+                };
                 &mark_platform($alias, $platform);
             } else {
                 print STDERR "Misspelling in line: \n$_\n";
