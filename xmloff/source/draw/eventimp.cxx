@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: cl $ $Date: 2001-09-25 11:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #endif
 #ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
 #include <com/sun/star/presentation/ClickAction.hpp>
+#endif
+
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
@@ -328,7 +332,10 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, c
         case XML_NAMESPACE_XLINK:
             if( IsXMLToken( aLocalName, XML_HREF ) )
             {
-                msBookmark = rImport.GetAbsoluteReference(sValue);
+                const UniString aTmp( rImport.GetAbsoluteReference(sValue) );
+                UniString aTmp2;
+                INetURLObject::translateToInternal( aTmp, aTmp2, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 );
+                msBookmark = aTmp2;
             }
             break;
         }
