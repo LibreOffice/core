@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:23:31 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ FloatingWindow RID_SVXTBX_FORM
     ToolBox TBX_FORM
     {
         SVLook = TRUE ;
-        LineCount = 2 ;
+        LineCount = 3 ;
         ItemList =
         {
             ToolBoxItem
@@ -456,6 +456,12 @@ FloatingWindow RID_SVXTBX_FORM
                 HelpID = SID_FM_COMBOBOX ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
+            };
+            ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_NAVIGATIONBAR ;
+                HelpID = SID_FM_NAVIGATIONBAR ;
             };
             ToolBoxItem
             {
