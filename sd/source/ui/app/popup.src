@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:25:30 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ Menu RID_SLIDE_SORTER_IMPRESS_SEL_POPUP
         MN_PRESENTATION_LAYOUT
         MN_MODIFY_PAGE
         SEPARATOR
-        MN_DIA
+        /*MN_DIA*/
         MN_HIDE_SLIDE
     };
 };
