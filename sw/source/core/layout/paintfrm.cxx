@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:17:54 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2305,6 +2305,8 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
     ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
 }
 
+#ifdef LONG_TABLE_HACK
+
 /*************************************************************************
 |*
 |*  SwRootFrm::HackPrepareLongTblPaint()
@@ -2335,6 +2337,8 @@ void SwRootFrm::HackPrepareLongTblPaint( int nMode )
                                          break;
     }
 }
+
+#endif
 
 
 /*************************************************************************
@@ -3735,11 +3739,15 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                 // it is at the top border of a table frame, which is a follow.
                 // Thus, use border attributes of cell frame in first row of complete table.
                 // First, determine first table frame of complete table.
+#ifdef FRANK_TEST
+                SwTabFrm* pMasterTabFrm = pParentTabFrm->FindMaster( true );
+#else
                 SwTabFrm* pMasterTabFrm = const_cast<SwTabFrm*>(pParentTabFrm->FindMaster());
                 while ( pMasterTabFrm->IsFollow() )
                 {
                     pMasterTabFrm = pMasterTabFrm->FindMaster();
                 }
+#endif
                 // determine first row of complete table.
                 const SwFrm* pFirstRow = pMasterTabFrm->GetLower();
                 // return first cell in first row
