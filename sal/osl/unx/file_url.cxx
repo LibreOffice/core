@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_url.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-13 12:28:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,7 +516,7 @@ namespace /* private */
         const sal_Unicode* sc = s;
         sal_Unicode*       dc = d;
 
-        while (*dc++ = *sc++)
+        while ((*dc++ = *sc++))
             /**/;
 
         return d;
@@ -676,7 +676,6 @@ namespace /* private */
             return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
 
         sal_Unicode        path_resolved_so_far[PATH_MAX];
-        sal_Unicode        realpath_buffer[PATH_MAX];
         const sal_Unicode* punresolved = unresolved_path.getStr();
         sal_Unicode*       presolvedsf = path_resolved_so_far;
 
@@ -926,7 +925,10 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
 
         if (osl::realpath(result, resolved))
         {
-            oslFileError osl_error = osl_getFileURLFromSystemPath(resolved.pData, pustrURL);
+#if OSL_DEBUG_LEVEL > 0
+            oslFileError osl_error =
+#endif
+                osl_getFileURLFromSystemPath(resolved.pData, pustrURL);
             OSL_ASSERT(osl_File_E_None == osl_error);
             bfound = true;
         }
