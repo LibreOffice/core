@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-10 15:54:48 $
+ *  last change: $Author: tbe $ $Date: 2002-07-03 12:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,4 +372,11 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
     }
 
     return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >( xPeer, ::com::sun::star::uno::UNO_QUERY );
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar )
+{
+    // TODO
+
+    return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >();
 }
