@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: iha $ $Date: 2001-01-19 17:38:22 $
+ *  last change: $Author: abi $ $Date: 2001-01-23 10:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2701,13 +2701,30 @@ shell::write( sal_Int32 CommandId,
     {
         sal_uInt64 nTotalNumberOfBytes = 0;
         sal_uInt64 nWrittenBytes;
-        sal_Int32 nReadBytes, nRequestedBytes = 2048;
+        sal_Int32 nReadBytes = 0, nRequestedBytes = 2048;
         uno::Sequence< sal_Int8 > seq( nRequestedBytes );
         do
         {
-            nReadBytes = aInputStream->readBytes( seq,
-                                                  nRequestedBytes );
-            if( nReadBytes )
+            try
+            {
+                nReadBytes = aInputStream->readBytes( seq,
+                                                      nRequestedBytes );
+            }
+            catch( const io::NotConnectedException& e )
+            {
+                bSuccess = false;
+            }
+            catch( const io::BufferSizeExceededException& e )
+            {
+                bSuccess = false;
+            }
+            catch( const io::IOException& e )
+            {
+                bSuccess = false;
+            }
+
+
+            if( bSuccess && nReadBytes )
             {
                 const sal_Int8* p = seq.getConstArray();
                 aFile.write( ((void*)(p)),
@@ -2719,7 +2736,8 @@ shell::write( sal_Int32 CommandId,
                     // DBG_ASSERT( "Write Operation not successful" );
                 }
             }
-        } while( sal_uInt64( nReadBytes ) == nRequestedBytes );
+        } while( bSuccess && sal_uInt64( nReadBytes ) == nRequestedBytes );
+
         aFile.setSize( nTotalNumberOfBytes );
     }
 
