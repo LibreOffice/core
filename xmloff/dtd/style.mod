@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.47 2002-01-17 13:35:08 dvo Exp $
+	$Id: style.mod,v 1.48 2002-02-15 20:33:43 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -392,6 +392,15 @@
 
 <!ATTLIST style:properties style:footnote-max-height %lengthOrNoLimit; #IMPLIED>
 <!ATTLIST style:properties style:vertical-align (top|bottom|middle|basline|auto) #IMPLIED>
+<!ATTLIST style:properties style:writing-mode (lr-tb|rl-tb|tb-rl|tb-lr|lr|rl|tb|page) "lr-tb">
+<!ATTLIST style:properties style:layout-grid-mode (none|line|both) #IMPLIED>
+<!ATTLIST style:properties style:layout-grid-base-height %measure; #IMPLIED
+<!ATTLIST style:properties style:layout-grid-ruby-height %measure; #IMPLIED
+<!ATTLIST style:properties style:layout-grid-lines %number; #IMPLIED;
+<!ATTLIST style:properties style:layout-grid-color %color; #IMPLIED
+<!ATTLIST style:properties style:layout-grid-ruby-below %boolean; #IMPLIED
+<!ATTLIST style:properties style:layout-grid-print %boolean; #IMPLIED
+<!ATTLIST style:properties style:layout-grid-display %boolean; #IMPLIED>
 
 <!ELEMENT style:footnote-sep EMPTY>
 <!ATTLIST style:footnote-sep style:width %length; #IMPLIED>
