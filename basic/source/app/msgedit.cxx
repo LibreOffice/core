@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: gh $ $Date: 2001-04-04 13:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 #ifndef _FSYS_HXX //autogen
 #include <tools/fsys.hxx>
 #endif
-#ifndef _CLIP_HXX //autogen
-#include <vcl/clip.hxx>
+#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
+#include <svtools/stringtransfer.hxx>
 #endif
 #ifndef NOOLDSV //autogen
 #include <vcl/system.hxx>
@@ -373,7 +373,7 @@ void MsgEdit::Delete()
 }
 
 void MsgEdit::Cut(){ Copy(); Delete(); bModified = TRUE; lModify.Call( NULL ); }
-void MsgEdit::Copy(){ Clipboard::Clear();Clipboard::CopyString( GetSelected() ); }
+void MsgEdit::Copy(){ ::svt::OStringTransfer::CopyString( GetSelected() ); }
 /**/void MsgEdit::Paste(){ Sound::Beep(); }
 void MsgEdit::Undo(){ Sound::Beep(); }
 void MsgEdit::Redo(){ Sound::Beep(); }

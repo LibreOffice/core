@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: gh $ $Date: 2001-04-04 13:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _FSYS_HXX //autogen
 #include <tools/fsys.hxx>
 #endif
-#ifndef _CLIP_HXX //autogen
-#include <vcl/clip.hxx>
+#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
+#include <svtools/stringtransfer.hxx>
 #endif
 
 #include "basic.hrc"
@@ -269,14 +269,14 @@ void AppWin::Activate()
 // Set up the menu
 long AppWin::InitMenu( Menu* pMenu )
 {
-    Clipboard cb;
+
+    ::rtl::OUString aTemp;
     TextSelection r = pDataEdit->GetSelection();
     BOOL bMarked = r.HasRange();
     pMenu->EnableItem( RID_EDITREPEAT,  (aFind.Len() != 0 ) );
     pMenu->EnableItem( RID_EDITCUT,     bMarked );
     pMenu->EnableItem( RID_EDITCOPY,    bMarked );
-//  pMenu->EnableItem( RID_EDITPASTE,   (cb.GetDataLen( FORMAT_STRING ) != 0 ) );
-    pMenu->EnableItem( RID_EDITPASTE,   (cb.HasFormat( FORMAT_STRING ) ) );
+    pMenu->EnableItem( RID_EDITPASTE,   ( ::svt::OStringTransfer::PasteString( aTemp ) ) );
     pMenu->EnableItem( RID_EDITDEL,     bMarked );
 //  pMenu->EnableItem( RID_HELPTOPIC,   bMarked );
 
@@ -327,11 +327,20 @@ void AppWin::Command( const CommandEvent& rCEvt )
         case RID_EDITREPEAT:
             Repeat(); break;
         case RID_EDITCUT:
-            if( bHasMark ) pDataEdit->Cut(); break;
+            if( bHasMark )
+                pDataEdit->Cut();
+            break;
         case RID_EDITCOPY:
-            if( bHasMark ) pDataEdit->Copy(); break;
+            if( bHasMark )
+                pDataEdit->Copy();
+            break;
         case RID_EDITPASTE:
-            if( Clipboard::HasFormat( FORMAT_STRING ) ) pDataEdit->Paste(); break;
+            {
+                ::rtl::OUString aTemp;
+                if( ::svt::OStringTransfer::PasteString( aTemp ) )
+                    pDataEdit->Paste();
+            }
+            break;
         case RID_EDITDEL:
             /*if( bHasMark ) */pDataEdit->Delete();
             break;
@@ -497,27 +506,27 @@ void AppWin::Load( const String& aName )
 USHORT AppWin::ImplSave()
 {
     SkipReload();
-    BOOL bResult = SAVE_RES_NOT_SAVED;
+    USHORT nResult = SAVE_RES_NOT_SAVED;
     String s1 = *pNoName;
     String s2 = GetText().Copy( 0, s1.Len() );
     if( s1 == s2 )
-        bResult = SaveAs();
+        nResult = SaveAs();
     else {
         String aName = GetText();
         if ( pDataEdit->Save( aName ) )
         {
-            bResult = SAVE_RES_SAVED;
+            nResult = SAVE_RES_SAVED;
             bHasFile = TRUE;
         }
         else
         {
-            bResult = SAVE_RES_ERROR;
+            nResult = SAVE_RES_ERROR;
             ErrorBox( this, ResId( IDS_WRITEERROR ) ).Execute();
         }
         UpdateFileInfo( HAS_BEEN_LOADED );
     }
     SkipReload( FALSE );
-    return bResult;
+    return nResult;
 }
 
 // mit neuem Namen speichern

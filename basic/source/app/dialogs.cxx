@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-06 12:09:11 $
+ *  last change: $Author: gh $ $Date: 2001-04-04 13:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@ HACK( #define protected public )
 #ifndef _FSYS_HXX //autogen
 #include <tools/fsys.hxx>
 #endif
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
+#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
+#include <svtools/stringtransfer.hxx>
 #endif
 #ifndef _SV_SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
@@ -718,8 +718,7 @@ IMPL_LINK( DisplayHidDlg, CopyToClipboard, void*, EMPTYARG )
             aSammel += '\n';
         aSammel += aMlbSlots.GetSelectEntry( i );
     }
-    Clipboard::Clear();
-    Clipboard::CopyString( aSammel );
+    ::svt::OStringTransfer::CopyString( aSammel );
     return 0;
 }
 

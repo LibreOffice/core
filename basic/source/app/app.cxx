@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gh $ $Date: 2001-03-14 11:33:53 $
+ *  last change: $Author: gh $ $Date: 2001-04-04 13:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@ Reference< XContentProviderManager > InitializeUCB( void )
     try
     {
 
+#ifdef DEBUG
+    ::rtl::OUString aTemp ( getPathToSystemRegistry() );
+#endif
     //////////////////////////////////////////////////////////////////////
     // Bootstrap readonly service factory
     Reference< XMultiServiceFactory > xSMgr( createRegistryServiceFactory( getPathToSystemRegistry(), sal_True ) );
@@ -183,6 +186,17 @@ Reference< XContentProviderManager > InitializeUCB( void )
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                                         OUString::createFromAscii(SAL_MODULENAME( "fileacc" )),
                                         Reference< XSimpleRegistry >() );
+        //Clipboard
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "sysdtrans" )),
+                                        Reference< XSimpleRegistry >() );
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "mcnttype" )),
+                                        Reference< XSimpleRegistry >() );
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "ftransl" )),
+                                        Reference< XSimpleRegistry >() );
+
 
 /*      // Packages
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
@@ -206,8 +220,11 @@ Reference< XContentProviderManager > InitializeUCB( void )
 */
 
         // i18n
+//      xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+//                                      OUString::createFromAscii(SVLIBRARY( "int" )),
+//                                      Reference< XSimpleRegistry >() );
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SVLIBRARY( "int" )),
+                                        OUString::createFromAscii(SVLIBRARY( "i18n" )),
                                         Reference< XSimpleRegistry >() );
 
         //////////////////////////////////////////////////////////////////////
@@ -532,6 +549,7 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     pHelpMenu->SetHighlightHdl( LINK( this, BasicFrame, HighlightMenu ) );
     pHelpMenu->SetActivateHdl( LINK( this, BasicFrame, InitMenu ) );
     pHelpMenu->SetDeactivateHdl( LINK( this, BasicFrame, DeInitMenu ) );
+
 
     LoadLRU();
 
@@ -1015,7 +1033,6 @@ IMPL_LINK_INLINE_START( BasicFrame, DeInitMenu, Menu *, pMenu )
     pMenu->EnableItem( RID_RUNPREVERR );
     if( pWork ) pWork->DeInitMenu( pMenu );
 */
-
     SetAutoRun( FALSE );
     String aString;
     pStatus->Message( aString );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbased.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2001-03-14 11:33:53 $
+ *  last change: $Author: gh $ $Date: 2001-04-04 13:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include <sbmeth.hxx>
 #endif
 
-#ifndef _CLIP_HXX //autogen
-#include <vcl/clip.hxx>
+#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
+#include <svtools/stringtransfer.hxx>
 #endif
 
 #ifndef _BASIC_TTRESHLP_HXX
@@ -302,7 +302,7 @@ void AppBasEd::Disassemble()
 {
     String aText;
     if( pFrame->Basic().Disassemble( pMod, aText ) )
-        Clipboard::CopyString( aText );
+        ::svt::OStringTransfer::CopyString( aText );
 }
 
 void AppBasEd::Run()
