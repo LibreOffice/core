@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-16 12:32:00 $
+ *  last change: $Author: ka $ $Date: 2000-11-23 13:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,40 +804,46 @@ BOOL GalleryTheme::InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos )
     {
         INetURLObject aURL( CreateUniqueURL( GetParent(), SGA_OBJ_BMP ) );
         DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-        SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
 
-        if( pOStm )
+        if( rGraphic.GetType() == GRAPHIC_BITMAP )
         {
-            if( rGraphic.GetType() == GRAPHIC_BITMAP )
+            ULONG nExportFormat;
+
+            if( rGraphic.IsAnimated() )
             {
-                ULONG nExportFormat;
-
-                if( rGraphic.IsAnimated() )
-                {
-                    aURL.SetExtension( String( RTL_CONSTASCII_USTRINGPARAM( "gif" ) ) );
-                    nExportFormat = CVT_GIF;
-                }
-                else
-                {
-                    aURL.SetExtension( String( RTL_CONSTASCII_USTRINGPARAM( "png" ) ) );
-                    nExportFormat = CVT_PNG;
-                }
-
-                pOStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
-                bRet = ( GraphicConverter::Export( *pOStm, rGraphic, nExportFormat ) == ERRCODE_NONE );
+                aURL.SetExtension( String( RTL_CONSTASCII_USTRINGPARAM( "gif" ) ) );
+                nExportFormat = CVT_GIF;
             }
             else
             {
-                aURL.SetExtension( String( RTL_CONSTASCII_USTRINGPARAM( "svm" ) ) );
+                aURL.SetExtension( String( RTL_CONSTASCII_USTRINGPARAM( "png" ) ) );
+                nExportFormat = CVT_PNG;
+            }
 
-                GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
+            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
 
+            if( pOStm )
+            {
+                pOStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
+                bRet = ( GraphicConverter::Export( *pOStm, rGraphic, nExportFormat ) == ERRCODE_NONE );
+                delete pOStm;
+            }
+        }
+        else
+        {
+            aURL.SetExtension( String( RTL_CONSTASCII_USTRINGPARAM( "svm" ) ) );
+
+            GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
+
+            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
+
+            if( pOStm )
+            {
                 pOStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
                 aMtf.Write( *pOStm );
                 bRet = ( pOStm->GetError() == ERRCODE_NONE );
+                delete pOStm;
             }
-
-            delete pOStm;
         }
 
         if( bRet )
