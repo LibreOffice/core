@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-26 14:14:30 $
+ *  last change: $Author: pl $ $Date: 2001-12-12 19:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,8 +255,10 @@ namespace x11 {
                                         m_aData;
             Sequence< ::com::sun::star::datatransfer::DataFlavor >
             m_aTypes;
+            Sequence< Atom >            m_aNativeTypes;
             // this is used for caching
             // m_aTypes is invalid after 2 seconds
+            // m_aNativeTypes contains the corresponding original atom
             int                         m_nLastTimestamp;
             bool                        m_bHaveUTF16;
             bool                        m_bHaveCompound;
@@ -376,7 +378,6 @@ namespace x11 {
         Atom                        m_nINCRAtom;
         Atom                        m_nCOMPOUNDAtom;
         Atom                        m_nUTF16Atom;
-        Atom                        m_nUTF8Atom;
         Atom                        m_nXdndAware;
         Atom                        m_nXdndEnter;
         Atom                        m_nXdndLeave;
@@ -468,7 +469,9 @@ namespace x11 {
         const ::rtl::OUString& getString( Atom nAtom );
 
         // type conversion
-        Atom convertTypeToNative( const ::rtl::OUString& rType, Atom selection, int& rFormat );
+        // note: convertTypeToNative does NOT clear the list, so you can append
+        // multiple types to the same list
+        void convertTypeToNative( const ::rtl::OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions );
         ::rtl::OUString convertTypeFromNative( Atom nType, Atom selection, int& rFormat );
 
         // methods for transferable
