@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 13:59:26 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@
 #define ID_TREE_VIEW_PASTE                  31
 #define ID_DIRECT_SQL                       32
 #define ID_TREE_QUERY_PASTE                 33
+#define ID_BROWSER_REFRESH_REBUILD          34
 
 
 
