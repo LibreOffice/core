@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:50:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,8 @@ VCLXWindow::VCLXWindow()
       maMouseMotionListeners( *this ),
       maPaintListeners( *this ),
       maContainerListeners( *this ),
-      maTopWindowListeners( *this )
+      maTopWindowListeners( *this ),
+      mnListenerLockLevel( 0 )
 {
     DBG_CTOR( VCLXWindow, 0 );
 
@@ -240,8 +241,22 @@ void VCLXWindow::SetWindow( Window* pWindow )
     GetWindow()->AddEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
 }
 
+void VCLXWindow::suspendVclEventListening( )
+{
+    ++mnListenerLockLevel;
+}
+
+void VCLXWindow::resumeVclEventListening( )
+{
+    DBG_ASSERT( mnListenerLockLevel, "VCLXWindow::resumeVclEventListening: not suspended!" );
+    --mnListenerLockLevel;
+}
+
 IMPL_LINK( VCLXWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
+    if ( mnListenerLockLevel )
+        return 0L;
+
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
@@ -1569,7 +1584,6 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     uno::Reference< uno::XInterface > aAC( mxAccessibleContext, uno::UNO_QUERY );
     uno::Reference< uno::XInterface > xSource( _rSource.Source, uno::UNO_QUERY );
 
-    DBG_ASSERT( aAC.get() == xSource.get(), "VCLXWindow::disposing: where does this call come from?" );
     if ( aAC.get() == xSource.get() )
     {   // yep, it does
         mxAccessibleContext = uno::Reference< accessibility::XAccessibleContext >();
