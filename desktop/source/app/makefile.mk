@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 11:07:24 $
+#   last change: $Author: hr $ $Date: 2004-05-10 13:01:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,6 +98,7 @@ OBJFILES = \
         $(OBJ)$/langselect.obj			    \
         $(OBJ)$/cmdlinehelp.obj             \
         $(OBJ)$/userinstall.obj             \
+        $(OBJ)$/desktopcontext.obj          \
         $(OBJ)$/license.obj
 
 
