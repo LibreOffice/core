@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:47:38 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1718,7 +1718,7 @@ void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot,
     ControllerFeatures aHelper( ::comphelper::getProcessServiceFactory(), this );
     if ( _rxController.is() )
         aHelper.assign( _rxController );
-            else
+    else
         aHelper.assign( _rxForm );
 
     aHelper->execute( _nSlot );
