@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetectionimport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:31:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ TypeDetectionImporter::TypeDetectionImporter( Reference< XMultiServiceFactory >&
 :   mxMSF(xMSF),
     sCdataAttribute( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) ),
     sWhiteSpace( RTL_CONSTASCII_USTRINGPARAM( " " ) ),
-    sOorNode( RTL_CONSTASCII_USTRINGPARAM( "oor:node" ) ),
+    sRootNode( RTL_CONSTASCII_USTRINGPARAM( "oor:component-data" ) ),
     sNode( RTL_CONSTASCII_USTRINGPARAM( "node" ) ),
     sName( RTL_CONSTASCII_USTRINGPARAM( "oor:name" ) ),
     sProp( RTL_CONSTASCII_USTRINGPARAM( "prop" ) ),
@@ -292,7 +292,8 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
 
     if( maStack.empty() )
     {
-        if( aName == sOorNode )
+        // #109668# support legacy name as well on import
+        if( aName == sRootNode || aName.equalsAscii("oor:node") )
         {
             eNewState = e_Root;
         }

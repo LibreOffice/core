@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetectionimport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:32:06 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ private:
     ::rtl::OUString maNodeName;
     ::rtl::OUString maPropertyName;
 
-    const ::rtl::OUString sOorNode;
+    const ::rtl::OUString sRootNode;
     const ::rtl::OUString sNode;
     const ::rtl::OUString sName;
     const ::rtl::OUString sProp;
