@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:07 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,13 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType() SAL_THR
     @return type of IDL type boolean
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool * ) SAL_THROW( () );
+/** Gets the meta type of IDL type boolean.
+
+    @param dummy typed pointer for function signature
+    @return type of IDL type boolean
+*/
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType(
+    bool const * ) SAL_THROW( () );
 
 /** Gets the meta type of IDL type char.
 
