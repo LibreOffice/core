@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:31:17 $
+ *  last change: $Author: ka $ $Date: 2000-12-06 13:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,9 @@ using namespace rtl;
 
 //////////////////////////////////////////////////////////////////////////////
 
-char __READONLY_DATA sXML_content[] = "Content";
+char __READONLY_DATA sXML_drawing[] = "drawing";
+char __READONLY_DATA sXML_impress[] = "presentation";
+char __READONLY_DATA sXML_content[] = "Content.xml";
 
 // ----------------
 // - SdXMLWrapper -
@@ -304,7 +306,7 @@ BOOL SdXMLWrapper::Export()
 
     if( pStorage )
     {
-        SvStorageStreamRef  xOStm( pStorage->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Content" ) ),
+        SvStorageStreamRef  xOStm( pStorage->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( sXML_content ) ),
                                                          STREAM_READ | STREAM_WRITE | STREAM_TRUNC ) );
 
         if( !xOStm.Is() || xOStm->GetError() )
