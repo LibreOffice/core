@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-30 13:41:07 $
+ *  last change: $Author: sb $ $Date: 2002-10-16 12:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,14 +564,17 @@ public:
     }
 
     /**
-      Returns a new string that is a substring of this string. The
-      substring begins at the specified beginIndex.
+      Returns a new string that is a substring of this string.
+
+      The substring begins at the specified beginIndex.  It is an error for
+      beginIndex to be negative or to be greater than the length of this string.
 
       @param     beginIndex   the beginning index, inclusive.
       @return    the specified substring.
     */
     OString copy( sal_Int32 beginIndex ) const SAL_THROW(())
     {
+        OSL_ENSURE(beginIndex >= 0 && beginIndex <= getLength());
         if ( beginIndex == 0 )
             return *this;
         else
@@ -585,8 +588,9 @@ public:
     /**
       Returns a new string that is a substring of this string.
 
-      The substring begins at the specified beginIndex and
-      extends to the character at index endIndex - 1.
+      The substring begins at the specified beginIndex and contains count
+      characters.  It is an error for either beginIndex or count to be negative,
+      or for beginIndex + count to be greater than the length of this string.
 
       @param     beginIndex   the beginning index, inclusive.
       @param     count        the number of characters.
@@ -594,6 +598,8 @@ public:
     */
     OString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
+        OSL_ENSURE(beginIndex >= 0 && beginIndex <= getLength()
+                   && count >= 0 && count <= getLength() - beginIndex);
         if ( (beginIndex == 0) && (count == getLength()) )
             return *this;
         else
