@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-27 12:32:00 $
+ *  last change: $Author: bm $ $Date: 2002-11-01 11:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,26 +428,6 @@ void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_OUTPUT_QUALITY_GRAYSCALE:
         case SID_OUTPUT_QUALITY_BLACKWHITE:
         case SID_OUTPUT_QUALITY_CONTRAST:
-        {
-            ULONG nMode = OUTPUT_DRAWMODE_COLOR;
-
-            switch(nSlot)
-            {
-                case SID_OUTPUT_QUALITY_COLOR: nMode = OUTPUT_DRAWMODE_COLOR; break;
-                case SID_OUTPUT_QUALITY_GRAYSCALE: nMode = OUTPUT_DRAWMODE_GRAYSCALE; break;
-                case SID_OUTPUT_QUALITY_BLACKWHITE: nMode = OUTPUT_DRAWMODE_BLACKWHITE; break;
-                case SID_OUTPUT_QUALITY_CONTRAST: nMode = OUTPUT_DRAWMODE_CONTRAST; break;
-            }
-
-            pWindow->SetDrawMode( nMode );
-            pFrameView->SetDrawMode( nMode );
-            pDrView->ReleaseMasterPagePaintCache();
-            pWindow->Invalidate();
-
-            Invalidate();
-            rReq.Done();
-            break;
-        }
 
         case SID_PREVIEW_QUALITY_COLOR:
         case SID_PREVIEW_QUALITY_GRAYSCALE:
