@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: af $ $Date: 2002-12-03 17:23:57 $
+ *  last change: $Author: pb $ $Date: 2002-12-04 10:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,8 +1644,16 @@
 					<desc xml:lang="en-US">Describes the range and current size of the help bookmark history list.</desc>
 				</info>
 				<constraints>
-					<minInclusive oor:value="0"/>
-					<maxInclusive oor:value="10000"/>
+					<minInclusive oor:value="0">
+						<info>
+							<desc xml:lang="en-US">It's the minimum range of the help bookmark history list.</desc>
+						</info>
+					</minInclusive>
+					<maxInclusive oor:value="10000">
+						<info>
+							<desc xml:lang="en-US">It's the maximum range of the help bookmark history list.</desc>
+						</info>
+					</maxInclusive>
 				</constraints>
 				<value>10000</value>
 			</prop>
@@ -2041,17 +2049,27 @@
 				<desc xml:lang="en-US">Contains window and dialog settings.</desc>
 			</info>
 			<prop oor:name="FontScaling" oor:type="xs:short">
-				<!-- OldPath: General/View -->
-				<!-- OldLocation: soffice.cfg -->
-				<!-- UIHints: Tools  Options - General  View  [Section] Display -->
+				<!--OldPath: General/View -->
+				<!--OldLocation: soffice.cfg-->
+				<!--UIHints: Tools  Options - General  View  [Section] Display-->
 				<info>
 					<author>PB</author>
 					<desc xml:lang="en-US">Specifies the scaling only of the screen representation  [UNIT=%].</desc>
 					<label xml:lang="en-US">Scaling</label>
 				</info>
 				<constraints>
-					<minInclusive oor:value="50"/>
-					<maxInclusive oor:value="200"/>
+					<minInclusive oor:value="50">
+						<info>
+							<author>PB</author>
+							<desc xml:lang="en-US">It is the minimum range of the scaling.</desc>
+						</info>
+					</minInclusive>
+					<maxInclusive oor:value="200">
+						<info>
+							<author>PB</author>
+							<desc xml:lang="en-US">It is the maximum range of the scaling.</desc>
+						</info>
+					</maxInclusive>
 				</constraints>
 				<value>100</value>
 			</prop>
@@ -2528,9 +2546,12 @@
 				<desc xml:lang="en-US">Specifies options related to the setup.</desc>
 			</info>
 			<group oor:name="Language">
+				<info>
+					<desc xml:lang="en-US">Specifies options related to the installd languages.</desc>
+				</info>
 				<prop oor:name="Locales" oor:type="oor:string-list">
-					<!-- OldPath: OfficeLanguage/[Code]=Installed -->
-					<!-- OldLocation: soffice.ini -->
+					<!--OldPath: OfficeLanguage/[Code]=Installed -->
+					<!--OldLocation: soffice.ini -->
 					<!--The string list has to be filled by the setup-->
 					<info>
 						<desc xml:lang="en-US">Contains the installed Office languages for the menus and dialogs.</desc>
