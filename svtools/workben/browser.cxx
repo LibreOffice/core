@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 17:08:34 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ App aApp;
 //==================================================================
 
 BrowseModeDialog::BrowseModeDialog( Window *pParent ):
-    ModalDialog( pParent, WinBits( WB_MOVEABLE | WB_CLOSEABLE | WB_SVLOOK ) ),
+    ModalDialog( pParent, WinBits( WB_MOVEABLE | WB_CLOSEABLE | WB_3DLOOK ) ),
 
     aSingleSel( this ),
     aMultiSel( this ),
