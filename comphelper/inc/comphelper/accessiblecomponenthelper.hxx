@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecomponenthelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-23 11:08:57 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 15:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@ namespace comphelper
     {
     protected:
         OCommonAccessibleComponent();
+        /// see the respective base class ctor for an extensive comment on this, please
+        OCommonAccessibleComponent( IMutex* _pExternalLock );
+        ~OCommonAccessibleComponent();
 
     protected:
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten
@@ -127,6 +130,8 @@ namespace comphelper
     {
     protected:
         OAccessibleComponentHelper( );
+        /// see the respective base class ctor for an extensive comment on this, please
+        OAccessibleComponentHelper( IMutex* _pExternalLock );
 
     public:
         // XInterface
@@ -157,6 +162,8 @@ namespace comphelper
     {
     protected:
         OAccessibleExtendedComponentHelper( );
+        /// see the respective base class ctor for an extensive comment on this, please
+        OAccessibleExtendedComponentHelper( IMutex* _pExternalLock );
 
     public:
         // XInterface
@@ -180,6 +187,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/04/23 11:08:57  fs
+ *  initial checkin - helper for implementing an XAccessible(Extended)Component
+ *
  *
  *  Revision 1.0 18.04.2002 11:47:39  fs
  ************************************************************************/

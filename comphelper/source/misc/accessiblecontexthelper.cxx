@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 07:54:46 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 15:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,8 @@ namespace comphelper
     class OContextHelper_Impl
     {
     private:
-        OAccessibleContextHelper*           m_pAntiImpl;    // the owning instance
+        OAccessibleContextHelper*           m_pAntiImpl;        // the owning instance
+        IMutex*                             m_pExternalLock;    // the optional additional external lock
 
         ::cppu::OInterfaceContainerHelper*  m_pEventListeners;
         WeakReference< XAccessible >        m_aCreator;     // the XAccessible which created our XAccessibleContext
@@ -108,9 +109,13 @@ namespace comphelper
         inline  Reference< XAccessible >    getCreator( ) const { return m_aCreator; }
         inline  void                        setCreator( const Reference< XAccessible >& _rAcc );
 
+        inline  IMutex*                     getExternalLock( )                  { return m_pExternalLock; }
+        inline  void                        setExternalLock( IMutex* _pLock )   { m_pExternalLock = _pLock; }
+
     public:
         OContextHelper_Impl( OAccessibleContextHelper* _pAntiImpl )
             :m_pAntiImpl( _pAntiImpl )
+            ,m_pExternalLock( NULL )
             ,m_pEventListeners( NULL )
         {
         }
@@ -142,12 +147,37 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
+    OAccessibleContextHelper::OAccessibleContextHelper( IMutex* _pExternalLock )
+        :OAccessibleContextHelper_Base( GetMutex() )
+        ,m_pImpl( NULL )
+    {
+        m_pImpl = new OContextHelper_Impl( this );
+        m_pImpl->setExternalLock( _pExternalLock );
+    }
+
+    //---------------------------------------------------------------------
+    void OAccessibleContextHelper::forgetExternalLock()
+    {
+        m_pImpl->setExternalLock( NULL );
+    }
+
+    //---------------------------------------------------------------------
     OAccessibleContextHelper::~OAccessibleContextHelper( )
     {
+        forgetExternalLock();
+            // this ensures that the lock, which may be already destroyed as part of the derivee,
+            // is not used anymore
+
         ensureDisposed();
 
         delete m_pImpl;
         m_pImpl = NULL;
+    }
+
+    //---------------------------------------------------------------------
+    IMutex* OAccessibleContextHelper::getExternalLock( )
+    {
+        return m_pImpl->getExternalLock();
     }
 
     //---------------------------------------------------------------------
@@ -173,7 +203,7 @@ namespace comphelper
     //---------------------------------------------------------------------
     void SAL_CALL OAccessibleContextHelper::addEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
-        OContextEntryGuard( this );
+        OContextEntryGuard aGuard( this );
         if ( _rxListener.is() )
             m_pImpl->getListenerContainer()->addInterface( _rxListener );
     }
@@ -181,7 +211,7 @@ namespace comphelper
     //---------------------------------------------------------------------
     void SAL_CALL OAccessibleContextHelper::removeEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
-        OContextEntryGuard( this );
+        OContextEntryGuard aGuard( this );
         if ( _rxListener.is() )
             m_pImpl->getListenerContainer()->removeInterface( _rxListener );
     }
@@ -277,7 +307,7 @@ namespace comphelper
     //---------------------------------------------------------------------
     sal_Int32 SAL_CALL OAccessibleContextHelper::getAccessibleIndexInParent(  ) throw (RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
 
         // -1 for child not found/no parent (according to specification)
         sal_Int32 nRet = -1;
@@ -352,6 +382,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2002/05/08 07:54:46  fs
+ *  #98750# no use the context (not the XAccessible) as event source, again, as usual in the UNO world
+ *
  *  Revision 1.5  2002/04/30 07:42:27  hr
  *  #65293#: removed not needed vcl/svapp.hxx includes to reduce dependencies
  *

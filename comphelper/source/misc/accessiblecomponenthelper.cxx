@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecomponenthelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 11:03:48 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 15:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,24 @@ namespace comphelper
     {
     }
 
+    //---------------------------------------------------------------------
+    OCommonAccessibleComponent::OCommonAccessibleComponent( IMutex* _pExternalLock )
+        :OAccessibleContextHelper( _pExternalLock )
+    {
+    }
+
+    //---------------------------------------------------------------------
+    OCommonAccessibleComponent::~OCommonAccessibleComponent( )
+    {
+        forgetExternalLock();
+            // this ensures that the lock, which may be already destroyed as part of the derivee,
+            // is not used anymore
+    }
+
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL OCommonAccessibleComponent::contains( const Point& _rPoint ) throw (RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         Rectangle aBounds( implGetBounds() );
         return  ( _rPoint.X >= 0 )
             &&  ( _rPoint.Y >= 0 )
@@ -95,7 +109,7 @@ namespace comphelper
     //--------------------------------------------------------------------
     Point SAL_CALL OCommonAccessibleComponent::getLocation(  ) throw (RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         Rectangle aBounds( implGetBounds() );
         return Point( aBounds.X, aBounds.Y );
     }
@@ -103,7 +117,7 @@ namespace comphelper
     //--------------------------------------------------------------------
     Point SAL_CALL OCommonAccessibleComponent::getLocationOnScreen(  ) throw (RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         Rectangle aBounds( implGetBounds() );
 
         Point aScreenLoc( 0, 0 );
@@ -124,7 +138,7 @@ namespace comphelper
     //--------------------------------------------------------------------
     Size SAL_CALL OCommonAccessibleComponent::getSize(  ) throw (RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         Rectangle aBounds( implGetBounds() );
         return Size( aBounds.Width, aBounds.Height );
     }
@@ -132,7 +146,7 @@ namespace comphelper
     //--------------------------------------------------------------------
     Rectangle SAL_CALL OCommonAccessibleComponent::getBounds(  ) throw (RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         return implGetBounds();
     }
 
@@ -141,6 +155,12 @@ namespace comphelper
     //=====================================================================
     //---------------------------------------------------------------------
     OAccessibleComponentHelper::OAccessibleComponentHelper( )
+    {
+    }
+
+    //---------------------------------------------------------------------
+    OAccessibleComponentHelper::OAccessibleComponentHelper( IMutex* _pExternalLock )
+        :OCommonAccessibleComponent( _pExternalLock )
     {
     }
 
@@ -187,6 +207,12 @@ namespace comphelper
     {
     }
 
+    //---------------------------------------------------------------------
+    OAccessibleExtendedComponentHelper::OAccessibleExtendedComponentHelper( IMutex* _pExternalLock )
+        :OCommonAccessibleComponent( _pExternalLock )
+    {
+    }
+
     //--------------------------------------------------------------------
     IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleExtendedComponentHelper, OCommonAccessibleComponent, OAccessibleExtendedComponentHelper_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleExtendedComponentHelper, OCommonAccessibleComponent, OAccessibleExtendedComponentHelper_Base )
@@ -229,6 +255,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/04/26 11:03:48  fs
+ *  #98750# corrected size calculation
+ *
  *  Revision 1.1  2002/04/23 11:10:21  fs
  *  initial checkin - helper for implementing an XAccessible(Extended)Component
  *
