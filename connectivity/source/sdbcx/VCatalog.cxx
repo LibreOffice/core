@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:45:46 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 15:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,12 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
 
+using namespace connectivity::dbtools;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -164,10 +166,11 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException
 void ODescriptor::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : ::com::sun::star::beans::PropertyAttribute::READONLY;
-    registerProperty(connectivity::PROPERTY_NAME, PROPERTY_ID_NAME ,nAttrib,&m_Name,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME ,nAttrib,&m_Name,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -------------------------------------------------------------------------
 ODescriptor::~ODescriptor()
 {
 }
+// -------------------------------------------------------------------------
 

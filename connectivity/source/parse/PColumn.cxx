@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:28 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 15:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,13 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
 
 using namespace connectivity;
+using namespace dbtools;
 using namespace connectivity::parse;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -125,10 +127,10 @@ void OParseColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(connectivity::PROPERTY_FUNCTION,           PROPERTY_ID_FUNCTION,           nAttrib,&m_bFunction,       ::getCppuType(reinterpret_cast< sal_Bool*>(NULL)));
-    registerProperty(connectivity::PROPERTY_TABLENAME,          PROPERTY_ID_TABLENAME,          nAttrib,&m_aTableName,      ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(connectivity::PROPERTY_REALNAME,           PROPERTY_ID_REALNAME,           nAttrib,&m_aRealName,       ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(connectivity::PROPERTY_DBASEPRECISIONCHANGED,      PROPERTY_ID_DBASEPRECISIONCHANGED,          nAttrib,&m_bDbasePrecisionChanged,      ::getCppuType(reinterpret_cast<sal_Bool*>(NULL)));
+    registerProperty(PROPERTY_FUNCTION,             PROPERTY_ID_FUNCTION,           nAttrib,&m_bFunction,       ::getCppuType(reinterpret_cast< sal_Bool*>(NULL)));
+    registerProperty(PROPERTY_TABLENAME,            PROPERTY_ID_TABLENAME,          nAttrib,&m_aTableName,      ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_REALNAME,             PROPERTY_ID_REALNAME,           nAttrib,&m_aRealName,       ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_DBASEPRECISIONCHANGED,    PROPERTY_ID_DBASEPRECISIONCHANGED,          nAttrib,&m_bDbasePrecisionChanged,      ::getCppuType(reinterpret_cast<sal_Bool*>(NULL)));
 
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndexColumn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:28 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 15:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,12 @@
 #ifndef _CONNECTIVITY_SDBCX_INDEXCOLUMN_HXX_
 #include "connectivity/sdbcx/VIndexColumn.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
 
+using namespace connectivity::dbtools;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 // -------------------------------------------------------------------------

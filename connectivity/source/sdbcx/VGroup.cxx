@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VGroup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 08:36:20 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 15:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGEOBJECT_HPP_
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
@@ -81,6 +82,7 @@
 
 
 // -------------------------------------------------------------------------
+using namespace connectivity::dbtools;
 using namespace connectivity::sdbcx;
 using namespace connectivity;
 using namespace ::com::sun::star::sdbc;

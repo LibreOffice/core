@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.2 2000-10-19 11:47:14 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.3 2000-10-24 15:42:07 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2000-10-19 11:47:14 $ $Revision: 1.2 $
+//	$Author: oj $ $Date: 2000-10-24 15:42:07 $ $Revision: 1.3 $
 //
 // Description:
 //
@@ -350,7 +350,9 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 {
 	sal_Int32 ch;
 	static sal_Int32 BUFFERSIZE = 256;
-	static sal_Char* Buffer = new sal_Char[BUFFERSIZE];
+	static sal_Char* Buffer = 0;
+	if(!Buffer)
+		Buffer = new sal_Char[BUFFERSIZE];
 	
 	sal_Char *s = Buffer;
 	sal_Int32 nPos = 0;
@@ -369,13 +371,13 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 				switch(nTyp)
 				{
 					case 0:
-						SQL_NEW_NODE(::rtl::OUString(Buffer,BUFFERSIZE,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
+						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
 						return SQL_TOKEN_NAME;											
 					case 1:
-						SQL_NEW_NODE(::rtl::OUString(Buffer,BUFFERSIZE,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
+						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
 						return SQL_TOKEN_STRING;
 					case 2:
-						SQL_NEW_NODE(::rtl::OUString(Buffer,BUFFERSIZE,RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
+						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
 						return SQL_TOKEN_ACCESS_DATE;
 				}				
 			} 

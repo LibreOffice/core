@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.3 2000-10-19 11:47:14 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.4 2000-10-24 15:42:07 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2000-10-19 11:47:14 $ $Revision: 1.3 $
+//	$Author: oj $ $Date: 2000-10-24 15:42:07 $ $Revision: 1.4 $
 //
 // Description:
 //
@@ -3038,7 +3038,7 @@ const Locale& OParseContext::getDefaultLocale()
 
 		// TODO check the decimal sep and thousand sep
 //		if(!m_xLocaleData.is())
-//			m_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY); 
+//			m_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.localedata")),UNO_QUERY); 
 //
 //		m_xLocaleData->getLocaleItem(*m_pLocale).
 //		aIntl.SetNumThousandSep(',');
@@ -3187,7 +3187,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
 		s_pGarbageCollector = new OSQLParseNodes();
 
 		if(!m_xLocaleData.is())
-			m_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY); 
+			m_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.localedata")),UNO_QUERY); 
 
 		// auf 0 zuruecksetzen
 		memset(OSQLParser::s_nRuleIDs,0,sizeof(sal_uInt16) * OSQLParseNode::rule_count+1);

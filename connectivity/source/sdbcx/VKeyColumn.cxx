@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKeyColumn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:45:46 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 15:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,12 @@
 #ifndef _CONNECTIVITY_SDBCX_KEYCOLUMN_HXX_
 #include "connectivity/sdbcx/VKeyColumn.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
 
+using namespace connectivity::dbtools;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 
