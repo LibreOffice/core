@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:11:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,7 @@ namespace dbaui
         return aReturn;
     }
     // -----------------------------------------------------------------------------
-    void OSingleDocumentController::Execute(sal_uInt16 _nId)
+    void OSingleDocumentController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
     {
         switch(_nId)
         {
