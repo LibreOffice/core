@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+#   last change: $Author: fs $ $Date: 2001-01-02 15:56:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
+        formevents.cxx \
+        eventimport.cxx \
+        eventexport.cxx \
         controlpropertyhdl.cxx \
         controlpropertymap.cxx \
         valueproperties.cxx \
@@ -95,6 +98,9 @@ CXXFILES = \
         strings.cxx
 
 SLOFILES =	\
+        $(SLO)$/formevents.obj \
+        $(SLO)$/eventimport.obj \
+        $(SLO)$/eventexport.obj \
         $(SLO)$/controlpropertyhdl.obj \
         $(SLO)$/controlpropertymap.obj \
         $(SLO)$/valueproperties.obj \
