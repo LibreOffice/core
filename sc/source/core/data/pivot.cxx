@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-06 08:57:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ static String*  pLabel[PIVOT_MAXFUNC+1];            // incl. "auto"
 static String*  pLabelTotal;
 static String*  pLabelData;
 
-static USHORT nDataMult = 1;
+static SCSIZE nDataMult = 1;
 
 #define nFirstLine  2
 
@@ -150,9 +150,9 @@ static const USHORT nFuncMaskArr[PIVOT_MAXFUNC+1] =
 //  24  Kreuzung von Spalte/Zeile (Gesamt-Spalte)
 //  25  wie 24 bei einzelnen "Gesamt"
 
-short lcl_MaskToIndex( USHORT nFuncMask )
+SCSIZE lcl_MaskToIndex( USHORT nFuncMask )
 {
-    short i;
+    SCSIZE i;
     for (i=0; i<=PIVOT_MAXFUNC; i++)
         if (nFuncMask == nFuncMaskArr[i])
             return i;
@@ -161,12 +161,12 @@ short lcl_MaskToIndex( USHORT nFuncMask )
     return 0;
 }
 
-BOOL lcl_IsEmptyLine( ScDocument* pDoc, const ScAddress& rPos, USHORT nCol2 )
+BOOL lcl_IsEmptyLine( ScDocument* pDoc, const ScAddress& rPos, SCCOL nCol2 )
 {
             //! ans Document verschieben !!!
 
     ScAddress aAdr( rPos );
-    for (USHORT nCol=aAdr.Col(); nCol<=nCol2; nCol++)
+    for (SCCOL nCol=aAdr.Col(); nCol<=nCol2; nCol++)
     {
         aAdr.SetCol( nCol );
         if ( pDoc->GetCell( aAdr ) )
@@ -203,8 +203,7 @@ ScPivot::ScPivot(ScDocument* pDocument) :
     bValidArea      (FALSE),
     bDataAtCol      (FALSE)
 {
-    short i;
-    for (i=0; i<PIVOT_MAXFIELD; i++)
+    for (SCSIZE i=0; i<PIVOT_MAXFIELD; i++)
     {
         pColList[i] = new PivotStrCollection();
         pRowList[i] = new PivotStrCollection();
@@ -223,7 +222,7 @@ ScPivot::ScPivot(ScDocument* pDocument) :
         pLabelTotal = new String( ScGlobal::GetRscString(STR_PIVOT_TOTAL) );
         pLabelData  = new String( ScGlobal::GetRscString(STR_PIVOT_DATA) );
 
-        for ( i=0; i<=PIVOT_MAXFUNC; i++ )          //  incl. "auto"
+        for (SCSIZE i=0; i<=PIVOT_MAXFUNC; i++ )    //  incl. "auto"
             pLabel[i] = new String;                 //  kein Leerzeichen
 
         *pLabel[ 0] = ScGlobal::GetRscString(STR_FUN_TEXT_SUM);
@@ -271,16 +270,15 @@ ScPivot::ScPivot(const ScPivot& rPivot):
     bValidArea      (FALSE),
     bDataAtCol      (FALSE)
 {
-    if (rPivot.nColNameCount && rPivot.pColNames)
+    if (rPivot.nColNameCount>0 && rPivot.pColNames)
     {
         nColNameCount = rPivot.nColNameCount;
         pColNames = new String[nColNameCount];
-        for (USHORT nCol=0; nCol<nColNameCount; nCol++)
+        for (SCSIZE nCol=0; nCol<nColNameCount; nCol++)
             pColNames[nCol] = rPivot.pColNames[nCol];
     }
 
-    short i;
-    for (i=0; i<PIVOT_MAXFIELD; i++)
+    for (SCSIZE i=0; i<PIVOT_MAXFIELD; i++)
     {
         pColList[i] = new PivotStrCollection();
         pRowList[i] = new PivotStrCollection();
@@ -299,16 +297,15 @@ ScPivot::ScPivot(const ScPivot& rPivot):
 
 ScPivot::~ScPivot()
 {
-    short i;
-    for (i=0; i<PIVOT_MAXFIELD; i++)
+    for (SCSIZE i=0; i<PIVOT_MAXFIELD; i++)
     {
         delete pColList[i];
         delete pRowList[i];
     }
     if (ppDataArr)
     {
-        for (i=0; i<nDataRowCount; i++)
-            delete[] ppDataArr[i];
+        for (SCSIZE j=0; j<nDataRowCount; j++)
+            delete[] ppDataArr[j];
         delete[] ppDataArr;
         ppDataArr = NULL;
     }
@@ -323,8 +320,8 @@ ScPivot::~ScPivot()
         delete pLabelTotal;
         delete pLabelData;
 
-        for ( i=0; i<=PIVOT_MAXFUNC; i++ )          // incl. "auto"
-            delete pLabel[i];
+        for ( SCSIZE k=0; k<=PIVOT_MAXFUNC; k++ )           // incl. "auto"
+            delete pLabel[k];
     }
 }
 
@@ -347,6 +344,8 @@ ScPivot* ScPivot::CreateNew() const
 
 void lcl_LoadFieldArr30( SvStream& rStream, PivotField* pField, USHORT nCount )
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     USHORT i;
 
     for (i=0; i<nCount; i++)
@@ -355,10 +354,13 @@ void lcl_LoadFieldArr30( SvStream& rStream, PivotField* pField, USHORT nCount )
                 >> pField[i].nFuncMask
                 >> pField[i].nFuncCount;
     }
+#endif
 }
 
 void lcl_LoadFieldArr( SvStream& rStream, PivotField* pField, USHORT nCount )
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     USHORT i;
 
     for (i=0; i<nCount; i++)
@@ -371,10 +373,13 @@ void lcl_LoadFieldArr( SvStream& rStream, PivotField* pField, USHORT nCount )
                 >> pField[i].nFuncMask
                 >> pField[i].nFuncCount;
     }
+#endif
 }
 
 void lcl_SaveFieldArr( SvStream& rStream, const PivotField* pField, USHORT nCount )
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     USHORT i;
 
     for (i=0; i<nCount; i++)
@@ -384,6 +389,7 @@ void lcl_SaveFieldArr( SvStream& rStream, const PivotField* pField, USHORT nCoun
                 << pField[i].nFuncMask
                 << pField[i].nFuncCount;
     }
+#endif
 }
 
 //  nach Load muessen Daten neu berechnet werden !
@@ -391,6 +397,8 @@ void lcl_SaveFieldArr( SvStream& rStream, const PivotField* pField, USHORT nCoun
 BOOL ScPivot::Load( SvStream& rStream, ScMultipleReadHeader& rHdr )
 {
     rHdr.StartEntry();
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
 
     rStream >> bHasHeader
 
@@ -461,19 +469,22 @@ BOOL ScPivot::Load( SvStream& rStream, ScMultipleReadHeader& rHdr )
         if (nColNameCount)
         {
             pColNames = new String[nColNameCount];
-            for (USHORT nCol=0; nCol<nColNameCount; nCol++)
+            for (SCCOL nCol=0; nCol<nColNameCount; nCol++)
                 rStream.ReadByteString( pColNames[nCol], rStream.GetStreamCharSet() );
         }
     }
     // sonst wird hinterher aus ScPivotCollection::Load ein Name vergeben
 
     rHdr.EndEntry();
+#endif
     return TRUE;
 }
 
 BOOL ScPivot::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 {
     rHdr.StartEntry();
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
 
     rStream << bHasHeader
 
@@ -511,11 +522,12 @@ BOOL ScPivot::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 
         if (!pColNames) ((ScPivot*)this)->nColNameCount = 0;        // soll nicht sein
         rStream << nColNameCount;
-        for (USHORT nCol=0; nCol<nColNameCount; nCol++)
+        for (SCCOL nCol=0; nCol<nColNameCount; nCol++)
             rStream.WriteByteString( pColNames[nCol], rStream.GetStreamCharSet() );
     }
 
     rHdr.EndEntry();
+#endif
     return TRUE;
 }
 
@@ -606,17 +618,17 @@ const String& ScPivot::GetTag() const
     return aTag;
 }
 
-void ScPivot::SetSrcArea(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2, USHORT nTab)
+void ScPivot::SetSrcArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab)
 {
-    nSrcCol1 = Min(nCol1, (USHORT)MAXCOL);
-    nSrcRow1 = Min(nRow1, (USHORT)MAXROW);
-    nSrcCol2 = Min(nCol2, (USHORT)MAXCOL);
-    nSrcRow2 = Min(nRow2, (USHORT)MAXROW);
+    nSrcCol1 = Min(nCol1, (SCCOL)MAXCOL);
+    nSrcRow1 = Min(nRow1, (SCROW)MAXROW);
+    nSrcCol2 = Min(nCol2, (SCCOL)MAXCOL);
+    nSrcRow2 = Min(nRow2, (SCROW)MAXROW);
     nSrcTab = nTab;
     bValidArea = FALSE;
 }
 
-void ScPivot::GetSrcArea(USHORT& rCol1, USHORT& rRow1, USHORT& rCol2, USHORT& rRow2, USHORT& rTab) const
+void ScPivot::GetSrcArea(SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2, SCTAB& rTab) const
 {
     rCol1 = nSrcCol1;
     rRow1 = nSrcRow1;
@@ -630,7 +642,7 @@ ScRange ScPivot::GetSrcArea() const
     return ScRange( nSrcCol1,nSrcRow1,nSrcTab, nSrcCol2,nSrcRow2,nSrcTab );
 }
 
-void ScPivot::SetDestPos(USHORT nCol, USHORT nRow, USHORT nTab)
+void ScPivot::SetDestPos(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     nDestCol1 = nCol;
     nDestRow1 = nRow;
@@ -638,7 +650,7 @@ void ScPivot::SetDestPos(USHORT nCol, USHORT nRow, USHORT nTab)
     bValidArea = FALSE;
 }
 
-void ScPivot::GetDestArea(USHORT& rCol1, USHORT& rRow1, USHORT& rCol2, USHORT& rRow2, USHORT& rTab) const
+void ScPivot::GetDestArea(SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2, SCTAB& rTab) const
 {
     rCol1 = nDestCol1;
     rRow1 = nDestRow1;
@@ -664,13 +676,12 @@ ScRange ScPivot::GetDestArea() const
     return ScRange( aStart, aEnd );
 }
 
-void ScPivot::MoveSrcArea( USHORT nNewCol, USHORT nNewRow, USHORT nNewTab )
+void ScPivot::MoveSrcArea( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab )
 {
     if ( nNewCol != nSrcCol1 || nNewRow != nSrcRow1 || nNewTab != nSrcTab )
     {
-        USHORT i;
-        short nDiffX = nNewCol - (short) nSrcCol1;
-        short nDiffY = nNewRow - (short) nSrcRow1;
+        SCsCOL nDiffX = nNewCol - (SCsCOL) nSrcCol1;
+        SCsROW nDiffY = nNewRow - (SCsROW) nSrcRow1;
 
         nSrcTab = nNewTab;
         nSrcCol1 += nDiffX;
@@ -683,20 +694,21 @@ void ScPivot::MoveSrcArea( USHORT nNewCol, USHORT nNewRow, USHORT nNewTab )
         aQuery.nRow1 += nDiffY;
         aQuery.nRow2 += nDiffY;
 
-        USHORT nEC = aQuery.GetEntryCount();
-        for (i=0; i<nEC; i++)
+        SCSIZE nEC = aQuery.GetEntryCount();
+        for (SCSIZE i=0; i<nEC; i++)
             if (aQuery.GetEntry(i).bDoQuery)
                 aQuery.GetEntry(i).nField += nDiffX;
 
         if (bValidArea)
         {
-            short nC;
+            SCSIZE nC;
+            SCSIZE nR;
             for (nC=0; nC<nColCount; nC++)
                 if (aColArr[nC].nCol != PIVOT_DATA_FIELD)
                     aColArr[nC].nCol += nDiffX;
-            for (nC=0; nC<nRowCount; nC++)
-                if (aRowArr[nC].nCol != PIVOT_DATA_FIELD)
-                    aRowArr[nC].nCol += nDiffX;
+            for (nR=0; nR<nRowCount; nR++)
+                if (aRowArr[nR].nCol != PIVOT_DATA_FIELD)
+                    aRowArr[nR].nCol += nDiffX;
             for (nC=0; nC<nDataCount; nC++)
                 if (aDataArr[nC].nCol != PIVOT_DATA_FIELD)
                     aDataArr[nC].nCol += nDiffX;
@@ -704,7 +716,7 @@ void ScPivot::MoveSrcArea( USHORT nNewCol, USHORT nNewRow, USHORT nNewTab )
     }
 }
 
-void ScPivot::ExtendSrcArea( USHORT nNewEndCol, USHORT nNewEndRow )
+void ScPivot::ExtendSrcArea( SCCOL nNewEndCol, SCROW nNewEndRow )
 {
     DBG_ASSERT( nNewEndCol >= nSrcCol2 && nNewEndRow >= nSrcRow2, "ExtendSrcArea: zu klein" );
 
@@ -714,12 +726,12 @@ void ScPivot::ExtendSrcArea( USHORT nNewEndCol, USHORT nNewEndRow )
     //  alles andere bleibt erhalten
 }
 
-void ScPivot::MoveDestArea( USHORT nNewCol, USHORT nNewRow, USHORT nNewTab )
+void ScPivot::MoveDestArea( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab )
 {
     if ( nNewCol != nDestCol1 || nNewRow != nDestRow1 || nNewTab != nDestTab )
     {
-        short nDiffX = nNewCol - (short) nDestCol1;
-        short nDiffY = nNewRow - (short) nDestRow1;
+        SCsCOL nDiffX = nNewCol - (SCsCOL) nDestCol1;
+        SCsROW nDiffY = nNewRow - (SCsROW) nDestRow1;
 
         nDestTab = nNewTab;
         nDestCol1 += nDiffX;
@@ -736,10 +748,10 @@ void ScPivot::MoveDestArea( USHORT nNewCol, USHORT nNewRow, USHORT nNewTab )
     }
 }
 
-void ScPivot::SetColFields(const PivotField* pFieldArr, short nCount)
+void ScPivot::SetColFields(const PivotField* pFieldArr, SCSIZE nCount)
 {
-    nColCount = Max((short)0, Min(nCount, (short)PIVOT_MAXFIELD));
-    for (short i = 0; i < nColCount; i++)
+    nColCount = Max(static_cast<SCSIZE>(0), Min(nCount, PIVOT_MAXFIELD));
+    for (SCSIZE i = 0; i < nColCount; i++)
     {
         aColArr[i] = pFieldArr[i];
         aColArr[i].nFuncCount = 0;
@@ -751,7 +763,7 @@ void ScPivot::SetColFields(const PivotField* pFieldArr, short nCount)
         }
         else
         {
-            for (short j=0; j<=PIVOT_MAXFUNC; j++)              // incl. "auto"
+            for (SCsCOL j=0; j<=PIVOT_MAXFUNC; j++)             // incl. "auto"
                 if (aColArr[i].nFuncMask & nFuncMaskArr[j])
                     aColArr[i].nFuncCount++;
         }
@@ -759,17 +771,17 @@ void ScPivot::SetColFields(const PivotField* pFieldArr, short nCount)
     bValidArea = FALSE;
 }
 
-void ScPivot::GetColFields(PivotField* pFieldArr, short& rCount) const
+void ScPivot::GetColFields(PivotField* pFieldArr, SCSIZE& rCount) const
 {
-    for (short i=0; i<nColCount; i++)
+    for (SCSIZE i=0; i<nColCount; i++)
         pFieldArr[i] = aColArr[i];
     rCount = nColCount;
 }
 
-void ScPivot::SetRowFields(const PivotField* pFieldArr, short nCount)
+void ScPivot::SetRowFields(const PivotField* pFieldArr, SCSIZE nCount)
 {
-    nRowCount = Max((short)0, Min(nCount, (short)PIVOT_MAXFIELD));
-    for (short i = 0; i < nRowCount; i++)
+    nRowCount = Max(static_cast<SCSIZE>(0), Min(nCount, PIVOT_MAXFIELD));
+    for (SCSIZE i = 0; i < nRowCount; i++)
     {
         aRowArr[i] = pFieldArr[i];
         aRowArr[i].nFuncCount = 0;
@@ -781,7 +793,7 @@ void ScPivot::SetRowFields(const PivotField* pFieldArr, short nCount)
         }
         else
         {
-            for (short j=0; j<=PIVOT_MAXFUNC; j++)              // incl. "auto"
+            for (SCSIZE j=0; j<=PIVOT_MAXFUNC; j++)             // incl. "auto"
                 if (aRowArr[i].nFuncMask & nFuncMaskArr[j])
                     aRowArr[i].nFuncCount++;
         }
@@ -789,17 +801,17 @@ void ScPivot::SetRowFields(const PivotField* pFieldArr, short nCount)
     bValidArea = FALSE;
 }
 
-void ScPivot::GetRowFields(PivotField* pFieldArr, short& rCount) const
+void ScPivot::GetRowFields(PivotField* pFieldArr, SCSIZE& rCount) const
 {
-    for (short i=0; i<nRowCount; i++)
+    for (SCSIZE i=0; i<nRowCount; i++)
         pFieldArr[i] = aRowArr[i];
     rCount = nRowCount;
 }
 
-void ScPivot::SetDataFields(const PivotField* pFieldArr, short nCount)
+void ScPivot::SetDataFields(const PivotField* pFieldArr, SCSIZE nCount)
 {
     USHORT nFuncNo;
-    short i;
+    SCSIZE i;
 
     //
     //      nDataCount vorausberechnen (wie unten)
@@ -840,7 +852,7 @@ void ScPivot::SetDataFields(const PivotField* pFieldArr, short nCount)
         if (bDataAtCol)
         {
             PivotField aField;
-            short nIndex = PIVOT_MAXFIELD;
+            SCSIZE nIndex = PIVOT_MAXFIELD;
             for (i=0; i<nColCount; i++)
             {
                 if (aColArr[i].nCol == PIVOT_DATA_FIELD)
@@ -860,7 +872,7 @@ void ScPivot::SetDataFields(const PivotField* pFieldArr, short nCount)
         else
         {
             PivotField aField;
-            short nIndex = PIVOT_MAXFIELD;
+            SCSIZE nIndex = PIVOT_MAXFIELD;
             for (i=0; i<nRowCount; i++)
             {
                 if (aRowArr[i].nCol == PIVOT_DATA_FIELD)
@@ -917,18 +929,18 @@ void ScPivot::SetDataFields(const PivotField* pFieldArr, short nCount)
     bValidArea = FALSE;
 }
 
-void ScPivot::GetDataFields(PivotField* pFieldArr, short& rCount) const
+void ScPivot::GetDataFields(PivotField* pFieldArr, SCSIZE& rCount) const
 {
-/*  for (short i=0; i<nDataCount; i++)
+/*  for (SCSIZE i=0; i<nDataCount; i++)
         pFieldArr[i] = aDataArr[i];
     rCount = nDataCount;
 */
 
     rCount = 0;
-    for (short i=0; i<nDataCount; i++)
+    for (SCSIZE i=0; i<nDataCount; i++)
     {
         BOOL bFound = FALSE;
-        for (short j=0; j<rCount && !bFound; j++)
+        for (SCSIZE j=0; j<rCount && !bFound; j++)
             if (pFieldArr[j].nCol == aDataArr[i].nCol)
             {
                 //  add to previous column only if new bits aren't already set there
@@ -953,8 +965,8 @@ BOOL ScPivot::CreateData(BOOL bKeepDest)
     //
     //
 
-    USHORT nOldCol2 = nDestCol2;
-    USHORT nOldRow2 = nDestRow2;
+    SCCOL nOldCol2 = nDestCol2;
+    SCROW nOldRow2 = nDestRow2;
 
     pColRef = new PivotColRef[MAXCOL];
     aQuery.nCol1 = nSrcCol1;
@@ -965,7 +977,7 @@ BOOL ScPivot::CreateData(BOOL bKeepDest)
     BOOL bRet = CreateFields();
     if (bRet)
     {
-        short i=0;                  // nDataMult berechnen - nach CreateFields, vor CreateFieldData !!!
+        SCSIZE i=0;                 // nDataMult berechnen - nach CreateFields, vor CreateFieldData !!!
         nDataMult = 1;
         if (nDataCount > 1)
         {
@@ -987,7 +999,7 @@ BOOL ScPivot::CreateData(BOOL bKeepDest)
         DBG_ASSERT(nDataMult,"nDataMult==0");
 
         CalcArea();
-        if ((nDestCol2 <= MAXCOL) && (nDestRow2 <= MAXROW))
+        if ((ValidCol(nDestCol2)) && (ValidRow(nDestRow2)))
         {
             CreateFieldData();
             bValidArea = TRUE;
@@ -1010,10 +1022,10 @@ void ScPivot::DrawData()
 {
     ScProgress aProgress( pDoc->GetDocumentShell(), ScGlobal::GetRscString(STR_PIVOT_PROGRESS), nDestRow2-nDestRow1 );
 
-    short i;
+    SCSIZE i;
 
-    USHORT nCol;
-    USHORT nRow;
+    SCCOL nCol;
+    SCROW nRow;
     String aStr;
     pDoc->pTab[nDestTab]->DeleteArea(nDestCol1, nDestRow1, nDestCol2, nDestRow2, IDF_ALL);
 
@@ -1084,8 +1096,8 @@ void ScPivot::DrawData()
     if (!bMakeTotalCol) bNoRows = TRUE;
     if (!bMakeTotalRow) bNoCols = TRUE;
 
-    USHORT nTotalCol = nDestCol2;
-    USHORT nTotalRow = nDestRow2;
+    SCCOL nTotalCol = nDestCol2;
+    SCROW nTotalRow = nDestRow2;
     if (bDataAtCol)
         nTotalRow -= nDataCount - 1;
     else
@@ -1110,11 +1122,11 @@ void ScPivot::DrawData()
     if (!bNoCols)
     {
         if (bDataAtCol)
-            for (short nTotCnt = 0; nTotCnt<nDataCount; nTotCnt++)
+            for (SCSIZE nTotCnt = 0; nTotCnt<nDataCount; nTotCnt++)
                 SetFuncLine(nDataStartCol, nRow+nTotCnt, nDestTab,
                             aDataArr[nTotCnt].nFuncMask, nTotCnt, 0, nDataRowCount);
         else
-            SetFuncLine(nDataStartCol, nRow, nDestTab, PIVOT_FUNC_AUTO, 0xffff, 0, nDataRowCount);
+            SetFuncLine(nDataStartCol, nRow, nDestTab, PIVOT_FUNC_AUTO, SCSIZE_MAX, 0, nDataRowCount);
     }
 
 
@@ -1124,7 +1136,7 @@ void ScPivot::DrawData()
     {
         if (!bDataAtCol)
         {
-            for (short i=0; i<nDataCount; i++)
+            for (SCSIZE i=0; i<nDataCount; i++)
             {
                 String aLab = *pLabelTotal;
                 aLab += ' ';
@@ -1141,7 +1153,7 @@ void ScPivot::DrawData()
             //  Kategorie 7
         }
 
-        if ( nDataStartRow )
+        if ( nDataStartRow > 0 )
             SetStyle(nTotalCol, nDestRow1+nFirstLine, nDestCol2, nDataStartRow-1, PIVOT_STYLE_TITLE);
         SetStyle(nTotalCol, nDataStartRow, nDestCol2, nDestRow2, PIVOT_STYLE_RESULT);
         SetFrame(nTotalCol, nDestRow1 + nFirstLine, nDestCol2, nDestRow2);
@@ -1153,7 +1165,7 @@ void ScPivot::DrawData()
     {
         if (bDataAtCol)
         {
-            for (short i=0; i<nDataCount; i++)
+            for (SCSIZE i=0; i<nDataCount; i++)
             {
                 String aLab = *pLabelTotal;
                 aLab += ' ';
@@ -1170,7 +1182,7 @@ void ScPivot::DrawData()
             //  Kategorie 9
         }
 
-        if ( nDataStartCol )
+        if ( nDataStartCol > 0 )
             SetStyle(nDestCol1, nTotalRow, nDataStartCol-1, nDestRow2, PIVOT_STYLE_TITLE);
         SetStyle(nDataStartCol, nTotalRow, nDestCol2, nDestRow2, PIVOT_STYLE_RESULT);
         SetFrame(nDestCol1, nTotalRow, nDestCol2, nDestRow2);
@@ -1182,15 +1194,14 @@ void ScPivot::DrawData()
 
 void ScPivot::ReleaseData()
 {
-    short i;
-    for (i = 0; i < PIVOT_MAXFIELD; i++)
+    for (SCSIZE i = 0; i < PIVOT_MAXFIELD; i++)
     {
         pColList[i]->FreeAll();
         pRowList[i]->FreeAll();
     }
     if (ppDataArr)
     {
-        for (i=0; i<nDataRowCount; i++)
+        for (SCSIZE i=0; i<nDataRowCount; i++)
             delete[] ppDataArr[i];
         delete[] ppDataArr;
         ppDataArr = NULL;
@@ -1201,7 +1212,7 @@ void ScPivot::ReleaseData()
     pColRef = NULL;
 }
 
-BOOL ScPivot::IsPivotAtCursor(USHORT nCol, USHORT nRow, USHORT nTab) const
+BOOL ScPivot::IsPivotAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
     if (bValidArea)
         return ( nTab == nDestTab
@@ -1211,7 +1222,7 @@ BOOL ScPivot::IsPivotAtCursor(USHORT nCol, USHORT nRow, USHORT nTab) const
         return FALSE;
 }
 
-BOOL ScPivot::IsFilterAtCursor(USHORT nCol, USHORT nRow, USHORT nTab) const
+BOOL ScPivot::IsFilterAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
     if (bValidArea)
         return (nCol == nDestCol1 && nRow == nDestRow1 && nTab == nDestTab);
@@ -1219,7 +1230,7 @@ BOOL ScPivot::IsFilterAtCursor(USHORT nCol, USHORT nRow, USHORT nTab) const
         return FALSE;
 }
 
-BOOL ScPivot::GetColFieldAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, USHORT& rField) const
+BOOL ScPivot::GetColFieldAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL& rField) const
 {
     rField = 0;
     BOOL bRet = FALSE;
@@ -1238,7 +1249,7 @@ BOOL ScPivot::GetColFieldAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, USHORT&
     return bRet;
 }
 
-BOOL ScPivot::GetRowFieldAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, USHORT& rField) const
+BOOL ScPivot::GetRowFieldAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL& rField) const
 {
     rField = 0;
     BOOL bRet = FALSE;
@@ -1264,9 +1275,9 @@ BOOL ScPivot::GetRowFieldAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, USHORT&
 
 BOOL ScPivot::CreateFields()
 {
-    short   i;
-    USHORT  nRow;
-    USHORT  nHeader;
+    SCSIZE  i;
+    SCROW   nRow;
+    SCROW   nHeader;
     String  aStr;
     TypedStrData* pStrData;
     if (bHasHeader)
@@ -1316,7 +1327,7 @@ BOOL ScPivot::CreateFields()
             {
                 if (aColArr[i].nCol != PIVOT_DATA_FIELD)
                 {
-                    USHORT nCatRow = bDetectCat ? GetCategoryRow( aColArr[i].nCol, nRow ) : nRow;
+                    SCROW nCatRow = bDetectCat ? GetCategoryRow( aColArr[i].nCol, nRow ) : nRow;
                     pStrData = new TypedStrData( pDoc, aColArr[i].nCol, nCatRow, nSrcTab, TRUE );
                     if (!(pColList[i]->Insert(pStrData)))
                         delete pStrData;
@@ -1326,7 +1337,7 @@ BOOL ScPivot::CreateFields()
             {
                 if (aRowArr[i].nCol != PIVOT_DATA_FIELD)
                 {
-                    USHORT nCatRow = bDetectCat ? GetCategoryRow( aRowArr[i].nCol, nRow ) : nRow;
+                    SCROW nCatRow = bDetectCat ? GetCategoryRow( aRowArr[i].nCol, nRow ) : nRow;
                     pStrData = new TypedStrData( pDoc, aRowArr[i].nCol, nCatRow, nSrcTab, TRUE );
                     if (!(pRowList[i]->Insert(pStrData)))
                         delete pStrData;
@@ -1339,10 +1350,10 @@ BOOL ScPivot::CreateFields()
 
 void ScPivot::CreateFieldData()
 {
-    USHORT* pRowListIndex = nRowCount ? new USHORT[nRowCount] : NULL;
-    USHORT* pColListIndex = nColCount ? new USHORT[nColCount] : NULL;
+    SCSIZE* pRowListIndex = nRowCount ? new SCSIZE[nRowCount] : NULL;
+    SCSIZE* pColListIndex = nColCount ? new SCSIZE[nColCount] : NULL;
 
-    short i,j,k;
+    SCSIZE i,j,k;
 
     ppDataArr = new SubTotal*[nDataRowCount];
     for (i=0; i<nDataRowCount; i++)
@@ -1357,13 +1368,13 @@ void ScPivot::CreateFieldData()
             for (i=0; i<nDataColCount; i++)
                 ppDataArr[j][i].nIndex = i/nDataMult%nDataCount;
 
-    short nHeader;
+    SCROW nHeader;
     if (bHasHeader)
         nHeader = 1;
     else
         nHeader = 0;
     ScAddress aSrcAdr( nSrcCol1, 0, nSrcTab );
-    for (USHORT nRow = nSrcRow1 + nHeader; nRow <= nSrcRow2; nRow++)
+    for (SCROW nRow = nSrcRow1 + nHeader; nRow <= nSrcRow2; nRow++)
     {
         BOOL bValidLine = TRUE;
         if (bIgnoreEmpty)
@@ -1379,22 +1390,22 @@ void ScPivot::CreateFieldData()
             for (j=0; j<nRowCount; j++)
                 if (aRowArr[j].nCol != PIVOT_DATA_FIELD)
                 {
-                    USHORT nCatRow = bDetectCat ? GetCategoryRow( aRowArr[j].nCol, nRow ) : nRow;
+                    SCROW nCatRow = bDetectCat ? GetCategoryRow( aRowArr[j].nCol, nRow ) : nRow;
                     TypedStrData aStrData( pDoc, aRowArr[j].nCol, nCatRow, nSrcTab, TRUE );
                     pRowListIndex[j] = pRowList[j]->GetIndex(&aStrData);
                 }
             for (j=0; j<nColCount; j++)
                 if (aColArr[j].nCol != PIVOT_DATA_FIELD)
                 {
-                    USHORT nCatRow = bDetectCat ? GetCategoryRow( aColArr[j].nCol, nRow ) : nRow;
+                    SCROW nCatRow = bDetectCat ? GetCategoryRow( aColArr[j].nCol, nRow ) : nRow;
                     TypedStrData aStrData( pDoc, aColArr[j].nCol, nCatRow, nSrcTab, TRUE );
-                    pColListIndex[j] = pColList[j]->GetIndex(&aStrData);
+                        pColListIndex[j] = pColList[j]->GetIndex(&aStrData);
                 }
 
             String aStr;
-            short nCIndex;
-            short nRIndex;
-            short nIndex;
+            SCSIZE nCIndex;
+            SCSIZE nRIndex;
+            SCSIZE nIndex;
             ScAddress aAdr( 0, nRow, nSrcTab );
 
             for (i=0; i<nDataCount; i++)
@@ -1432,7 +1443,7 @@ void ScPivot::CreateFieldData()
                 //  Daten eintragen
                 if ((nCIndex < nDataColCount) && (nRIndex < nDataRowCount))
                 {
-                    DBG_ASSERT((short)ppDataArr[nRIndex][nCIndex].nIndex == i, "falsch init.")
+                    DBG_ASSERT(ppDataArr[nRIndex][nCIndex].nIndex == i, "falsch init.")
 
                     ppDataArr[nRIndex][nCIndex].nIndex = i;
                     aAdr.SetCol( aDataArr[i].nCol );
@@ -1470,15 +1481,13 @@ void ScPivot::CalcArea()
     if (!bMakeTotalCol) bNoRows = TRUE;
     if (!bMakeTotalRow) bNoCols = TRUE;
 
-    short i;
-    short nDx;
     // StartSpalte/StartZeile des Datenbereichs berechnen
     if (bDataAtCol)
     {
         if (nDataCount > 1)
             nDataStartCol = nDestCol1 + nColCount;
         else
-            nDataStartCol = nDestCol1 + Max(0, nColCount - 1);
+            nDataStartCol = nDestCol1 + Max(static_cast<SCSIZE>(0), nColCount - 1);
     }
     else
         nDataStartCol = nDestCol1 + nColCount;
@@ -1487,7 +1496,7 @@ void ScPivot::CalcArea()
         if (nDataCount > 1)
             nDataStartRow = nDestRow1 + nRowCount + nFirstLine + 1;
         else
-            nDataStartRow = nDestRow1 + Max(0, nRowCount - 1) + nFirstLine + 1;
+            nDataStartRow = nDestRow1 + Max(static_cast<SCSIZE>(0), nRowCount - 1) + nFirstLine + 1;
     }
     else
         nDataStartRow = nDestRow1 + nRowCount + nFirstLine + 1;
@@ -1506,14 +1515,15 @@ void ScPivot::CalcArea()
     }
     else
     {
+        SCSIZE nDx;
         // Anzahl Spalten
         if ((aRowArr[nRowCount-1].nCol == PIVOT_DATA_FIELD) && (nDataCount == 1))
             nDx = 2;
         else
             nDx = 1;
-        long nColLines = pRowList[nRowCount-nDx]->GetCount();   // long um Ueberlauf zu erkennen
+        SCSIZE nColLines = pRowList[nRowCount-nDx]->GetCount(); // SCSIZE to recognize overflow
         nDataColCount = pRowList[nRowCount-nDx]->GetCount();
-        for (i=nRowCount-nDx-1; i >= 0; i--)
+        for (SCSIZE i=nRowCount-nDx; i-- > 0; )
         {
             nColLines *= pRowList[i]->GetCount();
             nDataColCount *= pRowList[i]->GetCount();
@@ -1527,7 +1537,7 @@ void ScPivot::CalcArea()
         if (aRowArr[nRowCount-1].nCol != PIVOT_DATA_FIELD)
             nColLines += (pRowList[nRowCount-1]->GetCount() * aRowArr[nRowCount-1].nFuncCount);
         */
-        if (nColLines > MAXCOL)
+        if (nColLines > static_cast<SCSIZE>(MAXCOL))
             nDestCol2 = MAXCOL+2;   // ungueltig, 1 wird unten abgezogen
         else if (bDataAtCol)
         {
@@ -1552,14 +1562,15 @@ void ScPivot::CalcArea()
     }
     else
     {
+        SCSIZE nDx;
         // Anzahl Zeilen
         if ((aColArr[nColCount-1].nCol == PIVOT_DATA_FIELD) && (nDataCount == 1))
             nDx = 2;
         else
             nDx = 1;
-        long nRowLines = pColList[nColCount-nDx]->GetCount();   // long um Ueberlauf zu erkennen
+        SCSIZE nRowLines = pColList[nColCount-nDx]->GetCount(); // SCSIZE to recognize overflow
         nDataRowCount = pColList[nColCount-nDx]->GetCount();
-        for (i=nColCount-nDx-1; i >= 0; i--)
+        for (SCSIZE i=nColCount-nDx; i-- > 0; )
         {
             nRowLines *= pColList[i]->GetCount();
             nDataRowCount *= pColList[i]->GetCount();
@@ -1573,7 +1584,7 @@ void ScPivot::CalcArea()
         if (aColArr[nColCount-1].nCol != PIVOT_DATA_FIELD)
             nRowLines += (pColList[nColCount-1]->GetCount() * aColArr[nColCount-1].nFuncCount);
         */
-        if (nRowLines > MAXROW)
+        if (nRowLines > static_cast<SCSIZE>(MAXROW))
             nDestRow2 = MAXROW+2;   // ungueltig, 1 wird unten abgezogen
         else if (!bDataAtCol)
         {
@@ -1602,22 +1613,20 @@ void ScPivot::CalcArea()
     }
 }
 
-void ScPivot::SetDataLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nRIndex)
+void ScPivot::SetDataLine(SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE nRIndex)
 {
-    USHORT nCIndex2;
-    short j;
-    short i;
+    SCSIZE nCIndex2;
 
     SubTotal aGrandTotal[PIVOT_MAXFIELD];           // pro Daten-Feld
 
-    for (i=0; i < nColIndex; i++)
+    for (SCSIZE i=0; i < nColIndex; i++)
     {
-        USHORT nCIndex = pColRef[i].nDataIndex;
+        SCSIZE nCIndex = pColRef[i].nDataIndex;
         if (nCIndex != PIVOT_FUNC_REF)
         {
 //          if ( ppDataArr[nRIndex][nCIndex].GetCount() )
             {
-                USHORT nDIndex = ppDataArr[nRIndex][nCIndex].nIndex;
+                SCSIZE nDIndex = ppDataArr[nRIndex][nCIndex].nIndex;
                 SetValue( nCol+i, nRow, ppDataArr[nRIndex][nCIndex], aDataArr[nDIndex].nFuncMask );
                 //  Kategorie 18
 
@@ -1630,15 +1639,16 @@ void ScPivot::SetDataLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nRIndex)
         else
         {
             SubTotal aTotal;
-            short k = i-1;
-            while ((pColRef[k].nDataIndex == PIVOT_FUNC_REF) && (k > 0)) k--;
-            for (j=k; (j>=0) && (pColRef[j].nRecCount > pColRef[i].nRecCount); j--)
+            SCSIZE k = i-1;
+            while ((pColRef[k].nDataIndex == PIVOT_FUNC_REF) && (k > 0))
+                k--;
+            for (SCSIZE j=k+1; (j-- > 0) && (pColRef[j].nRecCount > pColRef[i].nRecCount); )
             {
                 nCIndex2 = pColRef[j].nDataIndex;
                 if (nCIndex2 != PIVOT_FUNC_REF)
                 {
                     if ((pColRef[i].nIndex == ppDataArr[nRIndex][nCIndex2].nIndex) ||
-                        (pColRef[i].nIndex == 0xffff))
+                        (pColRef[i].nIndex == SCSIZE_MAX))
                     {
                         aTotal.Update( ppDataArr[nRIndex][nCIndex2] );
                     }
@@ -1665,8 +1675,8 @@ void ScPivot::SetDataLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nRIndex)
         }
         else
         {
-            USHORT nTotalCol = nDestCol2 - nDataCount + 1;
-            for (short nTotCnt = 0; nTotCnt<nDataCount; nTotCnt++)
+            SCCOL nTotalCol = nDestCol2 - nDataCount + 1;
+            for (SCSIZE nTotCnt = 0; nTotCnt<nDataCount; nTotCnt++)
             {
                 SetValue( nTotalCol+nTotCnt, nRow, aGrandTotal[nTotCnt], aDataArr[nTotCnt].nFuncMask );
                 //  Kategorie 21
@@ -1675,22 +1685,22 @@ void ScPivot::SetDataLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nRIndex)
     }
 }
 
-void ScPivot::SetFuncLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nFunc, USHORT nIndex, USHORT nStartRIndex, USHORT nEndRIndex)
+void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nFunc, SCSIZE nIndex, SCSIZE nStartRIndex, SCSIZE nEndRIndex)
 {
-    short nSubtCount = 0;
+    SCSIZE nSubtCount = 0;
     SubTotal aGrandTotal[PIVOT_MAXFIELD];
     USHORT nThisFunc = nFunc;
 
-    for (short i=0; i<nColIndex; i++)
+    for (SCSIZE i=0; i<nColIndex; i++)
     {
-        USHORT nCIndex = pColRef[i].nDataIndex;
+        SCSIZE nCIndex = pColRef[i].nDataIndex;
         if (nCIndex != PIVOT_FUNC_REF)
         {
             SubTotal aTotal;
-            for (USHORT j = nStartRIndex; j < nEndRIndex; j++)
+            for (SCSIZE j = nStartRIndex; j < nEndRIndex; j++)
             {
-                USHORT nDIndex = ppDataArr[j][nCIndex].nIndex;
-                if ((nIndex == nDIndex) || (nIndex == 0xffff))
+                SCSIZE nDIndex = ppDataArr[j][nCIndex].nIndex;
+                if ((nIndex == nDIndex) || (nIndex == SCSIZE_MAX))
                 {
                     aTotal.Update( ppDataArr[j][nCIndex] );
                 }
@@ -1705,7 +1715,7 @@ void ScPivot::SetFuncLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nFunc, U
             {
                 if (bDataAtCol)
                 {
-                    if ((short)nIndex<nDataCount)
+                    if (nIndex<nDataCount)
                         nThisFunc = aDataArr[nIndex].nFuncMask;
                     else
                         DBG_ERROR("wat fuer'n Index ???");
@@ -1721,25 +1731,25 @@ void ScPivot::SetFuncLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nFunc, U
 
             if ( nFunc == pColRef[i].nFuncMask )
             {
-                USHORT nEffIndex = nIndex;
-                if (nEffIndex == 0xffff)
+                SCSIZE nEffIndex = nIndex;
+                if (nEffIndex == SCSIZE_MAX)
                 {
                     nEffIndex = nSubtCount % nDataCount;
                     ++nSubtCount;
                 }
                 SubTotal aTotal;
 
-                short k = i-1;
-                short j;
-                while ((pColRef[k].nDataIndex == PIVOT_FUNC_REF) && (k > 0)) k--;
-                for (j=k; (j>=0) && (pColRef[j].nRecCount > pColRef[i].nRecCount); j--)
+                SCSIZE k = i-1;
+                while ((pColRef[k].nDataIndex == PIVOT_FUNC_REF) && (k > 0))
+                    k--;
+                for (SCSIZE j=k+1; (j-- > 0) && (pColRef[j].nRecCount > pColRef[i].nRecCount); )
                 {
                     nCIndex = pColRef[j].nDataIndex;
                     if (nCIndex != PIVOT_FUNC_REF)
                     {
-                        for (USHORT nRIndex = nStartRIndex; nRIndex < nEndRIndex; nRIndex++)
+                        for (SCSIZE nRIndex = nStartRIndex; nRIndex < nEndRIndex; nRIndex++)
                         {
-                            USHORT nDIndex = ppDataArr[nRIndex][nCIndex].nIndex;
+                            SCSIZE nDIndex = ppDataArr[nRIndex][nCIndex].nIndex;
                             if (nEffIndex == nDIndex)
                             {
                                 aTotal.Update( ppDataArr[nRIndex][nCIndex] );
@@ -1750,7 +1760,7 @@ void ScPivot::SetFuncLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nFunc, U
 
                 if (nFunc == PIVOT_FUNC_AUTO)
                 {
-                    if ((short)nEffIndex<nDataCount)
+                    if (nEffIndex<nDataCount)
                         nThisFunc = aDataArr[nEffIndex].nFuncMask;
                     else
                         DBG_ERROR("wat fuer'n Index ???");
@@ -1770,7 +1780,7 @@ void ScPivot::SetFuncLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nFunc, U
         {
             if (nFunc == PIVOT_FUNC_AUTO)
             {
-                if ((short)nIndex<nDataCount)
+                if (nIndex<nDataCount)
                     nThisFunc = aDataArr[nIndex].nFuncMask;
                 else
                     DBG_ERROR("wat fuer'n Index ???");
@@ -1780,8 +1790,8 @@ void ScPivot::SetFuncLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nFunc, U
         }
         else
         {
-            USHORT nTotalCol = nDestCol2 - nDataCount + 1;
-            for (short nTotCnt = 0; nTotCnt<nDataCount; nTotCnt++)
+            SCCOL nTotalCol = nDestCol2 - nDataCount + 1;
+            for (SCSIZE nTotCnt = 0; nTotCnt<nDataCount; nTotCnt++)
             {
                 if (nFunc == PIVOT_FUNC_AUTO)
                     nThisFunc = aDataArr[nTotCnt%nDataCount].nFuncMask;
@@ -1792,9 +1802,9 @@ void ScPivot::SetFuncLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nFunc, U
     }
 }
 
-void ScPivot::ColToTable(short nField, USHORT& nRow, ScProgress& rProgress)
+void ScPivot::ColToTable(SCSIZE nField, SCROW& nRow, ScProgress& rProgress)
 {
-    USHORT nCol = nDestCol1 + nField;
+    SCCOL nCol = nDestCol1 + nField;
     if (nColCount == 0)
     {
 //      SetDataLine(nCol + 1, nRow, nDestTab, nRowIndex);
@@ -1803,40 +1813,39 @@ void ScPivot::ColToTable(short nField, USHORT& nRow, ScProgress& rProgress)
         return;
     }
 
-    USHORT i;
-    short nDx;
+    SCSIZE nDx;
     if ((aColArr[nColCount -1].nCol == PIVOT_DATA_FIELD) && (nDataCount == 1))
         nDx = 2;
     else
         nDx = 1;
     if (nField < nColCount - nDx)
     {
-        for (i = 0; i < pColList[nField]->GetCount(); i++)
+        for (USHORT i = 0; i < pColList[nField]->GetCount(); i++)
         {
-            USHORT nSaveIndex = nRowIndex;
+            SCSIZE nSaveIndex = nRowIndex;
             String aStr = pColList[nField]->GetString(i);
             if (!aStr.Len()) aStr = ScGlobal::GetRscString(STR_EMPTYDATA);
             pDoc->SetString(nCol, nRow, nDestTab, aStr);
             //  Kategorie 10
-            USHORT nSaveRow = nRow;
+            SCROW nSaveRow = nRow;
             ColToTable(nField + 1, nRow, rProgress);
             SetStyle(nCol, nSaveRow, nCol, nRow - 1, PIVOT_STYLE_CATEGORY);
             SetFrame(nCol, nSaveRow, nCol, nRow - 1);
             if (aColArr[nField].nFuncCount > 0)                 // Zwischenergebnisse eingestellt?
             {
                 nSaveRow = nRow;
-                for (short j=0; j<=PIVOT_MAXFUNC; j++)                  // incl. "auto"
+                for (SCSIZE j=0; j<=PIVOT_MAXFUNC; j++)                 // incl. "auto"
                 {
                     if (aColArr[nField].nFuncMask & nFuncMaskArr[j])
                     {
                         String aLab;
                         if (bDataAtCol)
                         {
-                            for (short k=0; k < nDataCount; k++)
+                            for (SCSIZE k=0; k < nDataCount; k++)
                             {
                                 String aDataStr = pDataList->GetString(k);  // ist immer String
                                 aLab = aStr;
-                                short nFuncType;
+                                SCSIZE nFuncType;
                                 if ( j==PIVOT_MAXFUNC )
                                     nFuncType = lcl_MaskToIndex( aDataArr[k].nFuncMask );
                                 else
@@ -1858,12 +1867,12 @@ void ScPivot::ColToTable(short nField, USHORT& nRow, ScProgress& rProgress)
                             aLab += *pLabel[j];
                             pDoc->SetString(nCol, nRow, nDestTab, aLab);
                             //  Kategorie 12
-                            SetFuncLine(nDataStartCol, nRow, nDestTab, nFuncMaskArr[j], 0xffff, nSaveIndex, nRowIndex);
+                            SetFuncLine(nDataStartCol, nRow, nDestTab, nFuncMaskArr[j], SCSIZE_MAX, nSaveIndex, nRowIndex);
                             nRow++;
                         }
                     }
                 }
-                if ( nDataStartCol )
+                if ( nDataStartCol > 0 )
                     SetStyle(nCol, nSaveRow, nDataStartCol-1, nRow-1, PIVOT_STYLE_TITLE);
                 SetStyle(nDataStartCol, nSaveRow, nDestCol2, nRow-1, PIVOT_STYLE_RESULT);
                 SetFrameHor(nCol, nSaveRow, nDestCol2, nRow-1);
@@ -1873,10 +1882,10 @@ void ScPivot::ColToTable(short nField, USHORT& nRow, ScProgress& rProgress)
     }
     else if (nField < nColCount)
     {
-        USHORT nCatCount = pColList[nField]->GetCount();
+        SCSIZE nCatCount = pColList[nField]->GetCount();
         SetStyle(nCol, nRow, nCol, nRow+nCatCount-1, PIVOT_STYLE_CATEGORY);
         SetFrame(nCol, nRow, nDestCol2, nRow+nCatCount-1);
-        for (i = 0; i < nCatCount; i++)
+        for (SCSIZE i = 0; i < nCatCount; i++)
         {
             String aTmpStr = pColList[nField]->GetString(i);
             if (!aTmpStr.Len()) aTmpStr = ScGlobal::GetRscString(STR_EMPTYDATA);
@@ -1884,7 +1893,7 @@ void ScPivot::ColToTable(short nField, USHORT& nRow, ScProgress& rProgress)
             String aPutStr;
             if (pColList[nField] == pDataList)
             {
-                short nFuncType = lcl_MaskToIndex( aDataArr[i].nFuncMask );
+                SCSIZE nFuncType = lcl_MaskToIndex( aDataArr[i].nFuncMask );
                 aPutStr  = *pLabel[nFuncType];
                 aPutStr += ' ';
                 aPutStr += aTmpStr;
@@ -1903,11 +1912,10 @@ void ScPivot::ColToTable(short nField, USHORT& nRow, ScProgress& rProgress)
     }
 }
 
-void ScPivot::RowToTable(short nField, USHORT& nCol)
+void ScPivot::RowToTable(SCSIZE nField, SCCOL& nCol)
 {
     nRecCount++;
-    USHORT nRow = nDestRow1 + nFirstLine + nField + 1;
-    USHORT i;
+    SCROW nRow = nDestRow1 + nFirstLine + nField + 1;
     if (nRowCount == 0)
     {
         pColRef[nColIndex].nDataIndex = nDataIndex;
@@ -1916,7 +1924,7 @@ void ScPivot::RowToTable(short nField, USHORT& nCol)
         return;
     }
 
-    short nDx;
+    SCSIZE nDx;
     if ((aRowArr[nRowCount -1].nCol == PIVOT_DATA_FIELD) && (nDataCount == 1))
         nDx = 2;
     else
@@ -1924,30 +1932,30 @@ void ScPivot::RowToTable(short nField, USHORT& nCol)
 
     if (nField < nRowCount - nDx)
     {
-        for (i = 0; i < pRowList[nField]->GetCount(); i++)
+        for (USHORT i = 0; i < pRowList[nField]->GetCount(); i++)
         {
             String aStr = pRowList[nField]->GetString(i);
             if (!aStr.Len()) aStr = ScGlobal::GetRscString(STR_EMPTYDATA);
             pDoc->SetString(nCol, nRow, nDestTab, aStr);
             //  Kategorie 14
-            USHORT nSaveCol = nCol;
+            SCCOL nSaveCol = nCol;
             RowToTable(nField + 1, nCol);
             SetStyle(nSaveCol, nRow, nCol - 1, nRow, PIVOT_STYLE_CATEGORY);
             SetFrame(nSaveCol, nRow, nCol - 1, nRow);
             if (aRowArr[nField].nFuncCount > 0)
             {
                 nSaveCol = nCol;
-                for (USHORT j=0; j<=PIVOT_MAXFUNC; j++)                 // incl. "auto"
+                for (SCSIZE j=0; j<=PIVOT_MAXFUNC; j++)                 // incl. "auto"
                 {
                     if (aRowArr[nField].nFuncMask & nFuncMaskArr[j])
                     {
                         String aLab;
                         if (!bDataAtCol)
                         {
-                            for (short k=0; k < nDataCount; k++)
+                            for (SCSIZE k=0; k < nDataCount; k++)
                             {
                                 aLab = aStr;
-                                short nFuncType;
+                                SCSIZE nFuncType;
                                 if ( j==PIVOT_MAXFUNC )
                                     nFuncType = lcl_MaskToIndex( aDataArr[k].nFuncMask );
                                 else
@@ -1975,14 +1983,14 @@ void ScPivot::RowToTable(short nField, USHORT& nCol)
                             //  Kategorie 16
                             pColRef[nColIndex].nDataIndex = PIVOT_FUNC_REF;
                             pColRef[nColIndex].nRecCount = nRecCount;
-                            pColRef[nColIndex].nIndex = 0xffff;
+                            pColRef[nColIndex].nIndex = SCSIZE_MAX;
                             pColRef[nColIndex].nFuncMask = nFuncMaskArr[j];
                             nColIndex++;
                             nCol++;
                         }
                     }
                 }
-                if ( nDataStartRow )
+                if ( nDataStartRow > 0 )
                     SetStyle(nSaveCol, nRow,
                                 nCol-1, nDataStartRow-1, PIVOT_STYLE_TITLE);
                 SetStyle(nSaveCol, nDataStartRow, nCol-1, nDestRow2, PIVOT_STYLE_RESULT);
@@ -1992,10 +2000,10 @@ void ScPivot::RowToTable(short nField, USHORT& nCol)
     }
     else if (nField < nRowCount)
     {
-        USHORT nCatCount = pRowList[nField]->GetCount();
+        SCSIZE nCatCount = pRowList[nField]->GetCount();
         SetStyle(nCol, nRow, nCol+nCatCount-1, nRow, PIVOT_STYLE_CATEGORY);
         SetFrame(nCol, nRow, nCol+nCatCount-1, nDestRow2);
-        for (i = 0; i < nCatCount; i++)
+        for (SCSIZE i = 0; i < nCatCount; i++)
         {
             String aTmpStr = pRowList[nField]->GetString(i);
             if (!aTmpStr.Len()) aTmpStr = ScGlobal::GetRscString(STR_EMPTYDATA);
@@ -2003,7 +2011,7 @@ void ScPivot::RowToTable(short nField, USHORT& nCol)
             String aPutStr;
             if (pRowList[nField] == pDataList)
             {
-                short nFuncType = lcl_MaskToIndex( aDataArr[i].nFuncMask );
+                SCSIZE nFuncType = lcl_MaskToIndex( aDataArr[i].nFuncMask );
                 aPutStr  = *pLabel[nFuncType];
                 aPutStr += ' ';
                 aPutStr += aTmpStr;
@@ -2015,7 +2023,7 @@ void ScPivot::RowToTable(short nField, USHORT& nCol)
             //  Kategorie 17
             pColRef[nColIndex].nDataIndex = nDataIndex;
             pColRef[nColIndex].nRecCount = nRecCount;
-            pColRef[nColIndex].nIndex = 0xffff;
+            pColRef[nColIndex].nIndex = SCSIZE_MAX;
             pColRef[nColIndex].nFuncMask = PIVOT_FUNC_NONE;
             nColIndex++;
             nDataIndex++;
@@ -2025,9 +2033,9 @@ void ScPivot::RowToTable(short nField, USHORT& nCol)
     nRecCount--;
 }
 
-USHORT ScPivot::GetCategoryRow( USHORT nCol, USHORT nRow )
+SCROW ScPivot::GetCategoryRow( SCCOL nCol, SCROW nRow )
 {
-    USHORT nMinRow = nSrcRow1;
+    SCROW nMinRow = nSrcRow1;
     if (bHasHeader) ++nMinRow;
     BOOL bFound = FALSE;
     do
