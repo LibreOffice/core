@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:25:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -928,13 +928,13 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
     if(xLastResult.is())
     {
         Reference<XUnoTunnel> xCursorTunnel( xLastResult, UNO_QUERY);
-        SwXTextCursor* pPosCrsr = 0;
+        OTextCursorHelper* pPosCrsr = 0;
         if(xCursorTunnel.is())
         {
-            pPosCrsr = (SwXTextCursor*)xCursorTunnel->getSomething(
-                                    SwXTextCursor::getUnoTunnelId());
+            pPosCrsr = (OTextCursorHelper*)xCursorTunnel->getSomething(
+                                    OTextCursorHelper::getUnoTunnelId());
         }
-        SwUnoCrsr* pCrsr = pPosCrsr ? pPosCrsr->GetCrsr() : 0;
+        SwPaM* pCrsr = pPosCrsr ? pPosCrsr->GetPaM() : 0;
         if(pCrsr)
         {
             *pUnoCrsr->GetPoint() = *pCrsr->End();
