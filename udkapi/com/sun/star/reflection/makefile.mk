@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:57:32 $
+#   last change: $Author: obo $ $Date: 2004-06-03 16:15:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,6 +116,7 @@ IDLFILES=\
     XServiceTypeDescription2.idl \
     XSingletonTypeDescription.idl\
     XSingletonTypeDescription2.idl \
+    XStructTypeDescription.idl \
     XTypeDescription.idl\
     XTypeDescriptionEnumeration.idl\
     XTypeDescriptionEnumerationAccess.idl
