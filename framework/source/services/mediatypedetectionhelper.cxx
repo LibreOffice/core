@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediatypedetectionhelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-23 14:52:10 $
+ *  last change: $Author: as $ $Date: 2000-11-28 14:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-#if !TF_FILTER//MUSTFILTER
+#ifndef TF_FILTER//MUSTFILTER
 #ifndef _COM_SUN_STAR_FRAME_XFRAMELOADERQUERY_HPP_
 #include <com/sun/star/frame/XFrameLoaderQuery.hpp>
 #endif
@@ -94,7 +94,7 @@
 namespace framework
 {
 
-#if !TF_FILTER//MUSTFILTER
+#ifndef TF_FILTER//MUSTFILTER
 using namespace ::com::sun::star::frame ;
 #endif//MUSTFILTER
 using namespace ::com::sun::star        ;
@@ -159,7 +159,7 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
         return sal_False;
     }
 
-#if !TF_FILTER//MUSTFILTER
+#ifndef TF_FILTER//MUSTFILTER
     uno::Reference< frame::XFrameLoaderQuery > xQ(
         m_xFactory->createInstance( SERVICENAME_FRAMELOADERFACTORY ),uno::UNO_QUERY );
     //IMPLEMENTATIONNAME_FRAMELOADERFACTORY
@@ -210,6 +210,9 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/23 14:52:10  as
+    #79040# implement new filter detection - use TF_FILTER to enable
+
     Revision 1.1.1.1  2000/09/18 16:29:23  hr
     initial import
 

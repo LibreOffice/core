@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-23 14:52:09 $
+ *  last change: $Author: as $ $Date: 2000-11-28 14:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@
 #include <services/frameloaderfactory.hxx>
 #endif
 
-#if TF_FILTER//MUSTFILTER
+#ifdef TF_FILTER//MUSTFILTER
     #ifndef __FRAMEWORK_SERVICES_FILTERFACTORY_HXX_
     #include <services/filterfactory.hxx>
     #endif
@@ -131,7 +131,7 @@
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-#if TF_FILTER//MUSTFILTER
+#ifdef TF_FILTER//MUSTFILTER
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
                         COMPONENTINFO( ::framework::PlugInFrame                 )
                         COMPONENTINFO( ::framework::Desktop                     )

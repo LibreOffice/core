@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-23 14:52:13 $
+ *  last change: $Author: as $ $Date: 2000-11-28 14:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,17 +162,21 @@
 #ifndef _COM_SUN_STAR_BRIDGE_XINSTANCEPROVIDER_HPP_
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
 #endif
-
+#ifdef TF_FILTER//MUSTFILTER
 #ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
 #include <com/sun/star/document/XTypeDetection.hpp>
 #endif
-
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XELEMENTACCESS_HPP_
 #include <com/sun/star/container/XElementAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
+#include <com/sun/star/frame/XConfigManager.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -236,7 +240,9 @@ using namespace ::com::sun::star::util      ;
 using namespace ::com::sun::star::task      ;
 using namespace ::com::sun::star::mozilla   ;
 using namespace ::com::sun::star::bridge    ;
+#ifdef TF_FILTER//MUSTFILTER
 using namespace ::com::sun::star::document  ;
+#endif
 using namespace ::com::sun::star::container ;
 
 //_________________________________________________________________________________________________________________
@@ -262,7 +268,9 @@ class TestApplication : public Application
         void impl_testPlugIn        ( const Reference< XDesktop >& xDesktop, const Reference< XMultiServiceFactory >& xFactory  );
         void impl_testLoginDialog   (                                                                                           );
         void impl_testFilterCache   (                                                                                           );
+#ifdef TF_FILTER
         void impl_testTypeDetection (                                                                                           );
+#endif
 
         //*********************************************************************************************************
         // helper methods
@@ -284,6 +292,8 @@ TestApplication aTestApplication ;
 
 void TestApplication::Main()
 {
+    RegistryCache aCache;
+
     /**-***********************************************************************************************************
         initialize program
     **************************************************************************************************************/
@@ -304,15 +314,22 @@ void TestApplication::Main()
         test area
     **************************************************************************************************************/
 
+    Reference< XInterface > xI( xGlobalServiceManager->createInstance( DECLARE_ASCII("com.sun.star.config.SpecialConfigManager") ), UNO_QUERY );
+    Reference< XConfigManager > xC( xI, UNO_QUERY );
+    LOG_ASSERT( xI.is(), "config not created\n" )
+    LOG_ASSERT( xC.is(), "config interface not found\n" )
+
     //-------------------------------------------------------------------------------------------------------------
     #ifdef TEST_FILTERCACHE
     impl_testFilterCache();
     #endif
 
     //-------------------------------------------------------------------------------------------------------------
+#ifdef TF_FILTER
     #ifdef TEST_TYPEDETECTION
     impl_testTypeDetection();
     #endif
+#endif
 
     //-------------------------------------------------------------------------------------------------------------
     #ifdef TEST_LOGINDIALOG
@@ -422,6 +439,7 @@ void TestApplication::Main()
 //_________________________________________________________________________________________________________________
 //  test method
 //_________________________________________________________________________________________________________________
+#ifdef TF_FILTER
 void TestApplication::impl_testTypeDetection()
 {
     // We use a string buffer to log important informations and search results.
@@ -518,7 +536,7 @@ void TestApplication::impl_testTypeDetection()
 
     WRITE_LOGFILE( "testTypeDetection.log", U2B(sBuffer.makeStringAndClear()).getStr() )
 }
-
+#endif
 //_________________________________________________________________________________________________________________
 //  test method
 //_________________________________________________________________________________________________________________
@@ -580,7 +598,7 @@ void TestApplication::impl_testFilterCache()
         }
 */
         // searchFirstType( URL, MediaType, ClipboardFormat, startEntry )
-        TConstTypeIterator aIterator;
+        TCheckedTypeIterator aIterator;
         sBuffer.appendAscii( "search type for \"file://c|/temp/test.sdw\"; no media type; no clipboard format\n" );
         OUString sURL = DECLARE_ASCII("file://c|/temp/test.sdw");
         const OUString* pType = aCache.searchFirstType( &sURL, NULL, NULL, aIterator );

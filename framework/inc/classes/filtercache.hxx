@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-23 14:52:03 $
+ *  last change: $Author: as $ $Date: 2000-11-28 14:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
+#ifndef __FRAMEWORK_CLASSES_CHECKEDITERATOR_HXX_
+#include <classes/checkediterator.hxx>
+#endif
+
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
 #endif
@@ -110,6 +114,10 @@
 #include <stl/vector>
 #endif
 
+#ifndef __SGI_STL_ITERATOR
+#include <stl/iterator>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -134,6 +142,7 @@ namespace framework{
 //  exported definitions
 //_________________________________________________________________________________________________________________
 
+//*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 struct TStringHashFunction
 {
@@ -146,6 +155,7 @@ struct TStringHashFunction
 // A generic string list to hold different string informations with a fast access to it.
 typedef VECTOR< OUSTRING > TStringList;
 
+//*****************************************************************************************************************
 // These struct define a type, which present the type of a file.
 // He is used for easy filter detection without file stream detection!
 // The internal name is the keyname of an item with these structure in our hash map or our configuration set!
@@ -159,6 +169,7 @@ struct TType
     sal_Int32       nDocumentIconID     ;   // empty = 0
 };
 
+//*****************************************************************************************************************
 // These struct describe a filter wich is registered for one type.
 // He hold information about services which present the document himself (like a item) and a filter service which
 // filter a file in these document.
@@ -175,40 +186,43 @@ struct TFilter
     OUSTRING        sTemplateName       ;   // empty = ""           ... should be moved in UserData ...!?
 };
 
+//*****************************************************************************************************************
 // Programmer can register his own services for an content detection of different types.
 // The implementation or service name of these is the keyname of an item with these structure
 // in our hash map or our configuration set!
 struct TDetector
 {
-    TStringList     lTypes          ;   // empty not allowed! min=1 item!
+    TStringList     lTypes          ;   // empty not allowed! min 1 item need!
 };
 
+//*****************************************************************************************************************
 // Programmer can register his own services for loading documents in a frame.
 // The implementation or service name of these is the keyname of an item with these structure
 // in our hash map or our configuration set!
 struct TLoader
 {
     OUSTRING        sUIName         ;   // empty = ""
-    TStringList     lTypes          ;   // empty not allowed! min=1 item!
+    TStringList     lTypes          ;   // empty not allowed! min 1 item need!
 };
 
+//*****************************************************************************************************************
 // We need different hash maps for different tables of our configuration management.
-typedef HASH_MAP<   OUSTRING                    ,                       // Key name is the internal name!
+typedef HASH_MAP<   OUSTRING                    ,                       // structure of hash:   key< internal name >{ value< TType > }
                     TType                       ,
                     TStringHashFunction         ,
                     ::std::equal_to< OUSTRING > >   TTypeHash;
 
-typedef HASH_MAP<   OUSTRING                    ,                       // Key name is the internal name!
+typedef HASH_MAP<   OUSTRING                    ,                       // structure of hash:   key< internal name >{ value< TFilter > }
                     TFilter                     ,
                     TStringHashFunction         ,
                     ::std::equal_to< OUSTRING > >   TFilterHash;
 
-typedef HASH_MAP<   OUSTRING                    ,                       // Key name is the service or implementation name!
+typedef HASH_MAP<   OUSTRING                    ,                       // structure of hash:   key< implmentation name >{ value< TDetector > }
                     TDetector                   ,
                     TStringHashFunction         ,
                     ::std::equal_to< OUSTRING > >   TDetectorHash;
 
-typedef HASH_MAP<   OUSTRING                    ,                       // Key name is the service or implementation name!
+typedef HASH_MAP<   OUSTRING                    ,                       // structure of hash:   key< implementation name >{ value< TLoader > }
                     TLoader                     ,
                     TStringHashFunction         ,
                     ::std::equal_to< OUSTRING > >   TLoaderHash;
@@ -216,18 +230,21 @@ typedef HASH_MAP<   OUSTRING                    ,                       // Key n
 // Use these hash to implement different table which assign types to frame loader or detect services.
 // The normaly used TLoaderHash or TDetectorHash structures assign loader/detectors to types!
 // It's an optimism!
-typedef HASH_MAP<   OUSTRING                    ,
-                    TStringList                 ,
+typedef HASH_MAP<   OUSTRING                    ,                       // structure of detector hash:  key< internal type name >{ value< list of detector names > }
+                    TStringList                 ,                       // structure of loader hash:    key< internal type name >{ value< list of loader names > }
                     TStringHashFunction         ,
                     ::std::equal_to< OUSTRING > >   TPerformanceHash;
 
+//*****************************************************************************************************************
 // Defines "pointers" to items of our hash maps.
-typedef TStringList::const_iterator             TConstStringIterator        ;
-typedef TTypeHash::const_iterator               TConstTypeIterator          ;
-typedef TFilterHash::const_iterator             TConstFilterIterator        ;
-typedef TDetectorHash::const_iterator           TConstDetectorIterator      ;
-typedef TLoaderHash::const_iterator             TConstLoaderIterator        ;
-typedef TPerformanceHash::const_iterator        TConstPerformanceIterator   ;
+typedef TStringList::const_iterator                                 TConstStringIterator        ;
+typedef TTypeHash::const_iterator                                   TConstTypeIterator          ;
+typedef TFilterHash::const_iterator                                 TConstFilterIterator        ;
+typedef TDetectorHash::const_iterator                               TConstDetectorIterator      ;
+typedef TLoaderHash::const_iterator                                 TConstLoaderIterator        ;
+typedef TPerformanceHash::const_iterator                            TConstPerformanceIterator   ;
+typedef CheckedIterator< TStringList, TConstStringIterator >        TCheckedStringListIterator  ;
+typedef CheckedIterator< TTypeHash, TConstTypeIterator >            TCheckedTypeIterator        ;
 
 /*-************************************************************************************************************//**
     @short          cache for all filter and type information
@@ -319,23 +336,24 @@ class FilterCache
             @onerror    NULL is returned.
         *//*-*****************************************************************************************************/
 
-        const OUSTRING*     searchFirstType (   const   OUSTRING*           pURL                ,
-                                                const   OUSTRING*           pMediaType          ,
-                                                const   OUSTRING*           pClipboardFormat    ,
-                                                        TConstTypeIterator& rStartEntry         ) const;
+        const OUSTRING*     searchFirstType (   const   OUSTRING*               pURL                ,
+                                                const   OUSTRING*               pMediaType          ,
+                                                const   OUSTRING*               pClipboardFormat    ,
+                                                        TCheckedTypeIterator&   rStartEntry         ) const;
 
-        const OUSTRING*     searchType      (   const   OUSTRING*           pURL                ,
-                                                const   OUSTRING*           pMediaType          ,
-                                                const   OUSTRING*           pClipboardFormat    ,
-                                                        TConstTypeIterator& rFollowEntry        ) const;
+        const OUSTRING*     searchType      (   const   OUSTRING*               pURL                ,
+                                                const   OUSTRING*               pMediaType          ,
+                                                const   OUSTRING*               pClipboardFormat    ,
+                                                        TCheckedTypeIterator&   rFollowEntry        ) const;
 
-        const OUSTRING*     searchFirstFilterForType    (   const OUSTRING& sInternalTypeName   , TConstStringIterator& rStartEntry ) const ;
-        const OUSTRING*     searchFirstDetectorForType  (   const OUSTRING& sInternalTypeName   , TConstStringIterator& rStartEntry )       ;
-        const OUSTRING*     searchFirstLoaderForType    (   const OUSTRING& sInternalTypeName   , TConstStringIterator& rStartEntry )       ;
+        const OUSTRING*     searchFirstFilterForType    (   const OUSTRING& sInternalTypeName,  TCheckedStringListIterator& rStartEntry ) const ;
+        const OUSTRING*     searchFilterForType         (                                       TCheckedStringListIterator& rFollowEntry) const ;
 
-        const OUSTRING*     searchFilterForType         (   const OUSTRING& sInternalTypeName   , TConstStringIterator& rFollowEntry) const ;
-        const OUSTRING*     searchDetectorForType       (   const OUSTRING& sInternalTypeName   , TConstStringIterator& rFollowEntry)       ;
-        const OUSTRING*     searchLoaderForType         (   const OUSTRING& sInternalTypeName   , TConstStringIterator& rFollowEntry)       ;
+        const OUSTRING*     searchFirstDetectorForType  (   const OUSTRING& sInternalTypeName,  TCheckedStringListIterator& rStartEntry ) const ;
+        const OUSTRING*     searchDetectorForType       (                                       TCheckedStringListIterator& rFollowEntry) const ;
+
+        const OUSTRING*     searchFirstLoaderForType    (   const OUSTRING& sInternalTypeName,  TCheckedStringListIterator& rStartEntry ) const ;
+        const OUSTRING*     searchLoaderForType         (                                       TCheckedStringListIterator& rFollowEntry) const ;
 
         /*-****************************************************************************************************//**
             @short      get all properties of a cache entry by given name
@@ -431,6 +449,25 @@ class FilterCache
         OUSTRING impl_extractURLExtension( const OUSTRING& sURL ) const;
 
         /*-****************************************************************************************************//**
+            @short      eliminate "*." from every extension
+            @descr      Our configuration save extensions as "*.nnn" everytime. But this isn't a realy effective method
+                        to search for mathcing with a given URL. That's why we eleminate this obsolete letters from every
+                        saved extension in our internal cache. Now a normal compare is enough!
+
+            @ATTENTION  impl_extractURLExtension() must return strings with same format!
+
+            @seealso    method impl_extractURLExtensions()
+            @seealso    search methods
+
+            @param      "lExtension", string vector with extensions to convert
+            @return     Parameter "lExtensions" is an in/out parameter!
+
+            @onerror    No error should occure.
+        *//*-*****************************************************************************************************/
+
+        void impl_correctExtensions( TStringList& lExtensions );
+
+        /*-****************************************************************************************************//**
             @short      fill our cache with values from configuration
             @descr      We cache the complete type and filter information from our configuration as readonly values.
                         These helper method read the values and fill our static member with it.
@@ -447,10 +484,10 @@ class FilterCache
         *//*-*****************************************************************************************************/
 
         void impl_loadConfiguration (                                                                                                   );
-        void impl_fillTypeCache     ( const REFERENCE< XREGISTRYKEY >& xRootKey, TTypeHash& rCache                                      );
-        void impl_fillFilterCache   ( const REFERENCE< XREGISTRYKEY >& xRootKey, TFilterHash& rCache    , TPerformanceHash& rFastCache  );
+        void impl_fillTypeCache     ( const REFERENCE< XREGISTRYKEY >& xRootKey, TTypeHash&     rCache                                  );
+        void impl_fillFilterCache   ( const REFERENCE< XREGISTRYKEY >& xRootKey, TFilterHash&   rCache  , TPerformanceHash& rFastCache  );
         void impl_fillDetectorCache ( const REFERENCE< XREGISTRYKEY >& xRootKey, TDetectorHash& rCache  , TPerformanceHash& rFastCache  );
-        void impl_fillLoaderCache   ( const REFERENCE< XREGISTRYKEY >& xRootKey, TLoaderHash& rCache    , TPerformanceHash& rFastCache  );
+        void impl_fillLoaderCache   ( const REFERENCE< XREGISTRYKEY >& xRootKey, TLoaderHash&   rCache  , TPerformanceHash& rFastCache  );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -475,16 +512,23 @@ class FilterCache
 
     private:
 
+        static sal_Bool impldbg_checkParameter_searchFirstType                      (   const   OUSTRING*                   pURL                ,
+                                                                                        const   OUSTRING*                   pMediaType          ,
+                                                                                        const   OUSTRING*                   pClipboardFormat    ,
+                                                                                        const   TCheckedTypeIterator&       rStartEntry         );
         static sal_Bool impldbg_checkParameter_searchType                           (   const   OUSTRING*                   pURL                ,
                                                                                         const   OUSTRING*                   pMediaType          ,
                                                                                         const   OUSTRING*                   pClipboardFormat    ,
-                                                                                                TConstTypeIterator&         rStartEntry         );
-        static sal_Bool impldbg_checkParameter_searchFilterForType                  (   const   OUSTRING&                   sInternalTypeName   ,
-                                                                                                TConstStringIterator&       rStartEntry         );
-        static sal_Bool impldbg_checkParameter_searchDetectorForType                (   const   OUSTRING&                   sInternalTypeName   ,
-                                                                                                TConstStringIterator&       rStartEntry         );
-        static sal_Bool impldbg_checkParameter_searchLoaderForType                  (   const   OUSTRING&                   sInternalTypeName   ,
-                                                                                                TConstStringIterator&       rStartEntry         );
+                                                                                        const   TCheckedTypeIterator&       rFollowEntry        );
+        static sal_Bool impldbg_checkParameter_searchFirstFilterForType             (   const   OUSTRING&                   sInternalTypeName   ,
+                                                                                        const   TCheckedStringListIterator& rStartEntry         );
+        static sal_Bool impldbg_checkParameter_searchFilterForType                  (   const   TCheckedStringListIterator& rFollowEntry        );
+        static sal_Bool impldbg_checkParameter_searchFirstDetectorForType           (   const   OUSTRING&                   sInternalTypeName   ,
+                                                                                        const   TCheckedStringListIterator& rStartEntry         );
+        static sal_Bool impldbg_checkParameter_searchDetectorForType                (   const   TCheckedStringListIterator& rFollowEntry        );
+        static sal_Bool impldbg_checkParameter_searchFirstLoaderForType             (   const   OUSTRING&                   sInternalTypeName   ,
+                                                                                        const   TCheckedStringListIterator& rStartEntry         );
+        static sal_Bool impldbg_checkParameter_searchLoaderForType                  (   const   TCheckedStringListIterator& rFollowEntry        );
         static sal_Bool impldbg_checkParameter_getTypeByName                        (   const   OUSTRING&                   sName               );
         static sal_Bool impldbg_checkParameter_getFilterByName                      (   const   OUSTRING&                   sName               );
         static sal_Bool impldbg_checkParameter_getDetectorByName                    (   const   OUSTRING&                   sName               );
@@ -494,17 +538,17 @@ class FilterCache
         static sal_Bool impldbg_checkParameter_existsDetector                       (   const   OUSTRING&                   sName               );
         static sal_Bool impldbg_checkParameter_existsLoader                         (   const   OUSTRING&                   sName               );
         static sal_Bool impldbg_checkParameter_convertStringSequenceToVector        (   const   SEQUENCE< OUSTRING >&       seqSource           ,
-                                                                                                TStringList&                rDestination        );
+                                                                                        const   TStringList&                rDestination        );
         static sal_Bool impldbg_checkParameter_convertStringVectorToSequence        (   const   TStringList&                rSource             ,
-                                                                                                SEQUENCE< OUSTRING >&       seqDestination      );
+                                                                                        const   SEQUENCE< OUSTRING >&       seqDestination      );
         static sal_Bool impldbg_checkParameter_convertTTypeToPropertySequence       (   const   TType&                      rSource             ,
-                                                                                                SEQUENCE< PROPERTYVALUE >&  seqDestination      );
+                                                                                        const   SEQUENCE< PROPERTYVALUE >&  seqDestination      );
         static sal_Bool impldbg_checkParameter_convertTFilterToPropertySequence     (   const   TFilter&                    rSource             ,
-                                                                                                SEQUENCE< PROPERTYVALUE >&  seqDestination      );
+                                                                                        const   SEQUENCE< PROPERTYVALUE >&  seqDestination      );
         static sal_Bool impldbg_checkParameter_convertTLoaderToPropertySequence     (   const   TLoader&                    rSource             ,
-                                                                                                SEQUENCE< PROPERTYVALUE >&  seqDestination      );
+                                                                                        const   SEQUENCE< PROPERTYVALUE >&  seqDestination      );
         static sal_Bool impldbg_checkParameter_convertTDetectorToPropertySequence   (   const   TDetector&                  rSource             ,
-                                                                                                SEQUENCE< PROPERTYVALUE >&  seqDestination      );
+                                                                                        const   SEQUENCE< PROPERTYVALUE >&  seqDestination      );
 
     #endif  //  #ifdef ENABLE_ASSERTIONS
 
@@ -522,13 +566,13 @@ class FilterCache
             @onerror    -
         *//*-*****************************************************************************************************/
 
-//  #ifdef ENABLE_FILTERCACHEDEBUG
+    #ifdef ENABLE_FILTERCACHEDEBUG
 
     private:
 
         void impldbg_showCacheContent();
 
-//  #endif  //  #ifdef ENABLE_FILTERCACHEDEBUG
+    #endif  //  #ifdef ENABLE_FILTERCACHEDEBUG
 
     //-------------------------------------------------------------------------------------------------------------
     //  private variables
@@ -547,11 +591,8 @@ class FilterCache
         static sal_Int32            m_nRefCount         ;
         static OUSTRING             m_sDefaultDetector  ;
         static OUSTRING             m_sGenericLoader    ;
-        static TDetector            m_aDefaultDetector  ;
-        static TLoader              m_aGenericLoader    ;
-
-        sal_Bool                    m_bDefaultDetectorAlreadyReturned   ;
-        sal_Bool                    m_bGenericLoaderAlreadyReturned     ;
+        static TDetector*           m_pDefaultDetector  ;
+        static TLoader*             m_pGenericLoader    ;
 
 };      //  class FilterCache
 
