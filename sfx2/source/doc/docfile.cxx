@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 16:41:58 $
+ *  last change: $Author: mba $ $Date: 2000-12-01 11:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,7 +828,6 @@ sal_Bool SfxMedium::CloseOutStream_Impl()
         // if there is a storage based on the OutStream, we have to
         // close the storage, too, because otherwise the storage
         // would use an invalid ( deleted ) stream.
-
         if ( aStorage.Is() )
         {
             const SvStream *pStorage = aStorage->GetSvStream();
@@ -1050,14 +1049,26 @@ ErrCode SfxMedium::Unpack_Impl( const String& rDest )
 }
 
 //------------------------------------------------------------------
+#if SUPD<615
 SvStorage* SfxMedium::GetOutputStorage()
+{
+    return GetOutputStorage( FALSE );
+}
+#endif
+
+SvStorage* SfxMedium::GetOutputStorage( BOOL bUCBStorage )
 {
     if ( !pImp->pTempFile )
         CreateTempFile();
-    return GetStorage();
+    return GetStorage_Impl( bUCBStorage );
 }
 
 SvStorage* SfxMedium::GetStorage()
+{
+    return GetStorage_Impl( FALSE );
+}
+
+SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
 {
     if ( aStorage.Is() || bTriedStorage )
         return aStorage;
@@ -1091,7 +1102,7 @@ SvStorage* SfxMedium::GetStorage()
     if ( pImp->pTempFile && pOutStream )
     {
         DELETEZ( pOutStream );
-        aStorage = new SvStorage( aStorageName );
+        aStorage = new SvStorage( bUCBStorage, aStorageName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
     }
     else
     {
@@ -1287,7 +1298,8 @@ void SfxMedium::Transfer_Impl()
             }
         }
 
-        SvStream *pStream = GetOutStream();
+        CloseOutStream();
+        SvStream *pStream = new SvFileStream( pImp->pTempFile->GetURL(), STREAM_STD_READ );
         SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
         Reference < ::com::sun::star::io::XInputStream > xStream
             = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
@@ -1299,9 +1311,9 @@ void SfxMedium::Transfer_Impl()
         aArg.ReplaceExisting = sal_True;
         aAny <<= aArg;
 
-        UCB_Helper::ExecuteCommand( xContent, WID_INSERT,
-                                    aAny, &bSuccess );
-
+        UCB_Helper::ExecuteCommand( xContent, WID_INSERT, aAny, &bSuccess );
+        delete pStream;
+        GetOutStream();
         if ( !bSuccess )
             eError = ERRCODE_IO_GENERAL;
     }
@@ -2292,7 +2304,7 @@ sal_uInt16 SfxMedium::AddVersion_Impl( SfxVersionInfo& rInfo )
 
         sal_uInt16 nKey;
         for ( nKey=0; nKey<aLongs.Count(); nKey++ )
-            if ( aLongs[nKey] > nKey+1 )
+            if ( aLongs[nKey] > ( ULONG ) nKey+1 )
                 break;
 
         rInfo.aName = DEFINE_CONST_UNICODE( "Version" );
