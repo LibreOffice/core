@@ -4209,3 +4209,7 @@ _real@8@40098000000000000000
 ??1SystemWindow@@UAE@XZ
 ?IsValid@MSE40HTMLClipFormatObj@@QAEPAVSvStream@@AAV2@@Z
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Sequence@C@2345@@Z
+??1?$Reference@VXActiveDataSink@io@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??_R0?AVBufferSizeExceededException@io@star@sun@com@@@8
+??_R0?AVNotConnectedException@io@star@sun@com@@@8
+?s_pType_com_sun_star_io_XActiveDataSink@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXActiveDataSink@io@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
