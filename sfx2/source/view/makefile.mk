@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-19 08:03:40 $
+#   last change: $Author: kz $ $Date: 2004-10-04 21:03:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,17 +81,15 @@ SRC1FILES = \
         framedlg.src
 
 SLOFILES =	\
+                $(SLO)$/ipclient.obj \
+        $(SLO)$/viewsh.obj \
         $(SLO)$/frmload.obj \
         $(SLO)$/framedlg.obj \
         $(SLO)$/frame.obj \
         $(SLO)$/urlframe.obj \
-        $(SLO)$/ipenv.obj \
-        $(SLO)$/contenv.obj \
         $(SLO)$/printer.obj \
         $(SLO)$/prnmon.obj \
-        $(SLO)$/viewsh.obj \
         $(SLO)$/viewprn.obj \
-        $(SLO)$/ipfrm.obj \
         $(SLO)$/viewfac.obj \
         $(SLO)$/orgmgr.obj \
         $(SLO)$/intfrm.obj \
