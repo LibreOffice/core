@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:42:24 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,17 +232,7 @@ void SfxProgress_Impl::Enable_Impl( BOOL bEnable )
         pView->GetDispatcher()->Lock( !bEnable );
     }
 
-    if ( pDoc )
-    {
-        SfxFrame* pFrm = pDoc->GetMedium()->GetLoadTargetFrame();
-        pFrame = pFrm ? pFrm->GetCurrentViewFrame() : NULL;
-        if ( pFrame )
-        {
-            pFrame->Enable( bEnable );
-            pFrame->GetDispatcher()->Lock( !bEnable );
-        }
-    }
-    else
+    if ( !pDoc )
         SFX_APP()->LockDispatcher( !bEnable );
 }
 
@@ -561,13 +551,13 @@ BOOL SfxProgress::SetState
                 if ( !pHiddenItem || !pHiddenItem->GetValue() )
                 {
                     // not in a view, perhaps it's just loading
-                    SfxFrame* pFrame = pMedium->GetLoadTargetFrame();
-                    if ( pFrame && pFrame->GetCurrentViewFrame() )
-                    {
+                    //SfxFrame* pFrame = pMedium->GetLoadTargetFrame();
+                    //if ( pFrame && pFrame->GetCurrentViewFrame() )
+                    //{
                         // recycling frame
-                        pImp->pView = pFrame->GetCurrentViewFrame();
-                    }
-                    else
+                        //pImp->pView = pFrame->GetCurrentViewFrame();
+                    //}
+                    //else
                     {
                         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, FALSE );
                         Reference< XStatusIndicator > xInd;
@@ -687,9 +677,9 @@ void SfxProgress::Resume()
                         pFrame;
                         pFrame = SfxViewFrame::GetNext( *pFrame, pImp->xObjSh ) )
                     pFrame->GetWindow().EnterWait();
-                SfxFrame* pFrm = pImp->xObjSh->GetMedium()->GetLoadTargetFrame();
-                if ( pFrm )
-                    pFrm->GetWindow().EnterWait();
+                //SfxFrame* pFrm = pImp->xObjSh->GetMedium()->GetLoadTargetFrame();
+                //if ( pFrm )
+                //  pFrm->GetWindow().EnterWait();
             }
 //(mba)/task
 /*
@@ -747,9 +737,9 @@ void SfxProgress::Suspend()
                     pFrame;
                     pFrame = SfxViewFrame::GetNext( *pFrame, pImp->xObjSh ) )
                 pFrame->GetWindow().LeaveWait();
-                SfxFrame* pFrm = pImp->xObjSh->GetMedium()->GetLoadTargetFrame();
-                if ( pFrm )
-                    pFrm->GetWindow().LeaveWait();
+                //SfxFrame* pFrm = pImp->xObjSh->GetMedium()->GetLoadTargetFrame();
+                //if ( pFrm )
+                //  pFrm->GetWindow().LeaveWait();
         }
 //(mba)/task
 /*
@@ -875,9 +865,9 @@ void SfxProgress::SetWaitMode
                         pFrame;
                         pFrame = SfxViewFrame::GetNext( *pFrame, pImp->xObjSh ) )
                     pFrame->GetWindow().EnterWait();
-                SfxFrame* pFrm = pImp->xObjSh->GetMedium()->GetLoadTargetFrame();
-                if ( pFrm )
-                    pFrm->GetWindow().EnterWait();
+                //SfxFrame* pFrm = pImp->xObjSh->GetMedium()->GetLoadTargetFrame();
+                //if ( pFrm )
+                //  pFrm->GetWindow().EnterWait();
             }
 //(mba)/task
 /*
@@ -894,9 +884,9 @@ void SfxProgress::SetWaitMode
                         pFrame;
                         pFrame = SfxViewFrame::GetNext( *pFrame, pImp->xObjSh ) )
                     pFrame->GetWindow().LeaveWait();
-                SfxFrame* pFrm = pImp->xObjSh->GetMedium()->GetLoadTargetFrame();
-                if ( pFrm )
-                    pFrm->GetWindow().LeaveWait();
+                //SfxFrame* pFrm = pImp->xObjSh->GetMedium()->GetLoadTargetFrame();
+                //if ( pFrm )
+                //  pFrm->GetWindow().LeaveWait();
             }
 //(mba)/task
             /*
