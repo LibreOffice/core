@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: abi $ $Date: 2001-10-05 14:38:57 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 11:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,8 +389,8 @@ public:
     ~InputStreamTransformer();
 
     virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException );
-    virtual void SAL_CALL acquire( void ) throw( RuntimeException );
-    virtual void SAL_CALL release( void ) throw( RuntimeException );
+    virtual void SAL_CALL acquire( void ) throw();
+    virtual void SAL_CALL release( void ) throw();
 
     virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead )
         throw( NotConnectedException,
@@ -887,14 +887,14 @@ Any SAL_CALL InputStreamTransformer::queryInterface( const Type& rType ) throw( 
 
 
 
-void SAL_CALL InputStreamTransformer::acquire( void ) throw( RuntimeException )
+void SAL_CALL InputStreamTransformer::acquire( void ) throw()
 {
     OWeakObject::acquire();
 }
 
 
 
-void SAL_CALL InputStreamTransformer::release( void ) throw( RuntimeException )
+void SAL_CALL InputStreamTransformer::release( void ) throw()
 {
     OWeakObject::release();
 }

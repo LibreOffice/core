@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 11:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ ResultSetBase::~ResultSetBase()
 void SAL_CALL
 ResultSetBase::acquire(
     void )
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -130,7 +130,7 @@ ResultSetBase::acquire(
 void SAL_CALL
 ResultSetBase::release(
     void )
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }
@@ -493,14 +493,14 @@ public:
     }
 
     void SAL_CALL acquire( void )
-        throw( uno::RuntimeException )
+        throw()
     {
         OWeakObject::acquire();
     }
 
 
     void SAL_CALL release( void )
-        throw( uno::RuntimeException )
+        throw()
     {
         OWeakObject::release();
     }
