@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgname.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:51 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog RID_SVXDLG_NAME
     Text [ English ] = "Name" ;
     Text [ norwegian ] = "Navn" ;
     Text [ italian ] = "Nome" ;
-    Text [ portuguese_brazilian ] = "Nomear" ;
+    Text [ portuguese_brazilian ] = "Nome" ;
     Text [ portuguese ] = "Nome" ;
     Text [ finnish ] = "Nimi" ;
     Text [ danish ] = "Navn" ;
@@ -129,6 +129,9 @@ ModalDialog RID_SVXDLG_NAME
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nom";
     Text[ thai ] = "ชื่อ";
+    Text[ czech ] = "Název";
+    Text[ hebrew ] = "Name";
+    Text[ hindi ] = "नाम";
 };
  // RID_SVXDLG_MESSBOX -------------------------------------------------------
 ModalDialog RID_SVXDLG_MESSBOX
@@ -165,6 +168,15 @@ ModalDialog RID_SVXDLG_MESSBOX
     };
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
