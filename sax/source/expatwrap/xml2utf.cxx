@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2utf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-25 08:13:18 $
+ *  last change: $Author: jbu $ $Date: 2002-05-15 16:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
         }
 
         int nFound = str.indexOf( " encoding" );
-        if( nFound < str.getLength() ) {
+        if( nFound >= 0 ) {
             int nStop;
             int nStart = str.indexOf( "\"" , nFound );
             if( nStart < 0 || str.indexOf( "'" , nFound ) < nStart )
