@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xprintext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:43:46 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ SalPrinter::StartJob(
     XpSelectInput (pDisplay, aContext, XPPrintMask);
 
     char pJobName[ 64 ];
-    sprintf (pJobName, "%s.job-name: XPrint%d", pPrinterName, getpid() );
+    snprintf (pJobName, sizeof(pJobName), "%s.job-name: XPrint%d", pPrinterName, getpid() );
 
     XpStartJob( pDisplay, XPSpool );
 
