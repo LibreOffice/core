@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-20 14:30:48 $
+ *  last change: $Author: pb $ $Date: 2001-08-27 07:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,6 +584,7 @@ void IndexTabPage_Impl::InitializeIndex()
                             aIndexCB.InsertEntry( aToken );
                         }
                         String aSubIndex( TRIM( aKeywordPair.GetToken( 0, ';', nIdx ) ) );
+                        aSubIndex.Insert( ' ', 0 );
                         for ( j = 0; j < nRefCount; ++j )
                         {
                             if ( aIndexCB.GetEntryPos( aSubIndex ) != LISTBOX_ENTRY_NOTFOUND )
