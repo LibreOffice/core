@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-27 16:20:36 $
+ *  last change: $Author: cmc $ $Date: 2002-05-20 11:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1130,8 +1130,18 @@ ATTR_SETEMPHASIS:
                                 if( PLAINID->nEscapement )
                                     pSet->Put( SvxEscapementItem( nEsc, nProp,
                                                        PLAINID->nEscapement ));
+#if 0
+        /*
+        cmc: #i4727# I believe this is incorrect, other code that is counting
+        brackets so as to push/pop off the correct environment will have
+        pushed a new environment for the start { of this, but will not see the
+        } and so is out of sync for the rest of the document. If we actually
+        do want make this environment bleed into the surrounding environment
+        then we need to do it differently.
+        */
                                 // ueberlese die schliessende Klammer
                                 GetNextToken();
+#endif
                             }
                             break;
 
