@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.20 $
+*  $Revision: 1.21 $
 *
-*  last change: $Author: kz $ $Date: 2004-06-14 13:25:59 $
+*  last change: $Author: rt $ $Date: 2004-06-17 15:45:55 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -307,6 +307,17 @@ File gid_File_Bin_Cde_Open_Url
 End
 
 #endif
+
+File gid_File_Bin_Senddoc
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+  #ifdef UNX
+    Name = "senddoc";
+  #else
+    Name = "senddoc.exe";
+  #endif
+End
 
 #ifdef UNX
 
