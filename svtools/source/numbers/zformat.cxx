@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-01 13:32:53 $
+ *  last change: $Author: er $ $Date: 2002-11-13 17:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3904,18 +3904,41 @@ String SvNumberformat::GetMappedFormatstring(
         BOOL bDontQuote ) const
 {
     String aStr;
-    // 1 subformat matches all if no condition specified
-    BOOL bDefault1 = ( NumFor[1].GetnAnz() == 0 && eOp1 == NUMBERFORMAT_OP_NO );
+    BOOL bDefault[4];
+    // 1 subformat matches all if no condition specified,
+    bDefault[0] = ( NumFor[1].GetnAnz() == 0 && eOp1 == NUMBERFORMAT_OP_NO );
     // with 2 subformats [>=0];[<0] is implied if no condition specified
-    BOOL bDefault2 = ( !bDefault1 && NumFor[2].GetnAnz() == 0 &&
+    bDefault[1] = ( !bDefault[0] && NumFor[2].GetnAnz() == 0 &&
         eOp1 == NUMBERFORMAT_OP_GE && fLimit1 == 0.0 &&
         eOp2 == NUMBERFORMAT_OP_NO && fLimit2 == 0.0 );
-    // with 3 subformats [>0];[<0];[=0] is implied if no condition specified
-    BOOL bDefault3 = ( !bDefault2 && NumFor[2].GetnAnz() > 0 &&
+    // with 3 or more subformats [>0];[<0];[=0] is implied if no condition specified,
+    // note that subformats may be empty (;;;) and NumFor[2].GetnAnz()>0 is not checked.
+    bDefault[2] = ( !bDefault[0] && !bDefault[1] &&
         eOp1 == NUMBERFORMAT_OP_GT && fLimit1 == 0.0 &&
         eOp2 == NUMBERFORMAT_OP_LT && fLimit2 == 0.0 );
-    BOOL bDefault = bDefault1 || bDefault2 || bDefault3;
+    BOOL bDefaults = bDefault[0] || bDefault[1] || bDefault[2];
+    // from now on bDefault[] values are used to append empty subformats at the end
+    bDefault[3] = FALSE;
+    if ( !bDefaults )
+    {   // conditions specified
+        if ( eOp1 != NUMBERFORMAT_OP_NO && eOp2 == NUMBERFORMAT_OP_NO )
+            bDefault[0] = bDefault[1] = TRUE;                               // [];x
+        else if ( eOp1 != NUMBERFORMAT_OP_NO && eOp2 != NUMBERFORMAT_OP_NO &&
+                NumFor[2].GetnAnz() == 0 )
+            bDefault[0] = bDefault[1] = bDefault[2] = bDefault[3] = TRUE;   // [];[];;
+        // nothing to do if conditions specified for every subformat
+    }
+    else if ( bDefault[0] )
+        bDefault[0] = FALSE;    // a single unconditional subformat is never delimited
+    else
+    {
+        if ( bDefault[2] && NumFor[2].GetnAnz() == 0 && NumFor[1].GetnAnz() > 0 )
+            bDefault[3] = TRUE;     // special cases x;x;; and ;x;;
+        for ( int i=0; i<3 && !bDefault[i]; ++i )
+            bDefault[i] = TRUE;
+    }
     int nSem = 0;       // needed ';' delimiters
+    int nSub = 0;       // subformats delimited so far
     for ( int n=0; n<4; n++ )
     {
         if ( n > 0 )
@@ -3923,7 +3946,7 @@ String SvNumberformat::GetMappedFormatstring(
 
         String aPrefix;
 
-        if ( !bDefault )
+        if ( !bDefaults )
         {
             switch ( n )
             {
@@ -3955,13 +3978,12 @@ String SvNumberformat::GetMappedFormatstring(
         }
 
         USHORT nAnz = NumFor[n].GetnAnz();
-        if ( nAnz || aPrefix.Len() )
+        if ( nSem && (nAnz || aPrefix.Len()) )
         {
-            while ( nSem )
-            {
+            for ( ; nSem; --nSem )
                 aStr += ';';
-                nSem--;
-            }
+            for ( ; nSub <= n; ++nSub )
+                bDefault[nSub] = FALSE;
         }
 
         if ( aPrefix.Len() )
@@ -4021,6 +4043,10 @@ String SvNumberformat::GetMappedFormatstring(
                 }
             }
         }
+    }
+    for ( ; nSub<4 && bDefault[nSub]; ++nSub )
+    {   // append empty subformats
+        aStr += ';';
     }
     return aStr;
 }
