@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
+#   last change: $Author: dr $ $Date: 2001-07-30 11:28:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,29 +86,30 @@ CXXFILES = \
         XclImpExternsheet.cxx				\
         XclExpStream.cxx					\
         XclExpHelper.cxx					\
-        flttools.cxx \
-        read.cxx \
-        readchrt.cxx \
-        impop.cxx \
-        excimp8.cxx \
-        excel.cxx \
-        excform.cxx \
-        excform8.cxx \
-        fontbuff.cxx \
-        vfbuff.cxx \
-        xfbuff.cxx \
-        tokstack.cxx \
-        namebuff.cxx \
-        colrowst.cxx \
-        expop2.cxx \
-        excrecds.cxx \
-        excdoc.cxx \
-        exctools.cxx \
-        excobj.cxx \
-        excchart.cxx \
-        functab.cxx \
-        frmbase.cxx \
-        exccomp.cxx \
+        XclExpExternsheet.cxx				\
+        flttools.cxx						\
+        read.cxx							\
+        readchrt.cxx						\
+        impop.cxx							\
+        excimp8.cxx							\
+        excel.cxx							\
+        excform.cxx							\
+        excform8.cxx						\
+        fontbuff.cxx						\
+        vfbuff.cxx							\
+        xfbuff.cxx							\
+        tokstack.cxx						\
+        namebuff.cxx						\
+        colrowst.cxx						\
+        expop2.cxx							\
+        excrecds.cxx						\
+        excdoc.cxx							\
+        exctools.cxx						\
+        excobj.cxx							\
+        excchart.cxx						\
+        functab.cxx							\
+        frmbase.cxx							\
+        exccomp.cxx							\
         biffdump.cxx
 
 
@@ -118,29 +119,30 @@ SLOFILES =	\
         $(SLO)$/XclImpExternsheet.obj		\
         $(SLO)$/XclExpStream.obj			\
         $(SLO)$/XclExpHelper.obj			\
-        $(SLO)$/flttools.obj \
-        $(SLO)$/read.obj \
-        $(SLO)$/readchrt.obj \
-        $(SLO)$/impop.obj \
-        $(SLO)$/excimp8.obj \
-        $(SLO)$/excel.obj \
-        $(SLO)$/excform.obj \
-        $(SLO)$/excform8.obj \
-        $(SLO)$/fontbuff.obj \
-        $(SLO)$/vfbuff.obj \
-        $(SLO)$/xfbuff.obj \
-        $(SLO)$/tokstack.obj \
-        $(SLO)$/namebuff.obj \
-        $(SLO)$/colrowst.obj \
-        $(SLO)$/expop2.obj \
-        $(SLO)$/excrecds.obj \
-        $(SLO)$/excdoc.obj \
-        $(SLO)$/exctools.obj \
-        $(SLO)$/excobj.obj \
-        $(SLO)$/excchart.obj \
-        $(SLO)$/functab.obj \
-        $(SLO)$/frmbase.obj \
-        $(SLO)$/exccomp.obj \
+        $(SLO)$/XclExpExternsheet.obj		\
+        $(SLO)$/flttools.obj				\
+        $(SLO)$/read.obj					\
+        $(SLO)$/readchrt.obj				\
+        $(SLO)$/impop.obj					\
+        $(SLO)$/excimp8.obj					\
+        $(SLO)$/excel.obj					\
+        $(SLO)$/excform.obj					\
+        $(SLO)$/excform8.obj				\
+        $(SLO)$/fontbuff.obj				\
+        $(SLO)$/vfbuff.obj					\
+        $(SLO)$/xfbuff.obj					\
+        $(SLO)$/tokstack.obj				\
+        $(SLO)$/namebuff.obj				\
+        $(SLO)$/colrowst.obj				\
+        $(SLO)$/expop2.obj					\
+        $(SLO)$/excrecds.obj				\
+        $(SLO)$/excdoc.obj					\
+        $(SLO)$/exctools.obj				\
+        $(SLO)$/excobj.obj					\
+        $(SLO)$/excchart.obj				\
+        $(SLO)$/functab.obj					\
+        $(SLO)$/frmbase.obj					\
+        $(SLO)$/exccomp.obj					\
         $(SLO)$/biffdump.obj
 
 # --- Targets -------------------------------------------------------

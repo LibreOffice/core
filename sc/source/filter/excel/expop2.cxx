@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 09:56:08 $
+ *  last change: $Author: dr $ $Date: 2001-07-30 11:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #include "rangenam.hxx"
 #include "filtopt.hxx"
 
+#ifndef _SC_XCLEXPEXTERNSHEET_HXX
+#include "XclExpExternsheet.hxx"
+#endif
 
 extern const sal_Char*  pVBAStorageName;
 extern const sal_Char*  pVBASubStorageName;

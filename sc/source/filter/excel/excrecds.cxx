@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 14:18:24 $
+ *  last change: $Author: dr $ $Date: 2001-07-30 11:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,105 +117,12 @@
 #ifndef _SC_XCLEXPSTREAM_HXX
 #include "XclExpStream.hxx"
 #endif
+#ifndef _SC_XCLEXPEXTERNSHEET_HXX
+#include "XclExpExternsheet.hxx"
+#endif
 
 #include "xcl97rec.hxx"
 
-
-
-
-//-------------------------------------------------- class XclExpTabNumBuffer -
-
-XclExpTabNumBuffer::XclExpTabNumBuffer( ScDocument& rDoc ) :
-    bEnableLog( FALSE ),
-    nCodeCnt( 0 )
-{
-    nScCnt = rDoc.GetTableCount();
-    pBuffer = nScCnt ? new UINT32[ nScCnt ] : NULL;
-
-    for( UINT16 nTab = 0; nTab < nScCnt; nTab++ )
-    {
-        pBuffer[ nTab ] = 0;
-
-        // ignored tables (skipped by export, invalid Excel table number)
-        if( rDoc.IsScenario( nTab ) )
-            pBuffer[ nTab ] = EXC_TABBUF_FLAGIGNORE;
-
-        // external tables (skipped, with valid Excel table number for ref's)
-        else if( rDoc.GetLinkMode( nTab ) == SC_LINK_VALUE )
-            pBuffer[ nTab ] = EXC_TABBUF_FLAGEXT;
-    }
-    ApplyBuffer();
-
-    if( rDoc.GetExtDocOptions() )
-    {
-        CodenameList* pCList = rDoc.GetExtDocOptions()->GetCodenames();
-        if( pCList )
-            nCodeCnt = (UINT16) Min( pCList->Count(), (ULONG) 0xFFFF );
-    }
-
-
-}
-
-XclExpTabNumBuffer::~XclExpTabNumBuffer()
-{
-    if( pBuffer )
-        delete[] pBuffer;
-}
-
-void XclExpTabNumBuffer::ApplyBuffer()
-{
-    UINT16 nIndex = 0;
-    UINT16 nTab;
-    nExcCnt = nExtCnt = 0;
-
-    // regular tables
-    for( nTab = 0; nTab < nScCnt; nTab++ )
-    {
-        if( IsExportTable( nTab ) )
-        {
-            pBuffer[ nTab ] |= nIndex;
-             nIndex++;
-            nExcCnt++;
-        }
-        else
-            pBuffer[ nTab ] |= EXC_TABBUF_INVALID;
-    }
-
-    // external tables
-    for( nTab = 0; nTab < nScCnt; nTab++ )
-        if( IsExternal( nTab ) )
-        {
-            pBuffer[ nTab ] &= EXC_TABBUF_MASKFLAGS;
-            pBuffer[ nTab ] |= nIndex;
-             nIndex++;
-            nExtCnt++;
-        }
-}
-
-BOOL XclExpTabNumBuffer::IsExternal( UINT16 nScTab ) const
-{
-    return (nScTab < nScCnt) ? TRUEBOOL( pBuffer[ nScTab ] & EXC_TABBUF_FLAGEXT ) : FALSE;
-}
-
-BOOL XclExpTabNumBuffer::IsExportTable( UINT16 nScTab ) const
-{
-    DBG_ASSERT( nScTab < nScCnt, "XclExpTabNumBuffer::IsExportTable() - out of range!" );
-    return (pBuffer[ nScTab ] & EXC_TABBUF_MASKFLAGS) == 0;
-}
-
-UINT16 XclExpTabNumBuffer::GetExcTable( UINT16 nScTab ) const
-{
-    return (nScTab < nScCnt) ? (UINT16)(pBuffer[ nScTab ] & EXC_TABBUF_MASKTAB) : EXC_TABBUF_INVALID;
-}
-
-void XclExpTabNumBuffer::AppendTabRef( UINT16 nExcFirst, UINT16 nExcLast )
-{
-    if( bEnableLog )
-    {
-        Append( nExcFirst );
-        Append( nExcLast );
-    }
-}
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-28 07:14:06 $
+ *  last change: $Author: dr $ $Date: 2001-07-30 11:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
 
+#ifndef _SC_XCLEXPEXTERNSHEET_HXX
+#include "XclExpExternsheet.hxx"
+#endif
 #ifndef _SC_XCLEXPPIVOTTABLES_HXX
 #include "XclExpPivotTables.hxx"
 #endif
@@ -360,12 +363,12 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     UINT16  nExcTabCount    = rTabBuffer.GetExcTabCount();
     UINT16  nCodenames      = rR.nCodenames;
 
-    XclSstList*         pSstRecs            = NULL;
-    XclExternsheetList* pExternsheetRecs    = NULL;     // change: ExternsheetList includes Supbooks
+    XclSstList*             pSstRecs            = NULL;
+    XclExpExternsheetList*  pExternsheetRecs    = NULL;     // change: ExternsheetList includes Supbooks
     if ( rR.eDateiTyp >= Biff8 )
     {
         rR.pSstRecs         = pSstRecs          = new XclSstList;
-        rR.pExternsheetRecs = pExternsheetRecs  = new XclExternsheetList( &rR );
+        rR.pExternsheetRecs = pExternsheetRecs  = new XclExpExternsheetList( rR );
     }
 
     ExcNameList*    pNameList   = rR.pNameList  = new ExcNameList( rR );
