@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:34:02 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,23 @@ DECLARE_STL_STDKEY_SET( sal_Int32, SdXMLFormatMap );
 
 //////////////////////////////////////////////////////////////////////////////
 
+struct HeaderFooterPageSettingsImpl
+{
+    rtl::OUString maStrHeaderDeclName;
+    rtl::OUString maStrFooterDeclName;
+    rtl::OUString maStrDateTimeDeclName;
+};
+
+struct DateTimeDeclImpl
+{
+    rtl::OUString maStrText;
+    sal_Bool mbFixed;
+    sal_Int32 mnFormat;
+};
+
+
+//////////////////////////////////////////////////////////////////////////////
+
 class SdXMLExport : public SvXMLExport
 {
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxDocStyleFamilies;
@@ -155,6 +172,14 @@ class SdXMLExport : public SvXMLExport
     ::std::vector< ::rtl::OUString >        maDrawNotesPagesStyleNames;
     ::std::vector< ::rtl::OUString >        maMasterPagesStyleNames;
     ::rtl::OUString                         maHandoutMasterStyleName;
+    ::std::vector< HeaderFooterPageSettingsImpl >   maDrawPagesHeaderFooterSettings;
+    ::std::vector< HeaderFooterPageSettingsImpl >   maDrawNotesPagesHeaderFooterSettings;
+
+    ::std::vector< ::rtl::OUString >        maHeaderDeclsVector;
+    ::std::vector< ::rtl::OUString >        maFooterDeclsVector;
+    ::std::vector< DateTimeDeclImpl >       maDateTimeDeclsVector;
+
+    HeaderFooterPageSettingsImpl            maHandoutPageHeaderFooterSettings;
 
     XMLSdPropHdlFactory*                mpSdPropHdlFactory;
     XMLShapeExportPropertyMapper*       mpPropertySetMapper;
@@ -186,7 +211,7 @@ class SdXMLExport : public SvXMLExport
     void ImpPrepDrawMasterInfos();
     void ImpWritePageMasterInfos();
     void ImpPrepAutoLayoutInfos();
-
+    HeaderFooterPageSettingsImpl ImpPrepDrawPageHeaderFooterDecls( const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xDrawPage );
     ImpXMLEXPPageMasterInfo* ImpGetPageMasterInfoByName(const rtl::OUString& rName);
 
     void ImpPrepDrawPageInfos();
@@ -197,6 +222,8 @@ class SdXMLExport : public SvXMLExport
     BOOL ImpPrepAutoLayoutInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xPage, rtl::OUString& rName);
     void ImpWriteAutoLayoutInfos();
     void ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectangle& rRect);
+    void ImpWriteHeaderFooterDecls();
+    void ImplExportHeaderFooterDeclAttributes( const HeaderFooterPageSettingsImpl& aSettings );
 
     void exportFormsElement( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage );
     void exportPresentationSettings();
