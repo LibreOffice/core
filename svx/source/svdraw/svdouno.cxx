@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:00:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,7 +614,14 @@ sal_Bool SdrUnoObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& r
                 uno::Reference< awt::XGraphics > x = pOut->CreateUnoGraphics();
                 xView->setGraphics( x );
                 Point aP = pOut->LogicToPixel( aRect.TopLeft() );
-                xView->draw( aP.X(), aP.Y() );
+                try
+                {
+                    xView->draw( aP.X(), aP.Y() );
+                }
+                catch( const uno::Exception& )
+                {
+                    OSL_ENSURE( sal_False, "caught an exception while drawing the object!" );
+                }
             }
         }
         break;
