@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-30 15:02:39 $
+ *  last change: $Author: cd $ $Date: 2002-08-26 07:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,5 +194,8 @@
 #define FT_OK                               (RID_SFX_DOC_START+90)
 #define FT_CANCEL                           (RID_SFX_DOC_START+91)
 
-#endif
+#define STR_EXPORTASPDF_TITLE               (RID_SFX_DOC_START+92)
+#define STR_EXPORTBUTTON                    (RID_SFX_DOC_START+93)
+#define STR_EXPORTWITHCFGBUTTON             (RID_SFX_DOC_START+94)
 
+#endif
