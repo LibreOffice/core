@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 14:32:04 $
+ *  last change: $Author: sj $ $Date: 2001-10-08 16:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,6 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
     if ( rGraphic.GetType() != GRAPHIC_NONE )
     {
         sal_Int32   nMode = rConfigItem.ReadInt32( String( ResId( KEY_MODE, pResMgr ) ), 0 );
-
         if( rGraphic.GetType() == GRAPHIC_BITMAP )
         {
             // Auflösung wird eingestellt
@@ -892,6 +891,14 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             }
             else
                 aGraphic = rGraphic;
+
+            sal_Int32 nColors = rConfigItem.ReadInt32( String( ResId( KEY_COLORS, pResMgr ) ), 0 ); // #92767#
+            if ( nColors )  // graphic conversion necessary ?
+            {
+                BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
+                aBmpEx.Convert( (BmpConversion)nColors );   // the entries in the xml section have the same meaning as
+                aGraphic = aBmpEx;                          // they have in the BmpConversion enum, so it should be
+            }                                               // allowed to cast them
         }
         else
         {
@@ -913,7 +920,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             else
                 aGraphic = rGraphic;
         }
-    }
+       }
     else
         aGraphic = rGraphic;
 
