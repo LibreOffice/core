@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 07:13:58 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 15:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,12 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
+#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
+#endif
+
 #include <svtools/eitem.hxx>
+#include <vcl/msgbox.hxx>
 
 #include "recfloat.hxx"
 #include "dialog.hrc"
@@ -105,11 +110,31 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl( SfxBindings* pBindings ,
 
 BOOL SfxRecordingFloat_Impl::Close()
 {
-    SfxBindings& rBindings = GetBindings();
-    BOOL bRet = SfxFloatingWindow::Close();
-    SfxBoolItem aItem( FN_PARAM_1, TRUE );
-    rBindings.GetDispatcher()->Execute( SID_STOP_RECORDING, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+    BOOL bRet = TRUE;
+
+    // asking for recorded macro should be replaced if index access is available!
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = GetBindings().GetRecorder();
+    if ( xRecorder.is() && xRecorder->getRecordedMacro().getLength() )
+    {
+        QueryBox aBox( this, WB_YES_NO | WB_DEF_NO , String( SfxResId( STR_MACRO_LOSS ) ) );
+        aBox.SetText( String( STR_CANCEL_RECORDING ) );
+        bRet = ( aBox.Execute() == RET_YES );
+    }
+
+    if ( bRet )
+    {
+        SfxBindings& rBindings = GetBindings();
+        bRet = SfxFloatingWindow::Close();
+        SfxBoolItem aItem( FN_PARAM_1, TRUE );
+        rBindings.GetDispatcher()->Execute( SID_STOP_RECORDING, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+    }
+
     return bRet;
 }
 
+void SfxRecordingFloat_Impl::FillInfo( SfxChildWinInfo& rInfo ) const
+{
+    SfxFloatingWindow::FillInfo( rInfo );
+    rInfo.bVisible = sal_False;
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 07:13:55 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 15:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,9 +195,10 @@
 
 #define IMG_LST_STYLE_DESIGNER_HC       ( RC_DIALOG_BEGIN + 99 )
 
-#define RC_IMG_NORMAL                   ( RC_DIALOG_BEGIN + 100 )
-#define RC_IMG_HC                       ( RC_DIALOG_BEGIN + 101 )
-#define RC_BTN_RECORD                   ( RC_DIALOG_BEGIN + 102 )
+// 100-106 in tbxcust.hrc
+#define STR_MACRO_LOSS                  ( RC_DIALOG_BEGIN + 107 )
+#define STR_CANCEL_RECORDING            ( RC_DIALOG_BEGIN + 108 )
+
 
 #endif // #ifndef _SFX_DIALOG_HRC
 

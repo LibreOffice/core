@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 07:13:59 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 15:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,4 +87,18 @@ ToolBox SID_RECORDING_FLOATWINDOW
             Identifier = SID_STOP_RECORDING;
         };
     };
+};
+
+String STR_MACRO_LOSS
+{
+    Text = "Soll die Aufzeichnung wirklich abgebrochen werden? Alle bis zu diesem Punkt aufgezeichneten Schritte gehen verloren.";
+    Text [ english ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+    Text [ english_us ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+};
+
+String STR_CANCEL_RECORDING
+{
+    Text = "Aufzeichnung abbrechen";
+    Text [ english ] = "Cancel Recording";
+    Text [ english_us ] = "Cancel Recording";
 };
