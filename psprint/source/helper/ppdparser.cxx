@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-16 19:11:01 $
+ *  last change: $Author: pl $ $Date: 2001-12-06 17:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,7 +701,7 @@ void PPDParser::parseConstraint( const String& rLine )
 const String& PPDParser::getDefaultPaperDimension() const
 {
     if( m_pDefaultPaperDimension )
-        return m_pDefaultPaperDimension->m_aValue;
+        return m_pDefaultPaperDimension->m_aOption;
 
     return aEmptyString;
 }
