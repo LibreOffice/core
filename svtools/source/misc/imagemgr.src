@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-05 07:35:41 $
+ *  last change: $Author: pb $ $Date: 2002-11-11 10:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,103 +1161,103 @@ String STR_DESCRIPTION_FACTORY_MATH
 };
 String STR_DESCRIPTION_CALC_TEMPLATE
 {
-    Text = "%PRODUCTNAME 6.0 Tabellendokument Vorlage" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Spreadsheet Template" ;
-    Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de folha de c·lculo";
-    Text[ russian ] = "ÿ‡·ÎÓÌ ˝ÎÂÍÚÓÌÌÓÈ Ú‡·ÎËˆ˚ %PRODUCTNAME 6.0";
-    Text[ greek ] = "%PRODUCTNAME 6.0 Tabledocument Template";
-    Text[ dutch ] = "%productname% 6.0 Sjabloon voor werkbladdocumenten";
-    Text[ french ] = "%PRODUCTNAME 6.0 ModËle de classeur";
-    Text[ spanish ] = "%PRODUCTNAME 6.0 Plantilla de hoja de c·lculo";
-    Text[ finnish ] = "%PRODUCTNAME 6.0 Tabledocument Template";
-    Text[ italian ] = "%PRODUCTNAME 6.0 Modello di foglio elettronico";
-    Text[ danish ] = "%PRODUCTNAME 6.0-regnearksskabelon";
-    Text[ swedish ] = "%PRODUCTNAME 6.0 tabelldokument mall";
-    Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon arkusza kalkulacyjnego";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Tabledocument Template";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 Ë°®Ë®àÁÆó„Éâ„Ç≠„É•„É°„É≥„Éà „ÉÜ„É≥„Éó„É¨„Éº„Éà";
-    Text[ korean ] = "%PRODUCTNAME 6.0 Ïä§ÌîÑÎ†àÎìúÏãúÌä∏ ÌÖúÌîåÎ¶ø";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Â∑•‰ΩúË°®ÊñáÊ°£Ê†∑Âºè";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Â∑•‰ΩúË°®Êñá‰ª∂Ê®£Âºè";
-    Text[ turkish ] = "%PRODUCTNAME 6.0 Tabledocument Template";
-    Text[ arabic ] = "%PRODUCTNAME 6.0 Tabledocument Template";
-    Text[ catalan ] = "%PRODUCTNAME 6.0 Plantilla de full de c‡lcul";
-    Text[ thai ] = "%PRODUCTNAME 6.0 Spreadsheet Template";
+    Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tabellendokument Vorlage" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Spreadsheet Template" ;
+    Text[ portuguese ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modelo de folha de c·lculo";
+    Text[ russian ] = "ÿ‡·ÎÓÌ ˝ÎÂÍÚÓÌÌÓÈ Ú‡·ÎËˆ˚ %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION";
+    Text[ greek ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tabledocument Template";
+    Text[ dutch ] = "%productname% %PRODUCTXMLFILEFORMATVERSION Sjabloon voor werkbladdocumenten";
+    Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ModËle de classeur";
+    Text[ spanish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Plantilla de hoja de c·lculo";
+    Text[ finnish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tabledocument Template";
+    Text[ italian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modello di foglio elettronico";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-regnearksskabelon";
+    Text[ swedish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION tabelldokument mall";
+    Text[ polish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION - Szablon arkusza kalkulacyjnego";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tabledocument Template";
+    Text[ japanese ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Ë°®Ë®àÁÆó„Éâ„Ç≠„É•„É°„É≥„Éà „ÉÜ„É≥„Éó„É¨„Éº„Éà";
+    Text[ korean ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Ïä§ÌîÑÎ†àÎìúÏãúÌä∏ ÌÖúÌîåÎ¶ø";
+    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Â∑•‰ΩúË°®ÊñáÊ°£Ê†∑Âºè";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Â∑•‰ΩúË°®Êñá‰ª∂Ê®£Âºè";
+    Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tabledocument Template";
+    Text[ arabic ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tabledocument Template";
+    Text[ catalan ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Plantilla de full de c‡lcul";
+    Text[ thai ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Spreadsheet Template";
 };
 String STR_DESCRIPTION_DRAW_TEMPLATE
 {
-    Text = "%PRODUCTNAME 6.0 Zeichnungsvorlage" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Drawing Template" ;
-    Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de desenho";
-    Text[ russian ] = "ÿ‡·ÎÓÌ ËÒÛÌÍ‡ %PRODUCTNAME 6.0";
-    Text[ greek ] = "%PRODUCTNAME 6.0 Drawing Template";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Sjabloon voor tekeningen";
-    Text[ french ] = "%PRODUCTNAME 6.0 ModËle de dessin";
-    Text[ spanish ] = "%PRODUCTNAME 6.0 Plantilla de dibujo";
-    Text[ finnish ] = "%PRODUCTNAME 6.0 Drawing Template";
-    Text[ italian ] = "%PRODUCTNAME 6.0 Modelli di disegno";
-    Text[ danish ] = "%PRODUCTNAME 6.0-tegningsskabelon";
-    Text[ swedish ] = "%PRODUCTNAME 6.0 teckningsmall";
-    Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon rysunku";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Drawing Template";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 Âõ≥ÂΩ¢ÊèèÁîª„ÉÜ„É≥„Éó„É¨„Éº„Éà";
-    Text[ korean ] = "%PRODUCTNAME 6.0 Í∑∏Î¶¨Í∏∞ ÌÖúÌîåÎ¶ø";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 ÁªòÂõæÊ†∑Âºè";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Áπ™ÂúñÊ®£Âºè";
-    Text[ turkish ] = "%PRODUCTNAME 6.0 Drawing Template";
-    Text[ arabic ] = "%PRODUCTNAME 6.0 Drawing Template";
-    Text[ catalan ] = "%PRODUCTNAME 6.0 Plantilla de dibuix";
-    Text[ thai ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Zeichnungsvorlage" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing Template" ;
+    Text[ portuguese ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modelo de desenho";
+    Text[ russian ] = "ÿ‡·ÎÓÌ ËÒÛÌÍ‡ %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION";
+    Text[ greek ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing Template";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Sjabloon voor tekeningen";
+    Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ModËle de dessin";
+    Text[ spanish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Plantilla de dibujo";
+    Text[ finnish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing Template";
+    Text[ italian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modelli di disegno";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-tegningsskabelon";
+    Text[ swedish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION teckningsmall";
+    Text[ polish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION - Szablon rysunku";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing Template";
+    Text[ japanese ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Âõ≥ÂΩ¢ÊèèÁîª„ÉÜ„É≥„Éó„É¨„Éº„Éà";
+    Text[ korean ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Í∑∏Î¶¨Í∏∞ ÌÖúÌîåÎ¶ø";
+    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ÁªòÂõæÊ†∑Âºè";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Áπ™ÂúñÊ®£Âºè";
+    Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing Template";
+    Text[ arabic ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing Template";
+    Text[ catalan ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Plantilla de dibuix";
+    Text[ thai ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing Template";
 };
 String STR_DESCRIPTION_IMPRESS_TEMPLATE
 {
-    Text = "%PRODUCTNAME 6.0 Pr‰sentationsvorlage" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Presentation Template" ;
-    Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de apresentaÁ„o";
-    Text[ russian ] = "ÿ‡·ÎÓÌ ÔÂÁÂÌÚ‡ˆËË %PRODUCTNAME 6.0";
-    Text[ greek ] = "%PRODUCTNAME 6.0 Presentation Template";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Sjabloon voor presentaties";
-    Text[ french ] = "%PRODUCTNAME 6.0 ModËle de prÈsentation";
-    Text[ spanish ] = "%PRODUCTNAME 6.0 Plantilla de presentaciÛn";
-    Text[ finnish ] = "%PRODUCTNAME 6.0 Presentation Template";
-    Text[ italian ] = "%PRODUCTNAME 6.0 Modello di presentazione";
-    Text[ danish ] = "%PRODUCTNAME 6.0-prÊsentationsskabelon";
-    Text[ swedish ] = "%PRODUCTNAME 6.0 presentationsmall";
-    Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon prezentacji";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Presentation Template";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 „Éó„É¨„Çº„É≥„ÉÜ„Éº„Ç∑„Éß„É≥ „ÉÜ„É≥„Éó„É¨„Éº„Éà";
-    Text[ korean ] = "%PRODUCTNAME 6.0 ÌîÑÎ†àÏ††ÌÖåÏù¥ÏÖò ÌÖúÌîåÎ¶ø";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 ÊºîÁ§∫ÊñáÁ®øÊ†∑Âºè";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Á∞°Â†±Ê®£Âºè";
-    Text[ turkish ] = "%PRODUCTNAME 6.0 Presentation Template";
-    Text[ arabic ] = "%PRODUCTNAME 6.0 Presentation Template";
-    Text[ catalan ] = "%PRODUCTNAME 6.0 Plantilla de presentaciÛ";
-    Text[ thai ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Pr‰sentationsvorlage" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation Template" ;
+    Text[ portuguese ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modelo de apresentaÁ„o";
+    Text[ russian ] = "ÿ‡·ÎÓÌ ÔÂÁÂÌÚ‡ˆËË %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION";
+    Text[ greek ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation Template";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Sjabloon voor presentaties";
+    Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ModËle de prÈsentation";
+    Text[ spanish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Plantilla de presentaciÛn";
+    Text[ finnish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation Template";
+    Text[ italian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modello di presentazione";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-prÊsentationsskabelon";
+    Text[ swedish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION presentationsmall";
+    Text[ polish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION - Szablon prezentacji";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation Template";
+    Text[ japanese ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION „Éó„É¨„Çº„É≥„ÉÜ„Éº„Ç∑„Éß„É≥ „ÉÜ„É≥„Éó„É¨„Éº„Éà";
+    Text[ korean ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ÌîÑÎ†àÏ††ÌÖåÏù¥ÏÖò ÌÖúÌîåÎ¶ø";
+    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ÊºîÁ§∫ÊñáÁ®øÊ†∑Âºè";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Á∞°Â†±Ê®£Âºè";
+    Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation Template";
+    Text[ arabic ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation Template";
+    Text[ catalan ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Plantilla de presentaciÛ";
+    Text[ thai ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation Template";
 };
 String STR_DESCRIPTION_WRITER_TEMPLATE
 {
-    Text = "%PRODUCTNAME 6.0 Textdokument Vorlage" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Text Document Template" ;
-    Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de texto";
-    Text[ russian ] = "ÿ‡·ÎÓÌ ÚÂÍÒÚ‡ %PRODUCTNAME 6.0";
-    Text[ greek ] = "%PRODUCTNAME 6.0 Textdocument Template";
-    Text[ dutch ] = "%productname% 6.0 Sjabloon voor tekstdocumenten";
-    Text[ french ] = "%PRODUCTNAME 6.0 ModËle de texte";
-    Text[ spanish ] = "%PRODUCTNAME 6.0 Plantilla de documento de texto";
-    Text[ finnish ] = "%PRODUCTNAME 6.0 Textdocument Template";
-    Text[ italian ] = "%PRODUCTNAME 6.0 Modello di documento di testo";
-    Text[ danish ] = "%PRODUCTNAME 6.0-tekstdokumentskabelon";
-    Text[ swedish ] = "%PRODUCTNAME 6.0 textdokument mall";
-    Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon dokumentu tekstowego";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Textdocument Template";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 ÊñáÊõ∏„Éâ„Ç≠„É•„É°„É≥„Éà „ÉÜ„É≥„Éó„É¨„Éº„Éà";
-    Text[ korean ] = "%PRODUCTNAME 6.0 ÌÖçÏä§Ìä∏ Î¨∏ÏÑú ÌÖúÌîåÎ¶ø";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 ÊñáÊú¨ÊñáÊ°£Ê†∑Âºè";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 ÊñáÂ≠óÊñá‰ª∂Ê®£Âºè";
-    Text[ turkish ] = "%PRODUCTNAME 6.0 Textdocument Template";
-    Text[ arabic ] = "%PRODUCTNAME 6.0 Textdocument Template";
-    Text[ catalan ] = "%PRODUCTNAME 6.0 Plantilla de document de text";
-    Text[ thai ] = "%PRODUCTNAME 6.0 Text Document Template";
+    Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textdokument Vorlage" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Text Document Template" ;
+    Text[ portuguese ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modelo de texto";
+    Text[ russian ] = "ÿ‡·ÎÓÌ ÚÂÍÒÚ‡ %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION";
+    Text[ greek ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textdocument Template";
+    Text[ dutch ] = "%productname% %PRODUCTXMLFILEFORMATVERSION Sjabloon voor tekstdocumenten";
+    Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ModËle de texte";
+    Text[ spanish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Plantilla de documento de texto";
+    Text[ finnish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textdocument Template";
+    Text[ italian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modello di documento di testo";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-tekstdokumentskabelon";
+    Text[ swedish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION textdokument mall";
+    Text[ polish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION - Szablon dokumentu tekstowego";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textdocument Template";
+    Text[ japanese ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ÊñáÊõ∏„Éâ„Ç≠„É•„É°„É≥„Éà „ÉÜ„É≥„Éó„É¨„Éº„Éà";
+    Text[ korean ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ÌÖçÏä§Ìä∏ Î¨∏ÏÑú ÌÖúÌîåÎ¶ø";
+    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ÊñáÊú¨ÊñáÊ°£Ê†∑Âºè";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ÊñáÂ≠óÊñá‰ª∂Ê®£Âºè";
+    Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textdocument Template";
+    Text[ arabic ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textdocument Template";
+    Text[ catalan ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Plantilla de document de text";
+    Text[ thai ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Text Document Template";
 };
 String STR_DESCRIPTION_LOCALE_VOLUME
 {
@@ -1442,44 +1442,44 @@ String STR_DESCRIPTION_POWERPOINT_SHOW
 
 String STR_DESCRIPTION_SXMATH_DOC
 {
-    Text = "%PRODUCTNAME 6.0 Formel" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Formula" ;
+    Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formel" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formula" ;
 };
 
 String STR_DESCRIPTION_SXCHART_DOC
 {
-    Text = "%PRODUCTNAME 6.0 Diagramm" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Chart" ;
+    Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Diagramm" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Chart" ;
 };
 
 String STR_DESCRIPTION_SXDRAW_DOC
 {
-    Text = "%PRODUCTNAME 6.0 Zeichnung" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Drawing" ;
+    Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Zeichnung" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing" ;
 };
 
 String STR_DESCRIPTION_SXCALC_DOC
 {
-    Text = "%PRODUCTNAME 6.0 Tabellendokument" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Spreadsheet" ;
+    Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tabellendokument" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Spreadsheet" ;
 };
 
 String STR_DESCRIPTION_SXIMPRESS_DOC
 {
-    Text = "%PRODUCTNAME 6.0 Pr‰sentation" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Presentation" ;
+    Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Pr‰sentation" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation" ;
 };
 
 String STR_DESCRIPTION_SXWRITER_DOC
 {
-    Text = "%PRODUCTNAME 6.0 Textdokument" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Text Document" ;
+    Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textdokument" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Text Document" ;
 };
 
 String STR_DESCRIPTION_SXGLOBAL_DOC
 {
-    Text = "%PRODUCTNAME 6.0 Globaldokument" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Master Document" ;
+    Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Globaldokument" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Master Document" ;
 };
 
 String STR_DESCRIPTION_MATHML_DOC
