@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-13 11:34:16 $
+ *  last change: $Author: dl $ $Date: 2000-12-07 11:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,12 +123,8 @@ __EXPORT SdNavigatorWin::SdNavigatorWin( Window* pParent,
         pChildWinContext( pChWinCtxt ),
         // Bei Aenderung des DragTypes: SelectionMode der TLB anpassen!
         eDragType       ( NAVIGATOR_DRAGTYPE_EMBEDDED ),
-        bDocImported    ( FALSE ),
-        mpFocusWin      ( NULL )
+        bDocImported    ( FALSE )
 {
-    if( pParent )
-        mpFocusWin = pParent->GetParent();
-
     aTlbObjects.SetViewFrame( pBindings->GetDispatcher()->GetFrame() );
 
     FreeResource();
@@ -249,8 +245,15 @@ NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
 
 IMPL_LINK( SdNavigatorWin, GetFocusObjectsHdl, void *, p )
 {
-    if( mpFocusWin )
-        mpFocusWin->GrabFocus();
+    SfxViewShell* pCurSh = SfxViewShell::Current();
+
+    if ( pCurSh )
+    {
+        Window* pShellWnd = pCurSh->GetWindow();
+        if ( pShellWnd )
+            pShellWnd->GrabFocus();
+    }
+
     return 0;
 }
 
