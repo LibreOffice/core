@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-05 14:56:24 $
+ *  last change: $Author: oj $ $Date: 2002-03-27 14:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,14 +662,14 @@ void ODBTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
         aVal <<= m_CatalogName;
 
     Reference< XResultSet > xResult = m_xMetaData->getPrimaryKeys(aVal,m_SchemaName,m_Name);
+    Reference< XRow > xRow(xResult,UNO_QUERY);
 
-    if(xResult.is())
+    if ( xRow.is() )
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        if(xResult->next()) // there can be only one primary key
+        if ( xResult->next() ) // there can be only one primary key
         {
-            ::rtl::OUString aPkName = xRow->getString(6);
-            _rKeys.push_back(aPkName);
+            ::rtl::OUString sPkName = xRow->getString(6);
+            _rKeys.push_back(sPkName);
         }
     }
 }
@@ -681,12 +681,20 @@ void ODBTable::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
         aVal <<= m_CatalogName;
 
     Reference< XResultSet > xResult = m_xMetaData->getImportedKeys(aVal,m_SchemaName,m_Name);
+    Reference< XRow > xRow(xResult,UNO_QUERY);
 
-    if(xResult.is())
+    if ( xRow.is() )
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
-            _rKeys.push_back(xRow->getString(12));
+        while( xResult->next() )
+        {
+            sal_Int32 nKeySeq = xRow->getInt(9);
+            if ( nKeySeq == 1 )
+            { // only append when the sequnce number is 1 to forbid serveral inserting the same key name
+                ::rtl::OUString sFkName = xRow->getString(12);
+                if ( !xRow->wasNull() && sFkName.getLength() )
+                    _rKeys.push_back(sFkName);
+            }
+        }
     }
 }
 // -------------------------------------------------------------------------
