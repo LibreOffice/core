@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 09:57:58 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,12 +183,45 @@ hidspecial HID_DSADMIN_QUERIES_NEW                      { HelpId = HID_DSADMIN_Q
 hidspecial HID_DSADMIN_QUERIES_EDIT                     { HelpId = HID_DSADMIN_QUERIES_EDIT; };
 hidspecial HID_DSADMIN_QUERIES_DELETE                   { HelpId = HID_DSADMIN_QUERIES_DELETE; };
 
+hidspecial HID_TAB_DESIGN_TABLE_DESC                    { HelpId = HID_TAB_DESIGN_TABLE_DESC; };
+hidspecial HID_TAB_DESIGN_FIELDCONTROL                  { HelpId = HID_TAB_DESIGN_FIELDCONTROL; };
+hidspecial HID_TABLE_DESIGN_HELP_WINDOW                 { HelpId = HID_TABLE_DESIGN_HELP_WINDOW; };
+hidspecial HID_TAB_DESIGN_DESCWIN                       { HelpId = HID_TAB_DESIGN_DESCWIN; };
+hidspecial HID_TAB_DESIGN_TABLE_PROPS                   { HelpId = HID_TAB_DESIGN_TABLE_PROPS; };
+hidspecial HID_TABDESIGN_BACKGROUND                     { HelpId = HID_TABDESIGN_BACKGROUND; };
+hidspecial HID_CTL_TABLEEDIT                            { HelpId = HID_CTL_TABLEEDIT; };
+hidspecial HID_TABDESIGN_NAMECELL                       { HelpId = HID_TABDESIGN_NAMECELL; };
+hidspecial HID_TABDESIGN_TYPECELL                       { HelpId = HID_TABDESIGN_TYPECELL; };
+hidspecial HID_TABDESIGN_COMMENTCELL                    { HelpId = HID_TABDESIGN_COMMENTCELL; };
+hidspecial SID_TABLEDESIGN_INSERTROWS                   { HelpId = SID_TABLEDESIGN_INSERTROWS; };
+hidspecial SID_TABLEDESIGN_TABED_PRIMARYKEY             { HelpId = SID_TABLEDESIGN_TABED_PRIMARYKEY; };
+hidspecial HID_TLB_TABLEDESIGN                          { HelpId = HID_TLB_TABLEDESIGN; };
+hidspecial HID_TAB_DESIGN_HELP_TEXT_FRAME               { HelpId = HID_TAB_DESIGN_HELP_TEXT_FRAME; };
+hidspecial HID_TABLE_DESIGN_TABPAGE_GENERAL             { HelpId = HID_TABLE_DESIGN_TABPAGE_GENERAL; };
+hidspecial HID_TAB_ENT_DEFAULT                          { HelpId = HID_TAB_ENT_DEFAULT; };
+hidspecial HID_TAB_ENT_FORMAT_SAMPLE                    { HelpId = HID_TAB_ENT_FORMAT_SAMPLE; };
+hidspecial HID_TAB_ENT_FORMAT                           { HelpId = HID_TAB_ENT_FORMAT; };
+hidspecial HID_TAB_ENT_BOOL_DEFAULT                     { HelpId = HID_TAB_ENT_BOOL_DEFAULT; };
+hidspecial HID_TAB_ENT_REQUIRED                         { HelpId = HID_TAB_ENT_REQUIRED; };
+hidspecial HID_TAB_ENT_AUTOINCREMENT                    { HelpId = HID_TAB_ENT_AUTOINCREMENT; };
+hidspecial HID_TAB_ENT_TEXT_LEN                         { HelpId = HID_TAB_ENT_TEXT_LEN; };
+hidspecial HID_TAB_ENT_TYPE                             { HelpId = HID_TAB_ENT_TYPE; };
+hidspecial HID_TAB_ENT_COLUMNNAME                       { HelpId = HID_TAB_ENT_COLUMNNAME; };
+hidspecial HID_TAB_ENT_NUMTYP                           { HelpId = HID_TAB_ENT_NUMTYP; };
+hidspecial HID_TAB_ENT_LEN                              { HelpId = HID_TAB_ENT_LEN; };
+hidspecial HID_TAB_ENT_SCALE                            { HelpId = HID_TAB_ENT_SCALE; };
+hidspecial HID_BROWSER_TABLE_CREATE_DESIGN              { HelpId = HID_BROWSER_TABLE_CREATE_DESIGN; };
+hidspecial HID_BROWSER_TABLE_EDIT                       { HelpId = HID_BROWSER_TABLE_EDIT; };
+hidspecial HID_BROWSER_TABLE_DELETE                     { HelpId = HID_BROWSER_TABLE_DELETE; };
 hidspecial HID_SQLERROR_EXCHAIN_ERRORS                  { HelpId = HID_SQLERROR_EXCHAIN_ERRORS; };
 hidspecial HID_DBACCESS_START                           { HelpId = HID_DBACCESS_START; };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/02/05 09:57:58  fs
+ *  #83327# 2 new help ids for the sql error message dialog
+ *
  *  Revision 1.13  2001/02/05 09:53:41  oj
  *  new ids
  *
@@ -231,4 +264,5 @@ hidspecial HID_DBACCESS_START                           { HelpId = HID_DBACCESS_
  *
  *  Revision 1.0 30.10.00 14:02:39  fs
  ************************************************************************/
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 10:08:41 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,39 @@
 #define HID_DSADMIN_QUERIES_DELETE                  (HID_DBACCESS_START + 109)
 #define HID_DSADMIN_QUERYADMINISTRATION             (HID_DBACCESS_START + 110)
 
-#define HID_SQLERROR_EXCHAIN_ERRORS                 (HID_DBACCESS_START + 111)
-#define HID_SQLERROR_EXCHAIN_TEXT                   (HID_DBACCESS_START + 112)
+
+#define HID_TAB_DESIGN_TABLE_DESC                   (HID_DBACCESS_START + 111)
+#define HID_TAB_DESIGN_FIELDCONTROL                 (HID_DBACCESS_START + 112)
+#define HID_TABLE_DESIGN_HELP_WINDOW                (HID_DBACCESS_START + 113)
+#define HID_TAB_DESIGN_DESCWIN                      (HID_DBACCESS_START + 114)
+#define HID_TAB_DESIGN_TABLE_PROPS                  (HID_DBACCESS_START + 115)
+#define HID_TABDESIGN_BACKGROUND                    (HID_DBACCESS_START + 116)
+#define HID_CTL_TABLEEDIT                           (HID_DBACCESS_START + 117)
+#define HID_TABDESIGN_NAMECELL                      (HID_DBACCESS_START + 118)
+#define HID_TABDESIGN_TYPECELL                      (HID_DBACCESS_START + 119)
+#define HID_TABDESIGN_COMMENTCELL                   (HID_DBACCESS_START + 120)
+#define SID_TABLEDESIGN_INSERTROWS                  (HID_DBACCESS_START + 121)
+#define SID_TABLEDESIGN_TABED_PRIMARYKEY            (HID_DBACCESS_START + 122)
+#define HID_TLB_TABLEDESIGN                         (HID_DBACCESS_START + 123)
+#define HID_TAB_DESIGN_HELP_TEXT_FRAME              (HID_DBACCESS_START + 124)
+#define HID_TABLE_DESIGN_TABPAGE_GENERAL            (HID_DBACCESS_START + 125)
+#define HID_TAB_ENT_DEFAULT                         (HID_DBACCESS_START + 126)
+#define HID_TAB_ENT_FORMAT_SAMPLE                   (HID_DBACCESS_START + 127)
+#define HID_TAB_ENT_FORMAT                          (HID_DBACCESS_START + 128)
+#define HID_TAB_ENT_BOOL_DEFAULT                    (HID_DBACCESS_START + 129)
+#define HID_TAB_ENT_REQUIRED                        (HID_DBACCESS_START + 130)
+#define HID_TAB_ENT_AUTOINCREMENT                   (HID_DBACCESS_START + 131)
+#define HID_TAB_ENT_TEXT_LEN                        (HID_DBACCESS_START + 132)
+#define HID_TAB_ENT_TYPE                            (HID_DBACCESS_START + 133)
+#define HID_TAB_ENT_COLUMNNAME                      (HID_DBACCESS_START + 134)
+#define HID_TAB_ENT_NUMTYP                          (HID_DBACCESS_START + 135)
+#define HID_TAB_ENT_LEN                             (HID_DBACCESS_START + 136)
+#define HID_TAB_ENT_SCALE                           (HID_DBACCESS_START + 137)
+#define HID_BROWSER_TABLE_CREATE_DESIGN             (HID_DBACCESS_START + 138)
+#define HID_BROWSER_TABLE_EDIT                      (HID_DBACCESS_START + 139)
+#define HID_BROWSER_TABLE_DELETE                    (HID_DBACCESS_START + 140)
+#define HID_SQLERROR_EXCHAIN_ERRORS                 (HID_DBACCESS_START + 141)
+#define HID_SQLERROR_EXCHAIN_TEXT                   (HID_DBACCESS_START + 142)
 
 // don't forget to update the file util/hidother.src
 #endif // _DBA_DBACCESS_HELPID_HRC_
@@ -208,6 +239,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/02/05 10:08:41  fs
+ *  #83327# 2 new help ids for the sql error message dialog
+ *
  *  Revision 1.18  2001/02/05 09:52:21  oj
  *  new ids
  *
