@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:54:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #include <vcl/cursor.hxx>
 #endif
 
+#ifndef _SVX_UNOTEXT_HXX
+#include "unotext.hxx"
+#endif
 
 #include "editobj.hxx"
 #include "outlobj.hxx"
@@ -724,7 +727,7 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
             // alle Wins als OutlinerView beim Outliner anmelden
             if (!bOnlyOneView) {
                 for (i=0; i<nWinAnz; i++) {
-                    OutputDevice* pOut=GetWin(i);
+                    OutputDevice* pOut=GetWin((USHORT)i);
                     if (pOut!=pWin && pOut->GetOutDevType()==OUTDEV_WINDOW) {
                         OutlinerView* pOutlView=ImpMakeOutlinerView((Window*)pOut,!bEmpty,NULL);
                         pTextEditOutliner->InsertView(pOutlView,i);
@@ -1753,3 +1756,29 @@ BOOL SdrObjEditView::EndMacroObj()
     }
 }
 
+/** fills the given any with a XTextCursor for the current text selection.
+    Leaves the any untouched if there currently is no text selected */
+void SdrObjEditView::getTextSelection( ::com::sun::star::uno::Any& rSelection )
+{
+    if( IsTextEdit() )
+    {
+        OutlinerView* pOutlinerView = GetTextEditOutlinerView();
+        if( pOutlinerView && pOutlinerView->HasSelection() )
+        {
+            SdrObject* pObj = GetTextEditObject();
+
+            if( pObj )
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > xText( pObj->getUnoShape(), ::com::sun::star::uno::UNO_QUERY );
+                if( xText.is() )
+                {
+                    SvxUnoTextBase* pRange = SvxUnoTextBase::getImplementation( xText );
+                    if( pRange )
+                    {
+                        rSelection <<= pRange->createTextCursorBySelection( pOutlinerView->GetSelection() );
+                    }
+                }
+            }
+        }
+    }
+}
