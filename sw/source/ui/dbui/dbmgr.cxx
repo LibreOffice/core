@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-01-26 15:51:55 $
+ *  last change: $Author: os $ $Date: 2001-02-09 13:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,7 +1236,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
         {
             // Beim Speichern wurde kein Abbruch gedrueckt
             SfxMedium* pOrig = pSh->GetView().GetDocShell()->GetMedium();
-            String sOldName(pOrig->GetPhysicalName());
+            String sOldName(pOrig->GetURLObject().GetMainURL());
             const SfxFilter* pSfxFlt = SwIoSystem::GetFileFilter(
                                                     sOldName, ::aEmptyStr );
             String sAddress;
@@ -1291,7 +1291,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
                     }
                     else
                     {
-                        INetURLObject aTempFile(aTemp.GetFileName());
+                        INetURLObject aTempFile(aTemp.GetURL());
                         aPrtMonDlg.aPrinter.SetText( aTempFile.GetBase() );
                         String sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
                         sStat += ' ';
@@ -1317,7 +1317,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
                             // alle versteckten Felder/Bereiche entfernen
                             pDoc->RemoveInvisibleContent();
 
-                            SfxMedium* pDstMed = new SfxMedium( aTempFile.GetFull(), STREAM_STD_READWRITE, TRUE );
+                            SfxMedium* pDstMed = new SfxMedium( aTempFile.GetMainURL(), STREAM_STD_READWRITE, TRUE );
                             pDstMed->SetFilter( pSfxFlt );
 
                             xDocSh->DoSaveAs(*pDstMed);
