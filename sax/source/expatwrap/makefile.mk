@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 18:49:59 $
+#   last change: $Author: rt $ $Date: 2004-09-08 15:58:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,11 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 #-----------------------------------------------------------
+.IF "$(SYSTEM_EXPAT)" == "YES"
+CFLAGS+=-DSYSTEM_EXPAT
+.ELSE
 CFLAGS += -DXML_UNICODE
+.ENDIF
 
 SLOFILES =\
         $(SLO)$/xml2utf.obj\
