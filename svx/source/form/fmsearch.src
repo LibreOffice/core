@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:01:45 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 20:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ dutch ] = "~Formulier :";
         Text[ french ] = "Formulaire";
         Text[ spanish ] = "~Formulario";
-        Text[ finnish ] = "Lomake:";
+        Text[ finnish ] = "muoto";
         Text[ italian ] = "Formulario";
         Text[ danish ] = "~Formular :";
         Text[ swedish ] = "~Formul‰r";
@@ -284,7 +284,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "T¸m alanlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Todos los campos";
-        Text[ finnish ] = "Kaikki kent‰t";
+        Text[ finnish ] = "Kaikki kent?t";
     };
     RadioButton RB_SINGLEFIELD
     {
@@ -298,7 +298,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ dutch ] = "~Een enkel veld :";
         Text[ french ] = "Champ unique";
         Text[ spanish ] = "~Campo individual";
-        Text[ finnish ] = "Yksitt‰inen kentt‰:";
+        Text[ finnish ] = "Yksitt?inen kentt?";
         Text[ italian ] = "Campo singolo";
         Text[ danish ] = "Enkelt felt :";
         Text[ swedish ] = "~Enskilt f‰lt";
@@ -361,7 +361,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ dutch ] = "~Positie :";
         Text[ french ] = "Position";
         Text[ spanish ] = "~PosiciÛn";
-        Text[ finnish ] = "Sijainti:";
+        Text[ finnish ] = "Sijainti";
         Text[ italian ] = "~Posizione";
         Text[ danish ] = "Placering :";
         Text[ swedish ] = "~Position";
@@ -412,7 +412,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Alan format˝n˝ uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Usar formato de ~campo";
-        Text[ finnish ] = "K‰yt‰ kent‰n muotoa";
+        Text[ finnish ] = "K?yt? kent?n muotoa";
     };
     CheckBox CB_CASE
     {
@@ -472,7 +472,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Geriye doru ara";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Buscar hacia ~atr·s";
-        Text[ finnish ] = "Etsi taaksep‰in";
+        Text[ finnish ] = "Etsi taaksep?in";
     };
     CheckBox CB_STARTOVER
     {
@@ -562,7 +562,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Genel arama terimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ExpresiÛn ~regular";
-        Text[ finnish ] = "S‰‰nnˆllinen lauseke";
+        Text[ finnish ] = "S??nn?linen lauseke";
     };
     CheckBox CB_APPROX
     {
@@ -912,7 +912,7 @@ String RID_STR_RECORDSEARCH_METHODS
     Text[ korean ] = "ÌïÑÎìúÏóêÏÑú ÏûÑÏùòÎ°ú;ÌïÑÎìú ÏãúÏûëÏóê;ÌïÑÎìú ÎÅùÏóê;Ï†ÑÏ≤¥ ÌïÑÎìú";
     Text[ turkish ] = "Alanda rasgele;Alan ba˛˝nda;Alan sonunda;T¸m alanda";
     Text[ catalan ] = "cualquier parte en campo;al principio del campo;al final del campo;todo el campo";
-    Text[ finnish ] = "kent‰ss‰ miss‰ tahansa;kent‰n alussa;kent‰n lopussa;koko kentt‰";
+    Text[ finnish ] = "kent?ss? miss? tahansa;kent?n alussa;kent?n lopussa;koko kentt?";
 };
 
 String RID_STR_RECORDSEARCH_BUTTONS
@@ -940,7 +940,7 @@ String RID_STR_RECORDSEARCH_BUTTONS
     Text[ turkish ] = "Ba˛tan;Sondan;Ara;›ptal";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Desde el principio;~Desde el final;~Buscar;~Cancelar";
-    Text[ finnish ] = "Ylh‰‰lt‰;Alhaalta;Etsi;Peruuta";
+    Text[ finnish ] = "Ylh??lt?;Alhaalta;Etsi;Peruuta";
 };
 
 ErrorBox RID_SVXERR_SEARCH_NORECORD
@@ -968,7 +968,7 @@ ErrorBox RID_SVXERR_SEARCH_NORECORD
     Message[ turkish ] = "Girdiiniz verilere uygun veri k¸meleri bulunamad˝!";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "°No se encontrÛ ning˙n registro de datos adecuado a su informaciÛn!";
-    Message[ finnish ] = "Tietoja vastaavia tietueita ei lˆytynyt.";
+    Message[ finnish ] = "Tietoja vastaavia tietueita ei l?tynyt.";
 };
 
 ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
@@ -1052,6 +1052,7 @@ String RID_STR_SEARCH_COUNTING
     Text[ catalan ] = "contando registros de datos";
     Text[ finnish ] = "lasketaan tietueet";
 };
+
 
 
 
