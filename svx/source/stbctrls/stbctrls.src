@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:10:30 $
+ *  last change: $Author: obo $ $Date: 2001-02-09 21:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ Menu RID_SVXMNU_ZOOM
             Text = "Optimal" ;
             Text [ English ] = "Optimal" ;
             text [ english_us ] = "Optimal" ;
-            Text [ portuguese ] = "Optimizado" ;
+            Text [ portuguese ] = "Optimizar" ;
             Text [ portuguese_brazilian ] = "Optimal" ;
             Text [ swedish ] = "Optimal" ;
             Text [ danish ] = "Optimal" ;
@@ -297,7 +297,7 @@ Menu RID_SVXMNU_ZOOM
             Text[ dutch ] = "Paginabreedte";
             Text[ chinese_simplified ] = "Ò³Ών";
             Text[ greek ] = "Πλάτος σελίδας";
-            Text[ korean ] = "ΖδΐΜΑφ ³ΚΊρ";
+            Text[ korean ] = "ΒΚ ³ΚΊρ";
             Text[ turkish ] = "Sayfa geniώliπi";
             Text[ language_user1 ] = " ";
         };
@@ -327,7 +327,7 @@ Menu RID_SVXMNU_ZOOM
             Text[ dutch ] = "Hele pagina";
             Text[ chinese_simplified ] = "ΥϋÒ³";
             Text[ greek ] = "Ολόκληρη σελίδα";
-            Text[ korean ] = "ΖδΐΜΑφ ΐόΓΌ";
+            Text[ korean ] = "ΒΚ ΐόΓΌ";
             Text[ turkish ] = "Tόm sayfa";
             Text[ language_user1 ] = " ";
         };
