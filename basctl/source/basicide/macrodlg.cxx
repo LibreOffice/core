@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 15:28:34 $
+ *  last change: $Author: tbe $ $Date: 2001-09-27 15:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
         aMacroFromTxT(      this,   IDEResId( RID_TXT_MACROFROM ) ),
         aBasicBox(          this,   IDEResId( RID_CTRL_LIB ) ),
         aRunButton(         this,   IDEResId( RID_PB_RUN ) ),
-        aCancelCloseButton( this,   IDEResId( RID_PB_CANCEL ) ),
+        aCloseButton(       this,   IDEResId( RID_PB_CLOSE ) ),
         aAssignButton(      this,   IDEResId( RID_PB_ASSIGN ) ),
         aEditButton(        this,   IDEResId( RID_PB_EDIT ) ),
         aNewDelButton(      this,   IDEResId( RID_PB_DEL ) ),
@@ -115,7 +115,6 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
 
     nMode = MACROCHOOSER_ALL;
     bNewDelIsDel = TRUE;
-    bCancelCloseIsCancel = TRUE;
     //bAcceptDescription = TRUE;
 
     // Der Sfx fragt den BasicManager nicht, ob modified
@@ -127,7 +126,7 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
     aMacroBox.SetHighlightRange(); // ueber ganze Breite selektieren
 
     aRunButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
-    aCancelCloseButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
+    aCloseButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     aAssignButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     aEditButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     aNewDelButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
@@ -249,7 +248,6 @@ IMPL_LINK( MacroChooser, EditLoseFocusHdl, MultiLineEdit *, pEdit )
 /*
 IMPL_LINK_INLINE_START( MacroChooser, DescriptionModifyHdl, MultiLineEdit *, pEdit )
 {
-    CheckCancelClose();
     return 0;
 }
 IMPL_LINK_INLINE_END( MacroChooser, DescriptionModifyHdl, MultiLineEdit *, pEdit )
@@ -262,7 +260,7 @@ IMPL_LINK( MacroChooser, EditAccHdl, Accelerator *, pAcc )
     {
         bAcceptDescription = FALSE;
         UpdateFields();
-        aCancelCloseButton.GrabFocus();
+        aCloseButton.GrabFocus();
     }
 
     return 0;
@@ -312,7 +310,7 @@ short __EXPORT MacroChooser::Execute()
     UpdateFields();
 
     if ( StarBASIC::IsRunning() )
-        aCancelCloseButton.GrabFocus();
+        aCloseButton.GrabFocus();
 
     Window* pPrevDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
@@ -323,14 +321,6 @@ short __EXPORT MacroChooser::Execute()
     return nRet;
 }
 
-void MacroChooser::CheckCancelClose()
-{
-    if ( bCancelCloseIsCancel )
-    {
-        bCancelCloseIsCancel = FALSE;
-        aCancelCloseButton.SetText( String( IDEResId( RID_STR_CLOSE ) ) );
-    }
-}
 
 void MacroChooser::EnableButton( Button& rButton, BOOL bEnable )
 {
@@ -694,10 +684,9 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         StoreMacroDescription();
         EndDialog( MACRO_OK_RUN );
     }
-    else if ( pButton == &aCancelCloseButton )
+    else if ( pButton == &aCloseButton )
     {
-        if ( !bCancelCloseIsCancel )
-            StoreMacroDescription();
+        StoreMacroDescription();
         EndDialog( MACRO_CLOSE );
     }
     else if ( ( pButton == &aEditButton ) || ( pButton == &aNewDelButton ) )
@@ -733,7 +722,6 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 }
                 CheckButtons();
                 UpdateFields();
-                CheckCancelClose();
                 //if ( aMacroBox.GetCurEntry() )    // OV-Bug ?
                 //  aMacroBox.Select( aMacroBox.GetCurEntry() );
             }

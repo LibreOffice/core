@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: tbe $ $Date: 2001-09-27 15:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #define RID_ED_MACRONAME                 5
 #define RID_TXT_DESCRIPTION              6
 #define RID_PB_RUN                       8
-#define RID_PB_CANCEL                    9
+#define RID_PB_CLOSE                     9
 #define RID_PB_EDIT                     10
 #define RID_PB_ORG                      11
 #define RID_PB_DEL                      12

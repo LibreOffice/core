@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 15:28:34 $
+ *  last change: $Author: tbe $ $Date: 2001-09-27 15:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ private:
     BasicTreeListBox        aBasicBox;
 
     PushButton              aRunButton;
-    CancelButton            aCancelCloseButton;
+    CancelButton            aCloseButton;
     PushButton              aAssignButton;
     PushButton              aEditButton;
     PushButton              aNewDelButton;
@@ -115,7 +115,6 @@ private:
     //ExtendedMultiLineEdit aDescrEdit;
 
     BOOL                bNewDelIsDel;
-    BOOL                bCancelCloseIsCancel;
     //BOOL              bAcceptDescription;
     BOOL                bForceStoreBasic;
 
@@ -138,7 +137,6 @@ private:
     //DECL_LINK( EditGotFocusHdl, MultiLineEdit * );
     //DECL_LINK( EditLoseFocusHdl, MultiLineEdit * );
     //DECL_LINK( EditAccHdl, Accelerator * );
-    void                CheckCancelClose();
 
     //void              SetInfo( SbxVariable* pVar );
     String              GetInfo( SbxVariable* pVar );
