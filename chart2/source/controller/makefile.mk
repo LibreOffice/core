@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: iha $ $Date: 2004-01-17 13:09:45 $
+#   last change: $Author: kz $ $Date: 2004-05-18 18:34:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,6 +143,7 @@ RESLIB1LIST=\
     $(SRS)$/chcdialogs.srs
 
 RESLIB1NAME=	$(TARGET)
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=$(RESLIB1LIST)
 RESLIB1DEPN=$(RESLIB1LIST)
 
