@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-08 15:39:22 $
+#   last change: $Author: vg $ $Date: 2003-04-24 17:44:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,12 @@ PACKAGE=com$/sun$/star$/drawing
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    AccessibleShape.idl      		\
+    AccessibleGraphicShape.idl      \
+    AccessibleOLEShape.idl      	\
+    AccessibleDrawDocumentView.idl	\
+    AccessibleSlideView.idl			\
+    AccessibleSlideViewObject.idl	\
     AccessibleGraphControl.idl\
     Alignment.idl\
     AppletShape.idl\
