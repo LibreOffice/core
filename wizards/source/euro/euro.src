@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tv $ $Date: 2001-03-30 12:07:45 $
+ *  last change: $Author: kz $ $Date: 2001-04-02 19:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ Text[ english_us ] = "Note: Currency amounts from external links and currency co
     Text[ dutch ] = "Tip: Bedragen in valuta die verbonden zijn met externe links en valuta omrekeningsfactoren in celformules kunnen niet worden omgerekend.";
     Text[ french ] = "Avertissement : Il est impossible de convertir les montants liés à des références externes, de même que les facteurs de conversion inclus dans des cellules contenant des formules.";
     Text[ spanish ] = "Advertencia: No se pueden convertir los importes monetarios de referencias externas ni los factores de conversión de moneda en fórmulas.";
-    Text[ italian ] = "Nota: non è possibile convertire gli importi monetari connessi a riferimenti esterni, nonché a fattori di conversione monetaria in celle contenenti formule.";
+    Text[ italian ] = "Nota: non è possibile convertire gli importi monetari provenienti da riferimenti esterni, nonché fattori di conversione monetaria in formule.";
     Text[ danish ] = "Henvisning: Det er ikke muligt at konvertere valutabeløb, som relaterer til eksterne referencer, og valutaomregningsfaktorer i celleformler.";
     Text[ swedish ] = "OBS: valutabelopp som har externa referenser, liksom valutaomräkningsfaktorer i formler kan inte konverteras.";
     Text[ polish ] = "Wskazówka: Kwot (waluty) z zewnêtrznych po³¹czeñ oraz przeliczników waluty w formu³ach komórek nie mo¿na skonwertowaæ.";
