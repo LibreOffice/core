@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2001-03-23 09:22:44 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 10:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,14 @@ static ByteString& getEmptyByteString()
 
 static String toUncPath( const String& rPath )
 {
+#ifdef TF_FILEURL
+    ::rtl::OUString aFileURL;
+
+    if( ::osl::FileBase::getFileURLFromSystemPath( rPath, aFileURL ) != ::osl::FileBase::E_None )
+        aFileURL = rPath;
+
+    return aFileURL;
+#else
     ::rtl::OUString aUncPath;
     // check ir rFileName is already UNC; if not make it so
     if( rPath.CompareToAscii( "//", 2 ) == COMPARE_EQUAL )
@@ -139,6 +147,7 @@ static String toUncPath( const String& rPath )
     else if( ::osl::FileBase::normalizePath( rPath, aUncPath ) != ::osl::FileBase::E_None )
         aUncPath = rPath;
     return aUncPath;
+#endif
 }
 
 static ULONG ImplSysGetConfigTimeStamp( const XubString& rFileName )
