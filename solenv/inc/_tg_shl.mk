@@ -164,6 +164,12 @@ SHL1DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_d
 .ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
 
 .IF "$(SHL1TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(SHL1TARGETN:b)_linkinc.ls
+$(SHL1TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(SHL1TARGETN) : \
                     $(SHL1OBJS)\
                     $(SHL1DESCRIPTIONOBJ)\
@@ -325,7 +331,6 @@ $(SHL1TARGETN) : \
 .ELSE			# "$(linkinc)"==""
         +if exist $(MISC)$/$(SHL1TARGET).lnk del $(MISC)$/$(SHL1TARGET).lnk
         +if exist $(MISC)$/$(SHL1TARGET).lst del $(MISC)$/$(SHL1TARGET).lst
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
         +type $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL1BASEX) \
@@ -338,9 +343,8 @@ $(SHL1TARGETN) : \
         $(STDSHL) \
         $(SHL1LINKRES) \
         ) >> $(MISC)$/$(SHL1TARGET).lnk
-        +type $(MISC)$/linkinc.ls  >> $(MISC)$/$(SHL1TARGET).lnk
+        +type $(MISC)$/$(SHL1TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL1TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL1TARGET).lnk
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -591,6 +595,12 @@ SHL2DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_d
 .ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
 
 .IF "$(SHL2TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(SHL2TARGETN:b)_linkinc.ls
+$(SHL2TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(SHL2TARGETN) : \
                     $(SHL2OBJS)\
                     $(SHL2DESCRIPTIONOBJ)\
@@ -752,7 +762,6 @@ $(SHL2TARGETN) : \
 .ELSE			# "$(linkinc)"==""
         +if exist $(MISC)$/$(SHL2TARGET).lnk del $(MISC)$/$(SHL2TARGET).lnk
         +if exist $(MISC)$/$(SHL2TARGET).lst del $(MISC)$/$(SHL2TARGET).lst
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
         +type $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL2BASEX) \
@@ -765,9 +774,8 @@ $(SHL2TARGETN) : \
         $(STDSHL) \
         $(SHL2LINKRES) \
         ) >> $(MISC)$/$(SHL2TARGET).lnk
-        +type $(MISC)$/linkinc.ls  >> $(MISC)$/$(SHL2TARGET).lnk
+        +type $(MISC)$/$(SHL2TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL2TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL2TARGET).lnk
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1018,6 +1026,12 @@ SHL3DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_d
 .ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
 
 .IF "$(SHL3TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(SHL3TARGETN:b)_linkinc.ls
+$(SHL3TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(SHL3TARGETN) : \
                     $(SHL3OBJS)\
                     $(SHL3DESCRIPTIONOBJ)\
@@ -1179,7 +1193,6 @@ $(SHL3TARGETN) : \
 .ELSE			# "$(linkinc)"==""
         +if exist $(MISC)$/$(SHL3TARGET).lnk del $(MISC)$/$(SHL3TARGET).lnk
         +if exist $(MISC)$/$(SHL3TARGET).lst del $(MISC)$/$(SHL3TARGET).lst
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
         +type $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL3BASEX) \
@@ -1192,9 +1205,8 @@ $(SHL3TARGETN) : \
         $(STDSHL) \
         $(SHL3LINKRES) \
         ) >> $(MISC)$/$(SHL3TARGET).lnk
-        +type $(MISC)$/linkinc.ls  >> $(MISC)$/$(SHL3TARGET).lnk
+        +type $(MISC)$/$(SHL3TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL3TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL3TARGET).lnk
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1445,6 +1457,12 @@ SHL4DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_d
 .ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
 
 .IF "$(SHL4TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(SHL4TARGETN:b)_linkinc.ls
+$(SHL4TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(SHL4TARGETN) : \
                     $(SHL4OBJS)\
                     $(SHL4DESCRIPTIONOBJ)\
@@ -1606,7 +1624,6 @@ $(SHL4TARGETN) : \
 .ELSE			# "$(linkinc)"==""
         +if exist $(MISC)$/$(SHL4TARGET).lnk del $(MISC)$/$(SHL4TARGET).lnk
         +if exist $(MISC)$/$(SHL4TARGET).lst del $(MISC)$/$(SHL4TARGET).lst
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
         +type $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL4BASEX) \
@@ -1619,9 +1636,8 @@ $(SHL4TARGETN) : \
         $(STDSHL) \
         $(SHL4LINKRES) \
         ) >> $(MISC)$/$(SHL4TARGET).lnk
-        +type $(MISC)$/linkinc.ls  >> $(MISC)$/$(SHL4TARGET).lnk
+        +type $(MISC)$/$(SHL4TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL4TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL4TARGET).lnk
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1872,6 +1888,12 @@ SHL5DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_d
 .ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
 
 .IF "$(SHL5TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(SHL5TARGETN:b)_linkinc.ls
+$(SHL5TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(SHL5TARGETN) : \
                     $(SHL5OBJS)\
                     $(SHL5DESCRIPTIONOBJ)\
@@ -2033,7 +2055,6 @@ $(SHL5TARGETN) : \
 .ELSE			# "$(linkinc)"==""
         +if exist $(MISC)$/$(SHL5TARGET).lnk del $(MISC)$/$(SHL5TARGET).lnk
         +if exist $(MISC)$/$(SHL5TARGET).lst del $(MISC)$/$(SHL5TARGET).lst
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
         +type $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL5BASEX) \
@@ -2046,9 +2067,8 @@ $(SHL5TARGETN) : \
         $(STDSHL) \
         $(SHL5LINKRES) \
         ) >> $(MISC)$/$(SHL5TARGET).lnk
-        +type $(MISC)$/linkinc.ls  >> $(MISC)$/$(SHL5TARGET).lnk
+        +type $(MISC)$/$(SHL5TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL5TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL5TARGET).lnk
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -2299,6 +2319,12 @@ SHL6DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_d
 .ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
 
 .IF "$(SHL6TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(SHL6TARGETN:b)_linkinc.ls
+$(SHL6TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(SHL6TARGETN) : \
                     $(SHL6OBJS)\
                     $(SHL6DESCRIPTIONOBJ)\
@@ -2460,7 +2486,6 @@ $(SHL6TARGETN) : \
 .ELSE			# "$(linkinc)"==""
         +if exist $(MISC)$/$(SHL6TARGET).lnk del $(MISC)$/$(SHL6TARGET).lnk
         +if exist $(MISC)$/$(SHL6TARGET).lst del $(MISC)$/$(SHL6TARGET).lst
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
         +type $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL6BASEX) \
@@ -2473,9 +2498,8 @@ $(SHL6TARGETN) : \
         $(STDSHL) \
         $(SHL6LINKRES) \
         ) >> $(MISC)$/$(SHL6TARGET).lnk
-        +type $(MISC)$/linkinc.ls  >> $(MISC)$/$(SHL6TARGET).lnk
+        +type $(MISC)$/$(SHL6TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL6TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL6TARGET).lnk
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -2726,6 +2750,12 @@ SHL7DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_d
 .ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
 
 .IF "$(SHL7TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(SHL7TARGETN:b)_linkinc.ls
+$(SHL7TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(SHL7TARGETN) : \
                     $(SHL7OBJS)\
                     $(SHL7DESCRIPTIONOBJ)\
@@ -2887,7 +2917,6 @@ $(SHL7TARGETN) : \
 .ELSE			# "$(linkinc)"==""
         +if exist $(MISC)$/$(SHL7TARGET).lnk del $(MISC)$/$(SHL7TARGET).lnk
         +if exist $(MISC)$/$(SHL7TARGET).lst del $(MISC)$/$(SHL7TARGET).lst
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
         +type $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL7BASEX) \
@@ -2900,9 +2929,8 @@ $(SHL7TARGETN) : \
         $(STDSHL) \
         $(SHL7LINKRES) \
         ) >> $(MISC)$/$(SHL7TARGET).lnk
-        +type $(MISC)$/linkinc.ls  >> $(MISC)$/$(SHL7TARGET).lnk
+        +type $(MISC)$/$(SHL7TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL7TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL7TARGET).lnk
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -3153,6 +3181,12 @@ SHL8DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_d
 .ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
 
 .IF "$(SHL8TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(SHL8TARGETN:b)_linkinc.ls
+$(SHL8TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(SHL8TARGETN) : \
                     $(SHL8OBJS)\
                     $(SHL8DESCRIPTIONOBJ)\
@@ -3314,7 +3348,6 @@ $(SHL8TARGETN) : \
 .ELSE			# "$(linkinc)"==""
         +if exist $(MISC)$/$(SHL8TARGET).lnk del $(MISC)$/$(SHL8TARGET).lnk
         +if exist $(MISC)$/$(SHL8TARGET).lst del $(MISC)$/$(SHL8TARGET).lst
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
         +type $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL8BASEX) \
@@ -3327,9 +3360,8 @@ $(SHL8TARGETN) : \
         $(STDSHL) \
         $(SHL8LINKRES) \
         ) >> $(MISC)$/$(SHL8TARGET).lnk
-        +type $(MISC)$/linkinc.ls  >> $(MISC)$/$(SHL8TARGET).lnk
+        +type $(MISC)$/$(SHL8TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL8TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL8TARGET).lnk
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -3580,6 +3612,12 @@ SHL9DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_d
 .ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
 
 .IF "$(SHL9TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(SHL9TARGETN:b)_linkinc.ls
+$(SHL9TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(SHL9TARGETN) : \
                     $(SHL9OBJS)\
                     $(SHL9DESCRIPTIONOBJ)\
@@ -3741,7 +3779,6 @@ $(SHL9TARGETN) : \
 .ELSE			# "$(linkinc)"==""
         +if exist $(MISC)$/$(SHL9TARGET).lnk del $(MISC)$/$(SHL9TARGET).lnk
         +if exist $(MISC)$/$(SHL9TARGET).lst del $(MISC)$/$(SHL9TARGET).lst
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
         +type $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL9BASEX) \
@@ -3754,9 +3791,8 @@ $(SHL9TARGETN) : \
         $(STDSHL) \
         $(SHL9LINKRES) \
         ) >> $(MISC)$/$(SHL9TARGET).lnk
-        +type $(MISC)$/linkinc.ls  >> $(MISC)$/$(SHL9TARGET).lnk
+        +type $(MISC)$/$(SHL9TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL9TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL9TARGET).lnk
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -4007,6 +4043,12 @@ SHL10DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}
 .ENDIF			# "$(NO_SHL10DESCRIPTION)"==""
 
 .IF "$(SHL10TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(SHL10TARGETN:b)_linkinc.ls
+$(SHL10TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(SHL10TARGETN) : \
                     $(SHL10OBJS)\
                     $(SHL10DESCRIPTIONOBJ)\
@@ -4168,7 +4210,6 @@ $(SHL10TARGETN) : \
 .ELSE			# "$(linkinc)"==""
         +if exist $(MISC)$/$(SHL10TARGET).lnk del $(MISC)$/$(SHL10TARGET).lnk
         +if exist $(MISC)$/$(SHL10TARGET).lst del $(MISC)$/$(SHL10TARGET).lst
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
         +type $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL10BASEX) \
@@ -4181,9 +4222,8 @@ $(SHL10TARGETN) : \
         $(STDSHL) \
         $(SHL10LINKRES) \
         ) >> $(MISC)$/$(SHL10TARGET).lnk
-        +type $(MISC)$/linkinc.ls  >> $(MISC)$/$(SHL10TARGET).lnk
+        +type $(MISC)$/$(SHL10TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL10TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL10TARGET).lnk
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"

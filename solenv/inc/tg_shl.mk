@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-11 10:16:02 $
+#   last change: $Author: hjs $ $Date: 2001-09-28 17:11:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -264,6 +264,12 @@ SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)T
 .ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 
 .IF "$(SHL$(TNR)TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls
+$(SHL$(TNR)TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(SHL$(TNR)TARGETN) : \
                     $(SHL$(TNR)OBJS)\
                     $(SHL$(TNR)DESCRIPTIONOBJ)\
@@ -425,7 +431,6 @@ $(SHL$(TNR)TARGETN) : \
 .ELSE			# "$(linkinc)"==""
         +if exist $(MISC)$/$(SHL$(TNR)TARGET).lnk del $(MISC)$/$(SHL$(TNR)TARGET).lnk
         +if exist $(MISC)$/$(SHL$(TNR)TARGET).lst del $(MISC)$/$(SHL$(TNR)TARGET).lst
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
         +type $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX) \
@@ -438,9 +443,8 @@ $(SHL$(TNR)TARGETN) : \
         $(STDSHL) \
         $(SHL$(TNR)LINKRES) \
         ) >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
-        +type $(MISC)$/linkinc.ls  >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
+        +type $(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL$(TNR)TARGET).lnk
-#		+if exist $(MISC)$/linkinc.ls del $(MISC)$/linkinc.ls
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"

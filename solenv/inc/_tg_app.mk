@@ -41,6 +41,12 @@ APP1STDLIBS+=$(STATICLIB)
 .ENDIF
 
 .IF "$(APP1TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(APP1TARGETN:b)_linkinc.ls
+$(APP1TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(APP1RES) \
     $(APP1ICON) $(APP1DEPN) $(USE_APP1DEF)
@@ -140,7 +146,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1LIBS) \
         $(APP1STDLIBS) \
         $(STDLIB))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\linkobj.lst >> $(MISC)\$(APP1TARGET).lst
+        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP1TARGETN:b)_linkobj.lst >> $(MISC)\$(APP1TARGET).lst
         +if exist $(MISC)\$(APP1TARGET).lst type $(MISC)\$(APP1TARGET).lst  >> $(MISC)\$(APP1TARGET).lnk
         $(LINK) @$(MISC)\$(APP1TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
@@ -227,6 +233,12 @@ APP2STDLIBS+=$(STATICLIB)
 .ENDIF
 
 .IF "$(APP2TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(APP2TARGETN:b)_linkinc.ls
+$(APP2TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(APP2RES) \
     $(APP2ICON) $(APP2DEPN) $(USE_APP2DEF)
@@ -326,7 +338,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2LIBS) \
         $(APP2STDLIBS) \
         $(STDLIB))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\linkobj.lst >> $(MISC)\$(APP2TARGET).lst
+        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP2TARGETN:b)_linkobj.lst >> $(MISC)\$(APP2TARGET).lst
         +if exist $(MISC)\$(APP2TARGET).lst type $(MISC)\$(APP2TARGET).lst  >> $(MISC)\$(APP2TARGET).lnk
         $(LINK) @$(MISC)\$(APP2TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
@@ -413,6 +425,12 @@ APP3STDLIBS+=$(STATICLIB)
 .ENDIF
 
 .IF "$(APP3TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(APP3TARGETN:b)_linkinc.ls
+$(APP3TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(APP3RES) \
     $(APP3ICON) $(APP3DEPN) $(USE_APP3DEF)
@@ -512,7 +530,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3LIBS) \
         $(APP3STDLIBS) \
         $(STDLIB))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\linkobj.lst >> $(MISC)\$(APP3TARGET).lst
+        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP3TARGETN:b)_linkobj.lst >> $(MISC)\$(APP3TARGET).lst
         +if exist $(MISC)\$(APP3TARGET).lst type $(MISC)\$(APP3TARGET).lst  >> $(MISC)\$(APP3TARGET).lnk
         $(LINK) @$(MISC)\$(APP3TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
@@ -599,6 +617,12 @@ APP4STDLIBS+=$(STATICLIB)
 .ENDIF
 
 .IF "$(APP4TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(APP4TARGETN:b)_linkinc.ls
+$(APP4TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(APP4RES) \
     $(APP4ICON) $(APP4DEPN) $(USE_APP4DEF)
@@ -698,7 +722,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4LIBS) \
         $(APP4STDLIBS) \
         $(STDLIB))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\linkobj.lst >> $(MISC)\$(APP4TARGET).lst
+        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP4TARGETN:b)_linkobj.lst >> $(MISC)\$(APP4TARGET).lst
         +if exist $(MISC)\$(APP4TARGET).lst type $(MISC)\$(APP4TARGET).lst  >> $(MISC)\$(APP4TARGET).lnk
         $(LINK) @$(MISC)\$(APP4TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
@@ -785,6 +809,12 @@ APP5STDLIBS+=$(STATICLIB)
 .ENDIF
 
 .IF "$(APP5TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(APP5TARGETN:b)_linkinc.ls
+$(APP5TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(APP5RES) \
     $(APP5ICON) $(APP5DEPN) $(USE_APP5DEF)
@@ -884,7 +914,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5LIBS) \
         $(APP5STDLIBS) \
         $(STDLIB))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\linkobj.lst >> $(MISC)\$(APP5TARGET).lst
+        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP5TARGETN:b)_linkobj.lst >> $(MISC)\$(APP5TARGET).lst
         +if exist $(MISC)\$(APP5TARGET).lst type $(MISC)\$(APP5TARGET).lst  >> $(MISC)\$(APP5TARGET).lnk
         $(LINK) @$(MISC)\$(APP5TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
@@ -971,6 +1001,12 @@ APP6STDLIBS+=$(STATICLIB)
 .ENDIF
 
 .IF "$(APP6TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(APP6TARGETN:b)_linkinc.ls
+$(APP6TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(APP6RES) \
     $(APP6ICON) $(APP6DEPN) $(USE_APP6DEF)
@@ -1070,7 +1106,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6LIBS) \
         $(APP6STDLIBS) \
         $(STDLIB))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\linkobj.lst >> $(MISC)\$(APP6TARGET).lst
+        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP6TARGETN:b)_linkobj.lst >> $(MISC)\$(APP6TARGET).lst
         +if exist $(MISC)\$(APP6TARGET).lst type $(MISC)\$(APP6TARGET).lst  >> $(MISC)\$(APP6TARGET).lnk
         $(LINK) @$(MISC)\$(APP6TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
@@ -1157,6 +1193,12 @@ APP7STDLIBS+=$(STATICLIB)
 .ENDIF
 
 .IF "$(APP7TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(APP7TARGETN:b)_linkinc.ls
+$(APP7TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(APP7RES) \
     $(APP7ICON) $(APP7DEPN) $(USE_APP7DEF)
@@ -1256,7 +1298,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7LIBS) \
         $(APP7STDLIBS) \
         $(STDLIB))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\linkobj.lst >> $(MISC)\$(APP7TARGET).lst
+        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP7TARGETN:b)_linkobj.lst >> $(MISC)\$(APP7TARGET).lst
         +if exist $(MISC)\$(APP7TARGET).lst type $(MISC)\$(APP7TARGET).lst  >> $(MISC)\$(APP7TARGET).lnk
         $(LINK) @$(MISC)\$(APP7TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
@@ -1343,6 +1385,12 @@ APP8STDLIBS+=$(STATICLIB)
 .ENDIF
 
 .IF "$(APP8TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(APP8TARGETN:b)_linkinc.ls
+$(APP8TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(APP8RES) \
     $(APP8ICON) $(APP8DEPN) $(USE_APP8DEF)
@@ -1442,7 +1490,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8LIBS) \
         $(APP8STDLIBS) \
         $(STDLIB))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\linkobj.lst >> $(MISC)\$(APP8TARGET).lst
+        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP8TARGETN:b)_linkobj.lst >> $(MISC)\$(APP8TARGET).lst
         +if exist $(MISC)\$(APP8TARGET).lst type $(MISC)\$(APP8TARGET).lst  >> $(MISC)\$(APP8TARGET).lnk
         $(LINK) @$(MISC)\$(APP8TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
@@ -1529,6 +1577,12 @@ APP9STDLIBS+=$(STATICLIB)
 .ENDIF
 
 .IF "$(APP9TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(APP9TARGETN:b)_linkinc.ls
+$(APP9TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(APP9RES) \
     $(APP9ICON) $(APP9DEPN) $(USE_APP9DEF)
@@ -1628,7 +1682,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9LIBS) \
         $(APP9STDLIBS) \
         $(STDLIB))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\linkobj.lst >> $(MISC)\$(APP9TARGET).lst
+        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP9TARGETN:b)_linkobj.lst >> $(MISC)\$(APP9TARGET).lst
         +if exist $(MISC)\$(APP9TARGET).lst type $(MISC)\$(APP9TARGET).lst  >> $(MISC)\$(APP9TARGET).lnk
         $(LINK) @$(MISC)\$(APP9TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
@@ -1715,6 +1769,12 @@ APP10STDLIBS+=$(STATICLIB)
 .ENDIF
 
 .IF "$(APP10TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(APP10TARGETN:b)_linkinc.ls
+$(APP10TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(APP10RES) \
     $(APP10ICON) $(APP10DEPN) $(USE_APP10DEF)
@@ -1814,7 +1874,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10LIBS) \
         $(APP10STDLIBS) \
         $(STDLIB))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\linkobj.lst >> $(MISC)\$(APP10TARGET).lst
+        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP10TARGETN:b)_linkobj.lst >> $(MISC)\$(APP10TARGET).lst
         +if exist $(MISC)\$(APP10TARGET).lst type $(MISC)\$(APP10TARGET).lst  >> $(MISC)\$(APP10TARGET).lnk
         $(LINK) @$(MISC)\$(APP10TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""

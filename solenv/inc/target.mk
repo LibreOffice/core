@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-26 12:24:57 $
+#   last change: $Author: hjs $ $Date: 2001-09-28 17:11:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1847,10 +1847,6 @@ PRJHIDTARGET=$(MISC)$/$(PRJNAME).hid
 .ENDIF
 .ENDIF
 
-.IF "$(linkinc)"!=""
-LINKINCTARGETS+=$(MISC)$/linkinc.ls
-.ENDIF
-
 .IF "$(OS2_SOLENV_INC)"!=""
 OS2_COPY_MK=do_copy_mk
 .ENDIF
@@ -2872,11 +2868,11 @@ $(MISC)$/$(PRJNAME).hid : $(RESLIB1SRSFILES)
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
-$(MISC)$/linkinc.ls:
+$(MISC)$/%linkinc.ls .PHONY:
         +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(MISC)$/*.lin >> $@
 .ENDIF
 .ELSE
-$(MISC)$/linkinc.ls:
+$(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-05 10:24:46 $
+#   last change: $Author: hjs $ $Date: 2001-09-28 17:11:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,6 +136,12 @@ APP$(TNR)STDLIBS+=$(STATICLIB)
 .ENDIF
 
 .IF "$(APP$(TNR)TARGETN)"!=""
+
+.IF "$(linkinc)"!=""
+LINKINCTARGETS+=$(MISC)$/$(APP$(TNR)TARGETN:b)_linkinc.ls
+$(APP$(TNR)TARGETN) : $(LINKINCTARGETS)
+.ENDIF          # "$(linkinc)"!=""
+
 $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(APP$(TNR)RES) \
     $(APP$(TNR)ICON) $(APP$(TNR)DEPN) $(USE_APP$(TNR)DEF)
@@ -235,7 +241,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
         $(STDLIB))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\linkobj.lst >> $(MISC)\$(APP$(TNR)TARGET).lst
+        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP$(TNR)TARGETN:b)_linkobj.lst >> $(MISC)\$(APP$(TNR)TARGET).lst
         +if exist $(MISC)\$(APP$(TNR)TARGET).lst type $(MISC)\$(APP$(TNR)TARGET).lst  >> $(MISC)\$(APP$(TNR)TARGET).lnk
         $(LINK) @$(MISC)\$(APP$(TNR)TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
