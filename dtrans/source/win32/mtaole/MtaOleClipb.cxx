@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 13:01:35 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 14:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,9 +640,9 @@ void CMtaOleClipboard::createMtaOleReqWnd( )
     HINSTANCE hInst = GetModuleHandleA( CLIPSERVICE_DLL_NAME );
     OSL_ENSURE( NULL != hInst, "The name of the clipboard service dll must have changed" );
 
-    ZeroMemory( &wcex, sizeof( WNDCLASSEX ) );
+    ZeroMemory( &wcex, sizeof( WNDCLASSEXA ) );
 
-    wcex.cbSize        = sizeof( WNDCLASSEX );
+    wcex.cbSize        = sizeof( WNDCLASSEXA );
     wcex.lpfnWndProc   = static_cast< WNDPROC >( CMtaOleClipboard::mtaOleReqWndProc );
     wcex.hInstance     = hInst;
     wcex.lpszClassName = szWndClsName;
