@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABDriver.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-28 22:02:59 $
+ *  last change: $Author: wvd $ $Date: 2001-07-18 12:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ namespace connectivity
         public:
             OMozabDriver(const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) :
-                file::OFileDriver(_rxFactory){}
+                file::OFileDriver(_rxFactory), m_xMSFactory(_rxFactory){}
 
             static ::rtl::OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
             ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -92,6 +92,12 @@ namespace connectivity
                         throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL acceptsURL( const ::rtl::OUString& url )
                         throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+            & getMSFactory(void) const
+                    { return m_xMSFactory; }
+        private:
+            const ::com::sun::star::uno::Reference<
+                                                ::com::sun::star::lang::XMultiServiceFactory > m_xMSFactory;
         };
     }
 }
