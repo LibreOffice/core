@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-24 13:49:15 $
+ *  last change: $Author: dr $ $Date: 2001-08-20 14:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ FltError ImportExcel::Read( void )
 
     FltError            eLastErr = eERR_OK;
     UINT16              nOpcode;
+    UINT16              nBofLevel;
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
@@ -820,6 +821,7 @@ FltError ImportExcel::Read( void )
                                 eAkt = Z_Biff5Pre;  // Shrfmla Prefetch, Row-Prefetch
                                 aColRowBuff.Reset();
                                 pFltTab->Reset();
+                                nBofLevel = 0;
 
                                 aIn.StoreUserPosition();    // und Position merken
                                 break;
@@ -845,35 +847,42 @@ FltError ImportExcel::Read( void )
                 break;
             case Z_Biff5Pre:    // ------------------------------- Z_Biff5Pre -
             {
-                switch( nOpcode )
+                if( nOpcode == 0x0809 )
+                    nBofLevel++;
+                else if( (nOpcode == 0x000A) && nBofLevel )
+                    nBofLevel--;
+                else if( !nBofLevel )                       // don't read chart records
                 {
-                    case 0x00:  Dimensions(); break;    // DIMENSIONS   [ 2345]
-                    case 0x08:  Row25(); break;         // ROW          [ 2  5]
-                    case 0x0A:                          // EOF          [ 2345]
-                        eAkt = Z_Biff5I;
-                        aIn.SeekUserPosition(); // und zurueck an alte Position
-                        aColRowBuff.Apply( nTab );
-                        break;
-                    case 0x1A:  Verticalpagebreaks(); break;
-                    case 0x1B:  Horizontalpagebreaks(); break;
-                    case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
-                    case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
-                    case 0x21:  Array25(); break;       // ARRAY        [ 2  5]
-                    case 0x23:  Externname25(); break;  // EXTERNNAME   [ 2  5]
-                    case 0x41:  Pane(); break;          // PANE         [ 2345]
-                    case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
-                    case 0x55:  DefColWidth(); break;
-                    case 0x7D:  Colinfo(); break;       // COLINFO      [  345]
-                    case 0x81:  Wsbool(); break;        // WSBOOL       [ 2345]
-                    case 0x8C:  Country(); break;       // COUNTRY      [  345]
-                    case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
-                    case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345]
-                    case 0x0208: Row34(); break;        // ROW          [  34 ]
-                    case 0x0221: Array34(); break;      // ARRAY        [  34 ]
-                    case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
-                    case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                    case 0x023E: Window2_5(); break;    // WINDOW       [    5]
-                    case 0x04BC: Shrfmla(); break;      // SHRFMLA      [    5]
+                    switch( nOpcode )
+                    {
+                        case 0x00:  Dimensions(); break;    // DIMENSIONS   [ 2345]
+                        case 0x08:  Row25(); break;         // ROW          [ 2  5]
+                        case 0x0A:                          // EOF          [ 2345]
+                            eAkt = Z_Biff5I;
+                            aIn.SeekUserPosition(); // und zurueck an alte Position
+                            aColRowBuff.Apply( nTab );
+                            break;
+                        case 0x1A:  Verticalpagebreaks(); break;
+                        case 0x1B:  Horizontalpagebreaks(); break;
+                        case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
+                        case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
+                        case 0x21:  Array25(); break;       // ARRAY        [ 2  5]
+                        case 0x23:  Externname25(); break;  // EXTERNNAME   [ 2  5]
+                        case 0x41:  Pane(); break;          // PANE         [ 2345]
+                        case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
+                        case 0x55:  DefColWidth(); break;
+                        case 0x7D:  Colinfo(); break;       // COLINFO      [  345]
+                        case 0x81:  Wsbool(); break;        // WSBOOL       [ 2345]
+                        case 0x8C:  Country(); break;       // COUNTRY      [  345]
+                        case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
+                        case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345]
+                        case 0x0208: Row34(); break;        // ROW          [  34 ]
+                        case 0x0221: Array34(); break;      // ARRAY        [  34 ]
+                        case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
+                        case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
+                        case 0x023E: Window2_5(); break;    // WINDOW       [    5]
+                        case 0x04BC: Shrfmla(); break;      // SHRFMLA      [    5]
+                    }
                 }
             }
                 break;
@@ -1379,7 +1388,7 @@ FltError ImportExcel8::Read( void )
                     nBofLevel++;
                 else if( (nOpcode == 0x000A) && nBofLevel )
                     nBofLevel--;
-                else
+                else if( !nBofLevel )                       // don't read chart records
                 {
                     switch( nOpcode )
                     {
