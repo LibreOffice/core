@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryinterface.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,16 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
-/** */ //for docpp
 namespace cppu
 {
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
- */
+/** Compares demanded type to given template argument types.
+
+    @tplparam Interface1 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
@@ -89,13 +90,15 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     else
         return ::com::sun::star::uno::Any();
 }
+/** Compares demanded type to given template argument types.
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
-   @param       p2      a pointer to an interface.
- */
+    @tplparam Interface1 interface type
+    @tplparam Interface2 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @param p2 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1, class Interface2 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
@@ -109,14 +112,17 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     else
         return ::com::sun::star::uno::Any();
 }
+/** Compares demanded type to given template argument types.
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
-   @param       p2      a pointer to an interface.
-   @param       p3      a pointer to an interface.
- */
+    @tplparam Interface1 interface type
+    @tplparam Interface2 interface type
+    @tplparam Interface3 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @param p2 interface pointer
+    @param p3 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1, class Interface2, class Interface3 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
@@ -132,15 +138,19 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     else
         return ::com::sun::star::uno::Any();
 }
+/** Compares demanded type to given template argument types.
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
-   @param       p2      a pointer to an interface.
-   @param       p3      a pointer to an interface.
-   @param       p4      a pointer to an interface.
- */
+    @tplparam Interface1 interface type
+    @tplparam Interface2 interface type
+    @tplparam Interface3 interface type
+    @tplparam Interface4 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @param p2 interface pointer
+    @param p3 interface pointer
+    @param p4 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1, class Interface2, class Interface3, class Interface4 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
@@ -158,16 +168,21 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     else
         return ::com::sun::star::uno::Any();
 }
+/** Compares demanded type to given template argument types.
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
-   @param       p2      a pointer to an interface.
-   @param       p3      a pointer to an interface.
-   @param       p4      a pointer to an interface.
-   @param       p5      a pointer to an interface.
- */
+    @tplparam Interface1 interface type
+    @tplparam Interface2 interface type
+    @tplparam Interface3 interface type
+    @tplparam Interface4 interface type
+    @tplparam Interface5 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @param p2 interface pointer
+    @param p3 interface pointer
+    @param p4 interface pointer
+    @param p5 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     const ::com::sun::star::uno::Type & rType,
@@ -187,17 +202,23 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     else
         return ::com::sun::star::uno::Any();
 }
+/** Compares demanded type to given template argument types.
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
-   @param       p2      a pointer to an interface.
-   @param       p3      a pointer to an interface.
-   @param       p4      a pointer to an interface.
-   @param       p5      a pointer to an interface.
-   @param       p6      a pointer to an interface.
- */
+    @tplparam Interface1 interface type
+    @tplparam Interface2 interface type
+    @tplparam Interface3 interface type
+    @tplparam Interface4 interface type
+    @tplparam Interface5 interface type
+    @tplparam Interface6 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @param p2 interface pointer
+    @param p3 interface pointer
+    @param p4 interface pointer
+    @param p5 interface pointer
+    @param p6 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -221,18 +242,25 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     else
         return ::com::sun::star::uno::Any();
 }
+/** Compares demanded type to given template argument types.
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
-   @param       p2      a pointer to an interface.
-   @param       p3      a pointer to an interface.
-   @param       p4      a pointer to an interface.
-   @param       p5      a pointer to an interface.
-   @param       p6      a pointer to an interface.
-   @param       p7      a pointer to an interface.
- */
+    @tplparam Interface1 interface type
+    @tplparam Interface2 interface type
+    @tplparam Interface3 interface type
+    @tplparam Interface4 interface type
+    @tplparam Interface5 interface type
+    @tplparam Interface6 interface type
+    @tplparam Interface7 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @param p2 interface pointer
+    @param p3 interface pointer
+    @param p4 interface pointer
+    @param p5 interface pointer
+    @param p6 interface pointer
+    @param p7 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -258,19 +286,27 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     else
         return ::com::sun::star::uno::Any();
 }
+/** Compares demanded type to given template argument types.
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
-   @param       p2      a pointer to an interface.
-   @param       p3      a pointer to an interface.
-   @param       p4      a pointer to an interface.
-   @param       p5      a pointer to an interface.
-   @param       p6      a pointer to an interface.
-   @param       p7      a pointer to an interface.
-   @param       p8      a pointer to an interface.
- */
+    @tplparam Interface1 interface type
+    @tplparam Interface2 interface type
+    @tplparam Interface3 interface type
+    @tplparam Interface4 interface type
+    @tplparam Interface5 interface type
+    @tplparam Interface6 interface type
+    @tplparam Interface7 interface type
+    @tplparam Interface8 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @param p2 interface pointer
+    @param p3 interface pointer
+    @param p4 interface pointer
+    @param p5 interface pointer
+    @param p6 interface pointer
+    @param p7 interface pointer
+    @param p8 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -298,20 +334,29 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     else
         return ::com::sun::star::uno::Any();
 }
+/** Compares demanded type to given template argument types.
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
-   @param       p2      a pointer to an interface.
-   @param       p3      a pointer to an interface.
-   @param       p4      a pointer to an interface.
-   @param       p5      a pointer to an interface.
-   @param       p6      a pointer to an interface.
-   @param       p7      a pointer to an interface.
-   @param       p8      a pointer to an interface.
-   @param       p9      a pointer to an interface.
- */
+    @tplparam Interface1 interface type
+    @tplparam Interface2 interface type
+    @tplparam Interface3 interface type
+    @tplparam Interface4 interface type
+    @tplparam Interface5 interface type
+    @tplparam Interface6 interface type
+    @tplparam Interface7 interface type
+    @tplparam Interface8 interface type
+    @tplparam Interface9 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @param p2 interface pointer
+    @param p3 interface pointer
+    @param p4 interface pointer
+    @param p5 interface pointer
+    @param p6 interface pointer
+    @param p7 interface pointer
+    @param p8 interface pointer
+    @param p9 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -341,21 +386,31 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     else
         return ::com::sun::star::uno::Any();
 }
+/** Compares demanded type to given template argument types.
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
-   @param       p2      a pointer to an interface.
-   @param       p3      a pointer to an interface.
-   @param       p4      a pointer to an interface.
-   @param       p5      a pointer to an interface.
-   @param       p6      a pointer to an interface.
-   @param       p7      a pointer to an interface.
-   @param       p8      a pointer to an interface.
-   @param       p9      a pointer to an interface.
-   @param       p10     a pointer to an interface.
- */
+    @tplparam Interface1 interface type
+    @tplparam Interface2 interface type
+    @tplparam Interface3 interface type
+    @tplparam Interface4 interface type
+    @tplparam Interface5 interface type
+    @tplparam Interface6 interface type
+    @tplparam Interface7 interface type
+    @tplparam Interface8 interface type
+    @tplparam Interface9 interface type
+    @tplparam Interface10 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @param p2 interface pointer
+    @param p3 interface pointer
+    @param p4 interface pointer
+    @param p5 interface pointer
+    @param p6 interface pointer
+    @param p7 interface pointer
+    @param p8 interface pointer
+    @param p9 interface pointer
+    @param p10 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -387,22 +442,33 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     else
         return ::com::sun::star::uno::Any();
 }
+/** Compares demanded type to given template argument types.
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
-   @param       p2      a pointer to an interface.
-   @param       p3      a pointer to an interface.
-   @param       p4      a pointer to an interface.
-   @param       p5      a pointer to an interface.
-   @param       p6      a pointer to an interface.
-   @param       p7      a pointer to an interface.
-   @param       p8      a pointer to an interface.
-   @param       p9      a pointer to an interface.
-   @param       p10     a pointer to an interface.
-   @param       p11     a pointer to an interface.
- */
+    @tplparam Interface1 interface type
+    @tplparam Interface2 interface type
+    @tplparam Interface3 interface type
+    @tplparam Interface4 interface type
+    @tplparam Interface5 interface type
+    @tplparam Interface6 interface type
+    @tplparam Interface7 interface type
+    @tplparam Interface8 interface type
+    @tplparam Interface9 interface type
+    @tplparam Interface10 interface type
+    @tplparam Interface11 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @param p2 interface pointer
+    @param p3 interface pointer
+    @param p4 interface pointer
+    @param p5 interface pointer
+    @param p6 interface pointer
+    @param p7 interface pointer
+    @param p8 interface pointer
+    @param p9 interface pointer
+    @param p10 interface pointer
+    @param p11 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
           class Interface11 >
@@ -438,23 +504,35 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     else
         return ::com::sun::star::uno::Any();
 }
+/** Compares demanded type to given template argument types.
 
-/**
-   Compare types and choose return proper interface.
-   <BR>
-   @param       p1      a pointer to an interface.
-   @param       p2      a pointer to an interface.
-   @param       p3      a pointer to an interface.
-   @param       p4      a pointer to an interface.
-   @param       p5      a pointer to an interface.
-   @param       p6      a pointer to an interface.
-   @param       p7      a pointer to an interface.
-   @param       p8      a pointer to an interface.
-   @param       p9      a pointer to an interface.
-   @param       p10     a pointer to an interface.
-   @param       p11     a pointer to an interface.
-   @param       p12     a pointer to an interface.
- */
+    @tplparam Interface1 interface type
+    @tplparam Interface2 interface type
+    @tplparam Interface3 interface type
+    @tplparam Interface4 interface type
+    @tplparam Interface5 interface type
+    @tplparam Interface6 interface type
+    @tplparam Interface7 interface type
+    @tplparam Interface8 interface type
+    @tplparam Interface9 interface type
+    @tplparam Interface10 interface type
+    @tplparam Interface11 interface type
+    @tplparam Interface12 interface type
+    @param rType demanded type
+    @param p1 interface pointer
+    @param p2 interface pointer
+    @param p3 interface pointer
+    @param p4 interface pointer
+    @param p5 interface pointer
+    @param p6 interface pointer
+    @param p7 interface pointer
+    @param p8 interface pointer
+    @param p9 interface pointer
+    @param p10 interface pointer
+    @param p11 interface pointer
+    @param p12 interface pointer
+    @return acquired interface of demanded type or empty Any
+*/
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
           class Interface11, class Interface12 >

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,53 +88,54 @@
 
 typedef struct _uno_Environment uno_Environment;
 
-/**
-   Function to determine the environment of the implementation.
-   If the environment is NOT session specific (needs no additional context), then this function
-   should return the environment type name and leave ppEnv (0).
-   <BR>
-   @param       ppEnvTypeName   environment type name; string must be constant
-   @param       ppEnv           function returns its environment if the environment is
-                                  session specific, i.e. has special context
- */
+/** Function pointer declaration.
+    Function determines the environment of the component implementation, i.e. which compiler
+    compiled it. If the environment is NOT session specific (needs no additional context),
+    then this function should return the environment type name and leave ppEnv (to 0).
+
+    @paramppEnvTypeName environment type name; string must be constant
+    @param ppEnv function returns its environment if the environment is session specific,
+                 i.e. has special context
+*/
 typedef void (SAL_CALL * component_getImplementationEnvironmentFunc)(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv );
 
-/**
-   Optional function to retrieve a component description.
-   <BR>
-   @return                      an XML formatted string containing a short component description
- */
+/** Function pointer declaration.
+    Function retrieves a component description.
+
+    @return an XML formatted string containing a short component description
+*/
 typedef const sal_Char * (SAL_CALL * component_getDescriptionFunc)(void);
 
-/**
-   Writes component registry info, at least writing the supported service names.
-   <BR>
-   @param       pServiceManager a service manager
-                                  (the type is XMultiServiceFactory to be used by the environment
-                                  returned by component_getImplementationEnvironment)
-   @param       pRegistryKey    a registry key
-                                  (the type is XRegistryKey to be used by the environment
-                                  returned by component_getImplementationEnvironment)
-   @return                      true if everything went fine
- */
+/** Function pointer declaration.
+    Function writes component registry info, at least writing the supported service names.
+
+    @param pServiceManager
+    a service manager (the type is an XMultiServiceFactory that can be used
+    by the environment returned by component_getImplementationEnvironment)
+    @param pRegistryKey a registry key
+    (the type is XRegistryKey that can be used by the environment
+    returned by component_getImplementationEnvironment)
+    @return true if everything went fine
+*/
 typedef sal_Bool (SAL_CALL * component_writeInfoFunc)(
     void * pServiceManager, void * pRegistryKey );
 
-/**
-   Retrieves a factory to create component instances.
-   <BR>
-   @param       pImplName       desired implementation name
-   @param       pServiceManager a service manager
-                                  (the type is XMultiServiceFactory to be used by the environment
-                                  returned by component_getImplementationEnvironment)
-   @param       pRegistryKey    a registry key
-                                  (the type is XRegistryKey to be used by the environment
-                                  returned by component_getImplementationEnvironment)
-   @return                      acquired component factory
-                                  (the type is XSingleServiceFactory to be used by the environment
-                                  returned by component_getImplementationEnvironment)
- */
+/** Function pointer declaration.
+    Retrieves a factory to create component instances.
+
+   @param pImplName
+   desired implementation name
+   @param pServiceManager
+   a service manager (the type is XMultiServiceFactory that can be used by the environment
+   returned by component_getImplementationEnvironment)
+   @param pRegistryKey
+   a registry key (the type is XRegistryKey that can be used by the environment
+   returned by component_getImplementationEnvironment)
+   @return acquired component factory
+   (the type is lang::XSingleComponentFactory or lang::XSingleServiceFactory to be used by the
+   environment returned by component_getImplementationEnvironment)
+*/
 typedef void * (SAL_CALL * component_getFactoryFunc)(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
 
@@ -143,21 +144,38 @@ typedef void * (SAL_CALL * component_getFactoryFunc)(
 #define WRITE_COMPONENT_INFO_FUNCTION       "writeComponentInfo"
 #define CREATE_COMPONENT_FACTORY_FUNCTION   "createComponentFactory"
 
-/** This function pointer describes a function to write needed administrativ information
-      about a component into the registry.
- */
+/** @deprecated
+    Function pointer declaration.
+    Function writes component registry info, at least writing the supported service names.
+
+    @param pXKey a registry key
+    @return true if everything went fine
+*/
 typedef sal_Bool (SAL_CALL * WriteComponentInfoFunc)( uno_Interface * pXKey );
 
-/** This function pointer describes a function to create a factory for one or more components.
- */
+/** @deprecated
+    Function pointer declaration.
+    Retrieves a factory to create component instances.
+
+    @param pImplName
+    desired implementation name
+    @param pXSMgr a service manager
+    @param pXKey a registry key
+    @return acquired component factory
+*/
 typedef uno_Interface* (SAL_CALL * CreateComponentFactoryFunc)(
-    const sal_Unicode *, uno_Interface * pXSMgr, uno_Interface * pXKey );
+    const sal_Unicode * pImplName, uno_Interface * pXSMgr, uno_Interface * pXKey );
 
 
-/** */ //for docpp
 namespace cppu
 {
 
+/** Function pointer declaration.
+    Function creates component instance passing the component context to be used.
+
+    @param xContext component context to be used
+    @return component instance
+*/
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
     SAL_CALL * ComponentFactoryFunc)(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext )
@@ -168,7 +186,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
     @param fptr function pointer for instanciating the object
     @param rImplementationName implementation name of service
     @param rServiceNames supported services
-    @param pModCount             for future extension (library unloading concept).
+    @param pModCount for future extension (library unloading concept).
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >
 SAL_CALL createSingleComponentFactory(
@@ -178,28 +196,28 @@ SAL_CALL createSingleComponentFactory(
     rtl_ModuleCount * pModCount = 0 )
     SAL_THROW( () );
 
-/**
-   The type of the instanciate function used as argument of the create*Fcatory functions.
-   @see createSingleFactory
-   @see createOneInstanceFactory
- */
+/** @deprecated
+    The type of the instanciate function used as argument of the create*Fcatory functions.
+
+    @see createSingleFactory
+    @see createOneInstanceFactory
+*/
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SAL_CALL * ComponentInstantiation)(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager );
 
-/**
-  Create a single service factory.<BR>
-  Note: The function pointer ComponentInstantiation points to a function throws Exception.
+/** @deprecated
+    Create a single service factory.
 
-  @param rServiceManager        the service manager used by the implementation.
-  @param rImplementationName    the implementation name. An empty string is possible.
-  @param ComponentInstantiation the function pointer to create an object.
-  @param rServiceNames          the service supported by the implementation.
-  @param pModCount             for future extension (library unloading concept).
-  @return a factory that support the interfaces XServiceProvider, XServiceInfo
-             XSingleServiceFactory and XComponent.
+    @param rServiceManager      the service manager used by the implementation.
+    @param rImplementationName  the implementation name. An empty string is possible.
+    @param ComponentInstantiation the function pointer to create an object.
+    @param rServiceNames            the service supported by the implementation.
+    @param pModCount             for future extension (library unloading concept).
+    @return a factory that support the interfaces XServiceProvider, XServiceInfo
+    XSingleServiceFactory and XComponent.
 
-  @see createOneInstanceFactory
- */
+    @see createOneInstanceFactory
+*/
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
 createSingleFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
@@ -209,42 +227,39 @@ createSingleFactory(
     rtl_ModuleCount * pModCount = 0  )
     SAL_THROW( () );
 
-/**
-  Create a factory, that wrappes another one.<BR>
-  This means the methods of the interfaces XServiceProvider, XServiceInfo and
-  XSingleServiceFactory are forwarded.
-  <B>It is not possible to put a factory into two service managers!<BR>
-  The XComponent interface is not supported!</B>
+/** @deprecated
+    Creates a factory wrapping another one.
+    This means the methods of the interfaces XServiceProvider, XServiceInfo and
+    XSingleServiceFactory are forwarded.
+    @attention
+    The XComponent interface is not supported!
 
-  @param rServiceManager        the service manager used by the implementation.
-  @param xSingleServiceFactory  the wrapped service factory.
-  @return a factory that support the interfaces XServiceProvider, XServiceInfo
-             XSingleServiceFactory.
+    @param rServiceManager      the service manager used by the implementation.
+    @param xSingleServiceFactory    the wrapped service factory.
+    @return a factory that support the interfaces XServiceProvider, XServiceInfo
+    XSingleServiceFactory.
 
-  @see createSingleFactory
- */
+    @see createSingleFactory
+*/
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
 createFactoryProxy(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > & rFactory )
     SAL_THROW( () );
 
-/**
-  Create a single service factory which hold the instance created. If the
-  "XSingleServiceFactory::createFactoryWithArguments" method is called with arguments
-  new objects are created.
-  Note: The function pointer ComponentInstantiation points to a function throws Exception.
+/** @deprecated
+    Creates a single service factory which hold the instance created.
 
-  @param rServiceManager        the service manager used by the implementation.
-  @param rImplementationName    the implementation name. An empty string is possible.
-  @param ComponentInstantiation the function pointer to create an object.
-  @param rServiceNames          the service supported by the implementation.
-  @param pModCount             for future extension (library unloading concept).
-  @return a factory that support the interfaces XServiceProvider, XServiceInfo
-             XSingleServiceFactory and XComponent.
+    @param rServiceManager      the service manager used by the implementation.
+    @param rImplementationName  the implementation name. An empty string is possible.
+    @param ComponentInstantiation the function pointer to create an object.
+    @param rServiceNames            the service supported by the implementation.
+    @param pModCount             for future extension (library unloading concept).
+    @return a factory that support the interfaces XServiceProvider, XServiceInfo
+    XSingleServiceFactory and XComponent.
 
-  @see createSingleFactory
- */
+    @see createSingleFactory
+*/
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
 createOneInstanceFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
@@ -254,36 +269,32 @@ createOneInstanceFactory(
     rtl_ModuleCount * pModCount = 0  )
     SAL_THROW( () );
 
-/**
-  Create a single service factory.<BR>
-  Note: The function pointer ComponentInstantiation points to a function throws Exception.
+/** @deprecated
+    Creates a single service factory.
 
-  @param rServiceManager        the service manager used by the implementation.
-  @param rImplementationName    the implementation name. An empty string is possible.
-  @param rImplementationKey the registry key of the implementation section.
-  @return a factory that support the interfaces XServiceProvider, XServiceInfo
-             XSingleServiceFactory and XComponent.
- */
+    @param rServiceManager      the service manager used by the implementation.
+    @param rImplementationName  the implementation name. An empty string is possible.
+    @param rImplementationKey   the registry key of the implementation section.
+    @return a factory that support the interfaces XServiceProvider, XServiceInfo
+    XSingleServiceFactory and XComponent.
+*/
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createSingleRegistryFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
     const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & rImplementationKey )
     SAL_THROW( () );
 
-/**
-  Create a single service factory which hold the instance created. If the
-  "XSingleServiceFactory::createFactoryWithArguments" method is called with arguments
-  new objects are created.
-  Note: The function pointer ComponentInstantiation points to a function throws Exception.
+/** @deprecated
+    Creates a single service factory which holds the instance created.
 
-  @param rServiceManager        the service manager used by the implementation.
-  @param rImplementationName    the implementation name. An empty string is possible.
-  @param rImplementationKey the registry key of the implementation section.
-  @return a factory that support the interfaces XServiceProvider, XServiceInfo
-             XSingleServiceFactory and XComponent.
+    @param rServiceManager      the service manager used by the implementation.
+    @param rImplementationName  the implementation name. An empty string is possible.
+    @param rImplementationKey   the registry key of the implementation section.
+    @return a factory that support the interfaces XServiceProvider, XServiceInfo
+    XSingleServiceFactory and XComponent.
 
-  @see createSingleRegistryFactory
- */
+    @see createSingleRegistryFactory
+*/
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rComponentName,

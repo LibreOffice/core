@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex_pre.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:08 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 #ifndef _CPPUHELPER_IMPLBASE_EX_PRE_HXX_
 #define _CPPUHELPER_IMPLBASE_EX_PRE_HXX_
 
+/** @internal */
 #define __IFC_EX_TYPE_INIT_NAME( class_cast, ifc_name ) \
 { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ifc_name > const * ))&getCppuType, \
 ((sal_Int32)(ifc_name *) class_cast 16) - 16 }
-
+/** @internal */
 #define __IFC_EX_TYPE_INIT( class_cast, N ) __IFC_EX_TYPE_INIT_NAME( class_cast, Ifc##N )
 
 #endif

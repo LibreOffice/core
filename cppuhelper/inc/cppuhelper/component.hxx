@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-07 11:11:28 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,17 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 
 
-/** */ //for docpp
 namespace cppu
 {
 
-/** The helper implementation for a basic broadcaster. This implementation
-    supports aggregation and weak references.
+/** @deprecated
+    Helper for implementing ::com::sun::star::lang::XComponent.
+    Upon disposing objects of this class, sub-classes receive a disposing() call.  Objects of
+    this class can be held weakly, i.e. by a ::com::sun::star::uno::WeakReference.  Object of
+    this class can be aggregated, i.e. incoming queryInterface() calls are delegated.
+
+    @attention
+    The life-cycle of the passed mutex reference has to be longer than objects of this class.
 */
 class OComponentHelper
     : public ::cppu::OWeakAggObject
@@ -92,22 +97,18 @@ class OComponentHelper
     , public ::com::sun::star::lang::XComponent
 {
 public:
-    /**
-       Create an object that implements XComponent.
+    /** Constructor.
 
-       @param rMutex    the mutex used to protect multi thread access.
-                          The lifetime must be longer than the lifetime
-                          of this object.
-     */
+        @param rMutex
+        the mutex used to protect multi-threaded access;
+        lifetime must be longer than the lifetime of this object.
+    */
     OComponentHelper( ::osl::Mutex & rMutex ) SAL_THROW( () );
-    /**
-       If dispose is not previous called, first acquire is called to protect against
-       double delete and than call dispose.<BR> Note in this situation no destructor
-       of derived classes are called.
-     */
+    /** Dewstructor. If this object was not disposed previously, object will be disposed manually.
+    */
     virtual ~OComponentHelper() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
-    // XInterface
+    // XAggregation
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
         throw (::com::sun::star::uno::RuntimeException);
@@ -119,9 +120,14 @@ public:
     virtual void SAL_CALL release()
         throw ();
 
-    // XTypeProvider getImplementationId() has to be implemented separately!
+    /** @attention
+        XTypeProvider::getImplementationId() has to be implemented separately!
+    */
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw(::com::sun::star::uno::RuntimeException) = 0;
+    /** @attention
+        XTypeProvider::getTypes() has to be re-implemented!
+    */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -136,24 +142,19 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
 protected:
-    /**
-       Called in the dispose method after the listeners are notified.
-       In this situation rBHelper.bDisposed is false
-       and rBHelper.bDisposing is true.
+    /** Called in dispose method after the listeners were notified.
     */
     virtual void SAL_CALL disposing();
 
-    /**
-       Contains a mutex, a listener container and the dispose states.
-       Subclasses should only modify the listener container.
-    */
+    /** @internal */
     OBroadcastHelper    rBHelper;
 private:
+    /** @internal */
     inline OComponentHelper( const OComponentHelper & ) SAL_THROW( () );
+    /** @internal */
     inline OComponentHelper & operator = ( const OComponentHelper & ) SAL_THROW( () );
 };
 
 }
 
 #endif
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase_ex.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:08 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ namespace cppu
 
 /** Implementation helper base class for components. Inherits from ::cppu::OWeakObject and
     ::com::sun::star::lang::XComponent.
+    @internal
 */
 class SAL_NO_VTABLE WeakComponentImplHelperBase
     : public ::cppu::OWeakObject
@@ -135,6 +136,7 @@ public:
 
 /** Implementation helper base class for components. Inherits from ::cppu::OWeakAggObject and
     ::com::sun::star::lang::XComponent.
+    @internal
 */
 class SAL_NO_VTABLE WeakAggComponentImplHelperBase
     : public ::cppu::OWeakAggObject
@@ -182,6 +184,7 @@ public:
 };
 
 /** WeakComponentImplHelper
+    @internal
 */
 ::com::sun::star::uno::Any SAL_CALL WeakComponentImplHelper_query(
     ::com::sun::star::uno::Type const & rType,
@@ -190,12 +193,14 @@ public:
     ::cppu::WeakComponentImplHelperBase * pBase )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** WeakComponentImplHelper
+    @internal
 */
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakComponentImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
 /** WeakAggComponentImplHelper
+    @internal
 */
 ::com::sun::star::uno::Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     ::com::sun::star::uno::Type const & rType,
@@ -204,6 +209,7 @@ public:
     ::cppu::WeakAggComponentImplHelperBase * pBase )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** WeakAggComponentImplHelper
+    @internal
 */
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
     class_data * cd )

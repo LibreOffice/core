@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:08 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,13 @@
 #include <cppuhelper/implbase.hxx>
 #endif
 
+/* @deprecated
+   This header should not be used anymore.  compbase1-N.hxx use implbase_ex.hxx except
+   for MACOSX.
+*/
+
 //==================================================================================================
+/** @internal */
 #define __DEF_COMPIMPLHELPER_A( N ) \
 namespace cppu \
 { \
@@ -128,12 +134,14 @@ public: \
 };
 
 //==================================================================================================
+/** @internal */
 #define __DEF_COMPIMPLHELPER_B( N ) \
 template< __CLASS_IFC##N > \
 ClassData##N WeakComponentImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 4 ); \
 template< __CLASS_IFC##N > \
 ClassData##N WeakAggComponentImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 3 );
 //==================================================================================================
+/** @internal */
 #define __DEF_COMPIMPLHELPER_C( N ) \
 }
 //==================================================================================================
@@ -141,10 +149,12 @@ ClassData##N WeakAggComponentImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 3 
 // of the generic template class. It can only handle assignments to specific
 // instantiations of a template class.
 #ifdef MACOSX
+/** @internal */
 #define __DEF_COMPIMPLHELPER( N ) \
 __DEF_COMPIMPLHELPER_A( N ) \
 __DEF_COMPIMPLHELPER_C( N )
 #else
+/** @internal */
 #define __DEF_COMPIMPLHELPER( N ) \
 __DEF_COMPIMPLHELPER_A( N ) \
 __DEF_COMPIMPLHELPER_B( N ) \

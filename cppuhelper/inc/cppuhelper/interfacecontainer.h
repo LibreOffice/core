@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-29 15:27:57 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,6 @@ class OInterfaceContainerHelper;
 class OInterfaceIteratorHelper
 {
 public:
-    /** not useful
-       @deprecated
-     */
-    OInterfaceIteratorHelper() SAL_THROW( () );
     /**
        Create an iterator over the elements of the container. The iterator
        copies the elements of the conatainer. A change to the container

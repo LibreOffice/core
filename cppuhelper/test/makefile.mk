@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2001-11-07 11:10:14 $
+#   last change: $Author: dbo $ $Date: 2001-11-09 13:49:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,6 @@ PRJ=..
 
 PRJNAME=cppuhelper
 TARGET=testhelper
-TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 USE_DEFFILE=TRUE

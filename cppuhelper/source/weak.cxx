@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ void SAL_CALL OWeakObject::release() throw()
     }
 }
 
-OWeakObject::~OWeakObject() SAL_THROW( (::com::sun::star::uno::RuntimeException) )
+OWeakObject::~OWeakObject() SAL_THROW( (RuntimeException) )
 {
 }
 
@@ -278,8 +278,7 @@ Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter()
 //------------------------------------------------------------------------
 //-- OWeakAggObject ----------------------------------------------------
 //------------------------------------------------------------------------
-OWeakAggObject::~OWeakAggObject()
-    SAL_THROW( (::com::sun::star::uno::RuntimeException)  )
+OWeakAggObject::~OWeakAggObject() SAL_THROW( (RuntimeException) )
 {
 }
 

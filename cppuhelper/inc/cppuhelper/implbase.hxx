@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-27 10:00:49 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,17 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+/* @deprecated
+   This header should not be used anymore.  implbase1-N.hxx use implbase_ex.hxx except
+   for MACOSX.
+*/
 
 namespace cppu
 {
 
 /** Struct used for inline template implementation helpers: type entries.
     Not for plublic use.
+    @internal
 */
 struct Type_Offset
 {
@@ -92,6 +97,7 @@ struct Type_Offset
 };
 /** Struct used for inline template implementation helpers: class data of implementation.
     Not for plublic use.
+    @internal
 */
 struct ClassDataBase
 {
@@ -136,6 +142,7 @@ struct ClassDataBase
     is binary compatible with this one to be casted and used uniform. The size of the varying array
     is set in ClassDataBase::nType2Offset (base class).
     Not for plublic use.
+    @internal
 */
 struct ClassData : public ClassDataBase
 {
@@ -179,6 +186,7 @@ struct ClassData : public ClassDataBase
 
 /** Shared mutex for implementation helper initialization.
     Not for public use.
+    @internal
 */
 ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () );
 }
@@ -201,6 +209,8 @@ struct ClassData : public ClassDataBase
     __DEF_IMPLHELPER_PRE( N )
     __IFC_WRITEOFFSET( 1 ) __IFC_WRITEOFFSET( 2 ) __IFC_WRITEOFFSET( 3 ), ... up to N
     __DEF_IMPLHELPER_POST( N )
+
+    @internal
 */
 #define __DEF_IMPLHELPER_PRE( N ) \
 namespace cppu \
@@ -228,11 +238,13 @@ protected: \
             { \
                 char * pBase = (char *)this;
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
+    @internal
 */
 #define __IFC_WRITEOFFSET( N ) \
                 rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc##N > *)0 ), \
                                      (char *)(Ifc##N *)this - pBase );
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
+    @internal
 */
 #define __DEF_IMPLHELPER_POST_A( N ) \
                 rCD.bOffsetsInit = sal_True; \
@@ -300,6 +312,7 @@ public: \
 };
 
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
+    @internal
 */
 #define __DEF_IMPLHELPER_POST_B( N ) \
 template< __CLASS_IFC##N > \
@@ -309,6 +322,7 @@ ClassData##N WeakImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 1 ); \
 template< __CLASS_IFC##N > \
 ClassData##N WeakAggImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 2 );
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
+    @internal
 */
 #define __DEF_IMPLHELPER_POST_C( N ) \
 }
@@ -318,12 +332,14 @@ ClassData##N WeakAggImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 2 );
 // instantiations of a template class.
 #ifdef MACOSX
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
+    @internal
 */
 #define __DEF_IMPLHELPER_POST( N ) \
 __DEF_IMPLHELPER_POST_A( N ) \
 __DEF_IMPLHELPER_POST_C( N )
 #else
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
+    @internal
 */
 #define __DEF_IMPLHELPER_POST( N ) \
 __DEF_IMPLHELPER_POST_A( N ) \

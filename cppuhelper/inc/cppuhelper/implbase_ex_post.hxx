@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex_post.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:08 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #define _CPPUHELPER_IMPLBASE_EX_POST_HXX_
 
 
+/** @internal */
 #define __DEF_CLASS_DATA_INIT_EX( N, class_cast ) \
 { \
 N +1, sal_False, sal_False, \
@@ -72,6 +73,7 @@ __IFC_EX_TYPE_INIT_NAME( class_cast, ::com::sun::star::lang::XTypeProvider ) \
 } \
 }
 
+/** @internal */
 #define __DEF_IMPLHELPER_EX( N ) \
 namespace cppu \
 { \
@@ -202,6 +204,7 @@ class_data##N AggImplInheritanceHelper##N< BaseClass, __IFC##N >::s_cd = \
 __DEF_CLASS_DATA_INIT_EX( N, (AggImplInheritanceHelper##N< BaseClass, __IFC##N > *) ); \
 }
 
+/** @internal */
 #define __DEF_COMPIMPLHELPER_EX( N ) \
 namespace cppu \
 { \

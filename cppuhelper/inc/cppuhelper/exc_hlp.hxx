@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exc_hlp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-27 10:00:48 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 namespace cppu
 {
 
-/** This function throws the exception given in the Any rExc. The given value has to be of type
+/** This function throws the exception given by rExc. The given value has to be of type
     class EXCEPTION and must be dervived from or of type com.sun.star.uno.Exception.
 
     @param rExc exception to be thrown.

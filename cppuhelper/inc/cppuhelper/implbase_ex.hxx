@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-05 10:02:21 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,9 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 
-/** Despite the fact that the following include is not used in this header, it has to remain,
-    because it is expected by files including cppuhelper/implbaseN.hxx.
-    So maybe we can omit it some time in the future...
-*/
+// Despite the fact that the following include is not used in this header, it has to remain,
+// because it is expected by files including cppuhelper/implbaseN.hxx.
+// So maybe we can omit it some time in the future...
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -85,10 +84,12 @@ namespace cppu
 {
 
 /** function pointer signature for getCppuType
+    @internal
 */
 typedef ::com::sun::star::uno::Type const & (SAL_CALL * fptr_getCppuType)( void * ) SAL_THROW( () );
 
 /** single type + object offset
+    @internal
 */
 struct type_entry
 {
@@ -101,10 +102,13 @@ struct type_entry
         fptr_getCppuType getCppuType;
         typelib_TypeDescriptionReference * typeRef;
     } m_type;
+    /** offset for interface pointer
+    */
     sal_Int32 m_offset;
 };
 
 /** identical dummy struct for casting class_dataN to class_data
+    @internal
 */
 struct class_data
 {
@@ -130,6 +134,7 @@ struct class_data
 };
 
 /** ImplHelper
+    @internal
 */
 ::com::sun::star::uno::Any SAL_CALL ImplHelper_query(
     ::com::sun::star::uno::Type const & rType,
@@ -137,6 +142,7 @@ struct class_data
     void * that )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** ImplHelper
+    @internal
 */
 ::com::sun::star::uno::Any SAL_CALL ImplHelper_queryNoXInterface(
     ::com::sun::star::uno::Type const & rType,
@@ -144,23 +150,27 @@ struct class_data
     void * that )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** ImplHelper
+    @internal
 */
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL ImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** ImplHelper
+    @internal
 */
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL ImplInhHelper_getTypes(
     class_data * cd,
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > const & rAddTypes )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** ImplHelper
+    @internal
 */
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL ImplHelper_getImplementationId(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
 /** WeakImplHelper
+    @internal
 */
 ::com::sun::star::uno::Any SAL_CALL WeakImplHelper_query(
     ::com::sun::star::uno::Type const & rType,
@@ -169,12 +179,14 @@ struct class_data
     ::cppu::OWeakObject * pBase )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** WeakImplHelper
+    @internal
 */
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
 /** WeakAggImplHelper
+    @internal
 */
 ::com::sun::star::uno::Any SAL_CALL WeakAggImplHelper_queryAgg(
     ::com::sun::star::uno::Type const & rType,
@@ -183,6 +195,7 @@ struct class_data
     ::cppu::OWeakAggObject * pBase )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** WeakAggImplHelper
+    @internal
 */
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakAggImplHelper_getTypes(
     class_data * cd )

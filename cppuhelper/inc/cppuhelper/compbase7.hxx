@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase7.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-04 13:24:09 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,25 @@ __DEF_COMPIMPLHELPER_EX( 7 )
 
 namespace cppu
 {
+    /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
+        ::com::sun::star::lang::XComponent.  Upon disposing objects of this class, sub-classes
+        receive a disposing() call.  Objects of this class can be held weakly, i.e. by a
+        ::com::sun::star::uno::WeakReference.
+
+        @attention
+        The life-cycle of the passed mutex reference has to be longer than objects of this class.
+
+        @derive
+        Inherit from this class giving your interface(s) to be implemented as template argument(s).
+        Your sub class defines method implementations for these interface(s).
+    */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7 >
     class SAL_NO_VTABLE WeakComponentImplHelper7
         : public WeakComponentImplHelperBase
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7
     {
+        /** @internal */
         static class_data7 s_cd;
     public:
         inline WeakComponentImplHelper7( ::osl::Mutex & rMutex ) throw ()
@@ -116,12 +129,26 @@ namespace cppu
                     { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * ))&getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (WeakComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }
             }
     };
+    /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
+        ::com::sun::star::lang::XComponent.  Upon disposing objects of this class, sub-classes
+        receive a disposing() call.  Objects of this class can be held weakly, i.e. by a
+        ::com::sun::star::uno::WeakReference.  Object of this class can be aggregated, i.e.
+        incoming queryInterface() calls are delegated.
+
+        @attention
+        The life-cycle of the passed mutex reference has to be longer than objects of this class.
+
+        @derive
+        Inherit from this class giving your interface(s) to be implemented as template argument(s).
+        Your sub class defines method implementations for these interface(s).
+    */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7 >
     class SAL_NO_VTABLE WeakAggComponentImplHelper7
         : public WeakAggComponentImplHelperBase
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7
     {
+        /** @internal */
         static class_data7 s_cd;
     public:
         inline WeakAggComponentImplHelper7( ::osl::Mutex & rMutex ) throw ()

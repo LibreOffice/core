@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase6.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-04 13:24:09 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ __DEF_IMPLHELPER_EX( 6 )
 
 namespace cppu
 {
+    /** @internal */
     struct class_data6
     {
         sal_Int16 m_nTypes;
@@ -101,11 +102,20 @@ namespace cppu
         sal_Int8 m_id[ 16 ];
         type_entry m_typeEntries[ 6 + 1 ];
     };
+    /** Implementation helper implementing interface ::com::sun::star::lang::XTypeProvider
+        and method XInterface::queryInterface(), but no reference counting.
+
+        @derive
+        Inherit from this class giving your interface(s) to be implemented as template argument(s).
+        Your sub class defines method implementations for these interface(s) including acquire()/
+        release() and delegates incoming queryInterface() calls to this base class.
+    */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6 >
     class SAL_NO_VTABLE ImplHelper6
         : public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
     {
+        /** @internal */
         static class_data6 s_cd;
     public:
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
@@ -130,12 +140,21 @@ namespace cppu
             { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * ))&getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (ImplHelper6< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6 > *) 16) - 16 }
         }
     };
+    /** Implementation helper implementing interfaces ::com::sun::star::lang::XTypeProvider and
+        ::com::sun::star::uno::XInterface which supports weak mechanism to be held weakly
+        (supporting ::com::sun::star::uno::XWeak thru ::cppu::OWeakObject).
+
+        @derive
+        Inherit from this class giving your interface(s) to be implemented as template argument(s).
+        Your sub class defines method implementations for these interface(s).
+    */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6 >
     class SAL_NO_VTABLE WeakImplHelper6
         : public OWeakObject
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
     {
+        /** @internal */
         static class_data6 s_cd;
     public:
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
@@ -164,12 +183,26 @@ namespace cppu
             { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * ))&getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (WeakImplHelper6< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6 > *) 16) - 16 }
         }
     };
+    /** Implementation helper implementing interfaces ::com::sun::star::lang::XTypeProvider and
+        ::com::sun::star::uno::XInterface which supports weak mechanism to be held weakly
+        (supporting ::com::sun::star::uno::XWeak thru ::cppu::OWeakAggObject).
+        In addition, it supports also aggregation meaning object of this class can be aggregated
+        (::com::sun::star::uno::XAggregation thru ::cppu::OWeakAggObject).
+        If a delegator is set (this object is aggregated), then incoming queryInterface()
+        calls are delegated to the delegator object. If the delegator does not support the
+        demanded interface, it calls queryAggregation() on its aggregated objects.
+
+        @derive
+        Inherit from this class giving your interface(s) to be implemented as template argument(s).
+        Your sub class defines method implementations for these interface(s).
+    */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6 >
     class SAL_NO_VTABLE WeakAggImplHelper6
         : public OWeakAggObject
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
     {
+        /** @internal */
         static class_data6 s_cd;
     public:
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
@@ -200,11 +233,27 @@ namespace cppu
             { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * ))&getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (WeakAggImplHelper6< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6 > *) 16) - 16 }
         }
     };
+    /** Implementation helper implementing interfaces ::com::sun::star::lang::XTypeProvider and
+        ::com::sun::star::uno::XInterface inherting from a BaseClass.
+        All acquire() and release() calls are delegated to the BaseClass. Upon queryInterface(),
+        if a demanded interface is not supported by this class directly, the request is
+        delegated to the BaseClass.
+
+        @attention
+        The BaseClass has to be complete in a sense, that ::com::sun::star::uno::XInterface
+        and ::com::sun::star::lang::XTypeProvider are implemented properly.  The BaseClass
+        also has to have a default ctor.
+
+        @derive
+        Inherit from this class giving your additional interface(s) to be implemented as
+        template argument(s). Your sub class defines method implementations for these interface(s).
+    */
     template< class BaseClass, class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6 >
     class SAL_NO_VTABLE ImplInheritanceHelper6
         : public BaseClass
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
     {
+        /** @internal */
         static class_data6 s_cd;
     public:
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
@@ -238,11 +287,27 @@ namespace cppu
             { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * ))&getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (ImplInheritanceHelper6< BaseClass, Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6 > *) 16) - 16 }
         }
     };
+    /** Implementation helper implementing interfaces ::com::sun::star::lang::XTypeProvider and
+        ::com::sun::star::uno::XInterface inherting from a BaseClass.
+        All acquire(),  release() and queryInterface() calls are delegated to the BaseClass.
+        Upon queryAggregation(), if a demanded interface is not supported by this class directly,
+        the request is delegated to the BaseClass.
+
+        @attention
+        The BaseClass has to be complete in a sense, that ::com::sun::star::uno::XInterface,
+        ::com::sun::star::uno::XAggregation and ::com::sun::star::lang::XTypeProvider
+        are implemented properly.  The BaseClass also has to have a default ctor.
+
+        @derive
+        Inherit from this class giving your additional interface(s) to be implemented as
+        template argument(s). Your sub class defines method implementations for these interface(s).
+    */
     template< class BaseClass, class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6 >
     class SAL_NO_VTABLE AggImplInheritanceHelper6
         : public BaseClass
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
     {
+        /** @internal */
         static class_data6 s_cd;
     public:
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)

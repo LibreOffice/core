@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weakagg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,82 +68,79 @@
 #include <com/sun/star/uno/XAggregation.hpp>
 #endif
 
-/** */ //for docpp
+
 namespace cppu
 {
 
-/**
-   The basic implementation to support weak references and aggregation. The aggregation
-   implementation is based on interfaces, but you should use this class to avoid
-   problems against changes in the future. Overload queryAggregation() instead of queryInterface()
-   to return your interfaces.
-   <BR><B>Not tested.</B>
+/** Base class to implement an UNO object supporting weak references, i.e. the object can be held
+    weakly (by a ::com::sun::star::uno::WeakReference) and aggregation, i.e. the object can be
+    aggregated by another (delegator).
+    This implementation copes with reference counting.  Upon last release(), the virtual dtor
+    is called.
 
-   @author  Markus Meyer
-   @since   98/04/12
- */
+    @derive
+    Inherit from this class and delegate acquire()/ release() calls.  Re-implement
+    XAggregation::queryInterface().
+*/
 class OWeakAggObject
     : public ::cppu::OWeakObject
     , public ::com::sun::star::uno::XAggregation
 {
 public:
-    /**
-       Set the delegator to null.
-     */
-    OWeakAggObject() SAL_THROW( () )
+    /** Constructor.  No delegator set.
+    */
+    inline OWeakAggObject() SAL_THROW( () )
         {}
 
-    // XInterface
-    /**
-       Increment the reference count if no delegator is set, otherwise call
-       acquire at the delegator.
-     */
+    /** If a delegator is set, then the delegators gets acquired.  Otherwise call is delegated to
+        base class ::cppu::OWeakObject.
+    */
     virtual void SAL_CALL acquire() throw();
-    /**
-       Decrement the reference count if no delegator is set, otherwise call
-       acquire at the delegator. If the reference count goes to zero the
-       virtual destructor gets called.
-     */
+    /** If a delegator is set, then the delegators gets released.  Otherwise call is delegated to
+        base class ::cppu::OWeakObject.
+    */
     virtual void SAL_CALL release() throw();
-    /**
-       Delegates this call to the delegator, if one is set. Otherwise
-       call the method queryAggregation.
-       @see queryAggregation.
-     */
+    /** If a delegator is set, then the delegator is queried for the demanded interface.  If the
+        delegator cannot provide the demanded interface, it calls queryAggregation() on its
+        aggregated objects.
+
+        @param rType demanded interface type
+        @return demanded type or empty any
+        @see queryAggregation.
+    */
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
         throw(::com::sun::star::uno::RuntimeException);
 
-    // XAggregation
-    /**
-       Set the Delegator to the xDelegator member. This member is a weak
-       reference.
-       @param Delegator the object that delegate the queryInterface calls.
-     */
+    /** Set the delegator.  The delegator member reference is a weak reference.
+
+        @param Delegator the object that delegate its queryInterface to this aggregate.
+    */
     virtual void SAL_CALL setDelegator( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & Delegator )
         throw(::com::sun::star::uno::RuntimeException);
-    /**
-       Called from the delegator or queryInterface. Overload this method instead of
-       queryInterface.
-       @see queryInterfaces
-     */
+    /** Called by the delegator or queryInterface. Re-implement this method instead of
+        queryInterface.
+
+        @see queryInterface
+    */
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType )
         throw(::com::sun::star::uno::RuntimeException);
 
 protected:
-    /**
-       Call the destructor is only allowed if the reference count is zero.
-     */
-    virtual ~OWeakAggObject()
-        SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    /** Virtual dtor. Called when reference count is 0.
 
-    /**
-       The delegator set with setDelegator.
-       @see setDelegator
-     */
+        @attention
+        Despite the fact that a RuntimeException is allowed to be thrown, you must not throw any
+        exception upon destruction!
+    */
+    virtual ~OWeakAggObject() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+
+    /** weak reference to delegator.
+    */
     ::com::sun::star::uno::WeakReferenceHelper xDelegator;
 private:
+    /** @internal */
     OWeakAggObject( const OWeakObject & rObj ) SAL_THROW( () );
-
+    /** @internal */
     OWeakObject &  operator = ( const OWeakObject & rObj ) SAL_THROW( () );
 };
 

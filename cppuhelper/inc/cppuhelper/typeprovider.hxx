@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,27 +76,32 @@
 namespace cppu
 {
 
-//==================================================================================================
+/** Helper class to implement ::com::sun::star::lang::XTypeProvider.  Construct a static object
+    of this class with your UNO object's supported types.
+*/
 class OTypeCollection
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > _aTypes;
 
 public:
     // these are here to force memory de/allocation to sal lib.
+    /** @internal */
     inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
+    /** @internal */
     inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
+    /** @internal */
     inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
+    /** @internal */
     inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
         {}
 
-    OTypeCollection( const OTypeCollection & rCollection )
+    inline OTypeCollection( const OTypeCollection & rCollection )
         SAL_THROW( () )
         : _aTypes( rCollection._aTypes )
         {}
-
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
@@ -212,39 +217,64 @@ public:
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
         SAL_THROW( () );
 
+    /** Called upon XTypeProvider::getTypes().
+
+        @return type collection
+    */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() SAL_THROW( () )
         { return _aTypes; }
 };
 
-//==================================================================================================
+/** Helper class to implement ::com::sun::star::lang::XTypeProvider.  Construct a static object
+    of this class for your UNO object's implementation id.
+*/
 class OImplementationId
 {
+    /** @internal */
     mutable ::com::sun::star::uno::Sequence< sal_Int8 > * _pSeq;
+    /** @internal */
     sal_Bool _bUseEthernetAddress;
 
 public:
     // these are here to force memory de/allocation to sal lib.
+    /** @internal */
     inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
+    /** @internal */
     inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
+    /** @internal */
     inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
+    /** @internal */
     inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
         {}
 
+    /** @internal */
     ~OImplementationId() SAL_THROW( () );
-    OImplementationId( sal_Bool bUseEthernetAddress = sal_True ) SAL_THROW( () )
+    /** Constructor.
+
+        @param bUseEthernetAddress whether an ethernet mac address should be taken into account
+    */
+    inline OImplementationId( sal_Bool bUseEthernetAddress = sal_True ) SAL_THROW( () )
         : _pSeq( 0 )
         , _bUseEthernetAddress( bUseEthernetAddress )
         {}
-    OImplementationId( const ::com::sun::star::uno::Sequence< sal_Int8 > & rSeq ) SAL_THROW( () )
+    /** Constructor giving implementation id.
+
+        @param rSeq implementation id
+    */
+    inline OImplementationId( const ::com::sun::star::uno::Sequence< sal_Int8 > & rSeq ) SAL_THROW( () )
         : _pSeq( new ::com::sun::star::uno::Sequence< sal_Int8 >( rSeq ) )
         {}
-    OImplementationId( const OImplementationId & rId ) SAL_THROW( () )
+    inline OImplementationId( const OImplementationId & rId ) SAL_THROW( () )
         : _pSeq( new ::com::sun::star::uno::Sequence< sal_Int8 >( rId.getImplementationId() ) )
         {}
 
+    /** Called upon XTypeProvider::getImplementationId().
+
+        @return implementation id
+    */
     ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() const SAL_THROW( () );
 };
 

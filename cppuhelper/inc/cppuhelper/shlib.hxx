@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-08 15:54:52 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,27 +70,20 @@
 namespace cppu
 {
 
-/** Loads a shared library component and gets the factory out of it.
-    You can give either a fully qualified libname or single lib name.
-    The libname need not be pre/postfixed (e.g. xxx.dll).
-    You can give an extra path to force lookup of the library.
-    The resulting path of the library will be checked against
-    environment variable CPLD_ACCESSPATH.
+/** Loads a shared library component and gets the factory out of it.  You can give either a
+    fully qualified libname or single lib name.  The libname need not be pre/postfixed
+    (e.g. xxx.dll).  You can give parameter rPath to force lookup of the library in a specific
+    directory.  The resulting path of the library will be checked against environment variable
+    CPLD_ACCESSPATH if set.
 
-    @param rLibName
-           name of the library
-    @param rPath
-           optional path
-    @param rImplName
-           implementation to be retrieved from the library
-    @param xMgr
-           service manager to be provided to the component
-    @param xKey
-           registry key to be provided to the component
+    @param rLibName name of the library
+    @param rPath optional path
+    @param rImplName implementation to be retrieved from the library
+    @param xMgr service manager to be provided to the component
+    @param xKey registry key to be provided to the component
     @return
-           factory instance
-    @throws ::com::sun::star::loader::CannotActivateFactoryException
-            if activation failed
+    factory instance (::com::sun::star::lang::XSingleComponentFactory or
+    ::com::sun::star::lang::XSingleComponentFactory)
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
@@ -100,23 +93,16 @@ SAL_CALL loadSharedLibComponentFactory(
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey )
     SAL_THROW( (::com::sun::star::loader::CannotActivateFactoryException) );
 
-/** Invokes component_writeInfo() function of specified component library.
-    You can give either a fully qualified libname or single lib name.
-    The libname need not be pre/postfixed (e.g. xxx.dll).
-    You can give an extra path to force lookup of the library.
-    The resulting path of the library will be checked against
-    environment variable CPLD_ACCESSPATH.
+/** Invokes component_writeInfo() function of specified component library.  You can give either
+    a fully qualified libname or single lib name. The libname need not be pre/postfixed
+    (e.g. xxx.dll).  You can give parameter rPath to force lookup of the library in a specific
+    directory.  The resulting path of the library will be checked against environment variable
+    CPLD_ACCESSPATH if set.
 
-    @param rLibName
-           name of the library
-    @param rPath
-           optional path
-    @param xMgr
-           service manager to be provided to the component
-    @param xKey
-           registry key to be provided to the component
-    @throws ::com::sun::star::registry::CannotRegisterImplementationException
-            if writing the info failed
+    @param rLibName name of the library
+    @param rPath optional path
+    @param xMgr service manager to be provided to the component
+    @param xKey registry key to be provided to the component
 */
 void
 SAL_CALL writeSharedLibComponentInfo(

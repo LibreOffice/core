@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-09-03 14:28:17 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ namespace cppu
 
 /** Creates a simple registry service instance.
 
-    @rBootstrapPath optional boot strap path for initial components
+    @rBootstrapPath optional bootstrap path for initial components
     @return simple registry service instance
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >
@@ -80,7 +80,7 @@ SAL_CALL createSimpleRegistry(
 
 /** Creates a nested registry service instance.
 
-    @rBootstrapPath optional boot strap path for initial components
+    @rBootstrapPath optional bootstrap path for initial components
     @return nested registry service instance
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >
@@ -88,7 +88,7 @@ SAL_CALL createNestedRegistry(
     const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
     SAL_THROW( () );
 
-/** Installs type description manager instance, i.e. registers callback at cppu core.
+/** Installs type description manager instance, i.e. registers a callback at cppu core.
 
     @param xTDMgr manager instance
     @return true, if successfully registered
@@ -105,7 +105,7 @@ sal_Bool SAL_CALL installTypeDescriptionManager(
       - registry typedescription provider, typedescription manager (also installs it into cppu core)
 
     @param xRegistry registry for service manager and singleton objects of context (may be null)
-    @rBootstrapPath optional boot strap path for initial components
+    @rBootstrapPath optional bootstrap path for initial components
     @return component context
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
@@ -138,6 +138,26 @@ bootstrap_InitialComponentContext(
 defaultBootstrap_InitialComponentContext() SAL_THROW( (::com::sun::star::uno::Exception) );
 
 
+/** Bootstraps an initial component context with service manager upon default types and
+    services registry.
+    This includes insertion of initial services:
+      - (registry) service manager, shared lib loader,
+      - simple registry, nested registry,
+      - implementation registration
+      - registry typedescription provider, typedescription manager (also installs it into cppu core)
+
+    This function tries to find its parameters via these bootstrap variables:
+
+      - UNO_TYPES         -- a space separated list of file urls of type rdbs
+      - UNO_SERVICES      -- a space separated list of file urls of service rdbs
+      - UNO_WRITERDB      -- a file url of a write rdb (e.g. user.rdb)
+
+    Please look at http://udk.openoffice.org/common/man/concept/uno_default_bootstrapping.html
+    for further info.
+
+    @param iniFile ini filename to get bootstrap variables
+    @return component context
+*/
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile) SAL_THROW( (::com::sun::star::uno::Exception) );
 
