@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:40:18 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     ShrfmlaBuffer*      pShrfmlaBuff;
     ExtNameBuff*        pExtNameBuff;
     ExcelToSc*          pFmlaConverter;
-
-    BOOL                bChartTab;              // Tabelle mit einem einzigen Chart
 
     // Biff8
     XclImpAutoFilterBuffer* pAutoFilterBuffer;      // ranges for autofilter and advanced filter
