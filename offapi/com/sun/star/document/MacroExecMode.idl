@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MacroExecMode.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:49:57 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ module com { module sun { module star { module document {
 //=============================================================================
 /** Specify whether a macro can be executed.
 
-    @since #107627#
+    @since OOo 1.1.2
 */
 published constants MacroExecMode
 {
