@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:49:49 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,15 +382,15 @@ SwFrmNotify::~SwFrmNotify()
                             //MA 16. Oct. 95: (fix:21063) Verfeinert.
                             const SwFmtVertOrient &rVert =
                                         pFly->GetFmt()->GetVertOrient();
-                            const SwFmtHoriOrient &rHori =
-                                        pFly->GetFmt()->GetHoriOrient();
-                            if ( (rVert.GetVertOrient()    == VERT_CENTER  ||
-                                  rVert.GetVertOrient()    == VERT_BOTTOM  ||
-                                  rVert.GetRelationOrient()== PRTAREA)  &&
+                            if ( ( rVert.GetVertOrient() == VERT_CENTER  ||
+                                   rVert.GetVertOrient() == VERT_BOTTOM  ||
+                                   rVert.GetRelationOrient() == PRTAREA ) &&
                                  ( bChgHeight || bPrtHeight ) )
                             {
                                 bNotify = TRUE;
                             }
+                            const SwFmtHoriOrient &rHori =
+                                        pFly->GetFmt()->GetHoriOrient();
                             if ( ( rHori.GetHoriOrient() != HORI_NONE ||
                                    rHori.GetRelationOrient()== PRTAREA ||
                                    rHori.GetRelationOrient()== FRAME ) &&
@@ -429,22 +429,20 @@ SwFrmNotify::~SwFrmNotify()
                         else
                         {
                             pObj->SetAnchorPos( pFrm->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
-                            ((SwDrawContact*)GetUserCall(pObj))->ChkPage();
-                            // OD 30.06.2003 #108784# - correct relative position
-                            // of 'virtual' drawing objects.
                             SwDrawContact* pDrawContact =
                                 static_cast<SwDrawContact*>(pObj->GetUserCall());
-                            if ( pDrawContact )
-                            {
-                                pDrawContact->CorrectRelativePosOfVirtObjs();
-                            }
+                            ASSERT( pDrawContact,
+                                    "<SwFrmNotify::~SwFrmNotify()> - no contact found at drawing object." );
+                            pDrawContact->ChkPage();
+                            // OD 30.06.2003 #108784# - correct relative position
+                            // of 'virtual' drawing objects.
+                            pDrawContact->CorrectRelativePosOfVirtObjs();
                         }
                     }
                 }
             }
         }
     }
-#ifdef ACCESSIBLE_LAYOUT
     else if( pFrm->IsTxtFrm() && bValidSize != pFrm->GetValidSizeFlag() )
     {
         SwRootFrm *pRootFrm = pFrm->FindRootFrm();
@@ -454,7 +452,6 @@ SwFrmNotify::~SwFrmNotify()
             pRootFrm->GetCurrShell()->Imp()->InvalidateAccessibleFrmContent( pFrm );
         }
     }
-#endif
 }
 
 /*************************************************************************
@@ -810,8 +807,7 @@ SwCntntNotify::SwCntntNotify( SwCntntFrm *pCntntFrm ) :
             if ( rSpace.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
             {
                 mbChkHeightOfLastLine = true;
-                mnHeightOfLastLine =
-                        pTxtFrm->GetHeightOfLastLineForPropLineSpacing();
+                mnHeightOfLastLine = pTxtFrm->GetHeightOfLastLine();
             }
         }
     }
@@ -1014,6 +1010,16 @@ SwCntntNotify::~SwCntntNotify()
                 Point aPos( aAktPos );
                 FASTBOOL bSetPos = FALSE;
                 SwFmtVertOrient *pVert;
+                // OD 2004-03-10 #i11860# - consider lower space and line spacing
+                // of previous frame according to new option 'Use former object positioning'
+                SwTwips nCntTop = pCnt->Frm().Top();
+                if ( !pFmt->GetDoc()->IsFormerObjectPositioning() &&
+                     pCnt->IsTxtFrm() && !pCnt->IsVertical() )
+                {
+                    const SwTxtFrm* pTxtFrm = static_cast<const SwTxtFrm*>(pCnt);
+                    nCntTop += pTxtFrm->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+                }
+
                 if ( SFX_ITEM_SET == pFmt->GetAttrSet().GetItemState(
                             RES_VERT_ORIENT, FALSE, (const SfxPoolItem**)&pVert ) )
                 {
@@ -1023,9 +1029,8 @@ SwCntntNotify::~SwCntntNotify()
                         case REL_PG_FRAME:      aPos.Y() = pPage->Frm().Top(); break;
                         case REL_PG_PRTAREA:    aPos.Y() = pPage->Frm().Top();
                                                 aPos.Y() += pPage->Prt().Top(); break;
-                        case PRTAREA:           aPos.Y() = pCnt->Frm().Top();
-                                                aPos.Y() += pCnt->Prt().Top(); break;
-                        case FRAME:             aPos.Y() = pCnt->Frm().Top(); break;
+                        case PRTAREA:           aPos.Y() = nCntTop + pCnt->Prt().Top(); break;
+                        case FRAME:             aPos.Y() = nCntTop; break;
                         default:
                             bSetPos = FALSE;
                             ASSERT( !this,"neuer Trick vom WW Reader?" );
@@ -1080,8 +1085,7 @@ SwCntntNotify::~SwCntntNotify()
     //  if height of last line has changed.
     if ( pCnt->IsTxtFrm() && mbChkHeightOfLastLine )
     {
-        if ( mnHeightOfLastLine !=
-                static_cast<SwTxtFrm*>(pCnt)->GetHeightOfLastLineForPropLineSpacing() )
+        if ( mnHeightOfLastLine != static_cast<SwTxtFrm*>(pCnt)->GetHeightOfLastLine() )
         {
             static_cast<SwTxtFrm*>(pCnt)->InvalidateNextPrtArea();
         }
