@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:28:06 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -866,7 +866,7 @@ BOOL UCBStorageStream_Impl::Init()
         if ( !m_aTempURL.Len() )
             m_aTempURL = ::utl::TempFile().GetURL();
 
-        m_pStream = ::utl::UcbStreamHelper::CreateStream( m_aTempURL, STREAM_STD_READWRITE );
+        m_pStream = ::utl::UcbStreamHelper::CreateStream( m_aTempURL, STREAM_STD_READWRITE, sal_True /* bFileExists */ );
 #if OSL_DEBUG_LEVEL > 1
         ++nOpenFiles;
 #endif
@@ -1816,7 +1816,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
         if ( m_nMode & STREAM_WRITE )
         {
             // the root storage opens the package, so make sure that there is any
-            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READWRITE );
+            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READWRITE, m_pTempFile != 0 /* bFileExists */ );
             delete pStream;
         }
     }
@@ -1860,7 +1860,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     m_aURL = aTemp;
 
     // copy data into the temporary file
-    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READWRITE );
+    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READWRITE, sal_True /* bFileExists */ );
     if ( pStream )
     {
         rStream.Seek(0);
