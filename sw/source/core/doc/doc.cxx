@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:51:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <hintids.hxx>
 #endif
 
+#include <tools/shl.hxx>
+#include <tools/globname.hxx>
+
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
 #endif
@@ -73,9 +76,6 @@
 #endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
@@ -564,7 +564,7 @@ SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg, const GraphicObject& rGrfObj,
                             pFlyAttrSet, pGrfAttrSet, pFrmFmt );
 }
 
-SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, SvInPlaceObject *pObj,
+SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
                         const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet,
                         SwFrmFmt* pFrmFmt )
@@ -572,16 +572,15 @@ SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, SvInPlaceObject *pObj,
     if( !pFrmFmt )
     {
         USHORT nId = RES_POOLFRM_OLE;
-
-        FASTBOOL bMath = SotExchange::IsMath( *pObj->GetSvFactory() );
-        if ( bMath )
+        SvGlobalName aClassName( xObj->getClassID() );
+        if (SotExchange::IsMath(aClassName))
             nId = RES_POOLFRM_FORMEL;
 
         pFrmFmt = GetFrmFmtFromPool( nId );
     }
     return _InsNoTxtNode( *rRg.GetPoint(), GetNodes().MakeOLENode(
                             SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                            pObj,
+                            xObj,
                             pDfltGrfFmtColl ),
                             pFlyAttrSet, pGrfAttrSet,
                             pFrmFmt );
@@ -1205,7 +1204,7 @@ BOOL SwDoc::EmbedAllLinks()
 {
     BOOL bRet = FALSE;
     SvxLinkManager& rLnkMgr = GetLinkManager();
-    const ::so3::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+    const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
     if( rLnks.Count() )
     {
         BOOL bDoesUndo = DoesUndo();
@@ -1213,13 +1212,13 @@ BOOL SwDoc::EmbedAllLinks()
 
         for( USHORT n = 0; n < rLnks.Count(); ++n )
         {
-            ::so3::SvBaseLink* pLnk = &(*rLnks[ n ]);
+            ::sfx2::SvBaseLink* pLnk = &(*rLnks[ n ]);
             if( pLnk &&
                 ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
                   OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
                 pLnk->ISA( SwBaseLink ) )
             {
-                ::so3::SvBaseLinkRef xLink = pLnk;
+                ::sfx2::SvBaseLinkRef xLink = pLnk;
                 USHORT nCount = rLnks.Count();
 
                 String sFName;
