@@ -1,6 +1,6 @@
 
 .IF "$(YACCTARGET)"!=""
-$(YACCTARGET): $(YACCFILES)
+$(MISC)$/%.cxx : %.y
     @echo ------------------------------
     @echo Making: $@
     $(BISON) $(YACCFLAGS) $(YACCTARGET) $(YACCFILES)
