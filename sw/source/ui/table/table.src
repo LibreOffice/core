@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:15:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@ InfoBox MSG_ERR_TABLE_MERGE
     MESSAGE[ hindi ] = "चुने हुए सारणी कोष्ठों को मिलाना असंभव है ।";
     MESSAGE[ slovak ] = "Vybrané bunky tabuľky sú príliš komplexné na zlúčenie.";
 };
+
+
 
 
 
