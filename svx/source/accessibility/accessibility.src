@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-17 08:48:49 $
+ *  last change: $Author: af $ $Date: 2002-05-17 11:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,136 +61,6 @@
 
 #include "accessibility.hrc"
 
-String RID_SVXSTR_A11Y_LINE_COLOR
-{
-    Text = "Linienfarbe" ;
-    Text[ ENGLISH ] = "line color" ;
-    Text[ ENGLISH_US ] = "line color" ;
-    Text[ portuguese ] = "line color";
-    Text[ russian ] = "line color";
-    Text[ greek ] = "line color";
-    Text[ dutch ] = "line color";
-    Text[ french ] = "line color";
-    Text[ spanish ] = "line color";
-    Text[ finnish ] = "line color";
-    Text[ italian ] = "line color";
-    Text[ danish ] = "line color";
-    Text[ swedish ] = "line color";
-    Text[ polish ] = "line color";
-    Text[ portuguese_brazilian ] = "line color";
-    Text[ japanese ] = "line color";
-    Text[ korean ] = "line color";
-    Text[ chinese_simplified ] = "line color";
-    Text[ chinese_traditional ] = "line color";
-    Text[ turkish ] = "line color";
-    Text[ arabic ] = "line color";
-    Text[ catalan ] = "line color";
-    Text[ thai ] = "line color";
-};
-String RID_SVXSTR_A11Y_LINE_DASH_NAME
-{
-    Text = "Strichelung" ;
-    Text[ ENGLISH ] = "line dash" ;
-    Text[ ENGLISH_US ] = "line dash" ;
-    Text[ portuguese ] = "line dash";
-    Text[ russian ] = "line dash";
-    Text[ greek ] = "line dash";
-    Text[ dutch ] = "line dash";
-    Text[ french ] = "line dash";
-    Text[ spanish ] = "line dash";
-    Text[ finnish ] = "line dash";
-    Text[ italian ] = "line dash";
-    Text[ danish ] = "line dash";
-    Text[ swedish ] = "line dash";
-    Text[ polish ] = "line dash";
-    Text[ portuguese_brazilian ] = "line dash";
-    Text[ japanese ] = "line dash";
-    Text[ korean ] = "line dash";
-    Text[ chinese_simplified ] = "line dash";
-    Text[ chinese_traditional ] = "line dash";
-    Text[ turkish ] = "line dash";
-    Text[ arabic ] = "line dash";
-    Text[ catalan ] = "line dash";
-    Text[ thai ] = "line dash";
-};
-String RID_SVXSTR_A11Y_LINE_WIDTH
-{
-    Text = "Linienbreite" ;
-    Text[ ENGLISH ] = "line width" ;
-    Text[ ENGLISH_US ] = "line width" ;
-    Text[ portuguese ] = "line width";
-    Text[ russian ] = "line width";
-    Text[ greek ] = "line width";
-    Text[ dutch ] = "line width";
-    Text[ french ] = "line width";
-    Text[ spanish ] = "line width";
-    Text[ finnish ] = "line width";
-    Text[ italian ] = "line width";
-    Text[ danish ] = "line width";
-    Text[ swedish ] = "line width";
-    Text[ polish ] = "line width";
-    Text[ portuguese_brazilian ] = "line width";
-    Text[ japanese ] = "line width";
-    Text[ korean ] = "line width";
-    Text[ chinese_simplified ] = "line width";
-    Text[ chinese_traditional ] = "line width";
-    Text[ turkish ] = "line width";
-    Text[ arabic ] = "line width";
-    Text[ catalan ] = "line width";
-    Text[ thai ] = "line width";
-};
-String RID_SVXSTR_A11Y_FILL_COLOR
-{
-    Text = "F¸llfarbe" ;
-    Text[ ENGLISH ] = "fill color" ;
-    Text[ ENGLISH_US ] = "fill color" ;
-    Text[ portuguese ] = "fill color";
-    Text[ russian ] = "fill color";
-    Text[ greek ] = "fill color";
-    Text[ dutch ] = "fill color";
-    Text[ french ] = "fill color";
-    Text[ spanish ] = "fill color";
-    Text[ finnish ] = "fill color";
-    Text[ italian ] = "fill color";
-    Text[ danish ] = "fill color";
-    Text[ swedish ] = "fill color";
-    Text[ polish ] = "fill color";
-    Text[ portuguese_brazilian ] = "fill color";
-    Text[ japanese ] = "fill color";
-    Text[ korean ] = "fill color";
-    Text[ chinese_simplified ] = "fill color";
-    Text[ chinese_traditional ] = "fill color";
-    Text[ turkish ] = "fill color";
-    Text[ arabic ] = "fill color";
-    Text[ catalan ] = "fill color";
-    Text[ thai ] = "fill color";
-};
-String RID_SVXSTR_A11Y_FILL_STYLE
-{
-    Text = "F¸llstil" ;
-    Text[ ENGLISH ] = "fill style" ;
-    Text[ ENGLISH_US ] = "fill style" ;
-    Text[ portuguese ] = "fill style";
-    Text[ russian ] = "fill style";
-    Text[ greek ] = "fill style";
-    Text[ dutch ] = "fill style";
-    Text[ french ] = "fill style";
-    Text[ spanish ] = "fill style";
-    Text[ finnish ] = "fill style";
-    Text[ italian ] = "fill style";
-    Text[ danish ] = "fill style";
-    Text[ swedish ] = "fill style";
-    Text[ polish ] = "fill style";
-    Text[ portuguese_brazilian ] = "fill style";
-    Text[ japanese ] = "fill style";
-    Text[ korean ] = "fill style";
-    Text[ chinese_simplified ] = "fill style";
-    Text[ chinese_traditional ] = "fill style";
-    Text[ turkish ] = "fill style";
-    Text[ arabic ] = "fill style";
-    Text[ catalan ] = "fill style";
-    Text[ thai ] = "fill style";
-};
 String RID_SVXSTR_A11Y_3D_MATERIAL_COLOR
 {
     Text = "3D-Materialfarbe" ;
@@ -216,84 +86,6 @@ String RID_SVXSTR_A11Y_3D_MATERIAL_COLOR
     Text[ arabic ] = "3D material color";
     Text[ catalan ] = "3D material color";
     Text[ thai ] = "3D material color";
-};
-String RID_SVXSTR_A11Y_FILL_GRADIENT_NAME
-{
-    Text = "Verlauf" ;
-    Text[ ENGLISH ] = "gradient" ;
-    Text[ ENGLISH_US ] = "gradient" ;
-    Text[ portuguese ] = "gradient";
-    Text[ russian ] = "gradient";
-    Text[ greek ] = "gradient";
-    Text[ dutch ] = "gradient";
-    Text[ french ] = "gradient";
-    Text[ spanish ] = "gradient";
-    Text[ finnish ] = "gradient";
-    Text[ italian ] = "gradient";
-    Text[ danish ] = "gradient";
-    Text[ swedish ] = "gradient";
-    Text[ polish ] = "gradient";
-    Text[ portuguese_brazilian ] = "gradient";
-    Text[ japanese ] = "gradient";
-    Text[ korean ] = "gradient";
-    Text[ chinese_simplified ] = "gradient";
-    Text[ chinese_traditional ] = "gradient";
-    Text[ turkish ] = "gradient";
-    Text[ arabic ] = "gradient";
-    Text[ catalan ] = "gradient";
-    Text[ thai ] = "gradient";
-};
-String RID_SVXSTR_A11Y_FILL_HATCH_NAME
-{
-    Text = "Schraffur" ;
-    Text[ ENGLISH ] = "hatch" ;
-    Text[ ENGLISH_US ] = "hatch" ;
-    Text[ portuguese ] = "hatch";
-    Text[ russian ] = "hatch";
-    Text[ greek ] = "hatch";
-    Text[ dutch ] = "hatch";
-    Text[ french ] = "hatch";
-    Text[ spanish ] = "hatch";
-    Text[ finnish ] = "hatch";
-    Text[ italian ] = "hatch";
-    Text[ danish ] = "hatch";
-    Text[ swedish ] = "hatch";
-    Text[ polish ] = "hatch";
-    Text[ portuguese_brazilian ] = "hatch";
-    Text[ japanese ] = "hatch";
-    Text[ korean ] = "hatch";
-    Text[ chinese_simplified ] = "hatch";
-    Text[ chinese_traditional ] = "hatch";
-    Text[ turkish ] = "hatch";
-    Text[ arabic ] = "hatch";
-    Text[ catalan ] = "hatch";
-    Text[ thai ] = "hatch";
-};
-String RID_SVXSTR_A11Y_FILL_BITMAP_NAME
-{
-    Text = "Bitmap" ;
-    Text[ ENGLISH ] = "bitmap" ;
-    Text[ ENGLISH_US ] = "bitmap" ;
-    Text[ portuguese ] = "bitmap";
-    Text[ russian ] = "bitmap";
-    Text[ greek ] = "bitmap";
-    Text[ dutch ] = "bitmap";
-    Text[ french ] = "bitmap";
-    Text[ spanish ] = "bitmap";
-    Text[ finnish ] = "Bittikartta";
-    Text[ italian ] = "Stile bitmap";
-    Text[ danish ] = "bitmap";
-    Text[ swedish ] = "bitmap";
-    Text[ polish ] = "Mapa bitowa";
-    Text[ portuguese_brazilian ] = "bitmap";
-    Text[ japanese ] = "„Éì„ÉÉ„Éà„Éû„ÉÉ„Éó";
-    Text[ korean ] = "ÎπÑÌä∏Îßµ";
-    Text[ chinese_simplified ] = "‰ΩçÂõæ";
-    Text[ chinese_traditional ] = "ÈªûÈô£Âúñ";
-    Text[ turkish ] = "Bit e˛lem";
-    Text[ arabic ] = "’Ê—… ‰ﬁÿÌ…";
-    Text[ catalan ] = "Mapa de bits";
-    Text[ thai ] = "‡∏ö‡∏¥‡∏ó‡πÅ‡∏°‡∏õ";
 };
 String RID_SVXSTR_A11Y_TEXT_COLOR
 {
@@ -427,7 +219,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
 {
-    Text = "verlauf" ;
+    Text = "Verlauf" ;
     Text[ ENGLISH ] = "gradient" ;
     Text[ ENGLISH_US ] = "gradient" ;
     Text[ portuguese ] = "gradient";
@@ -453,7 +245,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
 {
-    Text = "bitmap" ;
+    Text = "Bitmap" ;
     Text[ ENGLISH ] = "bitmap" ;
     Text[ ENGLISH_US ] = "bitmap" ;
     Text[ portuguese ] = "bitmap";
@@ -556,87 +348,6 @@ String RID_SVXSTR_A11Y_AND
     Text[ thai ] = "and";
 };
 
-/*
-String RID_SVXSTR_A11Y_ST_RECTANGLE
-{
-    Text = "Rechteck" ;
-    Text[ ENGLISH ] = "Rectangle" ;
-    Text[ ENGLISH_US ] = "Rectangle" ;
-    Text[ portuguese ] = "Rectangle";
-    Text[ russian ] = "Rectangle";
-    Text[ greek ] = "Rectangle";
-    Text[ dutch ] = "Rectangle";
-    Text[ french ] = "Rectangle";
-    Text[ spanish ] = "Rectangle";
-    Text[ finnish ] = "Rectangle";
-    Text[ italian ] = "Rectangle";
-    Text[ danish ] = "Rectangle";
-    Text[ swedish ] = "Rectangle";
-    Text[ polish ] = "Rectangle";
-    Text[ portuguese_brazilian ] = "Rectangle";
-    Text[ japanese ] = "Rectangle";
-    Text[ korean ] = "Rectangle";
-    Text[ chinese_simplified ] = "Rectangle";
-    Text[ chinese_traditional ] = "Rectangle";
-    Text[ turkish ] = "Rectangle";
-    Text[ arabic ] = "Rectangle";
-    Text[ catalan ] = "Rectangle";
-    Text[ thai ] = "Rectangle";
-};
-String RID_SVXSTR_A11Y_ST_ELLIPSE
-{
-    Text = "Ellipse" ;
-    Text[ ENGLISH ] = "Ellipse" ;
-    Text[ ENGLISH_US ] = "Ellipse" ;
-    Text[ portuguese ] = "Elipse";
-    Text[ russian ] = "›ÎÎËÔÒ˚";
-    Text[ greek ] = "∏ÎÎÂÈ¯Á";
-    Text[ dutch ] = "Ellipse";
-    Text[ french ] = "Ellipse";
-    Text[ spanish ] = "Elipse";
-    Text[ finnish ] = "Ellipse";
-    Text[ italian ] = "Ellipse";
-    Text[ danish ] = "Ellipse";
-    Text[ swedish ] = "Ellipse";
-    Text[ polish ] = "Elipsa";
-    Text[ portuguese_brazilian ] = "Ellipse";
-    Text[ japanese ] = "Ê•ïÂÜÜÂΩ¢";
-    Text[ korean ] = "ÌÉÄÏõê";
-    Text[ chinese_simplified ] = "Ê§≠ÂúÜ";
-    Text[ chinese_traditional ] = "Ê©¢ÂúìÂΩ¢";
-    Text[ turkish ] = "Elips";
-    Text[ arabic ] = "‘ﬂ· »Ì÷ÊÌ";
-    Text[ catalan ] = "Ellipse";
-    Text[ thai ] = "‡∏ß‡∏á‡∏£‡∏µ";
-};
-String RID_SVXSTR_A11Y_ST_OPEN_BEZIER_CURVE
-{
-    Text = "Offene Bezier Kurve" ;
-    Text[ ENGLISH ] = "Open bezier curve" ;
-    Text[ ENGLISH_US ] = "Open bezier curve" ;
-    Text[ portuguese ] = "Open bezier curve";
-    Text[ russian ] = "Open bezier curve";
-    Text[ greek ] = "Open bezier curve";
-    Text[ dutch ] = "Open bezier curve";
-    Text[ french ] = "Open bezier curve";
-    Text[ spanish ] = "Open bezier curve";
-    Text[ finnish ] = "Open bezier curve";
-    Text[ italian ] = "Open bezier curve";
-    Text[ danish ] = "Open bezier curve";
-    Text[ swedish ] = "Open bezier curve";
-    Text[ polish ] = "Open bezier curve";
-    Text[ portuguese_brazilian ] = "Open bezier curve";
-    Text[ japanese ] = "Open bezier curve";
-    Text[ korean ] = "Open bezier curve";
-    Text[ chinese_simplified ] = "Open bezier curve";
-    Text[ chinese_traditional ] = "Open bezier curve";
-    Text[ turkish ] = "Open bezier curve";
-    Text[ arabic ] = "Open bezier curve";
-    Text[ catalan ] = "Open bezier curve";
-    Text[ thai ] = "Open bezier curve";
-};
-
-*/
 
 // SvxRectCtl
 
