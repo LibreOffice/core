@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:30:55 $
+ *  last change: $Author: bm $ $Date: 2001-05-17 15:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,13 @@ sal_Bool XLineStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
 {
     ::com::sun::star::drawing::LineStyle eLS;
     if(!(rVal >>= eLS ))
-        return sal_False;
+    {
+        // also try an int (for Basic)
+        sal_Int32 nLS;
+        if(!(rVal >>= nLS))
+            return sal_False;
+        eLS = (::com::sun::star::drawing::LineStyle)nLS;
+    }
 
     SetValue( (XLineStyle)eLS );
     return sal_True;
