@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-09-27 12:55:32 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,24 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "Fax Nummer";
         Text [ ENGLISH ] = "Fax number";
+        Text[ english_us ] = "Fax number";
+        Text[ portuguese ] = "Fax number";
+        Text[ russian ] = "Íîìåğ ôàêñà";
+        Text[ greek ] = "Áñéèìüò Fax";
+        Text[ dutch ] = "Faxnummer";
+        Text[ french ] = "Numéro de fax";
+        Text[ spanish ] = "Número de fax";
+        Text[ italian ] = "Fax number";
+        Text[ danish ] = "Faxnummer";
+        Text[ swedish ] = "Faxnummer";
+        Text[ polish ] = "Numer faksu";
+        Text[ portuguese_brazilian ] = "Fax number";
+        Text[ japanese ] = "Fax ”Ô†";
+        Text[ korean ] = "Fax number";
+        Text[ chinese_simplified ] = "´«ÕæºÅÂë";
+        Text[ chinese_traditional ] = "¶Ç¯u¸¹½X";
+        Text[ turkish ] = "Fax number";
+        Text[ arabic ] = "ÑŞã ÇáİÇßÓ";
     };
     Edit EDT_FAXNO
     {
