@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-03 19:21:04 $
+ *  last change: $Author: mhu $ $Date: 2001-11-26 20:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_TYPES_H_
-#define _STORE_TYPES_H_ "$Revision: 1.4 $"
+#define _STORE_TYPES_H_ "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -102,10 +102,6 @@ extern "C" {
 #define STORE_ATTRIB_ISFILE  0x40000000UL
 
 
-/** Access Mode type.
- */
-typedef enum __store_AccessMode storeAccessMode;
-
 /** Access Mode enumeration.
     @see store_openFile()
     @see store_openDirectory()
@@ -120,10 +116,10 @@ enum __store_AccessMode
     store_Access_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-
-/** Error Code type.
+/** Access Mode type.
  */
-typedef enum __store_Error storeError;
+typedef enum __store_AccessMode storeAccessMode;
+
 
 /** Error Code enumeration.
  */
@@ -154,10 +150,10 @@ enum __store_Error
     store_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-
-/** Find Data type.
+/** Error Code type.
  */
-typedef struct __store_FindData storeFindData;
+typedef enum __store_Error storeError;
+
 
 /** Find Data structure.
     @see store_findFirst()
@@ -190,6 +186,10 @@ struct __store_FindData
      */
     sal_uInt32 m_nReserved;
 };
+
+/** Find Data type.
+ */
+typedef struct __store_FindData storeFindData;
 
 
 /*========================================================================
