@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chpfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,9 @@ class SwChapterField : public SwField
 public:
     SwChapterField(SwChapterFieldType*, ULONG nFmt = 0);
 
-    void ChangeExpansion( const SwFrm*, const SwTxtNode*, BOOL bSrchNum = FALSE);
+    void ChangeExpansion(const SwFrm*, const SwTxtNode*,
+        BOOL bSrchNum = FALSE);
+    void ChangeExpansion(const SwTxtNode &rNd, BOOL bSrchNum);
 
     virtual String   Expand() const;
     virtual SwField* Copy() const;
