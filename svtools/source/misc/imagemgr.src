@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 07:55:29 $
+ *  last change: $Author: pb $ $Date: 2001-05-14 10:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,5 +161,857 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
     {
         68;
     };
+};
+
+// description strings
+
+String STR_DESCRIPTION_SOURCEFILE
+{
+    Text = "Quell-Code" ;
+    Text [ English ] = "Source-Code " ;
+    Text [ portuguese ] = "Código-fonte" ;
+    Text [ english_us ] = "Source Code" ;
+    Text [ portuguese_brazilian ] = "Quell-Code" ;
+    Text [ swedish ] = "Källkod" ;
+    Text [ danish ] = "Kildekode" ;
+    Text [ italian ] = "Codice-sorgente" ;
+    Text [ spanish ] = "Código fuente" ;
+    Text [ french ] = "Code source" ;
+    Text [ dutch ] = "Broncode" ;
+    Text [ chinese_simplified ] = "Ô´ÎÄ±¾";
+    Text [ russian ] = "Èñõîäíûé êîä";
+    Text [ polish ] = "Kod Ÿród³owy";
+    Text [ japanese ] = "¿°½ º°ÄŞ";
+    Text [ chinese_traditional ] = "­ì©lÀÉ";
+    Text [ arabic ] = "ÇáÔíİÑÉ ÇáãÕÏÑíÉ";
+    Text[ dutch ] = "Broncode";
+    Text[ chinese_simplified ] = "Ô´ÎÄ±¾";
+    Text[ greek ] = "Êùäéêüò ğñïİëåõóçò";
+    Text[ korean ] = "¼Ò½º ÄÚµå";
+    Text[ turkish ] = "Kaynak kod";
+};
+String STR_DESCRIPTION_BOOKMARKFILE
+{
+    Text = "Bookmarkdatei" ;
+    Text [ English ] = "Bookmarkfile" ;
+    Text [ dutch ] = "Bookmark-bestand" ;
+    Text [ english_us ] = "Bookmark file" ;
+    Text [ italian ] = "File di bookmark" ;
+    Text [ spanish ] = "Archivo de marcadores" ;
+    Text [ french ] = "Fichier de Bookmarks" ;
+    Text [ swedish ] = "Bokmärkesfil" ;
+    Text [ danish ] = "Bogmærkefil" ;
+    Text [ portuguese ] = "Ficheiro de marcadores" ;
+    Text [ portuguese_brazilian ] = "Bookmarkdatei" ;
+    Text [ chinese_simplified ] = "ÊéÇ©ÎÄ¼ş";
+    Text [ russian ] = "Ôàéë çàêëàäîê";
+    Text [ polish ] = "Plik zak³adek";
+    Text [ japanese ] = "ÌŞ¯¸Ï°¸Ì§²Ù";
+    Text [ chinese_traditional ] = "®ÑÅÒÀÉ®×";
+    Text [ arabic ] = "ãáİ ÇáÅÔÇÑÇÊ ÇáãÑÌÚíÉ";
+    Text[ dutch ] = "Bookmark-bestand";
+    Text[ chinese_simplified ] = "ÊéÇ©ÎÄ¼ş";
+    Text[ greek ] = "Áñ÷åßï óåëéäïäåßêôç";
+    Text[ korean ] = "Ã¥°¥ÇÇ ÆÄÀÏ";
+    Text[ turkish ] = "Yer işareti dosyası";
+};
+String STR_DESCRIPTION_GRAPHIC_DOC
+{
+    Text = "Grafik" ;
+    Text [ English ] = "Graphic" ;
+    Text [ portuguese ] = "Imagem" ;
+    Text [ english_us ] = "Graphic" ;
+    Text [ portuguese_brazilian ] = "Grafik" ;
+    Text [ swedish ] = "Grafik" ;
+    Text [ danish ] = "Grafik" ;
+    Text [ italian ] = "Immagine" ;
+    Text [ spanish ] = "Imagen" ;
+    Text [ french ] = "Image" ;
+    Text [ dutch ] = "Afbeelding" ;
+    Text [ chinese_simplified ] = "Í¼ĞÎ";
+    Text [ russian ] = "Ãğàôèêà";
+    Text [ polish ] = "Grafika";
+    Text [ japanese ] = "}";
+    Text [ chinese_traditional ] = "¹Ï§Î";
+    Text [ arabic ] = "ÕæÑÉ";
+    Text[ dutch ] = "Afbeelding";
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ greek ] = "Ãñáöéêü";
+    Text[ korean ] = "±×·¡ÇÈ";
+    Text[ turkish ] = "Grafik";
+};
+String STR_DESCRIPTION_CFGFILE
+{
+    Text = "Konfigurationsdatei" ;
+    Text [ English ] = "Configurationfile" ;
+    Text [ dutch ] = "Configuratiebestand" ;
+    Text [ english_us ] = "Configuration file" ;
+    Text [ italian ] = "File di configurazione" ;
+    Text [ spanish ] = "Archivo de configuración" ;
+    Text [ french ] = "Fichier de configuration" ;
+    Text [ swedish ] = "Konfigurationsfil" ;
+    Text [ danish ] = "Konfigurationsfil" ;
+    Text [ portuguese ] = "Ficheiro de configuração" ;
+    Text [ portuguese_brazilian ] = "Konfigurationsdatei" ;
+    Text [ chinese_simplified ] = "ÅäÖÃÎÄ¼ş";
+    Text [ russian ] = "Ôàéë êîíôèãóğàöèè";
+    Text [ polish ] = "Plik konfiguracyjny";
+    Text [ japanese ] = "ŠÂ‹«İ’èÌ§²Ù";
+    Text [ chinese_traditional ] = "°t¸mÀÉ®×";
+    Text [ arabic ] = "ãáİ ÇáÊßæíä";
+    Text[ dutch ] = "Configuratiebestand";
+    Text[ chinese_simplified ] = "ÅäÖÃÎÄ¼ş";
+    Text[ greek ] = "Áñ÷åßï ğáñáìİôñùí";
+    Text[ korean ] = "±¸¼º ÆÄÀÏ";
+    Text[ turkish ] = "Konfigürasyon dosyası";
+};
+String STR_DESCRIPTION_APPLICATION
+{
+    Text = "Anwendung" ;
+    Text [ English ] = "Application" ;
+    Text [ dutch ] = "Applicatie" ;
+    Text [ english_us ] = "Application" ;
+    Text [ italian ] = "Applicazione" ;
+    Text [ spanish ] = "Aplicación" ;
+    Text [ french ] = "Application" ;
+    Text [ swedish ] = "Tillämpning" ;
+    Text [ danish ] = "Applikation" ;
+    Text [ portuguese ] = "Aplicação" ;
+    Text [ portuguese_brazilian ] = "Anwendung" ;
+    Text [ chinese_simplified ] = "Ó¦ÓÃ³ÌĞò";
+    Text [ russian ] = "Ïğèìåíåíèå";
+    Text [ polish ] = "Aplikacja";
+    Text [ japanese ] = "±ÌßØ¹°¼®İ";
+    Text [ chinese_traditional ] = "À³¥Îµ{¦¡";
+    Text [ arabic ] = "ÊØÈíŞ";
+    Text[ dutch ] = "Applicatie";
+    Text[ chinese_simplified ] = "Ó¦ÓÃ³ÌĞò";
+    Text[ greek ] = "ÅöáñìïãŞ";
+    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥";
+    Text[ turkish ] = "Uygulama";
+};
+String STR_DESCRIPTION_DATABASE_TABLE
+{
+    Text = "Datenbank-Tabelle" ;
+    Text [ English ] = "Database Table" ;
+    Text [ portuguese ] = "Tabela da base de dados" ;
+    Text [ english_us ] = "Database Table" ;
+    Text [ portuguese_brazilian ] = "Datenbank-Tabelle" ;
+    Text [ swedish ] = "Databastabell" ;
+    Text [ danish ] = "Datenbase-tabel" ;
+    Text [ italian ] = "Tabella database" ;
+    Text [ spanish ] = "Tabla de base de datos" ;
+    Text [ french ] = "Table de base de données" ;
+    Text [ dutch ] = "Databasetabel" ;
+    Text [ chinese_simplified ] = "Êı¾İ¿â±í¸ñ";
+    Text [ russian ] = "Òàáëèöà áàçû äàííûõ";
+    Text [ polish ] = "Tabela bazy danych";
+    Text [ japanese ] = "ÃŞ°ÀÍŞ°½ Ã°ÌŞÙ";
+    Text [ chinese_traditional ] = "¸ê®Æ®wªí®æ";
+    Text [ arabic ] = "ÌÏæá ŞÇÚÏÉ ÈíÇäÇÊ";
+    Text[ dutch ] = "Databasetabel";
+    Text[ chinese_simplified ] = "Êı¾İ¿â±í¸ñ";
+    Text[ greek ] = "Ğßíáêáò âÜóçò äåäïìİíùí";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º Ç¥";
+    Text[ turkish ] = "Veritabanı tablosu";
+};
+String STR_DESCRIPTION_SYSFILE
+{
+    Text = "Systemdatei" ;
+    Text [ English ] = "Systemfile" ;
+    Text [ dutch ] = "Systeembestand" ;
+    Text [ english_us ] = "System file" ;
+    Text [ italian ] = "File system" ;
+    Text [ spanish ] = "Archivo del sistema" ;
+    Text [ french ] = "Fichier système" ;
+    Text [ swedish ] = "Systemfil" ;
+    Text [ danish ] = "Systemfil" ;
+    Text [ portuguese ] = "Ficheiro de sistema" ;
+    Text [ portuguese_brazilian ] = "Systemdatei" ;
+    Text [ chinese_simplified ] = "ÏµÍ³ÎÄ¼ş";
+    Text [ russian ] = "Ñèñòåìíûé ôàéë";
+    Text [ polish ] = "Plik systemowy";
+    Text [ japanese ] = "¼½ÃÑÌ§²Ù";
+    Text [ chinese_traditional ] = "¨t²ÎÀÉ®×";
+    Text [ arabic ] = "ãáİ ÇáäÙÇã";
+    Text[ dutch ] = "Systeembestand";
+    Text[ chinese_simplified ] = "ÏµÍ³ÎÄ¼ş";
+    Text[ greek ] = "Áñ÷åßï óõóôŞìáôïò";
+    Text[ korean ] = "½Ã½ºÅÛ ÆÄÀÏ";
+    Text[ turkish ] = "Sistem dosyası";
+};
+String STR_DESCRIPTION_WORD_DOC
+{
+    Text = "MS Word Dokument" ;
+    Text [ English ] = "MS Word Document" ;
+    Text [ portuguese ] = "Documento MS Word" ;
+    Text [ english_us ] = "MS Word Document" ;
+    Text [ portuguese_brazilian ] = "MS Word Dokument" ;
+    Text [ swedish ] = "MS Word-dokument" ;
+    Text [ danish ] = "MS Word dokument" ;
+    Text [ italian ] = "Documento MS Word" ;
+    Text [ spanish ] = "Documento de MS Word" ;
+    Text [ french ] = "Document MS Word" ;
+    Text [ dutch ] = "MS Word document" ;
+    Text [ chinese_simplified ] = "MS Word ÎÄµµ";
+    Text [ russian ] = "Äîêóìåíò MS Word";
+    Text [ polish ] = "Dokument MS Word";
+    Text [ japanese ] = "MS Word ÄŞ·­ÒİÄ";
+    Text [ chinese_traditional ] = "MS Word ¤å¥ó";
+    Text [ arabic ] = "MS Word ãÓÊäÏ";
+    Text[ dutch ] = "MS Word document";
+    Text[ chinese_simplified ] = "MS Word ÎÄµµ";
+    Text[ greek ] = "¸ããñáöï ôïõ MS Word";
+    Text[ korean ] = "MS Word ¹®¼­";
+    Text[ turkish ] = "MS Word belgesi";
+};
+String STR_DESCRIPTION_HELP_DOC
+{
+    Text = "Hilfedatei" ;
+    Text [ English ] = "Helpfile" ;
+    Text [ portuguese ] = "Ficheiro de ajuda" ;
+    Text [ english_us ] = "Help file" ;
+    Text [ portuguese_brazilian ] = "Hilfedatei" ;
+    Text [ swedish ] = "Hjälpfil" ;
+    Text [ danish ] = "Hjælp-fil" ;
+    Text [ italian ] = "File della Guida" ;
+    Text [ spanish ] = "Archivo de ayuda" ;
+    Text [ french ] = "Fichier d'aide" ;
+    Text [ dutch ] = "Help-bestand" ;
+    Text [ chinese_simplified ] = "°ïÖúÎÄ¼ş";
+    Text [ russian ] = "Ôàéë ñïğàâêè";
+    Text [ polish ] = "Plik pomocy";
+    Text [ japanese ] = "ÍÙÌßÌ§²Ù";
+    Text [ chinese_traditional ] = "»¡©úÀÉ®×";
+    Text [ arabic ] = "ãáİ ÇáãÓÇÚÏÉ";
+    Text[ dutch ] = "Help-bestand";
+    Text[ chinese_simplified ] = "°ïÖúÎÄ¼ş";
+    Text[ greek ] = "Áñ÷åßï âïŞèåéáò";
+    Text[ korean ] = "µµ¿ò¸» ÆÄÀÏ";
+    Text[ turkish ] = "Yardım dosyası";
+};
+String STR_DESCRIPTION_HTMLFILE
+{
+    Text = "Internet Dokument" ;
+    Text [ English ] = "Internet Document" ;
+    Text [ dutch ] = "Internet document" ;
+    Text [ english_us ] = "Internet Document" ;
+    Text [ italian ] = "Documento Internet" ;
+    Text [ spanish ] = "Documento Internet" ;
+    Text [ french ] = "Document Internet" ;
+    Text [ swedish ] = "Internetdokument" ;
+    Text [ danish ] = "Internetdokument" ;
+    Text [ portuguese ] = "Documento da Internet" ;
+    Text [ portuguese_brazilian ] = "Internet Dokument" ;
+    Text [ chinese_simplified ] = "¹ú¼Ê»¥ÁªÍøÎÄµµ";
+    Text [ russian ] = "Äîêóìåíò Èíòåğíåòà";
+    Text [ polish ] = "Dokument sieci Internet";
+    Text [ japanese ] = "²İÀ°È¯Ä ÄŞ·­ÒİÄ";
+    Text [ chinese_traditional ] = "Internet ¤å¥ó";
+    Text [ arabic ] = "ãÓÊäÏ ÅäÊÑäÊ";
+    Text[ dutch ] = "Internet document";
+    Text[ chinese_simplified ] = "¹ú¼Ê»¥ÁªÍøÎÄµµ";
+    Text[ greek ] = "¸ããñáöï ôïõ Internet";
+    Text[ korean ] = "ÀÎÅÍ³İ ¹®¼­";
+    Text[ turkish ] = "Internet belgesi";
+};
+String STR_DESCRIPTION_ARCHIVFILE
+{
+    Text = "Archivdatei" ;
+    Text [ English ] = "Archivfile" ;
+    Text [ dutch ] = "Archiefbestand" ;
+    Text [ english_us ] = "Archive file" ;
+    Text [ italian ] = "File di archivio" ;
+    Text [ spanish ] = "Archivo de archivo" ;
+    Text [ french ] = "Fichier archive" ;
+    Text [ swedish ] = "Arkivfil" ;
+    Text [ danish ] = "Arkivfil" ;
+    Text [ portuguese ] = "Ficheiro-arquivo" ;
+    Text [ portuguese_brazilian ] = "Archivdatei" ;
+    Text [ chinese_simplified ] = "µµ°¸ÎÄ¼ş";
+    Text [ russian ] = "Ôàéë àğõèâà";
+    Text [ polish ] = "Plik archiwum";
+    Text [ japanese ] = "±°¶²ÌŞÌ§²Ù";
+    Text [ chinese_traditional ] = "ÀÉ®×";
+    Text [ arabic ] = "ãáİ ÇáÃÑÔíİ";
+    Text[ dutch ] = "Archiefbestand";
+    Text[ chinese_simplified ] = "µµ°¸ÎÄ¼ş";
+    Text[ greek ] = "Añ÷åßï ğñïò öıëáîç";
+    Text[ korean ] = "ÀúÀå ÆÄÀÏ";
+    Text[ turkish ] = "Arşiv dosyası";
+};
+String STR_DESCRIPTION_LOGFILE
+{
+    Text = "Protokolldatei" ;
+    Text [ English ] = "Logfile" ;
+    Text [ portuguese ] = "Ficheiro de registo" ;
+    Text [ english_us ] = "Log file" ;
+    Text [ portuguese_brazilian ] = "Protokolldatei" ;
+    Text [ swedish ] = "Protokollfil" ;
+    Text [ danish ] = "Protokolfil" ;
+    Text [ italian ] = "File di protocollo" ;
+    Text [ spanish ] = "Archivo de protocolo" ;
+    Text [ french ] = "Fichier protocole" ;
+    Text [ dutch ] = "Protocolbestand" ;
+    Text [ chinese_simplified ] = "¼ÇÂ¼ÎÄ¼ş";
+    Text [ russian ] = "Ôàéë ïğîòîêîëà";
+    Text [ polish ] = "Plik rejestracyjny";
+    Text [ japanese ] = "ÌßÛÄºÙ Ì§²Ù";
+    Text [ chinese_traditional ] = "°O¿ıÀÉ®×";
+    Text [ arabic ] = "ãáİ ÇáÈÑæÊæßæá";
+    Text[ dutch ] = "Protocolbestand";
+    Text[ chinese_simplified ] = "¼ÇÂ¼ÎÄ¼ş";
+    Text[ greek ] = "Áñ÷åßï ğñùôïêüëëïõ";
+    Text[ korean ] = "·Î±× ÆÄÀÏ";
+    Text[ turkish ] = "Protokol dosyası";
+};
+String STR_DESCRIPTION_SMATH_DOC
+{
+    Text = "%PRODUCTNAME Formel" ;
+    Text [ English ] = "StarOffice Formula" ;
+    Text [ portuguese ] = "Fórmula %PRODUCTNAME" ;
+    Text [ english_us ] = "%PRODUCTNAME Formula" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Formel" ;
+    Text [ swedish ] = "%PRODUCTNAME-formel" ;
+    Text [ danish ] = "%PRODUCTNAME formel" ;
+    Text [ italian ] = "Formula %PRODUCTNAME" ;
+    Text [ spanish ] = "%PRODUCTNAME Fórmula" ;
+    Text [ french ] = "Formule %PRODUCTNAME" ;
+    Text [ dutch ] = "%PRODUCTNAME formule" ;
+    Text [ chinese_simplified ] = "%PRODUCTNAME ¹«Ê½";
+    Text [ russian ] = "Ôîğìóëà %PRODUCTNAME";
+    Text [ polish ] = "Formu³a %PRODUCTNAME";
+    Text [ japanese ] = "%PRODUCTNAME ”®";
+    Text [ chinese_traditional ] = "%PRODUCTNAME ¤½¦¡";
+    Text [ arabic ] = "%PRODUCTNAME ÕíÛÉ";
+    Text[ dutch ] = "%PRODUCTNAME formule";
+    Text[ chinese_simplified ] = "%PRODUCTNAME ¹«Ê½";
+    Text[ greek ] = "Ôığïò (%PRODUCTNAME)";
+    Text[ korean ] = "%PRODUCTNAME ¼ö½Ä";
+    Text[ turkish ] = "%PRODUCTNAME formulü";
+};
+String STR_DESCRIPTION_SCHART_DOC
+{
+    Text = "%PRODUCTNAME Diagramm" ;
+    Text [ English ] = "StarOffice Chart" ;
+    Text [ portuguese ] = "Gráfico %PRODUCTNAME" ;
+    Text [ english_us ] = "%PRODUCTNAME Chart" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Diagramm" ;
+    Text [ swedish ] = "%PRODUCTNAME-diagram" ;
+    Text [ danish ] = "%PRODUCTNAME diagram" ;
+    Text [ italian ] = "Diagramma %PRODUCTNAME" ;
+    Text [ spanish ] = "%PRODUCTNAME Diagrama" ;
+    Text [ french ] = "Diagramme %PRODUCTNAME" ;
+    Text [ dutch ] = "%PRODUCTNAME diagram" ;
+    Text [ chinese_simplified ] = "%PRODUCTNAME Í¼±í";
+    Text [ russian ] = "Äèàãğàììà %PRODUCTNAME";
+    Text [ polish ] = "Wykres %PRODUCTNAME";
+    Text [ japanese ] = "%PRODUCTNAME ¸Ş×Ì";
+    Text [ chinese_traditional ] = "%PRODUCTNAME ¹Ïªí";
+    Text [ arabic ] = "ıÇáÈíÇäí %PRODUCTNAME ÑÓã";
+    Text[ dutch ] = "%PRODUCTNAME diagram";
+    Text[ chinese_simplified ] = "%PRODUCTNAME Í¼±í";
+    Text[ greek ] = "ÄéÜãñáììá %PRODUCTNAME";
+    Text[ korean ] = "%PRODUCTNAME  Chart";
+    Text[ turkish ] = "%PRODUCTNAME şeması";
+};
+String STR_DESCRIPTION_SDRAW_DOC
+{
+    Text = "%PRODUCTNAME Zeichnung" ;
+    Text [ English ] = "StarOffice Drawing" ;
+    Text [ english_us ] = "Drawing (%PRODUCTNAME)" ;
+    Text [ portuguese ] = "Desenho %PRODUCTNAME" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Grafik / Präsentation" ;
+    Text [ swedish ] = "%PRODUCTNAME-teckning" ;
+    Text [ danish ] = "%PRODUCTNAME tegning" ;
+    Text [ italian ] = "Disegno %PRODUCTNAME " ;
+    Text [ spanish ] = "%PRODUCTNAME Dibujo" ;
+    Text [ french ] = "Dessin %PRODUCTNAME" ;
+    Text [ dutch ] = "%PRODUCTNAME tekening" ;
+    Text [ chinese_simplified ] = "%PRODUCTNAME »æÍ¼";
+    Text [ russian ] = "Ğèñóíîê â %PRODUCTNAME";
+    Text [ polish ] = "Rysunek %PRODUCTNAME";
+    Text [ japanese ] = "%PRODUCTNAME •`‰æ";
+    Text [ chinese_traditional ] = "%PRODUCTNAME Ã¸¹Ï";
+    Text [ arabic ] = "%PRODUCTNAME ÑÓãÉ";
+    Text[ dutch ] = "%PRODUCTNAME tekening";
+    Text[ chinese_simplified ] = "%PRODUCTNAME »æÍ¼";
+    Text[ greek ] = "Ó÷İäéï (%PRODUCTNAME)";
+    Text[ korean ] = "%PRODUCTNAME Draw";
+    Text[ turkish ] = "%PRODUCTNAME çizimi";
+};
+String STR_DESCRIPTION_SCALC_DOC
+{
+    Text = "%PRODUCTNAME Tabelle" ;
+    Text [ English ] = "StarOffice Table" ;
+    Text [ portuguese ] = "Folha de cálculo %PRODUCTNAME" ;
+    Text [ english_us ] = "Spreadsheet (%PRODUCTNAME)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Tabelle" ;
+    Text [ swedish ] = "%PRODUCTNAME-tabell" ;
+    Text [ danish ] = "%PRODUCTNAME regneark" ;
+    Text [ italian ] = "Tabella %PRODUCTNAME" ;
+    Text [ spanish ] = "%PRODUCTNAME Hoja de cálculo" ;
+    Text [ french ] = "Classeur %PRODUCTNAME" ;
+    Text [ dutch ] = "%PRODUCTNAME werkblad" ;
+    Text [ chinese_simplified ] = "%PRODUCTNAME ¹¤×÷±í";
+    Text [ russian ] = "İëåêòğîííàÿ òàáëèöà %PRODUCTNAME";
+    Text [ polish ] = "Arkusz kalkulacyjny %PRODUCTNAME";
+    Text [ japanese ] = "%PRODUCTNAME •\\ŒvZ";
+    Text [ chinese_traditional ] = "%PRODUCTNAME ¤u§@ªí";
+    Text [ arabic ] = "%PRODUCTNAME ÌÏæá";
+    Text[ dutch ] = "%PRODUCTNAME werkblad";
+    Text[ chinese_simplified ] = "%PRODUCTNAME ¹¤×÷±í";
+    Text[ greek ] = "Ğßíáêáò %PRODUCTNAME";
+    Text[ korean ] = "%PRODUCTNAME ½ºÇÁ·¹µå½ÃÆ®";
+    Text[ turkish ] = "%PRODUCTNAME tablosu";
+};
+String STR_DESCRIPTION_SIMPRESS_DOC
+{
+    Text = "%PRODUCTNAME Präsentation" ;
+    Text [ English ] = "StarOffice Presentation" ;
+    Text [ portuguese ] = "Apresentação (%PRODUCTNAME)" ;
+    Text [ english_us ] = "Presentation (%PRODUCTNAME)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Präsentation" ;
+    Text [ swedish ] = "%PRODUCTNAME-presentation" ;
+    Text [ danish ] = "%PRODUCTNAME præsentation" ;
+    Text [ italian ] = "Presentazione %PRODUCTNAME" ;
+    Text [ spanish ] = "%PRODUCTNAME Presentación" ;
+    Text [ french ] = "Présentation %PRODUCTNAME" ;
+    Text [ dutch ] = "%PRODUCTNAME presentatie" ;
+    Text [ chinese_simplified ] = "%PRODUCTNAME ÑİÊ¾ÎÄ¸å";
+    Text [ russian ] = "Ïğåçåíòàöèÿ â %PRODUCTNAME";
+    Text [ polish ] = "Prezentacja %PRODUCTNAME";
+    Text [ japanese ] = "%PRODUCTNAME ÌßÚ¾ŞİÃ°¼®İ";
+    Text [ chinese_traditional ] = "%PRODUCTNAME Â²³ø";
+    Text [ arabic ] = "ÇáÊŞÏíãí %PRODUCTNAME ÚÑÖ";
+    Text[ dutch ] = "%PRODUCTNAME presentatie";
+    Text[ chinese_simplified ] = "%PRODUCTNAME ÑİÊ¾ÎÄ¸å";
+    Text[ greek ] = "Ğáñïõóßáóç (%PRODUCTNAME)";
+    Text[ korean ] = "%PRODUCTNAME ÇÁ¸®Á¨Å×ÀÌ¼Ç";
+    Text[ turkish ] = "%PRODUCTNAME sunusu";
+};
+String STR_DESCRIPTION_SWRITER_DOC
+{
+    Text = "%PRODUCTNAME Text" ;
+    Text [ English ] = "StarOffice Text" ;
+    Text [ portuguese ] = "Texto %PRODUCTNAME" ;
+    Text [ english_us ] = "Text (%PRODUCTNAME)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text" ;
+    Text [ swedish ] = "%PRODUCTNAME-text" ;
+    Text [ danish ] = "%PRODUCTNAME tekst" ;
+    Text [ italian ] = "Testo %PRODUCTNAME" ;
+    Text [ spanish ] = "%PRODUCTNAME Texto" ;
+    Text [ french ] = "Texte %PRODUCTNAME" ;
+    Text [ dutch ] = "%PRODUCTNAME tekst" ;
+    Text [ chinese_simplified ] = "%PRODUCTNAME ÎÄ±¾";
+    Text [ russian ] = "Òåêñò %PRODUCTNAME";
+    Text [ polish ] = "Tekst %PRODUCTNAME";
+    Text [ japanese ] = "%PRODUCTNAME Ã·½Ä";
+    Text [ chinese_traditional ] = "%PRODUCTNAME ¤å¦r¤å¥ó";
+    Text [ arabic ] = "%PRODUCTNAME äÕ ";
+    Text[ dutch ] = "%PRODUCTNAME tekst";
+    Text[ chinese_simplified ] = "%PRODUCTNAME ÎÄ±¾";
+    Text[ greek ] = "Êåßìåíï %PRODUCTNAME";
+    Text[ korean ] = "%PRODUCTNAME ÅØ½ºÆ®";
+    Text[ turkish ] = "%PRODUCTNAME metin";
+};
+String STR_DESCRIPTION_GLOBALDOC
+{
+    Text = "%PRODUCTNAME Text Globaldokument" ;
+    Text [ English ] = "StarOffice Text GlobalDocument" ;
+    Text [ portuguese ] = "Documento-mestre %PRODUCTNAME" ;
+    Text [ english_us ] = "%PRODUCTNAME Text Master Document" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Text Globaldokument" ;
+    Text [ swedish ] = "%PRODUCTNAME Text Samlingsdokument" ;
+    Text [ danish ] = "%PRODUCTNAME tekst hoveddokument" ;
+    Text [ italian ] = "Documento master di testo di %PRODUCTNAME" ;
+    Text [ spanish ] = "%PRODUCTNAME Documento maestro de texto" ;
+    Text [ french ] = "Document-texte maître %PRODUCTNAME" ;
+    Text [ dutch ] = "%PRODUCTNAME Tekst master-document" ;
+    Text [ chinese_simplified ] = "%PRODUCTNAME ÎÄ±¾ Ö÷¿ØÎÄµµ";
+    Text [ russian ] = "%PRODUCTNAME - Ãëàâíûé äîêóìåíò";
+    Text [ polish ] = "Dokument g³ówny %PRODUCTNAME";
+    Text [ japanese ] = "%PRODUCTNAME Ã·½Ä Ï½À°ÄŞ·­ÒİÄ";
+    Text [ chinese_traditional ] = "%PRODUCTNAME ¤å¦r ¥D±±¤å¥ó";
+    Text [ arabic ] = "(%PRODUCTNAME text) ãÓÊäÏ ÔÇãá";
+    Text[ dutch ] = "%PRODUCTNAME Tekst master-document";
+    Text[ chinese_simplified ] = "%PRODUCTNAME ÎÄ±¾ Ö÷¿ØÎÄµµ";
+    Text[ greek ] = "Êåßìåíï êõñßïõ İããñáöïõ %PRODUCTNAME";
+    Text[ korean ] = "%PRODUCTNAME ÅØ½ºÆ® ¸¶½ºÅÍ ¹®¼­";
+    Text[ turkish ] = "%PRODUCTNAME Metin ana belgesi";
+};
+String STR_DESCRIPTION_SIMAGE_DOC
+{
+    Text = "%PRODUCTNAME Bild" ;
+    Text [ English ] = "StarOffice Picture" ;
+    Text [ portuguese ] = "Imagem %PRODUCTNAME" ;
+    Text [ english_us ] = "Picture (%PRODUCTNAME)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Bild" ;
+    Text [ swedish ] = "%PRODUCTNAME-bild" ;
+    Text [ danish ] = "%PRODUCTNAME billede" ;
+    Text [ italian ] = "Immagine %PRODUCTNAME" ;
+    Text [ spanish ] = "%PRODUCTNAME Imagen" ;
+    Text [ french ] = "Image %PRODUCTNAME" ;
+    Text [ dutch ] = "%PRODUCTNAME afbeelding" ;
+    Text [ chinese_simplified ] = "%PRODUCTNAME Í¼Ïñ";
+    Text [ russian ] = "Êàğòèíà â %PRODUCTNAME";
+    Text [ polish ] = "Obraz %PRODUCTNAME";
+    Text [ japanese ] = "%PRODUCTNAME }";
+    Text [ chinese_traditional ] = "%PRODUCTNAME ¼v¹³";
+    Text [ arabic ] = "%PRODUCTNAME ÕæÑÉ";
+    Text[ dutch ] = "%PRODUCTNAME afbeelding";
+    Text[ chinese_simplified ] = "%PRODUCTNAME Í¼Ïñ";
+    Text[ greek ] = "%PRODUCTNAME - Åéêüíá";
+    Text[ korean ] = "%PRODUCTNAME  Image";
+    Text[ turkish ] = "%PRODUCTNAME resmi";
+};
+String STR_DESCRIPTION_TEXTFILE
+{
+    Text = "Textdatei" ;
+    Text [ English ] = "Textfile" ;
+    Text [ dutch ] = "Tekstbestand" ;
+    Text [ english_us ] = "Text file" ;
+    Text [ italian ] = "File di testo" ;
+    Text [ spanish ] = "Archivo de texto" ;
+    Text [ french ] = "Fichier texte" ;
+    Text [ swedish ] = "Textfil" ;
+    Text [ danish ] = "Tekstfil" ;
+    Text [ portuguese ] = "Ficheiro de texto" ;
+    Text [ portuguese_brazilian ] = "Textdatei" ;
+    Text [ chinese_simplified ] = "ÎÄ±¾ÎÄ¼ş";
+    Text [ russian ] = "Òåêñòîâûé ôàéë";
+    Text [ polish ] = "Plik tekstowy";
+    Text [ japanese ] = "Ã·½ÄÌ§²Ù";
+    Text [ chinese_traditional ] = "¤å¦rÀÉ®×";
+    Text [ arabic ] = "ãáİ äÕ";
+    Text[ dutch ] = "Tekstbestand";
+    Text[ chinese_simplified ] = "ÎÄ±¾ÎÄ¼ş";
+    Text[ greek ] = "Áñ÷åßï êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ® ÆÄÀÏ";
+    Text[ turkish ] = "Metin dosyası";
+};
+String STR_DESCRIPTION_LINK
+{
+    Text = "Verknüpfung" ;
+    Text [ English ] = "Link" ;
+    Text [ dutch ] = "Koppeling" ;
+    Text [ english_us ] = "Link" ;
+    Text [ italian ] = "Collegamento" ;
+    Text [ spanish ] = "Vínculo" ;
+    Text [ french ] = "Lien" ;
+    Text [ swedish ] = "Länk" ;
+    Text [ danish ] = "Kæde" ;
+    Text [ portuguese ] = "Ligação" ;
+    Text [ portuguese_brazilian ] = "Verknüpfung" ;
+    Text [ chinese_simplified ] = "Á´½Ó";
+    Text [ russian ] = "Ññûëêà";
+    Text [ polish ] = "£¹cze";
+    Text [ japanese ] = "Øİ¸";
+    Text [ chinese_traditional ] = "±¶®|";
+    Text [ arabic ] = "ÇÑÊÈÇØ";
+    Text[ dutch ] = "Koppeling";
+    Text[ chinese_simplified ] = "Á´½Ó";
+    Text[ greek ] = "Óıíäåóç";
+    Text[ korean ] = "¸µÅ©";
+    Text[ turkish ] = "Bağlantı";
+};
+String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
+{
+    Text = "%PRODUCTNAME Vorlage" ;
+    Text [ English ] = "StarOffice Template" ;
+    Text [ portuguese ] = "Modelo %PRODUCTNAME" ;
+    Text [ english_us ] = "%PRODUCTNAME Template" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Vorlage" ;
+    Text [ swedish ] = "%PRODUCTNAME-mallar" ;
+    Text [ danish ] = "%PRODUCTNAME skabelon" ;
+    Text [ italian ] = "Modello %PRODUCTNAME" ;
+    Text [ spanish ] = "%PRODUCTNAME - Plantilla" ;
+    Text [ french ] = "Modèle %PRODUCTNAME" ;
+    Text [ dutch ] = "%PRODUCTNAME sjabloon" ;
+    Text [ chinese_simplified ] = "%PRODUCTNAME ÑùÊ½";
+    Text [ russian ] = "Øàáëîí %PRODUCTNAME";
+    Text [ polish ] = "%PRODUCTNAME - Szablon";
+    Text [ japanese ] = "%PRODUCTNAME ÃİÌßÚ°Ä";
+    Text [ chinese_traditional ] = "%PRODUCTNAME ¼Ë¦¡";
+    Text [ arabic ] = "ŞÇáÈ%PRODUCTNAME ";
+    Text[ dutch ] = "%PRODUCTNAME sjabloon";
+    Text[ chinese_simplified ] = "%PRODUCTNAME ÑùÊ½";
+    Text[ greek ] = "%PRODUCTNAME - Ğñüôõğï";
+    Text[ korean ] = "%PRODUCTNAME ¼­½ÄÆÄÀÏ";
+    Text[ turkish ] = "%PRODUCTNAME şablonu";
+};
+String STR_DESCRIPTION_EXCEL_DOC
+{
+    Text = "MS Excel Dokument" ;
+    Text [ English ] = "MS Excel Document" ;
+    Text [ portuguese ] = "Documento MS Excel" ;
+    Text [ english_us ] = "MS Excel Document" ;
+    Text [ portuguese_brazilian ] = "MS Excel Dokument" ;
+    Text [ swedish ] = "MS Excel-dokument" ;
+    Text [ danish ] = "MS Excel dokument" ;
+    Text [ italian ] = "Documento MS Excel" ;
+    Text [ spanish ] = "Documento de MS Excel" ;
+    Text [ french ] = "Document MS Excel" ;
+    Text [ dutch ] = "MS Excel document" ;
+    Text [ chinese_simplified ] = "MS Excel ÎÄµµ";
+    Text [ russian ] = "MS Excel - Äîêóìåíò";
+    Text [ polish ] = "Dokument MS Excel";
+    Text [ japanese ] = "MS Excel ÄŞ·­ÒİÄ";
+    Text [ chinese_traditional ] = "MS Excel ¤å¥ó";
+    Text [ arabic ] = "MS Excel ãÓÊäÏ";
+    Text[ dutch ] = "MS Excel document";
+    Text[ chinese_simplified ] = "MS Excel ÎÄµµ";
+    Text[ greek ] = "¸ããñáöï ôïõ MS Excel";
+    Text[ korean ] = "MS Excel ¹®¼­";
+    Text[ turkish ] = "MS Excel belgesi";
+};
+String STR_DESCRIPTION_EXCEL_TEMPLATE_DOC
+{
+    Text = "MS Excel Vorlage" ;
+    Text [ English ] = "MS Excel Template" ;
+    Text [ portuguese ] = "Modelo MS Excel" ;
+    Text [ english_us ] = "MS Excel Template" ;
+    Text [ portuguese_brazilian ] = "MS Excel Vorlage" ;
+    Text [ swedish ] = "MS Excel-dokumentmall" ;
+    Text [ danish ] = "MS Excel skabelon" ;
+    Text [ italian ] = "Modello MS Excel" ;
+    Text [ spanish ] = "MS Excel - Plantilla" ;
+    Text [ french ] = "Modèle MS Excel" ;
+    Text [ dutch ] = "MS Excel sjabloon" ;
+    Text [ chinese_simplified ] = "MS Excel Ä£°å";
+    Text [ russian ] = "MS Excel - Øàáëîí";
+    Text [ polish ] = "MS Excel - Szablon";
+    Text [ japanese ] = "MS Excel ÃİÌßÚ°Ä";
+    Text [ chinese_traditional ] = "MS Excel ½d¥»";
+    Text [ arabic ] = "ŞÇáÈMS Excel ";
+    Text[ dutch ] = "MS Excel sjabloon";
+    Text[ chinese_simplified ] = "MS Excel Ä£°å";
+    Text[ greek ] = "MS Excel - Ğñüôõğï";
+    Text[ korean ] = "MS Excel ¼­½ÄÆÄÀÏ";
+    Text[ turkish ] = "MS Excel şablonu";
+};
+String STR_DESCRIPTION_BATCHFILE
+{
+    Text = "Stapelverarbeitungsdatei" ;
+    Text [ English ] = "Batchfile" ;
+    Text [ dutch ] = "Batchbestand" ;
+    Text [ english_us ] = "Batch file" ;
+    Text [ italian ] = "File di batch" ;
+    Text [ spanish ] = "Archivo de lotes" ;
+    Text [ french ] = "Fichier de traitement par lots (fichier batch)" ;
+    Text [ swedish ] = "Batch-fil" ;
+    Text [ danish ] = "Batch-fil" ;
+    Text [ portuguese ] = "Ficheiro por lotes" ;
+    Text [ portuguese_brazilian ] = "Stapelverarbeitungsdatei" ;
+    Text[ chinese_simplified ] = "ÅúÎÄ¼ş";
+    Text[ russian ] = "Ïàêåòíûé ôàéë";
+    Text[ polish ] = "Plik wsadowy";
+    Text[ japanese ] = "ÊŞ¯Á Ì§²Ù";
+    Text[ chinese_traditional ] = "§åÀÉ®×";
+    Text[ arabic ] = "ãáİ ãÚÇáÌÉ ÏõİÚÉ";
+    Text[ dutch ] = "Batchbestand";
+    Text[ chinese_simplified ] = "ÅúÎÄ¼ş";
+    Text[ greek ] = "Áñ÷åßï ğïëëáğëşí åíôïëşí (Batch file)";
+    Text[ korean ] = "ÀÏ°ı Ã³¸® ÆÄÀÏ";
+    Text[ turkish ] = "Toplu iş dosyası";
+};
+String STR_DESCRIPTION_FILE
+{
+    Text = "Datei" ;
+    Text [ English ] = "File" ;
+    Text [ dutch ] = "Bestand" ;
+    Text [ english_us ] = "File" ;
+    Text [ italian ] = "File" ;
+    Text [ spanish ] = "Archivo" ;
+    Text [ french ] = "Fichier" ;
+    Text [ swedish ] = "Fil" ;
+    Text [ danish ] = "Fil" ;
+    Text [ portuguese ] = "Ficheiro" ;
+    Text [ portuguese_brazilian ] = "Datei" ;
+    Text [ chinese_simplified ] = "ÎÄ¼ş";
+    Text [ russian ] = "Ôàéë";
+    Text [ polish ] = "Plik";
+    Text [ japanese ] = "Ì§²Ù";
+    Text [ chinese_traditional ] = "ÀÉ®×";
+    Text [ arabic ] = "ãáİ";
+    Text[ dutch ] = "Bestand";
+    Text[ chinese_simplified ] = "ÎÄ¼ş";
+    Text[ greek ] = "Áñ÷åßï";
+    Text[ korean ] = "ÆÄÀÏ";
+    Text[ turkish ] = "Dosya";
+};
+String STR_DESCRIPTION_FOLDER
+{
+    Text = "Ordner" ;
+    Text [ English ] = "Folder" ;
+    Text [ dutch ] = "Map" ;
+    Text [ english_us ] = "Folder" ;
+    Text [ italian ] = "Cartella" ;
+    Text [ spanish ] = "Carpeta" ;
+    Text [ french ] = "Dossier" ;
+    Text [ swedish ] = "Mapp" ;
+    Text [ danish ] = "Mappe" ;
+    Text [ portuguese ] = "Pasta" ;
+    Text [ portuguese_brazilian ] = "Ordner" ;
+    Text [ chinese_simplified ] = "ÎÄ¼ş¼Ğ";
+    Text [ russian ] = "Ïàïêà";
+    Text [ polish ] = "Folder";
+    Text [ japanese ] = "Ì«ÙÀŞ";
+    Text [ chinese_traditional ] = "¸ê®Æ§¨";
+    Text [ arabic ] = "ãÌáÏ";
+    Text[ dutch ] = "Map";
+    Text[ chinese_simplified ] = "ÎÄ¼ş¼Ğ";
+    Text[ greek ] = "ÖÜêåëïò";
+    Text[ korean ] = "Æú´õ";
+    Text[ turkish ] = "Klasör";
+};
+String STR_DESCRIPTION_FACTORY_WRITER
+{
+    Text = "Textdokument";
+    Text [ ENGLISH ] = "Text Document" ;
+    Text[ english_us ] = "Text Document";
+    Text[ portuguese ] = "Texto";
+    Text[ russian ] = "Òåêñòîâûé äîêóìåíò";
+    Text[ greek ] = "¸ããñáöï êåéìİíïõ";
+    Text[ dutch ] = "Tekstdocument";
+    Text[ french ] = "Texte";
+    Text[ spanish ] = "Documento de texto";
+    Text[ italian ] = "Documento di testo";
+    Text[ danish ] = "Tekstdokument";
+    Text[ swedish ] = "Textdokument";
+    Text[ polish ] = "Dokument tekstowy";
+    Text[ portuguese_brazilian ] = "Text Document";
+    Text[ japanese ] = "•¶‘ÄŞ·­ÒİÄ";
+    Text[ korean ] = "ÅØ½ºÆ® ¹®¼­";
+    Text[ chinese_simplified ] = "ÎÄ±¾ÎÄµµ";
+    Text[ chinese_traditional ] = "¤å¦r¤å¥ó";
+    Text[ turkish ] = "Metin belgesi";
+    Text[ arabic ] = "ãÓÊäÏ äÕ";
+    Text[ catalan ] = "Documento de texto";
+};
+String STR_DESCRIPTION_FACTORY_CALC
+{
+    Text = "Tabellendokument";
+    Text [ ENGLISH ] = "Spreadsheet" ;
+    Text[ english_us ] = "Spreadsheet";
+    Text[ portuguese ] = "Folha de cálculo";
+    Text[ russian ] = "Äîêóìåíò ıëåêòğîííîé òàáëèöû";
+    Text[ greek ] = "Êåßìåíï ğßíáêá";
+    Text[ dutch ] = "Werkbladdocument";
+    Text[ french ] = "Classeur";
+    Text[ spanish ] = "Hoja de cálculo";
+    Text[ italian ] = "Foglio elettronico";
+    Text[ danish ] = "Regneark";
+    Text[ swedish ] = "Tabelldokument";
+    Text[ polish ] = "Arkusz kalkulacyjny";
+    Text[ portuguese_brazilian ] = "Spreadsheet";
+    Text[ japanese ] = "•\\ŒvZÄŞ·­ÒİÄ";
+    Text[ korean ] = "½ºÇÁ·¹µå½ÃÆ®";
+    Text[ chinese_simplified ] = "¹¤×÷±íÎÄµµ";
+    Text[ chinese_traditional ] = "¤u§@ªí¤å¥ó";
+    Text[ turkish ] = "Hesap tablosu";
+    Text[ arabic ] = "ãÓÊäÏ ÌÏæá";
+    Text[ catalan ] = "Hoja de cálculo";
+};
+String STR_DESCRIPTION_FACTORY_IMPRESS
+{
+    Text = "Präsentation";
+    Text [ ENGLISH ] = "Presentation" ;
+    Text[ english_us ] = "Presentation";
+    Text[ portuguese ] = "Apresentação";
+    Text[ russian ] = "Ïğåçåíòàöèÿ";
+    Text[ greek ] = "Ğáñïõóßáóç";
+    Text[ dutch ] = "Presentatie";
+    Text[ french ] = "Présentation";
+    Text[ spanish ] = "Presentación";
+    Text[ italian ] = "Presentazione";
+    Text[ danish ] = "Præsentation";
+    Text[ swedish ] = "Presentation";
+    Text[ polish ] = "Prezentacja";
+    Text[ portuguese_brazilian ] = "Presentation";
+    Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ";
+    Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç";
+    Text[ chinese_simplified ] = "ÑİÊ¾ÎÄ¸å";
+    Text[ chinese_traditional ] = "Â²³ø¤å¥ó";
+    Text[ turkish ] = "Sunu";
+    Text[ arabic ] = "ÚÑÖ ÊŞÏíãí";
+    Text[ catalan ] = "Presentación";
+};
+String STR_DESCRIPTION_FACTORY_DRAW
+{
+    Text = "Zeichnung";
+    Text [ ENGLISH ] = "Drawing" ;
+    Text[ english_us ] = "Drawing";
+    Text[ portuguese ] = "Desenho";
+    Text[ russian ] = "Ğèñóíîê";
+    Text[ greek ] = "Ó÷İäéï";
+    Text[ dutch ] = "Tekening";
+    Text[ french ] = "Dessin";
+    Text[ spanish ] = "Dibujo";
+    Text[ italian ] = "Disegno";
+    Text[ danish ] = "Tegning";
+    Text[ swedish ] = "Teckning";
+    Text[ polish ] = "Rysunek";
+    Text[ portuguese_brazilian ] = "Drawing";
+    Text[ japanese ] = "}Œ`•`‰æ";
+    Text[ korean ] = "±×¸²";
+    Text[ chinese_simplified ] = "»æÍ¼";
+    Text[ chinese_traditional ] = "Ã¸¹Ï¤å¥ó";
+    Text[ turkish ] = "Çizim";
+    Text[ arabic ] = "ÑÓãÉ";
+    Text[ catalan ] = "Dibujo";
+};
+String STR_DESCRIPTION_FACTORY_WRITERWEB
+{
+    Text = "HTML-Dokument";
+    Text [ ENGLISH ] = "HTML Document" ;
+    Text[ english_us ] = "HTML Document";
+    Text[ portuguese ] = "Documento HTML";
+    Text[ russian ] = "Äîêóìåíò HTML";
+    Text[ greek ] = "¸ããñáöï HTML";
+    Text[ dutch ] = "HTML-document";
+    Text[ french ] = "Document HTML";
+    Text[ spanish ] = "Documento HTML";
+    Text[ italian ] = "Documento HTML";
+    Text[ danish ] = "HTML-dokument";
+    Text[ swedish ] = "HTML-dokument";
+    Text[ polish ] = "Dokument HTML";
+    Text[ portuguese_brazilian ] = "HTML Document";
+    Text[ japanese ] = "HTML Œ`®ÄŞ·­ÒİÄ";
+    Text[ korean ] = "HTML ¹®¼­";
+    Text[ chinese_simplified ] = "HTML ÎÄµµ";
+    Text[ chinese_traditional ] = "HTML ¤å¥ó";
+    Text[ turkish ] = "HTML belgesi";
+    Text[ arabic ] = "ãÓÊäÏHTML ";
+    Text[ catalan ] = "Documento HTML";
+};
+String STR_DESCRIPTION_FACTORY_GLOBALDOC
+{
+    Text = "Globaldokument";
+    Text [ ENGLISH ] = "Master Document" ;
+    Text[ english_us ] = "Master Document";
+    Text[ portuguese ] = "Documento-mestre";
+    Text[ russian ] = "Ãëàâíûé äîêóìåíò";
+    Text[ greek ] = "Êıñéï İããñáöï";
+    Text[ dutch ] = "Master-document";
+    Text[ french ] = "Document maître";
+    Text[ spanish ] = "Documento maestro";
+    Text[ italian ] = "Documento master";
+    Text[ danish ] = "Hoveddokument";
+    Text[ swedish ] = "Samlingsdokument";
+    Text[ polish ] = "Dokument g³ówny";
+    Text[ portuguese_brazilian ] = "Master Document";
+    Text[ japanese ] = "Ï½À°ÄŞ·­ÒİÄ";
+    Text[ korean ] = "¸¶½ºÅÍ ¹®¼­";
+    Text[ chinese_simplified ] = "Ö÷¿ØÎÄµµ";
+    Text[ chinese_traditional ] = "¥D±±¤å¥ó";
+    Text[ turkish ] = "Ana belge";
+    Text[ arabic ] = "ãÓÊäÏ ÔÇãá";
+    Text[ catalan ] = "Documento maestro";
+};
+String STR_DESCRIPTION_FACTORY_MATH
+{
+    Text = "Formel";
+    Text[ english_us ] = "Formula";
 };
 
