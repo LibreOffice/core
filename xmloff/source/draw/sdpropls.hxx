@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-11 12:18:09 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ extern const XMLPropertyMapEntry aXMLSDProperties[];
 // entry list for presentation page properties
 
 extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
+extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 
 //////////////////////////////////////////////////////////////////////////////
 // types of own properties
@@ -171,6 +172,11 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_CAPTION_TYPE                    (XML_SD_TYPES_START + 65 )
 
 //////////////////////////////////////////////////////////////////////////////
+// header & footer types
+#define XML_SD_TYPE_DATETIMEUPDATE                  (XML_SD_TYPES_START + 70 )
+#define XML_SD_TYPE_DATETIME_FORMAT                 (XML_SD_TYPES_START + 71 )
+
+//////////////////////////////////////////////////////////////////////////////
 
 #define CTF_NUMBERINGRULES          1000
 //#define CTF_NUMBERINGRULES_NAME       1001
@@ -228,6 +234,18 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define CTF_CAPTION_ESCABS              1049
 
 //////////////////////////////////////////////////////////////////////////////
+// header&footer
+#define CTF_HEADER_VISIBLE              1050
+#define CTF_FOOTER_VISIBLE              1051
+#define CTF_PAGE_NUMBER_VISIBLE         1052
+#define CTF_DATE_TIME_VISIBLE           1053
+#define CTF_HEADER_TEXT                 1054
+#define CTF_FOOTER_TEXT                 1055
+#define CTF_DATE_TIME_TEXT              1056
+#define CTF_DATE_TIME_FORMAT            1057
+#define CTF_DATE_TIME_UPDATE            1058
+
+//////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes
 
 extern SvXMLEnumMapEntry aXML_ConnectionKind_EnumMap[];
@@ -236,13 +254,16 @@ extern SvXMLEnumMapEntry aXML_CircleKind_EnumMap[];
 //////////////////////////////////////////////////////////////////////////////
 // factory for own graphic properties
 
+class SvXMLExport;
+
 class XMLSdPropHdlFactory : public XMLPropertyHandlerFactory
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
+    SvXMLExport* mpExport;
 
 public:
-    XMLSdPropHdlFactory( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > );
+    XMLSdPropHdlFactory( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >, SvXMLExport* pExport );
     virtual ~XMLSdPropHdlFactory();
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const;
 };
