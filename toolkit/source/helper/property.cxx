@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:59:52 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "EffectiveMin" ),       BASEPROPERTY_EFFECTIVE_MIN,     ::getCppuType((const double*)0),        ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "EffectiveValue" ),     BASEPROPERTY_EFFECTIVE_VALUE,   ::getCppuType((const ::com::sun::star::uno::Any*)0),            ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID, sal_True ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Enabled" ),            BASEPROPERTY_ENABLED,           ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "EnforceFormat" ),      BASEPROPERTY_ENFORCE_FORMAT,    ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "FillColor" ),          BASEPROPERTY_FILLCOLOR,         ::getCppuType((const sal_Int32*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "FocusSelectionHide" ), BASEPROPERTY_FOCUSSELECTIONHIDE,::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "FontRelief" ),         BASEPROPERTY_FONTRELIEF,        ::getCppuType((const sal_Int16*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
