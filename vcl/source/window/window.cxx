@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.199 $
+ *  $Revision: 1.200 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:23:08 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2590,7 +2590,23 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, USHORT nFlags )
     if ( !(mnPaintFlags & IMPL_PAINT_PAINTALL) )
         maInvalidateRegion.Union( *pRegion );
 
-    ImplPostPaint();
+    // Handle transparent windows correctly: invalidate must be done on the first opaque parent
+    if( ((IsPaintTransparent() && !(nFlags & INVALIDATE_NOTRANSPARENT)) || (nFlags & INVALIDATE_TRANSPARENT) )
+            && ImplGetParent() )
+    {
+        /* The following optimization shows problems when resizing (native) tabcontrols (eg the Help viewer)
+           So we pass a NULL region to the parent as well which will result in a IMPL_PAINT_PAINTALL on the parent...
+
+        Region aWindowRegion;
+        if( pRegion == NULL )
+            // compute real region to avoid full repaint in parent
+            aWindowRegion = Rectangle( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
+        ImplGetParent()->ImplInvalidateFrameRegion( pRegion==NULL ? &aWindowRegion : pRegion, nFlags );
+        */
+        ImplGetParent()->ImplInvalidateFrameRegion( pRegion, nFlags );
+    }
+    else
+        ImplPostPaint();
 }
 
 // -----------------------------------------------------------------------
@@ -2621,7 +2637,10 @@ void Window::ImplInvalidateParentFrameRegion( Region& rRegion )
     if ( mbOverlapWin )
         mpFrameWindow->ImplInvalidateOverlapFrameRegion( rRegion );
     else
-        ImplGetParent()->ImplInvalidateFrameRegion( &rRegion, INVALIDATE_CHILDREN );
+    {
+        if( ImplGetParent() )
+            ImplGetParent()->ImplInvalidateFrameRegion( &rRegion, INVALIDATE_CHILDREN );
+    }
 }
 
 // -----------------------------------------------------------------------
