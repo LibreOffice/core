@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:16:22 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,6 @@
 #ifndef _POOLFMT_HXX //autogen
 #include <poolfmt.hxx>
 #endif
-#ifndef _FMTCOL_HXX //autogen
-#include <fmtcol.hxx>
-#endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
@@ -187,7 +184,13 @@
 #include <msfilter.hxx>
 #endif
 #ifndef SW_WRITERHELPER
-#include "writerhelper.hxx"
+#   include "writerhelper.hxx"
+#endif
+#ifndef SW_WRITERWORDGLUE
+#   include "writerwordglue.hxx"
+#endif
+#ifndef WW_WWSTYLES_HXX
+#   include "../inc/wwstyles.hxx"
 #endif
 
 #ifndef _WW8PAR_HXX
@@ -326,7 +329,7 @@ USHORT WW8WrtStyle::Build_GetWWSlot( const SwFmt& rFmt )
 
 USHORT WW8WrtStyle::GetWWId( const SwFmt& rFmt ) const
 {
-    USHORT nRet = WW8_STD::STI_USER;    // User-Style als default
+    USHORT nRet = ww::stiUser;    // User-Style als default
     USHORT nPoolId = rFmt.GetPoolFmtId();
     if( nPoolId == RES_POOLCOLL_STANDARD )
         nRet = 0;
@@ -749,7 +752,7 @@ wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
 
     ShortToSVBT16( 400, &maWW8_FFN[2] );        // weiss ich nicht besser
                                                 // 400 == FW_NORMAL (windows.h)
-    maWW8_FFN[4] = sw::types::rtl_TextEncodingToWinCharset(eChrSet);
+    maWW8_FFN[4] = sw::ms::rtl_TextEncodingToWinCharset(eChrSet);
 
     if (mbAlt)
         maWW8_FFN[5] = msFamilyNm.Len()+1;
@@ -1214,6 +1217,7 @@ int WW8_WrPlcSepx::HasBorderItem( const SwFmt& rFmt )
                 ((SvxBoxItem*)pItem)->GetRight() );
 }
 
+
 bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
 {
     pAttrs = new WW8_PdAttrDesc[ aSects.Count() ];
@@ -1403,60 +1407,9 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
                  )
                )
             {
-                /*
-                For #i4320# & #i14509# I am going to try this, nothing will
-                ever be perfect with the mismatch from title page of winword
-                sections vs our system. But I am relying on the natural
-                inclination of users to treat title pages as special and to
-                generally always have a manual page break inside them that we
-                can convert to a section break in the test in our page break
-                exporter to see if the page break will cause a new page
-                descriptor to follow
-                */
-
-                bool bPlausableTitlePage = true;
-
-                /*
-                So if this is not plausably a title page of the following page
-                style don't try to make it into one and rely on the users
-                likely manual page break to fix everything for us.
-
-                Additional tests may be necessary in the future. A balance
-                will have to be found.
-                */
                 const SwPageDesc *pFollow = pPd->GetFollow();
                 const SwFrmFmt& rFollowFmt = pFollow->GetMaster();
-
-                const SwFmtCol& rFirstCols = pPdFmt->GetCol();
-                const SwFmtCol& rFollowCols = rFollowFmt.GetCol();
-                const SwColumns& rFirstColumns = rFirstCols.GetColumns();
-                const SwColumns& rFollowColumns = rFollowCols.GetColumns();
-
-                if ((rFirstColumns.Count() != rFollowColumns.Count()))
-                {
-                    //e.g. #i4320#
-                    bPlausableTitlePage = false;
-                }
-                else
-                {
-                    //e.g. #i14509#
-                    const SvxULSpaceItem &rOneUL = pPdFmt->GetULSpace();
-                    const SvxULSpaceItem &rTwoUL= rFollowFmt.GetULSpace();
-                    const SvxLRSpaceItem &rOneLR = pPdFmt->GetLRSpace();
-                    const SvxLRSpaceItem &rTwoLR= rFollowFmt.GetLRSpace();
-
-                    if (
-                         (rOneUL.GetUpper() != rTwoUL.GetUpper()) ||
-                         (rOneUL.GetLower() != rTwoUL.GetLower()) ||
-                         (rOneLR.GetLeft() != rTwoLR.GetLeft()) ||
-                         (rOneLR.GetRight() != rTwoLR.GetRight())
-                       )
-                    {
-                        bPlausableTitlePage = false;
-                    }
-                }
-
-                if (bPlausableTitlePage)
+                if (sw::util::IsPlausableSingleWordSection(*pPdFmt, rFollowFmt))
                 {
                     if (rSepInfo.pPDNd)
                         pPdFirstPgFmt = pPd->GetPageFmtOfNode(*rSepInfo.pPDNd);
@@ -1663,6 +1616,9 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
 !!!!!!!!!!!
 */
 
+        const SwTxtNode *pOldPageRoot = rWrt.GetHdFtPageRoot();
+        rWrt.SetHdFtPageRoot(rSepInfo.pPDNd ? rSepInfo.pPDNd->GetTxtNode() : 0);
+
         ULONG nCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         if( !(nHeadFootFlags & WW8_HEADER_EVEN) && rWrt.pDop->fFacingPages )
             OutHeader( rWrt, *pPdFmt, nCpPos, nHeadFootFlags, WW8_HEADER_ODD );
@@ -1678,6 +1634,7 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
 
         OutHeader( rWrt, *pPdFirstPgFmt, nCpPos, nHeadFootFlags, WW8_HEADER_FIRST );
         OutFooter( rWrt, *pPdFirstPgFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_FIRST );
+        rWrt.SetHdFtPageRoot(pOldPageRoot);
     }
 
     if( pTxtPos->Count() )
