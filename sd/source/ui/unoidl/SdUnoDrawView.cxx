@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:37:05 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
+
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
 #endif
