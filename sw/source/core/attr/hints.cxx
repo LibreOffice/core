@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 12:46:39 $
+ *  last change: $Author: jp $ $Date: 2001-09-24 15:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
 #endif
 
 #ifndef _HINTIDS_HXX
@@ -353,6 +356,8 @@ USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript )
     {
         using namespace ::com::sun::star::i18n;
         {
+            if( ScriptType::WEAK == nScript )
+                nScript = GetScriptTypeOfLanguage( GetAppLanguage() );
             switch( nScript)
             {
             case ScriptType::COMPLEX:   ++pM;  // no break;
