@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2000-11-06 15:27:42 $
+ *  last change: $Author: ab $ $Date: 2000-11-14 11:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@
 
 #ifdef _USE_UNO
 #include <ucbhelper/contentbroker.hxx>
-#include <ucbhelper/registerucb.hxx>
+#include <ucbhelper/configurationkeys.hxx>
 #ifndef _COMPHELPER_REGPATHHELPER_HXX_
 #include <comphelper/regpathhelper.hxx>
 #endif
@@ -144,7 +144,7 @@ BasicApp aBasicApp;                     // Applikations-Instanz
 #endif
 
 #ifdef _USE_UNO
-Reference< XContentProviderManager > InitializeUCB( std::vector< ucb::ContentProviderRegistrationInfo > &rRegisteredProviders )
+Reference< XContentProviderManager > InitializeUCB( void )
 {
     Reference< XContentProviderManager > xUcb;
 #ifdef DEBUG
@@ -191,26 +191,11 @@ Reference< XContentProviderManager > InitializeUCB( std::vector< ucb::ContentPro
     setProcessServiceFactory( xSMgr );
 
     // Create unconfigured Ucb:
-    Sequence< Any > aArgs(1);
-    aArgs[0] <<= sal_False;
+    Sequence< Any > aArgs(2);
+    aArgs[0] <<= OUString::createFromAscii(UCB_CONFIGURATION_KEY1_LOCAL);
+    aArgs[1] <<= OUString::createFromAscii(UCB_CONFIGURATION_KEY2_OFFICE);
     ucb::ContentBroker::initialize( xSMgr, aArgs );
     xUcb = ucb::ContentBroker::get()->getContentProviderManagerInterface();
-    /*
-    Reference< XContentProviderManager > xUcb(
-        xSMgr->createInstanceWithArguments(
-            OUString::createFromAscii(
-                "com.sun.star.ucb.UniversalContentBroker" ),
-            aArgs ),
-        UNO_QUERY );
-    */
-    // Configure Ucb (use only file content provider):
-    Sequence< ContentProviderServiceInfo2 > aProviders(1);
-    aProviders[0].Service
-        = OUString::createFromAscii(
-              "com.sun.star.ucb.FileContentProvider");
-    aProviders[0].Scheme = OUString::createFromAscii("file");
-    aProviders[0].ReplaceExisting = false;
-    ucb::registerAtUcb(xUcb, xSMgr, aProviders, &rRegisteredProviders);
 
     }
     catch( Exception & rEx)
@@ -232,8 +217,7 @@ void BasicApp::Main( )
     try
     {
 #ifdef _USE_UNO
-    std::vector< ucb::ContentProviderRegistrationInfo > aRegisteredProviders;
-    Reference< XContentProviderManager > xUcb = InitializeUCB( aRegisteredProviders );
+    Reference< XContentProviderManager > xUcb = InitializeUCB();
 #endif
     {
         LanguageType aRequestedLanguage;
@@ -292,9 +276,6 @@ void BasicApp::Main( )
     delete pFrame;
 
     RemoveAccel( pMainAccel );
-#ifdef _USE_UNO
-    ucb::deregisterFromUcb(xUcb, aRegisteredProviders);
-#endif
 
     }
     catch( class Exception & rEx)
