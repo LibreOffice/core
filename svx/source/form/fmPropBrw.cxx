@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-08 09:58:22 $
+ *  last change: $Author: fs $ $Date: 2002-11-12 12:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
+#endif
+// #95343# -----------------
+#ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
+#include <com/sun/star/awt/XLayoutConstrains.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -450,6 +454,37 @@ void FmPropBrw::implSetNewObject(const Reference< XPropertySet >& _rxObject)
         }
 
         SetText(sTitle);
+
+        // #95343# ---------------------------------
+        Reference< ::com::sun::star::awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
+        if( xLayoutConstrains.is() )
+        {
+            Size aSize;
+            ::com::sun::star::awt::Size aMinSize = xLayoutConstrains->getMinimumSize();
+            aMinSize.Height += 4;
+            aMinSize.Width += 4;
+            aSize.setHeight( aMinSize.Height );
+            aSize.setWidth( aMinSize.Width );
+            SetMinOutputSizePixel( aSize );
+            aSize = GetOutputSizePixel();
+            sal_Bool bResize = sal_False;
+            if( aSize.Width() < aMinSize.Width )
+            {
+                aSize.setWidth( aMinSize.Width );
+                bResize = sal_True;
+            }
+            if( aSize.Height() < aMinSize.Height )
+            {
+                aSize.setHeight( aMinSize.Height );
+                bResize = sal_True;
+            }
+            if( bResize )
+            {
+                SetOutputSizePixel( aSize );
+                // the following Resize call is to circumvent a bug in VCL (or Windows?)
+                Resize();
+            }
+        }
     }
 }
 
