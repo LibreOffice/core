@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:50:30 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ public:
     virtual ~DrawView (void);
 
     virtual void MarkListHasChanged();
-    void InitRedraw(OutputDevice* pOutDev, const Region& rReg);
+    void InitRedraw(OutputDevice* pOutDev, const Region& rReg, const Link* pPaintProc=NULL );
 
     virtual BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
 
