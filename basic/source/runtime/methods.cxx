@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 11:01:41 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3515,7 +3515,7 @@ RTLFUNC(QBColor)
         return;
     }
 
-    Color aCol( (ColorName)rPar.Get(1)->GetInteger() );
+    Color aCol( (ColorData)rPar.Get(1)->GetInteger() );
 
     ULONG nRed   = aCol.GetRed() >> 8;
     ULONG nGreen = aCol.GetGreen() >> 8;
@@ -3627,42 +3627,10 @@ RTLFUNC(SavePicture)
 
 
 //-----------------------------------------------------------------------------------------
-/*
-class SbiAboutStarBasicDlg : public ModalDialog
-{
-    OKButton    aOkButton;
-    Control     aCtrl;
-
-public:
-        SbiAboutStarBasicDlg();
-};
-
-SbiAboutStarBasicDlg::SbiAboutStarBasicDlg() :
-    ModalDialog( GetpApp()->GetAppWindow(), BasicResId( RID_BASIC_START ) ),
-    aOkButton( this, BasicResId( 1 ) ),
-    aCtrl( this, BasicResId( 1 ) )
-{
-    FreeResource();
-}
-*/
-//-----------------------------------------------------------------------------------------
 
 RTLFUNC(AboutStarBasic)
 {
-    /*
-    String aName;
-    if( rPar.Count() >= 2 )
-    {
-        aName = rPar.Get(1)->GetString();
-    }
-
-    SbiAboutStarBasicDlg* pDlg = new SbiAboutStarBasicDlg;
-    pDlg->Execute();
-    delete pDlg;
-    */
 }
-
-// MsgBox( msg [,type[,title]] )
 
 RTLFUNC(MsgBox)
 {
@@ -3701,8 +3669,6 @@ RTLFUNC(MsgBox)
         nStyle = 0;
 
     nWinBits = nStyleMap[ nStyle ];
-    if( nType & 4096 )
-        nWinBits |= WB_SYSMODAL;
 
     WinBits nWinDefBits;
     nWinDefBits = (WB_DEF_OK | WB_DEF_RETRY | WB_DEF_YES);
@@ -3726,7 +3692,7 @@ RTLFUNC(MsgBox)
 
     nType &= (16+32+64);
     MessBox* pBox = 0;
-    Window* pParent = GetpApp()->GetDefModalDialogParent();
+    Window* pParent = GetpApp()->GetDefDialogParent();
     switch( nType )
     {
         case 16:
