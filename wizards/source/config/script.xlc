@@ -12,4 +12,5 @@
  <library:library library:name="Euro" library:link="true"/>
  <library:library library:name="Depot" library:link="true"/>
  <library:library library:name="Tutorials" library:link="true"/>
+ <library:library library:name="ScriptBindingLibrary" library:link="true"/>
 </library:libraries>
