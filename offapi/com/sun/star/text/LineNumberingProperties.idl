@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineNumberingProperties.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:44 $
+ *  last change: $Author: os $ $Date: 2001-01-23 14:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ service LineNumberingProperties
 
     /** The name of the character style that is used for the line number.
      */
-    [property] string CharStyle;
+    [property] string CharStyleName;
 
     //-------------------------------------------------------------------------
 
