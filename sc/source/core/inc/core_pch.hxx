@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_pch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:36:39 $
+ *  last change: $Author: nn $ $Date: 2000-11-21 16:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,6 @@
 #include <ddelink.hxx>
 #include <chartlis.hxx>
 #include <sfx2/minarray.hxx>
-#include <svtools/iniman.hxx>
 #include <svtools/txtcmp.hxx>
 #include <olinetab.hxx>
 #include <svtools/sbxobj.hxx>
