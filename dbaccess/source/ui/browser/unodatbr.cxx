@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 12:27:21 $
+ *  last change: $Author: oj $ $Date: 2000-11-30 16:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,7 @@
 #ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
 #endif
+#include "dbaccess_helpid.hrc"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -369,6 +370,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pTreeView = new DBTreeView(getContent(), WB_TABSTOP);
         m_pTreeView->Show();
         m_pTreeView->SetPreExpandHandler(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
+        m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
 
         // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
         m_pSplitter->SetSplitPosPixel( getContent()->LogicToPixel( Size( 80, 0 ), MAP_APPFONT ).Width() );
@@ -383,10 +385,11 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         initializeTreeModel();
 
         // TODO
-        //  getContent()->getVclControl()->GetDataWindow().SetUniqueId(UID_DATABROWSE_DATAWINDOW);
-        //  getContent()->getVclControl()->SetHelpId(HID_CTL_TABBROWSER);
-        //  if (getContent()->getVclControl()->GetHeaderBar())
-            //  getContent()->getVclControl()->GetHeaderBar()->SetHelpId(HID_DATABROWSE_HEADER);
+        getContent()->getVclControl()->GetDataWindow().SetUniqueId(UID_DATABROWSE_DATAWINDOW);
+        getContent()->getVclControl()->SetHelpId(HID_CTL_TABBROWSER);
+        getContent()->SetUniqueId(UID_CTL_CONTENT);
+        if (getContent()->getVclControl()->GetHeaderBar())
+            getContent()->getVclControl()->GetHeaderBar()->SetHelpId(HID_DATABROWSE_HEADER);
     }
 
     return sal_True;

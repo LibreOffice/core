@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 14:21:10 $
+ *  last change: $Author: oj $ $Date: 2000-11-30 16:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,21 @@
 #define HID_DLG_FILTERCRIT                          (HID_DBACCESS_START + 15)
 #define HID_DLG_ORDERCRIT                           (HID_DBACCESS_START + 16)
 
+#define HID_DATABROWSE_HEADER                       (HID_DBACCESS_START + 17)
+#define HID_CTL_TABBROWSER                          (HID_DBACCESS_START + 18)
+#define UID_DATABROWSE_DATAWINDOW                   (HID_DBACCESS_START + 19)
+#define HID_CTL_TREEVIEW                            (HID_DBACCESS_START + 20)
+#define UID_CTL_CONTENT                             (HID_DBACCESS_START + 21)
+
+
 #endif // _DBA_DBACCESS_HELPID_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/14 14:21:10  oj
+ *  two new defines
+ *
  *  Revision 1.1  2000/10/30 13:44:49  fs
  *  initial checkin - help ids for the dbaccess project
  *
