@@ -4056,7 +4056,13 @@ SfxBoolItem InsertHyperlink SID_HYPERLINK_INSERT
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertObjectFloatingFrame SID_INSERT_FLOATINGFRAME
-()
+(
+    SfxStringItem Name          FN_PARAM_1,
+    SfxStringItem URL           FN_PARAM_2,
+    SvxSizeItem   Margin        FN_PARAM_3,
+    SfxByteItem   ScrollingMode FN_PARAM_4,
+    SfxBoolItem   IsBorder      FN_PARAM_5
+)
 [
     /* flags: */
     AutoUpdate = FALSE,
