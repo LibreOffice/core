@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:14:25 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XMLIMPRT_HXX
 #define SC_XMLIMPRT_HXX
 
@@ -675,6 +674,15 @@ struct ScMyNamedExpression
 
 typedef std::list<const ScMyNamedExpression*> ScMyNamedExpressions;
 
+struct ScMyLabelRange
+{
+    rtl::OUString   sLabelRangeStr;
+    rtl::OUString   sDataRangeStr;
+    sal_Bool        bColumnOrientation;
+};
+
+typedef std::list<const ScMyLabelRange*> ScMyLabelRanges;
+
 struct ScMyImportValidation
 {
     rtl::OUString                                   sName;
@@ -790,6 +798,7 @@ class ScXMLImport: public SvXMLImport
     ScMyTables              aTables;
 
     ScMyNamedExpressions*   pMyNamedExpressions;
+    ScMyLabelRanges*        pMyLabelRanges;
     ScMyImportValidations*  pValidations;
     ScMyImpDetectiveOpArray*    pDetectiveOpArray;
     ScUnoGuard*             pScUnoGuard;
@@ -951,6 +960,12 @@ public:
         pMyNamedExpressions->push_back(pMyNamedExpression); }
     ScMyNamedExpressions* GetNamedExpressions() { return pMyNamedExpressions; }
 
+    void    AddLabelRange(const ScMyLabelRange* pMyLabelRange) {
+        if (!pMyLabelRanges)
+            pMyLabelRanges = new ScMyLabelRanges();
+        pMyLabelRanges->push_back(pMyLabelRange); }
+    ScMyLabelRanges* GetLabelRanges() { return pMyLabelRanges; }
+
     void AddValidation(const ScMyImportValidation& rValidation) {
         if (!pValidations)
             pValidations = new ScMyImportValidations();
@@ -1015,6 +1030,7 @@ public:
 
     sal_Int32   GetRangeType(const rtl::OUString sRangeType) const;
     void SetNamedRanges();
+    void SetLabelRanges();
 };
 
 #endif
