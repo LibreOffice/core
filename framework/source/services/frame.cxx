@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: as $ $Date: 2002-04-22 13:51:21 $
+ *  last change: $Author: as $ $Date: 2002-05-15 12:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,6 +1412,18 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     aWriteLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
+    // Free references of our frame tree.
+    // Force parent container to forget this frame too ...
+    // ( It's contained in m_xParent and so no css::lang::XEventListener for m_xParent! )
+    // It's important to do that before we free some other internal structures.
+    // Because if our parent gets an activate and found us as last possible active frame
+    // he try to deactivate us ... and we run into some trouble.
+    if( m_xParent.is() == sal_True )
+    {
+        m_xParent->getFrames()->remove( xThis );
+        m_xParent = css::uno::Reference< css::frame::XFramesSupplier >();
+    }
+
     /*ATTENTION
         It's neccessary to release our StatusIndicatorFactory-helper at first!
         He share our container window as parent for any created status indicator objects ...
@@ -1421,14 +1433,6 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >();
     impl_disposeContainerWindow( m_xContainerWindow );
 
-    // Free references of our frame tree.
-    // Force parent container to forget this frame too ...
-    // ( It's contained in m_xParent and so no css::lang::XEventListener for m_xParent! )
-    if( m_xParent.is() == sal_True )
-    {
-        m_xParent->getFrames()->remove( xThis );
-        m_xParent = css::uno::Reference< css::frame::XFramesSupplier >();
-    }
     /*ATTENTION
         Clear container after successful removing from parent container ...
         because our parent could be a task and stand in dispose too!
