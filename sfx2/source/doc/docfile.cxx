@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-29 16:10:39 $
+ *  last change: $Author: mba $ $Date: 2002-06-03 10:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2081,7 +2081,7 @@ SfxMedium::SfxMedium( SvStorage *pStorage, sal_Bool bRootP )
 
 SfxMedium::~SfxMedium()
 {
-//  CancelTransfers();
+    CancelTransfers();
     ::vos::OClearableGuard aGuard( pImp->aHandler->GetMutex() );
     pImp->aHandler->ReleaseMedium();
     aGuard.clear();
