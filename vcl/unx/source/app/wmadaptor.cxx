@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:17:07 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,10 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     if( m_aWMName.Len() == 0 )
     {
         if( XInternAtom( m_pDisplay, "_OL_WIN_ATTR", True ) )
+        {
             m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM( "Olwm" ) );
+            m_nInitWinGravity = NorthWestGravity;
+        }
     }
     if( m_aWMName.Len() == 0 )
     {
