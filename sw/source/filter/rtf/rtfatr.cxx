@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:50:39 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 11:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1727,6 +1727,11 @@ static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
     sal_uInt32 nSize = 0;
 
     Graphic aGraphic(rNd.GetGrf());
+
+    // If there is no graphic there is not much point in parsing it
+    if(aGraphic.GetType()==GRAPHIC_NONE)
+        return rRTFWrt;
+
     GfxLink aGraphicLink;
     const sal_Char* pBLIPType = 0;
     if (aGraphic.IsLink())
@@ -1806,6 +1811,7 @@ static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
 
         rRTFWrt.Strm() << '}';
     }
+
 
     rRTFWrt.Strm() << SwRTFWriter::sNewLine;
 #else
