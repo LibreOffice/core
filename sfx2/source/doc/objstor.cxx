@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:18:47 $
+ *  last change: $Author: mba $ $Date: 2001-02-14 09:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,10 +776,12 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             rMedium.SaveVersionList_Impl();
 
             // Den Storage f"ur die Versionen "offnen
-            SvStorageRef xVersion = aMedRef->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ) );
+            SvStorageRef xVersion = SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() ?
+                    aMedRef->OpenUCBStorage( DEFINE_CONST_UNICODE( "Versions" ) ) :
+                    aMedRef->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ) );
 
             // Ggf. alle schon vorhandenen Versionen kopieren
-            SvStorageRef xOldVersions = GetStorage()->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ), SFX_STREAM_READONLY );
+            SvStorageRef xOldVersions = GetStorage()->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ), SFX_STREAM_READONLY | STREAM_NOCREATE);
             if ( xOldVersions.Is() && xOldVersions->GetError() == SVSTREAM_OK )
             {
                 const SfxVersionTableDtor *pList = rMedium.GetVersionList();
@@ -796,8 +798,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             // Einen Stream aufmachen, auf den dann der Storage gesetzt wird,
             // in den gespeichert wird
-            SvMemoryStream aTmp;
-            SvStorageRef xTmp = new SvStorage( aTmp );
+//            SvMemoryStream aTmp;
+            ::utl::TempFile aTmpFile;
+            aTmpFile.EnableKillingFile( TRUE );
+            SvStorageRef xTmp = new SvStorage( ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() ), aTmpFile.GetURL() );
             rMedium.SetStorage_Impl( xTmp );
 
             // Version speichern
@@ -813,19 +817,21 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             xTmp->Commit();
 
+            // Medium wieder auf den alten Storage setzen
+            rMedium.SetStorage_Impl( aMedRef );
+
+            // storage freigeben, um ihn als stream zu öffnen
+            xTmp.Clear();
+
             // Den Stream mit dem Storage komprimiert abspeichern
             SvStorageStreamRef xStrm = xVersion->OpenStream( aInfo.aName );
-            aTmp.Seek(0);
             ZCodec aCodec;
             aCodec.BeginCompression( ZCODEC_BEST_COMPRESSION );
-            aCodec.Compress( aTmp, *xStrm );
+            aCodec.Compress( *aTmpFile.GetStream( STREAM_READ ), *xStrm );
             aCodec.EndCompression();
 
             // Versionen-Storage committen
             xVersion->Commit();
-
-            // Medium wieder auf den alten Storage setzen
-            rMedium.SetStorage_Impl( aMedRef );
         }
         else if ( pImp->bIsSaving )
         {
@@ -833,8 +839,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             const SfxVersionTableDtor *pList = rMedium.GetVersionList();
             if ( pList && pList->Count() )
             {
-                SvStorageRef xVersion = aMedRef->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ) );
-                SvStorageRef xOldVersions = GetStorage()->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ), SFX_STREAM_READONLY );
+                SvStorageRef xVersion = SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() ?
+                    aMedRef->OpenUCBStorage( DEFINE_CONST_UNICODE( "Versions" ) ) :
+                    aMedRef->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ) );
+                SvStorageRef xOldVersions = GetStorage()->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ), SFX_STREAM_READONLY | STREAM_NOCREATE );
                 if ( xOldVersions.Is() && xOldVersions->GetError() == SVSTREAM_OK )
                 {
                     sal_uInt32 n=0;
@@ -847,6 +855,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                         pInfo = pList->GetObject(n++);
                     }
                 }
+
+                xVersion->Commit();
             }
         }
     }
