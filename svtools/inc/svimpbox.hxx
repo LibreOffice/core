@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-14 14:48:09 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 14:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,7 @@ public:
     BOOL                HasHorScrollBar() const { return aHorSBar.IsVisible(); }
     void                ShowFocusRect( const SvLBoxEntry* pEntry );
     void                SetTabBar( TabBar* pTabBar );
+    void                CancelPendingEdit();
 };
 
 inline void SvImpLBox::SetExpandedNodeBmp( const Image& rBmp )

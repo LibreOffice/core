@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-28 15:10:33 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 14:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2017,7 +2017,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     if( pXItem )
     {
         SvLBoxTab* pXTab = pView->GetTab( pEntry, pXItem );
-        if( !rMEvt.IsMod1() && !rMEvt.IsMod2() &&pXTab->IsEditable() )
+        if( !rMEvt.IsMod1() && !rMEvt.IsMod2() && pXTab->IsEditable() )
             nFlags |= F_START_EDITTIMER;
 #ifndef MAC
         if( !pView->IsSelected( pEntry ))
@@ -3191,4 +3191,9 @@ void SvImpLBox::SetTabBar( TabBar* _pTabBar )
     pTabBar = _pTabBar;
 }
 
-
+void SvImpLBox::CancelPendingEdit()
+{
+    if( aEditTimer.IsActive() )
+        aEditTimer.Stop();
+    nFlags &= ~F_START_EDITTIMER;
+}
