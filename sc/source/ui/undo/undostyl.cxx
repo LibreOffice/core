@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undostyl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:52:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,18 +281,25 @@ BOOL ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 //      apply page style
 //
+ScUndoApplyPageStyle::ApplyStyleEntry::ApplyStyleEntry( SCTAB nTab, const String& rOldStyle ) :
+    mnTab( nTab ),
+    maOldStyle( rOldStyle )
+{
+}
 
-ScUndoApplyPageStyle::ScUndoApplyPageStyle( ScDocShell* pDocSh, SCTAB nT,
-                    const String& rOld, const String& rNew ) :
+ScUndoApplyPageStyle::ScUndoApplyPageStyle( ScDocShell* pDocSh, const String& rNewStyle ) :
     ScSimpleUndo( pDocSh ),
-    nTab( nT ),
-    aOldStyle( rOld ),
-    aNewStyle( rNew )
+    maNewStyle( rNewStyle )
 {
 }
 
 ScUndoApplyPageStyle::~ScUndoApplyPageStyle()
 {
+}
+
+void ScUndoApplyPageStyle::AddSheetAction( SCTAB nTab, const String& rOldStyle )
+{
+    maEntries.push_back( ApplyStyleEntry( nTab, rOldStyle ) );
 }
 
 String ScUndoApplyPageStyle::GetComment() const
@@ -303,20 +310,22 @@ String ScUndoApplyPageStyle::GetComment() const
 void ScUndoApplyPageStyle::Undo()
 {
     BeginUndo();
-
-    pDocShell->GetDocument()->SetPageStyle( nTab, aOldStyle );
-
-    ScPrintFunc( pDocShell, pDocShell->GetPrinter(), nTab ).UpdatePages();
+    for( ApplyStyleVec::const_iterator aIt = maEntries.begin(), aEnd = maEntries.end(); aIt != aEnd; ++aIt )
+    {
+        pDocShell->GetDocument()->SetPageStyle( aIt->mnTab, aIt->maOldStyle );
+        ScPrintFunc( pDocShell, pDocShell->GetPrinter(), aIt->mnTab ).UpdatePages();
+    }
     EndUndo();
 }
 
 void ScUndoApplyPageStyle::Redo()
 {
     BeginRedo();
-
-    pDocShell->GetDocument()->SetPageStyle( nTab, aNewStyle );
-
-    ScPrintFunc( pDocShell, pDocShell->GetPrinter(), nTab ).UpdatePages();
+    for( ApplyStyleVec::const_iterator aIt = maEntries.begin(), aEnd = maEntries.end(); aIt != aEnd; ++aIt )
+    {
+        pDocShell->GetDocument()->SetPageStyle( aIt->mnTab, maNewStyle );
+        ScPrintFunc( pDocShell, pDocShell->GetPrinter(), aIt->mnTab ).UpdatePages();
+    }
     EndRedo();
 }
 
