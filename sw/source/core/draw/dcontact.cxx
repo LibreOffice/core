@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-24 10:32:03 $
+ *  last change: $Author: ama $ $Date: 2001-12-05 13:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,10 +193,25 @@ SwRect GetBoundRect( const SdrObject* pObj )
     const SwFmt *pFmt = ((SwContact*)GetUserCall(pObj))->GetFmt();
     const SvxULSpaceItem &rUL = pFmt->GetULSpace();
     const SvxLRSpaceItem &rLR = pFmt->GetLRSpace();
-    aRet.Top ( Max( aRet.Top() - long(rUL.GetUpper()), 0L ));
-    aRet.Left( Max( aRet.Left()- long(rLR.GetLeft()),  0L ));
-    aRet.SSize().Height() += rUL.GetLower();
-    aRet.SSize().Width()  += rLR.GetRight();
+#ifdef VERTICAL_LAYOUT
+    SwFrm* pFrm = pObj->IsWriterFlyFrame() ?
+        ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm()
+        : ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchor();
+    if( pFrm && pFrm->IsVertical() )
+    {
+        aRet.Top ( Max( aRet.Top() - long(rLR.GetLeft()), 0L ));
+        aRet.Left( Max( aRet.Left()- long(rUL.GetLower()),  0L ));
+        aRet.SSize().Height() += rLR.GetRight();
+        aRet.SSize().Width()  += rUL.GetUpper();
+    }
+    else
+#endif
+    {
+        aRet.Top ( Max( aRet.Top() - long(rUL.GetUpper()), 0L ));
+        aRet.Left( Max( aRet.Left()- long(rLR.GetLeft()),  0L ));
+        aRet.SSize().Height() += rUL.GetLower();
+        aRet.SSize().Width()  += rLR.GetRight();
+    }
     return aRet;
 }
 
