@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdShapeTypes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:47:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ ShapeTypeDescriptor aSdShapeTypeList[] = {
 void RegisterImpressShapeTypes (void)
 {
     ShapeTypeHandler::Instance().AddShapeTypeList (
-        PRESENTATION_HANDOUT - PRESENTATION_OUTLINER + 1,
+        PRESENTATION_PAGENUMBER - PRESENTATION_OUTLINER + 1,
         aSdShapeTypeList);
 }
 
