@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-29 20:12:00 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ String STR_REMOVE_WARNING
     Text[ swedish ] = "Följande tecken är inte tillåtna och har därför tagits bort:  ";
     Text[ polish ] = "Nastêpuj¹cy znak jest niedozwolony i zosta³ dlatego usuniêty: ";
     Text[ portuguese_brazilian ] = "The following characters are not valid and have been removed: ";
-    Text[ japanese ] = "Ÿ‚Ì•¶š‚Í‹–‰Â‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚Åœ‹‚³‚ê‚Ü‚µ‚½B ";
+    Text[ japanese ] = "Ÿ‚Ì•¶š‚Í‹–‰Â‚³‚ê‚Ä‚¢‚È‚¢‚½‚ßœ‹‚³‚ê‚Ü‚µ‚½B ";
     Text[ korean ] = "´ÙÀ½ÀÇ ¹®ÀÚµéÀº À¯È¿ÇÏÁö ¾Ê¾Æ¼­ Á¦°ÅµÇ¾ú½À´Ï´Ù: ";
     Text[ chinese_simplified ] = "ÏÂÁĞ×Ö·ûÎŞĞ§ÇÒÒÑ¾­±»É¾³ı£º ";
     Text[ chinese_traditional ] = "¤U¦Cªº¦r«¬µL®Ä¦Ó³Q§R°£¡G ";
