@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:14:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,8 +364,7 @@ void SpinField::ImplInit( Window* pParent, WinBits nWinStyle )
         // Some themes want external spin buttons, therefore the main
         // spinfield should not overdraw the border between its encapsulated
         // edit field and the spin buttons
-        if ( (nWinStyle & WB_SPIN) &&
-            IsNativeControlSupported(CTRL_SPINBOX, HAS_BACKGROUND_TEXTURE) )
+        if ( (nWinStyle & WB_SPIN) && ImplUseNativeBorder( nWinStyle ) )
         {
             SetBackground();
             mpEdit = new Edit( this, WB_NOBORDER );
