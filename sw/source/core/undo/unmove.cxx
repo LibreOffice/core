@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unmove.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,114 +392,4 @@ void SwUndoMove::AddTblMrgFlyHstry( SwHistory& rHstr )
     nFtnStt += rHstr.Count();
     pHistory->Move( nInsPos, &rHstr );
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unmove.cxx,v 1.1.1.1 2000-09-19 00:08:28 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.39  2000/09/18 16:04:29  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.38  2000/05/09 10:04:24  jp
-      Changes for Unicode
-
-      Revision 1.37  1999/07/08 17:18:46  JP
-      Bug #67507#: ClearSwpHintsArr - optional dont delete fields/hardblanks/softhyps
-
-
-      Rev 1.36   08 Jul 1999 19:18:46   JP
-   Bug #67507#: ClearSwpHintsArr - optional dont delete fields/hardblanks/softhyps
-
-      Rev 1.35   02 Apr 1998 15:13:32   JP
-   Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-      Rev 1.34   27 Mar 1998 15:33:24   JP
-   UndoMove: GetHistory durch AddTblMrgFlyHstry ersetzt
-
-      Rev 1.33   22 Jan 1998 20:53:10   JP
-   CTOR des SwPaM umgestellt
-
-      Rev 1.32   13 Jan 1998 21:36:06   JP
-   Fussnoten in der IconSection zulassen (Redlining!)
-
-      Rev 1.31   19 Dec 1997 12:15:34   JP
-   MSG/NOTE entfernt
-
-      Rev 1.30   18 Nov 1997 16:36:48   JP
-   ResetAttr uber den Node und nicht uebers Doc rufen
-
-      Rev 1.29   03 Nov 1997 13:06:24   MA
-   precomp entfernt
-
-      Rev 1.28   09 Oct 1997 15:45:38   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.27   17 Jun 1997 13:02:54   JP
-   SetDestRange: Schnittstelle geaendert
-
-      Rev 1.26   11 Jun 1997 10:44:48   JP
-   pure virtual Repeat wurde zur virtual Methode, Segment Pragma entfernt
-
-      Rev 1.25   29 May 1997 22:56:32   JP
-   CopyAttr/CopyFmtAttr von SwUndo zur SwHistory verschoben
-
-      Rev 1.24   03 Apr 1997 16:30:08   JP
-   Bug #35738#: Attribute/Vorlagen richtig restaurieren
-
-      Rev 1.23   31 Jan 1997 10:13:34   JP
-   Bug #35409#: Attribute von der InsPos beim Undo wieder herstellen
-
-      Rev 1.22   29 Oct 1996 14:54:30   JP
-   am Doc ist das NodesArray nur noch ueber Get..() zugaenglich
-
-      Rev 1.21   04 Oct 1996 12:52:28   JP
-   neu: GetHistory - legt ggf. das History-Object an
-
-      Rev 1.20   24 Sep 1996 10:27:20   JP
-   erweitert fuers Undo von Move( SwRanges ), Redo FEHLT!
-
-      Rev 1.19   24 Nov 1995 17:13:58   OM
-   PCH->PRECOMPILED
-
-      Rev 1.18   22 Jun 1995 19:33:08   JP
-   virt. Methode GetUndoRange vernichtet, Objecte rufen jetzt die Basis-Klasse
-
-      Rev 1.17   08 Feb 1995 23:52:58   ER
-   undo.hxx -> swundo.hxx wegen solar undo.hxx
-
-      Rev 1.16   24 Jan 1995 19:07:46   JP
-   JoinNext/-Prev: zus. Parameter - seine Position im NodesArray
-
-      Rev 1.15   15 Dec 1994 20:48:16   SWG
-   *ARR* Ersetzungen, svmem, __far_data etc.
-
-      Rev 1.14   25 Oct 1994 14:50:56   MA
-   PreHdr.
-
-      Rev 1.13   02 Aug 1994 16:49:56   JP
-   SwCntntNode::JoinNext/JoinPrev(): Nodes-Array nicht mehr als Parameter
-
-      Rev 1.12   07 Jun 1994 19:48:40   JP
-   UndoMove: Member nNdDiff wird nicht benoetigt
-
-      Rev 1.11   07 Jun 1994 19:01:04   JP
-   neu: wird Text in die "Sonderbereiche" verschoben und befinden sich
-       in diesem Fussnoten, dann muessen sie geloescht werden.
-
-      Rev 1.10   02 Mar 1994 19:50:28   MI
-   Underscore im Namen der #pragmas
-
-      Rev 1.9   17 Feb 1994 08:31:00   MI
-   SEG_FUNCDEFS ausgefuellt
-
-      Rev 1.8   16 Feb 1994 13:17:18   MI
-   Pragmas zurechtgerueckt
-
-*************************************************************************/
-
 

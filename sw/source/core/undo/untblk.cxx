@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untblk.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,76 +414,4 @@ SwUndoCpyDoc::SwUndoCpyDoc( const SwPaM& rPam )
     : SwUndoInserts( UNDO_COPY, rPam )
 {
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/untblk.cxx,v 1.1.1.1 2000-09-19 00:08:28 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.52  2000/09/18 16:04:30  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.51  2000/07/03 19:25:19  jp
-      Bug #67696#: RstTxtAttr must delete TOX- and RefMarks
-
-      Revision 1.50  2000/05/09 10:04:56  jp
-      Changes for Unicode
-
-      Revision 1.49  1999/03/18 18:41:22  JP
-      Bug #63715#: SetRange - nur absatzgebundene Fly einsammeln
-
-
-      Rev 1.48   18 Mar 1999 19:41:22   JP
-   Bug #63715#: SetRange - nur absatzgebundene Fly einsammeln
-
-      Rev 1.47   28 Jul 1998 13:00:44   JP
-   Bug #53951#: Redlines am Anfang vom Node Copy/Move Bereich sonderbehandeln
-
-      Rev 1.46   06 May 1998 21:33:36   JP
-   das einfuegen einer Tabelleselektion setzt den StartNode falsch
-
-      Rev 1.45   20 Mar 1998 14:53:22   JP
-   Bug #48632# Undo - nicht auf 0 Pointer zugreifen
-
-      Rev 1.44   12 Feb 1998 16:51:58   JP
-   kleinere Optimierungen
-
-      Rev 1.43   29 Jan 1998 21:31:52   JP
-   GetEndOfIcons ersetzt durch GetEndOfExtras, das auf GetEndOfRedlines mappt
-
-      Rev 1.42   22 Jan 1998 20:53:12   JP
-   CTOR des SwPaM umgestellt
-
-      Rev 1.41   08 Jan 1998 20:56:04   JP
-   SwDoc::GetRedlineTbl returnt jetzt eine Referenz
-
-      Rev 1.40   19 Dec 1997 12:14:24   JP
-   Undo: Redlining beachten
-
-      Rev 1.39   18 Nov 1997 16:36:46   JP
-   ResetAttr uber den Node und nicht uebers Doc rufen
-
-      Rev 1.38   03 Nov 1997 13:06:26   MA
-   precomp entfernt
-
-      Rev 1.37   09 Oct 1997 15:45:48   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.36   03 Sep 1997 10:29:56   JP
-   zusaetzliches include von docary
-
-      Rev 1.35   18 Aug 1997 10:36:06   OS
-   includes
-
-      Rev 1.34   15 Aug 1997 12:38:00   OS
-   charatr/frmatr/txtatr aufgeteilt
-
-      Rev 1.33   11 Jun 1997 10:44:08   JP
-   pure virtual Repeat wurde zur virtual Methode, Segment Pragma entfernt
-
-*************************************************************************/
 

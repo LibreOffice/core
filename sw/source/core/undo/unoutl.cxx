@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoutl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,53 +101,5 @@ void SwUndoOutlineLeftRight::Repeat( SwUndoIter& rUndoIter )
     rUndoIter.GetDoc().OutlineUpDown( *rUndoIter.pAktPam, nOffset );
 }
 
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unoutl.cxx,v 1.1.1.1 2000-09-19 00:08:28 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.11  2000/09/18 16:04:29  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.10  1998/04/02 13:13:32  JP
-      Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-
-      Rev 1.9   02 Apr 1998 15:13:32   JP
-   Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-      Rev 1.8   23 Jan 1998 17:01:58   JP
-   SwUndoOutlineUpDown entfernt, wird durch MoveParagraph ersetzt
-
-      Rev 1.7   03 Nov 1997 13:06:14   MA
-   precomp entfernt
-
-      Rev 1.6   09 Oct 1997 15:45:28   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.5   11 Jun 1997 10:44:10   JP
-   pure virtual Repeat wurde zur virtual Methode, Segment Pragma entfernt
-
-      Rev 1.4   13 May 1997 15:03:26   JP
-   UndoMoveOutl: keine Selektion beachten
-
-      Rev 1.3   24 Nov 1995 17:14:04   OM
-   PCH->PRECOMPILED
-
-      Rev 1.2   22 Jun 1995 19:33:22   JP
-   virt. Methode GetUndoRange vernichtet, Objecte rufen jetzt die Basis-Klasse
-
-      Rev 1.1   08 Feb 1995 23:52:54   ER
-   undo.hxx -> swundo.hxx wegen solar undo.hxx
-
-      Rev 1.0   07 Feb 1995 19:34:34   JP
-   Undo fuers hoch/runter stufen/verschieben von Gliederung
-
-*************************************************************************/
 
 

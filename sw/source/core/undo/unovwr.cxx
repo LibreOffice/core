@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-08 13:27:50 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,78 +559,5 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
         }
     }
 }
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.8 2001-06-08 13:27:50 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.7  2001/02/27 16:53:28  jp
-      Transliterte: Offsets are inclusive the start position
-
-      Revision 1.6  2001/02/23 14:17:56  jp
-      change transliteration from 1-1 to 1-n mapping
-
-      Revision 1.5  2000/12/21 09:29:24  jp
-      new: transliteration
-
-      Revision 1.4  2000/11/06 10:47:36  jp
-      use new flag from the txtnode for textattribut expansion
-
-      Revision 1.3  2000/10/26 11:24:24  jp
-      for bug #78848#: don't call DeleteRedline
-
-      Revision 1.2  2000/10/25 15:13:25  jp
-      use CharClass/BreakIt instead of old WordSelection
-
-      Revision 1.1.1.1  2000/09/19 00:08:28  hr
-      initial import
-
-      Revision 1.35  2000/09/18 16:04:29  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.34  2000/07/20 13:15:35  jp
-      change old txtatr-character to the two new characters
-
-      Revision 1.33  2000/05/19 12:53:47  jp
-      use WordSelection class for check chars
-
-      Revision 1.32  2000/05/09 10:04:28  jp
-      Changes for Unicode
-
-      Revision 1.31  1998/01/22 19:53:12  JP
-      CTOR des SwPaM umgestellt
-
-
-      Rev 1.30   22 Jan 1998 20:53:12   JP
-   CTOR des SwPaM umgestellt
-
-      Rev 1.29   16 Jan 1998 11:06:52   JP
-   Overwrite: Redlining beachten
-
-      Rev 1.28   19 Dec 1997 12:15:34   JP
-   MSG/NOTE entfernt
-
-      Rev 1.27   03 Nov 1997 13:06:16   MA
-   precomp entfernt
-
-      Rev 1.26   09 Oct 1997 15:45:40   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.25   11 Jun 1997 10:44:08   JP
-   pure virtual Repeat wurde zur virtual Methode, Segment Pragma entfernt
-
-      Rev 1.24   29 May 1997 22:56:56   JP
-   CopyAttr/CopyFmtAttr von SwUndo zur SwHistory verschoben
-
-      Rev 1.23   29 Oct 1996 15:57:26   JP
-   Undo: autom. Aufnahme von Ausnahmen fuer die Autokorrektur anstossen
-
-*************************************************************************/
 
 

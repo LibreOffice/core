@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unfmco.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,68 +135,4 @@ void SwUndoFmtColl::Repeat( SwUndoIter& rUndoIter )
 
     rUndoIter.pLastUndoObj = this;
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unfmco.cxx,v 1.1.1.1 2000-09-19 00:08:27 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.22  2000/09/18 16:04:29  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.21  1998/04/02 13:13:30  JP
-      Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-
-      Rev 1.20   02 Apr 1998 15:13:30   JP
-   Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-      Rev 1.19   16 Jan 1998 11:07:54   JP
-   pAttrHistory am Doc entfernt
-
-      Rev 1.18   03 Nov 1997 13:06:28   MA
-   precomp entfernt
-
-      Rev 1.17   11 Jun 1997 10:44:48   JP
-   pure virtual Repeat wurde zur virtual Methode, Segment Pragma entfernt
-
-      Rev 1.16   23 Sep 1996 20:06:28   JP
-   SetTmpEnd: DocPtr entfernt
-
-      Rev 1.15   24 Nov 1995 17:14:04   OM
-   PCH->PRECOMPILED
-
-      Rev 1.14   08 Feb 1995 23:52:36   ER
-   undo.hxx -> swundo.hxx wegen solar undo.hxx
-
-      Rev 1.13   28 Jan 1995 21:21:12   JP
-   UndoInsFmt enternt
-
-      Rev 1.12   20 Jan 1995 09:57:02   JP
-   Bug10011: erfrage am Dok. ob der Pointer auf Fmt/Coll gueltig ist
-
-      Rev 1.11   15 Dec 1994 20:47:52   SWG
-   *ARR* Ersetzungen, svmem, __far_data etc.
-
-      Rev 1.10   25 Oct 1994 14:50:34   MA
-   PreHdr.
-
-      Rev 1.9   25 Aug 1994 18:06:08   JP
-   Umstellung Attribute (von SwHint -> SfxPoolItem)
-
-      Rev 1.8   02 Mar 1994 19:48:54   MI
-   Underscore im Namen der #pragmas
-
-      Rev 1.7   17 Feb 1994 08:30:04   MI
-   SEG_FUNCDEFS ausgefuellt
-
-      Rev 1.6   16 Feb 1994 13:11:30   MI
-   Pragmas zurechtgerueckt
-
-*************************************************************************/
-
 

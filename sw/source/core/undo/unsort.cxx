@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unsort.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,91 +332,4 @@ void SwUndoSort::Insert( ULONG nOrgPos, ULONG nNewPos)
     aSortList.C40_INSERT( SwSortUndoElement, pEle, aSortList.Count() );
 }
 
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unsort.cxx,v 1.1.1.1 2000-09-19 00:08:28 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.45  2000/09/18 16:04:29  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.44  2000/05/09 10:04:47  jp
-      Changes for Unicode
-
-      Revision 1.43  1998/04/02 13:14:10  JP
-      Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-
-      Rev 1.42   02 Apr 1998 15:14:10   JP
-   Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-      Rev 1.41   13 Feb 1998 10:31:48   JP
-   compiler error
-
-      Rev 1.40   12 Feb 1998 20:14:00   JP
-   ueberfluessige Code entfernt
-
-      Rev 1.39   12 Jan 1998 16:54:46   TJ
-   include
-
-      Rev 1.38   08 Jan 1998 21:09:28   JP
-   weitere Redlining Erweiterung
-
-      Rev 1.37   19 Dec 1997 12:14:24   JP
-   Undo: Redlining beachten
-
-      Rev 1.36   25 Nov 1997 12:34:50   JP
-   Bug #45167#: Undo auf Sort - die Move Reihenfolge muss beachtet werden
-
-      Rev 1.35   03 Nov 1997 13:06:08   MA
-   precomp entfernt
-
-      Rev 1.34   29 Oct 1997 17:04:12   JP
-   Bug #45167#: Redo-SortText - Source/Target vertauschen
-
-      Rev 1.33   09 Oct 1997 15:45:40   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.32   11 Sep 1997 17:58:48   JP
-   Bug #41397#: Sortieren von Tabellen - Formeln/Werte der Boxen mitnehmen
-
-      Rev 1.31   18 Aug 1997 10:34:54   OS
-   includes
-
-      Rev 1.30   11 Jun 1997 10:44:08   JP
-   pure virtual Repeat wurde zur virtual Methode, Segment Pragma entfernt
-
-      Rev 1.29   29 Oct 1996 14:55:26   JP
-   am Doc ist das NodesArray nur noch ueber Get..() zugaenglich
-
-      Rev 1.28   14 May 1996 11:35:32   JP
-   jetzt der richtige fix fuer Bug #27768#
-
-      Rev 1.27   13 May 1996 18:19:20   JP
-   Bug #27768#: Redo: Code sollte der gleiche wie beim Undo sein
-
-      Rev 1.26   24 Apr 1996 15:55:56   TRI
-   WTC Anpassung
-
-      Rev 1.25   24 Nov 1995 17:13:56   OM
-   PCH->PRECOMPILED
-
-      Rev 1.24   17 Nov 1995 10:20:40   MA
-   Segmentierung
-
-      Rev 1.23   27 Jul 1995 08:48:28   mk
-   an SCC4.0.1a angepasst (MDA)
-
-      Rev 1.22   22 Jun 1995 19:33:14   JP
-   virt. Methode GetUndoRange vernichtet, Objecte rufen jetzt die Basis-Klasse
-
-      Rev 1.21   04 Mar 1995 13:31:24   MA
-   unnoetiges SEXPORT entfernt.
-
-*************************************************************************/
 

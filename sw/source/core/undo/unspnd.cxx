@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unspnd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,124 +257,4 @@ void SwUndoSplitNode::Redo( SwUndoIter& rUndoIter )
     else
         rPam.GetPoint()->nNode = nOldNode;
 }
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unspnd.cxx,v 1.1.1.1 2000-09-19 00:08:28 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.41  2000/09/18 16:04:30  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.40  2000/07/03 19:25:15  jp
-      Bug #67696#: RstTxtAttr must delete TOX- and RefMarks
-
-      Revision 1.39  1998/04/02 13:14:10  JP
-      Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-
-      Rev 1.38   02 Apr 1998 15:14:10   JP
-   Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-      Rev 1.37   08 Jan 1998 20:56:02   JP
-   SwDoc::GetRedlineTbl returnt jetzt eine Referenz
-
-      Rev 1.36   19 Dec 1997 12:14:22   JP
-   Undo: Redlining beachten
-
-      Rev 1.35   03 Nov 1997 13:06:08   MA
-   precomp entfernt
-
-      Rev 1.34   30 Oct 1997 14:35:46   AMA
-   Chg: Kein AutoFlag mehr an Break bzw. PageDesc-Attributen
-
-      Rev 1.33   09 Oct 1997 15:45:40   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.32   18 Aug 1997 10:34:54   OS
-   includes
-
-      Rev 1.31   15 Aug 1997 12:38:04   OS
-   charatr/frmatr/txtatr aufgeteilt
-
-      Rev 1.30   12 Aug 1997 12:36:46   OS
-   Header-Umstellung
-
-      Rev 1.29   07 Aug 1997 15:04:56   OM
-   Headerfile-Umstellung
-
-      Rev 1.28   07 Jul 1997 11:21:10   JP
-   Bug #41313#: SplitNode - Flag fuer Sonderbehandlung von 1.Box in 1.Tabelle
-
-      Rev 1.27   11 Jun 1997 10:44:08   JP
-   pure virtual Repeat wurde zur virtual Methode, Segment Pragma entfernt
-
-      Rev 1.26   29 May 1997 22:56:56   JP
-   CopyAttr/CopyFmtAttr von SwUndo zur SwHistory verschoben
-
-      Rev 1.25   06 May 1997 12:06:12   MA
-   swtablehxx aufgeteilt
-
-      Rev 1.24   06 Feb 1997 13:26:56   JP
-   BreakAttribute beachten
-
-      Rev 1.23   29 Jan 1997 14:57:02   JP
-   neu: Flag fuer Sonderbehandlung in Tabellen
-
-      Rev 1.22   29 Oct 1996 14:55:40   JP
-   am Doc ist das NodesArray nur noch ueber Get..() zugaenglich
-
-      Rev 1.21   23 Sep 1996 20:06:28   JP
-   SetTmpEnd: DocPtr entfernt
-
-      Rev 1.20   24 Nov 1995 17:14:02   OM
-   PCH->PRECOMPILED
-
-      Rev 1.19   23 Jun 1995 07:58:56   OS
-   +inline GetDoc
-
-      Rev 1.18   22 Jun 1995 19:33:36   JP
-   virt. Methode GetUndoRange vernichtet, Objecte rufen jetzt die Basis-Klasse
-
-      Rev 1.17   04 Mar 1995 13:31:44   MA
-   unnoetiges SEXPORT entfernt.
-
-      Rev 1.16   23 Feb 1995 23:04:22   ER
-   sexport
-
-      Rev 1.15   08 Feb 1995 23:52:32   ER
-   undo.hxx -> swundo.hxx wegen solar undo.hxx
-
-      Rev 1.14   24 Jan 1995 19:07:46   JP
-   JoinNext/-Prev: zus. Parameter - seine Position im NodesArray
-
-      Rev 1.13   15 Dec 1994 20:48:38   SWG
-   *ARR* Ersetzungen, svmem, __far_data etc.
-
-      Rev 1.12   25 Oct 1994 14:50:38   MA
-   PreHdr.
-
-      Rev 1.11   02 Aug 1994 16:48:08   JP
-   SwCntntNode::JoinNext/JoinPrev(): Nodes-Array nicht mehr als Parameter
-
-      Rev 1.10   15 Mar 1994 11:33:32   JP
-   TmpRollback: wenn vom gesamten Node die Attribute gesichert werden, dann
-       immer von vorne wieder setzen.
-
-      Rev 1.9   02 Mar 1994 19:50:34   MI
-   Underscore im Namen der #pragmas
-
-      Rev 1.8   17 Feb 1994 08:31:16   MI
-   SEG_FUNCDEFS ausgefuellt
-
-      Rev 1.7   16 Feb 1994 13:22:20   MI
-   Pragmas zurechtgerueckt
-
-*************************************************************************/
-
 

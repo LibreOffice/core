@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unnum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-14 18:12:40 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,110 +482,5 @@ void SwUndoNumRuleStart::Repeat( SwUndoIter& rUndoIter )
     else
         rUndoIter.GetDoc().SetNumRuleStart( *rUndoIter.pAktPam->GetPoint(), bFlag );
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unnum.cxx,v 1.2 2001-08-14 18:12:40 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/19 00:08:28  hr
-      initial import
-
-      Revision 1.29  2000/09/18 16:04:29  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.28  1999/03/15 22:29:20  JP
-      Task #63049#: Numerierung mit rel. Einzuegen
-
-
-      Rev 1.27   15 Mar 1999 23:29:20   JP
-   Task #63049#: Numerierung mit rel. Einzuegen
-
-      Rev 1.26   11 Nov 1998 10:41:50   JP
-   Task #59308#: NoNum auch bei Outlines setzen
-
-      Rev 1.25   09 Nov 1998 17:34:22   JP
-   Bug #57903#: Flag fuers umsetzen der LRSpaces mit sichern
-
-      Rev 1.24   08 Apr 1998 15:37:16   JP
-   Bug #49140#: UndoInsNum - LRSpaces sichern
-
-      Rev 1.23   02 Apr 1998 15:13:32   JP
-   Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-      Rev 1.22   26 Jan 1998 10:44:30   JP
-   neu: eigenen Startwert fuer die akt. Numerierung am Node setzen
-
-      Rev 1.21   23 Jan 1998 17:01:58   JP
-   SwUndoOutlineUpDown entfernt, wird durch MoveParagraph ersetzt
-
-      Rev 1.20   09 Dec 1997 16:49:50   JP
-   neu: ReplaceNumRule fuer MakeByExample fuer NumerierungsVorlagen
-
-      Rev 1.19   19 Nov 1997 09:59:22   JP
-   Undo fuer Set-/ChgNumRule implementiert
-
-      Rev 1.18   18 Nov 1997 16:34:12   JP
-   neues UndoObject, UndoDelNum an neue Num. angepasst
-
-      Rev 1.17   17 Nov 1997 09:46:24   JP
-   Umstellung Numerierung
-
-      Rev 1.16   03 Nov 1997 13:06:20   MA
-   precomp entfernt
-
-      Rev 1.15   09 Oct 1997 15:45:38   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.14   11 Jun 1997 10:45:02   JP
-   pure virtual Repeat wurde zur virtual Methode, Segment Pragma entfernt
-
-      Rev 1.13   11 Mar 1997 16:21:58   AMA
-   New: Absaetze verschieben durch Strg + CursorUp/Down (auch ausserhalb von Num.)
-
-      Rev 1.12   04 Feb 1997 18:54:32   JP
-   SwUndoInsNum: bei keiner Selektion EndNode auf StartNode setzen
-
-      Rev 1.11   13 Dec 1996 14:58:24   JP
-   Bug #34497#: auf TextNode abpruefen
-
-      Rev 1.10   12 Dec 1996 13:10:40   JP
-   Bug #34429#: CTOR-UndoInNum: Selektion auf Anfang/Ende der Nodes setzen
-
-      Rev 1.9   29 Oct 1996 14:54:44   JP
-   am Doc ist das NodesArray nur noch ueber Get..() zugaenglich
-
-      Rev 1.8   26 Jul 1996 09:24:02   JP
-   SetNumRules - neues Flag fuers setzen des abs. Abstandes
-
-      Rev 1.7   11 Apr 1996 17:14:52   sdo
-   GCC, C40_INSERT
-
-      Rev 1.6   26 Mar 1996 15:26:14   JP
-   neu: SwUndoNumOrNoNum - Number an/aus schalten
-
-      Rev 1.5   26 Feb 1996 20:49:40   JP
-   UndoMoveNum: es muss kein Bereich vorhanden sein!
-
-      Rev 1.4   24 Nov 1995 17:14:00   OM
-   PCH->PRECOMPILED
-
-      Rev 1.3   17 Nov 1995 10:21:52   MA
-   Segmentierung
-
-      Rev 1.2   27 Jul 1995 08:45:42   mk
-   an SCC4.0.1a angepasst (MDA)
-
-      Rev 1.1   22 Jun 1995 19:33:30   JP
-   virt. Methode GetUndoRange vernichtet, Objecte rufen jetzt die Basis-Klasse
-
-      Rev 1.0   03 May 1995 14:17:52   JP
-   Initial revision.
-
-*************************************************************************/
 
 
