@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-25 08:39:08 $
+ *  last change: $Author: ama $ $Date: 2002-05-24 09:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1197,6 +1197,14 @@ void SwCntntFrm::MakeAll()
     const BOOL bTab = IsInTab();
     const BOOL bFtn = IsInFtn();
     const BOOL bSct = IsInSct();
+    sal_Bool bFooter;
+    {
+        SwFrm* pFooter = FindFooterOrHeader();
+        if( pFooter && pFooter->IsFooterFrm() )
+            bFooter = sal_True;
+        else
+            bFooter = sal_False;
+    }
     Point aOldFrmPos;               //Damit bei Turnarounds jew. mit der
     Point aOldPrtPos;               //letzten Pos verglichen und geprueft
                                     //werden kann, ob ein Prepare sinnvoll ist.
@@ -1279,7 +1287,7 @@ void SwCntntFrm::MakeAll()
                 Prepare( PREP_FIXSIZE_CHG );
         }
 
-        if ( aOldFrmPos != (Frm().*fnRect->fnGetPos)() )
+        if ( aOldFrmPos != (Frm().*fnRect->fnGetPos)() && !bFooter )
             CalcFlys( TRUE );
 #else
         aOldFrmPos = Frm().Pos();
