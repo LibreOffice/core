@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dr $ $Date: 2001-01-24 10:54:12 $
+#   last change: $Author: dr $ $Date: 2001-02-26 06:53:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,6 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 CXXFILES = \
         xcl97dum.cxx						\
         xcl97esc.cxx						\
-        xcl97exp.cxx						\
         xcl97rec.cxx						\
         XclImpCharts.cxx					\
         XclImpChartsApi.cxx					\
@@ -97,7 +96,6 @@ CXXFILES = \
 SLOFILES =	\
         $(SLO)$/xcl97dum.obj				\
         $(SLO)$/xcl97esc.obj				\
-        $(SLO)$/xcl97exp.obj				\
         $(SLO)$/xcl97rec.obj				\
         $(SLO)$/XclImpCharts.obj			\
         $(SLO)$/XclImpChartsApi.obj			\
