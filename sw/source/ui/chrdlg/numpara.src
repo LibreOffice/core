@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:35:54 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ TabPage TP_NUMPARA
         Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
         Text[ turkish ] = "Numaralama biçimi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Estilo de numeración";
     };
     ListBox LB_NUMBER_STYLE
     {
@@ -187,6 +188,10 @@ TabPage TP_NUMPARA
     {
              < " " ; > ;
     };
+    StringList [ catalan ] =
+    {
+             < "Ninguno" ; > ;
+    };
     };
     GroupBox GB_NEW_START
     {
@@ -215,6 +220,7 @@ TabPage TP_NUMPARA
         Text[ korean ] = "¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Numeración";
     };
     TriStateBox CB_NEW_START
     {
@@ -243,6 +249,7 @@ TabPage TP_NUMPARA
         Text[ korean ] = "ÀÌ ´Ü¶ô¿¡¼­ ´Ù½Ã ½ÃÀÛ(~E)";
         Text[ turkish ] = "Bu paragraf ile yeniden baþla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Volver a empezar en este párrafo";
     };
     FixedText FT_NEW_START
     {
@@ -271,6 +278,7 @@ TabPage TP_NUMPARA
         Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ(~S):";
         Text[ turkish ] = "~Baþlangýç deðeri:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Empezar ~con:";
     };
     NumericField NF_NEW_START
     {
@@ -303,7 +311,7 @@ TabPage TP_NUMPARA
         Text [ danish ] = "Linjenummerering" ;
         Text [ italian ] = "Numerazione righe" ;
         Text [ spanish ] = "Numeración de líneas" ;
-        Text [ french ] = "Numérotation de lignes" ;
+        Text [ french ] = "Numérotation des lignes" ;
         Text [ dutch ] = "Regelnummering" ;
         Text[ chinese_simplified ] = "ÐÐ±àºÅ";
         Text[ russian ] = "Íóìåðàöèÿ ñòðîê";
@@ -315,6 +323,7 @@ TabPage TP_NUMPARA
         Text[ korean ] = "Çà  ¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Satýr numaralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Numeración de líneas";
     };
     TriStateBox CB_COUNT_PARA
     {
@@ -342,6 +351,7 @@ TabPage TP_NUMPARA
         Text[ korean ] = "ÀÌ¡¡´Ü¶ôÀÇ ¼± ÇÔ²²¡¡¼¼±â(~I)";
         Text[ turkish ] = "Bu paragrafýn da satýrlarýný numarala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Con~tar las líneas de este párrafo";
     };
     TriStateBox CB_RESTART_PARACOUNT
     {
@@ -369,6 +379,7 @@ TabPage TP_NUMPARA
         Text[ korean ] = "ÀÌ ´Ü¶ô¿¡¼­ ´Ù½Ã ½ÃÀÛ(~A)";
         Text[ turkish ] = "Bu paragraf ile yeniden baþla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Volver a empe~zar en este párrafo";
     };
     FixedText FT_RESTART_NO
     {
@@ -396,6 +407,7 @@ TabPage TP_NUMPARA
         Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ(~S):";
         Text[ turkish ] = "~Baþlangýç deðeri:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Empezar ~con:";
     };
     NumericField NF_RESTART_PARA
     {
