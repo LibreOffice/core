@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:06:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#include <rtl/logfile.hxx>
+#include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -552,8 +554,12 @@ SvtInternalOptions::SvtInternalOptions()
     // ... and initialize ouer data container only if it not already!
     if( m_pDataContainer == NULL )
     {
+        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtInternalOptions_Impl::ctor()");
         m_pDataContainer = new SvtInternalOptions_Impl();
-    }
+
+        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_INTERNALOPTIONS);
+     }
 }
 
 //*****************************************************************************************************************
