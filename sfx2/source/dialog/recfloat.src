@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:48:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,35 +72,8 @@ FloatingWindow SID_RECORDING_FLOATWINDOW
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Makro aufzeichnen" ;
-    Text [ English ] = "Record Macro" ;
-    Text[ english_us ] = "Record Macro";
-    Text[ portuguese ] = "Record Macro";
-    Text[ russian ] = "Record Macro";
-    Text[ greek ] = "��������� ������������";
-    Text[ dutch ] = "Macro Opnemen";
-    Text[ french ] = "Enregistrement de macro";
-    Text[ spanish ] = "Grabar macro";
-    Text[ finnish ] = "Record Macro";
-    Text[ italian ] = "Registra macro";
-    Text[ danish ] = "Optag makro";
-    Text[ swedish ] = "Spela in makro";
-    Text[ polish ] = "Record Macro";
-    Text[ japanese ] = "マクロの記録";
-    Text[ korean ] = "매크로 기록";
-    Text[ chinese_simplified ] = "记录宏";
-    Text[ chinese_traditional ] = "記錄巨集";
-    Text[ turkish ] = "Makro Kaydet";
-    Text[ arabic ] = "Record Macro";
-    Text[ czech ] = "Zaznamenat makro";
-    Text[ hebrew ] = "‮רישום מקרו‬";
-    Text[ catalan ] = "Record Macro";
-    Text[ portuguese_brazilian ] = "Gravar Macro";
-    Text[ thai ] = "Record Macro";
-    Text[ hindi ] = "Record Macro";
-    Text[ slovak ] = "Nahrať Makro";
-    Text[ hungarian ] = "Makró rögzítése";
-    Text[ slovenian ] = "Posnemi makro";
+    Text [ de ] = "Makro aufzeichnen" ;
+    Text [ en-US ] = "Record Macro";
 };
 
 ToolBox SID_RECORDING_FLOATWINDOW
@@ -118,68 +91,14 @@ ToolBox SID_RECORDING_FLOATWINDOW
 
 String STR_MACRO_LOSS
 {
-    Text = "Soll die Aufzeichnung wirklich abgebrochen werden? Alle bis zu diesem Punkt aufgezeichneten Schritte gehen verloren.";
-    Text [ english ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text [ english_us ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ portuguese ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ russian ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ greek ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ dutch ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ french ] = "Voulez-vous vraiment annuler l'enregistrement ? Toutes les informations enregistr�es jusqu'� pr�sent seront perdues.";
-    Text[ spanish ] = "�Desea realmente cancelar la grabaci�n? Todos los pasos grabados hasta este momento se perder�n. ";
-    Text[ finnish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ italian ] = "Volete davvero annullate la registrazione? Tutte le fasi registrate fino a questo punto andranno perse.";
-    Text[ danish ] = "Er du sikker p�, at du vil annullere optagelsen? Alle hidtil optagede trin vil g� tabt.";
-    Text[ swedish ] = "Vill du verkligen avbryta inspelningen? Alla steg som har spelats in hittills kommer att g� f�rlorade.";
-    Text[ polish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ japanese ] = "記録をキャンセルしますか。記録されたステップは、この時点ですべて失われます。";
-    Text[ korean ] = "기록을 정말로 취소하시겠습니까? 지금까지 기록된 모든 작업 진행 내용을 잃을 수 있습니다.";
-    Text[ chinese_simplified ] = "真的要取消记录？所有当前的记录内容就会消失。";
-    Text[ chinese_traditional ] = "真的要取消記錄？所有的目前的記錄內容就會流失。";
-    Text[ turkish ] = "Ger�ekten kayd� iptal etmek istiyor musunuz? �imdiye kadar yap�lan t�m kay�tlar silinecektir.";
-    Text[ arabic ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ czech ] = "Opravdu chcete přerušit nahrávání? Veškeré doposud zaznamenané kroky budou ztraceny.";
-    Text[ hebrew ] = "‮האם אכן לבטל את הרישום? כל צעד שנרשם עד כה יאובד.‬";
-    Text[ catalan ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ portuguese_brazilian ] = "Deseja realmente cancelar a grava��o? Todos os passos gravados at� este ponto estar�o perdidos.";
-    Text[ thai ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ hindi ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ slovak ] = "Určite chcete zrušiť nahrávanie? Všetky nahrané kroky budú stratené.";
-    Text[ hungarian ] = "Valóban megszakítja a rögzítést? Az eddig rögzített lépések elvesznek.";
-    Text[ slovenian ] = "Ali ste prepričani, da želite prekiniti snemanje? Vsi do sedaj posneti koraki bodo izgubljeni.";
+    Text [ de ] = "Soll die Aufzeichnung wirklich abgebrochen werden? Alle bis zu diesem Punkt aufgezeichneten Schritte gehen verloren.";
+    Text [ en-US ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
 };
 
 String STR_CANCEL_RECORDING
 {
-    Text = "Aufzeichnung abbrechen";
-    Text [ english ] = "Cancel Recording";
-    Text [ english_us ] = "Cancel Recording";
-    Text[ portuguese ] = "Cancel Recording";
-    Text[ russian ] = "Cancel Recording";
-    Text[ greek ] = "Cancel Recording";
-    Text[ dutch ] = "Cancel Recording";
-    Text[ french ] = "Annuler l'enregistrement";
-    Text[ spanish ] = "Cancelar grabaci�n";
-    Text[ finnish ] = "Cancel Recording";
-    Text[ italian ] = "Annulla la registrazione";
-    Text[ danish ] = "Annuller optagelse";
-    Text[ swedish ] = "Avbryt inspelning";
-    Text[ polish ] = "Cancel Recording";
-    Text[ japanese ] = "記録をキャンセルする";
-    Text[ korean ] = "기록 취소";
-    Text[ chinese_simplified ] = "取消记录";
-    Text[ chinese_traditional ] = "取消記錄";
-    Text[ turkish ] = "Kayd� �ptal Et";
-    Text[ arabic ] = "Cancel Recording";
-    Text[ czech ] = "Zrušit nahrávání";
-    Text[ hebrew ] = "‮ביטול רישום‬";
-    Text[ catalan ] = "Cancel Recording";
-    Text[ portuguese_brazilian ] = "Cancelar grava��o";
-    Text[ thai ] = "Cancel Recording";
-    Text[ hindi ] = "Cancel Recording";
-    Text[ slovak ] = "Zrušiť nahrávanie";
-    Text[ hungarian ] = "Rögzítés megszakítása";
-    Text[ slovenian ] = "Prekliči snemanje";
+    Text [ de ] = "Aufzeichnung abbrechen";
+    Text [ en-US ] = "Cancel Recording";
 };
 
 
