@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 14:10:42 $
+ *  last change: $Author: os $ $Date: 2001-05-04 07:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,8 @@ protected:
     CheckBox        aCbxSnapPoints;
     FixedText       aFtSnapArea;
     MetricField     aMtrFldSnapArea;
+
+    FixedLine       aSeparatorFL;
 
     FixedLine       aGrpOrtho;
     CheckBox        aCbxOrtho;

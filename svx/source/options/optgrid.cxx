@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 14:10:59 $
+ *  last change: $Author: os $ $Date: 2001-05-04 07:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,7 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     aFtSnapArea         ( this, ResId( FT_SNAP_AREA ) ),
     aMtrFldSnapArea     ( this, ResId( MTR_FLD_SNAP_AREA ) ),
     aGrpSnap            ( this, ResId( GRP_SNAP ) ),
+    aSeparatorFL        ( this, ResId( FL_SEPARATOR ) ),
     aCbxOrtho           ( this, ResId( CBX_ORTHO ) ),
     aCbxBigOrtho        ( this, ResId( CBX_BIGORTHO ) ),
     aCbxRotate          ( this, ResId( CBX_ROTATE ) ),
@@ -243,6 +244,7 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     SetExchangeSupport();
 
     FreeResource();
+    aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
 
     // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( &rCoreSet );
