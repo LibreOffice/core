@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:37:55 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
@@ -845,7 +848,7 @@ BaseContent::getParent(
 
     try
     {
-        Reference< XContent > content = m_pMyShell->m_pProvider->queryContent( Identifier );
+        Reference< XInterface > content = m_pMyShell->m_pProvider->queryContent( Identifier );
         return content;
     }
     catch( IllegalIdentifierException )
@@ -960,28 +963,69 @@ BaseContent::setPropertyValues(
         return Sequence< Any >( Values.getLength() );
     }
 
-    rtl::OUString Title = rtl::OUString::createFromAscii( "Title" );
-    sal_Unicode slash = '/';
+    const rtl::OUString Title = rtl::OUString::createFromAscii( "Title" );
 
     // Special handling for files which have to be inserted
     if( m_nState & JustInserted )
     {
         for( sal_Int32 i = 0; i < Values.getLength(); ++i )
         {
-            if( Values[i].Name == Title && ! ( m_nState & NameForInsertionSet ) )
+            if( Values[i].Name == Title )
             {
                 rtl::OUString NewTitle;
                 if( Values[i].Value >>= NewTitle )
                 {
-                    if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
-                        m_aUncPath += rtl::OUString::createFromAscii("/");
+                    if ( m_nState & NameForInsertionSet )
+                    {
+                        // User wants to set another Title before "insert".
+                        // m_aUncPath contains previous own URI.
 
-                    m_aUncPath += rtl::Uri::encode( NewTitle,
-                                                    rtl_UriCharClassPchar,
-                                                    rtl_UriEncodeIgnoreEscapes,
-                                                    RTL_TEXTENCODING_UTF8 );
+                        sal_Int32 nLastSlash = m_aUncPath.lastIndexOf( '/' );
+                        bool bTrailingSlash = false;
+                        if ( nLastSlash == m_aUncPath.getLength() - 1 )
+                        {
+                            bTrailingSlash = true;
+                            nLastSlash
+                                = m_aUncPath.lastIndexOf( '/', nLastSlash );
+                        }
 
-                    m_nState |= NameForInsertionSet;
+                        OSL_ENSURE( nLastSlash != -1,
+                                    "BaseContent::setPropertyValues: "
+                                    "Invalid URL!" );
+
+                        rtl::OUStringBuffer aBuf(
+                            m_aUncPath.copy( 0, nLastSlash + 1 ) );
+
+                        if ( NewTitle.getLength() > 0 )
+                        {
+                            aBuf.append( NewTitle );
+                            if ( bTrailingSlash )
+                                aBuf.append( sal_Unicode( '/' ) );
+                        }
+                        else
+                        {
+                            m_nState &= ~NameForInsertionSet;
+                        }
+
+                        m_aUncPath = aBuf.makeStringAndClear();
+                    }
+                    else
+                    {
+                        if ( NewTitle.getLength() > 0 )
+                        {
+                            // Initial Title before "insert".
+                            // m_aUncPath contains parent's URI.
+
+                            if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
+                                m_aUncPath += rtl::OUString::createFromAscii("/");
+
+                            m_aUncPath += rtl::Uri::encode( NewTitle,
+                                                            rtl_UriCharClassPchar,
+                                                            rtl_UriEncodeIgnoreEscapes,
+                                                            RTL_TEXTENCODING_UTF8 );
+                            m_nState |= NameForInsertionSet;
+                        }
+                    }
                 }
             }
         }
@@ -1330,6 +1374,9 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
                                             RTL_TEXTENCODING_UTF8 );
         }
     }
+
+    if ( ! success )
+        return;
 
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,m_aUncPath );
     m_xContentIdentifier = Reference< XContentIdentifier >( p );
