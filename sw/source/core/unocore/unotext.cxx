@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-01 16:37:24 $
+ *  last change: $Author: os $ $Date: 2000-11-09 11:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1237,18 +1237,6 @@ uno::Reference< XTextCursor >  SwXBodyText::CreateTextCursor(sal_Bool bIgnoreTab
             }
             if(pCont)
                 aPam.GetPoint()->nContent.Assign(pCont, 0);
-        }
-        const SwStartNode* pTmp = aPam.GetNode()->FindStartNode();
-        if(pTmp->IsSectionNode())
-        {
-            SwSectionNode* pSectionStartNode = (SwSectionNode*)pTmp;
-            if(pSectionStartNode->GetSection().IsHiddenFlag())
-            {
-                SwCntntNode* pCont = GetDoc()->GetNodes().GoNextSection(
-                            &aPam.GetPoint()->nNode, sal_True, sal_False);
-                if(pCont)
-                    aPam.GetPoint()->nContent.Assign(pCont, 0);
-            }
         }
         xRet =  (XWordCursor*)new SwXTextCursor(this, *aPam.GetPoint(), CURSOR_BODY, GetDoc());
     }
