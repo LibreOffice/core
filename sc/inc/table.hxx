@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2002-12-05 16:00:12 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef SC_TABLE_HXX
 #define SC_TABLE_HXX
 
+#include <vector>
+
 #ifndef _GEN_HXX //autogen
 #include <tools/gen.hxx>
 #endif
@@ -116,6 +118,7 @@ class CollatorWrapper;
 class ScTable
 {
 private:
+    typedef ::std::vector< ScRange > ScRangeVec;
                                             //  Daten pro Tabelle   ------------------
     ScColumn        aCol[MAXCOL+1];
 
@@ -169,8 +172,9 @@ private:
     BOOL            bGlobalKeepQuery;
     BOOL            bSharedNameInserted;
 
-    USHORT          nPrintRangeCount;
-    ScRange*        pPrintRanges;
+    ScRangeVec      aPrintRanges;
+    BOOL            bPrintEntireSheet;
+
     ScRange*        pRepeatColRange;
     ScRange*        pRepeatRowRange;
 
@@ -510,10 +514,20 @@ public:
     void            SetRepeatColRange( const ScRange* pNew );
     void            SetRepeatRowRange( const ScRange* pNew );
 
-    USHORT          GetPrintRangeCount() const          { return nPrintRangeCount; }
+    USHORT          GetPrintRangeCount() const          { return static_cast< USHORT >( aPrintRanges.size() ); }
     const ScRange*  GetPrintRange(USHORT nPos) const;
-    void            SetPrintRangeCount( USHORT nNew );
-    void            SetPrintRange( USHORT nPos, const ScRange& rNew );
+    /** Returns true, if the sheet is always printed. */
+    BOOL            IsPrintEntireSheet() const          { return bPrintEntireSheet; }
+
+    /** Removes all print ranges. */
+    void            ClearPrintRanges();
+    /** Adds a new print ranges. */
+    void            AddPrintRange( const ScRange& rNew );
+    /** Removes all old print ranges and sets the passed print ranges. */
+    void            SetPrintRange( const ScRange& rNew );
+    /** Marks the specified sheet to be printed completely. Deletes old print ranges! */
+    void            SetPrintEntireSheet();
+
     void            FillPrintSaver( ScPrintSaverTab& rSaveTab ) const;
     void            RestorePrintRanges( const ScPrintSaverTab& rSaveTab );
 
