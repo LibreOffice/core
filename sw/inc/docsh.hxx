@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:33:31 $
+ *  last change: $Author: mtg $ $Date: 2001-02-08 15:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,8 @@ public:
 
     ULONG LoadStylesFromFile( const String& rURL, SwgReaderOption& rOpt,
                                 BOOL bUnoCall );
+    void InvalidateModel();
+    void ReactivateModel();
 };
 
 inline BOOL SwDocShell::SaveAsChilds( SvStorage *pStor )
