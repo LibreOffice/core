@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-20 17:49:40 $
+ *  last change: $Author: dvo $ $Date: 2002-10-08 14:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,6 +675,12 @@ void SwXMLExport::_ExportContent()
         Reference<XDrawPage> xPage = xDrawPageSupplier->getDrawPage();
         if (xPage.is())
         {
+            // #103597# prevent export of form controls which are embedded in
+            // mute sections
+            Reference<XIndexAccess> xIAPage( xPage, UNO_QUERY );
+            GetTextParagraphExport()->PreventExportOfControlsInMuteSections(
+                xIAPage, GetFormExport() );
+
             Reference<XFormsSupplier> xFormSupp(xPage, UNO_QUERY);
             if (xFormSupp->getForms()->hasElements())
             {
