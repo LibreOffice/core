@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:25:44 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 07:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 
 #define MID_INDEXDESIGN \
     Identifier = SID_INDEXDESIGN ; \
+    HelpId = SID_INDEXDESIGN ; \
     Text = "I~ndexentwurf..." ; \
     Text [ english ] = "I~ndex Desgin..." ; \
     Text [ english_us ] = "~Index Design...";   \
