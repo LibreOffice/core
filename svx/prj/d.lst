@@ -522,6 +522,7 @@ hedabu: ..\inc\deflt3d.hxx %_DEST%\inc%_EXT%\svx\deflt3d.hxx
 hedabu: ..\inc\unotext.hxx %_DEST%\inc%_EXT%\svx\unotext.hxx
 hedabu: ..\inc\unofield.hxx %_DEST%\inc%_EXT%\svx\unofield.hxx
 hedabu: ..\source\inc\mutxhelp.hxx %_DEST%\inc%_EXT%\svx\mutxhelp.hxx
+hedabu: ..\inc\unoedacc.hxx %_DEST%\inc%_EXT%\svx\unoedacc.hxx
 hedabu: ..\inc\unoedsrc.hxx %_DEST%\inc%_EXT%\svx\unoedsrc.hxx
 hedabu: ..\inc\unofored.hxx %_DEST%\inc%_EXT%\svx\unofored.hxx
 hedabu: ..\inc\unoforou.hxx %_DEST%\inc%_EXT%\svx\unoforou.hxx
