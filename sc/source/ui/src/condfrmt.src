@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:01:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ korean ] = "Á¶°Ç 1";
         Text[ turkish ] = "Koþul 1";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Condición 1";
     };
     ListBox LB_COND1_1
     {
@@ -209,6 +210,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
             < "Hücre deðeri" ; Default ; > ;
         < "Formül" ; Default ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "El valor de la celda es" ; Default ; > ;
+        < "La fórmula es" ; Default ; > ;
     };
     };
     ListBox LB_COND1_2
@@ -440,6 +446,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "igual" ; Default ; > ;
+        < "menor que" ; Default ; > ;
+        < "mayor que" ; Default ; > ;
+        < "menor o igual" ; Default ; > ;
+        < "mayor o igual" ; Default ; > ;
+        < "distinta de" ; Default ; > ;
+        < "entre" ; Default ; > ;
+        < "no entre" ; Default ; > ;
+    };
     };
     Edit EDT_COND1_1
     {
@@ -475,6 +492,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     FixedText FT_COND1_AND
     {
@@ -501,6 +519,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ korean ] = "¿Í";
         Text[ turkish ] = "ve";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "y";
     };
     Edit EDT_COND1_2
     {
@@ -536,6 +555,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     FixedText FT_COND1_TEMPLATE
     {
@@ -562,6 +582,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ korean ] = "¼¿ À¯Çü";
         Text[ turkish ] = "Hücre biçimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
+        Text[ catalan ] = "Estilo de celda";
     };
     ListBox LB_COND1_TEMPLATE
     {
@@ -597,6 +618,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ korean ] = "Á¶°Ç 2";
         Text[ turkish ] = "Koþul 2";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Condición 2";
     };
     ListBox LB_COND2_1
     {
@@ -709,6 +731,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
             < "Hücre deðeri" ; Default ; > ;
         < "Formül" ; Default ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "El valor de la celda es" ; Default ; > ;
+        < "La fórmula es" ; Default ; > ;
     };
     };
     ListBox LB_COND2_2
@@ -940,6 +967,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "igual" ; Default ; > ;
+        < "menor que" ; Default ; > ;
+        < "mayor que" ; Default ; > ;
+        < "menor o igual" ; Default ; > ;
+        < "mayor o igual" ; Default ; > ;
+        < "distinta de" ; Default ; > ;
+        < "entre" ; Default ; > ;
+        < "no entre" ; Default ; > ;
+    };
     };
     Edit EDT_COND2_1
     {
@@ -975,6 +1013,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     FixedText FT_COND2_AND
     {
@@ -1001,6 +1040,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ korean ] = "¿Í";
         Text[ turkish ] = "ve";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "y";
     };
     Edit EDT_COND2_2
     {
@@ -1036,6 +1076,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     FixedText FT_COND2_TEMPLATE
     {
@@ -1062,6 +1103,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ korean ] = "¼¿ À¯Çü";
         Text[ turkish ] = "Hücre biçimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
+        Text[ catalan ] = "Estilo de celda";
     };
     ListBox LB_COND2_TEMPLATE
     {
@@ -1097,6 +1139,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ korean ] = "Á¶°Ç 3";
         Text[ turkish ] = "Koþul 3";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Condición 3";
     };
     ListBox LB_COND3_1
     {
@@ -1209,6 +1252,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
             < "Hücre deðeri" ; Default ; > ;
         < "Formül" ; Default ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "El valor de la celda es" ; Default ; > ;
+        < "La fórmula es" ; Default ; > ;
     };
     };
     ListBox LB_COND3_2
@@ -1440,6 +1488,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "igual" ; Default ; > ;
+        < "menor que" ; Default ; > ;
+        < "mayor que" ; Default ; > ;
+        < "menor o igual" ; Default ; > ;
+        < "mayor o igual" ; Default ; > ;
+        < "distinta de" ; Default ; > ;
+        < "entre" ; Default ; > ;
+        < "no entre" ; Default ; > ;
+    };
     };
     Edit EDT_COND3_1
     {
@@ -1475,6 +1534,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     FixedText FT_COND3_AND
     {
@@ -1501,6 +1561,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ korean ] = "¿Í";
         Text[ turkish ] = "ve";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "y";
     };
     Edit EDT_COND3_2
     {
@@ -1536,6 +1597,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     FixedText FT_COND3_TEMPLATE
     {
@@ -1562,6 +1624,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ korean ] = "¼¿ À¯Çü";
         Text[ turkish ] = "Hücre biçimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
+        Text[ catalan ] = "Estilo de celda";
     };
     ListBox LB_COND3_TEMPLATE
     {
@@ -1609,4 +1672,5 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text[ korean ] = "Á¶°ÇÀû Æ÷¸ËÆÃ";
     Text[ turkish ] = "Koþullu formatlama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formato condicionado";
 };
