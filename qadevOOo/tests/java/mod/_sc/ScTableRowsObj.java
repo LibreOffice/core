@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTableRowsObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:11 $
+ *  last change:$Date: 2003-02-04 16:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.table.TableRows</code>. <p>
@@ -133,8 +136,7 @@ public class ScTableRowsObj extends TestCase {
     * @see com.sun.star.table.XColumnRowRange
     * @see com.sun.star.table.TableRows
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
 
@@ -145,12 +147,16 @@ public class ScTableRowsObj extends TestCase {
         XNameAccess oNames = (XNameAccess)
             UnoRuntime.queryInterface( XNameAccess.class, xSpreadsheets );
         try {
-            xSpreadsheet = (XSpreadsheet)
-                oNames.getByName(oNames.getElementNames()[0]);
+            xSpreadsheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),
+                    oNames.getByName(oNames.getElementNames()[0]));
         } catch(com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get spreadsheet", e);
         } catch(com.sun.star.container.NoSuchElementException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get spreadsheet", e);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get spreadsheet", e);
         }
