@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:26:27 $
+ *  last change: $Author: rt $ $Date: 2005-02-09 14:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,9 +344,6 @@ SwGrfNode * SwEditShell::_GetGrfNode() const
         pCrsr->GetPoint()->nNode == pCrsr->GetMark()->nNode )
         pGrfNode = pCrsr->GetPoint()->nNode.GetNode().GetGrfNode();
 
-
-    ASSERT( pGrfNode, "ist keine Graphic!!" );
-
     return pGrfNode;
 }
 /******************************************************************************
@@ -355,20 +352,27 @@ SwGrfNode * SwEditShell::_GetGrfNode() const
  *                   oder auf die gleiche Graphic zeigt)
  ******************************************************************************/
 
-const Graphic &SwEditShell::GetGraphic( BOOL bWait ) const
+// --> OD 2005-02-09 #119353# - robust
+const Graphic* SwEditShell::GetGraphic( BOOL bWait ) const
 {
-    SwGrfNode *pGrfNode = _GetGrfNode();
-    const Graphic& rGrf = pGrfNode->GetGrf();
-    if( rGrf.IsSwapOut() ||
-        ( pGrfNode->IsLinkedFile() && GRAPHIC_DEFAULT == rGrf.GetType() ) )
+    SwGrfNode* pGrfNode = _GetGrfNode();
+    // --> OD 2005-02-09 #119353# - robust
+    const Graphic* pGrf( 0L );
+    if ( pGrfNode )
     {
+        pGrf = &(pGrfNode->GetGrf());
+        if( pGrf->IsSwapOut() ||
+            ( pGrfNode->IsLinkedFile() && GRAPHIC_DEFAULT == pGrf->GetType() ) )
+        {
 #ifndef PRODUCT
-        ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
+            ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
 #else
-        pGrfNode->SwapIn( bWait );
+            pGrfNode->SwapIn( bWait );
 #endif
+        }
     }
-    return rGrf;
+    return pGrf;
+    // <--
 }
 
 BOOL SwEditShell::IsGrfSwapOut( BOOL bOnlyLinked ) const
@@ -381,16 +385,18 @@ BOOL SwEditShell::IsGrfSwapOut( BOOL bOnlyLinked ) const
                      : pGrfNode->GetGrfObj().IsSwappedOut());
 }
 
-const GraphicObject& SwEditShell::GetGraphicObj() const
+// --> OD 2005-02-09 #119353# - robust
+const GraphicObject* SwEditShell::GetGraphicObj() const
 {
-    SwGrfNode *pGrfNode = _GetGrfNode();
-    return pGrfNode->GetGrfObj();
+    SwGrfNode* pGrfNode = _GetGrfNode();
+    // --> OD 2005-02-09 #119353# - robust
+    return pGrfNode ? &(pGrfNode->GetGrfObj()) : 0L;
+    // <--
 }
 
 USHORT SwEditShell::GetGraphicType() const
 {
     SwGrfNode *pGrfNode = _GetGrfNode();
-    ASSERT( pGrfNode, "SwEditShell::GetGraphicType() without graphic node" )
     return pGrfNode ? pGrfNode->GetGrfObj().GetType() : GRAPHIC_NONE;
 }
 
