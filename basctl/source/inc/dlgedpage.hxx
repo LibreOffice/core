@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-23 16:13:46 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ public:
 
     void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
+
+    virtual SdrObject* SetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum);
 };
 
 #endif //_BASCTL_DLGEDPAGE_HXX
