@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-04 09:19:46 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 09:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,16 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
             sEmpty, aStylesArgs);
 
+        if (!bStylesOnly)
+        {
+            uno::Sequence<uno::Any> aSettingsArgs(0);
+
+            sal_Bool bSettingsRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsImporter")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
+                sEmpty, aSettingsArgs);
+        }
+
         sal_Bool bDocRetval(sal_False);
         if (!bStylesOnly)
         {
@@ -339,16 +349,6 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
 
             if( pObjectHelper )
                 SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
-        }
-
-        if (!bStylesOnly)
-        {
-            uno::Sequence<uno::Any> aSettingsArgs(0);
-
-            sal_Bool bSettingsRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsImporter")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
-                sEmpty, aSettingsArgs);
         }
 
         // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
