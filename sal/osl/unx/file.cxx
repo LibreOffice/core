@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:18:49 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2081,7 +2081,7 @@ static rtl_uString* oslMakeUStrFromPsz(const sal_Char* pszStr, rtl_uString** ust
 int UnicodeToText( char * buffer, size_t bufLen, const sal_Unicode * uniText, sal_Int32 uniTextLen )
 {
     rtl_UnicodeToTextConverter hConverter;
-    sal_Size   nInfo;
+    sal_uInt32   nInfo;
     sal_Size   nSrcChars, nDestBytes;
 
     /* stolen from rtl/string.c */
@@ -2130,7 +2130,7 @@ int TextToUnicode(
     sal_Int32    unic_text_buffer_size)
 {
     rtl_TextToUnicodeConverter hConverter;
-    sal_Size nInfo;
+    sal_uInt32 nInfo;
     sal_Size nSrcChars;
     sal_Size nDestBytes;
 
