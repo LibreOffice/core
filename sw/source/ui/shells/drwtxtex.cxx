@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-09-16 07:54:11 $
+ *  last change: $Author: fme $ $Date: 2002-11-07 09:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,7 @@ ASK_ESCAPE:
                 // disable "Thesaurus" if the language is not supported
                 const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(
                                 GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                                GetScriptTypeOfLanguage( GetAppLanguage())) );
+                                GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage())) );
                 LanguageType nLang = ((const SvxLanguageItem &)
                                                         rItem).GetLanguage();
                 //

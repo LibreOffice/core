@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-10-10 07:12:45 $
+ *  last change: $Author: fme $ $Date: 2002-11-07 09:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ inline LanguageType GetDocAppScriptLang( SwDoc& rDoc )
 {
     return ((SvxLanguageItem&)rDoc.GetDefault(
                             GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                                GetScriptTypeOfLanguage( GetAppLanguage() ))
+                                GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() ))
             )).GetLanguage();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-24 15:08:46 $
+ *  last change: $Author: fme $ $Date: 2002-11-07 09:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript )
         using namespace ::com::sun::star::i18n;
         {
             if( ScriptType::WEAK == nScript )
-                nScript = GetScriptTypeOfLanguage( GetAppLanguage() );
+                nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
             switch( nScript)
             {
             case ScriptType::COMPLEX:   ++pM;  // no break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-07 08:54:26 $
+ *  last change: $Author: fme $ $Date: 2002-11-07 09:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,7 @@ BOOL SwScanner::NextWord()
 
     const USHORT nNextScript =
             pBreakIt->xBreak->getScriptType( rText, nNextBegin );
-    if ( nNextScript != GetScriptTypeOfLanguage( aCurrLang ) )
+    if ( nNextScript != GetI18NScriptTypeOfLanguage( aCurrLang ) )
     {
         LanguageType aNextLang = rNode.GetLang( nNextBegin, nNextScript );
         if ( aNextLang != aCurrLang )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-08-14 14:10:45 $
+ *  last change: $Author: fme $ $Date: 2002-11-07 09:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 if(pDoc)
                 {
                     USHORT nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                                    GetScriptTypeOfLanguage( GetAppLanguage() ));
+                                    GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() ));
                     aOpt.SetLanguage( ((SvxLanguageItem&)pDoc->
                                 GetDefault( nWhich )).GetLanguage());
                 }
@@ -551,6 +551,9 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2002/08/14 14:10:45  os
+      #101300# system encoding entry doesn't get 'System' as name
+
       Revision 1.10  2002/07/29 15:17:09  er
       #100289# exclude subsets of RTL_TEXTENCODING_GB_18030 in import dialogs
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-30 15:06:16 $
+ *  last change: $Author: fme $ $Date: 2002-11-07 09:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,7 +643,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
         FOREACHPAM_END()
     }
     if( !nRet )
-        nRet = GetScriptTypeOfLanguage( LANGUAGE_SYSTEM );
+        nRet = GetI18NScriptTypeOfLanguage( LANGUAGE_SYSTEM );
     return nRet;
 }
 

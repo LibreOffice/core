@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 10:49:23 $
+ *  last change: $Author: fme $ $Date: 2002-11-07 09:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1132,7 +1132,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         else
             aFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
                         RES_CHRATR_FONT,
-                        GetScriptTypeOfLanguage( GetAppLanguage() ) ));
+                        GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() ) ));
     }
 
     Font aNewFont(aFontName, Size(1,1)); // Size nur wg. CTOR
@@ -1182,7 +1182,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             else
                 aFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
                             RES_CHRATR_FONT,
-                            GetScriptTypeOfLanguage( GetAppLanguage() ) ));
+                            GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() ) ));
         }
 
         // Zeichen einfuegen
@@ -1231,6 +1231,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.22  2002/10/25 10:49:23  os
+    #104489# enable Ctrl+Enter to insert a columned frame via keyboard
+
     Revision 1.21  2002/10/18 13:33:36  gt
     #90974# SwTextShell::ExecInsert(): set context @ SvxPluginFileDlg for SID_INSERT_SOUND & SID_INSERT_VIDEO
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-28 16:56:26 $
+ *  last change: $Author: fme $ $Date: 2002-11-07 09:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ USHORT SwBreakIt::GetRealScriptOfText( const String& rTxt,
             nScript = xBreak->getScriptType( rTxt, nChgPos );
     }
     if( ScriptType::WEAK == nScript )
-        nScript = GetScriptTypeOfLanguage( GetAppLanguage() );
+        nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
     return nScript;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-09 09:25:48 $
+ *  last change: $Author: fme $ $Date: 2002-11-07 09:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,30 +553,6 @@ BYTE WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
     return SW_LATIN;
 }
 
-/*************************************************************************
- *                      lcl_ConvertScript()
- *
- * Converts Script Type (SCRIPTTYPE_LATIN, SCRIPTTYPE_ASIAN, SCRIPTTYPE_COMPLEX)
- * to i18n Script Type (LATIN, ASIAN, COMPLEX, WEAK)
- *************************************************************************/
-
-USHORT lcl_ConvertScript( USHORT nScript )
-{
-    switch ( nScript )
-    {
-        case SCRIPTTYPE_ASIAN :
-            nScript = i18n::ScriptType::ASIAN;
-            break;
-        case SCRIPTTYPE_COMPLEX :
-            nScript = i18n::ScriptType::COMPLEX;
-            break;
-        default:
-            nScript = i18n::ScriptType::LATIN;
-            break;
-    }
-    return nScript;
-}
-
 
 /*************************************************************************
  *                      SwScriptInfo::InitScriptInfo()
@@ -750,8 +726,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
         if( nEnd > rTxt.Len() )
             nEnd = rTxt.Len();
 
-        nScript = (BYTE)lcl_ConvertScript(
-                    GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() ) );
+        nScript = (BYTE)GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
 
         ASSERT( i18n::ScriptType::LATIN == nScript ||
                 i18n::ScriptType::ASIAN == nScript ||
@@ -1145,8 +1120,7 @@ BYTE SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
     }
 
     // the default is the application language script
-    return (BYTE)lcl_ConvertScript(
-                  GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() ) );
+    return (BYTE)GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
 }
 
 #ifdef BIDI
