@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: lla $ $Date: 2001-06-15 08:29:44 $
+#   last change: $Author: jb $ $Date: 2001-06-20 15:03:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,10 +83,10 @@ CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
 # ... common for all test executables ..............................
 APPSTDLIBS=\
             $(SALLIB) \
-         $(VOSLIB) \
+            $(VOSLIB) \
             $(CPPULIB)	\
+            $(CPPUHELPERLIB)	\
             $(COMPHELPERLIB)	\
-            $(CPPUHELPERLIB)
 
 # ... cfgapi ..............................
 # APP1STDLIBS = $(APPSTDLIBS)
@@ -108,10 +108,10 @@ APPSTDLIBS=\
 # ... cfgapi ..............................
 APP2STDLIBS = $(APPSTDLIBS)
 
-APP2STDLIBS+=$(STDLIBCPP)
+APP2STDLIBS+= $(STDLIBCPP)
 
 .IF "$(GUI)"=="WNT"
-APP2STDLIBS+=$(LIBCIMT)
+APP2STDLIBS+= $(LIBCIMT)
 .ENDIF
 
 # CFLAGS+=-DWITHOUTAPI
@@ -119,6 +119,7 @@ APP2STDLIBS+=$(LIBCIMT)
 APP2TARGET= $(TARGET2)
 APP2OBJS=	\
     $(SLO)$/memorytests.obj	\
+    $(SLO)$/testmodules.obj	\
     $(SLO)$/treeload.obj \
     $(SLO)$/accessimpl.obj \
     $(SLO)$/adminproviderimpl.obj \
@@ -175,7 +176,6 @@ APP2OBJS=	\
     $(SLO)$/localizedtreeactions.obj \
     $(SLO)$/localsession.obj \
     $(SLO)$/matchlocale.obj \
-    $(SLO)$/memory.obj \
     $(SLO)$/mergechange.obj \
     $(SLO)$/namehelper.obj \
     $(SLO)$/nodechange.obj \
@@ -236,7 +236,10 @@ APP2OBJS=	\
     $(SLO)$/writesubtreeasbinaryhandler.obj \
     $(SLO)$/xmlformater.obj \
     $(SLO)$/xmltreebuilder.obj \
-    $(SLO)$/anypair.obj \
+    $(SLO)$/valuemembernode.obj \
+
+#	$(SLO)$/memory.obj \
+#	$(SLO)$/anypair.obj \
 
 
 # 	  $(SLO)$/strimpl.obj \

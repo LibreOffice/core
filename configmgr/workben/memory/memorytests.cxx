@@ -2,9 +2,9 @@
  *
  *  $RCSfile: memorytests.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2001-06-15 08:29:44 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 15:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,12 +136,9 @@
 
 #include "typeconverter.hxx"
 
-#include "memory.hxx"
+#include "testmodules.hxx"
 
 #include "valuenode.hxx"
-
-
-// #include <com/sun/star/configuration/XConfigurationSync.hpp>
 
 namespace configmgr
 {
@@ -329,7 +326,6 @@ static const sal_Char*      s_pPassword     =   "";
 #endif
 
 static bool m_bChange = false;
-
 // -----------------------------------------------------------------------------
 static void loadDefaults()
 {
@@ -624,7 +620,7 @@ int main( int argc, char * argv[] )
     {
         loadDefaults();
 
-        OUString const sServiceRegistry = OUString::createFromAscii( argc > 1 ? argv[1] : "applicat.rdb" );
+        OUString const sServiceRegistry = OUString::createFromAscii( "applicat.rdb" );
         Reference< XMultiServiceFactory > xORB;
         try
         {
@@ -662,47 +658,8 @@ int main( int argc, char * argv[] )
 
         MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung weil beim ersten mal falsch!" );
 
-        // delete [] pMem;
-        // showMemoryStatistic();
-
-        // standard office start.
-//      test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Common/Start"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Common"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Setup/CJK/Enable"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Setup/Office/Modules"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Inet"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Views"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Setup/Product"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.ucb.Configuration"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.ucb.Store/ContentProperties"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.TypeDetection"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Writer"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.WriterWeb"));
-        test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Linguistic"));
-
-        goto halt;
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Common"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Linguistic"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.TypeDetection"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Setup"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.UserProfile"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Inet"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Calc"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Chart"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.DataAccess"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Draw"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Impress"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Java"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Labels"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Math"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Views"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Writer"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.WriterWeb"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.ucb.Configuration"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.ucb.Hierarchy"));
-        // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.ucb.Store"));
-
-      halt:
+        for (char const * const * ppTestModule = configtest::s_aTestModules; *ppTestModule; ++ppTestModule)
+            test(xORB, sSharePath, sUserPath, OUString::createFromAscii(*ppTestModule));
 
         MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "ich habe fertig!" );
 
@@ -1093,7 +1050,7 @@ int requestTest( int argc, char * argv[] )
     {
         loadDefaults();
 
-        OUString const sServiceRegistry = OUString::createFromAscii( argc > 1 ? argv[1] : "applicat.rdb" );
+        OUString const sServiceRegistry = OUString::createFromAscii( "applicat.rdb" );
         Reference< XMultiServiceFactory > xORB;
         try
         {
@@ -1126,33 +1083,14 @@ int requestTest( int argc, char * argv[] )
 
         OTreeLoad aTreeLoad(xORB, sSharePath, sUserPath);
         sal_Int32 nIdx = 0;
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.Office.Common"));
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.Setup/CJK/Enable"));
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.Setup/Office/Modules"));
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.Inet"));
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.Office.Views"));
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.Setup/Product"));
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.ucb.Configuration"));
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.ucb.Store/ContentProperties"));
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.Office.TypeDetection"));
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.Office.Writer"));
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.Office.WriterWeb"));
-        aTreeLoad.requestSubtree(ASCII("org.openoffice.Office.Linguistic"));
+
+        for (char const * const * ppRequestModule = configtest::s_aTestModules; *ppRequestModule; ++ppRequestModule)
+            aTreeLoad.requestSubtree( OUString::createFromAscii(*ppRequestModule));
 
         MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "release subtrees" );
 
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.Office.Common"));
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.Setup/CJK/Enable"));
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.Setup/Office/Modules"));
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.Inet"));
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.Office.Views"));
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.Setup/Product"));
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.ucb.Configuration"));
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.ucb.Store/ContentProperties"));
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.Office.TypeDetection"));
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.Office.Writer"));
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.Office.WriterWeb"));
-        aTreeLoad.releaseSubtree(ASCII("org.openoffice.Office.Linguistic"));
+        for (char const * const * ppReleaseModule = configtest::s_aTestModules; *ppReleaseModule; ++ppReleaseModule)
+            aTreeLoad.releaseSubtree( OUString::createFromAscii(*ppReleaseModule));
 
         MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "ich habe fertig." );
         LOG_MEMORYMEASURE( "FirstTest_of_memusage", "Values of memory access for standard filters.", aMemoryInfo );
@@ -1168,7 +1106,7 @@ int requestTest( int argc, char * argv[] )
 
 int trust( int argc, char * argv[] )
 {
-    rtl::OUString const sServiceRegistry = OUString::createFromAscii( argc > 1 ? argv[1] : "applicat.rdb" );
+    rtl::OUString const sServiceRegistry = OUString::createFromAscii( "applicat.rdb" );
     uno::Reference< lang::XMultiServiceFactory > xORB;
     try
     {
@@ -1222,21 +1160,62 @@ int trust( int argc, char * argv[] )
     LOG_MEMORYMEASURE( "FirstTest_of_memusage", "Values of memory access for standard filters.", aMemoryInfo );
 
     volatile int dummy = 0;
+    return 0;
 }
 
 } // namespace configmgr
+// -----------------------------------------------------------------------------
+void usage()
+{
+    cerr << "Wrong or missing parameters.\nUsage:\n"
+            "\tmemorytest (all | trust | request | api)+ [clear] [(+<module>|-<module>)+]\n";
 
+    exit(-1);
+}
 
 // -----------------------------------------------------------------------------
 // ------------------------------------ Main ------------------------------------
 // -----------------------------------------------------------------------------
-
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )
 #endif
 {
+    enum TestSelect { TEST_TRUST = 01, TEST_REQUEST = 02, TEST_API = 04, TEST_ALL = 07 };
+
+    unsigned nSelect = 0;
+    while (argc >= 1 && argv[1] != NULL)
+    {
+             if ( ::rtl_str_compareIgnoreAsciiCase(argv[1], "trust"  ) ) nSelect |= TEST_TRUST;
+        else if ( ::rtl_str_compareIgnoreAsciiCase(argv[1], "request") ) nSelect |= TEST_REQUEST;
+        else if ( ::rtl_str_compareIgnoreAsciiCase(argv[1], "api"    ) ) nSelect |= TEST_API;
+        else if ( ::rtl_str_compareIgnoreAsciiCase(argv[1], "all"    ) ) nSelect |= TEST_ALL;
+        else break;
+
+        // here we found a known selector, so look on
+        ++argv;
+        --argc;
+    }
+
+    if (nSelect == 0) usage();
+
+//--------------------
+#define DO_TEST( test, func )   \
+    if (nSelect & TEST_##test)   \
+    {                           \
+        char const * const test_name = #test;   \
+        if (int nRet = func(argc, argv))        \
+            cerr << "Test: " << test_name << " returned with error code " << nRet << endl;  \
+        else                                                                                \
+            cerr << "Test: " << test_name << " finished without error !" ;                  \
+    } else // to allow a semicolon
+//--------------------
+
+    DO_TEST( TRUST   , configmgr::trust );
+    DO_TEST( REQUEST , configmgr::requestTest );
+    DO_TEST( API     , configmgr::main );
+
     return configmgr::main(argc, argv); // API
 //  return configmgr::requestTest(argc, argv);
 //  return configmgr::trust(argc, argv);
