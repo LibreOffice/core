@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:41:58 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1345,10 +1345,16 @@ shell::move( sal_Int32 CommandId,
         }
         case NameClash::ASK:
         default:
-        installError( CommandId,
-                      TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE,
-                      NameClash::ASK);
-        return;
+        {
+            nError = osl_File_move( srcUnqPath,dstUnqPath,true );
+            if( nError == osl::FileBase::E_EXIST )
+            {
+                installError( CommandId,
+                              TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE,
+                              NameClash::ASK);
+                return;
+            }
+        }
         break;
     }
 
@@ -1542,10 +1548,15 @@ shell::copy(
         case NameClash::ASK:
         default:
         {
-            installError( CommandId,
-                          TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY,
-                          NameClash::ASK);
-            return;
+            nError = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,true );
+
+            if( nError == osl::FileBase::E_EXIST )
+            {
+                installError( CommandId,
+                              TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY,
+                              NameClash);
+                return;
+            }
             break;
         }
     }
@@ -1801,18 +1812,16 @@ shell::mkfil( sal_Int32 CommandId,
     throw()
 {
     // return value unimportant
-    write( CommandId,
-           aUnqPath,
-           Overwrite,
-           aInputStream );
-
-    // Always notifications for an insert
-    // Cannot give an error
-
-    rtl::OUString aPrtPath = getParentName( aUnqPath );
-    notifyInsert( getContentEventListeners( aPrtPath ),aUnqPath );
-
-    return true;
+    sal_Bool bSuccess = write( CommandId,
+                               aUnqPath,
+                               Overwrite,
+                               aInputStream );
+    if ( bSuccess )
+    {
+        rtl::OUString aPrtPath = getParentName( aUnqPath );
+        notifyInsert( getContentEventListeners( aPrtPath ),aUnqPath );
+    }
+    return bSuccess;
 }
 
 
@@ -1824,10 +1833,10 @@ shell::mkfil( sal_Int32 CommandId,
 //
 //  writes to the file with given URL.
 //  The content of aInputStream becomes the content of the file
-//  Return::
+//  Return:: success of operation
 //
 
-void SAL_CALL
+sal_Bool SAL_CALL
 shell::write( sal_Int32 CommandId,
               const rtl::OUString& aUnqPath,
               sal_Bool OverWrite,
@@ -1838,7 +1847,7 @@ shell::write( sal_Int32 CommandId,
     if ( ! ensuredir( CommandId,
                       getParentName( aUnqPath ),
                       TASKHANDLING_ENSUREDIR_FOR_WRITE ) )
-        return;
+        return sal_False;
 
     osl::FileBase::RC err;
     osl::File aFile( aUnqPath );
@@ -1858,7 +1867,7 @@ shell::write( sal_Int32 CommandId,
             installError( CommandId,
                           TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE,
                           err );
-            return;
+            return sal_False;
         }
     }
     else
@@ -1871,7 +1880,7 @@ shell::write( sal_Int32 CommandId,
                           err );
 
             aFile.close();
-            return;
+            return sal_False;
         }
 
         err = aFile.open( OpenFlag_Write | OpenFlag_Create );
@@ -1881,15 +1890,17 @@ shell::write( sal_Int32 CommandId,
             installError( CommandId,
                           TASKHANDLING_NO_OPEN_FILE_FOR_WRITE,
                           err );
-            return;
+            return sal_False;
         }
     }
 
+    sal_Bool bSuccess = sal_True;
 
     if( ! aInputStream.is() )
     {
         installError( CommandId,
                       TASKHANDLING_INPUTSTREAM_FOR_WRITE );
+        bSuccess = sal_False;
     }
     else
     {
@@ -1909,18 +1920,21 @@ shell::write( sal_Int32 CommandId,
             {
                 installError( CommandId,
                               TASKHANDLING_NOTCONNECTED_FOR_WRITE );
+                bSuccess = sal_False;
                 break;
             }
             catch( const io::BufferSizeExceededException& )
             {
                 installError( CommandId,
                               TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE );
+                bSuccess = sal_False;
                 break;
             }
             catch( const io::IOException& )
             {
                 installError( CommandId,
                               TASKHANDLING_IOEXCEPTION_FOR_WRITE );
+                bSuccess = sal_False;
                 break;
             }
 
@@ -1937,12 +1951,14 @@ shell::write( sal_Int32 CommandId,
                     installError( CommandId,
                                   TASKHANDLING_FILEIOERROR_FOR_WRITE,
                                   err );
+                    bSuccess = sal_False;
                     break;
                 }
                 else if( nWrittenBytes != sal_uInt64( nReadBytes ) )
                 {
                     installError( CommandId,
                                   TASKHANDLING_FILEIOERROR_FOR_NO_SPACE );
+                    bSuccess = sal_False;
                     break;
                 }
 
@@ -1952,20 +1968,26 @@ shell::write( sal_Int32 CommandId,
 
         err = aFile.setSize( nTotalNumberOfBytes );
         if( err != osl::FileBase::E_None  )
+        {
             installError( CommandId,
                           TASKHANDLING_FILESIZE_FOR_WRITE,
                           err );
+            bSuccess = sal_False;
+        }
 
         err = aFile.sync();
         if( err != osl::FileBase::E_None  )
+        {
             installError( CommandId,
                           TASKHANDLING_FILEIOERROR_FOR_WRITE,
                           err );
+            bSuccess = sal_False;
+        }
     }
 
     aFile.close();
 
-    return;
+    return bSuccess;
 }
 
 
