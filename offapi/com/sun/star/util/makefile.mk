@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: cd $ $Date: 2002-08-15 05:26:22 $
+#   last change: $Author: fs $ $Date: 2002-09-11 09:27:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ IDLFILES=\
     NumberFormats.idl\
     NumberFormatSettings.idl\
     NumberFormatter.idl\
+    ModeChangeEvent.idl\
     ReplaceDescriptor.idl\
     SearchDescriptor.idl\
     SortDescriptor.idl\
@@ -120,6 +121,9 @@ IDLFILES=\
     XLinkUpdate.idl\
     XLocalizedAliases.idl\
     XMergeable.idl\
+    XModeChangeBroadcaster.idl\
+    XModeChangeListener.idl\
+    XModeChangeApproveListener.idl\
     XModeSelector.idl\
     XModifiable.idl\
     XModifyBroadcaster.idl\
@@ -147,6 +151,7 @@ IDLFILES=\
     XUpdatable.idl\
     XURLTransformer.idl\
     XUniqueIDFactory.idl\
+    VetoException.idl\
     DataEditorEventType.idl\
     DataEditorEvent.idl\
     XDataEditorListener.idl\
