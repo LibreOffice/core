@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:45:32 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 07:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _DBA_CORE_TABLEDECORATOR_HXX_
 #define _DBA_CORE_TABLEDECORATOR_HXX_
 
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
@@ -136,15 +139,16 @@ namespace dbaccess
     class ODBTableDecorator :public comphelper::OBaseMutex
                             ,public OTableDescriptor_BASE
                             ,public ODataSettings //ODataSettings_Base
-                            ,public OConfigurationFlushable
+                            ,protected OConfigurationFlushable
                             ,public IColumnFactory
                             ,public ::connectivity::sdbcx::IRefreshableColumns
                             ,public ODBTableDecorator_PROP
     {
         void fillPrivileges() const;
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   m_xTable;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >       m_xTable;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormats;
     // <properties>
         sal_Int32                                                                       m_nPrivileges;
     // </properties>
@@ -178,14 +182,18 @@ namespace dbaccess
             @param          _rxConn         the connection the table belongs to
             @param          _rxTable        the table from the driver can be null
         */
-        ODBTableDecorator(const ::utl::OConfigurationNode& _rTableConfig,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable)
-            throw(::com::sun::star::sdbc::SQLException);
+        ODBTableDecorator(
+            const ::utl::OConfigurationNode& _rTableConfig,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxNumberFormats
+        )   throw(::com::sun::star::sdbc::SQLException);
 
-        ODBTableDecorator(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxNewTable)
-            throw(::com::sun::star::sdbc::SQLException);
+        ODBTableDecorator(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxNewTable,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxNumberFormats
+        )   throw(::com::sun::star::sdbc::SQLException);
         virtual ~ODBTableDecorator();
 
         void setTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable);
@@ -232,6 +240,13 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getIndexes(  ) throw (::com::sun::star::uno::RuntimeException);
         // XDataDescriptorFactory
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    public:
+        // replaces OConfigurationFlushable::setConfigurationNode
+        void setContext(
+            const ::utl::OConfigurationTreeRoot& _rNode,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxNumberFormats
+        );
     };
 }
 #endif // _DBA_CORE_TABLEDECORATOR_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 07:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ namespace dbaccess
                     ,public IColumnFactory
     {
     protected:
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDriverColumns;
 
@@ -159,12 +160,12 @@ namespace dbaccess
             @param          _rDesc          the description of the table, as supplied by the driver
         */
         ODBTable(const ::utl::OConfigurationNode& _rTableConfig,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
                 const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName,
                 const ::rtl::OUString& _rType, const ::rtl::OUString& _rDesc)
             throw(::com::sun::star::sdbc::SQLException);
 
-        ODBTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn)
+        ODBTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn)
                 throw(::com::sun::star::sdbc::SQLException);
         virtual ~ODBTable();
 
