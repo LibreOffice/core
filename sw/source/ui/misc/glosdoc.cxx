@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:59:42 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,9 @@ SwTextBlocks* SwGlossaries::GetGroupDoc(const String &rName,
     {
         const String aName(rName);
         const sal_uInt16 nCount = pGlosArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        sal_uInt16 i;
+
+        for( i = 0; i < nCount; ++i)
         {
             const String *pName = (*pGlosArr)[i];
             if(*pName == aName)
@@ -405,7 +407,9 @@ sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
 SwGlossaries::~SwGlossaries()
 {
     sal_uInt16 nCount = pGlosArr? pGlosArr->Count() : 0;
-    for(sal_uInt16 i = 0; i < nCount; ++i)
+    sal_uInt16 i;
+
+    for( i = 0; i < nCount; ++i)
     {
         String *pTmp = (*pGlosArr)[i];
         delete pTmp;
@@ -539,7 +543,9 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
     {
         aPath = aNewPath;
         sal_uInt16 nCount = pPathArr? pPathArr->Count() : 0;
-        for(sal_uInt16 i = nCount; i; --i)
+        sal_uInt16 i;
+
+        for( i = nCount; i; --i)
         {
             String *pTmp = (*pPathArr)[i - 1];
             pPathArr->Remove(i - 1);
