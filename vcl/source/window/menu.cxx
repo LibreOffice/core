@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:14:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
+#endif
+#ifndef _SV_DOCKINGAREA_HXX
+#include <dockingarea.hxx>
 #endif
 
 
@@ -518,14 +521,19 @@ public:
 class DecoToolBox : public ToolBox
 {
     long lastSize;
+    Size maMinSize;
+
 public:
             DecoToolBox( Window* pParent, WinBits nStyle = 0 );
             DecoToolBox( Window* pParent, const ResId& rResId );
+    void    ImplInit();
 
     void    DataChanged( const DataChangedEvent& rDCEvt );
-    void    Resize();
 
-    void    SetImages();
+    void    SetImages( long nMaxHeight = 0 );
+
+    void    calcMinSize();
+    Size    getMinSize();
 
     Image   maImage;
     Image   maImageHC;
@@ -534,32 +542,66 @@ public:
 DecoToolBox::DecoToolBox( Window* pParent, WinBits nStyle ) :
     ToolBox( pParent, nStyle )
 {
-    lastSize = -1;
+    ImplInit();
 }
 DecoToolBox::DecoToolBox( Window* pParent, const ResId& rResId ) :
     ToolBox( pParent, rResId )
 {
-    lastSize = -1;
+    ImplInit();
 }
+
+void DecoToolBox::ImplInit()
+{
+    lastSize = -1;
+    calcMinSize();
+}
+
 void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
     if ( rDCEvt.GetFlags() & SETTINGS_STYLE )
     {
-        //SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetMenuBarColor() ) );
+        calcMinSize();
+        SetBackground();
         SetImages();
     }
 }
 
-void DecoToolBox::SetImages()
+void DecoToolBox::calcMinSize()
 {
-    if( lastSize != -1 )
+    ToolBox aTbx( GetParent() );
+    ResMgr* pResMgr = ImplGetResMgr();
+
+    Bitmap aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, pResMgr ) );
+    aTbx.SetOutStyle( TOOLBOX_STYLE_FLAT );
+    aTbx.InsertItem( IID_DOCUMENTCLOSE, Image( aBitmap ) );
+    maMinSize = aTbx.CalcWindowSizePixel();
+}
+
+Size DecoToolBox::getMinSize()
+{
+    return maMinSize;
+}
+
+void DecoToolBox::SetImages( long nMaxHeight )
+{
+    long border = getMinSize().Height() - maImage.GetSizePixel().Height();
+
+    if( !nMaxHeight && lastSize != -1 )
+        nMaxHeight = lastSize + border; // don't change anything if called with 0
+
+    if( nMaxHeight < getMinSize().Height() )
+        nMaxHeight = getMinSize().Height();
+
+    if( lastSize != nMaxHeight - border )
     {
+        lastSize = nMaxHeight - border;
+
         Color       aEraseColor( 255, 255, 255, 255 );
         BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
         BitmapEx    aBmpExSrc( GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ?
-                                 maImageHC.GetBitmapEx() : aBmpExDst );
+                              maImageHC.GetBitmapEx() : aBmpExDst );
 
         aEraseColor.SetTransparency( 255 );
         aBmpExDst.Erase( aEraseColor );
@@ -567,8 +609,8 @@ void DecoToolBox::SetImages()
 
         Rectangle aSrcRect( Point(0,0), maImage.GetSizePixel() );
         Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2,
-                                   (lastSize - maImage.GetSizePixel().Height())/2 ),
-                             maImage.GetSizePixel() );
+                                (lastSize - maImage.GetSizePixel().Height())/2 ),
+                            maImage.GetSizePixel() );
 
 
         aBmpExDst.CopyPixel( aDestRect, aSrcRect, &aBmpExSrc );
@@ -576,22 +618,6 @@ void DecoToolBox::SetImages()
     }
 }
 
-void DecoToolBox::Resize()
-{
-    Size aOutSz = GetOutputSizePixel();
-    long n      = aOutSz.Height();
-    if( n > 9 )
-    {
-        n -= 8;
-        if( n != lastSize )
-        {
-            lastSize = n;
-            SetImages();
-        }
-    }
-
-    ToolBox::Resize();
-}
 
 // Eine Basicklasse fuer beide (wegen pActivePopup, Timer, ...) waere nett,
 // aber dann musste eine 'Container'-Klasse gemacht werden, da von
@@ -659,6 +685,7 @@ public:
 
     void SetAutoPopup( BOOL bAuto ) { mbAutoPopup = bAuto; }
     void            ImplLayoutChanged();
+    Size            MinCloseButtonSize();
 };
 
 
@@ -751,6 +778,41 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
         bDone = TRUE;
     }
     return bDone;
+}
+
+static int ImplGetTopDockingAreaHeight( Window *pWindow )
+{
+    // find docking area that is top aligned and return its height
+    // note: dockingareas are direct children of the SystemWindow
+    int height=0;
+    BOOL bDone = FALSE;
+    if( pWindow->ImplGetFrameWindow() )
+    {
+        Window *pWin = pWindow->ImplGetFrameWindow()->mpFirstChild;
+        while( pWin && !bDone )
+        {
+            if( pWin->IsSystemWindow() )
+            {
+                pWin = pWin->mpFirstChild;
+                while( pWin && !bDone )
+                {
+                    DockingAreaWindow *pDockingArea = dynamic_cast< DockingAreaWindow* >( pWin );
+                    if( pDockingArea && pDockingArea->GetAlign() == WINDOWALIGN_TOP )
+                    {
+                        bDone = TRUE;
+                        if( pDockingArea->IsVisible() )
+                            height = pDockingArea->GetOutputSizePixel().Height();
+                    }
+                    else
+                        pWin = pWin->mpNext;
+                }
+
+            }
+            else
+                pWin = pWin->mpNext;
+        }
+    }
+    return height;
 }
 
 Menu::Menu()
@@ -2093,11 +2155,43 @@ Size Menu::ImplCalcSize( Window* pWin )
 
         aSz.Width() = nTextPos + nMaxTextWidth + nExtra + nMaxAccWidth;
         aSz.Width() += 10*nExtra;   // etwas mehr...
+        int nOuterSpace = ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
+        aSz.Width() += 2*nOuterSpace;
+        aSz.Height() += 2*nOuterSpace;
     }
     else
     {
         nTextPos = (USHORT)(2*nExtra);
         aSz.Height() = nFontHeight+6;
+
+        // get menubar height from native methods if supported
+        if( pWindow->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
+        {
+            ImplControlValue aVal;
+            Region aNativeBounds;
+            Region aNativeContent;
+            Region aCtrlRegion( Rectangle( Point( 0, 0 ), Size( 100, 15 ) ) );
+            if( pWindow->GetNativeControlRegion( ControlType(CTRL_MENUBAR),
+                                                 ControlPart(PART_ENTIRE_CONTROL),
+                                                 aCtrlRegion,
+                                                 ControlState(CTRL_STATE_ENABLED),
+                                                 aVal,
+                                                 OUString(),
+                                                 aNativeBounds,
+                                                 aNativeContent )
+            )
+            {
+                int nNativeHeight = aNativeBounds.GetBoundRect().GetHeight();
+                if( nNativeHeight > aSz.Height() )
+                    aSz.Height() = nNativeHeight;
+            }
+        }
+
+        // account for the size of the close button, which actually is a toolbox
+        // due to NWF this is variable
+        long nCloserHeight = ((MenuBarWindow*) pWindow)->MinCloseButtonSize().Height();
+        if( aSz.Height() < nCloserHeight )
+            aSz.Height() = nCloserHeight;
     }
 
     if ( pLogo )
@@ -2119,6 +2213,14 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
 
     if ( pLogo )
         aTopLeft.X() = pLogo->aBitmap.GetSizePixel().Width();
+
+    int nOuterSpace = 0;
+    if( !bIsMenuBar )
+    {
+        nOuterSpace = ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
+        aTopLeft.X() += nOuterSpace;
+        aTopLeft.Y() += nOuterSpace;
+    }
 
     Size aOutSz = pWin->GetOutputSizePixel();
     USHORT nCount = (USHORT)pItemList->Count();
@@ -2159,12 +2261,12 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 if ( !bLayout && !bIsMenuBar && ( pData->eType == MENUITEM_SEPARATOR ) )
                 {
                     aTmpPos.Y() = aPos.Y() + ((pData->aSz.Height()-2)/2);
-                    aTmpPos.X() = aPos.X() + 2;
+                    aTmpPos.X() = aPos.X() + 2 + nOuterSpace;
                     pWin->SetLineColor( rSettings.GetShadowColor() );
-                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3, aTmpPos.Y() ) );
+                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
                     aTmpPos.Y()++;
                     pWin->SetLineColor( rSettings.GetLightColor() );
-                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3, aTmpPos.Y() ) );
+                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
                     pWin->SetLineColor();
                 }
 
@@ -2203,6 +2305,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                     XubString aAccText = pData->aAccelKey.GetName();
                     aTmpPos.X() = aOutSz.Width() - pWin->GetTextWidth( aAccText );
                     aTmpPos.X() -= 3*nExtra;
+                    aTmpPos.X() -= nOuterSpace;
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
                     pWin->DrawCtrlText( aTmpPos, aAccText, 0, aAccText.Len(), nTextStyle );
@@ -2236,7 +2339,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 // SubMenu?
                 if ( !bLayout && !bIsMenuBar && pData->pSubMenu )
                 {
-                    aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra;
+                    aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra - nOuterSpace;
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nExtra/2;
                     aTmpPos.Y() += ( pData->aSz.Height() / 2 ) - ( nFontHeight/4 );
@@ -2721,7 +2824,6 @@ Window* MenuBar::ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu )
     pMenu->pWindow = pWindow;
     ((MenuBarWindow*)pWindow)->SetMenu( pMenu );
     long nHeight = pMenu->ImplCalcSize( pWindow ).Height();
-    if( nHeight < 20 ) nHeight = 20;   // leave enough space for closer
 
     // depending on the native implementation or the displayable flag
     // the menubar windows is supressed (ie, height=0)
@@ -3038,7 +3140,10 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     }
 
     MenuFloatingWindow* pWin = new MenuFloatingWindow( this, pW, nStyle | WB_SYSTEMWINDOW );
-    pWin->SetBorderStyle( pWin->GetBorderStyle() | WINDOW_BORDER_MENU );
+    if( pSVData->maNWFData.mbFlatMenu )
+        pWin->SetBorderStyle( WINDOW_BORDER_NOBORDER );
+    else
+        pWin->SetBorderStyle( pWin->GetBorderStyle() | WINDOW_BORDER_MENU );
     pWindow = pWin;
 
     Size aSz = ImplCalcSize( pWin );
@@ -3198,12 +3303,28 @@ static void ImplInitMenuWindow( Window* pWin, BOOL bFont, BOOL bMenuBar )
         pWin->SetPointFont( rStyleSettings.GetMenuFont() );
     if( bMenuBar )
     {
-        Wallpaper aWallpaper;
-        aWallpaper.SetStyle( WALLPAPER_APPLICATIONGRADIENT );
-        pWin->SetBackground( aWallpaper );
+        if( pWin->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
+        {
+            pWin->SetBackground();  // background will be drawn by NWF
+        }
+        else
+        {
+            Wallpaper aWallpaper;
+            aWallpaper.SetStyle( WALLPAPER_APPLICATIONGRADIENT );
+            pWin->SetBackground( aWallpaper );
+            pWin->SetPaintTransparent( FALSE );
+            pWin->SetParentClipMode( 0 );
+        }
     }
     else
-        pWin->SetBackground( Wallpaper( rStyleSettings.GetMenuColor() ) );
+    {
+        if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
+        {
+            pWin->SetBackground();  // background will be drawn by NWF
+        }
+        else
+            pWin->SetBackground( Wallpaper( rStyleSettings.GetMenuColor() ) );
+    }
 
     pWin->SetTextColor( rStyleSettings.GetMenuTextColor() );
     pWin->SetTextFillColor();
@@ -3901,6 +4022,9 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
     if ( pMenu->pLogo )
         nX = pMenu->pLogo->aBitmap.GetSizePixel().Width();
 
+    int nOuterSpace = ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
+    nY += nOuterSpace;
+
     USHORT nCount = (USHORT)pMenu->pItemList->Count();
     for ( USHORT n = 0; n < nCount; n++ )
     {
@@ -3912,28 +4036,59 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
             {
                 BOOL bRestoreLineColor = FALSE;
                 Color oldLineColor;
-                if ( bHighlight )
-                {
-                    if( pData->bEnabled )
-                        SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
-                    else
-                    {
-                        SetFillColor();
-                        oldLineColor = GetLineColor();
-                        SetLineColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
-                        bRestoreLineColor = TRUE;
-                    }
-                }
-                else
-                    SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
+                bool bDrawItemRect = true;
 
-                Rectangle aRect( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) );
+                Rectangle aItemRect( Point( nX+nOuterSpace, nY ), Size( aSz.Width()-2*nOuterSpace, pData->aSz.Height() ) );
                 if ( pData->nBits & MIB_POPUPSELECT )
                 {
                     long nFontHeight = GetTextHeight();
-                    aRect.Right() -= nFontHeight + nFontHeight/4;
+                    aItemRect.Right() -= nFontHeight + nFontHeight/4;
                 }
-                DrawRect( aRect );
+
+                if( IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
+                {
+                    Size aPxSize( GetOutputSizePixel() );
+                    Push( PUSH_CLIPREGION );
+                    IntersectClipRegion( Rectangle( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) ) );
+                    Rectangle aCtrlRect( Point( nX, 0 ), Size( aPxSize.Width()-nX, aPxSize.Height() ) );
+                    DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
+                                       Region( aCtrlRect ),
+                                       CTRL_STATE_ENABLED,
+                                       ImplControlValue(),
+                                       OUString() );
+                    Pop();
+                    if( bHighlight &&
+                        IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM ) )
+                    {
+                        bDrawItemRect = false;
+                        DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
+                                           Region( aItemRect ),
+                                           CTRL_STATE_SELECTED | CTRL_STATE_ENABLED,
+                                           ImplControlValue(),
+                                           OUString() );
+                    }
+                    else
+                        bDrawItemRect = bHighlight;
+                }
+                if( bDrawItemRect )
+                {
+                    if ( bHighlight )
+                    {
+                        if( pData->bEnabled )
+                            SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                        else
+                        {
+                            SetFillColor();
+                            oldLineColor = GetLineColor();
+                            SetLineColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                            bRestoreLineColor = TRUE;
+                        }
+                    }
+                    else
+                        SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
+
+                    DrawRect( aItemRect );
+                }
                 pMenu->ImplPaint( this, nBorder, nStartY, pData, bHighlight );
                 if( bRestoreLineColor )
                     SetLineColor( oldLineColor );
@@ -4207,6 +4362,17 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
 
 void MenuFloatingWindow::Paint( const Rectangle& rRect )
 {
+    if( IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
+    {
+        long nX = pMenu->pLogo ? pMenu->pLogo->aBitmap.GetSizePixel().Width() : 0;
+        Size aPxSize( GetOutputSizePixel() );
+        aPxSize.Width() -= nX;
+        DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
+                           Region( Rectangle( Point( nX, 0 ), aPxSize ) ),
+                           CTRL_STATE_ENABLED,
+                           ImplControlValue(),
+                           OUString() );
+    }
     if ( IsScrollMenu() )
     {
         ImplDrawScroller( TRUE );
@@ -4338,10 +4504,9 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     aCloser.maImageHC = Image( aBitmapHC, Color( COL_LIGHTMAGENTA ) );
 
     aCloser.SetOutStyle( TOOLBOX_STYLE_FLAT );
-    //aCloser.SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetMenuBarColor() ) );
-    Wallpaper aWall;
-    aWall.SetStyle( WALLPAPER_APPLICATIONGRADIENT );
-    aCloser.SetBackground( aWall );
+    aCloser.SetBackground();
+    aCloser.SetPaintTransparent( TRUE );
+    aCloser.SetParentClipMode( PARENTCLIPMODE_NOCLIP );
 
     aCloser.InsertItem( IID_DOCUMENTCLOSE,
         GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ? aCloser.maImageHC : aCloser.maImage, 0 );
@@ -4391,6 +4556,11 @@ void MenuBarWindow::ShowButtons( BOOL bClose, BOOL bFloat, BOOL bHide )
     aFloatBtn.Show( bFloat );
     aHideBtn.Show( bHide );
     Resize();
+}
+
+Size MenuBarWindow::MinCloseButtonSize()
+{
+    return aCloser.getMinSize();
 }
 
 IMPL_LINK( MenuBarWindow, CloserHdl, PushButton*, EMPTYARG )
@@ -4623,13 +4793,59 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
             {
                 // #107747# give menuitems the height of the menubar
                 Rectangle aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
+                Push( PUSH_CLIPREGION );
+                IntersectClipRegion( aRect );
                 if ( bHighlight )
                 {
-                    SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
-                    DrawRect( aRect );
+                    if( IsNativeControlSupported( CTRL_MENUBAR, PART_MENU_ITEM ) &&
+                        IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
+                    {
+                        // draw background (transparency)
+                        ImplControlValue aControlValue;
+                        MenubarValue aMenubarValue;
+                        aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
+                        aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
+
+                        Region aBgRegion( Rectangle( Point(0,0), GetOutputSizePixel() ) );
+                        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL,
+                                           aBgRegion,
+                                           CTRL_STATE_ENABLED,
+                                           aControlValue,
+                                           OUString() );
+
+                        // draw selected item
+                        DrawNativeControl( CTRL_MENUBAR, PART_MENU_ITEM,
+                                           Region( aRect ),
+                                           CTRL_STATE_ENABLED | CTRL_STATE_SELECTED,
+                                           aControlValue,
+                                           OUString() );
+                    }
+                    else
+                    {
+                        SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                        DrawRect( aRect );
+                    }
                 }
                 else
-                    Erase( aRect );
+                {
+                    if( IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) )
+                    {
+                        ImplControlValue aControlValue;
+                        MenubarValue aMenubarValue;
+                        aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
+                        aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
+
+                        Point aPt;
+                        // use full window size to get proper gradient
+                        // but clip accordingly
+                        Region              aCtrlRegion( Rectangle( aPt, GetOutputSizePixel() ) );
+
+                        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aControlValue, rtl::OUString() );
+                    }
+                    else
+                        Erase( aRect );
+                }
+                Pop();
                 pMenu->ImplPaint( this, 0, 0, pData, bHighlight );
             }
             return;
@@ -4829,6 +5045,18 @@ void MenuBarWindow::Paint( const Rectangle& rRect )
         return;
     }
 
+    if( IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) )
+    {
+        Point aPt;
+        Region              aCtrlRegion( Rectangle( aPt, GetOutputSizePixel() ) );
+
+        ImplControlValue aControlValue;
+        MenubarValue aMenubarValue;
+        aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
+        aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
+
+        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aControlValue, rtl::OUString() );
+    }
     pMenu->ImplPaint( this, 0 );
     if ( nHighlightedItem != ITEMPOS_INVALID )
         HighlightItem( nHighlightedItem, TRUE );
@@ -4841,71 +5069,31 @@ void MenuBarWindow::Resize()
     long nX     = aOutSz.Width()-3;
     long nY     = 2;
 
-    ULONG nStyle = GetSettings().GetStyleSettings().GetOptions();
-    if ( nStyle & (STYLE_OPTION_OS2STYLE | STYLE_OPTION_UNIXSTYLE | STYLE_OPTION_MACSTYLE) )
+    if ( aCloser.IsVisible() )
     {
-        if ( nStyle & STYLE_OPTION_OS2STYLE )
-        {
-            nX += 3;
-            nY -= 2;
-            n  += 4;
-        }
-
-        if ( aFloatBtn.IsVisible() )
-        {
-            nX -= n;
-            aFloatBtn.SetPosSizePixel( nX, nY, n, n );
-        }
-        if ( aHideBtn.IsVisible() )
-        {
-            nX -= n;
-            aHideBtn.SetPosSizePixel( nX, nY, n, n );
-        }
-        if ( nStyle & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE) )
-        {
-            if ( aFloatBtn.IsVisible() || aHideBtn.IsVisible() )
-                nX -= 3;
-        }
-        if ( aCloser.IsVisible() )
-        {
-            nX -= n;
-            aCloser.SetPosSizePixel( nX, nY, n, n );
-        }
+        nX -= n;
+        aCloser.SetImages( n );
+        Size aTbxSize( aCloser.CalcWindowSizePixel() );
+        long nTbxY = (aOutSz.Height() - aTbxSize.Height())/2;
+        aCloser.SetPosSizePixel( nX, nTbxY, aTbxSize.Width(), aTbxSize.Height() );
+        nX -= 3;
     }
-    else
+    if ( aFloatBtn.IsVisible() )
     {
-        if ( aCloser.IsVisible() )
-        {
-            nX -= n;
-            aCloser.SetPosSizePixel( nX, nY, n, n );
-            nX -= 3;
-        }
-        if ( aFloatBtn.IsVisible() )
-        {
-            nX -= n;
-            aFloatBtn.SetPosSizePixel( nX, nY, n, n );
-        }
-        if ( aHideBtn.IsVisible() )
-        {
-            nX -= n;
-            aHideBtn.SetPosSizePixel( nX, nY, n, n );
-        }
+        nX -= n;
+        aFloatBtn.SetPosSizePixel( nX, nY, n, n );
+    }
+    if ( aHideBtn.IsVisible() )
+    {
+        nX -= n;
+        aHideBtn.SetPosSizePixel( nX, nY, n, n );
     }
 
-    if ( nStyle & STYLE_OPTION_OS2STYLE )
-        aFloatBtn.SetSymbol( SYMBOL_OS2FLOAT );
-    else
-        aFloatBtn.SetSymbol( SYMBOL_FLOAT );
-    if ( nStyle & STYLE_OPTION_OS2STYLE )
-        aHideBtn.SetSymbol( SYMBOL_OS2HIDE );
-    else
-        aHideBtn.SetSymbol( SYMBOL_HIDE );
-    /*
-    if ( nStyle & STYLE_OPTION_OS2STYLE )
-        aCloser.SetSymbol( SYMBOL_OS2CLOSE );
-    else
-        aCloser.SetSymbol( SYMBOL_CLOSE );
-        */
+    aFloatBtn.SetSymbol( SYMBOL_FLOAT );
+    aHideBtn.SetSymbol( SYMBOL_HIDE );
+    //aCloser.SetSymbol( SYMBOL_CLOSE ); //is a toolbox now
+
+    Invalidate();
 }
 
 USHORT MenuBarWindow::ImplFindEntry( const Point& rMousePos ) const
@@ -4956,7 +5144,6 @@ void MenuBarWindow::ImplLayoutChanged()
     ImplInitMenuWindow( this, TRUE, TRUE );
     // Falls sich der Font geaendert hat.
     long nHeight = pMenu->ImplCalcSize( this ).Height();
-    if( nHeight < 20 ) nHeight = 20;   // leave enough space for closer
 
     // depending on the native implementation or the displayable flag
     // the menubar windows is supressed (ie, height=0)
