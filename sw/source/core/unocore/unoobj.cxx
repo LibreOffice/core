@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:00:20 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 10:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,9 +760,10 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                 SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
                 const SwNumRule* pRule = pTxtNd->GetNumRule();
                 // hier wird Multiselektion nicht beruecksichtigt
-                if( pRule && pTxtNd->GetNum())
+
+                if( pTxtNd->GetNum() )
                 {
-                    if( FN_UNO_NUM_LEVEL == pMap->nWID)
+                    if( FN_UNO_NUM_LEVEL == pMap->nWID  &&  pRule != NULL )
                     {
                         sal_Int16 nLevel;
                         aValue >>= nLevel;
@@ -788,7 +789,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                         }
 #endif
                     }
-                    else
+                    else if( FN_UNO_IS_NUMBER == pMap->nWID )
                     {
                         BOOL bIsNumber = *(sal_Bool*) aValue.getValue();
                         SwNodeNum aNum = *pTxtNd->GetNum();
