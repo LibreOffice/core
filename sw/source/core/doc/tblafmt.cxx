@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:35:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 19:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,9 +145,13 @@ const USHORT AUTOFORMAT_DATA_ID_641 = 10002;
 const USHORT AUTOFORMAT_ID_680DR14      = 10011;
 const USHORT AUTOFORMAT_DATA_ID_680DR14 = 10012;
 
+// --- from 680/dr25 on: #21549# store strings as UTF-8
+const USHORT AUTOFORMAT_ID_680DR25      = 10021;
+const USHORT AUTOFORMAT_DATA_ID_680DR25 = 10022;
+
 // current version
-const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_680DR14;
-const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_680DR14;
+const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_680DR25;
+const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_680DR25;
 
 
 #ifdef READ_OLDVERS
@@ -430,7 +434,9 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
     if( 0 == rVersions.nNumFmtVersion )
     {
         USHORT eSys, eLge;
-        rStream.ReadByteString( sNumFmtString, rStream.GetStreamCharSet() )
+        // --- from 680/dr25 on: #21549# store strings as UTF-8
+        CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
+        rStream.ReadByteString( sNumFmtString, eCharSet )
                 >> eSys >> eLge;
         eSysLanguage = (LanguageType) eSys;
         eNumFmtLanguage = (LanguageType) eLge;
@@ -513,7 +519,8 @@ BOOL SwBoxAutoFmt::Save( SvStream& rStream ) const
     aRotateAngle.Store( rStream, aRotateAngle.GetVersion(SOFFICE_FILEFORMAT_40) );
     aRotateMode.Store( rStream, aRotateMode.GetVersion(SOFFICE_FILEFORMAT_40) );
 
-    rStream.WriteByteString( sNumFmtString, rStream.GetStreamCharSet() )
+    // --- from 680/dr25 on: #21549# store strings as UTF-8
+    rStream.WriteByteString( sNumFmtString, RTL_TEXTENCODING_UTF8 )
         << (USHORT)eSysLanguage << (USHORT)eNumFmtLanguage;
 
     return 0 == rStream.GetError();
@@ -817,7 +824,9 @@ BOOL SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions )
             (AUTOFORMAT_DATA_ID_504 <= nVal && nVal <= AUTOFORMAT_DATA_ID)) )
     {
         BOOL b;
-        rStream.ReadByteString( aName, rStream.GetStreamCharSet() );
+        // --- from 680/dr25 on: #21549# store strings as UTF-8
+        CharSet eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
+        rStream.ReadByteString( aName, eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
         {
             rStream >> nStrResId;
@@ -897,7 +906,8 @@ BOOL SwTableAutoFmt::Save( SvStream& rStream ) const
     USHORT nVal = AUTOFORMAT_DATA_ID;
     BOOL b;
     rStream << nVal;
-    rStream.WriteByteString( aName, rStream.GetStreamCharSet() );
+    // --- from 680/dr25 on: #21549# store strings as UTF-8
+    rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
     rStream << nStrResId;
     rStream << ( b = bInclFont );
     rStream << ( b = bInclJustify );
