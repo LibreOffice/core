@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hjs $ $Date: 2001-06-16 21:50:16 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ TabDialog TAB_TEMPLATE
                 PageResID = RID_SVXPAGE_AREA ;
                 Text[ chinese_simplified ] = "³δΜξ";
                 Text[ russian ] = "Ηΰλθβκΰ";
-                Text[ polish ] = "Obszar";
+                Text[ polish ] = "Powierzchnia";
                 Text[ japanese ] = "•\\–Κ";
                 Text[ chinese_traditional ] = "¥R¶ρ";
                 Text[ greek ] = "Επιφάνεια";
@@ -243,7 +243,7 @@ TabDialog TAB_TEMPLATE
                 Text [ danish ] = "Skrifteffekt" ;
                 Text [ french ] = "Effets de caractθres" ;
                 Text [ swedish ] = "Teckeneffekt" ;
-                Text [ dutch ] = "Schrifteffecten" ;
+                Text [ dutch ] = "Schrifteffect" ;
                 Text [ spanish ] = "Efectos de fuente" ;
                 Text [ english_us ] = "Font Effect" ;
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
@@ -365,7 +365,7 @@ TabDialog TAB_TEMPLATE
                 Text[ russian ] = "Ηΰδΰνθε πΰημεπξβ";
                 Text[ polish ] = "Wymiarowanie";
                 Text[ japanese ] = "΅–@‚Μ‹L“ό";
-                Text[ chinese_traditional ] = "©w¤Ψ«Χ";
+                Text[ chinese_traditional ] = "©w¤Ψ¤o";
                 Text[ greek ] = "Διαστασιολόγηση";
                 Text[ korean ] = "Δ΅Όφ";
                 Text[ arabic ] = "ΗαήνΗΣ";
@@ -520,6 +520,7 @@ TabDialog TAB_TEMPLATE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de objeto grαfico";
 };
+
 
 
 
