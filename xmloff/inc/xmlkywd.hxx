@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-11 15:11:21 $
+ *  last change: $Author: mtg $ $Date: 2001-02-13 16:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1606,6 +1606,7 @@ XML_CONSTASCII_ACTION( sXML_underline_none, "none" );
 XML_CONSTASCII_ACTION( sXML_underline_single, "single" );
 XML_CONSTASCII_ACTION( sXML_underline_small_wave, "small-wave" );
 XML_CONSTASCII_ACTION( sXML_underline_wave, "wave" );
+XML_CONSTASCII_ACTION( sXML_unformatted_text, "unformatted-text" );
 XML_CONSTASCII_ACTION( sXML_union, "union" );
 XML_CONSTASCII_ACTION( sXML_unit, "unit" );
 XML_CONSTASCII_ACTION( sXML_unordered_list, "unordered-list" );
