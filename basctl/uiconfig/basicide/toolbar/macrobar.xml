@@ -14,10 +14,6 @@
  <toolbar:toolbaritem xlink:href=".uno:ManageBreakPoints" toolbar:helpid="helpid:30810" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:AddWatch" toolbar:helpid="helpid:30769" toolbar:text="" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectCatalog" toolbar:helpid="helpid:30774" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:ChooseMacro" toolbar:helpid="helpid:30770" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:ModuleDialog" toolbar:helpid="helpid:30773" toolbar:text="" />
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:MatchGroup" toolbar:helpid="helpid:30782" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ChooseControls" toolbar:helpid="helpid:10144" toolbar:text="" />
  <toolbar:toolbarseparator/>

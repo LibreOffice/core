@@ -14,4 +14,8 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:helpid="helpid:5701" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="helpid:5700" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectCatalog" toolbar:helpid="helpid:30774" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ChooseMacro" toolbar:helpid="helpid:30770" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ModuleDialog" toolbar:helpid="helpid:30773" toolbar:text="" />
 </toolbar:toolbar>
