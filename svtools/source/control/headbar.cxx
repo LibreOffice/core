@@ -2,9 +2,9 @@
  *
  *  $RCSfile: headbar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:12:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,35 +424,11 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                     Point( aRect.Right(), aRect.Bottom() ) );
 
     // ButtonStyle malen
-    if ( mbButtonStyle && !(nBits & HIB_FLAT) )
-    {
-        if ( aRect.GetWidth() >= 2 )
-        {
-            if ( bHigh )
-                pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-            else
-                pDev->SetLineColor( rStyleSettings.GetLightColor() );
-            pDev->DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom() ) );
-            pDev->DrawLine( aRect.TopLeft(), Point( aRect.Right()-1, aRect.Top() ) );
-            if ( !bHigh )
-            {
-                pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-                pDev->DrawLine( Point( aRect.Right()-1, aRect.Top()+1 ),
-                                Point( aRect.Right()-1, aRect.Bottom() ) );
-                pDev->DrawLine( Point( aRect.Left()+1, aRect.Bottom() ),
-                                Point( aRect.Right()-1, aRect.Bottom() ) );
-            }
-        }
-
-        aRect.Left()++;
-        aRect.Top()++;
-        aRect.Right()--;
-        aRect.Bottom()--;
-
-        // Wenn selektiert, verschiebt sich das Rechteck um 1 Pixel
-        if ( bHigh )
-            aRect.Move( 1, 1 );
-    }
+    // avoid 3D borders
+    if( bHigh )
+        DrawSelectionBackground( aRect, 1, TRUE, FALSE, FALSE );
+    else if ( !mbButtonStyle || (nBits & HIB_FLAT) )
+        DrawSelectionBackground( aRect, 0, TRUE, FALSE, FALSE );
 
     // Wenn kein Platz, dann brauchen wir auch nichts ausgeben
     if ( aRect.GetWidth() < 1 )
