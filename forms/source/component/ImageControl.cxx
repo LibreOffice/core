@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 10:29:10 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 08:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
         // build some arguments for the upcoming dialog
         try
         {
-            const ::rtl::OUString sServiceName = ::rtl::OUString::createFromAscii("com.sun.star.ui.FilePicker");
+            const ::rtl::OUString sServiceName = ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FilePicker");
             const ::rtl::OUString sInitializer = ::rtl::OUString::createFromAscii("FileOpen_LinkPreviewBox");
 
             Reference< XFilePicker > xDialog(m_xServiceFactory->createInstance(sServiceName), UNO_QUERY);
