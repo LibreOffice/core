@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdetect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:38:47 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
+#endif
 
 #ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
 #include <framework/interaction.hxx>
@@ -139,6 +142,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/brokenpackageint.hxx>
 #include <svx/impgrf.hxx>
 #include <svtools/FilterConfigItem.hxx>
 
@@ -183,11 +187,16 @@ SwFilterDetect::~SwFilterDetect()
     String aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
+    ::rtl::OUString aDocumentTitle; // interesting only if set in this method
+
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
     // there is no parameter that forbids to open as template
     sal_Bool bOpenAsTemplate = sal_False;
     sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
+
+    sal_Bool bRepairPackage = sal_False;
+    sal_Bool bRepairAllowed = sal_False;
 
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
@@ -197,6 +206,8 @@ SwFilterDetect::~SwFilterDetect()
     sal_Int32 nIndexOfContent = -1;
     sal_Int32 nIndexOfReadOnlyFlag = -1;
     sal_Int32 nIndexOfTemplateFlag = -1;
+    sal_Int32 nIndexOfDocumentTitle = -1;
+
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // extract properties
@@ -237,6 +248,10 @@ SwFilterDetect::~SwFilterDetect()
         }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) )
             lDescriptor[nProperty].Value >>= xInteraction;
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RapairPackage")) )
+            lDescriptor[nProperty].Value >>= bRepairPackage;
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle")) )
+            nIndexOfDocumentTitle = nProperty;
     }
 
     // can't check the type for external filters, so set the "dont" flag accordingly
@@ -280,7 +295,7 @@ SwFilterDetect::~SwFilterDetect()
             BOOL bIsStorage = aMedium.IsStorage();
             if ( bIsStorage )
             {
-                aMedium.GetStorage();
+                uno::Reference< embed::XStorage > xStorage = aMedium.GetStorage();
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
@@ -303,6 +318,77 @@ SwFilterDetect::~SwFilterDetect()
                             xInteraction->handle( xRequest );
                         }
                         catch ( Exception & ) {};
+                    }
+                }
+                else
+                {
+                    DBG_ASSERT( xStorage.is(), "At this point storage must exist!" );
+
+                    try
+                    {
+                        const SfxFilter* pFilter = aPreselectedFilterName.Len() ?
+                                SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
+                                SfxFilterMatcher(String::CreateFromAscii("swriter")).GetFilter4EA( aTypeName ) : 0;
+                        String aFilterName;
+                        if ( pFilter )
+                            aFilterName = pFilter->GetName();
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, &aFilterName );
+                    }
+                    catch( lang::WrappedTargetException& aWrap )
+                    {
+                        packages::zip::ZipIOException aZipException;
+
+                        // repairing is done only if this type is requested from outside
+                        if ( ( aWrap.TargetException >>= aZipException )
+                          && ( aTypeName.Len() || aPreselectedFilterName.Len() ) )
+                        {
+                            if ( xInteraction.is() )
+                            {
+                                // the package is broken one
+                                   aDocumentTitle = aMedium.GetURLObject().getName(
+                                                            INetURLObject::LAST_SEGMENT,
+                                                            true,
+                                                            INetURLObject::DECODE_WITH_CHARSET );
+
+                                if ( !bRepairPackage )
+                                {
+                                    // ask the user whether he wants to try to repair
+                                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
+                                    uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
+
+                                    xInteraction->handle( xRequest );
+
+                                    bRepairAllowed = pRequest->isApproved();
+                                }
+
+                                if ( !bRepairAllowed )
+                                {
+                                    // repair either not allowed or not successful
+                                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
+                                    uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
+                                       xInteraction->handle( xRequest );
+
+                                    aMedium.SetError( ERRCODE_ABORT );
+                                }
+                            }
+                            else
+                                aMedium.SetError( ERRCODE_IO_BROKENPACKAGE );
+
+                            if ( !bRepairAllowed )
+                            {
+                                aTypeName.Erase();
+                                aPreselectedFilterName.Erase();
+                            }
+                        }
+                    }
+                    catch( uno::RuntimeException& )
+                    {
+                        throw;
+                    }
+                    catch( uno::Exception& )
+                    {
+                        aTypeName.Erase();
+                        aPreselectedFilterName.Erase();
                     }
                 }
             }
@@ -331,14 +417,18 @@ SwFilterDetect::~SwFilterDetect()
                     bTestWriter = TRUE;
                 }
 
-                ULONG nErr = ERRCODE_NONE;
-                if ( pFilter || bTestWriter )
-                    nErr = DetectFilter( aMedium, &pFilter );
-                if ( nErr && bTestGlobal )
-                    nErr = GlobDetectFilter( aMedium, &pFilter );
+                // For own XML formats the following code seems just to duplicate the detection that was done already
+                if ( !bIsStorage )
+                {
+                    ULONG nErr = ERRCODE_NONE;
+                    if ( pFilter || bTestWriter )
+                        nErr = DetectFilter( aMedium, &pFilter );
+                    if ( nErr && bTestGlobal )
+                        nErr = GlobDetectFilter( aMedium, &pFilter );
 
-                if ( nErr != ERRCODE_NONE )
-                    pFilter = NULL;
+                    if ( nErr != ERRCODE_NONE )
+                        pFilter = NULL;
+                }
 
                 if ( pOrigFilter && pFilter && pFilter->GetTypeName() == pOrigFilter->GetTypeName() )
                     pFilter = pOrigFilter;
@@ -376,6 +466,46 @@ SwFilterDetect::~SwFilterDetect()
         else
             lDescriptor[nIndexOfReadOnlyFlag].Value <<= bReadOnly;
     }
+
+    if ( !bRepairPackage && bRepairAllowed )
+    {
+        lDescriptor.realloc( nPropertyCount + 1 );
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("RepairPackage");
+        lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
+        nPropertyCount++;
+
+        bOpenAsTemplate = sal_True;
+
+        // TODO/LATER: set progress bar that should be used
+    }
+
+    if ( bOpenAsTemplate )
+    {
+        if ( nIndexOfTemplateFlag == -1 )
+        {
+            lDescriptor.realloc( nPropertyCount + 1 );
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+            lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
+            nPropertyCount++;
+        }
+        else
+            lDescriptor[nIndexOfTemplateFlag].Value <<= bOpenAsTemplate;
+    }
+
+    if ( aDocumentTitle.getLength() )
+    {
+        // the title was set here
+        if ( nIndexOfDocumentTitle == -1 )
+        {
+            lDescriptor.realloc( nPropertyCount + 1 );
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("DocumentTitle");
+            lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
+            nPropertyCount++;
+        }
+        else
+            lDescriptor[nIndexOfDocumentTitle].Value <<= aDocumentTitle;
+    }
+
 
     if ( pFilter )
         aTypeName = pFilter->GetTypeName();
