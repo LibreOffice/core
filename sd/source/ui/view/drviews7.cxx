@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-14 15:53:22 $
+ *  last change: $Author: dl $ $Date: 2001-02-05 11:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,8 +907,11 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             nCurrentSId = pFuActual->GetSlotID();
         }
-        if( nCurrentSId != SID_TEXT_FITTOSIZE )
+        if( nCurrentSId != SID_TEXT_FITTOSIZE &&
+            nCurrentSId != SID_TEXT_FITTOSIZE_VERTICAL &&
+            nCurrentSId != SID_ATTR_CHAR_VERTICAL )
             nCurrentSId = SID_ATTR_CHAR;
+
         rSet.Put( SfxBoolItem( nCurrentSId, TRUE ) );
 
         // Kurzform von UpdateToolboxImages()
@@ -971,6 +974,8 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         // Alle objekterzeugenden Werkzeuge disablen
         rSet.ClearItem( SID_ATTR_CHAR );
         rSet.DisableItem( SID_ATTR_CHAR );
+        rSet.ClearItem( SID_ATTR_CHAR_VERTICAL );
+        rSet.DisableItem( SID_ATTR_CHAR_VERTICAL );
         rSet.ClearItem(SID_DRAW_LINE);
         rSet.DisableItem(SID_DRAW_LINE);
         rSet.ClearItem(SID_DRAW_MEASURELINE);
@@ -1018,8 +1023,12 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_DRAW_CIRCLE_NOFILL);
         rSet.ClearItem(SID_DRAW_CAPTION);
         rSet.DisableItem(SID_DRAW_CAPTION);
+        rSet.ClearItem(SID_DRAW_CAPTION_VERTICAL);
+        rSet.DisableItem(SID_DRAW_CAPTION_VERTICAL);
         rSet.ClearItem(SID_TEXT_FITTOSIZE);
         rSet.DisableItem(SID_TEXT_FITTOSIZE);
+        rSet.ClearItem(SID_TEXT_FITTOSIZE_VERTICAL);
+        rSet.DisableItem(SID_TEXT_FITTOSIZE_VERTICAL);
         rSet.ClearItem(SID_TOOL_CONNECTOR);
         rSet.DisableItem(SID_TOOL_CONNECTOR);
         rSet.ClearItem(SID_CONNECTOR_ARROW_START);

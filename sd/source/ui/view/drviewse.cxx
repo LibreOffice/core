@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-01-26 14:25:33 $
+ *  last change: $Author: dl $ $Date: 2001-02-05 11:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,8 +188,8 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
     USHORT nSId = rReq.GetSlot();
 
     if( pFuActual && pFuActual->ISA(FuText) &&
-        ( nSId == SID_TEXTEDIT || nSId == SID_ATTR_CHAR ||
-          nSId == SID_TEXT_FITTOSIZE ) )
+        ( nSId == SID_TEXTEDIT || nSId == SID_ATTR_CHAR || nSId == SID_TEXT_FITTOSIZE ||
+          nSId == SID_ATTR_CHAR_VERTICAL || nSId == SID_TEXT_FITTOSIZE_VERTICAL ) )
     {
         ((FuText*) pFuActual)->SetPermanent(TRUE);
         pFuActual->ReceiveRequest( rReq );
@@ -212,8 +212,8 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
             pFuOld = NULL;
         }
 
-        if ( nSId != SID_TEXTEDIT && nSId != SID_ATTR_CHAR &&
-             nSId != SID_TEXT_FITTOSIZE &&
+        if ( nSId != SID_TEXTEDIT && nSId != SID_ATTR_CHAR && nSId != SID_TEXT_FITTOSIZE &&
+             nSId != SID_ATTR_CHAR_VERTICAL && nSId != SID_TEXT_FITTOSIZE_VERTICAL &&
              pDrView->IsTextEdit() )
         {
             pDrView->EndTextEdit();
@@ -222,8 +222,10 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         nOldSId = pFuActual->GetSlotID();
 
         if (nOldSId == nSId ||
-            ((nOldSId == SID_TEXTEDIT || nOldSId == SID_ATTR_CHAR || nOldSId == SID_TEXT_FITTOSIZE) &&
-            (nSId == SID_TEXTEDIT || nSId == SID_ATTR_CHAR || nSId == SID_TEXT_FITTOSIZE)))
+            ((nOldSId == SID_TEXTEDIT || nOldSId == SID_ATTR_CHAR || nOldSId == SID_TEXT_FITTOSIZE ||
+              nOldSId == SID_ATTR_CHAR_VERTICAL || nOldSId == SID_TEXT_FITTOSIZE_VERTICAL) &&
+             (nSId == SID_TEXTEDIT || nSId == SID_ATTR_CHAR || nSId == SID_TEXT_FITTOSIZE ||
+              nSId == SID_ATTR_CHAR_VERTICAL || nSId == SID_TEXT_FITTOSIZE_VERTICAL )))
         {
             bPermanent = TRUE;
         }
@@ -244,19 +246,19 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
     {
         case SID_TEXTEDIT:  // BASIC ???
         case SID_ATTR_CHAR:
+        case SID_ATTR_CHAR_VERTICAL:
         case SID_TEXT_FITTOSIZE:
+        case SID_TEXT_FITTOSIZE_VERTICAL:
         {
-            USHORT n1 = SID_TEXTEDIT;
-            USHORT n2 = SID_ATTR_CHAR;
-            USHORT n3 = SID_TEXT_FITTOSIZE;
-
             pFuActual = new FuText(this, pWindow, pDrView, pDoc, rReq);
             ( (FuText*) pFuActual)->DoExecute();
             // Das Setzen des Permanent-Status erfolgt weiter oben!
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
             rBindings.Invalidate( SID_ATTR_CHAR );
+            rBindings.Invalidate( SID_ATTR_CHAR_VERTICAL );
             rBindings.Invalidate( SID_TEXT_FITTOSIZE );
+            rBindings.Invalidate( SID_TEXT_FITTOSIZE_VERTICAL );
             rReq.Done();
         }
         break;
@@ -372,6 +374,7 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_DRAW_CIRCLE:
         case SID_DRAW_CIRCLE_NOFILL:
         case SID_DRAW_CAPTION:
+        case SID_DRAW_CAPTION_VERTICAL:
         case SID_TOOL_CONNECTOR:
         case SID_CONNECTOR_ARROW_START:
         case SID_CONNECTOR_ARROW_END:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-08 13:31:17 $
+ *  last change: $Author: dl $ $Date: 2001-02-05 11:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,11 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
+#endif
+
 #include "sdresid.hxx"
 #include "app.hrc"
 #include "res_bmp.hrc"
@@ -1004,6 +1009,14 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
                 }
 
                 FASTBOOL bNewObj = TRUE;
+
+                OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
+                if( ( pOPO && pOPO->IsVertical() ) ||
+                    nSlotId == SID_ATTR_CHAR_VERTICAL ||
+                    nSlotId == SID_TEXT_FITTOSIZE_VERTICAL )
+                    pOutl->SetVertical( TRUE );
+
+
                 if (pView->BegTextEdit(pTextObj, pPV, pWindow, bNewObj, pOutl) &&
                     pTextObj->GetObjInventor() == SdrInventor)
                 {

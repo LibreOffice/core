@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-24 18:53:23 $
+ *  last change: $Author: dl $ $Date: 2001-02-05 11:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,8 +384,11 @@ BOOL SdTbxControl::IsCheckable( USHORT nSId )
         case SID_CONVERT_TO_3D_LATHE:
 
         case SID_ATTR_CHAR:
+        case SID_ATTR_CHAR_VERTICAL:
         case SID_TEXT_FITTOSIZE:
+        case SID_TEXT_FITTOSIZE_VERTICAL:
         case SID_DRAW_CAPTION:
+        case SID_DRAW_CAPTION_VERTICAL:
 
         case SID_DRAW_RECT:
         case SID_DRAW_SQUARE:

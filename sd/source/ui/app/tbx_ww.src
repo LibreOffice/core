@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:13:09 $
+ *  last change: $Author: dl $ $Date: 2001-02-05 11:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,7 @@ FloatingWindow RID_TEXT
     {
         SVLook = TRUE ;
         MenuStrings = TRUE ;
+        LineCount = 2 ;
         ItemList =
         {
             ToolBoxItem
@@ -351,6 +352,27 @@ FloatingWindow RID_TEXT
             {
                 Identifier = SID_DRAW_CAPTION ;
                 HelpId = SID_DRAW_CAPTION ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_ATTR_CHAR_VERTICAL ;
+                HelpID = SID_ATTR_CHAR_VERTICAL ;
+            };
+            ToolBoxItem
+            {
+                RadioCheck = TRUE ;
+                Identifier = SID_TEXT_FITTOSIZE_VERTICAL ;
+                HelpID = SID_TEXT_FITTOSIZE_VERTICAL ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_CAPTION_VERTICAL ;
+                HelpId = SID_DRAW_CAPTION_VERTICAL ;
             };
         };
     };

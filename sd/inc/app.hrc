@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:27 $
+ *  last change: $Author: dl $ $Date: 2001-02-05 11:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@
 #define SID_PUBLISH                         (SID_SD_START+283)
 #define SID_PAGES_PER_ROW                   (SID_SD_START+284)
 #define SID_TEXT_FITTOSIZE                  (SID_SD_START+285)
-//#define SID_FLTWIN_SDOBJPALETTE           (SID_SD_START+286)
+#define SID_TEXT_FITTOSIZE_VERTICAL         (SID_SD_START+286)
 #define SID_NAVIGATOR_PAGENAME              (SID_SD_START+287)
 #define SID_NAVIGATOR_STATE                 (SID_SD_START+288)
 #define SID_NAVIGATOR_INIT                  (SID_SD_START+289)
