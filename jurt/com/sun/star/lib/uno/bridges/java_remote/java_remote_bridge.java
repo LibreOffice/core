@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:28:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 14:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package com.sun.star.lib.uno.bridges.java_remote;
 
 
@@ -128,9 +127,8 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.37 $ $ $Date: 2004-05-19 10:28:42 $
+ * @version     $Revision: 1.38 $ $ $Date: 2004-06-03 14:33:46 $
  * @author      Kay Ramme
- * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
  */
 public class java_remote_bridge
