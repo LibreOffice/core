@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-12-22 01:19:05 $
+ *  last change: $Author: er $ $Date: 2001-01-10 16:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,7 +847,7 @@ BOOL SvStream::ReadUniStringLine( String& rStr )
 
     nOldFilePos += rStr.Len() * sizeof(sal_Unicode);
     if( Tell() > nOldFilePos )
-        nOldFilePos++;
+        nOldFilePos += sizeof(sal_Unicode);
     Seek( nOldFilePos );  // seeken wg. obigem BlockRead!
 
     if ( bEnd && (c=='\r' || c=='\n') )  // Sonderbehandlung DOS-Dateien
