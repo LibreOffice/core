@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-15 13:06:20 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 10:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,22 +171,20 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
     aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("LONGVARCHAR"));
     aRow[2] = ORowSetValue(DataType::LONGVARCHAR);
     aRow[3] = ORowSetValue((sal_Int32)65535);
-    aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
-    aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
-    aRows.push_back(aRow);
-
-    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("BOOL"));
-    aRow[2] = ORowSetValue(DataType::BIT);
-    aRow[3] = ORowSetValue((sal_Int32)1);
-    aRow[6] = ORowSetValue(::rtl::OUString());
-    aRow[9] = ORowSetValue((sal_Int32)ColumnSearch::BASIC);
     aRows.push_back(aRow);
 
     aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("DATE"));
     aRow[2] = ORowSetValue(DataType::DATE);
     aRow[3] = ORowSetValue((sal_Int32)10);
-    aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
-    aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
+    aRows.push_back(aRow);
+
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("BOOL"));
+    aRow[2] = ORowSetValue(DataType::BIT);
+    aRow[3] = ORowSetValue((sal_Int32)1);
+    aRow[4] = ORowSetValue();
+    aRow[5] = ORowSetValue();
+    aRow[6] = ORowSetValue(::rtl::OUString());
+    aRow[9] = ORowSetValue((sal_Int32)ColumnSearch::BASIC);
     aRows.push_back(aRow);
 
     aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("DECIMAL"));
