@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-01-30 16:22:15 $
+#   last change: $Author: dfoster $ $Date: 2003-02-06 15:31:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,14 +71,13 @@
   <property name="optimize"   value="on"/>
   <property name="debug"   value="on"/>
   <property name="scriptingclasses" value="${out}/class/scriptingtemp"/>
-  <property name="storageclasses" value="${out}/class/storagetemp"/>
   <property name="jardir" value="${out}/class"/>
   <property name="bindir" value="${out}/bin"/>
   <property name="idesupport.dir" value="org/openoffice/idesupport"/>
   <property name="netbeans.dir" value="org/openoffice/netbeans/modules/office"/>
   <property name="jedit.dir" value="org/openoffice/jedit/OfficeScripting"/>
+  <property name="framework.dir" value="Framework/com/sun/star/script/framework/security"/>
   <property name="scriptingjarname" value="ScriptRuntimeForJava.jar"/>
-  <!-- <property name="storagejarname" value="StorageProxy.jar"/> -->
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
@@ -113,19 +112,18 @@
   <!-- ===================== Prepare Directories ========================= -->
   <target name="prepare">
     <mkdir dir="${scriptingclasses}"/>
-    <mkdir dir="${storageclasses}"/>
     <mkdir dir="${jardir}"/>
-    <!-- <copy file="StorageProxy/com/sun/star/scripting/storage/scriptURI.xml" todir="${bindir}"/> -->
   </target>
 
   <!-- ======================== Compile Classes ========================== -->
   <target name="compile" depends="prepare">
     <javac srcdir="JRuntime/" destdir="${scriptingclasses}"
-              includes="**/*.java" classpathref="idlclasspath"
-       debug="${debug}" optimize="${optimize}" deprecation="off"/>
-    <!-- <javac srcdir="StorageProxy/" destdir="${storageclasses}"
-           includes="**/*.java" classpathref="idlclasspath"
-            debug="${debug}" optimize="${optimize}" deprecation="on"/>-->
+         includes="**/*.java" classpathref="idlclasspath"
+         debug="${debug}" optimize="${optimize}" deprecation="off"/>
+    <javac srcdir="Framework/" destdir="${scriptingclasses}"
+         includes="**/*.java" classpathref="idlclasspath" debug="${debug}"
+         optimize="${optimize}" deprecation="off">
+    </javac>
   </target>
 
   <target name="idesupport.compile" depends="prepare">
@@ -170,10 +168,14 @@
   <target name="jar" depends="compile">
     <jar jarfile="${jardir}/${scriptingjarname}"
          basedir="${scriptingclasses}">
-    <manifest>
-        <attribute name="Built-By" value="Sun Microsystems"/>
-        <attribute name="RegistrationClassName" value="ScriptRuntimeComponentRegistration"/>
-    </manifest>
+        <exclude name="${netbeans.dir}/**/.*/*"/>
+        <exclude name="**/beanshell/*"/>
+        <exclude name="**/security/*"/>
+        <exclude name="BeanShellRuntimeComponentRegistration.class"/>
+        <manifest>
+            <attribute name="Built-By" value="Sun Microsystems"/>
+            <attribute name="RegistrationClassName" value="ScriptRuntimeComponentRegistration"/>
+        </manifest>
     </jar>
 
     <jar jarfile="${jardir}/ScriptRuntimeForBeanShell.jar"
@@ -188,13 +190,16 @@
         <include name="**/ScriptContext.class"/>
     </jar>
 
-    <!--<jar jarfile="${jardir}/${storagejarname}"
-     basedir="${storageclasses}">
-    <manifest>
-                <attribute name="Built-By" value="Sun Microsystems"/>
-        <attribute name="RegistrationClassName" value="StorageProxy"/>
-    </manifest>
-    </jar>-->
+    <jar jarfile="${jardir}/ScriptFramework.jar"
+         basedir="${scriptingclasses}">
+        <manifest>
+            <attribute name="Built-By" value="Sun Microsystems"/>
+            <attribute name="RegistrationClassName"
+                       value="com.sun.star.script.framework.security.SecurityDialog"/>
+        </manifest>
+        <include name="**/security/*"/>
+    </jar>
+
   </target>
 
   <target name="idesupport.jar" depends="idesupport.compile">
@@ -268,7 +273,6 @@
   <!-- ====================== Clean Generated Files ===================== -->
   <target name="clean">
     <delete dir="${scriptingclasses}"/>
-    <delete dir="${storageclasses}"/>
     <delete dir="${jardir}/${scriptingjarname}"/>
     <delete file="${jardir}/office.jar"/>
     <delete file="${jardir}/localoffice.jar"/>
