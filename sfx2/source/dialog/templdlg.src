@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:46:40 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ ModalDialog RID_STYLECATALOG
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 114 ) ;
-        Size = MAP_APPFONT ( 110 , 55 ) ;
+        Size = MAP_APPFONT ( 110 , 77 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
         DropDown = TRUE ;
