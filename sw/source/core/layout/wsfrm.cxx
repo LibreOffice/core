@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:58:53 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,9 +522,13 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
             const SwFlyFrm* pFlyFrm = static_cast<const SwFlyFrm*>(this);
             if ( pFlyFrm->IsAutoPos() || pFlyFrm->IsFlyInCntFrm() )
             {
-                const SwPageFrm* pPageFrmOfAnchor =
-                        &(const_cast<SwFlyFrm*>(pFlyFrm)->GetPageFrmOfAnchor());
-                if ( pPageFrmOfAnchor != pPage )
+                // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+                // is replaced by method <FindPageFrmOfAnchor()>. It's return value
+                // have to be checked.
+                SwPageFrm* pPageFrmOfAnchor =
+                        const_cast<SwFlyFrm*>(pFlyFrm)->FindPageFrmOfAnchor();
+                if ( pPageFrmOfAnchor && pPageFrmOfAnchor != pPage )
+                // <--
                 {
                     InvalidatePage( pPageFrmOfAnchor );
                 }
@@ -897,20 +901,10 @@ void SwFrm::Remove()
 {
     ASSERT( pUpper, "Removen ohne Upper?" );
 
-    if( pPrev )
-        // einer aus der Mitte wird removed
-        pPrev->pNext = pNext;
-    else
-    {   // der erste in einer Folge wird removed
-        ASSERT( pUpper->pLower == this, "Layout inkonsistent." );
-        pUpper->pLower = pNext;
-    }
-    if( pNext )
-        pNext->pPrev = pPrev;
-
-#ifdef ACCESSIBLE_LAYOUT
-    // inform accessibility API
-    if ( IsInTab() )
+    // --> OD 2004-09-27 #114344# - inform accessibility API - dispose table the
+    // frame is in - before frame is 'removed from the layout' and
+    // only for cell frames and row frames.
+    if ( IsInTab() && ( IsRowFrm() || IsCellFrm() ) )
     {
         SwTabFrm* pTableFrm = FindTabFrm();
         if( pTableFrm != NULL  &&
@@ -927,7 +921,18 @@ void SwFrm::Remove()
             }
         }
     }
-#endif
+    // <--
+
+    if( pPrev )
+        // einer aus der Mitte wird removed
+        pPrev->pNext = pNext;
+    else
+    {   // der erste in einer Folge wird removed
+        ASSERT( pUpper->pLower == this, "Layout inkonsistent." );
+        pUpper->pLower = pNext;
+    }
+    if( pNext )
+        pNext->pPrev = pPrev;
 
     // Verbindung kappen.
     pNext  = pPrev  = 0;
