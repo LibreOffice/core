@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-24 06:01:16 $
+ *  last change: $Author: fme $ $Date: 2002-10-24 06:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,8 @@
 #include <hintids.hxx>
 #endif
 
-#ifdef VERTICAL_LAYOUT
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #endif
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
@@ -180,10 +178,8 @@
 #ifndef _DRAWFONT_HXX
 #include <drawfont.hxx>     // SwDrawTextInfo
 #endif
-#ifdef VERTICAL_LAYOUT
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // SwTxtFrm
-#endif
 #endif
 
 #if defined(WIN) || defined(WNT) || defined(PM2)
@@ -199,9 +195,7 @@
 SvStatistics aSvStat;
 #endif
 
-#ifdef VERTICAL_LAYOUT
 using namespace ::com::sun::star::i18n::ScriptType;
-#endif
 
 /************************************************************************
  * Hintergrundbrush setzen, z.B. bei Zeichenvorlagen
@@ -229,7 +223,6 @@ Color* SwFont::XChgBackColor( Color* pNewColor )
     return pRet;
 }
 
-#ifdef VERTICAL_LAYOUT
 
 // maps directions for vertical layout
 USHORT MapDirection( USHORT nDir, const BOOL bVertFormat )
@@ -284,6 +277,11 @@ USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat )
     return nDir;
 }
 
+USHORT SwFont::GetOrientation( const BOOL bVertFormat ) const
+{
+    return UnMapDirection( aSub[nActual].GetOrientation(), bVertFormat );
+}
+
 void SwFont::SetVertical( USHORT nDir, const BOOL bVertFormat )
 {
     // map direction if frame has vertical layout
@@ -297,7 +295,6 @@ void SwFont::SetVertical( USHORT nDir, const BOOL bVertFormat )
         aSub[2].SetVertical( nDir );
     }
 }
-#endif
 
 /*************************************************************************
  Escapement:
@@ -1096,7 +1093,6 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     {
         SV_STAT( nDrawStretchText );
 
-#ifdef VERTICAL_LAYOUT
         const Point &rOld = rInf.GetPos();
         rInf.SetPos( aPos );
 
@@ -1110,7 +1106,6 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
             if ( rInf.GetFrm()->IsVertical() )
                 rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
         }
-#endif
 
         if ( !IsCaseMap() )
             rInf.GetOut().DrawStretchText( aPos, rInf.GetWidth(),
@@ -1119,9 +1114,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
             rInf.GetOut().DrawStretchText( aPos, rInf.GetWidth(), CalcCaseMap(
                             rInf.GetText() ), rInf.GetIdx(), rInf.GetLen() );
 
-#ifdef VERTICAL_LAYOUT
         rInf.SetPos( rOld );
-#endif
     }
 
     if( rInf.GetUnderFnt() && nOldUnder != UNDERLINE_NONE )
@@ -1189,10 +1182,8 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 {
     long nOfst;
 
-#ifdef VERTICAL_LAYOUT
     USHORT nDir = UnMapDirection(
                 GetOrientation(), rInf.GetFrm() && rInf.GetFrm()->IsVertical() );
-#endif
 
     switch ( GetEscapement() )
     {
@@ -1201,11 +1192,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
             pLastFont->GetHeight( rInf.GetShell(), rInf.GetpOut() ) +
             pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() );
 
-#ifdef VERTICAL_LAYOUT
         switch ( nDir )
-#else
-        switch ( GetOrientation() )
-#endif
         {
         case 0 :
             rPos.Y() += nOfst;
@@ -1224,11 +1211,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
                 nOrgAscent;
 
 
-#ifdef VERTICAL_LAYOUT
         switch ( nDir )
-#else
-        switch ( GetOrientation() )
-#endif
         {
         case 0 :
             rPos.Y() += nOfst;
@@ -1245,11 +1228,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
     default :
         nOfst = ((long)nOrgHeight * GetEscapement()) / 100L;
 
-#ifdef VERTICAL_LAYOUT
         switch ( nDir )
-#else
-        switch ( GetOrientation() )
-#endif
         {
         case 0 :
             rPos.Y() -= nOfst;
@@ -1261,6 +1240,41 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
             rPos.X() += nOfst;
             break;
         }
+    }
+}
+
+// used during painting of small capitals
+void SwDrawTextInfo::Shift( USHORT nDir )
+{
+    ASSERT( bPos, "DrawTextInfo: Undefined Position" );
+    ASSERT( bSize, "DrawTextInfo: Undefined Width" );
+
+#ifdef BIDI
+    const BOOL bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) ==
+                          ( TEXT_LAYOUT_BIDI_STRONG == GetpOut()->GetLayoutMode() );
+
+    nDir = bBidiPor ?
+            1800 :
+            UnMapDirection( nDir, GetFrm() && GetFrm()->IsVertical() );
+#else
+    nDir = UnMapDirection( nDir, GetFrm() && GetFrm()->IsVertical() );
+#endif
+
+    switch ( nDir )
+    {
+    case 0 :
+        ((Point*)pPos)->X() += GetSize().Width();
+        break;
+    case 900 :
+        ASSERT( ((Point*)pPos)->Y() >= GetSize().Width(), "Going underground" );
+        ((Point*)pPos)->Y() -= GetSize().Width();
+        break;
+    case 1800 :
+        ((Point*)pPos)->X() -= GetSize().Width();
+        break;
+    case 2700 :
+        ((Point*)pPos)->Y() += GetSize().Width();
+        break;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-08 16:08:26 $
+ *  last change: $Author: fme $ $Date: 2002-10-24 06:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,8 @@
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
-
-#ifdef VERTICAL_LAYOUT
 #ifndef _DRAWFONT_HXX
 #include <drawfont.hxx>     // SwDrawTextInfo
-#endif
 #endif
 
 class LinguBase;        // SetLingu()
@@ -252,11 +249,7 @@ public:
     inline void SetUnderColor( const Color &rColor ) { aUnderColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetOutline( const BOOL bOutline );
-#ifdef VERTICAL_LAYOUT
            void SetVertical( USHORT nDir, const BOOL nVertLayout = FALSE );
-#else
-    inline void SetVertical( const USHORT nDir );
-#endif
     inline void SetShadow( const BOOL bShadow );
     inline void SetAutoKern( BYTE nAutoKern );
     inline void SetTransparent( const BOOL bTrans );
@@ -338,7 +331,7 @@ public:
     FontEmphasisMark GetEmphasisMark() const
         { return aSub[nActual].GetEmphasisMark(); }
     USHORT GetPropWidth() const { return aSub[nActual].GetPropWidth(); }
-    USHORT GetOrientation() const { return aSub[nActual].GetOrientation(); }
+    USHORT GetOrientation( const BOOL nVertLayout = FALSE ) const;
 
     inline const XubString& GetName( const BYTE nWhich ) const
         { return aSub[nWhich].GetName(); }
@@ -384,13 +377,8 @@ public:
     void DoOnCapitals( SwDoCapitals &rDo )
         { aSub[nActual].DoOnCapitals( rDo ); }
 
-#ifdef VERTICAL_LAYOUT
     Size _GetTxtSize( SwDrawTextInfo& rInf )
         { rInf.SetFont( this ); return aSub[nActual]._GetTxtSize( rInf ); }
-#else
-    Size _GetTxtSize( SwDrawTextInfo& rInf )
-        { return aSub[nActual]._GetTxtSize( rInf ); }
-#endif
 
     xub_StrLen GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth );
 
@@ -855,18 +843,6 @@ inline void SwSubFont::SetVertical( const USHORT nDir )
     Font::SetOrientation( nDir );
 }
 
-#ifndef VERTICAL_LAYOUT
-inline void SwFont::SetVertical( const USHORT nDir )
-{
-    if( nDir != aSub[0].GetOrientation() )
-    {
-        bFntChg = TRUE;
-        aSub[0].SetVertical( nDir );
-        aSub[1].SetVertical( nDir );
-        aSub[2].SetVertical( nDir );
-    }
-}
-#endif
 
 /*************************************************************************
  *                      class SvStatistics

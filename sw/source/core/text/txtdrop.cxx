@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-06-20 09:28:20 $
+ *  last change: $Author: fme $ $Date: 2002-10-24 06:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,6 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
  *              virtual SwDropPortion::Paint()
  *************************************************************************/
 
-
 void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     // ganz normale Ausgabe wird hier erledigt.
@@ -404,7 +403,18 @@ void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const
             !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings()       )
             rInf.DrawBackground( *this );
 
+        // make sure that font is not rotated
+        SwFont* pTmpFont = 0;
+        if ( rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() ) )
+        {
+            pTmpFont = new SwFont( *rInf.GetFont() );
+            pTmpFont->SetVertical( 0, rInf.GetTxtFrm()->IsVertical() );
+        }
+
+        SwFontSave aSave( rInf, pTmpFont );
+
         SwTxtPortion::Paint( rInf );
+        delete pTmpFnt;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-11 09:47:18 $
+ *  last change: $Author: fme $ $Date: 2002-10-24 06:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,8 +201,6 @@ using namespace ::com::sun::star::beans;
 extern const sal_Char __FAR_DATA sBulletFntName[];
 
 extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
-
-extern USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat );
 
 #ifndef PRODUCT
 // Test2: WYSIWYG++
@@ -989,8 +987,7 @@ void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
     ((SwTxtPaintInfo&)rInf).SetFont( pFnt );
 
     // The maximum width depends on the current orientation
-    const USHORT nDir = UnMapDirection( pFnt->GetOrientation(),
-                                        rInf.GetTxtFrm()->IsVertical() );
+    const USHORT nDir = pFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
     SwTwips nMaxWidth;
     switch ( nDir )
     {
@@ -1213,8 +1210,7 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
         const USHORT nFontHeight = pFnt->GetHeight( pVsh, GetOut() );
         const USHORT nFontAscent = pFnt->GetAscent( pVsh, GetOut() );
 
-        switch ( UnMapDirection( pFnt->GetOrientation(),
-                                 GetTxtFrm()->IsVertical() ) )
+        switch ( pFnt->GetOrientation( GetTxtFrm()->IsVertical() ) )
         {
         case 0 :
             aSize.Width() = nPostItsWidth;

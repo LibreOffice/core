@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-10 14:12:28 $
+ *  last change: $Author: fme $ $Date: 2002-10-24 06:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2201,41 +2201,6 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     nTxtBreak += rInf.GetIdx();
 
     return nTxtBreak;
-}
-
-// used during painting of small capitals
-void SwDrawTextInfo::Shift( USHORT nDir )
-{
-    ASSERT( bPos, "DrawTextInfo: Undefined Position" );
-    ASSERT( bSize, "DrawTextInfo: Undefined Width" );
-
-#ifdef BIDI
-    const BOOL bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) ==
-                          ( TEXT_LAYOUT_BIDI_STRONG == GetpOut()->GetLayoutMode() );
-
-    nDir = bBidiPor ?
-            1800 :
-            UnMapDirection( nDir, GetFrm() && GetFrm()->IsVertical() );
-#else
-    nDir = UnMapDirection( nDir, GetFrm() && GetFrm()->IsVertical() );
-#endif
-
-    switch ( nDir )
-    {
-    case 0 :
-        ((Point*)pPos)->X() += GetSize().Width();
-        break;
-    case 900 :
-        ASSERT( ((Point*)pPos)->Y() >= GetSize().Width(), "Going underground" );
-        ((Point*)pPos)->Y() -= GetSize().Width();
-        break;
-    case 1800 :
-        ((Point*)pPos)->X() -= GetSize().Width();
-        break;
-    case 2700 :
-        ((Point*)pPos)->Y() += GetSize().Width();
-        break;
-    }
 }
 
 extern Color aGlobalRetoucheColor;

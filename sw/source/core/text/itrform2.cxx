@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-27 13:40:00 $
+ *  last change: $Author: fme $ $Date: 2002-10-24 06:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,11 +191,8 @@
 #endif
 
 using namespace ::com::sun::star::i18n;
-#ifdef VERTICAL_LAYOUT
 extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
                        const SwScriptInfo* pSI );
-extern USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat );
-#endif
 
 extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
 
@@ -1492,8 +1489,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
             if ( pNumFnt )
             {
-                USHORT nDir = UnMapDirection( pNumFnt->GetOrientation(),
-                                            rInf.GetTxtFrm()->IsVertical() );
+                USHORT nDir = pNumFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
                 if ( 0 != nDir )
                 {
                     delete pPor;
