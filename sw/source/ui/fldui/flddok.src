@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:49:25 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ TabPage TP_FLD_DOK
         Text [ norwegian ] = "Type" ;
         Text [ italian ] = "~Tipo di campo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
-        Text [ portuguese ] = "~Tipo" ;
+        Text [ portuguese ] = "~Tipo de campo" ;
         Text [ finnish ] = "Laji" ;
         Text [ danish ] = "Felttype" ;
         Text [ french ] = "~Type de champ" ;
