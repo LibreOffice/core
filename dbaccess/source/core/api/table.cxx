@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-22 14:01:01 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 11:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,15 @@ void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
             if (xCurrentRow.is())
             {
                 ::rtl::OUString sUserWorkingFor = m_xMetaData->getUserName();
+                static const ::rtl::OUString sSELECT    = ::rtl::OUString::createFromAscii("SELECT");
+                static const ::rtl::OUString sINSERT    = ::rtl::OUString::createFromAscii("INSERT");
+                static const ::rtl::OUString sUPDATE    = ::rtl::OUString::createFromAscii("UPDATE");
+                static const ::rtl::OUString sDELETE    = ::rtl::OUString::createFromAscii("DELETE");
+                static const ::rtl::OUString sREAD      = ::rtl::OUString::createFromAscii("READ");
+                static const ::rtl::OUString sCREATE    = ::rtl::OUString::createFromAscii("CREATE");
+                static const ::rtl::OUString sALTER     = ::rtl::OUString::createFromAscii("ALTER");
+                static const ::rtl::OUString sREFERENCE = ::rtl::OUString::createFromAscii("REFERENCE");
+                static const ::rtl::OUString sDROP      = ::rtl::OUString::createFromAscii("DROP");
                 // after creation the set is positioned before the first record, per definitionem
 
                 ::rtl::OUString sPrivilege, sGrantee;
@@ -312,26 +321,26 @@ void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
                     sGrantable  = xCurrentRow->getString(7);
 #endif
 
-                    if (sUserWorkingFor != sGrantee)
+                    if (!sUserWorkingFor.equalsIgnoreAsciiCase(sGrantee))
                         continue;
 
-                    if (sPrivilege.compareToAscii("SELECT") == 0)
+                    if (sPrivilege.equalsIgnoreAsciiCase(sSELECT))
                         const_cast<ODBTable*>(this)->m_nPrivileges |= Privilege::SELECT;
-                    else if (sPrivilege.compareToAscii("INSERT") == 0)
+                    else if (sPrivilege.equalsIgnoreAsciiCase(sINSERT))
                         const_cast<ODBTable*>(this)->m_nPrivileges |= Privilege::INSERT;
-                    else if (sPrivilege.compareToAscii("UPDATE") == 0)
+                    else if (sPrivilege.equalsIgnoreAsciiCase(sUPDATE))
                         const_cast<ODBTable*>(this)->m_nPrivileges |= Privilege::UPDATE;
-                    else if (sPrivilege.compareToAscii("DELETE") == 0)
+                    else if (sPrivilege.equalsIgnoreAsciiCase(sDELETE))
                         const_cast<ODBTable*>(this)->m_nPrivileges |= Privilege::DELETE;
-                    else if (sPrivilege.compareToAscii("READ") == 0)
+                    else if (sPrivilege.equalsIgnoreAsciiCase(sREAD))
                         const_cast<ODBTable*>(this)->m_nPrivileges |= Privilege::READ;
-                    else if (sPrivilege.compareToAscii("CREATE") == 0)
+                    else if (sPrivilege.equalsIgnoreAsciiCase(sCREATE))
                         const_cast<ODBTable*>(this)->m_nPrivileges |= Privilege::CREATE;
-                    else if (sPrivilege.compareToAscii("ALTER") == 0)
+                    else if (sPrivilege.equalsIgnoreAsciiCase(sALTER))
                         const_cast<ODBTable*>(this)->m_nPrivileges |= Privilege::ALTER;
-                    else if (sPrivilege.compareToAscii("REFERENCE") == 0)
+                    else if (sPrivilege.equalsIgnoreAsciiCase(sREFERENCE))
                         const_cast<ODBTable*>(this)->m_nPrivileges |= Privilege::REFERENCE;
-                    else if (sPrivilege.compareToAscii("DROP") == 0)
+                    else if (sPrivilege.equalsIgnoreAsciiCase(sDROP))
                         const_cast<ODBTable*>(this)->m_nPrivileges |= Privilege::DROP;
                 }
             }

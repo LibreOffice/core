@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 10:58:28 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 11:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,8 +829,10 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         case DataType::NUMERIC:
             xParameter->setString(nPos,*aIter);
             break;
-        case DataType::DOUBLE:
         case DataType::FLOAT:
+            xParameter->setFloat(nPos,*aIter);
+            break;
+        case DataType::DOUBLE:
         case DataType::REAL:
             xParameter->setDouble(nPos,*aIter);
             break;
@@ -1149,6 +1151,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.19  2001/07/03 10:58:28  oj
+    #88888# only set values which are modified
+
     Revision 1.18  2001/06/22 13:07:17  oj
     #88012# change rowdeleted
 
