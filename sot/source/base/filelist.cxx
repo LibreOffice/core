@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-06 13:47:09 $
+ *  last change: $Author: pb $ $Date: 2001-09-28 12:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,26 +244,29 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
     // Unicode ?
     if( aSv_DROPFILES.fWide )
     {
-        // no, only ANSI
+        // yes, Unicode
         String aStr;
         sal_uInt16 c;
 
-        // 1. Zeichen lesen
-        rIStm >> c;
-        do {
+        while( !rIStm.IsEof() )
+        {
             aStr.Erase();
 
-            // String bis '\0' lesen
+            // read first character of filepath; c==0 > reach end of stream
+            rIStm >> c;
+            if ( !c )
+                break;
+
+            // read string till c==0
             while( c && !rIStm.IsEof() )
             {
                 aStr += (sal_Unicode)c;
                 rIStm >> c;
             }
 
-            // String in die Liste stopfen
+            // append the filepath
             rFileList.AppendFile( aStr );
         }
-        while( c  && !rIStm.IsEof() );      // c == 0 && cLast == 0 -> Ende
     }
     else
     {
@@ -271,26 +274,29 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
         ByteString aStr;
         sal_Char c;
 
-        // 1. Zeichen lesen
-        rIStm >> c;
-        do {
+        while( !rIStm.IsEof() )
+        {
             aStr.Erase();
 
-            // String bis '\0' lesen
+            // read first character of filepath; c==0 > reach end of stream
+            rIStm >> c;
+            if ( !c )
+                break;
+
+            // read string till c==0
             while( c && !rIStm.IsEof() )
             {
                 aStr += c;
                 rIStm >> c;
             }
 
-            // String in die Liste stopfen
-            rFileList.AppendFile( String(aStr, RTL_TEXTENCODING_ASCII_US));
+            // append the filepath
+            rFileList.AppendFile( String( aStr, RTL_TEXTENCODING_ASCII_US ) );
         }
-        while( c  && !rIStm.IsEof() );      // c == 0 && cLast == 0 -> Ende
     }
+
     return rIStm;
 }
-
 
 /******************************************************************************
 |*
@@ -315,6 +321,4 @@ ULONG FileList::Count( void ) const
 {
     return pStrList->Count();
 }
-
-
 
