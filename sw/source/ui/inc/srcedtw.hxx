@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: os $ $Date: 2001-05-16 12:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,6 @@ protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    Command( const CommandEvent& rCEvt );
-    virtual BOOL    Drop( const DropEvent& rEvt );
-    virtual BOOL    QueryDrop( DropEvent& rEvt );
     virtual void    DataChanged( const DataChangedEvent& );
 
 public:

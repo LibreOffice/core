@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: os $ $Date: 2001-05-16 12:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,40 +466,6 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-BOOL  TextViewOutWin::Drop( const DropEvent& rEvt )
-{
-    BOOL bDone = FALSE;
-    if ( pTextView )
-    {
-        bDone = pTextView->Drop( rEvt );
-        if ( bDone )
-        {
-            SfxBindings& rBindings = ((SwSrcEditWindow*)GetParent())->
-                            GetSrcView()->GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_TABLE_CELL );
-            rBindings.Invalidate( SID_SAVEDOC );
-            rBindings.Invalidate( SID_DOC_MODIFIED );
-        }
-    }
-    return bDone;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-BOOL  TextViewOutWin::QueryDrop( DropEvent& rEvt )
-{
-    if ( pTextView && !((SwSrcEditWindow*)GetParent())->IsReadonly() )
-        return pTextView->QueryDrop( rEvt );
-    return FALSE;
-}
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -951,66 +917,4 @@ void SwSrcEditWindow::GetFocus()
 //  rView.LostFocus();
 } */
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.55  2000/09/18 16:05:24  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.54  2000/09/14 10:36:36  os
-    GetBindings()  access corrected
-
-    Revision 1.53  2000/09/07 15:59:22  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.52  2000/06/23 07:49:49  os
-    #75591# disable AutoScroll while syntax highlighting
-
-    Revision 1.51  2000/04/18 15:18:17  os
-    UNICODE
-
-    Revision 1.50  2000/03/03 15:17:00  os
-    StarView remainders removed
-
-    Revision 1.49  2000/02/14 14:48:40  os
-    #70473# Unicode
-
-    Revision 1.48  2000/02/10 20:45:06  jp
-    Bug #72887#: ShowCursor in HTML code view
-
-    Revision 1.47  1999/11/10 14:25:10  os
-    KeyInput: Assertion removed
-
-    Revision 1.46  1999/05/21 13:14:40  OS
-    #55722# Scrolling waehrend Syntax-Highlight
-
-
-      Rev 1.45   21 May 1999 15:14:40   OS
-   #55722# Scrolling waehrend Syntax-Highlight
-
-      Rev 1.44   02 Dec 1998 16:30:22   OS
-   #66066# Hintergrund- und Font-Farbe initial aus den Systemeinstellungen holen
-
-      Rev 1.43   18 Aug 1998 13:38:14   OS
-   Mouse auf Raedern eingebaut #55166#
-
-      Rev 1.42   29 Jun 1998 12:56:52   OS
-   SW_MOD statt GetActiveModule
-
-      Rev 1.41   24 Jun 1998 18:43:08   MA
-   DataChanged fuer ScrollBar und Retouche, Retouche ganz umgestellt
-
-      Rev 1.40   02 Apr 1998 11:38:08   OS
-   neue HelpId
-
-      Rev 1.39   24 Mar 1998 15:59:28   OS
-   AutoIndent fuer TextEngine
-
-      Rev 1.38   19 Mar 1998 18:11:28   OS
-   ShowCursor nach dem Highlight #48789#
-
-      Rev 1.37   18 Mar 1998 15:05:48   OS
-   Fontgroesse berichtigt #47428#
-
-------------------------------------------------------------------------*/
 
