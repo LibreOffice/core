@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-09 10:15:30 $
+#   last change: $Author: rt $ $Date: 2004-08-20 09:23:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,9 @@ TARGET := test_com_sun_star_lib_uno_environments_remote
 
 PACKAGE := com$/sun$/star$/lib$/uno$/environments$/remote
 JAVATESTFILES := \
+    JavaThreadPoolFactory_Test.java \
     JobQueue_Test.java \
+    ThreadId_Test.java \
     ThreadPool_Test.java
 JAVAFILES := \
     TestIWorkAt.java \
