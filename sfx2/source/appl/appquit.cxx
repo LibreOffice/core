@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:56:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@
 #include "objsh.hxx"
 #include "dlgcont.hxx"
 #include "scriptcont.hxx"
-#include <misccfg.hxx>
+#include <svtools/misccfg.hxx>
 #include "docfac.hxx"
 
 #ifndef PRODUCT
@@ -278,7 +278,7 @@ void SfxApplication::Deinitialize()
     // free administration managers
     DELETEZ(pImp->pAutoSaveTimer);
     DELETEZ(pAppDispat);
-    DELETEZ(pImp->pSfxResManager);
+    SfxResId::DeleteResMgr();
     DELETEZ(pImp->pOfaResMgr);
 
     // ab hier d"urfen keine SvObjects mehr existieren
