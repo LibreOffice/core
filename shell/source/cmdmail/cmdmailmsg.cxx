@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailmsg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:34:14 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,29 +221,6 @@ void SAL_CALL CmdMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAt
 {
     MutexGuard aGuard( m_aMutex );
     m_Attachments = aAttachment;
-    sal_Int32 n = m_Attachments.getLength();
-    if (n > 0) {
-        Reference< com::sun::star::uri::XExternalUriReferenceTranslator >
-            translator(
-                com::sun::star::uri::ExternalUriReferenceTranslator::create(
-                    m_xContext));
-        for (sal_Int32 i = 0; i < n; ++i) {
-            OUString external(
-                translator->translateToExternal(m_Attachments[i]));
-            if (external.getLength() == 0
-                && m_Attachments[i].getLength() != 0)
-            {
-                throw RuntimeException(
-                    (OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "Cannot translate URI reference to external"
-                            " format: "))
-                     + m_Attachments[i]),
-                    static_cast< cppu::OWeakObject * >(this));
-            }
-            m_Attachments[i] = external;
-        }
-    }
 }
 
 //------------------------------------------------
