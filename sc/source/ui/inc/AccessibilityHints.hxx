@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityHints.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:25:35 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 07:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 #define SC_HINT_ACC_TABLECHANGED    SC_HINT_ACC_SIMPLE_START + 1
 #define SC_HINT_ACC_CURSORCHANGED   SC_HINT_ACC_SIMPLE_START + 2
 #define SC_HINT_ACC_VISAREACHANGED  SC_HINT_ACC_SIMPLE_START + 3
+#define SC_HINT_ACC_EDITMODE        SC_HINT_ACC_SIMPLE_START + 4
+#define SC_HINT_ACC_MAKEDRAWLAYER   SC_HINT_ACC_SIMPLE_START + 5
 
 // ---------------------------------------------------------------------------
 
