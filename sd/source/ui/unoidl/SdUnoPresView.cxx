@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoPresView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:32:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,10 @@ namespace sd {
 
 
 SdUnoPresView::SdUnoPresView (
-    View& rView,
-    DrawViewShell& rViewShell) throw()
-    : SdUnoDrawView (rView, rViewShell)
+    ViewShellBase& rBase,
+    ViewShell& rViewShell,
+    View& rView) throw()
+    : SdUnoDrawView (rBase, rViewShell, rView)
 {
 }
 
