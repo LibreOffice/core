@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sheet_XCellRangeData.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:52:36 $ 
+'*  last change:$Date: 2003-02-28 15:43:05 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -65,8 +65,6 @@
 '*************************************************************************
 '*************************************************************************
 
-
-
 ' Be sure that all variables are dimensioned:
 option explicit
 
@@ -78,10 +76,6 @@ option explicit
 
 '*************************************************************************
 
-
-
-
-
 Sub RunTest()
 
 '*************************************************************************
@@ -90,22 +84,16 @@ Sub RunTest()
 '*************************************************************************
 On Error Goto ErrHndl
     Dim bOK As Boolean
+    Dim data As Variant
+    Dim myNewData as Variant
 
     Test.StartMethod("getDataArray()")
-    Dim data As Variant
     data = oObj.getDataArray()
     bOK = Not IsEmpty(data) AND ubound(data) > 0
     Test.MethodTested("getDataArray()", bOK)
 
     Test.StartMethod("setDataArray()")
-
-    if IsEmpty(newData) OR IsNull(newData) then
-      newData() = Array(_
-                    Array(2.5, 5),_
-                    Array(4, 9))
-    endif
-
-    oObj.setDataArray(newData())
+    oObj.setDataArray(createUnoValue("[][]any",newData))
     data = oObj.getDataArray()
     bOK = equals(data, newData)
     Test.MethodTested("setDataArray()", bOK)
