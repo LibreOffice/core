@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-08 13:55:59 $
+ *  last change: $Author: ka $ $Date: 2001-07-24 09:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
     DragSourceHelper( this ),
     mpTheme( NULL )
 {
-    SetHelpId( HID_GALLERY_WINDOW );
+    SetHelpId( HID_GALLERY_PREVIEW );
     SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
     SetControlBackground( GALLERY_BG_COLOR );
     aSound.SetNotifyHdl( LINK( this, GalleryPreview, SoundEndHdl ) );
