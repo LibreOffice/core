@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-16 09:20:46 $
+ *  last change: $Author: fs $ $Date: 2001-11-01 15:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,7 +685,7 @@ sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
     }
     else if ((nFeature & FM_UI_FEATURE_SHOW_EXPLORER) == FM_UI_FEATURE_SHOW_EXPLORER)
     {
-        bResult = m_bDesignMode;
+        bResult = m_bDesignMode && m_pFormView && m_bHasForms;
     }
     return bResult;
 }
