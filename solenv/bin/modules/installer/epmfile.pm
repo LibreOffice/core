@@ -2,9 +2,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 09:13:10 $
+#   last change: $Author: is $ $Date: 2004-07-29 11:09:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1376,16 +1376,18 @@ sub put_systemintegration_into_installset
 
     if ( $installer::globals::islinuxbuild )
     {
+        my $productversion = $variables->{'PRODUCTVERSION'};
+
         if ($installer::globals::product =~ /OpenOffice/i )
         {
-            push(@systemfiles, "openoffice-redhat-menus-2.0-1.noarch.rpm");
-            push(@systemfiles, "openoffice-suse-menus-2.0-1.noarch.rpm");
+            push(@systemfiles, "openoffice-redhat-menus-$productversion-1.noarch.rpm");
+            push(@systemfiles, "openoffice-suse-menus-$productversion-1.noarch.rpm");
         }
         else
         {
             my $productname = lc($variables->{'PRODUCTNAME'});
-            push(@systemfiles, "$productname-redhat-menus-ea-8-1.noarch.rpm");
-            push(@systemfiles, "$productname-suse-menus-ea-8-1.noarch.rpm");
+            push(@systemfiles, "$productname-redhat-menus-ea-$productversion-1.noarch.rpm");
+            push(@systemfiles, "$productname-suse-menus-ea-$productversion-1.noarch.rpm");
         }
     }
 

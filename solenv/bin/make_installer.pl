@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 09:09:35 $
+#   last change: $Author: is $ $Date: 2004-07-29 11:09:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -222,6 +222,9 @@ if ( $installer::globals::globallogging ) { installer::files::save_file($logging
 
 $allvariablesarrayref = installer::ziplist::remove_multiples_from_ziplist($allvariablesarrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allvariables2.log" ,$allvariablesarrayref); }
+
+installer::ziplist::replace_variables_in_ziplist_variables($allvariablesarrayref);
+if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allvariables2a.log" ,$allvariablesarrayref); }
 
 my $allvariableshashref = installer::converter::convert_array_to_hash($allvariablesarrayref);   # the variables from the zip.lst
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3.log", $allvariableshashref); }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-16 15:05:05 $
+#   last change: $Author: is $ $Date: 2004-07-29 11:09:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -724,6 +724,26 @@ sub resolve_relative_pathes
     {
         installer::parameter::make_path_absolute(\${$patharrayref}[$i]);
         simplify_path(\${$patharrayref}[$i]);
+    }
+}
+
+####################################################
+# Replacing variables inside zip list variables
+# Example: {milestone} to be replaced by
+# $installer::globals::lastminor
+####################################################
+
+sub replace_variables_in_ziplist_variables
+{
+    my ($blockref) = @_;
+
+    my $milestonevariable = $installer::globals::lastminor;
+    $milestonevariable =~ s/m//;
+    $milestonevariable =~ s/s/\./;
+
+    for ( my $i = 0; $i <= $#{$blockref}; $i++ )
+    {
+        if ($installer::globals::lastminor) { ${$blockref}[$i] =~ s/\{milestone\}/$milestonevariable/; }
     }
 }
 
