@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: as $ $Date: 2002-06-19 13:38:23 $
+ *  last change: $Author: as $ $Date: 2002-07-09 06:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDDATASINKEXCEPTION_HPP_
+#include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandFailedException.hpp>
@@ -337,7 +340,11 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
 
     com::sun::star::uno::Any aRequest = xRequest->getRequest();
     com::sun::star::ucb::InteractiveIOException aIoException;
+    com::sun::star::ucb::UnsupportedDataSinkException aSinkException;
     if ( (aRequest >>= aIoException) && ( aIoException.Code == IOErrorCode_ACCESS_DENIED || aIoException.Code == IOErrorCode_LOCKING_VIOLATION ) )
+        return;
+    else
+    if ( aRequest >>= aSinkException )
         return;
     else
         m_xInter->handle( xRequest );
