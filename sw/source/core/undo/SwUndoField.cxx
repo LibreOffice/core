@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwUndoField.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:05:36 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 07:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include <swundo.hxx>
 #include <txtfld.hxx>
 #include <fldbas.hxx>
-#include <pamout.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <dbfld.hxx>
@@ -114,9 +113,6 @@ SwPosition SwUndoField::GetPosition()
     SwIndex aIndex(pNode->GetCntntNode(), nOffset);
     SwPosition aResult(aNodeIndex, aIndex);
 
-    printf("SwUndoField::GetPosition: ");
-    pamout_printPos(aResult);
-
     return aResult;
 }
 
@@ -153,22 +149,10 @@ SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
     ASSERT(pOldField, "No old field!");
     ASSERT(pNewField, "No new field!");
     ASSERT(pDoc, "No document!");
-
-    printf("SwUndoFieldFromDoc::SwUndoFieldFromDoc: old: ");
-    pamout_printField(*pOldField);
-    printf("\nnew: ");
-    pamout_printField(*pNewField);
-    printf("\n");
-
-    //lcl_AddDBFieldTypeRef(pOldField);
-    //lcl_AddDBFieldTypeRef(pNewField);
 }
 
 SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
 {
-    //lcl_ReleaseDBFieldTypeRef(pOldField);
-    //lcl_ReleaseDBFieldTypeRef(pNewField);
-
     delete pOldField;
     delete pNewField;
 }
@@ -176,19 +160,11 @@ SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
 void SwUndoFieldFromDoc::Undo(SwUndoIter & rIt)
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
-    SwField * pField = pTxtFld->GetFld().GetFld();
+    const SwField * pField = pTxtFld->GetFld().GetFld();
 
     if (pField)
     {
         BOOL bUndo = pDoc->DoesUndo();
-
-        printf("SwUndoFieldFromDoc::Undo:");
-        pamout_printField(*pField);
-        printf(" -> ");
-        pamout_printField(*pOldField);
-        printf("\n");
-
-        // RestoreFieldType(pField, pOldField->GetTyp());
 
         pDoc->DoUndo(FALSE);
         pDoc->UpdateFld(pTxtFld, *pOldField, pHnt, bUpdate);
@@ -199,19 +175,11 @@ void SwUndoFieldFromDoc::Undo(SwUndoIter & rIt)
 void SwUndoFieldFromDoc::Redo(SwUndoIter & rIt)
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
-    SwField * pField = pTxtFld->GetFld().GetFld();
+    const SwField * pField = pTxtFld->GetFld().GetFld();
 
     if (pField)
     {
         BOOL bUndo = pDoc->DoesUndo();
-
-        printf("SwUndoFieldFromDoc::Redo:");
-        pamout_printField(*pField);
-        printf(" -> ");
-        pamout_printField(*pNewField);
-        printf("\n");
-
-        //RestoreFieldType(pField, pNewField->GetTyp());
 
         pDoc->DoUndo(FALSE);
         pDoc->UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
