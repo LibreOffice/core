@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 12:03:48 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 13:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ namespace xmloff
             case CCA_TAB_STOP:          return "tab-stop";
             case CCA_TITLE:             return "title";
             case CCA_VALUE:             return "value";
+            case CCA_ORIENTATION:       return "orientation";
             default:
                 OSL_ENSURE(sal_False, "OAttributeMetaData::getCommonControlAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
@@ -235,6 +236,9 @@ namespace xmloff
             case SCA_IS_TRISTATE:           return "is-tristate";
             case SCA_STATE:                 return "state";
             case SCA_COLUMN_STYLE_NAME:     return "column-style-name";
+            case SCA_STEP_SIZE:             return "step-size";
+            case SCA_PAGE_STEP_SIZE:        return "page-step-size";
+            case SCA_REPEAT_DELAY:          return "delay-for-repeat";
             default:
                 OSL_ENSURE(sal_False, "OAttributeMetaData::getSpecialAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
@@ -322,6 +326,16 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OAttribute2Property::addInt32Property(
+        const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+        const sal_Int32 _nAttributeDefault)
+    {
+        ::rtl::OUStringBuffer aDefault;
+        SvXMLUnitConverter::convertNumber( aDefault, _nAttributeDefault );
+        implAdd( _pAttributeName, _rPropertyName, ::getCppuType( static_cast< sal_Int32* >(NULL) ), aDefault.makeStringAndClear() );
+    }
+
+    //---------------------------------------------------------------------
     void OAttribute2Property::addEnumProperty(
             const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
             const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
@@ -358,60 +372,4 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.11.22.2  2003/11/24 15:05:30  obo
- *  undo last change
- *
- *  Revision 1.11  2003/10/21 08:39:03  obo
- *  INTEGRATION: CWS formcelllinkage (1.10.160); FILE MERGED
- *  2003/10/01 09:55:19 fs 1.10.160.1: #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.10.160.1  2003/10/01 09:55:19  fs
- *  #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.10.156.1  2003/09/25 14:28:37  fs
- *  #18994# merging the changes from cws_srx645_fs002 branch
- *
- *  Revision 1.10.152.2  2003/09/18 14:00:37  fs
- *  #18995# changes for binding list boxes to cells, while exchanging selection indexes instead of strings
- *
- *  Revision 1.10.152.1  2003/09/17 12:26:51  fs
- *  #18999# #19367# persistence for cell value and cell range bindings
- *
- *  Revision 1.10  2002/10/25 07:54:55  fs
- *  #104402# +SCA_COLUMN_STYLE_NAME
- *
- *  Revision 1.9  2001/04/20 16:49:40  fs
- *  tabbing-cycle -> tab-cycle
- *
- *  Revision 1.8  2001/03/20 13:33:39  fs
- *  #83970# +getOfficeFormsAttributeName(/-space)
- *
- *  Revision 1.7  2001/03/20 08:02:29  fs
- *  #85114# #85115# corrected attributed names for encoding type and detail fields
- *
- *  Revision 1.6  2001/02/13 13:44:41  fs
- *  tab_index -> tab-index
- *
- *  Revision 1.5  2001/01/03 16:25:34  fs
- *  file format change (extra wrapper element for controls, similar to columns)
- *
- *  Revision 1.4  2000/12/12 12:01:05  fs
- *  new implementations for the import - still under construction
- *
- *  Revision 1.3  2000/12/06 17:28:05  fs
- *  changes for the formlayer import - still under construction
- *
- *  Revision 1.2  2000/11/19 15:41:32  fs
- *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
- *
- *  Revision 1.1  2000/11/17 19:01:36  fs
- *  initial checkin - export and/or import the applications form layer
- *
- *
- *  Revision 1.0 14.11.00 09:53:05  fs
- ************************************************************************/
 
