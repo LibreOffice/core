@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:03:36 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,10 +773,19 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
         BOOL bDefaultTextRestored = ( (FuText*) pFunc)->RestoreDefaultText();
         eKind = FmFormView::EndTextEdit(bDontDeleteReally);
 
-        if( bDefaultTextRestored )
-            pTextObj->SetEmptyPresObj( TRUE );
-
         pTextObj = ( (FuText*) pFunc)->GetTextObj();
+
+        if( pTextObj )
+        {
+            if( bDefaultTextRestored )
+            {
+                pTextObj->SetEmptyPresObj( TRUE );
+            }
+            else if( pTextObj->IsEmptyPresObj() && (pTextObj->GetEditOutlinerParaObject() == 0) )
+            {
+                pTextObj->SetEmptyPresObj( FALSE );
+            }
+        }
 
         if (eKind == SDRENDTEXTEDIT_CHANGED && !bDefaultTextRestored)
             ( (FuText*) pFunc)->ObjectChanged();
