@@ -38480,3 +38480,12 @@ _TI1?AVException@uno@star@sun@com@@
 ?getDbtoolsClientMutex@?A0xd918eb0a@@YAAAVMutex@osl@@XZ
 ?lcl_NeedAdditionalDataSource@?A0x32d06717@@YAEABV?$Reference@VXNameAccess@container@star@sun@com@@@uno@star@sun@com@@@Z
 ?InsertTable@SwBaseShell@@IAEXAAVSfxRequest@@@Z
+?CorrRedline@?A0xa28d3a78@@YAXAAVSwRedline@@ABUSwPosition@@1@Z
+??0SameName@?A0xdaf0e897@@QAE@ABVString@@@Z
+??RSameName@?A0xdaf0e897@@QBE_NPBD@Z
+?__find_if@_STL@@YAPAPBDPAPBD0VSameName@?A0xdaf0e897@@ABUrandom_access_iterator_tag@1@@Z
+?find_if@_STL@@YAPAPBDPAPBD0VSameName@?A0xdaf0e897@@@Z
+?getDbToolsClientClients@?A0x3b1a70ec@@YAAAJXZ
+?getDbToolsClientFactoryFunction@?A0x3b1a70ec@@YAAAP6APAXXZXZ
+?getDbToolsClientModule@?A0x3b1a70ec@@YAAAPAXXZ
+?getDbtoolsClientMutex@?A0x3b1a70ec@@YAAAVMutex@osl@@XZ
