@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeGeneration.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:27:23 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,11 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-
+// --> OD 2004-08-09 #i28749#
+#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX3_HPP_
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#endif
+// <--
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -429,7 +433,13 @@ namespace comphelper
             case CPPUTYPE_REFCONNECTION:    pType = &::getCppuType( (Reference< sdbc::XConnection >*)0);    break;
             case CPPUTYPE_REFMODEL:         pType = &::getCppuType( (Reference< frame::XModel >*)0);    break;
             case CPPUTYPE_REFCOMPONENT:     pType = &::getCppuType( (Reference< lang::XComponent >*)0 ); break;
-
+            // --> OD 2004-08-09 #i28749#
+            case CPPUTYPE_TRANSFORMATIONINHORIL2R:
+            {
+                pType = &::getCppuType( (drawing::HomogenMatrix3*)0 );
+            }
+            break;
+            // <--
             default:
                 OSL_ASSERT( "Unknown CPPU type" );
         }
