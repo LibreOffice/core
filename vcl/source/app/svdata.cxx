@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-14 18:11:27 $
+ *  last change: $Author: ssa $ $Date: 2001-05-18 08:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
-
-
+#include <stdio.h>
 
 #pragma hdrstop
 
@@ -263,6 +262,19 @@ Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos )
     }
 
     return NULL;
+}
+
+#endif
+
+// -----------------------------------------------------------------------
+
+#ifdef REMOTE_APPSERVER
+
+void rvpExceptionHandler()
+{
+#ifdef DEBUG
+    fprintf( stderr, "RVP exception caught!\n" );
+#endif
 }
 
 #endif
