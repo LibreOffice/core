@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:50 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:32:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ ENGLISH ] = "Apply" ;
                 Text [ english_us ] = "Apply" ;
                 Text [ portuguese ] = "Aplicar" ;
-                Text [ portuguese_brazilian ] = "Zuweisen" ;
+                Text [ portuguese_brazilian ] = "Aplicar" ;
                 Text [ swedish ] = "Tilldela" ;
                 Text [ danish ] = "Tildel" ;
                 Text [ italian ] = "Assegna" ;
@@ -103,7 +103,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ dutch ] = "Toewijzen" ;
                 Text[ chinese_simplified ] = "指定";
                 Text[ russian ] = "���������";
-                Text[ polish ] = "Przypisz";
+                Text[ polish ] = "Zastosuj";
                 Text[ japanese ] = "適用";
                 Text[ chinese_traditional ] = "指定";
                 Text[ arabic ] = "�����";
@@ -114,6 +114,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ catalan ] = "Aplica";
                 Text[ finnish ] = "K�yt�";
                 Text[ thai ] = "ใช้";
+                Text[ czech ] = "Použít";
+                Text[ hebrew ] = "‮יישום‬";
+                Text[ hindi ] = "लागू करो";
             };
             ToolBoxItem
             {
@@ -128,7 +131,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ english_us ] = "Workspace" ;
                 AutoCheck = TRUE ;
                 Text [ portuguese ] = "�rea de ajuste" ;
-                Text [ portuguese_brazilian ] = "Arbeitsbereich" ;
+                Text [ portuguese_brazilian ] = "�rea de Trabalho" ;
                 Text [ swedish ] = "Arbetsomr�de" ;
                 Text [ danish ] = "Arbejdsomr�de" ;
                 Text [ italian ] = "Area di lavoro" ;
@@ -148,6 +151,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ catalan ] = "�rea de treball";
                 Text[ finnish ] = "Ty�tila";
                 Text[ thai ] = "พื้นที่ทำงาน";
+                Text[ czech ] = "Pracovní plocha";
+                Text[ hebrew ] = "Arbeitsbereich";
+                Text[ hindi ] = "कार्यस्थान";
             };
             ToolBoxItem
             {
@@ -169,7 +175,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ swedish ] = "Urval" ;
                 Text [ danish ] = "Marker" ;
                 Text [ portuguese ] = "Selec��o" ;
-                Text [ portuguese_brazilian ] = "Auswahl" ;
+                Text [ portuguese_brazilian ] = "Selecionar" ;
                 Text[ chinese_simplified ] = "选择";
                 Text[ russian ] = "��������";
                 Text[ polish ] = "Zaznacz";
@@ -183,6 +189,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ catalan ] = "Selecciona";
                 Text[ finnish ] = "Valintaty�kalu";
                 Text[ thai ] = "เลือก";
+                Text[ czech ] = "Vybrat";
+                Text[ hebrew ] = "‮בחירה‬l";
+                Text[ hindi ] = "चुनो";
             };
             ToolBoxItem
             {
@@ -200,7 +209,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ swedish ] = "Rektangel" ;
                 Text [ danish ] = "Rektangel" ;
                 Text [ portuguese ] = "Rect�ngulo" ;
-                Text [ portuguese_brazilian ] = "Rechteck" ;
+                Text [ portuguese_brazilian ] = "Ret�ngulo" ;
                 Text[ chinese_simplified ] = "矩形";
                 Text[ russian ] = "�������������";
                 Text[ polish ] = "Prostok�t";
@@ -214,6 +223,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ catalan ] = "Rectangle";
                 Text[ finnish ] = "Suorakulmio";
                 Text[ thai ] = "สี่เหลี่ยม";
+                Text[ czech ] = "Obdélník";
+                Text[ hebrew ] = "‮צרובע‬";
+                Text[ hindi ] = "आयत";
             };
             ToolBoxItem
             {
@@ -231,7 +243,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ swedish ] = "Ellips" ;
                 Text [ danish ] = "Ellipse" ;
                 Text [ portuguese ] = "Elipse" ;
-                Text [ portuguese_brazilian ] = "Ellipse" ;
+                Text [ portuguese_brazilian ] = "Elipse" ;
                 Text[ chinese_simplified ] = "椭圆";
                 Text[ russian ] = "������";
                 Text[ polish ] = "Elipsa";
@@ -245,6 +257,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ catalan ] = "Elipse";
                 Text[ finnish ] = "Soikio";
                 Text[ thai ] = "วงรี";
+                Text[ czech ] = "Elipsa";
+                Text[ hebrew ] = "‮מעגל‬";
+                Text[ hindi ] = "दीर्घवृत्त";
             };
             ToolBoxItem
             {
@@ -262,7 +277,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ swedish ] = "Polygon" ;
                 Text [ danish ] = "Polygon" ;
                 Text [ portuguese ] = "Pol�gono" ;
-                Text [ portuguese_brazilian ] = "Polygon" ;
+                Text [ portuguese_brazilian ] = "Pol�gono" ;
                 Text[ chinese_simplified ] = "多边形";
                 Text[ russian ] = "�������������";
                 Text[ polish ] = "Wielok�t";
@@ -276,6 +291,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ catalan ] = "Pol�gon";
                 Text[ finnish ] = "Monikulmio";
                 Text[ thai ] = "หลายเหลี่ยม";
+                Text[ czech ] = "Mnohoúhelník";
+                Text[ hebrew ] = "‮פוליגונים‬";
+                Text[ hindi ] = "बहुभुज क्षेत्र";
             };
             /*
             ToolBoxItem
@@ -327,6 +345,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Edita els punts";
                 Text[ thai ] = "แก้ไขจุด";
+                Text[ czech ] = "Upravit body";
+                Text[ hebrew ] = "‮עריכת נקודות‬";
+                Text[ hindi ] = "बिन्दुओं का संपादन";
             };
             ToolBoxItem
             {
@@ -336,7 +357,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ ENGLISH ] = "Edit Points" ;
                 Text [ norwegian ] = "Edit Points" ;
                 Text [ italian ] = "Sposta punti" ;
-                Text [ portuguese_brazilian ] = "Editar Pontos" ;
+                Text [ portuguese_brazilian ] = "Mover Pontos" ;
                 Text [ portuguese ] = "Mover pontos" ;
                 Text [ finnish ] = "Siirr� pisteit�" ;
                 Text [ danish ] = "Flyt punkter" ;
@@ -359,6 +380,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Mou els punts";
                 Text[ thai ] = "ย้ายจุด";
+                Text[ czech ] = "Přesunout body";
+                Text[ hebrew ] = "‮הזזת נקודות‬";
+                Text[ hindi ] = "बिन्दुओं का स्थान परिवर्तन करो";
             };
             ToolBoxItem
             {
@@ -391,6 +415,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Insereix punts";
                 Text[ thai ] = "แทรกจุด";
+                Text[ czech ] = "Vložit body";
+                Text[ hebrew ] = "‮הוספת נקודות‬";
+                Text[ hindi ] = "बिन्दुओं को जोड़ो";
             };
             ToolBoxItem
             {
@@ -400,7 +427,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ ENGLISH ] = "Delete Points" ;
                 Text [ norwegian ] = "Delete Points" ;
                 Text [ italian ] = "Elimina punti" ;
-                Text [ portuguese_brazilian ] = "Apagar Pontos" ;
+                Text [ portuguese_brazilian ] = "Excluir Pontos" ;
                 Text [ portuguese ] = "Eliminar pontos" ;
                 Text [ finnish ] = "Poista pisteet" ;
                 Text [ danish ] = "Slet punkter" ;
@@ -421,6 +448,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Suprimeix els punts";
                 Text[ thai ] = "ลบจุด";
+                Text[ czech ] = "Odstranit body";
+                Text[ hebrew ] = "‮מחיקת נקודות‬";
+                Text[ hindi ] = "बिन्दुओं को मिटाओ";
             };
             ToolBoxItem
             {
@@ -434,7 +464,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ ENGLISH ] = "Auto contour" ;
                 Text [ english_us ] = "AutoContour" ;
                 Text [ portuguese ] = "AutoContorno" ;
-                Text [ portuguese_brazilian ] = "Autokontur" ;
+                Text [ portuguese_brazilian ] = "Contorno Autom�tico" ;
                 Text [ swedish ] = "AutoKontur" ;
                 Text [ danish ] = "AutoKontur" ;
                 Text [ italian ] = "Contorno automatico" ;
@@ -454,6 +484,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ catalan ] = "Contorn autom�tic";
                 Text[ finnish ] = "Automaattinen ��riviiva";
                 Text[ thai ] = "แสดงรูปร่างอัตโนมัติ";
+                Text[ czech ] = "Automatické obrysy";
+                Text[ hebrew ] = "AutoKontur";
+                Text[ hindi ] = "स्वचालित परिवेश";
             };
             ToolBoxItem
             {
@@ -468,7 +501,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ English ] = "Undo " ;
                 Text [ norwegian ] = "Angre " ;
                 Text [ italian ] = "Annulla  " ;
-                Text [ portuguese_brazilian ] = "Widerrufen" ;
+                Text [ portuguese_brazilian ] = "Desfazer" ;
                 Text [ portuguese ] = "Anular  " ;
                 Text [ finnish ] = "Kumoa " ;
                 Text [ danish ] = "Fortryd " ;
@@ -485,10 +518,13 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ arabic ] = "����� ";
                 Text[ greek ] = "�������� ";
                 Text[ korean ] = "실행 취소 ";
-                Text[ turkish ] = "Geri al ";
+                Text[ turkish ] = "Geri al";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Desf�s  ";
                 Text[ thai ] = "เลิกทำ ";
+                Text[ czech ] = "Zpět ";
+                Text[ hebrew ] = "‮ביטול פעולה‬";
+                Text[ hindi ] = "अनावृत्ति ";
             };
             ToolBoxItem
             {
@@ -500,7 +536,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ English ] = "Redo " ;
                 Text [ english_us ] = "Redo " ;
                 Text [ portuguese ] = "Restaurar  " ;
-                Text [ portuguese_brazilian ] = "Wiederholen" ;
+                Text [ portuguese_brazilian ] = "Refazer" ;
                 Text [ swedish ] = "�terst�ll " ;
                 Text [ danish ] = "Gendan " ;
                 Text [ italian ] = "Ripristina  " ;
@@ -509,17 +545,20 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ dutch ] = "Herstellen" ;
                 Text[ chinese_simplified ] = "恢复撤消命令 ";
                 Text[ russian ] = "�������";
-                Text[ polish ] = "Przywr�� ";
+                Text[ polish ] = "Pon�w ";
                 Text[ japanese ] = "やり直し ";
                 Text[ chinese_traditional ] = "恢復撤消指令";
                 Text[ arabic ] = "����� ";
                 Text[ greek ] = "��������� ";
                 Text[ korean ] = "다시 실행";
-                Text[ turkish ] = "Yinele ";
+                Text[ turkish ] = "Tekrarla";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Restaurar  ";
                 Text[ finnish ] = "Toista ";
                 Text[ thai ] = "ทำซ้ำ ";
+                Text[ czech ] = "Znovu ";
+                Text[ hebrew ] = "‮שחזור פעולה‬";
+                Text[ hindi ] = "फिर से करो ";
             };
             ToolBoxItem
             {
@@ -530,7 +569,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ english_us ] = "Eyedropper" ;
                 AutoCheck = TRUE ;
                 Text [ portuguese ] = "Pipeta" ;
-                Text [ portuguese_brazilian ] = "Pipette" ;
+                Text [ portuguese_brazilian ] = "Pipeta" ;
                 Text [ swedish ] = "Pipett" ;
                 Text [ danish ] = "Pipette" ;
                 Text [ italian ] = "Contagocce" ;
@@ -550,6 +589,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ catalan ] = "Comptagotes";
                 Text[ finnish ] = "V�rinvalitsin";
                 Text[ thai ] = "ตัวหยดสี";
+                Text[ czech ] = "Kapátko";
+                Text[ hebrew ] = "Pipette";
+                Text[ hindi ] = "अइड्रापर";
             };
         };
     };
@@ -609,6 +651,14 @@ FloatingWindow RID_SVXDLG_CONTOUR
         QuickHelpText[ catalan ] = "Tolerancia del color";
         CustomUnitText[ finnish ] = "%";
         QuickHelpText[ finnish ] = "V�ritoleranssi";
+        CustomUnitText[ czech ] = "%";
+        CustomUnitText[ hebrew ] = " %";
+        QuickHelpText[ czech ] = "Barevná tolerance";
+        QuickHelpText[ hebrew ] = "Farbtoleranz";
+        CustomUnitText[ thai ] = "%";
+        CustomUnitText[ hindi ] = "%";
+        QuickHelpText[ thai ] = "Color Tolerance";
+        QuickHelpText[ hindi ] = "रंग सहनशीलता";
     };
     Control CTL_CONTOUR
     {
@@ -617,7 +667,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
         Pos = MAP_APPFONT ( 6 , 24 ) ;
         HelpId = HID_CONTDLG_GRAPHWND ;
     };
-    Text [ portuguese_brazilian ] = "Kontur-Editor" ;
+    Text [ portuguese_brazilian ] = "Editor de Contornos" ;
     Text [ swedish ] = "Konturredigerare" ;
     Text [ danish ] = "Kontur-redigering" ;
     Text [ italian ] = "Editor contorno" ;
@@ -627,7 +677,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
     Text [ portuguese ] = "Editor de contornos" ;
     Text[ chinese_simplified ] = "图形轮廓编辑器";
     Text[ russian ] = "�������� �������";
-    Text[ polish ] = "Edytor kontur�w";
+    Text[ polish ] = "Edytor konturu";
     Text[ japanese ] = "輪郭エディタ";
     Text[ chinese_traditional ] = "圖形輪廓編輯器";
     Text[ arabic ] = "���� ���� �������";
@@ -671,6 +721,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
         MASKCOLOR
         CONTOURDLG_IDLIST
     };
+    Text[ czech ] = "Editor obrysů";
+    Text[ hebrew ] = "Kontur-Editor";
+    Text[ hindi ] = "परिवेश संपादक";
 };
 /******************************************************************************/
 String STR_CONTOURDLG_MODIFY
@@ -678,7 +731,7 @@ String STR_CONTOURDLG_MODIFY
     Text = "Die Kontur wurde ge�ndert.\nSollen die �nderungen �bernommen werden?" ;
     Text [ English ] = "The contour has been modified.\nDo you want to take your changes?" ;
     Text [ english_us ] = "The contour has been modified.\nDo you want to save the changes?" ;
-    Text [ portuguese_brazilian ] = "Die Kontur wurde ge?ndert.\nSollen die ?nderungen ?ernommen werden?" ;
+    Text [ portuguese_brazilian ] = "O contorno foi modificado.\nDeseja salvar as modifica��es?" ;
     Text [ swedish ] = "Konturen har �ndrats.\nSkall �ndringarna �vertas?" ;
     Text [ danish ] = "Konturen er blevet �ndret.\nSkal �ndringerne overtages?" ;
     Text [ italian ] = "Il contorno � stato modificato.\nAccettate le modifiche?" ;
@@ -699,13 +752,16 @@ String STR_CONTOURDLG_MODIFY
     Text[ catalan ] = "S'ha modificat el contorn.\nVoleu desar els canvis?";
     Text[ finnish ] = "��riviivaa on muutettu.\nTallennetaanko muutokset?";
     Text[ thai ] = "ดัดแปลงแก้ไขเส้นแสดงรูปร่างแล้ว\nคุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?";
+    Text[ czech ] = "Obrys byl změněn.\nPřejete si uložit změny?";
+    Text[ hebrew ] = "Die Kontur wurde geändert.\nSollen die Änderungen übernommen werden?";
+    Text[ hindi ] = "परिवेश को परिवर्तन किया गया है ।\nआप परिवर्तनों को संचित करना चाहते है?";
 };
 String STR_CONTOURDLG_NEWPIPETTE
 {
     Text = "M�chten Sie eine neue Kontur erzeugen?" ;
     Text [ English ] = "Do you want to create a new contour?" ;
     Text [ english_us ] = "Do you want to create a new contour?" ;
-    Text [ portuguese_brazilian ] = "M?hten Sie eine neue Kontur erzeugen?" ;
+    Text [ portuguese_brazilian ] = "Deseja criar um novo contorno?" ;
     Text [ swedish ] = "Vill du skapa en ny kontur?" ;
     Text [ danish ] = "Vil du skabe en ny kontur?" ;
     Text [ italian ] = "Creare un nuovo contorno?" ;
@@ -726,13 +782,16 @@ String STR_CONTOURDLG_NEWPIPETTE
     Text[ catalan ] = "Voleu crear un contorn nou?";
     Text[ finnish ] = "Luodaanko uusi ��riviiva?";
     Text[ thai ] = "คุณต้องการสร้างเส้นแสดงรูปร่างใหม่หรือไม่?";
+    Text[ czech ] = "Přejete si vytvořit nový obrys?";
+    Text[ hebrew ] = "Möchten Sie eine neue Kontur erzeugen?";
+    Text[ hindi ] = "आप नया परिवेश को उत्पन्न करना चाहते है?";
 };
 String STR_CONTOURDLG_WORKPLACE
 {
     Text = "Das Setzen eines neuen Arbeitsbereiches\nf�hrt zu einem L�schen der Kontur.\nM�chten sie wirklich fortfahren?" ;
     Text [ English ] = "Setting a new working area will\ncause a removal of the contour.\nDo you really want to continue?" ;
     Text [ english_us ] = "Setting a new workspace will\ncause the contour to be deleted.\nAre you sure you want to continue?" ;
-    Text [ portuguese_brazilian ] = "Das Setzen eines neuen Arbeitsbereiches\nf?rt zu einem L?chen der Kontur.\nM?hten sie wirklich fortfahren?" ;
+    Text [ portuguese_brazilian ] = "Ao definir uma nova �rea de trabalho\no contorno ser� exclu�do.\nDeseja continuar?" ;
     Text [ swedish ] = "Definition av ett nytt arbetsomr�de\nleder till att konturen raderas.\nVill du forts�tta �nd�?" ;
     Text [ danish ] = "Hvis du definerer et nyt arbejdsomr�de\nbliver konturen slettet.\nEr du sikker p� at du vil forts�tte?" ;
     Text [ italian ] = "L'impostazione di una nuova area di lavoro\ncauser� la cancellazione del contorno.\nVolete proseguire?" ;
@@ -742,7 +801,7 @@ String STR_CONTOURDLG_WORKPLACE
     Text [ portuguese ] = "Ao definir uma nova �rea de\ntrabalho eliminar� o contorno.\nDeseja continuar?" ;
     Text[ chinese_simplified ] = "定义一个新的编辑区域会删除掉轮廓。\\您真要继续？";
     Text[ russian ] = "��������� ����� ������� �������\n�������� � �������� �������.\n����������, �������� �� ���?";
-    Text[ polish ] = "Ustawienie nowego obszaru roboczego \nprowadzi do usuni�cia konturu.\nCzy chcesz kontynuowa�?";
+    Text[ polish ] = "Ustawienie nowego obszaru roboczego \nprowadzi do usuni�cia konturu.\nCzy kontynuowa�?";
     Text[ japanese ] = "新しい編集範囲を設定すると\n輪郭線が削除されます。\n続行しますか？";
     Text[ chinese_traditional ] = "定義一個新的編輯區域會清除輪廓。\n您真要繼續？";
     Text[ arabic ] = "����� ����� ��� ����� ���\n���� ��� ��� ���� �������. \n�� ���� �������� ������";
@@ -753,6 +812,9 @@ String STR_CONTOURDLG_WORKPLACE
     Text[ catalan ] = "En establir una nova �rea de treball\ns'eliminar� el contorn.\nVoleu continuar realment?";
     Text[ finnish ] = "Uuden ty�tilan m��ritt�minen\npoistaa ��riviivan.\nHaluatko jatkaa?";
     Text[ thai ] = "กำหนดพื้นที่ทำงานใหม่จะ\nเป็นเหตุให้เส้นแสดงรูปร่างถูกลบ\nคุณแน่ใจหรือไม่ที่ต้องการทำต่อ?";
+    Text[ czech ] = "Nastavení nové pracovní plochy způsobí\nvymazání obrysu. Opravdu chcete pokračovat?";
+    Text[ hebrew ] = "Das Setzen eines neuen Arbeitsbereiches\nführt zu einem Löschen der Kontur.\nMöchten sie wirklich fortfahren?";
+    Text[ hindi ] = "नया कार्यस्थान को सेट्ट करने से\nपरिवेश मिट सकता है ।\nआप सचमुच आगे बढना चाहते है?";
 };
 String STR_CONTOURDLG_LINKED
 {
@@ -760,7 +822,7 @@ String STR_CONTOURDLG_LINKED
     Text [ English ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
     Text [ norwegian ] = "Dette er +++linked grafikk. �nsker du � +++unlink the graphic for � redigere?" ;
     Text [ italian ] = "Questra immagine � collegata con il documento. Desiderate scollegare l'immagine per poterla modificare?" ;
-    Text [ portuguese_brazilian ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
+    Text [ portuguese_brazilian ] = "Esta figura est� vinculada ao documento. Deseja desvincular a figura para poder edit�-la?" ;
     Text [ portuguese ] = "Esta imagem est� ligada ao documento. Deseja remover a liga��o para poder editar a imagem?" ;
     Text [ english_us ] = "This graphic object is linked to the document. Do you want to unlink the graphics in order to edit it?" ;
     Text [ finnish ] = "T�m� grafiikkaobjekti on linkitetty asiakirjaan. Haluatko poistaa grafiikan linkin ja muokata grafiikkaa?" ;
@@ -771,7 +833,7 @@ String STR_CONTOURDLG_LINKED
     Text [ spanish ] = "Esta imagen est� vinculada al documento. �Desea deshacer el v�nculo para editar la imagen?" ;
     Text[ chinese_simplified ] = "这个图形是和文档链接的。您要取消这个链接，编辑这个图形吗？";
     Text[ russian ] = "���� ����������� ������ ������ � ����������. ������ �����, ����� ��������������� ����������� ������?";
-    Text[ polish ] = "Grafika jest po��czona z dokumentem. Czy chcesz usun�� ��cze, aby edytowa� grafik�?";
+    Text[ polish ] = "Ten obiekt graficzny jest do��czony do dokumentu. Czy chcesz usun�� ��cze, aby edytowa� grafik�?";
     Text[ japanese ] = "この図はドキュメントにリンクしています。図を編集するためにリンクを解除しますか。";
     Text[ chinese_traditional ] = "這個圖形是和文件連結的。您要取消這個連結﹐編輯這個圖形？";
     Text[ arabic ] = "��� ������ ������ ��������. �� ���� ����� �������� ��� ����� �� ����� �����ɿ";
@@ -781,8 +843,20 @@ String STR_CONTOURDLG_LINKED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aquesta imatge est� enlla�ada al document. Voleu desfer l'enlla� per editar la imatge?";
     Text[ thai ] = "เชื่อมโยงวัตถุกราฟิคนี้ไปยังเอกสาร คุณต้องการไม่เชื่อมโยงกราฟิคเพื่อแก้ไขมันหรือไม่?";
+    Text[ czech ] = "Tento obrázek je propojen s dokumentem. Přejete si rozpojit obrázek, abyste jej mohli upravit?";
+    Text[ hebrew ] = "Diese Grafik ist mit dem Dokument verknüpft. Möchten Sie die Verknüpfung aufheben, um die Grafik zu bearbeiten?";
+    Text[ hindi ] = "इस सुचित्र वस्तु को लेखपत्र केलिए लिंक किया है । उसको संपादन करने केलिए आप सुचित्र का लिंक हटाना चाहते है?";
 };
 /******************************************************************************/
+
+
+
+
+
+
+
+
+
 
 
 
