@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:45:46 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1677,7 +1677,7 @@ BOOL SwFrm::IsProtected() const
                 if ( pMaster->IsProtected() )
                     return TRUE;
             }
-            pFrm = ((SwFlyFrm*)pFrm)->GetAnchor();
+            pFrm = ((SwFlyFrm*)pFrm)->GetAnchorFrm();
         }
         else if ( pFrm->IsFtnFrm() )
             pFrm = ((SwFtnFrm*)pFrm)->GetRef();
@@ -2587,12 +2587,12 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     const UINT32 nPos = pObj->GetOrdNum();
                     for ( USHORT k = 0; bSub && k < aSortObjs.Count(); ++k )
                     {
-                        SwFlyFrm *pTmp = ((SwVirtFlyDrawObj*)aSortObjs[k])->GetFlyFrm();
+                        const SwFlyFrm *pTmp = ((SwVirtFlyDrawObj*)aSortObjs[k])->GetFlyFrm();
                         do
                         {   if ( nPos < pTmp->GetVirtDrawObj()->GetOrdNumDirect() )
                                 bSub = FALSE;
                             else
-                                pTmp = pTmp->GetAnchor()->FindFlyFrm();
+                                pTmp = pTmp->GetAnchorFrm()->FindFlyFrm();
                         } while ( bSub && pTmp );
                     }
                     if ( bSub )
