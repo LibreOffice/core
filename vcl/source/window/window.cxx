@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.187 $
+ *  $Revision: 1.188 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:56:02 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,18 @@ MouseEvent ImplTranslateMouseEvent( const MouseEvent& rE, Window* pSource, Windo
     Point aPos = pSource->OutputToScreenPixel( rE.GetPosPixel() );
     aPos = pDest->ScreenToOutputPixel( aPos );
     return MouseEvent( aPos, rE.GetClicks(), rE.GetMode(), rE.GetButtons(), rE.GetModifier() );
+}
+
+// -----------------------------------------------------------------------
+
+CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, Window* pSource, Window* pDest )
+{
+    if ( !rCEvt.IsMouseEvent() )
+        return rCEvt;
+
+    Point aPos = pSource->OutputToScreenPixel( rCEvt.GetMousePosPixel() );
+    aPos = pDest->ScreenToOutputPixel( aPos );
+    return CommandEvent( aPos, rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetData() );
 }
 
 // =======================================================================
@@ -4733,8 +4745,30 @@ void Window::DataChanged( const DataChangedEvent& )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplNotifyKeyMouseEventListeners( NotifyEvent& rNEvt )
+void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
 {
+    if( rNEvt.GetType() == EVENT_COMMAND )
+    {
+        const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
+        if ( pCEvt->GetCommand() != COMMAND_CONTEXTMENU )
+            // non context menu events are not to be notified up the chain
+            // so we return immediately
+            return;
+
+        if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
+        {
+            if ( rNEvt.GetWindow() == this )
+                // not interested in: The event listeners are already called in ::Command,
+                // and calling them here a second time doesn't make sense
+                ;
+            else
+            {
+                CommandEvent aCommandEvent = ImplTranslateCommandEvent( *pCEvt, rNEvt.GetWindow(), this );
+                ImplCallEventListeners( VCLEVENT_WINDOW_COMMAND, &aCommandEvent );
+            }
+        }
+    }
+
     // #82968# notify event listeners for mouse and key events seperately and
     // not in PreNotify ( as for focus listeners )
     // this allows for procesing those events internally first and pass it to
@@ -4803,7 +4837,7 @@ void Window::ImplNotifyKeyMouseEventListeners( NotifyEvent& rNEvt )
     {
         if( pParent->IsCompoundControl() )
         {
-            pParent->ImplNotifyKeyMouseEventListeners( rNEvt );
+            pParent->ImplNotifyKeyMouseCommandEventListeners( rNEvt );
             break;
         }
         pParent = pParent->ImplGetParent();
@@ -4849,7 +4883,7 @@ long Window::PreNotify( NotifyEvent& rNEvt )
                 ImplCallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS );
         }
 
-        // #82968# mouse and key events will be notified after processing ( in ImplNotifyKeyMouseEventListeners() )!
+        // #82968# mouse and key events will be notified after processing ( in ImplNotifyKeyMouseCommandEventListeners() )!
         //    see also ImplHandleMouseEvent(), ImplHandleKey()
 
         /*
