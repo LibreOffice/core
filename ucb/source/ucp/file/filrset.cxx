@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-14 08:09:51 $
+ *  last change: $Author: abi $ $Date: 2001-05-14 08:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,9 +653,8 @@ sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
     }
     else
     {
-        row = - row - 1;
         last();
-        while( row-- ) --m_nRow;
+        m_nRow += ( row + 1 );
     }
 
     return 0<= m_nRow && m_nRow < m_aItems.size();
