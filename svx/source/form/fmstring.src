@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:42:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ String RID_STR_HSCROLL
     Text[ russian ] = "Ãîğèçîíòàëüíàÿ ïîëîñà ïğîêğóòêè";
     Text[ polish ] = "Poziomy pasek przewijania";
     Text[ japanese ] = "…•½½¸Û°ÙÊŞ°";
-    Text[ chinese_traditional ] = "¤ô¥­¦¡¨÷¶b";
+    Text[ chinese_traditional ] = "¤ô¥­¦¡±²¶b";
     Text[ greek ] = "Ïñéæüíôéá ãñáììŞ êıëéóçò";
     Text[ korean ] = "¼öÆò ½ºÅ©·Ñ¹Ù";
     Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÃİŞíÇğ";
@@ -442,7 +442,7 @@ String RID_STR_VSCROLL
     Text[ russian ] = "Âåğòèêàëüíàÿ ïîëîñà ïğîêğóòêè";
     Text[ polish ] = "Pionowy pasek przewijania";
     Text[ japanese ] = "‚’¼½¸Û°ÙÊŞ°";
-    Text[ chinese_traditional ] = "««ª½¤è¦V¨÷¶b";
+    Text[ chinese_traditional ] = "««ª½¦¡±²¶b";
     Text[ greek ] = "Êáôáêüñõöç ãñáììŞ êıëéóçò";
     Text[ korean ] = "¼öÁ÷ ½ºÅ©·Ñ¹Ù";
     Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÑÃÓíÇğ";
@@ -1849,7 +1849,7 @@ String RID_STR_ERR_CONNECTLOST
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ö‚ÌÚ‘±‚Í’†’f‚³‚ê‚Ü‚µ‚½B";
     Text[ chinese_traditional ] = "¸ê®Æ®w³s½u¤w¸g¤¤Â_¡C";
     Text[ greek ] = "ÄéáêïğŞ ôçò óıíäåóçò ìå ôç âÜóç äåäïìİíùí";
-    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º¿¡ ´ëÇÑ ¿¬°áÀÌ ²÷°å½À´Ï´Ù.";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º¿¡ ´ëÇÑ ¿¬°áÀÌ Áß´ÜµÇ¾ú½À´Ï´Ù.";
     Text[ arabic ] = "Êã ŞØÚ ÇáÇÊÕÇá ÈŞÇÚÏÉ ÇáÈíÇäÇÊ.";
     Text[ turkish ] = "Veritabanı bağlantısı kesildi.";
     Text[ language_user1 ] = " ";
@@ -2166,7 +2166,7 @@ String RID_STR_TABLE_NOT_FOUND
     Text[ japanese ] = "Ã°ÌŞÙ'#'‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ chinese_traditional ] = "µLªk§ä¨ìªí®æ '#' ¡C";
     Text[ greek ] = "Äåí âñİèçêå ï ğßíáêáò '#'.";
-    Text[ korean ] = "Å×ÀÌºí'#'À»(¸¦) Ã£Áö ¸øÇß½À´Ï´Ù.";
+    Text[ korean ] = "Ç¥ '#'À»(¸¦) Ã£Áö ¸øÇß½À´Ï´Ù.";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÌÏæá '#'.";
     Text[ turkish ] = "Tablo '#' bulunamadı.";
     Text[ language_user1 ] = " ";
@@ -4633,7 +4633,7 @@ String RID_STR_EVT_AFTERINSERT
     Text [ portuguese ] = "Depois de inserir" ;
     Text [ english_us ] = "After insert" ;
     Text [ portuguese_brazilian ] = "Nach dem Einfügen" ;
-    Text [ swedish ] = "Efter infoga" ;
+    Text [ swedish ] = "Efter infogning" ;
     Text [ danish ] = "Efter indsæt" ;
     Text [ italian ] = "Ad inserimento avvenuto" ;
     Text [ spanish ] = "Después de insertar" ;
@@ -4711,7 +4711,7 @@ String RID_STR_EVT_BEFOREINSERT
     Text [ portuguese ] = "Antes de inserir" ;
     Text [ english_us ] = "Before insert" ;
     Text [ portuguese_brazilian ] = "Vor dem Einfügen" ;
-    Text [ swedish ] = "Innan infoga" ;
+    Text [ swedish ] = "Före infogning" ;
     Text [ danish ] = "Inden indsæt" ;
     Text [ italian ] = "Prima di inserire" ;
     Text [ spanish ] = "Antes de insertar" ;
@@ -5267,11 +5267,11 @@ String RID_STR_EVT_RELOADING
     Text[ spanish ] = "Antes de recargar";
     Text[ italian ] = "Prima del ricaricamento";
     Text[ danish ] = "Before reloading";
-    Text[ swedish ] = "Innan omladdning";
+    Text[ swedish ] = "Före omladdning";
     Text[ polish ] = "Przed ponownym za³adowaniem";
     Text[ portuguese_brazilian ] = "Before reloading";
     Text[ japanese ] = "ÄÛ°ÄŞ‚·‚é‘O";
-    Text[ korean ] = "Before reloading";
+    Text[ korean ] = "´Ù½Ã ·ÎµåÇÏ±â Àü¿¡";
     Text[ chinese_simplified ] = "ÔÚÖØĞÂÔØÈëÖ®Ç°";
     Text[ chinese_traditional ] = "¦b­«·s¸ü¤J¤§«e";
     Text[ turkish ] = "Before reloading";
@@ -5743,7 +5743,7 @@ String RID_STR_EVT_UNLOADING
     Text[ polish ] = "Przed roz³adowaniem";
     Text[ portuguese_brazilian ] = "Before unloading";
     Text[ japanese ] = "±İÛ°ÄŞ‚·‚é‘O";
-    Text[ korean ] = "Before unloading";
+    Text[ korean ] = "¾ğ·ÎµåÇÏ±â Àü¿¡";
     Text[ chinese_simplified ] = "ÔÚÍËĞ¶Ö®Ç°";
     Text[ chinese_traditional ] = "¦b°h¨ø¤§«e";
     Text[ turkish ] = "Before unloading";
@@ -7126,7 +7126,7 @@ String RID_STR_CREATECONTROLS_INVALIDSOURCE
     Text[ swedish ] = "Du kan inte skapa några formulärkontrollfält för de här kolumnerna i det här dokumentet:\nDokumentet hör till en fast databas ($docname$) som används som datakälla av alla formulärelement.\nMen kolumnerna som Du använder hör till en tabell eller sökning i en annan databas ($dropname$).";
     Text[ polish ] = "Dla kolumn w tym dokumencie nie mozna utworzyc pól kontrolnych formularza:\nDokument ten jest czescia stalej bazy danych ($docname$), która wykorzystywana jest przez wszystkie elementy formularza jako zródlo danych.\nUzywane przez ciebie kolumny sa skladnikiem tabeli lub kwerendy innej bazy danych ($dropname$).";
     Text[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚Å‚±‚ê‚ç‚Ì—ñ‚ÉÌ«°Ñ¥ºİÄÛ°Ù‚Íì¬‚Å‚«‚Ü‚¹‚ñB\nÄŞ·­ÒİÄ‚ªŒÅ’è‚µ‚½ÃŞ°ÀÍŞ°½‚É‚Â‚È‚ª‚Á‚Ä‚¢‚ÄA($docname$) ‚·‚×‚Ä‚ÌÌ«°Ñ—v‘f‚©‚ç‚à‚±‚ê‚ªÃŞ°À¿°½‚Æ‚µ‚Äg‚í‚ê‚é‚½‚ß‚Å‚·B\nw’è‚µ‚½—ñ‚Í•Ê‚ÌÃŞ°ÀÍŞ°½ ($dropname$) ‚ÌÃ°ÌŞÙA‚Ü‚½‚Í¸´Ø°‚É‚Â‚È‚ª‚Á‚Ä‚¢‚Ü‚·B";
-    Text[ korean ] = "ÀÌ ¹®¼­ÀÇ ÀÌ¿­¿¡ ´ëÇØ¼­´Â Æû-ÄÁÆ®·Ñ ÇÊµå¸¦ »ı¼ºÇÒ ¼ö ¾ø½À´Ï´Ù:\n ¹®¼­´Â °íÁ¤µÈ µ¥ÀÌÅÍ º£ÀÌ½º($docname$)¿¡ ¼ÓÇÏ¸ç, µû¶ó¼­ ¸ğµç Æû ¿ä¼Ò¿¡ ÀÇÇØ µ¥ÀÌÅÍ¼Ò½º·Î¼­ »ç¿ëµË´Ï´Ù.\n ÇÏÁö¸¸ »ç¿ëÀÚ¿¡ ÀÇÇØ »ç¿ëµÈ¡¡¿­Àº ´Ù¸¥ µ¥ÀÌÅÍº£ÀÌ½º($dropname$)ÀÇ Ç¥ ¶Ç´Â ÁúÀÇ¿¡ ¼ÓÇÕ´Ï´Ù.";
+    Text[ korean ] = "ÀÌ ¹®¼­ÀÇ ÀÌ ¿­¿¡ ´ëÇØ¼­´Â Æû-ÄÁÆ®·Ñ ÇÊµå¸¦ »ı¼ºÇÒ ¼ö ¾ø½À´Ï´Ù:\n ¹®¼­´Â °íÁ¤µÈ µ¥ÀÌÅÍ º£ÀÌ½º($docname$)¿¡ ¼ÓÇÏ¸ç, µû¶ó¼­ ¸ğµç Æû ¿ä¼Ò¿¡ ÀÇÇØ µ¥ÀÌÅÍ¼Ò½º·Î¼­ »ç¿ëµË´Ï´Ù.\n ÇÏÁö¸¸ »ç¿ëÀÚ¿¡ ÀÇÇØ »ç¿ëµÈ¡¡¿­Àº ´Ù¸¥ µ¥ÀÌÅÍº£ÀÌ½º($dropname$)ÀÇ Ç¥ ¶Ç´Â ÁúÀÇ¿¡ ¼ÓÇÕ´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞ·¨ÎªÎÄµµÖĞµÄÕâÒ»ÁĞ½¨Á¢±íµ¥¿ØÖÆ×Ö¶Î£º\nÕâ¸öÎÄµµ¹éÊôÓÚÒ»¸öÓÉËùÓĞ±íµ¥ÔªËØµ±×÷Êı¾İÔ´Ê¹ÓÃµÄÊı¾İ¿â($docname$)¡£\nÄúÊ¹ÓÃµÄÕâÒ»ÁĞÈ´¹éÊôÓÚÁíÒ»¸öÊı¾İ¿â($dropname$)ÖĞµÄÒ»¸ö±í¸ñ»òÕß²éÑ¯¡£";
     Text[ chinese_traditional ] = "µLªk¬°³o­Ó¤å¥óªºÄæ¦ì«Ø¥ß±±¨î¶µ¡G\n³o­Ó¤å¥óÄİ©ó¤@­Ó©T©wªº¸ê®Æ®w¡C¦]¬°©Ò¦³ªí³æª«É²³£¨Ï¥Î³o­Ó¸ê®Æ®w¨Ó·½¡C\n¨Ï¥ÎªºÄæ¦ìÄİ©ó¥t¤@­Ó¸ê®Æ®w($dropname$)ªºªí®æ©M¬d¸ß¡C";
     Text[ arabic ] = "áÇ íãßäß ÅäÔÇÁ ÍŞæá ÊÍßã ÎÇÕÉ ÈÇÓÊãÇÑÉ İí åĞÇ ÇáãÓÊäÏ áåĞå ÇáÃÚãÏÉ:\níäÊãí åĞÇ ÇáãÓÊäÏ Åáì ŞÇÚÏÉ ÈíÇäÇÊ ËÇÈÊÉ ($docname$) íÊã ÇÓÊÎÏÇãåÇ ãä ŞÈá ßÇİÉ ÚäÇÕÑ ÇáÇÓÊãÇÑÉ ßãÕÏÑ ááÈíÇäÇÊ. \nÃãÇ ÇáÃÚãÏÉ ÇáÊí ÊÓÊÎÏãåÇ İåí ÊäÊãí Åáì ÌÏæá Ãæ ÇÓÊİÓÇÑ İí ŞÇÚÏÉ ÈíÇäÇÊ ÃÎÑì ($dropname$).";
