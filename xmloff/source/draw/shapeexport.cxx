@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-07 18:45:57 $
+ *  last change: $Author: cl $ $Date: 2000-12-11 07:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,7 @@ void XMLShapeExport::exportAutoStyles()
     with the exportShape method. Its ok to call this twice with the same shape */
 void XMLShapeExport::createShapeId( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape )
 {
+/*
     uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
     if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( msZIndex ) )
     {
@@ -300,12 +301,14 @@ void XMLShapeExport::createShapeId( const com::sun::star::uno::Reference < com::
     {
         DBG_ERROR( "createShapeId failed!" );
     }
+*/
 }
 
 /** returns the unique id for this shape. It returns -1 if the was no createShapeId call
     for this shape yet. */
 sal_Int32 XMLShapeExport::getShapeId( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape )
 {
+/*
     uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
     if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( msZIndex ) )
     {
@@ -319,6 +322,6 @@ sal_Int32 XMLShapeExport::getShapeId( const com::sun::star::uno::Reference < com
                 return maUsedShapeIds[i].mnShapeId;
         }
     }
-
+*/
     return -1;
 }
