@@ -270,6 +270,7 @@
                     <menu:menuitem menu:id=".uno:SpellOnline" menu:helpid="12021" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:HangulHanjaConversion" menu:helpid="10959" menu:label="" />
             <menu:menuitem menu:id=".uno:Thesaurus" menu:helpid="10245" menu:label="" />
             <menu:menuitem menu:id=".uno:Hyphenation" menu:helpid="27340" menu:label="" />
             <menu:menuseparator/>
