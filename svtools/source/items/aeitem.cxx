@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aeitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:19:41 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@
 
 DBG_NAME(SfxAllEnumItem);
 
+TYPEINIT1_AUTOFACTORY(SfxAllEnumItem, SfxEnumItem)
+
 // -----------------------------------------------------------------------
 
 struct SfxAllEnumValue_Impl
@@ -85,6 +87,13 @@ SV_DECL_PTRARR_DEL(SfxAllEnumValueArr, SfxAllEnumValue_Impl*, 0, 8);
 SV_IMPL_PTRARR(SfxAllEnumValueArr, SfxAllEnumValue_Impl*);
 
 // -----------------------------------------------------------------------
+
+SfxAllEnumItem::SfxAllEnumItem() :
+    SfxEnumItem(),
+    pValues( 0 ),
+    pDisabledValues( 0 )
+{
+}
 
 SfxAllEnumItem::SfxAllEnumItem( USHORT nWhich, USHORT nVal, const XubString &rText ):
     SfxEnumItem(nWhich, nVal),
