@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-10 12:22:32 $
+ *  last change: $Author: kz $ $Date: 2001-09-11 20:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ Menu MN_SPELL_POPUP
             Text = "~Rechtschreibung..." ;
             Text [ English ] = "~Spelling..." ;
             Text[ language_user1 ] = "triple dots (...) are required now at the end of the text";
-            Text [ english_us ] = "~Spellcheck..." ;
+            Text [ english_us ] = "~Spellcheck" ;
             Text [ italian ] = "Controllo ~ortografico" ;
             Text [ spanish ] = "Ortogra~fía" ;
             Text [ french ] = "~Orthographe" ;
@@ -128,7 +128,7 @@ Menu MN_SPELL_POPUP
             Text[ turkish ] = "Ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Incluir";
-            Text[ finnish ] = "~Lisää";
+            Text[ finnish ] = "~Lis??";
         };
         MenuItem
         {
@@ -311,6 +311,7 @@ String STR_HYP_OK
     Text[ catalan ] = "La separación silábica ha finalizado";
     Text[ finnish ] = "Tavutus valmis";
 };
+
 
 
 
