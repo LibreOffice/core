@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-08-09 11:06:23 $
+ *  last change: $Author: er $ $Date: 2001-08-22 11:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,6 @@ BOOL ScExportBase::GetDataArea( USHORT nTab, USHORT& nStartCol,
 {
     pDoc->GetDataStart( nTab, nStartCol, nStartRow );
     pDoc->GetPrintArea( nTab, nEndCol, nEndRow, TRUE );
-    if ( nStartCol > nEndCol )
-        nStartCol = nEndCol;
-    if ( nStartRow > nEndRow )
-        nStartRow = nEndRow;
     return TrimDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
