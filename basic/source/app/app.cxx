@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-28 14:43:03 $
+ *  last change: $Author: vg $ $Date: 2002-04-02 09:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,8 @@ void BasicApp::Main( )
         DirEntry aIniPath( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) );
         if ( !aIniPath.Exists() )
         {   // look for it besides the executable
-            String aAppDir ( DirEntry( GetAppFileName() ).GetPath().GetFull() );
+            DirEntry aAppFileName( GetAppFileName() );
+            String aAppDir ( aAppFileName.GetPath().GetFull() );
             DirEntry aDefIniPath( Config::GetConfigName( aAppDir, CUniString("testtool") ) );
 
             if ( aDefIniPath.Exists() )
