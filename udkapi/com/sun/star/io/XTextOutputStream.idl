@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextOutputStream.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com {  module sun {  module star {  module io {
     The character encoding to be used can be set by <member>
     setEncoding()</member>. Default encoding is "utf8".</p>
  */
-interface XTextOutputStream: com::sun::star::io::XOutputStream
+published interface XTextOutputStream: com::sun::star::io::XOutputStream
 {
     //-------------------------------------------------------------------------
     /** writes a string to the stream using the encoding
