@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-24 18:01:47 $
+ *  last change: $Author: mav $ $Date: 2002-07-30 11:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,11 +422,15 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 !(pSh->Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
                 break;
 
+            // while switching to ReadOnly mode the storage should
+            // be reloaded also
+            /*
             SFX_ITEMSET_ARG(
                 pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem,
                 SID_EDITDOC, sal_False );
             if ( pItem && !pItem->GetValue() )
                    break;
+            */
 
             sal_uInt16 nOpenMode;
             sal_Bool bNeedsReload = sal_False;
@@ -448,7 +452,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 nOpenMode = SFX_STREAM_READWRITE;
 
             // Parameter auswerten
-            sal_Bool bReload = sal_True;
+            // sal_Bool bReload = sal_True;
             if ( rReq.IsAPI() )
             {
                 // per API steuern ob r/w oder r/o
@@ -456,6 +460,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( pEditItem )
                     nOpenMode = pEditItem->GetValue() ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY;
             }
+            /* the code looks to be useless
+             * it could not be reached before becouse of just commented code above
+             * so now it should be commented out also
             else
             {
                 // sonst Reaload abschaltbar
@@ -464,6 +471,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( pReloadItem )
                     bReload = pReloadItem->GetValue();
             }
+            */
 
             // doing
             if( pSh  )
@@ -572,6 +580,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
                 }
 
+                /*
                 if ( !bReload )
                 {
                     // Es soll nicht reloaded werden
@@ -581,7 +590,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         SfxBoolItem( rReq.GetSlot(), sal_False ) );
                     return;
                 }
-
+                */
                 // Ansonsten ( lokal und arbeiten auf Kopie ) muss gereloaded
                 // werden.
             }
