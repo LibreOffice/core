@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:09:07 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1708,8 +1708,9 @@ IMPL_LINK( OTableEditorCtrl, DelayedPaste, void*, EMPTYTAG )
 {
     nPasteEvent = 0;
 
-    // die Zeile, bei der eigefuegt werden wuerde
-    sal_Int32 nPastePosition = GetSelectRowCount() ? FirstSelectedRow() : GetCurRow();
+    sal_Int32 nPastePosition = GetView()->getController()->getFirstEmptyRowPosition();
+    if ( !GetView()->getController()->getTable().is() )
+        nPastePosition = GetSelectRowCount() ? FirstSelectedRow() : GetCurRow();
 
     if (!IsInsertNewAllowed(nPastePosition))
     {   // kein Einfuegen erlaubt, sondern nur anhaengen, also testen, ob hinter der PastePosition noch
@@ -1745,9 +1746,13 @@ IMPL_LINK( OTableEditorCtrl, DelayedInsNewRows, void*, EMPTYTAG )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     nInsNewRowsEvent = 0;
-    InsertNewRows( GetSelectRowCount() ? FirstSelectedRow() : m_nDataPos );
+    sal_Int32 nPastePosition = GetView()->getController()->getFirstEmptyRowPosition();
+    if ( !GetView()->getController()->getTable().is() )
+        nPastePosition = GetSelectRowCount() ? FirstSelectedRow() : m_nDataPos;
+
+    InsertNewRows( nPastePosition );
     SetNoSelection();
-    GoToRow( m_nDataPos );
+    GoToRow( nPastePosition );
 
     return 0;
 }
