@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-08 12:49:25 $
+ *  last change: $Author: nf $ $Date: 2000-12-18 11:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,8 +295,12 @@ void Export::QuotHTML( ByteString &rString )
     for ( ULONG i = 0; i < rString.Len(); i++ ) {
         ByteString sTemp = rString.Copy( i );
         if ( sTemp.Search( "<Arg n=" ) == 0 ) {
-            while ( i == rString.Len() || rString.GetChar( i ) == '>' ) {
+            while ( i < rString.Len() && rString.GetChar( i ) != '>' ) {
                  sReturn += rString.GetChar( i );
+                i++;
+            }
+            if ( rString.GetChar( i ) == '>' ) {
+                sReturn += ">";
                 i++;
             }
         }
