@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-24 14:34:14 $
+ *  last change: $Author: abi $ $Date: 2001-08-24 14:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,12 +496,27 @@ int KeywordInfo::Compare::operator()( const rtl::OUString& l,const rtl::OUString
     if( m_xCollator.is() )
     {
         sal_Int32 l1 = l.indexOf( sal_Unicode( ';' ) );
+        sal_Int32 l3;
+        if( l1 == -1 )
+            // Compare the whole length
+            l3 = l.getLength();
+        else
+            // Only until ;
+            l3 = l1;
+
         sal_Int32 l2 = l.getLength() - l1 - 1;
 
         sal_Int32 r1 = r.indexOf( sal_Unicode( ';' ) );
+        sal_Int32 r3;
+        if( r1 == -1 )
+            // Compare the whole length
+            r3 = r.getLength();
+        else
+            // Only until ;
+            r3 = r1;
         sal_Int32 r2 = r.getLength() - r1 - 1;
 
-        sal_Int32 c1 = m_xCollator->compareSubstring( l,0,l1,r,0,r1 );
+        sal_Int32 c1 = m_xCollator->compareSubstring( l,0,l3,r,0,r3 );
 
         if( c1 == +1 )
             return 0;
