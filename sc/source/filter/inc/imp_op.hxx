@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:20:43 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,8 @@ protected:
     void                    Row25( void );                  // 0x08
     void                    Bof2( void );                   // 0x09
     void                    Eof( void );                    // 0x0A
+    void                    DocProtect( void );             // 0x12
+    void                    Protect( void );                // 0x12 Sheet Protection
     BOOL                    Password( void );               // 0x13
     void                    Header( void );                 // 0x14
     void                    Footer( void );                 // 0x15

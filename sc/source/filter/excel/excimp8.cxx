@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-27 15:12:12 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,16 +547,6 @@ void ImportExcel8::Iteration( void )
     ScDocOptions    aOpt = pD->GetDocOptions();
     aOpt.SetIter( aIn.ReaduInt16() == 1 );
     pD->SetDocOptions( aOpt );
-}
-
-
-void ImportExcel8::Protect( void )
-{
-    if( aIn.ReaduInt16() )
-    {
-        uno::Sequence<sal_Int8> aEmptyPass;
-        GetDoc().SetTabProtection( GetScTab(), TRUE, aEmptyPass );
-    }
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-11-26 10:31:39 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,8 +161,6 @@ const ULONG ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
 
 //-------------------------------------------------------- class ExcDummy_04x -
 const BYTE      ExcDummy_040::pMyData[] = {
-    0x19, 0x00, 0x02, 0x00, 0x00, 0x00,                     // WINDOWPROTECT
-    0x12, 0x00, 0x02, 0x00, 0x00, 0x00,                     // PROTECT
     0x13, 0x00, 0x02, 0x00, 0x00, 0x00,                     // PASSWORD
     0x3d, 0x00, 0x12, 0x00, 0xe0, 0x01, 0x5a, 0x00, 0xcf,   // WINDOW1
     0x3f, 0x4e, 0x2a, 0x38, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -657,7 +655,6 @@ const BYTE* ExcDummy_Style::GetData( void ) const
 {
     return pMyData;
 }
-
 
 
 //------------------------------------------------------ class ExcBundlesheet -
@@ -3115,6 +3112,19 @@ XclExpWsbool::XclExpWsbool( RootData& rRootData ) :
         SetValue( GetValue() | EXC_WSBOOL_FITTOPAGE );
 }
 
+// XclExpWindowProtection ===============================================================
+
+XclExpWindowProtection::XclExpWindowProtection(bool bValue) :
+    XclExpBoolRecord(EXC_ID_WINDOWPROTECT,bValue)
+{
+}
+
+// XclExpDocProtection ===============================================================
+
+XclExpDocProtection::XclExpDocProtection(bool bValue) :
+    XclExpBoolRecord(EXC_ID_PROTECT,bValue)
+{
+}
 
 //------------------------------------------------------------ class ExcSetup -
 

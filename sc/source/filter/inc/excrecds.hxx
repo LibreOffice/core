@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:20:42 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,9 +312,23 @@ public:
     virtual const BYTE*     GetData( void ) const;
 };
 
+// EXC_ID_WINDOWPROTECTION
+class XclExpWindowProtection : public   XclExpBoolRecord
+{
+    public:
+        XclExpWindowProtection(bool bValue);
+};
+
+// EXC_ID_PROTECT  Document Protection
+class XclExpDocProtection : public  XclExpBoolRecord
+{
+    public:
+        XclExpDocProtection(bool bValue);
+};
+
 
 //-------------------------------------------------------- class ExcDummy_04x -
-// WINDOWPROTECT to BOOKBOOL (see excrecds.cxx), no 1904
+// PASSWORD to BOOKBOOL (see excrecds.cxx), no 1904
 
 class ExcDummy_040 : public ExcDummyRec
 {

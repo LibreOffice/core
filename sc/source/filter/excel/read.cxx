@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:16:02 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,7 @@ FltError ImportExcel::Read( void )
                         EndSheet();
                         eAkt = Z_Ende;
                         break;
+                    case 0x12:  Protect(); break;       // SHEET PROTECTION
                     case 0x14:  Header(); break;        // HEADER       [ 2345]
                     case 0x15:  Footer(); break;        // FOOTER       [ 2345]
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
@@ -393,6 +394,7 @@ FltError ImportExcel::Read( void )
                     case 0x0A:                          // EOF          [ 2345]
                         eAkt = Z_Ende;
                         break;
+                    case 0x12:  DocProtect(); break;    // PROTECT      [    5]
                     case 0x2F:                          // FILEPASS     [ 2345]
                         if( Filepass() )
                         {
@@ -438,6 +440,7 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff4E;
                         IncScTab();
                         break;
+                    case 0x12:  Protect(); break;       // SHEET PROTECTION
                     case 0x14:  Header(); break;        // HEADER       [ 2345]
                     case 0x15:  Footer(); break;        // FOOTER       [ 2345]
                     case 0x1A:  Verticalpagebreaks(); break;
@@ -563,6 +566,7 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff5W;
                         aIn.SeekGlobalPosition();  // und zurueck an alte Position
                         break;
+                    case 0x12:  DocProtect(); break;    // PROTECT      [    5]
                     case 0x2F:                          // FILEPASS     [ 2345]
                         if( Filepass() )
                         {
@@ -856,6 +860,7 @@ FltError ImportExcel::Read( void )
                             aIn.SeekGlobalPosition(); // und zurueck an alte Position
                             pColRowBuff->Apply( GetScTab() );
                             break;
+                        case 0x12:  Protect(); break;       // SHEET PROTECTION
                         case 0x1A:  Verticalpagebreaks(); break;
                         case 0x1B:  Horizontalpagebreaks(); break;
                         case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
@@ -1100,6 +1105,7 @@ FltError ImportExcel8::Read( void )
                         eAkt = Z_Biff8W;
                         aIn.SeekGlobalPosition();          // und zurueck an alte Position
                         break;
+                    case 0x12:  DocProtect(); break;    // PROTECT      [    5678]
                     case 0x2F:                          // FILEPASS     [ 2345   ]
                         if( Filepass() )
                         {

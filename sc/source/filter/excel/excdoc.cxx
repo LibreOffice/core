@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:15:59 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,8 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         // Names
         Add( pNameList );
 
+        Add( new XclExpWindowProtection(false) );
+        Add( new XclExpDocProtection(rDoc.IsDocProtected() == TRUE) );
         Add( new ExcDummy_040 );
         Add( new Exc1904( rDoc ) );
         Add( new ExcDummy_041 );
@@ -374,6 +376,8 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     }
     else
     {
+        Add( new XclExpWindowProtection(false) );
+        Add( new XclExpDocProtection(rDoc.IsDocProtected() == TRUE) );
         Add( new ExcDummy8_040 );
         Add( new ExcWindow18( rR ) );
         Add( new Exc1904( rDoc ) );
@@ -629,9 +633,9 @@ void ExcTable::FillAsTable( void )
     {
         Add( new XclExpBitmap( *rR.pER ) );
 
-        if( rDoc.IsTabProtected( nScTab ) )
-            Add( new XclProtection() );
     }
+    if( rDoc.IsTabProtected( nScTab ) )
+        Add( new XclProtection() );
 
     if ( eDateiTyp < Biff8 && rR.pExtSheetCntAndRecs )
         Add( new ExcExternDup( *rR.pExtSheetCntAndRecs ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:17 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,11 @@ const sal_uInt16 EXC_ID_LEFTMARGIN          = 0x0026;
 const sal_uInt16 EXC_ID_RIGHTMARGIN         = 0x0027;
 const sal_uInt16 EXC_ID_TOPMARGIN           = 0x0028;
 const sal_uInt16 EXC_ID_BOTTOMMARGIN        = 0x0029;
+
+// (0x0012, 0x0019) PROTECT and WINDOWPROTECT --------------------
+
+const sal_uInt16 EXC_ID_PROTECT             = 0x0012;
+const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
 
 
 // (0x0031) FONT --------------------------------------------------------------

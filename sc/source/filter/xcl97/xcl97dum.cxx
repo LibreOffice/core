@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97dum.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-16 11:38:40 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,6 @@ const ULONG ExcDummy8_00b::nMyLen = sizeof(ExcDummy8_00b::pMyData);
 
 
 const BYTE ExcDummy8_040::pMyData[] = {
-    0x19, 0x00, 0x02, 0x00, 0x00, 0x00,                     // WINDOWPROTECT
-    0x12, 0x00, 0x02, 0x00, 0x00, 0x00,                     // PROTECT
     0x13, 0x00, 0x02, 0x00, 0x00, 0x00,                     // PASSWORD
     0xaf, 0x01, 0x02, 0x00, 0x00, 0x00,                     // PROT4REV (8+)
     0xbc, 0x01, 0x02, 0x00, 0x00, 0x00,                     // PROT4REVPASS (8+)

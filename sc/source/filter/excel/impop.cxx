@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:16:01 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,6 +909,24 @@ void ImportExcel::Prntgrdlns( void )
         pStyleSheetItemSet->Put( SfxBoolItem( ATTR_PAGE_GRID, TRUE ) );
     else
         pStyleSheetItemSet->Put( SfxBoolItem( ATTR_PAGE_GRID, FALSE ) );
+}
+
+void ImportExcel::Protect( void )
+{
+    if( aIn.ReaduInt16() )
+    {
+        uno::Sequence<sal_Int8> aEmptyPass;
+        GetDoc().SetTabProtection( GetScTab(), TRUE, aEmptyPass );
+    }
+}
+
+void ImportExcel::DocProtect( void )
+{
+    if( aIn.ReaduInt16() )
+    {
+        uno::Sequence<sal_Int8> aEmptyPass;
+        GetDoc().SetDocProtection( TRUE, aEmptyPass );
+    }
 }
 
 
