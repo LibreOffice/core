@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-15 09:12:04 $
+ *  last change: $Author: fs $ $Date: 2002-04-16 08:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,7 +876,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
-        Text = "Am Ende des ~Textes" ;
+        Text = "Rechts/Unten" ;
         Text [ ENGLISH ] = "At ~end of text" ;
     };
     RadioButton BTN_CENTERALIGN
