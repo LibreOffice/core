@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-19 17:04:20 $
+ *  last change: $Author: mba $ $Date: 2000-10-20 17:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,7 @@ void SfxMedium::Done_Impl( ErrCode nError )
     DELETEZ( pImp->pCancellable );
     pImp->bDownloadDone = sal_True;
     SetError( nError );
-    if ( pImp->bStreamReady )
+    if ( pImp->bStreamReady || !pInStream )
     {
         pImp->aDoneLink.ClearPendingCall();
         pImp->aDoneLink.Call( (void*) nError );
@@ -1424,6 +1424,10 @@ void SfxMedium::GetMedium_Impl()
 
             pInStream = new SvStream( xLockBytes );
             pImp->bStreamReady = sal_True;
+        }
+        else
+        {
+            Done_Impl( ERRCODE_IO_NOTEXISTS );
         }
     }
 
