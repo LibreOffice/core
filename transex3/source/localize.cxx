@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-23 14:13:41 $
+ *  last change: $Author: nf $ $Date: 2001-08-24 10:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,6 +543,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
                 sOutput.GetBuffer());
         }
         else {
+            FileStat::SetReadOnlyFlag( aEntry, FALSE );
             SvFileStream aOutStream( aEntry.GetFull(), STREAM_STD_WRITE | STREAM_TRUNC );
             if ( !aOutStream.IsOpen()) {
                 fprintf( stderr,
