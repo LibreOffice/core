@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicrt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: gh $ $Date: 2001-11-06 13:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,11 @@ xub_StrLen BasicRuntime::GetCol1()
 xub_StrLen BasicRuntime::GetCol2()
 {
     return pRun->nCol2;
+}
+
+BOOL BasicRuntime::IsRun()
+{
+    return pRun->IsRun();
 }
 
 BasicRuntime BasicRuntime::GetNextRuntime()

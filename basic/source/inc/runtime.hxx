@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 09:53:57 $
+ *  last change: $Author: gh $ $Date: 2001-11-06 13:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,6 +473,7 @@ public:
     void FatalError( SbError );     // Fehlerbehandlung=Standard, Fehler setzen
     BOOL Step();                    // Einzelschritt (ein Opcode)
     void Stop()            { bRun = FALSE;   }
+    BOOL IsRun()           { return bRun;    }
     SbMethod* GetMethod()  { return pMeth;   }
     SbModule* GetModule()  { return pMod;    }
     USHORT GetDebugFlags() { return nFlags;  }
