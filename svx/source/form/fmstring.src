@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:38:43 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,6 +1399,12 @@ String RID_STR_IMAGECONTROL_CLASSNAME
 String RID_STR_HIDDEN_CLASSNAME
 {
     Text = "HiddenControl" ;
+};
+String RID_STR_NAVBAR_CLASSNAME
+{
+    Text = "Navigationsleiste" ;
+    Text [ english ] = "NavigationBar";
+    Text [ english_us ] = "NavigationBar";
 };
 
 String RID_STR_CLASSNAME_SCROLLBAR
@@ -3896,35 +3902,8 @@ String RID_STR_TAG
 String RID_STR_ECHO_CHAR
 {
     Text = "Zeichen für Passwörter" ;
-    Text [ English ] = "Password char" ;
-    Text [ portuguese ] = "Caracteres para senhas" ;
-    Text [ english_us ] = "Password characters" ;
-    Text [ portuguese_brazilian ] = "Caracteres para senhas" ;
-    Text [ swedish ] = "Tecken för lösenord" ;
-    Text [ danish ] = "Tegn til adgangskoder" ;
-    Text [ italian ] = "Caratteri per le password" ;
-    Text [ spanish ] = "Caracteres para contraseñas" ;
-    Text [ french ] = "Caractères pour mots de passe" ;
-    Text [ dutch ] = "Tekens voor wachtwoorden" ;
-    Text[ chinese_simplified ] = "å¯†ç å­—ç¬¦";
-    Text[ russian ] = "Ñèìâîëû ïàğîëÿ";
-    Text[ polish ] = "Znaki hase³";
-    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ç”¨ã®è¨˜å·";
-    Text[ chinese_traditional ] = "å¯†ç¢¼å­—å…ƒ";
-    Text[ greek ] = "×áñáêôŞñåò ãéá êùäéêïıò ğñüóâáóçò";
-    Text[ korean ] = "ì•”í˜¸ìš© ë¬¸ì";
-    Text[ arabic ] = "ÃÍÑİ ßáãÇÊ ÇáÓÑ";
-    Text[ turkish ] = "Şifre karakterleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Caràcters per contrasenyes";
-    Text[ finnish ] = "Salasanan merkit";
-    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
-    Text[ czech ] = "Znaky hesla";
-    Text[ hebrew ] = "â€®×ª×•×™ ×¡×™×¡××”â€¬";
-    Text[ hindi ] = "à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤…à¤•à¥à¤·à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Znaky hesla";
-    Text[ hungarian ] = "JelszÃ³karakterek";
-    Text[ slovenian ] = "Skriti znaki";
+    Text [ english ] = "Password character" ;
+    Text [ english_us ] = "Password character" ;
 };
 String RID_STR_EMPTY_IS_NULL
 {
@@ -4664,6 +4643,12 @@ String RID_STR_PROPTITLE_SPINBUTTON
     Text = "Drehfeld" ;
     Text [ english ] = "Spin Button" ;
     Text [ english_us ] = "Spin Button" ;
+};
+String RID_STR_PROPTITLE_NAVBAR
+{
+    Text = "Navigationsleiste";
+    Text [ english ] = "Navigation Bar";
+    Text [ english_us ] = "Navigation Bar";
 };
 String RID_STR_PROPTITLE_MULTISELECT
 {
