@@ -2,10 +2,6 @@
  *
  *  $RCSfile: AccessibleComponentImpl.java,v $
  *
- *  $Revision: 1.3 $
- *
- *  last change: $Author: hr $ $Date: 2003-03-18 15:48:16 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,10 +57,10 @@
 
 package org.openoffice.java.accessibility;
 
-import drafts.com.sun.star.accessibility.AccessibleStateType;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-// import drafts.com.sun.star.accessibility.XAccessibleExtendedComponent;
+import com.sun.star.accessibility.AccessibleStateType;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleComponent;
+// import com.sun.star.accessibility.XAccessibleExtendedComponent;
 import com.sun.star.uno.UnoRuntime;
 
 public class AccessibleComponentImpl implements javax.accessibility.AccessibleComponent {
@@ -167,7 +163,7 @@ public class AccessibleComponentImpl implements javax.accessibility.AccessibleCo
 
     public boolean contains(java.awt.Point p) {
         try {
-            return unoObject.contains(new com.sun.star.awt.Point(p.x, p.y));
+            return unoObject.containsPoint(new com.sun.star.awt.Point(p.x, p.y));
         } catch (com.sun.star.uno.RuntimeException e) {
             return false;
         }

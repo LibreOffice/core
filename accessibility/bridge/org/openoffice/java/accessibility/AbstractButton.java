@@ -60,7 +60,7 @@ package org.openoffice.java.accessibility;
 import javax.accessibility.AccessibleState;
 
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 /**
  */
