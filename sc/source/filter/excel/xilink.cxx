@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:29:43 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,8 @@ const XclImpExtName* XclImpExtNameList::GetName( sal_uInt16 nXclIndex ) const
 
 // Cached external cells ======================================================
 
-XclImpCrn::XclImpCrn( XclImpStream& rStrm, ExcelToSc& rFmlaConv, sal_uInt16 nCol, sal_uInt16 nRow ) :
-    XclImpCachedValue( rStrm, rFmlaConv ),
+XclImpCrn::XclImpCrn( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow ) :
+    XclImpCachedValue( rStrm ),
     mnCol( nCol ),
     mnRow( nRow )
 {
@@ -254,7 +254,7 @@ void XclImpSupbook::ReadXct( XclImpStream& rStrm )
     rStrm >> mnCurrExcTab;
 }
 
-void XclImpSupbook::ReadCrn( XclImpStream& rStrm, ExcelToSc& rFmlaConv )
+void XclImpSupbook::ReadCrn( XclImpStream& rStrm )
 {
     XclImpSupbookTab* pTab = maSupbookTabList.GetObject( mnCurrExcTab );
     if( pTab )
@@ -264,7 +264,7 @@ void XclImpSupbook::ReadCrn( XclImpStream& rStrm, ExcelToSc& rFmlaConv )
         rStrm >> nLastCol >> nFirstCol >> nRow;
 
         for( sal_uInt16 nCol = nFirstCol; (nCol <= nLastCol) && (rStrm.GetRecLeft() > 1); ++nCol )
-            pTab->AppendCrn( new XclImpCrn( rStrm, rFmlaConv, nCol, nRow ) );
+            pTab->AppendCrn( new XclImpCrn( rStrm, nCol, nRow ) );
     }
 }
 
@@ -388,11 +388,11 @@ void XclImpLinkManager::ReadXct( XclImpStream& rStrm )
         pSupbook->ReadXct( rStrm );
 }
 
-void XclImpLinkManager::ReadCrn( XclImpStream& rStrm, ExcelToSc& rFmlaConv )
+void XclImpLinkManager::ReadCrn( XclImpStream& rStrm )
 {
     XclImpSupbook* pSupbook = maSupbookBuffer.GetCurrSupbook();
     if( pSupbook )
-        pSupbook->ReadCrn( rStrm, rFmlaConv );
+        pSupbook->ReadCrn( rStrm );
 }
 
 void XclImpLinkManager::ReadExternname( XclImpStream& rStrm )
