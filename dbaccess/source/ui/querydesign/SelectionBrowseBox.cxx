@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:07:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1767,7 +1767,7 @@ void OSelectionBrowseBox::CheckFreeColumns(USHORT& _rColumnPosition)
     }
 }
 //------------------------------------------------------------------------------
-void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo )
+void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt32 _nCurrentPos)
 {
     Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
     if(!xConnection.is())
@@ -1777,8 +1777,11 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo )
     OTableFieldDescRef pEntry;
     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
     ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers());
-    OTableFields::iterator aIter = getFields().begin();
-    for(;aIter != getFields().end();++aIter)
+    sal_Bool bAppend = sal_False;
+
+    OTableFields& rFields = getFields();
+    OTableFields::iterator aIter = rFields.begin();
+    for(;aIter != rFields.end();++aIter)
     {
         pEntry = *aIter;
         OSL_ENSURE(pEntry.isValid(),"OTableFieldDescRef was null!");
@@ -1790,19 +1793,26 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo )
             bCase(aAlias,rInfo->GetAlias()) &&
             pEntry->GetFunctionType() == rInfo->GetFunctionType())
         {
-            if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
-                pEntry->SetGroupBy(sal_False);
+            sal_uInt32 nPos = aIter - rFields.begin();
+            bAppend = _nCurrentPos > nPos;
+            if ( bAppend )
+                aIter = rFields.end();
             else
             {
-                pEntry->SetGroupBy(rInfo->IsGroupBy());
-                if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
-                    pEntry->SetVisible(sal_True);
+                if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
+                    pEntry->SetGroupBy(sal_False);
+                else
+                {
+                    pEntry->SetGroupBy(rInfo->IsGroupBy());
+                    if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
+                        pEntry->SetVisible(sal_True);
+                }
             }
             break;
         }
     }
 
-    if (aIter == getFields().end())
+    if (aIter == rFields.end())
     {
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, sal_False, sal_False );
         if ( (pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy()) ) // das GroupBy wird bereits von rInfo "ubernommen
@@ -1874,21 +1884,21 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
 }
 
 //------------------------------------------------------------------------------
-void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrderDir eDir, sal_uInt16& nPos )
+void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrderDir eDir, sal_uInt32 _nCurrentPos)
 {
     Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
     if(!xConnection.is())
         return;
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DBG_ASSERT(!rInfo->IsEmpty(),"AddOrder:: OTableFieldDescRef sollte nicht Empty sein!");
-    // nPos merkt sich die Spalte in die Sortierung eingetragen wird,
-    // da weitere Sortierungen nur dahinter abgelegt werden duerfen
     OTableFieldDescRef pEntry;
     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
     ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers());
 
-    OTableFields::iterator aIter = getFields().begin();
-    for(;aIter != getFields().end();++aIter)
+    sal_Bool bAppend = sal_False;
+    OTableFields& rFields = getFields();
+    OTableFields::iterator aIter = rFields.begin();
+    for(;aIter != rFields.end();++aIter)
     {
         pEntry = *aIter;
         ::rtl::OUString aField = pEntry->GetField();
@@ -1897,25 +1907,29 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
         if (bCase(aField,rInfo->GetField()) &&
             bCase(aAlias,rInfo->GetAlias()))
         {
-            if(!m_bOrderByUnRelated)
-                pEntry->SetVisible(sal_True);
-            pEntry->SetOrderDir( eDir );
-            nPos = aIter - getFields().begin();
+            sal_uInt32 nPos = aIter - rFields.begin();
+            bAppend = _nCurrentPos > nPos;
+            if ( bAppend )
+                aIter = rFields.end();
+            else
+            {
+                if ( !m_bOrderByUnRelated )
+                    pEntry->SetVisible(sal_True);
+                pEntry->SetOrderDir( eDir );
+            }
             break;
         }
     }
 
-    if (aIter == getFields().end())
+    if (aIter == rFields.end())
     {
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, sal_False, sal_False );
         if(pTmp.isValid())
         {
-            if(!m_bOrderByUnRelated)
+            if ( !m_bOrderByUnRelated && !bAppend )
                 pTmp->SetVisible(sal_True);
             pTmp->SetOrderDir( eDir );
         }
-
-        nPos = (sal_uInt16)( getFields().size()-1 );
     }
 }
 
