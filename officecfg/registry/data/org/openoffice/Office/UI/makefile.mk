@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:33:15 $
+#   last change: $Author: obo $ $Date: 2004-07-06 14:24:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,16 @@ XCUFILES= \
     GenericCommands.xcu \
     MathCommands.xcu \
     StartModuleCommands.xcu \
-    WriterCommands.xcu
+    BasicIDEWindowState.xcu \
+    CalcWindowState.xcu \
+    DrawWindowState.xcu \
+    ImpressWindowState.xcu \
+    MathWindowState.xcu \
+    StartModuleWindowState.xcu \
+    WriterWindowState.xcu \
+    WriterGlobalWindowState.xcu \
+    WriterWebWindowState.xcu \
+     WriterCommands.xcu
 
 LOCALIZEDFILES= \
     BasicIDECommands.xcu \
@@ -94,6 +103,15 @@ LOCALIZEDFILES= \
     GenericCommands.xcu \
     MathCommands.xcu \
     StartModuleCommands.xcu \
+    BasicIDEWindowState.xcu \
+    CalcWindowState.xcu \
+    DrawWindowState.xcu \
+    ImpressWindowState.xcu \
+    MathWindowState.xcu \
+    StartModuleWindowState.xcu \
+    WriterWindowState.xcu \
+    WriterGlobalWindowState.xcu \
+    WriterWebWindowState.xcu \
     WriterCommands.xcu
 
 .INCLUDE :  target.mk
