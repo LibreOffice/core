@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-29 14:53:43 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 14:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,7 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
                             if (xParseNode.is())
                             {
                                 aCriteria = ::rtl::OUString();
-                                xParseNode->parseNodeToStr(aCriteria, xMetaData);
+                                xParseNode->parseNodeToStr(aCriteria, xMetaData,getParseContext());
                                 aFilter += aCriteria;
                             }
                         }

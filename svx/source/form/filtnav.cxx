@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 08:40:07 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 14:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1044,7 +1044,8 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
         xParseNode->parseNodeToPredicateStr(aPreparedText,
                                    xConnection->getMetaData(),
                                    xFormatter,
-                                   xField,aAppLocale,'.');
+                                   xField,aAppLocale,'.',
+                                   getParseContext());
         rText = aPreparedText;
         return sal_True;
     }
