@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:19:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1476,7 +1476,7 @@ public:
     SW_DLLPUBLIC void UpdateDocStat( SwDocStat& rStat );
 
     sal_uInt16 GetPageCount() const;
-    const Size GetPageSize( sal_uInt16 nPageNum ) const;
+    const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
 
         //PageDescriptor-Schnittstelle
     sal_uInt16 GetPageDescCnt() const { return aPageDescs.Count(); }
