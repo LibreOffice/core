@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-26 13:30:03 $
+ *  last change: $Author: tbe $ $Date: 2002-09-04 15:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,6 +436,29 @@ Window* VCLXAccessibleComponent::GetWindow() const
     return GetVCLXWindow() ? GetVCLXWindow()->GetWindow() : NULL;
 }
 
+void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
+{
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        Window *pLabeledBy = pWindow->GetLabeledBy();
+        if ( pLabeledBy && pLabeledBy != pWindow )
+        {
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+            aSequence[0] = pLabeledBy->GetAccessible();
+            rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
+        }
+
+        Window* pLabelFor = pWindow->GetLabelFor();
+        if ( pLabelFor && pLabelFor != pWindow )
+        {
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+            aSequence[0] = pLabelFor->GetAccessible();
+            rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABEL_FOR, aSequence ) );
+        }
+    }
+}
+
 void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
     Window* pWindow = GetWindow();
@@ -658,27 +681,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent:
 
     utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     uno::Reference< accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
-
-    Window* pWindow = GetWindow();
-    if ( pWindow )
-    {
-        Window *pLabeledBy = pWindow->GetLabeledBy();
-        if ( pLabeledBy && pLabeledBy != pWindow )
-        {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
-            aSequence[0] = pLabeledBy->GetAccessible();
-            pRelationSetHelper->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
-        }
-
-        Window* pLabelFor = pWindow->GetLabelFor();
-        if ( pLabelFor && pLabelFor != pWindow )
-        {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
-            aSequence[0] = pLabelFor->GetAccessible();
-            pRelationSetHelper->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABEL_FOR, aSequence ) );
-        }
-    }
-
+    FillAccessibleRelationSet( *pRelationSetHelper );
     return xSet;
 }
 
@@ -690,7 +693,6 @@ uno::Reference< accessibility::XAccessibleStateSet > VCLXAccessibleComponent::ge
     uno::Reference< accessibility::XAccessibleStateSet > xSet = pStateSetHelper;
     FillAccessibleStateSet( *pStateSetHelper );
     return xSet;
-//    return NULL;
 }
 
 lang::Locale VCLXAccessibleComponent::getLocale() throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-26 13:27:15 $
+ *  last change: $Author: tbe $ $Date: 2002-09-04 15:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ class VclSimpleEvent;
 class VclWindowEvent;
 
 namespace utl {
+class AccessibleRelationSetHelper;
 class AccessibleStateSetHelper;
 }
 
@@ -137,6 +138,7 @@ protected:
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void    FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet );
     virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent ) const;
