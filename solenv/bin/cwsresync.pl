@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-14 11:33:30 $
+#   last change: $Author: vg $ $Date: 2005-01-24 15:07:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.13 $ ';
+my $id_str = ' $Revision: 1.14 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -124,7 +124,6 @@ my %obligatory_modules = ();
 $obligatory_modules{'solenv'}++;
 $obligatory_modules{'default_images'}++;
 $obligatory_modules{'custom_images'}++;
-$obligatory_modules{'postprocess'}++;
 $obligatory_modules{'instset_native'}++;
 $obligatory_modules{'instsetoo_native'}++;
 $obligatory_modules{'smoketest_native'}++;
@@ -699,7 +698,8 @@ sub copyprj_module
     $ENVHASH{'i_server'} = '';
     $ENVHASH{'current_dir'} = cwd();
     $ENVHASH{'remote'} = '';
-    $ENVHASH{'opt_force_checkout'} = 1 if ($opt_force_checkout);
+    $ENVHASH{'force_checkout'} = 1 if ($opt_force_checkout);
+    $ENVHASH{RESYNC_UPDMINOR} = $opt_link if (defined $opt_link);
 
     $projects_to_copy{$module_name}++;
 
