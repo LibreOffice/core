@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:08:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ __EXPORT ScPreviewShell::~ScPreviewShell()
     //  so there's no need to activate any other window here anymore
 }
 
-void ScPreviewShell::InitStartTable(USHORT nTab)
+void ScPreviewShell::InitStartTable(SCTAB nTab)
 {
     pPreview->SetPageNo( pPreview->GetFirstPage(nTab) );
 }
@@ -271,7 +271,7 @@ Size __EXPORT ScPreviewShell::GetOptimalSizePixel() const
     if ( pViewSh )
     {
         ScViewData*         pViewData   = pViewSh->GetViewData();
-        USHORT              nCurTab     = pViewData->GetTabNo();
+        SCTAB               nCurTab     = pViewData->GetTabNo();
         ScDocument*         pDoc        = pDocShell->GetDocument();
         ScStyleSheetPool*   pStylePool  = pDoc->GetStyleSheetPool();
         SfxStyleSheetBase*  pStyleSheet = pStylePool->Find(
@@ -333,7 +333,7 @@ void __EXPORT ScPreviewShell::OuterResizePixel( const Point &rOfs, const Size &r
 void ScPreviewShell::UpdateScrollBars()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    USHORT nTab = pPreview->GetTab();
+    SCTAB nTab = pPreview->GetTab();
 
     ScStyleSheetPool*   pStylePool  = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase*  pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ),
@@ -508,9 +508,9 @@ USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, PrintDialog* pPri
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
 
     // get the list of affected sheets (using the "only selected sheets" option) before SfxViewShell::Print
-    USHORT nTabCount = pDocShell->GetDocument()->GetTableCount();
+    SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
     uno::Sequence<sal_Int32> aSheets(nTabCount);
-    for ( USHORT nTab=0; nTab<nTabCount; nTab++ )
+    for ( SCTAB nTab=0; nTab<nTabCount; nTab++ )
         aSheets[nTab] = nTab;
 
     uno::Sequence < beans::PropertyValue > aProps(1);
@@ -719,7 +719,7 @@ void __EXPORT ScPreviewShell::GetState( SfxItemSet& rSet )
 {
     pPreview->SetInGetState(TRUE);
 
-    USHORT nTab     = pPreview->GetTab();
+    SCTAB nTab      = pPreview->GetTab();
     long nPage      = pPreview->GetPageNo();
     long nTotal     = pPreview->GetTotalPages();
     USHORT nZoom    = pPreview->GetZoom();
@@ -788,7 +788,7 @@ void __EXPORT ScPreviewShell::GetState( SfxItemSet& rSet )
 void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    USHORT nTab = pPreview->GetTab();
+    SCTAB nTab = pPreview->GetTab();
     pDoc->GetName( nTab, rData.aTabName );
 
     rData.aTitle        = pDocShell->GetTitle();
