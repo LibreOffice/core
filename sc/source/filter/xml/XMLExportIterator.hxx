@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-08 18:28:50 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,7 @@ public:
 
     void                        AddObject(
                                     ScDetectiveObjType eObjType,
+                                    const sal_uInt16 nSheet,
                                     const ScAddress& rPosition,
                                     const ScRange& rSourceRange,
                                     sal_Bool bHasError );
