@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-25 13:06:42 $
+ *  last change: $Author: mt $ $Date: 2001-08-08 10:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1690,6 +1690,10 @@ void Edit::Command( const CommandEvent& rCEvt )
             SetCursorRect( NULL, GetTextWidth(
                 maText, nCursorPos, mpIMEInfos->nPos+mpIMEInfos->nLen-nCursorPos ) );
         }
+        else
+        {
+            SetCursorRect();
+        }
     }
     else
         Control::Command( rCEvt );
@@ -2360,6 +2364,10 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
 
 void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if ( !mpDDInfo )
+    {
+        mpDDInfo = new DDInfo;
+    }
     sal_Bool bTextContent = mbReadOnly ? sal_False : sal_True;   // quiery from rDTDEE.SupportedDataFlavors()
 //    if ( bTextContent )
 //        rDTDEE.Context->acceptDrop(datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE);
@@ -2379,9 +2387,6 @@ void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEv
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
     BOOL bDrop = FALSE;
-
-    if ( !mpDDInfo )
-        mpDDInfo = new DDInfo;
 
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
 
@@ -2411,7 +2416,7 @@ void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEv
             ImplHideDDCursor();
             ImplShowDDCursor();
         }
-        rDTDE.Context->acceptDrag(datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE);
+        rDTDE.Context->acceptDrag( rDTDE.DropAction );
     }
 }
 
