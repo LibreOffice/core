@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 12:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,9 +195,13 @@ namespace dbp
         const OControlWizardContext& rContext = getContext();
         try
         {
+            Reference< XConnection > xOldConn = getFormConnection();
+
             rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("DataSourceName"), makeAny(::rtl::OUString(m_aDatasource.GetSelectEntry())));
             rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("Command"), makeAny(::rtl::OUString(m_aTable.GetSelectEntry())));
             rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("CommandType"), makeAny((sal_Int32)CommandType::TABLE));
+
+            setFormConnection(xOldConn);
 
             if (!updateContext())
                 return sal_False;
@@ -287,7 +291,7 @@ namespace dbp
                         aTableNames = xTables->getElementNames();
                 }
 
-                // TODO: dispose the connection ... event better: share it with the other pages ...
+                setFormConnection(xConn);
             }
         }
         catch(SQLContext& e) { aSQLException <<= e; }
@@ -442,6 +446,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/28 09:18:30  fs
+ *  finalized the list/combo wizard
+ *
  *  Revision 1.2  2001/02/23 15:19:08  fs
  *  some changes / centralizations - added the list-/combobox wizard
  *
