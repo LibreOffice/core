@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ void OPropertyContainer::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, co
             break;
 
         case PropertyDescription::ltDerivedClassRealType:
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
 #endif
             // copy the data from the to-be-set value
