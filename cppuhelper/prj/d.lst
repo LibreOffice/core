@@ -56,3 +56,9 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\%__SRC%\lib\cppuhelper*.lib %_DEST%\lib%_EXT%\*
 ..\%__SRC%\misc\cppuhelper*.pdb %_DEST%\misc%_EXT%\*
 ..\version.mk %_DEST%\inc%_EXT%\cppuhelper\version.mk
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"

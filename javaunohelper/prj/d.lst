@@ -1,3 +1,9 @@
 ..\%__SRC%\class\juh.jar %_DEST%\bin%_EXT%\juh.jar
 ..\%__SRC%\bin\juh.dll %_DEST%\bin%_EXT%\juh.dll
 ..\%__SRC%\lib\libjuh.so %_DEST%\lib%_EXT%\libjuh.so
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
