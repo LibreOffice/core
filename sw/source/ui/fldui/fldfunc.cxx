@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:27:37 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,9 @@
 #ifndef _FLDFUNC_HXX
 #include <fldfunc.hxx>
 #endif
-
+#ifndef _FLDDROPDOWN_HXX
+#include <flddropdown.hxx>
+#endif
 #ifndef _FLDUI_HRC
 #include <fldui.hrc>
 #endif
@@ -136,7 +138,18 @@ SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aCond1ED    (this, SW_RES(ED_FUNCCOND1)),
     aCond2FT    (this, SW_RES(FT_FUNCCOND2)),
     aCond2ED    (this, SW_RES(ED_FUNCCOND2)),
-    aMacroBT    (this, SW_RES(BT_FUNCMACRO))
+    aMacroBT    (this, SW_RES(BT_FUNCMACRO)),
+    aListItemFT(    this, ResId( FT_LISTITEM    )),
+    aListItemED(    this, ResId( ED_LISTITEM    )),
+    aListAddPB(     this, ResId( PB_LISTADD     )),
+    aListItemsFT(   this, ResId( FT_LISTITEMS   )),
+    aListItemsLB(   this, ResId( LB_LISTITEMS   )),
+    aListRemovePB(  this, ResId( PB_LISTREMOVE  )),
+    aListUpPB(      this, ResId( PB_LISTUP      )),
+    aListDownPB(    this, ResId( PB_LISTDOWN    )),
+    aListNameFT(    this, ResId( FT_LISTNAME    )),
+    aListNameED(    this, ResId( ED_LISTNAME    )),
+    bDropDownLBChanged(false)
 {
     FreeResource();
 
@@ -262,6 +275,15 @@ void SwFldFuncPage::Reset(const SfxItemSet& rSet)
     aSelectionLB.SetDoubleClickHdl  (LINK(this, SwFldFuncPage, InsertMacroHdl));
     aFormatLB.SetDoubleClickHdl     (LINK(this, SwFldFuncPage, InsertHdl));
     aMacroBT.SetClickHdl            (LINK(this, SwFldFuncPage, MacroHdl));
+    Link aListModifyLk( LINK(this, SwFldFuncPage, ListModifyHdl));
+    aListAddPB.SetClickHdl(aListModifyLk);
+    aListRemovePB.SetClickHdl(aListModifyLk);
+    aListUpPB.SetClickHdl(aListModifyLk);
+    aListDownPB.SetClickHdl(aListModifyLk);
+    aListItemED.SetReturnActionLink(aListModifyLk);
+    Link aListEnableLk = LINK(this, SwFldFuncPage, ListEnableHdl);
+    aListItemED.SetModifyHdl(aListEnableLk);
+    aListItemsLB.SetSelectHdl(aListEnableLk);
 
     if( !IsRefresh() )
     {
@@ -345,21 +367,52 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
         BOOL bFormat = nSize != 0;
 
         // fuer Conditional Text zwei Controls
-        if(nTypeId != TYP_CONDTXTFLD)
-        {
-            aCond1FT.Hide();
-            aCond1ED.Hide();
-            aCond2FT.Hide();
-            aCond2ED.Hide();
-            aValueFT.Show();
-            aValueED.Show();
-        }
+        BOOL bDropDown = TYP_DROPDOWN == nTypeId;
+        BOOL bCondTxtFld = TYP_CONDTXTFLD == nTypeId;
+
+        aCond1FT.Show(!bDropDown && bCondTxtFld);
+        aCond1ED.Show(!bDropDown && bCondTxtFld);
+        aCond2FT.Show(!bDropDown && bCondTxtFld);
+        aCond2ED.Show(!bDropDown && bCondTxtFld);
+        aValueFT.Show(!bDropDown && !bCondTxtFld);
+        aValueED.Show(!bDropDown && !bCondTxtFld);
+        aMacroBT.Show(!bDropDown);
+        aNameED.Show(!bDropDown);
+
+        aListItemFT.Show(bDropDown);
+        aListItemED.Show(bDropDown);
+        aListAddPB.Show(bDropDown);
+        aListItemsFT.Show(bDropDown);
+        aListItemsLB.Show(bDropDown);
+        aListRemovePB.Show(bDropDown);
+        aListUpPB.Show(bDropDown);
+        aListDownPB.Show(bDropDown);
+        aListNameFT.Show(bDropDown);
+        aListNameED.Show(bDropDown);
+
         aNameED.SetDropEnable(FALSE);
 
         if (IsFldEdit())
         {
-            aNameED.SetText(GetCurField()->GetPar1());
-            aValueED.SetText(GetCurField()->GetPar2());
+            if(bDropDown)
+            {
+                const SwDropDownField* pDrop = (const SwDropDownField*)GetCurField();
+                Sequence<OUString> aItems = pDrop->GetItemSequence();
+                const OUString* pArray = aItems.getConstArray();
+                aListItemsLB.Clear();
+                for(sal_Int32 i = 0; i < aItems.getLength(); i++)
+                    aListItemsLB.InsertEntry(pArray[i]);
+                aListItemsLB.SelectEntry(pDrop->GetSelectedItem());
+                aListNameED.SetText(pDrop->GetPar2());
+                aListNameED.SaveValue();
+                bDropDownLBChanged = false;
+                ListEnableHdl(0);
+            }
+            else
+            {
+                aNameED.SetText(GetCurField()->GetPar1());
+                aValueED.SetText(GetCurField()->GetPar2());
+            }
         }
         else
         {
@@ -412,13 +465,6 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
                 }
 
                 bName = bValue = TRUE;
-
-                aCond1FT.Show();
-                aCond1ED.Show();
-                aCond2FT.Show();
-                aCond2ED.Show();
-                aValueFT.Hide();
-                aValueED.Hide();
                 break;
 
             case TYP_JUMPEDITFLD:
@@ -444,7 +490,8 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
                         bInsert = FALSE;
                 }
                 break;
-
+            case TYP_DROPDOWN :
+            break;
             default:
                 break;
         }
@@ -500,6 +547,71 @@ IMPL_LINK( SwFldFuncPage, InsertMacroHdl, ListBox *, pBox )
 {
     SelectHdl();
     InsertHdl();
+
+    return 0;
+}
+/* -----------------16.06.2003 16:24-----------------
+
+ --------------------------------------------------*/
+IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
+{
+    aListItemsLB.SetUpdateMode(FALSE);
+    if(pControl == &aListAddPB ||
+            pControl == &aListItemED && aListAddPB.IsEnabled())
+    {
+        String sEntry(aListItemED.GetText());
+        aListItemsLB.InsertEntry(sEntry);
+        aListItemsLB.SelectEntry(sEntry);
+    }
+    else if(aListItemsLB.GetSelectEntryCount())
+    {
+        USHORT nSelPos = aListItemsLB.GetSelectEntryPos();
+        if(pControl == &aListRemovePB)
+        {
+            aListItemsLB.RemoveEntry(nSelPos);
+            aListItemsLB.SelectEntryPos(nSelPos ? nSelPos - 1 : 0);
+        }
+        else if(pControl == &aListUpPB)
+        {
+            if(nSelPos)
+            {
+                String sEntry = aListItemsLB.GetSelectEntry();
+                aListItemsLB.RemoveEntry(nSelPos);
+                nSelPos--;
+                aListItemsLB.InsertEntry(sEntry, nSelPos);
+                aListItemsLB.SelectEntryPos(nSelPos);
+            }
+        }
+        else if(pControl == &aListDownPB)
+        {
+            if(nSelPos < aListItemsLB.GetEntryCount() - 1)
+            {
+                String sEntry = aListItemsLB.GetSelectEntry();
+                aListItemsLB.RemoveEntry(nSelPos);
+                nSelPos++;
+                aListItemsLB.InsertEntry(sEntry, nSelPos);
+                aListItemsLB.SelectEntryPos(nSelPos);
+            }
+        }
+    }
+    bDropDownLBChanged = true;
+    aListItemsLB.SetUpdateMode(TRUE);
+    ListEnableHdl(0);
+    return 0;
+}
+/* -----------------17.06.2003 08:36-----------------
+
+ --------------------------------------------------*/
+IMPL_LINK( SwFldFuncPage, ListEnableHdl, void*, EMPTYARG)
+{
+    //enable "Add" button when text is in the Edit that's not already member of the box
+    aListAddPB.Enable(aListItemED.GetText().Len() &&
+                LISTBOX_ENTRY_NOTFOUND == aListItemsLB.GetEntryPos(aListItemED.GetText()));
+    BOOL bEnableButtons = aListItemsLB.GetSelectEntryCount() > 0;
+    aListRemovePB.Enable(bEnableButtons);
+    aListUpPB.Enable(bEnableButtons && (aListItemsLB.GetSelectEntryPos() > 0));
+    aListDownPB.Enable(bEnableButtons &&
+                (aListItemsLB.GetSelectEntryPos() < (aListItemsLB.GetEntryCount() - 1)));
 
     return 0;
 }
@@ -612,7 +724,17 @@ BOOL SwFldFuncPage::FillItemSet(SfxItemSet& rSet)
             aVal += '|';
             aVal += aCond2ED.GetText();
             break;
-
+        case TYP_DROPDOWN :
+        {
+            aName = aListNameED.GetText();
+            for(USHORT i = 0; i < aListItemsLB.GetEntryCount(); i++)
+            {
+                if(i)
+                    aVal += DB_DELIM;
+                aVal += aListItemsLB.GetEntry(i);
+            }
+        }
+        break;
         default:
             break;
     }
@@ -622,6 +744,8 @@ BOOL SwFldFuncPage::FillItemSet(SfxItemSet& rSet)
         aValueED.GetSavedValue() != aValueED.GetText() ||
         aCond1ED.GetSavedValue() != aCond1ED.GetText() ||
         aCond2ED.GetSavedValue() != aCond2ED.GetText() ||
+        aListNameED.GetSavedValue() != aListNameED.GetText() ||
+        bDropDownLBChanged ||
         nOldFormat != nFormat)
     {
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat );
