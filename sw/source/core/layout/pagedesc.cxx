@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 13:10:40 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,21 @@ const SwTxtFmtColl* SwPageDesc::GetRegisterFmtColl() const
 
 void SwPageDesc::RegisterChange()
 {
+    // --> OD 2004-06-15 #117072# - During destruction of the document <SwDoc>
+    // the page description is modified. Thus, do nothing, if the document
+    // is in destruction respectively if no viewshell exists.
+    SwDoc* pDoc = GetMaster().GetDoc();
+    if ( !pDoc || pDoc->IsInDtor() )
+    {
+        return;
+    }
+    ViewShell* pSh = 0L;
+    pDoc->GetEditShell( &pSh );
+    if ( !pSh )
+    {
+        return;
+    }
+
     nRegHeight = 0;
     {
         SwClientIter aIter( GetMaster() );
