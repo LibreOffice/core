@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jl $ $Date: 2002-03-26 09:04:47 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:22:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,27 +60,15 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..$/..$/..
-
+PRJ := ..$/..$/..$/..$/..
 PRJNAME := jurt
+TARGET := test_com_sun_star_uno
+
 PACKAGE := com$/sun$/star$/uno
-TARGET  := test_com_sun_star_uno
+JAVATESTFILES := \
+    AnyConverter_Test.java \
+    UnoRuntime_Test.java \
+    WeakReference_Test.java
+JARFILES := ridl.jar sandbox.jar
 
-
-RDB= $(SOLARBINDIR)$/applicat.rdb 
-
-# --- Settings -----------------------------------------------------
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# Files --------------------------------------------------------
-
-JARFILES = ridl.jar jurt.jar
-
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/UnoRuntime_Test.class \
-    $(CLASSDIR)$/$(PACKAGE)$/AnyConverter_Test.class
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+.INCLUDE: javaunittest.mk
