@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:20:11 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,40 @@ public:
     inline SvUShorts& GetKanaComp() { return *pKanaComp; }
 
     void CreateSpaceAdd( const short nInit = 0 );
+
+    /** determine ascent and descent for positioning of as-character anchored
+        object
+
+        OD 07.01.2004 #i11859# - previously local method <lcl_MaxAscDescent>
+        Method calculates maximum ascents and descents of the line layout.
+        One value considering as-character anchored objects, one without these
+        objects.
+        Portions for other anchored objects aren't considered.
+
+        @param _orAscent
+        output parameter - maximum ascent without as-character anchored objects
+
+        @param _orDescent
+        output parameter - maximum descent without as-character anchored objects
+
+        @param _orObjAscent
+        output parameter - maximum ascent with as-character anchored objects
+
+        @param _orObjDescent
+        output parameter - maximum descent with as-character anchored objects
+
+        @param _pDontConsiderPortion
+        input parameter - portion, which isn't considered for calculating
+        <_orObjAscent> and <_orObjDescent>, if it isn't a portion for a
+        as-character anchored object or it isn't as high as the line.
+
+        @author OD
+    */
+    void MaxAscentDescent( SwTwips& _orAscent,
+                           SwTwips& _orDescent,
+                           SwTwips& _orObjAscent,
+                           SwTwips& _orObjDescent,
+                           const SwLinePortion* _pDontConsiderPortion = NULL ) const;
 
 #ifndef PRODUCT
     void DebugPortions( SvStream &rOs, const XubString &rTxt,
