@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:31:11 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             //-------------------------------------------------------------------------------------------------------------
                                             // Create an initial layout manager
                                             // Create layout manager and connect it to the newly created frame
-                                            m_xLayoutManager = css::uno::Reference< dcss::frame::XLayoutManager >(m_xFactory->createInstance(SERVICENAME_LAYOUTMANAGER), css::uno::UNO_QUERY);
+                                            m_xLayoutManager = css::uno::Reference< css::frame::XLayoutManager >(m_xFactory->createInstance(SERVICENAME_LAYOUTMANAGER), css::uno::UNO_QUERY);
                                         }
                                     )
 
@@ -700,7 +700,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
         m_bIsHidden = sal_False;
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR          = m_xFactory;
-    css::uno::Reference< dcss::frame::XLayoutManager >     xLayoutManager = m_xLayoutManager;
+    css::uno::Reference< css::frame::XLayoutManager >     xLayoutManager = m_xLayoutManager;
 
     // Release lock ... because we call some impl methods, which are threadsafe by himself.
     // If we hold this lock - we will produce our own deadlock!
@@ -713,7 +713,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
         xLayoutManager->attachFrame(this);
         addFrameActionListener(css::uno::Reference< css::frame::XFrameActionListener >(xLayoutManager, css::uno::UNO_QUERY));
         DockingAreaDefaultAcceptor* pAcceptor = new DockingAreaDefaultAcceptor(this);
-        css::uno::Reference< dcss::ui::XDockingAreaAcceptor > xDockingAreaAcceptor( static_cast< ::cppu::OWeakObject* >(pAcceptor), css::uno::UNO_QUERY );
+        css::uno::Reference< css::ui::XDockingAreaAcceptor > xDockingAreaAcceptor( static_cast< ::cppu::OWeakObject* >(pAcceptor), css::uno::UNO_QUERY );
         xLayoutManager->setDockingAreaAcceptor(xDockingAreaAcceptor);
 
         // create the status bar ... but dont show it here!
@@ -2862,7 +2862,7 @@ const css::uno::Sequence< css::beans::Property > Frame::impl_getStaticPropertyDe
         css::beans::Property( FRAME_PROPNAME_DISPATCHRECORDERSUPPLIER, FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL)          , css::beans::PropertyAttribute::TRANSIENT ),
         css::beans::Property( FRAME_PROPNAME_INDICATORINTERCEPTION   , FRAME_PROPHANDLE_INDICATORINTERCEPTION   , ::getCppuType((const css::uno::Reference< css::task::XStatusIndicator >*)NULL)                    , css::beans::PropertyAttribute::TRANSIENT ),
         css::beans::Property( FRAME_PROPNAME_ISHIDDEN                , FRAME_PROPHANDLE_ISHIDDEN                , ::getBooleanCppuType()                                                                            , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( FRAME_PROPNAME_LAYOUTMANAGER           , FRAME_PROPHANDLE_LAYOUTMANAGER           , ::getCppuType((const css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >*)NULL)  , css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( FRAME_PROPNAME_LAYOUTMANAGER           , FRAME_PROPHANDLE_LAYOUTMANAGER           , ::getCppuType((const css::uno::Reference< ::com::sun::star::frame::XLayoutManager >*)NULL)  , css::beans::PropertyAttribute::TRANSIENT ),
         css::beans::Property( FRAME_PROPNAME_TITLE                   , FRAME_PROPHANDLE_TITLE                   , ::getCppuType((const ::rtl::OUString*)NULL)                                                       , css::beans::PropertyAttribute::TRANSIENT ),
     };
     // Use it to initialize sequence!
@@ -3282,7 +3282,7 @@ void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame
     try
     {
         css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
-        css::uno::Reference< dcss::frame::XLayoutManager > xLayoutManager;
+        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         xFrameProps->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
         css::uno::Reference< css::beans::XPropertySet > xLayoutProps(xLayoutManager, css::uno::UNO_QUERY);
         css::uno::Reference< css::frame::XStatusListener > xCallback;
