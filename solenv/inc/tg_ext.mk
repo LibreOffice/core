@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: hjs $ $Date: 2004-09-16 19:42:08 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:36:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,10 +84,6 @@ PACKAGE_DIR=$(MISC)$/build
 #MUST match with PACKAGE_DIR
 BACK_PATH=..$/..$/..$/
 
-# remove logical operators from variable
-# to survive .IF statements
-BUILD_ACTION_CHECK=$(BUILD_ACTION:s/||//:s/&&//)
-
 # Remove entire package from output directory, for example, if new patches are
 # to be applied.
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
@@ -105,6 +101,7 @@ P_INSTALL_TARGET_DIR=$(MISC)$/install
 NEW_PATCH_FILE_NAME:=$(TARFILE_NAME)
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 NEW_PATCH_FILE_NAME:=$(PATCH_FILE_NAME)
+PATH_FILE_DEP:=$(PRJ)$/$(PATCH_FILE_DEP)
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 
 .IF "$(TAR_EXCLUDES)"!=""
@@ -174,7 +171,9 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.zip
     @+$(COPY) $(mktmp $(UNPACKCMD)) $@
 
 #untar
-$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack
+$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack $(PATCH_FILE_DEP)
+    +-$(RENAME) $(PACKAGE_DIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme
+    +-rm -rf $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme
     @+-$(MKDIR) $(PACKAGE_DIR:d)
     @+-$(MKDIR) $(PACKAGE_DIR)
     +cd $(PACKAGE_DIR) && ( $(shell +$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
@@ -182,13 +181,15 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpa
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @+cd $(PACKAGE_DIR) && chmod -R +rw * && $(TOUCH) $(UNTAR_FLAG_FILE)
     @+cd $(PACKAGE_DIR) && find . -type d -exec chmod a+x {{}} \;
-.ELSE			# "$(GUI)"=="WNT"
+.ELSE			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+# Native W32 tools generate only filedates with even seconds, cygwin also with odd seconds
+    +$(DELAY) 2
     @+cd $(PACKAGE_DIR) && attrib /s -r  >& $(NULLDEV) && $(TOUCH) $(UNTAR_FLAG_FILE)
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 
 
 #add new files to patch
-$(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) $(T_ADDITIONAL_FILES)
+$(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) $(T_ADDITIONAL_FILES:+".dummy")
 .IF "$(GUI)"=="WNT"
     @$(TOUCH) $@
 .ELSE			# "$(GUI)"=="WNT"
@@ -218,7 +219,10 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 .IF "$(T_ADDITIONAL_FILES)"!=""
-    +$(TOUCH) $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
+.IF "$(GUI)"=="WNT"
+# Native W32 tools generate only filedates with even seconds, cygwin also with odd seconds
+    +$(DELAY) 2
+.ENDIF # "$(GUI)"=="WNT"
     +$(TOUCH) $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 .ENDIF          # "$(T_ADDITIONAL_FILES)"!=""
 
@@ -235,13 +239,13 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     
 $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(BUILD_ACTION_CHECK)"=="none" || "$(BUILD_ACTION_CHECK)"==""
+.IF "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
     +$(TOUCH) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
-.ELSE			# "$(BUILD_ACTION_CHECK)"=="none" || "$(BUILD_ACTION_CHECK)"==""
+.ELSE			# "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
     +-$(MKDIR) $(P_BUILD_DIR)
     +cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) && $(TOUCH) $(BUILD_FLAG_FILE)
     +mv $(P_BUILD_DIR)$/$(BUILD_FLAG_FILE) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
-.ENDIF			# "$(BUILD_ACTION_CHECK)"=="none" || "$(BUILD_ACTION_CHECK)"==""
+.ENDIF			# "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
 
 $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -298,9 +302,11 @@ $(P_ADDITIONAL_FILES) :
 .ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
 
 .IF "$(T_ADDITIONAL_FILES)"!=""
-$(T_ADDITIONAL_FILES) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+$(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
     +-echo dummy > $@
     +-$(TOUCH) $@
+    +-echo dummy > $(@:d)$(@:b)
+    +-$(TOUCH) $(@:d)$(@:b)
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
 create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES)
