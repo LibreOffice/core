@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:19 $
+ *  last change: $Author: dbo $ $Date: 2002-07-10 15:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,16 +289,12 @@ void WeakComponentImplHelperBase::release()
         {
             dispose();
         }
-#ifdef _DEBUG
-        catch (Exception & exc)
+        catch (RuntimeException & exc) // don't break throw ()
         {
+#ifdef _DEBUG
             OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_ENSURE( 0, msg.getStr() );
-        }
 #endif
-        catch (...)
-        {
-            OSL_ENSURE( 0, "### unexpected non-UNO exception caught!" );
         }
     }
     OWeakObject::release();
@@ -317,17 +313,20 @@ void WeakComponentImplHelperBase::dispose()
             lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
             rBHelper.aLC.disposeAndClear( aEvt );
             disposing();
+            MutexGuard aGuard( rBHelper.rMutex );
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
         }
         catch (RuntimeException &)
         {
+            MutexGuard aGuard( rBHelper.rMutex );
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
             throw;
         }
         catch (Exception & exc)
         {
+            MutexGuard aGuard( rBHelper.rMutex );
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
 #ifdef _DEBUG
@@ -340,6 +339,7 @@ void WeakComponentImplHelperBase::dispose()
         }
         catch (...)
         {
+            MutexGuard aGuard( rBHelper.rMutex );
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
             OSL_ENSURE( 0, "### unexpected non-UNO exception caught!" );
@@ -354,8 +354,10 @@ void WeakComponentImplHelperBase::addEventListener(
     Reference< lang::XEventListener > const & xListener )
     throw (RuntimeException)
 {
+    ClearableMutexGuard aGuard( rBHelper.rMutex );
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
+        aGuard.clear();
         lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
         xListener->disposing( aEvt );
     }
@@ -422,16 +424,12 @@ void WeakAggComponentImplHelperBase::release()
         {
             dispose();
         }
-#ifdef _DEBUG
-        catch (Exception & exc)
+        catch (RuntimeException & exc) // don't break throw ()
         {
+#ifdef _DEBUG
             OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_ENSURE( 0, msg.getStr() );
-        }
 #endif
-        catch (...)
-        {
-            OSL_ENSURE( 0, "### unexpected exception caught!" );
         }
     }
     OWeakAggObject::release();
@@ -450,17 +448,20 @@ void WeakAggComponentImplHelperBase::dispose()
             lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
             rBHelper.aLC.disposeAndClear( aEvt );
             disposing();
+            MutexGuard aGuard( rBHelper.rMutex );
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
         }
         catch (RuntimeException &)
         {
+            MutexGuard aGuard( rBHelper.rMutex );
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
             throw;
         }
         catch (Exception & exc)
         {
+            MutexGuard aGuard( rBHelper.rMutex );
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
 #ifdef _DEBUG
@@ -473,6 +474,7 @@ void WeakAggComponentImplHelperBase::dispose()
         }
         catch (...)
         {
+            MutexGuard aGuard( rBHelper.rMutex );
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
             OSL_ENSURE( 0, "### unexpected non-UNO exception caught!" );
@@ -487,8 +489,10 @@ void WeakAggComponentImplHelperBase::addEventListener(
     Reference< lang::XEventListener > const & xListener )
     throw (RuntimeException)
 {
+    ClearableMutexGuard aGuard( rBHelper.rMutex );
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
+        aGuard.clear();
         lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
         xListener->disposing( aEvt );
     }

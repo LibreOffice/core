@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-26 15:09:45 $
+ *  last change: $Author: dbo $ $Date: 2002-07-10 15:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _RTL_STRING_HXX_
+#include <rtl/string.hxx>
+#endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -73,6 +76,7 @@
 #endif
 
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -130,9 +134,13 @@ void OComponentHelper::release() throw()
                 {
                     dispose();
                 }
-                catch(::com::sun::star::uno::Exception&)
+                catch (::com::sun::star::uno::RuntimeException & exc)
                 {
                     // release should not throw exceptions
+#ifdef _DEBUG
+                    OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+                    OSL_ENSURE( 0, msg.getStr() );
+#endif
                 }
 
                 // only the alive ref holds the object
@@ -208,18 +216,37 @@ void OComponentHelper::dispose()
             // notify subclasses to do their dispose
             disposing();
         }
-        catch(::com::sun::star::uno::Exception& e)
+        catch(::com::sun::star::uno::RuntimeException&)
         {
             // catch exception and throw again but signal that
             // the object was disposed. Dispose should be called
             // only once.
+            MutexGuard aGuard( rBHelper.rMutex );
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
-            throw e;
+            throw;
+        }
+        catch (::com::sun::star::uno::Exception & exc)
+        {
+            MutexGuard aGuard( rBHelper.rMutex );
+            rBHelper.bDisposed = sal_True;
+            rBHelper.bInDispose = sal_False;
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected UNO exception caught: ") ) +
+                exc.Message, Reference< XInterface >() );
+        }
+        catch (...)
+        {
+            MutexGuard aGuard( rBHelper.rMutex );
+            rBHelper.bDisposed = sal_True;
+            rBHelper.bInDispose = sal_False;
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected non-UNO exception caught: ") ),
+                Reference< XInterface >() );
         }
 
         // the values bDispose and bInDisposing must set in this order.
-        // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
+        MutexGuard aGuard( rBHelper.rMutex );
         rBHelper.bDisposed = sal_True;
         rBHelper.bInDispose = sal_False;
     }
@@ -236,8 +263,10 @@ void OComponentHelper::addEventListener(
     const Reference<XEventListener > & rxListener )
     throw(::com::sun::star::uno::RuntimeException)
 {
+    ClearableMutexGuard aGuard( rBHelper.rMutex );
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
+        aGuard.clear();
         Reference< XInterface > x( (XComponent *)this, UNO_QUERY );
         rxListener->disposing( EventObject( x ) );
     }
