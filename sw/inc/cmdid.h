@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:01:28 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,6 +729,12 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_TABLE_MERGE_TABLE                (FN_FORMAT2 + 152)
 #define FN_TABLE_ROW_SPLIT                  (FN_FORMAT2 + 153)
+
+#define FN_FORMAT_APPLY_HEAD1               (FN_FORMAT2 + 154)
+#define FN_FORMAT_APPLY_HEAD2               (FN_FORMAT2 + 155)
+#define FN_FORMAT_APPLY_HEAD3               (FN_FORMAT2 + 156)
+#define FN_FORMAT_APPLY_DEFAULT             (FN_FORMAT2 + 157)
+#define FN_FORMAT_APPLY_TEXTBODY            (FN_FORMAT2 + 158)
 
 /*--------------------------------------------------------------------
     Bereich: Extras
