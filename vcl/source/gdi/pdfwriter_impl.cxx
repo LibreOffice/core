@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-02 17:18:40 $
+ *  last change: $Author: pl $ $Date: 2002-10-08 11:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,8 +746,17 @@ SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayo
             {
                 int nLogicalIndex = bRightToLeft ? (rArgs.mnEndCharPos-1-i) : (rArgs.mnMinCharPos+i);
                 sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
-                if( m_aBuiltinFonts[n].m_eCharSet == RTL_TEXTENCODING_SYMBOL && cChar >= 0xf000 )
-                    cChar -= 0xf000;
+                if( cChar & 0xff00 )
+                {
+                    // some characters can be used by conversion
+                    if( m_aBuiltinFonts[n].m_eCharSet == RTL_TEXTENCODING_SYMBOL && cChar >= 0xf000 )
+                        cChar -= 0xf000;
+                    else
+                    {
+                        ByteString aChar( String( cChar ), RTL_TEXTENCODING_MS_1252 );
+                        cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
+                    }
+                }
                 DBG_ASSERT( cChar < 256, "invalid character index requested for builtin font" );
                 if( cChar & 0xff00 ) // not so good
                     cChar = 0;
@@ -2211,8 +2220,19 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUn
             nFontID = m_aEmbeddedFonts[ pCurrentFont ] = m_nNextFID++;
         for( int i = 0; i < nGlyphs; i++ )
         {
-            // for type1 (and builtin) fonts the glyphids are actually character codes
-            pMappedGlyphs[ i ] = (sal_Int8)pGlyphs[i];
+            sal_Unicode cChar = pUnicodes[i];
+            if( cChar & 0xff00 )
+            {
+                // some characters can be used by conversion
+                if( cChar >= 0xf000 && cChar <= 0xf0ff ) // symbol encoding in private use area
+                    cChar -= 0xf000;
+                else
+                {
+                    ByteString aChar( String( cChar ), RTL_TEXTENCODING_MS_1252 );
+                    cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
+                }
+            }
+            pMappedGlyphs[ i ] = (sal_Int8)cChar;
             pMappedFontObjects[ i ] = nFontID;
         }
     }
