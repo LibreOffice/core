@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-14 13:49:40 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,7 +934,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                         aText.Buffer=new UCHAR[aText.BufSize+1]; // Ein mehr für LookAhead bei CK-Trennung
                         rInp.Read((char* )aText.Buffer,aText.BufSize);
                         if (!rInp.GetError()) aText.Draw(rOut);
-                        delete aText.Buffer;
+                        delete[] aText.Buffer;
                     }
                 } break;
                 case ObjBmap: {
@@ -954,7 +954,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                         for(short i=0;i<aPoly.nPoints;i++) SWAPPOINT(aPoly.EckP[i]);
 #endif
                         if (!rInp.GetError()) aPoly.Draw(rOut);
-                        delete aPoly.EckP;
+                        delete[] aPoly.EckP;
                     }
                 } break;
                 case ObjSpln: {
@@ -967,7 +967,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                         for(short i=0;i<aSpln.nPoints;i++) SWAPPOINT(aSpln.EckP[i]);
 #endif
                         if (!rInp.GetError()) aSpln.Draw(rOut);
-                        delete aSpln.EckP;
+                        delete[] aSpln.EckP;
                     }
                 } break;
                 case ObjGrup: {

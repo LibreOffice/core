@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvspln.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-30 12:51:22 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,7 @@ USHORT NaturalSpline(USHORT n, double* x, double* y,
     h=new double[n+1];
     for (i=0;i<n;i++) {
         h[i]=x[i+1]-x[i];
-        if (h[i]<=0.0) { delete a; delete h; return 1; }
+        if (h[i]<=0.0) { delete[] a; delete[] h; return 1; }
     }
     for (i=0;i<n-1;i++) {
         a[i]=3.0*((y[i+2]-y[i+1])/h[i+1]-(y[i+1]-y[i])/h[i]);
@@ -571,7 +571,7 @@ USHORT NaturalSpline(USHORT n, double* x, double* y,
         c[1]=a[0]/d[0];
     } else {
         error=TriDiagGS(FALSE,n-1,b,d,c,a);
-        if (error!=0) { delete a; delete h; return error+2; }
+        if (error!=0) { delete[] a; delete[] h; return error+2; }
         for (i=0;i<n-1;i++) c[i+1]=a[i];
     }
     switch (MargCond) {
@@ -603,8 +603,8 @@ USHORT NaturalSpline(USHORT n, double* x, double* y,
         b[i]=(y[i+1]-y[i])/h[i]-h[i]*(c[i+1]+2.0*c[i])/3.0;
         d[i]=(c[i+1]-c[i])/(3.0*h[i]);
     }
-    delete a;
-    delete h;
+    delete[] a;
+    delete[] h;
     return 0;
 }
 
@@ -665,9 +665,9 @@ USHORT PeriodicSpline(USHORT n, double* x, double* y,
         Error=ZyklTriDiagGS(FALSE,n,b,d,c,lowrow,ricol,a);
         if ( Error != 0 )
         {
-            delete a;
-            delete lowrow;
-            delete ricol;
+            delete[] a;
+            delete[] lowrow;
+            delete[] ricol;
             return(Error+4);
         }
         for (i=0;i<=nm1;i++) c[i+1]=a[i];
@@ -679,9 +679,9 @@ USHORT PeriodicSpline(USHORT n, double* x, double* y,
         b[i]=b[i]-hl*(c[i+1]+2.0*c[i])/3.0;
         d[i]=(c[i+1]-c[i])/hl/3.0;
     }
-    delete a;
-    delete lowrow;
-    delete ricol;
+    delete[] a;
+    delete[] lowrow;
+    delete[] ricol;
     return 0;
 }
 
@@ -841,15 +841,15 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
     }
     if ( bRet == FALSE )
     {
-        delete ax;
-        delete ay;
-        delete bx;
-        delete by;
-        delete cx;
-        delete cy;
-        delete dx;
-        delete dy;
-        delete T;
+        delete[] ax;
+        delete[] ay;
+        delete[] bx;
+        delete[] by;
+        delete[] cx;
+        delete[] cy;
+        delete[] dx;
+        delete[] dy;
+        delete[] T;
         n=0;
     }
     return bRet;
@@ -926,15 +926,15 @@ BOOL Spline2Poly(Polygon& rSpln, BOOL Periodic, Polygon& rPoly)
             } // Ende von Teilpolynom
             i++; // n„chstes Teilpolynom
         }
-        delete ax;
-        delete ay;
-        delete bx;
-        delete by;
-        delete cx;
-        delete cy;
-        delete dx;
-        delete dy;
-        delete tv;
+        delete[] ax;
+        delete[] ay;
+        delete[] bx;
+        delete[] by;
+        delete[] cx;
+        delete[] cy;
+        delete[] dx;
+        delete[] dy;
+        delete[] tv;
         return bOk;
     } // Ende von if (bOk)
     rPoly.SetSize(0);

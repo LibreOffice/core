@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvtext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-28 15:33:29 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1187,8 +1187,8 @@ void TextType::Draw(OutputDevice& rOut)
             } // if ObjMin.y+yPos<=Obj_Max.y
         } // if !Fehler
     } while (c!=TextEnd && !Ende && !Fehler);
-    delete cLine;
-    delete xLine;
+    delete[] cLine;
+    delete[] xLine;
 }
 
 // End of DrawText.Pas

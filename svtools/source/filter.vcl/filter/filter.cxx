@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-18 17:09:20 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,11 +737,11 @@ static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, B
             if( ImplSearchEntry( pPtr, (BYTE*)"_width", pBuf + nSize - pPtr, 6 ) )
             {
                 rFormatExtension = UniString::CreateFromAscii( "XBM", 3 );
-                delete pBuf;
+                delete[] pBuf;
                 return TRUE;
             }
         }
-        delete pBuf;
+        delete[] pBuf;
     }
     else if( rFormatExtension.CompareToAscii( "XBM", 3 ) == COMPARE_EQUAL )
     {
