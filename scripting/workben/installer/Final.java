@@ -106,7 +106,7 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
     
     public void installationComplete(InstallationEvent ev) {
         //System.out.println("Detected installation complete");
-    if( InstUtil.hasNetbeansInstallation() || InstUtil.hasJeditInstallation() ) {
+    if( InstUtil.hasNetbeansInstallation() ) {
         //System.out.println("Detected installation complete (IDE(s) detected)");
         nav.removeCancelListener(this);
         nav.setCancelListener(nav);
