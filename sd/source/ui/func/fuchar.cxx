@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuchar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:46:17 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #pragma hdrstop
 
 #include "fuchar.hxx"
+
+#include <sfx2/viewfrm.hxx>
 
 #include <svx/editdata.hxx>
 #include <svx/svxids.hrc>
