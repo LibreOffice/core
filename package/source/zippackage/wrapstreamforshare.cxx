@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrapstreamforshare.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:02:34 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,8 @@ void SAL_CALL WrapStreamForShare::closeInput()
     if ( !m_xInStream.is() )
         throw io::IOException(); // TODO
 
-    m_xInStream->closeInput();
+    // the package is the owner so it will close the stream
+    // m_xInStream->closeInput();
     m_xInStream = uno::Reference< io::XInputStream >();
     m_xSeekable = uno::Reference< io::XSeekable >();
 }
