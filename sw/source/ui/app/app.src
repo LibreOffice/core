@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:29:08 $
+ *  last change: $Author: os $ $Date: 2002-12-06 14:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ String STR_PAGE_COUNT_MACRO
         FN_START_OF_DOCUMENT            ;\
         FN_END_OF_DOCUMENT              ;\
         FN_SHOW_TWO_PAGES               ;\
-        FN_SHOW_FOUR_PAGES              ;\
+        FN_SHOW_MULTIPLE_PAGES              ;\
         FN_PRINT_PAGEPREVIEW            ;\
         FN_FAX                          ;\
         FN_QRY_MERGE                    ;\
