@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-17 13:31:56 $
+ *  last change: $Author: ka $ $Date: 2002-01-14 12:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "filedlg.hxx"
+
+#include <algorithm>
 
 using namespace ::com::sun::star;
 
@@ -332,6 +334,8 @@ void SdTPAction::Construct()
     if( pGrafObj )
     {
         bOLEAction = TRUE;
+
+        aVerbVector.push_back( 0 );
         aLbOLEAction.InsertEntry( String( SdResId( STR_EDIT_OBJ ) ).EraseAllChars('~') );
     }
     else if( pOleObj )
@@ -347,7 +351,8 @@ void SdTPAction::Construct()
                 const SvVerb& rVerb = pList->GetObject( i );
                 if( rVerb.IsOnMenu() )
                 {
-                    String aTmp = rVerb.GetName();
+                    String aTmp( rVerb.GetName() );
+                    aVerbVector.push_back( rVerb.GetId() );
                     aLbOLEAction.InsertEntry( aTmp.EraseAllChars('~') );
                 }
             }
@@ -1305,8 +1310,13 @@ void SdTPAction::SetEditText( String& rStr )
             aEdtSound.SetText( aText );
             break;
         case presentation::ClickAction_VERB:
-            aLbOLEAction.SelectEntryPos( (USHORT)rStr.ToInt32() );
-            break;
+        {
+            ::std::vector< long >::iterator aFound( ::std::find( aVerbVector.begin(), aVerbVector.end(), rStr.ToInt32() ) );
+
+            if( aFound != aVerbVector.end() )
+                aLbOLEAction.SelectEntryPos( static_cast< short >( aFound - aVerbVector.begin() ) );
+        }
+        break;
         case presentation::ClickAction_PROGRAM:
             aEdtProgram.SetText( aText );
             break;
@@ -1342,7 +1352,14 @@ String SdTPAction::GetEditText( BOOL bFullDocDestination )
             break;
 
         case presentation::ClickAction_VERB:
-            return( UniString::CreateFromInt32( aLbOLEAction.GetSelectEntryPos() ) );
+        {
+            const USHORT nPos = aLbOLEAction.GetSelectEntryPos();
+
+            if( nPos < aVerbVector.size() )
+                aStr = UniString::CreateFromInt32( aVerbVector[ nPos ] );
+
+            return( aStr );
+        }
 
         case presentation::ClickAction_DOCUMENT:
             aStr = aEdtDocument.GetText();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-23 11:54:26 $
+ *  last change: $Author: ka $ $Date: 2002-01-14 12:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@
 #include "sdtreelb.hxx"
 #include "anmdef.hxx"
 
+#include <vector>
+
 class SdView;
 class SdDrawDocument;
 
@@ -128,42 +130,43 @@ public:
 class SdTPAction : public SfxTabPage
 {
 private:
-    FixedText           aFtAction;              // always visible
-    ListBox             aLbAction;
+    FixedText               aFtAction;              // always visible
+    ListBox                 aLbAction;
 
-    FixedLine           aFlEffect;              // fade controls
-    FixedText           aFtAnimation;
-    ListBox             aLbEffect;
-    FixedText           aFtSpeed;
-    RadioButton         aRbtSlow;
-    RadioButton         aRbtMedium;
-    RadioButton         aRbtFast;
+    FixedLine               aFlEffect;              // fade controls
+    FixedText               aFtAnimation;
+    ListBox                 aLbEffect;
+    FixedText               aFtSpeed;
+    RadioButton             aRbtSlow;
+    RadioButton             aRbtMedium;
+    RadioButton             aRbtFast;
 
-    FixedText           aFtTree;                // jump destination controls
-    SdPageObjsTLB       aLbTree;
-    SdPageObjsTLB       aLbTreeDocument;
-    ListBox             aLbOLEAction;
+    FixedText               aFtTree;                // jump destination controls
+    SdPageObjsTLB           aLbTree;
+    SdPageObjsTLB           aLbTreeDocument;
+    ListBox                 aLbOLEAction;
 
-    FixedLine           aFlSeparator;
-    TriStateBox         aTsbSound;
-    Edit                aEdtSound;
-    Edit                aEdtBookmark;
-    Edit                aEdtDocument;
-    Edit                aEdtProgram;
-    Edit                aEdtMacro;
-    PushButton          aBtnSearch;
-    PushButton          aBtnSeek;
-    TriStateBox         aTsbPlayFull;
+    FixedLine               aFlSeparator;
+    TriStateBox             aTsbSound;
+    Edit                    aEdtSound;
+    Edit                    aEdtBookmark;
+    Edit                    aEdtDocument;
+    Edit                    aEdtProgram;
+    Edit                    aEdtMacro;
+    PushButton              aBtnSearch;
+    PushButton              aBtnSeek;
+    TriStateBox             aTsbPlayFull;
 
-    const SfxItemSet&   rOutAttrs;
-    const SdView*       pView;
-    SdDrawDocument*     pDoc;
-    XColorTable*        pColTab;
+    const SfxItemSet&       rOutAttrs;
+    const SdView*           pView;
+    SdDrawDocument*         pDoc;
+    XColorTable*            pColTab;
 
-    BOOL                bTreeUpdated;
-    List*               pCurrentEffects;
-    List*               pCurrentActions;
-    String              aLastFile;
+    BOOL                    bTreeUpdated;
+    List*                   pCurrentEffects;
+    List*                   pCurrentActions;
+    String                  aLastFile;
+    ::std::vector< long >   aVerbVector;
 
     //------------------------------------
 
