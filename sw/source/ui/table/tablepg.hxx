@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablepg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-10-11 14:06:16 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,7 @@ class SwTextFlowPage : public SfxTabPage
     FixedText       aPageNoFT;
     NumericField    aPageNoNF;
     CheckBox        aSplitCB;
+    TriStateBox     aSplitRowCB;
     CheckBox        aKeepCB;
     CheckBox        aHeadLineCB;
 
@@ -244,6 +245,8 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK( ApplyCollClickHdl_Impl, CheckBox* );
     DECL_LINK( PageBreakPosHdl_Impl, RadioButton* );
     DECL_LINK( PageBreakTypeHdl_Impl, RadioButton* );
+    DECL_LINK( SplitHdl_Impl, CheckBox* );
+    DECL_LINK( SplitRowHdl_Impl, TriStateBox* );
 
 
     SwTextFlowPage( Window* pParent, const SfxItemSet& rSet );
