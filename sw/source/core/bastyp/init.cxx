@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-25 20:04:02 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,14 @@
 #ifndef _SVX_HNGPNCTITEM_HXX
 #include <svx/hngpnctitem.hxx>
 #endif
-#ifndef _SVX_CMAPITEM_HXX //autogen
+#ifndef _SVX_CMAPITEM_HXX
 #include <svx/cmapitem.hxx>
+#endif
+#ifndef _SVX_CHARSCALEITEM_HXX
+#include <svx/charscaleitem.hxx>
+#endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <svx/charrotateitem.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
@@ -469,10 +475,10 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEM_POOLABLE },  // RES_CHRATR_CTL_LANGUAGE
     { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEM_POOLABLE },   // RES_CHRATR_CTL_POSTURE
     { SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEM_POOLABLE },    // RES_CHRATR_CTL_WEIGHT
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_WRITING_DIRECTION
+    { SID_ATTR_CHAR_ROTATED, SFX_ITEM_POOLABLE },       // RES_CHRATR_ROTATE
     { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },  // RES_CHRATR_EMPHASIS_MARK
     { SID_ATTR_CHAR_TWO_LINES, SFX_ITEM_POOLABLE },     // RES_CHRATR_TWO_LINES
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY4
+    { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },    // RES_CHRATR_SCALEW
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY5
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
 
@@ -696,18 +702,14 @@ void _InitCore()
     pItem->SetWhich( RES_CHRATR_CTL_WEIGHT );
     aAttrTab[ RES_CHRATR_CTL_WEIGHT - POOLATTR_BEGIN ] = pItem;
 
-    aAttrTab[ RES_CHRATR_CTL_WEIGHT - POOLATTR_BEGIN ] = pItem;
-
-    aAttrTab[ RES_CHRATR_WRITING_DIRECTION - POOLATTR_BEGIN ] =
-                new SfxBoolItem( RES_CHRATR_WRITING_DIRECTION );
-
+    aAttrTab[ RES_CHRATR_ROTATE - POOLATTR_BEGIN ] = new SvxCharRotateItem;
     aAttrTab[ RES_CHRATR_EMPHASIS_MARK - POOLATTR_BEGIN ] =
-                new SvxEmphasisMarkItem();
+                new SvxEmphasisMarkItem;
     aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] = new SvxTwoLinesItem( FALSE );
+    aAttrTab[ RES_CHRATR_SCALEW - POOLATTR_BEGIN ] = new SvxCharScaleWidthItem;
 
 // CharakterAttr - Dummies
     aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY1 );
-    aAttrTab[ RES_CHRATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY4 );
     aAttrTab[ RES_CHRATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY5 );
 // CharakterAttr - Dummies
 

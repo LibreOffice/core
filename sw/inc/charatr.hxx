@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charatr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 21:29:02 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,10 @@ inline const SvxEmphasisMarkItem &SwAttrSet::GetEmphasisMark( BOOL bInP ) const
     {   return (const SvxEmphasisMarkItem&)Get( RES_CHRATR_EMPHASIS_MARK, bInP ); }
 inline const SvxTwoLinesItem    &SwAttrSet::Get2Lines( BOOL bInP ) const
     {   return (const SvxTwoLinesItem&)Get( RES_CHRATR_TWO_LINES, bInP ); }
+inline const SvxCharScaleWidthItem  &SwAttrSet::GetCharScaleW( BOOL bInP ) const
+    {   return (const SvxCharScaleWidthItem&)Get( RES_CHRATR_SCALEW, bInP ); }
+inline const SvxCharRotateItem  &SwAttrSet::GetCharRotate( BOOL bInP ) const
+    {   return (const SvxCharRotateItem&)Get( RES_CHRATR_ROTATE, bInP ); }
 
 /******************************************************************************
  *  Implementierung der Charakter-Attribut Methoden vom SwFmt
@@ -188,5 +192,9 @@ inline const SvxEmphasisMarkItem    &SwFmt::GetEmphasisMark( BOOL bInP ) const
     {   return aSet.GetEmphasisMark(bInP); }
 inline const SvxTwoLinesItem        &SwFmt::Get2Lines( BOOL bInP ) const
     {   return aSet.Get2Lines(bInP); }
+inline const SvxCharScaleWidthItem  &SwFmt::GetCharScaleW( BOOL bInP ) const
+    {   return aSet.GetCharScaleW(bInP); }
+inline const SvxCharRotateItem      &SwFmt::GetCharRotate( BOOL bInP ) const
+    {   return aSet.GetCharRotate(bInP); }
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-01-30 13:41:55 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@
 #endif
 #ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
+#endif
+#ifndef _SVX_CHARSCALEITEM_HXX
+#include <svx/charscaleitem.hxx>
+#endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <svx/charrotateitem.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -335,6 +341,12 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
         break;
     case RES_CHRATR_TWO_LINES:
         pNew = new SwTxt2Lines( (SvxTwoLinesItem&)rNew, nStt, nEnd );
+        break;
+    case RES_CHRATR_ROTATE:
+        pNew = new SwTxtCharRotate( (SvxCharRotateItem&)rNew, nStt, nEnd );
+        break;
+    case RES_CHRATR_SCALEW:
+        pNew = new SwTxtCharScaleWidth( (SvxCharScaleWidthItem&)rNew, nStt, nEnd );
         break;
     case RES_TXTATR_REFMARK:
         pNew = nStt == nEnd

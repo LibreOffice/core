@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-13 08:48:34 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,7 @@ public:
     FontEmphasisMark GetEmphasisMark() const
         { return aSub[nActual].GetEmphasisMark(); }
     USHORT GetPropWidth() { return aSub[nActual].GetPropWidth(); }
+    USHORT GetOrientation() { return aSub[nActual].GetOrientation(); }
 
     inline const XubString& GetName( const BYTE nWhich ) const
         { return aSub[nWhich].GetName(); }

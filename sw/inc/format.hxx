@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:18:48 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,9 +241,10 @@ public:
     inline const SvxPostureItem      &GetCTLPosture( BOOL = TRUE ) const;
     inline const SvxWeightItem       &GetCTLWeight( BOOL = TRUE ) const;
     inline const SfxBoolItem         &GetWritingDirection( BOOL = TRUE ) const;
-
     inline const SvxEmphasisMarkItem &GetEmphasisMark( BOOL = TRUE ) const;
-    inline const SvxTwoLinesItem    &Get2Lines( BOOL = TRUE ) const;
+    inline const SvxTwoLinesItem     &Get2Lines( BOOL = TRUE ) const;
+    inline const SvxCharScaleWidthItem &GetCharScaleW( BOOL = TRUE ) const;
+    inline const SvxCharRotateItem   &GetCharRotate( BOOL = TRUE ) const;
 
     // Frame-Attribute  - impl. steht im frmatr.hxx,
     // fuer LINUX, SINIX, HPUX auch in gcc_outl.cxx

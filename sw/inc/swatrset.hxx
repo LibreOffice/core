@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:18:49 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@ class SvxNoHyphenItem;
 class SvxBlinkItem;
 class SvxEmphasisMarkItem;
 class SvxTwoLinesItem;
+class SvxCharScaleWidthItem;
+class SvxCharRotateItem;
 
 // Frame-Attribute
 class SwFmtFillOrder;
@@ -277,6 +279,8 @@ public:
     inline const SfxBoolItem            &GetWritingDirection( BOOL = TRUE ) const;
     inline const SvxEmphasisMarkItem    &GetEmphasisMark( BOOL = TRUE ) const;
     inline const SvxTwoLinesItem        &Get2Lines( BOOL = TRUE ) const;
+    inline const SvxCharScaleWidthItem  &GetCharScaleW( BOOL = TRUE ) const;
+    inline const SvxCharRotateItem      &GetCharRotate( BOOL = TRUE ) const;
 
     // Frame-Attribute  - impl. steht im frmatr.hxx
     inline const SwFmtFillOrder         &GetFillOrder( BOOL = TRUE ) const;
@@ -352,6 +356,9 @@ public:
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/11/29 17:18:49  os
+      #80913# forbidden rules
+
       Revision 1.5  2000/11/20 09:36:59  jp
       new para attributes - expand para range
 

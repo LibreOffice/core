@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 21:29:02 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@ class SvXMLAttrContainerItem;
 class SwFmtRuby;
 class SvxTwoLinesItem;
 class SvxEmphasisMarkItem;
+class SvxCharScaleWidthItem;
+class SvxCharRotateItem;
+
 class SwFmtCharFmt;
 class SwFmtINetFmt;
 class SvxKerningItem;
@@ -197,6 +200,8 @@ public:
     inline const SwFmtRuby              &GetRuby() const;
     inline const SvxTwoLinesItem        &Get2Lines() const;
     inline const SvxEmphasisMarkItem    &GetEmphasisMark() const;
+    inline const SvxCharScaleWidthItem  &GetCharScaleW() const;
+    inline const SvxCharRotateItem      &GetCharRotate() const;
 
 private:
     SwTxtAttr( const SwTxtAttr& );
@@ -439,9 +444,25 @@ inline const SvxEmphasisMarkItem& SwTxtAttr::GetEmphasisMark() const
     return (const SvxEmphasisMarkItem&)*pAttr;
 }
 
+inline const SvxCharScaleWidthItem& SwTxtAttr::GetCharScaleW() const
+{
+    ASSERT( pAttr && pAttr->Which() == RES_CHRATR_SCALEW, "Falsche Abfrage" );
+    return (const SvxCharScaleWidthItem&)*pAttr;
+}
+
+inline const SvxCharRotateItem& SwTxtAttr::GetCharRotate() const
+{
+    ASSERT( pAttr && pAttr->Which() == RES_CHRATR_ROTATE, "Falsche Abfrage" );
+    return (const SvxCharRotateItem&)*pAttr;
+}
+
+
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/11/16 21:29:02  jp
+      SwFmt2Lines moved to SVX and renamed
+
       Revision 1.5  2000/11/06 10:46:50  jp
       new flags for the SwTxtAttr
 

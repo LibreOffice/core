@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 21:31:21 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,12 @@
 #endif
 #ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
+#endif
+#ifndef _SVX_CHARSCALEITEM_HXX
+#include <svx/charscaleitem.hxx>
+#endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <svx/charrotateitem.hxx>
 #endif
 
 #ifndef _TXTINET_HXX //autogen
@@ -801,5 +807,62 @@ void SwTxtEmphasisMark::ChgTxtAttr( SwTxtAttr &rAttr )
 void SwTxtEmphasisMark::RstTxtAttr( SwTxtAttr &rAttr )
 {
     ((SwTxtEmphasisMark&)rAttr).ePrevEmphasis = ePrevEmphasis;
+}
+
+// ******************************
+
+SwTxtCharRotate::SwTxtCharRotate( const SvxCharRotateItem& rAttr,
+                                    xub_StrLen nStart, xub_StrLen nEnd )
+   : SwTxtAttrEnd( rAttr, nStart, nEnd )
+{
+}
+
+void SwTxtCharRotate::ChgFnt( SwFont* pFont )
+{
+    nPrevRotate = pFont->GetOrientation();
+    pFont->SetVertical( GetCharRotate().GetValue() );
+}
+
+void SwTxtCharRotate::RstFnt( SwFont* pFont )
+{
+    pFont->SetVertical( nPrevRotate );
+}
+
+void SwTxtCharRotate::ChgTxtAttr( SwTxtAttr & rAttr )
+{
+    nPrevRotate = ((SwTxtCharRotate&)rAttr).nPrevRotate;
+    ((SwTxtCharRotate&)rAttr).nPrevRotate = GetCharRotate().GetValue();
+}
+
+void SwTxtCharRotate::RstTxtAttr( SwTxtAttr & rAttr )
+{
+    ((SwTxtCharRotate&)rAttr).nPrevRotate = nPrevRotate;
+}
+
+// ******************************
+
+SwTxtCharScaleWidth::SwTxtCharScaleWidth( const SvxCharScaleWidthItem& rAttr,
+                                    xub_StrLen nStart, xub_StrLen nEnd )
+   : SwTxtAttrEnd( rAttr, nStart, nEnd )
+{
+}
+
+void SwTxtCharScaleWidth::ChgFnt( SwFont* pFont )
+{
+    nPrevScale = pFont->GetPropWidth();
+    pFont->SetPropWidth( GetCharScaleW().GetValue() );
+}
+void SwTxtCharScaleWidth::RstFnt(SwFont * pFont )
+{
+    pFont->SetPropWidth( nPrevScale );
+}
+void SwTxtCharScaleWidth::ChgTxtAttr( SwTxtAttr & rAttr )
+{
+    nPrevScale = ((SwTxtCharScaleWidth&)rAttr).nPrevScale;
+    ((SwTxtCharScaleWidth&)rAttr).nPrevScale = GetCharScaleW().GetValue();
+}
+void SwTxtCharScaleWidth::RstTxtAttr( SwTxtAttr & rAttr )
+{
+    ((SwTxtCharScaleWidth&)rAttr).nPrevScale = nPrevScale;
 }
 

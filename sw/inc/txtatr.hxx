@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:36:59 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,38 @@ class SwTxtEmphasisMark : public SwTxtAttrEnd
     FontEmphasisMark ePrevEmphasis;
 public:
     SwTxtEmphasisMark( const SvxEmphasisMarkItem& rAttr,
+                        xub_StrLen nStart, xub_StrLen nEnd );
+
+    virtual void ChgFnt(SwFont *);
+    virtual void RstFnt(SwFont *);
+    virtual void ChgTxtAttr( SwTxtAttr & );
+    virtual void RstTxtAttr( SwTxtAttr & );
+};
+
+// CHARROTATE ************************************************************
+
+class SwTxtCharRotate : public SwTxtAttrEnd
+{
+    // Hier merkt es sich das SV-Attribut den Wert aus dem Font.
+    USHORT nPrevRotate;
+public:
+    SwTxtCharRotate( const SvxCharRotateItem& rAttr,
+                        xub_StrLen nStart, xub_StrLen nEnd );
+
+    virtual void ChgFnt(SwFont *);
+    virtual void RstFnt(SwFont *);
+    virtual void ChgTxtAttr( SwTxtAttr & );
+    virtual void RstTxtAttr( SwTxtAttr & );
+};
+
+// CHARSCALEWIDTH **********************************************************
+
+class SwTxtCharScaleWidth : public SwTxtAttrEnd
+{
+    // Hier merkt es sich das SV-Attribut den Wert aus dem Font.
+    USHORT nPrevScale;
+public:
+    SwTxtCharScaleWidth( const SvxCharScaleWidthItem& rAttr,
                         xub_StrLen nStart, xub_StrLen nEnd );
 
     virtual void ChgFnt(SwFont *);
