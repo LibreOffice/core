@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 11:36:31 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,7 @@
 #define HID_SC_DPDATAFIELD      ( HID_SC_OTHER_START + 10 )
 #define HID_SC_DPSUBT_OPT       ( HID_SC_OTHER_START + 11 )
 #define HID_SC_DPSUBT_HIDE      ( HID_SC_OTHER_START + 12 )
+#define HID_SC_DPSHOWDETAIL     ( HID_SC_OTHER_START + 16 )
 
 // Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )
@@ -1592,6 +1593,7 @@
 #define RID_SCDLG_LINKAREA              (SC_DIALOGS_START + 132)
 #define RID_SCDLG_DPDATAFIELD           (SC_DIALOGS_START + 133)
 #define RID_SCDLG_DPSUBTOTAL_OPT        (SC_DIALOGS_START + 134)
+#define RID_SCDLG_DPSHOWDETAIL          (SC_DIALOGS_START + 137)
 
 #define SC_DIALOGS_END          (SC_DIALOGS_START + 150)
 
