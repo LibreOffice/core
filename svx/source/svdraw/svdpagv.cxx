@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:01:22 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ SdrUnoControlRec::SdrUnoControlRec(SdrUnoControlList* _pParent, SdrUnoObj* _pObj
                  ,bIsListening(FALSE)
                  ,bDisposed(FALSE)
                  ,pParent(_pParent)
+                 ,mnPaintLevel( 0 )
 {
     uno::Reference< awt::XWindow> xWindow(xControl, uno::UNO_QUERY);
     if (xWindow.is())
@@ -217,8 +218,11 @@ void SAL_CALL SdrUnoControlRec::windowMoved( const ::com::sun::star::awt::Window
 void SAL_CALL SdrUnoControlRec::windowShown( const ::com::sun::star::lang::EventObject& e )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (!IsVisible())
-        StopListening();
+    if ( !mnPaintLevel )
+    {
+        if (!IsVisible())
+            StopListening();
+    }
 
     bVisible = TRUE;
 }
@@ -228,12 +232,16 @@ void SAL_CALL SdrUnoControlRec::windowHidden( const ::com::sun::star::lang::Even
     throw(::com::sun::star::uno::RuntimeException)
 {
     bVisible = FALSE;
+
     // Im Designmodus ist das Control nicht sichtbar und der drawing layer ist
     // verantwortlich fuer die Darstellung des Controls
     // In diesem Fall auf Aenderungen an den Eigenschaften der Controls gelauscht,
     // um ein Repaint auszufuehren.
-    if (!bDisposed)
-        StartListening();
+    if ( !mnPaintLevel )
+    {
+        if (!bDisposed)
+            StartListening();
+    }
 }
 
 // XPropertyChangeListener
