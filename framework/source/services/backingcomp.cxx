@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-28 15:38:07 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ namespace framework
 BackingComp::BackingComp( const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR )
     : ThreadHelpBase    (&Application::GetSolarMutex()                  )
     , m_xSMGR           (xSMGR                                          )
-    , m_aAsyncCallback  ( LINK( this, BackingComp, impl_asyncCallback ) )
+    , m_pAccExec        (0                                              )
 {
 }
 
@@ -216,6 +216,14 @@ BackingComp::BackingComp( const css::uno::Reference< css::lang::XMultiServiceFac
 
 BackingComp::~BackingComp()
 {
+    // Free this member inside dtor only! Not inside dispose().
+    // Otherwhise we cant guarantee right using of it inbetween.
+    if (m_pAccExec)
+    {
+        ::svt::AcceleratorExecute* pAccExec = m_pAccExec;
+        m_pAccExec = 0;
+        delete pAccExec;
+    }
 }
 
 //_______________________________________________
@@ -795,6 +803,9 @@ sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool bSuspend )
 void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEvent )
     throw(css::uno::RuntimeException)
 {
+    // Attention: dont free m_pAccExec here! see comments inside dtor and
+    // keyPressed() for further details.
+
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
@@ -824,8 +835,6 @@ void SAL_CALL BackingComp::dispose()
 {
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
-
-    m_aAsyncCallback.ClearPendingCall();
 
     // kill the menu
     css::util::URL aURL;
@@ -985,33 +994,31 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 /**
  */
 
-KeyCode impl_KeyCodeAWT2VCL( /*IN*/ const css::awt::KeyEvent& rAWTEvent )
-{
-    BOOL   bShift = ((rAWTEvent.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
-    BOOL   bMod1  = ((rAWTEvent.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
-    BOOL   bMod2  = ((rAWTEvent.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
-    USHORT nKey   = (USHORT)rAWTEvent.KeyCode;
-    return KeyCode(nKey, bShift, bMod1, bMod2);
-}
-
-//_______________________________________________
-
-/**
- */
-
 void SAL_CALL BackingComp::keyPressed( /*IN*/ const css::awt::KeyEvent& aEvent )
     throw(css::uno::RuntimeException)
 {
-    ::rtl::OUString sURL = GetCommandURLFromKeyCode(impl_KeyCodeAWT2VCL(aEvent));
-    if (sURL.getLength()>0)
+    // SAFE -> ----------------------------------
+    ReadGuard aReadLock(m_aLock);
+    ::svt::AcceleratorExecute* pAccExec = m_pAccExec;
+    aReadLock.unlock();
+    // <- SAFE ----------------------------------
+
+    if (!pAccExec)
     {
-        /* SAFE { */
+        pAccExec = ::svt::AcceleratorExecute::createAcceleratorHelper();
+        pAccExec->init(m_xSMGR, m_xFrame);
+
+        // SAFE -> ------------------------------
         WriteGuard aWriteLock(m_aLock);
-        m_lAsyncQueue.push(sURL);
-        m_aAsyncCallback.Call(0, sal_True);
+        m_pAccExec = pAccExec;
         aWriteLock.unlock();
-        /* } SAFE */
+        // <- SAFE ------------------------------
     }
+
+    // We can call this non ref counted member copy here outside
+    // the synchronized block. Because it lives till we reach our own dtor.
+    // And normaly we can't stand inside a method and reach our dtor ... Normaly .-)
+    pAccExec->execute(aEvent);
 }
 
 //_______________________________________________
@@ -1029,32 +1036,6 @@ void SAL_CALL BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& aEvent 
         - and it's first event will be a keyRealeased() for the already well known event, which switched to the backing mode!
         So it will be handled twice! document => backing mode => exit app ...
      */
-}
-
-IMPL_LINK( BackingComp, impl_asyncCallback, void*, pVoid )
-{
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-    ::rtl::OUString sURL = m_lAsyncQueue.front();
-    m_lAsyncQueue.pop();
-    aReadLock.unlock();
-    /* } SAFE */
-
-    css::util::URL aURL;
-    aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
-    if (xParser.is())
-        xParser->parseStrict(aURL);
-
-    css::uno::Reference< css::frame::XDispatchProvider > xProvider(m_xFrame, css::uno::UNO_QUERY);
-    if (xProvider.is())
-    {
-        css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
-        if (xDispatch.is())
-            xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue>());
-    }
-
-    return 0;
 }
 
 } // namespace framework
