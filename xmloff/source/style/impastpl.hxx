@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 12:30:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,9 @@ public:
         const UniReference < SvXMLExportPropertyMapper > & rMapper,
         const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
     void RegisterName( sal_Int32 nFamily, const ::rtl::OUString& rName );
+    void GetRegisteredNames(
+        com::sun::star::uno::Sequence<sal_Int32>& aFamilies,
+        com::sun::star::uno::Sequence<rtl::OUString>& aNames );
 
 //  ::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent,
 //                       const ::std::vector< XMLPropertyState >& rProperties,
