@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen6.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 19:09:51 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,104 @@
 
 #pragma hdrstop
 
-//#include "document.hxx"
+#include "scitems.hxx"
+#include <svx/scripttypeitem.hxx>
+
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include "document.hxx"
+#include "cell.hxx"
+#include "cellform.hxx"
+
+using namespace com::sun::star;
+
+#define SC_BREAKITER_SERVICE    "com.sun.star.i18n.BreakIterator"
 
 //
 //  this file is compiled with exceptions enabled
 //  put functions here that need exceptions!
 //
 
-// currently nothing here...
+// -----------------------------------------------------------------------
+
+BYTE ScDocument::GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat )
+{
+    if ( !pCell )
+        return 0;       // empty
+
+    BYTE nStored = pCell->GetScriptType();
+    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
+        return nStored;                             // use stored value
+
+    BYTE nRet = 0;
+
+    String aStr;
+    Color* pColor;
+    ScCellFormat::GetString( pCell, nNumberFormat, aStr, &pColor, *pFormTable );
+
+    if (aStr.Len())
+    {
+        //! keep the BreakIterator as member
+
+        uno::Reference<uno::XInterface> xInterface = xServiceManager->createInstance(
+                            rtl::OUString::createFromAscii( SC_BREAKITER_SERVICE ) );
+        uno::Reference<i18n::XBreakIterator> xBreakIter( xInterface, uno::UNO_QUERY );
+        if ( xBreakIter.is() )
+        {
+            rtl::OUString aText = aStr;
+            sal_Int32 nLen = aText.getLength();
+
+            sal_Int32 nPos = 0;
+            do
+            {
+                sal_Int16 nType = xBreakIter->getScriptType( aText, nPos );
+                switch ( nType )
+                {
+                    case i18n::ScriptType::LATIN:
+                        nRet |= SCRIPTTYPE_LATIN;
+                        break;
+                    case i18n::ScriptType::ASIAN:
+                        nRet |= SCRIPTTYPE_ASIAN;
+                        break;
+                    case i18n::ScriptType::COMPLEX:
+                        nRet |= SCRIPTTYPE_COMPLEX;
+                        break;
+                    // WEAK is ignored
+                }
+                nPos = xBreakIter->endOfScript( aText, nPos, nType );
+            }
+            while ( nPos >= 0 && nPos < nLen );
+        }
+    }
+
+    pCell->SetScriptType( nRet );       // store for later calls
+
+    return nRet;
+}
+
+BYTE ScDocument::GetScriptType( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCell* pCell )
+{
+    // if cell is not passed, take from document
+
+    if (!pCell)
+    {
+        pCell = GetCell( ScAddress( nCol, nRow, nTab ) );
+        if ( !pCell )
+            return 0;       // empty
+    }
+
+    // if script type is set, don't have to get number formats
+
+    BYTE nStored = pCell->GetScriptType();
+    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
+        return nStored;                             // use stored value
+
+    // include number formats from conditional formatting
+
+    ULONG nFormat = ((const SfxUInt32Item*)GetEffItem( nCol, nRow, nTab, ATTR_VALUE_FORMAT ))->GetValue();
+    return GetCellScriptType( pCell, nFormat );
+}
+
 

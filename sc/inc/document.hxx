@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-21 16:15:12 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,6 +970,9 @@ public:
     const ScConditionalFormat* GetCondFormat( USHORT nCol, USHORT nRow, USHORT nTab ) const;
     const SfxItemSet*   GetCondResult( USHORT nCol, USHORT nRow, USHORT nTab ) const;
     const SfxPoolItem*  GetEffItem( USHORT nCol, USHORT nRow, USHORT nTab, USHORT nWhich ) const;
+
+    BYTE            GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat );
+    BYTE            GetScriptType( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCell* pCell = NULL );
 
     BOOL            HasDetectiveOperations() const;
     void            AddDetectiveOperation( const ScDetOpData& rData );
