@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-29 14:05:14 $
+ *  last change: $Author: sj $ $Date: 2001-09-21 08:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,18 +742,18 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
                         EE_ITEMS_START,EE_ITEMS_END,
                         0,0);
 
-                    SfxWhichIter aIter( GetItemSet() );
+                    const SfxItemSet& rItemSet = GetItemSet();
+
+                    SfxWhichIter aIter( rItemSet );
                     sal_uInt16 nWhich( aIter.FirstWhich() );
                     const SfxPoolItem* pItem = NULL;
 
                     while( nWhich )
                     {
-                        if( SFX_ITEM_SET == GetItemSet().GetItemState(nWhich, FALSE, &pItem) )
+                        if( SFX_ITEM_SET == rItemSet.GetItemState( nWhich, FALSE, &pItem ) )
                             aSet.Put( *pItem->Clone() );
-
                         nWhich = aIter.NextWhich();
                     }
-
                     // Set the StyleSheet
                     NbcSetStyleSheet(pDefSS, TRUE);
 
