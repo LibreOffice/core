@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dr $ $Date: 2001-12-19 08:33:16 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text = "~Alles löschen" ;
         Text [ ENGLISH ] = "Delete ~All" ;
         Text [ norwegian ] = "Delete ~All" ;
-        Text [ italian ] = "Cancella ~tutto" ;
+        Text [ italian ] = "~Cancella tutto" ;
         Text [ portuguese_brazilian ] = "Apagar ~Tudo" ;
         Text [ portuguese ] = "Eliminar ~tudo" ;
         Text [ finnish ] = "Poista ~kaikki" ;
@@ -555,7 +555,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text = "Zeichen~ketten" ;
         Text [ ENGLISH ] = "~Strings" ;
         Text [ norwegian ] = "~Strings" ;
-        Text [ italian ] = "~Stringhe" ;
+        Text [ italian ] = "String~he" ;
         Text [ portuguese_brazilian ] = "~Cadeias" ;
         Text [ portuguese ] = "Cadeias de caracteres" ;
         Text [ finnish ] = "~Merkkijonot" ;
@@ -615,7 +615,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text = "~Datum & Zeit" ;
         Text [ ENGLISH ] = "~Date & Time" ;
         Text [ norwegian ] = "~Date & Time" ;
-        Text [ italian ] = "~Data & Ora" ;
+        Text [ italian ] = "Data ~& Ora" ;
         Text [ portuguese_brazilian ] = "~Data e Hora" ;
         Text [ portuguese ] = "~Data & Hora" ;
         Text [ finnish ] = "~Päivämäärä ja kellonaika" ;
@@ -675,7 +675,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text = "Forma~te" ;
         Text [ ENGLISH ] = "Forma~ts" ;
         Text [ norwegian ] = "Forma~ts" ;
-        Text [ italian ] = "Forma~ti" ;
+        Text [ italian ] = "Format~i" ;
         Text [ portuguese_brazilian ] = "Forma~tos" ;
         Text [ portuguese ] = "Forma~tos" ;
         Text [ finnish ] = "Muo~dot" ;
@@ -736,7 +736,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text [ ENGLISH ] = "~Objects" ;
         Text [ english_us ] = "~Objects" ;
         TabStop = TRUE ;
-        Text [ italian ] = "~Oggetti" ;
+        Text [ italian ] = "O~ggetti" ;
         Text [ spanish ] = "Objeto~s" ;
         Text [ french ] = "~Objets" ;
         Text [ dutch ] = "O~bjecten" ;
@@ -849,7 +849,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text = "~Alles einfügen" ;
         Text [ ENGLISH ] = "Insert a~ll" ;
         Text [ norwegian ] = "Insert a~ll" ;
-        Text [ italian ] = "Incolla ~tutto" ;
+        Text [ italian ] = "Inco~lla tutto" ;
         Text [ portuguese_brazilian ] = "Inserir ~tudo" ;
         Text [ portuguese ] = "Inserir ~tudo" ;
         Text [ finnish ] = "~Liitä kaikki" ;
@@ -879,7 +879,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text = "Zeichen~ketten" ;
         Text [ ENGLISH ] = "~Strings" ;
         Text [ norwegian ] = "~Strings" ;
-        Text [ italian ] = "~Stringhe" ;
+        Text [ italian ] = "String~he" ;
         Text [ portuguese_brazilian ] = "~Cadeias" ;
         Text [ portuguese ] = "~Cadeias de caracteres" ;
         Text [ finnish ] = "~Merkkijonot" ;
@@ -939,7 +939,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text = "~Datum & Zeit" ;
         Text [ ENGLISH ] = "~Date & Time" ;
         Text [ norwegian ] = "~Date & Time" ;
-        Text [ italian ] = "~Data & Ora" ;
+        Text [ italian ] = "Data ~& Ora" ;
         Text [ portuguese_brazilian ] = "~Data e Hora" ;
         Text [ portuguese ] = "~Data & Hora" ;
         Text [ finnish ] = "~Päivämäärä ja kellonaika" ;
@@ -999,7 +999,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text = "Forma~te" ;
         Text [ ENGLISH ] = "Forma~ts" ;
         Text [ norwegian ] = "Forma~ts" ;
-        Text [ italian ] = "Forma~ti" ;
+        Text [ italian ] = "Format~i" ;
         Text [ portuguese_brazilian ] = "Forma~tos" ;
         Text [ portuguese ] = "Forma~tos" ;
         Text [ finnish ] = "Muo~dot" ;
@@ -2562,7 +2562,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text = "~Jahr" ;
         Text [ ENGLISH ] = "~Year" ;
         Text [ norwegian ] = "~Year" ;
-        Text [ italian ] = "~Anno" ;
+        Text [ italian ] = "A~nno" ;
         Text [ portuguese_brazilian ] = "~Ano" ;
         Text [ portuguese ] = "~Ano" ;
         Text [ finnish ] = "Vuo~si" ;
@@ -2621,7 +2621,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text = "~Rechts" ;
         Text [ ENGLISH ] = "~Right" ;
         Text [ norwegian ] = "~Right" ;
-        Text [ italian ] = "A ~destra" ;
+        Text [ italian ] = "A dest~ra" ;
         Text [ portuguese_brazilian ] = "~Direita" ;
         Text [ portuguese ] = "~Direita" ;
         Text [ finnish ] = "~Oikea" ;
@@ -2861,7 +2861,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text = "Auto-Aus~füllen" ;
         Text [ ENGLISH ] = "~Autofill" ;
         Text [ norwegian ] = "~Autofill" ;
-        Text [ italian ] = "Compilazione ~autom." ;
+        Text [ italian ] = "Compila~zione autom." ;
         Text [ portuguese_brazilian ] = "~PreenchimentoAutom?tico" ;
         Text [ portuguese ] = "AutoPreenchimento" ;
         Text [ finnish ] = "~Automaattinen täyttö" ;
@@ -3809,4 +3809,5 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ catalan ] = "Modifica les dades font";
     Text[ finnish ] = "Vaihda lähdetietoalue";
 };
+
 
