@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescriptionGenerator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-05-29 15:03:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@
 #include "xdef.hxx"
 #include "unoapi.hxx"
 #include "accessibility.hrc"
-
+#include "DGColorNameLookUp.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -361,46 +361,7 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
             aValue >>= nValue;
         }
 
-        // Create color table in which to look up the given color.
-        uno::Reference<container::XNameContainer> xColorTable (
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii("com.sun.star.drawing.ColorTable")),
-            uno::UNO_QUERY);
-
-        uno::Reference<container::XNameAccess> xNA (xColorTable, uno::UNO_QUERY);
-        if (xNA.is())
-        {
-            // Get list of color names in order to iterate over the color
-            // table.
-            uno::Sequence<OUString> aNames;
-            {
-                // Look the solar mutex here as workarround for missing lock
-                // in called function.
-                ::vos::OGuard aGuard (::Application::GetSolarMutex());
-                aNames = xNA->getElementNames();
-            }
-            long i;
-            for (i=0; i<aNames.getLength(); i++)
-            {
-                // Compare the given color with the i-th entry of the table.
-                uno::Any aColor (xNA->getByName (aNames[i]));
-                long nColor;
-                aColor >>= nColor;
-                if (nColor == nValue)
-                {
-                    // Found the given color.  Append its name to the description.
-                    msDescription.append (aNames[i]);
-                    break;
-                }
-            }
-            if (i == aNames.getLength())
-            {
-                // Did not find the given color.  Append its rgb tuple to the
-                // description.
-                msDescription.append (sal_Unicode('#'));
-                msDescription.append (nValue, 16);
-            }
-        }
+        msDescription.append (DGColorNameLookUp::Instance().LookUpColor (nValue));
     }
     catch (::com::sun::star::beans::UnknownPropertyException)
     {
