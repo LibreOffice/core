@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:44:44 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 #define FT_DATATYPE             1
 #define FT_CONNECTURL           2
-#define FT_DATASOURCENAME       3
+#define FT_DATASOURCETYPE_PRE   3
 #define FT_USERNAME             4
 #define FT_PASSWORD             5
 #define FT_OPTIONS              6
@@ -88,11 +88,14 @@
 #define FT_LDAPROWCOUNT         21
 #define FT_AUTOINCREMENTVALUE   22
 #define FT_RETRIEVE_AUTO        23
+#define FT_BOOLEANCOMPARISON    24
+#define FT_DATASOURCETYPE_POST  25
 
 #define LB_DATATYPE             1
 #define LB_DATASOURCES          2
 #define LB_CHARSET              3
 #define LB_TIMEOUT_UNIT         4
+#define LB_BOOLEANCOMPARISON    5
 
 #define ET_CONNECTURL           1
 #define ET_DATASOURCENAME       2
@@ -115,6 +118,7 @@
 #define BTN_PASSWORD_OK         6
 #define BTN_PASSWORD_CANCEL     7
 #define BTN_PASSWORD_HELP       8
+#define PB_TESTDRIVERCLASS      9
 
 #define GB_CONNECTION           1
 #define GB_DBASE_MAIN           2
@@ -127,21 +131,29 @@
 #define CB_USECATALOG           6
 #define CB_SQL92CHECK           7
 #define CB_RETRIEVE_AUTO        8
-#define CB_USESSL               9
+#define CB_APPENDTABLEALIAS     9
+#define CB_IGNOREDRIVER_PRIV    10
+#define CB_PARAMETERNAMESUBST   11
+#define CB_ENABLEOUTERJOIN      12
+#define CB_SCHEMA               13
+#define CB_CATALOG              14
+#define CB_IGNOREINDEXAPPENDIX  15
+#define CB_USESSL               16
+#define CB_DOSLINEENDS          17
 
 #define FL_SEPARATOR1           1
 #define FL_SEPARATOR2           2
 #define FL_COLLECTION           3
 #define FL_SEPARATOR3           4
+#define FL_SEPARATORAUTO        5
+#define FL_DATAHANDLING         6
+#define FL_DATACONVERT          7
 
 #define CM_FIELDSEPARATOR       1
 #define CM_TEXTSEPARATOR        2
 #define CM_DECIMALSEPARATOR     3
 #define CM_THOUSANDSSEPARATOR   4
 #define CM_EXTENSION            5
-
-#define WND_DATASOURCESELECTOR  1
-#define WND_SELECTORBORDER      2
 
 #define CTL_TABLESUBSCRIPTION   1
 #define CTL_COLLECTION          2
@@ -159,30 +171,18 @@
 // string ids (usually relative to other resources, that's why not necessarily unique)
 
 #define STR_PAGETITLE_GENERAL               1
-#define STR_PAGETITLE_DBASE                 2
-#define STR_PAGETITLE_JDBC                  3
-#define STR_PAGETITLE_ODBC                  4
-#define STR_PAGETITLE_ADABAS                5
-#define STR_PAGETITLE_TEXT                  6
-#define STR_PAGETITLE_TABLESUBSCRIPTION     7
+#define STR_PAGETITLE_CONNECTION            2
+#define STR_PAGETITLE_ADVANCED              3
 #define STR_FIELDSEPARATORLIST              8
 #define STR_TEXTSEPARATORLIST               9
 #define STR_DELIMITER_MISSING               10
 #define STR_DELIMITER_MUST_DIFFER           11
 #define STR_NO_WILDCARDS                    12
-#define STR_NAMEINVALID                     13
-#define STR_DATASOURCEDELETED               14
+#define STR_PARENTTITLE                     14
 #define STR_COULDNOTLOAD_ODBCLIB            15
 #define STR_NO_ADABASE_DATASOURCES          16
-#define STR_PAGETITLE_ADO                   17
-#define STR_PAGETITLE_QUERIES               18
-#define STR_PAGETITLE_ADABAS_STATISTIC      19
-#define STR_PAGETITLE_DOCUMENTS             20
-#define STR_PAGETITLE_LDAP                  21
 #define STR_UNSUPPORTED_DATASOURCE_TYPE     22
-#define STR_PAGETITLE_USERADMIN             23
 #define STR_TEXT_FIELD_SEP_NONE             24
-#define STR_PAGETITLE_MYSQL                 25
 #define STR_MYSQL_CONFIG_NEXT_PAGE          26
 #define STR_JDBC_DEFAULT_URL                27
 
