@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:38:11 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include "PreviewWindow.hxx"
 #include "fuslshow.hxx"
 #include "FactoryIds.hxx"
+#include "slideshow.hxx"
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -368,6 +369,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         PreviewWindow* pPreviewWin = NULL;
 
         // notify preview slide show are changes are to be done
+/*
         if( pPreviewChildWindow!=NULL
             && (pPreviewWin = static_cast<PreviewWindow*>(
                 pPreviewChildWindow->GetWindow()))!= NULL)
@@ -377,6 +379,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             if( pShow )
                 pShow->InitPageModify();
         }
+*/
 
         if (!bHandoutMode)
         {
