@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:10:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ polish ] = "Zawartoœæ pola jest nierówna NULL";
         Text[ portuguese_brazilian ] = "Field content is n~ot NULL";
         Text[ japanese ] = "Ì¨°ÙÄŞ“à—e‚ÍNU~LL‚Å‚Í‚È‚¢";
-        Text[ korean ] = "ÇÊµå ³»¿ëÀÌ NU~LLÀÌ¡¡¾Æ´Ô";
+        Text[ korean ] = "ÇÊµå ³»¿ëÀÌ NULLÀÌ¡¡¾Æ´Ô";
         Text[ chinese_simplified ] = "×Ö¶ÎÄÚÈİ²»ÊÇ NU~LL";
         Text[ chinese_traditional ] = "Äæ¦ì¤º®e¤£¬O NU~LL";
         Text[ arabic ] = "ãÍÊæíÇÊ ÇáÍŞá áÇ ÊÓÇæí ŞíãÉ ÎÇáíÉ (NULL)";
@@ -403,7 +403,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         HelpId = HID_SEARCH_FORMATTER;
         Text[ italian ] = "Usa formattazioni di campo";
         Text[ portuguese_brazilian ] = "Feldfor~matierung benutzen";
-        Text[ portuguese ] = "Usar for~matação de campo";
+        Text[ portuguese ] = "Usar for~mato de campo";
         Text[ danish ] = "Anvend feltformatering";
         Text[ french ] = "Utiliser le f~ormatage de champ";
         Text[ swedish ] = "Använd ~fältformatering";
@@ -910,12 +910,12 @@ String RID_STR_RECORDSEARCH_METHODS
     Text[ dutch ] = "willekeurige plaats in veld;aan veldeinde;aan veldbegin;compleet veld";
     Text[ spanish ] = "cualquier parte en campo;al principio del campo;al final del campo;todo el campo";
     Text[ english_us ] = "anywhere in the field;beginning of field;end of field;entire field";
-    Text[ chinese_simplified ] = "ÈÎÒâÒ»¸ö×Ö¶Î£»ÔÚ×Ö¶Î¿ª¶Ë£»Õû¸ö×Ö¶Î";
+    Text[ chinese_simplified ] = "×Ö¶ÎÄÚµÄÈÎÒâÎ»ÖÃ;ÔÚ×Ö¶ÎµÄ¿ª¶Ë;ÔÚ×Ö¶ÎµÄ½áÎ²;Õû¸ö×Ö¶Î";
     Text[ language_user1 ] = " ";
     Text[ russian ] = "ïî æåëàíèş â ïîëå;â íà÷àëå ïîëÿ;â êîíöå ïîëÿ;âñå ïîëå";
     Text[ polish ] = "dowolnie w polu; na pocz¹tku pola; na koñcu pola;ca³e pole";
     Text[ japanese ] = "Ì¨°ÙÄŞ“à‚Ì‚ ‚éêŠ;Ì¨°ÙÄŞ‚Ì‰‚ß;Ì¨°ÙÄŞ‚ÌI‚è;Ì¨°ÙÄŞ‘S‘Ì";
-    Text[ chinese_traditional ] = "¥ô·N¤@­ÓÄæ¦ì¡Q¦bÄæ¦ì°_©l¦ì¸m¡Q¾ã­ÓÄæ¦ì";
+    Text[ chinese_traditional ] = "Äæ¦ìªº¥ô·N¦ì¸m;¦bÄæ¦ì°_©l¦ì¸m;¦bÄæ¦ìªºµ²§À;¾ã­ÓÄæ¦ì";
     Text[ arabic ] = "İí Ãí ãßÇä İí ÇáÍŞáºİí ÈÏÇíÊå;İí äåÇíÊåºÇáÍŞá ßáå";
     Text[ greek ] = "ôõ÷áßá;óôçí áñ÷Ş ôïõ ğåäßïõ;óôï ôİëïò ôïõ ğåäßïõ;ïëüêëçñï ôï ğåäßï";
     Text[ korean ] = "ÇÊµå¿¡¼­ ÀÓÀÇ·Î;ÇÊµå ½ÃÀÛ¿¡;ÇÊµå ³¡¿¡;ÀüÃ¼ ÇÊµå";
@@ -1061,5 +1061,6 @@ String RID_STR_SEARCH_COUNTING
     Text[ catalan ] = "contando registros de datos";
     Text[ finnish ] = "lasketaan tietueet";
 };
+
 
 
