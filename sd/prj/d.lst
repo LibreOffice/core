@@ -84,6 +84,14 @@ hedabu: ..\inc\sdobjfac.hxx %_DEST%\inc%_EXT%\sd\sdobjfac.hxx
 ..\xml\OutlineView.xml %_DEST%\xml%_EXT%\OutlineView.xml
 ..\xml\PresentationView.xml %_DEST%\xml%_EXT%\PresentationView.xml
 
+..\xml\AccessibleDrawDocumentView.xml %_DEST%\xml%_EXT%\AccessibleDrawDocumentView.xml
+..\xml\AccessibleOutlineView.xml %_DEST%\xml%_EXT%\AccessibleOutlineView.xml
+..\xml\AccessibleSlideView.xml %_DEST%\xml%_EXT%\AccessibleSlideView.xml
+..\xml\AccessiblePresentationShape.xml %_DEST%\xml%_EXT%\AccessiblePresentationShape.xml
+..\xml\AccessiblePresentationGraphicShape.xml %_DEST%\xml%_EXT%\AccessiblePresentationGraphicShape.xml
+..\xml\AccessiblePresentationOLEShape.xml %_DEST%\xml%_EXT%\AccessiblePresentationOLEShape.xml
+..\xml\AccessiblePageShape.xml %_DEST%\xml%_EXT%\AccessiblePageShape.xml
+
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
