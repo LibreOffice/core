@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 15:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_simplified ] = "ºÍ";
         Text[ russian ] = "è";
         Text[ polish ] = "i";
-        Text[ japanese ] = "‚»‚µ‚Ä";
+        Text[ japanese ] = "‚Æ";
         Text[ chinese_traditional ] = "©M";
         Text[ arabic ] = "æ";
         Text[ greek ] = "êáé";
@@ -991,7 +991,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_simplified ] = "ºÍ";
         Text[ russian ] = "è";
         Text[ polish ] = "i";
-        Text[ japanese ] = "‚»‚µ‚Ä";
+        Text[ japanese ] = "‚Æ";
         Text[ chinese_traditional ] = "©M";
         Text[ arabic ] = "æ";
         Text[ greek ] = "êáé";
@@ -1489,7 +1489,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_simplified ] = "ºÍ";
         Text[ russian ] = "è";
         Text[ polish ] = "i";
-        Text[ japanese ] = "‚»‚µ‚Ä";
+        Text[ japanese ] = "‚Æ";
         Text[ chinese_traditional ] = "©M";
         Text[ arabic ] = "æ";
         Text[ greek ] = "êáé";
@@ -1592,7 +1592,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text [ swedish ] = "Villkorlig formatering" ;
     Text [ danish ] = "Betinget formatering" ;
     Text [ portuguese_brazilian ] = "Bedingte Formatierung" ;
-    Text [ portuguese ] = "Fomatação condicionada" ;
+    Text [ portuguese ] = "Fomatação condicional" ;
     Text[ chinese_simplified ] = "ÓÐÌõ¼þµÄ¸ñÊ½";
     Text[ russian ] = "Óñëîâíîå ôîðìàòèðîâàíèå";
     Text[ polish ] = "Formatowanie warunkowe";
