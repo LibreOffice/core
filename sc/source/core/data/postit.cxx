@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:48:46 $
+ *  last change: $Author: nn $ $Date: 2005-01-17 10:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ Rectangle ScPostIt::MimicOldRectangle(const ScAddress& rPos) const
     Point aTailPos = ScDetectiveFunc(mpDoc, rPos.Tab()).GetDrawPos( nNextCol, rPos.Row(), FALSE );
 
     SdrCaptionObj* pCaption = new SdrCaptionObj(aDefaultRect, aTailPos );
-    InsertObject( pCaption,*mpDoc,rPos.Tab() );
+    InsertObject( pCaption, *mpDoc, rPos.Tab(), sal_False );
     pCaption->SetText( GetText() );
     Rectangle aRect = pCaption->GetLogicRect();
     if ( aRect.Bottom() > aDefaultRect.Bottom() )
