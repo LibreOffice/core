@@ -1,0 +1,24 @@
+..\%__SRC%\bin\cached*.dll %_DEST%\bin%_EXT%\cached*.dll
+..\%__SRC%\lib\libcached*.* %_DEST%\lib%_EXT%\libcached*.*
+..\%__SRC%\bin\cached*.map %_DEST%\bin%_EXT%\cached*.map
+..\%__SRC%\bin\cached*.sym %_DEST%\bin%_EXT%\cached*.sym
+
+..\%__SRC%\bin\srtrs*.dll %_DEST%\bin%_EXT%\srtrs*.dll
+..\%__SRC%\lib\libsrtrs*.* %_DEST%\lib%_EXT%\libsrtrs*.*
+..\%__SRC%\bin\srtrs*.map %_DEST%\bin%_EXT%\srtrs*.map
+..\%__SRC%\bin\srtrs*.sym %_DEST%\bin%_EXT%\srtrs*.sym
+
+..\%__SRC%\bin\ucb*.dll %_DEST%\bin%_EXT%\ucb*.dll
+..\%__SRC%\lib\libucb*.* %_DEST%\lib%_EXT%\libucb*.*
+..\%__SRC%\misc\ucb*.map %_DEST%\bin%_EXT%\ucb*.map
+..\%__SRC%\misc\ucb*.sym %_DEST%\bin%_EXT%\ucb*.sym
+
+..\%__SRC%\bin\ucp*.dll %_DEST%\bin%_EXT%\ucp*.dll
+..\%__SRC%\lib\libucp*.so %_DEST%\lib%_EXT%\libucp*.so
+..\%__SRC%\misc\ucp*.map %_DEST%\bin%_EXT%\ucp*.map
+..\%__SRC%\misc\ucp*.sym %_DEST%\bin%_EXT%\ucp*.sym
+
+..\%__SRC%\bin\ucb.exe %_DEST%\bin%_EXT%\ucb.exe
+..\%__SRC%\bin\ucb %_DEST%\bin%_EXT%\ucb.bin
+..\%__SRC%\misc\ucb.sh %_DEST%\bin%_EXT%\ucb
+
