@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:24:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,15 +355,14 @@ inline SfxDispatcher &SwView::GetDispatcher()
 void SwView::ImpSetVerb( int nSelType )
 {
     sal_Bool bResetVerbs = bVerbsActive;
-    if ( !GetDocShell()->IsInPlaceActive() &&
+    if ( !GetViewFrame()->GetFrame()->IsInPlace() &&
          (SwWrtShell::SEL_OLE|SwWrtShell::SEL_GRF) & nSelType )
     {
         if ( !pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT) )
         {
             if ( nSelType & SwWrtShell::SEL_OLE )
             {
-                SvInPlaceObjectRef xRef = GetWrtShell().GetOLEObj();
-                SetVerbs( &xRef->GetVerbList() );
+                SetVerbs( GetWrtShell().GetOLEObject()->getSupportedVerbs() );
                 bVerbsActive = sal_True;
                 bResetVerbs = sal_False;
             }
@@ -1096,8 +1095,11 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     pWrtShell->SetChgLnk(LINK(this, SwView, AttrChangedNotify));
 
     if( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
-        !((SvEmbeddedObject *)pDocSh)->GetVisArea().IsEmpty() )
-        SetVisArea( ((SvEmbeddedObject *)pDocSh)->GetVisArea(),sal_False);
+        //TODO/LATER: why a cast here?
+        //!((SvEmbeddedObject *)pDocSh)->GetVisArea().IsEmpty() )
+        //SetVisArea( ((SvEmbeddedObject *)pDocSh)->GetVisArea(),sal_False);
+        !pDocSh->GetVisArea(ASPECT_CONTENT).IsEmpty() )
+        SetVisArea( pDocSh->GetVisArea(ASPECT_CONTENT),sal_False);
 
     SwEditShell::SetUndoActionCount(
         static_cast< USHORT >( SW_MOD()->GetUndoOptions().GetUndoCount() ) );
@@ -1621,7 +1623,7 @@ void SwView::ShowCursor( FASTBOOL bOn )
 
 ErrCode SwView::DoVerb( long nVerb )
 {
-    if ( !GetDocShell()->IsInPlaceActive() )
+    if ( !GetViewFrame()->GetFrame()->IsInPlace() )
     {
         SwWrtShell &rSh = GetWrtShell();
         const int nSel = rSh.GetSelectionType();
