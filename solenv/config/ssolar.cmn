@@ -61,6 +61,7 @@ common
 		JDKLIB
 		JDKLIBS
 		JDKPATH
+        L10N-framework
 		LOCAL_SOLENV
 		LOCALINI
 		MK_UNROLL
@@ -129,7 +130,7 @@ common
 		TFDEF
 		TFDIR
 		TIMELOG
-        truetime
+		truetime
 		UDKSTAMP
 		URD_ONLY
 		USE_MAPFILES
