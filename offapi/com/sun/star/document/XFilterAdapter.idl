@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilterAdapter.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,10 @@ module com {   module sun {   module star {   module document {
       /** This is an interface that can be used to link a filter to the
         FilterAdapter
 
-          @throws com::sun::star::uno::RuntimeException
-           */
+        @throws com::sun::star::uno::RuntimeException
+
+        @since #107627#
+      */
       interface XFilterAdapter : com::sun::star::uno::XInterface
       {
         void convert(
