@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactoryimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
+ *  last change: $Author: fs $ $Date: 2000-12-01 13:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,11 +161,12 @@ SetElement* ReadOnlyObjectFactory::doCreateSetElement(configuration::ElementTree
     configuration::Tree aParentTree = aTree.getContextTree();
     if (!aParentTree.isEmpty())
     {
-        NodeRef aParentNode = aTree.getContextNode();
-        if (NodeElement* pParentElement = makeElement(aParentTree,aParentNode) )
+        //NodeRef aParentNode = aTree.getContextNode();
+        NodeRef aParentRoot = aParentTree.getRootNode();
+        if (NodeElement* pParentRootElement = makeElement(aParentTree,aParentRoot) )
         {
-            aParentRelease = UnoInterfaceRef(pParentElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
-            pParentContext = &getImplementation(*pParentElement);
+            aParentRelease = UnoInterfaceRef(pParentRootElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+            pParentContext = &getImplementation(*pParentRootElement);
         }
     }
 
@@ -329,11 +330,12 @@ SetElement* UpdateObjectFactory::doCreateSetElement(configuration::ElementTree c
     configuration::Tree aParentTree = aTree.getContextTree();
     if (!aParentTree.isEmpty())
     {
-        NodeRef aParentNode = aTree.getContextNode();
-        if (NodeElement* pParentElement = makeElement(aParentTree,aParentNode) )
+        //NodeRef aParentNode = aTree.getContextNode();
+        NodeRef aParentRoot = aParentTree.getRootNode();
+        if (NodeElement* pParentRootElement = makeElement(aParentTree,aParentRoot) )
         {
-            aParentRelease = UnoInterfaceRef(pParentElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
-            pParentContext = &getImplementation(*pParentElement);
+            aParentRelease = UnoInterfaceRef(pParentRootElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+            pParentContext = &getImplementation(*pParentRootElement);
         }
     }
 
