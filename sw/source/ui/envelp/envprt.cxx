@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:24:50 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 
 #pragma hdrstop
