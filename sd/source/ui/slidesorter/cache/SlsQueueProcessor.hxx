@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:11:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,12 @@ private:
     timer is started that eventually calls ProcessRequest().  This is
     repeated until the queue is empty or Stop() is called.
 */
-template <class Queue, class RequestData, class BitmapCache,
+template <class Queue,
+          class RequestData,
+          class BitmapCache,
           class BitmapFactory>
-    class QueueProcessor : public QueueProcessorBase
+    class QueueProcessor
+    : public QueueProcessorBase
 {
 public:
     QueueProcessor (
@@ -129,6 +132,7 @@ private:
     view::SlideSorterView& mrView;
     Queue& mrQueue;
     BitmapCache& mrCache;
+    BitmapFactory maBitmapFactory;
 
     virtual void ProcessRequest (void);
 };
@@ -138,7 +142,9 @@ private:
 
 //=====  QueueProcessor  ======================================================
 
-template <class Queue, class RequestData, class BitmapCache,
+template <class Queue,
+          class RequestData,
+          class BitmapCache,
           class BitmapFactory>
     QueueProcessor<
     Queue, RequestData, BitmapCache, BitmapFactory
@@ -149,14 +155,17 @@ template <class Queue, class RequestData, class BitmapCache,
         : maMutex(),
           mrView (rView),
           mrQueue (rQueue),
-          mrCache (rCache)
+          mrCache (rCache),
+          maBitmapFactory(rView)
 {
 }
 
 
 
 
-template <class Queue, class RequestData, class BitmapCache,
+template <class Queue,
+          class RequestData,
+          class BitmapCache,
           class BitmapFactory>
     void QueueProcessor<
     Queue, RequestData, BitmapCache, BitmapFactory
@@ -196,11 +205,18 @@ template <class Queue, class RequestData, class BitmapCache,
             {
                 ::osl::MutexGuard aGuard (maMutex);
                 // Create a new preview bitmap and store it in the cache.
-                BitmapEx aBitmap (BitmapFactory::CreateBitmap (*pRequest, mrView));
+                BitmapEx aBitmap (maBitmapFactory.CreateBitmap (*pRequest));
                 mrCache.SetBitmap (
                     pRequest->GetPage(),
                     aBitmap,
                     nPriorityClass==0);
+
+                // Initiate a repaint of the new preview.
+                SdrPageView* pPageView = mrView.GetPageViewPvNum(0);
+                Rectangle aDirtyRectangle (
+                    pRequest->GetViewContact().GetPaintRectangle()
+                    - pPageView->GetOffset());
+                mrView.InvalidateAllWin (aDirtyRectangle);
             }
             catch (...)
             {
