@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:04:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 09:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 #include "climaker_share.h"
 
+#include "sal/main.h"
 #include "osl/process.h"
 #include "osl/file.hxx"
 #include "osl/thread.h"
@@ -345,7 +346,7 @@ Reference< registry::XSimpleRegistry > open_registries(
 using namespace ::climaker;
 
 //##############################################################################
-extern "C" int SAL_CALL main( int argc, char const * argv [] )
+SAL_IMPLEMENT_MAIN()
 {
     sal_uInt32 nCount = osl_getCommandArgCount();
     if (0 == nCount)
