@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-23 11:56:55 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 14:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1944,7 +1944,8 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                             {
                                 SvStorageRef xDestStorage( pOe->pShell->GetStorage() );
                                 SvInPlaceObjectRef xIPObj( CheckForConvertToSOObj(
-                                            nSvxMSDffOLEConvFlags, *xObjStor, *xDestStorage ));
+                                            nSvxMSDffOLEConvFlags, *xObjStor,
+                                            *xDestStorage, rGraf ));
                                 if( xIPObj.Is() )
                                 {
                                     String aNm( pOe->pShell->InsertObject( xIPObj, String() )->GetObjName() );

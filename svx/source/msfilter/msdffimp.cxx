@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-15 14:08:02 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 14:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4906,7 +4906,8 @@ const GDIMetaFile* SvxMSDffManager::lcl_GetMetaFileFromGrf_Impl( const Graphic& 
 
 #ifndef SVX_LIGHT
 const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConvertFlags,
-                        SvStorage& rSrcStg, SvStorage& rDestStorage )
+                        SvStorage& rSrcStg, SvStorage& rDestStorage,
+                        const Graphic& rGrf )
 {
     static struct _ObjImpType
     {
@@ -4991,6 +4992,22 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                             xDoc->DoSaveAs( xObjStor );
                             xDoc->DoSaveCompleted( xObjStor );
                             pMed = 0;
+
+                            //JP 26.10.2001: Bug 93374 / 91928
+                            // the writer objects need the correct visarea
+                            if( sStarName.EqualsAscii( "swriter" ))
+                            {
+                                // set the correcet VisArea
+                                Size aSz( OutputDevice::LogicToLogic(
+                                                rGrf.GetPrefSize(),
+                                                rGrf.GetPrefMapMode(),
+                                        MapMode( xIPObj->GetMapUnit() ) ) );
+                                // don't modify the object
+                                xIPObj->EnableSetModified( FALSE );
+                                xIPObj->SetVisArea( Rectangle(
+                                    xIPObj->GetVisArea().TopLeft(), aSz ) );
+                                xIPObj->EnableSetModified( TRUE );
+                            }
                         }
                     }
                     delete pMed;
@@ -5051,7 +5068,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 if( bValidStorage && nConvertFlags )
                 {
                     SvInPlaceObjectRef xIPObj( CheckForConvertToSOObj(
-                                nConvertFlags, *xObjStg, *rDestStorage ));
+                                nConvertFlags, *xObjStg, *rDestStorage, rGrf ));
                     if( xIPObj.Is() )
                     {
                         pRet = new SdrOle2Obj( xIPObj, String(), rBoundRect, FALSE );
