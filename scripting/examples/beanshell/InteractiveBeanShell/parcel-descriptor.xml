@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<parcel xmlns:parcel="scripting.dtd">
+<parcel language="BeanShell" xmlns:parcel="scripting.dtd">
 
     <script language="BeanShell">
         <locale lang="en">
@@ -11,8 +11,6 @@
         </locale>
         <functionname value="interactive.bsh"/>
         <logicalname value="Interactive.BeanShell"/>
-        <languagedepprops>
-        </languagedepprops>
     </script>
 
 </parcel>
