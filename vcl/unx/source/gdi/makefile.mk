@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 15:58:32 $
+#   last change: $Author: rt $ $Date: 2005-01-07 09:26:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,16 +93,8 @@ SLOFILES=	\
         $(SLO)$/xlfd_extd.obj	\
         $(SLO)$/xlfd_smpl.obj	\
         $(SLO)$/salgdi3.obj		\
+        $(SLO)$/kdeint.obj		\
         $(SLO)$/pspgraphics.obj
-
-.IF "$(WITH_WIDGETSET)"=="kde"
-    # salnativewidgets-kde.cxx contains own implementation of KDEintegrator
-    SLOFILES+=$(SLO)/salnativewidgets-kde.obj
-    CFLAGS+=$(WIDGETSET_CFLAGS)
-.ELSE
-    SLOFILES+= \
-        $(SLO)$/kdeint.obj
-.ENDIF
 
 .IF "$(USE_XPRINT)" == "TRUE"
 CFLAGS+=-D_USE_PRINT_EXTENSION_=1
