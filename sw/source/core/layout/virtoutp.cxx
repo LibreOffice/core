@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtoutp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-03 14:59:11 $
+ *  last change: $Author: od $ $Date: 2002-10-11 11:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,8 +170,12 @@ BOOL SwLayVout::DoesFit( const Size &rNew )
 /*************************************************************************
  *                         SwLayVout::Enter
  *************************************************************************/
-
-void SwLayVout::Enter(  ViewShell *pShell, const SwRect &rRect, BOOL bOn )
+/// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
+///     in order to return value of class member variable <aRect>, if virtual
+///     output is used.
+///     <aRect> contains the rectangle that represents the area the virtual
+///     output device is used for and that is flushed at the end.
+void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, BOOL bOn )
 {
     Flush();
 
@@ -224,8 +228,12 @@ void SwLayVout::Enter(  ViewShell *pShell, const SwRect &rRect, BOOL bOn )
 
         MapMode aMapMode( pOut->GetMapMode() );
         aMapMode.SetOrigin( Point(0,0) - aRect.Pos() );
+
         if( aMapMode != pVirDev->GetMapMode() )
             pVirDev->SetMapMode( aMapMode );
+
+        /// OD 27.09.2002 #103636# - set value of parameter <rRect>
+        rRect = aRect;
     }
 }
 
