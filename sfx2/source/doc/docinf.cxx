@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2001-08-06 05:19:47 $
+ *  last change: $Author: as $ $Date: 2001-08-13 07:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ public:
 
 ULONG SfxPSStringProperty_Impl::Save( SvStream& rStream )
 {
-    ByteString aTemp( aString, rStream.GetStreamCharSet() );
+    ByteString aTemp( aString, GetSOStoreTextEncoding( rStream.GetStreamCharSet() ) );
     UINT32 nLen = aTemp.Len();
     rStream << (UINT32)( nLen + 1 );
     rStream.Write( aTemp.GetBuffer(), nLen );
@@ -181,7 +181,7 @@ ULONG SfxPSStringProperty_Impl::Load( SvStream& rStream )
     {
         ByteString aTemp;
         rStream.Read( aTemp.AllocBuffer( (xub_StrLen)( nLen - 1 ) ), nLen );
-        aString = String( aTemp, rStream.GetStreamCharSet() );
+        aString = String( aTemp, GetSOLoadTextEncoding( rStream.GetStreamCharSet() ) );
     }
     else
         aString.Erase();
