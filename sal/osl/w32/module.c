@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-02-16 08:45:53 $
+ *  last change: $Author: mfe $ $Date: 2001-03-01 15:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,18 +140,6 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
     rtl_string_release(symbolName);
 
     return address;
-}
-
-/*****************************************************************************/
-/* osl_getSymbolA */
-/*****************************************************************************/
-
-void* SAL_CALL osl_getSymbolA(oslModule Module, const char *pszSymbolName)
-{
-    OSL_ASSERT(Module);
-    OSL_ASSERT(pszSymbolName);
-
-    return (void*) GetProcAddress((HINSTANCE)Module, pszSymbolName);
 }
 
 

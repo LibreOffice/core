@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pliao $ $Date: 2001-02-05 00:40:48 $
+ *  last change: $Author: mfe $ $Date: 2001-03-01 15:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,11 +116,6 @@ void SAL_CALL osl_unloadModule(oslModule Module);
     @returns address of the symbol or 0 if lookup failed,
 */
 void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName);
-
-/** ascii interface for internal use.
-    @returns address of the symbol or 0 if lookup failed,
-*/
-void* SAL_CALL osl_getSymbolA(oslModule Module, const char *pszSymbolName);
 
 #ifdef __cplusplus
 }
