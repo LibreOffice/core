@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-18 09:03:35 $
+ *  last change: $Author: os $ $Date: 2000-10-19 13:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,13 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                 {
                     INT16 nTmp;
                     aValue >>= nTmp;
-                    aFtnInfo.aFmt.eType = (SvxExtNumType)nTmp;
+                    if(nTmp >= 0 &&
+                        (nTmp <= SVX_NUM_ARABIC ||
+                            nTmp == SVX_NUM_CHARS_UPPER_LETTER_N||
+                                nTmp == SVX_NUM_CHARS_LOWER_LETTER_N))
+                        aFtnInfo.aFmt.eType = (SvxExtNumType)nTmp;
+                    else
+                        throw lang::IllegalArgumentException();
                 }
                 break;
                 case  WID_START_AT:
@@ -2422,6 +2428,9 @@ void SwXTextColumns::setColumns(const uno::Sequence< text::TextColumn >& rColumn
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/10/18 09:03:35  os
+    #78254# use of NumberingRules service completed
+
     Revision 1.4  2000/10/12 17:29:11  mib
     Don't create styles then querying footnote info properties
 
