@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:44:00 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,6 +624,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ finnish ] = "~Alkuperäinen koko";
     };
 };
+
 
 
 
