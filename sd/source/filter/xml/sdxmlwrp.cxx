@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:43:58 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,7 +627,8 @@ sal_Bool SdXMLFilter::Import()
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
     xInfoSet->setPropertyValue( sPropName,
                             makeAny( OUString(INetURLObject::GetBaseURL()) ) );
-    if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
+    if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() &&
+         !pStorage->IsRoot() )
     {
         OUString aName( pStorage->GetName() );
         if( aName.getLength() )
@@ -820,7 +821,8 @@ sal_Bool SdXMLFilter::Export()
         OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
         xInfoSet->setPropertyValue( sPropName,
                                 makeAny( OUString(INetURLObject::GetBaseURL()) ) );
-        if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
+        if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() &&
+             !pStorage->IsRoot() )
         {
             OUString aName( pStorage->GetName() );
             if( aName.getLength() )
