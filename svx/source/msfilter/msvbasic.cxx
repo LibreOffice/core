@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-12-20 15:15:54 $
+ *  last change: $Author: cmc $ $Date: 2002-03-21 15:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         return 0;
     }
 
+    static const BYTE aOfficeXPLE[]     = {0x73, 0x00, 0x00, 0x01, 0x00, 0xFF};
     static const BYTE aOffice2000LE[]   = {0x6D, 0x00, 0x00, 0x01, 0x00, 0xFF};
     static const BYTE aOffice98BE[]     = {0x60, 0x00, 0x00, 0x0E, 0x00, 0xFF};
     static const BYTE aOffice97LE[]     = {0x5E, 0x00, 0x00, 0x01, 0x00, 0xFF};
@@ -221,7 +222,12 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     xVBAProject->Read( aProduct, sizeof(aProduct) );
 
     BOOL bIsUnicode;
-    if (!(memcmp(aProduct, aOffice2000LE, sizeof(aProduct))))
+    if (!(memcmp(aProduct, aOfficeXPLE, sizeof(aProduct))))
+    {
+        xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+        bIsUnicode=TRUE;
+    }
+    else if (!(memcmp(aProduct, aOffice2000LE, sizeof(aProduct))))
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
         bIsUnicode=TRUE;
@@ -239,7 +245,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     }
     else
     {
-        DBG_WARNING("unrecognized VBA macro version");
+        DBG_ASSERT(!this,"unrecognized VBA macro version, report cmc");
         return 0;
     }
 
@@ -297,7 +303,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
 
     INT16 nInt16s;
     *xVBAProject >> nInt16s;
-    DBG_ASSERT( nInt16s, "VBA: Bad String in VBA Project, panic!!" );
+    DBG_ASSERT( nInt16s >= 0, "VBA: Bad no of records in VBA Project, panic!" );
     if (!nInt16s)
         return 0;
 
@@ -305,7 +311,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
 
     INT16 nInt32s;
     *xVBAProject >> nInt32s;
-    DBG_ASSERT( nInt32s, "VBA: Bad String in VBA Project, panic!!" );
+    DBG_ASSERT( nInt32s >= 0, "VBA: Bad no of records in VBA Project, panic!" );
     if (!nInt32s)
         return 0;
     xVBAProject->SeekRel(4*nInt32s);
@@ -322,7 +328,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
 
     *xVBAProject >> nOffsets;
     DBG_ASSERT( nOffsets != 0xFFFF, "VBA: Bad nOffsets, panic!!" );
-    if (nOffsets == 0xFFFF)
+    if ((nOffsets == 0xFFFF) || (nOffsets == 0))
         return 0;
     pOffsets = new VBAOffset_Impl[ nOffsets ];
 
