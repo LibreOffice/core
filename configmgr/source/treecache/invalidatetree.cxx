@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:43:36 $
+ *  last change: $Author: dg $ $Date: 2001-05-03 16:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ auto_ptr<ISubtree> TreeManager::loadNodeFromSession( IConfigSession *_pSession, 
         throw container::NoSuchElementException((::rtl::OUString::createFromAscii("Error while retrieving the node")), NULL);
 
     // start loading
-    xLoader->start();
+    xLoader->start(this);
 
     // now block for reading
     std::auto_ptr<ISubtree> pResponse;

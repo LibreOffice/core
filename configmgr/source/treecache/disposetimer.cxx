@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: lla $ $Date: 2001-04-11 11:40:47 $
+ *  last change: $Author: dg $ $Date: 2001-05-03 16:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,9 +241,6 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
 
             TimeStamp aNextTaskTime = pInfo->runDisposer(aDisposeList, _aActualTime);
 
-            // remove unnecessry notification entires
-            uno::Sequence< OUString > aNodeList = pInfo->removeNotificationEntries(aDisposeList);
-
             CFG_TRACE_INFO_NI("- Found %d module trees to dispose", int(aDisposeList.size()) );
 
             if (!aNextTaskTime.isNever())
@@ -294,12 +291,6 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
             {
                 if (m_rTreeManager.m_pSession)
                 {
-                    if (aNodeList.getLength() > 0)
-                    {
-                        CFG_TRACE_INFO_NI("- Stoping notifications for  %d Nodes", int(aNodeList.getLength()) );
-                        m_rTreeManager.cancelNotify(aNodeList, xTaskOption);
-                    }
-
                     uno::Sequence< OUString > aCloseList = TreeInfo::collectNodeIds(aDisposeList);
                     if (aCloseList.getLength() > 0)
                     {
