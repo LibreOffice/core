@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.10 $
+#*  $Revision: 1.11 $
 #*
-#*  last change: $Author: khong $ $Date: 2002-06-20 02:38:54 $
+#*  last change: $Author: er $ $Date: 2002-07-19 10:40:09 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -90,7 +90,6 @@ LIB1FILES=	$(SLB)$/defaultnumberingprovider.lib	\
         $(SLB)$/characterclassification.lib \
         $(SLB)$/collator.lib \
         $(SLB)$/inputchecker.lib
-LIB1DEPN=	$(MISC)$/$(LIB1TARGET).flt
 
 SHL1TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
@@ -108,13 +107,6 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	$(TARGET).dxp
 
-I18NINC=	$(PRJ)$/inc$/transliterationImpl.hxx \
-        $(PRJ)$/inc$/transliteration_body.hxx \
-        $(PRJ)$/inc$/transliteration_caseignore.hxx \
-        $(PRJ)$/inc$/transliteration_commonclass.hxx \
-        $(PRJ)$/inc$/x_rtl_ustring.h \
-        $(PRJ)$/inc$/unicode.hxx
-
 # --- Targets ------------------------------------------------------------
 
 .INCLUDE :	target.mk
@@ -124,5 +116,3 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo Making: $@
     @echo Provider>> $@
 
-$(MISC)$/$(LIB1TARGET).flt: $(I18NINC)
-    +$(COPY) $< $(INCCOM)
