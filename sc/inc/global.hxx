@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 15:49:14 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 09:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,10 +411,11 @@ enum ScDirection
 
 enum ScSizeMode
     {
-        SC_SIZE_DIRECT,             // setzen oder bei 0 ausblenden
-        SC_SIZE_OPTIMAL,            // alles auf optimal
-        SC_SIZE_SHOW,               // einblenden mit alter Hoehe
-        SC_SIZE_VISOPT              // nur sichtbare auf optimal
+        SC_SIZE_DIRECT,             // set size or hide if value is 0
+        SC_SIZE_OPTIMAL,            // set optimal size for everything
+        SC_SIZE_SHOW,               // show with original size
+        SC_SIZE_VISOPT,             // set optimal size only if visible
+        SC_SIZE_ORIGINAL            // only set size, don't change visible flag
     };
 
 enum ScInputMode
