@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-10-11 12:58:07 $
+ *  last change: $Author: os $ $Date: 2002-11-14 12:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,15 @@
 #ifndef _POPUP_HRC
 #include <popup.hrc>
 #endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
+#ifndef _WVIEW_HXX
+#include <wview.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 
 SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 {
@@ -356,6 +365,9 @@ BOOL SwDrawTextShell::IsTextEdit()
 
 void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
 {
+    SwWrtShell &rSh = GetShell();
+    FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
+    SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     if ( rReq.GetArgs() )
     {

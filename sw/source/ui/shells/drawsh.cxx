@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-06 17:01:25 $
+ *  last change: $Author: os $ $Date: 2002-11-14 12:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,18 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
+#ifndef _WVIEW_HXX
+#include <wview.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 
 
 #include "swundo.hxx"
-#include "view.hxx"
 #include "wrtsh.hxx"
 #include "cmdid.h"
 #include "globals.hrc"
@@ -230,6 +238,8 @@ void SwDrawShell::Execute(SfxRequest &rReq)
 
         case SID_FONTWORK:
         {
+            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
             if (pArgs)
             {
@@ -449,6 +459,9 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/08/06 17:01:25  jp
+      #90191: compiler error
+
       Revision 1.2  2001/08/01 10:33:18  os
       #90191# double configurated entries corrected
 
