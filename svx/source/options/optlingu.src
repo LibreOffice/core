@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ TabPage RID_SFXPAGE_LINGU
         Text [ portuguese ] = "~Correcção automática" ;
         Text[ chinese_simplified ] = "×Ô¶¯¼ì²éÆ´Ğ´(~U)";
         Text[ russian ] = "Àâòîïğîâåğêà";
-        Text[ polish ] = "Automaty~czne sprawdzanie pisowni";
+        Text[ polish ] = "Au~tom. sprawdzanie pisowni";
         Text[ japanese ] = "©“®½ÍßÙÁª¯¸(~C)";
         Text[ chinese_traditional ] = "¦Û°ÊÀË¬d«÷¦r(~C)";
         Text[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí ÃËäÇÁ ÇáßÊÇÈÉ";
@@ -455,7 +455,7 @@ TabPage RID_SFXPAGE_LINGU
         Text [ portuguese ] = "Verificação automática da ortografia" ;
         Text[ chinese_simplified ] = "×Ô¶¯¼ì²éÆ´Ğ´";
         Text[ russian ] = "Àâòîïğîâåğêà îğôîãğàôèè";
-        Text[ polish ] = "Automatyczne sprawdzanie pisowni";
+        Text[ polish ] = "Autom. sprawdzanie pisowni";
         Text[ japanese ] = "©“®•¶ÍZ³";
         Text[ chinese_traditional ] = "¦Û°ÊÀË¬d«÷¦r";
         Text[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí ÊáŞÇÆí";
