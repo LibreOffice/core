@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:54:27 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1962,7 +1962,7 @@ void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
     if(!pFormatSample)
         return;
 
-    pFormatSample->SetText(getControlDefault(pFieldDescr));
+    pFormatSample->SetText(getControlDefault(pFieldDescr,sal_False));
 }
 
 //------------------------------------------------------------------------------
@@ -2091,10 +2091,11 @@ sal_Bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr,s
     return bTextFormat;
 }
 // -----------------------------------------------------------------------------
-String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDescr ) const
+String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck) const
 {
     ::rtl::OUString sDefault;
-    if ( _pFieldDescr->GetControlDefault().hasValue() )
+    sal_Bool bCheck = !_bCheck || _pFieldDescr->GetControlDefault().hasValue();
+    if ( bCheck )
     {
         sal_uInt32 nFormatKey;
         sal_Bool bTextFormat = sal_False;
@@ -2123,18 +2124,15 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
             else
                 _pFieldDescr->GetControlDefault() >>= nValue;
 
+
+            Reference<XNumberFormatter> xNumberFormatter = GetFormatter();
+            Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
+            OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
+            ::rtl::OUString sFormat;
+            xFormSet->getPropertyValue(::rtl::OUString::createFromAscii("FormatString")) >>= sFormat;
+
             if ( !bTextFormat )
             {
-                Reference<XNumberFormatter> xNumberFormatter = GetFormatter();
-                Reference<XNumberFormatPreviewer> xPreViewer(xNumberFormatter,UNO_QUERY);
-                OSL_ENSURE(xPreViewer.is(),"XNumberFormatPreviewer is null!");
-
-                Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
-                OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
-
-                ::rtl::OUString sFormat;
-                xFormSet->getPropertyValue(::rtl::OUString::createFromAscii("FormatString")) >>= sFormat;
-
                 Locale aLocale;
                 ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"))) >>= aLocale;
 
@@ -2145,8 +2143,14 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
                     nValue = DBTypeConversion::toNullDate(DBTypeConversion::getNULLDate(xNumberFormatter->getNumberFormatsSupplier()),nValue);
                 }
 
+
+
+                Reference<XNumberFormatPreviewer> xPreViewer(xNumberFormatter,UNO_QUERY);
+                OSL_ENSURE(xPreViewer.is(),"XNumberFormatPreviewer is null!");
                 sDefault = xPreViewer->convertNumberToPreviewString(sFormat,nValue,aLocale,sal_True);
             }
+            else if ( !_bCheck || (sDefault.getLength() != 0) )
+                sDefault = xNumberFormatter->formatString(nFormatKey,(sDefault.getLength() != 0 )? sDefault : sFormat);
         }
         catch(const Exception&)
         {
