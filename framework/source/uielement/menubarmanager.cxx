@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 10:04:42 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,20 +603,28 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const ::com::sun::star::uno::Sequenc
 MenuBarManager::~MenuBarManager()
 {
     DBG_ASSERT( OWeakObject::m_refCount == 0, "Who wants to delete an object with refcount > 0!" );
+    Destroy();
+}
 
+void MenuBarManager::Destroy()
+{
     OGuard  aGuard( Application::GetSolarMutex() );
-    std::vector< MenuItemHandler* >::iterator p;
-    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
-    {
-        MenuItemHandler* pItemHandler = *p;
-        pItemHandler->xMenuItemDispatch.clear();
-        pItemHandler->xSubMenuManager.clear();
-        pItemHandler->xPopupMenu.clear();
-        delete pItemHandler;
-    }
 
-    if ( m_bDeleteMenu )
-        delete m_pVCLMenu;
+    if ( !m_bDisposed )
+    {
+        std::vector< MenuItemHandler* >::iterator p;
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+        {
+            MenuItemHandler* pItemHandler = *p;
+            pItemHandler->xMenuItemDispatch.clear();
+            pItemHandler->xSubMenuManager.clear();
+            pItemHandler->xPopupMenu.clear();
+            delete pItemHandler;
+        }
+
+        if ( m_bDeleteMenu )
+            delete m_pVCLMenu;
+    }
 }
 
 // XComponent
@@ -630,6 +638,7 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
     {
         ResetableGuard aGuard( m_aLock );
         RemoveListener();
+        Destroy();
         m_bDisposed = sal_True;
     }
 }
@@ -656,6 +665,21 @@ void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListen
 void SAL_CALL MenuBarManager::frameAction( const FrameActionEvent& Action )
 throw ( RuntimeException )
 {
+    ResetableGuard aGuard( m_aLock );
+
+    if ( m_bDisposed )
+        throw com::sun::star::lang::DisposedException();
+
+    if ( Action.Action == FrameAction_CONTEXT_CHANGED )
+    {
+        std::vector< MenuItemHandler* >::iterator p;
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+        {
+            // Clear dispatch reference as we will requery it later o
+            MenuItemHandler* pItemHandler = *p;
+            pItemHandler->xMenuItemDispatch.clear();
+        }
+    }
 }
 
 // XStatusListener
@@ -740,24 +764,8 @@ throw ( RuntimeException )
 
         if ( Event.Requery )
         {
-            URL aTargetURL;
-            aTargetURL.Complete = pStatusChangedMenu->aMenuItemURL;
-
-            // #110897#
-            //Reference< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
-            Reference< XURLTransformer > xTrans( getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
-            xTrans->parseStrict( aTargetURL );
-
-            Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-            Reference< XDispatch > xMenuItemDispatch = xDispatchProvider->queryDispatch(
-                                                            aTargetURL, ::rtl::OUString(), 0 );
-
-            if ( xMenuItemDispatch.is() )
-            {
-                pStatusChangedMenu->xMenuItemDispatch   = xMenuItemDispatch;
-                pStatusChangedMenu->aMenuItemURL        = aTargetURL.Complete;
-                xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
-            }
+            // Release dispatch object - will be requeried on the next activate!
+            pStatusChangedMenu->xMenuItemDispatch.clear();
         }
     }
 }
@@ -826,6 +834,16 @@ void MenuBarManager::RemoveListener()
         Reference< XComponent > xComponent( pItemHandler->xSubMenuManager, UNO_QUERY );
         if ( xComponent.is() )
             xComponent->dispose();
+    }
+
+    try
+    {
+        if ( m_xFrame.is() )
+            m_xFrame->removeFrameActionListener( Reference< XFrameActionListener >(
+                                                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
+    }
+    catch ( Exception& )
+    {
     }
 
     m_xFrame = 0;
@@ -1285,96 +1303,117 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
             for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
             {
                 MenuItemHandler* pMenuItemHandler = *p;
-                if ( pMenuItemHandler && !pMenuItemHandler->xSubMenuManager.is() )
+                if ( pMenuItemHandler )
                 {
-                    // There is no dispatch mechanism for the special window list menu items,
-                    // because they are handled directly through XFrame->activate!!!
-                    // Don't update dispatches for special file menu items.
-                    if ( !(( pMenuItemHandler->nItemId >= START_ITEMID_WINDOWLIST &&
-                             pMenuItemHandler->nItemId < END_ITEMID_WINDOWLIST ) ||
-                           ( pMenuItemHandler->nItemId >= START_ITEMID_PICKLIST &&
-                             pMenuItemHandler->nItemId < END_ITEMID_PICKLIST )))
+                    if ( !pMenuItemHandler->xMenuItemDispatch.is() &&
+                         !pMenuItemHandler->xSubMenuManager.is()      )
                     {
-                        Reference< XDispatch > xMenuItemDispatch;
-
-                        ::rtl::OUString aItemCommand = pMenu->GetItemCommand( pMenuItemHandler->nItemId );
-                        if ( !aItemCommand.getLength() )
+                        // There is no dispatch mechanism for the special window list menu items,
+                        // because they are handled directly through XFrame->activate!!!
+                        // Don't update dispatches for special file menu items.
+                        if ( !(( pMenuItemHandler->nItemId >= START_ITEMID_WINDOWLIST &&
+                                pMenuItemHandler->nItemId < END_ITEMID_WINDOWLIST ) ||
+                            ( pMenuItemHandler->nItemId >= START_ITEMID_PICKLIST &&
+                                pMenuItemHandler->nItemId < END_ITEMID_PICKLIST )))
                         {
-                            aItemCommand = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-                            aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)pMenuItemHandler->nItemId );
-                            pMenu->SetItemCommand( pMenuItemHandler->nItemId, aItemCommand );
-                        }
+                            Reference< XDispatch > xMenuItemDispatch;
 
-                        aTargetURL.Complete = aItemCommand;
-
-                        xTrans->parseStrict( aTargetURL );
-
-                        if ( m_bIsBookmarkMenu )
-                            xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, pMenuItemHandler->aTargetFrame, 0 );
-                        else
-                            xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-                        if ( !pMenuItemHandler->xPopupMenuController.is() &&
-                             m_xPopupMenuControllerRegistration->hasController( aItemCommand, rtl::OUString() ))
-                        {
-                            // Try instanciate a popup menu controller. It is stored in the menu item handler.
-                            Reference< XMultiComponentFactory > xPopupMenuControllerFactory( m_xPopupMenuControllerRegistration, UNO_QUERY );
-                            if ( xPopupMenuControllerFactory.is() )
+                            ::rtl::OUString aItemCommand = pMenu->GetItemCommand( pMenuItemHandler->nItemId );
+                            if ( !aItemCommand.getLength() )
                             {
-                                Sequence< Any > aSeq( 2 );
-                                PropertyValue aPropValue;
+                                aItemCommand = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                                aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)pMenuItemHandler->nItemId );
+                                pMenu->SetItemCommand( pMenuItemHandler->nItemId, aItemCommand );
+                            }
 
-                                aPropValue.Name         = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
-                                aPropValue.Value      <<= m_aModuleIdentifier;
-                                aSeq[0] <<= aPropValue;
-                                aPropValue.Name         = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-                                aPropValue.Value      <<= m_xFrame;
-                                aSeq[1] <<= aPropValue;
+                            aTargetURL.Complete = aItemCommand;
 
-                                Reference< XComponentContext > xComponentContext;
+                            xTrans->parseStrict( aTargetURL );
 
-                                // #110897#
-                                // Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-                                Reference< XPropertySet > xProps( getServiceFactory(), UNO_QUERY );
+                            if ( m_bIsBookmarkMenu )
+                                xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, pMenuItemHandler->aTargetFrame, 0 );
+                            else
+                                xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
-                                xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>=
-                                    xComponentContext;
-
-                                Reference< XPopupMenuController > xPopupMenuController(
-                                                                        xPopupMenuControllerFactory->createInstanceWithArgumentsAndContext(
-                                                                            aItemCommand,
-                                                                            aSeq,
-                                                                            xComponentContext ),
-                                                                        UNO_QUERY );
-
-                                if ( xPopupMenuController.is() )
+                            if ( !pMenuItemHandler->xPopupMenuController.is() &&
+                                m_xPopupMenuControllerRegistration->hasController( aItemCommand, rtl::OUString() ))
+                            {
+                                // Try instanciate a popup menu controller. It is stored in the menu item handler.
+                                Reference< XMultiComponentFactory > xPopupMenuControllerFactory( m_xPopupMenuControllerRegistration, UNO_QUERY );
+                                if ( xPopupMenuControllerFactory.is() )
                                 {
-                                    // Provide our awt popup menu to the popup menu controller
-                                    pMenuItemHandler->xPopupMenuController = xPopupMenuController;
-                                    xPopupMenuController->setPopupMenu( pMenuItemHandler->xPopupMenu );
+                                    Sequence< Any > aSeq( 2 );
+                                    PropertyValue aPropValue;
+
+                                    aPropValue.Name         = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+                                    aPropValue.Value      <<= m_aModuleIdentifier;
+                                    aSeq[0] <<= aPropValue;
+                                    aPropValue.Name         = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+                                    aPropValue.Value      <<= m_xFrame;
+                                    aSeq[1] <<= aPropValue;
+
+                                    Reference< XComponentContext > xComponentContext;
+
+                                    // #110897#
+                                    // Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+                                    Reference< XPropertySet > xProps( getServiceFactory(), UNO_QUERY );
+
+                                    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>=
+                                        xComponentContext;
+
+                                    Reference< XPopupMenuController > xPopupMenuController(
+                                                                            xPopupMenuControllerFactory->createInstanceWithArgumentsAndContext(
+                                                                                aItemCommand,
+                                                                                aSeq,
+                                                                                xComponentContext ),
+                                                                            UNO_QUERY );
+
+                                    if ( xPopupMenuController.is() )
+                                    {
+                                        // Provide our awt popup menu to the popup menu controller
+                                        pMenuItemHandler->xPopupMenuController = xPopupMenuController;
+                                        xPopupMenuController->setPopupMenu( pMenuItemHandler->xPopupMenu );
+                                    }
                                 }
                             }
+                            else if ( pMenuItemHandler->xPopupMenuController.is() )
+                            {
+                                // Force update of popup menu
+                                pMenuItemHandler->xPopupMenuController->updatePopupMenu();
+                            }
+
+                            KeyCode aKeyCode = GetKeyCodeFromCommandURL( m_xFrame, aTargetURL.Complete );
+                            pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
+
+                            if ( xMenuItemDispatch.is() )
+                            {
+                                pMenuItemHandler->xMenuItemDispatch = xMenuItemDispatch;
+                                pMenuItemHandler->aMenuItemURL      = aTargetURL.Complete;
+
+                                // We need only an update to reflect the current state
+                                xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
+                                xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
+                            }
+                            else
+                                pMenu->EnableItem( pMenuItemHandler->nItemId, sal_False );
                         }
-                        else if ( pMenuItemHandler->xPopupMenuController.is() )
+                    }
+                    else if ( pMenuItemHandler->xMenuItemDispatch.is() )
+                    {
+                        // We need an update to reflect the current state
+                        try
                         {
-                            // Force update of popup menu
-                            pMenuItemHandler->xPopupMenuController->updatePopupMenu();
+                            aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
+                            xTrans->parseStrict( aTargetURL );
+
+                            pMenuItemHandler->xMenuItemDispatch->addStatusListener(
+                                                                    static_cast< XStatusListener* >( this ), aTargetURL );
+                            pMenuItemHandler->xMenuItemDispatch->removeStatusListener(
+                                                                    static_cast< XStatusListener* >( this ), aTargetURL );
                         }
-
-                        KeyCode aKeyCode = GetKeyCodeFromCommandURL( m_xFrame, aTargetURL.Complete );
-                        pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
-
-                        if ( xMenuItemDispatch.is() )
+                        catch ( Exception& )
                         {
-                            pMenuItemHandler->xMenuItemDispatch = xMenuItemDispatch;
-                            pMenuItemHandler->aMenuItemURL      = aTargetURL.Complete;
-
-                            // We need only an update to reflect the current state
-                            xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
-                            xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
                         }
-                        else
-                            pMenu->EnableItem( pMenuItemHandler->nItemId, sal_False );
                     }
                 }
             }
@@ -1636,6 +1675,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                 MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, (AddonPopupMenu *)pPopupMenu, bDeleteChildren, bDeleteChildren );
 
                 Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
+                rFrame->addFrameActionListener( Reference< XFrameActionListener >( xSubMenuManager, UNO_QUERY ));
 
                 // store menu item command as we later have to know which menu is active (see Activate handler)
                 pSubMenuManager->m_aMenuItemCommand = aItemCommand;
@@ -1652,6 +1692,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                 // #110897# MenuBarManager* pSubMenuManager = new MenuBarManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
                 MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
                 Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
+                rFrame->addFrameActionListener( Reference< XFrameActionListener >( xSubMenuManager, UNO_QUERY ));
 
                 // store menu item command as we later have to know which menu is active (see Activate handler)
                 pSubMenuManager->m_aMenuItemCommand = aItemCommand;
@@ -1692,6 +1733,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                         MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, pSubMenu, sal_True, sal_False );
 
                         Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
+                        rFrame->addFrameActionListener( Reference< XFrameActionListener >( xSubMenuManager, UNO_QUERY ));
 
                         MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                                     nItemId,
@@ -1733,6 +1775,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                 MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, pSubMenu, sal_True, sal_False );
 
                 Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
+                rFrame->addFrameActionListener( Reference< XFrameActionListener >( xSubMenuManager, UNO_QUERY ));
+
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                             nItemId,
                                                             xSubMenuManager,
@@ -1765,6 +1809,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                 MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, pSubMenu, sal_True, sal_False );
 
                 Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
+                rFrame->addFrameActionListener( Reference< XFrameActionListener >( xSubMenuManager, UNO_QUERY ));
+
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                             nItemId,
                                                             xSubMenuManager,
@@ -1951,6 +1997,9 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
 
         // Refill menu manager again
         FillMenuManager( m_pVCLMenu, xFrame, sal_False, sal_True );
+
+        // add itself as frame action listener
+        m_xFrame->addFrameActionListener( Reference< XFrameActionListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
     }
 }
 
