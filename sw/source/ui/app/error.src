@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-20 21:18:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ Resource RID_SW_ERRHDL
         TEXT [ english_us ] = "Error reading file " ;
         TEXT[ chinese_simplified ] = "‘ЏґЅќƒЉю ±ЈҐ…ъінќу ";
         TEXT[ russian ] = "ќшибка при чтении файла   ";
-        TEXT[ polish ] = "B≥єd odczytu pliku ";
+        TEXT[ polish ] = "B≥єd w odczytywaniu pliku ";
         TEXT[ japanese ] = "ћІ≤ўВћУ«ВЁОжВиі„∞ ";
         TEXT[ chinese_traditional ] = "≈™ј…Ѓ„Ѓ…µo•Ќњщї~ ";
         TEXT[ arabic ] = "ЌѕЋ ќЎ√ √Ћд«Ѕ ё—«Ѕ… «бгбЁ ";
@@ -549,7 +549,7 @@ Resource RID_SW_ERRHDL
         TEXT [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
         TEXT[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posiзгo $(ARG2)(linha,coluna)";
-        TEXT[ russian ] = "¬ части документа $(ARG1) в позиции $(ARG2)(строка, колонка)обнаружена ошибка формата файла.";
+        TEXT[ russian ] = "¬ части документа $(ARG1) в позиции $(ARG2)(строка, колонка)обнаружена ошибка формата.";
         TEXT[ greek ] = "≈нфпряуфзке Ёнб уц№лмб мпсцпрпязузт фпх бсчеяпх уфп фмёмб кеймЁнпх $(ARG1) уфз иЁуз $(ARG2)(гсбммё, уфёлз)";
         TEXT[ dutch ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
@@ -586,8 +586,8 @@ Resource RID_SW_ERRHDL
         TEXT [ english_us ] = "Error writing file " ;
         TEXT[ chinese_simplified ] = "–і»лќƒЉю ±ЈҐ…ъінќу ";
         TEXT[ russian ] = "ќшибка записи файла  ";
-        TEXT[ polish ] = "B≥єd zapisu pliku  ";
-        TEXT[ japanese ] = "ћІ≤ўУьЧЌТЖВћі„∞ ";
+        TEXT[ polish ] = "B≥єd w zapisywaniu pliku";
+        TEXT[ japanese ] = "ћІ≤ўПСВЂНЮВЁВћНџВћі„∞ ";
         TEXT[ chinese_traditional ] = "Љg§Jј…Ѓ„Ѓ…µo•Ќњщї~ ";
         TEXT[ arabic ] = "ЌѕЋ ќЎ√ √Ћд«Ѕ я «»… «бгбЁ ";
         TEXT[ greek ] = "”ц№лмб кбф№ фзн еггсбцё бсчеяпх ";
@@ -665,7 +665,7 @@ Resource RID_SW_ERRHDL
         TEXT [ english_us ] = "Error reading temporary file" ;
         TEXT[ chinese_simplified ] = "‘ЏґЅ»°‘Ё ±ќƒЉю ±ЈҐ…ъінќу";
         TEXT[ russian ] = "ќшибка при чтении временного файла";
-        TEXT[ polish ] = "B≥єd odczytu pliku tymczasowego";
+        TEXT[ polish ] = "B≥єd w odczytywaniu pliku tymczasowego";
         TEXT[ japanese ] = "√Ёќя„ЎћІ≤ўУ«ВЁОжВиВћНџВћі„∞";
         TEXT[ chinese_traditional ] = "≈™®ъЉ»Ѓ…ј…Ѓ„Ѓ…µo•Ќњщї~";
         TEXT[ arabic ] = "ЌѕЋ ќЎ√ √Ћд«Ѕ ё—«Ѕ… «бгбЁ «бгƒё ";
@@ -1039,7 +1039,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_simplified ] = "$(ARG1) ≤їіж‘Џ";
         Text[ russian ] = "$(ARG1) не существует";
         Text[ polish ] = "$(ARG1) nie istnieje";
-        Text[ japanese ] = "$(ARG1)ВЌВ†ВиВ№ВєВс";
+        Text[ japanese ] = "$(ARG1) ВЌВ†ВиВ№ВєВсБB";
         Text[ chinese_traditional ] = "$(ARG1) §£¶s¶b";
         Text[ arabic ] = "$(ARG1) џн— гжћжѕ";
         Text[ greek ] = "$(ARG1) ден хр№счей";
@@ -1404,7 +1404,7 @@ Resource RID_SW_ERRHDL
         TEXT [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
         TEXT[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posiзгo(ARG2)(linha,coluna)";
-        TEXT[ russian ] = "¬ части документа $(ARG1) в позиции $(ARG2)(строка,колонка)обнаружена ошибка формата файла.";
+        TEXT[ russian ] = "¬ части документа $(ARG1) в позиции $(ARG2)(строка,колонка)обнаружена ошибка формата.";
         TEXT[ greek ] = "≈нфпряуфзке уц№лмб мпсцпрпязузт уфп бсчеяп уфп фмёмб кеймЁнпх $(ARG1) уфз иЁуз $(ARG2)(гсбммё,уфёлз)";
         TEXT[ dutch ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
@@ -1429,7 +1429,7 @@ Resource RID_SW_ERRHDL
         TEXT [ English ] = "These characters could not be exported using the chosen character encoding: $(ARG1)" ;
         TEXT[ english_us ] = "The following characters could not be displayed in the selected character set: $(ARG1)";
         TEXT[ portuguese ] = "Foi impossнvel representar os seguintes caracteres no conjunto seleccionado: $(ARG1)";
-        TEXT[ russian ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ russian ] = "ѕредставить следующие знаки в выбранном наборе невозможно: $(ARG1)";
         TEXT[ greek ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ dutch ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ french ] = "Impossible de reprйsenter les caractиres suivants dans le jeu de caractиres sйlectionnй : $(ARG1)";
@@ -1449,6 +1449,7 @@ Resource RID_SW_ERRHDL
         TEXT[ catalan ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
     };
 };
+
 
 
 
