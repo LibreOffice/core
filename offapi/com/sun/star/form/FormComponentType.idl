@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponentType.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:36:59 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,10 @@ constants FormComponentType
     */
     const short SPINBUTTON = 21;
 
+    /** specifies a control which provides controller functionality for the <type scope="com::sun::star::form::component">DataForm</type>
+        it belongs to, such as functionality to navigate or filter this form.
+    */
+    const short NAVIGATIONBAR = 22;
 };
 
 //=============================================================================
