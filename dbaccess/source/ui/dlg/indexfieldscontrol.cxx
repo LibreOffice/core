@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:10:22 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 14:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,8 +356,17 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
+    sal_Bool IndexFieldsControl::IsModified() const
+    {
+        return DbBrowseBox::IsModified();
+    }
+
+    //------------------------------------------------------------------
     sal_Bool IndexFieldsControl::SaveModified()
     {
+        if (!IsModified())
+            return sal_True;
+
         switch (GetCurColumnId())
         {
             case COLUMN_ID_FIELDNAME:
@@ -510,6 +519,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/03/30 14:10:22  oj
+ *  #85298##85297# correct index impl
+ *
  *  Revision 1.2  2001/03/19 06:00:13  fs
  *  no controller if not enabled
  *
