@@ -60,7 +60,7 @@ package org.openoffice.java.accessibility;
 import javax.accessibility.AccessibleState;
 
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 public class Dialog extends java.awt.Dialog implements javax.accessibility.Accessible, NativeFrame {
     protected XAccessibleComponent unoAccessibleComponent;
@@ -99,9 +99,6 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
     java.awt.Component initialComponent = null;
 
     public java.awt.Component getInitialComponent() {
-        if (Build.DEBUG) {
-            System.err.println("returning initial component object of class: " + initialComponent.getClass().getName());
-        }
         return initialComponent;
     }
 
@@ -292,29 +289,29 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
-                case AccessibleEventId.ACCESSIBLE_NAME_EVENT:
+                case AccessibleEventId.NAME_CHANGED:
                     // Set the accessible name for the corresponding context, which will fire a property
                     // change event itself
                     handleNameChangedEvent(event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_DESCRIPTION_EVENT:
+                case AccessibleEventId.DESCRIPTION_CHANGED:
                     // Set the accessible description for the corresponding context, which will fire a property
                     // change event itself - so do not set propertyName !
                     handleDescriptionChangedEvent(event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_STATE_EVENT:
+                case AccessibleEventId.STATE_CHANGED:
                     // Update the internal state set and fire the appropriate PropertyChangedEvent
                     handleStateChangedEvent(event.OldValue, event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
+                case AccessibleEventId.CHILD:
                     if (AnyConverter.isObject(event.OldValue)) {
                         AccessibleObjectFactory.removeChild(Dialog.this, event.OldValue);
                     } else if (AnyConverter.isObject(event.NewValue)) {
                         AccessibleObjectFactory.addChild(Dialog.this, event.NewValue);
                     }
                     break;
-                case AccessibleEventId.ACCESSIBLE_VISIBLE_DATA_EVENT:
-                case AccessibleEventId.ACCESSIBLE_BOUNDRECT_EVENT:
+                case AccessibleEventId.VISIBLE_DATA_CHANGED:
+                case AccessibleEventId.BOUNDRECT_CHANGED:
                     handleVisibleDataEvent();
                     break;
                 default:
@@ -579,7 +576,7 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
 
         public boolean contains(java.awt.Point p) {
             try {
-                return unoAccessibleComponent.contains(new com.sun.star.awt.Point(p.x, p.y));
+                return unoAccessibleComponent.containsPoint(new com.sun.star.awt.Point(p.x, p.y));
             } catch (com.sun.star.uno.RuntimeException e) {
                 return false;
             }
@@ -644,7 +641,7 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
         public javax.accessibility.Accessible getAccessibleAt(java.awt.Point p) {
             try {
                 java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
-                    unoAccessibleComponent.getAccessibleAt(new com.sun.star.awt.Point(p.x, p.y)));
+                    unoAccessibleComponent.getAccessibleAtPoint(new com.sun.star.awt.Point(p.x, p.y)));
 
                 return (javax.accessibility.Accessible) c;
             } catch (com.sun.star.uno.RuntimeException e) {
