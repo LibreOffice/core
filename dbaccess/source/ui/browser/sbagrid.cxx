@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 12:08:57 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 16:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,6 @@ Reference< XInterface > SAL_CALL SbaXGridControl_CreateInstance(const Reference<
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString> aSupported(1);
     Sequence< ::rtl::OUString> aSupported(2);
     aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.DispatchGridControl");
     aSupported.getArray()[1] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.GridControl");
