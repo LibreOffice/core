@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:13:29 $
+ *  last change: $Author: yl146652 $ $Date: 2004-01-30 05:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2871,9 +2871,90 @@ TabPage PAGE_LDAP
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_LDAP;
 
+    FixedText FT_USERNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 7 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Benutzername" ;
+        Text [ english ] = "~Username" ;
+        Text [ NORWEGIAN ] = "~Username" ;
+        Text [ DANISH ] = "Brugernavn" ;
+        Text [ english_US ] = "~User name" ;
+        Text [ SPANISH ] = "N~ombre del usuario" ;
+        Text [ FINNISH ] = "K‰ytt‰j‰tunnus" ;
+        Text [ FRENCH ] = "Nom d'~utilisateur" ;
+        Text [ ITALIAN ] = "Nome ~utente" ;
+        Text [ DUTCH ] = "~Gebruikersnaam" ;
+        Text [ SWEDISH ] = "A~nv‰ndarnamn" ;
+        Text [ PORTUGUESE ] = "Nome do ~utilizador" ;
+        Text [ portuguese_brazilian ] = "Nome do ~usu·rio" ;
+        Text [ chinese_simplified ] = "‰ΩøÁî®Âêç(~U)";
+        Text [ russian ] = "»Ïˇ ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ";
+        Text [ polish ] = "Nazwa ~uøytkownika";
+        Text [ japanese ] = "„É¶„Éº„Ç∂„ÉºÂêç(~U)";
+        Text [ chinese_traditional ] = "‰ΩøÁî®ËÄÖÂêçÁ®±(~U)";
+        Text [ arabic ] = "«”„ «·„” Œœ„";
+        Text [ greek ] = "ºÌÔÏ· ˜ÒﬁÛÙÁ";
+        Text [ korean ] = "ÏÇ¨Ïö©Ïûê Ïù¥Î¶Ñ(~U)";
+        Text [ turkish ] = "~Kullan˝c˝ ismi";
+        Text [ language_user1 ] = " ";
+        Text[ catalan ] = "Nom d'~usuari";
+        Text[ thai ] = "‡∏ä‡∏∑‡πà‡∏≠~‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ";
+        Text[ czech ] = "U≈æivatelsk√© jm√©no";
+        Text[ hebrew ] = "~Benutzername";
+        Text[ hindi ] = "~‡§â‡§™‡§≠‡•ã‡§ï‡•ç‡§§‡§æ ‡§®‡§æ‡§Æ";
+        Text[ slovak ] = "~U≈æ√≠vateƒæsk√© meno";
+    };
+    Edit ET_USERNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 6 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_USER_LDAP;
+    };
+    CheckBox CB_PASSWORD_REQUIRED
+    {
+        Pos = MAP_APPFONT ( 90 , 21 ) ;
+        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
+        Text = "Kennwort erforderlich";
+        Text [ english ] = "Password required";
+        Text [ english_us ] = "Password required";
+        HelpId = HID_DSADMIN_PWDREC_LDAP;
+        Text [ portuguese ] = "Necess·rio senha";
+        Text [ russian ] = "ÕÂÓ·ıÓ‰ËÏÓ ‚‚ÂÒÚË Ô‡ÓÎ¸";
+        Text [ greek ] = "¡·ÈÙÂﬂÙ·È Í˘‰ÈÍ¸Ú Ò¸Û‚·ÛÁÚ";
+        Text [ dutch ] = "Wachtwoord vereist";
+        Text [ french ] = "Mot de passe requis";
+        Text [ spanish ] = "Se requiere una contraseÒa";
+        Text [ italian ] = "Password necessaria";
+        Text [ danish ] = "Adgangskode n¯dvendig";
+        Text [ swedish ] = "Lˆsenord kr‰vs";
+        Text [ polish ] = "Wymagane has≥o";
+        Text [ portuguese_brazilian ] = "Senha obrigatÛria";
+        Text [ japanese ] = "„Éë„Çπ„ÉØ„Éº„Éâ„ÅåÂøÖË¶Å";
+        Text [ korean ] = "ÏïîÌò∏ ÌïÑÏöî";
+        Text [ chinese_simplified ] = "ÂøÖÈ°ªËæìÂÖ•ÂØÜÁ†Å";
+        Text [ chinese_traditional ] = "ÂøÖÈ†àËº∏ÂÖ•ÂØÜÁ¢º";
+        Text [ turkish ] = "ﬁifre gerekli";
+        Text [ arabic ] = "„ÿ·Ê» ﬂ·„… ”—";
+        Text[ finnish ] = "Salasana pakollinen";
+        Text[ catalan ] = "Es necessita una contrasenya";
+        Text[ thai ] = "‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£‡∏£‡∏´‡∏±‡∏™‡∏ú‡πà‡∏≤‡∏ô";
+        Text[ czech ] = "Po≈æadovan√© heslo";
+        Text[ hebrew ] = "Kennwort erforderlich";
+        Text[ hindi ] = "‡§ï‡•Ç‡§ü‡§∂‡§¨‡•ç‡§¶ ‡§ï‡§æ ‡§Ü‡§µ‡§∂‡•ç‡§Ø‡§ï‡§§‡§æ";
+        Text[ slovak ] = "Po≈æadovan√© heslo";
+    };
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 4 , 32 ) ;
+        Size = MAP_APPFONT ( 252 , 1 ) ;
+    };
+
     FixedText FT_HOSTNAME
     {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Rechnername" ;
         Text [ english ] = "~Hostname" ;
@@ -2911,12 +2992,12 @@ TabPage PAGE_LDAP
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_HOSTNAME;
 
-        Pos = MAP_APPFONT ( 91 , 7 ) ;
+        Pos = MAP_APPFONT ( 91 , 37 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
     };
     FixedText FT_BASEDN
     {
-        Pos = MAP_APPFONT ( 6 , 26 ) ;
+        Pos = MAP_APPFONT ( 6 , 56 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Base DN" ;
         Text [ english ] = "~Base DN" ;
@@ -2955,17 +3036,51 @@ TabPage PAGE_LDAP
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_BASEDN;
 
-        Pos = MAP_APPFONT ( 91 , 25 ) ;
+        Pos = MAP_APPFONT ( 91 , 55 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
     };
+    CheckBox CB_USESSL
+    {
+        Pos = MAP_APPFONT ( 91 , 75 ) ;
+        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
+        Text = "Use secure connection(SSL)";
+        Text [ english ] = "Use secure connection(SSL)";
+        Text [ english_us ] = "Use secure connection(SSL)";
+        HelpId = HID_DSADMIN_USESSL_LDAP;
+        Text [ portuguese ] = "Use secure connection(SSL)";
+        Text [ russian ] = "Use secure connection(SSL)";
+        Text [ greek ] = "Use secure connection(SSL)";
+        Text [ dutch ] = "Use secure connection(SSL)";
+        Text [ french ] = "Use secure connection(SSL)";
+        Text [ spanish ] = "Use secure connection(SSL)";
+        Text [ italian ] = "Use secure connection(SSL)";
+        Text [ danish ] = "Use secure connection(SSL)";
+        Text [ swedish ] = "Use secure connection(SSL)";
+        Text [ polish ] = "Use secure connection(SSL)";
+        Text [ portuguese_brazilian ] = "Use secure connection(SSL)";
+        Text [ japanese ] = "Use secure connection(SSL)";
+        Text [ korean ] = "Use secure connection(SSL)";
+        Text [ chinese_simplified ] = "Use secure connection(SSL)";
+        Text [ chinese_traditional ] = "Use secure connection(SSL)";
+        Text [ turkish ] = "Use secure connection(SSL)";
+        Text [ arabic ] = "Use secure connection(SSL)";
+        Text[ finnish ] = "Use secure connection(SSL)";
+        Text[ catalan ] = "Use secure connection(SSL)";
+        Text[ thai ] = "Use secure connection(SSL)";
+        Text[ czech ] = "Use secure connection(SSL)";
+        Text[ hebrew ] = "Use secure connection(SSL)";
+        Text[ hindi ] = "Use secure connection(SSL)";
+        Text[ slovak ] = "Use secure connection(SSL)";
+    };
+
     FixedLine FL_SEPARATOR2
     {
-        Pos = MAP_APPFONT ( 4 , 42 ) ;
+        Pos = MAP_APPFONT ( 4 , 90 ) ;
         Size = MAP_APPFONT ( 252 , 1 ) ;
     };
     FixedText FT_PORTNUMBER
     {
-        Pos = MAP_APPFONT ( 6 , 47 ) ;
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Portnummer" ;
         Text [ english ] = "~Portnumber" ;
@@ -3003,12 +3118,12 @@ TabPage PAGE_LDAP
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_PORTNUMBER;
 
-        Pos = MAP_APPFONT ( 91 , 48 ) ;
+        Pos = MAP_APPFONT ( 91 , 96 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
     };
     FixedText FT_LDAPROWCOUNT
     {
-        Pos = MAP_APPFONT ( 6 , 67 ) ;
+        Pos = MAP_APPFONT ( 6 , 115 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Datens‰tze (max.)" ;
         Text [ english ] = "~Rows (max.)" ;
@@ -3046,7 +3161,7 @@ TabPage PAGE_LDAP
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_ROWCOUNT;
 
-        Pos = MAP_APPFONT ( 91 , 66 ) ;
+        Pos = MAP_APPFONT ( 91 , 114 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
     };
 };

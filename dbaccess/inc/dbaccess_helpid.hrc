@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:51:48 $
+ *  last change: $Author: yl146652 $ $Date: 2004-01-30 05:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,9 @@
 #define HID_DSADMIN_USER_DEFINED                    (HID_DBACCESS_START + 234)
 #define HID_DSADMIN_USERDEF_OPTIONS                 (HID_DBACCESS_START + 235)
 #define HID_DSADMIN_CHARSET_USERDEF                 (HID_DBACCESS_START + 236)
+#define HID_DSADMIN_USER_LDAP                       (HID_DBACCESS_START + 237)
+#define HID_DSADMIN_PWDREC_LDAP                     (HID_DBACCESS_START + 238)
+#define HID_DSADMIN_USESSL_LDAP                     (HID_DBACCESS_START + 239)
 
 
 

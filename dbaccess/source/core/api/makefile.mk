@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-16 12:40:29 $
+#   last change: $Author: yl146652 $ $Date: 2004-01-30 05:04:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : settings.mk
 
 # --- Files -------------------------------------
-
 SLOFILES=	\
         $(SLO)$/FilteredContainer.obj			\
         $(SLO)$/TableDeco.obj					\

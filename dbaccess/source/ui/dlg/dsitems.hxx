@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:24 $
+ *  last change: $Author: yl146652 $ $Date: 2004-01-30 05:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,14 @@
 #define DSID_USECATALOG             31          // should the driver use the catalog name when the database is filebased
 #define DSID_CONN_LDAP_HOSTNAME     32
 #define DSID_CONN_LDAP_BASEDN       33
-#define DSID_CONN_LDAP_PORTNUMBER   34
-#define DSID_CONN_LDAP_ROWCOUNT     35
-#define DSID_SQL92CHECK             36
-#define DSID_AUTOINCREMENTVALUE     37
-#define DSID_AUTORETRIEVEVALUE      38
-#define DSID_AUTORETRIEVEENABLED    39
+#define DSID_CONN_LDAP_USESSL       34
+#define DSID_CONN_LDAP_PORTNUMBER   35
+#define DSID_CONN_LDAP_ROWCOUNT     36
+#define DSID_SQL92CHECK             37
+#define DSID_AUTOINCREMENTVALUE     38
+#define DSID_AUTORETRIEVEVALUE      39
+#define DSID_AUTORETRIEVEENABLED    40
+
 
 
 //========================================================================
