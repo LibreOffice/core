@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-15 11:02:24 $
+ *  last change: $Author: kso $ $Date: 2001-02-16 08:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,15 +84,23 @@ NeonSession::NeonSession( DAVSessionFactory* pSessionFactory,
                           const ProxyConfig& rProxyCfg )
 : m_pSessionFactory( pSessionFactory )
 {
+    // @@@ We need to keep the char buffer for hostname and proxyname
+    // for the whole session lifetime because neon only stores a pointer
+    // to that buffer (last verified with neon 0.11.0)!!! We do this
+    // by having the members mHostName and mProxyName, which are OStrings!
+
     Init();
     NeonUri theUri( inUri );
 
-    mHostName = theUri.GetHost();
+    mHostName = OUStringToOString( theUri.GetHost(), RTL_TEXTENCODING_UTF8 );
     mPort = theUri.GetPort();
+
+    mProxyName = OUStringToOString( rProxyCfg.aName, RTL_TEXTENCODING_UTF8 );
+    mProxyPort = rProxyCfg.nPort;
 
     mHttpSession = CreateSession( mHostName,
                                   theUri.GetPort(),
-                                  rProxyCfg.aName,
+                                  mProxyName,
                                   rProxyCfg.nPort );
     if ( mHttpSession == NULL )
         throw DAVException( DAVException::DAV_SESSION_CREATE );
@@ -136,7 +144,9 @@ sal_Bool NeonSession::CanUse( const OUString & inUri )
 {
     sal_Bool IsConnected = sal_False;
     NeonUri theUri( inUri );
-    if ( theUri.GetPort() == mPort && theUri.GetHost() == mHostName )
+    if ( ( theUri.GetPort() == mPort ) &&
+         ( OUStringToOString( theUri.GetHost(), RTL_TEXTENCODING_UTF8 )
+             == mHostName ) )
          IsConnected = sal_True;
     return IsConnected;
 }
@@ -158,7 +168,7 @@ void NeonSession::setProxyAuthListener(DAVAuthListener * inDAVAuthListener)
 // -------------------------------------------------------------------
 // OPTIONS
 // -------------------------------------------------------------------
-void NeonSession::OPTIONS( const OUString &                 inUri,
+void NeonSession::OPTIONS( const OUString & inUri,
                            DAVCapabilities & outCapabilities,
                            const com::sun::star::uno::Reference<
                                com::sun::star::ucb::XCommandEnvironment >& inEnv )
@@ -432,9 +442,9 @@ void NeonSession::Init( void )
 // CreateSession
 // Creates a new neon session.
 // -------------------------------------------------------------------
-HttpSession * NeonSession::CreateSession( const OUString& inHostName,
+HttpSession * NeonSession::CreateSession( const OString & inHostName,
                                              int inPort,
-                                              const OUString& inProxyName,
+                                              const OString & inProxyName,
                                              int inProxyPort )
 {
     if ( inHostName.getLength() == 0 || inPort <= 0 )
@@ -446,17 +456,16 @@ HttpSession * NeonSession::CreateSession( const OUString& inHostName,
 
     if ( inProxyName.getLength() )
     {
-        OString aProxy = OUStringToOString( inProxyName, RTL_TEXTENCODING_UTF8 );
-        if ( http_session_proxy( theHttpSession, aProxy.getStr(), inProxyPort )
-                != HTTP_OK )
+        if ( http_session_proxy(
+                theHttpSession, inProxyName.getStr(), inProxyPort ) != HTTP_OK )
         {
             http_session_destroy( theHttpSession );
             throw DAVException( DAVException::DAV_HTTP_LOOKUP );
         }
     }
 
-    OString aHost = OUStringToOString( inHostName, RTL_TEXTENCODING_UTF8 );
-    if ( http_session_server( theHttpSession, aHost.getStr(), inPort ) != HTTP_OK )
+    if ( http_session_server(
+            theHttpSession, inHostName.getStr(), inPort ) != HTTP_OK )
     {
         http_session_destroy( theHttpSession );
         throw DAVException( DAVException::DAV_HTTP_LOOKUP );

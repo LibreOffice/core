@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
+ *  last change: $Author: kso $ $Date: 2001-02-16 08:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,11 @@ class NeonSession : public DAVSession
 {
     private:
         osl::Mutex              mMutex;
-        HttpSession *           mHttpSession;
-        rtl::OUString           mHostName;
+        rtl::OString            mHostName;
+        rtl::OString            mProxyName;
         sal_Int32               mPort;
+        sal_Int32               mProxyPort;
+        HttpSession *           mHttpSession;
 
         // Authentication stuff
         DAVAuthListener *       mListener;
@@ -183,9 +185,9 @@ class NeonSession : public DAVSession
         void            Init( void );
 
         // Create a Neon session for server at supplied host & port
-        HttpSession *   CreateSession( const ::rtl::OUString& inHostName,
+        HttpSession *   CreateSession( const ::rtl::OString & inHostName,
                                        int inPort,
-                                        const ::rtl::OUString& inProxyName,
+                                        const ::rtl::OString & inProxyName,
                                        int inProxyPort );
 
         // A simple Neon http_block_reader for use with a http GET method
