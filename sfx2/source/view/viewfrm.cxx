@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 16:56:51 $
+ *  last change: $Author: mba $ $Date: 2002-04-24 11:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3422,9 +3422,8 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
     {
         case SID_RECORDMACRO :
         {
-            ::rtl::OUString sProperty = rtl::OUString::createFromAscii("DispatchRecorderSupplier");
-
             // try to find any active recorder on this frame
+            ::rtl::OUString sProperty = rtl::OUString::createFromAscii("DispatchRecorderSupplier");
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
                     GetFrame()->GetFrameInterface(),
                     com::sun::star::uno::UNO_QUERY);
@@ -3530,7 +3529,17 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
             {
                 case SID_RECORDMACRO :
                 {
-                    rSet.Put( SfxBoolItem( nWhich, pImp->pMacro != NULL ) );
+                    ::rtl::OUString sProperty = rtl::OUString::createFromAscii("DispatchRecorderSupplier");
+                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
+                            GetFrame()->GetFrameInterface(),
+                            com::sun::star::uno::UNO_QUERY);
+
+                    com::sun::star::uno::Any aProp = xSet->getPropertyValue(sProperty);
+                    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
+                    if ( aProp >>= xSupplier )
+                        rSet.Put( SfxBoolItem( nWhich, xSupplier.is() ) );
+                    else
+                        rSet.DisableItem( nWhich );
                     break;
                 }
 
