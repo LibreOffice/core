@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 10:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1217,7 +1217,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     nKey(-1)
 {
     OUString sLanguage, sCountry;
-    ::drafts::com::sun::star::i18n::NativeNumberXmlAttributes aNatNumAttr;
+    ::com::sun::star::i18n::NativeNumberXmlAttributes aNatNumAttr;
     sal_Bool bAttrBool;
     sal_uInt16 nAttrEnum;
 
