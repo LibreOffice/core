@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdenum.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:48:31 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include "base.hxx"
 #endif
 
+#include "registry/reader.hxx"
+#include "registry/version.h"
+
 namespace stoc_rdbtdp
 {
 
@@ -101,12 +104,11 @@ Sequence< OUString > EnumTypeDescriptionImpl::getEnumNames()
 {
     if (! _pEnumNames)
     {
-        RegistryTypeReaderLoader aLoader;
-        RegistryTypeReader aReader(
-            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-            _aBytes.getLength(), sal_False );
+        typereg::Reader aReader(
+            _aBytes.getConstArray(), _aBytes.getLength(), false,
+            TYPEREG_VERSION_1);
 
-        sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
+        sal_uInt16 nFields = aReader.getFieldCount();
         Sequence< OUString > * pTempEnumNames = new Sequence< OUString >( nFields );
         OUString * pEnumNames = pTempEnumNames->getArray();
 
@@ -134,18 +136,18 @@ Sequence< sal_Int32 > EnumTypeDescriptionImpl::getEnumValues()
 {
     if (! _pEnumValues)
     {
-        RegistryTypeReaderLoader aLoader;
-        RegistryTypeReader aReader(
-            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-            _aBytes.getLength(), sal_False );
+        typereg::Reader aReader(
+            _aBytes.getConstArray(), _aBytes.getLength(), false,
+            TYPEREG_VERSION_1);
 
-        sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
+        sal_uInt16 nFields = aReader.getFieldCount();
         Sequence< sal_Int32 > * pTempEnumValues = new Sequence< sal_Int32 >( nFields );
         sal_Int32 * pEnumValues = pTempEnumValues->getArray();
 
         while (nFields--)
         {
-            pEnumValues[nFields] = getRTValueAsInt32( aReader.getFieldConstValue( nFields ) );
+            pEnumValues[nFields] = getRTValueAsInt32(
+                aReader.getFieldValue( nFields ) );
         }
 
         ClearableMutexGuard aGuard( getMutex() );
