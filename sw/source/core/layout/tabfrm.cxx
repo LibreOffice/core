@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:48:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1172,7 +1172,10 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                      !IsAnLower( pFly ) && !pFly->IsAnLower( this ) &&
                      ( !pMyFly || pMyFly->IsAnLower( pFly ) ) &&
                      pPage->GetPhyPageNum() >=
-                     pFly->GetAnchor()->FindPageFrm()->GetPhyPageNum() )
+                     pFly->GetAnchor()->FindPageFrm()->GetPhyPageNum() &&
+                     // anchor should be in same page body/header/footer
+                     ( pFly->GetAnchor()->FindFooterOrHeader() ==
+                       FindFooterOrHeader() ) )
                 {
                     const SwFmtSurround   &rSur = pFly->GetFmt()->GetSurround();
                     const SwFmtHoriOrient &rHori= pFly->GetFmt()->GetHoriOrient();
