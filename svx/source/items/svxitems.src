@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:27:12 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2569,7 +2569,7 @@ String RID_SVXITEMS_CASEMAP_TITEL
     Text [ finnish ] = "Otsikko" ;
     Text [ danish ] = "Titelskrift" ;
     Text [ french ] = "Caractères du titre" ;
-    Text [ swedish ] = "Titelteckensnitt" ;
+    Text [ swedish ] = "Titel" ;
     Text [ dutch ] = "Titel" ;
     Text [ spanish ] = "Caracteres del título" ;
     Text [ english_us ] = "Title" ;
@@ -3525,7 +3525,7 @@ String RID_ATTR_CHAR_CASEMAP
     Text[ chinese_simplified ] = "Ğ§¹û";
     Text[ russian ] = "İôôåêòû";
     Text[ polish ] = "Wyró¿nienie";
-    Text[ japanese ] = "•¶šü‚è";
+    Text[ japanese ] = "•¶ší";
     Text[ chinese_traditional ] = "®ÄªG";
     Text[ arabic ] = "ÊÃËíÑÇÊ";
     Text[ language_user1 ] = " ";
@@ -7119,7 +7119,7 @@ String RID_SVXITEMS_GRAPHIC
     Text[ chinese_simplified ] = "Í¼Ïñ";
     Text[ russian ] = "Ãğàôèêà";
     Text[ polish ] = "Grafika";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "}";
     Text[ chinese_traditional ] = "¹Ï§Î";
     Text[ arabic ] = "ÕæÑÉ";
     Text[ greek ] = "Ãñáöéêü";
