@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:36:34 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
             sal_uInt16 nPgNum = pPreviousStandardPage->GetMasterPageNum(nPos=0);
             pStandardPage->InsertMasterPage(nPgNum);
             pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
-            pStandardPage->SetAutoLayout(AUTOLAYOUT_NONE, sal_True, sal_True);
+            pStandardPage->SetAutoLayout(AUTOLAYOUT_NONE, sal_True );
         }
 
         aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
@@ -648,7 +648,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
             sal_uInt16 nPgNum = pPreviousNotesPage->GetMasterPageNum(nPos=0);
             pNotesPage->InsertMasterPage(nPgNum);
             pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
-            pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
+            pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True );
         }
     }
 
@@ -1038,6 +1038,21 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
     }
 
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.Header") ) )
+    {
+        return (::cppu::OWeakObject * )new SvxUnoTextField( ID_HEADERFIELD );
+    }
+
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.Footer") ) )
+    {
+        return (::cppu::OWeakObject * )new SvxUnoTextField( ID_FOOTERFIELD );
+    }
+
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.DateTime") ) )
+    {
+        return (::cppu::OWeakObject * )new SvxUnoTextField( ID_DATETIMEFIELD );
+    }
+
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.xml.NamespaceMap") ) )
     {
         static sal_uInt16 aWhichIds[] = { SDRATTR_XMLATTRIBUTES, EE_CHAR_XMLATTRIBS, EE_PARA_XMLATTRIBS, 0 };
@@ -1129,6 +1144,22 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         {
             nType = OBJ_PAGE;
         }
+        else if( aType.EqualsAscii( "FooterShape", 26, 12 ) )
+        {
+            nType = OBJ_TEXT;
+        }
+        else if( aType.EqualsAscii( "HeaderShape", 26, 12 ) )
+        {
+            nType = OBJ_TEXT;
+        }
+        else if( aType.EqualsAscii( "SlideNumberShape", 26, 17 ) )
+        {
+            nType = OBJ_TEXT;
+        }
+        else if( aType.EqualsAscii( "DateTimeShape", 26, 17 ) )
+        {
+            nType = OBJ_TEXT;
+        }
         else
         {
             throw lang::ServiceNotRegisteredException();
@@ -1170,7 +1201,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS( mbImpressDoc ? (26 + 4) : (15 + 4) );
+    uno::Sequence< OUString > aSNS( mbImpressDoc ? (30 + 4) : (19 + 4) );
 
     sal_uInt16 i(0);
 
@@ -1209,6 +1240,10 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
         aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesShape"));
         aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutShape"));
         aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.DocumentSettings"));
+        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.FooterShape"));
+        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HeaderShape"));
+        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SlideNumberShape"));
+        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.DateTimeShape"));
     }
     else
     {
@@ -1573,14 +1608,12 @@ sal_Bool ImplRenderPaintProc::IsPrintable( const SdrObject* pObj ) const
 IMPL_LINK( ImplRenderPaintProc, _ImplRenderPaintProc, SdrPaintProcRec*, pRecord )
 {
     SdrObject* pObj = pRecord->pObj;
-    if( !pObj->IsEmptyPresObj() && IsVisible( pObj ) && IsPrintable( pObj ) )
+    if( (pObj->GetPage() == NULL) || !pObj->GetPage()->checkVisibility( pRecord, false ) )
+        return 0;
+
+    if( IsVisible( pObj ) && IsPrintable( pObj ) )
     {
         pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
-    }
-    else
-    {
-        if( pObj->GetPage()->IsMasterPage() && (pObj->GetPage() == pObj->GetObjList()) && (pObj->GetOrdNum() == 0) && pObj->ISA( SdrRectObj ) )
-            pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
     }
     return 0;
 }
