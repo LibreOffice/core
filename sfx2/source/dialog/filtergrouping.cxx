@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-09 08:42:06 $
+ *  last change: $Author: vg $ $Date: 2001-10-11 11:29:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ namespace sfx2
     static const sal_Unicode s_cWildcardSeparator( ';' );
 
     //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
-    static const ::rtl::OUString& getSeparatorString()
+    const ::rtl::OUString& getSeparatorString()
     {
         static ::rtl::OUString s_sSeparatorString( &s_cWildcardSeparator, 1 );
         return s_sSeparatorString;
@@ -945,6 +945,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/10/09 08:42:06  fs
+ *  finalized #91894# - filter grouping and classifying now works (hopefully :)
+ *
  *  Revision 1.2  2001/10/02 12:37:54  fs
  *  #65293# include <algorithm> - needed for non-win platforms
  *
