@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-16 18:07:35 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 14:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #endif
 #ifndef _SWEVENT_HXX
 #include <swevent.hxx>
+#endif
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
 #endif
 
 #ifdef DEBUG
@@ -355,6 +358,7 @@ void SwWrtShell::UnSelectFrm()
         // Rahmenselektion aufheben mit garantiert ungueltiger Position
     Point aPt(LONG_MIN, LONG_MIN);
     SelectObj(aPt);
+    SwTransferable::ClearSelection( *this );
 }
 
 /*
@@ -392,6 +396,7 @@ long SwWrtShell::ResetSelect(const Point *,BOOL)
         */
         GetChgLnk().Call(this);
     }
+    SwTransferable::ClearSelection( *this );
     return 1;
 }
 
@@ -419,6 +424,7 @@ void SwWrtShell::SttSelect()
     fnKillSel = &SwWrtShell::Ignore;
     fnSetCrsr = &SwWrtShell::SetCrsr;
     bInSelect = TRUE;
+    SwTransferable::CreateSelection( *this );
 }
 /*
  * Ende eines Selektionsvorganges.
@@ -977,11 +983,14 @@ long SwWrtShell::MoveText(const Point *pPt,BOOL)
 
           Source Code Control System - Header
 
-          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.7 2001-05-16 18:07:35 jp Exp $
+          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.8 2001-09-11 14:57:42 jp Exp $
 
           Source Code Control System - Update
 
           $Log: not supported by cvs2svn $
+          Revision 1.7  2001/05/16 18:07:35  jp
+          Bug #85853#: IntelligentCut - only for LATIN scripts
+
           Revision 1.6  2001/03/12 08:18:49  tl
           SearcParam => SearchOptions and implied changes
 

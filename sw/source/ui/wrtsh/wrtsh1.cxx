@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:22:01 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 14:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,9 @@
 #endif
 #ifndef _VISCRS_HXX //autogen wg. SwSelPaintRects
 #include <viscrs.hxx>
+#endif
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
 #endif
 
 #ifndef _SWERROR_H
@@ -1473,6 +1476,7 @@ SwWrtShell::~SwWrtShell()
         PopMode();
     while(PopCrsr(FALSE))
         ;
+    SwTransferable::ClearSelection( *this );
 }
 
 
