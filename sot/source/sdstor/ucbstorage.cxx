@@ -963,7 +963,21 @@ sal_Int16 UCBStorage_Impl::Commit()
                 }
                 else
                 {
-                    // Is it correct to set title and content type before inserting if the content is new ?!
+                    sal_Int16 nLocalRet = COMMIT_RESULT_NOTHING_TO_DO;
+                    if ( pElement->m_xStorage.Is() )
+                    {
+                        if ( !pElement->m_bIsInserted || pElement->m_xStorage->Insert( m_pContent ) )
+                        {
+                            nLocalRet = pElement->m_xStorage->Commit();
+                            pContent = pElement->GetContent();
+                        }
+                    }
+                    else if ( pElement->m_xStream.Is() )
+                    {
+                        nLocalRet = pElement->m_xStream->Commit();
+                        pContent = pElement->GetContent();
+                    }
+
                     if ( pElement->m_aName != pElement->m_aOriginalName )
                     {
                         // errors will be caught in the "catch" statement outside the loop
@@ -982,14 +996,6 @@ sal_Int16 UCBStorage_Impl::Commit()
                         pContent->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"), aAny );
                     }
 
-                    sal_Int16 nLocalRet = COMMIT_RESULT_NOTHING_TO_DO;
-                    if ( pElement->m_xStorage.Is() )
-                    {
-                        if ( pElement->m_bIsInserted && pElement->m_xStorage->Insert( m_pContent ) )
-                            nLocalRet = pElement->m_xStorage->Commit();
-                    }
-                    else if ( pElement->m_xStream.Is() )
-                        nLocalRet = pElement->m_xStream->Commit();
                     if ( nLocalRet != COMMIT_RESULT_NOTHING_TO_DO )
                         nRet = nLocalRet;
                 }
@@ -1236,7 +1242,7 @@ BOOL UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
     {
         // copy the streams data
         // the destination stream must not be open
-        BaseStorageStream* pOtherStream = pDest->OpenStream( rElement.m_aName, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect );
+        BaseStorageStream* pOtherStream = pDest->OpenStream( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect );
         BaseStorageStream* pStream = NULL;
         BOOL bDeleteStream = FALSE;
 
@@ -1264,7 +1270,6 @@ BOOL UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
     {
         // copy the storage content
         // the destination storage must not be open
-        BaseStorage* pOtherStorage = pDest->OpenStorage( rElement.m_aName, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect );
         BaseStorage* pStorage = NULL;
 
         // if stream is already open, it is allowed to copy it, so be aware of this
@@ -1276,6 +1281,14 @@ BOOL UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
             pStorage = ( const_cast < UCBStorage* > (this) )->OpenStorage( rElement.m_aName, pImp->m_nMode, pImp->m_bDirect );
             bDeleteStorage = TRUE;
         }
+
+        UCBStorage* pUCBDest = PTR_CAST( UCBStorage, pDest );
+        UCBStorage* pUCBCopy = PTR_CAST( UCBStorage, pStorage );
+
+        BOOL bOpenUCBStorage = pUCBDest && pUCBCopy;
+        BaseStorage* pOtherStorage = bOpenUCBStorage ?
+                pDest->OpenUCBStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect ) :
+                pDest->OpenStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect );
 
         pOtherStorage->SetClassId( pStorage->GetClassId() );
         pStorage->CopyTo( pOtherStorage );
