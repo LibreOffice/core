@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLHelper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 15:57:27 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,37 +790,61 @@ public class XMLHelper
      *
      *  @param  sVersion
      *          number of the xml version.
-
+     *
      *  @param  sEncoding
      *          used file encoding.
-
+     *
      *  @param  sPath
      *          name of the configuration root.
-
+     *
      *  @param  sPackage
      *          name of the configuration package.
+     *
+     *  @param  bLanguagepack
+     *          force creation of a special header,
+     *          which is needed for language packs only.
      *
      *  @return [java.lang.String]
      *          the generated xml header.
 
 */
-    public static java.lang.String generateHeader(java.lang.String sVersion ,
-                                                  java.lang.String sEncoding,
-                                                  java.lang.String sPath    ,
-                                                  java.lang.String sPackage )
+    public static java.lang.String generateHeader(java.lang.String sVersion     ,
+                                                  java.lang.String sEncoding    ,
+                                                  java.lang.String sPath        ,
+                                                  java.lang.String sPackage     ,
+                                                  boolean          bLanguagePack)
     {
         java.lang.StringBuffer sHeader = new java.lang.StringBuffer(256);
 
-        sHeader.append("<?xml version=\"");
-        sHeader.append(sVersion);
-        sHeader.append("\" encoding=\"");
-        sHeader.append(sEncoding);
-        sHeader.append("\"?>\n<!DOCTYPE oor:component-data SYSTEM \"../../../../component-update.dtd\">\n");
-        sHeader.append("<oor:component-data xmlns:oor=\"http://openoffice.org/2001/registry\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" oor:package=\"");
-        sHeader.append(sPath);
-        sHeader.append("\" oor:name=\"");
-        sHeader.append(sPackage);
-        sHeader.append("\">\n");
+        if (bLanguagePack)
+        {
+            sHeader.append("<?xml version=\"");
+            sHeader.append(sVersion);
+            sHeader.append("\" encoding=\"");
+            sHeader.append(sEncoding);
+            sHeader.append("\"?>\n");
+            sHeader.append("<oor:component-data oor:package=\"");
+            sHeader.append(sPath);
+            sHeader.append("\" oor:name=\"");
+            sHeader.append(sPackage);
+            sHeader.append("\" xmlns:install=\"http://openoffice.org/2004/installation\"");
+            sHeader.append(" xmlns:oor=\"http://openoffice.org/2001/registry\"");
+            sHeader.append(" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"");
+            sHeader.append(" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
+        }
+        else
+        {
+            sHeader.append("<?xml version=\"");
+            sHeader.append(sVersion);
+            sHeader.append("\" encoding=\"");
+            sHeader.append(sEncoding);
+            sHeader.append("\"?>\n<!DOCTYPE oor:component-data SYSTEM \"../../../../component-update.dtd\">\n");
+            sHeader.append("<oor:component-data xmlns:oor=\"http://openoffice.org/2001/registry\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" oor:package=\"");
+            sHeader.append(sPath);
+            sHeader.append("\" oor:name=\"");
+            sHeader.append(sPackage);
+            sHeader.append("\">\n");
+        }
 
         return sHeader.toString();
     }
