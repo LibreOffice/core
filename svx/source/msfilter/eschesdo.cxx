@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-09 14:58:08 $
+ *  last change: $Author: sj $ $Date: 2001-03-15 15:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,9 +693,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
             rObj.SetAngle( 0 );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.OpenBezier" ) ||
-                  rObj.GetType().EqualsAscii( "drawing.OpenFreeHand" ) ||
-                  rObj.GetType().EqualsAscii( "drawing.PolyLinePath" ) )
+        else if ( rObj.GetType().EqualsAscii( "drawing.OpenBezier" ) )
         {
             if ( rObj.ImplHasText() )
             {
@@ -711,9 +709,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
             rObj.SetAngle( 0 );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.ClosedBezier" ) ||
-                  rObj.GetType().EqualsAscii( "drawing.ClosedFreeHand" ) ||
-                  rObj.GetType().EqualsAscii( "drawing.PolyPolygonPath" ) )
+        else if ( rObj.GetType().EqualsAscii( "drawing.ClosedBezier" ) )
         {
             if ( rObj.ImplHasText() )
             {
