@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-14 11:52:24 $
+ *  last change: $Author: as $ $Date: 2001-07-10 11:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,35 +66,21 @@
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #endif
 
-#ifdef TF_FILTER//MUSTFILTER
-    #ifndef _RTL_USTRING_HXX_
-    #include <rtl/ustring.hxx>
-    #endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 
-    #ifndef _TOOLS_DEBUG_HXX
-    #include <tools/debug.hxx>
-    #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
-    #ifndef _COM_SUN_STAR_FRAME_XSYNCHRONOUSFRAMELOADER_HPP_
-    #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
-    #endif
+#ifndef _COM_SUN_STAR_FRAME_XSYNCHRONOUSFRAMELOADER_HPP_
+#include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
+#endif
 
-    #ifndef _COM_SUN_STAR_DOCUMENT_XEXTENDEDFILTERDETECTION_HPP_
-    #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-    #endif
-#else
-    #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HDL_
-    #include <com/sun/star/lang/XInitialization.hpp>
-    #endif
-
-    #ifndef _COM_SUN_STAR_FRAME_XFRAMELOADER_HPP_
-    #include <com/sun/star/frame/XFrameLoader.hpp>
-    #endif
-
-    #ifndef _COM_SUN_STAR_FRAME_XEXTENDEDFILTERDETECTION_HPP_
-    #include <com/sun/star/frame/XExtendedFilterDetection.hpp>
-    #endif
-#endif//MUSTFILTER
+#ifndef _COM_SUN_STAR_DOCUMENT_XEXTENDEDFILTERDETECTION_HPP_
+#include <com/sun/star/document/XExtendedFilterDetection.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
@@ -159,7 +145,6 @@ namespace com
 #define SEQUENCE ::com::sun::star::uno::Sequence
 #define RUNTIME_EXCEPTION ::com::sun::star::uno::RuntimeException
 
-#ifdef TF_FILTER//MUSTFILTER
 class SfxFrameLoader : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::document::XExtendedFilterDetection  >
 {
     REFERENCE < ::com::sun::star::frame::XFrame > xFrame;
@@ -202,49 +187,6 @@ public:
 protected:
     virtual SfxObjectFactory&   GetFactory()=0;
 };
-
-#else//MUSTFILTER
-
-class SfxFrameLoader : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XFrameLoader, ::com::sun::star::lang::XInitialization, ::com::sun::star::frame::XExtendedFilterDetection  >
-{
-    REFERENCE < ::com::sun::star::frame::XFrame > xFrame;
-    REFERENCE < ::com::sun::star::frame::XLoadEventListener > xListener;
-    LoadEnvironment_Impl*   pLoader;
-    SfxFilterMatcher*       pMatcher;
-    String                  aFilterName;
-    SfxMedium*              pMedium;
-
-    DECL_LINK(              LoadDone_Impl, void* );
-
-public:
-                            SfxFrameLoader( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
-    virtual                 ~SfxFrameLoader();
-
-    void                    SetFilterName( const ::rtl::OUString& rFilterName )
-                            { aFilterName = rFilterName; }
-    String                  GetFilterName() const
-                            { return aFilterName; }
-
-    // XLoader
-    virtual void SAL_CALL   load(   const REFERENCE  < ::com::sun::star::frame::XFrame >& aFrame,
-                                    const ::rtl::OUString& aURL,
-                                    const SEQUENCE < ::com::sun::star::beans::PropertyValue >& aArgs,
-                                    const REFERENCE < ::com::sun::star::frame::XLoadEventListener >& aListener) throw( RUNTIME_EXCEPTION );
-
-    virtual void SAL_CALL   cancel() throw( RUNTIME_EXCEPTION );
-
-    // XInitialization
-    virtual void SAL_CALL   initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-                throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-    // XExtendedFilterDetection
-    virtual ::rtl::OUString SAL_CALL detect( const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgumentlist ) throw(::com::sun::star::uno::RuntimeException);
-
-protected:
-    virtual SfxObjectFactory&   GetFactory()=0;
-};
-
-#endif//MUSTFILTER
 
 class SfxFrameLoader_Impl : public SfxFrameLoader, public ::com::sun::star::lang::XServiceInfo
 {

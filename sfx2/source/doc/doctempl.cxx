@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-11 10:42:06 $
+ *  last change: $Author: as $ $Date: 2001-07-10 11:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,14 +126,8 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
 
-#ifdef TF_FILTER
 #ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
 #include <com/sun/star/document/XTypeDetection.hpp>
-#endif
-#else
-#ifndef _COM_SUN_STAR_FRAME_XFRAMELOADERQUERY_HPP_
-#include <com/sun/star/frame/XFrameLoaderQuery.hpp>
-#endif
 #endif
 
 #ifndef  _COM_SUN_STAR_FRAME_XDOCUMENTTEMPLATES_HPP_
