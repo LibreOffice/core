@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,7 @@
             Text[ english_us ] = "~Apply to all similar texts.";                \
             Text[ portuguese ] = "~Aplicar em todos os textos semelhantes";     \
             Text[ russian ] = "Ïğèìåíèòü êî âñåì îäèíàêîâûì òåêñòàì";           \
-            Text[ dutch ] = "~Voor alle dezelfde tekst gebruiken";              \
+            Text[ dutch ] = "~Alle gelijkluidende teksten";              \
             Text[ french ] = "~Appliquer à tous les textes similaires.";         \
             Text[ spanish ] = "~Aplicar a todos los textos iguales.";           \
             Text[ italian ] = "~Applica a tutti i testi simili";                 \
@@ -481,7 +481,7 @@
             Text[ japanese ] = "‚·‚×‚Ä‚Ì—‚Ä‚¢‚é•¶š—ñ‚É“K—p(~A)";               \
             Text[ chinese_simplified ] = "ÊÊÓÃÓÚÏàÍ¬µÄÕıÎÄ(~A)";           \
             Text[ chinese_traditional ] = "¥Î©ó©Ò¦³¬Û¦Pªº¤º¤å(~A)";            \
-            Text[ arabic ] = "ÊØÈíŞ Úáì ßá ÇáäÕæÕ ÇáããÇËáÉ.";                   \
+            Text[ arabic ] = "ÊØÈíŞ Úáì ßá ÇáäÕæÕ ÇáãÊãÇËáÉ.";                   \
             Text[ greek ] = "ÅöáñìïãŞ óå üëá ôá ğáñüìïéá êåßìåíá.";\
             Text[ korean ] = "ÀüÃ¼ À¯»ç ÅØ½ºÆ® Àû¿ë(~A)";\
             Text[ turkish ] = "~Tüm eş metinlere uygula.";\
@@ -498,7 +498,7 @@
             Text[ portuguese ] = "Procura e~xacta";\
             Text[ russian ] = "Òî÷íûé ïîèñê";\
             Text[ greek ] = "ÁêñéâŞò áíáæŞôçóç";\
-            Text[ dutch ] = "~Exact dezelfde tekens zoeken";\
+            Text[ dutch ] = "~Exact dezelfde tekens";\
             Text[ french ] = "Respecter la ~casse";\
             Text[ spanish ] = "Búsqueda e~xacta";\
             Text[ italian ] = "Ricerca esatta";\
@@ -622,7 +622,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ korean ] = "»õ·Î¿î »ç¿ëÀÚ »öÀÎ";
         Text[ chinese_simplified ] = "ĞÂ½¨ÓÃ»§Ä¿Â¼";
         Text[ chinese_traditional ] = "·s«Ø¦Û­q¥Ø¿ı";
-        Text[ arabic ] = "İåÑÓ ãÓÊÎÏã ÌÏíÏ";
+        Text[ arabic ] = "İåÑÓ ÌÏíÏ ááãÓÊÎÏã";
         Text[ turkish ] = "Yeni kullanıcı dizini";
         Text[ language_user1 ] = " ";
     };
@@ -649,7 +649,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ chinese_simplified ] = "Ãû³Æ(~N)";
         Text[ chinese_traditional ] = "¦WºÙ(~N)";
-        Text[ arabic ] = "ÇÓã";
+        Text[ arabic ] = "ÇáÇÓã";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
     };
@@ -671,7 +671,7 @@ ModalDialog DLG_NEW_USER_IDX
     Text[ italian ] = "Definisci nuovo indice personalizzato";
     Text[ danish ] = "Opret nyt brugerdefineret indeks";
     Text[ swedish ] = "Skapa ny användardefinierad förteckning";
-    Text[ polish ] = "Utwórz nowy indeks zdeiniowany przez u¿ytkownika";
+    Text[ polish ] = "Utwórz nowy indeks zdefiniowany przez u¿ytkownika";
     Text[ portuguese_brazilian ] = "Define new user index";
     Text[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìõˆø‚Ìì¬";
     Text[ korean ] = "»õ·Î¿î »ç¿ëÀÚ Á¤ÀÇ »öÀÎ ¸¸µé±â";
@@ -694,7 +694,7 @@ String STR_IDXMRK_EDIT
     Text [ danish ] = "Rediger indekselement" ;
     Text [ french ] = "Édition d'une entrée d'index" ;
     Text [ swedish ] = "Redigera förteckningspost" ;
-    Text [ dutch ] = "Indexgegeven bewerken" ;
+    Text [ dutch ] = "Indexitem bewerken" ;
     Text [ spanish ] = "Editar entrada de índice" ;
     Text [ english_us ] = "Edit Index Entry" ;
     Text[ chinese_simplified ] = "±à¼­Ä¿Â¼ÌõÄ¿";
@@ -721,7 +721,7 @@ String STR_IDXMRK_INSERT
     Text [ danish ] = "Indsæt indekselement" ;
     Text [ french ] = "Insertion d'une entrée d'index" ;
     Text [ swedish ] = "Infoga förteckningspost" ;
-    Text [ dutch ] = "Indexgegeven invoegen" ;
+    Text [ dutch ] = "Indexitem invoegen" ;
     Text [ spanish ] = "Insertar una entrada de índice" ;
     Text [ english_us ] = "Insert Index Entry" ;
     Text[ chinese_simplified ] = "²åÈëË÷ÒıÌõÄ¿";
@@ -1141,7 +1141,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     Text[ portuguese ] = "Definir entrada bibliográfica";
     Text[ russian ] = "Çàäàòü ıëåìåíò ñïèñêà ëèòåğàòóğû";
     Text[ greek ] = "Ïñéóìüò åããñáöŞò âéâëéïãñáößáò";
-    Text[ dutch ] = "Als Item voor literatuurlijst definiëren";
+    Text[ dutch ] = "Item voor literatuurlijst definiëren";
     Text[ french ] = "Définir une entrée de bibliographie";
     Text[ spanish ] = "Definir entrada de bibliografía";
     Text[ italian ] = "Definisci voce bibliografica";
