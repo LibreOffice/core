@@ -2,9 +2,9 @@
  *
  *  $RCSfile: actimpr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-15 12:21:54 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,9 +281,9 @@ void CGMImpressOutAct::ImplSetFillBundle()
     drawing::LineStyle      eLS;
     drawing::FillStyle      eFS;
 
-    sal_uInt32              nEdgeColor;
+    sal_uInt32              nEdgeColor = 0;
     EdgeType                eEdgeType;
-    double                  fEdgeWidth;
+    double                  fEdgeWidth = 0;
 
     sal_uInt32              nFillColor;
     FillInteriorStyle       eFillStyle;
@@ -347,7 +347,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
 
         case FIS_GEOPATTERN :
         {
-            if ( mpCGM->pElement->eTransparency = T_ON )
+            if ( mpCGM->pElement->eTransparency == T_ON )
                 nFillColor = mpCGM->pElement->nAuxiliaryColor;
             eFS = drawing::FillStyle_NONE;
         }
@@ -920,7 +920,10 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
             case TAV_NORMAL :
                 aTextPos.Y -= ( mpCGM->pElement->nCharacterHeight * 1.5 );
             case TAV_TOP :
-            break;
+                break;
+            case TAV_CAP:
+            case TAV_CONT:
+                break;  // -Wall these two were not here.
         }
 
         if ( nWidth < 0 )
