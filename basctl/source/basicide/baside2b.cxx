@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:39:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,6 +637,7 @@ void EditorWindow::CreateEditEngine()
 
     aHighlighter.initialize( HIGHLIGHT_BASIC );
 
+    BOOL bWasDoSyntaxHighlight = bDoSyntaxHighlight;
     bDoSyntaxHighlight = FALSE; // Bei grossen Texten zu langsam...
     ::rtl::OUString aOUSource( pModulWindow->GetModule() );
     sal_Int32 nLines = 0;
@@ -671,7 +672,7 @@ void EditorWindow::CreateEditEngine()
 
     // Das Syntax-Highlightning legt ein rel. groesse VDev an.
     aSyntaxIdleTimer.Stop();
-    bDoSyntaxHighlight = TRUE;
+    bDoSyntaxHighlight = bWasDoSyntaxHighlight;
 
 
     for ( USHORT nLine = 0; nLine < nLines; nLine++ )
@@ -829,29 +830,32 @@ void EditorWindow::InitScrollBars()
 
 void EditorWindow::ImpDoHighlight( ULONG nLine )
 {
-    String aLine( pEditEngine->GetText( nLine ) );
-    Range aChanges = aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
-    if ( aChanges.Len() )
+    if ( bDoSyntaxHighlight )
     {
-        for ( long n = aChanges.Min() + 1; n <= aChanges.Max(); n++ )
-            aSyntaxLineTable.Insert( n, (void*)(ULONG)1 );
-        aSyntaxIdleTimer.Start();
-    }
+        String aLine( pEditEngine->GetText( nLine ) );
+        Range aChanges = aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
+        if ( aChanges.Len() )
+        {
+            for ( long n = aChanges.Min() + 1; n <= aChanges.Max(); n++ )
+                aSyntaxLineTable.Insert( n, (void*)(ULONG)1 );
+            aSyntaxIdleTimer.Start();
+        }
 
-    BOOL bWasModified = pEditEngine->IsModified();
-    pEditEngine->RemoveAttribs( nLine, TRUE );
-    HighlightPortions aPortions;
-    aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-    USHORT nCount = aPortions.Count();
-    for ( USHORT i = 0; i < nCount; i++ )
-    {
-        HighlightPortion& r = aPortions[i];
-        const Color& rColor = ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->getSyntaxColor(r.tokenType);
-        pEditEngine->SetAttrib( TextAttribFontColor( rColor ), nLine, r.nBegin, r.nEnd, TRUE );
-    }
+        BOOL bWasModified = pEditEngine->IsModified();
+        pEditEngine->RemoveAttribs( nLine, TRUE );
+        HighlightPortions aPortions;
+        aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+        USHORT nCount = aPortions.Count();
+        for ( USHORT i = 0; i < nCount; i++ )
+        {
+            HighlightPortion& r = aPortions[i];
+            const Color& rColor = ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->getSyntaxColor(r.tokenType);
+            pEditEngine->SetAttrib( TextAttribFontColor( rColor ), nLine, r.nBegin, r.nEnd, TRUE );
+        }
 
-    // Das Highlighten soll kein Modify setzen
-    pEditEngine->SetModified( bWasModified );
+        // Das Highlighten soll kein Modify setzen
+        pEditEngine->SetModified( bWasModified );
+    }
 }
 
 void EditorWindow::ImplSetFont()
@@ -982,8 +986,11 @@ void EditorWindow::ParagraphInsertedDeleted( ULONG nPara, BOOL bInserted )
         aInvRec.Top() = nY;
         pModulWindow->GetBreakPointWindow().Invalidate( aInvRec );
 
-        String aDummy;
-        aHighlighter.notifyChange( nPara, bInserted ? 1 : (-1), &aDummy, 1 );
+        if ( bDoSyntaxHighlight )
+        {
+            String aDummy;
+            aHighlighter.notifyChange( nPara, bInserted ? 1 : (-1), &aDummy, 1 );
+        }
     }
 }
 
