@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-02 15:23:23 $
+#   last change: $Author: rt $ $Date: 2003-08-21 15:21:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ TARFILE_ROOTDIR=boost_1_27_0
 
 PATCH_FILE_NAME=boost_1_27_0.patch
 
-#ADDITIONAL_FILES=
+ADDITIONAL_FILES=boost$/detail$/linux_atomic.h
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
