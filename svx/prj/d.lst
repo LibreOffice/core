@@ -297,6 +297,7 @@ hedabu: ..\inc\svdmodel.hxx %_DEST%\inc%_EXT%\svx\svdmodel.hxx
 hedabu: ..\inc\svdmrkv.hxx %_DEST%\inc%_EXT%\svx\svdmrkv.hxx
 hedabu: ..\inc\svdoattr.hxx %_DEST%\inc%_EXT%\svx\svdoattr.hxx
 hedabu: ..\inc\svdobj.hxx %_DEST%\inc%_EXT%\svx\svdobj.hxx
+hedabu: ..\inc\sdrobjectuser.hxx %_DEST%\inc%_EXT%\svx\sdrobjectuser.hxx
 hedabu: ..\inc\svdocapt.hxx %_DEST%\inc%_EXT%\svx\svdocapt.hxx
 hedabu: ..\inc\svdocirc.hxx %_DEST%\inc%_EXT%\svx\svdocirc.hxx
 hedabu: ..\inc\svdoedge.hxx %_DEST%\inc%_EXT%\svx\svdoedge.hxx
@@ -314,6 +315,8 @@ hedabu: ..\inc\svdotext.hxx %_DEST%\inc%_EXT%\svx\svdotext.hxx
 hedabu: ..\inc\svdoukwn.hxx %_DEST%\inc%_EXT%\svx\svdoukwn.hxx
 hedabu: ..\inc\svdovirt.hxx %_DEST%\inc%_EXT%\svx\svdovirt.hxx
 hedabu: ..\inc\svdpage.hxx %_DEST%\inc%_EXT%\svx\svdpage.hxx
+hedabu: ..\inc\sdrpageuser.hxx %_DEST%\inc%_EXT%\svx\sdrpageuser.hxx
+hedabu: ..\inc\sdrmasterpagedescriptor.hxx %_DEST%\inc%_EXT%\svx\sdrmasterpagedescriptor.hxx
 hedabu: ..\inc\svdpagv.hxx %_DEST%\inc%_EXT%\svx\svdpagv.hxx
 hedabu: ..\inc\svdpntv.hxx %_DEST%\inc%_EXT%\svx\svdpntv.hxx
 hedabu: ..\inc\svdpoev.hxx %_DEST%\inc%_EXT%\svx\svdpoev.hxx
@@ -636,7 +639,6 @@ hedabu: ..\inc\svxdlg.hxx %_DEST%\inc%_EXT%\svx\svxdlg.hxx
 hedabu: ..\inc\acorrcfg.hxx %_DEST%\inc%_EXT%\svx\acorrcfg.hxx
 hedabu: ..\inc\htmlcfg.hxx %_DEST%\inc%_EXT%\svx\htmlcfg.hxx
 hedabu: ..\inc\ofaitem.hxx %_DEST%\inc%_EXT%\svx\ofaitem.hxx
-hedabu: ..\inc\framelink.hxx %_DEST%\inc%_EXT%\svx\framelink.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
@@ -652,11 +654,35 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
 ..\inc\svx\sdr\properties\textproperties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\textproperties.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\contact
+..\inc\svx\sdr\contact\displayinfo.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\displayinfo.hxx
+..\inc\svx\sdr\contact\objectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontact.hxx
+..\inc\svx\sdr\contact\objectcontactofobjlistpainter.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofobjlistpainter.hxx
+..\inc\svx\sdr\contact\objectcontactofpageview.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofpageview.hxx
 ..\inc\svx\sdr\contact\viewcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontact.hxx
+..\inc\svx\sdr\contact\viewcontactofe3dscene.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofe3dscene.hxx
+..\inc\svx\sdr\contact\viewcontactofgraphic.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofgraphic.hxx
+..\inc\svx\sdr\contact\viewcontactofgroup.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofgroup.hxx
+..\inc\svx\sdr\contact\viewcontactofmasterpage.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofmasterpage.hxx
+..\inc\svx\sdr\contact\viewcontactofpageobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofpageobj.hxx
+..\inc\svx\sdr\contact\viewcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrobj.hxx
+..\inc\svx\sdr\contact\viewcontactofsdrpage.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrpage.hxx
+..\inc\svx\sdr\contact\viewcontactoftextobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactoftextobj.hxx
+..\inc\svx\sdr\contact\viewobjectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontact.hxx
 ..\inc\svx\sdr\contact\viewobjectcontactlist.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactlist.hxx
 ..\inc\svx\sdr\contact\displayinfo.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\displayinfo.hxx
 ..\inc\svx\sdr\contact\objectcontactofobjlistpainter.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofobjlistpainter.hxx
 ..\inc\svx\sdr\contact\objectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontact.hxx
+..\inc\svx\sdr\contact\viewobjectcontactredirector.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactredirector.hxx
+..\inc\svx\sdr\contact\vocbitmapbuffer.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\vocbitmapbuffer.hxx
+
+mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation
+..\inc\svx\sdr\animation\ainfographic.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfographic.hxx
+..\inc\svx\sdr\animation\ainfoscrolltext.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfoscrolltext.hxx
+..\inc\svx\sdr\animation\ainfotext.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfotext.hxx
+..\inc\svx\sdr\animation\animationinfo.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\animationinfo.hxx
+..\inc\svx\sdr\animation\animationstate.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\animationstate.hxx
+..\inc\svx\sdr\animation\objectanimator.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\objectanimator.hxx
+..\inc\svx\sdr\animation\scheduler.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\scheduler.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml
