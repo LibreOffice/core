@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-11 15:02:29 $
+ *  last change: $Author: dv $ $Date: 2001-05-16 10:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ using namespace ::com::sun::star::util;
 using namespace ::rtl;
 
 // --------------------------------------------------------------
-#define SEND_MAIL_COMMAND   "cmd.executeMail=1"
+#define SEND_MAIL_COMMAND   "cmd.officeMail=1"
 #define SEND_MAIL_FROM      "MESSAGE_FROM="
 #define SEND_MAIL_TO        "MESSAGE_TO="
 #define SEND_MAIL_CC        "MESSAGE_CC="
