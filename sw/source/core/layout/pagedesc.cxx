@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:40:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,7 @@ void SwPageDesc::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         RegisterChange();
 }
 
-const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
+static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
 {
     SwModify* pMod;
     USHORT nFrmType;
@@ -394,7 +394,7 @@ const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
 const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
 {
     const SwPageDesc* pRet = 0;
-    const SwFrm* pChkFrm = ::lcl_GetFrmOfNode( rNd );
+    const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
     if (pChkFrm && (pChkFrm = pChkFrm->FindPageFrm()))
         pRet = ((const SwPageFrm*)pChkFrm)->GetPageDesc();
     return pRet;
@@ -405,7 +405,7 @@ const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
 {
     // welches PageDescFormat ist fuer diesen Node gueltig?
     const SwFrmFmt* pRet;
-    const SwFrm* pChkFrm = ::lcl_GetFrmOfNode( rNd );
+    const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
 
     if( pChkFrm && 0 != ( pChkFrm = pChkFrm->FindPageFrm() ))
     {
@@ -432,7 +432,7 @@ BOOL SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
     BOOL bRet = FALSE;
     if( GetFollow() && this != GetFollow() )
     {
-        const SwFrm* pChkFrm = ::lcl_GetFrmOfNode( rNd );
+        const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
         if( pChkFrm && 0 != ( pChkFrm = pChkFrm->FindPageFrm() ) &&
             pChkFrm->IsPageFrm() &&
             ( !pChkFrm->GetNext() || GetFollow() ==
