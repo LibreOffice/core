@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:01:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include "xeroot.hxx"
 #endif
 
+#ifndef _SVSTOR_HXX
+#include <so3/svstor.hxx>
+#endif
+
 #ifndef SC_ADDINCOL_HXX
 #include "addincol.hxx"
 #endif
@@ -85,11 +89,10 @@
 #include "xepivot.hxx"
 #endif
 
-
 // Global data ================================================================
 
-XclExpRootData::XclExpRootData( XclBiff eBiff, ScDocument& rDocument, const String& rDocUrl, CharSet eCharSet, bool bRelUrl ) :
-    XclRootData( eBiff, rDocument, rDocUrl, eCharSet ),
+XclExpRootData::XclExpRootData( XclBiff eBiff, SfxMedium& rMedium, ScDocument& rDocument, CharSet eCharSet, bool bRelUrl ) :
+    XclRootData( eBiff, rMedium, rDocument, eCharSet, true ),
     mbRelUrl( bRelUrl )
 {
 }
@@ -98,14 +101,12 @@ XclExpRootData::~XclExpRootData()
 {
 }
 
-
 // ----------------------------------------------------------------------------
 
 XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     XclRoot( rExpRootData ),
     mrExpData( rExpRootData )
 {
-    mrExpData.mpTracer.reset( new XclTracer( GetDocUrl(), CREATE_OUSTRING( "Office.Tracing/Export/Excel" ) ) );
     mrExpData.mpPalette.reset( new XclExpPalette( GetRoot() ) );
     mrExpData.mpFontBuffer.reset( new XclExpFontBuffer( GetRoot() ) );
     mrExpData.mpNumFmtBuffer.reset( new XclExpNumFmtBuffer( GetRoot() ) );
@@ -182,7 +183,6 @@ void XclExpRoot::CheckCellRangeList( ScRangeList& rRanges ) const
 {
     XclRoot::CheckCellRangeList( rRanges, GetXclMaxPos() );
 }
-
 
 // ============================================================================
 
