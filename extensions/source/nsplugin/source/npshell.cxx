@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 16:00:27 $
+ *  last change: $Author: rt $ $Date: 2004-12-16 10:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,17 +239,18 @@ char* pMimeTypes = "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5.0;"
 "application/msword:doc:Microsoft Word Document;"
 "application/vnd.ms-excel:xls:Microsoft Excel Document;"
 "application/vnd.ms-powerpoint:ppt:Microsoft Powerpoint Document;"
-"application/x-vnd.oasis.openoffice.text:oot:Open Office Text;"
-"application/x-vnd.oasis.openoffice-template:ott:Open Office Text Template;"
-"application/x-vnd.oasis.openoffice.text-master:oom:Open Office Master Document;"
-"application/x-vnd.oasis.openoffice.text-web:oth:HTML Document Template;"
-"application/x-vnd.oasis.openoffice.spreadsheet:oos:Open Office Spreadsheet;"
-"application/x-vnd.oasis.openoffice.spreadsheet-template:ots:Open Office Spreadsheet Template;"
-"application/x-vnd.oasis.openoffice.drawing:ood:Open Office Drawing;"
-"application/x-vnd.oasis.openoffice.drawing-template:otd:Open Office Drawing Template;"
-"application/x-vnd.oasis.openoffice.presentation:oop:Open Office Presentation;"
-"application/x-vnd.oasis.openoffice.presentation-template:otp:Open Office Presentation Template;"
-"application/x-vnd.oasis.openoffice.formula:oof:Open Office Formula";
+"application/vnd.oasis.opendocument.text:odt:OpenDocument Text;"
+"application/vnd.oasis.opendocument-template:ott:OpenDocument Text Template;"
+"application/vnd.oasis.opendocument.text-master:odm:OpenDocument Master Document;"
+"application/vnd.oasis.opendocument.text-web:oth:HTML Document Template;"
+"application/vnd.oasis.opendocument.spreadsheet:ods:OpenDocument Spreadsheet;"
+"application/vnd.oasis.opendocument.spreadsheet-template:ots:OpenDocument Spreadsheet Template;"
+"application/vnd.oasis.opendocument.drawing:odg:OpenDocument Drawing;"
+"application/vnd.oasis.opendocument.drawing-template:otg:OpenDocument Drawing Template;"
+"application/vnd.oasis.opendocument.presentation:odp:OpenDocument Presentation;"
+"application/vnd.oasis.opendocument.presentation-template:otp:OpenDocument Presentation Template;"
+"application/vnd.oasis.opendocument.formula:odf:OpenDocument Formula;"
+"application/vnd.oasis.opendocument.database:odb:OpenDocument Database;";
 
 char*
 NPP_GetMIMEDescription(void)
