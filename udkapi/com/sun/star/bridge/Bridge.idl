@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bridge.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ module com {  module sun {  module star {  module bridge {
     If there exist two services supporting the same protocol, it is arbitrary
     which one is chosen, so this should be omitted. </p>
  */
-service Bridge
+published service Bridge
 {
     /** allows to initialize the bridge service with the necessary
          arguments. The sequence&lt;any&gt; must have 4 members.
