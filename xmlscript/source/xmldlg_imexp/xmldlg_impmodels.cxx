@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 13:43:18 $
+ *  last change: $Author: dbo $ $Date: 2001-10-15 13:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,6 +826,9 @@ void ImageControlElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleImage") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("scale-image") ),
+                               _xAttributes );
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("src") ),
                               _xAttributes );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 09:42:27 $
+ *  last change: $Author: dbo $ $Date: 2001-10-15 13:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,6 +447,8 @@ void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
 
     // collect elements
     readDefaults();
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleImage") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":scale-image") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":src") ) );
     readEvents();
