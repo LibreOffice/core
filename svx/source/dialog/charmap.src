@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-06 11:28:15 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,8 +525,8 @@ String RID_SUBSETSTR_CYRILLIC
         Text[ portuguese_brazilian ] = "Cyrillic";
         Text[ japanese ] = "·ØÙ•¶š";
         Text[ korean ] = "Å°¸±¾î";
-        Text[ chinese_simplified ] = "¹Å´úË¹À­·òÓïµÄ×ÖÄ¸";
-        Text[ chinese_traditional ] = "¥j¥N´µ©Ô¤Ò»yªº¦r¥À";
+        Text[ chinese_simplified ] = "Î÷Àï¶ûÓï";
+        Text[ chinese_traditional ] = "¦è¨½º¸»y";
         Text[ turkish ] = "Cyrillic";
         Text[ arabic ] = "ÓíÑíáí";
         Text[ catalan ] = "Cirílico";
@@ -1063,7 +1063,7 @@ String RID_SUBSETSTR_GENERAL_PUNCTUATION
 {
     Text = "Allgemeine Interpunktion" ;
     Text [ ENGLISH ] = "General Punctuation" ;
-    Text[ english_us ] = "General Punctuation";
+    Text[ english_us ] = "General punctuation";
         Text[ portuguese ] = "Pontuação geral";
         Text[ russian ] = "Îáùàÿ ïóíêòóàöèÿ";
         Text[ greek ] = "ÃåíéêŞ óôŞîç";
@@ -1072,8 +1072,8 @@ String RID_SUBSETSTR_GENERAL_PUNCTUATION
         Text[ spanish ] = "Puntuación general";
         Text[ italian ] = "Punteggiatura generale";
         Text[ danish ] = "General Punctuation";
-        Text[ swedish ] = "Allmänna skiljetecken";
-        Text[ polish ] = "Ogólne znaki przestankowe";
+        Text[ swedish ] = "Allmän interpunktion";
+        Text[ polish ] = "Ogólna interpunkcja";
         Text[ portuguese_brazilian ] = "General Punctuation";
         Text[ japanese ] = "ˆê”Ê‹å“Ç“_";
         Text[ korean ] = "ÀÏ¹İ ±¸µÎÁ¡";
@@ -2694,6 +2694,7 @@ String RID_SUBSETSTR_MONGOLIAN
 };
 
 // ********************************************************************** EOF
+
 
 
 
