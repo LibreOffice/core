@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-13 14:31:00 $
+ *  last change: $Author: iha $ $Date: 2002-11-22 10:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,10 +718,22 @@ void    PrtPrvWindow::Paint(const Rectangle&)
         else
             aOffset.X() = (aWinSize.Width() - rSettings.aPrtSize.Width()) / 2;;
 
+
+        BOOL bAccessibleColors = SvtAccessibilityOptions().GetIsForPagePreviews();
+
         //der weisse Seitenhintergrund
         Rectangle aRect(aOffset, rSettings.aPrtSize);
-        SetFillColor( Color( COL_WHITE ) );
-        SetLineColor(Color( COL_BLACK ) );
+        if(bAccessibleColors)
+        {
+            SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
+            SetLineColor( GetSettings().GetStyleSettings().GetWindowTextColor() );
+        }
+        else
+        {
+            SetFillColor( Color( COL_WHITE ) );
+            SetLineColor(Color( COL_BLACK ) );
+        }
+
         DrawRect(aRect);
 
         Point aTL(aOffset);
@@ -744,7 +756,12 @@ void    PrtPrvWindow::Paint(const Rectangle&)
             aPrvPageSize.Width() = aPrvPageSize.Height() * nSourceScale / 100;
         }
 
-        SetFillColor( Color( COL_GRAY ) );
+        if(bAccessibleColors)
+            SetFillColor( GetSettings().GetStyleSettings().GetShadowColor() );
+        else
+            SetFillColor( Color( COL_GRAY ) );
+
+
         aRect = Rectangle(aTL, aPrvPageSize);
         for(USHORT i = 0; i < rSettings.nRows; i++)
         {
