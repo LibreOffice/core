@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-01 11:51:05 $
+ *  last change: $Author: obo $ $Date: 2000-12-06 15:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ dutch ] = "Standaardbrief ...";   \
     Text[ chinese_simplified ] = "ΣΚΌώΊΟ²Ά..."; \
     Text[ greek ] = "Εγκύκλιος επιστολή ...";   \
-    Text[ korean ] = "Ύη½Δ..."; \
+    Text[ korean ] = "Ζϋ ·ΉΕΝ...";  \
     Text[ turkish ] = "Mektup formu ...";   \
     Text[ language_user1 ] = " ";
 
@@ -599,7 +599,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ dutch ] = "Actualiseren"; \
     Text[ chinese_simplified ] = "ΈόΠΒ";    \
     Text[ greek ] = "Ενημέρωση";    \
-    Text[ korean ] = "°»½Ε";    \
+    Text[ korean ] = "»υ·Ξ °νΔ§";   \
     Text[ turkish ] = "Yenile"; \
     Text[ language_user1 ] = " ";
 
