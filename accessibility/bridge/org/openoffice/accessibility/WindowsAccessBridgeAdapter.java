@@ -187,7 +187,7 @@ public class WindowsAccessBridgeAdapter implements java.awt.event.AWTEventListen
             java.awt.Dimension d = getSize();
 
             if (Build.DEBUG) {
-                System.err.println("PopupMenuProxy.contains(" + p.x + "," + p.y + ") returns " +
+                System.err.println("PopupMenuProxy.containsPoint(" + p.x + "," + p.y + ") returns " +
                 (((d.width >= 0) && (p.x < d.width) && (d.height >= 0) && (p.y < d.height)) ? "true" : "false"));
             }
 
