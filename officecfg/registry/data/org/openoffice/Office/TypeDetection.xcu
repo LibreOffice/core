@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:49:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
         <value xml:lang="en-US">XHTML</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,,,,xhtml,20002,</value>
+        <value>1,,,,xml,20002,</value>
       </prop>
     </node>
     <node oor:name="writer_Flat_XML_File" oor:op="replace">
@@ -114,7 +114,7 @@
           <value xml:lang="th">DocBook</value>
       </prop>
       <prop oor:name="Data">
-        <value>1,,,doctype:-//OASIS//DTD DocBook XML V4.1.2//EN,xml,20002,</value>
+        <value>1,,doctype:-//OASIS//DTD DocBook XML V4.1.2//EN,,xml,20002,</value>
       </prop>
     </node>
     <node oor:name="writer_PocketWord_File" oor:op="replace">
@@ -2057,16 +2057,16 @@
           <value xml:lang="th">XHTML File</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,writer_XHTML_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/htmlsoff.jar;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;staroffice/sxw;text/html,0,,</value>
-      </prop>
+            <value>0,writer_XHTML_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524354,com.sun.star.documentconversion.XSLTFilter;;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;;../share/xslt/xhtml/main_html.xsl;,0,</value>
+    </prop>
     </node>
     <node oor:name="DocBook File" oor:op="replace">
       <prop oor:name="Installed">
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">DocBook</value>
-        <value xml:lang="en-US">DocBook</value>
+        <value xml:lang="de">DocBook (vereinfacht)</value>
+        <value xml:lang="en-US">DocBook (simplified)</value>
         <value xml:lang="x-translate">DocBook</value>
         <value xml:lang="x-comment">EM Oct 2002: Do not translate &quot;DocBook&quot; it is a product name. For more info visit http://www.docbook.org/</value>
           <value xml:lang="pt">DocBook</value>
@@ -2091,8 +2091,8 @@
           <value xml:lang="th">DocBook</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,writer_DocBook_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/docbook.jar;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;staroffice/sxw;application/x-docbook,0,,</value>
-      </prop>
+            <value>0,writer_DocBook_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XSLTFilter;;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;../share/xslt/docbook/docbooktosoffheadings.xsl;../share/xslt/docbook/sofftodocbookheadings.xsl,0,../share/xslt/docbook/DocBookTemplate.stw,</value>
+       </prop>
     </node>
     <node oor:name="PocketWord File" oor:op="replace">
       <prop oor:name="Installed">
@@ -7075,8 +7075,7 @@
   <node oor:name="DetectServices">
     <node oor:name="com.sun.star.comp.filters.XMLFilterDetect" oor:op="replace">
     <prop oor:name="Types">
-        <value>writer_DocBook_File</value>
-        <value>writer_Flat_XML_File</value>
+        <value>writer_DocBook_File writer_Flat_XML_File writer_XHTML_File</value>
     </prop>
     </node>
   </node>
