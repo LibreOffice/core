@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 12:51:55 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,10 @@ String RID_STR_TRIED_OPEN_TABLE
     Text[ swedish ] = "Försök gjordes att öppna tabellen $name$";
     Text[ polish ] = "Próbowano otworzyæ tabelê $name$.";
     Text[ portuguese_brazilian ] = "Tried to open the table $name$";
-    Text[ japanese ] = "$name$ Ã°ÌŞÙ‚ğŠJ‚±‚¤‚Æ‚µ‚Ü‚µ‚½B";
-    Text[ korean ] = "$name$ Å×ÀÌºíÀ» ¿­±â À§ÇØ ½ÃµµÇÔ";
-    Text[ chinese_simplified ] = "ÒÑ¾­³¢ÊÔ¹ı´ò¿ª±í¸ñ $name$ ¡£";
-    Text[ chinese_traditional ] = "¤w¸g¹Á¸Õ¹L¶}±Òªí®æ $name$ ¡C";
+    Text[ japanese ] = "$name$ ï¾ƒï½°ï¾Œï¾ï¾™ã‚’é–‹ã“ã†ã¨ã—ã¾ã—ãŸã€‚";
+    Text[ korean ] = "$name$ í…Œì´ë¸”ì„ ì—´ê¸° ìœ„í•´ ì‹œë„í•¨";
+    Text[ chinese_simplified ] = "å·²ç»å°è¯•è¿‡æ‰“å¼€è¡¨æ ¼ $name$ ã€‚";
+    Text[ chinese_traditional ] = "å·²ç¶“å˜—è©¦éé–‹å•Ÿè¡¨æ ¼ $name$ ã€‚";
     Text[ turkish ] = "Tried to open the table $name$";
     Text[ arabic ] = "Êã ãÍÇæáÉ İÊÍ ÇáÌÏæá $name$.";
     Text[ finnish ] = "Es wurde versucht, die Tabelle $name$ zu öffnen.";
@@ -102,10 +102,10 @@ String RID_STR_CONNECTION_INVALID
     Text[ swedish ] = "Det gick inte att skapa en förbindelse.";
     Text[ polish ] = "Brak po³¹czenia!";
     Text[ portuguese_brazilian ] = "Not possible to create a connection!";
-    Text[ japanese ] = "Ú‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "Á¢¼ÓµµÇÏÁö ¸øÇß½À´Ï´Ù!";
-    Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Á¬½Ó£¡";
-    Text[ chinese_traditional ] = "µLªk«Ø¥ß³s½u!";
+    Text[ japanese ] = "æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
+    Text[ korean ] = "ì ‘ì†ë„í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤!";
+    Text[ chinese_simplified ] = "æ— æ³•å»ºç«‹è¿æ¥ï¼";
+    Text[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹é€£ç·š!";
     Text[ turkish ] = "Not possible to create a connection!";
     Text[ arabic ] = "Not possible to create a connection!";
     Text[ finnish ] = "Es konnte keine Verbindung erstellt werden.";
@@ -116,7 +116,7 @@ String RID_STR_TABLE_IS_FILTERED
 {
     Text = "Die Tabelle $name$ existiert bereits. Sie ist nicht sichtbar, da sie ausgefiltert wurde.";
     Text [ english ] = "The table $name$ already exists, but hidden because it's filtered out.";
-    Text [ english_us ] = "The table $name$ already exists, but hidden because it's filtered out.";
+    Text [ english_us ] = "The table $name$ already exists. It has been filtered.";
     Text[ portuguese ] = "A tabela $name$ já existe. Esta foi filtrada.";
     Text[ russian ] = "Òàáëèöà $name$ óæå ñóùåñòâóåò. Îíà îòôèëüòğîâàíà!";
     Text[ greek ] = "Ï ğßíáêáò $name$ õğÜñ÷åé Şäç. ¸÷åé öéëôñáñéóôåß!";
@@ -128,10 +128,10 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ swedish ] = "Tabellen $name$ finns redan. Den har filtrerats!";
     Text[ polish ] = "Tabela $name$ ju¿ istenieje. Zosta³a ona przefiltrowana!";
     Text[ portuguese_brazilian ] = "the table $name$ already exists. She is only filtered!";
-    Text[ japanese ] = "Ã°ÌŞÙ $name$ ‚Í‚·‚Å‚É‚ ‚è‚Ü‚·BÌ¨ÙÀ‚³‚ê‚Ä‚¢‚Ü‚·B";
-    Text[ korean ] = "Å×ÀÌºí $name$ÀÌ(°¡) ÀÌ¹Ì ÀÖ½À´Ï´Ù. ÀÌ Å×ÀÌºíÀÌ ÇÊÅÍ¸µ µÇ¾ú½À´Ï´Ù!";
-    Text[ chinese_simplified ] = "Õâ¸ö±í¸ñ $name$ ÒÑ¾­´æÔÚ¡£ÒÑ¾­É¸³öÕâ¸ö±í¸ñ!";
-    Text[ chinese_traditional ] = "³o­Óªí®æ $name$ ¤w¸g¦s¦b¡C¤w¿z¿ï¥X³o­Óªí®æ!";
+    Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ $name$ ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚ï¾Œï½¨ï¾™ï¾€ã•ã‚Œã¦ã„ã¾ã™ã€‚";
+    Text[ korean ] = "í…Œì´ë¸” $name$ì´(ê°€) ì´ë¯¸ ìˆìŠµë‹ˆë‹¤. ì´ í…Œì´ë¸”ì´ í•„í„°ë§ ë˜ì—ˆìŠµë‹ˆë‹¤!";
+    Text[ chinese_simplified ] = "è¿™ä¸ªè¡¨æ ¼ $name$ å·²ç»å­˜åœ¨ã€‚å·²ç»ç­›å‡ºè¿™ä¸ªè¡¨æ ¼!";
+    Text[ chinese_traditional ] = "é€™å€‹è¡¨æ ¼ $name$ å·²ç¶“å­˜åœ¨ã€‚å·²ç¯©é¸å‡ºé€™å€‹è¡¨æ ¼!";
     Text[ turkish ] = "the table $name$ already exists. She is only filtered!";
     Text[ arabic ] = "the table $name$ already exists. She is only filtered!";
     Text[ finnish ] = "Die Tabelle $name$ existiert bereits. Sie wurde gefiltert!";
@@ -155,14 +155,15 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
     Text[ swedish ] = "Du har ingen skrivåtkomst till objektets konfigurationsdata.";
     Text[ polish ] = "Brak praw na zapisywanie danych konfiguracjynych obiektu.";
     Text[ portuguese_brazilian ] = "You have no write access to the configuration data the object is based on.";
-    Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ìİ’èÃŞ°À‚Ö‚Ì‘‚«‚İŒ ‚Í‚ ‚è‚Ü‚¹‚ñB";
-    Text[ korean ] = "°³Ã¼ÀÇ ÄÁÇÇ±Ô·¹ÀÌ¼Ç µ¥ÀÌÅÍ¿¡ ´ëÇÑ ¾²±â ±ÇÇÑÀÌ ¾ø½À´Ï´Ù";
-    Text[ chinese_simplified ] = "ÄúÃ»ÓĞÈ¨ÏŞ¶ÁÈ¡Õâ¸ö¶ÔÏóµÄÅäÖÃÊı¾İ¡£";
-    Text[ chinese_traditional ] = "±z¨S¦³Åv­­¦s¨ú³o­Óª«¥óªº°t¸m¸ê®Æ¡C";
+    Text[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®è¨­å®šï¾ƒï¾ï½°ï¾€ã¸ã®æ›¸ãè¾¼ã¿æ¨©ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
+    Text[ korean ] = "ê°œì²´ì˜ ì»¨í”¼ê·œë ˆì´ì…˜ ë°ì´í„°ì— ëŒ€í•œ ì“°ê¸° ê¶Œí•œì´ ì—†ìŠµë‹ˆë‹¤";
+    Text[ chinese_simplified ] = "æ‚¨æ²¡æœ‰æƒé™è¯»å–è¿™ä¸ªå¯¹è±¡çš„é…ç½®æ•°æ®ã€‚";
+    Text[ chinese_traditional ] = "æ‚¨æ²’æœ‰æ¬Šé™å­˜å–é€™å€‹ç‰©ä»¶çš„é…ç½®è³‡æ–™ã€‚";
     Text[ turkish ] = "You have no write access to the configuration data the object is based on.";
     Text[ arabic ] = "You have no write access to the configuration data the object is based on.";
     Text[ catalan ] = "You have no write access to the configuration data the object is based on.";
 };
+
 
 
 
