@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:14:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,6 @@ void XMLEmbeddedObjectImportContext::StartElement(
     if( xHandler.is() )
     {
         xHandler->startDocument();
-
         // #i34042: copy namepspace declarations
         SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
         Reference< XAttributeList > xAttrList( pAttrList );
