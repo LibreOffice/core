@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:02:23 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,6 +642,7 @@ ModalDialog DLG_COPY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Duplicar";
 };
+
 
 
 
