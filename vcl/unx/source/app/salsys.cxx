@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:42:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#include <stacktrace.hxx>
 #include <salunx.h>
 #include <salsys.hxx>
 #include <dtint.hxx>
@@ -78,8 +77,7 @@ public:
     virtual ~X11SalSystem();
 
     // overload pure virtual methods
-    virtual String GetSalSummarySystemInfos( ULONG nFlags );
-    virtual bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo );
+    virtual bool GetSalSystemDisplayInfo( DisplayInfo& rInfo );
     virtual int ShowNativeDialog( const String& rTitle,
                                   const String& rMessage,
                                   const std::list< String >& rButtons,
@@ -102,37 +100,7 @@ X11SalSystem::~X11SalSystem()
 {
 }
 
-String X11SalSystem::GetSalSummarySystemInfos( ULONG nFlags )
-{
-    sal_PostMortem aPostMortem;
-
-    /*
-     *  unimplemented flags:
-     *  SALSYSTEM_GETSYSTEMINFO_MODULES
-     *  SALSYSTEM_GETSYSTEMINFO_MOUSEINFO
-     *  SALSYSTEM_GETSYSTEMINFO_SYSTEMDIRS
-     *  SALSYSTEM_GETSYSTEMINFO_LOCALVOLUMES
-     */
-
-    ByteString aRet;
-    if( nFlags & SALSYSTEM_GETSYSTEMINFO_SYSTEMVERSION )
-        aRet += aPostMortem.getSystemInfo();
-    if( nFlags & SALSYSTEM_GETSYSTEMINFO_CPUTYPE )
-        aRet += aPostMortem.getProcessorInfo();
-    if( nFlags & SALSYSTEM_GETSYSTEMINFO_MEMORYINFO )
-        aRet += aPostMortem.getMemoryInfo();
-    if( nFlags & SALSYSTEM_GETSYSTEMINFO_STACK )
-        aRet += aPostMortem.getStackTrace();
-    if( nFlags & SALSYSTEM_GETSYSTEMINFO_GRAPHICSSYSTEM )
-        aRet += aPostMortem.getGraphicsSystem();
-
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SalSystem::GetSummarySystemInfos() =\n%s", aRet.GetBuffer() );
-#endif
-    return String( aRet, RTL_TEXTENCODING_ISO_8859_1 );
-}
-
-bool X11SalSystem::GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
+bool X11SalSystem::GetSalSystemDisplayInfo( DisplayInfo& rInfo )
 {
     bool bSuccess = false;
     Display* pDisplay = XOpenDisplay( NULL );
