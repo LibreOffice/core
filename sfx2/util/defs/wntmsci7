@@ -7164,3 +7164,4 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?CreateHelpURL@SfxHelp@@SA?AVString@@KABV2@@Z
 ?OpenHelpAgent@SfxHelp@@SAXPAVSfxFrame@@K@Z
 ?set@?$Reference@VXStatusListener@frame@star@sun@com@@@uno@star@sun@com@@QAAEPAVXStatusListener@frame@345@@Z
+??0?$Reference@VXInputStream@io@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
