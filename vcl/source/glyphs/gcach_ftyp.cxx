@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.53 $
- *  last change: $Author: hdu $ $Date: 2001-07-18 15:34:49 $
+ *  $Revision: 1.54 $
+ *  last change: $Author: hdu $ $Date: 2001-07-18 17:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
     #include <sys/mman.h>
 #elif defined(WIN32)
     #include <io.h>
+    #define strncasecmp strnicmp
 #endif
 
 #include "freetype/internal/ftobjs.h"
@@ -412,29 +413,28 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
 
 long FreetypeManager::FetchFontList( ImplDevFontList* pToAdd ) const
 {
-    const char* pLangBoostName = "soui.ttf";
+    const char* pLangBoost = NULL;
     const LanguageType aLang = Application::GetSettings().GetUILanguage();
     switch( aLang )
     {
         case LANGUAGE_JAPANESE:
-            pLangBoostName = "soui.ttf";    // japanese is default
+            pLangBoost = "jan";    // japanese is default
             break;
         case LANGUAGE_CHINESE:
         case LANGUAGE_CHINESE_SIMPLIFIED:
         case LANGUAGE_CHINESE_SINGAPORE:
-            pLangBoostName = "soui_zhs.ttf";
+            pLangBoost = "zhs";
             break;
         case LANGUAGE_CHINESE_TRADITIONAL:
         case LANGUAGE_CHINESE_HONGKONG:
         case LANGUAGE_CHINESE_MACAU:
-            pLangBoostName = "soui_zht.ttf";
+            pLangBoost = "zht";
             break;
         case LANGUAGE_KOREAN:
         case LANGUAGE_KOREAN_JOHAB:
-            pLangBoostName = "soui_kor.ttf";
+            pLangBoost = "kor";
             break;
     }
-    const rtl::OString aLangBoostName( pLangBoostName );
 
     long nCount = 0;
     for( FontList::const_iterator it(maFontList.begin()); it != maFontList.end(); ++it, ++nCount )
@@ -442,9 +442,15 @@ long FreetypeManager::FetchFontList( ImplDevFontList* pToAdd ) const
         ImplFontData* pFontData = new ImplFontData( (*it)->GetFontData() );
 
         // boost UI font quality if UI language matches
-        const ::rtl::OString aCFileName = (*it)->GetFontFileName()->toAsciiLowerCase();
-        if( 0 < aCFileName.indexOf( aLangBoostName ) )
-            pFontData->mnQuality += 10;
+        const ::rtl::OString* pCFileName = (*it)->GetFontFileName();
+        int nPos = pCFileName->lastIndexOf( '_' );
+        if( nPos == -1 || (*pCFileName)[nPos+1] == '.' )
+            pFontData->mnQuality += 5;      // filenames without langinfo => good
+        else
+        {
+            if( pLangBoost && !strncasecmp( pLangBoost, &pCFileName->getStr()[nPos+1], 3 ) )
+               pFontData->mnQuality += 10;  // filenames with correct langinfo => better
+        }
 
         pToAdd->Add( pFontData );
     }
@@ -1102,7 +1108,6 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
                 ft_kerning_default, &aKernVal );
             aKernPair.mnKern = aKernVal.x >> 6;
             if( (aKernPair.mnKern == 0) || (rcFT != FT_Err_Ok) )
-
                 continue;
 
             typedef std::pair<Cmap::iterator,Cmap::iterator> CPair;
