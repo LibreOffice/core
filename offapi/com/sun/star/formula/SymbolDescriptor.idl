@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SymbolDescriptor.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 11:43:19 $
+ *  last change: $Author: arellano $ $Date: 2001-06-08 16:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,27 +69,27 @@
 
 struct SymbolDescriptor
 {
-    /** The name of the symbol
+    /** The name of the symbol.
     */
     string sName;
 
-    /** The export name of the symbol
+    /** The export name of the symbol.
     */
     string sExportName;
 
-    /** Specifies the symbol set this symbol belongs to
+    /** Specifies the symbol set to which this symbol belongs.
     */
     string sSymbolSet;
 
-    /** Specifies the unicode character of the symbol
+    /** Specifies the unicode character of the symbol.
     */
     long nCharacter;
 
-    /** Specifies the exact name of the font ("Arial", "Courier", etc.)
+    /** Specifies the exact name of the font ("Arial", "Courier", etc.).
     */
     string sFontName;
 
-    /** Specifies the character set which is supported by the font
+    /** Specifies the character set which is supported by the font.
     */
     short nCharSet;
 
@@ -105,7 +105,7 @@ struct SymbolDescriptor
     */
     short nWeight;
 
-    /** Specifies whether the font is italic
+    /** Specifies if the font is italic.
     */
     short nItalic;
 };
