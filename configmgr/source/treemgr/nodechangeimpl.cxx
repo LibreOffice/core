@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 10:32:03 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,12 +430,14 @@ bool ValueReplaceImpl::doFillChange( NodeChangeData& rChange, ChangeCount _ix) c
 
 ValueResetImpl::ValueResetImpl()
 :ValueChangeImpl()
+, m_bTargetIsDefault(false)
 {
 }
 //-----------------------------------------------------------------------------
 
 ValueResetImpl::ValueResetImpl(UnoAny const& aNewValue, UnoAny const& aOldValue)
 :ValueChangeImpl(aNewValue, aOldValue)
+, m_bTargetIsDefault(false)
 {
 }
 //-----------------------------------------------------------------------------
@@ -446,11 +448,17 @@ void ValueResetImpl::doApplyChange( ValueMemberUpdate& rNode)
 }
 //-----------------------------------------------------------------------------
 
+bool ValueResetImpl::doIsChange() const
+{
+    return !m_bTargetIsDefault;
+}
+//-----------------------------------------------------------------------------
+
 bool ValueResetImpl::doFillChange( NodeChangeData& rChange, ChangeCount _ix) const
 {
     rChange.type = NodeChangeData::eSetDefault;
     ValueChangeImpl::doFillChange(rChange,_ix);
-    return !rChange.isEmptyChange(); // do it defensively here - default (= 'new') may be unknown still
+    return !m_bTargetIsDefault && !rChange.isEmptyChange(); // do it defensively here - default (= 'new') may be unknown still
 }
 //-----------------------------------------------------------------------------
 
@@ -461,6 +469,7 @@ void ValueResetImpl::preCheckValue(ValueMemberNode& rNode, UnoAny& rOld, UnoAny&
     UnoAny aDefaultValue = rNode.getDefaultValue();
     OSL_ENSURE(!rNew.hasValue() || rNew == aDefaultValue, "ERROR: Configuration: Stored new value of target does not match the actual default value");
     rNew = aDefaultValue;
+    m_bTargetIsDefault = rNode.isDefault();
 }
 
 //-----------------------------------------------------------------------------
