@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-06 16:53:44 $
+ *  last change: $Author: aw $ $Date: 2000-12-07 15:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3020,6 +3020,10 @@ void SdXMLExport::ImpExport3DShape(SvXMLExport& rExp,
 
                     aSvgDElement.AddPolygon(&aPoly, 0L, aMinPoint,
                         aMaxSize, rExp.GetMM100UnitConverter(), bClosed);
+
+                    // #80594# corrected error in PolyPolygon3D export for 3D XML
+                    pInnerSequenceX++;
+                    pInnerSequenceY++;
                 }
 
                 // write point array
