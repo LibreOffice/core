@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_cjk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:55:00 $
+ *  last change: $Author: khong $ $Date: 2002-08-02 01:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
     const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
 {
     if (dict)
-        return dict->previousWord(text.getStr(), anyPos, text.getLength());
+        return dict->previousWord(text.getStr(), anyPos, text.getLength(), wordType);
     else
         throw RuntimeException();
 }
@@ -93,7 +93,7 @@ BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
     const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
 {
     if (dict)
-        return dict->nextWord(text.getStr(), anyPos, text.getLength());
+        return dict->nextWord(text.getStr(), anyPos, text.getLength(), wordType);
     else
         throw RuntimeException();
 }
@@ -104,7 +104,7 @@ BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
     throw(RuntimeException)
 {
     if (dict)
-        return dict->getWordBoundary(text.getStr(), anyPos, text.getLength(), bDirection);
+        return dict->getWordBoundary(text.getStr(), anyPos, text.getLength(), wordType, bDirection);
     else
         throw RuntimeException();
 }

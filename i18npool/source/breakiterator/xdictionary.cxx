@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xdictionary.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-04-16 00:05:32 $
+ *  last change: $Author: khong $ $Date: 2002-08-02 01:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#include <com/sun/star/i18n/WordType.hpp>
 #include <tools/string.hxx>
 #include <xdictionary.hxx>
 #include <unicode.hxx>
@@ -239,24 +240,24 @@ WordBreakCache& SAL_CALL xdictionary::getCache(const sal_Unicode *text, Boundary
     return aCache;
 }
 
-Boundary SAL_CALL xdictionary::previousWord(const sal_Unicode *text, sal_Int32 anyPos, sal_Int32 len)
+Boundary SAL_CALL xdictionary::previousWord(const sal_Unicode *text, sal_Int32 anyPos, sal_Int32 len, sal_Int16 wordType)
 {
     // looking for the first non-whitespace character from anyPos
     while (unicode::isWhiteSpace(text[anyPos - 1])) anyPos --;
-    return getWordBoundary(text, anyPos - 1, len, true);
+    return getWordBoundary(text, anyPos - 1, len, wordType, true);
 }
 
-Boundary SAL_CALL xdictionary::nextWord(const sal_Unicode *text, sal_Int32 anyPos, sal_Int32 len)
+Boundary SAL_CALL xdictionary::nextWord(const sal_Unicode *text, sal_Int32 anyPos, sal_Int32 len, sal_Int16 wordType)
 {
-    boundary = getWordBoundary(text, anyPos, len, true);
+    boundary = getWordBoundary(text, anyPos, len, wordType, true);
     // looknig for the first non-whitespace character from anyPos
     anyPos = boundary.endPos;
     while (unicode::isWhiteSpace(text[anyPos])) anyPos ++;
 
-    return getWordBoundary(text, anyPos, len, true);
+    return getWordBoundary(text, anyPos, len, wordType, true);
 }
 
-Boundary SAL_CALL xdictionary::getWordBoundary(const sal_Unicode *text, sal_Int32 anyPos, sal_Int32 len, sal_Bool bDirection)
+Boundary SAL_CALL xdictionary::getWordBoundary(const sal_Unicode *text, sal_Int32 anyPos, sal_Int32 len, sal_Int16 wordType, sal_Bool bDirection)
 {
     Boundary boundary;
 
@@ -278,6 +279,11 @@ Boundary SAL_CALL xdictionary::getWordBoundary(const sal_Unicode *text, sal_Int3
     } else {
         boundary.startPos = anyPos++;
         boundary.endPos = anyPos < len ? anyPos : len;
+    }
+    if (wordType == WordType::WORD_COUNT) {
+        // skip punctuation for word count.
+        while (boundary.endPos < len && unicode::isPunctuation(text[boundary.endPos]))
+        boundary.endPos++;
     }
 
     return boundary;
