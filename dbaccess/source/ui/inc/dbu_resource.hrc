@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@
 #define QUERY_CONNECTION_LOST           RID_QUERYBOX_START +  2
 #define QUERY_BRW_DELETE_QUERY_CONFIRM  RID_QUERYBOX_START +  3
 #define QUERY_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  4
+#define TABLE_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  5
 
 //========================================================================
 // warning boxes
@@ -357,6 +358,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27  2001/02/28 10:10:01  oj
+ *  changes for the new relation design
+ *
  *  Revision 1.26  2001/02/23 15:02:06  oj
  *  a lot of import export
  *

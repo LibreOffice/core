@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:16:27 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,7 +592,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool bSuspend) throw( RuntimeExc
 {
     if(isModified())
     {
-        QueryBox aQry(getView(), ModuleRes(QUERY_DESIGN_SAVEMODIFIED));
+        QueryBox aQry(getView(), ModuleRes(TABLE_DESIGN_SAVEMODIFIED));
         switch (aQry.Execute())
         {
             case RET_YES:
