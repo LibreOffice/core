@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:58:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1458,6 +1458,7 @@ RTLFUNC(Val)
         {
             // #57844 Lokalisierte Funktion benutzen
             nResult = ::rtl::math::stringToDouble( aStr, '.', ',', NULL, NULL );
+            checkArithmeticOverflow( nResult );
             // ATL: nResult = strtod( aStr.GetStr(), &pEndPtr );
         }
 
