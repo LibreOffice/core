@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 11:33:31 $
+ *  last change: $Author: fs $ $Date: 2002-07-31 08:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2260,16 +2260,25 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
     // if we are on the same row only repaint
     // but this is only possible for rows which are not inserted, in that case the comparision result
     // may not be correct
-    else if (m_xCurrentRow.Is() && !m_xCurrentRow->IsNew() &&
-        CompareBookmark(m_xCurrentRow->GetBookmark(), m_pDataCursor->getBookmark()) &&
-        !::comphelper::getBOOL(Reference< XPropertySet > ((Reference< XInterface >)*m_pDataCursor, UNO_QUERY)->getPropertyValue(FM_PROP_ISNEW)))
+    else if ( m_xCurrentRow.Is() && !m_xCurrentRow->IsNew() )
     {
-        // Position ist ein und dieselbe
-        // Status uebernehmen, neuzeichnen fertig
-        DBG_ASSERT(m_xDataRow == m_xCurrentRow, "Fehler in den Datenzeilen");
-        TRACE_RANGE_MESSAGE1("same position, new state : %s", ROWSTATUS(m_xCurrentRow));
-        RowModified(m_nCurrentPos);
-        return;
+        if ( !m_pDataCursor->isBeforeFirst() && !m_pDataCursor->isAfterLast() )
+        {
+            sal_Bool bEqualBookmarks = CompareBookmark( m_xCurrentRow->GetBookmark(), m_pDataCursor->getBookmark() );
+
+            sal_Bool bDataCursorIsOnNew = sal_False;
+            m_pDataCursor->getPropertySet()->getPropertyValue( FM_PROP_ISNEW ) >>= bDataCursorIsOnNew;
+
+            if ( bEqualBookmarks && !bDataCursorIsOnNew )
+            {
+                // position of my data cursor is the same as the position our current row points tpo
+                // sync the status, repaint, done
+                DBG_ASSERT(m_xDataRow == m_xCurrentRow, "Fehler in den Datenzeilen");
+                TRACE_RANGE_MESSAGE1("same position, new state : %s", ROWSTATUS(m_xCurrentRow));
+                RowModified(m_nCurrentPos);
+                return;
+            }
+        }
     }
 
     // weg von der Row des DatenCursors
@@ -2327,15 +2336,33 @@ sal_Int32 DbGridControl::AlignSeekCursor()
     {
         try
         {
-            m_pSeekCursor->moveToBookmark(m_pDataCursor->getBookmark());
-            if (!CompareBookmark(m_pDataCursor->getBookmark(), m_pSeekCursor->getBookmark()))
-                // dummerweise kann das moveToBookmark indirekt dazu fuehren, dass der Seek-Cursor wieder neu positoniert wird (wenn
-                // naemlich das mit all seinen zu feuernden Events relativ komplexe moveToBookmark irgendwo ein Update ausloest),
-                // also muss ich es nochmal versuchen
+            if ( m_pDataCursor->isBeforeFirst() )
+            {
+                // this is somewhat strange, but can nevertheless happen
+                DBG_WARNING( "DbGridControl::AlignSeekCursor: nobody should tamper with my cursor this way (before first)!" );
+                m_pSeekCursor->first();
+                m_pSeekCursor->previous();
+                m_nSeekPos = -1;
+            }
+            else if ( m_pDataCursor->isAfterLast() )
+            {
+                DBG_WARNING( "DbGridControl::AlignSeekCursor: nobody should tamper with my cursor this way (after last)!" );
+                m_pSeekCursor->last();
+                m_pSeekCursor->next();
+                m_nSeekPos = -1;
+            }
+            else
+            {
                 m_pSeekCursor->moveToBookmark(m_pDataCursor->getBookmark());
-                // Nicht dass das jetzt nicht auch schief gegangen sein koennte, aber es ist zumindest unwahrscheinlicher geworden.
-                // Und die Alternative waere eine Schleife so lange bis es stimmt, und das kann auch nicht die Loesung sein
-            m_nSeekPos = m_pSeekCursor->getRow() - 1;
+                if (!CompareBookmark(m_pDataCursor->getBookmark(), m_pSeekCursor->getBookmark()))
+                    // dummerweise kann das moveToBookmark indirekt dazu fuehren, dass der Seek-Cursor wieder neu positoniert wird (wenn
+                    // naemlich das mit all seinen zu feuernden Events relativ komplexe moveToBookmark irgendwo ein Update ausloest),
+                    // also muss ich es nochmal versuchen
+                    m_pSeekCursor->moveToBookmark(m_pDataCursor->getBookmark());
+                    // Nicht dass das jetzt nicht auch schief gegangen sein koennte, aber es ist zumindest unwahrscheinlicher geworden.
+                    // Und die Alternative waere eine Schleife so lange bis es stimmt, und das kann auch nicht die Loesung sein
+                m_nSeekPos = m_pSeekCursor->getRow() - 1;
+            }
         }
         catch(Exception&)
         {
