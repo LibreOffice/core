@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitmap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:36:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ struct SvXMLItemMapEntry
     enum ::xmloff::token::XMLTokenEnum eLocalName;
                                 // the local name for the item inside
                                 // the Namespace (as an XMLTokenEnum)
-    sal_uInt32 nWhichId;        // the WichId to identify the item
+    sal_uInt16 nWhichId;        // the WichId to identify the item
                                 // in the pool
     sal_uInt32 nMemberId;       // the memberid specifies wich part
                                 // of the item should be imported or
