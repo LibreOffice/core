@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-09 12:34:23 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1496,7 +1496,7 @@ void XMLTextParagraphExport::exportParagraph(
 static const enum XMLTokenEnum lcl_XmlReferenceElements[] = {
     XML_REFERENCE_MARK, XML_REFERENCE_MARK_START, XML_REFERENCE_MARK_END };
 static const enum XMLTokenEnum lcl_XmlBookmarkElements[] = {
-    XML_BOOKMARK, XML_BO OKMARK_START, XML_BOOKMARK_END };
+    XML_BOOKMARK, XML_BOOKMARK_START, XML_BOOKMARK_END };
 
 
 void XMLTextParagraphExport::exportTextRangeEnumeration(
