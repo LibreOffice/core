@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 16:45:52 $
+ *  last change: $Author: rt $ $Date: 2002-12-13 13:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
         else if( pEvent->request_code == X_SetInputFocus )
             return;
 
-#if defined DEBUG || defined DBG_UTIL || defined BUILD_SOSL
+#if defined DEBUG || defined DBG_UTIL
 #if ! ( defined LINUX && defined PPC )
         XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
 #endif

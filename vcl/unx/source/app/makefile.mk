@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-27 13:30:31 $
+#   last change: $Author: rt $ $Date: 2002-12-13 13:27:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,10 +80,6 @@ dummy:
     @echo "Nothing to build for GUIBASE $(GUIBASE)"
 
 .ELSE		# "$(GUIBASE)"!="unx"
-
-.IF "$(BUILD_SOSL)"!=""
-CDEFS+=-DBUILD_SOSL
-.ENDIF
 
 .IF "$(remote)"==""
 OBJFILES=\
