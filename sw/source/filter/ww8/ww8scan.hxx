@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-14 12:31:25 $
+ *  last change: $Author: cmc $ $Date: 2002-11-22 16:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8SCAN_HXX
 #define _WW8SCAN_HXX
@@ -1599,8 +1602,9 @@ public:
     UINT32 fPrintBodyBeforeHdr              :1; // Print body text before header/footer
     UINT32 fNoLeading                                   :1; // Don't add extra spacebetween rows of text
     UINT32                                                      :1; // reserved
-    UINT32 fMWSmallCaps                             :1; // Use larger small caps like MacWord 5.x
-    UINT32                                                   :10;// reserved
+    UINT32 fMWSmallCaps : 1;    // Use larger small caps like MacWord 5.x
+    UINT32 : 9;                 // reserved
+    UINT32 fUsePrinterMetrics : 1;  //The magic option
 
     // hier sollte bei nFib <= 105  Schluss sein, sonst ist Datei fehlerhaft!
 

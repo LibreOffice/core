@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-22 12:56:00 $
+ *  last change: $Author: cmc $ $Date: 2002-11-22 16:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -665,8 +668,6 @@ void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
         nTmpSwPos = 0;      // HasTextItem nur in dem obigen Bereich erlaubt
         rWrt.pOutFmtNode = pOldMod;
     }
-
-    OutFlys(nSwPos);
     OutRedlines(nSwPos);
 }
 
@@ -1456,6 +1457,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         //Append bookmarks in this range, exclusive of final position
         //of this range
         rWW8Wrt.AppendBookmarks( *pNd, nAktPos, nNextAttr - nAktPos );
+        aAttrIter.OutFlys(nAktPos);
         bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
         bool bAttrWithRange = aAttrIter.OutAttrWithRange( nAktPos );
 

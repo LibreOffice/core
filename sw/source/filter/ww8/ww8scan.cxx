@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-14 12:31:25 $
+ *  last change: $Author: cmc $ $Date: 2002-11-22 16:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -6299,6 +6302,8 @@ WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
             fPrintBodyBeforeHdr         = ( a32Bit &  0x00040000 ) >> 18 ;
             fNoLeading                  = ( a32Bit &  0x00080000 ) >> 19 ;
             fMWSmallCaps                = ( a32Bit &  0x00200000 ) >> 21 ;
+
+            fUsePrinterMetrics          = ( a32Bit &  0x00200000 ) >> 31 ;
         }
 
         /*
@@ -6362,6 +6367,15 @@ WW8Dop::WW8Dop()
     fPagHidden = 1;
     fPagResults = 1;
     fDfltTrueType = 1;
+
+    /*
+    Writer acts like this all the time at the moment, ideally we need an
+    option for these two as well to import word docs that are not like
+    this by default
+    */
+    fNoLeading = 1;
+    fUsePrinterMetrics = 1;
+
     fRMView = 1;
     fRMPrint = 1;
     dxaTab = 0x2d0;
@@ -6543,6 +6557,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         if( fPrintBodyBeforeHdr )           a32Bit |= 0x00040000;
         if( fNoLeading )                    a32Bit |= 0x00080000;
         if( fMWSmallCaps )                  a32Bit |= 0x00200000;
+        if (fUsePrinterMetrics)             a32Bit |= 0x80000000;
         Set_UInt32( pData, a32Bit );
 
         Set_UInt16( pData, adt );
