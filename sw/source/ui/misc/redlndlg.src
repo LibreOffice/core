@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:23:08 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text[ chinese_traditional ] = "接受或捨棄變更內容";
     Text[ arabic ] = "���� �� ��� ���������";
     Text[ greek ] = "������� � �������� �������";
-    Text[ korean ] = "변경 사항  적용 또는 취소";
+    Text[ korean ] = "변경 사항 적용 또는 무시";
     Text[ turkish ] = "De�i�iklikleri onayla veyareddet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Accepta o rebutja canvis";
@@ -115,6 +115,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text[ czech ] = "Přijmout nebo odmítnout změny";
     Text[ hebrew ] = "Änderungen akzeptieren oder verwerfen";
     Text[ hindi ] = "परिवर्तनों को स्वीकार अथवा अस्वीकार करो";
+    Text[ slovak ] = "Prijať alebo odmietnuť zmeny";
 };
 
 ModalDialog DLG_MOD_REDLINE_ACCEPT
@@ -139,7 +140,7 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ chinese_traditional ] = "自動格式: 接受或捨棄變更內容";
     Text[ arabic ] = "���� �� ��� ������� ������� ��������";
     Text[ greek ] = "���������:������� � �������� �������";
-    Text[ korean ] = "자동 서식： 변경 사항 적용 또는 취소";
+    Text[ korean ] = "자동 서식  변경 사항 적용 또는 무시";
     Text[ turkish ] = "Otomatik formatlama: De�i�iklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoFormat: Accepta o rebutja canvis";
@@ -148,6 +149,7 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ czech ] = "Přijmout nebo odmítnout změny provedené automatickým formátováním";
     Text[ hebrew ] = "AutoFormat: Änderungen akzeptieren oder verwerfen";
     Text[ hindi ] = "स्वचालित रचना के परिवर्तनों को स्वीकार अथवा अस्वीकार करो";
+    Text[ slovak ] = "Prijať alebo odmietnuť zmeny vykonané automatickým formátovaním";
 };
 
 Menu MN_REDLINE_POPUP
@@ -185,6 +187,7 @@ Menu MN_REDLINE_POPUP
             Text[ czech ] = "Upravit komentář...";
             Text[ hebrew ] = "Kommentar bearbeiten...";
             Text[ hindi ] = "अपवाद का संपादन...";
+            Text[ slovak ] = "Upraviť komentár...";
         };
         MenuItem
         {
@@ -228,6 +231,7 @@ Menu MN_REDLINE_POPUP
                         Text[ czech ] = "Činnost";
                         Text[ hebrew ] = "‮פעולה‬";
                         Text[ hindi ] = "कार्य";
+                        Text[ slovak ] = "Činnosť";
                     };
                     MenuItem
                     {
@@ -261,6 +265,7 @@ Menu MN_REDLINE_POPUP
                         Text[ czech ] = "Autor";
                         Text[ hebrew ] = "‮מחבר‬";
                         Text[ hindi ] = "लेखक";
+                        Text[ slovak ] = "Autor";
                     };
                     MenuItem
                     {
@@ -294,6 +299,7 @@ Menu MN_REDLINE_POPUP
                         Text[ czech ] = "Datum";
                         Text[ hebrew ] = "‮תאריך‬";
                         Text[ hindi ] = "दिनांक";
+                        Text[ slovak ] = "Dátum";
                     };
                     MenuItem
                     {
@@ -327,6 +333,7 @@ Menu MN_REDLINE_POPUP
                         Text[ czech ] = "Komentář";
                         Text[ hebrew ] = "‮הערות‬";
                         Text[ hindi ] = "अपवाद";
+                        Text[ slovak ] = "Komentár";
                     };
                     MenuItem
                     {
@@ -360,6 +367,7 @@ Menu MN_REDLINE_POPUP
                         Text[ czech ] = "Pozice dokumentu";
                         Text[ hebrew ] = "Dokumentposition";
                         Text[ hindi ] = "लेखपत्र स्थान";
+                        Text[ slovak ] = "Pozícia dokumentu";
                     };
                 };
             };
@@ -388,9 +396,14 @@ Menu MN_REDLINE_POPUP
             Text[ czech ] = "Seřadit podle";
             Text[ hebrew ] = "Sortiere";
             Text[ hindi ] = "से सोर्ट करो";
+            Text[ slovak ] = "Triediť podľa";
         };
     };
 };
+
+
+
+
 
 
 
