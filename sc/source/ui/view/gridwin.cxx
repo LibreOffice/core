@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-11 16:36:02 $
+ *  last change: $Author: nn $ $Date: 2001-06-20 08:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2144,6 +2144,16 @@ void ScGridWindow::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
             pViewData->GetView()->GetSelEngine()->Command( aDragEvent );
 }
 
+void lcl_SetTextCursorPos( ScViewData* pViewData, ScSplitPos eWhich, Window* pWin )
+{
+    USHORT nCol = pViewData->GetCurX();
+    USHORT nRow = pViewData->GetCurY();
+    Rectangle aEditArea = pViewData->GetEditArea( eWhich, nCol, nRow, pWin, NULL, TRUE );
+    aEditArea.Right() = aEditArea.Left();
+    aEditArea = pWin->PixelToLogic( aEditArea );
+    pWin->SetCursorRect( &aEditArea );
+}
+
 void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
 {
     USHORT nCmd = rCEvt.GetCommand();
@@ -2169,6 +2179,17 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
                     return;                             // done
                 }
             }
+        }
+
+        if ( nCmd == COMMAND_CURSORPOS && !bEditView )
+        {
+            //  #88458# CURSORPOS may be called without following text input,
+            //  to set the input method window position
+            //  -> input mode must not be started,
+            //  manually calculate text insert position if not in input mode
+
+            lcl_SetTextCursorPos( pViewData, eWhich, this );
+            return;
         }
 
         ScInputHandler* pHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
