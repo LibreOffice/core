@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:51:11 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,9 +730,12 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
 
     FmFormView* pDrawView = NULL;
     Rectangle aFull( 0, 0, LONG_MAX, LONG_MAX );
-    if ( pDoc->HasControl( nTab, aFull ) )
+
+    // #114135#
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+
+    if( pModel )
     {
-        ScDrawLayer* pModel = pDoc->GetDrawLayer();         // can't be NULL then
         pDrawView = new FmFormView( pModel, pDev );
         pDrawView->ShowPagePgNum( nTab, Point() );
         pDrawView->SetPrintPreview( TRUE );
