@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 13:01:01 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:55:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,10 +71,11 @@ TARGETTYPE=CUI
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
-.INCLUDE :      pyversion.mk
 
 .IF "$(SYSTEM_PYTHON)" == "YES"
 SCPDEFS+=-DSYSTEM_PYTHON
+.ELSE
+.INCLUDE :      pyversion.mk
 .ENDIF
 
 SCPDEFS+=\
