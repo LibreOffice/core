@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: fs $ $Date: 2000-09-19 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1022,8 +1022,8 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             else
             {
                 // Standardlabel setzen
-                XubString aLabel(SVX_RES(RID_STR_COLUMN));
-                aLabel += static_cast<FmGridControl*>(GetParent())->GetModelColCount() + 1;
+                String aLabel(SVX_RES(RID_STR_COLUMN));
+                aLabel += String::CreateFromInt32(static_cast<FmGridControl*>(GetParent())->GetModelColCount() + 1);
                 xCol->setPropertyValue(FM_PROP_LABEL, XUB2ANY(aLabel));
                 xCol->setPropertyValue(FM_PROP_NAME, XUB2ANY(aLabel));
                 xCols->insertByIndex(nPos, aNew);
