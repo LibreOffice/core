@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2001-11-09 09:14:31 $
+#   last change: $Author: svesik $ $Date: 2002-03-11 21:15:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,9 @@ SHL1STDLIBS= \
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
+.IF "$(OS)"!="FREEBSD"
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+.ENDIF
 
 SHL1VERSIONMAP=$(TARGET).map
 
