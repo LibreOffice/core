@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:18:32 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 07:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,3 +1454,13 @@ Rectangle ComboBox::GetBoundingRectangle( USHORT nItem ) const
     return aRect;
 }
 // -----------------------------------------------------------------------------
+
+void ComboBox::SetBorderStyle( USHORT nBorderStyle )
+{
+    Window::SetBorderStyle( nBorderStyle );
+    if ( !IsDropDownBox() )
+    {
+        mpSubEdit->SetBorderStyle( nBorderStyle );
+        mpImplLB->SetBorderStyle( nBorderStyle );
+    }
+}
