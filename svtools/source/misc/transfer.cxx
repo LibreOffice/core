@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-13 14:07:55 $
+ *  last change: $Author: ka $ $Date: 2001-03-13 16:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,8 @@ sal_Bool TransferableHelper::SetString( const ::rtl::OUString& rString, const Da
         SotExchange::GetFormatDataFlavor( FORMAT_FILE, aFileFlavor ) &&
         TransferableDataHelper::IsEqual( aFileFlavor, rFlavor ) )
     {
-        const ByteString        aByteStr( String( rString ), gsl_getSystemTextEncoding() );
+        const String            aString( rString );
+        const ByteString        aByteStr( aString, gsl_getSystemTextEncoding() );
         Sequence< sal_Int8 >    aSeq( aByteStr.Len() + 1 );
 
         rtl_copyMemory( aSeq.getArray(), aByteStr.GetBuffer(), aByteStr.Len() );
