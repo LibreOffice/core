@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgutil.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-12 09:55:24 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 09:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ void SetFieldUnit( MetricField& rCtrl,
 void SetFieldUnit( MetricBox& rCtrl,
                    FieldUnit eUnit, BOOL bAll = FALSE );
 
-FieldUnit GetModuleFieldUnit();
+FieldUnit GetModuleFieldUnit( const SfxItemSet* pSet );
 
 // Metriken umrechnen
 long        CalcToUnit( float nIn, SfxMapUnit eUnit );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 11:36:50 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 09:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <unolingu.hxx>
 #endif
 
+#include <svtools/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -210,23 +211,29 @@ void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, BOOL bAll )
 
 // -----------------------------------------------------------------------
 
-FieldUnit GetModuleFieldUnit()
+FieldUnit GetModuleFieldUnit( const SfxItemSet* pSet )
 {
     FieldUnit eUnit = FUNIT_INCH;
-    SfxViewFrame* pFrame = SfxViewFrame::Current();
-    SfxObjectShell* pSh = NULL;
-    if ( pFrame )
-        pSh = pFrame->GetObjectShell();
-    SfxModule* pModule = pSh ? pSh->GetModule() : NULL;
-    if ( pModule )
-    {
-        const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
-        if ( pItem )
-            eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
-    }
+    const SfxPoolItem* pItem = NULL;
+    if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_METRIC, FALSE, &pItem ) )
+        eUnit = (FieldUnit)( (const SfxUInt16Item*)pItem )->GetValue();
     else
     {
-        DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
+        SfxViewFrame* pFrame = SfxViewFrame::Current();
+        SfxObjectShell* pSh = NULL;
+        if ( pFrame )
+            pSh = pFrame->GetObjectShell();
+        SfxModule* pModule = pSh ? pSh->GetModule() : NULL;
+        if ( pModule )
+        {
+            const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
+            if ( pItem )
+                eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+        }
+        else
+        {
+            DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
+        }
     }
     return eUnit;
 }
@@ -235,8 +242,7 @@ FieldUnit GetModuleFieldUnit()
 
 void SetMetricValue( MetricField& rField, long nCoreValue, SfxMapUnit eUnit )
 {
-    long nVal = OutputDevice::LogicToLogic( nCoreValue,
-                                            (MapUnit)eUnit, MAP_100TH_MM );
+    long nVal = OutputDevice::LogicToLogic( nCoreValue, (MapUnit)eUnit, MAP_100TH_MM );
     nVal = rField.Normalize( nVal );
     rField.SetValue( nVal, FUNIT_100TH_MM );
 
@@ -287,8 +293,7 @@ void SetMetricValue( MetricField& rField, long nCoreValue, SfxMapUnit eUnit )
 long GetCoreValue( const MetricField& rField, SfxMapUnit eUnit )
 {
     long nVal = rField.GetValue( FUNIT_100TH_MM );
-    long nUnitVal = OutputDevice::LogicToLogic( nVal, MAP_100TH_MM,
-                                                (MapUnit)eUnit      );
+    long nUnitVal = OutputDevice::LogicToLogic( nVal, MAP_100TH_MM, (MapUnit)eUnit );
     nUnitVal = rField.Denormalize( nUnitVal );
     return nUnitVal;
 
