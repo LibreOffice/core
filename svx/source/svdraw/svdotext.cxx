@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-31 09:20:26 $
+ *  last change: $Author: thb $ $Date: 2002-07-31 09:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,29 +575,6 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
     }
 }
 
-SdrOutliner& SdrTextObj::ImpGetDrawOutliner() const
-{
-    SdrOutliner& rOutl=pModel->GetDrawOutliner(this);
-    rOutl.SetUpdateMode(FALSE);
-    USHORT nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
-    if ( !IsOutlText() )
-        nOutlinerMode = OUTLINERMODE_TEXTOBJECT;
-    rOutl.Init( nOutlinerMode );
-
-    rOutl.SetGlobalCharStretching(100,100);
-    ULONG nStat=rOutl.GetControlWord();
-    nStat&=~(EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE);
-    rOutl.SetControlWord(nStat);
-    Size aNullSize;
-    Size aMaxSize(100000,100000);
-    rOutl.SetMinAutoPaperSize(aNullSize);
-    rOutl.SetMaxAutoPaperSize(aMaxSize);
-    rOutl.SetPaperSize(aMaxSize);
-    rOutl.ClearPolygon();
-
-    return rOutl;
-}
-
 FASTBOOL SdrTextObj::NbcSetEckenradius(long nRad)
 {
     SetItem(SdrEckenradiusItem(nRad));
@@ -1091,35 +1068,14 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                 // sonst kein Fontwork
                 // hier findet das richtige Painten des Textes statt
 
-                if (!bContourFrame)
-                {
-                    // FitToSize erstmal nicht mit ContourFrame
-                    SdrFitToSizeType eFit=GetFitToSize();
-                    if (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES)
-                    {
-                        ULONG nStat=rOutliner.GetControlWord();
-                        nStat|=EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE;
-                        rOutliner.SetControlWord(nStat);
-                    }
-                }
-
                 Rectangle aTextRect;
                 Rectangle aAnchorRect;
-                TakeTextRect(rOutliner, aTextRect, FALSE, &aAnchorRect);
-                Rectangle aPaintRect(aTextRect);
+                Rectangle aPaintRect;
                 Fraction aFitXKorreg(1,1);
-                FASTBOOL bFitKorreg=FALSE;
 
-                if (!bContourFrame)
-                {
-                    // FitToSize erstmal nicht mit ContourFrame
-                    SdrFitToSizeType eFit=GetFitToSize();
-                    if (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES)
-                    {
-                        ImpSetCharStretching(rOutliner,aTextRect,aAnchorRect,aFitXKorreg);
-                        aPaintRect=aAnchorRect;
-                    }
-                }
+                // #101029#: Extracted Outliner setup to ImpSetupDrawOutlinerForPaint
+                ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
+
                 FASTBOOL bAnimated=GetTextAniKind()!=SDRTEXTANI_NONE;
                 OutputDevice* pOutDev=rXOut.GetOutDev();
 
@@ -1210,48 +1166,40 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                     }
                     else
                     {
-                        if (!bFitKorreg)
+                        if(IsVerticalWriting())
                         {
-                            if(IsVerticalWriting())
+                            // new try for #82826#
+                            if(aAnchorRect.GetWidth() > aPaintRect.GetWidth())
                             {
-                                // new try for #82826#
-                                if(aAnchorRect.GetWidth() > aPaintRect.GetWidth())
-                                {
-                                    aPaintRect = Rectangle(
-                                        aPaintRect.Right() - aAnchorRect.GetWidth(), aPaintRect.Top(),
-                                        aPaintRect.Right(), aPaintRect.Bottom());
-                                }
-
-                                // #91744# for vertical writing the original fix #82826#
-                                // needs to be taken out.
-                                rOutliner.Draw(pOutDev, aPaintRect);
+                                aPaintRect = Rectangle(
+                                    aPaintRect.Right() - aAnchorRect.GetWidth(), aPaintRect.Top(),
+                                    aPaintRect.Right(), aPaintRect.Bottom());
                             }
-                            else
-                            {
-                                // new try for #82826#
-                                if(aAnchorRect.GetHeight() > aPaintRect.GetHeight())
-                                {
-                                    aPaintRect = Rectangle(
-                                        aPaintRect.Left(), aPaintRect.Top(),
-                                        aPaintRect.Right(), aPaintRect.Top() + aAnchorRect.GetHeight());
-                                }
 
-                                // #91809# for horizontal writing the original fix #82826#
-                                // needs to be taken out, too.
-                                rOutliner.Draw(pOutDev, aPaintRect);
-
-                                // #82826# for correct preview of outliner views
-                                //// rOutliner.Draw(pOutDev,aPaintRect);
-                                //if(aPaintRect.Top() > aAnchorRect.Top())
-                                //  rOutliner.Draw(pOutDev, aPaintRect);
-                                //else
-                                //  rOutliner.Draw(pOutDev, aAnchorRect);
-                            }
+                            // #91744# for vertical writing the original fix #82826#
+                            // needs to be taken out.
+                            rOutliner.Draw(pOutDev, aPaintRect);
                         }
                         else
                         {
-                            ImpTextPortionHandler aHdl(rOutliner,*this);
-                            aHdl.DrawFitText(rXOut,aPaintRect.TopLeft(),aFitXKorreg);
+                            // new try for #82826#
+                            if(aAnchorRect.GetHeight() > aPaintRect.GetHeight())
+                            {
+                                aPaintRect = Rectangle(
+                                    aPaintRect.Left(), aPaintRect.Top(),
+                                    aPaintRect.Right(), aPaintRect.Top() + aAnchorRect.GetHeight());
+                            }
+
+                            // #91809# for horizontal writing the original fix #82826#
+                            // needs to be taken out, too.
+                            rOutliner.Draw(pOutDev, aPaintRect);
+
+                            // #82826# for correct preview of outliner views
+                            //// rOutliner.Draw(pOutDev,aPaintRect);
+                            //if(aPaintRect.Top() > aAnchorRect.Top())
+                            //  rOutliner.Draw(pOutDev, aPaintRect);
+                            //else
+                            //  rOutliner.Draw(pOutDev, aAnchorRect);
                         }
                     }
                 }
@@ -1805,6 +1753,92 @@ void SdrTextObj::ImpCheckMasterCachable()
     if (!bNotVisibleAsMaster && pOutlinerParaObject!=NULL && pOutlinerParaObject->IsEditDoc()) {
         const EditTextObject& rText=pOutlinerParaObject->GetTextObject();
         bNotMasterCachable=rText.HasField(SvxPageField::StaticType());
+    }
+}
+
+// #101029#: Extracted from ImpGetDrawOutliner()
+void SdrTextObj::ImpInitDrawOutliner( SdrOutliner& rOutl ) const
+{
+    rOutl.SetUpdateMode(FALSE);
+    USHORT nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
+    if ( !IsOutlText() )
+        nOutlinerMode = OUTLINERMODE_TEXTOBJECT;
+    rOutl.Init( nOutlinerMode );
+
+    rOutl.SetGlobalCharStretching(100,100);
+    ULONG nStat=rOutl.GetControlWord();
+    nStat&=~(EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE);
+    rOutl.SetControlWord(nStat);
+    Size aNullSize;
+    Size aMaxSize(100000,100000);
+    rOutl.SetMinAutoPaperSize(aNullSize);
+    rOutl.SetMaxAutoPaperSize(aMaxSize);
+    rOutl.SetPaperSize(aMaxSize);
+    rOutl.ClearPolygon();
+}
+
+SdrOutliner& SdrTextObj::ImpGetDrawOutliner() const
+{
+    SdrOutliner& rOutl=pModel->GetDrawOutliner(this);
+
+    // #101029#: Code extracted to ImpInitDrawOutliner()
+    ImpInitDrawOutliner( rOutl );
+
+    return rOutl;
+}
+
+// #101029#: Extracted from Paint()
+void SdrTextObj::ImpSetupDrawOutlinerForPaint( FASTBOOL         bContourFrame,
+                                               SdrOutliner&     rOutliner,
+                                               Rectangle&       rTextRect,
+                                               Rectangle&       rAnchorRect,
+                                               Rectangle&       rPaintRect,
+                                               Fraction&        rFitXKorreg ) const
+{
+    if (!bContourFrame)
+    {
+        // FitToSize erstmal nicht mit ContourFrame
+        SdrFitToSizeType eFit=GetFitToSize();
+        if (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES)
+        {
+            ULONG nStat=rOutliner.GetControlWord();
+            nStat|=EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE;
+            rOutliner.SetControlWord(nStat);
+        }
+    }
+
+    TakeTextRect(rOutliner, rTextRect, FALSE, &rAnchorRect);
+    rPaintRect = rTextRect;
+
+    if (!bContourFrame)
+    {
+        // FitToSize erstmal nicht mit ContourFrame
+        SdrFitToSizeType eFit=GetFitToSize();
+        if (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES)
+        {
+            ImpSetCharStretching(rOutliner,rTextRect,rAnchorRect,rFitXKorreg);
+            rPaintRect=rAnchorRect;
+        }
+    }
+}
+
+void SdrTextObj::SetupOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaintRect ) const
+{
+    Rectangle aTextRect;
+    Rectangle aAnchorRect;
+    Fraction aFitXKorreg(1,1);
+
+    FASTBOOL bContourFrame=IsContourTextFrame();
+
+    ImpInitDrawOutliner( rOutl );
+    ImpSetupDrawOutlinerForPaint( bContourFrame, rOutl, aTextRect, aAnchorRect, rPaintRect, aFitXKorreg );
+
+    if( GetModel() )
+    {
+        MapMode aMapMode(GetModel()->GetScaleUnit(), Point(0,0),
+                         GetModel()->GetScaleFraction(),
+                         GetModel()->GetScaleFraction());
+        rOutl.SetRefMapMode(aMapMode);
     }
 }
 
