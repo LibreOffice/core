@@ -208,7 +208,7 @@ Dim LocStockName as String
 End Sub
 
 
-Sub SelectStockname()
+Sub SelectStockname(aEvent as Object)
 Dim iCurRow as Integer
 Dim CurStockName as String
 	With TransactModel
@@ -218,9 +218,14 @@ Dim CurStockName as String
 			iCurRow = GetStockRowIndex(CurStockName)
 			.txtQuantity.ValueMax = 10000000
 		Else
-			CurStockName = DlgTransaction.GetControl(&quot;lstSellStocks&quot;).GetSelectedItem()
+			Dim ListBoxList() as String
+			ListBoxList() = GetSelectedListboxItems(aEvent.Source.getModel())
+			CurStockName = ListBoxList(0)
+&apos;			CurStockName = DlgTransaction.GetControl(aEvent.Source.getModel.Name).GetSelectedItem()
 			iCurRow = GetStockRowIndex(CurStockName)
-			.txtQuantity.Value = oFirstSheet.GetCellByPosition(SBCOLUMNQUANTITY1, iCurRow).Value
+			Dim fdouble as Double
+			fdouble = oFirstSheet.GetCellByPosition(SBCOLUMNQUANTITY1, iCurRow).Value
+			.txtQuantity.Value = fdouble
 			.txtQuantity.ValueMax = oFirstSheet.GetCellByPosition(SBCOLUMNQUANTITY1, iCurRow).Value
 			.txtRate.Value = oFirstSheet.GetCellbyPosition(SBCOLUMNRATE1, iCurRow).Value
 		End If
@@ -491,4 +496,5 @@ Sub InitializeStockRatesControls(CurStep as Integer)
 				.optDaily.State = 1
 		End Select
 	End With
-End Sub</script:module>
+End Sub
+</script:module>
