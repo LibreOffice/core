@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:17:01 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,7 +557,7 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
         {
             SwFrm *pTmp = ::SaveCntnt( pFoll );
             if ( pTmp )
-                ::RestoreCntnt( pTmp, pUpper, pMaster->FindLastLower() );
+                ::RestoreCntnt( pTmp, pUpper, pMaster->FindLastLower(), true );
             pFoll->SetCompletePaint();
             pFoll->InvalidateSize();
             pFoll = pFoll->GetNextLink();
