@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:27:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include <cppuhelper/compbase_ex.hxx>
 #endif
 
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 using namespace ::cppu;
 using namespace ::osl;
