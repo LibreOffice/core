@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:50:00 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,6 +765,20 @@ void SdrPageView::DelWin(OutputDevice* pOutDev)
     }
 }
 
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > SdrPageView::GetControlContainer( const OutputDevice* _pDevice )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > xReturn;
+    USHORT nWinPos = pWinList->Find( const_cast< OutputDevice* >( _pDevice ) );
+    if ( SDRPAGEVIEWWIN_NOTFOUND != nWinPos )
+    {
+        xReturn = xReturn.query( ((*pWinList)[ nWinPos ]).GetControlContainerRef( ) );
+        if ( !xReturn.is() )
+            ((*pWinList)[ nWinPos ]).CreateControlContainer( );
+        xReturn = xReturn.query( ((*pWinList)[ nWinPos ]).GetControlContainerRef( ) );
+    }
+    return xReturn;
+}
+
 void SdrPageView::ImpInsertControl(const SdrUnoObj* pSdrUnoObj,
                                    SdrPageViewWinRec* pRec)
 {
@@ -826,10 +840,12 @@ void SdrPageView::ImpInsertControl(const SdrUnoObj* pSdrUnoObj,
                     // this is also needed for accessibility
                     xUnoControl->setDesignMode(GetView().IsDesignMode());
 
-                    pRec->GetControlContainerRef()->addControl(pSdrUnoObj->GetUnoControlTypeName(), xUnoControl);
-
                     SdrUnoControlRec* pUCR = new SdrUnoControlRec(&pRec->aControlList, (SdrUnoObj*)pSdrUnoObj, xUnoControl);
                     pRec->aControlList.Insert(pUCR);
+
+                    // #108327# do this last - the addition of the control triggeres processes which rely
+                    // on the control already being inserted into the aControlList
+                    pRec->GetControlContainerRef()->addControl(pSdrUnoObj->GetUnoControlTypeName(), xUnoControl);
                 }
             }
         }
