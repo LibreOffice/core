@@ -40,7 +40,7 @@ public class Test12 implements StorageTest {
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) xTempFileStream;
-            pArgs[1] = new Integer( ElementModes.ELEMENT_WRITE );
+            pArgs[1] = new Integer( ElementModes.WRITE );
 
             Object oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
@@ -53,7 +53,7 @@ public class Test12 implements StorageTest {
             // open a new substorage
             XStorage xTempSubStorage = m_aTestHelper.openSubStorage( xTempStorage,
                                                                     "SubStorage1",
-                                                                    ElementModes.ELEMENT_WRITE );
+                                                                    ElementModes.WRITE );
             if ( xTempSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );
@@ -70,14 +70,14 @@ public class Test12 implements StorageTest {
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             "MediaType2",
                                                             true,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage,
                                                             "MediaType3",
                                                             false,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             // commit substorage first
@@ -115,7 +115,7 @@ public class Test12 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResWriteStorage, "MediaType2", true, ElementModes.ELEMENT_WRITE ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResWriteStorage, "MediaType2", true, ElementModes.WRITE ) )
                 return false;
 
             if( !checkSubStorages( xResWriteStorage, pBytes1 ) )
@@ -124,14 +124,14 @@ public class Test12 implements StorageTest {
             // try to open for writing after opening for reading
             XStorage xResWSubStorage = m_aTestHelper.openSubStorage( xResWriteStorage,
                                                                     "SubStorage1",
-                                                                    ElementModes.ELEMENT_WRITE );
+                                                                    ElementModes.WRITE );
             if ( xResWSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't open substorage for writing after it was opened for reading!" );
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResWSubStorage, "MediaType3", false, ElementModes.ELEMENT_WRITE ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResWSubStorage, "MediaType3", false, ElementModes.WRITE ) )
                 return false;
 
             if ( !m_aTestHelper.checkStream( xResWSubStorage, "SubStream1", "MediaType1", pBytes1 ) )
@@ -168,7 +168,7 @@ public class Test12 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType2", true, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType2", true, ElementModes.READ ) )
                 return false;
 
             if( !checkSubStorages( xResultStorage, pBytes1 ) )
@@ -187,11 +187,11 @@ public class Test12 implements StorageTest {
     {
         XStorage xReadSubStorage1 = m_aTestHelper.openSubStorage( xStorage,
                                                                 "SubStorage1",
-                                                                ElementModes.ELEMENT_READ );
+                                                                ElementModes.READ );
 
         XStorage xReadSubStorage2 = m_aTestHelper.openSubStorage( xStorage,
                                                                 "SubStorage1",
-                                                                ElementModes.ELEMENT_READ );
+                                                                ElementModes.READ );
 
         if ( xReadSubStorage1 == null || xReadSubStorage2 == null )
         {
@@ -199,10 +199,10 @@ public class Test12 implements StorageTest {
             return false;
         }
 
-        if ( !m_aTestHelper.checkStorageProperties( xReadSubStorage1, "MediaType3", false, ElementModes.ELEMENT_READ ) )
+        if ( !m_aTestHelper.checkStorageProperties( xReadSubStorage1, "MediaType3", false, ElementModes.READ ) )
             return false;
 
-        if ( !m_aTestHelper.checkStorageProperties( xReadSubStorage2, "MediaType3", false, ElementModes.ELEMENT_READ ) )
+        if ( !m_aTestHelper.checkStorageProperties( xReadSubStorage2, "MediaType3", false, ElementModes.READ ) )
             return false;
 
         if ( !m_aTestHelper.checkStream( xReadSubStorage1, "SubStream1", "MediaType1", pBytes1 ) )
