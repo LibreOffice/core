@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 10:11:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@
 #ifdef DUMP
 
 #define ERR_SWG_READ_ERROR 1234
-#include <assert.h>
 #define ASSERT( a, b )
 
 #else                       // dump
@@ -163,7 +162,7 @@ public:
     {
         ASSERT(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
         std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         bool bBroken=false;
         rtl::OUString sError;
         const C *pIter = mpWwSprmTab;
