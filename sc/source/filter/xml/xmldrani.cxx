@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:30:50 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,6 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nRefresh(0),
     nSubTotalsUserListIndex(0),
-    nSubTotalRuleGroupFieldNumber(0),
     bContainsSort(sal_False),
     bContainsSubTotal(sal_False),
     bIsSelection(sal_False),
@@ -201,7 +200,6 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bSubTotalsEnabledUserList(sal_False),
     bSubTotalsAscending(sal_True),
     bNative(sal_True),
-    aSubTotalColumns(),
     aSortSequence()
 {
     nSourceType = sheet::DataImportMode_NONE;
@@ -514,7 +512,12 @@ void ScXMLDatabaseRangeContext::EndElement()
                                     aSubTotalParam.bUserDef = bSubTotalsEnabledUserList;
                                     aSubTotalParam.nUserIndex = nSubTotalsUserListIndex;
                                     pDBData->SetSubTotalParam(aSubTotalParam);
-                                    xSubTotalDescriptor->addNew(aSubTotalColumns, nSubTotalRuleGroupFieldNumber);
+                                    std::vector < ScSubTotalRule >::iterator aItr(aSubTotalRules.begin());
+                                    while (!aSubTotalRules.empty())
+                                    {
+                                        xSubTotalDescriptor->addNew(aItr->aSubTotalColumns, aItr->nSubTotalRuleGroupFieldNumber);
+                                        aItr = aSubTotalRules.erase(aItr);
+                                    }
                                 }
                             }
                             if ( pDBData->HasImportParam() && !pDBData->HasImportSelection() )
@@ -959,9 +962,9 @@ ScXMLSubTotalRuleContext::ScXMLSubTotalRuleContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
-    pDatabaseRangeContext = pTempDatabaseRangeContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetSubTotalRulesSubTotalRuleAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -976,7 +979,7 @@ ScXMLSubTotalRuleContext::ScXMLSubTotalRuleContext( ScXMLImport& rImport,
         {
             case XML_TOK_SUBTOTAL_RULE_ATTR_GROUP_BY_FIELD_NUMBER :
             {
-                pDatabaseRangeContext->SetSubTotalRuleGroupFieldNumber(static_cast<sal_Int16>(sValue.toInt32()));
+                aSubTotalRule.nSubTotalRuleGroupFieldNumber = static_cast<sal_Int16>(sValue.toInt32());
             }
             break;
         }
@@ -1000,7 +1003,7 @@ SvXMLImportContext *ScXMLSubTotalRuleContext::CreateChildContext( USHORT nPrefix
         case XML_TOK_SUBTOTAL_RULE_SUBTOTAL_FIELD :
         {
             pContext = new ScXMLSubTotalFieldContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, pDatabaseRangeContext);
+                                                          rLName, xAttrList, this);
         }
         break;
     }
@@ -1013,6 +1016,8 @@ SvXMLImportContext *ScXMLSubTotalRuleContext::CreateChildContext( USHORT nPrefix
 
 void ScXMLSubTotalRuleContext::EndElement()
 {
+    if (pDatabaseRangeContext)
+        pDatabaseRangeContext->AddSubTotalRule(aSubTotalRule);
 }
 
 ScXMLSubTotalFieldContext::ScXMLSubTotalFieldContext( ScXMLImport& rImport,
@@ -1020,10 +1025,10 @@ ScXMLSubTotalFieldContext::ScXMLSubTotalFieldContext( ScXMLImport& rImport,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+                                        ScXMLSubTotalRuleContext* pTempSubTotalRuleContext) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    pSubTotalRuleContext(pTempSubTotalRuleContext)
 {
-    pDatabaseRangeContext = pTempDatabaseRangeContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetSubTotalRuleSubTotalFieldAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1072,6 +1077,6 @@ void ScXMLSubTotalFieldContext::EndElement()
     sheet::SubTotalColumn aSubTotalColumn;
     aSubTotalColumn.Column = sFieldNumber.toInt32();
     aSubTotalColumn.Function = ScXMLConverter::GetFunctionFromString( sFunction );
-    pDatabaseRangeContext->AddSubTotalColumn(aSubTotalColumn);
+    pSubTotalRuleContext->AddSubTotalColumn(aSubTotalColumn);
 }
 
