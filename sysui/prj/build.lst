@@ -1,5 +1,5 @@
 su	sysui	:	offapi xml2cmp rdbmaker NULL
-su	sysui\oowin32\office\icons		nmake	-	w	su_iconsw NULL
+su	sysui\win32\office\icons		nmake	-	w	su_iconsw NULL
 su	sysui\tools\lngconv				nmake	-	u	su_lngconv NULL
 su	sysui\oounix\office 				nmake	-	u	su_iconsu NULL
 su	sysui\oounix\office\cde 			nmake	-	u	su_cdezips su_lngconv.u NULL
