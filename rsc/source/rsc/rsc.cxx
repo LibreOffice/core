@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
+ *  last change: $Author: hjs $ $Date: 2001-11-06 11:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,8 +875,12 @@ ERRTYPE RscCompiler::Link()
 #ifdef DEBUG
             fprintf( stderr, "move %s -> %s\n", pTmp, it->aOutputRc.GetBuffer() );
 #endif
-            link( pTmp, it->aOutputRc.GetBuffer() );
-            unlink( pTmp );
+            if( rename( pTmp, it->aOutputRc.GetBuffer() ) )
+            {
+                char aBuf[1024];
+                sprintf( aBuf, "%s -> %s", pTmp, it->aOutputRc.GetBuffer );
+                pTC->pEH->FatalError( ERR_RENAMEFILE, RscId(), aBuf );
+            }
             free( pTmp );
         }
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: erscerr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
+ *  last change: $Author: hjs $ $Date: 2001-11-06 11:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,12 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "This file <" );
             StdLstOut( pMessage );
             StdLstOut( "> cannot be opened." );
+        break;
+
+        case ERR_RENAMEFILE:
+            StdLstOut( "rename <" );
+            StdLstOut( pMessage );
+            StdLstOut( "> s not possible." );
         break;
 
         case ERR_FILESIZE:
