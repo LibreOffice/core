@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: bm $ $Date: 2002-05-06 10:23:13 $
+ *  last change: $Author: bm $ $Date: 2002-08-07 13:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1808,100 +1808,9 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
         bHasYAxisMinorGrid = sal_False,
         bHasZAxisMajorGrid = sal_False,
         bHasZAxisMinorGrid = sal_False;
+    sal_Bool bIs3DChart = sal_False;
 
-#if 0
-    uno::Reference< beans::XPropertySet > xProp( xDiagram, uno::UNO_QUERY );
-    if( xProp.is())
-    {
-        try
-        {
-            uno::Any aAny;
-
-            // check for supported services ...
-            uno::Reference< lang::XServiceInfo > xServ( xDiagram, uno::UNO_QUERY );
-            if( xServ.is())
-            {
-                bHasXAxis = xServ->supportsService(
-                    rtl::OUString::createFromAscii( "com.sun.star.chart.ChartAxisXSupplier" ));
-                bHasYAxis = xServ->supportsService(
-                    rtl::OUString::createFromAscii( "com.sun.star.chart.ChartAxisYSupplier" ));
-                bHasZAxis = xServ->supportsService(
-                    rtl::OUString::createFromAscii( "com.sun.star.chart.ChartAxisZSupplier" ));
-                bHasSecondaryXAxis = xServ->supportsService(
-                    rtl::OUString::createFromAscii( "com.sun.star.chart.ChartTwoAxisXSupplier" ));
-                bHasSecondaryYAxis = xServ->supportsService(
-                    rtl::OUString::createFromAscii( "com.sun.star.chart.ChartTwoAxisYSupplier" ));
-            }
-
-            // ... and then the properties provided by this service
-            if( bHasXAxis )
-            {
-                aAny = xProp->getPropertyValue(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasXAxis" )));
-                aAny >>= bHasXAxis;
-            }
-            if( bHasYAxis )
-            {
-                aAny = xProp->getPropertyValue(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasYAxis" )));
-                aAny >>= bHasYAxis;
-            }
-            if( bHasZAxis )
-            {
-                aAny = xProp->getPropertyValue(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasZAxis" )));
-                aAny >>= bHasZAxis;
-            }
-            if( bHasSecondaryXAxis )
-            {
-                aAny = xProp->getPropertyValue(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryXAxis" )));
-                aAny >>= bHasSecondaryXAxis;
-            }
-            if( bHasSecondaryYAxis )
-            {
-                aAny = xProp->getPropertyValue(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryYAxis" )));
-                aAny >>= bHasSecondaryYAxis;
-            }
-
-            aAny = xProp->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasXAxisTitle" )));
-            aAny >>= bHasXAxisTitle;
-            aAny = xProp->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasYAxisTitle" )));
-            aAny >>= bHasYAxisTitle;
-            aAny = xProp->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasZAxisTitle" )));
-            aAny >>= bHasZAxisTitle;
-
-            aAny = xProp->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasXAxisGrid" )));
-            aAny >>= bHasXAxisMajorGrid;
-            aAny = xProp->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasXAxisHelpGrid" )));
-            aAny >>= bHasXAxisMinorGrid;
-
-            aAny = xProp->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasYAxisGrid" )));
-            aAny >>= bHasYAxisMajorGrid;
-            aAny = xProp->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasYAxisHelpGrid" )));
-            aAny >>= bHasYAxisMinorGrid;
-
-            aAny = xProp->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasZAxisGrid" )));
-            aAny >>= bHasZAxisMajorGrid;
-            aAny = xProp->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasZAxisHelpGrid" )));
-            aAny >>= bHasZAxisMinorGrid;
-        }
-        catch( beans::UnknownPropertyException )
-        {
-            DBG_WARNING( "Required property not found in ChartDocument" );
-        }
-    }
-#else
+    // get multiple properties using XMultiPropertySet
     MultiPropertySetHandler aDiagramProperties (xDiagram);
 
     //  Check for supported services and then the properties provided by this service.
@@ -1961,18 +1870,23 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
     aDiagramProperties.Add (
         OUString (RTL_CONSTASCII_USTRINGPARAM ("HasZAxisHelpGrid")), bHasZAxisMinorGrid);
 
+    aDiagramProperties.Add(
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("Dim3D")), bIs3DChart);
+
     if ( ! aDiagramProperties.GetProperties ())
     {
         DBG_WARNING ("Required properties not found in Chart diagram");
     }
-#endif
 
     SvXMLElementExport* pAxis = NULL;
 
     // x axis
     // -------
 
-    if( bHasXAxis )
+    // write axis element also if the axis itself is not visible, but a grid or
+    // title
+    if( bHasXAxis ||
+        bHasXAxisTitle || bHasXAxisMajorGrid || bHasXAxisMinorGrid )
     {
         uno::Reference< chart::XAxisXSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
         if( xAxisSupp.is())
@@ -2132,8 +2046,10 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
     // y axis
     // -------
 
+    // write axis element also if the axis itself is not visible, but a grid or
+    // title
     if( bHasYAxis ||
-        ! ( bHasYAxis && bHasSecondaryYAxis ))  // no y axes at all => write at least primary
+        bHasYAxisTitle || bHasYAxisMajorGrid || bHasYAxisMinorGrid )
     {
         uno::Reference< chart::XAxisYSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
         if( xAxisSupp.is())
@@ -2282,7 +2198,8 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
     // z axis
     // -------
 
-    if( bHasZAxis )
+    if( bHasZAxis &&
+        bIs3DChart )
     {
         uno::Reference< chart::XAxisZSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
         if( xAxisSupp.is())
