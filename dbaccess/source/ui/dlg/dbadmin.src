@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:00:57 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1733,7 +1733,7 @@ TabPage PAGE_LDAP
         Text[ greek ] = "~Rows (max.)";
         Text[ dutch ] = "~Records (max.)";
         Text[ french ] = "Enregistrements (max.)";
-        Text[ spanish ] = "~Rows (max.)";
+        Text[ spanish ] = "~Registros de datos (máx.)";
         Text[ finnish ] = "~Rows (max.)";
         Text[ italian ] = "~Record (max.)";
         Text[ danish ] = "~Rows (max.)";
@@ -3278,6 +3278,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.62  2001/07/13 21:00:57  kz
+ *  Merge SRC638: 13.07.01 - 23:00:20
+ *
  *  Revision 1.61  2001/06/29 02:11:31  kz
  *  Merge SRC633: 29.06.01 - 04:11:10
  *
@@ -3352,6 +3355,7 @@ String STR_ADDRESSBOOK_LDAP
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
