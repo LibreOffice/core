@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-13 10:03:17 $
+ *  last change: $Author: dr $ $Date: 2001-05-18 09:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,9 @@
 #define TP_OPTIONS          2
 
 // TP_SORT_FIELDS:
-#define GB_SORT1            1
-#define GB_SORT2            2
-#define GB_SORT3            3
+#define FL_SORT1            1
+#define FL_SORT2            2
+#define FL_SORT3            3
 #define LB_SORT1            4
 #define LB_SORT2            5
 #define LB_SORT3            6
@@ -106,9 +106,10 @@
 #define BTN_LEFT_RIGHT      13
 #define STR_COL_LABEL       14
 #define STR_ROW_LABEL       15
-#define FL_LANGUAGE         16
+#define FT_LANGUAGE         16
 #define LB_LANGUAGE         17
-#define LB_ALGORITHM        18
+#define FT_ALGORITHM        18
+#define LB_ALGORITHM        19
 
 
 

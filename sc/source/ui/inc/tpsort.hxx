@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsort.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-13 10:03:17 $
+ *  last change: $Author: dr $ $Date: 2001-05-18 09:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,6 @@
 #include <vcl/lstbox.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _STDCTRL_HXX //autogen
 #include <svtools/stdctrl.hxx>
 #endif
@@ -127,20 +123,20 @@ protected:
     virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
 
 private:
+    FixedLine       aFlSort1;
     ListBox         aLbSort1;
     RadioButton     aBtnUp1;
     RadioButton     aBtnDown1;
-    GroupBox        aGbSort1;
 
+    FixedLine       aFlSort2;
     ListBox         aLbSort2;
     RadioButton     aBtnUp2;
     RadioButton     aBtnDown2;
-    GroupBox        aGbSort2;
 
+    FixedLine       aFlSort3;
     ListBox         aLbSort3;
     RadioButton     aBtnUp3;
     RadioButton     aBtnDown3;
-    GroupBox        aGbSort3;
 
     String          aStrUndefined;
     String          aStrColumn;
@@ -159,7 +155,7 @@ private:
 
     ListBox*            aSortLbArr[3];
     RadioButton*        aDirBtnArr[3][2];
-    GroupBox*           aGbArr[3];
+    FixedLine*          aFlArr[3];
 
 #ifdef _TPSORT_CXX
 private:
@@ -203,32 +199,33 @@ protected:
 
 private:
 
-    CheckBox    aBtnCase;
-    CheckBox    aBtnHeader;
-    CheckBox    aBtnFormats;
+    CheckBox            aBtnCase;
+    CheckBox            aBtnHeader;
+    CheckBox            aBtnFormats;
 
-    CheckBox    aBtnCopyResult;
-    ListBox     aLbOutPos;
-    Edit        aEdOutPos;
+    CheckBox            aBtnCopyResult;
+    ListBox             aLbOutPos;
+    Edit                aEdOutPos;
 
-    CheckBox    aBtnSortUser;
-    ListBox     aLbSortUser;
+    CheckBox            aBtnSortUser;
+    ListBox             aLbSortUser;
 
-    FixedLine   aLineLang;
-    SvxLanguageBox aLbLanguage;
-    ListBox     aLbAlgorithm;
+    FixedText           aFtLanguage;
+    SvxLanguageBox      aLbLanguage;
+    FixedText           aFtAlgorithm;
+    ListBox             aLbAlgorithm;
 
-    FixedLine   aLineDirection;
-    RadioButton aBtnTopDown;
-    RadioButton aBtnLeftRight;
+    FixedLine           aLineDirection;
+    RadioButton         aBtnTopDown;
+    RadioButton         aBtnLeftRight;
 
-    FixedText   aFtAreaLabel;
-//  FixedInfo   aFtArea;
-    String      aStrRowLabel;
-    String      aStrColLabel;
-    String      aStrUndefined;
-    String      aStrNoName;
-    String      aStrAreaLabel;
+    FixedText           aFtAreaLabel;
+//  FixedInfo           aFtArea;
+    String              aStrRowLabel;
+    String              aStrColLabel;
+    String              aStrUndefined;
+    String              aStrNoName;
+    String              aStrAreaLabel;
 
     const USHORT        nWhichSort;
     const ScSortParam&  rSortData;
