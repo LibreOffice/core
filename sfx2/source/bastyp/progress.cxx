@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:48:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,7 @@ void SfxProgress_Impl::Enable_Impl( BOOL bEnable )
     while ( pFrame )
     {
         pFrame->Enable(bEnable);
-        if ( pDoc )
-            pFrame->GetDispatcher()->Lock( !bEnable );
+        pFrame->GetDispatcher()->Lock( !bEnable );
         pFrame = SfxViewFrame::GetNext(*pFrame, pDoc);
     }
 
@@ -186,7 +185,7 @@ void SfxProgress_Impl::Enable_Impl( BOOL bEnable )
     }
 
     if ( !pDoc )
-        SFX_APP()->LockDispatcher( !bEnable );
+        SFX_APP()->GetAppDispatcher_Impl()->Lock( !bEnable );
 }
 
 // -----------------------------------------------------------------------
