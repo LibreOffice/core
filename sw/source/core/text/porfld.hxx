@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:56:44 $
+ *  last change: $Author: rt $ $Date: 2004-02-10 14:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ protected:
     XubString  aExpand;            // das expandierte Feld
     SwFont  *pFnt;              // Fuer mehrzeilige Felder
     xub_StrLen nNextOffset;     // Offset des Follows im Originalstring
+    xub_StrLen nNextScriptChg;
     KSHORT  nViewWidth;         // Screenbreite fuer leere Felder
     sal_Bool bFollow : 1;           // 2. oder weiterer Teil eines Feldes
     sal_Bool bLeft : 1;             // wird von SwNumberPortion benutzt
@@ -95,7 +96,6 @@ protected:
 
     inline void SetFont( SwFont *pNew ) { pFnt = pNew; }
     inline const SwFont *GetFont() const { return pFnt; }
-    BYTE ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull );
 public:
     SwFldPortion( const SwFldPortion& rFld );
     SwFldPortion( const XubString &rExpand, SwFont *pFnt = 0 );
@@ -132,6 +132,9 @@ public:
 
     inline xub_StrLen GetNextOffset() const { return nNextOffset; }
     inline void SetNextOffset( xub_StrLen nNew ) { nNextOffset = nNew; }
+
+    inline xub_StrLen GetNextScriptChg() const { return nNextScriptChg; }
+    inline void SetNextScriptChg( xub_StrLen nNew ) { nNextScriptChg = nNew; }
 
     // Felder-Cloner fuer SplitGlue
     virtual SwFldPortion *Clone( const XubString &rExpand ) const;
