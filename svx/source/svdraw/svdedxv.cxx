@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-11 10:15:22 $
+ *  last change: $Author: aw $ $Date: 2001-07-20 12:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,6 +740,14 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
             if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
             pTextEditOutliner->ClearModifyFlag();
+
+            // #71519#
+            {
+                SdrFitToSizeType eFit = ((SdrTextObj*)pTextEditObj)->GetFitToSize();
+                if((eFit == SDRTEXTFIT_PROPORTIONAL || eFit == SDRTEXTFIT_ALLLINES) && pWin)
+                    pWin->Invalidate(aTextEditArea);
+            }
+
             return TRUE; // Gut gelaufen, TextEdit laeuft nun
         } else {
             bBrk=TRUE;
@@ -941,7 +949,7 @@ BOOL SdrObjEditView::IsTextEditHit(const Point& rHit, short nTol) const
                 if( pRef )
                     nHitTol = pRef->LogicToLogic( nHitTol, MAP_100TH_MM, pRef->GetMapMode().GetMapUnit() );
 
-                bOk = pTextEditOutliner->IsTextPos( aPnt, nHitTol );
+                bOk = pTextEditOutliner->IsTextPos( aPnt, (sal_uInt16)nHitTol );
             }
         }
     }
