@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-14 15:47:28 $
+ *  last change: $Author: dl $ $Date: 2001-02-09 11:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
+#ifndef _SVDETC_HXX //autogen
+#include <svx/svdetc.hxx>
+#endif
 
 #ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
@@ -129,6 +132,19 @@
 
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
+#endif
+
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
 #endif
 
 #ifndef _SD_STLSHEET_HXX
@@ -770,7 +786,6 @@ USHORT __EXPORT SdViewShell::Print(SfxProgress& rProgress, PrintDialog* pDlg)
     rProgress.SetText( String( SdResId( STR_STATSTR_PRINT ) ) );
 
     PrintDialogRange    eOption;
-    International       aInternational;
     MultiSelection      aPrintSelection;
     String      aTimeDateStr;
     Font        aTimeDateFont(FAMILY_SWISS, Size(0, 423));
@@ -792,12 +807,12 @@ USHORT __EXPORT SdViewShell::Print(SfxProgress& rProgress, PrintDialog* pDlg)
     {
         if ( pPrintOpts->IsDate() )
         {
-            aTimeDateStr += aInternational.GetDate(Date());
+            aTimeDateStr += SdrGlobalData::pLocaleData->getDate( Date() );
             aTimeDateStr += (sal_Unicode)' ';
         }
 
         if ( pPrintOpts->IsTime() )
-            aTimeDateStr += aInternational.GetTime(Time(), FALSE, FALSE);
+            aTimeDateStr += SdrGlobalData::pLocaleData->getTime( Time(), FALSE, FALSE );
 
         if ( pPrintOpts->IsOutline() )
             bPrintOutline = TRUE;
