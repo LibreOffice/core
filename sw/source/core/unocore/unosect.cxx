@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-05 09:22:10 $
+ *  last change: $Author: dvo $ $Date: 2002-04-26 12:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ struct SwTextSectionProperties_Impl
     SwFmtNoBalancedColumns *pNoBalanceItem;
     sal_Bool    bDDE;
     sal_Bool    bHidden;
+    sal_Bool    bCondHidden;
     sal_Bool    bProtect;
     sal_Bool    bUpdateType;
 
@@ -182,6 +183,7 @@ struct SwTextSectionProperties_Impl
         bDDE(0),
         bHidden(0),
         bProtect(0),
+        bCondHidden(0),
         pColItem(0),
         pBrushItem(0),
         pFtnItem(0),
@@ -413,6 +415,11 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
 
         pRet = pDoc->Insert( aPam, aSect, aSet.Count() ? &aSet : 0 );
         pRet->GetFmt()->Add(this);
+
+        // #97450# XML import must hide sections depending on their old
+        //         condition status
+        if( pProps->sCondition.Len() != 0 )
+            pRet->SetCondHidden(pProps->bCondHidden);
 
         // set update type if DDE link (and connect, if necessary)
         if (pProps->bDDE)
@@ -671,6 +678,16 @@ void SwXTextSection::setPropertyValues(
                             aSection.SetHidden(!bVal);
                     }
                     break;
+                    case WID_SECT_CURRENTLY_VISIBLE:
+                    {
+                        sal_Bool bVal = *(sal_Bool*)pValues[nProperty].getValue();
+                        if(m_bIsDescriptor)
+                            pProps->bCondHidden = !bVal;
+                        else
+                            if( aSection.GetCondition().Len() != 0 )
+                                aSection.SetCondHidden(!bVal);
+                    }
+                    break;
                     case WID_SECT_PROTECTED:
                     {
                         sal_Bool bVal = *(sal_Bool*)pValues[nProperty].getValue();
@@ -890,6 +907,12 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                     {
                         sal_Bool bTemp = m_bIsDescriptor ? !pProps->bHidden : !pSect->IsHidden();
                         pRet[nProperty].setValue( &bTemp, ::getCppuBooleanType());
+                    }
+                    break;
+                    case WID_SECT_CURRENTLY_VISIBLE:
+                    {
+                        sal_Bool bTmp = m_bIsDescriptor ? !pProps->bCondHidden : !pSect->IsCondHidden();
+                        pRet[nProperty].setValue( &bTmp, ::getCppuBooleanType());
                     }
                     break;
                     case WID_SECT_PROTECTED:

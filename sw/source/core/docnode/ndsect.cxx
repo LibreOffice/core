@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:15:44 $
+ *  last change: $Author: dvo $ $Date: 2002-04-26 12:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,8 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
     {
         // dann berechne bis zu dieser Position
         SwCalc aCalc( *this );
-        FldsToCalc( aCalc, pNewSectNode->GetIndex() );
+        if( ! IsInReading() )
+            FldsToCalc( aCalc, pNewSectNode->GetIndex() );
         SwSection& rNewSect = pNewSectNode->GetSection();
         rNewSect.SetCondHidden( aCalc.Calculate( rNewSect.GetCondition() ).GetBool() );
     }
