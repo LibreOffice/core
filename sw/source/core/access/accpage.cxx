@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:16 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 12:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
 #ifndef _ACCPAGE_HXX
@@ -180,7 +183,7 @@ void SwAccessiblePage::_InvalidateFocus()
 
 SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pMap,
                                     const SwPageFrm *pFrame ) :
-    SwAccessibleContext( pMap, 0, pFrame )
+    SwAccessibleContext( pMap, AccessibleRole::PANEL, pFrame )
 {
     DBG_ASSERT( pFrame != NULL, "need frame" );
     DBG_ASSERT( pMap != NULL, "need map" );
@@ -195,7 +198,7 @@ SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pMap,
 
 SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pMap,
                                     const SwFrm *pFrame ) :
-    SwAccessibleContext( pMap, 0, pFrame )
+    SwAccessibleContext( pMap, AccessibleRole::PANEL, pFrame )
 {
     DBG_ASSERT( pFrame != NULL, "need frame" );
     DBG_ASSERT( pMap != NULL, "need map" );
