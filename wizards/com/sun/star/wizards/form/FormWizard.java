@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormWizard.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $  $Date: 2005-03-18 16:18:09 $
+ *  last change: $Author: hr $  $Date: 2005-04-06 11:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.lang.XComponent;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.document.OfficeDocument;
@@ -290,31 +291,33 @@ public class FormWizard extends WizardDialog{
     }
 
 
-    public void startFormWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue){
-    try{
-        curFormDocument =  new FormDocument(xMSF, true, false, oResource);
-        if (curFormDocument.oMainFormDBMetaData.getConnection(CurPropertyValue)){
-            curFormDocument.oSubFormDBMetaData.getConnection(new PropertyValue[]{Properties.createProperty("ActiveConnection", curFormDocument.oMainFormDBMetaData.DBConnection)});
-            curFormDocument.xProgressBar.setValue(20);
-            buildSteps();
-            this.curDBCommandFieldSelection.preselectCommand(CurPropertyValue, false);
-            createWindowPeer(curFormDocument.xWindowPeer);
-            curFormDocument.oMainFormDBMetaData.setWindowPeer(xControl.getPeer());
-    //      setAutoMnemonic("lblDialogHeader", false);
-            insertFormRelatedSteps();
-            short RetValue = executeDialog(curFormDocument.xFrame);
-            xComponent.dispose();
-            if (bcreateForm){
-                curFormDocument.oMainFormDBMetaData.addFormDocument(curFormDocument.xComponent);
-                curFormDocument.oMainFormDBMetaData.openFormDocument( FormName, bFormOpenMode);
+    public XComponent[] startFormWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue){
+        XComponent[] ret = null;
+        try{
+            curFormDocument =  new FormDocument(xMSF, true, false, oResource);
+            if (curFormDocument.oMainFormDBMetaData.getConnection(CurPropertyValue)){
+                curFormDocument.oSubFormDBMetaData.getConnection(new PropertyValue[]{Properties.createProperty("ActiveConnection", curFormDocument.oMainFormDBMetaData.DBConnection)});
+                curFormDocument.xProgressBar.setValue(20);
+                buildSteps();
+                this.curDBCommandFieldSelection.preselectCommand(CurPropertyValue, false);
+                createWindowPeer(curFormDocument.xWindowPeer);
+                curFormDocument.oMainFormDBMetaData.setWindowPeer(xControl.getPeer());
+        //      setAutoMnemonic("lblDialogHeader", false);
+                insertFormRelatedSteps();
+                short RetValue = executeDialog(curFormDocument.xFrame);
+                xComponent.dispose();
+                if (bcreateForm){
+                    curFormDocument.oMainFormDBMetaData.addFormDocument(curFormDocument.xComponent);
+                    ret = curFormDocument.oMainFormDBMetaData.openFormDocument( FormName, bFormOpenMode);
+                }
             }
         }
-    }
-    catch(java.lang.Exception jexception ){
-        jexception.printStackTrace(System.out);
-    }
-    if ((!bcreateForm) && (curFormDocument != null))
-        OfficeDocument.close(curFormDocument.xComponent);
+        catch(java.lang.Exception jexception ){
+            jexception.printStackTrace(System.out);
+        }
+        if ((!bcreateForm) && (curFormDocument != null))
+            OfficeDocument.close(curFormDocument.xComponent);
+        return ret;
     }
 
 
