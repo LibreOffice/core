@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:52:57 $
+ *  last change: $Author: os $ $Date: 2001-02-14 10:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
             {
                 m_pDataArr->DeleteAndDestroy(j, 1);
                 //re-generate positions of the fields
-                m_pSequArr->Remove(0, m_pSequArr->Count());
+                DelSequenceArray();
             }
             break;
         }
@@ -295,7 +295,7 @@ long    SwAuthorityFieldType::AddField(const String& rFieldContents)
         pEntry->AddRef();
         m_pDataArr->Insert(pEntry, m_pDataArr->Count());
         //re-generate positions of the fields
-        m_pSequArr->Remove(0, m_pSequArr->Count());
+        DelSequenceArray();
     }
     return nRet;
 }
@@ -313,9 +313,12 @@ BOOL SwAuthorityFieldType::AddField(long nHandle)
         {
             bRet = TRUE;
             pTemp->AddRef();
+            //re-generate positions of the fields
+            DelSequenceArray();
             break;
         }
     }
+    DBG_ASSERT(bRet, "::AddField(long) failed");
     return bRet;
 }
 /* -----------------17.09.99 14:52-------------------
@@ -439,6 +442,7 @@ void SwAuthorityFieldType::RemoveUnusedFields()
             delete pTemp;
         }
     }
+    DelSequenceArray();
 }
 
 /*-- 11.10.99 08:49:24---------------------------------------------------
@@ -497,6 +501,11 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByPosition(USHORT nPos) const
 USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
 {
     //find the field in a sorted array of handles,
+#ifdef DBG_UTIL
+    sal_Bool bCurrentFieldWithoutTextNode = sal_False;
+#endif
+    if(m_pSequArr->Count() && m_pSequArr->Count() != m_pDataArr->Count())
+        DelSequenceArray();
     if(!m_pSequArr->Count())
     {
         SwTOXSortTabBases aSortArr;
@@ -512,7 +521,13 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             SwAuthorityField* pAFld = (SwAuthorityField*)pFmtFld->GetFld();
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
             if(!pTxtFld)
+            {
+#ifdef DBG_UTIL
+                if(nHandle == pAFld->GetHandle())
+                    bCurrentFieldWithoutTextNode = sal_True;
+#endif
                 continue;
+            }
             const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
             ULONG nPos = rTxtNode.GetIndex();
             if( rTxtNode.GetTxt().Len() && rTxtNode.GetFrm() &&
@@ -520,8 +535,8 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             {
                 SwTOXAuthority* pNew = new SwTOXAuthority( rTxtNode,
                                                             *pFmtFld, aIntl );
-                Range aRange(0, aSortArr.Count());
-                for(short i = (short)aRange.Min(); i < (short)aRange.Max(); ++i)
+
+                for(short i = 0; i < aSortArr.Count(); ++i)
                 {
                     SwTOXSortTabBase* pOld = aSortArr[i];
                     if(*pOld == *pNew)
@@ -529,22 +544,23 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
                         //only the first occurence in the document
                         //has to be in the array
                         if(*pOld < *pNew)
-                        {
                             DELETEZ(pNew);
-                            break;
-                        }
-                        else
-                        {
-                            // remove the old content
+                        else // remove the old content
                             aSortArr.DeleteAndDestroy( i, 1 );
-                            continue;
-                        }
-                    }
-                    else if(*pNew < *pOld)
                         break;
+                    }
                 }
+                //if it still exists - insert at the correct position
                 if(pNew)
-                    aSortArr.Insert(pNew, i );
+                {
+                    for(short j = 0; j < aSortArr.Count(); ++j)
+                    {
+                        SwTOXSortTabBase* pOld = aSortArr[j];
+                        if(*pNew < *pOld)
+                            break;
+                    }
+                    aSortArr.Insert(pNew, j );
+                }
             }
         }
 
@@ -567,7 +583,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             break;
         }
     }
-    ASSERT(nRet, "Handle not found")
+    ASSERT(bCurrentFieldWithoutTextNode || nRet, "Handle not found")
     return nRet;
 }
 /* -----------------------------15.11.00 17:33--------------------------------
@@ -685,7 +701,7 @@ BOOL    SwAuthorityFieldType::PutValue( const Any& rVal, const String& rProperty
 void SwAuthorityFieldType::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
     //re-generate positions of the fields
-    m_pSequArr->Remove(0, m_pSequArr->Count());
+    DelSequenceArray();
     SwModify::Modify( pOld, pNew );
 }
 /* -----------------20.10.99 13:38-------------------

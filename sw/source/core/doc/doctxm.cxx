@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 20:45:17 $
+ *  last change: $Author: os $ $Date: 2001-02-14 10:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2196,7 +2196,31 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
                                       aRange, *pNew->pTOXIntl );
         }
     }
-    // Pos suchen und einfuegen
+    //search for identical entries and remove the trailing one
+    if(TOX_AUTHORITIES == SwTOXBase::GetType())
+    {
+        for(short i = (short)aRange.Min(); i < (short)aRange.Max(); ++i)
+        {
+            SwTOXSortTabBase* pOld = aSortArr[i];
+            if(*pOld == *pNew)
+            {
+                if(*pOld < *pNew)
+                {
+                    delete pNew;
+                    return;
+                }
+                else
+                {
+                    // remove the old content
+                    aSortArr.DeleteAndDestroy( i, 1 );
+                    aRange.Max()--;
+                    break;
+                }
+            }
+        }
+    }
+
+    // find position and insert
     //
     for(short i = (short)aRange.Min(); i < (short)aRange.Max(); ++i)
     {   // nur auf gleicher Ebene pruefen
@@ -2204,23 +2228,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
         SwTOXSortTabBase* pOld = aSortArr[i];
         if(*pOld == *pNew)
         {
-            if(TOX_AUTHORITIES == SwTOXBase::GetType())
-            {
-                //only the first occurence in the document
-                //has to be in the array
-                if(*pOld < *pNew)
-                {
-                    delete pNew;
-                }
-                else
-                {
-                    // remove the old content
-                    aSortArr.DeleteAndDestroy( i, 1 );
-                    aSortArr.Insert(pNew, i );
-                }
-                return;
-            }
-            else
+            if(TOX_AUTHORITIES != SwTOXBase::GetType())
             {
                 // Eigener Eintrag fuer Doppelte oder Keywords
                 //
@@ -2240,6 +2248,10 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
                 delete pNew;
                 return;
             }
+#ifdef DBG_UTIL
+            else
+                DBG_ERROR("Bibliography entries cannot be found here")
+#endif
         }
         if(*pNew < *pOld)
             break;

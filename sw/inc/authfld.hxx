@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:06:33 $
+ *  last change: $Author: os $ $Date: 2001-02-14 10:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include <toxe.hxx>
 #endif
 
+#define _SVSTDARR_LONGS
+#include <svtools/svstdarr.hxx>
+
 class SwAuthDataArr;
 /* -----------------21.09.99 13:32-------------------
 
@@ -108,7 +111,6 @@ struct SwTOXSortKey
  --------------------------------------------------*/
 class SvUShorts;
 class SwAuthorityField;
-class SvLongs;
 class SortKeyArr;
 class SwAuthorityFieldType : public SwFieldType
 {
@@ -140,6 +142,10 @@ public:
     void                RemoveField(long nHandle);
     long                AddField(const String& rFieldContents);
     BOOL                AddField(long nHandle);
+    void                DelSequenceArray()
+                        {
+                            m_pSequArr->Remove(0, m_pSequArr->Count());
+                        }
 
     const SwAuthEntry*  GetEntryByHandle(long nHandle) const;
 
@@ -160,7 +166,11 @@ public:
     USHORT              GetSequencePos(long nHandle);
 
     BOOL                IsSequence() const      {return m_bIsSequence;}
-    void                SetSequence(BOOL bSet)  {m_bIsSequence = bSet;}
+    void                SetSequence(BOOL bSet)
+                            {
+                                DelSequenceArray();
+                                m_bIsSequence = bSet;
+                            }
 
     void                SetPreSuffix( sal_Unicode cPre, sal_Unicode cSuf)
                             {
@@ -171,7 +181,11 @@ public:
     sal_Unicode         GetSuffix() const { return m_cSuffix;}
 
     BOOL                IsSortByDocument() const {return m_bSortByDocument;}
-    void                SetSortByDocument(BOOL bSet) {m_bSortByDocument = bSet;}
+    void                SetSortByDocument(BOOL bSet)
+                            {
+                                DelSequenceArray();
+                                m_bSortByDocument = bSet;
+                            }
 
     USHORT              GetSortKeyCount() const ;
     const SwTOXSortKey* GetSortKey(USHORT nIdx) const ;
@@ -213,13 +227,12 @@ public:
 // --- inlines -----------------------------------------------------------
 inline const String&    SwAuthEntry::GetAuthorField(ToxAuthorityField ePos)const
 {
-    if(AUTH_FIELD_END > ePos)
-        return aAuthFields[ePos];
-    else
-        return aEmptyStr;
+    DBG_ASSERT(AUTH_FIELD_END > ePos, "wrong index")
+    return aAuthFields[ePos];
 }
 inline void SwAuthEntry::SetAuthorField(ToxAuthorityField ePos, const String& rField)
 {
+    DBG_ASSERT(AUTH_FIELD_END > ePos, "wrong index")
     if(AUTH_FIELD_END > ePos)
         aAuthFields[ePos] = rField;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-27 13:30:09 $
+ *  last change: $Author: os $ $Date: 2001-02-14 10:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,9 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-
+#ifndef _TXTFLD_HXX
+#include <txtfld.hxx>
+#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -757,6 +759,8 @@ SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
     SwTOXSortTabBase( TOX_SORT_AUTHORITY, &rNd, 0, &rIntl ),
     m_rField(rField)
 {
+    if(rField.GetTxtFld())
+        nCntPos = *rField.GetTxtFld()->GetStart();
 }
 
 USHORT  SwTOXAuthority::GetLevel() const
