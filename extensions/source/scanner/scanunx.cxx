@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanunx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 12:15:09 $
+ *  last change: $Author: hr $ $Date: 2001-11-02 11:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,9 @@ void ScannerThread::run()
     else
         m_pHolder->m_nError = ScanError_ScannerNotAvailable;
 
-    m_xListener->disposing( com::sun::star::lang::EventObject( REF( XInterface )( static_cast< OWeakObject* >( m_pManager ) ) ) );
+
+    REF( XInterface ) xXInterface( static_cast< OWeakObject* >( m_pManager ) );
+    m_xListener->disposing( com::sun::star::lang::EventObject(xXInterface) );
 }
 
 // ------------------
