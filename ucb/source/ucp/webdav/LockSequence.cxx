@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LockSequence.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 11:37:31 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 14:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,9 @@ struct LockSequenceParseContext
 };
 
 //////////////////////////////////////////////////////////////////////////
-extern "C" static int validate_callback( void * userdata,
-                                         ne_xml_elmid parent,
-                                         ne_xml_elmid child )
+extern "C" int LockSequence_validate_callback( void * userdata,
+                                               ne_xml_elmid parent,
+                                               ne_xml_elmid child )
 {
     // @@@
     return NE_XML_VALID;
@@ -118,9 +118,9 @@ extern "C" static int validate_callback( void * userdata,
 
 //////////////////////////////////////////////////////////////////////////
 // static
-extern "C" static int endelement_callback( void * userdata,
-                                           const struct ne_xml_elm * s,
-                                           const char * cdata )
+extern "C" int LockSequence_endelement_callback( void * userdata,
+                                                 const struct ne_xml_elm * s,
+                                                 const char * cdata )
 {
     LockSequenceParseContext * pCtx
                     = static_cast< LockSequenceParseContext * >( userdata );
@@ -234,9 +234,9 @@ bool LockSequence::createFromXML( const rtl::OString & rInData,
         LockSequenceParseContext aCtx;
         ne_xml_push_handler( parser,
                                   elements,
-                                  validate_callback,
+                                  LockSequence_validate_callback,
                                   0, // startelement_callback
-                                  endelement_callback,
+                                  LockSequence_endelement_callback,
                                   &aCtx );
 
         ne_xml_parse( parser,

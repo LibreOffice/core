@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LockEntrySequence.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 11:37:30 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 14:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,18 +98,18 @@ struct LockEntrySequenceParseContext
 };
 
 //////////////////////////////////////////////////////////////////////////
-extern "C" static int validate_callback( void * userdata,
-                                         ne_xml_elmid parent,
-                                         ne_xml_elmid child )
+extern "C" int LinkEntrySequence_validate_callback( void * userdata,
+                                                    ne_xml_elmid parent,
+                                                    ne_xml_elmid child )
 {
     // @@@
     return NE_XML_VALID;
 }
 
 //////////////////////////////////////////////////////////////////////////
-extern "C" static int endelement_callback( void * userdata,
-                                           const struct ne_xml_elm * s,
-                                           const char * cdata )
+extern "C" int LinkEntrySequence_endelement_callback( void * userdata,
+                                                      const struct ne_xml_elm * s,
+                                                      const char * cdata )
 {
     LockEntrySequenceParseContext * pCtx
                 = static_cast< LockEntrySequenceParseContext * >( userdata );
@@ -161,9 +161,9 @@ bool LockEntrySequence::createFromXML( const rtl::OString & rInData,
         LockEntrySequenceParseContext aCtx;
         ne_xml_push_handler( parser,
                                   elements,
-                                  validate_callback,
+                                  LinkEntrySequence_validate_callback,
                                   0, // startelement_callback
-                                  endelement_callback,
+                                  LinkEntrySequence_endelement_callback,
                                   &aCtx );
 
         ne_xml_parse( parser,

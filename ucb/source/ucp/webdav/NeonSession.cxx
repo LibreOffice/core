@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 11:37:32 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 14:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,9 +193,9 @@ static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
 // ResponseBlockReader
 // A simple Neon response_block_reader for use with an XInputStream
 // -------------------------------------------------------------------
-extern "C" static void ResponseBlockReader( void *       inUserData,
-                                            const char * inBuf,
-                                            size_t       inLen )
+extern "C" void NeonSession_ResponseBlockReader( void *       inUserData,
+                                                 const char * inBuf,
+                                                 size_t       inLen )
 {
     // neon calls this function with (inLen == 0)...
     if ( inLen > 0 )
@@ -210,9 +210,9 @@ extern "C" static void ResponseBlockReader( void *       inUserData,
 // ResponseBlockWriter
 // A simple Neon response_block_reader for use with an XOutputStream
 // -------------------------------------------------------------------
-extern "C" static void ResponseBlockWriter( void *       inUserData,
-                                            const char * inBuf,
-                                            size_t       inLen )
+extern "C" void NeonSession_ResponseBlockWriter( void *       inUserData,
+                                                 const char * inBuf,
+                                                 size_t       inLen )
 {
     // neon calls this function with (inLen == 0)...
     if ( inLen > 0 )
@@ -229,11 +229,11 @@ extern "C" static void ResponseBlockWriter( void *       inUserData,
     }
 }
 
-extern "C" static int NeonAuth( void *      inUserData,
-                                const char *    inRealm,
-                                int          attempt,
-                                char *       inoutUserName,
-                                char *       inoutPassWord )
+extern "C" int NeonAuth( void *     inUserData,
+                         const char *   inRealm,
+                         int          attempt,
+                         char *       inoutUserName,
+                         char *       inoutPassWord )
 {
     NeonSession * theSession = static_cast< NeonSession * >( inUserData );
     if ( !theSession->getServerAuthListener() )
@@ -266,17 +266,17 @@ extern "C" static int NeonAuth( void *      inUserData,
 }
 
 
-extern "C" static void ProgressNotify( void * userdata,
-                                       off_t progress,
-                                       off_t total )
+extern "C" void NeonSession_ProgressNotify( void * userdata,
+                                            off_t progress,
+                                            off_t total )
 {
     // progress: bytes read so far
     // total:    total bytes to read, -1 -> total count not known
 }
 
-extern "C" static void StatusNotify( void * userdata,
-                                     ne_conn_status status,
-                                     const char *info )
+extern "C" void NeonSession_StatusNotify( void * userdata,
+                                          ne_conn_status status,
+                                          const char *info )
 {
 #if 0
     typedef enum {
@@ -290,9 +290,9 @@ extern "C" static void StatusNotify( void * userdata,
     // info: hostname
 }
 
-extern "C" static void PreSendRequest( ne_request * req,
-                                       void * userdata,
-                                       ne_buffer * headers )
+extern "C" void NeonSession_PreSendRequest( ne_request * req,
+                                            void * userdata,
+                                            ne_buffer * headers )
 {
     // userdata -> value returned by 'create'
 
@@ -660,7 +660,7 @@ uno::Reference< io::XInputStream > NeonSession::GET(
     int theRetVal = GET( m_pHttpSession,
                          rtl::OUStringToOString(
                              inPath, RTL_TEXTENCODING_UTF8 ),
-                         ResponseBlockReader,
+                         NeonSession_ResponseBlockReader,
                          theInputStream );
     HandleError( theRetVal );
     return theInputStream;
@@ -682,7 +682,7 @@ void NeonSession::GET( const rtl::OUString &                 inPath,
     int theRetVal = GET( m_pHttpSession,
                          rtl::OUStringToOString(
                              inPath, RTL_TEXTENCODING_UTF8 ),
-                         ResponseBlockWriter,
+                         NeonSession_ResponseBlockWriter,
                          &ioOutputStream );
     HandleError( theRetVal );
 }
@@ -745,7 +745,7 @@ uno::Reference< io::XInputStream > NeonSession::POST(
                             inPath, RTL_TEXTENCODING_UTF8 ),
                           reinterpret_cast< const char * >(
                               aDataToSend.getConstArray() ),
-                          ResponseBlockReader,
+                          NeonSession_ResponseBlockReader,
                           theInputStream,
                           rContentType,
                           rReferer );
@@ -780,7 +780,7 @@ void NeonSession::POST( const rtl::OUString & inPath,
                             inPath, RTL_TEXTENCODING_UTF8 ),
                           reinterpret_cast< const char * >(
                               aDataToSend.getConstArray() ),
-                          ResponseBlockWriter,
+                          NeonSession_ResponseBlockWriter,
                           &oOutputStream,
                           rContentType,
                           rReferer );
@@ -1035,11 +1035,13 @@ HttpSession * NeonSession::CreateSession( const ::rtl::OUString & inScheme,
                                                 inHostName, inPort ) );
 
     // Set a progress callback for the session.
-    ne_set_progress( theHttpSession, ProgressNotify, theHttpSession );
+    ne_set_progress(
+        theHttpSession, NeonSession_ProgressNotify, theHttpSession );
 
     // Set a status notification callback for the session, to report
     // connection status.
-    ne_set_status( theHttpSession, StatusNotify, theHttpSession );
+    ne_set_status(
+        theHttpSession, NeonSession_StatusNotify, theHttpSession );
 
     // Add hooks (i.e. for adding additional headers to the request)
 
@@ -1056,7 +1058,8 @@ HttpSession * NeonSession::CreateSession( const ::rtl::OUString & inScheme,
     //typedef void (*ne_pre_send_fn)(ne_request *req, void *userdata,
     //               ne_buffer *header);
 
-    ne_hook_pre_send( theHttpSession, PreSendRequest, this );
+    ne_hook_pre_send(
+        theHttpSession, NeonSession_PreSendRequest, this );
 
 #if 0
     /* Hook called after the request is sent. May return:

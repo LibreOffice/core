@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UCBDeadPropertyValue.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 11:37:32 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 14:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,9 @@ struct UCBDeadPropertyValueParseContext
 };
 
 //////////////////////////////////////////////////////////////////////////
-extern "C" static int validate_callback( void * userdata,
-                                         ne_xml_elmid parent,
-                                         ne_xml_elmid child )
+extern "C" int UCBDeadPropertyValue_validate_callback( void * userdata,
+                                                       ne_xml_elmid parent,
+                                                       ne_xml_elmid child )
 {
     switch ( parent )
     {
@@ -152,9 +152,9 @@ extern "C" static int validate_callback( void * userdata,
 
 //////////////////////////////////////////////////////////////////////////
 // static
-extern "C" static int endelement_callback( void * userdata,
-                                           const struct ne_xml_elm * s,
-                                           const char * cdata )
+extern "C" int UCBDeadPropertyValue_endelement_callback( void * userdata,
+                                                         const struct ne_xml_elm * s,
+                                                         const char * cdata )
 {
     UCBDeadPropertyValueParseContext * pCtx
             = static_cast< UCBDeadPropertyValueParseContext * >( userdata );
@@ -379,9 +379,9 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
         UCBDeadPropertyValueParseContext aCtx;
         ne_xml_push_handler( parser,
                                   elements,
-                                  validate_callback,
+                                  UCBDeadPropertyValue_validate_callback,
                                   0, // startelement_callback
-                                  endelement_callback,
+                                  UCBDeadPropertyValue_endelement_callback,
                                   &aCtx );
 
         ne_xml_parse( parser, rInData.getStr(), rInData.getLength() );

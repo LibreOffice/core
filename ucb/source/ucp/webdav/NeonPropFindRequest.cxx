@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 11:37:31 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 14:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,10 @@ using namespace std;
 using namespace webdav_ucp;
 
 // -------------------------------------------------------------------
-extern "C" static int propfind_iter( void* userdata,
-                                     const NeonPropName* pname,
-                                     const char* value,
-                                     const HttpStatus* status )
+extern "C" int NPFR_propfind_iter( void* userdata,
+                                   const NeonPropName* pname,
+                                   const char* value,
+                                   const HttpStatus* status )
 {
     /*
         HTTP Response Status Classes:
@@ -202,16 +202,16 @@ extern "C" static int propfind_iter( void* userdata,
 }
 
 // -------------------------------------------------------------------
-extern "C" static void propfind_results( void* userdata,
-                                         const char* href,
-                                         const NeonPropFindResultSet* set )
+extern "C" void NPFR_propfind_results( void* userdata,
+                                       const char* href,
+                                       const NeonPropFindResultSet* set )
 {
     // @@@ href is not the uri! DAVResource ctor wants uri!
 
     DAVResource theResource(
                         OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
 
-    ne_propset_iterate( set, propfind_iter, &theResource );
+    ne_propset_iterate( set, NPFR_propfind_iter, &theResource );
 
     // Add entry to resources list.
     vector< DAVResource > * theResources
@@ -220,10 +220,10 @@ extern "C" static void propfind_results( void* userdata,
 }
 
 // -------------------------------------------------------------------
-extern "C" static int propnames_iter( void* userdata,
-                                      const NeonPropName* pname,
-                                      const char* value,
-                                      const HttpStatus* status )
+extern "C" int NPFR_propnames_iter( void* userdata,
+                                    const NeonPropName* pname,
+                                    const char* value,
+                                    const HttpStatus* status )
 {
     OUString aFullName;
     DAVProperties::createUCBPropName( pname->nspace,
@@ -236,10 +236,9 @@ extern "C" static int propnames_iter( void* userdata,
 }
 
 // -------------------------------------------------------------------
-extern "C" static void propnames_results(
-                                      void* userdata,
-                                      const char* href,
-                                         const NeonPropFindResultSet* results )
+extern "C" void NPFR_propnames_results( void* userdata,
+                                        const char* href,
+                                        const NeonPropFindResultSet* results )
 {
     // @@@ href is not the uri! DAVResourceInfo ctor wants uri!
 
@@ -247,7 +246,7 @@ extern "C" static void propnames_results(
     DAVResourceInfo theResource(
                         OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
     // Fill entry.
-    ne_propset_iterate( results, propnames_iter, &theResource );
+    ne_propset_iterate( results, NPFR_propnames_iter, &theResource );
 
     // Add entry to resources list.
     vector< DAVResourceInfo > * theResources
@@ -281,11 +280,11 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
         thePropNames[ theIndex ].name   = NULL;
 
         nError = ne_simple_propfind( inSession,
-                                          inPath,
-                                          inDepth,
-                                          thePropNames,
-                                          propfind_results,
-                                          &ioResources );
+                                     inPath,
+                                     inDepth,
+                                     thePropNames,
+                                     NPFR_propfind_results,
+                                     &ioResources );
 
         for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )
             free( (void *)thePropNames[ theIndex ].name );
@@ -296,11 +295,11 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
     {
         // ALLPROP
         nError = ne_simple_propfind( inSession,
-                                          inPath,
-                                          inDepth,
-                                          NULL, // 0 == allprop
-                                          propfind_results,
-                                          &ioResources );
+                                     inPath,
+                                     inDepth,
+                                     NULL, // 0 == allprop
+                                     NPFR_propfind_results,
+                                     &ioResources );
     }
 
     // #87585# - Sometimes neon lies (because some servers lie).
@@ -321,10 +320,10 @@ NeonPropFindRequest::NeonPropFindRequest(
                             int & nError )
 {
     nError = ne_propnames( inSession,
-                            inPath,
-                            inDepth,
-                            propnames_results,
-                            &ioResInfo );
+                           inPath,
+                           inDepth,
+                           NPFR_propnames_results,
+                           &ioResInfo );
 
     // #87585# - Sometimes neon lies (because some servers lie).
     if ( ( nError == NE_OK ) && ioResInfo.empty() )
