@@ -474,13 +474,16 @@ Dim lDate as Long
 	End Select
 	Select Case  sCurCountryLocale
 		Case &quot;CN&quot;
-			CalInsertBankholiday(lDate-1, &quot;春节&quot;, cHolidayType_Full)
-			CalInsertBankholiday(lDate, &quot;春节&quot;, cHolidayType_Full)
-			CalInsertBankholiday(lDate+1, &quot;春节&quot;, cHolidayType_Full)
+			CalInsertBankholiday(lDate-1, &quot;农历除夕&quot;, cHolidayType_Full)
+			CalInsertBankholiday(lDate, &quot;春节初一&quot;, cHolidayType_Full)
+			CalInsertBankholiday(lDate+1, &quot;春节初二&quot;, cHolidayType_Full)
+			CalInsertBankholiday(lDate+2, &quot;春节初三&quot;, cHolidayType_Full)
+
 		Case Else
 			CalInsertBankholiday(lDate-1, &quot;農曆除夕&quot;, cHolidayType_Full)
-			CalInsertBankholiday(lDate, &quot;道教節&quot;, cHolidayType_Full)
-			CalInsertBankholiday(lDate+1, &quot;春節&quot;, cHolidayType_Full)
+			CalInsertBankholiday(lDate, &quot;春節初一&quot;, cHolidayType_Full)
+			CalInsertBankholiday(lDate+1, &quot;春節初二&quot;, cHolidayType_Full)
+			CalInsertBankholiday(lDate+2, &quot;春節初三&quot;, cHolidayType_Full)
 	End Select
 End Sub
 
