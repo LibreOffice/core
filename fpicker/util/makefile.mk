@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2004-12-17 13:27:40 $
+#   last change: $Author: kz $ $Date: 2005-01-18 13:26:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,8 @@ USE_LDUMP2=TRUE
 .IF "$(ENABLE_GTK)" == "TRUE"
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE: pkg_config.mk
+#check gtk version
+GTK_TWO_FOUR:=$(shell +-$(PKGCONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo ok)
 .ENDIF         # "$(ENABLE_GTK)" == "TRUE"
 .ENDIF         #.IF "$(GUI)"!="WNT"
 
@@ -110,6 +112,7 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 .ELSE
 .IF "$(ENABLE_GTK)" == "TRUE"
+.IF "$(GTK_TWO_FOUR)" == "ok"
 SHL1NOCHECK=TRUE
 SHL1TARGET=fps_gnome
 SHL1LIBS=$(SLB)$/fps_gnome.lib
@@ -120,6 +123,7 @@ LINKFLAGS!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
 .ENDIF          # "$(OS)"=="SOLARIS"
 
 DEF1NAME=$(SHL1TARGET)
+.ENDIF
 .ENDIF         # "$(ENABLE_GTK)" == "TRUE"
 .ENDIF         # ELSE "$(GUI)"=="WNT"
 
