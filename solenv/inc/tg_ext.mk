@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-11 12:16:29 $
+#   last change: $Author: hjs $ $Date: 2001-06-15 14:30:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,10 +66,18 @@ INCLUDE!:=$(shell echo $(INCLUDE:s/\stl//) | sed "s/[ \t]*-I/;/g" )
 .EXPORT : INCLUDE
 .ENDIF			# "$(GUI)"=="WNT"
 
+#.IF "$(OS)"=="SOLARIS"
+#.IF "$(BUILD_SOSL)"==""
+#CC:=$(COMPATH)$/bin$/cc
+#.EXPORT : CC
+#.ENDIF			# "$(BUILD_SOSL)"==""
+#.ENDIF			# "$(OS)"=="SOLARIS"
+
 #override
 PACKAGE_DIR=build$/$(ROUT)
 P_CONFIGURE_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(CONFIGURE_DIR)
 P_BUILD_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
+P_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(MISC)$/$(TARFILE_ROOTDIR)$/$i)
 
 
 ALLTAR : \
@@ -155,7 +163,13 @@ $(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).tar
     +$(TOUCH) $@
 .ENDIF			# "$(GUI)"=="UNX"	
 
-create_patch : $(MISC)$/$(TARFILE_ROOTDIR) 
+
+.IF "$(P_ADDITIONAL_FILES)"!=""
+$(P_ADDITIONAL_FILES) : $(MISC)$/$(TARFILE_ROOTDIR)
+    +-touch $@
+.ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
+
+create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES)
     @+-$(RM) $(MISC)$/$(TARFILE_NAME).patch.tmp >& $(NULLDEV)
     @+-$(RM) $(TARFILE_NAME).patch.bak >& $(NULLDEV)
 #ignore returncode of 1 (indicates differences...)	
