@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<org.openoffice.test
+xmlns="http://openoffice.org/2000/registry/components/org.openoffice.Inet"
+xmlns:cfg="http://openoffice.org/2000/registry/instance"
+xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance" xml:lang="en-US">
+
+<!-- long -->
+    <Long cfg:type="long">100000000000000</Long>
+
+<!-- double -->
+    <DoubleWithDot cfg:type="double">.787564</DoubleWithDot>
+    <EuroDM cfg:type="double">1.95583</EuroDM>
+    <ZeroDotZeroZeroOne cfg:type="double">0.001</ZeroDotZeroZeroOne>
+    <ZeroDotOne cfg:type="double">0.1</ZeroDotOne>
+    <NZeroDotOne cfg:type="double">-0.1</NZeroDotOne>
+
+<!-- binary -->
+    <Binary cfg:type="binary" cfg:nullable="true" xsi:null="true"/>
+
+<!-- Strings -->
+    <NullString cfg:type="string" xsi:null="true"/>
+    <String cfg:type="string">Identifier</String>
+    <StringList cfg:type="string" cfg:derivedBy="list">file:/ private:explorer private:help private:newmenu private:schedule private:searchfolder private:user</StringList>
+    <List cfg:type="string" cfg:derivedBy="list">NULL</List>
+    <PathAutoCorrect cfg:type="string" cfg:separator=":" cfg:derivedBy="list">$(inst)/share/autocorr:$(user)/autocorr</PathAutoCorrect>
+    <List2 cfg:type="string" cfg:derivedBy="list" cfg:separator="stupid" >NULLstupidFIRSTstupidSECONDstupid</List2>
+    <SeparatorKiller cfg:type="string" cfg:derivedBy="list" cfg:separator="." > .,.;.:.#.|.a._.!.$.%./.(.)=.?.+.*.#.~.'.\.{.}._</SeparatorKiller>
+    <LocaleString cfg:type="string" cfg:localized="true">
+    <default:data xml:lang="en-US">This is a string</default:data>
+    <default:data xml:lang="de-DE">Dies ist ein String</default:data>
+    </LocaleString>
+
+<!-- boolean -->
+    <BoolFalse cfg:type="boolean">false</BoolFalse>
+    <BoolTrue cfg:type="boolean">true</BoolTrue>
+    <BoolNULL cfg:type="boolean" xsi:null="true"/>
+
+<!-- int -->
+    <Integer cfg:type="int">0</Integer>
+    <IntList cfg:type="int" cfg:derivedBy="list">224 226 222 223 5</IntList>
+
+<!-- short -->
+    <Short cfg:type="short">100</Short>
+
+</org.openoffice.test>

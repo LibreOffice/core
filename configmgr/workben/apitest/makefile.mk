@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:13:43 $
+#   last change: $Author: lla $ $Date: 2000-11-03 11:56:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,6 +100,7 @@ APP1STDLIBS+=$(LIBCIMT)
 APP1TARGET= $(TARGET)
 APP1OBJS=	\
     $(SLO)$/cfgapi.obj	\
+    $(SLO)$/typeconverter.obj
 
 # ... cfgreg ..............................
 APP2STDLIBS = $(APPSTDLIBS)

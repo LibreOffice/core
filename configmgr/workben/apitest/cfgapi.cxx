@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-10-16 11:33:04 $
+ *  last change: $Author: lla $ $Date: 2000-11-03 11:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,17 @@ using namespace std;
 #include <cppuhelper/servicefactory.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
+#endif
+
 #include "createpropertyvalue.hxx"
+
+#include "typeconverter.hxx"
 
 // #include <com/sun/star/configuration/XConfigurationSync.hpp>
 
@@ -254,7 +264,7 @@ rtl::OUString enterValue(const char* _aStr, const char* _aDefault, bool _bIsAPas
 {
     cout << _aStr;
     cout.flush();
-    OString aTxt = input(_aDefault, _bIsAPassword ? 0 : '*');
+    OString aTxt = input(_aDefault, _bIsAPassword ? '*' : 0);
 
     OUString sValue = OUString::createFromAscii(aTxt);
     return sValue;
@@ -305,9 +315,19 @@ int _cdecl main( int argc, char * argv[] )
         cout << endl;
         OUString sPasswd = enterValue("Enter Password: ", "", true);
         cout << endl;
+        // rtl::OUString sFilePath = enterValue("Enter Filepath: ", "d:/local/609/SRC609/configmgr/workben/local_io",false);
+        rtl::OUString sFilePath = enterValue("Enter Filepath: ", "f:/local/609/SRC609/configmgr/workben/local_io",false);
+        // rtl::OUString sFilePath = enterValue("Enter Filepath: ", "f:/office60/user/config/registry", false);
+        cout << endl;
 
         Sequence< Any > aCPArgs;
         aCPArgs = createSequence(sUser, sPasswd);
+
+        aCPArgs.realloc(aCPArgs.getLength() + 1);
+        aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("rootpath"), sFilePath);
+
+        aCPArgs.realloc(aCPArgs.getLength() + 1);
+        aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("servertype"), ASCII("local"));
 
         Reference< XMultiServiceFactory > xCfgProvider(
             xORB->createInstanceWithArguments(
@@ -328,13 +348,18 @@ int _cdecl main( int argc, char * argv[] )
 
         cout << "Configuration Provider created !\n---------------------------------------------------------------" << endl;
 
-        OUString sPath =   enterValue("Enter RootPath: ", "org.openoffice.Setup", false);
+        OUString sPath =   enterValue("Enter RootPath: ", "org.openoffice.test", false);
+        cout << endl;
+        OUString sLocale =   enterValue("Enter Locale: ", "de-DE", false);
         cout << endl;
 
         Sequence< Any > aArgs;
         aArgs = createSequence(sUser, ASCII(""));
         aArgs.realloc(aArgs.getLength() + 1);
         aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("nodepath"), sPath);
+
+        aArgs.realloc(aArgs.getLength() + 1);
+        aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("locale"), sLocale);
 
         Reference< XInterface > xIFace = xCfgProvider->createInstanceWithArguments(
             OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
@@ -353,12 +378,13 @@ int _cdecl main( int argc, char * argv[] )
         flush(cout);
         cerr << "Caught exception: " << e.Message << endl;
     }
+/*
     catch (...)
     {
         flush(cout);
         cerr << "BUG: Caught UNKNOWN exception (?) " << endl;
     }
-
+*/
     return 0;
 }
 
@@ -613,6 +639,10 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                         case TypeClass_SEQUENCE:
                             {
                                 cout << "VALUE '" << aName << "' is a SEQUENCE or BINARY" << endl;
+
+                                Type aTypeS = configmgr::getSequenceElementType(aElement.getValueType());
+                                OUString sType = configmgr::toTypeName(aTypeS.getTypeClass());
+                                cout << "Real type is Sequence<" << sType << ">" << endl;
                                 bValueOk = true;
                             }
                             break;
@@ -657,7 +687,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                                 }
                             }
                             prompt_and_wait();
-                            return bValueOk;
+                            return bValueOk ? true : false;
                         }
 
                         if (aElement >>= xNext)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpletest.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:43 $
+ *  last change: $Author: lla $ $Date: 2000-11-03 11:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,17 @@ using namespace ::com::sun::star::io;
 // -----------------------------------------------------------------------------
 #define ASCII(x) OUString::createFromAscii(x)
 
+ostream& operator << (ostream& out, rtl::OUString const& aStr)
+{
+    sal_Unicode const* const pStr = aStr.getStr();
+    sal_Unicode const* const pEnd = pStr + aStr.getLength();
+    for (sal_Unicode const* p = pStr; p < pEnd; ++p)
+        if (0 < *p && *p < 127) // ASCII
+            out << char(*p);
+        else
+            out << "[\\u" << hex << *p << "]";
+    return out;
+}
 
 
 // -----------------------------------------------------------------------------
@@ -415,6 +426,7 @@ public:
 // -----------------------------------------------------------------------------
 // -------------------------------- Mapping Test --------------------------------
 // -----------------------------------------------------------------------------
+// Simple Map created with a stl::vector
 
 typedef ::std::pair< rtl::OUString, rtl::OUString > Assoc;
 // typedef ::std::set<Assoc, ltNode> MappingTable;
@@ -526,7 +538,7 @@ OUString changeToComSunStarPath(const OUString &aPath)
     return aPath;
 }
 
-void stringTest()
+void stringTest2()
 {
     OUString aPath = ASCII("org.OpenOffice.Setup/blah/blub");
 
@@ -534,4 +546,126 @@ void stringTest()
     volatile int dummy = 0;
 }
 
+/*
+
+class A
+{
+public:
+    static void run() {
+        cout << "This is A::run();" << endl;
+    }
+
+};
+
+class B : public A
+{
+public:
+
+    static void run() {
+        cout << "This is B::run();" << endl;
+    }
+};
+
+void classTest()
+{
+    A a;
+    B b;
+    B::run();
+}
+*/
+
+// -----------------------------------------------------------------------------
+// ------------------------------------ Map ------------------------------------
+// -----------------------------------------------------------------------------
+struct ltstr
+{
+    bool operator()(const rtl::OUString &s1, const rtl::OUString &s2) const
+        {
+            return s1.compareTo(s2) < 0 ? true : false;
+        }
+};
+
+void stringTest()
+{
+    map<const OUString, int, ltstr> months;
+
+    months[ASCII("january")] = 31;
+    months[ASCII("february")] = 28;
+    months[ASCII("march")] = 31;
+    months[ASCII("april")] = 30;
+    months[ASCII("may")] = 31;
+    months[ASCII("june")] = 30;
+    months[ASCII("july")] = 31;
+    months[ASCII("august")] = 31;
+    months[ASCII("september")] = 30;
+    months[ASCII("october")] = 31;
+    months[ASCII("november")] = 30;
+    months[ASCII("december")] = 31;
+
+    cout << "june -> " << months[ASCII("june")] << endl;
+    map<const OUString, int, ltstr>::iterator cur  = months.find(ASCII("april"));
+    // map<const OUString, int, ltstr>::iterator prev = cur;
+    map<const OUString, int, ltstr>::iterator next = cur;
+    // ++next;
+    // --prev;
+    // cout << "Previous (in alphabetical order) is " << (*prev).first << endl;
+    for(int i=0;i<12;i++)
+    {
+        cout << "Next (in alphabetical order) is " << (*next).first << " days " << (*next).second << endl;
+        ++next;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// ---------------------------------- HashMap ----------------------------------
+// -----------------------------------------------------------------------------
+#include <hash_map>
+
+
+struct eqstr
+{
+    bool operator()(const rtl::OUString &s1, const rtl::OUString &s2) const
+        {
+            return s1.equals(s2) == sal_True ? true : false;
+        }
+};
+
+struct hash_oustring
+{
+    // This hash funktion is a copy of hash<char*> from SGI-STL
+    size_t operator()(const rtl::OUString &_s) const
+        {
+            sal_Int64 nStrLen = _s.getLength();
+            const sal_Unicode *pStr = _s.getStr();
+            unsigned long h = 0;
+            for (sal_Int64 i=0;i<nStrLen; ++i)
+                h = 5*h + *pStr++;
+
+            return size_t(h);
+        }
+};
+
+void hash_test()
+{
+    hash_map<const rtl::OUString, rtl::OUString, hash_oustring, eqstr> months;
+
+    rtl::OUString sJanuary = ASCII("january");
+    months[sJanuary]   = ASCII("31");
+    months[ASCII("february")]  = ASCII("28");
+    months[ASCII("march")]     = ASCII("31");
+    months[ASCII("april")]     = ASCII("30");
+    months[ASCII("may")]       = ASCII("31");
+    months[ASCII("june")]      = ASCII("30");
+    months[ASCII("july")]      = ASCII("31");
+    months[ASCII("august")]    = ASCII("31");
+    months[ASCII("september")] = ASCII("30");
+    months[ASCII("october")]   = ASCII("31");
+    months[ASCII("november")]  = ASCII("30");
+    months[ASCII("december")]  = ASCII("31");
+
+    cout << "september -> " << months[ASCII("september")] << endl;
+    cout << "april     -> " << months[ASCII("april")] << endl;
+    cout << "june      -> " << months[ASCII("june")] << endl;
+    cout << "november  -> " << months[ASCII("november")] << endl;
+}
 } // namespace configmgr

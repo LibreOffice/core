@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:13:43 $
+#   last change: $Author: lla $ $Date: 2000-11-03 11:56:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,6 +147,8 @@ APP2OBJS=	\
     $(SLO)$/filehelper.obj \
     $(SLO)$/tracer.obj \
     $(SLO)$/updatedom.obj \
+    $(SLO)$/strconverter.obj \
+    $(SLO)$/strimpl.obj \
 
 
 .INCLUDE :  target.mk
