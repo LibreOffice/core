@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcvt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-20 15:59:22 $
+ *  last change: $Author: pl $ $Date: 2002-08-30 14:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,35 @@ SalConverterCache::EncodingHasChar( rtl_TextEncoding nEncoding,
 
         case RTL_TEXTENCODING_MS_1252:
         case RTL_TEXTENCODING_ISO_8859_1:
-            bMatch =    ( nChar >= 0x0000 && nChar <= 0x00ff );
+            bMatch =    ( nChar >= 0x0000 && nChar <= 0x00ff )
+                ||  ( nChar == 0x20ac )
+                ||  ( nChar == 0x201a )
+                ||  ( nChar == 0x0192 )
+                ||  ( nChar == 0x201e )
+                ||  ( nChar == 0x2026 )
+                ||  ( nChar == 0x2020 )
+                ||  ( nChar == 0x2021 )
+                ||  ( nChar == 0x02c6 )
+                ||  ( nChar == 0x2030 )
+                ||  ( nChar == 0x0160 )
+                ||  ( nChar == 0x2039 )
+                ||  ( nChar == 0x0152 )
+                ||  ( nChar == 0x017d )
+                ||  ( nChar == 0x2018 )
+                ||  ( nChar == 0x2019 )
+                ||  ( nChar == 0x201c )
+                ||  ( nChar == 0x201d )
+                ||  ( nChar == 0x2022 )
+                ||  ( nChar == 0x2013 )
+                ||  ( nChar == 0x2014 )
+                ||  ( nChar == 0x02dc )
+                ||  ( nChar == 0x2122 )
+                ||  ( nChar == 0x0161 )
+                ||  ( nChar == 0x203a )
+                ||  ( nChar == 0x0153 )
+                ||  ( nChar == 0x017e )
+                ||  ( nChar == 0x0178 )
+                ;
             break;
 
         case RTL_TEXTENCODING_ISO_8859_2:
@@ -226,7 +254,7 @@ SalConverterCache::EncodingHasChar( rtl_TextEncoding nEncoding,
             bMatch =    ( nChar >= 0x0020 && nChar <= 0x007e )
                     ||  ( nChar >= 0x00a0 && nChar <= 0x00ff )
                     ||  ( nChar >= 0x0152 && nChar <= 0x017e )
-                    ||  ( nChar >= 0x20ac && nChar <= 0x20ac );
+                    ||  ( nChar == 0x20ac );
             break;
 
         case RTL_TEXTENCODING_JIS_X_0201:
