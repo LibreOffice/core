@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2002-02-26 14:17:53 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 14:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ french ] = "Commande";
                 Text[ spanish ] = "Comando";
                 Text[ italian ] = "Comando";
-                Text[ danish ] = "Command";
+                Text[ danish ] = "Kommando";
                 Text[ swedish ] = "Kommando";
                 Text[ polish ] = "Polecenie";
                 Text[ portuguese_brazilian ] = "Command";
@@ -113,7 +113,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ french ] = "Papier";
                 Text[ spanish ] = "Papel";
                 Text[ italian ] = "Carta";
-                Text[ danish ] = "Paper";
+                Text[ danish ] = "Papir";
                 Text[ swedish ] = "Papper";
                 Text[ polish ] = "Papier";
                 Text[ portuguese_brazilian ] = "Paper";
@@ -139,7 +139,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ french ] = "Périphérique";
                 Text[ spanish ] = "Dispositivo";
                 Text[ italian ] = "Apparecchio";
-                Text[ danish ] = "Device";
+                Text[ danish ] = "Enhed";
                 Text[ swedish ] = "Enhet";
                 Text[ polish ] = "Sprzêt";
                 Text[ portuguese_brazilian ] = "Device";
@@ -165,7 +165,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ french ] = "Substitution de police";
                 Text[ spanish ] = "Sustitución de fuente";
                 Text[ italian ] = "Sostituzione carattere";
-                Text[ danish ] = "Fontsubstitution";
+                Text[ danish ] = "Skrifttypeerstatning";
                 Text[ swedish ] = "Teckensnittsersättning";
                 Text[ polish ] = "Zamiana czcionki";
                 Text[ portuguese_brazilian ] = "Fontsubstitution";
@@ -191,7 +191,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ french ] = "Paramètres supplémentaires";
                 Text[ spanish ] = "Otra configuración";
                 Text[ italian ] = "Ulteriori impostazioni";
-                Text[ danish ] = "Other settings";
+                Text[ danish ] = "Yderligere indstillinger";
                 Text[ swedish ] = "Fler inställningar";
                 Text[ polish ] = "Dodatkowe ustawienia";
                 Text[ portuguese_brazilian ] = "Other settings";
@@ -218,7 +218,7 @@ TabDialog RID_RTS_RTSDIALOG
         Text[ french ] = "selon le pilote";
         Text[ spanish ] = "del controlador";
         Text[ italian ] = "dal driver";
-        Text[ danish ] = "from driver";
+        Text[ danish ] = "ifølge driver";
         Text[ swedish ] = "från drivrutin";
         Text[ polish ] = "ze sterownika";
         Text[ portuguese_brazilian ] = "from driver";
@@ -243,7 +243,7 @@ TabDialog RID_RTS_RTSDIALOG
         Text[ french ] = "<ignorer>";
         Text[ spanish ] = "<ignorar>";
         Text[ italian ] = "<ignora>";
-        Text[ danish ] = "<ignore>";
+        Text[ danish ] = "<ignorer>";
         Text[ swedish ] = "<ignorera>";
         Text[ polish ] = "<ignoruj>";
         Text[ portuguese_brazilian ] = "<ignore>";
@@ -264,7 +264,7 @@ TabDialog RID_RTS_RTSDIALOG
     Text[ french ] = "Propriétés de %s";
     Text[ spanish ] = "Propiedades de %s";
     Text[ italian ] = "Proprietà di %s";
-    Text[ danish ] = "Properties of %s";
+    Text[ danish ] = "Egenskaber for %s";
     Text[ swedish ] = "Egenskaper för %s";
     Text[ polish ] = "W³aœciwoœci %s";
     Text[ portuguese_brazilian ] = "Properties of %s";
@@ -296,7 +296,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ french ] = "Format de ~papier";
         Text[ spanish ] = "~Formato de papel";
         Text[ italian ] = "~Formato carta";
-        Text[ danish ] = "~Papersize";
+        Text[ danish ] = "Papir~format";
         Text[ swedish ] = "~Pappersformat";
         Text[ polish ] = "Format papieru";
         Text[ portuguese_brazilian ] = "~Papersize";
@@ -330,7 +330,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ french ] = "~Orientation";
         Text[ spanish ] = "~Orientación";
         Text[ italian ] = "~Orientamento";
-        Text[ danish ] = "~Orientation";
+        Text[ danish ] = "~Papirretning";
         Text[ swedish ] = "~Orientering";
         Text[ polish ] = "Orientacja";
         Text[ portuguese_brazilian ] = "~Orientation";
@@ -364,7 +364,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ french ] = "~Duplex";
         Text[ spanish ] = "~Doble";
         Text[ italian ] = "Duple~x";
-        Text[ danish ] = "Dupleks";
+        Text[ danish ] = "~Dupleks";
         Text[ swedish ] = "~Duplex";
         Text[ polish ] = "~Dupleks";
         Text[ portuguese_brazilian ] = "~Duplex";
@@ -394,11 +394,11 @@ TabPage RID_RTS_PAPERPAGE
         Text[ portuguese ] = "~Origem do papel";
         Text[ russian ] = "~Ëîòîê áóìàãè";
         Text[ greek ] = "Äßóêïò ÷áñô~éïı";
-        Text[ dutch ] = "~Papierlade";
+        Text[ dutch ] = "P~apierlade";
         Text[ french ] = "~Bac d'alimentation";
         Text[ spanish ] = "~Bandeja de papel";
         Text[ italian ] = "~Cassetto";
-        Text[ danish ] = "~Input slot";
+        Text[ danish ] = "Pap~irbakke";
         Text[ swedish ] = "Pappersmagas~in";
         Text[ polish ] = "Zasobnik papieru";
         Text[ portuguese_brazilian ] = "~Input slot";
@@ -428,11 +428,11 @@ TabPage RID_RTS_PAPERPAGE
         Text[ portuguese ] = "~Escala";
         Text[ russian ] = "~Ìàñøòàáèğîâàíèå";
         Text[ greek ] = "ÊëéìÜêù~óç";
-        Text[ dutch ] = "~Schaal";
+        Text[ dutch ] = "Op~schaal brengen";
         Text[ french ] = "~Échelle";
         Text[ spanish ] = "~Escala";
         Text[ italian ] = "Sca~la";
-        Text[ danish ] = "~Scale";
+        Text[ danish ] = "~Skalering";
         Text[ swedish ] = "~Skalning";
         Text[ polish ] = "Skalowanie";
         Text[ portuguese_brazilian ] = "~Scale";
@@ -443,7 +443,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ turkish ] = "~Scale";
         Text[ arabic ] = "ÇáãŞíÇÓ";
         Text[ finnish ] = "~Skaalaa";
-        Text[ catalan ] = "~Escala";
+        Text[ catalan ] = "Esc~ala";
     };
     MetricField RID_RTS_PAPER_SCALE_BOX
     {
@@ -471,7 +471,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ french ] = "Couleur";
         Text[ spanish ] = "Color";
         Text[ italian ] = "Colore";
-        Text[ danish ] = "Color";
+        Text[ danish ] = "Farve";
         Text[ swedish ] = "Färg";
         Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "Color";
@@ -496,7 +496,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ french ] = "Niveaux de gris";
         Text[ spanish ] = "Escalas de grises";
         Text[ italian ] = "Toni di grigio";
-        Text[ danish ] = "Grayscale";
+        Text[ danish ] = "Gråtoner";
         Text[ swedish ] = "Gråskalor";
         Text[ polish ] = "Odcienie szaroœci";
         Text[ portuguese_brazilian ] = "Grayscale";
@@ -524,7 +524,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ french ] = "~Option";
         Text[ spanish ] = "~Opción";
         Text[ italian ] = "~Opzione";
-        Text[ danish ] = "Alternativ";
+        Text[ danish ] = "~Alternativ";
         Text[ swedish ] = "~Alternativ";
         Text[ polish ] = "Opcja";
         Text[ portuguese_brazilian ] = "~Option";
@@ -553,11 +553,11 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ portuguese ] = "~Valor activo";
         Text[ russian ] = "Òåêóùåå çíà÷åíèå";
         Text[ greek ] = "Ôñİ÷ïõóá ôéìŞ";
-        Text[ dutch ] = "Actuele ~waarde";
+        Text[ dutch ] = "Huidige ~waarde";
         Text[ french ] = "~Valeur active";
         Text[ spanish ] = "~Valor actual";
         Text[ italian ] = "~Valori attuali";
-        Text[ danish ] = "Current ~value";
+        Text[ danish ] = "Aktuel ~værdi";
         Text[ swedish ] = "Aktuellt ~värde";
         Text[ polish ] = "Aktualna wartoœæ";
         Text[ portuguese_brazilian ] = "Current ~value";
@@ -587,11 +587,11 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ portuguese ] = "~Nível PostScript";
         Text[ russian ] = "Óğîâåíü PostScript";
         Text[ greek ] = "Åğßğåäï PostScript";
-        Text[ dutch ] = "PostScript ~Level";
+        Text[ dutch ] = "PostScript-~niveau";
         Text[ french ] = "~Niveau PostScript";
         Text[ spanish ] = "~Nivel PostScript";
         Text[ italian ] = "Livello PostScript";
-        Text[ danish ] = "PostScript-niveau";
+        Text[ danish ] = "PostScript-~niveau";
         Text[ swedish ] = "PostScript-ni~vå";
         Text[ polish ] = "Poziom PostScript";
         Text[ portuguese_brazilian ] = "PostScript ~Level";
@@ -624,7 +624,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ french ] = "Couleur";
         Text[ spanish ] = "Color";
         Text[ italian ] = "Colore";
-        Text[ danish ] = "~Color";
+        Text[ danish ] = "~Farve";
         Text[ swedish ] = "~Färg";
         Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "~Color";
@@ -657,7 +657,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ french ] = "~Profondeur de couleur";
         Text[ spanish ] = "Prof~undidad de color";
         Text[ italian ] = "Profondità cro~matica";
-        Text[ danish ] = "Color ~depth";
+        Text[ danish ] = "Farve~dybde";
         Text[ swedish ] = "Färgdju~p";
         Text[ polish ] = "G³êbia koloru";
         Text[ portuguese_brazilian ] = "Color ~depth";
@@ -698,11 +698,11 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ portuguese ] = "~Activar substituição de caracteres";
         Text[ russian ] = "~Âêëş÷èòü çàìåíó øğèôòà";
         Text[ greek ] = "~Enable font substitution";
-        Text[ dutch ] = "~Vervanging van lettertype inschakelen";
+        Text[ dutch ] = "~Vervanging van lettertype activeren";
         Text[ french ] = "Activer la ~substitution de police";
         Text[ spanish ] = "~Activar sustitución de fuente";
         Text[ italian ] = "~Attiva la sostituzione dei font";
-        Text[ danish ] = "~Enable font substitution";
+        Text[ danish ] = "Aktiver ~skrifttypeerstatning";
         Text[ swedish ] = "Aktivera tecken~snittsersättning";
         Text[ polish ] = "Uaktywnij zamianê czcionek";
         Text[ portuguese_brazilian ] = "~Enable font substitution";
@@ -726,11 +726,11 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ portuguese ] = "~Tipos de letra substituídos";
         Text[ russian ] = "Çàìåíåííûå øğèôòû";
         Text[ greek ] = "Substituted ~fonts";
-        Text[ dutch ] = "~Lettertypen vervangen";
+        Text[ dutch ] = "Vervangen ~lettertypen";
         Text[ french ] = "Polices su~bstituées";
         Text[ spanish ] = "~Fuentes sustituidas";
         Text[ italian ] = "Font sostituiti";
-        Text[ danish ] = "Substituted ~fonts";
+        Text[ danish ] = "Erstattede s~krifttyper";
         Text[ swedish ] = "Ersatta te~ckensnitt";
         Text[ polish ] = "Zamieñ czcionki";
         Text[ portuguese_brazilian ] = "Substituted ~fonts";
@@ -766,7 +766,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ french ] = "Ajouter";
         Text[ spanish ] = "~Añadir";
         Text[ italian ] = "A~ggiungi";
-        Text[ danish ] = "~Add";
+        Text[ danish ] = "Ti~lføj";
         Text[ swedish ] = "~Lägg till";
         Text[ polish ] = "Dodaj";
         Text[ portuguese_brazilian ] = "~Add";
@@ -793,7 +793,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Eliminar";
         Text[ italian ] = "Ri~muovi";
-        Text[ danish ] = "~Remove";
+        Text[ danish ] = "~Fjern";
         Text[ swedish ] = "Ta ~bort";
         Text[ polish ] = "Usuñ";
         Text[ portuguese_brazilian ] = "~Remove";
@@ -816,11 +816,11 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ portuguese ] = "~Substituir tipo de letra";
         Text[ russian ] = "~Çàìåíèòü òèï øğèôòà";
         Text[ greek ] = "~Substitute font";
-        Text[ dutch ] = "~Vervang lettertype";
+        Text[ dutch ] = "Lettertype ~vervangen";
         Text[ french ] = "Substitution de la police";
         Text[ spanish ] = "~Sustituir fuente";
         Text[ italian ] = "Tipi di carattere sostituiti";
-        Text[ danish ] = "~Substitute font";
+        Text[ danish ] = "E~rstatter skrifttype";
         Text[ swedish ] = "E~rsätt teckensnitt";
         Text[ polish ] = "Zamieñ czcionkê";
         Text[ portuguese_brazilian ] = "~Substitute font";
@@ -855,7 +855,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ french ] = "Par la police d'~imprimante";
         Text[ spanish ] = "con ~fuente de impresora";
         Text[ italian ] = "da caratteri della stamapante";
-        Text[ danish ] = "by ~printer font";
+        Text[ danish ] = "med ~printerskrifttype";
         Text[ swedish ] = "med s~krivarteckensnitt";
         Text[ polish ] = "na czcionkê drukarki";
         Text[ portuguese_brazilian ] = "by ~printer font";
@@ -904,7 +904,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ french ] = "Sélectionner une commande";
         Text[ spanish ] = "Seleccionar comando";
         Text[ italian ] = "Seleziona comando";
-        Text[ danish ] = "Select command";
+        Text[ danish ] = "Vælg kommando";
         Text[ swedish ] = "Välj kommando";
         Text[ polish ] = "Wybierz polecenie";
         Text[ portuguese_brazilian ] = "Select command";
@@ -949,12 +949,12 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "Fax";
         Text[ portuguese ] = "Fax";
         Text[ russian ] = "Ôàêñ";
-        Text[ greek ] = "fax";
+        Text[ greek ] = "Fax";
         Text[ dutch ] = "fax";
         Text[ french ] = "Fax";
         Text[ spanish ] = "Fax";
         Text[ italian ] = "Fax";
-        Text[ danish ] = "fax";
+        Text[ danish ] = "Fax";
         Text[ swedish ] = "Fax";
         Text[ polish ] = "Faks";
         Text[ portuguese_brazilian ] = "fax";
@@ -975,11 +975,11 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ portuguese ] = "Conversor PDF";
         Text[ russian ] = "Ïğåîáğàçîâàòåëü PDF";
         Text[ greek ] = "PDF converter";
-        Text[ dutch ] = "PDF converter";
+        Text[ dutch ] = "PDF-converter";
         Text[ french ] = "Convertisseur PDF";
         Text[ spanish ] = "Convertidor PDF";
         Text[ italian ] = "Convertitore PDF";
-        Text[ danish ] = "PDF converter";
+        Text[ danish ] = "PDF-konverter";
         Text[ swedish ] = "PDF-konverterare";
         Text[ polish ] = "Konwerter PDF";
         Text[ portuguese_brazilian ] = "PDF converter";
@@ -1014,7 +1014,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ french ] = "Configurer comme";
         Text[ spanish ] = "Con~figurar como";
         Text[ italian ] = "Configura come :";
-        Text[ danish ] = "Configure as : ";
+        Text[ danish ] = "~Konfigurer som";
         Text[ swedish ] = "~Konfigurera som";
         Text[ polish ] = "Konfiguruj jako";
         Text[ portuguese_brazilian ] = "Configure as : ";
@@ -1043,7 +1043,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ spanish ] = "El número de fa~x se eliminará de la salida";
         Text[ finnish ] = "~Faksinumerot poistetaan tulosteesta";
         Text[ italian ] = "~Numero di fax eliminato dalla copia";
-        Text[ danish ] = "~fax number will be removed from output";
+        Text[ danish ] = "~Faxnummer fjernes fra outputtet";
         Text[ swedish ] = "~Faxnummer tas bort från utmatningen";
         Text[ polish ] = "Numer faksu zostanie usuniêty z wyjœcia";
         Text[ portuguese_brazilian ] = "~fax number will be removed from output";
@@ -1065,11 +1065,11 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ portuguese ] = "Directório destino PDF:";
         Text[ russian ] = "Êîíå÷íàÿ ïàïêà PDF :";
         Text[ greek ] = "PDF target directory :";
-        Text[ dutch ] = "PDF doeldirectory :";
+        Text[ dutch ] = "PDF-doeldirectory:";
         Text[ french ] = "Répertoire cible PDF :";
         Text[ spanish ] = "Directorio destino PDF :";
         Text[ italian ] = "Cartella destinazione PDF :";
-        Text[ danish ] = "PDF target directory :";
+        Text[ danish ] = "PDF-målbibliotek:";
         Text[ swedish ] = "PDF-målkatalog :";
         Text[ polish ] = "Katalog docelowy PDF :";
         Text[ portuguese_brazilian ] = "PDF target directory :";
@@ -1113,7 +1113,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ french ] = "Commande : ";
         Text[ spanish ] = "Comando: ";
         Text[ italian ] = "Comando: ";
-        Text[ danish ] = "Command: ";
+        Text[ danish ] = "Kommando: ";
         Text[ swedish ] = "Kommando: ";
         Text[ polish ] = "Polecenie: ";
         Text[ portuguese_brazilian ] = "Command: ";
@@ -1167,7 +1167,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ french ] = "Aide";
         Text[ spanish ] = "Ayuda";
         Text[ italian ] = "~?";
-        Text[ danish ] = "~Help";
+        Text[ danish ] = "~Hjælp";
         Text[ swedish ] = "~Hjälp";
         Text[ polish ] = "Pomoc";
         Text[ portuguese_brazilian ] = "~Help";
@@ -1194,7 +1194,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Eliminar";
         Text[ italian ] = "Ri~muovi";
-        Text[ danish ] = "~Remove";
+        Text[ danish ] = "~Fjern";
         Text[ swedish ] = "~Ta bort";
         Text[ polish ] = "Usuñ";
         Text[ portuguese_brazilian ] = "~Remove";
@@ -1215,11 +1215,11 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ portuguese ] = "A linha de comando dos conversores PDF é executada da seguinte maneira: em todos os documentos impressos, o \"(TMP)\" é substituído por um ficheiro temporário e o \"(OUTFILE)\" pelo ficheiro a ser criado. Quando \"(TMP)\" aparece na linha de comando, o código PostScript é transmitido para um ficheiro; caso contrário é transmitido para a entrada padrão (na forma de pipe).";
         Text[ russian ] = "Êîìàíäíàÿ ñòğîêà äëÿ ïğåîáğàçîâàòåëåé PDF îáğàáàòûâàåòñÿ ñëåäóşùèì îáğàçîì: äëÿ êàæäîãî ïå÷àòàåìîãî äîêóìåíòà â êîìàíäíîé ñòğîêå \"(TMP)\" çàìåíÿåòñÿ âğåìåííûì ôàéëîì, à \"(OUTFILE)\" ôàéëîì PDF, êîòîğûé íåîáõîäèìî ñîçäàòü. Åñëè \"(TMP)\" óæå ñóùåñòâóåò â êîìàíäíîé ñòğîêå, òî êîä PostScript ïåğåäàåòñÿ â ôàéë, â ïğîòèâíîì ñëó÷àå ïîñğåäñòâîì ñòàíäàğòíîãî ââîäà (ò .å. êàê pipe).";
         Text[ greek ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ dutch ] = "De commandoregel voor PDF-converters wordt als volgt uitgevoerd: bij ieder afgedrukt document wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(OUTFILE)\" door het aan te leggen bestand. Als er \"(TMP)\" staat in de commandoregel wordt de PostScript-code in een bestand opgeslagen, in het andere geval via de standaardinvoer (bijv. als Pipe) doorgegeven.";
+        Text[ dutch ] = "De commandoregel voor PDF-converters wordt als volgt uitgevoerd: bij ieder afgedrukt document wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(OUTFILE)\" door het te maken PDF-bestand. Als er \"(TMP)\" staat in de commandoregel, wordt de PostScript-code in een bestand opgeslagen ofwel via de standaardinvoer (bijvoorbeeld als Pipe) doorgegeven.";
         Text[ french ] = "Traitement de la ligne de commande pour les convertisseurs PDF : pour chaque document imprimé, \"(TMP)\" est remplacé par un fichier temporaire et \"(OUTFILE)\" par le fichier PDF à générer. Si \"(TMP)\" apparaît dans la ligne de commande, le code PostScript est transmis dans un fichier ; en cas contraire, il est transmis via l'entrée par défaut (c'est-à-dire comme tube (pipe)).";
         Text[ spanish ] = "La fila de comando en convertidores PDF se ejecutará de la siguiente forma: con cada documento que se imprima se sustituirá \"(TMP)\" en la línea de comandos por un archivo temporal y \"(OUTFILE)\" por el archivo PDF que se vaya a crear. Si \"(TMP)\" aparece en la línea de comando, el código PostScript se transferirá en un archivo, si no, a través de una entrada estándar, o sea, como pipe";
         Text[ italian ] = "La riga di comando nei convertitori PDF viene modificata come segue: per ogni documento stampato viene sostituito rispettivamente il file \"(TMP)\" da un file temporaneo e \"(OUTFILE)\" da un un file PDF. Se \"(TMP)\" appare nella riga comandi, il codice PostScript verrà trasmesso a un file, altrimenti verrà trasemsso come immissione standard (cioè come pipe).";
-        Text[ danish ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ danish ] = "Kommandolinjen ved PDF-konvertere bearbejdes på følgende måde: ved hvert udskrevet dokument erstattes i kommandolinjen \"(TMP)\" med en midlertidig fil og \"(OUTFILE)\" med den PDF-fil, der skal oprettes. Når \"(TMP)\" forekommer i kommandolinjen, overføres PostScript-koden til en fil, i modsat fald via standardindtastningen (det vil sige som pipe).";
         Text[ swedish ] = "Kommandoraden för PDF-konverterare bearbetas på följande sätt: på varje utskrivet dokument ersätts \"(TMP)\" och \"(OUTFILE)\" i kommandoraden av en temporär fil resp. av PDF-filen som ska skapas. Om \"(TMP)\" förekommer i kommandoraden överförs PostScript-koden i en fil, i annat fall via standardinmatningen (d.v.s. som pipe).";
         Text[ polish ] = "Wiersz poleceñ konwerterów PDF przetwarzany jest w nastêpuj¹cy sposób: Podczas drukowania dokumentu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(OUTFILE)\" na plik PDF, który ma byæ utworzony. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domyœlne (tzn jako potok (pipe)).";
         Text[ portuguese_brazilian ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
@@ -1244,7 +1244,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ french ] = "Traitement de la ligne de commande pour les imprimantes : le code PostScript généré est transmis à la ligne de commande comme entrée par défaut (c'est-à-dire comme tube (pipe)).";
         Text[ spanish ] = "La línea de comando en impresoras se ejecutará de esta forma: el código PostScript creado se transmitirá a la línea de comando como entrada predeterminada (es decir, como pipe).";
         Text[ italian ] = "La riga comandi nella stampante verrà impostata come segue: il codice PostScript creato verrà trasmesso alla riga di comando come immissione standard (cioè come pipe).";
-        Text[ danish ] = "The command line for printer devices is executed in the following way: the generated PostScript code will be delivered as standard input (as a pipe) to the command line.";
+        Text[ danish ] = "Kommandolinjen ved printere bearbejdes på følgende måde: den genererede PostScript-kode overføres til kommandolinjen som standardindtastning (det vil sige som pipe).";
         Text[ swedish ] = "Kommandoraden för skrivare bearbetas på följande sätt: den skapade PostScript-koden överförs som standardinmatning (d.v.s. som pipe) till kommandoraden.";
         Text[ polish ] = "Wiersz poleceñ przetwarzany jest w trakcie drukowania w nastêpuj¹cy sposób: Utworzony kod PostScript przekazany zostanie do wiersza poleceñ domyœlnie (tzn. jako potok (pipe)).";
         Text[ portuguese_brazilian ] = "The command line for printer devices is executed in the following way: the generated PostScript code will be delivered as standard input (as a pipe) to the command line.";
@@ -1265,11 +1265,11 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ portuguese ] = "A linha de comando para aparelhos de telefax é executada da seguinte forma: em todos os faxes enviados o \"(TMP)\" é substituído por um ficheiro temporário e \"(PHONE)\" pelo número de fax. Quando \"(TMP)\" aparece na linha de comando, o código PostScript é transmitido para um ficheiro, caso contrário para a entrada padrão (como Pipe).";
         Text[ russian ] = "Êîìàíäíàÿ ñòğîêà äëÿ ôàêñîâ îáğàáàòûâàåòñÿ ñëåäóşùèì îáğàçîì: âî âğåìÿ ïåğåäà÷è êàæäîãî ôàêñà â êîìàíäíîé ñòğîêå \"(TMP)\" çàìåíÿåòñÿ âğåìåííûì ôàéëîì, à \"(PHONE)\" - íîìåğîì ôàêñà. Åñëè \"(TMP)\" óæå ñóùåñòâóåò â êîìàíäíîé ñòğîêå, òî êîä PostScript ïåğåäàåòñÿ â ôàéëå, â ïğîòèâíîì ñëó÷àå ïîñğåäñòâîì ñòàíäàğòíîãî ââîäà (ò. å. êàê  pipe).";
         Text[ greek ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ dutch ] = "De commandoregel voor fax wordt als volgt uitgevoerd: op iedere fax die wordt verzonden wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(PHONE)\" door het faxnummer. Als er \"(TMP)\" staat in de commandoregel dan wordt de PostScript-code opgenomen in een bestand, zo niet dan als standaardinvoer (d.w.z. als Pipe) behandeld.";
+        Text[ dutch ] = "De commandoregel voor fax wordt als volgt uitgevoerd: op iedere fax die wordt verzonden wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(PHONE)\" door het faxnummer. Als er \"(TMP)\" staat in de commandoregel, wordt de PostScript-code opgenomen in een bestand ofwel als standaardinvoer (dat wil zeggen, als Pipe) behandeld.";
         Text[ french ] = "Traitement de la ligne de commande pour les périphériques fax : pour chaque envoi de fax, \"(TMP)\" est remplacé par un fichier temporaire et \"(PHONE)\" par le numéro de fax. Si \"(TMP)\" apparaît dans la ligne de commande, le code PostScript est transmis dans un fichier ; en cas contraire, il est transmis via l'entrée par défaut (c'est-à-dire comme tube (pipe)).";
         Text[ spanish ] = "La línea de comando en dispositivos de fax se ejecutará de esta forma: Para cada fax enviado se sustituirá en la fila de comando \"(TMP)\" por un archivo temporal y \"(PHONE)\" por un número de fax. Si \"(TMP)\" aparece en la fila de comando se transmitirá el código PostScript a un archivo; en caso contrario se hará mediante entrada estándar (es decir, como pipe).";
         Text[ italian ] = "La riga comandi degli apparecchi fax verrà impostata come segue: per ogni fax inviato ogni \"(TMP)\" della riga comandi verrà sostituito da un file temporaneo e \"(PHONE)\" sarà sostituito dal numero di fax. Se \"(TMP)\" appare nella riga comandi, il codice PostScript verrà trasmesso a un file, altrimenti verrà trasemsso come immissione standard (cioè come pipe).";
-        Text[ danish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ danish ] = "Kommandolinjen ved faxmaskiner bearbejdes på følgende måde: ved hver afsendt fax erstattes i kommandolinjen \"(TMP)\" med en midlertidig fil og \"(PHONE)\" med faxnummeret. Når \"(TMP)\" forekommer i kommandolinjen, overføres PostScript-koden til en fil, i modsat fald via standardindtastningen (det vil sige som pipe).";
         Text[ swedish ] = "Kommandoraden för faxar bearbetas på följande sätt: för varje fax som skickas ersätts \"(TMP)\" och \"(PHONE)\" med en temporär fil resp. av faxnumret. Om \"(TMP)\" förekommer i kommandoraden överförs PostScript-koden i en fil, i annat fall via standardinmatningen (d.v.s. som pipe).";
         Text[ polish ] = "Wiersz poleceñ w faksach przetwarzany jest w nastêpuj¹cy sposób: Podczas wysy³ania faksu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(PHON)\" na numer faksu. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domyœlnie (tzn. jako potok (pipe)).";
         Text[ portuguese_brazilian ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
@@ -1299,11 +1299,11 @@ TabPage RID_RTS_OTHERPAGE
         Text[ portuguese ] = "~Ajuste da margem esquerda";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñëåâà";
         Text[ greek ] = "Äéüñèùóç áñéóôåñïı ğåñéèùñßïõ :";
-        Text[ dutch ] = "~Linker marge corrigeren";
+        Text[ dutch ] = "~Linkermarge";
         Text[ french ] = "Marge gauche";
         Text[ spanish ] = "~Margen izquierdo";
         Text[ italian ] = "Margine ~sinistro:";
-        Text[ danish ] = "~Left margin adjustment :";
+        Text[ danish ] = "~Venstre margenkorrektur";
         Text[ swedish ] = "Vänster margina~l";
         Text[ polish ] = "Wyrównanie lewego marginesu";
         Text[ portuguese_brazilian ] = "~Left margin adjustment :";
@@ -1336,11 +1336,11 @@ TabPage RID_RTS_OTHERPAGE
         Text[ portuguese ] = "Aju~ste da margem superior";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñâåğõó";
         Text[ greek ] = "Äéüñèùóç ğÜíù ğåñéèùñß~ïõ :";
-        Text[ dutch ] = "~Marge boven corrigeren";
+        Text[ dutch ] = "~Bovenmarge";
         Text[ french ] = "Marge supérieure";
         Text[ spanish ] = "~Margen superior";
         Text[ italian ] = "Margine s~uperiore:";
-        Text[ danish ] = "~Top margin adjustment :";
+        Text[ danish ] = "~Topmargenkorrektur";
         Text[ swedish ] = "~Övre marginal";
         Text[ polish ] = "Wyrównanie górnego marginesu";
         Text[ portuguese_brazilian ] = "~Top margin adjustment :";
@@ -1373,11 +1373,11 @@ TabPage RID_RTS_OTHERPAGE
         Text[ portuguese ] = "Ajuste ~da margem direita";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñïğàâà";
         Text[ greek ] = "Äéüñèùóç äåîéïı ğå~ñéèùñßïõ :";
-        Text[ dutch ] = "~Rechter marge corrigeren";
+        Text[ dutch ] = "~Rechtermarge";
         Text[ french ] = "Marge droite";
         Text[ spanish ] = "~Margen derecho";
         Text[ italian ] = "Margine ~destro:";
-        Text[ danish ] = "~Right margin adjustment :";
+        Text[ danish ] = "~Højre margenkorrektur";
         Text[ swedish ] = "Höge~r marginal";
         Text[ polish ] = "Wyrównanie prawego marginesu";
         Text[ portuguese_brazilian ] = "~Right margin adjustment :";
@@ -1410,11 +1410,11 @@ TabPage RID_RTS_OTHERPAGE
         Text[ portuguese ] = "Ajuste da margem ~inferior";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñíèçó";
         Text[ greek ] = "Äéüñèùóç êÜôù ğåñéèùñßï~õ :";
-        Text[ dutch ] = "M~arge beneden corrigeren";
+        Text[ dutch ] = "~Benedenmarge";
         Text[ french ] = "Marge inférieure";
         Text[ spanish ] = "~Margen inferior";
         Text[ italian ] = "Margine ~inferiore:";
-        Text[ danish ] = "~Bottom margin adjustment :";
+        Text[ danish ] = "~Bundmargenkorrektur";
         Text[ swedish ] = "~Undre marginal";
         Text[ polish ] = "Wyrównanie dolnego marginesu";
         Text[ portuguese_brazilian ] = "~Bottom margin adjustment :";
@@ -1447,11 +1447,11 @@ TabPage RID_RTS_OTHERPAGE
         Text[ portuguese ] = "~Comentário";
         Text[ russian ] = "~Êîììåíòàğèé";
         Text[ greek ] = "ĞáñáôŞñçóç :";
-        Text[ dutch ] = "~Commentaar";
+        Text[ dutch ] = "~Opmerkingen";
         Text[ french ] = "Commentaire";
         Text[ spanish ] = "~Comentario";
         Text[ italian ] = "Co~mmento:";
-        Text[ danish ] = "~Comment :";
+        Text[ danish ] = "~Kommentar";
         Text[ swedish ] = "~Kommentar";
         Text[ polish ] = "Komentarz";
         Text[ portuguese_brazilian ] = "~Comment :";
@@ -1485,7 +1485,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ spanish ] = "~Predeterminado";
         Text[ finnish ] = "~Oletusarvo";
         Text[ italian ] = "~Standard";
-        Text[ danish ] = "~Default values";
+        Text[ danish ] = "~Standard";
         Text[ swedish ] = "~Standard";
         Text[ polish ] = "Standard";
         Text[ portuguese_brazilian ] = "~Default values";
@@ -1511,7 +1511,7 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ french ] = "Saisissez le numéro de fax.";
     Text[ spanish ] = "Indique el número de fax";
     Text[ italian ] = "Indicate il numero di fax.";
-    Text[ danish ] = "Please enter the fax number.";
+    Text[ danish ] = "Indtast faxnummeret.";
     Text[ swedish ] = "Ange faxnumret.";
     Text[ polish ] = "Nale¿y podaæ numer faksu.";
     Text[ portuguese_brazilian ] = "Please enter the fax number.";
