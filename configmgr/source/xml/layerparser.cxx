@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-22 14:51:57 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,11 @@ void LayerParser::startNode( ElementInfo const & aInfo, const uno::Reference< sa
     {
     case Operation::none:
     case Operation::modify:
-        m_xHandler->overrideNode(aInfo.name,aInfo.flags);
+        m_xHandler->overrideNode(aInfo.name,aInfo.flags,false);
+        break;
+
+    case Operation::clear:
+        m_xHandler->overrideNode(aInfo.name,aInfo.flags,true);
         break;
 
     case Operation::replace:
@@ -267,7 +271,12 @@ void LayerParser::startProperty( ElementInfo const & aInfo, const uno::Reference
     {
     case Operation::none:
     case Operation::modify:
-        m_xHandler->overrideProperty(aInfo.name,aInfo.flags,getActivePropertyType());
+        m_xHandler->overrideProperty(aInfo.name,aInfo.flags,getActivePropertyType(),false);
+        OSL_ASSERT(!m_bNewProp);
+        break;
+
+    case Operation::clear:
+        m_xHandler->overrideProperty(aInfo.name,aInfo.flags,getActivePropertyType(),true);
         OSL_ASSERT(!m_bNewProp);
         break;
 
