@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,9 +436,9 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
         if(xCrsr.is())
         {
             //
-            SwXTextCursor* pCursor =
+            OTextCursorHelper* pCursor =
                 xIfcTunnel.is() ?
-                    (SwXTextCursor*)xIfcTunnel->getSomething(SwXTextCursor::getUnoTunnelId())
+                    (OTextCursorHelper*)xIfcTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())
                     : 0;
 
             if(pCursor && pCursor->GetDoc() == GetView()->GetDocShell()->GetDoc())
@@ -1125,7 +1125,6 @@ SwXTextViewCursor::SwXTextViewCursor(SwView* pVw) :
     pView(pVw),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR))
 {
-
 }
 /*-- 17.12.98 09:36:24---------------------------------------------------
 
@@ -1299,13 +1298,13 @@ void SwXTextViewCursor::gotoRange(
 
         Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
         SwXTextRange* pRange = 0;
-        SwXTextCursor* pCursor = 0;
+        OTextCursorHelper* pCursor = 0;
         if(xRangeTunnel.is())
         {
             pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                     SwXTextRange::getUnoTunnelId());
-            pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                    SwXTextCursor::getUnoTunnelId());
+            pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                    OTextCursorHelper::getUnoTunnelId());
         }
 
         const sal_uInt16 nFrmType = rSh.GetFrmType(0,sal_True);
@@ -1326,9 +1325,9 @@ void SwXTextViewCursor::gotoRange(
                                                 FindSttNodeByType(eSearchNodeType);
 
         const SwNode* pSrcNode = 0;
-        if(pCursor && pCursor->GetCrsr())
+        if(pCursor && pCursor->GetPaM())
         {
-            pSrcNode = pCursor->GetCrsr()->GetNode();
+            pSrcNode = pCursor->GetPaM()->GetNode();
         }
         else if(pRange && pRange->GetBookmark())
         {
@@ -1939,4 +1938,59 @@ Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames(void) throw( Ru
     pArray[6] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
     return aRet;
 }
+/* -----------------------------03.03.03 11:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+const uno::Sequence< sal_Int8 > & SwXTextViewCursor::getUnoTunnelId()
+{
+    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
+    return aSeq;
+}
+/* -----------------------------03.03.03 11:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+//XUnoTunnel
+sal_Int64 SAL_CALL SwXTextViewCursor::getSomething(
+    const uno::Sequence< sal_Int8 >& rId )
+        throw(uno::RuntimeException)
+{
+    if( rId.getLength() == 16
+        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                        rId.getConstArray(), 16 ) )
+        {
+                return (sal_Int64)this;
+        }
+    return OTextCursorHelper::getSomething(rId);;
+}
+// -----------------------------------------------------------------------------
+
+IMPLEMENT_FORWARD_XINTERFACE2(SwXTextViewCursor,SwXTextViewCursor_Base,OTextCursorHelper)
+const SwDoc*        SwXTextViewCursor::GetDoc() const
+{
+    SwDoc* pDoc = pView->GetDocShell()->GetDoc();
+    SwWrtShell& rSh = pView->GetWrtShell();
+    return   rSh.GetCrsr() ? rSh.GetCrsr()->GetDoc() : 0;
+}
+// -----------------------------------------------------------------------------
+SwDoc*  SwXTextViewCursor::GetDoc()
+{
+    SwDoc* pDoc = pView->GetDocShell()->GetDoc();
+    SwWrtShell& rSh = pView->GetWrtShell();
+    return   rSh.GetCrsr() ? rSh.GetCrsr()->GetDoc() : 0;
+}
+// -----------------------------------------------------------------------------
+const SwPaM*    SwXTextViewCursor::GetPaM() const
+{
+    SwDoc* pDoc = pView->GetDocShell()->GetDoc();
+    SwWrtShell& rSh = pView->GetWrtShell();
+    return rSh.GetCrsr();
+}
+// -----------------------------------------------------------------------------
+SwPaM*  SwXTextViewCursor::GetPaM()
+{
+    SwDoc* pDoc = pView->GetDocShell()->GetDoc();
+    SwWrtShell& rSh = pView->GetWrtShell();
+    return rSh.GetCrsr();
+}
+// -----------------------------------------------------------------------------
 
