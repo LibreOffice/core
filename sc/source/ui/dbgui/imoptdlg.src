@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:04:56 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ czech ] = "Oddělovač pole";
         Text[ hebrew ] = "~Feldtrenner";
         Text[ hindi ] = "~क्षेत्र परिसीमित करनेवाला";
+        Text[ slovak ] = "Oddeľovač ~poľa";
     };
     ComboBox ED_FIELDSEP
     {
@@ -154,6 +155,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ czech ] = "Oddělovač textu";
         Text[ hebrew ] = "~Texttrenner";
         Text[ hindi ] = "~टेक्स्ट् परिसीमित करनेवाला";
+        Text[ slovak ] = "Oddeľovač ~textu";
     };
     ComboBox ED_TEXTSEP
     {
@@ -168,7 +170,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text = "~Zeichensatz" ;
         Text [ ENGLISH ] = "F~ont" ;
         Text [ norwegian ] = "F~ont" ;
-        Text [ italian ] = "~Tipo di carattere" ;
+        Text [ italian ] = "Set di caratteri" ;
         Text [ portuguese_brazilian ] = "~Conjunto de caracteres" ;
         Text [ portuguese ] = "~Conjunto de caracteres" ;
         Text [ french ] = "~Jeu de caract�res" ;
@@ -193,6 +195,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ czech ] = "Znaková sada";
         Text[ hebrew ] = "~Zeichensatz";
         Text[ hindi ] = "~अक्षर समूह";
+        Text[ slovak ] = "~Znaková sada";
     };
     ListBox DDLB_FONT
     {
@@ -242,6 +245,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ czech ] = "Volby pole";
         Text[ hebrew ] = "Feldoptionen";
         Text[ hindi ] = "क्षेत्र विकल्प";
+        Text[ slovak ] = "Voľby poľa";
     };
     CheckBox CB_FIXEDWIDTH
     {
@@ -274,6 +278,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ portuguese_brazilian ] = "Fixed column ~width";
         Text[ thai ] = "Fixed column ~width";
         Text[ hindi ] = "Fixed column ~width";
+        Text[ slovak ] = "~Pevná šírka stĺpca";
     };
     OKButton BTN_OK
     {
@@ -306,7 +311,10 @@ ModalDialog RID_SCDLG_IMPORTOPT
     Text[ czech ] = "Importovat soubor";
     Text[ hebrew ] = "Datei Importieren";
     Text[ hindi ] = "फाइल को निर्यात करो";
+    Text[ slovak ] = "Importovať súbor";
 };
+
+
 
 
 
