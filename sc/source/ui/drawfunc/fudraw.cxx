@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-19 12:16:07 $
+ *  last change: $Author: aw $ $Date: 2002-05-06 10:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,8 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                     bReturn = TRUE;
                 }
 
-                if(rKEvt.GetKeyCode().IsMod1())
+                // #98994# handle Mod1 and Mod2 to get travelling running on different systems
+                if(rKEvt.GetKeyCode().IsMod1() || rKEvt.GetKeyCode().IsMod2())
                 {
                     // #97016# II do something with a selected handle?
                     const SdrHdlList& rHdlList = pView->GetHdlList();
