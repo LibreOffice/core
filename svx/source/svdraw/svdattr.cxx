@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-05 06:51:47 $
+ *  last change: $Author: thb $ $Date: 2001-10-09 12:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,12 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[SDRATTR_TRANSFORMREF2Y -SDRATTR_START]=new SdrTransformRef2YItem;
     ppPoolDefaults[SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT -SDRATTR_START]=new SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, TRUE );
     ppPoolDefaults[SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM -SDRATTR_START]=new SfxBoolItem( SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM, FALSE );
+#ifndef SVX_LIGHT
     ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES );
+#else
+    // no need to have alien attributes persistent in the player
+    ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SfxVoidItem( SDRATTR_XMLATTRIBUTES );
+#endif // #ifndef SVX_LIGHT
 
     for (i=SDRATTR_NOTPERSISTRESERVE4; i<=SDRATTR_NOTPERSISTRESERVE15; i++) {
         ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
