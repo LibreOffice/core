@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:54:23 $
+ *  last change: $Author: dr $ $Date: 2001-04-24 14:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,17 @@ class ScHTMLParser;
 
 class ScHTMLImport : public ScEEImport
 {
+private:
+    static void         InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange );
+
 public:
                         ScHTMLImport( ScDocument* pDoc, const ScRange& rRange, BOOL bCalcWidthHeight = TRUE );
                         ~ScHTMLImport();
     const ScHTMLParser* GetParser() const { return (ScHTMLParser*)pParser; }
 
     virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0 );
+
+    static String       GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
 };
 
 

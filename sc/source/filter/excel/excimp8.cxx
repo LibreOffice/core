@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 14:17:11 $
+ *  last change: $Author: dr $ $Date: 2001-04-24 14:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3117,8 +3117,8 @@ void ImportExcel8::SXExt_ParamQry()
     aIn >> nFlags;
     if( nFlags & EXC_PQRY_TABLES )
     {
-// load all tables - not implemented
         pQuery->eMode = xiwqAllTables;
+        pQuery->aTables = ScFilterTools::GetHTMLTablesName();
     }
     else
     {
@@ -3172,23 +3172,6 @@ BOOL XclImpWebQuery::IsValid()
     return (aFilename.Len() != 0) && (eMode != xiwqUnknown);
 }
 
-void XclImpWebQuery::EraseQuotes( String& rToken )
-{
-    xub_StrLen nLastIx = rToken.Len() - 1;
-    if( (nLastIx > 0) && (rToken.GetChar( 0 ) == '"') && (rToken.GetChar( nLastIx ) == '"') )
-    {
-        rToken.Erase( nLastIx );
-        rToken.Erase( 0, 1 );
-    }
-}
-
-void XclImpWebQuery::AppendToken( String& rTokenList, const String& rToken, sal_Unicode cSep )
-{
-        if( rTokenList.Len() )
-            rTokenList += cSep;
-        rTokenList += rToken;
-}
-
 void XclImpWebQuery::ConvertTableNames()
 {
     const sal_Unicode cSep = ';';
@@ -3202,12 +3185,12 @@ void XclImpWebQuery::ConvertTableNames()
         String aToken( aTables.GetQuotedToken( 0, aQuotedPairs, cSep, nStringIx ) );
         sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.ToInt32() : 0;
         if( nTabNum > 0 )
-            AppendToken( aNewTables, ScFilterTools::GetNameFromHTMLIndex( (ULONG)nTabNum ), cSep );
+            ScFilterTools::AddToken( aNewTables, ScFilterTools::GetNameFromHTMLIndex( (ULONG)nTabNum ), cSep );
         else
         {
-            EraseQuotes( aToken );
+            ScFilterTools::EraseQuotes( aToken );
             if( aToken.Len() )
-                AppendToken( aNewTables, ScFilterTools::GetNameFromHTMLName( aToken ), cSep );
+                ScFilterTools::AddToken( aNewTables, ScFilterTools::GetNameFromHTMLName( aToken ), cSep );
         }
     }
     aTables = aNewTables;

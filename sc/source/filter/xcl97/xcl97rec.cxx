@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 09:57:53 $
+ *  last change: $Author: dr $ $Date: 2001-04-24 14:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2972,25 +2972,19 @@ XclExpWebQuery::XclExpWebQuery(
 
     // comma separated list of HTML table names or indexes
     xub_StrLen nTokenCnt = rSource.GetTokenCount( ';' );
-    String aNewTables;
+    String aNewTables, aAppendTable;
     xub_StrLen nStringIx = 0;
-    for( xub_StrLen nToken = 0; (nToken < nTokenCnt) && !bEntireDoc; nToken++ )
+    BOOL bExitLoop = FALSE;
+    for( xub_StrLen nToken = 0; (nToken < nTokenCnt) && !bExitLoop; nToken++ )
     {
         String aToken( rSource.GetToken( 0, ';', nStringIx ) );
         bEntireDoc = ScFilterTools::IsHTMLDocName( aToken );
-        if( !bEntireDoc )
-        {
-            String aAppend;
-            if( ScFilterTools::GetHTMLNameFromName( aToken, aAppend ) )
-            {
-                if( aNewTables.Len() )
-                    aNewTables += ',';
-                aNewTables += aAppend;
-            }
-        }
+        bExitLoop = bEntireDoc || ScFilterTools::IsHTMLTablesName( aToken );
+        if( !bExitLoop && ScFilterTools::GetHTMLNameFromName( aToken, aAppendTable ) )
+            ScFilterTools::AddToken( aNewTables, aAppendTable, ',' );
     }
 
-    if( !bEntireDoc )
+    if( !bExitLoop )    // neither HTML_all nor HTML_tables found
     {
         if( aNewTables.Len() )
             pQryTables = new XclExpUniString( aNewTables );

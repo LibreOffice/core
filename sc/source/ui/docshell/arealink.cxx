@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:28:55 $
+ *  last change: $Author: dr $ $Date: 2001-04-24 14:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include "globstr.hrc"
 #include "markdata.hxx"
 #include "hints.hxx"
+#include "htmlimp.hxx"
 
 #include "attrib.hxx"           // raus, wenn ResetAttrib am Dokument
 #include "patattr.hxx"          // raus, wenn ResetAttrib am Dokument
@@ -210,6 +211,38 @@ BOOL ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const Stri
             aSourceArea == rSource && aDestArea == rDest;
 }
 
+// find a range with name >rAreaName< in >pSrcDoc<, return it in >rRange<
+BOOL ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName )
+{
+    BOOL bFound = FALSE;
+    ScRangeName* pNames = pSrcDoc->GetRangeName();
+    USHORT nPos;
+    if (pNames)         // benannte Bereiche
+    {
+        if (pNames->SearchName( rAreaName, nPos ))
+            if ( (*pNames)[nPos]->IsReference( rRange ) )
+                bFound = TRUE;
+    }
+    if (!bFound)        // Datenbankbereiche
+    {
+        ScDBCollection* pDBColl = pSrcDoc->GetDBCollection();
+        if (pDBColl)
+            if (pDBColl->SearchName( rAreaName, nPos ))
+            {
+                USHORT nTab,nCol1,nRow1,nCol2,nRow2;
+                (*pDBColl)[nPos]->GetArea(nTab,nCol1,nRow1,nCol2,nRow2);
+                rRange = ScRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
+                bFound = TRUE;
+            }
+    }
+    if (!bFound)        // direct reference (range or cell)
+    {
+        if ( rRange.ParseAny( rAreaName, pSrcDoc ) & SCA_VALID )
+            bFound = TRUE;
+    }
+    return bFound;
+}
+
 //  ausfuehren:
 
 BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
@@ -247,41 +280,43 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     SvEmbeddedObjectRef aRef = pSrcShell;
     pSrcShell->DoLoad(pMed);
 
+    ScDocument* pSrcDoc = pSrcShell->GetDocument();
+
     // Optionen koennten gesetzt worden sein
     String aNewOpt = ScDocumentLoader::GetOptions(*pMed);
     if (!aNewOpt.Len())
         aNewOpt = aOptions;
 
-    //  Bereich suchen
+    // correct source range name list for web query import
+    String aTempArea;
 
-    BOOL bFound = FALSE;
-    ScRange aSourceRange;
-    ScDocument* pSrcDoc = pSrcShell->GetDocument();
-    ScRangeName* pNames = pSrcDoc->GetRangeName();
-    USHORT nPos;
-    if (pNames)         // benannte Bereiche
+    if( rNewFilter.EqualsAscii( pFilterHtmlWebQ ) )
+        aTempArea = ScHTMLImport::GetHTMLRangeNameList( pSrcDoc, rNewArea );
+    else
+        aTempArea = rNewArea;
+
+    // find total size of source area
+    USHORT nWidth = 0;
+    USHORT nHeight = 0;
+    xub_StrLen nTokenCnt = aTempArea.GetTokenCount( ';' );
+    xub_StrLen nStringIx = 0;
+    xub_StrLen nToken;
+
+    for( nToken = 0; nToken < nTokenCnt; nToken++ )
     {
-        if (pNames->SearchName( rNewArea, nPos ))
-            if ( (*pNames)[nPos]->IsReference( aSourceRange ) )
-                bFound = TRUE;
+        String aToken( aTempArea.GetToken( 0, ';', nStringIx ) );
+        ScRange aTokenRange;
+        if( FindExtRange( aTokenRange, pSrcDoc, aToken ) )
+        {
+            // columns: find maximum
+            nWidth = Max( nWidth, (USHORT)(aTokenRange.aEnd.Col() - aTokenRange.aStart.Col() + 1) );
+            // rows: add row range + 1 empty row
+            nHeight += aTokenRange.aEnd.Row() - aTokenRange.aStart.Row() + 2;
+        }
     }
-    if (!bFound)        // Datenbankbereiche
-    {
-        ScDBCollection* pDBColl = pSrcDoc->GetDBCollection();
-        if (pDBColl)
-            if (pDBColl->SearchName( rNewArea, nPos ))
-            {
-                USHORT nTab,nCol1,nRow1,nCol2,nRow2;
-                (*pDBColl)[nPos]->GetArea(nTab,nCol1,nRow1,nCol2,nRow2);
-                aSourceRange = ScRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
-                bFound = TRUE;
-            }
-    }
-    if (!bFound)        // direct reference (range or cell)
-    {
-        if ( aSourceRange.ParseAny( rNewArea, pSrcDoc ) & SCA_VALID )
-            bFound = TRUE;
-    }
+    // remove the last empty row
+    if( nHeight )
+        nHeight--;
 
     //  alte Daten loeschen / neue kopieren
 
@@ -289,12 +324,11 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     USHORT nDestTab = aDestPos.Tab();
     ScRange aOldRange = aDestArea;
     ScRange aNewRange = aDestArea;          // alter Bereich, wenn Datei nicht gefunden o.ae.
-    if (bFound)
-        aNewRange.aEnd = ScAddress(
-                aSourceRange.aEnd.Col() - aSourceRange.aStart.Col() + aDestPos.Col(),
-                aSourceRange.aEnd.Row() - aSourceRange.aStart.Row() + aDestPos.Row(),
-                nDestTab );
-
+    if (nWidth && nHeight)
+    {
+        aNewRange.aEnd.SetCol( aNewRange.aStart.Col() + nWidth - 1 );
+        aNewRange.aEnd.SetRow( aNewRange.aStart.Row() + nHeight - 1 );
+    }
 
     BOOL bCanDo = pDoc->CanFitBlock( aOldRange, aNewRange );    //! nach bDoInsert unterscheiden
     if (bCanDo)
@@ -346,35 +380,46 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 
         //  Daten kopieren
 
-        if (bFound)
+        if (nWidth && nHeight)
         {
-            USHORT nSrcTab = aSourceRange.aStart.Tab();
-            ScMarkData aSourceMark;
-            aSourceMark.SelectOneTable( nSrcTab );      // selektieren fuer CopyToClip
-            aSourceMark.SetMarkArea( aSourceRange );
-
-            ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-            pSrcDoc->CopyToClip( aSourceRange.aStart.Col(),aSourceRange.aStart.Row(),
-                                 aSourceRange.aEnd.Col(),aSourceRange.aEnd.Row(),
-                                 FALSE, pClipDoc, FALSE, &aSourceMark );
-
-            if ( pClipDoc->HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
-                                        HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+            ScDocument aClipDoc( SCDOCMODE_CLIP );
+            ScRange aNewTokenRange( aNewRange.aStart );
+            nStringIx = 0;
+            for( nToken = 0; nToken < nTokenCnt; nToken++ )
             {
-                //! ResetAttrib am Dokument !!!
+                String aToken( aTempArea.GetToken( 0, ';', nStringIx ) );
+                ScRange aTokenRange;
+                if( FindExtRange( aTokenRange, pSrcDoc, aToken ) )
+                {
+                    USHORT nSrcTab = aTokenRange.aStart.Tab();
+                    ScMarkData aSourceMark;
+                    aSourceMark.SelectOneTable( nSrcTab );      // selektieren fuer CopyToClip
+                    aSourceMark.SetMarkArea( aTokenRange );
 
-                ScPatternAttr aPattern( pSrcDoc->GetPool() );
-                aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
-                aPattern.GetItemSet().Put( ScMergeFlagAttr() );
-                pClipDoc->ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nSrcTab, aPattern );
+                    pSrcDoc->CopyToClip( aTokenRange.aStart.Col(), aTokenRange.aStart.Row(),
+                                         aTokenRange.aEnd.Col(), aTokenRange.aEnd.Row(),
+                                         FALSE, &aClipDoc, FALSE, &aSourceMark );
+
+                    if ( aClipDoc.HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
+                                            HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                    {
+                        //! ResetAttrib am Dokument !!!
+
+                        ScPatternAttr aPattern( pSrcDoc->GetPool() );
+                        aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
+                        aPattern.GetItemSet().Put( ScMergeFlagAttr() );
+                        aClipDoc.ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nSrcTab, aPattern );
+                    }
+
+                    aNewTokenRange.aEnd.SetCol( aNewTokenRange.aStart.Col() + (aTokenRange.aEnd.Col() - aTokenRange.aStart.Col()) );
+                    aNewTokenRange.aEnd.SetRow( aNewTokenRange.aStart.Row() + (aTokenRange.aEnd.Row() - aTokenRange.aStart.Row()) );
+                    ScMarkData aDestMark;
+                    aDestMark.SelectOneTable( nDestTab );
+                    aDestMark.SetMarkArea( aNewTokenRange );
+                    pDoc->CopyFromClip( aNewTokenRange, aDestMark, IDF_ALL, NULL, &aClipDoc, FALSE );
+                    aNewTokenRange.aStart.SetRow( aNewTokenRange.aEnd.Row() + 2 );
+                }
             }
-
-            ScMarkData aDestMark;
-            aDestMark.SelectOneTable( nDestTab );
-            aDestMark.SetMarkArea( aNewRange );
-            pDoc->CopyFromClip( aNewRange, aDestMark, IDF_ALL, NULL, pClipDoc, FALSE );
-
-            delete pClipDoc;
         }
         else
         {
