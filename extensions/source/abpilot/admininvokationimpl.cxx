@@ -2,9 +2,9 @@
  *
  *  $RCSfile: admininvokationimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:10:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,13 +106,15 @@ namespace abp
     //= OAdminDialogInvokation
     //=====================================================================
     //---------------------------------------------------------------------
-    OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rPreferredName, Window* _pMessageParent)
+    OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XMultiServiceFactory >& _rxORB
+                    , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _xDataSource
+                    , Window* _pMessageParent)
         :m_xORB(_rxORB)
-        ,m_sPreferredName(_rPreferredName)
+        ,m_xDataSource(_xDataSource)
         ,m_pMessageParent(_pMessageParent)
     {
         DBG_ASSERT(m_xORB.is(), "OAdminDialogInvokation::OAdminDialogInvokation: invalid service factory!");
-        DBG_ASSERT(m_sPreferredName.getLength(), "OAdminDialogInvokation::OAdminDialogInvokation: invalid preferred name!");
+        DBG_ASSERT(m_xDataSource.is(), "OAdminDialogInvokation::OAdminDialogInvokation: invalid preferred name!");
         DBG_ASSERT(m_pMessageParent, "OAdminDialogInvokation::OAdminDialogInvokation: invalid message parent!");
     }
 
@@ -125,26 +127,23 @@ namespace abp
         try
         {
             // the service name of the administration dialog
-            static ::rtl::OUString s_sAdministrationServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatasourceAdministrationDialog");
+            const static ::rtl::OUString s_sAdministrationServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatasourceAdministrationDialog"));
+            const static ::rtl::OUString s_sDataSourceTypeChangeDialog = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DataSourceTypeChangeDialog"));
 
             // the parameters for the call
-            Sequence< Any > aArguments(4);
+            Sequence< Any > aArguments(3);
             Any* pArguments = aArguments.getArray();
 
             // the parent window
             Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface(m_pMessageParent);
             *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), -1, makeAny(xDialogParent), PropertyState_DIRECT_VALUE);
 
-            // the mode indicating that we want allow creation of one single data source only
-            ::rtl::OUString sDialogMode = ::rtl::OUString::createFromAscii( _bFixedType ? "SingleEditFixedType" : "SingleEdit" );
-            *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii("Mode"), -1, makeAny( sDialogMode ), PropertyState_DIRECT_VALUE);
-
             // the title of the dialog
             String sAdminDialogTitle(ModuleRes(RID_STR_ADMINDIALOGTITLE));
             *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii("Title"), -1, makeAny(::rtl::OUString(sAdminDialogTitle)), PropertyState_DIRECT_VALUE);
 
             // the name of the new data source
-            *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii("InitialSelection"), -1, makeAny(m_sPreferredName), PropertyState_DIRECT_VALUE);
+            *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii("InitialSelection"), -1, makeAny(m_xDataSource), PropertyState_DIRECT_VALUE);
 
             // create the dialog
             Reference< XExecutableDialog > xDialog;
@@ -152,7 +151,7 @@ namespace abp
                 // creating the dialog service is potentially expensive (if all the libraries invoked need to be loaded)
                 // so we display a wait cursor
                 WaitObject aWaitCursor(m_pMessageParent);
-                xDialog = Reference< XExecutableDialog >( m_xORB->createInstanceWithArguments( s_sAdministrationServiceName , aArguments ), UNO_QUERY );
+                xDialog = Reference< XExecutableDialog >( m_xORB->createInstanceWithArguments( _bFixedType ? s_sAdministrationServiceName : s_sDataSourceTypeChangeDialog, aArguments ), UNO_QUERY );
 
                 // just for a smoother UI: What the dialog does upon execution, is (amongst other things) creating
                 // the DriverManager service
