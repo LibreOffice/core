@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonlingui.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:45:03 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <vcl/decoview.hxx>
 #endif
 
-#include "spldlg.hrc"
+#include "hangulhanjadlg.hrc"
 
 //=============================================================================
 // SvxClickInfoCtr
