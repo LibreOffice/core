@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:50:09 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,18 @@ void SmDocShell::ArrangeFormula()
 
     const SmFormat &rFormat = GetFormat();
     pTree->Prepare(rFormat, *this);
+
+    // format/draw formulas always from left to right,
+    // and numbers should not be converted
+    ULONG nLayoutMode = pOutDev->GetLayoutMode();
+    pOutDev->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+    INT16 nDigitLang = pOutDev->GetDigitLanguage();
+    pOutDev->SetDigitLanguage( LANGUAGE_ENGLISH );
+    //
     pTree->Arrange(*pOutDev, rFormat);
+    //
+    pOutDev->SetLayoutMode( nLayoutMode );
+    pOutDev->SetDigitLanguage( nDigitLang );
 
     SetFormulaArranged(TRUE);
 
@@ -597,7 +608,17 @@ void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
         bRestoreDrawMode = TRUE;
     }
 
+    // format/draw formulas always from left to right
+    // and numbers should not be converted
+    ULONG nLayoutMode = rDev.GetLayoutMode();
+    rDev.SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+    INT16 nDigitLang = rDev.GetDigitLanguage();
+    rDev.SetDigitLanguage( LANGUAGE_ENGLISH );
+    //
     pTree->Draw(rDev, rPosition);
+    //
+    rDev.SetLayoutMode( nLayoutMode );
+    rDev.SetDigitLanguage( nDigitLang );
 
     if (bRestoreDrawMode)
         rDev.SetDrawMode( nOldDrawMode );
