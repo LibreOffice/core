@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-16 21:47:18 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ ModalDialog DLG_BREAK
         Text[ chinese_traditional ] = "´«­¶(~P)";
         Text[ arabic ] = "ÝÇÕá ÕÝÍÇÊ";
         Text[ greek ] = "ÁëëáãÞ óåëßäáò";
-        Text[ korean ] = "ÂÊ¡¡ ³ª´©±â(~P)";
+        Text[ korean ] = "ÂÊ ³ª´©±â(~P)";
         Text[ turkish ] = "~Sayfa sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Salto de ~página";
@@ -421,6 +421,7 @@ ModalDialog DLG_BREAK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar salto";
 };
+
 
 
 
