@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:05:30 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 14:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1659,6 +1659,7 @@ BOOL lcl_IsNumbering(sal_Int16 eNumberType)
     return bResult;
 }
 
+#if 0
 const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
                                         BOOL bForward,
                                         BOOL bNum,
@@ -1716,6 +1717,7 @@ const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
     return pResult;
 }
 // <- #i23731#
+#endif
 
 BOOL SwDoc::GotoPrevNum( SwPosition& rPos, BOOL bOverUpper,
                             BYTE* pUpper, BYTE* pLower  )
@@ -1754,56 +1756,90 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
     }
     // <- #115901#
 
-    char nDiff = bDown ? 1 : -1;
     BOOL bRet = FALSE;
+    char nDiff = bDown ? 1 : -1;
 
     // ->#115901#
     if (bOnlyOutline)
         bRet = OutlineUpDown(rPam, nDiff);
     else if (bOnlyNonOutline)
     {
-        // <-#115901#
-        if( DoesUndo() )
-        {
-            ClearRedo();
-            AppendUndo( new SwUndoNumUpDown( rPam, nDiff ) );
-        }
 
-        String sNumRule;
         const SfxPoolItem* pItem;
         const String* pName;
-        for( ; nStt <= nEnd; ++nStt )
-        {
-            SwTxtNode* pTNd = GetNodes()[ nStt ]->GetTxtNode();
-            if( pTNd && 0 != ( pItem = pTNd->GetNoCondAttr(RES_PARATR_NUMRULE,
-                                                           TRUE ) ) &&
-                ( pName = &((SwNumRuleItem*)pItem)->GetValue())->Len() )
-            {
-                BYTE nLevel = pTNd->GetNum()->GetLevel();
-                if( ( -1 == nDiff && 0 < GetRealLevel(nLevel)) ||
-                    ( 1 == nDiff && MAXLEVEL - 1 > GetRealLevel(nLevel) ) )
-                {
-                    nLevel += nDiff;
-                    SwNodeNum aNum( *pTNd->GetNum() );
-                    aNum.SetLevel( nLevel );
 
-                    pTNd->UpdateNum( aNum );
-#ifndef NUM_RELSPACE
-                    pTNd->SetNumLSpace( TRUE );
-#endif
-                    if( *pName != sNumRule )
+        /* --> #i24560#
+
+        Only promote or demote if all selected paragraphs are
+        promotable resp. demotable.
+
+        */
+        for (int nTmp = nStt; nTmp <= nEnd; ++nTmp)
+        {
+            SwTxtNode* pTNd = GetNodes()[ nTmp ]->GetTxtNode();
+            if( pTNd)
+            {
+                pItem = pTNd->GetNoCondAttr(RES_PARATR_NUMRULE, TRUE );
+
+                if (0 != pItem)
+                {
+                    pName = &((SwNumRuleItem*)pItem)->GetValue();
+
+                    if (pName->Len())
                     {
-                        sNumRule = *pName;
-                        SwNumRule* pRule = FindNumRulePtr( *pName );
-                        pRule->SetInvalidRule( TRUE );
+                        BYTE nLevel = pTNd->GetNum()->GetRealLevel();
+                        if( (-1 == nDiff && 0 >= nLevel) ||
+                            (1 == nDiff && MAXLEVEL - 1 <= nLevel))
+                            bRet = FALSE;
                     }
-                    bRet = TRUE;
                 }
             }
         }
 
         if( bRet )
         {
+            /* <-- #i24560# */
+            if( DoesUndo() )
+            {
+                ClearRedo();
+                AppendUndo( new SwUndoNumUpDown( rPam, nDiff ) );
+            }
+
+            String sNumRule;
+
+            for( int nTmp = nStt; nTmp <= nEnd; ++nTmp )
+            {
+                SwTxtNode* pTNd = GetNodes()[ nTmp ]->GetTxtNode();
+                if( pTNd)
+                {
+                    pItem = pTNd->GetNoCondAttr(RES_PARATR_NUMRULE, TRUE );
+
+                    if (0 != pItem)
+                    {
+                        pName = &((SwNumRuleItem*)pItem)->GetValue();
+
+                        if (pName->Len())
+                        {
+                            BYTE nLevel = pTNd->GetNum()->GetLevel();
+                            nLevel += nDiff;
+                            SwNodeNum aNum( *pTNd->GetNum() );
+                            aNum.SetLevel( nLevel );
+
+                            pTNd->UpdateNum( aNum );
+#ifndef NUM_RELSPACE
+                            pTNd->SetNumLSpace( TRUE );
+#endif
+                            if( *pName != sNumRule )
+                            {
+                                sNumRule = *pName;
+                                SwNumRule* pRule = FindNumRulePtr( *pName );
+                                pRule->SetInvalidRule( TRUE );
+                            }
+                        }
+                    }
+                }
+            }
+
             UpdateNumRule();
             SetModified();
         }
