@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-08 11:49:01 $
+#   last change: $Author: obo $ $Date: 2004-06-04 10:37:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,10 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
+        $(SLO)$/addincol.obj \
+        $(SLO)$/addinhelpid.obj \
+        $(SLO)$/addinlis.obj \
+        $(SLO)$/address.obj \
         $(SLO)$/adiasync.obj \
         $(SLO)$/appoptio.obj \
         $(SLO)$/autoform.obj \
@@ -95,11 +99,14 @@ SLOFILES =  \
         $(SLO)$/consoli.obj  \
         $(SLO)$/dbcolect.obj \
         $(SLO)$/ddelink.obj \
-        $(SLO)$/detfunc.obj  \
         $(SLO)$/detdata.obj  \
+        $(SLO)$/detfunc.obj  \
         $(SLO)$/docoptio.obj \
         $(SLO)$/editutil.obj \
+        $(SLO)$/filtopt.obj \
+        $(SLO)$/hints.obj \
         $(SLO)$/indexmap.obj \
+        $(SLO)$/inputopt.obj \
         $(SLO)$/interpr1.obj \
         $(SLO)$/interpr2.obj \
         $(SLO)$/interpr3.obj \
@@ -107,14 +114,21 @@ SLOFILES =  \
         $(SLO)$/interpr5.obj \
         $(SLO)$/interpr6.obj \
         $(SLO)$/linelink.obj \
+        $(SLO)$/navicfg.obj \
+        $(SLO)$/optutil.obj \
+        $(SLO)$/parclass.obj \
+        $(SLO)$/printopt.obj \
+        $(SLO)$/prnsave.obj \
         $(SLO)$/progress.obj \
-        $(SLO)$/rangenam.obj \
         $(SLO)$/rangelst.obj \
+        $(SLO)$/rangenam.obj \
+        $(SLO)$/rangeseq.obj \
         $(SLO)$/rangeutl.obj \
         $(SLO)$/rechead.obj  \
-        $(SLO)$/refupdat.obj \
         $(SLO)$/refdata.obj \
         $(SLO)$/reffind.obj \
+        $(SLO)$/refreshtimer.obj \
+        $(SLO)$/refupdat.obj \
         $(SLO)$/scdebug.obj \
         $(SLO)$/scmatrix.obj \
         $(SLO)$/sctictac.obj \
@@ -123,20 +137,7 @@ SLOFILES =  \
         $(SLO)$/unitconv.obj \
         $(SLO)$/userlist.obj \
         $(SLO)$/viewopti.obj \
-        $(SLO)$/inputopt.obj \
-        $(SLO)$/filtopt.obj \
-        $(SLO)$/printopt.obj \
-        $(SLO)$/optutil.obj \
-        $(SLO)$/zforauto.obj \
-        $(SLO)$/hints.obj \
-        $(SLO)$/prnsave.obj \
-        $(SLO)$/navicfg.obj \
-        $(SLO)$/addincol.obj \
-        $(SLO)$/addinlis.obj \
-        $(SLO)$/addinhelpid.obj \
-        $(SLO)$/rangeseq.obj \
-        $(SLO)$/refreshtimer.obj \
-        $(SLO)$/parclass.obj
+        $(SLO)$/zforauto.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/addincol.obj
