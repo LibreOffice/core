@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:35:11 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1276,7 +1276,6 @@ BOOL SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
     // Gebe das "Auto[matische]-Format" mit der Id zurueck. Existiert
     // es noch nicht, dann erzeuge es
 
-typedef SwFmt* (SwDoc::*FnMakeFmt)( const String &, SwFmt * );
 SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
     SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric )
 {
@@ -1284,7 +1283,6 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
 
     SvPtrarr* pArray[ 2 ];
     USHORT nArrCnt = 1, nRCId = 0;
-    FnMakeFmt fnMkFmt;
     USHORT* pWhichRange = 0;
 
     switch( nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
@@ -1293,7 +1291,6 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
         {
             pArray[0] = pCharFmtTbl;
             pDeriveFmt = pDfltCharFmt;
-            fnMkFmt= (FnMakeFmt)&SwDoc::MakeCharFmt;
 
             if( nId > RES_POOLCHR_NORMAL_END )
                 nRCId = RC_POOLCHRFMT_HTML_BEGIN - RES_POOLCHR_HTML_BEGIN;
@@ -1315,7 +1312,6 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
             pArray[0] = pFrmFmtTbl;
             pArray[1] = pSpzFrmFmtTbl;
             pDeriveFmt = pDfltFrmFmt;
-            fnMkFmt= (FnMakeFmt)&SwDoc::MakeFrmFmt;
             nArrCnt = 2;
             nRCId = RC_POOLFRMFMT_BEGIN - RES_POOLFRM_BEGIN;
             pWhichRange = aFrmFmtSetRange;
@@ -1361,7 +1357,27 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
     else
     {
         BOOL bIsModified = IsModified();
-        pNewFmt = (this->*fnMkFmt)( aNm, pDeriveFmt );
+
+        BOOL bDoesUndo = DoesUndo();
+        DoUndo(FALSE);
+        switch (nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
+        {
+        case POOLGRP_CHARFMT:
+            pNewFmt = MakeCharFmt(aNm,
+                                  reinterpret_cast<SwCharFmt *>(pDeriveFmt));
+
+            break;
+        case POOLGRP_FRAMEFMT:
+            pNewFmt = MakeFrmFmt(aNm,
+                                 reinterpret_cast<SwFrmFmt *>(pDeriveFmt));
+
+            break;
+        default:
+            break;
+        }
+
+        DoUndo(bDoesUndo);
+
         if( !bIsModified )
             ResetModified();
         pNewFmt->SetPoolFmtId( nId );
