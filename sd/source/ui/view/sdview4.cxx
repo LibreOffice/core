@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-15 13:52:32 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ SdrGrafObj* SdView::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             SfxItemSet aSet(pDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
             aSet.Put(XFillStyleItem(XFILL_BITMAP));
             aSet.Put(XFillBitmapItem(&pDocSh->GetPool(), aXOBitmap));
-            pPickObj->SetItemSetAndBroadcast(aSet);
+            pPickObj->SetMergedItemSetAndBroadcast(aSet);
         }
     }
     else if ( pPV )
@@ -249,9 +249,9 @@ SdrGrafObj* SdView::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             if (pImageMap)
                 pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
 
-            Rectangle aPickObjRect(pPickObj->GetBoundRect());
+            Rectangle aPickObjRect(pPickObj->GetCurrentBoundRect());
             Size aPickObjSize(aPickObjRect.GetSize());
-            Rectangle aObjRect(pNewGrafObj->GetBoundRect());
+            Rectangle aObjRect(pNewGrafObj->GetCurrentBoundRect());
             Size aObjSize(aObjRect.GetSize());
 
             Fraction aScaleWidth(aPickObjSize.Width(), aObjSize.Width());
