@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:59:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,11 @@ namespace svt
         void            SetRoadmapBitmap( const BitmapEx& maBitmap, sal_Bool _bInvalidate = sal_True );
         const BitmapEx& GetRoadmapBitmap( ) const;
 
-        void            EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable );
-        sal_Bool        IsRoadmapItemEnabled( ItemId _nItemId ) const;
+        void            EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable, ItemIndex _nStartIndex = 0  );
+        sal_Bool        IsRoadmapItemEnabled( ItemId _nItemId, ItemIndex _nStartIndex = 0 ) const;
 
-        void            ChangeRoadmapItemLabel( ItemId _nID, ::rtl::OUString sLabel );
-        void            ChangeRoadmapItemID( ItemId _nID, ItemId _NewID );
+        void            ChangeRoadmapItemLabel( ItemId _nID, ::rtl::OUString sLabel, ItemIndex _nStartIndex = 0 );
+        void            ChangeRoadmapItemID( ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex = 0  );
 
         void            SetRoadmapInteractive( sal_Bool _bInteractive );
         sal_Bool        IsRoadmapInteractive();
@@ -147,8 +147,8 @@ namespace svt
         HyperLabel*         GetByIndex( ItemIndex _nItemIndex );
         const HyperLabel*   GetByIndex( ItemIndex _nItemIndex ) const;
 
-        HyperLabel*         GetByID( ItemId _nID );
-        const HyperLabel*   GetByID( ItemId _nID ) const;
+        HyperLabel*         GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  );
+        const HyperLabel*   GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  ) const;
 
         void                DrawHeadline();
         void                DeselectOldRoadmapItems();
