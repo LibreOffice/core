@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:26 $
+ *  last change: $Author: cl $ $Date: 2000-10-09 08:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ void SdModule::Execute(SfxRequest& rReq)
                         SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
 
                         SfxStamp aCreated;
-                        aCreated.SetName( SFX_INIMANAGER()->GetUserFullName() );
+                        aCreated.SetName( SFX_INIMANAGER()->GetFullName() );
                         rInfo.SetCreated( aCreated );
                         SfxStamp aInvalid( TIMESTAMP_INVALID_DATETIME );
                         rInfo.SetChanged( aInvalid );
