@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:58:31 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,6 +842,7 @@ class XMLConditionalTextImportContext : public XMLTextFieldImportContext
     const ::rtl::OUString sPropertyTrueContent;
     const ::rtl::OUString sPropertyFalseContent;
     const ::rtl::OUString sPropertyIsConditionTrue;
+    const ::rtl::OUString sPropertyCurrentPresentation;
 
     ::rtl::OUString sCondition;
     ::rtl::OUString sTrueContent;
