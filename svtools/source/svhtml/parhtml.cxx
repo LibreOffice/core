@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parhtml.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-15 08:32:11 $
+ *  last change: $Author: mib $ $Date: 2001-10-31 08:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@
 const sal_Int32 MAX_LEN = 1024L;
 //static sal_Unicode sTmpBuffer[ MAX_LEN+1 ];
 const sal_Int32 MAX_MACRO_LEN = 1024;
+
+const sal_Int32 MAX_ENTITY_LEN = 8L;
 
 /*  */
 
@@ -528,7 +530,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 }
                 else if( HTML_ISALPHA( nNextCh ) )
                 {
-                    ::rtl::OUStringBuffer sEntityBuffer( 6L );
+                    ::rtl::OUStringBuffer sEntityBuffer( MAX_ENTITY_LEN );
                     sal_Int32 nPos = 0L;
                     do
                     {
@@ -536,7 +538,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         nPos++;
                         nNextCh = GetNextChar();
                     }
-                    while( nPos < 6L && HTML_ISALNUM( nNextCh ) &&
+                    while( nPos < MAX_ENTITY_LEN && HTML_ISALNUM( nNextCh ) &&
                            !rInput.IsEof() );
 
                     if( IsParserWorking() && !rInput.IsEof() )
