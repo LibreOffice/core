@@ -505,9 +505,9 @@ sub collect_all_items_with_special_flag
 # Mechanism for simple installation without packing
 ###########################################################
 
-sub install_simple ($$$$)
+sub install_simple ($$$$$)
 {
-    my ($packagename, $directoriesarray, $filesarray, $linksarray) = @_;
+    my ($packagename, $languagestring, $directoriesarray, $filesarray, $linksarray) = @_;
 
     print "... installing module $packagename ...\n";
 
@@ -564,6 +564,7 @@ sub install_simple ($$$$)
     {
         my $filelist;
         my $fname = $installer::globals::destdir . "/$packagename";
+        if ($installer::globals::languagepack) { $fname .= ".$languagestring"; }
         open ($filelist, ">$fname") || die "Can't open $fname: $!";
         print $filelist @lines;
         close ($filelist);
