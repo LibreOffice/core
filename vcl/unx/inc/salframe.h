@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-28 16:50:00 $
+ *  last change: $Author: pl $ $Date: 2000-12-01 13:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,6 @@
  *
  *
  ************************************************************************/
-//-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
-//                                                                             //
-// (C) 1997 Star Division GmbH, Hamburg, Germany                               //
-//                                                                             //
-// $Revision: 1.2 $  $Author: pl $  $Date: 2000-11-28 16:50:00 $               //
-//                                                                             //
-// $Workfile:   salframe.h  $                                                  //
-//  $Modtime:   09 Sep 1997 17:29:12  $                                        //
-//                                                                             //
-//-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
-
 #ifndef _SV_SALFRAME_H
 #define _SV_SALFRAME_H
 
