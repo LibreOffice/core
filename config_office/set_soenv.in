@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.24 $
-# Date:        $Date: 2004-10-27 15:23:18 $
+# Version:     $Revision: 1.25 $
+# Date:        $Date: 2004-10-27 16:17:53 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $SHELL,
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $EXTRA_DOTNET_FILES, $USE_NEW_SDK, $FRAME_HOME, 
      $ATL_LIB, $ATL_INCLUDE, $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $ENABLE_DEBUG, $ENABLE_STATIC_GTK,
+     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $ENABLE_DEBUG,
 	 $PROEXT,
      $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME );
 #
@@ -132,8 +132,6 @@ $MINGW          = '@WITH_MINGWIN@'; # use MinGW for Windows build
 $CC             = '@CC@';           # C compiler
 $CXX            = '@CXX@';          # C++ compiler
 $EXCEPTIONS     = '@EXCEPTIONS@';   # Exception handling type
-$ENABLE_DEBUG   = '@ENABLE_DEBUG@';  # Enable a debug build
-$ENABLE_STATIC_GTK = '@ENABLE_STATIC_GTK@'; # Use static gtk libraries
 $WRAPCMD        = "";               # Wrapper (only for winnt)
 $GLIBC          = "";               # Whether the platform uses glibc
 $PROEXT         = "@PROEXT@";
@@ -1416,7 +1414,13 @@ ToFile( "debug",             "true",             "e" );
 ToFile( "PRODUCT",           "@PRODUCT@",        "e" );
 ToFile( "PROFULLSWITCH",     "@PROFULLSWITCH@",  "e" );
 ToFile( "PROEXT",            $PROEXT,            "e" );
-ToFile( "ENABLE_STATIC_GTK", $ENABLE_STATIC_GTK, "e" );
+ToFile( "ENABLE_GTK",        "@ENABLE_GTK@",       "e" );
+ToFile( "GTK_CFLAGS",        "@GTK_CFLAGS@",       "e" );
+ToFile( "GTK_LIBS",          "@GTK_LIBS@",         "e" );
+ToFile( "ENABLE_STATIC_GTK", "@ENABLE_STATIC_GTK@", "e" );
+ToFile( "ENABLE_KDE",        "@ENABLE_KDE@",       "e" );
+ToFile( "KDE_CFLAGS",        "@KDE_CFLAGS@",       "e" );
+ToFile( "KDE_LIBS",          "@KDE_LIBS@",         "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 # [ed] 5/14/02 If we're building Aqua graphics, insert a C macro to indicate this.
 # There may be a better way to do this, like splitting unxmacxp into two, but
