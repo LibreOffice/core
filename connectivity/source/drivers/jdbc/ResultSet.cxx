@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
+ *  last change: $Author: oj $ $Date: 2001-07-04 10:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,12 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
+#endif
 
 using namespace ::comphelper;
 
@@ -197,19 +203,22 @@ sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const ::rtl::OUString& column
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
-    jvalue args[1];
-        // Parameter konvertieren
-        args[0].l = convertwchar_tToJavaString(t.pEnv,columnName);
+
         // temporaere Variable initialisieren
         char * cSignature = "(Ljava/lang/String;)I";
         char * cMethodName = "findColumn";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
+            jvalue args[1];
+            // Parameter konvertieren
+            args[0].l = convertwchar_tToJavaString(t.pEnv,columnName);
             out = t.pEnv->CallIntMethod( object, mID, args[0].l );
-            ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
+
+            ThrowSQLException(t.pEnv,*this);
+
         } //mID
     } //t.pEnv
     return (sal_Int32)out;
@@ -658,16 +667,13 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
-        jvalue args[1];
-        // Parameter konvertieren
-        args[0].i = (sal_Int32)columnIndex;
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/sql/Timestamp;";
         char * cMethodName = "getTimestamp";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
-            out = t.pEnv->CallObjectMethod( object, mID, args[0].i);
+            out = t.pEnv->CallObjectMethod( object, mID, columnIndex);
             ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
         } //mID
@@ -891,22 +897,6 @@ sal_Bool SAL_CALL java_sql_ResultSet::previous(  ) throw(SQLException, RuntimeEx
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL java_sql_ResultSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
-//  jobject out(0);
-//  SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-//  if( t.pEnv )
-//  {
-//      // temporaere Variable initialisieren
-//      char * cSignature = "()Ljava/sql/Statement;";
-//      char * cMethodName = "getStatement";
-//      // Java-Call absetzen
-//      jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-//      if( mID ){
-//          out = t.pEnv->CallObjectMethod( object, mID );
-//          ThrowSQLException(t.pEnv,*this);
-//      } //mID
-//  } //t.pEnv
-//  // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-//  return out==0 ? 0 : (::cppu::OWeakObject*)new java_sql_Statement( t.pEnv, out );
     return m_aStatement.get();
 }
 // -------------------------------------------------------------------------
@@ -1217,7 +1207,7 @@ void SAL_CALL java_sql_ResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool
     {
         // temporaere Variable initialisieren
         char * cSignature = "(IZ)V";
-        char * cMethodName = "updateNull";
+        char * cMethodName = "updateBoolean";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
@@ -1339,18 +1329,20 @@ void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const ::r
     SDBThreadAttach t;
     if( t.pEnv )
     {
-        jvalue args[1];
-        // Parameter konvertieren
-        args[0].l = convertwchar_tToJavaString(t.pEnv,x);
+
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/lang/String)V";
         char * cMethodName = "updateString";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
+        if( mID )
+        {
+            jvalue args[1];
+            // Parameter konvertieren
+            args[0].l = convertwchar_tToJavaString(t.pEnv,x);
             t.pEnv->CallVoidMethod( object, mID,columnIndex,args[0].l);
-            ThrowSQLException(t.pEnv,*this);
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
+            ThrowSQLException(t.pEnv,*this);
         }
     }
 }
@@ -1361,21 +1353,21 @@ void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const ::co
     SDBThreadAttach t;
     if( t.pEnv )
     {
-        jvalue args[1];
-        jbyteArray aArray = t.pEnv->NewByteArray(x.getLength());
-        t.pEnv->SetByteArrayRegion(aArray,0,x.getLength(),(jbyte*)x.getConstArray());
-
-        // Parameter konvertieren
-        args[0].l = aArray;
         // temporaere Variable initialisieren
         char * cSignature = "(I[B)V";
         char * cMethodName = "updateBytes";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
+        if( mID )
+        {
+            jvalue args[1];
+            jbyteArray aArray = t.pEnv->NewByteArray(x.getLength());
+            t.pEnv->SetByteArrayRegion(aArray,0,x.getLength(),(jbyte*)x.getConstArray());
+            // Parameter konvertieren
+            args[0].l = aArray;
             t.pEnv->CallVoidMethod( object, mID,columnIndex,args[0].l);
-            ThrowSQLException(t.pEnv,*this);
             t.pEnv->DeleteLocalRef((jbyteArray)args[0].l);
+            ThrowSQLException(t.pEnv,*this);
         }
     }
 }
@@ -1386,16 +1378,18 @@ void SAL_CALL java_sql_ResultSet::updateDate( sal_Int32 columnIndex, const ::com
     SDBThreadAttach t;
     if( t.pEnv )
     {
-        jvalue args[1];
-        // Parameter konvertieren
-        java_sql_Date aD(x);
-        args[0].l = aD.getJavaObject();
+
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/sql/Date;)V";
         char * cMethodName = "updateDate";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
+        if( mID )
+        {
+            jvalue args[1];
+            // Parameter konvertieren
+            java_sql_Date aD(x);
+            args[0].l = aD.getJavaObject();
             t.pEnv->CallVoidMethod( object, mID,columnIndex,args[0].l);
             ThrowSQLException(t.pEnv,*this);
         }
@@ -1408,16 +1402,17 @@ void SAL_CALL java_sql_ResultSet::updateTime( sal_Int32 columnIndex, const ::com
     SDBThreadAttach t;
     if( t.pEnv )
     {
-        jvalue args[1];
-        // Parameter konvertieren
-        java_sql_Time aD(x);
-        args[0].l = aD.getJavaObject();
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/sql/Time;)V";
         char * cMethodName = "updateTime";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
+        if( mID )
+        {
+            jvalue args[1];
+            // Parameter konvertieren
+            java_sql_Time aD(x);
+            args[0].l = aD.getJavaObject();
             t.pEnv->CallVoidMethod( object, mID,columnIndex,args[0].l);
             ThrowSQLException(t.pEnv,*this);
         }
@@ -1430,16 +1425,17 @@ void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const 
     SDBThreadAttach t;
     if( t.pEnv )
     {
-        jvalue args[1];
-        java_sql_Timestamp aD(x);
-        // Parameter konvertieren
-        args[0].l = aD.getJavaObject();
         // temporaere Variable initialisieren
         char * cSignature = "(I;Ljava/sql/Timestamp;)V";
         char * cMethodName = "updateTimestamp";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
+        if( mID )
+        {
+            jvalue args[1];
+            java_sql_Timestamp aD(x);
+            // Parameter konvertieren
+            args[0].l = aD.getJavaObject();
             t.pEnv->CallVoidMethod( object, mID,columnIndex,args[0].l);
             ThrowSQLException(t.pEnv,*this);
         }
@@ -1452,6 +1448,7 @@ void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, con
     SDBThreadAttach t;
     if( t.pEnv )
     {
+        // TODO
         jvalue args[1];
         // Parameter konvertieren
         args[0].l = 0;
@@ -1491,116 +1488,21 @@ void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, 
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    SDBThreadAttach t;
-    if( t.pEnv )
+    if(!::dbtools::implUpdateObject(this,columnIndex,x))
     {
-        jvalue args[1];
-        switch(x.getValueTypeClass())
-        {
-                        case TypeClass_VOID:
-                args[0].l = NULL;
-                break;
-
-                        case TypeClass_BOOLEAN:
-                {
-                    sal_Bool f;
-                    x >>= f;
-                    updateBoolean(columnIndex,f);
-                }
-                break;
-                        case TypeClass_BYTE:
-                {
-                    sal_Int8 f;
-                    x >>= f;
-                    updateByte(columnIndex,f);
-                }
-                break;
-                        case TypeClass_SHORT:
-                        case TypeClass_UNSIGNED_SHORT:
-                {
-                    sal_Int16 f;
-                    x >>= f;
-                    updateShort(columnIndex,f);
-                }
-                break;
-                        case TypeClass_LONG:
-                        case TypeClass_UNSIGNED_LONG:
-                {
-                    sal_Int32 f;
-                    x >>= f;
-                    updateInt(columnIndex,f);
-                }
-                break;
-                        case TypeClass_HYPER:
-                        case TypeClass_UNSIGNED_HYPER:
-                {
-                    sal_Int64 f;
-                    x >>= f;
-                    updateLong(columnIndex,f);
-                }
-                break;
-                        case TypeClass_FLOAT:
-                {
-                    float f;
-                    x >>= f;
-                    updateFloat(columnIndex,f);
-                }
-                break;
-                        case TypeClass_DOUBLE:
-                updateDouble(columnIndex,comphelper::getDouble(x));
-                break;
-                        case TypeClass_CHAR:
-                        case TypeClass_STRING:
-                updateString(columnIndex,comphelper::getString(x));
-                break;
-                        case TypeClass_ENUM:
-            default:
-                OSL_ENSURE(0,"UNKOWN TYPE for java_sql_ResultSet::updateObject");
-        }
-        return;
-        // Parameter konvertieren
-        // temporaere Variable initialisieren
-        char * cSignature = "(ILjava/lang/Object;)V";
-        char * cMethodName = "updateObject";
-        // Java-Call absetzen
-//      jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-//      if( mID ){
-//          t.pEnv->CallVoidMethodA( object, mID,columnIndex,args);
-            ThrowSQLException(t.pEnv,*this);
-//          switch(x.getValueTypeClass())
-//          {
-//                              case TypeClass_CHAR:
-//                              case TypeClass_STRING:
-//                  t.pEnv->DeleteLocalRef((jobject)args[0].l);
-//                  break;
-//          }
-//      }
+        ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Unknown type for column: ");
+        sMsg += ::rtl::OUString::valueOf(columnIndex);
+        sMsg += ::rtl::OUString::createFromAscii(" !") ;
+        ::dbtools::throwGenericSQLException(sMsg,*this);
     }
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE(0,"java_sql_ResultSet::updateNumericObject: NYI");
-//  SDBThreadAttach t;
-//  if( t.pEnv )
-//  {
-//      jvalue args[1];
-//      // Parameter konvertieren
-//      args[0].l =
-//      // temporaere Variable initialisieren
-//      char * cSignature = "(I;Ljava/lang/Object;I)V";
-//      char * cMethodName = "updateObject";
-//      // Java-Call absetzen
-//      jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-//      if( mID ){
-//          t.pEnv->CallVoidMethod( object, mID,columnIndex,args[0].l,scale);
-            //  ThrowSQLException(t.pEnv,*this);
-//          t.pEnv->DeleteLocalRef((jobject)args[0].l);
-//      }
-//  }
+    //  OSL_ENSURE(0,"java_sql_ResultSet::updateNumericObject: NYI");
+    updateObject( columnIndex,x);
 }
-// -------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -1614,7 +1516,9 @@ sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(::com::sun::
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
-            ThrowSQLException(t.pEnv,*(::cppu::OWeakObject*)this);
+            // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
+            if(t.pEnv->ExceptionOccurred())
+                t.pEnv->ExceptionClear();
         } //mID
     } //t.pEnv
     return (sal_Int32)out;
@@ -1633,7 +1537,9 @@ sal_Int32 java_sql_ResultSet::getResultSetType() const throw(::com::sun::star::s
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
-            ThrowSQLException(t.pEnv,*(::cppu::OWeakObject*)this);
+            // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
+            if(t.pEnv->ExceptionOccurred())
+                t.pEnv->ExceptionClear();
         } //mID
     } //t.pEnv
     return (sal_Int32)out;
@@ -1651,7 +1557,9 @@ sal_Int32 java_sql_ResultSet::getFetchDirection() const throw(::com::sun::star::
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
-            ThrowSQLException(t.pEnv,*(::cppu::OWeakObject*)this);
+            // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
+            if(t.pEnv->ExceptionOccurred())
+                t.pEnv->ExceptionClear();
         } //mID
     } //t.pEnv
     return (sal_Int32)out;
@@ -1669,7 +1577,9 @@ sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc:
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
-            ThrowSQLException(t.pEnv,*(::cppu::OWeakObject*)this);
+            // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
+            if(t.pEnv->ExceptionOccurred())
+                t.pEnv->ExceptionClear();
         } //mID
     } //t.pEnv
     return (sal_Int32)out;
@@ -1709,7 +1619,9 @@ void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(::com::sun::st
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID,_par0);
-            ThrowSQLException(t.pEnv,*(::cppu::OWeakObject*)this);
+            // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
+            if(t.pEnv->ExceptionOccurred())
+                t.pEnv->ExceptionClear();
         } //mID
     } //t.pEnv
 
@@ -1744,7 +1656,9 @@ void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::s
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID,_par0);
-            ThrowSQLException(t.pEnv,*(::cppu::OWeakObject*)this);
+            // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
+            if(t.pEnv->ExceptionOccurred())
+                t.pEnv->ExceptionClear();
         } //mID
     } //t.pEnv
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 12:22:16 $
+ *  last change: $Author: oj $ $Date: 2001-07-04 10:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,31 +224,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     }
     catch(ContentCreationException&e)
     {
-        SQLException aError;
-        aError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to create a content for the URL given."));
-        aError.SQLState = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
-        aError.ErrorCode = 0;
-        aError.Context = static_cast< XConnection* >(this);
-        SQLException aUrlError;
-        aUrlError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL: "));
-        aUrlError.Message += url;
-        aError.NextException <<= aUrlError;
-        if (e.Message.getLength())
-        {
-            aUrlError.NextException <<= SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCB message: ")) += e.Message, aError.Context, ::rtl::OUString(), 0, Any());
-        }
-        throw aError;
+        throwUrlNotValid(aFileName,e.Message);
     }
-
-//  if (aFileStat.IsKind(FSYS_KIND_WILD))
-//  {
-//      m_aDirectoryName = (DirEntry(aFileName).GetPath()).GetFull();
-//      m_aFilenameExtension = DirEntry(aFileName).GetExtension();
-//
-//      // nyi: Verschiedene Extensions (aufgrund des angegebenen Wildcard)
-//      // (bisher keine Wildcard in der Extension moeglich!)
-//      aWildcard = DirEntry(aFileName).GetName();
-//  } else
 
     // set fields to fetch
     Sequence< OUString > aProps(1);
@@ -272,25 +249,17 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             m_xDir = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
         }
         else
+        {
+            OSL_ENSURE(0,"OConnection::construct: ::ucb::Content isn't a folde nor a document! How that?!");
             throw SQLException();
+        }
     }
     catch(Exception& e) // a execption is thrown when no file exists
     {
-        SQLException aError;
-        aError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to create a content for the URL given."));
-        aError.SQLState = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
-        aError.ErrorCode = 0;
-        aError.Context = static_cast< XConnection* >(this);
-        if (e.Message.getLength())
-            aError.NextException <<= SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCB message: ")) += e.Message, aError.Context, ::rtl::OUString(), 0, Any());
-        throw aError;
+        throwUrlNotValid(aFileName,e.Message);
     }
     if(!m_xDir.is() || !m_xContent.is())
-        throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to create a content for the URL given.")),
-                     *this,
-                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")),
-                     0,
-                     Any());
+        throwUrlNotValid(aFileName,::rtl::OUString());
 
     if (m_aFilenameExtension.Search('*') != STRING_NOTFOUND || m_aFilenameExtension.Search('?') != STRING_NOTFOUND)
         throw SQLException();
@@ -561,6 +530,29 @@ Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
         }
     }
     return pId->getImplementationId();
+}
+// -----------------------------------------------------------------------------
+void OConnection::throwUrlNotValid(const ::rtl::OUString & _rsUrl,const ::rtl::OUString & _rsMessage)
+{
+    SQLException aError;
+    aError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to create a content for the URL given."));
+    aError.SQLState = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
+    aError.ErrorCode = 0;
+    aError.Context = static_cast< XConnection* >(this);
+    SQLException aUrlError;
+    if(_rsUrl.getLength())
+    {
+        aUrlError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL: "));
+        aUrlError.Message += _rsUrl;
+    }
+    else
+        aUrlError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No URL supplied!"));
+
+    aError.NextException <<= aUrlError;
+    if (_rsMessage.getLength())
+        aUrlError.NextException <<= SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCB message: ")) += _rsMessage, aError.Context, ::rtl::OUString(), 0, Any());
+
+    throw aError;
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
+ *  last change: $Author: oj $ $Date: 2001-07-04 10:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,9 +170,6 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
-        jvalue args[1];
-        // Parameter konvertieren
-        args[0].i = (sal_Int32)column;
         // temporaere Variable initialisieren
         char * cSignature = "(I)Z";
         char * cMethodName = "isCaseSensitive";
@@ -393,9 +390,6 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSigned( sal_Int32 column ) throw
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
-        jvalue args[1];
-        // Parameter konvertieren
-        args[0].i = (sal_Int32)column;
         // temporaere Variable initialisieren
         char * cSignature = "(I)Z";
         char * cMethodName = "isSigned";
@@ -414,9 +408,6 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getPrecision( sal_Int32 column ) 
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
-    jvalue args[1];
-        // Parameter konvertieren
-        args[0].i = (sal_Int32)column;
         // temporaere Variable initialisieren
         char * cSignature = "(I)I";
         char * cMethodName = "getPrecision";
@@ -436,9 +427,6 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getScale( sal_Int32 column ) thro
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
-    jvalue args[1];
-        // Parameter konvertieren
-        args[0].i = (sal_Int32)column;
         // temporaere Variable initialisieren
         char * cSignature = "(I)I";
         char * cMethodName = "getScale";
@@ -458,9 +446,6 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::isNullable( sal_Int32 column ) th
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
-    jvalue args[1];
-        // Parameter konvertieren
-        args[0].i = (sal_Int32)column;
         // temporaere Variable initialisieren
         char * cSignature = "(I)I";
         char * cMethodName = "isNullable";
