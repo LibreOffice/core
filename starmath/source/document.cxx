@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:09:28 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
     SetFormulaArranged(FALSE);
     SmViewShell *pViewSh = SmGetActiveView();
     if (pViewSh)
-        pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_GRAPHIC);
+        pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_GAPHIC_SM);
     SetModified(TRUE);
 }
 
@@ -1028,7 +1028,7 @@ BOOL SmDocShell::InsertFrom(SfxMedium &rMedium)
         if (pView)
         {
             SfxBindings &rBnd = pView->GetViewFrame()->GetBindings();
-            rBnd.Invalidate(SID_GRAPHIC);
+            rBnd.Invalidate(SID_GAPHIC_SM);
             rBnd.Invalidate(SID_TEXT);
         }
     }
@@ -1173,7 +1173,7 @@ BOOL SmDocShell::Insert(SvStorage *pStor)
         if (pView)
         {
             SfxBindings &rBnd = pView->GetViewFrame()->GetBindings();
-            rBnd.Invalidate(SID_GRAPHIC);
+            rBnd.Invalidate(SID_GAPHIC_SM);
             rBnd.Invalidate(SID_TEXT);
         }
     }
@@ -1473,7 +1473,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 Resize();
                 // Fenster anpassen, neuzeichnen, ModifyCount erhöhen,...
                 if (pBindings)
-                    pBindings->Invalidate(SID_GRAPHIC);
+                    pBindings->Invalidate(SID_GAPHIC_SM);
             }
             RestartFocusTimer();
             rReq.SetReturnValue (SfxBoolItem (rReq.GetSlot(), TRUE));
@@ -1507,7 +1507,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 {
                     SetModified(TRUE);
                     if (pBindings)
-                        pBindings->Invalidate(SID_GRAPHIC);
+                        pBindings->Invalidate(SID_GAPHIC_SM);
                 }
                 else SetModified (FALSE);
             }
@@ -1536,7 +1536,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 {
                     SetModified(TRUE);
                     if (pBindings)
-                        pBindings->Invalidate(SID_GRAPHIC);
+                        pBindings->Invalidate(SID_GAPHIC_SM);
                 }
                 else SetModified (FALSE);
             }
@@ -1565,7 +1565,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 {
                     SetModified(TRUE);
                     if (pBindings)
-                        pBindings->Invalidate(SID_GRAPHIC);
+                        pBindings->Invalidate(SID_GAPHIC_SM);
                 }
                 else
                     SetModified (FALSE);
@@ -1600,7 +1600,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 {
                     SetModified(TRUE);
                     if (pBindings)
-                        pBindings->Invalidate(SID_GRAPHIC);
+                        pBindings->Invalidate(SID_GAPHIC_SM);
                 }
                 else
                     SetModified (FALSE);
@@ -1761,8 +1761,8 @@ void SmDocShell::GetState(SfxItemSet &rSet)
             rSet.Put(SfxStringItem(SID_TEXT, GetText()));
             break;
 
-        case SID_GRAPHIC:
-            rSet.Put(SfxInt16Item(SID_GRAPHIC, nModifyCount));
+        case SID_GAPHIC_SM:
+            rSet.Put(SfxInt16Item(SID_GAPHIC_SM, nModifyCount));
             break;
 
         case SID_UNDO:
