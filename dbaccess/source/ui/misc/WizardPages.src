@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:52 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ String STR_HTML_TITLE
     Text[ danish ] = "Kopier HTML-tabel";
     Text[ swedish ] = "Kopiera HTML-tabell";
     Text[ polish ] = "Kopiuj tabel� HTML";
-    Text[ portuguese_brazilian ] = "Copy HTML table";
+    Text[ portuguese_brazilian ] = "Copiar tabela HTML";
     Text[ japanese ] = "HTML テーブルのコピー";
     Text[ korean ] = "HTML 테이블 복사";
     Text[ chinese_simplified ] = "复制 HTML 表格";
@@ -104,6 +104,9 @@ String STR_HTML_TITLE
     Text[ catalan ] = "Copia la taula HTML";
     Text[ finnish ] = "Kopioi HTML-taulukko";
     Text[ thai ] = "คัดลอกตาราง HTML ";
+    Text[ czech ] = "Kopírovat HTML tabulku";
+    Text[ hebrew ] = "HTML Tabelle kopieren";
+    Text[ hindi ] = "HTML सारणी की प्रतिलिपि";
 };
 
 String STR_RTF_TITLE
@@ -121,7 +124,7 @@ String STR_RTF_TITLE
     Text[ danish ] = "Kopier RTF-tabel";
     Text[ swedish ] = "Kopiera RTF-tabell";
     Text[ polish ] = "Kopiuj tabel� RTF";
-    Text[ portuguese_brazilian ] = "Copy RTF table";
+    Text[ portuguese_brazilian ] = "Copiar tabela RTF";
     Text[ japanese ] = "RTF テーブルのコピー";
     Text[ korean ] = "RTF 테이블 복사";
     Text[ chinese_simplified ] = "复制 RTF 表格";
@@ -131,6 +134,9 @@ String STR_RTF_TITLE
     Text[ catalan ] = "Copia la taula RTF";
     Text[ finnish ] = "Kopioi RTF-taulukko";
     Text[ thai ] = "คัดลอกตาราง RTF ";
+    Text[ czech ] = "Kopírovat RTF tabulku";
+    Text[ hebrew ] = "RTF Tabelle kopieren";
+    Text[ hindi ] = "RTF सारणी की प्रतिलिपि";
 };
 
 String STR_WIZ_COLUMN_SELECT_TITEL
@@ -147,17 +153,20 @@ String STR_WIZ_COLUMN_SELECT_TITEL
     Text[ italian ] = "Applica colonne";
     Text[ danish ] = "Overtag kolonner";
     Text[ swedish ] = "�verta kolumner";
-    Text[ polish ] = "Przejmij kolumn�";
-    Text[ portuguese_brazilian ] = "Undo";
+    Text[ polish ] = "Zastosuj kolumny";
+    Text[ portuguese_brazilian ] = "Aplicar colunas";
     Text[ japanese ] = "列の適用";
     Text[ korean ] = "열 적용";
     Text[ chinese_simplified ] = "采用列";
     Text[ chinese_traditional ] = "採用欄";
     Text[ arabic ] = "����� �������";
-    Text[ turkish ] = "S�tunlar� kullan";
+    Text[ turkish ] = "S�tunlara  uygula";
     Text[ catalan ] = "Aplica les columnes";
     Text[ finnish ] = "K�yt� sarakkeita";
     Text[ thai ] = "ใช้คอลัมน์";
+    Text[ czech ] = "Použít sloupce";
+    Text[ hebrew ] = "Spaltenübernahme";
+    Text[ hindi ] = "स्तंभों को लागू करो";
 };
 
 String STR_WIZ_TYPE_SELECT_TITEL
@@ -175,16 +184,19 @@ String STR_WIZ_TYPE_SELECT_TITEL
     Text[ danish ] = "Typeformatering";
     Text[ swedish ] = "Typformateringar";
     Text[ polish ] = "Formatowanie typu";
-    Text[ portuguese_brazilian ] = "Undo";
+    Text[ portuguese_brazilian ] = "Formata��o do tipo";
     Text[ japanese ] = "タイプの書式設定";
     Text[ korean ] = "유형 서식";
     Text[ chinese_simplified ] = "类型格式化";
     Text[ chinese_traditional ] = "類型格式化";
     Text[ arabic ] = "������� �����";
-    Text[ turkish ] = "Tip formatlamas�";
+    Text[ turkish ] = "Formatlama t�r�";
     Text[ catalan ] = "Formatatge de tipus";
     Text[ finnish ] = "Tyypin muotoilu";
     Text[ thai ] = "ชนิดการจัดรูปแบบ";
+    Text[ czech ] = "Formátování typu";
+    Text[ hebrew ] = "Typformatierungen";
+    Text[ hindi ] = "वर्ग रचना";
 };
 
 String STR_WIZ_PKEY_ALREADY_DEFINED
@@ -201,17 +213,20 @@ String STR_WIZ_PKEY_ALREADY_DEFINED
     Text[ italian ] = "I seguenti campi sono stati impostati come chiave primaria:\n";
     Text[ danish ] = "F�lgende felter er allerede valgt som prim�rn�gle:\n";
     Text[ swedish ] = "F�ljande f�lt �r redan satta som prim�rnycklar:\n";
-    Text[ polish ] = "Jako klucze g��wne osadzono ju� nast�puj�ce pola:\n";
-    Text[ portuguese_brazilian ] = "There are already primary keys defined for this fields:\n";
+    Text[ polish ] = "Nast�puj�ce pola ju� zosta�y ustawione jako klucze g��wne:\n";
+    Text[ portuguese_brazilian ] = "Os seguintes campos j� foram atribu�dos como chaves prim�rias:\n";
     Text[ japanese ] = "以下のフィールドはすでにプライマリキーとして設定されています。\n";
     Text[ korean ] = "다음 필드에는 기본 키가 이미 지정되어 있습니다:\n";
     Text[ chinese_simplified ] = "已经为下列字段设定了主关键字：\n";
     Text[ chinese_traditional ] = "以下的欄位已經指定成主關鍵字：\n";
     Text[ arabic ] = "�� ����� ������ ������� ������ ������ �����:\n";
-    Text[ turkish ] = "�u alanlar birinci anahtar olarak belirlenmi� durumda:\n";
+    Text[ turkish ] = "A�a��daki alanlar halihaz�rda birincil alanlar olarak ayarland�.";
     Text[ catalan ] = "Els camps seg�ents ja s'han definit com a claus prim�ries:\n";
     Text[ finnish ] = "Seuraavat kent�t on jo m��ritetty perusavaimiksi:\n";
     Text[ thai ] = "ตั้งค่าเขตข้อมูลนี้เป็นคีย์หลักแล้ว:\n";
+    Text[ czech ] = "Následující pole již byly použity jako primární klíč:\n";
+    Text[ hebrew ] = "Es sind bereits folgende Felder als Primärschlüssel gesetzt:\n";
+    Text[ hindi ] = "निम्नलिखित क्षेत्रों को पहिले से ही प्रैमरी की जैसे सेट्ट किया है:\n";
 };
 
 String STR_WIZ_NAME_MATCHING_TITEL
@@ -228,17 +243,20 @@ String STR_WIZ_NAME_MATCHING_TITEL
     Text[ italian ] = "Collega colonne";
     Text[ danish ] = "Tildel kolonner";
     Text[ swedish ] = "Tilldela kolumner";
-    Text[ polish ] = "Przyporz�dkuj kolumny";
-    Text[ portuguese_brazilian ] = "Bind columns";
+    Text[ polish ] = "Przypisz kolumny";
+    Text[ portuguese_brazilian ] = "Atribuir colunas";
     Text[ japanese ] = "列の分類";
     Text[ korean ] = "열 지정";
     Text[ chinese_simplified ] = "编排列";
     Text[ chinese_traditional ] = "編排欄";
     Text[ arabic ] = "����� �������";
-    Text[ turkish ] = "S�tunlar� ata";
+    Text[ turkish ] = "Kolonlar ata";
     Text[ catalan ] = "Assigna les columnes";
     Text[ finnish ] = "M��rit� sarakkeet";
     Text[ thai ] = "กำหนดคอลัมน์";
+    Text[ czech ] = "Přiřadit sloupce";
+    Text[ hebrew ] = "Spalten zuordnen";
+    Text[ hindi ] = "स्तंभों को निर्दिष्ट करो";
 };
 
 ModalDialog WIZ_RTFCOPYTABLE
@@ -247,7 +265,7 @@ ModalDialog WIZ_RTFCOPYTABLE
     Text                = "RTF Tabelle kopieren" ;
     Text [ ENGLISH ]    = "Copy rtf table" ;
     Text [ english_us ] = "Copy RTF Table" ;
-    Text [ portuguese_brazilian ] = "Tabelle kopieren" ;
+    Text [ portuguese_brazilian ] = "Copiar tabela RTF" ;
     Text [ swedish ]    = "Kopiera RTF-tabell" ;
     Text [ danish ]     = "Kopier �RTF-tabel" ;
     Text [ italian ]    = "Copia tabella RTF" ;
@@ -285,15 +303,18 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ danish ] = "~Hj�lp";
         Text[ swedish ] = "~Hj�lp";
         Text[ polish ] = "Po~moc";
-        Text[ portuguese_brazilian ] = "Help";
+        Text[ portuguese_brazilian ] = "~Ajuda";
         Text[ japanese ] = "ヘルプ(~H)";
         Text[ korean ] = "도움말(~H)";
         Text[ chinese_simplified ] = "帮助(~H)";
         Text[ chinese_traditional ] = "說明(~H)";
-        Text[ turkish ] = "Help";
+        Text[ turkish ] = "Yard�m";
         Text[ arabic ] = "Help";
         Text[ catalan ] = "Ajuda";
         Text[ thai ] = "~ช่วยเหลือ";
+        Text[ czech ] = "Nápověda";
+        Text[ hebrew ] = "‮עזרה‬";
+        Text[ hindi ] = "~सहायता";
     };
     CancelButton PB_CANCEL
     {
@@ -311,17 +332,20 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ italian ] = "~Annulla";
         Text[ danish ] = "~Annuller";
         Text[ swedish ] = "~Avbryt";
-        Text[ polish ] = "Anuluj";
-        Text[ portuguese_brazilian ] = "Cancel";
+        Text[ polish ] = "~Anuluj";
+        Text[ portuguese_brazilian ] = "C~ancelar";
         Text[ japanese ] = "キャンセル(~C)";
         Text[ korean ] = "취소(~C)";
         Text[ chinese_simplified ] = "取消(~C)";
         Text[ chinese_traditional ] = "取消(~C)";
         Text[ arabic ] = "����� �����";
-        Text[ turkish ] = "�ptal";
+        Text[ turkish ] = "~�ptal";
         Text[ catalan ] = "~Cancel�la";
         Text[ finnish ] = "~Peruuta";
         Text[ thai ] = "~ยกเลิก";
+        Text[ czech ] = "Zrušit";
+        Text[ hebrew ] = "‮ביטול‬";
+        Text[ hindi ] = "~रद्द करो";
     };
     PushButton PB_PREV
     {
@@ -339,17 +363,20 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ italian ] = "<~Indietro";
         Text[ danish ] = "<~Tilbage";
         Text[ swedish ] = "<Till~baka";
-        Text[ polish ] = "< Wstecz";
-        Text[ portuguese_brazilian ] = "< ~Back";
+        Text[ polish ] = "< ~Wstecz";
+        Text[ portuguese_brazilian ] = "< ~Anterior";
         Text[ japanese ] = "< 戻る(~B)";
         Text[ korean ] = "< 뒤로(~B)";
         Text[ chinese_simplified ] = "< 返回(~B)";
         Text[ chinese_traditional ] = "< 返回(~B)";
         Text[ arabic ] = "<������";
-        Text[ turkish ] = "<Geri";
+        Text[ turkish ] = "< Geri";
         Text[ catalan ] = "< ~Anterior";
         Text[ finnish ] = "< ~Edellinen";
         Text[ thai ] = "< ~กลับไป";
+        Text[ czech ] = "< Předchozí";
+        Text[ hebrew ] = "<‮הקודם ‬";
+        Text[ hindi ] = "< ~पीछे";
     };
     PushButton PB_NEXT
     {
@@ -367,17 +394,20 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ italian ] = "A~vanti>";
         Text[ danish ] = "~N�ste>";
         Text[ swedish ] = "N~�sta>";
-        Text[ polish ] = "Dalej>";
-        Text[ portuguese_brazilian ] = "~Next>";
+        Text[ polish ] = "~Dalej>";
+        Text[ portuguese_brazilian ] = "~Pr�ximo>";
         Text[ japanese ] = "次へ(~N)>";
         Text[ korean ] = "다음>(~N)";
         Text[ chinese_simplified ] = "继续 (~N)>";
         Text[ chinese_traditional ] = "繼續 (~N)>";
         Text[ arabic ] = "������>";
-        Text[ turkish ] = "Devam>";
+        Text[ turkish ] = "~�leri>";
         Text[ catalan ] = "~Seg�ent>";
         Text[ finnish ] = "~Seuraava>";
         Text[ thai ] = "~ถัดไป>";
+        Text[ czech ] = "Další >";
+        Text[ hebrew ] = "‮הבא‬>";
+        Text[ hindi ] = "~आगे>";
     };
     OKButton PB_OK
     {
@@ -396,27 +426,33 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ italian ] = "~Crea";
         Text[ danish ] = "~Udf�r";
         Text[ swedish ] = "~F�rdigst�ll";
-        Text[ polish ] = "Utw�rz";
-        Text[ portuguese_brazilian ] = "Finish";
+        Text[ polish ] = "~Utw�rz";
+        Text[ portuguese_brazilian ] = "~Criar";
         Text[ japanese ] = "完了(~R)";
         Text[ korean ] = "만들기(~R)";
         Text[ chinese_simplified ] = "完成(~R)";
         Text[ chinese_traditional ] = "完成(~R)";
         Text[ arabic ] = "�����";
-        Text[ turkish ] = "Olu�tur";
+        Text[ turkish ] = "~yarat";
         Text[ catalan ] = "C~rea";
         Text[ finnish ] = "~Luo";
         Text[ thai ] = "สร้าง";
+        Text[ czech ] = "Vytvořit";
+        Text[ hebrew ] = "~Fertig stellen";
+        Text[ hindi ] = "~उत्पन्न करो";
     };
 
     Text[ greek ] = "��������� ������ RTF";
     Text[ korean ] = "RTF 테이블 복사";
     Text[ chinese_traditional ] = "複製RTF表格";
     Text[ arabic ] = "��� ���� RTF";
-    Text[ turkish ] = "RTF tablosunu kopyala";
+    Text[ turkish ] = "RTF Tablosu Kopyala";
     Text[ catalan ] = "Copia la taula RTF";
     Text[ finnish ] = "Kopioi RTF-taulukko";
     Text[ thai ] = "คัดลอกตาราง RTF ";
+    Text[ czech ] = "Kopírovat RTF tabulku";
+    Text[ hebrew ] = "RTF Tabelle kopieren";
+    Text[ hindi ] = "RTF सारणी की प्रतिलिपि";
 };
 
 //==================================================================
@@ -447,16 +483,19 @@ TabPage TAB_WIZ_COLUMN_SELECT
         Text[ danish ] = "Eksisterende kolonner";
         Text[ swedish ] = "Existerande kolumner";
         Text[ polish ] = "Istniej�ce kolumny";
-        Text[ portuguese_brazilian ] = "Tablename:";
+        Text[ portuguese_brazilian ] = "Colunas existentes";
         Text[ japanese ] = "既存の列";
         Text[ korean ] = "기존 열:";
         Text[ chinese_simplified ] = "现存的列";
         Text[ chinese_traditional ] = "現存的欄";
         Text[ arabic ] = "������� ��������";
-        Text[ turkish ] = "Mevcut s�tunlar";
+        Text[ turkish ] = "Varolan S�tunlar";
         Text[ catalan ] = "Columnes existents";
         Text[ finnish ] = "Olemassaolevat sarakkeet";
         Text[ thai ] = "คอลัมน์ที่มีอยู่";
+        Text[ czech ] = "Existující sloupce";
+        Text[ hebrew ] = "Vorhandene Spalten";
+        Text[ hindi ] = "अस्तित्व में रहनेवाला स्तंभ";
     };
 
     MultiListBox LB_ORG_COLUMN_NAMES
@@ -602,8 +641,8 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ italian ] = "Informazione colonne";
         Text[ danish ] = "Kolonneinformation";
         Text[ swedish ] = "Kolumninformation";
-        Text[ polish ] = "Informacja o kolumnnach:";
-        Text[ portuguese_brazilian ] = "Tablename:";
+        Text[ polish ] = "Informacja o kolumnach";
+        Text[ portuguese_brazilian ] = "Informa��o sobre colunas";
         Text[ japanese ] = "列の情報";
         Text[ korean ] = "열 정보";
         Text[ chinese_simplified ] = "列的信息";
@@ -613,6 +652,9 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ catalan ] = "Informaci� sobre columnes";
         Text[ finnish ] = "Saraketiedot";
         Text[ thai ] = "ข้อมูลคอลัมน์";
+        Text[ czech ] = "Informace o sloupci";
+        Text[ hebrew ] = "Spalteninformation";
+        Text[ hindi ] = "स्तंभ सूचना";
     };
 
     TabPage CONTROL_CONTAINER
@@ -639,8 +681,8 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ italian ] = "Riconoscimento autom. tipo";
         Text[ danish ] = "Automatisk typegenkendelse";
         Text[ swedish ] = "Autom. typigenk�nning";
-        Text[ polish ] = "Automat. identyfikacja typu";
-        Text[ portuguese_brazilian ] = "Tablename:";
+        Text[ polish ] = "Automatyczne rozpoznawanie typu";
+        Text[ portuguese_brazilian ] = "Reconhecimento de digita��o autom�tica";
         Text[ japanese ] = "種類の自動認識";
         Text[ korean ] = "자동 유형 인식";
         Text[ chinese_simplified ] = "自动识别类型";
@@ -650,6 +692,9 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ catalan ] = "Reconeixement autom�tic del tipus";
         Text[ finnish ] = "Automaattinen tyypin tunnistus";
         Text[ thai ] = "จดจำการพิมพ์อัตโนมัติ";
+        Text[ czech ] = "Automatické rozpoznávání typu";
+        Text[ hebrew ] = "Automat. Typerkennung";
+        Text[ hindi ] = "स्वचालित ढंग से वर्ग का पहचान";
     };
 
     FixedText FT_AUTO
@@ -670,15 +715,18 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ danish ] = "(maks.) ~linjer";
         Text[ swedish ] = "(ma~x) rader";
         Text[ polish ] = "Wiersze (maks.)";
-        Text[ portuguese_brazilian ] = "Tablename:";
+        Text[ portuguese_brazilian ] = "Linhas (m�~x.)";
         Text[ japanese ] = "最大行数(~X)";
         Text[ korean ] = "최대 줄 수(~X)";
         Text[ chinese_simplified ] = "(最多的)行(~X)";
         Text[ chinese_traditional ] = "(最多的)列(~X)";
-        Text[ turkish ] = "Sat�rlar (azami):";
+        Text[ turkish ] = "�izgiler (max)";
         Text[ arabic ] = "(���� ������) ������:";
         Text[ catalan ] = "L�nies (m?~x):";
         Text[ thai ] = "บรรทัด (มาก~ที่สุด):";
+        Text[ czech ] = "Řádků (max)";
+        Text[ hebrew ] = "(max.) ~Zeilen";
+        Text[ hindi ] = "रेखाएँ (अ~धिकतम)";
     };
 
     NumericField ET_AUTO
@@ -711,7 +759,7 @@ Menu RID_SBA_RTF_PKEYPOPUP
             Text            = "Prim�rschl�ssel" ;
             Text [ ENGLISH ] = "Primary key" ;
             Text [ english_us ] = "Primary Key" ;
-            Text [ portuguese_brazilian ] = "Prim?rschl?sel" ;
+            Text [ portuguese_brazilian ] = "Chave prim�ria" ;
             Text [ swedish ] = "Prim�rnyckel" ;
             Text [ danish ] = "Prim�rn�gle" ;
             Text [ italian ] = "Chiave primaria" ;
@@ -727,10 +775,13 @@ Menu RID_SBA_RTF_PKEYPOPUP
             Text[ greek ] = "�������� ������";
             Text[ korean ] = "기본 키";
             Text[ arabic ] = "����� �����";
-            Text[ turkish ] = "Birinci anahtar";
+            Text[ turkish ] = "Birincil Anahtar";
             Text[ catalan ] = "Clau prim�ria";
             Text[ finnish ] = "Perusavain";
             Text[ thai ] = "คีย์หลัก";
+            Text[ czech ] = "Primární klíč";
+            Text[ hebrew ] = "Primärschlüssel";
+            Text[ hindi ] = "प्रैमरी की";
         };
     };
 };
@@ -762,15 +813,18 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ danish ] = "Kildetabel: \n";
         Text[ swedish ] = "K�lltabell: \n";
         Text[ polish ] = "Tabela �r�d�owa: \n";
-        Text[ portuguese_brazilian ] = "Source table: \n";
+        Text[ portuguese_brazilian ] = "Tabela de origem: \n";
         Text[ japanese ] = "ソーステーブル: \n";
         Text[ korean ] = "원본 테이블: \n";
         Text[ chinese_simplified ] = "源表格：\n";
         Text[ chinese_traditional ] = "源表格：\n";
-        Text[ turkish ] = "Kaynak tablo: \n";
+        Text[ turkish ] = "Kaynak tablo \n";
         Text[ arabic ] = "���� ������: \n";
         Text[ catalan ] = "Taula font: \n";
         Text[ thai ] = "แหล่งตาราง: \n";
+        Text[ czech ] = "Zdrojová tabulka: \n";
+        Text[ hebrew ] = "Quelltabelle: \n";
+        Text[ hindi ] = "मूल सारणी: \n";
     };
 
     FixedText FT_TABLE_RIGHT
@@ -790,8 +844,8 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ italian ] = "Tabella destinazione: \n";
         Text[ danish ] = "M�ltabel: \n";
         Text[ swedish ] = "M�ltabell: \n";
-        Text[ polish ] = "Tabela docelowa: \n";
-        Text[ portuguese_brazilian ] = "Destination table: \n";
+        Text[ polish ] = "Tabela docelowa:\n";
+        Text[ portuguese_brazilian ] = "Tabela de destino: \n";
         Text[ japanese ] = "ターゲットテーブル: \n";
         Text[ korean ] = "대상 테이블: \n";
         Text[ chinese_simplified ] = "目标表格：\n";
@@ -800,6 +854,9 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ arabic ] = "���� ������: \n";
         Text[ catalan ] = "Taula de dest�: \n";
         Text[ thai ] = "ตารางเป้าหมาย: \n";
+        Text[ czech ] = "Cílová tabulka: \n";
+        Text[ hebrew ] = "Zieltabelle: \n";
+        Text[ hindi ] = "नियत स्थान सारणी: \n";
     };
 
     Control CTRL_LEFT
@@ -918,17 +975,20 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ italian ] = "Tutti";
         Text[ danish ] = "a~lle";
         Text[ swedish ] = "A~lla";
-        Text[ polish ] = "wszystkie";
-        Text[ portuguese_brazilian ] = "all";
+        Text[ polish ] = "~Wszystko";
+        Text[ portuguese_brazilian ] = "~todos";
         Text[ japanese ] = "すべて(~A)";
         Text[ korean ] = "모두(~A)";
         Text[ chinese_simplified ] = "全部(~A)";
         Text[ chinese_traditional ] = "全部(~A)";
         Text[ arabic ] = "����";
-        Text[ turkish ] = "T�m�";
+        Text[ turkish ] = "~Hepsi";
         Text[ catalan ] = "~Tot";
         Text[ finnish ] = "~Kaikki";
         Text[ thai ] = "~ทั้งหมด";
+        Text[ czech ] = "Vše";
+        Text[ hebrew ] = "‮הכל‬";
+        Text[ hindi ] = "~सब";
     };
 
     PushButton PB_NONE
@@ -948,17 +1008,20 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ italian ] = "Nessuno";
         Text[ danish ] = "~ingen";
         Text[ swedish ] = "~Inga";
-        Text[ polish ] = "brak";
-        Text[ portuguese_brazilian ] = "none";
+        Text[ polish ] = "~Brak";
+        Text[ portuguese_brazilian ] = "~nenhum";
         Text[ japanese ] = "なし(~E)";
         Text[ korean ] = "없음(~E)";
         Text[ chinese_simplified ] = "无(~E)";
         Text[ chinese_traditional ] = "無(~E)";
         Text[ arabic ] = "����";
-        Text[ turkish ] = "Hi�biri";
+        Text[ turkish ] = "~Hi�biri";
         Text[ catalan ] = "Ca~p";
         Text[ finnish ] = "Ei ~mit��n";
         Text[ thai ] = "ไม่~มี";
+        Text[ czech ] = "Nic";
+        Text[ hebrew ] = "~keine";
+        Text[ hindi ] = "~कोई नहीं";
     };
 };
 TabPage TAB_WIZ_COPYTABLE
@@ -986,16 +1049,19 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ italian ] = "Nome ~tabella";
         Text[ danish ] = "~Tabelnavn";
         Text[ swedish ] = "~Tabellnamn";
-        Text[ polish ] = "Nazwa tabeli";
-        Text[ portuguese_brazilian ] = "Tabellenname:";
+        Text[ polish ] = "Nazwa ta~beli";
+        Text[ portuguese_brazilian ] = "Nome da ta~bela";
         Text[ japanese ] = "テーブル名(~B)";
         Text[ korean ] = "테이블 이름(~B)";
         Text[ chinese_simplified ] = "表格名称(~B)";
         Text[ chinese_traditional ] = "表格名稱(~B)";
-        Text[ turkish ] = "Tablo ad�:";
+        Text[ turkish ] = "Ta~blo ismi";
         Text[ arabic ] = "��� ������:";
         Text[ catalan ] = "No~m de la taula:";
         Text[ thai ] = "ชื่อตา~ราง:";
+        Text[ czech ] = "Název tabulky";
+        Text[ hebrew ] = "~Tabellenname";
+        Text[ hindi ] = "~सारणी नाम";
     };
 
     Edit ET_TABLENAME
@@ -1014,7 +1080,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text                = "Optionen" ;
         Text [ ENGLISH ]    = "Options" ;
         Text [ english_us ] = "Options" ;
-        Text [ portuguese_brazilian ] = "Optionen" ;
+        Text [ portuguese_brazilian ] = "Op��es" ;
         Text [ swedish ]    = "Alternativ" ;
         Text [ danish ]     = "Indstillinger" ;
         Text [ italian ]    = "Opzioni" ;
@@ -1034,6 +1100,9 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
         Text[ thai ] = "ตัวเลือก";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "‮אפשרויות‬";
+        Text[ hindi ] = "विकल्प";
     };
     RadioButton RB_DEFDATA
     {
@@ -1043,7 +1112,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ ENGLISH ]    = "Definition and d~ata" ;
         Text [ portuguese ] = "Defini��o e ~dados" ;
         Text [ english_us ] = "De~finition and data" ;
-        Text [ portuguese_brazilian ] = "Definition und Daten" ;
+        Text [ portuguese_brazilian ] = "Defini��o e ~dados" ;
         Text [ swedish ]    = "D~efinition och data" ;
         Text [ danish ]     = "Definition og d~ata" ;
         Text [ italian ]    = "Definizione e ~dati" ;
@@ -1052,16 +1121,19 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ dutch ]      = "~Definitie en gegevens" ;
         Text[ chinese_simplified ] = "定义和数据(~F)";
         Text[ russian ]     = "��������� � ������";
-        Text[ polish ]      = "Definicja i dane";
+        Text[ polish ]      = "~Definicja i dane";
         Text[ japanese ]    = "定義とデータ(~F)";
         Text[ chinese_traditional ] = "定義和資料(~F)";
         Text[ arabic ]      = "������� ���������";
         Text[ greek ] = "������� ��� �������~�";
         Text[ korean ] = "정의 및 데이터(~F)";
-        Text[ turkish ] = "Tan�m ve veriler";
+        Text[ turkish ] = "Ta~n�mlama ve veri";
         Text[ catalan ] = "De~finici� i dades";
         Text[ finnish ] = "M~��ritys ja tiedot";
         Text[ thai ] = "คำ~จำกัดความและข้อมูล";
+        Text[ czech ] = "Definice a data";
+        Text[ hebrew ] = "Definition und D~aten";
+        Text[ hindi ] = "~परिभाषा और ड़ॉटा";
     };
     RadioButton RB_DEF
     {
@@ -1071,7 +1143,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ ENGLISH ]    = "~Definition" ;
         Text [ portuguese ] = "~Defini��o" ;
         Text [ english_us ] = "Def~inition" ;
-        Text [ portuguese_brazilian ] = "Definition" ;
+        Text [ portuguese_brazilian ] = "~Defini��o" ;
         Text [ swedish ]    = "~Definition" ;
         Text [ danish ]     = "~Definition" ;
         Text [ italian ]    = "De~finizione" ;
@@ -1080,16 +1152,19 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ dutch ]      = "~Definitie" ;
         Text[ chinese_simplified ] = "定义(~I)";
         Text[ russian ]     = "���������";
-        Text[ polish ]      = "Definicja";
+        Text[ polish ]      = "Def~inicja";
         Text[ japanese ]    = "定義(~I)";
         Text[ chinese_traditional ] = "定義(~I)";
         Text[ arabic ]      = "�����";
         Text[ greek ] = "�������";
         Text[ korean ] = "정의(~I)";
-        Text[ turkish ] = "Tan�m";
+        Text[ turkish ] = "Tan�mlama";
         Text[ catalan ] = "Def~inici�";
         Text[ finnish ] = "~M��ritys";
         Text[ thai ] = "คำ~จำกัดความ";
+        Text[ czech ] = "Definice";
+        Text[ hebrew ] = "~Definition";
+        Text[ hindi ] = "~परिभाषा";
     };
 
     RadioButton RB_VIEW
@@ -1108,17 +1183,20 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ italian ] = "Come ~vista tabella";
         Text[ danish ] = "Som tabelvi~sning";
         Text[ swedish ] = "~Som tabellvy";
-        Text[ polish ] = "Jako widok tabeli";
-        Text[ portuguese_brazilian ] = "A~s View";
+        Text[ polish ] = "~Jako widok tabeli";
+        Text[ portuguese_brazilian ] = "~Como modo tabela";
         Text[ japanese ] = "テーブルビューとして(~S)";
         Text[ korean ] = "테이블 보기로(~S)";
         Text[ chinese_simplified ] = "当作表格视图(~S)";
         Text[ chinese_traditional ] = "當作表格檢視(~S)";
         Text[ arabic ] = "��� ����� ��� ������";
-        Text[ turkish ] = "Tablo g�r�n�m� olarak";
+        Text[ turkish ] = "~Tablo g�r�n�m� olarak";
         Text[ catalan ] = "Com a visualitzaci� de t~aula";
         Text[ finnish ] = "~Taulun�kym�n�";
         Text[ thai ] = "เป็~นมุมมองตาราง";
+        Text[ czech ] = "Jako pohled na tabulky";
+        Text[ hebrew ] = "Als Tabellen~sicht";
+        Text[ hindi ] = "~सारणी दृश्य जैसे";
     };
 
     RadioButton RB_APPENDDATA
@@ -1128,7 +1206,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text                = "Daten a~nh�ngen" ;
         Text [ ENGLISH ]    = "Appe~nd data" ;
         Text [ english_us ] = "Attach ~data" ;
-        Text [ portuguese_brazilian ] = "Daten anh?ngen" ;
+        Text [ portuguese_brazilian ] = "A~nexar dados" ;
         Text [ swedish ]    = "Tillf~oga data" ;
         Text [ danish ]     = "V~edh�ft data" ;
         Text [ italian ]    = "Al~lega i dati" ;
@@ -1138,16 +1216,19 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ portuguese ] = "A~nexar dados" ;
         Text[ chinese_simplified ] = "附加数据(~D)";
         Text[ russian ]     = "�������� ������";
-        Text[ polish ]      = "Za��cz dane";
+        Text[ polish ]      = "Za��cz ~dane";
         Text[ japanese ]    = "データの添付(~D)";
         Text[ chinese_traditional ] = "附加資料(~D)";
         Text[ arabic ]      = "����� ������";
         Text[ greek ] = "����������� ������~���";
         Text[ korean ] = "데이터 첨부(~D)";
-        Text[ turkish ] = "Verileri ekle";
+        Text[ turkish ] = "~Veri ekle";
         Text[ catalan ] = "~Adjunta dades";
         Text[ finnish ] = "~Liit� tiedot";
         Text[ thai ] = "แนบ ~ข้อมูล";
+        Text[ czech ] = "Připojit data";
+        Text[ hebrew ] = "Daten a~nhängen";
+        Text[ hindi ] = "~डॉटा बाँधो";
     };
 
     CheckBox CB_PRIMARY_COLUMN
@@ -1166,17 +1247,20 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ italian ] = "Crea chiave~primaria";
         Text[ danish ] = "Generer ~prim�rn�gle";
         Text[ swedish ] = "Skapa ~prim�rnyckel";
-        Text[ polish ] = "Utw�rz klucz g��wny";
-        Text[ portuguese_brazilian ] = "~Create primary key";
+        Text[ polish ] = "~Utw�rz klucz g��wny";
+        Text[ portuguese_brazilian ] = "Criar chave ~prim�ria";
         Text[ japanese ] = "プライマリキーの作成(~T)";
         Text[ korean ] = "기본키 만들기(~T)";
         Text[ chinese_simplified ] = "生成主关键字(~T)";
         Text[ chinese_traditional ] = "生成主關鍵字(~T)";
         Text[ arabic ] = "����� ����� �����";
-        Text[ turkish ] = "Birincil anahtar olu�tur";
+        Text[ turkish ] = "Birin~cil anahtar olu�tur";
         Text[ catalan ] = "~Crea una clau prim�ria";
         Text[ finnish ] = "Luo p~erusavain";
         Text[ thai ] = "สร้า~งคีย์หลัก";
+        Text[ czech ] = "Vytvořit primární klíč";
+        Text[ hebrew ] = "~Primärschlüssel erzeugen";
+        Text[ hindi ] = "~प्रैमरी की उत्पन्न करो";
     };
     FixedText FT_KEYNAME
     {
@@ -1196,15 +1280,18 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ danish ] = "Navn";
         Text[ swedish ] = "Namn";
         Text[ polish ] = "Nazwa";
-        Text[ portuguese_brazilian ] = "Name:";
+        Text[ portuguese_brazilian ] = "Nome";
         Text[ japanese ] = "名前";
         Text[ korean ] = "이름";
         Text[ chinese_simplified ] = "名称";
         Text[ chinese_traditional ] = "名稱";
-        Text[ turkish ] = "Ad:";
+        Text[ turkish ] = "�sim";
         Text[ arabic ] = "�����:";
         Text[ catalan ] = "Nom:";
         Text[ thai ] = "ชื่อ:";
+        Text[ czech ] = "Název";
+        Text[ hebrew ] = "Name";
+        Text[ hindi ] = "नाम्";
     };
 
     Edit ET_KEYNAME
@@ -1231,7 +1318,7 @@ String STR_WIZ_TABLE_COPY
     Text[ danish ] = "~Kopier tabel";
     Text[ swedish ] = "Kopiera tabell";
     Text[ polish ] = "Kopiuj tabel�";
-    Text[ portuguese_brazilian ] = "Copy table";
+    Text[ portuguese_brazilian ] = "Copiar tabela";
     Text[ japanese ] = "テーブルのコピー";
     Text[ korean ] = "테이블 복사";
     Text[ chinese_simplified ] = "复制表格";
@@ -1241,6 +1328,9 @@ String STR_WIZ_TABLE_COPY
     Text[ catalan ] = "Copia taula";
     Text[ finnish ] = "Kopioi taulu";
     Text[ thai ] = "คัดลอกตาราง";
+    Text[ czech ] = "Kopírovat tabulku";
+    Text[ hebrew ] = "Tabelle kopieren";
+    Text[ hindi ] = "सारणी का प्रतिलिपि";
 };
 
 String STR_COPYTABLE_TITLE_COPY
@@ -1249,7 +1339,7 @@ String STR_COPYTABLE_TITLE_COPY
     Text [ ENGLISH ] = "copy table" ;
     Text [ portuguese ] = "Copiar tabela" ;
     Text [ english_us ] = "Copy table" ;
-    Text [ portuguese_brazilian ] = "Tabelle kopieren" ;
+    Text [ portuguese_brazilian ] = "Copiar tabela" ;
     Text [ swedish ] = "Kopiera tabell" ;
     Text [ danish ] = "~Kopier tabel" ;
     Text [ italian ] = "Copia tabella" ;
@@ -1268,6 +1358,9 @@ String STR_COPYTABLE_TITLE_COPY
     Text[ catalan ] = "Copia taula";
     Text[ finnish ] = "Kopioi taulu";
     Text[ thai ] = "คัดลอกตาราง";
+    Text[ czech ] = "Kopírovat tabulku";
+    Text[ hebrew ] = "Tabelle kopieren";
+    Text[ hindi ] = "सारणी का प्रतिलिपि";
 };
 
 String STR_COPYTABLE_TITLE_MOVE
@@ -1276,7 +1369,7 @@ String STR_COPYTABLE_TITLE_MOVE
     Text [ ENGLISH ] = "move table" ;
     Text [ portuguese ] = "Mover tabela" ;
     Text [ english_us ] = "Move table" ;
-    Text [ portuguese_brazilian ] = "Tabelle verschieben" ;
+    Text [ portuguese_brazilian ] = "Mover tabela" ;
     Text [ swedish ] = "Flytta tabell" ;
     Text [ danish ] = "Flyt tabel" ;
     Text [ italian ] = "Sposta tabella" ;
@@ -1295,6 +1388,9 @@ String STR_COPYTABLE_TITLE_MOVE
     Text[ catalan ] = "Mou la taula";
     Text[ finnish ] = "Siirr� taulu";
     Text[ thai ] = "ย้ายตาราง";
+    Text[ czech ] = "Přesunout tabulku";
+    Text[ hebrew ] = "Tabelle verschieben";
+    Text[ hindi ] = "सारणी का स्थान परिवर्तन करो";
 };
 ErrorBox ERROR_INVALID_TABLE_NAME
 {
@@ -1310,18 +1406,21 @@ ErrorBox ERROR_INVALID_TABLE_NAME
     Message[ italian ] = "Il nome della tabella non � valido nel database attuale.";
     Message[ danish ] = "I den aktuelle database er dette ikke et gyldigt tabelnavn.";
     Message[ swedish ] = "Det h�r �r inget giltigt tabellnamn i den aktuella databasen.";
-    Message[ polish ] = "Ta nazwa tabeli jest nieprawid�owa w aktualnej bazie danych.";
-    Message[ portuguese_brazilian ] = "This isn't a valid tablename in the current database.";
+    Message[ polish ] = "Ta nazwa tabeli jest nieprawid�owa w bie��cej bazie danych.";
+    Message[ portuguese_brazilian ] = "Este nome de tabela n�o � v�lido na base de dados atual.";
     Message[ japanese ] = "現在のデータベースでは、このテーブル名は無効です。";
     Message[ chinese_simplified ] = "这不是当前数据库有效的表格名称。";
     Message[ chinese_traditional ] = "使用中的資料庫無法接受這個無效的變更名稱。";
     Message[ arabic ] = "���� ��� ���� ��� ���� �� ����� �������� �������.";
     Message[ greek ] = "���� �� ����� ��� ������ ��� ����� ������ ���� �������� ���� ���������.";
     Message[ korean ] = "현재 데이터베이스에서 유효하지 않은 테이블 이름입니다.";
-    Message[ turkish ] = "Bu veritaban�nda bu ad ge�erli de�il.";
+    Message[ turkish ] = "Ge�erli veritaban�nda bu tablo ismi ge�ersiz.";
     Message[ catalan ] = "Aquest nom de taula no �s v�lid en la base de dades actual.";
     Message[ finnish ] = "T�m� taulun nimi ei ole kelvollinen nykyisess� tietokannassa.";
     Message[ thai ] = "ชื่อตารางนี้ไม่ถูกต้องในฐานข้อมูลปัจจุบัน";
+    Message[ czech ] = "Tento název tabulky není platný v této databázi.";
+    Message[ hebrew ] = "In der aktuellen Datenbank ist dies kein gültiger Tabellenname.";
+    Message[ hindi ] = "वर्तमान लेखासंचय में इस सारणी का नाम मान्य नहीं है ।";
 };
 String STR_ERR_DUPL_TABLENAME
 {
@@ -1329,7 +1428,7 @@ String STR_ERR_DUPL_TABLENAME
     Text [ ENGLISH ] = "The tablename \'$name$\' does already exist.\nYou may enter a new name\nor append the data to the existing table." ;
     Text [ portuguese ] = "O nome da tabela \'$name$\' j� existe.\nDefina outro nome\nou anexe os dados � tabela existente." ;
     Text [ english_us ] = "The table name \'$name$\' already exists.\nYou may enter a new name\nor append the data to the existing table." ;
-    Text [ portuguese_brazilian ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie k?nen einen neuen Namen angeben\noder die Daten an die existierende Tabelle anh?ngen." ;
+    Text [ portuguese_brazilian ] = "O nome da tabela \"$name$\" j� existe.\nVoc� pode digitar um outro nome\nou anexar os dados � tabela existente." ;
     Text [ swedish ] = "Tabellnamnet \'$name$\' finns redan.\nDu kan ange ett nytt namn\neller tillfoga data till den existerande tabellen." ;
     Text [ danish ] = "Tabelnavnet \'$name$\' findes allerede.\nDu kan indtaste et andet navn\neller vedh�fte dataene til den eksisterende tabel." ;
     Text [ italian ] = "Il nome della tabella \'$name$\' esiste gi� .\nPotete indicare un nuovo nome oppure \nallegare i dati alla tabella esistente." ;
@@ -1338,17 +1437,20 @@ String STR_ERR_DUPL_TABLENAME
     Text [ dutch ] = "Tabelnaam \'$name$\' bestaat reeds.\nU kunt een nieuwe naam opgeven \nof de gegevens aan de bestaande tabel toevoegen." ;
     Text[ chinese_simplified ] = "表格名称 \'$name$\' 已经存在。\n您能够给定一个新名称\n或者将数据附加在现存的表格内。";
     Text[ russian ] = "��� ������� \'$name$\' ��� ����������.\n����� ������ ����� ���\n��� �������� ������ � ������������ �������.";
-    Text[ polish ] = "Nazwa tabeli \'$name$\' ju� istnieje.\nWybierz inn� nazw� nlub do��cz dane do istniej�cej tabeli.";
+    Text[ polish ] = "Nazwa tabeli \'$name$\' ju� istnieje.\nMo�esz wybra� inn� nazw� lub do��czy� dane \ndo istniej�cej tabeli.";
     Text[ japanese ] = "\'$name$\' のテーブル名はすでにあります。\n新しい名前を入力か、\nまたは既存のテーブルにデータを添付します。";
     Text[ chinese_traditional ] = "表格名稱 \'$name$\' 已經存在。\n您能夠輸入一個新名稱\n或者將資料附加在現存的表格內。";
     Text[ arabic ] = "��� ������ \'$name$\' ����� ������.\n����� ����� ��� ����\n�� ����� �������� ������� �������.";
     Text[ greek ] = "�� ����� ��� ������ \'$name$\' ������� ���.\n�������� �� �������� ��� ��� �����\n� �� ������������� �� �������� ���� ��� ������� ������.";
     Text[ korean ] = "테이블 이름 \'$name$\'은(는) 이미 있습니다.\n새 이름을 입력하거나\n데이터를 기존 테이블에 추가할 수 있습니다.";
-    Text[ turkish ] = "Tablo ad� \'$name$\' mevcut durumda.\nBa�ka bir ad girebilir ya da verileri mevcut tabloya ekleyebilirsiniz.";
+    Text[ turkish ] = "Bu tablo ismi \'$name$\' halihaz�rda mevcut. \n Siz yeni bir isim girebilirsiniz yada mevcut tabloya ekleme yapabilirsiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El nom de taula \'$name$\' ja existeix.\nPot escriure un altre nom\no adjuntar les dades a la taula existent.";
     Text[ finnish ] = "Taulun nimi \'$name$\' on jo k�yt�ss�.\nVoit sy�tt�� uuden nimen\ntai liitt�� tiedot olemassa olevaan tauluun.";
     Text[ thai ] = "ชื่อ \'$name$\' มีอยู่แล้ว\nคุณจะใส่ชื่อใหม่\nหรือผนวกข้อมูลเข้ากับตารางที่มีอยู่แล้ว";
+    Text[ czech ] = "Tento název tabulky \'$name$\' již existuje.\nMůžete zadat nový, nebo data přidat\nk této existující tabulce.";
+    Text[ hebrew ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie können einen neuen Namen angeben\noder die Daten an die existierende Tabelle anhängen.";
+    Text[ hindi ] = "सारणी नाम \'$name$\' पहिले से ही अस्तित्व में है ।\nआप नया नाम को प्रविष्ट कर सकते है\nअथवा ड़ॉटा को अस्तित्व में रहनेवाला सारणी में जोड़ सकते है ।";
 };
 
 ErrorBox ERROR_INVALID_TABLE_NAME_LENGTH
@@ -1372,8 +1474,14 @@ ErrorBox ERROR_INVALID_TABLE_NAME_LENGTH
     Message[ korean ] = "이름이 너무 깁니다. 테이블 이름을 변경해주십시오.";
     Message[ chinese_simplified ] = "请您更改表格的名称。当前的名称太长了。";
     Message[ chinese_traditional ] = "請變更表格名稱。目前的名稱太長了。";
-    Message[ turkish ] = "Please change the table name. It is too long.";
+    Message[ turkish ] = "Tablo ad� �ok uzun. L�tfen tablo ad�n� de�i�tirin. ";
     Message[ arabic ] = "Please change the table name. It is too long.";
+    Message[ czech ] = "Prosím změňte název tabulky, je příliš dlouhý.";
+    Message[ hebrew ] = "Bitte ändern Sie den Tabellenname. Er ist zu lang.";
+    Message[ catalan ] = "Please change the table name. It is too long.";
+    Message[ portuguese_brazilian ] = "Please change the table name. It is too long.";
+    Message[ thai ] = "Please change the table name. It is too long.";
+    Message[ hindi ] = "Please change the table name. It is too long.";
 };
 
 Image IMG_SORTUP_H
@@ -1403,6 +1511,16 @@ Image IMG_SORTDOWN_H
         Blue = 0xFFFF ;
     };
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
