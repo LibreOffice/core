@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-04 14:18:17 $
+ *  last change: $Author: ab $ $Date: 2001-07-05 14:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3628,15 +3628,19 @@ RTLFUNC(MsgBox)
     nWinBits = nStyleMap[ nStyle ];
     if( nType & 4096 )
         nWinBits |= WB_SYSMODAL;
+
+    WinBits nWinDefBits;
+    nWinDefBits = (WB_DEF_OK | WB_DEF_RETRY | WB_DEF_YES);
     if( nType & 256 )
     {
         if( nStyle == 5 || nStyle == 2)
-            nWinBits |= WB_DEF_CANCEL;
+            nWinDefBits = WB_DEF_CANCEL;
         else
-            nWinBits |= (WB_DEF_CANCEL | WB_DEF_RETRY | WB_DEF_NO);
+            nWinDefBits = (WB_DEF_CANCEL | WB_DEF_RETRY | WB_DEF_NO);
     }
     if( nType & 512 )
-        nWinBits |= WB_DEF_CANCEL;
+        nWinDefBits = WB_DEF_CANCEL;
+    nWinBits |= nWinDefBits;
 
     String aMsg = rPar.Get(1)->GetString();
     String aTitle;
