@@ -20,4 +20,6 @@ sh    shell\source\win32\shlxthandler\columninfo   nmake   -   w   sh_win32_shlx
 sh    shell\source\win32\shlxthandler\thumbviewer  nmake   -   w   sh_win32_shlxthandler_thumbviewer NULL
 sh    shell\source\win32\shlxthandler              nmake   -   w   sh_win32_shlxthandler sh_win32_lngconv.w sh_win32_shlxthandler_res.w sh_win32_shlxthandler_util.w sh_all_zipfile.w sh_all_ooofilereader.w sh_win32_shlxthandler_propsheets.w sh_win32_shlxthandler_infotips.w sh_win32_shlxthandler_columninfo.w sh_win32_shlxthandler_thumbviewer.w NULL
 sh    shell\source\backends\localebe               nmake   -   all sh_backends_localebe NULL
+sh    shell\source\backends\wininetbe              nmake   -   w   sh_backends_wininetbe NULL
+sh    shell\source\backends\gconfbe                nmake   -   u   sh_backends_gconfbe NULL
 sh    shell\source\win32\shlxthandler\ooofilt      nmake   -   w   sh_win32_shlxthandler_ooofilt sh_all_zipfile.w sh_all_ooofilereader.w sh_win32_shlxthandler_util.w sh_all NULL
