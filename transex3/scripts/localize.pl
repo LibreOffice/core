@@ -6,9 +6,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-18 08:16:13 $
+#   last change: $Author: ihi $ $Date: 2004-11-26 20:44:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -167,7 +167,7 @@ sub splitfile{
                 $lastFile = $currentFile; # ?
                 $last_sdffile = $cur_sdffile;
             }
-            if( ( $lang eq "en-US" || $lang eq "de") ){}
+            if( ( $lang eq "en-US" || ( $prj ne "helpcontent2" && $lang eq "de") ) ){}
 #            elsif( $currentFile eq $lastFile ){
             elsif( $cur_sdffile eq $last_sdffile ){
                 $block{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
@@ -176,7 +176,7 @@ sub splitfile{
                 $lastFile = $currentFile; #?
                 $last_sdffile = $cur_sdffile;
                 %block = ();
-                if( !( $lang eq "en-US" || $lang eq "de") ){  $block{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ; }
+                if( !( $lang eq "en-US" || ( $prj ne "helpcontent2" && $lang eq "de") ) ){  $block{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ; }
             }
         } #else { print STDOUT "splitfile REGEX kaputt\n";}
 
