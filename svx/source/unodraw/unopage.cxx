@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-12 13:20:39 $
+ *  last change: $Author: cl $ $Date: 2001-07-10 07:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,10 +238,6 @@ void SAL_CALL SvxDrawPage::add( const Reference< drawing::XShape >& xShape )
     {
         pObj->SetModel(pModel);
         pPage->InsertObject( pObj );
-    }
-    else
-    {
-        return;
     }
 
     if(pObj == NULL)
@@ -652,7 +648,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     pRet = new SvxShapeCaption( pObj );
                     break;
                 case OBJ_TEXT:
-                    pRet = new SvxShape( pObj );
+                    pRet = new SvxShapeText( pObj );
                     break;
                 case OBJ_GRAF:
                     pRet = new SvxGraphicObject( pObj );
@@ -731,7 +727,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     break;
                 default: // unbekanntes 2D-Objekt auf der Page
                     DBG_ERROR("Nicht implementierter Starone-Shape erzeugt! [CL]");
-                    pRet = new SvxShape( pObj );
+                    pRet = new SvxShapeText( pObj );
                     break;
             }
             break;

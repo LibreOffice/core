@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-25 10:39:12 $
+ *  last change: $Author: cl $ $Date: 2001-07-10 07:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ SvxShape::SvxShape( SdrObject* pObject ) throw()
     bDisposing( sal_False ),
     pModel(NULL),
     aSize(100,100),
-    aDisposeListeners( aDisposeContainerMutex )
+    aDisposeListeners( maMutex )
 {
     Init();
 }
@@ -286,7 +286,7 @@ SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMap* pPropertyMap )
     pObj    (pObject),
     pModel(NULL),
     aSize(100,100),
-    aDisposeListeners( aDisposeContainerMutex )
+    aDisposeListeners( maMutex )
 
 {
     Init();
@@ -299,7 +299,7 @@ SvxShape::SvxShape() throw()
     pObj    (NULL),
     pModel(NULL),
     aSize(100,100),
-    aDisposeListeners( aDisposeContainerMutex )
+    aDisposeListeners( maMutex )
 
 {
     Init();
@@ -308,16 +308,10 @@ SvxShape::SvxShape() throw()
 //----------------------------------------------------------------------
 SvxShape::~SvxShape() throw()
 {
-    if (xTextAgg.is())
-        xTextAgg->setDelegator( Reference< uno::XInterface >() );
-
-    xTextAgg = NULL;
+    OGuard aGuard( Application::GetSolarMutex() );
 
     if( pModel )
         EndListening( *pModel );
-
-
-    OGuard aGuard( Application::GetSolarMutex() );
 }
 
 //----------------------------------------------------------------------
@@ -350,27 +344,14 @@ SvxShape* SvxShape::getImplementation( uno::Reference< uno::XInterface > xInt ) 
 //----------------------------------------------------------------------
 sal_Int64 SAL_CALL SvxShape::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException) \
 {
-    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
-                                                         rId.getConstArray(), 16 ) )
+    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) )
     {
         return (sal_Int64)this;
     }
     else
     {
-        if( !xTextAgg.is() )
-            queryAggregation( ::getCppuType((const Reference< text::XText >*)0));
-
-        if( xTextAgg.is() )
-        {
-            uno::Any aAny( xTextAgg->queryAggregation( ::getCppuType((const Reference< lang::XUnoTunnel >*)0) ) );
-            uno::Reference< lang::XUnoTunnel > xUT;
-            aAny >>= xUT;
-            if( xUT.is() )
-                return xUT->getSomething(rId );
-        }
+        return NULL;
     }
-
-    return NULL;
 }
 
 //----------------------------------------------------------------------
@@ -382,9 +363,13 @@ SvxShape* SvxShape::GetShapeForSdrObj( SdrObject* pObj ) throw()
 //----------------------------------------------------------------------
 void SvxShape::Init() throw()
 {
-    if(pObj == NULL)    // ab hier nur nocht mit Objekt
+    // only init if we already have an object
+    // if we get an object later Init() will
+    // be called again
+    if(pObj == NULL)
         return;
 
+    // no model? this should not be
     if(!pObj->GetModel())
         return;
 
@@ -394,15 +379,16 @@ void SvxShape::Init() throw()
 
     const sal_uInt32 nInventor = pObj->GetObjInventor();
 
-    if( nInventor == SdrInventor ||
-        nInventor == E3dInventor ||
-        nInventor == FmFormInventor )
+    // is it one of ours (svx) ?
+    if( nInventor == SdrInventor || nInventor == E3dInventor || nInventor == FmFormInventor )
     {
         UHashMapEntry* pMap = pSdrShapeIdentifierMap;
         sal_uInt32 nObjId;
 
         if(nInventor == FmFormInventor)
+        {
             nObjId = OBJ_UNO;
+        }
         else
         {
             nObjId = pObj->GetObjIdentifier();
@@ -442,27 +428,30 @@ void SvxShape::Init() throw()
 //----------------------------------------------------------------------
 void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
 {
-    DBG_ASSERT( !pObj || pObj == pNewObj, "SvxShape::Create was called twice!" );
-
-    pObj = pNewObj;
-
-    Init();
-
-    ObtainSettingsFromPropertySet( aPropSet );
-
-    // save user call
-    SdrObjUserCall* pUser = pObj->GetUserCall();
-    pObj->SetUserCall(NULL);
-
-    setPosition( aPosition );
-    setSize( aSize );
-
-    pObj->SetUserCall( pUser );
-
-    if( aShapeName.getLength() )
+    if( pObj != pNewObj )
     {
-        pObj->SetName( aShapeName );
-        aShapeName = OUString();
+        pObj = pNewObj;
+
+        Init();
+
+        ObtainSettingsFromPropertySet( aPropSet );
+
+        // save user call
+        SdrObjUserCall* pUser = pObj->GetUserCall();
+        pObj->SetUserCall(NULL);
+
+        setPosition( aPosition );
+        setSize( aSize );
+
+        // restore user call after we set the initial size
+        pObj->SetUserCall( pUser );
+
+        // if this shape was already named, use this name
+        if( aShapeName.getLength() )
+        {
+            pObj->SetName( aShapeName );
+            aShapeName = OUString();
+        }
     }
 }
 
@@ -522,22 +511,15 @@ void SvxShape::ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet) throw
 {
     if(pObj && rPropSet.AreThereOwnUsrAnys())
     {
-        SfxItemSet aSet( pModel->GetItemPool(),
-            SDRATTR_START, SDRATTR_END,
-//-/            SID_ATTR_3D_START, SID_ATTR_3D_END,
-            0);
-
+        SfxItemSet aSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END, 0);
         Reference< beans::XPropertySet > xShape( (OWeakObject*)this, UNO_QUERY );
         aPropSet.ObtainSettingsFromPropertySet(rPropSet, aSet, xShape);
-
-//-/        pObj->SetAttributes( aSet, sal_False );
-//-/        SdrBroadcastItemChange aItemChange(*pObj);
         pObj->SetItemSetAndBroadcast(aSet);
-//-/        pObj->BroadcastItemChange(aItemChange);
-
         pObj->ApplyNotPersistAttr( aSet );
     }
 }
+
+//----------------------------------------------------------------------
 
 uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw()
 {
@@ -586,84 +568,7 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
     return aAny;
 }
 
-// UserAggObject
-
 //----------------------------------------------------------------------
-uno::Any SAL_CALL SvxShape::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    return OWeakAggObject::queryInterface( rType );
-}
-
-uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    uno::Any aAny;
-
-    if( rType == ::getCppuType((const Reference< beans::XPropertySet >*)0))
-        aAny <<= Reference< beans::XPropertySet >(this);
-    else if( rType == ::getCppuType((const Reference< drawing::XShape >*)0))
-        aAny <<= Reference< drawing::XShape >(this);
-    else if( rType == ::getCppuType((const Reference< lang::XComponent >*)0))
-        aAny <<= Reference< lang::XComponent>(this);
-    else if( rType == ::getCppuType((const Reference< drawing::XShapeDescriptor >*)0))
-        aAny <<= Reference< drawing::XShapeDescriptor>(this);
-    else if( rType == ::getCppuType((const Reference< beans::XPropertyState >*)0))
-        aAny <<= Reference<beans::XPropertyState>(this);
-    else if( rType == ::getCppuType((const Reference< lang::XTypeProvider >*)0))
-        aAny <<= Reference<lang::XTypeProvider>(this);
-    else if( rType == ::getCppuType((const Reference< XServiceInfo >*)0))
-        aAny <<= Reference<XServiceInfo>(this);
-    else if( rType == ::getCppuType((const Reference< XUnoTunnel >*)0))
-        aAny <<= Reference<XUnoTunnel>(this);
-    else if( rType == ::getCppuType((const Reference< drawing::XGluePointsSupplier >*)0))
-        aAny <<= Reference<drawing::XGluePointsSupplier>(this);
-    else if( rType == ::getCppuType((const Reference< container::XChild >*)0))
-        aAny <<= Reference<container::XChild >(this);
-    else if( rType == ::getCppuType((const Reference< container::XNamed >*)0))
-        aAny <<= Reference<container::XNamed>(this);
-    else
-        aAny <<= OWeakAggObject::queryAggregation( rType );
-
-    if( !aAny.hasValue() && pObj && pObj->GetModel() )
-    {
-        if( !xTextAgg.is() )
-        {
-            SvxTextEditSource aSvxTextEditSource( pObj );
-
-            {
-                Reference< ::com::sun::star::text::XText > xTextParent;
-                Reference< ::com::sun::star::text::XText > xText =
-                    new SvxUnoText( &aSvxTextEditSource, ImplGetSvxUnoOutlinerTextCursorPropertyMap(), xTextParent );
-                if(xText.is())
-                {
-                    Reference< uno::XAggregation > xAgg( xText, UNO_QUERY );
-                    xTextAgg = xAgg;
-                }
-            }
-
-            if(xTextAgg.is())
-            {
-                Reference< uno::XInterface > xDelegator( (OWeakObject*)this, UNO_QUERY );
-                xTextAgg->setDelegator(xDelegator);
-            }
-            else
-                return uno::Any();
-        }
-
-        aAny <<= xTextAgg->queryAggregation( rType );
-    }
-
-    return aAny;
-}
-
-void SAL_CALL SvxShape::acquire() throw(uno::RuntimeException)
-{
-    OWeakAggObject::acquire();
-}
-
-void SAL_CALL SvxShape::release() throw(uno::RuntimeException)
-{
-    OWeakAggObject::release();
-}
 
 void SvxShape::addStaticTypes( sal_Int16 nNewTypes, /* uno::Type* */ ... ) throw()
 {
@@ -680,44 +585,59 @@ void SvxShape::addStaticTypes( sal_Int16 nNewTypes, /* uno::Type* */ ... ) throw
     va_end( marker );
 }
 
+//----------------------------------------------------------------------
+
 uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
     throw (uno::RuntimeException)
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        const uno::Sequence< uno::Type > aBaseTypes( SvxUnoText::getStaticTypes() );
-        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const sal_Int32 nOwnTypes = 8;      // !DANGER! Keep this updated!
+        // Ready for multithreading; get global mutex for first call of this method only! see before
+        MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
 
-        maTypeSequence.realloc( nBaseTypes  + nOwnTypes );
-        uno::Type* pTypes = maTypeSequence.getArray();
+        // Control these pointer again ... it can be, that another instance will be faster then these!
+        if( maTypeSequence.getLength() == 0 )
+        {
+            static ::cppu::OTypeCollection aSvxShapeTypeCollection(
+                ::getCppuType((const uno::Reference< drawing::XShape >*)0),
+                ::getCppuType((const uno::Reference< lang::XComponent >*)0),
+                ::getCppuType((const uno::Reference< beans::XPropertySet >*)0),
+                ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0),
+                ::getCppuType((const uno::Reference< beans::XPropertyState >*)0),
+                ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0),
+                ::getCppuType((const uno::Reference< container::XChild >*)0),
+                ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0),
+                ::getCppuType((const uno::Reference< container::XNamed >*)0) );
 
-        *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
-        *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
-        *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-        *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
-        *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
-        *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
-        *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
-        *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
-
-        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
-            *pTypes++ = *pBaseTypes++;
+            maTypeSequence = aSvxShapeTypeCollection.getTypes();
+        }
     }
     return maTypeSequence;
 }
 
+//----------------------------------------------------------------------
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
+    static ::cppu::OImplementationId* pID = NULL ;
+
+    if ( pID == NULL )
     {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+        // Ready for multithreading; get global mutex for first call of this method only! see before
+        MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+
+        // Control these pointer again ... it can be, that another instance will be faster then these!
+        if ( pID == NULL )
+        {
+            // Create a new static ID ...
+            static ::cppu::OImplementationId aID( sal_False ) ;
+            // ... and set his address to static pointer!
+            pID = &aID ;
+        }
     }
-    return aId;
+
+    return pID->getImplementationId() ;
 }
 
 //----------------------------------------------------------------------
@@ -825,8 +745,7 @@ awt::Point SAL_CALL SvxShape::getPosition() throw(uno::RuntimeException)
         Rectangle aRect( getLogicRectHack(pObj) );
         Point aPt( aRect.Left(), aRect.Top() );
 
-        // Position ist relativ zum Anker, in absolute Position
-        // umrechnen
+        // Position is relativ to anchor, so recalc to absolut position
         aPt -= pObj->GetAnchorPos();
 
         ForceMetricTo100th_mm(aPt);
@@ -912,6 +831,7 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
     aSize = rSize;
 }
 
+//----------------------------------------------------------------------
 
 // XNamed
 OUString SAL_CALL SvxShape::getName(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -925,6 +845,8 @@ OUString SAL_CALL SvxShape::getName(  ) throw(::com::sun::star::uno::RuntimeExce
         return aShapeName;
     }
 }
+
+//----------------------------------------------------------------------
 
 void SAL_CALL SvxShape::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -981,6 +903,7 @@ void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException)
 }
 
 //----------------------------------------------------------------------
+
 void SAL_CALL SvxShape::addEventListener( const Reference< lang::XEventListener >& xListener )
     throw(uno::RuntimeException)
 {
@@ -988,6 +911,7 @@ void SAL_CALL SvxShape::addEventListener( const Reference< lang::XEventListener 
 }
 
 //----------------------------------------------------------------------
+
 void SAL_CALL SvxShape::removeEventListener( const Reference< lang::XEventListener >& aListener ) throw(uno::RuntimeException)
 {
    aDisposeListeners.removeInterface(aListener);
@@ -996,6 +920,7 @@ void SAL_CALL SvxShape::removeEventListener( const Reference< lang::XEventListen
 // XPropertySet
 
 //----------------------------------------------------------------------
+
 Reference< beans::XPropertySetInfo > SAL_CALL
     SvxShape::getPropertySetInfo() throw(uno::RuntimeException)
 {
@@ -1008,6 +933,8 @@ void SAL_CALL SvxShape::addPropertyChangeListener( const OUString& aPropertyName
 void SAL_CALL SvxShape::removePropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 void SAL_CALL SvxShape::addVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 void SAL_CALL SvxShape::removeVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+
+//----------------------------------------------------------------------
 
 sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
 {
@@ -1023,6 +950,8 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
         return sal_False;
     }
 }
+
+//----------------------------------------------------------------------
 
 sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUString& rName, SfxItemSet& rSet, SdrModel* pModel )
 {
@@ -1134,6 +1063,8 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
     return sal_True;
 }
 
+//----------------------------------------------------------------------
+
 sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet )
 {
     String aName;
@@ -1189,12 +1120,9 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 }
 
 //----------------------------------------------------------------------
+
 void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const uno::Any& rVal )
-    throw(beans::UnknownPropertyException,
-            beans::PropertyVetoException,
-                lang::IllegalArgumentException,
-                    lang::WrappedTargetException,
-                        uno::RuntimeException)
+    throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -1628,7 +1556,6 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
             SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-//-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
             aSet.Put(pObj->GetItem(pMap->nWID));
 
             if( SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pMap, rVal, aSet ))
@@ -1645,19 +1572,9 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 
             if(!aSet.Count())
             {
-//-/                    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
-//-/                    {
-//-/                        // 3D-Attribut, eigenen Default
-//-/                        // Diese sollten IMMER gesetzt sein, da TakeAttributes an
-//-/                        // 3D-Objekten alle Items erzeugt und eintraegt
-//-/                        DBG_ERROR("AW: Got NO default item from group SID_ATTR_3D_");
-//-/                    }
-//-/                    else
-//-/                    {
                 // Default aus ItemPool holen
                 if(pModel->GetItemPool().IsWhich(pMap->nWID))
                     aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
-//-/                    }
             }
 
             if(aSet.Count())
@@ -1702,10 +1619,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 }
                 else
                 {
-//-/                        pObj->SetAttributes( aSet, sal_False );
-//-/                        SdrBroadcastItemChange aItemChange(*pObj);
                     pObj->SetItemSetAndBroadcast(aSet);
-//-/                        pObj->BroadcastItemChange(aItemChange);
                 }
             }
             return;
@@ -1732,10 +1646,9 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 }
 
 //----------------------------------------------------------------------
+
 uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
-    throw(beans::UnknownPropertyException,
-            lang::WrappedTargetException,
-                uno::RuntimeException)
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -2102,8 +2015,6 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
                 SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-//-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
-//-/                aSet.Put(pObj->GetItemSet());
                 aSet.Put(pObj->GetItem(pMap->nWID));
 
                 if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
@@ -2120,19 +2031,9 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 
                 if(!aSet.Count())
                 {
-//-/                    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
-//-/                    {
-//-/                        // 3D-Attribut, eigenen Default
-//-/                        // Diese sollten IMMER gesetzt sein, da TakeAttributes an
-//-/                        // 3D-Objekten alle Items erzeugt und eintraegt
-//-/                        DBG_ERROR("AW: Got NO default item from group SID_ATTR_3D_");
-//-/                    }
-//-/                    else
-//-/                    {
                     // Default aus ItemPool holen
                     if(pModel->GetItemPool().IsWhich(pMap->nWID))
                         aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
-//-/                    }
                 }
 
                 if(aSet.Count())
@@ -2152,6 +2053,46 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
     }
     return aAny;
 }
+
+// XMultiPropertySet
+void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    const sal_Int32 nCount = aPropertyNames.getLength();
+    const OUString* pNames = aPropertyNames.getConstArray();
+
+    const uno::Any* pValues = aValues.getConstArray();
+
+    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+        setPropertyValue( *pNames++, *pValues++ );
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL SvxShape::getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException)
+{
+    const sal_Int32 nCount = aPropertyNames.getLength();
+    const OUString* pNames = aPropertyNames.getConstArray();
+
+    uno::Sequence< uno::Any > aRet( nCount );
+    uno::Any* pValue = aRet.getArray();;
+
+    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+        *pValue++ = getPropertyValue( *pNames++ );
+
+    return aRet;
+}
+
+void SAL_CALL SvxShape::addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+void SAL_CALL SvxShape::removePropertiesChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+void SAL_CALL SvxShape::firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+//----------------------------------------------------------------------
 
 uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pMap ) const
 {
@@ -2254,6 +2195,8 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pM
     return aAny;
 }
 
+//----------------------------------------------------------------------
+
 // XPropertyState
 beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
@@ -2304,6 +2247,8 @@ beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& Proper
     }
 }
 
+//----------------------------------------------------------------------
+
 uno::Sequence< beans::PropertyState > SAL_CALL SvxShape::getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
@@ -2318,6 +2263,8 @@ uno::Sequence< beans::PropertyState > SAL_CALL SvxShape::getPropertyStates( cons
 
     return aRet;
 }
+
+//----------------------------------------------------------------------
 
 void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
@@ -2346,6 +2293,8 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
 
     pModel->SetChanged();
 }
+
+//----------------------------------------------------------------------
 
 uno::Any SAL_CALL SvxShape::getPropertyDefault( const OUString& aPropertyName )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
@@ -2376,12 +2325,15 @@ uno::Any SAL_CALL SvxShape::getPropertyDefault( const OUString& aPropertyName )
 }
 
 //----------------------------------------------------------------------
+
+//----------------------------------------------------------------------
 // XServiceInfo
 //----------------------------------------------------------------------
 OUString SAL_CALL SvxShape::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxShape") );
+    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("SvxShape") );
+    return aServiceName;
 }
 
 #define STAR_NAMESPACE "com.sun.star."
@@ -2427,10 +2379,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aSeq;
 
-    GET_TEXT_INTERFACE( XServiceInfo, xInfo );
-
-    if( xInfo.is() )
-        aSeq = xInfo->getSupportedServiceNames();
+//  aSeq = xInfo->getSupportedServiceNames();
 
     if( pObj && pObj->GetObjInventor() == SdrInventor)
     {
@@ -2439,12 +2388,12 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
         switch(nIdent)
         {
         case OBJ_GRUP:
-            addToSequence( aSeq, 2, sUNO_service_drawing_GroupShape,
+            SvxServiceInfoHelper::addToSequence( aSeq, 2, sUNO_service_drawing_GroupShape,
 
                                     sUNO_service_drawing_Shape );
             break;
         case OBJ_LINE:
-            addToSequence( aSeq,10, sUNO_service_drawing_LineShape,
+            SvxServiceInfoHelper::addToSequence( aSeq,10, sUNO_service_drawing_LineShape,
 
                                     sUNO_service_drawing_Shape,
                                     sUNO_service_drawing_LineProperties,
@@ -2460,7 +2409,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
             break;
 
         case OBJ_RECT:
-            addToSequence( aSeq,10, sUNO_service_drawing_RectangleShape,
+            SvxServiceInfoHelper::addToSequence( aSeq,10, sUNO_service_drawing_RectangleShape,
 
                                     sUNO_service_drawing_Shape,
                                     sUNO_service_drawing_FillProperties,
@@ -2479,7 +2428,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
         case OBJ_SECT:
         case OBJ_CARC:
         case OBJ_CCUT:
-            addToSequence( aSeq,10, sUNO_service_drawing_EllipseShape,
+            SvxServiceInfoHelper::addToSequence( aSeq,10, sUNO_service_drawing_EllipseShape,
 
                                     sUNO_service_drawing_Shape,
                                     sUNO_service_drawing_FillProperties,
@@ -2496,7 +2445,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
 
         case OBJ_PATHPLIN:
         case OBJ_PLIN:
-            addToSequence( aSeq,10, sUNO_service_drawing_PolyLineShape,
+            SvxServiceInfoHelper::addToSequence( aSeq,10, sUNO_service_drawing_PolyLineShape,
 
                                     sUNO_service_drawing_Shape,
                                     sUNO_service_drawing_LineProperties,
@@ -2514,7 +2463,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
 
         case OBJ_PATHPOLY:
         case OBJ_POLY:
-            addToSequence( aSeq,11, sUNO_service_drawing_PolyPolygonShape,
+            SvxServiceInfoHelper::addToSequence( aSeq,11, sUNO_service_drawing_PolyPolygonShape,
 
                                     sUNO_service_drawing_Shape,
                                     sUNO_service_drawing_LineProperties,
@@ -2533,7 +2482,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
 
         case OBJ_FREELINE:
         case OBJ_PATHLINE:
-            addToSequence( aSeq,11, sUNO_service_drawing_OpenBezierShape,
+            SvxServiceInfoHelper::addToSequence( aSeq,11, sUNO_service_drawing_OpenBezierShape,
 
                                     sUNO_service_drawing_Shape,
                                     sUNO_service_drawing_LineProperties,
@@ -2552,7 +2501,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
 
         case OBJ_FREEFILL:
         case OBJ_PATHFILL:
-            addToSequence( aSeq,11, sUNO_service_drawing_ClosedBezierShape,
+            SvxServiceInfoHelper::addToSequence( aSeq,11, sUNO_service_drawing_ClosedBezierShape,
 
                                     sUNO_service_drawing_Shape,
                                     sUNO_service_drawing_LineProperties,
@@ -2572,7 +2521,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
         case OBJ_OUTLINETEXT:
         case OBJ_TITLETEXT:
         case OBJ_TEXT:
-            addToSequence( aSeq,10, sUNO_service_drawing_TextShape,
+            SvxServiceInfoHelper::addToSequence( aSeq,10, sUNO_service_drawing_TextShape,
 
                                     sUNO_service_drawing_Shape,
                                     sUNO_service_drawing_FillProperties,
@@ -2588,7 +2537,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
         break;
 
         case OBJ_GRAF:
-            addToSequence( aSeq, 8, sUNO_service_drawing_GraphicObjectShape,
+            SvxServiceInfoHelper::addToSequence( aSeq, 8, sUNO_service_drawing_GraphicObjectShape,
 
                                     sUNO_service_drawing_Shape,
 
@@ -2602,12 +2551,12 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
             break;
 
         case OBJ_OLE2:
-            addToSequence( aSeq, 2, sUNO_service_drawing_OLE2Shape,
+            SvxServiceInfoHelper::addToSequence( aSeq, 2, sUNO_service_drawing_OLE2Shape,
                                     sUNO_service_drawing_Shape);
             break;
 
         case OBJ_CAPTION:
-            addToSequence( aSeq,10, sUNO_service_drawing_CaptionShape,
+            SvxServiceInfoHelper::addToSequence( aSeq,10, sUNO_service_drawing_CaptionShape,
 
                                     sUNO_service_drawing_Shape,
                                     sUNO_service_drawing_FillProperties,
@@ -2623,12 +2572,12 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
             break;
 
         case OBJ_PAGE:
-            addToSequence( aSeq, 2, sUNO_service_drawing_PageShape,
+            SvxServiceInfoHelper::addToSequence( aSeq, 2, sUNO_service_drawing_PageShape,
                                     sUNO_service_drawing_Shape );
             break;
 
         case OBJ_MEASURE:
-            addToSequence( aSeq,11, sUNO_service_drawing_MeasureShape,
+            SvxServiceInfoHelper::addToSequence( aSeq,11, sUNO_service_drawing_MeasureShape,
 
                                     sUNO_service_drawing_MeasureProperties,
 
@@ -2646,16 +2595,16 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
             break;
 
         case OBJ_FRAME:
-            addToSequence( aSeq, 2, sUNO_service_drawing_FrameShape,
+            SvxServiceInfoHelper::addToSequence( aSeq, 2, sUNO_service_drawing_FrameShape,
                                     sUNO_service_drawing_Shape );
             break;
 
         case OBJ_UNO:
-            addToSequence( aSeq, 2, sUNO_service_drawing_ControlShape,
+            SvxServiceInfoHelper::addToSequence( aSeq, 2, sUNO_service_drawing_ControlShape,
                                     sUNO_service_drawing_Shape );
             break;
         case OBJ_EDGE:
-            addToSequence( aSeq,11, sUNO_service_drawing_ConnectorShape,
+            SvxServiceInfoHelper::addToSequence( aSeq,11, sUNO_service_drawing_ConnectorShape,
 
                                     sUNO_service_drawing_ConnectorProperties,
 
@@ -2680,6 +2629,19 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
     return aSeq;
 }
 
+//----------------------------------------------------------------------
+sal_Bool SAL_CALL SvxShape::supportsService( const OUString& ServiceName ) throw ( uno::RuntimeException )
+{
+    const uno::Sequence< OUString > SupportedServices( getSupportedServiceNames() );
+    const ::rtl::OUString * pArray = SupportedServices.getConstArray();
+    for( INT32 i = 0; i < SupportedServices.getLength(); i++ )
+        if( pArray[i] == ServiceName )
+            return TRUE;
+    return FALSE;
+}
+
+//----------------------------------------------------------------------
+
 // XGluePointsSupplier
 uno::Reference< container::XIndexContainer > SAL_CALL SvxShape::getGluePoints()
     throw(uno::RuntimeException)
@@ -2694,6 +2656,8 @@ uno::Reference< container::XIndexContainer > SAL_CALL SvxShape::getGluePoints()
 
     return xGluePoints;
 }
+
+//----------------------------------------------------------------------
 
 // XChild
 uno::Reference< uno::XInterface > SAL_CALL SvxShape::getParent(  )
@@ -2725,17 +2689,175 @@ uno::Reference< uno::XInterface > SAL_CALL SvxShape::getParent(  )
     return xParent;
 }
 
+//----------------------------------------------------------------------
+
 void SAL_CALL SvxShape::setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent )
     throw(lang::NoSupportException, uno::RuntimeException)
 {
     throw lang::NoSupportException();
 }
 
-/************6***********************************************************
+/***********************************************************************
+* class SvxShapeText                                                   *
+***********************************************************************/
+SvxShapeText::SvxShapeText() throw ()
+: SvxShape(), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
+{
+}
+
+//----------------------------------------------------------------------
+SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
+: SvxShape( pObject ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
+{
+    if( pObject )
+        SetEditSource( new SvxTextEditSource( pObject ) );
+}
+
+//----------------------------------------------------------------------
+SvxShapeText::SvxShapeText( SdrObject* pObject, const SfxItemPropertyMap* pPropertySet ) throw ()
+: SvxShape( pObject, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
+{
+    if( pObject )
+        SetEditSource( new SvxTextEditSource( pObject ) );
+}
+
+//----------------------------------------------------------------------
+SvxShapeText::~SvxShapeText() throw ()
+{
+}
+
+void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw ()
+{
+    if( pNewObj && (NULL == GetEditSource()))
+        SetEditSource( new SvxTextEditSource( pNewObj ) );
+
+    SvxShape::Create( pNewObj, pNewPage );
+}
+
+// XInterface
+//----------------------------------------------------------------------
+uno::Any SAL_CALL SvxShapeText::queryInterface( const uno::Type & rType )
+    throw( uno::RuntimeException )
+{
+    return SvxShape::queryInterface( rType );
+}
+
+uno::Any SAL_CALL SvxShapeText::queryAggregation( const uno::Type & rType )
+    throw( uno::RuntimeException )
+{
+    uno::Any aAny( SvxShape::queryAggregation( rType ) );
+    if( !aAny.hasValue() )
+        aAny = SvxUnoTextBase::queryAggregation( rType );
+
+    return aAny;
+}
+
+//----------------------------------------------------------------------
+void SAL_CALL SvxShapeText::acquire() throw( uno::RuntimeException )
+{
+    SvxShape::acquire();
+}
+
+//----------------------------------------------------------------------
+void SAL_CALL SvxShapeText::release() throw( uno::RuntimeException )
+{
+    SvxShape::release();
+}
+
+// XServiceInfo
+//----------------------------------------------------------------------
+OUString SAL_CALL SvxShapeText::getImplementationName() throw( uno::RuntimeException )
+{
+    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("SvxShapeText") );
+    return aServiceName;
+}
+
+//----------------------------------------------------------------------
+uno::Sequence< OUString > SAL_CALL SvxShapeText::getSupportedServiceNames() throw( uno::RuntimeException )
+{
+    return SvxShape::getSupportedServiceNames();
+}
+
+//----------------------------------------------------------------------
+sal_Bool SAL_CALL SvxShapeText::supportsService( const OUString& ServiceName ) throw ( uno::RuntimeException )
+{
+    return SvxShape::supportsService(ServiceName);
+}
+
+    // XTypeProvider
+//----------------------------------------------------------------------
+uno::Sequence< uno::Type > SAL_CALL SvxShapeText::getTypes()
+    throw( uno::RuntimeException )
+{
+    if( SvxShape::maTypeSequence.getLength() == 0 )
+    {
+        // Ready for multithreading; get global mutex for first call of this method only! see before
+        MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+
+        // Control these pointer again ... it can be, that another instance will be faster then these!
+        if( SvxShape::maTypeSequence.getLength() == 0 )
+        {
+            // initialize base types
+            SvxShape::getTypes();
+
+            const int nOwnCount = SvxShape::maTypeSequence.getLength();
+
+            uno::Sequence< uno::Type > aTextTypes( SvxUnoTextBase::getTypes() );
+
+            const int nTextCount = aTextTypes.getLength();
+
+            SvxShape::maTypeSequence.realloc( nOwnCount + nTextCount );
+
+            uno::Type* pTypes = SvxShape::maTypeSequence.getArray();
+            pTypes = &(pTypes[nOwnCount]);
+
+            uno::Type* pTextTypes = aTextTypes.getArray();
+
+            for( int i = 0; i < nTextCount; i++ )
+                *pTypes++ = *pTextTypes++;
+        }
+    }
+    return SvxShape::maTypeSequence;
+}
+
+sal_Int64 SAL_CALL SvxShapeText::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException) \
+{
+    const sal_Int64 nReturn = SvxShape::getSomething( rId );
+    if( nReturn )
+        return nReturn;
+
+    return SvxUnoTextBase::getSomething( rId );
+}
+
+//----------------------------------------------------------------------
+uno::Sequence< sal_Int8 > SAL_CALL SvxShapeText::getImplementationId()
+    throw( uno::RuntimeException )
+{
+    static ::cppu::OImplementationId* pID = NULL ;
+
+    if ( pID == NULL )
+    {
+        // Ready for multithreading; get global mutex for first call of this method only! see before
+        MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+
+        // Control these pointer again ... it can be, that another instance will be faster then these!
+        if ( pID == NULL )
+        {
+            // Create a new static ID ...
+            static ::cppu::OImplementationId aID( sal_False ) ;
+            // ... and set his address to static pointer!
+            pID = &aID ;
+        }
+    }
+
+    return pID->getImplementationId() ;
+}
+
+/***********************************************************************
 * class SvxShapeRect                                                   *
 ***********************************************************************/
 SvxShapeRect::SvxShapeRect( SdrObject* pObj ) throw()
-: SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_SHAPE) )
+: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_SHAPE) )
 {
 
 }
@@ -2746,12 +2868,12 @@ SvxShapeRect::~SvxShapeRect() throw()
 
 uno::Any SAL_CALL SvxShapeRect::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
 {
-    return OWeakAggObject::queryInterface( rType );
+    return SvxShapeText::queryInterface( rType );
 }
 
 uno::Any SAL_CALL SvxShapeRect::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
-    return SvxShape::queryAggregation( rType );
+    return SvxShapeText::queryAggregation( rType );
 }
 
 void SAL_CALL SvxShapeRect::acquire() throw(uno::RuntimeException)

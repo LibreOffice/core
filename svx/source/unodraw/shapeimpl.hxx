@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-07 14:25:20 $
+ *  last change: $Author: cl $ $Date: 2001-07-10 07:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ class SvGlobalName;
 *                                                                      *
 ***********************************************************************/
 
-class SvxShapeCaption : public SvxShape
+class SvxShapeCaption : public SvxShapeText
 {
 public:
     SvxShapeCaption( SdrObject* pObj ) throw();

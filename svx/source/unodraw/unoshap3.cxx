@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-04 13:31:52 $
+ *  last change: $Author: cl $ $Date: 2001-07-10 07:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 1, "com.sun.star.drawing.Shape3DScene" );
+    SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.Shape3DScene" );
     return aSeq;
 }
 
@@ -650,7 +650,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DCube");
     return aSeq;
 }
@@ -753,7 +753,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DSphere");
     return aSeq;
 }
@@ -948,7 +948,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DLathe");
     return aSeq;
 }
@@ -1061,7 +1061,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames(
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DExtrude");
     return aSeq;
 }
@@ -1180,7 +1180,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames(
     throw(uno::RuntimeException)
 {
     Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DPolygon");
     return aSeq;
 }
