@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 12:49:29 $
+ *  last change: $Author: bm $ $Date: 2003-12-09 09:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "ChartModelHelper.hxx"
 #include "macros.hxx"
 #include "ContextHelper.hxx"
+#include "MeterHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <drafts/com/sun/star/chart2/XChartDocument.hpp>
@@ -113,32 +114,39 @@ rtl::OUString TitleHelper::getIdentifierForTitle( TitleHelper::eTitleType nTitle
 uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleIndex
                                               , const uno::Reference< frame::XModel >& xModel )
 {
+    uno::Reference< XTitled > xResult;
+    uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
+    uno::Reference< XDiagram > xDiagram;
+    if( xChartDoc.is())
+        xDiagram.set( xChartDoc->getDiagram());
+
     switch( nTitleIndex )
     {
         case TitleHelper::MAIN_TITLE:
-            return uno::Reference< XTitled >( xModel, uno::UNO_QUERY );
+            xResult.set( xModel, uno::UNO_QUERY );
+            break;
         case TitleHelper::SUB_TITLE:
-        {
-            uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
-            if( !xChartDoc.is())
-                return NULL;
-            return uno::Reference< XTitled >( xChartDoc->getDiagram(), uno::UNO_QUERY );
-        }
+            if( xDiagram.is())
+                xResult.set( xDiagram, uno::UNO_QUERY );
+            break;
         case TitleHelper::X_AXIS_TITLE:
-            //@todo
+            if( xDiagram.is())
+                xResult.set( MeterHelper::getAxis( 0, true, xDiagram ), uno::UNO_QUERY );
             break;
         case TitleHelper::Y_AXIS_TITLE:
-            //@todo
+            if( xDiagram.is())
+                xResult.set( MeterHelper::getAxis( 1, true, xDiagram ), uno::UNO_QUERY );
             break;
         case TitleHelper::Z_AXIS_TITLE:
-            //@todo
+            if( xDiagram.is())
+                xResult.set( MeterHelper::getAxis( 2, true, xDiagram ), uno::UNO_QUERY );
             break;
         default:
             OSL_ENSURE( false, "Unsupported Title-Type requested" );
             break;
     }
 
-    return uno::Reference< XTitled >();
+    return xResult;
 }
 
 uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
