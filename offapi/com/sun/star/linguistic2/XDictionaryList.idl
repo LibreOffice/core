@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionaryList.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 16:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com { module sun { module star { module linguistic2 {
 
     <P>A dictionary-list may be given to a spellchecker or hyphenator
     service implementation on their creation in order to supply a set
-    of dictionaries and thus additional information to be used for
+    of dictionaries and additional information to be used for
     those purposes.</P>
 
     @see    com::sun::star::linguistic2::XDictionary
@@ -112,7 +112,7 @@ interface XDictionaryList : com::sun::star::uno::XInterface
 
          @returns
             the XDictionary with the specified name. If no such
-            dictionary exists <NULL/> will be returned.
+            dictionary exists, <NULL/> will be returned.
 
         @param  aDictionaryName
             specifies the name of the dictionary to look for.
@@ -125,7 +125,7 @@ interface XDictionaryList : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** adds a dictionary to the list.
 
-        <P>Additionally the dictionary-list will add itself to the list of dictionary
+        <P>Additionally, the dictionary-list will add itself to the list of dictionary
          event listeners of that dictionary.</P>
 
         @returns
@@ -144,7 +144,7 @@ interface XDictionaryList : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** removes a single dictionary from the list.
 
-        <P>If the dictionary is still active it will be deactivated
+        <P>If the dictionary is still active, it will be deactivated
         first. The dictionary-list will remove itself from the list of
         dictionary event listeners of the dictionary.</P>
 
@@ -164,21 +164,23 @@ interface XDictionaryList : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** adds an entry to the list of dictionary-list event listeners.
 
-        <P>On dictionary-list events each entry in the listener list will
+        <P>On dictionary-list events, each entry in the listener list will
          be notified via a call to
          <member scope="com::sun::star::linguistic2">
          XDictionaryListEventListener::processDictionaryListEvent</member>.</P>
 
         @returns
-            <TRUE/> if the entry was made, <FALSE/> else.
+            <TRUE/> if the entry was made, <FALSE/> otherwise.
             If the object disposes it will always fail.
+
+    <!-- Dennis: How is "disposes" being used in this sentence? -->
 
         @param  xListener
             the object to be notified of dictionary-list events.
 
         @param  bReceiveVerbose
-            </TRUE> if the listener requires are more detailed event
-            notification as usual.
+            </TRUE> if the listener requires more detailed event
+            notification than usual.
 
         @see    removeDictionaryListEventListener
         @see    com::sun::star::linguistic2::XDictionaryListEventListener
@@ -205,11 +207,11 @@ interface XDictionaryList : com::sun::star::uno::XInterface
         [in] com::sun::star::linguistic2::XDictionaryListEventListener xListener );
 
     //-------------------------------------------------------------------------
-    /** increase request level for event buffering by one.
+    /** increases request level for event buffering by one.
 
-         <P>The request level for event buffering is just an integer
+         <P>The request level for event buffering is an integer
          counter that is initially set to 0.
-        As long as the request level is not 0 events will be buffered
+        As long as the request level is not 0, events will be buffered
          until the next flushing of the buffer.</P>
 
         @returns
@@ -227,7 +229,7 @@ interface XDictionaryList : com::sun::star::uno::XInterface
 
          <P>There should be one matching endCollectEvents call for every
          beginCollectEvents call. Usually you will group these around
-         some code where you don't like to get notfied of every single
+         some code where you do not wish to get notfied of every single
          event.</P>
 
         @returns
@@ -263,7 +265,7 @@ interface XDictionaryList : com::sun::star::uno::XInterface
 
         @param  aLocale
             defines the language of the dictionary.
-             Use an empty Locale
+             Use an empty aLocale
             for dictionaries which may contain entries of all languages.
 
         @param  eDicType
@@ -272,7 +274,7 @@ interface XDictionaryList : com::sun::star::uno::XInterface
          @param aURL
             is the URL of the location where the dictionary is persistent if
             the XStorable interface is supported.
-            It may be empty which means the dictionary will not be persistent.
+            It may be empty, which means the dictionary will not be persistent.
 
         @see    com::sun::star::linguistic2::XDictionary
         @see    com::sun::star::lang::Locale
