@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdynres.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:49:31 $
+ *  last change: $Author: hjs $ $Date: 2001-08-06 14:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <vector>
 #include <sortdynres.hxx>
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_

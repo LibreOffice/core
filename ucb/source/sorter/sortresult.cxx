@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 08:43:57 $
+ *  last change: $Author: hjs $ $Date: 2001-08-06 14:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <vector>
 #include <sortresult.hxx>
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
