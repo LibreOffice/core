@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@ namespace xmloff
     //= OPropertyExport
     //=====================================================================
     /** provides export related tools for attribute handling
+
+        <p>(The name is somewhat misleading. It's not only a PropertyExport, but in real a ElementExport.
+        Anyway.)</p>
     */
     class OPropertyExport : public OAttributeMetaData
     {
@@ -389,6 +392,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/06 17:28:05  fs
+ *  changes for the formlayer import - still under construction
+ *
  *  Revision 1.3  2000/11/21 13:38:45  hr
  *  #65293#: includes
  *

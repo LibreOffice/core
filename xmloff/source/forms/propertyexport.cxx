@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 11:58:32 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@ namespace xmloff
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
+
+    // NO using namespace ...util !!!
+    // need a tools Date/Time/DateTime below, which would conflict with the uno types then
 
     using namespace ::comphelper;
 
@@ -796,6 +799,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/12 11:58:32  fs
+ *  generic properies: writer shorts really as shorts
+ *
  *  Revision 1.4  2000/12/06 17:28:05  fs
  *  changes for the formlayer import - still under construction
  *
