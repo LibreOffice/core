@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 12:03:50 $
+ *  last change: $Author: tl $ $Date: 2002-06-19 10:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3749,6 +3749,11 @@ USHORT GetScriptTypeOfLanguage( USHORT nLang )
     case LANGUAGE_URDU_INDIA:
     case LANGUAGE_THAI:
     case LANGUAGE_VIETNAMESE:
+    case LANGUAGE_HINDI:
+    case LANGUAGE_KANNADA:
+    case LANGUAGE_TELUGU:
+    case LANGUAGE_TAMIL:
+    case LANGUAGE_GUJARATI:
         nScript = SCRIPTTYPE_COMPLEX;
         break;
 
@@ -3764,7 +3769,6 @@ USHORT GetScriptTypeOfLanguage( USHORT nLang )
 #define LANGUAGE_BELARUSIAN                 0x0423
 #define LANGUAGE_BENGALI                    0x0445
 #define LANGUAGE_GUJARATI                   0x0447
-#define LANGUAGE_HINDI                      0x0439
 #define LANGUAGE_INDONESIAN                 0x0421
 #define LANGUAGE_KASHMIRI                   0x0460
 #define LANGUAGE_KASHMIRI_INDIA             0x0860
@@ -3790,9 +3794,7 @@ USHORT GetScriptTypeOfLanguage( USHORT nLang )
 #define LANGUAGE_SERBIAN_CYRILLIC           0x0C1A
 #define LANGUAGE_SINDHI                     0x0459
 #define LANGUAGE_SWAHILI                    0x5041
-#define LANGUAGE_TAMIL                      0x0449
 #define LANGUAGE_TATAR                      0x0444
-#define LANGUAGE_TELUGU                     0x044A
 #define LANGUAGE_TURKISH                    0x041F
 #define LANGUAGE_UKRAINIAN                  0x0422
 #define LANGUAGE_UZBEK                      0x0043
