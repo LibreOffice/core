@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:21:26 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,19 +328,16 @@ void ScDocument::UpdateDrawPrinter()
     }
 }
 
-BOOL ScDocument::IsChart( SdrObject* pObject )
+sal_Bool ScDocument::IsChart( const SdrObject* pObject )
 {
-    if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
+    // #109985#
+    // IsChart() implementation moved to svx drawinglayer
+    if(pObject && OBJ_OLE2 == pObject->GetObjIdentifier())
     {
-        SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-        if (aIPObj.Is())
-        {
-            SvGlobalName aObjClsId = *aIPObj->GetSvFactory();
-            if ( SotExchange::IsChart( aObjClsId ))
-                return TRUE;
-        }
+        return ((SdrOle2Obj*)pObject)->IsChart();
     }
-    return FALSE;
+
+    return sal_False;
 }
 
 IMPL_LINK_INLINE_START( ScDocument, GetUserDefinedColor, USHORT *, pColorIndex )
@@ -504,7 +501,7 @@ BOOL ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
                 while (pObject)
                 {
                     if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                            aMMRect.IsInside( pObject->GetBoundRect() ) )
+                            aMMRect.IsInside( pObject->GetCurrentBoundRect() ) )
                         return TRUE;
 
                     pObject = aIter.Next();
@@ -559,7 +556,7 @@ void ScDocument::StartAnimations( USHORT nTab, Window* pWin )
             SdrGrafObj* pGrafObj = (SdrGrafObj*)pObject;
             if ( pGrafObj->IsAnimated() )
             {
-                const Rectangle& rRect = pGrafObj->GetBoundRect();
+                const Rectangle& rRect = pGrafObj->GetCurrentBoundRect();
                 pGrafObj->StartAnimation( pWin, rRect.TopLeft(), rRect.GetSize() );
             }
         }
@@ -666,7 +663,7 @@ BOOL ScDocument::HasBackgroundDraw( USHORT nTab, const Rectangle& rMMRect )
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
-        if ( pObject->GetLayer() == SC_LAYER_BACK && pObject->GetBoundRect().IsOver( rMMRect ) )
+        if ( pObject->GetLayer() == SC_LAYER_BACK && pObject->GetCurrentBoundRect().IsOver( rMMRect ) )
             bFound = TRUE;
         pObject = aIter.Next();
     }
@@ -693,7 +690,7 @@ BOOL ScDocument::HasAnyDraw( USHORT nTab, const Rectangle& rMMRect )
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
-        if ( pObject->GetBoundRect().IsOver( rMMRect ) )
+        if ( pObject->GetCurrentBoundRect().IsOver( rMMRect ) )
             bFound = TRUE;
         pObject = aIter.Next();
     }
@@ -722,7 +719,7 @@ SdrObject* ScDocument::GetObjectAtPoint( USHORT nTab, const Point& rPos )
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                if ( pObject->GetBoundRect().IsInside(rPos) )
+                if ( pObject->GetCurrentBoundRect().IsInside(rPos) )
                 {
                     //  Intern interessiert gar nicht
                     //  Objekt vom Back-Layer nur, wenn kein Objekt von anderem Layer getroffen
