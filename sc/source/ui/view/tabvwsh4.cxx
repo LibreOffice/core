@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 07:32:37 $
+ *  last change: $Author: er $ $Date: 2001-09-05 12:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,6 +526,9 @@ void __EXPORT ScTabViewShell::ReadUserData(const String& rData, BOOL bBrowse)
 
 void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::PropertyValue >& rSettings, sal_Bool bBrowse )
 {
+    if ( GetViewData()->GetDocShell()->IsPreview() )
+        return;
+
     Window* pOldWin = GetActiveWin();
     BOOL bFocus = pOldWin && pOldWin->HasFocus();
 
