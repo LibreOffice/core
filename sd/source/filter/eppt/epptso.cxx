@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-19 15:23:00 $
+ *  last change: $Author: sj $ $Date: 2001-01-22 18:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,14 +143,8 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
-#include <com/sun/star/drawing/ColorMode.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
 #include <com/sun/star/drawing/XControlShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
-#include <com/sun/star/text/GraphicCrop.hpp>
 #endif
 #ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
@@ -1695,7 +1689,7 @@ sal_Bool PPTWriter::ImplGetText()
 
 //  -----------------------------------------------------------------------
 
-void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt, const ::com::sun::star::awt::Point& rRefPoint )
+void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
 {
     if ( mnAngle < 0 )
         mnAngle = ( 36000 + mnAngle ) % 36000;
@@ -4362,7 +4356,7 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 sal_uInt32 nSpFlags = SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE;
                 ADD_SHAPE( ESCHER_ShpInst_HostControl, nSpFlags );
-                if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False, sal_True ) )
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False  ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 aPropOpt.AddOpt( ESCHER_Prop_pictureId, mnExEmbed );
                 aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
@@ -4550,98 +4544,9 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
                     else
                     {
                         ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_False ) )
+                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_False, sal_True ) )
                             aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                     }
-                    sal_uInt32 nPicFlags = 0;
-                    ::com::sun::star::drawing::ColorMode eColorMode( ::com::sun::star::drawing::ColorMode_STANDARD );
-                    sal_Int16 nLuminance = 0;
-                    sal_Int16 nContrast = 0;
-                    sal_Int16 nRed = 0;
-                    sal_Int16 nGreen = 0;
-                    sal_Int16 nBlue = 0;
-                    double fGamma = 1.0;
-                    sal_Int16 nTransparency = 0;
-
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "GraphicColorMode" ) ) ) )
-                        mAny >>= eColorMode;
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "AdjustLuminance" ) ) ) )
-                        mAny >>= nLuminance;
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "AdjustContrast" ) ) ) )
-                        mAny >>= nContrast;
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "AdjustRed" ) ) ) )
-                        mAny >>= nRed;
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "AdjustGreen" ) ) ) )
-                        mAny >>= nGreen;
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "AdjustBlue" ) ) ) )
-                        mAny >>= nBlue;
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Gamma" ) ) ) )
-                        mAny >>= fGamma;
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Transparency" ) ) ) )
-                        mAny >>= nTransparency;
-
-                    if ( ( eColorMode == ::com::sun::star::drawing::ColorMode_WATERMARK )
-                            && ( nLuminance || nContrast ) )
-                    {
-                        eColorMode = ::com::sun::star::drawing::ColorMode_STANDARD;
-                        nLuminance += 5000;
-                        if ( nLuminance > 10000 )
-                            nLuminance = 10000;
-                        nContrast -= 7000;
-                        if ( nContrast < 10000 )
-                            nContrast = 10000;
-                    }
-                    nContrast *= 327;
-                    nLuminance *= 327;
-                    switch ( eColorMode )
-                    {
-                        case ::com::sun::star::drawing::ColorMode_GREYS :
-                            nPicFlags |= 0x40004;
-                        break;
-                        case ::com::sun::star::drawing::ColorMode_MONO :
-                            nPicFlags |= 0x60006;
-                        break;
-                        case ::com::sun::star::drawing::ColorMode_WATERMARK :
-                        {
-                            nContrast = 0x4ccd;
-                            nLuminance = 0x599a;
-                        }
-                        break;
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "GraphicCrop" ) ) ) )
-                    {
-                        ::com::sun::star::text::GraphicCrop aGraphCrop;
-                        if ( mAny >>= aGraphCrop )
-                        {
-                            ::com::sun::star::awt::Size aCropSize( mXShape->getSize() );
-                            if ( aGraphCrop.Left )
-                            {
-                                sal_uInt32 nLeft = ( aGraphCrop.Left * 65536 ) / aCropSize.Width;
-                                aPropOpt.AddOpt( ESCHER_Prop_cropFromLeft, nLeft );
-                            }
-                            if ( aGraphCrop.Top )
-                            {
-                                sal_uInt32 nTop = ( aGraphCrop.Top * 65536 ) / aCropSize.Height;
-                                aPropOpt.AddOpt( ESCHER_Prop_cropFromTop, nTop );
-                            }
-                            if ( aGraphCrop.Right )
-                            {
-                                sal_uInt32 nRight = ( aGraphCrop.Right * 65536 ) / aCropSize.Width;
-                                aPropOpt.AddOpt( ESCHER_Prop_cropFromRight, nRight );
-                            }
-                            if ( aGraphCrop.Bottom )
-                            {
-                                sal_uInt32 nBottom = ( aGraphCrop.Bottom * 65536 ) / aCropSize.Height;
-                                aPropOpt.AddOpt( ESCHER_Prop_cropFromBottom, nBottom );
-                            }
-                        }
-                    }
-                    if ( nContrast )
-                        aPropOpt.AddOpt( ESCHER_Prop_pictureContrast, nContrast );
-                    if ( nLuminance )
-                        aPropOpt.AddOpt( ESCHER_Prop_pictureBrightness, nLuminance );
-                    if ( nPicFlags )
-                        aPropOpt.AddOpt( ESCHER_Prop_pictureActive, nPicFlags );
                 }
             }
             else if ( ( mType == "drawing.Text" ) || ( mType == "presentation.Subtitle" ) || ( mType == "presentation.Notes" ) )
@@ -4850,7 +4755,7 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
                     if ( nOlePictureId )
                         nSpFlags |= 0x10;
                     ADD_SHAPE( ESCHER_ShpInst_PictureFrame, nSpFlags );
-                    if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False, sal_True ) )
+                    if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                     if ( nOlePictureId )
                         aPropOpt.AddOpt( ESCHER_Prop_pictureId, nOlePictureId );
@@ -4882,18 +4787,10 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
             }
             aPropOpt.CreateShadowProperties( mXPropSet );
             maRect.Justify();
+
             if ( mnAngle )
-            {
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "RotationPointX" ) ) ) )
-                {
-                    ::com::sun::star::awt::Point aRefPoint( *( (sal_Int32*)mAny.getValue() ), 0 );
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "RotationPointY" ) ) ) )
-                    {
-                        aRefPoint.Y = *( (sal_Int32*)mAny.getValue() );
-                        ImplFlipBoundingBox( aPropOpt, ImplMapPoint( aRefPoint ) );
-                    }
-                }
-            }
+                ImplFlipBoundingBox( aPropOpt );
+
             aPropOpt.Commit( *mpStrm );
             mpPptEscherEx->AddClientAnchor( maRect );
 
@@ -5070,7 +4967,7 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
                 if ( mnAngle < 0 )
                     mnAngle = ( 36000 + mnAngle ) % 36000;
                 if ( mnAngle )
-                    ImplFlipBoundingBox( aPropOpt, ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() ) );
+                    ImplFlipBoundingBox( aPropOpt );
             }
             else
             {
