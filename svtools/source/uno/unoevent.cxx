@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:51:39 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,6 @@ const sal_Char sAPI_SvDetachedEventDescriptor[] = "SvDetachedEventDescriptor";
 //
 
 SvBaseEventDescriptor::SvBaseEventDescriptor( const SvEventDescription* pSupportedMacroItems ) :
-        sServiceName(RTL_CONSTASCII_USTRINGPARAM(sAPI_ServiceName)),
-        mpSupportedMacroItems(pSupportedMacroItems),
-        mnMacroItems(0),
         sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
         sMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName")),
         sLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
@@ -118,7 +115,10 @@ SvBaseEventDescriptor::SvBaseEventDescriptor( const SvEventDescription* pSupport
         sJavaScript(RTL_CONSTASCII_USTRINGPARAM("JavaScript")),
         sScript(RTL_CONSTASCII_USTRINGPARAM("Script")),
         sNone(RTL_CONSTASCII_USTRINGPARAM("None")),
-        sEmpty()
+        sServiceName(RTL_CONSTASCII_USTRINGPARAM(sAPI_ServiceName)),
+        sEmpty(),
+        mpSupportedMacroItems(pSupportedMacroItems),
+        mnMacroItems(0)
 {
     DBG_ASSERT(pSupportedMacroItems != NULL, "Need a list of supported events!");
 
@@ -367,7 +367,7 @@ void SvBaseEventDescriptor::getMacroFromAny(
     // process ...
     sal_Bool bTypeOK = sal_False;
     sal_Bool bNone = sal_False;     // true if EventType=="None"
-    enum ScriptType eType;
+    enum ScriptType eType = EXTENDED_STYPE;
     OUString sScriptVal;
     OUString sMacroVal;
     OUString sLibVal;
