@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Desktop.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: obo $ $Date: 2004-09-08 14:01:21 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:28:27 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,6 +60,8 @@
 
 package com.sun.star.wizards.common;
 
+import java.util.Date;
+
 import com.sun.star.awt.XToolkit;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XDesktop;
@@ -90,9 +92,13 @@ import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.util.XStringSubstitution;
 import com.sun.star.frame.*;
+import com.sun.star.i18n.KParseType;
+import com.sun.star.i18n.ParseResult;
+import com.sun.star.i18n.XCharacterClassification;
 
 public class Desktop {
 
@@ -183,25 +189,58 @@ public class Desktop {
         return (xMSF);
     }
 
+
     public static String getIncrementSuffix(XNameAccess xElementContainer, String ElementName) {
         boolean bElementexists = true;
         int i = 1;
-        String sIncSuffix;
-        String[] sControlNames = xElementContainer.getElementNames();
+        String sIncSuffix = "";
         String BaseName = ElementName;
         while (bElementexists == true) {
             bElementexists = xElementContainer.hasByName(ElementName);
             if (bElementexists == true) {
                 i += 1;
-                ElementName = BaseName + "_" + Integer.toString(i);
+                ElementName = BaseName + Integer.toString(i);
             }
         }
-        if (i == 1)
-            sIncSuffix = "";
-        else
-            sIncSuffix = "_" + Integer.toString(i);
+        if (i > 1)
+            sIncSuffix = Integer.toString(i);
         return sIncSuffix;
     }
+
+
+    public static String getIncrementSuffix(XHierarchicalNameAccess xElementContainer, String ElementName) {
+        boolean bElementexists = true;
+        int i = 1;
+        String sIncSuffix = "";
+        String BaseName = ElementName;
+        while (bElementexists == true) {
+            bElementexists = xElementContainer.hasByHierarchicalName(ElementName);
+            if (bElementexists == true) {
+                i += 1;
+                ElementName = BaseName + Integer.toString(i);
+            }
+        }
+        if (i > 1)
+            sIncSuffix = Integer.toString(i);
+        return sIncSuffix;
+    }
+
+
+
+    public static int checkforfirstSpecialCharacter(XMultiServiceFactory _xMSF, String  _sString, Locale _aLocale){
+    try {
+        int nStartFlags = com.sun.star.i18n.KParseTokens.ANY_LETTER_OR_NUMBER + com.sun.star.i18n.KParseTokens.ASC_UNDERSCORE;
+        int nContFlags = nStartFlags;
+        Object ocharservice = _xMSF.createInstance("com.sun.star.i18n.CharacterClassification");
+        int ilength = _sString.length();
+        XCharacterClassification xCharacterClassification = (XCharacterClassification) UnoRuntime.queryInterface(XCharacterClassification.class, ocharservice);
+        ParseResult aResult = xCharacterClassification.parsePredefinedToken(KParseType.IDENTNAME, _sString, 0, _aLocale, nStartFlags, "", nContFlags, " ");
+        return aResult.EndPos;
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+        return -1;
+    }}
+
 
     /**
      * Checks if the passed Element Name already exists in the  ElementContainer. If yes it appends a
@@ -213,11 +252,50 @@ public class Desktop {
 
     public static String getUniqueName(XNameAccess xElementContainer, String sElementName) {
         String sIncSuffix = getIncrementSuffix(xElementContainer, sElementName);
-        if (sIncSuffix == "")
-            return sElementName;
-        else
-            return sElementName + sIncSuffix;
+        return sElementName + sIncSuffix;
     }
+
+    /**
+     * Checks if the passed Element Name already exists in the  ElementContainer. If yes it appends a
+     * suffix to make it unique
+     * @param xElementContainer
+     * @param sElementName
+     * @return a unique Name ready to be added to the container.
+     */
+
+    public static String getUniqueName(XHierarchicalNameAccess xElementContainer, String sElementName) {
+        String sIncSuffix = getIncrementSuffix(xElementContainer, sElementName);
+        return sElementName + sIncSuffix;
+    }
+
+
+
+
+    /**
+     * Checks if the passed Element Name already exists in the list If yes it appends a
+     * suffix to make it unique
+     * @param _slist
+     * @param _sElementName
+     * @return a unique Name not being in the passed list.
+     */
+    public static String getUniqueName(String[] _slist, String _sElementName) {
+        int a = 2;
+        String scompname = _sElementName;
+        boolean bElementexists = true;
+        if (_slist == null)
+            return _sElementName;
+        if (_slist.length == 0)
+            return _sElementName;
+        while (bElementexists == true) {
+            for (int i = 0; i < _slist.length; i++){
+                if (JavaTools.FieldInList(_slist, scompname) == -1)
+                    return scompname;
+            }
+            scompname = _sElementName + "_" + a++;
+        }
+        return null;
+    }
+
 
 
     /**
@@ -353,6 +431,20 @@ public class Desktop {
             exception.printStackTrace(System.out);
         }
     }
+
+
+    public static long getNullDateCorrection(XNumberFormatsSupplier _xNumberFormatsSupplier){
+        com.sun.star.util.Date dNullDate = (com.sun.star.util.Date) Helper.getUnoStructValue(_xNumberFormatsSupplier.getNumberFormatSettings(), "NullDate");
+        long lNullDate = Helper.convertUnoDatetoInteger(dNullDate);
+        java.util.Calendar oCal = java.util.Calendar.getInstance();
+        oCal.set(1900, 1, 1);
+        Date dTime = oCal.getTime();
+        long lTime = dTime.getTime();
+        long lDBNullDate = lTime / (3600 * 24000);
+        long iDiffValue = lDBNullDate - lNullDate;
+        return iDiffValue;
+    }
+
 
 
     /**
