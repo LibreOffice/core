@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-03 17:50:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
