@@ -75,16 +75,20 @@ public class PlayerWindow implements java.awt.event.KeyListener,
                                      com.sun.star.lang.XServiceInfo,
                                      com.sun.star.media.XPlayerWindow
 {
-    private WindowAdapter                   maFrame;
-    private javax.media.Player              maPlayer;
-    private com.sun.star.media.ZoomLevel    meZoomLevel = com.sun.star.media.ZoomLevel.ORIGINAL;
-    private boolean                         mbShowControls = false;
+    private com.sun.star.lang.XMultiServiceFactory maFactory;
+    private WindowAdapter maFrame;
+    private javax.media.Player maPlayer;
+    private com.sun.star.media.ZoomLevel meZoomLevel = com.sun.star.media.ZoomLevel.ORIGINAL;
+    private boolean mbShowControls = false;
 
 
     // -------------------------------------------------------------------------
 
-    public PlayerWindow( java.lang.Object[] aArgs, javax.media.Player aPlayer )
+    public PlayerWindow( com.sun.star.lang.XMultiServiceFactory aFactory,
+                         java.lang.Object[] aArgs, javax.media.Player aPlayer )
     {
+        maFactory = aFactory;
+
         try
         {
             if( aArgs.length > 1 )
