@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:15:13 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ PushButton RID_PREVIEW_BUTTON
     Text[ czech ] = "Přehrát";
     Text[ hebrew ] = "Ab~spielen";
     Text[ hindi ] = "शुरु";
+    Text[ slovak ] = "Prehrať";
 };
 Bitmap BMP_TAB_PAGEMODE
 {
@@ -1505,6 +1506,8 @@ Bitmap BMP_PRESOBJ_IMAGE
     File = "image.bmp" ;
 };
 #endif
+
+
 
 
 
