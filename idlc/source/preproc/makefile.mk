@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-15 12:48:46 $
+#   last change: $Author: hr $ $Date: 2001-09-26 14:42:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,8 @@ TARGETTYPE=CUI
 TARGETTHREAD=ST
 
 # --- Settings -----------------------------------------------------
+
+NO_DEFAULT_STL=TRUE
 
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
