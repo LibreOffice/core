@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:12:13 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 14:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
+#include "DrawController.hxx"
 #ifndef _SV_SOUND_HXX
 #include <vcl/sound.hxx>
 #endif
@@ -470,6 +471,8 @@ void SelectionFunction::Deactivate()
 
 void SelectionFunction::ShowEffect (model::PageDescriptor& rDescriptor)
 {
+    DBG_ERROR("not implemented");
+/*
     ShowingEffectInfo* pInfo = mpShowingEffectInfo;
 
     if (pInfo != NULL)
@@ -541,8 +544,8 @@ void SelectionFunction::ShowEffect (model::PageDescriptor& rDescriptor)
         short nPrevPage = (pPage->GetPageNum()-1)/2 - 1;
 
         nZoom = nWinZoom;
-        GraphicObject* pOld = NULL;/*const_cast< GraphicObject* >(
-            pSlView->GetFromCache( pDoc->GetSdPage(nPrevPage, PK_STANDARD), nZoom, -10 ) );  */
+        GraphicObject* pOld = NULL;//const_cast< GraphicObject* >(
+            //pSlView->GetFromCache( pDoc->GetSdPage(nPrevPage, PK_STANDARD), nZoom, -10 ) );
         if( !pOld )
         {
             SdPage* pPrevPage = pDoc->GetSdPage(nPrevPage, PK_STANDARD);
@@ -564,7 +567,7 @@ void SelectionFunction::ShowEffect (model::PageDescriptor& rDescriptor)
     }
 
     nZoom = nWinZoom;
-    GraphicObject* pNew = NULL;/*const_cast< GraphicObject* >( pSlView->GetFromCache( pDoc->GetSdPage(nPageNo, PK_STANDARD), nZoom, -10 ) );*/
+    GraphicObject* pNew = NULL;//const_cast< GraphicObject* >( pSlView->GetFromCache( pDoc->GetSdPage(nPageNo, PK_STANDARD), nZoom, -10 ) );
 
     int nPageNo = (pPage->GetPageNum()-1)/2;
     if( !pNew )
@@ -621,6 +624,7 @@ void SelectionFunction::ShowEffect (model::PageDescriptor& rDescriptor)
         // were already dead, so kill the info and quit silently
         delete pInfo;
     }
+    */
 }
 
 
