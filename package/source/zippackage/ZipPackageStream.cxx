@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 11:55:22 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,15 +174,56 @@ void ZipPackageStream::setZipEntry( const ZipEntry &rInEntry)
 }
 
 //--------------------------------------------------------------------------
-Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream()
+uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCopy()
 {
-    if ( m_nStreamMode != PACKAGE_STREAM_DATA || !bToBeEncrypted || !xStream.is() )
+    if ( m_nStreamMode != PACKAGE_STREAM_RAW || !xStream.is() )
+        throw io::IOException(); // TODO
+
+    if ( xEncryptionData.isEmpty() )
+        throw ZipIOException( OUString::createFromAscii( "Encrypted stream without encryption data!\n" ),
+                            Reference< XInterface >() );
+
+    uno::Reference< io::XSeekable > xSeek( xStream, UNO_QUERY );
+    if ( !xSeek.is() )
+        throw ZipIOException( OUString::createFromAscii( "The stream must be seekable!\n" ),
+                            Reference< XInterface >() );
+
+    // skip header
+    xSeek->seek( n_ConstHeaderSize + xEncryptionData->aInitVector.getLength() +
+                    xEncryptionData->aSalt.getLength() + xEncryptionData->aDigest.getLength() );
+
+    // create temporary stream
+    uno::Reference < io::XOutputStream > xTempOut(
+                        m_xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                        uno::UNO_QUERY );
+    uno::Reference < io::XInputStream > xTempIn( xTempOut, UNO_QUERY );
+    uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY );
+    if ( !xTempOut.is() || !xTempIn.is() || !xTempSeek.is() )
+        throw io::IOException(); // TODO:
+
+    // copy the raw stream to the temporary file starting from the current position
+    copyInputToOutput_Impl( xStream, xTempOut );
+    xTempOut->closeOutput();
+    xTempSeek->seek( 0 );
+
+    return xTempIn;
+}
+
+//--------------------------------------------------------------------------
+Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( sal_Bool bAddHeaderForEncr )
+{
+    if ( m_nStreamMode != PACKAGE_STREAM_DATA || !xStream.is() || bAddHeaderForEncr && !bToBeEncrypted )
         throw packages::NoEncryptionException(); // TODO
 
-    Sequence< sal_Int8 > aKey = ( xEncryptionData.isEmpty() || !bHaveOwnKey ) ? rZipPackage.getEncryptionKey() :
+    Sequence< sal_Int8 > aKey;
+
+    if ( bToBeEncrypted )
+    {
+        aKey = ( xEncryptionData.isEmpty() || !bHaveOwnKey ) ? rZipPackage.getEncryptionKey() :
                                                                                 xEncryptionData->aKey;
-    if ( !aKey.getLength() )
-        throw packages::NoEncryptionException(); // TODO
+        if ( !aKey.getLength() )
+            throw packages::NoEncryptionException(); // TODO
+    }
 
     try
     {
@@ -220,8 +261,11 @@ Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream()
         // copy all the properties of this stream to the new stream
         xNewPSProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), makeAny( sMediaType ) );
         xNewPSProps->setPropertyValue( ::rtl::OUString::createFromAscii( "Compressed" ), makeAny( bToBeCompressed ) );
-        xNewPSProps->setPropertyValue( ::rtl::OUString::createFromAscii( "EncryptionKey" ), makeAny( aKey ) );
-        xNewPSProps->setPropertyValue( ::rtl::OUString::createFromAscii( "Encrypted" ), makeAny( sal_True ) );
+        if ( bToBeEncrypted )
+        {
+            xNewPSProps->setPropertyValue( ::rtl::OUString::createFromAscii( "EncryptionKey" ), makeAny( aKey ) );
+            xNewPSProps->setPropertyValue( ::rtl::OUString::createFromAscii( "Encrypted" ), makeAny( sal_True ) );
+        }
 
         // insert a new stream in the package
         Reference< XUnoTunnel > xTunnel;
@@ -238,7 +282,11 @@ Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream()
         pPackage->commitChanges();
 
         // get raw stream from the temporary package
-        Reference< io::XInputStream > xInRaw = xNewPackStream->getRawStream();
+        Reference< io::XInputStream > xInRaw;
+        if ( bAddHeaderForEncr )
+            xInRaw = xNewPackStream->getRawStream();
+        else
+            xInRaw = xNewPackStream->getPlainRawStream();
 
         // create another temporary file
         uno::Reference < io::XOutputStream > xTempOut(
@@ -458,7 +506,12 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
         xEncryptionData->aKey = rZipPackage.getEncryptionKey();
 
     if (IsPackageMember())
+    {
+        if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
+            xEncryptionData->aKey = rZipPackage.getEncryptionKey();
+
         return rZipPackage.getZipFile().getDataStream( aEntry, xEncryptionData, bIsEncrypted );
+    }
     else if ( m_nStreamMode == PACKAGE_STREAM_RAW )
         return ZipFile::StaticGetDataFromRawStream( xStream, xEncryptionData );
     else if ( xStream.is() )
@@ -501,7 +554,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream()
             return new WrapStreamForShare( xStream, m_aSharedMutexRef );
         }
         else if ( m_nStreamMode == PACKAGE_STREAM_DATA && bToBeEncrypted )
-            return TryToGetRawFromDataStream();
+            return TryToGetRawFromDataStream( sal_True );
     }
 
     throw packages::NoEncryptionException(); // TODO
@@ -546,6 +599,36 @@ void SAL_CALL ZipPackageStream::setRawStream( const Reference< io::XInputStream 
     m_nStreamMode = PACKAGE_STREAM_RAW;
 }
 
+//--------------------------------------------------------------------------
+uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getPlainRawStream()
+        throw ( io::IOException,
+                uno::RuntimeException )
+{
+    // There is no stream attached to this object
+    if ( m_nStreamMode == PACKAGE_STREAM_NOTSET )
+        return Reference< io::XInputStream >();
+
+    // this method can not be used together with old approach
+    if ( m_nStreamMode == PACKAGE_STREAM_DETECT )
+        throw packages::zip::ZipIOException(); // TODO
+
+    if (IsPackageMember())
+    {
+        return rZipPackage.getZipFile().getRawData( aEntry, xEncryptionData, bIsEncrypted );
+    }
+    else if ( xStream.is() )
+    {
+        if ( m_nStreamMode == PACKAGE_STREAM_RAW )
+        {
+            // the header should not be returned here
+            return GetRawEncrStreamNoHeaderCopy();
+        }
+        else if ( m_nStreamMode == PACKAGE_STREAM_DATA )
+            return TryToGetRawFromDataStream( sal_False );
+    }
+
+    return Reference< io::XInputStream >();
+}
 
 // XUnoTunnel
 
