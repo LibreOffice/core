@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediawindow.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2004-08-23 09:04:42 $
+ *  last change: $Author: hr $ $Date: 2005-02-14 11:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 String AVMEDIA_STR_INSERTMEDIA_DLG
 {
     Text[de] = "Film und Klang einfügen";
-    Text[en-us] = "Insert Movie and Sound";
+    Text[en-US] = "Insert Movie and Sound";
 };
 
 // ------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ String AVMEDIA_STR_INSERTMEDIA_DLG
 STRING AVMEDIA_STR_OPENMEDIA_DLG
 {
     Text[de] = "Film und Klang öffnen";
-    Text[en-us] = "Open Movie and Sound";
+    Text[en-US] = "Open Movie and Sound";
 };
 
 // ------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ STRING AVMEDIA_STR_OPENMEDIA_DLG
 String AVMEDIA_STR_ALL_MEDIAFILES
 {
     Text[de] = "Alle Film- und Klangdateien";
-    Text[en-us] = "All movie and sound files";
+    Text[en-US] = "All movie and sound files";
 };
 
 // ------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ String AVMEDIA_STR_ALL_MEDIAFILES
 String AVMEDIA_STR_ALL_FILES
 {
     Text[de] = "Alle Dateien (*.*)";
-    Text[en-us] = "All files (*.*)";
+    Text[en-US] = "All files (*.*)";
 };
 
 // ------------------------------------------------------------------------------
@@ -112,5 +112,5 @@ ErrorBox AVMEDIA_ERR_URL
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
     Message[de] = "Das Format der ausgewählten Datei wird nicht unterstützt.";
-    Message[en-us] = "The format of the selected file is not supported.";
+    Message[en-US] = "The format of the selected file is not supported.";
 };
