@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-07 13:32:20 $
+ *  last change: $Author: oj $ $Date: 2001-02-07 13:42:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,14 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
 {
     FeatureState aReturn;
         // (disabled automatically)
-    aReturn.bEnabled = sal_True;
+    aReturn.bEnabled = m_xConnection.is();
+    if(!m_xConnection.is()) // so what should otherwise
+    {
+        String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
+        InfoBox(getView(), aMessage).Execute();
+        aReturn.aState = ::cppu::bool2any(sal_False);
+        return aReturn;
+    }
 
     switch (_nId)
     {
