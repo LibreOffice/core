@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-28 11:45:20 $
+ *  last change: $Author: dl $ $Date: 2000-12-05 13:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
 #ifndef SVX_LIGHT
     // Language setzen
-    LanguageType eLanguage = LANGUAGE_SYSTEM;
+    eLanguage = LANGUAGE_SYSTEM;
 
     try
     {

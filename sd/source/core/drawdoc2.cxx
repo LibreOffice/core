@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-27 09:10:56 $
+ *  last change: $Author: dl $ $Date: 2000-12-05 13:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,18 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _EEITEM_HXX //autogen
+#include <svx/eeitem.hxx>
+#endif
+#ifndef _EEITEMID_HXX //autogen
+#include <svx/eeitemid.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
+#ifndef _SFXITEMPOOL_HXX
+#include <svtools/itempool.hxx>
 #endif
 
 
@@ -1058,6 +1070,7 @@ void SdDrawDocument::SetLanguage( LanguageType eNewLang )
         eLanguage = eNewLang;
         GetDrawOutliner().SetDefaultLanguage( eLanguage );
         pHitTestOutliner->SetDefaultLanguage( eLanguage );
+        pItemPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
         SetChanged( TRUE );
     }
 }
@@ -1074,6 +1087,7 @@ void SdDrawDocument::SetLanguageCJK( LanguageType eNewLang )
     if( eLanguageCJK != eNewLang )
     {
         eLanguageCJK = eNewLang;
+        pItemPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
         SetChanged( TRUE );
     }
 }
@@ -1090,6 +1104,7 @@ void SdDrawDocument::SetLanguageCTL( LanguageType eNewLang )
     if( eLanguageCTL != eNewLang )
     {
         eLanguageCTL = eNewLang;
+        pItemPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
         SetChanged( TRUE );
     }
 }
