@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:40:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,9 +148,6 @@
 #ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
 
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
@@ -198,9 +195,6 @@
 #include "dialmgr.hxx"
 #endif
 
-#ifndef _SVX_FMPROP_HXX
-#include "fmprop.hxx"
-#endif
 #ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
 #endif
@@ -437,6 +431,7 @@ FmXFormController::FmXFormController(const Reference< XMultiServiceFactory > & _
                   ,m_bDetachEvents(sal_True)
                   ,m_nCurrentFilterPosition(0)
                   ,m_nToggleEvent(0)
+                  ,m_bAttemptedHandlerCreation( false )
 {
     DBG_CTOR( FmXFormController, NULL );
 
@@ -944,7 +939,7 @@ namespace
         if ( !( _rDynamicColorProp >>= bDoUse ) )
         {
             DocumentType eDocType = DocumentClassification::classifyHostDocument( _rxForm );
-            bDoUse = ( eDocType == eElectronicForm ) || ( eDocType == eDatabaseForm );
+            bDoUse = ( eDocType == eEnhancedForm ) || ( eDocType == eDatabaseForm );
         }
         return bDoUse;
     }
@@ -964,7 +959,7 @@ void SAL_CALL FmXFormController::propertyChange(const PropertyChangeEvent& evt) 
             Reference< XControl > xControl = findControl(m_aControls,xControlModel,sal_False,sal_False);
             if ( xControl.is() )
             {
-                startControlListening(xControl);
+                startControlModifyListening( xControl );
                 Reference<XPropertySet> xProp(xControlModel,UNO_QUERY);
                 if ( xProp.is() )
                     xProp->removePropertyChangeListener(FM_PROP_BOUNDFIELD, this);
@@ -1011,7 +1006,8 @@ void SAL_CALL FmXFormController::propertyChange(const PropertyChangeEvent& evt) 
             if ( bEnable )
             {
                 m_pControlBorderManager->enableDynamicBorderColor();
-                m_pControlBorderManager->focusGained( m_xActiveControl.get() );
+                if ( m_xActiveControl.is() )
+                    m_pControlBorderManager->focusGained( m_xActiveControl.get() );
             }
             else
             {
@@ -1033,19 +1029,13 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
 
 
     // Austauschen der Kontrols fuer das aktuelle Formular
-    Sequence < Reference< XControl >  > aControls( m_aControls );
-    const Reference< XControl > * pControls = m_aControls.getConstArray();
     SdrPageView* pCurPageView = m_pView->GetPageViewPvNum(0);
-
     const SdrPageViewWindow* pWindow = pCurPageView ? pCurPageView->FindWindow(*((OutputDevice*)m_pView->GetActualOutDev())) : 0L;
-    if(!pWindow)
-    {
+    if ( !pWindow )
         return;
-    }
 
-    //sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
-    //if (nPos == SDRPAGEVIEWWIN_NOTFOUND)
-    //    return;
+    const Reference< XControl >* pControls = m_aControls.getConstArray();
+    sal_Int32 nControls = m_aControls.getLength();
 
     // the control we have to activate after replacement
     Reference< XControl > xNewActiveControl;
@@ -1054,7 +1044,7 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
         // as we don't want new controls to be attached to the scripting environment
         // we change attach flags
         m_bAttachEvents = sal_False;
-        for (sal_Int32 i = aControls.getLength(); i > 0;)
+        for (sal_Int32 i = nControls; i > 0;)
         {
             const Reference< XControl > & xControl = pControls[--i];
             if (xControl.is())
@@ -1102,7 +1092,7 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
     else
     {
         m_bDetachEvents = sal_False;
-        for (sal_Int32 i = aControls.getLength(); i > 0;)
+        for (sal_Int32 i = nControls; i > 0;)
         {
             const Reference< XControl > & xControl = pControls[--i];
             if (xControl.is())
@@ -1460,7 +1450,19 @@ void SAL_CALL FmXFormController::mouseExited( const awt::MouseEvent& _rEvent ) t
     m_pControlBorderManager->mouseExited( _rEvent.Source );
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------
+void SAL_CALL FmXFormController::componentValidityChanged( const EventObject& _rSource ) throw (RuntimeException)
+{
+    Reference< XControl > xControl( findControl( m_aControls, Reference< XControlModel >( _rSource.Source, UNO_QUERY ), sal_False, sal_False ) );
+    Reference< XValidatableFormComponent > xValidatable( _rSource.Source, UNO_QUERY );
+
+    OSL_ENSURE( xControl.is() && xValidatable.is(), "FmXFormController::componentValidityChanged: huh?" );
+
+    if ( xControl.is() && xValidatable.is() )
+        m_pControlBorderManager->validityChanged( xControl, xValidatable );
+}
+
+//--------------------------------------------------------------------
 void FmXFormController::setModel(const Reference< XTabControllerModel > & Model) throw( RuntimeException )
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
@@ -1539,6 +1541,7 @@ void FmXFormController::setModel(const Reference< XTabControllerModel > & Model)
                && xModelProps->getPropertySetInfo()->hasPropertyByName( FM_PROP_DYNAMIC_CONTROL_BORDER )
                && xModelProps->getPropertySetInfo()->hasPropertyByName( FM_PROP_CONTROL_BORDER_COLOR_FOCUS )
                && xModelProps->getPropertySetInfo()->hasPropertyByName( FM_PROP_CONTROL_BORDER_COLOR_MOUSE )
+               && xModelProps->getPropertySetInfo()->hasPropertyByName( FM_PROP_CONTROL_BORDER_COLOR_INVALID )
                )
             {
                 bool bEnableDynamicControlBorder = lcl_shouldUseDynamicControlBorder(
@@ -1550,12 +1553,11 @@ void FmXFormController::setModel(const Reference< XTabControllerModel > & Model)
 
                 sal_Int32 nColor = 0;
                 if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_FOCUS ) >>= nColor )
-                {
                     m_pControlBorderManager->setStatusColor( CONTROL_STATUS_FOCUSED, nColor );
-                    m_pControlBorderManager->setStatusColor( CONTROL_STATUS_BOTH, nColor );
-                }
                 if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_MOUSE ) >>= nColor )
                     m_pControlBorderManager->setStatusColor( CONTROL_STATUS_MOUSE_HOVER, nColor );
+                if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_INVALID ) >>= nColor )
+                    m_pControlBorderManager->setStatusColor( CONTROL_STATUS_INVALID, nColor );
             }
         }
     }
@@ -1643,10 +1645,6 @@ void FmXFormController::setContainer(const Reference< XControlContainer > & xCon
         if ( m_aTabActivationTimer.IsActive() )
             m_aTabActivationTimer.Stop();
 
-        // bei den Controls abmelden
-        sal_Int32 nCount = m_aControls.getLength();
-        const Reference< XControl > * pControls = m_aControls.getConstArray();
-
         // clear the filter map
         for (FmFilterControls::const_iterator iter = m_aFilterControls.begin();
              iter != m_aFilterControls.end(); ++iter)
@@ -1655,30 +1653,10 @@ void FmXFormController::setContainer(const Reference< XControlContainer > & xCon
         m_aFilterControls.clear();
 
         // einsammeln der Controls
-        for (sal_Int32 i = 0; i < nCount; ++i, ++pControls)
-        {
-            // bei jedem Control als FocusListener anmelden
-            Reference< XWindow >  xWindow(*pControls, UNO_QUERY);
-            if (xWindow.is())
-            {
-                xWindow->removeFocusListener( this );
-                xWindow->removeMouseListener( this );
-
-                // abmelden beim Eventattacher
-                removeFromEventAttacher(*pControls);
-            }
-
-            Reference< XDispatchProviderInterception >  xInterception(*pControls, UNO_QUERY);
-            if (xInterception.is())
-                deleteInterceptor(xInterception);
-
-            if (pControls->is())
-            {
-                Reference< XReset >  xControlReset((*pControls)->getModel(), UNO_QUERY);
-                if (xControlReset.is())
-                    xControlReset->removeResetListener((XResetListener*)this);
-            }
-        }
+        const Reference< XControl >* pControls = m_aControls.getConstArray();
+        const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
+        while ( pControls != pControlsEnd )
+            implControlRemoved( *pControls++, true );
 
         // Datenbank spezifische Dinge vornehmen
         if (m_bDBConnection && isListeningForChanges())
@@ -1695,7 +1673,7 @@ void FmXFormController::setContainer(const Reference< XControlContainer > & xCon
     {
         Sequence< Reference< XControlModel > > aModels = xTabModel->getControlModels();
         const Reference< XControlModel > * pModels = aModels.getConstArray();
-        Sequence< Reference< XControl > > xCtrls = xContainer->getControls();
+        Sequence< Reference< XControl > > aAllControls = xContainer->getControls();
 
         sal_Int32 nCount = aModels.getLength();
         m_aControls = Sequence< Reference< XControl > >( nCount );
@@ -1703,35 +1681,13 @@ void FmXFormController::setContainer(const Reference< XControlContainer > & xCon
 
         // einsammeln der Controls
         sal_Int32 i, j;
-        for (i = 0, j = 0; i < nCount; ++i )
+        for (i = 0, j = 0; i < nCount; ++i, ++pModels )
         {
-            Reference< XControlModel >  xCtrlModel = pModels[i];
-            // Zum Model passendes Control suchen
-            Reference< XControl >  xCtrl = findControl( xCtrls, xCtrlModel,sal_False );
-            if (xCtrl.is())
+            Reference< XControl > xControl = findControl( aAllControls, *pModels, sal_False, sal_True );
+            if ( xControl.is() )
             {
-                pControls[j++] = xCtrl;
-
-                // bei jedem Control als FocusListener anmelden
-                Reference< XWindow >  xWindow(xCtrl, UNO_QUERY);
-                if (xWindow.is())
-                {
-                    xWindow->addFocusListener( this );
-                    xWindow->addMouseListener( this );
-                    // anmelden beim Eventattacher
-                    addToEventAttacher(xCtrl);
-                }
-
-                // add a dispatch interceptor to the control (if supported)
-                Reference< XDispatchProviderInterception >  xInterception(xCtrl, UNO_QUERY);
-                if (xInterception.is())
-                    createInterceptor(xInterception);
-
-                // we want to know about the reset of the the model of our controls
-                // (for correctly resetting m_bModified)
-                Reference< XReset >  xControlReset(xCtrl->getModel(), UNO_QUERY);
-                if (xControlReset.is())
-                    xControlReset->addResetListener((XResetListener*)this);
+                pControls[j++] = xControl;
+                implControlInserted( xControl, true );
             }
         }
 
@@ -1786,19 +1742,15 @@ Sequence< Reference< XControl > > FmXFormController::getControls(void) throw( Ru
         Sequence< Reference< XControl > > aNewControls(nModels);
 
         Reference< XControl > * pControls = aNewControls.getArray();
-        Reference< XControlModel >  xCtrlModel;
-        Reference< XControl >  xCtrl;
+        Reference< XControl >  xControl;
 
         // Umsortieren der Controls entsprechend der TabReihenfolge
         sal_Int32 j = 0;
-        for (sal_Int32 i = 0; i < nModels; i++)
+        for (sal_Int32 i = 0; i < nModels; ++i, ++pModels )
         {
-            xCtrlModel = pModels[i];
-
-            // Zum Model passendes Control suchen
-            xCtrl = findControl(m_aControls, xCtrlModel);
-            if (xCtrl.is())
-                pControls[j++] = xCtrl;
+            xControl = findControl( m_aControls, *pModels, sal_True, sal_True );
+            if ( xControl.is() )
+                pControls[j++] = xControl;
         }
 
         // not every model had an associated control
@@ -1889,39 +1841,53 @@ void FmXFormController::setLocks()
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     // alle Controls, die mit einer Datenquelle verbunden sind locken/unlocken
-    sal_Int32 nLength = m_aControls.getLength();
-    const Reference< XControl > * pControls = m_aControls.getConstArray();
-    for (sal_Int32 i = 0; i < nLength; i++)
-        setControlLock(pControls[i]);
+    const Reference< XControl >* pControls = m_aControls.getConstArray();
+    const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
+    while ( pControls != pControlsEnd )
+        setControlLock( *pControls++ );
 }
 
 //------------------------------------------------------------------------------
-void FmXFormController::startControlListening(const Reference< XControl > & xControl)
+namespace
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    // jetzt anmelden bei gebundenen feldern
-    sal_Bool bModifyListening = sal_False;
-    Reference< XBoundComponent >  xBound(xControl, UNO_QUERY);
-    if (xBound.is()) // gebundene Controls,
-        bModifyListening = sal_True;
-    else
+    bool lcl_shouldListenForModifications( const Reference< XControl >& _rxControl, const Reference< XPropertyChangeListener >& _rxBoundFieldListener )
     {
-        xBound = Reference< XBoundComponent > (xControl->getModel(), UNO_QUERY);
+        bool bShould = false;
 
-        // gibt es eine Datenquelle
-        Reference< XPropertySet >  xSet(xBound, UNO_QUERY);
-        if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+        Reference< XBoundComponent > xBound( _rxControl, UNO_QUERY );
+        if ( xBound.is() )
         {
-            Reference< XPropertySet >  xField;
-            xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
-            bModifyListening = (xField.is());
-            if ( !bModifyListening )
-                xSet->addPropertyChangeListener( FM_PROP_BOUNDFIELD, this );
+            bShould = true;
         }
-    }
+        else if ( _rxControl.is() )
+        {
+            xBound = Reference< XBoundComponent >( _rxControl->getModel(), UNO_QUERY );
 
-    // kuenstliches while
-    while (bModifyListening)
+            Reference< XPropertySet > xModelProps( xBound, UNO_QUERY );
+            if ( xModelProps.is() && ::comphelper::hasProperty( FM_PROP_BOUNDFIELD, xModelProps ) )
+            {
+                Reference< XPropertySet > xField;
+                xModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ) >>= xField;
+                bShould = xField.is();
+
+                if ( !bShould && _rxBoundFieldListener.is() )
+                    xModelProps->addPropertyChangeListener( FM_PROP_BOUNDFIELD, _rxBoundFieldListener );
+            }
+        }
+
+        return bShould;
+    }
+}
+
+//------------------------------------------------------------------------------
+void FmXFormController::startControlModifyListening(const Reference< XControl > & xControl)
+{
+    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController::startControlModifyListening: Object already disposed!");
+
+    bool bModifyListening = lcl_shouldListenForModifications( xControl, this );
+
+    // artificial while
+    while ( bModifyListening )
     {
         Reference< XModifyBroadcaster >  xMod(xControl, UNO_QUERY);
         if (xMod.is())
@@ -1963,27 +1929,11 @@ void FmXFormController::startControlListening(const Reference< XControl > & xCon
 }
 
 //------------------------------------------------------------------------------
-void FmXFormController::stopControlListening(const Reference< XControl > & xControl)
+void FmXFormController::stopControlModifyListening(const Reference< XControl > & xControl)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-//  Reference< XDatabaseCursor >  xCursor(getModel(), UNO_QUERY);
-    sal_Bool bModifyListening = sal_False;
 
-    Reference< XBoundComponent >  xBound(xControl, UNO_QUERY);
-    if (xBound.is()) // gebundene Controls,
-        bModifyListening = sal_True;
-    else
-    {
-        xBound = Reference< XBoundComponent > (xControl->getModel(), UNO_QUERY);
-        // gibt es eine Datenquelle
-        Reference< XPropertySet >  xSet(xBound, UNO_QUERY);
-        if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
-        {
-            Reference< XPropertySet >  xField;
-            xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
-            bModifyListening = (xField.is());
-        }
-    }
+    bool bModifyListening = lcl_shouldListenForModifications( xControl, NULL );
 
     // kuenstliches while
     while (bModifyListening)
@@ -2033,9 +1983,10 @@ void FmXFormController::startListening()
     m_bModified  = sal_False;
 
     // jetzt anmelden bei gebundenen feldern
-    const Reference< XControl > * pControls = m_aControls.getConstArray();
-    for (sal_Int32 i = 0; i < m_aControls.getLength(); i++ )
-        startControlListening(pControls[i]);
+    const Reference< XControl >* pControls = m_aControls.getConstArray();
+    const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
+    while ( pControls != pControlsEnd )
+        startControlModifyListening( *pControls++ );
 }
 
 //------------------------------------------------------------------------------
@@ -2045,39 +1996,108 @@ void FmXFormController::stopListening()
     m_bModified  = sal_False;
 
     // jetzt anmelden bei gebundenen feldern
-    const Reference< XControl > * pControls = m_aControls.getConstArray();
-    for (sal_Int32 i = 0; i < m_aControls.getLength(); i++ )
-        stopControlListening(pControls[i]);
+    const Reference< XControl >* pControls = m_aControls.getConstArray();
+    const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
+    while ( pControls != pControlsEnd )
+        stopControlModifyListening( *pControls++ );
 }
 
 
 //------------------------------------------------------------------------------
-Reference< XControl >  FmXFormController::findControl(Sequence< Reference< XControl > >& rCtrls, const Reference< XControlModel > & xCtrlModel ,sal_Bool _bRemove,sal_Bool _bOverWrite) const
+Reference< XControl >  FmXFormController::findControl(Sequence< Reference< XControl > >& _rControls, const Reference< XControlModel > & xCtrlModel ,sal_Bool _bRemove,sal_Bool _bOverWrite) const
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     DBG_ASSERT( xCtrlModel.is(), "findControl - welches ?!" );
 
-    Reference< XControl > * pCtrls = rCtrls.getArray();
+    Reference< XControl >* pControls = _rControls.getArray();
     Reference< XControlModel >  xModel;
-    for ( sal_Int32 i = 0, nCount = rCtrls.getLength(); i < nCount; ++i )
+    for ( sal_Int32 i = 0, nCount = _rControls.getLength(); i < nCount; ++i, ++pControls )
     {
-        // #66449# Speicherueberschreiber durch folgende Zeile
-        // Reference< XControlModel >  xModel(pCtrls[i].is() ? pCtrls[i]->getModel() : Reference< XControlModel > ());
-        if (pCtrls[i].is())
+        if ( pControls->is() )
         {
-            xModel = pCtrls[i]->getModel();
-            if ((XControlModel*)xModel.get() == (XControlModel*)xCtrlModel.get())
+            xModel = (*pControls)->getModel();
+            if ( xModel.get() == xCtrlModel.get() )
             {
-                Reference< XControl >  xCtrl( pCtrls[i] );
+                Reference< XControl > xControl( *pControls );
                 if ( _bRemove )
-                    ::comphelper::removeElementAt(rCtrls, i);
+                    ::comphelper::removeElementAt( _rControls, i );
                 else if ( _bOverWrite )
-                    pCtrls[i] = Reference< XControl >();
-                return xCtrl;
+                    *pControls = Reference< XControl >();
+                return xControl;
             }
         }
     }
     return Reference< XControl > ();
+}
+
+//------------------------------------------------------------------------------
+void FmXFormController::implControlInserted( const Reference< XControl>& _rxControl, bool _bAddToEventAttacher )
+{
+    Reference< XWindow > xWindow( _rxControl, UNO_QUERY );
+    if ( xWindow.is() )
+    {
+        xWindow->addFocusListener( this );
+        xWindow->addMouseListener( this );
+
+        if ( _bAddToEventAttacher )
+            addToEventAttacher( _rxControl );
+    }
+
+    // add a dispatch interceptor to the control (if supported)
+    Reference< XDispatchProviderInterception > xInterception( _rxControl, UNO_QUERY );
+    if ( xInterception.is() )
+        createInterceptor( xInterception );
+
+    if ( _rxControl.is() )
+    {
+        Reference< XControlModel > xModel( _rxControl->getModel() );
+
+        // we want to know about the reset of the the model of our controls
+        // (for correctly resetting m_bModified)
+        Reference< XReset >  xReset( xModel, UNO_QUERY );
+        if ( xReset.is() )
+            xReset->addResetListener( this );
+
+        // and we want to know about the validity, to visually indicate it
+        Reference< XValidatableFormComponent > xValidatable( xModel, UNO_QUERY );
+        if ( xValidatable.is() )
+        {
+            xValidatable->addFormComponentValidityListener( this );
+            m_pControlBorderManager->validityChanged( _rxControl, xValidatable );
+        }
+    }
+
+}
+
+//------------------------------------------------------------------------------
+void FmXFormController::implControlRemoved( const Reference< XControl>& _rxControl, bool _bRemoveFromEventAttacher )
+{
+    Reference< XWindow > xWindow( _rxControl, UNO_QUERY );
+    if ( xWindow.is() )
+    {
+        xWindow->removeFocusListener( this );
+        xWindow->removeMouseListener( this );
+
+        if ( _bRemoveFromEventAttacher )
+            removeFromEventAttacher( _rxControl );
+    }
+
+    Reference< XDispatchProviderInterception > xInterception( _rxControl, UNO_QUERY);
+    if ( xInterception.is() )
+        deleteInterceptor( xInterception );
+
+    if ( _rxControl.is() )
+    {
+        Reference< XControlModel > xModel( _rxControl->getModel() );
+
+        Reference< XReset >  xReset( xModel, UNO_QUERY );
+        if ( xReset.is() )
+            xReset->removeResetListener( this );
+
+        Reference< XValidatableFormComponent > xValidatable( xModel, UNO_QUERY );
+        if ( xValidatable.is() )
+            xValidatable->removeFormComponentValidityListener( this );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -2088,48 +2108,26 @@ void FmXFormController::insertControl(const Reference< XControl > & xControl)
     m_aControls.realloc(m_aControls.getLength() + 1);
     m_aControls.getArray()[m_aControls.getLength() - 1] = xControl;
 
-    Reference< XWindow >  xWindow(xControl, UNO_QUERY);
-    if (xWindow.is())
-    {
-        xWindow->addFocusListener( this );
-        xWindow->addMouseListener( this );
-
-        // register at the Eventattacher but not in filter mode
-        if (m_bAttachEvents)
-            addToEventAttacher(xControl);
-    }
-
-    Reference< XDispatchProviderInterception >  xInterception(xControl, UNO_QUERY);
-    if (xInterception.is())
-        createInterceptor(xInterception);
-
-    if (xControl.is())
-    {
-        // we want to know about the reset of the the model of our controls
-        // (for correctly resetting m_bModified)
-        Reference< XReset >  xControlReset(xControl->getModel(), UNO_QUERY);
-        if (xControlReset.is())
-            xControlReset->addResetListener((XResetListener*)this);
-    }
+    implControlInserted( xControl, m_bAttachEvents );
 
     if (m_bDBConnection && !m_bFiltering)
         setControlLock(xControl);
 
     if (isListeningForChanges() && m_bAttachEvents)
-        startControlListening(xControl);
+        startControlModifyListening( xControl );
 }
 
 //------------------------------------------------------------------------------
 void FmXFormController::removeControl(const Reference< XControl > & xControl)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    const Reference< XControl > * pCtrls = m_aControls.getArray();
-    sal_Int32 nCount = m_aControls.getLength();
-    for ( sal_uInt32 i = 0; i < (sal_uInt32)nCount; i++ )
+    const Reference< XControl >* pControls = m_aControls.getConstArray();
+    const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
+    while ( pControls != pControlsEnd )
     {
-        if ((XControl*)xControl.get() == (XControl*)pCtrls[i].get())
+        if ( xControl.get() == (*pControls++).get() )
         {
-            ::comphelper::removeElementAt(m_aControls, i);
+            ::comphelper::removeElementAt( m_aControls, pControls - m_aControls.getArray() );
             break;
         }
     }
@@ -2142,28 +2140,10 @@ void FmXFormController::removeControl(const Reference< XControl > & xControl)
             m_aFilterControls.erase(iter);
     }
 
-    Reference< XWindow >  xWindow(xControl, UNO_QUERY);
-    if (xWindow.is())
-    {
-        xWindow->removeFocusListener( this );
-        xWindow->removeMouseListener( this );
-        if (m_bDetachEvents)
-            removeFromEventAttacher(xControl);
-    }
+    implControlRemoved( xControl, m_bDetachEvents );
 
-    Reference< XDispatchProviderInterception >  xInterception(xControl, UNO_QUERY);
-    if (xInterception.is())
-        deleteInterceptor(xInterception);
-
-    if (xControl.is())
-    {
-        Reference< XReset >  xControlReset(xControl->getModel(), UNO_QUERY);
-        if (xControlReset.is())
-            xControlReset->removeResetListener((XResetListener*)this);
-    }
-
-    if (isListeningForChanges() && m_bDetachEvents)
-        stopControlListening(xControl);
+    if ( isListeningForChanges() && m_bDetachEvents )
+        stopControlModifyListening( xControl );
 }
 
 // XLoadListener
@@ -2320,17 +2300,20 @@ void FmXFormController::unload() throw( RuntimeException )
     m_bCanInsert = m_bCanUpdate = m_bCycle = sal_False;
     m_bCurrentRecordModified = m_bCurrentRecordNew = m_bLocked = sal_False;
 }
+
 // -----------------------------------------------------------------------------
 void FmXFormController::removeBoundFieldListener()
 {
-    const Reference< XControl > * pControls = m_aControls.getConstArray();
-    for (sal_Int32 i = 0; i < m_aControls.getLength(); ++i,++pControls )
+    const Reference< XControl >* pControls = m_aControls.getConstArray();
+    const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
+    while ( pControls != pControlsEnd )
     {
-        Reference<XPropertySet> xProp(*pControls,UNO_QUERY);
+        Reference< XPropertySet > xProp( *pControls++, UNO_QUERY );
         if ( xProp.is() )
-            xProp->removePropertyChangeListener(FM_PROP_BOUNDFIELD, this);
+            xProp->removePropertyChangeListener( FM_PROP_BOUNDFIELD, this );
     }
 }
+
 //------------------------------------------------------------------------------
 void FmXFormController::startFormListening( const Reference< XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly )
 {
@@ -2529,16 +2512,16 @@ void SAL_CALL FmXFormController::elementRemoved(const ContainerEvent& evt) throw
 Reference< XControl >  FmXFormController::isInList(const Reference< XWindowPeer > & xPeer) const
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    const Reference< XControl > * pCtrls = m_aControls.getConstArray();
+    const Reference< XControl >* pControls = m_aControls.getConstArray();
 
     sal_uInt32 nCtrls = m_aControls.getLength();
-    for ( sal_uInt32 n = 0; n < nCtrls && xPeer.is(); n++ )
+    for ( sal_uInt32 n = 0; n < nCtrls && xPeer.is(); ++n, ++pControls )
     {
-        if (pCtrls[n].is())
+        if ( pControls->is() )
         {
-            Reference< XVclWindowPeer >  xCtrlPeer(pCtrls[n]->getPeer(), UNO_QUERY);
-            if ((XWindowPeer*)xCtrlPeer.get() == (XWindowPeer*)xPeer.get() || xCtrlPeer->isChild(xPeer))
-                return pCtrls[n];
+            Reference< XVclWindowPeer >  xCtrlPeer( (*pControls)->getPeer(), UNO_QUERY);
+            if ( ( xCtrlPeer.get() == xPeer.get() ) || xCtrlPeer->isChild( xPeer ) )
+                return *pControls;
         }
     }
     return Reference< XControl > ();
@@ -2791,9 +2774,8 @@ void FmXFormController::startFiltering()
     m_bAttachEvents = sal_False;
 
     // Austauschen der Kontrols fuer das aktuelle Formular
-    Sequence < Reference< XControl >  > aControls(m_aControls);
-    const Reference< XControl > * pControls = m_aControls.getConstArray();
-    SdrPageView* pCurPageView = m_pView->GetPageViewPvNum(0);
+    const Reference< XControl >* pControls = m_aControls.getConstArray();
+    sal_Int32 nControlCount = m_aControls.getLength();
 
     // the control we have to activate after replacement
     Reference< XControl >  xNewActiveControl;
@@ -2806,12 +2788,12 @@ void FmXFormController::startFiltering()
     // structure for storing the field info
     vector<FmFieldInfo> aFieldInfos;
 
-    // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
+    SdrPageView* pCurPageView = m_pView->GetPageViewPvNum(0);
     const SdrPageViewWindow* pWindow = pCurPageView ? pCurPageView->FindWindow(*((OutputDevice*)m_pView->GetActualOutDev())) : 0L;
 
-    if(pWindow)
+    if ( pWindow )
     {
-        for (sal_Int32 i = aControls.getLength(); i > 0;)
+        for (sal_Int32 i = nControlCount; i > 0;)
         {
             const Reference< XControl > & xControl = pControls[--i];
             if (xControl.is())
@@ -2979,8 +2961,8 @@ void FmXFormController::stopFiltering()
     ::comphelper::disposeComponent(m_xComposer);
 
     // Austauschen der Kontrols fuer das aktuelle Formular
-    Sequence < Reference< ::com::sun::star::awt::XControl >  > aControls(m_aControls);
-    const Reference< ::com::sun::star::awt::XControl > * pControls = m_aControls.getConstArray();
+    const Reference< XControl > * pControls = m_aControls.getConstArray();
+    sal_Int32 nControlCount = m_aControls.getLength();
     SdrPageView* pCurPageView = m_pView->GetPageViewPvNum(0);
 
     // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
@@ -2998,7 +2980,7 @@ void FmXFormController::stopFiltering()
 
     if (pWindow)
     {
-        for (sal_Int32 i = aControls.getLength(); i > 0;)
+        for ( sal_Int32 i = nControlCount; i > 0; )
         {
             const Reference< XControl > & xControl = pControls[--i];
             if (xControl.is())
@@ -3507,6 +3489,9 @@ sal_Bool SAL_CALL FmXFormController::approveParameter(const DatabaseParameterEve
         // default handling: instantiate an interaction handler and let it handle the parameter request
         try
         {
+            if ( !ensureInteractionHandler() )
+                return sal_False;
+
             // two continuations allowed: OK and Cancel
             OParameterContinuation* pParamValues = new OParameterContinuation;
             OInteractionAbort* pAbort = new OInteractionAbort;
@@ -3520,12 +3505,10 @@ sal_Bool SAL_CALL FmXFormController::approveParameter(const DatabaseParameterEve
             pParamRequest->addContinuation(pParamValues);
             pParamRequest->addContinuation(pAbort);
 
-            // create the handler, let it handle the request
-            Reference< XInteractionHandler > xHandler(m_xORB->createInstance(SRV_SDB_INTERACTION_HANDLER), UNO_QUERY);
-            if (xHandler.is())
+            // handle the request
             {
                 ::vos::OGuard aGuard(Application::GetSolarMutex());
-                xHandler->handle(xParamRequest);
+                m_xInteractionHandler->handle(xParamRequest);
             }
 
             if (!pParamValues->wasSelected())
@@ -3643,16 +3626,20 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 _nId, const URL& aURL,
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     Reference< XDispatch >  xReturn;
     // dispatches handled by ourself
-    if (aURL.Complete == FMURL_CONFIRM_DELETION)
-        xReturn = static_cast<XDispatch*>(this);
+    if  (   ( aURL.Complete == FMURL_CONFIRM_DELETION )
+        ||  (   ( aURL.Complete.equalsAscii( "private:/InteractionHandler" ) )
+            &&  ensureInteractionHandler()
+            )
+        )
+        xReturn = static_cast< XDispatch* >( this );
 
     // dispatches of FormSlot-URLs we have to translate
     if ( !xReturn.is() && m_aControllerFeatures.isAssigned() )
-            {
+    {
         // find the slot id which corresponds to the URL
         sal_Int32 nFeatureId = ::svx::FeatureSlotTranslation::getControllerFeatureIdForURL( aURL.Main );
         if ( nFeatureId > 0 )
-                {
+        {
             // get the dispatcher for this feature, create if necessary
             DispatcherContainer::const_iterator aDispatcherPos = m_aFeatureDispatchers.find( nFeatureId );
             if ( aDispatcherPos == m_aFeatureDispatchers.end() )
@@ -3674,8 +3661,29 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 _nId, const URL& aURL,
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::dispatch( const URL& _rURL, const Sequence< PropertyValue >& _rArgs ) throw (RuntimeException)
 {
-    OSL_ENSURE(sal_False, "FmXFormController::dispatch: never to be called!");
-    // we use the dispatch mechanism only for exposing the XConfirmDeleteListener interface
+    if ( _rArgs.getLength() != 1 )
+    {
+        DBG_ERROR( "FmXFormController::dispatch: no arguments -> no dispatch!" );
+        return;
+    }
+
+    if ( _rURL.Complete.equalsAscii( "private:/InteractionHandler" ) )
+    {
+        Reference< XInteractionRequest > xRequest;
+        OSL_VERIFY( _rArgs[0].Value >>= xRequest );
+        if ( xRequest.is() )
+            handle( xRequest );
+        return;
+    }
+
+    if  ( _rURL.Complete == FMURL_CONFIRM_DELETION )
+    {
+        DBG_ERROR( "FmXFormController::dispatch: How do you expect me to return something via this call?" );
+            // confirmDelete has a return value - dispatch hasn't
+        return;
+    }
+
+    DBG_ERROR( "FmXFormController::dispatch: unknown URL!" );
 }
 
 //------------------------------------------------------------------------------
@@ -3728,6 +3736,30 @@ Reference< XDispatchProviderInterceptor >  FmXFormController::createInterceptor(
 }
 
 //------------------------------------------------------------------------------
+bool FmXFormController::ensureInteractionHandler()
+{
+    if ( m_xInteractionHandler.is() )
+        return true;
+    if ( m_bAttemptedHandlerCreation )
+        return false;
+    m_bAttemptedHandlerCreation = true;
+    if ( !m_xORB.is() )
+        return false;
+
+    m_xInteractionHandler.set( m_xORB->createInstance( SRV_SDB_INTERACTION_HANDLER ), UNO_QUERY );
+    OSL_ENSURE( m_xInteractionHandler.is(), "FmXFormController::ensureInteractionHandler: could not create an interaction handler!" );
+    return m_xInteractionHandler.is();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXFormController::handle( const Reference< XInteractionRequest >& _rRequest ) throw (RuntimeException)
+{
+    if ( !ensureInteractionHandler() )
+        return;
+    m_xInteractionHandler->handle( _rRequest );
+}
+
+//------------------------------------------------------------------------------
 void FmXFormController::deleteInterceptor(const Reference< XDispatchProviderInterception > & _xInterception)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
@@ -3755,6 +3787,36 @@ void FmXFormController::deleteInterceptor(const Reference< XDispatchProviderInte
     m_aControlDispatchInterceptors.erase(aIter);
 }
 
+//--------------------------------------------------------------------
+void SAL_CALL FmXFormController::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
+{
+    DBG_ASSERT( !m_xInteractionHandler.is(), "FmXFormController::initialize: already initialized!" );
+        // currently, we only initialize our interaction handler here, so it's sufficient to assert this
 
+    NamedValue aNamed;
+    PropertyValue aProperty;
 
+    const Any* pArg = aArguments.getConstArray();
+    const Any* pArgEnd = aArguments.getConstArray() + aArguments.getLength();
+    while ( pArg != pArgEnd )
+    {
+        if ( ( *pArg >>= aNamed ) && aNamed.Name.equalsAscii( "InteractionHandler" ) )
+        {
+            OSL_VERIFY( aNamed.Value >>= m_xInteractionHandler );
+            break;
+        }
 
+        if ( ( *pArg >>= aProperty ) && aProperty.Name.equalsAscii( "InteractionHandler" ) )
+        {
+            OSL_VERIFY( aProperty.Value >>= m_xInteractionHandler );
+            break;
+        }
+
+        if ( *pArg >>= m_xInteractionHandler )
+        {
+            break;
+        }
+
+        ++pArg;
+    }
+}
