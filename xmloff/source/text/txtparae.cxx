@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-16 14:47:50 $
+ *  last change: $Author: mib $ $Date: 2001-11-22 19:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,7 +1095,14 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateParaExtPropMapper(
     return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
 }
 
+#if SUPD < 650
 void XMLTextParagraphExport::collectFrames()
+{
+    collectFrames( sal_False );
+}
+#endif
+
+void XMLTextParagraphExport::collectFrames( sal_Bool bBoundToFrameOnly )
 {
     Reference < XTextFramesSupplier > xTFS( GetExport().GetModel(), UNO_QUERY );
     if( xTFS.is() )
@@ -1117,9 +1124,12 @@ void XMLTextParagraphExport::collectFrames()
             switch( eAnchor )
             {
             case TextContentAnchorType_AT_PAGE:
-                if( !pPageTextFrameIdxs )
-                    pPageTextFrameIdxs = new SvLongs;
-                pPageTextFrameIdxs->Insert( i, pPageTextFrameIdxs->Count() );
+                if( !bBoundToFrameOnly )
+                {
+                    if( !pPageTextFrameIdxs )
+                        pPageTextFrameIdxs = new SvLongs;
+                    pPageTextFrameIdxs->Insert( i, pPageTextFrameIdxs->Count() );
+                }
                 break;
             case TextContentAnchorType_AT_FRAME:
                 if( !pFrameTextFrameIdxs )
@@ -1151,9 +1161,12 @@ void XMLTextParagraphExport::collectFrames()
             switch( eAnchor )
             {
             case TextContentAnchorType_AT_PAGE:
-                if( !pPageGraphicIdxs )
-                    pPageGraphicIdxs = new SvLongs;
-                pPageGraphicIdxs->Insert( i, pPageGraphicIdxs->Count() );
+                if( !bBoundToFrameOnly )
+                {
+                    if( !pPageGraphicIdxs )
+                        pPageGraphicIdxs = new SvLongs;
+                    pPageGraphicIdxs->Insert( i, pPageGraphicIdxs->Count() );
+                }
                 break;
             case TextContentAnchorType_AT_FRAME:
                 if( !pFrameGraphicIdxs )
@@ -1185,9 +1198,12 @@ void XMLTextParagraphExport::collectFrames()
             switch( eAnchor )
             {
             case TextContentAnchorType_AT_PAGE:
-                if( !pPageEmbeddedIdxs )
-                    pPageEmbeddedIdxs = new SvLongs;
-                pPageEmbeddedIdxs->Insert( i, pPageEmbeddedIdxs->Count() );
+                if( !bBoundToFrameOnly )
+                {
+                    if( !pPageEmbeddedIdxs )
+                        pPageEmbeddedIdxs = new SvLongs;
+                    pPageEmbeddedIdxs->Insert( i, pPageEmbeddedIdxs->Count() );
+                }
                 break;
             case TextContentAnchorType_AT_FRAME:
                 if( !pFrameEmbeddedIdxs )
@@ -1219,8 +1235,10 @@ void XMLTextParagraphExport::collectFrames()
             TextContentAnchorType eAnchor;
             aAny >>= eAnchor;
 
-            if( TextContentAnchorType_AT_PAGE != eAnchor &&
-                TextContentAnchorType_AT_FRAME != eAnchor )
+            if( (TextContentAnchorType_AT_PAGE != eAnchor &&
+                 TextContentAnchorType_AT_FRAME != eAnchor) ||
+                 (TextContentAnchorType_AT_PAGE == eAnchor &&
+                 bBoundToFrameOnly ) )
                 continue;
 
             Reference<XServiceInfo> xServiceInfo( xShape,
@@ -1294,11 +1312,10 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
 }
 
 sal_Bool lcl_txtpara_isFrameAnchor(
-        const Reference < XTextContent > rTxtCntnt,
+        const Reference < XPropertySet > rPropSet,
         const Reference < XTextFrame >& rParentTxtFrame )
 {
-    Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
-    Any aAny = xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame") ) );
+    Any aAny = rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame") ) );
     Reference < XTextFrame > xAnchorTxtFrame;
     aAny >>= xAnchorTxtFrame;
 
@@ -1310,21 +1327,22 @@ void XMLTextParagraphExport::exportFrameFrames(
         sal_Bool bProgress,
         const Reference < XTextFrame > *pParentTxtFrame )
 {
-    if( pFrameTextFrameIdxs )
+    if( pFrameTextFrameIdxs && pFrameTextFrameIdxs->Count() )
     {
+        Any aAny;
         sal_uInt16 i = 0;
         while( i < pFrameTextFrameIdxs->Count() )
         {
-            Any aAny = xTextFrames->getByIndex( (*pFrameTextFrameIdxs)[i] );
+            aAny = xTextFrames->getByIndex( (*pFrameTextFrameIdxs)[i] );
             Reference < XTextFrame > xTxtFrame;
             aAny >>= xTxtFrame;
-            Reference < XTextContent > xTxtCntnt( xTxtFrame, UNO_QUERY );
-            if( bAutoStyles ||
-                lcl_txtpara_isFrameAnchor( xTxtCntnt, *pParentTxtFrame ) )
+            Reference < XPropertySet > xPropSet( xTxtFrame, UNO_QUERY );
+            if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
             {
                 if( !bAutoStyles )
                     pFrameTextFrameIdxs->Remove( i );
                 sal_uInt16 nOldCount = pFrameTextFrameIdxs->Count();
+                Reference < XTextContent > xTxtCntnt( xTxtFrame, UNO_QUERY );
                 exportTextFrame( xTxtCntnt, bAutoStyles, bProgress );
                 if( bAutoStyles )
                     i++;
@@ -1335,16 +1353,17 @@ void XMLTextParagraphExport::exportFrameFrames(
                 i++;
         }
     }
-    if( pFrameGraphicIdxs )
+    if( pFrameGraphicIdxs && pFrameGraphicIdxs->Count() )
     {
+        Any aAny;
         sal_uInt16 i = 0;
         while( i < pFrameGraphicIdxs->Count() )
         {
-            Any aAny = xGraphics->getByIndex( (*pFrameGraphicIdxs)[i] );
+            aAny = xGraphics->getByIndex( (*pFrameGraphicIdxs)[i] );
             Reference < XTextContent > xTxtCntnt;
             aAny >>= xTxtCntnt;
-            if( bAutoStyles ||
-                lcl_txtpara_isFrameAnchor( xTxtCntnt, *pParentTxtFrame ) )
+            Reference < XPropertySet > xPropSet( xTxtCntnt, UNO_QUERY );
+            if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
             {
                 if( !bAutoStyles )
                     pFrameGraphicIdxs->Remove( i );
@@ -1359,20 +1378,22 @@ void XMLTextParagraphExport::exportFrameFrames(
                 i++;
         }
     }
-    if( pFrameEmbeddedIdxs )
+    if( pFrameEmbeddedIdxs && pFrameEmbeddedIdxs->Count() )
     {
+        Any aAny;
         sal_uInt16 i = 0;
         while( i < pFrameEmbeddedIdxs->Count() )
         {
-            Any aAny = xEmbeddeds->getByIndex( (*pFrameEmbeddedIdxs)[i] );
-            Reference < XTextContent > xTxtCntnt;
-            aAny >>= xTxtCntnt;
-            if( bAutoStyles ||
-                lcl_txtpara_isFrameAnchor( xTxtCntnt, *pParentTxtFrame ) )
+            aAny = xEmbeddeds->getByIndex( (*pFrameEmbeddedIdxs)[i] );
+            Reference < XEmbeddedObjectSupplier > xEOS;
+            aAny >>= xEOS;
+            Reference < XPropertySet > xPropSet( xEOS, UNO_QUERY );
+            if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
             {
                 if( !bAutoStyles )
                     pFrameEmbeddedIdxs->Remove( i );
                 sal_uInt16 nOldCount = pFrameEmbeddedIdxs->Count();
+                Reference < XTextContent > xTxtCntnt( xEOS, UNO_QUERY );
                 exportTextEmbedded( xTxtCntnt, bAutoStyles );
                 if( bAutoStyles )
                     i++;
@@ -1383,21 +1404,22 @@ void XMLTextParagraphExport::exportFrameFrames(
                 i++;
         }
     }
-    if( pFrameShapeIdxs )
+    if( pFrameShapeIdxs && pFrameShapeIdxs->Count() )
     {
+        Any aAny;
         sal_uInt16 i = 0;
         while( i < pFrameShapeIdxs->Count() )
         {
-            Any aAny = xShapes->getByIndex( (*pFrameShapeIdxs)[i] );
+            aAny = xShapes->getByIndex( (*pFrameShapeIdxs)[i] );
             Reference < XShape > xShape;
             aAny >>= xShape;
-            Reference < XTextContent > xTxtCntnt( xShape, UNO_QUERY );
-            if( bAutoStyles ||
-                lcl_txtpara_isFrameAnchor( xTxtCntnt, *pParentTxtFrame ) )
+            Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
+            if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
             {
                 if( !bAutoStyles )
                     pFrameShapeIdxs->Remove( i );
                 sal_uInt16 nOldCount = pFrameShapeIdxs->Count();
+                Reference < XTextContent > xTxtCntnt( xShape, UNO_QUERY );
                 exportShape( xTxtCntnt, bAutoStyles );
                 if( bAutoStyles )
                     i++;
@@ -2260,6 +2282,9 @@ void XMLTextParagraphExport::exportTextFrame(
         if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
                                             xPropSet->getPropertySetInfo() ) )
             Add( XML_STYLE_FAMILY_TEXT_TEXT, *pRangePropSet );
+
+        // frame bound frames
+        collectFramesBoundToFrameAutoStyles( xTxtFrame, bProgress );
 
         exportText( xTxt, bAutoStyles, bProgress, sal_True );
     }
