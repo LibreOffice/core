@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:05:33 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,13 @@ static CommandLineArgs::BoolParam aModuleGroupDefinition[] =
     CommandLineArgs::CMD_BOOLPARAM_IMPRESS,
     CommandLineArgs::CMD_BOOLPARAM_GLOBAL,
     CommandLineArgs::CMD_BOOLPARAM_MATH,
-    CommandLineArgs::CMD_BOOLPARAM_WEB
+    CommandLineArgs::CMD_BOOLPARAM_WEB,
+    CommandLineArgs::CMD_BOOLPARAM_BASE
 };
 
 CommandLineArgs::GroupDefinition CommandLineArgs::m_pGroupDefinitions[ CommandLineArgs::CMD_GRPID_COUNT ] =
 {
-    { 7, aModuleGroupDefinition }
+    { 8, aModuleGroupDefinition }
 };
 
 CommandLineArgs::CommandLineArgs()
@@ -390,6 +391,11 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPIMPRESS, sal_True );
         return sal_True;
     }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpbase" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_HELPBASE, sal_True );
+        return sal_True;
+    }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpbasic" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPBASIC, sal_True );
@@ -465,6 +471,13 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_IMPRESS );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_IMPRESS, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-base" )) == sal_True )
+    {
+        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_BASE );
+        if ( !bAlreadySet )
+            SetBoolParam_Impl( CMD_BOOLPARAM_BASE, sal_True );
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-global" )) == sal_True )
@@ -648,6 +661,12 @@ sal_Bool CommandLineArgs::IsHelpImpress() const
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HELPIMPRESS ];
 }
+
+sal_Bool CommandLineArgs::IsHelpBase() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_HELPBASE ];
+}
 sal_Bool CommandLineArgs::IsHelpMath() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
@@ -681,6 +700,12 @@ sal_Bool CommandLineArgs::IsImpress() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_IMPRESS ];
+}
+
+sal_Bool CommandLineArgs::IsBase() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_BASE ];
 }
 
 sal_Bool CommandLineArgs::IsGlobal() const
