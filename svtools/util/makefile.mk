@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.7 $
+#*  $Revision: 1.8 $
 #*
-#*  last change: $Author: obr $ $Date: 2000-11-13 10:36:37 $
+#*  last change: $Author: hr $ $Date: 2000-11-14 09:58:52 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -152,7 +152,6 @@ LIB8FILES=	\
         $(SLB)$/srch.lib	\
         $(SLB)$/svarray.lib \
         $(SLB)$/svhtml1.lib \
-        $(SLB)$/svsql.lib	\
         $(SLB)$/svrtf.lib	\
         $(SLB)$/cmdparse.lib
 
