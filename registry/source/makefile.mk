@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-10 21:33:58 $
+#   last change: $Author: rt $ $Date: 2004-03-30 16:34:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,8 @@ PRJ=..
 
 PRJNAME=registry
 TARGET=regcpp
+
+ENABLE_EXCEPTIONS := TRUE
 
 # --- Settings -----------------------------------------------------
 
