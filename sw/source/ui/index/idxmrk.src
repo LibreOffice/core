@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:54:42 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@
             QuickHelpText[ polish ] = "Nowy indeks u¿ytkownika";\
             QuickHelpText[ portuguese_brazilian ] = "New user defined index";\
             QuickHelpText[ japanese ] = "V‚µ‚¢Õ°»Ş°İ’è‚Ìõˆø";\
-            QuickHelpText[ korean ] = "New user defined index";\
+            QuickHelpText[ korean ] = "»õ¡¡»ç¿ëÀÚÁ¤ÀÇ¡¡»öÀÎ!";\
             QuickHelpText[ chinese_simplified ] = "New user defined index";\
             QuickHelpText[ chinese_traditional ] = "·s¼W¨Ï¥ÎªÌ¦Û­q¥Ø¿ı!";\
             QuickHelpText[ arabic ] = "İåÑÓ ÌÏíÏ ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";\
@@ -245,7 +245,7 @@
             Text[ chinese_traditional ] = "¼Ğ°O";                   \
             Text[ arabic ] = "ÇáÊÍÏíÏ";                      \
             Text[ greek ] = "ÓŞìáíóç";\
-            Text[ korean ] = "¼±ÅÃ";\
+            Text[ korean ] = "¸¶Å·";\
             Text[ turkish ] = "Seçim";\
             Text[ language_user1 ] = " ";\
         };                                                          \
@@ -484,7 +484,7 @@
             Text[ chinese_traditional ] = "¥Î©ó©Ò¦³¬Û¦Pªº¤º¤å(~A)";            \
             Text[ arabic ] = "ÊØÈíŞ Úáì ßá ÇáäÕæÕ ÇáãÊãÇËáÉ.";                   \
             Text[ greek ] = "ÅöáñìïãŞ óå üëá ôá ğáñüìïéá êåßìåíá.";\
-            Text[ korean ] = "ÀüÃ¼ À¯»ç ÅØ½ºÆ® Àû¿ë(~A)";\
+            Text[ korean ] = "¸ğµç¡¡°°Àº ÅØ½ºÆ®¿¡ Àû¿ë(~A)";\
             Text[ turkish ] = "~Tüm eş metinlere uygula.";\
             Text[ language_user1 ] = " ";\
         };                                                                      \
@@ -508,7 +508,7 @@
             Text[ polish ] = "Dok³adne wyszukiwanie";\
             Text[ portuguese_brazilian ] = "Match case";\
             Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~T)";\
-            Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~T)";\
+            Text[ korean ] = "Á¤È®ÇÏ°Ô¡¡Ã£±â";\
             Text[ chinese_simplified ] = "¾«È·ËÑÑ°";\
             Text[ chinese_traditional ] = "ºëÚÌ·j´M";\
             Text[ arabic ] = "ÈÍË ÏŞíŞ";\
@@ -675,7 +675,7 @@ ModalDialog DLG_NEW_USER_IDX
     Text[ polish ] = "Utwórz nowy indeks zdefiniowany przez u¿ytkownika";
     Text[ portuguese_brazilian ] = "Define new user index";
     Text[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìõˆø‚Ìì¬";
-    Text[ korean ] = "»õ·Î¿î »ç¿ëÀÚ Á¤ÀÇ »öÀÎ ¸¸µé±â";
+    Text[ korean ] = "»õ »ç¿ëÀÚ Á¤ÀÇ »öÀÎ ¸¸µé±â";
     Text[ chinese_simplified ] = "ĞÂ½¨ÓÃ»§×Ô¶¨Ä¿Â¼";
     Text[ chinese_traditional ] = "·s¼W¦Û­qªº¥Ø¿ı";
     Text[ arabic ] = "ÅäÔÇÁ İåÑÓ ÌÏíÏ ãõÚóÑøóİ ãä ŞÈá ÇáãÓÊÎÏã";
@@ -786,7 +786,7 @@ String STR_IDXMRK_INSERT
             Text[ polish ] = "Z zawartoœci dokumentu";\
             Text[ portuguese_brazilian ] = "From document content";\
             Text[ japanese ] = "•¶‘“à—e‚©‚ç(~F)";\
-            Text[ korean ] = "¹®¼­ ³»¿ë¿¡¼­ ºÎÅÍ(~F)";\
+            Text[ korean ] = "¹®¼­ ³»¿ëÀ¸·ÎºÎÅÍ(~F)";\
             Text[ chinese_simplified ] = "²ÉÓÃÎÄµµÄÚÈİ";\
             Text[ chinese_traditional ] = "±q¤å¥ó¤º®e";\
             Text[ arabic ] = "ãä ãÍÊæíÇÊ ÇáãÓÊäÏ";\
@@ -1131,7 +1131,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
         Text[ polish ] = "Dane wpisu";
         Text[ portuguese_brazilian ] = "Entry data";
         Text[ japanese ] = "“ü—Í“ú";
-        Text[ korean ] = "Ç×¸ñ µ¥ÀÌÅÍ";
+        Text[ korean ] = "ÀÔ·Â µ¥ÀÌÅÍ";
         Text[ chinese_simplified ] = "ÌõÄ¿Êı¾İ";
         Text[ chinese_traditional ] = "±ø¥Ø¸ê®Æ";
         Text[ arabic ] = "ÈíÇäÇÊ ÇáÅÏÎÇá";
@@ -1177,7 +1177,7 @@ String STR_AUTHMRK_EDIT
     Text[ japanese ] = "Ql•¶Œ£•\\‚Ì•ÒW";
     Text[ korean ] = "Âü°í¹®Çå Ç×¸ñ ÆíÁı";
     Text[ chinese_simplified ] = "±à¼­ÎÄÏ×Ä¿Â¼ÌõÄ¿";
-    Text[ chinese_traditional ] = "½s¿è°Ñ¦Ò¤åÄm±ø¥Ø";
+    Text[ chinese_traditional ] = "½s¿è°Ñ¦Ò¤åÄm¥Ø¿ı±ø¥Ø";
     Text[ arabic ] = "ÊÍÑíÑ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça dizini girişini düzenle";
     Text[ language_user1 ] = " ";
@@ -1200,9 +1200,9 @@ String STR_AUTHMRK_INSERT
     Text[ polish ] = "Wstaw wpis bibliograficzny";
     Text[ portuguese_brazilian ] = "Insert authority entry";
     Text[ japanese ] = "Ql•¶Œ£‚Ì‘}“ü";
-    Text[ korean ] = "Âüº¸¹®Çå Ç×¸ñ Á¤ÀÇ";
+    Text[ korean ] = "Âüº¸¹®Çå Ç×¸ñ »ğÀÔ";
     Text[ chinese_simplified ] = "²åÈëÎÄÏ×Ä¿Â¼ÌõÄ¿";
-    Text[ chinese_traditional ] = "´¡¤J°Ñ¦Ò¤åÄm±ø¥Ø";
+    Text[ chinese_traditional ] = "´¡¤J°Ñ¦Ò¤åÄm¥Ø¿ı±ø¥Ø";
     Text[ arabic ] = "ÅÏÑÇÌ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça dizini girişi ekle";
     Text[ language_user1 ] = " ";
