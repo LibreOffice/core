@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-19 12:19:09 $
+ *  last change: $Author: mba $ $Date: 2000-12-19 13:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1252,7 +1252,7 @@ void SfxMedium::Transfer_Impl()
         if ( ! xContent.is() )
             return;
 
-        sal_Bool bSuccess;
+        sal_Bool bSuccess = sal_False;
 
         // check wether the the temp file has the same protocol
         // scheme as the destination, wether the destination supports
@@ -1275,8 +1275,11 @@ void SfxMedium::Transfer_Impl()
                                                    WID_TRANSFER );
         }
 
+        // free resources, otherwise the transfer may fail
+        Close();
         if ( bTryTransfer && aDest.removeSegment() )
         {
+            // content says: direct transfer is possible
             TransferInfo    aInfo;
             String          aParentURL = aDest.GetMainURL();
             Any             aAny;
@@ -1302,14 +1305,11 @@ void SfxMedium::Transfer_Impl()
             }
 
             aAny <<= aInfo;
-            Close();
-            UCB_Helper::ExecuteCommand( aParentURL, WID_TRANSFER,
-                                        aAny, &bSuccess );
+            UCB_Helper::ExecuteCommand( aParentURL, WID_TRANSFER, aAny, &bSuccess );
             if ( bSuccess )
             {
-                // when the transfer command executed successful
-                // there will be no tempfile anymore so we have
-                // to get rid of it
+                // when the transfer command executed successful, there will be no tempfile
+                // anymore ( because the file has been moved! ), so we have to get rid of it
                 pImp->pTempFile->EnableKillingFile( sal_False );
                 delete pImp->pTempFile;
                 pImp->pTempFile = NULL;
@@ -1317,23 +1317,23 @@ void SfxMedium::Transfer_Impl()
             }
         }
 
-        CloseOutStream();
-        SvStream *pStream = new SvFileStream( pImp->pTempFile->GetFileName(), STREAM_STD_READ );
-        SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
-        Reference < ::com::sun::star::io::XInputStream > xStream
-            = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
+        if ( !bSuccess )
+        {
+            // direct transfer impossible or failed: transfer data as stream
+            SvStream *pStream = new SvFileStream( pImp->pTempFile->GetFileName(), STREAM_STD_READ );
+            SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
+            Reference < ::com::sun::star::io::XInputStream > xStream = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
 
-        Any aAny;
-        InsertCommandArgument aArg;
+            Any aAny;
+            InsertCommandArgument aArg;
+            aArg.Data = xStream;
+            aArg.ReplaceExisting = sal_True;
+            aAny <<= aArg;
 
-        aArg.Data = xStream;
-        aArg.ReplaceExisting = sal_True;
-        aAny <<= aArg;
+            UCB_Helper::ExecuteCommand( xContent, WID_INSERT, aAny, &bSuccess );
+            delete pStream;
+        }
 
-        UCB_Helper::ExecuteCommand( xContent, WID_INSERT, aAny, &bSuccess );
-        delete pStream;
-        if ( !aStorage.Is() )
-            GetOutStream();
         if ( !bSuccess )
             eError = ERRCODE_IO_GENERAL;
     }
