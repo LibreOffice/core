@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2000-12-02 15:45:26 $
+ *  last change: $Author: dr $ $Date: 2000-12-06 16:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,6 +1493,36 @@ long CalcY( const UINT16 nT, const UINT16 nR, const UINT16 nOR, const double f, 
         ( ( double ) pD->GetRowOffset( nR, nT )
             + ( double ) pD->GetRowHeight( nR, nT ) * ( ( double ) nOR / 256.0 ) )
         * f );
+}
+
+
+
+BOOL GetExcRKValue( double fValue, INT32& rRKValue )
+{
+    double fFrac, fInt;
+
+    // integer
+    fFrac = modf( fValue, &fInt );
+    if( (fFrac == 0.0) && (fInt >= -536870912.0) && (fInt <= 536870911.0) ) // 2^29 =  536870912
+    {
+        rRKValue = (INT32) fInt;
+        rRKValue <<= 2;
+        rRKValue |= EXC_RK_INT;
+        return TRUE;
+    }
+
+    // integer/100
+    fFrac = modf( fValue * 100.0, &fInt );
+    if( (fFrac == 0.0) && (fInt >= -536870912.0) && (fInt <= 536870911.0) )
+    {
+        rRKValue = ( INT32 ) fInt;
+        rRKValue <<= 2;
+        rRKValue |= EXC_RK_INT100;
+        return TRUE;
+    }
+
+    // double
+    return FALSE;
 }
 
 
