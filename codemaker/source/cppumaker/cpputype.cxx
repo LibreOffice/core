@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-13 12:04:24 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 12:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3505,7 +3505,7 @@ sal_Bool EnumType::dumpDeclaration(FileStream& o)
     RTFieldAccess   access = RT_ACCESS_INVALID;
     RTConstValue    constValue;
     OString         fieldName;
-    sal_uInt32      value=0;
+    sal_Int32       value=0;
     for (sal_uInt16 i=0; i < fieldCount; i++)
     {
         access = m_reader.getFieldAccess(i);

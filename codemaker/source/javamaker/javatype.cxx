@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-14 09:49:51 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 12:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1759,7 +1759,7 @@ sal_Bool EnumType::dumpFile(FileStream& o)
         constValue = m_reader.getFieldConstValue(i);
 
         if (constValue.m_type == RT_TYPE_INT32)
-            value = (sal_Int32)constValue.m_value.aLong;
+            value = constValue.m_value.aLong;
         else
             value++;
 
@@ -1772,6 +1772,8 @@ sal_Bool EnumType::dumpFile(FileStream& o)
     inc();
     o << indent() << "switch( value )\n" << indent() << "{\n";
     inc();
+
+    value = 0;
     for (i=0; i < fieldCount; i++)
     {
         access = m_reader.getFieldAccess(i);
