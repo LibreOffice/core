@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2001-01-08 16:56:03 $
+#   last change: $Author: obo $ $Date: 2001-01-15 14:03:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ NO_BSYMBOLIC=TRUE
 
 # --- Files --------------------------------------------------------
 
-#.IF "$(COM)$(CPU)" == "C50I"
+.IF "$(COM)$(CPU)" == "C50I" || "$(COM)$(CPU)" == "C52I"
 
 CFLAGS += -O5 -xO5
 
@@ -101,7 +101,7 @@ SHL1STDLIBS= \
     $(CPPULIB)	\
     $(SALLIB)
 
-#.ENDIF
+.ENDIF
 
 .INCLUDE :	target.mk
 
