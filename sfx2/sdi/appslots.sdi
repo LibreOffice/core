@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: kz $ $Date: 2004-10-04 20:40:53 $
-#*    $Revision: 1.17 $
+#*    last change       $Author: pjunck $ $Date: 2004-11-03 08:25:10 $
+#*    $Revision: 1.18 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -497,16 +497,6 @@ shell SfxApplication
     //----------------------------------------------------------------------
 
     SID_COMP_BIBLIOGRAPHY
-    [
-        ExecMethod = OfaExec_Impl;
-    ]
-
-    SID_DATASOURCE_ADMINISTRATION
-    [
-        ExecMethod = OfaExec_Impl;
-    ]
-
-    SID_SDB52_IMPORT_WIZARD
     [
         ExecMethod = OfaExec_Impl;
     ]
