@@ -2,15 +2,15 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:04:05 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
  *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
+ *         - Sun Industry Standardsf Source License Version 1.1
  *
  *  Sun Microsystems Inc., October, 2000
  *
@@ -2289,7 +2289,8 @@ BOOL SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
 BOOL SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
 {
     String* pNew = new String( rNew );
-    if( rNew.Len() && GetWrdSttExceptList()->Insert( pNew ) )
+    SvStringsISortDtor* pExceptList = LoadWrdSttExceptList();
+    if( rNew.Len() && pExceptList && pExceptList->Insert( pNew ) )
     {
         MakeUserStorage_Impl();
         SotStorageRef xStg = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
