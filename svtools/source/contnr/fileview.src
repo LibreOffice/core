@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:38:38 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,6 +652,8 @@ ModalDialog DLG_SVT_QUERYDELETE
     Text[ hindi ] = "मिटाना दृढ़ करो";
     Text[ slovak ] = "Potvrdiť vymazanie";
 };
+
+
 
 
 
