@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvttcn6.tab,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2002-02-27 09:16:06 $
+ *  last change: $Author: sb $ $Date: 2002-02-27 15:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ static ImplDBCSToUniLeadTab const aBIG5UniLeadTab[256] =
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x9D */ /* We convert this as double byte */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x9E */ /* We convert this as double byte */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x9F */ /* We convert this as double byte */
-    {      0,    1,    0, NULL },                               /* 0xA0 */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xA0 */ /* We convert this as double byte */
     {      0, 0x40, 0xFE, aImplDBCSToUniTab_BIG5_A1 },          /* 0xA1 */
     {      0, 0x40, 0xFE, aImplDBCSToUniTab_BIG5_A2 },          /* 0xA2 */
     {      0, 0x40, 0xFE, aImplDBCSToUniTab_BIG5_A3 },          /* 0xA3 */
@@ -817,7 +817,7 @@ static ImplDBCSToUniLeadTab const aMS950UniLeadTab[256] =
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x9D */ /* We convert this as double byte */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x9E */ /* We convert this as double byte */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x9F */ /* We convert this as double byte */
-    {      0,    1,    0, NULL },                               /* 0xA0 */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xA0 */ /* We convert this as double byte */
     {      0, 0x40, 0xFE, aImplDBCSToUniTab_BIG5_A1 },          /* 0xA1 */
     {      0, 0x40, 0xFE, aImplDBCSToUniTab_BIG5_A2 },          /* 0xA2 */
     {      0, 0x40, 0xFE, aImplDBCSToUniTab_BIG5_A3 },          /* 0xA3 */
