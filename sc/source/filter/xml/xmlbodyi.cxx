@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 10:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,10 +270,14 @@ void ScXMLBodyContext::EndElement()
                 if (xProperties.is())
                 {
                     XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetScImport().GetAutoStyles();
-                    XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                        XML_STYLE_FAMILY_TABLE_TABLE, GetScImport().GetFirstTableStyle(), sal_True);
-                    if (pStyle)
-                        pStyle->FillPropertySet(xProperties);
+                    rtl::OUString sTableStyleName(GetScImport().GetFirstTableStyle());
+                    if (sTableStyleName.getLength())
+                    {
+                        XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                            XML_STYLE_FAMILY_TABLE_TABLE, sTableStyleName, sal_True);
+                        if (pStyle)
+                            pStyle->FillPropertySet(xProperties);
+                    }
                 }
             }
         }
