@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,7 @@ Resource RID_SW_ERRHDL
         TEXT[ greek ] = "Ôï áñ÷åßï áõôü äåí åßíáé ôýðïõ WinWord97";
         TEXT[ dutch ] = "Dit is geen WinWord97 bestand";
         TEXT[ french ] = "Il ne s'agit pas d'un fichier WinWord97 !";
-        TEXT[ spanish ] = "This isn't a WinWord97 file";
+        TEXT[ spanish ] = "El archivo no es de WinWord97";
         TEXT[ italian ] = "This isn't a WinWord97 file";
         TEXT[ danish ] = "Filen er ingen WinWord97-fil";
         TEXT[ swedish ] = "Filen är inte en WinWord97-fil";
@@ -711,7 +711,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese ] = "Memória insuficiente" ;
         TEXT [ finnish ] = "Muisti on lopussa" ;
         TEXT [ danish ] = "Ikke nok hukommelse" ;
-        TEXT [ french ] = "Mémoire saturée" ;
+        TEXT [ french ] = "Mémoire insuffisante" ;
         TEXT [ swedish ] = "Inte tillräckligt med minne" ;
         TEXT [ dutch ] = "Onvoldoende geheugen beschikbaar" ;
         TEXT [ spanish ] = "Memoria insuficiente" ;
@@ -737,7 +737,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese ] = "Memória insuficiente" ;
         TEXT [ finnish ] = "Muisti on lopussa" ;
         TEXT [ danish ] = "Ikke nok hukommelse" ;
-        TEXT [ french ] = "Mémoire saturée" ;
+        TEXT [ french ] = "Mémoire insuffisante" ;
         TEXT [ swedish ] = "Inte tillräckligt med minne" ;
         TEXT [ dutch ] = "Onvoldoende geheugen beschikbaar" ;
         TEXT [ spanish ] = "Memoria insuficiente" ;
@@ -1144,7 +1144,7 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "Alcuni oggetti OLE sono stati prelevati solo come immagini" ;
         Text [ spanish ] = "Algunos objetos OLE se pudieron incluir solo como imágenes" ;
         Text [ french ] = "Certains objets OLE ont pu être chargés uniquement sous forme d'images" ;
-        Text [ swedish ] = "Några OLE-objekt kunde bara övertas som grafiker" ;
+        Text [ swedish ] = "Några OLE-objekt kunde bara övertas som grafik" ;
         Text [ danish ] = "Nogle OLE-objekter kunne kun overtages som grafik" ;
         Text [ portuguese ] = "Alguns dos objectos OLE puderam ser apenas carregados como imagens" ;
         Text [ portuguese_brazilian ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
@@ -1169,7 +1169,7 @@ Resource RID_SW_ERRHDL
         Text [ spanish ] = "Algunos objetos OLE se pudieron incluir solo como imágenes" ;
         Text [ french ] = "Certains objets OLE ont pu être chargés uniquement sous forme d'images" ;
         Text [ dutch ] = "Enkele OLE-objecten konden alleen als grafische objecten worden overgenomen" ;
-        Text [ swedish ] = "Några OLE-objekt kunde bara övertas som grafiker" ;
+        Text [ swedish ] = "Några OLE-objekt kunde bara övertas som grafik" ;
         Text [ danish ] = "Nogle OLE-objekter kunne kun overtages som grafik" ;
         Text [ portuguese ] = "Alguns dos objectos OLE foram carregados apenas como imagens" ;
         Text [ portuguese_brazilian ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
