@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2002-08-08 13:03:43 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 08:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1041,13 +1041,30 @@ void SAL_CALL ScConsolidationDescriptor::setInsertLinks( sal_Bool bInsertLinks )
 
 //------------------------------------------------------------------------
 
-ScFilterDescriptorBase::ScFilterDescriptorBase() :
+ScFilterDescriptorBase::ScFilterDescriptorBase(ScDocShell* pDocShell) :
+    pDocSh(pDocShell),
     aPropSet( lcl_GetFilterPropertyMap() )
 {
+    if (pDocSh)
+        pDocSh->GetDocument()->AddUnoObject(*this);
 }
 
 ScFilterDescriptorBase::~ScFilterDescriptorBase()
 {
+    if (pDocSh)
+        pDocSh->GetDocument()->RemoveUnoObject(*this);
+}
+
+void ScFilterDescriptorBase::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxSimpleHint ) )
+    {
+        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        if ( nId == SFX_HINT_DYING )
+        {
+            pDocSh = NULL;          // invalid
+        }
+    }
 }
 
 // XSheetFilterDescriptor
@@ -1071,24 +1088,6 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
     for (USHORT i=0; i<nCount; i++)
     {
         const ScQueryEntry& rEntry = aParam.GetEntry(i);
-        sheet::FilterOperator eFilterOp;
-        switch (rEntry.eOp)             // ScQueryOp
-        {
-            case SC_EQUAL:          eFilterOp = sheet::FilterOperator_EQUAL;          break;
-            case SC_LESS:           eFilterOp = sheet::FilterOperator_LESS;           break;
-            case SC_GREATER:        eFilterOp = sheet::FilterOperator_GREATER;        break;
-            case SC_LESS_EQUAL:     eFilterOp = sheet::FilterOperator_LESS_EQUAL;     break;
-            case SC_GREATER_EQUAL:  eFilterOp = sheet::FilterOperator_GREATER_EQUAL;  break;
-            case SC_NOT_EQUAL:      eFilterOp = sheet::FilterOperator_NOT_EQUAL;      break;
-            case SC_TOPVAL:         eFilterOp = sheet::FilterOperator_TOP_VALUES;     break;
-            case SC_BOTVAL:         eFilterOp = sheet::FilterOperator_BOTTOM_VALUES;  break;
-            case SC_TOPPERC:        eFilterOp = sheet::FilterOperator_TOP_PERCENT;    break;
-            case SC_BOTPERC:        eFilterOp = sheet::FilterOperator_BOTTOM_PERCENT; break;
-            default:
-                DBG_ERROR("Falscher Filter-enum");
-                eFilterOp = sheet::FilterOperator_EMPTY;
-        }
-        //! FILTER_EMPTY / FILTER_NOTEMPTY umsetzen !!!!!!!!!!!!!!!!!!!!!
 
         rtl::OUString aStringValue;
         if (rEntry.pStr)
@@ -1097,11 +1096,44 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
         aField.Connection    = (rEntry.eConnect == SC_AND) ? sheet::FilterConnection_AND :
                                                              sheet::FilterConnection_OR;
         aField.Field         = rEntry.nField;
-        aField.Operator      = eFilterOp;
         aField.IsNumeric     = !rEntry.bQueryByString;
         aField.StringValue   = aStringValue;
         aField.NumericValue  = rEntry.nVal;
         pAry[i] = aField;
+
+        switch (rEntry.eOp)             // ScQueryOp
+        {
+            case SC_EQUAL:
+                {
+                    aField.Operator = sheet::FilterOperator_EQUAL;
+                    if (!rEntry.bQueryByString && *rEntry.pStr == EMPTY_STRING)
+                    {
+                        if (rEntry.nVal == SC_EMPTYFIELDS)
+                        {
+                            aField.Operator = sheet::FilterOperator_EMPTY;
+                            aField.NumericValue = 0;
+                        }
+                        else if (rEntry.nVal == SC_NONEMPTYFIELDS)
+                        {
+                            aField.Operator = sheet::FilterOperator_NOT_EMPTY;
+                            aField.NumericValue = 0;
+                        }
+                    }
+                }
+                break;
+            case SC_LESS:           aField.Operator = sheet::FilterOperator_LESS;             break;
+            case SC_GREATER:        aField.Operator = sheet::FilterOperator_GREATER;          break;
+            case SC_LESS_EQUAL:     aField.Operator = sheet::FilterOperator_LESS_EQUAL;   break;
+            case SC_GREATER_EQUAL:  aField.Operator = sheet::FilterOperator_GREATER_EQUAL;  break;
+            case SC_NOT_EQUAL:      aField.Operator = sheet::FilterOperator_NOT_EQUAL;    break;
+            case SC_TOPVAL:         aField.Operator = sheet::FilterOperator_TOP_VALUES;   break;
+            case SC_BOTVAL:         aField.Operator = sheet::FilterOperator_BOTTOM_VALUES;  break;
+            case SC_TOPPERC:        aField.Operator = sheet::FilterOperator_TOP_PERCENT;      break;
+            case SC_BOTPERC:        aField.Operator = sheet::FilterOperator_BOTTOM_PERCENT; break;
+            default:
+                DBG_ERROR("Falscher Filter-enum");
+                aField.Operator = sheet::FilterOperator_EMPTY;
+        }
     }
     return aSeq;
 }
@@ -1127,36 +1159,50 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
         if (!rEntry.pStr)
             rEntry.pStr = new String;       // sollte nicht sein (soll immer initialisiert sein)
 
-        ScQueryOp eQueryOp;
-        switch (pAry[i].Operator)           // FilterOperator
-        {
-            case sheet::FilterOperator_EQUAL:           eQueryOp = SC_EQUAL;         break;
-            case sheet::FilterOperator_LESS:            eQueryOp = SC_LESS;          break;
-            case sheet::FilterOperator_GREATER:         eQueryOp = SC_GREATER;       break;
-            case sheet::FilterOperator_LESS_EQUAL:      eQueryOp = SC_LESS_EQUAL;    break;
-            case sheet::FilterOperator_GREATER_EQUAL:   eQueryOp = SC_GREATER_EQUAL; break;
-            case sheet::FilterOperator_NOT_EQUAL:       eQueryOp = SC_NOT_EQUAL;     break;
-            case sheet::FilterOperator_TOP_VALUES:      eQueryOp = SC_TOPVAL;        break;
-            case sheet::FilterOperator_BOTTOM_VALUES:   eQueryOp = SC_BOTVAL;        break;
-            case sheet::FilterOperator_TOP_PERCENT:     eQueryOp = SC_TOPPERC;       break;
-            case sheet::FilterOperator_BOTTOM_PERCENT:  eQueryOp = SC_BOTPERC;       break;
-            case sheet::FilterOperator_EMPTY:
-            case sheet::FilterOperator_NOT_EMPTY:
-                //! set SC_EMPTYFIELDS / SC_NONEMPTYFIELDS values !!!!!
-                eQueryOp = SC_EQUAL;
-                break;
-            default:
-                DBG_ERROR("Falscher Query-enum");
-                eQueryOp = SC_EQUAL;
-        }
-
         rEntry.bDoQuery         = TRUE;
         rEntry.eConnect         = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
         rEntry.nField           = (USHORT)pAry[i].Field;
-        rEntry.eOp              = eQueryOp;
         rEntry.bQueryByString   = !pAry[i].IsNumeric;
         *rEntry.pStr            = String( pAry[i].StringValue );
         rEntry.nVal             = pAry[i].NumericValue;
+
+        if (!rEntry.bQueryByString && pDocSh)
+        {
+            pDocSh->GetDocument()->GetFormatTable()->GetInputLineString(rEntry.nVal, 0, *rEntry.pStr);
+        }
+
+        switch (pAry[i].Operator)           // FilterOperator
+        {
+            case sheet::FilterOperator_EQUAL:           rEntry.eOp = SC_EQUAL;       break;
+            case sheet::FilterOperator_LESS:            rEntry.eOp = SC_LESS;            break;
+            case sheet::FilterOperator_GREATER:         rEntry.eOp = SC_GREATER;         break;
+            case sheet::FilterOperator_LESS_EQUAL:      rEntry.eOp = SC_LESS_EQUAL;  break;
+            case sheet::FilterOperator_GREATER_EQUAL:   rEntry.eOp = SC_GREATER_EQUAL; break;
+            case sheet::FilterOperator_NOT_EQUAL:       rEntry.eOp = SC_NOT_EQUAL;   break;
+            case sheet::FilterOperator_TOP_VALUES:      rEntry.eOp = SC_TOPVAL;      break;
+            case sheet::FilterOperator_BOTTOM_VALUES:   rEntry.eOp = SC_BOTVAL;      break;
+            case sheet::FilterOperator_TOP_PERCENT:     rEntry.eOp = SC_TOPPERC;         break;
+            case sheet::FilterOperator_BOTTOM_PERCENT:  rEntry.eOp = SC_BOTPERC;         break;
+            case sheet::FilterOperator_EMPTY:
+                {
+                    rEntry.eOp = SC_EQUAL;
+                    rEntry.nVal = SC_EMPTYFIELDS;
+                    rEntry.bQueryByString = FALSE;
+                    *rEntry.pStr = EMPTY_STRING;
+                }
+                break;
+            case sheet::FilterOperator_NOT_EMPTY:
+                {
+                    rEntry.eOp = SC_EQUAL;
+                    rEntry.nVal = SC_NONEMPTYFIELDS;
+                    rEntry.bQueryByString = FALSE;
+                    *rEntry.pStr = EMPTY_STRING;
+                }
+                break;
+            default:
+                DBG_ERROR("Falscher Query-enum");
+                rEntry.eOp = SC_EQUAL;
+        }
     }
 
     USHORT nParamCount = aParam.GetEntryCount();    // Param wird nicht unter 8 resized
@@ -1278,7 +1324,9 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFilterDescriptorBase )
 
 //------------------------------------------------------------------------
 
-ScFilterDescriptor::ScFilterDescriptor()
+ScFilterDescriptor::ScFilterDescriptor(ScDocShell* pDocSh)
+    :
+    ScFilterDescriptorBase(pDocSh)
 {
 }
 
@@ -1303,7 +1351,8 @@ void ScFilterDescriptor::SetParam( const ScQueryParam& rNew )
 
 //------------------------------------------------------------------------
 
-ScRangeFilterDescriptor::ScRangeFilterDescriptor(ScDatabaseRangeObj* pPar) :
+ScRangeFilterDescriptor::ScRangeFilterDescriptor(ScDocShell* pDocSh, ScDatabaseRangeObj* pPar) :
+    ScFilterDescriptorBase(pDocSh),
     pParent(pPar)
 {
     if (pParent)
@@ -1330,7 +1379,8 @@ void ScRangeFilterDescriptor::PutData( const ScQueryParam& rParam )
 
 //------------------------------------------------------------------------
 
-ScDataPilotFilterDescriptor::ScDataPilotFilterDescriptor(ScDataPilotDescriptorBase* pPar) :
+ScDataPilotFilterDescriptor::ScDataPilotFilterDescriptor(ScDocShell* pDocSh, ScDataPilotDescriptorBase* pPar) :
+    ScFilterDescriptorBase(pDocSh),
     pParent(pPar)
 {
     if (pParent)
@@ -1585,7 +1635,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScDatabaseRangeObj::getFi
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScRangeFilterDescriptor(this);
+    return new ScRangeFilterDescriptor(pDocShell, this);
 }
 
 void ScDatabaseRangeObj::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
